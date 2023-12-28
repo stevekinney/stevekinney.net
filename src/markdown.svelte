@@ -1,12 +1,20 @@
-<script lang="ts">
+<script>
 	import { default as DateTime } from '$lib/components/date.svelte';
 	import metadata from '$lib/metadata';
 
 	export let title = '';
-	export let date: Date | string | undefined = undefined;
-	export let modified: Date | string | undefined = undefined;
-	export let description: string | undefined = undefined;
-	export let published: boolean = false;
+
+	/** @type {Date | string | undefined } */
+	export let date = undefined;
+
+	/** @type {Date | string | undefined } */
+	export let modified = undefined;
+
+	/** @type {string | undefined } */
+	export let description = undefined;
+
+	/** @type { boolean } */
+	export let published = false;
 </script>
 
 <svelte:head>
