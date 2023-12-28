@@ -34,7 +34,7 @@ export async function GET() {
 				<title>${title}</title>
 				<description>${description}</description>
 				<id>${url}/writing/rss</id>
-				<link type="text/html" href=${url} />
+				<link type="text/html" href="${url}" />
 				<updated>${new Date(first.date).toISOString()}</updated>
 				<rights>Copyright © ${now.getFullYear()}, ${title}</rights>
 				${entries}
