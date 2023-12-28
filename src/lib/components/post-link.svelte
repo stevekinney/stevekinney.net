@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-
 	import type { Post } from '$lib/types';
 
 	import Date from './date.svelte';
@@ -10,7 +8,6 @@
 	export let as: keyof HTMLElementTagNameMap = 'div';
 
 	$: href = `/writing/${post.slug}`;
-	$: active = $page.url.pathname === href;
 </script>
 
 <svelte:element this={as} class="group flex flex-wrap items-center gap-1">

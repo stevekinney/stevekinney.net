@@ -21,8 +21,10 @@
 		'font-semibold decoration-slate-600 decoration-8 underline-offset-8 hover:text-purple-800 dark:decoration-slate-900 dark:hover:text-purple-200',
 		className
 	)}
-	class:active><slot /></a
+	class:active
 >
+	<slot />
+</a>
 
 <style lang="postcss">
 	.active {

@@ -1,7 +1,11 @@
 <script lang="ts">
 	import formatDate from '$lib/format-date';
+	import { twMerge as merge } from 'tailwind-merge';
 
 	export let date: Date | string;
+
+	let className: string = '';
+	export { className as class };
 </script>
 
-<p class="text-purple-600 dark:text-purple-400">{formatDate(date)}</p>
+<p class={merge('text-purple-600 dark:text-purple-400', className)}>{formatDate(date)}</p>
