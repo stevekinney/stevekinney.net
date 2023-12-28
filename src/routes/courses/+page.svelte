@@ -1,7 +1,7 @@
 <script>
 	import courses from '$lib/courses';
 	import Card from '$lib/components/card.svelte';
-	import Description, { metadata as meta } from './description.md';
+	import Description from './description.md';
 </script>
 
 <section class="space-y-6">
