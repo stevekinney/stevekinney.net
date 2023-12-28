@@ -4,6 +4,7 @@
 	import type { Post } from '$lib/types';
 
 	import Date from './date.svelte';
+	import Link from './link.svelte';
 
 	export let post: Post;
 	export let as: keyof HTMLElementTagNameMap = 'div';
@@ -14,17 +15,7 @@
 
 <svelte:element this={as} class="group flex flex-wrap items-center gap-1">
 	<Date date={post.date} />
-	<a
-		{href}
-		class="font-semibold group-hover:text-purple-900 dark:group-hover:text-purple-100"
-		class:active
-	>
+	<Link {href} class="decoration-2">
 		{post.title}
-	</a>
+	</Link>
 </svelte:element>
-
-<style lang="postcss">
-	.active {
-		@apply underline decoration-purple-700 decoration-2 underline-offset-2;
-	}
-</style>

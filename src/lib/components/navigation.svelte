@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Link from './link.svelte';
 
 	let className: string = '';
 	export { className as class };
 </script>
 
 <nav class="flex items-center gap-4 {className}">
-	<a href="/writing" class:active={$page.url.pathname.startsWith('/writing')}>Writing</a>
-	<a href="/courses" class:active={$page.url.pathname.startsWith('/courses')}>Courses</a>
+	<Link href="/writing">Writing</Link>
+	<Link href="/courses">Courses</Link>
 </nav>
 
 <style lang="postcss">

@@ -1,3 +1,3 @@
-<article class="prose max-w-none dark:prose-invert">
+<article class="prose dark:prose-invert">
 	<slot />
 </article>

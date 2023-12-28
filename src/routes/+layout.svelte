@@ -6,14 +6,15 @@
 	import Navigation from '$lib/components/navigation.svelte';
 
 	import '../app.css';
+	import Link from '$lib/components/link.svelte';
 </script>
 
 <main
 	class="container my-6 grid grid-cols-1 items-center gap-6 p-4 sm:my-10 sm:grid-cols-2 lg:grid-cols-3"
 >
 	<header>
-		<h1 class="whitespace-nowrap text-4xl font-bold lg:order-1">
-			<a href="/" class="decoration-purple-500 decoration-4 underline-offset-4 hover:underline">
+		<h1 class="whitespace-nowrap lg:order-1">
+			<a href="/" class="text-4xl font-bold text-black dark:text-white">
 				{metadata.title}
 			</a>
 		</h1>
