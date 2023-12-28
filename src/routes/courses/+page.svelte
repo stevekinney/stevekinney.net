@@ -13,7 +13,7 @@
 
 	<Description />
 
-	<ul class="grid gap-10 lg:grid-cols-3">
+	<ul class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
 		{#each courses as course}
 			<Card title={course.title} description={course.description} url={course.href} as="li" />
 		{/each}

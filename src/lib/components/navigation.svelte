@@ -13,10 +13,10 @@
 
 <style lang="postcss">
 	a {
-		@apply font-semibold decoration-black decoration-4 underline-offset-8 hover:text-purple-800 dark:decoration-slate-500 dark:hover:text-purple-300;
+		@apply font-semibold decoration-black decoration-4 underline-offset-8 hover:text-purple-800 dark:hover:text-purple-300;
 	}
 
 	.active {
-		@apply text-purple-700 underline dark:text-purple-400;
+		@apply text-purple-700 underline dark:text-purple-800;
 	}
 </style>

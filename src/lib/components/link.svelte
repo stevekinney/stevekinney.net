@@ -18,7 +18,7 @@
 <a
 	{href}
 	class={merge(
-		'font-semibold decoration-slate-600 decoration-8 underline-offset-8 hover:text-purple-800 dark:decoration-slate-600 dark:hover:text-purple-200',
+		'font-semibold decoration-slate-600 decoration-8 underline-offset-8 hover:text-purple-800 dark:decoration-slate-900 dark:hover:text-purple-200',
 		className
 	)}
 	class:active><slot /></a
