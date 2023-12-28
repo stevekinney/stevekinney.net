@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import Link from './link.svelte';
 
 	let className: string = '';
