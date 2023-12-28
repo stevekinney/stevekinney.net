@@ -1,5 +1,37 @@
 <script lang="ts">
+	import { Github, Instagram, Twitter, Linkedin, Youtube } from 'lucide-svelte';
+
+	import metadata from '$lib/metadata';
+	import SocialLink from '$lib/components/social-link.svelte';
+	import Navigation from '$lib/components/navigation.svelte';
+
 	import '../app.css';
 </script>
 
-<slot />
+<main
+	class="container my-6 grid grid-cols-1 items-center gap-6 p-4 sm:my-10 sm:grid-cols-2 lg:grid-cols-3"
+>
+	<header>
+		<h1 class="whitespace-nowrap text-4xl font-bold lg:order-1">
+			<a href="/" class="decoration-purple-500 decoration-4 underline-offset-4 hover:underline">
+				{metadata.title}
+			</a>
+		</h1>
+	</header>
+
+	<div
+		class="order-1 flex items-center justify-between gap-4 sm:order-none sm:justify-end lg:order-3"
+	>
+		<SocialLink href="https://github.com/stevekinney" icon={Github} />
+		<SocialLink href="https://instagram.com/stevekinney" icon={Instagram} />
+		<SocialLink href="https://twitter.com/stevekinney" icon={Twitter} />
+		<SocialLink href="https://linkedin.com/in/stevekinney" icon={Linkedin} />
+		<SocialLink href="https://www.youtube.com/channel/UChXe-1_Jh91Z_CM3ppH39Xg" icon={Youtube} />
+	</div>
+
+	<Navigation class="sm:col-start-2 sm:justify-end lg:order-2 lg:justify-center" />
+
+	<div class="my-10 sm:col-span-full lg:order-3">
+		<slot />
+	</div>
+</main>

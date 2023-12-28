@@ -1,3 +1,4 @@
+import type { Post } from '$lib/types.js';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
@@ -6,7 +7,7 @@ export async function load({ params }) {
 
 		return {
 			content: post.default,
-			meta: post.metadata
+			meta: post.metadata as Post
 		};
 	} catch (e) {
 		throw error(404, `Could not find ${params.slug}`);

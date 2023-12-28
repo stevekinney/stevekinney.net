@@ -1,4 +1,6 @@
-import adapter from '@sveltejs/adapter-auto';
+import staticAdapter from '@sveltejs/adapter-static';
+import vercelAdapter from '@sveltejs/adapter-vercel';
+
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 import remarkUnwrapImages from 'remark-unwrap-images';
@@ -13,11 +15,11 @@ const mdsvexOptions = {
 	remarkPlugins: [remarkUnwrapImages],
 	rehypePlugins: [rehypeSlug],
 	layout: {
-		_: './src/mdsvex.svelte'
+		_: './src/markdown.svelte'
 	},
 	highlight: {
 		highlighter: async (code, lang = 'text') => {
-			const highlighter = await shiki.getHighlighter({ theme: 'poimandres' });
+			const highlighter = await shiki.getHighlighter({ theme: 'solarized-dark' });
 			const html = escapeSvelte(highlighter.codeToHtml(code, { lang }));
 			return `{@html \`${html}\` }`;
 		}
@@ -29,8 +31,9 @@ const config = {
 	extensions: ['.svelte', '.md'],
 	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions)],
 	kit: {
-		adapter: adapter()
-	}
+		adapter: process.env.VERCEL ? vercelAdapter() : staticAdapter()
+	},
+	inlineStyleThreshold: 2500000
 };
 
 export default config;
