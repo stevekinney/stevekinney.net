@@ -13,13 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/writing/typescript-generics.md",
+                "file": "src/writing/svelte-stores.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "130a1b054350a4ec",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "src/writing/svelte-stores.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -32,6 +45,14 @@
         "id": "2e099d2b03394f9c",
         "type": "tabs",
         "children": [
+          {
+            "id": "f0c968d4592a423f",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          },
           {
             "id": "77f1f21339d79784",
             "type": "leaf",
@@ -58,14 +79,15 @@
             }
           },
           {
-            "id": "f0c968d4592a423f",
+            "id": "a926bf48f02c6aa1",
             "type": "leaf",
             "state": {
-              "type": "bookmarks",
+              "type": "mk-path-view",
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -85,7 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "src/writing/typescript-generics.md",
+                "file": "src/writing/svelte-stores.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +124,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "src/writing/typescript-generics.md",
+                "file": "src/writing/svelte-stores.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +147,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "src/writing/typescript-generics.md"
+                "file": "src/writing/svelte-stores.md"
               }
             }
           },
@@ -157,10 +179,16 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "4cdce11b7b5a2289",
+  "active": "130a1b054350a4ec",
   "lastOpenFiles": [
+    "README.md",
+    "Spaces/Home",
+    "Spaces",
     "src/writing/svelte-stores.md",
+    "src/routes/writing/description.md",
     "src/writing/typescript-generics.md",
+    "templates/post.md",
+    "templates",
     "src/routes/biography.md"
   ]
 }

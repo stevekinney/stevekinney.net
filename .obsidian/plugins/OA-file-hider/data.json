@@ -5,6 +5,8 @@
     "build",
     "static",
     "tests",
-    "src/lib"
+    "src/lib",
+    "src/routes/writing/[slug]",
+    "README.md"
   ]
 }

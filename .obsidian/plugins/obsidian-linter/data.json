@@ -38,7 +38,7 @@
     },
     "yaml-key-sort": {
       "enabled": false,
-      "yaml-key-priority-sort-order": "",
+      "yaml-key-priority-sort-order": "title, description, date, modified, published",
       "priority-keys-at-start-of-yaml": true,
       "yaml-sort-order-for-other-keys": "None"
     },
@@ -249,7 +249,9 @@
   "lintOnFileChange": false,
   "displayLintOnFileChangeNotice": false,
   "settingsConvertedToConfigKeyValues": true,
-  "foldersToIgnore": [],
+  "foldersToIgnore": [
+    "templates"
+  ],
   "linterLocale": "system-default",
   "logLevel": "ERROR",
   "lintCommands": [],
