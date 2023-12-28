@@ -5,6 +5,8 @@
 </script>
 
 <section>
+	<h2 class="mb-8 text-xl font-bold">Written Words</h2>
+
 	<ul class="posts grid grid-cols-1 gap-8 lg:grid-cols-3">
 		{#each data.posts as post}
 			<Card
