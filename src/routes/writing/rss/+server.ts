@@ -29,10 +29,13 @@ export async function GET() {
 		.trim();
 
 	const xml = `
-		<?xml version="1.0" encoding="UTF-8"?>
-		<feed xmlns="http://www.w3.org/2005/Atom" rel="self">
+		<?xml version="1.0" encoding="utf-8"?>
+		<feed xmlns="http://www.w3.org/2005/Atom">
 				<title>${title}</title>
-				<description>${description}</description>
+				<subtitle>${description}</subtitle>
+				<author>
+       		<name>${author}</name>
+     		</author>
 				<id>${url}/writing/rss</id>
 				<link type="text/html" href="${url}" />
 				<updated>${new Date(first.date).toISOString()}</updated>

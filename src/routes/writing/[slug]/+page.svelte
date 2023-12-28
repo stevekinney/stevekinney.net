@@ -1,6 +1,4 @@
 <script lang="ts">
-	import metadata from '$lib/metadata';
-
 	import Date from '$lib/components/date.svelte';
 
 	export let data;

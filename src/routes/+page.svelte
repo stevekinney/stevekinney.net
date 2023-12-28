@@ -1,5 +1,4 @@
 <script lang="ts">
-	import courses from '$lib/courses';
 	import metadata from '$lib/metadata';
 	import Biography from './biography.md';
 </script>

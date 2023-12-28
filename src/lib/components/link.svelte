@@ -22,6 +22,8 @@
 		className
 	)}
 	class:active
+	aria-current={active ? 'page' : undefined}
+	{...$$restProps}
 >
 	<slot />
 </a>

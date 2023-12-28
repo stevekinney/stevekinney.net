@@ -11,13 +11,17 @@ module.exports = {
 	plugins: ['@typescript-eslint'],
 	parserOptions: {
 		sourceType: 'module',
-		ecmaVersion: 2020,
+		ecmaVersion: 'latest',
 		extraFileExtensions: ['.svelte']
 	},
 	env: {
 		browser: true,
-		es2017: true,
+		es2021: true,
 		node: true
+	},
+	rules: {
+		'no-unused-vars': 'off',
+		'@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }]
 	},
 	overrides: [
 		{
@@ -25,6 +29,13 @@ module.exports = {
 			parser: 'svelte-eslint-parser',
 			parserOptions: {
 				parser: '@typescript-eslint/parser'
+			},
+			rules: {
+				'no-undef': 'off',
+				'@typescript-eslint/no-unused-vars': [
+					'error',
+					{ varsIgnorePattern: '^\\$\\$\\w+', argsIgnorePattern: '^_' }
+				]
 			}
 		}
 	]
