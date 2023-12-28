@@ -15,8 +15,9 @@ export async function GET() {
 				<title>${title}</title>
 				<summary>${description}</summary>
 				<link type="text/html" href="${url}/writing/${slug}" />
-				<published>${new Date(date).toUTCString()}</published>
-				<updated>${new Date(modified).toUTCString()}</updated>
+				<id>${url}/writing/${slug}</id>
+				<published>${new Date(date).toISOString()}</published>
+				<updated>${new Date(modified).toISOString()}</updated>
 				<author>
 					<name>${author}</name>
 					<uri>${url}</uri>
@@ -29,12 +30,12 @@ export async function GET() {
 
 	const xml = `
 		<?xml version="1.0" encoding="UTF-8"?>
-		<feed xmlns="http://www.w3.org/2005/Atom">
+		<feed xmlns="http://www.w3.org/2005/Atom" rel="self">
 				<title>${title}</title>
 				<description>${description}</description>
 				<id>${url}/writing/rss</id>
-				<link>${url}</link>
-				<updated>${new Date(first.date).toUTCString()}</updated>
+				<link type="text/html" href=${url} />
+				<updated>${new Date(first.date).toISOString()}</updated>
 				<rights>Copyright © ${now.getFullYear()}, ${title}</rights>
 				${entries}
 		</feed>
