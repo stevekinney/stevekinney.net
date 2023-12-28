@@ -8,6 +8,7 @@
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content={data.meta.title} />
 	<meta property="og:description" content={data.meta.description} />
+	<meta property="og:image" content="/assets/{data.slug}.svg" />
 	<meta property="article:published_time" content={data.meta.date} />
 	<meta property="article:modified_time" content={data.meta.modified} />
 	<meta property="article:author" content="Steve Kinney" />
