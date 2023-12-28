@@ -7,12 +7,12 @@
 </script>
 
 <svelte:head>
-	<title>{data.meta.title} — {metadata.title}</title>
-	<meta name="description" content={data.meta.description} />
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content={data.meta.title} />
 	<meta property="og:description" content={data.meta.description} />
 	<meta property="article:published_time" content={data.meta.date} />
+	<meta property="article:modified_time" content={data.meta.modified} />
+	<meta property="article:author" content="Steve Kinney" />
 </svelte:head>
 
 <div>

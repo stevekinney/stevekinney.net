@@ -1,4 +1,4 @@
-async function getPosts() {
+export const getPosts = async () => {
 	let posts: Post[] = [];
 
 	const paths = import.meta.glob('/src/writing/*.md', { eager: true });
@@ -19,6 +19,15 @@ async function getPosts() {
 	);
 
 	return posts;
-}
+};
 
-export default getPosts;
+export const getPost = async (slug: string) => {
+	const post = await import(`../writing/${slug}.md`);
+	const meta = post.metadata as Post;
+
+	return {
+		content: post.default,
+		meta,
+		slug
+	};
+};

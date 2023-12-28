@@ -1,4 +1,6 @@
 ---
+title: Writing
+description: A relatively small collection of things that Steve has managed to sit down and type out.
 date: 2023-12-27T19:32:52-07:00
 modified: 2023-12-28T09:27:32-07:00
 ---
