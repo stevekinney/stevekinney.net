@@ -3,7 +3,7 @@ import type { Post } from './types';
 async function getPosts() {
 	let posts: Post[] = [];
 
-	const paths = import.meta.glob('/src/posts/*.md', { eager: true });
+	const paths = import.meta.glob('/src/writing/*.md', { eager: true });
 
 	for (const path in paths) {
 		const file = paths[path];

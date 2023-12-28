@@ -1,0 +1,166 @@
+{
+  "main": {
+    "id": "cbb116c2407fe5ae",
+    "type": "split",
+    "children": [
+      {
+        "id": "0dcfd3e06783fd16",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4cdce11b7b5a2289",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "src/writing/typescript-generics.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "eb6be55a37f0728d",
+    "type": "split",
+    "children": [
+      {
+        "id": "2e099d2b03394f9c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "77f1f21339d79784",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "132a0dbf712bc636",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "f0c968d4592a423f",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "00272d03f6327cf9",
+    "type": "split",
+    "children": [
+      {
+        "id": "016434f50dde17b4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "38de8f7964abff54",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "src/writing/typescript-generics.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "25f491ac9b9d479a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "src/writing/typescript-generics.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "6a798481ba9b1330",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "6e6d5f659e40e6e3",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "src/writing/typescript-generics.md"
+              }
+            }
+          },
+          {
+            "id": "77cf2ce100c02037",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "4cdce11b7b5a2289",
+  "lastOpenFiles": [
+    "src/writing/svelte-stores.md",
+    "src/writing/typescript-generics.md",
+    "src/routes/biography.md"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "promptDelete": false,
+  "attachmentFolderPath": "/src/assets",
+  "userIgnoreFilters": [
+    "build/",
+    "static/",
+    "tests/",
+    "node_modules/"
+  ],
+  "newFileLocation": "folder",
+  "newFileFolderPath": "src/writing",
+  "newLinkFormat": "relative",
+  "useMarkdownLinks": true,
+  "showUnsupportedFiles": false
+}

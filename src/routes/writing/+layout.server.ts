@@ -1,4 +1,4 @@
-import getPosts from '$lib/get-posts';
+import getPosts from '$lib/posts';
 
 export async function load() {
 	const posts = await getPosts();
