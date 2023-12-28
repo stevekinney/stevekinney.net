@@ -10,13 +10,3 @@
 	<Link href="/writing">Writing</Link>
 	<Link href="/courses">Courses</Link>
 </nav>
-
-<style lang="postcss">
-	a {
-		@apply font-semibold decoration-black decoration-4 underline-offset-8 hover:text-purple-800 dark:hover:text-purple-300;
-	}
-
-	.active {
-		@apply text-purple-700 underline dark:text-purple-800;
-	}
-</style>
