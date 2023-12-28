@@ -2,7 +2,7 @@
 	import { default as DateTime } from '$lib/components/date.svelte';
 	import metadata from '$lib/metadata';
 
-	export let title: string = '';
+	export let title = '';
 	export let date: Date | string | undefined = undefined;
 	export let modified: Date | string | undefined = undefined;
 	export let description: string | undefined = undefined;
