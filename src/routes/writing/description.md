@@ -1,1 +1,1 @@
-I write a lot of words, but most of them are for the [courses](/courses) that I teach. That said I've occasionally mustered up the will power and discipline to write a few words that I'm _not_ being paid for. This is a complete list. Apologies in advance.
+I write a lot of words, but most of them are for the [courses](/courses) that I teach or in some other pseudo-professional capacity. That said I've occasionally mustered up the will power and discipline to write a few words that I'm _not_ being paid for. This is a complete list. Please accept my apologies in advance.
