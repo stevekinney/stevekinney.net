@@ -10,8 +10,8 @@ Before taking on his current role at Temporal, Steve contributed as a front-end 
 
 [temp]: https://temporal.io
 [0]: https://frontendmasters.com/teachers/steve-kinney/
-[8]: https://turing.io
-[9]: https://frontend.turing.io
+[8]: https://turing.edu
+[9]: https://frontend.turing.edu
 [10]: https://bit.ly/electronjs
 [11]: https://manning.com
 [12]: https://dinosaurjs.org
