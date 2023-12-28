@@ -26,7 +26,7 @@ export default ({ post }: SocialCardProps) => {
 				gap: '2rem',
 				height: '100vh',
 				justifyContent: 'center',
-				padding: '2rem',
+				padding: '4rem',
 				width: '100vw',
 				textShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
 			}}
