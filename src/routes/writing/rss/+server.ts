@@ -3,6 +3,8 @@ import { getPosts } from '$lib/posts';
 
 const now = new Date();
 
+export const prerender = true;
+
 export async function GET() {
 	const headers = { 'Content-Type': 'application/xml' };
 	const posts = await getPosts();

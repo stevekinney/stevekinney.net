@@ -1,6 +1,7 @@
 <script lang="ts">
 	import metadata from '$lib/metadata';
 	import Biography from './biography.md';
+	import socialCard from './assets/social-card.jpg';
 </script>
 
 <svelte:head>
@@ -10,6 +11,12 @@
 	<meta property="og:title" content={metadata.title} />
 	<meta property="og:description" content={metadata.description} />
 	<meta property="og:url" content={metadata.url} />
+	<meta property="og:image" content={socialCard} />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Steve Kinney" />
+	<meta name="twitter:site" content="@stevekinney" />
+	<meta property="twitter:description" content={metadata.description} />
+	<meta property="twitter:image" content={socialCard} />
 </svelte:head>
 
 <div class="space-y-8">

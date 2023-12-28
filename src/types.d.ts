@@ -4,3 +4,5 @@ declare module '*.md' {
 	export default ComponentType<SvelteComponent>;
 	export const metadata: Record<string, unknown>;
 }
+
+declare module 'remark-obsidian';

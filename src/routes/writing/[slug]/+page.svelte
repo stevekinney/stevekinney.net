@@ -11,6 +11,11 @@
 	<meta property="article:published_time" content={data.meta.date} />
 	<meta property="article:modified_time" content={data.meta.modified} />
 	<meta property="article:author" content="Steve Kinney" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content={data.meta.title} />
+	<meta name="twitter:site" content="@stevekinney" />
+	<meta property="twitter:description" content={data.meta.description} />
+	<meta property="twitter:image" content="/assets/{data.slug}.svg" />
 </svelte:head>
 
 <div>
