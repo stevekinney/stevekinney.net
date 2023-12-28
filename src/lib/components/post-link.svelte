@@ -1,6 +1,4 @@
 <script lang="ts">
-	import type { Post } from '$lib/types';
-
 	import Date from './date.svelte';
 	import Link from './link.svelte';
 

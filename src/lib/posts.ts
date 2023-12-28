@@ -1,5 +1,3 @@
-import type { Post } from './types';
-
 async function getPosts() {
 	let posts: Post[] = [];
 

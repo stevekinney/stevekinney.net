@@ -179,8 +179,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "130a1b054350a4ec",
+  "active": "77f1f21339d79784",
   "lastOpenFiles": [
+    "src/lib/types.d.ts",
     "README.md",
     "Spaces/Home",
     "Spaces",
