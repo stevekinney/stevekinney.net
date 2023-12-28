@@ -7,7 +7,8 @@ export async function load({ params }) {
 
 		return {
 			content: post.default,
-			meta: post.metadata as Post
+			meta: post.metadata as Post,
+			slug: params.slug
 		};
 	} catch (e) {
 		throw error(404, `Could not find ${params.slug}`);
