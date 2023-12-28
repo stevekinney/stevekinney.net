@@ -19,7 +19,7 @@
 
 		<div class="space-y-4">
 			<h3
-				class="font-semibold text-purple-200 decoration-purple-500 decoration-4 underline-offset-4 group-hover:underline"
+				class="font-semibold text-purple-800 decoration-purple-500 decoration-4 underline-offset-4 group-hover:underline"
 			>
 				{title}
 			</h3>

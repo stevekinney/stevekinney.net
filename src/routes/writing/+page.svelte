@@ -5,7 +5,7 @@
 	export let data;
 </script>
 
-<section class="space-y-8">
+<section class="space-y-6">
 	<h2 class="text-xl font-bold">Written Words</h2>
 
 	<Description />

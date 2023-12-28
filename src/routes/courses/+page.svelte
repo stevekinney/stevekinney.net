@@ -4,7 +4,7 @@
 	import Description from './description.md';
 </script>
 
-<section class="space-y-8">
+<section class="space-y-6">
 	<h2 class="text-xl font-bold">
 		<a href="https://frontendmasters.com/teachers/steve-kinney/" target="_blank">
 			Courses on <span>Frontend Masters</span>
