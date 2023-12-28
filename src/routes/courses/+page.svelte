@@ -1,8 +1,17 @@
 <script>
 	import courses from '$lib/courses';
+	import metadata from '$lib/metadata';
 	import Card from '$lib/components/card.svelte';
 	import Description from './description.md';
 </script>
+
+<svelte:head>
+	<title>Writing — {metadata.title}</title>
+	<meta
+		name="description"
+		content="A list of courses that Steve has taught with Frontend Masters."
+	/>
+</svelte:head>
 
 <section class="space-y-6">
 	<h2 class="text-xl font-bold">

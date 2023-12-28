@@ -6,7 +6,6 @@
 	import Navigation from '$lib/components/navigation.svelte';
 
 	import '../app.css';
-	import Link from '$lib/components/link.svelte';
 </script>
 
 <main

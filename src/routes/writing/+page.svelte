@@ -1,9 +1,15 @@
 <script lang="ts">
 	import Card from '$lib/components/card.svelte';
+	import metadata from '$lib/metadata';
 	import Description from './description.md';
 
 	export let data;
 </script>
+
+<svelte:head>
+	<title>Writing — {metadata.title}</title>
+	<meta name="description" content="Posts, essays, and tutorials." />
+</svelte:head>
 
 <section class="space-y-6">
 	<h2 class="text-xl font-bold">Written Words</h2>
