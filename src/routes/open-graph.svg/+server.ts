@@ -3,7 +3,10 @@ import { getFont } from '$lib/fonts';
 
 import OpenGraphImage from './open-graph-image';
 
-const headers = { 'Content-Type': 'image/svg+xml' };
+const headers = {
+	'Content-Type': 'image/svg+xml',
+	'Cache-Control': 'max-age=604800, stale-while-revalidate=86400',
+};
 
 const firaSans = await getFont('fira-sans', 500, 'normal');
 const firaSansThin = await getFont('fira-sans', 300, 'normal');
