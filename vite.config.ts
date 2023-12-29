@@ -5,7 +5,11 @@ import { enhancedImages } from '@sveltejs/enhanced-img';
 
 export default defineConfig({
 	plugins: [sveltekit(), enhancedImages(), imagetools()],
+	esbuild: {
+		jsxFactory: 'h',
+		jsxFragment: 'Fragment',
+	},
 	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}']
-	}
+		include: ['src/**/*.{test,spec}.{js,ts}'],
+	},
 });

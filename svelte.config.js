@@ -16,15 +16,15 @@ const mdsvexOptions = {
 	remarkPlugins: [remarkUnwrapImages, remarkObsidian],
 	rehypePlugins: [rehypeSlug],
 	layout: {
-		_: './src/markdown.svelte'
+		_: './src/markdown.svelte',
 	},
 	highlight: {
 		highlighter: async (code, lang = 'text') => {
 			const highlighter = await shiki.getHighlighter({ theme: 'solarized-dark' });
 			const html = escapeSvelte(highlighter.codeToHtml(code, { lang }));
 			return `{@html \`${html}\` }`;
-		}
-	}
+		},
+	},
 };
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -32,8 +32,11 @@ const config = {
 	extensions: ['.svelte', '.md'],
 	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions)],
 	kit: {
-		adapter: process.env.VERCEL ? vercelAdapter() : staticAdapter()
-	}
+		adapter: process.env.VERCEL ? vercelAdapter() : staticAdapter({ strict: false }),
+		alias: {
+			'$assets/*': 'src/assets/*',
+		},
+	},
 };
 
 export default config;

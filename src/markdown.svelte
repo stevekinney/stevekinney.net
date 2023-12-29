@@ -1,8 +1,11 @@
 <script>
 	import { default as DateTime } from '$lib/components/date.svelte';
-	import metadata from '$lib/metadata';
 
+	/** @type {Date | string | undefined } */
 	export let title = '';
+
+	/** @type {Date | string | undefined } */
+	export let description = '';
 
 	/** @type {Date | string | undefined } */
 	export let date = undefined;
@@ -10,19 +13,17 @@
 	/** @type {Date | string | undefined } */
 	export let modified = undefined;
 
-	/** @type {string | undefined } */
-	export let description = undefined;
-
 	/** @type { boolean } */
 	export let published = false;
-</script>
 
-<svelte:head>
-	{#if title}<title>{title} — {metadata.title}</title>{/if}
-	{#if description}<meta name="description" content={description} />{/if}
-	{#if published && date}<meta name="date" content={String(date)} />{/if}
-	{#if published && modified}<meta name="last-modified" content={String(modified)} />{/if}
-</svelte:head>
+	export const metadata = {
+		title,
+		description,
+		date,
+		modified,
+		published,
+	};
+</script>
 
 <article class="prose dark:prose-invert">
 	<slot />

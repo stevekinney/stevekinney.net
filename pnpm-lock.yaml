@@ -13,6 +13,15 @@ dependencies:
     version: 0.14.7
 
 devDependencies:
+  '@fontsource/fira-sans':
+    specifier: ^5.0.18
+    version: 5.0.18
+  '@fontsource/league-gothic':
+    specifier: ^5.0.18
+    version: 5.0.18
+  '@fontsource/roboto':
+    specifier: ^5.0.8
+    version: 5.0.8
   '@playwright/test':
     specifier: ^1.28.1
     version: 1.40.1
@@ -61,6 +70,9 @@ devDependencies:
   eslint-plugin-svelte:
     specifier: ^2.30.0
     version: 2.35.1(eslint@8.56.0)(svelte@4.2.8)
+  fast-glob:
+    specifier: ^3.3.2
+    version: 3.3.2
   mdsvex:
     specifier: ^0.11.0
     version: 0.11.0(svelte@4.2.8)
@@ -103,6 +115,9 @@ devDependencies:
   tslib:
     specifier: ^2.4.1
     version: 2.6.2
+  tsx:
+    specifier: ^4.7.0
+    version: 4.7.0
   typescript:
     specifier: ^5.0.0
     version: 5.3.3
@@ -392,6 +407,18 @@ packages:
   /@eslint/js@8.56.0:
     resolution: {integrity: sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dev: true
+
+  /@fontsource/fira-sans@5.0.18:
+    resolution: {integrity: sha512-FAxkEg8LSYqihmZ0bBGxVyPzur5P6QwGssVcolUAKO+DrdopbxJxuUb8H8kzSoF9OkVR7ZAmaIQiWvm973PubA==}
+    dev: true
+
+  /@fontsource/league-gothic@5.0.18:
+    resolution: {integrity: sha512-jccZ4qdBuuHXDYC8OOURNoGm+uflx03HvWh516nkXDw+nIJSAG5aDTNLVg7uaJMvyII4MXG4o49QKZ29Yv7zbw==}
+    dev: true
+
+  /@fontsource/roboto@5.0.8:
+    resolution: {integrity: sha512-XxPltXs5R31D6UZeLIV1td3wTXU3jzd3f2DLsXI8tytMGBkIsGcc9sIyiupRtA8y73HAhuSCeweOoBqf6DbWCA==}
     dev: true
 
   /@humanwhocodes/config-array@0.11.13:
@@ -2047,6 +2074,12 @@ packages:
     engines: {node: '>=16'}
     dev: true
 
+  /get-tsconfig@4.7.2:
+    resolution: {integrity: sha512-wuMsz4leaj5hbGgg4IvDU0bqJagpftG5l5cXIAvo8uZrqn0NJqwtfupTN00VnkQJPcIRrxYrm1Ue24btpCha2A==}
+    dependencies:
+      resolve-pkg-maps: 1.0.0
+    dev: true
+
   /github-slugger@2.0.0:
     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
     dev: true
@@ -3062,6 +3095,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /resolve-pkg-maps@1.0.0:
+    resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
+    dev: true
+
   /resolve@1.22.8:
     resolution: {integrity: sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw==}
     hasBin: true
@@ -3620,6 +3657,17 @@ packages:
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+    dev: true
+
+  /tsx@4.7.0:
+    resolution: {integrity: sha512-I+t79RYPlEYlHn9a+KzwrvEwhJg35h/1zHsLC2JXvhC2mdynMv6Zxzvhv5EMV6VF5qJlLlkSnMVvdZV3PSIGcg==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+    dependencies:
+      esbuild: 0.19.10
+      get-tsconfig: 4.7.2
+    optionalDependencies:
+      fsevents: 2.3.3
     dev: true
 
   /type-check@0.4.0:
