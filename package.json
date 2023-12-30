@@ -62,11 +62,23 @@
 		"@fontsource/roboto": "^5.0.8",
 		"sharp": "0.32.6"
 	},
+	"overrides": {
+		"vite-imagetools": {
+			"sharp": "0.32.6"
+		}
+	},
 	"pnpm": {
 		"supportedArchitectures": {
-			"os": ["linux", "darwin", "current"],
-			"cpu": ["x64", "arm64", "current"]
+			"os": [
+				"linux",
+				"darwin",
+				"current"
+			],
+			"cpu": [
+				"x64",
+				"arm64",
+				"current"
+			]
 		}
 	}
 }
-
