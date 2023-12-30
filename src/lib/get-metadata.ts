@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import { page } from '$app/stores';
 import { derived } from 'svelte/store';
 
@@ -18,7 +19,8 @@ export const description = derived(page, ($page) => {
 });
 
 export const openGraphUrl = derived(page, ($page) => {
-	const url = new URL('/open-graph.jpg', $page.url);
+	const base = dev ? $page.url : 'https://stevekinney.net';
+	const url = new URL('/open-graph.jpg', base);
 
 	const title = $page.data.meta?.title;
 	const description = $page.data.meta?.description;
@@ -30,5 +32,6 @@ export const openGraphUrl = derived(page, ($page) => {
 });
 
 export const url = derived(page, ($page) => {
-	return 'https://stevekinney.net' + $page.url.pathname;
+	const base = dev ? $page.url : 'https://stevekinney.net';
+	return base + $page.url.pathname;
 });
