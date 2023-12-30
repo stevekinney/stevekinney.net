@@ -1,10 +1,10 @@
 export const getPosts = async () => {
 	let posts: Post[] = [];
 
-	const paths = import.meta.glob('/src/writing/*.md', { eager: true });
+	const paths = import.meta.glob('/src/writing/*.md');
 
 	for (const path in paths) {
-		const file = paths[path];
+		const file = await paths[path]();
 		const slug = path.split('/').at(-1)?.replace('.md', '');
 
 		if (file && typeof file === 'object' && 'metadata' in file && slug) {
@@ -15,7 +15,7 @@ export const getPosts = async () => {
 	}
 
 	posts = posts.sort(
-		(first, second) => new Date(second.date).getTime() - new Date(first.date).getTime()
+		(first, second) => new Date(second.date).getTime() - new Date(first.date).getTime(),
 	);
 
 	return posts;
@@ -29,7 +29,7 @@ export const getPost = async (slug: string) => {
 		return {
 			content: post.default,
 			meta,
-			slug
+			slug,
 		};
 	} catch (e) {
 		throw new Error(`Could not find file: ../writing/${slug}.md`);

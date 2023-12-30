@@ -1,7 +1,8 @@
 <script>
 	import courses from '$lib/courses';
 	import Card from '$lib/components/card.svelte';
-	import Description from './description.md';
+
+	export let data;
 </script>
 
 <section class="space-y-6">
@@ -11,7 +12,7 @@
 		</a>
 	</h2>
 
-	<Description />
+	<svelte:component this={data.description} />
 
 	<ul class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
 		{#each courses as course}

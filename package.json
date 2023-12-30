@@ -65,7 +65,7 @@
 	"pnpm": {
 		"supportedArchitectures": {
 			"os": ["linux", "darwin", "current"],
-			"cpu": ["x64", "arm64"]
+			"cpu": ["x64", "arm64", "current"]
 		}
 	}
 }
