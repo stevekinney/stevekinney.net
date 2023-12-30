@@ -29,4 +29,6 @@ export const openGraphUrl = derived(page, ($page) => {
 	return `${url.pathname}${url.search}`;
 });
 
-export const url = 'https://stevekinney.net';
+export const url = derived(page, ($page) => {
+	return $page.url.href;
+});

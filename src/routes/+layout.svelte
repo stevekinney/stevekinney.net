@@ -15,7 +15,7 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={$title} />
 	<meta property="og:description" content={$description} />
-	<meta property="og:url" content={url} />
+	<meta property="og:url" content={$url} />
 	<meta property="og:image" content={$openGraphUrl} />
 	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:title" content="Steve Kinney" />
@@ -24,9 +24,11 @@
 	<meta property="twitter:image" content={$openGraphUrl} />
 	{#if $page.data.meta?.published && $page.data.meta?.date}
 		<meta name="date" content={String($page.data.meta?.date)} />
+		<meta name="article:published_time" content={String($page.data.meta?.date)} />
 	{/if}
 	{#if $page.data.meta?.published && $page.data.meta?.modified}
 		<meta name="last-modified" content={String($page.data.meta?.modified)} />
+		<meta name="article:modified_time" content={String($page.data.meta?.modified)} />
 	{/if}
 </svelte:head>
 
