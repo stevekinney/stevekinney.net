@@ -60,7 +60,7 @@
 		"@fontsource/fira-sans": "^5.0.18",
 		"@fontsource/league-gothic": "^5.0.18",
 		"@fontsource/roboto": "^5.0.8",
-		"sharp": "^0.33.1"
+		"sharp": "0.32.6"
 	},
 	"pnpm": {
 		"supportedArchitectures": {
