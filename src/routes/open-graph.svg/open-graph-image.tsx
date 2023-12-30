@@ -38,13 +38,15 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 				flexDirection: 'column',
 				width: '100vw',
 				height: '100vh',
-				padding: '7rem',
+				padding: '4rem 7rem',
 				gap: '2rem',
 				backgroundImage: `url('${url.origin}${socialCard}')`,
 				color: 'white',
 			}}
 		>
-			<h1 style={{ fontSize: '6rem', fontFamily: 'League Gothic', margin: 0 }}>Steve Kinney</h1>
+			<h1 style={{ fontSize: '6rem', fontFamily: 'League Gothic', margin: 0, flexShrink: 1 }}>
+				Steve Kinney
+			</h1>
 
 			<div
 				style={{
