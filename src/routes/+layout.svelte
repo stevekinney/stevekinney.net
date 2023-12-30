@@ -1,35 +1,26 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { Github, Instagram, Twitter, Linkedin, Youtube } from 'lucide-svelte';
-	
-	import metadata from '$lib/metadata';
+
 	import SocialLink from '$lib/components/social-link.svelte';
 	import Navigation from '$lib/components/navigation.svelte';
-	import { openGraphUrl } from '$lib/get-metadata';
+	import { openGraphUrl, title, description, url } from '$lib/get-metadata';
 
 	import '../app.css';
 </script>
 
 <svelte:head>
-	{#if $page.data.meta?.title}
-		<title>{$page.data.meta?.title} | {metadata.title}</title>
-	{:else}
-		<title>{metadata.title}</title>
-	{/if}
-
-	<meta name="description" content={$page.data.meta?.description || metadata.description} />
+	<title>{$title}</title>
+	<meta name="description" content={$description} />
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content={$page.data.meta?.title || metadata.title} />
-	<meta property="og:description" content={$page.data.meta?.description || metadata.description} />
-	<meta property="og:url" content={metadata.url} />
+	<meta property="og:title" content={$title} />
+	<meta property="og:description" content={$description} />
+	<meta property="og:url" content={url} />
 	<meta property="og:image" content={$openGraphUrl} />
 	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:title" content="Steve Kinney" />
 	<meta name="twitter:site" content="@stevekinney" />
-	<meta
-		property="twitter:description"
-		content={$page.data.meta?.description || metadata.description}
-	/>
+	<meta property="twitter:description" content={$description} />
 	<meta property="twitter:image" content={$openGraphUrl} />
 	{#if $page.data.meta?.published && $page.data.meta?.date}
 		<meta name="date" content={String($page.data.meta?.date)} />
@@ -44,9 +35,7 @@
 >
 	<header>
 		<h1 class="whitespace-nowrap lg:order-1">
-			<a href="/" class="text-4xl font-bold text-black dark:text-white">
-				{metadata.title}
-			</a>
+			<a href="/" class="text-4xl font-bold text-black dark:text-white">Steve Kinney</a>
 		</h1>
 	</header>
 
