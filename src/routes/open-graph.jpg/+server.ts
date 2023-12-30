@@ -1,10 +1,11 @@
 import satori from 'satori';
+import sharp from 'sharp';
 import OpenGraphImage from './open-graph-image';
 
 export const prerender = false;
 
 const headers = {
-	'Content-Type': 'image/svg+xml',
+	'Content-Type': 'image/jpeg',
 	'Cache-Control': 'max-age=604800, stale-while-revalidate=86400',
 };
 
@@ -42,5 +43,7 @@ export async function GET(handler) {
 		],
 	});
 
-	return new Response(svg, { headers });
+	const buffer = await sharp(Buffer.from(svg)).jpeg().toBuffer();
+
+	return new Response(buffer, { headers });
 }

@@ -18,7 +18,7 @@ export const description = derived(page, ($page) => {
 });
 
 export const openGraphUrl = derived(page, ($page) => {
-	const url = new URL('/open-graph.svg', $page.url);
+	const url = new URL('/open-graph.jpg', $page.url);
 
 	const title = $page.data.meta?.title;
 	const description = $page.data.meta?.description;

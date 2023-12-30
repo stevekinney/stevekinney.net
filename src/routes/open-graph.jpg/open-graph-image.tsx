@@ -13,7 +13,7 @@ export function h(type: string, props: { [key: string]: unknown } | null, ...chi
 	return { type, props: props || {} };
 }
 
-const MAX_DESCRIPTION_LENGTH = 150;
+const MAX_DESCRIPTION_LENGTH = 200;
 
 const OpenGraphImage = ({ url }: RequestEvent) => {
 	let title: string | undefined;
@@ -38,9 +38,10 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 				flexDirection: 'column',
 				width: '100vw',
 				height: '100vh',
-				padding: '4rem 7rem',
+				padding: '4rem 10rem',
 				gap: '2rem',
-				backgroundImage: `url('${url.origin}${socialCard}')`,
+				backgroundImage: `linear-gradient(133deg, rgba(2,0,36,0.6) 0%, rgba(106,0,139,0.4) 45%, rgba(106,0,139,0.4) 75%, rgba(49,0,64,0.8) 100%), url('${url.origin}${socialCard}')`,
+				backgroundPosition: 'center, 100% center',
 				color: 'white',
 			}}
 		>
@@ -60,7 +61,7 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 				{title && (
 					<h2
 						style={{
-							fontSize: description ? '4rem' : '6rem',
+							fontSize: description ? '3rem' : '6rem',
 							textAlign: description ? 'left' : 'center',
 							width: '100%',
 							margin: 0,

@@ -59,6 +59,7 @@
 	"dependencies": {
 		"@fontsource/fira-sans": "^5.0.18",
 		"@fontsource/league-gothic": "^5.0.18",
-		"@fontsource/roboto": "^5.0.8"
+		"@fontsource/roboto": "^5.0.8",
+		"sharp": "^0.33.1"
 	}
 }
