@@ -13,6 +13,8 @@ export function h(type: string, props: { [key: string]: unknown } | null, ...chi
 	return { type, props: props || {} };
 }
 
+const MAX_DESCRIPTION_LENGTH = 150;
+
 const OpenGraphImage = ({ url }: RequestEvent) => {
 	let title: string | undefined;
 	let description;
@@ -36,7 +38,7 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 				flexDirection: 'column',
 				width: '100vw',
 				height: '100vh',
-				padding: '2rem',
+				padding: '7rem',
 				gap: '2rem',
 				backgroundImage: `url('${url.origin}${socialCard}')`,
 				color: 'white',
@@ -76,7 +78,9 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 							textOverflow: 'ellipsis',
 						}}
 					>
-						{description.length > 400 ? `${description.slice(0, 400)}…` : description}
+						{description.length > MAX_DESCRIPTION_LENGTH
+							? `${description.slice(0, MAX_DESCRIPTION_LENGTH)}…`
+							: description}
 					</p>
 				)}
 			</div>
