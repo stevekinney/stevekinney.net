@@ -15,7 +15,7 @@ export function h(type: string, props: { [key: string]: unknown } | null, ...chi
 
 const OpenGraphImage = ({ url }: RequestEvent) => {
 	let title: string | undefined;
-	let description = metadata.description;
+	let description;
 
 	if (url.searchParams.has('title')) {
 		title = decodeURIComponent(url.searchParams.get('title')!);
@@ -23,6 +23,10 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 
 	if (url.searchParams.has('description')) {
 		description = decodeURIComponent(url.searchParams.get('description')!);
+	}
+
+	if (!title && !description) {
+		description = metadata.description;
 	}
 
 	return (

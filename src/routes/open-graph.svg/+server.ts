@@ -1,20 +1,22 @@
 import satori from 'satori';
+import OpenGraphImage from './open-graph-image';
 
 export const prerender = false;
-
-import OpenGraphImage from './open-graph-image';
-import { readFile } from 'fs/promises';
 
 const headers = {
 	'Content-Type': 'image/svg+xml',
 	'Cache-Control': 'max-age=604800, stale-while-revalidate=86400',
 };
 
-const firaSans = await readFile('src/routes/open-graph.svg/fira-sans-300-normal.woff');
-const firaSansThin = await readFile('src/routes/open-graph.svg/fira-sans-500-normal.woff');
-const leagueGothic = await readFile('src/routes/open-graph.svg/league-gothic-400-normal.woff');
-
 export async function GET(handler) {
+	const { fetch } = handler;
+
+	const firaSans = await fetch('/fira-sans-500-normal.woff').then((res) => res.arrayBuffer());
+	const firaSansThin = await fetch('/fira-sans-300-normal.woff').then((res) => res.arrayBuffer());
+	const leagueGothic = await fetch('/league-gothic-400-normal.woff').then((res) =>
+		res.arrayBuffer(),
+	);
+
 	const svg = await satori(OpenGraphImage(handler), {
 		width: 1200,
 		height: 630,
