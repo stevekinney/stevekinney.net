@@ -1,4 +1,4 @@
-import type { RequestEvent } from './$types';
+import type { RequestEvent } from '@sveltejs/kit';
 
 // @ts-expect-error - Required for vite-imagetools
 import socialCard from '$assets/social-card.jpg?grayscale&brightness=0.4&url';

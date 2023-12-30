@@ -1,5 +1,7 @@
 import satori from 'satori';
 
+export const prerender = false;
+
 import OpenGraphImage from './open-graph-image';
 import { readFile } from 'fs/promises';
 
@@ -19,15 +21,15 @@ export async function GET(handler) {
 		fonts: [
 			{
 				name: 'Fira Sans',
-				weight: 500,
-				style: 'normal',
-				data: firaSans,
-			},
-			{
-				name: 'Fira Sans',
 				weight: 300,
 				style: 'normal',
 				data: firaSansThin,
+			},
+			{
+				name: 'Fira Sans',
+				weight: 500,
+				style: 'normal',
+				data: firaSans,
 			},
 			{
 				name: 'League Gothic',
