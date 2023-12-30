@@ -61,5 +61,12 @@
 		"@fontsource/league-gothic": "^5.0.18",
 		"@fontsource/roboto": "^5.0.8",
 		"sharp": "^0.33.1"
+	},
+	"pnpm": {
+		"supportedArchitectures": {
+			"os": ["linux", "darwin", "current"],
+			"cpu": ["x64", "arm64"]
+		}
 	}
 }
+
