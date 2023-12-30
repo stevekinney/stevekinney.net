@@ -11,6 +11,7 @@
 
 <svelte:head>
 	<title>{$title}</title>
+	<link rel="image_src" href={$openGraphUrl} />
 	<meta name="description" content={$description} />
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={$title} />
