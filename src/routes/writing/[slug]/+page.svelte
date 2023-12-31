@@ -4,11 +4,15 @@
 	export let data;
 </script>
 
-<div>
-	<hgroup class="mb-10 space-y-2">
+<div class="space-y-10">
+	<hgroup class="space-y-2">
 		<Date date={data.meta.date} />
 		<h1 class="text-2xl font-bold">{data.meta.title}</h1>
 	</hgroup>
+
+	<p class="font-serif text-2xl">
+		{data.meta.description}
+	</p>
 
 	<svelte:component this={data.content} />
 </div>
