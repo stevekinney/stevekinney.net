@@ -4,7 +4,7 @@ import { getPosts } from '$lib/posts';
 export const prerender = true;
 
 const now = new Date();
-const headers = { 'Content-Type': 'application/xml' };
+const headers = { 'Content-Type': 'application/rss+xml' };
 
 export async function GET() {
 	const posts = await getPosts();
@@ -32,13 +32,14 @@ export async function GET() {
 
 	const xml = `
 		<?xml version="1.0" encoding="utf-8"?>
-		<feed xmlns="http://www.w3.org/2005/Atom" rel="self">
+		<feed xmlns="http://www.w3.org/2005/Atom">
 				<title>${title}</title>
 				<subtitle>${description}</subtitle>
 				<author>
        		<name>${author}</name>
      		</author>
 				<id>${url}/writing/rss</id>
+				<atom:link href="${url}/writing/rss" rel="self" type="application/rss+xml" />
 				<link type="text/html" href="${url}" />
 				<updated>${new Date(first.date).toISOString()}</updated>
 				<rights>Copyright © ${now.getFullYear()}, ${title}</rights>
