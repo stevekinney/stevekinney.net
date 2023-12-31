@@ -1,15 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { Github, Instagram, Twitter, Linkedin, Youtube } from 'lucide-svelte';
-	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 
 	import SocialLink from '$lib/components/social-link.svelte';
 	import Navigation from '$lib/components/navigation.svelte';
 	import { openGraphUrl, title, description, url } from '$lib/get-metadata';
 
 	import '../app.css';
-
-	injectSpeedInsights();
 </script>
 
 <svelte:head>
