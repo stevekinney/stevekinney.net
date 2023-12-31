@@ -18,7 +18,7 @@
 >
 	<p>
 		See something that looks a little off? Feel free to <a
-			href="https://github.com/stevekinney/stevekinney.net/blob/main/src/posts/{data.slug}.md"
+			href="https://github.com/stevekinney/stevekinney.net/tree/main/src/writing/{data.slug}.md"
 			class="font-semibold underline decoration-purple-500 decoration-2 underline-offset-4"
 			>open a pull request here</a
 		>.
