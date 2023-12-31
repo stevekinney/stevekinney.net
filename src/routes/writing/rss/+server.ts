@@ -39,7 +39,6 @@ export async function GET() {
        		<name>${author}</name>
      		</author>
 				<id>${url}/writing/rss</id>
-				<atom:link href="${url}/writing/rss" rel="self" type="application/rss+xml" />
 				<link type="text/html" href="${url}" />
 				<updated>${new Date(first.date).toISOString()}</updated>
 				<rights>Copyright © ${now.getFullYear()}, ${title}</rights>
