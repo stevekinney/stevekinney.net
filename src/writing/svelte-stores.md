@@ -2,7 +2,7 @@
 title: A Gentle Introduction to Svelte Stores
 description: 'Svelte stores simplify state management across components, offering a reactive and flexible system for sharing data, beyond basic client-side frameworks.'
 date: 2021-08-10T16:00:00.006Z
-modified: 2023-12-31T10:05:17-07:00
+modified: 2023-12-31T10:09:50-07:00
 published: true
 ---
 
@@ -224,3 +224,5 @@ Whenever the `page` store is updated, it will push a new value to everything tha
 ## In Conclusion
 
 Svelte stores are a simple, but incredibly powerful, concept. One point that I want to reiterate is that any JavaScript object that has a `subscribe` method that returns a function allowing you to unsubscribe from the store works. You can put a light wrapper around Redux and use it as a store in Svelte. You can use [observables from RxJS](https://rxjs.dev/guide/observable) as Svelte stores. You can write your own or you can use abstract the built-in writable, readable, and derived stores to create your own functionality.
+
+My thanks to **Rory MacKean** for finding a bunch of errors—typographical and otherwise—in the original version of this post.
