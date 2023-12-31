@@ -1,6 +1,6 @@
 ---
 title: A Gentle Introduction to Svelte Stores
-description: 'Svelte stores simplify state management across components, offering a reactive and flexible system for sharing data, beyond basic client-side frameworks.'
+description: Svelte stores simplify state management across components, offering a reactive and flexible system for sharing data. Let's learn how they're implemented.
 date: 2021-08-10T16:00:00.006Z
 modified: 2023-12-31T10:09:50-07:00
 published: true

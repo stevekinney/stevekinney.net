@@ -1,12 +1,12 @@
 ---
 title: Understanding Generics in TypeScript
-description: In TypeScript, a generic is a type tool that allows for the creation of reusable components that can work with a variety of types rather than a single one.
+description: "Let's learn a little bit about what generics are in TypeScript, why their useful, and how to use them."
 date: 2021-08-16T16:00:00.006Z
-modified: 2023-12-28T09:22:00-07:00
+modified: 2023-12-31T10:16:32-07:00
 published: true
 ---
 
-When you're first learning TypeScript, you typically start by adding fairly straight-forward type annotations to your functions and variables. For example, you might take a function that is allegedly supposed to add two numbers together and make sure that it _actually_ takes two numbers.
+When you're first learning TypeScript, you typically start by adding fairly straight-forward type annotations to your functions and variables. All is good in the world and it feels easy. For example, you might take a function that is allegedly supposed to add two numbers together and make sure that it _actually_ takes two numbers as arguments.
 
 ```ts
 const add = (x: number, y: number) => {
@@ -14,15 +14,20 @@ const add = (x: number, y: number) => {
 };
 ```
 
-You can even go as far as telling TypeScript that this function returns a number as well, but you don't need to. TypeScript will infer that by the fact that there is only one code path (e.g. no conditionals, loops, or anything of that nature) and if you add two numbers together, you're going to get a number. When in doubt, let TypeScript infer types, if possible. Typically, it does a better job and finds a more restrictive type than you might on your own.
+You can even go as far as telling TypeScript that this function returns a number as well, but you don't need to. TypeScript will infer that due to the fact that there is only one code path (e.g. no conditionals, loops, or anything of that nature) and if you add two numbers together, you're going to get a number.
 
-But, once you've gotten the basics of TypeScript down, it's time to take a look at generics. [Generics][gen] allow us to be a little bit more flexible with our type system. You can think of them as variables for your types.
+- **Some free advice that you didn't ask for**: When in doubt, let TypeScript infer types, if possible. Typically, it does a better job and finds a more restrictive type than you might on your own.
+- **Caveat**: A lot of times, I will add an annotation for the return value when I'm first developing the function. It's like a free unit test.
+
+Once you've gotten the basics of TypeScript down, it's time to take a look at generics. [Generics][gen] allow us to be a little bit more flexible with our type system. You can think of them as variables for your types.
 
 [gen]: https://www.typescriptlang.org/docs/handbook/2/generics.html
 
-Let's say you want to build a linked list data structure. Very cool. Ideally, we want to create a linked list where the value can be of any type. But, we want all of the nodes in any given linked list to be of the _same_ type. This means that we _cannot_ use the `any` type, because that's just chaos mode: Sure, it would allow the first node in the linked list to be of `any` type, but it would not force subsequent nodes in that list to be of the same type.
+Let's say you want to build a linked list data structure. Very cool. Ideally, we want to create a linked list where the value can be of any type. But, we want all of the nodes in any given linked list to be of the _same_ type.
 
-Before you click with generics, you might be tempted to create a whole bevy of linked list types. You'd make one for numbers, one for strings, one for objects where the keys are strings and the values are numbers, so on and so forth. (When I saw _you_, I'm mostly projecting. I mean _me_. I was tempted to do this until every fiber of my being screamed at me to stop.)
+That last requirement means that we _cannot_ use the `any` type, because that's just chaos mode: Sure, it would allow the first node in the linked list to be of `any` type, but it would not force subsequent nodes in that list to be of the same type.
+
+Before your brain fully clicks with generics, you might be tempted to create a whole bevy of linked list types. You'd make one for numbers, one for strings, one for objects where the keys are strings and the values are numbers, so on and so forth. (When I say _you_, I'm mostly projecting. I mean _me_. I was tempted to do this until every fiber of my being screamed at me to stop.)
 
 This is where we might use a generic. You might have seen some syntax at looks like this:
 
@@ -41,7 +46,7 @@ We can't just make a new object with that type.
 const link: Link = {};
 ```
 
-Why? Because as much as TypeScript wants to help us out, we haven't given it enough information. TypeScript is saying "Help me help you. Sure, you want make a `Link`, but what is `T` going to be? Can you tell me so that I can make sure that it's always `T`? Thanks!"
+Why? Because as much as TypeScript wants to help us out, we haven't given it enough information. TypeScript is saying, "help me help you. Sure, you want make a `Link`, but what is `T` going to be? Can you tell me so that I can make sure that it's always `T`? Thanks!"
 
 We can define what type `T` should be.
 
