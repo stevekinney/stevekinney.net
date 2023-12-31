@@ -2,19 +2,19 @@
 title: A Gentle Introduction to Svelte Stores
 description: 'Svelte stores simplify state management across components, offering a reactive and flexible system for sharing data, beyond basic client-side frameworks.'
 date: 2021-08-10T16:00:00.006Z
-modified: 2023-12-28T09:28:56-07:00
+modified: 2023-12-31T10:05:17-07:00
 published: true
 ---
 
-Any client-side framework or library looks reasonable when you're working on a small demonstration application. But, things typically get out of hand as your state management needs grow. This is particularly true when you want to share state between multiple components that aren't located near each other in your component hierarchy.
+Any client-side framework or library looks reasonable when you're working on a small demonstration application. But, things tend to get out of hand as your application—and it's state management needs—grow. This is particularly true when you want to share state between multiple components that aren't located near each other in your component hierarchy.
 
-Svelte supports something called [_stores_](https://svelte.dev/docs/svelte-store). Stores are JavaScript objects that adhere to a simple interface. You could implement a store yourself without a lot of code—and that's totally something that you might actually choose to do. Svelte doesn't particularly care. Svelte has some built-in stores, but basically anything that has a `subscribe` method that returns a function allowing you to unsubscribe will do the trick.
+Svelte comes with something called [_stores_](https://svelte.dev/docs/svelte-store). Stores are JavaScript objects that adhere to a simple interface. You could implement a store yourself without a lot of code—and that's totally something that you might actually choose to do. Svelte doesn't particularly care. Svelte has some built-in stores, but basically anything that has a `subscribe` method that returns a function allowing you to unsubscribe will do the trick.
 
 Stores allow you to access data or functionality from multiple components. They're reactive, which just means that they'll update your components whenever their data changes, hence that handy `subscribe` method.
 
-Sure, you _could_ do the thing where you move it up to the highest common component in the tree—the one that likely doesn't actually need this data itself—and then drill down to all of the components that actually do (just like they told us to when React first hit the scene), but anyone who has ever done knows it's not fun and falls apart rapidly when you depart from the friendly shores of some naively simple demonstration application and get into the real world where you need to move components around because of _reasons_.
+Sure, you _could_ do the thing where you move it up to the highest common component in the tree—the one that likely doesn't actually need this data itself—and then drill down to all of the components that actually do—just like they told us to when React first hit the scene. But, anyone who has ever done knows it's not fun and falls apart rapidly when you depart from the friendly shores of some naively simple demonstration application and get into the real world where you need to move components around because of _reasons_.
 
-To put it more succinctly, Svelte Stores allow you to separate your state management from your component hierarchy. This is usually something that becomes important whenever you need the same piece of data in more than one place in whatever application you're building. (I'm looking at you, `currentUser`.)
+To put it more succinctly, Svelte Stores allow you to separate your state management from your component hierarchy. This is usually something that becomes important whenever you need the same piece of data in more than one place in whatever application you're building. I'm looking at you, `currentUser`.
 
 With Svelte, you can define your stores and then just require them in your components. When the store updates, it will trigger a re-render of the component with the latest data.
 
@@ -22,7 +22,7 @@ If you've ever used Node's event emitters or [RxJS](https://rxjs.dev/), then you
 
 ## Using Stores in Your Svelte Application
 
-We're going to talk about how Svelte stores work below. But I'd be remiss if I didn't at least discuss how you go about using them in your Svelte application. As I mentioned, basically the only rule of Svelte stores is that they have a `subscribe` method that pushes out a new value every time that internal value is updated.
+We're going to talk about how Svelte stores work below. But, I'd be remiss if I didn't at least discuss how to go about using them in your Svelte application. As I mentioned, basically the only rule of Svelte stores is that they have a `subscribe` method that pushes out a new value every time that internal value is updated.
 
 You _could_ do something like this in your Svelte component's `<script>` tag:
 
@@ -35,7 +35,7 @@ let value; // Create a variable that you can use in your markup.
 // Subscribe to the store, updating the component's variable when it changes.
 const unsubscribe = counter.subscribe((newValue) => (value = newValue));
 
-// Unsubscribe to the store when the component is destroyed.
+	// Unsubscribe to the store when the component is destroyed.
 onDestroy(unsubscribe);
 ```
 
@@ -47,11 +47,11 @@ This works, but it's a bit tedious and it's common enough that Svelte provides y
 
 That's it. The Svelte compiler looks at that `$` and says, "Oh, this must be a store! Let me subscribe to it and I'll unsubscribe from it when this component is removed." Boom. You're done.
 
-Another fun advantage to this is that you can use the same store in multiple components and they'll all be synchronized to the same value. I'll leave it as an exercise to the reader to try to just import an object, use it inline in their React component, _and_ make it so that each of the components using the object are using the same value in memory without relying on the Context API.
+Another fun advantage to this is that you can use the same store in multiple components and they'll all be synchronized to the same value. I'll leave it as an exercise to the reader (i.e. you) to try to just import an object, use it inline in your React component, _and_ make it so that each of the components using the object are using the same value without relying on the Context API.
 
 ## Creating a Store
 
-Svelte provides three kinds of stores for you as part of its standard library: `writable`, `readable` and `derived` stores. (Technically, these are really all just variations on `writable` stores—but that's neither here nor there.).
+Svelte provides three kinds of stores for you: `writable`, `readable` and `derived` stores. (Technically, these are really all just variations on `writable` stores—but that's neither here nor there.).
 
 ```ts
 import { writable } from 'svelte/stores';
@@ -66,7 +66,7 @@ store.update((n) => n + 1); // This is similar to passing a function to
 //  `useState` in React.
 ```
 
-But, like I said, the extra fun comes with the fact that basically anything can be a store as long as it abides by contract that comes along with stores. What's involved in this? Basically, you need to implement the following:
+Like I said, the extra fun comes with the fact that basically anything can be a store as long as it abides by the contract that comes along with stores. What's involved in this? Basically, you need to implement the following:
 
 - An object that has a `subscribe` method.
 - That `subscribe` method should return a function that allows you to unsubscribe from changes.
@@ -76,7 +76,7 @@ But, like I said, the extra fun comes with the fact that basically anything can 
 
 ## Creating Your Own Custom Store
 
-Here is an obnoxiously simple store that you definitely shouldn't use, but should illustrate how simple it actually is under the hood.
+Here is an obnoxiously simple store that you definitely shouldn't use, but should illustrate how simple it is under the hood.
 
 ```js
 const createWritableStore = (value) => {
@@ -96,7 +96,7 @@ const createWritableStore = (value) => {
 	};
 
 	// `set` is a method that takes a new value and updates the one we're storing
-	// in memorty when we created the store and passed `value` in.
+	// in memory when we created the store and passed `value` in.
 	const set = (newValue) => {
 		value = newValue;
 		// After updating value, call all of the subscibers and tell them about the
@@ -115,11 +115,11 @@ const createWritableStore = (value) => {
 };
 ```
 
-Now, the real implementation does a bunch of fun things like—you know—making sure you're actually passing it functions as a subscribers. So, definitely use that one. But, this oversimplification should at least help you wrap your mind around how Svelte stores under the hood.
+Now, the real implementation does a bunch of fun things like—you know—making sure you're actually passing it functions as a subscribers. So, definitely use the stores that Svelte provides over my naïve implementation above. But, this oversimplification should at least help you wrap your mind around how Svelte stores under the hood.
 
 ## Abstracting Writeable Stores
 
-Sometimes you want all of the goodness of a store, but you want to give it a cleaner interface. For example, instead of letting anyone set the value of the store to _anything_, you want to only allow the recipient of your store to increment the count, decrement the count, and reset it back to zero. (As opposed to doing something wild like setting it to a string. Some people just want to see the world burn.) Like I said earlier, as long as you abide by the store contract, you can do whatever you want and it still counts as a store.
+Sometimes you want all of the goodness of a store, but you want to give it a cleaner interface. For example, instead of letting just anyone set the value of the store to _anything_, you want to only allow consumers to increment the count, decrement the count, and reset it back to zero. (As opposed to doing something wild like setting it to a string. Some people just want to see the world burn.) Like I said earlier, as long as you abide by the store contract, you can do whatever you want and it still counts as a store.
 
 Okay, so what does this mean—this basically means that you can proxy the subscribe method and then add whatever methods you want that will handle updating the values.
 
@@ -138,13 +138,11 @@ const createCounter = (initialCount) => {
 };
 ```
 
-With this, we're still using `set` and `update`, but they're hidden from whoever is on the receiving end of the object that comes out of `createCounter`. They can `subscribe` to changes, they can `increment`, `decrement`, and `reset` the value—but they can't call `update` or `reset` directly. Using the `$` syntax, they can just use it as a value that updates and you're UI will reflect those changes accordingly.
+With this, we're still using `set` and `update`, but they're hidden from whoever is on the receiving end of the object that comes out of `createCounter`. They can `subscribe` to changes, they can `increment`, `decrement`, and `reset` the value—but they can't call `update` or `set` directly. Using the `$` syntax, they can just use it as a value that updates and you're UI will reflect those changes accordingly.
 
 ## Readable Stores
 
-Readable stores are just an abstraction over writable stores.
-
-Here is a fun fact: a readable store is just an abstraction around a writable store that hides the `set` method from you. Instead, it takes a callback that allows you figure out what it should listen to in order to be able to update stuff. For example, you could set up a readable store and with the callback function, you could have it listen for messages over a WebSocket connection or call an API at some interval.
+A readable store is just an abstraction around a writable store that hides the `set` method from you. Instead, it takes a callback that allows you figure out what it should listen to in order to be able to update stuff. For example, you could set up a readable store and with the callback function, you could have it listen for messages over a WebSocket connection or call an API at some interval.
 
 ```ts
 const store = readable(0, (set) => {
@@ -164,7 +162,7 @@ const store = readable(0, (set) => {
 This is a simplified version of how a readable store is implemented in the Svelte codebase.
 
 ```ts
-const createReadableStore = (fn, initialValue) => {
+const createReadableStore = (initialValue, fn) => {
 	const store = createWritableStore(initialValue);
 
 	fn(store.set);
@@ -190,7 +188,7 @@ You're basically saying:
 [redux]: https://react-redux.js.org/api/hooks#useselector-examples
 [reselect]: https://github.com/reduxjs/reselect
 
-Here is a real world example of a derived store in action. [SvelteKit][kit] is a framework that provides a lot of the common infrastructure for building Svelte applications. It takes care of It is kind of like [NextJS][next] or even [Create React App][cra] (if you squint real hard), but for Svelte instead of React. It provides a bunch of stores out of the box and the `page` store is one of them. `page` gives you some of the information about the current route: the path, dynamic parameters in that path, the query parameters, etc.
+Here is a real world example of a derived store in action. [SvelteKit][kit] is a framework that provides a lot of the common infrastructure for building Svelte applications. It is kind of like [NextJS][next] or even [Create React App][cra] (if you squint real hard), but for Svelte instead of React. It provides a bunch of stores out of the box and the `page` store is one of them. `page` gives you some of the information about the current route: the path, dynamic parameters in that path, the query parameters, etc.
 
 In multiple places throughout [the application that I'm working on][temporal], I want to know whether we're looking at a given thing in full screen mode, which is determined by whether or not the `?fullScreen=true` query parameter is set. Cool. But, I don't want fuss with the `page` store every time I need figure out if we're in full screen mode or not. So, I created a derived store that looks like this:
 
@@ -217,7 +215,7 @@ Let's talk about what's happening here:
   - whether or not there even is a query param called `fullScreen`, and
   - if so, is it set to something other than `"false"`.
 
-Whenver the `page` store is updated, it will push a new value to everything that subscribes to it—just like the bespoke stores we wrote ourselves above. My derived store is a subscriber. When `page` updates, it will figure out if the `fullScreen` query parameter is still set. If this has changed, it will let anything subscribed to the `isFullScreen` store know so that it can update accordingly.
+Whenever the `page` store is updated, it will push a new value to everything that subscribes to it—just like the bespoke stores we wrote ourselves above. My derived store is a subscriber. When `page` updates, it will figure out if the `fullScreen` query parameter is still set. If this has changed, it will let anything subscribed to the `isFullScreen` store know so that it can update accordingly.
 
 [kit]: https://kit.svelte.dev
 [cra]: https://create-react-app.dev/
