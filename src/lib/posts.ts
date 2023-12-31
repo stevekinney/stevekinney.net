@@ -22,16 +22,12 @@ export const getPosts = async () => {
 };
 
 export const getPost = async (slug: string) => {
-	try {
-		const post = await import(`../writing/${slug}.md`);
-		const meta = post.metadata as Post;
+	const post = await import(`../writing/${slug}.md`);
+	const meta = post.metadata as Post;
 
-		return {
-			content: post.default,
-			meta,
-			slug,
-		};
-	} catch (e) {
-		throw new Error(`Could not find file: ../writing/${slug}.md`);
-	}
+	return {
+		content: post.default,
+		meta,
+		slug,
+	};
 };
