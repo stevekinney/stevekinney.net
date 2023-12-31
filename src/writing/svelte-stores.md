@@ -1,6 +1,6 @@
 ---
 title: A Gentle Introduction to Svelte Stores
-description: Svelte stores simplify state management across components, offering a reactive and flexible system for sharing data. Let's learn how they're implemented.
+description: Svelte stores simplify state management across components. Let's learn how they're implemented.
 date: 2021-08-10T16:00:00.006Z
 modified: 2023-12-31T10:44:46-07:00
 published: true
@@ -37,7 +37,7 @@ let value; // Create a variable that you can use in your markup.
 // Subscribe to the store, updating the component's variable when it changes.
 const unsubscribe = counter.subscribe((newValue) => (value = newValue));
 
-	// Unsubscribe to the store when the component is destroyed.
+// Unsubscribe to the store when the component is destroyed.
 onDestroy(unsubscribe);
 ```
 
@@ -112,7 +112,7 @@ const createWritableStore = (value) => {
 	// basic interface of a Svelte store.
 	return {
 		subscribe,
-		set
+		set,
 	};
 };
 ```
