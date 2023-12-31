@@ -1,12 +1,12 @@
 import { title, description, url, author } from '$lib/metadata';
 import { getPosts } from '$lib/posts';
 
-const now = new Date();
-
 export const prerender = true;
 
+const now = new Date();
+const headers = { 'Content-Type': 'application/xml' };
+
 export async function GET() {
-	const headers = { 'Content-Type': 'application/xml' };
 	const posts = await getPosts();
 	const [first] = posts;
 
@@ -25,14 +25,14 @@ export async function GET() {
 					<uri>${url}</uri>
 				</author>
 			</entry>
-		`.trim()
+		`.trim(),
 		)
 		.join('\n')
 		.trim();
 
 	const xml = `
 		<?xml version="1.0" encoding="utf-8"?>
-		<feed xmlns="http://www.w3.org/2005/Atom">
+		<feed xmlns="http://www.w3.org/2005/Atom" rel="self">
 				<title>${title}</title>
 				<subtitle>${description}</subtitle>
 				<author>
