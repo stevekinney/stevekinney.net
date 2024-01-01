@@ -70,6 +70,8 @@ The good news is that I'm just going to share it with you in case you'd like to 
 
 <ShikiThemeEditor />
 
+The defaults—and what I'm using at the time of this writing are loosely based on [Sarah Drasner's Night Owl theme](https://github.com/sdras/night-owl-vscode-theme).
+
 [tool]: /tools/shiki-theme-editor
 [Shiki]: https://shiki.matsu.io/
 [Lighthouse]: https://developer.chrome.com/docs/lighthouse/overview

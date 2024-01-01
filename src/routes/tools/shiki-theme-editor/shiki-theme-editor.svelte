@@ -28,7 +28,7 @@
 				<label class="text-nowrap font-mono text-xs" for={name}>{name}</label>
 				<p class="select-all text-sm text-gray-500">{value}</p>
 				<input
-					class="@sm:col-span-1 col-span-2 w-full outline-none"
+					class="@sm:col-span-1 @sm:w-full col-span-2 outline-none"
 					id={name}
 					{value}
 					{name}
