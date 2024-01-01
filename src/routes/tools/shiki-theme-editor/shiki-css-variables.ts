@@ -16,7 +16,7 @@ const shikiCssVariables = {
 
 export type ShikiCssVariable = keyof typeof shikiCssVariables;
 
-const store = writable({ ...shikiCssVariables });
+const store = writable(shikiCssVariables);
 
 export const set = (key: ShikiCssVariable, value: string) => {
 	store.update((state) => ({ ...state, [key]: value }));
