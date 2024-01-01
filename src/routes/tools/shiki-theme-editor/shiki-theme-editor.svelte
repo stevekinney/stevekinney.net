@@ -23,10 +23,10 @@
 		<pre
 			class="select-all overflow-x-auto rounded-md p-4"
 			style="{$asInlineStyle} background-color: var(--shiki-color-background)">{@html $toHTML}</pre>
-		<div class="@sm:grid-cols-[max-content_max-content_1fr] grid grid-cols-2 items-center gap-4">
+		<div class="@sm:grid-cols-[max-content_1fr_1fr] grid grid-cols-2 items-center gap-4">
 			{#each Object.entries($shikiCssVariables) as [name, value]}
 				<label class="text-nowrap font-mono text-xs" for={name}>{name}</label>
-				<p class="select-all text-sm text-gray-500">{value}</p>
+				<p class="select-all text-right font-mono text-sm text-gray-500">{value}</p>
 				<input
 					class="@sm:col-span-1 @sm:w-full col-span-2 outline-none"
 					id={name}
