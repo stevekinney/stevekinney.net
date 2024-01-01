@@ -5,10 +5,6 @@
 @tailwind utilities;
 
 @layer base {
-	body {
-		@apply dark:bg-black-pearl-950 text-black-pearl-950 dark:text-white;
-	}
-
 	:root {
 		--shiki-color-text: #aac569;
 		--shiki-color-background: #011628;
@@ -21,5 +17,13 @@
 		--shiki-token-string-expression: #d6deeb;
 		--shiki-token-punctuation: #dd0000;
 		--shiki-token-link: #79b8ff;
+	}
+
+	body {
+		@apply dark:bg-black-pearl-950 text-black-pearl-950 dark:text-white;
+	}
+
+	pre {
+		@apply bg-black-pearl-950 border-black-pearl-950 dark:border-black-pearl-800 rounded-md border-2;
 	}
 }
