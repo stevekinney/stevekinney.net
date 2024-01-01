@@ -15,15 +15,21 @@
 	</p>
 
 	<svelte:component this={data.content} />
+
+	{#if data.meta.published && data.meta.modified}
+		<p class="my-6 text-right text-sm text-slate-500 dark:text-gray-400">
+			Last modified on <Date date={data.meta.modified} />.
+		</p>
+	{/if}
 </div>
 
 <footer
-	class="border-primary-200 bg-primary-100 dark:border-primary-900 dark:bg-primary-800 my-10 rounded-md border-2 px-8 py-4"
+	class="my-10 rounded-md border-2 border-primary-200 bg-primary-100 px-8 py-4 dark:border-primary-900 dark:bg-primary-800"
 >
 	<p>
 		See something that looks a little off? Feel free to <a
 			href="https://github.com/stevekinney/stevekinney.net/tree/main/src/writing/{data.slug}.md"
-			class="decoration-primary-500 font-semibold underline decoration-2 underline-offset-4"
+			class="font-semibold underline decoration-primary-500 decoration-2 underline-offset-4"
 			>open a pull request here</a
 		>.
 	</p>
