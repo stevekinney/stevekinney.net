@@ -22,6 +22,7 @@
 
 <div class="not-prose @container">
 	<div class="grid grid-cols-1 gap-4 @2xl:grid-cols-2">
+		<!-- eslint-disable svelte/no-at-html-tags -->
 		<pre
 			class="select-all overflow-x-auto rounded-md p-4"
 			style="{$asInlineStyle} background-color: var(--shiki-color-background)">{@html $toHTML}</pre>
