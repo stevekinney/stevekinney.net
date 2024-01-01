@@ -38,7 +38,11 @@
 >
 	<header>
 		<h1 class="whitespace-nowrap lg:order-1">
-			<a href="/" class="font-header text-6xl text-black dark:text-white">Steve Kinney</a>
+			<a
+				href="/"
+				class="decoration-primary-700 font-header text-6xl text-black hover:underline dark:text-white"
+				>Steve Kinney</a
+			>
 		</h1>
 	</header>
 

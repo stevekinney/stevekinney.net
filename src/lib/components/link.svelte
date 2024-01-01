@@ -18,8 +18,8 @@
 <a
 	{href}
 	class={merge(
-		'font-semibold decoration-slate-600 decoration-8 underline-offset-8 hover:text-purple-800 dark:decoration-slate-900 dark:hover:text-purple-200',
-		className
+		'font-semibold decoration-slate-600 decoration-4 underline-offset-8 hover:text-primary-800 dark:decoration-slate-400  dark:hover:text-primary-200',
+		className,
 	)}
 	class:active
 	aria-current={active ? 'page' : undefined}
@@ -30,6 +30,6 @@
 
 <style lang="postcss">
 	.active {
-		@apply underline  dark:text-purple-200;
+		@apply underline  dark:text-primary-200;
 	}
 </style>

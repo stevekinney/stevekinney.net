@@ -12,7 +12,7 @@
 <a {href} target="_blank">
 	<svelte:component
 		this={icon}
-		class={merge('transition-colors hover:stroke-purple-700 active:stroke-purple-600', className)}
+		class={merge('hover:stroke-primary-700 active:stroke-primary-600 transition-colors', className)}
 		size={36}
 		aria-label={icon.name}
 	/>

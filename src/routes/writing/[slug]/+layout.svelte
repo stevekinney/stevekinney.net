@@ -21,7 +21,7 @@
 				data-sveltekit-reload
 			>
 				<Rss size={16} />
-				<span class="decoration-purple-700 decoration-2 underline-offset-2 group-hover:underline">
+				<span class="decoration-primary-700 decoration-2 underline-offset-2 group-hover:underline">
 					RSS Feed
 				</span>
 			</a>

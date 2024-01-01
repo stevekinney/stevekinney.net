@@ -9,6 +9,6 @@
 	export { className as class };
 </script>
 
-<svelte:element this={as} class={merge('text-purple-600 dark:text-purple-400', className)}>
+<svelte:element this={as} class={merge('text-primary-600 dark:text-primary-400', className)}>
 	{formatDate(date)}
 </svelte:element>

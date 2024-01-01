@@ -6,6 +6,20 @@
 
 @layer base {
 	body {
-		@apply dark:bg-slate-800 dark:text-white;
+		@apply dark:bg-black-pearl-950 text-black-pearl-950 dark:text-white;
+	}
+
+	:root {
+		--shiki-color-text: #aac569;
+		--shiki-color-background: #011628;
+		--shiki-token-constant: #7fdbca;
+		--shiki-token-string: #edc38d;
+		--shiki-token-comment: #94a4ad;
+		--shiki-token-keyword: #c792e9;
+		--shiki-token-parameter: #d6deeb;
+		--shiki-token-function: #edc38d;
+		--shiki-token-string-expression: #d6deeb;
+		--shiki-token-punctuation: #dd0000;
+		--shiki-token-link: #79b8ff;
 	}
 }
