@@ -6,11 +6,11 @@
 </script>
 
 <section class="space-y-6">
-	<h2 class="text-xl font-bold">
+	<h1 class="text-xl font-bold">
 		<a href="https://frontendmasters.com/teachers/steve-kinney/" target="_blank">
 			Courses on <span>Frontend Masters</span>
 		</a>
-	</h2>
+	</h1>
 
 	<svelte:component this={data.description} />
 
