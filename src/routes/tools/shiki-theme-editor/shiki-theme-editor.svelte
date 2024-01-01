@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { ChangeEventHandler } from 'svelte/elements';
-	import typescript from '$lib/posts?raw';
 
 	import shikiCssVariables, {
 		set,
@@ -29,14 +28,7 @@
 			{#each Object.entries($shikiCssVariables) as [name, value]}
 				<label class="text-nowrap font-mono text-xs" for={name}>{name}</label>
 				<p class="select-all text-right font-mono text-sm text-gray-500">{value}</p>
-				<input
-					class="col-span-1 outline-none"
-					id={name}
-					{value}
-					{name}
-					type="color"
-					on:change={handleChange}
-				/>
+				<input id={name} {value} {name} type="color" on:change={handleChange} />
 			{/each}
 		</div>
 	</div>
