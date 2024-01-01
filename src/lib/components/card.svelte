@@ -21,12 +21,12 @@
 		)}
 	>
 		{#if date}
-			<p class="text-primary-600 dark:text-primary-400 mb-1">{formatDate(date)}</p>
+			<p class="mb-1 text-primary-600 dark:text-primary-400">{formatDate(date)}</p>
 		{/if}
 
 		<div class="space-y-4">
 			<h3
-				class="decoration-primary-500 dark:text-primary-50 font-semibold decoration-4 underline-offset-4 group-hover:underline"
+				class="font-semibold decoration-primary-500 decoration-2 underline-offset-4 group-hover:underline dark:text-primary-50"
 			>
 				{title}
 			</h3>
