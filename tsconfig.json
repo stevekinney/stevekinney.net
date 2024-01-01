@@ -11,8 +11,8 @@
 		"strict": true,
 		"moduleResolution": "bundler",
 		"jsx": "preserve",
-    "jsxFactory": "h",
-    "jsxFragmentFactory": "Fragment"
+		"jsxFactory": "h",
+		"jsxFragmentFactory": "Fragment"
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//

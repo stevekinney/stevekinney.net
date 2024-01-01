@@ -40,7 +40,7 @@
 		<h1 class="whitespace-nowrap lg:order-1">
 			<a
 				href="/"
-				class="decoration-primary-700 font-header text-6xl text-black hover:underline dark:text-white"
+				class="font-header text-6xl text-black decoration-primary-700 hover:underline dark:text-white"
 				>Steve Kinney</a
 			>
 		</h1>

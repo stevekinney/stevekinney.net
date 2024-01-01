@@ -11,5 +11,5 @@ export default {
 	title,
 	url,
 	description,
-	author
+	author,
 };
