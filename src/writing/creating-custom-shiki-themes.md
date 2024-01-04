@@ -66,9 +66,9 @@ The latter can be done like this.
 
 Because of the same faulty wiring in my brain that compelled me to build a blog from scratch before even bothering to sit down and write a single blog post, I decided that I needed to build my own theme creator so that I could tweak the colors to my heart's content.
 
-The good news is that I'm just going to share it with you in case you'd like to do something similar. You can check out the full version [here][tool] or play around with the smaller version below.
+The good news is that I'm just going to share it with you in case you'd like to do something similar. You can check out [the full version here][tool] or play around with the smaller version below.
 
-<ShikiThemeEditor />
+<ShikiThemeEditor withCodeSamples />
 
 The defaults—and what I'm using at the time of this writing are loosely based on [Sarah Drasner's Night Owl theme](https://github.com/sdras/night-owl-vscode-theme).
 

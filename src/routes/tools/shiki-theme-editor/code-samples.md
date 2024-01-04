@@ -2,6 +2,8 @@
 layout: code
 ---
 
+<h2 class="font-bold text-xl">Examples</h2>
+
 ```python
 def process_order(order):
   check_fraud(order.order_id, order.payment_info)
