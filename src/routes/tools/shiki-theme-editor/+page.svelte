@@ -1,5 +1,7 @@
 <script>
 	import ShikiThemeCreator from './shiki-theme-editor.svelte';
+	import CodeSamples from './code-samples.md';
+
 	export let data;
 </script>
 
@@ -8,5 +10,5 @@
 
 	<svelte:component this={data.content} />
 
-	<ShikiThemeCreator />
+	<ShikiThemeCreator withCodeSamples />
 </div>

@@ -28,20 +28,6 @@ export const asInlineStyle = derived(store, (state) => {
 		.join(' ');
 });
 
-// <span class="line"><span style="color: var(--shiki-token-function)">:root</span><span style="color: var(--shiki-color-text)"> {
-// <span class="line"><span style="color: var(--shiki-color-text)">  --shiki-color-text</span><span style="color: var(--shiki-token-keyword)">:</span><span style="color: var(--shiki-color-text)"> </span><span style="color: var(--shiki-token-constant)">#d6deeb</span><span style="color: var(--shiki-color-text)">;
-// <span class="line"><span style="color: var(--shiki-color-text)">  --shiki-color-background</span><span style="color: var(--shiki-token-keyword)">:</span><span style="color: var(--shiki-color-text)"> </span><span style="color: var(--shiki-token-constant)">#011628</span><span style="color: var(--shiki-color-text)">;
-// <span class="line"><span style="color: var(--shiki-color-text)">  --shiki-token-constant</span><span style="color: var(--shiki-token-keyword)">:</span><span style="color: var(--shiki-color-text)"> </span><span style="color: var(--shiki-token-constant)">#7fdbca</span><span style="color: var(--shiki-color-text)">;
-// <span class="line"><span style="color: var(--shiki-color-text)">  --shiki-token-string</span><span style="color: var(--shiki-token-keyword)">:</span><span style="color: var(--shiki-color-text)"> </span><span style="color: var(--shiki-token-constant)">#edc38d</span><span style="color: var(--shiki-color-text)">;
-// <span class="line"><span style="color: var(--shiki-color-text)">  --shiki-token-comment</span><span style="color: var(--shiki-token-keyword)">:</span><span style="color: var(--shiki-color-text)"> </span><span style="color: var(--shiki-token-constant)">#94a4ad</span><span style="color: var(--shiki-color-text)">;
-// <span class="line"><span style="color: var(--shiki-color-text)">  --shiki-token-keyword</span><span style="color: var(--shiki-token-keyword)">:</span><span style="color: var(--shiki-color-text)"> </span><span style="color: var(--shiki-token-constant)">#c792e9</span><span style="color: var(--shiki-color-text)">;
-// <span class="line"><span style="color: var(--shiki-color-text)">  --shiki-token-parameter</span><span style="color: var(--shiki-token-keyword)">:</span><span style="color: var(--shiki-color-text)"> </span><span style="color: var(--shiki-token-constant)">#d6deeb</span><span style="color: var(--shiki-color-text)">;
-// <span class="line"><span style="color: var(--shiki-color-text)">  --shiki-token-function</span><span style="color: var(--shiki-token-keyword)">:</span><span style="color: var(--shiki-color-text)"> </span><span style="color: var(--shiki-token-constant)">#edc38d</span><span style="color: var(--shiki-color-text)">;
-// <span class="line"><span style="color: var(--shiki-color-text)">  --shiki-token-string-expression</span><span style="color: var(--shiki-token-keyword)">:</span><span style="color: var(--shiki-color-text)"> </span><span style="color: var(--shiki-token-constant)">#7fdbca</span><span style="color: var(--shiki-color-text)">;
-// <span class="line"><span style="color: var(--shiki-color-text)">  --shiki-token-punctuation</span><span style="color: var(--shiki-token-keyword)">:</span><span style="color: var(--shiki-color-text)"> </span><span style="color: var(--shiki-token-constant)">#c792e9</span><span style="color: var(--shiki-color-text)">;
-// <span class="line"><span style="color: var(--shiki-color-text)">  --shiki-token-link</span><span style="color: var(--shiki-token-keyword)">:</span><span style="color: var(--shiki-color-text)"> </span><span style="color: var(--shiki-token-constant)">#79b8ff</span><span style="color: var(--shiki-color-text)">;
-// <span class="line"><span style="color: var(--shiki-color-text)">}
-
 export const toHTML = derived(store, (state) => {
 	let html = '<code>';
 
