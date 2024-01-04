@@ -20,10 +20,10 @@
 	}
 
 	body {
-		@apply dark:bg-black-pearl-950 text-black-pearl-950 dark:text-white;
+		@apply text-black-pearl-950 dark:bg-black-pearl-950 dark:text-white;
 	}
 
 	pre {
-		@apply bg-black-pearl-950 border-black-pearl-950 dark:border-black-pearl-800 rounded-md border-2;
+		@apply overflow-x-auto rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 p-4 dark:border-black-pearl-800;
 	}
 }
