@@ -18,9 +18,9 @@
 	<meta property="og:description" content={$description} />
 	<meta property="og:url" content={$url} />
 	<meta property="og:image" content={$openGraphUrl} />
-	<meta name="twitter:card" content="summary" />
-	<meta name="twitter:title" content="Steve Kinney" />
-	<meta name="twitter:site" content="@stevekinney" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={$title} />
+	<meta name="twitter:creator" content="@stevekinney" />
 	<meta property="twitter:description" content={$description} />
 	<meta property="twitter:image" content={$openGraphUrl} />
 	{#if $page.data.meta?.published && $page.data.meta?.date}
