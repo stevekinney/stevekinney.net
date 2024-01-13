@@ -1,5 +1,17 @@
 export default [
 	{
+		title: 'Tailwind CSS',
+		description:
+			'Learn Tailwind CSS‘s utility-first approach for responsive, and customizable web designs. Master themes, layers, responsive breakpoints, dark mode, and more to create maintainable and visually appealing user interfaces!',
+		href: 'https://frontendmasters.com/courses/tailwind-css/',
+	},
+	{
+		title: 'Vite',
+		description:
+			"Master Vite, the modern build tool for faster and leaner web development. Learn to integrate with React, optimize assets, and extend with plugins. See what it's like to actually enjoy using your build tools!",
+		href: 'https://frontendmasters.com/courses/vite/',
+	},
+	{
 		title: 'Get Kids into Coding with Scratch',
 		description:
 			'Explore the essence of Scratch programming. Delve into game mechanics, craft interactive stories, and grasp computer science fundamentals. This course inspires fun projects tailored for young learners.',
