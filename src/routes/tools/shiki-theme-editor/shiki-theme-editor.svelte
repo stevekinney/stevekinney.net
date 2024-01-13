@@ -18,7 +18,7 @@
 	};
 </script>
 
-<div class="not-prose @container">
+<div class="not-prose space-y-10 @container">
 	<div class="grid grid-cols-1 gap-4 @2xl:grid-cols-2">
 		<!-- eslint-disable svelte/no-at-html-tags -->
 		<pre
@@ -34,18 +34,23 @@
 			{/each}
 		</div>
 	</div>
-
-	<CodeSamples
-		--shiki-color-text={$shikiCssVariables['--shiki-color-text']}
-		--shiki-color-background={$shikiCssVariables['--shiki-color-background']}
-		--shiki-token-constant={$shikiCssVariables['--shiki-token-constant']}
-		--shiki-token-string={$shikiCssVariables['--shiki-token-string']}
-		--shiki-token-comment={$shikiCssVariables['--shiki-token-comment']}
-		--shiki-token-keyword={$shikiCssVariables['--shiki-token-keyword']}
-		--shiki-token-parameter={$shikiCssVariables['--shiki-token-parameter']}
-		--shiki-token-function={$shikiCssVariables['--shiki-token-function']}
-		--shiki-token-string-expression={$shikiCssVariables['--shiki-token-string-expression']}
-		--shiki-token-punctuation={$shikiCssVariables['--shiki-token-punctuation']}
-		--shiki-token-link={$shikiCssVariables['--shiki-token-link']}
-	/>
+	<div>
+		<h2 class="mb-8 text-xl font-bold">Examples</h2>
+		<section>
+			<CodeSamples
+				--shiki-color-text={$shikiCssVariables['--shiki-color-text']}
+				--shiki-color-background={$shikiCssVariables['--shiki-color-background']}
+				--shiki-token-constant={$shikiCssVariables['--shiki-token-constant']}
+				--shiki-token-string={$shikiCssVariables['--shiki-token-string']}
+				--shiki-token-comment={$shikiCssVariables['--shiki-token-comment']}
+				--shiki-token-keyword={$shikiCssVariables['--shiki-token-keyword']}
+				--shiki-token-parameter={$shikiCssVariables['--shiki-token-parameter']}
+				--shiki-token-function={$shikiCssVariables['--shiki-token-function']}
+				--shiki-token-string-expression={$shikiCssVariables['--shiki-token-string-expression']}
+				--shiki-token-punctuation={$shikiCssVariables['--shiki-token-punctuation']}
+				--shiki-token-link={$shikiCssVariables['--shiki-token-link']}
+				class="space-y-8"
+			/>
+		</section>
+	</div>
 </div>
