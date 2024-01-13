@@ -17,7 +17,7 @@ const mdsvexOptions = {
 	rehypePlugins: [rehypeSlug],
 	layout: {
 		_: './src/lib/markdown/post.svelte',
-		code: './src/lib/markdown/code.svelte',
+		base: './src/lib/markdown/base.svelte',
 	},
 	highlight: {
 		highlighter: async (code, lang = 'text') => {

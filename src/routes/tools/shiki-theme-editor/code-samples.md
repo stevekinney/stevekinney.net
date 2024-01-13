@@ -1,8 +1,6 @@
 ---
-layout: code
+layout: base
 ---
-
-<h2 class="font-bold text-xl">Examples</h2>
 
 ```python
 def process_order(order):

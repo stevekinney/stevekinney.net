@@ -1,0 +1,3 @@
+<section {...$$restProps}>
+	<slot />
+</section>
