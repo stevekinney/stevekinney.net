@@ -24,6 +24,6 @@
 	}
 
 	pre {
-		@apply rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 dark:border-black-pearl-800;
+		@apply overflow-x-auto rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 p-4 dark:border-black-pearl-800;
 	}
 }
