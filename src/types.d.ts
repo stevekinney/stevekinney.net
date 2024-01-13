@@ -1,3 +1,8 @@
+type Markdown = {
+	default: ComponentType<SvelteComponent>;
+	metadata: Record<string, unknown>;
+};
+
 declare module '*.md' {
 	const SvelteComponent: import('svelte').SvelteComponent;
 	const CompnentType: import('svelte').ComponentType;
