@@ -10,5 +10,5 @@
 
 	<svelte:component this={data.content} />
 
-	<ShikiThemeCreator withCodeSamples />
+	<ShikiThemeCreator />
 </div>

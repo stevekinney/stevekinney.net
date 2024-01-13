@@ -2,8 +2,6 @@
 	import type { ChangeEventHandler } from 'svelte/elements';
 	import CodeSamples from './code-samples.md';
 
-	export let withCodeSamples = false;
-
 	import shikiCssVariables, {
 		set,
 		asInlineStyle,
@@ -36,19 +34,18 @@
 			{/each}
 		</div>
 	</div>
-	{#if withCodeSamples}
-		<CodeSamples
-			--shiki-color-text={$shikiCssVariables['--shiki-color-text']}
-			--shiki-color-background={$shikiCssVariables['--shiki-color-background']}
-			--shiki-token-constant={$shikiCssVariables['--shiki-token-constant']}
-			--shiki-token-string={$shikiCssVariables['--shiki-token-string']}
-			--shiki-token-comment={$shikiCssVariables['--shiki-token-comment']}
-			--shiki-token-keyword={$shikiCssVariables['--shiki-token-keyword']}
-			--shiki-token-parameter={$shikiCssVariables['--shiki-token-parameter']}
-			--shiki-token-function={$shikiCssVariables['--shiki-token-function']}
-			--shiki-token-string-expression={$shikiCssVariables['--shiki-token-string-expression']}
-			--shiki-token-punctuation={$shikiCssVariables['--shiki-token-punctuation']}
-			--shiki-token-link={$shikiCssVariables['--shiki-token-link']}
-		/>
-	{/if}
+
+	<CodeSamples
+		--shiki-color-text={$shikiCssVariables['--shiki-color-text']}
+		--shiki-color-background={$shikiCssVariables['--shiki-color-background']}
+		--shiki-token-constant={$shikiCssVariables['--shiki-token-constant']}
+		--shiki-token-string={$shikiCssVariables['--shiki-token-string']}
+		--shiki-token-comment={$shikiCssVariables['--shiki-token-comment']}
+		--shiki-token-keyword={$shikiCssVariables['--shiki-token-keyword']}
+		--shiki-token-parameter={$shikiCssVariables['--shiki-token-parameter']}
+		--shiki-token-function={$shikiCssVariables['--shiki-token-function']}
+		--shiki-token-string-expression={$shikiCssVariables['--shiki-token-string-expression']}
+		--shiki-token-punctuation={$shikiCssVariables['--shiki-token-punctuation']}
+		--shiki-token-link={$shikiCssVariables['--shiki-token-link']}
+	/>
 </div>
