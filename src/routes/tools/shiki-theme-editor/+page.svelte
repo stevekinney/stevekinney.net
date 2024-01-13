@@ -1,6 +1,5 @@
 <script>
 	import ShikiThemeCreator from './shiki-theme-editor.svelte';
-	import CodeSamples from './code-samples.md';
 
 	export let data;
 </script>
