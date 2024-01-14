@@ -108,18 +108,17 @@ The next step is to make our preprocessor actually _do something_. Let's say we 
 We'd ideally like to translate it into something that Svelte will render correctly.
 
 ```html
-<script lang="ts">
-	const exampleVariable = 'Variable Content';
-	const thisShouldBeIgnored = "Don't **mess** with code.";
-</script>
-
 <h1>A Markdown Title</h1>
+
 <ul>
 	<li>{exampleVariable}</li>
 	<li>Markdown Content</li>
 </ul>
+
 <p>**Markdown** inside of an HTML element.</p>
 ```
+
+(The script tag should stay in place, but the syntax highlighter that I'm using on this websire is making the formatting look gross. So, I'm omiitting it. But, you can check out [this unit test](https://github.com/stevekinney/svelte-markdown-example/blob/dd2305ea82eca68a674f9490f69cd4f008924086/src/lib/markdown-to-html.test.js#L6-L22) if you want a better look.)
 
 Now, you'll notice that I haven't solved for processing Markdown inside of HTML tags. As I mentioned earlier, this is a—most likely, intentional—limitation of Remark. There is a plugin called [`rehype-raw`](https://github.com/rehypejs/rehype-raw) that solves this issue, but I found that it didn't play nicely when I tried to use Svelte components in my Markdown. It treat my Svelte components as regular HTML tags and try to do me a favor and make the, lowercase, which then meant that Svelte didn't recognize them as components. That's another battle for another three day weekend, I suppose.
 
