@@ -1,7 +1,6 @@
 export const load = async () => {
-	const { default: content, metadata } = await import('./README.md');
+	const { metadata } = await import('./+page.md');
 	return {
 		meta: metadata,
-		content,
 	};
 };

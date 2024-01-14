@@ -18,6 +18,7 @@ const mdsvexOptions = {
 	layout: {
 		_: './src/lib/markdown/post.svelte',
 		base: './src/lib/markdown/base.svelte',
+		page: './src/lib/markdown/page.svelte',
 	},
 	highlight: {
 		highlighter: async (code, lang = 'text') => {
