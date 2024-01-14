@@ -2,7 +2,7 @@
 title: Creating a Markdown Preprocessor for Svelte
 description: "Let's look at how to write our own preprocessor for SvelteKit."
 date: 2024-01-14T13:21:01-07:00
-modified: 2024-01-14T13:40:05-07:00
+modified: 2024-01-14T14:41:37-07:00
 published: true
 tags:
   - svelte
@@ -36,7 +36,7 @@ const preprocess = () => {
 };
 ```
 
-The preprocessors run the the order that I listed them in the example above. Since, we're worried about converting Markdown to HTML today, we're only to concern ourselves with the `markup` method on `PreprocessorGroup` object seen above.
+The preprocessors run in the order that I listed them in the example above. Since, we're worried about converting Markdown to HTML today, we're only to concern ourselves with the `markup` method on `PreprocessorGroup` object seen above.
 
 We can start with something like this to get us going.
 
@@ -120,7 +120,7 @@ We'd ideally like to translate it into something that Svelte will render correct
 
 (The `script` tag should stay in place, but the syntax highlighter that I'm using on this website is making the formatting look gross. So, I'm omitting it. But, you can check out [this unit test](https://github.com/stevekinney/svelte-markdown-example/blob/dd2305ea82eca68a674f9490f69cd4f008924086/src/lib/markdown-to-html.test.js#L6-L22) if you want a better look.)
 
-Now, you'll notice that I haven't solved for processing Markdown inside of HTML tags. As I mentioned earlier, this is a—most likely, intentional—limitation of Remark. There is a plugin called [`rehype-raw`](https://github.com/rehypejs/rehype-raw) that solves this issue, but I found that it didn't play nicely when I tried to use Svelte components in my Markdown. It treat my Svelte components as regular HTML tags and try to do me a favor and make the, lowercase, which then meant that Svelte didn't recognize them as components. That's another battle for another three day weekend, I suppose.
+Now, you'll notice that I haven't solved for processing Markdown inside of HTML tags. As I mentioned earlier, this is a—most likely, intentional—limitation of Remark. There is a plugin called [`rehype-raw`](https://github.com/rehypejs/rehype-raw) that solves this issue, but I found that it didn't play nicely when I tried to use Svelte components in my Markdown. It treats my Svelte components as regular HTML tags and try to do me a favor and make the, lowercase, which then meant that Svelte didn't recognize them as components. That's another battle for another three day weekend, I suppose.
 
 ### Converting Markdown to HTML
 
@@ -192,9 +192,9 @@ There is still a lot that this _doesn't_ do and I absolutely cannot recommend us
 
 - It doesn't support layouts.
 - It doesn't support custom components.
-- I'm not entirely sure that Remark won't do bad things to you `{#each}` and `{#if}` blocks.
+- I'm not entirely sure that Remark won't do bad things to your `{#each}` and `{#if}` blocks.
 
-But, for the purposes of learning a little bit more about how preprocessing works in SvelteKit, I think we an go ahead and fly a mission accomplished banner.
+But, for the purposes of learning a little bit more about how preprocessing works in SvelteKit, I think we can go ahead and fly a mission accomplished banner.
 
 [mdsvex]: https://mdsvex.com/docs
 [Svelte]: https://svelte.dev/
