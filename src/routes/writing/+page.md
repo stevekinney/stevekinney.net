@@ -7,6 +7,7 @@ modified: 2023-12-31T10:21:58-07:00
 ---
 
 <script lang="ts">
+	import { NotebookPen } from 'lucide-svelte';
 	import DateTime from '$lib/components/date.svelte';
 
 	export let data;
@@ -16,13 +17,14 @@ I write a lot of words, but most of them are for the [courses](/courses) that I 
 
 <ul class="space-y-8 not-prose">
 	{#each data.posts as post}
-	<li>
-		<a href="/writing/{post.slug}" class="group">
-			<div class="flex sm:gap-4 sm:items-center justify-between flex-col sm:flex-row">
-			<h3 class="font-bold sm:text-xl underline decoration-primary-200 decoration-4 group-hover:decoration-primary-500">{post.title}</h3>
+	<li class="block">
+		<a href="/writing/{post.slug}" class="group grid grid-cols-[50px_1fr] gap-4 md:gap-8 bg-primary-50 border-primary-200 border p-4 rounded-md hover:border-primary-300">
+		<NotebookPen size={28} class="m-2" />
+		<div>
+			<h3 class="font-semibold sm:text-xl underline decoration-primary-200 decoration-4 group-hover:decoration-primary-400">{post.title}</h3>
 			<DateTime date={post.date} />
-			</div>
 			<p>{post.description}</p>
+			<div>
 		</a>
 	</li>
 	{/each}
