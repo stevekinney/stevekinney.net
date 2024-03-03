@@ -4,7 +4,7 @@ import typography from '@tailwindcss/typography';
 import containerQueries from '@tailwindcss/container-queries';
 
 export default {
-	content: ['./src/**/*.svelte', './src/**/*.html', './src/**/*.ts'],
+	content: ['./src/**/*.svelte', './src/**/*.html', './src/**/*.ts', './src/**/*.md'],
 	theme: {
 		extend: {
 			colors: {
