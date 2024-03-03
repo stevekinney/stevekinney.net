@@ -1,8 +1,17 @@
 <script lang="ts">
+	import SEO from '$lib/components/seo.svelte';
 	import Date from '$lib/components/date.svelte';
 
 	export let data;
 </script>
+
+<SEO
+	title={data.meta.title}
+	description={data.meta.description}
+	published={data.meta.published}
+	date={data.meta.date}
+	modified={data.meta.modified}
+/>
 
 <div class="space-y-10">
 	<hgroup class="space-y-2">
@@ -14,7 +23,7 @@
 		{data.meta.description}
 	</p>
 
-	<svelte:component this={data.content} />
+	<svelte:component this={data.content} class="prose dark:prose-invert" as="article" />
 
 	{#if data.meta.published && data.meta.modified}
 		<p class="my-6 text-right text-sm text-slate-500 dark:text-gray-400">

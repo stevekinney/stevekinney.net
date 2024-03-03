@@ -1,7 +1,3 @@
----
-layout: base
----
-
 ```python
 def process_order(order):
   check_fraud(order.order_id, order.payment_info)

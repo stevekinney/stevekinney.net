@@ -1,6 +1,9 @@
 <script lang="ts">
+	import SEO from '$lib/components/seo.svelte';
 	import Biography from './biography.md';
 </script>
+
+<SEO />
 
 <div class="space-y-8">
 	<enhanced:img
@@ -9,5 +12,5 @@
 		class="aspect-[3/4] max-w-full rounded-md shadow-lg sm:float-right sm:ml-8 sm:w-72 md:w-96"
 		alt="Steve Kinney"
 	/>
-	<Biography />
+	<Biography class="prose" />
 </div>

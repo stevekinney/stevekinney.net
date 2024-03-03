@@ -16,8 +16,7 @@ const mdsvexOptions = {
 	remarkPlugins: [remarkUnwrapImages, remarkObsidian],
 	rehypePlugins: [rehypeSlug],
 	layout: {
-		_: './src/lib/markdown/post.svelte',
-		base: './src/lib/markdown/base.svelte',
+		_: './src/lib/markdown/base.svelte',
 		page: './src/lib/markdown/page.svelte',
 	},
 	highlight: {

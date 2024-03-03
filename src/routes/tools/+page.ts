@@ -1,10 +1,10 @@
 export async function load() {
-	const { default: content, metadata } = await import('./README.md');
 	const readmes = import.meta.glob<Markdown>('./**/+page.md', { eager: true });
 
 	const tools = Object.entries(readmes)
 		.filter(([key, value]) => {
-			if (key === './README.md') return false;
+			console.log(key);
+			if (key === './+page.md') return false;
 			return value.metadata.title && value.metadata.description;
 		})
 		.map(([key, value]) => {
@@ -15,5 +15,5 @@ export async function load() {
 			};
 		});
 
-	return { tools, content, meta: metadata };
+	return { tools };
 }

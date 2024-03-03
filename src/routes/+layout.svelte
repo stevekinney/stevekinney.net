@@ -1,37 +1,11 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { Github, Instagram, Twitter, Linkedin, Youtube } from 'lucide-svelte';
 
 	import SocialLink from '$lib/components/social-link.svelte';
 	import Navigation from '$lib/components/navigation.svelte';
-	import { openGraphUrl, title, description, url } from '$lib/get-metadata';
 
 	import '../app.css';
 </script>
-
-<svelte:head>
-	<title>{$title}</title>
-	<link rel="image_src" href={$openGraphUrl} />
-	<meta name="description" content={$description} />
-	<meta property="og:type" content="website" />
-	<meta property="og:title" content={$title} />
-	<meta property="og:description" content={$description} />
-	<meta property="og:url" content={$url} />
-	<meta property="og:image" content={$openGraphUrl} />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content={$title} />
-	<meta name="twitter:creator" content="@stevekinney" />
-	<meta property="twitter:description" content={$description} />
-	<meta property="twitter:image" content={$openGraphUrl} />
-	{#if $page.data.meta?.published && $page.data.meta?.date}
-		<meta name="date" content={String($page.data.meta?.date)} />
-		<meta name="article:published_time" content={String($page.data.meta?.date)} />
-	{/if}
-	{#if $page.data.meta?.published && $page.data.meta?.modified}
-		<meta name="last-modified" content={String($page.data.meta?.modified)} />
-		<meta name="article:modified_time" content={String($page.data.meta?.modified)} />
-	{/if}
-</svelte:head>
 
 <main
 	class="container my-6 grid grid-cols-1 items-center gap-6 p-4 sm:my-10 sm:grid-cols-2 lg:grid-cols-3"
