@@ -3,7 +3,6 @@ export async function load() {
 
 	const tools = Object.entries(readmes)
 		.filter(([key, value]) => {
-			console.log(key);
 			if (key === './+page.md') return false;
 			return value.metadata.title && value.metadata.description;
 		})
