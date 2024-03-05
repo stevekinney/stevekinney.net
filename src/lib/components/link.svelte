@@ -18,18 +18,12 @@
 <a
 	{href}
 	class={merge(
-		'font-semibold decoration-slate-600 decoration-4 underline-offset-8 hover:text-primary-800 dark:decoration-slate-400  dark:hover:text-primary-200',
+		'font-semibold decoration-primary-600 decoration-4 underline-offset-8 hover:text-primary-800 hover:decoration-slate-600 dark:decoration-slate-400  dark:hover:text-primary-200',
 		className,
 	)}
-	class:active
+	class:underline={active}
 	aria-current={active ? 'page' : undefined}
 	{...$$restProps}
 >
 	<slot />
 </a>
-
-<style lang="postcss">
-	.active {
-		@apply underline  dark:text-primary-200;
-	}
-</style>
