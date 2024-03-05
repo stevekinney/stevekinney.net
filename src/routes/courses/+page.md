@@ -3,7 +3,7 @@ title: Courses on Frontend Masters
 description: A somewhat-complete list of courses that Steve has taught with Frontend Masters.
 layout: page
 date: 2023-12-27T19:28:51-07:00
-modified: 2023-12-31T10:21:05-07:00
+modified: 2024-03-18T12:21:42-06:00
 ---
 
 <script>

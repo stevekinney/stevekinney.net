@@ -76,7 +76,6 @@
 		"@fontsource/roboto": "^5.0.12",
 		"@tailwindcss/container-queries": "^0.1.1",
 		"@vercel/analytics": "^1.2.2",
-		"postcss-nesting": "^12.1.1",
 		"sharp": "0.33.3"
 	},
 	"overrides": {
