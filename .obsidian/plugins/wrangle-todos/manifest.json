@@ -1,0 +1,10 @@
+{
+	"id": "wrangle-todos",
+	"name": "TODO Wrangler",
+	"version": "1.0.4",
+	"minAppVersion": "0.15.0",
+	"description": "Wrangles your TODOs and puts them at the bottom of the file.",
+	"author": "Jeel Shah",
+	"authorUrl": "https://jeelshah.com",
+	"isDesktopOnly": false
+}
