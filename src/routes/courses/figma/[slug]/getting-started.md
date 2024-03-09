@@ -1,10 +1,11 @@
 ---
 title: Getting Started with Figma
 description: "Let's get learn our way around Figma and get comfortable with some of the basic tools."
-modified: 2024-03-09T11:56:02-05:00
+modified: 2024-03-09T14:03:48-05:00
 date: 2024-03-05T13:04:49-07:00
 published: false
 ---
+
 When you first enter Figma, you're greeted with the option to either create a new project or select a recent one.
 
 ![](../../../../assets/figma-home-screen.png)
@@ -49,7 +50,7 @@ Selecting a layer changes the toolbar center to display a set of layer-specific 
 
 These options allow you to reset changes, create components, use masks, combine selections, and mark designs as ready for development.
 
-## Account, Sharing, and Dev Mode
+### Account, Sharing, and Dev Mode
 
 ![](../../../../assets/figma-toolbar-right.png)
 
