@@ -1,54 +1,98 @@
 ---
 title: Getting Started with Figma
 description: "Let's get learn our way around Figma and get comfortable with some of the basic tools."
-modified: 2024-03-05T13:53:15-07:00
+modified: 2024-03-09T11:56:02-05:00
 date: 2024-03-05T13:04:49-07:00
+published: false
 ---
-When you first enter Figma, you'll see the ability to either create a project or select a recent one.
+When you first enter Figma, you're greeted with the option to either create a new project or select a recent one.
 
 ![](../../../../assets/figma-home-screen.png)
 
-Once you hop into a given project, you'll see an interface that looks _something_ like the screenshot below.
+Upon entering a project, you're presented with an interface similar to the screenshot below.
 
 ![](../../../../assets/figma-workspace.png)
 
-## The Figma Interface
+## The Toolbar
 
 ![](../../../../assets/figma-toolbar-left.png)
 
-Along the top, you have your **toolbar**. This is where you'll find common tools for drawing shapes, creating layers, adding comments, and moving stuff along.
+The toolbar, located along the top, is where you find essential tools for drawing shapes, creating layers, adding comments, and more. A small caret next to some of the icons reveals a sub-menu with additional tools.
+
+- **Move Tool (V):** The default tool for selecting and moving objects.
+- **Frame Tool (F):** Creates frames, which are containers for other objects, useful for entire screens or components.
+- **Shape Tools:** Includes Rectangle (R), Line (L), Ellipse (O), Polygon (P), and Pen (P) tools for drawing basic shapes and custom paths.
+- **Text Tool (T):** Adds and edits text elements.
+- **Hand Tool (H):** Pans around the canvas, can be temporarily activated with the Spacebar.
+- **Zoom Tool (Z):** Zooms in and out of the canvas, also zoomable via keyboard shortcuts or trackpad gestures.
+- **Comment Tool (C):** Facilitates collaboration by enabling comments on the design.
+
+### The Figma Menu
 
 ![](../../../../assets/figma-application-menu.png)
 
-At the leftmost end of the toolbar, you have the **Figma menu**. If you're using the [desktop application](https://www.figma.com/downloads), then this will have a most of everything you'll find along in the application's menu bar along with some additional preferences.
+At the toolbar's leftmost end is the **Figma menu**. In the [desktop application](https://www.figma.com/downloads), this menu combines application menu bar items with additional preferences.
 
-You'll also notice the **Quick Actions…** menu item. Pressing `Command/Control-/` at any time will pull up a command palette that allows you to quickly search for and jump to a given command.
+The **Quick Actions…** menu item opens a command palette (using `Command/Control-/`) that lets you quickly search for and execute commands.
 
 ### File Options
 
 ![](../../../../assets/figma-file-menu.png)
 
-In the center of the the toolbar, you'll see the current file that you're working with along with a bunch of different options around working with that file. You'll notice that Figma keeps track of revisions and allow you to see the version history.
+The center of the toolbar displays the current file name, surrounded by various file-related options. Figma tracks revisions, allowing access to version history.
+
+### Layer Options
+
+Selecting a layer changes the toolbar center to display a set of layer-specific tools.
+
+![](../../../../assets/figma-toolbar-layer-options.png)
+
+These options allow you to reset changes, create components, use masks, combine selections, and mark designs as ready for development.
 
 ## Account, Sharing, and Dev Mode
 
 ![](../../../../assets/figma-toolbar-right.png)
 
-At the right-most end of the toolbar, you'll see your current account, a few sharing options, and the ability to switch to [Dev Mode](./dev-mode.md).
+The right end of the toolbar shows account information, sharing options, and a switch for [Dev Mode](./dev-mode.md).
 
-## Pages and Layers
+## Left Side Panel: Layers and Assets
 
-Along the left of Figma's user interface, you'll see the ability to navigate between different pages in your design. You'll also see all of the layers for the currently-selected page.
+This panel has two sections:
+
+- **Layers Panel:** Displays the design's hierarchical structure, crucial for organizing elements.
+- **Assets Panel:** Houses reusable components and styles for efficient and consistent design.
+
+### Pages and Layers
+
+The interface's left side lets you navigate between pages and view layers for the selected page.
 
 ![](../../../../assets/figma-pages-and-layers.png)
 
-## Layer Options
+### Assets
 
-On the right of Figma's UI, you'll see a set of options for tweaking the currently-selected layer or layers. Don't worry if this looks a little bit overwhelming, we'll dig into all of these over the course of our time together.
+The Assets Panel is a repository for managing reusable components and styles, supporting team collaboration through shared libraries. This feature streamlines the design process and ensures design consistency.
+
+## Right Side Panel: Design and Prototype
+
+This panel features two tabs:
+
+- **Design Tab:** Contains properties for the appearance of selected objects.
+- **Prototype Tab:** Offers tools for creating interactive prototypes by defining user flows and interactions.
+
+### Design
+
+The right side provides options for adjusting the properties of selected layers.
 
 ![](../../../../assets/figma-layer-options.png)
+
+### Prototype
+
+The Prototype Tab enables the creation of detailed, interactive prototypes, enhancing the design process and facilitating user testing by simulating real user flows.
+
 ## Context Menu
 
-Right clicking on a given layer will pull up the context menu that allows you to work with the layer that you right-clicked on.
+Right-clicking a layer opens a context menu for layer-specific actions.
 
 ![](../../../../assets/figma-context-menu.png)
+
+This tour of Figma's UI highlights the comprehensive tools available for digital design, from basic drawing to advanced prototyping, ensuring an efficient and collaborative design process.
