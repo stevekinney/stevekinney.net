@@ -3,7 +3,7 @@ title: Components
 description: Leverage Figma components for scalable and efficient design. Create, reuse, and manage elements easily for consistency and collaboration across projects.
 published: false
 date: 2024-03-09T14:21:18-05:00
-modified: 2024-03-18T12:20:28-06:00
+modified: 2024-03-18T16:39:58-06:00
 ---
 
 Components in Figma are like handy tools that help designers create elements they can use again and again in different projects. These elements, ranging from simple icons to more complex UI sections, make designing easier by keeping everything looking consistent and saving time. Let's dive into how to make the most of components in Figma to improve your design process.

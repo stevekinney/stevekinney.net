@@ -8,15 +8,15 @@ published: false
 
 When you first enter Figma, you're greeted with the option to either create a new project or select a recent one.
 
-![](../../../../assets/figma-home-screen.png)
+![](../../assets/figma-home-screen.png)
 
 Upon entering a project, you're presented with an interface similar to the screenshot below.
 
-![](../../../../assets/figma-workspace.png)
+![](../../assets/figma-workspace.png)
 
 ## The Toolbar
 
-![](../../../../assets/figma-toolbar-left.png)
+![](../../assets/figma-toolbar-left.png)
 
 The toolbar, located along the top, is where you find essential tools for drawing shapes, creating layers, adding comments, and more. A small caret next to some of the icons reveals a sub-menu with additional tools.
 
@@ -30,7 +30,7 @@ The toolbar, located along the top, is where you find essential tools for drawin
 
 ### The Figma Menu
 
-![](../../../../assets/figma-application-menu.png)
+![](../../assets/figma-application-menu.png)
 
 At the toolbar's leftmost end is the **Figma menu**. In the [desktop application](https://www.figma.com/downloads), this menu combines application menu bar items with additional preferences.
 
@@ -38,7 +38,7 @@ The **Quick Actions…** menu item opens a command palette (using `Command/Contr
 
 ### File Options
 
-![](../../../../assets/figma-file-menu.png)
+![](../../assets/figma-file-menu.png)
 
 The center of the toolbar displays the current file name, surrounded by various file-related options. Figma tracks revisions, allowing access to version history.
 
@@ -46,15 +46,15 @@ The center of the toolbar displays the current file name, surrounded by various 
 
 Selecting a layer changes the toolbar center to display a set of layer-specific tools.
 
-![](../../../../assets/figma-toolbar-layer-options.png)
+![](../../assets/figma-toolbar-layer-options.png)
 
 These options allow you to reset changes, create components, use masks, combine selections, and mark designs as ready for development.
 
 ### Account, Sharing, and Dev Mode
 
-![](../../../../assets/figma-toolbar-right.png)
+![](../../assets/figma-toolbar-right.png)
 
-The right end of the toolbar shows account information, sharing options, and a switch for [Dev Mode](./dev-mode.md).
+The right end of the toolbar shows account information, sharing options, and a switch for [Dev Mode](dev-mode.md).
 
 ## Left Side Panel: Layers and Assets
 
@@ -67,7 +67,7 @@ This panel has two sections:
 
 The interface's left side lets you navigate between pages and view layers for the selected page.
 
-![](../../../../assets/figma-pages-and-layers.png)
+![](../../assets/figma-pages-and-layers.png)
 
 ### Assets
 
@@ -84,7 +84,7 @@ This panel features two tabs:
 
 The right side provides options for adjusting the properties of selected layers.
 
-![](../../../../assets/figma-layer-options.png)
+![](../../assets/figma-layer-options.png)
 
 ### Prototype
 
@@ -94,6 +94,6 @@ The Prototype Tab enables the creation of detailed, interactive prototypes, enha
 
 Right-clicking a layer opens a context menu for layer-specific actions.
 
-![](../../../../assets/figma-context-menu.png)
+![](../../assets/figma-context-menu.png)
 
 This tour of Figma's UI highlights the comprehensive tools available for digital design, from basic drawing to advanced prototyping, ensuring an efficient and collaborative design process.

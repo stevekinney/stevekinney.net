@@ -42,7 +42,7 @@ When should you use frames?
 - **Component Creation:** Frames are ideal for creating reusable design elements like buttons, icons, and input fields. They can be nested within each other, allowing for complex component structures.
 - **Grids and Layouts:** Apply layout grids to frames to maintain consistent spacing and alignment throughout your design.
 
-![](../../../../assets/figma-frame-tool.png)
+![](../../assets/figma-frame-tool.png)
 
 You can create a frame in any of the following ways:
 
@@ -55,7 +55,7 @@ Sections are relatively new feature to Figma. Before sections were introduced, w
 
 Sections are visually distinct from frames _and_ they allow you to denote if something is ready for development or not.
 
-![](../../../../assets/figma-sections.gif)
+![](../../assets/figma-sections.gif)
 
 Sections are also a good choice in the following scenarios:
 

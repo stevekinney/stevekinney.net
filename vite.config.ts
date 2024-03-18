@@ -2,6 +2,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 import { imagetools } from 'vite-imagetools';
 import { enhancedImages } from '@sveltejs/enhanced-img';
+import type { Plugin } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit(), enhancedImages(), imagetools()],

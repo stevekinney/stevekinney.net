@@ -5,7 +5,6 @@ published: false
 date: 2024-03-09T14:20:40-05:00
 modified: 2024-03-09T15:21:50-05:00
 ---
-
 Layout grids allow you to apply a fixed grid or a set of columns or rows to a frame. You can use these grids to align elements to a grid system. They pair nicely with constraints to assist you in putting together responsive layouts, which have been all the range since a little pocket-sized computer out back in 2007.
 
 You can apply a layout grid to any frame. You can even apply multiple grids to a single frame. You can also tweak how the grid looks (e.g. the color and opacity).

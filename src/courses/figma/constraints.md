@@ -5,7 +5,6 @@ published: false
 date: 2024-03-09T14:13:01-05:00
 modified: 2024-03-09T14:19:35-05:00
 ---
-
 Constraints control how the layers within a frame should behave when the size of the frame changes. By default, a layer’s constraints are set to to top and left.
 
 In Figma, constraints can be set to scale, shift, or remain fixed with respect to the edges of the frame. This gives designers the ability to maintain padding, spacing, and alignment consistent across different screen sizes, enhancing the user experience.

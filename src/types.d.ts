@@ -11,3 +11,4 @@ declare module '*.md' {
 }
 
 declare module 'remark-obsidian';
+declare module 'mdsvex-relative-images';

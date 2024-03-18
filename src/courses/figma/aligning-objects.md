@@ -8,13 +8,13 @@ published: false
 
 Figma provides an array of tools designed to assist in aligning and distributing objects precisely. Upon selecting multiple objects, you'll encounter a toolset akin to what's illustrated below.
 
-![](../../../../assets/figma-align-and-distribute-objects.png)
+![](../../assets/figma-align-and-distribute-objects.png)
 
 ## Aligning Objects
 
 Figma enables the alignment of objects along the vertical or horizontal axes, allowing selection of start, middle, or end alignment. The platform intelligently utilizes the boundaries of all selected objects to determine the optimal alignment.
 
-![](../../../../assets/figma-align-objects.gif)
+![](../../assets/figma-align-objects.gif)
 
 The following keyboard shortcuts facilitate these alignment actions:
 
@@ -29,7 +29,7 @@ The following keyboard shortcuts facilitate these alignment actions:
 
 Beyond alignment, Figma also enables the even distribution of objects. When distributing horizontally, it considers the leftmost and rightmost objects as bounds; vertically, the top and bottommost objects are used.
 
-![](../../../../assets/figma-distributing-objects.gif)
+![](../../assets/figma-distributing-objects.gif)
 
 The platform includes keyboard shortcuts for distribution tasks:
 
