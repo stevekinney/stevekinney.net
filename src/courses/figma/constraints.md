@@ -3,11 +3,12 @@ title: Constraints
 description: Learn how to master constraints in Figma for responsive design. Ensure your UI adapts seamlessly across devices with this essential guide
 published: false
 date: 2024-03-09T14:13:01-05:00
-modified: 2024-03-09T14:19:35-05:00
+modified: 2024-03-20T14:41:46-06:00
 ---
+
 Constraints control how the layers within a frame should behave when the size of the frame changes. By default, a layer’s constraints are set to to top and left.
 
-In Figma, constraints can be set to scale, shift, or remain fixed with respect to the edges of the frame. This gives designers the ability to maintain padding, spacing, and alignment consistent across different screen sizes, enhancing the user experience.
+In Figma, you can use constraints to adjust how elements scale, shift, or stay in place based on the frame edges. This feature helps designers keep padding, spacing, and alignment the same on all screen sizes, making the user experience even better.
 
 If we adjust the size of the frame to the right, you’ll see that box stays in it’s initial position. But, we can change this behavior.
 
@@ -16,13 +17,14 @@ If we adjust the size of the frame to the right, you’ll see that box stays in 
 Okay, let's say you want to set up some constraints:
 
 1. **Select an Element:** Click on the element you want to apply constraints to within your frame.
-2. **Access the Constraints Panel:** In the right-hand side panel under the 'Design' tab, locate the 'Constraints' section.
+2. **Access the Constraints Panel:** In the right-hand side panel under the **Design** tab, locate the **Constraints** section.
 3. **Configure Constraints:** Choose how your element should behave horizontally and vertically. Options include:
    - **Top/Left:** The element stays fixed to the top or left edge of the frame.
    - **Bottom/Right:** The element remains anchored to the bottom or right edge.
    - **Center:** The element stays centered as the frame resizes.
    - **Scale:** The element scales proportionally with the frame.
 
+![](../../assets/figma-constraints.gif)
 ## Some Practical Applications
 
 - **Responsive Web Design**: Constraints are invaluable in responsive web design, allowing UI components to adjust gracefully as browser windows resize. For instance, setting side navigation to “Left & Scale” ensures it stretches correctly, while the main content area can be set to “Scale” to utilize available space efficiently.
