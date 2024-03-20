@@ -11,4 +11,5 @@ declare module '*.md' {
 }
 
 declare module 'mdsvex-relative-images';
+declare module '@jsdevtools/rehype-toc';
 declare module 'remark-obsidian';
