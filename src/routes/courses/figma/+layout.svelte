@@ -17,8 +17,10 @@
 					class={merge(
 						'decoration-2 underline-offset-2',
 						bonus && `before:mr-2 before:decoration-0 before:content-['🎁']`,
-					)}>{title}</Link
+					)}
 				>
+					{title}
+				</Link>
 			</li>
 		{/each}
 	</ul>

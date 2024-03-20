@@ -13,7 +13,7 @@
 
 <div class="space-y-10">
 	<hgroup class="space-y-2">
-		<h1 class="text-2xl font-bold">{data.meta.title}</h1>
+		<h1 class="text-4xl font-bold">{data.meta.title}</h1>
 	</hgroup>
 
 	<svelte:component this={data.content} class="prose dark:prose-invert" as="article" />
@@ -30,9 +30,10 @@
 >
 	<p>
 		See something that looks a little off? Feel free to <a
-			href="https://github.com/stevekinney/stevekinney.net/tree/main/src/writing/{data.slug}.md"
+			href="https://github.com/stevekinney/stevekinney.net/tree/main/src{data.pathname}.md"
 			class="font-semibold underline decoration-primary-500 decoration-2 underline-offset-4"
-			>open a pull request here</a
-		>.
+		>
+			open a pull request here
+		</a>.
 	</p>
 </footer>

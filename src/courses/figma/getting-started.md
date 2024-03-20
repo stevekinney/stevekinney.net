@@ -1,7 +1,7 @@
 ---
 title: Getting Started with Figma
 description: "Let's get learn our way around Figma and get comfortable with some of the basic tools."
-modified: 2024-03-09T14:03:48-05:00
+modified: 2024-03-20T14:47:04-06:00
 date: 2024-03-05T13:04:49-07:00
 published: false
 ---
@@ -38,13 +38,15 @@ The **Quick Actions…** menu item opens a command palette (using `Command/Contr
 
 ### File Options
 
+When you haven't selected any layers, you'll see information about the current file in the center of the toolbar.
+
 ![](../../assets/figma-file-menu.png)
 
 The center of the toolbar displays the current file name, surrounded by various file-related options. Figma tracks revisions, allowing access to version history.
 
 ### Layer Options
 
-Selecting a layer changes the toolbar center to display a set of layer-specific tools.
+Selecting a layer changes the toolbar center to display a set of layer-specific tools. You'll no longer see the name of the file in the center of toolbar until you deselect whatever layers that you've chosen.
 
 ![](../../assets/figma-toolbar-layer-options.png)
 
@@ -52,9 +54,11 @@ These options allow you to reset changes, create components, use masks, combine 
 
 ### Account, Sharing, and Dev Mode
 
+The right end of the toolbar shows account information, sharing options, and a switch for [Dev Mode](dev-mode.md).
+
 ![](../../assets/figma-toolbar-right.png)
 
-The right end of the toolbar shows account information, sharing options, and a switch for [Dev Mode](dev-mode.md).
+We'll talk a little bit more about [Dev Mode](dev-mode.md) in a little bit, but I'd be remiss if I didn't point out that this feature is only available on paid plans and is *not* available on free plans.
 
 ## Left Side Panel: Layers and Assets
 
@@ -65,7 +69,7 @@ This panel has two sections:
 
 ### Pages and Layers
 
-The interface's left side lets you navigate between pages and view layers for the selected page.
+Figma allows you to organize your designs into pages. Within a page, you can see a list of all of the layers and objects in the currently selected page. The interface's left side lets you navigate between pages and view layers for the selected page.
 
 ![](../../assets/figma-pages-and-layers.png)
 
@@ -82,18 +86,16 @@ This panel features two tabs:
 
 ### Design
 
-The right side provides options for adjusting the properties of selected layers.
+This is where the magic happens. The right side provides options for adjusting the properties of selected layers.
 
 ![](../../assets/figma-layer-options.png)
 
 ### Prototype
 
-The Prototype Tab enables the creation of detailed, interactive prototypes, enhancing the design process and facilitating user testing by simulating real user flows.
+The **Prototype** tab enables the creation of detailed, interactive prototypes, enhancing the design process and facilitating user testing by simulating real user flows.
 
 ## Context Menu
 
-Right-clicking a layer opens a context menu for layer-specific actions.
+Right-clicking a layer opens a context menu for layer-specific actions just like it does in many other applications. The tasting note here, of course, is that this is clearly a bespoke context menu and is available both in the Web UI as well as in the Figma desktop application.
 
 ![](../../assets/figma-context-menu.png)
-
-This tour of Figma's UI highlights the comprehensive tools available for digital design, from basic drawing to advanced prototyping, ensuring an efficient and collaborative design process.

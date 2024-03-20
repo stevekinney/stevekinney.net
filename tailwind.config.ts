@@ -4,7 +4,13 @@ import typography from '@tailwindcss/typography';
 import containerQueries from '@tailwindcss/container-queries';
 
 export default {
-	content: ['./src/**/*.svelte', './src/**/*.html', './src/**/*.ts', './src/**/*.md'],
+	content: [
+		'./src/**/*.svelte',
+		'./src/**/*.html',
+		'./src/**/*.ts',
+		'./src/**/*.md',
+		'./svelte.config.js',
+	],
 	theme: {
 		extend: {
 			colors: {

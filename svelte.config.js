@@ -4,6 +4,7 @@ import vercelAdapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 import { mdsvex, escapeSvelte } from 'mdsvex';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import relativeImages from 'mdsvex-relative-images';
 import remarkUnwrapImages from 'remark-unwrap-images';
 import rehypeSlug from 'rehype-slug';
@@ -30,7 +31,7 @@ const fixMarkdownUrls = () => {
 const mdsvexOptions = {
 	extensions: ['.md'],
 	remarkPlugins: [remarkUnwrapImages, remarkObsidian, fixMarkdownUrls, relativeImages],
-	rehypePlugins: [rehypeSlug],
+	rehypePlugins: [rehypeAutolinkHeadings, rehypeSlug],
 	layout: {
 		_: './src/lib/markdown/base.svelte',
 		page: './src/lib/markdown/page.svelte',

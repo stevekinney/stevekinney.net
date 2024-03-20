@@ -1,7 +1,8 @@
 import { error } from '@sveltejs/kit';
 
-export async function load({ params }) {
+export async function load({ params, url }) {
 	const { slug } = params;
+	const { pathname } = url;
 
 	const post = await import(`../../../../courses/figma/${slug}.md`).catch(() => {
 		error(404, 'Not found');
@@ -13,5 +14,6 @@ export async function load({ params }) {
 		content: post.default,
 		meta,
 		slug,
+		pathname,
 	};
 }

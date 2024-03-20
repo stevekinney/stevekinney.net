@@ -8,9 +8,9 @@ published: false
 
 [Figma](https://figma.com/) features three key tools that appear similar at first glance: [**frames**](https://help.figma.com/hc/en-us/articles/360041539473-Frames-in-Figma), [**groups**](https://help.figma.com/hc/en-us/articles/360039832054-The-difference-between-frames-and-groups), and [**sections**](https://help.figma.com/hc/en-us/articles/9771500257687-Organize-your-canvas-with-sections). Each serves a unique purpose in organizing and designing within the platform. Let's delve into these tools to understand their differences and best use cases.
 
-- **Groups** are ideal for quick, temporary arrangements and applying uniform styling across multiple elements.
-- **Frames** serve as the fundamental structure for your design, accommodating everything from screen layouts to components.
-- **Sections** offer a new, top-level organizational layer, perfect for enhancing collaboration and streamlining navigation and presentation.
+- [**Groups**](#groups) are ideal for quick, temporary arrangements and applying uniform styling across multiple elements.
+- [**Frames**](#frames) serve as the fundamental structure for your design, accommodating everything from screen layouts to components.
+- [**Sections**](#sections) offer a new, top-level organizational layer, perfect for enhancing collaboration and streamlining navigation and presentation.
 
 ## Groups
 

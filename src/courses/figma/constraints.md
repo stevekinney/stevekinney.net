@@ -25,6 +25,7 @@ Okay, let's say you want to set up some constraints:
    - **Scale:** The element scales proportionally with the frame.
 
 ![](../../assets/figma-constraints.gif)
+
 ## Some Practical Applications
 
 - **Responsive Web Design**: Constraints are invaluable in responsive web design, allowing UI components to adjust gracefully as browser windows resize. For instance, setting side navigation to “Left & Scale” ensures it stretches correctly, while the main content area can be set to “Scale” to utilize available space efficiently.

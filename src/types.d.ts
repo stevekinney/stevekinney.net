@@ -10,5 +10,5 @@ declare module '*.md' {
 	export const metadata: Record<string, unknown>;
 }
 
-declare module 'remark-obsidian';
 declare module 'mdsvex-relative-images';
+declare module 'remark-obsidian';
