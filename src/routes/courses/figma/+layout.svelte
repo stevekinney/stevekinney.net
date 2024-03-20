@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { twMerge as merge } from 'tailwind-merge';
+
 	import Link from '$lib/components/link.svelte';
 	import index from './table-of-contents';
 </script>
@@ -8,9 +10,15 @@
 		<slot />
 	</div>
 	<ul class="space-y-2">
-		{#each index as { title, slug }}
+		{#each index as { title, slug, bonus }}
 			<li>
-				<Link href="/courses/figma/{slug}" class="decoration-2 underline-offset-2">{title}</Link>
+				<Link
+					href="/courses/figma/{slug}"
+					class={merge(
+						'decoration-2 underline-offset-2',
+						bonus && `before:mr-2 before:decoration-0 before:content-['🎁']`,
+					)}>{title}</Link
+				>
 			</li>
 		{/each}
 	</ul>

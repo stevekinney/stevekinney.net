@@ -3,12 +3,11 @@ import vercelAdapter from '@sveltejs/adapter-vercel';
 
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
+import { mdsvex, escapeSvelte } from 'mdsvex';
+import relativeImages from 'mdsvex-relative-images';
 import remarkUnwrapImages from 'remark-unwrap-images';
 import rehypeSlug from 'rehype-slug';
 import remarkObsidian from 'remark-obsidian';
-import relativeImages from 'mdsvex-relative-images';
-
-import { mdsvex, escapeSvelte } from 'mdsvex';
 import shiki from 'shiki';
 import { visit } from 'unist-util-visit';
 

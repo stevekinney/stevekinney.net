@@ -1,6 +1,7 @@
 type Section = {
 	title: string;
 	slug: string;
+	bonus?: boolean;
 };
 
 const index: Readonly<Section[]> = [
@@ -19,12 +20,12 @@ const index: Readonly<Section[]> = [
 	{ title: 'Interactive Components', slug: 'interactive-components' },
 	{ title: 'Dev Mode', slug: 'dev-mode' },
 	{ title: 'Prototyping', slug: 'prototyping' },
-	{ title: 'Branching and Merging', slug: 'branching-and-merging' },
 	{ title: 'Libraries', slug: 'libraries' },
 	{ title: 'Widget API', slug: 'widget-api' },
 	{ title: 'Plugin API', slug: 'plugin-api' },
 	{ title: 'Developer Resources API', slug: 'developer-resources-api' },
 	{ title: 'REST API', slug: 'rest-api' },
+	{ title: 'Branching and Merging', slug: 'branching-and-merging', bonus: true },
 ] as const;
 
 export default index;
