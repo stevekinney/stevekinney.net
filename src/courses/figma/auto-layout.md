@@ -3,13 +3,33 @@ title: Auto Layout
 description: auto layout in Figma helps designers make flexible designs easily. Understanding and using this feature improves design workflow.
 published: false
 date: 2024-03-09T14:20:45-05:00
-modified: 2024-03-21T07:09:09-06:00
+modified: 2024-03-21T07:31:16-06:00
 ---
 
 Manually adjusting everything is hard and we certainly don’t arrange our UIs by pixel in the browser. Imagine if everything you already know and love about [flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox) was available to you?
 Well, it is. It just goes by the name auto layout.
 
 **Fun Fact**: Auto layout is _only_ available in [Frames](layers.md#Frames).
+
+- [ ] Show the difference between how auto layout behaves with frames versus shapes (in so far as it doesn't).
+- [ ] Make a bulleted list with auto layout as a simple example
+- [ ] Write an example where you create components out of bullet/navigation items
+- [ ] Create an exercise or walk through for creating a navigation bar to demonstrate auto layout
+- [ ] Create an exercise or walk through for creating a button as a simple demonstrate auto layout
+- [ ] Show negative spacing and constraints with auto layout; use a series of avatars like in Notion
+- [ ] Create an exercise or walk through for creating a button group
+- [ ] Use a card to demonstrate how a fixed width but a height set to hug contents behave
+- [ ] Create an example with an Instagram card to demonstrate both constraints and auto layout
+- [ ] Show how "fill container" works with auto layout
+- [ ] Show how double-clicking with hug the contents in an auto layout
+- [ ] Show own option-click will make a auto layout child fill the component
+- [ ] Show how to adjust alignments with an auto layout with keyboard shortcuts
+- [ ] Show how to align text items with auto layout
+
+## Keyboard Shortcuts
+
+- `Shift-A` will turn any frame into an Auto Layout frame.
+- `Option/Alt-Shift-A` will remove Auto Layout from a frame.
 
 ## Understanding Auto Layout
 
