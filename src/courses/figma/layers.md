@@ -1,7 +1,7 @@
 ---
 title: Working with Layers
 description: In which we learn how to use frames, sections, slices, and groups in Figma—and the difference between them.
-modified: 2024-03-09T15:21:49-05:00
+modified: 2024-03-20T20:14:18-06:00
 date: 2024-03-05T13:04:49-07:00
 published: false
 ---
@@ -33,8 +33,8 @@ Frames are _way more_ powerful than groups, but with great power comes great res
 
 - Frames can contain other frames.
 - Frames can have their own height and width separate from then objects they contain.
-- Frames support things like Layout Grids, Auto Layout, Constraints.
-- Frames support prototyping.
+- Frames support things like [Layout Grids](layout-grids.md), [Auto Layout](auto-layout.md), and [Constraints](constraints.md).
+- Frames support [prototyping](prototyping.md).
 
 When should you use frames?
 

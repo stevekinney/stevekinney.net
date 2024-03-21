@@ -3,11 +3,13 @@ title: Auto Layout
 description: auto layout in Figma helps designers make flexible designs easily. Understanding and using this feature improves design workflow.
 published: false
 date: 2024-03-09T14:20:45-05:00
-modified: 2024-03-20T16:40:06-06:00
+modified: 2024-03-20T20:12:26-06:00
 ---
 
 Manually adjusting everything is hard and we certainly don’t arrange our UIs by pixel in the browser. Imagine if everything you already know and love about [flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox) was available to you?
 Well, it is. It just goes by the name auto layout.
+
+**Fun Fact**: Auto layout is _only_ available in [Frames](layers.md#Frames).
 
 ## Understanding Auto Layout
 
