@@ -1,7 +1,7 @@
 ---
 title: Getting Started with Figma
 description: "Let's get learn our way around Figma and get comfortable with some of the basic tools."
-modified: 2024-03-21T07:14:11-06:00
+modified: 2024-03-21T07:18:48-06:00
 date: 2024-03-05T13:04:49-07:00
 published: false
 ---
@@ -102,6 +102,12 @@ Right-clicking a layer opens a context menu for layer-specific actions just like
 
 ## The Command Palette
 
-Hitting `Command-P` or `Control-P` will allow you to pull up the Command Palette, which makes it easy to search for and jump to any command that you need. This is also a great way to learn about some of the keyboard shortcuts that are available for common tasks.
+Hitting `Command-P`/`Control-P` _or_ `Command-/`/`Control-/` will allow you to pull up the Command Palette, which makes it easy to search for and jump to any command that you need. This is also a great way to learn about some of the keyboard shortcuts that are available for common tasks.
 
 ![Figma's Command Palette](../../assets/figma-command-palette.png)
+
+## Keyboard Shortcuts
+
+You can either use the Command Palette *or* press `Control-Shift-?` and pull up this helpful guide for learning all of the keyboard shortcuts supported by Figma.
+
+![Figma Keyboard Shortcuts](../../assets/figma-keyboard-shortcuts.png)
