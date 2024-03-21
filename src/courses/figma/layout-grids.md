@@ -24,7 +24,7 @@ Column grids are perfect for web pages and mobile interfaces, where vertical ali
 
 Row grids are used less frequently but are invaluable for designs that require horizontal alignment, such as timelines or charts. Similar to column grids, you can adjust the number of rows, the gutter height, and margins to fit your design specifications.
 
-![](../../assets/Pasted%20image%2020240320201910.png)
+![](../../assets/figma-layout-grids-rows.png)
 
 ## Grids
 
