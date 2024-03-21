@@ -26,7 +26,7 @@
 <SEO {title} {description} {published} {date} {modified} />
 
 <div class={className} {...toDataAttributes($$restProps)}>
-	<h1 class="mb-6 text-xl font-bold">{title}</h1>
+	<h1 class="mb-6 text-4xl font-bold">{title}</h1>
 
 	<article class="prose max-w-none dark:prose-invert">
 		<slot />
