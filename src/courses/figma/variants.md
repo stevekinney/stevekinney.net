@@ -32,7 +32,3 @@ Each variant can have different properties assigned, such as "State" for a butto
 - **Clearly Define Properties:** Use meaningful property names and values that clearly describe the differences between variants, making them intuitive to use for anyone accessing the design system.
 - **Limit Variant Complexity:** While it’s powerful, avoid overcomplicating your variant structure. Too many properties or values can become confusing, reducing the efficiency gains.
 - **Use for Scalable Elements:** Variants are best used for components that have multiple, distinct versions. Not every component needs variants, so evaluate the scalability and reusability of elements before combining them.
-
-## Conclusion
-
-Variants in Figma are a game-changer for managing complex design systems and ensuring consistency across projects. By effectively utilizing this feature, designers can significantly streamline their workflow, reduce the time spent on searching for and switching between component states, and improve collaboration within design teams.

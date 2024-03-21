@@ -34,7 +34,3 @@ To set up a library in Figma, simply create a file with the components and style
 - **Regular Updates:** Continually update and refine your libraries to reflect design iterations and ensure that all assets remain relevant.
 - **Limit Library Numbers:** While having specific libraries for different projects or themes can be useful, too many libraries can become overwhelming. Aim for a balance that suits your team’s needs.
 - **Educate Your Team:** Ensure all team members understand how to use libraries effectively, including how to access and implement shared components and styles in their designs.
-
-## Conclusion
-
-Libraries in Figma are an indispensable tool for any design team looking to streamline their workflow, enhance collaboration, and maintain consistency across their projects. By effectively leveraging libraries, teams can create a dynamic, shared ecosystem of design assets that propels their projects forward with both speed and coherence.

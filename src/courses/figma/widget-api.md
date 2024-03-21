@@ -35,7 +35,3 @@ To begin developing widgets with the Figma Widget API, you'll need a basic under
 - **Optimize Performance:** Ensure your widget performs efficiently, especially when interacting with the Figma canvas or external data sources, to provide a seamless experience.
 - **Ensure Security and Privacy:** Be mindful of user data and adhere to best practices for data handling and privacy, especially when integrating with external services.
 - **Iterate Based on Feedback:** Utilize user feedback to continuously improve your widget, adding new features or refining existing functionalities to meet user needs better.
-
-## Conclusion
-
-The Figma Widget API provides a powerful avenue for creating customized tools and integrations within Figma, offering endless possibilities for enhancing design workflows and collaboration. By developing custom widgets, developers can significantly contribute to the productivity and creativity of design teams, making the design process more efficient and tailored to specific needs.
