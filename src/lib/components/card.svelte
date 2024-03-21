@@ -30,7 +30,7 @@
 			>
 				{title}
 			</h3>
-			<p class="line-clamp-6">{description}</p>
+			<p class="line-clamp-4">{description}</p>
 		</div>
 	</svelte:element>
 </a>
