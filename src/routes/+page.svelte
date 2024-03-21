@@ -12,5 +12,5 @@
 		class="aspect-[3/4] max-w-full rounded-md shadow-lg sm:float-right sm:ml-8 sm:w-72 md:w-96"
 		alt="Steve Kinney"
 	/>
-	<Biography class="prose" />
+	<Biography class="prose dark:prose-invert" />
 </div>

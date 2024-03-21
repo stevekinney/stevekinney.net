@@ -18,10 +18,10 @@ I write a lot of words, but most of them are for the [courses](/courses) that I 
 <ul class="space-y-8 not-prose">
 	{#each data.posts as post}
 	<li class="block">
-		<a href="/writing/{post.slug}" class="group grid grid-cols-[50px_1fr] gap-4 bg-primary-50 border-primary-200 border p-4 rounded-md hover:border-primary-300">
+		<a href="/writing/{post.slug}" class="group grid grid-cols-[50px_1fr] gap-4 bg-primary-50 border-primary-200 dark:border-primary-700 dark:bg-primary-800 border p-4 rounded-md hover:border-primary-300">
 		<NotebookPen size={28} class="m-2" />
 		<div>
-			<h3 class="font-semibold sm:text-xl underline decoration-primary-200 decoration-4 group-hover:decoration-primary-400">{post.title}</h3>
+			<h3 class="font-semibold sm:text-xl group-hover:underline decoration-primary-200 decoration-4 group-hover:decoration-primary-400">{post.title}</h3>
 			<DateTime date={post.date} />
 			<p>{post.description}</p>
 			<div>

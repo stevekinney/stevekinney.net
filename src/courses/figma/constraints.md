@@ -3,10 +3,12 @@ title: Constraints
 description: Learn how to master constraints in Figma for responsive design. Ensure your UI adapts seamlessly across devices with this essential guide
 published: false
 date: 2024-03-09T14:13:01-05:00
-modified: 2024-03-20T14:41:46-06:00
+modified: 2024-03-21T07:53:52-06:00
 ---
 
 Constraints control how the layers within a frame should behave when the size of the frame changes. By default, a layer’s constraints are set to to top and left.
+
+**Pro Tip**: Constraints *only* show up when an object is inside of a frame.
 
 In Figma, you can use constraints to adjust how elements scale, shift, or stay in place based on the frame edges. This feature helps designers keep padding, spacing, and alignment the same on all screen sizes, making the user experience even better.
 

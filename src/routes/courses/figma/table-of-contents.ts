@@ -8,6 +8,7 @@ const index: Readonly<Section[]> = [
 	{ title: 'Getting Started', slug: 'getting-started' },
 	{ title: 'Aligning Objects', slug: 'aligning-objects' },
 	{ title: 'Working with Layers', slug: 'layers' },
+	{ title: 'Working with Text', slug: 'text' },
 	{ title: 'Selecting and Inspecting', slug: 'selecting-and-inspecting' },
 	{ title: 'Constraints', slug: 'constraints' },
 	{ title: 'Layout Grids', slug: 'layout-grids' },

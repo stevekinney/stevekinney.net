@@ -1,9 +1,9 @@
 ---
 title: Auto Layout
-description: auto layout in Figma helps designers make flexible designs easily. Understanding and using this feature improves design workflow.
+description: Auto layout in Figma helps designers make flexible designs easily. Understanding and using this feature improves design workflow.
 published: false
 date: 2024-03-09T14:20:45-05:00
-modified: 2024-03-21T07:31:16-06:00
+modified: 2024-03-21T08:21:34-06:00
 ---
 
 Manually adjusting everything is hard and we certainly don’t arrange our UIs by pixel in the browser. Imagine if everything you already know and love about [flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox) was available to you?
@@ -11,29 +11,28 @@ Well, it is. It just goes by the name auto layout.
 
 **Fun Fact**: Auto layout is _only_ available in [Frames](layers.md#Frames).
 
-- [ ] Show the difference between how auto layout behaves with frames versus shapes (in so far as it doesn't).
-- [ ] Make a bulleted list with auto layout as a simple example
-- [ ] Write an example where you create components out of bullet/navigation items
-- [ ] Create an exercise or walk through for creating a navigation bar to demonstrate auto layout
-- [ ] Create an exercise or walk through for creating a button as a simple demonstrate auto layout
-- [ ] Show negative spacing and constraints with auto layout; use a series of avatars like in Notion
-- [ ] Create an exercise or walk through for creating a button group
-- [ ] Use a card to demonstrate how a fixed width but a height set to hug contents behave
-- [ ] Create an example with an Instagram card to demonstrate both constraints and auto layout
-- [ ] Show how "fill container" works with auto layout
-- [ ] Show how double-clicking with hug the contents in an auto layout
-- [ ] Show own option-click will make a auto layout child fill the component
-- [ ] Show how to adjust alignments with an auto layout with keyboard shortcuts
-- [ ] Show how to align text items with auto layout
+## Shortcuts
 
-## Keyboard Shortcuts
-
-- `Shift-A` will turn any frame into an Auto Layout frame.
-- `Option/Alt-Shift-A` will remove Auto Layout from a frame.
+- **`Shift-A`** will turn any frame into an Auto Layout frame.
+- **`Option/Alt-Shift-A`** will remove Auto Layout from a frame.
+- **`Shift` and drag a handle**: Drag padding/spacing with big nudge steps
+- **`Option` and drag a handle**: Drag padding from both sides
+- **`Shift+Option` and drag a handle**: Drag padding from all sides
+- **`Option` and click on the padding area**: Edit both padding sides
+- **`Shift+Option` and click on the padding area**: Edit all padding sides
+- **`Command/Control` and click on the padding input field**: Edit all padding in design panel
+- **Double click on the edge**: Set hug contents
+- **`Option` and double click on the edge**: Set fill container
+- **`Option` and select Fixed Size for text**: Set text resizing to text truncation
+- **Click on the alignment widget + `Up`, `Down`, `Left`, or `Right`**: Set alignment stepwise
+- **Click on the alignment widget and press `W`, `A`, `S`, or `D`**: Set alignment to edge
+- **Click on the alignment widget and press `V` or `H`**: Set alignment to center vertically or horizontally
+- **Click on the alignment widget and press `B`**: Toggle baseline alignment
+- **Click on the alignment widget and press `X`**: Toggle space between
 
 ## Understanding Auto Layout
 
-Auto layout adds a structure to your frames and components, allowing them to resize content automatically based on the properties you define. It's particularly useful for designing interfaces that need to be responsive or adapt to content variations, such as text changes or dynamic lists.
+Auto layout adds a structure to your frames and components, allowing them to resize content automatically based on the properties you define. It's particularly useful for designing interfaces that need to be responsive or adapt to content variations, such as text changes, navigation bars, or dynamic lists. As I mentioned above, if you think you might use flexbox in your implementation, then you'll probably choose to use auto layout in Figma.
 
 ![](../../assets/figma-auto-layout-controls.png)
 
@@ -47,14 +46,6 @@ Looking at the screenshot above, you can see the following controls:
 There are also some advanced settings hiding out in the little menu along the right-side of the control panel.
 
 ![](../../assets/figma-auto-layout-advanced-options.png)
-
-## Limitations
-
-Auto layout does have some limitations:
-
-- You can't add Layout Grids to a frame with auto layout applied.
-- You can't apply Constraints to a frame using auto layout.
-- You can't use Smart Selection on anything in a frame using auto layout.
 
 ## Setting Up Auto Layout
 
@@ -78,7 +69,7 @@ When you're basing the size of the frame based on it's children, then you can pr
 
 ![](../../assets/figma-auto-layout-fixed-height-auto-gap.png)
 
-Now, the you can resize the frame and the elements will distribute themselves evenly.
+Now, the you can resize the frame and the elements will distribute themselves evenly. The ability for frames to adapt to the size of their children and be able to maintain consistent spaces are basically two of the most common use cases for using auto layout.
 
 ![](../../assets/figma-auto-layout-resize-fixed-size.gif)
 
@@ -88,12 +79,6 @@ Trying to grab the corners of the frame to resize it will switch the horizontal 
 
 ![](../../assets/figma-auto-layout-click-to-resize-padding.gif)
 
-## Responsive Design
-
-With auto layout, creating responsive designs becomes a lot more straightforward. By defining constraints and using auto layout strategically, you can ensure that your design adapts elegantly across different devices, from desktops to mobile phones.
-
-auto layout provides flexibility, enabling elements to shrink, grow, or stay fixed based on their content. Whether you're dealing with buttons that need to adjust to text length or lists that vary in content size, auto layout ensures your design remains cohesive.
-
 ## Accounting for Strokes
 
 When determining the size of objects for auto layout, strokes are not considered, so they do not impact the parent frame or other nearby elements.
@@ -102,6 +87,27 @@ This might not be the best approach for developer handoff since it doesn't show 
 
 To address this, you can decide if strokes should occupy space within an auto layout frame. Simply access the advanced layout settings and use the dropdown menu next to **stroke** to choose between **included in layout** or **excluded from layout**.
 
+![Exclude Stroke From Auto Layout](../../assets/figma-exclude-stroke-auto-layout.gif)
+
 ## Additional Resources
 
 - [Figma for Education: Learning Auto layout](https://www.youtube.com/watch?v=PGYCZbP3xH4&list=PLEBQWzRBb4irVSBAwLaJwR8u6YGXALNtO&index=21)
+
+## Appendix
+
+- [ ] Show the difference between how auto layout behaves with frames versus shapes (in so far as it doesn't).
+- [ ] Make a bulleted list with auto layout as a simple example
+- [ ] Write an example where you create components out of bullet/navigation items
+- [ ] Create an exercise or walk through for creating a navigation bar to demonstrate auto layout
+- [ ] Create an exercise or walk through for creating a button as a simple demonstrate auto layout
+- [ ] Show negative spacing and constraints with auto layout; use a series of avatars like in Notion
+- [ ] Create an exercise or walk through for creating a button group
+- [ ] Use a card to demonstrate how a fixed width but a height set to hug contents behave
+- [ ] Create an example with an Instagram card to demonstrate both constraints and auto layout
+- [ ] Show how "fill container" works with auto layout
+- [ ] Show how double-clicking with hug the contents in an auto layout
+- [ ] Show own option-click will make a auto layout child fill the component
+- [ ] Show how to adjust alignments with an auto layout with keyboard shortcuts
+- [ ] Show how to align text items with auto layout
+- [ ] Show how absolute positioning works with Auto layout (and with constraints); a potential example is a back to top button
+- [ ] Make a fake version of the macOS dock with Auto layout and absolute positioning

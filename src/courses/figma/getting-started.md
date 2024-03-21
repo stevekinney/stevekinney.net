@@ -1,7 +1,7 @@
 ---
 title: Getting Started with Figma
 description: "Let's get learn our way around Figma and get comfortable with some of the basic tools."
-modified: 2024-03-21T07:18:48-06:00
+modified: 2024-03-21T08:05:02-06:00
 date: 2024-03-05T13:04:49-07:00
 published: false
 ---
@@ -9,11 +9,13 @@ published: false
 When you first enter Figma, you're greeted with the option to either create a new project or select a recent one.
 
 ![Figma Home](../../assets/figma-home-screen.png)
-
-Upon entering a project, you're presented with an interface similar to the screenshot below.
+Upon entering a project, you're presented with an interface similar to the screenshot below. Almost everything that you're going to do in Figma is going to be in this workspace.
 
 ![An Empty Figma Workspace](../../assets/figma-workspace.png)
+In the center, you have the Canvas. Here are some helpful tips for navigating around the canvas:
 
+- **Pan Around the Canvas**: Hold the `Space` bar and drag or do a two-finger drag on your touchpad.
+- **Zoom In/Out**: `Command/Control +` or `Command/Control -`, hold the `Command` key while scrolling, or pinch on the touchpad.
 ## The Toolbar
 
 ![Figma's Toolbar](../../assets/figma-toolbar-left.png)
@@ -79,10 +81,13 @@ The Assets Panel is a repository for managing reusable components and styles, su
 
 ## Right Side Panel: Design and Prototype
 
-This panel features two tabs:
+This panel features two modes:
 
 - **Design Tab:** Contains properties for the appearance of selected objects.
 - **Prototype Tab:** Offers tools for creating interactive prototypes by defining user flows and interactions.
+
+> [!NOTE] Inspect Mode
+> Previously, Figma had a third mode, called **Inspect**, in this pane. This functionality has been moved into [Dev Mode](dev-mode.md) and is now only available for paid accounts.
 
 ### Design
 
