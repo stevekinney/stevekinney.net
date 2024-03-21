@@ -1,7 +1,7 @@
 ---
 title: Aligning Objects
 description: "Let's explore some of the useful utilities that Figma provides to for aligning and spacing objects quickly and easily."
-modified: 2024-03-20T14:33:28-06:00
+modified: 2024-03-20T16:39:45-06:00
 date: 2024-03-05T13:04:49-07:00
 published: false
 ---
@@ -38,6 +38,8 @@ The platform includes keyboard shortcuts for distribution tasks:
 
 ## Tidy Up
 
-The "Tidy Up" feature in Figma makes it easy to organize multiple objects by automatically aligning and distributing them with a single click.
+The Tidy Up tool makes it super easy to tidy up messy selections without the need for precise adjustments. You can use the Tidy Up to neatly organize your chosen items.
 
-- [ ] Add more around the **Tidy Up** feature.
+Tidy Up arranges selected items closely together with equal spacing. This feature isn't just handy for Smart Selections; it works wonders with tables and toolbars too. Plus, unlike the usual distribute function, Tidy Up ensures consistent spacing every time.
+
+![](../../assets/figma-tidy-up.gif)

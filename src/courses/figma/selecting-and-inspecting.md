@@ -1,7 +1,7 @@
 ---
 title: Selecting and Inspecting
 description: "Let's look at some of the tools Figma provides for measuring sizes and distances."
-modified: 2024-03-20T13:51:20-06:00
+modified: 2024-03-20T16:45:38-06:00
 date: 2024-03-05T13:04:49-07:00
 published: false
 ---
@@ -13,15 +13,18 @@ Some of the standard tips that we've picked up from most GUIs apply to Figma as 
 
 ![](../../assets/figma-drag-to-select-multiple.gif)
 
-## Selecting Similar Objects
+**Pro Tip**: Holding the `Command` key will always allow you to drag to select an area even when you might have otherwise ended up clicking on an individual frame.
 
-- [ ] Verify selecting similar objects and make sure it works as expected.
+## Selecting Similar Objects
 
 - Hold down the `Command` key on macOS or the `Control` key on Windows to select the exact element that you’re presently hovering over.
 - With an element selected, click on the Inspect tab at the top of the right sidebar.
 - Select one of the blue buttons, go to the Figma menu in the upper-left corner, select the Edit menu, and see how you can select similar elements with the same properties.
 
 ![](../../assets/figma-select-similar.png)
+
+> [!NOTE]
+> One thing to note is that this will select all of the matching object with in the same frame and will _not_ work across frames or for objects that are not inside of a frame.
 
 ## Measuring the Distance Between Layers
 

@@ -3,7 +3,7 @@ title: Auto Layout
 description: auto layout in Figma helps designers make flexible designs easily. Understanding and using this feature improves design workflow.
 published: false
 date: 2024-03-09T14:20:45-05:00
-modified: 2024-03-18T16:39:52-06:00
+modified: 2024-03-20T16:40:06-06:00
 ---
 
 Manually adjusting everything is hard and we certainly don’t arrange our UIs by pixel in the browser. Imagine if everything you already know and love about [flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox) was available to you?
@@ -73,8 +73,6 @@ With auto layout, creating responsive designs becomes a lot more straightforward
 auto layout provides flexibility, enabling elements to shrink, grow, or stay fixed based on their content. Whether you're dealing with buttons that need to adjust to text length or lists that vary in content size, auto layout ensures your design remains cohesive.
 
 ## Accounting for Strokes
-
-- [ ] Add a visual example for including/excluding strokes with Auto Layout.
 
 When determining the size of objects for auto layout, strokes are not considered, so they do not impact the parent frame or other nearby elements.
 
