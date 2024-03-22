@@ -1,7 +1,3 @@
-<script context="module">
-	export { default as img } from './img.svelte';
-</script>
-
 <script>
 	import { toDataAttributes } from '$lib/to-data-attributes';
 

@@ -1,5 +1,13 @@
-<!-- svelte-ignore a11y-missing-attribute -->
-<img
-	class="max-w-full rounded-md border-2 border-slate-200 bg-slate-50 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
-	{...$$restProps}
-/>
+<script lang="ts">
+	export let src: string;
+	export let alt: string;
+</script>
+
+<picture>
+	<source
+		srcset="{src}?format=avif 768px, {src}?format=webp 768w"
+		sizes="(min-width: 640px) 768px, 768px"
+		type="image/avif"
+	/>
+	<img src="{src}?format=avif" {alt} class="rounded-md shadow-md" {...$$restProps} />
+</picture>

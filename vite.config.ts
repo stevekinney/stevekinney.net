@@ -4,7 +4,7 @@ import { imagetools } from 'vite-imagetools';
 import { enhancedImages } from '@sveltejs/enhanced-img';
 
 export default defineConfig({
-	plugins: [enhancedImages(), sveltekit(), imagetools()],
+	plugins: [sveltekit(), enhancedImages(), imagetools()],
 	esbuild: {
 		jsxFactory: 'h',
 		jsxFragment: 'Fragment',
