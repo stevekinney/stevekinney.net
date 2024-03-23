@@ -16,3 +16,8 @@ GROUP BY title
 ```
 
 
+## Component Ideas
+
+- Button
+- Card (e.g. an Instagram card)
+- Navigation Bar

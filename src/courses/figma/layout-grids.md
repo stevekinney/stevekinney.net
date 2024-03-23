@@ -1,11 +1,14 @@
 ---
 title: Layout Grids
 description: Layout grids in Figma enhance your designs with structure and consistency. Learn to utilize columns, rows, and grids for precise alignment.
-drafted: false
+drafted: true
 figma: false
 date: 2024-03-09T14:20:40-05:00
 modified: 2024-03-20T20:17:55-06:00
-tags: [figma, course, frontendmasters]
+tags:
+  - figma
+  - course
+  - frontendmasters
 ---
 
 Layout grids allow you to apply a fixed grid or a set of columns or rows to a frame. You can use these grids to align elements to a grid system. They pair nicely with constraints to assist you in putting together responsive layouts, which have been all the range since a little pocket-sized computer out back in 2007.

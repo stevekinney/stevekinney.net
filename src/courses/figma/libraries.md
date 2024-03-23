@@ -5,7 +5,11 @@ drafted: false
 figma: false
 date: 2024-03-09T14:26:58-05:00
 modified: 2024-03-09T15:21:53-05:00
-tags: [figma, course, frontendmasters]
+tags:
+  - figma
+  - course
+  - frontendmasters
+  - bonus
 ---
 
 Libraries in Figma are a central repository for storing and sharing design components and styles across projects, significantly boosting productivity and ensuring consistency in design. This feature allows teams to create a single source of truth for all design elements, from UI components to text styles and colors, making it easier to maintain a cohesive look and feel across multiple projects. Let’s delve into how leveraging libraries can transform your design workflow in Figma.

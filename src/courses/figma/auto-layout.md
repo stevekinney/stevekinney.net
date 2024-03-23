@@ -4,7 +4,7 @@ description: Auto layout in Figma helps designers make flexible designs easily. 
 drafted: true
 figma: false
 date: 2024-03-09T14:20:45-05:00
-modified: 2024-03-23T12:01:00-06:00
+modified: 2024-03-23T14:20:46-06:00
 tags: [figma, course, frontendmasters]
 ---
 
@@ -91,9 +91,27 @@ To address this, you can decide if strokes should occupy space within an auto la
 
 ![Exclude Stroke From Auto Layout](../../assets/figma-exclude-stroke-auto-layout.gif)
 
-## Additional Resources
+## Nesting Auto Layouts
 
-- [Figma for Education: Learning Auto layout](https://www.youtube.com/watch?v=PGYCZbP3xH4&list=PLEBQWzRBb4irVSBAwLaJwR8u6YGXALNtO&index=21)
+Nested Auto Layouts in Figma help designers create layouts that adjust smoothly to different content and device sizes. By nesting Auto Layout frames within each other, designers can blend the benefits of Auto Layout with complex designs, making layouts that adapt easily to changing content.
+
+### Selling Points of Nested Auto Layouts
+
+1. **Responsive Design:** Nested Auto Layouts automatically adjust design elements to fit various screen sizes, crucial for responsive designs.
+2. **Content Flexibility:** Perfect for designs with changing content needs, like dynamic lists or user-generated content, without requiring manual adjustments.
+3. **Organized Design:** Nested Auto Layouts keep your Figma layers tidy and structured, simplifying the management of intricate designs.
+
+### Some Pro-Tips for Working with Nested Auto Layouts
+
+- **Learn Auto Layout Features:** Understand how properties like spacing and padding impact layout design, especially when nesting layouts.
+- **Plan Your Design:** Map out your component structure before nesting layouts to ensure elements relate properly and adjust as needed.
+- **Utilize Variants:** Pairing variants with nested Auto Layouts boosts component flexibility and reusability, expanding design possibilities.
+
+### Practical Applications
+
+- **Forms and Lists:** Ideal for creating forms and lists that adapt to varying content lengths or additions.
+- **Responsive Navigation Menus:** Craft navigation menus that adjust to different screen sizes, showing more items on larger screens and simplifying on smaller devices.
+- **Cards and Tiles:** Design card components or tiles that resize based on content, maintaining consistent spacing and padding.
 
 ## Appendix
 

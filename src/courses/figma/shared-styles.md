@@ -1,35 +1,51 @@
 ---
 title: Shared Styles
 description: Master consistency and efficiency in Figma with Shared Styles. Simplify your workflow by reusing design attributes for text, colors, and effects across projects.
-drafted: false
+drafted: true
 figma: false
 date: 2024-03-09T14:19:54-05:00
-modified: 2024-03-09T15:22:24-05:00
-tags: [figma, course, frontendmasters]
+modified: 2024-03-23T13:35:47-06:00
+tags:
+  - figma
+  - course
+  - frontendmasters
 ---
 
-Shared Styles in Figma revolutionize the way designers approach consistency and efficiency across their projects. By enabling teams to create, apply, and manage universal styles for text, colors, and effects, Figma ensures that maintaining a cohesive design language is simpler and more streamlined than ever. Let's delve into the benefits and applications of Shared Styles in your Figma workflow.
+Shared styles allow you to store information about the color, text properties, shadows, or layouts into reusable styles. This is cool because if you update that style, then anything that points to that style will also update accordingly.
 
-## What Are Shared Styles?
+You can create shared styles for any of the following:
 
-Shared Styles allow you to define and reuse specific design attributes, such as typography, fill colors, stroke properties, and effects like shadows or blurs. Once a style is created, it can be applied to any element within your designs, ensuring uniformity and speeding up the design process.
+- Colors
+- Text
+- Effects (e.g. shadows and blurs)
+- [Layout Grids](layout-grids.md)
 
-## Creating Shared Styles
+## Text Styles and Color Styles
 
-To create a Shared Style, simply select the element with the attributes you wish to save as a style. In the right-side panel, you'll find options to create styles for fill, stroke, text, and effects. Clicking on the 'Create Style' button saves these attributes, making them available across your entire project.
+One of the things to notice here is that text styles and color styles are separate. This is intended to make your life easier.
 
-## Applying Shared Styles
+You don’t need to make three styles for red text: one right-aligned, one center-aligned, and one-left aligned. You can make your color style and your alignment style and them apply them both separately to the layer in question.
 
-Applying Shared Styles is as straightforward as their creation. Select an element and, from the right-side panel, choose the appropriate style under the fill, stroke, text, or effects section. This instantly updates the element with the predefined attributes, ensuring consistency across your design.
+## Naming Conventions
 
-## Managing and Updating Shared Styles
+The way you name your styles will help you as your design does it inevitable march into complexity. You can use a slash in the name of your file to create an ad hoc folder-like structure to your components.
 
-One of the greatest advantages of Shared Styles is the ease with which they can be managed and updated. If a style needs to be modified, making changes to the original style automatically updates all instances where that style has been applied, saving you from the tedious task of manual updates.
+By using a forward slash in your style names, you can group your colors by theme or hue or type styles by size or use case. You might group your grid styles by the viewport of whatever device they’re intended for.
 
-## Collaboration with Shared Styles
+## Creating Styles at Scale
 
-Shared Styles are a boon for team collaboration. By sharing a consistent set of design styles across team members, everyone works from the same visual language, reducing discrepancies and streamlining the design-to-development handoff process.
+- Let’s create a style based off of one of the colors.
+- This is tedious, let’s actually create them in bulk by renaming these little color swatches to whatever we want the styles to be called.
+- We’ll a plugin called [Styler](https://www.figma.com/community/plugin/820660579767995949/Styler) to create the styles.
 
-## Advantages in Responsive and Adaptive Design
+## Generating CSS from Styles
 
-In responsive and adaptive design, Shared Styles play a crucial role by ensuring that elements adapt consistently across different screen sizes and layouts. This consistency is key to a seamless user experience, regardless of the device or platform.
+If you’re going to go through all of the work to create styles in Figma, it would be nice if you could export some of the basic ideas of those styles into CSS or SCSS variables to use in your code. It turns out that you can with a plugin called [CSSGen](https://www.figma.com/community/plugin/742750636238601912/CSSGen).
+
+## Batch Renaming
+
+Larry Wall, the creator of the Perl programming language, famously said that the three great virtues of a programmer were laziness, impatience, and hubris. In his honor, let's talk about way for renaming layers in bulk. This will aid us when we start creating styles based on layers.
+
+- Select a row of color layers.
+- Use the Quick Action panel and search for Rename or hit `Command/Control-R`.
+- Rename them all using the Gray / $n00 (the $n is a variable for a number that will increment).

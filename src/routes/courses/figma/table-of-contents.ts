@@ -13,7 +13,6 @@ const index: Readonly<Section[]> = [
 	{ title: 'Constraints', slug: 'constraints' },
 	{ title: 'Layout Grids', slug: 'layout-grids' },
 	{ title: 'Auto Layout', slug: 'auto-layout' },
-	{ title: 'Nesting Auto Layouts', slug: 'nesting-auto-layouts' },
 	{ title: 'Shared Styles', slug: 'shared-styles' },
 	{ title: 'Variables', slug: 'variables' },
 	{ title: 'Components', slug: 'components' },
