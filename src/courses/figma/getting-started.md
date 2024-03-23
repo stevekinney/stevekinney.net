@@ -1,9 +1,11 @@
 ---
 title: Getting Started with Figma
-description: "Let's get learn our way around Figma and get comfortable with some of the basic tools."
+description: Let's get learn our way around Figma and get comfortable with some of the basic tools.
 modified: 2024-03-21T08:05:02-06:00
 date: 2024-03-05T13:04:49-07:00
-published: false
+drafted: true
+figma: false
+tags: [figma, course, frontendmasters]
 ---
 
 When you first enter Figma, you're greeted with the option to either create a new project or select a recent one.
@@ -16,6 +18,7 @@ In the center, you have the Canvas. Here are some helpful tips for navigating ar
 
 - **Pan Around the Canvas**: Hold the `Space` bar and drag or do a two-finger drag on your touchpad.
 - **Zoom In/Out**: `Command/Control +` or `Command/Control -`, hold the `Command` key while scrolling, or pinch on the touchpad.
+
 ## The Toolbar
 
 ![Figma's Toolbar](../../assets/figma-toolbar-left.png)
@@ -113,6 +116,6 @@ Hitting `Command-P`/`Control-P` _or_ `Command-/`/`Control-/` will allow you to p
 
 ## Keyboard Shortcuts
 
-You can either use the Command Palette *or* press `Control-Shift-?` and pull up this helpful guide for learning all of the keyboard shortcuts supported by Figma.
+You can either use the Command Palette _or_ press `Control-Shift-?` and pull up this helpful guide for learning all of the keyboard shortcuts supported by Figma.
 
 ![Figma Keyboard Shortcuts](../../assets/figma-keyboard-shortcuts.png)

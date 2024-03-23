@@ -1,9 +1,11 @@
 ---
 title: Nesting Auto Layouts
 description: Elevate your Figma designs with nested Auto Layouts, enabling dynamic, scalable layouts that adapt to content changes for responsive, efficient design work.
-published: false
+drafted: false
+figma: false
 date: 2024-03-09T14:21:06-05:00
 modified: 2024-03-09T15:21:57-05:00
+tags: [figma, course, frontendmasters]
 ---
 
 Nested Auto Layouts in Figma empower designers to build complex, flexible layouts that respond dynamically to content changes. This feature is key to creating designs that can scale, adapt, and look great across different device sizes and content variations. Here’s how to harness the power of nesting Auto Layouts to make your designs more efficient and responsive.

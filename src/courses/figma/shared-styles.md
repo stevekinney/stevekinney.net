@@ -1,9 +1,11 @@
 ---
 title: Shared Styles
 description: Master consistency and efficiency in Figma with Shared Styles. Simplify your workflow by reusing design attributes for text, colors, and effects across projects.
-published: false
+drafted: false
+figma: false
 date: 2024-03-09T14:19:54-05:00
 modified: 2024-03-09T15:22:24-05:00
+tags: [figma, course, frontendmasters]
 ---
 
 Shared Styles in Figma revolutionize the way designers approach consistency and efficiency across their projects. By enabling teams to create, apply, and manage universal styles for text, colors, and effects, Figma ensures that maintaining a cohesive design language is simpler and more streamlined than ever. Let's delve into the benefits and applications of Shared Styles in your Figma workflow.

@@ -1,9 +1,11 @@
 ---
 title: Interactive Components
 description: "Utilize Figma's interactive components to bring prototypes to life with realistic interactions, streamlining the design process and enhancing user experience."
-published: false
+drafted: false
+figma: false
 date: 2024-03-09T14:42:38-05:00
 modified: 2024-03-09T15:21:45-05:00
+tags: [figma, course, frontendmasters]
 ---
 
 Interactive components in Figma revolutionize how designers create and demonstrate interactive prototypes. This feature enables the integration of interactive states within components, such as buttons, toggles, and dropdowns, directly into your prototypes without needing separate frames for each state. This guide will explore how to utilize interactive components to make your prototypes more dynamic and realistic.

@@ -1,9 +1,11 @@
 ---
 title: Variants
 description: Streamline design with Figma variants, combining multiple component iterations for simplicity and consistency. Enhance efficiency and collaboration in your projects.
-published: false
+drafted: false
+figma: false
 date: 2024-03-09T14:21:25-05:00
-modified: 2024-03-09T15:22:31-05:00
+modified: 2024-03-23T12:02:45-06:00
+tags: [figma, course, frontendmasters]
 ---
 
 Variants in Figma offer a sophisticated way to streamline your design process by consolidating multiple versions of a component into a single, organized group. This powerful feature simplifies the management of related components, such as buttons with different states or inputs with various configurations, enhancing both efficiency and consistency across your designs. Here’s how to make the most of variants in your Figma projects.

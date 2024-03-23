@@ -1,9 +1,15 @@
 ---
 title: Plugin API
 description: The Figma Plugin API enables developers to create custom plugins, automating tasks, enhancing functionality, and introducing new workflows, thereby significantly enriching the Figma design experience.
-published: false
+drafted: false
+figma: false
 date: 2024-03-09T14:32:51-05:00
-modified: 2024-03-09T15:22:05-05:00
+modified: 2024-03-23T12:12:02-06:00
+tags:
+  - figma
+  - course
+  - frontendmasters
+  - bonus
 ---
 
 The Figma Plugin API serves as a gateway for developers to extend and enhance the functionality of Figma through custom plugins. These plugins can automate tasks, integrate external data, and provide new tools and workflows, significantly enriching the Figma ecosystem for all users. Let's delve into the capabilities of the Figma Plugin API and how it empowers developers to create impactful additions to the Figma platform.

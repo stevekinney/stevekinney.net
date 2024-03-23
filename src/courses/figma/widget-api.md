@@ -1,9 +1,15 @@
 ---
 title: Widget API
 description: The Figma Widget API enables the creation of custom widgets, offering enhanced customization, efficiency, and innovation within the Figma design environment, ultimately elevating the user experience.
-published: false
+drafted: false
+figma: false
 date: 2024-03-09T14:32:56-05:00
 modified: 2024-03-09T15:22:37-05:00
+tags:
+  - figma
+  - course
+  - frontendmasters
+  - bonus
 ---
 
 The Figma Widget API unlocks a new realm of possibilities for enhancing the user experience within Figma by allowing developers to create custom widgets. These widgets can range from workflow enhancers, data visualizations, to interactive design tools, providing users with a more tailored and efficient design environment. Let's explore the potential of the Figma Widget API and how it can be leveraged to create innovative solutions within Figma.

@@ -1,9 +1,11 @@
 ---
 title: Prototyping
 description: Prototyping in Figma enables designers to create interactive simulations of their designs, offering a practical tool for testing, feedback, and collaboration.
-published: false
+drafted: false
+figma: false
 date: 2024-03-09T14:25:10-05:00
 modified: 2024-03-09T15:22:07-05:00
+tags: [figma, course, frontendmasters]
 ---
 
 Prototyping in Figma transforms static designs into interactive simulations, allowing designers to explore, test, and validate user experiences before any development begins. This powerful feature bridges the gap between design and functionality, providing a real-world feel of how a product will work. Here’s a dive into leveraging prototyping in Figma to elevate your design process.

@@ -1,9 +1,15 @@
 ---
 title: REST API
-description: Figma's REST API offers a bridge for developers to access and manipulate design data, enabling automation, enhanced collaboration, and the creation of custom integrations to streamline design and development processes.
-published: false
+description: "Figma's REST API offers a bridge for developers to access and manipulate design data, enabling automation, enhanced collaboration, and the creation of custom integrations to streamline design and development processes."
+drafted: false
+figma: false
 date: 2024-03-09T14:33:01-05:00
-modified: 2024-03-09T15:29:24-05:00
+modified: 2024-03-23T12:11:45-06:00
+tags:
+  - figma
+  - course
+  - frontendmasters
+  - bonus
 ---
 
 Figma's REST API is a cornerstone for developers looking to integrate Figma's robust design capabilities within their applications, automate workflows, or build custom integrations. This API facilitates access to Figma files, comments, and projects, allowing for the manipulation and extraction of design information programmatically. Let's explore the vast possibilities opened by Figma's REST API and how it can be leveraged to streamline and enhance design and development processes.

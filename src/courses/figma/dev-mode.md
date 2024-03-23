@@ -1,9 +1,11 @@
 ---
 title: Developer Mode
 description: Dev Mode in Figma optimizes the design-to-development handoff by providing detailed design specifications and code snippets, enhancing efficiency and accuracy in development.
-published: false
+drafted: false
+figma: false
 date: 2024-03-09T14:27:23-05:00
 modified: 2024-03-09T15:21:31-05:00
+tags: [figma, course, frontendmasters]
 ---
 
 Dev Mode in Figma streamlines the design-to-development handoff process, providing developers with all the information they need to turn design files into functional code. This feature enhances collaboration between design and development teams by offering an in-depth view of design specifications, including dimensions, styles, and assets. Let’s explore how Dev Mode can elevate your team's efficiency and ensure a seamless transition from design to development.

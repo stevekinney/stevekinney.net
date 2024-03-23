@@ -1,5 +1,6 @@
 ---
 title:
 description:
-published: false
+drafted: false
+figma: false
 ---
