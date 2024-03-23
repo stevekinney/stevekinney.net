@@ -50,7 +50,7 @@ const mdsvexOptions = {
  * @param {string} options.content
  * @param {string} options.filename
  */
-export const processMarkdown = () => {
+export const processImages = () => {
 	return {
 		name: 'markdown-image-optimization',
 		/**
@@ -130,7 +130,7 @@ export const processMarkdown = () => {
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	extensions: ['.svelte', '.md'],
-	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions), processMarkdown()],
+	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions), processImages()],
 	kit: {
 		adapter: process.env.VERCEL ? vercelAdapter() : staticAdapter({ strict: false }),
 		alias: {
