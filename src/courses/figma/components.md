@@ -46,7 +46,7 @@ Copies of the master component are called instances and they keep the same prope
 
 Once you've created a component, you can see it in that pane that we looked at earlier that was empty.
 
-![](../../assets/Pasted%20image%2020240323125939.png)
+![](../../assets/figma-components-in-asset-pane.png)
 
 Simply drag the component onto the canvas to use it. Changing the main component will cascade down to the individual component, but you can also override certain properties on the instance component. In the example below, we'll create a component and then override its text content as well as its background color.
 

@@ -4,7 +4,7 @@ description: Auto layout in Figma helps designers make flexible designs easily. 
 drafted: true
 figma: false
 date: 2024-03-09T14:20:45-05:00
-modified: 2024-03-23T14:20:46-06:00
+modified: 2024-03-23T14:30:32-06:00
 tags: [figma, course, frontendmasters]
 ---
 
@@ -115,11 +115,8 @@ Nested Auto Layouts in Figma help designers create layouts that adjust smoothly 
 
 ## Appendix
 
-- [ ] Show the difference between how auto layout behaves with frames versus shapes (in so far as it doesn't).
-- [ ] Make a bulleted list with auto layout as a simple example
-- [ ] Write an example where you create components out of bullet/navigation items
-- [ ] Create an exercise or walk through for creating a navigation bar to demonstrate auto layout
 - [ ] Create an exercise or walk through for creating a button as a simple demonstrate auto layout
+- [ ] Create an exercise or walk through for creating a navigation bar to demonstrate auto layout
 - [ ] Show negative spacing and constraints with auto layout; use a series of avatars like in Notion
 - [ ] Create an exercise or walk through for creating a button group
 - [ ] Use a card to demonstrate how a fixed width but a height set to hug contents behave
@@ -131,3 +128,5 @@ Nested Auto Layouts in Figma help designers create layouts that adjust smoothly 
 - [ ] Show how to align text items with auto layout
 - [ ] Show how absolute positioning works with Auto layout (and with constraints); a potential example is a back to top button
 - [ ] Make a fake version of the macOS dock with Auto layout and absolute positioning
+- [ ] How how you can set minimum and maximum width of the elements
+- [ ] Show off the "Expose Properties of Nested Elements"

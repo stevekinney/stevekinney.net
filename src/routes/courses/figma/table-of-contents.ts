@@ -16,16 +16,11 @@ const index: Readonly<Section[]> = [
 	{ title: 'Shared Styles', slug: 'shared-styles' },
 	{ title: 'Variables', slug: 'variables' },
 	{ title: 'Components', slug: 'components' },
+	{ title: 'Component Properties', slug: 'component-properties' },
 	{ title: 'Variants', slug: 'variants' },
 	{ title: 'Interactive Components', slug: 'interactive-components' },
 	{ title: 'Dev Mode', slug: 'dev-mode' },
 	{ title: 'Prototyping', slug: 'prototyping' },
-	{ title: 'Libraries', slug: 'libraries' },
-	{ title: 'Widget API', slug: 'widget-api' },
-	{ title: 'Plugin API', slug: 'plugin-api' },
-	{ title: 'Developer Resources API', slug: 'developer-resources-api' },
-	{ title: 'REST API', slug: 'rest-api' },
-	{ title: 'Branching and Merging', slug: 'branching-and-merging', bonus: true },
 ] as const;
 
 export default index;
