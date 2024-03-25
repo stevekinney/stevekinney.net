@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { formatPageTitle } from '$lib/format-page-title';
 
-	export let title: string | undefined = undefined;
+	export let title: string | undefined = 'Steve Kinney';
 	export let description =
 		'Steve Kinney is a teacher, artist, and software engineer out of Denver, Colorado, USA.';
 
