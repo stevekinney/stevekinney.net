@@ -1,18 +1,27 @@
+<script context="module" lang="ts">
+	const title = 'Figma Spacing Variable Generator';
+	const description = 'Generate Figma variables for spacing in your design system.';
+
+	export const metadata = {
+		title,
+		description,
+	};
+</script>
+
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { Trash } from 'lucide-svelte';
 
-	import { generateFigmaSpacingVariables } from './generate-variables';
 	import README from './README.md';
+	import SEO from '$lib/components/seo.svelte';
+	import { generateFigmaSpacingVariables } from './generate-variables';
 
 	export let data;
 
 	$: collection = generateFigmaSpacingVariables('Spacing', data.variables);
 </script>
 
-<svelte:head>
-	<title>Generate Figma Variables</title>
-</svelte:head>
+<SEO {title} {description} />
 
 <main class="grid grid-cols-2 gap-8">
 	<header class="col-span-2">
