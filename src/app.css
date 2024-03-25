@@ -26,4 +26,58 @@
 	pre {
 		@apply overflow-x-auto rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 p-4 dark:border-black-pearl-800;
 	}
+
+	table {
+		@apply w-full border-collapse rounded-xl border-2 border-black-pearl-950 dark:border-black-pearl-800;
+	}
+
+	thead {
+		@apply bg-black-pearl-950 text-white dark:bg-black-pearl-800;
+	}
+
+	th {
+		@apply text-left;
+	}
+
+	th,
+	td {
+		@apply p-2;
+	}
+
+	label {
+		@apply text-black-pearl-950 dark:text-white;
+	}
+
+	input,
+	select {
+		@apply rounded-md border border-slate-500 p-2 dark:border-black-pearl-600 dark:bg-black-pearl-800;
+	}
+
+	select {
+		@apply border-0 dark:bg-inherit;
+	}
+
+	button {
+		@apply button;
+	}
+
+	[type='submit'] {
+		@apply button-primary;
+	}
+}
+
+@layer components {
+	.button {
+		@apply inline-flex items-center justify-center gap-2 rounded-md border border-slate-500 p-2 hover:bg-slate-100 active:bg-slate-200 dark:hover:bg-slate-800 dark:active:bg-slate-700;
+		&.small {
+			@apply py-1 text-xs;
+		}
+		&.ghost {
+			@apply border-none bg-transparent text-primary-500 hover:bg-slate-100 active:bg-slate-200;
+		}
+	}
+
+	.button-primary {
+		@apply button rounded-md border border-primary-500 bg-primary-500 p-2 text-white hover:bg-primary-600 active:bg-primary-700;
+	}
 }
