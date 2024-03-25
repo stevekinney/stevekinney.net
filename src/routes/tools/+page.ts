@@ -1,5 +1,5 @@
 export async function load() {
-	const readmes = import.meta.glob<Markdown>('./**/+page.md', { eager: true });
+	const readmes = import.meta.glob<Markdown>('./**/+page.{md,svelte}', { eager: true });
 
 	const tools = Object.entries(readmes)
 		.filter(([key, value]) => {
@@ -7,8 +7,9 @@ export async function load() {
 			return value.metadata.title && value.metadata.description;
 		})
 		.map(([key, value]) => {
+			const href = key.split('/')[1];
 			return {
-				href: '/tools/' + key.slice(0, key.length - 9),
+				href: '/tools/' + href,
 				title: String(value.metadata.title),
 				description: String(value.metadata.description),
 			};
