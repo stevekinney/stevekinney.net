@@ -73,12 +73,13 @@ const generateVariable = (
 	{ baseRem = 16 }: GenerateVariableOptions = {},
 ) => {
 	const pixels = toValue(value, baseRem);
+	const name = key.replace('.', '_');
 
 	if (isNaN(pixels)) return;
 
 	const result: FigmaVariable = {
 		id: `VariableID:1:${id()}`,
-		name: `${collection.name}/${key.replace('.', '_')}`,
+		name,
 		description: '',
 		type: 'FLOAT',
 		valuesByMode: {
