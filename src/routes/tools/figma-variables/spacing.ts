@@ -1,4 +1,11 @@
 export default {
+	'Container/Extra Small': '375px',
+	'Container/Small': '640px',
+	'Container/Medium': '768px',
+	'Container/Large': '1024px',
+	'Container/XL': '1280px',
+	'Container/2XL': '1536px',
+	'Container/3XL': '1920px',
 	'Spacing/0': '0px',
 	'Spacing/px': '1px',
 	'Spacing/1': '0.25rem',
