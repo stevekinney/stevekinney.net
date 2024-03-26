@@ -19,6 +19,10 @@
 		--shiki-token-link: #79b8ff;
 	}
 
+	a {
+		@apply link;
+	}
+
 	body {
 		@apply text-black-pearl-950 dark:bg-black-pearl-950 dark:text-white;
 	}
@@ -50,7 +54,11 @@
 
 	input,
 	select {
-		@apply rounded-md border border-slate-500 p-2 dark:border-black-pearl-600 dark:bg-black-pearl-800;
+		@apply input;
+	}
+
+	select {
+		@apply focus:bg-primary-100;
 	}
 
 	select {
@@ -68,7 +76,7 @@
 
 @layer components {
 	.button {
-		@apply inline-flex items-center justify-center gap-2 rounded-md border border-slate-500 p-2 hover:bg-slate-100 active:bg-slate-200 dark:hover:bg-slate-800 dark:active:bg-slate-700;
+		@apply inline-flex items-center justify-center gap-2 rounded-md border border-primary-600 p-2 outline-8 outline-offset-4 outline-primary-500 ring-primary-400 ring-offset-0 transition-colors hover:bg-primary-100 hover:ring-2 active:bg-primary-200 dark:hover:bg-slate-800 dark:active:bg-slate-700;
 		&.small {
 			@apply py-1 text-xs;
 		}
@@ -78,6 +86,15 @@
 	}
 
 	.button-primary {
-		@apply button rounded-md border border-primary-500 bg-primary-500 p-2 text-white hover:bg-primary-600 active:bg-primary-700;
+		@apply button rounded-md border border-primary-500 bg-primary-600 p-2 text-white hover:bg-primary-700 active:bg-primary-800;
+	}
+
+	.input {
+		@apply rounded-md border border-slate-500 p-2 accent-primary-600 outline-offset-4 outline-primary-500 ring-primary-400 focus:outline-4 focus:ring-4 dark:border-black-pearl-600 dark:bg-black-pearl-800;
+	}
+
+	.link,
+	.prose a {
+		@apply hover:bg-primary-200 hover:decoration-primary-400 dark:hover:bg-slate-800 dark:hover:decoration-primary-600;
 	}
 }

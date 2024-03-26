@@ -23,11 +23,16 @@
 
 <SEO {title} {description} />
 
-<main class="grid grid-cols-2 gap-8">
+<main class="grid grid-cols-1 gap-8 md:grid-cols-2">
 	<section class="space-y-8">
 		<README class="prose dark:prose-invert" />
-		<form method="POST" action="?/reset" class="flex items-start gap-2" use:enhance>
-			<button><ListRestart />Reset to Defaults</button>
+		<form
+			method="POST"
+			action="?/reset"
+			class="flex items-start justify-center gap-2 md:justify-start"
+			use:enhance
+		>
+			<button type="submit"><ListRestart />Reset to Defaults</button>
 			<a
 				class="button"
 				href="data:text/json;charset=utf-8,{JSON.stringify(collection, null, 2)}"
@@ -63,7 +68,7 @@
 		</div>
 	</form>
 
-	<table class="col-span-2 text-sm">
+	<table class="text-sm md:col-span-2">
 		<thead>
 			<tr>
 				<th>Variable</th>
@@ -82,10 +87,11 @@
 					<td class="text-right">{value}</td>
 					<td>
 						<div
-							class="bg-primary-300"
-							style="width: {variable.codeSyntax.WEB}; height: 1rem;"
-						/></td
-					>
+							class=" h-4 bg-primary-300"
+							class:hidden={!variable.codeSyntax.WEB.includes('rem')}
+							style="width: {variable.codeSyntax.WEB};"
+						/>
+					</td>
 					<td><code>{variable.codeSyntax.WEB}</code></td>
 					<td class="text-center">
 						<form method="post" action="?/remove" use:enhance>
