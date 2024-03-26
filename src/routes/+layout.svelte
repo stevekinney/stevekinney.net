@@ -8,7 +8,7 @@
 </script>
 
 <main
-	class="container my-6 grid grid-cols-1 items-center gap-6 sm:my-10 sm:grid-cols-2 lg:grid-cols-3"
+	class="container my-6 grid grid-cols-1 items-center gap-6 px-4 sm:my-10 sm:grid-cols-2 lg:grid-cols-3"
 >
 	<header>
 		<h1 class="whitespace-nowrap lg:order-1">
