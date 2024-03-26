@@ -44,7 +44,7 @@
 		</form>
 	</section>
 
-	<form class="space-y-4" method="POST" action="?/add" use:enhance>
+	<form class="surface-secondary space-y-4" method="POST" action="?/add" use:enhance>
 		<h2 class="font-semibold">Create a New Variable</h2>
 		<label class="sr-only" for="new-spacing-name">Variable Name</label>
 		<input class="w-full" id="new-spacing-name" name="key" placeholder="Variable Name" required />
@@ -72,7 +72,7 @@
 		<thead>
 			<tr>
 				<th>Variable</th>
-				<th colspan="2">Value (Pixels)</th>
+				<th>Value</th>
 				<th>Code Syntax</th>
 				<th><span class="sr-only">Remove</span></th>
 			</tr>
@@ -81,18 +81,21 @@
 			{#each collection.variables as variable}
 				{@const [value] = Object.values(variable.valuesByMode)}
 				<tr>
-					<th class="flex">
+					<th class="w-1/6">
 						{variable.name}
 					</th>
-					<td class="text-right">{value}</td>
-					<td>
-						<div
-							class=" h-4 bg-primary-300"
-							class:hidden={!variable.codeSyntax.WEB.includes('rem')}
-							style="width: {variable.codeSyntax.WEB};"
-						/>
+					<td class="overflow-x-clip md:min-w-fit">
+						<div class="flex gap-2">
+							<p class="text-center md:min-w-8 md:text-right">{value}</p>
+							{#if variable.codeSyntax.WEB.includes('rem')}
+								<div
+									class="hidden h-4 bg-primary-300 md:block dark:bg-primary-800"
+									style="width: {variable.codeSyntax.WEB};"
+								/>
+							{/if}
+						</div>
 					</td>
-					<td><code>{variable.codeSyntax.WEB}</code></td>
+					<td class="text-center"><code>{variable.codeSyntax.WEB}</code></td>
 					<td class="text-center">
 						<form method="post" action="?/remove" use:enhance>
 							<label class="sr-only" for="remove-spacing-name">Remove {variable.name}</label>
