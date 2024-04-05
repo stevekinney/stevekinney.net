@@ -8,7 +8,7 @@ import rehypeSlug from 'rehype-slug';
 import remarkObsidian from 'remark-obsidian';
 
 import { mdsvex, escapeSvelte } from 'mdsvex';
-import shiki from 'shiki';
+import { codeToHtml, bundledLanguages } from 'shiki';
 
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
@@ -21,8 +21,8 @@ const mdsvexOptions = {
 	},
 	highlight: {
 		highlighter: async (code, lang = 'text') => {
-			const highlighter = await shiki.getHighlighter({ theme: 'css-variables' });
-			const html = escapeSvelte(highlighter.codeToHtml(code, { lang }));
+			if (!bundledLanguages[lang]) return escapeSvelte(code);
+			const html = escapeSvelte(await codeToHtml(code, { lang, theme: 'night-owl' }));
 			return `{@html \`${html}\` }`;
 		},
 	},
