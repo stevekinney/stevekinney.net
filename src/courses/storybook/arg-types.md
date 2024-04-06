@@ -3,7 +3,7 @@ title: Improving ArgTypes with Metadata
 description:
 exclude: false
 drafted: false
-modified: 2024-04-03T18:11:00-06:00
+modified: 2024-04-06T09:39:53-06:00
 ---
 
 ## Adding Metadata to `argTypes`
@@ -120,4 +120,4 @@ This will render a little tooltip with your additional detail.
 
 You can also use the `category` and `subcategory` properties on `table` to section. In order to further organize your controls. We don't have a lot to organize *right now*, but I wanted to put it on your radar.
 
-![](assets/CleanShot%202024-04-03%20at%2018.10.57@2x.png)
+![](assets/storybook-figma-categories-and-subcategories.png)

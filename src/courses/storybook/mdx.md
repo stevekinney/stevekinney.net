@@ -1,9 +1,9 @@
 ---
 title: Documenting Components with MDX
-description:
+description: 
 exclude: false
-drafted: false
-modified: 2024-04-03T17:36:31-06:00
+drafted: true
+modified: 2024-04-06T10:19:25-06:00
 ---
 
 Storybook allows you to document components using [MDX](https://mdxjs.com/), which is basically just Markdown + JSX.
@@ -72,4 +72,3 @@ Let's talk about what's going on here:
 - There is some more prose and then re render the `Controls`, which is analogous to what we've seen so far.
 
 ![Button component documentation rendered in MDX](assets/storybook-button-mdx.png)
-
