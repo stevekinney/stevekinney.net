@@ -25,8 +25,6 @@ Once you're in, you can either choose an existing project or create a new one.
 
 In the even you're creating a new project, you'll be asked what kind of project you're looking to integrate. In our case, this is going to be Storybook.
 
-![Project type selection screen in Chromatic](assets/CleanShot%202024-04-06%20at%2014.08.25@2x.png)
-
 You'll then get a unique project key to use to associate your Storybook with this newly-created project in Chromatic.
 
 ![](assets/storybook-chromatic-project-configuration.png)

@@ -3,7 +3,7 @@ title: Adding Variants
 description:
 exclude: false
 drafted: false
-modified: 2024-04-03T12:52:02-06:00
+modified: 2024-04-06T15:21:13-06:00
 ---
 
 Let's get a little philosophical. There are a _lot_ of flavors of buttons in the world. For our purposes, we're going to call these **variants**. One of the most common variants that we see out in the wild is the idea of having primary and secondary buttons. Additional examples include destructive buttons and disabled buttons, et cetera.
@@ -238,9 +238,6 @@ export const Destructive: Story = {
 ```
 
 We'll now see each variant in our Storybook as well as an additional control for swapping between the variants.
-
-![[button-variants-in-storybook.png]]
-
 ### Using `clsx` to Compose Class Names
 
 > [!NOTE] Installing `clsx`
