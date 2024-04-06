@@ -1,6 +1,7 @@
 ---
-title:
-description:
-drafted: false
-figma: false
+title: 
+description: 
+date: "{{date}}"
+tags: 
+published: false
 ---

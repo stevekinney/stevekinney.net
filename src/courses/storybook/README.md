@@ -1,16 +1,18 @@
 ---
-modified: 2024-04-03T10:25:34-06:00
+modified: 2024-04-03T17:48:19-06:00
 exclude: true
 ---
 
 ## Getting Started
 
 - [Setting Up Storybook](setting-up.md)
+  - [Storybook Sandboxes](sandboxes.md)
 - [How to Write a Story](writing-stories.md)
 - [Adding Variants to a Story](adding-variants.md)
-- [Adding Controls to a Story](adding-controls.md)
+- [Adding Controls to a Story](controls.md)
 - Exercise: [Adding Button Sizes](adding-button-sizes-exercise.md)
 - [Setting Default Arguments](default-args.md)
+- [Improving `argTypes` with Metadata](arg-types.md)
 
 ## Styling with Storybook
 

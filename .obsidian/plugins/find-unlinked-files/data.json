@@ -9,7 +9,10 @@
     "src/writing/",
     "templates/"
   ],
-  "filesToIgnore": [],
+  "filesToIgnore": [
+    "README.md",
+    "workspace.md"
+  ],
   "fileTypesToIgnore": [
     "yaml",
     "woff",
