@@ -5,10 +5,6 @@ drafted: true
 figma: false
 date: 2024-03-09T14:21:25-05:00
 modified: 2024-03-28T14:43:06-06:00
-tags:
-  - figma
-  - course
-  - frontendmasters
 ---
 
 ![](../../assets/figma-loki-variants.jpg)
@@ -91,6 +87,3 @@ Now, when we have an instance of the component, we can easily switch between var
 For extra fun, you can combine the above technique with [component-properties](component-properties.md#boolean-properties) to conditionally show the nested variant.
 
 ![](../../assets/figma-boolean-properties-with-nested-variants.gif)
-
-- [ ] Add section comparing instance swapping with variants.
-- [ ] Add a section showing how to use a base component to make it easier to maintain.

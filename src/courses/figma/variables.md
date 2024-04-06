@@ -88,7 +88,7 @@ And now you're variables will be a neat little group for you.
 ![](../../assets/figma-variable-groups.png)
 
 > [!tip] Naming Things is Hard
-> On my team, we've struggled a lot with what to name our variables. This existence of light and dark modes certainly add a lot of extra complexity. For example, it's hard to call a color variable, `red-light`, if it's actually *darker* when in dark mode. I don't hate the naming conventions that [Twilio uses for the design tokens in their Paste design system](https://paste.twilio.design/tokens/list).
+> On my team, we've struggled a lot with what to name our variables. This existence of light and dark modes certainly add a lot of extra complexity. For example, it's hard to call a color variable, `red-light`, if it's actually _darker_ when in dark mode. I don't hate the naming conventions that [Twilio uses for the design tokens in their Paste design system](https://paste.twilio.design/tokens/list).
 
 ## What Are the Difference between Styles and Variables?
 
@@ -113,6 +113,7 @@ But, the most common case that we might find is adding the ability to theme a co
 What's really cool about this is that all of the nested objects will inherit mode of the parent—unless you intentionally override it.
 
 ![Variable inheritance](../../assets/figma-variable-inheritance.gif)
+
 ## Boolean Variables
 
 Boolean variables are useful when you want to show or hide something. Lets's start by making a boolean variable. We can then use the modes associated with this boolean variable based on what mode we're in.
@@ -133,9 +134,9 @@ Once, you've set up the aliasing, you'll see a clear visual indicator of the lin
 
 ## Some Limitations
 
-Here are some limitations that I've noticed while using Variables in Figma. As I mentioned above, Variables are still in beta, so this list will *hopefully* be out of data at some point.
+Here are some limitations that I've noticed while using Variables in Figma. As I mentioned above, Variables are still in beta, so this list will _hopefully_ be out of data at some point.
 
-- You can't use mathematically expressions either with Variables or when defining variables. For example, you can type "300-32" as in the width box, and Figma will compute that down to 268, but you can't put you couldn't for example, put in a "300 - `spacing-4` * 2" or create a set of variables that take a base REM value and multiply it when defining a new variable. There is an [open thread](https://forum.figma.com/t/using-expression-as-a-variables-value/45743) or [two](https://forum.figma.com/t/using-expression-as-a-variables-value/45743) requesting this as a feature.
+- You can't use mathematically expressions either with Variables or when defining variables. For example, you can type "300-32" as in the width box, and Figma will compute that down to 268, but you can't put you couldn't for example, put in a "300 - `spacing-4` \* 2" or create a set of variables that take a base REM value and multiply it when defining a new variable. There is an [open thread](https://forum.figma.com/t/using-expression-as-a-variables-value/45743) or [two](https://forum.figma.com/t/using-expression-as-a-variables-value/45743) requesting this as a feature.
 
 ## Styles Versus Variables
 
@@ -153,15 +154,8 @@ I tend to prefer variables over styles, but I will admit that I occasionally hav
 
 **Styles can be built on top of variables, but variables can't be built on top of styles.** For stuff like colors, you can compose styles out of variables. So, the two approaches are not necessarily mutually exclusive.
 
-- [ ] Create an example where you definite a style for a button out of a bunch of variables (e.g. border color, background color, etc).
-
 ## Importing and Exporting Variables
 
 Figma doesn't support importing to exporting variables out of the box, but there is a plugin that you can use called [Export/Import Variables](https://www.figma.com/community/plugin/1256972111705530093/export-import-variables).
 
-Pro-Tip: You might choose to use this with [the author](https://www.figma.com/@honzatmn)'s [Tailwind CSS Variables](https://www.figma.com/community/file/1255212493834031845) design file.
-
-- [ ] Create an example where you might demonstrate using both primitive and semantic variables in Figma. Show how aliasing might work.
-- [ ] Create an example of refactoring a component to use Figma variables.
-- [ ] Create an example where you might use Figma to create different spacing modes (e.g. comfortable, compact, and default).
-- [ ] Create an exercise where students add a compact and relaxed modes as well as a light and dark mode to our menu
+**Pro-Tip**: You might choose to use this with [the author](https://www.figma.com/@honzatmn)'s [Tailwind CSS Variables](https://www.figma.com/community/file/1255212493834031845) design file.
