@@ -3,11 +3,13 @@ title: Setting Up Tailwind and Theming
 description:
 exclude: false
 drafted: true
-modified: 2024-04-06T11:03:57-06:00
+modified: 2024-04-06T16:42:08-06:00
 ---
 
 > [!NOTE] This is not necessarily Tailwind-specific
 > Almost everything in this section can be applied to any stylesheets that you happen to be using in your application, but since we're going to be using Tailwind in our design system, this has a mild-Tailwind flavor to it, but the content itself applies more broadly.
+>
+> There are plenty of reasons why you might consider using Tailwind and equally as many as to why it might not be the best fit. I did my best to outline my thinking [here](/writing/tailwind-and-design-systems).
 
 Integration with [Tailwind](https://tailwindcss.com)—or, honestly—any other styles that you have set up is fairly easy with Storybook.
 
