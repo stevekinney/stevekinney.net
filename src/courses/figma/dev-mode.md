@@ -36,7 +36,7 @@ Creating a tutorial on using Figma's Developer Mode provides a comprehensive gui
 
 ## The Dev Mode Toolbar
 
-![](../../assets/figma-dev-mode-toolbar.png)
+![Dev Mode in the Figma toolbar](../../assets/figma-dev-mode-toolbar.png)
 
 In this toolbar, you'll see the following options:
 

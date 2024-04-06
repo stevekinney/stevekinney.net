@@ -28,7 +28,7 @@ Okay, let's say you want to set up some constraints:
    - **Center:** The element stays centered as the frame resizes.
    - **Scale:** The element scales proportionally with the frame.
 
-![](../../assets/figma-constraints.gif)
+![Figma Constraints](../../assets/figma-constraints.gif)
 
 ## Some Practical Applications
 

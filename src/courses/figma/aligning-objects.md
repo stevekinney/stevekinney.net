@@ -10,13 +10,13 @@ tags: [figma, course, frontendmasters]
 
 Figma offers various tools to help you align and distribute objects easily. When you select multiple objects, you'll find a set of tools like the one shown below.
 
-![](../../assets/figma-align-and-distribute-objects.png)
+![Aligning and distributing objects](../../assets/figma-align-and-distribute-objects.png)
 
 ## Aligning Objects
 
 In Figma, you can align objects vertically or horizontally, choosing from start, middle, or end alignment options. Figma cleverly uses the boundaries of all selected objects to align them perfectly.
 
-![](../../assets/figma-align-objects.gif)
+![Aligning objects in Figma](../../assets/figma-align-objects.gif)
 
 The following keyboard shortcuts facilitate these alignment actions:
 
@@ -31,7 +31,7 @@ The following keyboard shortcuts facilitate these alignment actions:
 
 Figma also lets you evenly distribute objects. When distributing horizontally, it considers the leftmost and rightmost objects as boundaries; for vertical distribution, it uses the top and bottommost objects.
 
-![](../../assets/figma-distributing-objects.gif)
+![Distributing objects in Figma](../../assets/figma-distributing-objects.gif)
 
 The platform includes keyboard shortcuts for distribution tasks:
 
@@ -44,4 +44,4 @@ The Tidy Up tool makes it super easy to tidy up messy selections without the nee
 
 Tidy Up arranges selected items closely together with equal spacing. This feature isn't just handy for Smart Selections; it works wonders with tables and toolbars too. Plus, unlike the usual distribute function, Tidy Up ensures consistent spacing every time.
 
-![](../../assets/figma-tidy-up.gif)
+![Using Tidy Up in Figma](../../assets/figma-tidy-up.gif)

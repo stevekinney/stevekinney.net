@@ -52,11 +52,11 @@ We can also create component properties that have a text value. There are two ma
 
 The first reason is probably the most common, but the second reason might become handy if you're looking to get a little fancy with the given variants of your component and want to use the same label in more than one place.
 
-![](../../assets/figma-component-property-text.png)
+![Text property for components](../../assets/figma-component-property-text.png)
 
 We can then set the value of any text field to this property in the **Text** panel.
 
-![](../../assets/figma-setting-a-text-property.png)
+![Setting a text property on a component](../../assets/figma-setting-a-text-property.png)
 
 Now, you can easily change the value of the text property just by clicking the instance of the component.
 
@@ -71,10 +71,9 @@ These **preferred values** allow you to create define a set of components that y
 > [!tip] Variants vs. Instance Swap
 > Your mileage may vary and you're welcome to disagree with me, but I will typically make [variants](variants.md) for all of the different states of a button (e.g. hover, active, disabled. etc.). But, I'll make different components for each type of button (e.g. primary, secondary, ghost, etc.). This allows me to swap between the states with [variants](variants.md) when [prototyping](prototyping.md) and but easily [instance swap](#instance-swap) between the types when designing. Shoving _everything_ into variants tends to make organization a mess.
 
-- [ ] Add some screenshots showing how to implement an instance swap property in Figma.
 ## Simplifying Component Instances
 
-If you want to hide away most of the complexities of a component away from anyone using it, then you can go to the main component and select "Simplify all instances". This will reduce the number of knobs that someone gets to (or, has to) fiddle and allows you to keep things *simple*.
+If you want to hide away most of the complexities of a component away from anyone using it, then you can go to the main component and select "Simplify all instances". This will reduce the number of knobs that someone gets to (or, has to) fiddle and allows you to keep things _simple_.
 
 > [!NOTE] Simplifying an instance will hide layers, but **anyone with the ability to edit** the design file will still be able to edit those layers.
 

@@ -46,17 +46,17 @@ Copies of the master component are called instances and they keep the same prope
 
 Once you've created a component, you can see it in that pane that we looked at earlier that was empty.
 
-![](../../assets/figma-components-in-asset-pane.png)
+![Components in Figma's asset pane](../../assets/figma-components-in-asset-pane.png)
 
 Simply drag the component onto the canvas to use it. Changing the main component will cascade down to the individual component, but you can also override certain properties on the instance component. In the example below, we'll create a component and then override its text content as well as its background color.
 
-![Creating an Instance Component](../../assets/figma-creating-an-instance-component.gif)
+![Creating an instance component](../../assets/figma-creating-an-instance-component.gif)
 
 ### Detaching an Instance from a Component
 
 If you no longer want an instance of a component to inherit properties from the main component, you can choose to detach it from the component—effectively breaking the prototypal inheritance chain.
 
-![Detatch a Component](../../assets/figma-detatch-component.png)
+![Detatch a component](../../assets/figma-detatch-component.png)
 
 The shortcut for detaching an instance is `Option/Alt-Shift-B`.
 
@@ -65,5 +65,3 @@ The shortcut for detaching an instance is `Option/Alt-Shift-B`.
 Figma's Assets panel is where you can keep all your components organized. You can create a library of components to share with your team, making sure everyone uses the same elements. Naming them well and grouping them helps you find and use components quickly.
 
 [Sections](layers.md#sections) are useful not only for marking whether or not a given component is ready for development, but also add a layer of organization to your [Assets](getting-started.md#assets) panel.
-
-- [ ] Talk about what you can and cannot change about inside a component in Figma.

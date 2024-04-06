@@ -15,7 +15,7 @@ It turns out that users like to interact with these web pages that we build. Som
 
 Not only can we have lots and lots of different types of buttons, those buttons can be in different states based on user interaction. Consider this simple button for a moment.
 
-![](../../assets/figma-button-states.png)
+![Button states](../../assets/figma-button-states.png)
 
 We want our buttons to behave in our prototypes as they would in the browser. This is where that Prototype mode in the right sidebar comes into play.
 
