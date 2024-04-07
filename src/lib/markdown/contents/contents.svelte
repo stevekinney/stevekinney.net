@@ -14,8 +14,7 @@
 	export let as = 'nav';
 
 	/** @type {string | undefined | null} */
-	let className;
-
+	let className = '';
 	export { className as class };
 </script>
 

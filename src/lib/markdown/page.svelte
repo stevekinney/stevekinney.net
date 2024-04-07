@@ -8,9 +8,6 @@
 	/** @type {string} */
 	export let description;
 
-	/** @type {string | undefined | null} */
-	let className = '';
-
 	/** @type {boolean} */
 	export let published = true;
 
@@ -20,6 +17,8 @@
 	/** @type {Date | string | undefined} */
 	export let modified = undefined;
 
+	/** @type {string | undefined | null} */
+	let className = '';
 	export { className as class };
 </script>
 

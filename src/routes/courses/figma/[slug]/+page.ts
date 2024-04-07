@@ -4,8 +4,6 @@ export async function load({ params, url }) {
 	const { slug } = params;
 	const { pathname } = url;
 
-	console.log({ slug });
-
 	const post = await import(`../../../../courses/figma/${slug}.md`).catch(() => {
 		error(404, 'Not found');
 	});
