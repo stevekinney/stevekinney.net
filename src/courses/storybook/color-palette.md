@@ -27,7 +27,7 @@ import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
 
 Storybook will render this simple color palette.
 
-![Storybook rendering a color palette](assets/storybook-color-palette.png)
+![Storybook rendering a color palette](../../assets/storybook-color-palette.png)
 
 What's even better is that you can programmatically render the color palette since you have the full power of JSX at your disposal. This allows you to easily generate a color palette based on your theme.
 
@@ -47,4 +47,4 @@ import colors from './colors';
 
 Obviously, this will be a little different depending on the taxonomy of your theme, but you can expect something along the lines of this.
 
-![A programmatically generated color palette displayed in Storybook](assets/storybook-progamatically-generated-color-palette.png)
+![A programmatically generated color palette displayed in Storybook](../../assets/storybook-progamatically-generated-color-palette.png)

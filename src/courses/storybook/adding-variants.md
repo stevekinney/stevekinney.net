@@ -133,7 +133,7 @@ export const Button = (props: ButtonProps) => {
 
 Our button now looks a little prettier.
 
-![Our button with some basic styling](assets/storybook-styled-basic-button.png)
+![Our button with some basic styling](../../assets/storybook-styled-basic-button.png)
 
 So far, we've made the follow changes to our code.
 

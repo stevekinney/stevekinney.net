@@ -27,7 +27,7 @@ const meta: Meta<typeof Button> = {
 
 Now, you'll notice that we have the ability to set that property in our controls.
 
-![An additional control to show the disabled state](assets/storybook-control-disabled-state.png)
+![An additional control to show the disabled state](../../assets/storybook-control-disabled-state.png)
 
 We have to click on it in order to set it. If we don't want to do that, we can set the value in each of our stories.
 
@@ -59,7 +59,7 @@ export const Destructive: Story = {
 
 And how, we'll see that it's set and we can save one extra click. I'll leave it up to you to decide if that's worth it or not.
 
-![Explicitly setting the value of the type](assets/storybook-default-control-value.png)
+![Explicitly setting the value of the type](../../assets/storybook-default-control-value.png)
 
 ## An Alternative Approach for Setting a Default Value
 

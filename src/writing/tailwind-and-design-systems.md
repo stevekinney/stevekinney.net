@@ -2,7 +2,7 @@
 title: Positives, Negatives, and Alternatives to Using Tailwind for a Design System
 description: Is Tailwind the best choice when building out a design system? It depends.
 date: 2024-04-06
-modified: 2024-04-06T16:40:21-06:00
+modified: 2024-04-06T17:00:03-06:00
 tags:
   - css
   - tailwind
@@ -25,6 +25,7 @@ Some negatives to consider:
 Some things that I've learned to appreciate about Tailwind over the years:
 
 - I originally didn't care for the idea of utility classes and needed to be sold, but over time, I've come to love them. Whenever I try _not_ to use Tailwind, I end up creating my own utility classes for common things. It's nice to get them out of the box.
+- The inverse of the above point about the added dependencies is that by having Tailwind as a dependency, you're able to leverage all of it's theming with not a lot of extra effort on your part. The only place where you need to be *particularly* careful is when it comes to colors. But, you *could* create a Tailwind plugin to go along with your components that can provide the ability to pass in configuration options as well as handle graceful fallbacks when a given color that you rely on isn't defined.
 - Tailwind is smart about stripping out the classes that you don't use, which is something I don't want to have to think about or write tooling for.
 - Having that long list of utility classes in the DOM is way easier to navigate than a bunch of opaque CSS classes with hashes for names that you find in a lot of tools like CSS modules. Every time I have to debug an issue, it's a lot easier to just open up the Elements tab in the Chrome Developer Tools and tweak some of the class names than try to reverse engineer what that hashed class name is referring to.
 - Media queries and pseudo states a just a lot easier to work with in Tailwind than doing it by hand. Again, tooling can solve for this, but at what point are you just re-creating Tailwind?

@@ -1,7 +1,7 @@
 ---
 modified: 2024-04-03T11:10:07-06:00
-title: 
-description: 
+title: Writing Stories in Storybook
+description:
 exclude: false
 drafted: false
 ---
@@ -14,7 +14,7 @@ import { ComponentProps } from 'react';
 type ButtonProps = ComponentProps<'button'>;
 
 export const Button = (props: ButtonProps) => {
-  return <button {...props} />;
+	return <button {...props} />;
 };
 ```
 
@@ -36,8 +36,8 @@ The default export, `Meta`, contains metadata about this component's stories. Th
 
 ```tsx
 const meta: Meta<typeof Button> = {
-  title: 'Button',
-  component: Button,
+	title: 'Button',
+	component: Button,
 };
 
 export default meta;
@@ -49,7 +49,7 @@ Each named export is a story. You'll need at least one named export if you want 
 type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
-  render: () => <Button>Button</Button>,
+	render: () => <Button>Button</Button>,
 };
 ```
 
@@ -63,36 +63,37 @@ import { Button } from './button';
 type Story = StoryObj<typeof Button>;
 
 const meta: Meta<typeof Button> = {
-  title: 'Button',
-  component: Button,
+	title: 'Button',
+	component: Button,
 };
 
 export default meta;
 
 export const Primary: Story = {
-  render: () => <Button>Button</Button>,
+	render: () => <Button>Button</Button>,
 };
 ```
 
 If you run Storybook using `npm run storybook`, you'll see something like the following:
 
-![](assets/storybook-basic-button-story.png)
+![](../../assets/storybook-basic-button-story.png)
 It's not much to look at, but it's our first story.
+
 ## Using `args`
 
 Instead of rendering the component itself, you can choose to use to an `args` object that will be used for the `props` of the component being rendered in the story.
 
 ```tsx
 export const Primary: Story = {
-  args: {
-    children: 'Button',
-  },
+	args: {
+		children: 'Button',
+	},
 };
 ```
 
 You'll notice that you can adjust the `props` in the **Controls** tab.
 
-![A basic implementation of controls in Storybook](assets/storybook-basic-button-props.png)
+![A basic implementation of controls in Storybook](../../assets/storybook-basic-button-props.png)
 
 ## Our Basic Button
 
@@ -106,17 +107,17 @@ import { Button } from './button';
 type Story = StoryObj<typeof Button>;
 
 const meta: Meta<typeof Button> = {
-  title: 'Button',
-  component: Button,
+	title: 'Button',
+	component: Button,
 };
 
 export default meta;
 
 export const Primary: Story = {
-  args: {
-    children: 'Button',
-  },
+	args: {
+		children: 'Button',
+	},
 };
 ```
 
-Right now, our `Button` component doesn't do much of anything and it's _pretty ugly_. Let's add some to the button. Let's add some [variants](variants.md) to the story.
+Right now, our `Button` component doesn't do much of anything and it's _pretty ugly_. Let's add some to the button. Let's add some [variants](adding-variants.md) to the story.

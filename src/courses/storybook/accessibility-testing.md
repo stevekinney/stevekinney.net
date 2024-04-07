@@ -6,7 +6,7 @@ drafted: false
 modified: 2024-04-06T12:49:32-06:00
 ---
 
-Storybook allows you to conduct accessibility audits on your stories using the [`@storybook/addon-a11y`](@storybook/addon-a11y) addon. Let's get it up and running.
+Storybook allows you to conduct accessibility audits on your stories using the [`@storybook/addon-a11y`](https://npm.im/@storybook/addon-a11y) addon. Let's get it up and running.
 
 ```sh
 npx storybook@latest add @storybook/addon-a11y

@@ -71,4 +71,4 @@ Let's talk about what's going on here:
 - The `Primary` block renders the first-defined story in our `button.stories.tsx` file. It's purely coincidental that it happens that my first export is *also* named **Primary**.
 - There is some more prose and then re render the `Controls`, which is analogous to what we've seen so far.
 
-![Button component documentation rendered in MDX](assets/storybook-button-mdx.png)
+![Button component documentation rendered in MDX](../../assets/storybook-button-mdx.png)

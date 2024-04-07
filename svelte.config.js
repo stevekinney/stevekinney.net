@@ -19,9 +19,20 @@ import { twMerge as merge } from 'tailwind-merge';
  */
 const fixMarkdownUrls = () => {
 	return (tree) => {
+		let baseUrl = '';
+
+		visit(tree, 'yaml', (/** @type import('mdast').YAML */ node) => {
+			if (node.type !== 'yaml') return;
+			const { value } = node;
+			const match = value.match(/base: (.*)/);
+			if (!match) return;
+			const [, url] = match;
+			baseUrl = url + '/';
+		});
+
 		visit(tree, 'link', (/** @type import('mdast').Link */ node) => {
 			const { url } = node;
-			node.url = url.replace(/\.md/, '');
+			node.url = baseUrl + url.replace(/\.md/, '');
 		});
 	};
 };
@@ -35,6 +46,7 @@ const mdsvexOptions = {
 	layout: {
 		_: './src/lib/markdown/base.svelte',
 		page: './src/lib/markdown/page.svelte',
+		contents: './src/lib/markdown/contents/contents.svelte',
 	},
 	highlight: {
 		highlighter: async (code, lang = 'text') => {
@@ -129,6 +141,7 @@ const config = {
 		alias: {
 			'@/*': 'src/*',
 			'$assets/*': 'src/assets/*',
+			'$courses/*': 'src/courses/*',
 		},
 	},
 };
