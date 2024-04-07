@@ -2,13 +2,14 @@
 date: 2024-03-23T11:50:59-06:00
 modified: 2024-04-03T10:11:54-06:00
 layout: contents
+base: /courses/figma
 exclude: true
 ---
 
 - [Getting Started](getting-started.md)
 - [Aligning Objects](aligning-objects.md)
 - [Working with Layers](layers.md)
-- [Selecting and Inspecting](selecing-and-inspecting.md)
+- [Selecting and Inspecting](selecting-and-inspecting.md)
 - [Constraints](constraints.md)
 - [Layout Grids](layout-grids.md)
 - [Auto Layout](auto-layout.md)

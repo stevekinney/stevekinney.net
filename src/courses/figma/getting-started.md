@@ -119,6 +119,7 @@ Hitting `Command-P`/`Control-P` _or_ `Command-/`/`Control-/` will allow you to p
 You can either use the Command Palette _or_ press `Control-Shift-?` and pull up this helpful guide for learning all of the keyboard shortcuts supported by Figma.
 
 ![Figma Keyboard Shortcuts](../../assets/figma-keyboard-shortcuts.png)
+
 ## Moving Around
 
 You have a few options when it comes to moving around:
