@@ -10,8 +10,9 @@
 	export let published = true;
 	export let date: Date | string | undefined = undefined;
 	export let modified: Date | string | undefined = undefined;
+	export let url = $page.url;
 
-	const base = dev ? $page.url : 'https://stevekinney.net';
+	const base = dev ? url : 'https://stevekinney.net';
 
 	$: openGraph = new URL('/open-graph.jpg', base);
 	$: if (title) openGraph.searchParams.set('title', encodeURIComponent(title));
@@ -26,7 +27,7 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={formatPageTitle(title)} />
 	<meta property="og:description" content={description} />
-	<meta property="og:url" content={$page.url.href} />
+	<meta property="og:url" content={url} />
 	<meta property="og:image" content={openGraphUrl} />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={formatPageTitle(title)} />
