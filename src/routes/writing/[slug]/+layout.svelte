@@ -10,7 +10,7 @@
 		<h2 class="text-lg font-bold">Further Reading</h2>
 		<ul class="space-y-4">
 			{#each data.posts as post}
-				<PostLink {post} as="li" />
+				<PostLink {post} href="/writing/{post.slug}" as="li" />
 			{/each}
 		</ul>
 		<p>

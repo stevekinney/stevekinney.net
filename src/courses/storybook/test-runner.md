@@ -3,8 +3,11 @@ title: Setting Up a Test Runner
 description:
 exclude: false
 drafted: false
-modified: 2024-04-06T12:29:09-06:00
+modified: 2024-04-08T13:30:35-06:00
 ---
+
+> [!tip] Storybook uses Playwright
+> Make sure that you have your Playwright browsers installed by running `npx playwright install`.
 
 Storybook allows you to take your [Play functions](play-functions.md) and run through them all and in order to make sure they all do what you expect them to do.
 

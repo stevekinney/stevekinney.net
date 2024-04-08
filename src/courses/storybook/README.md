@@ -32,6 +32,7 @@ exclude: true
 ## Testing and Interactions
 
 - [Play Functions](play-functions.md)
+- [Testing Components](testing-components-with-storybook.md)
 - [Setting Up a Test Runner](test-runner.md)
 - [Visual Tests](visual-tests.md)
 - [Accessibility Testing](accessibility-testing.md)

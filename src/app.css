@@ -56,17 +56,8 @@
 		@apply text-black-pearl-950 dark:text-white;
 	}
 
-	input,
 	select {
-		@apply input;
-	}
-
-	select {
-		@apply border-0 bg-inherit focus:bg-primary-100 dark:bg-inherit dark:focus:bg-primary-800;
-	}
-
-	button {
-		@apply button;
+		@apply input border-0 bg-inherit focus:bg-primary-100 dark:bg-inherit dark:focus:bg-primary-800;
 	}
 
 	[type='submit'] {

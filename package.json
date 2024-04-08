@@ -28,6 +28,7 @@
     "@storybook/svelte": "^8.0.6",
     "@storybook/sveltekit": "^8.0.6",
     "@storybook/test": "^8.0.6",
+    "@storybook/test-runner": "^0.17.0",
     "@sveltejs/adapter-auto": "^3.2.0",
     "@sveltejs/adapter-static": "^3.0.1",
     "@sveltejs/adapter-vercel": "^5.2.0",
@@ -45,6 +46,7 @@
     "@vercel/speed-insights": "^1.0.10",
     "autoprefixer": "^10.4.19",
     "change-case": "^5.4.4",
+    "clsx": "^2.1.0",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-storybook": "^0.8.0",
@@ -90,6 +92,7 @@
     "@fontsource/roboto": "^5.0.12",
     "@tailwindcss/container-queries": "^0.1.1",
     "@vercel/analytics": "^1.2.2",
+    "class-variance-authority": "^0.7.0",
     "sharp": "0.33.3"
   },
   "overrides": {

@@ -16,6 +16,11 @@ import {
 	Zap,
 } from 'lucide-svelte';
 
+export type CalloutVariation = (typeof variations)[number];
+
+type CalloutVariationAlias = keyof typeof aliases;
+type CalloutVariationWithoutAlias = Exclude<CalloutVariation, CalloutVariationAlias>;
+
 export const variations = [
 	'abstract',
 	'attention',
@@ -46,8 +51,6 @@ export const variations = [
 	'warning',
 ] as const;
 
-export type CalloutVariation = (typeof variations)[number];
-
 const aliases = {
 	summary: 'abstract',
 	tldr: 'abstract',
@@ -69,30 +72,27 @@ const isAlias = (variant: CalloutVariation): variant is keyof typeof aliases => 
 	return variant in aliases;
 };
 
-type Alias = keyof typeof aliases;
-type ResolvedVariation = Exclude<CalloutVariation, Alias>;
-
-export const getVariation = (variant: CalloutVariation): ResolvedVariation => {
+export const getVariation = (variant: CalloutVariation): CalloutVariationWithoutAlias => {
 	if (isAlias(variant) && variant in aliases) {
 		return aliases[variant];
 	}
-	return variant as ResolvedVariation;
+	return variant as CalloutVariationWithoutAlias;
 };
 
-const variationColors: Record<ResolvedVariation, string> = {
-	abstract: 'bg-green-50 text-green-700',
-	bug: 'bg-red-50 text-red-700',
-	danger: 'bg-red-50 text-red-700',
-	example: 'bg-purple-50 text-purple-700',
-	failure: 'bg-red-50 text-red-700',
-	info: 'bg-blue-50 text-blue-700',
-	note: 'bg-blue-50 text-blue-700',
-	question: 'bg-orange-50 text-orange-700',
-	quote: 'bg-slate-50 text-slate-700',
-	success: 'bg-green-50 text-green-700',
-	tip: 'bg-green-50 text-green-700',
-	todo: 'bg-blue-50 text-blue-700',
-	warning: 'bg-orange-50 text-orange-700',
+const variationColors: Record<CalloutVariationWithoutAlias, string> = {
+	abstract: 'bg-green-50 text-green-700 border-green-100',
+	bug: 'bg-red-50 text-red-700 border-red-100',
+	danger: 'bg-red-50 text-red-700 border-red-100',
+	example: 'bg-purple-50 text-purple-700 border-purple-100',
+	failure: 'bg-red-50 text-red-700 border-red-100',
+	info: 'bg-blue-50 text-blue-700 border-blue-100',
+	note: 'bg-blue-50 text-blue-700 border-blue-100',
+	question: 'bg-orange-50 text-orange-700 border-orange-100',
+	quote: 'bg-slate-50 text-slate-700 border-slate-100',
+	success: 'bg-green-50 text-green-700 border-green-100',
+	tip: 'bg-green-50 text-green-700 border-green-100',
+	todo: 'bg-blue-50 text-blue-700 border-blue-100',
+	warning: 'bg-orange-50 text-orange-700 border-orange-100',
 };
 
 export const getVariationColor = (variation: CalloutVariation): string => {
@@ -100,7 +100,7 @@ export const getVariationColor = (variation: CalloutVariation): string => {
 	return variationColors[v];
 };
 
-const variationIcons: Record<ResolvedVariation, ComponentType<Icon>> = {
+const variationIcons: Record<CalloutVariationWithoutAlias, ComponentType<Icon>> = {
 	abstract: ClipboardList,
 	bug: Bug,
 	danger: Zap,

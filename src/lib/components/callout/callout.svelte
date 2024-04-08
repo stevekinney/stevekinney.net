@@ -11,7 +11,7 @@
 	let open = !foldable;
 </script>
 
-<div class="space-y-2 rounded-md border border-current p-4 shadow-sm {getVariationColor(variant)}">
+<div class="space-y-2 rounded-md border p-4 shadow-sm {getVariationColor(variant)}">
 	<svelte:element
 		this={foldable ? 'label' : 'div'}
 		class="flex items-center gap-1 leading-tight text-current"
