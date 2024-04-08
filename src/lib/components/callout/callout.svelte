@@ -12,16 +12,19 @@
 </script>
 
 <div class="space-y-2 rounded-md border border-current p-4 shadow-sm {getVariationColor(variant)}">
-	<label class="flex items-center gap-1 leading-tight text-current">
-		<input type="checkbox" bind:checked={open} class="peer hidden" />
+	<svelte:element
+		this={foldable ? 'label' : 'div'}
+		class="flex items-center gap-1 leading-tight text-current"
+	>
 		<svelte:component this={getIcon(variant)} class="w-4" />
 		<span class="font-bold">{title}</span>
 		{#if foldable}
+			<input type="checkbox" bind:checked={open} class="peer hidden" />
 			<ChevronDown class="ml-auto w-4 -rotate-90 transition-transform peer-checked:rotate-0" />
 		{/if}
-	</label>
+	</svelte:element>
 	{#if $$slots.default || description}
-		<div class="prose" class:hidden={!open}>
+		<div class="prose" class:hidden={foldable && !open}>
 			<slot><p>{description}</p></slot>
 		</div>
 	{/if}
