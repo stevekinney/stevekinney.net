@@ -1,11 +1,16 @@
-const regexPattern = /\[!\s*(\w+)\s*\]([+-]?)\s+([^<>\n]+)/i;
+/**
+ * @typedef {import('.').Callout} Callout
+ */
+
+const pattern = /\[!\s*(\w+)\s*\]([+-]?)\s+([^<>\n]+)/i;
+
 /**
  * Parse callout text into an object.
  * @param {string} markup
- * @returns {Callout | null}
+ * @returns { | null}
  */
 export function parseCallout(markup) {
-	const match = markup.match(regexPattern);
+	const match = markup.match(pattern);
 	if (!match) return null;
 
 	markup = markup.replace('<blockquote>', '').replace('</blockquote>', '');
@@ -15,7 +20,7 @@ export function parseCallout(markup) {
 	let foldable = Boolean(match[2] === '+' || match[2] === '-');
 
 	let description = markup
-		.replace(regexPattern, '')
+		.replace(pattern, '')
 		.replace(/<p>\s+/, '<p>')
 		.trim();
 
