@@ -62,6 +62,21 @@ describe('compilers/callouts/parse-callout', () => {
 		});
 	});
 
+	it('should parse a callout with punctuation in the title', () => {
+		const callout = `
+      <blockquote>
+        <p>[!NOTE] This vs. That\nDescription</p>
+      </blockquote>
+    `.trim();
+
+		expect(parseCallout(callout)).toEqual({
+			title: 'This vs. That',
+			variant: 'note',
+			description: '<p>Description</p>',
+			foldable: false,
+		});
+	});
+
 	it('should return null if no matches are found', () => {
 		const callout = `
       <blockquote>

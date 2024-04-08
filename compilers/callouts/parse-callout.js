@@ -2,9 +2,7 @@
  * @typedef {{ title: string | undefined, variant: string | undefined, description: string | undefined }} Callout
  */
 
-import { match } from 'assert';
-
-const regexPattern = /\[!\s*(\w+)\s*\]([+-]?)\s+(\w+)/i;
+const regexPattern = /\[!\s*(\w+)\s*\]([+-]?)\s+([^<>\n]+)/i;
 /**
  * Parse callout text into an object.
  * @param {string} markup

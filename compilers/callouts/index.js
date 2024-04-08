@@ -2,6 +2,15 @@ import MagicString from 'magic-string';
 import { parse, walk } from 'svelte/compiler';
 
 import { parseCallout } from './parse-callout.js';
+import { compileCallout } from './compile-callout.js';
+
+/**
+ * @typedef Callout
+ * @property {string} title
+ * @property {string} variant
+ * @property {string | undefined} description
+ * @property {boolean | undefined} foldable
+ */
 
 export const processCallouts = () => {
 	return {
@@ -29,14 +38,7 @@ export const processCallouts = () => {
 						if (!details) return;
 						hasCallouts = true;
 
-						let callout = '';
-						if (details.description) {
-							callout = `<Callout title="${details.title}" variant="${details.variant}" foldable=${details.foldable}>${details.description || ''}</Callout>`;
-						} else {
-							callout = `<Callout title="${details.title}" variant="${details.variant}" foldable=${details.foldable} />`;
-						}
-
-						s.overwrite(start, end, callout);
+						s.overwrite(start, end, compileCallout(details));
 					}
 				},
 			});
