@@ -1,16 +1,19 @@
 ---
-title: "Implementing Obsidian's Callout in Svelte"
-description: "A gentle walkthrough where we build out take on Obsidian's callout component in Svelte."
-date: 2024-04-07
+title: Implementing Obsidian's Callout in Svelte
+description: A gentle walkthrough where we build out take on Obsidian's callout component in Svelte.
+date: 2024-04-07T10:29:29-06:00
 tags:
   - svelte
   - storybook
   - design-systems
 published: false
-modified: 2024-04-07T14:01:25-06:00
+modified: 2024-04-08T07:36:36-06:00
 ---
 
 I use [Obsidian](https://obsidian.md) for a lot of my writing and note gathering when I'm working on a course. I wouldn't mind using [Obsidian Publish](https://obsidian.md/publish) for hosting my notes and—as of this writing—I do have a paid account, but given that I want a high-level of customization and the ability to include code along with my content, I need a bit more control over how the content is hosted than Obsidian Publish is willing to give me.
+
+> [!Abstract] We're Doing This Live
+> I'm in the middle of working on a course on building out a component library in Storybook, so I figured, this was a good excuse to document my thinking around building out a component. I'm coming into this relatively cold and this piece documents my thinking as I went about implementing the component that you're reading _right now_.
 
 I want to be able to use Obsidian's [Callout](https://help.obsidian.md/Editing+and+formatting/Callouts) components, but they're not a standard feature of Markdown. So, I need to build out my own `Callout` component to render them properly.
 

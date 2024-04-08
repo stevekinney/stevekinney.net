@@ -1,0 +1,115 @@
+import { describe, it, expect } from 'vitest';
+import { parseCallout } from './parse-callout.js';
+
+describe('compilers/callouts/parse-callout', () => {
+	it('should parse callout text into an object', () => {
+		const callout = `
+      <blockquote>
+        <p>[!NOTE] Title\nDescription</p>
+      </blockquote>
+    `.trim();
+
+		expect(parseCallout(callout)).toEqual({
+			title: 'Title',
+			variant: 'note',
+			description: 'Description',
+			foldable: false,
+		});
+	});
+
+	it('should parse callout text without a description', () => {
+		const callout = `
+      <blockquote>
+        <p>[!NOTE] Title</p>
+      </blockquote>
+    `.trim();
+
+		expect(parseCallout(callout)).toEqual({
+			title: 'Title',
+			variant: 'note',
+			description: undefined,
+			foldable: false,
+		});
+	});
+
+	it('should parse a callout with a lowecase variant', () => {
+		const callout = `
+      <blockquote>
+        <p>[!note] Title\nDescription</p>
+      </blockquote>
+    `.trim();
+
+		expect(parseCallout(callout)).toEqual({
+			title: 'Title',
+			variant: 'note',
+			description: 'Description',
+			foldable: false,
+		});
+	});
+
+	it('should parse a callout with a variant that has whitespace', () => {
+		const callout = `
+      <blockquote>
+        <p>[! NOTE ] Title\nDescription</p>
+      </blockquote>
+    `.trim();
+
+		expect(parseCallout(callout)).toEqual({
+			title: 'Title',
+			variant: 'note',
+			description: 'Description',
+			foldable: false,
+		});
+	});
+
+	it('should parse callout text that does not have surrounding elements', () => {
+		const callout = `[!NOTE] Title\nDescription`;
+
+		expect(parseCallout(callout)).toEqual({
+			title: 'Title',
+			variant: 'note',
+			description: 'Description',
+			foldable: false,
+		});
+	});
+
+	it('should return null if no matches are found', () => {
+		const callout = `
+      <blockquote>
+        <p>Some random text</p>
+      </blockquote>
+    `.trim();
+
+		expect(parseCallout(callout)).toBe(null);
+	});
+
+	it('should return a foldable prop if the callout is foldable with a "+"', () => {
+		const callout = `
+      <blockquote>
+        <p>[!NOTE]+ Title\nDescription</p>
+      </blockquote>
+    `.trim();
+
+		expect(parseCallout(callout)).toEqual({
+			title: 'Title',
+			variant: 'note',
+			description: 'Description',
+			foldable: true,
+		});
+	});
+
+	it('should return a foldable prop if the callout is foldable with a "-"', () => {
+		const callout = `
+      <blockquote>
+        <p>[!NOTE]- Title\nDescription</p>
+      </blockquote>
+    `.trim();
+
+		expect(parseCallout(callout)).toEqual({
+			title: 'Title',
+			variant: 'note',
+			description: 'Description',
+			foldable: true,
+		});
+	});
+});

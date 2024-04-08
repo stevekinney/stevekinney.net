@@ -4,7 +4,7 @@ description: Leverage Figma components for scalable and efficient design. Create
 drafted: true
 figma: false
 date: 2024-03-09T14:21:18-05:00
-modified: 2024-03-28T10:36:08-06:00
+modified: 2024-04-08T07:26:47-06:00
 tags:
   - figma
   - course
@@ -75,7 +75,8 @@ These **preferred values** allow you to create define a set of components that y
 
 If you want to hide away most of the complexities of a component away from anyone using it, then you can go to the main component and select "Simplify all instances". This will reduce the number of knobs that someone gets to (or, has to) fiddle and allows you to keep things _simple_.
 
-> [!NOTE] Simplifying an instance will hide layers, but **anyone with the ability to edit** the design file will still be able to edit those layers.
+> [!NOTE] Simplifying Won't Protect You
+> Simplifying an instance will hide layers, but **anyone with the ability to edit** the design file will still be able to edit those layers.
 
 ![Simplifying component instances](../../assets/figma-simplify-component-instance.gif)
 

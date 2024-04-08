@@ -31,6 +31,9 @@ devDependencies:
   '@playwright/test':
     specifier: ^1.43.0
     version: 1.43.0
+  '@storybook/addon-a11y':
+    specifier: ^8.0.6
+    version: 8.0.6
   '@storybook/addon-essentials':
     specifier: ^8.0.6
     version: 8.0.6(@types/react@18.2.74)(react-dom@18.2.0)(react@18.2.0)
@@ -2589,6 +2592,13 @@ packages:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
 
+  /@storybook/addon-a11y@8.0.6:
+    resolution: {integrity: sha512-p84GRmEU4f9uro71et4X4elnCFReq16UC44h8neLhcZHlMLkPop5oSRslcvF7MlKrM+mJepO1tsKmBmoTaq2PQ==}
+    dependencies:
+      '@storybook/addon-highlight': 8.0.6
+      axe-core: 4.9.0
+    dev: true
+
   /@storybook/addon-actions@8.0.6:
     resolution: {integrity: sha512-3R/d2Td6+yeR+UnyCAeZ4tuiRGSm+6gKUQP9vB1bvEFQGuFBrV+zs3eakcYegOqZu3IXuejgaB0Knq987gUL5A==}
     dependencies:
@@ -4290,6 +4300,11 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       possible-typed-array-names: 1.0.0
+    dev: true
+
+  /axe-core@4.9.0:
+    resolution: {integrity: sha512-H5orY+M2Fr56DWmMFpMrq5Ge93qjNdPVqzBv5gWK3aD1OvjBEJlEzxf09z93dGVQeI0LiW+aCMIx1QtShC/zUw==}
+    engines: {node: '>=4'}
     dev: true
 
   /axobject-query@4.0.0:
