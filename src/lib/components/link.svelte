@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import { twMerge as merge } from 'tailwind-merge';
 
@@ -14,7 +15,7 @@
 	let className: string = '';
 	export { className as class };
 
-	$: isActive = $page.url.pathname.startsWith(href);
+	$: isActive = browser && $page.url.pathname.startsWith(href);
 </script>
 
 <a
