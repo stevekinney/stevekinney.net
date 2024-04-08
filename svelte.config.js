@@ -90,7 +90,8 @@ export const processImages = () => {
 						if (!src) return;
 
 						const [srcValue] = src.value;
-						const url = decodeURIComponent(srcValue.data);
+						let url = decodeURIComponent(srcValue.data);
+						if (url.startsWith('assets/')) url = `./${url}`;
 						const id = '_' + camelCase(url);
 
 						images.set(url, { id, url });
@@ -140,6 +141,7 @@ const config = {
 		adapter: process.env.VERCEL ? vercelAdapter() : staticAdapter({ strict: false }),
 		alias: {
 			'@/*': 'src/*',
+			'$lib/*': 'src/lib/*',
 			'$assets/*': 'src/assets/*',
 			'$courses/*': 'src/courses/*',
 		},

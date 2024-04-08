@@ -11,3 +11,5 @@ vite.config.ts.timestamp-*
 .obsidian/workspace.json
 .vercel
 meta-*
+
+*storybook.log
