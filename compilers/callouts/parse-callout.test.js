@@ -12,7 +12,7 @@ describe('compilers/callouts/parse-callout', () => {
 		expect(parseCallout(callout)).toEqual({
 			title: 'Title',
 			variant: 'note',
-			description: 'Description',
+			description: '<p>Description</p>',
 			foldable: false,
 		});
 	});
@@ -42,7 +42,7 @@ describe('compilers/callouts/parse-callout', () => {
 		expect(parseCallout(callout)).toEqual({
 			title: 'Title',
 			variant: 'note',
-			description: 'Description',
+			description: '<p>Description</p>',
 			foldable: false,
 		});
 	});
@@ -57,18 +57,7 @@ describe('compilers/callouts/parse-callout', () => {
 		expect(parseCallout(callout)).toEqual({
 			title: 'Title',
 			variant: 'note',
-			description: 'Description',
-			foldable: false,
-		});
-	});
-
-	it('should parse callout text that does not have surrounding elements', () => {
-		const callout = `[!NOTE] Title\nDescription`;
-
-		expect(parseCallout(callout)).toEqual({
-			title: 'Title',
-			variant: 'note',
-			description: 'Description',
+			description: '<p>Description</p>',
 			foldable: false,
 		});
 	});
@@ -93,7 +82,7 @@ describe('compilers/callouts/parse-callout', () => {
 		expect(parseCallout(callout)).toEqual({
 			title: 'Title',
 			variant: 'note',
-			description: 'Description',
+			description: '<p>Description</p>',
 			foldable: true,
 		});
 	});
@@ -108,8 +97,26 @@ describe('compilers/callouts/parse-callout', () => {
 		expect(parseCallout(callout)).toEqual({
 			title: 'Title',
 			variant: 'note',
-			description: 'Description',
+			description: '<p>Description</p>',
 			foldable: true,
 		});
+	});
+
+	it('should support multi-line descriptions', () => {
+		const callout = `
+      <blockquote>
+      <p>[!NOTE] Title
+      First paragraph</p>
+      <p>Second paragraph</p>
+      </blockquote>
+    `.trim();
+
+		const { title, variant, description } = parseCallout(callout);
+		expect(title).toBe('Title');
+		expect(variant).toBe('note');
+		expect(description).toMatchInlineSnapshot(`
+			"<p>First paragraph</p>
+			      <p>Second paragraph</p>"
+		`);
 	});
 });

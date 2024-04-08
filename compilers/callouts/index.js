@@ -29,11 +29,14 @@ export const processCallouts = () => {
 						if (!details) return;
 						hasCallouts = true;
 
-						s.overwrite(
-							start,
-							end,
-							`<Callout title="${details.title}" variant="${details.variant}">${details.description || ''}</Callout>`,
-						);
+						let callout = '';
+						if (details.description) {
+							callout = `<Callout title="${details.title}" variant="${details.variant}" foldable=${details.foldable}>${details.description || ''}</Callout>`;
+						} else {
+							callout = `<Callout title="${details.title}" variant="${details.variant}" foldable=${details.foldable} />`;
+						}
+
+						s.overwrite(start, end, callout);
 					}
 				},
 			});
