@@ -3,7 +3,7 @@ title: Setting Up a Test Runner
 description:
 exclude: false
 drafted: false
-modified: 2024-04-08T19:08:50-06:00
+modified: 2024-04-08T19:26:25-06:00
 ---
 
 > [!tip] Storybook uses Playwright
@@ -27,20 +27,6 @@ npx test-storybook
 ```
 
 Alternatively, you can—and should—add a script to your `package.json` to run the tests.
-
-## Configuring Test Coverage
-
-Let's say you want to get a sense of how well you're exercising your components, you can hook your test runner up with [Istanbul](https://istanbul.js.org/).
-
-```sh
-npx storybook@latest add @storybook/addon-coverage
-```
-
-And, then you should be able to run your tests with a `--coverage` flag.
-
-```
-
-```
 
 ## Running Your Tests in Github Actions
 
