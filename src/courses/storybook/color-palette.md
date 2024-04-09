@@ -1,6 +1,6 @@
 ---
 title: Color Palettes in Storybook
-description: 
+description:
 exclude: false
 drafted: true
 modified: 2024-04-06T09:56:57-06:00

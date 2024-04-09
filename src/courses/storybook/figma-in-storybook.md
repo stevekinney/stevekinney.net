@@ -1,6 +1,6 @@
 ---
 title: Integrating Figma Designs into Storybook
-description: 
+description:
 exclude: false
 drafted: true
 modified: 2024-04-06T14:49:54-06:00

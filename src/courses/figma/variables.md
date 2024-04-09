@@ -65,15 +65,15 @@ Let's say you used something like the screenshot above, the output of the CSS in
 ```css
 border-radius: var(--rounded);
 border: 1px solid #000;
-background: #FFF;
+background: #fff;
 ```
 
 What's even better is now, you can use a plugin—like this [CSS Variables Generator](https://www.figma.com/community/plugin/1271829798610738782), for example, to generate a manifest of all of the CSS variables used in the design. The output of the plugin looks like this:
 
 ```css
 :root {
-  --rounded: 16px;
-  --rounded-rem: 3.125rem;
+	--rounded: 16px;
+	--rounded-rem: 3.125rem;
 }
 ```
 

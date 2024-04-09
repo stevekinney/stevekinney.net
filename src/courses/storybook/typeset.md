@@ -1,6 +1,6 @@
 ---
 title: Using the TypeSet Doc Block
-description: 
+description:
 exclude: false
 drafted: true
 modified: 2024-04-08T07:34:44-06:00

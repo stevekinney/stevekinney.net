@@ -1,6 +1,7 @@
 ---
 title: Using Variants and Variables for Responsive Text
 ---
+
 Let's start with a component that looks something like this:
 
 ![](../../assets/figma-responsive-text-edit-variant-property.png)

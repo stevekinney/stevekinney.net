@@ -1,7 +1,7 @@
 ---
 modified: 2024-04-03T10:52:03-06:00
 title: Setting Up Storybook
-description: 
+description:
 exclude: false
 drafted: true
 ---
@@ -25,9 +25,9 @@ Storybook will install the following dependencies:
 - [`@storybook/react-vite`](https://npm.im/@storybook/react-vite)
 - [`@storybook/test`](https://npm.im/@storybook/test)
 
-Additionally, [`eslint-plugin-storybook`](https://npm.im/eslint-plugin-storybook) will be installed *only* if you're already using [ESLint](https://eslint.org/) in your project.
+Additionally, [`eslint-plugin-storybook`](https://npm.im/eslint-plugin-storybook) will be installed _only_ if you're already using [ESLint](https://eslint.org/) in your project.
 
-There is one additional dependency, [`@storybook/addon-onboarding`](https://npm.im/@storybook/addon-onboarding), that will *only* be installed with certain frameworks. You'll also most likely be removing it later.
+There is one additional dependency, [`@storybook/addon-onboarding`](https://npm.im/@storybook/addon-onboarding), that will _only_ be installed with certain frameworks. You'll also most likely be removing it later.
 
 It will also create `.storybook` directory at the root of your project with two files:
 

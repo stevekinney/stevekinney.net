@@ -1,6 +1,6 @@
 ---
-title: 
-description: 
+title:
+description:
 exclude: false
 drafted: false
 modified: 2024-04-06T17:05:16-06:00

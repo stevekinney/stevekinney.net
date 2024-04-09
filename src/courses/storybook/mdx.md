@@ -1,6 +1,6 @@
 ---
 title: Documenting Components with MDX
-description: 
+description:
 exclude: false
 drafted: true
 modified: 2024-04-06T10:19:25-06:00
@@ -68,7 +68,7 @@ Let's talk about what's going on here:
 
 - We're importing all of the exports from our button stories.
 - We're importing the `Meta` block from `@storybook/blocks` in order to attach our documentation to our component.
-- The `Primary` block renders the first-defined story in our `button.stories.tsx` file. It's purely coincidental that it happens that my first export is *also* named **Primary**.
+- The `Primary` block renders the first-defined story in our `button.stories.tsx` file. It's purely coincidental that it happens that my first export is _also_ named **Primary**.
 - There is some more prose and then re render the `Controls`, which is analogous to what we've seen so far.
 
 ![Button component documentation rendered in MDX](../../assets/storybook-button-mdx.png)

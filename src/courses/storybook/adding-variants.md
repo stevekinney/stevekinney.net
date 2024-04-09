@@ -238,6 +238,7 @@ export const Destructive: Story = {
 ```
 
 We'll now see each variant in our Storybook as well as an additional control for swapping between the variants.
+
 ### Using `clsx` to Compose Class Names
 
 > [!NOTE] Installing `clsx`
@@ -326,7 +327,7 @@ index f2fa94b..f025c74 100644
 +++ b/src/stories/button.tsx
 @@ -8,13 +8,5 @@ type ButtonProps = ComponentProps<'button'> & {
  };
- 
+
  export const Button = ({ variant = 'primary', …props }: ButtonProps) => {
 -  return (
 -    <button
