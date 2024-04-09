@@ -7,7 +7,7 @@ date: 2024-03-09T14:21:25-05:00
 modified: 2024-03-28T14:43:06-06:00
 ---
 
-![](../../assets/figma-loki-variants.jpg)
+![Loki and his variants](../../assets/figma-loki-variants.jpg)
 
 We all know that there usually isn't just _one_ button. Buttons come in lots of shapes and sizes.
 
@@ -37,7 +37,7 @@ Variants reduce clutter by housing related components together. They streamline 
 
 The easiest way to do this is similar to what we saw using [Component Properties](component-properties.md).
 
-![](../../assets/figma-variant-component-property.png)
+![A variant component property in Figma](../../assets/figma-variant-component-property.png)
 
 You're variants are effectively key/value stores. They all need to have the same names for the given nature of the variant and then you can have a bunch of names for actual iterations.
 
@@ -45,7 +45,7 @@ You're variants are effectively key/value stores. They all need to have the same
 
 I won't bore you with the implementation details of each component. But, you can take a lucky guess. The "Small" variant has reduced padding and a slightly smaller font size.
 
-![](../../assets/figma-variant-example.gif)
+![An example of a Figma component variant](../../assets/figma-variant-example.gif)
 
 ### Creating Variants for Existing Components
 
@@ -62,7 +62,7 @@ I can do this as follows:
 5. Give your new property a name.
 6. Name the new composite component appropriately.
 
-![](../../assets/figma-creating-variants-from-components.gif)
+![Creating Variants from components in Figma](../../assets/figma-creating-variants-from-components.gif)
 
 #### Streamlining Variant Creation with Names
 
@@ -70,20 +70,20 @@ If you really want to show off, you can cut at least one tiny step out of this w
 
 ## Swapping Variants with the Instance Swap Component Property
 
-![](../../assets/figma-button-with-icon.png)
+![Figma button with an icon](../../assets/figma-button-with-icon.png)
 
 Consider this button that has an icon. Let's say that we wanted to allow the consumer of this button swap out the icon for another icon—but _only_ another icon. How would we do this?
 
 As long as the Icon is a component, we can use the "Expose properties from Nested Instances" option to surface the variants of the Icon up to the top.
 
-![](../../assets/figma-expose-nested-instances.png)
+![Expose nested component instances](../../assets/figma-expose-nested-instances.png)
 
 Now, when we have an instance of the component, we can easily switch between variants of the underlying components.
 
-![](../../assets/figma-switch-between-nested-variants.gif)
+![Switch between nested variants](../../assets/figma-switch-between-nested-variants.gif)
 
 ### Conditional Nested Variants
 
 For extra fun, you can combine the above technique with [component-properties](component-properties.md#boolean-properties) to conditionally show the nested variant.
 
-![](../../assets/figma-boolean-properties-with-nested-variants.gif)
+![Boolean properties with nested variants](../../assets/figma-boolean-properties-with-nested-variants.gif)

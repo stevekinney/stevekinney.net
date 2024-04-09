@@ -76,7 +76,7 @@ export const Primary: Story = {
 
 If you run Storybook using `npm run storybook`, you'll see something like the following:
 
-![](../../assets/storybook-basic-button-story.png)
+![A basic button story in Storybook](../../assets/storybook-basic-button-story.png)
 It's not much to look at, but it's our first story.
 
 ## Using `args`

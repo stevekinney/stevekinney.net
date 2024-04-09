@@ -27,7 +27,7 @@ In the even you're creating a new project, you'll be asked what kind of project 
 
 You'll then get a unique project key to use to associate your Storybook with this newly-created project in Chromatic.
 
-![](../../assets/storybook-chromatic-project-configuration.png)
+![Configuring a project in Chromatic](../../assets/storybook-chromatic-project-configuration.png)
 
 In your project, run the included command: `npx chromatic --project-token=` with your project token. The Chromatic CLI will take care of the rest and you'll your component and stories in the summary.
 

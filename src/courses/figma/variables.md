@@ -40,7 +40,7 @@ Your variables must be one of the following types of values:
 
 Once created, your variable will be available in a table for you to adjust as needed.
 
-![](../../assets/figma-variable-table.png)
+![Figma variable table](../../assets/figma-variable-table.png)
 
 Now, for values that accept whatever variable type that you're using, you can opt to use your new variable instead of a hard-coded value.
 
@@ -58,7 +58,7 @@ If you don't only want your variable to be available to particular properties—
 
 You can also adjust the name of the variable in [Dev Mode](dev-mode.md).
 
-![](../../assets/figma-variable-property.png)
+![Adjusting the name of a Figma variable](../../assets/figma-variable-property.png)
 
 Let's say you used something like the screenshot above, the output of the CSS in Dev Mode, would now look something like this.
 
@@ -85,7 +85,7 @@ It _is_ possible to put variables into groups. Simply select some of your variab
 
 And now you're variables will be a neat little group for you.
 
-![](../../assets/figma-variable-groups.png)
+![Figma's variable groups](../../assets/figma-variable-groups.png)
 
 > [!tip] Naming Things is Hard
 > On my team, we've struggled a lot with what to name our variables. This existence of light and dark modes certainly add a lot of extra complexity. For example, it's hard to call a color variable, `red-light`, if it's actually _darker_ when in dark mode. I don't hate the naming conventions that [Twilio uses for the design tokens in their Paste design system](https://paste.twilio.design/tokens/list).
@@ -126,11 +126,11 @@ Modes are inherited from their parent. Components that are set to `auto` will in
 
 You can also have variables reference other variables. This is mostly useful for when you want to have a wide rang of primitive values and then a few semantic variables that are based off of those primitive values.
 
-![](../../assets/figma-set-up-a-variable-alias.png)
+![Setting up a variable alias](../../assets/figma-set-up-a-variable-alias.png)
 
 Once, you've set up the aliasing, you'll see a clear visual indicator of the link in the UI. You can still tweak all of the settings as to where the variable can be used as well as the output as seen in Dev Mode.
 
-![](../../assets/figma-variable-aliasing.png)
+![Figma variable aliasing](../../assets/figma-variable-aliasing.png)
 
 ## Some Limitations
 

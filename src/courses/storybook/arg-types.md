@@ -120,4 +120,4 @@ This will render a little tooltip with your additional detail.
 
 You can also use the `category` and `subcategory` properties on `table` to section. In order to further organize your controls. We don't have a lot to organize _right now_, but I wanted to put it on your radar.
 
-![](../../assets/storybook-figma-categories-and-subcategories.png)
+![Figma controls with categories and subcategories](../../assets/storybook-figma-categories-and-subcategories.png)
