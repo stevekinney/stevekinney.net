@@ -3,10 +3,10 @@ title: Using the TypeSet Doc Block
 description:
 exclude: false
 drafted: true
-modified: 2024-04-08T07:34:44-06:00
+modified: 2024-04-09T15:00:30-06:00
 ---
 
-Similar to the [color palettes](color-palette.md), Storybook also provides a helpful set of components for rendering your design system's typography.
+Similar to the [color palettes](color-palette.md) and [icon galleries](icon-gallery.md), Storybook also provides a helpful set of components for rendering your design system's typography.
 
 ```tsx
 import { Meta, Typeset } from '@storybook/blocks';

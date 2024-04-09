@@ -26,44 +26,58 @@ const meta: Meta<typeof Button> = {
 
 You'll now see that the correct radio buttons are selected and even our `disabled` boolean is now correctly set. And now, we can remove a lot of our boiler plate and spreading of arguments and get something a bit cleaner.
 
-```ts
-export const Primary: Story = {};
+```diff
+diff --git a/src/components/button/button.stories.tsx b/src/components/button/button.stories.tsx
+index 58228bd..4a09a08 100644
+--- a/src/components/button/button.stories.tsx
++++ b/src/components/button/button.stories.tsx
+@@ -21,45 +21,36 @@ type Story = StoryObj<typeof Button>;
 
-export const Secondary: Story = {
-	args: {
-		variant: 'secondary',
-	},
-};
+ export const Primary: Story = {
+   args: {
+-    children: 'Button',
+     variant: 'primary',
+-    disabled: false,
+   },
+ };
 
-export const Destructive: Story = {
-	args: {
-		variant: 'destructive',
-	},
-};
+ export const Secondary: Story = {
+   args: {
+-    children: 'Button',
+     variant: 'secondary',
+-    disabled: false,
+   },
+ };
 
-export const ExtraSmall: Story = {
-	args: {
-		size: 'extra-small',
-	},
-};
+ export const Destructive: Story = {
+   args: {
+-    children: 'Button',
+     variant: 'destructive',
+-    disabled: false,
+   },
+ };
 
-export const Small: Story = {
-	args: {
-		size: 'small',
-	},
-};
+ export const Small: Story = {
+   args: {
+-    children: 'Button',
+     size: 'small',
+   },
+ };
 
-export const Medium: Story = {
-	args: {
-		size: 'medium',
-	},
-};
+ export const Medium: Story = {
+   args: {
+-    children: 'Button',
+     size: 'medium',
+   },
+ };
 
-export const Large: Story = {
-	args: {
-		size: 'large',
-	},
-};
+ export const Large: Story = {
+   args: {
+-    children: 'Button',
+     size: 'large',
+   },
+ };
+
 ```
 
 You can argue that we can/should probably get rid of a dedicated story for each size and I probably wouldn't make a counter argument.

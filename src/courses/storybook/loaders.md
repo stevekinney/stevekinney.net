@@ -3,7 +3,7 @@ title: Loaders
 description:
 exclude: false
 drafted: true
-modified: 2024-04-06T12:08:00-06:00
+modified: 2024-04-09T11:33:44-06:00
 ---
 
 Loaders in Storybook offer a way to asynchronously load data or perform actions _before_ a story is rendered. This can be especially useful when you need to fetch mock data from an API, perform setup tasks, or dynamically manipulate props or globals based on external factors before the story is displayed. Similar to [parameters](parameters.md) loaders can be applied globally to affect all stories or locally to affect specific stories.
@@ -36,7 +36,7 @@ This loader fetches user data asynchronously and provides it to all stories thro
 
 Local loaders are defined within individual stories or story files. They're used to load data or perform actions specific to a single story or a group of stories within the same file.
 
-Suppose you have a `ProfileCard` component that requires user data:
+Let's say you have a `ProfileCard` component that requires user data:
 
 ```tsx
 export default {

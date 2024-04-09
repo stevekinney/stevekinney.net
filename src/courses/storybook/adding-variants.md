@@ -3,7 +3,7 @@ title: Adding Variants
 description:
 exclude: false
 drafted: false
-modified: 2024-04-06T15:21:13-06:00
+modified: 2024-04-09T12:49:39-06:00
 ---
 
 Let's get a little philosophical. There are a _lot_ of flavors of buttons in the world. For our purposes, we're going to call these **variants**. One of the most common variants that we see out in the wild is the idea of having primary and secondary buttons. Additional examples include destructive buttons and disabled buttons, et cetera.
@@ -54,7 +54,7 @@ Let's use `variant` as our prop since that seems to be a tried-and-true approach
 
 - `primary`
 - `secondary`
-- `destructive`Here's the corrected version of your blog post with typographical errors fixed.
+- `destructive`
 
 We'll start with our super-simple button component from [the previous chapter](writing-stories.md).
 
@@ -81,43 +81,89 @@ type ButtonProps = ComponentProps<'button'> & {
 > [!NOTE] A Brief Word on Styling
 > We're going to start by using vanilla CSS and CSS modules right now. Later on, we'll use [Tailwind](https://tailwindcss.com) in a effort to make our lives easier and focus on the specifics of Storybook rather than CSS. But, you're welcome to use whatever styling tools make you happiest. Storybook doesn't have a horse in this race.
 
-Let's start by styling the button. We haven't implemented any of these variants yet, so we'll work on styling the primary button first and then go from there. In `button.module.css`, add the following:
+Let's start by styling the button. We haven't implemented any of these variants yet, so we'll work on styling the primary button first and then go from there. In `button.module.css`, I have the following styles waiting for you.
 
 ```css
 .button {
-	background-color: hsla(237, 64%, 50%, 1);
-	border-color: hsla(237, 64%, 50%, 1);
+	align-items: center;
+	background-color: #4f46e5;
+	border-color: transparent;
+	border-radius: 0.25rem;
+	border-width: 1px;
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 	color: white;
-	border-radius: 0.5rem;
 	cursor: pointer;
-	display: inline-block;
-	font-size: 1rem;
-	padding: 0.5rem 0.75rem;
-	text-align: center;
-	text-decoration: none;
-	outline-offset: 0.0625rem;
-	outline-style: none;
-	outline-width: 0.25rem;
-	outline-color: hsla(237, 64%, 50%, 0.2);
-	border: 0.125rem solid transparent;
+	display: inline-flex;
+	font-weight: 600;
+	gap: 0.375rem;
+	padding: 0.375rem 0.75rem;
+	transition: background-color 0.2s;
 }
 
-.button:hover {
-	background-color: hsla(237, 64%, 46%, 1);
+/* Focus visible styles */
+.button:focus-visible {
+	outline: 2px solid;
+	outline-offset: 2px;
 }
 
-.button:active {
-	background-color: hsla(237, 64%, 42%, 1);
-}
-
-.button:focus,
-.button:active {
-	outline-style: solid;
-}
-
+/* Disabled styles */
 .button:disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
+}
+
+.button:hover {
+	background-color: #4338ca;
+}
+
+.button:active {
+	background-color: #3730a3;
+}
+
+/* Variant: secondary */
+.button-secondary {
+	background-color: white;
+	color: #1f2937;
+	border-color: #94a3b8;
+}
+
+.button-secondary:hover {
+	background-color: #f1f5f9;
+}
+
+.button-secondary:active {
+	background-color: #e2e8f0;
+}
+
+/* Variant: destructive */
+.button-destructive {
+	background-color: #dc2626;
+	color: white;
+	border-color: transparent;
+}
+
+.button-destructive:hover {
+	background-color: #b91c1c;
+}
+
+.button-destructive:active {
+	background-color: #991b1b;
+}
+
+/* Variant: ghost */
+.button-ghost {
+	background-color: transparent;
+	color: #4f46e5;
+	border-color: transparent;
+	box-shadow: none;
+}
+
+.button-ghost:hover {
+	background-color: #f1f5f9;
+}
+
+.button-ghost:active {
+	background-color: #e2e8f0;
 }
 ```
 
@@ -133,24 +179,23 @@ export const Button = (props: ButtonProps) => {
 
 Our button now looks a little prettier.
 
-![Our button with some basic styling](../../assets/storybook-styled-basic-button.png)
+![](assets/storybook-styled-basic-button.png)
 
 So far, we've made the follow changes to our code.
 
 ```diff
-diff --git a/src/stories/button.tsx b/src/stories/button.tsx
-index ae8eab4..a6632c5 100644
---- a/src/stories/button.tsx
-+++ b/src/stories/button.tsx
-@@ -1,7 +1,11 @@
+diff --git a/src/components/button/button.tsx b/src/components/button/button.tsx
+index 578f1d2..a6632c5 100644
+--- a/src/components/button/button.tsx
++++ b/src/components/button/button.tsx
+@@ -1,9 +1,11 @@
  import { ComponentProps } from 'react';
 
--type ButtonProps = ComponentProps<'button'>;
 +import styles from './button.module.css';
 +
-+type ButtonProps = ComponentProps<'button'> & {
-+  variant?: 'primary' | 'secondary' | 'destructive';
-+};
+ type ButtonProps = ComponentProps<'button'> & {
+   variant?: 'primary' | 'secondary' | 'destructive';
+ };
 
  export const Button = (props: ButtonProps) => {
 -  return <button {…props} />;
@@ -160,45 +205,7 @@ index ae8eab4..a6632c5 100644
 
 ### Styling Our Variants
 
-Writing the styles for our variants is as simple as adding the CSS properties that we want to override from the base variant.
-
-```css
-.secondary {
-	background-color: white;
-	color: hsla(237, 64%, 50%, 1);
-	border-color: hsla(237, 64%, 50%, 1);
-}
-
-.secondary:hover {
-	background-color: hsla(237, 64%, 95%, 1);
-}
-
-.secondary:active {
-	background-color: hsla(237, 64%, 90%, 1);
-}
-
-.destructive {
-	background-color: hsla(0, 64%, 50%, 1);
-	color: white;
-	border-color: hsla(0, 64%, 50%, 1);
-}
-
-.destructive:hover {
-	background-color: hsla(0, 64%, 46%, 1);
-}
-
-.destructive:active {
-	background-color: hsla(0, 64%, 42%, 1);
-}
-
-.destructive:focus {
-	outline-color: hsla(0, 64%, 50%, 0.2);
-}
-```
-
-#### Adding the Classes to Our Component
-
-Now that we've written our classes, we need to dynamically add them to our our component. One simple—but tedious—way to do this is to just append them to the `className` string. This might look something like this:
+I already provided some classes for our variants, but we need to dynamically add them to our our component. One simple—but tedious—way to do this is to just append them to the `className` string. This might look something like this:
 
 ```tsx
 export const Button = ({ variant = 'primary', ...props }: ButtonProps) => {
@@ -239,10 +246,12 @@ export const Destructive: Story = {
 
 We'll now see each variant in our Storybook as well as an additional control for swapping between the variants.
 
+![Basic button with variants](assets/storybook-basic-button-with-variants@2x.png)
+
 ### Using `clsx` to Compose Class Names
 
 > [!NOTE] Installing `clsx`
-> You made need to install `clsx` as a dependency using `npm install clsx`.
+> You made need to install `clsx` as a dependency using `npm install clsx`. If you're following along with the example repository, then I've already included it in the `package.json`.
 
 In our super simple example, appending to the string to compose the list of classes we want to apply to our button worked, but it's going to get tedious as as the complexity of our button grows. We can use [`clsx`](https://www.npmjs.com/package/clsx), a handy utility for dynamically applying classes, to make our future lives a bit easier.
 
@@ -259,6 +268,23 @@ type ButtonProps = ComponentProps<'button'> & {
 export const Button = ({ variant = 'primary', ...props }: ButtonProps) => {
 	return (
 		<button
+			className={clsx(
+				styles.button,
+				variant === 'secondary' && styles.secondary,
+				variant === 'destructive' && styles.destructive,
+			)}
+			{...props}
+		/>
+	);
+};
+```
+
+`clsx` also supports an object-notation that you can use if you prefer.
+
+```tsx
+export const Button = ({ variant = 'primary', ...props }: ButtonProps) => {
+	return (
+		<button
 			className={clsx(styles.button, {
 				[styles.secondary]: variant === 'secondary',
 				[styles.destructive]: variant === 'destructive',
@@ -269,75 +295,6 @@ export const Button = ({ variant = 'primary', ...props }: ButtonProps) => {
 };
 ```
 
-## An Optional Extension
+`clsx` is somewhat helpful in this example, but it becomes _a lot_ more useful when we have even slightly more complicated logic.
 
-We can also pull our the styles the are specific to the `primary` variant and add that as an option as well.
-
-```css
-.button {
-	border-radius: 8px;
-	border-width: 2px;
-	border-style: solid;
-	outline-offset: 1px;
-	outline-width: 4px;
-	padding: 8px 12px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	cursor: pointer;
-}
-
-.button:focus {
-	outline-style: solid;
-}
-
-.button:disabled {
-	opacity: 0.5;
-	cursor: not-allowed;
-}
-
-.primary {
-	background-color: #444ce7;
-	border-color: #444ce7;
-	color: #f8fafc;
-	outline-color: #444ce780;
-}
-
-.primary:hover {
-	background-color: #363bcc;
-	border-color: #363bcc;
-}
-```
-
-We can even use the `variant` prop as a key to index the `styles` object.
-
-```tsx
-export const Button = ({ variant = 'primary', ...props }: ButtonProps) => {
-	return <button className={clsx(styles.button, styles[variant])} {...props} />;
-};
-```
-
-Here is a quick `diff` of those changes:
-
-```diff
-diff --git a/src/stories/button.tsx b/src/stories/button.tsx
-index f2fa94b..f025c74 100644
---- a/src/stories/button.tsx
-+++ b/src/stories/button.tsx
-@@ -8,13 +8,5 @@ type ButtonProps = ComponentProps<'button'> & {
- };
-
- export const Button = ({ variant = 'primary', …props }: ButtonProps) => {
--  return (
--    <button
--      className={clsx(styles.button, {
--        [styles.secondary]: variant === 'secondary',
--        [styles.destructive]: variant === 'destructive',
--      })}
--      {…props}
--    />
--  );
-+  return <button className={clsx(styles.button, styles[variant])} {…props} />;
- };
-```
+And with our initial variants in place, let's play around with the [controls](controls.md) a bit.

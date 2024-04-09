@@ -1,12 +1,12 @@
 ---
-modified: 2024-04-03T11:10:07-06:00
+modified: 2024-04-09T12:18:52-06:00
 title: Writing Stories in Storybook
 description:
 exclude: false
 drafted: false
 ---
 
-Consider this super-naïve button component. Let's say that this is in `button.tsx`.
+Consider this super-naïve button component. Let's say that this is in `src/components/button.tsx`.
 
 ```tsx
 import { ComponentProps } from 'react';
@@ -77,11 +77,11 @@ export const Primary: Story = {
 If you run Storybook using `npm run storybook`, you'll see something like the following:
 
 ![A basic button story in Storybook](../../assets/storybook-basic-button-story.png)
-It's not much to look at, but it's our first story.
+It's not much to look at, but it's our first story and I suppose that we had to start somewhere, right?
 
 ## Using `args`
 
-Instead of rendering the component itself, you can choose to use to an `args` object that will be used for the `props` of the component being rendered in the story.
+Instead of rendering the component itself, you can choose to use to an `args` object that will be used for the `props` of the component being rendered in the story. This takes advantage of [Storybook's Component Story Format](https://storybook.js.org/docs/api/csf).
 
 ```tsx
 export const Primary: Story = {

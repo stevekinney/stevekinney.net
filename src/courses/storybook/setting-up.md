@@ -38,4 +38,6 @@ It will set you up with some basic stories in `src/stories`.
 
 Lastly, it will start up a server running on port 6006. You can start this server up at any time using `npm run storybook`.
 
+![Storybook's initial welcome screen](assets/storybook-welcome-screen.png)
+
 With that, let's take a look at [writing our first story](writing-stories).

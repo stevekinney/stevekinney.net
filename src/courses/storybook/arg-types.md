@@ -3,7 +3,7 @@ title: Improving ArgTypes with Metadata
 description:
 exclude: false
 drafted: false
-modified: 2024-04-06T09:39:53-06:00
+modified: 2024-04-09T13:16:02-06:00
 ---
 
 ## Adding Metadata to `argTypes`
@@ -115,6 +115,55 @@ const meta: Meta<typeof Button> = {
 This will render a little tooltip with your additional detail.
 
 ![Additional details are rendered in a small tooltip](../../assets/storybook-arg-types-detail.png)
+
+Here is a summary of our changes so far for those of you keeping track at home.
+
+```diff
+diff --git a/src/components/button/button.stories.tsx b/src/components/button/button.stories.tsx
+index 4348e02..34ba94e 100644
+--- a/src/components/button/button.stories.tsx
++++ b/src/components/button/button.stories.tsx
+@@ -16,21 +16,39 @@ const meta = {
+       name: 'Label',
+       control: 'text',
+       description: 'Text to display on the button',
++      table: {
++        disable: true,
++      },
+     },
+     variant: {
+       name: 'Variant',
+       description: 'Variant of the button',
+       control: 'select',
++      table: {
++        defaultValue: {
++          summary: 'primary',
++        },
++      },
+     },
+     size: {
+       name: 'Size',
+       control: 'select',
+       description: 'Size of the button',
++      table: {
++        defaultValue: {
++          summary: 'medium',
++        },
++      },
+     },
+     disabled: {
+       name: 'Disabled',
+       control: 'boolean',
+       description: 'Disables the button',
++      table: {
++        defaultValue: {
++          summary: false,
++        },
++      },
+     },
+   },
+ } satisfies Meta<typeof Button>;
+```
 
 ## Additional Controls
 

@@ -1,5 +1,5 @@
 ---
-modified: 2024-04-06T14:56:57-06:00
+modified: 2024-04-09T15:01:25-06:00
 base: /courses/storybook
 layout: contents
 exclude: true
@@ -14,20 +14,15 @@ exclude: true
 - [Adding Controls to a Story](controls.md)
 - [Adding Button Sizes](adding-button-sizes-exercise.md)
 - [Setting Default Arguments](default-args.md)
-- [Improving `argTypes` with Metadata](arg-types.md)
 - [Importing Styles, Using Tailwind, and Using Themes](setting-up-tailwind.md)
 
 ## Documenting Components
 
 - [Using Storybook with MDX](mdx.md)
-- [`ColorPalette`](color-palette.md)
-- [`TypeSet`](typeset.md)
-
-## Developing Components with Storybook
-
-- [Using Decorators for Context](decorators.md)
-- [Using Loaders to Fetch Data](loaders.md)
-- [Integration with Mock Service Worker](mock-service-worker.md)
+- [Improving `argTypes` with Metadata](arg-types.md)
+- [Color Palette](color-palette.md)
+- [Icon Gallery](icon-gallery)
+- [Type Set](typeset.md)
 
 ## Testing and Interactions
 
@@ -36,6 +31,12 @@ exclude: true
 - [Setting Up a Test Runner](test-runner.md)
 - [Visual Tests](visual-tests.md)
 - [Accessibility Testing](accessibility-testing.md)
+
+## Developing Components with Storybook
+
+- [Using Decorators for Context](decorators.md)
+- [Using Loaders to Fetch Data](loaders.md)
+- [Integration with Mock Service Worker](mock-service-worker.md)
 
 ## Integration with Design Tooling
 
