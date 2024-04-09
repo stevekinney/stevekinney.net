@@ -1,5 +1,5 @@
 ---
-modified: 2024-04-09T15:01:25-06:00
+modified: 2024-04-09T16:23:38-06:00
 base: /courses/storybook
 layout: contents
 exclude: true
@@ -24,6 +24,9 @@ exclude: true
 - [Icon Gallery](icon-gallery)
 - [Type Set](typeset.md)
 
+## Component Styling Techniques
+
+- [Class Variance Authority](class-variance-authority.md)
 ## Testing and Interactions
 
 - [Play Functions](play-functions.md)
@@ -32,7 +35,7 @@ exclude: true
 - [Visual Tests](visual-tests.md)
 - [Accessibility Testing](accessibility-testing.md)
 
-## Developing Components with Storybook
+## APIs, Context, and External Dependencies
 
 - [Using Decorators for Context](decorators.md)
 - [Using Loaders to Fetch Data](loaders.md)
