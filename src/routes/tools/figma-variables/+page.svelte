@@ -15,6 +15,7 @@
 	import README from './README.md';
 	import SEO from '$lib/components/seo.svelte';
 	import { generateFigmaSpacingVariables } from './generate-variables';
+	import Card from '@/lib/components/card';
 
 	export let data;
 
@@ -44,35 +45,37 @@
 		</form>
 	</section>
 
-	<form class="surface-secondary space-y-4" method="POST" action="?/add" use:enhance>
-		<h2 class="font-semibold">Create a New Variable</h2>
-		<label class="sr-only" for="new-spacing-name">Variable Name</label>
-		<input
-			class="input w-full"
-			id="new-spacing-name"
-			name="key"
-			placeholder="Variable Name"
-			required
-		/>
-		<div class="flex items-center gap-4">
-			<label class="sr-only" for="new-spacing-value">Value</label>
+	<Card>
+		<form class="space-y-4" method="POST" action="?/add" use:enhance>
+			<h2 class="font-semibold">Create a New Variable</h2>
+			<label class="sr-only" for="new-spacing-name">Variable Name</label>
 			<input
 				class="input w-full"
-				id="new-spacing-value"
-				type="number"
-				name="value"
-				placeholder="Value"
+				id="new-spacing-name"
+				name="key"
+				placeholder="Variable Name"
 				required
 			/>
-			<select name="unit">
-				<option value="rem">rem</option>
-				<option value="px">px</option>
-			</select>
-		</div>
-		<div class="flex gap-2">
-			<button class="button w-full" type="submit">Add</button>
-		</div>
-	</form>
+			<div class="flex items-center gap-4">
+				<label class="sr-only" for="new-spacing-value">Value</label>
+				<input
+					class="input w-full"
+					id="new-spacing-value"
+					type="number"
+					name="value"
+					placeholder="Value"
+					required
+				/>
+				<select name="unit">
+					<option value="rem">rem</option>
+					<option value="px">px</option>
+				</select>
+			</div>
+			<div class="flex gap-2">
+				<button class="button w-full" type="submit">Add</button>
+			</div>
+		</form>
+	</Card>
 
 	<table class="text-sm md:col-span-2">
 		<thead>
