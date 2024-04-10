@@ -21,7 +21,7 @@ Branching in Figma allows team members to create parallel versions of a design f
 
 To create a branch in Figma, you navigate to the file you wish to branch from and select the option to create a new branch.
 
-![Branching and merging in Figma](../../assets/figma-branching-and-merging.png)
+![Branching and merging in Figma](assets/figma-branching-and-merging.png)
 
 ## Working Within Branches
 
@@ -29,11 +29,11 @@ While working within a branch, you have the freedom to make any changes or addit
 
 ## The Merging Process
 
-![Review and merge changes](../../assets/figma-review-and-merge-changes.png)
+![Review and merge changes](assets/figma-review-and-merge-changes.png)
 
 Once the work on a branch is complete, the next step is to merge these changes back into the main file. Merging compares the branch with the main file, identifying any conflicts that might have come up. Figma provides tools to resolve these conflicts, ensuring that the final merge is smooth and that all changes are integrated seamlessly.
 
-![Review changes](../../assets/figma-review-changes.png)
+![Review changes](assets/figma-review-changes.png)
 
 ## Benefits of Branching and Merging
 

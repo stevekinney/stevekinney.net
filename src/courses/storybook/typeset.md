@@ -37,4 +37,4 @@ import { Meta, Typeset } from '@storybook/blocks';
 
 You'll see something along these lines.
 
-![Storybooks Typeset component rendering a our design system's typography](../../assets/storybook-typeset-docs-block.png)
+![Storybooks Typeset component rendering a our design system's typography](assets/storybook-typeset-docs-block.png)

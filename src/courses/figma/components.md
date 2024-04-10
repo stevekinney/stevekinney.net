@@ -26,7 +26,7 @@ I probably don't need to sell you on the value of using components in your desig
 
 Your available components can be found in Assets mode in the left-pane of your workspace. That said, until you've created some components, there isn't much to see here.
 
-![An Empty Components Pane](../../assets/figma-empty-components-pane.png)
+![An Empty Components Pane](assets/figma-empty-components-pane.png)
 
 ## Creating Components
 
@@ -34,11 +34,11 @@ To make a component, just choose the element you want to use and click the "Crea
 
 You can create a component using the context menu by right-clicking on the object that you want to turn into a component.
 
-![Creating a Component from the Context Menu in Figma](../../assets/figma-create-component-context-menu.png)
+![Creating a Component from the Context Menu in Figma](assets/figma-create-component-context-menu.png)
 
 You can also create a component using the center of the toolbar menu when you're selecting an object.
 
-![Creating a Component from the Toolbar Menu](../../assets/figma-create-component-toolbar-menu.png)
+![Creating a Component from the Toolbar Menu](assets/figma-create-component-toolbar-menu.png)
 
 ## Using Instances
 
@@ -46,17 +46,17 @@ Copies of the master component are called instances and they keep the same prope
 
 Once you've created a component, you can see it in that pane that we looked at earlier that was empty.
 
-![Components in Figma's asset pane](../../assets/figma-components-in-asset-pane.png)
+![Components in Figma's asset pane](assets/figma-components-in-asset-pane.png)
 
 Simply drag the component onto the canvas to use it. Changing the main component will cascade down to the individual component, but you can also override certain properties on the instance component. In the example below, we'll create a component and then override its text content as well as its background color.
 
-![Creating an instance component](../../assets/figma-creating-an-instance-component.gif)
+![Creating an instance component](assets/figma-creating-an-instance-component.gif)
 
 ### Detaching an Instance from a Component
 
 If you no longer want an instance of a component to inherit properties from the main component, you can choose to detach it from the component—effectively breaking the prototypal inheritance chain.
 
-![Detatch a component](../../assets/figma-detatch-component.png)
+![Detatch a component](assets/figma-detatch-component.png)
 
 The shortcut for detaching an instance is `Option/Alt-Shift-B`.
 

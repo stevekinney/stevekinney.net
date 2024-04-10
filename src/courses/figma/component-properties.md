@@ -25,23 +25,23 @@ In Figma, there are four types of component properties:
 
 Boolean properties to set `true` and `false` values. This allows us to toggle an attribute on or off. Let's say we had a badge component and we wanted to add the ability to add a hash tag to the badge—and we wanted it to be something that we could toggle on and off.
 
-![An example badge and hash tag component](../../assets/figma-badge-component.png)
+![An example badge and hash tag component](assets/figma-badge-component.png)
 
 We can start by creating a boolean component property from the **Properties** on the left panel.
 
-![Create a new component property](../../assets/figma-create-component-property.png)
+![Create a new component property](assets/figma-create-component-property.png)
 
 And from there, we can give it a default value of—you guessed it—either `true` or `false` along with a convenient name for the property.
 
-![Properties when creating a new component in Figma](../../assets/figma-component-property-settings.png)
+![Properties when creating a new component in Figma](assets/figma-component-property-settings.png)
 
 Then we can navigate to the layer that want trigger with this property and link it it's visibility to the component property.
 
-![Link the visibility of a layer to a component property](../../assets/figma-visibility-based-on-component-property.png)
+![Link the visibility of a layer to a component property](assets/figma-visibility-based-on-component-property.png)
 
 Now, when we use an instance of that component, we'll see that we have the ability to toggle the component property on and off.
 
-![Triggering the visibility of a layer on and off based on a component property](../../assets/figma-component-property-on-instance.gif)
+![Triggering the visibility of a layer on and off based on a component property](assets/figma-component-property-on-instance.gif)
 
 ## Text Properties
 
@@ -52,15 +52,15 @@ We can also create component properties that have a text value. There are two ma
 
 The first reason is probably the most common, but the second reason might become handy if you're looking to get a little fancy with the given variants of your component and want to use the same label in more than one place.
 
-![Text property for components](../../assets/figma-component-property-text.png)
+![Text property for components](assets/figma-component-property-text.png)
 
 We can then set the value of any text field to this property in the **Text** panel.
 
-![Setting a text property on a component](../../assets/figma-setting-a-text-property.png)
+![Setting a text property on a component](assets/figma-setting-a-text-property.png)
 
 Now, you can easily change the value of the text property just by clicking the instance of the component.
 
-![Changing a text component property](../../assets/figma-component-property-change-label.gif)
+![Changing a text component property](assets/figma-component-property-change-label.gif)
 
 ## Instance Swap
 
@@ -78,6 +78,6 @@ If you want to hide away most of the complexities of a component away from anyon
 > [!NOTE] Simplifying Won't Protect You
 > Simplifying an instance will hide layers, but **anyone with the ability to edit** the design file will still be able to edit those layers.
 
-![Simplifying component instances](../../assets/figma-simplify-component-instance.gif)
+![Simplifying component instances](assets/figma-simplify-component-instance.gif)
 
 Next let's talk about [Variants](variants.md).

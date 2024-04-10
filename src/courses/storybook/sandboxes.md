@@ -13,4 +13,4 @@ Storybook allows you to set up pre-configured sandboxes. This is useful if you j
 npx storybook@latest sandbox
 ```
 
-![Creating a Storybook sandbox from the CLI](../../assets/storybook-sandboxes-cli.png)
+![Creating a Storybook sandbox from the CLI](assets/storybook-sandboxes-cli.png)

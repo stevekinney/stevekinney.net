@@ -36,7 +36,7 @@ Well, it is. It just goes by the name auto layout.
 
 Auto layout adds a structure to your frames and components, allowing them to resize content automatically based on the properties you define. It's particularly useful for designing interfaces that need to be responsive or adapt to content variations, such as text changes, navigation bars, or dynamic lists. As I mentioned above, if you think you might use flexbox in your implementation, then you'll probably choose to use auto layout in Figma.
 
-![Figma's auto layout contols](../../assets/figma-auto-layout-controls.png)
+![Figma's auto layout contols](assets/figma-auto-layout-controls.png)
 
 Looking at the screenshot above, you can see the following controls:
 
@@ -47,7 +47,7 @@ Looking at the screenshot above, you can see the following controls:
 
 There are also some advanced settings hiding out in the little menu along the right-side of the control panel.
 
-![Advanced options for Figma's auto layout](../../assets/figma-auto-layout-advanced-options.png)
+![Advanced options for Figma's auto layout](assets/figma-auto-layout-advanced-options.png)
 
 ## Setting Up Auto Layout
 
@@ -55,31 +55,31 @@ To apply auto layout, select a frame or group of objects and click the "Auto Lay
 
 The really cool thing about using auto layout is that you no longer need to resize your frames in order to accommodate new items.
 
-![Figma auto layout in the side menu](../../assets/figma-auto-layout-side-menu-example.gif)
+![Figma auto layout in the side menu](assets/figma-auto-layout-side-menu-example.gif)
 
 This works because in this case, sizing is controlled by the `Hug` value in the frame size. This instructs the frame to adapt to the size of its children.
 
-![Figma auto layout's hug frame size option](../../assets/figma-auto-layout-hug-frame-size.png)
+![Figma auto layout's hug frame size option](assets/figma-auto-layout-hug-frame-size.png)
 
 You can control this by using the caret next to the value.
 
-![Fixed versus hug contents in Figma's auto layout](../../assets/figma-auto-layout-fixed-vs-hug.png)
+![Fixed versus hug contents in Figma's auto layout](assets/figma-auto-layout-fixed-vs-hug.png)
 
 ## Minding the Gap
 
 When you're basing the size of the frame based on it's children, then you can provide a value that represents how many pixels you want in between each child. Alternatively, if you want to use a fixed size, then you can set the `gap` to auto. This will spread the children out evenly across the entire height or width of the parent frame. You can think of this like using `justify-items: space-between` in flexbox when using CSS.
 
-![Fixed height and automatic gap sizing with auto layout](../../assets/figma-auto-layout-fixed-height-auto-gap.png)
+![Fixed height and automatic gap sizing with auto layout](assets/figma-auto-layout-fixed-height-auto-gap.png)
 
 Now, the you can resize the frame and the elements will distribute themselves evenly. The ability for frames to adapt to the size of their children and be able to maintain consistent spaces are basically two of the most common use cases for using auto layout.
 
-![Resizing with a fixed size using auto layout in Figma](../../assets/figma-auto-layout-resize-fixed-size.gif)
+![Resizing with a fixed size using auto layout in Figma](assets/figma-auto-layout-resize-fixed-size.gif)
 
 ## Adjusting the Padding
 
 Trying to grab the corners of the frame to resize it will switch the horizontal and/or vertical resizing from **Hug** to **Fixed**. However, if you want to click to change the padding, you can do that as well, you just need to be a _little bit_ more precise as to where you click to drag.
 
-![Click to resize padding using auto layout](../../assets/figma-auto-layout-click-to-resize-padding.gif)
+![Click to resize padding using auto layout](assets/figma-auto-layout-click-to-resize-padding.gif)
 
 ## Accounting for Strokes
 
@@ -89,7 +89,7 @@ This might not be the best approach for developer handoff since it doesn't show 
 
 To address this, you can decide if strokes should occupy space within an auto layout frame. Simply access the advanced layout settings and use the dropdown menu next to **stroke** to choose between **included in layout** or **excluded from layout**.
 
-![Exclude Stroke From Auto Layout](../../assets/figma-exclude-stroke-auto-layout.gif)
+![Exclude Stroke From Auto Layout](assets/figma-exclude-stroke-auto-layout.gif)
 
 ## Nesting Auto Layouts
 

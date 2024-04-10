@@ -15,7 +15,7 @@ It turns out that users like to interact with these web pages that we build. Som
 
 Not only can we have lots and lots of different types of buttons, those buttons can be in different states based on user interaction. Consider this simple button for a moment.
 
-![Button states](../../assets/figma-button-states.png)
+![Button states](assets/figma-button-states.png)
 
 We want our buttons to behave in our prototypes as they would in the browser. This is where that Prototype mode in the right sidebar comes into play.
 
@@ -23,8 +23,8 @@ We want our buttons to behave in our prototypes as they would in the browser. Th
 
 One option at our disposal is to swap between variables based on the user interaction.
 
-![Setting up interactions for a button](../../assets/figma-change-variants-interactive.gif)
+![Setting up interactions for a button](assets/figma-change-variants-interactive.gif)
 
 And with that you should be able to see your button in action and interact with it.
 
-![Interactive prototype of button](../../assets/figma-interative-button-component.gif)
+![Interactive prototype of button](assets/figma-interative-button-component.gif)

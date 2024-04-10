@@ -10,7 +10,7 @@
 
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Trash, Download, ListRestart } from 'lucide-svelte';
+	import { Trash, Download, ListRestart, PlusCircle } from 'lucide-svelte';
 
 	import README from './README.md';
 	import SEO from '$lib/components/seo.svelte';
@@ -57,7 +57,7 @@
 				placeholder="Variable Name"
 				required
 			/>
-			<div class="flex items-center gap-4">
+			<div class="flex items-end gap-4">
 				<Input
 					label="Spacing Value"
 					id="new-spacing-value"
@@ -71,8 +71,8 @@
 					<option value="px">px</option>
 				</select>
 			</div>
-			<div class="flex gap-2">
-				<Button class="w-full" type="submit">Add</Button>
+			<div>
+				<Button full icon={PlusCircle}>Add</Button>
 			</div>
 		</form>
 	</Card>

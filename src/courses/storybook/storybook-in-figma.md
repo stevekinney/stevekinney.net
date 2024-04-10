@@ -10,4 +10,4 @@ You'll need to have your project published on [Chromatic](visual-tests.md). But,
 
 In [Figma's Dev Mode](../figma/dev-mode.md), go to the plugins pane and search for Storybook. You'll need to connect Figma to Chromatic, but after that you'll be able to paste in the link to your story and see them side by side.
 
-![Storybook integrated into Figma](../../assets/storybook-integrated-into-figma.png)
+![Storybook integrated into Figma](assets/storybook-integrated-into-figma.png)

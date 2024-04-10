@@ -21,7 +21,7 @@ Running this script will install the dependency as well as add it to `.storybook
 
 Head over into Figma and click on the **Share** button towards the right in the toolbar and then select **Copy Link**.
 
-![Sharing a Figma file](../../assets/storybook-figma-share-file.png)
+![Sharing a Figma file](assets/storybook-figma-share-file.png)
 
 Next, in your story, we're going to add a parameter that creates the link between the story and the designs.
 
@@ -41,4 +41,4 @@ const meta: Meta<typeof Button> = {
 
 And now, when you start up storybook, you'll be able to see both side by side.
 
-![Figma design alongside Storybook](../../assets/storybook-alongside-figma.png)
+![Figma design alongside Storybook](assets/storybook-alongside-figma.png)

@@ -76,7 +76,7 @@ export const Primary: Story = {
 
 If you run Storybook using `npm run storybook`, you'll see something like the following:
 
-![A basic button story in Storybook](../../assets/storybook-basic-button-story.png)
+![A basic button story in Storybook](assets/storybook-basic-button-story.png)
 It's not much to look at, but it's our first story and I suppose that we had to start somewhere, right?
 
 ## Using `args`
@@ -93,7 +93,7 @@ export const Primary: Story = {
 
 You'll notice that you can adjust the `props` in the **Controls** tab.
 
-![A basic implementation of controls in Storybook](../../assets/storybook-basic-button-props.png)
+![A basic implementation of controls in Storybook](assets/storybook-basic-button-props.png)
 
 ## Our Basic Button
 

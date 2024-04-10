@@ -24,7 +24,7 @@ Creating variables in Figma is straightforward. You define a variable and assign
 
 You can create a variable and see a table of all of your local variables can be seen by clicking on the Canvas and the selecting **Local Variables** from the **Design** panel.
 
-![Create a new Variable](../../assets/figma-create-variable.png)
+![Create a new Variable](assets/figma-create-variable.png)
 
 Your variables must be one of the following types of values:
 
@@ -36,29 +36,29 @@ Your variables must be one of the following types of values:
 > [!NOTE] More Variables Are Coming Soon
 > According to Figma support for gradients, images, and typography is [coming soon](https://help.figma.com/hc/en-us/articles/4406787442711-Figma-beta-features#Coming_soon).
 
-![Figma variable types](../../assets/figma-variable-types.png)
+![Figma variable types](assets/figma-variable-types.png)
 
 Once created, your variable will be available in a table for you to adjust as needed.
 
-![Figma variable table](../../assets/figma-variable-table.png)
+![Figma variable table](assets/figma-variable-table.png)
 
 Now, for values that accept whatever variable type that you're using, you can opt to use your new variable instead of a hard-coded value.
 
-![Using a Figma variable](../../assets/using-a-figma-variable.png)
+![Using a Figma variable](assets/figma-using-a-variable.png)
 
 Now, when you adjust that variable, anything referencing that variable will update accordingly.
 
-![Updating a variable in Figma](../../assets/figma-update-variable.gif)
+![Updating a variable in Figma](assets/figma-update-variable.gif)
 
 ### Scoping Your Variable to Particular Properties
 
 If you don't only want your variable to be available to particular properties—or, you want a quick cheat sheet to see what properties your variables support, then you can check out the scoping of the variable.
 
-![Variable scoping](../../assets/figma-variable-scoping.png)
+![Variable scoping](assets/figma-variable-scoping.png)
 
 You can also adjust the name of the variable in [Dev Mode](dev-mode.md).
 
-![Adjusting the name of a Figma variable](../../assets/figma-variable-property.png)
+![Adjusting the name of a Figma variable](assets/figma-variable-property.png)
 
 Let's say you used something like the screenshot above, the output of the CSS in Dev Mode, would now look something like this.
 
@@ -81,11 +81,11 @@ What's even better is now, you can use a plugin—like this [CSS Variables Gener
 
 It _is_ possible to put variables into groups. Simply select some of your variables and right-click on the selection.
 
-![Right-click on your variables to create a new group](../../assets/figma-create-new-variable-group.png)
+![Right-click on your variables to create a new group](assets/figma-create-new-variable-group.png)
 
 And now you're variables will be a neat little group for you.
 
-![Figma's variable groups](../../assets/figma-variable-groups.png)
+![Figma's variable groups](assets/figma-variable-groups.png)
 
 > [!tip] Naming Things is Hard
 > On my team, we've struggled a lot with what to name our variables. This existence of light and dark modes certainly add a lot of extra complexity. For example, it's hard to call a color variable, `red-light`, if it's actually _darker_ when in dark mode. I don't hate the naming conventions that [Twilio uses for the design tokens in their Paste design system](https://paste.twilio.design/tokens/list).
@@ -102,17 +102,17 @@ The most salient bit, is that variables make it easier to do theming. Let's talk
 
 The values of a given variable can be split into one or more modes. The most common use case for this light and dark modes, but these modes could be used for any number of different themes. You could also create a "comfortable" and "compact" mode as seen in Gmail.
 
-![Spacing Themes as Seen in Gmail](../../assets/figma-gmail-spacing-themes.png)
+![Spacing Themes as Seen in Gmail](assets/figma-gmail-spacing-themes.png)
 
 ### Dark Mode
 
 But, the most common case that we might find is adding the ability to theme a component—more specifically to set it up to support a light and a dark mode. You can do this by setting up two different modes for your color variables. Once this is set up, you can easily toggle between the two modes in the Layers pane in the right sidebar.
 
-![Swapping between light and dark modes](../../assets/figma-switching-variable-modes.gif)
+![Swapping between light and dark modes](assets/figma-switching-variable-modes.gif)
 
 What's really cool about this is that all of the nested objects will inherit mode of the parent—unless you intentionally override it.
 
-![Variable inheritance](../../assets/figma-variable-inheritance.gif)
+![Variable inheritance](assets/figma-variable-inheritance.gif)
 
 ## Boolean Variables
 
@@ -126,11 +126,11 @@ Modes are inherited from their parent. Components that are set to `auto` will in
 
 You can also have variables reference other variables. This is mostly useful for when you want to have a wide rang of primitive values and then a few semantic variables that are based off of those primitive values.
 
-![Setting up a variable alias](../../assets/figma-set-up-a-variable-alias.png)
+![Setting up a variable alias](assets/figma-set-up-a-variable-alias.png)
 
 Once, you've set up the aliasing, you'll see a clear visual indicator of the link in the UI. You can still tweak all of the settings as to where the variable can be used as well as the output as seen in Dev Mode.
 
-![Figma variable aliasing](../../assets/figma-variable-aliasing.png)
+![Figma variable aliasing](assets/figma-variable-aliasing.png)
 
 ## Some Limitations
 

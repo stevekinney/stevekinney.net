@@ -10,4 +10,5 @@ export type ButtonProps = Partial<HTMLButtonElement> &
 		href?: string;
 		loading?: boolean;
 		class?: string;
+		full?: boolean;
 	};

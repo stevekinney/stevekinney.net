@@ -137,7 +137,7 @@ Like I said, either answer is fine depending on your settings. I don't have a st
 
 If all goes well, you should see something like this:
 
-![A notification from Storybook's CLI that the themes addon was successfully installed](../../assets/storybook-addon-themes-success-in-cli.png)
+![A notification from Storybook's CLI that the themes addon was successfully installed](assets/storybook-addon-themes-success-in-cli.png)
 
 In addition to installing the dependency, this will make the following changes to your Storybook configuration.
 

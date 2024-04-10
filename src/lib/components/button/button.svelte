@@ -14,6 +14,7 @@
 	export let iconPosition: ButtonProps['iconPosition'] = 'left';
 	export let href: string | undefined = undefined;
 	export let loading: boolean = false;
+	export let full: boolean = false;
 
 	let className: string = '';
 	export { className as class };
@@ -24,8 +25,7 @@
 	role={href ? 'link' : 'button'}
 	{href}
 	tabindex={$$props.tabindex ?? 0}
-	class={merge(variants({ variant, size, iconPosition }), className)}
-	{...$$props}
+	class={merge(variants({ variant, size, iconPosition }), full && 'w-full', className)}
 	{...$$restProps}
 	on:click
 	on:keydown

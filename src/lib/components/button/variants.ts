@@ -8,6 +8,7 @@ export const variants = cva(
 		'shadow-sm',
 		'inline-flex',
 		'items-center',
+		'justify-center',
 		'cursor-pointer',
 		'gap-1.5',
 		'focus-visible:outline',
