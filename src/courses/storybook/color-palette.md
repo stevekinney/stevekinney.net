@@ -47,7 +47,7 @@ import colors from 'tailwindcss/colors';
 
 Obviously, this will be a little different depending on the taxonomy of your theme, but you can expect something along the lines of this.
 
-![](assets/storybook-color-palette-from-tailwind@2x.png)
+![A color palette based on Tailwind's default theme](assets/storybook-color-palette-from-tailwind@2x.png)
 
 ## Creating a Theme of Semantic Colors
 
