@@ -3,7 +3,7 @@ title: Class Variance Authority
 description:
 exclude: false
 drafted: false
-modified: 2024-04-09T16:19:48-06:00
+modified: 2024-04-09T16:37:48-06:00
 ---
 
 [Class Variance Authority](https://cva.style) is a framework agnostic tool for creating variants of a component with different classes. It's super simple and you probably _could_ write it yourself if you had to—but, you don't have to because it already exists.
@@ -15,7 +15,12 @@ CVA allows you to:
 3. Allow you to define default variants when one isn't explicitly specified.
 4. It allows you to create compound variants.
 
-It works _super well_ with Tailwind, but you don't need use Tailwind to use CVA. Let's look at an example where we refactor our [button component](adding-variants.md) from earlier to use CVA.
+It works _super well_ with Tailwind, but you don't need use Tailwind to use CVA. You can use any utility classes that you want or even just the classes from our CSS modules like we did earlier.
+
+> [!TIP] Using Tailwind's IntelliSense with Class Variance Authority
+> If you're using Tailwind and Visual Studio Code and CVA and the [Tailwind CSS IntelliSense extension](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss), then you might want to make [this](https://cva.style/docs/getting-started/installation#tailwind-css) tweak to the `settings.json` in your project.
+
+Let's look at an example where we refactor our [button component](adding-variants.md) from earlier to use CVA.
 
 ```ts
 import { cva, type VariantProps } from 'class-variance-authority';
