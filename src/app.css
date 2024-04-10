@@ -51,18 +51,6 @@
 	td {
 		@apply whitespace-nowrap p-2 text-left;
 	}
-
-	label {
-		@apply text-black-pearl-950 dark:text-white;
-	}
-
-	select {
-		@apply input border-0 bg-inherit focus:bg-primary-100 dark:bg-inherit dark:focus:bg-primary-800;
-	}
-
-	[type='submit'] {
-		@apply button-primary;
-	}
 }
 
 @layer components {

@@ -1,18 +1,22 @@
 <script lang="ts">
 	import clsx from 'clsx';
 	import { LoaderCircle as Loading } from 'lucide-svelte';
+	import { twMerge as merge } from 'tailwind-merge';
 	import { variants } from './variants';
 	import type { ButtonProps } from './types';
 
 	type $$Props = ButtonProps;
 
-	export let label = 'Button';
+	export let label = '';
 	export let variant: ButtonProps['variant'] = 'primary';
 	export let size: ButtonProps['size'] = 'medium';
 	export let icon: ButtonProps['icon'] = undefined;
 	export let iconPosition: ButtonProps['iconPosition'] = 'left';
 	export let href: string | undefined = undefined;
 	export let loading: boolean = false;
+
+	let className: string = '';
+	export { className as class };
 </script>
 
 <svelte:element
@@ -20,7 +24,8 @@
 	role={href ? 'link' : 'button'}
 	{href}
 	tabindex={$$props.tabindex ?? 0}
-	class={variants({ variant, size, iconPosition })}
+	class={merge(variants({ variant, size, iconPosition }), className)}
+	{...$$props}
 	{...$$restProps}
 	on:click
 	on:keydown
