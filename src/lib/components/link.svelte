@@ -7,15 +7,18 @@
 		href: string;
 		class?: string;
 		active?: string;
+		exact?: boolean;
 	}
 
 	export let href: string = '#';
 	export let active: string = 'underline';
+	export let exact: boolean = false;
 
 	let className: string = '';
 	export { className as class };
 
-	$: isActive = browser && $page.url.pathname.startsWith(href);
+	$: isActive =
+		browser && exact ? $page.url.pathname === href : $page.url.pathname.startsWith(href);
 </script>
 
 <a
