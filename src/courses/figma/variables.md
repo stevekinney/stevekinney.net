@@ -4,7 +4,7 @@ description: Variables in Figma revolutionize design workflows by allowing for t
 drafted: true
 figma: false
 date: 2024-03-09T14:25:35-05:00
-modified: 2024-03-28T11:48:24-06:00
+modified: 2024-04-13T13:10:37-06:00
 tags: [figma, course, frontendmasters]
 ---
 
@@ -12,6 +12,8 @@ Just like in JavaScript, variables in Figma act as placeholders that store speci
 
 > [!NOTE] Release Status
 > As of the time of this writing, Variables are still in beta. Variables aren't available for everything—just yet. But the list of things that support variables is likely to increase over time.
+>
+> There is also some overlap with [styles](styles.md), you can read more about the differences [here](styles-vs-variables.md).
 
 - Variables are local to the file that you'e currently working in.
 - You can publish your variables as a [library](libraries.md) like you would publish components.
@@ -137,22 +139,6 @@ Once, you've set up the aliasing, you'll see a clear visual indicator of the lin
 Here are some limitations that I've noticed while using Variables in Figma. As I mentioned above, Variables are still in beta, so this list will _hopefully_ be out of data at some point.
 
 - You can't use mathematically expressions either with Variables or when defining variables. For example, you can type "300-32" as in the width box, and Figma will compute that down to 268, but you can't put you couldn't for example, put in a "300 - `spacing-4` \* 2" or create a set of variables that take a base REM value and multiply it when defining a new variable. There is an [open thread](https://forum.figma.com/t/using-expression-as-a-variables-value/45743) or [two](https://forum.figma.com/t/using-expression-as-a-variables-value/45743) requesting this as a feature.
-
-## Styles Versus Variables
-
-If you're thinking to yourself that there might be some overlap between variables and [styles](styles.md) in Figma, you're definitely in good company.
-
-- Variables allow you to define the CSS output in Dev Mode.
-- Variables—particularly the number variables—can be used for defining reusable properties like border widths.
-- Variables support modes. Styles do not.
-- Variables can only store one value, while styles can store sets of values.
-- As of this writing, you can't store things like gradients or image values in variables—you have to use styles. **Note**: support for gradients and images are [coming soon](https://help.figma.com/hc/en-us/articles/4406787442711-Figma-beta-features#Coming_soon).
-- As of this writing, you can't do much with [typography](typography.md) when it comes to variables. For that you'll need to use styles. Typography is also [coming soon](https://help.figma.com/hc/en-us/articles/4406787442711-Figma-beta-features#Coming_soon).
-- Variables can scoped. Styles can't.
-
-I tend to prefer variables over styles, but I will admit that I occasionally have my doubts and consider whether or not styles might be a better idea.
-
-**Styles can be built on top of variables, but variables can't be built on top of styles.** For stuff like colors, you can compose styles out of variables. So, the two approaches are not necessarily mutually exclusive.
 
 ## Importing and Exporting Variables
 

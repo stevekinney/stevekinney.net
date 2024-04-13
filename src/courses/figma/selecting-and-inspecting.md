@@ -1,7 +1,7 @@
 ---
 title: Selecting and Inspecting
-description: Let's look at some of the tools Figma provides for measuring sizes and distances.
-modified: 2024-03-20T16:45:38-06:00
+description: "Let's look at some of the tools Figma provides for measuring sizes and distances."
+modified: 2024-04-13T14:42:31-06:00
 date: 2024-03-05T13:04:49-07:00
 drafted: true
 figma: false
@@ -38,4 +38,7 @@ Select an element on the page and hold down either the `Alt` or `Option` key. As
 
 Drawing objects and giving them fill-sizes and whatnot is pretty straight-forward. But, like most things in our industry, the tricky part comes when you want to refactor or change things at scale.
 
-What would happen if we wanted to change the color of all of the green boxes to another color? Sure, we could select all of the boxes with that color and adjust them—but, that only works for the given page that you’re looking at. Let's talk about [Shared Styles](styles.md).
+What would happen if we wanted to change the color of all of the green boxes to another color? Sure, we could select all of the boxes with that color and adjust them—but, that only works for the given page that you’re looking at.
+
+> [!warning] There are better ways to make changes at scale
+> Later on, we'll look at [styles](styles.md), [variables](variables.md), and [components](components.md).

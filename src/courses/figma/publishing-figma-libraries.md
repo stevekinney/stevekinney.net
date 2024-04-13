@@ -3,7 +3,7 @@ title: Publishing Libraries
 description: How to publish shared component and variable libraries for use across your organization.
 exclude: false
 drafted: false
-modified: 2024-04-13T11:17:17-06:00
+modified: 2024-04-13T13:26:47-06:00
 ---
 
 You've done all of this work to create your tokens, variables, and components. Now, we want to publish those libraries for use across your organization. You can publish the library from the center of the toolbar.
@@ -24,3 +24,8 @@ Now, from within any project inside of Figma, you can easily add that library to
 
 ![Add a library in another Figma project](assets/figma-add-a-library.png)
 
+## Updating Libraries as a Consumer
+
+If a library that you rely on updates, you'll see it in the toolbar. This will allow you to review the changes before they're automatically applied.
+
+![Updating a Figma library](assets/figma-update-library-as-a-consumer.png)

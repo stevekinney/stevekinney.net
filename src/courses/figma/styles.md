@@ -4,12 +4,15 @@ description: Master consistency and efficiency in Figma with Shared Styles. Simp
 drafted: true
 figma: false
 date: 2024-03-09T14:19:54-05:00
-modified: 2024-03-28T10:48:15-06:00
+modified: 2024-04-13T15:03:35-06:00
 tags:
   - figma
   - course
   - frontendmasters
 ---
+
+> [!NOTE] Styles and Variables
+> Figma introduced a new feature—that is currently in beta—called [variables](variables.md). There is a certain amount of overlap between the two features. That said, **variables** don't—and can't—replace styles just yet. You can read some more about the differences in [Styles vs. Variables](styles-vs-variables.md).
 
 Shared styles allow you to store information about the color, text properties, shadows, or layouts into reusable styles. This is cool because if you update that style, then anything that points to that style will also update accordingly.
 
@@ -19,8 +22,6 @@ You can create shared styles for any of the following:
 - Text
 - Effects (e.g. shadows and blurs)
 - [Layout Grids](layout-grids.md)
-
-If you're curious how styles relate to [variables](variables.md), I talk a little bit about that [here](variables.md#styles-versus-variables).
 
 ## Text Styles and Color Styles
 

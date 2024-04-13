@@ -4,14 +4,14 @@ description: Auto layout in Figma helps designers make flexible designs easily. 
 drafted: true
 figma: false
 date: 2024-03-09T14:20:45-05:00
-modified: 2024-03-23T14:30:32-06:00
+modified: 2024-04-13T15:02:24-06:00
 tags: [figma, course, frontendmasters]
 ---
 
-Manually adjusting everything is hard and we certainly don’t arrange our UIs by pixel in the browser. Imagine if everything you already know and love about [flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox) was available to you?
-Well, it is. It just goes by the name auto layout.
+Manually adjusting everything is hard and we certainly don’t arrange our UIs by pixel in the browser. Imagine if everything you already know and love about [flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox) was available to you? Well, it is. It just goes by the name auto layout.
 
-**Fun Fact**: Auto layout is _only_ available in [Frames](layers.md#frames).
+> [!WARNING] Frames only
+> Auto layout is only available in [Frames](layers.md#frames).
 
 ## Shortcuts
 

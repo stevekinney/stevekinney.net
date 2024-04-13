@@ -1,7 +1,7 @@
 ---
 title: Getting Started with Figma
 description: "Let's get learn our way around Figma and get comfortable with some of the basic tools."
-modified: 2024-03-28T14:42:14-06:00
+modified: 2024-04-13T14:31:20-06:00
 date: 2024-03-05T13:04:49-07:00
 drafted: true
 figma: false
@@ -13,7 +13,8 @@ When you first enter Figma, you're greeted with the option to either create a ne
 ![Figma Home](assets/figma-home-screen.png)
 Upon entering a project, you're presented with an interface similar to the screenshot below. Almost everything that you're going to do in Figma is going to be in this workspace.
 
-![An Empty Figma Workspace](assets/figma-workspace.png)
+![The Figma Workspace](assets/figma-workspace.png)
+
 In the center, you have the Canvas. Here are some helpful tips for navigating around the canvas:
 
 - **Pan Around the Canvas**: Hold the `Space` bar and drag or do a two-finger drag on your touchpad.
