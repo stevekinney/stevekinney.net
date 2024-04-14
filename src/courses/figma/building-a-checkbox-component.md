@@ -9,7 +9,7 @@ modified: 2024-04-13T17:12:01-06:00
 > [!success] Solution
 > This is the solution for the exercise in the section on [interactive components](interactive-components.md).
 
-Let's start by setting up some color variables. I have long given up have the smallest possible set of variables for colors humanly possible. I now aim for the smallest set *practically possible*. So, I'll probably make two variables for the background colors of the checkbox.
+Let's start by setting up some color variables. I have long given up have the smallest possible set of variables for colors humanly possible. I now aim for the smallest set _practically possible_. So, I'll probably make two variables for the background colors of the checkbox.
 
 ![New variables for the checkbox background](assets/figma-checkbox-background-variables.png)
 
@@ -34,17 +34,17 @@ If you wanted to, you could try to simulate the focused state with a hover trans
 
 You can see in action [here](https://www.figma.com/proto/k2WU0bJ53LG4Kl6hoBCITR/Curricula-Components?page-id=0%3A1&type=design&node-id=22-1009&viewport=-5532%2C-4146%2C5.6&t=AyXsLsPZMzFZrDNN-1&scaling=min-zoom&mode=design).
 
-<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2Fk2WU0bJ53LG4Kl6hoBCITR%2FCurricula-Components%3Fpage-id%3D0%253A1%26type%3Ddesign%26node-id%3D22-1009%26viewport%3D-5532%252C-4146%252C5.6%26t%3DAyXsLsPZMzFZrDNN-1%26scaling%3Dmin-zoom%26mode%3Ddesign" allowfullscreen></iframe>
+<iframe width="100%" height="450" title="Figma Checkbox Component" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2Fk2WU0bJ53LG4Kl6hoBCITR%2FCurricula-Components%3Fpage-id%3D0%253A1%26type%3Ddesign%26node-id%3D22-1009%26viewport%3D-5532%252C-4146%252C5.6%26t%3DAyXsLsPZMzFZrDNN-1%26scaling%3Dmin-zoom%26mode%3Ddesign" allowfullscreen></iframe>
 
 ## Expanding the Component
 
 Next, we're going to expand our checkbox to be a checklist item. This isn't anything we haven't seen before. We just need to create a component that also has some text and [auto-layout](auto layout.md).
 
-![](assets/figma-checklist-item.png)
+![The checklist item component](assets/figma-checklist-item.png)
 
 **The problem** with this component is that only the checkbox is interactive. We want to make clicking the element itself interactive.
 
-Instead, we need to do something similar to the checkbox component and create two variants and connect their interactions. The **good news** is that we *still* inherit from the **Checkbox** component in terms of style. But, I haven't found a good way to pass component properties through.
+Instead, we need to do something similar to the checkbox component and create two variants and connect their interactions. The **good news** is that we _still_ inherit from the **Checkbox** component in terms of style. But, I haven't found a good way to pass component properties through.
 
 ![Variants of the checklist item component](assets/figma-checklist-item-variants.png)
 
