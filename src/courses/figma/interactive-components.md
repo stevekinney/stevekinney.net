@@ -28,3 +28,9 @@ One option at our disposal is to swap between variables based on the user intera
 And with that you should be able to see your button in action and interact with it.
 
 ![Interactive prototype of button](assets/figma-interative-button-component.gif)
+
+
+> [!Example] Exercise
+> Can you build a checkbox component that can be clicked to check the checkbox? You can find [the solution here](building-a-checkbox-component.md).
+
+
