@@ -18,6 +18,9 @@ tags:
 
 ## Accessing Dev Mode
 
+> [!TIP] Keyboard shortcut
+> You can switch into Dev Mode at any time using **Shift+D**.
+
 You can access Dev Mode by simply switching to the 'Inspect' tab within a Figma file. This view automatically provides the specific details and assets they need, based on their selection within the design file. Dev Mode is available to anyone with access to the Figma file, facilitating open communication and collaboration across the entire project team.
 
 ![Accessing Dev Mode](assets/figma-accessing-dev-mode.gif)

@@ -69,6 +69,9 @@ You can control this by using the caret next to the value.
 
 When you're basing the size of the frame based on it's children, then you can provide a value that represents how many pixels you want in between each child. Alternatively, if you want to use a fixed size, then you can set the `gap` to auto. This will spread the children out evenly across the entire height or width of the parent frame. You can think of this like using `justify-items: space-between` in flexbox when using CSS.
 
+> [!TIP] Keyboard shortcut
+> You can quickly switch between fixed and automatic spacing using **Command+X**.
+
 ![Fixed height and automatic gap sizing with auto layout](assets/figma-auto-layout-fixed-height-auto-gap.png)
 
 Now, the you can resize the frame and the elements will distribute themselves evenly. The ability for frames to adapt to the size of their children and be able to maintain consistent spaces are basically two of the most common use cases for using auto layout.

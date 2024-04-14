@@ -4,7 +4,7 @@ description: Variables in Figma revolutionize design workflows by allowing for t
 drafted: true
 figma: false
 date: 2024-03-09T14:25:35-05:00
-modified: 2024-04-13T13:10:37-06:00
+modified: 2024-04-10T15:40:30-06:00
 tags: [figma, course, frontendmasters]
 ---
 
@@ -52,6 +52,9 @@ Now, when you adjust that variable, anything referencing that variable will upda
 
 ![Updating a variable in Figma](assets/figma-update-variable.gif)
 
+> [!TIP] Duplicating variables
+> **Shift+Return** will create a new variable with the same properties.
+
 ### Scoping Your Variable to Particular Properties
 
 If you don't only want your variable to be available to particular properties—or, you want a quick cheat sheet to see what properties your variables support, then you can check out the scoping of the variable.
@@ -79,6 +82,9 @@ What's even better is now, you can use a plugin—like this [CSS Variables Gener
 }
 ```
 
+> [!TIP] Bulk editing variables
+> You can change the properties of multiple variables by selecting them and right-clicking.
+
 ## Grouping Variables
 
 It _is_ possible to put variables into groups. Simply select some of your variables and right-click on the selection.
@@ -89,7 +95,7 @@ And now you're variables will be a neat little group for you.
 
 ![Figma's variable groups](assets/figma-variable-groups.png)
 
-> [!tip] Naming Things is Hard
+> [!info] Naming things is hard
 > On my team, we've struggled a lot with what to name our variables. This existence of light and dark modes certainly add a lot of extra complexity. For example, it's hard to call a color variable, `red-light`, if it's actually _darker_ when in dark mode. I don't hate the naming conventions that [Twilio uses for the design tokens in their Paste design system](https://paste.twilio.design/tokens/list).
 
 ## What Are the Difference between Styles and Variables?
@@ -144,4 +150,4 @@ Here are some limitations that I've noticed while using Variables in Figma. As I
 
 Figma doesn't support importing to exporting variables out of the box, but there is a plugin that you can use called [Export/Import Variables](https://www.figma.com/community/plugin/1256972111705530093/export-import-variables).
 
-**Pro-Tip**: You might choose to use this with [the author](https://www.figma.com/@honzatmn)'s [Tailwind CSS Variables](https://www.figma.com/community/file/1255212493834031845) design file.
+> [!tip] You might choose to use this with [the author's](https://www.figma.com/@honzatmn)'s [Tailwind CSS Variables](https://www.figma.com/community/file/1255212493834031845) design file.
