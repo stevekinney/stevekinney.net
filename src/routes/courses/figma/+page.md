@@ -3,10 +3,15 @@ title: Figma for Developers
 description: "An high-level introduction to Steve's Figma for Developers course."
 layout: page
 date: 2024-03-05T12:56:55-07:00
-modified: 2024-04-15T06:34:21-06:00
+modified: 2024-04-15T08:57:19-06:00
 ---
 
 I'm [Steve](https://stevekinney.net), the head of frontend engineering at [Temporal](https://temporal.io) I'm excited to guide you through [Figma](https://figma.com) from a developer's perspective. Our journey into Figma is not just about design; it's about creating a bridge between design and development, making it easier for teams to collaborate and build amazing user interfaces.
+
+> [!IMPORTANT] Some features required a paid account
+> Most of what we're going to talk about today is included for free with any [Figma account](https://help.figma.com/hc/en-us/articles/360039811114-Create-a-Figma-account). That said, there are a few features like [Dev Mode](https://www.figma.com/dev-mode/) and [Variable Modes](https://help.figma.com/hc/en-us/articles/15343816063383-Modes-for-variables) that **require a paid account**.
+>
+> There is **no expectation** that you have a paid account, but we will be exploring a few of these features during this course.
 
 ## Why Figma for Developers?
 
@@ -18,6 +23,6 @@ If you're a designer, this course is _also_ for you. You'll learn how to structu
 
 By the end of this course, you'll not only be proficient in using Figma but also understand how to translate designs into code, contribute to a design system, and work effectively with designers. Whether converting from Photoshop or integrating with tools like Storybook, you'll gain insights into making Figma a pivotal part of your development workflow.
 
-## Getting Started
+## Prerequisites
 
 All you need is [a Figma account](https://www.figma.com/login) and a web browser. Optionally, you might to install the [Figma desktop application](https://www.figma.com/downloads) as well as [Figma for Visual Studio Code](https://help.figma.com/hc/en-us/articles/15023121296151-Figma-for-VS-Code).
