@@ -5,8 +5,7 @@
 	export let as = 'section';
 
 	/** @type {string | undefined | null} */
-	let className;
-
+	let className = '';
 	export { className as class };
 </script>
 

@@ -8,9 +8,6 @@
 	/** @type {string} */
 	export let description;
 
-	/** @type {string | undefined | null} */
-	let className = '';
-
 	/** @type {boolean} */
 	export let published = true;
 
@@ -20,13 +17,15 @@
 	/** @type {Date | string | undefined} */
 	export let modified = undefined;
 
+	/** @type {string | undefined | null} */
+	let className = '';
 	export { className as class };
 </script>
 
 <SEO {title} {description} {published} {date} {modified} />
 
 <div class={className} {...toDataAttributes($$restProps)}>
-	<h1 class="mb-6 text-xl font-bold">{title}</h1>
+	<h1 class="mb-6 text-4xl font-bold">{title}</h1>
 
 	<article class="prose max-w-none dark:prose-invert">
 		<slot />

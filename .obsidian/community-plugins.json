@@ -1,4 +1,5 @@
 [
-  "OA-file-hider",
-  "obsidian-linter"
+  "obsidian-linter",
+  "dataview",
+  "find-unlinked-files"
 ]
