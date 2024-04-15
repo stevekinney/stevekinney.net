@@ -1,9 +1,7 @@
 ---
 title: Testing Components with Storybook
 description:
-exclude: false
-drafted: false
-modified: 2024-04-08T13:32:25-06:00
+modified: 2024-04-15T06:34:57-06:00
 ---
 
 One of the really cool things that you can do with Storybook and [Play functions](play-functions.md) is that you can use them to test out your component for you. Let's say that I had a button that could also be a link if we passed a `href` property to the button.

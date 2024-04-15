@@ -1,10 +1,8 @@
 ---
 title: Constraints
 description: Learn how to master constraints in Figma for responsive design. Ensure your UI adapts seamlessly across devices with this essential guide
-drafted: true
-figma: false
 date: 2024-03-09T14:13:01-05:00
-modified: 2024-03-28T14:40:42-06:00
+modified: 2024-04-15T06:34:21-06:00
 tags: [figma, course, frontendmasters]
 ---
 

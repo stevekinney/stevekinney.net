@@ -1,10 +1,8 @@
 ---
 title: Variables
 description: Variables in Figma revolutionize design workflows by allowing for the efficient update of multiple elements, ensuring consistency and adaptability across projects.
-drafted: true
-figma: false
 date: 2024-03-09T14:25:35-05:00
-modified: 2024-04-10T15:40:30-06:00
+modified: 2024-04-15T06:34:20-06:00
 tags: [figma, course, frontendmasters]
 ---
 

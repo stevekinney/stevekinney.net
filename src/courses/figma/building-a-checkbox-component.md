@@ -1,9 +1,7 @@
 ---
 title: Building a Checkbox Component
 description: Creating an interactive checkbox component with variants
-exclude: false
-drafted: false
-modified: 2024-04-13T17:12:01-06:00
+modified: 2024-04-15T06:34:57-06:00
 ---
 
 > [!success] Solution

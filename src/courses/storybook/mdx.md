@@ -1,9 +1,7 @@
 ---
 title: Documenting Components with MDX
 description:
-exclude: false
-drafted: true
-modified: 2024-04-09T13:57:51-06:00
+modified: 2024-04-15T06:34:57-06:00
 ---
 
 Storybook allows you to document components using [MDX](https://mdxjs.com/), which is basically just Markdown + JSX.
@@ -42,6 +40,7 @@ Welcome to our dope component library. This is a collection of components that w
 ```
 
 ![A basic MDX documentation page in Storybook](assets/storybook-mdx-basic@2x.png)
+
 ## Doc Blocks
 
 The _real_ power—or, at least the Storybook-related power—comes mixing in `@storybook/blocks` into your documentation. Doc blocks allow you to take pieces of the stories that we've been working with so far and integrating them into your prose.

@@ -1,9 +1,7 @@
 ---
 title: Improving ArgTypes with Metadata
 description:
-exclude: false
-drafted: false
-modified: 2024-04-09T13:16:02-06:00
+modified: 2024-04-15T06:34:57-06:00
 ---
 
 ## Adding Metadata to `argTypes`

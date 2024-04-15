@@ -1,9 +1,7 @@
 ---
-modified: 2024-04-03T10:52:03-06:00
+modified: 2024-04-15T06:34:57-06:00
 title: Setting Up Storybook
 description:
-exclude: false
-drafted: true
 ---
 
 Storybook handles most of it's own configuration. Inside of an existing projects, you just need to run the following command.
