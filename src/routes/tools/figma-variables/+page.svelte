@@ -66,7 +66,10 @@
 					placeholder="Value"
 					required
 				/>
-				<select name="unit">
+				<select
+					class="rounded-md px-3 py-1 ring-primary-600 focus:outline-none focus:ring-2 dark:bg-slate-800"
+					name="unit"
+				>
 					<option value="rem">rem</option>
 					<option value="px">px</option>
 				</select>

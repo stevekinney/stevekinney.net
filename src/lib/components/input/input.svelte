@@ -30,7 +30,7 @@
 		</span>
 		<div
 			class={clsx(
-				'flex w-full items-center gap-2 rounded-md bg-white px-3 py-1 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-inset ring-slate-500 focus-within:bg-primary-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-600',
+				'flex w-full items-center gap-2 rounded-md bg-white px-3 py-1 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-inset ring-slate-500 focus-within:bg-primary-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-600 dark:bg-slate-800 dark:focus-within:bg-slate-700',
 				disabled && 'cursor-not-allowed bg-slate-100',
 			)}
 		>
@@ -44,7 +44,7 @@
 			{/if}
 			<input
 				bind:value
-				class="block w-full bg-transparent focus:outline-none disabled:cursor-not-allowed"
+				class="block w-full bg-transparent focus:outline-none disabled:cursor-not-allowed dark:text-white"
 				placeholder={unlabeled ? placeholder || label : placeholder}
 				{...$$restProps}
 				{disabled}
