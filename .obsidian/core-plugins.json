@@ -4,7 +4,6 @@
   "switcher",
   "graph",
   "backlink",
-  "canvas",
   "outgoing-link",
   "tag-pane",
   "properties",
@@ -16,5 +15,6 @@
   "bookmarks",
   "outline",
   "word-count",
+  "workspaces",
   "file-recovery"
 ]

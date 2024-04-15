@@ -5,20 +5,6 @@
 @tailwind utilities;
 
 @layer base {
-	:root {
-		--shiki-color-text: #aac569;
-		--shiki-color-background: #011628;
-		--shiki-token-constant: #7fdbca;
-		--shiki-token-string: #edc38d;
-		--shiki-token-comment: #94a4ad;
-		--shiki-token-keyword: #c792e9;
-		--shiki-token-parameter: #d6deeb;
-		--shiki-token-function: #edc38d;
-		--shiki-token-string-expression: #7fdbca;
-		--shiki-token-punctuation: #c792e9;
-		--shiki-token-link: #79b8ff;
-	}
-
 	body {
 		@apply text-black-pearl-950 dark:bg-black-pearl-950 dark:text-white;
 	}
@@ -65,27 +51,6 @@
 	td {
 		@apply whitespace-nowrap p-2 text-left;
 	}
-
-	label {
-		@apply text-black-pearl-950 dark:text-white;
-	}
-
-	input,
-	select {
-		@apply input;
-	}
-
-	select {
-		@apply border-0 bg-inherit focus:bg-primary-100 dark:bg-inherit dark:focus:bg-primary-800;
-	}
-
-	button {
-		@apply button;
-	}
-
-	[type='submit'] {
-		@apply button-primary;
-	}
 }
 
 @layer components {
@@ -118,5 +83,21 @@
 
 	.surface-secondary {
 		@apply surface bg-slate-50 text-slate-900 dark:bg-black-pearl-800 dark:text-white;
+	}
+
+	.prose {
+		th {
+			@apply text-white;
+		}
+		th,
+		td {
+			@apply p-2;
+		}
+		tbody tr:nth-child(even) {
+			@apply bg-slate-100 dark:border-black-pearl-700;
+		}
+		pre.shiki {
+			@apply shadow-md;
+		}
 	}
 }

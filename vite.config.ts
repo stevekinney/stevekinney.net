@@ -10,6 +10,6 @@ export default defineConfig({
 		jsxFragment: 'Fragment',
 	},
 	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}'],
+		include: ['src/**/*.{test,spec}.{js,ts}', 'compilers/**/*.{test,spec}.{js,ts}'],
 	},
 });

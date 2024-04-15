@@ -1,0 +1,45 @@
+{
+  "outputFileName": "meta-orphaned",
+  "disableWorkingLinks": false,
+  "directoriesToIgnore": [
+    "build/",
+    "static/",
+    "src/routes/",
+    "src/assets/",
+    "src/writing/",
+    "templates/"
+  ],
+  "filesToIgnore": [
+    "README.md",
+    "workspace.md"
+  ],
+  "fileTypesToIgnore": [
+    "yaml",
+    "woff",
+    "ts",
+    "svelte",
+    "json",
+    "js",
+    "html"
+  ],
+  "linksToIgnore": [],
+  "tagsToIgnore": [],
+  "fileTypesToDelete": [],
+  "ignoreFileTypes": true,
+  "ignoreDirectories": true,
+  "unresolvedLinksIgnoreDirectories": true,
+  "unresolvedLinksOutputFileName": "meta-broken",
+  "unresolvedLinksDirectoriesToIgnore": [],
+  "unresolvedLinksFilesToIgnore": [],
+  "unresolvedLinksFileTypesToIgnore": [],
+  "unresolvedLinksLinksToIgnore": [],
+  "unresolvedLinksTagsToIgnore": [],
+  "withoutTagsDirectoriesToIgnore": [],
+  "withoutTagsFilesToIgnore": [],
+  "withoutTagsOutputFileName": "meta-untagged",
+  "emptyFilesOutputFileName": "meta-empty",
+  "emptyFilesDirectories": [],
+  "emptyFilesFilesToIgnore": [],
+  "emptyFilesIgnoreDirectories": true,
+  "openOutputFile": true
+}

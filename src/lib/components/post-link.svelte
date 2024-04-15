@@ -3,9 +3,8 @@
 	import Link from './link.svelte';
 
 	export let post: Post;
+	export let href: string;
 	export let as: keyof HTMLElementTagNameMap = 'div';
-
-	$: href = `/writing/${post.slug}`;
 </script>
 
 <svelte:element this={as} class="group flex flex-wrap items-center gap-1">

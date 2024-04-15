@@ -10,10 +10,14 @@
 
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Trash, Download, ListRestart } from 'lucide-svelte';
+	import { Trash, Download, ListRestart, PlusCircle } from 'lucide-svelte';
 
 	import README from './README.md';
 	import SEO from '$lib/components/seo.svelte';
+	import Card from '$lib/components/card';
+	import Button from '$lib/components/button';
+	import Input from '$lib/components/input';
+
 	import { generateFigmaSpacingVariables } from './generate-variables';
 
 	export let data;
@@ -32,41 +36,46 @@
 			class="flex items-start justify-center gap-2 md:justify-start"
 			use:enhance
 		>
-			<button type="submit"><ListRestart />Reset to Defaults</button>
-			<a
-				class="button"
+			<Button type="submit" icon={ListRestart}>Reset to Defaults</Button>
+			<Button
 				href="data:text/json;charset=utf-8,{JSON.stringify(collection, null, 2)}"
-				download="Spacing.json"
+				download="spacing.json"
+				icon={Download}
 			>
-				<Download class="h-4" />
 				Download
-			</a>
+			</Button>
 		</form>
 	</section>
 
-	<form class="surface-secondary space-y-4" method="POST" action="?/add" use:enhance>
-		<h2 class="font-semibold">Create a New Variable</h2>
-		<label class="sr-only" for="new-spacing-name">Variable Name</label>
-		<input class="w-full" id="new-spacing-name" name="key" placeholder="Variable Name" required />
-		<div class="flex items-center gap-4">
-			<label class="sr-only" for="new-spacing-value">Value</label>
-			<input
-				class="w-full"
-				id="new-spacing-value"
-				type="number"
-				name="value"
-				placeholder="Value"
+	<Card>
+		<form class="space-y-4" method="POST" action="?/add" use:enhance>
+			<h2 class="font-semibold">Create a New Variable</h2>
+			<Input
+				label="Variable Name"
+				id="new-spacing-name"
+				name="key"
+				placeholder="Variable Name"
 				required
 			/>
-			<select name="unit">
-				<option value="rem">rem</option>
-				<option value="px">px</option>
-			</select>
-		</div>
-		<div class="flex gap-2">
-			<button class="w-full" type="submit">Add</button>
-		</div>
-	</form>
+			<div class="flex items-end gap-4">
+				<Input
+					label="Spacing Value"
+					id="new-spacing-value"
+					type="number"
+					name="value"
+					placeholder="Value"
+					required
+				/>
+				<select name="unit">
+					<option value="rem">rem</option>
+					<option value="px">px</option>
+				</select>
+			</div>
+			<div>
+				<Button full icon={PlusCircle}>Add</Button>
+			</div>
+		</form>
+	</Card>
 
 	<table class="text-sm md:col-span-2">
 		<thead>
@@ -100,7 +109,7 @@
 						<form method="post" action="?/remove" use:enhance>
 							<label class="sr-only" for="remove-spacing-name">Remove {variable.name}</label>
 							<input type="hidden" name="key" value={variable.name} />
-							<button class="ghost small"><Trash class="h-4" /></button>
+							<Button size="small" variant="ghost" icon={Trash} />
 						</form>
 					</td>
 				</tr>

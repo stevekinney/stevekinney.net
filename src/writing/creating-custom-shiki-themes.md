@@ -6,7 +6,7 @@ tags:
   - css
   - shiki
 date: 2023-12-31T22:08:38-07:00
-modified: 2023-12-31T22:08:55-07:00
+modified: 2024-04-08T08:39:54-06:00
 ---
 
 <script>
@@ -15,7 +15,8 @@ modified: 2023-12-31T22:08:55-07:00
 
 **TL;DR**: I created a little tool for tweaking the CSS variables for [Shiki][] themes and you [can check it out here][tool].
 
----
+> [!fail] This content is outdated
+> This approach worked in the versions of [Shiki][] prior to 1.0, but it's no longer applicable with modern versions.
 
 ## The Origin Story
 
