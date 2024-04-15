@@ -1,12 +1,12 @@
 ---
 title: Adding a Dark Mode
-description:
-modified: 2024-04-14T11:48:30-06:00
+description: Using variable modes to add a dark mode to a button component in Figma.
+modified: 2024-04-15T08:58:08-06:00
 ---
 
 Let's say we want to add a dark mode theme to our button.
 
-> [!Warning] Figma modes require a paid tier
+> [!Warning] Variable modes require a being on a paid tier
 > Figma modes are not available on their free tier. You can have up to four modes per collection in their professional and organization plans and then up 40 on their enterprise plan.
 
 Let's take our button components from [the previous section](creating-a-button-component.md).
