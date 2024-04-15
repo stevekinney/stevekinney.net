@@ -20,6 +20,10 @@ It works _super well_ with Tailwind, but you don't need use Tailwind to use CVA.
 
 Let's look at an example where we refactor our [button component](adding-variants.md) from earlier to use CVA.
 
+## Refactoring the Variant Variant
+
+I regret some of my previous naming choices, but here we are. Let's look at some code and talk through it.
+
 ```ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -39,6 +43,7 @@ export const variants = cva(
 		'transition-colors',
 		'disabled:opacity-50',
 		'disabled:cursor-not-allowed',
+		'disabled:pointer-events-none',
 	],
 	{
 		variants: {
@@ -47,49 +52,52 @@ export const variants = cva(
 					'bg-primary-600',
 					'text-white',
 					'border-transparent',
-					'hover:bg-primary-700',
-					'active:bg-primary-800',
-					'disabled:hover:bg-primary-700',
-					'disabled:active:bg-primary-800',
+					'hover:bg-primary-500',
+					'active:bg-primary-400',
 				],
 				secondary: [
 					'bg-white',
-					'text-gray-800',
-					'border-slate-400',
-					'hover:bg-slate-100',
-					'active:bg-slate-200',
-					'disabled:hover:bg-white',
-					'disabled:active:bg-white',
+					'text-slate-900',
+					'border-slate-300',
+					'hover:bg-slate-50',
+					'active:bg-slate-100',
 				],
 				destructive: [
-					'bg-red-600',
+					'bg-danger-600',
 					'text-white',
 					'border-transparent',
-					'hover:bg-red-700',
-					'active:bg-red-800',
-					'disabled:hover:bg-red-600',
-					'disabled:active:bg-red-600',
+					'hover:bg-danger-500',
+					'active:bg-danger-400',
 				],
-			},
-			size: {
-				small: ['text-sm', 'px-2', 'py-1'],
-				medium: ['text-sm', 'px-2.5', 'py-1.5'],
-				large: ['text-sm', 'px-3', 'py-2'],
-			},
-			iconPosition: {
-				left: ['flex-row'],
-				right: ['flex-row-reverse'],
 			},
 		},
 		defaultVariants: {
 			variant: 'secondary',
-			size: 'medium',
-			iconPosition: 'left',
 		},
 	},
 );
-
-export type ButtonVariants = VariantProps<typeof variants>;
 ```
 
-One of the things that you'll notice is that this is just a JavaScript object. You can use it with Svelte just as easily as you could with React or anything else. The really sweet part though is that `ButtonVariants` at the bottom. It looks at the object returned from CVA and creates a type that you can use as a prop with almost any framework—as long as you're using TypeScript, of course. This allows yout the ability to share you component styling (e.g. your design language) across multiple projects—even if they're using different frameworks.
+One of the things that you'll notice is that this is just a JavaScript object. You can use it with Svelte just as easily as you could with React or anything else.
+
+## Generating Types Automatically
+
+We can also add the following:
+
+```ts
+type ButtonVariants = VariantProps<typeof variants>;
+```
+
+`VariantProps` looks at the object returned from CVA and creates a type that you can use as a prop with almost any framework—as long as you're using TypeScript, of course. This allows you the ability to share you component styling (e.g. your design language) across multiple projects—even if they're using different frameworks.
+
+Now, we can update the component to use a type based on the variants.
+
+```ts
+type ButtonProps = ComponentProps<'button'> & {
+	variant?: ButtonVariants['variant'];
+	size?: 'small' | 'medium' | 'large';
+};
+```
+
+> [!example] Exercise
+> Can you add an additional variant for the `size` property? We'll checkout a solution [here](adding-a-size-variant.md).

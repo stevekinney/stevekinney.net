@@ -14,7 +14,12 @@ exclude: true
 - [Adding Controls to a Story](controls.md)
 - [Adding Button Sizes](adding-button-sizes-exercise.md)
 - [Setting Default Arguments](default-args.md)
+
+## Styling
+
 - [Importing Styles, Using Tailwind, and Using Themes](setting-up-tailwind.md)
+- [Customizing Tailwind Colors](customizing-tailwind-colors.md)
+- [Importing Fonts from Fontsource](importing-fontsource-fonts.md)
 
 ## Documenting Components
 
@@ -23,10 +28,15 @@ exclude: true
 - [Color Palette](color-palette.md)
 - [Icon Gallery](icon-gallery)
 - [Type Set](typeset.md)
+- [Organizing Stories and Documentation](naming-and-hierarchy.md)
 
 ## Component Styling Techniques
 
 - [Class Variance Authority](class-variance-authority.md)
+- [Adding a Size Variant with CVA](adding-a-size-variant.md)
+- [Supporting Dark Mode](adding-dark-mode-to-our-components.md)
+- [Forcing Dark Mode](forcing-dark-mode.md)
+- [Implementing a Callout Component](callout-component-exercise.md)
 
 ## Testing and Interactions
 

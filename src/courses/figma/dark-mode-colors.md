@@ -1,0 +1,25 @@
+---
+title: A Color Taxonomy for a Dark Mode Button
+description:
+modified: 2024-04-14T08:31:03-06:00
+---
+
+As we've seen, we have lots and lots of buttons. Let's think about the colors we're using and then what that might look like in a dark theme.
+
+## Base Styles
+
+| Style      | Light Mode Color | Dark Mode |
+| ---------- | ---------------- | --------- |
+| Background | white            | slate-950 |
+| Text       | slate-950        | white     |
+
+## Button
+
+| Variant   | State   | Light Mode Color | Dark Mode   |
+| --------- | ------- | ---------------- | ----------- |
+| Primary   | Default | primary-600      | primary-400 |
+| Primary   | Hover   | primary-700      | primary-500 |
+| Primary   | Active  | primary-800      | primary-600 |
+| Secondary | Default | white            | slate-950   |
+| Secondary | Hover   | slate-100        | slate-      |
+| Secondary | Active  | slate-200        |             |
