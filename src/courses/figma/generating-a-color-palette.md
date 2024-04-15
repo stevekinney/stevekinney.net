@@ -21,6 +21,13 @@ On a long enough timeline, you'll probably end up using a lot off different colo
 > [!EXAMPLE] The case for semantic colors
 > Here is a **thought exercise**: Let's assume your company's brand is some kind of red color. So, you use `red` throughout your code and designs. And then, the corporate powers that be decided to do a rebrand or there is some kind of merger or acquisition. You're going to be a lot happier as a person/team if you used `brand` or `primary` instead of `red` everywhere. The same goes for things like success, error, information, and danger states.
 
+I usually start with the following semantic colors:
+
+- **Information**: Often represented by a blue color, signaling clarity and calm.
+- **Success**: Green is commonly used, suggesting safety and "go-ahead".
+- **Warning**: Orange or yellow, indicating caution but not immediate danger.
+- **Dangerous Information/Actions**: Red, as it universally signals stop or error.
+
 ## Generating Color Variables
 
 There are _a lot_ of tools out there for generating a color palette. I really like [uicolors.app](https://uicolors.app). They have a [really cool plugin for Figma](https://www.figma.com/community/plugin/1242548152689430610/tailwind-css-color-generator) that allows you to generate a color palette that aligns with [Tailwind](https://tailwindcss.com)'s semantics. You don't have to use Tailwind to use it either. It's definitely a nice jumping off point to begin with.
