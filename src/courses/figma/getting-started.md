@@ -1,10 +1,8 @@
 ---
 title: Getting Started with Figma
 description: "Let's get learn our way around Figma and get comfortable with some of the basic tools."
-modified: 2024-04-13T14:31:20-06:00
+modified: 2024-04-15T06:34:21-06:00
 date: 2024-03-05T13:04:49-07:00
-drafted: true
-figma: false
 tags: [figma, course, frontendmasters]
 ---
 

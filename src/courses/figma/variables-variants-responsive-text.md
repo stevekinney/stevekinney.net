@@ -1,5 +1,6 @@
 ---
 title: Using Variants and Variables for Responsive Text
+modified: 2024-04-15T06:34:20-06:00
 ---
 
 Let's start with a component that looks something like this:

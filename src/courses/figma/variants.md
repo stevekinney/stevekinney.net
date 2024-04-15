@@ -1,10 +1,8 @@
 ---
 title: Variants
 description: Streamline design with Figma variants, combining multiple component iterations for simplicity and consistency. Enhance efficiency and collaboration in your projects.
-drafted: true
-figma: false
 date: 2024-03-09T14:21:25-05:00
-modified: 2024-03-28T14:43:06-06:00
+modified: 2024-04-15T06:34:20-06:00
 ---
 
 ![Loki and his variants](assets/figma-loki-variants.jpg)

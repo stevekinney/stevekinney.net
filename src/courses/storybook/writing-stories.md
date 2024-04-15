@@ -1,9 +1,7 @@
 ---
-modified: 2024-04-09T12:18:52-06:00
+modified: 2024-04-15T06:34:57-06:00
 title: Writing Stories in Storybook
 description:
-exclude: false
-drafted: false
 ---
 
 Consider this super-naïve button component. Let's say that this is in `src/components/button.tsx`.

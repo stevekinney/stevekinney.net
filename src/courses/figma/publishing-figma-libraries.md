@@ -1,16 +1,14 @@
 ---
 title: Publishing Libraries
 description: How to publish shared component and variable libraries for use across your organization.
-exclude: false
-drafted: false
-modified: 2024-04-13T13:26:47-06:00
+modified: 2024-04-15T06:34:57-06:00
 ---
 
 You've done all of this work to create your tokens, variables, and components. Now, we want to publish those libraries for use across your organization. You can publish the library from the center of the toolbar.
 
 ![The menu to publish a library in Figma](assets/figma-publish-library.png)
 
-From there, you can select what components that you want to publish. For example, you might not want to publish your [base components](base-components.md) or primitive tokens. If there are any components that you *don't* want to publish, you can select **Hide when publishing**.
+From there, you can select what components that you want to publish. For example, you might not want to publish your [base components](base-components.md) or primitive tokens. If there are any components that you _don't_ want to publish, you can select **Hide when publishing**.
 
 ![Hide when publishing](assets/figma-hide-from-publishing.png)
 

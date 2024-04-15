@@ -1,9 +1,7 @@
 ---
 title: 'Solution: Adding Button Size Variants and Controls'
 description:
-exclude: false
-drafted: false
-modified: 2024-04-09T13:01:48-06:00
+modified: 2024-04-15T06:34:57-06:00
 ---
 
 We should also probably update the component as well, right?

@@ -1,10 +1,8 @@
 ---
 title: Interactive Components
 description: "Utilize Figma's interactive components to bring prototypes to life with realistic interactions, streamlining the design process and enhancing user experience."
-drafted: true
-figma: false
 date: 2024-03-09T14:42:38-05:00
-modified: 2024-03-24T17:51:52-06:00
+modified: 2024-04-15T06:34:21-06:00
 tags:
   - figma
   - course
@@ -29,8 +27,5 @@ And with that you should be able to see your button in action and interact with 
 
 ![Interactive prototype of button](assets/figma-interative-button-component.gif)
 
-
 > [!Example] Exercise
 > Can you build a checkbox component that can be clicked to check the checkbox? You can find [the solution here](building-a-checkbox-component.md).
-
-

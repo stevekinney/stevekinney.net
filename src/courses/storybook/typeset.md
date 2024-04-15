@@ -1,9 +1,7 @@
 ---
 title: Using the TypeSet Doc Block
 description:
-exclude: false
-drafted: true
-modified: 2024-04-09T15:00:30-06:00
+modified: 2024-04-15T06:34:57-06:00
 ---
 
 Similar to the [color palettes](color-palette.md) and [icon galleries](icon-gallery.md), Storybook also provides a helpful set of components for rendering your design system's typography.

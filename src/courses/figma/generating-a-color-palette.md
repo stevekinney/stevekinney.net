@@ -1,17 +1,14 @@
 ---
 title: Generating a Color Palette
 description: Using a Figma plugin to generate a set of color variable that we can use in our project.
-exclude: false
-drafted: true
-modified: 2024-04-13T07:27:56-06:00
+modified: 2024-04-15T06:34:57-06:00
 ---
 
 > [!TIP] Coming up with a color palette
-> Color theory is a bit outside of the topics we're going to cover today, but I did want to point you towards a few tools that I use when I am trying to come up with a color palette. **Disclaimer**: I am an engineering and *not* a designer.
+> Color theory is a bit outside of the topics we're going to cover today, but I did want to point you towards a few tools that I use when I am trying to come up with a color palette. **Disclaimer**: I am an engineering and _not_ a designer.
 >
 > - [UIColors.app](http://uicolors.app)
-> - [Coolors](https://coolors.co/)
-> [Paletton](https://paletton.com/)
+> - [Coolors](https://coolors.co/) > [Paletton](https://paletton.com/)
 
 There are two—well, really just one and a half—primary techniques for creating a color palette:
 
@@ -25,7 +22,7 @@ On a long enough timeline, you'll probably end up using a lot off different colo
 
 ## Generating Color Variables
 
-There are *a lot* of tools out there for generating a color palette. I really like [uicolors.app](https://uicolors.app). They have a [really cool plugin for Figma](https://www.figma.com/community/plugin/1242548152689430610/tailwind-css-color-generator) that allows you to generate a color palette that aligns with [Tailwind](https://tailwindcss.com)'s semantics. You don't have to use Tailwind to use it either. It's definitely a nice jumping off point to begin with.
+There are _a lot_ of tools out there for generating a color palette. I really like [uicolors.app](https://uicolors.app). They have a [really cool plugin for Figma](https://www.figma.com/community/plugin/1242548152689430610/tailwind-css-color-generator) that allows you to generate a color palette that aligns with [Tailwind](https://tailwindcss.com)'s semantics. You don't have to use Tailwind to use it either. It's definitely a nice jumping off point to begin with.
 
 ![Tailwind CSS Color Generator](assets/figma-tailwind-css-color-generator.png)
 
