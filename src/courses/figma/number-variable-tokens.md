@@ -1,6 +1,6 @@
 ---
 title: Using Variables for Tokens
-description:
+description: Using Figma variables for design system tokens.
 modified: 2024-04-15T06:34:57-06:00
 ---
 

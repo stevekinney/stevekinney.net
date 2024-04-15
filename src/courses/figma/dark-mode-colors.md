@@ -1,6 +1,6 @@
 ---
 title: A Color Taxonomy for a Dark Mode Button
-description:
+description: Some example colors to get us started implementing a dark mode for a button in Figma.
 modified: 2024-04-14T08:31:03-06:00
 ---
 

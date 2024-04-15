@@ -36,8 +36,6 @@ exclude: true
 - [Creating a Callout Component](creating-a-callout-component.md)
 - [Base Components](base-components.md)
 - [Interactive Components](interactive-components.md)
-- [Building a Checkbox](building-a-checkbox-component.md)
-- [Variants and Variable Modes for Responsive Text](variables-variants-responsive-text.md)
 
 ## Prototyping and Developing
 
@@ -47,5 +45,6 @@ exclude: true
 
 ## Advanced Component Patterns
 
+- [Variants and Variable Modes for Responsive Text](variables-variants-responsive-text.md)
 - [Placeholder Components](placeholder-components.md)
 - [Cropped Grid Components](cropped-grid-components.md)

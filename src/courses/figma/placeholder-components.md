@@ -2,7 +2,7 @@
 date: 2024-03-28T13:11:56-06:00
 modified: 2024-04-15T06:34:57-06:00
 title: Placeholder Components
-description:
+description: A pattern for swapping out the contents of a component in Figma.
 ---
 
 Once of the things we learned with components is that we can't have open slots. We can only do one-for-one replacements of components. One trick is to have an otherwise-useless, placeholder component.

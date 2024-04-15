@@ -2,10 +2,7 @@
 title: Text and Typography
 date: 2024-03-21T07:29:19-06:00
 modified: 2024-04-15T06:34:20-06:00
-tags:
-  - figma
-  - course
-  - frontendmasters
+description: Setting up a reusuable typography system in Figma.
 ---
 
 > [!warning] Text properties currently do not support variables
