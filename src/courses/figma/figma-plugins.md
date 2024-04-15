@@ -1,6 +1,6 @@
 ---
 title: Figma Plugins
-description:
+description: A short list of useful Figma plugins.
 modified: 2024-04-15T06:34:57-06:00
 ---
 

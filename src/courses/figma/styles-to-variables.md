@@ -1,6 +1,6 @@
 ---
 title: Converting Styles to Variables
-description:
+description: A useful plugin for converting Figma styles to variables.
 modified: 2024-04-15T06:34:57-06:00
 ---
 

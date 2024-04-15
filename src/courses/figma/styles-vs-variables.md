@@ -1,6 +1,6 @@
 ---
 title: Styles Versus Variables
-description:
+description: Figma styles, variables, and the difference between them.
 modified: 2024-04-15T06:34:57-06:00
 ---
 

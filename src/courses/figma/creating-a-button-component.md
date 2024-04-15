@@ -1,6 +1,6 @@
 ---
 title: Creating a Button Component
-description:
+description: A walkthrough for creating a button component in Figma.
 modified: 2024-04-14T11:32:25-06:00
 ---
 
