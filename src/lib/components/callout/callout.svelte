@@ -24,7 +24,7 @@
 		{/if}
 	</svelte:element>
 	{#if $$slots.default || description}
-		<div class="prose" class:hidden={foldable && !open}>
+		<div class="prose dark:prose-invert" class:hidden={foldable && !open}>
 			<slot><p>{description}</p></slot>
 		</div>
 	{/if}

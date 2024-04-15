@@ -72,7 +72,8 @@ export const processImages = () => {
 						if (node.type === 'Program') {
 							const imports = Array.from(images.entries())
 								.map(([url, { id }]) => {
-									return `\timport ${id} from '${url}';`;
+									if (!url.endsWith('gif')) url += '?w=700&format=avif&withoutEnlargement';
+									return `import ${id} from '${url}';`;
 								})
 								.join('\n');
 							s.appendLeft(node.end, imports);
@@ -117,6 +118,7 @@ const getAttributeValue = (attr) => {
  */
 const formatImage = (s, node, id, src) => {
 	s.update(src.start, src.end, `{${id}}`);
+	s.appendLeft(src.end, ` srcset="{${id} 2x}"`);
 
 	const classAttr = getAttribute(node, 'class');
 
