@@ -1,9 +1,7 @@
 ---
 title: Creating a Color Palette from Your Tailwind Theme
 description:
-exclude: false
-drafted: false
-modified: 2024-04-09T14:29:41-06:00
+modified: 2024-04-15T06:34:56-06:00
 ---
 
 Instead of referencing Tailwind's default theme, we can look our our Tailwind configuration file. Add the following to `src/colors.mdx`.

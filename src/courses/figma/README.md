@@ -1,6 +1,6 @@
 ---
 date: 2024-03-23T11:50:59-06:00
-modified: 2024-04-14T07:03:40-06:00
+modified: 2024-04-15T06:34:21-06:00
 layout: contents
 base: /courses/figma
 exclude: true
@@ -44,6 +44,7 @@ exclude: true
 - [Prototyping](prototyping.md)
 - [Dev Mode](dev-mode.md)
 - [Publishing Libraries](publishing-figma-libraries.md)
+
 ## Advanced Component Patterns
 
 - [Placeholder Components](placeholder-components.md)

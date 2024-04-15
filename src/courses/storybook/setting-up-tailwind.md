@@ -1,9 +1,7 @@
 ---
 title: Setting Up Tailwind and Theming
 description:
-exclude: false
-drafted: true
-modified: 2024-04-09T13:51:56-06:00
+modified: 2024-04-15T06:34:57-06:00
 ---
 
 > [!important] This is not necessarily Tailwind-specific

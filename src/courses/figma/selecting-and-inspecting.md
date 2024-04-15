@@ -1,10 +1,8 @@
 ---
 title: Selecting and Inspecting
 description: "Let's look at some of the tools Figma provides for measuring sizes and distances."
-modified: 2024-04-13T14:42:31-06:00
+modified: 2024-04-15T06:34:20-06:00
 date: 2024-03-05T13:04:49-07:00
-drafted: true
-figma: false
 tags: [figma, course, frontendmasters]
 ---
 

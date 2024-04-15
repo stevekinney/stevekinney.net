@@ -1,10 +1,8 @@
 ---
 title: Working with Libraries in Figma
 description: Harness the power of Figma libraries to streamline your design process, ensuring consistency and efficiency with a shared repository of components and styles.
-drafted: false
-figma: false
 date: 2024-03-09T14:26:58-05:00
-modified: 2024-03-09T15:21:53-05:00
+modified: 2024-04-15T06:34:20-06:00
 tags:
   - figma
   - course

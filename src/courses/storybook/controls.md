@@ -1,9 +1,7 @@
 ---
 title: Addings Controls
 description:
-exclude: false
-drafted: false
-modified: 2024-04-09T13:02:12-06:00
+modified: 2024-04-15T06:34:57-06:00
 ---
 
 In the last section, we added styles for the button when it was in `disabled` state, but we don't have a particularly good way to trigger that in our stories. We _could_ add additional stories for the disabled state of each of our button variants, but that feels like it might get out of hand.
@@ -63,7 +61,7 @@ And how, we'll see that it's set and we can save one extra click. I'll leave it 
 
 ## An Alternative Approach for Setting a Default Value
 
-One of the cool things about Storybook stories is that they're just ES Modules. You *could* use the spread operator if you find yourself needing to make wide-scale changes often. This is helpful if we want to use aspects of one story in the context of another story.
+One of the cool things about Storybook stories is that they're just ES Modules. You _could_ use the spread operator if you find yourself needing to make wide-scale changes often. This is helpful if we want to use aspects of one story in the context of another story.
 
 ```ts
 export const Primary: Story = {

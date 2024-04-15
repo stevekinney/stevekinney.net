@@ -1,9 +1,7 @@
 ---
 title: Creating Semantic Colors
-description: 
-exclude: false
-drafted: false
-modified: 2024-04-13T08:17:19-06:00
+description:
+modified: 2024-04-15T06:34:57-06:00
 ---
 
 Once we have our wider color palette, it might make sense to create a curated subset of those colors that have some actual meaning. For example, we might have some callouts or alerts that we want to have a standard background color for. We can start with something like this.

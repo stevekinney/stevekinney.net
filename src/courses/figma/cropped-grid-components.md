@@ -1,10 +1,8 @@
 ---
 date: 2024-03-28T13:06:40-06:00
-modified: 2024-04-13T17:27:37-06:00
+modified: 2024-04-15T06:34:57-06:00
 title: Cropped Grid Components
-description: 
-exclude: false
-drafted: false
+description:
 ---
 
 As we learned with [components](components.md) and dug into a little bit with [placeholder components](placeholder-components.md), components can't take what slotted children but we can do a one-for-one swap. But what if we want to swap in more than one component? One trick we can use is called **cropped grid components**.
@@ -20,4 +18,3 @@ We're going to set up a frame to serve as out checklist component. And then fill
 2. Drag in one **Checklist Item** component.
 3. Duplicate it multiple times.
 4. Set the constraints to have it move along the top and then the center of the parent.
-

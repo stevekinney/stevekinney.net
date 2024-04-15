@@ -1,17 +1,15 @@
 ---
 title: Text and Typography
 date: 2024-03-21T07:29:19-06:00
-modified: 2024-04-13T15:04:11-06:00
+modified: 2024-04-15T06:34:20-06:00
 tags:
   - figma
   - course
   - frontendmasters
-drafted: false
-figma: false
 ---
 
 > [!warning] Text properties currently do not support variables
-> [Variables](variables.md) are still in beta in Figma. At the time of this writing, there is no support for styling text using variables. However, it *is* on the roadmap and variables *will eventually support variables*. But, for now, we must use [styles](styles.md).
+> [Variables](variables.md) are still in beta in Figma. At the time of this writing, there is no support for styling text using variables. However, it _is_ on the roadmap and variables _will eventually support variables_. But, for now, we must use [styles](styles.md).
 
 We can save any styling we do the text of a layer as a [style](styles.md). This allows you to update the style and then have any layers that use that style immediately inherit the changes.
 

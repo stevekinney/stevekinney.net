@@ -1,11 +1,7 @@
 ---
 title: Aligning Objects
 description: "Let's explore some of the useful utilities that Figma provides to for aligning and spacing objects quickly and easily."
-modified: 2024-03-23T12:08:29-06:00
-date: 2024-03-05T13:04:49-07:00
-drafted: true
-figma: false
-tags: [figma, course, frontendmasters]
+modified: 2024-04-15T06:34:21-06:00
 ---
 
 Figma offers various tools to help you align and distribute objects easily. When you select multiple objects, you'll find a set of tools like the one shown below.
