@@ -118,7 +118,6 @@ const getAttributeValue = (attr) => {
  */
 const formatImage = (s, node, id, src) => {
 	s.update(src.start, src.end, `{${id}}`);
-	s.appendLeft(src.end, ` srcset="{${id} 2x}"`);
 
 	const classAttr = getAttribute(node, 'class');
 

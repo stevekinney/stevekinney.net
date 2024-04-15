@@ -6,9 +6,10 @@ drafted: true
 modified: 2024-04-13T09:27:11-06:00
 ---
 
-Let's look at taking some of the concepts we've learned so far and creating a **Callout** component that we can use in our designs. Our end result will look *something* like this.
+Let's look at taking some of the concepts we've learned so far and creating a **Callout** component that we can use in our designs. Our end result will look _something_ like this.
 
-![](assets/figma-callout-component-completed.png)
+![The completed callout component](assets/figma-callout-component-completed.png)
+
 ## Surface and Border Colors
 
 We'll start with a basic frame, but we want to give it the background and border variables that we set up in the [semantic colors](semantic-colors.md) section.

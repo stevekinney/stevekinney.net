@@ -2,7 +2,7 @@
 date: 2024-03-28T13:11:56-06:00
 modified: 2024-04-13T17:52:49-06:00
 title: Placeholder Components
-description: 
+description:
 exclude: false
 drafted: false
 ---
@@ -19,7 +19,7 @@ Your placeholder components can look like anything, this is what one that I whip
 ![A placeholder component](assets/figma-placeholder-component.png)
 And then I can create something like a generic card component where I want to be able to swap in a component.
 
-![](assets/figma-card-with-placeholder.png)
+![Card component with a placeholder](assets/figma-card-with-placeholder.png)
 
 > [!Warning] Make sure to set the placeholder to fill the container for both width and height.
 
@@ -33,6 +33,6 @@ And now, you can select any components that you want to as preferred components,
 
 ![Swapping in a preferred component](assets/figma-preferred-component-instance-swap.png)
 
-And now you can swap in some other component into this card. This is also a reasonable strategy for [base components](base-components.md), but it *definitely* still feels like a hack—so, I'd probably use it sparingly.
+And now you can swap in some other component into this card. This is also a reasonable strategy for [base components](base-components.md), but it _definitely_ still feels like a hack—so, I'd probably use it sparingly.
 
 ![Placeholder with checklist](assets/placeholder-with-checklist.png)
