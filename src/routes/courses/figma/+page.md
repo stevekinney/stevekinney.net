@@ -3,8 +3,11 @@ title: Figma for Developers
 description: "An high-level introduction to Steve's Figma for Developers course."
 layout: page
 date: 2024-03-05T12:56:55-07:00
-modified: 2024-04-15T08:57:19-06:00
+modified: 2024-04-16T06:28:47-05:00
 ---
+
+> [!Important] Figma Project File
+> We'll be working with [this Figma project file](https://www.figma.com/community/file/1362026240901861662). You can and should make a copy of it and follow along.
 
 I'm [Steve](https://stevekinney.net), the head of frontend engineering at [Temporal](https://temporal.io) I'm excited to guide you through [Figma](https://figma.com) from a developer's perspective. Our journey into Figma is not just about design; it's about creating a bridge between design and development, making it easier for teams to collaborate and build amazing user interfaces.
 
