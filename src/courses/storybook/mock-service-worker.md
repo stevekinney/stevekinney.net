@@ -1,7 +1,7 @@
 ---
 title: Mock Service Worker with Storybook
 description:
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-04-17T07:31:39-05:00
 ---
 
 You can have your stories fetch data from an API using [loaders](loaders.md), but you probably don't want to have to go through the hassle of spinning up a local server just to view your component library. You also probably don't wan to take on the dependency of an external API that could go down and break your Storybook.
@@ -18,4 +18,18 @@ You'll need to configure your Mock Service Worker endpoints if you haven't alrea
 
 ```sh
 npx msw init public/
+```
+
+## Adding the Addon
+
+```ts
+import { initialize, mswLoader } from 'msw-storybook-addon';
+initialize();
+
+const preview = {
+	//… other stuff
+	loaders: [mswLoader],
+};
+
+export default preview;
 ```

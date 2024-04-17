@@ -4,6 +4,38 @@ description:
 modified: 2024-04-15T06:34:57-06:00
 ---
 
+In almost every application that I have ever worked on there is a concept that a link can look like a button. There is a pattern in React, where we can use polymorphic components. We talk a lot about how to do this in the course on React and Typescript, but for now, let's just be a little hand-wavvy.
+
+We'll update the type as follows:
+
+```tsx
+type ButtonProps = ComponentPropsWithoutRef<'button'> &
+	ButtonVariants & {
+		href?: never;
+	};
+
+type AnchorProps = ComponentPropsWithoutRef<'a'> &
+	ButtonVariants & {
+		href?: string;
+	};
+
+type ButtonOrLinkProps = ButtonProps | AnchorProps;
+```
+
+And then we'll make one small tweak to our `Button` component.
+
+```tsx
+export const Button = ({ variant = 'primary', size = 'medium', ...props }: ButtonOrLinkProps) => {
+	const className = clsx(variants({ variant, size }));
+
+	if (props.href) {
+		return <a className={className} {...(props as ComponentPropsWithoutRef<'a'>)} />;
+	} else {
+		return <button className={className} {...(props as ComponentPropsWithoutRef<'button'>)} />;
+	}
+};
+```
+
 One of the really cool things that you can do with Storybook and [Play functions](play-functions.md) is that you can use them to test out your component for you. Let's say that I had a button that could also be a link if we passed a `href` property to the button.
 
 I want to test for the following conditions:

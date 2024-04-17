@@ -63,16 +63,23 @@ You can use loaders in combination with decorators to wrap stories with addition
 ### Example: Wrapping a Story with Loaded Data
 
 ```tsx
-export const decorators = [
-	(Story, context) => {
-		const { userData } = context.loaded;
-		return (
-			<UserProvider value={userData}>
+const meta = {
+	title: 'Components/TaskList',
+	component: TaskList,
+	loaders: [
+		async () => {
+			const tasks = await fetch('https://jsonplaceholder.typicode.com/todos').then((res) =>
+				res.json(),
+			);
+			return { tasks };
+		},
+	],
+	decorators: [
+		(Story, { loaded }) => (
+			<TaskListProvider tasks={loaded.tasks}>
 				<Story />
-			</UserProvider>
-		);
-	},
-];
+			</TaskListProvider>
+		),
+	],
+} as Meta<typeof TaskList>;
 ```
-
-This decorator uses the `userData` loaded by a global loader to wrap stories within a `UserProvider`.
