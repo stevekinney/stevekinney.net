@@ -1,11 +1,8 @@
 ---
 title: Setting Up a Test Runner
 description:
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-04-17T05:33:48-05:00
 ---
-
-> [!tip] Storybook uses Playwright
-> Make sure that you have your Playwright browsers installed by running `npx playwright install`.
 
 Storybook allows you to take your [Play functions](play-functions.md) and run through them all and in order to make sure they all do what you expect them to do.
 
@@ -14,6 +11,9 @@ You will need to install their test runner in order to get started with this:
 ```sh
 npm install -D @storybook/test-runner
 ```
+
+> [!tip] Storybook uses Playwright
+> Make sure that you have your Playwright browsers installed by running `npx playwright install`.
 
 > [!WARNING] Storybook Must Be Running
 > Storybook must be running in order to run your tests with `@storybook/test-runner`.

@@ -1,5 +1,5 @@
 ---
-modified: 2024-04-15T06:34:20-06:00
+modified: 2024-04-17T07:33:00-05:00
 base: /courses/storybook
 layout: contents
 exclude: true
@@ -36,6 +36,7 @@ exclude: true
 - [Adding a Size Variant with CVA](adding-a-size-variant.md)
 - [Supporting Dark Mode](adding-dark-mode-to-our-components.md)
 - [Forcing Dark Mode](forcing-dark-mode.md)
+- [An Alternative Approach to Dark Mode](dark-mode-alternative.md)
 - [Implementing a Callout Component](callout-component-exercise.md)
 
 ## Testing and Interactions
@@ -50,9 +51,9 @@ exclude: true
 
 - [Using Decorators for Context](decorators.md)
 - [Using Loaders to Fetch Data](loaders.md)
+
+## Appendix
+
 - [Integration with Mock Service Worker](mock-service-worker.md)
-
-## Integration with Design Tooling
-
 - [Storybook in Figma](storybook-in-figma.md)
 - [Figma in Storybook](figma-in-storybook.md)
