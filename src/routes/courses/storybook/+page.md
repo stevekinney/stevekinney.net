@@ -3,7 +3,7 @@ title: Building Design Systems in Storybook
 description: 'An exploration in building a design system using Storybook.'
 layout: page
 date: 2024-03-05T12:56:55-07:00
-modified: 2024-04-15T07:05:44-06:00
+modified: 2024-04-17T09:03:56-05:00
 ---
 
 Even if you don't work on the design systems team at your company, over a long enough period of time, you're likely to find yourself working on a design system or component library. Having a standardized set of components saves you from having to reinvent the wheel every single time you tackle a new feature. And—arguably more importantly, it allows you to make large-scale changes without the tedium of manually tweaking every single element in your project.
@@ -12,6 +12,8 @@ This workshop offers a comprehensive guide to building design systems using [Sto
 
 > [!IMPORTANT] Course Materials
 > Throughout our time together, we'll be using [this repository](https://github.com/stevekinney/anthology).
+>
+> The Figma designs that inspire the components in this repository can be found [here](https://www.figma.com/file/Qhb4PJucNK8bgvf4N65Jrm/Anthology?type=design&node-id=0%3A1&mode=design&t=Dr1OUnsNFnelFSUN-1).
 
 ## Prerequisites
 
