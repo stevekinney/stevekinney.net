@@ -94,7 +94,7 @@
 			@apply p-2;
 		}
 		tbody tr:nth-child(even) {
-			@apply bg-slate-100 dark:border-black-pearl-700;
+			@apply bg-slate-100 dark:border-black-pearl-700 dark:bg-black-pearl-800;
 		}
 		pre.shiki {
 			@apply shadow-md;
