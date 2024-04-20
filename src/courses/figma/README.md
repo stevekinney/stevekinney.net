@@ -34,7 +34,6 @@ exclude: true
 - [Variants](variants.md)
 - [Generating an Icon Library](generating-an-icon-library.md)
 - [Creating a Callout Component](creating-a-callout-component.md)
-- [Base Components](base-components.md)
 - [Interactive Components](interactive-components.md)
 
 ## Prototyping and Developing
