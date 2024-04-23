@@ -25,3 +25,7 @@ export const Default: Story = {};
 export const Disabled: Story = {
 	args: { disabled: true },
 };
+
+export const Required: Story = {
+	args: { required: true },
+};
