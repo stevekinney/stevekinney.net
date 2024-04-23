@@ -1,6 +1,7 @@
 <script lang="ts">
 	import clsx from 'clsx';
 	import type { InputProps } from './types';
+	import Label from '../label';
 
 	type $$Props = InputProps;
 
@@ -18,16 +19,7 @@
 </script>
 
 <div>
-	<label class="flex flex-col gap-1.5">
-		<span
-			class={clsx(
-				'inline-flex items-center gap-1 text-sm font-semibold',
-				required && 'after:h-1.5 after:w-1.5 after:rounded-full after:bg-red-500',
-				unlabeled && 'sr-only',
-			)}
-		>
-			{label}
-		</span>
+	<Label {label} {disabled} {required} hidden={unlabeled}>
 		<div
 			class={clsx(
 				'flex w-full items-center gap-2 rounded-md bg-white px-3 py-1 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-inset ring-slate-500 focus-within:bg-primary-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-600 dark:bg-slate-800 dark:focus-within:bg-slate-700',
@@ -63,5 +55,5 @@
 			{/if}
 		</div>
 		{#if details}<span class="text-xs text-slate-500">{details}</span>{/if}
-	</label>
+	</Label>
 </div>
