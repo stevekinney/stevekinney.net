@@ -1,3 +1,4 @@
-export type SelectProps = Partial<HTMLSelectElement> & {
+export type SelectProps = Omit<Partial<HTMLSelectElement>, 'options'> & {
 	label: string;
+	options: { label: string; value: string }[];
 };
