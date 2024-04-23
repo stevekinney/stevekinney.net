@@ -56,4 +56,3 @@ In `src/icons.mdx`:
 We should now live in a much more orderly world.
 
 ![Storybook components ordered nicely](assets/storybook-components-ordered-nicely.png)
-

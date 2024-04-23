@@ -87,6 +87,5 @@ export const LengthTooLong: Story = {
 >
 > - A disabled text area is—in fact—disabled.
 > - Typing in the text area does not change the value of the text area.
->   
+>
 > A potential solution can be found [here](text-area-disabled-play-function-solution.md).
-
