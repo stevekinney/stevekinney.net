@@ -7,6 +7,7 @@ modified: 2024-04-14T15:36:58-06:00
 Okay, it's your turn to try this out. Consider this [Callout component](https://www.figma.com/file/Qhb4PJucNK8bgvf4N65Jrm/Anthology?type=design&node-id=2-2372&mode=design). Consider the following. You can choose to ignore the fact that they have different icons if you'd like.
 
 ![Callout component designs](assets/callout-component-designs.png)
+
 ## Colors
 
 The callout makes use of the following colors from our theme.
