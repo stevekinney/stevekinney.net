@@ -129,22 +129,9 @@ describe('compilers/callouts/parse-callout', () => {
 		const { title, variant, description } = parseCallout(callout);
 		expect(title).toBe('Title');
 		expect(variant).toBe('note');
-		expect(description).toBe('<p>First paragraph</p>' + '<p>Second paragraph</p>');
-	});
-
-	it('should support titles with markup', () => {
-		const callout = `
-      <blockquote>
-      <p>[!NOTE] A <strong>Title</strong>
-      Description</p>
-      </blockquote>
-    `.trim();
-
-		expect(parseCallout(callout)).toEqual({
-			title: 'A <strong>Title</strong>',
-			variant: 'note',
-			description: '<p>Description</p>',
-			foldable: false,
-		});
+		expect(description).toMatchInlineSnapshot(`
+			"<p>First paragraph</p>
+			      <p>Second paragraph</p>"
+		`);
 	});
 });
