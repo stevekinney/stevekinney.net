@@ -31,8 +31,8 @@ Figma also lets you evenly distribute objects. When distributing horizontally, i
 
 The platform includes keyboard shortcuts for distribution tasks:
 
-- **Distribute Vertically:** `Shift/Cmd + Alt/Option + V`
-- **Distribute Horizontally:** `Shift/Cmd + Alt/Option + H`
+- **Distribute Vertically:** `Ctrl + Alt/Option + V`
+- **Distribute Horizontally:** `Ctrl + Alt/Option + H`
 
 ## Tidy Up
 
