@@ -11,7 +11,7 @@
 	export let modified: Date | string | undefined = undefined;
 	export let url = $page.url;
 
-	$: openGraph = new URL('/open-graph.jpg', url.href);
+	$: openGraph = new URL('/open-graph.jpg', 'https://stevekinney.net');
 	$: if (title) openGraph.searchParams.set('title', encodeURIComponent(title));
 	$: if (description) openGraph.searchParams.set('description', encodeURIComponent(description));
 	$: openGraphUrl = openGraph.href;
