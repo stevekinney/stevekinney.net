@@ -9,7 +9,7 @@
 	export let published = true;
 	export let date: Date | string | undefined = undefined;
 	export let modified: Date | string | undefined = undefined;
-	export let url = $page.url;
+	export let url = new URL($page.url.pathname, 'https://stevekinney.net');
 
 	$: openGraph = new URL('/open-graph.jpg', 'https://stevekinney.net');
 	$: if (title) openGraph.searchParams.set('title', encodeURIComponent(title));
