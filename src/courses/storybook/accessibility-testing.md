@@ -21,7 +21,7 @@ From the `axe-core` [`README.md`](https://github.com/dequelabs/axe-core/blob/dev
 There is an integration between [Axe](https://www.deque.com/axe/) and [Playwright](https://playwright.dev/) called—unsurprisingly—[`axe-playwright`](https://npm.im/axe-playwright). What's super cool is that Storybook can spin up Playwright and run these tests for you with it's [test runner](test-runner.md).
 
 > [!important] Dependencies
-> You'll need to install `axe-plaright` if it's not already installed. You can take care of that by running `npm install axe-playwright --save-dev`.
+> You'll need to install `axe-playwright` if it's not already installed. You can take care of that by running `npm install axe-playwright --save-dev`.
 >
 > Also, if this is your first rodeo with Playwright in your project, you'll need to install its browsers. You can take care of this by running `npx playwright install`.
 
