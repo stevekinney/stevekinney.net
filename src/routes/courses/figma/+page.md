@@ -6,6 +6,8 @@ date: 2024-03-05T12:56:55-07:00
 modified: 2024-04-16T06:28:47-05:00
 ---
 
+The material in this course is intended to go along with the [Figma, v2](https://frontendmasters.com/courses/figma-v2/) couse with [Frontend Masters](https://frontendmasters.com).
+
 > [!Important] Figma Project File
 > We'll be working with [this Figma project file](https://www.figma.com/community/file/1362026240901861662). You can and should make a copy of it and follow along.
 
