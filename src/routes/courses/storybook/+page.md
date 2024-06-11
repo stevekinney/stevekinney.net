@@ -6,6 +6,8 @@ date: 2024-03-05T12:56:55-07:00
 modified: 2024-04-17T09:03:56-05:00
 ---
 
+The material in this course is intended to go along with the [Design Systems with Storybook, v2](https://frontendmasters.com/courses/design-systems-v2/) couse with [Frontend Masters](https://frontendmasters.com).
+
 Even if you don't work on the design systems team at your company, over a long enough period of time, you're likely to find yourself working on a design system or component library. Having a standardized set of components saves you from having to reinvent the wheel every single time you tackle a new feature. And—arguably more importantly, it allows you to make large-scale changes without the tedium of manually tweaking every single element in your project.
 
 This workshop offers a comprehensive guide to building design systems using [Storybook](https://storybook.js.org). Covering everything from basic setup to advanced features, attendees will learn about atomic design, accessibility, visual regression testing, responsive design, and dark mode implementation. The workshop emphasizes practical, hands-on learning for effective team collaboration and documentation.
