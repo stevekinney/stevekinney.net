@@ -30,7 +30,7 @@
 			{#each Object.entries($shikiCssVariables) as [name, value]}
 				<label class="text-nowrap font-mono text-xs" for={name}>{name}</label>
 				<p class="select-all text-right font-mono text-sm text-gray-500">{value}</p>
-				<input id={name} {value} {name} type="color" class="input" on:change={handleChange} />
+				<input id={name} {value} {name} type="color" on:change={handleChange} />
 			{/each}
 		</div>
 	</div>
