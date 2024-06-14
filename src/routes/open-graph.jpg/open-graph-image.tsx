@@ -1,7 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
 
-// @ts-expect-error - Required for vite-imagetools
-import socialCard from '$assets/social-card.jpg?grayscale&brightness=0.4&url';
 import metadata from '$lib/metadata';
 
 export function h(type: string, props: { [key: string]: unknown } | null, ...children: unknown[]) {
@@ -14,6 +12,7 @@ export function h(type: string, props: { [key: string]: unknown } | null, ...chi
 }
 
 const MAX_DESCRIPTION_LENGTH = 200;
+const MAX_TITLE_LENGTH = 150;
 
 const OpenGraphImage = ({ url }: RequestEvent) => {
 	let title: string | undefined;
@@ -40,15 +39,11 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 				height: '100vh',
 				padding: '4rem 10rem',
 				gap: '2rem',
-				backgroundImage: `linear-gradient(133deg, rgba(2,0,36,0.6) 0%, rgba(106,0,139,0.4) 45%, rgba(106,0,139,0.4) 75%, rgba(49,0,64,0.8) 100%), url('${url.origin}${socialCard}')`,
+				backgroundColor: 'white',
 				backgroundPosition: 'center, 100% center',
-				color: 'white',
+				color: 'black',
 			}}
 		>
-			<h1 style={{ fontSize: '6rem', fontFamily: 'League Gothic', margin: 0, flexShrink: 1 }}>
-				Steve Kinney
-			</h1>
-
 			<div
 				style={{
 					display: 'flex',
@@ -67,7 +62,7 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 							margin: 0,
 						}}
 					>
-						{title}
+						{title.length > MAX_TITLE_LENGTH ? `${title.slice(0, MAX_TITLE_LENGTH)}…` : title}
 					</h2>
 				)}
 				{description && (
