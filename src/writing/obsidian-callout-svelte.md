@@ -1,6 +1,6 @@
 ---
 title: Implementing Obsidian's Callout in Svelte
-description: A gentle walkthrough where we build out take on Obsidian's callout component in Svelte.
+description: A gentle walkthrough where we build our take on Obsidian's callout component in Svelte.
 date: 2024-04-07T10:29:29-06:00
 tags:
   - svelte

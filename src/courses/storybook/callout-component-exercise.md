@@ -1,6 +1,6 @@
 ---
-title: Implementing a Calllout Component
-description:
+title: Implementing a Callout Component
+description: Let's build a callout component in Figma.
 modified: 2024-04-14T15:36:58-06:00
 ---
 
