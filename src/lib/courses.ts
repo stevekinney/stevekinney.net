@@ -1,5 +1,17 @@
 export default [
 	{
+		title: 'Design Systems with Storybook, v2',
+		description:
+			'Learn to create scalable design systems with Storybook. Build reusable UI components, test components, implement dark mode, and generate comprehensive documentation.',
+		href: 'https://frontendmasters.com/courses/design-systems-v2/',
+	},
+	{
+		title: 'Figma for Developers, v2',
+		description:
+			"Learn to use Figma's developer-friendly features like constraints, auto layout, component properties and CSS generation to efficiently build and translate designs to code. Bridge the gap between design and development.",
+		href: 'https://frontendmasters.com/courses/figma-v2/',
+	},
+	{
 		title: 'Tailwind CSS',
 		description:
 			'Learn Tailwind CSS‘s utility-first approach for responsive, and customizable web designs. Master themes, layers, responsive breakpoints, dark mode, and more to create maintainable and visually appealing user interfaces!',
