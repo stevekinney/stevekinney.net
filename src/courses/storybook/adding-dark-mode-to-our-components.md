@@ -1,6 +1,6 @@
 ---
 title: Adding Dark Mode to Our Components
-description:
+description: Tailwind makes it easy to support a custom dark-mode theme for your application.
 modified: 2024-04-14T15:26:30-06:00
 ---
 
