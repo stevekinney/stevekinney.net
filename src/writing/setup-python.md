@@ -15,6 +15,10 @@ So, you want to get started writing some Python on your Macintosh computer. That
 
 I can't remember if you're going to need this immediately, but you're going to need this _eventually_. Let's get it out of the way now.
 
+```sh
+xcode-select --install
+```
+
 > [!Info] Why do I need this?
 > Apple offers the Xcode Command Line Tools, a set of essential software development utilities. These include compilers, debuggers, and more, all vital for macOS development. They aid in compiling code, managing versions, and using system utilities. Users can install them without the full Xcode IDE, making them a lightweight option for those who don't need the complete environment—which includes you at this point.
 
