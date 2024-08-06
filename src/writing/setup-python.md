@@ -46,7 +46,7 @@ Next, let's use that fresh—or, freshly updated—Homebrew installation to inst
 brew install python
 ```
 
-> [!Attention] This might be good enough.
+> [!Done] This might be good enough.
 > You could—and probably _should_ stop here if you're just getting started and looking for a super basic setup. We'll keep going a little bit, but if anything that follows confuses you, then this is a good place to pause and you can come back later and follow the rest of the steps.
 
 ## Set Up a Virtual Environment
