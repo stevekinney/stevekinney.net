@@ -39,6 +39,7 @@ export const variations = [
 	'hint',
 	'important',
 	'info',
+	'information',
 	'missing',
 	'note',
 	'question',
@@ -52,20 +53,21 @@ export const variations = [
 ] as const;
 
 const aliases = {
-	summary: 'abstract',
-	tldr: 'abstract',
-	error: 'danger',
-	fail: 'failure',
-	missing: 'failure',
-	faq: 'question',
-	help: 'question',
-	cite: 'quote',
-	check: 'success',
-	done: 'success',
-	hint: 'tip',
-	important: 'tip',
 	attention: 'warning',
 	caution: 'warning',
+	check: 'success',
+	cite: 'quote',
+	done: 'success',
+	error: 'danger',
+	fail: 'failure',
+	faq: 'question',
+	help: 'question',
+	hint: 'tip',
+	important: 'tip',
+	information: 'info',
+	missing: 'failure',
+	summary: 'abstract',
+	tldr: 'abstract',
 } as const;
 
 const isAlias = (variant: CalloutVariation): variant is keyof typeof aliases => {
