@@ -3,7 +3,7 @@
 </script>
 
 <Card {...$$props}>
-	<div class="prose">
+	<div class="prose dark:prose-invert">
 		<h2>Card Title</h2>
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut maximus arcu purus, quis faucibus

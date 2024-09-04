@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const variants = cva(['rounded-md', 'shadow-md', 'p-6'], {
 	variants: {
 		variant: {
-			default: ['bg-slate-100 dark:bg-slate-800'],
+			default: ['bg-slate-100 dark:bg-slate-800 text-white'],
 			primary: ['bg-primary-100 dark:bg-primary-800'],
 			success: ['bg-green-100 dark:bg-green-800'],
 			danger: ['bg-red-100 dark:bg-red-800'],
