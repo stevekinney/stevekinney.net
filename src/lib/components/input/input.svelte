@@ -27,10 +27,14 @@
 			)}
 		>
 			{#if before}
-				<svelte:component this={before} class="pointer-events-none h-4 w-4 " aria-hidden="true" />
+				<svelte:component
+					this={before}
+					class="pointer-events-none h-4 w-4 dark:text-slate-400"
+					aria-hidden="true"
+				/>
 			{/if}
 			{#if prefix}
-				<span class="pointer-events-none text-primary-600">
+				<span class="pointer-events-none text-primary-600 dark:text-primary-400">
 					{prefix}
 				</span>
 			{/if}
@@ -46,14 +50,18 @@
 				on:invalid
 			/>
 			{#if suffix}
-				<span class="pointer-events-none text-primary-600">
+				<span class="pointer-events-none text-primary-600 dark:text-primary-400">
 					{suffix}
 				</span>
 			{/if}
 			{#if after}
-				<svelte:component this={after} class="pointer-events-none h-4 w-4" aria-hidden="true" />
+				<svelte:component
+					this={after}
+					class="pointer-events-none h-4 w-4 dark:text-slate-400"
+					aria-hidden="true"
+				/>
 			{/if}
 		</div>
-		{#if details}<span class="text-xs text-slate-500">{details}</span>{/if}
+		{#if details}<span class="text-xs text-slate-500 dark:text-slate-400">{details}</span>{/if}
 	</Label>
 </div>

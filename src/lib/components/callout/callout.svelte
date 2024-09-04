@@ -14,7 +14,7 @@
 <div class="space-y-2 rounded-md border p-4 shadow-sm {getVariationColor(variant)}">
 	<svelte:element
 		this={foldable ? 'label' : 'div'}
-		class="flex items-center gap-1 leading-tight text-current"
+		class="flex items-center gap-2 leading-tight text-current"
 	>
 		<svelte:component this={getIcon(variant)} class="w-4" />
 		<span class="font-bold">{title}</span>
