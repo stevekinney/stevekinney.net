@@ -3,7 +3,7 @@ import { dev } from '$app/environment';
 export const getPosts = async () => {
 	let posts: Post[] = [];
 
-	const paths = import.meta.glob('/src/writing/*.md');
+	const paths = import.meta.glob('/content/writing/*.md');
 
 	for (const path in paths) {
 		const file = await paths[path]();
@@ -28,7 +28,7 @@ export const getPosts = async () => {
 };
 
 export const getPost = async (slug: string) => {
-	const post = await import(`../writing/${slug}.md`);
+	const post = await import(`../../content/writing/${slug}.md`);
 	const meta = post.metadata as Post;
 
 	return {

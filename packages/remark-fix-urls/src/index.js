@@ -2,6 +2,7 @@ import { visit } from 'unist-util-visit';
 import { parse } from 'yaml';
 
 /**
+ * A remark plugin to fix the URLs in Markdown files.
  * @type {import('unified').Plugin}
  */
 export const fixMarkdownUrls = () => {
@@ -15,15 +16,14 @@ export const fixMarkdownUrls = () => {
 			const { base } = parse(node.value);
 
 			if (base) {
-				baseUrl = base;
+				baseUrl = base + '/';
 			}
 		});
-
-		if (!base) return;
 
 		// Fix the URLs in the Markdown files by removing the `.md` extension.
 		visit(tree, 'link', (/** @type import('mdast').Link */ node) => {
 			const { url } = node;
+
 			node.url = baseUrl + url.replace(/\.md/, '');
 		});
 	};
