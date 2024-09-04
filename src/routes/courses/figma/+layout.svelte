@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { twMerge as merge } from 'tailwind-merge';
-
-	import Link from '$lib/components/link.svelte';
 	import Index from '$courses/figma/README.md';
 </script>
 

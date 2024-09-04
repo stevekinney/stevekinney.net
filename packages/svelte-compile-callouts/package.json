@@ -1,0 +1,20 @@
+{
+	"name": "svelte-compile-callouts",
+	"version": "1.0.0",
+	"description": "",
+	"main": "src/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"types": "tsc",
+		"test": "vitest"
+	},
+	"keywords": [],
+	"author": "Steve Kinney <hello@stevekinney.net>",
+	"license": "MIT",
+	"type": "module",
+	"devDependencies": {
+		"magic-string": "^0.30.9",
+		"svelte": "^4.2.12",
+		"vitest": "^1.4.0"
+	}
+}

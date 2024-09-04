@@ -4,7 +4,7 @@ export async function load({ params, url }) {
 	const { slug } = params;
 	const { pathname } = url;
 
-	const post = await import(`../../../../courses/storybook/${slug}.md`).catch(() => {
+	const post = await import(`../../../../../content/courses/storybook/${slug}.md`).catch(() => {
 		error(404, 'Not found');
 	});
 
