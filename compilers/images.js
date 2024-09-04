@@ -21,6 +21,10 @@ const classes = ['max-w-full', 'rounded-md', 'shadow-md'];
  * @property {Array<(ElementNode|TextNode)>} children - The child nodes of the element.
  */
 
+/**
+ * Add image optimization to the Markdown content.
+ * @return {import("svelte/compiler").PreprocessorGroup}
+ */
 export const processImages = () => {
 	return {
 		name: 'markdown-image-optimization',
