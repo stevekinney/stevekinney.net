@@ -8,7 +8,9 @@ import remarkUnwrapImages from 'remark-unwrap-images';
 import rehypeSlug from 'rehype-slug';
 import { codeToHtml, bundledLanguages } from 'shiki';
 
-import { processCallouts, processImages, fixMarkdownUrls } from './compilers/index.js';
+import { processImages } from 'svelte-enhance-images';
+import { processCallouts } from 'svelte-compile-callouts';
+import { fixMarkdownUrls } from 'remark-fix-urls';
 
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
