@@ -1,4 +1,5 @@
 import { visit } from 'unist-util-visit';
+import { parse } from 'yaml';
 
 /**
  * @type {import('unified').Plugin}
@@ -11,15 +12,14 @@ export const fixMarkdownUrls = () => {
 		visit(tree, 'yaml', (/** @type import('mdast').YAML */ node) => {
 			if (node.type !== 'yaml') return;
 
-			const { value } = node;
-			const match = value.match(/base: (.*)/);
+			const { base } = parse(node.value);
 
-			if (!match) return;
-
-			const [, url] = match;
-
-			baseUrl = url + '/';
+			if (base) {
+				baseUrl = base;
+			}
 		});
+
+		if (!base) return;
 
 		// Fix the URLs in the Markdown files by removing the `.md` extension.
 		visit(tree, 'link', (/** @type import('mdast').Link */ node) => {

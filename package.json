@@ -85,7 +85,8 @@
 		"unist-util-visit": "^5.0.0",
 		"vite": "^5.2.8",
 		"vite-imagetools": "^7.0.1",
-		"vitest": "^1.4.0"
+		"vitest": "^1.4.0",
+		"yaml": "^2.5.1"
 	},
 	"type": "module",
 	"dependencies": {

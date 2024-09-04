@@ -5,6 +5,13 @@ import { parseCallout } from './parse-callout.js';
 import { compileCallout } from './compile-callout.js';
 
 /**
+ * @typedef Node
+ * @property {string} type
+ * @property {string} name
+ * @property {number} start
+ * @property {number} end
+ *
+ *
  * @typedef Callout Metadata for a callout.
  * @property {string} title The title of the callout.
  * @property {string} variant The variant of the callout.
@@ -29,11 +36,14 @@ export const processCallouts = () => {
 			const { instance, html } = parse(content, { filename });
 			const s = new MagicString(content);
 
-			/** Did we find any callouts in the Markdown file? */
+			/**
+			 * Did we find any callouts in the Markdown file?
+			 * @type {boolean}
+			 */
 			let hasCallouts = false;
 
 			walk(html, {
-				enter(node) {
+				enter(/** @type Node */ node) {
 					if (node.type === 'Element' && node.name === 'blockquote') {
 						const start = node.start;
 						const end = node.end;
@@ -56,9 +66,9 @@ export const processCallouts = () => {
 			if (hasCallouts) {
 				if (instance) {
 					walk(instance, {
-						enter(node) {
+						enter(/** @type Node */ node) {
 							if (node.type === 'Program') {
-								// Add the import statement at the top of the file.
+								// Add the import statement to the `<script/>` section.
 								s.appendLeft(node.end, `\n\timport Callout from '$lib/components/callout';\n`);
 							}
 						},
