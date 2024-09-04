@@ -8,7 +8,7 @@ modified: 2024-09-04T08:04:33-06:00
 
 The material in this course is intended to go along with the [Figma, v2](https://frontendmasters.com/courses/figma-v2/) course with [Frontend Masters](https://frontendmasters.com).
 
-> [!information] Figma Project File
+> [!info] Figma Project File
 > We'll be working with [this Figma project file](https://www.figma.com/community/file/1362026240901861662). You can and should make a copy of it and follow along.
 
 I'm [Steve](https://stevekinney.net), the head of frontend engineering at [Temporal](https://temporal.io) I'm excited to guide you through [Figma](https://figma.com) from a developer's perspective. Our journey into Figma is not just about design; it's about creating a bridge between design and development, making it easier for teams to collaborate and build amazing user interfaces.
