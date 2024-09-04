@@ -6,7 +6,6 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex, escapeSvelte } from 'mdsvex';
 import remarkUnwrapImages from 'remark-unwrap-images';
 import rehypeSlug from 'rehype-slug';
-import remarkObsidian from 'remark-obsidian';
 import { codeToHtml, bundledLanguages } from 'shiki';
 
 import { processCallouts, processImages, fixMarkdownUrls } from './compilers/index.js';
@@ -14,8 +13,8 @@ import { processCallouts, processImages, fixMarkdownUrls } from './compilers/ind
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
 	extensions: ['.md'],
-	remarkPlugins: [remarkUnwrapImages, remarkObsidian, fixMarkdownUrls],
-	// @ts-expect-error - rehypeSlug is not in the types
+	remarkPlugins: [remarkUnwrapImages, fixMarkdownUrls],
+	// @ts-expect-error - `rehypeSlug` is not in the types
 	rehypePlugins: [rehypeSlug],
 	layout: {
 		_: './src/lib/markdown/base.svelte',
