@@ -5,13 +5,14 @@ import { parseCallout } from './parse-callout.js';
 import { compileCallout } from './compile-callout.js';
 
 /**
- * @typedef Callout
- * @property {string} title
- * @property {string} variant
- * @property {string | undefined} description
- * @property {boolean | undefined} foldable
+ * @typedef Callout Metadata for a callout.
+ * @property {string} title The title of the callout.
+ * @property {string} variant The variant of the callout.
+ * @property {string | undefined} description The description of the callout.
+ * @property {boolean | undefined} foldable Whether the callout is foldable.
  */
 
+// This is the SvelteKit plugin that processes callouts in Markdown files.
 export const processCallouts = () => {
 	return {
 		name: 'markdown-process-callouts',
@@ -25,6 +26,7 @@ export const processCallouts = () => {
 			const { instance, html } = parse(content, { filename });
 			const s = new MagicString(content);
 
+			/** Did we find any callouts in the Markdown file? */
 			let hasCallouts = false;
 
 			walk(html, {
@@ -33,21 +35,27 @@ export const processCallouts = () => {
 						const start = node.start;
 						const end = node.end;
 
-						const details = parseCallout(content.substring(start, end));
+						const callout = parseCallout(content.substring(start, end));
 
-						if (!details) return;
+						// If it's not a callout, bail.
+						if (!callout) return;
+
+						// We found a callout!
 						hasCallouts = true;
 
-						s.overwrite(start, end, compileCallout(details));
+						// Replace the callout with a component.
+						s.overwrite(start, end, compileCallout(callout));
 					}
 				},
 			});
 
+			// If we found any callouts, we need to import the `Callout` component.
 			if (hasCallouts) {
 				if (instance) {
 					walk(instance, {
 						enter(node) {
 							if (node.type === 'Program') {
+								// Add the import statement at the top of the file.
 								s.appendLeft(node.end, `\n\timport Callout from '$lib/components/callout';\n`);
 							}
 						},
