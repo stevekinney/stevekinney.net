@@ -1,6 +1,11 @@
 /**
- * Takes a callout object and returns HTML.
- * @param {import('.').Callout} callout
+ * @typedef {import('.').Callout} Callout
+ */
+
+/**
+ * Takes a callout object and returns the markup for a Svelte compoonent.
+ * @param {Callout} callout
+ * @returns {string} The markup for a Svelte component.
  */
 export const compileCallout = (callout) => {
 	const { title, variant, description, foldable } = callout;
