@@ -12,7 +12,10 @@ import { compileCallout } from './compile-callout.js';
  * @property {boolean | undefined} foldable Whether the callout is foldable.
  */
 
-// This is the SvelteKit plugin that processes callouts in Markdown files.
+/**
+ * Turn Obsidian callouts into Svelte components.
+ * @returns {import("svelte/compiler").PreprocessorGroup}
+ */
 export const processCallouts = () => {
 	return {
 		name: 'markdown-process-callouts',
