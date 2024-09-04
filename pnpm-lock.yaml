@@ -181,9 +181,6 @@ devDependencies:
   rehype-slug:
     specifier: ^6.0.0
     version: 6.0.0
-  remark-obsidian:
-    specifier: ^1.8.0
-    version: 1.8.0
   remark-unwrap-images:
     specifier: ^4.0.0
     version: 4.0.0
@@ -10288,10 +10285,6 @@ packages:
     engines: {node: '>=4'}
     dependencies:
       es6-error: 4.1.1
-    dev: true
-
-  /remark-obsidian@1.8.0:
-    resolution: {integrity: sha512-nzL47ykZubW/ELAetSE8+73BFX8kGO+64//7pYnsEuEUrEz5x4AHP9wYhsceFkfK6oftAyugy1FkPcThhdyD2g==}
     dev: true
 
   /remark-unwrap-images@4.0.0:
