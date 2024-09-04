@@ -244,18 +244,6 @@ importers:
         specifier: ^2.5.1
         version: 2.5.1
 
-  packages/fix-markdown-urls:
-    devDependencies:
-      unified:
-        specifier: ^11.0.4
-        version: 11.0.4
-      unist-util-visit:
-        specifier: ^5.0.0
-        version: 5.0.0
-      yaml:
-        specifier: ^2.5.1
-        version: 2.5.1
-
   packages/remark-fix-urls:
     devDependencies:
       unified:
