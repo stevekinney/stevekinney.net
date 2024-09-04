@@ -43,6 +43,23 @@
 				"close": true
 			},
 			"problemMatcher": []
+		},
+		{
+			"label": "Open in Obsidian",
+			"type": "shell",
+			"command": "open \"obsidian://open?vault=stevekinney.net&file=${relativeFileDirname}/${fileBasenameNoExtension}\"",
+			"isBackground": false,
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "shared",
+				"clear": true,
+				"showReuseMessage": false,
+				"group": "commands",
+				"close": true
+			},
+			"problemMatcher": []
 		}
 	]
 }
