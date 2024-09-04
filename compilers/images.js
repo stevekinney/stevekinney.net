@@ -31,6 +31,8 @@ export const processImages = () => {
 		 */
 		markup: ({ content, filename }) => {
 			if (!filename.endsWith('.md')) return;
+
+			// Parse the content with the Svelte Compiler and create a MagicString instance.
 			const { instance, html } = parse(content, { filename });
 			const s = new MagicString(content);
 
@@ -43,6 +45,7 @@ export const processImages = () => {
 			 */
 			const isElement = (node) => node.type === 'Element';
 
+			// Walk the HTML AST and find all the image elements.
 			walk(html, {
 				enter(node) {
 					if (isElement(node) && node.name === 'img') {
@@ -52,6 +55,7 @@ export const processImages = () => {
 						const srcValue = getAttributeValue(src);
 
 						let url = decodeURIComponent(srcValue.data);
+
 						if (url.startsWith('assets/')) url = `./${url}`;
 						const id = '_' + camelCase(url);
 
@@ -66,6 +70,7 @@ export const processImages = () => {
 				},
 			});
 
+			// Add the correct import statements at the top of the file.
 			if (instance) {
 				walk(instance, {
 					enter(node) {
@@ -76,6 +81,7 @@ export const processImages = () => {
 									return `import ${id} from '${url}';`;
 								})
 								.join('\n');
+
 							s.appendLeft(node.end, imports);
 						}
 					},
@@ -90,9 +96,15 @@ export const processImages = () => {
 	};
 };
 
+/**
+ * Determines if the URL is a video.
+ * @param {string} url
+ * @returns {boolean}
+ */
 const isVideo = (url) => url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.ogg');
 
 /**
+ * Gets an attribute by name.
  * @param {ElementNode} node
  * @param {string} name
  * @returns {Attribute | undefined}
@@ -100,6 +112,7 @@ const isVideo = (url) => url.endsWith('.mp4') || url.endsWith('.webm') || url.en
 const getAttribute = (node, name) => node.attributes.find((attr) => attr.name === name);
 
 /**
+ * Gets the value of an attribute.
  * @param {Attribute} attr
  * @returns {TextNode | undefined}
  */
@@ -110,7 +123,8 @@ const getAttributeValue = (attr) => {
 };
 
 /**
- *
+ * Adds the imported image refernce to as the image `src`.
+ * Adds the Tailwind classes to the element.
  * @param {MagicString} s
  * @param {Node & ElementNode} node
  * @param {TextNode} src
@@ -125,6 +139,7 @@ const formatImage = (s, node, id, src) => {
 		const classValue = getAttributeValue(classAttr);
 		s.update(classValue.start, classValue.end, merge(classValue.data, classes));
 	} else {
+		// Add the class attributes right after `<img`.
 		s.appendLeft(node.start + 4, ` class="${classes.join(' ')}"`);
 	}
 };
