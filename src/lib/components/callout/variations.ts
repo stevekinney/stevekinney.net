@@ -83,26 +83,26 @@ export const getVariation = (variant: CalloutVariation): CalloutVariationWithout
 
 const variationColors: Record<CalloutVariationWithoutAlias, string> = {
 	abstract:
-		'bg-green-50 text-green-700 border-green-100 dark:bg-green-900 dark:text-green-50 dark:border-green-800',
-	bug: 'bg-red-50 text-red-700 border-red-100 dark:bg-red-900 dark:text-red-50 dark:border-red-800',
+		'bg-green-50 text-green-700 border-green-100 dark:bg-green-950 dark:text-green-50 dark:border-green-900',
+	bug: 'bg-red-50 text-red-700 border-red-100 dark:bg-red-950 dark:text-red-50 dark:border-red-900',
 	danger:
-		'bg-red-50 text-red-700 border-red-100 dark:bg-red-900 dark:text-red-50 dark:border-red-800',
+		'bg-red-50 text-red-700 border-red-100 dark:bg-red-950 dark:text-red-50 dark:border-red-900',
 	example:
-		'bg-purple-50 text-purple-700 border-purple-100 dark:bg-purple-900 dark:text-purple-50 dark:border-purple-800',
+		'bg-purple-50 text-purple-700 border-purple-100 dark:bg-purple-950 dark:text-purple-50 dark:border-purple-900',
 	failure:
-		'bg-red-50 text-red-700 border-red-100 dark:bg-red-900 dark:text-red-50 dark:border-red-800',
-	info: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900 dark:text-blue-50 dark:border-blue-800',
-	note: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900 dark:text-blue-50 dark:border-blue-800',
+		'bg-red-50 text-red-700 border-red-100 dark:bg-red-950 dark:text-red-50 dark:border-red-900',
+	info: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-950 dark:text-blue-50 dark:border-blue-900',
+	note: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-950 dark:text-blue-50 dark:border-blue-900',
 	question:
-		'bg-orange-50 text-orange-700 border-orange-100 dark:bg-orange-900 dark:text-orange-50 dark:border-orange-800',
+		'bg-orange-50 text-orange-700 border-orange-100 dark:bg-orange-950 dark:text-orange-50 dark:border-orange-900',
 	quote:
-		'bg-slate-50 text-slate-700 border-slate-100 dark:bg-slate-900 dark:text-slate-50 dark:border-slate-800',
+		'bg-slate-50 text-slate-700 border-slate-100 dark:bg-slate-950 dark:text-slate-50 dark:border-slate-900',
 	success:
-		'bg-green-50 text-green-700 border-green-100 dark:bg-green-900 dark:text-green-50 dark:border-green-800',
-	tip: 'bg-green-50 text-green-700 border-green-100 dark:bg-green-900 dark:text-green-50 dark:border-green-800',
-	todo: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900 dark:text-blue-50 dark:border-blue-800',
+		'bg-green-50 text-green-700 border-green-100 dark:bg-green-950 dark:text-green-50 dark:border-green-900',
+	tip: 'bg-green-50 text-green-700 border-green-100 dark:bg-green-950 dark:text-green-50 dark:border-green-900',
+	todo: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-950 dark:text-blue-50 dark:border-blue-900',
 	warning:
-		'bg-orange-50 text-orange-700 border-orange-100 dark:bg-orange-900 dark:text-orange-50 dark:border-orange-800',
+		'bg-orange-50 text-orange-700 border-orange-100 dark:bg-orange-950 dark:text-orange-50 dark:border-orange-900',
 };
 
 export const getVariationColor = (variation: CalloutVariation): string => {
