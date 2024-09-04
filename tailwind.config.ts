@@ -5,6 +5,7 @@ import containerQueries from '@tailwindcss/container-queries';
 
 export default {
 	content: [
+		'./compilers/**/*.js',
 		'./src/**/*.svelte',
 		'./src/**/*.html',
 		'./src/**/*.ts',
