@@ -10,7 +10,7 @@ modified: 2024-04-08T08:39:54-06:00
 ---
 
 <script>
-  import ShikiThemeEditor from '../routes/tools/shiki-theme-editor/editor.svelte';
+  import ShikiThemeEditor from '@/routes/tools/shiki-theme-editor/editor.svelte';
 </script>
 
 **TL;DR**: I created a little tool for tweaking the CSS variables for [Shiki][] themes and you [can check it out here][tool].
