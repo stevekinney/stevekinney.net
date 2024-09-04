@@ -38,12 +38,11 @@ const config = {
 	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions), processImages(), processCallouts()],
 	kit: {
 		adapter: process.env.VERCEL ? vercelAdapter() : staticAdapter({ strict: false }),
-
 		alias: {
 			'@/*': 'src/*',
 			'$lib/*': 'src/lib/*',
 			'$assets/*': 'src/assets/*',
-			'$courses/*': 'src/courses/*',
+			'$courses/*': 'content/courses/*',
 		},
 	},
 };

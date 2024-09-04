@@ -16,15 +16,14 @@ export const fixMarkdownUrls = () => {
 			const { base } = parse(node.value);
 
 			if (base) {
-				baseUrl = base;
+				baseUrl = base + '/';
 			}
 		});
-
-		if (!baseUrl) return;
 
 		// Fix the URLs in the Markdown files by removing the `.md` extension.
 		visit(tree, 'link', (/** @type import('mdast').Link */ node) => {
 			const { url } = node;
+
 			node.url = baseUrl + url.replace(/\.md/, '');
 		});
 	};
