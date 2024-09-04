@@ -44,14 +44,12 @@ export default {
 			container: {
 				center: true,
 				padding: {
-					DEFAULT: '0',
-					sm: '2rem',
-					lg: '4rem',
+					DEFAULT: '2rem',
 				},
 				screens: {
 					DEFAULT: '400px',
 					sm: '640px',
-					md: '768px',
+					md: '700px',
 					lg: '1024px',
 				},
 			},
