@@ -20,49 +20,54 @@ export const processImages = (): PreprocessorGroup => {
 			const { instance, html } = parse(content, { filename });
 			const s = new MagicString(content);
 
-			/** @type {Map<string, { url: string, id: string }>} */
-			const images = new Map();
+			const images = new Map<string, { url: string; id: string }>();
 
 			// Walk the HTML AST and find all the image elements.
-			walk(html, (node) => {
-				if (node.name === 'img') {
-					const src = getAttribute(node, 'src');
+			walk(html, {
+				enter(node) {
+					if (node.name === 'img') {
+						const src = getAttribute(node, 'src');
 
-					if (!src) return;
+						if (!src) return;
 
-					const srcValue = getAttributeValue(src);
+						const srcValue = getAttributeValue(src);
 
-					if (!srcValue) return;
+						if (!srcValue) return;
 
-					let url = decodeURIComponent(srcValue.data);
+						let url = decodeURIComponent(srcValue.data);
 
-					if (url.startsWith('assets/')) url = `./${url}`;
+						if (url.startsWith('assets/')) url = `./${url}`;
 
-					const id = '_' + camelCase(url);
+						const id = '_' + camelCase(url);
 
-					images.set(url, { id, url });
+						images.set(url, { id, url });
 
-					if (isVideo(url)) {
-						return formatVideo(s, node, id);
+						if (isVideo(url)) {
+							formatVideo(s, node, id);
+							return;
+						}
+
+						formatImage(s, node, id, srcValue);
 					}
-
-					formatImage(s, node, id, srcValue);
-				}
+				},
 			});
 
 			// Add the correct import statements at the top of the file.
 			if (instance) {
-				walk(instance, (node) => {
-					if (node.type === 'Program') {
-						const imports = Array.from(images.entries())
-							.map(([url, { id }]) => {
-								if (!url.endsWith('gif')) url += '?w=700&format=avif&withoutEnlargement';
-								return `import ${id} from '${url}';`;
-							})
-							.join('\n');
+				walk(instance, {
+					enter(node) {
+						if (node.type === 'Program') {
+							const imports = Array.from(images.entries())
+								.map(([url, { id }]) => {
+									if (!url.endsWith('gif')) url += '?w=700&format=avif&withoutEnlargement';
+									return `import ${id} from '${url}';`;
+								})
+								.join('\n');
 
-						s.appendLeft(node.end, imports);
-					}
+							s.appendLeft(node.end, imports);
+							return false;
+						}
+					},
 				});
 			}
 
