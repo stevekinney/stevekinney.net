@@ -13,6 +13,7 @@
 	"license": "MIT",
 	"type": "module",
 	"devDependencies": {
+		"@types/mdast": "^4.0.4",
 		"unified": "^11.0.4",
 		"unist-util-visit": "^5.0.0",
 		"yaml": "^2.5.1"
