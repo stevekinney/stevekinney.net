@@ -7,9 +7,9 @@
 	],
 	"scripts": {
 		"dev": "vite dev --port 4444",
-		"build": "pnpm build:packages vite build",
+		"build": "pnpm build:packages && vite build",
 		"preview": "vite preview",
-		"prepare": "svelte-kit sync && pnpm build:packages",
+		"prepare": "svelte-kit sync",
 		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
