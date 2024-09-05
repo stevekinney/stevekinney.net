@@ -65,7 +65,6 @@ export const processImages = (): PreprocessorGroup => {
 								.join('\n');
 
 							s.appendLeft(node.end, imports);
-							return false;
 						}
 					},
 				});
