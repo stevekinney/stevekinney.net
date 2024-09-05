@@ -17,10 +17,6 @@ declare module '*.md' {
 	export const metadata: Record<string, unknown>;
 }
 
-declare module 'mdsvex-relative-images';
-declare module '@jsdevtools/rehype-toc';
-declare module 'remark-obsidian';
-
 declare module 'remark-slug' {
 	export default import('unified').Plugin;
 }
