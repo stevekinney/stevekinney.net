@@ -7,7 +7,7 @@
 	],
 	"scripts": {
 		"dev": "vite dev --port 4444",
-		"build": "vite build",
+		"build": "pnpm build:packages vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync && pnpm build:packages",
 		"test": "npm run test:integration && npm run test:unit",
