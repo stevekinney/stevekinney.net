@@ -30,7 +30,7 @@
 >
 	<p>
 		See something that looks a little off? Feel free to <a
-			href="https://github.com/stevekinney/stevekinney.net/tree/main/src{data.pathname}.md"
+			href="https://github.com/stevekinney/stevekinney.net/tree/main/content{data.pathname}.md"
 			class="font-semibold underline decoration-primary-500 decoration-2 underline-offset-4"
 		>
 			open a pull request here
