@@ -7,9 +7,9 @@
 	],
 	"scripts": {
 		"dev": "vite dev --port 4444",
-		"build": "pnpm build:packages && vite build",
+		"build": "vite build",
 		"preview": "vite preview",
-		"prepare": "svelte-kit sync",
+		"prepare": "",
 		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -20,7 +20,9 @@
 		"test:storybook": "test-storybook",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
-		"build:packages": "pnpm run --filter '*' build"
+		"install:packages": "pnpm install --filter './packages/*'",
+		"build:packages": "pnpm run --filter './packages/*' build",
+		"install:all": "pnpm install:packages && pnpm build:packages && pnpm install -w"
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^1.8.0",
