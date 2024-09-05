@@ -12,12 +12,8 @@ export const getPosts = async () => {
 		if (file && typeof file === 'object' && 'metadata' in file && slug) {
 			const metadata = file.metadata as Omit<Post, 'slug'>;
 			const post = { ...metadata, slug } satisfies Post;
-			if (dev) {
+			if (dev || post.published) {
 				posts.push(post);
-			} else {
-				if (post.published) {
-					posts.push(post);
-				}
 			}
 		}
 	}
