@@ -23,6 +23,8 @@ export default [
 			'build',
 			'.svelte-kit',
 			'package',
+			'build',
+			'**/dist',
 			'**/.env',
 			'**/.env.*',
 			'!**/.env.example',

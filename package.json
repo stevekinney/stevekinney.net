@@ -2,11 +2,14 @@
 	"name": "stevekinney.net",
 	"version": "0.0.1",
 	"private": true,
+	"workspaces": [
+		"packages/*"
+	],
 	"scripts": {
 		"dev": "vite dev --port 4444",
 		"build": "vite build",
 		"preview": "vite preview",
-		"prepare": "svelte-kit sync",
+		"prepare": "svelte-kit sync && pnpm build:packages",
 		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -17,7 +20,7 @@
 		"test:storybook": "test-storybook",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
-		"types": "pnpm run --filter '*' types"
+		"build:packages": "pnpm run --filter '*' build"
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^1.8.0",
