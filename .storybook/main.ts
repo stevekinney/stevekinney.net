@@ -14,8 +14,6 @@ const config: StorybookConfig = {
 		name: '@storybook/sveltekit',
 		options: {},
 	},
-	docs: {
-		autodocs: 'tag',
-	},
+	docs: {},
 };
 export default config;
