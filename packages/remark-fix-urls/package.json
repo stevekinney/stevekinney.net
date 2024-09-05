@@ -2,10 +2,10 @@
 	"name": "remark-fix-urls",
 	"version": "1.0.0",
 	"description": "",
-	"main": "src/index.js",
+	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"types": "tsc",
+		"build": "tsc",
 		"test": "vitest"
 	},
 	"keywords": [],

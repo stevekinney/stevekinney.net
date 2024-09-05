@@ -1,0 +1,14 @@
+{
+	"name": "walk-svelte-ast",
+	"version": "1.0.0",
+	"description": "",
+	"main": "dist/index.js",
+	"scripts": {
+		"build": "tsc",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "Steve Kinney <hello@stevekinney.net>",
+	"license": "MIT",
+	"type": "module"
+}
