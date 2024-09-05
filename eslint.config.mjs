@@ -29,6 +29,7 @@ export default [
 			'**/pnpm-lock.yaml',
 			'**/package-lock.json',
 			'**/yarn.lock',
+			'**/.obsidian',
 		],
 	},
 	...compat.extends(
@@ -36,7 +37,6 @@ export default [
 		'plugin:@typescript-eslint/recommended',
 		'plugin:svelte/recommended',
 		'prettier',
-		'plugin:storybook/recommended',
 	),
 	{
 		plugins: {

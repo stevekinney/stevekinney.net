@@ -15,7 +15,9 @@ export const getPosts = async () => {
 			if (dev) {
 				posts.push(post);
 			} else {
-				post.published && posts.push(post);
+				if (post.published) {
+					posts.push(post);
+				}
 			}
 		}
 	}
