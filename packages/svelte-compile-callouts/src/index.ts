@@ -21,33 +21,42 @@ export const processCallouts = (): PreprocessorGroup => {
 			 * Did we find any callouts in the Markdown file?
 			 */
 			let hasCallouts = false;
+			let calloutImported = false;
 
-			walk(html, (node) => {
-				if (node.type === 'Element' && node.name === 'blockquote') {
-					const start = node.start;
-					const end = node.end;
+			walk(html, {
+				enter(node) {
+					if (node.name === 'blockquote') {
+						const start = node.start;
+						const end = node.end;
 
-					const callout = parseCallout(content.substring(start, end));
+						const callout = parseCallout(content.substring(start, end));
 
-					// If it's not a callout, bail.
-					if (!callout) return;
+						// If it's not a callout, bail.
+						if (!callout) return;
 
-					// We found a callout!
-					hasCallouts = true;
+						// We found a callout!
+						hasCallouts = true;
 
-					// Replace the callout with a component.
-					s.overwrite(start, end, compileCallout(callout));
-				}
+						// Replace the callout with a component.
+						s.overwrite(start, end, compileCallout(callout));
+					}
+				},
 			});
 
 			// If we found any callouts, we need to import the `Callout` component.
 			if (hasCallouts) {
 				if (instance) {
-					walk(instance, (node) => {
-						if (node.type === 'Program') {
-							// Add the import statement to the `<script/>` section.
-							s.appendLeft(node.end, `\n\timport Callout from '$lib/components/callout';\n`);
-						}
+					walk(instance, {
+						enter(node) {
+							if (node.type === 'Program') {
+								if (calloutImported) return false;
+								// Add the import statement to the `<script/>` section.
+								s.appendLeft(node.end, `\n\timport Callout from '$lib/components/callout';\n`);
+								calloutImported = true;
+								// Stop walking.
+								return false;
+							}
+						},
 					});
 				}
 			}
