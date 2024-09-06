@@ -16,7 +16,6 @@ import { fixMarkdownUrls } from 'remark-fix-urls';
 const mdsvexOptions = {
 	extensions: ['.md'],
 	remarkPlugins: [remarkUnwrapImages, fixMarkdownUrls],
-	// @ts-expect-error - `rehypeSlug` is not in the types
 	rehypePlugins: [rehypeSlug],
 	layout: {
 		_: './src/lib/markdown/base.svelte',
