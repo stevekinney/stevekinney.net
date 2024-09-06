@@ -42,6 +42,7 @@ const config = {
 			'$lib/*': 'src/lib/*',
 			'$assets/*': 'src/assets/*',
 			'$courses/*': 'content/courses/*',
+			'content/*': 'content/*',
 		},
 	},
 };
