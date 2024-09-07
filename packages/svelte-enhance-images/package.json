@@ -2,10 +2,11 @@
 	"name": "svelte-enhance-images",
 	"version": "1.0.0",
 	"description": "",
-	"main": "dist/index.js",
+	"main": "dist/index.es.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"build": "tsc",
+		"build": "vite build --config ../../vite.package.config.ts",
+		"watch": "vite build --watch --config ../../vite.package.config.ts",
 		"test": "vitest"
 	},
 	"keywords": [],
@@ -13,11 +14,10 @@
 	"license": "MIT",
 	"type": "module",
 	"devDependencies": {
-		"walk-svelte-ast": "workspace:*",
 		"change-case": "^5.4.4",
 		"magic-string": "^0.30.9",
 		"svelte": "^4.2.12",
 		"tailwind-merge": "^2.2.2",
-		"typescript": "^5.4.4"
+		"vite-plugin-dts": "^4.1.1"
 	}
 }

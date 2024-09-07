@@ -2,13 +2,30 @@
 	"name": "walk-svelte-ast",
 	"version": "1.0.0",
 	"description": "",
-	"main": "dist/index.js",
+	"main": "dist/index.es.js",
+	"types": "dist/index.d.ts",
 	"scripts": {
-		"build": "tsc",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"build": "vite build --config ../../vite.package.config.ts",
+		"watch": "vite build --watch --config ../../vite.package.config.ts",
+		"test": "vitest --config ../../vite.package.config.ts"
 	},
 	"keywords": [],
 	"author": "Steve Kinney <hello@stevekinney.net>",
 	"license": "MIT",
-	"type": "module"
+	"type": "module",
+	"devDependencies": {
+		"svelte": "^4.2.19",
+		"vite": "^5.4.3",
+		"vite-plugin-dts": "^4.1.1",
+		"vitest": "^2.0.5"
+	},
+	"overrides": {
+		"svelte": {
+			"exports": {
+				"./types/compiler/interfaces": {
+					"types": "./types/compiler/interfaces.d.ts"
+				}
+			}
+		}
+	}
 }
