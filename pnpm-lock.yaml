@@ -276,9 +276,6 @@ importers:
       vite-plugin-dts:
         specifier: ^4.1.1
         version: 4.1.1(@types/node@22.5.4)(rollup@4.21.2)(typescript@5.5.4)(vite@5.4.3(@types/node@22.5.4))
-      walk-svelte-ast:
-        specifier: workspace:*
-        version: link:../walk-svelte-ast
 
   packages/walk-svelte-ast:
     devDependencies:
