@@ -3,7 +3,7 @@ import { camelCase } from 'change-case';
 import MagicString from 'magic-string';
 import { twMerge as merge } from 'tailwind-merge';
 
-import { walk, type TemplateNode, type Attribute, type Text } from 'walk-svelte-ast';
+import { walk, type Node, type Attribute, type Text } from 'walk-svelte-ast';
 
 const classes = ['max-w-full', 'rounded-md', 'shadow-md'];
 
@@ -84,7 +84,7 @@ const isVideo = (url: string) =>
 /**
  * Gets an attribute by name.
  **/
-const getAttribute = (node: TemplateNode, name: string): Attribute | undefined =>
+const getAttribute = (node: Node, name: string): Attribute | undefined =>
 	node.attributes.find((attr: Attribute) => attr.name === name);
 
 /**
@@ -100,7 +100,7 @@ const getAttributeValue = (attr: Attribute): Text | undefined => {
  * Adds the imported image refernce to as the image `src`.
  * Adds the Tailwind classes to the element.
  */
-const formatImage = (s: MagicString, node: TemplateNode, id: string, src: Text) => {
+const formatImage = (s: MagicString, node: Node, id: string, src: Text) => {
 	s.update(src.start, src.end, `{${id}}`);
 
 	const classAttr = getAttribute(node, 'class');
@@ -115,7 +115,7 @@ const formatImage = (s: MagicString, node: TemplateNode, id: string, src: Text) 
 	}
 };
 
-const formatVideo = (s: MagicString, node: TemplateNode, id: string) => {
+const formatVideo = (s: MagicString, node: Node, id: string) => {
 	return s.update(
 		node.start,
 		node.end,

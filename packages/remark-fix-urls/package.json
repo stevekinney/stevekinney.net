@@ -2,11 +2,10 @@
 	"name": "remark-fix-urls",
 	"version": "1.0.0",
 	"description": "",
-	"main": "dist/index.es.js",
+	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"build": "vite build --config ../../vite.package.config.ts",
-		"watch": "vite build --watch --config ../../vite.package.config.ts",
+		"build": "tsc",
 		"test": "vitest"
 	},
 	"keywords": [],
@@ -15,10 +14,8 @@
 	"type": "module",
 	"devDependencies": {
 		"@types/mdast": "^4.0.4",
-		"typescript": "^5.5.4",
 		"unified": "^11.0.4",
 		"unist-util-visit": "^5.0.0",
-		"vite-plugin-dts": "^4.1.1",
 		"yaml": "^2.5.1"
 	}
 }

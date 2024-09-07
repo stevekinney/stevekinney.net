@@ -1,0 +1,28 @@
+{
+	"include": ["src/**/*.js", "src/**/*.ts"],
+	"exclude": ["dist/**", "**/*.test.ts", "**/*.test.js"],
+	"compilerOptions": {
+		"baseUrl": ".",
+		"target": "ESNext", // Modern ES features, aligned with Vite's defaults
+		"module": "ESNext", // Vite uses ES modules, so set this to ESNext
+		"declaration": true, // Generate .d.ts files
+		"declarationMap": true, // Source maps for declarations
+		"sourceMap": true, // Enable source maps
+		"outDir": "dist", // Output directory for compiled code
+		"strict": true, // Strict type-checking for robustness
+		"esModuleInterop": true, // For CommonJS module interop
+		"skipLibCheck": true, // Skip checking library .d.ts files
+		"forceConsistentCasingInFileNames": true, // Enforce consistent file name casing
+		"moduleResolution": "node", // Resolve Node.js modules
+		"resolveJsonModule": true, // Allow importing JSON files
+		"isolatedModules": true, // Vite handles each module individually
+		"noEmitOnError": true, // Prevent output if there are errors
+		"removeComments": true, // Clean up output
+		"allowSyntheticDefaultImports": true, // Allow default imports from modules without a default export
+		"lib": ["ESNext", "DOM"], // Target modern JS and include DOM types for browser compatibility
+		"types": ["vite/client"],
+		"paths": {
+			"svelte/types/compiler/interfaces": ["node_modules/svelte/types/compiler/interfaces.d.ts"]
+		}
+	}
+}

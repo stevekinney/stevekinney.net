@@ -20,15 +20,14 @@
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
 		"install:packages": "pnpm install --filter './packages/*'",
-		"build:packages": "turbo build",
-		"watch:packages": "turbo watch",
+		"build:packages": "pnpm run --filter './packages/*' build",
 		"install:all": "pnpm install:packages && pnpm build:packages && pnpm install -w && svelte-kit sync"
 	},
 	"devDependencies": {
-		"@chromatic-com/storybook": "^1.9.0",
+		"@chromatic-com/storybook": "^1.8.0",
 		"@eslint/eslintrc": "^3.1.0",
-		"@eslint/js": "^9.10.0",
-		"@playwright/test": "^1.47.0",
+		"@eslint/js": "^9.9.1",
+		"@playwright/test": "^1.46.1",
 		"@storybook/addon-a11y": "^8.2.9",
 		"@storybook/addon-coverage": "^1.0.4",
 		"@storybook/addon-essentials": "^8.2.9",
@@ -46,8 +45,6 @@
 		"@sveltejs/kit": "^2.5.26",
 		"@sveltejs/vite-plugin-svelte": "^3.1.2",
 		"@tailwindcss/typography": "^0.5.15",
-		"@types/eslint__eslintrc": "^2.1.2",
-		"@types/eslint__js": "^8.42.3",
 		"@types/node": "^22.5.4",
 		"@types/unist": "^3.0.3",
 		"@typescript-eslint/eslint-plugin": "^8.4.0",
@@ -57,11 +54,11 @@
 		"axe-playwright": "^2.0.2",
 		"change-case": "^5.4.4",
 		"clsx": "^2.1.1",
-		"eslint": "^9.10.0",
+		"eslint": "^9.9.1",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.43.0",
 		"globals": "^15.9.0",
-		"lucide-svelte": "^0.439.0",
+		"lucide-svelte": "^0.438.0",
 		"mdsvex": "^0.12.3",
 		"postcss": "^8.4.45",
 		"postcss-nesting": "^13.0.0",
@@ -81,11 +78,9 @@
 		"tailwind-merge": "^2.5.2",
 		"tailwindcss": "^3.4.10",
 		"tslib": "^2.7.0",
-		"turbo": "^2.1.1",
 		"typescript": "^5.5.4",
 		"vite": "^5.4.3",
 		"vite-imagetools": "^7.0.1",
-		"vite-plugin-dts": "^4.1.1",
 		"vitest": "^2.0.5",
 		"yaml": "^2.5.1"
 	},
@@ -102,9 +97,7 @@
 	"overrides": {
 		"vite-imagetools": {
 			"sharp": "0.33.5"
-		},
-		"@microsoft/api-extractor": "7.47.7",
-		"typescript": "^5.5.4"
+		}
 	},
 	"pnpm": {
 		"supportedArchitectures": {
