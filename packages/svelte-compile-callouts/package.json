@@ -2,11 +2,10 @@
 	"name": "svelte-compile-callouts",
 	"version": "1.0.0",
 	"description": "",
-	"main": "dist/index.es.js",
+	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"build": "vite build --config ../../vite.package.config.ts",
-		"watch": "vite build --watch --config ../../vite.package.config.ts",
+		"build": "tsc",
 		"test": "vitest"
 	},
 	"keywords": [],
@@ -14,13 +13,9 @@
 	"license": "MIT",
 	"type": "module",
 	"devDependencies": {
+		"walk-svelte-ast": "workspace:*",
 		"magic-string": "^0.30.9",
 		"svelte": "^4.2.12",
-		"vite-plugin-dts": "^4.1.1",
-		"vitest": "^1.4.0",
-		"walk-svelte-ast": "workspace:*"
-	},
-	"overrides": {
-		"typescript": "^5.5.4"
+		"vitest": "^1.4.0"
 	}
 }

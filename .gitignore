@@ -15,4 +15,3 @@ meta-*
 *storybook.log
 content/.obsidian/workspace.json
 **/.svelte-kit
-.turbo
