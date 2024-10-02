@@ -16,6 +16,7 @@ modified: 2024-04-15T06:34:21-06:00
 - [Figma for Developers](/courses/figma)
 - [Building Design Systems with Storybook](/courses/storybook)
 - [Web Security](/courses/web-security)
+- [Introduction to Testing in JavaScript](/courses/testing)
 
 ## Recordings
 

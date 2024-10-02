@@ -1,5 +1,5 @@
 ---
-modified: 2024-04-15T06:34:20-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 Now, this is interesting. If you look closely, you'll see that we don't have anything selected in terms of the `variant` for each of these button sizes. This makes sense since we didn't add it as an argument and if you peek back over at our component code, you'll see that when in doubt, we default to a primary button unless told otherwise—similarly, we default to a medium-size button if no `size` prop is passed in.

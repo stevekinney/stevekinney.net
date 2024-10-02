@@ -1,7 +1,7 @@
 ---
 title: Integrating Storybook into Figma
 description:
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 You'll need to have your project published on [Chromatic](visual-tests.md). But, once you have that in place, go to your project and copy the URL the particular component that you want to link up with Figma.

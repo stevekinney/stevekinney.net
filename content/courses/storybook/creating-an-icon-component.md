@@ -1,7 +1,7 @@
 ---
 title: Creating an Icon Component
 description:
-modified: 2024-04-15T06:34:56-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 I'm not sure that we're going to do this together, but I thought I'd show you my very naïve implementation of an `Icon` component. I want to limit the number of available icons _and_ I want auto-complete to help me find the icon that I need. Here is my very simple icon component that we can start with.

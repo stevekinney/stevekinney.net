@@ -1,7 +1,7 @@
 ---
 title: 'Solution: Adding Button Size Variants and Controls'
 description:
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 We should also probably update the component as well, right?
@@ -47,4 +47,4 @@ export const Large: Story = {
 };
 ```
 
-Alright, as promised, it's time to talk about [default arguments](default-args.md).
+As promised, it's time to talk about [default arguments](default-args.md).

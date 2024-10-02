@@ -1,7 +1,7 @@
 ---
 title: Documenting Components with MDX
 description:
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 Storybook allows you to document components using [MDX](https://mdxjs.com/), which is basically just Markdown + JSX.

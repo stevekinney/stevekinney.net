@@ -1,7 +1,7 @@
 ---
 title: Testing Components with Storybook
 description:
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 In almost every application that I have ever worked on there is a concept that a link can look like a button. There is a pattern in React, where we can use polymorphic components. We talk a lot about how to do this in the course on React and Typescript, but for now, let's just be a little hand-wavvy.

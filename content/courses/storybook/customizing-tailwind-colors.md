@@ -1,7 +1,7 @@
 ---
 title: Customizing the Colors in Our Theme
 description:
-modified: 2024-04-14T14:27:18-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 Our design system has it's own color system. Luckily, we can swap out the one included in Tailwind fairly easily. To save you the hassle of putting it together yourself, I included an implementation in `src/tokens/colors.ts` that you can use.

@@ -1,6 +1,6 @@
 ---
 date: 2024-03-28T13:06:40-06:00
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-09-28T11:31:17-06:00
 title: Cropped Grid Components
 description: Using the cropped grid pattern for dynamically displaying content in Figma components.
 ---

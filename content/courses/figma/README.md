@@ -1,6 +1,6 @@
 ---
 date: 2024-03-23T11:50:59-06:00
-modified: 2024-04-15T06:34:21-06:00
+modified: 2024-09-28T11:31:17-06:00
 layout: contents
 base: /courses/figma
 exclude: true

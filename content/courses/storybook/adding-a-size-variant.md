@@ -1,7 +1,7 @@
 ---
 title: Adding a Size Variant with CVA
 description:
-modified: 2024-04-14T14:55:56-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 In the [previous section](class-variance-authority.md), we looked using [Class Variance Authority](https://cva.style) to programmatically apply Tailwind's utility classes based on the props passed in. Now, we want to do that for the style as well.

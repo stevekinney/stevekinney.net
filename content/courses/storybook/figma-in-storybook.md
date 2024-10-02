@@ -1,7 +1,7 @@
 ---
 title: Integrating Figma Designs into Storybook
 description:
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 A lot of times it'd be nice to see what we're implementing in the same place where we're reviewing our implementation. If you're using Figma, then you can integrate into your stories to make your life just a little bit easier.

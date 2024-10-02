@@ -1,7 +1,7 @@
 ---
 title: Generating a Color Palette
 description: Using a Figma plugin to generate a set of color variable that we can use in our project.
-modified: 2024-04-15T06:55:57-06:00
+modified: 2024-09-28T11:31:17-06:00
 ---
 
 > [!TIP] Coming up with a color palette
