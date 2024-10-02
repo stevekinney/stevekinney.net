@@ -3,7 +3,7 @@ title: Organizing Components and Hierarchy
 description:
 exclude: false
 drafted: false
-modified: 2024-04-14T08:19:29-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 If you look at our sidebar, it's _already_ getting a little unorganized. Luckily, it's pretty easy to bring some level of organization to our components. Storybook uses the way that our components are named to form some story of hierarchy.

@@ -1,7 +1,7 @@
 ---
 title: Implementing a Calllout Component
 description:
-modified: 2024-04-14T15:39:50-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 > [!important] This is the solution for a previous exercise

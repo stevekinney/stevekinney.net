@@ -1,7 +1,7 @@
 ---
 title: Styles Versus Variables
 description: Figma styles, variables, and the difference between them.
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-09-28T11:31:17-06:00
 ---
 
 If you're thinking to yourself that there might be some overlap between variables and [styles](styles.md) in Figma, you're definitely in good company.

@@ -2,7 +2,7 @@
 title: Branching and Merging Versions
 description: "Unlock efficient, collaborative design with Figma's branching and merging. Work independently on branches and seamlessly integrate changes, enhancing teamwork and creativity."
 date: 2024-03-09T14:27:50-05:00
-modified: 2024-04-15T08:59:16-06:00
+modified: 2024-09-28T11:31:17-06:00
 tags: [figma, course, frontendmasters]
 ---
 

@@ -1,6 +1,6 @@
 ---
 date: 2024-03-28T13:11:56-06:00
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-09-28T11:31:17-06:00
 title: Placeholder Components
 description: A pattern for swapping out the contents of a component in Figma.
 ---

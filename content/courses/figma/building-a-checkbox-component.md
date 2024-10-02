@@ -1,7 +1,7 @@
 ---
 title: Building a Checkbox Component
 description: Creating an interactive checkbox component with variants in Figma.
-modified: 2024-04-15T09:00:46-06:00
+modified: 2024-09-28T11:31:17-06:00
 ---
 
 > [!success] Solution

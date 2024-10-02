@@ -1,7 +1,7 @@
 ---
 title: Setting Up Chromatic
 description:
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 [Chromatic](https://www.chromatic.com/) is a cloud-based software tool created by the maintainers of Storybook that automates visual testing for UI components and web applications. Since it's made by the maintainers of Storybook, you can imagine that It integrates seamlessly with Storybook and allows you to capture snapshots of every story and compare them across different commits to identify visual changes.

@@ -1,7 +1,7 @@
 ---
 title: Setting Up a Test Runner
 description:
-modified: 2024-04-17T05:33:48-05:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 Storybook allows you to take your [Play functions](play-functions.md) and run through them all and in order to make sure they all do what you expect them to do.

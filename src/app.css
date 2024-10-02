@@ -14,7 +14,7 @@
 	}
 
 	table {
-		@apply w-full border-separate border-spacing-0 rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 shadow-md dark:border-black-pearl-800 dark:bg-black-pearl-800;
+		@apply block w-full max-w-full border-separate border-spacing-0 overflow-x-scroll rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 shadow-md dark:border-black-pearl-800 dark:bg-black-pearl-800;
 	}
 
 	thead {

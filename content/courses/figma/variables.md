@@ -2,7 +2,7 @@
 title: Variables
 description: Variables in Figma revolutionize design workflows by allowing for the efficient update of multiple elements, ensuring consistency and adaptability across projects.
 date: 2024-03-09T14:25:35-05:00
-modified: 2024-04-15T06:34:20-06:00
+modified: 2024-09-28T11:31:17-06:00
 ---
 
 Just like in JavaScript, variables in Figma act as placeholders that store specific—and reusable—values. These values can be anything from color codes, font sizes, spacing measurements, to text strings. Once defined, these variables can be applied to properties of different design elements within your Figma files.

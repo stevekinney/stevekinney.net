@@ -1,7 +1,7 @@
 ---
 title: 'Exercise: Adding Button Size Variant and Controls'
 description:
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-09-28T11:31:16-06:00
 ---
 
 Buttons can come in all shapes and sizes, the buttons in our design system come in four sizes—`extra-small`, `small`, `medium`, and `large` —with `medium` being the default size. Here is some CSS to get us started. This is included in `button.module.css`.

@@ -1,13 +1,13 @@
 ---
-title: Implementing Obsidian's Callout in Svelte
-description: A gentle walkthrough where we build our take on Obsidian's callout component in Svelte.
+title: "Implementing Obsidian's Callout in Svelte"
+description: "A gentle walkthrough where we build our take on Obsidian's callout component in Svelte."
 date: 2024-04-07T10:29:29-06:00
 tags:
   - svelte
   - storybook
   - design-systems
 published: false
-modified: 2024-04-08T07:36:36-06:00
+modified: 2024-09-28T11:31:14-06:00
 ---
 
 I use [Obsidian](https://obsidian.md) for a lot of my writing and note gathering when I'm working on a course. I wouldn't mind using [Obsidian Publish](https://obsidian.md/publish) for hosting my notes and—as of this writing—I do have a paid account, but given that I want a high-level of customization and the ability to include code along with my content, I need a bit more control over how the content is hosted than Obsidian Publish is willing to give me.
@@ -446,7 +446,7 @@ export const Warning: Story = {
 };
 ```
 
-In addition to make a whole bunch of stories, I went ahead and move some of the default arguments to the `meta` for the component. Alright, now we need to get to the icons.
+In addition to make a whole bunch of stories, I went ahead and move some of the default arguments to the `meta` for the component. Now we need to get to the icons.
 
 ## Getting the Icon for the Callout Variation
 

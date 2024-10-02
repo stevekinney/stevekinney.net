@@ -2,7 +2,7 @@
 title: Developer Resources API
 description: The Figma Developer Resources API enhances development workflows by providing programmatic access to design specifications, enabling automation, consistency, and the creation of custom development tools.
 date: 2024-03-09T14:33:34-05:00
-modified: 2024-04-15T06:34:21-06:00
+modified: 2024-09-28T11:31:17-06:00
 ---
 
 The Figma Developer Resources API is a powerful tool designed to bridge the gap between design and development further by providing programmatic access to Figma files. This API allows developers to extract design tokens, assets, and more directly from Figma files, enabling automation, integration with development workflows, and the creation of custom tools and applications. Let's delve into how the Figma Developer Resources API can transform your development process.

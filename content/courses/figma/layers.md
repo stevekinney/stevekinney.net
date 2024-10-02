@@ -1,7 +1,7 @@
 ---
 title: Working with Layers
 description: In which we learn how to use frames, sections, slices, and groups in Figma—and the difference between them.
-modified: 2024-04-15T06:34:21-06:00
+modified: 2024-09-28T11:31:17-06:00
 date: 2024-03-05T13:04:49-07:00
 tags: [figma, course, frontendmasters]
 ---

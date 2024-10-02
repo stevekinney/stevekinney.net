@@ -1,7 +1,7 @@
 ---
 title: Using Variables for Tokens
 description: Using Figma variables for design system tokens.
-modified: 2024-04-15T06:34:57-06:00
+modified: 2024-09-28T11:31:17-06:00
 ---
 
 The core value proposition of [variables](variables.md) is that they store single values that make it easy for us to change across all of our designs later. You can implement [a full set of spacing values like found in Tailwind](https://tailwindcss.com/docs/customizing-spacing#default-spacing-scale)—and this might make total sense as a basis for your primitives—or you may choose to use a curated, more-limited set.
