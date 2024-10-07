@@ -3,7 +3,8 @@ import { camelCase } from 'change-case';
 import MagicString from 'magic-string';
 import { twMerge as merge } from 'tailwind-merge';
 
-import { walk, type TemplateNode, type Attribute, type Text } from 'walk-svelte-ast';
+import { walk } from 'svelte-tree-walker';
+import { Attribute, TemplateNode, Text } from 'svelte/types/compiler/interfaces';
 
 const classes = ['max-w-full', 'rounded-md', 'shadow-md'];
 
@@ -23,51 +24,48 @@ export const processImages = (): PreprocessorGroup => {
 			const images = new Map<string, { url: string; id: string }>();
 
 			// Walk the HTML AST and find all the image elements.
-			walk(html, {
-				enter(node) {
-					if (node.name === 'img') {
-						const src = getAttribute(node, 'src');
+			for (const node of walk(html)) {
+				if ('name' in node && node.name === 'img') {
+					const src = getAttribute(node, 'src');
 
-						if (!src) return;
+					if (!src) continue;
 
-						const srcValue = getAttributeValue(src);
+					const srcValue = getAttributeValue(src);
 
-						if (!srcValue) return;
+					if (!srcValue) continue;
 
-						let url = decodeURIComponent(srcValue.data);
+					let url = decodeURIComponent(srcValue.data);
 
-						if (url.startsWith('assets/')) url = `./${url}`;
+					if (url.startsWith('assets/')) url = `./${url}`;
 
-						const id = '_' + camelCase(url);
+					const id = '_' + camelCase(url);
 
-						images.set(url, { id, url });
+					images.set(url, { id, url });
 
-						if (isVideo(url)) {
-							formatVideo(s, node, id);
-							return;
-						}
-
-						formatImage(s, node, id, srcValue);
+					if (isVideo(url)) {
+						formatVideo(s, node, id);
+						continue;
 					}
-				},
-			});
+
+					formatImage(s, node, id, srcValue);
+				}
+			}
 
 			// Add the correct import statements at the top of the file.
 			if (instance) {
-				walk(instance, {
-					enter(node) {
-						if (node.type === 'Program') {
-							const imports = Array.from(images.entries())
-								.map(([url, { id }]) => {
-									if (!url.endsWith('gif')) url += '?w=700&format=avif&withoutEnlargement';
-									return `import ${id} from '${url}';`;
-								})
-								.join('\n');
+				for (const node of walk(instance)) {
+					if (node.type === 'Program') {
+						const imports = Array.from(images.entries())
+							.map(([url, { id }]) => {
+								if (!url.endsWith('gif')) url += '?w=700&format=avif&withoutEnlargement';
+								return `import ${id} from '${url}';`;
+							})
+							.join('\n');
 
-							s.appendLeft(node.end, imports);
-						}
-					},
-				});
+						s.appendLeft(node.end, imports);
+						break;
+					}
+				}
 			}
 
 			return {
