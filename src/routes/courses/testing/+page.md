@@ -56,6 +56,5 @@ Additionally, I also have some further reading on some more advanced topics that
 - [Advanced Debugging in Vitest](/courses/testing/debugging-vitest-tests)
 - [Creating Custom Reporters in Vitest](/courses/testing/vitest-reporters)
 - [Creating Custom Matchers in Vitest](/courses/testing/custom-matchers)
-- [Parallel and Serial Test Execution](/courses/testing/parallel-and-serial-test-execution)
 - [Test Contexts in Vitest](/courses/testing/test-context)
 - [Running Tests for Related Files in Vitest](/courses/testing/running-tests-for-related-files)
