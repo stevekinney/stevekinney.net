@@ -56,7 +56,7 @@ If you no longer want an instance of a component to inherit properties from the 
 
 ![Detatch a component](assets/figma-detatch-component.png)
 
-The shortcut for detaching an instance is `Option/Alt-Shift-B`.
+The shortcut for detaching an instance is `Option/Ctrl-Alt-B`.
 
 ## Organizing Components
 
