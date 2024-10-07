@@ -2,12 +2,7 @@
   "outputFileName": "meta-orphaned",
   "disableWorkingLinks": false,
   "directoriesToIgnore": [
-    "build/",
-    "static/",
-    "src/routes/",
-    "src/assets/",
-    "src/writing/",
-    "templates/"
+    "writing/"
   ],
   "filesToIgnore": [
     "README.md",
