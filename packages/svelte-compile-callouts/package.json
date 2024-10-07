@@ -15,8 +15,8 @@
 	"devDependencies": {
 		"magic-string": "^0.30.9",
 		"svelte": "^4.2.12",
+		"svelte-tree-walker": "latest",
 		"vite": "^5.4.3",
-		"vitest": "^1.4.0",
-		"walk-svelte-ast": "workspace:*"
+		"vitest": "^1.4.0"
 	}
 }
