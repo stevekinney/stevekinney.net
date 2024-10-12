@@ -82,7 +82,6 @@ type ButtonProps = ComponentProps<'button'> & {
 Let's start by styling the button. We haven't implemented any of these variants yet, so we'll work on styling the primary button first and then go from there. In `button.module.css`, I have the following styles waiting for you.
 
 ```css
-/* Base Button Styles */
 .button {
     align-items: center;
     background-color: #4f46e5;
