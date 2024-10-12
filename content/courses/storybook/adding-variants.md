@@ -82,86 +82,88 @@ type ButtonProps = ComponentProps<'button'> & {
 Let's start by styling the button. We haven't implemented any of these variants yet, so we'll work on styling the primary button first and then go from there. In `button.module.css`, I have the following styles waiting for you.
 
 ```css
+/* Base Button Styles */
 .button {
-	align-items: center;
-	background-color: #4f46e5;
-	border-color: transparent;
-	border-radius: 0.25rem;
-	border-width: 1px;
-	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-	color: white;
-	cursor: pointer;
-	display: inline-flex;
-	font-weight: 600;
-	gap: 0.375rem;
-	padding: 0.375rem 0.75rem;
-	transition: background-color 0.2s;
+    align-items: center;
+    background-color: #4f46e5;
+    border-color: transparent;
+    border-radius: 0.25rem;
+    border-width: 1px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    color: white;
+    cursor: pointer;
+    display: inline-flex;
+    font-weight: 600;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    transition: background-color 0.2s;
 }
 
 /* Focus visible styles */
 .button:focus-visible {
-	outline: 2px solid;
-	outline-offset: 2px;
+    outline: 2px solid;
+    outline-offset: 2px;
 }
 
 /* Disabled styles */
 .button:disabled {
-	opacity: 0.5;
-	cursor: not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
+/* Hover and Active States for Base Button */
 .button:hover {
-	background-color: #4338ca;
+    background-color: #4338ca;
 }
 
 .button:active {
-	background-color: #3730a3;
+    background-color: #3730a3;
 }
 
-/* Variant: secondary */
-.button-secondary {
-	background-color: white;
-	color: #1f2937;
-	border-color: #94a3b8;
+/* Secondary Variant */
+.secondary {
+    background-color: white;
+    color: #1f2937;
+    border-color: #94a3b8;
 }
 
-.button-secondary:hover {
-	background-color: #f1f5f9;
+.secondary:hover {
+    background-color: #f1f5f9;
 }
 
-.button-secondary:active {
-	background-color: #e2e8f0;
+.secondary:active {
+    background-color: #e2e8f0;
 }
 
-/* Variant: destructive */
-.button-destructive {
-	background-color: #dc2626;
-	color: white;
-	border-color: transparent;
+/* Destructive Variant */
+.destructive {
+    background-color: #dc2626;
+    color: white;
+    border-color: transparent;
 }
 
-.button-destructive:hover {
-	background-color: #b91c1c;
+.destructive:hover {
+    background-color: #b91c1c;
 }
 
-.button-destructive:active {
-	background-color: #991b1b;
+.destructive:active {
+    background-color: #991b1b;
 }
 
-/* Variant: ghost */
-.button-ghost {
-	background-color: transparent;
-	color: #4f46e5;
-	border-color: transparent;
-	box-shadow: none;
+/* Ghost Variant */
+.ghost {
+    background-color: transparent;
+    color: #4f46e5;
+    border-color: transparent;
+    box-shadow: none;
 }
 
-.button-ghost:hover {
-	background-color: #f1f5f9;
+.ghost:hover {
+    background-color: #f1f5f9;
 }
 
-.button-ghost:active {
-	background-color: #e2e8f0;
+.ghost:active {
+    background-color: #e2e8f0;
 }
 ```
 
