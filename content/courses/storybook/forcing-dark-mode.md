@@ -1,6 +1,6 @@
 ---
 title: Forcing Dark Mode
-description:
+description: Use the force to force Dark Mode™ upond your users regardless of your user's system preferences.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

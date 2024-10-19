@@ -1,6 +1,6 @@
 ---
 title: 'Exercise: Adding Button Size Variant and Controls'
-description:
+description: Buttons can come in all shapes and sizes. Let's support that.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

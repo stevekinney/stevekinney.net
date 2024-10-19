@@ -1,6 +1,6 @@
 ---
 title: Play Functions
-description:
+description: Play functions in Storybook allow you to automate interactions and assertions to test your components effectively.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

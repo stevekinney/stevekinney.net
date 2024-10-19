@@ -1,6 +1,6 @@
 ---
 title: Adding an Icon Gallery to Storybook
-description:
+description: Create a gallery for your icons in Storybook with this one weird trick.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

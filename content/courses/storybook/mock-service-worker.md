@@ -1,6 +1,6 @@
 ---
 title: Mock Service Worker with Storybook
-description:
+description: To use Mock Service Worker (MSW) in Storybook, install MSW, create a handler for the API endpoint, and configure it in Storybook to intercept requests during testing.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

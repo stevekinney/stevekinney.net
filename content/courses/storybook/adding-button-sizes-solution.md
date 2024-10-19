@@ -1,6 +1,6 @@
 ---
 title: 'Solution: Adding Button Size Variants and Controls'
-description:
+description: A solution for an exercise.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

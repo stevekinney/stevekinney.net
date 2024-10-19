@@ -1,6 +1,6 @@
 ---
 title: Creating an Icon Component
-description:
+description: A brief walkthroigh where we create an Icon component in Storybook.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

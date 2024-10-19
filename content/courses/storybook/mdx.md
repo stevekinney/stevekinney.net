@@ -1,6 +1,6 @@
 ---
 title: Documenting Components with MDX
-description:
+description: MDX is a flavor of Markdown that allows you to embed React components.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

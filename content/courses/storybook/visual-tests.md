@@ -1,6 +1,6 @@
 ---
 title: Setting Up Chromatic
-description:
+description: Checking for visual regressions in your components.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

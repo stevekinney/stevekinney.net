@@ -1,6 +1,6 @@
 ---
 title: Addings Controls
-description:
+description: Storybook allows us to create custom controls that we can manipulate on our stories.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

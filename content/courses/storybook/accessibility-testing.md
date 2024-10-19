@@ -1,6 +1,6 @@
 ---
 title: Accessibility Testing in Storybook
-description:
+description: Storybook allows you to conduct accessibility audits on your stories using the @storybook/addon-a11y.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

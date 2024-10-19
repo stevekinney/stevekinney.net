@@ -1,6 +1,6 @@
 ---
 title: Color Palettes in Storybook
-description:
+description: Storybook provides a Docs Block for rendering your design system's color palette.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

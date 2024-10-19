@@ -1,6 +1,6 @@
 ---
 title: Loaders
-description:
+description: Loaders in Storybook offer a way to asynchronously load data or perform actions before a story is rendered.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

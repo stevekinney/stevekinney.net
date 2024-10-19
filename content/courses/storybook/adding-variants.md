@@ -1,6 +1,6 @@
 ---
 title: Adding Variants
-description:
+description: Let's add button variants using props and clsx for dynamic class composition.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

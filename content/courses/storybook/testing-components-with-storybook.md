@@ -1,6 +1,6 @@
 ---
 title: Testing Components with Storybook
-description:
+description: In Storybook, you can use Play functions to test polymorphic components.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

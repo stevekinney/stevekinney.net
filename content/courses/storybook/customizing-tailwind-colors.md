@@ -1,6 +1,6 @@
 ---
 title: Customizing the Colors in Our Theme
-description:
+description: Changing or replacing the colors in the built-in Tailwind theme.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

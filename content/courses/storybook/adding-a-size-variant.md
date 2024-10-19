@@ -1,6 +1,6 @@
 ---
 title: Adding a Size Variant with CVA
-description:
+description: Adding variants using Class Variance Authority.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

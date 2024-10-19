@@ -1,6 +1,6 @@
 ---
 title: Integrating Storybook into Figma
-description:
+description: Publish your project on Chromatic. Copy Storybook URL. In Figma Dev Mode, search for Storybook plugin, connect Chromatic, paste URL, and see components side by side.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Setting Up Tailwind and Theming
-description:
+description: To integrate Tailwind with Storybook, install Tailwind, import styles, configure dark mode, and use the Themes addon with a data attribute.
 modified: 2024-09-28T11:31:16-06:00
 ---
 
