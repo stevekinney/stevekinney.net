@@ -14,7 +14,7 @@ Next, we'll set up a variable that has one of three modes: **Phone**, **Tablet**
 
 ![Size modes using Figma variables](assets/figma-variable-size-modes.png)
 
-Now, here is where the magic happens. Let's treat our initial component as a [base component](base-components.md). You can rename it to **Base Heading** if you want.
+Now, here is where the magic happens. Let's treat our initial component as a base component. You can rename it to **Base Heading** if you want.
 
 Create an instance of your base component and assign the variant to your new variable.
 

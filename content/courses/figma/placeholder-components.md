@@ -31,6 +31,6 @@ And now, you can select any components that you want to as preferred components,
 
 ![Swapping in a preferred component](assets/figma-preferred-component-instance-swap.png)
 
-And now you can swap in some other component into this card. This is also a reasonable strategy for [base components](base-components.md), but it _definitely_ still feels like a hack—so, I'd probably use it sparingly.
+And now you can swap in some other component into this card. This is also a reasonable strategy for base component, but it _definitely_ still feels like a hack—so, I'd probably use it sparingly.
 
 ![Placeholder with checklist](assets/figma-placeholder-with-checklist.png)
