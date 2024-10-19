@@ -1,6 +1,6 @@
 ---
 title: Importing Fonts from Fontsource
-description:
+description: Import fonts from Fontsource by installing the specific font package, importing it in your CSS or JS file, and adding the import path to your project configuration if necessary.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

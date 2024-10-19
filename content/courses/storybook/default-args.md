@@ -1,4 +1,6 @@
 ---
+title: Default Arguments in Storybook
+description: Setting default values for component parameters in Storybook.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

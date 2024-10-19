@@ -1,6 +1,6 @@
 ---
 title: Setting Up a Test Runner
-description:
+description: To run Storybook Play functions, install the test runner, start Storybook, and use npx test-storybook. Optionally add to package.json scripts.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

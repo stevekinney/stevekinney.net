@@ -1,8 +1,7 @@
 ---
 title: Organizing Components and Hierarchy
-description:
+description: Storybook uses the way that our components are named to form some story of hierarchy.
 exclude: false
-drafted: false
 modified: 2024-09-28T11:31:16-06:00
 ---
 

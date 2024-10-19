@@ -1,6 +1,6 @@
 ---
 title: Using the TypeSet Doc Block
-description:
+description: Storybook provides components for rendering your design system's typography.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

@@ -1,7 +1,7 @@
 ---
 modified: 2024-09-28T11:31:16-06:00
 title: Writing Stories in Storybook
-description:
+description: How to write basic stories in Storybook.
 ---
 
 Consider this super-naïve button component. Let's say that this is in `src/components/button.tsx`.

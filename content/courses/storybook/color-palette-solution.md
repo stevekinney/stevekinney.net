@@ -1,6 +1,6 @@
 ---
 title: Creating a Color Palette from Your Tailwind Theme
-description:
+description: A potential solution for the exercise where we create a color palette from a Tailwind theme.
 modified: 2024-09-28T11:31:16-06:00
 ---
 

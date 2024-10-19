@@ -1,6 +1,6 @@
 ---
 title: Class Variance Authority
-description:
+description: A framework agnostic tool for creating variants of a component with different classes.
 modified: 2024-09-28T11:31:16-06:00
 ---
 
