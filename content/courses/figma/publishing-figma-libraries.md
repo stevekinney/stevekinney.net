@@ -8,7 +8,7 @@ You've done all of this work to create your tokens, variables, and components. N
 
 ![The menu to publish a library in Figma](assets/figma-publish-library.png)
 
-From there, you can select what components that you want to publish. For example, you might not want to publish your [base components](base-components.md) or primitive tokens. If there are any components that you _don't_ want to publish, you can select **Hide when publishing**.
+From there, you can select what components that you want to publish. For example, you might not want to publish your base components or primitive tokens. If there are any components that you _don't_ want to publish, you can select **Hide when publishing**.
 
 ![Hide when publishing](assets/figma-hide-from-publishing.png)
 
