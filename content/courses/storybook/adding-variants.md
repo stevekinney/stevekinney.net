@@ -119,48 +119,48 @@ Let's start by styling the button. We haven't implemented any of these variants 
 }
 
 /* Variant: secondary */
-.button-secondary {
+.secondary {
 	background-color: white;
 	color: #1f2937;
 	border-color: #94a3b8;
 }
 
-.button-secondary:hover {
+.secondary:hover {
 	background-color: #f1f5f9;
 }
 
-.button-secondary:active {
+.secondary:active {
 	background-color: #e2e8f0;
 }
 
 /* Variant: destructive */
-.button-destructive {
+.destructive {
 	background-color: #dc2626;
 	color: white;
 	border-color: transparent;
 }
 
-.button-destructive:hover {
+.destructive:hover {
 	background-color: #b91c1c;
 }
 
-.button-destructive:active {
+.destructive:active {
 	background-color: #991b1b;
 }
 
 /* Variant: ghost */
-.button-ghost {
+.ghost {
 	background-color: transparent;
 	color: #4f46e5;
 	border-color: transparent;
 	box-shadow: none;
 }
 
-.button-ghost:hover {
+.ghost:hover {
 	background-color: #f1f5f9;
 }
 
-.button-ghost:active {
+.ghost:active {
 	background-color: #e2e8f0;
 }
 ```
