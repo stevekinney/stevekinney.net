@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { parseCallout } from './parse-callout.js';
+import { Callout } from './callout.js';
 
 describe('compilers/callouts/parse-callout', () => {
 	it('should parse callout text into an object', () => {
@@ -126,7 +127,8 @@ describe('compilers/callouts/parse-callout', () => {
       </blockquote>
     `.trim();
 
-		const { title, variant, description } = parseCallout(callout);
+		const { title, variant, description } = parseCallout(callout) as Callout;
+
 		expect(title).toBe('Title');
 		expect(variant).toBe('note');
 		expect(description).toMatchInlineSnapshot(`
