@@ -1,6 +1,6 @@
 ---
-title: The Basics
-description: A basic guide on writing and running tests along with mock setups.
+title: Introduction to Testing
+description: A course on testing JavaScript
 modified: 2024-09-30T14:27:45-06:00
 base: /courses/testing
 layout: contents
