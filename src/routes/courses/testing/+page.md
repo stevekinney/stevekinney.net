@@ -1,12 +1,12 @@
 ---
-title: Introduction to Testing in JavaScript
-description: 'An exploration in building a design system using Storybook.'
+title: Introduction to Testing
+description: 'An introduction to testing using JavaScript'
 layout: page
 date: 2024-09-28T12:56:55-07:00
 modified: 2024-09-28T12:56:55-07:00
 ---
 
-The material in this course is intended to go along with the [Introduction to Testing](https://frontendmasters.com/workshops/intro-testing/) course with [Frontend Masters](https://frontendmasters.com).
+The material in this course is intended to go along with the [Introduction to Testing](https://frontendmasters.com/courses/testing/) course with [Frontend Masters](https://frontendmasters.com).
 
 Testing increases your confidence that your applications will function as expected. This workshop will teach you the fundamentals of testing and give you the foundations to write more testable code in your applications. You’ll set up an efficient testing environment where a test runner is part of your development workflow. You’ll gain practical experience writing unit and integration tests while exploring common testing tools.
 
