@@ -114,7 +114,7 @@ Spies give you powerful control over testing interactions, allowing you to valid
 
 - `toHaveBeenCalled()`: Passes if the spy was ever called.
 - `toHaveBeenCalledTimes(times)`: Passes if the spy was called the correct number of times.
-- `toHaveBeenCalledWith(…args)`: Passes if the function has *ever* been called with the arguments that you specify.
+- `toHaveBeenCalledWith(…args)`: Passes if the function has _ever_ been called with the arguments that you specify.
 - `toHaveBeenLastCalledWith`: Passes if the function was most recently called with the arguments that you specify.
 - `toHaveBeenNthCalledWith(time, …args)`: Passes if the function was called whichever time you specified with the arguments you specified.
 - `toHaveReturned()`: Passes if the function returned (e.g., it didn't throw an error).

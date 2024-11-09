@@ -103,7 +103,7 @@
 								<div
 									class="hidden h-4 bg-primary-300 md:block dark:bg-primary-800"
 									style="width: {variable.codeSyntax.WEB};"
-								/>
+								></div>
 							{/if}
 						</div>
 					</td>

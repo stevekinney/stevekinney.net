@@ -13,7 +13,7 @@ modified: 2024-09-28T16:12:24-06:00
 
 That's not even all of it. But, you get the point. The idea is that we want to simulate what an actual user will do as opposed to getting too in the weeds about the events that the browser is firing on our behalf.
 
-In *most* cases, you'll want to prefer using [`@testing-library/user-event`](https://www.npmjs.com/package/@testing-library/user-event) over the built-in `fireEvent`.
+In _most_ cases, you'll want to prefer using [`@testing-library/user-event`](https://www.npmjs.com/package/@testing-library/user-event) over the built-in `fireEvent`.
 
 Let's take it for a spin with that `counter.test.ts` file that we were looking at earlier:
 

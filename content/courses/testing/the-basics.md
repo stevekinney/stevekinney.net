@@ -17,7 +17,7 @@ it('is a super simple test', () => {
 });
 ```
 
-You *could* run this test by running `npm test` from the command line, but don't expect any surprises.
+You _could_ run this test by running `npm test` from the command line, but don't expect any surprises.
 
 At the highest level, we can see the following:
 
@@ -45,13 +45,13 @@ test('a test with a function', () => {
 });
 ```
 
-The selling point here is that when we write tests, we can make a bunch of statements about how we *expect* our code to work. Our test suite's job is to save us the hassle of having to manually check on all of these things. Instead, the test runner will grab our code and make sure that everything still works the way that we expect as we go about our business adding features and refactoring code.
+The selling point here is that when we write tests, we can make a bunch of statements about how we _expect_ our code to work. Our test suite's job is to save us the hassle of having to manually check on all of these things. Instead, the test runner will grab our code and make sure that everything still works the way that we expect as we go about our business adding features and refactoring code.
 
 Generally speaking, it's unlikely that our `add` function would live inside of a test. More likely, it's a utility function of some kind that we'd use in our application.
 
 We'll keep our scratchpad around in the repository for anytime we want to do some quick experiments, but let's hop over to `examples/basic-math/src/arithmetic.js` instead.
 
-We can pull out our *very* exciting function into it's own file like we might otherwise expect to see in our normal day-to-day.
+We can pull out our _very_ exciting function into it's own file like we might otherwise expect to see in our normal day-to-day.
 
 ```javascript
 // arithmetic.js

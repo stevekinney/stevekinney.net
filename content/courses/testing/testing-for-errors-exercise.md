@@ -6,7 +6,7 @@ modified: 2024-09-28T18:32:10.979Z
 
 Math has some rules. For example, you're not allowed to divide by zero. JavaScript gets especially weird about this. `5 / 0` equals `Infinity`. We don't want that. The purpose of our utility library is to protect us from some of the oddities that might come up.
 
-Instead of giving us stuff like `Infinity` or `NaN`, we *want* our library to throw an error. And, if we want our code to do something, then we should probably test that it does what we want it to do, right?
+Instead of giving us stuff like `Infinity` or `NaN`, we _want_ our library to throw an error. And, if we want our code to do something, then we should probably test that it does what we want it to do, right?
 
 The question then is: **How do we test to make sure that our code blows up in certain situations**?
 
@@ -72,7 +72,7 @@ console.log(5 + '5'); // "55" (string concatenation)
 console.log(5 - '5'); // 0 (subtraction)
 ```
 
-**Your choice**: Either write a test that makes sure that the values of both `a` and `b` are numbers *or* write some tests that verify that the strings were converted to a number. If converting an argument to a string results in `NaN`, then throw an error.
+**Your choice**: Either write a test that makes sure that the values of both `a` and `b` are numbers _or_ write some tests that verify that the strings were converted to a number. If converting an argument to a string results in `NaN`, then throw an error.
 
 For example:
 

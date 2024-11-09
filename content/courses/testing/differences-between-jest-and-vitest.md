@@ -13,7 +13,7 @@ Honestly, it doesn't really matter. Jest is built on top of Jasmine and [Vitest 
 
 But, if you really wanted to know my heuristic, here it is:
 
-- Jest is maintained by Facebook, who coincidentally maintain [React](https://reactjs.org/docs/testing-recipes.html#gatsby-focus-wrapper). And, it comes built-in with [Create React App](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app). So, I'll usually just use Jest if it's already there because I am *very* lazy.
+- Jest is maintained by Facebook, who coincidentally maintain [React](https://reactjs.org/docs/testing-recipes.html#gatsby-focus-wrapper). And, it comes built-in with [Create React App](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app). So, I'll usually just use Jest if it's already there because I am _very_ lazy.
 - [Vitest](https://vitest.dev) is optimized to work with Vite (an alternative to Webpack). By default, Vue and Svelte applications use Vite. React applications can use Vite as well and there is even a boilerplate (e.g. `npm create vite@latest my-app --template react`, which works suspiciously similar to `create-react-app`. I chose it for this course it's the most broadly applicable.
 - [Angular](https://angular.io/guide/testing) uses Jasmine by default. But, like I said, Jest is based on Jasmine and Vitest is a drop-in replacement for Jest.
 
@@ -21,11 +21,11 @@ But, if you really wanted to know my heuristic, here it is:
 
 ### Jest
 
-Jest has been around the block. Built by Facebook, it's perfect for testing React apps (and others!) and has a reputation for giving you everything you need out of the box—mocking, snapshots, you name it. But here’s the thing. Jest can sometimes feel a little… *slow*. Not glacial slow, but slow enough that you’re going to start wondering if your code has some existential crisis every time the test suite runs. It uses the Node runtime exclusively, which is great for stability, but can limit its execution speed compared to other approaches.
+Jest has been around the block. Built by Facebook, it's perfect for testing React apps (and others!) and has a reputation for giving you everything you need out of the box—mocking, snapshots, you name it. But here’s the thing. Jest can sometimes feel a little… _slow_. Not glacial slow, but slow enough that you’re going to start wondering if your code has some existential crisis every time the test suite runs. It uses the Node runtime exclusively, which is great for stability, but can limit its execution speed compared to other approaches.
 
 ### Vitest
 
-Vitest? Built on **Vite**—yes, that lightning-fast bundler—and this speed advantage becomes one of its calling cards. Vitest leans into the Vite ecosystem and uses **ESM (EcmaScript Modules)**, which allows for crazy fast start times and lightning-fast testing, especially in *development mode*. The ability to run tests directly in a browser without additional setup brings a major boost in speed for frontend-heavy projects which, let’s be real, is 90% of what we’re doing these days, right?
+Vitest? Built on **Vite**—yes, that lightning-fast bundler—and this speed advantage becomes one of its calling cards. Vitest leans into the Vite ecosystem and uses **ESM (EcmaScript Modules)**, which allows for crazy fast start times and lightning-fast testing, especially in _development mode_. The ability to run tests directly in a browser without additional setup brings a major boost in speed for frontend-heavy projects which, let’s be real, is 90% of what we’re doing these days, right?
 
 ## Setup and Learning Curve
 
@@ -37,7 +37,7 @@ But—and it’s a big but—the Jest API array of features can sometimes tip ov
 
 ### Vitest
 
-Vitest, by comparison, is a smoother onboarding if you're *already* in the Vite ecosystem. The same way Jest “just works” for React, Vitest “just works” for Vite-powered projects. Configuration’s simple, the syntax is almost identical to Jest (so anyone making the switch won’t feel like they’ve been dropped into a foreign country), and it’s very lightweight in terms of setup.
+Vitest, by comparison, is a smoother onboarding if you're _already_ in the Vite ecosystem. The same way Jest “just works” for React, Vitest “just works” for Vite-powered projects. Configuration’s simple, the syntax is almost identical to Jest (so anyone making the switch won’t feel like they’ve been dropped into a foreign country), and it’s very lightweight in terms of setup.
 
 Set up Vite already? Then you’re like 90% of the way there. It’s like Vitest sidled up to you at the coffee shop and quietly said: “Hey… no big deal, but… wanna test this?"
 
@@ -90,11 +90,11 @@ Instant peace of mind.
 
 ### Vitest
 
-Vitest also supports snapshots. However, if you’ve built up a mountain of Jest snapshots, they aren’t *directly* transferable. That means switching might require a bit of work converting, and Vitest’s snapshot functionality doesn’t have the same level of maturity—for now. It gets the job done, but I wouldn’t print the victory cake about switching just for snapshots alone.
+Vitest also supports snapshots. However, if you’ve built up a mountain of Jest snapshots, they aren’t _directly_ transferable. That means switching might require a bit of work converting, and Vitest’s snapshot functionality doesn’t have the same level of maturity—for now. It gets the job done, but I wouldn’t print the victory cake about switching just for snapshots alone.
 
 ## Which One Is Right for You?
 
-At the end of the day *both* are great for testing your JavaScript projects. But here’s the real-world takeaway:
+At the end of the day _both_ are great for testing your JavaScript projects. But here’s the real-world takeaway:
 
 - **Using Vite and a modern ecosystem?** You’re probably going to enjoy Vitest’s faster start times, seamless TypeScript integrations, and simplicity.
 - **Deeply reliant on Jest’s mocking, parallelization, or snapshot APIs?** Jest might still hold the crown for you, especially if it’s already baked into your tools and workflow.

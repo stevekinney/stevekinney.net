@@ -4,7 +4,7 @@ description: Learn how to perform cross-browser testing with Vitest and Playwrig
 modified: 2024-09-28T14:34:59-06:00
 ---
 
-Let’s talk about cross-browser testing, because let’s be real, the odds that your app is only ever going to be used on the latest Chrome version are about as good as finishing a Friday without hitting *at least* one merge conflict. You’ve got users out there with different setups—Safari, Firefox, Edge, maybe even IE11 (gross).
+Let’s talk about cross-browser testing, because let’s be real, the odds that your app is only ever going to be used on the latest Chrome version are about as good as finishing a Friday without hitting _at least_ one merge conflict. You’ve got users out there with different setups—Safari, Firefox, Edge, maybe even IE11 (gross).
 
 Let’s explore a quick and practical way to set up cross-browser testing so you can handle browser quirks without rage-clicking into oblivion.
 
@@ -114,4 +114,4 @@ This efficiently loops through the browser tests so you're not cluttering your `
 
 The great thing is that Vitest lets Playwright do most of the heavy lifting, running your app inside the simulated browsers with minimal setup. Not only do you get faster feedback, but you've also got some serious coverage across the major browsers without installing half a dozen VMs or keeping an ancient version of IE lying around.
 
-Is cross-browser testing still painful? Meh, a little. But, at least we’ve got the tools to help make it just painful *enough*.
+Is cross-browser testing still painful? Meh, a little. But, at least we’ve got the tools to help make it just painful _enough_.
