@@ -1,20 +1,36 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { page } from '$app/stores';
 	import { formatPageTitle } from '$lib/format-page-title';
 
-	export let title: string | undefined = 'Steve Kinney';
-	export let description =
-		'Steve Kinney is a teacher, artist, and software engineer out of Denver, Colorado, USA.';
 
-	export let published = true;
-	export let date: Date | string | undefined = undefined;
-	export let modified: Date | string | undefined = undefined;
-	export let url = new URL($page.url.pathname, 'https://stevekinney.net');
+	interface Props {
+		title?: string | undefined;
+		description?: string;
+		published?: boolean;
+		date?: Date | string | undefined;
+		modified?: Date | string | undefined;
+		url?: any;
+	}
 
-	$: openGraph = new URL('/open-graph.jpg', 'https://stevekinney.net');
-	$: if (title) openGraph.searchParams.set('title', encodeURIComponent(title));
-	$: if (description) openGraph.searchParams.set('description', encodeURIComponent(description));
-	$: openGraphUrl = openGraph.href;
+	let {
+		title = 'Steve Kinney',
+		description = 'Steve Kinney is a teacher, artist, and software engineer out of Denver, Colorado, USA.',
+		published = true,
+		date = undefined,
+		modified = undefined,
+		url = new URL($page.url.pathname, 'https://stevekinney.net')
+	}: Props = $props();
+
+	let openGraph = $derived(new URL('/open-graph.jpg', 'https://stevekinney.net'));
+	run(() => {
+		if (title) openGraph.searchParams.set('title', encodeURIComponent(title));
+	});
+	run(() => {
+		if (description) openGraph.searchParams.set('description', encodeURIComponent(description));
+	});
+	let openGraphUrl = $derived(openGraph.href);
 </script>
 
 <svelte:head>

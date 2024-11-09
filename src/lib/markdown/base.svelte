@@ -1,14 +1,23 @@
 <script>
 	import { toDataAttributes } from '$lib/to-data-attributes';
 
-	/** @type {string} */
-	export let as = 'section';
+	
 
 	/** @type {string | undefined | null} */
-	let className = '';
-	export { className as class };
+	/**
+	 * @typedef {Object} Props
+	 * @property {string} [as]
+	 * @property {string} [class]
+	 * @property {import('svelte').Snippet} [children]
+	 */
+
+	/** @type {Props & { [key: string]: any }} */
+	let { as = 'section', class: className = '', children, ...rest } = $props();
+	
+
+	const children_render = $derived(children);
 </script>
 
-<svelte:element this={as} class={className} {...toDataAttributes($$restProps)}>
-	<slot />
+<svelte:element this={as} class={className} {...toDataAttributes(rest)}>
+	{@render children_render?.()}
 </svelte:element>

@@ -4,7 +4,7 @@
 	import Resources from './resources.svelte';
 	import Edit from './edit.svelte';
 
-	export let data;
+	let { data } = $props();
 </script>
 
 <SEO
@@ -20,7 +20,7 @@
 		<Edit />
 	</hgroup>
 
-	<svelte:component this={data.content} class="prose dark:prose-invert" as="article" />
+	<data.content class="prose dark:prose-invert" as="article" />
 
 	{#if data.meta.modified}
 		<p class="my-6 text-right text-sm text-slate-500 dark:text-gray-400">

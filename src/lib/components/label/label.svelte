@@ -1,10 +1,23 @@
 <script lang="ts">
 	import clsx from 'clsx';
 
-	export let required: boolean = false;
-	export let disabled: boolean = false;
-	export let hidden: boolean = false;
-	export let label: string;
+	interface Props {
+		required?: boolean;
+		disabled?: boolean;
+		hidden?: boolean;
+		label: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		required = false,
+		disabled = false,
+		hidden = false,
+		label,
+		children
+	}: Props = $props();
+
+	const children_render = $derived(children);
 </script>
 
 <label class="flex flex-col gap-1.5">
@@ -18,5 +31,5 @@
 	>
 		{label}
 	</span>
-	<slot />
+	{@render children_render?.()}
 </label>

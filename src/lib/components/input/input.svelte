@@ -1,21 +1,42 @@
 <script lang="ts">
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import clsx from 'clsx';
 	import type { InputProps } from './types';
 	import Label from '../label';
 
 	type $$Props = InputProps;
 
-	export let label: InputProps['label'];
-	export let value: InputProps['value'] = undefined;
-	export let details: InputProps['details'] = undefined;
-	export let required: InputProps['required'] = false;
-	export let unlabeled: InputProps['unlabeled'] = false;
-	export let placeholder: InputProps['placeholder'] = undefined;
-	export let before: InputProps['before'] = undefined;
-	export let after: InputProps['after'] = undefined;
-	export let prefix: InputProps['prefix'] = undefined;
-	export let suffix: InputProps['suffix'] = undefined;
-	export let disabled: InputProps['disabled'] = false;
+	interface Props {
+		label: InputProps['label'];
+		value?: InputProps['value'];
+		details?: InputProps['details'];
+		required?: InputProps['required'];
+		unlabeled?: InputProps['unlabeled'];
+		placeholder?: InputProps['placeholder'];
+		before?: InputProps['before'];
+		after?: InputProps['after'];
+		prefix?: InputProps['prefix'];
+		suffix?: InputProps['suffix'];
+		disabled?: InputProps['disabled'];
+		[key: string]: any
+	}
+
+	let {
+		label,
+		value = $bindable(undefined),
+		details = undefined,
+		required = false,
+		unlabeled = false,
+		placeholder = undefined,
+		before = undefined,
+		after = undefined,
+		prefix = undefined,
+		suffix = undefined,
+		disabled = false,
+		...rest
+	}: Props = $props();
 </script>
 
 <div>
@@ -27,8 +48,8 @@
 			)}
 		>
 			{#if before}
-				<svelte:component
-					this={before}
+				{@const SvelteComponent = before}
+				<SvelteComponent
 					class="pointer-events-none h-4 w-4 dark:text-slate-400"
 					aria-hidden="true"
 				/>
@@ -42,12 +63,12 @@
 				bind:value
 				class="block w-full bg-transparent focus:outline-none disabled:cursor-not-allowed dark:text-white"
 				placeholder={unlabeled ? placeholder || label : placeholder}
-				{...$$restProps}
+				{...rest}
 				{disabled}
-				on:change
-				on:input
-				on:focus
-				on:invalid
+				onchange={bubble('change')}
+				oninput={bubble('input')}
+				onfocus={bubble('focus')}
+				oninvalid={bubble('invalid')}
 			/>
 			{#if suffix}
 				<span class="pointer-events-none text-primary-600 dark:text-primary-400">
@@ -55,8 +76,8 @@
 				</span>
 			{/if}
 			{#if after}
-				<svelte:component
-					this={after}
+				{@const SvelteComponent_1 = after}
+				<SvelteComponent_1
 					class="pointer-events-none h-4 w-4 dark:text-slate-400"
 					aria-hidden="true"
 				/>

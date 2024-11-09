@@ -1,10 +1,17 @@
 <script lang="ts">
 	import Index from '$courses/storybook/README.md';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
+
+	const children_render = $derived(children);
 </script>
 
 <div class="grid grid-cols-1 gap-8 lg:grid-cols-[3fr_1fr]">
 	<div>
-		<slot />
+		{@render children_render?.()}
 	</div>
 	<Index />
 </div>

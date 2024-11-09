@@ -2,32 +2,50 @@
 	import SEO from '$lib/components/seo.svelte';
 	import { toDataAttributes } from '$lib/to-data-attributes';
 
-	/** @type {string} */
-	export let title;
+	
 
-	/** @type {string} */
-	export let description;
+	
 
-	/** @type {boolean} */
-	export let published = true;
+	
 
-	/** @type {Date | string | undefined} */
-	export let date = undefined;
+	
 
-	/** @type {Date | string | undefined} */
-	export let modified = undefined;
+	
 
 	/** @type {string | undefined | null} */
-	let className = '';
-	export { className as class };
+	/**
+	 * @typedef {Object} Props
+	 * @property {string} title
+	 * @property {string} description
+	 * @property {boolean} [published]
+	 * @property {Date | string | undefined} [date]
+	 * @property {Date | string | undefined} [modified]
+	 * @property {string} [class]
+	 * @property {import('svelte').Snippet} [children]
+	 */
+
+	/** @type {Props & { [key: string]: any }} */
+	let {
+		title,
+		description,
+		published = true,
+		date = undefined,
+		modified = undefined,
+		class: className = '',
+		children,
+		...rest
+	} = $props();
+	
+
+	const children_render = $derived(children);
 </script>
 
 <SEO {title} {description} {published} {date} {modified} />
 
-<div class={className} {...toDataAttributes($$restProps)}>
+<div class={className} {...toDataAttributes(rest)}>
 	<h1 class="mb-6 text-4xl font-bold">{title}</h1>
 
 	<article class="prose max-w-none dark:prose-invert">
-		<slot />
+		{@render children_render?.()}
 	</article>
 </div>

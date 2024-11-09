@@ -5,35 +5,52 @@
 
 	type $$Props = SelectProps;
 
-	export let label: SelectProps['label'];
-	export let options: SelectProps['options'] = [];
-	export let disabled: SelectProps['disabled'] = false;
-	export let required: SelectProps['required'] = false;
+	interface Props {
+		label: SelectProps['label'];
+		options?: SelectProps['options'];
+		disabled?: SelectProps['disabled'];
+		required?: SelectProps['required'];
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		label,
+		options = [],
+		disabled = false,
+		required = false,
+		children,
+		...rest
+	}: Props = $props();
+
+	const children_render = $derived(children);
 </script>
 
 <div>
-	<Label {label} {disabled} {required}>
-		<div
-			class={merge(
-				'rounded-md border-0 bg-white px-4 py-1 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-inset ring-slate-500 dark:bg-slate-800  dark:focus-within:bg-slate-700',
-				!disabled &&
-					'focus-within:bg-primary-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-600',
-				disabled && 'cursor-not-allowed bg-slate-100 text-slate-500',
-			)}
-		>
-			<select
-				class="w-full bg-transparent outline-none disabled:cursor-not-allowed dark:text-slate-100"
-				{required}
-				{disabled}
-				{...$$restProps}
+	<Label  {disabled} {required}>
+		{#snippet children({ label })}
+				<div
+				class={merge(
+					'rounded-md border-0 bg-white px-4 py-1 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-inset ring-slate-500 dark:bg-slate-800  dark:focus-within:bg-slate-700',
+					!disabled &&
+						'focus-within:bg-primary-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-600',
+					disabled && 'cursor-not-allowed bg-slate-100 text-slate-500',
+				)}
 			>
-				<slot>
-					<option disabled selected>Select an option...</option>
-					{#each options || [] as option}
-						<option value={option.value}>{option.label || option.value}</option>
-					{/each}
-				</slot>
-			</select>
-		</div>
-	</Label>
+				<select
+					class="w-full bg-transparent outline-none disabled:cursor-not-allowed dark:text-slate-100"
+					{required}
+					{disabled}
+					{...rest}
+				>
+					{#if children_render}{@render children_render()}{:else}
+						<option disabled selected>Select an option...</option>
+						{#each options || [] as option}
+							<option value={option.value}>{option.label || option.value}</option>
+						{/each}
+					{/if}
+				</select>
+			</div>
+					{/snippet}
+		</Label>
 </div>

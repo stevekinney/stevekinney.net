@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { variants, type CountVariants } from './variants';
 
-	export let count: number;
-	export let variant: CountVariants['variant'] = 'default';
+	interface Props {
+		count: number;
+		variant?: CountVariants['variant'];
+	}
+
+	let { count, variant = 'default' }: Props = $props();
 </script>
 
 <span class={variants({ variant })}>

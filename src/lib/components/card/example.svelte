@@ -1,8 +1,13 @@
 <script lang="ts">
 	import Card from './card.svelte';
+	interface Props {
+		[key: string]: any
+	}
+
+	let { ...props }: Props = $props();
 </script>
 
-<Card {...$$props}>
+<Card {...props}>
 	<div class="prose dark:prose-invert">
 		<h2>Card Title</h2>
 		<p>

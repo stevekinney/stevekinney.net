@@ -2,7 +2,9 @@
 	import { Rss } from 'lucide-svelte';
 	import PostLink from '$lib/components/post-link.svelte';
 
-	export let data;
+	let { data, children } = $props();
+
+	const children_render = $derived(children);
 </script>
 
 <div class="grid grid-cols-1 gap-10 lg:grid-cols-4">
@@ -28,6 +30,6 @@
 		</p>
 	</div>
 	<div class="lg:col-span-3">
-		<slot />
+		{@render children_render?.()}
 	</div>
 </div>
