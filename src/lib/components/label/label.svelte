@@ -9,15 +9,7 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let {
-		required = false,
-		disabled = false,
-		hidden = false,
-		label,
-		children
-	}: Props = $props();
-
-	const children_render = $derived(children);
+	let { required = false, disabled = false, hidden = false, label, children }: Props = $props();
 </script>
 
 <label class="flex flex-col gap-1.5">
@@ -31,5 +23,5 @@
 	>
 		{label}
 	</span>
-	{@render children_render?.()}
+	{@render children?.()}
 </label>

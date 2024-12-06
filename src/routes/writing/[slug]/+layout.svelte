@@ -3,8 +3,6 @@
 	import PostLink from '$lib/components/post-link.svelte';
 
 	let { data, children } = $props();
-
-	const children_render = $derived(children);
 </script>
 
 <div class="grid grid-cols-1 gap-10 lg:grid-cols-4">
@@ -30,6 +28,6 @@
 		</p>
 	</div>
 	<div class="lg:col-span-3">
-		{@render children_render?.()}
+		{@render children?.()}
 	</div>
 </div>

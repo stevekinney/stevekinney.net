@@ -18,10 +18,8 @@
 		count = undefined,
 		variant = 'default',
 		icon = null,
-		children
+		children,
 	}: Props = $props();
-
-	const children_render = $derived(children);
 </script>
 
 <div class={variants({ variant })}>
@@ -29,7 +27,7 @@
 		{@const SvelteComponent = icon}
 		<SvelteComponent class="h-3 w-3" />
 	{/if}
-	{#if children_render}{@render children_render()}{:else}{label}{/if}
+	{#if children}{@render children()}{:else}{label}{/if}
 	{#if count !== undefined}
 		<Count {count} {variant} />
 	{/if}

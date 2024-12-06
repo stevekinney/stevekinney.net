@@ -4,8 +4,6 @@
 	}
 
 	let { children }: Props = $props();
-	const children_render = $derived(children);
-
 </script>
 
-<ul class="mb-8 space-y-1">{@render children_render?.()}</ul>
+<ul class="mb-8 space-y-1">{@render children?.()}</ul>

@@ -2,16 +2,6 @@
 	import SEO from '$lib/components/seo.svelte';
 	import { toDataAttributes } from '$lib/to-data-attributes';
 
-	
-
-	
-
-	
-
-	
-
-	
-
 	/** @type {string | undefined | null} */
 	/**
 	 * @typedef {Object} Props
@@ -35,9 +25,6 @@
 		children,
 		...rest
 	} = $props();
-	
-
-	const children_render = $derived(children);
 </script>
 
 <SEO {title} {description} {published} {date} {modified} />
@@ -46,6 +33,6 @@
 	<h1 class="mb-6 text-4xl font-bold">{title}</h1>
 
 	<article class="prose max-w-none dark:prose-invert">
-		{@render children_render?.()}
+		{@render children?.()}
 	</article>
 </div>

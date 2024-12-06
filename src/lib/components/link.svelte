@@ -3,32 +3,27 @@
 	import { page } from '$app/stores';
 	import { twMerge as merge } from 'tailwind-merge';
 
-	
-
-
 	interface Props {
 		href: string;
 		class?: string;
 		active?: string;
 		exact?: boolean;
 		children?: import('svelte').Snippet;
-		[key: string]: any
+		[key: string]: any;
 	}
 
-	let {
+	const {
 		href = '#',
-		class = '',
+		class: className = '',
 		active = 'underline',
 		exact = false,
 		children,
 		...rest
 	}: Props = $props();
-	
 
-	let isActive =
-		$derived(browser && exact ? $page.url.pathname === href : $page.url.pathname.startsWith(href));
-
-	const children_render = $derived(children);
+	const isActive = $derived(
+		browser && exact ? $page.url.pathname === href : $page.url.pathname.startsWith(href),
+	);
 </script>
 
 <a
@@ -41,5 +36,5 @@
 	aria-current={isActive ? 'page' : undefined}
 	{...rest}
 >
-	{@render children_render?.()}
+	{@render children?.()}
 </a>

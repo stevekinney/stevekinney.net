@@ -10,8 +10,6 @@
 	}
 
 	let { children }: Props = $props();
-
-	const children_render = $derived(children);
 </script>
 
 <main
@@ -41,6 +39,6 @@
 	<Navigation class="sm:col-start-2 sm:justify-end lg:order-2 lg:justify-center" />
 
 	<div class="my-6 sm:col-span-full lg:order-3">
-		{@render children_render?.()}
+		{@render children?.()}
 	</div>
 </main>

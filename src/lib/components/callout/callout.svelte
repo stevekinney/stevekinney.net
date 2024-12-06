@@ -16,14 +16,12 @@
 		title = capitalize(variant),
 		description = '',
 		foldable = false,
-		children
+		children,
 	}: Props = $props();
 
 	let open = $state(!foldable);
 
 	const SvelteComponent = $derived(getIcon(variant));
-
-	const children_render = $derived(children);
 </script>
 
 <div class="space-y-2 rounded-md border p-4 shadow-sm {getVariationColor(variant)}">
@@ -40,7 +38,7 @@
 	</svelte:element>
 	{#if children || description}
 		<div class="prose dark:prose-invert" class:hidden={foldable && !open}>
-			{#if children_render}{@render children_render()}{:else}<p>{description}</p>{/if}
+			{#if children}{@render children()}{:else}<p>{description}</p>{/if}
 		</div>
 	{/if}
 </div>

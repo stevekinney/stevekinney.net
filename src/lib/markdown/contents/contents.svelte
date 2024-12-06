@@ -10,8 +10,6 @@
 	import { twMerge as merge } from 'tailwind-merge';
 	import { toDataAttributes } from '$lib/to-data-attributes';
 
-	
-
 	/** @type {string | undefined | null} */
 	/**
 	 * @typedef {Object} Props
@@ -22,11 +20,8 @@
 
 	/** @type {Props & { [key: string]: any }} */
 	let { as = 'nav', class: className = '', children, ...rest } = $props();
-	
-
-	const children_render = $derived(children);
 </script>
 
 <svelte:element this={as} class={merge(className)} {...toDataAttributes(rest)}>
-	{@render children_render?.()}
+	{@render children?.()}
 </svelte:element>

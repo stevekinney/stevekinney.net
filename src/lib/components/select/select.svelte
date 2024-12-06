@@ -3,15 +3,13 @@
 	import type { SelectProps } from './types';
 	import Label from '../label';
 
-	type $$Props = SelectProps;
-
 	interface Props {
 		label: SelectProps['label'];
 		options?: SelectProps['options'];
 		disabled?: SelectProps['disabled'];
 		required?: SelectProps['required'];
 		children?: import('svelte').Snippet;
-		[key: string]: any
+		[key: string]: any;
 	}
 
 	let {
@@ -22,14 +20,12 @@
 		children,
 		...rest
 	}: Props = $props();
-
-	const children_render = $derived(children);
 </script>
 
 <div>
-	<Label  {disabled} {required}>
+	<Label {disabled} {required}>
 		{#snippet children({ label })}
-				<div
+			<div
 				class={merge(
 					'rounded-md border-0 bg-white px-4 py-1 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-inset ring-slate-500 dark:bg-slate-800  dark:focus-within:bg-slate-700',
 					!disabled &&
@@ -43,7 +39,7 @@
 					{disabled}
 					{...rest}
 				>
-					{#if children_render}{@render children_render()}{:else}
+					{#if children}{@render children()}{:else}
 						<option disabled selected>Select an option...</option>
 						{#each options || [] as option}
 							<option value={option.value}>{option.label || option.value}</option>
@@ -51,6 +47,6 @@
 					{/if}
 				</select>
 			</div>
-					{/snippet}
-		</Label>
+		{/snippet}
+	</Label>
 </div>
