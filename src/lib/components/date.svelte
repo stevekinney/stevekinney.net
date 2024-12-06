@@ -8,7 +8,7 @@
 		class?: string;
 	}
 
-	let { date, as = 'time', class: className = '' }: Props = $props();
+	const { date, as = 'time', class: className = '' }: Props = $props();
 </script>
 
 <svelte:element this={as} class={merge('text-primary-600 dark:text-primary-400', className)}>

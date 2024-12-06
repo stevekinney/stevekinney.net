@@ -10,7 +10,7 @@
 		class?: string;
 	}
 
-	let { href, icon, name = icon.name, class: className = '' }: Props = $props();
+	const { href, icon, name = icon.name, class: className = '' }: Props = $props();
 
 	const SvelteComponent = $derived(icon);
 </script>

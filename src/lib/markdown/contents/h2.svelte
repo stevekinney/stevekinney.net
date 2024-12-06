@@ -3,7 +3,7 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let { children }: Props = $props();
+	const { children }: Props = $props();
 </script>
 
 <h2 class="mb-2 text-lg font-bold">{@render children?.()}</h2>

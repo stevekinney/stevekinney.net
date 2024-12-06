@@ -7,7 +7,7 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let { variant = 'default', as = 'div', children }: Props = $props();
+	const { variant = 'default', as = 'div', children }: Props = $props();
 </script>
 
 <svelte:element this={as} class={variants({ variant })}>

@@ -12,7 +12,7 @@
 		[key: string]: any;
 	}
 
-	let {
+	const {
 		label,
 		options = [],
 		disabled = false,

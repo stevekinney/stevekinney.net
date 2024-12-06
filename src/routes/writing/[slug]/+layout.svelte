@@ -2,7 +2,7 @@
 	import { Rss } from 'lucide-svelte';
 	import PostLink from '$lib/components/post-link.svelte';
 
-	let { data, children } = $props();
+	const { data, children } = $props();
 </script>
 
 <div class="grid grid-cols-1 gap-10 lg:grid-cols-4">

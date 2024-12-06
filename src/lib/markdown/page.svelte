@@ -15,7 +15,7 @@
 	 */
 
 	/** @type {Props & { [key: string]: any }} */
-	let {
+	const {
 		title,
 		description,
 		published = true,

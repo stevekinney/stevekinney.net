@@ -10,7 +10,7 @@
 	 */
 
 	/** @type {Props & { [key: string]: any }} */
-	let { as = 'section', class: className = '', children, ...rest } = $props();
+	const { as = 'section', class: className = '', children, ...rest } = $props();
 </script>
 
 <svelte:element this={as} class={className} {...toDataAttributes(rest)}>

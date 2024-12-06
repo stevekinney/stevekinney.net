@@ -6,7 +6,7 @@
 		variant?: CountVariants['variant'];
 	}
 
-	let { count, variant = 'default' }: Props = $props();
+	const { count, variant = 'default' }: Props = $props();
 </script>
 
 <span class={variants({ variant })}>

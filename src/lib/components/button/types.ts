@@ -1,12 +1,12 @@
-import type { ComponentType } from 'svelte';
+import type { HTMLButtonAttributes, HTMLAnchorAttributes } from 'svelte/elements';
 import type { ButtonVariants } from './variants';
-import type { Icon } from 'lucide-svelte';
+import type { Snippet } from 'svelte';
 
-export type ButtonProps = Partial<HTMLButtonElement> &
-	Partial<HTMLAnchorElement> &
+export type ButtonProps = Partial<HTMLButtonAttributes> &
+	Partial<HTMLAnchorAttributes> &
 	ButtonVariants & {
 		label?: string;
-		icon?: ComponentType<Icon>;
+		icon?: Snippet;
 		href?: string;
 		loading?: boolean;
 		class?: string;

@@ -5,7 +5,7 @@
 		class?: string;
 	}
 
-	let { class: className = '' }: Props = $props();
+	const { class: className = '' }: Props = $props();
 </script>
 
 <nav class="flex items-center gap-4 {className}">

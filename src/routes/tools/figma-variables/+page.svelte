@@ -20,7 +20,7 @@
 
 	import { generateFigmaSpacingVariables } from './generate-variables';
 
-	let { data } = $props();
+	const { data } = $props();
 
 	let collection = $derived(generateFigmaSpacingVariables('Spacing', data.variables));
 </script>

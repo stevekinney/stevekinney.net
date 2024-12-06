@@ -13,7 +13,7 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let {
+	const {
 		label = 'Badge',
 		count = undefined,
 		variant = 'default',

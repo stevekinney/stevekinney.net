@@ -6,7 +6,7 @@
 		[key: string]: any;
 	}
 
-	let { href, children, ...rest }: Props = $props();
+	const { href, children, ...rest }: Props = $props();
 </script>
 
 <Link

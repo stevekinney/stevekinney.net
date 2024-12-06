@@ -9,7 +9,7 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let { required = false, disabled = false, hidden = false, label, children }: Props = $props();
+	const { required = false, disabled = false, hidden = false, label, children }: Props = $props();
 </script>
 
 <label class="flex flex-col gap-1.5">

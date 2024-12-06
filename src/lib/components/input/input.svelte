@@ -6,8 +6,6 @@
 	import type { InputProps } from './types';
 	import Label from '../label';
 
-	type $$Props = InputProps;
-
 	interface Props {
 		label: InputProps['label'];
 		value?: InputProps['value'];
@@ -25,7 +23,7 @@
 
 	let {
 		label,
-		value = $bindable(undefined),
+		value = $bindable(''),
 		details = undefined,
 		required = false,
 		unlabeled = false,

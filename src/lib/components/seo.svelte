@@ -13,7 +13,7 @@
 		url?: any;
 	}
 
-	let {
+	const {
 		title = 'Steve Kinney',
 		description = 'Steve Kinney is a teacher, artist, and software engineer out of Denver, Colorado, USA.',
 		published = true,

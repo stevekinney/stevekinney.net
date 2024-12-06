@@ -4,7 +4,7 @@
 	import Resources from './resources.svelte';
 	import Edit from './edit.svelte';
 
-	let { data } = $props();
+	const { data } = $props();
 </script>
 
 <SEO

@@ -19,7 +19,7 @@
 	 */
 
 	/** @type {Props & { [key: string]: any }} */
-	let { as = 'nav', class: className = '', children, ...rest } = $props();
+	const { as = 'nav', class: className = '', children, ...rest } = $props();
 </script>
 
 <svelte:element this={as} class={merge(className)} {...toDataAttributes(rest)}>

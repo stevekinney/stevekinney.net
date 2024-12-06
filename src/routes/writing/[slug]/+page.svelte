@@ -2,7 +2,7 @@
 	import SEO from '$lib/components/seo.svelte';
 	import Date from '$lib/components/date.svelte';
 
-	let { data } = $props();
+	const { data } = $props();
 </script>
 
 <SEO

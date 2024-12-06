@@ -9,7 +9,7 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let { children }: Props = $props();
+	const { children }: Props = $props();
 </script>
 
 <main

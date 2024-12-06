@@ -11,7 +11,7 @@
 		class?: string;
 	}
 
-	let {
+	const {
 		title,
 		description,
 		url,

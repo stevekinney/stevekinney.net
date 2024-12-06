@@ -11,7 +11,7 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let {
+	const {
 		variant = 'note',
 		title = capitalize(variant),
 		description = '',
