@@ -5,17 +5,29 @@
 
 	import Count from '../count';
 
-	export let label: string = 'Badge';
-	export let count: number | undefined = undefined;
-	export let variant: BadgeVariants['variant'] = 'default';
-	export let icon: ComponentType<Icon> | null | undefined = null;
+	interface Props {
+		label?: string;
+		count?: number | undefined;
+		variant?: BadgeVariants['variant'];
+		icon?: ComponentType<Icon> | null | undefined;
+		children?: import('svelte').Snippet;
+	}
+
+	const {
+		label = 'Badge',
+		count = undefined,
+		variant = 'default',
+		icon = null,
+		children,
+	}: Props = $props();
 </script>
 
 <div class={variants({ variant })}>
 	{#if icon}
-		<svelte:component this={icon} class="h-3 w-3" />
+		{@const SvelteComponent = icon}
+		<SvelteComponent class="h-3 w-3" />
 	{/if}
-	<slot>{label}</slot>
+	{#if children}{@render children()}{:else}{label}{/if}
 	{#if count !== undefined}
 		<Count {count} {variant} />
 	{/if}

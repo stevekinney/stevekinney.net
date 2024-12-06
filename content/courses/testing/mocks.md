@@ -6,9 +6,9 @@ modified: 2024-09-28T15:16:29-06:00
 
 Generally, speaking it's not helpful to test code that you don't control.
 
-The TL;DR of mocking is that sometimes we need to swap out things we don't control with things that we *do*. For example, it might be outside of the scope of our test to make sure that a third-party API goes down. Or, if that API isn't free, you don't necessarily want to run up a bill every time you run your test suite, right?
+The TL;DR of mocking is that sometimes we need to swap out things we don't control with things that we _do_. For example, it might be outside of the scope of our test to make sure that a third-party API goes down. Or, if that API isn't free, you don't necessarily want to run up a bill every time you run your test suite, right?
 
-A *mock* is a more powerful and flexible type of [test doubles](test-doubles.md) that can both define behavior (like a [stub](stubs.md)) and record information (like a [spy](spies.md)). Mocks allow you to specify exactly how a function should behave, including return values, thrown errors, or complex interactions, while also tracking the number of calls and arguments passed.
+A _mock_ is a more powerful and flexible type of [test doubles](test-doubles.md) that can both define behavior (like a [stub](stubs.md)) and record information (like a [spy](spies.md)). Mocks allow you to specify exactly how a function should behave, including return values, thrown errors, or complex interactions, while also tracking the number of calls and arguments passed.
 
 > \[!NOTE] Best Practices and Common Pitfalls
 > We'll cover this in the slides, but you can review the [best practices and common pitfalls with mocking here](mocking-best-practices.md)
@@ -34,14 +34,14 @@ expect(number).toHaveReturnedWith(5000);
 ## Methods
 
 - `mockImplementation`: Takes a function that you want your mock function to call whenever it's called.
-- `mockImplementationOnce`: Accepts a function that will only be used the *next time* a function is called.
+- `mockImplementationOnce`: Accepts a function that will only be used the _next time_ a function is called.
 - `withImplementation`: Overrides the original mock implementation temporarily while the callback is being executed. Calls the function immediately.
 - `mockReturnValue`: Nevermind the implementation, we just know we want it to return whatever value.
-- `mockReturnValueOnce`: Set the return value—but only the *next time* it's called.
+- `mockReturnValueOnce`: Set the return value—but only the _next time_ it's called.
 - `mockResolvedValue`: Sets the value of the promise when it resolves.
-- `mockResolvedValueOnce`: Set the resolved value of a promise *next time* it resolves.
+- `mockResolvedValueOnce`: Set the resolved value of a promise _next time_ it resolves.
 - `mockRejectedValue`: Rejects a promise with the error provided.
-- `mockRejectedValueOnce`: Rejects a promise with the error provided *next time*.
+- `mockRejectedValueOnce`: Rejects a promise with the error provided _next time_.
 - `mockReturnThis`: Sets the value of `this`.
 
 ### Example

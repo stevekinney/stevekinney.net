@@ -17,7 +17,7 @@ Vitest's [test contexts](https://vitest.dev/guide/test-context.html) are inspire
 
 ## Setting Context with `test.context`
 
-Vitest gives you this magical `test.context` object that you can throw stuff into inside each test. Basically, think of `test.context` as that utility belt where Batman (you) can keep all your gadgets and not let things get messy. Each test gets its own context, so they don't bleed values into each other—thankfully saving you from one of those *"Why does everything break when I run all my tests together?"* moments.
+Vitest gives you this magical `test.context` object that you can throw stuff into inside each test. Basically, think of `test.context` as that utility belt where Batman (you) can keep all your gadgets and not let things get messy. Each test gets its own context, so they don't bleed values into each other—thankfully saving you from one of those _"Why does everything break when I run all my tests together?"_ moments.
 
 Let's write a simple test that stores something in the context:
 
@@ -36,9 +36,9 @@ Let’s slow down here: The `ctx` object that you see there? That’s the contex
 
 ## Accessing Context in Hooks
 
-Hold on—you’re probably thinking, *What if I want to set the context before the test runs? Like in some `beforeEach` hook?*
+Hold on—you’re probably thinking, _What if I want to set the context before the test runs? Like in some `beforeEach` hook?_
 
-That's exactly where contexts are even more powerful. You can modify test contexts *inside* `beforeEach()` or even `afterEach()` hooks, which makes them ridiculously useful when you need to do some setup for each test without cluttering the test itself.
+That's exactly where contexts are even more powerful. You can modify test contexts _inside_ `beforeEach()` or even `afterEach()` hooks, which makes them ridiculously useful when you need to do some setup for each test without cluttering the test itself.
 
 Check this out:
 
@@ -69,7 +69,7 @@ And notice: Each test gets its **own** isolated context. So changes in one test 
 
 ## Context Between Tests Is Isolated
 
-Now, you might be wondering: *So what happens with context across multiple tests?* The cool thing is that each test has **its own context instance**, meaning that you can safely modify the context within a test, and it won't affect other tests.
+Now, you might be wondering: _So what happens with context across multiple tests?_ The cool thing is that each test has **its own context instance**, meaning that you can safely modify the context within a test, and it won't affect other tests.
 
 Earlier, when we updated `ctx.user.role = 'editor'` in the second test, it didn’t affect the `user.role` in the first test. That’s the context doing its job to keep things isolated and sane. You don’t want to be in a world where tests are secretly sharing information behind your back. Trust me, it’s a dark place.
 
@@ -101,7 +101,7 @@ What did we do here? We initialized a default API response in `beforeEach`, lett
 
 ## When Context Could Be Too Much
 
-So context is neat and all, but just because you *can* doesn’t always mean you *should*. It’s tempting to start treating `ctx` like a storage locker, cramming everything in there. Do you really need twenty variables in your test’s context? Probably not. Sometimes, it’s better to keep your tests straightforward and only use context sparingly, for setup values or shared instances that genuinely make sense.
+So context is neat and all, but just because you _can_ doesn’t always mean you _should_. It’s tempting to start treating `ctx` like a storage locker, cramming everything in there. Do you really need twenty variables in your test’s context? Probably not. Sometimes, it’s better to keep your tests straightforward and only use context sparingly, for setup values or shared instances that genuinely make sense.
 
 Context is awesome for reducing shared setup boilerplate, but don’t let it grow into this abstract mess of values you have to keep track of later. The goal is to make tests readable and maintainable, right? If `test.context` helps with that, great! If not, maybe step back and think about whether you're trying to solve a problem that doesn’t really exist (we've all been there).
 

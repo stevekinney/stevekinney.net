@@ -5,6 +5,11 @@
 	import Navigation from '$lib/components/navigation.svelte';
 
 	import '../app.css';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	const { children }: Props = $props();
 </script>
 
 <main
@@ -34,6 +39,6 @@
 	<Navigation class="sm:col-start-2 sm:justify-end lg:order-2 lg:justify-center" />
 
 	<div class="my-6 sm:col-span-full lg:order-3">
-		<slot />
+		{@render children?.()}
 	</div>
 </main>

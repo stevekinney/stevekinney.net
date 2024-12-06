@@ -4,13 +4,13 @@ description: Learn essential tools for debugging tests in Vitest effectively.
 modified: 2024-09-28T14:43:06-06:00
 ---
 
-You've just written the best code of your life, you hit `npm run test`, and oof—something's broken. But now the real fun begins: *debugging*. That's right, if debugging your code wasn't enough, you get to debug your tests too.
+You've just written the best code of your life, you hit `npm run test`, and oof—something's broken. But now the real fun begins: _debugging_. That's right, if debugging your code wasn't enough, you get to debug your tests too.
 
 Like all debugging, it's the mix of detective work and head-scratching that we all signed up for at some point shortly after choosing this career path. Don’t worry, though. We’re going to walk through the essential tools Vitest offers for debugging, and I promise, it's not as scary as figuring out why your CSS grid isn't lining up.
 
 ## Error Messages in Vitest: Your First Clue
 
-Before we dive into fancy debugging tools, let’s talk about reading Vitest’s error messages. That might seem basic, but it’s huge. You run the test, and it fails. Vitest is *really* good at telling you *what* went wrong, which line, and, often, why. So when you see the red "FAIL," slow down and carefully read through the stack trace.
+Before we dive into fancy debugging tools, let’s talk about reading Vitest’s error messages. That might seem basic, but it’s huge. You run the test, and it fails. Vitest is _really_ good at telling you _what_ went wrong, which line, and, often, why. So when you see the red "FAIL," slow down and carefully read through the stack trace.
 
 Let’s say you have this failing test:
 
@@ -45,11 +45,11 @@ test.only('adds two numbers', () => {
 });
 ```
 
-Boom—Vitest just runs that single test. Now, *all* your attention is on the suspect. Narrow it down and debug faster.
+Boom—Vitest just runs that single test. Now, _all_ your attention is on the suspect. Narrow it down and debug faster.
 
 ## Using `console.log`
 
-Okay, if we’re being real here, most debugging is just sprucing up the joint with `console.log`. Sometimes, the fastest way to figure out what’s going wrong is to pepper *a few `console.log`s into your code*. If you're adding a million log statements to your actual test files—hey, no judgment—we all do it.
+Okay, if we’re being real here, most debugging is just sprucing up the joint with `console.log`. Sometimes, the fastest way to figure out what’s going wrong is to pepper _a few `console.log`s into your code_. If you're adding a million log statements to your actual test files—hey, no judgment—we all do it.
 
 ```javascript
 test('adds two numbers', () => {

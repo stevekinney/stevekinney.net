@@ -4,7 +4,7 @@ description: Learn how to mock timers, dates, and utilities in Vitest.
 modified: 2024-09-28T15:14:27-06:00
 ---
 
-A lot of UIs tend to show stuff like time and dates. As we've discussed previously, we want our tests to be consistent. As [Steve Miller once wrote](https://www.youtube.com/watch?v=HlItAutxJzk\&list=OLAK5uy_lRxgtVPfsBuzpgFdYdFi0Ej0J2mNwzz2A), (but let's be honest, you 're thinking of [Seal's version from the Space Jam soundtrack](https://www.youtube.com/watch?v=gxbBp9SH81U)):
+A lot of UIs tend to show stuff like time and dates. As we've discussed previously, we want our tests to be consistent. As [Steve Miller once wrote](https://www.youtube.com/watch?v=HlItAutxJzk&list=OLAK5uy_lRxgtVPfsBuzpgFdYdFi0Ej0J2mNwzz2A), (but let's be honest, you 're thinking of [Seal's version from the Space Jam soundtrack](https://www.youtube.com/watch?v=gxbBp9SH81U)):
 
 > Time keeps on slipping into the future.
 > Time keeps on slipping, slipping, slipping into the future.
@@ -51,7 +51,7 @@ vi.setSystemTime(date);
 ```
 
 - You can get access to the mocked time using `vi.getMockedSystemTime()`.
-- You can get access to the *real* time using `vi.getRealSystemTime()`. (I cannot even come up with a reason why you'd want to do this. I'm just mentioning it in the name of completeness).
+- You can get access to the _real_ time using `vi.getRealSystemTime()`. (I cannot even come up with a reason why you'd want to do this. I'm just mentioning it in the name of completeness).
 
 ### Advancing Time Forward
 

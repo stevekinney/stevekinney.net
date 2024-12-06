@@ -4,8 +4,8 @@ import vercelAdapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 import { mdsvex, escapeSvelte } from 'mdsvex';
-import remarkUnwrapImages from 'remark-unwrap-images';
-import rehypeSlug from 'rehype-slug';
+import unwrapImages from 'rehype-unwrap-images';
+import slug from 'rehype-slug';
 import { codeToHtml, bundledLanguages } from 'shiki';
 
 import { processImages } from 'svelte-enhance-images';
@@ -15,8 +15,8 @@ import { fixMarkdownUrls } from 'remark-fix-urls';
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
 	extensions: ['.md'],
-	remarkPlugins: [remarkUnwrapImages, fixMarkdownUrls],
-	rehypePlugins: [rehypeSlug],
+	remarkPlugins: [unwrapImages, fixMarkdownUrls],
+	rehypePlugins: [slug],
 	layout: {
 		_: './src/lib/markdown/base.svelte',
 		page: './src/lib/markdown/page.svelte',

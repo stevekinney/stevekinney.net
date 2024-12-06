@@ -3,17 +3,20 @@
 	import type { Icon } from 'lucide-svelte';
 	import { twMerge as merge } from 'tailwind-merge';
 
-	export let href: string;
-	export let icon: ComponentType<Icon>;
-	export let name = icon.name;
+	interface Props {
+		href: string;
+		icon: ComponentType<Icon>;
+		name?: any;
+		class?: string;
+	}
 
-	let className: string = '';
-	export { className as class };
+	const { href, icon, name = icon.name, class: className = '' }: Props = $props();
+
+	const SvelteComponent = $derived(icon);
 </script>
 
 <a {href} target="_blank">
-	<svelte:component
-		this={icon}
+	<SvelteComponent
 		class={merge('transition-colors hover:stroke-primary-700 active:stroke-primary-600', className)}
 		size={36}
 		aria-label={name}

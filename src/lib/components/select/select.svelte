@@ -3,12 +3,23 @@
 	import type { SelectProps } from './types';
 	import Label from '../label';
 
-	type $$Props = SelectProps;
+	interface Props {
+		label: SelectProps['label'];
+		options?: SelectProps['options'];
+		disabled?: SelectProps['disabled'];
+		required?: SelectProps['required'];
+		children?: import('svelte').Snippet;
+		[key: string]: any;
+	}
 
-	export let label: SelectProps['label'];
-	export let options: SelectProps['options'] = [];
-	export let disabled: SelectProps['disabled'] = false;
-	export let required: SelectProps['required'] = false;
+	const {
+		label,
+		options = [],
+		disabled = false,
+		required = false,
+		children,
+		...rest
+	}: Props = $props();
 </script>
 
 <div>
@@ -25,14 +36,16 @@
 				class="w-full bg-transparent outline-none disabled:cursor-not-allowed dark:text-slate-100"
 				{required}
 				{disabled}
-				{...$$restProps}
+				{...rest}
 			>
-				<slot>
+				{#if children}
+					{@render children()}
+				{:else}
 					<option disabled selected>Select an option...</option>
 					{#each options || [] as option}
 						<option value={option.value}>{option.label || option.value}</option>
 					{/each}
-				</slot>
+				{/if}
 			</select>
 		</div>
 	</Label>

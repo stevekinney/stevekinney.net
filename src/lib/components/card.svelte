@@ -2,14 +2,23 @@
 	import formatDate from '$lib/format-date';
 	import { twMerge as merge } from 'tailwind-merge';
 
-	export let title: string;
-	export let description: string;
-	export let url: string;
-	export let date: Date | string | undefined = undefined;
-	export let as: keyof HTMLElementTagNameMap = 'div';
+	interface Props {
+		title: string;
+		description: string;
+		url: string;
+		date?: Date | string | undefined;
+		as?: keyof HTMLElementTagNameMap;
+		class?: string;
+	}
 
-	let className: string = '';
-	export { className as class };
+	const {
+		title,
+		description,
+		url,
+		date = undefined,
+		as = 'div',
+		class: className = '',
+	}: Props = $props();
 </script>
 
 <a href={url} class="group">

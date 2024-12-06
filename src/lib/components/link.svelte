@@ -3,22 +3,27 @@
 	import { page } from '$app/stores';
 	import { twMerge as merge } from 'tailwind-merge';
 
-	interface $$Props extends Partial<HTMLLinkElement> {
+	interface Props {
 		href: string;
 		class?: string;
 		active?: string;
 		exact?: boolean;
+		children?: import('svelte').Snippet;
+		[key: string]: any;
 	}
 
-	export let href: string = '#';
-	export let active: string = 'underline';
-	export let exact: boolean = false;
+	const {
+		href = '#',
+		class: className = '',
+		active = 'underline',
+		exact = false,
+		children,
+		...rest
+	}: Props = $props();
 
-	let className: string = '';
-	export { className as class };
-
-	$: isActive =
-		browser && exact ? $page.url.pathname === href : $page.url.pathname.startsWith(href);
+	const isActive = $derived(
+		browser && exact ? $page.url.pathname === href : $page.url.pathname.startsWith(href),
+	);
 </script>
 
 <a
@@ -29,7 +34,7 @@
 		isActive && active,
 	)}
 	aria-current={isActive ? 'page' : undefined}
-	{...$$restProps}
+	{...rest}
 >
-	<slot />
+	{@render children?.()}
 </a>

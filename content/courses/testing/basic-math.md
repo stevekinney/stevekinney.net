@@ -62,4 +62,4 @@ export const add = (a, b) => a + b;
 And then I'd watch it pass. Now, there isn't a lot of refactoring here, but you get the idea.
 
 > \[!example] Exercise
-> Okay, enough of listening to me talk. Can you implement the rest of the basic math functions in `examples/basic-math/src/arithmetic.test.js`? Ideally, you want to take some test-driven development for a spin. On one hand, this exercise is *super* easy. On the other hand, you really don't have a great excuse not to do some test-driven development. If you need a helping hand, you can follow [this walkthrough](basic-math-exercise-walkthrough.md).
+> Okay, enough of listening to me talk. Can you implement the rest of the basic math functions in `examples/basic-math/src/arithmetic.test.js`? Ideally, you want to take some test-driven development for a spin. On one hand, this exercise is _super_ easy. On the other hand, you really don't have a great excuse not to do some test-driven development. If you need a helping hand, you can follow [this walkthrough](basic-math-exercise-walkthrough.md).

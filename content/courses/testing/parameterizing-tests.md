@@ -32,7 +32,7 @@ export class Polygon {
 }
 ```
 
-Maybe we want to test that we're getting the correct name depending on the number of sides. It's *not* that hard to write a bunch of tests for this, but you can put on your imagination hats for a moment and imagine a world where you have a lot more cases.
+Maybe we want to test that we're getting the correct name depending on the number of sides. It's _not_ that hard to write a bunch of tests for this, but you can put on your imagination hats for a moment and imagine a world where you have a lot more cases.
 
 `describe.each` and `it.each` (or, `test.each`) allow us to use an array or table to automatically generate tests for ourselves.
 

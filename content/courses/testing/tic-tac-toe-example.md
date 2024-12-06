@@ -24,7 +24,7 @@ modified: 2024-09-28T18:32:11.126Z
 10. [Conclusion](#conclusion)
 11. [Additional Exercises](#additional-exercises)
 
-***
+---
 
 ### Introduction
 
@@ -498,7 +498,7 @@ All tests should pass.
 
 No immediate refactoring needed.
 
-***
+---
 
 At this point, we've implemented the core game logic using TDD.
 
@@ -750,7 +750,7 @@ npm test
 
 All tests should pass if the UI code correctly implements the game logic.
 
-***
+---
 
 ### Conclusion
 

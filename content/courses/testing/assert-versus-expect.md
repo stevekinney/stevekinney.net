@@ -5,7 +5,7 @@ modified: 2024-09-28T13:25:43-06:00
 ---
 
 > \[!NOTE] We Won't Be Covering This in the Course
-> This *honestly* isn't all that important. I'm including it here just in case you get curious.
+> This _honestly_ isn't all that important. I'm including it here just in case you get curious.
 
 The key difference between `assert` and `expect` lies in their **usage patterns** and **API styles** in testing libraries. Both are used for writing assertions (i.e., verifying that certain conditions hold true in your tests), but they differ in syntax, style, and flexibility.
 
@@ -82,4 +82,4 @@ expect(result).toBe(expected);
 
 In summary, both are used to write assertions, but `expect` is more flexible, expressive, and better suited for behavior-driven development, while `assert` is simpler and more direct.
 
-I've used both a various points in my career—and I really don't have a preference. We'll use `expect` in this course, because it *feels* like it's more popular at this moment in time.
+I've used both a various points in my career—and I really don't have a preference. We'll use `expect` in this course, because it _feels_ like it's more popular at this moment in time.

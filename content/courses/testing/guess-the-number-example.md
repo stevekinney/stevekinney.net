@@ -24,7 +24,7 @@ modified: 2024-09-28T18:32:10.824Z
 9. [Conclusion](#conclusion)
 10. [Additional Exercises](#additional-exercises)
 
-***
+---
 
 ### Introduction
 
@@ -444,7 +444,7 @@ All tests should pass.
 
 Consider moving validation logic into separate functions if needed.
 
-***
+---
 
 At this point, we've implemented the core game logic using TDD.
 
@@ -512,6 +512,6 @@ To further enhance your "Guess the Number" game and testing skills, consider imp
    - Implement a high score system that records the best scores.
    - Write tests to ensure high scores are updated and retrieved correctly.
 
-***
+---
 
 By extending the game and writing tests for new features, you'll deepen your understanding of TDD and improve your testing proficiency.

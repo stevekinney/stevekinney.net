@@ -4,11 +4,11 @@ description: Explore alternatives to snapshot tests for efficient testing.
 modified: 2024-09-28T15:26:05-06:00
 ---
 
-Snapshot tests—love them or hate them. They seem *so* helpful at first. "Look, I just got this test to pass by updating the snapshot!" But then, a month later, when that snapshot has 1,200 lines of JSON and you can't even remember what you're testing? Yeah, we’ve all been there. So, if you want to avoid the trap of snapshot tests becoming a maintenance nightmare, what can you do instead? Let’s explore some real-world alternatives that’ll keep your test suite both useful and maintainable.
+Snapshot tests—love them or hate them. They seem _so_ helpful at first. "Look, I just got this test to pass by updating the snapshot!" But then, a month later, when that snapshot has 1,200 lines of JSON and you can't even remember what you're testing? Yeah, we’ve all been there. So, if you want to avoid the trap of snapshot tests becoming a maintenance nightmare, what can you do instead? Let’s explore some real-world alternatives that’ll keep your test suite both useful and maintainable.
 
 ## Testing Individual Pieces of Output
 
-Snapshots are super tempting because you just "capture" a component's output in one fell swoop. But nine times out of ten, you’re probably not interested in *everything* that comes out. What you **really** care about is that specific little chunk of output—a CSS class, a tag, some text.
+Snapshots are super tempting because you just "capture" a component's output in one fell swoop. But nine times out of ten, you’re probably not interested in _everything_ that comes out. What you **really** care about is that specific little chunk of output—a CSS class, a tag, some text.
 
 Let’s say you have a `Button` component. Instead of snapshotting the whole thing, let's focus on the key part. For example, we might want to confirm that the button is using the right class, rendering the right label:
 
@@ -34,7 +34,7 @@ Boom. You’re now testing exactly what matters… and you won’t get overwhelm
 
 ## Testing Behavior Instead of Output
 
-Snapshots focus *heavily* on the "what" (what does the output look like?). But have you ever thought about the "how"? You don't write components just to *look* pretty; they should, you know, *do* something.
+Snapshots focus _heavily_ on the "what" (what does the output look like?). But have you ever thought about the "how"? You don't write components just to _look_ pretty; they should, you know, _do_ something.
 
 Here's where testing behavior comes in. Let’s stick with our `Button` example and imagine it has a click handler. We don’t care what the DOM looks like after rendering—we care whether it propagates a click event when a user actually clicks it.
 
@@ -84,7 +84,7 @@ describe('UserProfile', () => {
 });
 ```
 
-Next time the layout changes, no huge diff worries. You’re asserting against the only thing that actually matters to users—what they *see* and *read*.
+Next time the layout changes, no huge diff worries. You’re asserting against the only thing that actually matters to users—what they _see_ and _read_.
 
 ## Custom Matchers
 
@@ -118,7 +118,7 @@ This helps keep things readable—and avoids snapshot hell.
 
 I'm not telling you to delete **all** snapshots from your life. There are times when they’re pretty convenient—like tracking a huge chunk of config objects or API response mock data where you need the full picture.
 
-But the trick is to use them **sparingly**. Focus your tests on the critical parts of your UI and interactions, and keep the snapshots for data or when the structure *really* matters.
+But the trick is to use them **sparingly**. Focus your tests on the critical parts of your UI and interactions, and keep the snapshots for data or when the structure _really_ matters.
 
 ## Final Thoughts
 

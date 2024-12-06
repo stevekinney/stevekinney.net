@@ -59,7 +59,7 @@ These are fairly similar to what we saw with our individual tests.
 
 - `describe.skip`: Skip this suite.
 - `describe.skipIf`: Skip this suite if the provided value is truthy.
-- `describe.only`: Only run this suite (and any others that use `.only` as well, of course). You probably *don't* want to accidentally commit this. Trust me. It's embarassing.
+- `describe.only`: Only run this suite (and any others that use `.only` as well, of course). You probably _don't_ want to accidentally commit this. Trust me. It's embarassing.
 - `describe.todo`: Marks a suite as something you're going to implement later. This is helpful when you know the kinds of tests that you'll need and and want to keep track of how many you have less.
 - `describe.each`: Used for generating a multiple suites on based on a collection of data. This is covered more in [Parameterizing Tests](parameterizing-tests.md).
 - `describe.concurrent`: Run all of the tests in this suite concurrently. This is covered more in [Parallelizing Tests](parallelizing-tests.md).

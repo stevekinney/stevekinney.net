@@ -1,8 +1,11 @@
 <script lang="ts">
 	import Link from './link.svelte';
 
-	let className: string = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+	}
+
+	const { class: className = '' }: Props = $props();
 </script>
 
 <nav class="flex items-center gap-4 {className}">

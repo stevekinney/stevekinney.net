@@ -4,7 +4,7 @@ description: Learn how to test edge cases and errors to improve robustness.
 modified: 2024-09-29T15:30:11-06:00
 ---
 
-No, this is *not* my new band name.
+No, this is _not_ my new band name.
 
 The "happy path" refers to the scenario where everything works as expected—inputs are valid, conditions are ideal, and no errors occur. However, the Real World™ is nowhere near as kind.
 
@@ -47,12 +47,12 @@ The list goes on—but we have better things to get to. Surely out basic arithme
 - `subtract('1', 1)`
 - `divide(5, 0)`
 
-So on and so forth. The only *wrong* answer here is `:shrug:`. Really in any of these cases, we have about a grand total of two options:
+So on and so forth. The only _wrong_ answer here is `:shrug:`. Really in any of these cases, we have about a grand total of two options:
 
 - Fail gracefully.
 - Flip a table (a.k.a. throw an error)
 
-Our tests *need* to cover these edge cases and this is one of the nuances of test-driven development. There is nothing about TDD that precludes you from doing these things—but, calling a day after your red-green-refactor cycle is *also* not going to get you all the way there.
+Our tests _need_ to cover these edge cases and this is one of the nuances of test-driven development. There is nothing about TDD that precludes you from doing these things—but, calling a day after your red-green-refactor cycle is _also_ not going to get you all the way there.
 
 ### Additional Examples of Invalid Input
 
