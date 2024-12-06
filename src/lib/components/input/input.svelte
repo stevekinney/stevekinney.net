@@ -20,7 +20,7 @@
 		prefix?: InputProps['prefix'];
 		suffix?: InputProps['suffix'];
 		disabled?: InputProps['disabled'];
-		[key: string]: any
+		[key: string]: any;
 	}
 
 	let {

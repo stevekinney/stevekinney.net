@@ -3,7 +3,6 @@
 	import type { Icon } from 'lucide-svelte';
 	import { twMerge as merge } from 'tailwind-merge';
 
-
 	interface Props {
 		href: string;
 		icon: ComponentType<Icon>;
@@ -11,13 +10,7 @@
 		class?: string;
 	}
 
-	let {
-		href,
-		icon,
-		name = icon.name,
-		class: className = ''
-	}: Props = $props();
-	
+	let { href, icon, name = icon.name, class: className = '' }: Props = $props();
 
 	const SvelteComponent = $derived(icon);
 </script>

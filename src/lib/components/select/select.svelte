@@ -38,7 +38,9 @@
 				{disabled}
 				{...rest}
 			>
-				{#if children}{@render children()}{:else}
+				{#if children}
+					{@render children()}
+				{:else}
 					<option disabled selected>Select an option...</option>
 					{#each options || [] as option}
 						<option value={option.value}>{option.label || option.value}</option>

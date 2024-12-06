@@ -4,7 +4,6 @@
 	import { page } from '$app/stores';
 	import { formatPageTitle } from '$lib/format-page-title';
 
-
 	interface Props {
 		title?: string | undefined;
 		description?: string;
@@ -20,7 +19,7 @@
 		published = true,
 		date = undefined,
 		modified = undefined,
-		url = new URL($page.url.pathname, 'https://stevekinney.net')
+		url = new URL($page.url.pathname, 'https://stevekinney.net'),
 	}: Props = $props();
 
 	let openGraph = $derived(new URL('/open-graph.jpg', 'https://stevekinney.net'));

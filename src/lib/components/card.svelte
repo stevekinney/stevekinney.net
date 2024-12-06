@@ -2,7 +2,6 @@
 	import formatDate from '$lib/format-date';
 	import { twMerge as merge } from 'tailwind-merge';
 
-
 	interface Props {
 		title: string;
 		description: string;
@@ -18,9 +17,8 @@
 		url,
 		date = undefined,
 		as = 'div',
-		class: className = ''
+		class: className = '',
 	}: Props = $props();
-	
 </script>
 
 <a href={url} class="group">
