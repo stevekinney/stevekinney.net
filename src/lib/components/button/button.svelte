@@ -1,6 +1,4 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
-	import clsx from 'clsx';
 	import { LoaderCircle as Loading } from 'lucide-svelte';
 	import { twMerge as merge } from 'tailwind-merge';
 	import { variants } from './variants';
@@ -31,7 +29,8 @@
 	{#if loading}
 		<Loading />
 	{:else if icon}
-		{@render icon()}
+		{@const Icon = icon}
+		<Icon />
 	{/if}
 	{#if children}
 		{@render children()}
