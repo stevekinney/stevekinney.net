@@ -131,4 +131,4 @@ Real talk—nothing’s perfect. There are a few things to keep in mind when run
 
 1. **It’s still not a real browser.** You're not getting every subtlety of a specific Chrome or Firefox version. Remember, this is JSDOM-ified, meaning it's designed to act like a browser rather than being one.
 2. **Performance.** Running tests with `jsdom` can be a bit slower than straight-up Node tests. It’s the cost of emulating browser stuff.
-3. **Browser-specific issues.** Just because something works in Vitest browser mode doesn’t mean it’ll work in *all* browsers. (I’m looking at you, Internet Explorer.)
+3. **Browser-specific issues.** Just because something works in Vitest browser mode doesn’t mean it’ll work in _all_ browsers. (I’m looking at you, Internet Explorer.)

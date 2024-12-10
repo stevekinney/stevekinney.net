@@ -26,7 +26,7 @@ modified: 2024-09-28T18:32:11.055Z
 10. [Conclusion](#conclusion)
 11. [Additional Exercises](#additional-exercises)
 
-***
+---
 
 ### Introduction
 

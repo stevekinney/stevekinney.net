@@ -66,7 +66,7 @@ describe('Counter app', () => {
 });
 ```
 
-Rather than testing the internal state directly, we’re checking **the thing we care about most**—what the user sees: that number goes up when the button is clicked. Now when some poor soul is maintaining your app in the future, they can *immediately tell* what’s going on—oh, button click equals counter change, cool. They don’t have to dig into how the inner state of `count` works.
+Rather than testing the internal state directly, we’re checking **the thing we care about most**—what the user sees: that number goes up when the button is clicked. Now when some poor soul is maintaining your app in the future, they can _immediately tell_ what’s going on—oh, button click equals counter change, cool. They don’t have to dig into how the inner state of `count` works.
 
 ## Mocking DOM Methods
 

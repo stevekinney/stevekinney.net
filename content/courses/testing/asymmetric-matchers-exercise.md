@@ -35,7 +35,7 @@ export class Character extends Person {
 }
 ```
 
-You can take a look at `roll-dice.js`, but I'll spoil the surpise: It's *basically* a random number generator. It also has two dates—`createdAt` and `lastModified` that will be a bit hard to pin down as well. Can you write some tests that will test the parts we can pin down?
+You can take a look at `roll-dice.js`, but I'll spoil the surpise: It's _basically_ a random number generator. It also has two dates—`createdAt` and `lastModified` that will be a bit hard to pin down as well. Can you write some tests that will test the parts we can pin down?
 
 - We know that the first and last name should be what we pass in.
 - Full name should likely be the first and last name combined.

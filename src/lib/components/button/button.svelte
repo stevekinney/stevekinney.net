@@ -1,41 +1,40 @@
 <script lang="ts">
-	import clsx from 'clsx';
 	import { LoaderCircle as Loading } from 'lucide-svelte';
 	import { twMerge as merge } from 'tailwind-merge';
 	import { variants } from './variants';
 	import type { ButtonProps } from './types';
 
-	type $$Props = ButtonProps;
-
-	export let label = '';
-	export let variant: ButtonProps['variant'] = 'primary';
-	export let size: ButtonProps['size'] = 'medium';
-	export let icon: ButtonProps['icon'] = undefined;
-	export let iconPosition: ButtonProps['iconPosition'] = 'left';
-	export let href: string | undefined = undefined;
-	export let loading: boolean = false;
-	export let full: boolean = false;
-
-	let className: string = '';
-	export { className as class };
+	const {
+		label = '',
+		class: className = '',
+		variant = 'primary',
+		size = 'medium',
+		icon,
+		iconPosition = 'left',
+		href,
+		loading = false,
+		full = false,
+		children,
+		...props
+	}: ButtonProps = $props();
 </script>
 
 <svelte:element
 	this={href ? 'a' : 'button'}
 	role={href ? 'link' : 'button'}
 	{href}
-	tabindex={$$props.tabindex ?? 0}
 	class={merge(variants({ variant, size, iconPosition }), full && 'w-full', className)}
-	{...$$restProps}
-	on:click
-	on:keydown
+	{...props}
 >
-	{#if icon || loading}
-		<svelte:component
-			this={loading ? Loading : icon}
-			class={clsx('h-4 w-4', loading && 'animate-spin')}
-			aria-hidden="true"
-		/>
+	{#if loading}
+		<Loading />
+	{:else if icon}
+		{@const Icon = icon}
+		<Icon />
 	{/if}
-	<slot>{label}</slot>
+	{#if children}
+		{@render children()}
+	{:else}
+		{label}
+	{/if}
 </svelte:element>

@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	const title = 'Figma Spacing Variable Generator';
 	const description = 'Generate Figma variables for spacing in your design system.';
 
@@ -20,9 +20,9 @@
 
 	import { generateFigmaSpacingVariables } from './generate-variables';
 
-	export let data;
+	const { data } = $props();
 
-	$: collection = generateFigmaSpacingVariables('Spacing', data.variables);
+	let collection = $derived(generateFigmaSpacingVariables('Spacing', data.variables));
 </script>
 
 <SEO {title} {description} />
@@ -103,7 +103,7 @@
 								<div
 									class="hidden h-4 bg-primary-300 md:block dark:bg-primary-800"
 									style="width: {variable.codeSyntax.WEB};"
-								/>
+								></div>
 							{/if}
 						</div>
 					</td>

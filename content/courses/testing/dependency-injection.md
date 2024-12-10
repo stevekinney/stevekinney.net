@@ -1,5 +1,5 @@
 ---
-title: "Dependency Injection In JavaScript: What, Why, And How"
+title: 'Dependency Injection In JavaScript: What, Why, And How'
 description: Learn the basics and benefits of Dependency Injection in JavaScript.
 modified: 2024-09-28T14:45:40-06:00
 ---
@@ -12,7 +12,7 @@ This makes your code more flexible, and much easier to test. Testing's about to 
 
 ## Before Dependency Injection
 
-Let's say you have a not-very-smart `UserService` that fetches some user data. But it's doing a little *too much* on its own.
+Let's say you have a not-very-smart `UserService` that fetches some user data. But it's doing a little _too much_ on its own.
 
 ```javascript
 class UserService {
@@ -74,7 +74,7 @@ See how now we can just pass a fake `apiClient`, and tell it exactly how to beha
 
 - **Testability:** Yep, this is the big one. When your dependencies are injected, you can easily swap them out with mocks or stubs during testing. Compare that to the alternative—mocking out internal creation logic (gross) or actually hitting a live API (uhh… no thanks).
 - **Flexibility:** Changing a dependency becomes as simple as handing a new one to your class or function. No need to dive deep into the internals just to update an implementation, making your app more maintainable.
-- **Decoupling:** When your code doesn’t need to know *how* things are created, it’s largely isolated from changes. Want to swap out `ApiClient` for something else? Just hand in the new dependency. No drama, no tears.
+- **Decoupling:** When your code doesn’t need to know _how_ things are created, it’s largely isolated from changes. Want to swap out `ApiClient` for something else? Just hand in the new dependency. No drama, no tears.
 
 ## Dependency Injection in Functions
 
@@ -90,4 +90,4 @@ Boom, flexible! You can pass whatever object you want into `getUser()`—even on
 
 ## Wrapping Up
 
-Dependency Injection isn’t scary. It’s not even complicated. It's just a little sleight of hand where instead of creating all the stuff inside a function or class, you pass the stuff in from the outside. This pattern decouples your code, makes it easier to change *and* easier to test. Trust me, your future self will thank you.
+Dependency Injection isn’t scary. It’s not even complicated. It's just a little sleight of hand where instead of creating all the stuff inside a function or class, you pass the stuff in from the outside. This pattern decouples your code, makes it easier to change _and_ easier to test. Trust me, your future self will thank you.

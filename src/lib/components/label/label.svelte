@@ -1,15 +1,20 @@
 <script lang="ts">
-	import clsx from 'clsx';
+	import { twMerge as merge } from 'tailwind-merge';
+	import type { ExtendElement } from '../component.types';
+	import type { HTMLAttributes } from 'svelte/elements';
 
-	export let required: boolean = false;
-	export let disabled: boolean = false;
-	export let hidden: boolean = false;
-	export let label: string;
+	type Props = HTMLAttributes<HTMLElement> & {
+		label: string;
+		required?: boolean | null;
+		disabled?: boolean | null;
+	};
+
+	const { required = false, disabled = false, hidden = false, label, children }: Props = $props();
 </script>
 
 <label class="flex flex-col gap-1.5">
 	<span
-		class={clsx(
+		class={merge(
 			'inline-flex items-center gap-1.5 text-sm font-semibold',
 			disabled && 'text-slate-500 dark:text-slate-400',
 			required && 'after:h-1.5 after:w-1.5 after:rounded-full after:bg-red-500',
@@ -18,5 +23,5 @@
 	>
 		{label}
 	</span>
-	<slot />
+	{@render children?.()}
 </label>

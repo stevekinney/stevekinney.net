@@ -4,4 +4,9 @@ const formatDate = (date: Date | string): string => {
 	return date.toLocaleDateString('en-US', options);
 };
 
+export const toISODate = (date: Date | string): string => {
+	if (typeof date === 'string') date = new Date(date);
+	return date.toISOString();
+};
+
 export default formatDate;

@@ -4,10 +4,10 @@ description: Explore in-source testing with Vitest for quick experimentation.
 modified: 2024-09-28T15:01:48-06:00
 ---
 
-Picture this: You’re zipping along, writing your brand-new feature. Everything’s great, maybe even sipping a fresh cup of coffee. And then it hits you—**you forgot to write unit tests**. But the thought of context-switching, creating dedicated test files, setting up more boilerplate… *ugh*. It’s at these moments that the concept of **in-source testing** shines.
+Picture this: You’re zipping along, writing your brand-new feature. Everything’s great, maybe even sipping a fresh cup of coffee. And then it hits you—**you forgot to write unit tests**. But the thought of context-switching, creating dedicated test files, setting up more boilerplate… _ugh_. It’s at these moments that the concept of **in-source testing** shines.
 
 > \[!TIP] A Moment of Honesty
-> I typically *only* use this when I am feeling lazy. And, I usually—on a long enough timeline—end up breaking the tests out into their own file.
+> I typically _only_ use this when I am feeling lazy. And, I usually—on a long enough timeline—end up breaking the tests out into their own file.
 
 Instead of creating a separate test for every little file in your project, what if you could… test directly **in the source file itself**? Wild? Maybe. Convenient? Oh, absolutely. Vitest supports in-source testing, which can be your secret weapon for rapid experimentation during development. It’s not necessarily what you'd run in production, but for quick scaffolding, it’s gold.
 
@@ -71,17 +71,17 @@ Vitest will sweep up your test cases embedded in source files and execute them r
 
 ## A Few Gotchas
 
-Don’t get *too* carried away. In-source testing is perfect for quick, informal checks during development. But as your app scales (just like that slight creep of tech debt you pretend not to see), **best practices** of test organization still matter.
+Don’t get _too_ carried away. In-source testing is perfect for quick, informal checks during development. But as your app scales (just like that slight creep of tech debt you pretend not to see), **best practices** of test organization still matter.
 
 - **Keep production code clean**. You don’t want chunks of test logic shipped to production, so make sure the `import.meta.vitest` gate keeps you from loading those tests outside of dev/test environments.
-- **When features grow**, maybe *consider* switching to a dedicated test file. Your in-source testing should be for the quick and dirty experiments, not the 400-line monstrosities that make you cry.
+- **When features grow**, maybe _consider_ switching to a dedicated test file. Your in-source testing should be for the quick and dirty experiments, not the 400-line monstrosities that make you cry.
 
 ## In-Source Testing in Practice
 
-Here’s where this really shines: You’re in the middle of writing an algorithm, and you want to test specific edge cases quickly—without breaking your flow. Or you’ve got utility functions strewn about and want to know that each incremental step of your work is *rock solid*. In-source testing keeps you fluid and flexible. Perfect for proof-of-concept or when inspiration is rapped out on the keyboard.
+Here’s where this really shines: You’re in the middle of writing an algorithm, and you want to test specific edge cases quickly—without breaking your flow. Or you’ve got utility functions strewn about and want to know that each incremental step of your work is _rock solid_. In-source testing keeps you fluid and flexible. Perfect for proof-of-concept or when inspiration is rapped out on the keyboard.
 
 ## Wrapping It Up
 
-In-source testing isn’t going to be your full-fledged test suite replacement, nor should it be. But when you’re in the middle of it, and the last thing you want to do is open another file to context-switch just to test that tiny piece of logic, this little feature can save you *tons* of time. It’s **low-investment testing**: quick hoop shots while you’re dribbling through a feature.
+In-source testing isn’t going to be your full-fledged test suite replacement, nor should it be. But when you’re in the middle of it, and the last thing you want to do is open another file to context-switch just to test that tiny piece of logic, this little feature can save you _tons_ of time. It’s **low-investment testing**: quick hoop shots while you’re dribbling through a feature.
 
 Use it, enjoy it, but most importantly, don’t let it become another shortcut that causes future-you to suffer when debugging in six months.
