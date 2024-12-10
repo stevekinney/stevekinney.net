@@ -10,6 +10,7 @@
 		date?: Date | string;
 		modified?: Date | string;
 		url?: any;
+		children?: import('svelte').Snippet;
 	}
 
 	const {
@@ -19,6 +20,7 @@
 		date = undefined,
 		modified = undefined,
 		url = new URL($page.url.pathname, $page.url.origin),
+		children,
 	}: SEOProps = $props();
 
 	const openGraph = $derived(
@@ -47,5 +49,9 @@
 	{#if published && modified}
 		<meta name="last-modified" content={String(modified)} />
 		<meta name="article:modified_time" content={String(modified)} />
+	{/if}
+
+	{#if children}
+		{@render children()}
 	{/if}
 </svelte:head>

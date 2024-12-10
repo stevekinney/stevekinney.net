@@ -1,16 +1,15 @@
 <script lang="ts">
+	import type { ExtendElement } from '../component.types';
 	import { twMerge as merge } from 'tailwind-merge';
-	import type { SelectProps } from './types';
 	import Label from '../label';
 
-	interface Props {
-		label: SelectProps['label'];
-		options?: SelectProps['options'];
-		disabled?: SelectProps['disabled'];
-		required?: SelectProps['required'];
-		children?: import('svelte').Snippet;
-		[key: string]: any;
-	}
+	type Props = ExtendElement<
+		'select',
+		{
+			label: string;
+			options: { label: string; value: string }[];
+		}
+	>;
 
 	const {
 		label,

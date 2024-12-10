@@ -1,14 +1,13 @@
 <script lang="ts">
+	import type { ExtendElement } from './component.types';
+	import { twMerge as merge } from 'tailwind-merge';
+
 	import Link from './link.svelte';
 
-	interface Props {
-		class?: string;
-	}
-
-	const { class: className = '' }: Props = $props();
+	const { class: className = '' }: ExtendElement<'nav'> = $props();
 </script>
 
-<nav class="flex items-center gap-4 {className}">
+<nav class={merge('flex items-center gap-4', className)}>
 	<Link href="/writing">Writing</Link>
 	<Link href="/courses">Courses</Link>
 	<Link href="/tools">Tools</Link>

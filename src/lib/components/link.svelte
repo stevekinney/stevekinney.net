@@ -1,28 +1,28 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import { twMerge as merge } from 'tailwind-merge';
+	import type { ExtendElement } from './component.types';
 
-	interface Props {
-		href: string;
-		class?: string;
-		active?: string;
-		exact?: boolean;
-		children?: import('svelte').Snippet;
-		[key: string]: any;
-	}
+	type Props = ExtendElement<
+		'a',
+		{
+			href: string;
+			active?: string;
+			exact?: boolean;
+		}
+	>;
 
 	const {
 		href = '#',
-		class: className = '',
 		active = 'underline',
 		exact = false,
 		children,
+		class: className = '',
 		...rest
 	}: Props = $props();
 
 	const isActive = $derived(
-		browser && exact ? $page.url.pathname === href : $page.url.pathname.startsWith(href),
+		exact ? $page.url.pathname === href : $page.url.pathname.startsWith(href),
 	);
 </script>
 

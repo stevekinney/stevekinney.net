@@ -1,16 +1,23 @@
 <script lang="ts">
-	import formatDate from '$lib/format-date';
 	import { twMerge as merge } from 'tailwind-merge';
+	import type { ExtendElement, ElementName } from './component.types';
 
-	interface Props {
-		date: Date | string;
-		as?: keyof HTMLElementTagNameMap;
-		class?: string;
-	}
+	import formatDate, { toISODate } from '$lib/format-date';
 
-	const { date, as = 'time', class: className = '' }: Props = $props();
+	type Props = ExtendElement<
+		'time',
+		{
+			date: Date | string;
+		}
+	>;
+
+	const { date, class: className = '', ...props }: Props = $props();
 </script>
 
-<svelte:element this={as} class={merge('text-primary-600 dark:text-primary-400', className)}>
+<time
+	datetime={toISODate(date)}
+	class={merge('text-primary-600 dark:text-primary-400', className)}
+	{...props}
+>
 	{formatDate(date)}
-</svelte:element>
+</time>

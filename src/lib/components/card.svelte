@@ -1,15 +1,18 @@
 <script lang="ts">
-	import formatDate from '$lib/format-date';
+	import type { ElementName, ExtendElement } from '$lib/components/component.types';
 	import { twMerge as merge } from 'tailwind-merge';
+	import formatDate from '$lib/format-date';
 
-	interface Props {
-		title: string;
-		description: string;
-		url: string;
-		date?: Date | string | undefined;
-		as?: keyof HTMLElementTagNameMap;
-		class?: string;
-	}
+	type Props = ExtendElement<
+		'div',
+		{
+			title: string;
+			description: string;
+			url: string;
+			date?: Date | string | undefined;
+			as?: ElementName;
+		}
+	>;
 
 	const {
 		title,
@@ -18,12 +21,14 @@
 		date = undefined,
 		as = 'div',
 		class: className = '',
+		...props
 	}: Props = $props();
 </script>
 
-<a href={url} class="group">
+<a href={url} class="group block">
 	<svelte:element
 		this={as}
+		{...props}
 		class={merge(
 			'rounded-md border-2 border-slate-400 bg-slate-50 p-4 shadow-md transition-colors group-hover:border-slate-500 group-hover:bg-slate-100 sm:h-64 dark:border-slate-700 dark:bg-slate-900 dark:group-hover:bg-slate-900',
 			className,
