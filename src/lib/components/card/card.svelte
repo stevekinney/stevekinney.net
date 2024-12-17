@@ -1,10 +1,19 @@
-<script lang="ts">
+<script lang="ts" module>
+	import type { BaseAttributes } from '../component.types';
 	import { variants, type CardVariants } from './variants';
 
-	export let variant: CardVariants['variant'] = 'default';
-	export let as: 'div' | 'section' | 'aside' | 'article' | 'li' = 'div';
+	type ValidElements = 'div' | 'section' | 'aside' | 'article' | 'li';
+
+	export type CardProps = BaseAttributes &
+		CardVariants & {
+			as?: ValidElements;
+		};
+</script>
+
+<script lang="ts">
+	let { variant = 'default', as = 'div', children }: CardProps = $props();
 </script>
 
 <svelte:element this={as} class={variants({ variant })}>
-	<slot />
+	{@render children?.()}
 </svelte:element>

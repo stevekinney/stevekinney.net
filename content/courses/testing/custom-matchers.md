@@ -4,7 +4,7 @@ description: Create custom matchers in Vitest for specialized assertions.
 modified: 2024-09-28T14:57:06-06:00
 ---
 
-Let's say you can't find the `expect` method that makes you happy. You *could* extend the matchers in Vitest.
+Let's say you can't find the `expect` method that makes you happy. You _could_ extend the matchers in Vitest.
 
 ```javascript
 // vitest.setup.js
@@ -73,5 +73,5 @@ test('date comparison', () => {
 ## Best Practices
 
 1. **Keep the matcher simple**. You don’t want to write a novel for each matcher. Remember, code is read more often than it’s written, so make sure that your custom matcher is easy to understand at a glance.
-2. **Detailed error messages**. When a test fails, the developer (spoiler: future you) needs to understand *why* things exploded. A good message makes debugging way less painful.
+2. **Detailed error messages**. When a test fails, the developer (spoiler: future you) needs to understand _why_ things exploded. A good message makes debugging way less painful.
 3. **Leverage context for your app**. Extend matchers when you find yourself repeating specific checks. In the land of testing, **DRY** doesn’t just stand for "Don’t Repeat Yourself", it stands for "**Don’t Rage Yet**", because tests are meant to stay calm and concise.

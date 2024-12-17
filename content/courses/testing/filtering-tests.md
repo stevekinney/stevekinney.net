@@ -4,7 +4,7 @@ description: Learn how to filter tests in Vitest by name, directory, and more.
 modified: 2024-09-29T14:05:40-06:00
 ---
 
-Vitest gives you a bunch of interesting ways to only run *some* of your tests. Let's walking some of the more popular ones.
+Vitest gives you a bunch of interesting ways to only run _some_ of your tests. Let's walking some of the more popular ones.
 
 ## Filtering by File Name
 
@@ -41,7 +41,7 @@ Sometimes, we don't want all of our tests to run. Some times we only want certai
 
 ## Only Run Certain Tests
 
-You can use `.only` if you want to run *only* a few of your tests.
+You can use `.only` if you want to run _only_ a few of your tests.
 
 ```ts
 it.only('should work', () => {
@@ -69,7 +69,7 @@ test.skip('works with "test" as well', () => {
 });
 ```
 
-Alternatively, you can use `todo` to signify that you want to skip this test for now, *but* it's because you intend to write an implementation for it… eventually.
+Alternatively, you can use `todo` to signify that you want to skip this test for now, _but_ it's because you intend to write an implementation for it… eventually.
 
 ```ts
 it('should work', () => {
@@ -129,7 +129,7 @@ npm test foo
 
 ```
 
-This will run `foo.test.ts`, but *not* `bar.test.ts`.
+This will run `foo.test.ts`, but _not_ `bar.test.ts`.
 
 ## `vitest related`
 

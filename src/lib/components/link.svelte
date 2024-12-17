@@ -1,24 +1,29 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import { twMerge as merge } from 'tailwind-merge';
+	import type { ExtendElement } from './component.types';
 
-	interface $$Props extends Partial<HTMLLinkElement> {
-		href: string;
-		class?: string;
-		active?: string;
-		exact?: boolean;
-	}
+	type Props = ExtendElement<
+		'a',
+		{
+			href: string;
+			active?: string;
+			exact?: boolean;
+		}
+	>;
 
-	export let href: string = '#';
-	export let active: string = 'underline';
-	export let exact: boolean = false;
+	const {
+		href = '#',
+		active = 'underline',
+		exact = false,
+		children,
+		class: className = '',
+		...rest
+	}: Props = $props();
 
-	let className: string = '';
-	export { className as class };
-
-	$: isActive =
-		browser && exact ? $page.url.pathname === href : $page.url.pathname.startsWith(href);
+	const isActive = $derived(
+		exact ? $page.url.pathname === href : $page.url.pathname.startsWith(href),
+	);
 </script>
 
 <a
@@ -29,7 +34,7 @@
 		isActive && active,
 	)}
 	aria-current={isActive ? 'page' : undefined}
-	{...$$restProps}
+	{...rest}
 >
-	<slot />
+	{@render children?.()}
 </a>

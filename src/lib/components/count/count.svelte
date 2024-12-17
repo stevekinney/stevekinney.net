@@ -1,10 +1,18 @@
 <script lang="ts">
+	import { twMerge as merge } from 'tailwind-merge';
+	import type { ExtendElement } from '../component.types';
 	import { variants, type CountVariants } from './variants';
 
-	export let count: number;
-	export let variant: CountVariants['variant'] = 'default';
+	type CountProps = ExtendElement<
+		'span',
+		CountVariants & {
+			count: number;
+		}
+	>;
+
+	const { count, variant = 'default', class: className, ...props }: CountProps = $props();
 </script>
 
-<span class={variants({ variant })}>
+<span class={merge(variants({ variant }), className)} {...props}>
 	{count}
 </span>

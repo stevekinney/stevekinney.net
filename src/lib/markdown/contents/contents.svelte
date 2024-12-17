@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
 	import A from './a.svelte';
 	import H2 from './h2.svelte';
 	import UL from './ul.svelte';
@@ -10,14 +10,18 @@
 	import { twMerge as merge } from 'tailwind-merge';
 	import { toDataAttributes } from '$lib/to-data-attributes';
 
-	/** @type {string} */
-	export let as = 'nav';
-
 	/** @type {string | undefined | null} */
-	let className = '';
-	export { className as class };
+	/**
+	 * @typedef {Object} Props
+	 * @property {string} [as]
+	 * @property {string} [class]
+	 * @property {import('svelte').Snippet} [children]
+	 */
+
+	/** @type {Props & { [key: string]: any }} */
+	const { as = 'nav', class: className = '', children, ...rest } = $props();
 </script>
 
-<svelte:element this={as} class={merge(className)} {...toDataAttributes($$restProps)}>
-	<slot />
+<svelte:element this={as} class={merge(className)} {...toDataAttributes(rest)}>
+	{@render children?.()}
 </svelte:element>

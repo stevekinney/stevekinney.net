@@ -14,3 +14,5 @@ declare module '*.md' {
 
 	export const metadata: Record<string, unknown>;
 }
+
+type Variant = import('./variants').Variant;

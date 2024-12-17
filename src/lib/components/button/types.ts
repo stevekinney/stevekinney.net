@@ -1,14 +1,14 @@
-import type { ComponentType } from 'svelte';
-import type { ButtonVariants } from './variants';
 import type { Icon } from 'lucide-svelte';
+import type { ButtonVariants } from './variants';
+import type { ExtendElement } from '../component.types';
 
-export type ButtonProps = Partial<HTMLButtonElement> &
-	Partial<HTMLAnchorElement> &
+export type ButtonProps = ExtendElement<
+	'button',
 	ButtonVariants & {
 		label?: string;
-		icon?: ComponentType<Icon>;
+		icon?: typeof Icon;
 		href?: string;
 		loading?: boolean;
-		class?: string;
 		full?: boolean;
-	};
+	}
+>;

@@ -51,9 +51,9 @@ test('calculates factorial of a positive integer', () => {
 
 **Explanation:**
 
-- *Arrange*: Set up the input value and expected output.
-- *Act*: Call the `factorial` function with the input.
-- *Assert*: Check that the result matches the expected output.
+- _Arrange_: Set up the input value and expected output.
+- _Act_: Call the `factorial` function with the input.
+- _Assert_: Check that the result matches the expected output.
 
 #### Example 2: Testing Error Handling
 
@@ -83,8 +83,8 @@ test('throws an error when dividing by zero', () => {
 
 **Explanation:**
 
-- *Arrange*: Initialize the numerator and set the denominator to zero.
-- *Act and Assert*: Execute the function inside an assertion to check for the expected error.
+- _Arrange_: Initialize the numerator and set the denominator to zero.
+- _Act and Assert_: Execute the function inside an assertion to check for the expected error.
 
 #### Example 3: Testing Asynchronous Code
 
@@ -125,9 +125,9 @@ test('fetches data successfully from an API', async () => {
 
 **Explanation:**
 
-- *Arrange*: Mock the `fetch` function to return predefined data.
-- *Act*: Call the `fetchData` function.
-- *Assert*: Verify that the returned data matches the mock data and that `fetch` was called with the correct URL.
+- _Arrange_: Mock the `fetch` function to return predefined data.
+- _Act_: Call the `fetchData` function.
+- _Assert_: Verify that the returned data matches the mock data and that `fetch` was called with the correct URL.
 
 #### Example 4: Testing a Class Method
 
@@ -161,9 +161,9 @@ test('adds two numbers correctly using Calculator class', () => {
 
 **Explanation:**
 
-- *Arrange*: Create an instance of `Calculator` and set up the numbers.
-- *Act*: Invoke the `add` method with the numbers.
-- *Assert*: Check that the result equals the expected sum.
+- _Arrange_: Create an instance of `Calculator` and set up the numbers.
+- _Act_: Invoke the `add` method with the numbers.
+- _Assert_: Check that the result equals the expected sum.
 
 #### Example 5: Testing a Function with Side Effects
 
@@ -196,10 +196,10 @@ test('logs the correct message to the console', () => {
 
 **Explanation:**
 
-- *Arrange*: Spy on the `console.log` method.
-- *Act*: Call `logMessage` with a test message.
-- *Assert*: Verify that `console.log` was called with the correct message.
-- *Cleanup*: Restore the original `console.log` method.
+- _Arrange_: Spy on the `console.log` method.
+- _Act_: Call `logMessage` with a test message.
+- _Assert_: Verify that `console.log` was called with the correct message.
+- _Cleanup_: Restore the original `console.log` method.
 
 #### Example 6: Testing Edge Cases
 
@@ -230,9 +230,9 @@ test('returns undefined for an empty array', () => {
 
 **Explanation:**
 
-- *Arrange*: Prepare an empty array.
-- *Act*: Call `getFirstElement` with the empty array.
-- *Assert*: Verify that the result is `undefined`.
+- _Arrange_: Prepare an empty array.
+- _Act_: Call `getFirstElement` with the empty array.
+- _Assert_: Verify that the result is `undefined`.
 
 #### Example 7: Testing with Mock Service Worker (MSW)
 
@@ -277,9 +277,9 @@ test('fetches user data successfully', async () => {
 
 **Explanation:**
 
-- *Arrange*: Set up MSW to intercept network requests and return mock data.
-- *Act*: Call the `getUser` function with a test user ID.
-- *Assert*: Verify that the returned user data matches the mock data.
+- _Arrange_: Set up MSW to intercept network requests and return mock data.
+- _Act_: Call the `getUser` function with a test user ID.
+- _Assert_: Verify that the returned user data matches the mock data.
 
 ### Key Takeaways
 

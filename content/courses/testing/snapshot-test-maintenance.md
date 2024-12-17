@@ -36,7 +36,7 @@ Take a close look at that diff. Does it look like a developer (you) did this on 
 
 I know we're all busy and deadlines are looming, but **don't just automatically update the snapshot** without thinking. I mean, come on, that's just asking for it. 😅
 
-If the changes are valid—such as a visual tweak or expected output changes—*then* you can confidently run:
+If the changes are valid—such as a visual tweak or expected output changes—_then_ you can confidently run:
 
 ```bash
 npx vitest --update
