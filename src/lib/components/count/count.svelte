@@ -3,14 +3,14 @@
 	import type { ExtendElement } from '../component.types';
 	import { variants, type CountVariants } from './variants';
 
-	type Props = ExtendElement<
+	type CountProps = ExtendElement<
 		'span',
 		CountVariants & {
 			count: number;
 		}
 	>;
 
-	const { count, variant = 'default', class: className, ...props }: Props = $props();
+	const { count, variant = 'default', class: className, ...props }: CountProps = $props();
 </script>
 
 <span class={merge(variants({ variant }), className)} {...props}>
