@@ -5,7 +5,7 @@
 
 	import Label from '../label';
 
-	type Props = ExtendElement<
+	type InputProps = ExtendElement<
 		'input',
 		{
 			label: string;
@@ -33,7 +33,7 @@
 		prefix = undefined,
 		suffix = undefined,
 		...props
-	}: Props = $props();
+	}: InputProps = $props();
 </script>
 
 {#snippet icon(iconType: typeof IconType)}
