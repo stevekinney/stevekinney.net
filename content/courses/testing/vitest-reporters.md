@@ -4,11 +4,11 @@ description: Learn how to create and implement custom reporters in Vitest.
 modified: 2024-09-28T14:40:20-06:00
 ---
 
-Reporters are what you see in your terminal when you run your tests. It turns out that there are some options here. I've almost always used the built-in, default reporter. But, maybe you want something different. Or maybe, you *need* a different format for some other kind of tooling to ingest or something.
+Reporters are what you see in your terminal when you run your tests. It turns out that there are some options here. I've almost always used the built-in, default reporter. But, maybe you want something different. Or maybe, you _need_ a different format for some other kind of tooling to ingest or something.
 
 ### Default Reporter
 
-By default, Vitest goes with a pretty simple format in your terminal. It's essentially the *classic newsroom feel*: you get a list of all test suites, along with which tests passed or failed.
+By default, Vitest goes with a pretty simple format in your terminal. It's essentially the _classic newsroom feel_: you get a list of all test suites, along with which tests passed or failed.
 
 Let’s simplify this with a quick setup and run:
 
@@ -77,7 +77,7 @@ Translation: Two tests passed (.), and one failed (F). Short, sweet, and ready f
 
 #### Verbose Reporter
 
-Maybe you're more of a *give-me-everything* kinda person. If you want your test output to feel like a full log of basically every tiny thing going on, the **verbose** reporter is your jam.
+Maybe you're more of a _give-me-everything_ kinda person. If you want your test output to feel like a full log of basically every tiny thing going on, the **verbose** reporter is your jam.
 
 ```bash
 npx vitest --reporter verbose
@@ -145,19 +145,19 @@ Boom. Now you’ve got dots in your terminal and JSON data flying wherever you w
 
 ## Custom Reporters
 
-You’ve got your tests running with Vitest, and everything looks shiny… except maybe the default output doesn’t scratch that developer itch, right? Maybe you’ve got a VIP watching over your CI pipeline who's like, "It's fine, but I wish it looked *cooler*."
+You’ve got your tests running with Vitest, and everything looks shiny… except maybe the default output doesn’t scratch that developer itch, right? Maybe you’ve got a VIP watching over your CI pipeline who's like, "It's fine, but I wish it looked _cooler_."
 
-Or maybe you're staring at your terminal and thinking, "Could this have more info—*or*, could it bless me with *less* info?" Time to roll up your sleeves and whip up a **custom reporter**.
+Or maybe you're staring at your terminal and thinking, "Could this have more info—_or_, could it bless me with _less_ info?" Time to roll up your sleeves and whip up a **custom reporter**.
 
 Vitest lets you create custom reporters to control what gets spit out in your command line. Let’s walk through crafting a custom reporter that’ll make your tests feel more at home, whether that’s jazzed up or minimalistic.
 
 ## Why Custom Reporters Matter
 
-Imagine this: you’ve got a CI pipeline breaking *occasionally* (ugh), and you need to get to the root cause ASAP. The default reporter's output is okay, but what if you could give it just a *bit* more context? Custom reporters allow you to surface specific information that’s helpful in your scenario—whether that’s cleaner logs, specific metrics, or a creative touch that livens up your test reports.
+Imagine this: you’ve got a CI pipeline breaking _occasionally_ (ugh), and you need to get to the root cause ASAP. The default reporter's output is okay, but what if you could give it just a _bit_ more context? Custom reporters allow you to surface specific information that’s helpful in your scenario—whether that’s cleaner logs, specific metrics, or a creative touch that livens up your test reports.
 
 Some other hypothetical use cases:
 
-- Making CEOs and managers feel *something* when they see test results.
+- Making CEOs and managers feel _something_ when they see test results.
 - Addressing special requirements for audit or compliance reasons.
 - Controlling the noise level—sometimes you just want the deets, not the fanfare.
 
@@ -189,7 +189,7 @@ export class HelloWorldReporter {
 
 ## Hooking It Into Vitest
 
-Okay, we’ve got the *HelloWorldReporter* locked and loaded. Now we just need to tell Vitest to use it.
+Okay, we’ve got the _HelloWorldReporter_ locked and loaded. Now we just need to tell Vitest to use it.
 
 Here’s how you connect it in your `vitest.config.js` file.
 
@@ -225,13 +225,13 @@ If a test fails? Expect some fireworks:
 
 ## Where to Take This Next
 
-Custom reporters vary *wildly* depending on what you’re trying to achieve. Maybe you want to generate a file with summary stats, spit out a more compact report for quicker reads, or build a visual dashboard from the results.
+Custom reporters vary _wildly_ depending on what you’re trying to achieve. Maybe you want to generate a file with summary stats, spit out a more compact report for quicker reads, or build a visual dashboard from the results.
 
-You can go as simple or complex as you need. Heck, you could even pipe your results into a `Slack` webhook or have them broadcast in Morse code over the office speakers (not that I’d recommend it, but *hey*, it's your world).
+You can go as simple or complex as you need. Heck, you could even pipe your results into a `Slack` webhook or have them broadcast in Morse code over the office speakers (not that I’d recommend it, but _hey_, it's your world).
 
 Key things you can hook into:
 
 - `onTestStart(test)` – The moment a test begins
 - `onTestPass(test)` – When a test sails through
-- `onTestFail(test)` – Your test hits the *failure iceberg*
+- `onTestFail(test)` – Your test hits the _failure iceberg_
 - `onRunComplete(testResults)` – Everything’s done and dusted

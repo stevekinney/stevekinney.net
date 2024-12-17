@@ -2,7 +2,7 @@
 	import SEO from '$lib/components/seo.svelte';
 	import Date from '$lib/components/date.svelte';
 
-	export let data;
+	const { data } = $props();
 </script>
 
 <SEO
@@ -16,7 +16,7 @@
 		<h1 class="text-4xl font-bold">{data.meta.title}</h1>
 	</hgroup>
 
-	<svelte:component this={data.content} class="prose dark:prose-invert" as="article" />
+	<data.content class="prose dark:prose-invert" as="article" />
 
 	{#if data.meta.modified}
 		<p class="my-6 text-right text-sm text-slate-500 dark:text-gray-400">

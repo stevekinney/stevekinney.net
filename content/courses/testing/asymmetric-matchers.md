@@ -6,7 +6,7 @@ modified: 2024-09-29T16:13:52-06:00
 
 Why are they called asymmetric matchers? I don't know. But, that's what the [Jest documentation calls them](https://jestjs.io/docs/expect#asymmetric-matchers), so that's what I'm calling them. (The Vitest documentation doesn't call them anything in particular.)
 
-Here are two of my *many* hot takes around testing:
+Here are two of my _many_ hot takes around testing:
 
 - Tests solely exist to give us confidence that we can make changes to our code base—large or small—without accidentally breaking things.
 - Tests that are more annoying then they are helpful will lead to your and your team deleting them and/or just abandoning testing.
@@ -48,7 +48,7 @@ it('should create a person with a first name and last name', () => {
 
 ![The test fails because of a random id](assets/failing-test-due-to-random-id.png)
 
-We don't really care what the `id` is but maybe we want to make sure that there *is* an `id` and that it's a string.
+We don't really care what the `id` is but maybe we want to make sure that there _is_ an `id` and that it's a string.
 
 ```javascript
 it('should create a person with a first name and last name', () => {
@@ -119,7 +119,7 @@ Notice that we’re not matching the exact sequence or every single Avenger in t
 
 ## Searching for That Needle in a Hay Stack: `expect.stringMatching`
 
-Ever had a string like an error message or some user input where you don’t know the exact wording, but you’re pretty sure it belongs? Welcome to `stringMatching`. Using regex (yes, the *wizardry* beloved by developers and feared by future maintainers), you can check if your log message or output string passes the vibe check.
+Ever had a string like an error message or some user input where you don’t know the exact wording, but you’re pretty sure it belongs? Welcome to `stringMatching`. Using regex (yes, the _wizardry_ beloved by developers and feared by future maintainers), you can check if your log message or output string passes the vibe check.
 
 ```js
 const logMessage = 'User admin123 successfully logged in at 12:30 AM';
@@ -139,7 +139,7 @@ So when should you use these? Here’s the pro tip: when **exact matches don't m
 
 Let’s be honest, as developers, we live in a world where APIs change, object structures pick up random fields, and arrays never seem to behave long-term. Keeping your tests passing without sacrificing thoroughness is key.
 
-## When *Not* to Use Them
+## When _Not_ to Use Them
 
 Use asymmetric matchers sparingly, though. They can be a slippery slope. You don’t want to end up with every test being so flexible that they’re practically meaningless. Save these matchers for when being exact won’t provide much value and will just clutter your tests.
 

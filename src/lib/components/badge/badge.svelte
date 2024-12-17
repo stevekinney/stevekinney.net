@@ -1,21 +1,31 @@
 <script lang="ts">
-	import type { Icon } from 'lucide-svelte';
-	import type { ComponentType } from 'svelte';
 	import { variants, type BadgeVariants } from './variants';
 
 	import Count from '../count';
+	import type { BaseAttributes, WithIcon } from '../component.types';
 
-	export let label: string = 'Badge';
-	export let count: number | undefined = undefined;
-	export let variant: BadgeVariants['variant'] = 'default';
-	export let icon: ComponentType<Icon> | null | undefined = null;
+	interface Props extends WithIcon, BaseAttributes {
+		label?: string;
+		count?: number | undefined;
+		variant?: BadgeVariants['variant'];
+	}
+
+	const {
+		label = 'Badge',
+		count = undefined,
+		variant = 'default',
+		icon,
+		children,
+		...props
+	}: Props = $props();
 </script>
 
-<div class={variants({ variant })}>
+<div class={variants({ variant })} {...props}>
 	{#if icon}
-		<svelte:component this={icon} class="h-3 w-3" />
+		{@const SvelteComponent = icon}
+		<SvelteComponent class="h-3 w-3" />
 	{/if}
-	<slot>{label}</slot>
+	{#if children}{@render children()}{:else}{label}{/if}
 	{#if count !== undefined}
 		<Count {count} {variant} />
 	{/if}

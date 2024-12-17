@@ -1,21 +1,34 @@
 <script lang="ts">
-	import type { ComponentType } from 'svelte';
-	import type { Icon } from 'lucide-svelte';
+	import type { Icon as IconType } from 'lucide-svelte';
 	import { twMerge as merge } from 'tailwind-merge';
+	import type { ExtendElement } from './component.types';
 
-	export let href: string;
-	export let icon: ComponentType<Icon>;
-	export let name = icon.name;
+	type SocialLinkProps = ExtendElement<
+		'a',
+		{
+			icon: typeof IconType;
+			name?: any;
+			size?: number;
+		}
+	>;
 
-	let className: string = '';
-	export { className as class };
+	const {
+		href,
+		icon,
+		name = icon.name,
+		target = '_blank',
+		size = 36,
+		class: className = '',
+		...props
+	}: SocialLinkProps = $props();
+
+	const Icon = $derived(icon);
 </script>
 
-<a {href} target="_blank">
-	<svelte:component
-		this={icon}
+<a {href} {target} {...props}>
+	<Icon
 		class={merge('transition-colors hover:stroke-primary-700 active:stroke-primary-600', className)}
-		size={36}
 		aria-label={name}
+		{size}
 	/>
 </a>

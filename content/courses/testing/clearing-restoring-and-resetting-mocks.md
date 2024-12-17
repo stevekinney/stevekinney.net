@@ -16,7 +16,7 @@ We'll get into the specifics of each in a moment, but let's just compare them at
 
 ## Clearing Mocks
 
-Clearing a mock removes all *invocation history*. Let's say you've got a mock that's been called a few times, and you want to reset the call count back to zero. That’s *clearing* in action.
+Clearing a mock removes all _invocation history_. Let's say you've got a mock that's been called a few times, and you want to reset the call count back to zero. That’s _clearing_ in action.
 
 ```js
 const myFunc = vi.fn();
@@ -53,10 +53,10 @@ myFunc.mockReset();
 console.log(myFunc()); // undefined
 ```
 
-When should you reset? Think of it as hitting *undo*. If you’ve changed what the mock returns, and you’re like, "Nope, never should've done that,” then this is your ticket to sanity.
+When should you reset? Think of it as hitting _undo_. If you’ve changed what the mock returns, and you’re like, "Nope, never should've done that,” then this is your ticket to sanity.
 
 > \[!WARNING] A Word on Resetting
-> With reset, you'll still *have* the mock object, but it behaves like it did out of the box—call count set to `0`, and no return values or side effects.
+> With reset, you'll still _have_ the mock object, but it behaves like it did out of the box—call count set to `0`, and no return values or side effects.
 
 ## Restoring Mocks
 
@@ -88,7 +88,7 @@ For a moment, let's assume `const fn = vi.fn()`.
 
 You'd typically put these in an `afterEach` block within your test suite.
 
-- `vi.clearAllMocks`: Clears out the history of calls and return values on the spies, but does *not* reset them to their default implementation. This is effectively the same as calling `.mockClear()` on each and every spy.
+- `vi.clearAllMocks`: Clears out the history of calls and return values on the spies, but does _not_ reset them to their default implementation. This is effectively the same as calling `.mockClear()` on each and every spy.
 - `vi.resetAllMocks`: Calls `.mockReset()` on all the spies. It will replace any mock implementations with an empty function.
 - `vi.restoreAllMocks`: Calls `.mockRestore()` on each and every mock. This one returns the world to it's original state.
 

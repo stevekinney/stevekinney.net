@@ -6,7 +6,7 @@ modified: 2024-09-28T18:32:11.236Z
 
 **Nota bene**: In order to parallelize tests, you have to use [test-context](test-context.md). So, if we haven't talked about that, let's pause and do that now.
 
-**TL;DR** Parallelizing tests is *basically* only useful when you've got a bunch of long-running asynchronous (read: *non-blocking*) tests.
+**TL;DR** Parallelizing tests is _basically_ only useful when you've got a bunch of long-running asynchronous (read: _non-blocking_) tests.
 
 Consider this ridiculous example as a though exercise:
 
@@ -52,12 +52,12 @@ Normally, your test suite will run these tests in series. This means that each t
   ⠴ should sleep for 1500ms 1502ms
 ```
 
-We *can* choose to run our tests in parallel. Most of the time this is not needed, which is why it's not the default behavior, but in certain cases, it can be useful.
+We _can_ choose to run our tests in parallel. Most of the time this is not needed, which is why it's not the default behavior, but in certain cases, it can be useful.
 
 There are basically two rules:
 
 1. You must use the version `expect` bound to the test via the `context` argument passed to each test function (e.g. `context.expect`).
-2. You must annotate either the individual tests that you want to run concurrently *or* the entire suite.
+2. You must annotate either the individual tests that you want to run concurrently _or_ the entire suite.
 
 For example, if we refactor our tests as follows, they'll run in parallel:
 
