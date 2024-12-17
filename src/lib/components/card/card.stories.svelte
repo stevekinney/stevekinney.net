@@ -12,6 +12,9 @@
 				options: ['default', 'success', 'warning', 'danger', 'information', 'error'],
 			},
 		},
+		args: {
+			as: 'div',
+		},
 	});
 </script>
 
