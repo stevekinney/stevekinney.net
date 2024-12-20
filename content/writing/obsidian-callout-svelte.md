@@ -536,11 +536,11 @@ And now, we can set a default value for our title based on the variant.
 
 ```svelte
 <script lang="ts">
-	import { capitalize } from '$lib/capitalize';
+	import { sentenceCase } from 'change-case';
 	import { getVariationColor, getIcon, type CalloutVariation } from './variations';
 
 	export let variant: CalloutVariation = 'note';
-	export let title: string = capitalize(variant);
+	export let title: string = sentenceCase(variant);
 	export let description: string = '';
 	export let foldable: boolean = false;
 </script>
@@ -595,11 +595,11 @@ We'll only render that additional `div` with the description if there is either 
 
 ```svelte
 <script lang="ts">
-	import { capitalize } from '$lib/capitalize';
+	import { sentenceCase } from 'change-case';
 	import { getVariationColor, getIcon, type CalloutVariation } from './variations';
 
 	export let variant: CalloutVariation = 'note';
-	export let title: string = capitalize(variant);
+	export let title: string = sentenceCase(variant);
 	export let description: string = '';
 	export let foldable: boolean = false;
 </script>
@@ -646,11 +646,11 @@ This is what I wrote for my first draft.
 ```svelte
 <script lang="ts">
 	import { ChevronDown } from 'lucide-svelte';
-	import { capitalize } from '$lib/capitalize';
+	import { sentenceCase } from 'change-case';
 	import { getVariationColor, getIcon, type CalloutVariation } from './variations';
 
 	export let variant: CalloutVariation = 'note';
-	export let title: string = capitalize(variant);
+	export let title: string = sentenceCase(variant);
 	export let description: string = '';
 	export let foldable: boolean = false;
 
