@@ -5,7 +5,7 @@ description: A collection of little tools and utilities that Steve has made alon
 ---
 
 <script>
-	import Card from '$lib/components/card.svelte';
+	import Card from '$lib/components/card';
 
 	export let data;
 </script>
