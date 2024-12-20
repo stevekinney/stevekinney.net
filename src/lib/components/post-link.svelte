@@ -13,7 +13,7 @@
 
 <svelte:element this={as} class="group flex flex-wrap items-center gap-1">
 	<Date date={post.date} />
-	<Link {href} class="decoration-primary-400 decoration-2 underline-offset-4">
+	<Link {href} class="bg-transparent decoration-primary-400 decoration-2 underline-offset-4">
 		{post.title}
 	</Link>
 </svelte:element>

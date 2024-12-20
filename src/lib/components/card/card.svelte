@@ -30,11 +30,7 @@
 </script>
 
 <svelte:element this={as} class={variants({ variant })}>
-	<svelte:element
-		this={url ? 'a' : 'div'}
-		href={url}
-		class={merge(url && 'group hover:bg-slate-100 dark:hover:bg-slate-900')}
-	>
+	<svelte:element this={url ? 'a' : 'div'} href={url} class={merge(url && 'group')}>
 		{#if title}
 			<h3
 				class="mb-4 font-semibold decoration-primary-500 decoration-2 underline-offset-4 group-hover:underline dark:text-primary-50"

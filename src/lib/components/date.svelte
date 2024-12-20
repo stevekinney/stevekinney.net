@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { twMerge as merge } from 'tailwind-merge';
-	import type { ExtendElement, ElementName } from './component.types';
+	import type { ExtendElement } from './component.types';
 
 	import formatDate, { toISODate } from '$lib/format-date';
 
