@@ -1,17 +1,24 @@
-import { parse, type PreprocessorGroup } from 'svelte/compiler';
+import { parse } from 'svelte/compiler';
+
 import { camelCase } from 'change-case';
 import MagicString from 'magic-string';
 import { twMerge as merge } from 'tailwind-merge';
 
 import { walk } from 'svelte-tree-walker';
-import { Attribute, TemplateNode, Text } from 'svelte/types/compiler/interfaces';
+
+/**
+ * @typedef {import('svelte/types/compiler/interfaces').Attribute} Attribute
+ * @typedef {import('svelte/types/compiler/interfaces').TemplateNode} TemplateNode
+ * @typedef {import('svelte/types/compiler/interfaces').Text} Text
+ */
 
 const classes = ['max-w-full', 'rounded-md', 'shadow-md'];
 
 /**
  * Add image optimization to the Markdown content.
+ * @returns {import('svelte/compiler').PreprocessorGroup}
  */
-export const processImages = (): PreprocessorGroup => {
+export const processImages = () => {
 	return {
 		name: 'markdown-image-optimization',
 		markup: ({ content, filename }) => {
@@ -21,7 +28,8 @@ export const processImages = (): PreprocessorGroup => {
 			const { instance, html } = parse(content, { filename });
 			const s = new MagicString(content);
 
-			const images = new Map<string, { url: string; id: string }>();
+			/** @type {Map<{url: string, id: string}>} */
+			const images = new Map();
 
 			// Walk the HTML AST and find all the image elements.
 			for (const node of walk(html)) {
@@ -76,19 +84,27 @@ export const processImages = (): PreprocessorGroup => {
 	};
 };
 
-const isVideo = (url: string) =>
-	url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.ogg');
+/**
+ * Check if the URL is a video.
+ * @param {string} url
+ */
+const isVideo = (url) => url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.ogg');
 
 /**
  * Gets an attribute by name.
+ * @param {TemplateNode} node
+ * @param {string} name
+ * @returns {Attribute | undefined}
  **/
-const getAttribute = (node: TemplateNode, name: string): Attribute | undefined =>
-	node.attributes.find((attr: Attribute) => attr.name === name);
+const getAttribute = (node, name) =>
+	node.attributes.find((/** @type {Attribute} */ attr) => attr.name === name);
 
 /**
  * Gets the value of an attribute.
+ * @param {Attribute} attr
+ * @returns {Text | undefined}
  */
-const getAttributeValue = (attr: Attribute): Text | undefined => {
+const getAttributeValue = (attr) => {
 	if (attr.value.length === 0) return;
 	const [value] = attr.value;
 	if (value.type === 'Text') return value;
@@ -97,8 +113,13 @@ const getAttributeValue = (attr: Attribute): Text | undefined => {
 /**
  * Adds the imported image refernce to as the image `src`.
  * Adds the Tailwind classes to the element.
+ * @param {MagicString} s
+ * @param {TemplateNode} node
+ * @param {string} id
+ * @param {Text} src
+ * @returns {void}
  */
-const formatImage = (s: MagicString, node: TemplateNode, id: string, src: Text) => {
+const formatImage = (s, node, id, src) => {
 	s.update(src.start, src.end, `{${id}}`);
 
 	const classAttr = getAttribute(node, 'class');
@@ -113,7 +134,15 @@ const formatImage = (s: MagicString, node: TemplateNode, id: string, src: Text) 
 	}
 };
 
-const formatVideo = (s: MagicString, node: TemplateNode, id: string) => {
+/**
+ * Adds the imported video refernce to as the video `src`.
+ * Adds the Tailwind classes to the element.
+ * @param {MagicString} s
+ * @param {TemplateNode} node
+ * @param {string} id
+ * @returns {void}
+ */
+const formatVideo = (s, node, id) => {
 	return s.update(
 		node.start,
 		node.end,
