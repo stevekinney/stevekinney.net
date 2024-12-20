@@ -1,7 +1,8 @@
 <script lang="ts">
-	import type { BaseAttributes, ExtendElement } from '../component.types';
+	import { sentenceCase } from 'change-case';
 	import { ChevronDown } from 'lucide-svelte';
-	import { capitalize } from '$lib/capitalize';
+
+	import type { BaseAttributes, ExtendElement } from '../component.types';
 	import { getVariationColor, getIcon, type CalloutVariation } from './variations';
 
 	type Props = ExtendElement<
@@ -17,7 +18,7 @@
 	const {
 		variant = 'note',
 		description = '',
-		title = capitalize(variant),
+		title = sentenceCase(variant),
 		foldable = false,
 		children,
 	}: Props = $props();
