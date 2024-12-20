@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { twMerge as merge } from 'tailwind-merge';
 	import type { ExtendElement } from './component.types';
 
@@ -14,7 +14,7 @@
 	const { href = '#', children, class: className = '', ...rest }: Props = $props();
 
 	const ariaCurrent: 'page' | 'true' | undefined = $derived(
-		href === $page.url.pathname ? 'page' : $page.url.pathname.startsWith(href) ? 'true' : undefined,
+		href === page.url.pathname ? 'page' : page.url.pathname.startsWith(href) ? 'true' : undefined,
 	);
 </script>
 

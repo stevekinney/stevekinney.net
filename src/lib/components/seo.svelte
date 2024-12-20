@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { formatPageTitle } from '$lib/format-page-title';
 	import { encodeParameters } from '$lib/encode-parameters';
 
@@ -19,12 +19,12 @@
 		published = true,
 		date = undefined,
 		modified = undefined,
-		url = new URL($page.url.pathname, $page.url.origin),
+		url = new URL(page.url.pathname, page.url.origin),
 		children,
 	}: SEOProps = $props();
 
 	const openGraph = $derived(
-		new URL(`/open-graph.jpg?${encodeParameters({ title, description })}`, $page.url.origin),
+		new URL(`/open-graph.jpg?${encodeParameters({ title, description })}`, page.url.origin),
 	);
 </script>
 
