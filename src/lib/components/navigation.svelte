@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ExtendElement } from './component.types';
-	import { twMerge as merge } from 'tailwind-merge';
+	import { merge } from '$merge';
 
 	import Link from './link.svelte';
 

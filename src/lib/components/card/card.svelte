@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import { twMerge as merge } from 'tailwind-merge';
+	import { merge } from '$merge';
 	import formatDate from '$lib/format-date';
 	import type { BaseAttributes } from '$lib/components/component.types';
 

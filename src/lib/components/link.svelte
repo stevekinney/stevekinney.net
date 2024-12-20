@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { twMerge as merge } from 'tailwind-merge';
+	import { merge } from '$merge';
 	import type { ExtendElement } from './component.types';
 
 	type Props = ExtendElement<

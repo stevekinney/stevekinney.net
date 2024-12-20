@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { LoaderCircle as Loading } from 'lucide-svelte';
-	import { twMerge as merge } from 'tailwind-merge';
+	import { merge } from '$merge';
 	import { variants } from './variants';
 	import type { ButtonProps } from './types';
 
