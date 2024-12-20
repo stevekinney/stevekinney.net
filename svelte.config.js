@@ -6,16 +6,17 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex, escapeSvelte } from 'mdsvex';
 import unwrapImages from 'rehype-unwrap-images';
 import slug from 'rehype-slug';
+import gfm from 'remark-gfm';
 import { codeToHtml, bundledLanguages } from 'shiki';
 
-import { processImages } from 'svelte-enhance-images';
-import { processCallouts } from 'svelte-compile-callouts';
-import { fixMarkdownUrls } from 'remark-fix-urls';
+import { processCallouts } from './plugins/svelte-compile-callouts.js';
+import { processImages } from './plugins/svelte-enhance-images.js';
+import { fixMarkdownUrls } from './plugins/remark-fix-urls.js';
 
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
 	extensions: ['.md'],
-	remarkPlugins: [unwrapImages, fixMarkdownUrls],
+	remarkPlugins: [unwrapImages, fixMarkdownUrls, gfm],
 	rehypePlugins: [slug],
 	layout: {
 		_: './src/lib/markdown/base.svelte',

@@ -1,6 +1,31 @@
-import { describe, it, expect } from 'vitest';
-import { parseCallout } from './parse-callout.js';
-import { Callout } from './callout.js';
+import { describe, expect, it } from 'vitest';
+import { compileCallout, parseCallout } from './svelte-compile-callouts.js';
+
+describe('compileCallout', () => {
+	it('should compile a callout object into HTML', () => {
+		const callout = {
+			title: 'Title',
+			variant: 'note',
+			description: '<p>Description</p>',
+			foldable: false,
+		};
+
+		expect(compileCallout(callout)).toBe(
+			`<Callout title="Title" variant="note"><p>Description</p></Callout>`,
+		);
+	});
+
+	it('should compile a callout object without a description', () => {
+		const callout = {
+			title: 'Title',
+			variant: 'note',
+			description: undefined,
+			foldable: false,
+		};
+
+		expect(compileCallout(callout)).toBe('<Callout title="Title" variant="note" />');
+	});
+});
 
 describe('compilers/callouts/parse-callout', () => {
 	it('should parse callout text into an object', () => {
@@ -127,7 +152,8 @@ describe('compilers/callouts/parse-callout', () => {
       </blockquote>
     `.trim();
 
-		const { title, variant, description } = parseCallout(callout) as Callout;
+		/** @type {import('./svelte-compile-callouts.js').Callout */
+		const { title, variant, description } = parseCallout(callout);
 
 		expect(title).toBe('Title');
 		expect(variant).toBe('note');
