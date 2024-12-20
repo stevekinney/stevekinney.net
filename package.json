@@ -15,10 +15,7 @@
 		"test:unit": "vitest",
 		"test:storybook": "test-storybook",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build",
-		"install:packages": "pnpm install --filter './packages/*'",
-		"build:packages": "pnpm run --filter './packages/*' build",
-		"install:all": "pnpm install:packages && pnpm build:packages && pnpm install -w && svelte-kit sync"
+		"build-storybook": "storybook build"
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^3.2.3",
