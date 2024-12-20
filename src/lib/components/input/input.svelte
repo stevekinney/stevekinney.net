@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { twMerge as merge } from 'tailwind-merge';
+	import { merge } from '$merge';
 	import type { Icon as IconType } from 'lucide-svelte';
 	import type { ExtendElement } from '../component.types';
 

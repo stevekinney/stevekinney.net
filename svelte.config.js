@@ -44,6 +44,7 @@ const config = {
 			'$assets/*': 'src/assets/*',
 			'$courses/*': 'content/courses/*',
 			'content/*': 'content/*',
+			$merge: 'src/lib/merge.ts',
 		},
 	},
 };

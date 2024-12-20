@@ -7,7 +7,7 @@
 </script>
 
 <script>
-	import { twMerge as merge } from 'tailwind-merge';
+	import { merge } from '$merge';
 	import { toDataAttributes } from '$lib/to-data-attributes';
 
 	/** @type {string | undefined | null} */
