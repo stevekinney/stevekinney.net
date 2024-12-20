@@ -10,5 +10,6 @@ export type ButtonProps = ExtendElement<
 		href?: string;
 		loading?: boolean;
 		full?: boolean;
+		download?: string;
 	}
 >;

@@ -8,7 +8,7 @@ modified: 2024-04-15T06:34:21-06:00
 
 <script>
 	import courses from '$lib/courses';
-	import Card from '$lib/components/card.svelte';
+	import Card from '$lib/components/card';
 </script>
 
 ## Full Workshop Walkthroughs

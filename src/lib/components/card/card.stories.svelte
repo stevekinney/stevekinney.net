@@ -1,6 +1,6 @@
 <script lang="ts" module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
-	import Card, { type CardProps } from './card.svelte';
+	import Card, { type CardBaseProps } from './card.svelte';
 
 	const { Story } = defineMeta({
 		title: 'Card',
@@ -18,7 +18,7 @@
 	});
 </script>
 
-{#snippet content(args: CardProps)}
+{#snippet content(args: CardBaseProps)}
 	<Card {...args}>
 		<div class="prose dark:prose-invert">
 			<h2>Card Title</h2>
@@ -35,37 +35,37 @@
 {/snippet}
 
 <Story name="Default" args={{ variant: 'default' }}>
-	{#snippet children(args: CardProps)}
+	{#snippet children(args: CardBaseProps)}
 		{@render content(args)}
 	{/snippet}
 </Story>
 
 <Story name="Success" args={{ variant: 'success' }}>
-	{#snippet children(args: CardProps)}
+	{#snippet children(args: CardBaseProps)}
 		{@render content(args)}
 	{/snippet}
 </Story>
 
 <Story name="Warning" args={{ variant: 'warning' }}>
-	{#snippet children(args: CardProps)}
+	{#snippet children(args: CardBaseProps)}
 		{@render content(args)}
 	{/snippet}
 </Story>
 
 <Story name="Danger" args={{ variant: 'danger' }}>
-	{#snippet children(args: CardProps)}
+	{#snippet children(args: CardBaseProps)}
 		{@render content(args)}
 	{/snippet}
 </Story>
 
 <Story name="Information" args={{ variant: 'information' }}>
-	{#snippet children(args: CardProps)}
+	{#snippet children(args: CardBaseProps)}
 		{@render content(args)}
 	{/snippet}
 </Story>
 
 <Story name="Error" args={{ variant: 'error' }}>
-	{#snippet children(args: CardProps)}
+	{#snippet children(args: CardBaseProps)}
 		{@render content(args)}
 	{/snippet}
 </Story>
