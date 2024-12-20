@@ -42,9 +42,6 @@ importers:
       '@playwright/test':
         specifier: ^1.49.1
         version: 1.49.1
-      '@r4ai/remark-callout':
-        specifier: ^0.6.2
-        version: 0.6.2
       '@storybook/addon-a11y':
         specifier: ^8.4.7
         version: 8.4.7(storybook@8.4.7(prettier@3.4.2))
@@ -129,9 +126,6 @@ importers:
       change-case:
         specifier: ^5.4.4
         version: 5.4.4
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
       eslint:
         specifier: ^9.17.0
         version: 9.17.0(jiti@1.21.6)
@@ -177,9 +171,6 @@ importers:
       rehype-unwrap-images:
         specifier: ^1.0.0
         version: 1.0.0
-      remark-fix-urls:
-        specifier: workspace:*
-        version: link:packages/remark-fix-urls
       remark-gfm:
         specifier: ^4.0.0
         version: 4.0.0
@@ -198,12 +189,6 @@ importers:
       svelte-check:
         specifier: ^4.1.1
         version: 4.1.1(picomatch@4.0.2)(svelte@5.15.0)(typescript@5.7.2)
-      svelte-compile-callouts:
-        specifier: workspace:*
-        version: link:packages/svelte-compile-callouts
-      svelte-enhance-images:
-        specifier: workspace:*
-        version: link:packages/svelte-enhance-images
       tailwind-merge:
         specifier: ^2.5.5
         version: 2.5.5
@@ -1136,10 +1121,6 @@ packages:
 
   '@polka/url@1.0.0-next.24':
     resolution: {integrity: sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==}
-
-  '@r4ai/remark-callout@0.6.2':
-    resolution: {integrity: sha512-yRj0dzEqdGYquJqTcr68CtAAh47AamWGMbZwiXBTeH6tf2MAh3Rc8C3xYhsRHKX91j9h5JZPTV2YLv+zL08AHQ==}
-    engines: {node: '>=16'}
 
   '@rollup/pluginutils@5.1.0':
     resolution: {integrity: sha512-XTIWOPPcpvyKI6L1NHo0lFlCyznUEyPmPY1mc3KpPVDYulHSTvyeLNVW00QTLIAFNhR3kYnJTQHeGqU4M3n09g==}
@@ -2657,9 +2638,6 @@ packages:
   define-lazy-prop@2.0.0:
     resolution: {integrity: sha512-Ds09qNh8yw3khSjiJjiUInaGX9xlqZDY7JVryGxdxV7NPeuqQfplOpQ66yJFZut3jLa5zOwkXw1g9EI2uKh4Og==}
     engines: {node: '>=8'}
-
-  defu@6.1.4:
-    resolution: {integrity: sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==}
 
   delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
@@ -6444,11 +6422,6 @@ snapshots:
 
   '@polka/url@1.0.0-next.24': {}
 
-  '@r4ai/remark-callout@0.6.2':
-    dependencies:
-      defu: 6.1.4
-      unist-util-visit: 5.0.0
-
   '@rollup/pluginutils@5.1.0(rollup@4.24.0)':
     dependencies:
       '@types/estree': 1.0.6
@@ -8098,8 +8071,6 @@ snapshots:
       gopd: 1.0.1
 
   define-lazy-prop@2.0.0: {}
-
-  defu@6.1.4: {}
 
   delayed-stream@1.0.0: {}
 
