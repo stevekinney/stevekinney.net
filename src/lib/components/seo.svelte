@@ -37,6 +37,7 @@
 	<meta property="og:description" content={description} />
 	<meta property="og:url" content={url.href} />
 	<meta property="og:image" content={openGraph.href} />
+	<meta property="og:site_name" content="Steve Kinney" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={formatPageTitle(title)} />
 	<meta name="twitter:creator" content="@stevekinney" />
