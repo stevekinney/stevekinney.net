@@ -11,12 +11,9 @@ export function h(type: string, props: { [key: string]: unknown } | null, ...chi
 	return { type, props: props || {} };
 }
 
-const MAX_DESCRIPTION_LENGTH = 200;
-const MAX_TITLE_LENGTH = 150;
-
 const OpenGraphImage = ({ url }: RequestEvent) => {
-	let title: string | undefined;
-	let description;
+	let title: string | undefined = metadata.title;
+	let description = metadata.description;
 
 	if (url.searchParams.has('title')) {
 		title = decodeURIComponent(url.searchParams.get('title')!);
@@ -34,57 +31,60 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 		<div
 			style={{
 				display: 'flex',
-				flexDirection: 'column',
-				width: '100vw',
-				height: '100vh',
-				padding: '4rem 10rem',
-				gap: '2rem',
-				backgroundColor: 'white',
-				backgroundPosition: 'center, 100% center',
-				color: 'black',
 			}}
 		>
 			<div
 				style={{
 					display: 'flex',
 					flexDirection: 'column',
-					justifyContent: title ? 'flex-start' : 'center',
+					width: '100vw',
+					height: '100vh',
+					padding: '4rem',
 					gap: '2rem',
-					flexGrow: 1,
+					backgroundImage:
+						'radial-gradient(circle at 25px 25px, #8a55c8 2%, transparent 0%), radial-gradient(circle at 75px 75px, #8a55c8 2%, transparent 0%), linear-gradient(to right, #643a8f, #d5c2f0)',
+					color: 'black',
+					backgroundSize: '100px 100px, 100px 100px, 100% 100%',
+					backgroundColor: 'white',
 				}}
 			>
-				{title && (
+				<div
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: title ? 'flex-start' : 'center',
+						gap: '2rem',
+						flexGrow: 1,
+						height: '60vh',
+					}}
+				>
 					<h2
 						style={{
 							fontSize: description ? '3rem' : '6rem',
 							textAlign: description ? 'left' : 'center',
-							width: '100%',
 							margin: 0,
+							overflow: 'hidden',
+							textOverflow: 'ellipsis',
 						}}
 					>
-						{title.length > MAX_TITLE_LENGTH ? `${title.slice(0, MAX_TITLE_LENGTH)}…` : title}
+						{title}
 					</h2>
-				)}
-				{description && (
 					<p
 						style={{
 							fontSize: '2rem',
 							fontWeight: 300,
 							margin: 0,
 							overflow: 'hidden',
-							maxHeight: '250px',
 							textOverflow: 'ellipsis',
 						}}
 					>
-						{description.length > MAX_DESCRIPTION_LENGTH
-							? `${description.slice(0, MAX_DESCRIPTION_LENGTH)}…`
-							: description}
+						{description}
 					</p>
-				)}
-			</div>
-			<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-				<p style={{ fontSize: '2rem', margin: 0 }}>@stevekinney</p>
-				<p style={{ fontSize: '2rem', margin: 0 }}>https://stevekinney.net</p>
+				</div>
+				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+					<p style={{ fontSize: '2rem', margin: 0 }}>@stevekinney</p>
+					<p style={{ fontSize: '2rem', margin: 0 }}>https://stevekinney.net</p>
+				</div>
 			</div>
 		</div>
 	);
