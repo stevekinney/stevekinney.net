@@ -1,8 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vitest/config';
 import { imagetools } from 'vite-imagetools';
 import { enhancedImages } from '@sveltejs/enhanced-img';
-import { searchForWorkspaceRoot, type Plugin } from 'vite';
+import { searchForWorkspaceRoot, defineConfig, type Plugin } from 'vite';
 
 const projectRoot = (id: string = 'project-root'): Plugin => {
 	const virtualModuleId = `virtual:${id}`;
@@ -18,7 +17,7 @@ const projectRoot = (id: string = 'project-root'): Plugin => {
 		load(id) {
 			if (id === resolvedVirtualModuleId) {
 				const projectRoot = JSON.stringify(searchForWorkspaceRoot(process.cwd()));
-				return `export default ${projectRoot};`;
+				return `const root = ${projectRoot}; export default root; export const fromProjectRoot = (...segments) => root + '/' + segments.flatMap(s => s.split('/')).join('/');`;
 			}
 		},
 	};
@@ -29,9 +28,6 @@ export default defineConfig({
 	esbuild: {
 		jsxFactory: 'h',
 		jsxFragment: 'Fragment',
-	},
-	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}', 'compilers/**/*.{test,spec}.{js,ts}'],
 	},
 	server: {
 		fs: {
