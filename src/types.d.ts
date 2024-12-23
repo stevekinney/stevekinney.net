@@ -6,14 +6,12 @@ type BaseNode = import('svelte/types/compiler/interfaces').BaseNode;
 type ElementNode = import('svelte/types/compiler/interfaces').Element;
 
 type Markdown = {
-	default: ComponentType<SvelteComponent>;
+	default: import('svelte').Component;
 	metadata: Record<string, unknown>;
 };
 
 declare module '*.md' {
-	const SvelteComponent: import('svelte').SvelteComponent;
-	const CompnentType: import('svelte').ComponentType;
-	export default ComponentType<SvelteComponent>;
+	export default import('svelte').Component;
 	export const metadata: Record<string, unknown>;
 }
 
@@ -32,4 +30,5 @@ declare module 'svelte/compiler' {
 declare module 'virtual:project-root' {
 	const projectRoot: string;
 	export default projectRoot;
+	export const fromProjectRoot: (...path: string[]) => string;
 }
