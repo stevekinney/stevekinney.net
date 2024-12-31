@@ -1,8 +1,8 @@
 ---
-title: A Gentle Introduction to Using Vector Databases
-description: 'Learn how to build a simple vector database using Pinecone and OpenAI embeddings, and discover how semantic search can make your data more accessible and intelligent.'
-date: 2024-12-30T23:58:37.522Z
-modified: 2024-12-30T23:58:37.522Z
+title: A Gentle Introduction to Using a Vector Database
+description: In which we learn how to build a simple vector database using Pinecone and OpenAI embeddings, and discover it was way easier than we might have expected.
+date: 2024-12-30T17:07:17-07:00
+modified: 2024-12-30T17:07:23-07:00
 published: true
 tags:
   - open-ai
