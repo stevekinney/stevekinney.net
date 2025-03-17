@@ -15,26 +15,26 @@ VS Code and the community provide a rich collection of pre-built Dev Container d
 
 You can start with **Add Dev Container Configuration Files** from the Command Center.
 
-![](assets/dev-containers-location.png)
+![VS Code interface showing the Dev Containers command location](assets/dev-containers-location.png)
 Next, select which container you'd like to use.
 
-![](assets/dev-containers-select-prebuilt-container.png)
+![Dialog for selecting a prebuilt container configuration](assets/dev-containers-select-prebuilt-container.png)
 
 In the case of the **Node.js & TypeScript** image, you'll be asked which version of Node, you'd like to use.
 
-![](assets/dev-containers-select-version-of-node.png)
+![Dialog for selecting Node.js version for the container](assets/dev-containers-select-version-of-node.png)
 
 Once you've selected your container, you can also pick some additional software that you'd like to include.
 
-![](assets/dev-containers-select-features.png)
+![Dialog for selecting additional features for the dev container](assets/dev-containers-select-features.png)
 
 You can filter this list to find whatever you're looking for.
 
-![](assets/dev-containers-select-features-filtered.png)
+![Filtered list of dev container features](assets/dev-containers-select-features-filtered.png)
 
 Finally, you can add some bonus files.
 
-![](assets/dev-containers-optional-files.png)
+![Dialog for selecting optional configuration files](assets/dev-containers-optional-files.png)
 
 ## The End Result
 
