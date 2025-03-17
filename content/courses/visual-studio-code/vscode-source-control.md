@@ -1,7 +1,7 @@
 ---
 title: Source Control in VS Code
-description: Learn how to use VS Code's integrated Git features for effective version control
-modified: 2025-03-16T16:41:23-06:00
+description: "Learn how to use VS Code's integrated Git features for effective version control"
+modified: 2025-03-17T10:32:32-06:00
 ---
 
 Git is baked right into VS Code, making version control feel like second nature. From staging and committing changes to handling merges and pushing to remote repositories, the built-in UI provides a smooth, visual workflow. Let’s explore how to leverage these features—plus a few extras like Git blame, GitHub integration, and interactive rebase—to keep your code pristine and your team happy.
@@ -67,3 +67,9 @@ Interactive rebase (`git rebase -i`) might sound intimidating, but it’s an ess
 5. Save and close the file to continue. VS Code updates your commit history accordingly.
 
 If you encounter conflicts during the rebase, VS Code’s merge resolution features kick in just like any other merge, making it simpler to polish your commit history to a shine.
+
+## Another Option
+
+Alternatively, I also really like [Github Desktop](https://github.com/desktop).
+
+![Github Desktop](assets/github-desktop.png)

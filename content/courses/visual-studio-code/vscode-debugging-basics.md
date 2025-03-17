@@ -9,7 +9,7 @@ modified: 2025-03-16T15:15:35-06:00
 
 There are a bunch of templates that Visual Studio Code provides to get up and running quickly.
 
-![Setting Up a Launch Configuration](assets/Code%20-%20index.js%20—%20maths%20-2025-03-16%20at%2014.29.30@2x.png)
+![Setting Up a Launch Configuration](assets/select-debugger-vscode.png)
 
 ## Together
 

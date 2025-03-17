@@ -1,10 +1,16 @@
 ---
 title: Navigating VS Code
 description: Master the essential navigation features in VS Code to efficiently move through your codebase
-modified: 2025-03-16T16:49:23-06:00
+modified: 2025-03-17T10:34:20-06:00
 ---
 
-Navigating large codebases can feel like exploring a maze. VS Code offers a range of tools to help you zip around files and symbols—quickly tracking down definitions, references, and more. Let’s take a closer look at these essential navigation features.
+Navigating large codebases can feel like exploring a maze. I have a long rant about how one of the best skills you can learn is how to drop into a large codebase and quickly get your bearings. Visual Studio Code offers a range of tools to help you zip around files and symbols—quickly tracking down definitions, references, and more. Let’s take a closer look at these essential navigation features.
+
+## An Aside: A Free Trick for macOS Users
+
+Visual Studio Code makes a lot of use of the function keys. The problem is—so does macOS. You *could* hold down the `fn` key on your keyboard. Alternatively, you can switch it so that your functions keys are `F1`, `F2`, etc. and only change your screen brightness when you press the `fn` key. This is one of the first things that I do when I set up a new Mac.
+
+![Use Function Keys as Standard Function Keys](assets/fn-keyboard-settings.png)
 
 ## Go to Definition, Declaration, Implementation, and Type Definition
 
