@@ -1,7 +1,7 @@
 ---
 title: Snippet Libraries and Extensions
 description: Exploring built-in snippets, community snippet extensions, and how to create your own snippet extensions
-modified: 2025-03-16T12:04:50-06:00
+modified: 2025-03-17T10:49:41-06:00
 ---
 
 ## Snippet Libraries and Extensions
@@ -24,14 +24,18 @@ Explore the built-in snippets for the languages you use regularly to discover qu
 
 The VS Code Marketplace is rich with snippet extensions and libraries created by the community. These extensions offer pre-built snippet collections for various languages, frameworks, and libraries, saving you the effort of creating everything from scratch.
 
-- **Searching for Snippet Extensions:**
+> [!NOTE] I don't use any of these.
+> People like them, but I am *way* too high-strung and prefer to build my own snippets. Your mileage may vary.
 
-  1. **Open Extensions View:** Click on the Extensions icon in the Activity Bar on the side of VS Code (or press `Ctrl+Shift+X` / `Cmd+Shift+X`).
-  2. **Search for "snippets":** In the Extensions Marketplace search bar, type "snippets" followed by the language or framework you're interested in (e.g., "snippets javascript", "snippets react", "snippets python").
-  3. **Browse and Install:** Explore the search results. Look for extensions with good ratings, a large number of installs, and recent updates. Read the extension description and features to see if it meets your needs.
-  4. **Install Extension:** Click the "Install" button to install the extension. VS Code will download and activate the extension.
+### Go Hunting for a Snippets Extension
 
-- **Popular Snippet Extensions:** Some popular snippet extensions include:
+1. **Open Extensions View:** Click on the Extensions icon in the Activity Bar on the side of VS Code (or press `Ctrl+Shift+X` / `Cmd+Shift+X`).
+2. **Search for "snippets":** In the Extensions Marketplace search bar, type "snippets" followed by the language or framework you're interested in (e.g., "snippets javascript", "snippets react", "snippets python").
+3. **Browse and Install:** Explore the search results. Look for extensions with good ratings, a large number of installs, and recent updates. Read the extension description and features to see if it meets your needs.
+4. **Install Extension:** Click the "Install" button to install the extension. VS Code will download and activate the extension.
+
+### Some Popular Options
+
   - **ES7+ React/Redux/React-Native snippets:** For React development.
   - **Python Snippets:** For Python development.
   - **Angular Snippets (Version 15):** For Angular development.
@@ -40,13 +44,11 @@ The VS Code Marketplace is rich with snippet extensions and libraries created by
   - **PHP Snippets:** For PHP development.
   - **HTML Snippets:** Enhanced HTML snippets.
   - **CSS Peek:** While primarily for CSS peeking, it often includes CSS snippets.
-- **Benefits of Using Snippet Extensions:**
-  - **Large Snippet Collections:** Extensions provide a vast library of pre-defined snippets, covering common use cases and frameworks.
-  - **Time Savings:** You don't need to create snippets from scratch for common patterns.
-  - **Community-Maintained:** Popular extensions are often actively maintained and updated by the community.
-  - **Framework-Specific Snippets:** Extensions often cater to specific frameworks and libraries, providing snippets tailored to those environments.
 
 ### Creating Snippet Extensions
+
+> [!NOTE] We'll talk more about extensions later.
+> But, I figure if you've read this far—then this content might be helpful or interesting to you.
 
 If you have created a valuable collection of snippets that you want to share with the wider VS Code community, consider creating and publishing a snippet extension.
 
@@ -63,5 +65,3 @@ If you have created a valuable collection of snippets that you want to share wit
 
 3. **Define Snippets in Extension:** Within your extension project, you'll find a `snippets` folder. Create `.code-snippets` files within this folder to define your snippets (e.g., `my-language-snippets.code-snippets`). Follow the standard snippet JSON format.
 4. **Package and Publish:** Use the `vsce` tool (VS Code Extension Manager) to package and publish your extension to the VS Code Marketplace. Refer to the [VS Code Extension Marketplace documentation](https://www.google.com/url?sa=E&source=gmail&q=https://code.visualstudio.com/api/working-with-extensions/publishing-extension&authuser=1) for detailed publishing steps.
-
-Creating a snippet extension allows you to contribute to the VS Code ecosystem and share your productivity-boosting snippets with other developers.

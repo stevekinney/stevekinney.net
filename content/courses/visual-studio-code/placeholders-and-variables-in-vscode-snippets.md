@@ -1,10 +1,80 @@
 ---
-title: Snippet Variables in VS Code
-description: Learn how to use powerful snippet variables like TM_SELECTED_TEXT and CLIPBOARD to create dynamic code templates
-modified: 2025-03-16T16:21:33-06:00
+title: Placeholders and Variables in Snippets
+description: Learn how to navigate placeholders, and use transformations to maximize your snippet efficiency in Visual Studio Code.
+modified: 2025-03-17T10:43:47-06:00
 ---
 
-Variables in snippets dynamically insert useful data. You're probably familiar with basic variables like `TM_FILENAME` or `CURRENT_YEAR`, but two less-used (yet powerful) heroes are `TM_SELECTED_TEXT` and `CLIPBOARD`.
+## Placeholder Navigation
+
+Once you insert a snippet with placeholders, VS Code makes it easy to navigate and fill in the placeholder values:
+
+- **Tab Key (`Tab`):** After snippet insertion, your cursor will automatically be positioned at the first placeholder (`$1`). Pressing the `Tab` key will jump the cursor to the next placeholder (`$2`), then `$3`, and so on, in numerical order.
+- **Shift+Tab Keys (`Shift+Tab`):** To move backward through placeholders, press `Shift+Tab`. This will move the cursor to the previous placeholder in reverse numerical order.
+- **Simultaneous Editing of Identical Placeholders:** If you use the same placeholder number multiple times in your snippet body (e.g., `${1:variableName}` used twice), editing the value of one instance will automatically update all other instances of the same placeholder number _within the current snippet insertion_. This is very useful for renaming variables or parameters consistently throughout a code block.
+
+## Variable Transformation
+
+Snippet variables become even more powerful when combined with transformations. Transformations allow you to modify the value of a variable before it's inserted into the snippet. The syntax for transformations is:
+
+```ts
+${variable_name/regular_expression/format_string/options}
+```
+
+Let's break down the transformation syntax:
+
+- **`variable_name`:** The name of the variable you want to transform (e.g., `TM_FILENAME_BASE`, `CURRENT_YEAR`).
+- **`/regular_expression/`:** A regular expression to match against the variable's value.
+- **`format_string`:** The string to replace the matched text with. You can use special escape sequences within the `format_string`:
+  - `$0`: Inserts the whole matched text.
+  - `$1`, `$2`, … `$9`: Inserts the text captured by the corresponding capturing group in the regular expression.
+- **`options` (Optional):** Flags to modify the regular expression matching behavior:
+  - `i`: Case-insensitive matching.
+  - `g`: Global matching (replace all occurrences).
+  - `m`: Multiline mode.
+
+### Convert Filename to Uppercase
+
+```json
+"Uppercase Filename": {
+    "prefix": "upperfile",
+    "body": [
+        "// File: ${TM_FILENAME_BASE/^(.*)$/${1:/upcase}/}.js"
+    ],
+    "description": "Insert filename in uppercase"
+}
+```
+
+- `TM_FILENAME_BASE`: Gets the filename without extension.
+- `/^(.*)$/`: Matches the entire filename (captured in group 1).
+- `/${1:/upcase}/`: Replaces the matched text with the uppercase version of capturing group 1 (`$1`).
+- `/upcase`: A predefined transformation function to convert to uppercase. Other predefined functions include `/downcase`, `/capitalize`.
+
+### Extract Year from Full Date
+
+```json
+"Year from Date": {
+  "prefix": "yearfromdate",
+  "body": [
+	  "// Year: ${CURRENT_DATE/^(\\d{4})-(\\d{2})-(\\d{2})$/$1/}"
+  ],
+  "description": "Extract year from current date"
+}
+```
+
+- `CURRENT_DATE`: Gets the current date (e.g., `2025-03-07`).
+- `/^(\\d{4})-(\\d{2})-(\\d{2})$/`: Regular expression to match the YYYY-MM-DD format, capturing year, month, and day in groups 1, 2, and 3 respectively.
+- `/$1/`: Replaces the matched text with only capturing group 1 (the year).
+
+Variable transformations are incredibly powerful for dynamically adapting snippets to different contexts and formatting needs. Explore the [VS Code documentation on snippet syntax](https://www.google.com/search?q=https://code.visualstudio.com/docs/editor/userdefinedsnippets%23_snippet-syntax&authuser=1) for more advanced transformation examples and options.
+
+## Placeholder Options
+
+Placeholders can be further customized using options to control their behavior:
+
+- **Default Values:** As seen in `${1:array}`, you can provide a default value that will be inserted initially. If you don't want to change the default value, you can simply press `Tab` to move to the next placeholder.
+- **Choices (Quick Pick Menus):** `${1|option1,option2,option3|}` creates a dropdown list of options, as discussed earlier.
+- **Placeholder Transformations (within Placeholders):** You can even apply transformations _within_ placeholders. For instance, you could combine a variable and a transformation within a placeholder: `${1:${TM_FILENAME_BASE/^(.*)$/${1:/capitalize}/}}`. This would capitalize the filename base and use it as a default value for the first placeholder.
+- **Placeholder as a Snippet Trigger:** You can nest snippets and use a placeholder as a trigger for another snippet. When you reach a placeholder, typing a snippet prefix within it can trigger another snippet insertion within that placeholder. This is a key concept for creating nested snippets (discussed in the next section).
 
 ## Surrounding Text with `TM_SELECTED_TEXT`
 

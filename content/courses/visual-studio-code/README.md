@@ -3,13 +3,14 @@ title: Visual Studio Code Course
 description: "Learn to maximize your productivity with VS Code's features and capabilities"
 layout: contents
 base: /courses/visual-studio-code
-modified: 2025-03-17T09:31:45-06:00
+modified: 2025-03-17T10:49:53-06:00
 ---
 
 ## Basics
 
 - [Editor Layout](vscode-editor-layout.md)
 - [The Command Palette](vscode-command-palette.md)
+- [Keybindings](keybindings-for-tasks-vscode.md)
 - [The Integrated Terminal](vscode-integrated-terminal.md)
 - [Navigation](navigating-vscode.md)
 - [Source Control](vscode-source-control.md)
@@ -18,7 +19,7 @@ modified: 2025-03-17T09:31:45-06:00
 - [Multiple Cursors with Find and Replace](multiple-cursors-with-find-and-replace.md)
 - [Refactoring](refactoring-in-vscode.md)
 - [Emmet](vscode-emmet.md)
-- [Steve's Favorite and Other Popular Extensions](favorite-vs-code-extensions.md)
+- [A Tour of Extensions](favorite-vs-code-extensions.md)
 
 ## Settings
 
@@ -33,13 +34,11 @@ modified: 2025-03-17T09:31:45-06:00
 ## Snippets
 
 - [Using Snippets](vscode-snippets) ([Exercises](vscode-snippet-exercises.md))
-- [Creating and Managing Snippets](creating-and-managing-snippets.md)
-- [Using Snippets Effectively](using-snippets-effectively-in-vscode.md)
-- [Snippet Variables](snippets-vscode-variables.md)
+- [Placeholders and Variables](placeholders-and-variables-in-vscode-snippets.md)
 - [Snippets and Regular Expressions](snippets-regex.md)
 - [Advanced Snippet Techniques](advanced-snippet-techniques-vscode.md)
-- [Snippets Libraries and Extensions](snippets-libraries-and-extensions.md)
 - [Assigning Keybindings to Snippets](keybindings-for-snippets-vscode.md)
+- [Snippets Libraries and Extensions](snippets-libraries-and-extensions.md)
 
 ## Tasks
 
@@ -55,7 +54,7 @@ modified: 2025-03-17T09:31:45-06:00
 - [`launch.json`](launch-config.md)
 - [Debugging Web Applications](debugging-web-applications.md)
 - [Debugging Running Node Processes](debugging-running-node-processes.md)
-- [Advanced Debugging Tecniques](advanced-debugging-techniques.md)
+- [Advanced Debugging Techniques](advanced-debugging-techniques.md)
 
 ## Multi-Root Workspaces
 

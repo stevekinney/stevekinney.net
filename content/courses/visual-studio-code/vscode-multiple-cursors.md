@@ -1,7 +1,7 @@
 ---
 title: Multiple Cursors in VS Code
 description: Learn how to use multiple cursors for efficient simultaneous editing across multiple locations in your code
-modified: 2025-03-16T15:00:00-06:00
+modified: 2025-03-17T10:34:30-06:00
 ---
 
 ## Working with Multiple Cursors in Visual Studio Code

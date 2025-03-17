@@ -1,7 +1,7 @@
 ---
 title: Using Snippets with Regular Expressions in VS Code
 description: Master regex transformations in snippets to create advanced dynamic templates with powerful text manipulation
-modified: 2025-03-16T16:22:50-06:00
+modified: 2025-03-17T10:44:54-06:00
 ---
 
 Suppose you want to generate a TypeScript constant name based on the filename, converting `hello-world.ts` into `HELLO_WORLD`. Capture groups and regex replacements are your allies here:
@@ -58,4 +58,5 @@ Here's how it works:
 
 Regex captures (`(.*?)` and `(y|s)?`) and conditionals (`${2:?…:…}`) are the secret sauce that make this possible.
 
-> [!TIP] Complex regex patterns are powerful but can quickly get hairy. Always test your snippets with varied input to ensure consistent behavior. Nobody likes regex-induced bugs at 2 AM.
+> [!TIP] This is the Standard Issue Warning for Regular Expressions
+> Complex regex patterns are powerful but can quickly get hairy. Always test your snippets with varied input to ensure consistent behavior. Nobody likes regex-induced bugs at 2 AM.
