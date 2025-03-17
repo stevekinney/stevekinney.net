@@ -22,12 +22,12 @@ modified: 2025-03-16T16:34:45-06:00
 
 ## Settings
 
-- [Settings Precedence](settings-precedence-vscode)
-- [Editing Settings (Visually)](editing-settings-through-the-vs-code-ui)
-- [Editing Settings via JSON](editing-settings-through-json)
-- [Steve's Favorite and Other Popular Settings](favorite-vs-code-settings)
-- [Settings for Managing Files](vscode-settings-for-managing-files)
-- [Settings Profiles](settings-profiles-vscode)
+- [Settings Precedence](settings-precedence-vscode.md)
+- [Editing Settings (Visually)](editing-settings-through-the-vs-code-ui.md)
+- [Editing Settings via JSON](editing-settings-through-json.md)
+- [Steve's Favorite and Other Popular Settings](favorite-vs-code-settings.md)
+- [Settings for Managing Files](vscode-settings-for-managing-files.md)
+- [Settings Profiles](settings-profiles-vscode.md)
 - [Controlling Settings With Environment Variables](settings-via-env-vars-vscode.md)
 
 ## Snippets
@@ -42,29 +42,29 @@ modified: 2025-03-16T16:34:45-06:00
 
 ## Tasks
 
-- [Visual Studio Code Tasks](vscode-tasks)
-- [Tasks: Examples](examples-of-tasks)
-- [Tasks: Tips and Tricks](vscode-tasks-tips-and-tricks)
+- [Visual Studio Code Tasks](vscode-tasks.md)
+- [Tasks: Examples](examples-of-tasks.md)
+- [Tasks: Tips and Tricks](vscode-tasks-tips-and-tricks.md)
 - [Advanced Usage for Tasks](tasks-advanced-usage.md)
 
 ## Debugging
 
 - [Debugging Basics](vscode-debugging-basics.md)
-- [`launch.json`](launch-config)
-- [Debugging Web Applications](debugging-web-applications)
+- [`launch.json`](launch-config.md)
+- [Debugging Web Applications](debugging-web-applications.md)
 - [Debugging Running Node Processes](debugging-running-node-processes.md)
 - [Advanced Debugging Tecniques](advanced-debugging-techniques.md)
 
 ## Multi-Root Workspaces
 
-- [Multi-Root Workspaces](multi-root-workspaces)
-- [Creating Multi-Root Workspaces](creating-a-multi-root-workspace)
+- [Multi-Root Workspaces](multi-root-workspaces.md)
+- [Creating Multi-Root Workspaces](creating-a-multi-root-workspace.md)
 
 ## Dev Containers
 
 - [Dev Containers](vscode-dev-containers.md)
 - [Setting Up Dev Containers](setting-up-dev-containers)
 - [Exploring `devcontainer.json`](exploring-devcontainer-json.md)
-- [Working with Dev Containers](working-with-dev-containers)
+- [Working with Dev Containers](working-with-dev-containers.md)
 - [Dev Containers and Dockerfiles](dev-containers-and-dockerfiles.md)
 - [Personalizing Your Container Environment](personalizing-dev-containers.md)
