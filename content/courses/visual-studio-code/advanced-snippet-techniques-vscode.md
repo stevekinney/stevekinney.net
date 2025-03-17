@@ -1,5 +1,5 @@
 ---
-title: Advanced Snippet Techniques in VS Code
+title: Advanced Snippet Techniques in Visual Studio Code
 description: Master nested snippets and regular expressions to create powerful, dynamic code templates
 modified: 2025-03-17T10:47:02-06:00
 ---
@@ -88,7 +88,7 @@ Now, the modified `snippet` becomes:
 2. Fill in the component name at placeholder `$1`.
 3. Press `Tab` to move to placeholder `$2`.
 4. Now, within the `$2` placeholder, type the prefix of the "React PropTypes" snippet, which is `proptypes`.
-5. VS Code will suggest the "React PropTypes" snippet. Select it.
+5. Visual Studio Code will suggest the "React PropTypes" snippet. Select it.
 6. The "React PropTypes" snippet will be inserted _within_ the `$2` placeholder of the "React Functional Component" snippet, effectively nesting them.
 
 Nested snippets allow you to create modular and reusable code templates, building complex structures from smaller, manageable snippets.

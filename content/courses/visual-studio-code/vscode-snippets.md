@@ -1,10 +1,10 @@
 ---
-title: Snippets in VS Code
+title: Snippets in Visual Studio Code
 description: Learn how to use and create code snippets to boost your productivity with reusable code templates
 modified: 2025-03-17T10:39:37-06:00
 ---
 
-Snippets are pre-written blocks of code that you can quickly insert into your editor using a short keyword or prefix. It's not unfair of them as code templates or shortcuts for frequently used code structures. In VS Code, snippets are more than just static text; they are dynamic and interactive, allowing you to customize and adapt them to your specific needs.
+Snippets are pre-written blocks of code that you can quickly insert into your editor using a short keyword or prefix. It's not unfair of them as code templates or shortcuts for frequently used code structures. In Visual Studio Code, snippets are more than just static text; they are dynamic and interactive, allowing you to customize and adapt them to your specific needs.
 
 I don't really feel like you need a sales pitch on snippets, but just in case—here you go:
 
@@ -16,7 +16,7 @@ I don't really feel like you need a sales pitch on snippets, but just in case—
 
 ## Snippet Structure
 
-A snippet in VS Code is defined as a JSON object with the following key fields:
+A snippet in Visual Studio Code is defined as a JSON object with the following key fields:
 
 ```json
 {
@@ -32,8 +32,8 @@ The snippet name is just the name you give to your snippet. It's used for organi
 
 Let's break down each field:
 
-- **`prefix` (String, Required):** This is the trigger word or characters you type in the editor to activate the snippet suggestion. When you type the `prefix`, VS Code will suggest your snippet in the IntelliSense dropdown. Choose a short, memorable, and unique prefix to avoid conflicts with existing commands or keywords.
-- **`body` (Array of Strings, Required):** This is the core of the snippet – the actual code block that will be inserted. Each element in the array represents a line of code. VS Code will join these strings and insert them into the document, respecting indentation and line breaks. You can use placeholders, variables, and choices within the `body` to make your snippets dynamic.
+- **`prefix` (String, Required):** This is the trigger word or characters you type in the editor to activate the snippet suggestion. When you type the `prefix`, Visual Studio Code will suggest your snippet in the IntelliSense dropdown. Choose a short, memorable, and unique prefix to avoid conflicts with existing commands or keywords.
+- **`body` (Array of Strings, Required):** This is the core of the snippet – the actual code block that will be inserted. Each element in the array represents a line of code. Visual Studio Code will join these strings and insert them into the document, respecting indentation and line breaks. You can use placeholders, variables, and choices within the `body` to make your snippets dynamic.
 - **`description` (String, Optional):** A brief explanation of what the snippet does. This description is displayed in the IntelliSense suggestion list, helping you understand the snippet's purpose when choosing from multiple suggestions. Providing clear descriptions is crucial for managing a large collection of snippets.
 - **`scope` (String, Optional):** Defines the languages or file types where the snippet should be available. If omitted, the snippet is considered global and will be available in all languages. You can specify a single language identifier (e.g., `"javascript"`, `"python"`) or a comma-separated list of language identifiers (e.g., `"javascript,typescript"`). You can find a list of language identifiers [here](https://www.google.com/url?sa=E&source=gmail&q=https://code.visualstudio.com/docs/languages/identifiers&authuser=1).
 
@@ -63,14 +63,15 @@ In this example:
 
 ## Snippet Syntax: Placeholders, Variables, and Choices
 
-Snippets in VS Code are powerful because they support dynamic content through placeholders, variables, and choices.
+Snippets in Visual Studio Code are powerful because they support dynamic content through placeholders, variables, and choices.
 
 - **Placeholders (`$1`, `$2`, `$3`, … and `$0`):** Placeholders represent cursor positions within the snippet. When you insert a snippet, the cursor initially jumps to `$1`. Pressing `Tab` moves the cursor to `$2`, then `$3`, and so on. `$0` is the final cursor position after you've navigated through all numbered placeholders. You can also use placeholder names like `${1:variableName}` to provide a default value or hint for the placeholder.
   - In the `for` loop example above:
     - `${1:array}`: The first placeholder, suggesting "array" as a default value.
     - `${2:element}`: The second placeholder, suggesting "element" as a default value.
     - `${0:// body}`: The final cursor position, placed inside the loop body with a comment.
-- **Variables (`${variable_name}`):** VS Code provides a rich set of predefined variables that you can use within snippets to insert dynamic information based on the context. Variables are enclosed in `${}`. Some commonly used variables include:
+- **Variables (`${variable_name}`):** Visual Studio Code provides a rich set of predefined variables that you can use within snippets to insert dynamic information based on the context. Variables are enclosed in `${}`. Some commonly used variables include:
+
   - **File and Path Variables:**
     - `${TM_FILENAME}`: The current filename (e.g., `my_script.js`).
     - `${TM_FILENAME_BASE}`: The current filename without the extension (e.g., `my_script`).
@@ -103,7 +104,7 @@ Snippets in VS Code are powerful because they support dynamic content through pl
 
 ### Adding Choices
 
-Choices provide a dropdown list of options when you reach a placeholder. The syntax is `${placeholder_number|option1,option2,option3|}`. When you insert the snippet and reach this placeholder, VS Code will display a quick pick menu with `option1`, `option2`, and `option3`. You can select one of these options, or type in your own value.
+Choices provide a dropdown list of options when you reach a placeholder. The syntax is `${placeholder_number|option1,option2,option3|}`. When you insert the snippet and reach this placeholder, Visual Studio Code will display a quick pick menu with `option1`, `option2`, and `option3`. You can select one of these options, or type in your own value.
 
 ```json
   "Log Message": {
@@ -122,8 +123,8 @@ When you use this snippet, the first placeholder `${1|DEBUG,INFO,WARNING,ERROR,C
 
 ## Snippet Scope
 
-Snippet scope determines where your snippets are available within VS Code. You can define snippets at three levels:
+Snippet scope determines where your snippets are available within Visual Studio Code. You can define snippets at three levels:
 
-- **Global Snippets (User Snippets):** These snippets are available in all VS Code workspaces and for all languages (unless a `scope` is explicitly defined). They are ideal for commonly used code patterns that are language-agnostic or applicable across multiple projects.
+- **Global Snippets (User Snippets):** These snippets are available in all Visual Studio Code workspaces and for all languages (unless a `scope` is explicitly defined). They are ideal for commonly used code patterns that are language-agnostic or applicable across multiple projects.
 - **Language-Specific Snippets:** These snippets are specific to a particular programming language. They are only available when you are working with files of that language type (e.g., JavaScript snippets will only appear in `.js` files). This is useful for language-specific syntax and constructs.
-- **Project-Specific Snippets (Workspace Snippets):** These snippets are specific to the current VS Code workspace or project folder. They are stored within the `.vscode` folder at the root of your project. Project-specific snippets are perfect for enforcing coding standards or providing shortcuts that are unique to a particular project.
+- **Project-Specific Snippets (Workspace Snippets):** These snippets are specific to the current Visual Studio Code workspace or project folder. They are stored within the `.vscode` folder at the root of your project. Project-specific snippets are perfect for enforcing coding standards or providing shortcuts that are unique to a particular project.

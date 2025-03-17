@@ -1,6 +1,6 @@
 ---
-title: 'VS Code Tasks: Tips and Tricks'
-description: Advanced techniques for customizing VS Code tasks with problem matchers, presentation options, and environment variables
+title: 'Visual Studio Code Tasks: Tips and Tricks'
+description: Advanced techniques for customizing Visual Studio Code tasks with problem matchers, presentation options, and environment variables
 modified: 2025-03-16T14:21:30-06:00
 ---
 
@@ -85,25 +85,25 @@ You can configure tasks to run automatically when you open a folder or workspace
 			"problemMatcher": {
 				"owner": "custom",
 				"pattern": {
-					"regexp": "."
+					"regexp": ".",
 				},
 				"background": {
 					"beginsPattern": "Starting development server",
-					"endsPattern": "Development server started"
-				}
+					"endsPattern": "Development server started",
+				},
 			},
 			"runOptions": {
-				"runOn": "folderOpen"
-			}
-		}
-	]
+				"runOn": "folderOpen",
+			},
+		},
+	],
 }
 ```
 
 ### Key Properties:
 
 - **`runOptions.runOn`:** Specifies when to run the task. The value `"folderOpen"` means the task will automatically start when the folder is opened.
-- **`isBackground: true`:** Marks this as a long-running background task that doesn't block VS Code.
+- **`isBackground: true`:** Marks this as a long-running background task that doesn't block Visual Studio Code.
 - **`problemMatcher`:** Configure patterns to detect when the task has started successfully.
 
 ### Additional `runOn` Options:
@@ -131,8 +131,8 @@ You can configure tasks to run automatically when you open a folder or workspace
 	"dependsOn": ["Start Backend", "Start Frontend", "Watch CSS"],
 	"dependsOrder": "parallel",
 	"runOptions": {
-		"runOn": "folderOpen"
-	}
+		"runOn": "folderOpen",
+	},
 }
 ```
 
@@ -154,4 +154,4 @@ You can configure tasks to run automatically when you open a folder or workspace
 
 > [!WARNING]
 >
-> Be careful with auto-starting tasks that consume significant resources or modify files. They can slow down VS Code startup or cause unexpected behavior for other users who open your project.
+> Be careful with auto-starting tasks that consume significant resources or modify files. They can slow down Visual Studio Code startup or cause unexpected behavior for other users who open your project.

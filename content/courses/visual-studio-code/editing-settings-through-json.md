@@ -1,6 +1,6 @@
 ---
 title: Editing Settings Through JSON
-description: Learn how to directly edit VS Code settings using the settings.json file for advanced configuration
+description: Learn how to directly edit Visual Studio Code settings using the settings.json file for advanced configuration
 modified: 2025-03-16T12:36:12-06:00
 ---
 
@@ -48,7 +48,7 @@ Depending on your platform, the user settings file is located here:
 
 ## Advanced Configuration with `settings.json`
 
-**Comments:** While JSON itself doesn't support comments, VS Code `settings.json` allows single-line (`//`) and multi-line (`/* … */`) comments for documentation and notes.
+**Comments:** While JSON itself doesn't support comments, Visual Studio Code `settings.json` allows single-line (`//`) and multi-line (`/* … */`) comments for documentation and notes.
 
 **Conditional Settings:** You can use language-specific settings within `settings.json` to apply configurations only to certain languages. For example:
 
@@ -66,8 +66,8 @@ Depending on your platform, the user settings file is located here:
 }
 ```
 
-This example sets `tabSize` to 4 and enables `pylint` for Python files, while setting `tabSize` to 2 for JavaScript files. The language identifier (e.g., `python`, `javascript`) is enclosed in square brackets `[]`. You can find language identifiers in the Language Mode selector in the bottom-right corner of VS Code.
+This example sets `tabSize` to 4 and enables `pylint` for Python files, while setting `tabSize` to 2 for JavaScript files. The language identifier (e.g., `python`, `javascript`) is enclosed in square brackets `[]`. You can find language identifiers in the Language Mode selector in the bottom-right corner of Visual Studio Code.
 
 **Array and Object Settings:** Settings that are arrays or objects are often easier to configure directly in `settings.json`. For instance, the `files.exclude` setting, which is an object, is typically modified in `settings.json` to add or remove file patterns to exclude from the Explorer.
 
-**Scripting and Automation:** `settings.json` files can be programmatically generated or modified, enabling scripting and automation of VS Code configuration. This can be useful for setting up consistent development environments across teams or for dynamically adjusting settings based on scripts or environment variables.
+**Scripting and Automation:** `settings.json` files can be programmatically generated or modified, enabling scripting and automation of Visual Studio Code configuration. This can be useful for setting up consistent development environments across teams or for dynamically adjusting settings based on scripts or environment variables.

@@ -4,7 +4,7 @@ description: Complete guide to installing, creating, and customizing development
 modified: 2025-03-16T11:08:21-06:00
 ---
 
-Now that we understand the "why," let's get practical and learn "how" to set up Dev Containers in VS Code.
+Now that we understand the "why," let's get practical and learn "how" to set up Dev Containers in Visual Studio Code.
 
 ## Installation and Prerequisites
 
@@ -23,7 +23,7 @@ Before embarking on your Dev Container journey, ensure you have the following pr
 
 ### Remote - Containers Extension
 
-- Open VS Code.
+- Open Visual Studio Code.
 - Go to the Extensions view (Ctrl+Shift+X or Cmd+Shift+X).
 - Search for "Remote - Containers" by Microsoft.
 - Click "Install" to install the extension.
@@ -32,17 +32,17 @@ Before embarking on your Dev Container journey, ensure you have the following pr
 
 With the prerequisites in place, let's create our first Dev Container. The heart of Dev Containers is the `devcontainer.json` file. This file, placed in the `.devcontainer` folder at the root of your project, defines your containerized development environment.
 
-1. **Open your Project Folder in VS Code:** Open the root folder of your project in VS Code. If you don't have a project yet, create an empty folder.
-2. **Open the Command Palette:** Press Ctrl+Shift+P (or Cmd+Shift+P on macOS) to open the VS Code Command Palette.
+1. **Open your Project Folder in Visual Studio Code:** Open the root folder of your project in Visual Studio Code. If you don't have a project yet, create an empty folder.
+2. **Open the Command Palette:** Press Ctrl+Shift+P (or Cmd+Shift+P on macOS) to open the Visual Studio Code Command Palette.
 3. **Search for "Dev Containers":** Type "Dev Containers" and select "Dev Containers: Add Dev Container Configuration Files…".
 
 ## Choose a Predefined Container Definition or Create from Scratch
 
-- **Predefined Definition (Recommended for Beginners):** VS Code offers a list of predefined Dev Container definitions for popular languages and frameworks (e.g., Node.js, Python, .NET, Go, Java). Choose one that closely matches your project's technology stack.
+- **Predefined Definition (Recommended for Beginners):** Visual Studio Code offers a list of predefined Dev Container definitions for popular languages and frameworks (e.g., Node.js, Python, .NET, Go, Java). Choose one that closely matches your project's technology stack.
 - **Create from 'Empty Container':** If no predefined definition suits your needs, choose "From 'Empty Container'". This will create a basic `devcontainer.json` that you can customize from scratch.
 - **Use 'Dockerfile':** If you already have a Dockerfile for your project or want complete control, choose "From Dockerfile". This will generate a `devcontainer.json` that references your existing Dockerfile.
 
-5. **Customize `devcontainer.json` (If needed):** After selecting a definition, VS Code will create a `.devcontainer` folder and place `devcontainer.json` inside it. Open `devcontainer.json` to review and customize its properties.
+5. **Customize `devcontainer.json` (If needed):** After selecting a definition, Visual Studio Code will create a `.devcontainer` folder and place `devcontainer.json` inside it. Open `devcontainer.json` to review and customize its properties.
 
 ### Key Properties of `devcontainer.json`
 
@@ -60,7 +60,7 @@ When using `dockerFile`, this optional property specifies the **build context** 
 
 #### Extensions
 
-The `extensions` property is an **array of VS Code extension IDs** that should be automatically installed _inside_ the Dev Container when it starts.
+The `extensions` property is an **array of Visual Studio Code extension IDs** that should be automatically installed _inside_ the Dev Container when it starts.
 
 ```json
 "extensions": [
@@ -69,11 +69,11 @@ The `extensions` property is an **array of VS Code extension IDs** that should b
 ]
 ```
 
-This ensures everyone using the Dev Container has the same set of extensions. Find extension IDs in the VS Code Marketplace URL or by right-clicking an extension in the Extensions view and selecting "Copy Extension ID".
+This ensures everyone using the Dev Container has the same set of extensions. Find extension IDs in the Visual Studio Code Marketplace URL or by right-clicking an extension in the Extensions view and selecting "Copy Extension ID".
 
 #### Settings
 
-This `settings` property is a **JSON object** that allows you to define VS Code settings that will be applied _inside_ the Dev Container.
+This `settings` property is a **JSON object** that allows you to define Visual Studio Code settings that will be applied _inside_ the Dev Container.
 
 ```json
 "settings": {

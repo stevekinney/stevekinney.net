@@ -1,6 +1,6 @@
 ---
-title: Emmet in VS Code
-description: Learn how to use Emmet's powerful abbreviation syntax to speed up HTML and CSS development in VS Code
+title: Emmet in Visual Studio Code
+description: Learn how to use Emmet's powerful abbreviation syntax to speed up HTML and CSS development in Visual Studio Code
 modified: 2025-03-16T17:01:11-06:00
 ---
 
@@ -55,7 +55,7 @@ Here’s a quick look at other common patterns:
 
 ## Emmet in JSX/TSX
 
-Emmet can also boost your productivity in React files. To ensure it works correctly in `.jsx` or `.tsx` files, configure VS Code’s settings so Emmet treats these files as HTML. One common approach is adding the following setting in your `settings.json`:
+Emmet can also boost your productivity in React files. To ensure it works correctly in `.jsx` or `.tsx` files, configure Visual Studio Code’s settings so Emmet treats these files as HTML. One common approach is adding the following setting in your `settings.json`:
 
 ```json
 "emmet.includeLanguages": {

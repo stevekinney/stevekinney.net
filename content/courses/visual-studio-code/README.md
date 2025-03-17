@@ -1,6 +1,6 @@
 ---
 title: Visual Studio Code Course
-description: "Learn to maximize your productivity with VS Code's features and capabilities"
+description: "Learn to maximize your productivity with Visual Studio Code's features and capabilities"
 layout: contents
 base: /courses/visual-studio-code
 modified: 2025-03-17T10:49:53-06:00

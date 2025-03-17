@@ -1,6 +1,6 @@
 ---
-title: Debugging Running Node Processes in VS Code
-description: Learn how to attach VS Code's debugger to existing Node.js processes for better runtime troubleshooting
+title: Debugging Running Node Processes in Visual Studio Code
+description: Learn how to attach Visual Studio Code's debugger to existing Node.js processes for better runtime troubleshooting
 modified: 2025-03-16T16:07:00-06:00
 ---
 
@@ -8,12 +8,12 @@ Alternatively, you can attach the debugger to an already running Node process. T
 
 ```json
 {
-  "type": "node",
-  "request": "attach",
-  "name": "Attach to Node",
-  "address": "localhost",
-  "port": 9229
+	"type": "node",
+	"request": "attach",
+	"name": "Attach to Node",
+	"address": "localhost",
+	"port": 9229
 }
 ```
 
-When you start this attach config (F5), VS Code will try to attach to Node on that host/port. This is useful for debugging scenarios where the Node process is launched outside VS Code (for instance, via a terminal or a nodemon process). VS Code can also **auto-attach** to Node processes run in the integrated terminal if you enable it (more on this in *Lesser-Known Features*).
+When you start this attach config (F5), Visual Studio Code will try to attach to Node on that host/port. This is useful for debugging scenarios where the Node process is launched outside Visual Studio Code (for instance, via a terminal or a nodemon process). Visual Studio Code can also **auto-attach** to Node processes run in the integrated terminal if you enable it (more on this in _Lesser-Known Features_).
