@@ -6,7 +6,7 @@ modified: 2025-03-16T12:04:50-06:00
 
 Once you have a `.devcontainer` folder in your project, VS Code will recognize it and offer you options to work within the Dev Container.
 
-![](assets/reopen-in-dev-container.png)
+![VS Code dialog showing option to reopen in container](assets/reopen-in-dev-container.png)
 
 > [!NOTE] Docker Installation
 > If Docker is not installed, Visual Studio Code will attempt to install it.
@@ -22,7 +22,7 @@ Once you have a `.devcontainer` folder in your project, VS Code will recognize i
 
 Once the container is up and running, you'll be able to see it in **Docker Desktop**.
 
-![](assets/docker-desktop-container-running.png)
+![Docker Desktop showing a running container](assets/docker-desktop-container-running.png)
 
 ## Building, Rebuilding, and Updating
 
