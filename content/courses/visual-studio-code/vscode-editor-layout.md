@@ -1,7 +1,7 @@
 ---
 title: Editor Layout in Visual Studio Code
 description: Customize your VS Code workspace with flexible layouts, split views, and Zen Mode for an optimal coding experience
-modified: 2025-03-17T09:27:43-06:00
+modified: 2025-03-17T13:32:12-05:00
 ---
 
 The most reasonable place to start is getting comfortable with the editor itself. If we can take the little tedious stuff that we need to do and make it *faster*, then we have more mental bandwidth for all of the Big Brain™ stuff that is arguably what we get paid for—as opposed to mousing around looking for that important file.
@@ -44,3 +44,42 @@ Once in Zen Mode, you can still hover near the edges of the screen to reveal hid
 
 > [!TIP] Adding keybindings for Zen Mode
 > If you frequently use Zen Mode, assign a custom keyboard shortcut to it in your keybindings (`File -> Preferences -> Keyboard Shortcuts` or `Code -> Preferences -> Keyboard Shortcuts` on macOS). You’ll be a single keystroke away from that tranquil, minimalistic bliss.
+
+## Splitting the Editor
+
+Use `Cmd+\` or `Ctrl+\` to split the editor into a new pane.
+
+![Split the Editor in Visual Studio Code](assets/split-the-editor-vscode.mp4)
+
+## Move Across Tabs
+
+Use `Cmd-Option-⃗➡️` and `Cmd-Option-⬅️` to move from tab to tab. On Windows, you can use `Ctrl-Alt-➡️` and `Ctrl-Alt-⬅️`.
+
+![Move from Tab to Tab in Visual Studio Code](assets/move-from-tab-to-tab.mp4)
+
+## Jump Between Editor Groups
+
+You've got two options here.
+
+1. You can jump to a *particular* group.
+2. You can move around between the groups using the arrow keys.
+
+![Switch Groups in Visual Studio Code](assets/switch-group-vscode.png)
+
+## Jump to a Line
+
+Use `Ctrl-G` to jump to a particular line.
+
+![Jump to a Line](assets/go-to-line-vscode.png)
+
+## Go to Bracket
+
+The **Go to Bracket** command jumps from the opening to the closing bracket. There is also ability to **Select to Bracket**, but it doesn't have a keybinding—by default. We'll look at how to add one later.
+
+![Go to Bracket](assets/go-to-bracket-vscode.png)
+
+## Open the Integrated Terminal
+
+You can use `Ctrl-Backtick` to open the integrated terminal.
+
+![Open the Integrated Terminal](assets/open-the-terminal-vscode.mp4)

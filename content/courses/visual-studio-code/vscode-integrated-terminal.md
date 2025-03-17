@@ -1,7 +1,7 @@
 ---
 title: Integrated Terminal in VS Code
 description: "Learn how to use and customize VS Code's integrated terminal for efficient development workflows"
-modified: 2025-03-17T10:26:57-06:00
+modified: 2025-03-17T13:41:35-05:00
 ---
 
 The built-in terminal is pretty straight-forward, but let's look at some of the ways that we can take it the Next Level™, as they say.
@@ -61,3 +61,19 @@ Long terminal sessions can accumulate a lot of output—logs, debugging info, an
 
 - Click the magnifying glass icon (Find) in the terminal toolbar, or press `Ctrl+F` (on Windows/Linux) or `Cmd+F` (on macOS) while the terminal is focused.
 - Type your query to highlight matches in the terminal output.
+
+## Focusing the Active Terminal
+
+**Pro-Tip**: `Ctrl-Backtick` will open or close the integrated terminal. Theoretically `Cmd-Down` will focus it, but only if you have accessibility mode turned on. You can add a keybinding that will focus the terminal if it's already created.
+
+```json
+[
+	{
+		"key": "ctrl+`",
+		"command": "workbench.action.terminal.focus",
+		"when": "terminalHasBeenCreated && terminalProcessSupported"
+	}
+]
+```
+
+Obviously, you can choose any keybinding that pleases you.
