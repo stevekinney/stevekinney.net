@@ -145,12 +145,12 @@ An array of glob patterns specifying files or folders that the debugger should _
 
 ```json
 "skipFiles": [
-    "<node_internals>/**",  // Skip Node.js internal files
-    "${workspaceFolder}/node_modules/**" // Skip files in node_modules
+    "<node_internals>/**",
+    "${workspaceFolder}/node_modules/**"
 ]
 ```
 
-**`"<node_internals>/**"` is a special pattern that matches Node.js internal files.\*\*
+`"<node_internals>/**"` is a special pattern that matches Node.js internal files.
 
 ## `outFiles` (Optional)
 

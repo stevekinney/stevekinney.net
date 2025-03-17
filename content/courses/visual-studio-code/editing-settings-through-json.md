@@ -19,30 +19,30 @@ Depending on your platform, the user settings file is located here:
 
 ### JSON Syntax and Schema
 
-```JSON
+```json
 {
-    "editor.fontSize": 14,
-    "editor.fontFamily": "Fira Code",
-    "editor.lineHeight": 22,
-    "workbench.colorTheme": "Dracula",
-    "files.autoSave": "afterDelay",
-    "files.autoSaveDelay": 1000,
-    "editor.tabSize": 2,
-    "editor.insertSpaces": true,
-    "editor.detectIndentation": false,
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/node_modules": true
-    },
-    "explorer.confirmDelete": false,
-    "terminal.integrated.fontSize": 13,
-    "terminal.integrated.fontFamily": "monospace",
-    "editor.wordWrap": "on",
-    "editor.minimap.enabled": false
+	"editor.fontSize": 14,
+	"editor.fontFamily": "Fira Code",
+	"editor.lineHeight": 22,
+	"workbench.colorTheme": "Dracula",
+	"files.autoSave": "afterDelay",
+	"files.autoSaveDelay": 1000,
+	"editor.tabSize": 2,
+	"editor.insertSpaces": true,
+	"editor.detectIndentation": false,
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/node_modules": true
+	},
+	"explorer.confirmDelete": false,
+	"terminal.integrated.fontSize": 13,
+	"terminal.integrated.fontFamily": "monospace",
+	"editor.wordWrap": "on",
+	"editor.minimap.enabled": false
 }
 ```
 
@@ -52,19 +52,19 @@ Depending on your platform, the user settings file is located here:
 
 **Conditional Settings:** You can use language-specific settings within `settings.json` to apply configurations only to certain languages. For example:
 
-    ```JSON
-    {
-        "[python]": {
-            "editor.tabSize": 4,
-            "editor.insertSpaces": true,
-            "python.linting.pylintEnabled": true
-        },
-        "[javascript]": {
-            "editor.tabSize": 2,
-            "editor.insertSpaces": true
-        }
-    }
-    ```
+```json
+{
+	"[python]": {
+		"editor.tabSize": 4,
+		"editor.insertSpaces": true,
+		"python.linting.pylintEnabled": true
+	},
+	"[javascript]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": true
+	}
+}
+```
 
 This example sets `tabSize` to 4 and enables `pylint` for Python files, while setting `tabSize` to 2 for JavaScript files. The language identifier (e.g., `python`, `javascript`) is enclosed in square brackets `[]`. You can find language identifiers in the Language Mode selector in the bottom-right corner of VS Code.
 

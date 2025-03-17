@@ -1,5 +1,6 @@
 ---
 title: Generating OpenAPI Contracts from an Existing Express API
+description: Learn how to generate OpenAPI specifications from your existing Express API using tools like swagger-jsdoc.
 modified: 2025-03-15T17:00:00-06:00
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: Adding Types to Express
+description: Learn how to leverage TypeScript with Express to build type-safe APIs and web applications.
 modified: 2025-03-15T15:02:03-06:00
 ---
 

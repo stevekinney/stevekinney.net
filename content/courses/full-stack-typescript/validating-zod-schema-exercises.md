@@ -1,5 +1,6 @@
 ---
-title: Valdating Zod Schemas (Exercises)
+title: Validating Zod Schemas (Exercises)
+description: Practice your Zod skills with these hands-on exercises that cover schema validation, transformations, and advanced Zod features.
 modified: 2025-03-20T13:14:15-06:00
 ---
 

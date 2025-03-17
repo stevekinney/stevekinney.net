@@ -1,4 +1,6 @@
 ---
+title: Best Practices with tRPC
+description: Learn key best practices for developing robust and maintainable tRPC applications.
 modified: 2025-03-15T16:39:33-06:00
 ---
 
