@@ -71,6 +71,7 @@ Snippets in VS Code are powerful because they support dynamic content through pl
     - `${2:element}`: The second placeholder, suggesting "element" as a default value.
     - `${0:// body}`: The final cursor position, placed inside the loop body with a comment.
 - **Variables (`${variable_name}`):** VS Code provides a rich set of predefined variables that you can use within snippets to insert dynamic information based on the context. Variables are enclosed in `${}`. Some commonly used variables include:
+
   - **File and Path Variables:**
     - `${TM_FILENAME}`: The current filename (e.g., `my_script.js`).
     - `${TM_FILENAME_BASE}`: The current filename without the extension (e.g., `my_script`).
@@ -105,22 +106,20 @@ Snippets in VS Code are powerful because they support dynamic content through pl
 
 Choices provide a dropdown list of options when you reach a placeholder. The syntax is `${placeholder_number|option1,option2,option3|}`. When you insert the snippet and reach this placeholder, VS Code will display a quick pick menu with `option1`, `option2`, and `option3`. You can select one of these options, or type in your own value.
 
-  **Example with Choices (Logging levels in Python):**
-
-  ```JSON
+```json
   "Log Message": {
-      "prefix": "logmsg",
-      "body": [
-          "import logging",
-          "",
-          "logging.basicConfig(level=logging.${1|DEBUG,INFO,WARNING,ERROR,CRITICAL|})",
-          "logging.${1|DEBUG,INFO,WARNING,ERROR,CRITICAL|}(${2:message})"
-      ],
-      "description": "Log message with level choice in Python"
-  }
-  ```
+    "prefix": "logmsg",
+    "body": [
+        "import logging",
+        "",
+        "logging.basicConfig(level=logging.${1|DEBUG,INFO,WARNING,ERROR,CRITICAL|})",
+        "logging.${1|DEBUG,INFO,WARNING,ERROR,CRITICAL|}(${2:message})"
+    ],
+    "description": "Log message with level choice in Python"
+}
+```
 
-  When you use this snippet, the first placeholder `${1|DEBUG,INFO,WARNING,ERROR,CRITICAL|}` will present a dropdown with logging levels. Choosing an option will automatically populate both instances of `${1|…|}` with the selected level.
+When you use this snippet, the first placeholder `${1|DEBUG,INFO,WARNING,ERROR,CRITICAL|}` will present a dropdown with logging levels. Choosing an option will automatically populate both instances of `${1|…|}` with the selected level.
 
 ## Snippet Scope
 

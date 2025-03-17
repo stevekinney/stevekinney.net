@@ -1,3 +1,8 @@
+---
+title: Type-Safe Middleware with Express
+description: Add type-safety to middleware when using Express.
+---
+
 ### Type-Safe Middleware Chains
 
 Express middleware can be challenging to type correctly, especially when middleware adds properties to the request:

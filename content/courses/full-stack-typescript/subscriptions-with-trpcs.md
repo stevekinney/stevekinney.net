@@ -1,4 +1,6 @@
 ---
+title: Real-time Subscriptions with tRPC
+description: Learn how to implement real-time updates using tRPC's subscription capabilities with Server-Sent Events or WebSockets.
 modified: 2025-03-15T16:36:52-06:00
 ---
 

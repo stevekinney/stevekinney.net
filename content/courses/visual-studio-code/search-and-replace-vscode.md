@@ -92,7 +92,7 @@ VS Code offers a dedicated Search Editor that provides a more powerful way to wo
 
 When working with large codebases or complex searches, the Search Editor becomes invaluable for organizing and navigating through numerous results. You can even have multiple Search Editors open simultaneously for different queries.
 
-> [!TIP] 
+> [!TIP]
 > You can save a Search Editor to revisit the same search later. Use `File > Save As...` or the keyboard shortcut `Ctrl+S` (`Cmd+S` on macOS).
 
 ## Advanced Capture Groups in Replacements
@@ -111,10 +111,8 @@ Williams, Michael
 
 You can use capture groups to swap the order:
 
-```
-Find:    ([^,]+),\s*(.+)
-Replace: $2 $1
-```
+- Find: `([^,]+),\s*(.+)`
+- Replace: `$2 $1`
 
 This transforms the text to:
 
@@ -130,18 +128,18 @@ The pattern captures everything before the comma as `$1` and everything after (e
 
 Need to convert dates from MM/DD/YYYY to YYYY-MM-DD format?
 
-```
-Find:    (\d{1,2})\/(\d{1,2})\/(\d{4})
-Replace: $3-$1-$2
-```
+- Find: `(\d{1,2})\/(\d{1,2})\/(\d{4})`
+- Replace: `$3-$1-$2`
 
 This changes:
+
 ```
 12/25/2023
 1/15/2024
 ```
 
 To:
+
 ```
 2023-12-25
 2024-1-15
@@ -149,19 +147,15 @@ To:
 
 For a more robust version that ensures two-digit months and days:
 
-```
-Find:    (\d{1,2})\/(\d{1,2})\/(\d{4})
-Replace: $3-${1.padStart(2, '0')}-${2.padStart(2, '0')}
-```
+- Find: `(\d{1,2})\/(\d{1,2})\/(\d{4})`
+- Replace: `$3-${1.padStart(2, '0')}-${2.padStart(2, '0')}`
 
 ### Transforming HTML to JSX
 
 When converting HTML to JSX, you often need to change attribute names:
 
-```
-Find:    <([a-z]+)([^>]*)\sclass="([^"]*)"([^>]*)>
-Replace: <$1$2 className="$3"$4>
-```
+- Find: `<([a-z]+)([^>]*)\sclass="([^"]*)"([^>]*)>`
+- Replace: `<$1$2 className="$3"$4>`
 
 This changes `<div class="container">` to `<div className="container">`.
 
@@ -169,10 +163,8 @@ This changes `<div class="container">` to `<div className="container">`.
 
 Transform article titles into URL-friendly slugs:
 
-```
-Find:    ([A-Z])([A-Za-z\s]+)
-Replace: ${1.toLowerCase()}${2.toLowerCase().replace(/\s+/g, '-')}
-```
+- Find: `([A-Z])([A-Za-z\s]+)`
+- Replace: `${1.toLowerCase()}${2.toLowerCase().replace(/\s+/g, '-')}`
 
 This converts "My Article Title" to "my-article-title".
 
@@ -180,21 +172,17 @@ This converts "My Article Title" to "my-article-title".
 
 Transform snake_case to camelCase:
 
-```
-Find:    ([a-z])_([a-z])
-Replace: $1${2.toUpperCase()}
-```
+- Find: `([a-z])_([a-z])`
+- Replace: `$1${2.toUpperCase()}`
 
 This changes "user_profile_id" to "userProfileId".
 
 Or convert camelCase to kebab-case:
 
-```
-Find:    ([a-z])([A-Z])
-Replace: $1-${2.toLowerCase()}
-```
+- Find: `([a-z])([A-Z])`
+- Replace: `$1-${2.toLowerCase()}`
 
 This changes "userProfileId" to "user-profile-id".
 
-> [!TIP] 
+> [!TIP]
 > Remember that regex replacement operations in VS Code occur from left to right, so complex transformations might require multiple passes with different patterns.

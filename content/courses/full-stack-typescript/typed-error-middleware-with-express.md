@@ -1,3 +1,8 @@
+---
+title: Typed-Error Middleware with Express
+description: Add type-safety to Express errors.
+---
+
 ### Typed Error Middleware
 
 Express error middleware has a distinct signature:

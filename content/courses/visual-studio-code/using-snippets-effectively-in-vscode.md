@@ -84,7 +84,7 @@ Let's break down the transformation syntax:
 
 ### Extract Year from Full Date
 
-```JSON
+```json
 "Year from Date": {
   "prefix": "yearfromdate",
   "body": [

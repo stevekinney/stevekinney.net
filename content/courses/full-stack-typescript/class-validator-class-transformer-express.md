@@ -1,5 +1,6 @@
 ---
 title: Advanced Validation Techniques in Express with TypeScript
+description: Learn how to implement object-oriented validation in Express using class-validator and class-transformer libraries.
 modified: 2025-03-15T16:15:00-06:00
 ---
 

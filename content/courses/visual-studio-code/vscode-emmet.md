@@ -12,11 +12,11 @@ Emmet turns short snippets of text into full HTML structures. For instance, if y
 
 ```html
 <div>
-  <ul>
-    <li></li>
-    <li></li>
-    <li></li>
-  </ul>
+	<ul>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
 </div>
 ```
 
@@ -34,11 +34,11 @@ Here’s a quick look at other common patterns:
 
 ```html
 <ul>
-  <li class="item"></li>
-  <li class="item"></li>
-  <li class="item"></li>
-  <li class="item"></li>
-  <li class="item"></li>
+	<li class="item"></li>
+	<li class="item"></li>
+	<li class="item"></li>
+	<li class="item"></li>
+	<li class="item"></li>
 </ul>
 ```
 
@@ -46,8 +46,8 @@ Here’s a quick look at other common patterns:
 
 ```html
 <div class="container">
-  <img class="logo" src="logo.png" />
-  <p></p>
+	<img class="logo" src="logo.png" />
+	<p></p>
 </div>
 ```
 
@@ -83,12 +83,12 @@ If you type `div.wrapper>div.title{Hello, Emmet!}^^p.subtitle{It even works in R
 import React from 'react';
 
 export function MyComponent() {
-  return (
-    <div className="wrapper">
-      <div className="title">Hello, Emmet!</div>
-      <p className="subtitle">It even works in React!</p>
-    </div>
-  );
+	return (
+		<div className="wrapper">
+			<div className="title">Hello, Emmet!</div>
+			<p className="subtitle">It even works in React!</p>
+		</div>
+	);
 }
 ```
 
@@ -101,7 +101,7 @@ export function MyComponent() {
 
 Parentheses let you create complex nested structures and apply multipliers to groups of elements. This is incredibly useful for creating repeated compound structures.
 
-```
+```css
 (header>h1)+(main>section*3)+(footer>p)
 ```
 
@@ -109,21 +109,21 @@ Expands to:
 
 ```html
 <header>
-  <h1></h1>
+	<h1></h1>
 </header>
 <main>
-  <section></section>
-  <section></section>
-  <section></section>
+	<section></section>
+	<section></section>
+	<section></section>
 </main>
 <footer>
-  <p></p>
+	<p></p>
 </footer>
 ```
 
 You can also use grouping to apply attributes or content to multiple elements:
 
-```
+```css
 (div>h2+p).card*3
 ```
 
@@ -131,16 +131,16 @@ Creates three card divs, each with an `h2` and `p` element:
 
 ```html
 <div class="card">
-  <h2></h2>
-  <p></p>
+	<h2></h2>
+	<p></p>
 </div>
 <div class="card">
-  <h2></h2>
-  <p></p>
+	<h2></h2>
+	<p></p>
 </div>
 <div class="card">
-  <h2></h2>
-  <p></p>
+	<h2></h2>
+	<p></p>
 </div>
 ```
 
@@ -152,7 +152,7 @@ Filters modify how Emmet abbreviations expand. They're added at the end of an ab
 
 Removes insignificant whitespace from the output:
 
-```
+```css
 ul>li*3|t
 ```
 
@@ -160,9 +160,9 @@ Produces more compact output:
 
 ```html
 <ul>
-<li></li>
-<li></li>
-<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
 </ul>
 ```
 
@@ -170,7 +170,7 @@ Produces more compact output:
 
 Adds comments to help identify closing tags in large structures:
 
-```
+```css
 div>header+main+footer|c
 ```
 
@@ -178,10 +178,10 @@ Expands to:
 
 ```html
 <div>
-  <header></header>
-  <main></main>
-  <footer></footer>
-  <!-- /div -->
+	<header></header>
+	<main></main>
+	<footer></footer>
+	<!-- /div -->
 </div>
 ```
 
@@ -189,7 +189,7 @@ Expands to:
 
 Makes writing Block Element Modifier (BEM) notation easier:
 
-```
+```css
 form.search>input.field|bem
 ```
 
@@ -197,7 +197,7 @@ Produces:
 
 ```html
 <form class="search">
-  <input class="search__field">
+	<input class="search__field" />
 </form>
 ```
 
@@ -207,7 +207,7 @@ Emmet has a smart system that infers tag names based on parent-child relationshi
 
 For example, when creating a list, you can leave out the `li` tag name:
 
-```
+```css
 ul>.item*3
 ```
 
@@ -215,13 +215,14 @@ Emmet knows that `ul` elements typically contain `li` children, so it produces:
 
 ```html
 <ul>
-  <li class="item"></li>
-  <li class="item"></li>
-  <li class="item"></li>
+	<li class="item"></li>
+	<li class="item"></li>
+	<li class="item"></li>
 </ul>
 ```
 
 Common implicit tags include:
+
 - `li` inside `ul` and `ol`
 - `tr` inside `table`
 - `td` inside `tr`
@@ -231,19 +232,23 @@ Common implicit tags include:
 
 Emmet includes a powerful lorem ipsum generator to quickly add placeholder text:
 
-```
+```css
 p>lorem
 ```
 
 Creates a paragraph with standard lorem ipsum text:
 
 ```html
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti eos cupiditate dolore doloribus!</p>
+<p>
+	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae
+	natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti
+	eos cupiditate dolore doloribus!
+</p>
 ```
 
 You can specify the number of words:
 
-```
+```css
 p>lorem10
 ```
 
@@ -255,7 +260,7 @@ Generates exactly 10 words:
 
 Combine with multipliers for multiple paragraphs:
 
-```
+```css
 article>(h2>lorem5)+p*3>lorem20
 ```
 
@@ -263,10 +268,19 @@ Creates an article with a heading and three paragraphs:
 
 ```html
 <article>
-  <h2>Lorem ipsum dolor sit amet.</h2>
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi fugiat veritatis culpa quos aspernatur! Laboriosam alias iure fuga possimus officiis.</p>
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci labore repellat, asperiores quas quae maxime doloremque aliquam? Eius, illo excepturi.</p>
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis sapiente distinctio illum perspiciatis, pariatur at libero. Placeat laboriosam asperiores esse.</p>
+	<h2>Lorem ipsum dolor sit amet.</h2>
+	<p>
+		Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi fugiat veritatis culpa quos
+		aspernatur! Laboriosam alias iure fuga possimus officiis.
+	</p>
+	<p>
+		Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci labore repellat, asperiores
+		quas quae maxime doloremque aliquam? Eius, illo excepturi.
+	</p>
+	<p>
+		Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis sapiente distinctio illum
+		perspiciatis, pariatur at libero. Placeat laboriosam asperiores esse.
+	</p>
 </article>
 ```
 
@@ -274,7 +288,7 @@ Creates an article with a heading and three paragraphs:
 
 Here's a complete blog post card with structured content:
 
-```
+```css
 article.card>(header.card__header>h2.card__title{Post Title $}+p.card__meta>time+span.card__author{Author Name})+(div.card__content>p*2>lorem)+footer.card__footer>a.btn.btn--primary{Read More}
 ```
 

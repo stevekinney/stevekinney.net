@@ -1,5 +1,6 @@
 ---
 title: Working Backwards from Types
+description: Learn how to create Zod schemas that match existing TypeScript types using the satisfies operator for perfect type alignment.
 modified: 2025-03-20T13:31:13-06:00
 ---
 

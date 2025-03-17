@@ -1,5 +1,6 @@
 ---
 title: Building Type-Safe APIs with express-zod-api
+description: Learn how to use express-zod-api to build type-safe and validated API endpoints by combining Express with Zod schemas.
 modified: 2025-03-15T16:30:00-06:00
 ---
 
