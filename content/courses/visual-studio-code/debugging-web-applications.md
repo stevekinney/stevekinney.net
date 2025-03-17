@@ -1,6 +1,6 @@
 ---
-title: Debugging Web Applications in VS Code
-description: Configure VS Code to debug front-end web applications with breakpoints, variable inspection, and more
+title: Debugging Web Applications in Visual Studio Code
+description: Configure Visual Studio Code to debug front-end web applications with breakpoints, variable inspection, and more
 modified: 2025-03-16T15:06:06-06:00
 ---
 
@@ -28,7 +28,7 @@ You can also easily hook into your running web applications using Visual Studio 
 ## Run the application
 
 - In the terminal, run `npm run dev`.
-- In the VS Code Debug view, select "Launch Chrome against localhost" (or "Launch Edge against localhost") and press F5.
+- In the Visual Studio Code Debug view, select "Launch Chrome against localhost" (or "Launch Edge against localhost") and press F5.
 
 ## Example Debugging Scenarios
 

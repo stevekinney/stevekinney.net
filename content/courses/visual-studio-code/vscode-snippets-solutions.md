@@ -1,6 +1,6 @@
 ---
-title: VS Code Snippet Exercise Solutions
-description: Solutions to the VS Code snippet creation exercises with complete code examples
+title: Visual Studio Code Snippet Exercise Solutions
+description: Solutions to the Visual Studio Code snippet creation exercises with complete code examples
 modified: 2025-03-16T11:00:45-06:00
 ---
 

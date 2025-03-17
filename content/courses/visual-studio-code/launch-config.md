@@ -1,5 +1,5 @@
 ---
-title: Launch Configurations in VS Code
+title: Launch Configurations in Visual Studio Code
 description: Detailed guide to creating and customizing launch.json files for different debugging scenarios
 modified: 2025-03-16T15:38:44-06:00
 ---
@@ -35,10 +35,10 @@ Specifies the type of debugger to use. This is usually determined by the extensi
 
 ## `request` (Required)
 
-Specifies whether VS Code should _launch_ a new process or _attach_ to an existing running process.
+Specifies whether Visual Studio Code should _launch_ a new process or _attach_ to an existing running process.
 
-- `"launch"`: VS Code starts the application in debug mode. This is the most common setting.
-- `"attach"`: VS Code connects to an already running process. This is useful for debugging servers, long-running processes, or applications running in containers.
+- `"launch"`: Visual Studio Code starts the application in debug mode. This is the most common setting.
+- `"attach"`: Visual Studio Code connects to an already running process. This is useful for debugging servers, long-running processes, or applications running in containers.
 
 ```json
 "request": "launch" // Or "attach"
@@ -54,7 +54,7 @@ A user-friendly name for this configuration. This name appears in the Debug view
 
 ## `program` (Often Required for `launch`)
 
-Specifies the _entry point_ of your application – the file that VS Code should execute when you start debugging. This is usually a relative path from the workspace root.
+Specifies the _entry point_ of your application – the file that Visual Studio Code should execute when you start debugging. This is usually a relative path from the workspace root.
 
 ```json
 "program": "${workspaceFolder}/src/index.js"
@@ -102,8 +102,8 @@ Specifies a path to a `.env` file, to load environment variables from a file.
 Specifies where the output from your application (e.g., `console.log` statements) should be displayed.
 
 - **Values:**
-  - `"integratedTerminal"` (Recommended): Output appears in VS Code's integrated terminal. This provides the best experience, including support for colors and interactive input.
-  - `"internalConsole"`: Output appears in VS Code's Debug Console. This is less flexible than the integrated terminal.
+  - `"integratedTerminal"` (Recommended): Output appears in Visual Studio Code's integrated terminal. This provides the best experience, including support for colors and interactive input.
+  - `"internalConsole"`: Output appears in Visual Studio Code's Debug Console. This is less flexible than the integrated terminal.
   - `"externalTerminal"`: Launches an external terminal window. Use this if your application requires a specific terminal or if you have issues with the integrated terminal.
 
 ```json
@@ -112,7 +112,7 @@ Specifies where the output from your application (e.g., `console.log` statements
 
 ## `preLaunchTask` (Optional)
 
-Specifies the name of a VS Code task (defined in `tasks.json`) to run _before_ the debugger starts. This is incredibly useful for automating build steps, compiling code, or starting dependent services.
+Specifies the name of a Visual Studio Code task (defined in `tasks.json`) to run _before_ the debugger starts. This is incredibly useful for automating build steps, compiling code, or starting dependent services.
 
 ```json
 "preLaunchTask": "build" // Runs the "build" task from tasks.json
@@ -130,7 +130,7 @@ Similar to `preLaunchTask`, but runs a task _after_ the debugging session ends. 
 
 ## `sourceMaps` (Optional, but _highly_ recommended for many languages)
 
-Controls whether VS Code uses _source maps_ to map between your source code and the code that's actually being executed. Source maps are _essential_ for debugging languages that are compiled or transpiled (like TypeScript, JavaScript with Babel, Sass, etc.). When you compile TypeScript to JavaScript, the compiler can generate a `.js.map` file (the source map) alongside the `.js` file. This map tells the debugger how to map lines of code in the compiled JavaScript back to the original TypeScript code.
+Controls whether Visual Studio Code uses _source maps_ to map between your source code and the code that's actually being executed. Source maps are _essential_ for debugging languages that are compiled or transpiled (like TypeScript, JavaScript with Babel, Sass, etc.). When you compile TypeScript to JavaScript, the compiler can generate a `.js.map` file (the source map) alongside the `.js` file. This map tells the debugger how to map lines of code in the compiled JavaScript back to the original TypeScript code.
 
 - `true`: Enable source map support (default for many configurations).
 - `false`: Disable source map support.
@@ -174,11 +174,11 @@ Specifies the absolute path to an executable that should be used. For example, i
 
 When using `request: "attach"`, some properties are different or have different meanings:
 
-- **`processId` (Optional):** The ID of the process to attach to. You can use `${command:pickProcess}` to have VS Code prompt you to select a running process.
+- **`processId` (Optional):** The ID of the process to attach to. You can use `${command:pickProcess}` to have Visual Studio Code prompt you to select a running process.
 - **`port` (Often Required for `attach`):** The port number to connect to when attaching to a remote debugger.
 - **`address` (Optional):** The hostname or IP address of the remote machine (for remote debugging).
-- **`restart` (Optional):** If set to `true`, VS Code will automatically restart the debugging session if the attached process terminates.
-- **`localRoot` (Optional):** The local source root for remote debugging. This helps VS Code find the source files if the paths on the remote machine are different.
+- **`restart` (Optional):** If set to `true`, Visual Studio Code will automatically restart the debugging session if the attached process terminates.
+- **`localRoot` (Optional):** The local source root for remote debugging. This helps Visual Studio Code find the source files if the paths on the remote machine are different.
 - **`remoteRoot` (Optional):** The remote source root for remote debugging.
 
 ## Example Configurations

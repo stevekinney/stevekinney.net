@@ -32,7 +32,7 @@ Then, create a `tasks.json` file (if it doesn't exist) in your `.vscode` folder.
 - **`label`:** A descriptive name for the task.
 - **`type`:** `"shell"` indicates we're running a shell command.
 - **`command`:** `"npx jest --watchAll"` (or `"yarn test --watchAll"` if using Yarn) executes Jest in watch mode. The `--watchAll` flag tells Jest to watch for changes in _all_ files and re-run tests accordingly.
-- **`problemMatcher`:** `"$jest"` integrates Jest's output with VS Code's Problems panel, highlighting errors and warnings directly in the editor.
+- **`problemMatcher`:** `"$jest"` integrates Jest's output with Visual Studio Code's Problems panel, highlighting errors and warnings directly in the editor.
 - **`group`:** Marks this task as the default test task (`isDefault: true`). This allows you to run it quickly with `Ctrl+Shift+T` (or `Cmd+Shift+T` on macOS).
 
 Now, you can run this task from the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) by typing "Tasks: Run Test Task", or use the keyboard shortcut. Jest will run in the integrated terminal and automatically re-run your tests whenever you save a file.
@@ -110,7 +110,7 @@ This example demonstrates compiling Sass (or Less) to CSS using the `sass` comma
 - **`Compile Sass (Watch Mode)` Task:**
   - `"command": "sass --watch src/styles.scss:dist/styles.css"`: This runs sass in watch mode. Sass now monitors the `src` folder, and will output to the `dist` folder.
   - `"isBackground": true`: Makes this a background task.
-- **`problemMatcher`:** `"$sass-loader"` is a built-in problem matcher that correctly parses Sass compiler errors and displays them in the VS Code Problems panel. If you're using Less, you might need a different problem matcher or create a custom one.
+- **`problemMatcher`:** `"$sass-loader"` is a built-in problem matcher that correctly parses Sass compiler errors and displays them in the Visual Studio Code Problems panel. If you're using Less, you might need a different problem matcher or create a custom one.
 
 ## Running Database Migrations
 
@@ -151,11 +151,11 @@ This example shows how to run database migrations using a hypothetical `migrate`
 
 ## Task Inputs: `promptString`, `pickString`, and `command`
 
-VS Code tasks support different input types to make your tasks more flexible and interactive.
+Visual Studio Code tasks support different input types to make your tasks more flexible and interactive.
 
 - **`promptString` (Covered Above):** Prompts the user for free-form text input.
 - **`pickString` (Covered in Original Content):** Presents the user with a dropdown list of predefined options.
-- **`command`:** Executes a VS Code command and uses its return value as the input. This is powerful for integrating with other VS Code features and extensions.
+- **`command`:** Executes a Visual Studio Code command and uses its return value as the input. This is powerful for integrating with other Visual Studio Code features and extensions.
 
 **Example: `command` Input (Getting the Current Git Branch)**
 
@@ -180,7 +180,7 @@ VS Code tasks support different input types to make your tasks more flexible and
 }
 ```
 
-- **`"command": "git.getBranch"`:** This would ideally call a VS Code command (potentially provided by a Git extension) that returns the current Git branch. You might need to install a Git extension that provides such a command, or write a simple extension yourself to expose this functionality. The built-in Git extension _doesn't_ expose a command in precisely this way, but this illustrates the concept.
+- **`"command": "git.getBranch"`:** This would ideally call a Visual Studio Code command (potentially provided by a Git extension) that returns the current Git branch. You might need to install a Git extension that provides such a command, or write a simple extension yourself to expose this functionality. The built-in Git extension _doesn't_ expose a command in precisely this way, but this illustrates the concept.
 - The output of the `git.getBranch` command would then be substituted into the `echo` command in the task.
 
 ## Compound Tasks
@@ -224,9 +224,9 @@ Tasks run serially in the exact order listed in the `dependsOn` array. Each task
 
 ```json
 {
-  "label": "Sequential Build and Test",
-  "dependsOn": ["Clean", "Build", "Test"],
-  "dependsOrder": "sequence"
+	"label": "Sequential Build and Test",
+	"dependsOn": ["Clean", "Build", "Test"],
+	"dependsOrder": "sequence"
 }
 ```
 
@@ -238,9 +238,9 @@ All dependent tasks start simultaneously and run concurrently.
 
 ```json
 {
-  "label": "Parallel Assets Build",
-  "dependsOn": ["Compile CSS", "Compile JavaScript", "Optimize Images"],
-  "dependsOrder": "parallel"
+	"label": "Parallel Assets Build",
+	"dependsOn": ["Compile CSS", "Compile JavaScript", "Optimize Images"],
+	"dependsOrder": "parallel"
 }
 ```
 
@@ -248,17 +248,17 @@ This launches all three asset compilation tasks at once, which can significantly
 
 ### 3. `any`
 
-VS Code starts tasks in parallel, but the main task completes as soon as any dependent task finishes. This is useful for "race condition" scenarios.
+Visual Studio Code starts tasks in parallel, but the main task completes as soon as any dependent task finishes. This is useful for "race condition" scenarios.
 
 ```json
 {
-  "label": "Development Server",
-  "dependsOn": ["Start API Server", "Start Frontend Server"],
-  "dependsOrder": "any"
+	"label": "Development Server",
+	"dependsOn": ["Start API Server", "Start Frontend Server"],
+	"dependsOrder": "any"
 }
 ```
 
-In this example, the "Development Server" task is considered complete when either the API server or the frontend server starts successfully. 
+In this example, the "Development Server" task is considered complete when either the API server or the frontend server starts successfully.
 
 ### Combining Dependencies
 
@@ -266,47 +266,48 @@ You can create complex task trees by combining dependencies. For example:
 
 ```json
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Clean",
-      "type": "shell",
-      "command": "rm -rf dist"
-    },
-    {
-      "label": "Build Frontend",
-      "type": "shell",
-      "command": "npm run build:frontend",
-      "dependsOn": ["Clean"]
-    },
-    {
-      "label": "Build Backend",
-      "type": "shell",
-      "command": "npm run build:backend",
-      "dependsOn": ["Clean"]
-    },
-    {
-      "label": "Run Tests",
-      "type": "shell",
-      "command": "npm test",
-      "dependsOn": ["Build Frontend", "Build Backend"],
-      "dependsOrder": "sequence"
-    },
-    {
-      "label": "Full Pipeline",
-      "dependsOn": ["Run Tests"],
-      "problemMatcher": []
-    }
-  ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Clean",
+			"type": "shell",
+			"command": "rm -rf dist"
+		},
+		{
+			"label": "Build Frontend",
+			"type": "shell",
+			"command": "npm run build:frontend",
+			"dependsOn": ["Clean"]
+		},
+		{
+			"label": "Build Backend",
+			"type": "shell",
+			"command": "npm run build:backend",
+			"dependsOn": ["Clean"]
+		},
+		{
+			"label": "Run Tests",
+			"type": "shell",
+			"command": "npm test",
+			"dependsOn": ["Build Frontend", "Build Backend"],
+			"dependsOrder": "sequence"
+		},
+		{
+			"label": "Full Pipeline",
+			"dependsOn": ["Run Tests"],
+			"problemMatcher": []
+		}
+	]
 }
 ```
 
 In this example:
+
 1. The "Clean" task runs first
 2. Then "Build Frontend" and "Build Backend" run (both depend on "Clean")
 3. After both builds complete, "Run Tests" executes (depends on both builds)
 4. Finally, "Full Pipeline" completes after "Run Tests" finishes
 
 > [!TIP]
-> 
+>
 > Be aware of potential race conditions when using `parallel` with tasks that might conflict (e.g., tasks that write to the same files). In such cases, `sequence` is safer.

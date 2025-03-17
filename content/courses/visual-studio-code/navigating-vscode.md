@@ -1,6 +1,6 @@
 ---
-title: Navigating VS Code
-description: Master the essential navigation features in VS Code to efficiently move through your codebase
+title: Navigating Visual Studio Code
+description: Master the essential navigation features in Visual Studio Code to efficiently move through your codebase
 modified: 2025-03-17T10:34:20-06:00
 ---
 
@@ -8,19 +8,19 @@ Navigating large codebases can feel like exploring a maze. I have a long rant ab
 
 ## An Aside: A Free Trick for macOS Users
 
-Visual Studio Code makes a lot of use of the function keys. The problem is—so does macOS. You *could* hold down the `fn` key on your keyboard. Alternatively, you can switch it so that your functions keys are `F1`, `F2`, etc. and only change your screen brightness when you press the `fn` key. This is one of the first things that I do when I set up a new Mac.
+Visual Studio Code makes a lot of use of the function keys. The problem is—so does macOS. You _could_ hold down the `fn` key on your keyboard. Alternatively, you can switch it so that your functions keys are `F1`, `F2`, etc. and only change your screen brightness when you press the `fn` key. This is one of the first things that I do when I set up a new Mac.
 
 ![Use Function Keys as Standard Function Keys](assets/fn-keyboard-settings.png)
 
 ## Go to Definition, Declaration, Implementation, and Type Definition
 
-Pressing `F12` to go to a symbol’s definition is a well-known VS Code trick, but it doesn’t stop there. For many languages, especially TypeScript and other popular languages, you can also jump to a symbol’s declaration, implementation, or type definition. Right-click a function, class, or variable name to see commands like `Go to Definition`, `Go to Declaration`, `Go to Type Definition`, or `Go to Implementation`. This lets you quickly investigate where a piece of code originates or how it’s structured, without manually hunting through files.
+Pressing `F12` to go to a symbol’s definition is a well-known Visual Studio Code trick, but it doesn’t stop there. For many languages, especially TypeScript and other popular languages, you can also jump to a symbol’s declaration, implementation, or type definition. Right-click a function, class, or variable name to see commands like `Go to Definition`, `Go to Declaration`, `Go to Type Definition`, or `Go to Implementation`. This lets you quickly investigate where a piece of code originates or how it’s structured, without manually hunting through files.
 
 > [!TIP] In many projects, the difference between “definition” and “declaration” can be subtle. If one option doesn’t reveal what you need, try the other. You might discover a hidden interface or an abstract class behind the scenes.
 
 ## Find All References
 
-Sometimes, you want to see every nook and cranny where a particular function, method, or variable is used. By pressing `Shift+F12` (or selecting `Find All References` from the right-click menu), VS Code collates a list of every location in your codebase referencing the selected symbol. This is extremely handy when refactoring or analyzing the impact of changes before you break something by accident.
+Sometimes, you want to see every nook and cranny where a particular function, method, or variable is used. By pressing `Shift+F12` (or selecting `Find All References` from the right-click menu), Visual Studio Code collates a list of every location in your codebase referencing the selected symbol. This is extremely handy when refactoring or analyzing the impact of changes before you break something by accident.
 
 ## Peek Definition
 
@@ -38,7 +38,7 @@ The Outline view (accessible from the Explorer sidebar or via `View -> Outline`)
 
 ## Go to Symbol
 
-In-file symbol navigation is speedy with `Ctrl+Shift+O` (`Cmd+Shift+O` on macOS). Start typing the symbol’s name, and VS Code will filter the list in real-time. Select the symbol you want, press Enter, and land exactly where you need to be.
+In-file symbol navigation is speedy with `Ctrl+Shift+O` (`Cmd+Shift+O` on macOS). Start typing the symbol’s name, and Visual Studio Code will filter the list in real-time. Select the symbol you want, press Enter, and land exactly where you need to be.
 
 For a broader, workspace-wide search, press `Ctrl+T` (or `Cmd+T`). This scours every file in your workspace for a matching symbol, which is particularly helpful in large projects. Quickly jump into that function declared 42 files away—no rummaging through folder structures needed.
 
@@ -50,7 +50,7 @@ Despite the best navigation features, sometimes you want to mark your place. Ext
 - Flagging a chunk of code awaiting a coworker’s feedback.
 - Tracking multiple to-dos without sprinkling `TODO:` comments everywhere.
 
-Bookmarks live alongside the rest of VS Code’s UI, so you can manage them similarly to breakpoints or search results.
+Bookmarks live alongside the rest of Visual Studio Code’s UI, so you can manage them similarly to breakpoints or search results.
 
 > [!WARNING] Less is More
 > Don’t become bookmark-happy; too many can clutter your editor. Use them sparingly for maximum effectiveness—your future self will thank you.

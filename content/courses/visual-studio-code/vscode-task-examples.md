@@ -1,6 +1,6 @@
 ---
-title: Examples of VS Code Tasks
-description: Practical examples of VS Code tasks for common development scenarios including building, testing, and deployments
+title: Examples of Visual Studio Code Tasks
+description: Practical examples of Visual Studio Code tasks for common development scenarios including building, testing, and deployments
 modified: 2025-03-16T14:18:06-06:00
 ---
 
@@ -29,7 +29,7 @@ modified: 2025-03-16T14:18:06-06:00
 ```
 
 - `dependsOn` ensures `Compile TypeScript` completes before `Run Tests`.
-- `problemMatcher` is set to `$tsc`, letting VS Code highlight TS errors in the editor.
+- `problemMatcher` is set to `$tsc`, letting Visual Studio Code highlight TS errors in the editor.
 
 ## Docker Build and Push
 
@@ -61,7 +61,7 @@ Let’s say you have a Dockerfile, and you want to build and push to a container
 
 ## Using Variables and Inputs
 
-VS Code supports [variable substitution](https://code.visualstudio.com/docs/editor/variables-reference) and user inputs. Let’s allow the user to input a custom environment, like `production` or `staging`:
+Visual Studio Code supports [variable substitution](https://code.visualstudio.com/docs/editor/variables-reference) and user inputs. Let’s allow the user to input a custom environment, like `production` or `staging`:
 
 ```jsonc
 {
@@ -85,5 +85,5 @@ VS Code supports [variable substitution](https://code.visualstudio.com/docs/edit
 }
 ```
 
-- When you run `Deploy`, VS Code will pop up a picker to select the environment, substituting that choice in the command.
+- When you run `Deploy`, Visual Studio Code will pop up a picker to select the environment, substituting that choice in the command.
 - Perfect for scripts that differ by environment or other parameters.

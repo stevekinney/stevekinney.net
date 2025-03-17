@@ -1,6 +1,6 @@
 ---
 title: Popular Visual Studio Code Settings
-description: Discover valuable VS Code settings to customize your editor for maximum productivity and a better development experience
+description: Discover valuable Visual Studio Code settings to customize your editor for maximum productivity and a better development experience
 modified: 2025-03-16T13:01:13-06:00
 ---
 
@@ -10,9 +10,9 @@ I'm a relatively simple person, but here are some settings I feel strongly about
 
 ### `workbench.editor.revealIfOpen`
 
-The `workbench.editor.revealIfOpen` setting is your VS Code version of, “Hey, I already have that file open!” Instead of cluttering your workspace with duplicate tabs, VS Code just brings the existing tab into focus. Here’s the breakdown:
+The `workbench.editor.revealIfOpen` setting is your Visual Studio Code version of, “Hey, I already have that file open!” Instead of cluttering your workspace with duplicate tabs, Visual Studio Code just brings the existing tab into focus. Here’s the breakdown:
 
-When you open a file that’s already open in another tab, VS Code simply reveals the existing tab rather than opening a new one. No more dueling duplicates.
+When you open a file that’s already open in another tab, Visual Studio Code simply reveals the existing tab rather than opening a new one. No more dueling duplicates.
 
 ### `updateImportsOnFileMove`
 
@@ -21,7 +21,7 @@ When you open a file that’s already open in another tab, VS Code simply reveal
 "typescript.updateImportsOnFileMove.enabled": "always",
 ```
 
-Whenever you move (or rename) a file, VS Code scans your project and automatically updates all import paths that reference the moved file. No more broken links.
+Whenever you move (or rename) a file, Visual Studio Code scans your project and automatically updates all import paths that reference the moved file. No more broken links.
 
 #### How It Works
 
@@ -34,25 +34,25 @@ Whenever you move (or rename) a file, VS Code scans your project and automatical
 - **Effortless Refactoring:** You can rearrange your project structure without the fear of breaking your import statements.
 - **Team-Friendly:** Ensures consistency and saves your team from the headache of manually updating imports across multiple files.
 
-Both settings ensure that whenever you move a file in your JavaScript or TypeScript project, VS Code automatically updates the corresponding import paths. This keeps your code clean, functional, and free from those pesky path errors—letting you focus on building features instead of debugging import statements.
+Both settings ensure that whenever you move a file in your JavaScript or TypeScript project, Visual Studio Code automatically updates the corresponding import paths. This keeps your code clean, functional, and free from those pesky path errors—letting you focus on building features instead of debugging import statements.
 
 ### `javascript.preferences.organizeImports`
 
-This setting is basically VS Code’s way of letting you keep your import statements as neat as a well-organized sock drawer. Here’s the lowdown:
+This setting is basically Visual Studio Code’s way of letting you keep your import statements as neat as a well-organized sock drawer. Here’s the lowdown:
 
 **What It Does**
 
-- **Automatic Cleanup:** When enabled, VS Code’s JavaScript language service will tidy up your imports by removing unused ones, sorting them, and grouping them logically. It’s like having a digital Marie Kondo for your code.
+- **Automatic Cleanup:** When enabled, Visual Studio Code’s JavaScript language service will tidy up your imports by removing unused ones, sorting them, and grouping them logically. It’s like having a digital Marie Kondo for your code.
 - **Manual or Auto:** You can trigger this manually via the “Organize Imports” command or automatically when you save your file if you’ve configured the appropriate code action.
 
 **How It Works**
 
-- **Integration with Code Actions:** The setting works in tandem with the code action "source.organizeImports". When you save (and if you’ve set it up in editor.codeActionsOnSave), VS Code will run through your file and re-arrange your import statements.
+- **Integration with Code Actions:** The setting works in tandem with the code action "source.organizeImports". When you save (and if you’ve set it up in editor.codeActionsOnSave), Visual Studio Code will run through your file and re-arrange your import statements.
 - **Keeps Your Code Lean:** By getting rid of unused imports and sorting the rest, it ensures that your code doesn’t accumulate unnecessary baggage—keeping it cleaner and easier to read.
 
 **How to Configure**
 
-1. **Set the Preference:** Make sure you have "javascript.preferences.organizeImports": true in your VS Code settings (if applicable).
+1. **Set the Preference:** Make sure you have "javascript.preferences.organizeImports": true in your Visual Studio Code settings (if applicable).
 2. **Enable on Save (Optional):** Add this to your settings to have it auto-run on save:
 
 ```ts
@@ -73,7 +73,7 @@ In short, javascript.preferences.organizeImports is a small setting that deliver
 
 ## Other Popular Settings
 
-I don't love all of these, but other people do and you might too. Here are a few popular VS Code tweaks that many developers swear by, along with why they might tickle your fancy:
+I don't love all of these, but other people do and you might too. Here are a few popular Visual Studio Code tweaks that many developers swear by, along with why they might tickle your fancy:
 
 - `files.autoSave`
   - Automatically saves your changes based on your chosen trigger (e.g., after a delay, when focus changes, or on window change).

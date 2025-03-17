@@ -1,5 +1,5 @@
 ---
-title: VS Code Snippet Exercises
+title: Visual Studio Code Snippet Exercises
 description: Practice creating various code snippets in Visual Studio Code
 modified: 2025-03-16T10:58:50-06:00
 ---
@@ -18,7 +18,7 @@ modified: 2025-03-16T10:58:50-06:00
 12. **Import Default Export:** Design a snippet triggered by `importdef` that generates a TypeScript import statement specifically for importing the `default` export from a module. It should include placeholders for the variable name that will hold the default export and the path to the module. Add a description.
 13. **Basic Express Route:** Develop a snippet with the prefix `expressroute` that lays out the basic structure of an Express route handler in TypeScript. It should include placeholders for the route path, the HTTP method (consider a choice placeholder for `get`, `post`, `put`, `patch`, `delete`), and the request (`req`), response (`res`), and next (`next`) parameters. Include a basic `res.send()` or similar within the handler. Ensure it's multiline and has a description.
 14. **Basic React Component:** Create a snippet that, upon typing `rc`, generates the basic structure of a functional React component in TypeScript. It should include placeholders for the component name, and a basic return statement with a `div` or similar. Consider including a basic import for `React` if needed. Ensure it's multiline and has a description.
-15. **File Header Snippet:** Create a snippet that, when you type `fileheader`, generates a standard file header comment in TypeScript, automatically including the current filename and the current date. Use the appropriate VS Code predefined variables for this. Add a description.
+15. **File Header Snippet:** Create a snippet that, when you type `fileheader`, generates a standard file header comment in TypeScript, automatically including the current filename and the current date. Use the appropriate Visual Studio Code predefined variables for this. Add a description.
 16. **Transform to Uppercase:** Design a snippet with the prefix `toupper` that takes a word as input through a placeholder and then inserts both the original word and its uppercase version. Use a transform to convert the placeholder text to uppercase. Add a description.
 17. **Surround with `try…catch`:** Develop a snippet with the prefix `trycatch` that is designed to surround selected TypeScript code with a `try…catch` block. It should use the `$TM_SELECTED_TEXT` variable to represent the highlighted code. Add a description.
 

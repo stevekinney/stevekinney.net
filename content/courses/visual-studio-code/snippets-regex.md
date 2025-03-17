@@ -1,5 +1,5 @@
 ---
-title: Using Snippets with Regular Expressions in VS Code
+title: Using Snippets with Regular Expressions in Visual Studio Code
 description: Master regex transformations in snippets to create advanced dynamic templates with powerful text manipulation
 modified: 2025-03-17T10:44:54-06:00
 ---
@@ -51,10 +51,10 @@ Sometimes, you want conditionals in your snippets. For example, converting a sel
 Here's how it works:
 
 - If the selected text ends in `y` or `s`, it pluralizes correctly:
-    - `city` → `cities`
-    - `class` → `classes`
+  - `city` → `cities`
+  - `class` → `classes`
 - Otherwise, it simply adds an `s`:
-    - `dog` → `dogs`
+  - `dog` → `dogs`
 
 Regex captures (`(.*?)` and `(y|s)?`) and conditionals (`${2:?…:…}`) are the secret sauce that make this possible.
 

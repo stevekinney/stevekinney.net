@@ -98,4 +98,4 @@ Dev Containers offer a range of advanced features that further enhance flexibili
 ### Port Forwarding
 
 - **Covered earlier in `devcontainer.json`:** The `forwardPorts` property allows you to forward ports from the container to your host.
-- **Dynamic Port Forwarding:** VS Code's Dev Containers extension automatically detects ports exposed by applications running in the container and offers to forward them. You'll see a notification when an application running inside the container starts listening on a port.
+- **Dynamic Port Forwarding:** Visual Studio Code's Dev Containers extension automatically detects ports exposed by applications running in the container and offers to forward them. You'll see a notification when an application running inside the container starts listening on a port.

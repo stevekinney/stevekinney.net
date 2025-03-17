@@ -1,18 +1,18 @@
 ---
-title: Dev Containers in VS Code
-description: Understanding how to use Docker containers for consistent development environments in VS Code
+title: Dev Containers in Visual Studio Code
+description: Understanding how to use Docker containers for consistent development environments in Visual Studio Code
 modified: 2025-03-16T11:07:11-06:00
 ---
 
 Imagine having a perfectly tailored development environment for each project, encapsulated and isolated from your host machine. That's precisely what Dev Containers offer. At their core, Dev Containers utilize **Docker containers** to define and provide a complete development environment.
 
-Think of a Docker container as a lightweight, standalone, executable package that includes everything needed to run a piece of software, including code, runtime, system tools, libraries, and settings. Dev Containers extend this concept by integrating it seamlessly into VS Code.
+Think of a Docker container as a lightweight, standalone, executable package that includes everything needed to run a piece of software, including code, runtime, system tools, libraries, and settings. Dev Containers extend this concept by integrating it seamlessly into Visual Studio Code.
 
 **TL;DR**—A dev container is essentially the following:
 
 - **A Docker Container:** It's built upon Docker technology, inheriting all its benefits like isolation and portability.
 - **A Development Environment:** It's specifically configured to be a complete development environment, pre-loaded with tools, runtimes, libraries, and extensions required for a particular project.
-- **Integrated with VS Code:** It's not just a container running somewhere; it's deeply integrated with VS Code. VS Code connects to this container and operates _inside_ it, treating it as the development machine. Your code, terminal, debugger, extensions – everything runs inside the container.
+- **Integrated with Visual Studio Code:** It's not just a container running somewhere; it's deeply integrated with Visual Studio Code. Visual Studio Code connects to this container and operates _inside_ it, treating it as the development machine. Your code, terminal, debugger, extensions – everything runs inside the container.
 - **Defined by Configuration:** The environment is defined by a configuration file, typically `devcontainer.json`, which resides within your project. This file dictates how the container is built and configured.
 
 ## Role of Dev Containers
@@ -35,7 +35,7 @@ The adoption of Dev Containers brings a wealth of advantages, significantly enha
 ### Reproducibility
 
 - **Problem:** Setting up a complex development environment can be time-consuming and error-prone. Recreating an environment after a system crash or for a new team member can be a significant hurdle.
-- **Dev Container Solution:** Dev Containers make environment recreation effortless. The `devcontainer.json` and related files (like Dockerfile) fully define the environment. Simply cloning the repository and opening it in VS Code (with the Dev Containers extension) will rebuild the _exact_ same environment. This is invaluable for onboarding new developers and for quickly recovering from environment issues.
+- **Dev Container Solution:** Dev Containers make environment recreation effortless. The `devcontainer.json` and related files (like Dockerfile) fully define the environment. Simply cloning the repository and opening it in Visual Studio Code (with the Dev Containers extension) will rebuild the _exact_ same environment. This is invaluable for onboarding new developers and for quickly recovering from environment issues.
 
 ### Isolation
 
@@ -45,7 +45,7 @@ The adoption of Dev Containers brings a wealth of advantages, significantly enha
 ### Onboarding
 
 - **Problem:** New developers often face a steep learning curve getting their development environment set up correctly. This can be frustrating and slow down their integration into the team.
-- **Dev Container Solution:** Dev Containers drastically simplify onboarding. New team members simply need to install VS Code, Docker, and the Remote - Containers extension. Opening the project repository in VS Code automatically prompts them to use the Dev Container. The environment is pre-configured and ready to go, allowing new developers to start contributing code quickly and efficiently.
+- **Dev Container Solution:** Dev Containers drastically simplify onboarding. New team members simply need to install Visual Studio Code, Docker, and the Remote - Containers extension. Opening the project repository in Visual Studio Code automatically prompts them to use the Dev Container. The environment is pre-configured and ready to go, allowing new developers to start contributing code quickly and efficiently.
 
 ### Flexibility
 

@@ -6,7 +6,7 @@ modified: 2025-03-17T10:43:47-06:00
 
 ## Placeholder Navigation
 
-Once you insert a snippet with placeholders, VS Code makes it easy to navigate and fill in the placeholder values:
+Once you insert a snippet with placeholders, Visual Studio Code makes it easy to navigate and fill in the placeholder values:
 
 - **Tab Key (`Tab`):** After snippet insertion, your cursor will automatically be positioned at the first placeholder (`$1`). Pressing the `Tab` key will jump the cursor to the next placeholder (`$2`), then `$3`, and so on, in numerical order.
 - **Shift+Tab Keys (`Shift+Tab`):** To move backward through placeholders, press `Shift+Tab`. This will move the cursor to the previous placeholder in reverse numerical order.
@@ -65,7 +65,7 @@ Let's break down the transformation syntax:
 - `/^(\\d{4})-(\\d{2})-(\\d{2})$/`: Regular expression to match the YYYY-MM-DD format, capturing year, month, and day in groups 1, 2, and 3 respectively.
 - `/$1/`: Replaces the matched text with only capturing group 1 (the year).
 
-Variable transformations are incredibly powerful for dynamically adapting snippets to different contexts and formatting needs. Explore the [VS Code documentation on snippet syntax](https://www.google.com/search?q=https://code.visualstudio.com/docs/editor/userdefinedsnippets%23_snippet-syntax&authuser=1) for more advanced transformation examples and options.
+Variable transformations are incredibly powerful for dynamically adapting snippets to different contexts and formatting needs. Explore the [Visual Studio Code documentation on snippet syntax](https://www.google.com/search?q=https://code.visualstudio.com/docs/editor/userdefinedsnippets%23_snippet-syntax&authuser=1) for more advanced transformation examples and options.
 
 ## Placeholder Options
 
@@ -110,7 +110,7 @@ This snippet duplicates the selected text—first as a string (so you know what'
 
 ## Advanced `TM_SELECTED_TEXT` with Transformations
 
-The real power of `TM_SELECTED_TEXT` emerges when combined with VS Code's transformation functions. These allow you to modify the selected text in various ways, opening up a world of possibilities.
+The real power of `TM_SELECTED_TEXT` emerges when combined with Visual Studio Code's transformation functions. These allow you to modify the selected text in various ways, opening up a world of possibilities.
 
 ### Text Case Transformations
 

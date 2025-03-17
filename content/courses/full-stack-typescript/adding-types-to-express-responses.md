@@ -748,7 +748,7 @@ This often happens with async handlers. Solutions:
 
 #### Type Inspection
 
-Use VS Code's hover information to inspect types:
+Use Visual Studio Code's hover information to inspect types:
 
 ```typescript
 // Hover over 'req' to see its inferred type

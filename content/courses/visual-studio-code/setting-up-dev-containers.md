@@ -1,21 +1,21 @@
 ---
-title: Setting Up Dev Containers in VS Code
+title: Setting Up Dev Containers in Visual Studio Code
 description: A step-by-step guide to setting up and customizing development containers in Visual Studio Code
 modified: 2025-03-16T12:03:10-06:00
 ---
 
 ![Setting up Dev Containers](assets/set-up-dev-containers-vscode.png)
 
-VS Code and the community provide a rich collection of pre-built Dev Container definitions. These are incredibly useful for quickly setting up common development environments without writing `devcontainer.json` from scratch.
+Visual Studio Code and the community provide a rich collection of pre-built Dev Container definitions. These are incredibly useful for quickly setting up common development environments without writing `devcontainer.json` from scratch.
 
 **Accessing Pre-built Definitions:**
 
-1. **When Creating a Dev Container:** When you use the "Dev Containers: Add Dev Container Configuration Files…" command, VS Code will offer a list of predefined definitions. These are fetched from the [vscode-dev-containers repository on GitHub](https://www.google.com/url?sa=E&source=gmail&q=https://github.com/devcontainers/templates&authuser=1).
-2. **VS Code Dev Containers Extension Documentation:** The documentation for the "Remote - Containers" extension also provides links to curated lists of pre-built definitions.
+1. **When Creating a Dev Container:** When you use the "Dev Containers: Add Dev Container Configuration Files…" command, Visual Studio Code will offer a list of predefined definitions. These are fetched from the [vscode-dev-containers repository on GitHub](https://www.google.com/url?sa=E&source=gmail&q=https://github.com/devcontainers/templates&authuser=1).
+2. **Visual Studio Code Dev Containers Extension Documentation:** The documentation for the "Remote - Containers" extension also provides links to curated lists of pre-built definitions.
 
 You can start with **Add Dev Container Configuration Files** from the Command Center.
 
-![VS Code interface showing the Dev Containers command location](assets/dev-containers-location.png)
+![Visual Studio Code interface showing the Dev Containers command location](assets/dev-containers-location.png)
 Next, select which container you'd like to use.
 
 ![Dialog for selecting a prebuilt container configuration](assets/dev-containers-select-prebuilt-container.png)

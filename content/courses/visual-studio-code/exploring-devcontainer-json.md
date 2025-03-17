@@ -18,7 +18,7 @@ When using `dockerFile`, this optional property specifies the **build context** 
 
 ## Extensions
 
-The `extensions` property is an **array of VS Code extension IDs** that should be automatically installed _inside_ the Dev Container when it starts.
+The `extensions` property is an **array of Visual Studio Code extension IDs** that should be automatically installed _inside_ the Dev Container when it starts.
 
 ```json
 "extensions": [
@@ -27,11 +27,11 @@ The `extensions` property is an **array of VS Code extension IDs** that should b
 ]
 ```
 
-This ensures everyone using the Dev Container has the same set of extensions. Find extension IDs in the VS Code Marketplace URL or by right-clicking an extension in the Extensions view and selecting "Copy Extension ID".
+This ensures everyone using the Dev Container has the same set of extensions. Find extension IDs in the Visual Studio Code Marketplace URL or by right-clicking an extension in the Extensions view and selecting "Copy Extension ID".
 
 ## Settings
 
-This `settings` property is a **JSON object** that allows you to define VS Code settings that will be applied _inside_ the Dev Container.
+This `settings` property is a **JSON object** that allows you to define Visual Studio Code settings that will be applied _inside_ the Dev Container.
 
 ```json
 "settings": {

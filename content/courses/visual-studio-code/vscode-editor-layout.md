@@ -1,10 +1,10 @@
 ---
 title: Editor Layout in Visual Studio Code
-description: Customize your VS Code workspace with flexible layouts, split views, and Zen Mode for an optimal coding experience
+description: Customize your Visual Studio Code workspace with flexible layouts, split views, and Zen Mode for an optimal coding experience
 modified: 2025-03-17T13:32:12-05:00
 ---
 
-The most reasonable place to start is getting comfortable with the editor itself. If we can take the little tedious stuff that we need to do and make it *faster*, then we have more mental bandwidth for all of the Big Brain™ stuff that is arguably what we get paid for—as opposed to mousing around looking for that important file.
+The most reasonable place to start is getting comfortable with the editor itself. If we can take the little tedious stuff that we need to do and make it _faster_, then we have more mental bandwidth for all of the Big Brain™ stuff that is arguably what we get paid for—as opposed to mousing around looking for that important file.
 
 Visual Studio Code allows you to rearrange views and panels so that the information you need is always front and center. You can drag and drop panels (such as `Explorer`, `Debug`, or `Terminal`) to different areas of the screen to match your preference. Under the `View` menu, you’ll find `Appearance`, where you can toggle side bars, activity bars, and the panel location.
 
@@ -30,9 +30,9 @@ To split your editor quickly, right-click the tab of the file you’re viewing a
 
 ## Multiple Windows
 
-I'm coming from a editor that didn't have split panes—I'm looking at you, TextMate. So, this *used* to be how I lived my life. But, these days—I tend to stick with a single window with multiple editor groups. That said, I also don't use multiple monitors.
+I'm coming from a editor that didn't have split panes—I'm looking at you, TextMate. So, this _used_ to be how I lived my life. But, these days—I tend to stick with a single window with multiple editor groups. That said, I also don't use multiple monitors.
 
-Sometimes, splitting isn’t enough. Multiple windows might be the solution if you’re juggling many files or separate projects. You can open another instance of VS Code from the `File -> New Window` menu, or by using the Command Palette command `New Window`. Each window can then focus on a distinct set of files or a different project folder.
+Sometimes, splitting isn’t enough. Multiple windows might be the solution if you’re juggling many files or separate projects. You can open another instance of Visual Studio Code from the `File -> New Window` menu, or by using the Command Palette command `New Window`. Each window can then focus on a distinct set of files or a different project folder.
 
 If you’re working on a large feature and also monitoring logs or a server file in another folder, multiple windows prevent you from losing context. Arrange these windows on multiple monitors or snap them side-by-side for a command-center vibe.
 
@@ -61,7 +61,7 @@ Use `Cmd-Option-⃗➡️` and `Cmd-Option-⬅️` to move from tab to tab. On W
 
 You've got two options here.
 
-1. You can jump to a *particular* group.
+1. You can jump to a _particular_ group.
 2. You can move around between the groups using the arrow keys.
 
 ![Switch Groups in Visual Studio Code](assets/switch-group-vscode.png)

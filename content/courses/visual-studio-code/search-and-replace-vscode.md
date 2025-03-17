@@ -4,7 +4,7 @@ description: Master powerful search and replace techniques including regular exp
 modified: 2025-03-16T16:46:20-06:00
 ---
 
-VS Code's search and replace features are like an all-seeing crystal ball for your codebase—pinpointing the lines you need to tweak, then changing them at scale with minimal hassle. Here's how to harness its power, step by step.
+Visual Studio Code's search and replace features are like an all-seeing crystal ball for your codebase—pinpointing the lines you need to tweak, then changing them at scale with minimal hassle. Here's how to harness its power, step by step.
 
 ## Regular Expressions: The Advanced Power Tool
 
@@ -33,13 +33,13 @@ Here, `(let\s+)` captures the literal `let` plus the following space, so the rep
 
 ## Searching Across Files
 
-Press `Ctrl+Shift+F` (or `Cmd+Shift+F` on macOS) to open the Search view, which scans your entire workspace by default. Type in your query or pattern, and watch as VS Code combs through all files, presenting matches in a collapsible tree of results.
+Press `Ctrl+Shift+F` (or `Cmd+Shift+F` on macOS) to open the Search view, which scans your entire workspace by default. Type in your query or pattern, and watch as Visual Studio Code combs through all files, presenting matches in a collapsible tree of results.
 
 You can refine this search by specifying `Files to include` or `Files to exclude`. For instance, if you only want to search TypeScript files, type `**/*.ts` in the inclusion field. If you'd like to skip certain folders (like `node_modules`), exclude them explicitly with a pattern such as `**/node_modules`.
 
 ## Search and Replace Across Files
 
-When you need to correct or update code across your entire project, the Replace panel is your friend. Once you enter text in the `Replace` field, you can preview the proposed changes before finalizing. VS Code groups each change by file, and you can accept or reject them individually or all at once.
+When you need to correct or update code across your entire project, the Replace panel is your friend. Once you enter text in the `Replace` field, you can preview the proposed changes before finalizing. Visual Studio Code groups each change by file, and you can accept or reject them individually or all at once.
 
 This careful approach ensures you don't blindly clobber lines you never intended to touch. It's like having a code-proofreading assistant who waits for your final say before making sweeping edits.
 
@@ -58,13 +58,13 @@ These patterns make it effortless to keep your search results relevant, saving y
 
 ## Preserve Case
 
-VS Code has a nifty "Preserve Case" feature, especially handy if you're refactoring variable names with different capitalizations. Suppose you search for `name` and replace it with `thing`. If you turn on Preserve Case, `Name` becomes `Thing`, and `NAME` becomes `THING`, matching the original capitalization pattern.
+Visual Studio Code has a nifty "Preserve Case" feature, especially handy if you're refactoring variable names with different capitalizations. Suppose you search for `name` and replace it with `thing`. If you turn on Preserve Case, `Name` becomes `Thing`, and `NAME` becomes `THING`, matching the original capitalization pattern.
 
 You can toggle this option by clicking the `AB` icon in the Search view. It's an easy way to avoid case-related mishaps while still automating the majority of your refactor.
 
 ## Search Editor: A Dedicated View for Search Results
 
-VS Code offers a dedicated Search Editor that provides a more powerful way to work with search results. Press `Ctrl+Shift+J` (or `Cmd+Shift+J` on macOS) to open the Search Editor, which presents your search results in a full-fledged editor view.
+Visual Studio Code offers a dedicated Search Editor that provides a more powerful way to work with search results. Press `Ctrl+Shift+J` (or `Cmd+Shift+J` on macOS) to open the Search Editor, which presents your search results in a full-fledged editor view.
 
 ### Benefits of the Search Editor:
 
@@ -185,4 +185,4 @@ Or convert camelCase to kebab-case:
 This changes "userProfileId" to "user-profile-id".
 
 > [!TIP]
-> Remember that regex replacement operations in VS Code occur from left to right, so complex transformations might require multiple passes with different patterns.
+> Remember that regex replacement operations in Visual Studio Code occur from left to right, so complex transformations might require multiple passes with different patterns.

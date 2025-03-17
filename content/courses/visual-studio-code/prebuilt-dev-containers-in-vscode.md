@@ -1,21 +1,21 @@
 ---
-title: Prebuilt Dev Containers in VS Code
+title: Prebuilt Dev Containers in Visual Studio Code
 description: Using and customizing prebuilt container definitions to quickly set up development environments
 modified: 2025-03-16T11:18:10-06:00
 ---
 
-VS Code and the community provide a rich collection of pre-built Dev Container definitions. These are incredibly useful for quickly setting up common development environments without writing `devcontainer.json` from scratch.
+Visual Studio Code and the community provide a rich collection of pre-built Dev Container definitions. These are incredibly useful for quickly setting up common development environments without writing `devcontainer.json` from scratch.
 
 ## Accessing Pre-built Definitions
 
-When you use the "Dev Containers: Add Dev Container Configuration Files…" command, VS Code will offer a list of predefined definitions. These are fetched from the [vscode-dev-containers repository on GitHub](https://github.com/devcontainers/templates).
+When you use the "Dev Containers: Add Dev Container Configuration Files…" command, Visual Studio Code will offer a list of predefined definitions. These are fetched from the [vscode-dev-containers repository on GitHub](https://github.com/devcontainers/templates).
 
 **Example: Using a Pre-built Python Definition:**
 
-1. Open your project folder in VS Code.
+1. Open your project folder in Visual Studio Code.
 2. Open the Command Palette and select "Dev Containers: Add Dev Container Configuration Files…".
 3. Choose "Python 3".
-4. VS Code generates a `.devcontainer` folder with a pre-configured `devcontainer.json` for Python development.
+4. Visual Studio Code generates a `.devcontainer` folder with a pre-configured `devcontainer.json` for Python development.
 5. Open the folder in a Dev Container (as explained in the next section).
 
 **Customizing Pre-built Definitions:**
@@ -28,16 +28,16 @@ Now that you've set up a Dev Container, let’s explore how to work with it effe
 
 ### Opening a Folder in a Container: Connecting to Your Environment
 
-Once you have a `.devcontainer` folder in your project, VS Code will recognize it and offer options to work within the Dev Container.
+Once you have a `.devcontainer` folder in your project, Visual Studio Code will recognize it and offer options to work within the Dev Container.
 
 **Opening a Folder in a Dev Container:**
 
 - **Option 1 (Recommended): Reopen in Container**
 
-  1. Open your project folder in VS Code (the folder contains the `.devcontainer` folder).
-  2. VS Code detects the Dev Container configuration and displays a notification: "Dev Container: Folder contains a Dev Container configuration file."
+  1. Open your project folder in Visual Studio Code (the folder contains the `.devcontainer` folder).
+  2. Visual Studio Code detects the Dev Container configuration and displays a notification: "Dev Container: Folder contains a Dev Container configuration file."
   3. Click "Reopen in Container."
-  4. VS Code builds (if necessary) and starts the Dev Container. Once ready, it reloads and shows "(Dev Container)" in the bottom-left corner.
+  4. Visual Studio Code builds (if necessary) and starts the Dev Container. Once ready, it reloads and shows "(Dev Container)" in the bottom-left corner.
 
 - **Option 2: Command Palette – "Dev Containers: Reopen in Container"**
 
@@ -51,11 +51,11 @@ Once you have a `.devcontainer` folder in your project, VS Code will recognize i
 **What Happens When You "Reopen in Container"?**
 
 - **Container Build (If Necessary):**  
-  VS Code triggers a Docker build if the specified image (or Dockerfile) needs to be built. Build logs appear in the Output panel, and subsequent reopens are faster due to Docker caching.
+  Visual Studio Code triggers a Docker build if the specified image (or Dockerfile) needs to be built. Build logs appear in the Output panel, and subsequent reopens are faster due to Docker caching.
 - **Container Start:**  
   Docker starts the container as configured.
-- **VS Code Connection:**  
-  VS Code connects to the running container.
+- **Visual Studio Code Connection:**  
+  Visual Studio Code connects to the running container.
 - **Workspace Mount:**  
   Your project folder is **bind-mounted** into the container at the `workspaceFolder` (default `/workspace`), ensuring changes sync between host and container.
 - **Extension Installation (Inside Container):**  
@@ -73,7 +73,7 @@ Sometimes you need to modify your Dev Container configuration. In such cases, re
 
   1. Ensure you are connected to your Dev Container.
   2. Open the Command Palette and select "Dev Containers: Rebuild Container."
-  3. VS Code rebuilds the container image based on your updated Dockerfile or image specification, then restarts the container.
+  3. Visual Studio Code rebuilds the container image based on your updated Dockerfile or image specification, then restarts the container.
 
 - **Option 2: Command Palette – "Dev Containers: Rebuild and Reopen in Container"**
 
@@ -86,11 +86,11 @@ Sometimes you need to modify your Dev Container configuration. In such cases, re
 
 ### Accessing the Terminal: Your Gateway to the Container
 
-The integrated terminal in VS Code runs _inside_ the Dev Container.
+The integrated terminal in Visual Studio Code runs _inside_ the Dev Container.
 
 **Accessing the Dev Container Terminal:**
 
-- **Option 1: VS Code Integrated Terminal**
+- **Option 1: Visual Studio Code Integrated Terminal**
   1. Ensure you are connected to your Dev Container.
   2. Open the integrated terminal (Ctrl+` or Cmd+`).
   3. The terminal prompt shows you are inside the container (using the shell configured in your container image or `devcontainer.json`).
@@ -103,7 +103,7 @@ The integrated terminal in VS Code runs _inside_ the Dev Container.
 
 ### Installing Extensions: Enhancing Your Containerized IDE
 
-Dev Containers allow you to install VS Code extensions directly within the container.
+Dev Containers allow you to install Visual Studio Code extensions directly within the container.
 
 **Installing Extensions Inside the Dev Container:**
 
@@ -129,7 +129,7 @@ Sharing your Dev Container configuration via version control ensures every team 
 - **Version Control:**  
   Commit the `.devcontainer` folder (including `devcontainer.json` and optionally a `Dockerfile` or `docker-compose.yml`) to Git.
 - **Team Cloning:**  
-  When team members clone the repository and open it in VS Code with the Remote - Containers extension, they will be prompted to "Reopen in Container" and receive the same environment.
+  When team members clone the repository and open it in Visual Studio Code with the Remote - Containers extension, they will be prompted to "Reopen in Container" and receive the same environment.
 
 **Benefits:**
 
@@ -250,7 +250,7 @@ Mount your host’s dotfiles to personalize your container.
 **Port Forwarding:**
 
 - Use the `forwardPorts` property to forward container ports to the host.
-- VS Code can auto-detect and prompt for forwarded ports.
+- Visual Studio Code can auto-detect and prompt for forwarded ports.
 
 **Docker Compose:**
 
@@ -308,7 +308,7 @@ Mount your host’s dotfiles to personalize your container.
 - **Extension Installation Issues:**
   - Ensure container internet connectivity.
   - Verify extension compatibility.
-  - Restart VS Code or reload the container.
+  - Restart Visual Studio Code or reload the container.
 - **Performance Issues:**
   - Increase Docker Desktop resources.
   - Optimize Dockerfile layering and base image size.
@@ -323,7 +323,7 @@ Mount your host’s dotfiles to personalize your container.
 - Install only essential extensions.
 - Minimize background processes.
 - Choose efficient base images.
-- Configure VS Code caching optimally.
+- Configure Visual Studio Code caching optimally.
 
 ### Security Considerations
 

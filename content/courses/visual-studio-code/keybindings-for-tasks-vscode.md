@@ -9,10 +9,10 @@ Another example is a custom task that might run a build step:
 
 ```json
 {
-  "key": "ctrl+shift+b",
-  "command": "workbench.action.tasks.runTask",
-  "args": "build",
-  "when": "editorFocus"
+	"key": "ctrl+shift+b",
+	"command": "workbench.action.tasks.runTask",
+	"args": "build",
+	"when": "editorFocus"
 }
 ```
 
@@ -34,9 +34,9 @@ At its core, `keybindings.json` is a list of rules. Each rule typically contains
 
 ```json
 {
-  "key": "ctrl+alt+j",
-  "command": "editor.action.commentLine",
-  "when": "editorTextFocus && editorLangId == 'javascript'"
+	"key": "ctrl+alt+j",
+	"command": "editor.action.commentLine",
+	"when": "editorTextFocus && editorLangId == 'javascript'"
 }
 ```
 
@@ -56,7 +56,7 @@ Chaining multiple conditions is as easy as using `&&` between them. This flexibi
 
 ### Avoiding Keybinding Conflicts
 
-Conflicts occur when two or more shortcuts are bound to the same keys in the same context. VS Code typically uses the last declared binding, so whichever one is loaded last takes priority. To avoid confusion, review existing shortcuts in the Keybindings editor before assigning new ones. If you find a conflict, either remove or change the old binding to keep your muscle memory intact.
+Conflicts occur when two or more shortcuts are bound to the same keys in the same context. Visual Studio Code typically uses the last declared binding, so whichever one is loaded last takes priority. To avoid confusion, review existing shortcuts in the Keybindings editor before assigning new ones. If you find a conflict, either remove or change the old binding to keep your muscle memory intact.
 
 > [!TIP] Overriding extensions that override your key bindings
 > If you rely on an extension that hijacks a shortcut you love, open `keybindings.json` and override it. Conflict solved—no drama necessary.
