@@ -1,9 +1,9 @@
 ---
 title: Visual Studio Code Course
-description: Learn to maximize your productivity with VS Code's features and capabilities
+description: "Learn to maximize your productivity with VS Code's features and capabilities"
 layout: contents
 base: /courses/visual-studio-code
-modified: 2025-03-16T16:34:45-06:00
+modified: 2025-03-17T09:31:45-06:00
 ---
 
 ## Basics
@@ -39,6 +39,7 @@ modified: 2025-03-16T16:34:45-06:00
 - [Snippets and Regular Expressions](snippets-regex.md)
 - [Advanced Snippet Techniques](advanced-snippet-techniques-vscode.md)
 - [Snippets Libraries and Extensions](snippets-libraries-and-extensions.md)
+- [Assigning Keybindings to Snippets](keybindings-for-snippets-vscode.md)
 
 ## Tasks
 
@@ -46,6 +47,7 @@ modified: 2025-03-16T16:34:45-06:00
 - [Tasks: Examples](vscode-task-examples.md)
 - [Tasks: Tips and Tricks](vscode-tasks-tips-and-tricks.md)
 - [Advanced Usage for Tasks](tasks-advanced-usage.md)
+- [Assigning Keybindings to Tasks](keybindings-for-tasks-vscode.md)
 
 ## Debugging
 
