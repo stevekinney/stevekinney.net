@@ -43,7 +43,7 @@ modified: 2025-03-16T16:34:45-06:00
 ## Tasks
 
 - [Visual Studio Code Tasks](vscode-tasks.md)
-- [Tasks: Examples](examples-of-tasks.md)
+- [Tasks: Examples](vscode-task-examples.md)
 - [Tasks: Tips and Tricks](vscode-tasks-tips-and-tricks.md)
 - [Advanced Usage for Tasks](tasks-advanced-usage.md)
 
