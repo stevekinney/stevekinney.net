@@ -1,24 +1,7 @@
 ---
-modified: 2025-03-17T13:44:39-05:00
+modified: 2025-03-18T02:10:33-05:00
 title: Keybindings for Tasks
 ---
-
-## Keybindings for Tasks
-
-Another example is a custom task that might run a build step:
-
-```json
-{
-	"key": "ctrl+shift+b",
-	"command": "workbench.action.tasks.runTask",
-	"args": "build",
-	"when": "editorFocus"
-}
-```
-
-Here, pressing `Ctrl+Shift+B` triggers a build task in the current project. Simple, fast, and tailored exactly to your workflow.
-
-## Keybindings
 
 Keybindings are the magic shortcuts that let you summon commands with a single keystroke. You can view and customize them directly from the Command Palette by searching for `Preferences: Open Keyboard Shortcuts`. This view lists every available command and any default or custom bindings.
 
@@ -60,3 +43,18 @@ Conflicts occur when two or more shortcuts are bound to the same keys in the sam
 
 > [!TIP] Overriding extensions that override your key bindings
 > If you rely on an extension that hijacks a shortcut you love, open `keybindings.json` and override it. Conflict solved—no drama necessary.
+
+## Keybindings for Tasks
+
+Another example is a custom task that might run a build step:
+
+```json
+{
+	"key": "ctrl+shift+b",
+	"command": "workbench.action.tasks.runTask",
+	"args": "build",
+	"when": "editorFocus"
+}
+```
+
+Here, pressing `Ctrl+Shift+B` triggers a build task in the current project. Simple, fast, and tailored exactly to your workflow.

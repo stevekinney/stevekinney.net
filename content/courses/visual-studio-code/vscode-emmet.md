@@ -1,7 +1,7 @@
 ---
 title: Emmet in Visual Studio Code
-description: Learn how to use Emmet's powerful abbreviation syntax to speed up HTML and CSS development in Visual Studio Code
-modified: 2025-03-16T17:01:11-06:00
+description: "Learn how to use Emmet's powerful abbreviation syntax to speed up HTML and CSS development in Visual Studio Code"
+modified: 2025-03-18T02:16:01-05:00
 ---
 
 Emmet is a powerful shorthand system for HTML and CSS, built right into Visual Studio Code. It dramatically speeds up your front-end workflow by letting you write concise abbreviations that expand into full-fledged markup or style rules. Below are the core features and tips for making Emmet work for you, particularly when writing React in TSX or JSX.
@@ -284,7 +284,7 @@ Creates an article with a heading and three paragraphs:
 </article>
 ```
 
-### Real-World Complex Example
+### Real-World-ish, Complex-ish Example
 
 Here's a complete blog post card with structured content:
 
@@ -293,3 +293,5 @@ article.card>(header.card__header>h2.card__title{Post Title $}+p.card__meta>time
 ```
 
 This single abbreviation produces a fully structured blog post card with proper classes, dummy text, and styled buttons—demonstrating the true power of Emmet for rapid frontend development.
+
+Now, let's take a look at some [some exercises](vscode-emmet-exercises).

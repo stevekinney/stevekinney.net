@@ -1,7 +1,7 @@
 ---
 title: Tasks in Visual Studio Code
 description: Understand how to configure and use Visual Studio Code tasks to automate your development workflow
-modified: 2025-03-17T10:51:01-06:00
+modified: 2025-03-17T16:46:31-05:00
 ---
 
 `tasks.json` is a configuration file in Visual Studio Code that defines automated tasks you can run from the editor. Instead of manually typing the same build or test commands in the terminal (ugh, repetitive strain, anyone?), you can click a button, press a shortcut, or let Visual Studio Code trigger these tasks automatically.
@@ -81,8 +81,9 @@ Runs the command as a subprocess without typical shell expansions. You might nee
 }
 ```
 
-### Gulp / Grunt / MSBuild / Make
+### Gulp, Grunt, MSBuild, and Make
 
 Visual Studio Code can detect certain tasks automatically from your gulp, grunt, or MSBuild project definitions. However, you can still define them manually in tasks.json if you want more control or a custom approach.
 
-I don't use any of these—these days, at least—and cannot speak to them.
+> [!WARNING] I can't answer any questions on Gulp, Grunt, MSBuild, or Make
+> I don't use any of these tools—these days, at least—and cannot speak to them.
