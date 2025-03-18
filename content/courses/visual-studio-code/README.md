@@ -3,14 +3,14 @@ title: Visual Studio Code Course
 description: "Learn to maximize your productivity with Visual Studio Code's features and capabilities"
 layout: contents
 base: /courses/visual-studio-code
-modified: 2025-03-18T05:00:18-05:00
+modified: 2025-03-18T07:56:28-05:00
 ---
 
 ## Basics
 
 - [Editor Layout](vscode-editor-layout.md)
 - [The Command Palette](vscode-command-palette.md)
-- [Keybindings](keybindings-for-tasks-vscode.md)
+- [Keybindings](keybindings.md)
 - [The Integrated Terminal](vscode-integrated-terminal.md)
 - [Navigation](navigating-vscode.md)
 - [Source Control](vscode-source-control.md)
@@ -47,7 +47,7 @@ modified: 2025-03-18T05:00:18-05:00
 - [Tasks: Examples](vscode-task-examples.md)
 - [Tasks: Tips and Tricks](vscode-tasks-tips-and-tricks.md)
 - [Compound Tasks](compound-tasks-vscode.md)
-- [Assigning Keybindings to Tasks](keybindings-for-tasks-vscode.md)
+- [Keybindings for Tasks](keybindings-for-tasks)
 
 ## Debugging
 

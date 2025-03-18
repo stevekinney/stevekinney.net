@@ -1,8 +1,11 @@
 ---
 title: Launch Configurations in Visual Studio Code
 description: Detailed guide to creating and customizing launch.json files for different debugging scenarios
-modified: 2025-03-16T15:38:44-06:00
+modified: 2025-03-18T07:44:25-05:00
 ---
+
+> [!QUESTION] Should I use `tasks.json` or `launch.json` for development?
+> If your goal is to **start** your development server as part of your workflow without debugging, configure it in `tasks.json`. If you need to **debug** your development server, set up the necessary configurations in `launch.json`. For scenarios where you want to start the server and then attach a debugger, you can define a task in `tasks.json` to start the server and a corresponding configuration in `launch.json` to attach the debugger to the running server.
 
 Let's walk through all of the sertings that you can play around with in `launch.json`.
 
@@ -128,7 +131,7 @@ Similar to `preLaunchTask`, but runs a task _after_ the debugging session ends. 
 "postDebugTask": "stop-server"
 ```
 
-## `sourceMaps` (Optional, but _highly_ recommended for many languages)
+## `sourceMaps` (Optional, But _highly_ Recommended for Many languages)
 
 Controls whether Visual Studio Code uses _source maps_ to map between your source code and the code that's actually being executed. Source maps are _essential_ for debugging languages that are compiled or transpiled (like TypeScript, JavaScript with Babel, Sass, etc.). When you compile TypeScript to JavaScript, the compiler can generate a `.js.map` file (the source map) alongside the `.js` file. This map tells the debugger how to map lines of code in the compiled JavaScript back to the original TypeScript code.
 
@@ -204,7 +207,7 @@ Here are some common `launch.json` configurations for different scenarios:
 }
 ```
 
-### Node.js (Attach to Process)
+### Node.js (Attach To Process)
 
 ```json
 {

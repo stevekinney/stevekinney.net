@@ -1,14 +1,14 @@
 ---
 title: Source Control in Visual Studio Code
 description: "Learn how to use Visual Studio Code's integrated Git features for effective version control"
-modified: 2025-03-17T10:32:32-06:00
+modified: 2025-03-18T08:08:34-05:00
 ---
 
 Git is baked right into Visual Studio Code, making version control feel like second nature. From staging and committing changes to handling merges and pushing to remote repositories, the built-in UI provides a smooth, visual workflow. Let’s explore how to leverage these features—plus a few extras like Git blame, GitHub integration, and interactive rebase—to keep your code pristine and your team happy.
 
 ## Basic Git Operations
 
-At the heart of Visual Studio Code’s source control is the Source Control panel (the icon that looks like a branch fork on the Activity Bar). Once opened, you’ll see the changes in your working tree, including any staged and unstaged files. Here’s the lowdown on each operation:
+At the heart of Visual Studio Code’s source control is the Source Control panel (the icon that looks like a branch fork on the Activity Bar). Once opened, you’ll see the changes in your working tree, including any staged and un-staged files. Here’s the lowdown on each operation:
 
 - **Staging:** Click the plus icon next to changed files, or use the `Stage Changes` button for everything at once.
 - **Committing:** Enter a commit message in the text box at the top of the Source Control panel, then hit the checkmark to commit.
@@ -43,7 +43,7 @@ To browse commit history, use extensions like `Git History` or built-in commands
 
 ## Git Blame
 
-Ever wonder who wrote that questionable piece of code? Git blame has you covered. In Visual Studio Code, you can hover your cursor over a line or install an extension like GitLens to see inline blame annotations. It’ll tell you which commit last touched that line, who authored it, and when. It’s an efficient way to track accountability—just don’t use it for shaming your past self too hard.
+Ever wonder who wrote that questionable piece of code? Git blame has you covered. In Visual Studio Code, you can hover your cursor over a line or install an extension like [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) to see inline blame annotations. It’ll tell you which commit last touched that line, who authored it, and when. It’s an efficient way to track accountability—just don’t use it for shaming your past self too hard.
 
 ## GitHub Integration
 
