@@ -1,7 +1,7 @@
 ---
 title: Source Control in Visual Studio Code
 description: "Learn how to use Visual Studio Code's integrated Git features for effective version control"
-modified: 2025-03-18T08:08:34-05:00
+modified: 2025-03-18T08:12:30-05:00
 ---
 
 Git is baked right into Visual Studio Code, making version control feel like second nature. From staging and committing changes to handling merges and pushing to remote repositories, the built-in UI provides a smooth, visual workflow. Let’s explore how to leverage these features—plus a few extras like Git blame, GitHub integration, and interactive rebase—to keep your code pristine and your team happy.
@@ -55,18 +55,6 @@ Visual Studio Code provides native support for GitHub, GitLab, and Bitbucket wor
 
 > [!TIP] Even More Github Integration
 > If you want to integrate more deeply, the official GitHub extension suite lets you sign in to GitHub and manage issues, pull requests, and more, all from within Visual Studio Code.
-
-## Interactive Rebase
-
-Interactive rebase (`git rebase -i`) might sound intimidating, but it’s an essential skill for keeping your commit history tidy and coherent. To do an interactive rebase from within Visual Studio Code:
-
-1. **Open the integrated terminal** in your repository.
-2. Run a command like `git rebase -i HEAD~4` to rebase the last four commits.
-3. Visual Studio Code opens the rebase instruction file. Each commit is listed with commands like `pick`, `squash`, or `reword`.
-4. Edit these lines to reorder commits, squash them, or rename commit messages.
-5. Save and close the file to continue. Visual Studio Code updates your commit history accordingly.
-
-If you encounter conflicts during the rebase, Visual Studio Code’s merge resolution features kick in just like any other merge, making it simpler to polish your commit history to a shine.
 
 ## Another Option
 

@@ -1,9 +1,10 @@
 ---
 title: Refactoring in Visual Studio Code
 description: Master essential code refactoring techniques in Visual Studio Code, from renaming symbols to extracting methods and variables
-modified: 2025-03-17T16:25:05-05:00
+modified: 2025-03-18T08:22:18-05:00
 ---
 
+There are a bunch of little niceties in Visual Studio Code that make refactoring *way* easier.
 ## Rename Symbol
 
 Okay, so this is like my favorite feature that I use basically every single day.
@@ -66,3 +67,25 @@ As you code, you might notice a lightbulb icon or yellow squiggly lines under so
 ## The Problems Panel
 
 Keep an eye on the Problems panel (you can toggle with `Ctrl+Shift+M`). If there's a number on the bottom left (status bar) like ❗3 or ⚠️1, that's errors or warnings count. Clicking that opens Problems. You can click an item to jump to it. Quick Fix (if available) can often fix those warnings (like adding a missing import, or adding `// @ts-ignore`, etc., depending on context).
+
+## Inline Refactoring
+
+When a variable or function you previously extracted turns out to be redundant, use inline refactoring to reverse the process. This command replaces all instances of the symbol with its original value or code, then removes its declaration. Right-click the symbol and choose "Inline Variable" (or "Inline Function"), or invoke it from the Command Palette by searching for "Inline." This helps simplify your code when extra abstraction is no longer needed.
+
+## Organize Imports
+
+Unused or unsorted imports can clutter your files, especially in TypeScript projects. VS Code provides an "Organize Imports" action that automatically removes unused imports and sorts the remaining ones. Trigger it via the Command Palette or set it to run on save. This refactoring cleans up your file header, improving readability and maintainability.
+
+## Move to New File
+
+As your code evolves, you might find that certain functions, classes, or constants would be better placed in their own module. Some language extensions offer a "Move to New File" refactoring that automatically extracts the selected symbol into a new file and updates all references accordingly. This modularization makes your codebase easier to navigate and reuse across different parts of your project.
+
+## Convert Function to Arrow Function
+
+For JavaScript and TypeScript, converting traditional function expressions to arrow functions can lead to more concise and modern syntax. VS Code’s refactoring tools can offer a "Convert to Arrow Function" option that transforms your code while preserving its behavior. This is particularly useful when refactoring legacy code or adhering to contemporary coding standards.
+
+## Surround With
+
+Frequently wrapping code blocks with common structures—such as `try`/`catch` blocks, if/else statements, or custom snippets—can be automated using the "Surround With" refactoring. Select the code block, then trigger the refactoring from the Command Palette to choose from available wrapping templates. This feature speeds up repetitive tasks and ensures consistency in how you encapsulate code patterns.
+
+Each of these additional refactoring tools empowers you to streamline your code changes and maintain a clean, modular, and modern codebase.

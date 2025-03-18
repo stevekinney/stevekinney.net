@@ -1,7 +1,7 @@
 ---
 title: Launch Configurations in Visual Studio Code
 description: Detailed guide to creating and customizing launch.json files for different debugging scenarios
-modified: 2025-03-18T07:44:25-05:00
+modified: 2025-03-18T08:48:30-05:00
 ---
 
 > [!QUESTION] Should I use `tasks.json` or `launch.json` for development?
@@ -257,3 +257,42 @@ Here are some common `launch.json` configurations for different scenarios:
 	]
 }
 ```
+
+## Compound Configurations
+
+Compound configurations allow you to launch multiple debugging configurations simultaneously. This is especially useful for complex scenarios like launching both a backend server and a frontend application at the same time. You define a compound configuration by adding a `compounds` array at the root of your `launch.json`. Each compound configuration specifies a name and an array of configurations to launch concurrently.
+
+```json
+"compounds": [
+  {
+    "name": "Full Stack Debug",
+    "configurations": ["Launch Node.js App", "Launch Chrome against localhost"]
+  }
+]
+```
+
+> [!TIP] Use compound configurations to streamline multi-process debugging workflows without having to manually start each configuration.
+
+## Using Debug Variables
+
+Visual Studio Code supports a range of predefined variables within `launch.json`, such as `${workspaceFolder}`, `${file}`, and `${env:VARIABLE_NAME}`. These variables allow you to write dynamic configurations that adapt to your environment. For instance, `${workspaceFolder}` always resolves to the root of your project, making your configuration portable across different machines.
+
+```json
+"program": "${workspaceFolder}/src/index.js"
+```
+
+> [!TIP] Leverage these variables to create flexible launch configurations that automatically adjust to changes in your workspace structure.
+
+## Server Ready Action
+
+When debugging web applications, it’s often necessary to wait for your development server to be fully operational before attaching the debugger. The `serverReadyAction` property lets you specify a pattern to watch for in the output. Once the pattern is detected, VS Code can automatically open a URL or attach the debugger.
+
+```json
+"serverReadyAction": {
+  "action": "openExternally",
+  "pattern": "listening on port ([0-9]+)",
+  "uriFormat": "http://localhost:%s"
+}
+```
+
+> [!TIP] Use `serverReadyAction` to automate the process of waiting for your server to be ready, reducing manual steps and streamlining your debugging workflow.

@@ -1,7 +1,7 @@
 ---
 title: Emmet in Visual Studio Code
 description: "Learn how to use Emmet's powerful abbreviation syntax to speed up HTML and CSS development in Visual Studio Code"
-modified: 2025-03-18T02:16:01-05:00
+modified: 2025-03-18T08:25:14-05:00
 ---
 
 Emmet is a powerful shorthand system for HTML and CSS, built right into Visual Studio Code. It dramatically speeds up your front-end workflow by letting you write concise abbreviations that expand into full-fledged markup or style rules. Below are the core features and tips for making Emmet work for you, particularly when writing React in TSX or JSX.
@@ -293,5 +293,39 @@ article.card>(header.card__header>h2.card__title{Post Title $}+p.card__meta>time
 ```
 
 This single abbreviation produces a fully structured blog post card with proper classes, dummy text, and styled buttons—demonstrating the true power of Emmet for rapid frontend development.
+
+## Wrap with Abbreviation
+
+Emmet isn’t just for generating new markup—it can also wrap existing code in a new structure. Highlight the code you want to wrap, then invoke the **Wrap with Abbreviation** command via the Command Palette. Type your abbreviation (for example, `section>div.wrapper`) and press `Tab`. Emmet will enclose your selection in the new markup, saving you the hassle of manual edits.
+
+> [!TIP] Use this feature to quickly refactor blocks of code, adding semantic wrappers or applying consistent styling without interrupting your flow.
+
+## Custom Emmet Snippets
+
+For repetitive patterns or project-specific markup, you can define custom Emmet snippets. Customize these by adding an `emmet.extensionsPath` entry in your settings to point to a folder containing your snippets. For example, create a file named `snippets.json` in your designated folder with content like:
+
+```json
+{
+  "html": {
+    "snippets": {
+      "btn": "<button class=\"btn\">$0</button>"
+    }
+  }
+}
+```
+
+Then, set the path in your `settings.json`:
+
+```json
+{
+  "emmet.extensionsPath": "path/to/your/snippets"
+}
+```
+
+This way, typing `btn` and pressing `Tab` will quickly insert your custom button template.
+
+> [!TIP] Custom snippets can be a game changer when working on projects with repetitive UI elements. Tailor them to your codebase to save time and reduce errors.
+
+These additional techniques and settings elevate Emmet from a simple abbreviation tool to a fully customizable assistant that adapts to your specific development needs.
 
 Now, let's take a look at some [some exercises](vscode-emmet-exercises).

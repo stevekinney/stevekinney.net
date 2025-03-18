@@ -1,7 +1,7 @@
 ---
 title: Multiple Cursors with Find and Replace
 description: Learn how to use search results to create multiple cursors for efficient text editing in Visual Studio Code
-modified: 2025-03-17T10:35:34-06:00
+modified: 2025-03-18T08:20:18-05:00
 ---
 
 > [!tip] This is it's own section because I think it's _super helpful_ and I didn't want to forget about it.

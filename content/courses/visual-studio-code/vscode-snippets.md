@@ -1,7 +1,7 @@
 ---
 title: Snippets in Visual Studio Code
 description: Learn how to use and create code snippets to boost your productivity with reusable code templates
-modified: 2025-03-17T10:39:37-06:00
+modified: 2025-03-18T08:44:44-05:00
 ---
 
 Snippets are pre-written blocks of code that you can quickly insert into your editor using a short keyword or prefix. It's not unfair of them as code templates or shortcuts for frequently used code structures. In Visual Studio Code, snippets are more than just static text; they are dynamic and interactive, allowing you to customize and adapt them to your specific needs.
@@ -71,7 +71,6 @@ Snippets in Visual Studio Code are powerful because they support dynamic content
     - `${2:element}`: The second placeholder, suggesting "element" as a default value.
     - `${0:// body}`: The final cursor position, placed inside the loop body with a comment.
 - **Variables (`${variable_name}`):** Visual Studio Code provides a rich set of predefined variables that you can use within snippets to insert dynamic information based on the context. Variables are enclosed in `${}`. Some commonly used variables include:
-
   - **File and Path Variables:**
     - `${TM_FILENAME}`: The current filename (e.g., `my_script.js`).
     - `${TM_FILENAME_BASE}`: The current filename without the extension (e.g., `my_script`).
@@ -128,3 +127,6 @@ Snippet scope determines where your snippets are available within Visual Studio 
 - **Global Snippets (User Snippets):** These snippets are available in all Visual Studio Code workspaces and for all languages (unless a `scope` is explicitly defined). They are ideal for commonly used code patterns that are language-agnostic or applicable across multiple projects.
 - **Language-Specific Snippets:** These snippets are specific to a particular programming language. They are only available when you are working with files of that language type (e.g., JavaScript snippets will only appear in `.js` files). This is useful for language-specific syntax and constructs.
 - **Project-Specific Snippets (Workspace Snippets):** These snippets are specific to the current Visual Studio Code workspace or project folder. They are stored within the `.vscode` folder at the root of your project. Project-specific snippets are perfect for enforcing coding standards or providing shortcuts that are unique to a particular project.
+
+> [!NOTE] The filename is unimportant.
+> The file name itself isn’t critical to how snippets work—Visual Studio Code just cares about the JSON structure and where you place the file (in the proper snippets directory). However, naming your snippet file descriptively (like `javascript.json` or `global-snippets.json`) makes it easier for you to organize and maintain your snippets over time. Otherwise, you might end up searching for that file like it's hidden treasure in your settings folder!

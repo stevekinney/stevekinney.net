@@ -1,7 +1,7 @@
 ---
 title: Placeholders and Variables in Snippets
 description: Learn how to navigate placeholders, and use transformations to maximize your snippet efficiency in Visual Studio Code.
-modified: 2025-03-17T10:43:47-06:00
+modified: 2025-03-18T08:41:54-05:00
 ---
 
 ## Placeholder Navigation
@@ -235,3 +235,27 @@ The `CLIPBOARD` variable inserts the current clipboard content into your snippet
 Copy the component name, trigger this snippet, and your component scaffold appears instantly, fully named and typed.
 
 > [!WARNING] Make sure the clipboard actually contains what you expect. Otherwise, you'll end up with components like `const BuyMilkReminder`—funny but probably unintended.
+
+## Final Cursor Position
+
+When your snippet has been fully expanded, the special tab stop `$0` determines where the cursor lands next. This lets you control exactly where to continue coding after filling in all placeholders. For example:
+
+```json
+"Complete Function": {
+  "prefix": "fn",
+  "body": [
+    "function ${1:funcName}(${2:params}) {",
+    "  $0",
+    "}"
+  ],
+  "description": "Creates a function with a final cursor position for the function body"
+}
+```
+
+In this snippet, once you've filled in the function name and parameters, pressing `Tab` moves the cursor directly to the `$0` location—ready for you to start writing the function body.
+
+## Nested Snippets Trigger
+
+For more advanced workflows, you can trigger nested snippets within a placeholder. While editing a placeholder, if you type a snippet prefix and trigger its expansion, the new snippet will be inserted inside the current placeholder. This can be particularly useful for generating repeated or structured content dynamically. For example, if you’re writing a component and frequently need to insert a specific prop type structure, triggering a nested snippet can streamline that process.
+
+> [!TIP] Experiment with nesting snippets to reduce repetitive typing and maintain a consistent structure, but be cautious—overly complex nested snippets can sometimes make navigation a bit tricky.

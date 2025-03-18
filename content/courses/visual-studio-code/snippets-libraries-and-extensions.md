@@ -1,7 +1,7 @@
 ---
 title: Snippet Libraries and Extensions
 description: Exploring built-in snippets, community snippet extensions, and how to create your own snippet extensions
-modified: 2025-03-17T10:49:41-06:00
+modified: 2025-03-18T08:44:00-05:00
 ---
 
 ## Snippet Libraries and Extensions
