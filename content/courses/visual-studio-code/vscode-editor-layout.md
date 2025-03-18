@@ -1,7 +1,7 @@
 ---
 title: Editor Layout in Visual Studio Code
 description: Customize your Visual Studio Code workspace with flexible layouts, split views, and Zen Mode for an optimal coding experience
-modified: 2025-03-17T13:32:12-05:00
+modified: 2025-03-18T07:58:39-05:00
 ---
 
 The most reasonable place to start is getting comfortable with the editor itself. If we can take the little tedious stuff that we need to do and make it _faster_, then we have more mental bandwidth for all of the Big Brain™ stuff that is arguably what we get paid for—as opposed to mousing around looking for that important file.
@@ -83,3 +83,39 @@ The **Go to Bracket** command jumps from the opening to the closing bracket. The
 You can use `Ctrl-Backtick` to open the integrated terminal.
 
 ![Open the Integrated Terminal](assets/open-the-terminal-vscode.mp4)
+
+## Customizing Your Panels
+
+VS Code allows you to not only rearrange panels but also resize them for optimal focus. Adjust the borders between panels to allocate more space to your most-used views, such as the Explorer or Terminal. Once you have your ideal layout, save your workspace configuration to preserve these settings between sessions. For example, you can save your layout using:
+
+```json
+// In your workspace configuration file
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "workbench.panel.defaultLocation": "bottom",
+    "workbench.editor.enablePreview": false
+  }
+}
+```
+
+> [!TIP] Save Your Layout
+> Use `File → Save Workspace As…` to keep your customized panel sizes and positions intact.
+
+## Managing Open Editors
+
+The Open Editors section is more than a simple list—it can be optimized for enhanced productivity. Pin frequently used files to keep them visible, even when multiple tabs are open. You can also reorder the list to group related files together, which mirrors the order in the top editor area and helps maintain a neat workflow.
+
+> [!TIP] Keep It Organized
+> Regularly close files you no longer need and pin those you access frequently for a cleaner Open Editors view.
+
+## Troubleshooting & Additional Tips
+
+Even with a perfectly set up environment, you may encounter occasional glitches. If a panel or view suddenly disappears, use the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`) and run commands such as `View: Reset View Locations` or `Toggle Sidebar Visibility`. For performance issues in larger projects, consider closing unused files or temporarily disabling non-essential extensions to keep VS Code running smoothly.
+
+> [!TIP] Stay Productive
+> Regularly update your workspace settings and extensions to avoid common pitfalls and maintain an efficient coding environment.

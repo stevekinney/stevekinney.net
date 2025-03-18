@@ -1,7 +1,7 @@
 ---
 title: Integrated Terminal in Visual Studio Code
 description: "Learn how to use and customize Visual Studio Code's integrated terminal for efficient development workflows"
-modified: 2025-03-17T13:41:35-05:00
+modified: 2025-03-18T08:05:32-05:00
 ---
 
 The built-in terminal is pretty straight-forward, but let's look at some of the ways that we can take it the Next Level™, as they say.
@@ -53,7 +53,8 @@ If you’re looking to orchestrate a set of tasks, define a `tasks.json` file in
 
 The integrated terminal can auto-inject environment variables or track certain command events, depending on your shell and the extensions you’ve installed. For instance, Visual Studio Code’s Remote—WSL extension seamlessly detects your WSL distribution and mirrors your development environment from Windows into Linux. You might also use environment variable injection to pass credentials or configuration details without manually re-exporting them every time.
 
-> [!WARNING] Be cautious when passing sensitive environment variables. While it’s convenient, always ensure you’re not inadvertently exposing secrets in public repos or recorded terminal sessions.
+> [!WARNING] Sharing isn't always caring.
+> Be cautious when passing sensitive environment variables. While it’s convenient, always ensure you’re not inadvertently exposing secrets in public repos or recorded terminal sessions.
 
 ## Searching Within the Terminal
 
@@ -77,3 +78,10 @@ Long terminal sessions can accumulate a lot of output—logs, debugging info, an
 ```
 
 Obviously, you can choose any keybinding that pleases you.
+
+## Terminal Session Persistence
+
+While the integrated terminal closes with VS Code, you can maintain long-running processes by using a terminal multiplexer such as tmux or screen within the terminal itself. Running a multiplexer ensures that your sessions continue in the background even if you restart VS Code, preserving your workflows and processes.
+
+> [!TIP] Keep Your Sessions Alive
+> Use `tmux` or `screen` to persist terminal sessions and avoid disruptions in your long-running tasks.
