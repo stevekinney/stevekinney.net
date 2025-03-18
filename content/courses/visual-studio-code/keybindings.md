@@ -79,10 +79,10 @@ Sometimes the same shortcut isn’t ideal across different operating systems. VS
 
 ```json
 {
-  "key": "ctrl+shift+t",
-  "command": "workbench.action.reopenClosedEditor",
-  "when": "editorTextFocus",
-  "mac": "cmd+shift+t"
+	"key": "ctrl+shift+t",
+	"command": "workbench.action.reopenClosedEditor",
+	"when": "editorTextFocus",
+	"mac": "cmd+shift+t"
 }
 ```
 
@@ -94,9 +94,9 @@ VS Code supports multi-stroke (or chorded) keybindings, which allow you to chain
 
 ```json
 {
-  "key": "cmd+k cmd+c",
-  "command": "editor.action.addCommentLine",
-  "when": "editorTextFocus"
+	"key": "cmd+k cmd+c",
+	"command": "editor.action.addCommentLine",
+	"when": "editorTextFocus"
 }
 ```
 
@@ -104,5 +104,3 @@ Using multi-stroke keybindings provides a robust way to extend your shortcut rep
 
 > [!tip] Running Multiple Commands
 > There is a handy extension for that called [**Multi Command**](https://marketplace.visualstudio.com/items?itemName=ryuta46.multi-command).
-
-**See also**: [Keybindings for Tasks](keybindings-for-tasks).

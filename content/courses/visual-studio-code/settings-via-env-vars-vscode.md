@@ -1,7 +1,7 @@
 ---
 title: Controlling Settings with Environment Variables in Visual Studio Code
 description: Learn how to use environment variables to dynamically configure Visual Studio Code settings across different environments
-modified: 2025-03-16T13:45:47-06:00
+modified: 2025-03-18T08:34:11-05:00
 ---
 
 Environment variables allow you to dynamically configure Visual Studio Code settings based on your system environment. This is useful for adapting settings to different operating systems, development stages (development, staging, production), or user-specific configurations. You can reference environment variables in `settings.json` using the `${env:VARIABLE_NAME}` syntax.
@@ -9,8 +9,6 @@ Environment variables allow you to dynamically configure Visual Studio Code sett
 ```json
 {
 	"terminal.integrated.defaultProfile.windows": "${env:WSL_DISTRO_NAME}", // Use WSL distro name as default terminal profile on Windows
-	"editor.fontSize": "${env:VSCODE_FONT_SIZE:14}" // Use environment variable VSCODE_FONT_SIZE, default to 14 if not set
-}
 ```
 
 The syntax basically works like this:

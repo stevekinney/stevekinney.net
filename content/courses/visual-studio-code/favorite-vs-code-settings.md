@@ -40,17 +40,17 @@ Both settings ensure that whenever you move a file in your JavaScript or TypeScr
 
 This setting is basically Visual Studio Code’s way of letting you keep your import statements as neat as a well-organized sock drawer. Here’s the lowdown:
 
-**What It Does**
+#### What It Does
 
 - **Automatic Cleanup:** When enabled, Visual Studio Code’s JavaScript language service will tidy up your imports by removing unused ones, sorting them, and grouping them logically. It’s like having a digital Marie Kondo for your code.
 - **Manual or Auto:** You can trigger this manually via the “Organize Imports” command or automatically when you save your file if you’ve configured the appropriate code action.
 
-**How It Works**
+#### How It Works
 
 - **Integration with Code Actions:** The setting works in tandem with the code action "source.organizeImports". When you save (and if you’ve set it up in editor.codeActionsOnSave), Visual Studio Code will run through your file and re-arrange your import statements.
 - **Keeps Your Code Lean:** By getting rid of unused imports and sorting the rest, it ensures that your code doesn’t accumulate unnecessary baggage—keeping it cleaner and easier to read.
 
-**How to Configure**
+#### How to Configure
 
 1. **Set the Preference:** Make sure you have "javascript.preferences.organizeImports": true in your Visual Studio Code settings (if applicable).
 2. **Enable on Save (Optional):** Add this to your settings to have it auto-run on save:
@@ -61,9 +61,9 @@ This setting is basically Visual Studio Code’s way of letting you keep your im
 }
 ```
 
-1. **Enjoy the Cleanup:** Now every time you save, your imports get a tidy makeover—no more rogue, unused modules hanging around!
+**Enjoy the Cleanup:** Now every time you save, your imports get a tidy makeover—no more rogue, unused modules hanging around!
 
-**Why It’s Worth Using**
+#### Why It’s Worth Using
 
 - **Consistency:** Ensures that all your files follow the same organized pattern.
 - **Reduced Clutter:** Eliminates dead code (unused imports) that might confuse or bloat your files.
@@ -75,27 +75,42 @@ In short, javascript.preferences.organizeImports is a small setting that deliver
 
 I don't love all of these, but other people do and you might too. Here are a few popular Visual Studio Code tweaks that many developers swear by, along with why they might tickle your fancy:
 
-- `files.autoSave`
-  - Automatically saves your changes based on your chosen trigger (e.g., after a delay, when focus changes, or on window change).
-  - It’s like having an overzealous backup buddy who never lets you lose your unsaved genius.
-- `editor.minimap.enabled`
-  - Toggles the minimap—a little bird's-eye view of your code—on or off.
-  - For those who love a visual map of their code or want to reduce on-screen clutter if the minimap feels like extra baggage.
-- `editor.wordWrap`
-  - Wraps long lines of code so you don’t have to scroll sideways forever.
-  - Keeps your code readable without feeling like you’re stuck in an endless horizontal tunnel.
-- `editor.renderWhitespace`
-  - Displays invisible characters like spaces, tabs, and line breaks.
-  - Handy for catching sneaky formatting issues, so you always know exactly what’s going on behind the scenes.
-- `editor.cursorSmoothCaretAnimation`
-  - Gives your cursor movement a smooth, animated glide.
-  - It may not affect functionality, but it sure makes navigating your code feel like a dance routine.
-- `workbench.iconTheme`
-  - Lets you choose a different set of file icons, so your file tree can look as stylish as your code.
-  - A fresh icon theme can inject some personality into your workspace—think of it as a makeover for your file explorer.
-- `editor.codeLens`
-  - Adds inline annotations for references, test statuses, and more.
-  - It’s like having tiny, helpful post-it notes in your code, keeping track of important info right where you need it.
-- `terminal.integrated.fontFamily`
-  - Lets you set your favorite terminal font for a more personalized or visually appealing integrated terminal.
-  - Because even your command line deserves to look cool and feel comfortable.
+### `files.autoSave`
+
+- Automatically saves your changes based on your chosen trigger (e.g., after a delay, when focus changes, or on window change).
+- It's like having an overzealous backup buddy who never lets you lose your unsaved genius.
+
+### `editor.minimap.enabled`
+
+- Toggles the minimap—a little bird's-eye view of your code—on or off.
+- For those who love a visual map of their code or want to reduce on-screen clutter if the minimap feels like extra baggage.
+
+### `editor.wordWrap`
+
+- Wraps long lines of code so you don’t have to scroll sideways forever.
+- Keeps your code readable without feeling like you’re stuck in an endless horizontal tunnel.
+
+### `editor.renderWhitespace`
+
+- Displays invisible characters like spaces, tabs, and line breaks.
+- Handy for catching sneaky formatting issues, so you always know exactly what’s going on behind the scenes.
+
+### `editor.cursorSmoothCaretAnimation`
+
+- Gives your cursor movement a smooth, animated glide.
+- It may not affect functionality, but it sure makes navigating your code feel like a dance routine.
+
+### `workbench.iconTheme`
+
+- Lets you choose a different set of file icons, so your file tree can look as stylish as your code.
+- A fresh icon theme can inject some personality into your workspace—think of it as a makeover for your file explorer.
+
+### `editor.codeLens`
+
+- Adds inline annotations for references, test statuses, and more.
+- It’s like having tiny, helpful post-it notes in your code, keeping track of important info right where you need it.
+
+### `terminal.integrated.fontFamily`
+
+- Lets you set your favorite terminal font for a more personalized or visually appealing integrated terminal.
+- Because even your command line deserves to look cool and feel comfortable.

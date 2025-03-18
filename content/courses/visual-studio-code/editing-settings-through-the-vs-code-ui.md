@@ -1,7 +1,7 @@
 ---
 title: Editing Settings Through the Visual Studio Code UI
 description: Learn how to configure Visual Studio Code settings using the visual Settings Editor interface
-modified: 2025-03-16T12:29:39-06:00
+modified: 2025-03-18T08:28:32-05:00
 ---
 
 The Settings Editor is Visual Studio Code's user-friendly interface for Browse and modifying settings. It provides a searchable list of all available settings, along with descriptions and their current values.
@@ -11,6 +11,28 @@ The Settings Editor is Visual Studio Code's user-friendly interface for Browse a
 - **Menu:** Go to `File` (or `Code` on macOS) > `Preferences` > `Settings` (or `Code` > `Settings` > `Settings` on macOS).
 - **Keyboard Shortcut:** Press `Ctrl+,` (Windows, Linux) or `Cmd+,` (macOS).
 - **Command Palette:** Open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`) and type "Settings" or "Preferences: Open Settings (UI)".
+
+## Filtering and Comparing Settings
+
+In addition to the basic search bar, you can leverage search operators to refine your results. For example, typing `@modified` displays only the settings you’ve changed from their default values. Similarly, `@builtin` shows the original defaults provided by Visual Studio Code. These operators are especially useful for troubleshooting or auditing your customizations.
+
+## Viewing Default Settings
+
+Sometimes it’s helpful to compare your changes against the defaults. You can click on the link labeled “Open Default Settings (JSON)” within the Settings Editor. This read-only view shows all the built-in settings along with their default values and descriptions, allowing you to better understand what options are available.
+
+## Syncing and Sharing Settings
+
+Visual Studio Code offers a Settings Sync feature that automatically uploads your customizations to the cloud and synchronizes them across your devices. With Settings Sync enabled, any change you make in the Settings Editor is propagated to all your installations. This is particularly beneficial when setting up a new machine or working on multiple devices, ensuring a consistent environment everywhere.
+
+## Directly Editing Settings Files
+
+For those who prefer granular control, the “Edit in settings.json” link lets you open your configuration file directly. This file supports IntelliSense and schema validation, making it easier to enter valid values. User settings are stored in a centralized file, while workspace settings reside in the `.vscode` folder of your project. Familiarizing yourself with these files can be very helpful when you need to perform bulk changes or share configurations with your team.
+
+## Resetting and Copying Settings
+
+When you need to revert a setting back to its default, simply click the reset icon (the gear) next to the setting. Additionally, hovering over any setting reveals options to copy its ID or export it as JSON. These features are useful for sharing configurations with coworkers or for scripting environment setups.
+
+Each of these enhancements to the Settings Editor not only improves your ability to customize Visual Studio Code but also streamlines the process of managing your development environment.
 
 ## Navigating the Settings Editor
 

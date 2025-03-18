@@ -3,7 +3,7 @@ title: Visual Studio Code Course
 description: "Learn to maximize your productivity with Visual Studio Code's features and capabilities"
 layout: contents
 base: /courses/visual-studio-code
-modified: 2025-03-18T07:56:28-05:00
+modified: 2025-03-18T08:49:38-05:00
 ---
 
 ## Basics
@@ -20,11 +20,9 @@ modified: 2025-03-18T07:56:28-05:00
 - [Refactoring](refactoring-in-vscode.md)
 - [Emmet](vscode-emmet.md) ([Exercises](vscode-emmet-exercises.md))
 - [A Tour of Extensions](favorite-vs-code-extensions.md)
-- [Some Keyboard Shortcuts](vscode-keyboard-shortcuts)
 
 ## Settings
 
-- [Settings Precedence](settings-precedence-vscode.md)
 - [Editing Settings (Visually)](editing-settings-through-the-vs-code-ui.md)
 - [Editing Settings via JSON](editing-settings-through-json.md)
 - [Steve's Favorite and Other Popular Settings](favorite-vs-code-settings.md)
@@ -47,7 +45,7 @@ modified: 2025-03-18T07:56:28-05:00
 - [Tasks: Examples](vscode-task-examples.md)
 - [Tasks: Tips and Tricks](vscode-tasks-tips-and-tricks.md)
 - [Compound Tasks](compound-tasks-vscode.md)
-- [Keybindings for Tasks](keybindings-for-tasks)
+- [Built-in Problem Matchers](built-in-problem-matchers)
 
 ## Debugging
 
@@ -61,6 +59,7 @@ modified: 2025-03-18T07:56:28-05:00
 
 - [Multi-Root Workspaces](multi-root-workspaces.md)
 - [Creating Multi-Root Workspaces](creating-a-multi-root-workspace.md)
+- [More on Multi-Root Namespaces](more-on-multi-root-namespaces)
 
 ## Dev Containers
 
@@ -76,3 +75,7 @@ modified: 2025-03-18T07:56:28-05:00
 - [Scaffolding an Extension](vscode-extension-scaffold.md)
 - [Building a Simple Extension](building-a-simple-vscode-extension)
 - [Building an Extension with a Web View](vscode-regular-expressionist.md)
+
+## Appendix
+
+[Some Keyboard Shortcuts](vscode-keyboard-shortcuts)
