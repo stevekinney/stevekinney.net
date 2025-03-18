@@ -3,7 +3,7 @@ title: Visual Studio Code Course
 description: "Learn to maximize your productivity with Visual Studio Code's features and capabilities"
 layout: contents
 base: /courses/visual-studio-code
-modified: 2025-03-17T10:49:53-06:00
+modified: 2025-03-18T05:00:18-05:00
 ---
 
 ## Basics
@@ -18,8 +18,9 @@ modified: 2025-03-17T10:49:53-06:00
 - [Multiple Cursors](vscode-multiple-cursors.md)
 - [Multiple Cursors with Find and Replace](multiple-cursors-with-find-and-replace.md)
 - [Refactoring](refactoring-in-vscode.md)
-- [Emmet](vscode-emmet.md)
+- [Emmet](vscode-emmet.md) ([Exercises](vscode-emmet-exercises.md))
 - [A Tour of Extensions](favorite-vs-code-extensions.md)
+- [Some Keyboard Shortcuts](vscode-keyboard-shortcuts)
 
 ## Settings
 
@@ -45,7 +46,7 @@ modified: 2025-03-17T10:49:53-06:00
 - [Visual Studio Code Tasks](vscode-tasks.md)
 - [Tasks: Examples](vscode-task-examples.md)
 - [Tasks: Tips and Tricks](vscode-tasks-tips-and-tricks.md)
-- [Advanced Usage for Tasks](tasks-advanced-usage.md)
+- [Compound Tasks](compound-tasks-vscode.md)
 - [Assigning Keybindings to Tasks](keybindings-for-tasks-vscode.md)
 
 ## Debugging
@@ -69,3 +70,9 @@ modified: 2025-03-17T10:49:53-06:00
 - [Working with Dev Containers](working-with-dev-containers.md)
 - [Dev Containers and Dockerfiles](dev-containers-and-dockerfiles.md)
 - [Personalizing Your Container Environment](personalizing-dev-containers.md)
+
+## Extensions
+
+- [Scaffolding an Extension](vscode-extension-scaffold.md)
+- [Building a Simple Extension](building-a-simple-vscode-extension)
+- [Building an Extension with a Web View](vscode-regular-expressionist.md)

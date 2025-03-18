@@ -113,7 +113,7 @@ You can configure tasks to run automatically when you open a folder or workspace
 
 ### Tips for Auto-Starting Tasks:
 
-1. **Use `presentation` options** to control terminal visibility:
+**Use `presentation` options** to control terminal visibility:
 
 ```jsonc
 "presentation": {
@@ -123,7 +123,7 @@ You can configure tasks to run automatically when you open a folder or workspace
 }
 ```
 
-2. **Combine with task dependencies** to create complete startup workflows:
+**Combine with task dependencies** to create complete startup workflows:
 
 ```jsonc
 {
@@ -136,7 +136,7 @@ You can configure tasks to run automatically when you open a folder or workspace
 }
 ```
 
-3. **Use prompts for confirmation** if you don't always want the task to run:
+**Use prompts for confirmation** if you don't always want the task to run:
 
 ```jsonc
 "inputs": [
@@ -149,9 +149,3 @@ You can configure tasks to run automatically when you open a folder or workspace
 	}
 ],
 ```
-
-4. **Consider user preference settings** by checking environment variables before starting heavy tasks.
-
-> [!WARNING]
->
-> Be careful with auto-starting tasks that consume significant resources or modify files. They can slow down Visual Studio Code startup or cause unexpected behavior for other users who open your project.

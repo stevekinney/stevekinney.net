@@ -14,6 +14,9 @@ modified: 2025-03-18T09:45:00-07:00
 
 This comprehensive Visual Studio Code course covers a wide range of features to make you appear _way more_ productive than your co-workers.
 
+> [!TIP] Example Repository
+> We're going to be playing around with some of the examples in [this repository](https://github.com/stevekinney/vscode-examples).
+
 We'll begin with editor basics including layout customization, command palette usage, integrated terminal, multiple cursor techniques, and navigation capabilities. Next, we'll dive into configuration management through settings precedence, and profiles.
 
 More advanced topics include code snippets creation and management, task automation, debugging techniques from basic breakpoints to advanced data inspection, and source control integration with Git. The course also thoroughly explores Dev Containers functionality for creating consistent development environments.
