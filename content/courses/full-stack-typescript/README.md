@@ -1,7 +1,7 @@
 ---
 title: 'Full Stack TypeScript: Building Type-Safe Applications'
 description: 'A comprehensive guide to building type-safe full stack applications with TypeScript, Zod, Express, and more.'
-modified: 2025-03-20T08:57:09-05:00
+modified: 2025-03-20T08:58:24-05:00
 base: /courses/full-stack-typescript
 layout: contents
 exclude: true
@@ -64,7 +64,7 @@ exclude: true
 
 - [Prisma](typesafe-database-with-prisma.md)
 - [Generate Zod Schemas from Prisma](zod-schemas-from-prisma)
-- [Generate tRPC with Prisma](generate-trpc-prisma.md)
+- [Generate tRPC with Prisma](prisma-trpc.md)
 
 ## Appendix
 
