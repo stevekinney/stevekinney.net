@@ -1,193 +1,318 @@
 ---
-title: Generating OpenAPI Contracts from Zod Schemas with zod-to-openapi
+title: Generating OpenAPI Contracts from Zod Schemas
 modified: 2025-03-15T17:15:00-06:00
 ---
 
-[`zod-to-openapi`](https://www.npmjs.com/package/zod-to-openapi) is a super cool tool that allows you to generate OpenAPI specifications directly from your Zod schemas. This approach ensures that your API documentation is always in sync with your validation logic, reducing the risk of inconsistencies. This guide walks you through using `zod-to-openapi` to create OpenAPI contracts from your Zod-powered Express APIs.
+Let's through the process of adding OpenAPI documentation to a TypeScript Express server using Zod for validation.
 
-## Install `zod-to-openapi`
+## Extend Zod Schemas with OpenAPI Metadata
 
-Install `zod-to-openapi` as a development dependency:
-
-```bash
-npm install zod-to-openapi zod express
-```
-
-## Define Your Zod Schemas
-
-Ensure that your Express routes are using Zod schemas for request and response validation.
-
-**Example:**
+Create a new file `openapi.ts` that will convert your Zod schemas to OpenAPI format:
 
 ```typescript
-import express, { Request, Response } from 'express';
+import { extendZodWithOpenApi, generateSchema } from '@anatine/zod-openapi';
+import { OpenAPIObject } from 'openapi3-ts/oas31';
 import { z } from 'zod';
+import * as schemas from './your-schemas'; // Import your Zod schemas
 
-const app = express();
-app.use(express.json());
+extendZodWithOpenApi(z);
 
-const createUserSchema = z.object({
-	username: z.string().min(3),
-	email: z.string().email(),
-	age: z.number().int().positive().optional(),
+// Define TaskSchema with OpenAPI metadata
+const TaskSchema = schemas.TaskSchema.openapi({
+	description: 'A task item',
+	example: {
+		id: 1,
+		title: 'Complete OpenAPI integration',
+		description: 'Add OpenAPI specs to the tasks API',
+		completed: false,
+	},
 });
 
-const userResponseSchema = z.object({
-	id: z.string().uuid(),
-	username: z.string(),
-	email: z.string(),
-	age: z.number().int().positive().optional(),
+const TasksSchema = schemas.TasksSchema.openapi({
+	description: 'A collection of task items',
 });
 
-app.post(
-	'/users',
-	(
-		req: Request<{}, {}, z.infer<typeof createUserSchema>>,
-		res: Response<z.infer<typeof userResponseSchema>>,
-	) => {
-		// ... your route logic
-		const newUser: z.infer<typeof userResponseSchema> = {
-			id: '123e4567-e89b-12d3-a456-426614174000',
-			username: req.body.username,
-			email: req.body.email,
-			age: req.body.age,
-		};
-		res.status(201).json(newUser);
+const NewTaskSchema = schemas.NewTaskSchema.openapi({
+	description: 'Data required to create a new task',
+	example: {
+		title: 'Create a new task',
+		description: 'This is a new task to be created',
 	},
-);
+});
 
-app.get(
-	'/users/:userId',
-	(req: Request<{ userId: string }>, res: Response<z.infer<typeof userResponseSchema>>) => {
-		// ... your route logic
-		const user: z.infer<typeof userResponseSchema> = {
-			id: req.params.userId,
-			username: 'john_doe',
-			email: 'john@example.com',
-			age: 30,
-		};
-		res.json(user);
+const UpdateTaskSchema = schemas.UpdateTaskSchema.openapi({
+	description: 'Data for updating an existing task',
+	example: {
+		title: 'Updated task title',
+		description: 'Updated task description',
+		completed: true,
 	},
-);
+});
 ```
 
-## Generate OpenAPI Components from Zod Schemas
+## Define the OpenAPI Document
 
-Use `zod-to-openapi` to generate OpenAPI components from your Zod schemas.
-
-**Example:**
+Add the full OpenAPI specification to your `openapi.ts` file:
 
 ```typescript
-import { createRoute, generateOpenApiDocument } from 'zod-to-openapi';
-import { createUserSchema, userResponseSchema } from './your-schemas'; // Import your Zod schemas
-
-const components = {
-	schemas: {
-		CreateUserRequest: createUserSchema,
-		UserResponse: userResponseSchema,
+export const openApiDocument: OpenAPIObject = {
+	openapi: '3.1.0',
+	info: {
+		title: 'Tasks API',
+		version: '1.0.0',
+		description: 'API for managing tasks',
+		contact: {
+			name: 'Steve Kinney',
+			email: 'hello@stevekinney.net',
+		},
+	},
+	paths: {
+		'/tasks': {
+			get: {
+				tags: ['Tasks'],
+				summary: 'Get all tasks',
+				description: 'Retrieve all tasks, optionally filtered by completion status',
+				parameters: [
+					{
+						name: 'completed',
+						in: 'query',
+						required: false,
+						schema: {
+							type: 'boolean',
+						},
+						description: 'Filter tasks by completion status',
+					},
+				],
+				responses: {
+					'200': {
+						description: 'List of tasks',
+						content: {
+							'application/json': {
+								schema: generateSchema(TasksSchema),
+							},
+						},
+					},
+					'500': {
+						description: 'Server error',
+						content: {
+							'application/json': {
+								schema: generateSchema(ErrorResponseSchema),
+							},
+						},
+					},
+				},
+			},
+			post: {
+				tags: ['Tasks'],
+				summary: 'Create a new task',
+				description: 'Add a new task to the database',
+				requestBody: {
+					content: {
+						'application/json': {
+							schema: generateSchema(NewTaskSchema),
+						},
+					},
+					required: true,
+				},
+				responses: {
+					'201': {
+						description: 'Task created successfully',
+					},
+					'400': {
+						description: 'Invalid input',
+						content: {
+							'application/json': {
+								schema: generateSchema(ErrorResponseSchema),
+							},
+						},
+					},
+					'500': {
+						description: 'Server error',
+						content: {
+							'application/json': {
+								schema: generateSchema(ErrorResponseSchema),
+							},
+						},
+					},
+				},
+			},
+		},
+		'/tasks/{id}': {
+			get: {
+				tags: ['Tasks'],
+				summary: 'Get a task by ID',
+				description: 'Retrieve a single task by its ID',
+				parameters: [
+					{
+						name: 'id',
+						in: 'path',
+						required: true,
+						schema: {
+							type: 'integer',
+						},
+						description: 'ID of the task to retrieve',
+					},
+				],
+				responses: {
+					'200': {
+						description: 'Task found',
+						content: {
+							'application/json': {
+								schema: generateSchema(TaskSchema),
+							},
+						},
+					},
+					'404': {
+						description: 'Task not found',
+						content: {
+							'application/json': {
+								schema: generateSchema(ErrorResponseSchema),
+							},
+						},
+					},
+					'500': {
+						description: 'Server error',
+						content: {
+							'application/json': {
+								schema: generateSchema(ErrorResponseSchema),
+							},
+						},
+					},
+				},
+			},
+			put: {
+				tags: ['Tasks'],
+				summary: 'Update a task',
+				description: 'Update an existing task by its ID',
+				parameters: [
+					{
+						name: 'id',
+						in: 'path',
+						required: true,
+						schema: {
+							type: 'integer',
+						},
+						description: 'ID of the task to update',
+					},
+				],
+				requestBody: {
+					content: {
+						'application/json': {
+							schema: generateSchema(UpdateTaskSchema),
+						},
+					},
+					required: true,
+				},
+				responses: {
+					'200': {
+						description: 'Task updated successfully',
+					},
+					'404': {
+						description: 'Task not found',
+						content: {
+							'application/json': {
+								schema: generateSchema(ErrorResponseSchema),
+							},
+						},
+					},
+					'400': {
+						description: 'Invalid input',
+						content: {
+							'application/json': {
+								schema: generateSchema(ErrorResponseSchema),
+							},
+						},
+					},
+					'500': {
+						description: 'Server error',
+						content: {
+							'application/json': {
+								schema: generateSchema(ErrorResponseSchema),
+							},
+						},
+					},
+				},
+			},
+			delete: {
+				tags: ['Tasks'],
+				summary: 'Delete a task',
+				description: 'Delete a task by its ID',
+				parameters: [
+					{
+						name: 'id',
+						in: 'path',
+						required: true,
+						schema: {
+							type: 'integer',
+						},
+						description: 'ID of the task to delete',
+					},
+				],
+				responses: {
+					'200': {
+						description: 'Task deleted successfully',
+					},
+					'404': {
+						description: 'Task not found',
+						content: {
+							'application/json': {
+								schema: generateSchema(ErrorResponseSchema),
+							},
+						},
+					},
+					'500': {
+						description: 'Server error',
+						content: {
+							'application/json': {
+								schema: generateSchema(ErrorResponseSchema),
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+	components: {
+		schemas: {
+			Task: generateSchema(TaskSchema),
+			Tasks: generateSchema(TasksSchema),
+			NewTask: generateSchema(NewTaskSchema),
+			UpdateTask: generateSchema(UpdateTaskSchema),
+			ErrorResponse: generateSchema(ErrorResponseSchema),
+		},
 	},
 };
-
-const document = generateOpenApiDocument({
-	title: 'My Express API',
-	version: '1.0.0',
-	components,
-	paths: {
-		'/users': {
-			post: createRoute({
-				request: {
-					body: {
-						content: {
-							'application/json': {
-								schema: createUserSchema,
-							},
-						},
-					},
-				},
-				responses: {
-					201: {
-						description: 'User created',
-						content: {
-							'application/json': {
-								schema: userResponseSchema,
-							},
-						},
-					},
-				},
-			}),
-			get: createRoute({
-				responses: {
-					200: {
-						description: 'list of users',
-						content: {
-							'application/json': {
-								schema: z.array(userResponseSchema),
-							},
-						},
-					},
-				},
-			}),
-		},
-		'/users/{userId}': {
-			get: createRoute({
-				request: {
-					params: z.object({ userId: z.string() }),
-				},
-				responses: {
-					200: {
-						description: 'User details',
-						content: {
-							'application/json': {
-								schema: userResponseSchema,
-							},
-						},
-					},
-				},
-			}),
-		},
-	},
-});
-
-console.log(JSON.stringify(document, null, 2));
 ```
 
-## Save the OpenAPI Specification
-
-Save the generated OpenAPI specification to a file (e.g., `openapi.json` or `openapi.yaml`).
-
-```bash
-node your-script.js > openapi.json
-```
-
-## Serve the OpenAPI Specification (Optional)
-
-You can serve the generated OpenAPI specification using [`swagger-ui-express`](https://www.npmjs.com/package/swagger-ui-express) to provide an interactive documentation interface.
-
-```bash
-npm install swagger-ui-express
-```
+And then integrate with your Express server:
 
 ```typescript
-// index.ts
+// server.ts
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
-import openapiDocument from './openapi.json';
+import { openApiDocument } from './openapi';
 
-const app = express();
+export async function createServer() {
+	const app = express();
+	app.use(express.json());
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiDocument));
+	// Serve OpenAPI docs
+	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
-app.listen(3000, () => {
-	console.log('Server listening on port 3000');
-});
+	// Expose OpenAPI spec as JSON
+	app.get('/openapi.json', (req, res) => {
+		res.json(openApiDocument);
+	});
+
+	// Your existing routes...
+
+	return app;
+}
 ```
 
-## Benefits
+## Accessessing the Documentation
 
-- **Synchronization:** Ensures that your API documentation is always synchronized with your validation logic.
-- **Type Safety:** Leverages Zod's type safety to generate accurate OpenAPI schemas.
-- **Reduced Errors:** Minimizes the risk of inconsistencies between your API and documentation.
-- **Automation:** Automates the process of generating OpenAPI contracts.
-- **Maintainability:** Simplifies the maintenance of your API documentation.
+Once implemented, you can access:
 
-By using `zod-to-openapi`, you can streamline the process of generating OpenAPI contracts from your Zod-powered Express APIs, ensuring accuracy and consistency.
+- Interactive API documentation at: `/api-docs`
+- Raw OpenAPI JSON specification at: `/openapi.json`

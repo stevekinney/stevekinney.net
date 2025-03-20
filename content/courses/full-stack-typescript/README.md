@@ -1,7 +1,7 @@
 ---
 title: 'Full Stack TypeScript: Building Type-Safe Applications'
 description: 'A comprehensive guide to building type-safe full stack applications with TypeScript, Zod, Express, and more.'
-modified: 2025-03-15T16:46:36-06:00
+modified: 2025-03-20T08:53:17-05:00
 base: /courses/full-stack-typescript
 layout: contents
 exclude: true
@@ -32,23 +32,23 @@ exclude: true
 
 - [Adding Types to Express Requests](adding-types-to-express.md)
 - [Adding Types to Express Responses](adding-types-to-express-responses.md)
-- [Type Safe Route Registration](type-safe-route-registration-with-express.md)
-- [Type Safe Middleware with Express](type-safe-middleware-with-express.md)
-- [Type Safe Asynchronous Route Handlers](type-safe-asynchronous-route-handlers-with-express.md)
-- [Typed Error Middleware](typed-error-middleware-with-express.md)
-- [Branded Types with Express](branded-types-express.md)
-- [Typing Headers and Cookies](typing-headers-and-cookies-in-express.md)
-- [Type Safe Route Registration](type-safe-routes-in-express.md)
+- [Adding Types to Express with Zod](typing-express-with-zod-walkthrough.md)
+- [Adding Zod Schemas to Path Parameters](express-zod-params.md)
+- [Validating Query and Path Parameters](validating-query-and-path-parameters.md)
+- [Validating Schema with Middleware](validating-schema-with-middleware.md)
 - [Using Zod with Express](using-zod-with-express.md)
-- [Express Zod API](express-zod-api.md)
+- [Adding Client-Side Validation](adding-client-side-validation.md)
 - [Testing with Zod and Express](testing-with-zod-and-express.md)
-- [Class Validator and Class Transformer](class-validator-class-transformer-express.md)
+- [Validating the Data Layer](validating-the-data-layer.md)
 
 ## API Contracts
 
 - [OpenAPI/Swagger Contracts](open-api-swagger-express.md)
 - [Generating OpenAPI from Express](generating-open-api-from-express.md)
 - [Zod to OpenAPI](zod-to-open-api.md)
+- [Generating Types from an OpenAPI Specification](generating-types-from-open-api)
+- [Generating Zod Schemas from OpenAPI](generating-zod-openapi)
+- [Validating Your API with OpenAPI](validating-your-api-openai)
 
 ## tRPC
 
@@ -56,11 +56,24 @@ exclude: true
 - [tRPC on the Server](trpc-on-the-server.md)
 - [tRPC on the Client](trpc-on-the-client.md)
 - [Subscriptions with tRPC](subscriptions-with-trpcs.md)
-- [Middleare and Authentication with tRPC](middleware-auth-logging-for-trpc.md)
+- [Middleware and Authentication with tRPC](middleware-auth-logging-for-trpc.md)
 - [Custom Data Transformers with tRPC](custom-data-transformers-with-trpcs.md)
 - [Testing and Debugging with tRPC](testing-and-debugging-trpc.md)
-- [Best Practices with tRPC](best-practices-with-trpc.md)
 
 ## Databases
 
 - [Prisma](typesafe-database-with-prisma.md)
+- [Generate Zod Schemas from Prisma](zod-schemas-from-prisma)
+- [Generate a tRPC client with Prisma](generate-trpc-prisma)
+
+## Appendix
+
+- [Express Zod API](express-zod-api.md)
+- [Class Validator and Class Transformer](class-validator-class-transformer-express.md)
+- [Typed Error Middleware with Express](typed-error-middleware-with-express.md)
+- [Branded Types with Express](branded-types-express.md)
+- [Type Safe Route Registration](type-safe-route-registration-with-express.md)
+- [Type Safe Asynchronous Route Handlers](type-safe-asynchronous-route-handlers-with-express.md)
+- [Typing Headers and Cookies](typing-headers-and-cookies-in-express.md)
+- [Type Safe Route Registration](type-safe-routes-in-express.md)
+- [Type Safe Middleware with Express](type-safe-middleware-with-express.md)
