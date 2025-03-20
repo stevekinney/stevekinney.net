@@ -6,6 +6,9 @@ date: 2025-03-20T12:00:00-07:00
 modified: 2025-03-20T12:00:00-07:00
 ---
 
+> [!NOTE] The Repository for the Workshop
+> You can find all of the code that we'll be playing with today in [this repository](https://github.com/stevekinney/full-stack-typescript).
+
 When building modern TypeScript applications, you'll quickly discover just how important it is to validate data effectively and maintain type safety from front to back. That's where libraries like Zod, React Hook Form, and tRPC come to the rescue. You’ll learn how Zod transforms from a mere validation tool into a full-blown runtime guardian, sparing your code from sloppy user input. By pairing Zod with React Hook Form, you’ll see how typed schemas can both validate form data on the client and transfer seamlessly to the server for final checks.
 
 On the server side, you’ll explore how Express can be carefully massaged into a type-safe environment using generic signatures like `Request<Params, ResBody, ReqBody, ReqQuery>` and by hooking up Zod (or alternative libraries) for runtime validation. You’ll also discover how to enforce consistent API responses, work with typed request headers, harness error-handling middleware, and keep your cookie usage under control. This ensures every route truly operates with the data shape you’ve promised—no more “surprise, that field is actually undefined.”
