@@ -1,5 +1,5 @@
 ---
-modified: 2025-03-15T16:36:24-06:00
+modified: 2025-03-20T03:57:46-05:00
 title: tRPC on the Server
 description: Learn how to set up a tRPC server with Express to create type-safe API endpoints with routers, procedures, and contexts.
 ---
@@ -7,166 +7,193 @@ description: Learn how to set up a tRPC server with Express to create type-safe 
 ## Install Dependencies
 
 ```bash
-npm install express @trpc/server @trpc/server/adapters/express zod sqlite3
+npm install express @trpc/server zod sqlite3
 npm install -D typescript ts-node nodemon @types/node @types/express
 ```
 
-- **express**: for our HTTP server.
-- **@trpc/server** & **@trpc/server/adapters/express**: for tRPC core & its Express integration.
-- **zod**: schema validation library (the unstoppable input-validation sidekick).
-- **sqlite3**: our sample DB driver (because “SQLite or bust” for quick examples).
-- **TypeScript toolchain**: you know why.
+- [`express`](https://npm.im/express): For our HTTP server.
+- [`@trpc/server`](https://npm.im/@trpc/server): For tRPC core & its Express integration.
+- [`zod`](https://npm.im/zod): Schema validation library (the unstoppable input-validation sidekick).
+- [`sqlite3`](https://npm.im/sqlite3): Our sample DB driver (because “SQLite or bust” for quick examples).
+- [`typescript`](https://npm.im/typescript): You know why.
 
 ## Defining the tRPC API
 
 tRPC works around **routers** (collections of procedures) and **procedures** (functions that can be queries, mutations, or subscriptions).
 
-### Basic tRPC Initialization
+### Create the tRPC Base
 
-Create a file like `server/src/trpc.ts`:
+Create a `trpc.ts` file that sets up the core tRPC functionality:
 
-```ts
+```typescript
 import { initTRPC } from '@trpc/server';
+import { z } from 'zod';
+import {
+	NewTaskSchema,
+	TaskParamsSchema,
+	TaskQuerySchema,
+	UpdateTaskSchema,
+} from 'busy-bee-schema';
+import type { Context } from './trpc-context.js';
 
-const t = initTRPC.create();
+// Initialize tRPC with context
+const t = initTRPC.context<Context>().create();
 
+// Create router and procedure helpers
 export const router = t.router;
 export const publicProcedure = t.procedure;
-```
 
-- `t.router` is how we define groups of endpoints.
-- `publicProcedure` is our basic “unprotected” procedure factory (we’ll make an “authenticated” version later).
+// Create the task router with procedures
+export const taskRouter = router({
+	// Get all tasks with optional filtering by completion status
+	getTasks: publicProcedure
+		.input(TaskQuerySchema) // Use Zod schema for input validation
+		.query(async ({ input, ctx }) => {
+			return await ctx.taskClient.getTasks(input);
+		}),
 
-Let’s define a simple router for `User`—with a “get” query and a “create” mutation. We’ll store data in SQLite:
-
-```ts
-// server/src/routers/user.ts
-
-import { publicProcedure, router } from '../trpc';
-import { z } from 'zod';
-import { db } from '../db'; // your SQLite instance/connection
-
-export const userRouter = router({
-	// Query to get a user by ID
-	getUser: publicProcedure.input(z.number()).query(({ input }) => {
-		const stmt = db.prepare('SELECT id, name FROM user WHERE id = ?');
-		const user = stmt.get(input);
-		return user || null;
+	// Get a single task by ID
+	getTask: publicProcedure.input(TaskParamsSchema).query(async ({ input, ctx }) => {
+		const task = await ctx.taskClient.getTask(input.id);
+		return task;
 	}),
 
-	// Mutation to create a new user
-	createUser: publicProcedure
+	// Create a new task
+	createTask: publicProcedure.input(NewTaskSchema).mutation(async ({ input, ctx }) => {
+		await ctx.taskClient.createTask({ task: input });
+		return { success: true };
+	}),
+
+	// Update an existing task
+	updateTask: publicProcedure
 		.input(
 			z.object({
-				name: z.string().min(1),
-				password: z.string().min(4),
+				id: z.coerce.number().int(),
+				task: UpdateTaskSchema,
 			}),
 		)
-		.mutation(({ input }) => {
-			const stmt = db.prepare(`
-        INSERT INTO user (name, password) VALUES (?, ?)
-      `);
-			const result = stmt.run(input.name, input.password);
-			return { id: result.lastInsertRowid, name: input.name };
+		.mutation(async ({ input, ctx }) => {
+			await ctx.taskClient.updateTask(input.id, input.task);
+			return { success: true };
 		}),
+
+	// Delete a task
+	deleteTask: publicProcedure.input(TaskParamsSchema).mutation(async ({ input, ctx }) => {
+		await ctx.taskClient.deleteTask(input.id);
+		return { success: true };
+	}),
 });
-```
 
-- **`getUser`**: Validates the input is a `number`; returns the user or `null`.
-- **`createUser`**: Accepts a name & password; inserts into the DB. Don’t actually store passwords in plaintext—hash them. This is just a bad example for demonstration.
-
-### Combine Multiple Routers
-
-Eventually, you’ll have more routers (`postsRouter`, `commentsRouter`, etc.). Combine them into a single `appRouter`:
-
-```ts
-// server/src/index.ts
-
-import { router } from './trpc';
-import { userRouter } from './routers/user';
-
+// Create the app router
 export const appRouter = router({
-	user: userRouter,
-	// add more routers here…
+	task: taskRouter,
 });
 
+// Export type definition of API for client usage
 export type AppRouter = typeof appRouter;
 ```
 
-### tRPC Context
+### Set Up Context
 
-The **context** gets created for each request—handy for auth, DB connections, or reading headers. You can attach a user object, for example:
+Create a `trpc-context.ts` file to provide the necessary context to all tRPC procedures:
 
-```ts
-// server/src/context.ts
+```typescript
+import { inferAsyncReturnType } from '@trpc/server';
+import { TaskClient } from './client.js';
+import { getDatabase } from './database.js';
 
-import type { CreateExpressContextOptions } from '@trpc/server/adapters/express';
-import { db } from './db';
+/**
+ * Creates context for tRPC procedures
+ * Initializes database connection and task client
+ */
+export async function createContext() {
+	const database = await getDatabase();
+	const taskClient = new TaskClient(database);
 
-export function createContext({ req, res }: CreateExpressContextOptions) {
-	const authHeader = req.headers.authorization;
-	let user = null;
-
-	if (authHeader) {
-		// e.g., treat the header as "user ID" for simplicity
-		const userId = authHeader;
-		user = db.prepare('SELECT id, name FROM user WHERE id = ?').get(userId);
-	}
-
-	return { user, db };
+	return {
+		taskClient,
+	};
 }
-export type Context = ReturnType<typeof createContext>;
+
+// Export the context type for use in tRPC setup
+export type Context = inferAsyncReturnType<typeof createContext>;
 ```
 
-Then tell tRPC about the context type:
+### Create an Express Adapter
 
-```ts
-// server/src/trpc.ts
+Create a `trpc-adapter.ts` file to integrate tRPC with Express:
 
-import { initTRPC } from '@trpc/server';
-import type { Context } from './context';
-
-const t = initTRPC.context<Context>().create();
-// ...
-```
-
----
-
-## Express.js Setup
-
-Time to make the server. In `server/src/server.ts`:
-
-```ts
+```typescript
+import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import express from 'express';
-import * as trpcExpress from '@trpc/server/adapters/express';
-import cors from 'cors';
-import { appRouter } from './index';
-import { createContext } from './context';
+import { createContext } from './trpc-context.js';
+import { appRouter } from './trpc.js';
 
-const app = express();
-app.use(cors());
+/**
+ * Creates an Express router with tRPC endpoints
+ * @returns Express router with tRPC middleware
+ */
+export function createTRPCRouter() {
+	const router = express.Router();
 
-app.use(
-	'/trpc',
-	trpcExpress.createExpressMiddleware({
-		router: appRouter,
-		createContext,
-	}),
-);
+	router.use(
+		'/trpc',
+		createExpressMiddleware({
+			router: appRouter,
+			createContext,
+		}),
+	);
 
-app.listen(4000, () => {
-	console.log('tRPC server running at http://localhost:4000');
-});
+	return router;
+}
 ```
 
-That’s it! All requests to `/trpc` are handled by tRPC. For developer sanity, you might want to add `onError` for logging:
+### Add tRPC to Your Express App
+
+Update your main `server.ts` file to include the tRPC router:
+
+```typescript
+import { createTRPCRouter } from './trpc-adapter.js';
+
+export async function createServer(database: Database) {
+	const app = express();
+	app.use(cors());
+	app.use(express.json());
+
+	// Add tRPC router
+	app.use('/api', createTRPCRouter());
+
+	// ... rest of your Express setup
+}
+```
+
+## Using tRPC
+
+After implementing these steps, your tRPC API will be available at:
 
 ```ts
-trpcExpress.createExpressMiddleware({
-	router: appRouter,
-	createContext,
-	onError({ error, path, type }) {
-		console.error(`Tsk, tsk! Error on ${path} [${type}]:`, error);
-	},
-});
+/api/trpc/[procedure-path]
 ```
+
+For example:
+
+- `GET /api/trpc/task.getTasks` - Get all tasks
+- `GET /api/trpc/task.getTask` - Get a specific task
+- `POST /api/trpc/task.createTask` - Create a task
+- `POST /api/trpc/task.updateTask` - Update a task
+- `POST /api/trpc/task.deleteTask` - Delete a task
+
+## Benefits of tRPC
+
+1. **Type Safety**: Full end-to-end type safety between your client and server
+2. **Schema Validation**: Automatic validation of inputs using Zod schemas
+3. **Developer Experience**: Better autocomplete and type checking in your editor
+4. **API Documentation**: Type definitions serve as documentation for your API
+5. **Performance**: tRPC uses WebSockets for subscriptions and efficient data transfer
+
+## Next Steps
+
+- Create a tRPC client in your frontend application to consume these endpoints
+- Add middleware for authentication/authorization
+- Implement error handling strategies
+- Add more complex procedures with nested routers

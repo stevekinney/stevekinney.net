@@ -1,121 +1,129 @@
 ---
-modified: 2025-03-15T16:35:27-06:00
+modified: 2025-03-20T03:58:11-05:00
 title: tRPC on the Client
 description: Learn how to set up and use tRPC on the client side with React and React Query integration for type-safe API calls.
 ---
 
-For React + React Query:
+This guide documents how we migrated the client-side API from using direct REST calls to using tRPC. Before implementing these changes, the following were set up:
+
+- A tRPC server (in `/server/src/trpc.ts`)
+- Shared schemas between client and server (in `shared/schemas.ts`)
+- Existing REST API client (in `/client/src/api.ts`)
+
+## Install Dependencies
+
+I already did this for you, but it feels appropriate to call it out explicitly. The first step was to install the necessary client-side tRPC packages:
 
 ```bash
-npm install react react-dom zod @trpc/client @trpc/react-query @tanstack/react-query
+npm install @trpc/client
 ```
 
-This allows you to use tRPC hooks in React that rely on React Query’s caching and concurrency magic.
+## Update API Client
 
-## Building the Client
+The existing REST API client was completely refactored to use tRPC:
 
-You can call the tRPC server from anywhere:
+```typescript
+import { type NewTask, type Task, type UpdateTask } from 'busy-bee-schema';
 
-- **Vanilla**: Use the `@trpc/client` low-level functions.
-- **React**: Use `@trpc/react-query` for sweet React Query integration.
+import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 
-### Vanilla Example
+import type { AppRouter } from '../../server/src/trpc';
 
-```ts
-// client/src/index.ts
-import { createTRPCClient, httpBatchLink } from '@trpc/client';
-import type { AppRouter } from '../../server/src/index';
-
-const client = createTRPCClient<AppRouter>({
-	links: [httpBatchLink({ url: 'http://localhost:4000/trpc' })],
+const client = createTRPCProxyClient<AppRouter>({
+	links: [
+		httpBatchLink({
+			url: 'http://localhost:4001/api/trpc',
+		}),
+	],
 });
 
-async function demoCalls() {
-	try {
-		const user = await client.user.getUser.query(1);
-		console.log('User #1:', user);
-	} catch (err) {
-		console.error('Uh oh:', err);
-	}
+export const fetchTasks = async (showCompleted: boolean): Promise<Task[]> => {
+	return client.task.getTasks.query({ completed: showCompleted ? true : undefined });
+};
+```
 
-	const newUser = await client.user.createUser.mutate({
-		name: 'Bob',
-		password: 'secret123',
+### Key Changes Made
+
+**Client Setup**: Created a tRPC proxy client that connects to the server endpoint:
+
+```typescript
+const client = createTRPCProxyClient<AppRouter>({
+	links: [
+		httpBatchLink({
+			url: 'http://localhost:4001/trpc',
+		}),
+	],
+});
+```
+
+### Fetch Tasks
+
+Updated to use tRPC query
+
+```typescript
+export const fetchTasks = async (showCompleted: boolean): Promise<Task[]> => {
+	return client.task.getTasks.query({ completed: showCompleted ? true : undefined });
+};
+```
+
+### Get Single Task
+
+Updated to use tRPC query with ID parameter
+
+```typescript
+export const getTask = async (id: string): Promise<Task> => {
+	const task = await client.task.getTask.query({ id: parseInt(id, 10) });
+
+	if (!task) throw new Error('Failed to fetch task');
+
+	return task;
+};
+```
+
+### Create Task
+
+Updated to use tRPC mutation
+
+```typescript
+export const createTask = async (task: NewTask): Promise<void> => {
+	await client.task.createTask.mutate(task);
+};
+```
+
+### Update Task
+
+Updated to use tRPC mutation with proper parameter structure
+
+```typescript
+export const updateTask = async (id: string, task: UpdateTask): Promise<void> => {
+	await client.task.updateTask.mutate({
+		id: parseInt(id, 10),
+
+		task,
 	});
-	console.log('Created user:', newUser);
-}
-
-demoCalls();
+};
 ```
 
-### React Example
+### Delete Task
 
-Install `@tanstack/react-query` and set things up:
+Updated to use tRPC mutation
 
-```ts
-// client/src/utils/trpc.ts
-
-import { createTRPCReact, httpBatchLink } from '@trpc/react-query';
-import type { AppRouter } from '../../../server/src/index';
-
-export const trpc = createTRPCReact<AppRouter>();
-
-export const trpcClient = trpc.createClient({
-	links: [httpBatchLink({ url: 'http://localhost:4000/trpc' })],
-});
+```typescript
+export const deleteTask = async (id: string): Promise<void> => {
+	await client.task.deleteTask.mutate({ id: parseInt(id, 10) });
+};
 ```
 
-Wrap your React app:
+## Benefits of Using tRPC
 
-```tsx
-// client/src/main.tsx
+1. **Type Safety**: Full end-to-end type safety between client and server
+2. **Simplified API Calls**: No need to manually construct URLs or handle HTTP errors
+3. **Automatic Type Inference**: Client automatically knows the shape of data from server
+4. **Reduced Boilerplate**: No need for explicit data validation or parsing
+5. **Better Developer Experience**: Autocomplete for available endpoints
 
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { trpc, trpcClient } from './utils/trpc';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import App from './App';
+## Next Steps
 
-const queryClient = new QueryClient();
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-	<React.StrictMode>
-		<trpc.Provider client={trpcClient} queryClient={queryClient}>
-			<QueryClientProvider client={queryClient}>
-				<App />
-			</QueryClientProvider>
-		</trpc.Provider>
-	</React.StrictMode>,
-);
-```
-
-Then in a component:
-
-```tsx
-// client/src/App.tsx
-
-import { trpc } from './utils/trpc';
-
-function App() {
-	const getUserQuery = trpc.user.getUser.useQuery(1);
-	const createUserMutation = trpc.user.createUser.useMutation();
-
-	if (getUserQuery.isLoading) return <div>Loading user…</div>;
-	if (getUserQuery.error) return <div>Error: {getUserQuery.error.message}</div>;
-
-	const user = getUserQuery.data;
-
-	return (
-		<div>
-			<p>User: {user ? user.name : 'Not found'}</p>
-			<button onClick={() => createUserMutation.mutate({ name: 'Alice', password: 'foobar' })}>
-				Create user
-			</button>
-		</div>
-	);
-}
-
-export default App;
-```
-
-All queries/mutations are fully type-safe. If the server changes the shape of user objects, your client code will break at build time—no more shipping bugs into production because of mismatched shapes.
+- Implement optimistic updates for improved user experience
+- Add error handling middleware
+- Consider implementing real-time updates with tRPC subscriptions
