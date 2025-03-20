@@ -32,7 +32,7 @@ Unhappy path testing involves various failure scenarios, such as:
 
 ## Testing Invalid Input
 
-It it takes is like 3 minutes of talking to someone who writes some other programming language to hear the jokes about JavaScript.
+It takes like 3 minutes of talking to someone who writes some other programming language to hear the jokes about JavaScript.
 
 - `true + true === 2`
 - `1 + '1' === '11'`
@@ -65,7 +65,7 @@ function parseAge(age) {
 		throw new Error('Invalid age format');
 	}
 	if (age < 0 || age > 120) {
-		throw new Error('Age must be between 0 and 129');
+		throw new Error('Age must be between 0 and 120');
 	}
 	return age;
 }
