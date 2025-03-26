@@ -41,7 +41,7 @@ import recipes from './recipes.json';
 type Recipe = (typeof recipes)[number];
 ```
 
-Next, we'll pull in [Pinecone](https://www.npmjs.com/package/@pinecone-database/pinecone) and the [Open AI SDK](https://www.npmjs.com/package/openai). Additionally, we'll use `dotenv` to pull in our API keys as environment variables from `.env`, which you'll need to create yourself since it's included in `,gitignore`. It turns out that I wasn't particularly in the mood to publicly expose my API keys and let y'all run up a series of bills on my behalf.
+Next, we'll pull in [Pinecone](https://www.npmjs.com/package/@pinecone-database/pinecone) and the [Open AI SDK](https://www.npmjs.com/package/openai). Additionally, we'll use `dotenv` to pull in our API keys as environment variables from `.env`, which you'll need to create yourself since it's included in `.gitignore`. It turns out that I wasn't particularly in the mood to publicly expose my API keys and let y'all run up a series of bills on my behalf.
 
 ```typescript
 import 'dotenv/config';
