@@ -64,7 +64,7 @@ These context keys can be combined using conditional operators to create more sp
 
 ### Avoiding Keybinding Conflicts
 
-Conflicts occur the same keybinding is bound to two or more shortcuts in the same context. Visual Studio Code typically uses the last declared binding, so whichever one is loaded last takes priority. To avoid confusion, review existing shortcuts in the Keybindings editor before assigning new ones. If you find a conflict, either remove or change the old binding to keep your muscle memory intact.
+Conflicts occur when the same keybinding is bound to two or more shortcuts in the same context. Visual Studio Code typically uses the last declared binding, so whichever one is loaded last takes priority. To avoid confusion, review existing shortcuts in the Keybindings editor before assigning new ones. If you find a conflict, either remove or change the old binding to keep your muscle memory intact.
 
 > [!TIP] Overriding extensions that override your key bindings
 > If you rely on an extension that hijacks a shortcut you love, open `keybindings.json` and override it. Conflict solved—no drama necessary.
