@@ -4,7 +4,7 @@ import { error } from '@sveltejs/kit';
 export async function load({ params }) {
   try {
     return await getPost(params.slug);
-  } catch (e) {
+  } catch {
     return error(404, `Post not found`);
   }
 }
