@@ -4,17 +4,11 @@ import OpenGraphImage from './open-graph-image';
 
 export const prerender = false;
 
-const headers = {
-	'Content-Type': 'image/jpeg',
-	'Cache-Control': 'max-age=604800, stale-while-revalidate=86400',
-};
-
 export async function GET(handler) {
 	const { fetch } = handler;
 
 	const firaSansBold = await fetch('/fira-sans-500-normal.woff').then((res) => res.arrayBuffer());
 	const firaSansThin = await fetch('/fira-sans-300-normal.woff').then((res) => res.arrayBuffer());
-
 	const leagueGothic = await fetch('/league-gothic-400-normal.woff').then((res) =>
 		res.arrayBuffer(),
 	);
@@ -46,5 +40,12 @@ export async function GET(handler) {
 
 	const buffer = await sharp(Buffer.from(svg)).jpeg().toBuffer();
 
-	return new Response(buffer, { headers });
+	return new Response(buffer, {
+		headers: {
+			'Content-Type': 'image/jpeg',
+			'Cache-Control': 'public, max-age=604800, stale-while-revalidate=86400',
+			'Access-Control-Allow-Origin': '*',
+			'Content-Length': buffer.length.toString(),
+		},
+	});
 }
