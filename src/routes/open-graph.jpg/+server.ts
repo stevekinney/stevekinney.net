@@ -12,8 +12,9 @@ const headers = {
 export async function GET(handler) {
 	const { fetch } = handler;
 
-	const firaSans = await fetch('/fira-sans-500-normal.woff').then((res) => res.arrayBuffer());
+	const firaSansBold = await fetch('/fira-sans-500-normal.woff').then((res) => res.arrayBuffer());
 	const firaSansThin = await fetch('/fira-sans-300-normal.woff').then((res) => res.arrayBuffer());
+
 	const leagueGothic = await fetch('/league-gothic-400-normal.woff').then((res) =>
 		res.arrayBuffer(),
 	);
@@ -32,7 +33,7 @@ export async function GET(handler) {
 				name: 'Fira Sans',
 				weight: 500,
 				style: 'normal',
-				data: firaSans,
+				data: firaSansBold,
 			},
 			{
 				name: 'League Gothic',
