@@ -3,6 +3,9 @@ import metadata from '$lib/metadata';
 import type { Element } from 'hast';
 import { toHtml } from 'hast-util-to-html';
 import { h } from 'hastscript';
+import prettier from 'prettier';
+
+export const prerender = true;
 
 const getPriority = (path: string): number => {
 	if (path.endsWith('/README.md')) return 0.8;
@@ -31,6 +34,7 @@ const getUrl = (path: string): string => {
 };
 
 export const GET = async () => {
+	const checked: Set<string> = new Set();
 	const paths: Element[] = [];
 	let mostRecent = new Date(0);
 
@@ -42,6 +46,10 @@ export const GET = async () => {
 	for (const path of filePaths) {
 		if (path.includes('[slug]')) continue; // Skip dynamic routes
 		const url = getUrl(path);
+
+		if (checked.has(url)) continue; // Skip if already processed
+		checked.add(url);
+
 		const priority = getPriority(path);
 		const lastModified = await getLastModifiedDate(`./${path}`);
 
@@ -56,16 +64,22 @@ export const GET = async () => {
 
 	const sitemap = h('urlset', { xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' }, ...paths);
 
-	const content = `<?xml version="1.0" encoding="UTF-8"?>` + toHtml(sitemap);
+	const xml = await prettier.format(`<?xml version="1.0" encoding="utf-8"?>\n${toHtml(sitemap)}`, {
+		parser: 'html',
+		printWidth: 100,
+		tabWidth: 2,
+		htmlWhitespaceSensitivity: 'ignore',
+	});
 
-	return new Response(content, {
+	return new Response(xml, {
 		headers: {
 			'Content-Type': 'application/xml',
-			'Content-Length': Buffer.byteLength(content).toString(),
+			'Content-Length': Buffer.byteLength(xml).toString(),
 			'Cache-Control': 'public, max-age=86400',
 			'Access-Control-Allow-Origin': '*',
 			'Last-Modified': mostRecent.toUTCString(),
 			'X-Robots-Tag': 'all',
+			ETag: `W/"${mostRecent.getTime()}"`,
 		},
 	});
 };
