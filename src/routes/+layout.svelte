@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { Github, Instagram, Twitter, Linkedin, Youtube } from 'lucide-svelte';
+	import { Github, Instagram, Linkedin, Twitter, Youtube } from 'lucide-svelte';
 
-	import SocialLink from '$lib/components/social-link.svelte';
 	import Navigation from '$lib/components/navigation.svelte';
+	import SocialLink from '$lib/components/social-link.svelte';
 
 	import '../app.css';
+
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
