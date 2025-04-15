@@ -106,7 +106,7 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 							padding: '1rem',
 						}}
 					>
-						https://stevekinney.net
+						{metadata.url}
 					</p>
 				</div>
 			</div>
