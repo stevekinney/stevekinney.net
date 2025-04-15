@@ -42,7 +42,7 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 					padding: '4rem',
 					gap: '2rem',
 					backgroundImage:
-						'radial-gradient(circle at 25px 25px, #8a55c8 2%, transparent 0%), radial-gradient(circle at 75px 75px, #8a55c8 2%, transparent 0%), linear-gradient(to right, #643a8f, #d5c2f0)',
+						'radial-gradient(circle at 25px 25px, rgba(220, 58, 30, 0.5) 5%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(43, 141, 153, 0.5) 5%, transparent 0%), linear-gradient(to right, #F1D9AC, #A8E2E9)',
 					color: 'black',
 					backgroundSize: '100px 100px, 100px 100px, 100% 100%',
 					backgroundColor: 'white',
@@ -60,11 +60,15 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 				>
 					<h2
 						style={{
-							fontSize: description ? '3rem' : '6rem',
+							fontSize: description ? '2.5rem' : '6rem',
 							textAlign: description ? 'left' : 'center',
 							margin: 0,
+							fontWeight: 500,
 							overflow: 'hidden',
 							textOverflow: 'ellipsis',
+							backgroundColor: 'black',
+							color: 'white',
+							padding: '1rem 1rem',
 						}}
 					>
 						{title}
@@ -72,18 +76,38 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
 					<p
 						style={{
 							fontSize: '2rem',
-							fontWeight: 300,
 							margin: 0,
 							overflow: 'hidden',
 							textOverflow: 'ellipsis',
+							backgroundColor: 'black',
+							color: 'white',
+							padding: '1rem 1rem',
 						}}
 					>
 						{description}
 					</p>
 				</div>
 				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-					<p style={{ fontSize: '2rem', margin: 0 }}>@stevekinney</p>
-					<p style={{ fontSize: '2rem', margin: 0 }}>https://stevekinney.net</p>
+					<p
+						style={{
+							fontSize: '2rem',
+							margin: 0,
+							backgroundColor: 'white',
+							padding: '1rem',
+						}}
+					>
+						@stevekinney
+					</p>
+					<p
+						style={{
+							fontSize: '2rem',
+							margin: 0,
+							backgroundColor: 'white',
+							padding: '1rem',
+						}}
+					>
+						https://stevekinney.net
+					</p>
 				</div>
 			</div>
 		</div>
