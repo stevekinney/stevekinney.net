@@ -1,10 +1,8 @@
-const pageTitle = 'Steve Kinney';
+import { title } from './metadata';
 
-export const formatPageTitle = (title: string | undefined): string => {
-	if (title) {
-		if (title === pageTitle) return pageTitle;
-		return `${title} | ${pageTitle}`;
-	}
+export const formatPageTitle = (pageTitle: string | undefined): string => {
+	if (!pageTitle) return title;
+	if (pageTitle === title) return title;
 
-	return pageTitle;
+	return `${pageTitle} | ${title}`;
 };
