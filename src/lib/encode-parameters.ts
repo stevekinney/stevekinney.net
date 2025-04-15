@@ -1,4 +1,4 @@
-export const encodeParameters = (values: Record<string, string>) => {
+export const encodeParameters = (values: Record<string, string>): string => {
 	const encoded = new URLSearchParams();
 
 	for (const [key, value] of Object.entries(values)) {
