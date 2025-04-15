@@ -13,7 +13,7 @@ export const GET = async () => {
 		});
 	} catch (error) {
 		if (dev) {
-			console.error(`Error fetching posts`, error);
+			console.error('Error fetching posts', error);
 		}
 
 		return new Response(JSON.stringify({ error: 'Posts not found' }), {
