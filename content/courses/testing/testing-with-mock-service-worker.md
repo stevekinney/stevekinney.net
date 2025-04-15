@@ -42,15 +42,15 @@ Create a `src/mocks` directory and set up the handlers for your API endpoints.
 import { rest } from 'msw';
 
 export const handlers = [
-	// Mock a GET request to /api/user
-	rest.get('/api/user', (req, res, ctx) => {
-		return res(ctx.status(200), ctx.json({ id: '123', name: 'John Doe' }));
-	}),
-	// Mock a POST request to /api/login
-	rest.post('/api/login', (req, res, ctx) => {
-		const { username } = req.body;
-		return res(ctx.status(200), ctx.json({ message: `Welcome, ${username}!` }));
-	}),
+  // Mock a GET request to /api/user
+  rest.get('/api/user', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ id: '123', name: 'John Doe' }));
+  }),
+  // Mock a POST request to /api/login
+  rest.post('/api/login', (req, res, ctx) => {
+    const { username } = req.body;
+    return res(ctx.status(200), ctx.json({ message: `Welcome, ${username}!` }));
+  }),
 ];
 ```
 
@@ -93,10 +93,10 @@ Update your `vitest.config.js` to include the setup file:
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	test: {
-		environment: 'jsdom',
-		setupFiles: './setupTests.js',
-	},
+  test: {
+    environment: 'jsdom',
+    setupFiles: './setupTests.js',
+  },
 });
 ```
 
@@ -111,21 +111,21 @@ Suppose you have a React component that fetches user data:
 import React, { useEffect, useState } from 'react';
 
 export function UserProfile() {
-	const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
-	useEffect(() => {
-		fetch('/api/user')
-			.then((res) => res.json())
-			.then(setUser);
-	}, []);
+  useEffect(() => {
+    fetch('/api/user')
+      .then((res) => res.json())
+      .then(setUser);
+  }, []);
 
-	if (!user) return <div>Loading…</div>;
+  if (!user) return <div>Loading…</div>;
 
-	return (
-		<div>
-			<h1>{user.name}</h1>
-		</div>
-	);
+  return (
+    <div>
+      <h1>{user.name}</h1>
+    </div>
+  );
 }
 ```
 
@@ -138,15 +138,15 @@ import { expect, test } from 'vitest';
 import { UserProfile } from './UserProfile';
 
 test('renders user profile after fetching data', async () => {
-	// Render the component
-	render(<UserProfile />);
+  // Render the component
+  render(<UserProfile />);
 
-	// Verify loading state
-	expect(screen.getByText(/loading/i)).toBeInTheDocument();
+  // Verify loading state
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
 
-	// Wait for the user data to be displayed
-	const userName = await screen.findByText('John Doe');
-	expect(userName).toBeInTheDocument();
+  // Wait for the user data to be displayed
+  const userName = await screen.findByText('John Doe');
+  expect(userName).toBeInTheDocument();
 });
 ```
 
@@ -171,18 +171,18 @@ import { server } from '../mocks/server';
 import { UserProfile } from './UserProfile';
 
 test('handles server error', async () => {
-	// Override the default handler for this test
-	server.use(
-		rest.get('/api/user', (req, res, ctx) => {
-			return res(ctx.status(500));
-		}),
-	);
+  // Override the default handler for this test
+  server.use(
+    rest.get('/api/user', (req, res, ctx) => {
+      return res(ctx.status(500));
+    }),
+  );
 
-	render(<UserProfile />);
+  render(<UserProfile />);
 
-	// Wait for error message
-	const errorMessage = await screen.findByText(/failed to load user/i);
-	expect(errorMessage).toBeInTheDocument();
+  // Wait for error message
+  const errorMessage = await screen.findByText(/failed to load user/i);
+  expect(errorMessage).toBeInTheDocument();
 });
 ```
 
@@ -209,9 +209,9 @@ Override handlers within tests to simulate different scenarios.
 
 ```javascript
 server.use(
-	rest.get('/api/user', (req, res, ctx) => {
-		return res(ctx.status(404), ctx.json({ error: 'User not found' }));
-	}),
+  rest.get('/api/user', (req, res, ctx) => {
+    return res(ctx.status(404), ctx.json({ error: 'User not found' }));
+  }),
 );
 ```
 
@@ -230,18 +230,18 @@ import { rest } from 'msw';
 import { server } from '../mocks/server';
 
 test('submits form data correctly', async () => {
-	let requestBody;
+  let requestBody;
 
-	server.use(
-		rest.post('/api/submit', (req, res, ctx) => {
-			requestBody = req.body;
-			return res(ctx.status(200));
-		}),
-	);
+  server.use(
+    rest.post('/api/submit', (req, res, ctx) => {
+      requestBody = req.body;
+      return res(ctx.status(200));
+    }),
+  );
 
-	// … render component and trigger form submission …
+  // … render component and trigger form submission …
 
-	expect(requestBody).toEqual({ name: 'Alice', age: 30 });
+  expect(requestBody).toEqual({ name: 'Alice', age: 30 });
 });
 ```
 
@@ -311,31 +311,31 @@ afterEach(() => server.resetHandlers());
 import React, { useEffect, useState } from 'react';
 
 export function Dashboard() {
-	const [user, setUser] = useState(null);
-	const [notifications, setNotifications] = useState([]);
+  const [user, setUser] = useState(null);
+  const [notifications, setNotifications] = useState([]);
 
-	useEffect(() => {
-		fetch('/api/user')
-			.then((res) => res.json())
-			.then(setUser);
+  useEffect(() => {
+    fetch('/api/user')
+      .then((res) => res.json())
+      .then(setUser);
 
-		fetch('/api/notifications')
-			.then((res) => res.json())
-			.then(setNotifications);
-	}, []);
+    fetch('/api/notifications')
+      .then((res) => res.json())
+      .then(setNotifications);
+  }, []);
 
-	if (!user || notifications.length === 0) return <div>Loading…</div>;
+  if (!user || notifications.length === 0) return <div>Loading…</div>;
 
-	return (
-		<div>
-			<h1>Welcome, {user.name}</h1>
-			<ul>
-				{notifications.map((n) => (
-					<li key={n.id}>{n.message}</li>
-				))}
-			</ul>
-		</div>
-	);
+  return (
+    <div>
+      <h1>Welcome, {user.name}</h1>
+      <ul>
+        {notifications.map((n) => (
+          <li key={n.id}>{n.message}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 ```
 
@@ -344,18 +344,18 @@ export function Dashboard() {
 ```javascript
 // handlers.js
 export const handlers = [
-	rest.get('/api/user', (req, res, ctx) => {
-		return res(ctx.status(200), ctx.json({ id: '123', name: 'Alice' }));
-	}),
-	rest.get('/api/notifications', (req, res, ctx) => {
-		return res(
-			ctx.status(200),
-			ctx.json([
-				{ id: '1', message: 'Notification 1' },
-				{ id: '2', message: 'Notification 2' },
-			]),
-		);
-	}),
+  rest.get('/api/user', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ id: '123', name: 'Alice' }));
+  }),
+  rest.get('/api/notifications', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json([
+        { id: '1', message: 'Notification 1' },
+        { id: '2', message: 'Notification 2' },
+      ]),
+    );
+  }),
 ];
 ```
 
@@ -368,15 +368,15 @@ import { expect, test } from 'vitest';
 import { Dashboard } from './Dashboard';
 
 test('renders user and notifications', async () => {
-	render(<Dashboard />);
+  render(<Dashboard />);
 
-	expect(screen.getByText(/loading/i)).toBeInTheDocument();
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
 
-	const welcomeMessage = await screen.findByText(/welcome, alice/i);
-	expect(welcomeMessage).toBeInTheDocument();
+  const welcomeMessage = await screen.findByText(/welcome, alice/i);
+  expect(welcomeMessage).toBeInTheDocument();
 
-	const notificationItems = await screen.findAllByRole('listitem');
-	expect(notificationItems).toHaveLength(2);
+  const notificationItems = await screen.findAllByRole('listitem');
+  expect(notificationItems).toHaveLength(2);
 });
 ```
 

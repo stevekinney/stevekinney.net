@@ -49,12 +49,12 @@ Below is a list of 10 hands-on challenges that will move you from Zod novice to 
 
 ```ts
 {
-	name: string;
-	addresses: Array<{
-		street: string;
-		city: string;
-		zip: string;
-	}>;
+  name: string;
+  addresses: Array<{
+    street: string;
+    city: string;
+    zip: string;
+  }>;
 }
 ```
 

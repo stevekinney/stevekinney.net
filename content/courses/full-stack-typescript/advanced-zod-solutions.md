@@ -6,4 +6,4 @@ modified: 2025-03-16T12:00:00-06:00
 
 # Advanced Zod Solutions
 
-*This file contains solutions to advanced Zod validation scenarios.*
+_This file contains solutions to advanced Zod validation scenarios._

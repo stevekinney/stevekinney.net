@@ -19,30 +19,30 @@ The development server task runs in the background so you can continue working w
   "tasks": [
     {
       "label": "Lint",
-      "type": "npm", 
+      "type": "npm",
       "script": "lint",
-      "group": "build",                      // Allows Run Build Task to trigger lint
-      "problemMatcher": ["$eslint-stylish"]  // Highlights ESLint errors in Problems pane
+      "group": "build", // Allows Run Build Task to trigger lint
+      "problemMatcher": ["$eslint-stylish"] // Highlights ESLint errors in Problems pane
     },
     {
       "label": "Test",
       "type": "shell",
-      "command": "npm run test",             // Or a direct test runner command
-      "group": "test",                      // Allows Run Test Task to trigger tests
-      "problemMatcher": []                  // (Attach a matcher if test output can be parsed for errors)
+      "command": "npm run test", // Or a direct test runner command
+      "group": "test", // Allows Run Test Task to trigger tests
+      "problemMatcher": [] // (Attach a matcher if test output can be parsed for errors)
     },
     {
       "label": "Build (Frontend)",
       "type": "shell",
-      "command": "npm run build",           // Runs Vite or tsc build for frontend
-      "problemMatcher": ["$tsc"]            // Use TypeScript matcher to catch type errors
+      "command": "npm run build", // Runs Vite or tsc build for frontend
+      "problemMatcher": ["$tsc"] // Use TypeScript matcher to catch type errors
     },
     {
       "label": "Dev Server (Frontend)",
       "type": "npm",
-      "script": "dev",                     // Launches Vite dev server
-      "isBackground": true,                // Mark as long-running background task
-      "problemMatcher": "$tsc-watch"       // Treat TS compile errors during dev
+      "script": "dev", // Launches Vite dev server
+      "isBackground": true, // Mark as long-running background task
+      "problemMatcher": "$tsc-watch" // Treat TS compile errors during dev
     }
   ]
 }
@@ -50,7 +50,7 @@ The development server task runs in the background so you can continue working w
 
 ### Adding a Backend Server
 
-So, now let's say we *also* wanted to spin up the backend API. We can add some additional tasks.
+So, now let's say we _also_ wanted to spin up the backend API. We can add some additional tasks.
 
 ```json
 // Compound task to run frontend and backend concurrently
@@ -77,27 +77,28 @@ So, now let's say we *also* wanted to spin up the backend API. We can add some a
 ```
 
 ## Some Other Examples
+
 ### Compiling TypeScript, Then Running Unit Tests
 
 ```jsonc
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Compile TypeScript",
-			"type": "shell",
-			"command": "tsc -p tsconfig.json",
-			"problemMatcher": "$tsc",
-			"group": "build",
-		},
-		{
-			"label": "Run Tests",
-			"type": "shell",
-			"command": "npm run test",
-			"group": "test",
-			"dependsOn": "Compile TypeScript", // runs compile first, then test
-		},
-	],
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compile TypeScript",
+      "type": "shell",
+      "command": "tsc -p tsconfig.json",
+      "problemMatcher": "$tsc",
+      "group": "build",
+    },
+    {
+      "label": "Run Tests",
+      "type": "shell",
+      "command": "npm run test",
+      "group": "test",
+      "dependsOn": "Compile TypeScript", // runs compile first, then test
+    },
+  ],
 }
 ```
 
@@ -110,22 +111,22 @@ Let’s say you have a Dockerfile, and you want to build and push to a container
 
 ```jsonc
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Docker Build",
-			"type": "shell",
-			"command": "docker build -t myrepo/myimage:latest .",
-			"problemMatcher": [],
-		},
-		{
-			"label": "Docker Push",
-			"type": "shell",
-			"command": "docker push myrepo/myimage:latest",
-			"problemMatcher": [],
-			"dependsOn": "Docker Build",
-		},
-	],
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Docker Build",
+      "type": "shell",
+      "command": "docker build -t myrepo/myimage:latest .",
+      "problemMatcher": [],
+    },
+    {
+      "label": "Docker Push",
+      "type": "shell",
+      "command": "docker push myrepo/myimage:latest",
+      "problemMatcher": [],
+      "dependsOn": "Docker Build",
+    },
+  ],
 }
 ```
 
@@ -138,23 +139,23 @@ Visual Studio Code supports [variable substitution](https://code.visualstudio.co
 
 ```jsonc
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Deploy",
-			"type": "shell",
-			"command": "npm run deploy -- --env ${input:whichEnv}",
-		},
-	],
-	"inputs": [
-		{
-			"id": "whichEnv",
-			"type": "pickString",
-			"description": "Select environment to deploy to",
-			"options": ["development", "staging", "production"],
-			"default": "development",
-		},
-	],
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Deploy",
+      "type": "shell",
+      "command": "npm run deploy -- --env ${input:whichEnv}",
+    },
+  ],
+  "inputs": [
+    {
+      "id": "whichEnv",
+      "type": "pickString",
+      "description": "Select environment to deploy to",
+      "options": ["development", "staging", "production"],
+      "default": "development",
+    },
+  ],
 }
 ```
 

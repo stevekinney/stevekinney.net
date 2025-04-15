@@ -7,10 +7,10 @@ Search parameters and path parameters are technically strings. But, I know they 
 
 ```ts
 const TaskSchema = z.object({
-	id: z.coerce.number().int(),
-	title: z.string(),
-	description: z.string().optional(),
-	completed: z.coerce.boolean(),
+  id: z.coerce.number().int(),
+  title: z.string(),
+  description: z.string().optional(),
+  completed: z.coerce.boolean(),
 });
 
 const TaskParamsSchema = TaskSchema.pick({ id: true });
@@ -28,7 +28,7 @@ The same basic idea works for search parameters.
 
 ```ts
 const TaskQuerySchema = z.object({
-	completed: z.coerce.boolean().optional(),
+  completed: z.coerce.boolean().optional(),
 });
 ```
 

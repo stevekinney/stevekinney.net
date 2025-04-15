@@ -18,7 +18,7 @@ const email = emailSchema.parse('test@example.com');
 // Type is EmailAddress
 
 function sendEmail(to: EmailAddress) {
-	console.log('Sending email to', to);
+  console.log('Sending email to', to);
 }
 
 sendEmail(email);

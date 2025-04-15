@@ -1,26 +1,26 @@
 <script lang="ts" module>
-	import { defineMeta } from '@storybook/addon-svelte-csf';
-	import Callout from './callout.svelte';
-	import { variations } from './variations';
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+  import Callout from './callout.svelte';
+  import { variations } from './variations';
 
-	const { Story } = defineMeta({
-		title: 'Callout',
-		component: Callout,
-		tags: ['autodocs'],
-		args: {
-			description: 'This is a description of the callout.',
-			foldable: false,
-		},
-		argTypes: {
-			variant: {
-				control: 'select',
-				options: variations,
-			},
-			title: {
-				control: 'text',
-			},
-		},
-	});
+  const { Story } = defineMeta({
+    title: 'Callout',
+    component: Callout,
+    tags: ['autodocs'],
+    args: {
+      description: 'This is a description of the callout.',
+      foldable: false,
+    },
+    argTypes: {
+      variant: {
+        control: 'select',
+        options: variations,
+      },
+      title: {
+        control: 'text',
+      },
+    },
+  });
 </script>
 
 <Story name="Default" />
@@ -28,19 +28,19 @@
 <Story name="Foldable" args={{ foldable: true }} />
 
 <Story
-	name="Foldable and Description"
-	args={{ foldable: true, description: 'This is a description of the callout.' }}
+  name="Foldable and Description"
+  args={{ foldable: true, description: 'This is a description of the callout.' }}
 />
 
 <Story name="Foldable and Title" args={{ foldable: true, title: 'This is a title' }} />
 
 <Story
-	name="Foldable, Title, and Description"
-	args={{
-		foldable: true,
-		title: 'This is a title',
-		description: 'This is a description of the callout.',
-	}}
+  name="Foldable, Title, and Description"
+  args={{
+    foldable: true,
+    title: 'This is a title',
+    description: 'This is a description of the callout.',
+  }}
 />
 
 <Story name="Abstract" args={{ variant: 'abstract' }} />

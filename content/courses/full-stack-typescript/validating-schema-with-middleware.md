@@ -7,42 +7,42 @@ We could create a middleware that allows us to validate the body of a request wi
 
 ```ts
 const validateBody =
-	(schema: ZodSchema) => (request: Request, response: Response, next: NextFunction) => {
-		try {
-			schema.parse(request.body);
-			next();
-		} catch (error) {
-			return handleError(request, response, error);
-		}
-	};
+  (schema: ZodSchema) => (request: Request, response: Response, next: NextFunction) => {
+    try {
+      schema.parse(request.body);
+      next();
+    } catch (error) {
+      return handleError(request, response, error);
+    }
+  };
 ```
 
 Even better, we could try to hold on to the type.
 
 ```ts
 const validateBody =
-	<T>(schema: ZodSchema<T>): RequestHandler<NonNullable<unknown>, NonNullable<unknown>, T> =>
-	(request: Request, response: Response, next: NextFunction) => {
-		try {
-			schema.parse(request.body);
-			next();
-		} catch (error) {
-			return handleError(request, response, error);
-		}
-	};
+  <T>(schema: ZodSchema<T>): RequestHandler<NonNullable<unknown>, NonNullable<unknown>, T> =>
+  (request: Request, response: Response, next: NextFunction) => {
+    try {
+      schema.parse(request.body);
+      next();
+    } catch (error) {
+      return handleError(request, response, error);
+    }
+  };
 ```
 
 ## Validating `POST`
 
 ```ts
 app.post('/tasks', validateBody(NewTaskSchema), async (req, res) => {
-	try {
-		const task = NewTaskSchema.parse(req.body);
-		await createTask.run([task.title, task.description]);
-		return res.sendStatus(201);
-	} catch (error) {
-		return handleError(req, res, error);
-	}
+  try {
+    const task = NewTaskSchema.parse(req.body);
+    await createTask.run([task.title, task.description]);
+    return res.sendStatus(201);
+  } catch (error) {
+    return handleError(req, res, error);
+  }
 });
 ```
 
@@ -50,18 +50,18 @@ app.post('/tasks', validateBody(NewTaskSchema), async (req, res) => {
 
 ```ts
 app.put('/tasks/:id', validateBody(UpdateTaskSchema), async (req, res) => {
-	try {
-		const { id } = TaskParamsSchema.parse(req.params);
+  try {
+    const { id } = TaskParamsSchema.parse(req.params);
 
-		const previous = TaskSchema.parse(await getTask.get([id]));
-		const updates = req.body;
-		const task = { ...previous, ...updates };
+    const previous = TaskSchema.parse(await getTask.get([id]));
+    const updates = req.body;
+    const task = { ...previous, ...updates };
 
-		await updateTask.run([task.title, task.description, task.completed, id]);
-		return res.sendStatus(200);
-	} catch (error) {
-		return handleError(req, res, error);
-	}
+    await updateTask.run([task.title, task.description, task.completed, id]);
+    return res.sendStatus(200);
+  } catch (error) {
+    return handleError(req, res, error);
+  }
 });
 ```
 

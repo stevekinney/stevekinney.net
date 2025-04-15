@@ -29,10 +29,10 @@ Create a `trpc.ts` file that sets up the core tRPC functionality:
 import { initTRPC } from '@trpc/server';
 import { z } from 'zod';
 import {
-	NewTaskSchema,
-	TaskParamsSchema,
-	TaskQuerySchema,
-	UpdateTaskSchema,
+  NewTaskSchema,
+  TaskParamsSchema,
+  TaskQuerySchema,
+  UpdateTaskSchema,
 } from 'busy-bee-schema';
 import type { Context } from './trpc-context.js';
 
@@ -45,48 +45,48 @@ export const publicProcedure = t.procedure;
 
 // Create the task router with procedures
 export const taskRouter = router({
-	// Get all tasks with optional filtering by completion status
-	getTasks: publicProcedure
-		.input(TaskQuerySchema) // Use Zod schema for input validation
-		.query(async ({ input, ctx }) => {
-			return await ctx.taskClient.getTasks(input);
-		}),
+  // Get all tasks with optional filtering by completion status
+  getTasks: publicProcedure
+    .input(TaskQuerySchema) // Use Zod schema for input validation
+    .query(async ({ input, ctx }) => {
+      return await ctx.taskClient.getTasks(input);
+    }),
 
-	// Get a single task by ID
-	getTask: publicProcedure.input(TaskParamsSchema).query(async ({ input, ctx }) => {
-		const task = await ctx.taskClient.getTask(input.id);
-		return task;
-	}),
+  // Get a single task by ID
+  getTask: publicProcedure.input(TaskParamsSchema).query(async ({ input, ctx }) => {
+    const task = await ctx.taskClient.getTask(input.id);
+    return task;
+  }),
 
-	// Create a new task
-	createTask: publicProcedure.input(NewTaskSchema).mutation(async ({ input, ctx }) => {
-		await ctx.taskClient.createTask({ task: input });
-		return { success: true };
-	}),
+  // Create a new task
+  createTask: publicProcedure.input(NewTaskSchema).mutation(async ({ input, ctx }) => {
+    await ctx.taskClient.createTask({ task: input });
+    return { success: true };
+  }),
 
-	// Update an existing task
-	updateTask: publicProcedure
-		.input(
-			z.object({
-				id: z.coerce.number().int(),
-				task: UpdateTaskSchema,
-			}),
-		)
-		.mutation(async ({ input, ctx }) => {
-			await ctx.taskClient.updateTask(input.id, input.task);
-			return { success: true };
-		}),
+  // Update an existing task
+  updateTask: publicProcedure
+    .input(
+      z.object({
+        id: z.coerce.number().int(),
+        task: UpdateTaskSchema,
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.taskClient.updateTask(input.id, input.task);
+      return { success: true };
+    }),
 
-	// Delete a task
-	deleteTask: publicProcedure.input(TaskParamsSchema).mutation(async ({ input, ctx }) => {
-		await ctx.taskClient.deleteTask(input.id);
-		return { success: true };
-	}),
+  // Delete a task
+  deleteTask: publicProcedure.input(TaskParamsSchema).mutation(async ({ input, ctx }) => {
+    await ctx.taskClient.deleteTask(input.id);
+    return { success: true };
+  }),
 });
 
 // Create the app router
 export const appRouter = router({
-	task: taskRouter,
+  task: taskRouter,
 });
 
 // Export type definition of API for client usage
@@ -107,12 +107,12 @@ import { getDatabase } from './database.js';
  * Initializes database connection and task client
  */
 export async function createContext() {
-	const database = await getDatabase();
-	const taskClient = new TaskClient(database);
+  const database = await getDatabase();
+  const taskClient = new TaskClient(database);
 
-	return {
-		taskClient,
-	};
+  return {
+    taskClient,
+  };
 }
 
 // Export the context type for use in tRPC setup
@@ -134,17 +134,17 @@ import { appRouter } from './trpc.js';
  * @returns Express router with tRPC middleware
  */
 export function createTRPCRouter() {
-	const router = express.Router();
+  const router = express.Router();
 
-	router.use(
-		'/trpc',
-		createExpressMiddleware({
-			router: appRouter,
-			createContext,
-		}),
-	);
+  router.use(
+    '/trpc',
+    createExpressMiddleware({
+      router: appRouter,
+      createContext,
+    }),
+  );
 
-	return router;
+  return router;
 }
 ```
 
@@ -156,14 +156,14 @@ Update your main `server.ts` file to include the tRPC router:
 import { createTRPCRouter } from './trpc-adapter.js';
 
 export async function createServer(database: Database) {
-	const app = express();
-	app.use(cors());
-	app.use(express.json());
+  const app = express();
+  app.use(cors());
+  app.use(express.json());
 
-	// Add tRPC router
-	app.use('/api', createTRPCRouter());
+  // Add tRPC router
+  app.use('/api', createTRPCRouter());
 
-	// ... rest of your Express setup
+  // ... rest of your Express setup
 }
 ```
 
@@ -172,7 +172,7 @@ export async function createServer(database: Database) {
 After implementing these steps, your tRPC API will be available at:
 
 ```ts
-/api/trpc/[procedure-path]
+/api/cprt / [procedure - path];
 ```
 
 For example:

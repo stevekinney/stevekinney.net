@@ -20,11 +20,11 @@ A snippet in Visual Studio Code is defined as a JSON object with the following k
 
 ```json
 {
-	"Snippet Name": {
-		"prefix": "trigger",
-		"body": ["// Code line 1", "// Code line 2", "// ..."],
-		"description": "Snippet description"
-	}
+  "Snippet Name": {
+    "prefix": "trigger",
+    "body": ["// Code line 1", "// Code line 2", "// ..."],
+    "description": "Snippet description"
+  }
 }
 ```
 
@@ -71,6 +71,7 @@ Snippets in Visual Studio Code are powerful because they support dynamic content
     - `${2:element}`: The second placeholder, suggesting "element" as a default value.
     - `${0:// body}`: The final cursor position, placed inside the loop body with a comment.
 - **Variables (`${variable_name}`):** Visual Studio Code provides a rich set of predefined variables that you can use within snippets to insert dynamic information based on the context. Variables are enclosed in `${}`. Some commonly used variables include:
+
   - **File and Path Variables:**
     - `${TM_FILENAME}`: The current filename (e.g., `my_script.js`).
     - `${TM_FILENAME_BASE}`: The current filename without the extension (e.g., `my_script`).

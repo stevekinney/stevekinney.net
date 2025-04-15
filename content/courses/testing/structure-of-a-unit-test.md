@@ -28,8 +28,8 @@ Consider a function that calculates the factorial of a number:
 
 ```javascript
 function factorial(n) {
-	if (n < 0) throw new Error('Negative input not allowed');
-	return n === 0 ? 1 : n * factorial(n - 1);
+  if (n < 0) throw new Error('Negative input not allowed');
+  return n === 0 ? 1 : n * factorial(n - 1);
 }
 ```
 
@@ -37,15 +37,15 @@ function factorial(n) {
 
 ```javascript
 test('calculates factorial of a positive integer', () => {
-	// Arrange
-	const input = 5;
-	const expectedOutput = 120;
+  // Arrange
+  const input = 5;
+  const expectedOutput = 120;
 
-	// Act
-	const result = factorial(input);
+  // Act
+  const result = factorial(input);
 
-	// Assert
-	expect(result).toBe(expectedOutput);
+  // Assert
+  expect(result).toBe(expectedOutput);
 });
 ```
 
@@ -61,8 +61,8 @@ Testing how a function handles invalid input:
 
 ```javascript
 function divide(a, b) {
-	if (b === 0) throw new Error('Cannot divide by zero');
-	return a / b;
+  if (b === 0) throw new Error('Cannot divide by zero');
+  return a / b;
 }
 ```
 
@@ -70,14 +70,14 @@ function divide(a, b) {
 
 ```javascript
 test('throws an error when dividing by zero', () => {
-	// Arrange
-	const numerator = 10;
-	const denominator = 0;
+  // Arrange
+  const numerator = 10;
+  const denominator = 0;
 
-	// Act and Assert
-	expect(() => {
-		divide(numerator, denominator);
-	}).toThrow('Cannot divide by zero');
+  // Act and Assert
+  expect(() => {
+    divide(numerator, denominator);
+  }).toThrow('Cannot divide by zero');
 });
 ```
 
@@ -92,8 +92,8 @@ Suppose there's an asynchronous function that fetches data from an API:
 
 ```javascript
 async function fetchData(url) {
-	const response = await fetch(url);
-	return response.json();
+  const response = await fetch(url);
+  return response.json();
 }
 ```
 
@@ -101,25 +101,25 @@ async function fetchData(url) {
 
 ```javascript
 test('fetches data successfully from an API', async () => {
-	// Arrange
-	const url = 'https://api.example.com/data';
-	const mockData = { id: 1, name: 'Test Data' };
-	global.fetch = vi.fn(() =>
-		Promise.resolve({
-			json: () => Promise.resolve(mockData),
-		}),
-	);
+  // Arrange
+  const url = 'https://api.example.com/data';
+  const mockData = { id: 1, name: 'Test Data' };
+  global.fetch = vi.fn(() =>
+    Promise.resolve({
+      json: () => Promise.resolve(mockData),
+    }),
+  );
 
-	// Act
-	const data = await fetchData(url);
+  // Act
+  const data = await fetchData(url);
 
-	// Assert
-	expect(data).toEqual(mockData);
-	expect(global.fetch).toHaveBeenCalledWith(url);
+  // Assert
+  expect(data).toEqual(mockData);
+  expect(global.fetch).toHaveBeenCalledWith(url);
 
-	// Cleanup
-	global.fetch.mockClear();
-	delete global.fetch;
+  // Cleanup
+  global.fetch.mockClear();
+  delete global.fetch;
 });
 ```
 
@@ -135,9 +135,9 @@ Consider a simple `Calculator` class:
 
 ```javascript
 class Calculator {
-	add(a, b) {
-		return a + b;
-	}
+  add(a, b) {
+    return a + b;
+  }
 }
 ```
 
@@ -145,17 +145,17 @@ class Calculator {
 
 ```javascript
 test('adds two numbers correctly using Calculator class', () => {
-	// Arrange
-	const calculator = new Calculator();
-	const num1 = 7;
-	const num2 = 3;
-	const expected = 10;
+  // Arrange
+  const calculator = new Calculator();
+  const num1 = 7;
+  const num2 = 3;
+  const expected = 10;
 
-	// Act
-	const result = calculator.add(num1, num2);
+  // Act
+  const result = calculator.add(num1, num2);
 
-	// Assert
-	expect(result).toBe(expected);
+  // Assert
+  expect(result).toBe(expected);
 });
 ```
 
@@ -171,7 +171,7 @@ Suppose a function logs a message to the console:
 
 ```javascript
 function logMessage(message) {
-	console.log(message);
+  console.log(message);
 }
 ```
 
@@ -179,18 +179,18 @@ function logMessage(message) {
 
 ```javascript
 test('logs the correct message to the console', () => {
-	// Arrange
-	const consoleSpy = vi.spyOn(console, 'log');
-	const message = 'Hello, World!';
+  // Arrange
+  const consoleSpy = vi.spyOn(console, 'log');
+  const message = 'Hello, World!';
 
-	// Act
-	logMessage(message);
+  // Act
+  logMessage(message);
 
-	// Assert
-	expect(consoleSpy).toHaveBeenCalledWith(message);
+  // Assert
+  expect(consoleSpy).toHaveBeenCalledWith(message);
 
-	// Cleanup
-	consoleSpy.mockRestore();
+  // Cleanup
+  consoleSpy.mockRestore();
 });
 ```
 
@@ -207,8 +207,8 @@ Testing a function that processes an array:
 
 ```javascript
 function getFirstElement(array) {
-	if (!Array.isArray(array)) throw new Error('Input must be an array');
-	return array[0];
+  if (!Array.isArray(array)) throw new Error('Input must be an array');
+  return array[0];
 }
 ```
 
@@ -216,15 +216,15 @@ function getFirstElement(array) {
 
 ```javascript
 test('returns undefined for an empty array', () => {
-	// Arrange
-	const inputArray = [];
-	const expectedOutput = undefined;
+  // Arrange
+  const inputArray = [];
+  const expectedOutput = undefined;
 
-	// Act
-	const result = getFirstElement(inputArray);
+  // Act
+  const result = getFirstElement(inputArray);
 
-	// Assert
-	expect(result).toBe(expectedOutput);
+  // Assert
+  expect(result).toBe(expectedOutput);
 });
 ```
 
@@ -241,8 +241,8 @@ Testing a function that makes an API call, using MSW to mock the network request
 ```javascript
 // Function to fetch user data
 async function getUser(id) {
-	const response = await fetch(`/api/users/${id}`);
-	return response.json();
+  const response = await fetch(`/api/users/${id}`);
+  return response.json();
 }
 ```
 
@@ -253,10 +253,10 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
 const server = setupServer(
-	rest.get('/api/users/:id', (req, res, ctx) => {
-		const { id } = req.params;
-		return res(ctx.json({ id, name: 'John Doe' }));
-	}),
+  rest.get('/api/users/:id', (req, res, ctx) => {
+    const { id } = req.params;
+    return res(ctx.json({ id, name: 'John Doe' }));
+  }),
 );
 
 beforeAll(() => server.listen());
@@ -264,14 +264,14 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test('fetches user data successfully', async () => {
-	// Arrange
-	const userId = '123';
+  // Arrange
+  const userId = '123';
 
-	// Act
-	const user = await getUser(userId);
+  // Act
+  const user = await getUser(userId);
 
-	// Assert
-	expect(user).toEqual({ id: '123', name: 'John Doe' });
+  // Assert
+  expect(user).toEqual({ id: '123', name: 'John Doe' });
 });
 ```
 

@@ -18,14 +18,14 @@ function route<
 
 ```ts
 const userRoutes = [
-	route<{ id: string }, UserResponse>('/users/:id', (req, res) => {
-		const userId = req.params.id;
-		// …
-	}),
-	route<{}, UserResponse[], {}, { query?: string }>('/users', (req, res) => {
-		const searchQuery = req.query.query;
-		// …
-	}),
+  route<{ id: string }, UserResponse>('/users/:id', (req, res) => {
+    const userId = req.params.id;
+    // …
+  }),
+  route<{}, UserResponse[], {}, { query?: string }>('/users', (req, res) => {
+    const searchQuery = req.query.query;
+    // …
+  }),
 ];
 ```
 

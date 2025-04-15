@@ -20,19 +20,19 @@ We can add the following to our story or to the meta:
 
 ```tsx
 const meta = {
-	title: 'Components/TaskList',
-	component: TaskList,
-	decorators: [
-		(Story) => (
-			<TaskListProvider
-				tasks={[
-					{ id: '1', title: 'Task 1', completed: false },
-					{ id: '2', title: 'Task 2', completed: true },
-				]}
-			>
-				<Story />
-			</TaskListProvider>
-		),
-	],
+  title: 'Components/TaskList',
+  component: TaskList,
+  decorators: [
+    (Story) => (
+      <TaskListProvider
+        tasks={[
+          { id: '1', title: 'Task 1', completed: false },
+          { id: '2', title: 'Task 2', completed: true },
+        ]}
+      >
+        <Story />
+      </TaskListProvider>
+    ),
+  ],
 } as Meta<typeof TaskList>;
 ```

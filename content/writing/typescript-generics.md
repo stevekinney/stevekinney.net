@@ -12,7 +12,7 @@ When you're first learning TypeScript, you typically start by adding fairly stra
 
 ```ts
 const add = (x: number, y: number) => {
-	return x + y;
+  return x + y;
 };
 ```
 
@@ -35,8 +35,8 @@ This is where we might use a generic. You might have seen some syntax at looks l
 
 ```tsx
 type Link<T> = {
-	value: T;
-	next?: Link<T>;
+  value: T;
+  next?: Link<T>;
 };
 ```
 
@@ -62,10 +62,10 @@ This won't work:
 
 ```ts
 const firstLink: Link<number> = {
-	value: 2,
-	next: {
-		value: 'string', // This won't work.
-	},
+  value: 2,
+  next: {
+    value: 'string', // This won't work.
+  },
 };
 ```
 
@@ -73,10 +73,10 @@ This will work, however:
 
 ```ts
 const firstLink: Link<number> = {
-	value: 2,
-	next: {
-		value: 4,
-	},
+  value: 2,
+  next: {
+    value: 4,
+  },
 };
 ```
 
@@ -90,7 +90,7 @@ As with the linked list example, it would _less than ideal_ if we had to make ne
 
 ```ts
 function identity<T>(arg: T) {
-	return arg;
+  return arg;
 }
 ```
 
@@ -116,8 +116,8 @@ For example:
 
 ```js
 const arrayWithoutLast = tap([1, 2, 3, 4], function (array) {
-	// Pop always returns the value it removed from the end of the array.
-	return array.pop();
+  // Pop always returns the value it removed from the end of the array.
+  return array.pop();
 });
 ```
 

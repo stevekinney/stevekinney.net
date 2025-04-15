@@ -9,14 +9,14 @@ Imagine you have a button, and when you click it, something happens. Classic cas
 ```javascript
 // examples/element-factory/src/button.js
 export function createButton() {
-	const button = document.createElement('button');
-	button.textContent = 'Click Me';
+  const button = document.createElement('button');
+  button.textContent = 'Click Me';
 
-	button.addEventListener('click', () => {
-		button.textContent = 'Clicked!';
-	});
+  button.addEventListener('click', () => {
+    button.textContent = 'Clicked!';
+  });
 
-	return button;
+  return button;
 }
 ```
 
@@ -31,21 +31,21 @@ import { it, expect, describe } from 'vitest';
 import { createButton } from './button.js';
 
 describe('createButton', () => {
-	it('should create a button element', () => {
-		const button = createButton();
-		expect(button.tagName).toBe('BUTTON');
-	});
+  it('should create a button element', () => {
+    const button = createButton();
+    expect(button.tagName).toBe('BUTTON');
+  });
 
-	it('should have the text "Click Me"', () => {
-		const button = createButton();
-		expect(button.textContent).toBe('Click Me');
-	});
+  it('should have the text "Click Me"', () => {
+    const button = createButton();
+    expect(button.textContent).toBe('Click Me');
+  });
 
-	it('should change the text to "Clicked!" when clicked', () => {
-		const button = createButton();
-		button.click();
-		expect(button.textContent).toBe('Clicked!');
-	});
+  it('should change the text to "Clicked!" when clicked', () => {
+    const button = createButton();
+    button.click();
+    expect(button.textContent).toBe('Clicked!');
+  });
 });
 ```
 

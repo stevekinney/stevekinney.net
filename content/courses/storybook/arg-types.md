@@ -10,36 +10,36 @@ Storybook tries it's best to infer as much as it can, but the more data you add,
 
 ```ts
 const meta: Meta<typeof Button> = {
-	title: 'Button',
-	component: Button,
-	args: {
-		children: 'Button',
-		variant: 'primary',
-		size: 'medium',
-		disabled: false,
-	},
-	argTypes: {
-		children: {
-			name: 'Label',
-			control: 'text',
-			description: 'Text to display on the button',
-		},
-		variant: {
-			name: 'Variant',
-			description: 'Variant of the button',
-			control: 'select',
-		},
-		size: {
-			name: 'Size',
-			control: 'select',
-			description: 'Size of the button',
-		},
-		disabled: {
-			name: 'Disabled',
-			control: 'boolean',
-			description: 'Disables the button',
-		},
-	},
+  title: 'Button',
+  component: Button,
+  args: {
+    children: 'Button',
+    variant: 'primary',
+    size: 'medium',
+    disabled: false,
+  },
+  argTypes: {
+    children: {
+      name: 'Label',
+      control: 'text',
+      description: 'Text to display on the button',
+    },
+    variant: {
+      name: 'Variant',
+      description: 'Variant of the button',
+      control: 'select',
+    },
+    size: {
+      name: 'Size',
+      control: 'select',
+      description: 'Size of the button',
+    },
+    disabled: {
+      name: 'Disabled',
+      control: 'boolean',
+      description: 'Disables the button',
+    },
+  },
 };
 ```
 

@@ -27,7 +27,7 @@ Here’s how you create a simple stub:
 
 ```js
 const fetchStub = vi.fn(() =>
-	Promise.resolve({ band: 'Green Day', venue: 'Madison Square Garden' }),
+  Promise.resolve({ band: 'Green Day', venue: 'Madison Square Garden' }),
 );
 ```
 
@@ -41,9 +41,9 @@ Here’s the function to be tested:
 
 ```js
 async function getConcertDetails(band) {
-	const response = await fetch(`/api/concerts?band=${band}`);
-	const data = await response.json();
-	return data;
+  const response = await fetch(`/api/concerts?band=${band}`);
+  const data = await response.json();
+  return data;
 }
 ```
 
@@ -54,26 +54,26 @@ import { describe, it, expect, vi } from 'vitest';
 import { getConcertDetails } from './concerts';
 
 describe('getConcertDetails', () => {
-	it('returns concert details from the API', async () => {
-		// Stub the fetch function to simulate an API response
-		const fetchStub = vi.fn(() =>
-			Promise.resolve({
-				json: () => Promise.resolve({ band: 'Green Day', venue: 'Madison Square Garden' }),
-			}),
-		);
+  it('returns concert details from the API', async () => {
+    // Stub the fetch function to simulate an API response
+    const fetchStub = vi.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve({ band: 'Green Day', venue: 'Madison Square Garden' }),
+      }),
+    );
 
-		// Replace the global fetch function with our stub
-		global.fetch = fetchStub;
+    // Replace the global fetch function with our stub
+    global.fetch = fetchStub;
 
-		// Call the function under test
-		const result = await getConcertDetails('Green Day');
+    // Call the function under test
+    const result = await getConcertDetails('Green Day');
 
-		// Assert that the stubbed API returned the correct data
-		expect(result).toEqual({ band: 'Green Day', venue: 'Madison Square Garden' });
+    // Assert that the stubbed API returned the correct data
+    expect(result).toEqual({ band: 'Green Day', venue: 'Madison Square Garden' });
 
-		// Clean up: Restore the original fetch function
-		fetchStub.mockRestore();
-	});
+    // Clean up: Restore the original fetch function
+    fetchStub.mockRestore();
+  });
 });
 ```
 
@@ -110,7 +110,7 @@ Imagine a function that fetches concert data from an API. You can create a stub 
 ```js
 // Stub the fetch function to always return fixed data
 const fetchStub = vi.fn(() =>
-	Promise.resolve({ band: 'Green Day', venue: 'Madison Square Garden' }),
+  Promise.resolve({ band: 'Green Day', venue: 'Madison Square Garden' }),
 );
 
 // Now use this stubbed version in your test instead of making a real API call.
@@ -127,7 +127,7 @@ A **stub** is similar to a mock but focuses on providing predefined responses ra
 ```javascript
 // notifier.js
 export function notify(message) {
-	// Sends a notification (e.g., email, SMS)
+  // Sends a notification (e.g., email, SMS)
 }
 ```
 
@@ -139,17 +139,17 @@ import { test, expect, vi } from 'vitest';
 import { notify } from './notifier';
 
 test('sends a notification', () => {
-	// Arrange
-	const notifyStub = vi.fn();
+  // Arrange
+  const notifyStub = vi.fn();
 
-	// Replace the real notify function with the stub
-	notifyStub('Test message');
+  // Replace the real notify function with the stub
+  notifyStub('Test message');
 
-	// Act
-	// (No action needed since we're stubbing the function)
+  // Act
+  // (No action needed since we're stubbing the function)
 
-	// Assert
-	expect(notifyStub).toHaveBeenCalledWith('Test message');
+  // Assert
+  expect(notifyStub).toHaveBeenCalledWith('Test message');
 });
 ```
 

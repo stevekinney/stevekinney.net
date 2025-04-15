@@ -18,13 +18,13 @@ Here’s a basic one as a refresher:
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	test: {
-		globals: true,
-		environment: 'jsdom',
-		coverage: {
-			reporter: ['text', 'json', 'html'],
-		},
-	},
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+    },
+  },
 });
 ```
 
@@ -46,12 +46,12 @@ import { defineConfig } from 'vitest/config';
 import path from 'path';
 
 export default defineConfig({
-	resolve: {
-		alias: {
-			'@components': path.resolve(__dirname, 'src/components'),
-			'@utils': path.resolve(__dirname, 'src/utils'),
-		},
-	},
+  resolve: {
+    alias: {
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
+    },
+  },
 });
 ```
 
@@ -69,11 +69,11 @@ Ah yes, the modern mess of JavaScript modules. You're probably encountering both
 
 ```ts
 export default defineConfig({
-	test: {
-		deps: {
-			fallbackCJS: true, // Handle CommonJS dependencies that break ESM resolution
-		},
-	},
+  test: {
+    deps: {
+      fallbackCJS: true, // Handle CommonJS dependencies that break ESM resolution
+    },
+  },
 });
 ```
 
@@ -86,9 +86,9 @@ Here's a quick scenario. Let’s say you're testing a Node application. You’re
 ```ts
 // vitest.config.ts
 export default defineConfig({
-	test: {
-		isolate: true, // Ensure each test file runs in its own VM context
-	},
+  test: {
+    isolate: true, // Ensure each test file runs in its own VM context
+  },
 });
 ```
 
@@ -102,9 +102,9 @@ So, what happens when one of your tests drags on, like… for-ev-er. Maybe it de
 
 ```ts
 export default defineConfig({
-	test: {
-		testTimeout: 5000, // 5 seconds, if it takes longer, something is wrong.
-	},
+  test: {
+    testTimeout: 5000, // 5 seconds, if it takes longer, something is wrong.
+  },
 });
 ```
 
@@ -116,9 +116,9 @@ That occasional test that just decides it wants some attention by failing random
 
 ```ts
 export default defineConfig({
-	test: {
-		retry: 2, // Will rerun a failing test 2 times before marking it as failed
-	},
+  test: {
+    retry: 2, // Will rerun a failing test 2 times before marking it as failed
+  },
 });
 ```
 
@@ -132,12 +132,12 @@ Here's what usually happens after you start integrating **watch mode** into your
 
 ```ts
 export default defineConfig({
-	test: {
-		watch: {
-			include: ['src/**'],
-			exclude: ['node_modules/**', '*.spec.js'], // avoid triggering for these
-		},
-	},
+  test: {
+    watch: {
+      include: ['src/**'],
+      exclude: ['node_modules/**', '*.spec.js'], // avoid triggering for these
+    },
+  },
 });
 ```
 

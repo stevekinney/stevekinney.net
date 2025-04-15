@@ -17,7 +17,7 @@ Let's look at some best practices when it comes to using [mocks](mocks.md), [stu
 
 ```javascript
 afterEach(() => {
-	vi.clearAllMocks();
+  vi.clearAllMocks();
 });
 ```
 
@@ -63,7 +63,7 @@ afterEach(() => {
 
   ```javascript
   beforeEach(() => {
-  	vi.resetModules();
+    vi.resetModules();
   });
   ```
 

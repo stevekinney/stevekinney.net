@@ -13,7 +13,7 @@ Let's start with the world's simplest test. I have an example of this code in `e
 import { test, expect } from 'vitest';
 
 it('is a super simple test', () => {
-	expect(true).toBe(true);
+  expect(true).toBe(true);
 });
 ```
 
@@ -34,14 +34,14 @@ Okay, well this works—but, it's a little ridiculous. Let's actually test some 
 
 ```js
 test('another test, but with some logic', () => {
-	expect(1 + 1).toBe(2);
+  expect(1 + 1).toBe(2);
 });
 ```
 
 ```js
 test('a test with a function', () => {
-	const add = (a, b) => a + b;
-	expect(add(1, 2)).toBe(3);
+  const add = (a, b) => a + b;
+  expect(add(1, 2)).toBe(3);
 });
 ```
 
@@ -56,7 +56,7 @@ We can pull out our _very_ exciting function into it's own file like we might ot
 ```javascript
 // arithmetic.js
 export const add = (a, b) => {
-	return a + b;
+  return a + b;
 };
 ```
 
@@ -68,9 +68,9 @@ import { describe, it, expect } from 'vitest';
 import { add } from './arithmetic';
 
 describe('add', () => {
-	it('should add two numbers', () => {
-		expect(add(1, 2)).toBe(3);
-	});
+  it('should add two numbers', () => {
+    expect(add(1, 2)).toBe(3);
+  });
 });
 
 describe.todo('subtract', () => {});
@@ -90,17 +90,17 @@ import { describe, it, expect } from 'vitest';
 import { add } from './arithmetic';
 
 describe('add', () => {
-	it('should add two positive numbers', () => {
-		expect(add(1, 2)).toBe(3);
-	});
+  it('should add two positive numbers', () => {
+    expect(add(1, 2)).toBe(3);
+  });
 
-	it('should two negative numbers', () => {
-		expect(add(-2, -3)).toBe(-5);
-	});
+  it('should two negative numbers', () => {
+    expect(add(-2, -3)).toBe(-5);
+  });
 
-	it('should a positive and a negative number', () => {
-		expect(add(5, -3)).toBe(2);
-	});
+  it('should a positive and a negative number', () => {
+    expect(add(5, -3)).toBe(2);
+  });
 });
 ```
 

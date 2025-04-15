@@ -9,16 +9,16 @@ Let's consider this `tsconfig.json` for a hot minute.
 
 ```jsonc
 {
-	"compilerOptions": {
-		"strict": true,
-		"noImplicitAny": true,
-		"strictNullChecks": true,
-		"strictPropertyInitialization": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"exactOptionalPropertyTypes": true,
-		"forceConsistentCasingInFileNames": true,
-	},
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+  },
 }
 ```
 

@@ -13,57 +13,57 @@ type SessionToken = string & { readonly _brand: unique symbol };
 
 // Create functions to safely create branded types
 function createUserId(id: string): UserId {
-	return id as UserId;
+  return id as UserId;
 }
 
 function createSessionToken(token: string): SessionToken {
-	return token as SessionToken;
+  return token as SessionToken;
 }
 
 // Use in request and response types
 interface GetUserRequest {
-	params: {
-		userId: UserId;
-	};
+  params: {
+    userId: UserId;
+  };
 }
 
 interface UserResponse {
-	id: UserId;
-	username: string;
-	email: string;
+  id: UserId;
+  username: string;
+  email: string;
 }
 
 interface AuthResponse {
-	token: SessionToken;
-	user: UserResponse;
+  token: SessionToken;
+  user: UserResponse;
 }
 
 // Example usage
 app.get('/users/:userId', (req: Request<GetUserRequest['params']>, res: Response<UserResponse>) => {
-	const rawUserId = req.params.userId;
+  const rawUserId = req.params.userId;
 
-	// Convert string to branded type
-	const userId = createUserId(rawUserId);
+  // Convert string to branded type
+  const userId = createUserId(rawUserId);
 
-	// Now we have a type-safe userId that can't be confused with other string IDs
-	const user = getUserById(userId);
+  // Now we have a type-safe userId that can't be confused with other string IDs
+  const user = getUserById(userId);
 
-	res.json(user);
+  res.json(user);
 });
 
 app.post('/login', (req: Request, res: Response<AuthResponse>) => {
-	// Generate a session token
-	const token = createSessionToken(generateRandomToken());
+  // Generate a session token
+  const token = createSessionToken(generateRandomToken());
 
-	// Get user
-	const userId = createUserId('123');
-	const user = getUserById(userId);
+  // Get user
+  const userId = createUserId('123');
+  const user = getUserById(userId);
 
-	// Return typed response
-	res.json({
-		token,
-		user,
-	});
+  // Return typed response
+  res.json({
+    token,
+    user,
+  });
 });
 ```
 

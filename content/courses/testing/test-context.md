@@ -25,10 +25,10 @@ Let's write a simple test that stores something in the context:
 import { test, expect } from 'vitest';
 
 test('it should store a value in the context', (ctx) => {
-	// let's put some cool stuff into this context thing
-	ctx.foo = 'bar';
+  // let's put some cool stuff into this context thing
+  ctx.foo = 'bar';
 
-	expect(ctx.foo).toBe('bar');
+  expect(ctx.foo).toBe('bar');
 });
 ```
 
@@ -46,20 +46,20 @@ Check this out:
 import { beforeEach, test, expect } from 'vitest';
 
 beforeEach((ctx) => {
-	// let's set the context up in a hook
-	ctx.user = { name: 'Alice', role: 'admin' };
+  // let's set the context up in a hook
+  ctx.user = { name: 'Alice', role: 'admin' };
 });
 
 test('it should access the context modified in beforeEach', (ctx) => {
-	expect(ctx.user.name).toBe('Alice');
-	expect(ctx.user.role).toBe('admin');
+  expect(ctx.user.name).toBe('Alice');
+  expect(ctx.user.role).toBe('admin');
 });
 
 test('it should have a different context for each test', (ctx) => {
-	// this is a fresh context, distinct from the previous test
-	expect(ctx.user.name).toBe('Alice');
-	ctx.user.role = 'editor';
-	expect(ctx.user.role).toBe('editor');
+  // this is a fresh context, distinct from the previous test
+  expect(ctx.user.name).toBe('Alice');
+  ctx.user.role = 'editor';
+  expect(ctx.user.role).toBe('editor');
 });
 ```
 
@@ -82,18 +82,18 @@ import { beforeEach, test, expect } from 'vitest';
 
 // pretending we're mocking some API, no big deal
 beforeEach((ctx) => {
-	ctx.apiResponse = { data: 'default' }; // set default data
+  ctx.apiResponse = { data: 'default' }; // set default data
 });
 
 test('api returns default data initially', (ctx) => {
-	expect(ctx.apiResponse.data).toBe('default');
+  expect(ctx.apiResponse.data).toBe('default');
 });
 
 test('api returns different data for another test', (ctx) => {
-	// yeah, just modify the context for this test only
-	ctx.apiResponse.data = 'different!';
+  // yeah, just modify the context for this test only
+  ctx.apiResponse.data = 'different!';
 
-	expect(ctx.apiResponse.data).toBe('different!');
+  expect(ctx.apiResponse.data).toBe('different!');
 });
 ```
 

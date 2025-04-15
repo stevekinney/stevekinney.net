@@ -12,7 +12,7 @@ When you need to serialize `Date`, `Map`, or `BigInt` fields, consider [SuperJSO
 import superjson from 'superjson';
 
 const t = initTRPC.create({
-	transformer: superjson,
+  transformer: superjson,
 });
 ```
 
@@ -20,10 +20,10 @@ And on the client:
 
 ```ts
 createTRPCClient<AppRouter>({
-	transformer: superjson,
-	links: [
-		/* ... */
-	],
+  transformer: superjson,
+  links: [
+    /* ... */
+  ],
 });
 ```
 

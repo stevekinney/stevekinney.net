@@ -1,17 +1,17 @@
 <script lang="ts">
-	import Index from '$courses/full-stack-typescript/README.md';
+  import Index from '$courses/full-stack-typescript/README.md';
 
-	interface Props {
-		children?: import('svelte').Snippet;
-	}
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
 
-	const { children }: Props = $props();
+  const { children }: Props = $props();
 </script>
 
 <div class="grid grid-cols-1 gap-8 lg:grid-cols-[3fr_1fr]">
-	<div>
-		{@render children?.()}
-	</div>
+  <div>
+    {@render children?.()}
+  </div>
 
-	<Index />
+  <Index />
 </div>

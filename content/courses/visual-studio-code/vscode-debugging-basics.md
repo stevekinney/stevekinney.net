@@ -28,15 +28,15 @@ Set up a `launch.json`. Here is a example of a _super simple_ `launch.json`.
 
 ```json
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Launch Program",
-			"skipFiles": ["<node_internals>/**"],
-			"args": ["${workspaceFolder}/index.js"]
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "skipFiles": ["<node_internals>/**"],
+      "args": ["${workspaceFolder}/index.js"]
+    }
+  ]
 }
 ```

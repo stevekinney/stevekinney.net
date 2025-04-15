@@ -15,15 +15,15 @@ import Database from 'better-sqlite3';
 let db: Database;
 
 beforeEach(() => {
-	db = new Database(':memory:');
-	db.prepare('CREATE TABLE user (id INTEGER PRIMARY KEY, name TEXT, password TEXT)').run();
-	db.prepare('INSERT INTO user (name, password) VALUES (?, ?)').run('Alice', 'pass123');
+  db = new Database(':memory:');
+  db.prepare('CREATE TABLE user (id INTEGER PRIMARY KEY, name TEXT, password TEXT)').run();
+  db.prepare('INSERT INTO user (name, password) VALUES (?, ?)').run('Alice', 'pass123');
 });
 
 test('getUser finds existing user', async () => {
-	const caller = appRouter.createCaller({ db, user: null });
-	const user = await caller.user.getUser(1);
-	expect(user?.name).toBe('Alice');
+  const caller = appRouter.createCaller({ db, user: null });
+  const user = await caller.user.getUser(1);
+  expect(user?.name).toBe('Alice');
 });
 ```
 

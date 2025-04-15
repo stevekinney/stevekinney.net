@@ -3,7 +3,7 @@ title: More on Mutli-Root Namespaces
 modified: 2025-03-18T08:51:14-05:00
 ---
 
-Some additional notes that we *probably* won't get to, but I'll include here just in case.
+Some additional notes that we _probably_ won't get to, but I'll include here just in case.
 
 ## Workspace File Structure and Persistence
 

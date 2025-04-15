@@ -11,20 +11,20 @@ Let's say you can't find the `expect` method that makes you happy. You _could_ e
 import { expect } from 'vitest';
 
 expect.extend({
-	toBeWithinRange(received, min, max) {
-		const pass = received >= min && received <= max;
-		if (pass) {
-			return {
-				message: () => `expected ${received} not to be within range ${min} - ${max}`,
-				pass: true,
-			};
-		} else {
-			return {
-				message: () => `expected ${received} to be within range ${min} - ${max}`,
-				pass: false,
-			};
-		}
-	},
+  toBeWithinRange(received, min, max) {
+    const pass = received >= min && received <= max;
+    if (pass) {
+      return {
+        message: () => `expected ${received} not to be within range ${min} - ${max}`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () => `expected ${received} to be within range ${min} - ${max}`,
+        pass: false,
+      };
+    }
+  },
 });
 ```
 
@@ -32,7 +32,7 @@ Let's see it in action.
 
 ```javascript
 test('number is within range', () => {
-	expect(10).toBeWithinRange(5, 15);
+  expect(10).toBeWithinRange(5, 15);
 });
 ```
 
@@ -44,20 +44,20 @@ Here’s a custom matcher for checking if one date is later than another:
 
 ```js
 expect.extend({
-	toBeLaterThan(received, comparedDate) {
-		const pass = new Date(received) > new Date(comparedDate);
-		if (pass) {
-			return {
-				message: () => `expected ${received} not to be later than ${comparedDate}`,
-				pass: true,
-			};
-		} else {
-			return {
-				message: () => `expected ${received} to be later than ${comparedDate}`,
-				pass: false,
-			};
-		}
-	},
+  toBeLaterThan(received, comparedDate) {
+    const pass = new Date(received) > new Date(comparedDate);
+    if (pass) {
+      return {
+        message: () => `expected ${received} not to be later than ${comparedDate}`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () => `expected ${received} to be later than ${comparedDate}`,
+        pass: false,
+      };
+    }
+  },
 });
 ```
 
@@ -65,8 +65,8 @@ Boom! Now you can write some crisp, clear date comparisons:
 
 ```js
 test('date comparison', () => {
-	expect('2023-10-10').toBeLaterThan('2023-09-01'); // ✅ True.
-	expect('2023-05-15').toBeLaterThan('2023-07-01'); // 💣 False.
+  expect('2023-10-10').toBeLaterThan('2023-09-01'); // ✅ True.
+  expect('2023-05-15').toBeLaterThan('2023-07-01'); // 💣 False.
 });
 ```
 

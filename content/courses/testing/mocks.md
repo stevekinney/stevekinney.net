@@ -101,9 +101,9 @@ Here’s the function we want to test:
 
 ```js
 async function getConcertDetails(band) {
-	const response = await fetch(`/api/concerts?band=${band}`);
-	const data = await response.json();
-	return data;
+  const response = await fetch(`/api/concerts?band=${band}`);
+  const data = await response.json();
+  return data;
 }
 ```
 
@@ -114,29 +114,29 @@ import { describe, it, expect, vi } from 'vitest';
 import { getConcertDetails } from './concerts';
 
 describe('getConcertDetails', () => {
-	it('returns concert details from the API', async () => {
-		// Mock the fetch function to simulate an API response
-		const fetchMock = vi.fn(() =>
-			Promise.resolve({
-				json: () => Promise.resolve({ band: 'Green Day', venue: 'Madison Square Garden' }),
-			}),
-		);
+  it('returns concert details from the API', async () => {
+    // Mock the fetch function to simulate an API response
+    const fetchMock = vi.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve({ band: 'Green Day', venue: 'Madison Square Garden' }),
+      }),
+    );
 
-		// Replace the global fetch function with our mock
-		global.fetch = fetchMock;
+    // Replace the global fetch function with our mock
+    global.fetch = fetchMock;
 
-		// Call the function under test
-		const result = await getConcertDetails('Green Day');
+    // Call the function under test
+    const result = await getConcertDetails('Green Day');
 
-		// Assert that the mock API returned the correct data
-		expect(result).toEqual({ band: 'Green Day', venue: 'Madison Square Garden' });
+    // Assert that the mock API returned the correct data
+    expect(result).toEqual({ band: 'Green Day', venue: 'Madison Square Garden' });
 
-		// Verify that the mock was called
-		expect(fetchMock).toHaveBeenCalledTimes(1);
+    // Verify that the mock was called
+    expect(fetchMock).toHaveBeenCalledTimes(1);
 
-		// Clean up: Restore the original fetch function
-		fetchMock.mockRestore();
-	});
+    // Clean up: Restore the original fetch function
+    fetchMock.mockRestore();
+  });
 });
 ```
 

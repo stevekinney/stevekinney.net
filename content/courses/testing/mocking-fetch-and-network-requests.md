@@ -12,9 +12,9 @@ Let's create a basic function that will throw a fetch call out into the wild and
 
 ```javascript
 async function getData() {
-	const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
-	const data = await response.json();
-	return data;
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+  const data = await response.json();
+  return data;
 }
 
 export { getData };
@@ -35,28 +35,28 @@ import { test, vi, expect } from 'vitest';
 import { getData } from './yourFunctionFile';
 
 test('fetches data successfully from API', async () => {
-	// Mock the fetch function.
-	const mockResponse = {
-		userId: 1,
-		id: 1,
-		title: 'Test Todo',
-		completed: false,
-	};
+  // Mock the fetch function.
+  const mockResponse = {
+    userId: 1,
+    id: 1,
+    title: 'Test Todo',
+    completed: false,
+  };
 
-	// Here we tell Vitest to mock fetch on the `window` object.
-	global.fetch = vi.fn(() =>
-		Promise.resolve({
-			json: () => Promise.resolve(mockResponse),
-		}),
-	);
+  // Here we tell Vitest to mock fetch on the `window` object.
+  global.fetch = vi.fn(() =>
+    Promise.resolve({
+      json: () => Promise.resolve(mockResponse),
+    }),
+  );
 
-	// Call the function and assert the result
-	const data = await getData();
-	expect(data).toEqual(mockResponse);
+  // Call the function and assert the result
+  const data = await getData();
+  expect(data).toEqual(mockResponse);
 
-	// Check that fetch was called exactly once
-	expect(fetch).toHaveBeenCalledTimes(1);
-	expect(fetch).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/todos/1');
+  // Check that fetch was called exactly once
+  expect(fetch).toHaveBeenCalledTimes(1);
+  expect(fetch).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/todos/1');
 });
 ```
 
@@ -74,7 +74,7 @@ Taking out the trash is an important step in testing. Mocks can get a bit "stick
 import { afterEach } from 'vitest';
 
 afterEach(() => {
-	vi.clearAllMocks(); // Reset all mocked calls between tests
+  vi.clearAllMocks(); // Reset all mocked calls between tests
 });
 ```
 
@@ -88,10 +88,10 @@ Let’s see how we’d test an error, like when fetch itself rejects:
 
 ```javascript
 test('handles fetch failure', async () => {
-	global.fetch = vi.fn(() => Promise.reject('API is down'));
+  global.fetch = vi.fn(() => Promise.reject('API is down'));
 
-	await expect(getData()).rejects.toEqual('API is down');
-	expect(fetch).toHaveBeenCalledTimes(1);
+  await expect(getData()).rejects.toEqual('API is down');
+  expect(fetch).toHaveBeenCalledTimes(1);
 });
 ```
 

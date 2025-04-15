@@ -23,14 +23,14 @@ Use a minimal configuration tailored for Node’s type stripping. For instance:
 
 ```json
 {
-	"compilerOptions": {
-		"target": "esnext",
-		"module": "nodenext",
-		"allowImportingTsExtensions": true, // Import .ts files directly
-		"rewriteRelativeImportExtensions": true, // Convert .ts imports to .js in output
-		"verbatimModuleSyntax": true, // Enforce use of 'import type' for type-only imports
-		"erasableSyntaxOnly": true // Warns on unsupported TS features (like enums, namespaces, etc.)
-	}
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "allowImportingTsExtensions": true, // Import .ts files directly
+    "rewriteRelativeImportExtensions": true, // Convert .ts imports to .js in output
+    "verbatimModuleSyntax": true, // Enforce use of 'import type' for type-only imports
+    "erasableSyntaxOnly": true // Warns on unsupported TS features (like enums, namespaces, etc.)
+  }
 }
 ```
 

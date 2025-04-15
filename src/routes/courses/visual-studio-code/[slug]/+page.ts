@@ -1,21 +1,21 @@
 import { error } from '@sveltejs/kit';
 
 export async function load({ params, url }) {
-	const { slug } = params;
-	const { pathname } = url;
+  const { slug } = params;
+  const { pathname } = url;
 
-	const post = await import(`../../../../../content/courses/visual-studio-code/${slug}.md`).catch(
-		() => {
-			error(404, 'Not found');
-		},
-	);
+  const post = await import(`../../../../../content/courses/visual-studio-code/${slug}.md`).catch(
+    () => {
+      error(404, 'Not found');
+    },
+  );
 
-	const meta = post.metadata as Post;
+  const meta = post.metadata as Post;
 
-	return {
-		content: post.default,
-		meta,
-		slug,
-		pathname,
-	};
+  return {
+    content: post.default,
+    meta,
+    slug,
+    pathname,
+  };
 }

@@ -27,12 +27,12 @@ Your average Svelte component has three-ish pieces to it: the `<script>` tags, a
 
 ```js
 const preprocess = () => {
-	return {
-		name: 'svelte-preprocessor-name',
-		markup: ({ content, filename }) => {},
-		script: ({ content, filename }) => {},
-		style: ({ content, filename }) => {},
-	};
+  return {
+    name: 'svelte-preprocessor-name',
+    markup: ({ content, filename }) => {},
+    script: ({ content, filename }) => {},
+    style: ({ content, filename }) => {},
+  };
 };
 ```
 
@@ -44,19 +44,19 @@ We can start with something like this to get us going.
 import { processMarkdown } from './markdown-to-html.js';
 
 const svelteMarkdown = () => {
-	return {
-		name: 'svelte-markdown',
-		/**
-		 * @param {object} options
-		 * @param {string} options.content
-		 * @param {string} options.filename
-		 */
-		markup: ({ content, filename }) => {
-			if (filename.endsWith('.md')) {
-				return processMarkdown({ content, filename });
-			}
-		},
-	};
+  return {
+    name: 'svelte-markdown',
+    /**
+     * @param {object} options
+     * @param {string} options.content
+     * @param {string} options.filename
+     */
+    markup: ({ content, filename }) => {
+      if (filename.endsWith('.md')) {
+        return processMarkdown({ content, filename });
+      }
+    },
+  };
 };
 
 export default svelteMarkdown;
@@ -74,12 +74,12 @@ import svelteMarkdown from './src/lib/svelte-markdown.js';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	extensions: ['.svelte', '.md'], // Add .md to the list of extensions
-	preprocess: [vitePreprocess(), svelteMarkdown()], // Add our preprocessor
+  extensions: ['.svelte', '.md'], // Add .md to the list of extensions
+  preprocess: [vitePreprocess(), svelteMarkdown()], // Add our preprocessor
 
-	kit: {
-		adapter: adapter(),
-	},
+  kit: {
+    adapter: adapter(),
+  },
 };
 
 export default config;
@@ -111,8 +111,8 @@ We'd ideally like to translate it into something that Svelte will render correct
 <h1>A Markdown Title</h1>
 
 <ul>
-	<li>{exampleVariable}</li>
-	<li>Markdown Content</li>
+  <li>{exampleVariable}</li>
+  <li>Markdown Content</li>
 </ul>
 
 <p>**Markdown** inside of an HTML element.</p>
@@ -140,11 +140,11 @@ So, our Markdown to HTML pipeline is going to look something like this:
  * @param {string} content
  */
 const toHTML = (content) =>
-	unified()
-		.use(remarkParse)
-		.use(remarkRehype, { allowDangerousHtml: true })
-		.use(rehypeStringify, { allowDangerousHtml: true })
-		.process(content);
+  unified()
+    .use(remarkParse)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeStringify, { allowDangerousHtml: true })
+    .process(content);
 ```
 
 We want to keep our existing markup. So, we're turning on `allowDangerousHtml`. Turning it off will strip out your `<script>` and other HTML tags, which might be a good thing if you don't ever intent on embedding components or anything else into your content.
@@ -160,19 +160,19 @@ Next, we need to integrate this into `processMarkdown` in order to wire it toget
  * @param {string} options.filename
  */
 export const processMarkdown = async ({ content, filename }) => {
-	const result = new MagicString(content);
-	const { html } = parse(content);
+  const result = new MagicString(content);
+  const { html } = parse(content);
 
-	const { start, end } = html;
+  const { start, end } = html;
 
-	const processed = await toHTML(content.slice(start, end));
+  const processed = await toHTML(content.slice(start, end));
 
-	result.update(start, end, String(processed));
+  result.update(start, end, String(processed));
 
-	return {
-		code: result.toString(),
-		map: result.generateMap({ source: filename }),
-	};
+  return {
+    code: result.toString(),
+    map: result.generateMap({ source: filename }),
+  };
 };
 ```
 

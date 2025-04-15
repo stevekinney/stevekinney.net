@@ -15,10 +15,10 @@ Let’s assume you’ve got this super fancy little module that reads from a fil
 import { readFile, writeFile } from 'fs/promises';
 
 export async function processFile(filePath, content) {
-	const existingContent = await readFile(filePath, 'utf-8');
-	const updatedContent = `${existingContent}\n${content}`;
-	await writeFile(filePath, updatedContent);
-	return updatedContent;
+  const existingContent = await readFile(filePath, 'utf-8');
+  const updatedContent = `${existingContent}\n${content}`;
+  await writeFile(filePath, updatedContent);
+  return updatedContent;
 }
 ```
 
@@ -40,26 +40,26 @@ import { describe, it, expect, vi } from 'vitest';
 vi.mock('fs/promises'); // this magic line mocks the whole module
 
 describe('processFile', () => {
-	it('should read content, append new content, and write it back', async () => {
-		// Arrange: Set up mock behavior
-		const mockFilePath = 'mockFile.txt';
-		const mockExistingContent = 'Hello World';
-		const mockNewContent = 'Vitest is awesome';
+  it('should read content, append new content, and write it back', async () => {
+    // Arrange: Set up mock behavior
+    const mockFilePath = 'mockFile.txt';
+    const mockExistingContent = 'Hello World';
+    const mockNewContent = 'Vitest is awesome';
 
-		// Mock 'readFile' to return some existing content
-		readFile.mockResolvedValue(mockExistingContent);
+    // Mock 'readFile' to return some existing content
+    readFile.mockResolvedValue(mockExistingContent);
 
-		// Act: Call the function we're testing
-		const result = await processFile(mockFilePath, mockNewContent);
+    // Act: Call the function we're testing
+    const result = await processFile(mockFilePath, mockNewContent);
 
-		// Assert: Did the magic happen?
-		expect(readFile).toHaveBeenCalledWith(mockFilePath, 'utf-8');
-		expect(writeFile).toHaveBeenCalledWith(
-			mockFilePath,
-			`${mockExistingContent}\n${mockNewContent}`,
-		);
-		expect(result).toBe(`${mockExistingContent}\n${mockNewContent}`);
-	});
+    // Assert: Did the magic happen?
+    expect(readFile).toHaveBeenCalledWith(mockFilePath, 'utf-8');
+    expect(writeFile).toHaveBeenCalledWith(
+      mockFilePath,
+      `${mockExistingContent}\n${mockNewContent}`,
+    );
+    expect(result).toBe(`${mockExistingContent}\n${mockNewContent}`);
+  });
 });
 ```
 

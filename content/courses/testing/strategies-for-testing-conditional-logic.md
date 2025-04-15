@@ -14,13 +14,13 @@ Before we write a single test, we need to know what conditions we’re dealing w
 
 ```javascript
 const calculateDiscount = (items) => {
-	if (items > 10) {
-		return 0.2; // 20% discount
-	} else if (items > 5) {
-		return 0.1; // 10% discount
-	} else {
-		return 0; // No discount
-	}
+  if (items > 10) {
+    return 0.2; // 20% discount
+  } else if (items > 5) {
+    return 0.1; // 10% discount
+  } else {
+    return 0; // No discount
+  }
 };
 ```
 
@@ -53,20 +53,20 @@ import { describe, it, expect } from 'vitest';
 import { calculateDiscount } from './discounts'; // Assume your function lives here
 
 describe('calculateDiscount - conditional logic tests', () => {
-	it('should return a 20% discount if more than 10 items', () => {
-		const discount = calculateDiscount(11);
-		expect(discount).toBe(0.2);
-	});
+  it('should return a 20% discount if more than 10 items', () => {
+    const discount = calculateDiscount(11);
+    expect(discount).toBe(0.2);
+  });
 
-	it('should return a 10% discount if more than 5 items but less than or equal to 10', () => {
-		const discount = calculateDiscount(7);
-		expect(discount).toBe(0.1);
-	});
+  it('should return a 10% discount if more than 5 items but less than or equal to 10', () => {
+    const discount = calculateDiscount(7);
+    expect(discount).toBe(0.1);
+  });
 
-	it('should return 0 discount if 5 or fewer items', () => {
-		const discount = calculateDiscount(3);
-		expect(discount).toBe(0);
-	});
+  it('should return 0 discount if 5 or fewer items', () => {
+    const discount = calculateDiscount(3);
+    expect(discount).toBe(0);
+  });
 });
 ```
 
@@ -84,23 +84,23 @@ If you really want to sleep at night, let’s cover those too:
 
 ```javascript
 it('should return 0 discount for exactly 5 items', () => {
-	const discount = calculateDiscount(5);
-	expect(discount).toBe(0);
+  const discount = calculateDiscount(5);
+  expect(discount).toBe(0);
 });
 
 it('should return 0 discount for exactly 10 items', () => {
-	const discount = calculateDiscount(10);
-	expect(discount).toBe(0.1);
+  const discount = calculateDiscount(10);
+  expect(discount).toBe(0.1);
 });
 
 it('should return 0 discount for 0 items', () => {
-	const discount = calculateDiscount(0);
-	expect(discount).toBe(0);
+  const discount = calculateDiscount(0);
+  expect(discount).toBe(0);
 });
 
 it('should return 0 discount for negative number of items', () => {
-	const discount = calculateDiscount(-1);
-	expect(discount).toBe(0);
+  const discount = calculateDiscount(-1);
+  expect(discount).toBe(0);
 });
 ```
 
@@ -114,10 +114,10 @@ Maybe later you decide, "Hey, let’s give a 15% discount for exactly 10 items."
 
 ```javascript
 if (items > 10) {
-	return 0.2;
+  return 0.2;
 } else if (items >= 10) {
-	// Adjusted!
-	return 0.15; // New sweet spot
+  // Adjusted!
+  return 0.15; // New sweet spot
 }
 ```
 

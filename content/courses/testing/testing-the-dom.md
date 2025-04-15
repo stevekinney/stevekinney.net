@@ -14,9 +14,9 @@ To use [JSDOM](https://www.npmjs.com/package/jsdom), you can set it as the envir
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	test: {
-		environment: 'jsdom',
-	},
+  test: {
+    environment: 'jsdom',
+  },
 });
 ```
 
@@ -26,9 +26,9 @@ Alternatively, you could choose to use [Happy DOM](https://www.npmjs.com/package
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	test: {
-		environment: 'happy-dom',
-	},
+  test: {
+    environment: 'happy-dom',
+  },
 });
 ```
 

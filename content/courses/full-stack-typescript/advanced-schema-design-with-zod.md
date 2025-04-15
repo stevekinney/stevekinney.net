@@ -10,30 +10,30 @@ Handle schemas that reference themselves recursively (e.g., tree-like structures
 
 ```ts
 interface Category {
-	name: string;
-	subcategories?: Category[]; // Recursive reference
+  name: string;
+  subcategories?: Category[]; // Recursive reference
 }
 
 const categorySchema: z.ZodSchema<Category> = z.lazy(() =>
-	z.object({
-		name: z.string(),
-		subcategories: z.array(categorySchema).optional(), // Use lazy schema here
-	}),
+  z.object({
+    name: z.string(),
+    subcategories: z.array(categorySchema).optional(), // Use lazy schema here
+  }),
 );
 
 const validCategory: Category = {
-	name: 'Electronics',
-	subcategories: [
-		{ name: 'Computers' },
-		{ name: 'Phones', subcategories: [{ name: 'Smartphones' }] },
-	],
+  name: 'Electronics',
+  subcategories: [
+    { name: 'Computers' },
+    { name: 'Phones', subcategories: [{ name: 'Smartphones' }] },
+  ],
 };
 
 categorySchema.parse(validCategory); // Valid
 
 const invalidCategory: any = {
-	name: 'Books',
-	subcategories: [{ name: 123 }], // Invalid subcategory type
+  name: 'Books',
+  subcategories: [{ name: 123 }], // Invalid subcategory type
 };
 
 // categorySchema.parse(invalidCategory); // Throws ZodError: Expected object, received number at 'subcategories[0].name'
@@ -45,24 +45,24 @@ Use preprocessing to handle complex data transformations or conditional validati
 
 ```ts
 const complexDataSchema = z.preprocess(
-	(input) => {
-		if (typeof input === 'string' && input.startsWith('{') && input.endsWith('}')) {
-			try {
-				return JSON.parse(input); // Attempt to parse JSON string
-			} catch (e) {
-				return input; // If parsing fails, return original string for string validation
-			}
-		}
-		return input; // Return original input if not a JSON-like string
-	},
-	z.union([
-		z.object({
-			// Schema for parsed JSON object
-			type: z.literal('json'),
-			data: z.object({ value: z.number() }),
-		}),
-		z.string().startsWith('prefix-'), // Schema for string with prefix
-	]),
+  (input) => {
+    if (typeof input === 'string' && input.startsWith('{') && input.endsWith('}')) {
+      try {
+        return JSON.parse(input); // Attempt to parse JSON string
+      } catch (e) {
+        return input; // If parsing fails, return original string for string validation
+      }
+    }
+    return input; // Return original input if not a JSON-like string
+  },
+  z.union([
+    z.object({
+      // Schema for parsed JSON object
+      type: z.literal('json'),
+      data: z.object({ value: z.number() }),
+    }),
+    z.string().startsWith('prefix-'), // Schema for string with prefix
+  ]),
 );
 
 complexDataSchema.parse('{ "type": "json", "data": { "value": 42 } }'); // Valid, parses JSON and validates object schema
@@ -82,24 +82,24 @@ Zod's powerful type inference capabilities are a game-changer for TypeScript dev
 
 ```ts
 const productSchema = z.object({
-	id: z.string().uuid(),
-	name: z.string().min(2),
-	price: z.number().positive(),
-	description: z.string().optional(),
+  id: z.string().uuid(),
+  name: z.string().min(2),
+  price: z.number().positive(),
+  description: z.string().optional(),
 });
 
 // Infer the TypeScript type from the Zod schema
 type Product = z.infer<typeof productSchema>;
 
 function processProduct(product: Product) {
-	console.log(`Processing product: ${product.name} (ID: ${product.id}), Price: $${product.price}`);
-	// ... further logic with type-safe 'product' object
+  console.log(`Processing product: ${product.name} (ID: ${product.id}), Price: $${product.price}`);
+  // ... further logic with type-safe 'product' object
 }
 
 const validProductData = {
-	id: 'a1b2c3d4-e5f6-7890-1234-567890abcdef',
-	name: 'Awesome Gadget',
-	price: 99.99,
+  id: 'a1b2c3d4-e5f6-7890-1234-567890abcdef',
+  name: 'Awesome Gadget',
+  price: 99.99,
 };
 
 const parsedProduct = productSchema.parse(validProductData); // Runtime validation
@@ -114,23 +114,23 @@ Zod schemas can be used to define precise type signatures for function parameter
 
 ```ts
 const configSchema = z.object({
-	apiKey: z.string(),
-	apiUrl: z.string().url(),
-	timeout: z.number().positive().default(5000), // Default timeout in milliseconds
+  apiKey: z.string(),
+  apiUrl: z.string().url(),
+  timeout: z.number().positive().default(5000), // Default timeout in milliseconds
 });
 type Config = z.infer<typeof configSchema>;
 
 function initializeApp(configData: unknown): Config {
-	// Input as 'unknown' to force runtime validation
-	const config = configSchema.parse(configData); // Runtime validation of config data
-	console.log('App initialized with config:', config);
-	return config; // Type-safe Config object returned
+  // Input as 'unknown' to force runtime validation
+  const config = configSchema.parse(configData); // Runtime validation of config data
+  console.log('App initialized with config:', config);
+  return config; // Type-safe Config object returned
 }
 
 const validConfigData = {
-	apiKey: 'your-api-key',
-	apiUrl: '[https://api.example.com](https://www.google.com/search?q=https://api.example.com)',
-	// timeout is optional, default will be used
+  apiKey: 'your-api-key',
+  apiUrl: '[https://api.example.com](https://www.google.com/search?q=https://api.example.com)',
+  // timeout is optional, default will be used
 };
 
 const appConfig = initializeApp(validConfigData); // Runtime validation and type-safe config
@@ -152,37 +152,37 @@ Zod supports asynchronous validation with the `schema.parseAsync(data)` method. 
 import { z } from 'zod';
 
 const usernameSchema = z
-	.string()
-	.min(3)
-	.refine(
-		async (username) => {
-			// Simulate asynchronous check against a database or API
-			await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate network latency
-			const isUsernameTaken = await checkUsernameAvailability(username); // Assume this function checks username in a database
-			return !isUsernameTaken; // Username is valid if not taken
-		},
-		{ message: 'Username is already taken' },
-	);
+  .string()
+  .min(3)
+  .refine(
+    async (username) => {
+      // Simulate asynchronous check against a database or API
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate network latency
+      const isUsernameTaken = await checkUsernameAvailability(username); // Assume this function checks username in a database
+      return !isUsernameTaken; // Username is valid if not taken
+    },
+    { message: 'Username is already taken' },
+  );
 
 async function validateUsername(username: string) {
-	try {
-		const validatedUsername = await usernameSchema.parseAsync(username);
-		console.log(`Username "${validatedUsername}" is valid and available.`);
-	} catch (error) {
-		if (error instanceof z.ZodError) {
-			console.error('Username validation failed:', error.errors);
-		} else {
-			console.error('Unexpected error:', error);
-		}
-	}
+  try {
+    const validatedUsername = await usernameSchema.parseAsync(username);
+    console.log(`Username "${validatedUsername}" is valid and available.`);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error('Username validation failed:', error.errors);
+    } else {
+      console.error('Unexpected error:', error);
+    }
+  }
 }
 
 // Assume checkUsernameAvailability is an asynchronous function that checks username availability
 async function checkUsernameAvailability(username: string): Promise<boolean> {
-	// ... (Implementation to check username in database or API) ...
-	// Simulate:
-	const takenUsernames = ['takenUser', 'anotherTakenUser'];
-	return takenUsernames.includes(username);
+  // ... (Implementation to check username in database or API) ...
+  // Simulate:
+  const takenUsernames = ['takenUser', 'anotherTakenUser'];
+  return takenUsernames.includes(username);
 }
 
 validateUsername('newUser123'); // Validates asynchronously, assuming "newUser123" is available
@@ -207,23 +207,23 @@ const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
 
 const createUserSchema = z.object({
-	name: z.string().min(2),
-	email: z.string().email(),
-	password: z.string().min(8),
+  name: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(8),
 });
 
 app.post('/users', async (req: Request, res: Response) => {
-	try {
-		const userData = createUserSchema.parse(req.body); // Validate request body
-		// ... (Create user in database using validated userData) ...
-		res.status(201).json({ message: 'User created successfully', user: userData });
-	} catch (error) {
-		if (error instanceof z.ZodError) {
-			res.status(400).json({ errors: error.errors }); // Return validation errors to client
-		} else {
-			res.status(500).json({ message: 'Server error' });
-		}
-	}
+  try {
+    const userData = createUserSchema.parse(req.body); // Validate request body
+    // ... (Create user in database using validated userData) ...
+    res.status(201).json({ message: 'User created successfully', user: userData });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      res.status(400).json({ errors: error.errors }); // Return validation errors to client
+    } else {
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
 });
 
 app.listen(3000, () => console.log('Server listening on port 3000'));
@@ -306,35 +306,35 @@ Validate and transform data when serializing to or deserializing from formats li
 import { z } from 'zod';
 
 const userDataSchema = z.object({
-	userId: z.number(),
-	username: z.string(),
-	profileData: z
-		.object({
-			bio: z.string().optional(),
-			avatarUrl: z.string().url().optional(),
-		})
-		.nullable(), // Profile data can be null
+  userId: z.number(),
+  username: z.string(),
+  profileData: z
+    .object({
+      bio: z.string().optional(),
+      avatarUrl: z.string().url().optional(),
+    })
+    .nullable(), // Profile data can be null
 });
 type UserData = z.infer<typeof userDataSchema>;
 
 function serializeUserData(user: UserData): string {
-	userDataSchema.parse(user); // Validate before serialization
-	return JSON.stringify(user);
+  userDataSchema.parse(user); // Validate before serialization
+  return JSON.stringify(user);
 }
 
 function deserializeUserData(jsonString: string): UserData {
-	const parsedData = JSON.parse(jsonString);
-	return userDataSchema.parse(parsedData); // Validate after deserialization
+  const parsedData = JSON.parse(jsonString);
+  return userDataSchema.parse(parsedData); // Validate after deserialization
 }
 
 const userToSerialize: UserData = {
-	userId: 123,
-	username: 'testUser',
-	profileData: {
-		bio: 'Software developer',
-		avatarUrl:
-			'[https://example.com/avatar.png](https://www.google.com/search?q=https://example.com/avatar.png)',
-	},
+  userId: 123,
+  username: 'testUser',
+  profileData: {
+    bio: 'Software developer',
+    avatarUrl:
+      '[https://example.com/avatar.png](https://www.google.com/search?q=https://example.com/avatar.png)',
+  },
 };
 
 const serialized = serializeUserData(userToSerialize);
@@ -354,32 +354,32 @@ import * as yaml from 'js-yaml';
 import { z } from 'zod';
 
 const appConfigSchema = z.object({
-	server: z.object({
-		host: z.string(),
-		port: z.number().positive(),
-	}),
-	database: z.object({
-		url: z.string().url(),
-		username: z.string(),
-		password: z.string(),
-	}),
-	featureFlags: z.record(z.string(), z.boolean()).optional(), // Optional feature flags
+  server: z.object({
+    host: z.string(),
+    port: z.number().positive(),
+  }),
+  database: z.object({
+    url: z.string().url(),
+    username: z.string(),
+    password: z.string(),
+  }),
+  featureFlags: z.record(z.string(), z.boolean()).optional(), // Optional feature flags
 });
 type AppConfig = z.infer<typeof appConfigSchema>;
 
 function loadConfig(configPath: string): AppConfig {
-	try {
-		const configFile = fs.readFileSync(configPath, 'utf8');
-		const configData = yaml.load(configFile); // Load YAML config
-		return appConfigSchema.parse(configData); // Validate config data
-	} catch (error) {
-		if (error instanceof z.ZodError) {
-			console.error('Configuration validation failed:', error.errors);
-		} else {
-			console.error('Error loading configuration:', error);
-		}
-		throw new Error('Failed to load application configuration.');
-	}
+  try {
+    const configFile = fs.readFileSync(configPath, 'utf8');
+    const configData = yaml.load(configFile); // Load YAML config
+    return appConfigSchema.parse(configData); // Validate config data
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error('Configuration validation failed:', error.errors);
+    } else {
+      console.error('Error loading configuration:', error);
+    }
+    throw new Error('Failed to load application configuration.');
+  }
 }
 
 const config = loadConfig('./config.yaml'); // Load and validate configuration from YAML file
@@ -402,11 +402,11 @@ Zod’s default error messages might be a bit robotic for your taste. Use a cust
 import { z, ZodError, ZodIssueCode } from 'zod';
 
 z.setErrorMap((issue, ctx) => {
-	if (issue.code === ZodIssueCode.invalid_type) {
-		return { message: `Invalid type: expected ${issue.expected}, got ${issue.received}` };
-	}
-	// fallback to default message
-	return { message: ctx.defaultError };
+  if (issue.code === ZodIssueCode.invalid_type) {
+    return { message: `Invalid type: expected ${issue.expected}, got ${issue.received}` };
+  }
+  // fallback to default message
+  return { message: ctx.defaultError };
 });
 
 z.string().parse(123);
@@ -417,7 +417,7 @@ z.string().parse(123);
 
 ```ts
 const mySchema = z.string().errorMap((issue, ctx) => {
-	return { message: "This isn't a string—cut it out." };
+  return { message: "This isn't a string—cut it out." };
 });
 ```
 
@@ -461,13 +461,13 @@ This is simpler than writing manual `.preprocess()` or `.transform()` in many ca
 import { z } from 'zod';
 
 const schemaA = z.object({
-	name: z.string(),
-	age: z.number(),
+  name: z.string(),
+  age: z.number(),
 });
 
 const schemaB = z.object({
-	age: z.number().min(18),
-	email: z.string().email(),
+  age: z.number().min(18),
+  email: z.string().email(),
 });
 
 const merged = schemaA.merge(schemaB);

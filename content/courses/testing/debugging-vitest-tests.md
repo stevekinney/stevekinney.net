@@ -19,7 +19,7 @@ import { expect, test } from 'vitest';
 import { addNumbers } from './addNumbers';
 
 test('adds two numbers', () => {
-	expect(addNumbers(2, 2)).toBe(5);
+  expect(addNumbers(2, 2)).toBe(5);
 });
 ```
 
@@ -41,7 +41,7 @@ When you’ve got a gnarly error and, say, 135 tests awaiting execution, there�
 
 ```javascript
 test.only('adds two numbers', () => {
-	expect(addNumbers(2, 2)).toBe(5);
+  expect(addNumbers(2, 2)).toBe(5);
 });
 ```
 
@@ -53,9 +53,9 @@ Okay, if we’re being real here, most debugging is just sprucing up the joint w
 
 ```javascript
 test('adds two numbers', () => {
-	const result = addNumbers(2, 2);
-	console.log('The result is:', result);
-	expect(result).toBe(5);
+  const result = addNumbers(2, 2);
+  console.log('The result is:', result);
+  expect(result).toBe(5);
 });
 ```
 

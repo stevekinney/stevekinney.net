@@ -7,16 +7,16 @@ We can use a tool called [`orval`](https://npm.im/orval) to generate Zod schemas
 ```ts
 /* eslint-disable no-undef */
 module.exports = {
-	'busy-bee': {
-		output: {
-			client: 'zod',
-			mode: 'single',
-			target: './src/schemas.ts',
-		},
-		input: {
-			target: './openapi.json',
-		},
-	},
+  'busy-bee': {
+    output: {
+      client: 'zod',
+      mode: 'single',
+      target: './src/schemas.ts',
+    },
+    input: {
+      target: './openapi.json',
+    },
+  },
 };
 ```
 
@@ -37,14 +37,14 @@ import { z as zod } from 'zod';
  * @summary Get all tasks
  */
 export const getTasksQueryParams = zod.object({
-	completed: zod.boolean().optional().describe('Filter tasks by completion status'),
+  completed: zod.boolean().optional().describe('Filter tasks by completion status'),
 });
 
 export const getTasksResponseItem = zod.object({
-	id: zod.number(),
-	title: zod.string(),
-	description: zod.string().optional(),
-	completed: zod.boolean().optional(),
+  id: zod.number(),
+  title: zod.string(),
+  description: zod.string().optional(),
+  completed: zod.boolean().optional(),
 });
 export const getTasksResponse = zod.array(getTasksResponseItem);
 
@@ -53,51 +53,51 @@ export const getTasksResponse = zod.array(getTasksResponseItem);
  * @summary Create a new task
  */
 export const postTasksBody = zod
-	.object({
-		title: zod.string(),
-		description: zod.string().optional(),
-	})
-	.describe('Data required to create a new task');
+  .object({
+    title: zod.string(),
+    description: zod.string().optional(),
+  })
+  .describe('Data required to create a new task');
 
 /**
  * Retrieve a single task by its ID
  * @summary Get a task by ID
  */
 export const getTasksIdParams = zod.object({
-	id: zod.number().describe('ID of the task to retrieve'),
+  id: zod.number().describe('ID of the task to retrieve'),
 });
 
 export const getTasksIdResponse = zod
-	.object({
-		id: zod.number(),
-		title: zod.string(),
-		description: zod.string().optional(),
-		completed: zod.boolean().optional(),
-	})
-	.describe('A task item');
+  .object({
+    id: zod.number(),
+    title: zod.string(),
+    description: zod.string().optional(),
+    completed: zod.boolean().optional(),
+  })
+  .describe('A task item');
 
 /**
  * Update an existing task by its ID
  * @summary Update a task
  */
 export const putTasksIdParams = zod.object({
-	id: zod.number().describe('ID of the task to update'),
+  id: zod.number().describe('ID of the task to update'),
 });
 
 export const putTasksIdBody = zod
-	.object({
-		title: zod.string().optional(),
-		description: zod.string().optional(),
-		completed: zod.boolean().optional(),
-	})
-	.describe('Data for updating an existing task');
+  .object({
+    title: zod.string().optional(),
+    description: zod.string().optional(),
+    completed: zod.boolean().optional(),
+  })
+  .describe('Data for updating an existing task');
 
 /**
  * Delete a task by its ID
  * @summary Delete a task
  */
 export const deleteTasksIdParams = zod.object({
-	id: zod.number().describe('ID of the task to delete'),
+  id: zod.number().describe('ID of the task to delete'),
 });
 ```
 

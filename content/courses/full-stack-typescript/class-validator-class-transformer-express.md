@@ -34,11 +34,11 @@ Also, ensure that your `tsconfig.json` has the following options enabled:
 
 ```json
 {
-	"compilerOptions": {
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true
-		// ... other options
-	}
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+    // ... other options
+  }
 }
 ```
 
@@ -50,22 +50,22 @@ Create classes that represent your request bodies, and use decorators from `clas
 import { IsString, IsEmail, MinLength, IsOptional, IsInt, Min, Max } from 'class-validator';
 
 export class CreateUserDto {
-	@IsString()
-	@MinLength(3)
-	username: string;
+  @IsString()
+  @MinLength(3)
+  username: string;
 
-	@IsEmail()
-	email: string;
+  @IsEmail()
+  email: string;
 
-	@IsString()
-	@MinLength(8)
-	password: string;
+  @IsString()
+  @MinLength(8)
+  password: string;
 
-	@IsOptional()
-	@IsInt()
-	@Min(18)
-	@Max(120)
-	age?: number;
+  @IsOptional()
+  @IsInt()
+  @Min(18)
+  @Max(120)
+  age?: number;
 }
 ```
 
@@ -79,15 +79,15 @@ import { validate, plainToClass } from 'class-transformer';
 import { CreateUserDto } from './dtos/create-user.dto'; // Assuming your DTO is in dtos/create-user.dto
 
 export async function validateDto(req: Request, res: Response, next: NextFunction) {
-	const dto = plainToClass(CreateUserDto, req.body);
-	const errors = await validate(dto);
+  const dto = plainToClass(CreateUserDto, req.body);
+  const errors = await validate(dto);
 
-	if (errors.length > 0) {
-		return res.status(400).json({ errors: errors.map((e) => e.constraints) });
-	}
+  if (errors.length > 0) {
+    return res.status(400).json({ errors: errors.map((e) => e.constraints) });
+  }
 
-	req.body = dto; // Replace req.body with the transformed and validated DTO
-	next();
+  req.body = dto; // Replace req.body with the transformed and validated DTO
+  next();
 }
 ```
 
@@ -104,10 +104,10 @@ const app = express();
 app.use(express.json());
 
 app.post('/users', validateDto, (req: Request<{}, {}, CreateUserDto>, res: Response) => {
-	// req.body is now a validated instance of CreateUserDto
-	const { username, email, password, age } = req.body;
-	// ... create user logic
-	res.status(201).json({ message: 'User created' });
+  // req.body is now a validated instance of CreateUserDto
+  const { username, email, password, age } = req.body;
+  // ... create user logic
+  res.status(201).json({ message: 'User created' });
 });
 ```
 
@@ -119,31 +119,31 @@ For validation logic that goes beyond simple decorators, custom type guards offe
 
 ```typescript
 function isValidCustomDate(value: any): value is string {
-	if (typeof value !== 'string') {
-		return false;
-	}
+  if (typeof value !== 'string') {
+    return false;
+  }
 
-	const regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
-	return regex.test(value);
+  const regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
+  return regex.test(value);
 }
 
 interface EventRequest {
-	startTime: string; // Must be a custom date format
+  startTime: string; // Must be a custom date format
 }
 
 function validateEventRequest(req: Request, res: Response, next: NextFunction) {
-	const { startTime } = req.body as EventRequest;
+  const { startTime } = req.body as EventRequest;
 
-	if (!isValidCustomDate(startTime)) {
-		return res.status(400).json({ error: 'Invalid start time format' });
-	}
+  if (!isValidCustomDate(startTime)) {
+    return res.status(400).json({ error: 'Invalid start time format' });
+  }
 
-	next();
+  next();
 }
 
 app.post('/events', validateEventRequest, (req: Request<any, any, EventRequest>, res: Response) => {
-	// req.body.startTime is now guaranteed to be a valid custom date string
-	res.json({ message: 'Event created' });
+  // req.body.startTime is now guaranteed to be a valid custom date string
+  res.json({ message: 'Event created' });
 });
 ```
 

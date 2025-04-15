@@ -10,9 +10,9 @@ You can automatically mock a module using `vi.mock()`:
 
 ```js
 vi.mock('./api', () => ({
-	getConcertDetails: vi
-		.fn()
-		.mockResolvedValue({ band: 'Green Day', venue: 'Madison Square Garden' }),
+  getConcertDetails: vi
+    .fn()
+    .mockResolvedValue({ band: 'Green Day', venue: 'Madison Square Garden' }),
 }));
 ```
 

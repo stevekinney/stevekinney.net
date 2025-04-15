@@ -39,7 +39,7 @@ Let’s go through an example where we spy on a function and verify its behavior
 
 ```js
 function handleTicketSaleError(errorMessage) {
-	console.error(`Error: ${errorMessage}`);
+  console.error(`Error: ${errorMessage}`);
 }
 ```
 
@@ -49,19 +49,19 @@ In our test, we can spy on `console.error` to ensure it was called with the corr
 import { describe, it, expect, vi } from 'vitest';
 
 describe('handleTicketSaleError', () => {
-	it('logs an error message when ticket sale fails', () => {
-		// Spy on console.error
-		const errorSpy = vi.spyOn(console, 'error');
+  it('logs an error message when ticket sale fails', () => {
+    // Spy on console.error
+    const errorSpy = vi.spyOn(console, 'error');
 
-		// Call the function under test
-		handleTicketSaleError('Payment declined');
+    // Call the function under test
+    handleTicketSaleError('Payment declined');
 
-		// Assert that the spy tracked the correct call
-		expect(errorSpy).toHaveBeenCalledWith('Error: Payment declined');
+    // Assert that the spy tracked the correct call
+    expect(errorSpy).toHaveBeenCalledWith('Error: Payment declined');
 
-		// Clean up: Restore the original function
-		errorSpy.mockRestore();
-	});
+    // Clean up: Restore the original function
+    errorSpy.mockRestore();
+  });
 });
 ```
 
@@ -80,26 +80,26 @@ Here’s an example that demonstrates how to check these properties:
 
 ```js
 function processOrder(orderId) {
-	console.log(`Processing order: ${orderId}`);
+  console.log(`Processing order: ${orderId}`);
 }
 
 describe('processOrder', () => {
-	it('should log the correct order ID', () => {
-		// Spy on console.log
-		const logSpy = vi.spyOn(console, 'log');
+  it('should log the correct order ID', () => {
+    // Spy on console.log
+    const logSpy = vi.spyOn(console, 'log');
 
-		// Call the function under test
-		processOrder('12345');
+    // Call the function under test
+    processOrder('12345');
 
-		// Verify the spy was called exactly once
-		expect(logSpy).toHaveBeenCalledTimes(1);
+    // Verify the spy was called exactly once
+    expect(logSpy).toHaveBeenCalledTimes(1);
 
-		// Verify the spy was called with the correct argument
-		expect(logSpy).toHaveBeenCalledWith('Processing order: 12345');
+    // Verify the spy was called with the correct argument
+    expect(logSpy).toHaveBeenCalledWith('Processing order: 12345');
 
-		// Clean up: Restore the original function
-		logSpy.mockRestore();
-	});
+    // Clean up: Restore the original function
+    logSpy.mockRestore();
+  });
 });
 ```
 
@@ -131,18 +131,18 @@ import { test, expect, vi } from 'vitest';
 import * as math from './arithmetic';
 
 test('calls add with correct arguments', () => {
-	// Arrange
-	const addSpy = vi.spyOn(math, 'add');
+  // Arrange
+  const addSpy = vi.spyOn(math, 'add');
 
-	// Act
-	const result = math.add(2, 3);
+  // Act
+  const result = math.add(2, 3);
 
-	// Assert
-	expect(addSpy).toHaveBeenCalledWith(2, 3);
-	expect(result).toBe(5);
+  // Assert
+  expect(addSpy).toHaveBeenCalledWith(2, 3);
+  expect(result).toBe(5);
 
-	// Cleanup
-	addSpy.mockRestore();
+  // Cleanup
+  addSpy.mockRestore();
 });
 ```
 

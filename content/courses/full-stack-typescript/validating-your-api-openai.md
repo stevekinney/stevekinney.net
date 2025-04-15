@@ -9,10 +9,10 @@ We can then use it as middleware to make sure that our responses are up-to-snuff
 
 ```ts
 app.use(
-	OpenApiValidator.middleware({
-		apiSpec: './openapi.json',
-		validateRequests: true,
-		validateResponses: true,
-	}),
+  OpenApiValidator.middleware({
+    apiSpec: './openapi.json',
+    validateRequests: true,
+    validateResponses: true,
+  }),
 );
 ```

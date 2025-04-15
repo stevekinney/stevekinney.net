@@ -8,18 +8,18 @@ Buttons can come in all shapes and sizes, the buttons in our design system come 
 
 ```css
 .small {
-	font-size: 0.875rem;
-	padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
 }
 
 .medium {
-	font-size: 0.875rem;
-	padding: 0.375rem 0.625rem;
+  font-size: 0.875rem;
+  padding: 0.375rem 0.625rem;
 }
 
 .large {
-	font-size: 0.875rem;
-	padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
 }
 ```
 

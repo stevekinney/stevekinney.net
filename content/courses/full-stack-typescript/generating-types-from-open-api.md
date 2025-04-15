@@ -49,15 +49,15 @@ Let's replace traditional fetch calls with typed API methods:
 
 ```typescript
 export const fetchTasks = async (showCompleted: boolean) => {
-	const { data, error } = await GET('/tasks', {
-		params: {
-			query: showCompleted ? { completed: true } : {},
-		},
-	});
+  const { data, error } = await GET('/tasks', {
+    params: {
+      query: showCompleted ? { completed: true } : {},
+    },
+  });
 
-	if (error) throw new Error('Failed to fetch tasks');
+  if (error) throw new Error('Failed to fetch tasks');
 
-	return data || [];
+  return data || [];
 };
 ```
 
@@ -65,15 +65,15 @@ export const fetchTasks = async (showCompleted: boolean) => {
 
 ```typescript
 export const getTask = async (id: string) => {
-	const { data, error } = await GET('/tasks/{id}', {
-		params: {
-			path: { id: Number(id) },
-		},
-	});
+  const { data, error } = await GET('/tasks/{id}', {
+    params: {
+      path: { id: Number(id) },
+    },
+  });
 
-	if (error) throw new Error('Failed to fetch task');
+  if (error) throw new Error('Failed to fetch task');
 
-	return data;
+  return data;
 };
 ```
 
@@ -81,11 +81,11 @@ export const getTask = async (id: string) => {
 
 ```typescript
 export const createTask = async (task: { title: string; description?: string }) => {
-	const { error } = await POST('/tasks', {
-		body: task,
-	});
+  const { error } = await POST('/tasks', {
+    body: task,
+  });
 
-	if (error) throw new Error('Failed to create task');
+  if (error) throw new Error('Failed to create task');
 };
 ```
 
@@ -93,19 +93,19 @@ export const createTask = async (task: { title: string; description?: string }) 
 
 ```typescript
 export const updateTask = async (
-	id: string,
+  id: string,
 
-	task: { title?: string; description?: string; completed?: boolean },
+  task: { title?: string; description?: string; completed?: boolean },
 ) => {
-	const { error } = await PUT('/tasks/{id}', {
-		params: {
-			path: { id: Number(id) },
-		},
+  const { error } = await PUT('/tasks/{id}', {
+    params: {
+      path: { id: Number(id) },
+    },
 
-		body: task,
-	});
+    body: task,
+  });
 
-	if (error) throw new Error('Failed to update task');
+  if (error) throw new Error('Failed to update task');
 };
 ```
 
@@ -113,13 +113,13 @@ export const updateTask = async (
 
 ```typescript
 export const deleteTask = async (id: string) => {
-	const { error } = await DELETE('/tasks/{id}', {
-		params: {
-			path: { id: Number(id) },
-		},
-	});
+  const { error } = await DELETE('/tasks/{id}', {
+    params: {
+      path: { id: Number(id) },
+    },
+  });
 
-	if (error) throw new Error('Failed to delete task');
+  if (error) throw new Error('Failed to delete task');
 };
 ```
 

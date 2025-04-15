@@ -23,13 +23,13 @@ Let’s dive into an example. Imagine you’ve got a function that converts stri
 ```js
 // examples/utility-belt/src/string-to-number.js
 export const stringToNumber = (value) => {
-	const number = Number(value);
+  const number = Number(value);
 
-	if (isNaN(number)) {
-		throw new Error(`'${value}' cannot be parsed as a number.`);
-	}
+  if (isNaN(number)) {
+    throw new Error(`'${value}' cannot be parsed as a number.`);
+  }
 
-	return number;
+  return number;
 };
 ```
 
@@ -42,9 +42,9 @@ Now, let’s write some Vitest tests to cover these special moments. When writin
 ```js
 // examples/utility-belt/src/string-to-number.test.js
 describe('stringToNumber', () => {
-	it('converts a string to a number', () => {
-		expect(stringToNumber('42')).toBe(42);
-	});
+  it('converts a string to a number', () => {
+    expect(stringToNumber('42')).toBe(42);
+  });
 });
 ```
 
@@ -57,7 +57,7 @@ We might be tempted to write something like this:
 
 ```javascript
 it.fails('throws an error if given a string that is not a number', () => {
-	expect(stringToNumber('foo')).toBe(42);
+  expect(stringToNumber('foo')).toBe(42);
 });
 ```
 
@@ -70,7 +70,7 @@ For example the following is a _real_ mistake that I made while I was writing th
 
 ```javascript
 it.fails('throws an error if given a string that is not a number', () => {
-	expect('foo').toBe(42);
+  expect('foo').toBe(42);
 });
 ```
 
@@ -82,7 +82,7 @@ Let me update that first rule: **uncaught** errors will cause a test to fail. Le
 
 ```javascript
 it('throws an error if given a string that is not a number', () => {
-	expect(stringToNumber('foo')).toBe(42);
+  expect(stringToNumber('foo')).toBe(42);
 });
 ```
 
@@ -92,7 +92,7 @@ Let's try calling the `toThrow()` method.
 
 ```javascript
 it('throws an error if given a string that is not a number', () => {
-	expect(stringToNumber('foo')).toThrow();
+  expect(stringToNumber('foo')).toThrow();
 });
 ```
 
@@ -100,7 +100,7 @@ Hmm—it's still broken. This is one little nuance. Calling `stringToNumber` wit
 
 ```javascript
 it('throws an error if given a string that is not a number', () => {
-	expect(() => stringToNumber('foo')).toThrow();
+  expect(() => stringToNumber('foo')).toThrow();
 });
 ```
 
@@ -110,7 +110,7 @@ We can validate that it throws the error we're expecting.
 
 ```javascript
 it('throws an error if given a string that is not a number', () => {
-	expect(() => stringToNumber('foo')).toThrow(`'foo' cannot be parsed as a number.`);
+  expect(() => stringToNumber('foo')).toThrow(`'foo' cannot be parsed as a number.`);
 });
 ```
 
@@ -118,8 +118,8 @@ I might pull out the value since it's being used twice.
 
 ```javascript
 it('throws an error if given a string that is not a number', () => {
-	const value = 'foo';
-	expect(() => stringToNumber(value)).toThrow(`'${value}' cannot be parsed as a number.`);
+  const value = 'foo';
+  expect(() => stringToNumber(value)).toThrow(`'${value}' cannot be parsed as a number.`);
 });
 ```
 
@@ -127,8 +127,8 @@ You can also use part of the message or a regular expression if you only want to
 
 ```javascript
 it('throws an error if given a string that is not a number', () => {
-	const value = 'foo';
-	expect(() => stringToNumber(value)).toThrow('cannot be parsed as a number');
+  const value = 'foo';
+  expect(() => stringToNumber(value)).toThrow('cannot be parsed as a number');
 });
 ```
 
@@ -167,11 +167,11 @@ There is another class of arguments that we _could_ try to throw errors for: A `
 
 ```js
 it('should throw an error for empty strings', () => {
-	expect(() => stringToNumber('')).toThrow('Empty strings are not valid input');
+  expect(() => stringToNumber('')).toThrow('Empty strings are not valid input');
 });
 
 it('should throw an error for strings with only spaces', () => {
-	expect(() => stringToNumber('    ')).toThrow('Empty strings are not valid input');
+  expect(() => stringToNumber('    ')).toThrow('Empty strings are not valid input');
 });
 ```
 

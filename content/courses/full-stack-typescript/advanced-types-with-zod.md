@@ -72,18 +72,18 @@ Create reusable schema components by defining schemas as variables or functions.
 
 ```ts
 const baseUserSchema = z.object({
-	id: z.number().positive(),
-	createdAt: z.date(),
+  id: z.number().positive(),
+  createdAt: z.date(),
 });
 
 const customerSchema = baseUserSchema.extend({
-	customerType: z.literal('customer'),
-	orders: z.array(z.object({ orderId: z.string() })),
+  customerType: z.literal('customer'),
+  orders: z.array(z.object({ orderId: z.string() })),
 });
 
 const adminSchema = baseUserSchema.extend({
-	customerType: z.literal('admin'),
-	permissions: z.array(z.string()),
+  customerType: z.literal('admin'),
+  permissions: z.array(z.string()),
 });
 
 const userSchema = z.union([customerSchema, adminSchema]); // Combine reusable schemas
@@ -99,21 +99,21 @@ When your data has a known “discriminator” field, `z.discriminatedUnion()` i
 import { z } from 'zod';
 
 const customerSchema = z.object({
-	type: z.literal('customer'),
-	orders: z.array(z.string()),
+  type: z.literal('customer'),
+  orders: z.array(z.string()),
 });
 
 const adminSchema = z.object({
-	type: z.literal('admin'),
-	permissions: z.array(z.string()),
+  type: z.literal('admin'),
+  permissions: z.array(z.string()),
 });
 
 const userSchema = z.discriminatedUnion('type', [customerSchema, adminSchema]);
 
 // Succeeds if type === 'customer' or 'admin'
 userSchema.parse({
-	type: 'customer',
-	orders: ['order1', 'order2'],
+  type: 'customer',
+  orders: ['order1', 'order2'],
 });
 ```
 
@@ -134,9 +134,9 @@ Zod includes special schemas that mirror TypeScript’s built-in utility types:
 
 ```ts
 const exoticSchema = z.object({
-	no: z.never(), // always invalid
-	hidden: z.unknown(), // always valid, type = unknown
-	whatever: z.any(), // always valid, type = any
+  no: z.never(), // always invalid
+  hidden: z.unknown(), // always valid, type = unknown
+  whatever: z.any(), // always valid, type = any
 });
 ```
 

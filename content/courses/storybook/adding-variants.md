@@ -40,7 +40,7 @@ This syntax is really nice, but you risk ending up with someone passing in a con
 
 ```tsx
 <Button primary secondary>
-	Button
+  Button
 </Button>
 ```
 
@@ -62,7 +62,7 @@ import { ComponentProps } from 'react';
 type ButtonProps = ComponentProps<'button'>;
 
 export const Button = (props: ButtonProps) => {
-	return <button {...props} />;
+  return <button {...props} />;
 };
 ```
 
@@ -70,7 +70,7 @@ First, we'll add our new prop and its accepted values to the `ButtonProps` type.
 
 ```tsx
 type ButtonProps = ComponentProps<'button'> & {
-	variant?: 'primary' | 'secondary' | 'destructive';
+  variant?: 'primary' | 'secondary' | 'destructive';
 };
 ```
 
@@ -83,85 +83,85 @@ Let's start by styling the button. We haven't implemented any of these variants 
 
 ```css
 .button {
-	align-items: center;
-	background-color: #4f46e5;
-	border-color: transparent;
-	border-radius: 0.25rem;
-	border-width: 1px;
-	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-	color: white;
-	cursor: pointer;
-	display: inline-flex;
-	font-weight: 600;
-	gap: 0.375rem;
-	padding: 0.375rem 0.75rem;
-	transition: background-color 0.2s;
+  align-items: center;
+  background-color: #4f46e5;
+  border-color: transparent;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  color: white;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 600;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  transition: background-color 0.2s;
 }
 
 /* Focus visible styles */
 .button:focus-visible {
-	outline: 2px solid;
-	outline-offset: 2px;
+  outline: 2px solid;
+  outline-offset: 2px;
 }
 
 /* Disabled styles */
 .button:disabled {
-	opacity: 0.5;
-	cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .button:hover {
-	background-color: #4338ca;
+  background-color: #4338ca;
 }
 
 .button:active {
-	background-color: #3730a3;
+  background-color: #3730a3;
 }
 
 /* Variant: secondary */
 .secondary {
-	background-color: white;
-	color: #1f2937;
-	border-color: #94a3b8;
+  background-color: white;
+  color: #1f2937;
+  border-color: #94a3b8;
 }
 
 .secondary:hover {
-	background-color: #f1f5f9;
+  background-color: #f1f5f9;
 }
 
 .secondary:active {
-	background-color: #e2e8f0;
+  background-color: #e2e8f0;
 }
 
 /* Variant: destructive */
 .destructive {
-	background-color: #dc2626;
-	color: white;
-	border-color: transparent;
+  background-color: #dc2626;
+  color: white;
+  border-color: transparent;
 }
 
 .destructive:hover {
-	background-color: #b91c1c;
+  background-color: #b91c1c;
 }
 
 .destructive:active {
-	background-color: #991b1b;
+  background-color: #991b1b;
 }
 
 /* Variant: ghost */
 .ghost {
-	background-color: transparent;
-	color: #4f46e5;
-	border-color: transparent;
-	box-shadow: none;
+  background-color: transparent;
+  color: #4f46e5;
+  border-color: transparent;
+  box-shadow: none;
 }
 
 .ghost:hover {
-	background-color: #f1f5f9;
+  background-color: #f1f5f9;
 }
 
 .ghost:active {
-	background-color: #e2e8f0;
+  background-color: #e2e8f0;
 }
 ```
 
@@ -171,7 +171,7 @@ We'll add the style to our component and then bask in the fruits of our labor.
 import styles from './button.module.css';
 
 export const Button = (props: ButtonProps) => {
-	return <button className={styles.button} {...props} />;
+  return <button className={styles.button} {...props} />;
 };
 ```
 
@@ -207,11 +207,11 @@ I already provided some classes for our variants, but we need to dynamically add
 
 ```tsx
 export const Button = ({ variant = 'primary', ...props }: ButtonProps) => {
-	let className = styles.button;
-	if (variant === 'secondary') className += ` ${styles.secondary}`;
-	if (variant === 'destructive') className += ` ${styles.destructive}`;
+  let className = styles.button;
+  if (variant === 'secondary') className += ` ${styles.secondary}`;
+  if (variant === 'destructive') className += ` ${styles.destructive}`;
 
-	return <button className={className} {...props} />;
+  return <button className={className} {...props} />;
 };
 ```
 
@@ -221,24 +221,24 @@ If we want to easily see each of these variants in Storybook, we'll need to add 
 
 ```tsx
 export const Primary: Story = {
-	args: {
-		children: 'Button',
-		variant: 'primary',
-	},
+  args: {
+    children: 'Button',
+    variant: 'primary',
+  },
 };
 
 export const Secondary: Story = {
-	args: {
-		children: 'Button',
-		variant: 'secondary',
-	},
+  args: {
+    children: 'Button',
+    variant: 'secondary',
+  },
 };
 
 export const Destructive: Story = {
-	args: {
-		children: 'Button',
-		variant: 'destructive',
-	},
+  args: {
+    children: 'Button',
+    variant: 'destructive',
+  },
 };
 ```
 
@@ -260,20 +260,20 @@ import clsx from 'clsx';
 import styles from './button.module.css';
 
 type ButtonProps = ComponentProps<'button'> & {
-	variant?: 'primary' | 'secondary' | 'destructive';
+  variant?: 'primary' | 'secondary' | 'destructive';
 };
 
 export const Button = ({ variant = 'primary', ...props }: ButtonProps) => {
-	return (
-		<button
-			className={clsx(
-				styles.button,
-				variant === 'secondary' && styles.secondary,
-				variant === 'destructive' && styles.destructive,
-			)}
-			{...props}
-		/>
-	);
+  return (
+    <button
+      className={clsx(
+        styles.button,
+        variant === 'secondary' && styles.secondary,
+        variant === 'destructive' && styles.destructive,
+      )}
+      {...props}
+    />
+  );
 };
 ```
 
@@ -281,15 +281,15 @@ export const Button = ({ variant = 'primary', ...props }: ButtonProps) => {
 
 ```tsx
 export const Button = ({ variant = 'primary', ...props }: ButtonProps) => {
-	return (
-		<button
-			className={clsx(styles.button, {
-				[styles.secondary]: variant === 'secondary',
-				[styles.destructive]: variant === 'destructive',
-			})}
-			{...props}
-		/>
-	);
+  return (
+    <button
+      className={clsx(styles.button, {
+        [styles.secondary]: variant === 'secondary',
+        [styles.destructive]: variant === 'destructive',
+      })}
+      {...props}
+    />
+  );
 };
 ```
 

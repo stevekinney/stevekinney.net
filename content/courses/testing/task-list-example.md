@@ -118,12 +118,12 @@ This cycle is often referred to as **Red-Green-Refactor**.
    import react from '@vitejs/plugin-react';
 
    export default defineConfig({
-   	plugins: [react()],
-   	test: {
-   		globals: true,
-   		environment: 'jsdom',
-   		setupFiles: './tests/setupTests.js',
-   	},
+     plugins: [react()],
+     test: {
+       globals: true,
+       environment: 'jsdom',
+       setupFiles: './tests/setupTests.js',
+     },
    });
    ```
 
@@ -140,14 +140,14 @@ This cycle is often referred to as **Red-Green-Refactor**.
 
    ```json
    {
-   	"scripts": {
-   		"dev": "vite",
-   		"build": "vite build",
-   		"preview": "vite preview",
-   		"test": "vitest",
-   		"test:watch": "vitest --watch",
-   		"coverage": "vitest run --coverage"
-   	}
+     "scripts": {
+       "dev": "vite",
+       "build": "vite build",
+       "preview": "vite preview",
+       "test": "vitest",
+       "test:watch": "vitest --watch",
+       "coverage": "vitest run --coverage"
+     }
    }
    ```
 
@@ -183,14 +183,14 @@ import { setupServer } from 'msw/node';
 import { ToDoList } from '../components/ToDoList';
 
 const mockTodos = [
-	{ id: 1, title: 'Buy groceries', completed: false },
-	{ id: 2, title: 'Walk the dog', completed: true },
+  { id: 1, title: 'Buy groceries', completed: false },
+  { id: 2, title: 'Walk the dog', completed: true },
 ];
 
 const server = setupServer(
-	rest.get('/api/todos', (req, res, ctx) => {
-		return res(ctx.json(mockTodos));
-	}),
+  rest.get('/api/todos', (req, res, ctx) => {
+    return res(ctx.json(mockTodos));
+  }),
 );
 
 beforeAll(() => server.listen());
@@ -198,14 +198,14 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test('renders to-do items fetched from API', async () => {
-	render(<ToDoList />);
+  render(<ToDoList />);
 
-	expect(screen.getByText(/loading/i)).toBeInTheDocument();
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
 
-	const items = await screen.findAllByRole('listitem');
-	expect(items).toHaveLength(2);
-	expect(screen.getByText('Buy groceries')).toBeInTheDocument();
-	expect(screen.getByText('Walk the dog')).toBeInTheDocument();
+  const items = await screen.findAllByRole('listitem');
+  expect(items).toHaveLength(2);
+  expect(screen.getByText('Buy groceries')).toBeInTheDocument();
+  expect(screen.getByText('Walk the dog')).toBeInTheDocument();
 });
 ```
 
@@ -234,29 +234,29 @@ Create `src/components/ToDoList.jsx`:
 import React, { useEffect, useState } from 'react';
 
 export function ToDoList() {
-	const [todos, setTodos] = useState([]);
-	const [loading, setLoading] = useState(true);
+  const [todos, setTodos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		fetch('/api/todos')
-			.then((res) => res.json())
-			.then((data) => {
-				setTodos(data);
-				setLoading(false);
-			});
-	}, []);
+  useEffect(() => {
+    fetch('/api/todos')
+      .then((res) => res.json())
+      .then((data) => {
+        setTodos(data);
+        setLoading(false);
+      });
+  }, []);
 
-	if (loading) return <div>Loading…</div>;
+  if (loading) return <div>Loading…</div>;
 
-	return (
-		<ul>
-			{todos.map((todo) => (
-				<li key={todo.id}>
-					{todo.title} {todo.completed ? '(Completed)' : ''}
-				</li>
-			))}
-		</ul>
-	);
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id}>
+          {todo.title} {todo.completed ? '(Completed)' : ''}
+        </li>
+      ))}
+    </ul>
+  );
 }
 ```
 
@@ -340,54 +340,54 @@ Update `src/components/ToDoList.jsx`:
 import React, { useEffect, useState } from 'react';
 
 export function ToDoList() {
-	const [todos, setTodos] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [newTodo, setNewTodo] = useState('');
+  const [todos, setTodos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [newTodo, setNewTodo] = useState('');
 
-	useEffect(() => {
-		fetchTodos();
-	}, []);
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
-	function fetchTodos() {
-		fetch('/api/todos')
-			.then((res) => res.json())
-			.then((data) => {
-				setTodos(data);
-				setLoading(false);
-			});
-	}
+  function fetchTodos() {
+    fetch('/api/todos')
+      .then((res) => res.json())
+      .then((data) => {
+        setTodos(data);
+        setLoading(false);
+      });
+  }
 
-	function addTodo() {
-		fetch('/api/todos', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ title: newTodo }),
-		}).then(() => {
-			setNewTodo('');
-			fetchTodos();
-		});
-	}
+  function addTodo() {
+    fetch('/api/todos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: newTodo }),
+    }).then(() => {
+      setNewTodo('');
+      fetchTodos();
+    });
+  }
 
-	if (loading) return <div>Loading…</div>;
+  if (loading) return <div>Loading…</div>;
 
-	return (
-		<div>
-			<input
-				placeholder="Add new to-do"
-				value={newTodo}
-				onChange={(e) => setNewTodo(e.target.value)}
-			/>
-			<button onClick={addTodo}>Add</button>
+  return (
+    <div>
+      <input
+        placeholder="Add new to-do"
+        value={newTodo}
+        onChange={(e) => setNewTodo(e.target.value)}
+      />
+      <button onClick={addTodo}>Add</button>
 
-			<ul>
-				{todos.map((todo) => (
-					<li key={todo.id}>
-						{todo.title} {todo.completed ? '(Completed)' : ''}
-					</li>
-				))}
-			</ul>
-		</div>
-	);
+      <ul>
+        {todos.map((todo) => (
+          <li key={todo.id}>
+            {todo.title} {todo.completed ? '(Completed)' : ''}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 ```
 
@@ -413,21 +413,21 @@ Update `src/tests/ToDoList.test.jsx`:
 
 ```jsx
 test('marks a to-do item as completed', async () => {
-	render(<ToDoList />);
+  render(<ToDoList />);
 
-	const itemCheckbox = await screen.findByRole('checkbox', { name: 'Buy groceries' });
-	expect(itemCheckbox).not.toBeChecked();
+  const itemCheckbox = await screen.findByRole('checkbox', { name: 'Buy groceries' });
+  expect(itemCheckbox).not.toBeChecked();
 
-	// Mock the PUT request
-	server.use(
-		rest.put('/api/todos/1', (req, res, ctx) => {
-			return res(ctx.json({ id: 1, title: 'Buy groceries', completed: true }));
-		}),
-	);
+  // Mock the PUT request
+  server.use(
+    rest.put('/api/todos/1', (req, res, ctx) => {
+      return res(ctx.json({ id: 1, title: 'Buy groceries', completed: true }));
+    }),
+  );
 
-	await userEvent.click(itemCheckbox);
+  await userEvent.click(itemCheckbox);
 
-	expect(itemCheckbox).toBeChecked();
+  expect(itemCheckbox).toBeChecked();
 });
 ```
 

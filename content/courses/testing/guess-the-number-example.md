@@ -98,9 +98,9 @@ Add a test script to your `package.json`:
 
 ```json
 {
-	"scripts": {
-		"test": "vitest"
-	}
+  "scripts": {
+    "test": "vitest"
+  }
 }
 ```
 
@@ -111,9 +111,9 @@ Create a `vitest.config.js` file (optional for simple setups):
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	test: {
-		globals: true,
-	},
+  test: {
+    globals: true,
+  },
 });
 ```
 
@@ -145,17 +145,17 @@ import { describe, it, expect } from 'vitest';
 import { createGame } from '../src/game';
 
 describe('Guess the Number Game', () => {
-	it('generates a random number between 1 and 100 by default', () => {
-		const game = createGame();
-		expect(game.secretNumber).toBeGreaterThanOrEqual(1);
-		expect(game.secretNumber).toBeLessThanOrEqual(100);
-	});
+  it('generates a random number between 1 and 100 by default', () => {
+    const game = createGame();
+    expect(game.secretNumber).toBeGreaterThanOrEqual(1);
+    expect(game.secretNumber).toBeLessThanOrEqual(100);
+  });
 
-	it('allows setting a custom range', () => {
-		const game = createGame(1, 50);
-		expect(game.secretNumber).toBeGreaterThanOrEqual(1);
-		expect(game.secretNumber).toBeLessThanOrEqual(50);
-	});
+  it('allows setting a custom range', () => {
+    const game = createGame(1, 50);
+    expect(game.secretNumber).toBeGreaterThanOrEqual(1);
+    expect(game.secretNumber).toBeLessThanOrEqual(50);
+  });
 });
 ```
 
@@ -181,12 +181,12 @@ Implement `createGame` in `src/game.js`:
 ```javascript
 // src/game.js
 export function createGame(min = 1, max = 100) {
-	return {
-		secretNumber: Math.floor(Math.random() * (max - min + 1)) + min,
-		min,
-		max,
-		attempts: 0,
-	};
+  return {
+    secretNumber: Math.floor(Math.random() * (max - min + 1)) + min,
+    min,
+    max,
+    attempts: 0,
+  };
 }
 ```
 
@@ -214,32 +214,32 @@ Add to `tests/game.test.js`:
 
 ```javascript
 describe('makeGuess', () => {
-	it('increments the number of attempts', () => {
-		const game = createGame();
-		game.makeGuess(50);
-		expect(game.attempts).toBe(1);
-	});
+  it('increments the number of attempts', () => {
+    const game = createGame();
+    game.makeGuess(50);
+    expect(game.attempts).toBe(1);
+  });
 
-	it('returns "correct" when the guess is equal to the secret number', () => {
-		const game = createGame();
-		game.secretNumber = 42;
-		const result = game.makeGuess(42);
-		expect(result).toBe('correct');
-	});
+  it('returns "correct" when the guess is equal to the secret number', () => {
+    const game = createGame();
+    game.secretNumber = 42;
+    const result = game.makeGuess(42);
+    expect(result).toBe('correct');
+  });
 
-	it('returns "too high" when the guess is greater than the secret number', () => {
-		const game = createGame();
-		game.secretNumber = 42;
-		const result = game.makeGuess(50);
-		expect(result).toBe('too high');
-	});
+  it('returns "too high" when the guess is greater than the secret number', () => {
+    const game = createGame();
+    game.secretNumber = 42;
+    const result = game.makeGuess(50);
+    expect(result).toBe('too high');
+  });
 
-	it('returns "too low" when the guess is less than the secret number', () => {
-		const game = createGame();
-		game.secretNumber = 42;
-		const result = game.makeGuess(30);
-		expect(result).toBe('too low');
-	});
+  it('returns "too low" when the guess is less than the secret number', () => {
+    const game = createGame();
+    game.secretNumber = 42;
+    const result = game.makeGuess(30);
+    expect(result).toBe('too low');
+  });
 });
 ```
 
@@ -264,22 +264,22 @@ Update `src/game.js`:
 
 ```javascript
 export function createGame(min = 1, max = 100) {
-	return {
-		secretNumber: Math.floor(Math.random() * (max - min + 1)) + min,
-		min,
-		max,
-		attempts: 0,
-		makeGuess(guess) {
-			this.attempts++;
-			if (guess === this.secretNumber) {
-				return 'correct';
-			} else if (guess > this.secretNumber) {
-				return 'too high';
-			} else {
-				return 'too low';
-			}
-		},
-	};
+  return {
+    secretNumber: Math.floor(Math.random() * (max - min + 1)) + min,
+    min,
+    max,
+    attempts: 0,
+    makeGuess(guess) {
+      this.attempts++;
+      if (guess === this.secretNumber) {
+        return 'correct';
+      } else if (guess > this.secretNumber) {
+        return 'too high';
+      } else {
+        return 'too low';
+      }
+    },
+  };
 }
 ```
 
@@ -307,14 +307,14 @@ Add to `tests/game.test.js`:
 
 ```javascript
 describe('makeGuess', () => {
-	// … previous tests …
+  // … previous tests …
 
-	it('handles negative numbers correctly', () => {
-		const game = createGame(-50, 50);
-		game.secretNumber = -10;
-		expect(game.makeGuess(-20)).toBe('too low');
-		expect(game.makeGuess(0)).toBe('too high');
-	});
+  it('handles negative numbers correctly', () => {
+    const game = createGame(-50, 50);
+    game.secretNumber = -10;
+    expect(game.makeGuess(-20)).toBe('too low');
+    expect(game.makeGuess(0)).toBe('too high');
+  });
 });
 ```
 
@@ -346,13 +346,13 @@ Add to `tests/game.test.js`:
 
 ```javascript
 describe('attempts tracking', () => {
-	it('counts the number of attempts made', () => {
-		const game = createGame();
-		game.makeGuess(10);
-		game.makeGuess(20);
-		game.makeGuess(30);
-		expect(game.attempts).toBe(3);
-	});
+  it('counts the number of attempts made', () => {
+    const game = createGame();
+    game.makeGuess(10);
+    game.makeGuess(20);
+    game.makeGuess(30);
+    expect(game.attempts).toBe(3);
+  });
 });
 ```
 
@@ -376,16 +376,16 @@ Add to `tests/game.test.js`:
 
 ```javascript
 describe('input validation', () => {
-	it('throws an error when the guess is not a number', () => {
-		const game = createGame();
-		expect(() => game.makeGuess('a')).toThrow('Invalid guess');
-	});
+  it('throws an error when the guess is not a number', () => {
+    const game = createGame();
+    expect(() => game.makeGuess('a')).toThrow('Invalid guess');
+  });
 
-	it('throws an error when the guess is out of range', () => {
-		const game = createGame(1, 50);
-		expect(() => game.makeGuess(0)).toThrow('Guess must be between 1 and 50');
-		expect(() => game.makeGuess(51)).toThrow('Guess must be between 1 and 50');
-	});
+  it('throws an error when the guess is out of range', () => {
+    const game = createGame(1, 50);
+    expect(() => game.makeGuess(0)).toThrow('Guess must be between 1 and 50');
+    expect(() => game.makeGuess(51)).toThrow('Guess must be between 1 and 50');
+  });
 });
 ```
 
@@ -405,28 +405,28 @@ Update `src/game.js`:
 
 ```javascript
 export function createGame(min = 1, max = 100) {
-	return {
-		secretNumber: Math.floor(Math.random() * (max - min + 1)) + min,
-		min,
-		max,
-		attempts: 0,
-		makeGuess(guess) {
-			if (typeof guess !== 'number' || isNaN(guess)) {
-				throw new Error('Invalid guess');
-			}
-			if (guess < this.min || guess > this.max) {
-				throw new Error(`Guess must be between ${this.min} and ${this.max}`);
-			}
-			this.attempts++;
-			if (guess === this.secretNumber) {
-				return 'correct';
-			} else if (guess > this.secretNumber) {
-				return 'too high';
-			} else {
-				return 'too low';
-			}
-		},
-	};
+  return {
+    secretNumber: Math.floor(Math.random() * (max - min + 1)) + min,
+    min,
+    max,
+    attempts: 0,
+    makeGuess(guess) {
+      if (typeof guess !== 'number' || isNaN(guess)) {
+        throw new Error('Invalid guess');
+      }
+      if (guess < this.min || guess > this.max) {
+        throw new Error(`Guess must be between ${this.min} and ${this.max}`);
+      }
+      this.attempts++;
+      if (guess === this.secretNumber) {
+        return 'correct';
+      } else if (guess > this.secretNumber) {
+        return 'too high';
+      } else {
+        return 'too low';
+      }
+    },
+  };
 }
 ```
 

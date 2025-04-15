@@ -20,15 +20,15 @@ Here’s how you create a spy and check the arguments. Let's take a look at `exa
 
 ```js
 describe('logger', () => {
-	it('logs to the console in development mode', () => {
-		const spy = vi.spyOn(console, 'log');
+  it('logs to the console in development mode', () => {
+    const spy = vi.spyOn(console, 'log');
 
-		log('Hello, world!');
+    log('Hello, world!');
 
-		expect(spy).toHaveBeenCalledWith('Hello, world!');
+    expect(spy).toHaveBeenCalledWith('Hello, world!');
 
-		spy.mockRestore();
-	});
+    spy.mockRestore();
+  });
 });
 ```
 
@@ -43,13 +43,13 @@ In this example, `spy` tracks the calls to `console.log`. The `expect(spy).toHav
 const mockFn = vi.fn();
 
 describe('mock function argument checking', () => {
-	it('should be called with the correct arguments', () => {
-		// Call the mock function with some arguments
-		mockFn('Green Day', 'American Idiot');
+  it('should be called with the correct arguments', () => {
+    // Call the mock function with some arguments
+    mockFn('Green Day', 'American Idiot');
 
-		// Check the arguments passed to the mock function
-		expect(mockFn).toHaveBeenCalledWith('Green Day', 'American Idiot');
-	});
+    // Check the arguments passed to the mock function
+    expect(mockFn).toHaveBeenCalledWith('Green Day', 'American Idiot');
+  });
 });
 ```
 
@@ -63,17 +63,17 @@ Vitest allows you to check the arguments passed to a function over multiple call
 const mockFn = vi.fn();
 
 describe('checking multiple calls', () => {
-	it('should track all the arguments for multiple calls', () => {
-		// Call the mock function multiple times with different arguments
-		mockFn('Green Day', 'Dookie');
-		mockFn('Nirvana', 'Nevermind');
+  it('should track all the arguments for multiple calls', () => {
+    // Call the mock function multiple times with different arguments
+    mockFn('Green Day', 'Dookie');
+    mockFn('Nirvana', 'Nevermind');
 
-		// Check arguments of the first call
-		expect(mockFn).toHaveBeenNthCalledWith(1, 'Green Day', 'Dookie');
+    // Check arguments of the first call
+    expect(mockFn).toHaveBeenNthCalledWith(1, 'Green Day', 'Dookie');
 
-		// Check arguments of the second call
-		expect(mockFn).toHaveBeenNthCalledWith(2, 'Nirvana', 'Nevermind');
-	});
+    // Check arguments of the second call
+    expect(mockFn).toHaveBeenNthCalledWith(2, 'Nirvana', 'Nevermind');
+  });
 });
 ```
 
@@ -85,22 +85,22 @@ When working with asynchronous code, it’s important to ensure that the correct
 
 ```js
 async function fetchBandData(bandName, callback) {
-	// Simulate an async operation
-	await new Promise((resolve) => setTimeout(resolve, 100));
-	callback(`${bandName} data`);
+  // Simulate an async operation
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  callback(`${bandName} data`);
 }
 
 describe('fetchBandData', () => {
-	it('should call the callback with the correct data', async () => {
-		// Create a mock callback
-		const callback = vi.fn();
+  it('should call the callback with the correct data', async () => {
+    // Create a mock callback
+    const callback = vi.fn();
 
-		// Call the async function with the mock callback
-		await fetchBandData('Green Day', callback);
+    // Call the async function with the mock callback
+    await fetchBandData('Green Day', callback);
 
-		// Verify that the callback was called with the correct argument
-		expect(callback).toHaveBeenCalledWith('Green Day data');
-	});
+    // Verify that the callback was called with the correct argument
+    expect(callback).toHaveBeenCalledWith('Green Day data');
+  });
 });
 ```
 
@@ -117,15 +117,15 @@ mockFn('Green Day', 'Dookie');
 mockFn('Blink-182', 'Enema of the State');
 
 describe('accessing arguments manually', () => {
-	it('should manually access arguments of each call', () => {
-		// Access the arguments of the first call
-		const firstCallArgs = mockFn.mock.calls[0];
-		expect(firstCallArgs).toEqual(['Green Day', 'Dookie']);
+  it('should manually access arguments of each call', () => {
+    // Access the arguments of the first call
+    const firstCallArgs = mockFn.mock.calls[0];
+    expect(firstCallArgs).toEqual(['Green Day', 'Dookie']);
 
-		// Access the arguments of the second call
-		const secondCallArgs = mockFn.mock.calls[1];
-		expect(secondCallArgs).toEqual(['Blink-182', 'Enema of the State']);
-	});
+    // Access the arguments of the second call
+    const secondCallArgs = mockFn.mock.calls[1];
+    expect(secondCallArgs).toEqual(['Blink-182', 'Enema of the State']);
+  });
 });
 ```
 
