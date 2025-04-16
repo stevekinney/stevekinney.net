@@ -3,6 +3,7 @@ published: false
 title: 'What If It Goes Wrong?: The Hidden Dangers of Counterfactual Reasoning in AI'
 description: The fragility of counterfactual reasoning identified in this paper strongly warns us that simplistic assumptions of stability or predictability in AI might be dangerously naive.
 modified: 2025-04-16T17:14:14-06:00
+date: 2025-04-16T17:14:14-06:00
 ---
 
 Ever wondered, "What if I'd taken that other job?" or "What if that meeting had gone differently?" We ask "What if?" questions all the time. These are called counterfactuals, and they're super powerful tools for understanding cause and effect, interpreting complex models, and even trying to make algorithms fairer.
