@@ -5,7 +5,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI();
 
-const files = FastGlob.sync('content/**/*.md');
+const files = FastGlob.sync('../content/**/*.md');
 
 for (const file of files) {
   if (file.endsWith('_index.md')) continue;
