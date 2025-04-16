@@ -1,14 +1,5 @@
 # Markdown Formatting Guidelines
 
-## Explanations & Content
-
-- **Paragraphs Over Lists:** Write explanations in paragraphs; use lists only when essential.
-- **No Code in Lists:** Keep code blocks out of list items.
-
-## Document Structure
-
-- **No Horizontal Rules:** Never use horizontal rules (e.g., `---`, `***`). Use clear headings and blank lines for separation.
-
 ## Headings
 
 - **No Numbering:** Do not number headings.
@@ -16,10 +7,15 @@
 - **Consistent Capitalization:** Use a uniform capitalization style (Title or Sentence case).
 - **No Bold:** Use Markdown heading syntax without extra bolding. Do not wrap headings in bold syntax.
 
+## Document Structure
+
+- **No Horizontal Rules:** Never use horizontal rules (e.g., `---`, `***`). Use clear headings and blank lines for separation.
+
 ## Paragraphs & Lists
 
 - **Prefer Paragraphs:** Write explanations in paragraphs.
 - **Lists Only When Essential:** Use bulleted or numbered lists for steps or key points; lists must never contain code blocks.
+- **No Code in Lists:** Keep code blocks out of list items.
 
 ## Code
 
@@ -31,18 +27,18 @@
 - **Standard Block Quotes:** Use `>` for quotes.
 - **Obsidian-Style Callouts:** Use these callout types (and their aliases):
 
-  - **Abstract** (aliases: summary, tldr)
+  - **Abstract** (aliases: `summary`, `tldr`)
   - **Info**
   - **Todo**
-  - **Tip** (aliases: hint, important)
-  - **Success** (aliases: check, done)
-  - **Question** (aliases: help, faq)
-  - **Warning** (aliases: caution, attention)
-  - **Failure** (aliases: fail, missing)
-  - **Danger** (alias: error)
+  - **Tip** (aliases: `hint`, `important`)
+  - **Success** (aliases: `check`, `done`)
+  - **Question** (aliases: `help`, `faq`)
+  - **Warning** (aliases: `caution`, `attention`)
+  - **Failure** (aliases: `fail`, `missing`)
+  - **Danger** (alias: `error`)
   - **Bug**
   - **Example**
-  - **Quote** (alias: cite)
+  - **Quote** (alias: `cite`)
 
   _Example:_
 

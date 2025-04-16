@@ -6,7 +6,7 @@ date: 2024-03-05T12:56:55-07:00
 modified: 2024-04-17T09:03:56-05:00
 ---
 
-The material in this course is intended to go along with the [Design Systems with Storybook, v2](https://frontendmasters.com/courses/design-systems-v2/) course with [Frontend Masters](https://frontendmasters.com).
+The material in this course is intended to go along with the [Design Systems with Storybook, v2](https://frontendmasters.com/courses/design-systems-v2/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) course with [Frontend Masters](https://frontendmasters.com/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon).
 
 Even if you don't work on the design systems team at your company, over a long enough period of time, you're likely to find yourself working on a design system or component library. Having a standardized set of components saves you from having to reinvent the wheel every single time you tackle a new feature. And—arguably more importantly, it allows you to make large-scale changes without the tedium of manually tweaking every single element in your project.
 
