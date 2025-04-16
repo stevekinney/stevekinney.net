@@ -1,6 +1,7 @@
 <script lang="ts">
-  import SEO from '$lib/components/seo.svelte';
   import Date from '$lib/components/date.svelte';
+  import SEO from '$lib/components/seo.svelte';
+  import PullRequest from '@/lib/components/pull-request.svelte';
 
   const { data } = $props();
 </script>
@@ -32,14 +33,4 @@
   {/if}
 </div>
 
-<footer
-  class="my-10 rounded-md border-2 border-primary-200 bg-primary-100 px-8 py-4 dark:border-primary-900 dark:bg-primary-800"
->
-  <p>
-    See something that looks a little off? Feel free to <a
-      href="https://github.com/stevekinney/stevekinney.net/tree/main/content/writing/{data.slug}.md"
-      class="font-semibold underline decoration-primary-500 decoration-2 underline-offset-4"
-      >open a pull request here</a
-    >.
-  </p>
-</footer>
+<PullRequest filename="writing/{data.slug}" />
