@@ -48,7 +48,6 @@ export default {
           DEFAULT: '2rem',
         },
         screens: {
-          DEFAULT: '400px',
           sm: '640px',
           md: '700px',
           lg: '1024px',
