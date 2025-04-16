@@ -69,11 +69,11 @@ Long terminal sessions can accumulate a lot of output—logs, debugging info, an
 
 ```json
 [
-	{
-		"key": "ctrl+`",
-		"command": "workbench.action.terminal.focus",
-		"when": "terminalHasBeenCreated && terminalProcessSupported"
-	}
+  {
+    "key": "ctrl+`",
+    "command": "workbench.action.terminal.focus",
+    "when": "terminalHasBeenCreated && terminalProcessSupported"
+  }
 ]
 ```
 

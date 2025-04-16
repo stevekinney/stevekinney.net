@@ -27,8 +27,8 @@ import { initialize, mswLoader } from 'msw-storybook-addon';
 initialize();
 
 const preview = {
-	//… other stuff
-	loaders: [mswLoader],
+  //… other stuff
+  loaders: [mswLoader],
 };
 
 export default preview;

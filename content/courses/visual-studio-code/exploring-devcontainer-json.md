@@ -65,15 +65,15 @@ If your web application runs on port 3000 inside the container, forwarding port 
 
 ```json
 {
-	"name": "Node.js Development Container",
-	"image": "mcr.microsoft.com/devcontainers/javascript-node:18",
-	"extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "ms-vscode.js-debug-nodejs"],
-	"settings": {
-		"terminal.integrated.shell.linux": "/bin/bash",
-		"editor.formatOnSave": true,
-		"eslint.alwaysShowStatus": true
-	},
-	"forwardPorts": [3000],
-	"postCreateCommand": "npm install"
+  "name": "Node.js Development Container",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+  "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "ms-vscode.js-debug-nodejs"],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "editor.formatOnSave": true,
+    "eslint.alwaysShowStatus": true
+  },
+  "forwardPorts": [3000],
+  "postCreateCommand": "npm install"
 }
 ```

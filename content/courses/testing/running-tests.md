@@ -22,11 +22,11 @@ For our use cases, we have it defined in our `package.json`. For example, you mi
 
 ```json
 {
-	// … other stuff
-	"scripts": {
-		"test": "vitest"
-	}
-	// more stuff …
+  // … other stuff
+  "scripts": {
+    "test": "vitest"
+  }
+  // more stuff …
 }
 ```
 

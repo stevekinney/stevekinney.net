@@ -1,5 +1,12 @@
 ---
-modified: 2025-03-15T16:39:42-06:00
+modified: 2025-03-15T22:39:42.000Z
+description: >-
+  Learn to efficiently run server-side unit tests for tRPC using
+  `createCaller()` without needing an Express server setup. Includes tips for
+  debugging to ensure seamless development.
+title: >-
+  "Efficient Server-Side Unit Testing with tRPC: Using `createCaller()` without
+  Express"
 ---
 
 ## Server-Side Unit Tests
@@ -15,15 +22,15 @@ import Database from 'better-sqlite3';
 let db: Database;
 
 beforeEach(() => {
-	db = new Database(':memory:');
-	db.prepare('CREATE TABLE user (id INTEGER PRIMARY KEY, name TEXT, password TEXT)').run();
-	db.prepare('INSERT INTO user (name, password) VALUES (?, ?)').run('Alice', 'pass123');
+  db = new Database(':memory:');
+  db.prepare('CREATE TABLE user (id INTEGER PRIMARY KEY, name TEXT, password TEXT)').run();
+  db.prepare('INSERT INTO user (name, password) VALUES (?, ?)').run('Alice', 'pass123');
 });
 
 test('getUser finds existing user', async () => {
-	const caller = appRouter.createCaller({ db, user: null });
-	const user = await caller.user.getUser(1);
-	expect(user?.name).toBe('Alice');
+  const caller = appRouter.createCaller({ db, user: null });
+  const user = await caller.user.getUser(1);
+  expect(user?.name).toBe('Alice');
 });
 ```
 

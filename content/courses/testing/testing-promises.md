@@ -21,17 +21,17 @@ Here’s an example of testing a function that returns a resolved promise:
 ```js
 // Function to be tested
 function fetchBandData(bandName) {
-	return Promise.resolve({ name: bandName, genre: 'Punk Rock' });
+  return Promise.resolve({ name: bandName, genre: 'Punk Rock' });
 }
 
 describe('fetchBandData', () => {
-	it('should return band data when the promise resolves', async () => {
-		// Call the function
-		const result = await fetchBandData('Green Day');
+  it('should return band data when the promise resolves', async () => {
+    // Call the function
+    const result = await fetchBandData('Green Day');
 
-		// Assert that the promise resolved with the correct value
-		expect(result).toEqual({ name: 'Green Day', genre: 'Punk Rock' });
-	});
+    // Assert that the promise resolved with the correct value
+    expect(result).toEqual({ name: 'Green Day', genre: 'Punk Rock' });
+  });
 });
 ```
 
@@ -46,14 +46,14 @@ Here’s how you can test a rejected promise:
 ```js
 // Function to be tested
 function fetchBandDataWithError(bandName) {
-	return Promise.reject(new Error('Band not found'));
+  return Promise.reject(new Error('Band not found'));
 }
 
 describe('fetchBandDataWithError', () => {
-	it('should throw an error when the promise rejects', async () => {
-		// Assert that the promise rejects with an error
-		await expect(fetchBandDataWithError('Unknown Band')).rejects.toThrow('Band not found');
-	});
+  it('should throw an error when the promise rejects', async () => {
+    // Assert that the promise rejects with an error
+    await expect(fetchBandDataWithError('Unknown Band')).rejects.toThrow('Band not found');
+  });
 });
 ```
 
@@ -67,13 +67,13 @@ Vitest provides convenient matchers `.resolves` and `.rejects` to test promises 
 
 ```js
 describe('fetchBandData', () => {
-	it('should resolve with band data', () => {
-		// Test promise resolution using .resolves
-		return expect(fetchBandData('Green Day')).resolves.toEqual({
-			name: 'Green Day',
-			genre: 'Punk Rock',
-		});
-	});
+  it('should resolve with band data', () => {
+    // Test promise resolution using .resolves
+    return expect(fetchBandData('Green Day')).resolves.toEqual({
+      name: 'Green Day',
+      genre: 'Punk Rock',
+    });
+  });
 });
 ```
 
@@ -83,10 +83,10 @@ In this example, the test checks if the promise resolves with the expected data 
 
 ```js
 describe('fetchBandDataWithError', () => {
-	it('should reject with an error', () => {
-		// Test promise rejection using .rejects
-		return expect(fetchBandDataWithError('Unknown Band')).rejects.toThrow('Band not found');
-	});
+  it('should reject with an error', () => {
+    // Test promise rejection using .rejects
+    return expect(fetchBandDataWithError('Unknown Band')).rejects.toThrow('Band not found');
+  });
 });
 ```
 
@@ -104,25 +104,25 @@ import * as api from './api';
 
 // Code under test
 async function getConcertDetails(bandName) {
-	const response = await api.fetchConcerts(bandName);
-	return response.data;
+  const response = await api.fetchConcerts(bandName);
+  return response.data;
 }
 
 describe('getConcertDetails', () => {
-	// Mock the API module
-	vi.mock('./api', () => ({
-		fetchConcerts: vi.fn(() =>
-			Promise.resolve({ data: [{ venue: 'Wembley', date: '2024-10-05' }] }),
-		),
-	}));
+  // Mock the API module
+  vi.mock('./api', () => ({
+    fetchConcerts: vi.fn(() =>
+      Promise.resolve({ data: [{ venue: 'Wembley', date: '2024-10-05' }] }),
+    ),
+  }));
 
-	it('should return concert details from the mocked API', async () => {
-		// Test with the mocked promise
-		const result = await getConcertDetails('Green Day');
+  it('should return concert details from the mocked API', async () => {
+    // Test with the mocked promise
+    const result = await getConcertDetails('Green Day');
 
-		// Verify the result
-		expect(result).toEqual([{ venue: 'Wembley', date: '2024-10-05' }]);
-	});
+    // Verify the result
+    expect(result).toEqual([{ venue: 'Wembley', date: '2024-10-05' }]);
+  });
 });
 ```
 
@@ -135,23 +135,23 @@ When working with multiple promises in your code, you might need to test them co
 ```js
 // Function to be tested
 function fetchMultipleBandData() {
-	return Promise.all([
-		Promise.resolve({ name: 'Green Day', genre: 'Punk Rock' }),
-		Promise.resolve({ name: 'Nirvana', genre: 'Grunge' }),
-	]);
+  return Promise.all([
+    Promise.resolve({ name: 'Green Day', genre: 'Punk Rock' }),
+    Promise.resolve({ name: 'Nirvana', genre: 'Grunge' }),
+  ]);
 }
 
 describe('fetchMultipleBandData', () => {
-	it('should resolve all promises with the correct data', async () => {
-		// Await all promises
-		const result = await fetchMultipleBandData();
+  it('should resolve all promises with the correct data', async () => {
+    // Await all promises
+    const result = await fetchMultipleBandData();
 
-		// Verify the result of each promise
-		expect(result).toEqual([
-			{ name: 'Green Day', genre: 'Punk Rock' },
-			{ name: 'Nirvana', genre: 'Grunge' },
-		]);
-	});
+    // Verify the result of each promise
+    expect(result).toEqual([
+      { name: 'Green Day', genre: 'Punk Rock' },
+      { name: 'Nirvana', genre: 'Grunge' },
+    ]);
+  });
 });
 ```
 
@@ -164,30 +164,30 @@ Sometimes, your promises might include delays using `setTimeout` or similar asyn
 ```js
 // Function that returns a delayed promise
 function delayedBandData() {
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			resolve({ name: 'Green Day', genre: 'Punk Rock' });
-		}, 3000);
-	});
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ name: 'Green Day', genre: 'Punk Rock' });
+    }, 3000);
+  });
 }
 
 describe('delayedBandData', () => {
-	it('should resolve the promise after a delay', async () => {
-		// Use fake timers to control time
-		vi.useFakeTimers();
+  it('should resolve the promise after a delay', async () => {
+    // Use fake timers to control time
+    vi.useFakeTimers();
 
-		// Call the function (but do not await yet)
-		const promise = delayedBandData();
+    // Call the function (but do not await yet)
+    const promise = delayedBandData();
 
-		// Fast-forward time
-		vi.advanceTimersByTime(3000);
+    // Fast-forward time
+    vi.advanceTimersByTime(3000);
 
-		// Now await the promise resolution
-		const result = await promise;
+    // Now await the promise resolution
+    const result = await promise;
 
-		// Verify the resolved data
-		expect(result).toEqual({ name: 'Green Day', genre: 'Punk Rock' });
-	});
+    // Verify the resolved data
+    expect(result).toEqual({ name: 'Green Day', genre: 'Punk Rock' });
+  });
 });
 ```
 

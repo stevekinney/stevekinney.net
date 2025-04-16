@@ -1,6 +1,10 @@
 ---
 title: 'Emmet in Visual Studio Code: Solutions'
-modified: 2025-03-18T02:30:50-05:00
+modified: 2025-03-18T07:30:50.000Z
+description: >-
+  Explore solutions for Emmet exercises in Visual Studio Code, featuring classic
+  HTML structures like paragraphs, lists, and nested elements. Streamline your
+  coding with these concise examples!
 ---
 
 Here are some possible solutions to [these exercises](vscode-emmet-exercises.md).

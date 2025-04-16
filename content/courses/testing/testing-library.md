@@ -10,14 +10,14 @@ Let's review the example from the [previous section](testing-local-storage.md).
 
 ```javascript
 it('should store the value in localStorage', () => {
-	const secretInput = createSecretInput();
-	const input = secretInput.querySelector('input');
-	const button = secretInput.querySelector('button');
+  const secretInput = createSecretInput();
+  const input = secretInput.querySelector('input');
+  const button = secretInput.querySelector('button');
 
-	input.value = 'my secret';
-	button.click();
+  input.value = 'my secret';
+  button.click();
 
-	expect(localStorage.getItem('secret')).toBe('my secret');
+  expect(localStorage.getItem('secret')).toBe('my secret');
 });
 ```
 
@@ -51,21 +51,21 @@ Let's look at this test re-imagined using Testing Library. We'll look at the who
 
 ```javascript
 describe('createSecretInput', async () => {
-	beforeEach(() => {
-		document.innerHTML = '';
-		document.body.appendChild(createSecretInput());
-		localStorage.clear();
-	});
+  beforeEach(() => {
+    document.innerHTML = '';
+    document.body.appendChild(createSecretInput());
+    localStorage.clear();
+  });
 
-	it('should store the value in localStorage', async () => {
-		const input = screen.getByLabelText('Secret');
-		const button = screen.getByRole('button', { name: 'Store Secret' });
+  it('should store the value in localStorage', async () => {
+    const input = screen.getByLabelText('Secret');
+    const button = screen.getByRole('button', { name: 'Store Secret' });
 
-		await userEvent.type(input, 'my secret');
-		await userEvent.click(button);
+    await userEvent.type(input, 'my secret');
+    await userEvent.click(button);
 
-		expect(localStorage.getItem('secret')).toBe('my secret');
-	});
+    expect(localStorage.getItem('secret')).toBe('my secret');
+  });
 });
 ```
 
@@ -84,14 +84,14 @@ In the previous iteration, I was just playing around with the elements in memory
 
 ```javascript
 beforeEach(() => {
-	// Clear out the DOM.
-	document.innerHTML = '';
+  // Clear out the DOM.
+  document.innerHTML = '';
 
-	// Clear out `localStorage`.
-	localStorage.clear();
+  // Clear out `localStorage`.
+  localStorage.clear();
 
-	// Render our little component.
-	document.body.appendChild(createSecretInput());
+  // Render our little component.
+  document.body.appendChild(createSecretInput());
 });
 ```
 
@@ -101,13 +101,13 @@ Now, we're going to use some accessibility selectors. `screen` is basically the 
 
 ```javascript
 it('should store the value in localStorage', async () => {
-	const input = screen.getByLabelText('Secret');
-	const button = screen.getByRole('button', { name: 'Store Secret' });
+  const input = screen.getByLabelText('Secret');
+  const button = screen.getByRole('button', { name: 'Store Secret' });
 
-	await user.type(input, 'my secret');
-	await user.click(button);
+  await user.type(input, 'my secret');
+  await user.click(button);
 
-	expect(localStorage.getItem('secret')).toBe('my secret');
+  expect(localStorage.getItem('secret')).toBe('my secret');
 });
 ```
 

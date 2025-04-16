@@ -1,6 +1,7 @@
 ---
 modified: 2025-03-18T08:03:25-05:00
 title: Keybindings
+description: 'Setting key bindings in Visual Studio Code.'
 ---
 
 Keybindings are the magic shortcuts that let you summon commands with a single keystroke. You can view and customize them directly from the Command Palette by searching for `Preferences: Open Keyboard Shortcuts`. This view lists every available command and any default or custom bindings.
@@ -17,9 +18,9 @@ At its core, `keybindings.json` is a list of rules. Each rule typically contains
 
 ```json
 {
-	"key": "ctrl+alt+j",
-	"command": "editor.action.commentLine",
-	"when": "editorTextFocus && editorLangId == 'javascript'"
+  "key": "ctrl+alt+j",
+  "command": "editor.action.commentLine",
+  "when": "editorTextFocus && editorLangId == 'javascript'"
 }
 ```
 
@@ -79,10 +80,10 @@ Sometimes the same shortcut isn’t ideal across different operating systems. VS
 
 ```json
 {
-	"key": "ctrl+shift+t",
-	"command": "workbench.action.reopenClosedEditor",
-	"when": "editorTextFocus",
-	"mac": "cmd+shift+t"
+  "key": "ctrl+shift+t",
+  "command": "workbench.action.reopenClosedEditor",
+  "when": "editorTextFocus",
+  "mac": "cmd+shift+t"
 }
 ```
 
@@ -94,9 +95,9 @@ VS Code supports multi-stroke (or chorded) keybindings, which allow you to chain
 
 ```json
 {
-	"key": "cmd+k cmd+c",
-	"command": "editor.action.addCommentLine",
-	"when": "editorTextFocus"
+  "key": "cmd+k cmd+c",
+  "command": "editor.action.addCommentLine",
+  "when": "editorTextFocus"
 }
 ```
 

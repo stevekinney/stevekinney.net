@@ -1,22 +1,22 @@
 <script lang="ts" module>
-	import { defineMeta } from '@storybook/addon-svelte-csf';
-	import Count from './count.svelte';
-	import { variants } from '$lib/variants';
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+  import Count from './count.svelte';
+  import { variants } from '$lib/variants';
 
-	const { Story } = defineMeta({
-		title: 'Count',
-		component: Count,
-		tags: ['autodocs'],
-		argTypes: {
-			variant: {
-				control: 'select',
-				options: variants,
-			},
-			count: {
-				control: 'number',
-			},
-		},
-	});
+  const { Story } = defineMeta({
+    title: 'Count',
+    component: Count,
+    tags: ['autodocs'],
+    argTypes: {
+      variant: {
+        control: 'select',
+        options: variants,
+      },
+      count: {
+        control: 'number',
+      },
+    },
+  });
 </script>
 
 <Story name="Default" args={{ count: 0, variant: 'default' }} />

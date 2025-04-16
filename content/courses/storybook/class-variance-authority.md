@@ -28,53 +28,53 @@ I regret some of my previous naming choices, but here we are. Let's look at some
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const variants = cva(
-	[
-		'font-semibold',
-		'border',
-		'rounded',
-		'shadow-sm',
-		'inline-flex',
-		'items-center',
-		'cursor-pointer',
-		'gap-1.5',
-		'focus-visible:outline',
-		'focus-visible:outline-2',
-		'focus-visible:outline-offset-2',
-		'transition-colors',
-		'disabled:opacity-50',
-		'disabled:cursor-not-allowed',
-		'disabled:pointer-events-none',
-	],
-	{
-		variants: {
-			variant: {
-				primary: [
-					'bg-primary-600',
-					'text-white',
-					'border-transparent',
-					'hover:bg-primary-500',
-					'active:bg-primary-400',
-				],
-				secondary: [
-					'bg-white',
-					'text-slate-900',
-					'border-slate-300',
-					'hover:bg-slate-50',
-					'active:bg-slate-100',
-				],
-				destructive: [
-					'bg-danger-600',
-					'text-white',
-					'border-transparent',
-					'hover:bg-danger-500',
-					'active:bg-danger-400',
-				],
-			},
-		},
-		defaultVariants: {
-			variant: 'secondary',
-		},
-	},
+  [
+    'font-semibold',
+    'border',
+    'rounded',
+    'shadow-sm',
+    'inline-flex',
+    'items-center',
+    'cursor-pointer',
+    'gap-1.5',
+    'focus-visible:outline',
+    'focus-visible:outline-2',
+    'focus-visible:outline-offset-2',
+    'transition-colors',
+    'disabled:opacity-50',
+    'disabled:cursor-not-allowed',
+    'disabled:pointer-events-none',
+  ],
+  {
+    variants: {
+      variant: {
+        primary: [
+          'bg-primary-600',
+          'text-white',
+          'border-transparent',
+          'hover:bg-primary-500',
+          'active:bg-primary-400',
+        ],
+        secondary: [
+          'bg-white',
+          'text-slate-900',
+          'border-slate-300',
+          'hover:bg-slate-50',
+          'active:bg-slate-100',
+        ],
+        destructive: [
+          'bg-danger-600',
+          'text-white',
+          'border-transparent',
+          'hover:bg-danger-500',
+          'active:bg-danger-400',
+        ],
+      },
+    },
+    defaultVariants: {
+      variant: 'secondary',
+    },
+  },
 );
 ```
 
@@ -94,8 +94,8 @@ Now, we can update the component to use a type based on the variants.
 
 ```ts
 type ButtonProps = ComponentProps<'button'> & {
-	variant?: ButtonVariants['variant'];
-	size?: 'small' | 'medium' | 'large';
+  variant?: ButtonVariants['variant'];
+  size?: 'small' | 'medium' | 'large';
 };
 ```
 

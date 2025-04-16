@@ -18,15 +18,15 @@ import { describe, it, expect } from 'vitest';
 import Button from './Button.vue';
 
 describe('Button', () => {
-	it('renders with the right label and class', () => {
-		const { getByRole } = render(Button, { props: { label: 'Click Me' } });
+  it('renders with the right label and class', () => {
+    const { getByRole } = render(Button, { props: { label: 'Click Me' } });
 
-		const button = getByRole('button');
+    const button = getByRole('button');
 
-		// Instead of snapshotting the whole thing
-		expect(button.textContent).toBe('Click Me');
-		expect(button.classList).toContain('btn-primary');
-	});
+    // Instead of snapshotting the whole thing
+    expect(button.textContent).toBe('Click Me');
+    expect(button.classList).toContain('btn-primary');
+  });
 });
 ```
 
@@ -44,17 +44,17 @@ import { describe, it, expect } from 'vitest';
 import Button from './Button.vue';
 
 describe('Button', () => {
-	it('emits an event when clicked', async () => {
-		const { getByRole, emitted } = render(Button, {
-			props: { label: 'Click Me' },
-		});
+  it('emits an event when clicked', async () => {
+    const { getByRole, emitted } = render(Button, {
+      props: { label: 'Click Me' },
+    });
 
-		const button = getByRole('button');
+    const button = getByRole('button');
 
-		await fireEvent.click(button);
+    await fireEvent.click(button);
 
-		expect(emitted()).toHaveProperty('click');
-	});
+    expect(emitted()).toHaveProperty('click');
+  });
 });
 ```
 
@@ -72,15 +72,15 @@ import { describe, it, expect } from 'vitest';
 import UserProfile from './UserProfile.vue';
 
 describe('UserProfile', () => {
-	it("renders the user's name and title", () => {
-		const { getByText } = render(UserProfile, {
-			props: { user: { name: 'Jane Doe', title: 'Developer' } },
-		});
+  it("renders the user's name and title", () => {
+    const { getByText } = render(UserProfile, {
+      props: { user: { name: 'Jane Doe', title: 'Developer' } },
+    });
 
-		// Test user-facing text—super easy to follow and maintain
-		expect(getByText('Jane Doe')).toBeTruthy();
-		expect(getByText('Developer')).toBeTruthy();
-	});
+    // Test user-facing text—super easy to follow and maintain
+    expect(getByText('Jane Doe')).toBeTruthy();
+    expect(getByText('Developer')).toBeTruthy();
+  });
 });
 ```
 
@@ -92,20 +92,20 @@ Sometimes, JSON snapshots sneak into the party. If you find yourself in that sce
 
 ```js
 expect.extend({
-	toHaveTextContent(received, argument) {
-		const pass = received.textContent.includes(argument);
-		if (pass) {
-			return {
-				message: () => `expected ${received} not to have text content ${argument}`,
-				pass: true,
-			};
-		} else {
-			return {
-				message: () => `expected ${received} to have text content ${argument}`,
-				pass: false,
-			};
-		}
-	},
+  toHaveTextContent(received, argument) {
+    const pass = received.textContent.includes(argument);
+    if (pass) {
+      return {
+        message: () => `expected ${received} not to have text content ${argument}`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () => `expected ${received} to have text content ${argument}`,
+        pass: false,
+      };
+    }
+  },
 });
 
 // In your test

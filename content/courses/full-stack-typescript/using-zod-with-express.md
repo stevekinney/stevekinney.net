@@ -17,10 +17,10 @@ app.use(express.json());
 
 // Define a schema for creating users
 const createUserSchema = z.object({
-	username: z.string().min(3).max(20),
-	email: z.string().email(),
-	password: z.string().min(8),
-	age: z.number().int().positive().optional(),
+  username: z.string().min(3).max(20),
+  email: z.string().email(),
+  password: z.string().min(8),
+  age: z.number().int().positive().optional(),
 });
 
 // Infer the TypeScript type from the schema
@@ -28,31 +28,31 @@ type CreateUserInput = z.infer<typeof createUserSchema>;
 
 // Middleware for validating request body
 function validateBody<T extends z.ZodTypeAny>(schema: T) {
-	return (req: Request, res: Response, next: NextFunction) => {
-		try {
-			req.body = schema.parse(req.body);
-			next();
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				return res.status(400).json({
-					error: 'Validation failed',
-					details: error.errors,
-				});
-			}
-			next(error);
-		}
-	};
+  return (req: Request, res: Response, next: NextFunction) => {
+    try {
+      req.body = schema.parse(req.body);
+      next();
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({
+          error: 'Validation failed',
+          details: error.errors,
+        });
+      }
+      next(error);
+    }
+  };
 }
 
 app.post(
-	'/users',
-	validateBody(createUserSchema),
-	(req: Request<{}, {}, CreateUserInput>, res: Response) => {
-		// req.body is validated & typed as CreateUserInput
-		const { username, email, password, age } = req.body;
-		// … create user logic here …
-		res.status(201).json({ message: 'User created' });
-	},
+  '/users',
+  validateBody(createUserSchema),
+  (req: Request<{}, {}, CreateUserInput>, res: Response) => {
+    // req.body is validated & typed as CreateUserInput
+    const { username, email, password, age } = req.body;
+    // … create user logic here …
+    res.status(201).json({ message: 'User created' });
+  },
 );
 ```
 
@@ -62,32 +62,32 @@ When working with GET endpoints that include query strings, you can define a sch
 
 ```ts
 const searchQuerySchema = z.object({
-	q: z.string().optional(),
-	page: z.string().regex(/^\d+$/).transform(Number).optional(),
-	limit: z.string().regex(/^\d+$/).transform(Number).optional(),
+  q: z.string().optional(),
+  page: z.string().regex(/^\d+$/).transform(Number).optional(),
+  limit: z.string().regex(/^\d+$/).transform(Number).optional(),
 });
 type SearchQuery = z.infer<typeof searchQuerySchema>;
 
 function validateQuery<T extends z.ZodTypeAny>(schema: T) {
-	return (req: Request, res: Response, next: NextFunction) => {
-		try {
-			req.query = schema.parse(req.query);
-			next();
-		} catch (error) {
-			return res.status(400).json({ error: 'Invalid query', details: error });
-		}
-	};
+  return (req: Request, res: Response, next: NextFunction) => {
+    try {
+      req.query = schema.parse(req.query);
+      next();
+    } catch (error) {
+      return res.status(400).json({ error: 'Invalid query', details: error });
+    }
+  };
 }
 
 app.get(
-	'/search',
-	validateQuery(searchQuerySchema),
-	(req: Request<{}, {}, {}, SearchQuery>, res: Response) => {
-		// req.query is validated & typed as SearchQuery
-		const { q, page = 1, limit = 10 } = req.query;
-		// … search logic …
-		res.json({ query: q, page, limit });
-	},
+  '/search',
+  validateQuery(searchQuerySchema),
+  (req: Request<{}, {}, {}, SearchQuery>, res: Response) => {
+    // req.query is validated & typed as SearchQuery
+    const { q, page = 1, limit = 10 } = req.query;
+    // … search logic …
+    res.json({ query: q, page, limit });
+  },
 );
 ```
 
@@ -97,28 +97,28 @@ If your routes include path parameters (like /:userId), you can validate req.par
 
 ```ts
 const userParamsSchema = z.object({
-	userId: z.string().uuid(),
+  userId: z.string().uuid(),
 });
 type UserParams = z.infer<typeof userParamsSchema>;
 
 function validateParams<T extends z.ZodTypeAny>(schema: T) {
-	return (req: Request, res: Response, next: NextFunction) => {
-		try {
-			req.params = schema.parse(req.params);
-			next();
-		} catch (error) {
-			return res.status(400).json({ error: 'Invalid params', details: error });
-		}
-	};
+  return (req: Request, res: Response, next: NextFunction) => {
+    try {
+      req.params = schema.parse(req.params);
+      next();
+    } catch (error) {
+      return res.status(400).json({ error: 'Invalid params', details: error });
+    }
+  };
 }
 
 app.get(
-	'/users/:userId',
-	validateParams(userParamsSchema),
-	(req: Request<UserParams>, res: Response) => {
-		// req.params.userId is validated & typed as a string UUID
-		res.json({ userId: req.params.userId });
-	},
+  '/users/:userId',
+  validateParams(userParamsSchema),
+  (req: Request<UserParams>, res: Response) => {
+    // req.params.userId is validated & typed as a string UUID
+    res.json({ userId: req.params.userId });
+  },
 );
 ```
 
@@ -128,14 +128,14 @@ Zod can also validate your outbound data. This isn't always necessary, but in hi
 
 ```ts
 const userListResponseSchema = z.object({
-	success: z.boolean(),
-	data: z.array(createUserSchema), // returning a list of users
+  success: z.boolean(),
+  data: z.array(createUserSchema), // returning a list of users
 });
 
 function sendUserListResponse(res: Response, payload: unknown) {
-	// Validate the shape before sending
-	const parsedPayload = userListResponseSchema.parse(payload);
-	res.json(parsedPayload);
+  // Validate the shape before sending
+  const parsedPayload = userListResponseSchema.parse(payload);
+  res.json(parsedPayload);
 }
 ```
 
@@ -146,7 +146,7 @@ If you prefer not to handle exceptions with `try`/`catch`, consider `schema.safe
 ```ts
 const result = createUserSchema.safeParse(req.body);
 if (!result.success) {
-	return res.status(400).json({ errors: result.error.errors });
+  return res.status(400).json({ errors: result.error.errors });
 }
 // result.data is valid
 ```

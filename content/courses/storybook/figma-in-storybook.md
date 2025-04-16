@@ -25,15 +25,15 @@ Next, in your story, we're going to add a parameter that creates the link betwee
 
 ```ts
 const meta: Meta<typeof Button> = {
-	title: 'Button',
-	component: Button,
-	parameters: {
-		design: {
-			type: 'figma',
-			url: 'https://www.figma.com/file/w7qcf0DQZEQhudgeOoLbZ8/Components?type=design&node-id=24%3A177&mode=design&t=i9nPQJAFW2alh32c-1',
-		},
-	},
-	// …additional properties…
+  title: 'Button',
+  component: Button,
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/w7qcf0DQZEQhudgeOoLbZ8/Components?type=design&node-id=24%3A177&mode=design&t=i9nPQJAFW2alh32c-1',
+    },
+  },
+  // …additional properties…
 };
 ```
 

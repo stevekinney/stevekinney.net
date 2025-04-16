@@ -10,9 +10,9 @@ Consider this test for a moment:
 
 ```ts
 test('Asynchronous code accidentally passes', () => {
-	setTimeout(() => {
-		expect(false).toBe(true);
-	}, 1);
+  setTimeout(() => {
+    expect(false).toBe(true);
+  }, 1);
 });
 ```
 
@@ -20,11 +20,11 @@ It's not that this test is any good, it's just that the assertion never runs.
 
 ```ts
 test('Asynchronous code has zero expectations', () => {
-	expect.assertions(0);
+  expect.assertions(0);
 
-	setTimeout(() => {
-		expect(false).toBe(true);
-	}, 1000);
+  setTimeout(() => {
+    expect(false).toBe(true);
+  }, 1000);
 });
 ```
 
@@ -32,11 +32,11 @@ Put another way, we can assert that our assertion never—umm—_asserts_.
 
 ```ts
 test.fails('Code inside of callback never runs', () => {
-	expect.hasAssertions();
+  expect.hasAssertions();
 
-	setTimeout(() => {
-		expect(false).toBe(true);
-	}, 1000);
+  setTimeout(() => {
+    expect(false).toBe(true);
+  }, 1000);
 });
 ```
 
@@ -46,13 +46,13 @@ In some frameworks, you'd be able to do something like this.
 // 🚨 This will not work in Vitest.
 
 test('Code inside of callback never runs', (done) => {
-	expect.hasAssertions();
+  expect.hasAssertions();
 
-	setTimeout(() => {
-		expect(false).toBe(true);
+  setTimeout(() => {
+    expect(false).toBe(true);
 
-		done();
-	}, 1000);
+    done();
+  }, 1000);
 });
 ```
 
@@ -68,15 +68,15 @@ Consider the following two tests:
 const addAsync = (a: number, b: number) => Promise.resolve(a + b);
 
 it.fails("fails if you don't use an async function", () => {
-	const result = addAsync(2, 3);
+  const result = addAsync(2, 3);
 
-	expect(result).toBe(5);
+  expect(result).toBe(5);
 });
 
 it('passes if use an `async/await`', async () => {
-	const result = await addAsync(2, 3);
+  const result = await addAsync(2, 3);
 
-	expect(result).toBe(5);
+  expect(result).toBe(5);
 });
 ```
 

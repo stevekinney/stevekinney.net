@@ -43,13 +43,13 @@ import { describe, it, expect } from 'vitest';
 import { addNumbers, subtractNumbers } from './mathUtils';
 
 describe('mathUtils', () => {
-	it('should add numbers correctly', () => {
-		expect(addNumbers(2, 2)).toBe(4);
-	});
+  it('should add numbers correctly', () => {
+    expect(addNumbers(2, 2)).toBe(4);
+  });
 
-	it('should subtract numbers correctly', () => {
-		expect(subtractNumbers(2, 1)).toBe(1);
-	});
+  it('should subtract numbers correctly', () => {
+    expect(subtractNumbers(2, 1)).toBe(1);
+  });
 });
 ```
 

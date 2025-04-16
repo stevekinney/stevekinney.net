@@ -1,6 +1,7 @@
 ---
 title: Scaffolding an Extension
 modified: 2025-03-17T18:28:51-05:00
+description: A little note on how to get started building a Visual Studio Code plugin.
 ---
 
 Laying down the boilerplate for an extension is relatively straight-forward using out good friend, [Yeoman](https://yeoman.io/).

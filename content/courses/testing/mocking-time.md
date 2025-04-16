@@ -15,13 +15,13 @@ Typically, if you need to control time in your tests, you'd opt in to using Sino
 
 ```ts
 beforeEach(() => {
-	// Take control of time.
-	vi.useFakeTimers();
+  // Take control of time.
+  vi.useFakeTimers();
 });
 
 afterEach(() => {
-	// Put things back the way you found it.
-	vi.useRealTimers();
+  // Put things back the way you found it.
+  vi.useRealTimers();
 });
 ```
 
@@ -83,24 +83,24 @@ vi.useFakeTimers();
 
 // Example function that uses setTimeout
 function delay(callback) {
-	setTimeout(() => {
-		callback('Delayed');
-	}, 1000);
+  setTimeout(() => {
+    callback('Delayed');
+  }, 1000);
 }
 
 describe('delay function', () => {
-	it('should call callback after delay', () => {
-		const callback = vi.fn();
+  it('should call callback after delay', () => {
+    const callback = vi.fn();
 
-		// Call the function under test
-		delay(callback);
+    // Call the function under test
+    delay(callback);
 
-		// Fast-forward time
-		vi.advanceTimersByTime(1000);
+    // Fast-forward time
+    vi.advanceTimersByTime(1000);
 
-		// Assert that the callback was called
-		expect(callback).toHaveBeenCalledWith('Delayed');
-	});
+    // Assert that the callback was called
+    expect(callback).toHaveBeenCalledWith('Delayed');
+  });
 });
 ```
 
@@ -116,10 +116,10 @@ const mockDate = new Date(2024, 1, 1);
 vi.setSystemTime(mockDate);
 
 describe('mocked Date', () => {
-	it('should return the mocked date', () => {
-		const currentDate = new Date();
-		expect(currentDate).toEqual(mockDate);
-	});
+  it('should return the mocked date', () => {
+    const currentDate = new Date();
+    expect(currentDate).toEqual(mockDate);
+  });
 });
 ```
 
@@ -132,9 +132,9 @@ In more complex systems, you may want to mock entire modules to isolate the code
 ```js
 // Mock the api module
 vi.mock('./api', () => ({
-	getConcertDetails: vi
-		.fn()
-		.mockResolvedValue({ band: 'Green Day', venue: 'Madison Square Garden' }),
+  getConcertDetails: vi
+    .fn()
+    .mockResolvedValue({ band: 'Green Day', venue: 'Madison Square Garden' }),
 }));
 ```
 
@@ -147,7 +147,7 @@ After running a test, it’s important to reset or restore the mocks to their or
 ```js
 // Reset all mocks after each test
 afterEach(() => {
-	vi.resetAllMocks();
+  vi.resetAllMocks();
 });
 ```
 
@@ -160,7 +160,7 @@ You can combine the functionality of mocks, spies, and stubs for more advanced t
 ```js
 // Create a mock and spy on one of its methods
 const mockObject = {
-	method: vi.fn().mockReturnValue('Mocked result'),
+  method: vi.fn().mockReturnValue('Mocked result'),
 };
 
 // Spy on the method
@@ -183,27 +183,27 @@ Here’s an example where we mock `setTimeout` and use `vi.useFakeTimers()` to c
 
 ```js
 function delayedFunction(callback) {
-	setTimeout(() => {
-		callback('Done');
-	}, 3000);
+  setTimeout(() => {
+    callback('Done');
+  }, 3000);
 }
 
 describe('delayedFunction', () => {
-	it('should call callback after timeout', () => {
-		// Mock the timer
-		vi.useFakeTimers();
+  it('should call callback after timeout', () => {
+    // Mock the timer
+    vi.useFakeTimers();
 
-		const callback = vi.fn();
+    const callback = vi.fn();
 
-		// Call the function under test
-		delayedFunction(callback);
+    // Call the function under test
+    delayedFunction(callback);
 
-		// Fast-forward the timer
-		vi.advanceTimersByTime(3000);
+    // Fast-forward the timer
+    vi.advanceTimersByTime(3000);
 
-		// Assert that the callback was called
-		expect(callback).toHaveBeenCalledWith('Done');
-	});
+    // Assert that the callback was called
+    expect(callback).toHaveBeenCalledWith('Done');
+  });
 });
 ```
 

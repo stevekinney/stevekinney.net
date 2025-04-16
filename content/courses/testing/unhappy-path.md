@@ -71,26 +71,26 @@ function parseAge(age) {
 }
 
 describe('parseAge', () => {
-	it('should throw an error for non-number input', () => {
-		// Test invalid input: string
-		expect(() => parseAge('thirty')).toThrow('Invalid age format');
+  it('should throw an error for non-number input', () => {
+    // Test invalid input: string
+    expect(() => parseAge('thirty')).toThrow('Invalid age format');
 
-		// Test invalid input: null
-		expect(() => parseAge(null)).toThrow('Invalid age format');
-	});
+    // Test invalid input: null
+    expect(() => parseAge(null)).toThrow('Invalid age format');
+  });
 
-	it('should throw an error for out-of-range age', () => {
-		// Test invalid age: negative number
-		expect(() => parseAge(-5)).toThrow('Age must be between 0 and 120');
+  it('should throw an error for out-of-range age', () => {
+    // Test invalid age: negative number
+    expect(() => parseAge(-5)).toThrow('Age must be between 0 and 120');
 
-		// Test invalid age: too high
-		expect(() => parseAge(130)).toThrow('Age must be between 0 and 120');
-	});
+    // Test invalid age: too high
+    expect(() => parseAge(130)).toThrow('Age must be between 0 and 120');
+  });
 
-	it('should return the valid age for a number between 0 and 120', () => {
-		// Test valid input
-		expect(parseAge(25)).toBe(25);
-	});
+  it('should return the valid age for a number between 0 and 120', () => {
+    // Test valid input
+    expect(parseAge(25)).toBe(25);
+  });
 });
 ```
 
@@ -110,43 +110,43 @@ When working with asynchronous functions, such as API calls or database queries,
 ```js
 // Asynchronous function to be tested
 async function fetchUserData(userId) {
-	if (!userId) {
-		throw new Error('User ID is required');
-	}
-	const response = await fetch(`/api/users/${userId}`);
-	if (!response.ok) {
-		throw new Error('Failed to fetch user data');
-	}
-	return response.json();
+  if (!userId) {
+    throw new Error('User ID is required');
+  }
+  const response = await fetch(`/api/users/${userId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch user data');
+  }
+  return response.json();
 }
 
 describe('fetchUserData', () => {
-	it('should throw an error if userId is not provided', async () => {
-		// Test for missing userId
-		await expect(fetchUserData()).rejects.toThrow('User ID is required');
-	});
+  it('should throw an error if userId is not provided', async () => {
+    // Test for missing userId
+    await expect(fetchUserData()).rejects.toThrow('User ID is required');
+  });
 
-	it('should throw an error if the API response is not ok', async () => {
-		// Mock the fetch function to simulate an API error
-		global.fetch = vi.fn(() => Promise.resolve({ ok: false }));
+  it('should throw an error if the API response is not ok', async () => {
+    // Mock the fetch function to simulate an API error
+    global.fetch = vi.fn(() => Promise.resolve({ ok: false }));
 
-		// Test for API failure
-		await expect(fetchUserData(1)).rejects.toThrow('Failed to fetch user data');
-	});
+    // Test for API failure
+    await expect(fetchUserData(1)).rejects.toThrow('Failed to fetch user data');
+  });
 
-	it('should return user data on success', async () => {
-		// Mock fetch to return valid data
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				ok: true,
-				json: () => Promise.resolve({ id: 1, name: 'John Doe' }),
-			}),
-		);
+  it('should return user data on success', async () => {
+    // Mock fetch to return valid data
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ id: 1, name: 'John Doe' }),
+      }),
+    );
 
-		// Test happy path
-		const result = await fetchUserData(1);
-		expect(result).toEqual({ id: 1, name: 'John Doe' });
-	});
+    // Test happy path
+    const result = await fetchUserData(1);
+    expect(result).toEqual({ id: 1, name: 'John Doe' });
+  });
 });
 ```
 
@@ -163,30 +163,30 @@ Boundary conditions are another common source of errors. Testing the edges of va
 ```js
 // Function to be tested
 function calculateDiscount(price) {
-	if (price < 0) {
-		throw new Error('Price cannot be negative');
-	}
-	if (price > 1000) {
-		return price * 0.2; // 20% discount for high prices
-	}
-	return price * 0.1; // 10% discount otherwise
+  if (price < 0) {
+    throw new Error('Price cannot be negative');
+  }
+  if (price > 1000) {
+    return price * 0.2; // 20% discount for high prices
+  }
+  return price * 0.1; // 10% discount otherwise
 }
 
 describe('calculateDiscount', () => {
-	it('should throw an error for negative prices', () => {
-		// Test boundary condition: negative price
-		expect(() => calculateDiscount(-10)).toThrow('Price cannot be negative');
-	});
+  it('should throw an error for negative prices', () => {
+    // Test boundary condition: negative price
+    expect(() => calculateDiscount(-10)).toThrow('Price cannot be negative');
+  });
 
-	it('should apply 10% discount for prices less than 1000', () => {
-		// Test boundary condition: price below 1000
-		expect(calculateDiscount(500)).toBe(50);
-	});
+  it('should apply 10% discount for prices less than 1000', () => {
+    // Test boundary condition: price below 1000
+    expect(calculateDiscount(500)).toBe(50);
+  });
 
-	it('should apply 20% discount for prices above 1000', () => {
-		// Test boundary condition: price above 1000
-		expect(calculateDiscount(1500)).toBe(300);
-	});
+  it('should apply 20% discount for prices above 1000', () => {
+    // Test boundary condition: price above 1000
+    expect(calculateDiscount(1500)).toBe(300);
+  });
 });
 ```
 
@@ -205,42 +205,42 @@ import * as db from './db';
 
 // Function to be tested
 async function getUserData(userId) {
-	try {
-		const user = await db.findUserById(userId);
-		if (!user) {
-			throw new Error('User not found');
-		}
-		return user;
-	} catch (error) {
-		throw new Error('Database error');
-	}
+  try {
+    const user = await db.findUserById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
+  } catch (error) {
+    throw new Error('Database error');
+  }
 }
 
 describe('getUserData', () => {
-	it('should throw an error if the user is not found', async () => {
-		// Mock the database to return null (user not found)
-		vi.spyOn(db, 'findUserById').mockResolvedValue(null);
+  it('should throw an error if the user is not found', async () => {
+    // Mock the database to return null (user not found)
+    vi.spyOn(db, 'findUserById').mockResolvedValue(null);
 
-		// Test that the function throws the correct error
-		await expect(getUserData(1)).rejects.toThrow('User not found');
-	});
+    // Test that the function throws the correct error
+    await expect(getUserData(1)).rejects.toThrow('User not found');
+  });
 
-	it('should throw an error for database failure', async () => {
-		// Mock the database to simulate an error
-		vi.spyOn(db, 'findUserById').mockRejectedValue(new Error('Database failure'));
+  it('should throw an error for database failure', async () => {
+    // Mock the database to simulate an error
+    vi.spyOn(db, 'findUserById').mockRejectedValue(new Error('Database failure'));
 
-		// Test that the function throws a database error
-		await expect(getUserData(1)).rejects.toThrow('Database error');
-	});
+    // Test that the function throws a database error
+    await expect(getUserData(1)).rejects.toThrow('Database error');
+  });
 
-	it('should return user data if the user exists', async () => {
-		// Mock the database to return a valid user
-		vi.spyOn(db, 'findUserById').mockResolvedValue({ id: 1, name: 'John Doe' });
+  it('should return user data if the user exists', async () => {
+    // Mock the database to return a valid user
+    vi.spyOn(db, 'findUserById').mockResolvedValue({ id: 1, name: 'John Doe' });
 
-		// Test happy path
-		const result = await getUserData(1);
-		expect(result).toEqual({ id: 1, name: 'John Doe' });
-	});
+    // Test happy path
+    const result = await getUserData(1);
+    expect(result).toEqual({ id: 1, name: 'John Doe' });
+  });
 });
 ```
 

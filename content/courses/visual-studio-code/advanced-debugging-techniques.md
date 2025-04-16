@@ -15,7 +15,7 @@ For example, imagine you're debugging a loop and only want to pause when a varia
 ```ts
 // Your code
 for (let i = 0; i < data.length; i++) {
-	// … some code …
+  // … some code …
 }
 
 // Conditional Breakpoint Expression:
@@ -32,12 +32,12 @@ Logpoints and `console.log` statements both help you trace program execution and
 
 ```javascript
 function processData(item) {
-	console.log('Processing item:', item.id, 'name:', item.name); // Added manually
+  console.log('Processing item:', item.id, 'name:', item.name); // Added manually
 
-	// Process the item...
+  // Process the item...
 
-	console.log('Processing completed, result:', result); // Added manually
-	return result;
+  console.log('Processing completed, result:', result); // Added manually
+  return result;
 }
 ```
 
@@ -45,14 +45,14 @@ function processData(item) {
 
 ```javascript
 function processData(item) {
-	// No code modification needed! Logpoint added through Visual Studio Code UI:
-	// "Processing item: {item.id}, name: {item.name}"
+  // No code modification needed! Logpoint added through Visual Studio Code UI:
+  // "Processing item: {item.id}, name: {item.name}"
 
-	// Process the item...
+  // Process the item...
 
-	// Another logpoint added through Visual Studio Code UI:
-	// "Processing completed, result: {result}"
-	return result;
+  // Another logpoint added through Visual Studio Code UI:
+  // "Processing completed, result: {result}"
+  return result;
 }
 ```
 
@@ -89,7 +89,7 @@ To add a logpoint, right-click in the breakpoint gutter and choose "Add Logpoint
 ```ts
 // Your code
 function processData(item: any) {
-	// … some code …
+  // … some code …
 }
 
 // Logpoint Message:
@@ -111,8 +111,8 @@ To set a hit count breakpoint, right-click on a breakpoint and choose "Edit Brea
 ```ts
 // Your code
 for (let i = 0; i < 1000; i++) {
-	// … some code …
-	// Breakpoint set to hit count 500
+  // … some code …
+  // Breakpoint set to hit count 500
 }
 ```
 
@@ -184,20 +184,20 @@ While native data breakpoints have limited support in JavaScript, you can use Ja
 ```javascript
 // Create a monitored version of your object
 function createMonitored(obj, onChange) {
-	return new Proxy(obj, {
-		set(target, property, value) {
-			console.log(`Property '${property}' changing from ${target[property]} to ${value}`);
-			onChange(target, property, value);
-			target[property] = value;
-			return true;
-		},
-	});
+  return new Proxy(obj, {
+    set(target, property, value) {
+      console.log(`Property '${property}' changing from ${target[property]} to ${value}`);
+      onChange(target, property, value);
+      target[property] = value;
+      return true;
+    },
+  });
 }
 
 // Usage
 const user = { name: 'Alice', score: 100 };
 const monitoredUser = createMonitored(user, (obj, prop, value) => {
-	debugger; // This will pause execution whenever a property changes
+  debugger; // This will pause execution whenever a property changes
 });
 
 // Now use monitoredUser instead of user
@@ -212,19 +212,19 @@ For complex objects where the proxy approach isn't practical, you can implement 
 
 ```javascript
 function trackChanges(obj, label = 'Object') {
-	const snapshot = JSON.stringify(obj);
+  const snapshot = JSON.stringify(obj);
 
-	// Create a conditional breakpoint with this expression:
-	// JSON.stringify(obj) !== snapshot
+  // Create a conditional breakpoint with this expression:
+  // JSON.stringify(obj) !== snapshot
 
-	// Or use a logpoint with this message:
-	// `${label} changed: before=${snapshot}, after=${JSON.stringify(obj)}`
+  // Or use a logpoint with this message:
+  // `${label} changed: before=${snapshot}, after=${JSON.stringify(obj)}`
 }
 
 // In your code
 function processData(data) {
-	trackChanges(data, 'data');
-	// ... processing ...
+  trackChanges(data, 'data');
+  // ... processing ...
 }
 ```
 
@@ -319,19 +319,19 @@ For Jest, the most popular JavaScript testing framework:
 ```json
 // launch.json
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Debug Jest Tests",
-			"program": "${workspaceFolder}/node_modules/.bin/jest",
-			"args": ["--runInBand", "${fileBasename}"],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"disableOptimisticBPs": true
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Jest Tests",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": ["--runInBand", "${fileBasename}"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true
+    }
+  ]
 }
 ```
 
@@ -346,14 +346,14 @@ For a more interactive approach, install the "Jest Runner" extension, which adds
 ```javascript
 // Example Jest test with breakpoint
 test('calculates total correctly', () => {
-	const cart = new ShoppingCart();
-	cart.addItem({ id: 1, price: 10 });
-	cart.addItem({ id: 2, price: 20 });
+  const cart = new ShoppingCart();
+  cart.addItem({ id: 1, price: 10 });
+  cart.addItem({ id: 2, price: 20 });
 
-	// Set a breakpoint on the next line to inspect the cart before checking
-	const total = cart.calculateTotal();
+  // Set a breakpoint on the next line to inspect the cart before checking
+  const total = cart.calculateTotal();
 
-	expect(total).toBe(30);
+  expect(total).toBe(30);
 });
 ```
 
@@ -364,17 +364,17 @@ For Mocha, another popular JavaScript testing framework:
 ```json
 // launch.json
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Debug Mocha Tests",
-			"program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-			"args": ["--timeout", "999999", "--colors", "${file}"],
-			"internalConsoleOptions": "openOnSessionStart"
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Mocha Tests",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": ["--timeout", "999999", "--colors", "${file}"],
+      "internalConsoleOptions": "openOnSessionStart"
+    }
+  ]
 }
 ```
 
@@ -385,17 +385,17 @@ For Python using pytest:
 ```json
 // launch.json
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"name": "Debug pytest",
-			"type": "python",
-			"request": "launch",
-			"module": "pytest",
-			"args": ["${file}", "-v"],
-			"justMyCode": false
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug pytest",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["${file}", "-v"],
+      "justMyCode": false
+    }
+  ]
 }
 ```
 
@@ -419,20 +419,20 @@ The C# extension provides excellent built-in support for .NET test frameworks:
 ```json
 // launch.json
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"name": "Debug xUnit Tests",
-			"type": "coreclr",
-			"request": "launch",
-			"preLaunchTask": "build",
-			"program": "dotnet",
-			"args": ["test", "${workspaceFolder}/tests/MyProject.Tests/MyProject.Tests.csproj"],
-			"cwd": "${workspaceFolder}",
-			"console": "internalConsole",
-			"stopAtEntry": false
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug xUnit Tests",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "dotnet",
+      "args": ["test", "${workspaceFolder}/tests/MyProject.Tests/MyProject.Tests.csproj"],
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ]
 }
 ```
 

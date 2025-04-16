@@ -32,16 +32,16 @@ Ensure that your Express API uses Zod schemas for request and response validatio
 import { z } from 'zod';
 
 export const createUserSchema = z.object({
-	username: z.string().min(3),
-	email: z.string().email(),
-	age: z.number().int().positive().optional(),
+  username: z.string().min(3),
+  email: z.string().email(),
+  age: z.number().int().positive().optional(),
 });
 
 export const userResponseSchema = z.object({
-	id: z.string().uuid(),
-	username: z.string(),
-	email: z.string(),
-	age: z.number().int().positive().optional(),
+  id: z.string().uuid(),
+  username: z.string(),
+  email: z.string(),
+  age: z.number().int().positive().optional(),
 });
 ```
 
@@ -78,50 +78,50 @@ const app = express();
 app.use(express.json());
 
 app.post(
-	'/users',
-	(
-		req: Request<{}, {}, z.infer<typeof createUserSchema>>,
-		res: Response<z.infer<typeof userResponseSchema>>,
-	) => {
-		const newUser: z.infer<typeof userResponseSchema> = {
-			id: '123e4567-e89b-12d3-a456-426614174000',
-			username: req.body.username,
-			email: req.body.email,
-			age: req.body.age,
-		};
-		res.status(201).json(newUser);
-	},
+  '/users',
+  (
+    req: Request<{}, {}, z.infer<typeof createUserSchema>>,
+    res: Response<z.infer<typeof userResponseSchema>>,
+  ) => {
+    const newUser: z.infer<typeof userResponseSchema> = {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+      username: req.body.username,
+      email: req.body.email,
+      age: req.body.age,
+    };
+    res.status(201).json(newUser);
+  },
 );
 
 const server = app.listen(3001); // Use a different port for testing
 
 describe('User API', () => {
-	afterAll(() => {
-		server.close();
-	});
+  afterAll(() => {
+    server.close();
+  });
 
-	it('should create a user', async () => {
-		const userData = createUserFixture();
-		const response = await request.post('http://localhost:3001/users').send(userData);
+  it('should create a user', async () => {
+    const userData = createUserFixture();
+    const response = await request.post('http://localhost:3001/users').send(userData);
 
-		expect(response.status).toBe(201);
-		expect(response.body).toEqual(expect.objectContaining(userData));
-		expect(userResponseSchema.safeParse(response.body).success).toBe(true);
-	});
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual(expect.objectContaining(userData));
+    expect(userResponseSchema.safeParse(response.body).success).toBe(true);
+  });
 
-	it('should handle invalid input', async () => {
-		const invalidUserData = { username: 'a', email: 'invalid-email' }; // Invalid username and email
-		try {
-			await request.post('http://localhost:3001/users').send(invalidUserData);
-		} catch (error: any) {
-			expect(error.response.status).toBe(400); // Assuming your API returns 400 for invalid input
-		}
-	});
+  it('should handle invalid input', async () => {
+    const invalidUserData = { username: 'a', email: 'invalid-email' }; // Invalid username and email
+    try {
+      await request.post('http://localhost:3001/users').send(invalidUserData);
+    } catch (error: any) {
+      expect(error.response.status).toBe(400); // Assuming your API returns 400 for invalid input
+    }
+  });
 
-	it('should generate a valid user response fixture', () => {
-		const responseData = userResponseFixture();
-		expect(userResponseSchema.safeParse(responseData).success).toBe(true);
-	});
+  it('should generate a valid user response fixture', () => {
+    const responseData = userResponseFixture();
+    expect(userResponseSchema.safeParse(responseData).success).toBe(true);
+  });
 });
 ```
 

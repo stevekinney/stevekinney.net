@@ -21,28 +21,28 @@ Depending on your platform, the user settings file is located here:
 
 ```json
 {
-	"editor.fontSize": 14,
-	"editor.fontFamily": "Fira Code",
-	"editor.lineHeight": 22,
-	"workbench.colorTheme": "Dracula",
-	"files.autoSave": "afterDelay",
-	"files.autoSaveDelay": 1000,
-	"editor.tabSize": 2,
-	"editor.insertSpaces": true,
-	"editor.detectIndentation": false,
-	"files.exclude": {
-		"**/.git": true,
-		"**/.svn": true,
-		"**/.hg": true,
-		"**/CVS": true,
-		"**/.DS_Store": true,
-		"**/node_modules": true
-	},
-	"explorer.confirmDelete": false,
-	"terminal.integrated.fontSize": 13,
-	"terminal.integrated.fontFamily": "monospace",
-	"editor.wordWrap": "on",
-	"editor.minimap.enabled": false
+  "editor.fontSize": 14,
+  "editor.fontFamily": "Fira Code",
+  "editor.lineHeight": 22,
+  "workbench.colorTheme": "Dracula",
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true
+  },
+  "explorer.confirmDelete": false,
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.fontFamily": "monospace",
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": false
 }
 ```
 
@@ -54,15 +54,15 @@ Depending on your platform, the user settings file is located here:
 
 ```json
 {
-	"[python]": {
-		"editor.tabSize": 4,
-		"editor.insertSpaces": true,
-		"python.linting.pylintEnabled": true
-	},
-	"[javascript]": {
-		"editor.tabSize": 2,
-		"editor.insertSpaces": true
-	}
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "python.linting.pylintEnabled": true
+  },
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  }
 }
 ```
 

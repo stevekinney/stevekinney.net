@@ -45,9 +45,9 @@ So, I might start with a test like this:
 
 ```javascript
 describe('add', () => {
-	it('adds two positive numbers', () => {
-		expect(add(1, 2)).toBe(3);
-	});
+  it('adds two positive numbers', () => {
+    expect(add(1, 2)).toBe(3);
+  });
 });
 ```
 

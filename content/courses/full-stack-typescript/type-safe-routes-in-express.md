@@ -1,6 +1,9 @@
 ---
-modified: 2025-03-15T15:08:35-06:00
+modified: 2025-03-15T21:08:35.000Z
 title: Type-Safe Route Registration
+description: >-
+  Discover how to implement type-safe route registration in Express, ensuring
+  handlers receive correctly typed requests for enhanced reliability.
 ---
 
 One limitation of Express is that route paths are just strings, not checked against parameter types. We can build a type-safe router:
@@ -18,14 +21,14 @@ function route<
 
 ```ts
 const userRoutes = [
-	route<{ id: string }, UserResponse>('/users/:id', (req, res) => {
-		const userId = req.params.id;
-		// …
-	}),
-	route<{}, UserResponse[], {}, { query?: string }>('/users', (req, res) => {
-		const searchQuery = req.query.query;
-		// …
-	}),
+  route<{ id: string }, UserResponse>('/users/:id', (req, res) => {
+    const userId = req.params.id;
+    // …
+  }),
+  route<{}, UserResponse[], {}, { query?: string }>('/users', (req, res) => {
+    const searchQuery = req.query.query;
+    // …
+  }),
 ];
 ```
 

@@ -3,8 +3,8 @@ import { inject } from '@vercel/analytics';
 import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 
 if (!dev) {
-	injectSpeedInsights();
-	inject({ mode: 'production' });
+  injectSpeedInsights();
+  inject({ mode: 'production' });
 }
 
 export const prerender = true;

@@ -13,12 +13,12 @@ import clsx from 'clsx';
 import styles from './button.module.css';
 
 type ButtonProps = ComponentProps<'button'> & {
-	variant?: 'primary' | 'secondary' | 'destructive';
-	size?: 'small' | 'medium' | 'large';
+  variant?: 'primary' | 'secondary' | 'destructive';
+  size?: 'small' | 'medium' | 'large';
 };
 
 export const Button = ({ variant = 'primary', size = 'medium', ...props }: ButtonProps) => {
-	return <button className={clsx(styles.button, styles[variant], styles[size])} {...props} />;
+  return <button className={clsx(styles.button, styles[variant], styles[size])} {...props} />;
 };
 ```
 
@@ -26,24 +26,24 @@ Lastly, we need to add additional stories for our button sizes.
 
 ```tsx
 export const Small: Story = {
-	args: {
-		children: 'Button',
-		size: 'small',
-	},
+  args: {
+    children: 'Button',
+    size: 'small',
+  },
 };
 
 export const Medium: Story = {
-	args: {
-		children: 'Button',
-		size: 'medium',
-	},
+  args: {
+    children: 'Button',
+    size: 'medium',
+  },
 };
 
 export const Large: Story = {
-	args: {
-		children: 'Button',
-		size: 'large',
-	},
+  args: {
+    children: 'Button',
+    size: 'large',
+  },
 };
 ```
 

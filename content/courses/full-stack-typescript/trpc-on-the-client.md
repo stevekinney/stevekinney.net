@@ -30,15 +30,15 @@ import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from '../../server/src/trpc';
 
 const client = createTRPCProxyClient<AppRouter>({
-	links: [
-		httpBatchLink({
-			url: 'http://localhost:4001/api/trpc',
-		}),
-	],
+  links: [
+    httpBatchLink({
+      url: 'http://localhost:4001/api/trpc',
+    }),
+  ],
 });
 
 export const fetchTasks = async (showCompleted: boolean): Promise<Task[]> => {
-	return client.task.getTasks.query({ completed: showCompleted ? true : undefined });
+  return client.task.getTasks.query({ completed: showCompleted ? true : undefined });
 };
 ```
 
@@ -48,11 +48,11 @@ export const fetchTasks = async (showCompleted: boolean): Promise<Task[]> => {
 
 ```typescript
 const client = createTRPCProxyClient<AppRouter>({
-	links: [
-		httpBatchLink({
-			url: 'http://localhost:4001/trpc',
-		}),
-	],
+  links: [
+    httpBatchLink({
+      url: 'http://localhost:4001/trpc',
+    }),
+  ],
 });
 ```
 
@@ -62,7 +62,7 @@ Updated to use tRPC query
 
 ```typescript
 export const fetchTasks = async (showCompleted: boolean): Promise<Task[]> => {
-	return client.task.getTasks.query({ completed: showCompleted ? true : undefined });
+  return client.task.getTasks.query({ completed: showCompleted ? true : undefined });
 };
 ```
 
@@ -72,11 +72,11 @@ Updated to use tRPC query with ID parameter
 
 ```typescript
 export const getTask = async (id: string): Promise<Task> => {
-	const task = await client.task.getTask.query({ id: parseInt(id, 10) });
+  const task = await client.task.getTask.query({ id: parseInt(id, 10) });
 
-	if (!task) throw new Error('Failed to fetch task');
+  if (!task) throw new Error('Failed to fetch task');
 
-	return task;
+  return task;
 };
 ```
 
@@ -86,7 +86,7 @@ Updated to use tRPC mutation
 
 ```typescript
 export const createTask = async (task: NewTask): Promise<void> => {
-	await client.task.createTask.mutate(task);
+  await client.task.createTask.mutate(task);
 };
 ```
 
@@ -96,11 +96,11 @@ Updated to use tRPC mutation with proper parameter structure
 
 ```typescript
 export const updateTask = async (id: string, task: UpdateTask): Promise<void> => {
-	await client.task.updateTask.mutate({
-		id: parseInt(id, 10),
+  await client.task.updateTask.mutate({
+    id: parseInt(id, 10),
 
-		task,
-	});
+    task,
+  });
 };
 ```
 
@@ -110,7 +110,7 @@ Updated to use tRPC mutation
 
 ```typescript
 export const deleteTask = async (id: string): Promise<void> => {
-	await client.task.deleteTask.mutate({ id: parseInt(id, 10) });
+  await client.task.deleteTask.mutate({ id: parseInt(id, 10) });
 };
 ```
 

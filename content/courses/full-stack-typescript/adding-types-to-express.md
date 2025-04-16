@@ -12,7 +12,7 @@ Express primarily revolves around three core types:
 import { Request, Response, NextFunction } from 'express';
 
 app.get('/users', (req: Request, res: Response, next: NextFunction) => {
-	// Route handler logic
+  // Route handler logic
 });
 ```
 
@@ -20,15 +20,15 @@ The Request and Response interfaces are generic:
 
 ```typescript
 interface Request<
-	P = ParamsDictionary,
-	ResBody = any,
-	ReqBody = any,
-	ReqQuery = ParsedQs,
-	Locals extends Record<string, any> = Record<string, any>,
+  P = ParamsDictionary,
+  ResBody = any,
+  ReqBody = any,
+  ReqQuery = ParsedQs,
+  Locals extends Record<string, any> = Record<string, any>,
 > extends core.Request {}
 
 interface Response<ResBody = any, Locals extends Record<string, any> = Record<string, any>>
-	extends core.Response {}
+  extends core.Response {}
 ```
 
 Those `any` types are danger zones. They represent the wild, untamed parts of your API contract that TypeScript can't verify. Our mission is to replace them with precise types that reflect your API's actual behavior.
@@ -44,12 +44,12 @@ URL parameters represent path variables in your route definitions:
 ```typescript
 // Define the parameter structure
 interface UserParams {
-	userId: string;
+  userId: string;
 }
 
 app.get('/users/:userId', (req: Request<UserParams>, res: Response) => {
-	// TypeScript now knows req.params.userId exists and is a string
-	const userId = req.params.userId;
+  // TypeScript now knows req.params.userId exists and is a string
+  const userId = req.params.userId;
 });
 ```
 
@@ -61,14 +61,14 @@ Query strings present a unique challenge because they're optional by nature and 
 
 ```typescript
 interface UserQuery {
-	sort?: string;
-	filter?: string;
-	page?: string; // Query params are always strings with basic Express typing
+  sort?: string;
+  filter?: string;
+  page?: string; // Query params are always strings with basic Express typing
 }
 
 app.get('/users', (req: Request<{}, {}, {}, UserQuery>, res: Response) => {
-	// TypeScript knows about req.query.sort, req.query.filter, etc.
-	const page = Number(req.query.page || '1');
+  // TypeScript knows about req.query.sort, req.query.filter, etc.
+  const page = Number(req.query.page || '1');
 });
 ```
 
@@ -80,14 +80,14 @@ Request bodies usually come from `POST`, `PUT`, or `PATCH` requests:
 
 ```typescript
 interface CreateUserBody {
-	username: string;
-	email: string;
-	password: string;
+  username: string;
+  email: string;
+  password: string;
 }
 
 app.post('/users', (req: Request<{}, {}, CreateUserBody>, res: Response) => {
-	// TypeScript knows req.body has username, email, and password properties
-	const { username, email, password } = req.body;
+  // TypeScript knows req.body has username, email, and password properties
+  const { username, email, password } = req.body;
 });
 ```
 
@@ -99,26 +99,26 @@ For routes that use multiple parameter sources, you can combine these approaches
 
 ```typescript
 interface UserRequest {
-	params: {
-		userId: string;
-	};
-	query: {
-		fields?: string;
-	};
-	body: {
-		name?: string;
-		email?: string;
-	};
+  params: {
+    userId: string;
+  };
+  query: {
+    fields?: string;
+  };
+  body: {
+    name?: string;
+    email?: string;
+  };
 }
 
 app.patch(
-	'/users/:userId',
-	(
-		req: Request<UserRequest['params'], {}, UserRequest['body'], UserRequest['query']>,
-		res: Response,
-	) => {
-		// Fully typed request with params, query, and body
-	},
+  '/users/:userId',
+  (
+    req: Request<UserRequest['params'], {}, UserRequest['body'], UserRequest['query']>,
+    res: Response,
+  ) => {
+    // Fully typed request with params, query, and body
+  },
 );
 ```
 
@@ -135,21 +135,21 @@ The Express namespace allows augmenting the Request interface:
 ```typescript
 // In a declaration file (e.g., types.d.ts)
 declare namespace Express {
-	interface Request {
-		user?: {
-			id: string;
-			roles: string[];
-		};
-		requestId: string;
-	}
+  interface Request {
+    user?: {
+      id: string;
+      roles: string[];
+    };
+    requestId: string;
+  }
 }
 
 // Now this works everywhere
 app.get('/profile', (req: Request, res: Response) => {
-	// TypeScript knows req.user and req.requestId exist
-	if (req.user) {
-		// Do something with the authenticated user
-	}
+  // TypeScript knows req.user and req.requestId exist
+  if (req.user) {
+    // Do something with the authenticated user
+  }
 });
 ```
 
@@ -165,23 +165,23 @@ For more precise control, we can use middleware to guarantee properties exist:
 ```typescript
 // Define a middleware that attaches user data
 const attachUser: RequestHandler = (req, res, next) => {
-	// Authenticate and attach user
-	req.user = { id: '123', roles: ['admin'] };
-	next();
+  // Authenticate and attach user
+  req.user = { id: '123', roles: ['admin'] };
+  next();
 };
 
 // Create a type guard to verify user exists
 function ensureAuth(req: Request, res: Response, next: NextFunction): void {
-	if (!req.user) {
-		return res.status(401).send('Unauthorized');
-	}
-	next();
+  if (!req.user) {
+    return res.status(401).send('Unauthorized');
+  }
+  next();
 }
 
 // Use them together to ensure type safety
 app.get('/admin', attachUser, ensureAuth, (req: Request, res: Response) => {
-	// TypeScript now knows req.user exists and is non-null
-	const { id, roles } = req.user; // No need for null check
+  // TypeScript now knows req.user exists and is non-null
+  const { id, roles } = req.user; // No need for null check
 });
 ```
 
@@ -190,29 +190,29 @@ For more sophisticated patterns, we can create custom middleware types:
 ```typescript
 // Define a custom request type with guaranteed user property
 interface AuthenticatedRequest extends Request {
-	user: {
-		id: string;
-		roles: string[];
-	};
+  user: {
+    id: string;
+    roles: string[];
+  };
 }
 
 // Define middleware that guarantees the user property
 function authenticateMiddleware(req: Request, res: Response, next: NextFunction): void {
-	// Authentication logic...
-	(req as AuthenticatedRequest).user = { id: '123', roles: ['user'] };
-	next();
+  // Authentication logic...
+  (req as AuthenticatedRequest).user = { id: '123', roles: ['user'] };
+  next();
 }
 
 // Define a route handler that uses the authenticated request
 function adminHandler(req: AuthenticatedRequest, res: Response): void {
-	// TypeScript knows req.user exists and has the correct shape
-	const { id, roles } = req.user;
+  // TypeScript knows req.user exists and has the correct shape
+  const { id, roles } = req.user;
 
-	if (!roles.includes('admin')) {
-		return res.status(403).send('Forbidden');
-	}
+  if (!roles.includes('admin')) {
+    return res.status(403).send('Forbidden');
+  }
 
-	res.send(`Welcome, admin ${id}!`);
+  res.send(`Welcome, admin ${id}!`);
 }
 
 // Wire it all together

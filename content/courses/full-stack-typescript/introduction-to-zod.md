@@ -73,9 +73,9 @@ We can start by defining schemas—which you can think of like you would a `type
 import { z } from 'zod';
 
 export const UserSchema = z.object({
-	name: z.string(),
-	email: z.string(),
-	age: z.number(),
+  name: z.string(),
+  email: z.string(),
+  age: z.number(),
 });
 
 // Automatically infer the TypeScript type
@@ -88,9 +88,9 @@ We can also add some additional validation (e.g. making sure something is an ema
 import { z } from 'zod';
 
 export const UserSchema = z.object({
-	name: z.string().min(1, "Name can't be empty"),
-	email: z.string().email('Invalid email format'),
-	age: z.number().int().min(1).max(120),
+  name: z.string().min(1, "Name can't be empty"),
+  email: z.string().email('Invalid email format'),
+  age: z.number().int().min(1).max(120),
 });
 
 // Automatically infer the TypeScript type
@@ -102,27 +102,27 @@ Once you have a schema, you can use Zod to validate objects to make sure that th
 ```ts
 // Using parse() – throws on failure
 try {
-	const validUser = UserSchema.parse({
-		name: 'Alice',
-		email: 'alice@example.com',
-		age: 30,
-	});
-	console.log('Valid user:', validUser);
+  const validUser = UserSchema.parse({
+    name: 'Alice',
+    email: 'alice@example.com',
+    age: 30,
+  });
+  console.log('Valid user:', validUser);
 } catch (error) {
-	console.error('Validation error:', error);
+  console.error('Validation error:', error);
 }
 
 // Using safeParse() – returns a result object
 const result = UserSchema.safeParse({
-	name: 'Bob',
-	email: 'bob@example', // Invalid email!
-	age: 25,
+  name: 'Bob',
+  email: 'bob@example', // Invalid email!
+  age: 25,
 });
 
 if (!result.success) {
-	console.error('Validation failed:', result.error.errors);
+  console.error('Validation failed:', result.error.errors);
 } else {
-	console.log('Valid user:', result.data);
+  console.log('Valid user:', result.data);
 }
 ```
 
@@ -137,9 +137,9 @@ The magic of Zod is that your schema is your single source of truth. You don't w
 import { z } from 'zod';
 
 const ProductSchema = z.object({
-	id: z.string().uuid(),
-	name: z.string(),
-	price: z.number().positive(),
+  id: z.string().uuid(),
+  name: z.string(),
+  price: z.number().positive(),
 });
 
 type Product = z.infer<typeof ProductSchema>;

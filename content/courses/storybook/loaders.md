@@ -38,19 +38,19 @@ Let's say you have a `ProfileCard` component that requires user data:
 
 ```tsx
 export default {
-	title: 'Example/ProfileCard',
+  title: 'Example/ProfileCard',
 };
 
 export const DefaultProfileCard = () => <ProfileCard />;
 
 DefaultProfileCard.loaders = [
-	async () => ({
-		profileData: await fetch('/api/profile').then((res) => res.json()),
-	}),
+  async () => ({
+    profileData: await fetch('/api/profile').then((res) => res.json()),
+  }),
 ];
 
 export const DefaultProfileCardStory = (args, { loaded: { profileData } }) => (
-	<ProfileCard {...profileData} />
+  <ProfileCard {...profileData} />
 );
 ```
 
@@ -64,22 +64,22 @@ You can use loaders in combination with decorators to wrap stories with addition
 
 ```tsx
 const meta = {
-	title: 'Components/TaskList',
-	component: TaskList,
-	loaders: [
-		async () => {
-			const tasks = await fetch('https://jsonplaceholder.typicode.com/todos').then((res) =>
-				res.json(),
-			);
-			return { tasks };
-		},
-	],
-	decorators: [
-		(Story, { loaded }) => (
-			<TaskListProvider tasks={loaded.tasks}>
-				<Story />
-			</TaskListProvider>
-		),
-	],
+  title: 'Components/TaskList',
+  component: TaskList,
+  loaders: [
+    async () => {
+      const tasks = await fetch('https://jsonplaceholder.typicode.com/todos').then((res) =>
+        res.json(),
+      );
+      return { tasks };
+    },
+  ],
+  decorators: [
+    (Story, { loaded }) => (
+      <TaskListProvider tasks={loaded.tasks}>
+        <Story />
+      </TaskListProvider>
+    ),
+  ],
 } as Meta<typeof TaskList>;
 ```

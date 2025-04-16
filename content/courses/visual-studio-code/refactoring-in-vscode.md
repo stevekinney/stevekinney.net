@@ -4,7 +4,8 @@ description: Master essential code refactoring techniques in Visual Studio Code,
 modified: 2025-03-18T08:22:18-05:00
 ---
 
-There are a bunch of little niceties in Visual Studio Code that make refactoring *way* easier.
+There are a bunch of little niceties in Visual Studio Code that make refactoring _way_ easier.
+
 ## Rename Symbol
 
 Okay, so this is like my favorite feature that I use basically every single day.
@@ -19,22 +20,22 @@ Sometimes, a block of code in a function grows too large or handles multiple res
 
 ```ts
 function processNumbers(nums: number[]): void {
-	// Original code that can be extracted
-	const total = nums.reduce((acc, curr) => acc + curr, 0);
-	console.log(`Sum of numbers: ${total}`);
+  // Original code that can be extracted
+  const total = nums.reduce((acc, curr) => acc + curr, 0);
+  console.log(`Sum of numbers: ${total}`);
 
-	// … more code …
+  // … more code …
 }
 
 // After extracting method/function:
 function processNumbers(nums: number[]): void {
-	calculateAndLogSum(nums);
-	// … more code …
+  calculateAndLogSum(nums);
+  // … more code …
 }
 
 function calculateAndLogSum(nums: number[]): void {
-	const total = nums.reduce((acc, curr) => acc + curr, 0);
-	console.log(`Sum of numbers: ${total}`);
+  const total = nums.reduce((acc, curr) => acc + curr, 0);
+  console.log(`Sum of numbers: ${total}`);
 }
 ```
 

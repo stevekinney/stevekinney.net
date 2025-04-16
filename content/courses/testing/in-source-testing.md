@@ -25,7 +25,7 @@ Imagine you’ve got this tiny utility function that adds two numbers, `add.js`:
 
 ```js
 export function add(a, b) {
-	return a + b;
+  return a + b;
 }
 ```
 
@@ -36,20 +36,20 @@ import { describe, it, expect } from 'vitest';
 
 // Here's your function:
 export function add(a, b) {
-	return a + b;
+  return a + b;
 }
 
 // And now… here's your in-source test!
 if (import.meta.vitest) {
-	describe('add', () => {
-		it('adds two numbers correctly', () => {
-			expect(add(2, 3)).toBe(5);
-		});
+  describe('add', () => {
+    it('adds two numbers correctly', () => {
+      expect(add(2, 3)).toBe(5);
+    });
 
-		it('handles negative numbers', () => {
-			expect(add(-2, -3)).toBe(-5);
-		});
-	});
+    it('handles negative numbers', () => {
+      expect(add(-2, -3)).toBe(-5);
+    });
+  });
 }
 ```
 

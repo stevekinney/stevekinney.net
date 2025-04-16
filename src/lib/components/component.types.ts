@@ -8,18 +8,18 @@ import type { HTMLAttributes, SvelteHTMLElements } from 'svelte/elements';
 export type ElementName = keyof SvelteHTMLElements;
 
 export type WithIcon = {
-	icon?: typeof IconType;
+  icon?: typeof IconType;
 };
 
 export type WithChildren = {
-	children: Snippet;
+  children: Snippet;
 };
 
 export type BaseAttributes = HTMLAttributes<HTMLElement>;
 
 export type ExtendElement<
-	Element extends ElementName | HTMLAttributes<HTMLElement> = HTMLAttributes<HTMLElement>,
-	Props extends Record<string, any> = {},
+  Element extends ElementName | HTMLAttributes<HTMLElement> = HTMLAttributes<HTMLElement>,
+  Props extends Record<string, any> = {},
 > = Element extends ElementName
-	? Omit<SvelteHTMLElements[Element], keyof Props> & Props
-	: Omit<Element, keyof Props> & Props;
+  ? Omit<SvelteHTMLElements[Element], keyof Props> & Props
+  : Omit<Element, keyof Props> & Props;

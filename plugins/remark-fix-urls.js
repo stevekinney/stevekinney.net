@@ -1,27 +1,27 @@
+import { dirname } from 'path';
 import { visit } from 'unist-util-visit';
-import { parse } from 'yaml';
+
+const externalUrl = /^(https?:\/\/|\/\/)/;
+
+const isExternalUrl = (url) => {
+  return externalUrl.test(url);
+};
 
 /**
  * A remark plugin to fix the URLs in Markdown files.
  * @type {import('unified').Plugin}
  */
-export const fixMarkdownUrls = () => {
-	return (tree) => {
-		let baseUrl = '';
+export const fixMarkdownUrls = (contentPath = 'content') => {
+  return (tree, { filename, cwd }) => {
+    const baseUrl = '/' + dirname(filename.replace(`${cwd}/`, '')).replace(`${contentPath}/`, '');
 
-		// Find the base URL in the YAML frontmatter.
-		visit(tree, 'yaml', (/** @type {import('mdast').Yaml} */ node) => {
-			const { base } = parse(node.value);
+    visit(tree, 'link', (/** @type {import('mdast').Link} */ node) => {
+      const { url } = node;
+      if (isExternalUrl(url)) return;
+      if (!url.includes('.md')) return;
+      const updated = `${baseUrl}/${url.replace(/\.md/, '')}`;
 
-			if (base) {
-				baseUrl = `${base}/`;
-			}
-		});
-
-		// Fix the URLs in the Markdown files by removing the `.md` extension.
-		visit(tree, 'link', (/** @type {import('mdast').Yaml} */ node) => {
-			const { url } = node;
-			node.url = baseUrl + url.replace(/\.md/, '');
-		});
-	};
+      node.url = updated;
+    });
+  };
 };

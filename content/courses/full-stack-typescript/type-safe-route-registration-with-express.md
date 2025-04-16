@@ -1,5 +1,10 @@
 ---
-modified: 2025-03-15T15:16:08-06:00
+modified: 2025-03-15T21:16:08.000Z
+description: >-
+  Learn to build a type-safe router for Express in TypeScript, ensuring handlers
+  receive correctly typed requests while defining routes with more reliability
+  and clarity.
+title: '"Building a Type-Safe Router for Express with TypeScript"'
 ---
 
 One limitation of Express is that route paths are just strings, not checked against parameter types. We can build a type-safe router:

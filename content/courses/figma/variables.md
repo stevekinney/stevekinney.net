@@ -74,8 +74,8 @@ What's even better is now, you can use a plugin—like this [CSS Variables Gener
 
 ```css
 :root {
-	--rounded: 16px;
-	--rounded-rem: 3.125rem;
+  --rounded: 16px;
+  --rounded-rem: 3.125rem;
 }
 ```
 

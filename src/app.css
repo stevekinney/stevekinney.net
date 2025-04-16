@@ -5,99 +5,99 @@
 @tailwind utilities;
 
 @layer base {
-	body {
-		@apply text-black-pearl-950 dark:bg-black-pearl-950 dark:text-white;
-	}
+  body {
+    @apply text-black-pearl-950 dark:bg-black-pearl-950 dark:text-white;
+  }
 
-	pre {
-		@apply overflow-x-auto rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 p-4 dark:border-black-pearl-800;
-	}
+  pre {
+    @apply overflow-x-auto rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 p-4 dark:border-black-pearl-800;
+  }
 
-	table {
-		@apply block w-full max-w-full border-separate border-spacing-0 overflow-x-scroll rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 shadow-md dark:border-black-pearl-800 dark:bg-black-pearl-800;
-	}
+  table {
+    @apply block w-full max-w-full border-separate border-spacing-0 overflow-x-scroll rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 shadow-md dark:border-black-pearl-800 dark:bg-black-pearl-800;
+  }
 
-	thead {
-		@apply border-2 border-black-pearl-950 bg-black-pearl-950 text-white dark:border-black-pearl-700 dark:bg-black-pearl-700;
-		&:first-child {
-			@apply rounded-t-md;
-		}
-		&:first-child th:first-child {
-			@apply rounded-tl-md;
-		}
-		&:first-child th:last-child {
-			@apply rounded-tr-md;
-		}
-	}
+  thead {
+    @apply border-2 border-black-pearl-950 bg-black-pearl-950 text-white dark:border-black-pearl-700 dark:bg-black-pearl-700;
+    &:first-child {
+      @apply rounded-t-md;
+    }
+    &:first-child th:first-child {
+      @apply rounded-tl-md;
+    }
+    &:first-child th:last-child {
+      @apply rounded-tr-md;
+    }
+  }
 
-	tbody {
-		@apply bg-white dark:bg-black-pearl-900;
-		& th {
-			@apply bg-slate-100 dark:bg-black-pearl-800;
-		}
-		&:last-child {
-			@apply rounded-b-md;
-		}
-		&:last-child > tr:last-child > td:first-child,
-		&:last-child > tr:last-child > th:first-child {
-			@apply rounded-bl-md;
-		}
-		&:last-child > tr:last-child > td:last-child {
-			@apply rounded-br-md;
-		}
-	}
+  tbody {
+    @apply bg-white dark:bg-black-pearl-900;
+    & th {
+      @apply bg-slate-100 dark:bg-black-pearl-800;
+    }
+    &:last-child {
+      @apply rounded-b-md;
+    }
+    &:last-child > tr:last-child > td:first-child,
+    &:last-child > tr:last-child > th:first-child {
+      @apply rounded-bl-md;
+    }
+    &:last-child > tr:last-child > td:last-child {
+      @apply rounded-br-md;
+    }
+  }
 
-	th,
-	td {
-		@apply whitespace-nowrap p-2 text-left;
-	}
+  th,
+  td {
+    @apply whitespace-nowrap p-2 text-left;
+  }
 }
 
 @layer components {
-	.button {
-		@apply inline-flex items-center justify-center gap-2 rounded-md border border-primary-600 p-2 outline-8 outline-offset-4 outline-primary-500 ring-primary-400 ring-offset-0 transition-colors hover:bg-primary-100 hover:ring-2 active:bg-primary-200 dark:hover:bg-slate-800 dark:active:bg-primary-900;
-		&.small {
-			@apply py-1 text-xs;
-		}
-		&.ghost {
-			@apply border-none bg-transparent text-primary-500 hover:bg-slate-100 active:bg-slate-200 dark:hover:bg-slate-700 dark:active:bg-slate-800;
-		}
-	}
+  .button {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-primary-600 p-2 outline-8 outline-offset-4 outline-primary-500 ring-primary-400 ring-offset-0 transition-colors hover:bg-primary-100 hover:ring-2 active:bg-primary-200 dark:hover:bg-slate-800 dark:active:bg-primary-900;
+    &.small {
+      @apply py-1 text-xs;
+    }
+    &.ghost {
+      @apply border-none bg-transparent text-primary-500 hover:bg-slate-100 active:bg-slate-200 dark:hover:bg-slate-700 dark:active:bg-slate-800;
+    }
+  }
 
-	.button-primary {
-		@apply button rounded-md border border-primary-500 bg-primary-600 p-2 text-white hover:bg-primary-700 active:bg-primary-800;
-	}
+  .button-primary {
+    @apply button rounded-md border border-primary-500 bg-primary-600 p-2 text-white hover:bg-primary-700 active:bg-primary-800;
+  }
 
-	.input {
-		@apply appearance-none rounded-md border border-slate-500 p-2 accent-primary-600 outline-offset-4 outline-primary-500 ring-primary-400 hover:border-primary-800 focus:outline-4 focus:ring-4 dark:border-black-pearl-600 dark:bg-black-pearl-800 dark:outline-primary-800 dark:ring-primary-800;
-	}
+  .input {
+    @apply appearance-none rounded-md border border-slate-500 p-2 accent-primary-600 outline-offset-4 outline-primary-500 ring-primary-400 hover:border-primary-800 focus:outline-4 focus:ring-4 dark:border-black-pearl-600 dark:bg-black-pearl-800 dark:outline-primary-800 dark:ring-primary-800;
+  }
 
-	.link,
-	.prose a {
-		@apply hover:bg-primary-200 hover:decoration-primary-400 dark:hover:bg-slate-800 dark:hover:decoration-primary-600;
-	}
+  .link,
+  .prose a {
+    @apply hover:bg-primary-200 hover:decoration-primary-400 dark:hover:bg-slate-800 dark:hover:decoration-primary-600;
+  }
 
-	.surface {
-		@apply rounded-md p-4 shadow-md;
-	}
+  .surface {
+    @apply rounded-md p-4 shadow-md;
+  }
 
-	.surface-secondary {
-		@apply surface bg-slate-50 text-slate-900 dark:bg-black-pearl-800 dark:text-white;
-	}
+  .surface-secondary {
+    @apply surface bg-slate-50 text-slate-900 dark:bg-black-pearl-800 dark:text-white;
+  }
 
-	.prose {
-		th {
-			@apply text-white;
-		}
-		th,
-		td {
-			@apply p-2;
-		}
-		tbody tr:nth-child(even) {
-			@apply bg-slate-100 dark:border-black-pearl-700 dark:bg-black-pearl-800;
-		}
-		pre.shiki {
-			@apply shadow-md;
-		}
-	}
+  .prose {
+    th {
+      @apply text-white;
+    }
+    th,
+    td {
+      @apply p-2;
+    }
+    tbody tr:nth-child(even) {
+      @apply bg-slate-100 dark:border-black-pearl-700 dark:bg-black-pearl-800;
+    }
+    pre.shiki {
+      @apply shadow-md;
+    }
+  }
 }

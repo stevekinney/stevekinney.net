@@ -12,17 +12,17 @@ We can set some default arguments that Storybook will fall back to unless we ove
 
 ```tsx
 const meta: Meta<typeof Button> = {
-	title: 'Button',
-	component: Button,
-	args: {
-		children: 'Button',
-		variant: 'primary',
-		size: 'medium',
-		disabled: false,
-	},
-	argTypes: {
-		disabled: { control: 'boolean' },
-	},
+  title: 'Button',
+  component: Button,
+  args: {
+    children: 'Button',
+    variant: 'primary',
+    size: 'medium',
+    disabled: false,
+  },
+  argTypes: {
+    disabled: { control: 'boolean' },
+  },
 };
 ```
 

@@ -17,11 +17,11 @@ Add a test for division by zero in `calculator.test.js`:
 ```javascript
 // src/calculator.test.js
 describe('divide', () => {
-	// … previous tests …
+  // … previous tests …
 
-	it('throws an error when dividing by zero', () => {
-		expect(() => divide(5, 0)).toThrow('Cannot divide by zero');
-	});
+  it('throws an error when dividing by zero', () => {
+    expect(() => divide(5, 0)).toThrow('Cannot divide by zero');
+  });
 });
 ```
 
@@ -42,10 +42,10 @@ Modify the `divide` function in `calculator.js`:
 ```javascript
 // src/calculator.js
 export function divide(a, b) {
-	if (b === 0) {
-		throw new Error('Cannot divide by zero');
-	}
-	return a / b;
+  if (b === 0) {
+    throw new Error('Cannot divide by zero');
+  }
+  return a / b;
 }
 ```
 

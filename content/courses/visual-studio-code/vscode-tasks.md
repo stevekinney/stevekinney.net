@@ -27,20 +27,20 @@ Here’s a minimal example of a `tasks.json` file:
 
 ```jsonc
 {
-	// See https://code.visualstudio.com/docs/editor/tasks
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Build the project",
-			"type": "shell",
-			"command": "npm run build",
-			"problemMatcher": "$tsc",
-			"group": {
-				"kind": "build",
-				"isDefault": true,
-			},
-		},
-	],
+  // See https://code.visualstudio.com/docs/editor/tasks
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build the project",
+      "type": "shell",
+      "command": "npm run build",
+      "problemMatcher": "$tsc",
+      "group": {
+        "kind": "build",
+        "isDefault": true,
+      },
+    },
+  ],
 }
 ```
 
@@ -62,9 +62,9 @@ Most typical scenario: run a script or command in your shell. Great for quick bu
 
 ```json
 {
-	"label": "Shell Task Example",
-	"type": "shell",
-	"command": "echo Hello from the shell!"
+  "label": "Shell Task Example",
+  "type": "shell",
+  "command": "echo Hello from the shell!"
 }
 ```
 
@@ -74,10 +74,10 @@ Runs the command as a subprocess without typical shell expansions. You might nee
 
 ```json
 {
-	"label": "Process Task Example",
-	"type": "process",
-	"command": "node",
-	"args": ["app.js"]
+  "label": "Process Task Example",
+  "type": "process",
+  "command": "node",
+  "args": ["app.js"]
 }
 ```
 

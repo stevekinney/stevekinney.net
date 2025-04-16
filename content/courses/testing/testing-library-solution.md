@@ -15,11 +15,11 @@ Next we'll use `user-event` to click the button instead of calling a method on t
 
 ```javascript
 it('should change the text to "Clicked!" when clicked', async () => {
-	const button = createButton();
+  const button = createButton();
 
-	await userEvent.click(button);
+  await userEvent.click(button);
 
-	expect(button.textContent).toBe('Clicked!');
+  expect(button.textContent).toBe('Clicked!');
 });
 ```
 
@@ -31,12 +31,12 @@ We can also choose to render the button to the `document` and find it that way.
 
 ```javascript
 it('should change the text to "Clicked!" when clicked', async () => {
-	document.body.appendChild(createButton());
-	const button = screen.getByRole('button', { name: 'Click Me' });
+  document.body.appendChild(createButton());
+  const button = screen.getByRole('button', { name: 'Click Me' });
 
-	await userEvent.click(button);
+  await userEvent.click(button);
 
-	expect(button.textContent).toBe('Clicked!');
+  expect(button.textContent).toBe('Clicked!');
 });
 ```
 

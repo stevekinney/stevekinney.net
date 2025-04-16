@@ -16,13 +16,13 @@ Add a `dotfiles` property to your `devcontainer.json` configuration.
 
 ```json
 {
-	"dotfiles": {
-		"repository": "https://github.com/your-username/dotfiles",
+  "dotfiles": {
+    "repository": "https://github.com/your-username/dotfiles",
 
-		"targetPath": "~",
+    "targetPath": "~",
 
-		"installCommand": "install.sh"
-	}
+    "installCommand": "install.sh"
+  }
 }
 ```
 
@@ -80,9 +80,9 @@ Dev Containers offer a range of advanced features that further enhance flexibili
 
 ```json
 {
-	"mounts": [
-		"source=${localWorkspaceFolder}/data,target=/container/data,type=bind,consistency=cached"
-	]
+  "mounts": [
+    "source=${localWorkspaceFolder}/data,target=/container/data,type=bind,consistency=cached"
+  ]
 }
 ```
 

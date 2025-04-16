@@ -20,19 +20,19 @@ Let's start by writing a story that checks to see if the length count works at a
 
 ```tsx
 export const MaxLength: Story = {
-	args: {
-		maxLength: 140,
-	},
-	play: async ({ canvasElement }) => {
-		const canvas = within(canvasElement);
-		const textArea = canvas.getByRole('textbox');
-		const count = canvas.getByTestId('length');
+  args: {
+    maxLength: 140,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const textArea = canvas.getByRole('textbox');
+    const count = canvas.getByTestId('length');
 
-		const inputValue = 'Hello, world!';
+    const inputValue = 'Hello, world!';
 
-		userEvent.type(textArea, inputValue);
-		expect(count).toHaveTextContent(inputValue.length.toString());
-	},
+    userEvent.type(textArea, inputValue);
+    expect(count).toHaveTextContent(inputValue.length.toString());
+  },
 };
 ```
 
@@ -42,19 +42,19 @@ We even have access to `args`.
 
 ```ts
 export const LengthTooLong: Story = {
-	args: {
-		maxLength: 140,
-	},
-	play: async ({ canvasElement, args }) => {
-		const canvas = within(canvasElement);
-		const textArea = canvas.getByRole('textbox');
-		const count = canvas.getByTestId('length');
+  args: {
+    maxLength: 140,
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const textArea = canvas.getByRole('textbox');
+    const count = canvas.getByTestId('length');
 
-		const inputValue = 'H' + 'e'.repeat(140) + 'y!';
+    const inputValue = 'H' + 'e'.repeat(140) + 'y!';
 
-		await userEvent.type(textArea, inputValue);
-		expect(count).toHaveTextContent(inputValue.length.toString());
-	},
+    await userEvent.type(textArea, inputValue);
+    expect(count).toHaveTextContent(inputValue.length.toString());
+  },
 };
 ```
 
@@ -62,23 +62,23 @@ We can even expand this to check for stuff like classes, styling, or accessibili
 
 ```tsx
 export const LengthTooLong: Story = {
-	args: {
-		maxLength: 140,
-	},
-	play: async ({ canvasElement, args }) => {
-		const canvas = within(canvasElement);
-		const textArea = canvas.getByRole('textbox');
-		const count = canvas.getByTestId('length');
+  args: {
+    maxLength: 140,
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const textArea = canvas.getByRole('textbox');
+    const count = canvas.getByTestId('length');
 
-		const inputValue = 'H' + 'e'.repeat(args.maxLength || 140) + 'y!';
+    const inputValue = 'H' + 'e'.repeat(args.maxLength || 140) + 'y!';
 
-		await userEvent.type(textArea, inputValue);
+    await userEvent.type(textArea, inputValue);
 
-		expect(count).toHaveTextContent(inputValue.length.toString());
-		expect(textArea).toHaveClass('ring-danger-500');
-		expect(count).toHaveStyle({ color: 'rgb(237, 70, 86)' });
-		expect(textArea).toHaveAttribute('aria-invalid', 'true');
-	},
+    expect(count).toHaveTextContent(inputValue.length.toString());
+    expect(textArea).toHaveClass('ring-danger-500');
+    expect(count).toHaveStyle({ color: 'rgb(237, 70, 86)' });
+    expect(textArea).toHaveAttribute('aria-invalid', 'true');
+  },
 };
 ```
 

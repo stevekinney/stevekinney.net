@@ -57,10 +57,10 @@ type CalloutProps = PropsWithChildren<{ title: string }> & VariantProps<typeof v
 const variants = cva(['p-4', 'rounded', 'border', 'shadow-md', 'space-y-4']);
 
 export const Callout = ({ title, children }: CalloutProps) => (
-	<div className={variants({})}>
-		<h2 className="font-semibold">{title}</h2>
-		<p>{children}</p>
-	</div>
+  <div className={variants({})}>
+    <h2 className="font-semibold">{title}</h2>
+    <p>{children}</p>
+  </div>
 );
 ```
 
@@ -71,12 +71,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Callout } from './callout';
 
 const meta = {
-	title: 'Components/Callout',
-	component: Callout,
-	args: {
-		title: 'An Important Message',
-		children: 'This is a message that you should read.',
-	},
+  title: 'Components/Callout',
+  component: Callout,
+  args: {
+    title: 'An Important Message',
+    children: 'This is a message that you should read.',
+  },
 } satisfies Meta<typeof Callout>;
 
 export default meta;

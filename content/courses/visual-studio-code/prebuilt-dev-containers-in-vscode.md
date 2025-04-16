@@ -151,7 +151,7 @@ For advanced customization, use a Dockerfile.
 2. In `devcontainer.json`, replace the `image` property with `dockerFile` and specify the Dockerfile path:
    ```json
    {
-   	"dockerFile": "Dockerfile"
+     "dockerFile": "Dockerfile"
    }
    ```
    Use a relative path if the Dockerfile isn’t in the same folder.
@@ -195,11 +195,11 @@ Mount your host’s dotfiles to personalize your container.
 1. Add a `dotfiles` property in `devcontainer.json`:
    ```json
    {
-   	"dotfiles": {
-   		"repository": "https://github.com/your-username/dotfiles",
-   		"targetPath": "~",
-   		"installCommand": "install.sh"
-   	}
+     "dotfiles": {
+       "repository": "https://github.com/your-username/dotfiles",
+       "targetPath": "~",
+       "installCommand": "install.sh"
+     }
    }
    ```
    - **repository:** URL to your dotfiles repo.
@@ -237,9 +237,9 @@ Mount your host’s dotfiles to personalize your container.
 - Define in `devcontainer.json` using the `mounts` property:
   ```json
   {
-  	"mounts": [
-  		"source=${localWorkspaceFolder}/data,target=/container/data,type=bind,consistency=cached"
-  	]
+    "mounts": [
+      "source=${localWorkspaceFolder}/data,target=/container/data,type=bind,consistency=cached"
+    ]
   }
   ```
   - **source:** Host path.
@@ -258,9 +258,9 @@ Mount your host’s dotfiles to personalize your container.
 - Modify `devcontainer.json` to use `dockerComposeFile`, and specify `service` and `workspaceFolder`:
   ```json
   {
-  	"dockerComposeFile": "docker-compose.yml",
-  	"service": "app",
-  	"workspaceFolder": "/app"
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/app"
   }
   ```
 - **Example `docker-compose.yml`:**
@@ -352,15 +352,15 @@ Setting up a Node.js environment with specific npm packages and configurations f
 
 ```json
 {
-	"name": "Node.js Web App",
-	"image": "mcr.microsoft.com/devcontainers/javascript-node:18",
-	"extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "ms-vscode.js-debug-nodejs"],
-	"settings": {
-		"terminal.integrated.shell.linux": "/bin/bash",
-		"editor.formatOnSave": true
-	},
-	"forwardPorts": [3000],
-	"postCreateCommand": "npm install"
+  "name": "Node.js Web App",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+  "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "ms-vscode.js-debug-nodejs"],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "editor.formatOnSave": true
+  },
+  "forwardPorts": [3000],
+  "postCreateCommand": "npm install"
 }
 ```
 

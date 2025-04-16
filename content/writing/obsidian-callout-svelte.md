@@ -45,7 +45,7 @@ With all of that in mind, Here is some pseudo-code of what I'd like the interfac
 
 ```tsx
 <Callout variant="note" title="An Important Note" foldable>
-	This is the body of a very important note.
+  This is the body of a very important note.
 </Callout>
 ```
 
@@ -57,33 +57,33 @@ First up we want to take that table of all of the variation and make a type that
 
 ```ts
 type CalloutVariation =
-	| 'abstract'
-	| 'attention'
-	| 'bug'
-	| 'caution'
-	| 'check'
-	| 'cite'
-	| 'danger'
-	| 'done'
-	| 'error'
-	| 'example'
-	| 'fail'
-	| 'failure'
-	| 'faq'
-	| 'help'
-	| 'hint'
-	| 'important'
-	| 'info'
-	| 'missing'
-	| 'note'
-	| 'question'
-	| 'quote'
-	| 'success'
-	| 'summary'
-	| 'tip'
-	| 'tldr'
-	| 'todo'
-	| 'warning';
+  | 'abstract'
+  | 'attention'
+  | 'bug'
+  | 'caution'
+  | 'check'
+  | 'cite'
+  | 'danger'
+  | 'done'
+  | 'error'
+  | 'example'
+  | 'fail'
+  | 'failure'
+  | 'faq'
+  | 'help'
+  | 'hint'
+  | 'important'
+  | 'info'
+  | 'missing'
+  | 'note'
+  | 'question'
+  | 'quote'
+  | 'success'
+  | 'summary'
+  | 'tip'
+  | 'tldr'
+  | 'todo'
+  | 'warning';
 ```
 
 ## Determining the Component Properites
@@ -104,23 +104,23 @@ My initial component structure is going to look something like this:
 
 ```svelte
 <script lang="ts">
-	import { Pencil } from 'lucide-svelte';
-	import type { CalloutVariation } from './variations';
+  import { Pencil } from 'lucide-svelte';
+  import type { CalloutVariation } from './variations';
 
-	export let variant: CalloutVariation = 'note';
-	export let title: string = '';
-	export let description: string = '';
-	export let foldable: boolean = false;
+  export let variant: CalloutVariation = 'note';
+  export let title: string = '';
+  export let description: string = '';
+  export let foldable: boolean = false;
 </script>
 
 <div class="rounded-md border border-current bg-blue-50 p-4 text-blue-700 shadow-sm">
-	<div class="mb-2 flex items-center gap-1 leading-tight">
-		<Pencil class="w-4" />
-		<span class="font-bold">{title}</span>
-	</div>
-	<div class="prose">
-		<slot><p>{description}</p></slot>
-	</div>
+  <div class="mb-2 flex items-center gap-1 leading-tight">
+    <Pencil class="w-4" />
+    <span class="font-bold">{title}</span>
+  </div>
+  <div class="prose">
+    <slot><p>{description}</p></slot>
+  </div>
 </div>
 ```
 
@@ -143,18 +143,18 @@ import type { Meta, StoryObj } from '@storybook/svelte';
 import Callout from './callout.svelte';
 
 const meta = {
-	title: 'Components/Callout',
-	component: Callout,
+  title: 'Components/Callout',
+  component: Callout,
 } satisfies Meta<Callout>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-	args: {
-		title: 'An Important Note',
-		description: 'This is a note about something important.',
-	},
+  args: {
+    title: 'An Important Note',
+    description: 'This is a note about something important.',
+  },
 };
 ```
 
@@ -166,33 +166,33 @@ A trick that I commonly use here is to create a constant value and then derive t
 
 ```ts
 export const variations = [
-	'abstract',
-	'attention',
-	'bug',
-	'caution',
-	'check',
-	'cite',
-	'danger',
-	'done',
-	'error',
-	'example',
-	'fail',
-	'failure',
-	'faq',
-	'help',
-	'hint',
-	'important',
-	'info',
-	'missing',
-	'note',
-	'question',
-	'quote',
-	'success',
-	'summary',
-	'tip',
-	'tldr',
-	'todo',
-	'warning',
+  'abstract',
+  'attention',
+  'bug',
+  'caution',
+  'check',
+  'cite',
+  'danger',
+  'done',
+  'error',
+  'example',
+  'fail',
+  'failure',
+  'faq',
+  'help',
+  'hint',
+  'important',
+  'info',
+  'missing',
+  'note',
+  'question',
+  'quote',
+  'success',
+  'summary',
+  'tip',
+  'tldr',
+  'todo',
+  'warning',
 ] as const;
 
 export type CalloutVariation = (typeof variations)[number];
@@ -208,14 +208,14 @@ import Callout from './callout.svelte';
 import { variations } from './variations';
 
 const meta = {
-	title: 'Components/Callout',
-	component: Callout,
-	argTypes: {
-		variant: {
-			control: 'select',
-			options: variations,
-		},
-	},
+  title: 'Components/Callout',
+  component: Callout,
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: variations,
+    },
+  },
 } satisfies Meta<Callout>;
 
 // …the rest of the story…
@@ -259,34 +259,34 @@ First of all, I don't ever want to think about these aliases again. So, I'm goin
 
 ```ts
 const aliases = {
-	summary: 'abstract',
-	tldr: 'abstract',
-	error: 'danger',
-	fail: 'failure',
-	missing: 'failure',
-	faq: 'question',
-	help: 'question',
-	cite: 'quote',
-	check: 'success',
-	done: 'success',
-	hint: 'tip',
-	important: 'tip',
-	attention: 'warning',
-	caution: 'warning',
+  summary: 'abstract',
+  tldr: 'abstract',
+  error: 'danger',
+  fail: 'failure',
+  missing: 'failure',
+  faq: 'question',
+  help: 'question',
+  cite: 'quote',
+  check: 'success',
+  done: 'success',
+  hint: 'tip',
+  important: 'tip',
+  attention: 'warning',
+  caution: 'warning',
 } as const;
 
 const isAlias = (variant: CalloutVariation): variant is keyof typeof aliases => {
-	return variant in aliases;
+  return variant in aliases;
 };
 
 type Alias = keyof typeof aliases;
 type ResolvedVariation = Exclude<CalloutVariation, Alias>;
 
 export const getVariation = (variant: CalloutVariation): ResolvedVariation => {
-	if (isAlias(variant) && variant in aliases) {
-		return aliases[variant];
-	}
-	return variant as ResolvedVariation;
+  if (isAlias(variant) && variant in aliases) {
+    return aliases[variant];
+  }
+  return variant as ResolvedVariation;
 };
 ```
 
@@ -294,24 +294,24 @@ With that solved, I can do something similar with the core variations and the co
 
 ```ts
 const variationColors: Record<ResolvedVariation, string> = {
-	abstract: 'bg-green-50 text-green-700',
-	bug: 'bg-red-50 text-red-700',
-	danger: 'bg-red-50 text-red-700',
-	example: 'bg-purple-50 text-purple-700',
-	failure: 'bg-red-50 text-red-700',
-	info: 'bg-blue-50 text-blue-700',
-	note: 'bg-blue-50 text-blue-700',
-	question: 'bg-orange-50 text-orange-700',
-	quote: 'bg-slate-50 text-slate-700',
-	success: 'bg-green-50 text-green-700',
-	tip: 'bg-green-50 text-green-700',
-	todo: 'bg-blue-50 text-blue-700',
-	warning: 'bg-orange-50 text-orange-700',
+  abstract: 'bg-green-50 text-green-700',
+  bug: 'bg-red-50 text-red-700',
+  danger: 'bg-red-50 text-red-700',
+  example: 'bg-purple-50 text-purple-700',
+  failure: 'bg-red-50 text-red-700',
+  info: 'bg-blue-50 text-blue-700',
+  note: 'bg-blue-50 text-blue-700',
+  question: 'bg-orange-50 text-orange-700',
+  quote: 'bg-slate-50 text-slate-700',
+  success: 'bg-green-50 text-green-700',
+  tip: 'bg-green-50 text-green-700',
+  todo: 'bg-blue-50 text-blue-700',
+  warning: 'bg-orange-50 text-orange-700',
 };
 
 export const getVariationColor = (variation: CalloutVariation): string => {
-	const v = getVariation(variation);
-	return variationColors[v];
+  const v = getVariation(variation);
+  return variationColors[v];
 };
 ```
 
@@ -319,23 +319,23 @@ Now, let's wire all of this into our component in. I _could_ use something like 
 
 ```svelte
 <script lang="ts">
-	import { Pencil } from 'lucide-svelte';
-	import { getVariationColor, type CalloutVariation } from './variations';
+  import { Pencil } from 'lucide-svelte';
+  import { getVariationColor, type CalloutVariation } from './variations';
 
-	export let variant: CalloutVariation = 'note';
-	export let title: string = '';
-	export let description: string = '';
-	export let foldable: boolean = false;
+  export let variant: CalloutVariation = 'note';
+  export let title: string = '';
+  export let description: string = '';
+  export let foldable: boolean = false;
 </script>
 
 <div class="rounded-md border border-current p-4 shadow-sm {getVariationColor(variant)}">
-	<div class="mb-2 flex items-center gap-1 leading-tight">
-		<Pencil class="w-4" />
-		<span class="font-bold">{title}</span>
-	</div>
-	<div class="prose">
-		<slot><p>{description}</p></slot>
-	</div>
+  <div class="mb-2 flex items-center gap-1 leading-tight">
+    <Pencil class="w-4" />
+    <span class="font-bold">{title}</span>
+  </div>
+  <div class="prose">
+    <slot><p>{description}</p></slot>
+  </div>
 </div>
 ```
 
@@ -347,19 +347,19 @@ import Callout from './callout.svelte';
 import { variations } from './variations';
 
 const meta = {
-	title: 'Components/Callout',
-	component: Callout,
-	args: {
-		title: 'This is a Callout',
-		description: 'This is a description of the callout.',
-		foldable: false,
-	},
-	argTypes: {
-		variant: {
-			control: 'select',
-			options: variations,
-		},
-	},
+  title: 'Components/Callout',
+  component: Callout,
+  args: {
+    title: 'This is a Callout',
+    description: 'This is a description of the callout.',
+    foldable: false,
+  },
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: variations,
+    },
+  },
 } satisfies Meta<Callout>;
 
 export default meta;
@@ -368,81 +368,81 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const Abstract: Story = {
-	args: {
-		variant: 'abstract',
-	},
+  args: {
+    variant: 'abstract',
+  },
 };
 
 export const Bug: Story = {
-	args: {
-		variant: 'bug',
-	},
+  args: {
+    variant: 'bug',
+  },
 };
 
 export const Danger: Story = {
-	args: {
-		variant: 'danger',
-	},
+  args: {
+    variant: 'danger',
+  },
 };
 
 export const Example: Story = {
-	args: {
-		variant: 'example',
-	},
+  args: {
+    variant: 'example',
+  },
 };
 
 export const Failure: Story = {
-	args: {
-		variant: 'failure',
-	},
+  args: {
+    variant: 'failure',
+  },
 };
 
 export const Note: Story = {
-	args: {
-		variant: 'note',
-	},
+  args: {
+    variant: 'note',
+  },
 };
 
 export const Info: Story = {
-	args: {
-		variant: 'info',
-	},
+  args: {
+    variant: 'info',
+  },
 };
 
 export const Question: Story = {
-	args: {
-		variant: 'question',
-	},
+  args: {
+    variant: 'question',
+  },
 };
 
 export const Quote: Story = {
-	args: {
-		variant: 'quote',
-	},
+  args: {
+    variant: 'quote',
+  },
 };
 
 export const Success: Story = {
-	args: {
-		variant: 'success',
-	},
+  args: {
+    variant: 'success',
+  },
 };
 
 export const Tip: Story = {
-	args: {
-		variant: 'tip',
-	},
+  args: {
+    variant: 'tip',
+  },
 };
 
 export const Todo: Story = {
-	args: {
-		variant: 'todo',
-	},
+  args: {
+    variant: 'todo',
+  },
 };
 
 export const Warning: Story = {
-	args: {
-		variant: 'warning',
-	},
+  args: {
+    variant: 'warning',
+  },
 };
 ```
 
@@ -457,20 +457,20 @@ Let's import all of our icons and some types to help us work with them.
 ```ts
 import type { ComponentType } from 'svelte';
 import {
-	type Icon,
-	AlertTriangle,
-	Bug,
-	Check,
-	CheckCircle2,
-	ClipboardList,
-	Flame,
-	HelpCircle,
-	Info,
-	List,
-	Pencil,
-	Quote,
-	X,
-	Zap,
+  type Icon,
+  AlertTriangle,
+  Bug,
+  Check,
+  CheckCircle2,
+  ClipboardList,
+  Flame,
+  HelpCircle,
+  Info,
+  List,
+  Pencil,
+  Quote,
+  X,
+  Zap,
 } from 'lucide-svelte';
 ```
 
@@ -478,24 +478,24 @@ Next, we'll define a list a dictionary that associates our variations to our ico
 
 ```ts
 const variationIcons: Record<ResolvedVariation, ComponentType<Icon>> = {
-	abstract: ClipboardList,
-	bug: Bug,
-	danger: Zap,
-	example: List,
-	failure: X,
-	info: Info,
-	note: Pencil,
-	question: HelpCircle,
-	quote: Quote,
-	success: Check,
-	tip: Flame,
-	todo: CheckCircle2,
-	warning: AlertTriangle,
+  abstract: ClipboardList,
+  bug: Bug,
+  danger: Zap,
+  example: List,
+  failure: X,
+  info: Info,
+  note: Pencil,
+  question: HelpCircle,
+  quote: Quote,
+  success: Check,
+  tip: Flame,
+  todo: CheckCircle2,
+  warning: AlertTriangle,
 };
 
 export const getIcon = (variation: CalloutVariation) => {
-	const v = getVariation(variation);
-	return variationIcons[v];
+  const v = getVariation(variation);
+  return variationIcons[v];
 };
 ```
 
@@ -503,22 +503,22 @@ Finally, we'll pull that logic into our component. I'm using `svelte:component` 
 
 ```svelte
 <script lang="ts">
-	import { getVariationColor, getIcon, type CalloutVariation } from './variations';
+  import { getVariationColor, getIcon, type CalloutVariation } from './variations';
 
-	export let variant: CalloutVariation = 'note';
-	export let title: string = '';
-	export let description: string = '';
-	export let foldable: boolean = false;
+  export let variant: CalloutVariation = 'note';
+  export let title: string = '';
+  export let description: string = '';
+  export let foldable: boolean = false;
 </script>
 
 <div class="rounded-md border border-current p-4 shadow-sm {getVariationColor(variant)}">
-	<div class="mb-2 flex items-center gap-1 leading-tight">
-		<svelte:component this={getIcon(variant)} class="w-4" />
-		<span class="font-bold">{title}</span>
-	</div>
-	<div class="prose">
-		<slot><p>{description}</p></slot>
-	</div>
+  <div class="mb-2 flex items-center gap-1 leading-tight">
+    <svelte:component this={getIcon(variant)} class="w-4" />
+    <span class="font-bold">{title}</span>
+  </div>
+  <div class="prose">
+    <slot><p>{description}</p></slot>
+  </div>
 </div>
 ```
 
@@ -528,7 +528,7 @@ Obsidian's callouts will let you omit a title and use the name of the variation 
 
 ```ts
 export const capitalize = (str: string): string => {
-	return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 ```
 
@@ -536,13 +536,13 @@ And now, we can set a default value for our title based on the variant.
 
 ```svelte
 <script lang="ts">
-	import { sentenceCase } from 'change-case';
-	import { getVariationColor, getIcon, type CalloutVariation } from './variations';
+  import { sentenceCase } from 'change-case';
+  import { getVariationColor, getIcon, type CalloutVariation } from './variations';
 
-	export let variant: CalloutVariation = 'note';
-	export let title: string = sentenceCase(variant);
-	export let description: string = '';
-	export let foldable: boolean = false;
+  export let variant: CalloutVariation = 'note';
+  export let title: string = sentenceCase(variant);
+  export let description: string = '';
+  export let foldable: boolean = false;
 </script>
 ```
 
@@ -550,19 +550,19 @@ And now, I think I'll remove the title as a default argument in the stories.
 
 ```ts
 const meta = {
-	title: 'Components/Callout',
-	component: Callout,
-	args: {
-		// title: 'This is a Callout', ❌ Remove this!
-		description: 'This is a description of the callout.',
-		foldable: false,
-	},
-	argTypes: {
-		variant: {
-			control: 'select',
-			options: variations,
-		},
-	},
+  title: 'Components/Callout',
+  component: Callout,
+  args: {
+    // title: 'This is a Callout', ❌ Remove this!
+    description: 'This is a description of the callout.',
+    foldable: false,
+  },
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: variations,
+    },
+  },
 } satisfies Meta<Callout>;
 ```
 
@@ -570,9 +570,9 @@ We'll also add an additional story that _does_ set the title.
 
 ```ts
 export const WithTitle: Story = {
-	args: {
-		title: 'An Important Callout',
-	},
+  args: {
+    title: 'An Important Callout',
+  },
 };
 ```
 
@@ -582,10 +582,10 @@ If we just don't pass in a `description` slot, then it doesn't look too bad, but
 
 ```ts
 export const WithoutDescription: Story = {
-	args: {
-		title: 'An Important Callout',
-		description: undefined,
-	},
+  args: {
+    title: 'An Important Callout',
+    description: undefined,
+  },
 };
 ```
 
@@ -595,25 +595,25 @@ We'll only render that additional `div` with the description if there is either 
 
 ```svelte
 <script lang="ts">
-	import { sentenceCase } from 'change-case';
-	import { getVariationColor, getIcon, type CalloutVariation } from './variations';
+  import { sentenceCase } from 'change-case';
+  import { getVariationColor, getIcon, type CalloutVariation } from './variations';
 
-	export let variant: CalloutVariation = 'note';
-	export let title: string = sentenceCase(variant);
-	export let description: string = '';
-	export let foldable: boolean = false;
+  export let variant: CalloutVariation = 'note';
+  export let title: string = sentenceCase(variant);
+  export let description: string = '';
+  export let foldable: boolean = false;
 </script>
 
 <div class="space-y-2 rounded-md border border-current p-4 shadow-sm {getVariationColor(variant)}">
-	<div class="flex items-center gap-1 leading-tight">
-		<svelte:component this={getIcon(variant)} class="w-4" />
-		<span class="font-bold">{title}</span>
-	</div>
-	{#if $$slots.default || description}
-		<div class="prose">
-			<slot><p>{description}</p></slot>
-		</div>
-	{/if}
+  <div class="flex items-center gap-1 leading-tight">
+    <svelte:component this={getIcon(variant)} class="w-4" />
+    <span class="font-bold">{title}</span>
+  </div>
+  {#if $$slots.default || description}
+    <div class="prose">
+      <slot><p>{description}</p></slot>
+    </div>
+  {/if}
 </div>
 ```
 
@@ -627,9 +627,9 @@ Looking at Obsidian's implementation, they're just taking Lucide's `chevron-down
 
 ```ts
 export const Foldable: Story = {
-	args: {
-		foldable: true,
-	},
+  args: {
+    foldable: true,
+  },
 };
 ```
 
@@ -645,36 +645,36 @@ This is what I wrote for my first draft.
 
 ```svelte
 <script lang="ts">
-	import { ChevronDown } from 'lucide-svelte';
-	import { sentenceCase } from 'change-case';
-	import { getVariationColor, getIcon, type CalloutVariation } from './variations';
+  import { ChevronDown } from 'lucide-svelte';
+  import { sentenceCase } from 'change-case';
+  import { getVariationColor, getIcon, type CalloutVariation } from './variations';
 
-	export let variant: CalloutVariation = 'note';
-	export let title: string = sentenceCase(variant);
-	export let description: string = '';
-	export let foldable: boolean = false;
+  export let variant: CalloutVariation = 'note';
+  export let title: string = sentenceCase(variant);
+  export let description: string = '';
+  export let foldable: boolean = false;
 
-	let open = !foldable;
+  let open = !foldable;
 </script>
 
 <div class="space-y-2 rounded-md border border-current p-4 shadow-sm {getVariationColor(variant)}">
-	<!-- Use a label element to make the entire region clickable -->
-	<label class="flex items-center gap-1 leading-tight text-current">
-		<input type="checkbox" bind:checked={open} class="peer hidden" />
-		<!-- Hidden checkbox -->
-		<svelte:component this={getIcon(variant)} class="w-4" />
-		<span class="font-bold">{title}</span>
-		{#if foldable}
-			<!-- Use Tailwind's `peer` variant to control the rotation of the checkbox -->
-			<ChevronDown class="ml-auto w-4 -rotate-90 transition-transform peer-checked:rotate-0 " />
-		{/if}
-	</label>
-	{#if $$slots.default || description}
-		<!-- Hide the description unless the callout is in an open state -->
-		<div class="prose" class:hidden={!open}>
-			<slot><p>{description}</p></slot>
-		</div>
-	{/if}
+  <!-- Use a label element to make the entire region clickable -->
+  <label class="flex items-center gap-1 leading-tight text-current">
+    <input type="checkbox" bind:checked={open} class="peer hidden" />
+    <!-- Hidden checkbox -->
+    <svelte:component this={getIcon(variant)} class="w-4" />
+    <span class="font-bold">{title}</span>
+    {#if foldable}
+      <!-- Use Tailwind's `peer` variant to control the rotation of the checkbox -->
+      <ChevronDown class="ml-auto w-4 -rotate-90 transition-transform peer-checked:rotate-0 " />
+    {/if}
+  </label>
+  {#if $$slots.default || description}
+    <!-- Hide the description unless the callout is in an open state -->
+    <div class="prose" class:hidden={!open}>
+      <slot><p>{description}</p></slot>
+    </div>
+  {/if}
 </div>
 ```
 

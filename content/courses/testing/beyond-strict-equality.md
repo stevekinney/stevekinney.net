@@ -14,29 +14,29 @@ This works like we expect for simple types:
 
 ```ts
 test('strings should be strictly equal', () => {
-	expect('string').toBe('string');
+  expect('string').toBe('string');
 });
 
 test('numbers should be strictly equal', () => {
-	expect(2).toBe(2);
+  expect(2).toBe(2);
 });
 
 test('booleans should be strictly equal', () => {
-	expect(true).toBe(true);
+  expect(true).toBe(true);
 
-	expect(false).toBe(false);
+  expect(false).toBe(false);
 });
 
 test('undefined should be strictly equal to itself', () => {
-	expect(undefined).toBe(undefined);
+  expect(undefined).toBe(undefined);
 });
 
 test('null should be strictly equal to itself', () => {
-	expect(null).toBe(null);
+  expect(null).toBe(null);
 });
 
 test('BigInts should be strickly equal', () => {
-	expect(BigInt(Number.MAX_SAFE_INTEGER)).toBe(BigInt(Number.MAX_SAFE_INTEGER));
+  expect(BigInt(Number.MAX_SAFE_INTEGER)).toBe(BigInt(Number.MAX_SAFE_INTEGER));
 });
 ```
 
@@ -44,17 +44,17 @@ But, things get a little trickier when comparing objects (arrays _and_ functions
 
 ```ts
 describe('toBe', () => {
-	test.fails('objects should not be strictly equal', () => {
-		expect({ a: 1 }).toBe({ a: 1 });
-	});
+  test.fails('objects should not be strictly equal', () => {
+    expect({ a: 1 }).toBe({ a: 1 });
+  });
 
-	test.fails('arrays should be strictly equal', () => {
-		expect([1, 2, 3]).toBe([1, 2, 3]);
-	});
+  test.fails('arrays should be strictly equal', () => {
+    expect([1, 2, 3]).toBe([1, 2, 3]);
+  });
 
-	test.fails('functions should to be strictly equal', () => {
-		expect(() => {}).toBe(() => {});
-	});
+  test.fails('functions should to be strictly equal', () => {
+    expect(() => {}).toBe(() => {});
+  });
 });
 ```
 
@@ -64,13 +64,13 @@ Consider this function:
 
 ```javascript
 export const generateFibonacci = (n) => {
-	const sequence = [0, 1];
+  const sequence = [0, 1];
 
-	for (let i = 2; i < n; i++) {
-		sequence[i] = sequence[i - 1] + sequence[i - 2];
-	}
+  for (let i = 2; i < n; i++) {
+    sequence[i] = sequence[i - 1] + sequence[i - 2];
+  }
 
-	return sequence;
+  return sequence;
 };
 ```
 
@@ -78,8 +78,8 @@ This seems like something I'd like to test, right? Here is the issue, this other
 
 ```javascript
 it('should generate fibonacci sequence', () => {
-	const fibonacci = generateFibonacci(10);
-	expect(fibonacci).toBe([0, 1, 1, 2, 3, 5, 8, 13, 21, 34]);
+  const fibonacci = generateFibonacci(10);
+  expect(fibonacci).toBe([0, 1, 1, 2, 3, 5, 8, 13, 21, 34]);
 });
 ```
 
@@ -92,26 +92,26 @@ Let's look at another example:
 
 ```ts
 describe('toEqual', () => {
-	test('similar objects should pass with #toEqual', () => {
-		expect({ a: 1 }).toEqual({ a: 1 });
-	});
+  test('similar objects should pass with #toEqual', () => {
+    expect({ a: 1 }).toEqual({ a: 1 });
+  });
 
-	test('similar nested objects should pass with #toEqual', () => {
-		expect({ a: 1, b: { c: 2 } }).toEqual({ a: 1, b: { c: 2 } });
-	});
+  test('similar nested objects should pass with #toEqual', () => {
+    expect({ a: 1, b: { c: 2 } }).toEqual({ a: 1, b: { c: 2 } });
+  });
 
-	test('similar arrays should pass with #toEqual', () => {
-		expect([1, 2, 3]).toEqual([1, 2, 3]);
-	});
+  test('similar arrays should pass with #toEqual', () => {
+    expect([1, 2, 3]).toEqual([1, 2, 3]);
+  });
 
-	test('similar multi-dimensional arrays should pass with #toEqual', () => {
-		expect([1, [2, 3]]).toEqual([1, [2, 3]]);
-	});
+  test('similar multi-dimensional arrays should pass with #toEqual', () => {
+    expect([1, [2, 3]]).toEqual([1, [2, 3]]);
+  });
 
-	test('functions should to be strictly equal if compared by reference', () => {
-		const fn = () => {};
-		expect(fn).toBe(fn);
-	});
+  test('functions should to be strictly equal if compared by reference', () => {
+    const fn = () => {};
+    expect(fn).toBe(fn);
+  });
 });
 ```
 
@@ -126,33 +126,33 @@ Here are some tests that you can review that might help clarify the difference. 
 
 ```javascript
 class Person {
-	constructor(name) {
-		this.name = name;
-	}
+  constructor(name) {
+    this.name = name;
+  }
 }
 
 test('objects with the same properties are equal', () => {
-	expect({ a: 1, b: 2 }).toEqual({ a: 1, b: 2 });
+  expect({ a: 1, b: 2 }).toEqual({ a: 1, b: 2 });
 });
 
 test('objects with different properties are not equal', () => {
-	expect({ a: 1, b: 2 }).not.toEqual({ a: 1, b: 3 });
+  expect({ a: 1, b: 2 }).not.toEqual({ a: 1, b: 3 });
 });
 
 test('objects with undefined properties are equal to objects without those properties', () => {
-	expect({ a: 1 }).toEqual({ a: 1, b: undefined });
+  expect({ a: 1 }).toEqual({ a: 1, b: undefined });
 });
 
 test('objects with undefined properties are *not* strictly equal to objects without those properties', () => {
-	expect({ a: 1 }).not.toStrictEqual({ a: 1, b: undefined });
+  expect({ a: 1 }).not.toStrictEqual({ a: 1, b: undefined });
 });
 
 test('instances are equal to object literals with the same properties', () => {
-	expect(new Person('Alice')).toEqual({ name: 'Alice' });
+  expect(new Person('Alice')).toEqual({ name: 'Alice' });
 });
 
 test('instances are not strictly equal to object literals with the same properties', () => {
-	expect(new Person('Alice')).not.toStrictEqual({ name: 'Alice' });
+  expect(new Person('Alice')).not.toStrictEqual({ name: 'Alice' });
 });
 ```
 

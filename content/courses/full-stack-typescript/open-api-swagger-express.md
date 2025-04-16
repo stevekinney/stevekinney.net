@@ -1,6 +1,10 @@
 ---
 title: Type-Safe APIs with OpenAPI and TypeScript
-modified: 2025-03-15T16:00:00-06:00
+modified: 2025-03-15T22:00:00.000Z
+description: >-
+  Learn to create type-safe APIs with OpenAPI and TypeScript. Define APIs,
+  generate TypeScript types, and integrate them with Express for consistent,
+  error-free development.
 ---
 
 OpenAPI (formerly Swagger) provides a powerful way to define and document your API contracts. Integrating it with TypeScript ensures type safety and consistency across your application. This guide walks you through defining your API using OpenAPI, generating TypeScript types, and using them within your Express application.
@@ -113,78 +117,78 @@ This command generates `src/types/api.d.ts`, containing TypeScript types corresp
 
 ```typescript
 export interface User {
-	id?: string;
-	username?: string;
-	email?: string;
+  id?: string;
+  username?: string;
+  email?: string;
 }
 
 export interface CreateUserRequest {
-	username?: string;
-	email?: string;
+  username?: string;
+  email?: string;
 }
 
 export interface paths {
-	'/users': {
-		get: {
-			parameters: {
-				query?: {
-					query?: string;
-					page?: number;
-				};
-			};
-			responses: {
-				'200': {
-					content: {
-						'application/json': components['schemas']['User'][];
-					};
-				};
-			};
-		};
-		post: {
-			requestBody: {
-				content: {
-					'application/json': components['schemas']['CreateUserRequest'];
-				};
-			};
-			responses: {
-				'201': {
-					content: {
-						'application/json': components['schemas']['User'];
-					};
-				};
-			};
-		};
-	};
-	'/users/{userId}': {
-		get: {
-			parameters: {
-				path: {
-					userId: string;
-				};
-			};
-			responses: {
-				'200': {
-					content: {
-						'application/json': components['schemas']['User'];
-					};
-				};
-			};
-		};
-	};
+  '/users': {
+    get: {
+      parameters: {
+        query?: {
+          query?: string;
+          page?: number;
+        };
+      };
+      responses: {
+        '200': {
+          content: {
+            'application/json': components['schemas']['User'][];
+          };
+        };
+      };
+    };
+    post: {
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['CreateUserRequest'];
+        };
+      };
+      responses: {
+        '201': {
+          content: {
+            'application/json': components['schemas']['User'];
+          };
+        };
+      };
+    };
+  };
+  '/users/{userId}': {
+    get: {
+      parameters: {
+        path: {
+          userId: string;
+        };
+      };
+      responses: {
+        '200': {
+          content: {
+            'application/json': components['schemas']['User'];
+          };
+        };
+      };
+    };
+  };
 }
 
 export interface components {
-	schemas: {
-		User: {
-			id?: string;
-			username?: string;
-			email?: string;
-		};
-		CreateUserRequest: {
-			username?: string;
-			email?: string;
-		};
-	};
+  schemas: {
+    User: {
+      id?: string;
+      username?: string;
+      email?: string;
+    };
+    CreateUserRequest: {
+      username?: string;
+      email?: string;
+    };
+  };
 }
 ```
 
@@ -201,66 +205,66 @@ app.use(express.json());
 
 // Example route handler
 app.get(
-	'/users',
-	(
-		req: Request<
-			{},
-			paths['/users']['get']['responses']['200']['content']['application/json'],
-			{},
-			paths['/users']['get']['parameters']['query']
-		>,
-		res: Response<paths['/users']['get']['responses']['200']['content']['application/json']>,
-	) => {
-		// Access typed query parameters
-		const query = req.query.query;
-		const page = req.query.page;
-		// ... your logic
-		const users: paths['/users']['get']['responses']['200']['content']['application/json'] = [
-			{ id: '1', username: 'john', email: 'john@example.com' },
-		];
-		res.json(users);
-	},
+  '/users',
+  (
+    req: Request<
+      {},
+      paths['/users']['get']['responses']['200']['content']['application/json'],
+      {},
+      paths['/users']['get']['parameters']['query']
+    >,
+    res: Response<paths['/users']['get']['responses']['200']['content']['application/json']>,
+  ) => {
+    // Access typed query parameters
+    const query = req.query.query;
+    const page = req.query.page;
+    // ... your logic
+    const users: paths['/users']['get']['responses']['200']['content']['application/json'] = [
+      { id: '1', username: 'john', email: 'john@example.com' },
+    ];
+    res.json(users);
+  },
 );
 
 app.post(
-	'/users',
-	(
-		req: Request<
-			{},
-			paths['/users']['post']['responses']['201']['content']['application/json'],
-			paths['/users']['post']['requestBody']['content']['application/json']
-		>,
-		res: Response<paths['/users']['post']['responses']['201']['content']['application/json']>,
-	) => {
-		// Access typed request body
-		const { username, email } = req.body;
-		// ... your logic
-		const user: paths['/users']['post']['responses']['201']['content']['application/json'] = {
-			id: '2',
-			username: username,
-			email: email,
-		};
-		res.status(201).json(user);
-	},
+  '/users',
+  (
+    req: Request<
+      {},
+      paths['/users']['post']['responses']['201']['content']['application/json'],
+      paths['/users']['post']['requestBody']['content']['application/json']
+    >,
+    res: Response<paths['/users']['post']['responses']['201']['content']['application/json']>,
+  ) => {
+    // Access typed request body
+    const { username, email } = req.body;
+    // ... your logic
+    const user: paths['/users']['post']['responses']['201']['content']['application/json'] = {
+      id: '2',
+      username: username,
+      email: email,
+    };
+    res.status(201).json(user);
+  },
 );
 
 app.get(
-	'/users/:userId',
-	(
-		req: Request<
-			paths['/users/{userId}']['get']['parameters']['path'],
-			paths['/users/{userId}']['get']['responses']['200']['content']['application/json']
-		>,
-		res: Response<
-			paths['/users/{userId}']['get']['responses']['200']['content']['application/json']
-		>,
-	) => {
-		const userId = req.params.userId;
-		// ... your logic
-		const user: paths['/users/{userId}']['get']['responses']['200']['content']['application/json'] =
-			{ id: userId, username: 'john', email: 'john@example.com' };
-		res.json(user);
-	},
+  '/users/:userId',
+  (
+    req: Request<
+      paths['/users/{userId}']['get']['parameters']['path'],
+      paths['/users/{userId}']['get']['responses']['200']['content']['application/json']
+    >,
+    res: Response<
+      paths['/users/{userId}']['get']['responses']['200']['content']['application/json']
+    >,
+  ) => {
+    const userId = req.params.userId;
+    // ... your logic
+    const user: paths['/users/{userId}']['get']['responses']['200']['content']['application/json'] =
+      { id: userId, username: 'john', email: 'john@example.com' };
+    res.json(user);
+  },
 );
 
 // ... other routes

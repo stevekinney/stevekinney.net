@@ -12,14 +12,14 @@ All that we need to do is add the following to the `Meta` of our story.
 
 ```ts
 const meta: Meta<typeof Button> = {
-	title: 'Button',
-	component: Button,
-	argTypes: {
-		disabled: {
-			control: 'boolean',
-			description: 'Disables the button',
-		},
-	},
+  title: 'Button',
+  component: Button,
+  argTypes: {
+    disabled: {
+      control: 'boolean',
+      description: 'Disables the button',
+    },
+  },
 };
 ```
 
@@ -31,27 +31,27 @@ We have to click on it in order to set it. If we don't want to do that, we can s
 
 ```ts
 export const Primary: Story = {
-	args: {
-		children: 'Button',
-		variant: 'primary',
-		disabled: false,
-	},
+  args: {
+    children: 'Button',
+    variant: 'primary',
+    disabled: false,
+  },
 };
 
 export const Secondary: Story = {
-	args: {
-		children: 'Button',
-		variant: 'secondary',
-		disabled: false,
-	},
+  args: {
+    children: 'Button',
+    variant: 'secondary',
+    disabled: false,
+  },
 };
 
 export const Destructive: Story = {
-	args: {
-		children: 'Button',
-		variant: 'destructive',
-		disabled: false,
-	},
+  args: {
+    children: 'Button',
+    variant: 'destructive',
+    disabled: false,
+  },
 };
 ```
 
@@ -65,25 +65,25 @@ One of the cool things about Storybook stories is that they're just ES Modules. 
 
 ```ts
 export const Primary: Story = {
-	args: {
-		children: 'Button',
-		variant: 'primary',
-		disabled: false,
-	},
+  args: {
+    children: 'Button',
+    variant: 'primary',
+    disabled: false,
+  },
 };
 
 export const Secondary: Story = {
-	args: {
-		...Primary.args,
-		variant: 'secondary',
-	},
+  args: {
+    ...Primary.args,
+    variant: 'secondary',
+  },
 };
 
 export const Destructive: Story = {
-	args: {
-		...Primary.args,
-		variant: 'destructive',
-	},
+  args: {
+    ...Primary.args,
+    variant: 'destructive',
+  },
 };
 ```
 

@@ -8,7 +8,7 @@ If you need real-time updates (like for chat or notifications), tRPC supports su
 
 ```ts
 onNewUser: publicProcedure.subscription(() => {
-	// Return a subscription that emits whenever a new user is created
+  // Return a subscription that emits whenever a new user is created
 });
 ```
 
@@ -16,8 +16,8 @@ Then on the client:
 
 ```ts
 client.user.onNewUser.subscribe(undefined, {
-	next(data) {
-		console.log('New user:', data);
-	},
+  next(data) {
+    console.log('New user:', data);
+  },
 });
 ```

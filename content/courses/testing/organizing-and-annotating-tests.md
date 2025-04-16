@@ -75,13 +75,13 @@ Organize tests around specific functionalities or features.
 
 ```javascript
 describe('Math Utilities', () => {
-	test('adds numbers correctly', () => {
-		// Test code
-	});
+  test('adds numbers correctly', () => {
+    // Test code
+  });
 
-	test('multiplies numbers correctly', () => {
-		// Test code
-	});
+  test('multiplies numbers correctly', () => {
+    // Test code
+  });
 });
 ```
 
@@ -91,21 +91,21 @@ For complex modules, nesting can mirror the application's structure.
 
 ```javascript
 describe('User Module', () => {
-	describe('Authentication', () => {
-		test('successfully logs in with valid credentials', () => {
-			// Test code
-		});
+  describe('Authentication', () => {
+    test('successfully logs in with valid credentials', () => {
+      // Test code
+    });
 
-		test('fails to log in with invalid credentials', () => {
-			// Test code
-		});
-	});
+    test('fails to log in with invalid credentials', () => {
+      // Test code
+    });
+  });
 
-	describe('Profile Management', () => {
-		test('updates user profile', () => {
-			// Test code
-		});
-	});
+  describe('Profile Management', () => {
+    test('updates user profile', () => {
+      // Test code
+    });
+  });
 });
 ```
 
@@ -115,11 +115,11 @@ Names should clearly state what is being tested.
 
 ```javascript
 describe('Array', () => {
-	describe('push', () => {
-		test('adds an element to the end of the array', () => {
-			// Test code
-		});
-	});
+  describe('push', () => {
+    test('adds an element to the end of the array', () => {
+      // Test code
+    });
+  });
 });
 ```
 
@@ -129,21 +129,21 @@ Use `beforeEach`, `afterEach`, `beforeAll`, and `afterAll` to manage setup and t
 
 ```javascript
 describe('Database Tests', () => {
-	beforeAll(() => {
-		// Connect to database
-	});
+  beforeAll(() => {
+    // Connect to database
+  });
 
-	afterAll(() => {
-		// Disconnect from database
-	});
+  afterAll(() => {
+    // Disconnect from database
+  });
 
-	beforeEach(() => {
-		// Seed database
-	});
+  beforeEach(() => {
+    // Seed database
+  });
 
-	test('fetches a record successfully', () => {
-		// Test code
-	});
+  test('fetches a record successfully', () => {
+    // Test code
+  });
 });
 ```
 
@@ -153,13 +153,13 @@ Each test should focus on a single aspect, and tests within a `describe` block s
 
 ```javascript
 describe('String Manipulation', () => {
-	test('converts string to uppercase', () => {
-		// Test code
-	});
+  test('converts string to uppercase', () => {
+    // Test code
+  });
 
-	test('trims whitespace from string', () => {
-		// Test code
-	});
+  test('trims whitespace from string', () => {
+    // Test code
+  });
 });
 ```
 
@@ -170,20 +170,20 @@ Too much nesting can make tests hard to read. Keep the structure as flat as poss
 ```javascript
 // Instead of deeply nested describes
 describe('Module A', () => {
-	describe('Component B', () => {
-		describe('Function C', () => {
-			test('performs action X', () => {
-				// Test code
-			});
-		});
-	});
+  describe('Component B', () => {
+    describe('Function C', () => {
+      test('performs action X', () => {
+        // Test code
+      });
+    });
+  });
 });
 
 // Prefer a flatter structure
 describe('Component B - Function C', () => {
-	test('performs action X', () => {
-		// Test code
-	});
+  test('performs action X', () => {
+    // Test code
+  });
 });
 ```
 
@@ -193,17 +193,17 @@ Group tests that share the same setup or context.
 
 ```javascript
 describe('When user is authenticated', () => {
-	beforeEach(() => {
-		// Mock authentication
-	});
+  beforeEach(() => {
+    // Mock authentication
+  });
 
-	test('accesses protected route', () => {
-		// Test code
-	});
+  test('accesses protected route', () => {
+    // Test code
+  });
 
-	test('sees personalized content', () => {
-		// Test code
-	});
+  test('sees personalized content', () => {
+    // Test code
+  });
 });
 ```
 
@@ -216,11 +216,11 @@ Focus on specific test suites without running the entire test suite.
 
 ```javascript
 describe.only('Critical Functionality Tests', () => {
-	// Tests to focus on
+  // Tests to focus on
 });
 
 describe.skip('Deprecated Functionality Tests', () => {
-	// Tests to skip
+  // Tests to skip
 });
 ```
 
@@ -232,10 +232,10 @@ Add comments to explain non-obvious tests or setups within `describe` blocks.
 
 ```javascript
 describe('Edge Cases for Date Parsing', () => {
-	// Tests for leap years and time zones
-	test('correctly parses leap day', () => {
-		// Test code
-	});
+  // Tests for leap years and time zones
+  test('correctly parses leap day', () => {
+    // Test code
+  });
 });
 ```
 

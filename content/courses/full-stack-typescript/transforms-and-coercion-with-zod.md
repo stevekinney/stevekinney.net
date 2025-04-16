@@ -10,11 +10,11 @@ Sometimes you want a transform: say you accept a `string` but store it as a `Dat
 
 ```ts
 const dateSchema = z
-	.string()
-	.refine((val) => !isNaN(new Date(val).valueOf()), {
-		message: 'Invalid date string',
-	})
-	.transform((val) => new Date(val));
+  .string()
+  .refine((val) => !isNaN(new Date(val).valueOf()), {
+    message: 'Invalid date string',
+  })
+  .transform((val) => new Date(val));
 
 // Now your run-of-the-mill string is validated and transformed into a Date object
 const date: Date = dateSchema.parse('2025-03-20');
@@ -33,9 +33,9 @@ import { z } from 'zod';
 
 // Start with a string
 const pipeline = z
-	.string()
-	.transform((val) => val.trim()) // first transform
-	.transform((trimmed) => trimmed.toUpperCase()); // second transform
+  .string()
+  .transform((val) => val.trim()) // first transform
+  .transform((trimmed) => trimmed.toUpperCase()); // second transform
 
 // " hello " -> "hello" -> "HELLO"
 pipeline.parse('  hello  ');

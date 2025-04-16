@@ -63,21 +63,21 @@ We're going to create a `VectorDatabase` class to encapsulate our logic. I'm goi
 
 ```typescript
 export class VectorDatabasse {
-	private pinecone: Pinecone;
-	private openai: OpenAI;
+  private pinecone: Pinecone;
+  private openai: OpenAI;
 
-	private readonly indexName = 'recipes';
-	private readonly dimension = 1536; // OpenAI's ada-002 embedding dimension
-	private readonly metric = 'cosine'; // OpenAI's ada-002 embedding metric
+  private readonly indexName = 'recipes';
+  private readonly dimension = 1536; // OpenAI's ada-002 embedding dimension
+  private readonly metric = 'cosine'; // OpenAI's ada-002 embedding metric
 
-	constructor() {
-		/** Instantiate an instance of the Pinecone SDK.  */
-		this.pinecone = new Pinecone({ apiKey: PINECONE_API_KEY! });
-		/** Instantiate an instance of the OpenAI SDK.  */
-		this.openai = new OpenAI({ apiKey: OPEN_AI_API_KEY! });
-	}
+  constructor() {
+    /** Instantiate an instance of the Pinecone SDK.  */
+    this.pinecone = new Pinecone({ apiKey: PINECONE_API_KEY! });
+    /** Instantiate an instance of the OpenAI SDK.  */
+    this.openai = new OpenAI({ apiKey: OPEN_AI_API_KEY! });
+  }
 
-	// ... More to come ...
+  // ... More to come ...
 }
 ```
 
@@ -137,20 +137,20 @@ The first one, `generateEmbedding` is going to use Open AI in order to take a gi
 
 ```typescript
 export class VectorDatabase {
-	// ... Previous code ...
+  // ... Previous code ...
 
-	/**
-	 * Generate embeddings using OpenAI's API.
-	 * @returns A vector representation of the text.
-	 */
-	async generateEmbedding(text: string): Promise<number[]> {
-		const response = await this.openai.embeddings.create({
-			model: 'text-embedding-ada-002',
-			input: text,
-		});
+  /**
+   * Generate embeddings using OpenAI's API.
+   * @returns A vector representation of the text.
+   */
+  async generateEmbedding(text: string): Promise<number[]> {
+    const response = await this.openai.embeddings.create({
+      model: 'text-embedding-ada-002',
+      input: text,
+    });
 
-		return response.data[0].embedding;
-	}
+    return response.data[0].embedding;
+  }
 }
 ```
 
@@ -158,23 +158,23 @@ We'll use `this.generateEmbedding` for both storing our documents and then also 
 
 ```typescript
 export class VectorDatabase {
-	// ... Previous code ...
+  // ... Previous code ...
 
-	async indexDocument(document: Recipe) {
-		const index = await this.getIndex();
-		const embedding = await this.generateEmbedding(document.content);
+  async indexDocument(document: Recipe) {
+    const index = await this.getIndex();
+    const embedding = await this.generateEmbedding(document.content);
 
-		await index.upsert([
-			{
-				id: document.id,
-				values: embedding,
-				metadata: {
-					title: document.title,
-					content: document.content,
-				},
-			},
-		]);
-	}
+    await index.upsert([
+      {
+        id: document.id,
+        values: embedding,
+        metadata: {
+          title: document.title,
+          content: document.content,
+        },
+      },
+    ]);
+  }
 }
 ```
 
@@ -184,38 +184,38 @@ Finally, we need to figure out how to search the vector database to get content 
 
 ```typescript
 export class VectorDatabase {
-	// ... Previous code ...
+  // ... Previous code ...
 
-	/**
-	 * Search the vector database for content that matches the query.
-	 */
-	async semanticSearch(
-		/**
-		 * A string that will be turned into an embedding and used to query the
-		 * vector database.
-		 */
-		query: string,
-		/** The number of results to return. Maximum: 10,000. */
-		topK: number = 3,
-	) {
-		// Generate embedding for the search query.
-		const vector = await this.generateEmbedding(query);
-		const index = await this.getIndex();
+  /**
+   * Search the vector database for content that matches the query.
+   */
+  async semanticSearch(
+    /**
+     * A string that will be turned into an embedding and used to query the
+     * vector database.
+     */
+    query: string,
+    /** The number of results to return. Maximum: 10,000. */
+    topK: number = 3,
+  ) {
+    // Generate embedding for the search query.
+    const vector = await this.generateEmbedding(query);
+    const index = await this.getIndex();
 
-		// Search for similar vectors
-		const searchResults = await index.query({
-			vector,
-			topK,
-			includeMetadata: true,
-		});
+    // Search for similar vectors
+    const searchResults = await index.query({
+      vector,
+      topK,
+      includeMetadata: true,
+    });
 
-		return searchResults.matches.map((match) => ({
-			id: match.id,
-			title: match.metadata?.title,
-			content: match.metadata?.content.toString().slice(0, 50) + '…',
-			score: match.score,
-		}));
-	}
+    return searchResults.matches.map((match) => ({
+      id: match.id,
+      title: match.metadata?.title,
+      content: match.metadata?.content.toString().slice(0, 50) + '…',
+      score: match.score,
+    }));
+  }
 }
 ```
 
@@ -228,8 +228,8 @@ const database = new VectorDatabase();
 
 // Comment this out if you've already stored the recipes in the database.
 for (const recipe of recipes) {
-	console.log(chalk.blue('Indexing recipe:'), recipe.title);
-	await database.indexDocument(recipe);
+  console.log(chalk.blue('Indexing recipe:'), recipe.title);
+  await database.indexDocument(recipe);
 }
 
 const searchResults = await database.semanticSearch('recipes with ice cream');
