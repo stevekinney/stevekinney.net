@@ -1,5 +1,9 @@
 ---
-modified: 2025-03-15T15:17:08-06:00
+modified: 2025-03-15T21:17:08.000Z
+description: >-
+  Learn how to use a type-safe wrapper in Express to handle asynchronous route
+  handlers and ensure errors are correctly managed.
+title: '"Type-Safe Async Error Handling in Express Routes"'
 ---
 
 Express doesn't natively handle promises, which can lead to unhandled rejections. A type-safe wrapper helps:

@@ -1,6 +1,10 @@
 ---
-modified: 2025-03-15T14:48:12-06:00
+modified: 2025-03-15T20:48:12.000Z
 title: Structuring Zod Schemas Efficiently
+description: >-
+  Explore Zod schema structuring tips, focusing on modularization, reuse, type
+  inference, composition, and naming for efficient schema management and
+  maintainable application architecture.
 ---
 
 ## Modularize schemas by domain

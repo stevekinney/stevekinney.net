@@ -1,6 +1,10 @@
 ---
 title: Type-Safe APIs with OpenAPI and TypeScript
-modified: 2025-03-15T16:00:00-06:00
+modified: 2025-03-15T22:00:00.000Z
+description: >-
+  Learn to create type-safe APIs with OpenAPI and TypeScript. Define APIs,
+  generate TypeScript types, and integrate them with Express for consistent,
+  error-free development.
 ---
 
 OpenAPI (formerly Swagger) provides a powerful way to define and document your API contracts. Integrating it with TypeScript ensures type safety and consistency across your application. This guide walks you through defining your API using OpenAPI, generating TypeScript types, and using them within your Express application.

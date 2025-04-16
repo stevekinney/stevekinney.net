@@ -1,5 +1,8 @@
 ---
 title: Generating Zod Schemas from OpenAPI
+description: >-
+  Learn how to use `orval` to generate Zod schemas from OpenAPI specifications,
+  enhancing type safety and productivity in your projects.
 ---
 
 We can use a tool called [`orval`](https://npm.im/orval) to generate Zod schemas from an OpenAPI specification. We can configure Orval like so:

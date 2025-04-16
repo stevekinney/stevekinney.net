@@ -1,6 +1,10 @@
 ---
 title: Validating Request Parameters
-modified: 2025-03-19T14:11:37-05:00
+modified: 2025-03-19T19:11:37.000Z
+description: >-
+  Learn how to validate and coerce request parameters into the correct types
+  using Zod schemas, ensuring your path and query parameters are properly parsed
+  as numbers or booleans.
 ---
 
 Search parameters and path parameters are technically strings. But, I know they should be numbers. It's fine. Let's just make sure that they coerce into numbers.

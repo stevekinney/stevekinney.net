@@ -1,6 +1,10 @@
 ---
 title: Generating OpenAPI Contracts from Zod Schemas
-modified: 2025-03-15T17:15:00-06:00
+modified: 2025-03-15T23:15:00.000Z
+description: >-
+  Learn to generate OpenAPI docs for a TypeScript Express server using Zod
+  schemas, providing clear API metadata and seamless integration with Swagger UI
+  for interactive documentation.
 ---
 
 Let's through the process of adding OpenAPI documentation to a TypeScript Express server using Zod for validation.

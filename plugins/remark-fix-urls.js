@@ -18,7 +18,7 @@ export const fixMarkdownUrls = (contentPath = 'content') => {
     visit(tree, 'link', (/** @type {import('mdast').Link} */ node) => {
       const { url } = node;
       if (isExternalUrl(url)) return;
-      if (!url.endsWith('.md')) return;
+      if (!url.includes('.md')) return;
       const updated = `${baseUrl}/${url.replace(/\.md/, '')}`;
 
       node.url = updated;

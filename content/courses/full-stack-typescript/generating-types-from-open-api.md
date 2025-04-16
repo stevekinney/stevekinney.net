@@ -1,6 +1,10 @@
 ---
 title: Generating Types from an Open API specification
-modified: 2025-03-20T05:49:31-05:00
+modified: 2025-03-20T10:49:31.000Z
+description: >-
+  Learn how to generate TypeScript types from an OpenAPI spec using
+  `openapi-typescript`, creating a type-safe client with `openapi-fetch`,
+  enhancing your API's type safety and developer experience.
 ---
 
 Once you have an OpenAPI specification, you can use [`openapi-typescript`](https://npm.im/openapi-typescript) to generate types.
