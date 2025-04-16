@@ -3,6 +3,7 @@ import vercelAdapter from '@sveltejs/adapter-vercel';
 
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
+import rehypeMermaid from '@beoe/rehype-mermaid';
 import { escapeSvelte, mdsvex } from 'mdsvex';
 import slug from 'rehype-slug';
 import unwrapImages from 'rehype-unwrap-images';
@@ -17,7 +18,7 @@ import { processImages } from './plugins/svelte-enhance-images.js';
 const mdsvexOptions = {
   extensions: ['.md'],
   remarkPlugins: [unwrapImages, fixMarkdownUrls, gfm],
-  rehypePlugins: [slug],
+  rehypePlugins: [slug, rehypeMermaid],
   layout: {
     _: './src/lib/markdown/base.svelte',
     page: './src/lib/markdown/page.svelte',

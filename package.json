@@ -18,6 +18,7 @@
     "build-storybook": "storybook build"
   },
   "devDependencies": {
+    "@beoe/rehype-mermaid": "^0.4.2",
     "@chromatic-com/storybook": "^3.2.3",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.17.0",
@@ -66,9 +67,11 @@
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.9",
+    "rehype-mermaid": "^3.0.0",
     "rehype-slug": "^6.0.0",
     "rehype-unwrap-images": "^1.0.0",
     "remark-gfm": "^4.0.0",
+    "remark-mermaid-plugin": "^1.0.2",
     "satori": "^0.12.0",
     "shiki": "^1.24.3",
     "storybook": "^8.4.7",
