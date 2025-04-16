@@ -12,8 +12,8 @@ import config from '../tailwind.config';
 ## Application Colors
 
 <ColorPalette>
-	{Object.entries(config.theme.extend.colors).map(([name, value]) => (
-		<ColorItem key={name} title={name} colors={value} />
-	))}
+  {Object.entries(config.theme.extend.colors).map(([name, value]) => (
+    <ColorItem key={name} title={name} colors={value} />
+  ))}
 </ColorPalette>
 ```

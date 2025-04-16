@@ -110,10 +110,10 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 import {
-	NewTaskSchema,
-	TaskParamsSchema,
-	TaskQuerySchema,
-	UpdateTaskSchema,
+  NewTaskSchema,
+  TaskParamsSchema,
+  TaskQuerySchema,
+  UpdateTaskSchema,
 } from 'busy-bee-schema';
 
 import { handleError } from './handle-error.js';
@@ -121,81 +121,81 @@ import { openApiDocument } from './openapi.js';
 import { validate } from './validate.js';
 
 export async function createServer() {
-	const app = express();
-	app.use(cors());
-	app.use(express.json());
+  const app = express();
+  app.use(cors());
+  app.use(express.json());
 
-	// Serve OpenAPI docs
-	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
+  // Serve OpenAPI docs
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
-	// Expose OpenAPI spec as JSON
-	app.get('/openapi.json', (req, res) => {
-		res.json(openApiDocument);
-	});
+  // Expose OpenAPI spec as JSON
+  app.get('/openapi.json', (req, res) => {
+    res.json(openApiDocument);
+  });
 
-	app.get('/tasks', validate({ query: TaskQuerySchema }), async (req, res) => {
-		try {
-			const tasks = await prisma.task.findMany();
-			return res.json(tasks);
-		} catch (error) {
-			return handleError(req, res, error);
-		}
-	});
+  app.get('/tasks', validate({ query: TaskQuerySchema }), async (req, res) => {
+    try {
+      const tasks = await prisma.task.findMany();
+      return res.json(tasks);
+    } catch (error) {
+      return handleError(req, res, error);
+    }
+  });
 
-	// Get a specific task
-	app.get('/tasks/:id', validate({ params: TaskParamsSchema }), async (req, res) => {
-		try {
-			const { id } = req.params;
-			const task = await prisma.task.findUnique({ where: { id } });
+  // Get a specific task
+  app.get('/tasks/:id', validate({ params: TaskParamsSchema }), async (req, res) => {
+    try {
+      const { id } = req.params;
+      const task = await prisma.task.findUnique({ where: { id } });
 
-			if (!task) return res.status(404).json({ message: 'Task not found' });
+      if (!task) return res.status(404).json({ message: 'Task not found' });
 
-			return res.json(task);
-		} catch (error) {
-			return handleError(req, res, error);
-		}
-	});
+      return res.json(task);
+    } catch (error) {
+      return handleError(req, res, error);
+    }
+  });
 
-	app.post('/tasks', validate({ body: NewTaskSchema }), async (req, res) => {
-		try {
-			const task = req.body;
-			await prisma.task.create({ data: task });
-			return res.status(201).json({ message: 'Task created successfully' });
-		} catch (error) {
-			return handleError(req, res, error);
-		}
-	});
+  app.post('/tasks', validate({ body: NewTaskSchema }), async (req, res) => {
+    try {
+      const task = req.body;
+      await prisma.task.create({ data: task });
+      return res.status(201).json({ message: 'Task created successfully' });
+    } catch (error) {
+      return handleError(req, res, error);
+    }
+  });
 
-	// Update a task
-	app.put(
-		'/tasks/:id',
-		validate({ params: TaskParamsSchema, body: UpdateTaskSchema }),
-		async (req, res) => {
-			try {
-				const { id } = req.params;
+  // Update a task
+  app.put(
+    '/tasks/:id',
+    validate({ params: TaskParamsSchema, body: UpdateTaskSchema }),
+    async (req, res) => {
+      try {
+        const { id } = req.params;
 
-				const data = req.body;
-				await prisma.task.update({ where: { id }, data });
+        const data = req.body;
+        await prisma.task.update({ where: { id }, data });
 
-				return res.status(200).json({ message: 'Task updated successfully' });
-			} catch (error) {
-				return handleError(req, res, error);
-			}
-		},
-	);
+        return res.status(200).json({ message: 'Task updated successfully' });
+      } catch (error) {
+        return handleError(req, res, error);
+      }
+    },
+  );
 
-	// Delete a task
-	app.delete('/tasks/:id', validate({ params: TaskParamsSchema }), async (req, res) => {
-		try {
-			const { id } = req.params;
-			await prisma.task.delete({ where: { id } });
-			return res.status(200).json({ message: 'Task deleted successfully' });
-		} catch (error) {
-			return handleError(req, res, error);
-		}
-	});
+  // Delete a task
+  app.delete('/tasks/:id', validate({ params: TaskParamsSchema }), async (req, res) => {
+    try {
+      const { id } = req.params;
+      await prisma.task.delete({ where: { id } });
+      return res.status(200).json({ message: 'Task deleted successfully' });
+    } catch (error) {
+      return handleError(req, res, error);
+    }
+  });
 
-	return app;
+  return app;
 }
 ```
 

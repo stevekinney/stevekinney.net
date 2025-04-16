@@ -1,6 +1,9 @@
 ---
-modified: 2025-03-15T15:08:35-06:00
+modified: 2025-03-15T21:08:35.000Z
 title: Type-Safe Route Registration
+description: >-
+  Explore how to add type safety to route registration in Express, ensuring
+  handlers receive correctly typed requests while using TypeScript.
 ---
 
 One limitation of Express is that route paths are just strings, not checked against parameter types. We can build a type-safe router:

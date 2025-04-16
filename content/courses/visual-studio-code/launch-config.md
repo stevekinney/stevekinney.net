@@ -192,18 +192,18 @@ Here are some common `launch.json` configurations for different scenarios:
 
 ```json
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"type": "pwa-node",
-			"request": "launch",
-			"name": "Launch Node.js App",
-			"program": "${workspaceFolder}/src/index.js",
-			"console": "integratedTerminal",
-			"skipFiles": ["<node_internals>/**"],
-			"preLaunchTask": "build" // Assuming you have a "build" task
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Launch Node.js App",
+      "program": "${workspaceFolder}/src/index.js",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "preLaunchTask": "build" // Assuming you have a "build" task
+    }
+  ]
 }
 ```
 
@@ -211,16 +211,16 @@ Here are some common `launch.json` configurations for different scenarios:
 
 ```json
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"type": "pwa-node",
-			"request": "attach",
-			"name": "Attach to Process",
-			"processId": "${command:pickProcess}",
-			"skipFiles": ["<node_internals>/**"]
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "pwa-node",
+      "request": "attach",
+      "name": "Attach to Process",
+      "processId": "${command:pickProcess}",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
 }
 ```
 
@@ -228,16 +228,16 @@ Here are some common `launch.json` configurations for different scenarios:
 
 ```json
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"type": "python",
-			"request": "launch",
-			"name": "Run Python Script",
-			"program": "${workspaceFolder}/main.py",
-			"console": "integratedTerminal"
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "python",
+      "request": "launch",
+      "name": "Run Python Script",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal"
+    }
+  ]
 }
 ```
 
@@ -245,16 +245,16 @@ Here are some common `launch.json` configurations for different scenarios:
 
 ```json
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"type": "pwa-chrome",
-			"request": "launch",
-			"name": "Launch Chrome against localhost",
-			"url": "http://localhost:8080", // URL of your web app
-			"webRoot": "${workspaceFolder}/src" // Path to your web app's source files
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "pwa-chrome",
+      "request": "launch",
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:8080", // URL of your web app
+      "webRoot": "${workspaceFolder}/src" // Path to your web app's source files
+    }
+  ]
 }
 ```
 

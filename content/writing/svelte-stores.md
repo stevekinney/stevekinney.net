@@ -82,38 +82,38 @@ Here is an obnoxiously simple store that you definitely shouldn't use, but shoul
 
 ```js
 const createWritableStore = (value) => {
-	// Create a data structure to keep track of all of the subscribers.
-	const subscribers = new Set();
+  // Create a data structure to keep track of all of the subscribers.
+  const subscribers = new Set();
 
-	// Define a `subscribe` method. It should take a callback function as an
-	// argument.
-	const subscribe = (fn) => {
-		// Add the function to data structure above.
-		subscribers.add(fn);
-		// Call the function with the current value of the store.
-		fn(value);
-		// Return a function that allows you to remove this function from the list
-		// of subscribers.
-		return () => subscribers.delete(fn);
-	};
+  // Define a `subscribe` method. It should take a callback function as an
+  // argument.
+  const subscribe = (fn) => {
+    // Add the function to data structure above.
+    subscribers.add(fn);
+    // Call the function with the current value of the store.
+    fn(value);
+    // Return a function that allows you to remove this function from the list
+    // of subscribers.
+    return () => subscribers.delete(fn);
+  };
 
-	// `set` is a method that takes a new value and updates the one we're storing
-	// in memory when we created the store and passed `value` in.
-	const set = (newValue) => {
-		value = newValue;
-		// After updating value, call all of the subscibers and tell them about the
-		// new value.
-		for (const fn of subscribers) {
-			fn(value);
-		}
-	};
+  // `set` is a method that takes a new value and updates the one we're storing
+  // in memory when we created the store and passed `value` in.
+  const set = (newValue) => {
+    value = newValue;
+    // After updating value, call all of the subscibers and tell them about the
+    // new value.
+    for (const fn of subscribers) {
+      fn(value);
+    }
+  };
 
-	// Return our subscribe and set methods as an object. This adheres to the
-	// basic interface of a Svelte store.
-	return {
-		subscribe,
-		set,
-	};
+  // Return our subscribe and set methods as an object. This adheres to the
+  // basic interface of a Svelte store.
+  return {
+    subscribe,
+    set,
+  };
 };
 ```
 
@@ -148,16 +148,16 @@ A readable store is just an abstraction around a writable store that hides the `
 
 ```ts
 const store = readable(0, (set) => {
-	// The function passed in to a readable store is just the `set` method from a
-	// writable store, but it's only available internally and will not be exposed
-	// on the store that is returned from calling `readable`.
-	const interval = setInterval(() => {
-		set(Date.now());
-	}, 1000);
+  // The function passed in to a readable store is just the `set` method from a
+  // writable store, but it's only available internally and will not be exposed
+  // on the store that is returned from calling `readable`.
+  const interval = setInterval(() => {
+    set(Date.now());
+  }, 1000);
 
-	// You should return a function that should be called when the last
-	// subscriber unsubscribes from your store.
-	return () => clearInterval(interval);
+  // You should return a function that should be called when the last
+  // subscriber unsubscribes from your store.
+  return () => clearInterval(interval);
 });
 ```
 
@@ -165,11 +165,11 @@ This is a simplified version of how a readable store is implemented in the Svelt
 
 ```ts
 const createReadableStore = (initialValue, fn) => {
-	const store = createWritableStore(initialValue);
+  const store = createWritableStore(initialValue);
 
-	fn(store.set);
+  fn(store.set);
 
-	return { subscribe: store.subscribe };
+  return { subscribe: store.subscribe };
 };
 ```
 
@@ -199,10 +199,10 @@ import { page } from '$app/stores';
 import { derived } from 'svelte/store';
 
 export const isFullScreen = derived(page, ($page) => {
-	const { query } = $page;
-	if (!query.has('fullScreen')) return false;
-	if (query.get('fullScreen') === 'false') return false;
-	return true;
+  const { query } = $page;
+  if (!query.has('fullScreen')) return false;
+  if (query.get('fullScreen') === 'false') return false;
+  return true;
 });
 ```
 

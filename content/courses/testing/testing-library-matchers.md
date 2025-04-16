@@ -57,9 +57,9 @@ We want to render the `Counter` component before each test. This will put it bac
 
 ```javascript
 describe('Counter', () => {
-	beforeEach(() => {
-		render(<Counter />);
-	});
+  beforeEach(() => {
+    render(<Counter />);
+  });
 });
 ```
 
@@ -69,8 +69,8 @@ Now, let's write a quick test to see if it's rendering as expected.
 
 ```javascript
 it('renders with an initial count of 0', () => {
-	const countElement = screen.getByTestId('counter-count');
-	expect(countElement).toHaveTextContent('0');
+  const countElement = screen.getByTestId('counter-count');
+  expect(countElement).toHaveTextContent('0');
 });
 ```
 
@@ -80,11 +80,11 @@ We can also verify that the `decrement` and `reset` buttons are disabled when th
 
 ```javascript
 it('disables the "Decrement" and "Reset" buttons when the count is 0', () => {
-	const decrementButton = screen.getByRole('button', { name: 'Decrement' });
-	const resetButton = screen.getByRole('button', { name: 'Reset' });
+  const decrementButton = screen.getByRole('button', { name: 'Decrement' });
+  const resetButton = screen.getByRole('button', { name: 'Reset' });
 
-	expect(decrementButton).toBeDisabled();
-	expect(resetButton).toBeDisabled();
+  expect(decrementButton).toBeDisabled();
+  expect(resetButton).toBeDisabled();
 });
 ```
 

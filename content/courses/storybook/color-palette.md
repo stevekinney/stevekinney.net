@@ -35,11 +35,11 @@ Let's say we wanted to pull in all of the colors from Tailwind. We could do some
 import colors from 'tailwindcss/colors';
 
 <ColorPalette>
-	{Object.entries(colors)
-		.filter(([, value]) => typeof value !== 'string')
-		.map(([name, value]) => (
-			<ColorItem key={name} title={name} colors={value} />
-		))}
+  {Object.entries(colors)
+    .filter(([, value]) => typeof value !== 'string')
+    .map(([name, value]) => (
+      <ColorItem key={name} title={name} colors={value} />
+    ))}
 </ColorPalette>;
 ```
 
@@ -72,21 +72,21 @@ import type { Config } from 'tailwindcss';
 import colors from 'tailwindcss/colors';
 
 export default {
-	content: ['./src/**/*.{js,jsx,ts,tsx,mdx,html}'],
-	darkMode: ['class', '[data-mode="dark"]'],
-	theme: {
-		extend: {
-			colors: {
-				primary: colors.indigo,
-				success: colors.green,
-				warning: colors.amber,
-				danger: colors.red,
-				info: colors.blue,
-				surface: colors.slate,
-			},
-		},
-	},
-	plugins: [],
+  content: ['./src/**/*.{js,jsx,ts,tsx,mdx,html}'],
+  darkMode: ['class', '[data-mode="dark"]'],
+  theme: {
+    extend: {
+      colors: {
+        primary: colors.indigo,
+        success: colors.green,
+        warning: colors.amber,
+        danger: colors.red,
+        info: colors.blue,
+        surface: colors.slate,
+      },
+    },
+  },
+  plugins: [],
 } satisfies Config;
 ```
 

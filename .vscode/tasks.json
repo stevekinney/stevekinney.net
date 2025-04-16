@@ -1,67 +1,67 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Start Development Server",
-			"type": "process",
-			"command": "pnpm",
-			"args": ["dev"],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"presentation": {
-				"reveal": "always",
-				"panel": "shared"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "Run Storybook",
-			"type": "shell",
-			"command": "pnpm storybook",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"presentation": {
-				"reveal": "always",
-				"panel": "shared"
-			}
-		},
-		{
-			"label": "Open in Github Desktop",
-			"type": "shell",
-			"command": "github ${workspaceFolder}",
-			"isBackground": false,
-			"presentation": {
-				"echo": false,
-				"reveal": "silent",
-				"focus": false,
-				"panel": "shared",
-				"clear": true,
-				"showReuseMessage": false,
-				"group": "commands",
-				"close": true
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "Open in Obsidian",
-			"type": "shell",
-			"command": "open \"obsidian://open?vault=stevekinney.net&file=${relativeFileDirname}/${fileBasenameNoExtension}\"",
-			"isBackground": false,
-			"presentation": {
-				"echo": true,
-				"reveal": "silent",
-				"focus": false,
-				"panel": "shared",
-				"clear": true,
-				"showReuseMessage": false,
-				"group": "commands",
-				"close": true
-			},
-			"problemMatcher": []
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Development Server",
+      "type": "process",
+      "command": "pnpm",
+      "args": ["dev"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Storybook",
+      "type": "shell",
+      "command": "pnpm storybook",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Open in Github Desktop",
+      "type": "shell",
+      "command": "github ${workspaceFolder}",
+      "isBackground": false,
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "clear": true,
+        "showReuseMessage": false,
+        "group": "commands",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Open in Obsidian",
+      "type": "shell",
+      "command": "open \"obsidian://open?vault=stevekinney.net&file=${relativeFileDirname}/${fileBasenameNoExtension}\"",
+      "isBackground": false,
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "clear": true,
+        "showReuseMessage": false,
+        "group": "commands",
+        "close": true
+      },
+      "problemMatcher": []
+    }
+  ]
 }

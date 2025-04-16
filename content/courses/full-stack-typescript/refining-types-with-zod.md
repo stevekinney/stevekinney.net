@@ -1,6 +1,7 @@
 ---
 title: Refining Types with Zod
 modified: 2025-03-20T12:52:15-06:00
+description: A guide to creating and using custom validation schemas in Zod, including refining schemas, custom validation, nested types, branded types, and best practices for error handling and testing.
 ---
 
 Zod ships with a generous spread of primitive and composite schema definitions right out of the box. If your “custom type” can be expressed as a straightforward Zod object or union, just use one of those like we saw in the [introduction earlier](introduction-to-zod.md).
@@ -9,15 +10,15 @@ Zod ships with a generous spread of primitive and composite schema definitions r
 import { z } from 'zod';
 
 const userSchema = z.object({
-	name: z.string(),
-	age: z.number().int().min(0),
+  name: z.string(),
+  age: z.number().int().min(0),
 });
 
 type User = z.infer<typeof userSchema>;
 
 const parsedUser = userSchema.parse({
-	name: 'Ada Lovelace',
-	age: 36,
+  name: 'Ada Lovelace',
+  age: 36,
 });
 ```
 
@@ -30,7 +31,7 @@ Zod’s `.refine()` method lets you tack on custom validation logic. Let's say y
 
 ```ts
 const emailSchema = z.string().refine((value) => value.endsWith('frontendmasters.com'), {
-	message: 'Email must end with frontendmasters.com',
+  message: 'Email must end with frontendmasters.com',
 });
 
 const validatedEmail = emailSchema.parse('hellofrontendmasters.com'); // passes
@@ -49,17 +50,17 @@ Sometimes you have a type so weird that `.refine()` just won’t cut it—or may
 ```ts
 // Suppose we want a schema for a string that must parse into a valid Date
 const validDateString = z.custom<string>(
-	(value) => {
-		if (typeof value !== 'string') return false;
+  (value) => {
+    if (typeof value !== 'string') return false;
 
-		// Attempt to parse date
-		const date = new Date(value);
-		// Check if it's a real date
-		return !isNaN(date.valueOf());
-	},
-	{
-		message: 'Invalid date string provided',
-	},
+    // Attempt to parse date
+    const date = new Date(value);
+    // Check if it's a real date
+    return !isNaN(date.valueOf());
+  },
+  {
+    message: 'Invalid date string provided',
+  },
 );
 
 // If you also want TypeScript to know it's a string, you'll do:
@@ -78,23 +79,23 @@ If you have an object containing arrays containing objects (or other labyrinthin
 
 ```ts
 const addressSchema = z.object({
-	street: z.string(),
-	zipCode: z.string().length(5),
+  street: z.string(),
+  zipCode: z.string().length(5),
 });
 
 const userWithAddressSchema = z.object({
-	name: z.string(),
-	addresses: z.array(addressSchema).nonempty(),
+  name: z.string(),
+  addresses: z.array(addressSchema).nonempty(),
 });
 
 type UserWithAddress = z.infer<typeof userWithAddressSchema>;
 
 userWithAddressSchema.parse({
-	name: 'Grace Hopper',
-	addresses: [
-		{ street: '1900 Sea St', zipCode: '12345' },
-		{ street: '3 Admiral Dr', zipCode: '99999' },
-	],
+  name: 'Grace Hopper',
+  addresses: [
+    { street: '1900 Sea St', zipCode: '12345' },
+    { street: '3 Admiral Dr', zipCode: '99999' },
+  ],
 }); // passes
 ```
 
@@ -121,7 +122,7 @@ Zod out-of-the-box has decent error messaging, but do your future self (and your
 
 ```ts
 const fancySchema = z.number().int().min(1, {
-	message: 'Number must be a positive integer. This includes you, 0.',
+  message: 'Number must be a positive integer. This includes you, 0.',
 });
 ```
 
@@ -138,13 +139,13 @@ import { describe, it, expect } from 'vitest'; // or your test runner
 import { validDateString } from './path/to/your/schema';
 
 describe('validDateString', () => {
-	it('should parse a valid date', () => {
-		expect(() => validDateString.parse('2025-03-20')).not.toThrow();
-	});
+  it('should parse a valid date', () => {
+    expect(() => validDateString.parse('2025-03-20')).not.toThrow();
+  });
 
-	it('should throw on invalid date', () => {
-		expect(() => validDateString.parse('Feb 30th, 2025')).toThrow();
-	});
+  it('should throw on invalid date', () => {
+    expect(() => validDateString.parse('Feb 30th, 2025')).toThrow();
+  });
 });
 ```
 
@@ -156,15 +157,15 @@ You can compose smaller schemas together. Even for wild custom requirements, bre
 
 ```ts
 function isPrime(num: number): boolean {
-	if (num < 2) return false;
-	for (let i = 2; i <= Math.sqrt(num); i++) {
-		if (num % i === 0) return false;
-	}
-	return true;
+  if (num < 2) return false;
+  for (let i = 2; i <= Math.sqrt(num); i++) {
+    if (num % i === 0) return false;
+  }
+  return true;
 }
 
 const primeUnder1000Schema = z.number().int().min(2).max(999).refine(isPrime, {
-	message: 'Number must be prime',
+  message: 'Number must be prime',
 });
 ```
 
@@ -174,19 +175,19 @@ const primeUnder1000Schema = z.number().int().min(2).max(999).refine(isPrime, {
 
 ```ts
 const productSchema = z
-	.object({
-		price: z.number().positive(),
-		quantity: z.number().int().nonnegative(),
-	})
-	.superRefine((data, ctx) => {
-		if (data.price > 1000 && data.quantity > 0) {
-			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-				message: 'High-value items must have quantity 0 for initial stock',
-				path: ['quantity'],
-			});
-		}
-	});
+  .object({
+    price: z.number().positive(),
+    quantity: z.number().int().nonnegative(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.price > 1000 && data.quantity > 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'High-value items must have quantity 0 for initial stock',
+        path: ['quantity'],
+      });
+    }
+  });
 
 productSchema.parse({ price: 1200, quantity: 0 }); // Valid
 // productSchema.parse({ price: 1200, quantity: 5 }); // Throws ZodError: High-value items must have quantity 0 for initial stock at 'quantity'
@@ -198,10 +199,10 @@ productSchema.parse({ price: 1200, quantity: 0 }); // Valid
 
 ```ts
 const preprocessNumberSchema = z.preprocess((val) => {
-	if (typeof val === 'string') {
-		return parseInt(val, 10); // Try to parse string to number
-	}
-	return val; // Otherwise, return original value
+  if (typeof val === 'string') {
+    return parseInt(val, 10); // Try to parse string to number
+  }
+  return val; // Otherwise, return original value
 }, z.number().positive());
 
 preprocessNumberSchema.parse('42'); // Valid, returns 42 (number)
@@ -223,23 +224,23 @@ Keeping these validations separate from the raw schema logic keeps your code cle
 import { z } from 'zod';
 
 const passwordSchema = z
-	.string()
-	.min(8)
-	.superRefine((val, ctx) => {
-		if (!/[A-Z]/.test(val)) {
-			ctx.addIssue({
-				code: 'custom',
-				message: 'Password must include an uppercase letter',
-			});
-		}
-		if (!/\d/.test(val)) {
-			ctx.addIssue({
-				code: 'custom',
-				message: 'Password must include a digit',
-			});
-		}
-		// You can add more checks if needed...
-	});
+  .string()
+  .min(8)
+  .superRefine((val, ctx) => {
+    if (!/[A-Z]/.test(val)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Password must include an uppercase letter',
+      });
+    }
+    if (!/\d/.test(val)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Password must include a digit',
+      });
+    }
+    // You can add more checks if needed...
+  });
 ```
 
 Now, if the password is missing both uppercase letters _and_ digits, you get _two distinct errors._ That’s helpful for user feedback—otherwise, a single `.refine()` would typically throw just one error message.

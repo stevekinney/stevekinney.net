@@ -24,11 +24,11 @@ npm install vitest --save-dev
 import { expect, test } from 'vitest';
 
 test('math works', () => {
-	expect(1 + 1).toBe(2);
+  expect(1 + 1).toBe(2);
 });
 
 test('this one will fail', () => {
-	expect(2 + 2).toBe(5);
+  expect(2 + 2).toBe(5);
 });
 ```
 
@@ -97,18 +97,18 @@ Here’s a simplified version of the output:
 
 ```json
 {
-	"numFailedTests": 1,
-	"numPassedTests": 1,
-	"testResults": [
-		{
-			"name": "math works",
-			"status": "passed"
-		},
-		{
-			"name": "this one will fail",
-			"status": "failed"
-		}
-	]
+  "numFailedTests": 1,
+  "numPassedTests": 1,
+  "testResults": [
+    {
+      "name": "math works",
+      "status": "passed"
+    },
+    {
+      "name": "this one will fail",
+      "status": "failed"
+    }
+  ]
 }
 ```
 
@@ -172,18 +172,18 @@ Let’s craft a simple custom reporter that says, "Hello, testing world," whenev
 ```js
 // hello-world-reporter.js
 export class HelloWorldReporter {
-	onTestStart(test) {
-		console.log(`Hello from ${test.name}`);
-	}
+  onTestStart(test) {
+    console.log(`Hello from ${test.name}`);
+  }
 
-	// Optional: here's where all your reporting dreams can come true
-	onTestPass(test) {
-		console.log(`🎉 Hooray! Test passed: ${test.name}`);
-	}
+  // Optional: here's where all your reporting dreams can come true
+  onTestPass(test) {
+    console.log(`🎉 Hooray! Test passed: ${test.name}`);
+  }
 
-	onTestFail(test) {
-		console.log(`💥 Oh no! Test failed: ${test.name}`);
-	}
+  onTestFail(test) {
+    console.log(`💥 Oh no! Test failed: ${test.name}`);
+  }
 }
 ```
 
@@ -198,9 +198,9 @@ import { defineConfig } from 'vitest/config';
 import { HelloWorldReporter } from './hello-world-reporter';
 
 export default defineConfig({
-	test: {
-		reporters: [new HelloWorldReporter()],
-	},
+  test: {
+    reporters: [new HelloWorldReporter()],
+  },
 });
 ```
 

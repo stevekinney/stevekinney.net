@@ -8,25 +8,25 @@ Compound tasks allow you to run multiple tasks in sequence. This is useful for o
 
 ```json
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Task A",
-			"type": "shell",
-			"command": "echo Task A"
-		},
-		{
-			"label": "Task B",
-			"type": "shell",
-			"command": "echo Task B"
-		},
-		{
-			"label": "Run A and B",
-			"dependsOn": ["Task A", "Task B"],
-			"dependsOrder": "sequence",
-			"problemMatcher": []
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Task A",
+      "type": "shell",
+      "command": "echo Task A"
+    },
+    {
+      "label": "Task B",
+      "type": "shell",
+      "command": "echo Task B"
+    },
+    {
+      "label": "Run A and B",
+      "dependsOn": ["Task A", "Task B"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    }
+  ]
 }
 ```
 
@@ -43,9 +43,9 @@ Tasks run serially in the exact order listed in the `dependsOn` array. Each task
 
 ```json
 {
-	"label": "Sequential Build and Test",
-	"dependsOn": ["Clean", "Build", "Test"],
-	"dependsOrder": "sequence"
+  "label": "Sequential Build and Test",
+  "dependsOn": ["Clean", "Build", "Test"],
+  "dependsOrder": "sequence"
 }
 ```
 
@@ -57,9 +57,9 @@ All dependent tasks start simultaneously and run concurrently.
 
 ```json
 {
-	"label": "Parallel Assets Build",
-	"dependsOn": ["Compile CSS", "Compile JavaScript", "Optimize Images"],
-	"dependsOrder": "parallel"
+  "label": "Parallel Assets Build",
+  "dependsOn": ["Compile CSS", "Compile JavaScript", "Optimize Images"],
+  "dependsOrder": "parallel"
 }
 ```
 
@@ -71,9 +71,9 @@ Visual Studio Code starts tasks in parallel, but the main task completes as soon
 
 ```json
 {
-	"label": "Development Server",
-	"dependsOn": ["Start API Server", "Start Frontend Server"],
-	"dependsOrder": "any"
+  "label": "Development Server",
+  "dependsOn": ["Start API Server", "Start Frontend Server"],
+  "dependsOrder": "any"
 }
 ```
 
@@ -85,38 +85,38 @@ You can create complex task trees by combining dependencies. For example:
 
 ```json
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Clean",
-			"type": "shell",
-			"command": "rm -rf dist"
-		},
-		{
-			"label": "Build Frontend",
-			"type": "shell",
-			"command": "npm run build:frontend",
-			"dependsOn": ["Clean"]
-		},
-		{
-			"label": "Build Backend",
-			"type": "shell",
-			"command": "npm run build:backend",
-			"dependsOn": ["Clean"]
-		},
-		{
-			"label": "Run Tests",
-			"type": "shell",
-			"command": "npm test",
-			"dependsOn": ["Build Frontend", "Build Backend"],
-			"dependsOrder": "sequence"
-		},
-		{
-			"label": "Full Pipeline",
-			"dependsOn": ["Run Tests"],
-			"problemMatcher": []
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Clean",
+      "type": "shell",
+      "command": "rm -rf dist"
+    },
+    {
+      "label": "Build Frontend",
+      "type": "shell",
+      "command": "npm run build:frontend",
+      "dependsOn": ["Clean"]
+    },
+    {
+      "label": "Build Backend",
+      "type": "shell",
+      "command": "npm run build:backend",
+      "dependsOn": ["Clean"]
+    },
+    {
+      "label": "Run Tests",
+      "type": "shell",
+      "command": "npm test",
+      "dependsOn": ["Build Frontend", "Build Backend"],
+      "dependsOrder": "sequence"
+    },
+    {
+      "label": "Full Pipeline",
+      "dependsOn": ["Run Tests"],
+      "problemMatcher": []
+    }
+  ]
 }
 ```
 

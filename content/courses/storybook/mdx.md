@@ -17,12 +17,12 @@ By default, MDX will pick up any `.mdx` files in your project. But, you _can_ co
 import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
-	/**
-	 * Change the setting below if you want to be a bit more specific
-	 * about where you want Storybook to go looking for MDX files.
-	 */
-	stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-	// The rest of your configuration…
+  /**
+   * Change the setting below if you want to be a bit more specific
+   * about where you want Storybook to go looking for MDX files.
+   */
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  // The rest of your configuration…
 };
 export default config;
 ```

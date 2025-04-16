@@ -19,11 +19,11 @@ import { icons, Icon } from './components/icon';
 These are the icons being used in our design system. They are available as React components.
 
 <IconGallery>
-	{icons.map((icon) => (
-		<IconItem key={icon} name={icon}>
-			<Icon type={icon} />
-		</IconItem>
-	))}
+  {icons.map((icon) => (
+    <IconItem key={icon} name={icon}>
+      <Icon type={icon} />
+    </IconItem>
+  ))}
 </IconGallery>
 ```
 

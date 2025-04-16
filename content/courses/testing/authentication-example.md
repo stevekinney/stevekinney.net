@@ -143,32 +143,32 @@ import { describe, it, expect } from 'vitest';
 import { validateRegistrationData, hashPassword } from '../../src/controllers/authController';
 
 describe('Auth Controller - Unit Tests', () => {
-	describe('validateRegistrationData', () => {
-		it('should validate correct data', () => {
-			const data = { username: 'testuser', password: 'Password123' };
-			const result = validateRegistrationData(data);
-			expect(result).toBe(true);
-		});
+  describe('validateRegistrationData', () => {
+    it('should validate correct data', () => {
+      const data = { username: 'testuser', password: 'Password123' };
+      const result = validateRegistrationData(data);
+      expect(result).toBe(true);
+    });
 
-		it('should invalidate data with missing fields', () => {
-			const data = { username: 'testuser' };
-			expect(() => validateRegistrationData(data)).toThrow('Password is required');
-		});
+    it('should invalidate data with missing fields', () => {
+      const data = { username: 'testuser' };
+      expect(() => validateRegistrationData(data)).toThrow('Password is required');
+    });
 
-		it('should invalidate data with weak password', () => {
-			const data = { username: 'testuser', password: 'pass' };
-			expect(() => validateRegistrationData(data)).toThrow('Password is too weak');
-		});
-	});
+    it('should invalidate data with weak password', () => {
+      const data = { username: 'testuser', password: 'pass' };
+      expect(() => validateRegistrationData(data)).toThrow('Password is too weak');
+    });
+  });
 
-	describe('hashPassword', () => {
-		it('should hash the password', async () => {
-			const password = 'Password123';
-			const hash = await hashPassword(password);
-			expect(hash).not.toBe(password);
-			expect(hash).toMatch(/^\$2[aby]\$.{56}$/); // Regex for bcrypt hash
-		});
-	});
+  describe('hashPassword', () => {
+    it('should hash the password', async () => {
+      const password = 'Password123';
+      const hash = await hashPassword(password);
+      expect(hash).not.toBe(password);
+      expect(hash).toMatch(/^\$2[aby]\$.{56}$/); // Regex for bcrypt hash
+    });
+  });
 });
 ```
 
@@ -196,21 +196,21 @@ Create `src/controllers/authController.js`:
 import bcrypt from 'bcrypt';
 
 export function validateRegistrationData(data) {
-	if (!data.username) {
-		throw new Error('Username is required');
-	}
-	if (!data.password) {
-		throw new Error('Password is required');
-	}
-	if (data.password.length < 6) {
-		throw new Error('Password is too weak');
-	}
-	return true;
+  if (!data.username) {
+    throw new Error('Username is required');
+  }
+  if (!data.password) {
+    throw new Error('Password is required');
+  }
+  if (data.password.length < 6) {
+    throw new Error('Password is too weak');
+  }
+  return true;
 }
 
 export async function hashPassword(password) {
-	const saltRounds = 10;
-	return await bcrypt.hash(password, saltRounds);
+  const saltRounds = 10;
+  return await bcrypt.hash(password, saltRounds);
 }
 ```
 
@@ -238,28 +238,28 @@ Add to `tests/unit/auth.test.js`:
 import { verifyPassword, generateToken } from '../../src/controllers/authController';
 
 describe('verifyPassword', () => {
-	it('should return true for correct password', async () => {
-		const password = 'Password123';
-		const hash = await hashPassword(password);
-		const result = await verifyPassword(password, hash);
-		expect(result).toBe(true);
-	});
+  it('should return true for correct password', async () => {
+    const password = 'Password123';
+    const hash = await hashPassword(password);
+    const result = await verifyPassword(password, hash);
+    expect(result).toBe(true);
+  });
 
-	it('should return false for incorrect password', async () => {
-		const password = 'Password123';
-		const hash = await hashPassword(password);
-		const result = await verifyPassword('WrongPassword', hash);
-		expect(result).toBe(false);
-	});
+  it('should return false for incorrect password', async () => {
+    const password = 'Password123';
+    const hash = await hashPassword(password);
+    const result = await verifyPassword('WrongPassword', hash);
+    expect(result).toBe(false);
+  });
 });
 
 describe('generateToken', () => {
-	it('should generate a JWT token', () => {
-		const user = { id: 1, username: 'testuser' };
-		const token = generateToken(user);
-		expect(token).toBeDefined();
-		expect(typeof token).toBe('string');
-	});
+  it('should generate a JWT token', () => {
+    const user = { id: 1, username: 'testuser' };
+    const token = generateToken(user);
+    expect(token).toBeDefined();
+    expect(typeof token).toBe('string');
+  });
 });
 ```
 
@@ -291,11 +291,11 @@ const SECRET_KEY = 'your_secret_key'; // In production, store this securely
 // … previous code …
 
 export async function verifyPassword(password, hash) {
-	return await bcrypt.compare(password, hash);
+  return await bcrypt.compare(password, hash);
 }
 
 export function generateToken(user) {
-	return jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: '1h' });
+  return jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: '1h' });
 }
 ```
 
@@ -371,32 +371,32 @@ Update `src/controllers/authController.js`:
 const users = []; // In-memory user store (replace with a database in production)
 
 export async function register(req, res) {
-	try {
-		validateRegistrationData(req.body);
-		const hashedPassword = await hashPassword(req.body.password);
-		const user = { id: users.length + 1, username: req.body.username, password: hashedPassword };
-		users.push(user);
-		res.status(201).json({ message: 'User registered successfully' });
-	} catch (error) {
-		res.status(400).json({ error: error.message });
-	}
+  try {
+    validateRegistrationData(req.body);
+    const hashedPassword = await hashPassword(req.body.password);
+    const user = { id: users.length + 1, username: req.body.username, password: hashedPassword };
+    users.push(user);
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 }
 
 export async function login(req, res) {
-	try {
-		const user = users.find((u) => u.username === req.body.username);
-		if (!user) {
-			throw new Error('Invalid username or password');
-		}
-		const isValid = await verifyPassword(req.body.password, user.password);
-		if (!isValid) {
-			throw new Error('Invalid username or password');
-		}
-		const token = generateToken(user);
-		res.json({ token });
-	} catch (error) {
-		res.status(400).json({ error: error.message });
-	}
+  try {
+    const user = users.find((u) => u.username === req.body.username);
+    if (!user) {
+      throw new Error('Invalid username or password');
+    }
+    const isValid = await verifyPassword(req.body.password, user.password);
+    if (!isValid) {
+      throw new Error('Invalid username or password');
+    }
+    const token = generateToken(user);
+    res.json({ token });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 }
 ```
 
@@ -411,59 +411,59 @@ import request from 'supertest';
 import app from '../../src/app.js';
 
 describe('Auth Routes - Integration Tests', () => {
-	it('should register a new user', async () => {
-		const response = await request(app).post('/api/auth/register').send({
-			username: 'testuser',
-			password: 'Password123',
-		});
-		expect(response.status).toBe(201);
-		expect(response.body.message).toBe('User registered successfully');
-	});
+  it('should register a new user', async () => {
+    const response = await request(app).post('/api/auth/register').send({
+      username: 'testuser',
+      password: 'Password123',
+    });
+    expect(response.status).toBe(201);
+    expect(response.body.message).toBe('User registered successfully');
+  });
 
-	it('should not register a user with existing username', async () => {
-		// Register the user first
-		await request(app).post('/api/auth/register').send({
-			username: 'testuser',
-			password: 'Password123',
-		});
-		// Try registering again
-		const response = await request(app).post('/api/auth/register').send({
-			username: 'testuser',
-			password: 'Password123',
-		});
-		expect(response.status).toBe(400);
-		expect(response.body.error).toBe('Username already exists');
-	});
+  it('should not register a user with existing username', async () => {
+    // Register the user first
+    await request(app).post('/api/auth/register').send({
+      username: 'testuser',
+      password: 'Password123',
+    });
+    // Try registering again
+    const response = await request(app).post('/api/auth/register').send({
+      username: 'testuser',
+      password: 'Password123',
+    });
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Username already exists');
+  });
 
-	it('should login a registered user', async () => {
-		// Register the user
-		await request(app).post('/api/auth/register').send({
-			username: 'testuser',
-			password: 'Password123',
-		});
-		// Login
-		const response = await request(app).post('/api/auth/login').send({
-			username: 'testuser',
-			password: 'Password123',
-		});
-		expect(response.status).toBe(200);
-		expect(response.body.token).toBeDefined();
-	});
+  it('should login a registered user', async () => {
+    // Register the user
+    await request(app).post('/api/auth/register').send({
+      username: 'testuser',
+      password: 'Password123',
+    });
+    // Login
+    const response = await request(app).post('/api/auth/login').send({
+      username: 'testuser',
+      password: 'Password123',
+    });
+    expect(response.status).toBe(200);
+    expect(response.body.token).toBeDefined();
+  });
 
-	it('should not login with incorrect password', async () => {
-		// Register the user
-		await request(app).post('/api/auth/register').send({
-			username: 'testuser',
-			password: 'Password123',
-		});
-		// Attempt to login with wrong password
-		const response = await request(app).post('/api/auth/login').send({
-			username: 'testuser',
-			password: 'WrongPassword',
-		});
-		expect(response.status).toBe(400);
-		expect(response.body.error).toBe('Invalid username or password');
-	});
+  it('should not login with incorrect password', async () => {
+    // Register the user
+    await request(app).post('/api/auth/register').send({
+      username: 'testuser',
+      password: 'Password123',
+    });
+    // Attempt to login with wrong password
+    const response = await request(app).post('/api/auth/login').send({
+      username: 'testuser',
+      password: 'WrongPassword',
+    });
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Invalid username or password');
+  });
 });
 ```
 
@@ -488,19 +488,19 @@ Update `register` function in `authController.js`:
 
 ```javascript
 export async function register(req, res) {
-	try {
-		validateRegistrationData(req.body);
-		const existingUser = users.find((u) => u.username === req.body.username);
-		if (existingUser) {
-			throw new Error('Username already exists');
-		}
-		const hashedPassword = await hashPassword(req.body.password);
-		const user = { id: users.length + 1, username: req.body.username, password: hashedPassword };
-		users.push(user);
-		res.status(201).json({ message: 'User registered successfully' });
-	} catch (error) {
-		res.status(400).json({ error: error.message });
-	}
+  try {
+    validateRegistrationData(req.body);
+    const existingUser = users.find((u) => u.username === req.body.username);
+    if (existingUser) {
+      throw new Error('Username already exists');
+    }
+    const hashedPassword = await hashPassword(req.body.password);
+    const user = { id: users.length + 1, username: req.body.username, password: hashedPassword };
+    users.push(user);
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 }
 ```
 
@@ -528,40 +528,40 @@ Add to `tests/integration/auth.integration.test.js`:
 
 ```javascript
 describe('Protected Routes', () => {
-	it('should access protected route with valid token', async () => {
-		// Register and login the user
-		await request(app).post('/api/auth/register').send({
-			username: 'testuser',
-			password: 'Password123',
-		});
-		const loginResponse = await request(app).post('/api/auth/login').send({
-			username: 'testuser',
-			password: 'Password123',
-		});
-		const token = loginResponse.body.token;
+  it('should access protected route with valid token', async () => {
+    // Register and login the user
+    await request(app).post('/api/auth/register').send({
+      username: 'testuser',
+      password: 'Password123',
+    });
+    const loginResponse = await request(app).post('/api/auth/login').send({
+      username: 'testuser',
+      password: 'Password123',
+    });
+    const token = loginResponse.body.token;
 
-		// Access protected route
-		const response = await request(app)
-			.get('/api/protected')
-			.set('Authorization', `Bearer ${token}`);
+    // Access protected route
+    const response = await request(app)
+      .get('/api/protected')
+      .set('Authorization', `Bearer ${token}`);
 
-		expect(response.status).toBe(200);
-		expect(response.body.message).toBe('Protected content');
-	});
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe('Protected content');
+  });
 
-	it('should not access protected route without token', async () => {
-		const response = await request(app).get('/api/protected');
-		expect(response.status).toBe(401);
-		expect(response.body.error).toBe('Unauthorized');
-	});
+  it('should not access protected route without token', async () => {
+    const response = await request(app).get('/api/protected');
+    expect(response.status).toBe(401);
+    expect(response.body.error).toBe('Unauthorized');
+  });
 
-	it('should not access protected route with invalid token', async () => {
-		const response = await request(app)
-			.get('/api/protected')
-			.set('Authorization', 'Bearer invalidtoken');
-		expect(response.status).toBe(401);
-		expect(response.body.error).toBe('Invalid token');
-	});
+  it('should not access protected route with invalid token', async () => {
+    const response = await request(app)
+      .get('/api/protected')
+      .set('Authorization', 'Bearer invalidtoken');
+    expect(response.status).toBe(401);
+    expect(response.body.error).toBe('Invalid token');
+  });
 });
 ```
 
@@ -579,7 +579,7 @@ Update `src/app.js`:
 import { authenticateToken } from './middleware/authMiddleware.js';
 
 app.get('/api/protected', authenticateToken, (req, res) => {
-	res.json({ message: 'Protected content' });
+  res.json({ message: 'Protected content' });
 });
 ```
 
@@ -592,15 +592,15 @@ import jwt from 'jsonwebtoken';
 const SECRET_KEY = 'your_secret_key';
 
 export function authenticateToken(req, res, next) {
-	const authHeader = req.headers['authorization'];
-	const token = authHeader && authHeader.split(' ')[1];
-	if (!token) return res.status(401).json({ error: 'Unauthorized' });
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
 
-	jwt.verify(token, SECRET_KEY, (err, user) => {
-		if (err) return res.status(401).json({ error: 'Invalid token' });
-		req.user = user;
-		next();
-	});
+  jwt.verify(token, SECRET_KEY, (err, user) => {
+    if (err) return res.status(401).json({ error: 'Invalid token' });
+    req.user = user;
+    next();
+  });
 }
 ```
 

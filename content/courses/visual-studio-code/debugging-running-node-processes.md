@@ -8,11 +8,11 @@ Alternatively, you can attach the debugger to an already running Node process. T
 
 ```json
 {
-	"type": "node",
-	"request": "attach",
-	"name": "Attach to Node",
-	"address": "localhost",
-	"port": 9229
+  "type": "node",
+  "request": "attach",
+  "name": "Attach to Node",
+  "address": "localhost",
+  "port": 9229
 }
 ```
 

@@ -24,15 +24,15 @@ Now, you can use the font stack in your CSS, but we're using Tailwind, so let's 
 
 ```ts
 export default {
-	content: ['./src/**/*.{js,jsx,ts,tsx,mdx,html}'],
-	darkMode: ['class', '[data-mode="dark"]'],
-	theme: {
-		extend: {
-			fontFamily: {
-				sans: ['Inter Variable', 'sans-serif'],
-			},
-		},
-	},
-	plugins: [],
+  content: ['./src/**/*.{js,jsx,ts,tsx,mdx,html}'],
+  darkMode: ['class', '[data-mode="dark"]'],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter Variable', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
 } satisfies Config;
 ```

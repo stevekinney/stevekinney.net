@@ -12,7 +12,7 @@ import { ComponentProps } from 'react';
 type ButtonProps = ComponentProps<'button'>;
 
 export const Button = (props: ButtonProps) => {
-	return <button {...props} />;
+  return <button {...props} />;
 };
 ```
 
@@ -34,8 +34,8 @@ The default export, `Meta`, contains metadata about this component's stories. Th
 
 ```tsx
 const meta: Meta<typeof Button> = {
-	title: 'Button',
-	component: Button,
+  title: 'Button',
+  component: Button,
 };
 
 export default meta;
@@ -47,7 +47,7 @@ Each named export is a story. You'll need at least one named export if you want 
 type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
-	render: () => <Button>Button</Button>,
+  render: () => <Button>Button</Button>,
 };
 ```
 
@@ -61,14 +61,14 @@ import { Button } from './button';
 type Story = StoryObj<typeof Button>;
 
 const meta: Meta<typeof Button> = {
-	title: 'Button',
-	component: Button,
+  title: 'Button',
+  component: Button,
 };
 
 export default meta;
 
 export const Primary: Story = {
-	render: () => <Button>Button</Button>,
+  render: () => <Button>Button</Button>,
 };
 ```
 
@@ -83,9 +83,9 @@ Instead of rendering the component itself, you can choose to use to an `args` ob
 
 ```tsx
 export const Primary: Story = {
-	args: {
-		children: 'Button',
-	},
+  args: {
+    children: 'Button',
+  },
 };
 ```
 
@@ -105,16 +105,16 @@ import { Button } from './button';
 type Story = StoryObj<typeof Button>;
 
 const meta: Meta<typeof Button> = {
-	title: 'Button',
-	component: Button,
+  title: 'Button',
+  component: Button,
 };
 
 export default meta;
 
 export const Primary: Story = {
-	args: {
-		children: 'Button',
-	},
+  args: {
+    children: 'Button',
+  },
 };
 ```
 

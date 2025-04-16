@@ -10,11 +10,11 @@ Let's start by modifying our setup:
 
 ```javascript
 beforeEach(() => {
-	vi.spyOn(localStorage, 'getItem').mockReturnValue('test secret');
-	vi.spyOn(localStorage, 'setItem');
+  vi.spyOn(localStorage, 'getItem').mockReturnValue('test secret');
+  vi.spyOn(localStorage, 'setItem');
 
-	document.body.innerHTML = '';
-	document.body.appendChild(createSecretInput());
+  document.body.innerHTML = '';
+  document.body.appendChild(createSecretInput());
 });
 ```
 
@@ -22,8 +22,8 @@ Now, let's say that we want to take a look at whether or not the input has the c
 
 ```javascript
 it('should have loaded the secret from localStorage', async () => {
-	expect(screen.getByLabelText('Secret')).toHaveValue('test secret');
-	expect(localStorage.getItem).toHaveBeenCalledWith('secret');
+  expect(screen.getByLabelText('Secret')).toHaveValue('test secret');
+  expect(localStorage.getItem).toHaveBeenCalledWith('secret');
 });
 ```
 
@@ -39,14 +39,14 @@ We can also do the same for setting the value. Bear in mind, since the secret is
 
 ```javascript
 it('should save the secret to localStorage', async () => {
-	const input = screen.getByLabelText('Secret');
-	const button = screen.getByText('Store Secret');
+  const input = screen.getByLabelText('Secret');
+  const button = screen.getByText('Store Secret');
 
-	await userEvent.clear(input);
-	await userEvent.type(input, 'new secret');
-	await userEvent.click(button);
+  await userEvent.clear(input);
+  await userEvent.type(input, 'new secret');
+  await userEvent.click(button);
 
-	expect(localStorage.setItem).toHaveBeenCalledWith('secret', 'new secret');
+  expect(localStorage.setItem).toHaveBeenCalledWith('secret', 'new secret');
 });
 ```
 

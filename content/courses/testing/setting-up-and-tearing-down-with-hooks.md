@@ -27,18 +27,18 @@ Suppose you're testing a simple counter object:
 let value = 0;
 
 export const counter = {
-	get value() {
-		return value;
-	},
-	increment() {
-		value++;
-	},
-	decrement() {
-		value--;
-	},
-	reset() {
-		value = 0;
-	},
+  get value() {
+    return value;
+  },
+  increment() {
+    value++;
+  },
+  decrement() {
+    value--;
+  },
+  reset() {
+    value = 0;
+  },
 };
 ```
 
@@ -46,21 +46,21 @@ These tests will fail because the counter is going to maintain state between the
 
 ```javascript
 describe('Counter', () => {
-	it('starts at zero', () => {
-		expect(counter.value).toBe(0);
-	});
+  it('starts at zero', () => {
+    expect(counter.value).toBe(0);
+  });
 
-	it('can increment', () => {
-		counter.increment();
-		expect(counter.value).toBe(1);
-	});
+  it('can increment', () => {
+    counter.increment();
+    expect(counter.value).toBe(1);
+  });
 
-	// Let's get this test to *not* fail.
-	it('can decrement', () => {
-		counter.increment();
-		counter.decrement();
-		expect(counter.value).toBe(0);
-	});
+  // Let's get this test to *not* fail.
+  it('can decrement', () => {
+    counter.increment();
+    counter.decrement();
+    expect(counter.value).toBe(0);
+  });
 });
 ```
 
@@ -74,25 +74,25 @@ import { expect, test, beforeEach } from 'vitest';
 import { counter } from './counter';
 
 describe('Counter', () => {
-	beforeEach(() => {
-		counter.reset();
-	});
+  beforeEach(() => {
+    counter.reset();
+  });
 
-	it('starts at zero', () => {
-		expect(counter.value).toBe(0);
-	});
+  it('starts at zero', () => {
+    expect(counter.value).toBe(0);
+  });
 
-	it('can increment', () => {
-		counter.increment();
-		expect(counter.value).toBe(1);
-	});
+  it('can increment', () => {
+    counter.increment();
+    expect(counter.value).toBe(1);
+  });
 
-	// Let's get this test to *not* fail.
-	it('can decrement', () => {
-		counter.increment();
-		counter.decrement();
-		expect(counter.value).toBe(0);
-	});
+  // Let's get this test to *not* fail.
+  it('can decrement', () => {
+    counter.increment();
+    counter.decrement();
+    expect(counter.value).toBe(0);
+  });
 });
 ```
 
@@ -106,15 +106,15 @@ Suppose you have tests that require setting up a database connection:
 ```javascript
 // db.js
 export const db = {
-	connect: async () => {
-		/* … */
-	},
-	disconnect: async () => {
-		/* … */
-	},
-	clear: async () => {
-		/* … */
-	},
+  connect: async () => {
+    /* … */
+  },
+  disconnect: async () => {
+    /* … */
+  },
+  clear: async () => {
+    /* … */
+  },
 };
 ```
 
@@ -126,28 +126,28 @@ import { expect, test, beforeAll, afterAll, beforeEach } from 'vitest';
 import { db } from './db';
 
 beforeAll(async () => {
-	// Arrange: Connect to the database once before all tests
-	await db.connect();
+  // Arrange: Connect to the database once before all tests
+  await db.connect();
 });
 
 afterAll(async () => {
-	// Cleanup: Disconnect from the database after all tests
-	await db.disconnect();
+  // Cleanup: Disconnect from the database after all tests
+  await db.disconnect();
 });
 
 beforeEach(async () => {
-	// Arrange: Clear the database before each test
-	await db.clear();
+  // Arrange: Clear the database before each test
+  await db.clear();
 });
 
 test('fetches data from the database', async () => {
-	// Act: Insert test data and fetch it
-	// Assert: Verify the fetched data
+  // Act: Insert test data and fetch it
+  // Assert: Verify the fetched data
 });
 
 test('updates data in the database', async () => {
-	// Act: Update test data
-	// Assert: Verify the data was updated
+  // Act: Update test data
+  // Assert: Verify the data was updated
 });
 ```
 
@@ -167,23 +167,23 @@ import { test, expect, describe, beforeEach } from 'vitest';
 let data;
 
 describe('Group 1', () => {
-	beforeEach(() => {
-		data = { value: 1 };
-	});
+  beforeEach(() => {
+    data = { value: 1 };
+  });
 
-	test('data value is 1', () => {
-		expect(data.value).toBe(1);
-	});
+  test('data value is 1', () => {
+    expect(data.value).toBe(1);
+  });
 });
 
 describe('Group 2', () => {
-	beforeEach(() => {
-		data = { value: 2 };
-	});
+  beforeEach(() => {
+    data = { value: 2 };
+  });
 
-	test('data value is 2', () => {
-		expect(data.value).toBe(2);
-	});
+  test('data value is 2', () => {
+    expect(data.value).toBe(2);
+  });
 });
 ```
 
@@ -202,20 +202,20 @@ import { test, expect, beforeEach } from 'vitest';
 let user;
 
 beforeEach(async () => {
-	// Simulate fetching user data
-	user = await fetchUser();
+  // Simulate fetching user data
+  user = await fetchUser();
 });
 
 test('user name is Alice', () => {
-	expect(user.name).toBe('Alice');
+  expect(user.name).toBe('Alice');
 });
 
 async function fetchUser() {
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			resolve({ name: 'Alice' });
-		}, 100);
-	});
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ name: 'Alice' });
+    }, 100);
+  });
 }
 ```
 

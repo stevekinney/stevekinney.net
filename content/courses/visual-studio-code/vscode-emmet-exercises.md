@@ -1,6 +1,7 @@
 ---
 modified: 2025-03-18T02:26:30-05:00
-title: "Emmet in Visual Studio Code: Exercises"
+title: 'Emmet in Visual Studio Code: Exercises'
+description: 'Some quick exercises for getting comfortable using Emmet inside of VS Code.'
 ---
 
 We don't have a ton of opportunities for hands-on practice in this course. So, let's take the opportunity since we have one.

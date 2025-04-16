@@ -1,6 +1,9 @@
 ---
 modified: 2025-03-17T10:50:34-06:00
+title: Keybindings for Snippets
+description: Add Keybindings for your Snippets in Visual Studio Code.
 ---
+
 Custom keybindings aren’t limited to built-in commands. You can also bind snippets, custom tasks, or extension-specific features.
 
 For instance, if you want a quick snippet of a React component:

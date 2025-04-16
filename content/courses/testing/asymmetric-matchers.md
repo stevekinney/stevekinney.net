@@ -21,15 +21,15 @@ Consider this `Person` from `examples/characters/person.js` for a moment:
 import { v4 as id } from 'uuid';
 
 export class Person {
-	constructor(firstName, lastName) {
-		this.id = 'person-' + id();
-		this.firstName = firstName;
-		this.lastName = lastName;
-	}
+  constructor(firstName, lastName) {
+    this.id = 'person-' + id();
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
 
-	get fullName() {
-		return `${this.firstName} ${this.lastName}`;
-	}
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
 }
 ```
 
@@ -41,8 +41,8 @@ This well-meaning test is going to fail:
 
 ```javascript
 it('should create a person with a first name and last name', () => {
-	const person = new Person('Grace', 'Hopper');
-	expect(person).toEqual({ firstName: 'Grace', lastName: 'Hopper' });
+  const person = new Person('Grace', 'Hopper');
+  expect(person).toEqual({ firstName: 'Grace', lastName: 'Hopper' });
 });
 ```
 
@@ -52,12 +52,12 @@ We don't really care what the `id` is but maybe we want to make sure that there 
 
 ```javascript
 it('should create a person with a first name and last name', () => {
-	const person = new Person('Grace', 'Hopper');
-	expect(person).toEqual({
-		id: expect.any(String),
-		firstName: 'Grace',
-		lastName: 'Hopper',
-	});
+  const person = new Person('Grace', 'Hopper');
+  expect(person).toEqual({
+    id: expect.any(String),
+    firstName: 'Grace',
+    lastName: 'Hopper',
+  });
 });
 ```
 
@@ -65,12 +65,12 @@ We could even make sure that the string matches a certain pattern.
 
 ```javascript
 it('should create a person with a first name and last name', () => {
-	const person = new Person('Grace', 'Hopper');
-	expect(person).toEqual({
-		id: expect.stringMatching(/^person-/),
-		firstName: 'Grace',
-		lastName: 'Hopper',
-	});
+  const person = new Person('Grace', 'Hopper');
+  expect(person).toEqual({
+    id: expect.stringMatching(/^person-/),
+    firstName: 'Grace',
+    lastName: 'Hopper',
+  });
 });
 ```
 
@@ -86,17 +86,17 @@ You’ve got some giant object returning all kinds of extra data, but you only c
 
 ```js
 const strongestAvenger = {
-	name: 'Thor Odinson',
-	age: 1500,
-	weapon: 'Stormbreaker',
-	occupation: 'God of Thunder',
+  name: 'Thor Odinson',
+  age: 1500,
+  weapon: 'Stormbreaker',
+  occupation: 'God of Thunder',
 };
 
 expect(strongestAvenger).toEqual(
-	expect.objectContaining({
-		name: 'Thor Odinson',
-		weapon: 'Stormbreaker',
-	}),
+  expect.objectContaining({
+    name: 'Thor Odinson',
+    weapon: 'Stormbreaker',
+  }),
 );
 ```
 

@@ -12,11 +12,11 @@ Emmet turns short snippets of text into full HTML structures. For instance, if y
 
 ```html
 <div>
-	<ul>
-		<li></li>
-		<li></li>
-		<li></li>
-	</ul>
+  <ul>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
 </div>
 ```
 
@@ -34,11 +34,11 @@ Here’s a quick look at other common patterns:
 
 ```html
 <ul>
-	<li class="item"></li>
-	<li class="item"></li>
-	<li class="item"></li>
-	<li class="item"></li>
-	<li class="item"></li>
+  <li class="item"></li>
+  <li class="item"></li>
+  <li class="item"></li>
+  <li class="item"></li>
+  <li class="item"></li>
 </ul>
 ```
 
@@ -46,8 +46,8 @@ Here’s a quick look at other common patterns:
 
 ```html
 <div class="container">
-	<img class="logo" src="logo.png" />
-	<p></p>
+  <img class="logo" src="logo.png" />
+  <p></p>
 </div>
 ```
 
@@ -83,12 +83,12 @@ If you type `div.wrapper>div.title{Hello, Emmet!}^^p.subtitle{It even works in R
 import React from 'react';
 
 export function MyComponent() {
-	return (
-		<div className="wrapper">
-			<div className="title">Hello, Emmet!</div>
-			<p className="subtitle">It even works in React!</p>
-		</div>
-	);
+  return (
+    <div className="wrapper">
+      <div className="title">Hello, Emmet!</div>
+      <p className="subtitle">It even works in React!</p>
+    </div>
+  );
 }
 ```
 
@@ -109,15 +109,15 @@ Expands to:
 
 ```html
 <header>
-	<h1></h1>
+  <h1></h1>
 </header>
 <main>
-	<section></section>
-	<section></section>
-	<section></section>
+  <section></section>
+  <section></section>
+  <section></section>
 </main>
 <footer>
-	<p></p>
+  <p></p>
 </footer>
 ```
 
@@ -131,16 +131,16 @@ Creates three card divs, each with an `h2` and `p` element:
 
 ```html
 <div class="card">
-	<h2></h2>
-	<p></p>
+  <h2></h2>
+  <p></p>
 </div>
 <div class="card">
-	<h2></h2>
-	<p></p>
+  <h2></h2>
+  <p></p>
 </div>
 <div class="card">
-	<h2></h2>
-	<p></p>
+  <h2></h2>
+  <p></p>
 </div>
 ```
 
@@ -160,9 +160,9 @@ Produces more compact output:
 
 ```html
 <ul>
-	<li></li>
-	<li></li>
-	<li></li>
+  <li></li>
+  <li></li>
+  <li></li>
 </ul>
 ```
 
@@ -178,10 +178,10 @@ Expands to:
 
 ```html
 <div>
-	<header></header>
-	<main></main>
-	<footer></footer>
-	<!-- /div -->
+  <header></header>
+  <main></main>
+  <footer></footer>
+  <!-- /div -->
 </div>
 ```
 
@@ -197,7 +197,7 @@ Produces:
 
 ```html
 <form class="search">
-	<input class="search__field" />
+  <input class="search__field" />
 </form>
 ```
 
@@ -215,9 +215,9 @@ Emmet knows that `ul` elements typically contain `li` children, so it produces:
 
 ```html
 <ul>
-	<li class="item"></li>
-	<li class="item"></li>
-	<li class="item"></li>
+  <li class="item"></li>
+  <li class="item"></li>
+  <li class="item"></li>
 </ul>
 ```
 
@@ -240,9 +240,9 @@ Creates a paragraph with standard lorem ipsum text:
 
 ```html
 <p>
-	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae
-	natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti
-	eos cupiditate dolore doloribus!
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui dicta minus molestiae vel beatae
+  natus eveniet ratione temporibus aperiam harum alias officiis assumenda officia quibusdam deleniti
+  eos cupiditate dolore doloribus!
 </p>
 ```
 
@@ -268,19 +268,19 @@ Creates an article with a heading and three paragraphs:
 
 ```html
 <article>
-	<h2>Lorem ipsum dolor sit amet.</h2>
-	<p>
-		Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi fugiat veritatis culpa quos
-		aspernatur! Laboriosam alias iure fuga possimus officiis.
-	</p>
-	<p>
-		Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci labore repellat, asperiores
-		quas quae maxime doloremque aliquam? Eius, illo excepturi.
-	</p>
-	<p>
-		Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis sapiente distinctio illum
-		perspiciatis, pariatur at libero. Placeat laboriosam asperiores esse.
-	</p>
+  <h2>Lorem ipsum dolor sit amet.</h2>
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi fugiat veritatis culpa quos
+    aspernatur! Laboriosam alias iure fuga possimus officiis.
+  </p>
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci labore repellat, asperiores
+    quas quae maxime doloremque aliquam? Eius, illo excepturi.
+  </p>
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis sapiente distinctio illum
+    perspiciatis, pariatur at libero. Placeat laboriosam asperiores esse.
+  </p>
 </article>
 ```
 

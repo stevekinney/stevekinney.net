@@ -16,10 +16,10 @@ Let's say you have a not-very-smart `UserService` that fetches some user data. B
 
 ```javascript
 class UserService {
-	getUser() {
-		const apiClient = new ApiClient();
-		return apiClient.get('/user');
-	}
+  getUser() {
+    const apiClient = new ApiClient();
+    return apiClient.get('/user');
+  }
 }
 ```
 
@@ -31,13 +31,13 @@ Let's loosen up these constraints and pass the dependencies via the constructor.
 
 ```javascript
 class UserService {
-	constructor(apiClient) {
-		this.apiClient = apiClient;
-	}
+  constructor(apiClient) {
+    this.apiClient = apiClient;
+  }
 
-	getUser() {
-		return this.apiClient.get('/user');
-	}
+  getUser() {
+    return this.apiClient.get('/user');
+  }
 }
 ```
 
@@ -54,17 +54,17 @@ import { describe, it, expect, vi } from 'vitest';
 import { UserService } from './UserService';
 
 describe('UserService', () => {
-	it('fetches user data', async () => {
-		const fakeApiClient = {
-			get: vi.fn().mockResolvedValue({ id: 1, name: 'Steve' }),
-		};
+  it('fetches user data', async () => {
+    const fakeApiClient = {
+      get: vi.fn().mockResolvedValue({ id: 1, name: 'Steve' }),
+    };
 
-		const userService = new UserService(fakeApiClient);
-		const user = await userService.getUser();
+    const userService = new UserService(fakeApiClient);
+    const user = await userService.getUser();
 
-		expect(fakeApiClient.get).toHaveBeenCalledWith('/user');
-		expect(user).toEqual({ id: 1, name: 'Steve' });
-	});
+    expect(fakeApiClient.get).toHaveBeenCalledWith('/user');
+    expect(user).toEqual({ id: 1, name: 'Steve' });
+  });
 });
 ```
 
@@ -82,7 +82,7 @@ You don't need fancy classes to do Dependency Injection either! You can do it wi
 
 ```javascript
 function getUser(apiClient) {
-	return apiClient.get('/user');
+  return apiClient.get('/user');
 }
 ```
 

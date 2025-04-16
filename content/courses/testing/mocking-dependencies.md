@@ -21,7 +21,7 @@ If we go back to our `log` function in `examples/logjam`—you'll see that in pr
 
 ```js
 vi.mock('./send-to-server', {
-	sendToServer: vi.fn(),
+  sendToServer: vi.fn(),
 });
 ```
 
@@ -31,18 +31,18 @@ Now, we can run our tests with that function mocked out.
 
 ```js
 beforeEach(() => {
-	vi.stubEnv('MODE', 'production');
+  vi.stubEnv('MODE', 'production');
 });
 
 afterEach(() => {
-	vi.unstubAllEnvs();
-	vi.resetAllMocks();
+  vi.unstubAllEnvs();
+  vi.resetAllMocks();
 });
 
 it('sends messages to the server in production mode', () => {
-	log('Hello, world!');
+  log('Hello, world!');
 
-	expect(sendToServer).toHaveBeenCalledWith('info', 'Hello, world!');
+  expect(sendToServer).toHaveBeenCalledWith('info', 'Hello, world!');
 });
 ```
 
@@ -70,31 +70,31 @@ Here’s an example of mocking a database service function:
 ```js
 // Database service that will be mocked
 function fetchBandData(bandName) {
-	// Normally this would fetch from a database
-	return database.query(`SELECT * FROM bands WHERE name = '${bandName}'`);
+  // Normally this would fetch from a database
+  return database.query(`SELECT * FROM bands WHERE name = '${bandName}'`);
 }
 
 // Code under test
 async function getBandDetails(bandName) {
-	return await fetchBandData(bandName);
+  return await fetchBandData(bandName);
 }
 
 describe('getBandDetails', () => {
-	it('should return mocked band data', async () => {
-		// Mock fetchBandData to simulate database response
-		const mockFetchBandData = vi.fn(() =>
-			Promise.resolve({ name: 'Green Day', genre: 'Punk Rock' }),
-		);
+  it('should return mocked band data', async () => {
+    // Mock fetchBandData to simulate database response
+    const mockFetchBandData = vi.fn(() =>
+      Promise.resolve({ name: 'Green Day', genre: 'Punk Rock' }),
+    );
 
-		// Call the function with the mocked dependency
-		const result = await mockFetchBandData('Green Day');
+    // Call the function with the mocked dependency
+    const result = await mockFetchBandData('Green Day');
 
-		// Check that the function was called with the correct argument
-		expect(mockFetchBandData).toHaveBeenCalledWith('Green Day');
+    // Check that the function was called with the correct argument
+    expect(mockFetchBandData).toHaveBeenCalledWith('Green Day');
 
-		// Assert the return value
-		expect(result).toEqual({ name: 'Green Day', genre: 'Punk Rock' });
-	});
+    // Assert the return value
+    expect(result).toEqual({ name: 'Green Day', genre: 'Punk Rock' });
+  });
 });
 ```
 
@@ -112,27 +112,27 @@ import * as api from './api';
 
 // Code under test
 async function getConcertDetails(bandName) {
-	return await api.fetchConcerts(bandName);
+  return await api.fetchConcerts(bandName);
 }
 
 describe('getConcertDetails', () => {
-	// Mock the entire api module
-	vi.mock('./api', () => ({
-		fetchConcerts: vi.fn(() =>
-			Promise.resolve([{ venue: 'Madison Square Garden', date: '2024-09-01' }]),
-		),
-	}));
+  // Mock the entire api module
+  vi.mock('./api', () => ({
+    fetchConcerts: vi.fn(() =>
+      Promise.resolve([{ venue: 'Madison Square Garden', date: '2024-09-01' }]),
+    ),
+  }));
 
-	it('should return mocked concert details', async () => {
-		// Call the function with the mocked module
-		const result = await getConcertDetails('Green Day');
+  it('should return mocked concert details', async () => {
+    // Call the function with the mocked module
+    const result = await getConcertDetails('Green Day');
 
-		// Check that the fetchConcerts mock was called
-		expect(api.fetchConcerts).toHaveBeenCalledWith('Green Day');
+    // Check that the fetchConcerts mock was called
+    expect(api.fetchConcerts).toHaveBeenCalledWith('Green Day');
 
-		// Assert the return value
-		expect(result).toEqual([{ venue: 'Madison Square Garden', date: '2024-09-01' }]);
-	});
+    // Assert the return value
+    expect(result).toEqual([{ venue: 'Madison Square Garden', date: '2024-09-01' }]);
+  });
 });
 ```
 
@@ -149,23 +149,23 @@ import * as fs from 'fs';
 
 // Code under test
 function readConfigFile(filePath) {
-	return fs.readFileSync(filePath, 'utf-8');
+  return fs.readFileSync(filePath, 'utf-8');
 }
 
 describe('readConfigFile', () => {
-	// Mock the fs module
-	vi.mock('fs');
+  // Mock the fs module
+  vi.mock('fs');
 
-	it('should read the mocked config file', () => {
-		// Mock the fs.readFileSync method
-		vi.spyOn(fs, 'readFileSync').mockReturnValue('mocked file content');
+  it('should read the mocked config file', () => {
+    // Mock the fs.readFileSync method
+    vi.spyOn(fs, 'readFileSync').mockReturnValue('mocked file content');
 
-		// Call the function under test
-		const result = readConfigFile('/path/to/config');
+    // Call the function under test
+    const result = readConfigFile('/path/to/config');
 
-		// Assert the returned file content
-		expect(result).toBe('mocked file content');
-	});
+    // Assert the returned file content
+    expect(result).toBe('mocked file content');
+  });
 });
 ```
 
@@ -181,26 +181,26 @@ import * as api from './api';
 
 // Code under test
 async function fetchConcertData(bandName) {
-	const response = await api.getConcerts(bandName);
-	return response.data;
+  const response = await api.getConcerts(bandName);
+  return response.data;
 }
 
 describe('fetchConcertData', () => {
-	// Mock the API module
-	vi.mock('./api', () => ({
-		getConcerts: vi.fn(() => Promise.resolve({ data: [{ venue: 'Wembley', date: '2024-10-05' }] })),
-	}));
+  // Mock the API module
+  vi.mock('./api', () => ({
+    getConcerts: vi.fn(() => Promise.resolve({ data: [{ venue: 'Wembley', date: '2024-10-05' }] })),
+  }));
 
-	it('should fetch concert data using the mocked API', async () => {
-		// Call the function under test
-		const result = await fetchConcertData('Green Day');
+  it('should fetch concert data using the mocked API', async () => {
+    // Call the function under test
+    const result = await fetchConcertData('Green Day');
 
-		// Assert that the API was called with the correct argument
-		expect(api.getConcerts).toHaveBeenCalledWith('Green Day');
+    // Assert that the API was called with the correct argument
+    expect(api.getConcerts).toHaveBeenCalledWith('Green Day');
 
-		// Check the returned data
-		expect(result).toEqual([{ venue: 'Wembley', date: '2024-10-05' }]);
-	});
+    // Check the returned data
+    expect(result).toEqual([{ venue: 'Wembley', date: '2024-10-05' }]);
+  });
 });
 ```
 

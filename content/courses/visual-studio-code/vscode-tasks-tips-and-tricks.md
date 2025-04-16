@@ -10,21 +10,21 @@ You can define custom problem matchers to parse the output of any CLI tool. This
 
 ```jsonc
 {
-	"problemMatcher": [
-		{
-			"owner": "customLinter",
-			"pattern": [
-				{
-					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error)\\s+(.*)$",
-					"file": 1,
-					"line": 2,
-					"column": 3,
-					"severity": 4,
-					"message": 5,
-				},
-			],
-		},
-	],
+  "problemMatcher": [
+    {
+      "owner": "customLinter",
+      "pattern": [
+        {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error)\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5,
+        },
+      ],
+    },
+  ],
 }
 ```
 
@@ -34,16 +34,16 @@ You can control how the task output is shown:
 
 ```jsonc
 {
-	"label": "Verbose Build",
-	"type": "shell",
-	"command": "npm run build --verbose",
-	"presentation": {
-		"reveal": "always",
-		"panel": "dedicated",
-		"echo": true,
-		"showReuseMessage": false,
-		"clear": true,
-	},
+  "label": "Verbose Build",
+  "type": "shell",
+  "command": "npm run build --verbose",
+  "presentation": {
+    "reveal": "always",
+    "panel": "dedicated",
+    "echo": true,
+    "showReuseMessage": false,
+    "clear": true,
+  },
 }
 ```
 
@@ -57,13 +57,13 @@ Need environment variables for a single task? Insert `env` in the task:
 
 ```jsonc
 {
-	"label": "Build with Env Var",
-	"type": "shell",
-	"command": "npm run build",
-	"env": {
-		"NODE_ENV": "production",
-		"API_KEY": "xyz123",
-	},
+  "label": "Build with Env Var",
+  "type": "shell",
+  "command": "npm run build",
+  "env": {
+    "NODE_ENV": "production",
+    "API_KEY": "xyz123",
+  },
 }
 ```
 
@@ -75,28 +75,28 @@ You can configure tasks to run automatically when you open a folder or workspace
 
 ```jsonc
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Start Dev Server",
-			"type": "shell",
-			"command": "npm run dev",
-			"isBackground": true,
-			"problemMatcher": {
-				"owner": "custom",
-				"pattern": {
-					"regexp": ".",
-				},
-				"background": {
-					"beginsPattern": "Starting development server",
-					"endsPattern": "Development server started",
-				},
-			},
-			"runOptions": {
-				"runOn": "folderOpen",
-			},
-		},
-	],
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Dev Server",
+      "type": "shell",
+      "command": "npm run dev",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": ".",
+        },
+        "background": {
+          "beginsPattern": "Starting development server",
+          "endsPattern": "Development server started",
+        },
+      },
+      "runOptions": {
+        "runOn": "folderOpen",
+      },
+    },
+  ],
 }
 ```
 
@@ -127,12 +127,12 @@ You can configure tasks to run automatically when you open a folder or workspace
 
 ```jsonc
 {
-	"label": "Dev Environment",
-	"dependsOn": ["Start Backend", "Start Frontend", "Watch CSS"],
-	"dependsOrder": "parallel",
-	"runOptions": {
-		"runOn": "folderOpen",
-	},
+  "label": "Dev Environment",
+  "dependsOn": ["Start Backend", "Start Frontend", "Watch CSS"],
+  "dependsOrder": "parallel",
+  "runOptions": {
+    "runOn": "folderOpen",
+  },
 }
 ```
 

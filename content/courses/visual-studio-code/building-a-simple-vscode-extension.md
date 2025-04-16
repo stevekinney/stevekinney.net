@@ -1,6 +1,7 @@
 ---
 title: Building a Simple Extension
 modified: 2025-03-18T04:22:17-05:00
+description: A quick guide to building a Visual Studio Code extension.
 ---
 
 Let's build a simple extension that finds all of the `FIXME`s in a JavaScript file and then decorates them so that we can see them easily.
@@ -12,47 +13,47 @@ const vscode = require('vscode');
 
 // Step A: Define a decoration type
 const decorationType = vscode.window.createTextEditorDecorationType({
-	backgroundColor: 'rgba(255, 0, 0, 0.3)', // semi-transparent red
+  backgroundColor: 'rgba(255, 0, 0, 0.3)', // semi-transparent red
 });
 
 // Step B: Function to find and decorate words
 function decorateWords() {
-	const editor = vscode.window.activeTextEditor;
-	if (!editor) return;
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) return;
 
-	const text = editor.document.getText();
-	const regex = /\bFIXME\b/g;
+  const text = editor.document.getText();
+  const regex = /\bFIXME\b/g;
 
-	const ranges = [...text.matchAll(regex)].map((match) => {
-		const startPos = editor.document.positionAt(match.index);
-		const endPos = editor.document.positionAt(match.index + match[0].length);
-		return new vscode.Range(startPos, endPos);
-	});
+  const ranges = [...text.matchAll(regex)].map((match) => {
+    const startPos = editor.document.positionAt(match.index);
+    const endPos = editor.document.positionAt(match.index + match[0].length);
+    return new vscode.Range(startPos, endPos);
+  });
 
-	editor.setDecorations(decorationType, ranges);
+  editor.setDecorations(decorationType, ranges);
 }
 
 // Step C: Hook the function into editor/document change events
 function subscribeToDocumentChanges(context) {
-	// Re-run whenever text changes
-	vscode.workspace.onDidChangeTextDocument(() => decorateWords(), null, context.subscriptions);
-	// Re-run whenever the active editor changes (switch tabs, etc.)
-	vscode.window.onDidChangeActiveTextEditor(() => decorateWords(), null, context.subscriptions);
+  // Re-run whenever text changes
+  vscode.workspace.onDidChangeTextDocument(() => decorateWords(), null, context.subscriptions);
+  // Re-run whenever the active editor changes (switch tabs, etc.)
+  vscode.window.onDidChangeActiveTextEditor(() => decorateWords(), null, context.subscriptions);
 
-	// Run at least once on activation
-	decorateWords();
+  // Run at least once on activation
+  decorateWords();
 }
 
 // This is your extension’s main activation
 function activate(context) {
-	// Register the decorator logic with events
-	subscribeToDocumentChanges(context);
+  // Register the decorator logic with events
+  subscribeToDocumentChanges(context);
 }
 
 // export (so VS Code recognizes these functions)
 module.exports = {
-	activate,
-	deactivate: () => {},
+  activate,
+  deactivate: () => {},
 };
 ```
 
@@ -69,24 +70,24 @@ Your `package.json` should have something like this in its `contributes` section
 
 ```json
 {
-	"name": "comment-highlighter",
-	"displayName": "comment-highlighter",
-	"description": "It highlights comments.",
-	"version": "0.0.1",
-	"engines": {
-		"vscode": "^1.98.0"
-	},
-	"activationEvents": ["onLanguage:javascript", "onLanguage:typescript"],
-	"main": "./extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.decorateWords",
-				"title": "Decorate Words"
-			}
-		]
-	}
-	// …More stuff…
+  "name": "comment-highlighter",
+  "displayName": "comment-highlighter",
+  "description": "It highlights comments.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.98.0"
+  },
+  "activationEvents": ["onLanguage:javascript", "onLanguage:typescript"],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.decorateWords",
+        "title": "Decorate Words"
+      }
+    ]
+  }
+  // …More stuff…
 }
 ```
 

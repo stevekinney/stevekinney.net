@@ -28,7 +28,7 @@ To hit that sweet 100%, chances are you’ll end up writing tests that don’t d
 
 ```js
 it('loads with no errors', () => {
-	expect(true).toBe(true);
+  expect(true).toBe(true);
 });
 ```
 

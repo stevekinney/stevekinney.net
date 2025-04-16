@@ -11,7 +11,7 @@ Dev Containers offer a high degree of customization to perfectly match your proj
 
 ```json
 {
-	"dockerFile": "Dockerfile"
+  "dockerFile": "Dockerfile"
 }
 ```
 

@@ -1,81 +1,24 @@
 ---
-title: Visual Studio Code Course
-description: "Learn to maximize your productivity with Visual Studio Code's features and capabilities"
-layout: contents
-base: /courses/visual-studio-code
-modified: 2025-03-18T08:49:38-05:00
+title: Visual Studio Code
+description: 'A in-depth guide covering everyhing you would ever want to know about using Visual Studio Code.'
+layout: page
+date: 2025-03-18T09:45:00-07:00
+modified: 2025-03-18T09:45:00-07:00
 ---
 
-## Basics
+> [!NOTE] Prerequisites
+> Please make sure you have the following installed.
+>
+> - [Visual Studio Code](https://code.visualstudio.com/download)
+> - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Optional. Used for the section on Dev Containers.)
 
-- [Editor Layout](vscode-editor-layout.md)
-- [The Command Palette](vscode-command-palette.md)
-- [Keybindings](keybindings.md)
-- [The Integrated Terminal](vscode-integrated-terminal.md)
-- [Navigation](navigating-vscode.md)
-- [Source Control](vscode-source-control.md)
-- [Search and Replace](search-and-replace-vscode.md)
-- [Multiple Cursors](vscode-multiple-cursors.md)
-- [Multiple Cursors with Find and Replace](multiple-cursors-with-find-and-replace.md)
-- [Refactoring](refactoring-in-vscode.md)
-- [Emmet](vscode-emmet.md) ([Exercises](vscode-emmet-exercises.md))
-- [A Tour of Extensions](favorite-vs-code-extensions.md)
+This comprehensive Visual Studio Code course covers a wide range of features to make you appear _way more_ productive than your co-workers.
 
-## Settings
+> [!TIP] Example Repository
+> We're going to be playing around with some of the examples in [this repository](https://github.com/stevekinney/vscode-examples).
 
-- [Editing Settings (Visually)](editing-settings-through-the-vs-code-ui.md)
-- [Editing Settings via JSON](editing-settings-through-json.md)
-- [Steve's Favorite and Other Popular Settings](favorite-vs-code-settings.md)
-- [Settings for Managing Files](vscode-settings-for-managing-files.md)
-- [Settings Profiles](settings-profiles-vscode.md)
-- [Controlling Settings With Environment Variables](settings-via-env-vars-vscode.md)
+We'll begin with editor basics including layout customization, command palette usage, integrated terminal, multiple cursor techniques, and navigation capabilities. Next, we'll dive into configuration management through settings precedence, and profiles.
 
-## Snippets
+More advanced topics include code snippets creation and management, task automation, debugging techniques from basic breakpoints to advanced data inspection, and source control integration with Git. The course also thoroughly explores Dev Containers functionality for creating consistent development environments.
 
-- [Using Snippets](vscode-snippets) ([Exercises](vscode-snippet-exercises.md))
-- [Placeholders and Variables](placeholders-and-variables-in-vscode-snippets.md)
-- [Snippets and Regular Expressions](snippets-regex.md)
-- [Advanced Snippet Techniques](advanced-snippet-techniques-vscode.md)
-- [Assigning Keybindings to Snippets](keybindings-for-snippets-vscode.md)
-- [Snippets Libraries and Extensions](snippets-libraries-and-extensions.md)
-
-## Tasks
-
-- [Visual Studio Code Tasks](vscode-tasks.md)
-- [Tasks: Examples](vscode-task-examples.md)
-- [Tasks: Tips and Tricks](vscode-tasks-tips-and-tricks.md)
-- [Compound Tasks](compound-tasks-vscode.md)
-- [Built-in Problem Matchers](built-in-problem-matchers)
-
-## Debugging
-
-- [Debugging Basics](vscode-debugging-basics.md)
-- [`launch.json`](launch-config.md)
-- [Debugging Web Applications](debugging-web-applications.md)
-- [Debugging Running Node Processes](debugging-running-node-processes.md)
-- [Advanced Debugging Techniques](advanced-debugging-techniques.md)
-
-## Multi-Root Workspaces
-
-- [Multi-Root Workspaces](multi-root-workspaces.md)
-- [Creating Multi-Root Workspaces](creating-a-multi-root-workspace.md)
-- [More on Multi-Root Namespaces](more-on-multi-root-namespaces)
-
-## Dev Containers
-
-- [Dev Containers](vscode-dev-containers.md)
-- [Setting Up Dev Containers](setting-up-dev-containers)
-- [Exploring `devcontainer.json`](exploring-devcontainer-json.md)
-- [Working with Dev Containers](working-with-dev-containers.md)
-- [Dev Containers and Dockerfiles](dev-containers-and-dockerfiles.md)
-- [Personalizing Your Container Environment](personalizing-dev-containers.md)
-
-## Extensions
-
-- [Scaffolding an Extension](vscode-extension-scaffold.md)
-- [Building a Simple Extension](building-a-simple-vscode-extension)
-- [Building an Extension with a Web View](vscode-regular-expressionist.md)
-
-## Appendix
-
-[Some Keyboard Shortcuts](vscode-keyboard-shortcuts)
+The course emphasizes practical skills with dedicated sections on refactoring tools, search and replace operations, multi-root workspaces for managing multiple projects, and Emmet for faster HTML/CSS authoring. Throughout the modules, there's a balance between covering built-in functionality and highlighting useful extensions. Each topic includes detailed explanations, code examples, and best practices, with specific attention to keyboard shortcuts and command patterns that streamline the development experience. The material progressively builds from fundamental concepts to more specialized features, helping developers transition from basic usage to mastering Visual Studio Code as a powerful development environment.

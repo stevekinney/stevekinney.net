@@ -98,9 +98,9 @@ Capture groups in regular expressions aren't just for preserving parts of the ma
 Imagine you have a list of names in "LastName, FirstName" format that you need to reverse:
 
 ```ts
-Smith, John
-Johnson, Sarah
-Williams, Michael
+Smith, John;
+Johnson, Sarah;
+Williams, Michael;
 ```
 
 You can use capture groups to swap the order:
@@ -128,15 +128,15 @@ Need to convert dates from `MM/DD/YYYY` to `YYYY-MM-DD` format?
 This changes:
 
 ```ts
-12/25/2023
-1/15/2024
+12 / 25 / 2023;
+1 / 15 / 2024;
 ```
 
 To:
 
 ```ts
-2023-12-25
-2024-1-15
+2023 - 12 - 25;
+2024 - 1 - 15;
 ```
 
 For a more robust version that ensures two-digit months and days:

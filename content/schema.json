@@ -1,34 +1,34 @@
 {
-	"$schema": "http://json-schema.org/draft-07/schema#",
-	"type": "object",
-	"properties": {
-		"title": {
-			"type": "string"
-		},
-		"description": {
-			"type": "string"
-		},
-		"modified": {
-			"type": "string",
-			"format": "date-time"
-		},
-		"date": {
-			"type": "string",
-			"format": "date-time"
-		},
-		"published": {
-			"type": "boolean"
-		},
-		"exclude": {
-			"type": "boolean"
-		},
-		"tags": {
-			"type": "array",
-			"items": {
-				"type": "string"
-			}
-		}
-	},
-	"required": ["title", "description", "modified"],
-	"additionalProperties": false
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "modified": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "published": {
+      "type": "boolean"
+    },
+    "exclude": {
+      "type": "boolean"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["title", "description", "modified"],
+  "additionalProperties": false
 }

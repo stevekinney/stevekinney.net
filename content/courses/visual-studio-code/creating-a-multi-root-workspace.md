@@ -16,26 +16,26 @@ modified: 2025-03-16T14:12:15-06:00
 
 ```json
 {
-	"folders": [
-		{
-			"path": "path/to/folder1"
-		},
-		{
-			"path": "path/to/folder2",
-			"name": "Custom Folder Name"
-		},
-		{
-			"uri": "git://repo-url?ref#folder-in-repo",
-			"name": "Remote Repository Folder"
-		}
-	],
-	"settings": {
-		"editor.tabSize": 2,
-		"files.autoSave": "afterDelay"
-	},
-	"extensions": {
-		"recommendations": ["ms-vscode.vscode-typescript", "dbaeumer.vscode-eslint"]
-	}
+  "folders": [
+    {
+      "path": "path/to/folder1"
+    },
+    {
+      "path": "path/to/folder2",
+      "name": "Custom Folder Name"
+    },
+    {
+      "uri": "git://repo-url?ref#folder-in-repo",
+      "name": "Remote Repository Folder"
+    }
+  ],
+  "settings": {
+    "editor.tabSize": 2,
+    "files.autoSave": "afterDelay"
+  },
+  "extensions": {
+    "recommendations": ["ms-vscode.vscode-typescript", "dbaeumer.vscode-eslint"]
+  }
 }
 ```
 

@@ -28,46 +28,46 @@ const app = express();
 app.use(express.json());
 
 const createUserEndpoint = {
-	method: 'post',
-	path: '/users',
-	request: {
-		body: z.object({
-			username: z.string().min(3),
-			email: z.string().email(),
-			age: z.number().int().positive().optional(),
-		}),
-	},
-	response: z.object({
-		id: z.string().uuid(),
-		username: z.string(),
-		email: z.string(),
-		age: z.number().int().positive().optional(),
-	}),
-	handler: async ({ input, res }) => {
-		// Input is automatically validated against the request schema
-		const { username, email, age } = input.body;
+  method: 'post',
+  path: '/users',
+  request: {
+    body: z.object({
+      username: z.string().min(3),
+      email: z.string().email(),
+      age: z.number().int().positive().optional(),
+    }),
+  },
+  response: z.object({
+    id: z.string().uuid(),
+    username: z.string(),
+    email: z.string(),
+    age: z.number().int().positive().optional(),
+  }),
+  handler: async ({ input, res }) => {
+    // Input is automatically validated against the request schema
+    const { username, email, age } = input.body;
 
-		// Simulate user creation
-		const newUser = {
-			id: '123e4567-e89b-12d3-a456-426614174000', // Example UUID
-			username,
-			email,
-			age,
-		};
+    // Simulate user creation
+    const newUser = {
+      id: '123e4567-e89b-12d3-a456-426614174000', // Example UUID
+      username,
+      email,
+      age,
+    };
 
-		// Respond with the validated response schema
-		res.status(201).json(newUser);
-	},
+    // Respond with the validated response schema
+    res.status(201).json(newUser);
+  },
 };
 
 // Create Express endpoints from the API definition
 createExpressEndpoints({
-	endpoints: [createUserEndpoint],
-	app,
+  endpoints: [createUserEndpoint],
+  app,
 });
 
 app.listen(3000, () => {
-	console.log('Server listening on port 3000');
+  console.log('Server listening on port 3000');
 });
 ```
 
@@ -87,28 +87,28 @@ app.listen(3000, () => {
 
 ```typescript
 const getUserEndpoint = {
-	method: 'get',
-	path: '/users/:userId',
-	request: {
-		params: z.object({
-			userId: z.string().uuid(),
-		}),
-	},
-	response: z.object({
-		id: z.string().uuid(),
-		username: z.string(),
-		email: z.string(),
-	}),
-	handler: async ({ input, res }) => {
-		const { userId } = input.params;
-		// ... logic to get the user
-		const user = {
-			id: userId,
-			username: 'john_doe',
-			email: 'john@example.com',
-		};
-		res.json(user);
-	},
+  method: 'get',
+  path: '/users/:userId',
+  request: {
+    params: z.object({
+      userId: z.string().uuid(),
+    }),
+  },
+  response: z.object({
+    id: z.string().uuid(),
+    username: z.string(),
+    email: z.string(),
+  }),
+  handler: async ({ input, res }) => {
+    const { userId } = input.params;
+    // ... logic to get the user
+    const user = {
+      id: userId,
+      username: 'john_doe',
+      email: 'john@example.com',
+    };
+    res.json(user);
+  },
 };
 ```
 
@@ -116,34 +116,34 @@ const getUserEndpoint = {
 
 ```typescript
 const searchUsersEndpoint = {
-	method: 'get',
-	path: '/search',
-	request: {
-		query: z.object({
-			query: z.string().optional(),
-			page: z.number().int().positive().default(1),
-			limit: z.number().int().positive().default(10),
-		}),
-	},
-	response: z.array(
-		z.object({
-			id: z.string().uuid(),
-			username: z.string(),
-			email: z.string(),
-		}),
-	),
-	handler: async ({ input, res }) => {
-		const { query, page, limit } = input.query;
-		// ... search logic
-		const users = [
-			{
-				id: '123e4567-e89b-12d3-a456-426614174000',
-				username: 'john_doe',
-				email: 'john@example.com',
-			},
-		];
-		res.json(users);
-	},
+  method: 'get',
+  path: '/search',
+  request: {
+    query: z.object({
+      query: z.string().optional(),
+      page: z.number().int().positive().default(1),
+      limit: z.number().int().positive().default(10),
+    }),
+  },
+  response: z.array(
+    z.object({
+      id: z.string().uuid(),
+      username: z.string(),
+      email: z.string(),
+    }),
+  ),
+  handler: async ({ input, res }) => {
+    const { query, page, limit } = input.query;
+    // ... search logic
+    const users = [
+      {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        username: 'john_doe',
+        email: 'john@example.com',
+      },
+    ];
+    res.json(users);
+  },
 };
 ```
 
@@ -155,19 +155,19 @@ const searchUsersEndpoint = {
 
 ```typescript
 const exampleEndpoint = {
-	// ...
-	handler: async ({ res }) => {
-		try {
-			// some logic that can throw errors.
-			throw new Error('custom error');
-		} catch (e) {
-			if (e instanceof Error) {
-				res.status(500).json({ error: e.message });
-			} else {
-				res.status(500).json({ error: 'unknown error' });
-			}
-		}
-	},
+  // ...
+  handler: async ({ res }) => {
+    try {
+      // some logic that can throw errors.
+      throw new Error('custom error');
+    } catch (e) {
+      if (e instanceof Error) {
+        res.status(500).json({ error: e.message });
+      } else {
+        res.status(500).json({ error: 'unknown error' });
+      }
+    }
+  },
 };
 ```
 

@@ -19,7 +19,7 @@ This test will obviously fail.
 
 ```javascript
 it('should fail', () => {
-	expect(true).toBe(false);
+  expect(true).toBe(false);
 });
 ```
 
@@ -27,7 +27,7 @@ Interestingly, this test will _also_ fail.
 
 ```javascript
 it('should fail', () => {
-	throw new Error('Throwing is failing.');
+  throw new Error('Throwing is failing.');
 });
 ```
 
@@ -35,8 +35,8 @@ At the same time, this test will pass.
 
 ```javascript
 it('should pass', () => {
-	const four = 2 + 2;
-	console.log(four);
+  const four = 2 + 2;
+  console.log(four);
 });
 ```
 
@@ -44,13 +44,13 @@ What we can summise—outside of the fact that I spelled it ou in that second te
 
 ```javascript
 const expect = (a) => {
-	return {
-		toBe(b) {
-			if (a !== b) {
-				throw new Error(`Expected: ${a}, but got ${b}`);
-			}
-		},
-	};
+  return {
+    toBe(b) {
+      if (a !== b) {
+        throw new Error(`Expected: ${a}, but got ${b}`);
+      }
+    },
+  };
 };
 ```
 
@@ -64,7 +64,7 @@ I don't ever use this one, but I'm sure it's there for a reason and maybe it'll 
 
 ```javascript
 test.fails('works with "test" as well', () => {
-	expect(true).toBe(false);
+  expect(true).toBe(false);
 });
 ```
 
@@ -83,9 +83,9 @@ This seems pretty straight-forward until we remember the one thing—aside from 
 
 ```javascript
 it('it will pass, unfortunately', () => {
-	setTimeout(() => {
-		expect('This should fail.').toBe('Totally not the same.');
-	}, 1000);
+  setTimeout(() => {
+    expect('This should fail.').toBe('Totally not the same.');
+  }, 1000);
 });
 ```
 
@@ -93,9 +93,9 @@ It doesn't fail because asynchronous code is hard. But, if we annotate with the 
 
 ```javascript
 test.fails('works with "test" as well', () => {
-	setTimeout(() => {
-		expect('This should fail.').toBe('Totally not the same.');
-	}, 1000);
+  setTimeout(() => {
+    expect('This should fail.').toBe('Totally not the same.');
+  }, 1000);
 });
 ```
 
@@ -103,13 +103,13 @@ We'll talk more about this in the section on [testing asynchronous code](testing
 
 ```ts
 test('works with "test" as well', () => {
-	return new Promise((done) => {
-		setTimeout(() => {
-			expect('This should fail.').not.toBe('Totally not the same.');
+  return new Promise((done) => {
+    setTimeout(() => {
+      expect('This should fail.').not.toBe('Totally not the same.');
 
-			done(null);
-		}, 500);
-	});
+      done(null);
+    }, 500);
+  });
 });
 ```
 

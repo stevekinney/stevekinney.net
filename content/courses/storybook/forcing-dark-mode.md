@@ -8,11 +8,11 @@ Just like I don't want to set arguments by default, sometimes, I want to force a
 
 ```tsx
 export const Dark: Story = {
-	parameters: {
-		themes: {
-			themeOverride: 'dark',
-		},
-	},
+  parameters: {
+    themes: {
+      themeOverride: 'dark',
+    },
+  },
 };
 ```
 
@@ -20,10 +20,10 @@ As long as we're on the topic, you can also force a viewport:
 
 ```tsx
 export const Mobile: Story = {
-	parameters: {
-		viewport: {
-			defaultViewport: 'mobile1',
-		},
-	},
+  parameters: {
+    viewport: {
+      defaultViewport: 'mobile1',
+    },
+  },
 };
 ```

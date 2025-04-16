@@ -16,16 +16,16 @@ Let's look at an example.
 
 ```javascript
 function calculateTotal(cartItems) {
-	return cartItems.reduce((total, item) => total + item.price, 0);
+  return cartItems.reduce((total, item) => total + item.price, 0);
 }
 
 test('calculates correct total from cart items', () => {
-	const items = [
-		{ name: 'Widget', price: 9.99 },
-		{ name: 'Gizmo', price: 12.49 },
-	];
-	const total = calculateTotal(items);
-	expect(total).toBe(22.48);
+  const items = [
+    { name: 'Widget', price: 9.99 },
+    { name: 'Gizmo', price: 12.49 },
+  ];
+  const total = calculateTotal(items);
+  expect(total).toBe(22.48);
 });
 ```
 
@@ -39,20 +39,20 @@ For example, suppose you’ve got a `getUserCart` function that hits some local 
 
 ```javascript
 function getUserCart(userId, cartService) {
-	const cartItems = cartService.getCartByUserId(userId);
-	return calculateTotal(cartItems);
+  const cartItems = cartService.getCartByUserId(userId);
+  return calculateTotal(cartItems);
 }
 
 test('returns correct total from cart service', () => {
-	const cartService = {
-		getCartByUserId: (id) => [
-			{ name: 'Thingamajig', price: 19.99 },
-			{ name: 'Doodad', price: 5.99 },
-		],
-	};
+  const cartService = {
+    getCartByUserId: (id) => [
+      { name: 'Thingamajig', price: 19.99 },
+      { name: 'Doodad', price: 5.99 },
+    ],
+  };
 
-	const total = getUserCart(123, cartService);
-	expect(total).toBe(25.98);
+  const total = getUserCart(123, cartService);
+  expect(total).toBe(25.98);
 });
 ```
 
@@ -66,14 +66,14 @@ Let’s say you have some `CartItem` object that carries both data and a relevan
 
 ```javascript
 class CartItem {
-	constructor(name, price) {
-		this.name = name;
-		this.price = price;
-	}
+  constructor(name, price) {
+    this.name = name;
+    this.price = price;
+  }
 
-	getPrice() {
-		return this.price;
-	}
+  getPrice() {
+    return this.price;
+  }
 }
 ```
 
@@ -81,8 +81,8 @@ If you’re testing how `getPrice` behaves, you probably don’t need to mock it
 
 ```javascript
 test('calculates price of cart item correctly', () => {
-	const item = new CartItem('Component A', 99.99);
-	expect(item.getPrice()).toBe(99.99);
+  const item = new CartItem('Component A', 99.99);
+  expect(item.getPrice()).toBe(99.99);
 });
 ```
 
@@ -94,10 +94,10 @@ Sometimes, mocks exist to patch a leaky test… but let’s be real—maybe the 
 
 ```javascript
 test('correctly sums prices in cart', () => {
-	const cart = [{ price: 10 }, { price: 20 }];
+  const cart = [{ price: 10 }, { price: 20 }];
 
-	const total = cart.reduce((sum, item) => sum + item.price, 0);
-	expect(total).toBe(30);
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  expect(total).toBe(30);
 });
 ```
 
@@ -109,11 +109,11 @@ By “dumb” functions, I’m talking about pure functions or functions with no
 
 ```javascript
 function add(a, b) {
-	return a + b;
+  return a + b;
 }
 
 test('adds numbers correctly', () => {
-	expect(add(2, 3)).toBe(5);
+  expect(add(2, 3)).toBe(5);
 });
 ```
 

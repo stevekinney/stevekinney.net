@@ -10,10 +10,10 @@ Let's say we have the following type:
 
 ```ts
 type Task = {
-	id: string;
-	title: string;
-	description?: string;
-	completed: boolean;
+  id: string;
+  title: string;
+  description?: string;
+  completed: boolean;
 };
 ```
 
@@ -21,10 +21,10 @@ We can use `satisfies` to make sure that our schema matches.
 
 ```ts
 const taskSchema = z.object({
-	id: z.string().uuid(),
-	title: z.string(),
-	description: z.string().optional(),
-	completed: z.boolean(),
+  id: z.string().uuid(),
+  title: z.string(),
+  description: z.string().optional(),
+  completed: z.boolean(),
 }) satisfies z.ZodType<Task>;
 ```
 

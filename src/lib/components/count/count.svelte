@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { merge } from '$merge';
-	import type { ExtendElement } from '../component.types';
-	import { variants, type CountVariants } from './variants';
+  import { merge } from '$merge';
+  import type { ExtendElement } from '../component.types';
+  import { variants, type CountVariants } from './variants';
 
-	type CountProps = ExtendElement<
-		'span',
-		CountVariants & {
-			count: number;
-		}
-	>;
+  type CountProps = ExtendElement<
+    'span',
+    CountVariants & {
+      count: number;
+    }
+  >;
 
-	const { count, variant = 'default', class: className, ...props }: CountProps = $props();
+  const { count, variant = 'default', class: className, ...props }: CountProps = $props();
 </script>
 
 <span class={merge(variants({ variant }), className)} {...props}>
-	{count}
+  {count}
 </span>

@@ -181,9 +181,9 @@ Adjust your test script in `package.json`:
 
 ```json
 {
-	"scripts": {
-		"test": "vitest --coverage"
-	}
+  "scripts": {
+    "test": "vitest --coverage"
+  }
 }
 ```
 

@@ -45,11 +45,11 @@ You can use `.only` if you want to run _only_ a few of your tests.
 
 ```ts
 it.only('should work', () => {
-	expect(true).toBe(true);
+  expect(true).toBe(true);
 });
 
 test('works with "test" as well', () => {
-	expect(true).not.toBe(false);
+  expect(true).not.toBe(false);
 });
 ```
 
@@ -61,11 +61,11 @@ Alternatively, you can `skip` tests that you don't want to run right now.
 import { it, expect, test } from 'vitest';
 
 it('should work', () => {
-	expect(true).toBe(true);
+  expect(true).toBe(true);
 });
 
 test.skip('works with "test" as well', () => {
-	expect(true).not.toBe(false);
+  expect(true).not.toBe(false);
 });
 ```
 
@@ -94,17 +94,17 @@ You saw some of these (well, the first two) before, but I'll call them out just 
 
 ```ts
 test.runIf(process.env.NODE_ENV === 'development')(
-	'it should run in development',
+  'it should run in development',
 
-	() => {
-		expect(process.env.NODE_ENV).toBe('development');
-	},
+  () => {
+    expect(process.env.NODE_ENV).toBe('development');
+  },
 );
 ```
 
 ```ts
 test.skipIf(process.env.NODE_ENV !== 'test')('it should run in test', () => {
-	expect(process.env.NODE_ENV).toBe('test');
+  expect(process.env.NODE_ENV).toBe('test');
 });
 ```
 

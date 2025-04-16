@@ -11,26 +11,26 @@ We’ll need to adjust our setup a bit for the DOM:
 ```html
 <!-- index.html -->
 <html lang="en">
-	<head>
-		<title>Counter</title>
-	</head>
-	<body>
-		<div id="app">
-			<p id="counter">0</p>
-			<button id="increment">Increment</button>
-		</div>
+  <head>
+    <title>Counter</title>
+  </head>
+  <body>
+    <div id="app">
+      <p id="counter">0</p>
+      <button id="increment">Increment</button>
+    </div>
 
-		<script>
-			const counterElement = document.getElementById('counter');
-			const buttonElement = document.getElementById('increment');
-			let count = 0;
+    <script>
+      const counterElement = document.getElementById('counter');
+      const buttonElement = document.getElementById('increment');
+      let count = 0;
 
-			buttonElement.addEventListener('click', () => {
-				count += 1;
-				counterElement.textContent = count;
-			});
-		</script>
-	</body>
+      buttonElement.addEventListener('click', () => {
+        count += 1;
+        counterElement.textContent = count;
+      });
+    </script>
+  </body>
 </html>
 ```
 
@@ -40,29 +40,29 @@ Here’s the test for that behavior:
 import { describe, it, expect } from 'vitest';
 
 describe('Counter app', () => {
-	it('should increment the count when the button is clicked', () => {
-		// Set up DOM
-		document.body.innerHTML = `
+  it('should increment the count when the button is clicked', () => {
+    // Set up DOM
+    document.body.innerHTML = `
       <p id="counter">0</p>
       <button id="increment">Increment</button>
     `;
 
-		const button = document.getElementById('increment');
-		const counter = document.getElementById('counter');
+    const button = document.getElementById('increment');
+    const counter = document.getElementById('counter');
 
-		// Fake our state
-		let count = 0;
-		button.addEventListener('click', () => {
-			count += 1;
-			counter.textContent = count;
-		});
+    // Fake our state
+    let count = 0;
+    button.addEventListener('click', () => {
+      count += 1;
+      counter.textContent = count;
+    });
 
-		// Simulate the button click
-		button.click();
+    // Simulate the button click
+    button.click();
 
-		// Check if the behavior is what we expect
-		expect(counter.textContent).toBe('1');
-	});
+    // Check if the behavior is what we expect
+    expect(counter.textContent).toBe('1');
+  });
 });
 ```
 
@@ -76,18 +76,18 @@ Sometimes you need to mock up DOM methods or third-party services—stuff that g
 import { describe, it, vi } from 'vitest';
 
 describe('DOM tests', () => {
-	it('should call getElementById', () => {
-		const spy = vi.spyOn(global.document, 'getElementById').mockReturnValue({
-			textContent: '0',
-		});
+  it('should call getElementById', () => {
+    const spy = vi.spyOn(global.document, 'getElementById').mockReturnValue({
+      textContent: '0',
+    });
 
-		const element = document.getElementById('counter');
+    const element = document.getElementById('counter');
 
-		expect(spy).toHaveBeenCalled();
-		expect(element.textContent).toBe('0');
+    expect(spy).toHaveBeenCalled();
+    expect(element.textContent).toBe('0');
 
-		spy.mockRestore();
-	});
+    spy.mockRestore();
+  });
 });
 ```
 
