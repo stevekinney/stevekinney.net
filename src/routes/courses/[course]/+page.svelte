@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
+  import PullRequest from '$lib/components/pull-request.svelte';
   import SEO from '$lib/components/seo.svelte';
-  import PullRequest from '@/lib/components/pull-request.svelte';
 
   const { data } = $props();
 </script>

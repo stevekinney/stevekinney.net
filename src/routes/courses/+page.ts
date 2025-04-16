@@ -1,4 +1,4 @@
-import { CourseMetadataSchema } from '@/lib/schemas/courses';
+import { CourseMetadataSchema } from '$lib/schemas/courses';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async () => {
