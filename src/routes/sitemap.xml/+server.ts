@@ -7,10 +7,12 @@ import prettier from 'prettier';
 
 export const prerender = true;
 
+const dynamicRoute = /\[\w+\]/;
+
 const getPriority = (path: string): number => {
   if (path.endsWith('/README.md')) return 0.8;
   if (path.includes('/writing/')) return 0.7;
-  if (path.includes('/content/')) return 0.6;
+  if (path.includes('/content/')) return 0.5;
 
   if (path.startsWith('/src/routes/')) {
     const depth = path.split('/').length - 4; // Adjust for the number of segments in the path
@@ -44,7 +46,9 @@ export const GET = async () => {
   ].flat();
 
   for (const path of filePaths) {
-    if (path.includes('[slug]')) continue; // Skip dynamic routes
+    if (dynamicRoute.test(path)) continue; // Skip dynamic routes
+    if (path.includes('_index')) continue;
+
     const url = getUrl(path);
 
     if (checked.has(url)) continue; // Skip if already processed
