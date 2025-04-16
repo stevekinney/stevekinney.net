@@ -1,79 +1,20 @@
 ---
-title: 'Full Stack TypeScript: Building Type-Safe Applications'
-description: 'A comprehensive guide to building type-safe full stack applications with TypeScript, Zod, Express, and more.'
-modified: 2025-03-20T08:58:24-05:00
-base: /courses/full-stack-typescript
-layout: contents
-exclude: true
+title: Full Stack TypeScript
+description: Add type-safety across the stack.
+layout: page
+date: 2025-03-20T12:00:00-07:00
+modified: 2025-03-20T12:00:00-07:00
 ---
 
-## TypeScript Best Practices
+> [!NOTE] The Repository for the Workshop
+> You can find all of the code that we'll be playing with today in [this repository](https://github.com/stevekinney/full-stack-typescript).
 
-- [TypeScript Configuration Best Practices](typescript-configuration-best-practices.md)
-- [Type Stripping](type-stripping.md)
+When building modern TypeScript applications, you'll quickly discover just how important it is to validate data effectively and maintain type safety from front to back. That's where libraries like Zod, React Hook Form, and tRPC come to the rescue. You’ll learn how Zod transforms from a mere validation tool into a full-blown runtime guardian, sparing your code from sloppy user input. By pairing Zod with React Hook Form, you’ll see how typed schemas can both validate form data on the client and transfer seamlessly to the server for final checks.
 
-## Schema Validation with Zod
+On the server side, you’ll explore how Express can be carefully massaged into a type-safe environment using generic signatures like `Request<Params, ResBody, ReqBody, ReqQuery>` and by hooking up Zod (or alternative libraries) for runtime validation. You’ll also discover how to enforce consistent API responses, work with typed request headers, harness error-handling middleware, and keep your cookie usage under control. This ensures every route truly operates with the data shape you’ve promised—no more “surprise, that field is actually undefined.”
 
-- [Type Safety vs. Runtime Validation](type-safety-vs-runtime-validation.md)
-- [Type Guards and Schema Validation](type-guards-vs-schema-validation)
-- [Introduction to Zod](introduction-to-zod.md)
-- [Advanced Types with Zod](advanced-types-with-zod.md)
-- [Refining Types with Zod](refining-types-with-zod.md)
-- [Type Branding with Zod](type-branding-with-zod.md)
-- [Transforms and Coercion with Zod](transforms-and-coercion-with-zod.md)
-- [Validating Zod Schema (Exercise)](validating-zod-schema-exercises.md)
-- [Working Backwards from Types with Zod](working-backwards-from-types-with-zod)
-- [Advanced Schema Design with Zod](advanced-schema-design-with-zod.md)
-- [Testing Zod Schema](testing-zod-schema.md)
-- [Best Practices with Zod](zod-best-practices.md)
-- [Structuring Zod Schemas Efficiently](structuring-zod-schemas-efficiently.md)
+You’ll then see how to generate the holy grail of API docs—OpenAPI/Swagger specs—directly from your TypeScript code. Tools like `zod-to-openapi` help keep your documentation in perfect sync with your actual validation rules, turning the dreaded chore of “update the docs” into a speedy, automated step. If you want to dive even deeper into typed endpoints, you’ll learn that tRPC can eliminate the need for separate REST or GraphQL definitions, enabling type-checked procedure calls right in your frontend.
 
-## API Type Safely
+Throughout this journey, a big focus is placed on best practices: how to write advanced Zod schemas (unions, intersections, branded types, transforms) without losing your sanity, how to avoid repeated validations or enormous boilerplates, and how to keep performance from tanking. You'll also uncover the secrets of testing: hooking up your Zod schemas to test frameworks, verifying your Express routes via supertest, and unit-testing your tRPC calls with zero fuss.
 
-- [Adding Types to Express Requests](adding-types-to-express.md)
-- [Adding Types to Express Responses](adding-types-to-express-responses.md)
-- [Adding Types to Express with Zod](typing-express-with-zod-walkthrough.md)
-- [Adding Zod Schemas to Path Parameters](express-zod-params.md)
-- [Validating Query and Path Parameters](validating-query-and-path-parameters.md)
-- [Validating Schema with Middleware](validating-schema-with-middleware.md)
-- [Using Zod with Express](using-zod-with-express.md)
-- [Adding Client-Side Validation](adding-client-side-validation.md)
-- [Testing with Zod and Express](testing-with-zod-and-express.md)
-- [Validating the Data Layer](validating-the-data-layer.md)
-
-## API Contracts
-
-- [OpenAPI/Swagger Contracts](open-api-swagger-express.md)
-- [Generating OpenAPI from Express](generating-open-api-from-express.md)
-- [Zod to OpenAPI](zod-to-open-api.md)
-- [Generating Types from an OpenAPI Specification](generating-types-from-open-api)
-- [Generating Zod Schemas from OpenAPI](generating-zod-openapi)
-- [Validating Your API with OpenAPI](validating-your-api-openai)
-
-## tRPC
-
-- [What is tRPC?](what-is-trpc.md)
-- [tRPC on the Server](trpc-on-the-server.md)
-- [tRPC on the Client](trpc-on-the-client.md)
-- [Subscriptions with tRPC](subscriptions-with-trpcs.md)
-- [Middleware and Authentication with tRPC](middleware-auth-logging-for-trpc.md)
-- [Custom Data Transformers with tRPC](custom-data-transformers-with-trpcs.md)
-- [Testing and Debugging with tRPC](testing-and-debugging-trpc.md)
-
-## Databases
-
-- [Prisma](typesafe-database-with-prisma.md)
-- [Generate Zod Schemas from Prisma](zod-schemas-from-prisma)
-- [Generate tRPC with Prisma](prisma-trpc.md)
-
-## Appendix
-
-- [Express Zod API](express-zod-api.md)
-- [Class Validator and Class Transformer](class-validator-class-transformer-express.md)
-- [Typed Error Middleware with Express](typed-error-middleware-with-express.md)
-- [Branded Types with Express](branded-types-express.md)
-- [Type Safe Route Registration](type-safe-route-registration-with-express.md)
-- [Type Safe Asynchronous Route Handlers](type-safe-asynchronous-route-handlers-with-express.md)
-- [Typing Headers and Cookies](typing-headers-and-cookies-in-express.md)
-- [Type Safe Route Registration](type-safe-routes-in-express.md)
-- [Type Safe Middleware with Express](type-safe-middleware-with-express.md)
+Finally, for those craving a full-stack approach, you’ll see how to tie these concepts into a database layer—be it Prisma or another TypeScript-friendly ORM. By unifying your type definitions from the database to the front end, you drastically reduce “API mismatch” headaches and keep development nimble. Overall, expect to walk away knowing how to craft robust apps that glean the best from TypeScript’s compile-time checks, while also guaranteeing real-world inputs won’t break your system at runtime.

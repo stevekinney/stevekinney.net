@@ -1,59 +1,34 @@
 ---
-modified: 2024-09-28T11:31:16-06:00
-base: /courses/storybook
-layout: contents
-exclude: true
+title: Building Design Systems in Storybook
+description: 'An exploration in building a design system using Storybook.'
+layout: page
+date: 2024-03-05T12:56:55-07:00
+modified: 2024-04-17T09:03:56-05:00
 ---
 
-## Getting Started
+The material in this course is intended to go along with the [Design Systems with Storybook, v2](https://frontendmasters.com/courses/design-systems-v2/) course with [Frontend Masters](https://frontendmasters.com).
 
-- [Setting Up Storybook](setting-up.md)
-- [Storybook Sandboxes](sandboxes.md)
-- [How to Write a Story](writing-stories.md)
-- [Adding Variants to a Story](adding-variants.md)
-- [Adding Controls to a Story](controls.md)
-- [Adding Button Sizes](adding-button-sizes-exercise.md)
-- [Setting Default Arguments](default-args.md)
+Even if you don't work on the design systems team at your company, over a long enough period of time, you're likely to find yourself working on a design system or component library. Having a standardized set of components saves you from having to reinvent the wheel every single time you tackle a new feature. And—arguably more importantly, it allows you to make large-scale changes without the tedium of manually tweaking every single element in your project.
 
-## Styling
+This workshop offers a comprehensive guide to building design systems using [Storybook](https://storybook.js.org). Covering everything from basic setup to advanced features, attendees will learn about atomic design, accessibility, visual regression testing, responsive design, and dark mode implementation. The workshop emphasizes practical, hands-on learning for effective team collaboration and documentation.
 
-- [Importing Styles, Using Tailwind, and Using Themes](setting-up-tailwind.md)
-- [Customizing Tailwind Colors](customizing-tailwind-colors.md)
-- [Importing Fonts from Fontsource](importing-fontsource-fonts.md)
+> [!IMPORTANT] Course Materials
+> Throughout our time together, we'll be using [this repository](https://github.com/stevekinney/anthology).
+>
+> The Figma designs that inspire the components in this repository can be found [here](https://www.figma.com/file/Qhb4PJucNK8bgvf4N65Jrm/Anthology?type=design&node-id=0%3A1&mode=design&t=Dr1OUnsNFnelFSUN-1).
 
-## Documenting Components
+## Prerequisites
 
-- [Using Storybook with MDX](mdx.md)
-- [Improving `argTypes` with Metadata](arg-types.md)
-- [Color Palette](color-palette.md)
-- [Icon Gallery](icon-gallery)
-- [Type Set](typeset.md)
-- [Organizing Stories and Documentation](naming-and-hierarchy.md)
+You'll need the following in order to follow along with this course. You'll have a chance to get set up with everything along the way. But, if you want to get a head start, get yourself set up with the tools below.
 
-## Component Styling Techniques
+- [A Chromatic account](https://www.chromatic.com/)
+- **Recommended, but not required**: [pnpm](https://pnpm.io/installation)
 
-- [Class Variance Authority](class-variance-authority.md)
-- [Adding a Size Variant with CVA](adding-a-size-variant.md)
-- [Supporting Dark Mode](adding-dark-mode-to-our-components.md)
-- [Forcing Dark Mode](forcing-dark-mode.md)
-- [An Alternative Approach to Dark Mode](dark-mode-alternative.md)
-- [Implementing a Callout Component](callout-component-exercise.md)
+## Libraries and Tools Used
 
-## Testing and Interactions
+In addition to Storybook, we'll also be leveraging some other libraries along the way. They'll be included in any of the example repositories where they're needed, but I figured it'd be helpful to list them all in one place as well
 
-- [Play Functions](play-functions.md)
-- [Testing Components](testing-components-with-storybook.md)
-- [Setting Up a Test Runner](test-runner.md)
-- [Visual Tests](visual-tests.md)
-- [Accessibility Testing](accessibility-testing.md)
-
-## APIs, Context, and External Dependencies
-
-- [Using Decorators for Context](decorators.md)
-- [Using Loaders to Fetch Data](loaders.md)
-
-## Appendix
-
-- [Integration with Mock Service Worker](mock-service-worker.md)
-- [Storybook in Figma](storybook-in-figma.md)
-- [Figma in Storybook](figma-in-storybook.md)
+- [Tailwind CSS](https://tailwindcss.com)
+- [clsx](https://npm.im/clsx)
+- [Class Variance Authority](https://cva.style/docs)
+- [Vite](https://vite.dev)

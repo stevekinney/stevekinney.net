@@ -7,8 +7,8 @@
 </script>
 
 <script>
-  import { merge } from '$merge';
   import { toDataAttributes } from '$lib/to-data-attributes';
+  import { merge } from '$merge';
 
   /** @type {string | undefined | null} */
   /**

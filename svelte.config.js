@@ -3,15 +3,15 @@ import vercelAdapter from '@sveltejs/adapter-vercel';
 
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
-import { mdsvex, escapeSvelte } from 'mdsvex';
-import unwrapImages from 'rehype-unwrap-images';
+import { escapeSvelte, mdsvex } from 'mdsvex';
 import slug from 'rehype-slug';
+import unwrapImages from 'rehype-unwrap-images';
 import gfm from 'remark-gfm';
-import { codeToHtml, bundledLanguages } from 'shiki';
+import { bundledLanguages, codeToHtml } from 'shiki';
 
+import { fixMarkdownUrls } from './plugins/remark-fix-urls.js';
 import { processCallouts } from './plugins/svelte-compile-callouts.js';
 import { processImages } from './plugins/svelte-enhance-images.js';
-import { fixMarkdownUrls } from './plugins/remark-fix-urls.js';
 
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
@@ -21,7 +21,7 @@ const mdsvexOptions = {
   layout: {
     _: './src/lib/markdown/base.svelte',
     page: './src/lib/markdown/page.svelte',
-    contents: './src/lib/markdown/contents/contents.svelte',
+    contents: './src/lib/markdown/components/contents.svelte',
   },
   highlight: {
     highlighter: async (code, lang = 'text') => {

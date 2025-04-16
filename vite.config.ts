@@ -1,7 +1,7 @@
-import { sveltekit } from '@sveltejs/kit/vite';
-import { imagetools } from 'vite-imagetools';
 import { enhancedImages } from '@sveltejs/enhanced-img';
-import { searchForWorkspaceRoot, defineConfig, type Plugin } from 'vite';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite';
+import { imagetools } from 'vite-imagetools';
 
 const projectRoot = (id: string = 'project-root'): Plugin => {
   const virtualModuleId = `virtual:${id}`;

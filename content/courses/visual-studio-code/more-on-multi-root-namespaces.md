@@ -1,6 +1,7 @@
 ---
 title: More on Mutli-Root Namespaces
 modified: 2025-03-18T08:51:14-05:00
+description: Some additional notes on using mutli-root namespaces in Visual Studio Code.
 ---
 
 Some additional notes that we _probably_ won't get to, but I'll include here just in case.
