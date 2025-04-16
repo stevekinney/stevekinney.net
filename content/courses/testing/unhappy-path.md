@@ -61,13 +61,13 @@ A common unhappy path is when the user provides invalid input. You should test h
 ```js
 // Function to be tested
 function parseAge(age) {
-	if (typeof age !== 'number') {
-		throw new Error('Invalid age format');
-	}
-	if (age < 0 || age > 120) {
-		throw new Error('Age must be between 0 and 120');
-	}
-	return age;
+  if (typeof age !== 'number') {
+    throw new Error('Invalid age format');
+  }
+  if (age < 0 || age > 120) {
+    throw new Error('Age must be between 0 and 120');
+  }
+  return age;
 }
 
 describe('parseAge', () => {
