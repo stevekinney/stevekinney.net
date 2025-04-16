@@ -7,6 +7,6 @@
     {@render children?.()}
   </section>
   {#if data.contents}
-    <data.contents class="sticky top-6 hidden lg:block" as="aside" />
+    <data.contents as="aside" />
   {/if}
 </div>

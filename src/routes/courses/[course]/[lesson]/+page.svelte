@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { page } from '$app/state';
   import Date from '$lib/components/date.svelte';
+  import PullRequest from '$lib/components/pull-request.svelte';
   import SEO from '$lib/components/seo.svelte';
 
   const { data } = $props();
@@ -35,3 +37,5 @@
     </p>
   {/if}
 </div>
+
+<PullRequest filename="courses/{page.params.course}/{page.params.lesson}" />
