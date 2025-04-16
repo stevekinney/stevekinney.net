@@ -31,12 +31,15 @@
 
     <p>
       I am lucky enough to teach a bunch of courses with my friends at <a
-        href="https://frontendmasters.com"
+        href="https://frontendmasters.com?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon"
         target="_blank">Frontend Masters</a
       >. We've been working together since 2016. Before I was a teacher, I was a customer back when
       I was learning the ropes. I can't recommend them highly enough. Below, I've listed out some of
       the courses that I've taught over the last few years. You can find the most up-to-date list
-      <a href="https://frontendmasters.com/teachers/steve-kinney/" target="_blank">here</a>.
+      <a
+        href="https://frontendmasters.com/teachers/steve-kinney/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon"
+        target="_blank">here</a
+      >.
     </p>
   </section>
 

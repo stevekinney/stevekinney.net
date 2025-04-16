@@ -9,7 +9,7 @@ modified: 2024-09-28T13:10:18-06:00
 Vitest is pretty awesome right out of the box, but sometimes you need to customize things to fit your project. This brings us to the `vitest.config.ts` file.
 
 > \[!NOTE] This is Mostly Vite-Related Content
-> Most of what we're covering here related to Vite—and thereby Vitest. Our friends at [Frontend Masters](https://frontendmasters.com) have [a whole course on Vite](https://frontendmasters.com/courses/vite/) that is taught by a _very_ dapper instructor.
+> Most of what we're covering here related to Vite—and thereby Vitest. Our friends at [Frontend Masters](https://frontendmasters.com?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) have [a whole course on Vite](https://frontendmasters.com/courses/vite/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) that is taught by a _very_ dapper instructor.
 
 Here’s a basic one as a refresher:
 
