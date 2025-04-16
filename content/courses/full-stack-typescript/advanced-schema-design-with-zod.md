@@ -129,7 +129,7 @@ function initializeApp(configData: unknown): Config {
 
 const validConfigData = {
 	apiKey: 'your-api-key',
-	apiUrl: '[https://api.example.com](https://www.google.com/search?q=https://api.example.com)',
+	apiUrl: 'https://api.example.com',
 	// timeout is optional, default will be used
 };
 
