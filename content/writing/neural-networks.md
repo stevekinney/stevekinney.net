@@ -17,7 +17,7 @@ At its core, a [**neural network**](https://en.wikipedia.org/wiki/Neural_network
 
 These individual processing steps are often called [**neurons**](https://www.baeldung.com/cs/neural-networks-neurons), but let's not get _too_ hung up on the biological analogy. Think of them as little computational units. They take some input numbers, do a small calculation, and pass the result along. These neurons are organized into [**layers**](https://www.geeksforgeeks.org/layers-in-artificial-neural-networks-ann/), much like you might organize your code into modules or stages in a data processing pipeline.
 
-![](assets/neural-network-layers.svg)
+![Neural Network Layers](assets/neural-network-layers.svg)
 
 The thing that makes neural networks useful for learning is that the mathematical functions they represent are _differentiable_. Basically, this means we can calculate how a small change in any internal setting affects the final output. Why does that matter? Because it allows the network to figure out _how_ to get better. If the network's output is wrong, differentiability tells us which internal knobs to tweak, and in which direction, to make the output slightly _less wrong_ next time. It's like getting automated hints on how to adjust parameters to improve performance.
 
@@ -35,7 +35,7 @@ How do these layers actually _do_ anything? The connections between neurons have
 
 So how does the network learn the right values for all those weights and biases? Through a process called [**training**](https://developers.google.com/machine-learning/crash-course/neural-networks), which you can think of as a highly iterative testing and refinement cycle, perhaps the world's noisiest Continuous Integration loop.
 
-![Neural Network Training Loop](assets/neural-network-training-loop.svg)
+![Neural Network Training Loop](assets/neural-network-training-loop.jpg)
 
 First, you run data through the network with its current weights and biases—this is the **Forward Pass**, like executing your code. Then, you compare the network's output to the known correct answer using a [**Loss Function**](https://builtin.com/machine-learning/loss-functions). This function calculates how "wrong" the network was—think of it as running your unit tests and seeing how many failed, or how far off the results were.
 
