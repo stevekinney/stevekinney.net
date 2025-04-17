@@ -23,7 +23,7 @@ In my use cases, context windows tend to be super important. This is how that br
 
 ## Pro-Tips for Using GPT-4.1
 
-Here’s a concise list of the top-reported best practices for working with GPT-4.1—distilled from official OpenAI guidance, community experiments, and industry write-ups.
+Here's a—probably incomplete—list of things that I've found to work super well, so far
 
 ### Use a Consistent Prompt Structure
 
