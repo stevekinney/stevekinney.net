@@ -1,9 +1,9 @@
 ---
-published: true
 title: Getting the Most Out of GPT-4.1
 description: 'A naïve guide to get the most out of GPT-4.1: context window optimization, coding tips, prompt best practices, and when to choose GPT-4.1 over GPT-4.5.'
 modified: 2025-04-17T07:14:14-06:00
 date: 2025-04-17T07:14:14-06:00
+published: true
 ---
 
 ## Wait… Isn't GPT-4.1 Less Than GPT-4.5?
@@ -23,7 +23,7 @@ In my use cases, context windows tend to be super important. This is how that br
 
 ## Pro-Tips for Using GPT-4.1
 
-Here's a—probably incomplete—list of things that I've found to work super well, so far
+Here's a—probably incomplete—list of things that I've found to work super well, so far.
 
 ### Use a Consistent Prompt Structure
 
@@ -35,11 +35,11 @@ GPT-4.1 follows directions _strictly_. Avoid vague language. Instead of "Explain
 
 ### Bookend Important Instructions
 
-Place critical directives at both the beginning and end of your prompt to ensure they aren’t lost. For instance, start and finish with "Only return JSON" to lock in the desired format.
+Place critical directives at both the beginning and end of your prompt to ensure they aren't lost. For instance, start and finish with "Only return JSON" to lock in the desired format.
 
 ### Leverage Formatting and Delimiters
 
-Use Markdown headers (`#`, `##`), XML-style tags (`<context>`, `<instructions>`), or triple backticks (```) to clearly distinguish sections. Label code with fences and narrative with plain text so the model doesn’t conflate them, yielding cleaner outputs.
+Use Markdown headers (`#`, `##`), XML-style tags (`<context>`, `<instructions>`), or triple backticks (```) to clearly distinguish sections. Label code with fences and narrative with plain text so the model doesn't conflate them, yielding cleaner outputs.
 
 ### Encourage Step-by-Step Reasoning
 
@@ -51,7 +51,7 @@ Treat GPT-4.1 like a persistent assistant: "Keep working until the task is compl
 
 ### Control Knowledge Access
 
-Specify when to rely solely on your provided documents ("Only use the provided context") versus blending in the model’s general knowledge ("Combine the provided information with your general knowledge"). Use context-only for compliance and hybrid when you need broader domain insights.
+Specify when to rely solely on your provided documents ("Only use the provided context") versus blending in the model's general knowledge ("Combine the provided information with your general knowledge"). Use context-only for compliance and hybrid when you need broader domain insights.
 
 ### Optimize Retrieval for Grounding
 
@@ -75,14 +75,14 @@ Start with minimal prompts, test outputs, and gradually layer in complexity. Reg
 
 ## In Comparison
 
-As I said at the beginning of this long-winded piece, GPT-4.1 is engineered for developers, offering 21–27 % better coding performance and handling context windows up to 1 million tokens at about 26 % lower cost than GPT-4.5. In contrast, GPT-4.5 prioritizes conversational fluency, creativity, and emotional intelligence, delivering succinct, human-like responses with lower hallucination rates, albeit at a higher operational cost.
+As I said at the beginning of this long-winded piece, GPT-4.1 is engineered for developers, offering 21–27% better coding performance and handling context windows up to 1 million tokens at about 26% lower cost than GPT-4.5. In contrast, GPT-4.5 prioritizes conversational fluency, creativity, and emotional intelligence, delivering succinct, human-like responses with lower hallucination rates, albeit at a higher operational cost.
 
 ### When to Prefer GPT-4.1
 
 - Optimized for coding workloads, with a 27% lift on coding benchmarks versus GPT-4.5.
 - Supports up to 1 million-token context windows, making it ideal for analyzing large codebases or massive documents.
-- Approximately 26 % cheaper per token than its predecessors, cutting costs for high-volume, programmatic use.
-- Delivers up to 40 % faster inference than GPT-4o, reducing latency in CI/CD pipelines and interactive IDE tooling.
+- Approximately 26% cheaper per token than its predecessors, cutting costs for high-volume, programmatic use.
+- Delivers up to 40% faster inference than GPT-4o, reducing latency in CI/CD pipelines and interactive IDE tooling.
 - Tuned for precise code diffs, reliable tool invocation, and agentic coding workflows in production systems.
 - Excels at multi-step instruction following for complex automation and refactoring tasks.
 
@@ -95,4 +95,4 @@ As I said at the beginning of this long-winded piece, GPT-4.1 is engineered for 
 - Supports multimodal inputs (file and image uploads), enabling richer, context-aware interactions.
 - Well-suited for customer-facing chatbots, virtual assistants, and domain experts requiring nuanced dialogue.
 
-GPT-4.1 and GPT-4.5 each serve distinct needs. Choose GPT-4.1 for large-scale code analysis, automation, and cost-efficient high-volume tasks. Opt for GPT-4.5 when conversational nuance, creativity, and emotional intelligence matter most. Understanding these strengths ensures you leverage each model where it excels.
+GPT-4.1 and GPT-4.5 each serve distinct needs. Choose GPT-4.1 for large-scale code analysis, automation, and cost-efficient high-volume tasks. Opt for GPT-4.5 when conversational nuance, creativity, and emotional intelligence matter most.
