@@ -1,0 +1,13 @@
+# Format according to RFC 9116 (https://www.rfc-editor.org/rfc/rfc9116.html)
+
+# Contact information for reporting security vulnerabilities
+Contact: https://github.com/stevekinney/stevekinney.net/issues
+
+# Encryption key for secure communications (example)
+Encryption: https://stevekinney.com/pgp-key.txt
+
+# Preferred languages for security reports
+Preferred-Languages: en
+
+# Expiration date for this security.txt file (set to 1 year from now)
+Expires: 2026-04-17T00:00:00.000Z
