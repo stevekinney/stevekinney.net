@@ -1,6 +1,6 @@
 ---
 published: true
-title: "What If It Goes Wrong?: The Hidden Dangers of Counterfactual Reasoning in AI"
+title: 'What If It Goes Wrong?: The Hidden Dangers of Counterfactual Reasoning in AI'
 description: "Exploring the pitfalls of counterfactual reasoning in AI, highlighting its fragility, chaotic nature, and alignment with Nassim Taleb's critique of prediction in complex systems."
 modified: 2025-04-21T11:01:33-06:00
 date: 2025-04-21T10:48:47-06:00
@@ -9,19 +9,17 @@ date: 2025-04-21T10:48:47-06:00
 > [!NOTE] Paper Review
 > These are my notes from the paper, [When Counterfactual Reasoning Fails: Chaos and Real-World Complexity](https://arxiv.org/abs/2503.23820) by [Yahya Aalaila](https://arxiv.org/search/cs?searchtype=author&query=Aalaila,+Y), [Gerrit Großmann](https://arxiv.org/search/cs?searchtype=author&query=Gro%C3%9Fmann,+G), [Sumantrak Mukherjee](https://arxiv.org/search/cs?searchtype=author&query=Mukherjee,+S), [Jonas Wahl](https://arxiv.org/search/cs?searchtype=author&query=Wahl,+J), and [Sebastian Vollmer](https://arxiv.org/search/cs?searchtype=author&query=Vollmer,+S).
 
-[Counterfactual reasoning](https://en.wikipedia.org/wiki/Counterfactual_thinking)—the mental gymnastics of wondering "what if"—is baked into how we think. Have you ever wondered, "What if I'd taken that other job?" or "What if that meeting had gone differently?" We ask "What if?" questions all the time. (It's how I spent the majority of my 20s, honestly) These are called [counterfactuals](https://plato.stanford.edu/entries/counterfactuals/), and help us understand cause and effect and interpreting complex models,.
-
-In artificial intelligence, especially when we're talking about [large language models (LLMs)](https://aws.amazon.com/what-is/large-language-model/), counterfactual reasoning has rapidly emerged as a crucial method for interpreting, evaluating, and understanding complex behaviors.
+[Counterfactual reasoning](https://en.wikipedia.org/wiki/Counterfactual_thinking)—the mental gymnastics of wondering "what if"—is baked into how we think. Have you ever wondered, "What if I'd taken that other job?" or "What if that meeting had gone differently?" We ask "What if?" questions all the time. (It's how I spent the majority of my 20s, if I am being honest.) These are called [counterfactuals](https://plato.stanford.edu/entries/counterfactuals/), and help us understand cause and effect and interpreting complex models,.
 
 But what if these counterfactual questions actually lead us astray? Some [recent research](https://arxiv.org/abs/2503.23820)—which we'll talk about today—can be problematic when working with AI systems.
 
 ## The Importance of Context in Counterfactual Reasoning
 
-One crucial aspect of counterfactual reasoning is the context in which it is applied. The same counterfactual question can yield vastly different insights depending on the underlying dynamics. In a perfect world, a counterfactual analysis might provide clear and actionable insights. In chaotic or complex systems, however, the same analysis could mislead us into oversimplifying the situation.
+One aspect of counterfactual reasoning is the context in which it is applied. The same counterfactual question can yield different insights. Determining what _did_ happen is a bit more straight-forward than opining all of the stuff that _could have_ happened. In a perfect world, a counterfactual analysis might provide clear and actionable insights. In chaotic or complex systems, however, the same analysis could mislead us into oversimplifying the situation.
 
-In the realm of AI, where models are trained on vast datasets and operate under complex algorithms, the context becomes even more critical. We need to ensure that counterfactual analyses consider the intricacies of the models and the environments in which they operate.
+In terms of AI, where models are trained on vast datasets and operate under complex algorithms, the context becomes even more critical. We need to ensure that counterfactual analyses consider the intricacies of the models and the environments in which they operate. Models tend to be trained on real data, not counterfactual data. The problem is that it's totally reasonable for a human to prompt the model with a counterfactual.
 
-The framing of counterfactual questions is essential. Subtle changes in how we pose these questions can lead to different interpretations and conclusions. This highlights the need for careful consideration and a deep understanding of the system at hand when employing counterfactual reasoning.
+Subtle changes in how we pose questions or prompt models can lead to different interpretations and conclusions. The paper highlights the need for careful consideration and a deep understanding of the system at hand when employing counterfactual reasoning.
 
 ## Chaos, Uncertainty, and the Fragility of "What If?"
 
@@ -33,7 +31,7 @@ Consider this:
 - But, typically, we're training a model on "right answers."
 - So, what happens if we ask the model a counterfactual?
 
-At first glance, counterfactual reasoning seems straightforward: tweak something, imagine how things play out differently, and learn from the imagined outcomes. It reminds me of [our recent conversation on neural networks](./neural-networks.md). That said, recent insights into [chaotic systems](https://en.wikipedia.org/wiki/Chaos_theory) reveal that even tiny changes—like a minor tweak to an initial condition or a small error in estimating a parameter can lead to dramatically different results. This phenomenon, commonly known as the [butterfly effect](https://en.wikipedia.org/wiki/Butterfly_effect)—which was also [a movie with Asthon Kutcher](https://en.wikipedia.org/wiki/The_Butterfly_Effect)—is highlighted in the paper ["When Counterfactual Reasoning Fails: Chaos and Real-World Complexity"](https://arxiv.org/abs/2503.23820).
+At first glance, counterfactual reasoning seems straightforward: tweak something, imagine how things play out differently, and learn from the imagined outcomes. See also: [our recent conversation on neural networks](./neural-networks.md). That said, recent insights into [chaotic systems](https://en.wikipedia.org/wiki/Chaos_theory) reveal that even tiny changes—like a minor tweak to an initial condition or a small error in estimating a parameter can lead to dramatically different results. This phenomenon, commonly known as the [butterfly effect](https://en.wikipedia.org/wiki/Butterfly_effect)—which was also [a movie with Asthon Kutcher](https://en.wikipedia.org/wiki/The_Butterfly_Effect)—is highlighted in the paper that we're discussing today, ["When Counterfactual Reasoning Fails: Chaos and Real-World Complexity"](https://arxiv.org/abs/2503.23820).
 
 In controlled experiments on [chaotic dynamical systems](https://en.wikipedia.org/wiki/Chaos_theory) (such as the [Lorenz](https://en.wikipedia.org/wiki/Lorenz_system) and [Rössler](https://en.wikipedia.org/wiki/R%C3%B6ssler_attractor) systems), the authors demonstrate that small inaccuracies or uncertainties can cause huge deviations from expected outcomes. Even when their models seemed precise, counterfactual predictions quickly spiraled into completely unreliable territory. This fragility starkly illustrates that in chaotic contexts, counterfactuals aren't just hypothetical—they can be flat-out misleading.
 
@@ -42,9 +40,9 @@ In controlled experiments on [chaotic dynamical systems](https://en.wikipedia.or
 
 ## How Does This Relate to AI and Large Language Models?
 
-At their core, modern AI systems learn complex relationships between billions of parameters, and as we've seen, complexity can easily give way to chaos. If a minor shift in input can trigger major, unexpected changes in the model’s behavior, then any counterfactual explanations or analyses we generate from these models could be inherently unstable.
+At their core, modern AI systems learn complex relationships between billions of parameters, and as we've seen, complexity can easily give way to chaos. If a minor shift in input can trigger major, unexpected changes in the model's behavior, then any counterfactual explanations or analyses we generate from these models could be inherently unstable.
 
-Take interpretability as an example. When we use counterfactual reasoning to explain why a language model generated a particular response ("Had the input been slightly different, it would have answered differently"), we implicitly trust that the system behaves predictably. But given the potential chaotic nature of complex neural networks, minor variations in inputs—say, a different phrasing or subtle prompt adjustments—can cause wildly different outputs. This undermines our confidence in counterfactual explanations that we rely on for model transparency.
+Take interpretability as an example: When we use counterfactual reasoning to explain why a language model generated a particular response ("Had the input been slightly different, it would have answered differently"), we implicitly trust that the system behaves predictably. But given the potential chaotic nature of complex neural networks, minor variations in inputs—say, a different phrasing or subtle prompt adjustments—can cause wildly different outputs. This undermines our confidence in counterfactual explanations that we rely on for model transparency.
 
 This sensitivity isn't limited to explanations alone. It impacts fairness assessments, robustness benchmarks, and even safety evaluations in AI.
 
@@ -55,17 +53,17 @@ For example, efforts to ensure that an AI system behaves fairly across different
 
 ## Real-World Consequences: Trust, Fairness, and Safety
 
-Imagine an AI system used in medicine that predicts patient outcomes. If the underlying predictive model is sensitive to tiny changes—like a slight miscalibration in patient data—then using counterfactual reasoning to recommend personalized treatments ("What if this patient had received a different dosage?") becomes risky. The recommended treatments might look sound superficially but could fail unpredictably when applied to real-world scenarios.
+Imagine an AI system used in medicine that predicts patient outcomes. This is an area where you can't really afford to get stuff wrong. If the underlying predictive model is sensitive to tiny changes—like a slight miscalibration in patient data—then using counterfactual reasoning to recommend personalized treatments ("What if this patient had received a different dosage?") becomes risky. The recommended treatments might look sound superficially but could fail unpredictably when applied to real-world scenarios.
 
 In areas such as automated finance, weather forecasting, or autonomous vehicles, this danger multiplies. The inherent sensitivity of complex AI systems means minor inaccuracies or slight misunderstandings can escalate into major errors in judgment or prediction.
 
 ## Nassim Taleb and the Fragility of Counterfactual Reasoning
 
-[Nassim Nicholas Taleb](https://en.wikipedia.org/wiki/Nassim_Nicholas_Taleb)'s book [*The Black Swan*](https://amzn.to/42UhiVY) argues that complex systems resist reliable prediction because rare but impactful events dominate, making forecasts based on past data unreliable.
+[Nassim Nicholas Taleb](https://en.wikipedia.org/wiki/Nassim_Nicholas_Taleb)'s book [_The Black Swan_](https://amzn.to/42UhiVY) argues that complex systems resist reliable prediction because rare but impactful events dominate, making forecasts based on past data unreliable.
 
 Taleb would almost certainly interpret the paper as illustrating the "[ludic fallacy](https://en.wikipedia.org/wiki/Ludic_fallacy)," which describes the misuse of simplified, structured models to understand messy, real-world complexities. The paper demonstrates precisely how these models can break down when confronted with genuine complexity, uncertainty, and chaos—conditions Taleb consistently warns against in his critique of overly confident modeling.
 
-The findings also exemplify Taleb’s concept of "[fragility](https://arxiv.org/abs/1209.2298)," the idea that certain systems deteriorate quickly under uncertainty or volatility. The paper clearly shows how minor perturbations can drastically alter outcomes, reinforcing his argument that fragility often manifests through extreme sensitivity to small changes.
+The findings also exemplify Taleb's concept of "[fragility](https://arxiv.org/abs/1209.2298)," the idea that certain systems deteriorate quickly under uncertainty or volatility. The paper clearly shows how minor perturbations can drastically alter outcomes, reinforcing his argument that fragility often manifests through extreme sensitivity to small changes.
 
 Taleb is notably skeptical of simplistic causal narratives, a skepticism encapsulated in his idea of the "[narrative fallacy](https://en.wikipedia.org/wiki/Narrative_fallacy)." The unreliable nature of counterfactual reasoning demonstrated in the paper confirms his view that retrospective "what-if" scenarios often mislead more than they inform, especially in opaque, complex systems.
 
