@@ -58,6 +58,7 @@
     "fast-glob": "^3.3.2",
     "globals": "^15.14.0",
     "gray-matter": "^4.0.3",
+    "html-entities": "^2.6.0",
     "lucide-svelte": "^0.469.0",
     "magic-string": "^0.30.17",
     "mdsvex": "^0.12.3",

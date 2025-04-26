@@ -6,10 +6,7 @@
   export let data;
 </script>
 
-<SEO
-  title="Writing"
-  description="A collection of articles, essays, and other writing that I've done over the years."
-/>
+<SEO title={data.title} description={data.description} image={data.opengraph} />
 
 <ul class="not-prose space-y-8">
   {#each data.posts as post}

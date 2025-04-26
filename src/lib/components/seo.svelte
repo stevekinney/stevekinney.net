@@ -1,7 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { formatPageTitle } from '$lib/format-page-title';
-  import { createOpenGraphImage } from '../open-graph';
 
   interface SEOProps {
     title: string;

@@ -1,9 +1,7 @@
-import type { RequestEvent } from '@sveltejs/kit';
-
 import metadata from '$lib/metadata';
 
 export function h(type: string, props: { [key: string]: unknown } | null, ...children: unknown[]) {
-  if (children.length) {
+  if (children && children.length) {
     props = props || {};
     props.children = children;
   }
@@ -11,22 +9,7 @@ export function h(type: string, props: { [key: string]: unknown } | null, ...chi
   return { type, props: props || {} };
 }
 
-const OpenGraphImage = ({ url }: RequestEvent) => {
-  let title: string | undefined = metadata.title;
-  let description = metadata.description;
-
-  if (url.searchParams.has('title')) {
-    title = decodeURIComponent(url.searchParams.get('title')!);
-  }
-
-  if (url.searchParams.has('description')) {
-    description = decodeURIComponent(url.searchParams.get('description')!);
-  }
-
-  if (!title && !description) {
-    description = metadata.description;
-  }
-
+const OpenGraphImage = ({ title = metadata.title, description = metadata.description }) => {
   return (
     <div
       style={{
