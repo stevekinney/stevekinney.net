@@ -20,8 +20,7 @@
     children,
   }: SEOProps = $props();
 
-  const parameters = new URLSearchParams(page.url.search);
-  const image = $derived(new URL('/og', page.url.origin).href + `?${parameters.toString()}`);
+  const image = `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`;
 </script>
 
 <svelte:head>
