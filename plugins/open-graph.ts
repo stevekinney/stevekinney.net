@@ -1,4 +1,3 @@
-import { readFile } from 'fs/promises';
 import { type Plugin } from 'vite';
 
 export const openGraphPlugin = (): Plugin => {

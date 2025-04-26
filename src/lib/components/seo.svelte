@@ -1,8 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { encodeParameters } from '$lib/encode-parameters';
   import { formatPageTitle } from '$lib/format-page-title';
-  import openGraph from 'virtual:open-graph';
+  import { openGraphImage } from '../open-graph';
 
   interface SEOProps {
     title: string;
@@ -33,7 +32,7 @@
   <meta property="og:url" content={page.url.href} />
   <meta property="og:title" content={formatPageTitle(title)} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={openGraph} />
+  <meta property="og:image" content={openGraphImage(title, description)} />
   <meta property="og:site_name" content="Steve Kinney" />
   <meta property="og:locale" content="en_US" />
 
@@ -45,7 +44,7 @@
   <meta name="twitter:title" content={formatPageTitle(title)} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:creator" content="@stevekinney" />
-  <meta name="twitter:image" content={openGraph} />
+  <meta name="twitter:image" content={openGraphImage(title, description)} />
 
   {#if published && date}
     <meta name="date" content={new Date(date).toISOString()} />
