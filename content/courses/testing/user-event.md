@@ -1,7 +1,7 @@
 ---
 title: FireEvent vs UserEvent in Testing
 description: Learn how to simulate user events in testing using userEvent.
-modified: 2024-09-28T16:12:24-06:00
+modified: 2025-04-26T09:57:39-06:00
 ---
 
 `fireEvent` is useful for—umm—firing events, but generally speaking there is more to a user interaction than just one event. [Consider the list of events](fire-event-events.md) that `fireEvent` supports. that `fireEvent` supports. Let's look at an over-simplified list of what happens when a user types into an `input` field:
@@ -78,3 +78,6 @@ await user.click(element); // Perform a click with `shiftKey: true`
 ```
 
 (**Source**: [`user-event` documentation](https://testing-library.com/docs/user-event/setup#starting-a-session-per-setup))
+
+> [!TIP] Accident Counter with User Event
+> You can take a look at a sollution for the Accident Counter example [using user event](accident-counter-with-user-event.md).

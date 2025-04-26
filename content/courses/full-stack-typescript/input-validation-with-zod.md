@@ -1,10 +1,10 @@
 ---
 title: Input Validation with Zod
 description: 'Use Zod with React Hook Form to create robust, type-safe form validation in your frontend applications.'
-modified: 2025-03-15T14:44:38-06:00
+modified: 2025-04-26T09:58:57-06:00
 ---
 
-One popular approach is to use **React Hook Form** (a form state management library) in combination with Zod. React Hook Form has official support for Zod via a resolver. The setup looks like this:
+One popular approach is to use [React Hook Form](https://react-hook-form.com/) in combination with [Zod](https://zod.dev). React Hook Form has official support for Zod via a resolver. The setup looks like this:
 
 ```ts
 import { useForm } from 'react-hook-form';
@@ -45,4 +45,4 @@ The benefit of this approach is a **single source of truth** for validation – 
 
 Even if you’re not using a form library, you can still use Zod in React by manually calling `schema.safeParse` on, say, form submit. For instance, you could use a React component’s state for form inputs and on submit do `const result = FormSchema.safeParse(formState)`. If `result.success` is false, set error messages accordingly; if true, proceed. But libraries like React Hook Form simplify this by tying into component state and re-renders for you.
 
-In summary, Zod on the frontend helps maintain **type safety and validation consistency**. You get to leverage the same robust validation rules in the browser, leading to more resilient applications. And thanks to integrations like React Hook Form’s resolver, setting it up is very convenient – you largely just plug in your schema and let the library handle the rest.
+Zod on the frontend helps maintain **type safety and validation consistency**. You get to leverage the same robust validation rules in the browser, leading to more resilient applications. And thanks to integrations like React Hook Form’s resolver, setting it up is very convenient – you largely just plug in your schema and let the library handle the rest.

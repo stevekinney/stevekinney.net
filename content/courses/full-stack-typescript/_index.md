@@ -1,5 +1,6 @@
 ---
 layout: contents
+modified: 2025-04-26T10:02:07-06:00
 ---
 
 ## TypeScript Best Practices
@@ -64,9 +65,11 @@ layout: contents
 ## Appendix
 
 - [Express Zod API](express-zod-api.md)
+- [Input Validation with Zod](input-validation-with-zod.md)
 - [Class Validator and Class Transformer](class-validator-class-transformer-express.md)
 - [Typed Error Middleware with Express](typed-error-middleware-with-express.md)
 - [Branded Types with Express](branded-types-express.md)
+- [Global Error Types with Express](global-error-types-express.md)
 - [Type Safe Route Registration](type-safe-route-registration-with-express.md)
 - [Type Safe Asynchronous Route Handlers](type-safe-asynchronous-route-handlers-with-express.md)
 - [Typing Headers and Cookies](typing-headers-and-cookies-in-express.md)
