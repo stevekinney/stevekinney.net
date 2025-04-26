@@ -1,11 +1,12 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { formatPageTitle } from '$lib/format-page-title';
-  import { openGraphImage } from '../open-graph';
+  import { createOpenGraphImage } from '../open-graph';
 
   interface SEOProps {
     title: string;
     description: string;
+    image: string;
     published?: boolean;
     date?: Date | string;
     modified?: Date | string;
@@ -15,6 +16,7 @@
   const {
     title,
     description,
+    image,
     published = true,
     date = undefined,
     modified = undefined,
@@ -32,10 +34,11 @@
   <meta property="og:url" content={page.url.href} />
   <meta property="og:title" content={formatPageTitle(title)} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={openGraphImage(title, description)} />
+
   <meta property="og:site_name" content="Steve Kinney" />
   <meta property="og:locale" content="en_US" />
 
+  <meta property="og:image" content={image} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="627" />
 
@@ -44,7 +47,7 @@
   <meta name="twitter:title" content={formatPageTitle(title)} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:creator" content="@stevekinney" />
-  <meta name="twitter:image" content={openGraphImage(title, description)} />
+  <meta name="twitter:image" content={image} />
 
   {#if published && date}
     <meta name="date" content={new Date(date).toISOString()} />

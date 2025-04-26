@@ -16,7 +16,7 @@ In unit testing, one of the key tasks is verifying that functions are called wit
 
 [Spies](spies.md) in Vitest can track how a function is called, including the arguments passed to it. The `vi.spyOn()` method allows you to monitor existing functions and check their arguments without modifying their behavior.
 
-Here’s how you create a spy and check the arguments. Let's take a look at `examples/logjam/src/log.test.js`.
+Here's how you create a spy and check the arguments. Let's take a look at `examples/logjam/src/log.test.js`.
 
 ```js
 describe('logger', () => {
@@ -81,7 +81,7 @@ The `toHaveBeenNthCalledWith()` method checks the arguments for the first call a
 
 ## Checking Arguments of Asynchronous Functions
 
-When working with asynchronous code, it’s important to ensure that the correct arguments are passed to functions when dealing with promises or callbacks. Vitest’s spies and mocks can handle asynchronous functions as well.
+When working with asynchronous code, it's important to ensure that the correct arguments are passed to functions when dealing with promises or callbacks. Vitest's spies and mocks can handle asynchronous functions as well.
 
 ```js
 async function fetchBandData(bandName, callback) {
@@ -133,4 +133,4 @@ This example shows how you can manually inspect the `mock.calls` array to access
 
 ## Conclusion
 
-Checking the arguments passed to a function is super important part of verifying that your code behaves correctly in unit tests. Whether you’re using spies to monitor real functions or mocks to simulate them, Vitest provides powerful tools like `toHaveBeenCalledWith()`, `toHaveBeenNthCalledWith()`, and `mock.calls` to assert on the arguments passed during execution. These capabilities allow you to confidently test that your code is passing the right data to the right places.
+Checking the arguments passed to a function is super important part of verifying that your code behaves correctly in unit tests. Whether you're using spies to monitor real functions or mocks to simulate them, Vitest provides powerful tools like `toHaveBeenCalledWith()`, `toHaveBeenNthCalledWith()`, and `mock.calls` to assert on the arguments passed during execution. These capabilities allow you to confidently test that your code is passing the right data to the right places.

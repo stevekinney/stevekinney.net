@@ -21,23 +21,23 @@ You can create shared styles for any of the following:
 
 One of the things to notice here is that text styles and color styles are separate. This is intended to make your life easier.
 
-You don’t need to make three styles for red text: one right-aligned, one center-aligned, and one-left aligned. You can make your color style and your alignment style and them apply them both separately to the layer in question.
+You don't need to make three styles for red text: one right-aligned, one center-aligned, and one-left aligned. You can make your color style and your alignment style and them apply them both separately to the layer in question.
 
 ## Naming Conventions
 
 The way you name your styles will help you as your design does it inevitable march into complexity. You can use a slash in the name of your file to create an ad hoc folder-like structure to your components.
 
-By using a forward slash in your style names, you can group your colors by theme or hue or type styles by size or use case. You might group your grid styles by the viewport of whatever device they’re intended for.
+By using a forward slash in your style names, you can group your colors by theme or hue or type styles by size or use case. You might group your grid styles by the viewport of whatever device they're intended for.
 
 ## Creating Styles at Scale
 
-- Let’s create a style based off of one of the colors.
-- This is tedious, let’s actually create them in bulk by renaming these little color swatches to whatever we want the styles to be called.
-- We’ll a plugin called [Styler](https://www.figma.com/community/plugin/820660579767995949/Styler) to create the styles.
+- Let's create a style based off of one of the colors.
+- This is tedious, let's actually create them in bulk by renaming these little color swatches to whatever we want the styles to be called.
+- We'll a plugin called [Styler](https://www.figma.com/community/plugin/820660579767995949/Styler) to create the styles.
 
 ## Generating CSS from Styles
 
-If you’re going to go through all of the work to create styles in Figma, it would be nice if you could export some of the basic ideas of those styles into CSS or SCSS variables to use in your code. It turns out that you can with a plugin called [CSSGen](https://www.figma.com/community/plugin/742750636238601912/CSSGen).
+If you're going to go through all of the work to create styles in Figma, it would be nice if you could export some of the basic ideas of those styles into CSS or SCSS variables to use in your code. It turns out that you can with a plugin called [CSSGen](https://www.figma.com/community/plugin/742750636238601912/CSSGen).
 
 ## Batch Renaming
 

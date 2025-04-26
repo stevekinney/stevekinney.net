@@ -4,7 +4,7 @@ description: Learn how to implement real-time updates using tRPC's subscription 
 modified: 2025-03-15T16:36:52-06:00
 ---
 
-If you need real-time updates (like for chat or notifications), tRPC supports subscriptions (via SSE or WebSockets). You’ll set up a special link on the client and define `.subscription()` procedures on the server. Check tRPC docs for the exact approach (since it can differ between SSE and WS). Example snippet on the server:
+If you need real-time updates (like for chat or notifications), tRPC supports subscriptions (via SSE or WebSockets). You'll set up a special link on the client and define `.subscription()` procedures on the server. Check tRPC docs for the exact approach (since it can differ between SSE and WS). Example snippet on the server:
 
 ```ts
 onNewUser: publicProcedure.subscription(() => {

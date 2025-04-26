@@ -4,7 +4,7 @@ description: Learn how to test DOM interactions using Vitest and DOM Testing Lib
 modified: 2024-09-28T16:08:44-06:00
 ---
 
-Imagine you have a button, and when you click it, something happens. Classic case, right? Let’s whip up a basic test for that interaction. Here’s a simple function, found in `examples/element-factory/src/button.js`, that creates our DOM structure and adds some behavior:
+Imagine you have a button, and when you click it, something happens. Classic case, right? Let's whip up a basic test for that interaction. Here's a simple function, found in `examples/element-factory/src/button.js`, that creates our DOM structure and adds some behavior:
 
 ```javascript
 // examples/element-factory/src/button.js
@@ -20,11 +20,11 @@ export function createButton() {
 }
 ```
 
-Nothing fancy—just a button that says "Click Me," and when you click it, it changes to "Clicked!" It’s like a microwave tutorial level for DOM testing.
+Nothing fancy—just a button that says "Click Me," and when you click it, it changes to "Clicked!" It's like a microwave tutorial level for DOM testing.
 
 ## Writing the Test
 
-Now let's test this sucker and make sure it's not lying to us. We’ll add a new test case to ensure the button successfully changes text on click.
+Now let's test this sucker and make sure it's not lying to us. We'll add a new test case to ensure the button successfully changes text on click.
 
 ```javascript
 import { it, expect, describe } from 'vitest';

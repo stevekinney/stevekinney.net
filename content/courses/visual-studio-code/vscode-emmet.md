@@ -20,7 +20,7 @@ Emmet turns short snippets of text into full HTML structures. For instance, if y
 </div>
 ```
 
-Here’s a quick look at other common patterns:
+Here's a quick look at other common patterns:
 
 `header+main+footer` expands into three sibling elements:
 
@@ -51,11 +51,11 @@ Here’s a quick look at other common patterns:
 </div>
 ```
 
-> [!TIP] If you’re not sure which abbreviation to use, type part of the snippet and press `Ctrl+Space` (or `Cmd+Space` on macOS) to see Emmet suggestions.
+> [!TIP] If you're not sure which abbreviation to use, type part of the snippet and press `Ctrl+Space` (or `Cmd+Space` on macOS) to see Emmet suggestions.
 
 ## Emmet in JSX/TSX
 
-Emmet can also boost your productivity in React files. To ensure it works correctly in `.jsx` or `.tsx` files, configure Visual Studio Code’s settings so Emmet treats these files as HTML. One common approach is adding the following setting in your `settings.json`:
+Emmet can also boost your productivity in React files. To ensure it works correctly in `.jsx` or `.tsx` files, configure Visual Studio Code's settings so Emmet treats these files as HTML. One common approach is adding the following setting in your `settings.json`:
 
 ```json
 "emmet.includeLanguages": {
@@ -65,7 +65,7 @@ Emmet can also boost your productivity in React files. To ensure it works correc
 }
 ```
 
-Once that’s in place, you can use the same abbreviations you’d use in an HTML file. For example, in a `MyComponent.tsx`:
+Once that's in place, you can use the same abbreviations you'd use in an HTML file. For example, in a `MyComponent.tsx`:
 
 ```tsx
 import React from 'react';
@@ -296,7 +296,7 @@ This single abbreviation produces a fully structured blog post card with proper 
 
 ## Wrap with Abbreviation
 
-Emmet isn’t just for generating new markup—it can also wrap existing code in a new structure. Highlight the code you want to wrap, then invoke the **Wrap with Abbreviation** command via the Command Palette. Type your abbreviation (for example, `section>div.wrapper`) and press `Tab`. Emmet will enclose your selection in the new markup, saving you the hassle of manual edits.
+Emmet isn't just for generating new markup—it can also wrap existing code in a new structure. Highlight the code you want to wrap, then invoke the **Wrap with Abbreviation** command via the Command Palette. Type your abbreviation (for example, `section>div.wrapper`) and press `Tab`. Emmet will enclose your selection in the new markup, saving you the hassle of manual edits.
 
 > [!TIP] Use this feature to quickly refactor blocks of code, adding semantic wrappers or applying consistent styling without interrupting your flow.
 

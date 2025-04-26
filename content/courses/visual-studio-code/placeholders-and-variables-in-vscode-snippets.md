@@ -78,7 +78,7 @@ Placeholders can be further customized using options to control their behavior:
 
 ## Surrounding Text with `TM_SELECTED_TEXT`
 
-Imagine you've got some React code, and you want to quickly wrap your selected JSX with a custom component. Here’s a handy snippet for that:
+Imagine you've got some React code, and you want to quickly wrap your selected JSX with a custom component. Here's a handy snippet for that:
 
 ```json
 "Wrap with MyComponent": {
@@ -256,6 +256,6 @@ In this snippet, once you've filled in the function name and parameters, pressin
 
 ## Nested Snippets Trigger
 
-For more advanced workflows, you can trigger nested snippets within a placeholder. While editing a placeholder, if you type a snippet prefix and trigger its expansion, the new snippet will be inserted inside the current placeholder. This can be particularly useful for generating repeated or structured content dynamically. For example, if you’re writing a component and frequently need to insert a specific prop type structure, triggering a nested snippet can streamline that process.
+For more advanced workflows, you can trigger nested snippets within a placeholder. While editing a placeholder, if you type a snippet prefix and trigger its expansion, the new snippet will be inserted inside the current placeholder. This can be particularly useful for generating repeated or structured content dynamically. For example, if you're writing a component and frequently need to insert a specific prop type structure, triggering a nested snippet can streamline that process.
 
 > [!TIP] Experiment with nesting snippets to reduce repetitive typing and maintain a consistent structure, but be cautious—overly complex nested snippets can sometimes make navigation a bit tricky.

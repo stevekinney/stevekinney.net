@@ -5,11 +5,11 @@ date: 2024-03-09T14:26:58-05:00
 modified: 2024-09-28T11:31:17-06:00
 ---
 
-Libraries in Figma are a central repository for storing and sharing design components and styles across projects, significantly boosting productivity and ensuring consistency in design. This feature allows teams to create a single source of truth for all design elements, from UI components to text styles and colors, making it easier to maintain a cohesive look and feel across multiple projects. Let’s delve into how leveraging libraries can transform your design workflow in Figma.
+Libraries in Figma are a central repository for storing and sharing design components and styles across projects, significantly boosting productivity and ensuring consistency in design. This feature allows teams to create a single source of truth for all design elements, from UI components to text styles and colors, making it easier to maintain a cohesive look and feel across multiple projects. Let's delve into how leveraging libraries can transform your design workflow in Figma.
 
 ## Core Features of Libraries
 
-Figma’s libraries allow you to publish components and styles that can be reused in any design file within your team or organization. This centralized system supports the following:
+Figma's libraries allow you to publish components and styles that can be reused in any design file within your team or organization. This centralized system supports the following:
 
 - **Components:** Reusable UI elements such as buttons, icons, and input fields.
 - **Text Styles:** Defined typography styles including font, size, line height, and color.
@@ -31,5 +31,5 @@ To set up a library in Figma, simply create a file with the components and style
 
 - **Organize Thoughtfully:** Keep your libraries well-organized by categorizing components and styles clearly, making it easier for team members to find what they need.
 - **Regular Updates:** Continually update and refine your libraries to reflect design iterations and ensure that all assets remain relevant.
-- **Limit Library Numbers:** While having specific libraries for different projects or themes can be useful, too many libraries can become overwhelming. Aim for a balance that suits your team’s needs.
+- **Limit Library Numbers:** While having specific libraries for different projects or themes can be useful, too many libraries can become overwhelming. Aim for a balance that suits your team's needs.
 - **Educate Your Team:** Ensure all team members understand how to use libraries effectively, including how to access and implement shared components and styles in their designs.

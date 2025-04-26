@@ -12,7 +12,7 @@ Spies are particularly useful when you want to check interactions within the sys
 
 - **Tracking Behavior**: Spies can track whether a function was called, how many times it was called, and with what arguments.
 - **Verification**: You can use spies to verify that certain functions were triggered under the right conditions.
-- **Non-intrusive**: Spies do not modify the function’s original behavior unless explicitly configured to do so.
+- **Non-intrusive**: Spies do not modify the function's original behavior unless explicitly configured to do so.
 
 ## When to Use Spies
 
@@ -23,9 +23,9 @@ Spies are particularly useful when you want to check interactions within the sys
 
 ## Creating a Spy in Vitest
 
-In Vitest, you can create spies using the `vi.spyOn()` method, which monitors an existing function. It doesn’t change the actual behavior of the function unless you explicitly instruct it to do so.
+In Vitest, you can create spies using the `vi.spyOn()` method, which monitors an existing function. It doesn't change the actual behavior of the function unless you explicitly instruct it to do so.
 
-Here’s how you create a basic spy:
+Here's how you create a basic spy:
 
 ```js
 const spy = vi.spyOn(console, 'log');
@@ -35,7 +35,7 @@ This spy will watch the `console.log` function and record how many times it was 
 
 ## Spying on Function Calls, Parameters, and Return Values
 
-Let’s go through an example where we spy on a function and verify its behavior. Consider a function that logs an error message when a ticket sale fails:
+Let's go through an example where we spy on a function and verify its behavior. Consider a function that logs an error message when a ticket sale fails:
 
 ```js
 function handleTicketSaleError(errorMessage) {
@@ -76,7 +76,7 @@ One of the main advantages of spies is their ability to provide detailed informa
 - **The return value of the function**.
 - **The context (`this` value)** in which the function was called.
 
-Here’s an example that demonstrates how to check these properties:
+Here's an example that demonstrates how to check these properties:
 
 ```js
 function processOrder(orderId) {

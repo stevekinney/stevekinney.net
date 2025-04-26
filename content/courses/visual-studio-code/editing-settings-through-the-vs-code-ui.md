@@ -14,11 +14,11 @@ The Settings Editor is Visual Studio Code's user-friendly interface for Browse a
 
 ## Filtering and Comparing Settings
 
-In addition to the basic search bar, you can leverage search operators to refine your results. For example, typing `@modified` displays only the settings you’ve changed from their default values. Similarly, `@builtin` shows the original defaults provided by Visual Studio Code. These operators are especially useful for troubleshooting or auditing your customizations.
+In addition to the basic search bar, you can leverage search operators to refine your results. For example, typing `@modified` displays only the settings you've changed from their default values. Similarly, `@builtin` shows the original defaults provided by Visual Studio Code. These operators are especially useful for troubleshooting or auditing your customizations.
 
 ## Viewing Default Settings
 
-Sometimes it’s helpful to compare your changes against the defaults. You can click on the link labeled “Open Default Settings (JSON)” within the Settings Editor. This read-only view shows all the built-in settings along with their default values and descriptions, allowing you to better understand what options are available.
+Sometimes it's helpful to compare your changes against the defaults. You can click on the link labeled “Open Default Settings (JSON)” within the Settings Editor. This read-only view shows all the built-in settings along with their default values and descriptions, allowing you to better understand what options are available.
 
 ## Syncing and Sharing Settings
 

@@ -6,7 +6,7 @@ modified: 2025-03-18T08:20:04-05:00
 
 What to know the quickest way to become a 10x developer? **Ten cursors**.
 
-Multiple cursors let you edit code in several places at once. This feature is perfect for renaming repeated variables, inserting the same snippet in multiple lines, or applying quick fixes across multiple spots. Here’s how to unleash their power.
+Multiple cursors let you edit code in several places at once. This feature is perfect for renaming repeated variables, inserting the same snippet in multiple lines, or applying quick fixes across multiple spots. Here's how to unleash their power.
 
 When you hold `Alt` on Windows/Linux or `Option` on macOS and click in different locations, Visual Studio Code places separate cursors wherever you click. Anything you type then appears in all those positions simultaneously. You can also place cursors in a vertical column by holding `Shift + Alt` (Windows/Linux) or `Shift + Option` (macOS) while dragging the mouse vertically.
 
@@ -23,7 +23,7 @@ Highlight `foo` and press `Ctrl+D` or `Cmd+D` repeatedly until all instances are
 > [!TIP]
 > If you accidentally select one occurrence too many, press `Ctrl+U` (Windows/Linux) or `Cmd+U` (macOS) to undo your last selection action. This lets you fine-tune which occurrences get changed.
 
-Multiple cursors also extend to other editing commands. For example, you can indent or uncomment multiple lines simultaneously, or use shortcuts like `Ctrl+Shift+K` (Windows/Linux) or `Cmd+Shift+K` (macOS) to delete all lines where cursors are placed. Once you get comfortable with these techniques, you’ll speed through tasks that used to be tedious one-by-one edits.
+Multiple cursors also extend to other editing commands. For example, you can indent or uncomment multiple lines simultaneously, or use shortcuts like `Ctrl+Shift+K` (Windows/Linux) or `Cmd+Shift+K` (macOS) to delete all lines where cursors are placed. Once you get comfortable with these techniques, you'll speed through tasks that used to be tedious one-by-one edits.
 
 ## Column Selection
 
@@ -45,4 +45,4 @@ When working with block selections, you might want to add a cursor at the end of
 
 ## Undoing a Cursor
 
-When you’re working with multiple cursors, it’s easy to accidentally add one extra that you don’t need. Fortunately, Visual Studio Code provides a simple way to remove the most recently added cursor. Just press `Ctrl+U` on Windows/Linux or `Cmd+U` on macOS, and the last cursor you placed will be undone. This lets you fine-tune your multi-cursor selection until only the desired occurrences are included. Use this shortcut as often as needed to ensure your editing remains precise and controlled.
+When you're working with multiple cursors, it's easy to accidentally add one extra that you don't need. Fortunately, Visual Studio Code provides a simple way to remove the most recently added cursor. Just press `Ctrl+U` on Windows/Linux or `Cmd+U` on macOS, and the last cursor you placed will be undone. This lets you fine-tune your multi-cursor selection until only the desired occurrences are included. Use this shortcut as often as needed to ensure your editing remains precise and controlled.

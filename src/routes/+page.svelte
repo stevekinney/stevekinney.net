@@ -2,9 +2,11 @@
   import SEO from '$lib/components/seo.svelte';
   import { description, title } from '@/lib/metadata';
   import Biography from './biography.md';
+
+  const { data } = $props();
 </script>
 
-<SEO {title} {description} />
+<SEO {title} {description} image={data.opengraph} />
 
 <div class="space-y-8">
   <enhanced:img

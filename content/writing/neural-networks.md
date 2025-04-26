@@ -1,6 +1,6 @@
 ---
 title: Neural Networks
-description: A friendly intro to neural networks—what they are, how they learn, and why they matter for software engineers exploring the world of generative AI.
+description: A friendly intro to neural networks, what they are, how they learn, and why they matter for software engineers exploring the world of generative AI.
 tags:
   - ai
   - machine-learning
@@ -21,9 +21,9 @@ These individual processing steps are often called [**neurons**](https://www.bae
 
 The thing that makes neural networks useful for learning is that the mathematical functions they represent are _differentiable_. Basically, this means we can calculate how a small change in any internal setting affects the final output. Why does that matter? Because it allows the network to figure out _how_ to get better. If the network's output is wrong, differentiability tells us which internal knobs to tweak, and in which direction, to make the output slightly _less wrong_ next time. It's like getting automated hints on how to adjust parameters to improve performance.
 
-Imagine you’re mixing colors to paint the perfect green. You start with some blue and some yellow paint. If the green you mix is too bluish, you know exactly what to do next time: use a bit less blue or a bit more yellow.
+Imagine you're mixing colors to paint the perfect green. You start with some blue and some yellow paint. If the green you mix is too bluish, you know exactly what to do next time: use a bit less blue or a bit more yellow.
 
-That’s what “differentiable” means for neural networks. When the network makes a mistake, we know exactly how to tweak each little part inside to get closer to the right answer next time. It helps the network learn by showing exactly how each small change affects the final result.
+That's what “differentiable” means for neural networks. When the network makes a mistake, we know exactly how to tweak each little part inside to get closer to the right answer next time. It helps the network learn by showing exactly how each small change affects the final result.
 
 ## Layers, Weights, and Biases
 

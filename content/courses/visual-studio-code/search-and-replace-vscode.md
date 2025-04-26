@@ -183,6 +183,6 @@ This changes "userProfileId" to "user-profile-id".
 
 ## Saving Search Queries
 
-Yes, you can save search queries by using the Search Editor. Once you open the Search Editor (press `Ctrl+Shift+J` on Windows/Linux or `Cmd+Shift+J` on macOS) and run your search, you can save the results—including the query itself—as a file. Simply use **File → Save As…** (or the corresponding shortcut) to store your search document. This file not only preserves the output but also the search parameters, so you can re-run or modify the query later with ease. It’s especially useful for recurring searches in large codebases or when you want to share a complex search query with your team.
+Yes, you can save search queries by using the Search Editor. Once you open the Search Editor (press `Ctrl+Shift+J` on Windows/Linux or `Cmd+Shift+J` on macOS) and run your search, you can save the results—including the query itself—as a file. Simply use **File → Save As…** (or the corresponding shortcut) to store your search document. This file not only preserves the output but also the search parameters, so you can re-run or modify the query later with ease. It's especially useful for recurring searches in large codebases or when you want to share a complex search query with your team.
 
-> [!TIP] Leverage the Search Editor to keep a library of your most-used queries. This ensures that you don’t have to reconstruct intricate regex patterns or inclusion/exclusion filters from scratch every time you need them.
+> [!TIP] Leverage the Search Editor to keep a library of your most-used queries. This ensures that you don't have to reconstruct intricate regex patterns or inclusion/exclusion filters from scratch every time you need them.

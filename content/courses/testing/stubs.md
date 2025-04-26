@@ -17,13 +17,13 @@ Use stubs when:
 - You need to simulate different behaviors from the external systems (e.g., returning specific data or triggering an error) to cover various test cases.
 - You want to speed up tests by eliminating real-time-consuming operations, such as network requests or file I/O.
 
-Stubs are best suited for situations where you don’t need to verify how often or how a function is called but simply want to control what it returns.
+Stubs are best suited for situations where you don't need to verify how often or how a function is called but simply want to control what it returns.
 
 ## Creating Stubs with Vitest
 
 In Vitest, you can easily create stubs using the `vi.fn()` method. This function allows you to replace the actual implementation of a dependency and return specific values when the stubbed function is called.
 
-Here’s how you create a simple stub:
+Here's how you create a simple stub:
 
 ```js
 const fetchStub = vi.fn(() =>
@@ -35,9 +35,9 @@ const fetchStub = vi.fn(() =>
 
 ## Example: Stubbing External Dependencies (e.g., API Calls, File System interactions)
 
-Let’s walk through a real-world example. Imagine you are testing a function that fetches concert details for a band by making an API call. You want to avoid making the actual API call in your test and instead control the behavior using a stub.
+Let's walk through a real-world example. Imagine you are testing a function that fetches concert details for a band by making an API call. You want to avoid making the actual API call in your test and instead control the behavior using a stub.
 
-Here’s the function to be tested:
+Here's the function to be tested:
 
 ```js
 async function getConcertDetails(band) {
@@ -81,7 +81,7 @@ In this test, we replace the real `fetch` function with a stub that simulates th
 
 ## Asserting the Behavior of Code with Stubs
 
-When using stubs, you typically want to assert that the function you’re testing behaves correctly given the predefined responses. In the example above, we verify that `getConcertDetails` returns the correct concert information when the `fetchStub` provides the simulated API data.
+When using stubs, you typically want to assert that the function you're testing behaves correctly given the predefined responses. In the example above, we verify that `getConcertDetails` returns the correct concert information when the `fetchStub` provides the simulated API data.
 
 Vitest also provides methods to check how many times a stub was called, although this is not the primary use of a stub. You can, however, assert that the stubbed function was called if needed:
 

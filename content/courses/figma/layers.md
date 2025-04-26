@@ -29,7 +29,7 @@ To make a group:
 
 A **frame** is a high-level grouping of objects. At the risk of sounding hyperbolic, they're the foundation of your designs in Figma. It's an area where you're going to create your design. You can set a frame's size to be any number of popular device sizes as well a custom size. You can also nest frames inside of frames. You might know a frame by any of the names that something similar might go by in some of the other tools out there: canvas or art board come to mind.
 
-Frames are _way more_ powerful than groups, but with great power comes great responsibility, so sometimes it’s just easier to use a group.
+Frames are _way more_ powerful than groups, but with great power comes great responsibility, so sometimes it's just easier to use a group.
 
 - Frames can contain other frames.
 - Frames can have their own height and width separate from then objects they contain.
@@ -46,7 +46,7 @@ When should you use frames?
 
 You can create a frame in any of the following ways:
 
-- Use the **Frame tool**—by either selecting it from the toolbar or pressing the `F` key—and either pick a predetermined size from the right sidebar or click and drag to whatever size you’re looking for.
+- Use the **Frame tool**—by either selecting it from the toolbar or pressing the `F` key—and either pick a predetermined size from the right sidebar or click and drag to whatever size you're looking for.
 - Select a bunch of layers and press `Command-Option-G` or `Control-Alt-G` to create a frame around those layers.
 
 ## Sections

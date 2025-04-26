@@ -8,7 +8,7 @@ modified: 2024-09-28T12:56:55-07:00
 
 The material in this course is intended to go along with the [Introduction to Testing](https://frontendmasters.com/courses/testing/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) course with [Frontend Masters](https://frontendmasters.com/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon).
 
-Testing increases your confidence that your applications will function as expected. This workshop will teach you the fundamentals of testing and give you the foundations to write more testable code in your applications. You’ll set up an efficient testing environment where a test runner is part of your development workflow. You’ll gain practical experience writing unit and integration tests while exploring common testing tools.
+Testing increases your confidence that your applications will function as expected. This workshop will teach you the fundamentals of testing and give you the foundations to write more testable code in your applications. You'll set up an efficient testing environment where a test runner is part of your development workflow. You'll gain practical experience writing unit and integration tests while exploring common testing tools.
 
 ## Prerequisites
 
