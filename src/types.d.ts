@@ -27,9 +27,3 @@ declare module 'svelte/compiler' {
     visitor: { enter?: (node: N) => void; leave?: (node: N) => void },
   ): void;
 }
-
-declare module 'virtual:project-root' {
-  const projectRoot: string;
-  export default projectRoot;
-  export const fromProjectRoot: (...path: string[]) => string;
-}
