@@ -5,7 +5,6 @@
   interface SEOProps {
     title: string;
     description: string;
-    image: string;
     published?: boolean;
     date?: Date | string;
     modified?: Date | string;

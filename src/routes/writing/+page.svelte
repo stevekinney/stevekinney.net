@@ -6,7 +6,7 @@
   export let data;
 </script>
 
-<SEO title={data.title} description={data.description} image={data.opengraph} />
+<SEO title={data.title} description={data.description} />
 
 <ul class="not-prose space-y-8">
   {#each data.posts as post}

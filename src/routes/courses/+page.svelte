@@ -6,7 +6,7 @@
   const { data } = $props();
 </script>
 
-<SEO title={data.title} description={data.description} image={data.opengraph} />
+<SEO title={data.title} description={data.description} />
 
 <div class="space-y-8">
   <section class="prose dark:prose-invert">

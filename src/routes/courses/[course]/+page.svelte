@@ -6,12 +6,7 @@
   const { data } = $props();
 </script>
 
-<SEO
-  title={data.title}
-  description={data.description}
-  image={data.opengraph}
-  published={data.published}
-/>
+<SEO title={data.title} description={data.description} published={data.published} />
 
 <data.content />
 

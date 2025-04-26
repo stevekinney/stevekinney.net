@@ -10,7 +10,6 @@
   title={data.meta.title}
   description={data.meta.description}
   published={data.meta.published}
-  image={data.opengraph}
   date={data.meta.date}
   modified={data.meta.modified}
 />
