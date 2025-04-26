@@ -15,12 +15,14 @@
   const {
     title,
     description,
-    image,
     published = true,
     date = undefined,
     modified = undefined,
     children,
   }: SEOProps = $props();
+
+  const parameters = new URLSearchParams(page.url.search);
+  const image = $derived(new URL('/og', page.url.origin).href + `?${parameters.toString()}`);
 </script>
 
 <svelte:head>
