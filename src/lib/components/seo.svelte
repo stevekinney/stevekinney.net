@@ -39,7 +39,7 @@
 
   <meta property="og:image" content={image} />
   <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="627" />
+  <meta property="og:image:height" content="630" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content={page.url.href} />
