@@ -2,10 +2,10 @@ import { getPost } from '$lib/posts.js';
 import { createOpenGraphImage } from '@/lib/open-graph';
 import { error } from '@sveltejs/kit';
 
-export async function load({ params, fetch }) {
+export async function load({ params }) {
   try {
     const post = await getPost(params.slug);
-    const opengraph = await createOpenGraphImage(post.meta.title, post.meta.description, fetch);
+    const opengraph = await createOpenGraphImage(post.meta.title, post.meta.description);
 
     return {
       ...post,

@@ -21,3 +21,8 @@ declare module 'svelte/compiler' {
     visitor: { enter?: (node: N) => void; leave?: (node: N) => void },
   ): void;
 }
+
+declare module 'virtual:opengraph-image*' {
+  const opengraph: string;
+  export const url: opengraph;
+}

@@ -1,19 +1,20 @@
 // import { error } from '@sveltejs/kit';
-import { CourseMetadataSchema } from '$lib/schemas/courses';
+import { CourseMarkdownSchema } from '$lib/schemas/courses';
+import { createOpenGraphImage } from '@/lib/open-graph';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ params }) => {
-  const { course } = params;
+  const { course: slug } = params;
 
-  const { default: content, metadata } = await import(
-    `../../../../content/courses/${course}/README.md`
+  const { default: content, metadata } = CourseMarkdownSchema.parse(
+    await import(`../../../../content/courses/${slug}/README.md`),
   );
 
+  const opengraph = await createOpenGraphImage(metadata.title, metadata.description);
+
   return {
+    ...metadata,
     content,
-    ...CourseMetadataSchema.parse({
-      ...metadata,
-      slug: course,
-    }),
+    opengraph,
   };
 };

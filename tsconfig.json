@@ -13,7 +13,7 @@
     "jsx": "preserve",
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment"
-  }
-
+  },
+  "include": ["plugins/**/*.tsx", "src/**/*", "svelte.config.js", "vite.config.ts"]
   // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 }

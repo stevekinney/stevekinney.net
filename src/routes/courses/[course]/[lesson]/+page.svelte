@@ -10,6 +10,7 @@
 <SEO
   title="{data.title} | {data.course.title}"
   description={data.description}
+  image={data.opengraph}
   published={data.published}
 />
 

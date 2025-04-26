@@ -1,8 +1,8 @@
 import { CourseMetadataSchema } from '$lib/schemas/courses';
-import { createOpenGraphImage } from '@/lib/open-graph';
+import { createOpenGraphImage } from '$lib/open-graph';
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = async ({ fetch }) => {
+export const load: PageLoad = async () => {
   const courses = import.meta.glob(`../../../content/courses/**/README.md`, {
     eager: true,
     import: 'metadata',
@@ -10,17 +10,19 @@ export const load: PageLoad = async ({ fetch }) => {
 
   const walkthroughs = Object.entries(courses).map(([path, metadata]) => {
     const slug = path.split('/').slice(-2, -1)[0];
+    const meta = CourseMetadataSchema.parse(metadata);
 
-    if (typeof metadata !== 'object') throw new Error(`Invalid metadata for course at ${path}`);
-
-    return CourseMetadataSchema.parse({ ...metadata, slug });
+    return {
+      ...meta,
+      slug,
+    };
   });
 
   const title = 'Courses';
   const description =
     "A collection of courses that I've taught over the years, including full course walkthroughs and recordings from Frontend Masters.";
 
-  const opengraph = await createOpenGraphImage(title, description, fetch);
+  const opengraph = await createOpenGraphImage(title, description);
 
   return {
     title,
