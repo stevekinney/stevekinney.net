@@ -9,7 +9,6 @@
 <SEO
   title="Courses"
   description="A collection of courses that I've taught over the years, including full course walkthroughs and recordings from Frontend Masters."
-  url="/courses"
 />
 
 <div class="space-y-8">

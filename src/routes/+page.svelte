@@ -1,9 +1,10 @@
 <script lang="ts">
   import SEO from '$lib/components/seo.svelte';
+  import { description, title } from '@/lib/metadata';
   import Biography from './biography.md';
 </script>
 
-<SEO />
+<SEO {title} {description} />
 
 <div class="space-y-8">
   <enhanced:img
