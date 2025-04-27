@@ -1,7 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { formatPageTitle } from '$lib/format-page-title';
-  import metadata from '../metadata';
 
   interface SEOProps {
     title: string;
