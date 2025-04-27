@@ -8,10 +8,19 @@ export const GET = async ({ params }) => {
 
   const image = await createOpenGraphImage(title, description);
 
-  return new Response(image, {
+  const body = new ReadableStream<typeof image>({
+    async start(controller) {
+      controller.enqueue(image);
+      controller.close();
+    },
+  });
+
+  return new Response(body, {
     headers: {
       'Content-Type': 'image/jpeg',
       'Cache-Control': 'public, max-age=31536000, immutable, no-transform',
+      'Access-Control-Allow-Origin': '*',
+      'Content-Length': image.length.toString(),
     },
   });
 };
