@@ -1,8 +1,6 @@
 import metadata from '$lib/metadata';
 import { createOpenGraphImage } from './open-graph';
 
-export const prerender = false;
-
 export const GET = async ({ url }) => {
   const title = url.searchParams.get('title') || metadata.title;
   const description = url.searchParams.get('description');
