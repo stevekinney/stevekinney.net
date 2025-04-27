@@ -1,5 +1,7 @@
 import { createOpenGraphImage } from './open-graph';
 
+export const prerender = false;
+
 export const GET = async ({ url }) => {
   const title = url.searchParams.get('title') || 'Steve Kinney';
   const description = url.searchParams.get('description');
@@ -9,7 +11,7 @@ export const GET = async ({ url }) => {
   return new Response(image, {
     headers: {
       'Content-Type': 'image/jpeg',
-      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Cache-Control': 'public, max-age=31536000, immutable, no-transform',
     },
   });
 };
