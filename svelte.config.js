@@ -14,6 +14,18 @@ import { fixMarkdownUrls } from './plugins/remark-fix-urls.js';
 import { processCallouts } from './plugins/svelte-compile-callouts.js';
 import { processImages } from './plugins/svelte-enhance-images.js';
 
+const getAdapter = () => {
+  if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+    console.log('Using Vercel adapter…');
+    return vercelAdapter();
+  }
+
+  console.log('Using static adapter…');
+  return staticAdapter({
+    strict: false,
+  });
+};
+
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
   extensions: ['.md'],
@@ -39,7 +51,7 @@ const config = {
   extensions: ['.svelte', '.md'],
   preprocess: [vitePreprocess(), mdsvex(mdsvexOptions), processImages(), processCallouts()],
   kit: {
-    adapter: !process.env.VERCEL ? staticAdapter({ strict: false }) : vercelAdapter(),
+    adapter: getAdapter(),
     alias: {
       '$lib/*': 'src/lib/*',
       '$assets/*': 'src/assets/*',
