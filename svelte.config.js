@@ -26,7 +26,8 @@ const mdsvexOptions = {
   },
   highlight: {
     highlighter: async (code, lang = 'text') => {
-      if (!bundledLanguages[lang]) return code;
+      if (!lang) return code;
+      if (!(lang in bundledLanguages)) return code;
       const html = escapeSvelte(await codeToHtml(code, { lang, theme: 'night-owl' }));
       return `{@html \`${html}\` }`;
     },
@@ -40,7 +41,6 @@ const config = {
   kit: {
     adapter: !process.env.VERCEL ? staticAdapter({ strict: false }) : vercelAdapter(),
     alias: {
-      '@/*': 'src/*',
       '$lib/*': 'src/lib/*',
       '$assets/*': 'src/assets/*',
       '$courses/*': 'content/courses/*',
