@@ -15,7 +15,7 @@ import { processCallouts } from './plugins/svelte-compile-callouts.js';
 import { processImages } from './plugins/svelte-enhance-images.js';
 
 const getAdapter = () => {
-  if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+  if (process.env.VERCEL) {
     console.log('Using Vercel adapter…');
     return vercelAdapter();
   }
