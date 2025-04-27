@@ -32,9 +32,9 @@ const mdsvexOptions = {
   remarkPlugins: [unwrapImages, fixMarkdownUrls, gfm],
   rehypePlugins: [slug, rehypeMermaid],
   layout: {
-    _: './src/lib/markdown/base.svelte',
-    page: './src/lib/markdown/page.svelte',
-    contents: './src/lib/markdown/components/contents.svelte',
+    _: 'src/lib/markdown/base.svelte',
+    page: 'src/lib/markdown/page.svelte',
+    contents: 'src/lib/markdown/components/contents.svelte',
   },
   highlight: {
     highlighter: async (code, lang = 'text') => {
