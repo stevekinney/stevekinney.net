@@ -22,9 +22,11 @@
   }: SEOProps = $props();
 
   const createImageUrl = (title: string, description: string) => {
-    const encodedTitle = encodeURIComponent(title);
-    const encodedDescription = encodeURIComponent(description);
-    return new URL(`/open-graph/${encodedTitle}/${encodedDescription}`, metadata.url).href;
+    const params = new URLSearchParams({
+      title,
+      description,
+    });
+    return `/open-graph?${params.toString()}`;
   };
 
   const image = createImageUrl(title, description);
