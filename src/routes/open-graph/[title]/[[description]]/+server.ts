@@ -1,10 +1,10 @@
 import { createOpenGraphImage } from './open-graph';
 
-export const prerender = false;
+export const prerender = true;
 
-export const GET = async ({ url }) => {
-  const title = url.searchParams.get('title') || 'Steve Kinney';
-  const description = url.searchParams.get('description');
+export const GET = async ({ params }) => {
+  const title = params.title;
+  const description = params.description;
 
   const image = await createOpenGraphImage(title, description);
 

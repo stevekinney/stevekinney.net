@@ -20,7 +20,7 @@
     children,
   }: SEOProps = $props();
 
-  const image = `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`;
+  const image = `/open-graph/${encodeURIComponent(title)}/${encodeURIComponent(description)}`;
 </script>
 
 <svelte:head>
