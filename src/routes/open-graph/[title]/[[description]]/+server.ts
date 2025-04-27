@@ -1,6 +1,6 @@
 import { createOpenGraphImage } from './open-graph';
 
-export const prerender = true;
+export const prerender = false;
 
 export const GET = async ({ params }) => {
   const title = params.title;
