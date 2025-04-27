@@ -146,9 +146,7 @@ export async function createOpenGraphImage(
     },
   );
 
-  const buffer = await sharp(Buffer.from(svg)).jpeg().toBuffer();
-
-  return buffer;
+  return sharp(Buffer.from(svg)).jpeg().toBuffer();
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

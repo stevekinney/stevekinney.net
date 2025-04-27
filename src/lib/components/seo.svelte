@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { formatPageTitle } from '$lib/format-page-title';
+  import metadata from '../metadata';
 
   interface SEOProps {
     title: string;
@@ -20,7 +21,13 @@
     children,
   }: SEOProps = $props();
 
-  const image = `/open-graph/${encodeURIComponent(title)}/${encodeURIComponent(description)}`;
+  const createImageUrl = (title: string, description: string) => {
+    const encodedTitle = encodeURIComponent(title);
+    const encodedDescription = encodeURIComponent(description);
+    return new URL(`/open-graph/${encodedTitle}/${encodedDescription}`, metadata.url).href;
+  };
+
+  const image = createImageUrl(title, description);
 </script>
 
 <svelte:head>
