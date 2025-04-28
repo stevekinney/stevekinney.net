@@ -1,5 +1,5 @@
 ---
-title: "Solution: Testing a Reducer in Zod"
+title: 'Solution: Testing a Reducer in Zod'
 description: Tests I write during development compared to maintenance.
 modified: 2025-04-26T10:01:00-06:00
 ---
