@@ -5,35 +5,47 @@ import sharp from 'sharp';
 import metadata from '$lib/metadata';
 import { OpenGraphImage } from './open-graph';
 
+// Constants for image dimensions
+const IMAGE_WIDTH = 1200;
+const IMAGE_HEIGHT = 630;
+
+// Font paths
+const FONT_PATHS = {
+  firaSansBold: '/fonts/fira-sans-500-normal.woff',
+  firaSansThin: '/fonts/fira-sans-300-normal.woff',
+  leagueGothic: '/fonts/league-gothic-400-normal.woff',
+};
+
+/**
+ * Handler for generating Open Graph images
+ */
 export const GET = async ({ url, fetch }) => {
+  // Extract parameters
   const title = url.searchParams.get('title') || metadata.title;
   const description = url.searchParams.get('description');
 
-  const firaSansBold = await fetch('/fonts/fira-sans-500-normal.woff').then((res) =>
-    res.arrayBuffer(),
-  );
+  // Load fonts in parallel
+  const [firaSansBold, firaSansThin, leagueGothic] = await Promise.all([
+    fetch(FONT_PATHS.firaSansBold).then((res) => res.arrayBuffer()),
+    fetch(FONT_PATHS.firaSansThin).then((res) => res.arrayBuffer()),
+    fetch(FONT_PATHS.leagueGothic).then((res) => res.arrayBuffer()),
+  ]);
 
-  const firaSansThin = await fetch('/fonts/fira-sans-300-normal.woff').then((res) =>
-    res.arrayBuffer(),
-  );
-
-  const leagueGothic = await fetch('/fonts/league-gothic-400-normal.woff').then((res) =>
-    res.arrayBuffer(),
-  );
-
+  // Extract main title
   const [mainTitle] = title
     .split(' | ')
     .map((line) => line.trim())
     .map((line) => encode(line));
 
+  // Generate SVG with satori
   const svg = await satori(
     OpenGraphImage({
       title: mainTitle,
       description: encode(description || ''),
     }),
     {
-      width: 1200,
-      height: 630,
+      width: IMAGE_WIDTH,
+      height: IMAGE_HEIGHT,
       fonts: [
         {
           name: 'Fira Sans',
@@ -57,8 +69,10 @@ export const GET = async ({ url, fetch }) => {
     },
   );
 
+  // Convert SVG to JPEG
   const image = await sharp(Buffer.from(svg)).jpeg().toBuffer();
 
+  // Create readable stream for response
   const body = new ReadableStream<typeof image>({
     async start(controller) {
       controller.enqueue(image);
@@ -66,6 +80,7 @@ export const GET = async ({ url, fetch }) => {
     },
   });
 
+  // Return response with appropriate headers
   return new Response(body, {
     headers: {
       'Content-Type': 'image/jpeg',
