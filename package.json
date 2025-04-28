@@ -15,7 +15,8 @@
     "test:unit": "vitest",
     "test:storybook": "test-storybook",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "postinstall": "svelte-kit sync"
   },
   "devDependencies": {
     "@beoe/rehype-mermaid": "^0.4.2",

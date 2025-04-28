@@ -3,13 +3,19 @@ import { encode } from 'html-entities';
 import satori from 'satori';
 import sharp from 'sharp';
 
-import { readFile } from 'fs/promises';
-
 import metadata from '$lib/metadata';
 
-const firaSansBold = await readFile('./static/fira-sans-500-normal.woff');
-const firaSansThin = await readFile('./static/fira-sans-300-normal.woff');
-const leagueGothic = await readFile('./static/league-gothic-400-normal.woff');
+const getFont = async (url: string) => {
+  const response = await fetch(`https://og-playground.vercel.app/${url}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch font from ${url}`);
+  }
+  return response.arrayBuffer();
+};
+
+const firaSansBold = await getFont('fira-sans-500-normal.woff');
+const firaSansThin = await getFont('fira-sans-300-normal.woff');
+const leagueGothic = await getFont('league-gothic-400-normal.woff');
 
 const Description = ({ description = '' }) => {
   if (!description) return null;
