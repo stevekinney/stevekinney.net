@@ -18,7 +18,7 @@ const getBaseUrl = (): Plugin => {
     async load(id) {
       if (id === virtualModuleId) {
         if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-          return `export default '//${process.env.VERCEL_PROJECT_PRODUCTION_URL}';`;
+          return `export default 'https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}';`;
         }
         return `export default '/';`;
       }
