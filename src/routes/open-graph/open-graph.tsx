@@ -29,7 +29,10 @@ const Description = ({ description = '' }) => {
   );
 };
 
-const OpenGraphImage = ({ title = metadata.title, description = '' }) => {
+export const OpenGraphImage = ({
+  title = metadata.title,
+  description = '',
+}: OpenGraphImageProps) => {
   return (
     <div
       style={{
@@ -104,61 +107,6 @@ const OpenGraphImage = ({ title = metadata.title, description = '' }) => {
     </div>
   );
 };
-
-export async function createOpenGraphImage(
-  fetch: typeof globalThis.fetch,
-  { title = metadata.title, description }: OpenGraphImageProps,
-) {
-  const firaSansBold = await fetch('/fonts/fira-sans-500-normal.woff').then((res) =>
-    res.arrayBuffer(),
-  );
-
-  const firaSansThin = await fetch('/fonts/fira-sans-300-normal.woff').then((res) =>
-    res.arrayBuffer(),
-  );
-
-  const leagueGothic = await fetch('/fonts/league-gothic-400-normal.woff').then((res) =>
-    res.arrayBuffer(),
-  );
-
-  const [mainTitle] = title
-    .split(' | ')
-    .map((line) => line.trim())
-    .map((line) => encode(line));
-
-  const svg = await satori(
-    OpenGraphImage({
-      title: mainTitle,
-      description: encode(description || ''),
-    }),
-    {
-      width: 1200,
-      height: 630,
-      fonts: [
-        {
-          name: 'Fira Sans',
-          weight: 300,
-          style: 'normal',
-          data: firaSansThin,
-        },
-        {
-          name: 'Fira Sans',
-          weight: 500,
-          style: 'normal',
-          data: firaSansBold,
-        },
-        {
-          name: 'League Gothic',
-          weight: 500,
-          style: 'normal',
-          data: leagueGothic,
-        },
-      ],
-    },
-  );
-
-  return sharp(Buffer.from(svg)).jpeg().toBuffer();
-}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function h(type: string, props: { [key: string]: unknown } | null, ...children: unknown[]) {
