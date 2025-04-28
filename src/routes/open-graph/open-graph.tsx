@@ -5,9 +5,10 @@ import sharp from 'sharp';
 
 import metadata from '$lib/metadata';
 
-import firaSansThin from './fonts/fira-sans-300-normal.woff';
-import firaSansBold from './fonts/fira-sans-500-normal.woff';
-import leagueGothic from './fonts/league-gothic-400-normal.woff';
+type OpenGraphImageProps = {
+  title?: string;
+  description?: string | null | undefined;
+};
 
 const Description = ({ description = '' }) => {
   if (!description) return null;
@@ -105,9 +106,15 @@ const OpenGraphImage = ({ title = metadata.title, description = '' }) => {
 };
 
 export async function createOpenGraphImage(
-  title: string = metadata.title,
-  description: string | null | undefined = metadata.description,
+  fetch: typeof globalThis.fetch,
+  { title = metadata.title, description }: OpenGraphImageProps,
 ) {
+  const firaSansBold = await fetch('/fira-sans-500-normal.woff').then((res) => res.arrayBuffer());
+  const firaSansThin = await fetch('/fira-sans-300-normal.woff').then((res) => res.arrayBuffer());
+  const leagueGothic = await fetch('/league-gothic-400-normal.woff').then((res) =>
+    res.arrayBuffer(),
+  );
+
   const [mainTitle] = title
     .split(' | ')
     .map((line) => line.trim())
