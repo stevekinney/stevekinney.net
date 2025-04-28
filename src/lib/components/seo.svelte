@@ -1,6 +1,10 @@
 <script lang="ts">
+  import { dev } from '$app/environment';
   import { page } from '$app/state';
   import { formatPageTitle } from '$lib/format-page-title';
+  import metadata from '../metadata';
+
+  const baseUrl = dev ? '/' : metadata.url;
 
   interface SEOProps {
     title: string;
@@ -25,7 +29,7 @@
       title,
       description,
     });
-    return `${import.meta.env.BASE_URL}/open-graph?${params.toString()}`;
+    return `${baseUrl}/open-graph?${params.toString()}`;
   };
 
   const image = createImageUrl(title, description);
