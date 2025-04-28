@@ -1,8 +1,3 @@
-import { encode } from 'html-entities';
-
-import satori from 'satori';
-import sharp from 'sharp';
-
 import metadata from '$lib/metadata';
 
 type OpenGraphImageProps = {
@@ -10,7 +5,7 @@ type OpenGraphImageProps = {
   description?: string | null | undefined;
 };
 
-const Description = ({ description = '' }) => {
+const Description = ({ description = '' }: Pick<OpenGraphImageProps, 'description'>) => {
   if (!description) return null;
   return (
     <p
@@ -79,7 +74,7 @@ export const OpenGraphImage = ({
           >
             {title}
           </h2>
-          <Description />
+          <Description description={description} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <p
