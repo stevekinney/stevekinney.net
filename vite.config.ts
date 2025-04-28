@@ -17,8 +17,8 @@ const getBaseUrl = (): Plugin => {
     },
     async load(id) {
       if (id === virtualModuleId) {
-        if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-          return `export default '//${process.env.VERCEL_PROJECT_PRODUCTION_URL}';`;
+        if (process.env.VERCEL_URL) {
+          return `export default '//${process.env.VERCEL_URL}';`;
         }
         return `export default '/';`;
       }
@@ -28,7 +28,6 @@ const getBaseUrl = (): Plugin => {
 
 export default defineConfig({
   plugins: [sveltekit(), enhancedImages(), imagetools(), getBaseUrl()],
-
   esbuild: {
     jsxFactory: 'h',
     jsxFragment: 'Fragment',
