@@ -5,17 +5,9 @@ import sharp from 'sharp';
 
 import metadata from '$lib/metadata';
 
-const getFont = async (url: string) => {
-  const response = await fetch(`/${url}`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch font from ${url}`);
-  }
-  return response.arrayBuffer();
-};
-
-const firaSansBold = await getFont('fira-sans-500-normal.woff');
-const firaSansThin = await getFont('fira-sans-300-normal.woff');
-const leagueGothic = await getFont('league-gothic-400-normal.woff');
+import firaSansThin from './fonts/fira-sans-300-normal.woff';
+import firaSansBold from './fonts/fira-sans-500-normal.woff';
+import leagueGothic from './fonts/league-gothic-400-normal.woff';
 
 const Description = ({ description = '' }) => {
   if (!description) return null;
@@ -134,19 +126,19 @@ export async function createOpenGraphImage(
           name: 'Fira Sans',
           weight: 300,
           style: 'normal',
-          data: firaSansThin,
+          data: Buffer.from(firaSansThin),
         },
         {
           name: 'Fira Sans',
           weight: 500,
           style: 'normal',
-          data: firaSansBold,
+          data: Buffer.from(firaSansBold),
         },
         {
           name: 'League Gothic',
           weight: 500,
           style: 'normal',
-          data: leagueGothic,
+          data: Buffer.from(leagueGothic),
         },
       ],
     },

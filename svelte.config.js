@@ -19,7 +19,9 @@ import { processImages } from './plugins/svelte-enhance-images.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-console.log('Vercel Production URL', process.env.VERCEL_PROJECT_PRODUCTION_URL);
+if (process.env.VERCEL) {
+  console.log('Vercel Production URL', process.env.VERCEL_PROJECT_PRODUCTION_URL);
+}
 
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
