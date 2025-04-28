@@ -6,7 +6,7 @@ modified: 2025-03-15T16:00:00-06:00
 
 ## Leveraging Transform to Create Specialized Types
 
-Sometimes you want a transform: say you accept a `string` but store it as a `Date`. Zod’s `.transform()` method has your back. You still validate the input first, then morph it into whatever form you need:
+Sometimes you want a transform: say you accept a `string` but store it as a `Date`. Zod's `.transform()` method has your back. You still validate the input first, then morph it into whatever form you need:
 
 ```ts
 const dateSchema = z
@@ -24,7 +24,7 @@ This approach is great for bridging the gap between what your API or form input 
 
 ## Pipelining Transforms
 
-Zod allows chaining transforms. You can do `.transform()` multiple times if each transform’s output type matches the next transform’s input type.
+Zod allows chaining transforms. You can do `.transform()` multiple times if each transform's output type matches the next transform's input type.
 
 ### Example: Combining Validation + Chained Transforms
 

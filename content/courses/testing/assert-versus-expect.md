@@ -34,7 +34,7 @@ assert.deepEqual({ a: 1 }, { a: 1 }); // Deep comparison of objects
 ## `expect`: Behavior-Driven Development Style
 
 - **`expect`** follows the **[Behavior-Driven Development](https://en.wikipedia.org/wiki/Behavior-driven_development) (BDD)** style and is typically used in testing libraries like Jest, Vitest, and Mocha/Chai.
-- It’s known for being **more expressive** and **chainable**, allowing developers to write more human-readable tests.
+- It's known for being **more expressive** and **chainable**, allowing developers to write more human-readable tests.
 - **Chaining**: You can chain different matchers (e.g., `.toBe()`, `.toEqual()`, `.toContain()`) with `expect` to create more flexible and powerful assertions.
 
 ### Example Using `expect`
@@ -70,7 +70,7 @@ expect({ a: 1 }).toEqual({ a: 1 }); // Deep comparison of objects
 ## When to Use `assert` or `expect`?
 
 - Use **`assert`** if you want a **minimal, straightforward assertion library** and do not need the expressiveness of BDD-style tests.
-- Use **`expect`** if you prefer a **more readable, BDD-style** test that allows for **chaining and flexible matchers**. It’s commonly found in modern test frameworks like Jest or Vitest and helps create more human-readable tests.
+- Use **`expect`** if you prefer a **more readable, BDD-style** test that allows for **chaining and flexible matchers**. It's commonly found in modern test frameworks like Jest or Vitest and helps create more human-readable tests.
 
 ```js
 // Using assert

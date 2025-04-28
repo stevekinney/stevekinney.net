@@ -65,7 +65,7 @@ This will do the same thing as the above example. The auto-mocking algorithm wor
 
 If your code depends on individual functions from a service or module, you can mock those specific functions using `vi.fn()` to simulate their behavior.
 
-Here’s an example of mocking a database service function:
+Here's an example of mocking a database service function:
 
 ```js
 // Database service that will be mocked
@@ -104,7 +104,7 @@ In this example, we replace the real `fetchBandData` function with a mock implem
 
 In cases where your code depends on multiple functions from a module or service, you can mock the entire module using `vi.mock()`. This is particularly useful for mocking external libraries or services that provide multiple functionalities.
 
-Here’s how to mock an entire module:
+Here's how to mock an entire module:
 
 ```js
 // Imagine you have a module called 'api' with various functions
@@ -142,7 +142,7 @@ In this example, the entire `api` module is mocked, and the `fetchConcerts` func
 
 You can also mock built-in Node.js modules like `fs` or `http` if your code interacts with the file system or performs network requests.
 
-Here’s an example of mocking the `fs` module:
+Here's an example of mocking the `fs` module:
 
 ```js
 import * as fs from 'fs';
@@ -173,7 +173,7 @@ In this test, the `fs.readFileSync` method is mocked to return predefined conten
 
 ## Example: Mocking an External API
 
-Here’s a complete example of mocking an external API dependency using Vitest:
+Here's a complete example of mocking an external API dependency using Vitest:
 
 ```js
 // Assume you have an API module
@@ -204,9 +204,9 @@ describe('fetchConcertData', () => {
 });
 ```
 
-In this example, we mock the entire API module, ensuring the test doesn’t make any real API requests. The mock returns predefined data, allowing you to control the test scenario completely.
+In this example, we mock the entire API module, ensuring the test doesn't make any real API requests. The mock returns predefined data, allowing you to control the test scenario completely.
 
-Whether you’re mocking APIs, databases, or file systems, mocking ensures that your tests remain predictable, fast, and focused on the logic under test. Always, always, always remember to reset or restore mocks after tests to maintain a clean and consistent test environment.
+Whether you're mocking APIs, databases, or file systems, mocking ensures that your tests remain predictable, fast, and focused on the logic under test. Always, always, always remember to reset or restore mocks after tests to maintain a clean and consistent test environment.
 
 ## `vi.doMock`
 

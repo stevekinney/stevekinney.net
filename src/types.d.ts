@@ -5,15 +5,13 @@ type Ast = import('svelte/types/compiler/interfaces').Ast;
 type BaseNode = import('svelte/types/compiler/interfaces').BaseNode;
 type ElementNode = import('svelte/types/compiler/interfaces').Element;
 
-type Markdown = {
-  default: import('svelte').Component;
-  metadata: Record<string, unknown>;
-};
-
 declare module '*.md' {
-  type SvelteComponent = import('svelte').Component;
-  export default SvelteComponent;
+  export default import('svelte').Component;
   export const metadata: Record<string, unknown>;
+}
+
+declare module 'virtual:base-url' {
+  export default InstanceType<ArrayBuffer>;
 }
 
 declare module 'remark-slug' {
@@ -28,8 +26,7 @@ declare module 'svelte/compiler' {
   ): void;
 }
 
-declare module 'virtual:project-root' {
-  const projectRoot: string;
-  export default projectRoot;
-  export const fromProjectRoot: (...path: string[]) => string;
+declare module 'virtual:opengraph-image*' {
+  const opengraph: string;
+  export const url: opengraph;
 }

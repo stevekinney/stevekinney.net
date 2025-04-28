@@ -402,7 +402,7 @@ These examples demonstrate the breadth of Zod's applicability. By integrating Zo
 
 ## Custom Error Maps
 
-Zod’s default error messages might be a bit robotic for your taste. Use a custom error map to globally or locally tweak them.
+Zod's default error messages might be a bit robotic for your taste. Use a custom error map to globally or locally tweak them.
 
 ### Setting a Global Error Map
 

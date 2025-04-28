@@ -24,7 +24,7 @@ Pre-built definitions are excellent starting points. You can customize them furt
 
 ## Working with Dev Containers: Your Daily Development Workflow
 
-Now that you've set up a Dev Container, let’s explore how to work with it effectively.
+Now that you've set up a Dev Container, let's explore how to work with it effectively.
 
 ### Opening a Folder in a Container: Connecting to Your Environment
 
@@ -98,7 +98,7 @@ The integrated terminal in Visual Studio Code runs _inside_ the Dev Container.
 **Usage:**
 
 - **Execute Commands:** Run commands such as build scripts, tests, or dependency management directly within the container.
-- **Temporary Software Installation:** Install packages (via apt, npm, pip, etc.) as needed, though changes won’t persist across restarts unless added to the Dockerfile.
+- **Temporary Software Installation:** Install packages (via apt, npm, pip, etc.) as needed, though changes won't persist across restarts unless added to the Dockerfile.
 - **Debug and Troubleshoot:** Use the terminal to inspect logs and troubleshoot container issues.
 
 ### Installing Extensions: Enhancing Your Containerized IDE
@@ -154,7 +154,7 @@ For advanced customization, use a Dockerfile.
      "dockerFile": "Dockerfile"
    }
    ```
-   Use a relative path if the Dockerfile isn’t in the same folder.
+   Use a relative path if the Dockerfile isn't in the same folder.
 
 **Examples:**
 
@@ -188,7 +188,7 @@ For advanced customization, use a Dockerfile.
 
 ### dotfiles: Personalizing Your Environment
 
-Mount your host’s dotfiles to personalize your container.
+Mount your host's dotfiles to personalize your container.
 
 **Using dotfiles:**
 

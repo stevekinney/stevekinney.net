@@ -5,7 +5,7 @@ date: 2025-03-15T17:00:07-06:00
 modified: 2025-03-20T08:07:01-05:00
 ---
 
-Below is a step‑by‑step tutorial that not only shows you how to set up Prisma with Express and TypeScript for a simple todo app but also highlights the changes you made—replacing your custom TaskClient with Prisma for full type safety. Let’s jump in.
+Below is a step‑by‑step tutorial that not only shows you how to set up Prisma with Express and TypeScript for a simple todo app but also highlights the changes you made—replacing your custom TaskClient with Prisma for full type safety. Let's jump in.
 
 ## Initialize Prisma
 
@@ -44,7 +44,7 @@ npx prisma generate
 
 ## Integrating Prisma in Your Express Server
 
-Previously, you used a custom `TaskClient` (and a `Database` type from SQLite) to handle your database operations. Now we’re switching to Prisma to get true type safety. Here’s a look at your diff with changes:
+Previously, you used a custom `TaskClient` (and a `Database` type from SQLite) to handle your database operations. Now we're switching to Prisma to get true type safety. Here's a look at your diff with changes:
 
 ```diff
 diff --git a/server/src/server.ts b/server/src/server.ts
@@ -64,7 +64,7 @@ index bbdd593..53ee07a 100644
 
 ### Replacing CRUD Methods
 
-Instead of calling methods on your custom client, you now use Prisma’s methods:
+Instead of calling methods on your custom client, you now use Prisma's methods:
 
 ### `GET /tasks`
 
@@ -99,7 +99,7 @@ await prisma.task.delete({ where: { id } });
 
 ## 6. Full Updated `server.ts` Example
 
-Here’s what your complete `server.ts` might look like after integrating Prisma:
+Here's what your complete `server.ts` might look like after integrating Prisma:
 
 ```typescript
 import cors from 'cors';

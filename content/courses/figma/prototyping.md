@@ -40,7 +40,7 @@ Interactive components are reusable elements with predefined states (like button
 
 ## Best Practices for Prototyping
 
-- **Keep Prototypes Organized**: Label your frames and interactions clearly and utilize Figma’s layers panel to manage the complexity.
+- **Keep Prototypes Organized**: Label your frames and interactions clearly and utilize Figma's layers panel to manage the complexity.
 - **Embrace Iterative Design**: Use feedback from user testing to refine your prototype iteratively. Prototyping is a cyclical process, and improvements are always around the corner.
 
 ## Building a Complete Prototype

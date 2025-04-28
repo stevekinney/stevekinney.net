@@ -3,7 +3,11 @@ import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
   try {
-    return await getPost(params.slug);
+    const post = await getPost(params.slug);
+
+    return {
+      ...post,
+    };
   } catch {
     return error(404, `Post not found`);
   }

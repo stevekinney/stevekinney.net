@@ -9,13 +9,21 @@ export const load: PageLoad = async () => {
 
   const walkthroughs = Object.entries(courses).map(([path, metadata]) => {
     const slug = path.split('/').slice(-2, -1)[0];
+    const meta = CourseMetadataSchema.parse(metadata);
 
-    if (typeof metadata !== 'object') throw new Error(`Invalid metadata for course at ${path}`);
-
-    return CourseMetadataSchema.parse({ ...metadata, slug });
+    return {
+      ...meta,
+      slug,
+    };
   });
 
+  const title = 'Courses';
+  const description =
+    "A collection of courses that I've taught over the years, including full course walkthroughs and recordings from Frontend Masters.";
+
   return {
+    title,
+    description,
     walkthroughs,
   };
 };

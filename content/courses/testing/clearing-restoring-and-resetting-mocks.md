@@ -4,19 +4,19 @@ description: Learn how to manage mocks effectively using Vitest.
 modified: 2024-09-28T14:19:13-06:00
 ---
 
-Mocking is all well and good when it's intended, but it's going to haunt you if old mocks linger on well past their welcome. Once you’ve mocked something, you want to make sure that those mocks don’t stick around like a bad code smell. That's why **clearing**, **restoring**, and **resetting** mocks are vital parts of your testing toolkit. So, let’s break it down like refactoring a confusing callback hell into promise chains.
+Mocking is all well and good when it's intended, but it's going to haunt you if old mocks linger on well past their welcome. Once you've mocked something, you want to make sure that those mocks don't stick around like a bad code smell. That's why **clearing**, **restoring**, and **resetting** mocks are vital parts of your testing toolkit. So, let's break it down like refactoring a confusing callback hell into promise chains.
 
 ## When To Use Each
 
 We'll get into the specifics of each in a moment, but let's just compare them at a high level before we dive in.
 
-- **Clear**: You’ve created some complex mock logic, and now you're retracing steps, clearing call history to test cleanly.
+- **Clear**: You've created some complex mock logic, and now you're retracing steps, clearing call history to test cleanly.
 - **Reset**: You made a mess with return values or `.mockImplementation`—and now you just want to start over without rebuilding the mock.
-- **Restore**: You’re done mocking, you want to reinstate the original functionality, and walk away like nothing ever happened.
+- **Restore**: You're done mocking, you want to reinstate the original functionality, and walk away like nothing ever happened.
 
 ## Clearing Mocks
 
-Clearing a mock removes all _invocation history_. Let's say you've got a mock that's been called a few times, and you want to reset the call count back to zero. That’s _clearing_ in action.
+Clearing a mock removes all _invocation history_. Let's say you've got a mock that's been called a few times, and you want to reset the call count back to zero. That's _clearing_ in action.
 
 ```js
 const myFunc = vi.fn();
@@ -31,7 +31,7 @@ myFunc.mockClear();
 console.log(myFunc.mock.calls.length); // Ah, nice! Back to 0.
 ```
 
-Use `mockClear()` when you want to ensure that your tests are checking fresh invocation data. This way, you’re not being haunted by any ghost calls from previous tests. Common use case? When you're running the same mock across multiple assertions but want a clean slate for each.
+Use `mockClear()` when you want to ensure that your tests are checking fresh invocation data. This way, you're not being haunted by any ghost calls from previous tests. Common use case? When you're running the same mock across multiple assertions but want a clean slate for each.
 
 > \[!TIP] Pro Tip
 > If your tests rely on the **number of times** a function is called, reset that call count before each test—so you're always getting fresh numbers.
@@ -53,14 +53,14 @@ myFunc.mockReset();
 console.log(myFunc()); // undefined
 ```
 
-When should you reset? Think of it as hitting _undo_. If you’ve changed what the mock returns, and you’re like, "Nope, never should've done that,” then this is your ticket to sanity.
+When should you reset? Think of it as hitting _undo_. If you've changed what the mock returns, and you're like, "Nope, never should've done that,” then this is your ticket to sanity.
 
 > \[!WARNING] A Word on Resetting
 > With reset, you'll still _have_ the mock object, but it behaves like it did out of the box—call count set to `0`, and no return values or side effects.
 
 ## Restoring Mocks
 
-Now, here's the nuclear option: **restoring** mocks. This completely removes the mock's implementation and puts things back the way they were before you even touched it. If you’re mocking a native function or something from a shared library, this is how you avoid accidentally breaking things later.
+Now, here's the nuclear option: **restoring** mocks. This completely removes the mock's implementation and puts things back the way they were before you even touched it. If you're mocking a native function or something from a shared library, this is how you avoid accidentally breaking things later.
 
 ```js
 // Let's mock Math.random
@@ -94,4 +94,4 @@ You'd typically put these in an `afterEach` block within your test suite.
 
 ### Conclusion
 
-Vitest gives you the tools you need to keep your tests clean, your mocks simple, and your frustrations (mostly) in check. The key is knowing when to clean up after yourself. Mocks can be powerful, but if you don’t clear, reset, or restore them properly, you’ll end up wondering why things are on fire and you're dealing with mocking baggage from previous tests.
+Vitest gives you the tools you need to keep your tests clean, your mocks simple, and your frustrations (mostly) in check. The key is knowing when to clean up after yourself. Mocks can be powerful, but if you don't clear, reset, or restore them properly, you'll end up wondering why things are on fire and you're dealing with mocking baggage from previous tests.

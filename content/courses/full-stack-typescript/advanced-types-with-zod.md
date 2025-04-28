@@ -120,15 +120,15 @@ userSchema.parse({
 ### Benefits
 
 - **Performance**: Zod can skip checking every union branch once it sees the discriminator.
-- **Clarity**: If your input object’s `type` or `kind` is incorrect, you’ll get an immediate error.
+- **Clarity**: If your input object's `type` or `kind` is incorrect, you'll get an immediate error.
 
 ## `never`, `unknown`, and `any`
 
-Zod includes special schemas that mirror TypeScript’s built-in utility types:
+Zod includes special schemas that mirror TypeScript's built-in utility types:
 
 - `z.never()` — always fails. If you see `z.never()`, that property can _never_ validly exist.
-- `z.unknown()` — anything can pass, but the final type is `unknown`. Good for storing data you won’t interact with directly.
-- `z.any()` — anything can pass _and_ the final type is `any`. Rarely recommended, but can be a last resort if you absolutely can’t type something.
+- `z.unknown()` — anything can pass, but the final type is `unknown`. Good for storing data you won't interact with directly.
+- `z.any()` — anything can pass _and_ the final type is `any`. Rarely recommended, but can be a last resort if you absolutely can't type something.
 
 ### Example
 

@@ -1,17 +1,17 @@
 import { z } from 'zod';
 
+export type CourseMarkdown = z.infer<typeof CourseMarkdownSchema>;
 export type CourseMetadata = z.infer<typeof CourseMetadataSchema>;
-export type LessonMetadata = z.infer<typeof LessonMetadataSchema>;
 
 export const CourseMetadataSchema = z.object({
   title: z.string(),
-  slug: z.string(),
   description: z.string(),
   modified: z.string().optional(),
   published: z.boolean().default(true),
-  tags: z.array(z.string()).default([]),
+  tags: z.array(z.string()).optional().default([]),
 });
 
-export const LessonMetadataSchema = CourseMetadataSchema.omit({
-  slug: true,
+export const CourseMarkdownSchema = z.object({
+  metadata: CourseMetadataSchema,
+  default: z.any(),
 });

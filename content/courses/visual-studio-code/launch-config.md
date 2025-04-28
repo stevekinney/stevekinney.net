@@ -285,7 +285,7 @@ Visual Studio Code supports a range of predefined variables within `launch.json`
 
 ## Server Ready Action
 
-When debugging web applications, it’s often necessary to wait for your development server to be fully operational before attaching the debugger. The `serverReadyAction` property lets you specify a pattern to watch for in the output. Once the pattern is detected, VS Code can automatically open a URL or attach the debugger.
+When debugging web applications, it's often necessary to wait for your development server to be fully operational before attaching the debugger. The `serverReadyAction` property lets you specify a pattern to watch for in the output. Once the pattern is detected, VS Code can automatically open a URL or attach the debugger.
 
 ```json
 "serverReadyAction": {

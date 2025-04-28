@@ -6,11 +6,7 @@
   const { data } = $props();
 </script>
 
-<SEO
-  title="Courses"
-  description="A collection of courses that I've taught over the years, including full course walkthroughs and recordings from Frontend Masters."
-  url="/courses"
-/>
+<SEO title={data.title} description={data.description} />
 
 <div class="space-y-8">
   <section class="prose dark:prose-invert">

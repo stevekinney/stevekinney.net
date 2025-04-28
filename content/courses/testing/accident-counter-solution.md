@@ -1,5 +1,5 @@
 ---
-modified: 2024-09-30T10:55:21-06:00
+modified: 2025-04-26T09:56:32-06:00
 title: 'Accident Counter: Solution'
 description: 'The solution for the Accident Counter exercise in the "Introduction to Testing" course for Frontend Masters.'
 ---
@@ -105,3 +105,5 @@ describe('Counter ', () => {
   });
 });
 ```
+
+We can also take a look at another approach using [using user event](accident-counter-with-user-event.md).

@@ -8,7 +8,7 @@ modified: 2025-03-18T01:04:17-05:00
 
 In the example below, we've got separate tasks for linting, testing, building, and serving a Vite app.
 
-The `"group"` property tags the lint task as a build-related task and the test task as a test group task, enabling quick access via **Run Build Task** or **Run Test Task** commands. The build task runs the project’s production build (using Vite or `tsc`) and associates the TypeScript problem matcher to catch compile errors.
+The `"group"` property tags the lint task as a build-related task and the test task as a test group task, enabling quick access via **Run Build Task** or **Run Test Task** commands. The build task runs the project's production build (using Vite or `tsc`) and associates the TypeScript problem matcher to catch compile errors.
 
 The development server task runs in the background so you can continue working while it watches for file changes. Marking it with `"isBackground": true` prevents Visual Studio Code from treating it as finished – it will keep running until you terminate it manually.
 
@@ -107,7 +107,7 @@ So, now let's say we _also_ wanted to spin up the backend API. We can add some a
 
 ### Docker Build and Push
 
-Let’s say you have a Dockerfile, and you want to build and push to a container registry in one step:
+Let's say you have a Dockerfile, and you want to build and push to a container registry in one step:
 
 ```jsonc
 {
@@ -135,7 +135,7 @@ Let’s say you have a Dockerfile, and you want to build and push to a container
 
 ## Using Variables and Inputs
 
-Visual Studio Code supports [variable substitution](https://code.visualstudio.com/docs/editor/variables-reference) and user inputs. Let’s allow the user to input a custom environment, like `production` or `staging`:
+Visual Studio Code supports [variable substitution](https://code.visualstudio.com/docs/editor/variables-reference) and user inputs. Let's allow the user to input a custom environment, like `production` or `staging`:
 
 ```jsonc
 {

@@ -10,9 +10,9 @@ I'm a relatively simple person, but here are some settings I feel strongly about
 
 ### `workbench.editor.revealIfOpen`
 
-The `workbench.editor.revealIfOpen` setting is your Visual Studio Code version of, “Hey, I already have that file open!” Instead of cluttering your workspace with duplicate tabs, Visual Studio Code just brings the existing tab into focus. Here’s the breakdown:
+The `workbench.editor.revealIfOpen` setting is your Visual Studio Code version of, “Hey, I already have that file open!” Instead of cluttering your workspace with duplicate tabs, Visual Studio Code just brings the existing tab into focus. Here's the breakdown:
 
-When you open a file that’s already open in another tab, Visual Studio Code simply reveals the existing tab rather than opening a new one. No more dueling duplicates.
+When you open a file that's already open in another tab, Visual Studio Code simply reveals the existing tab rather than opening a new one. No more dueling duplicates.
 
 ### `updateImportsOnFileMove`
 
@@ -25,8 +25,8 @@ Whenever you move (or rename) a file, Visual Studio Code scans your project and 
 
 #### How It Works
 
-- **Behind the Scenes:** When you move a file, the language service kicks in and looks for any import statements that refer to that file’s old location. It then rewrites them with the new path.
-- **“Always” Mode:** With the setting set to "always", this process happens automatically—without prompting you. It’s like having a personal assistant who never forgets to update your contacts when you change your number.
+- **Behind the Scenes:** When you move a file, the language service kicks in and looks for any import statements that refer to that file's old location. It then rewrites them with the new path.
+- **“Always” Mode:** With the setting set to "always", this process happens automatically—without prompting you. It's like having a personal assistant who never forgets to update your contacts when you change your number.
 
 #### Why I Like It
 
@@ -38,17 +38,17 @@ Both settings ensure that whenever you move a file in your JavaScript or TypeScr
 
 ### `javascript.preferences.organizeImports`
 
-This setting is basically Visual Studio Code’s way of letting you keep your import statements as neat as a well-organized sock drawer. Here’s the lowdown:
+This setting is basically Visual Studio Code's way of letting you keep your import statements as neat as a well-organized sock drawer. Here's the lowdown:
 
 #### What It Does
 
-- **Automatic Cleanup:** When enabled, Visual Studio Code’s JavaScript language service will tidy up your imports by removing unused ones, sorting them, and grouping them logically. It’s like having a digital Marie Kondo for your code.
-- **Manual or Auto:** You can trigger this manually via the “Organize Imports” command or automatically when you save your file if you’ve configured the appropriate code action.
+- **Automatic Cleanup:** When enabled, Visual Studio Code's JavaScript language service will tidy up your imports by removing unused ones, sorting them, and grouping them logically. It's like having a digital Marie Kondo for your code.
+- **Manual or Auto:** You can trigger this manually via the “Organize Imports” command or automatically when you save your file if you've configured the appropriate code action.
 
 #### How It Works
 
-- **Integration with Code Actions:** The setting works in tandem with the code action "source.organizeImports". When you save (and if you’ve set it up in editor.codeActionsOnSave), Visual Studio Code will run through your file and re-arrange your import statements.
-- **Keeps Your Code Lean:** By getting rid of unused imports and sorting the rest, it ensures that your code doesn’t accumulate unnecessary baggage—keeping it cleaner and easier to read.
+- **Integration with Code Actions:** The setting works in tandem with the code action "source.organizeImports". When you save (and if you've set it up in editor.codeActionsOnSave), Visual Studio Code will run through your file and re-arrange your import statements.
+- **Keeps Your Code Lean:** By getting rid of unused imports and sorting the rest, it ensures that your code doesn't accumulate unnecessary baggage—keeping it cleaner and easier to read.
 
 #### How to Configure
 
@@ -63,7 +63,7 @@ This setting is basically Visual Studio Code’s way of letting you keep your im
 
 **Enjoy the Cleanup:** Now every time you save, your imports get a tidy makeover—no more rogue, unused modules hanging around!
 
-#### Why It’s Worth Using
+#### Why It's Worth Using
 
 - **Consistency:** Ensures that all your files follow the same organized pattern.
 - **Reduced Clutter:** Eliminates dead code (unused imports) that might confuse or bloat your files.
@@ -87,13 +87,13 @@ I don't love all of these, but other people do and you might too. Here are a few
 
 ### `editor.wordWrap`
 
-- Wraps long lines of code so you don’t have to scroll sideways forever.
-- Keeps your code readable without feeling like you’re stuck in an endless horizontal tunnel.
+- Wraps long lines of code so you don't have to scroll sideways forever.
+- Keeps your code readable without feeling like you're stuck in an endless horizontal tunnel.
 
 ### `editor.renderWhitespace`
 
 - Displays invisible characters like spaces, tabs, and line breaks.
-- Handy for catching sneaky formatting issues, so you always know exactly what’s going on behind the scenes.
+- Handy for catching sneaky formatting issues, so you always know exactly what's going on behind the scenes.
 
 ### `editor.cursorSmoothCaretAnimation`
 
@@ -108,7 +108,7 @@ I don't love all of these, but other people do and you might too. Here are a few
 ### `editor.codeLens`
 
 - Adds inline annotations for references, test statuses, and more.
-- It’s like having tiny, helpful post-it notes in your code, keeping track of important info right where you need it.
+- It's like having tiny, helpful post-it notes in your code, keeping track of important info right where you need it.
 
 ### `terminal.integrated.fontFamily`
 

@@ -6,13 +6,13 @@ modified: 2024-09-28T11:31:17-06:00
 tags: [figma, course, frontendmasters]
 ---
 
-Constraints control how the layers within a frame should behave when the size of the frame changes. By default, a layer’s constraints are set to to top and left.
+Constraints control how the layers within a frame should behave when the size of the frame changes. By default, a layer's constraints are set to to top and left.
 
 **Pro Tip**: Constraints _only_ show up when an object is inside of a frame.
 
 In Figma, you can use constraints to adjust how elements scale, shift, or stay in place based on the frame edges. This feature helps designers keep padding, spacing, and alignment the same on all screen sizes, making the user experience even better.
 
-If we adjust the size of the frame to the right, you’ll see that box stays in it’s initial position. But, we can change this behavior.
+If we adjust the size of the frame to the right, you'll see that box stays in it's initial position. But, we can change this behavior.
 
 ## Setting Up Constraints
 
@@ -37,5 +37,5 @@ Okay, let's say you want to set up some constraints:
 ## Best Practices and Other Assorted Tips
 
 - **Nest Frames:** To create complex responsive designs, use nested frames. Apply constraints within these frames for granular control over how each component behaves.
-- **Prototype and Test:** Use Figma’s prototyping features to test how your designs adapt to different screen sizes. This real-time feedback is essential for fine-tuning your responsive designs.
+- **Prototype and Test:** Use Figma's prototyping features to test how your designs adapt to different screen sizes. This real-time feedback is essential for fine-tuning your responsive designs.
 - **Leverage Auto Layout:** Combining constraints with Figma's Auto Layout feature can further streamline the responsiveness of your designs, especially for vertical resizing and spacing adjustments.

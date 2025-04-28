@@ -1,7 +1,7 @@
 ---
-title: Next Steps
+title: "Solution: Testing a Reducer in Zod"
 description: Tests I write during development compared to maintenance.
-modified: 2024-09-28T18:32:11.117Z
+modified: 2025-04-26T10:01:00-06:00
 ---
 
 Here is a really simple—and also secretly flawed—solution:

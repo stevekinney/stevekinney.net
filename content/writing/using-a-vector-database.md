@@ -2,7 +2,7 @@
 title: A Gentle Introduction to Using a Vector Database
 description: In which we learn how to build a simple vector database using Pinecone and OpenAI embeddings, and discover it was way easier than we might have expected.
 date: 2024-12-30T17:07:17-07:00
-modified: 2024-12-30T17:07:23-07:00
+modified: 2025-04-26T10:04:14-06:00
 published: true
 tags:
   - open-ai
@@ -129,7 +129,7 @@ Next, we'll initialize our connection to Pinecone.
 
 We're going to add three methods:
 
-- `generateEmbedding`: This will use OpenAI to create an [[Embedding|embedding]] based on the text content of a document.
+- `generateEmbedding`: This will use OpenAI to create an embedding based on the text content of a document.
 - `indexDocument`: This will call `generateEmbedding` and then add the document to our vector database.
 - `semanticSearch`: This will search our vector database for content that is similar to the query.
 

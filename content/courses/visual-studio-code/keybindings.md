@@ -24,7 +24,7 @@ At its core, `keybindings.json` is a list of rules. Each rule typically contains
 }
 ```
 
-This binds `Ctrl+Alt+J` to toggle line comments, but only in JavaScript files (`editorLangId == 'javascript'`). If you tried using this binding in a TypeScript file, it wouldn’t work.
+This binds `Ctrl+Alt+J` to toggle line comments, but only in JavaScript files (`editorLangId == 'javascript'`). If you tried using this binding in a TypeScript file, it wouldn't work.
 
 ### Understanding the `when` Clause
 
@@ -76,7 +76,7 @@ VS Code offers a built-in Settings Sync feature that includes your custom keybin
 
 ## Platform-Specific Keybindings
 
-Sometimes the same shortcut isn’t ideal across different operating systems. VS Code allows you to define platform-specific keybindings directly in your `keybindings.json`. For example, you can override the key for a command on macOS compared to Windows or Linux:
+Sometimes the same shortcut isn't ideal across different operating systems. VS Code allows you to define platform-specific keybindings directly in your `keybindings.json`. For example, you can override the key for a command on macOS compared to Windows or Linux:
 
 ```json
 {

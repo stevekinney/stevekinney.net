@@ -23,11 +23,11 @@ const parsedUser = userSchema.parse({
 ```
 
 > [!TIP] Pro-Tip
-> If your custom type is basically just a structured shape (like a person or a fancy shape with some optional properties), you may not need anything beyond Zod’s standard schemas.
+> If your custom type is basically just a structured shape (like a person or a fancy shape with some optional properties), you may not need anything beyond Zod's standard schemas.
 
 ## Refining Schemas
 
-Zod’s `.refine()` method lets you tack on custom validation logic. Let's say you have an email field that _must_ end with `frontendmasters.com`. Start with a regular string, then refine away:
+Zod's `.refine()` method lets you tack on custom validation logic. Let's say you have an email field that _must_ end with `frontendmasters.com`. Start with a regular string, then refine away:
 
 ```ts
 const emailSchema = z.string().refine((value) => value.endsWith('frontendmasters.com'), {
@@ -45,7 +45,7 @@ emailSchema.parse('hello@anotherdomain.com');
 
 ## Creating Custom Schemas
 
-Sometimes you have a type so weird that `.refine()` just won’t cut it—or maybe you want more direct control. That’s where `z.custom()` steps in. It’s ideal for things that can’t be well represented by simple types, or for checking shape plus brand. For example:
+Sometimes you have a type so weird that `.refine()` just won't cut it—or maybe you want more direct control. That's where `z.custom()` steps in. It's ideal for things that can't be well represented by simple types, or for checking shape plus brand. For example:
 
 ```ts
 // Suppose we want a schema for a string that must parse into a valid Date
@@ -99,11 +99,11 @@ userWithAddressSchema.parse({
 }); // passes
 ```
 
-Keep nesting all you like. If your data structure is complicated, at least Zod’s layered approach keeps the validator logic tidy.
+Keep nesting all you like. If your data structure is complicated, at least Zod's layered approach keeps the validator logic tidy.
 
 ## Branded Types for Extra Semantics
 
-Zod has a concept of “branded” types, letting you layer on custom brand markers to differentiate otherwise identical primitives. This is great if you want to give a type special meaning without creating a new runtime type. For instance, you can have a UserId that’s just a string under the hood but is recognized as a distinct brand in your code:
+Zod has a concept of “branded” types, letting you layer on custom brand markers to differentiate otherwise identical primitives. This is great if you want to give a type special meaning without creating a new runtime type. For instance, you can have a UserId that's just a string under the hood but is recognized as a distinct brand in your code:
 
 ```ts
 const userIdSchema = z.string().uuid().brand<'UserId'>();
@@ -126,7 +126,7 @@ const fancySchema = z.number().int().min(1, {
 });
 ```
 
-Don’t be afraid to be explicit. Cryptic error messages lead to more debugging time (which leads to more coffee, which might be good, but also leads to more frustration, which definitely isn’t).
+Don't be afraid to be explicit. Cryptic error messages lead to more debugging time (which leads to more coffee, which might be good, but also leads to more frustration, which definitely isn't).
 
 ---
 
@@ -149,7 +149,7 @@ describe('validDateString', () => {
 });
 ```
 
-Tests ensure that future you (who might be sleep-deprived) doesn’t accidentally break your carefully constructed custom schemas.
+Tests ensure that future you (who might be sleep-deprived) doesn't accidentally break your carefully constructed custom schemas.
 
 ## Composing Zod Schemas
 
@@ -243,10 +243,10 @@ const passwordSchema = z
   });
 ```
 
-Now, if the password is missing both uppercase letters _and_ digits, you get _two distinct errors._ That’s helpful for user feedback—otherwise, a single `.refine()` would typically throw just one error message.
+Now, if the password is missing both uppercase letters _and_ digits, you get _two distinct errors._ That's helpful for user feedback—otherwise, a single `.refine()` would typically throw just one error message.
 
 ## Some Final Thoughts
 
-- **Be mindful of performance**: For extremely large schemas or high-traffic endpoints, you might need to optimize or memoize certain checks. Zod is already pretty efficient, but if you do something insane in .refine(), you’ll pay for it.
-- **Validate input at the edges**: Don’t wait until half your codebase has touched the data to realize it’s invalid. Validate as close to the “data entry point” as you can—be it an API endpoint, a form submission, or a message queue consumer.
-- **Keep an eye on updates**: Zod evolves. New versions might bring new features or better performance. It’s worth checking once in a while to see if your custom logic can be replaced by a newly released built-in method.
+- **Be mindful of performance**: For extremely large schemas or high-traffic endpoints, you might need to optimize or memoize certain checks. Zod is already pretty efficient, but if you do something insane in .refine(), you'll pay for it.
+- **Validate input at the edges**: Don't wait until half your codebase has touched the data to realize it's invalid. Validate as close to the “data entry point” as you can—be it an API endpoint, a form submission, or a message queue consumer.
+- **Keep an eye on updates**: Zod evolves. New versions might bring new features or better performance. It's worth checking once in a while to see if your custom logic can be replaced by a newly released built-in method.

@@ -23,7 +23,7 @@ In [Multi-Root Workspaces](multi-root-workspaces.md), each folder can maintain i
 
 ## Basic Structure
 
-Here’s a minimal example of a `tasks.json` file:
+Here's a minimal example of a `tasks.json` file:
 
 ```jsonc
 {

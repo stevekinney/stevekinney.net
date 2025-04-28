@@ -56,7 +56,7 @@ Our tests _need_ to cover these edge cases and this is one of the nuances of tes
 
 ### Additional Examples of Invalid Input
 
-A common unhappy path is when the user provides invalid input. You should test how your code behaves when it receives input that doesn’t meet expectations.
+A common unhappy path is when the user provides invalid input. You should test how your code behaves when it receives input that doesn't meet expectations.
 
 ```js
 // Function to be tested
@@ -105,7 +105,7 @@ In this example:
 
 ## Testing Errors in Asynchronous Functions
 
-When working with asynchronous functions, such as API calls or database queries, it’s important to test failure scenarios like network errors, timeouts, or service unavailability.
+When working with asynchronous functions, such as API calls or database queries, it's important to test failure scenarios like network errors, timeouts, or service unavailability.
 
 ```js
 // Asynchronous function to be tested
@@ -246,7 +246,7 @@ describe('getUserData', () => {
 
 In this example:
 
-- We simulate a database returning `null` to test the scenario where a user isn’t found.
+- We simulate a database returning `null` to test the scenario where a user isn't found.
 - We mock the database to simulate a failure and check that the function throws the correct error.
 - The happy path is also tested to ensure that the function works correctly when the user is found.
 
