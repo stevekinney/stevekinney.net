@@ -5,9 +5,18 @@ import sharp from 'sharp';
 
 import metadata from '$lib/metadata';
 
-import firaSansThin from './fonts/fira-sans-300-normal.woff';
-import firaSansBold from './fonts/fira-sans-500-normal.woff';
-import leagueGothic from './fonts/league-gothic-400-normal.woff';
+const getFont = async (path: string) => {
+  return fetch(`https://cdn.jsdelivr.net/fontsource/fonts/${path}.`).then((res) => {
+    if (!res.ok) {
+      throw new Error(`Failed to load font from ${path}`);
+    }
+    return res.arrayBuffer();
+  });
+};
+
+const firaSansThin = await getFont('fira-sans@latest/latin-300-normal.woff2');
+const firaSansBold = await getFont('fira-sans@latest/latin-500-normal.woff2');
+const leagueGothic = await getFont('league-gothic:vf@latest/latin-wght-normal.woff2');
 
 const Description = ({ description = '' }) => {
   if (!description) return null;
@@ -126,19 +135,19 @@ export async function createOpenGraphImage(
           name: 'Fira Sans',
           weight: 300,
           style: 'normal',
-          data: Buffer.from(firaSansThin),
+          data: firaSansThin,
         },
         {
           name: 'Fira Sans',
           weight: 500,
           style: 'normal',
-          data: Buffer.from(firaSansBold),
+          data: firaSansBold,
         },
         {
           name: 'League Gothic',
           weight: 500,
           style: 'normal',
-          data: Buffer.from(leagueGothic),
+          data: leagueGothic,
         },
       ],
     },
