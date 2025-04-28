@@ -6,7 +6,7 @@ import sharp from 'sharp';
 import metadata from '$lib/metadata';
 
 const getFont = async (url: string) => {
-  const response = await fetch(`https://og-playground.vercel.app/${url}`);
+  const response = await fetch(`/${url}`);
   if (!response.ok) {
     throw new Error(`Failed to fetch font from ${url}`);
   }
