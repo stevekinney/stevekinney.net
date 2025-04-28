@@ -109,9 +109,15 @@ export async function createOpenGraphImage(
   fetch: typeof globalThis.fetch,
   { title = metadata.title, description }: OpenGraphImageProps,
 ) {
-  const firaSansBold = await fetch('/fira-sans-500-normal.woff').then((res) => res.arrayBuffer());
-  const firaSansThin = await fetch('/fira-sans-300-normal.woff').then((res) => res.arrayBuffer());
-  const leagueGothic = await fetch('/league-gothic-400-normal.woff').then((res) =>
+  const firaSansBold = await fetch('/fonts/fira-sans-500-normal.woff').then((res) =>
+    res.arrayBuffer(),
+  );
+
+  const firaSansThin = await fetch('/fonts/fira-sans-300-normal.woff').then((res) =>
+    res.arrayBuffer(),
+  );
+
+  const leagueGothic = await fetch('/fonts/league-gothic-400-normal.woff').then((res) =>
     res.arrayBuffer(),
   );
 
