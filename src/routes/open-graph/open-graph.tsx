@@ -6,9 +6,10 @@ import sharp from 'sharp';
 import metadata from '$lib/metadata';
 
 const getFont = async (path: string) => {
-  return fetch(`https://cdn.jsdelivr.net/fontsource/fonts/${path}.`).then((res) => {
+  const url = new URL(`fontsource/fonts/${path}`, 'https://cdn.jsdelivr.net');
+  return fetch(url).then((res) => {
     if (!res.ok) {
-      throw new Error(`Failed to load font from ${path}`);
+      throw new Error(`Failed to load font from "${url.href}"`);
     }
     return res.arrayBuffer();
   });
@@ -16,7 +17,7 @@ const getFont = async (path: string) => {
 
 const firaSansThin = await getFont('fira-sans@latest/latin-300-normal.woff2');
 const firaSansBold = await getFont('fira-sans@latest/latin-500-normal.woff2');
-const leagueGothic = await getFont('league-gothic:vf@latest/latin-wght-normal.woff2');
+const leagueGothic = await getFont('league-gothic@latest/latin-400-normal.woff2');
 
 const Description = ({ description = '' }) => {
   if (!description) return null;
