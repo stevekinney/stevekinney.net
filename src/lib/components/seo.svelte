@@ -2,6 +2,8 @@
   import { page } from '$app/state';
   import { formatPageTitle } from '$lib/format-page-title';
 
+  console.log(import.meta.env);
+
   interface SEOProps {
     title: string;
     description: string;
@@ -25,7 +27,7 @@
       title,
       description,
     });
-    return `/open-graph?${params.toString()}`;
+    return `//${import.meta.env.BASE_URL}/open-graph?${params.toString()}`;
   };
 
   const image = createImageUrl(title, description);

@@ -42,8 +42,10 @@ const mdsvexOptions = {
 const config = {
   extensions: ['.svelte', '.md'],
   preprocess: [vitePreprocess(), mdsvex(mdsvexOptions), processImages(), processCallouts()],
+  base: process.env.VERCEL_PROJECT_PRODUCTION_URL,
   kit: {
     adapter: process.env.VERCEL ? vercelAdapter() : staticAdapter({ strict: false }),
+
     alias: {
       '@/*': 'src/*',
       '$lib/*': 'src/lib/*',
