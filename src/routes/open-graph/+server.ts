@@ -1,4 +1,3 @@
-import { encode } from 'html-entities';
 import satori from 'satori';
 import sharp from 'sharp';
 
@@ -32,16 +31,13 @@ export const GET = async ({ url, fetch }) => {
   ]);
 
   // Extract main title
-  const [mainTitle] = title
-    .split(' | ')
-    .map((line) => line.trim())
-    .map((line) => encode(line));
+  const [mainTitle] = title.split(' | ').map((line) => line.trim());
 
   // Generate SVG with satori
   const svg = await satori(
     OpenGraphImage({
       title: mainTitle,
-      description: encode(description || ''),
+      description: description || '',
     }),
     {
       width: IMAGE_WIDTH,
