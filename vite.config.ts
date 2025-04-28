@@ -5,6 +5,7 @@ import { imagetools } from 'vite-imagetools';
 
 export default defineConfig({
   plugins: [sveltekit(), enhancedImages(), imagetools()],
+  assetsInclude: ['**/*.woff2', '**/*.woff'],
   esbuild: {
     jsxFactory: 'h',
     jsxFragment: 'Fragment',

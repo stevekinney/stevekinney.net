@@ -4,20 +4,17 @@ import satori from 'satori';
 import sharp from 'sharp';
 
 import metadata from '$lib/metadata';
+import { readFile } from 'fs/promises';
+import { join } from 'path';
 
 const getFont = async (path: string) => {
-  const url = new URL(`fontsource/fonts/${path}`, 'https://cdn.jsdelivr.net');
-  return fetch(url).then((res) => {
-    if (!res.ok) {
-      throw new Error(`Failed to load font from "${url.href}"`);
-    }
-    return res.arrayBuffer();
-  });
+  const filePath = join(process.cwd(), 'src', 'routes', 'open-graph', 'fonts', path);
+  return readFile(filePath);
 };
 
-const firaSansThin = await getFont('fira-sans@latest/latin-300-normal.woff2');
-const firaSansBold = await getFont('fira-sans@latest/latin-500-normal.woff2');
-const leagueGothic = await getFont('league-gothic@latest/latin-400-normal.woff2');
+const firaSansThin = await getFont('fira-sans-300-normal.woff');
+const firaSansBold = await getFont('fira-sans-500-normal.woff');
+const leagueGothic = await getFont('league-gothic-400-normal.woff');
 
 const Description = ({ description = '' }) => {
   if (!description) return null;
