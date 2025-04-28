@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { dev } from '$app/environment';
   import { page } from '$app/state';
   import { formatPageTitle } from '$lib/format-page-title';
+  import baseUrl from 'virtual:base-url';
   import metadata from '../metadata';
-
-  const baseUrl = dev ? '/' : metadata.url;
 
   interface SEOProps {
     title: string;

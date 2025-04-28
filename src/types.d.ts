@@ -10,7 +10,7 @@ declare module '*.md' {
   export const metadata: Record<string, unknown>;
 }
 
-declare module '*.woff' {
+declare module 'virtual:base-url' {
   export default InstanceType<ArrayBuffer>;
 }
 

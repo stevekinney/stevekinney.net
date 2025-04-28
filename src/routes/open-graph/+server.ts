@@ -1,7 +1,8 @@
-import metadata from '$lib/metadata';
 import { encode } from 'html-entities';
 import satori from 'satori';
 import sharp from 'sharp';
+
+import metadata from '$lib/metadata';
 import { OpenGraphImage } from './open-graph';
 
 export const GET = async ({ url, fetch }) => {

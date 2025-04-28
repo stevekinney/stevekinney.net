@@ -1,36 +1,33 @@
 import { enhancedImages } from '@sveltejs/enhanced-img';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { readFile } from 'fs/promises';
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite';
 import { imagetools } from 'vite-imagetools';
 
-const loadFont = (): Plugin => {
+const getBaseUrl = (): Plugin => {
+  const moduleId = 'virtual:base-url';
+  const virtualModuleId = '\0' + moduleId;
+
   return {
-    name: 'load-font',
+    name: 'get-base-url',
     enforce: 'pre',
+    resolveId(id) {
+      if (id === moduleId) {
+        return virtualModuleId;
+      }
+    },
     async load(id) {
-      if (id.endsWith('.woff')) {
-        console.log('Loading font:', id);
-        const font = await readFile(id);
-        const uint8Array = new Uint8Array(font);
-        const bytes = Array.from(uint8Array).join(',');
-        const code = [
-          `export default (function() {`,
-          `  const byteArray = new Uint8Array([${bytes}]);`,
-          `  return byteArray.buffer;`,
-          `})();`,
-        ].join('\n');
-        return {
-          code,
-          map: null,
-        };
+      if (id === virtualModuleId) {
+        if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+          return `export default '//${process.env.VERCEL_PROJECT_PRODUCTION_URL}';`;
+        }
+        return `export default '/';`;
       }
     },
   };
 };
 
 export default defineConfig({
-  plugins: [sveltekit(), enhancedImages(), imagetools(), loadFont()],
+  plugins: [sveltekit(), enhancedImages(), imagetools(), getBaseUrl()],
 
   esbuild: {
     jsxFactory: 'h',
