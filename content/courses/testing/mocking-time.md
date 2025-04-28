@@ -142,7 +142,7 @@ This allows you to mock all the functions inside the `api` module at once. When 
 
 ### Resetting Mocks
 
-After running a test, it’s important to reset or restore the mocks to their original state to avoid cross-test interference. You can reset mocks using `vi.resetAllMocks()` or restore original implementations with `mockRestore()`.
+After running a test, it's important to reset or restore the mocks to their original state to avoid cross-test interference. You can reset mocks using `vi.resetAllMocks()` or restore original implementations with `mockRestore()`.
 
 ```js
 // Reset all mocks after each test
@@ -179,7 +179,7 @@ This example combines a mock and a spy, allowing you to control the behavior of 
 
 Mocking asynchronous functions like `setTimeout` is another advanced use case. By mocking timers, you can simulate asynchronous behavior without actually waiting for the real delay.
 
-Here’s an example where we mock `setTimeout` and use `vi.useFakeTimers()` to control the flow of time in an asynchronous function:
+Here's an example where we mock `setTimeout` and use `vi.useFakeTimers()` to control the flow of time in an asynchronous function:
 
 ```js
 function delayedFunction(callback) {

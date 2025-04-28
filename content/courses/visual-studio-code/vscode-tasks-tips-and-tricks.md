@@ -47,8 +47,8 @@ You can control how the task output is shown:
 }
 ```
 
-- `reveal`: Show the panel automatically or only if there’s a problem (`silent`, `never`, etc.).
-- `panel`: Keep each task’s output in a separate panel, or reuse a single terminal panel.
+- `reveal`: Show the panel automatically or only if there's a problem (`silent`, `never`, etc.).
+- `panel`: Keep each task's output in a separate panel, or reuse a single terminal panel.
 - `clear`: Clear the previous output before running the new task.
 
 ## Environment Variables

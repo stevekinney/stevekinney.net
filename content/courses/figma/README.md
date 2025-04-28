@@ -1,6 +1,6 @@
 ---
 title: Figma for Developers
-description: "An high-level introduction to Steve's Figma for Developers course."
+description: "An high level introduction to Steve's Figma for Developers course."
 layout: page
 date: 2024-03-05T12:56:55-07:00
 modified: 2024-09-04T08:04:33-06:00

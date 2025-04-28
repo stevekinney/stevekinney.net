@@ -4,11 +4,11 @@ description: Learn how to mock file operations using Vitest and fs/promises.
 modified: 2024-09-28T15:13:26-06:00
 ---
 
-Usually, when you're testing something like file operations, you don’t actually want your tests messing around with your file system. We don't want some rogue unit test changing the file that holds your coworkers' lunch preferences or—god forbid—deleting it entirely. That's where mocking comes in. With mocking, we can just _pretend_ we're reading and writing files. Vitest and modern tools like `fs/promises` make this super straightforward. So, let’s dig in.
+Usually, when you're testing something like file operations, you don't actually want your tests messing around with your file system. We don't want some rogue unit test changing the file that holds your coworkers' lunch preferences or—god forbid—deleting it entirely. That's where mocking comes in. With mocking, we can just _pretend_ we're reading and writing files. Vitest and modern tools like `fs/promises` make this super straightforward. So, let's dig in.
 
 ## Setting the Scene
 
-Let’s assume you’ve got this super fancy little module that reads from a file, modifies the data, and writes it back. Something really _real-world_ like this:
+Let's assume you've got this super fancy little module that reads from a file, modifies the data, and writes it back. Something really _real-world_ like this:
 
 ```javascript
 // fileOperations.js
@@ -22,15 +22,15 @@ export async function processFile(filePath, content) {
 }
 ```
 
-The dream here is that you'll pass a file path and some new content, and it'll append that content to whatever's in the file. Pretty standard. But for the sake of our tests, we don’t want to actually read or write files.
+The dream here is that you'll pass a file path and some new content, and it'll append that content to whatever's in the file. Pretty standard. But for the sake of our tests, we don't want to actually read or write files.
 
 ## Mocking the File System with Vitest
 
-We can mock `fs/promises` using Vitest’s `vi.mock()` function. This lets us _intercept_ those calls to `readFile` and `writeFile` and return specific values we want.
+We can mock `fs/promises` using Vitest's `vi.mock()` function. This lets us _intercept_ those calls to `readFile` and `writeFile` and return specific values we want.
 
 ### Write the Test
 
-Let’s first write the tests, mocking those file system calls so we don’t nuke any actual files.
+Let's first write the tests, mocking those file system calls so we don't nuke any actual files.
 
 ```javascript
 import { processFile } from './fileOperations';
@@ -67,7 +67,7 @@ describe('processFile', () => {
 
 #### The Mock
 
-`vi.mock('fs/promises')` essentially says, “Hey, Vitest, don’t even try interacting with the real file system—just mock everything in this module.”
+`vi.mock('fs/promises')` essentially says, “Hey, Vitest, don't even try interacting with the real file system—just mock everything in this module.”
 
 #### Mocking `readFile`
 
@@ -79,7 +79,7 @@ After appending the contents, you're gonna want to check that it's calling `writ
 
 ### Running the Test
 
-Assuming you’ve got Vitest all set up, you can kick the test off by running:
+Assuming you've got Vitest all set up, you can kick the test off by running:
 
 ```bash
 npx vitest
@@ -89,8 +89,8 @@ And if everything is wired up correctly, it'll pass! 🎉
 
 ## Common Pitfalls
 
-1. **Forgetting to mock the right thing:** The file system API lives under different names (`fs`, `fs/promises`). Make sure you’re mocking the right one! Newer Node.js code prefers `fs/promises`, which is why we’re mocking that.
-2. **Mocks returning undefined:** If you forget `mockResolvedValue`, Vitest will return `undefined` by default. So if you’re wondering why your test is throwing `undefined is not a function`—check those mocks!
+1. **Forgetting to mock the right thing:** The file system API lives under different names (`fs`, `fs/promises`). Make sure you're mocking the right one! Newer Node.js code prefers `fs/promises`, which is why we're mocking that.
+2. **Mocks returning undefined:** If you forget `mockResolvedValue`, Vitest will return `undefined` by default. So if you're wondering why your test is throwing `undefined is not a function`—check those mocks!
 
 ## Final Thoughts
 

@@ -10,9 +10,18 @@ import unwrapImages from 'rehype-unwrap-images';
 import gfm from 'remark-gfm';
 import { bundledLanguages, codeToHtml } from 'shiki';
 
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { fixMarkdownUrls } from './plugins/remark-fix-urls.js';
 import { processCallouts } from './plugins/svelte-compile-callouts.js';
 import { processImages } from './plugins/svelte-enhance-images.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+if (process.env.VERCEL) {
+  console.log('Vercel Production URL', process.env.VERCEL_PROJECT_PRODUCTION_URL);
+}
 
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
@@ -20,9 +29,9 @@ const mdsvexOptions = {
   remarkPlugins: [unwrapImages, fixMarkdownUrls, gfm],
   rehypePlugins: [slug, rehypeMermaid],
   layout: {
-    _: './src/lib/markdown/base.svelte',
-    page: './src/lib/markdown/page.svelte',
-    contents: './src/lib/markdown/components/contents.svelte',
+    _: path.join(__dirname, './src/lib/markdown/base.svelte'),
+    page: path.join(__dirname, './src/lib/markdown/page.svelte'),
+    contents: path.join(__dirname, './src/lib/markdown/components/contents.svelte'),
   },
   highlight: {
     highlighter: async (code, lang = 'text') => {

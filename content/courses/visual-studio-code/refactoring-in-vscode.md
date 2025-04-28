@@ -61,9 +61,9 @@ Use this feature to make your code self-documenting and reduce duplication.
 
 ## Quick Fixes
 
-As you code, you might notice a lightbulb icon or yellow squiggly lines under some code. These indicate Visual Studio Code (or rather, the language server or linter) has suggestions. For example, in a JS file, if you have an unused variable, you might see a gray underline. Or if you spelled `console` as `consle`, there might be a red squiggle and a lightbulb offering “Did you mean 'console'?”. To trigger these **Quick Fix** suggestions manually, place the cursor on the error or underlined code and press `Ctrl-.` or `Cmd+.` . A context menu of fixes/refactorings appears. You can navigate it with arrows or click. For instance, on the misspelled `consle`, `Ctrl+.` might suggest “Change to 'console'” – selecting it will automatically fix the typo. Another example: in TypeScript or C#, if you have a function call to a function that doesn’t exist, Quick Fix might offer “Create function definition for …” and generate a stub for you.
+As you code, you might notice a lightbulb icon or yellow squiggly lines under some code. These indicate Visual Studio Code (or rather, the language server or linter) has suggestions. For example, in a JS file, if you have an unused variable, you might see a gray underline. Or if you spelled `console` as `consle`, there might be a red squiggle and a lightbulb offering “Did you mean 'console'?”. To trigger these **Quick Fix** suggestions manually, place the cursor on the error or underlined code and press `Ctrl-.` or `Cmd+.` . A context menu of fixes/refactorings appears. You can navigate it with arrows or click. For instance, on the misspelled `consle`, `Ctrl+.` might suggest “Change to 'console'” – selecting it will automatically fix the typo. Another example: in TypeScript or C#, if you have a function call to a function that doesn't exist, Quick Fix might offer “Create function definition for …” and generate a stub for you.
 
-**Other Refactors:** Depending on language, `Ctrl+.` might offer things like “Extract function from selection” or “Convert to template string” or “Surround with try/catch”. It’s worth checking the lightbulb if you think “I wish I could quickly do X” – sometimes the language support has it. For example, in a JSX file, you might get “Wrap in div” etc., as a quick fix. Or simply “Remove unused import” if a module is imported but not used.
+**Other Refactors:** Depending on language, `Ctrl+.` might offer things like “Extract function from selection” or “Convert to template string” or “Surround with try/catch”. It's worth checking the lightbulb if you think “I wish I could quickly do X” – sometimes the language support has it. For example, in a JSX file, you might get “Wrap in div” etc., as a quick fix. Or simply “Remove unused import” if a module is imported but not used.
 
 ## The Problems Panel
 
@@ -83,7 +83,7 @@ As your code evolves, you might find that certain functions, classes, or constan
 
 ## Convert Function to Arrow Function
 
-For JavaScript and TypeScript, converting traditional function expressions to arrow functions can lead to more concise and modern syntax. VS Code’s refactoring tools can offer a "Convert to Arrow Function" option that transforms your code while preserving its behavior. This is particularly useful when refactoring legacy code or adhering to contemporary coding standards.
+For JavaScript and TypeScript, converting traditional function expressions to arrow functions can lead to more concise and modern syntax. VS Code's refactoring tools can offer a "Convert to Arrow Function" option that transforms your code while preserving its behavior. This is particularly useful when refactoring legacy code or adhering to contemporary coding standards.
 
 ## Surround With
 

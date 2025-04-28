@@ -46,4 +46,4 @@ Figma also allows the overlay of multiple grid types on a single frame, providin
 
 ## Adjusting and Toggling Grids
 
-Once a grid is applied, you can adjust its settings at any time to reflect changes in your design requirements. Pro-tip: Toggling grids on and off is simple — use the shortcut `Ctrl/Cmd + G` or click the eye icon next to the grid name in the right-side panel. This feature is handy for quickly checking your design’s alignment with or without the grid's visual guides.
+Once a grid is applied, you can adjust its settings at any time to reflect changes in your design requirements. Pro-tip: Toggling grids on and off is simple — use the shortcut `Ctrl/Cmd + G` or click the eye icon next to the grid name in the right-side panel. This feature is handy for quickly checking your design's alignment with or without the grid's visual guides.

@@ -38,9 +38,9 @@ test('number is within range', () => {
 
 ## A More Interesting Example
 
-Let’s say you’re working with **dates**. Testing for "is this date after that date?" could be a little annoying with vanilla matchers.
+Let's say you're working with **dates**. Testing for "is this date after that date?" could be a little annoying with vanilla matchers.
 
-Here’s a custom matcher for checking if one date is later than another:
+Here's a custom matcher for checking if one date is later than another:
 
 ```js
 expect.extend({
@@ -72,6 +72,6 @@ test('date comparison', () => {
 
 ## Best Practices
 
-1. **Keep the matcher simple**. You don’t want to write a novel for each matcher. Remember, code is read more often than it’s written, so make sure that your custom matcher is easy to understand at a glance.
+1. **Keep the matcher simple**. You don't want to write a novel for each matcher. Remember, code is read more often than it's written, so make sure that your custom matcher is easy to understand at a glance.
 2. **Detailed error messages**. When a test fails, the developer (spoiler: future you) needs to understand _why_ things exploded. A good message makes debugging way less painful.
-3. **Leverage context for your app**. Extend matchers when you find yourself repeating specific checks. In the land of testing, **DRY** doesn’t just stand for "Don’t Repeat Yourself", it stands for "**Don’t Rage Yet**", because tests are meant to stay calm and concise.
+3. **Leverage context for your app**. Extend matchers when you find yourself repeating specific checks. In the land of testing, **DRY** doesn't just stand for "Don't Repeat Yourself", it stands for "**Don't Rage Yet**", because tests are meant to stay calm and concise.

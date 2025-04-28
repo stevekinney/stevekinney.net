@@ -17,7 +17,7 @@ In some test scenarios, you may need to override or mock specific properties of 
 
 When overriding getter or setter properties, you can use `vi.spyOn()` to replace their behavior. This is especially useful for built-in object properties like `window.location` or `process.env` that you need to override in a test.
 
-Here’s an example of overriding a getter:
+Here's an example of overriding a getter:
 
 ```js
 // Spy on the global object property (e.g., window.location.href)
@@ -57,7 +57,7 @@ In this example, the `process.env.API_KEY` property is directly overridden to si
 
 For more complex scenarios where properties use getters or setters, you can override them directly by redefining the property using `Object.defineProperty()`.
 
-Here’s how to override a property with a custom getter:
+Here's how to override a property with a custom getter:
 
 ```js
 // Override a property with a custom getter
@@ -77,7 +77,7 @@ In this example, we use `Object.defineProperty()` to mock `window.innerWidth` wi
 
 ## Restoring Overridden Properties
 
-After overriding object properties, it’s important to restore them to their original state to avoid side effects in other tests. Vitest provides `mockRestore()` to reset spied or mocked properties.
+After overriding object properties, it's important to restore them to their original state to avoid side effects in other tests. Vitest provides `mockRestore()` to reset spied or mocked properties.
 
 ```js
 const originalHref = window.location.href;
@@ -102,4 +102,4 @@ By restoring the original value of `window.location.href` in the `afterEach()` b
 
 ## Conclusion
 
-Overriding object properties in Vitest is a powerful technique for testing code that relies on dynamic or external values like environment variables, configuration objects, or global properties. Whether you’re using `vi.spyOn()` to mock getters and setters, directly modifying properties, or using `Object.defineProperty()` for more advanced control, overriding properties allows you to test different scenarios in isolation. Always remember to reset or restore the original properties after the test to maintain clean, isolated test environments.
+Overriding object properties in Vitest is a powerful technique for testing code that relies on dynamic or external values like environment variables, configuration objects, or global properties. Whether you're using `vi.spyOn()` to mock getters and setters, directly modifying properties, or using `Object.defineProperty()` for more advanced control, overriding properties allows you to test different scenarios in isolation. Always remember to reset or restore the original properties after the test to maintain clean, isolated test environments.

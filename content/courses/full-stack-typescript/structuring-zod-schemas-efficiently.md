@@ -13,7 +13,7 @@ Group related schemas together, perhaps each module or file corresponds to a fea
 
 ## Reuse and extend schemas
 
-Often you have similar schemas for different situations – for example, a "create user" vs "update user" (where update might allow omission of some fields). Rather than define two from scratch, define a base and derive the other. Zod provides methods like `.partial()` to make all fields optional, or `.omit()` / `.pick()` to derive a subset. For instance, you might do `const UserSchemaPartial = UserSchema.partial()` to get a schema where none of the fields are required (useful for PATCH update input). Or if an extended version has extra fields, use `UserSchema.extend({ newField: z.string() })`. This ensures consistency – you’re not redefining the validation rules for those shared fields in multiple places.
+Often you have similar schemas for different situations – for example, a "create user" vs "update user" (where update might allow omission of some fields). Rather than define two from scratch, define a base and derive the other. Zod provides methods like `.partial()` to make all fields optional, or `.omit()` / `.pick()` to derive a subset. For instance, you might do `const UserSchemaPartial = UserSchema.partial()` to get a schema where none of the fields are required (useful for PATCH update input). Or if an extended version has extra fields, use `UserSchema.extend({ newField: z.string() })`. This ensures consistency – you're not redefining the validation rules for those shared fields in multiple places.
 
 ## Leverage `z.infer` for types
 
@@ -32,6 +32,6 @@ If you have common pieces, define them once. Say you have an Address schema used
 
 ## Naming and describing
 
-Use `.describe("Description")` on schemas for documentation purposes. While this doesn’t affect validation, it can embed human-readable descriptions in the schema which can later be used for documentation generation or just making error messages clearer. For instance, `z.string().min(1).describe("Non-empty name")`. This is useful if you convert schemas to OpenAPI or GraphQL documentation, as the descriptions can carry over.
+Use `.describe("Description")` on schemas for documentation purposes. While this doesn't affect validation, it can embed human-readable descriptions in the schema which can later be used for documentation generation or just making error messages clearer. For instance, `z.string().min(1).describe("Non-empty name")`. This is useful if you convert schemas to OpenAPI or GraphQL documentation, as the descriptions can carry over.
 
-By structuring schemas thoughtfully, you make it easier to maintain the contract your application relies on. When requirements change (like a new field is added), you update one schema definition in one place. And by inferring types, you ensure all your functions that consume that data type are aware of the change. Essentially, treat schemas as a fundamental part of your application’s architecture – much like you treat database models or API interfaces.
+By structuring schemas thoughtfully, you make it easier to maintain the contract your application relies on. When requirements change (like a new field is added), you update one schema definition in one place. And by inferring types, you ensure all your functions that consume that data type are aware of the change. Essentially, treat schemas as a fundamental part of your application's architecture – much like you treat database models or API interfaces.

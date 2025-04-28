@@ -1,5 +1,4 @@
 <script>
-  import SEO from '$lib/components/seo.svelte';
   import { toDataAttributes } from '$lib/to-data-attributes';
 
   /** @type {string | undefined | null} */
@@ -26,8 +25,6 @@
     ...rest
   } = $props();
 </script>
-
-<SEO {title} {description} {published} {date} {modified} />
 
 <div class={className} {...toDataAttributes(rest)}>
   <h1 class="mb-6 text-4xl font-bold">{title}</h1>

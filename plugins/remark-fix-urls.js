@@ -3,6 +3,18 @@ import { visit } from 'unist-util-visit';
 
 const externalUrl = /^(https?:\/\/|\/\/)/;
 
+import { z } from 'zod';
+
+const fileSchema = z.object({
+  filename: z.string(),
+  cwd: z.string(),
+});
+
+/**
+ * Check if the URL is external.
+ * @param {string} url
+ * @returns
+ */
 const isExternalUrl = (url) => {
   return externalUrl.test(url);
 };
@@ -12,7 +24,8 @@ const isExternalUrl = (url) => {
  * @type {import('unified').Plugin}
  */
 export const fixMarkdownUrls = (contentPath = 'content') => {
-  return (tree, { filename, cwd }) => {
+  return (tree, file) => {
+    const { filename, cwd } = fileSchema.parse(file);
     const baseUrl = '/' + dirname(filename.replace(`${cwd}/`, '')).replace(`${contentPath}/`, '');
 
     visit(tree, 'link', (/** @type {import('mdast').Link} */ node) => {

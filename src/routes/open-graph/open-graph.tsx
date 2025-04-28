@@ -1,32 +1,38 @@
-import type { RequestEvent } from '@sveltejs/kit';
+import { encode } from 'html-entities';
+
+import satori from 'satori';
+import sharp from 'sharp';
 
 import metadata from '$lib/metadata';
 
-export function h(type: string, props: { [key: string]: unknown } | null, ...children: unknown[]) {
-  if (children.length) {
-    props = props || {};
-    props.children = children;
-  }
+type OpenGraphImageProps = {
+  title?: string;
+  description?: string | null | undefined;
+};
 
-  return { type, props: props || {} };
-}
+const Description = ({ description = '' }) => {
+  if (!description) return null;
+  return (
+    <p
+      style={{
+        fontSize: '2rem',
+        margin: 0,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        backgroundColor: 'black',
+        color: 'white',
+        padding: '1rem 1rem',
+      }}
+    >
+      {description}
+    </p>
+  );
+};
 
-const OpenGraphImage = ({ url }: RequestEvent) => {
-  let title: string | undefined = metadata.title;
-  let description = metadata.description;
-
-  if (url.searchParams.has('title')) {
-    title = decodeURIComponent(url.searchParams.get('title')!);
-  }
-
-  if (url.searchParams.has('description')) {
-    description = decodeURIComponent(url.searchParams.get('description')!);
-  }
-
-  if (!title && !description) {
-    description = metadata.description;
-  }
-
+export const OpenGraphImage = ({
+  title = metadata.title,
+  description = '',
+}: OpenGraphImageProps) => {
   return (
     <div
       style={{
@@ -73,19 +79,7 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
           >
             {title}
           </h2>
-          <p
-            style={{
-              fontSize: '2rem',
-              margin: 0,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              backgroundColor: 'black',
-              color: 'white',
-              padding: '1rem 1rem',
-            }}
-          >
-            {description}
-          </p>
+          <Description />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <p
@@ -114,4 +108,12 @@ const OpenGraphImage = ({ url }: RequestEvent) => {
   );
 };
 
-export default OpenGraphImage;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function h(type: string, props: { [key: string]: unknown } | null, ...children: unknown[]) {
+  if (children && children.length) {
+    props = props || {};
+    props.children = children;
+  }
+
+  return { type, props: props || {} };
+}

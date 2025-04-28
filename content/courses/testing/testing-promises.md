@@ -16,7 +16,7 @@ You _could_ use the strategies from [Testing Asynchronous Code](testing-asynchro
 
 When a promise resolves successfully, you want to verify that the returned value matches what you expect. In Vitest, this is typically done using `async` and `await` or returning the promise directly in your test function.
 
-Here’s an example of testing a function that returns a resolved promise:
+Here's an example of testing a function that returns a resolved promise:
 
 ```js
 // Function to be tested
@@ -41,7 +41,7 @@ In this example, the `fetchBandData` function returns a promise that resolves wi
 
 In addition to testing successful promise resolutions, it's equally important to test how your code handles promise rejections (errors). Vitest allows you to test rejected promises using `try/catch` blocks or `.rejects` in your assertions.
 
-Here’s how you can test a rejected promise:
+Here's how you can test a rejected promise:
 
 ```js
 // Function to be tested
@@ -96,7 +96,7 @@ Here, `.rejects.toThrow()` is used to verify that the promise rejects with a spe
 
 When your code depends on asynchronous external services (e.g., APIs), you can use mocks to simulate different promise behaviors—both resolution and rejection. This is especially useful when testing functions that rely on external resources without making actual requests.
 
-Here’s an example using a mocked API call:
+Here's an example using a mocked API call:
 
 ```js
 // Simulate an API module

@@ -77,7 +77,7 @@ Mocks are more powerful than stubs because they provide both behavior definition
 
 In Vitest, you can create mocks using the `vi.fn()` method, which allows you to define how a function should behave and track calls made to it.
 
-Here’s a simple example of creating a mock:
+Here's a simple example of creating a mock:
 
 ```js
 const paymentMock = vi.fn();
@@ -95,9 +95,9 @@ In this case, the mock will return 'Payment Successful' the first time it is cal
 
 ### Example: Mocking a Database or an External API
 
-Let’s consider an example where we mock an external API that fetches concert details for a band. We’ll use the mock to simulate different scenarios, such as a successful API call and a failure.
+Let's consider an example where we mock an external API that fetches concert details for a band. We'll use the mock to simulate different scenarios, such as a successful API call and a failure.
 
-Here’s the function we want to test:
+Here's the function we want to test:
 
 ```js
 async function getConcertDetails(band) {
@@ -107,7 +107,7 @@ async function getConcertDetails(band) {
 }
 ```
 
-Now, we’ll mock the `fetch` function in our test:
+Now, we'll mock the `fetch` function in our test:
 
 ```js
 import { describe, it, expect, vi } from 'vitest';
@@ -146,7 +146,7 @@ In this example, `fetchMock` simulates the behavior of the real `fetch` function
 
 Mocks in Vitest allow you to assert not only the return values and errors, but also interactions such as how many times the mock was called, what arguments were passed, and the order of calls.
 
-Here’s how you can assert different interactions with mocks:
+Here's how you can assert different interactions with mocks:
 
 ```js
 // Create a mock function

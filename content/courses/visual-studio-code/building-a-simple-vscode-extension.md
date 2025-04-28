@@ -44,7 +44,7 @@ function subscribeToDocumentChanges(context) {
   decorateWords();
 }
 
-// This is your extension’s main activation
+// This is your extension's main activation
 function activate(context) {
   // Register the decorator logic with events
   subscribeToDocumentChanges(context);

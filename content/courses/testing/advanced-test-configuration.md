@@ -11,7 +11,7 @@ Vitest is pretty awesome right out of the box, but sometimes you need to customi
 > \[!NOTE] This is Mostly Vite-Related Content
 > Most of what we're covering here related to Vite—and thereby Vitest. Our friends at [Frontend Masters](https://frontendmasters.com?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) have [a whole course on Vite](https://frontendmasters.com/courses/vite/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) that is taught by a _very_ dapper instructor.
 
-Here’s a basic one as a refresher:
+Here's a basic one as a refresher:
 
 ```ts
 // vitest.config.ts
@@ -32,7 +32,7 @@ This gives you a decent setup—global variables available across all tests, usi
 
 ### Setting up Test Aliases
 
-Let’s knock out something simple but powerful: **path aliases**. If you're deep into a project, your imports are probably starting to look like a tangled mess of relative paths.
+Let's knock out something simple but powerful: **path aliases**. If you're deep into a project, your imports are probably starting to look like a tangled mess of relative paths.
 
 ```ts
 import MyComponent from '../../../../../component/MyComponent';
@@ -55,17 +55,17 @@ export default defineConfig({
 });
 ```
 
-Now in your tests, it’s much cleaner:
+Now in your tests, it's much cleaner:
 
 ```ts
 import MyComponent from '@components/MyComponent'; // Phew.
 ```
 
-Neat and readable. Plus, we’re already one step closer to a maintainable codebase.
+Neat and readable. Plus, we're already one step closer to a maintainable codebase.
 
 ### Handling ESM and CommonJS Together
 
-Ah yes, the modern mess of JavaScript modules. You're probably encountering both in your project, and it can get nasty when you try to test them. Sometimes, you need to treat CommonJS and ESM _differently_. No problem—Vitest’s got you covered.
+Ah yes, the modern mess of JavaScript modules. You're probably encountering both in your project, and it can get nasty when you try to test them. Sometimes, you need to treat CommonJS and ESM _differently_. No problem—Vitest's got you covered.
 
 ```ts
 export default defineConfig({
@@ -81,7 +81,7 @@ This little addition can save you headaches when testing packages that work with
 
 ### Isolating Test Environments
 
-Here's a quick scenario. Let’s say you're testing a Node application. You’re using actual **file reads**, and it is _slow_. But you know about mocking, right? But wait! Before you even get into mocking (which is another can of worms), Vitest lets you run each test file in complete **isolation**—sort of like a mini-reset between each run.
+Here's a quick scenario. Let's say you're testing a Node application. You're using actual **file reads**, and it is _slow_. But you know about mocking, right? But wait! Before you even get into mocking (which is another can of worms), Vitest lets you run each test file in complete **isolation**—sort of like a mini-reset between each run.
 
 ```ts
 // vitest.config.ts
@@ -96,7 +96,7 @@ This turns each test file into its own bubble. That means if you're changing `gl
 
 ## Test Timeouts and Reruns
 
-So, what happens when one of your tests drags on, like… for-ev-er. Maybe it depends on network latency or takes a second to spin up resources. You don’t want your test suite hanging just because one test feels a little lazy, right? Vitest lets you set **global timeouts**, but you can configure them on a _test-by-test_ basis too. Get ready to save precious minutes of your life:
+So, what happens when one of your tests drags on, like… for-ev-er. Maybe it depends on network latency or takes a second to spin up resources. You don't want your test suite hanging just because one test feels a little lazy, right? Vitest lets you set **global timeouts**, but you can configure them on a _test-by-test_ basis too. Get ready to save precious minutes of your life:
 
 ### Global Timeouts
 
@@ -108,11 +108,11 @@ export default defineConfig({
 });
 ```
 
-That’s right, 5000 milliseconds. More than enough time for most tests. If anything runs longer than that, Vitest will scream at you, and maybe it’s time to investigate **why**.
+That's right, 5000 milliseconds. More than enough time for most tests. If anything runs longer than that, Vitest will scream at you, and maybe it's time to investigate **why**.
 
 ### Test Rerun: Flaky Test Insurance
 
-That occasional test that just decides it wants some attention by failing randomly? (Yeah, we _all_ have that _one_ test.) Let’s tell Vitest to rerun it automatically a few times before calling it a failure:
+That occasional test that just decides it wants some attention by failing randomly? (Yeah, we _all_ have that _one_ test.) Let's tell Vitest to rerun it automatically a few times before calling it a failure:
 
 ```ts
 export default defineConfig({
@@ -145,4 +145,4 @@ This way, you're far more selective during your test runs—letting you focus on
 
 ## Conclusion
 
-The goal here isn’t just about writing squeaky-clean tests—**it’s about staying sane** while doing it. Take these tips as your advanced toolbox to wield Vitest the next time complexity strikes.
+The goal here isn't just about writing squeaky-clean tests—**it's about staying sane** while doing it. Take these tips as your advanced toolbox to wield Vitest the next time complexity strikes.

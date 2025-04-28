@@ -4,13 +4,13 @@ description: Explore alternatives to snapshot tests for efficient testing.
 modified: 2024-09-28T15:26:05-06:00
 ---
 
-Snapshot tests—love them or hate them. They seem _so_ helpful at first. "Look, I just got this test to pass by updating the snapshot!" But then, a month later, when that snapshot has 1,200 lines of JSON and you can't even remember what you're testing? Yeah, we’ve all been there. So, if you want to avoid the trap of snapshot tests becoming a maintenance nightmare, what can you do instead? Let’s explore some real-world alternatives that’ll keep your test suite both useful and maintainable.
+Snapshot tests—love them or hate them. They seem _so_ helpful at first. "Look, I just got this test to pass by updating the snapshot!" But then, a month later, when that snapshot has 1,200 lines of JSON and you can't even remember what you're testing? Yeah, we've all been there. So, if you want to avoid the trap of snapshot tests becoming a maintenance nightmare, what can you do instead? Let's explore some real-world alternatives that'll keep your test suite both useful and maintainable.
 
 ## Testing Individual Pieces of Output
 
-Snapshots are super tempting because you just "capture" a component's output in one fell swoop. But nine times out of ten, you’re probably not interested in _everything_ that comes out. What you **really** care about is that specific little chunk of output—a CSS class, a tag, some text.
+Snapshots are super tempting because you just "capture" a component's output in one fell swoop. But nine times out of ten, you're probably not interested in _everything_ that comes out. What you **really** care about is that specific little chunk of output—a CSS class, a tag, some text.
 
-Let’s say you have a `Button` component. Instead of snapshotting the whole thing, let's focus on the key part. For example, we might want to confirm that the button is using the right class, rendering the right label:
+Let's say you have a `Button` component. Instead of snapshotting the whole thing, let's focus on the key part. For example, we might want to confirm that the button is using the right class, rendering the right label:
 
 ```js
 import { render } from '@testing-library/vue';
@@ -30,13 +30,13 @@ describe('Button', () => {
 });
 ```
 
-Boom. You’re now testing exactly what matters… and you won’t get overwhelmed with endless diffs when the padding on the button changes.
+Boom. You're now testing exactly what matters… and you won't get overwhelmed with endless diffs when the padding on the button changes.
 
 ## Testing Behavior Instead of Output
 
 Snapshots focus _heavily_ on the "what" (what does the output look like?). But have you ever thought about the "how"? You don't write components just to _look_ pretty; they should, you know, _do_ something.
 
-Here's where testing behavior comes in. Let’s stick with our `Button` example and imagine it has a click handler. We don’t care what the DOM looks like after rendering—we care whether it propagates a click event when a user actually clicks it.
+Here's where testing behavior comes in. Let's stick with our `Button` example and imagine it has a click handler. We don't care what the DOM looks like after rendering—we care whether it propagates a click event when a user actually clicks it.
 
 ```js
 import { render, fireEvent } from '@testing-library/vue';
@@ -62,9 +62,9 @@ There you go—tests behavior, not the markup. If the button now has pixel margi
 
 ## Using Textual Assertions, Not Snapshots
 
-For larger components that render more intricate layouts, a textual representation can be easier to reason about than raw HTML output. Textual assertions are your friend when you’re focused on user-facing content.
+For larger components that render more intricate layouts, a textual representation can be easier to reason about than raw HTML output. Textual assertions are your friend when you're focused on user-facing content.
 
-Let’s say we’re testing a `UserProfile` component that displays a user’s name and title. Rather than snapshotting the whole thing (and dying a slow death with every subtle layout change), you can test that the right content renders:
+Let's say we're testing a `UserProfile` component that displays a user's name and title. Rather than snapshotting the whole thing (and dying a slow death with every subtle layout change), you can test that the right content renders:
 
 ```js
 import { render } from '@testing-library/vue';
@@ -84,7 +84,7 @@ describe('UserProfile', () => {
 });
 ```
 
-Next time the layout changes, no huge diff worries. You’re asserting against the only thing that actually matters to users—what they _see_ and _read_.
+Next time the layout changes, no huge diff worries. You're asserting against the only thing that actually matters to users—what they _see_ and _read_.
 
 ## Custom Matchers
 
@@ -116,7 +116,7 @@ This helps keep things readable—and avoids snapshot hell.
 
 ## When/If Snapshots Might Actually Help
 
-I'm not telling you to delete **all** snapshots from your life. There are times when they’re pretty convenient—like tracking a huge chunk of config objects or API response mock data where you need the full picture.
+I'm not telling you to delete **all** snapshots from your life. There are times when they're pretty convenient—like tracking a huge chunk of config objects or API response mock data where you need the full picture.
 
 But the trick is to use them **sparingly**. Focus your tests on the critical parts of your UI and interactions, and keep the snapshots for data or when the structure _really_ matters.
 

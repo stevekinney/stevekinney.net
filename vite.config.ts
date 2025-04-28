@@ -3,28 +3,32 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite';
 import { imagetools } from 'vite-imagetools';
 
-const projectRoot = (id: string = 'project-root'): Plugin => {
-  const virtualModuleId = `virtual:${id}`;
-  const resolvedVirtualModuleId = '\0' + virtualModuleId;
+const getBaseUrl = (): Plugin => {
+  const moduleId = 'virtual:base-url';
+  const virtualModuleId = '\0' + moduleId;
 
   return {
-    name: 'project-root',
+    name: 'get-base-url',
+    enforce: 'pre',
     resolveId(id) {
-      if (id === virtualModuleId) {
-        return resolvedVirtualModuleId;
+      if (id === moduleId) {
+        return virtualModuleId;
       }
     },
-    load(id) {
-      if (id === resolvedVirtualModuleId) {
-        const projectRoot = JSON.stringify(searchForWorkspaceRoot(process.cwd()));
-        return `const root = ${projectRoot}; export default root; export const fromProjectRoot = (...segments) => root + '/' + segments.flatMap(s => s.split('/')).join('/');`;
+    async load(id) {
+      if (id === virtualModuleId) {
+        if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+          return `export default '//${process.env.VERCEL_PROJECT_PRODUCTION_URL}';`;
+        }
+        return `export default '/';`;
       }
     },
   };
 };
 
 export default defineConfig({
-  plugins: [sveltekit(), enhancedImages(), imagetools(), projectRoot()],
+  plugins: [sveltekit(), enhancedImages(), imagetools(), getBaseUrl()],
+
   esbuild: {
     jsxFactory: 'h',
     jsxFragment: 'Fragment',

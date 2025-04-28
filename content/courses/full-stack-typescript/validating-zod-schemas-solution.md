@@ -249,7 +249,7 @@ try {
 
 ### Adding a Little Brand to Your Life
 
-**Goal**: A UserId branded type that’s a valid UUID string.
+**Goal**: A UserId branded type that's a valid UUID string.
 
 ```ts
 import { z } from 'zod';
@@ -273,7 +273,7 @@ try {
 }
 ```
 
-**Test Branding**: If you have a function that expects a UserId type, passing a normal string should fail type-check (in TypeScript). This won’t fail at runtime, but at compile time.
+**Test Branding**: If you have a function that expects a UserId type, passing a normal string should fail type-check (in TypeScript). This won't fail at runtime, but at compile time.
 
 ## Solutions
 

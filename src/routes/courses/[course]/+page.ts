@@ -1,19 +1,16 @@
 // import { error } from '@sveltejs/kit';
-import { CourseMetadataSchema } from '$lib/schemas/courses';
+import { CourseMarkdownSchema } from '$lib/schemas/courses';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ params }) => {
-  const { course } = params;
+  const { course: slug } = params;
 
-  const { default: content, metadata } = await import(
-    `../../../../content/courses/${course}/README.md`
+  const { default: content, metadata } = CourseMarkdownSchema.parse(
+    await import(`../../../../content/courses/${slug}/README.md`),
   );
 
   return {
+    ...metadata,
     content,
-    ...CourseMetadataSchema.parse({
-      ...metadata,
-      slug: course,
-    }),
   };
 };

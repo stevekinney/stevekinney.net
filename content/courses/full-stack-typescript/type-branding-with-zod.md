@@ -4,7 +4,7 @@ description: 'Use Zod for type branding to create nominal type relationships whi
 modified: 2025-03-15T16:15:00-06:00
 ---
 
-You can “brand” your types so that TypeScript sees them as unique, even if they’re plain strings or numbers at runtime.
+You can “brand” your types so that TypeScript sees them as unique, even if they're plain strings or numbers at runtime.
 
 ```ts
 import { z } from 'zod';

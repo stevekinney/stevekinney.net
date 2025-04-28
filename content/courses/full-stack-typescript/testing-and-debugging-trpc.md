@@ -34,11 +34,11 @@ test('getUser finds existing user', async () => {
 });
 ```
 
-No messing with HTTP calls, so it’s fast. If you want integration or end-to-end tests, you can spin up your server and query it normally. For big apps, you might also do front-end integration tests using Cypress or Playwright.
+No messing with HTTP calls, so it's fast. If you want integration or end-to-end tests, you can spin up your server and query it normally. For big apps, you might also do front-end integration tests using Cypress or Playwright.
 
 ## Debugging
 
 - **Check logs**: Add an `onError` to the tRPC middleware or use a logging middleware.
 - **React Query DevTools**: If using React, the dev tools can reveal query states, caching, and more.
-- **Console logs**: When in doubt, sprinkle them around (and remove them once you’re done!).
+- **Console logs**: When in doubt, sprinkle them around (and remove them once you're done!).
 - **CORS**: Make sure you enable it if your client is served from a different origin.
