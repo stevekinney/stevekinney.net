@@ -20,7 +20,7 @@ const getBaseUrl = (): Plugin => {
         if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
           return `export default 'https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}';`;
         }
-        return `export default '/';`;
+        return `export default '';`;
       }
     },
   };
