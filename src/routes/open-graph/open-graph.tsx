@@ -4,17 +4,10 @@ import satori from 'satori';
 import sharp from 'sharp';
 
 import metadata from '$lib/metadata';
-import { readFile } from 'fs/promises';
-import { join } from 'path';
 
-const getFont = async (path: string) => {
-  const filePath = join(process.cwd(), 'src', 'routes', 'open-graph', 'fonts', path);
-  return readFile(filePath);
-};
-
-const firaSansThin = await getFont('fira-sans-300-normal.woff');
-const firaSansBold = await getFont('fira-sans-500-normal.woff');
-const leagueGothic = await getFont('league-gothic-400-normal.woff');
+import firaSansThin from './fonts/fira-sans-300-normal.woff';
+import firaSansBold from './fonts/fira-sans-500-normal.woff';
+import leagueGothic from './fonts/league-gothic-400-normal.woff';
 
 const Description = ({ description = '' }) => {
   if (!description) return null;

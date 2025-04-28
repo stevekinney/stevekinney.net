@@ -10,6 +10,10 @@ declare module '*.md' {
   export const metadata: Record<string, unknown>;
 }
 
+declare module '*.woff' {
+  export default InstanceType<ArrayBuffer>;
+}
+
 declare module 'remark-slug' {
   export default import('unified').Plugin;
 }
