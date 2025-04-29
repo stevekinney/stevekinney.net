@@ -14,16 +14,7 @@
    */
 
   /** @type {Props & { [key: string]: any }} */
-  const {
-    title,
-    description,
-    published = true,
-    date = undefined,
-    modified = undefined,
-    class: className = '',
-    children,
-    ...rest
-  } = $props();
+  const { class: className = '', children, title, ...rest } = $props();
 </script>
 
 <div class={className} {...toDataAttributes(rest)}>

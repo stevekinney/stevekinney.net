@@ -62,6 +62,7 @@ export default [
 
     rules: {
       'no-unused-vars': 'off',
+      'no-import-assign': 'off',
 
       '@typescript-eslint/no-unused-vars': [
         'error',

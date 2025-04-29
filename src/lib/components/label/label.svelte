@@ -1,6 +1,5 @@
 <script lang="ts">
   import { merge } from '$merge';
-  import type { ExtendElement } from '../component.types';
   import type { HTMLAttributes } from 'svelte/elements';
 
   type Props = HTMLAttributes<HTMLElement> & {

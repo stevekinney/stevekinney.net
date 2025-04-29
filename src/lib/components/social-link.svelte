@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { Icon as IconType } from 'lucide-svelte';
   import { merge } from '$merge';
+  import type { Icon as IconType } from 'lucide-svelte';
   import type { ExtendElement } from './component.types';
 
   type SocialLinkProps = ExtendElement<
     'a',
     {
       icon: typeof IconType;
-      name?: any;
+      name?: string;
       size?: number;
     }
   >;
@@ -27,7 +27,10 @@
 
 <a {href} {target} {...props}>
   <Icon
-    class={merge('transition-colors hover:stroke-primary-700 active:stroke-primary-600', className)}
+    class={merge(
+      'transition-colors hover:stroke-primary-700 active:stroke-primary-600',
+      String(className),
+    )}
     aria-label={name}
     {size}
   />

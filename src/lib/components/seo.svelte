@@ -2,7 +2,6 @@
   import { page } from '$app/state';
   import { formatPageTitle } from '$lib/format-page-title';
   import baseUrl from 'virtual:base-url';
-  import metadata from '../metadata';
 
   interface SEOProps {
     title: string;
