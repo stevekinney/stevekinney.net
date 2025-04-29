@@ -1,15 +1,14 @@
-import { parse } from 'svelte/compiler';
-
 import { camelCase } from 'change-case';
 import MagicString from 'magic-string';
+import { walk } from 'svelte-tree-walker';
+import { parse } from 'svelte/compiler';
 import { twMerge as merge } from 'tailwind-merge';
 
-import { walk } from 'svelte-tree-walker';
-
 /**
- * @typedef {import('svelte/types/compiler/interfaces').Attribute} Attribute
- * @typedef {import('svelte/types/compiler/interfaces').TemplateNode} TemplateNode
- * @typedef {import('svelte/types/compiler/interfaces').Text} Text
+ * @typedef {{ name: string; value: { type: string; data: string; start: number; end: number }[] }} SvelteAttribute
+ * @typedef {{ type: string; data: string; start: number; end: number }} SvelteTextNode
+ * @typedef {any} AstNode
+ * @typedef {import('magic-string').SourceMap} SourceMap // Keep this if needed elsewhere
  */
 
 const classes = ['max-w-full', 'rounded-md', 'shadow-md'];
@@ -28,7 +27,7 @@ export const processImages = () => {
       const { instance, html } = parse(content, { filename });
       const s = new MagicString(content);
 
-      /** @type {Map<{url: string, id: string}>} */
+      /** @type {Map<string, {url: string, id: string}>} */
       const images = new Map();
 
       // Walk the HTML AST and find all the image elements.
@@ -65,8 +64,9 @@ export const processImages = () => {
           if (node.type === 'Program') {
             const imports = Array.from(images.entries())
               .map(([url, { id }]) => {
-                if (!url.endsWith('gif')) url += '?w=700&format=avif&withoutEnlargement';
-                return `import ${id} from '${url}';`;
+                let importUrl = url;
+                if (!url.endsWith('gif')) importUrl += '?w=700&format=avif&withoutEnlargement';
+                return `import ${id} from '${importUrl}';`;
               })
               .join('\n');
 
@@ -87,22 +87,23 @@ export const processImages = () => {
 /**
  * Check if the URL is a video.
  * @param {string} url
+ * @returns {boolean}
  */
 const isVideo = (url) => url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.ogg');
 
 /**
  * Gets an attribute by name.
- * @param {TemplateNode} node
+ * @param {AstNode} node
  * @param {string} name
- * @returns {Attribute | undefined}
+ * @returns {SvelteAttribute | undefined}
  **/
 const getAttribute = (node, name) =>
-  node.attributes.find((/** @type {Attribute} */ attr) => attr.name === name);
+  node.attributes.find((/** @type {SvelteAttribute} */ attr) => attr.name === name);
 
 /**
  * Gets the value of an attribute.
- * @param {Attribute} attr
- * @returns {Text | undefined}
+ * @param {SvelteAttribute} attr
+ * @returns {SvelteTextNode | undefined}
  */
 const getAttributeValue = (attr) => {
   if (attr.value.length === 0) return;
@@ -114,9 +115,9 @@ const getAttributeValue = (attr) => {
  * Adds the imported image refernce to as the image `src`.
  * Adds the Tailwind classes to the element.
  * @param {MagicString} s
- * @param {TemplateNode} node
+ * @param {AstNode} node
  * @param {string} id
- * @param {Text} src
+ * @param {SvelteTextNode} src
  * @returns {void}
  */
 const formatImage = (s, node, id, src) => {
@@ -138,12 +139,12 @@ const formatImage = (s, node, id, src) => {
  * Adds the imported video refernce to as the video `src`.
  * Adds the Tailwind classes to the element.
  * @param {MagicString} s
- * @param {TemplateNode} node
+ * @param {AstNode} node
  * @param {string} id
  * @returns {void}
  */
 const formatVideo = (s, node, id) => {
-  return s.update(
+  s.update(
     node.start,
     node.end,
     `<video src={${id}} class="${classes.join(' ')}" controls><track kind="captions"></video>`,
