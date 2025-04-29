@@ -1,8 +1,6 @@
 import { dev } from '$app/environment';
 import { z } from 'zod';
 
-export type Post = z.infer<typeof PostSchema>;
-
 const PostMetadataSchema = z.object({
   title: z.string(),
   description: z.string(),
@@ -12,7 +10,12 @@ const PostMetadataSchema = z.object({
   published: z.boolean(),
 });
 
-const PostSchema = PostMetadataSchema.extend({
+const PostSchema = z.object({
+  content: z.any(),
+  metadata: PostMetadataSchema,
+});
+
+const PostWithSlugSchema = PostMetadataSchema.extend({
   slug: z.string(),
 });
 
@@ -23,28 +26,23 @@ const IndividualPostSchema = z.object({
 });
 
 export const getPosts = async () => {
-  let posts: Post[] = [];
-
   const paths = import.meta.glob('/content/writing/*.md');
 
-  for (const path in paths) {
-    const file = await paths[path]();
-    const slug = path.split('/').at(-1)?.replace('.md', '');
+  const posts = await Promise.all(
+    Object.entries(paths).map(async ([path, importFile]) => {
+      const file = await importFile();
+      const slug = path.split('/').at(-1)?.replace('.md', '');
+      const { metadata } = PostSchema.parse(file);
 
-    if (file && typeof file === 'object' && 'metadata' in file && slug) {
-      const metadata = file.metadata as Omit<Post, 'slug'>;
-      const post = PostSchema.parse({ ...metadata, slug });
-      if (dev || post.published) {
-        posts.push(post);
+      if (dev || metadata.published) {
+        return PostWithSlugSchema.parse({ ...metadata, slug });
       }
-    }
-  }
-
-  posts = posts.sort(
-    (first, second) => new Date(second.date).getTime() - new Date(first.date).getTime(),
+    }),
   );
 
-  return posts;
+  return posts
+    .filter((post) => post !== undefined)
+    .sort((first, second) => new Date(second.date).getTime() - new Date(first.date).getTime());
 };
 
 export const getPost = async (slug: string) => {
