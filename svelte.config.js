@@ -19,10 +19,6 @@ import { processImages } from './plugins/svelte-enhance-images.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-if (process.env.VERCEL) {
-  console.log('Vercel Production URL', process.env.VERCEL_PROJECT_PRODUCTION_URL);
-}
-
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
   extensions: ['.md'],
@@ -35,7 +31,7 @@ const mdsvexOptions = {
   },
   highlight: {
     highlighter: async (code, lang = 'text') => {
-      if (!bundledLanguages[lang]) return code;
+      if (!lang || !(lang in bundledLanguages)) return code;
       const html = escapeSvelte(await codeToHtml(code, { lang, theme: 'night-owl' }));
       return `{@html \`${html}\` }`;
     },
