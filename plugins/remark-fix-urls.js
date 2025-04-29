@@ -45,7 +45,7 @@ const getBaseUrl = (/** @type {{ filename: string; cwd: string }} */ fileData, c
 
 /**
  * A remark plugin that processes internal Markdown links to generate correct routing URLs.
- * It transforms .md extensions and handles path resolution while preserving external links.
+ * It transforms `.md` extensions and handles path resolution while preserving external links.
  *
  * @param {string} contentPath - The root directory containing content files (defaults to 'content')
  * @returns import('unified').Plugin} A unified plugin function
