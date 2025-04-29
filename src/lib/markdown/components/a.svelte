@@ -4,7 +4,7 @@
   interface Props {
     href: string;
     children?: import('svelte').Snippet;
-    [key: string]: any;
+    [key: string]: unknown;
   }
 
   const { href, children, ...rest }: Props = $props();
