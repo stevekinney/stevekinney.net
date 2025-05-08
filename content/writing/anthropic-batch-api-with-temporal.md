@@ -34,7 +34,7 @@ The main incentive for me is convenience, but using the Batch API has a lot of b
 - **It's (potentially) simpler**: Instead of managing complex queuing systems or worrying about rate limits, you can use the Batches API to submit large groups of queries and let Anthropic handle the processing. As noted by Andy Edmonds from Quora: "It's very convenient to submit a batch and download the results within 24 hours, instead of having to deal with the complexity of running many parallel live queries to get the same result."
 - **It scales**: The Batch API makes it easier to handle large-scale tasks such as dataset analysis, classification of large datasets, or extensive model evaluations without infrastructure concerns. This unlocks new possibilities for processing corporate document repositories, user feedback analysis, or other large-scale data processing tasks that were previously less practical or cost-prohibitive.
 
-> ![TIP] Break Up
+> [!TIP] Break It Up
 > Consider breaking very large datasets into multiple batches for better manageability. While the API supports up to 100,000 requests per batch, smaller batches may be easier to monitor and manage.
 
 ### Potential Cost-Savings
