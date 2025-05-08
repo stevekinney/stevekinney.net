@@ -41,11 +41,11 @@ The main incentive for me is convenience, but using the **Message Batches API** 
 
 Let's consider a scenario with 10,000 documents that need summaries using Claude 3.5 Sonnet:
 
-| Approach                                             | Input Cost                                           | Output Cost                                                 | Total Cost | Savings    |
-| ---------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------- | ---------- | ---------- |
-| **Individual Requests**                              | 10,000 docs × 5,000 tokens/doc × $10/M tokens = $500 | 10,000 summaries × 500 tokens/summary × $30/M tokens = $150 | $650       | -          |
-| \***\*Message Batches API\*\***                      | 10,000 docs × 5,000 tokens/doc × $5/M tokens = $250  | 10,000 summaries × 500 tokens/summary × $15/M tokens = $75  | $325       | $325 (50%) |
-| \***\*Message Batches API** with Optimal Caching\*\* | 10,000 docs × 5,000 tokens/doc × $0.5/M tokens = $25 | 10,000 summaries × 500 tokens/summary × $15/M tokens = $75  | $100       | $550 (85%) |
+| Approach                                     | Input Cost                                           | Output Cost                                                 | Total Cost | Savings    |
+| -------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------- | ---------- | ---------- |
+| **Individual Requests**                      | 10,000 docs × 5,000 tokens/doc × $10/M tokens = $500 | 10,000 summaries × 500 tokens/summary × $30/M tokens = $150 | $650       | -          |
+| **Message Batches API**                      | 10,000 docs × 5,000 tokens/doc × $5/M tokens = $250  | 10,000 summaries × 500 tokens/summary × $15/M tokens = $75  | $325       | $325 (50%) |
+| **Message Batches API with Optimal Caching** | 10,000 docs × 5,000 tokens/doc × $0.5/M tokens = $25 | 10,000 summaries × 500 tokens/summary × $15/M tokens = $75  | $100       | $550 (85%) |
 
 We'll discuss prompt caching in the future. The main takeaway here is that leveraging some of the lesser known features can result in meaningful cost savings.
 
