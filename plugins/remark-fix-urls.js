@@ -2,12 +2,19 @@ import { dirname } from 'path';
 import { visit } from 'unist-util-visit';
 import { z } from 'zod';
 
-// Constants
-const EXTERNAL_URL_PATTERN = /^(https?:\/\/|\/\/)/;
-const MARKDOWN_EXTENSION = '.md';
+/**
+ * Constants for URL processing
+ */
+const URL_PATTERNS = {
+  EXTERNAL: /^(https?:\/\/|\/\/)/,
+  MARKDOWN_EXTENSION: '.md',
+};
+
 const DEFAULT_CONTENT_PATH = 'content';
 
-// Zod schema for file validation
+/**
+ * Zod schema for validating file metadata
+ */
 const FileSchema = z.object({
   filename: z.string(),
   cwd: z.string(),
@@ -15,43 +22,43 @@ const FileSchema = z.object({
 
 /**
  * Determines if a URL points to an external resource
- * @param {string} url - The URL to check
- * @returns {boolean} indicating if the URL is external
+ * @param {string} url - URL to check
+ * @returns {boolean} True if the URL is external
  */
-const isExternalUrl = (url) => {
-  return EXTERNAL_URL_PATTERN.test(url);
-};
+const isExternalUrl = (url) => URL_PATTERNS.EXTERNAL.test(url);
 
 /**
- * Transforms an internal Markdown URL to its corresponding route path
- * @param {string} url - The original URL from the Markdown file
- * @param {string} baseUrl - The base URL path for the current file
- * @returns {string} The transformed URL
+ * Transforms a markdown link to its corresponding route path
+ * @param {string} url - Original URL from markdown
+ * @param {string} baseUrl - Base URL path
+ * @returns {string} Transformed URL
  */
-const transformInternalUrl = (url, baseUrl) => {
-  return `${baseUrl}/${url.replace(MARKDOWN_EXTENSION, '')}`;
-};
+const transformInternalUrl = (url, baseUrl) =>
+  `${baseUrl}/${url.replace(URL_PATTERNS.MARKDOWN_EXTENSION, '')}`;
 
 /**
- * Calculates the base URL for a file based on its location in the content directory
- * @param {Object} fileData - Object containing file information
- * @param {string} contentPath - The root content directory path
- * @returns {string} The calculated base URL
+ * Calculates the base URL for a file relative to the content directory
+ * @param {object} fileData - Object containing file information
+ * @param {string} fileData.filename - Full path to the file
+ * @param {string} fileData.cwd - Current working directory
+ * @param {string} contentPath - Root content directory path
+ * @returns {string} Calculated base URL
  */
-const getBaseUrl = (/** @type {{ filename: string; cwd: string }} */ fileData, contentPath) => {
+const getBaseUrl = (fileData, contentPath) => {
   const { filename, cwd } = fileData;
   return '/' + dirname(filename.replace(`${cwd}/`, '')).replace(`${contentPath}/`, '');
 };
 
 /**
- * A remark plugin that processes internal Markdown links to generate correct routing URLs.
- * It transforms `.md` extensions and handles path resolution while preserving external links.
+ * A remark plugin that processes internal markdown links to generate correct routing URLs.
+ * Transforms `.md` extensions and handles path resolution while preserving external links.
  *
- * @param {string} contentPath - The root directory containing content files (defaults to 'content')
- * @returns import('unified').Plugin} A unified plugin function
+ * @param {string} contentPath - Root directory containing content files (defaults to 'content')
+ * @returns {import('unified').Plugin} A unified plugin function
  */
-export const fixMarkdownUrls = (contentPath = DEFAULT_CONTENT_PATH) => {
-  return (
+export const fixMarkdownUrls =
+  (contentPath = DEFAULT_CONTENT_PATH) =>
+  (
     /** @type {import('mdast').Root} */ tree,
     /** @type {{ filename: string; cwd: string }} */ file,
   ) => {
@@ -61,11 +68,12 @@ export const fixMarkdownUrls = (contentPath = DEFAULT_CONTENT_PATH) => {
     visit(tree, 'link', (node) => {
       const { url } = node;
 
-      if (isExternalUrl(url) || !url.includes(MARKDOWN_EXTENSION)) {
+      // Skip processing if the URL is external or doesn't contain a markdown extension
+      if (isExternalUrl(url) || !url.includes(URL_PATTERNS.MARKDOWN_EXTENSION)) {
         return;
       }
 
+      // Transform the URL
       node.url = transformInternalUrl(url, baseUrl);
     });
   };
-};
