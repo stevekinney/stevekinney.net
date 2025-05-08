@@ -6,7 +6,9 @@ modified: 2025-05-08T14:08:02-06:00
 date: 2025-05-08T14:05:36-06:00
 ---
 
-When I'm doing research, I typically write down any questions that I have and then later—I run a little script to do some quick research on the topics and questions that I jotted down earlier. Initially, I was just using a gross little script to loop over all of the questions one-by-one, but occasionally a few of those requests would fail and I'd be too lazy to look and try to see which ones. I'd typically just run the entire script again and eat the cost. Eventually, I improved this process a bit by using [Anthropic](https://anthropic.com)'s [Message Batch API](https://www.anthropic.com/news/message-batches-api) and paired it with [Temporal](https://temporal.io) in order to make sure everything is running smoothly.
+When I'm doing research, I typically write down any questions that I have or terms that I wanted to learn more about. Later, I'd run a little script to do some quick research on the topics and questions that I jotted down earlier.
+
+Initially, I was just using a gross little script to loop over all of the questions one-by-one, but occasionally a few of those requests would fail and I'd be too lazy to look and try to see which ones. I'd typically just run the entire script again and eat the cost. Eventually, I improved this process a bit by using [Anthropic](https://anthropic.com)'s [Message Batch API](https://www.anthropic.com/news/message-batches-api) and paired it with [Temporal](https://temporal.io) in order to make sure everything is running smoothly.
 
 [Anthropic's Batch API](https://www.anthropic.com/news/message-batches-api) provides a dedicated pipeline for processing multiple Claude requests asynchronously at a significant discount, making it an essential tool for developers working with AI at scale. This guide will walk you through everything you need to know about implementing, optimizing, and leveraging the Batch API effectively.
 
@@ -321,8 +323,6 @@ process.on('beforeExit', (code) => {
 
 In the code above, we're doing the following:
 
-## Temporal Worker Code Explanation
-
 - Creates a CommonJS-style `require` function using `createRequire`
 - This enables using `require.resolve` within an ES module context
 - Resolves the absolute path to the workflow file, which Temporal needs
@@ -404,6 +404,7 @@ You're going to need to have a few things running to get all of this working:
 Again, I'm bias because I used to work on the UI, but for me, one of the really powerful bonuses is that I can see what's going on in the UI and how my workflows are progressing.
 
 ![The Workflow in the UI](assets/workflow-completed.png)
+
 ## In Conclusion
 
 Okay, so what did we learn today? Anthropic's Batch API represents a powerful tool in the AI developer's toolkit, offering substantial cost savings and simplified processing for large-scale Claude interactions. By combining Anthropic's Batch API with Temporal's durable workflow engine, you get the best of both worlds—cost-effective AI processing and bulletproof orchestration that can withstand failures, crashes, and interruptions. This integration eliminates the headaches of manually tracking batch IDs, building polling logic, and managing retries, allowing you to focus on your core application logic instead of infrastructure concerns. Whether you're processing thousands of documents, analyzing customer feedback, or running large-scale model evaluations, this approach provides a production-ready foundation that scales with your needs while potentially reducing costs by up to 85%. As AI processing becomes increasingly central to modern applications, mastering tools like the Batch API and Temporal is a super useful combination.
