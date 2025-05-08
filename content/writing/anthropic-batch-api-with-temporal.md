@@ -1,7 +1,7 @@
 ---
 published: true
-title: "Using Anthropic's **Message Batches API** with Temporal"
-description: "Build scalable, cost-efficient AI processing with Anthropic's **Message Batches API** and Temporal workflows."
+title: "Using Anthropic's Message Batches API with Temporal"
+description: "Build scalable, cost-efficient AI processing with Anthropic's Message Batches API and Temporal workflows."
 modified: 2025-05-08T14:08:02-06:00
 date: 2025-05-08T14:05:36-06:00
 ---
