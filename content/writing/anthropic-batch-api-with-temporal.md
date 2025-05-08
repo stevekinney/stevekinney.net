@@ -118,7 +118,7 @@ This code can be improved by allowing you to adjust parameters of `BatchCreatePa
 
 ### Monitoring Batch Processing Status
 
-Next, we want to be able to keep checking to see if our results are ready. The approach has a few flaws that we'll address in a bit, but let's start with the simplest possible approach: We're write a function called `checkBatchStatus` that will check in with Anthropic to see if our batch is ready for us as well as a fuynction called `pollUntilComplete`, which will run `checkBatchStatus` at regular intervals until we hear back that the batch is ready. I'm also adding the following helper funcitons to `src/activities.ts`.
+Next, we want to be able to keep checking to see if our results are ready. The approach has a few flaws that we'll address in a bit, but let's start with the simplest possible approach: We'll write a function called `checkBatchStatus` that will check in with Anthropic to see if our batch is ready for us as well as a function called `pollUntilComplete`, which will run `checkBatchStatus` at regular intervals until we hear back that the batch is ready. I'm also adding the following helper functions to `src/activities.ts`.
 
 ```typescript
 async function checkBatchStatus(id: string) {
@@ -217,11 +217,11 @@ Here is an incomplete list of things that I don't want to have to deal with:
 
 - Keeping track of all of my batch IDs
 - Worrying about what's going to happen with `pollUntilComplete` in the event I close the lid on my MacBook or choose to throw it into the ocean or something.
-- Building out some infrasturcture to orchestrate multiple batch requests.
+- Building out some infrastructure to orchestrate multiple batch requests.
 
 Luckily, [Temporal](https://temporal.io) is a shockingly good fit for this kind of workflow. You'll need to [install Temporal](https://temporal.io/setup/install-temporal-cli) in order to get a server up and running, but that's pretty easy to do using **Temporal CLI**.
 
-Temporal is a orchestration platform that makes building reliable distributed applications super simple. A workflow in Temporal is a durable, fault-tolerant program where you define your business logic. Temporal keeps track of your workflow and maintains its state even through failures, while activities are individual tasks or operations that workflows execute, such as API calls or database operations. Aside from the fact that I used to work there, I like Temporal because it eliminates the need to write complex retry logic, timeouts, and state persistence code; if a server crashes mid-execution, Temporal automatically resumes workflows from where they left off, allowing me (and you, potentially) to write code as if failures don't exist, which is the kind of world that I want to live in personally. It has a pretty dope UI, if you ask me.
+Temporal is an orchestration platform that makes building reliable distributed applications super simple. A workflow in Temporal is a durable, fault-tolerant program where you define your business logic. Temporal keeps track of your workflow and maintains its state even through failures, while activities are individual tasks or operations that workflows execute, such as API calls or database operations. Aside from the fact that I used to work there, I like Temporal because it eliminates the need to write complex retry logic, timeouts, and state persistence code; if a server crashes mid-execution, Temporal automatically resumes workflows from where they left off, allowing me (and you, potentially) to write code as if failures don't exist, which is the kind of world that I want to live in personally. It has a pretty dope UI, if you ask me.
 
 Temporal brings a bunch of useful features to the table:
 
@@ -252,7 +252,7 @@ npm install @temporalio/client @temporalio/worker @temporalio/workflow @temporal
 
 ### Setting Up the Workflow
 
-In Temporal, you'll typically write a workflow that is comprised up of activities. Which is why I had the forsight to put all of those functions in `src/activities.ts` earlier. A simple version of our workflow, might look something like this:
+In Temporal, you'll typically write a workflow that is comprised up of activities. Which is why I had the foresight to put all of those functions in `src/activities.ts` earlier. A simple version of our workflow, might look something like this:
 
 ```ts
 import { proxyActivities, sleep } from '@temporalio/workflow';
@@ -402,11 +402,11 @@ You're going to need to have a few things running to get all of this working:
 
 - An instance of the Temporal Server (e.g. `temporal server start-dev` from the command line).
 - A worker running. `npx tsx src/worker.ts`.
-- Kick off the workflow: `npx tsx/temporal.ts.
+- Kick off the workflow: `npx tsx src/temporal.ts.
 
 ### Seeing it in Action
 
-Again, I'm bias because I used to work on the UI, but for me, one of the really powerful bonuses is that I can see what's going on in the UI and how my workflows are progressing.
+Again, I'm biased because I used to work on the UI, but for me, one of the really powerful bonuses is that I can see what's going on in the UI and how my workflows are progressing.
 
 ![The Workflow in the UI](assets/workflow-completed.png)
 
