@@ -193,10 +193,13 @@ async function getBatchResults(id: string) {
 
 ### Bringing It All Together
 
-Now that we have our functions set up, we can run the entire flow.
+Now that we have our functions set up, we can run the entire flow. This basic flow can be found in `src/index.ts`.
 
 ```ts
-const batchId = await createBatch();
+import messages from '../messages.json';
+import { createBatch, getBatchResults, pollUntilComplete } from './activities';
+
+const batchId = await createBatch(messages);
 await pollUntilComplete(batchId);
 const results = await getBatchResults(batchId);
 
