@@ -53,13 +53,13 @@ We'll discuss prompt caching in the future. The main takeaway here is that lever
 
 Off the top of my head, here are some practical uses cases where the Message Batch API _might_ be a good fit:
 
-- Large-scale evaluations: Process thousands of test cases efficiently
-- Content moderation: Analyze large volumes of user-generated content asynchronously
-- Customer feedback analysis: Process and categorize feedback data
-- Language translation: Batch translate documents or content
-- Data enrichment: Add AI-generated metadata to large datasets
-- Report generation: Create summaries from structured data
-- Knowledge extraction: Pull insights from document repositories
+- **Large-scale evaluations**: Process thousands of test cases efficiently
+- **Content moderation**: Analyze large volumes of user-generated content asynchronously
+- **Customer feedback analysis**: Process and categorize feedback data
+- **Language translation**: Batch translate documents or content
+- **Data enrichment**: Add AI-generated metadata to large datasets
+- **Report generation**: Create summaries from structured data
+- **Knowledge extraction**: Pull insights from collections of documents
 
 But generally speaking, any task that doesn't require immediate responses is a candidate for the Batch API.
 
@@ -414,7 +414,7 @@ Okay, so what did we learn today? Anthropic's Batch API represents a powerful to
 
 ### Next Steps and Potential Improvements
 
-There is probably more that I can, should, and probably will add to this example, but let's save all of this for another day.
+There is clearly more that I can, should, and probably _will_ add to this example, but let's save all of this for another day.
 
 1. **Implement Prompt Caching**: Build out the prompt caching mechanism mentioned in the cost analysis to achieve that impressive 85% cost reduction. This could involve deduplicating similar requests and storing previously processed prompts.
 2. **Add Comprehensive Error Handling**: Enhance the error handling to address all potential result types (including `canceled` and `expired`) and implement more sophisticated retry strategies for different types of failures.
