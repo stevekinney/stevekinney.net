@@ -51,15 +51,15 @@
     description: string,
     config: Record<string, unknown> = {},
   ): string => {
-    const params = { 
-      title, 
+    const params = {
+      title,
       description,
       ...(accentColor ? { accentColor } : {}),
       ...(secondaryAccentColor ? { secondaryAccentColor } : {}),
       ...(textColor ? { textColor } : {}),
       ...(backgroundColor ? { backgroundColor } : {}),
       ...(hideFooter !== undefined ? { hideFooter: String(hideFooter) } : {}),
-      ...config
+      ...config,
     };
     const query = encodeParameters(params);
     return `${baseUrl}/open-graph?${query}`;
