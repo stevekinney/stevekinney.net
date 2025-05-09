@@ -16,12 +16,27 @@ const FONT_PATHS = {
 };
 
 /**
+ * Parse boolean parameters from URL query string
+ */
+const parseBoolean = (value: string | null): boolean | undefined => {
+  if (value === null) return undefined;
+  return value.toLowerCase() === 'true';
+};
+
+/**
  * Handler for generating Open Graph images
  */
 export const GET = async ({ url, fetch }) => {
   // Extract parameters
   const title = url.searchParams.get('title') || metadata.title;
   const description = url.searchParams.get('description');
+  const backgroundColor = url.searchParams.get('backgroundColor') ?? undefined;
+  const textColor = url.searchParams.get('textColor') ?? undefined;
+  const accentColor = url.searchParams.get('accentColor') ?? undefined;
+  const secondaryAccentColor = url.searchParams.get('secondaryAccentColor') ?? undefined;
+  const hideFooter = parseBoolean(url.searchParams.get('hideFooter'));
+  const handle = url.searchParams.get('handle') ?? undefined;
+  const siteUrl = url.searchParams.get('url') ?? undefined;
 
   // Load fonts in parallel
   const [firaSansBold, firaSansThin, leagueGothic] = await Promise.all([
@@ -30,14 +45,18 @@ export const GET = async ({ url, fetch }) => {
     fetch(FONT_PATHS.leagueGothic).then((res) => res.arrayBuffer()),
   ]);
 
-  // Extract main title
-  const [mainTitle] = title.split(' | ').map((line) => line.trim());
-
   // Generate SVG with satori
   const svg = await satori(
     OpenGraphImage({
-      title: mainTitle,
-      description: description || '',
+      title,
+      description,
+      backgroundColor,
+      textColor,
+      accentColor,
+      secondaryAccentColor,
+      hideFooter,
+      handle,
+      url: siteUrl,
     }),
     {
       width: IMAGE_WIDTH,
