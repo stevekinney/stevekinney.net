@@ -4,5 +4,5 @@
 }
 
 [data-post-link]:hover [data-post-link-title] {
-  @apply text-primary-700 decoration-primary-500 underline dark:text-primary-300 dark:decoration-primary-400;
+  @apply text-primary-700 underline decoration-primary-500 dark:text-primary-300 dark:decoration-primary-400;
 }
