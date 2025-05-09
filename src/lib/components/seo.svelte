@@ -1,72 +1,95 @@
 <script lang="ts">
   import { page } from '$app/state';
+  import { encodeParameters } from '$lib/encode-parameters';
   import { formatPageTitle } from '$lib/format-page-title';
+  import { author, title as siteTitle } from '$lib/metadata';
+  import type { Snippet } from 'svelte';
   import baseUrl from 'virtual:base-url';
 
-  interface SEOProps {
+  type SEOProps = {
     title: string;
     description: string;
     published?: boolean;
     date?: Date | string;
     modified?: Date | string;
-    children?: import('svelte').Snippet;
-  }
+    children?: Snippet;
+    imageParams?: Record<string, string>;
+    type?: 'website' | 'article';
+    twitterCard?: 'summary' | 'summary_large_image';
+    twitterCreator?: string;
+  };
 
   const {
     title,
     description,
     published = true,
-    date = undefined,
-    modified = undefined,
+    date,
+    modified,
     children,
+    imageParams,
+    type = 'website',
+    twitterCard = 'summary_large_image',
+    twitterCreator = '@stevekinney',
   }: SEOProps = $props();
 
-  const createImageUrl = (title: string, description: string) => {
-    const params = new URLSearchParams({
-      title,
-      description,
-    });
-    return `${baseUrl}/open-graph?${params.toString()}`;
+  const formattedTitle = formatPageTitle(title);
+  const currentUrl = page.url.href;
+
+  // Create image URL with all provided parameters
+  const createImageUrl = (
+    title: string,
+    description: string,
+    additionalParams?: Record<string, string>,
+  ): string => {
+    const params = { title, description, ...additionalParams };
+    const query = encodeParameters(params);
+    return `${baseUrl}/open-graph?${query}`;
   };
 
-  const image = createImageUrl(title, description);
+  const image = createImageUrl(title, description, imageParams);
+
+  const dateIso = date ? new Date(date).toISOString() : undefined;
+  const modifiedIso = modified ? new Date(modified).toISOString() : undefined;
 </script>
 
 <svelte:head>
-  <title>{formatPageTitle(title)}</title>
-  <link rel="canonical" href={page.url.href} />
+  <title>{formattedTitle}</title>
+  <link rel="canonical" href={currentUrl} />
 
   <meta name="description" content={description} />
+  <meta name="author" content={author} />
 
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content={page.url.href} />
-  <meta property="og:title" content={formatPageTitle(title)} />
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={currentUrl} />
+  <meta property="og:title" content={formattedTitle} />
   <meta property="og:description" content={description} />
-
-  <meta property="og:site_name" content="Steve Kinney" />
+  <meta property="og:site_name" content={siteTitle} />
   <meta property="og:locale" content="en_US" />
-
   <meta property="og:image" content={image} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content={page.url.href} />
-  <meta name="twitter:title" content={formatPageTitle(title)} />
+  <!-- Twitter -->
+  <meta name="twitter:card" content={twitterCard} />
+  <meta name="twitter:url" content={currentUrl} />
+  <meta name="twitter:title" content={formattedTitle} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:creator" content="@stevekinney" />
+  <meta name="twitter:creator" content={twitterCreator} />
   <meta name="twitter:image" content={image} />
 
-  {#if published && date}
-    <meta name="date" content={new Date(date).toISOString()} />
-    <meta property="article:published_time" content={new Date(date).toISOString()} />
+  <!-- Publication dates for SEO and social sharing -->
+  {#if published && dateIso}
+    <meta name="date" content={dateIso} />
+    <meta property="article:published_time" content={dateIso} />
   {/if}
 
-  {#if published && modified}
-    <meta name="last-modified" content={new Date(modified).toISOString()} />
-    <meta property="article:modified_time" content={new Date(modified).toISOString()} />
+  {#if published && modifiedIso}
+    <meta name="last-modified" content={modifiedIso} />
+    <meta property="article:modified_time" content={modifiedIso} />
   {/if}
 
+  <!-- Additional tags from parent component -->
   {#if children}
     {@render children()}
   {/if}
