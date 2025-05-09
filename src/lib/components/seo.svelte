@@ -17,6 +17,11 @@
     type?: 'website' | 'article';
     twitterCard?: 'summary' | 'summary_large_image';
     twitterCreator?: string;
+    accentColor?: string;
+    secondaryAccentColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+    hideFooter?: boolean;
   };
 
   const {
@@ -30,6 +35,11 @@
     type = 'website',
     twitterCard = 'summary_large_image',
     twitterCreator = '@stevekinney',
+    accentColor,
+    secondaryAccentColor,
+    textColor,
+    backgroundColor,
+    hideFooter,
   }: SEOProps = $props();
 
   const formattedTitle = formatPageTitle(title);
@@ -39,9 +49,18 @@
   const createImageUrl = (
     title: string,
     description: string,
-    additionalParams?: Record<string, string>,
+    config: Record<string, unknown> = {},
   ): string => {
-    const params = { title, description, ...additionalParams };
+    const params = { 
+      title, 
+      description,
+      ...(accentColor ? { accentColor } : {}),
+      ...(secondaryAccentColor ? { secondaryAccentColor } : {}),
+      ...(textColor ? { textColor } : {}),
+      ...(backgroundColor ? { backgroundColor } : {}),
+      ...(hideFooter !== undefined ? { hideFooter: String(hideFooter) } : {}),
+      ...config
+    };
     const query = encodeParameters(params);
     return `${baseUrl}/open-graph?${query}`;
   };
