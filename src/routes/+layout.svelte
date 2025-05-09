@@ -1,15 +1,14 @@
 <script lang="ts">
-  import { Github, Instagram, Linkedin, Twitter, Youtube } from 'lucide-svelte';
-  import { author, description, title } from '$lib/metadata';
   import { page } from '$app/stores';
+  import { author, description, title } from '$lib/metadata';
   import { toDataAttributes } from '$lib/to-data-attributes';
+  import { Github, Instagram, Linkedin, Twitter, Youtube } from 'lucide-svelte';
+  import type { Snippet } from 'svelte';
 
+  import type { ExtendElement } from '$lib/components/component.types';
   import Navigation from '$lib/components/navigation.svelte';
   import SEO from '$lib/components/seo.svelte';
   import SocialLink from '$lib/components/social-link.svelte';
-  import type { ExtendElement } from '$lib/components/component.types';
-  import type { Snippet } from 'svelte';
-
   // Import styles
   import '../app.css';
 
