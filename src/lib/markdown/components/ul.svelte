@@ -1,9 +1,16 @@
 <script lang="ts">
-  interface Props {
-    children?: import('svelte').Snippet;
-  }
+  import type { Snippet } from 'svelte';
+  import { merge } from '$merge';
 
-  const { children }: Props = $props();
+  type Props = {
+    children?: Snippet;
+    class?: string;
+    [key: string]: unknown;
+  };
+
+  const { children, class: className = '', ...rest }: Props = $props();
 </script>
 
-<ul class="mb-8 space-y-1">{@render children?.()}</ul>
+<ul class={merge('mb-8 space-y-1', className)} data-markdown-list {...rest}>
+  {@render children?.()}
+</ul>

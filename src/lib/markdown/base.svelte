@@ -1,16 +1,16 @@
-<script>
+<script lang="ts">
   import { toDataAttributes } from '$lib/to-data-attributes';
+  import type { Snippet } from 'svelte';
+  import './markdown.css';
 
-  /** @type {string | undefined | null} */
-  /**
-   * @typedef {Object} Props
-   * @property {string} [as]
-   * @property {string} [class]
-   * @property {import('svelte').Snippet} [children]
-   */
+  type Props = {
+    as?: string;
+    class?: string;
+    children?: Snippet;
+    [key: string]: unknown;
+  };
 
-  /** @type {Props & { [key: string]: any }} */
-  const { as = 'section', class: className = '', children, ...rest } = $props();
+  const { as = 'section', class: className = '', children, ...rest }: Props = $props();
 </script>
 
 <svelte:element this={as} class={className} {...toDataAttributes(rest)}>
