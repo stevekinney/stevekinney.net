@@ -1,1 +1,6 @@
-export { twMerge as merge } from 'tailwind-merge';
+import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export const merge = (...inputs: string[]) => {
+  return twMerge(clsx(...inputs));
+};
