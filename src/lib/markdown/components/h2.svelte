@@ -1,9 +1,15 @@
 <script lang="ts">
-  interface Props {
-    children?: import('svelte').Snippet;
-  }
+  import type { Snippet } from 'svelte';
 
-  const { children }: Props = $props();
+  type Props = {
+    children?: Snippet;
+    class?: string;
+    [key: string]: unknown;
+  };
+
+  const { children, class: className = '', ...rest }: Props = $props();
 </script>
 
-<h2 class="mb-2 text-lg font-bold">{@render children?.()}</h2>
+<h2 class={className} data-markdown-heading {...rest}>
+  {@render children?.()}
+</h2>

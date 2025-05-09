@@ -1,0 +1,35 @@
+/* Markdown link styles */
+[data-markdown-link] {
+  @apply font-normal underline-offset-4 hover:text-black hover:underline dark:hover:bg-primary-900;
+}
+
+/* Table of contents styles */
+[data-markdown-contents] {
+  @apply my-6 rounded-md bg-gray-50 p-4 dark:bg-gray-800;
+}
+
+[data-markdown-contents] h2 {
+  @apply mb-2 font-bold;
+}
+
+[data-markdown-contents] ul {
+  @apply pl-4;
+}
+
+[data-markdown-contents] li {
+  @apply py-1;
+}
+
+[data-markdown-contents] a {
+  @apply font-normal text-primary-700 hover:text-primary-900 hover:underline dark:text-primary-300 dark:hover:text-primary-100;
+}
+
+/* Heading styles */
+[data-markdown-heading] {
+  @apply mb-2 text-lg font-bold;
+}
+
+/* List styles */
+[data-markdown-list] {
+  @apply mb-8 space-y-1;
+}

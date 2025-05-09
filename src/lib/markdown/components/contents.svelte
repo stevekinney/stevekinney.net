@@ -1,4 +1,4 @@
-<script module>
+<script module lang="ts">
   import A from './a.svelte';
   import H2 from './h2.svelte';
   import UL from './ul.svelte';
@@ -6,22 +6,27 @@
   export { A as a, H2 as h2, UL as ul };
 </script>
 
-<script>
+<script lang="ts">
   import { toDataAttributes } from '$lib/to-data-attributes';
   import { merge } from '$merge';
+  import type { Snippet } from 'svelte';
+  import type { ExtendElement } from '$lib/components/component.types';
 
-  /** @type {string | undefined | null} */
-  /**
-   * @typedef {Object} Props
-   * @property {string} [as]
-   * @property {string} [class]
-   * @property {import('svelte').Snippet} [children]
-   */
+  type Props = {
+    as?: string;
+    class?: string;
+    children?: Snippet;
+    [key: string]: unknown;
+  };
 
-  /** @type {Props & { [key: string]: any }} */
-  const { as = 'nav', class: className = '', children, ...rest } = $props();
+  const { as = 'nav', class: className = '', children, ...rest }: Props = $props();
 </script>
 
-<svelte:element this={as} class={merge(className)} {...toDataAttributes(rest)}>
+<svelte:element
+  this={as}
+  class={merge(className)}
+  {...toDataAttributes(rest)}
+  data-markdown-contents
+>
   {@render children?.()}
 </svelte:element>

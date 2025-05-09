@@ -33,7 +33,7 @@
 
   // Calculate icon based on variant
   const Icon = $derived(getIcon(variant));
-  
+
   // State for foldable callouts
   let open = $state(!foldable);
 
@@ -41,7 +41,7 @@
   const containerClass = merge(
     'space-y-2 rounded-md border p-4 shadow-sm',
     getVariationColor(variant),
-    className
+    className,
   );
 
   // Calculate header classes
