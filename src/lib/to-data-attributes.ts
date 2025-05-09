@@ -13,16 +13,6 @@ const configuration = {
 type PreservedKey = (typeof configuration.keysToPreserve)[number];
 type OmitKey = (typeof configuration.keysToOmit)[number];
 
-// Type for input values that can be converted to data attributes
-export type DataAttributeValue = string | number | boolean | Record<string, unknown>;
-
-// Type for the result of the toDataAttributes function
-export type DataAttributesResult = {
-  [key: `data-${string}`]: string;
-} & {
-  [K in PreservedKey]?: unknown;
-};
-
 /**
  * Converts object properties to HTML data attributes.
  *
@@ -40,9 +30,9 @@ export type DataAttributesResult = {
  * // Returns: { 'data-foo': 'bar', 'class': 'my-class' }
  */
 export const toDataAttributes = <T extends Record<string, unknown>>(
-  props: T
-): DataAttributesResult => {
-  const result = {} as DataAttributesResult;
+  props: T,
+): Record<string, unknown> => {
+  const result: Record<string, unknown> = {};
 
   Object.entries(props).forEach(([key, value]) => {
     // Skip keys that should be omitted
@@ -52,7 +42,7 @@ export const toDataAttributes = <T extends Record<string, unknown>>(
 
     // Preserve specific keys without adding the data- prefix
     if (configuration.keysToPreserve.includes(key as PreservedKey)) {
-      result[key as PreservedKey] = value;
+      result[key] = value;
       return;
     }
 

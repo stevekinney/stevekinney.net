@@ -1,9 +1,10 @@
 <script lang="ts">
   import Date from './date.svelte';
   import Link from './link.svelte';
+  import type { PostWithSlug } from '$lib/posts';
 
   interface Props {
-    post: Post;
+    post: PostWithSlug;
     href: string;
     as?: keyof HTMLElementTagNameMap;
   }
