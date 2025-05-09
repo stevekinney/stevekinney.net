@@ -29,30 +29,30 @@ const __dirname = dirname(__filename);
  */
 const mdsvexOptions = {
   extensions: ['.md'],
-  
+
   // Process markdown content
   remarkPlugins: [unwrapImages, fixMarkdownUrls, remarkGfm],
   rehypePlugins: [rehypeSlug, rehypeMermaid],
-  
+
   // Layout templates for markdown content
   layout: {
     _: join(__dirname, './src/lib/markdown/base.svelte'),
     page: join(__dirname, './src/lib/markdown/page.svelte'),
     contents: join(__dirname, './src/lib/markdown/components/contents.svelte'),
   },
-  
+
   // Syntax highlighting configuration
   highlight: {
     highlighter: async (code, lang = 'text') => {
       if (!lang || !(lang in bundledLanguages)) return code;
-      
+
       const html = escapeSvelte(
-        await codeToHtml(code, { 
-          lang, 
-          theme: 'night-owl' 
-        })
+        await codeToHtml(code, {
+          lang,
+          theme: 'night-owl',
+        }),
       );
-      
+
       return `{@html \`${html}\` }`;
     },
   },
@@ -65,21 +65,14 @@ const mdsvexOptions = {
 const config = {
   // File extensions to process
   extensions: ['.svelte', '.md'],
-  
+
   // Preprocessing steps for content
-  preprocess: [
-    vitePreprocess(), 
-    mdsvex(mdsvexOptions), 
-    processImages(), 
-    processCallouts()
-  ],
-  
+  preprocess: [vitePreprocess(), mdsvex(mdsvexOptions), processImages(), processCallouts()],
+
   kit: {
     // Choose adapter based on deployment target
-    adapter: process.env.VERCEL 
-      ? vercelAdapter() 
-      : staticAdapter({ strict: false }),
-    
+    adapter: process.env.VERCEL ? vercelAdapter() : staticAdapter({ strict: false }),
+
     // Path aliases for imports
     alias: {
       '@/*': 'src/*',
