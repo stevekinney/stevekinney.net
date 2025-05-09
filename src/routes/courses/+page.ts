@@ -1,25 +1,58 @@
-import { CourseMetadataSchema } from '$lib/schemas/courses';
+import { CourseMetadataSchema, type CourseMetadata } from '$lib/schemas/courses';
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = async () => {
-  const courses = import.meta.glob(`../../../content/courses/**/README.md`, {
-    eager: true,
-    import: 'metadata',
-  });
+const title = 'Courses';
+const description =
+  "A collection of courses that I've taught over the years, including full course walkthroughs and recordings from Frontend Masters.";
 
-  const walkthroughs = Object.entries(courses).map(([path, metadata]) => {
-    const slug = path.split('/').slice(-2, -1)[0];
-    const meta = CourseMetadataSchema.parse(metadata);
+/**
+ * Interface for course data with slug
+ */
+interface CourseWithSlug extends CourseMetadata {
+  slug: string;
+}
+
+/**
+ * Page metadata for courses page
+ */
+interface CoursesPageData {
+  title: string;
+  description: string;
+  walkthroughs: CourseWithSlug[];
+}
+
+/**
+ * Extracts the course slug from a file path
+ * @param path - Full path to the course README.md
+ * @returns The extracted course slug
+ */
+const extractSlugFromPath = (path: string): string => {
+  return path.split('/').slice(-2, -1)[0];
+};
+
+/**
+ * Loads courses from content directory and prepares data for the page
+ */
+export const load: PageLoad = async (): Promise<CoursesPageData> => {
+  // Get all course README.md files and their metadata
+  const courseFiles = import.meta.glob<{ metadata: unknown }>(
+    '../../../content/courses/**/README.md',
+    {
+      eager: true,
+      import: 'metadata',
+    },
+  );
+
+  // Process course files into structured data with slugs
+  const walkthroughs = Object.entries(courseFiles).map(([path, { metadata }]) => {
+    const slug = extractSlugFromPath(path);
+    const validatedMetadata = CourseMetadataSchema.parse(metadata);
 
     return {
-      ...meta,
+      ...validatedMetadata,
       slug,
     };
   });
-
-  const title = 'Courses';
-  const description =
-    "A collection of courses that I've taught over the years, including full course walkthroughs and recordings from Frontend Masters.";
 
   return {
     title,
