@@ -35,23 +35,25 @@ const extractSlugFromPath = (path: string): string => {
  */
 export const load: PageLoad = async (): Promise<CoursesPageData> => {
   // Get all course README.md files and their metadata
-  const courseFiles = import.meta.glob<{ metadata: unknown }>(
-    '../../../content/courses/**/README.md',
-    {
-      eager: true,
-      import: 'metadata',
-    },
-  );
+  const courseFiles = import.meta.glob<CourseMetadata>('../../../content/courses/**/README.md', {
+    eager: true,
+    import: 'metadata',
+  });
 
   // Process course files into structured data with slugs
-  const walkthroughs = Object.entries(courseFiles).map(([path, { metadata }]) => {
-    const slug = extractSlugFromPath(path);
-    const validatedMetadata = CourseMetadataSchema.parse(metadata);
+  const walkthroughs = Object.entries(courseFiles).map(([path, metadata]) => {
+    try {
+      const slug = extractSlugFromPath(path);
+      const validatedMetadata = CourseMetadataSchema.parse(metadata);
 
-    return {
-      ...validatedMetadata,
-      slug,
-    };
+      return {
+        ...validatedMetadata,
+        slug,
+      };
+    } catch (error) {
+      console.error(`Error processing course at ${path}.`, { error, metadata });
+      throw error;
+    }
   });
 
   return {
