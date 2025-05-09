@@ -30,6 +30,20 @@ describe('toDataAttributes', () => {
     });
   });
 
+  test('should convert object to data attributes with boolean values', () => {
+    const props = {
+      isActive: true,
+      isDisabled: false,
+    };
+
+    const result = toDataAttributes(props);
+
+    expect(result).toEqual({
+      'data-isActive': 'true',
+      'data-isDisabled': 'false',
+    });
+  });
+
   test('should omit null and undefined values', () => {
     const props = {
       foo: null,
@@ -63,5 +77,48 @@ describe('toDataAttributes', () => {
     const result = toDataAttributes(props);
 
     expect(result).toEqual({});
+  });
+
+  test('should handle empty objects', () => {
+    const props = {};
+    const result = toDataAttributes(props);
+    expect(result).toEqual({});
+  });
+
+  test('should handle mixed property types', () => {
+    const props = {
+      text: 'hello',
+      count: 42,
+      enabled: true,
+      class: 'my-class',
+      style: { margin: '10px' },
+      data: { ignored: true }
+    };
+
+    const result = toDataAttributes(props);
+
+    expect(result).toEqual({
+      'data-text': 'hello',
+      'data-count': '42',
+      'data-enabled': 'true',
+      'class': 'my-class',
+      'style': { margin: '10px' }
+    });
+  });
+
+  test('should handle keys with special characters or prefixes', () => {
+    const props = {
+      'data-test': 'shouldHaveDoublePrefix',
+      'special-key': 'value',
+      'camelCase': 'value'
+    };
+
+    const result = toDataAttributes(props);
+
+    expect(result).toEqual({
+      'data-data-test': 'shouldHaveDoublePrefix',
+      'data-special-key': 'value',
+      'data-camelCase': 'value'
+    });
   });
 });

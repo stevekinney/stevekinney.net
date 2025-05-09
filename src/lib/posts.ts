@@ -43,25 +43,25 @@ export const getPosts = async (): Promise<PostWithSlug[]> => {
     try {
       const file = await importFile();
       const slug = path.split('/').at(-1)?.replace('.md', '');
-      
+
       if (!slug) {
         console.error(`Could not extract slug from path: ${path}`);
         return undefined;
       }
-      
+
       const { metadata } = PostSchema.parse(file);
 
       if (dev || metadata.published) {
         return PostWithSlugSchema.parse({ ...metadata, slug });
       }
-      
+
       return undefined;
     } catch (error) {
       console.error(`Error processing post at ${path}:`, error);
       return undefined;
     }
   });
-  
+
   const posts = await Promise.all(postsPromises);
 
   return posts
@@ -75,7 +75,7 @@ export const getPosts = async (): Promise<PostWithSlug[]> => {
 export const getPost = async (slug: string): Promise<IndividualPost> => {
   try {
     const { default: content, metadata: meta } = await import(`../../content/writing/${slug}.md`);
-    
+
     return IndividualPostSchema.parse({
       content,
       meta,
