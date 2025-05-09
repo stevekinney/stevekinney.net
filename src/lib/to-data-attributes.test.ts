@@ -92,7 +92,7 @@ describe('toDataAttributes', () => {
       enabled: true,
       class: 'my-class',
       style: { margin: '10px' },
-      data: { ignored: true }
+      data: { ignored: true },
     };
 
     const result = toDataAttributes(props);
@@ -101,8 +101,8 @@ describe('toDataAttributes', () => {
       'data-text': 'hello',
       'data-count': '42',
       'data-enabled': 'true',
-      'class': 'my-class',
-      'style': { margin: '10px' }
+      class: 'my-class',
+      style: { margin: '10px' },
     });
   });
 
@@ -110,7 +110,7 @@ describe('toDataAttributes', () => {
     const props = {
       'data-test': 'shouldHaveDoublePrefix',
       'special-key': 'value',
-      'camelCase': 'value'
+      camelCase: 'value',
     };
 
     const result = toDataAttributes(props);
@@ -118,7 +118,7 @@ describe('toDataAttributes', () => {
     expect(result).toEqual({
       'data-data-test': 'shouldHaveDoublePrefix',
       'data-special-key': 'value',
-      'data-camelCase': 'value'
+      'data-camelCase': 'value',
     });
   });
 });

@@ -7,7 +7,7 @@
 
   type ValidElements = 'div' | 'section' | 'aside' | 'article' | 'li' | 'a';
 
-  type CardProps = BaseAttributes &
+  export type CardBaseProps = BaseAttributes &
     CardVariants & {
       title?: string;
       description?: string;
@@ -26,27 +26,22 @@
     variant = 'default',
     as = url ? 'a' : 'div',
     children,
-  }: CardProps = $props();
+  }: CardBaseProps = $props();
 </script>
 
 <svelte:element this={as} class={variants({ variant })}>
   <svelte:element this={url ? 'a' : 'div'} href={url} class={merge(url && 'group')}>
     {#if title}
-      <h3
-        class="mb-4 font-semibold decoration-primary-500 decoration-2 underline-offset-4 group-hover:underline dark:text-primary-50"
-      >
-        {title}
-      </h3>
+      <h2 class="text-xl font-semibold group-hover:underline">{title}</h2>
     {/if}
-
+    {#if description}
+      <p class="prose dark:prose-invert">{description}</p>
+    {/if}
     {#if date}
-      <p class="mb-1 text-primary-600 dark:text-primary-400">{formatDate(date)}</p>
+      <p class="text-sm text-slate-500 dark:text-slate-400">{formatDate(date)}</p>
     {/if}
-
     {#if children}
-      {@render children?.()}
-    {:else}
-      <p class="line-clamp-4">{description}</p>
+      {@render children()}
     {/if}
   </svelte:element>
 </svelte:element>
