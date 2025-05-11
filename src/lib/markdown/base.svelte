@@ -1,7 +1,6 @@
 <script lang="ts">
   import { toDataAttributes } from '$lib/to-data-attributes';
   import type { Snippet } from 'svelte';
-  import './markdown.css';
 
   type Props = {
     as?: string;
