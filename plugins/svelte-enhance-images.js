@@ -127,8 +127,12 @@ const formatImage = (s, node, id, src) => {
 
   if (classAttr) {
     const classValue = getAttributeValue(classAttr);
-    if (!classValue) throw new Error('Class attribute value not found');
-    s.update(classValue.start, classValue.end, merge(classValue.data, classes));
+    if (!classValue || !classValue.data.trim()) {
+      // If the class attribute is empty, append the default classes
+      s.appendLeft(node.start + 4, ` class="${classes.join(' ')}"`);
+    } else {
+      s.update(classValue.start, classValue.end, merge(classValue.data, classes));
+    }
   } else {
     // Add the class attributes right after `<img`.
     s.appendLeft(node.start + 4, ` class="${classes.join(' ')}"`);
