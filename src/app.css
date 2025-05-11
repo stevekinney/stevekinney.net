@@ -34,7 +34,6 @@
   --color-black-pearl-950: oklch(0.194 0.047 245.441);
 }
 
-/* Tailwind 4 uses @layer differently */
 @layer base {
   body {
     @apply text-black-pearl-950 dark:bg-black-pearl-950 dark:text-white;
