@@ -65,7 +65,7 @@ export const processImages = () => {
             const imports = Array.from(images.entries())
               .map(([url, { id }]) => {
                 let importUrl = url;
-                if (!url.endsWith('gif')) importUrl += '?w=700&format=avif&withoutEnlargement';
+                if (!url.endsWith('gif')) importUrl += '?w=902&format=avif&withoutEnlargement';
                 return `import ${id} from '${importUrl}';`;
               })
               .join('\n');
@@ -127,7 +127,7 @@ const formatImage = (s, node, id, src) => {
 
   if (classAttr) {
     const classValue = getAttributeValue(classAttr);
-    if (!classValue) return;
+    if (!classValue) throw new Error('Class attribute value not found');
     s.update(classValue.start, classValue.end, merge(classValue.data, classes));
   } else {
     // Add the class attributes right after `<img`.
