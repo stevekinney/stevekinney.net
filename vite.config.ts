@@ -28,13 +28,7 @@ const getBaseUrl = (): Plugin => {
 };
 
 export default defineConfig({
-  plugins: [
-    sveltekit() as Plugin,
-    enhancedImages() as Plugin,
-    imagetools() as Plugin,
-    tailwindcss() as Plugin,
-    getBaseUrl(),
-  ],
+  plugins: [sveltekit(), enhancedImages(), imagetools(), tailwindcss() as Plugin[], getBaseUrl()],
 
   esbuild: {
     jsxFactory: 'h',
