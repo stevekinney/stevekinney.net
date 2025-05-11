@@ -20,7 +20,7 @@
 <div class={className} {...toDataAttributes(rest)}>
   <h1 class="mb-6 text-4xl font-bold">{title}</h1>
 
-  <article class="prose max-w-none dark:prose-invert">
+  <article class="prose dark:prose-invert max-w-none">
     {@render children?.()}
   </article>
 </div>

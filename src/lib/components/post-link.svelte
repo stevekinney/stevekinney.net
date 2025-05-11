@@ -1,10 +1,9 @@
 <script lang="ts">
+  import type { PostWithSlug } from '$lib/posts';
+  import { merge } from '$merge';
+  import type { SvelteHTMLElements } from 'svelte/elements';
   import Date from './date.svelte';
   import Link from './link.svelte';
-  import { merge } from '$merge';
-  import type { PostWithSlug } from '$lib/posts';
-  import type { SvelteHTMLElements } from 'svelte/elements';
-  import './post-link.css';
 
   type Props = {
     post: PostWithSlug;
@@ -26,7 +25,7 @@
   <Date date={post.date} />
   <Link
     {href}
-    class="bg-transparent decoration-primary-400 decoration-2 underline-offset-4"
+    class="decoration-primary-400 bg-transparent decoration-2 underline-offset-4"
     data-post-link-title
   >
     {post.title}

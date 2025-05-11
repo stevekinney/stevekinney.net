@@ -52,14 +52,14 @@
 <!-- Main layout -->
 <main
   {...dataAttrs}
-  class="container my-6 grid grid-cols-1 items-center gap-6 sm:my-10 sm:grid-cols-2 lg:grid-cols-3"
+  class="mx-auto my-6 grid max-w-5xl grid-cols-1 items-center gap-6 px-4 sm:my-10 sm:grid-cols-2 md:px-8 lg:grid-cols-3"
 >
   <!-- Site header -->
   <header>
     <h1 class="whitespace-nowrap lg:order-1">
       <a
         href="/"
-        class="font-header text-6xl text-black decoration-primary-700 hover:underline dark:text-white"
+        class="font-header decoration-primary-700 text-6xl text-black hover:underline dark:text-white"
         aria-label="{author}'s homepage"
       >
         {author}

@@ -9,7 +9,7 @@
 <SEO title={data.title} description={data.description} />
 
 <div class="space-y-8">
-  <section class="prose dark:prose-invert">
+  <section class="prose dark:prose-invert max-w-none">
     <h2>Full Course Walkthroughs</h2>
     <ul>
       {#each data.walkthroughs as walkthrough}
@@ -22,7 +22,7 @@
     </ul>
   </section>
 
-  <section class="prose dark:prose-invert">
+  <section class="prose dark:prose-invert max-w-none">
     <h2>Recordings</h2>
 
     <p>
