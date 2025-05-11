@@ -10,7 +10,6 @@
   import { toDataAttributes } from '$lib/to-data-attributes';
   import { merge } from '$merge';
   import type { Snippet } from 'svelte';
-  import type { ExtendElement } from '$lib/components/component.types';
 
   type Props = {
     as?: string;

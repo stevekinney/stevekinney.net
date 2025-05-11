@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { merge } from '$lib/merge';
   import type { Snippet } from 'svelte';
 
   type Props = {
@@ -10,6 +11,6 @@
   const { children, class: className = '', ...rest }: Props = $props();
 </script>
 
-<h2 class={className} data-markdown-heading {...rest}>
+<h2 class={merge(className, 'mb-2 font-bold')} data-markdown-heading {...rest}>
   {@render children?.()}
 </h2>
