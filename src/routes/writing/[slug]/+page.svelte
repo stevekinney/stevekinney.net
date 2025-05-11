@@ -24,7 +24,7 @@
     {data.meta.description}
   </p>
 
-  <data.content class="prose dark:prose-invert" as="article" />
+  <data.content class="prose dark:prose-invert max-w-none" as="article" />
 
   {#if data.meta.published && data.meta.modified}
     <p class="my-6 text-right text-sm text-slate-500 dark:text-gray-400">

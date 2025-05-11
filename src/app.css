@@ -1,24 +1,55 @@
 @import '@fontsource/league-gothic';
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/container-queries";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --font-header: 'League Gothic', sans-serif;
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
 
+  --color-primary-50: oklch(0.98 0.009 308.642);
+  --color-primary-100: oklch(0.952 0.021 304.169);
+  --color-primary-200: oklch(0.913 0.037 303.186);
+  --color-primary-300: oklch(0.845 0.066 303.843);
+  --color-primary-400: oklch(0.746 0.11 304.348);
+  --color-primary-500: oklch(0.614 0.166 302.847);
+  --color-primary-600: oklch(0.563 0.174 302.429);
+  --color-primary-700: oklch(0.495 0.167 302.963);
+  --color-primary-800: oklch(0.441 0.138 304.133);
+  --color-primary-900: oklch(0.384 0.113 305.12);
+  --color-primary-950: oklch(0.287 0.101 304.156);
+  --color-black-pearl-50: oklch(0.881 0.064 241.59);
+  --color-black-pearl-100: oklch(0.854 0.081 239.59);
+  --color-black-pearl-200: oklch(0.812 0.111 235.335);
+  --color-black-pearl-300: oklch(0.751 0.148 236.362);
+  --color-black-pearl-400: oklch(0.664 0.152 240.033);
+  --color-black-pearl-500: oklch(0.563 0.142 244.984);
+  --color-black-pearl-600: oklch(0.466 0.129 249.276);
+  --color-black-pearl-700: oklch(0.373 0.105 249.79);
+  --color-black-pearl-800: oklch(0.3 0.078 246.35);
+  --color-black-pearl-900: oklch(0.248 0.061 245.878);
+  --color-black-pearl-950: oklch(0.194 0.047 245.441);
+}
+
+/* Tailwind 4 uses @layer differently */
 @layer base {
   body {
     @apply text-black-pearl-950 dark:bg-black-pearl-950 dark:text-white;
   }
 
   pre {
-    @apply overflow-x-auto rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 p-4 dark:border-black-pearl-800;
+    @apply border-black-pearl-950 bg-black-pearl-950 dark:border-black-pearl-800 overflow-x-auto rounded-md border-2 p-4;
   }
 
   table {
-    @apply block w-full max-w-full border-separate border-spacing-0 overflow-x-scroll rounded-md border-2 border-black-pearl-950 bg-black-pearl-950 shadow-md dark:border-black-pearl-800 dark:bg-black-pearl-800;
+    @apply border-black-pearl-950 bg-black-pearl-950 dark:border-black-pearl-800 dark:bg-black-pearl-800 block w-full max-w-full border-separate border-spacing-0 overflow-x-scroll rounded-md border-2 shadow-md;
   }
 
   thead {
-    @apply border-2 border-black-pearl-950 bg-black-pearl-950 text-white dark:border-black-pearl-700 dark:bg-black-pearl-700;
+    @apply border-black-pearl-950 bg-black-pearl-950 dark:border-black-pearl-700 dark:bg-black-pearl-700 border-2 text-white;
     &:first-child {
       @apply rounded-t-md;
     }
@@ -31,9 +62,9 @@
   }
 
   tbody {
-    @apply bg-white dark:bg-black-pearl-900;
+    @apply dark:bg-black-pearl-900 bg-white;
     & th {
-      @apply bg-slate-100 dark:bg-black-pearl-800;
+      @apply dark:bg-black-pearl-800 bg-slate-100;
     }
     &:last-child {
       @apply rounded-b-md;
@@ -49,40 +80,41 @@
 
   th,
   td {
-    @apply whitespace-nowrap p-2 text-left;
+    @apply p-2 text-left whitespace-nowrap;
   }
 }
 
-@layer components {
-  .button {
-    @apply inline-flex items-center justify-center gap-2 rounded-md border border-primary-600 p-2 outline-8 outline-offset-4 outline-primary-500 ring-primary-400 ring-offset-0 transition-colors hover:bg-primary-100 hover:ring-2 active:bg-primary-200 dark:hover:bg-slate-800 dark:active:bg-primary-900;
-    &.small {
-      @apply py-1 text-xs;
-    }
-    &.ghost {
-      @apply border-none bg-transparent text-primary-500 hover:bg-slate-100 active:bg-slate-200 dark:hover:bg-slate-700 dark:active:bg-slate-800;
-    }
+@utility button {
+  @apply border-primary-600 outline-primary-500 ring-primary-400 hover:bg-primary-100 active:bg-primary-200 dark:active:bg-primary-900 inline-flex items-center justify-center gap-2 rounded-md border p-2 ring-offset-0 outline-8 outline-offset-4 transition-colors hover:ring-2 dark:hover:bg-slate-800;
+  &.small {
+    @apply py-1 text-xs;
   }
+  &.ghost {
+    @apply text-primary-500 border-none bg-transparent hover:bg-slate-100 active:bg-slate-200 dark:hover:bg-slate-700 dark:active:bg-slate-800;
+  }
+}
 
+@utility surface {
+  @apply rounded-md p-4 shadow-md;
+}
+
+/* Tailwind 4 uses @layer differently */
+@layer components {
   .button-primary {
-    @apply button rounded-md border border-primary-500 bg-primary-600 p-2 text-white hover:bg-primary-700 active:bg-primary-800;
+    @apply button border-primary-500 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 rounded-md border p-2 text-white;
   }
 
   .input {
-    @apply appearance-none rounded-md border border-slate-500 p-2 accent-primary-600 outline-offset-4 outline-primary-500 ring-primary-400 hover:border-primary-800 focus:outline-4 focus:ring-4 dark:border-black-pearl-600 dark:bg-black-pearl-800 dark:outline-primary-800 dark:ring-primary-800;
+    @apply accent-primary-600 outline-primary-500 ring-primary-400 hover:border-primary-800 dark:border-black-pearl-600 dark:bg-black-pearl-800 dark:outline-primary-800 dark:ring-primary-800 appearance-none rounded-md border border-slate-500 p-2 outline-offset-4 focus:ring-4 focus:outline-4;
   }
 
   .link,
   .prose a {
-    @apply hover:bg-primary-200 hover:decoration-primary-400 dark:hover:bg-slate-800 dark:hover:decoration-primary-600;
-  }
-
-  .surface {
-    @apply rounded-md p-4 shadow-md;
+    @apply hover:bg-primary-200 hover:decoration-primary-400 dark:hover:decoration-primary-600 dark:hover:bg-slate-800;
   }
 
   .surface-secondary {
-    @apply surface bg-slate-50 text-slate-900 dark:bg-black-pearl-800 dark:text-white;
+    @apply surface dark:bg-black-pearl-800 bg-slate-50 text-slate-900 dark:text-white;
   }
 
   .prose {
@@ -94,7 +126,7 @@
       @apply p-2;
     }
     tbody tr:nth-child(even) {
-      @apply bg-slate-100 dark:border-black-pearl-700 dark:bg-black-pearl-800;
+      @apply dark:border-black-pearl-700 dark:bg-black-pearl-800 bg-slate-100;
     }
     pre.shiki {
       @apply shadow-md;

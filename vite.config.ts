@@ -2,6 +2,7 @@ import { enhancedImages } from '@sveltejs/enhanced-img';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite';
 import { imagetools } from 'vite-imagetools';
+import tailwindcss from '@tailwindcss/vite';
 
 const getBaseUrl = (): Plugin => {
   const moduleId = 'virtual:base-url';
@@ -27,7 +28,7 @@ const getBaseUrl = (): Plugin => {
 };
 
 export default defineConfig({
-  plugins: [sveltekit(), enhancedImages(), imagetools(), getBaseUrl()],
+  plugins: [sveltekit(), enhancedImages(), imagetools(), tailwindcss(), getBaseUrl()],
 
   esbuild: {
     jsxFactory: 'h',
