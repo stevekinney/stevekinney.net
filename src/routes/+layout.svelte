@@ -52,7 +52,7 @@
 <!-- Main layout -->
 <main
   {...dataAttrs}
-  class="mx-auto my-6 grid max-w-5xl grid-cols-1 items-center gap-6 px-4 sm:my-10 sm:grid-cols-2 md:px-8 lg:grid-cols-3"
+  class="mx-auto my-6 grid max-w-7xl grid-cols-1 items-center gap-6 px-4 sm:my-10 sm:grid-cols-2 md:px-8 lg:grid-cols-3"
 >
   <!-- Site header -->
   <header>
