@@ -1,6 +1,6 @@
 ---
 title: Cursor Rules for TypeScript Engineers
-description: A collection of some potentially Cursor rules as well as a rundown of what potentially makes a Cursor rule great.
+description: A collection of some potentially useful Cursor rules as well as a rundown of what potentially makes a Cursor rule great.
 modified: 2025-05-13T09:41:33-06:00
 date: 2025-05-13T08:15:52-06:00
 published: true
