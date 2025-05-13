@@ -145,54 +145,54 @@ You are an expert TypeScript developer who understands that type assertions (usi
 - Set up default values with `.default()` when appropriate
 - Use transformations with `.transform()` to convert data formats
 - Always handle potential validation errors
+```
 
-## Examples
+I then provide it with incorrect and correct examples. For this post, these are in their own code blocks because nested code blocks in Markdown is not a thing and this blog post is written in Markdown. In my _actualy_ rules, it's in the same file.
 
-### INCORRECT
-
+```ts
 // ❌ WRONG: Using type assertions
 interface User {
-id: string;
-name: string;
-email: string;
-age: number;
+  id: string;
+  name: string;
+  email: string;
+  age: number;
 }
 
 const fetchUser = async (id: string): Promise<User> => {
-const response = await fetch(`/api/users/${id}`);
-const data = await response.json();
-return data as User; // DANGEROUS: No runtime validation!
-}
+  const response = await fetch(`/api/users/${id}`);
+  const data = await response.json();
+  return data as User; // DANGEROUS: No runtime validation!
+};
+```
 
-### CORRECT
-
+```ts
 // ✅ RIGHT: Using Zod for validation
 import { z } from 'zod';
 
 // Define the schema
 const UserSchema = z.object({
-id: z.string().uuid(),
-name: z.string().min(1),
-email: z.string().email(),
-age: z.number().int().positive().min(13)
+  id: z.string().uuid(),
+  name: z.string().min(1),
+  email: z.string().email(),
+  age: z.number().int().positive().min(13),
 });
 
 // Derive the type from the schema
 type User = z.infer<typeof UserSchema>;
 
 const fetchUser = async (id: string): Promise<User> => {
-const response = await fetch(`/api/users/${id}`);
-const data = await response.json();
+  const response = await fetch(`/api/users/${id}`);
+  const data = await response.json();
 
-// Runtime validation
-return UserSchema.parse(data);
-}
+  // Runtime validation
+  return UserSchema.parse(data);
+};
 
 // With error handling
 const fetchUserSafe = async (id: string): Promise<User | null> => {
-try {
-const response = await fetch(`/api/users/${id}`);
-const data = await response.json();
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    const data = await response.json();
 
     const result = UserSchema.safeParse(data);
     if (!result.success) {
@@ -201,12 +201,11 @@ const data = await response.json();
     }
 
     return result.data;
-
-} catch (error) {
-console.error('Error fetching user:', error);
-return null;
-}
-}
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    return null;
+  }
+};
 ```
 
 Luckily, I just recently taught a [Frontend Masters workshop on full-stack type-safety](https://frontendmasters.com/workshops/fullstack-typescript-v2/), so I had plenty of good and bad examples at my disposal.
@@ -234,11 +233,9 @@ You are an expert JavaScript/TypeScript developer who specializes in leveraging 
 - Use Bun.serve() for HTTP servers instead of Express, Fastify, or similar frameworks
 - Leverage Bun's built-in stream handling and fetch implementation
 - Implement WebSocket servers with Bun.serve's WebSocket support
+```
 
-## Example
-
-### Incorrect
-
+````ts
 // ❌ AVOID: Express or similar frameworks
 import express from 'express';
 const app = express();
@@ -247,21 +244,24 @@ res.send('Hello World');
 });
 app.listen(3000);
 
-### CORRECT
-
+```ts
 // ✅ USE: Bun.serve
 const server = Bun.serve({
-port: 3000,
-fetch(req) {
-const url = new URL(req.url);
-if (url.pathname === '/') {
-return new Response('Hello World');
-}
-return new Response('Not Found', { status: 404 });
-},
+  port: 3000,
+  fetch(req) {
+    const url = new URL(req.url);
+    if (url.pathname === '/') {
+      return new Response('Hello World');
+    }
+    return new Response('Not Found', { status: 404 });
+  },
 });
 
 console.log(`Listening on http://localhost:${server.port}`);
+````
+
+````
+
 ```
 
 Another thing that I've done, is used the **Copy as Markdown** option from the [Bun documentation](https://bun.sh/docs/cli/run#bun) and used `@bun-run.md` in order to tell Bun to load that into context as well. The `@` symbol before a file name tells Cursor to read that file and load it into context. I text to take it out when I'm not implenting a feature that needs that given documentation as not to fill up my context window. (Yes, I know I could probably _also_ make my language a bit more terse too, but a little bit of sass in my prompts amuses me—even if it is a waste of tokens.)
@@ -284,3 +284,5 @@ In the meantime, if you're looking to explore some other Cursor rules, here are 
 - [Awesome Cursor Rules](https://github.com/PatrickJS/awesome-cursorrules)
 - [cursor.directory](https://cursor.directory)
 - [.cursorrules](https://dotcursorrules.com)
+```
+````
