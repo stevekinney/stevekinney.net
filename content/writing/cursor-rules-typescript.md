@@ -59,7 +59,7 @@ I loaded some of my existing projects in Gemini—mostly because it has a giant 
 
 ## Type Definitions
 
-- Don't ever use `any`. Ever. If you feel like you have to use `any`, use `unknown` instead.
+- Do not ever use `any`. Ever. If you feel like you have to use `any`, use `unknown` instead.
 - Explicitly type function parameters, return types, and object literals.
 - Please don't ever use Enums. Use a union if you feel tempted to use an Enum.
 - Use `readonly` modifiers for immutable properties and arrays
