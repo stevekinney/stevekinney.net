@@ -243,9 +243,7 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 app.listen(3000);
-```
 
-```ts
 // ✅ USE: Bun.serve
 const server = Bun.serve({
   port: 3000,
