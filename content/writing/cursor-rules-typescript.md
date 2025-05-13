@@ -235,14 +235,15 @@ You are an expert JavaScript/TypeScript developer who specializes in leveraging 
 - Implement WebSocket servers with Bun.serve's WebSocket support
 ```
 
-````ts
+```ts
 // ❌ AVOID: Express or similar frameworks
 import express from 'express';
 const app = express();
 app.get('/', (req, res) => {
-res.send('Hello World');
+  res.send('Hello World');
 });
 app.listen(3000);
+```
 
 ```ts
 // ✅ USE: Bun.serve
@@ -258,10 +259,6 @@ const server = Bun.serve({
 });
 
 console.log(`Listening on http://localhost:${server.port}`);
-````
-
-````
-
 ```
 
 Another thing that I've done, is used the **Copy as Markdown** option from the [Bun documentation](https://bun.sh/docs/cli/run#bun) and used `@bun-run.md` in order to tell Bun to load that into context as well. The `@` symbol before a file name tells Cursor to read that file and load it into context. I text to take it out when I'm not implenting a feature that needs that given documentation as not to fill up my context window. (Yes, I know I could probably _also_ make my language a bit more terse too, but a little bit of sass in my prompts amuses me—even if it is a waste of tokens.)
@@ -284,5 +281,3 @@ In the meantime, if you're looking to explore some other Cursor rules, here are 
 - [Awesome Cursor Rules](https://github.com/PatrickJS/awesome-cursorrules)
 - [cursor.directory](https://cursor.directory)
 - [.cursorrules](https://dotcursorrules.com)
-```
-````
