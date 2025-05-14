@@ -76,7 +76,7 @@ These are the rules that I bring in specifically for the workflows. There is not
 
 Again, because determinism is the name of the game, we want store the plan _inside_ the Workflow (e.g., an array of steps) before you start running it. That way the plan is part of history and replay knows what to do—even if an Activity result diverges later. If it was outside of the workflow closure, it could mutate. There are some protections built into the SDK around this, but—keep in mind—my goal is to prevent Cursor from writing problematic code in the first place.
 
-Workflows have a limit of about 10,000 items in the event histoy. After that, you have to use `continueAsNew` to basically spin the work off into a new workflow. `continueAsNew` definitely deserves it's own discussion, but let's look at an overly-simple example.
+Workflows have a limit of about 10,000 items in the event histoy. After that, you have to use `continueAsNew` to basically spin the work off into a new workflow. `continueAsNew` definitely deserves its own discussion, but let's look at an overly-simple example.
 
 ```ts
 export async function longRunningProcess(state: WorkflowState): Promise<void> {
