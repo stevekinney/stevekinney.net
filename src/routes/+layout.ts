@@ -8,3 +8,12 @@ if (!dev) {
 }
 
 export const prerender = true;
+
+export const load = async ({ fetch }) => {
+  const posts = await fetch('/writing');
+  const postsData = await posts.json();
+
+  return {
+    posts: postsData,
+  };
+};
