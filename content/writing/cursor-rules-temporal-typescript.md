@@ -46,7 +46,7 @@ This is my high-level guidance. I haven't decided whether or not I want to have 
 
 [Temporal](https://temporal.io) persists every interaction in a database. If you hand it a fancy `class` instance, _only the plain data_ survives, your methods get silently removed, and replay explodes. A data is passed from between worklows and activities just like you might be used to with HTTP. This means that JSON is fair game, but thinking you can pass a `class` into an activity—even though it looks like a function is not going to end well and the same goes for returning a non-primitive value.
 
-> [!TIP] You _could_ choose to serialize and deserialize your data structures.
+> [!TIP] You could choose to serialize and deserialize your data structures.
 > If you really need more robust objects, consider using something like [`class-transformer`](https://github.com/typestack/class-transformer) or [SuperJSON](https://github.com/flightcontrolhq/superjson).
 
 ```ts
