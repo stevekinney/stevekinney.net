@@ -105,7 +105,7 @@ The [`openapi-typescript`](https://www.npmjs.com/package/openapi-typescript) too
 npm install -D openapi-typescript
 ```
 
-### Generate Types:
+### Generate Types
 
 ```bash
 npx openapi-typescript openapi.yaml -o src/types/api.d.ts
