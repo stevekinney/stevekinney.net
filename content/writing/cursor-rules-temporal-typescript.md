@@ -103,7 +103,7 @@ export async function longRunningProcess(state: WorkflowState): Promise<void> {
 }
 ```
 
-## `activities.mdc` additions
+## `activities.mdc`
 
 Activities are the closest thing to normal functions in Temporal, so most of our general best practices. That said, I've been experimenting with a few little tweaks.
 
