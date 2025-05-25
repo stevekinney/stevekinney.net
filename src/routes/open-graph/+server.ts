@@ -8,12 +8,27 @@ import { OpenGraphImage } from './open-graph';
 const IMAGE_WIDTH = 1200;
 const IMAGE_HEIGHT = 630;
 
-// Font paths
-const FONT_PATHS = {
-  firaSansBold: '/fonts/fira-sans-500-normal.woff',
-  firaSansThin: '/fonts/fira-sans-300-normal.woff',
-  leagueGothic: '/fonts/league-gothic-400-normal.woff',
-};
+// Configuration for fonts
+const FONT_INFO = [
+  {
+    name: 'Fira Sans',
+    weight: 300,
+    style: 'normal',
+    path: '/fonts/fira-sans-300-normal.woff',
+  },
+  {
+    name: 'Fira Sans',
+    weight: 500,
+    style: 'normal',
+    path: '/fonts/fira-sans-500-normal.woff',
+  },
+  {
+    name: 'League Gothic',
+    weight: 500, // As per original Satori config, Satori matches this weight.
+    style: 'normal',
+    path: '/fonts/league-gothic-400-normal.woff',
+  },
+] as const;
 
 /**
  * Parse boolean parameters from URL query string
@@ -39,11 +54,17 @@ export const GET = async ({ url, fetch }) => {
   const siteUrl = url.searchParams.get('url') ?? undefined;
 
   // Load fonts in parallel
-  const [firaSansBold, firaSansThin, leagueGothic] = await Promise.all([
-    fetch(FONT_PATHS.firaSansBold).then((res) => res.arrayBuffer()),
-    fetch(FONT_PATHS.firaSansThin).then((res) => res.arrayBuffer()),
-    fetch(FONT_PATHS.leagueGothic).then((res) => res.arrayBuffer()),
-  ]);
+  const loadedFontData = await Promise.all(
+    FONT_INFO.map((font) => fetch(font.path).then((res) => res.arrayBuffer())),
+  );
+
+  // Prepare fonts for Satori
+  const satoriFontsConfig = FONT_INFO.map((font, index) => ({
+    name: font.name,
+    weight: font.weight,
+    style: font.style,
+    data: loadedFontData[index],
+  }));
 
   // Generate SVG with satori
   const svg = await satori(
@@ -61,42 +82,15 @@ export const GET = async ({ url, fetch }) => {
     {
       width: IMAGE_WIDTH,
       height: IMAGE_HEIGHT,
-      fonts: [
-        {
-          name: 'Fira Sans',
-          weight: 300,
-          style: 'normal',
-          data: firaSansThin,
-        },
-        {
-          name: 'Fira Sans',
-          weight: 500,
-          style: 'normal',
-          data: firaSansBold,
-        },
-        {
-          name: 'League Gothic',
-          weight: 500,
-          style: 'normal',
-          data: leagueGothic,
-        },
-      ],
+      fonts: satoriFontsConfig,
     },
   );
 
   // Convert SVG to JPEG
   const image = await sharp(Buffer.from(svg)).jpeg().toBuffer();
 
-  // Create readable stream for response
-  const body = new ReadableStream<typeof image>({
-    async start(controller) {
-      controller.enqueue(image);
-      controller.close();
-    },
-  });
-
   // Return response with appropriate headers
-  return new Response(body, {
+  return new Response(image, {
     headers: {
       'Content-Type': 'image/jpeg',
       'Cache-Control': 'public, max-age=31536000, immutable, no-transform',
