@@ -7,7 +7,7 @@
 
   import type { ExtendElement } from '$lib/components/component.types';
   import Navigation from '$lib/components/navigation.svelte';
-  import SEO from '$lib/components/seo.svelte';
+
   import SocialLink from '$lib/components/social-link.svelte';
   // Import styles
   import '../app.css';
@@ -45,9 +45,6 @@
     },
   ];
 </script>
-
-<!-- SEO metadata -->
-<SEO {title} {description} />
 
 <!-- Main layout -->
 <main
