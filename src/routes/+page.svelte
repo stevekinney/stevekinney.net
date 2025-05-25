@@ -6,8 +6,6 @@
   import Biography from './biography.md';
 
   const { data } = $props();
-
-  console.log(data.posts);
 </script>
 
 <SEO {title} {description} />
