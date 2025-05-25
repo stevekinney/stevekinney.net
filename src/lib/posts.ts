@@ -1,12 +1,6 @@
 import { dev } from '$app/environment';
 import { z } from 'zod';
 
-// Type declarations
-export type PostMetadata = z.infer<typeof PostMetadataSchema>;
-export type Post = z.infer<typeof PostSchema>;
-export type PostWithSlug = z.infer<typeof PostWithSlugSchema>;
-export type IndividualPost = z.infer<typeof IndividualPostSchema>;
-
 // Schema definitions
 const PostMetadataSchema = z.object({
   title: z.string(),
@@ -32,46 +26,60 @@ const IndividualPostSchema = z.object({
   slug: z.string(),
 });
 
-/**
- * Fetches all blog posts and sorts them by date (newest first)
- * In development mode, shows all posts; in production, only published posts
- */
+// Type exports
+export type PostMetadata = z.infer<typeof PostMetadataSchema>;
+export type Post = z.infer<typeof PostSchema>;
+export type PostWithSlug = z.infer<typeof PostWithSlugSchema>;
+export type IndividualPost = z.infer<typeof IndividualPostSchema>;
+
+const extractSlugFromPath = (path: string): string | undefined => {
+  return path.split('/').at(-1)?.replace('.md', '');
+};
+
+const processPost = async (
+  path: string,
+  importFile: () => Promise<unknown>,
+): Promise<PostWithSlug | undefined> => {
+  try {
+    const file = await importFile();
+    const slug = extractSlugFromPath(path);
+
+    if (!slug) {
+      console.error(`Could not extract slug from path: ${path}`);
+      return undefined;
+    }
+
+    const { metadata } = PostSchema.parse(file);
+
+    if (!dev && !metadata.published) {
+      return undefined;
+    }
+
+    return PostWithSlugSchema.parse({ ...metadata, slug });
+  } catch (error) {
+    console.error(`Error processing post at ${path}:`, error);
+    return undefined;
+  }
+};
+
+const sortPostsByDate = (posts: PostWithSlug[]): PostWithSlug[] => {
+  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+};
+
+// Main functions
 export const getPosts = async (): Promise<PostWithSlug[]> => {
   const paths = import.meta.glob('/content/writing/*.md');
 
-  const postsPromises = Object.entries(paths).map(async ([path, importFile]) => {
-    try {
-      const file = await importFile();
-      const slug = path.split('/').at(-1)?.replace('.md', '');
-
-      if (!slug) {
-        console.error(`Could not extract slug from path: ${path}`);
-        return undefined;
-      }
-
-      const { metadata } = PostSchema.parse(file);
-
-      if (dev || metadata.published) {
-        return PostWithSlugSchema.parse({ ...metadata, slug });
-      }
-
-      return undefined;
-    } catch (error) {
-      console.error(`Error processing post at ${path}:`, error);
-      return undefined;
-    }
-  });
+  const postsPromises = Object.entries(paths).map(([path, importFile]) =>
+    processPost(path, importFile),
+  );
 
   const posts = await Promise.all(postsPromises);
+  const validPosts = posts.filter((post): post is PostWithSlug => post !== undefined);
 
-  return posts
-    .filter((post): post is PostWithSlug => post !== undefined)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return sortPostsByDate(validPosts);
 };
 
-/**
- * Fetches a single blog post by slug
- */
 export const getPost = async (slug: string): Promise<IndividualPost> => {
   try {
     const { default: content, metadata: meta } = await import(`../../content/writing/${slug}.md`);
