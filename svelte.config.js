@@ -71,7 +71,12 @@ const config = {
 
   kit: {
     // Choose adapter based on deployment target
-    adapter: process.env.VERCEL ? vercelAdapter() : staticAdapter({ strict: false }),
+    adapter: process.env.VERCEL
+      ? vercelAdapter()
+      : staticAdapter({
+          strict: false,
+          fallback: '404.html',
+        }),
 
     // Path aliases for imports
     alias: {
