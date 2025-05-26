@@ -16,7 +16,8 @@
     "test:storybook": "test-storybook",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "postinstall": "svelte-kit sync"
+    "postinstall": "svelte-kit sync",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@beoe/rehype-mermaid": "^0.4.2",
@@ -64,6 +65,8 @@
     "globals": "^15.14.0",
     "gray-matter": "^4.0.3",
     "html-entities": "^2.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
     "lucide-svelte": "^0.469.0",
     "magic-string": "^0.30.17",
     "mdsvex": "^0.12.5",
@@ -127,6 +130,10 @@
         "current"
       ]
     }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,svelte,css,md,html,json}": "prettier --write",
+    "*.{js,jsx,ts,tsx,svelte}": "eslint --fix"
   },
   "packageManager": "pnpm@9.15.1"
 }
