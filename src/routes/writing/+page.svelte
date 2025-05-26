@@ -18,7 +18,7 @@
         <NotebookPen size={28} class="m-2" />
         <div>
           <h3
-            class="font-semibold decoration-primary-200 decoration-4 group-hover:underline group-hover:decoration-primary-400 sm:text-xl"
+            class="decoration-primary-200 group-hover:decoration-primary-400 font-semibold decoration-4 group-hover:underline sm:text-xl"
           >
             {post.title}
           </h3>

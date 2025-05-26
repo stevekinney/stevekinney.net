@@ -45,7 +45,7 @@
   <Label {label} {disabled} {required} hidden={unlabeled}>
     <div
       class={merge(
-        'flex w-full items-center gap-2 rounded-md bg-white px-3 py-1 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-inset ring-slate-500 focus-within:bg-primary-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-600 dark:bg-slate-800 dark:focus-within:bg-slate-700',
+        'focus-within:bg-primary-50 focus-within:ring-primary-600 flex w-full items-center gap-2 rounded-md bg-white px-3 py-1 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-slate-500 ring-inset focus-within:ring-2 focus-within:outline-none dark:bg-slate-800 dark:focus-within:bg-slate-700',
         disabled && 'cursor-not-allowed bg-slate-100',
       )}
     >
@@ -53,7 +53,7 @@
         {@render icon(before)}
       {/if}
       {#if prefix}
-        <span class="pointer-events-none text-primary-600 dark:text-primary-400">
+        <span class="text-primary-600 dark:text-primary-400 pointer-events-none">
           {prefix}
         </span>
       {/if}
@@ -66,7 +66,7 @@
         {...props}
       />
       {#if suffix}
-        <span class="pointer-events-none text-primary-600 dark:text-primary-400">
+        <span class="text-primary-600 dark:text-primary-400 pointer-events-none">
           {suffix}
         </span>
       {/if}

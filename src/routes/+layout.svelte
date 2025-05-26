@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { author, description, title } from '$lib/metadata';
+  import { author } from '$lib/metadata';
   import { toDataAttributes } from '$lib/to-data-attributes';
   import { Github, Instagram, Linkedin, Twitter, Youtube } from 'lucide-svelte';
   import type { Snippet } from 'svelte';
