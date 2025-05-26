@@ -25,9 +25,9 @@
   <Label {label} {disabled} {required}>
     <div
       class={merge(
-        'rounded-md border-0 bg-white px-4 py-1 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-inset ring-slate-500 dark:bg-slate-800  dark:focus-within:bg-slate-700',
+        'rounded-md border-0 bg-white px-4 py-1 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-slate-500 ring-inset dark:bg-slate-800  dark:focus-within:bg-slate-700',
         !disabled &&
-          'focus-within:bg-primary-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-600',
+          'focus-within:bg-primary-50 focus-within:ring-primary-600 focus-within:ring-2 focus-within:outline-none',
         disabled && 'cursor-not-allowed bg-slate-100 text-slate-500',
       )}
     >

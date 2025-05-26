@@ -21,7 +21,7 @@
 <a
   {href}
   class={merge(
-    'font-semibold decoration-primary-600 decoration-4 underline-offset-8 hover:text-primary-800 hover:decoration-primary-600 dark:decoration-slate-400  dark:hover:text-primary-200',
+    'decoration-primary-600 hover:text-primary-800 hover:decoration-primary-600 dark:hover:text-primary-200 font-semibold decoration-4 underline-offset-8  dark:decoration-slate-400',
     ariaCurrent && 'underline',
     ariaCurrent === 'page' && 'bg-primary-100 dark:bg-primary-900',
     className,

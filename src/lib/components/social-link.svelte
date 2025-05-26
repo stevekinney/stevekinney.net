@@ -28,7 +28,7 @@
 <a {href} {target} {...props}>
   <Icon
     class={merge(
-      'transition-colors hover:stroke-primary-700 active:stroke-primary-600',
+      'hover:stroke-primary-700 active:stroke-primary-600 transition-colors',
       String(className),
     )}
     aria-label={name}
