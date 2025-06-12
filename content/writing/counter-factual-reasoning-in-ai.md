@@ -7,7 +7,7 @@ date: 2025-04-21T10:48:47-06:00
 ---
 
 > [!NOTE] Paper Review
-> These are my notes from the paper, [When Counterfactual Reasoning Fails: Chaos and Real-World Complexity](https://arxiv.org/abs/2503.23820) by [Yahya Aalaila](https://arxiv.org/search/cs?searchtype=author&query=Aalaila,+Y), [Gerrit Großmann](https://arxiv.org/search/cs?searchtype=author&query=Gro%C3%9Fmann,+G), [Sumantrak Mukherjee](https://arxiv.org/search/cs?searchtype=author&query=Mukherjee,+S), [Jonas Wahl](https://arxiv.org/search/cs?searchtype=author&query=Wahl,+J), and [Sebastian Vollmer](https://arxiv.org/search/cs?searchtype=author&query=Vollmer,+S).
+> These are my notes from the paper, [When Counterfactual Reasoning Fails: Chaos and Real-World Complexity](https://arxiv.org/abs/2503.23820) by [Yahya Aalaila](https://arxiv.org/search/cs?searchtype=author&query=Aalaila,+Y), [Gerrit Großmann](https://arxiv.org/search/cs?searchtype=author&query=Gro%C3%9Fmann,+G), [Sumantrak Mukherjee](https://arxiv.org/search/cs?searchtype=author&query=Mukherjee,+S), [Jonas Wahl](https://arxiv.org/search/cs?searchtype=author&query=Wahl,+J), and [Sebastian Vollmer](https://arxiv.org/search/cs?searchtype=author&query=Vollmer,+S).
 
 [Counterfactual reasoning](https://en.wikipedia.org/wiki/Counterfactual_thinking)—the mental gymnastics of wondering "what if"—is baked into how we think. Have you ever wondered, "What if I'd taken that other job?" or "What if that meeting had gone differently?" We ask "What if?" questions all the time. (It's how I spent the majority of my 20s, if I am being honest.) These are called [counterfactuals](https://plato.stanford.edu/entries/counterfactuals/), and help us understand cause and effect and interpreting complex models,.
 

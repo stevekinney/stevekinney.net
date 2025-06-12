@@ -13,9 +13,9 @@ The Settings Editor provides a convenient visual interface, directly editing the
 
 Depending on your platform, the user settings file is located here:
 
-- **Windows** `%APPDATA%\Code\User\settings.json`
-- **macOS** `$HOME/Library/Application\ Support/Code/User/settings.json`
-- **Linux** `$HOME/.config/Code/User/settings.json`
+- **Windows** `%APPDATA%\Code\User\settings.json`
+- **macOS** `$HOME/Library/Application\ Support/Code/User/settings.json`
+- **Linux** `$HOME/.config/Code/User/settings.json`
 
 ### JSON Syntax and Schema
 

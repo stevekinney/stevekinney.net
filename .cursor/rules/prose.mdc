@@ -1,0 +1,145 @@
+---
+description: 
+globs: *.md
+alwaysApply: false
+---
+## Frontmatter
+
+All markdown articles begin with a YAML frontmatter block.
+
+* **Required Fields**:
+    * `title`: The title of the article. Enclosed in single quotes.
+    * `description`: A brief, one-sentence summary of the article. Enclosed in single quotes.
+    * `date`: The publication date in `YYYY-MM-DD` format. Enclosed in single quotes.
+    * `tags`: A YAML array of relevant tags in lowercase.
+    * `published`: A boolean (`true` or `false`) indicating visibility.
+* **Optional Fields**:
+    * `image`: A path to the article's cover image.
+
+**Example:**
+```yaml
+---
+title: 'A Brief Introduction to SvelteKit'
+description: 'A quick look at what SvelteKit is and why you might want to use it.'
+date: '2023-03-21'
+tags: ['svelte', 'sveltekit', 'web development']
+image: '/images/blog/sveltekit-intro.png'
+published: true
+---
+```
+
+## Headings
+
+* **No Numbering**: Do not number headings.
+* **Markdown Only**: Use only Markdown heading markers (`#`, `##`, `###`, etc.); if a title exists, use H1; otherwise, start with H2 and descend.
+* The main title is defined in the frontmatter and should be treated as a Level 1 Heading (`<h1>`).
+* Article subheadings should start at Level 2 (`##`).
+* **Consistent Capitalization**: Use sentence case for all headings (e.g., `## Getting started with props`).
+* **No Bold**: Use Markdown heading syntax without extra bolding. Do not wrap headings in bold syntax.
+
+## Document Structure
+
+* **No Horizontal Rules**: Never use horizontal rules (e.g., `---`, `***`). Use clear headings and blank lines for separation.
+
+## Prose
+
+* **Tone**: The tone is instructional, friendly, and addresses the reader directly (e.g., "In this post, we will...", "You can now...").
+* **Paragraphs**: Keep paragraphs focused on a single topic and relatively short for readability. Prefer paragraphs for explanations.
+* **Emphasis**:
+    * Use backticks (`` ` ``) for inline code, technical terms, file names, and package names (e.g., `SvelteKit`, `vite.config.ts`, `HTMLElement`).
+    * Use bold (`**...**`) for strong emphasis on key concepts or to highlight important terms.
+    * Italics (`*...*`) are used sparingly for subtle emphasis.
+
+## Lists
+
+* Use hyphens (`-`) for unordered lists.
+* Lists are used to break down steps, features, or key takeaways.
+* **Lists Only When Essential**: Use bulleted or numbered lists for steps or key points; lists must never contain code blocks.
+* **No Code in Lists**: Keep code blocks out of list items.
+* Separate paragraphs with a blank line.
+* Indent nested list items by two spaces.
+
+## Links & Images
+
+* Use standard Markdown syntax for links: `[Descriptive Link Text](URL)`.
+* Image syntax: `![Alt text for accessibility](/path/to/image.png)`.
+
+## Code Blocks
+
+* **Fenced Code Blocks**: Enclose all code blocks with triple backticks (```` ``` ````).
+* **Always** include a language identifier to enable syntax highlighting (e.g., `typescript`, `svelte`, `bash`).
+* **Inline Code**: Always wrap inline code in single backticks (e.g., `z.parse()`).
+* Introduce code blocks with a preceding sentence that ends in a colon, providing context for the snippet.
+
+**Example:**
+```markdown
+The component receives the `post` object as a prop:
+
+````svelte
+<script lang="ts">
+  import type { Post } from '$lib/types';
+
+  export let post: Post;
+</script>
+
+<h2>{post.title}</h2>
+````
+```
+
+## Block Quotes & Callouts
+
+* **Standard Block Quotes**: Use `>` for quotes.
+* **Obsidian-Style Callouts**: Use these callout types (and their aliases):
+
+  - **Abstract** (aliases: `summary`, `tldr`)
+  - **Info**
+  - **Todo**
+  - **Tip** (aliases: `hint`, `important`)
+  - **Success** (aliases: `check`, `done`)
+  - **Question** (aliases: `help`, `faq`)
+  - **Warning** (aliases: `caution`, `attention`)
+  - **Failure** (aliases: `fail`, `missing`)
+  - **Danger** (alias: `error`)
+  - **Bug**
+  - **Example**
+  - **Quote** (alias: `cite`)
+
+  _Example:_
+
+  > [!TIP] Tip Title
+  > This is a quick tip.
+
+## Formatting & Readability
+
+* For explicit line breaks, end a line with two spaces.
+* Follow uniform conventions for headings, lists, and code.
+* Keep formatting simple and uncluttered.
+
+## Code Style
+
+These rules apply to all TypeScript, JavaScript, and Svelte files, enforced by the project's Prettier configuration.
+
+### General Code Formatting
+
+* **Indentation**: 2 spaces.
+* **Quotes**: Single quotes (`'`) are preferred over double quotes (`"`).
+* **Semicolons**: Semicolons are required at the end of statements.
+* **Trailing Commas**: Trailing commas should be used in multi-line objects, arrays, and parameter lists (`'all'`).
+* **Line Length**: While not strictly defined in the provided files, the formatting suggests a preference for readable line lengths, often breaking lines after the 80-100 character mark.
+
+### Naming Conventions
+
+* **Variables & Functions**: Use `camelCase` (e.g., `getBaseUrl`, `postData`).
+* **Types & Interfaces**: Use `PascalCase` (e.g., `Post`, `Plugin`).
+* **Files**:
+    * Svelte components: `PascalCase.svelte` (e.g., `Header.svelte`).
+    * Routes and content files: `kebab-case.md` or `+page.svelte`.
+    * Configuration files: `kebab-case.config.js` (e.g., `vite.config.ts`).
+
+### TypeScript & JavaScript
+
+* **Modules**: Use ES Modules (`import`/`export`) consistently.
+* **Types**: Provide explicit types for function parameters, return values, and variables where the type cannot be easily inferred.
+* **Comments**:
+    * Use JSDoc-style comments (`/** ... */`) to document functions and their parameters, especially in configuration files.
+    * Use single-line `//` comments for brief, inline explanations.

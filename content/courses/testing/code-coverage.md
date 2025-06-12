@@ -55,7 +55,7 @@ npx vitest --coverage
 You'll likely get a new `./coverage` directory. Go take a look. You can spin up a quick web server using:
 
 ```ts
-vite preview  --outDir coverage
+vite preview  --outDir coverage
 ```
 
 This will allow you see where you code is _not_ being tested. (Source: [The documenation for c8](https://github.com/bcoe/c8#ignoring-uncovered-lines-functions-and-blocks).)

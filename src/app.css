@@ -1,5 +1,6 @@
 @import '@fontsource/league-gothic';
 @import 'tailwindcss';
+
 @plugin "@tailwindcss/typography";
 @plugin "@tailwindcss/container-queries";
 
@@ -34,12 +35,18 @@
   --color-black-pearl-950: oklch(0.194 0.047 245.441);
 }
 
-@layer base {
-  body {
-    @apply text-black-pearl-950 dark:bg-black-pearl-950 dark:text-white;
+@layer utilities {
+  .prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    padding: 0.1rem 0.25rem;
+    background-color: color-mix(in oklch, var(--color-black-pearl-50) 20%, transparent);
+    border-radius: 0.25rem;
   }
 
-  pre {
-    @apply border-black-pearl-950 bg-black-pearl-950 dark:border-black-pearl-800 overflow-x-auto rounded-md border-2 p-4;
+  .prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *))::before {
+    content: none;
+  }
+
+  .prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *))::after {
+    content: none;
   }
 }
