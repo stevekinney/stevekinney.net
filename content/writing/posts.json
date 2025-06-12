@@ -1,0 +1,146 @@
+[
+  {
+    "title": "Cursor Rules for Writing Temporal Workflows with TypeScript",
+    "description": "Essential guidelines and best practices for writing reliable Temporal workflows in TypeScript, covering serialization, determinism, and workflow patterns.",
+    "date": "2025-05-14T15:00:00.000Z",
+    "modified": "2025-05-14T15:00:00.000Z",
+    "published": true,
+    "tags": [],
+    "slug": "cursor-rules-temporal-typescript"
+  },
+  {
+    "title": "Cursor Rules for TypeScript Engineers",
+    "description": "A collection of some potentially useful Cursor rules as well as a rundown of what potentially makes a Cursor rule great.",
+    "date": "2025-05-13T14:15:52.000Z",
+    "modified": "2025-05-13T15:41:33.000Z",
+    "published": true,
+    "tags": [],
+    "slug": "cursor-rules-typescript"
+  },
+  {
+    "title": "Using Anthropic's Message Batches API with Temporal",
+    "description": "Build scalable, cost-efficient AI processing with Anthropic's Message Batches API and Temporal workflows.",
+    "date": "2025-05-08T20:05:36.000Z",
+    "modified": "2025-05-08T20:08:02.000Z",
+    "published": true,
+    "tags": [],
+    "slug": "anthropic-batch-api-with-temporal"
+  },
+  {
+    "title": "What If It Goes Wrong?: The Hidden Dangers of Counterfactual Reasoning in AI",
+    "description": "Exploring the pitfalls of counterfactual reasoning in AI, highlighting its fragility, chaotic nature, and alignment with Nassim Taleb's critique of prediction in complex systems.",
+    "date": "2025-04-21T16:48:47.000Z",
+    "modified": "2025-04-21T17:01:33.000Z",
+    "published": true,
+    "tags": [],
+    "slug": "counter-factual-reasoning-in-ai"
+  },
+  {
+    "title": "Getting the Most Out of GPT-4.1",
+    "description": "A naïve guide to get the most out of GPT-4.1: context window optimization, coding tips, prompt best practices, and when to choose GPT-4.1 over GPT-4.5.",
+    "date": "2025-04-17T13:14:14.000Z",
+    "modified": "2025-04-17T13:14:14.000Z",
+    "published": true,
+    "tags": [],
+    "slug": "getting-the-most-out-of-gpt-4-1"
+  },
+  {
+    "title": "Neural Networks",
+    "description": "A friendly intro to neural networks, what they are, how they learn, and why they matter for software engineers exploring the world of generative AI.",
+    "date": "2025-04-16T19:49:56.000Z",
+    "modified": "2025-04-16T22:47:14.000Z",
+    "published": true,
+    "tags": [
+      "ai",
+      "machine-learning",
+      "neural-networks",
+      "transformers"
+    ],
+    "slug": "neural-networks"
+  },
+  {
+    "title": "A Gentle Introduction to Using a Vector Database",
+    "description": "In which we learn how to build a simple vector database using Pinecone and OpenAI embeddings, and discover it was way easier than we might have expected.",
+    "date": "2024-12-31T00:07:17.000Z",
+    "modified": "2025-04-26T16:04:14.000Z",
+    "published": true,
+    "tags": [
+      "open-ai",
+      "pinecone",
+      "artificial-intelligence"
+    ],
+    "slug": "using-a-vector-database"
+  },
+  {
+    "title": "Setting Up a Python Environment on macOS",
+    "description": "A brief guide for getting started writing Python on a Mac using virtual environments.",
+    "date": "2024-08-06T16:00:00.006Z",
+    "modified": "2024-09-28T17:31:14.000Z",
+    "published": true,
+    "tags": [
+      "python",
+      "virtual-env"
+    ],
+    "slug": "setup-python"
+  },
+  {
+    "title": "Implementing Obsidian's Callout in Svelte",
+    "description": "A gentle walkthrough where we build our take on Obsidian's callout component in Svelte.",
+    "date": "2024-04-07T16:29:29.000Z",
+    "modified": "2024-09-28T17:31:14.000Z",
+    "published": false,
+    "tags": [
+      "svelte",
+      "storybook",
+      "design-systems"
+    ],
+    "slug": "obsidian-callout-svelte"
+  },
+  {
+    "title": "Positives, Negatives, and Alternatives to Using Tailwind for a Design System",
+    "description": "Is Tailwind the best choice when building out a design system? It depends.",
+    "date": "2024-04-06T22:30:00.000Z",
+    "modified": "2024-09-28T17:31:14.000Z",
+    "published": true,
+    "tags": [
+      "css",
+      "tailwind",
+      "design-systems"
+    ],
+    "slug": "tailwind-and-design-systems"
+  },
+  {
+    "title": "Creating a Markdown Preprocessor for Svelte",
+    "description": "Let's look at how to write our own preprocessor for SvelteKit.",
+    "date": "2024-01-14T20:21:01.000Z",
+    "modified": "2024-09-28T17:31:14.000Z",
+    "published": true,
+    "tags": [
+      "svelte",
+      "ast"
+    ],
+    "slug": "svelte-markdown-preprocessor"
+  },
+  {
+    "title": "Understanding Generics in TypeScript",
+    "description": "Let's learn a little bit about what generics are in TypeScript, why they're useful, and how to use them.",
+    "date": "2021-08-16T16:00:00.006Z",
+    "modified": "2024-09-28T17:31:14.000Z",
+    "published": true,
+    "tags": [
+      "typescript"
+    ],
+    "slug": "typescript-generics"
+  },
+  {
+    "title": "A Gentle Introduction to Svelte Stores",
+    "description": "Svelte stores simplify state management across components. Let's learn how they're implemented.",
+    "date": "2021-08-10T16:00:00.006Z",
+    "modified": "2024-09-28T17:31:14.000Z",
+    "published": true,
+    "tags": [
+      "svelte"
+    ],
+    "slug": "svelte-stores"
+  }
+]

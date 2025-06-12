@@ -9,12 +9,7 @@ if (!dev) {
 
 export const prerender = true;
 
-export const load = async () => {
-  // Import posts directly to avoid fetch during prerendering
-  const { getPosts } = await import('$lib/posts');
-  const posts = await getPosts();
-
-  return {
-    posts,
-  };
-};
+export async function load({ data }) {
+  const { posts } = data;
+  return { posts };
+}
