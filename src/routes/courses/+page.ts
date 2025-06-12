@@ -35,10 +35,7 @@ const extractSlugFromPath = (path: string): string => {
  */
 export const load: PageLoad = async (): Promise<CoursesPageData> => {
   // Get all course README.md files and their metadata
-  const courseFiles = import.meta.glob<CourseMetadata>('../../../content/courses/**/README.md', {
-    eager: true,
-    import: 'metadata',
-  });
+  const courseFiles = import('../../../content/courses/courses.json');
 
   // Process course files into structured data with slugs.
   const walkthroughs = Object.entries(courseFiles).map(([path, metadata]) => {

@@ -190,6 +190,7 @@ Now let's add a hamburger menu that appears when the container is too narrow for
     <div class="@sm:hidden">
       <button
         class="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-slate-100"
+        id="mobile-menu-1"
       >
         <svg class="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -263,9 +264,9 @@ Let's complete the hamburger functionality with a dropdown menu that appears whe
 
       <!-- Mobile Menu Button (narrow containers) -->
       <div class="@sm:hidden">
-        <input type="checkbox" id="mobile-menu" class="peer sr-only" />
+        <input type="checkbox" id="mobile-menu-2" class="peer sr-only" />
         <label
-          for="mobile-menu"
+          for="mobile-menu-2"
           class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-slate-100"
         >
           <svg
@@ -401,9 +402,9 @@ Let's enhance accessibility with proper focus states and ARIA attributes.
 
       <!-- Mobile Menu Button (narrow containers) -->
       <div class="@sm:hidden">
-        <input type="checkbox" id="mobile-menu" class="peer sr-only" />
+        <input type="checkbox" id="mobile-menu-3" class="peer sr-only" />
         <label
-          for="mobile-menu"
+          for="mobile-menu-3"
           class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md transition-colors focus-within:bg-slate-100 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-600 hover:bg-slate-100"
           aria-label="Toggle navigation menu"
         >
@@ -541,9 +542,9 @@ Finally, let's add some polish with active navigation states and smooth transiti
 
       <!-- Mobile Menu Button (narrow containers) -->
       <div class="@sm:hidden">
-        <input type="checkbox" id="mobile-menu" class="peer sr-only" />
+        <input type="checkbox" id="mobile-menu-3" class="peer sr-only" />
         <label
-          for="mobile-menu"
+          for="mobile-menu-3"
           class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md transition-colors focus-within:bg-slate-100 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-600 hover:bg-slate-100"
           aria-label="Toggle navigation menu"
         >

@@ -34,7 +34,6 @@ modified: 2025-06-11T15:33:53-06:00
 - [Group and Peer Modifiers](group-and-peer-modifiers.md)
 - [Before & After Pseudo-Selectors](before-and-after-pseudo-selectors.md)
 - [Building a Details Disclosure Card](building-details-disclosure.md)
-- [Building a Input with Inline Validation](building-an-input-with-validation.md)
 - [Building a Compound Input](building-a-compound-input.md)
 - [Data Attribute Variants](data-attribute-variants.md)
 - [User Preference Variants](user-preference-variants.md)

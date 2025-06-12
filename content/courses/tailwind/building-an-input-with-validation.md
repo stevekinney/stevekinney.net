@@ -7,8 +7,8 @@ Let's start with our basic HTML structure for an input field with validation mes
 
 ```html tailwind
 <div>
-  <label for="email">Email address</label>
-  <input type="email" name="email" id="email" placeholder="you@example.com" />
+  <label for="email-1">Email address</label>
+  <input type="email" name="email" id="email-1" placeholder="you@example.com" />
   <div>Please enter a valid email address</div>
 </div>
 ```
@@ -21,12 +21,12 @@ First, let's apply the professional input styling we learned in our [form input 
 
 ```html tailwind
 <div>
-  <label for="email" class="block text-sm font-medium text-slate-900">Email address</label>
+  <label for="email-2" class="block text-sm font-medium text-slate-900">Email address</label>
   <div class="mt-2">
     <input
       type="email"
       name="email"
-      id="email"
+      id="email-2"
       class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-slate-900 outline-1 -outline-offset-1 outline-slate-300 placeholder:text-slate-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
       placeholder="you@example.com"
     />
@@ -50,12 +50,12 @@ Now let's introduce the peer system and HTML5 validation. We'll add the `require
 
 ```html tailwind
 <div>
-  <label for="email" class="block text-sm font-medium text-slate-900">Email address</label>
+  <label for="email-3" class="block text-sm font-medium text-slate-900">Email address</label>
   <div class="mt-2">
     <input
       type="email"
       name="email"
-      id="email"
+      id="email-3"
       required
       class="peer block w-full rounded-md bg-white px-3 py-1.5 text-base text-slate-900 outline-1 -outline-offset-1 outline-slate-300 placeholder:text-slate-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
       placeholder="you@example.com"
@@ -78,12 +78,12 @@ Let's make the error message appear only when the input is invalid using the `pe
 
 ```html tailwind
 <div>
-  <label for="email" class="block text-sm font-medium text-slate-900">Email address</label>
+  <label for="email-4" class="block text-sm font-medium text-slate-900">Email address</label>
   <div class="mt-2">
     <input
       type="email"
       name="email"
-      id="email"
+      id="email-4"
       required
       class="peer block w-full rounded-md bg-white px-3 py-1.5 text-base text-slate-900 outline-1 -outline-offset-1 outline-slate-300 placeholder:text-slate-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
       placeholder="you@example.com"
@@ -111,12 +111,12 @@ There's a problem: the error shows immediately on page load because an empty req
 
 ```html tailwind
 <div>
-  <label for="email" class="block text-sm font-medium text-slate-900">Email address</label>
+  <label for="email-5" class="block text-sm font-medium text-slate-900">Email address</label>
   <div class="mt-2">
     <input
       type="email"
       name="email"
-      id="email"
+      id="email-5"
       required
       class="peer block w-full rounded-md bg-white px-3 py-1.5 text-base text-slate-900 outline-1 -outline-offset-1 outline-slate-300 placeholder:text-slate-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
       placeholder="you@example.com"
@@ -144,12 +144,12 @@ Let's add visual feedback to the input itself when it's in an error state.
 
 ```html tailwind
 <div>
-  <label for="email" class="block text-sm font-medium text-slate-900">Email address</label>
+  <label for="email-6" class="block text-sm font-medium text-slate-900">Email address</label>
   <div class="mt-2">
     <input
       type="email"
       name="email"
-      id="email"
+      id="email-6"
       required
       class="peer block w-full rounded-md bg-white px-3 py-1.5 text-base text-slate-900 outline-1 -outline-offset-1 outline-slate-300 placeholder:text-slate-400 invalid:outline-red-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 focus:invalid:outline-red-500"
       placeholder="you@example.com"
@@ -176,12 +176,12 @@ Let's add a subtle success indicator when the input is valid and has content.
 
 ```html tailwind
 <div>
-  <label for="email" class="block text-sm font-medium text-slate-900">Email address</label>
+  <label for="email-7" class="block text-sm font-medium text-slate-900">Email address</label>
   <div class="mt-2">
     <input
       type="email"
       name="email"
-      id="email"
+      id="email-7"
       required
       class="peer block w-full rounded-md bg-white px-3 py-1.5 text-base text-slate-900 outline-1 -outline-offset-1 outline-slate-300 placeholder:text-slate-400 valid:outline-green-500 invalid:outline-red-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 focus:invalid:outline-red-500"
       placeholder="you@example.com"
@@ -215,12 +215,12 @@ Let's add transitions to make the state changes feel polished rather than jarrin
 
 ```html tailwind
 <div>
-  <label for="email" class="block text-sm font-medium text-slate-900">Email address</label>
+  <label for="email-8" class="block text-sm font-medium text-slate-900">Email address</label>
   <div class="mt-2">
     <input
       type="email"
       name="email"
-      id="email"
+      id="email-8"
       required
       class="peer block w-full rounded-md bg-white px-3 py-1.5 text-base text-slate-900 outline-1 -outline-offset-1 outline-slate-300 transition-colors placeholder:text-slate-400 valid:outline-green-500 invalid:outline-red-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 focus:invalid:outline-red-500"
       placeholder="you@example.com"
@@ -252,26 +252,26 @@ Let's add proper ARIA attributes to ensure screen readers understand the validat
 
 ```html tailwind
 <div>
-  <label for="email" class="block text-sm font-medium text-slate-900">Email address</label>
+  <label for="email-9" class="block text-sm font-medium text-slate-900">Email address</label>
   <div class="mt-2">
     <input
       type="email"
       name="email"
-      id="email"
+      id="email-9"
       required
-      aria-describedby="email-error email-success"
+      aria-describedby="email-success-9 email-error-9"
       class="peer block w-full rounded-md bg-white px-3 py-1.5 text-base text-slate-900 outline-1 -outline-offset-1 outline-slate-300 transition-colors placeholder:text-slate-400 valid:outline-green-500 invalid:outline-red-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 focus:invalid:outline-red-500"
       placeholder="you@example.com"
     />
   </div>
   <div
-    id="email-success"
+    id="email-success-9"
     class="mt-2 hidden text-sm text-green-600 transition-opacity peer-valid:block peer-valid:peer-placeholder-shown:hidden"
   >
     ✓ Email address is valid
   </div>
   <div
-    id="email-error"
+    id="email-error-9"
     class="mt-2 hidden text-sm text-red-600 transition-opacity peer-invalid:block peer-invalid:peer-placeholder-shown:hidden"
   >
     Please enter a valid email address
@@ -281,8 +281,8 @@ Let's add proper ARIA attributes to ensure screen readers understand the validat
 
 Accessibility improvements:
 
-- `aria-describedby="email-error email-success"`: Links the input to both message elements so screen readers announce them
-- `id` attributes on messages: Required for `aria-describedby` to function properly
+- `aria-describedby="email-success-9 email-error-9"`: Links the input to both message elements so screen readers announce them
+- `id="email-success-9"` and `id="email-error-9"` attributes on messages: Required for `aria-describedby` to function properly
 
 This ensures that screen reader users hear validation feedback when it appears, not just sighted users who see the visual changes.
 
