@@ -10,7 +10,7 @@ In the example below, we've got separate tasks for linting, testing, building, a
 
 The `"group"` property tags the lint task as a build-related task and the test task as a test group task, enabling quick access via **Run Build Task** or **Run Test Task** commands. The build task runs the project's production build (using Vite or `tsc`) and associates the TypeScript problem matcher to catch compile errors.
 
-The development server task runs in the background so you can continue working while it watches for file changes. Marking it with `"isBackground": true` prevents Visual Studio Code from treating it as finished – it will keep running until you terminate it manually.
+The development server task runs in the background so you can continue working while it watches for file changes. Marking it with `"isBackground": true` prevents Visual Studio Code from treating it as finished – it will keep running until you terminate it manually.
 
 ```json
 // .vscode/tasks.json (excerpt)

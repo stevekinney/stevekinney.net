@@ -18,7 +18,7 @@ export const Button = (props: ButtonProps) => {
 
 Next, we'll create our first story called—unsurprisingly—`button.stories.tsx`.
 
-First, import the `Meta` and `StoryObj` types to get some sweet, sweet autocompletion in TypeScript stories as well as the very responsible type safety.
+First, import the `Meta` and `StoryObj` types to get some sweet, sweet autocompletion in TypeScript stories as well as the very responsible type safety.
 
 ```tsx
 import type { Meta, StoryObj } from '@storybook/react';

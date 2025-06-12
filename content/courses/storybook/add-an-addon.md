@@ -7,7 +7,7 @@ modified: 2024-09-28T11:31:16-06:00
 If you need to manually add an addon in Storybook, you can follow these steps to get going. First, we'll need to install the addon in question.
 
 ```sh
- npm i -D @storybook/addon-themes
+ npm i -D @storybook/addon-themes
 ```
 
 Next, we'll pop over to `.storybook/main.ts` and add it to the array of addons.
