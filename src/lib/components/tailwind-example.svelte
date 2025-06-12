@@ -15,24 +15,41 @@
     }
   };
 
+  const listener = (event: MessageEvent) => {
+    if (event.source !== iframe.contentWindow) return;
+    const data = event.data;
+    if (data.type === 'set-height') {
+      height = data.height;
+    }
+  };
+
   $effect(() => setDefaultWidth());
+  $effect(() => {
+    if (!iframe) return;
+    window.addEventListener('message', listener);
+    return () => window.removeEventListener('message', listener);
+  });
 </script>
 
 <section class="flex flex-col gap-4 rounded-md bg-slate-200 p-4 shadow-md dark:bg-slate-900">
   <div class="flex w-full flex-col items-center gap-4">
-    <div class="flex w-full items-center gap-4">
-      <label class="flex w-full flex-1 items-center gap-2 text-xs">
-        <span class="font-semibold">Height</span>
-        <input
-          type="range"
-          bind:value={height}
-          min="100"
-          max="800"
-          step="10"
-          class="accent-primary-700 w-full"
-        />
-      </label>
+    <iframe
+      class="z-10 rounded-md border-2 border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-800"
+      title="Tailwind Example"
+      bind:this={iframe}
+      src={code}
+      {height}
+      width={width || '100%'}
+    ></iframe>
+  </div>
 
+  <div>
+    {@render children?.()}
+  </div>
+
+  <details class="w-full">
+    <summary>Options</summary>
+    <div class="flex w-full items-center gap-4 p-4">
       <label class="flex w-full flex-1 items-center gap-2 text-xs">
         <span class="font-semibold">Width</span>
         <input
@@ -48,16 +65,5 @@
 
       <Button variant="secondary" size="small" onclick={setDefaultWidth}>Reset Width</Button>
     </div>
-
-    <iframe
-      class="z-10 rounded-md border-2 border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-800"
-      title="Tailwind Example"
-      bind:this={iframe}
-      src={code}
-      {height}
-      width={width || '100%'}
-    ></iframe>
-  </div>
-
-  {@render children?.()}
+  </details>
 </section>

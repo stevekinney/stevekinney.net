@@ -28,7 +28,9 @@ Use `flex` to create a flex container. Control layout direction and wrapping wit
   <div class="min-h-[100px] rounded-lg bg-green-500 p-4 text-white">Item 2</div>
   <div class="min-h-[100px] rounded-lg bg-purple-500 p-4 text-white">Item 3</div>
 </div>
+```
 
+```html tailwind
 <!-- Wrap on mobile, no wrap on desktop -->
 <div class="flex flex-wrap gap-4 lg:flex-nowrap">
   <div class="min-h-[100px] min-w-[200px] rounded-lg bg-red-500 p-4 text-white">Item 1</div>

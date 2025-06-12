@@ -1,9 +1,9 @@
 <script module lang="ts">
-  import A from './a.svelte';
-  import H2 from './h2.svelte';
-  import UL from './ul.svelte';
+  import a from './components/a.svelte';
+  import h2 from './components/h2.svelte';
+  import ul from './components/ul.svelte';
 
-  export { A as a, H2 as h2, UL as ul };
+  export { a, h2, ul };
 </script>
 
 <script lang="ts">

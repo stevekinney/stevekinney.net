@@ -143,22 +143,14 @@ Disabled state styling:
 Form controls like checkboxes and radio buttons can also match your design system:
 
 ```html tailwind
-<div class="mt-4 space-y-2">
-  <div class="flex items-center gap-2">
-    <input type="checkbox" id="newsletter" name="newsletter" class="h-4 w-4 accent-indigo-600" />
-    <label for="newsletter" class="text-sm text-slate-900"> Subscribe to newsletter </label>
-  </div>
+<div class="flex items-center gap-2">
+  <input type="checkbox" id="newsletter" name="newsletter" class="h-4 w-4 accent-pink-500" />
+  <label for="newsletter" class="text-sm text-slate-900">Sign Up for Spam</label>
+</div>
 
-  <div class="flex items-center gap-2">
-    <input
-      type="radio"
-      id="option1"
-      name="choice"
-      value="option1"
-      class="h-4 w-4 accent-indigo-600"
-    />
-    <label for="option1" class="text-sm text-slate-900"> Option 1 </label>
-  </div>
+<div class="flex items-center gap-2">
+  <input type="radio" id="option1" name="choice" value="option1" class="h-4 w-4 accent-pink-500" />
+  <label for="option1" class="text-sm text-slate-900">The Only Option</label>
 </div>
 ```
 

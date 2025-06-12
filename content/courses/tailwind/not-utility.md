@@ -39,17 +39,6 @@ The `not-*` variant applies styles when a condition is NOT true, simplifying con
 </button>
 ```
 
-### Loading States
-
-```html tailwind
-<!-- Show loading spinner when not loaded -->
-<div
-  class="not-loaded:animate-pulse not-loaded:bg-gray-200 loaded:bg-green-100 flex h-20 items-center justify-center rounded-lg"
->
-  <span class="loaded:block not-loaded:hidden text-green-800">Content Loaded!</span>
-</div>
-```
-
 ### Responsive Visibility
 
 ```html tailwind
