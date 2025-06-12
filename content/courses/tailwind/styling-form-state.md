@@ -8,7 +8,7 @@ You can form elements based on their state without conditional logic.
 
 ```html tailwind
 <input
-  class="bg-white px-3 py-1.5 outline-2 outline-slate-400 invalid:outline-red-500 focus:ring-2 disabled:cursor-not-allowed disabled:bg-gray-100"
+  class="rounded-md bg-white px-3 py-1.5 outline-2 outline-slate-400 invalid:outline-red-500 disabled:cursor-not-allowed disabled:bg-gray-100"
 />
 ```
 
@@ -32,7 +32,10 @@ You can form elements based on their state without conditional logic.
 ### Placeholders
 
 ```html tailwind
-<input placeholder="Email" class="placeholder:italic" />
+<input
+  placeholder="Email"
+  class="rounded-md bg-white px-3 py-1.5 outline-2 outline-slate-400 placeholder:italic"
+/>
 ```
 
 ### File Inputs
@@ -47,7 +50,7 @@ You can form elements based on their state without conditional logic.
 ### Text Cursor
 
 ```html tailwind
-<input class="bg-white px-3 py-1.5 caret-pink-500 outline-2 outline-slate-400" />
+<input class="rounded-md bg-white px-3 py-1.5 caret-pink-500 outline-2 outline-slate-400" />
 ```
 
 ## Form Utilities
@@ -56,7 +59,7 @@ You can form elements based on their state without conditional logic.
 
 ```html tailwind
 <select
-  class="appearance-none rounded border border-gray-300 bg-white px-3 py-2 pr-8 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  class="b w-fullg-white block appearance-none rounded-md px-3 py-2 pr-8 outline-2 outline-slate-400 focus:border-blue-500 focus:outline-pink-400"
 >
   <option value="">Choose an option</option>
   <option value="option1">Option 1</option>
@@ -69,21 +72,21 @@ You can form elements based on their state without conditional logic.
 
 ```html tailwind
 <div class="space-y-4">
-  <textarea
-    class="rounded border border-gray-300 bg-white px-3 py-2 select-all focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  <div
+    class="b w-fullg-white block rounded-md px-3 py-2 outline-2 outline-slate-400 select-all focus:outline-pink-400"
   >
-This text will be selected when clicked</textarea
+    This text will be selected when clicked
+  </div>
+  <div
+    class="b w-fullg-white block rounded-md px-3 py-2 outline-2 outline-slate-400 select-none focus:outline-pink-400"
   >
-  <textarea
-    class="rounded border border-gray-300 bg-white px-3 py-2 select-none focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    This text cannot be selected
+  </div>
+  <div
+    class="b w-fullg-white block rounded-md px-3 py-2 outline-2 outline-slate-400 select-text focus:outline-pink-400"
   >
-This text cannot be selected</textarea
-  >
-  <textarea
-    class="rounded border border-gray-300 bg-white px-3 py-2 select-text focus:ring-2 focus:ring-blue-500 focus:outline-none"
-  >
-This text can be selected normally</textarea
-  >
+    This text can be selected normally
+  </div>
 </div>
 ```
 
@@ -92,29 +95,21 @@ This text can be selected normally</textarea
 ```html tailwind
 <div class="space-y-4">
   <textarea
-    class="resize-none rounded border border-gray-300 bg-white px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    class="block w-full resize-none rounded-md bg-white px-3 py-2 outline-2 outline-slate-400 focus:outline-pink-400"
     placeholder="Cannot be resized"
-  >
-This textarea cannot be resized</textarea
-  >
+  ></textarea>
   <textarea
-    class="resize-y rounded border border-gray-300 bg-white px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    class="block w-full resize-y rounded-md bg-white px-3 py-2 outline-2 outline-slate-400 focus:outline-pink-400"
     placeholder="Resize vertically only"
-  >
-This textarea can only be resized vertically</textarea
-  >
+  ></textarea>
   <textarea
-    class="resize-x rounded border border-gray-300 bg-white px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    class="block w-full resize-x rounded-md bg-white px-3 py-2 outline-2 outline-slate-400 focus:outline-pink-400"
     placeholder="Resize horizontally only"
-  >
-This textarea can only be resized horizontally</textarea
-  >
+  ></textarea>
   <textarea
-    class="resize rounded border border-gray-300 bg-white px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    class="block w-full resize rounded-md bg-white px-3 py-2 outline-2 outline-slate-400 focus:outline-pink-400"
     placeholder="Resize in both directions"
-  >
-This textarea can be resized in both directions</textarea
-  >
+  ></textarea>
 </div>
 ```
 
@@ -124,12 +119,3 @@ This textarea can be resized in both directions</textarea
 - **Placeholder color:** Now 50% opacity of text color (was gray-400)
 - **Button cursor:** Default is `cursor-default` (was pointer)
 - **Outline:** `outline-hidden` preserves outline in forced-colors mode
-
-## Combining with Other Variants
-
-We'll get to this shortly, but I wanted to include it just in case you're reading these notes later.
-
-```html tailwind
-<input class="peer" type="email" />
-<span class="hidden text-red-500 peer-invalid:block"> Invalid email </span>
-```

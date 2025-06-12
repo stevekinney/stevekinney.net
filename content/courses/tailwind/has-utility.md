@@ -33,7 +33,7 @@ Basic `has-*` implementation:
 
 - `has-[input:checked]:border-green-500`: When container has a checked input, border turns green
 - `has-[input:checked]:bg-green-50`: When container has a checked input, background turns light green
-- The entire container responds automatically to the checkbox state
+- The entire container responds automatically to the checkbox state.
 
 This is fundamentally different from `peer-*` utilities—instead of siblings affecting each other, parents respond to children.
 
@@ -48,7 +48,7 @@ This is fundamentally different from `peer-*` utilities—instead of siblings af
     <input
       type="email"
       required
-      class="mt-1 block w-full rounded border-2 border-slate-300 bg-white px-3 py-2 focus:border-blue-500 focus:outline-none"
+      class="mt-1 block w-full rounded border-2 border-slate-300 bg-white px-3 py-2 invalid:border-red-600 focus:border-blue-500 focus:outline-none"
     />
   </div>
 
@@ -67,7 +67,7 @@ Form validation features:
 - `has-[input:valid]:border-green-500`: Container turns green when input is valid
 - `has-[input:invalid]:border-red-500`: Container turns red when input is invalid
 - `has-[input:focus]:border-blue-500`: Container highlights when input is focused
-- `transition-colors`: Smooth state transitions
+- `transition-colors`: Smooth state transitions.
 
 The entire form field container provides visual feedback, not just the input itself.
 
@@ -114,7 +114,6 @@ Let's build interactive cards that respond to nested form controls, perfect for 
 
 Card selection styling:
 
-- `border-2`: Thicker border for prominent selection feedback
 - `has-[input:checked]:border-blue-500`: Selected card gets blue border
 - `has-[input:checked]:bg-blue-50`: Selected card gets light background
 - `has-[input:checked]:shadow-md`: Selected card gets elevated shadow
@@ -251,9 +250,9 @@ Perfect for admin interfaces where entire rows need to respond to selection stat
 
 Table row features:
 
-- `has-[input:checked]:bg-blue-50`: Selected rows get highlighted
-- `has-[input:checked]:border-l-4`: Selected rows get prominent left border
-- `transition-colors`: Smooth state transitions
+- `has-[input:checked]:bg-blue-50`: Selected rows get highlighted.
+- `has-[input:checked]:border-l-4`: Selected rows get prominent left border.
+- `transition-colors`: Smooth state transitions.
 
 Creates intuitive selection interfaces where entire rows provide visual feedback.
 
@@ -309,15 +308,14 @@ Bulk actions features:
 - Works across multiple child elements automatically
 - Perfect for e-commerce and admin interfaces
 
-## Why has-\* Utilities Are Revolutionary
+## Why This is Kind of a Big Deal™
 
 The `has-*` utilities represent a fundamental shift in CSS capabilities:
 
-**Before `:has()`**: Parent-child state relationships required JavaScript event handling and manual class management.
+- **Before `:has()`**: Parent-child state relationships required JavaScript event handling and manual class management.
+- **With `has-*`**: Sophisticated interactive patterns work with pure CSS.
 
-**With `has-*`**: Sophisticated interactive patterns work with pure CSS.
-
-**Key advantages:**
+### Key Advantages
 
 - **Performance**: No JavaScript overhead required
 - **Accessibility**: Works seamlessly with native form controls
@@ -326,12 +324,11 @@ The `has-*` utilities represent a fundamental shift in CSS capabilities:
 
 **Browser support**: Supported in all modern browsers (Chrome 105+, Firefox 121+, Safari 15.4+).
 
-## Challenges
+### Challenges
 
 Try building these variations:
 
 1. **Multi-step Form**: Create a 3-step form where each step's container responds to input completion using `has-[input:valid]` conditions
-
 2. **Dashboard Metrics**: Build metric cards that can be selected for comparison, with a comparison panel that appears when multiple cards are selected
 
 The `has-*` utilities unlock powerful new possibilities for creating intelligent, responsive interfaces while maintaining semantic HTML and excellent performance.

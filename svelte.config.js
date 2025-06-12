@@ -16,44 +16,14 @@ import { fileURLToPath } from 'url';
 import { fixMarkdownUrls } from './plugins/remark-fix-urls.js';
 import { processCallouts } from './plugins/svelte-compile-callouts.js';
 import { processImages } from './plugins/svelte-enhance-images.js';
+import {
+  processTailwindExamples,
+  toTailwindPlayground,
+} from './plugins/tailwind-playground/index.js';
 
 // Define directory paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-import { parse } from 'svelte/compiler';
-import { walk } from 'svelte-tree-walker';
-import MagicString from 'magic-string';
-
-/**
- * Creates a preprocessor to handle <tailwind-example> components in markdown files.
- * @returns {import('svelte/compiler').PreprocessorGroup}
- */
-const processTailwindExamples = () => {
-  return {
-    name: 'tailwind-example',
-    markup: ({ content, filename }) => {
-      if (!filename?.endsWith('.md')) return;
-
-      // Parse the content with the Svelte Compiler
-      const { instance, html } = parse(content, { filename });
-      const s = new MagicString(content);
-
-      // Find all <tailwind-example> components and process them
-      for (const node of walk(html)) {
-        if ('name' in node && node.name === 'TailwindExample') {
-          s.appendRight(
-            instance.content.end,
-            `\nimport TailwindExample from '$lib/components/tailwind-example.svelte';\n`,
-          );
-          break;
-        }
-      }
-
-      return { code: s.toString(), map: s.generateMap({ hires: true }) };
-    },
-  };
-};
 
 /**
  * MDSvex configuration options
@@ -70,7 +40,7 @@ const mdsvexOptions = {
   layout: {
     _: join(__dirname, './src/lib/markdown/base.svelte'),
     page: join(__dirname, './src/lib/markdown/page.svelte'),
-    contents: join(__dirname, './src/lib/markdown/components/contents.svelte'),
+    contents: join(__dirname, './src/lib/markdown/contents.svelte'),
   },
 
   highlight: {
@@ -96,13 +66,10 @@ const mdsvexOptions = {
         'not-last:mb-4',
       ];
 
-      const codeBlock = `<div class="${classes.join(' ')}" data-language="${lang}" data-metastring="${metastring}">{@html \`${html}\` }</div>`;
+      const codeBlock = `<div class="${classes.join(' ')}" data-language="${lang}" data-metastring="${metastring}">${html}</div>`;
 
       if (metastring === 'tailwind') {
-        const encoded = Buffer.from(
-          `<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><title>Tailwind Example</title><link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css'></head><body class='bg-white dark:bg-slate-950 p-4'>${code}</body></html>`,
-        ).toString('base64');
-        return `<TailwindExample code="data:text/html;base64,${encoded}">${codeBlock}</TailwindExample>`;
+        return toTailwindPlayground(code, codeBlock);
       }
 
       return codeBlock;

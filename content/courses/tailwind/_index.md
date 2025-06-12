@@ -53,7 +53,6 @@ modified: 2025-06-11T15:33:53-06:00
 - [Direction and Wrapping](flexbox-direction-and-wrapping.md)
 - [Alignment](flexbox-alignment.md)
 - [Growing and Shrinking](flexbox-growing-and-shrinking.md)
-- [Building a Login Form](building-a-login-form.md)
 - [Initial Size](flexbox-initial-size.md)
 - [Aligning Individual Items](flexbox-aligning-individual-items.md)
 - [Multi-Directional Layouts](flexbox-multi-directional-layouts.md)

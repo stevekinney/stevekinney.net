@@ -1,11 +1,12 @@
 ---
-title: 'Modern Web Design with Tailwind CSS'
-description: 'Learn to build beautiful, responsive, and maintainable websites with the latest version of Tailwind CSS.'
-layout: 'page'
-date: '2024-07-26'
+title: TailwindCSS
+description: 'An introduction to testing using JavaScript'
+layout: page
+date: 2025-06-13T12:56:55-07:00
+modified: 2025-06-13T12:56:55-07:00
 ---
 
-Welcome to this comprehensive course on modern web design with Tailwind CSS! Whether you are new to utility-first CSS or are looking to upgrade your skills to the latest version, this course will provide you with a solid foundation and guide you through advanced topics.
+Welcome to this comprehensive course on building user interfaces with Tailwind CSS. Whether you are new to utility-first CSS or are looking to upgrade your skills to the latest version, this course will provide you with a solid foundation and guide you through advanced topics.
 
 ## Who is this course for?
 

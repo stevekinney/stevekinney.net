@@ -305,19 +305,16 @@ Tailwind `self-*` utilities:
 
 `justify-content` controls grid _track_ alignment along the container's _main axis_ (typically horizontal) when there's extra space. Applied to the grid container.
 
-Tailwind `justify-*` utilities:
-`justify-start`, `justify-end`, `justify-center`, `justify-between`, `justify-around`, `justify-evenly`, `justify-stretch`, `justify-normal`.
+Tailwind `justify-*` utilities: `justify-start`, `justify-end`, `justify-center`, `justify-between`, `justify-around`, `justify-evenly`, `justify-stretch`, `justify-normal`.
 
 ```html tailwind
-<div class="grid w-64 grid-cols-3 justify-center gap-4 rounded-lg bg-gray-100 p-4">
-  <div class="min-h-[80px] rounded bg-blue-200 p-4">Item 1</div>
-  <div class="min-h-[80px] rounded bg-red-200 p-4">Item 2</div>
+<div class="grid h-96 grid-cols-[4rem_4rem_4rem] justify-center gap-4 rounded-lg bg-green-100 p-4">
+  <div class="flex h-12 w-12 items-center justify-center rounded bg-blue-200">1</div>
+  <div class="flex h-12 w-12 items-center justify-center rounded bg-red-200">2</div>
 </div>
 ```
 
 Implicit columns are centered within the container due to `justify-center`.
-
-`-safe` suffix utilities are available.
 
 ### Justifying Items (`justify-items`)
 
@@ -327,9 +324,9 @@ Tailwind `justify-items-*` utilities:
 `justify-items-start`, `justify-items-end`, `justify-items-center`, `justify-items-stretch` (default), `justify-items-normal`.
 
 ```html tailwind
-<div class="grid w-64 grid-cols-2 justify-items-center gap-4 rounded-lg bg-gray-100 p-4">
-  <div class="min-h-[80px] w-16 rounded bg-blue-200 p-4">Item 1 (wider)</div>
-  <div class="min-h-[80px] w-8 rounded bg-red-200 p-4">Item 2</div>
+<div class="grid h-96 grid-cols-3 justify-items-center gap-4 rounded-lg bg-green-100 p-4">
+  <div class="h-24 w-24 rounded bg-blue-200 p-4">Item 1</div>
+  <div class="h-24 w-24 rounded bg-red-200 p-4">Item 2</div>
 </div>
 ```
 
@@ -345,9 +342,9 @@ Tailwind `justify-self-*` utilities:
 `justify-self-auto` (uses `justify-items`), `justify-self-start`, `justify-self-end`, `justify-self-center`, `justify-self-stretch`.
 
 ```html tailwind
-<div class="grid w-64 grid-cols-2 justify-items-start gap-4 rounded-lg bg-gray-100 p-4">
-  <div class="min-h-[80px] w-16 rounded bg-blue-200 p-4">Item 1 (start)</div>
-  <div class="min-h-[80px] w-8 justify-self-center rounded bg-red-200 p-4">Item 2 (centered)</div>
+<div class="grid grid-cols-2 justify-items-start gap-4 rounded-lg bg-gray-100 p-4">
+  <div class="min-h-[80px] rounded bg-blue-200 p-4">Item 1 (start)</div>
+  <div class="min-h-[80px] justify-self-center rounded bg-red-200 p-4">Item 2 (centered)</div>
 </div>
 ```
 

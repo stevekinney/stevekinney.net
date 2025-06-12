@@ -63,25 +63,19 @@ Then use them:
 
 ## Common Patterns
 
-**Tab interfaces:**
+### Tab interfaces
 
 ```html tailwind
 <button data-selected class="data-selected:border-b-2">Tab 1</button>
 ```
 
-**Accordion items:**
+### Accordion items
 
 ```html tailwind
 <div data-expanded class="data-expanded:pb-4">Content</div>
 ```
 
-**Loading states:**
-
-```html tailwind
-<div data-loading class="data-loading:pointer-events-none">...</div>
-```
-
-**Form validation:**
+### Form validation
 
 ```html tailwind
 <input data-invalid class="data-invalid:ring-red-500" />
