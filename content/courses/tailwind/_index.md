@@ -4,6 +4,8 @@ modified: 2025-06-13T05:23:02-05:00
 ---
 
 - [Tailwind Play](https://play.tailwindcss.com)
+- [Flexbox Playground](https://tailwind-workshop.vercel.app/playgrounds/flex?boxes=3&height=600&width=w-20)
+- [Grid Playground](- [Flexbox Playground](https://tailwind-workshop.vercel.app/playgrounds/grid?boxes=3&height=600&width=w-20))
 
 ## High-Level
 
