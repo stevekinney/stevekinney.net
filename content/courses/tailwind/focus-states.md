@@ -22,7 +22,7 @@ modified: 2025-06-11T12:17:33-06:00
 
 For skip links, main navigation, or accessibility-critical elements. These elements should be immediately obvious when focused, regardless of how focus was achieved.
 
-```html tailwind
+```html
 <a href="#main-content" class="outline-offset-4 focus:outline-2 focus:outline-blue-500">
   Skip to main content
 </a>

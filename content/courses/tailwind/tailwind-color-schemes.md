@@ -132,25 +132,6 @@ Use `@theme` to define colors that generate utilities:
 <div class="bg-(--color-brand)/20">...</div>
 ```
 
-## Theme Switching Pattern
-
-```html tailwind
-<html lang="en" class="scheme-light-dark" data-theme="auto">
-  <head>
-    <script>
-      // Apply theme before paint
-      const theme = localStorage.getItem('theme') || 'auto';
-      if (theme === 'auto') {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.dataset.theme = prefersDark ? 'dark' : 'light';
-      } else {
-        document.documentElement.dataset.theme = theme;
-      }
-    </script>
-  </head>
-</html>
-```
-
 ## Best Practices
 
 1. **Use semantic color names** that describe purpose, not appearance
