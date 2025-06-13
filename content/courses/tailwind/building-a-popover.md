@@ -394,7 +394,7 @@ You can customize popover positioning by using different anchor utilities. Here 
 
 The anchor positioning system is completely flexible—you can create any spatial relationship between trigger and popover.
 
-## Why This Approach is Powerful
+## Why This Approach is Cool
 
 **Semantic Class Names**: Classes like `anchor-menu-button` and `anchor-below-menu-button` are self-documenting and reusable.
 
@@ -411,5 +411,4 @@ The anchor positioning system is completely flexible—you can create any spatia
 Try building these variations:
 
 1. **User Profile Popover**: Create a popover with user avatar, name, email, and action buttons using a more complex layout with proper spacing and typography hierarchy
-
 2. **Multi-Section Menu**: Extend the menu to include multiple grouped sections with separators, organizing related actions together using the separator pattern we learned
