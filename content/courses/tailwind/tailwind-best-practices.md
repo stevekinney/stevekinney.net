@@ -36,19 +36,18 @@ Declare design tokens in `@theme` blocks:
 
 - Define tokens ( `--color-primary`, `--spacing-4`, `--font-brand` ) inside `@theme` using native CSS custom properties.
 - Reuse across all layers for single-source-of-truth styling
-- Keep documentation near consuming code; no JavaScript config needed
+- Keep documentation near consuming code; no JavaScript configuration needed.
 
 ## Responsive, State, and Container Variants
 
 - Mobile-first: default rule, then `md:`, `lg:` prefixes
 - Combine state and media: `md:hover:bg-primary-600`
-- Use `cq` prefix for container queries with `container-type: inline-size`
 
 ## Accessibility Defaults
 
 - Use `focus-visible:outline-none` instead of `outline-none` for keyboard accessibility
 - Built-in helpers: `sr-only`, `not-sr-only`, `motion-safe:*`, `selection:*`
-- Prefer semantic HTML over ARIA gymnastics; Tailwind styles elements, it doesn’t fix semantics.
+- Prefer semantic HTML over ARIA gymnastics; Tailwind styles elements, it doesn't fix semantics.
 
 ## Performance Hygiene
 
@@ -72,4 +71,4 @@ Experiment with new CSS behind feature queries:
 ```
 
 - Remove proprietary prefixes (grid, flexbox): modern build targets don't need them.
-- Move stable features (OKLCH) to `@theme` block
+- Move stable features (OKLCH) to `@theme` block.
