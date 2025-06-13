@@ -263,7 +263,7 @@ The square format with generous padding creates a comfortable touch target while
 
 ## Adding Button Variations and Layout
 
-Let's enhance the footer with multiple button options and proper spacing, similar to patterns from our [button bar tutorial](creating-a-button-bar.md).
+Let's enhance the footer with multiple button options and proper spacing.
 
 ```html
 <div>
