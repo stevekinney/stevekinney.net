@@ -17,7 +17,7 @@ Container queries let you style elements based on their parent's size, not the v
 
 Mark parent as container, style children based on its size:
 
-```html tailwind
+```html
 <div class="@container">
   <article class="flex flex-col @sm:flex-row @lg:grid @lg:grid-cols-3">
     <!-- Adapts to container width -->
@@ -39,7 +39,7 @@ Default sizes match viewport breakpoints:
 
 ### Card Component
 
-```html tailwind
+```html
 <div class="@container">
   <div class="p-4 @sm:p-6 @md:p-8">
     <h3 class="text-lg @sm:text-xl @lg:text-2xl">Responsive heading</h3>
@@ -52,7 +52,7 @@ Default sizes match viewport breakpoints:
 
 ### Sidebar Layout
 
-```html tailwind
+```html
 <aside class="@container">
   <nav class="flex flex-wrap gap-2 @sm:flex-col @sm:gap-1">
     <a href="#" class="@sm:py-2">Link</a>
@@ -64,7 +64,7 @@ Default sizes match viewport breakpoints:
 
 Target specific containers in nested layouts:
 
-```html tailwind
+```html
 <!-- Main content area -->
 <main class="@container/main">
   <!-- Sidebar -->
@@ -85,7 +85,7 @@ Target specific containers in nested layouts:
 
 ### Maximum Width
 
-```html tailwind
+```html
 <div class="@container">
   <div class="@max-md:hidden">Hidden in small containers</div>
 </div>
@@ -93,7 +93,7 @@ Target specific containers in nested layouts:
 
 ### Specific Ranges
 
-```html tailwind
+```html
 <div class="@container">
   <div class="@sm:@max-lg:bg-blue-100">Blue only in medium containers</div>
 </div>
@@ -101,7 +101,7 @@ Target specific containers in nested layouts:
 
 ## Arbitrary Container Sizes
 
-```html tailwind
+```html
 <div class="@container">
   <!-- Custom breakpoint -->
   <div class="@min-[400px]:flex">Flex at 400px container width</div>
@@ -115,7 +115,7 @@ Target specific containers in nested layouts:
 
 Control which dimension to query:
 
-```html tailwind
+```html
 <!-- Default: inline-size (width) -->
 <div class="@container">...</div>
 
@@ -127,7 +127,7 @@ Control which dimension to query:
 
 Size elements relative to container:
 
-```html tailwind
+```html
 <div class="@container">
   <!-- 50% of container width -->
   <div class="w-[50cqw]">...</div>
@@ -165,7 +165,7 @@ Units available:
 
 Product card that works everywhere:
 
-```html tailwind
+```html
 <div class="@container">
   <div class="flex flex-col gap-4 p-4 @sm:flex-row">
     <!-- Image -->

@@ -9,11 +9,11 @@ Tailwind 4 is a ground-up rewrite of the framework.
 - **[Oxide Engine](tailwind-oxide.md):** Rust-powered engine with 5x faster full builds, 100x faster incremental builds
 - **CSS-First Configuration:** Configure in CSS with `@theme`, `@utility`, `@custom-variant`, `@plugin` (JavaScript config still supported via `@config`)
 - **Native CSS Variables:** `@theme` tokens automatically exposed as CSS custom properties
-- **Modern CSS:** Native [`@layer`](tailwind-layers.md), [`@property`](at-property.md), [`color-mix()`](color-mix.md), [OKLCH colors](oklch-colors.md)
+- **Modern CSS:** Native `@layer`, [`@property`](at-property.md), [`color-mix()`](color-mix.md), [OKLCH colors](oklch-colors.md)
 - **[OKLCH Colors](oklch-colors.md):** Perceptually uniform, P3 wide gamut support
 - **Simplified Installation:** Single `@import "tailwindcss";` replaces three directives
 - **Automatic Content Detection:** No `content` array needed, respects `.gitignore`
-- **New Utilities:** [Container queries](container-queries.md), 3D transforms, gradients (radial/conic), text shadows, [masks](tailwind-masks.md), [`not-*`](not-utility.md), [`starting:`](starting-style.md), `user-valid/invalid`, `pointer-*`, `inset-shadow/ring`, [`inert`](inert-utility.md)
+- **New Utilities:** [Container queries](container-queries.md), 3D transforms, gradients (radial/conic), text shadows, masks, [`not-*`](not-utility.md), [`starting:`](starting-style.md), `user-valid/invalid`, `pointer-*`, `inset-shadow/ring`, [`inert`](inert-utility.md)
 - **Composable Variants:** Chain [`group-*`](group-and-peer-modifiers.md), [`peer-*`](group-and-peer-modifiers.md), [`has-*`](has-utility.md), [`not-*`](not-utility.md)
 - **Breaking Changes:** Deprecated utilities removed, border defaults to `currentColor`, CSS variables use `(…)` not `[…]`, variants in `@layer components` changed
 - **Browser Support:** Safari 16.4+, Chrome 111+, Firefox 128+ (use v3.x for older browsers)

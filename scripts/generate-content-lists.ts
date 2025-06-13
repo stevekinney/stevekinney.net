@@ -46,7 +46,5 @@ function sortDescending(first: PostWithSlug, second: PostWithSlug) {
 const posts = FastGlob.sync('./content/writing/**/*.md').map(getPostMetadata).sort(sortDescending);
 const courses = FastGlob.sync('./content/courses/**/README.md').map(getCourseMetadata);
 
-console.log(courses);
-
 writeFileSync('./content/writing/posts.json', JSON.stringify(posts, null, 2));
 writeFileSync('./content/courses/courses.json', JSON.stringify(courses, null, 2));

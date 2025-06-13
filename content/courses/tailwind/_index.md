@@ -94,10 +94,6 @@ modified: 2025-06-11T15:33:53-06:00
 - [Built-In Animations](built-in-animations.md)
 - [`@starting-style`](starting-style.md)
 - [Pulse and Loading Indicator Patterns](pulse-and-loading-indicator-patterns.md)
-- [Backdrop Filters](backdrop-filters.md)
-- [Backface Visibility](backface-visibility.md)
-- [Custom Keyframe Animations](custom-keyframe-animations.md)
-- [Masks](tailwind-masks.md)
 
 ## Theming and Customization
 

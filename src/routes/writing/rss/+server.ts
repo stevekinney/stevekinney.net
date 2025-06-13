@@ -1,5 +1,5 @@
 import { author, description as siteDescription, title as siteTitle, url } from '$lib/metadata';
-import { getPosts } from '$lib/posts';
+import posts from '$lib/posts.json';
 import { toHtml } from 'hast-util-to-html';
 import { h } from 'hastscript';
 import prettier from 'prettier';
@@ -8,7 +8,6 @@ export const prerender = true;
 const now = new Date();
 
 export async function GET() {
-  const posts = await getPosts();
   const [first] = posts;
   const updated = new Date(first.date);
 
