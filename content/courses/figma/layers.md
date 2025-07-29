@@ -1,9 +1,14 @@
 ---
 title: Working with Layers
-description: In which we learn how to use frames, sections, slices, and groups in Figma—and the difference between them.
-modified: 2024-09-28T11:31:17-06:00
-date: 2024-03-05T13:04:49-07:00
-tags: [figma, course, frontendmasters]
+description: >-
+  In which we learn how to use frames, sections, slices, and groups in Figma—and
+  the difference between them.
+modified: 2025-04-28T17:33:44-06:00
+date: 2024-03-05T20:04:49.000Z
+tags:
+  - figma
+  - course
+  - frontendmasters
 ---
 
 [Figma](https://figma.com/) features three key tools that appear similar at first glance: [**frames**](https://help.figma.com/hc/en-us/articles/360041539473-Frames-in-Figma), [**groups**](https://help.figma.com/hc/en-us/articles/360039832054-The-difference-between-frames-and-groups), and [**sections**](https://help.figma.com/hc/en-us/articles/9771500257687-Organize-your-canvas-with-sections). Each serves a unique purpose in organizing and designing within the platform. Let's delve into these tools to understand their differences and best use cases.

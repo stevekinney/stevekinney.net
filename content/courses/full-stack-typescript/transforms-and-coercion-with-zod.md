@@ -1,7 +1,9 @@
 ---
 title: Transforms and Coercion with Zod
-description: 'Master Zod transformations and data coercion to convert, refine, and prepare your data in type-safe ways.'
-modified: 2025-03-15T16:00:00-06:00
+description: >-
+  Master Zod transformations and data coercion to convert, refine, and prepare
+  your data in type-safe ways.
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 ## Leveraging Transform to Create Specialized Types

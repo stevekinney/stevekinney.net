@@ -1,7 +1,7 @@
 ---
 title: Testing Division By Zero in JavaScript
 description: Learn how to test division by zero in JavaScript utilities.
-modified: 2024-09-28T18:32:10.979Z
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Math has some rules. For example, you're not allowed to divide by zero. JavaScript gets especially weird about this. `5 / 0` equals `Infinity`. We don't want that. The purpose of our utility library is to protect us from some of the oddities that might come up.

@@ -1,6 +1,10 @@
 ---
 title: Spacing Scale
-description: How Tailwind's spacing scale powers utilities for margin, padding, gap, and sizing with the --spacing CSS variable.
+description: >-
+  How Tailwind's spacing scale powers utilities for margin, padding, gap, and
+  sizing with the --spacing CSS variable.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 The **spacing scale** in Tailwind CSS is a predefined set of values for utilities that control space: `margin`, `padding`, `gap`, `width`, `height`, and others. In Tailwind 4, the numeric spacing scale is driven by the `--spacing` CSS variable.
@@ -10,7 +14,6 @@ The **spacing scale** in Tailwind CSS is a predefined set of values for utilitie
 1. **Based on `var(--spacing)`:** The core of the numeric spacing scale is the `--spacing` CSS variable. Utility classes with numbers (like `p-4`, `m-8`, `w-12`, `gap-6`) are generated using `calc(var(--spacing) * <number>)`. For example, `w-4` results in `width: calc(var(--spacing) * 4);`. The base unit `var(--spacing)` is typically `0.25rem`.
 
 2. **Utilities That Use the Spacing Scale:** The numeric spacing scale is used by:
-
    - **`margin`**: `m-<number>`, `mx-<number>`, `my-<number>`, `mt-<number>`, `mr-<number>`, `mb-<number>`, `ml-<number>`, `ms-<number>`, `me-<number>`
    - **`padding`**: `p-<number>`, `px-<number>`, `py-<number>`, `pt-<number>`, `pr-<number>`, `pb-<number>`, `pl-<number>`, `ps-<number>`, `pe-<number>`
    - **`gap`**: `gap-<number>`, `gap-x-<number>`, `gap-y-<number>`

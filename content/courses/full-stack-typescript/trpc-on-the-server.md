@@ -1,7 +1,9 @@
 ---
-modified: 2025-03-20T03:57:46-05:00
+modified: 2025-04-16T12:27:20-06:00
 title: tRPC on the Server
-description: Learn how to set up a tRPC server with Express to create type-safe API endpoints with routers, procedures, and contexts.
+description: >-
+  Learn how to set up a tRPC server with Express to create type-safe API
+  endpoints with routers, procedures, and contexts.
 ---
 
 ## Install Dependencies

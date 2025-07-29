@@ -1,6 +1,8 @@
 ---
 title: Button Exemplars
 description: Fully built-out buttons in Tailwind.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 ## Light Mode

@@ -1,7 +1,10 @@
 ---
 title: Mock Service Worker with Storybook
-description: To use Mock Service Worker (MSW) in Storybook, install MSW, create a handler for the API endpoint, and configure it in Storybook to intercept requests during testing.
-modified: 2024-09-28T11:31:16-06:00
+description: >-
+  To use Mock Service Worker (MSW) in Storybook, install MSW, create a handler
+  for the API endpoint, and configure it in Storybook to intercept requests
+  during testing.
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 You can have your stories fetch data from an API using [loaders](loaders.md), but you probably don't want to have to go through the hassle of spinning up a local server just to view your component library. You also probably don't wan to take on the dependency of an external API that could go down and break your Storybook.

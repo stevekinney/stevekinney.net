@@ -1,8 +1,10 @@
 ---
 title: Organizing Components and Hierarchy
-description: Storybook uses the way that our components are named to form some story of hierarchy.
+description: >-
+  Storybook uses the way that our components are named to form some story of
+  hierarchy.
 exclude: false
-modified: 2024-09-28T11:31:16-06:00
+modified: 2024-10-18T19:45:04-06:00
 ---
 
 If you look at our sidebar, it's _already_ getting a little unorganized. Luckily, it's pretty easy to bring some level of organization to our components. Storybook uses the way that our components are named to form some story of hierarchy.

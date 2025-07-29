@@ -1,8 +1,11 @@
 ---
 title: Interactive Components
-description: "Utilize Figma's interactive components to bring prototypes to life with realistic interactions, streamlining the design process and enhancing user experience."
-date: 2024-03-09T14:42:38-05:00
-modified: 2024-09-28T11:31:17-06:00
+description: >-
+  Utilize Figma's interactive components to bring prototypes to life with
+  realistic interactions, streamlining the design process and enhancing user
+  experience.
+date: 2024-03-09T19:42:38.000Z
+modified: 2024-10-02T08:49:23-05:00
 tags:
   - figma
   - course

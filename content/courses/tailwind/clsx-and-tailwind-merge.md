@@ -1,6 +1,8 @@
 ---
 title: Merging and Deduplicating Class Names
 description: Using tailwind-merge and clsx to keep your classes from clashing.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 At lot of times when you're building out components, you might want to allow the component to be extended with additional classes, but how do you keep them from clashing with the classes you've already defined?

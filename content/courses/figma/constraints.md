@@ -1,9 +1,14 @@
 ---
 title: Constraints
-description: Learn how to master constraints in Figma for responsive design. Ensure your UI adapts seamlessly across devices with this essential guide
-date: 2024-03-09T14:13:01-05:00
-modified: 2024-09-28T11:31:17-06:00
-tags: [figma, course, frontendmasters]
+description: >-
+  Learn how to master constraints in Figma for responsive design. Ensure your UI
+  adapts seamlessly across devices with this essential guide
+date: 2024-03-09T19:13:01.000Z
+modified: 2025-04-28T17:33:44-06:00
+tags:
+  - figma
+  - course
+  - frontendmasters
 ---
 
 Constraints control how the layers within a frame should behave when the size of the frame changes. By default, a layer's constraints are set to to top and left.

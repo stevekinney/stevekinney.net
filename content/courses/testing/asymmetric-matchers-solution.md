@@ -1,7 +1,7 @@
 ---
 title: Implementing Tests for the Character Class
 description: Example of how to implement tests for the Character class.
-modified: 2024-09-28T18:32:10.999Z
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Here is one way to implement tests for our `Character` class in [the previous exercise](asymmetric-matchers-exercise) using [Asymmetric Matchers](asymmetric-matchers.md).

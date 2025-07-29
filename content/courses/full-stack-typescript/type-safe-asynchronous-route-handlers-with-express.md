@@ -1,5 +1,5 @@
 ---
-modified: 2025-03-15T21:17:08.000Z
+modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn how to use a type-safe wrapper in Express to handle asynchronous route
   handlers and ensure errors are correctly managed.

@@ -1,8 +1,10 @@
 ---
 title: A Gentle Introduction to Svelte Stores
-description: "Svelte stores simplify state management across components. Let's learn how they're implemented."
+description: >-
+  Svelte stores simplify state management across components. Let's learn how
+  they're implemented.
 date: 2021-08-10T16:00:00.006Z
-modified: 2024-09-28T11:31:14-06:00
+modified: 2025-04-16T12:27:20-06:00
 published: true
 tags:
   - svelte

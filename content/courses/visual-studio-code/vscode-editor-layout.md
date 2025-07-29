@@ -1,7 +1,9 @@
 ---
 title: Editor Layout in Visual Studio Code
-description: Customize your Visual Studio Code workspace with flexible layouts, split views, and Zen Mode for an optimal coding experience
-modified: 2025-03-18T07:58:39-05:00
+description: >-
+  Customize your Visual Studio Code workspace with flexible layouts, split
+  views, and Zen Mode for an optimal coding experience
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 The most reasonable place to start is getting comfortable with the editor itself. If we can take the little tedious stuff that we need to do and make it _faster_, then we have more mental bandwidth for all of the Big Brain™ stuff that is arguably what we get paid for—as opposed to mousing around looking for that important file.

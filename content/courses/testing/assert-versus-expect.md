@@ -1,7 +1,7 @@
 ---
 title: The Key Difference Between assert and expect
 description: Differences in usage patterns and APIs between assert and expect.
-modified: 2024-09-28T13:25:43-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 > \[!NOTE] We Won't Be Covering This in the Course
@@ -48,13 +48,16 @@ expect(true).toBeTruthy(); // Checks if value is truthy
 expect({ a: 1 }).toEqual({ a: 1 }); // Deep comparison of objects
 ```
 
-- **Pros**:
-  - More expressive and readable due to chaining and flexible matchers.
-  - Supports **custom matchers** and additional checks like `.toBeTruthy()`, `.toHaveLength()`, etc.
-  - Easier to write tests in a BDD style (more natural language).
-- **Cons**:
-  - Slightly larger API compared to `assert` due to the additional matchers.
-  - May require a testing library like Jest or Vitest for full functionality.
+#### Pros
+
+- More expressive and readable due to chaining and flexible matchers.
+- Supports **custom matchers** and additional checks like `.toBeTruthy()`, `.toHaveLength()`, etc.
+- Easier to write tests in a BDD style (more natural language).
+
+#### Cons
+
+- Slightly larger API compared to `assert` due to the additional matchers.
+- May require a testing library like Jest or Vitest for full functionality.
 
 ## Key Differences
 

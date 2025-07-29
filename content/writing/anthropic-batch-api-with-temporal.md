@@ -1,9 +1,11 @@
 ---
 published: true
-title: "Using Anthropic's Message Batches API with Temporal"
-description: "Build scalable, cost-efficient AI processing with Anthropic's Message Batches API and Temporal workflows."
-modified: 2025-05-08T14:08:02-06:00
-date: 2025-05-08T14:05:36-06:00
+title: Using Anthropic's Message Batches API with Temporal
+description: >-
+  Build scalable, cost-efficient AI processing with Anthropic's Message Batches
+  API and Temporal workflows.
+modified: 2025-05-08T14:59:20-06:00
+date: 2025-05-08T20:05:36.000Z
 ---
 
 When I'm doing research, I typically write down any questions that I have or terms that I wanted to learn more about. Later, I'd run a little script to do some quick research on the topics and questions that I jotted down earlier.

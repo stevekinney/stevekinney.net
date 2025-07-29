@@ -1,7 +1,9 @@
 ---
-modified: 2025-04-26T09:56:32-06:00
+modified: 2025-04-28T17:33:44-06:00
 title: 'Accident Counter: Solution'
-description: 'The solution for the Accident Counter exercise in the "Introduction to Testing" course for Frontend Masters.'
+description: >-
+  The solution for the Accident Counter exercise in the "Introduction to
+  Testing" course for Frontend Masters.
 ---
 
 Your code might look a bit different, but here is one possible solution.

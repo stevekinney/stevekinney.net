@@ -1,6 +1,10 @@
 ---
 title: Inert Utility
-description: Style non-interactive elements with Tailwind's inert variant for accessibility and visual communication.
+description: >-
+  Style non-interactive elements with Tailwind's inert variant for accessibility
+  and visual communication.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Clear communication of element state and interactivity is vital for user experience, especially for keyboard and assistive technology users. Tailwind CSS helps by providing variants to style elements based on state, including `inert`.

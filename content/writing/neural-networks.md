@@ -1,14 +1,16 @@
 ---
 title: Neural Networks
-description: A friendly intro to neural networks, what they are, how they learn, and why they matter for software engineers exploring the world of generative AI.
+description: >-
+  A friendly intro to neural networks, what they are, how they learn, and why
+  they matter for software engineers exploring the world of generative AI.
 tags:
   - ai
   - machine-learning
   - neural-networks
   - transformers
 published: true
-modified: 2025-04-16T16:47:14-06:00
-date: 2025-04-16T13:49:56-06:00
+modified: 2025-04-28T17:33:44-06:00
+date: 2025-04-16T19:49:56.000Z
 ---
 
 At its core, a [**neural network**](https://en.wikipedia.org/wiki/Neural_network_%28machine_learning%29) is like a very complex function or a pipeline you might build in your programming language of choice. You can think of it as a series of processing steps chained together—like a `pipe` function. You feed data in one end (function arguments or parameters), it goes through various transformations, and you get an output (like a return value).

@@ -1,6 +1,10 @@
 ---
 title: Backdrop Filters
-description: Apply graphical effects like blur and brightness to content behind elements using Tailwind's backdrop filter utilities.
+description: >-
+  Apply graphical effects like blur and brightness to content behind elements
+  using Tailwind's backdrop filter utilities.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Backdrop filters in CSS let you apply visual effects like blur or brightness to the area _behind_ an element. Regular filters change the element itself, but backdrop filters change what's underneath. This is great for effects like frosted glass. Tailwind includes utility classes to easily use these modern CSS features directly in your HTML.

@@ -1,7 +1,7 @@
 ---
 title: Strategies For Testing Conditional Logic
 description: Learn how to effectively test conditional logic in your code.
-modified: 2024-09-28T15:31:06-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Conditional logic is one of those things that can sneak up on you. You start with something simple: "Just handle this one edge case." The next thing you know, you've got more `if` statements than you do lines of actual code. And when things go wrong—and they _will_—it's usually because some branch of your conditional logic went rogue.

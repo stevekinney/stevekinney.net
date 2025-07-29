@@ -1,8 +1,10 @@
 ---
 title: Type-Safe Database Access with Prisma
-description: A comprehensive guide to using Prisma with tRPC, Express, and TypeScript for end-to-end type safety in your database operations.
-date: 2025-03-15T17:00:07-06:00
-modified: 2025-03-20T08:07:01-05:00
+description: >-
+  A comprehensive guide to using Prisma with tRPC, Express, and TypeScript for
+  end-to-end type safety in your database operations.
+date: 2025-03-15T23:00:07.000Z
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Below is a step‑by‑step tutorial that not only shows you how to set up Prisma with Express and TypeScript for a simple todo app but also highlights the changes you made—replacing your custom TaskClient with Prisma for full type safety. Let's jump in.
@@ -97,7 +99,7 @@ await prisma.task.update({ where: { id }, data });
 await prisma.task.delete({ where: { id } });
 ```
 
-## 6. Full Updated `server.ts` Example
+## Full Updated `server.ts` Example
 
 Here's what your complete `server.ts` might look like after integrating Prisma:
 

@@ -1,7 +1,9 @@
 ---
 title: Working with Dev Containers in Visual Studio Code
-description: Learn how to use, rebuild and interact with development containers in Visual Studio Code
-modified: 2025-03-16T12:04:50-06:00
+description: >-
+  Learn how to use, rebuild and interact with development containers in Visual
+  Studio Code
+modified: 2025-03-17T16:36:04-05:00
 ---
 
 Once you have a `.devcontainer` folder in your project, Visual Studio Code will recognize it and offer you options to work within the Dev Container.

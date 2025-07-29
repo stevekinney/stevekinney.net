@@ -1,6 +1,6 @@
 ---
 title: Adding Client-Side Schema Validation
-modified: 2025-03-20T07:58:20.000Z
+modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn to implement client-side schema validation in a React app with
   TypeScript and Express, using `busy-bee-schema` to ensure API response

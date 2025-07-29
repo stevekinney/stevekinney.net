@@ -1,7 +1,9 @@
 ---
 title: Building a Form Input
-description: "Let's build a professional input field component step by step using Tailwind CSS."
-modified: 2025-06-11T12:14:26-06:00
+description: >-
+  Let's build a professional input field component step by step using Tailwind
+  CSS.
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Let's start with our basic HTML structure.

@@ -1,6 +1,10 @@
 ---
 title: Backface Visibility
-description: Control the visibility of element back faces in 3D transformations with Tailwind's backface visibility utilities.
+description: >-
+  Control the visibility of element back faces in 3D transformations with
+  Tailwind's backface visibility utilities.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 The `backface-visibility` CSS property determines if an element's back face is visible during 3D transformations. When an element rotates in 3D, its back side might face the user. This property lets you show or hide that back side.

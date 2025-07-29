@@ -1,7 +1,9 @@
 ---
 title: Guessing Game Solution
-description: 'The solution to the "Guessing Game" exercise in the "Introduction to Testing" course.'
-modified: 2024-09-30T13:35:09-06:00
+description: >-
+  The solution to the "Guessing Game" exercise in the "Introduction to Testing"
+  course.
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 For starters, we want to make sure we can hold the return value of `Math.random()` in place so that we can test against it.

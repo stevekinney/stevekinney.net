@@ -1,8 +1,11 @@
 ---
 title: Working with Libraries in Figma
-description: Harness the power of Figma libraries to streamline your design process, ensuring consistency and efficiency with a shared repository of components and styles.
-date: 2024-03-09T14:26:58-05:00
-modified: 2024-09-28T11:31:17-06:00
+description: >-
+  Harness the power of Figma libraries to streamline your design process,
+  ensuring consistency and efficiency with a shared repository of components and
+  styles.
+date: 2024-03-09T19:26:58.000Z
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Libraries in Figma are a central repository for storing and sharing design components and styles across projects, significantly boosting productivity and ensuring consistency in design. This feature allows teams to create a single source of truth for all design elements, from UI components to text styles and colors, making it easier to maintain a cohesive look and feel across multiple projects. Let's delve into how leveraging libraries can transform your design workflow in Figma.

@@ -1,6 +1,10 @@
 ---
 title: Tailwind's Layers
-description: 'Understanding CSS cascade layers in Tailwind 4: theme, base, components, and utilities.'
+description: >-
+  Understanding CSS cascade layers in Tailwind 4: theme, base, components, and
+  utilities.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Tailwind CSS uses **layers** to control CSS order for efficient file size and specificity. This minimizes conflicts between utility classes, base styles, and component styles. Tailwind defines four CSS cascade layers: `theme`, `base`, `components`, and `utilities`. The `theme` layer contains CSS custom properties that power design tokens.

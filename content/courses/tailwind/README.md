@@ -1,8 +1,12 @@
 ---
-title: 'Modern Web Design with Tailwind CSS'
-description: 'Learn to build beautiful, responsive, and maintainable websites with the latest version of Tailwind CSS.'
-layout: 'page'
-date: '2024-07-26'
+title: Modern Web Design with Tailwind CSS
+description: >-
+  Learn to build beautiful, responsive, and maintainable websites with the
+  latest version of Tailwind CSS.
+layout: page
+date: 2024-07-26
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Welcome to this comprehensive course on modern web design with Tailwind CSS! Whether you are new to utility-first CSS or are looking to upgrade your skills to the latest version, this course will provide you with a solid foundation and guide you through advanced topics.

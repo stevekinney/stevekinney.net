@@ -1,7 +1,7 @@
 ---
 title: Installing a Code Coverage Tool
 description: A guide to setting up and managing code coverage in Vitest.
-modified: 2024-09-28T16:18:12-06:00
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Code coverage is useful for identifying how much your code is (or _isn't_) covered by tests. This can be useful for identifying blind spots and potential edge cases that are not covered by your test suite.
@@ -176,17 +176,17 @@ The HTML report is generated in the `coverage` directory by default. Open `cover
 
 #### Best Practices for Code Coverage
 
-##### 1. Aim for Meaningful Coverage, Not Just High Percentages
+##### Aim for Meaningful Coverage, Not Just High Percentages
 
 - **Quality Over Quantity**: High coverage does not guarantee good tests. Focus on writing meaningful tests that cover critical code paths.
 - **Avoid Coverage for Its Own Sake**: Don't write superficial tests just to increase coverage numbers.
 
-##### 2. Identify and Prioritize Critical Code
+##### Identify and Prioritize Critical Code
 
 - **Core Functionality**: Ensure that essential functions and business logic are thoroughly tested.
 - **Edge Cases**: Write tests for boundary conditions and error handling paths.
 
-##### 3. Exclude Generated or External Code
+##### Exclude Generated or External Code
 
 - **Configuration Files**: Exclude files like configuration or setup files that don't need testing.
 - **Third-Party Libraries**: Exclude `node_modules` or other external code from coverage.

@@ -1,6 +1,10 @@
 ---
 title: ARIA Integration
-description: Style elements based on ARIA attributes for better accessibility with Tailwind's ARIA variants and utilities
+description: >-
+  Style elements based on ARIA attributes for better accessibility with
+  Tailwind's ARIA variants and utilities
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 You can conditionally style elements using the `aria-*` variant, which targets elements based on their ARIA attributes. For instance, you can change the background color of an element when the `aria-checked` attribute is set to `true` using a class like `aria-checked:bg-sky-700`. This variant applies styles only when the specified ARIA condition is met.

@@ -1,7 +1,7 @@
 ---
 title: Testing a DOM Element
 description: Learn how to test DOM interactions using Vitest and DOM Testing Library.
-modified: 2024-09-28T16:08:44-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Imagine you have a button, and when you click it, something happens. Classic case, right? Let's whip up a basic test for that interaction. Here's a simple function, found in `examples/element-factory/src/button.js`, that creates our DOM structure and adds some behavior:
