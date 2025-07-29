@@ -1,7 +1,6 @@
 ---
-title: AI Development
-description: Master AI-powered development tools like Claude Code, Cursor, and MCP servers for enhanced productivity and automated workflows
-modified: 2025-07-29T12:28:36-06:00
+layout: contents
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 ## High-Level
