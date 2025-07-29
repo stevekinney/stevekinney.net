@@ -1,6 +1,10 @@
 ---
 title: Grid Subgrids
-description: Use CSS subgrids in Tailwind to inherit parent grid tracks for aligned nested grid structures.
+description: >-
+  Use CSS subgrids in Tailwind to inherit parent grid tracks for aligned nested
+  grid structures.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Tailwind CSS uses utility classes to build complex, responsive UIs in HTML. Version 4.0 improves performance and embraces modern CSS.

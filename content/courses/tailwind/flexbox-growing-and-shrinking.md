@@ -1,7 +1,9 @@
 ---
 title: Flexbox Growing and Shrinking
-description: Master flex-grow and flex-shrink utilities to control how flex items expand and contract in available space
-modified: 2025-06-07T16:13:04-06:00
+description: >-
+  Master flex-grow and flex-shrink utilities to control how flex items expand
+  and contract in available space
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Control how flex items grow to fill available space or shrink when space is limited.

@@ -1,7 +1,9 @@
 ---
 title: Setting Up a Test Runner
-description: To run Storybook Play functions, install the test runner, start Storybook, and use npx test-storybook. Optionally add to package.json scripts.
-modified: 2024-09-28T11:31:16-06:00
+description: >-
+  To run Storybook Play functions, install the test runner, start Storybook, and
+  use npx test-storybook. Optionally add to package.json scripts.
+modified: 2024-10-18T19:45:04-06:00
 ---
 
 Storybook allows you to take your [Play functions](play-functions.md) and run through them all and in order to make sure they all do what you expect them to do.

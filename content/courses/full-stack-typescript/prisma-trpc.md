@@ -1,6 +1,6 @@
 ---
 title: Generate a tRPC Service with Prisma
-modified: 2025-03-20T13:43:39.000Z
+modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn to create a tRPC service using Prisma with the prisma-trpc-generator.
   Explore setup options and integrate with Zod, all detailed in this guide.

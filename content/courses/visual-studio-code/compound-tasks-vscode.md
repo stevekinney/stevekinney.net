@@ -1,7 +1,9 @@
 ---
 title: Compound Tasks in Visual Studio Code
-description: Explore advanced task capabilities including watch modes, compound tasks, and task inputs for efficient development workflows
-modified: 2025-03-18T08:45:42-05:00
+description: >-
+  Explore advanced task capabilities including watch modes, compound tasks, and
+  task inputs for efficient development workflows
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Compound tasks allow you to run multiple tasks in sequence. This is useful for orchestrating complex workflows.
@@ -37,7 +39,7 @@ Compound tasks allow you to run multiple tasks in sequence. This is useful for o
 
 When orchestrating multiple tasks, you need to control both which tasks run (`dependsOn`) and how they run in relation to each other (`dependsOrder`). The `dependsOrder` property accepts three values, each with distinct behavior:
 
-### 1. `sequence` (Default)
+### `sequence` (Default)
 
 Tasks run serially in the exact order listed in the `dependsOn` array. Each task must complete before the next one starts.
 
@@ -51,7 +53,7 @@ Tasks run serially in the exact order listed in the `dependsOn` array. Each task
 
 This ensures that "Clean" finishes before "Build" starts, and "Build" finishes before "Test" starts. If any task fails, subsequent tasks won't run.
 
-### 2. `parallel`
+### `parallel`
 
 All dependent tasks start simultaneously and run concurrently.
 
@@ -65,7 +67,7 @@ All dependent tasks start simultaneously and run concurrently.
 
 This launches all three asset compilation tasks at once, which can significantly speed up build times for independent operations.
 
-### 3. `any`
+### `any`
 
 Visual Studio Code starts tasks in parallel, but the main task completes as soon as any dependent task finishes. This is useful for "race condition" scenarios.
 

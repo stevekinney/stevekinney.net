@@ -2,8 +2,8 @@
 title: Full Stack TypeScript
 description: Add type-safety across the stack.
 layout: page
-date: 2025-03-20T12:00:00-07:00
-modified: 2025-03-20T12:00:00-07:00
+date: 2025-03-20T19:00:00.000Z
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 > [!NOTE] The Repository for the Workshop

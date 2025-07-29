@@ -1,7 +1,9 @@
 ---
 title: Prebuilt Dev Containers in Visual Studio Code
-description: Using and customizing prebuilt container definitions to quickly set up development environments
-modified: 2025-03-16T11:18:10-06:00
+description: >-
+  Using and customizing prebuilt container definitions to quickly set up
+  development environments
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Visual Studio Code and the community provide a rich collection of pre-built Dev Container definitions. These are incredibly useful for quickly setting up common development environments without writing `devcontainer.json` from scratch.
@@ -33,14 +35,12 @@ Once you have a `.devcontainer` folder in your project, Visual Studio Code will 
 **Opening a Folder in a Dev Container:**
 
 - **Option 1 (Recommended): Reopen in Container**
-
   1. Open your project folder in Visual Studio Code (the folder contains the `.devcontainer` folder).
   2. Visual Studio Code detects the Dev Container configuration and displays a notification: "Dev Container: Folder contains a Dev Container configuration file."
   3. Click "Reopen in Container."
   4. Visual Studio Code builds (if necessary) and starts the Dev Container. Once ready, it reloads and shows "(Dev Container)" in the bottom-left corner.
 
 - **Option 2: Command Palette – "Dev Containers: Reopen in Container"**
-
   1. Open your project folder.
   2. Open the Command Palette and select "Dev Containers: Reopen in Container."
   3. Follow the same process as Option 1.
@@ -70,13 +70,11 @@ Sometimes you need to modify your Dev Container configuration. In such cases, re
 **Building or Rebuilding a Dev Container:**
 
 - **Option 1: Command Palette – "Dev Containers: Rebuild Container"**
-
   1. Ensure you are connected to your Dev Container.
   2. Open the Command Palette and select "Dev Containers: Rebuild Container."
   3. Visual Studio Code rebuilds the container image based on your updated Dockerfile or image specification, then restarts the container.
 
 - **Option 2: Command Palette – "Dev Containers: Rebuild and Reopen in Container"**
-
   1. Similar to the previous option but automatically reopens your project in the newly rebuilt container.
 
 - **When to Rebuild:**
@@ -193,6 +191,7 @@ Mount your host's dotfiles to personalize your container.
 **Using dotfiles:**
 
 1. Add a `dotfiles` property in `devcontainer.json`:
+
    ```json
    {
      "dotfiles": {
@@ -202,9 +201,11 @@ Mount your host's dotfiles to personalize your container.
      }
    }
    ```
+
    - **repository:** URL to your dotfiles repo.
    - **targetPath:** Path inside the container (default `~`).
    - **installCommand:** Script executed post-cloning.
+
 2. Structure your dotfiles repository with files like `.bashrc`, `.gitconfig`, and an `install.sh` script:
    ```plaintext
    dotfiles-repository/
@@ -235,6 +236,7 @@ Mount your host's dotfiles to personalize your container.
 
 - Mount host directories into the container.
 - Define in `devcontainer.json` using the `mounts` property:
+
   ```json
   {
     "mounts": [
@@ -242,6 +244,7 @@ Mount your host's dotfiles to personalize your container.
     ]
   }
   ```
+
   - **source:** Host path.
   - **target:** Container path.
   - **type:** Set as `bind`.

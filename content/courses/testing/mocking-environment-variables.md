@@ -1,7 +1,7 @@
 ---
 title: Testing Environment-Dependent Code with Spies
 description: Learn how to reset VITE_ENV in Vitest using beforeEach and vi.stubEnv.
-modified: 2024-09-28T15:08:07-06:00
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Maybe you want to make sure your code behaves as expected given different environment variables. You could get really fancy in the way you filter your tests—or, you could just mock those environment variables for a hot minute.

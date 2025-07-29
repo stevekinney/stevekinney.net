@@ -1,7 +1,7 @@
 ---
 title: Implementing a Callout Component
-description: "Let's build a callout component in Figma."
-modified: 2024-09-28T11:31:16-06:00
+description: Let's build a callout component in Figma.
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Okay, it's your turn to try this out. Consider this [Callout component](https://www.figma.com/file/Qhb4PJucNK8bgvf4N65Jrm/Anthology?type=design&node-id=2-2372&mode=design). Consider the following. You can choose to ignore the fact that they have different icons if you'd like.

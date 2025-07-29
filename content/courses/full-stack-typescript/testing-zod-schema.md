@@ -1,7 +1,9 @@
 ---
 title: 'Testing with Zod: Building Robust and Maintainable Schemas'
-description: 'Learn effective strategies for testing Zod schemas to ensure their correctness and prevent regressions as your application evolves.'
-modified: 2025-03-15T17:45:00-06:00
+description: >-
+  Learn effective strategies for testing Zod schemas to ensure their correctness
+  and prevent regressions as your application evolves.
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Writing comprehensive unit tests for your Zod schemas is essential to ensure their correctness and2 prevent regressions as your application evolves. Here are key strategies for testing Zod schemas:

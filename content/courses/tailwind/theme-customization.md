@@ -1,6 +1,10 @@
 ---
 title: Theme Customization
-description: Create, customize, and manage design systems using Tailwind's powerful CSS-native theme variable system
+description: >-
+  Create, customize, and manage design systems using Tailwind's powerful
+  CSS-native theme variable system
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Unlike previous versions that relied on JavaScript configuration files, Tailwind 4 uses CSS-native theme variables that provide better performance, easier sharing between projects, and more intuitive workflows.

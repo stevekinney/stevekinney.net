@@ -1,7 +1,7 @@
 ---
 title: Only Running Tests For Related Files
 description: Learn how to run only related tests in Vitest to save time.
-modified: 2024-09-28T15:23:09-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Picture this: You've been cranking away on some code, making changes, darting between files like a superhero full of caffeine. Then comes the dreaded moment—time to rerun the tests. All. Of. Them.

@@ -1,7 +1,7 @@
 ---
 title: Alternatives To Using Test Doubles
 description: Explore alternatives to using test doubles in your testing strategy.
-modified: 2024-09-28T13:18:53-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Put on your imagination cap for a second: You're writing a test, and you _could_ mock something out, but it just feels… wrong.

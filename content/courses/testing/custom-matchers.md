@@ -1,7 +1,7 @@
 ---
 title: Customer Matchers in Vitest
 description: Create custom matchers in Vitest for specialized assertions.
-modified: 2024-09-28T14:57:06-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Let's say you can't find the `expect` method that makes you happy. You _could_ extend the matchers in Vitest.

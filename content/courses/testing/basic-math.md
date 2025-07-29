@@ -1,7 +1,7 @@
 ---
 title: Implementing Some Basic Tests
 description: Learn to implement and test simple arithmetic functions with TDD.
-modified: 2024-09-29T13:47:46-06:00
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 It turns out that there is a lot more to math than just adding numbers. Our product manager also wants us to be able to subtract, multiple, and divide numbers too, apparently. Talk about feature creep.

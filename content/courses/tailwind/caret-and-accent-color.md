@@ -1,6 +1,10 @@
 ---
 title: Caret and Accent Color
-description: Customize cursor and form control colors using Tailwind's caret and accent color utilities for brand consistency.
+description: >-
+  Customize cursor and form control colors using Tailwind's caret and accent
+  color utilities for brand consistency.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Tailwind 4.0 provides utilities to control `caret-color` (text input cursor) and `accent-color` (form controls like checkboxes, radio buttons) directly in your HTML.

@@ -1,7 +1,9 @@
 ---
 title: Before & After Pseudo-Selectors
-description: "Style ::before and ::after pseudo-elements with Tailwind's before: and after: variants for decorative content."
-modified: 2025-06-11T15:24:40-06:00
+description: >-
+  Style ::before and ::after pseudo-elements with Tailwind's before: and after:
+  variants for decorative content.
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 ## Basic Usage

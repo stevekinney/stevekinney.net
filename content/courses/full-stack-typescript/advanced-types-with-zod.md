@@ -1,7 +1,9 @@
 ---
 title: Advanced Types with Zod
-description: 'Learn about advanced type constructs in Zod including literals, enums, tuples, unions, discriminated unions, and more.'
-modified: 2025-03-15T16:45:00-06:00
+description: >-
+  Learn about advanced type constructs in Zod including literals, enums, tuples,
+  unions, discriminated unions, and more.
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 ## Literals

@@ -1,7 +1,7 @@
 ---
 title: In-Source Testing
 description: Explore in-source testing with Vitest for quick experimentation.
-modified: 2024-09-28T15:01:48-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Picture this: You're zipping along, writing your brand-new feature. Everything's great, maybe even sipping a fresh cup of coffee. And then it hits you—**you forgot to write unit tests**. But the thought of context-switching, creating dedicated test files, setting up more boilerplate… _ugh_. It's at these moments that the concept of **in-source testing** shines.

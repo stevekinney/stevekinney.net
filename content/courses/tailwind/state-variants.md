@@ -1,6 +1,10 @@
 ---
 title: State Variants
-description: Apply styles conditionally using Tailwind's state variants for pseudo-classes, media queries, and attribute selectors
+description: >-
+  Apply styles conditionally using Tailwind's state variants for pseudo-classes,
+  media queries, and attribute selectors
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 State variants apply utility classes conditionally based on element state or context. Prefix any utility with a variant name and colon: `hover:bg-blue-500`, `md:text-lg`.
@@ -9,7 +13,7 @@ Key difference from CSS: Tailwind uses separate classes for each state rather th
 
 ## Types of State Variants
 
-### 1. Pseudo-classes
+### Pseudo-classes
 
 **Interactive:** `hover`, `focus`, `active`, `visited`, `focus-within`, `focus-visible`
 
@@ -19,7 +23,7 @@ Key difference from CSS: Tailwind uses separate classes for each state rather th
 
 **Special:** `target`, `placeholder-shown`, `details-content`, `autofill`
 
-### 2. Pseudo-elements
+### Pseudo-elements
 
 - `before` and `after`
 - `placeholder` (form inputs)
@@ -29,7 +33,7 @@ Key difference from CSS: Tailwind uses separate classes for each state rather th
 - `first-line` and `first-letter`
 - `backdrop` (dialogs)
 
-### 3. Media and Feature Queries
+### Media and Feature Queries
 
 **Responsive:** `sm`, `md`, `lg`, `xl`, `2xl` (viewport widths)
 
@@ -51,14 +55,14 @@ Key difference from CSS: Tailwind uses separate classes for each state rather th
 
 **Feature Detection:** `supports-[...]`, `not-supports-[...]`
 
-### 4. Attribute Selectors
+### Attribute Selectors
 
 - **ARIA:** `aria-*` (e.g., `aria-checked`)
 - **Data:** `data-*` (e.g., `data-active`)
 - **Direction:** `rtl`, `ltr`
 - **State:** `open` (details/dialog), `inert`
 
-### 5. Child Selectors
+### Child Selectors
 
 - `*` - Direct children only
 - `**` - All descendants

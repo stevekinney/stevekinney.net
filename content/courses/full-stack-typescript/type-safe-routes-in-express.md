@@ -1,5 +1,5 @@
 ---
-modified: 2025-03-15T21:08:35.000Z
+modified: 2025-04-16T12:27:20-06:00
 title: Type-Safe Route Registration
 description: >-
   Discover how to implement type-safe route registration in Express, ensuring

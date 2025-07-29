@@ -1,6 +1,6 @@
 ---
 title: Best Practices with Zod
-modified: 2025-03-15T20:54:17.000Z
+modified: 2025-04-28T17:33:44-06:00
 description: >-
   Learn best practices with Zod for efficient runtime validation, including
   avoiding redundant checks, reusing schemas, and optimizing performance in

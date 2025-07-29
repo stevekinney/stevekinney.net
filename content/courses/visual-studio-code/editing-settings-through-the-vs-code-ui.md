@@ -1,7 +1,9 @@
 ---
 title: Editing Settings Through the Visual Studio Code UI
-description: Learn how to configure Visual Studio Code settings using the visual Settings Editor interface
-modified: 2025-03-18T08:28:32-05:00
+description: >-
+  Learn how to configure Visual Studio Code settings using the visual Settings
+  Editor interface
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 The Settings Editor is Visual Studio Code's user-friendly interface for Browse and modifying settings. It provides a searchable list of all available settings, along with descriptions and their current values.

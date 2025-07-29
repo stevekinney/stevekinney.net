@@ -1,7 +1,9 @@
 ---
 title: Tailwind Anti-Patterns
-description: Common Tailwind anti-patterns to avoid for cleaner, maintainable code and proper utility-first development practices.
-modified: 2025-06-11T11:39:40-06:00
+description: >-
+  Common Tailwind anti-patterns to avoid for cleaner, maintainable code and
+  proper utility-first development practices.
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 ## Overusing the `@apply` Directive

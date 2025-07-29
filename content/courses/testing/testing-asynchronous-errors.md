@@ -1,5 +1,5 @@
 ---
-modified: 2024-09-30T14:26:06-06:00
+modified: 2025-04-16T12:27:20-06:00
 title: Testing Asynchronous Errors
 description: Learn how to write unit tests that test for asynchronous errors.
 ---

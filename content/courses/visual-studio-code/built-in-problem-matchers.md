@@ -1,5 +1,5 @@
 ---
-modified: 2025-03-18T09:09:48-05:00
+modified: 2025-04-28T17:33:44-06:00
 title: Built-in Problem Matchers
 description: The problem matchers built-in to Visual Studio Code.
 ---

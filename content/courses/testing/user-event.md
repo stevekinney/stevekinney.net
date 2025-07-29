@@ -1,7 +1,7 @@
 ---
 title: FireEvent vs UserEvent in Testing
 description: Learn how to simulate user events in testing using userEvent.
-modified: 2025-04-26T09:57:39-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 `fireEvent` is useful for—umm—firing events, but generally speaking there is more to a user interaction than just one event. [Consider the list of events](fire-event-events.md) that `fireEvent` supports. that `fireEvent` supports. Let's look at an over-simplified list of what happens when a user types into an `input` field:

@@ -1,6 +1,6 @@
 ---
 title: Validating Request Parameters
-modified: 2025-03-19T19:11:37.000Z
+modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn how to validate and coerce request parameters into the correct types
   using Zod schemas, ensuring your path and query parameters are properly parsed

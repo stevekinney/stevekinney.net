@@ -1,7 +1,7 @@
 ---
 title: Maintaining Snapshot Tests
 description: A quick and easy guide to understanding snapshot testing with Vitest.
-modified: 2024-09-28T15:26:39-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 So here's the deal with **snapshot testing**—it's **quick** and **easy** to write, but like any magic trick, there's some sleight of hand you should be aware of. A snapshot is basically a serialized version of the output that your component, function, or whatever you're testing spits out. Vitest (and tools like it) compares this serialized version to the previously saved "snapshot" version on disk during each test.

@@ -1,7 +1,7 @@
 ---
 title: Building A Tic Tac Toe Game Using Test-Driven Development With Vitest
 description: Learn to build a Tic Tac Toe game using TDD and Vitest.
-modified: 2024-09-28T18:32:11.126Z
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 ## Building a Tic Tac Toe Game Using Test-Driven Development with Vitest
@@ -132,7 +132,7 @@ Before we start coding, let's outline the game logic:
 
 ### Implementing the Game Logic with TDD
 
-#### 1. Creating the Game Board
+#### Creating the Game Board
 
 ##### Step 1: Write the Test (Red)
 
@@ -207,7 +207,7 @@ Tests should now pass.
 
 Our code is simple; no refactoring needed.
 
-#### 2. Placing a Move
+#### Placing a Move
 
 We need to implement a function to place a move on the board.
 
@@ -291,7 +291,7 @@ All tests should pass.
 
 Consider separating player switching logic.
 
-#### 3. Checking for a Winner
+#### Checking for a Winner
 
 We need to implement a method to check for a winner.
 
@@ -409,7 +409,7 @@ All tests should pass.
 
 Consider moving the lines array outside the function if needed.
 
-#### 4. Checking for a Draw
+#### Checking for a Draw
 
 We need to check if the game ends in a draw.
 
@@ -506,7 +506,7 @@ At this point, we've implemented the core game logic using TDD.
 
 Now we'll create a simple UI using HTML and JavaScript.
 
-#### 1. Create `index.html`
+#### Create `index.html`
 
 ```html
 <!-- src/index.html -->
@@ -550,7 +550,7 @@ Now we'll create a simple UI using HTML and JavaScript.
 </html>
 ```
 
-#### 2. Create `ui.js`
+#### Create `ui.js`
 
 We'll write the UI code as we write tests for it.
 
@@ -558,7 +558,7 @@ We'll write the UI code as we write tests for it.
 
 We'll use **Vitest** with **Testing Library** to test our UI.
 
-#### 1. Set Up Testing Library
+#### Set Up Testing Library
 
 Install dependencies:
 
@@ -586,7 +586,7 @@ Create `tests/setupTests.js`:
 import '@testing-library/jest-dom';
 ```
 
-#### 2. Writing UI Tests
+#### Writing UI Tests
 
 Create `tests/ui.test.js`:
 
@@ -655,7 +655,7 @@ describe('Tic Tac Toe UI', () => {
 });
 ```
 
-#### 3. Implementing UI Code to Pass Tests
+#### Implementing UI Code to Pass Tests
 
 Update `src/ui.js`:
 
@@ -740,7 +740,7 @@ cells.forEach((cell) => {
 resetButton.addEventListener('click', resetGame);
 ```
 
-#### 4. Run the Tests
+#### Run the Tests
 
 Run the tests:
 
@@ -767,41 +767,33 @@ By following Test-Driven Development principles, we've built a functional Tic Ta
 To further enhance your Tic Tac Toe game and testing skills, consider implementing the following features:
 
 1. **AI Opponent**
-
    - Implement an AI player that makes moves against the human player.
    - Write tests to ensure the AI makes valid moves.
 
 2. **Score Tracking**
-
    - Keep track of the number of wins for each player.
    - Write tests to verify that the scores are updated correctly.
 
 3. **Improved UI**
-
    - Enhance the UI with better styling and animations.
    - Ensure accessibility by using proper ARIA roles and labels.
 
 4. **Undo Functionality**
-
    - Allow players to undo their last move.
    - Write tests to ensure the game state is correctly reverted.
 
 5. **Online Multiplayer**
-
    - Implement networked multiplayer functionality.
    - Write integration tests to simulate multiple players.
 
 6. **Responsive Design**
-
    - Make the game responsive and playable on different devices.
    - Test UI elements on various screen sizes.
 
 7. **Leaderboard**
-
    - Add a leaderboard to display top players' scores.
    - Write tests to ensure scores are correctly stored and retrieved.
 
 8. **Test Coverage Analysis**
-
    - Integrate code coverage reporting with Vitest.
    - Analyze the coverage report to identify untested code paths.

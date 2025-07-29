@@ -1,7 +1,9 @@
 ---
 title: Advanced Validation Techniques in Express with TypeScript
-description: Learn how to implement object-oriented validation in Express using class-validator and class-transformer libraries.
-modified: 2025-03-15T16:15:00-06:00
+description: >-
+  Learn how to implement object-oriented validation in Express using
+  class-validator and class-transformer libraries.
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 While basic type checking and libraries like [Zod](https://www.npmjs.com/package/zod) provide robust validation, advanced scenarios may require more sophisticated techniques. This guide explores using [`class-validator`](https://www.npmjs.com/package/class-validator) and [`class-transformer`](https://www.npmjs.com/package/class-transformer) for object-oriented validation, as well as crafting custom type guards for complex logic.

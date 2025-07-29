@@ -1,6 +1,6 @@
 ---
 title: Validating the API with OpenAPI
-modified: 2025-03-20T11:55:30.000Z
+modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn how to ensure your API adheres to specifications using
   `express-openapi-validator` middleware for request and response validation.

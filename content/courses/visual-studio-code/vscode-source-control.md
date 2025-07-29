@@ -1,7 +1,9 @@
 ---
 title: Source Control in Visual Studio Code
-description: "Learn how to use Visual Studio Code's integrated Git features for effective version control"
-modified: 2025-03-18T08:12:30-05:00
+description: >-
+  Learn how to use Visual Studio Code's integrated Git features for effective
+  version control
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Git is baked right into Visual Studio Code, making version control feel like second nature. From staging and committing changes to handling merges and pushing to remote repositories, the built-in UI provides a smooth, visual workflow. Let's explore how to leverage these features—plus a few extras like Git blame, GitHub integration, and interactive rebase—to keep your code pristine and your team happy.

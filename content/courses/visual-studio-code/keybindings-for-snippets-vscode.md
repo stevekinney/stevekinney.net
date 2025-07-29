@@ -1,5 +1,5 @@
 ---
-modified: 2025-03-17T10:50:34-06:00
+modified: 2025-04-28T17:33:44-06:00
 title: Keybindings for Snippets
 description: Add Keybindings for your Snippets in Visual Studio Code.
 ---
