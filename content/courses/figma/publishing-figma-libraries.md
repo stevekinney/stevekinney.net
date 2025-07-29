@@ -1,7 +1,9 @@
 ---
 title: Publishing Libraries
-description: How to publish shared component and variable libraries for use across your organization.
-modified: 2024-09-28T11:31:17-06:00
+description: >-
+  How to publish shared component and variable libraries for use across your
+  organization.
+modified: 2024-10-18T19:48:24-06:00
 ---
 
 You've done all of this work to create your tokens, variables, and components. Now, we want to publish those libraries for use across your organization. You can publish the library from the center of the toolbar.

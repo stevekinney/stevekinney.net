@@ -1,6 +1,6 @@
 ---
 layout: contents
-modified: 2025-04-26T10:02:07-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 ## TypeScript Best Practices

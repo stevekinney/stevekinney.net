@@ -1,7 +1,7 @@
 ---
 title: Building a Button
 description: Let's build a button from scratch using Tailwind.
-modified: 2025-05-24T15:33:53-06:00
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 When last we spoke, we had a button that worked like this.

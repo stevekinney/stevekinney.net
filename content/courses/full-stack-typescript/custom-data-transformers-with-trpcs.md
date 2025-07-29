@@ -1,7 +1,9 @@
 ---
 title: Custom Data Transformers with tRPC
-description: Learn how to use data transformers like SuperJSON to properly serialize complex data types in tRPC applications.
-modified: 2025-03-16T12:00:00-06:00
+description: >-
+  Learn how to use data transformers like SuperJSON to properly serialize
+  complex data types in tRPC applications.
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 ### Custom Data Transformers

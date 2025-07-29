@@ -1,8 +1,11 @@
 ---
 title: Cursor Rules for Writing Temporal Workflows with TypeScript
-description: Essential guidelines and best practices for writing reliable Temporal workflows in TypeScript, covering serialization, determinism, and workflow patterns.
-date: 2025-05-14T09:00:00-06:00
-modified: 2025-05-14T09:00:00-06:00
+description: >-
+  Essential guidelines and best practices for writing reliable Temporal
+  workflows in TypeScript, covering serialization, determinism, and workflow
+  patterns.
+date: 2025-05-14T15:00:00.000Z
+modified: 2025-05-14T09:40:20-06:00
 published: true
 ---
 

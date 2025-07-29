@@ -1,6 +1,10 @@
 ---
 title: Custom Keyframe Animations
-description: Create custom CSS animations with Tailwind 4's @theme directive for pulse effects and loading indicators.
+description: >-
+  Create custom CSS animations with Tailwind 4's @theme directive for pulse
+  effects and loading indicators.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Engaging interfaces often use dynamic elements for visual feedback or to indicate activity, like pulsing effects or loading indicators. Tailwind 4's CSS-first configuration simplifies integrating custom animations.

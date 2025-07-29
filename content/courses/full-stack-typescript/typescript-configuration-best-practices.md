@@ -1,8 +1,10 @@
 ---
 title: TypeScript Configuration Best Practices
-description: An in-depth guide to configuring TypeScript with strict type checking and other important compiler options for maximum safety and reliability.
-date: 2025-03-15T16:58:14-06:00
-modified: 2025-03-15T16:58:14-06:00
+description: >-
+  An in-depth guide to configuring TypeScript with strict type checking and
+  other important compiler options for maximum safety and reliability.
+date: 2025-03-15T22:58:14.000Z
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Let's consider this `tsconfig.json` for a hot minute.
@@ -39,7 +41,6 @@ Even if some of these are enabled by default when `"strict": true` is set, havin
 ## `noImplicitAny: true`
 
 - **What it does:** If you forget to specify (or let TS infer) the type of a variable or function parameter, TypeScript will not fallback to `any`. Instead, it'll throw an error, making you either:
-
   1. Explicitly type the variable/parameter, or
   2. Let TypeScript infer a suitable type from usage.
 

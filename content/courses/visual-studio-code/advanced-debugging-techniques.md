@@ -1,7 +1,9 @@
 ---
 title: Advanced Debugging Techniques in Visual Studio Code
-description: Master powerful debugging features like conditional breakpoints, logpoints, and more for efficient troubleshooting
-modified: 2025-03-16T16:12:01-06:00
+description: >-
+  Master powerful debugging features like conditional breakpoints, logpoints,
+  and more for efficient troubleshooting
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 ## Conditional Breakpoints
@@ -443,7 +445,6 @@ For component tests in frameworks like React, Vue, or Angular:
 1. **React Testing Library / Enzyme**:
    - Use Jest configuration but add the `--env=jsdom` argument
 2. **Cypress Component Tests**:
-
    - Use the Cypress extension to open Cypress in debug mode
    - Set breakpoints in your component code
 

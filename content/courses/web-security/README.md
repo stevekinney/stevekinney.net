@@ -1,9 +1,9 @@
 ---
 title: Web Security
-description: 'An introduction to the fundamentals of web security.'
+description: An introduction to the fundamentals of web security.
 layout: page
-date: 2024-04-05T12:56:55-07:00
-modified: 2024-05-31T06:28:47-05:00
+date: 2024-04-05T19:56:55.000Z
+modified: 2025-04-16T17:51:06-06:00
 ---
 
 The content below is supplimentary content for the [Web Security, v2](https://frontendmasters.com/courses/web-security-v2/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) course with **Frontend Masters**.

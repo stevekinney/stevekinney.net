@@ -1,7 +1,9 @@
 ---
 title: Styling Form State
-description: "Use Tailwind's form state variants to style inputs, textareas, and buttons based on validation, focus, and disabled states"
-modified: 2025-06-11T14:36:02-06:00
+description: >-
+  Use Tailwind's form state variants to style inputs, textareas, and buttons
+  based on validation, focus, and disabled states
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 You can form elements based on their state without conditional logic.

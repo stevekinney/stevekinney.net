@@ -1,6 +1,10 @@
 ---
 title: Building an Input with Inline Validation
-description: Let's build an input field with real-time validation feedback step by step using Tailwind's peer utilities.
+description: >-
+  Let's build an input field with real-time validation feedback step by step
+  using Tailwind's peer utilities.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Let's start with our basic HTML structure for an input field with validation messaging.

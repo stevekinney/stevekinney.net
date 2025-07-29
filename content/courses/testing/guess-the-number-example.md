@@ -1,7 +1,7 @@
 ---
 title: Building A "Guess The Number" Game Using Test-Driven Development With Vitest
 description: Learn to build a "Guess the Number" game using TDD with Vitest.
-modified: 2024-09-28T18:32:10.824Z
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 ## Building a "Guess the Number" Game Using Test-Driven Development with Vitest
@@ -133,7 +133,7 @@ Before we start coding, let's outline the game logic:
 
 ### Implementing the Game Logic with TDD
 
-#### 1. Generating a Random Number
+#### Generating a Random Number
 
 ##### Step 1: Write the Test (Red)
 
@@ -204,7 +204,7 @@ Tests should now pass.
 
 Our code is acceptable as is.
 
-#### 2. Making a Guess
+#### Making a Guess
 
 We need to implement a function to make a guess.
 
@@ -297,7 +297,7 @@ All tests should pass.
 
 No immediate refactoring needed.
 
-#### 3. Providing Feedback
+#### Providing Feedback
 
 We've already implemented feedback in the previous step, but let's add tests for edge cases.
 
@@ -336,7 +336,7 @@ Our `makeGuess` function already compares numbers correctly, including negative 
 
 Ensure that comparisons handle edge cases correctly.
 
-#### 4. Tracking Attempts
+#### Tracking Attempts
 
 We need to ensure the game tracks the number of attempts accurately.
 
@@ -366,7 +366,7 @@ npm test
 
 The test should pass, confirming attempts are tracked.
 
-#### 5. Handling Invalid Inputs
+#### Handling Invalid Inputs
 
 We need to handle cases where the guess is not a valid number or is out of range.
 
@@ -473,42 +473,34 @@ By following Test-Driven Development principles, we've built a functional "Guess
 To further enhance your "Guess the Number" game and testing skills, consider implementing the following features:
 
 1. **Set Maximum Attempts**
-
    - Modify the game to allow a maximum number of attempts.
    - Write tests to ensure the game ends after the maximum attempts are reached.
 
 2. **Hint System**
-
    - Implement a hint system that provides additional clues.
    - Write tests to verify hints are accurate and provided correctly.
 
 3. **Replay Functionality**
-
    - Add a method to reset the game and start over.
    - Write tests to ensure the game resets correctly.
 
 4. **Difficulty Levels**
-
    - Introduce difficulty levels that adjust the range or number of attempts.
    - Write tests to verify the game behaves correctly at different difficulty levels.
 
 5. **Statistical Tracking**
-
    - Keep track of statistics like total games played, wins, and average attempts.
    - Write tests to ensure statistics are recorded accurately.
 
 6. **Input Parsing**
-
    - Enhance input handling to accept strings and convert them to numbers.
    - Write tests to ensure inputs like `'42'` are correctly interpreted.
 
 7. **Multiplayer Mode**
-
    - Allow multiple players to take turns guessing.
    - Write tests to ensure player turns and scores are managed correctly.
 
 8. **High Score List**
-
    - Implement a high score system that records the best scores.
    - Write tests to ensure high scores are updated and retrieved correctly.
 

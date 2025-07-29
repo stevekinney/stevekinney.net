@@ -1,7 +1,7 @@
 ---
 title: Starting with Simple Tests
 description: Learn how to test basic expressions and functions using Vitest.
-modified: 2024-09-29T14:04:33-06:00
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 > \[!TIP] Sample Code Repository

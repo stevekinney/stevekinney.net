@@ -1,5 +1,5 @@
 ---
-modified: 2024-09-28T15:19:02-06:00
+modified: 2025-04-16T12:27:20-06:00
 title: Auto-Mocking in Vitest
 description: Let Vitest mock dependencies on your behalf.
 ---

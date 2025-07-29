@@ -1,7 +1,9 @@
 ---
-modified: 2025-03-15T15:03:06-06:00
+modified: 2025-04-16T12:27:20-06:00
 title: Adding Types to Express Responses
-description: Learn how to add comprehensive type safety to Express response objects for better API consistency and reliability.
+description: >-
+  Learn how to add comprehensive type safety to Express response objects for
+  better API consistency and reliability.
 ---
 
 Just as we type request inputs, we should type response outputs to ensure API consistency.

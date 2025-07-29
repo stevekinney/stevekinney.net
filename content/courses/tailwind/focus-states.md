@@ -1,7 +1,9 @@
 ---
 title: Focus States
-description: Understanding focus, focus-visible, and focus-within utilities in Tailwind for accessible keyboard navigation
-modified: 2025-06-11T12:17:33-06:00
+description: >-
+  Understanding focus, focus-visible, and focus-within utilities in Tailwind for
+  accessible keyboard navigation
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 ## `focus`: Always Shows

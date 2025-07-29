@@ -1,7 +1,7 @@
 ---
 title: Understanding Test-Driven Development
 description: A simple explanation of the steps in Test-Driven Development.
-modified: 2024-09-28T15:35:06-06:00
+modified: 2024-10-02T08:49:23-05:00
 ---
 
 Test-Driven Developer (TDD) is way simpler than a lot of people want to make it sound. You basically follow these steps:

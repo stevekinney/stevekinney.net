@@ -1,6 +1,6 @@
 ---
 title: Type-Safe APIs with OpenAPI and TypeScript
-modified: 2025-03-15T22:00:00.000Z
+modified: 2025-05-14T09:27:07-06:00
 description: >-
   Learn to create type-safe APIs with OpenAPI and TypeScript. Define APIs,
   generate TypeScript types, and integrate them with Express for consistent,

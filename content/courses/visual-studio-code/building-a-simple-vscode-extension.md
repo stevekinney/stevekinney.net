@@ -1,6 +1,6 @@
 ---
 title: Building a Simple Extension
-modified: 2025-03-18T04:22:17-05:00
+modified: 2025-04-28T17:33:44-06:00
 description: A quick guide to building a Visual Studio Code extension.
 ---
 

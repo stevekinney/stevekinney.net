@@ -1,7 +1,9 @@
 ---
 title: Integrated Terminal in Visual Studio Code
-description: "Learn how to use and customize Visual Studio Code's integrated terminal for efficient development workflows"
-modified: 2025-03-18T08:05:32-05:00
+description: >-
+  Learn how to use and customize Visual Studio Code's integrated terminal for
+  efficient development workflows
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 The built-in terminal is pretty straight-forward, but let's look at some of the ways that we can take it the Next Level™, as they say.

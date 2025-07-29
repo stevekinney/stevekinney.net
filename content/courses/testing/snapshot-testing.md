@@ -1,7 +1,7 @@
 ---
 title: Snapshot Testing
 description: Learn how to implement snapshot testing using Vitest framework.
-modified: 2024-09-28T15:30:02-06:00
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Snapshot testing is a powerful technique in software testing that captures the output of a piece of code and compares it against a reference snapshot stored alongside the test. If the output changes, the test fails, alerting developers to unexpected changes in the codebase.

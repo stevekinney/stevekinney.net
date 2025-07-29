@@ -1,6 +1,10 @@
 ---
 title: Tailwind Masks
-description: Apply CSS masks with Tailwind utilities for creative visual effects using images and gradients.
+description: >-
+  Apply CSS masks with Tailwind utilities for creative visual effects using
+  images and gradients.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 CSS masking partially or fully hides parts of an element's content. Unlike opacity or `overflow: hidden`, masking uses another image or gradient to define visible portions based on transparency or luminance. Tailwind 4 provides utilities for implementing CSS masks directly in markup.

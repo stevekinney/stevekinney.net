@@ -1,7 +1,9 @@
 ---
-modified: 2025-03-15T15:32:23-06:00
+modified: 2025-04-16T12:27:20-06:00
 title: Branded Types with Express
-description: Learn how to use branded types in Express applications to enhance type safety for IDs, tokens, and other special string values.
+description: >-
+  Learn how to use branded types in Express applications to enhance type safety
+  for IDs, tokens, and other special string values.
 ---
 
 Sometimes basic types aren't enough. For IDs, tokens, and other special strings, we can use branded types:

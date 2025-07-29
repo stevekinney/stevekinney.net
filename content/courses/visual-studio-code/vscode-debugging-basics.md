@@ -1,7 +1,9 @@
 ---
 title: 'Debugging: The Basics in Visual Studio Code'
-description: Learn fundamental debugging techniques in Visual Studio Code including launch configurations, breakpoints, and stepping through code
-modified: 2025-03-18T08:47:13-05:00
+description: >-
+  Learn fundamental debugging techniques in Visual Studio Code including launch
+  configurations, breakpoints, and stepping through code
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 > [!NOTE] Example Repository

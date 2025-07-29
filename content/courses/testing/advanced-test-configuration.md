@@ -1,7 +1,7 @@
 ---
 title: Advanced Test Configuration With Vitest
 description: Dive into advanced Vitest configurations for better efficiency.
-modified: 2024-09-28T13:10:18-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 ## Customizing the `vitest.config.ts`

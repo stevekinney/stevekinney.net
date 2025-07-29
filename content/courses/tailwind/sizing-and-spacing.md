@@ -1,10 +1,16 @@
 ---
-title: 'Sizing and Spacing'
-description: "Learn how to control the size and spacing of elements using Tailwind's foundational utility classes.'"
-date: '2024-07-26'
-tags: ['tailwind', 'css', 'sizing', 'spacing']
+title: Sizing and Spacing
+description: >-
+  Learn how to control the size and spacing of elements using Tailwind's
+  foundational utility classes.'
+date: 2024-07-26
+tags:
+  - tailwind
+  - css
+  - sizing
+  - spacing
 published: true
-modified: 2025-06-11T11:17:08-06:00
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 In this lesson, we will explore one of the most fundamental aspects of Tailwind CSS: the sizing and spacing system. Mastering these utilities is the key to building well-proportioned and responsive layouts.
@@ -68,7 +74,6 @@ While this is very powerful, it's a good practice to stick to the predefined sca
 Now it's your turn to practice.
 
 1. **Build a simple card:**
-
    - Create a `div` with a width of `w-80`.
    - Give it a background color (e.g., `bg-gray-100`) and rounded corners (`rounded-lg`).
    - Add `p-6` of padding inside the card.

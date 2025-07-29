@@ -1,7 +1,9 @@
 ---
 title: An Alternative Approach to Implementing Dark Mode
-description: In which we use semantic colors for elements that reference CSS variables that are switched to different values when in dark mode.
-modified: 2024-09-28T11:31:16-06:00
+description: >-
+  In which we use semantic colors for elements that reference CSS variables that
+  are switched to different values when in dark mode.
+modified: 2024-10-18T19:45:04-06:00
 ---
 
 We do something slightly different. We don't even reference colors at all in our code. Instead, we have semantic colors for elements that reference CSS variables that are switched to different values when in dark mode.

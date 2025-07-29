@@ -1,6 +1,6 @@
 ---
 title: Scaffolding an Extension
-modified: 2025-03-17T18:28:51-05:00
+modified: 2025-04-16T12:27:20-06:00
 description: A little note on how to get started building a Visual Studio Code plugin.
 ---
 

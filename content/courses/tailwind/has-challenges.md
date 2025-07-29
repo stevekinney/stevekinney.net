@@ -1,6 +1,6 @@
 ---
 title: Challenges with `has` Utility
-modified: 2025-06-11T15:07:31-06:00
+modified: 2025-06-11T19:05:33-06:00
 description: Getting our hands dirty with the `has` utility in Tailwind.
 ---
 

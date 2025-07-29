@@ -1,7 +1,7 @@
 ---
 title: Using Mock Service Worker With Vitest For API Testing
 description: Learn how to use Mock Service Worker with Vitest for API testing.
-modified: 2024-09-28T16:10:57-06:00
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Mocking external network requests is a crucial part of testing applications that rely on APIs. **Mock Service Worker (MSW)** is a powerful tool that allows you to intercept and mock network requests at the network level. When combined with **Vitest**, a fast and modern JavaScript testing framework, you can create robust and reliable tests for your applications.
@@ -391,19 +391,24 @@ Using Mock Service Worker with Vitest provides a powerful and flexible way to mo
 
 ### Key Takeaways
 
-- **MSW Benefits**:
-  - Mocks network requests at the network level.
-  - Works seamlessly in both browser and Node.js environments.
-  - Simplifies testing of components that rely on external APIs.
-- **Best Practices**:
-  - Centralize request handlers for maintainability.
-  - Use contextual handlers to simulate different scenarios.
-  - Verify requests and responses within tests.
-  - Handle unhandled requests to catch missing handlers.
-- **Avoiding Pitfalls**:
-  - Reset handlers between tests to prevent cross-test contamination.
-  - Ensure mocked responses match expected formats.
-  - Be cautious of over-mocking.
+#### MSW Benefits
+
+- Mocks network requests at the network level.
+- Works seamlessly in both browser and Node.js environments.
+- Simplifies testing of components that rely on external APIs.
+
+#### Best Practices
+
+- Centralize request handlers for maintainability.
+- Use contextual handlers to simulate different scenarios.
+- Verify requests and responses within tests.
+- Handle unhandled requests to catch missing handlers.
+
+#### Avoiding Pitfalls
+
+- Reset handlers between tests to prevent cross-test contamination.
+- Ensure mocked responses match expected formats.
+- Be cautious of over-mocking.
 
 By integrating MSW into your testing workflow with Vitest, you can enhance the reliability and robustness of your tests, ultimately leading to higher-quality applications.
 

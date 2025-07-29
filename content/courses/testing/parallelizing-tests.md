@@ -1,7 +1,7 @@
 ---
 title: Parallelizing Tests Using Test Context
 description: Learn how to parallelize long-running asynchronous tests.
-modified: 2024-09-28T18:32:11.236Z
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 **Nota bene**: In order to parallelize tests, you have to use [test-context](test-context.md). So, if we haven't talked about that, let's pause and do that now.

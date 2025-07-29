@@ -1,7 +1,9 @@
 ---
 title: Tailwind Color Schemes
-description: Master CSS-first color management in Tailwind 4 using theme variables, dark mode, and the color-scheme property
-modified: 2025-06-07T16:05:54-06:00
+description: >-
+  Master CSS-first color management in Tailwind 4 using theme variables, dark
+  mode, and the color-scheme property
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Tailwind 4 uses CSS-first configuration with `@theme` for color management and the `color-scheme` property for native browser theming.

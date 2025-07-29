@@ -1,7 +1,7 @@
 ---
 title: Implementing a Calllout Component
 description: A solution for the exercise where we create a callout component.
-modified: 2024-09-28T11:31:16-06:00
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 > [!important] This is the solution for a previous exercise

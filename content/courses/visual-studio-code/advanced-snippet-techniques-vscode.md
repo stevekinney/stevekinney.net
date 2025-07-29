@@ -1,7 +1,9 @@
 ---
 title: Advanced Snippet Techniques in Visual Studio Code
-description: Master nested snippets and regular expressions to create powerful, dynamic code templates
-modified: 2025-03-17T10:47:02-06:00
+description: >-
+  Master nested snippets and regular expressions to create powerful, dynamic
+  code templates
+modified: 2025-03-17T16:36:04-05:00
 ---
 
 Alright, we're not done just yet. Let's take a quick moment and look at two advanced strategies before we move on.

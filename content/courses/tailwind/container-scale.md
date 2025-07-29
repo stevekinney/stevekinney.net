@@ -1,6 +1,10 @@
 ---
 title: Container Scale
-description: Understanding Tailwind's container scale for fixed width values, container queries, and responsive design utilities
+description: >-
+  Understanding Tailwind's container scale for fixed width values, container
+  queries, and responsive design utilities
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Tailwind's **container scale** is a set of predefined fixed width values used for sizing and layout utilities. This scale is managed via native CSS variables in the `@theme` directive, under the `--container-*` namespace.
@@ -8,7 +12,6 @@ Tailwind's **container scale** is a set of predefined fixed width values used fo
 1.  **What it Represents:** The container scale offers standard width values, often matching common breakpoint sizes or fixed container widths. It's different from the general [spacing scale](spacing-scale.md) (`--spacing`) used for padding, margin, etc.
 
 2.  **Utilities Using the Container Scale:**
-
     - **`columns`**: `columns-xs` to `columns-7xl` use `--container-*` values for ideal column width.
     - **`flex-basis`**: `basis-xs` to `basis-7xl` use `--container-*` values for initial flex item size.
     - **`max-width`**: `max-w-xs` to `max-w-7xl` use `--container-*` values for maximum element width.
@@ -18,7 +21,6 @@ Tailwind's **container scale** is a set of predefined fixed width values used fo
 3.  **Default Values:** The scale ranges from `3xs` (16rem/256px) to `7xl` (80rem/1280px), typically using rem values.
 
 4.  **Customization in Tailwind 4:**
-
     - Customize the container scale in your main CSS file using the `@theme` directive.
     - Define or override values in the `--container-*` namespace within `@theme`.
     - Example: Add `4xs` or override `7xl`. This enables utilities like `columns-4xs` and container query variants.

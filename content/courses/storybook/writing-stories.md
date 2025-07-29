@@ -1,5 +1,5 @@
 ---
-modified: 2024-09-28T11:31:16-06:00
+modified: 2025-06-11T19:05:33-06:00
 title: Writing Stories in Storybook
 description: How to write basic stories in Storybook.
 ---

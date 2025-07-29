@@ -1,6 +1,10 @@
 ---
 title: Building a Centered Login Form
-description: Let's build a professional centered login form step by step using Tailwind CSS flexbox utilities.
+description: >-
+  Let's build a professional centered login form step by step using Tailwind CSS
+  flexbox utilities.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Let's start with our basic HTML structure for a simple login form.

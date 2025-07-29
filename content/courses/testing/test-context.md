@@ -1,7 +1,7 @@
 ---
 title: Understanding Test Context
 description: Learn how to use the test context feature in Vitest effectively.
-modified: 2024-09-28T15:34:11-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 Allow me to paint a picture: Imagine you're working on a project (yours or the team's chaotic Frankenstein) where every test depends on some shared state, configuration, or custom data per test. You want to pass information along with your tests in a way that doesn't feel like duct-taping random values onto global variables. What do? Enter **test context** in Vitest.

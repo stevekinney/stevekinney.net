@@ -1,7 +1,9 @@
 ---
 title: Color Palettes in Storybook
-description: Storybook provides a Docs Block for rendering your design system's color palette.
-modified: 2024-09-28T11:31:16-06:00
+description: >-
+  Storybook provides a Docs Block for rendering your design system's color
+  palette.
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Storybook provides a Docs Block for rendering your design system's color palette. For example, you can create a `.mdx` file that looks like this.

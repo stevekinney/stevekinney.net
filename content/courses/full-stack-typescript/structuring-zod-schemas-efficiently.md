@@ -1,5 +1,5 @@
 ---
-modified: 2025-03-15T20:48:12.000Z
+modified: 2025-04-28T17:33:44-06:00
 title: Structuring Zod Schemas Efficiently
 description: >-
   Explore Zod schema structuring tips, focusing on modularization, reuse, type

@@ -1,9 +1,9 @@
 ---
 title: Figma for Developers
-description: "An high level introduction to Steve's Figma for Developers course."
+description: An high level introduction to Steve's Figma for Developers course.
 layout: page
-date: 2024-03-05T12:56:55-07:00
-modified: 2024-09-04T08:04:33-06:00
+date: 2024-03-05T19:56:55.000Z
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 The material in this course is intended to go along with the [Figma, v2](https://frontendmasters.com/courses/figma-v2/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) course with [Frontend Masters](https://frontendmasters.com/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon).

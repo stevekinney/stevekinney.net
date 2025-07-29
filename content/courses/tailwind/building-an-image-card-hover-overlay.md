@@ -1,6 +1,10 @@
 ---
 title: Building an Image Card with Hover Overlay
-description: Let's build an image card with an interactive hover overlay step by step using Tailwind CSS group utilities.
+description: >-
+  Let's build an image card with an interactive hover overlay step by step using
+  Tailwind CSS group utilities.
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Let's start with our basic HTML structure for an image card with overlay content.

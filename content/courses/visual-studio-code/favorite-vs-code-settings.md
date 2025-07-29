@@ -1,7 +1,9 @@
 ---
 title: Popular Visual Studio Code Settings
-description: Discover valuable Visual Studio Code settings to customize your editor for maximum productivity and a better development experience
-modified: 2025-03-16T13:01:13-06:00
+description: >-
+  Discover valuable Visual Studio Code settings to customize your editor for
+  maximum productivity and a better development experience
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 ## Steve's Favorites

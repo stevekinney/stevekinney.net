@@ -1,8 +1,8 @@
 ---
 title: Creating a Markdown Preprocessor for Svelte
-description: "Let's look at how to write our own preprocessor for SvelteKit."
-date: 2024-01-14T13:21:01-07:00
-modified: 2024-09-28T11:31:14-06:00
+description: Let's look at how to write our own preprocessor for SvelteKit.
+date: 2024-01-14T20:21:01.000Z
+modified: 2025-04-16T12:27:20-06:00
 published: true
 tags:
   - svelte

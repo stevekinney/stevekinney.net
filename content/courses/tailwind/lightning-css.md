@@ -1,6 +1,10 @@
 ---
 title: Lightning CSS
-description: The high-performance CSS parser, transformer, and minifier written in Rust that powers Tailwind and modern CSS tooling
+description: >-
+  The high-performance CSS parser, transformer, and minifier written in Rust
+  that powers Tailwind and modern CSS tooling
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Lightning CSS is a next-generation CSS parser, transformer, and minifier written in Rust that's designed to be extremely fast while supporting modern CSS features. It's developed by the team behind [Parcel](https://parceljs.org/) and serves as a high-performance alternative to traditional CSS processing tools.
