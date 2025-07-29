@@ -1,7 +1,7 @@
 ---
 title: 'Solution: Testing a Reducer in Zod'
 description: Tests I write during development compared to maintenance.
-modified: 2025-04-26T10:01:00-06:00
+modified: 2025-04-28T17:43:42-06:00
 ---
 
 Here is a really simple—and also secretly flawed—solution:

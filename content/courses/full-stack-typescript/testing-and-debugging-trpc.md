@@ -1,5 +1,5 @@
 ---
-modified: 2025-03-15T22:39:42.000Z
+modified: 2025-04-28T17:33:44-06:00
 description: >-
   Learn to efficiently run server-side unit tests for tRPC using
   `createCaller()` without needing an Express server setup. Includes tips for

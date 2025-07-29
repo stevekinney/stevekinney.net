@@ -1,7 +1,7 @@
 ---
-modified: 2024-09-30T10:44:47-06:00
-title: "Working with Testing Library's Matchers"
-description: "Learn how to test DOM nodes more effectively using Testing Library's Matchers"
+modified: 2025-04-16T12:27:20-06:00
+title: Working with Testing Library's Matchers
+description: Learn how to test DOM nodes more effectively using Testing Library's Matchers
 ---
 
 Testing Library also includes some useful matchers for making expectations on DOM elements. As a fun bonus, we're going to use React as well—just to show you how little of a difference it makes when it comes to testing your UI in the DOM.

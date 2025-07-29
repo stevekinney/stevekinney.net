@@ -1,9 +1,9 @@
 ---
 title: Building Design Systems in Storybook
-description: 'An exploration in building a design system using Storybook.'
+description: An exploration in building a design system using Storybook.
 layout: page
-date: 2024-03-05T12:56:55-07:00
-modified: 2024-04-17T09:03:56-05:00
+date: 2024-03-05T19:56:55.000Z
+modified: 2025-04-16T17:51:06-06:00
 ---
 
 The material in this course is intended to go along with the [Design Systems with Storybook, v2](https://frontendmasters.com/courses/design-systems-v2/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) course with [Frontend Masters](https://frontendmasters.com/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon).

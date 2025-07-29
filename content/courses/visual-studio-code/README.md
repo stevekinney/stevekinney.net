@@ -1,9 +1,11 @@
 ---
 title: Visual Studio Code
-description: 'A in-depth guide covering everyhing you would ever want to know about using Visual Studio Code.'
+description: >-
+  A in-depth guide covering everyhing you would ever want to know about using
+  Visual Studio Code.
 layout: page
-date: 2025-03-18T09:45:00-07:00
-modified: 2025-03-18T09:45:00-07:00
+date: 2025-03-18T16:45:00.000Z
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 > [!NOTE] Prerequisites

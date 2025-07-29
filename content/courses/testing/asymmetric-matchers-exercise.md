@@ -1,7 +1,7 @@
 ---
 title: Testing the Character Class
 description: Writing tests for the Character class and its key attributes.
-modified: 2024-09-28T18:32:11.103Z
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Let's head over to `examples/characters` and spend a moment reflecting on this `Character` class, which is a subset of the `Person` class we were just looking at.

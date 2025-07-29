@@ -1,6 +1,6 @@
 ---
 title: Generating Types from an Open API specification
-modified: 2025-03-20T10:49:31.000Z
+modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn how to generate TypeScript types from an OpenAPI spec using
   `openapi-typescript`, creating a type-safe client with `openapi-fetch`,

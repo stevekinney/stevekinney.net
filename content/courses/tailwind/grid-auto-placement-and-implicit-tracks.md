@@ -1,6 +1,10 @@
 ---
 title: Grid Auto-Placement and Implicit Tracks
-description: Understanding CSS Grid's auto-placement algorithm and implicit track creation for dynamic, flexible grid layouts
+description: >-
+  Understanding CSS Grid's auto-placement algorithm and implicit track creation
+  for dynamic, flexible grid layouts
+
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Tailwind CSS provides utilities to control how grid items are automatically placed and how implicit tracks are sized when the grid needs to create new rows or columns.

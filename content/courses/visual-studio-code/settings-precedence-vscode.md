@@ -1,7 +1,9 @@
 ---
 title: Settings Precedence in Visual Studio Code
-description: Understand how Visual Studio Code's hierarchical settings system works across default, user, workspace, and folder levels
-modified: 2025-03-16T12:27:30-06:00
+description: >-
+  Understand how Visual Studio Code's hierarchical settings system works across
+  default, user, workspace, and folder levels
+modified: 2025-03-17T16:36:04-05:00
 ---
 
 Visual Studio Code settings are organized into a hierarchical system, allowing you to define configurations at different scopes. This hierarchy ensures flexibility, enabling you to apply general settings across all your projects while also accommodating project-specific needs. The settings levels, in order of precedence (from least to most specific), are:

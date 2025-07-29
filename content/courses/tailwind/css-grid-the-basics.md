@@ -1,7 +1,9 @@
 ---
 title: CSS Grid The Basics
-description: "Learn CSS Grid layout fundamentals with Tailwind 4's grid utilities for two-dimensional layouts."
-modified: 2025-06-07T16:11:39-06:00
+description: >-
+  Learn CSS Grid layout fundamentals with Tailwind 4's grid utilities for
+  two-dimensional layouts.
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 CSS Grid with Tailwind offers precise control over two-dimensional layouts. Flexbox is powerful for one-dimensional alignment, but Grid excels in two dimensions. Tailwind 4, with its utility-first approach, makes building complex grid layouts intuitive and fast. Compose layouts directly in HTML with clear, semantic classes, reducing the need for custom CSS.

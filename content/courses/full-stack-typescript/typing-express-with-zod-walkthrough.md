@@ -1,6 +1,6 @@
 ---
 title: 'Demonstration: Typing Express with Zod'
-modified: 2025-03-19T19:09:49.000Z
+modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn to integrate Zod schema validation in an Express app to ensure data
   integrity, covering tasks like creation, updates, and database queries with

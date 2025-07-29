@@ -1,7 +1,9 @@
 ---
 title: Multiple Cursors in Visual Studio Code
-description: Learn how to use multiple cursors for efficient simultaneous editing across multiple locations in your code
-modified: 2025-03-18T08:20:04-05:00
+description: >-
+  Learn how to use multiple cursors for efficient simultaneous editing across
+  multiple locations in your code
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 What to know the quickest way to become a 10x developer? **Ten cursors**.

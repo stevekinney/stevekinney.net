@@ -1,7 +1,7 @@
 ---
 title: Testing Promises
 description: Learn how to test promises in Vitest for both resolution and rejection.
-modified: 2024-09-28T16:05:47-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 You _could_ use the strategies from [Testing Asynchronous Code](testing-asynchronous-code.md), but let's dig in just a little bit more on promises, in particular.

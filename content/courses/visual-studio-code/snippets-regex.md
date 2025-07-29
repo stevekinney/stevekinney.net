@@ -1,7 +1,9 @@
 ---
 title: Using Snippets with Regular Expressions in Visual Studio Code
-description: Master regex transformations in snippets to create advanced dynamic templates with powerful text manipulation
-modified: 2025-03-17T10:44:54-06:00
+description: >-
+  Master regex transformations in snippets to create advanced dynamic templates
+  with powerful text manipulation
+modified: 2025-03-17T16:36:04-05:00
 ---
 
 Suppose you want to generate a TypeScript constant name based on the filename, converting `hello-world.ts` into `HELLO_WORLD`. Capture groups and regex replacements are your allies here:

@@ -1,6 +1,6 @@
 ---
 title: Validating Schema with Middleware
-modified: 2025-03-19T20:05:51.000Z
+modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn to create middleware for validating request bodies using Zod schemas in
   TypeScript, ensuring data integrity for `POST` and `PUT` operations in your

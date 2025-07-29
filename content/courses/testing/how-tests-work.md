@@ -1,7 +1,7 @@
 ---
 title: How Tests Work
 description: Explore techniques to ensure tests fail when expected.
-modified: 2024-09-29T13:30:40-06:00
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 > \[!TIP] Steve's First Rule of Testing

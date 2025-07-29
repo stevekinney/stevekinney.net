@@ -1,6 +1,6 @@
 ---
 title: Generate Zod Schemas from Prisma
-modified: 2025-03-20T13:21:38.000Z
+modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn to generate Zod schemas from Prisma using `zod-prisma-types`. Simplify
   validation by integrating Zod with your Prisma setup effortlessly.

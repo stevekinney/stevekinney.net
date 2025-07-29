@@ -1,7 +1,7 @@
 ---
 title: Testing Function Arguments
 description: Learn how to verify function arguments using spies and mocks in Vitest.
-modified: 2024-09-28T14:06:36-06:00
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 In unit testing, one of the key tasks is verifying that functions are called with the correct arguments. This ensures that your code is passing the right data through the system and interacting with dependencies in the expected way. Vitest provides some powerful utilities to check the arguments passed to a function, either by using spies or mocks.

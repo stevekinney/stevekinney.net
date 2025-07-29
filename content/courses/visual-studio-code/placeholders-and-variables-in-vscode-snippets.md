@@ -1,7 +1,9 @@
 ---
 title: Placeholders and Variables in Snippets
-description: Learn how to navigate placeholders, and use transformations to maximize your snippet efficiency in Visual Studio Code.
-modified: 2025-03-18T08:41:54-05:00
+description: >-
+  Learn how to navigate placeholders, and use transformations to maximize your
+  snippet efficiency in Visual Studio Code.
+modified: 2025-04-28T17:33:44-06:00
 ---
 
 ## Placeholder Navigation

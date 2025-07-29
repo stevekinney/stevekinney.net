@@ -1,5 +1,5 @@
 ---
-modified: 2025-03-15T21:16:08.000Z
+modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn to build a type-safe router for Express in TypeScript, ensuring handlers
   receive correctly typed requests while defining routes with more reliability

@@ -1,7 +1,9 @@
 ---
 title: Flexbox Aligning Individual Items
-description: "Override container alignment for specific flex items using Tailwind's align-self utilities."
-modified: 2025-06-07T16:11:25-06:00
+description: >-
+  Override container alignment for specific flex items using Tailwind's
+  align-self utilities.
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 While `align-items` controls the alignment of all direct children in a flex container, `align-self` allows fine-tuning the alignment of a single item. Tailwind provides `self-*` utilities for this.

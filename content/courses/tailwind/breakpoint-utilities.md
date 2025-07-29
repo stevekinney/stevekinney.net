@@ -1,7 +1,9 @@
 ---
 title: Breakpoint Utilities
-description: "Build responsive designs with Tailwind's mobile-first breakpoint system and viewport-based conditional styling."
-modified: 2025-06-07T16:09:50-06:00
+description: >-
+  Build responsive designs with Tailwind's mobile-first breakpoint system and
+  viewport-based conditional styling.
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Tailwind uses a mobile-first approach: un-prefixed utilities apply to all sizes, prefixed utilities apply from that breakpoint up.

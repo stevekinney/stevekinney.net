@@ -1,7 +1,9 @@
 ---
 title: Flexbox Initial Size
-description: "Control the initial size of flex items before growing or shrinking with Tailwind's flex-basis utilities"
-modified: 2025-06-07T16:11:11-06:00
+description: >-
+  Control the initial size of flex items before growing or shrinking with
+  Tailwind's flex-basis utilities
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 Set the initial size of flex items before they grow or shrink using `basis-*` utilities.

@@ -1,8 +1,11 @@
 ---
-title: Building An Authentication System Using Test-Driven Development With
-  Express And Vitest
-description: Learn how to create an authentication system with TDD using Express and Vitest.
-modified: 2024-09-28T17:47:03-06:00
+title: >-
+  Building An Authentication System Using Test-Driven Development With Express
+  And Vitest
+description: >-
+  Learn how to create an authentication system with TDD using Express and
+  Vitest.
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 ## Building an Authentication System Using Test-Driven Development with Express and Vitest
@@ -131,7 +134,7 @@ This cycle is often referred to as **Red-Green-Refactor**.
 
 ### Implementing the System with TDD
 
-#### 1. User Registration
+#### User Registration
 
 ##### Step 1: Write the Test (Red)
 
@@ -228,7 +231,7 @@ The tests should pass.
 
 Ensure error messages are consistent and code is clean.
 
-#### 2. User Login
+#### User Login
 
 ##### Step 1: Write the Test (Red)
 
@@ -313,7 +316,7 @@ The tests should pass.
 
 Ensure the secret key is managed securely (e.g., using environment variables).
 
-#### 3. User Logout
+#### User Logout
 
 Since we're using JWT tokens, logout can be handled on the client side by deleting the token. However, for server-side logout (e.g., blacklisting tokens), we'd need additional infrastructure. For simplicity, we'll assume stateless JWT and focus on the client-side logout.
 
@@ -644,41 +647,33 @@ By following Test-Driven Development principles, we've built a basic authenticat
 To further enhance your authentication system and testing skills, consider implementing the following features:
 
 1. **Password Reset Functionality**
-
    - Implement password reset via email.
    - Write tests to ensure the reset process is secure.
 
 2. **Account Verification**
-
    - Send a verification email upon registration.
    - Write tests to verify that unverified accounts cannot log in.
 
 3. **Role-Based Access Control**
-
    - Implement roles (e.g., user, admin) and permissions.
    - Write tests to ensure access control is enforced correctly.
 
 4. **Using a Database**
-
    - Replace the in-memory user store with a database (e.g., MongoDB, PostgreSQL).
    - Write tests that interact with the database, possibly using a test database.
 
 5. **Session Management**
-
    - Implement session management for token invalidation (e.g., blacklisting tokens).
    - Write tests to ensure sessions are handled correctly.
 
 6. **Input Sanitization**
-
    - Ensure all inputs are sanitized to prevent injection attacks.
    - Write tests to verify that the system is secure against such attacks.
 
 7. **Rate Limiting**
-
    - Implement rate limiting to protect against brute-force attacks.
    - Write tests to ensure rate limiting works as expected.
 
 8. **Security Auditing**
-
    - Use tools to audit your code for security vulnerabilities.
    - Address any issues found and write tests to prevent regressions.

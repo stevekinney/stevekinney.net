@@ -1,8 +1,10 @@
 ---
-date: 2024-03-28T13:06:40-06:00
-modified: 2024-09-28T11:31:17-06:00
+date: 2024-03-28T19:06:40.000Z
+modified: 2024-10-02T08:49:23-05:00
 title: Cropped Grid Components
-description: Using the cropped grid pattern for dynamically displaying content in Figma components.
+description: >-
+  Using the cropped grid pattern for dynamically displaying content in Figma
+  components.
 ---
 
 As we learned with [components](components.md) and dug into a little bit with [placeholder components](placeholder-components.md), components can't take what slotted children but we can do a one-for-one swap. But what if we want to swap in more than one component? One trick we can use is called **cropped grid components**.

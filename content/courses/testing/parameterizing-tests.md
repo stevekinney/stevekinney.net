@@ -1,7 +1,7 @@
 ---
 title: Using Test.each And Describe.each To Generate Tests And Suites
 description: Learn to programmatically generate tests using test.each.
-modified: 2024-09-28T16:19:31-06:00
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 We can use test.each and describe.each to programmatically generate tests and test suites for us. Consider the following example:

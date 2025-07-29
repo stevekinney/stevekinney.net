@@ -1,7 +1,7 @@
 ---
 title: Using toBe and toEqual for Strict Equality
 description: Learn the difference between toBe and toEqual in Vitest testing.
-modified: 2024-09-29T15:44:49-06:00
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Most of us have been living in the "everything should be immutable" world long enough to know that there is a difference between comparing objects by reference and comparing it with object that _looks_ the same in terms of its value, but has a difference reference in memory.

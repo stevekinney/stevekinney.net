@@ -1,7 +1,7 @@
 ---
-title: 'Mocking and Spying on Local Storage'
+title: Mocking and Spying on Local Storage
 description: An example where we mock and spy on local storage.
-modified: 2024-09-30T14:14:38-06:00
+modified: 2025-04-16T12:27:20-06:00
 ---
 
 Let's take a look at `examples/element-factory/src/secret-input.test.js` again. We have some functionality where the input field can be pre-populated with whatever is currently in `localStorage`. Let's say that we want to both stub the value of `localStorage` and also be able to introspect the parameters that `localStorage.getItem` was called with.

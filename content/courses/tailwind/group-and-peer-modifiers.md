@@ -1,7 +1,9 @@
 ---
 title: Group and Peer Modifiers
-description: "Style elements based on parent or sibling states using Tailwind's group and peer modifiers for complex interactions"
-modified: 2025-06-11T15:15:17-06:00
+description: >-
+  Style elements based on parent or sibling states using Tailwind's group and
+  peer modifiers for complex interactions
+modified: 2025-06-11T19:05:33-06:00
 ---
 
 `group` and `peer` modifiers are two of Tailwind's most powerful features for creating interactive components without writing custom CSS. They allow you to style elements based on the state of their parent (`group`) or sibling (`peer`) elements.

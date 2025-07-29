@@ -1,5 +1,5 @@
 ---
-modified: 2025-03-15T21:07:44.000Z
+modified: 2025-04-16T12:27:20-06:00
 title: Adding Types to Headers and Cookies with Express
 description: >-
   Learn how to add TypeScript types to headers and cookies in Express for safer
