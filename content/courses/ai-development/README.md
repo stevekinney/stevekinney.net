@@ -21,4 +21,5 @@ And, of course, we'll actually cover the tools themselves. You'll learn to use a
 - [Extended Thinking Mode (Anthropic)](https://www.anthropic.com/news/visible-extended-thinking) - Documentation on Claude's thinking capabilities
 - [cursor.directory](https://cursor.directory) - Community examples for Cursor rules
 - [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) - Collection of Cursor rules examples
-- [Crystal](https://github.com/stravu/crystal): A tool for managing Git worktrees for Claude Code]
+- [Crystal](https://github.com/stravu/crystal): A tool for managing Git worktrees for Claude Code.
+- [Claude Code Sub-Agents Collection](https://github.com/augmnt/agents)
