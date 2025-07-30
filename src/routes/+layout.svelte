@@ -47,12 +47,12 @@
 </script>
 
 <!-- Main layout -->
-<main
+<div
   {...dataAttrs}
   class="mx-auto my-6 grid max-w-7xl grid-cols-1 items-center gap-6 px-4 sm:my-10 sm:grid-cols-2 md:px-8 lg:grid-cols-3"
 >
   <!-- Site header -->
-  <header>
+  <header role="banner">
     <h1 class="whitespace-nowrap lg:order-1">
       <a
         href="/"
@@ -68,6 +68,8 @@
   <div
     class="order-1 flex items-center justify-between gap-4 sm:order-none sm:justify-end lg:order-3"
     data-social-links
+    role="complementary"
+    aria-label="Social media links"
   >
     {#each socialLinks as { href, icon, label }}
       <SocialLink {href} {icon} name={label} />
@@ -81,4 +83,4 @@
   <div class="my-6 sm:col-span-full lg:order-3" data-content-container>
     {@render children?.()}
   </div>
-</main>
+</div>

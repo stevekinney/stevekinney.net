@@ -45,10 +45,10 @@ Here's how to use various `@` symbols effectively:
 
 For consistent, project-specific guidance, Cursor provides ways to define persistent context:
 
-- **`.cursorrules` and `.cursor/rules`**: These files act as a "constitution" for how the AI should behave within a specific project, enforcing consistent code style, language preferences, and quality guidelines.
+- **`.cursor/rules` and `.cursor/rules`**: These files act as a "constitution" for how the AI should behave within a specific project, enforcing consistent code style, language preferences, and quality guidelines.
   - **Project Rules (`.cursor/rules`)**: Stored as Markdown files within the project's repository, these are version-controlled and shared with the entire team. They can specify preferred frameworks, style guidelines, or persistent instructions (e.g., "always write docstrings"). They can be configured to apply "always," "auto-attach" based on file patterns, be "agent requested," or invoked "manually".
   - **User Rules**: Global rules configured in Cursor's settings that apply to all projects, best for personal preferences like tone of response.
-  - `.cursorrules` (Legacy): A single-file system located at the project root, still supported but newer project rules are recommended for flexibility.
+  - `.cursor/rules` (Legacy): A single-file system located at the project root, still supported but newer project rules are recommended for flexibility.
   - **Best Practices for Rules**: Start small and add to your rules file when you notice Cursor making the same mistake twice. Define them clearly and concisely. You can find examples at `cursor.directory` or `awesome-cursorrules` GitHub repository.
 - **Notepads**: These are "supercharged sticky notes" that allow you to store frequently used prompts, file references, and explanations for quick reuse. They can bridge the gap between composer and chat interactions, and a key advantage is their ability to contain and reference `@` symbols themselves, creating reusable context bundles. Notepads can be used for documenting project architecture, development guidelines, reusable code templates, or team-specific rules.
 
@@ -87,6 +87,6 @@ To maximize Cursor's effectiveness, consider these practices:
 - **Keep Files Small**: Keep code files under 500 lines where possible, making it easier for Cursor's Agent mode to read them completely.
 - **Document Functions Clearly**: Document the function and implementation logic in the first 100 lines of files to help the Agent index and understand the purpose.
 - **Use Inline Comments**: Guide edits by placing comments like `// AI: Add error handling without breaking existing logic` directly in your code.
-- **Adjust Rules as Project Evolves**: Update your `.cursorrules` as your project changes to ensure continued adherence to standards.
+- **Adjust Rules as Project Evolves**: Update your `.cursor/rules` as your project changes to ensure continued adherence to standards.
 - **Test Your Changes**: The AI can help write tests, which can be run in YOLO mode for automated iteration until tests pass.
 - **Understand Models**: Choose the right AI model for the task, as different models have different strengths (e.g., Claude for refactoring, GPT for complex reasoning).

@@ -56,7 +56,7 @@ The **Cmd/Ctrl+L** command opens the main AI chat panel, which functions as a "p
   - `@Code` and `@Symbols`: Focus on specific functions, classes, or variables (e.g., `@useUserData hook`).
   - `@Docs` and `@Web`: Extend the AI's knowledge beyond local code by referencing external documentation or performing live web searches. You can even add your own documentation by URL for Cursor to index.
   - `@Git`, `@Linter Errors`, `@Past Chats`: Provide specific context like commit history, diffs, linter errors, or previous conversations.
-- **Define Project-Wide Rules with `.cursorrules`:** Create a `.cursor/rules.mdc` file at your project's root to define consistent code style, language preferences, and quality guidelines that Cursor will always follow. Global rules can also be set in Cursor settings.
+- **Define Project-Wide Rules with `.cursor/rules`:** Create a `.cursor/rules.mdc` file at your project's root to define consistent code style, language preferences, and quality guidelines that Cursor will always follow. Global rules can also be set in Cursor settings.
 - **Utilize Notepads:** Create "supercharged sticky notes" to store frequently used prompts, file references, and explanations. These can be referenced using `@MyNotepad` to include their content, streamlining repetitive workflows.
 - **Break Down Problems (Plan-and-Act):** For complex tasks, ask the AI to first provide a step-by-step plan and reasoning, then instruct it to execute the plan after your review. This helps avoid flawed strategies.
 - **Iterative Refinement:** Treat interactions as a dialogue. Start broad, then refine prompts based on the AI's output, providing specific feedback.

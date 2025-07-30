@@ -4,7 +4,7 @@ description: Create reusable context bundles with Cursor Notepads to streamline 
 modified: 2025-07-29T09:58:36-06:00
 ---
 
-Cursor Notepads are essentially **drop-in Markdown pads that can bundle prompts, documentation links, file references, and rules**. They extend the capabilities of `.cursorrules` files by offering reusable contexts for your development process. Notepads accept rich text and can include `@file` mentions, allowing you to pin code or documents directly within the pad. They are accessible by their name using the `@` syntax (e.g., `@NotepadName`).
+Cursor Notepads are essentially **drop-in Markdown pads that can bundle prompts, documentation links, file references, and rules**. They extend the capabilities of `.cursor/rules` files by offering reusable contexts for your development process. Notepads accept rich text and can include `@file` mentions, allowing you to pin code or documents directly within the pad. They are accessible by their name using the `@` syntax (e.g., `@NotepadName`).
 
 ![Cursor Notepads](assets/cursor-notepad.png)
 
@@ -38,7 +38,7 @@ To maximize the effectiveness of Notepads:
 - **Version Critical Information in Git** While Notepads are convenient, they are not stored directly in your Git repository. For information requiring version history or team-wide sharing, consider mirroring it in standard Markdown files within your codebase.
 - **Curate and Lint Content** Treat Notepad content like code: use clear headings, bullet points, and avoid unnecessary fluff. Junk context can inflate your token usage and dilute the AI's focus.
 - **Bundle Repeated Prompts** Store frequently used prompts (e.g., "write exhaustive unit tests") in a Notepad. This can lead to faster workflows and reduce AI hallucinations.
-- **Combine with `.cursorrules`** Use project-level `.cursorrules` files for always-on constraints (e.g., "always use TypeScript") and Notepads for "sometimes-on" or dynamic context (e.g., "legacy Stripe migration details").
+- **Combine with `.cursor/rules`** Use project-level `.cursor/rules` files for always-on constraints (e.g., "always use TypeScript") and Notepads for "sometimes-on" or dynamic context (e.g., "legacy Stripe migration details").
 - **Regularly Audit** Schedule periodic reviews of your Notepads to remove stale links or outdated rules, preventing "context rot".
 - **Avoid Sensitive Data** Do not store temporary notes, version control information, or sensitive credentials directly in Notepads.
 
