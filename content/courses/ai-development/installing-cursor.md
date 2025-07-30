@@ -4,7 +4,7 @@ description: Download, install, and configure Cursor AI code editor with VS Code
 modified: 2025-07-29T14:36:18-06:00
 ---
 
-You can **download Cursor from its official website**: https://cursor.sh. The installation process is straightforward and feels similar to installing Visual Studio Code: download, run, and it's done.
+You can [download Cursor here](https://cursor.com). The installation process is straightforward and feels similar to installing Visual Studio Code (and for a good reason, right?): download, run, and it's done.
 
 ## Initial Setup and Onboarding
 
