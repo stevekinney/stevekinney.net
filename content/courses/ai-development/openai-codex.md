@@ -2,7 +2,6 @@
 title: Understanding OpenAI Codex for Code Generation
 description: Explore OpenAI Codex's AI-powered code generation capabilities and autonomous software engineering features.
 modified: 2025-07-28T08:05:10-06:00
-tags: [1]
 ---
 
 OpenAI Codex is an artificial intelligence model and a cloud-based software engineering agent developed by OpenAI, designed to transform how developers interact with codebases and build software. It is also available as a lightweight, open-source command-line interface (CLI) tool.

@@ -1,7 +1,6 @@
 ---
 title: Claude Code Commands
 description: Create and use custom slash commands to encapsulate expertise and workflows into reusable, project-scoped and user-scoped command templates
-tags: [1234]
 modified: 2025-07-24T15:39:45-06:00
 ---
 
