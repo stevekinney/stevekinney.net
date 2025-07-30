@@ -17,6 +17,7 @@ And, of course, we'll actually cover the tools themselves. You'll learn to use a
 
 ## Resources and References
 
+- [Basic React, TypeScript, and Tailwind Template](https://github.com/stevekinney/basic-template)
 - [Model Context Protocol Overview](https://modelcontextprotocol.io/overview)
 - [Repomix](https://repomix.com/) - Tool for preparing repository content for AI analysis
 - [Extended Thinking Mode (Anthropic)](https://www.anthropic.com/news/visible-extended-thinking) - Documentation on Claude's thinking capabilities
