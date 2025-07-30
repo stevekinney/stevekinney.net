@@ -280,4 +280,4 @@ In the meantime, if you're looking to explore some other Cursor rules, here are 
 
 - [Awesome Cursor Rules](https://github.com/PatrickJS/awesome-cursorrules)
 - [cursor.directory](https://cursor.directory)
-- [.cursorrules](https://dotcursorrules.com)
+- [.cursor/rules](https://dotcursorrules.com)

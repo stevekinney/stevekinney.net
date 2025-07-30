@@ -1,11 +1,12 @@
 ---
 modified: 2025-07-29T15:08:44-06:00
 title: Developing with AI Tools
+layout: page
 description: A course covering everything that Steve has learned to date about developing software with Cursor and Claude Code.
 date: 2025-07-30
 ---
 
-This course covers all the things that I have learned about using AI-powered tools like [Cursor](https://cursor.com) and [Claude Code][https://www.anthropic.com/claude-code] to write software. Since this kind of stuff can go out of date quickly, I try to focus on the battle-tested approaches that have worked for decades: thinking things through before you jump into the code, maintaining good Git discipline so you can revert back to a known good state whenever things go off the rails, testing, linting code quality, and more.
+This course covers all the things that I have learned about using AI-powered tools like [Cursor](https://cursor.com) and [Claude Code](https://www.anthropic.com/claude-code) to write software. Since this kind of stuff can go out of date quickly, I try to focus on the battle-tested approaches that have worked for decades: thinking things through before you jump into the code, maintaining good Git discipline so you can revert back to a known good state whenever things go off the rails, testing, linting code quality, and more.
 
 We also spend a decent amount of time accidentally learning how large language models work and how to effectively manage context.
 
@@ -23,3 +24,5 @@ And, of course, we'll actually cover the tools themselves. You'll learn to use a
 - [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) - Collection of Cursor rules examples
 - [Crystal](https://github.com/stravu/crystal): A tool for managing Git worktrees for Claude Code.
 - [Claude Code Sub-Agents Collection](https://github.com/augmnt/agents)
+- [Awesome Claude Prompts](https://github.com/langgptai/awesome-claude-prompts)
+- [Awesome Claude Code](https://github.com/hesreallyhim/awesome-claude-code?tab=readme-ov-file)
