@@ -1,7 +1,11 @@
 ---
 title: Installing the Hugging Face CLI
 description: A brief guide on how to install the Hugging Face CLI.
+modified: 2025-08-01T05:18:46-05:00
 ---
+
+> [!NOTE] You most likely won't have to do this.
+> But, just in case—here are some instructions.
 
 To install the Hugging Face Command Line Interface (CLI), you will primarily need to **install the `huggingface_hub` library**. You should install the `huggingface_hub` library using `pip`, the Python package manager.
 
