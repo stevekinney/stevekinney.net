@@ -1,6 +1,7 @@
 ---
 title: Hugging Face Pipeline Tasks
 description: A list of all of the things you can do with a Hugging Face Transformers.
+modified: 2025-08-01T05:20:59-05:00
 ---
 
 The `pipeline()` function in the Hugging Face Transformers library is a **high-level abstraction that offers the simplest way to use pre-trained AI models out-of-the-box** for various tasks. It handles the necessary preprocessing and postprocessing steps, allowing you to input raw data and receive intelligible answers.

@@ -1,9 +1,14 @@
 ---
 title: What is Hugging Face?
 description: A quick overview of what exactly Hugging Face is.
+modified: 2025-08-01T05:18:52-05:00
 ---
+> [!NOTE]  Our main interaction today will be with the libraries.
+> We'll mostly be using Hugging Face's `transformers` and `diffusers` libraries.
 
-Hugging Face is a **widely recognized AI company and an open-source community** that focuses on Natural Language Processing (NLP) and Artificial Intelligence. It initially began as a chatbot company before pivoting to develop cutting-edge open-source NLP technologies. Its primary goal is to **democratize AI technology**, making it accessible, open, and easy for everyone, which helps reduce computation costs and allows users to leverage state-of-the-art models without training them from scratch.
+[Hugging Face](https://huggingface.co) is a **AI company and an open-source community** that focuses on Natural Language Processing (NLP) and Artificial Intelligence. It initially began as a chatbot company before pivoting to develop cutting-edge open-source NLP technologies. Its primary goal is to **democratize AI technology**, making it accessible, open, and easy for everyone, which helps reduce computation costs and allows users to leverage state-of-the-art models without training them from scratch.
+
+![The Hugging Face website](assets/hugging-face-website.png)
 
 The Hugging Face ecosystem is built around its **collaborative platform, the Hugging Face Hub**, which functions similarly to GitHub for machine learning assets. Key components of this ecosystem include:
 
