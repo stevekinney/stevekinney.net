@@ -13,8 +13,8 @@ Let's start with our basic HTML structure to explore these powerful utilities.
 
 ```html tailwind
 <div>
-  <input type="checkbox" id="terms" />
-  <label for="terms">I agree to the terms</label>
+  <input type="checkbox" id="terms-0" />
+  <label for="terms-0">I agree to the terms</label>
 </div>
 ```
 
@@ -28,8 +28,8 @@ First, let's make the container respond to its checkbox child's state.
 <div
   class="flex items-center gap-3 rounded-lg border p-4 has-[input:checked]:border-green-500 has-[input:checked]:bg-green-50"
 >
-  <input type="checkbox" id="terms" class="h-4 w-4" />
-  <label for="terms" class="text-slate-900">I agree to the terms</label>
+  <input type="checkbox" id="terms-1" class="h-4 w-4" />
+  <label for="terms-1" class="text-slate-900">I agree to the terms</label>
 </div>
 ```
 
