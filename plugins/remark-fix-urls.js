@@ -56,24 +56,23 @@ const getBaseUrl = (fileData, contentPath) => {
  * @param {string} contentPath - Root directory containing content files (defaults to 'content')
  * @returns {import('unified').Plugin} A unified plugin function
  */
-export const fixMarkdownUrls =
-  (contentPath = DEFAULT_CONTENT_PATH) =>
-  (
-    /** @type {import('mdast').Root} */ tree,
-    /** @type {{ filename: string; cwd: string }} */ file,
-  ) => {
-    const fileData = FileSchema.parse(file);
-    const baseUrl = getBaseUrl(fileData, contentPath);
+export function fixMarkdownUrls(contentPath = DEFAULT_CONTENT_PATH) {
+  return function () {
+    return function transformer(tree, file) {
+      const fileData = FileSchema.parse(file);
+      const baseUrl = getBaseUrl(fileData, contentPath);
 
-    visit(tree, 'link', (node) => {
-      const { url } = node;
+      visit(tree, 'link', (/** @type {import('mdast').Link} */ node) => {
+        const { url } = node;
 
-      // Skip processing if the URL is external or doesn't contain a markdown extension
-      if (isExternalUrl(url) || !url.includes(URL_PATTERNS.MARKDOWN_EXTENSION)) {
-        return;
-      }
+        // Skip processing if the URL is external or doesn't contain a markdown extension
+        if (isExternalUrl(url) || !url.includes(URL_PATTERNS.MARKDOWN_EXTENSION)) {
+          return;
+        }
 
-      // Transform the URL
-      node.url = transformInternalUrl(url, baseUrl);
-    });
+        // Transform the URL
+        node.url = transformInternalUrl(url, baseUrl);
+      });
+    };
   };
+}

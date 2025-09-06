@@ -19,6 +19,15 @@ const IndividualPostSchema = z.object({
 // Type exports
 export type PostMetadata = z.infer<typeof PostMetadataSchema>;
 export type IndividualPost = z.infer<typeof IndividualPostSchema>;
+export type PostWithSlug = {
+  title: string;
+  date: string;
+  slug: string;
+  description: string;
+  modified: string;
+  published: boolean;
+  tags: string[];
+};
 
 export const getPost = async (slug: string): Promise<IndividualPost> => {
   try {

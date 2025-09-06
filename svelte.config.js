@@ -80,7 +80,7 @@ const config = {
   preprocess: [
     vitePreprocess(),
     mdsvex(mdsvexOptions),
-    processImages(),
+    /** @type {any} */ (processImages()),
     processCallouts(),
     importTailwindPlayground(),
   ],

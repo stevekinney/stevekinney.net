@@ -18,10 +18,11 @@ const classes = ['max-w-full', 'rounded-md', 'shadow-md'];
  * @returns {import('svelte/compiler').PreprocessorGroup}
  */
 export const processImages = () => {
-  return {
+  /** @type {import('svelte/compiler').PreprocessorGroup} */
+  const preprocessor = {
     name: 'markdown-image-optimization',
-    markup: ({ content, filename }) => {
-      if (!filename?.endsWith('.md')) return;
+    markup({ content, filename }) {
+      if (!filename || !filename.endsWith('.md')) return undefined;
 
       // Parse the content with the Svelte Compiler and create a MagicString instance.
       const { instance, html } = parse(content, { filename });
@@ -82,6 +83,7 @@ export const processImages = () => {
       };
     },
   };
+  return preprocessor;
 };
 
 /**
