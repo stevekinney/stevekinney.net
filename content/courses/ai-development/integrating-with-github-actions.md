@@ -60,7 +60,6 @@ Once set up, you define how Claude Code interacts with your repository through w
    This example demonstrates how Claude checks out the code and executes a review prompt when a PR is triggered.
 
 2. **Action Parameters**: The `claude-code-action` supports key parameters:
-
    - `trigger_phrase`: The phrase that activates Claude (e.g., "@claude").
    - `timeout_minutes`: Sets a timeout for Claude's operation.
    - `github_token`: Used for authentication with GitHub actions.

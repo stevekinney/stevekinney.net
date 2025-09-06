@@ -90,7 +90,7 @@ export const GET = async ({ url, fetch }) => {
   const image = await sharp(Buffer.from(svg)).jpeg().toBuffer();
 
   // Return response with appropriate headers
-  return new Response(image, {
+  return new Response(new Uint8Array(image), {
     headers: {
       'Content-Type': 'image/jpeg',
       'Cache-Control': 'public, max-age=31536000, immutable, no-transform',

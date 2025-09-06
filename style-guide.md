@@ -26,7 +26,6 @@
 
 - **Standard Block Quotes:** Use `>` for quotes.
 - **Obsidian-Style Callouts:** Use these callout types (and their aliases):
-
   - **Abstract** (aliases: `summary`, `tldr`)
   - **Info**
   - **Todo**

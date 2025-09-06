@@ -12,6 +12,7 @@
     }
   >;
 
+   
   const {
     href,
     icon,
@@ -19,20 +20,21 @@
     target = '_blank',
     size = 36,
     class: className = '',
+    // eslint-disable-next-line svelte/valid-compile
     ...props
   }: SocialLinkProps = $props();
 
   const Icon = $derived(icon);
 </script>
 
-<a 
-  {href} 
-  {target} 
+<a
+  {href}
+  {target}
   rel={target === '_blank' ? 'noopener noreferrer' : undefined}
   aria-label="Visit {name} profile"
   class={merge(
-    'focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 rounded',
-    className
+    'focus:ring-primary-600 rounded focus:ring-2 focus:ring-offset-2 focus:outline-none',
+    className,
   )}
   {...props}
 >

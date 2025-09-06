@@ -50,12 +50,7 @@
     "date": "2025-04-16T19:49:56.000Z",
     "modified": "2025-04-16T22:47:14.000Z",
     "published": true,
-    "tags": [
-      "ai",
-      "machine-learning",
-      "neural-networks",
-      "transformers"
-    ],
+    "tags": ["ai", "machine-learning", "neural-networks", "transformers"],
     "slug": "neural-networks"
   },
   {
@@ -64,11 +59,7 @@
     "date": "2024-12-31T00:07:17.000Z",
     "modified": "2025-04-26T16:04:14.000Z",
     "published": true,
-    "tags": [
-      "open-ai",
-      "pinecone",
-      "artificial-intelligence"
-    ],
+    "tags": ["open-ai", "pinecone", "artificial-intelligence"],
     "slug": "using-a-vector-database"
   },
   {
@@ -77,10 +68,7 @@
     "date": "2024-08-06T16:00:00.006Z",
     "modified": "2024-09-28T17:31:14.000Z",
     "published": true,
-    "tags": [
-      "python",
-      "virtual-env"
-    ],
+    "tags": ["python", "virtual-env"],
     "slug": "setup-python"
   },
   {
@@ -89,11 +77,7 @@
     "date": "2024-04-07T16:29:29.000Z",
     "modified": "2024-09-28T17:31:14.000Z",
     "published": false,
-    "tags": [
-      "svelte",
-      "storybook",
-      "design-systems"
-    ],
+    "tags": ["svelte", "storybook", "design-systems"],
     "slug": "obsidian-callout-svelte"
   },
   {
@@ -102,11 +86,7 @@
     "date": "2024-04-06T22:30:00.000Z",
     "modified": "2024-09-28T17:31:14.000Z",
     "published": true,
-    "tags": [
-      "css",
-      "tailwind",
-      "design-systems"
-    ],
+    "tags": ["css", "tailwind", "design-systems"],
     "slug": "tailwind-and-design-systems"
   },
   {
@@ -115,10 +95,7 @@
     "date": "2024-01-14T20:21:01.000Z",
     "modified": "2024-09-28T17:31:14.000Z",
     "published": true,
-    "tags": [
-      "svelte",
-      "ast"
-    ],
+    "tags": ["svelte", "ast"],
     "slug": "svelte-markdown-preprocessor"
   },
   {
@@ -127,9 +104,7 @@
     "date": "2021-08-16T16:00:00.006Z",
     "modified": "2024-09-28T17:31:14.000Z",
     "published": true,
-    "tags": [
-      "typescript"
-    ],
+    "tags": ["typescript"],
     "slug": "typescript-generics"
   },
   {
@@ -138,9 +113,7 @@
     "date": "2021-08-10T16:00:00.006Z",
     "modified": "2024-09-28T17:31:14.000Z",
     "published": true,
-    "tags": [
-      "svelte"
-    ],
+    "tags": ["svelte"],
     "slug": "svelte-stores"
   }
 ]
