@@ -4,4 +4,4 @@ description: Leverage Google's NotebookLM for research, documentation analysis, 
 modified: 2025-07-28T07:28:41-06:00
 ---
 
-![](assets/notebooklm.png)
+![NotebookLM](assets/notebooklm.png)
