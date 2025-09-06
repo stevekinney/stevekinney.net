@@ -87,6 +87,7 @@ export default [
 
     rules: {
       'no-undef': 'off',
+      'svelte/valid-compile': 'off',
 
       '@typescript-eslint/no-unused-vars': [
         'error',

@@ -2,6 +2,7 @@
   import { page } from '$app/stores';
   import { author } from '$lib/metadata';
   import { toDataAttributes } from '$lib/to-data-attributes';
+  import { merge } from '$merge';
   import { Github, Instagram, Linkedin, Twitter, Youtube } from 'lucide-svelte';
   import type { Snippet } from 'svelte';
 
@@ -23,14 +24,20 @@
   >;
 
   // Extract props
-  // eslint-disable-next-line svelte/valid-compile
-  const { children, ...rest }: LayoutProps = $props();
+  const {
+    children,
+    id,
+    class: className,
+    style,
+    role,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledby,
+  }: LayoutProps = $props();
 
   // Prepare data attributes for layout container
   const dataAttrs = toDataAttributes({
     layout: true,
     currentPath: $page.url.pathname,
-    ...rest,
   });
 
   // Social media profile links
@@ -50,7 +57,15 @@
 <!-- Main layout -->
 <div
   {...dataAttrs}
-  class="mx-auto my-6 grid max-w-7xl grid-cols-1 items-center gap-6 px-4 sm:my-10 sm:grid-cols-2 md:px-8 lg:grid-cols-3"
+  {id}
+  {style}
+  {role}
+  aria-label={ariaLabel}
+  aria-labelledby={ariaLabelledby}
+  class={merge(
+    'mx-auto my-6 grid max-w-7xl grid-cols-1 items-center gap-6 px-4 sm:my-10 sm:grid-cols-2 md:px-8 lg:grid-cols-3',
+    className,
+  )}
 >
   <!-- Site header -->
   <header>

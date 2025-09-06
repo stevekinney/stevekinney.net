@@ -108,6 +108,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@anthropic-ai/claude-code": "^1.0.108",
     "@fontsource/fira-sans": "^5.2.5",
     "@fontsource/league-gothic": "^5.2.5",
     "@fontsource/roboto": "^5.2.5",
