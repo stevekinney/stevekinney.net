@@ -3,6 +3,7 @@ import sharp from 'sharp';
 
 import metadata from '$lib/metadata';
 import { OpenGraphImage } from './open-graph';
+import type { RequestHandler } from '@sveltejs/kit';
 
 // Constants for image dimensions
 const IMAGE_WIDTH = 1200;
@@ -41,7 +42,7 @@ const parseBoolean = (value: string | null): boolean | undefined => {
 /**
  * Handler for generating Open Graph images
  */
-export const GET = async ({ url, fetch }) => {
+export const GET: RequestHandler = async ({ url, fetch }) => {
   // Extract parameters
   const title = url.searchParams.get('title') || metadata.title;
   const description = url.searchParams.get('description');
@@ -55,7 +56,7 @@ export const GET = async ({ url, fetch }) => {
 
   // Load fonts in parallel
   const loadedFontData = await Promise.all(
-    FONT_INFO.map((font) => fetch(font.path).then((res) => res.arrayBuffer())),
+    FONT_INFO.map((font) => fetch(font.path).then((res: Response) => res.arrayBuffer())),
   );
 
   // Prepare fonts for Satori

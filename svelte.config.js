@@ -14,6 +14,7 @@ import { fileURLToPath } from 'url';
 
 // Custom plugins
 import { fixMarkdownUrls } from './plugins/remark-fix-urls.js';
+import remarkEscapeComparators from './plugins/remark-escape-comparators.js';
 import { processCallouts } from './plugins/svelte-compile-callouts.js';
 import { processImages } from './plugins/svelte-enhance-images.js';
 import { importTailwindPlayground } from './plugins/import-tailwind-playground.js';
@@ -30,8 +31,13 @@ const mdsvexOptions = {
   extensions: ['.md'],
 
   // Process markdown content
-  remarkPlugins: [unwrapImages, fixMarkdownUrls, remarkGfm],
-  rehypePlugins: [rehypeSlug],
+  // Custom remark plugins (typed via casts to satisfy TS)
+  remarkPlugins: [
+    /** @type {any} */ (remarkEscapeComparators),
+    /** @type {any} */ (fixMarkdownUrls),
+    remarkGfm,
+  ],
+  rehypePlugins: [rehypeSlug, unwrapImages],
 
   // Layout templates for markdown content
   layout: {

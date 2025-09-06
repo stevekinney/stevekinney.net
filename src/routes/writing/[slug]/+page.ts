@@ -1,7 +1,8 @@
 import { getPost } from '$lib/posts.js';
 import { error } from '@sveltejs/kit';
+import type { PageLoad } from './$types';
 
-export async function load({ params }) {
+export const load: PageLoad = async ({ params }) => {
   try {
     const post = await getPost(params.slug);
 
@@ -9,6 +10,6 @@ export async function load({ params }) {
       ...post,
     };
   } catch {
-    return error(404, `Post not found`);
+    throw error(404, 'Post not found');
   }
-}
+};
