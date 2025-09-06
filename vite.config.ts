@@ -4,31 +4,18 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite';
 import { imagetools } from 'vite-imagetools';
 
-const getBaseUrl = (): Plugin => {
-  const moduleId = 'virtual:base-url';
-  const virtualModuleId = '\0' + moduleId;
-
-  return {
-    name: 'get-base-url',
-    enforce: 'pre',
-    resolveId(id) {
-      if (id === moduleId) {
-        return virtualModuleId;
-      }
-    },
-    async load(id) {
-      if (id === virtualModuleId) {
-        if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-          return `export default 'https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}';`;
-        }
-        return `export default '';`;
-      }
-    },
-  };
-};
+import { getBaseUrl } from './plugins/get-base-url';
+import { getTailwindExamples } from './plugins/process-tailwind-examples';
 
 export default defineConfig({
-  plugins: [sveltekit(), enhancedImages(), imagetools(), tailwindcss() as Plugin[], getBaseUrl()],
+  plugins: [
+    getBaseUrl(),
+    getTailwindExamples(),
+    sveltekit(),
+    enhancedImages(),
+    imagetools(),
+    tailwindcss() as Plugin[],
+  ],
 
   esbuild: {
     jsxFactory: 'h',

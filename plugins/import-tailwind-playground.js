@@ -6,7 +6,7 @@ import { parse } from 'svelte/compiler';
  * Creates a preprocessor to handle <tailwind-example> components in markdown files.
  * @returns {import('svelte/compiler').PreprocessorGroup}
  */
-export const processTailwindExamples = () => {
+export const importTailwindPlayground = () => {
   return {
     name: 'tailwind-example',
     markup: ({ content, filename }) => {
@@ -18,10 +18,10 @@ export const processTailwindExamples = () => {
 
       // Find all <tailwind-example> components and process them
       for (const node of walk(html)) {
-        if ('name' in node && node.name === 'TailwindExample') {
+        if ('name' in node && node.name === 'TailwindPlayground') {
           s.appendRight(
             instance.content.end,
-            `\nimport TailwindExample from '$lib/components/tailwind-example.svelte';\n`,
+            `\nimport TailwindPlayground from '$lib/components/tailwind-playground.svelte';\n`,
           );
           break;
         }

@@ -16,10 +16,7 @@ import { fileURLToPath } from 'url';
 import { fixMarkdownUrls } from './plugins/remark-fix-urls.js';
 import { processCallouts } from './plugins/svelte-compile-callouts.js';
 import { processImages } from './plugins/svelte-enhance-images.js';
-import {
-  processTailwindExamples,
-  toTailwindPlayground,
-} from './plugins/tailwind-playground/index.js';
+import { importTailwindPlayground } from './plugins/import-tailwind-playground.js';
 
 // Define directory paths
 const __filename = fileURLToPath(import.meta.url);
@@ -53,7 +50,7 @@ const mdsvexOptions = {
           lang,
           theme: 'night-owl',
         }),
-      );
+      ).replace(/\stabindex="[^"]*"/g, '');
 
       const classes = [
         'bg-[#011627]',
@@ -66,13 +63,7 @@ const mdsvexOptions = {
         'not-last:mb-4',
       ];
 
-      const codeBlock = `<div class="${classes.join(' ')}" data-language="${lang}" data-metastring="${metastring}">${html}</div>`;
-
-      if (metastring === 'tailwind') {
-        return toTailwindPlayground(code, codeBlock);
-      }
-
-      return codeBlock;
+      return `<div class="${classes.join(' ')}" data-language="${lang}" data-metastring="${metastring}">${html}</div>`;
     },
   },
 };
@@ -91,7 +82,7 @@ const config = {
     mdsvex(mdsvexOptions),
     processImages(),
     processCallouts(),
-    processTailwindExamples(),
+    importTailwindPlayground(),
   ],
 
   kit: {
