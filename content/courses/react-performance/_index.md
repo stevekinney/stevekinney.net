@@ -34,12 +34,12 @@ modified: 2025-09-07T12:00:00-06:00
 - [useTransition and startTransition](usetransition-and-starttransition.md)
 - [useDeferredValue Patterns](usedeferredvalue-patterns.md)
 - [useActionState Performance](useactionstate-performance.md)
-- [The use Hook](the-use-hook.md)
-- [flushSync in React DOM](flushsync-in-react-dom.md)
+- [The `use` Hook](the-use-hook.md)
+- [`flushSync` in React DOM](flushsync-in-react-dom.md)
 
 ## Server-Side Performance
 
-- [React Server Components RSC](react-server-components-rsc.md)
+- [React Server Components (RSC)](react-server-components-rsc.md)
 - [Optimizing Server Side Rendering](optimizing-server-side-rendering.md)
 - [Streaming SSR Optimization](streaming-ssr-optimization.md)
 - [Selective Hydration React 19](selective-hydration-react-19.md)
