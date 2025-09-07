@@ -139,6 +139,16 @@ const formatImage = (s, node, id, src) => {
     // Add the class attributes right after `<img`.
     s.appendLeft(node.start + 4, ` class="${classes.join(' ')}"`);
   }
+
+  // Add loading and decoding hints if not present
+  const loadingAttr = getAttribute(node, 'loading');
+  if (!loadingAttr) {
+    s.appendLeft(node.start + 4, ` loading="lazy"`);
+  }
+  const decodingAttr = getAttribute(node, 'decoding');
+  if (!decodingAttr) {
+    s.appendLeft(node.start + 4, ` decoding="async"`);
+  }
 };
 
 /**
