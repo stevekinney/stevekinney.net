@@ -28,7 +28,7 @@ export const processImages = () => {
       const { instance, html } = parse(content, { filename });
       const s = new MagicString(content);
 
-      /** @type {Map<string, {url: string, id: string}>} */
+      /** @type {Map<string, {url: string, id: string, metaId?: string, setId?: string, hasMeta: boolean, hasSrcset: boolean}>} */
       const images = new Map();
 
       // Walk the HTML AST and find all the image elements.
@@ -47,15 +47,24 @@ export const processImages = () => {
           if (url.startsWith('assets/')) url = `./${url}`;
 
           const id = '_' + camelCase(url);
+          const isGif = url.toLowerCase().endsWith('.gif');
+          const metaId = isGif ? undefined : id + '_meta';
+          const setId = isGif ? undefined : id + '_set';
 
-          images.set(url, { id, url });
+          images.set(url, { id, url, metaId, setId, hasMeta: !isGif, hasSrcset: !isGif });
 
           if (isVideo(url)) {
             formatVideo(s, node, id);
             continue;
           }
 
-          formatImage(s, node, id, srcValue);
+          formatImage(
+            s,
+            node,
+            id,
+            srcValue,
+            images.get(url) ?? { hasMeta: false, hasSrcset: false },
+          );
         }
       }
 
@@ -64,10 +73,21 @@ export const processImages = () => {
         for (const node of walk(instance)) {
           if (node.type === 'Program') {
             const imports = Array.from(images.entries())
-              .map(([url, { id }]) => {
-                let importUrl = url;
-                if (!url.endsWith('gif')) importUrl += '?w=902&format=avif&withoutEnlargement';
-                return `import ${id} from '${importUrl}';`;
+              .map(([url, cfg]) => {
+                const lines = [];
+                if (cfg.hasSrcset) {
+                  // Multiple widths for responsive images
+                  lines.push(`import ${cfg.setId} from '${url}?w=480;768;902&format=avif&srcset';`);
+                }
+                // Main src (single reasonably large width)
+                const mainSrc = url.toLowerCase().endsWith('gif')
+                  ? url
+                  : `${url}?w=902&format=avif&withoutEnlargement`;
+                lines.push(`import ${cfg.id} from '${mainSrc}';`);
+                if (cfg.hasMeta && cfg.metaId) {
+                  lines.push(`import ${cfg.metaId} from '${url}?metadata';`);
+                }
+                return lines.join('\n');
               })
               .join('\n');
 
@@ -120,9 +140,10 @@ const getAttributeValue = (attr) => {
  * @param {AstNode} node
  * @param {string} id
  * @param {SvelteTextNode} src
+ * @param {{ metaId?: string, setId?: string, hasMeta: boolean, hasSrcset: boolean }} cfg
  * @returns {void}
  */
-const formatImage = (s, node, id, src) => {
+const formatImage = (s, node, id, src, cfg) => {
   s.update(src.start, src.end, `{${id}}`);
 
   const classAttr = getAttribute(node, 'class');
@@ -148,6 +169,31 @@ const formatImage = (s, node, id, src) => {
   const decodingAttr = getAttribute(node, 'decoding');
   if (!decodingAttr) {
     s.appendLeft(node.start + 4, ` decoding="async"`);
+  }
+
+  // Add width/height to reduce CLS when metadata is available
+  if (cfg && cfg.hasMeta && cfg.metaId) {
+    const widthAttr = getAttribute(node, 'width');
+    if (!widthAttr) {
+      s.appendLeft(node.start + 4, ` width="{${cfg.metaId}.width}"`);
+    }
+    const heightAttr = getAttribute(node, 'height');
+    if (!heightAttr) {
+      s.appendLeft(node.start + 4, ` height="{${cfg.metaId}.height}"`);
+    }
+  }
+
+  // Add srcset and sizes if configured
+  if (cfg && cfg.hasSrcset && cfg.setId) {
+    const srcsetAttr = getAttribute(node, 'srcset');
+    if (!srcsetAttr) {
+      s.appendLeft(node.start + 4, ` srcset="{${cfg.setId}}"`);
+    }
+    const sizesAttr = getAttribute(node, 'sizes');
+    if (!sizesAttr) {
+      // Default sizes: full width on small screens, cap at ~902px otherwise
+      s.appendLeft(node.start + 4, ` sizes="(min-width: 1024px) 902px, 100vw"`);
+    }
   }
 };
 
