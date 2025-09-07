@@ -77,7 +77,9 @@ export const processImages = () => {
                 const lines = [];
                 if (cfg.hasSrcset) {
                   // Multiple widths for responsive images
-                  lines.push(`import ${cfg.setId} from '${url}?w=480;768;902&format=avif&srcset';`);
+                  lines.push(
+                    `import ${cfg.setId} from '${url}?w=480;768;1024&format=avif&srcset';`,
+                  );
                 }
                 // Main src (single reasonably large width)
                 const mainSrc = url.toLowerCase().endsWith('gif')
@@ -192,7 +194,10 @@ const formatImage = (s, node, id, src, cfg) => {
     const sizesAttr = getAttribute(node, 'sizes');
     if (!sizesAttr) {
       // Default sizes: full width on small screens, cap at ~902px otherwise
-      s.appendLeft(node.start + 4, ` sizes="(min-width: 1024px) 902px, 100vw"`);
+      s.appendLeft(
+        node.start + 4,
+        ` sizes="(min-width: 1280px) 902px, (min-width: 768px) 80vw, 100vw"`,
+      );
     }
   }
 };
