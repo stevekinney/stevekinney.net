@@ -19,7 +19,7 @@ Error boundaries are class components that implement either `componentDidCatch` 
 
 Let's start with a properly typed error boundary that captures both the error and additional error information:
 
-```typescript
+```tsx
 import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface ErrorBoundaryState {
@@ -59,9 +59,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   render() {
     if (this.state.hasError && this.state.error) {
       // Custom fallback or default error message
-      return this.props.fallback
-        ? this.props.fallback(this.state.error, this.state.errorInfo!)
-        : <div>Something went wrong.</div>;
+      return this.props.fallback ? (
+        this.props.fallback(this.state.error, this.state.errorInfo!)
+      ) : (
+        <div>Something went wrong.</div>
+      );
     }
 
     return this.props.children;
@@ -75,18 +77,14 @@ Notice how we're properly typing the `ErrorInfo` object from React, which contai
 
 Your fallback components should be properly typed to receive the error information they need:
 
-```typescript
+```tsx
 interface ErrorFallbackProps {
   error: Error;
   errorInfo?: ErrorInfo;
   resetErrorBoundary?: () => void;
 }
 
-const ErrorFallback: React.FC<ErrorFallbackProps> = ({
-  error,
-  errorInfo,
-  resetErrorBoundary
-}) => (
+const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, errorInfo, resetErrorBoundary }) => (
   <div className="error-boundary">
     <h2>Oops! Something went wrong</h2>
     <p>{error.message}</p>
@@ -98,11 +96,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
       </details>
     )}
 
-    {resetErrorBoundary && (
-      <button onClick={resetErrorBoundary}>
-        Try Again
-      </button>
-    )}
+    {resetErrorBoundary && <button onClick={resetErrorBoundary}>Try Again</button>}
   </div>
 );
 ```
@@ -111,7 +105,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
 
 Real-world error boundaries often need the ability to reset their state. Here's how to implement that with proper TypeScript support:
 
-```typescript
+```tsx
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
@@ -183,7 +177,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
 Suspense boundaries are much simpler to type since they're built-in React components, but the fallback prop and error handling still need proper typing:
 
-```typescript
+```tsx
 import { Suspense, ReactNode } from 'react';
 
 interface LoadingFallbackProps {
@@ -191,19 +185,13 @@ interface LoadingFallbackProps {
   progress?: number;
 }
 
-const LoadingFallback: React.FC<LoadingFallbackProps> = ({
-  message = 'Loading...',
-  progress
-}) => (
+const LoadingFallback: React.FC<LoadingFallbackProps> = ({ message = 'Loading...', progress }) => (
   <div className="loading-boundary">
     <div className="spinner" />
     <p>{message}</p>
     {progress !== undefined && (
       <div className="progress-bar">
-        <div
-          className="progress-fill"
-          style={{ width: `${progress}%` }}
-        />
+        <div className="progress-fill" style={{ width: `${progress}%` }} />
       </div>
     )}
   </div>
@@ -215,11 +203,7 @@ interface AsyncWrapperProps {
   loadingMessage?: string;
 }
 
-const AsyncWrapper: React.FC<AsyncWrapperProps> = ({
-  children,
-  fallback,
-  loadingMessage
-}) => (
+const AsyncWrapper: React.FC<AsyncWrapperProps> = ({ children, fallback, loadingMessage }) => (
   <Suspense fallback={fallback || <LoadingFallback message={loadingMessage} />}>
     {children}
   </Suspense>
@@ -230,7 +214,7 @@ const AsyncWrapper: React.FC<AsyncWrapperProps> = ({
 
 In practice, you'll often want both error and suspense handling. Here's a typed wrapper that handles both concerns:
 
-```typescript
+```tsx
 interface BoundaryWrapperProps {
   children: ReactNode;
   loadingFallback?: ReactNode;
@@ -245,9 +229,7 @@ const BoundaryWrapper: React.FC<BoundaryWrapperProps> = ({
   onError,
 }) => (
   <ErrorBoundary fallback={errorFallback} onError={onError}>
-    <Suspense fallback={loadingFallback}>
-      {children}
-    </Suspense>
+    <Suspense fallback={loadingFallback}>{children}</Suspense>
   </ErrorBoundary>
 );
 
@@ -264,7 +246,7 @@ const BoundaryWrapper: React.FC<BoundaryWrapperProps> = ({
   }}
 >
   <UserProfile userId={userId} />
-</BoundaryWrapper>
+</BoundaryWrapper>;
 ```
 
 ## Real-World Patterns
@@ -273,31 +255,22 @@ const BoundaryWrapper: React.FC<BoundaryWrapperProps> = ({
 
 When building applications with routing, you'll want boundaries at the route level to prevent navigation errors from crashing the entire app:
 
-```typescript
+```tsx
 interface RouteErrorBoundaryProps {
   children: ReactNode;
   routeName: string;
 }
 
-const RouteErrorBoundary: React.FC<RouteErrorBoundaryProps> = ({
-  children,
-  routeName
-}) => (
+const RouteErrorBoundary: React.FC<RouteErrorBoundaryProps> = ({ children, routeName }) => (
   <ErrorBoundary
     fallback={(error, errorInfo) => (
-      <RouteFallback
-        error={error}
-        errorInfo={errorInfo}
-        routeName={routeName}
-      />
+      <RouteFallback error={error} errorInfo={errorInfo} routeName={routeName} />
     )}
     onError={(error, errorInfo) => {
       logError(`Route ${routeName} error:`, error, errorInfo);
     }}
   >
-    <Suspense fallback={<RouteLoadingSpinner />}>
-      {children}
-    </Suspense>
+    <Suspense fallback={<RouteLoadingSpinner />}>{children}</Suspense>
   </ErrorBoundary>
 );
 
@@ -305,17 +278,12 @@ interface RouteFallbackProps extends ErrorFallbackProps {
   routeName: string;
 }
 
-const RouteFallback: React.FC<RouteFallbackProps> = ({
-  error,
-  routeName
-}) => (
+const RouteFallback: React.FC<RouteFallbackProps> = ({ error, routeName }) => (
   <div className="route-error">
     <h1>Page Unavailable</h1>
     <p>The {routeName} page encountered an error:</p>
     <code>{error.message}</code>
-    <button onClick={() => window.location.reload()}>
-      Refresh Page
-    </button>
+    <button onClick={() => window.location.reload()}>Refresh Page</button>
   </div>
 );
 ```
@@ -324,26 +292,21 @@ const RouteFallback: React.FC<RouteFallbackProps> = ({
 
 Sometimes you need error boundaries that understand their context and can provide more specific error handling:
 
-```typescript
+```tsx
 interface ContextualErrorBoundaryProps {
   children: ReactNode;
   context: string;
   criticalErrors?: string[]; // Error types that should bubble up
 }
 
-class ContextualErrorBoundary extends Component<
-  ContextualErrorBoundaryProps,
-  ErrorBoundaryState
-> {
+class ContextualErrorBoundary extends Component<ContextualErrorBoundaryProps, ErrorBoundaryState> {
   // ... basic error boundary implementation
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     const { criticalErrors = [], context } = this.props;
 
     // If this is a critical error type, re-throw to bubble up
-    if (criticalErrors.some(criticalError =>
-      error.message.includes(criticalError)
-    )) {
+    if (criticalErrors.some((criticalError) => error.message.includes(criticalError))) {
       throw error;
     }
 
@@ -362,14 +325,14 @@ class ContextualErrorBoundary extends Component<
   criticalErrors={['AuthenticationError', 'NetworkError']}
 >
   <UserDashboard />
-</ContextualErrorBoundary>
+</ContextualErrorBoundary>;
 ```
 
 ## Error Information Types
 
 TypeScript's `ErrorInfo` interface provides structured information about where errors occurred. Here's how to leverage it properly:
 
-```typescript
+```tsx
 import { ErrorInfo } from 'react';
 
 // ErrorInfo contains:
@@ -403,7 +366,7 @@ Error boundaries only catch errors in the component tree below them. They don't 
 - Errors during server-side rendering
 - Errors in the error boundary itself
 
-```typescript
+```tsx
 // ❌ This won't be caught by error boundaries
 const BadComponent = () => {
   const handleClick = () => {
@@ -435,7 +398,7 @@ const GoodAsyncComponent = () => {
 
 When integrating with error reporting services, ensure your error data is properly typed:
 
-```typescript
+```tsx
 interface ErrorReport {
   error: {
     message: string;

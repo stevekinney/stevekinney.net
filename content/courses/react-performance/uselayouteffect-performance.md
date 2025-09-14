@@ -15,7 +15,7 @@ The key insight: `useLayoutEffect` forces React to block the browser's paint pro
 
 React provides two hooks for side effects that run after render: `useEffect` and `useLayoutEffect`. The difference lies in their relationship to the browser's rendering pipeline.
 
-```typescript
+```tsx
 function TimingDemo() {
   const [count, setCount] = useState(0);
 
@@ -51,7 +51,7 @@ Use `useLayoutEffect` when you need to read from or write to the DOM before the 
 
 The most common legitimate use case is measuring elements that depend on dynamic content:
 
-```typescript
+```tsx
 function AutoResizingTextarea() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState('');
@@ -84,7 +84,7 @@ function AutoResizingTextarea() {
 
 When you need to read and immediately write layout properties:
 
-```typescript
+```tsx
 function ScrollSyncedHeader() {
   const headerRef = useRef<HTMLElement>(null);
   const [scrollY, setScrollY] = useState(0);
@@ -119,7 +119,7 @@ function ScrollSyncedHeader() {
 
 Every millisecond spent in `useLayoutEffect` directly delays when users see your updates:
 
-```typescript
+```tsx
 function ExpensiveLayoutEffect() {
   const [data, setData] = useState<number[]>([]);
 
@@ -149,7 +149,7 @@ function ExpensiveLayoutEffect() {
 
 `useLayoutEffect` runs synchronously even in React's Concurrent Mode, which can interfere with features like time slicing:
 
-```typescript
+```tsx
 function ConcurrentUnfriendly() {
   const [items, setItems] = useState<Item[]>([]);
 
@@ -171,7 +171,7 @@ function ConcurrentUnfriendly() {
 
 Use the React DevTools Profiler and browser performance tools to measure the actual cost:
 
-```typescript
+```tsx
 function MeasuredLayoutEffect() {
   const [trigger, setTrigger] = useState(0);
 
@@ -179,7 +179,7 @@ function MeasuredLayoutEffect() {
     const start = performance.now();
 
     // Your layout effect work
-    document.querySelectorAll('.measured-element').forEach(el => {
+    document.querySelectorAll('.measured-element').forEach((el) => {
       const rect = el.getBoundingClientRect();
       // Do something with measurements
     });
@@ -188,11 +188,7 @@ function MeasuredLayoutEffect() {
     console.log(`Layout effect took ${end - start}ms`);
   }, [trigger]);
 
-  return (
-    <button onClick={() => setTrigger(t => t + 1)}>
-      Trigger Layout Effect
-    </button>
-  );
+  return <button onClick={() => setTrigger((t) => t + 1)}>Trigger Layout Effect</button>;
 }
 ```
 
@@ -205,7 +201,7 @@ function MeasuredLayoutEffect() {
 
 When you must use `useLayoutEffect`, batch your DOM operations to minimize layout thrashing:
 
-```typescript
+```tsx
 function BatchedLayoutOperations() {
   const [items, setItems] = useState<Item[]>([]);
 
@@ -239,7 +235,7 @@ function BatchedLayoutOperations() {
 
 For measuring elements, consider `ResizeObserver` as an alternative to layout effects:
 
-```typescript
+```tsx
 function ResizeObserverExample() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const elementRef = useRef<HTMLDivElement>(null);
@@ -249,7 +245,7 @@ function ResizeObserverExample() {
     if (!element) return;
 
     // ResizeObserver is more efficient than layout effects for size changes
-    const resizeObserver = new ResizeObserver(entries => {
+    const resizeObserver = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect;
       setDimensions({ width, height });
     });
@@ -270,7 +266,7 @@ function ResizeObserverExample() {
 
 ### Using useLayoutEffect for Non-DOM Side Effects
 
-```typescript
+```tsx
 // ❌ Bad - doesn't need to block paint
 useLayoutEffect(() => {
   // API calls don't need synchronous timing
@@ -290,7 +286,7 @@ useEffect(() => {
 
 ### Overusing for "Feels Faster"
 
-```typescript
+```tsx
 function OverEngineeredComponent() {
   const [data, setData] = useState(null);
 
@@ -311,7 +307,7 @@ function OverEngineeredComponent() {
 
 React 19's Concurrent Features make `useLayoutEffect` even more important to use judiciously. The new rendering model makes blocking synchronous work more visible to users.
 
-```typescript
+```tsx
 function React19Aware() {
   const [items, setItems] = useState<Item[]>([]);
 
@@ -340,7 +336,7 @@ function React19Aware() {
 
 Create performance benchmarks to validate your `useLayoutEffect` usage:
 
-```typescript
+```tsx
 function PerformanceTest() {
   const [iterations, setIterations] = useState(0);
   const timeRef = useRef<number[]>([]);
@@ -367,7 +363,7 @@ function PerformanceTest() {
   }, [iterations]);
 
   return (
-    <button onClick={() => setIterations(i => i + 1)}>
+    <button onClick={() => setIterations((i) => i + 1)}>
       Run Performance Test (iterations: {iterations})
     </button>
   );

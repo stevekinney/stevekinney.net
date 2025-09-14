@@ -25,7 +25,7 @@ npx storybook@latest init
 
 This creates a `.storybook` folder with TypeScript-friendly defaults. The key file to pay attention to is `main.ts`:
 
-```typescript
+```tsx
 // .storybook/main.ts
 import type { StorybookConfig } from '@storybook/react-vite';
 
@@ -56,7 +56,7 @@ The `typescript.reactDocgen` setting is particularly important—it automaticall
 
 Here's where things get interesting. Let's build a `Button` component and see how TypeScript makes our stories both more powerful and safer:
 
-```typescript
+```tsx
 // src/components/Button/Button.tsx
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -83,7 +83,7 @@ const buttonVariants = cva(
       variant: 'default',
       size: 'default',
     },
-  }
+  },
 );
 
 export interface ButtonProps
@@ -98,7 +98,10 @@ export interface ButtonProps
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, isLoading, leftIcon, rightIcon, children, disabled, ...props }, ref) => {
+  (
+    { className, variant, size, isLoading, leftIcon, rightIcon, children, disabled, ...props },
+    ref,
+  ) => {
     return (
       <button
         className={buttonVariants({ variant, size, className })}
@@ -106,13 +109,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || isLoading}
         {...props}
       >
-        {isLoading && <span className="animate-spin mr-2">⏳</span>}
+        {isLoading && <span className="mr-2 animate-spin">⏳</span>}
         {leftIcon && <span className="mr-2">{leftIcon}</span>}
         {children}
         {rightIcon && <span className="ml-2">{rightIcon}</span>}
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = 'Button';
@@ -120,7 +123,7 @@ Button.displayName = 'Button';
 
 Now for the magic. Our story file becomes a type-safe exploration of every possible button state:
 
-```typescript
+```tsx
 // src/components/Button/Button.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button, type ButtonProps } from './Button';
@@ -170,7 +173,7 @@ export const Default: Story = {
 
 export const AllVariants: Story = {
   render: () => (
-    <div className="flex gap-2 flex-wrap">
+    <div className="flex flex-wrap gap-2">
       <Button variant="default">Default</Button>
       <Button variant="destructive">Destructive</Button>
       <Button variant="outline">Outline</Button>
@@ -182,7 +185,7 @@ export const AllVariants: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <div className="flex gap-2 items-center">
+    <div className="flex items-center gap-2">
       <Button size="sm">Small</Button>
       <Button size="default">Default</Button>
       <Button size="lg">Large</Button>
@@ -233,7 +236,7 @@ Notice how TypeScript prevents us from creating stories with invalid prop combin
 
 Here's where the magic really happens. With `reactDocgen: 'react-docgen-typescript'` enabled, Storybook automatically creates controls for all your typed props. But we can make this even better by adding JSDoc comments to our props:
 
-```typescript
+```tsx
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
@@ -275,7 +278,7 @@ These JSDoc comments become documentation in Storybook's controls panel, and the
 
 Real components often have complex interdependencies between props. Let's look at a more sophisticated example—a data table with TypeScript generics:
 
-```typescript
+```tsx
 // src/components/DataTable/DataTable.tsx
 interface Column<T> {
   /** Unique identifier for the column */
@@ -322,7 +325,7 @@ export function DataTable<T extends Record<string, any>>({
 
 Creating stories for generic components requires a bit more setup, but TypeScript ensures we get it right:
 
-```typescript
+```tsx
 // src/components/DataTable/DataTable.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
 import { DataTable } from './DataTable';
@@ -401,9 +404,7 @@ export const UserTable: Story = {
         key: 'role',
         header: 'Role',
         render: (value) => (
-          <span className={`badge badge-${value}`}>
-            {String(value).toUpperCase()}
-          </span>
+          <span className={`badge badge-${value}`}>{String(value).toUpperCase()}</span>
         ),
       },
       {
@@ -470,7 +471,7 @@ export const LoadingState: Story = {
 
 Storybook's `args` system becomes much more powerful with TypeScript. You can create reusable arg configurations:
 
-```typescript
+```tsx
 // Shared args for common scenarios
 const commonButtonArgs = {
   children: 'Click me',
@@ -498,7 +499,7 @@ export const DestructiveButton: Story = {
 
 For components with many similar variations, templates can reduce duplication:
 
-```typescript
+```tsx
 const Template: StoryObj<typeof Button> = {
   render: (args) => <Button {...args} />,
 };
@@ -524,7 +525,7 @@ export const Large = {
 
 TypeScript makes your action handlers type-safe too:
 
-```typescript
+```tsx
 import { action } from '@storybook/addon-actions';
 import { fn } from '@storybook/test';
 
@@ -551,7 +552,7 @@ export const Interactive: Story = {
 
 Your stories become living documentation for your design system. Each story demonstrates a specific use case with type safety:
 
-```typescript
+```tsx
 export const DesignSystemShowcase: Story = {
   render: () => (
     <div className="space-y-8">
@@ -559,7 +560,9 @@ export const DesignSystemShowcase: Story = {
         <h3>Primary Actions</h3>
         <div className="flex gap-2">
           <Button variant="default">Save Changes</Button>
-          <Button variant="default" leftIcon="📁">Save Draft</Button>
+          <Button variant="default" leftIcon="📁">
+            Save Draft
+          </Button>
         </div>
       </section>
 
@@ -567,7 +570,9 @@ export const DesignSystemShowcase: Story = {
         <h3>Destructive Actions</h3>
         <div className="flex gap-2">
           <Button variant="destructive">Delete</Button>
-          <Button variant="destructive" size="sm">Remove</Button>
+          <Button variant="destructive" size="sm">
+            Remove
+          </Button>
         </div>
       </section>
 
@@ -575,7 +580,9 @@ export const DesignSystemShowcase: Story = {
         <h3>Loading States</h3>
         <div className="flex gap-2">
           <Button isLoading>Processing...</Button>
-          <Button isLoading variant="destructive">Deleting...</Button>
+          <Button isLoading variant="destructive">
+            Deleting...
+          </Button>
         </div>
       </section>
     </div>
@@ -594,13 +601,11 @@ export const DesignSystemShowcase: Story = {
 
 Stories are perfect for documenting and testing edge cases that might be hard to reproduce:
 
-```typescript
+```tsx
 export const EdgeCases: Story = {
   render: () => (
-    <div className="space-y-4 max-w-md">
-      <Button className="w-full">
-        Very Very Very Long Button Text That Might Wrap
-      </Button>
+    <div className="max-w-md space-y-4">
+      <Button className="w-full">Very Very Very Long Button Text That Might Wrap</Button>
 
       <Button leftIcon="🌟" rightIcon="→" size="sm">
         Tiny with Both Icons
@@ -621,21 +626,27 @@ export const EdgeCases: Story = {
 
 Since stories are only loaded in development, you can create comprehensive test suites without worrying about bundle size:
 
-```typescript
+```tsx
 // This won't affect your production bundle
 export const ComprehensiveTest: Story = {
   render: () => {
-    const allVariants: ButtonProps['variant'][] = ['default', 'destructive', 'outline', 'secondary', 'ghost'];
+    const allVariants: ButtonProps['variant'][] = [
+      'default',
+      'destructive',
+      'outline',
+      'secondary',
+      'ghost',
+    ];
     const allSizes: ButtonProps['size'][] = ['sm', 'default', 'lg', 'icon'];
 
     return (
       <div className="grid grid-cols-4 gap-2">
-        {allVariants.flatMap(variant =>
-          allSizes.map(size => (
+        {allVariants.flatMap((variant) =>
+          allSizes.map((size) => (
             <Button key={`${variant}-${size}`} variant={variant} size={size}>
               {size === 'icon' ? '🚀' : `${variant} ${size}`}
             </Button>
-          ))
+          )),
         )}
       </div>
     );
@@ -649,7 +660,7 @@ export const ComprehensiveTest: Story = {
 
 Avoid using `as any` in your stories—it defeats the purpose of type safety:
 
-```typescript
+```tsx
 // ❌ Bad - loses type safety
 export const BadExample: Story = {
   args: {
@@ -669,7 +680,7 @@ export const GoodExample: Story = {
 
 When working with generic components, be explicit about your types:
 
-```typescript
+```tsx
 // ❌ Hard to maintain and understand
 export const GenericTable: Story = {
   args: {
@@ -699,7 +710,7 @@ export const UserDataTable: StoryObj<typeof DataTable<StoryUser>> = {
 
 Keep your args focused on the story's purpose:
 
-```typescript
+```tsx
 // ❌ Too much configuration for a simple story
 export const SimpleButton: Story = {
   args: {

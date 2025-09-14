@@ -15,7 +15,7 @@ We'll cover everything from basic typed contexts to advanced patterns like selec
 
 Let's start with the foundation—a properly typed context that catches errors at compile time rather than runtime. Here's what most folks reach for first:
 
-```typescript
+```tsx
 import { createContext, useContext, ReactNode } from 'react';
 
 // ✅ Define your context value type explicitly
@@ -64,7 +64,7 @@ This pattern gives us type safety and runtime checks, but there's room for impro
 
 For more complex state, splitting your context into separate state and actions can improve both performance and maintainability. This pattern borrows ideas from Redux but keeps things simpler:
 
-```typescript
+```tsx
 import { createContext, useContext, useReducer, ReactNode } from 'react';
 
 // ✅ Separate state and actions
@@ -114,9 +114,7 @@ function todoReducer(state: TodoState, action: TodoAction): TodoState {
       return {
         ...state,
         todos: state.todos.map((todo) =>
-          todo.id === action.payload.id
-            ? { ...todo, completed: !todo.completed }
-            : todo
+          todo.id === action.payload.id ? { ...todo, completed: !todo.completed } : todo,
         ),
       };
     // ... other cases
@@ -162,9 +160,7 @@ export function TodoProvider({ children }: { children: ReactNode }) {
 
   return (
     <TodoStateContext.Provider value={state}>
-      <TodoActionsContext.Provider value={actions}>
-        {children}
-      </TodoActionsContext.Provider>
+      <TodoActionsContext.Provider value={actions}>{children}</TodoActionsContext.Provider>
     </TodoStateContext.Provider>
   );
 }
@@ -197,7 +193,7 @@ This approach has several advantages:
 
 Here's where things get interesting. The selector pattern lets components subscribe only to the specific slices of state they care about, dramatically reducing unnecessary re-renders:
 
-```typescript
+```tsx
 import { createContext, useContext, useCallback, useSyncExternalStore } from 'react';
 
 // ✅ State store with subscription capabilities
@@ -239,14 +235,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         notifications: [],
         isLoading: false,
       }),
-    []
+    [],
   );
 
-  return (
-    <AppStateContext.Provider value={store}>
-      {children}
-    </AppStateContext.Provider>
-  );
+  return <AppStateContext.Provider value={store}>{children}</AppStateContext.Provider>;
 }
 
 // ✅ Selector hook that prevents unnecessary re-renders
@@ -258,7 +250,7 @@ export function useAppState<T>(selector: (state: AppState) => T): T {
 
   return useSyncExternalStore(
     store.subscribe,
-    useCallback(() => selector(store.getState()), [selector, store])
+    useCallback(() => selector(store.getState()), [selector, store]),
   );
 }
 
@@ -283,7 +275,7 @@ export function useAppActions() {
 
 Now components can subscribe to exactly what they need:
 
-```typescript
+```tsx
 // ✅ This component only re-renders when the user changes
 function UserProfile() {
   const user = useAppState((state) => state.user);
@@ -302,8 +294,8 @@ function UserProfile() {
 // ✅ This component only re-renders when todos change
 function TodoCount() {
   const todoCount = useAppState((state) => state.todos.length);
-  const completedCount = useAppState((state) =>
-    state.todos.filter(todo => todo.completed).length
+  const completedCount = useAppState(
+    (state) => state.todos.filter((todo) => todo.completed).length,
   );
 
   return (
@@ -333,7 +325,7 @@ function ThemeToggle() {
 
 For even more type safety, you can use discriminated unions to ensure your context state is always in a valid configuration:
 
-```typescript
+```tsx
 // ✅ Use discriminated unions for complex state
 type AuthState =
   | { status: 'idle' }
@@ -358,7 +350,7 @@ export function useAuth() {
     } catch (error) {
       setAuth({
         status: 'error',
-        error: error instanceof Error ? error.message : 'Login failed'
+        error: error instanceof Error ? error.message : 'Login failed',
       });
     }
   };
@@ -395,20 +387,20 @@ Here are some scenarios where these patterns really shine:
 
 ### 1. Shopping Cart with Performance Optimization
 
-```typescript
+```tsx
 // Separate contexts for cart data and UI state
 const CartDataContext = createContext<CartState | undefined>(undefined);
 const CartUIContext = createContext<CartUIActions | undefined>(undefined);
 
 // Components that show cart count don't re-render when UI state changes
 function CartBadge() {
-  const itemCount = useCartData(state => state.items.length);
+  const itemCount = useCartData((state) => state.items.length);
   return <Badge count={itemCount} />;
 }
 
 // Cart drawer only re-renders when UI state changes
 function CartDrawer() {
-  const isOpen = useCartUI(state => state.isDrawerOpen);
+  const isOpen = useCartUI((state) => state.isDrawerOpen);
   const { closeDrawer } = useCartActions();
 
   return <Drawer isOpen={isOpen} onClose={closeDrawer} />;
@@ -417,7 +409,7 @@ function CartDrawer() {
 
 ### 2. Multi-Step Form with Validation State
 
-```typescript
+```tsx
 type FormState = {
   currentStep: number;
   formData: Partial<RegistrationData>;
@@ -436,11 +428,11 @@ function PersonalInfoStep() {
 
 ### 3. Real-Time Dashboard
 
-```typescript
+```tsx
 // Dashboard components can subscribe to specific metrics
 function MetricCard({ metric }: { metric: keyof DashboardMetrics }) {
-  const value = useDashboardState(state => state.metrics[metric]);
-  const isLoading = useDashboardState(state => state.loading[metric]);
+  const value = useDashboardState((state) => state.metrics[metric]);
+  const isLoading = useDashboardState((state) => state.loading[metric]);
 
   // Only re-renders when this specific metric changes
   return <Card value={value} loading={isLoading} />;
@@ -453,7 +445,7 @@ When implementing these patterns, watch out for these common pitfalls:
 
 ### Selector Reference Equality
 
-```typescript
+```tsx
 // ❌ This creates a new array on every selector call
 function TodoList() {
   const activeTodos = useAppState((state) => state.todos.filter((todo) => !todo.completed));
@@ -474,32 +466,21 @@ function useActiveTodos() {
 
 ### Context Provider Re-creation
 
-```typescript
+```tsx
 // ❌ This creates a new context value object on every render
 function AppProvider({ children }) {
   const [state, setState] = useState(initialState);
 
-  return (
-    <AppContext.Provider value={{ state, setState }}>
-      {children}
-    </AppContext.Provider>
-  );
+  return <AppContext.Provider value={{ state, setState }}>{children}</AppContext.Provider>;
 }
 
 // ✅ Memoize the context value
 function AppProvider({ children }) {
   const [state, setState] = useState(initialState);
 
-  const contextValue = useMemo(
-    () => ({ state, setState }),
-    [state]
-  );
+  const contextValue = useMemo(() => ({ state, setState }), [state]);
 
-  return (
-    <AppContext.Provider value={contextValue}>
-      {children}
-    </AppContext.Provider>
-  );
+  return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 }
 ```
 
@@ -507,7 +488,7 @@ function AppProvider({ children }) {
 
 Testing contexts becomes much easier with proper TypeScript patterns:
 
-```typescript
+```tsx
 import { render, screen } from '@testing-library/react';
 import { TodoProvider, useTodoState, useTodoActions } from './TodoContext';
 
@@ -529,7 +510,7 @@ test('adds todo correctly', async () => {
   render(
     <TodoProvider>
       <TestComponent />
-    </TodoProvider>
+    </TodoProvider>,
   );
 
   expect(screen.getByTestId('todo-count')).toHaveTextContent('0');

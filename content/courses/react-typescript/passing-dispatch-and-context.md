@@ -15,7 +15,7 @@ We're going to walk through the refactoring journey from prop-drilled dispatch f
 
 Here's a typical scenario that grows organically in React applications. You start with a `useReducer` in your main component and need to pass the dispatch function down to deeply nested components:
 
-```typescript
+```tsx
 // Types for our todo application
 interface Todo {
   id: string;
@@ -43,10 +43,7 @@ function App() {
   );
 }
 
-function MainContent({ todos, dispatch }: {
-  todos: Todo[];
-  dispatch: Dispatch<TodoAction>
-}) {
+function MainContent({ todos, dispatch }: { todos: Todo[]; dispatch: Dispatch<TodoAction> }) {
   return (
     <div>
       <TodoList todos={todos} dispatch={dispatch} />
@@ -55,13 +52,10 @@ function MainContent({ todos, dispatch }: {
   );
 }
 
-function TodoList({ todos, dispatch }: {
-  todos: Todo[];
-  dispatch: Dispatch<TodoAction>
-}) {
+function TodoList({ todos, dispatch }: { todos: Todo[]; dispatch: Dispatch<TodoAction> }) {
   return (
     <ul>
-      {todos.map(todo => (
+      {todos.map((todo) => (
         <TodoItem key={todo.id} todo={todo} dispatch={dispatch} />
       ))}
     </ul>
@@ -69,10 +63,7 @@ function TodoList({ todos, dispatch }: {
 }
 
 // Finally! The component that actually needs dispatch
-function TodoItem({ todo, dispatch }: {
-  todo: Todo;
-  dispatch: Dispatch<TodoAction>
-}) {
+function TodoItem({ todo, dispatch }: { todo: Todo; dispatch: Dispatch<TodoAction> }) {
   return (
     <li>
       <input
@@ -81,9 +72,7 @@ function TodoItem({ todo, dispatch }: {
         onChange={() => dispatch({ type: 'TOGGLE_TODO', payload: { id: todo.id } })}
       />
       <span>{todo.text}</span>
-      <button
-        onClick={() => dispatch({ type: 'DELETE_TODO', payload: { id: todo.id } })}
-      >
+      <button onClick={() => dispatch({ type: 'DELETE_TODO', payload: { id: todo.id } })}>
         Delete
       </button>
     </li>
@@ -100,7 +89,7 @@ Notice how `MainContent` and `TodoList` don't actually _use_ the dispatch functi
 
 The first step in our migration is creating a properly typed Context. We'll start by extracting our state and dispatch types, then creating the Context structure:
 
-```typescript
+```tsx
 import { createContext, useContext, useReducer, ReactNode, Dispatch } from 'react';
 
 // ✅ First, centralize your action types
@@ -138,7 +127,7 @@ This gives us a typed context with runtime safety. The `undefined` default value
 
 Now let's create the Provider component that will replace our prop drilling. The key insight is that this Provider should encapsulate all the state management logic:
 
-```typescript
+```tsx
 interface TodoProviderProps {
   children: ReactNode;
   initialTodos?: Todo[];
@@ -148,16 +137,9 @@ export function TodoProvider({ children, initialTodos = [] }: TodoProviderProps)
   const [todos, dispatch] = useReducer(todoReducer, initialTodos);
 
   // ✅ Memoize the context value to prevent unnecessary re-renders
-  const contextValue = useMemo(
-    () => ({ todos, dispatch }),
-    [todos]
-  );
+  const contextValue = useMemo(() => ({ todos, dispatch }), [todos]);
 
-  return (
-    <TodoContext.Provider value={contextValue}>
-      {children}
-    </TodoContext.Provider>
-  );
+  return <TodoContext.Provider value={contextValue}>{children}</TodoContext.Provider>;
 }
 
 // ✅ Your reducer stays the same
@@ -174,18 +156,14 @@ function todoReducer(state: Todo[], action: TodoAction): Todo[] {
         },
       ];
     case 'TOGGLE_TODO':
-      return state.map(todo =>
-        todo.id === action.payload.id
-          ? { ...todo, completed: !todo.completed }
-          : todo
+      return state.map((todo) =>
+        todo.id === action.payload.id ? { ...todo, completed: !todo.completed } : todo,
       );
     case 'DELETE_TODO':
-      return state.filter(todo => todo.id !== action.payload.id);
+      return state.filter((todo) => todo.id !== action.payload.id);
     case 'SET_PRIORITY':
-      return state.map(todo =>
-        todo.id === action.payload.id
-          ? { ...todo, priority: action.payload.priority }
-          : todo
+      return state.map((todo) =>
+        todo.id === action.payload.id ? { ...todo, priority: action.payload.priority } : todo,
       );
     default:
       return state;
@@ -199,7 +177,7 @@ Notice that we're using `useMemo` for the context value. This is crucial—witho
 
 Here's the beauty of this approach: you can migrate component by component without breaking anything. Start from the deepest components and work your way up:
 
-```typescript
+```tsx
 // ✅ Step 3a: First, wrap your app with the provider
 function App() {
   return (
@@ -225,9 +203,7 @@ function TodoItem({ todo }: { todo: Todo }) {
         onChange={() => dispatch({ type: 'TOGGLE_TODO', payload: { id: todo.id } })}
       />
       <span>{todo.text}</span>
-      <button
-        onClick={() => dispatch({ type: 'DELETE_TODO', payload: { id: todo.id } })}
-      >
+      <button onClick={() => dispatch({ type: 'DELETE_TODO', payload: { id: todo.id } })}>
         Delete
       </button>
     </li>
@@ -240,7 +216,7 @@ function TodoList() {
 
   return (
     <ul>
-      {todos.map(todo => (
+      {todos.map((todo) => (
         <TodoItem key={todo.id} todo={todo} />
       ))}
     </ul>
@@ -269,7 +245,7 @@ The migration is gradual and safe—you can deploy after each step without break
 
 Once you have the basic context working, you can enhance it with more ergonomic patterns. One common improvement is separating your dispatch into semantic action creators:
 
-```typescript
+```tsx
 // ✅ Create action creators for better developer experience
 export function useTodoActions() {
   const { dispatch } = useTodoContext();
@@ -289,7 +265,7 @@ export function useTodoActions() {
         dispatch({ type: 'SET_PRIORITY', payload: { id, priority } });
       },
     }),
-    [dispatch]
+    [dispatch],
   );
 }
 
@@ -299,11 +275,7 @@ function TodoItem({ todo }: { todo: Todo }) {
 
   return (
     <li>
-      <input
-        type="checkbox"
-        checked={todo.completed}
-        onChange={() => toggleTodo(todo.id)}
-      />
+      <input type="checkbox" checked={todo.completed} onChange={() => toggleTodo(todo.id)} />
       <span>{todo.text}</span>
       <button onClick={() => deleteTodo(todo.id)}>Delete</button>
     </li>
@@ -325,15 +297,8 @@ function AddTodoForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Add a todo..."
-      />
-      <select
-        value={priority}
-        onChange={(e) => setPriority(e.target.value as Todo['priority'])}
-      >
+      <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Add a todo..." />
+      <select value={priority} onChange={(e) => setPriority(e.target.value as Todo['priority'])}>
         <option value="low">Low</option>
         <option value="medium">Medium</option>
         <option value="high">High</option>
@@ -354,7 +319,7 @@ This pattern gives you several benefits:
 
 For even better type safety, you can create action builders that ensure your actions are always well-formed:
 
-```typescript
+```tsx
 // ✅ Action builders with full type safety
 export const todoActions = {
   addTodo: (text: string, priority: Todo['priority']): TodoAction => ({
@@ -395,7 +360,7 @@ export function useTodoActions() {
 
 This approach makes testing easier too—you can test your action builders independently from your components:
 
-```typescript
+```tsx
 // ✅ Easy to test action builders
 import { todoActions } from './TodoContext';
 
@@ -422,7 +387,7 @@ describe('todoActions', () => {
 
 Here's a more complex example showing how to migrate form state management from prop drilling to context. This pattern is especially useful for multi-step forms or wizards:
 
-```typescript
+```tsx
 // Before: Prop drilling form dispatch through multiple steps
 interface RegistrationFormState {
   currentStep: number;
@@ -449,10 +414,13 @@ type FormAction =
   | { type: 'SET_SUBMITTING'; payload: boolean };
 
 // ✅ After: Clean context-based approach
-const RegistrationContext = createContext<{
-  state: RegistrationFormState;
-  dispatch: Dispatch<FormAction>;
-} | undefined>(undefined);
+const RegistrationContext = createContext<
+  | {
+      state: RegistrationFormState;
+      dispatch: Dispatch<FormAction>;
+    }
+  | undefined
+>(undefined);
 
 export function useRegistrationForm() {
   const context = useContext(RegistrationContext);
@@ -465,20 +433,23 @@ export function useRegistrationForm() {
 export function useRegistrationActions() {
   const { dispatch } = useRegistrationForm();
 
-  return useMemo(() => ({
-    nextStep: () => dispatch({ type: 'NEXT_STEP' }),
-    prevStep: () => dispatch({ type: 'PREV_STEP' }),
-    updatePersonalInfo: (info: PersonalInfo) =>
-      dispatch({ type: 'UPDATE_PERSONAL_INFO', payload: info }),
-    updateAccountDetails: (details: AccountDetails) =>
-      dispatch({ type: 'UPDATE_ACCOUNT_DETAILS', payload: details }),
-    updatePreferences: (prefs: UserPreferences) =>
-      dispatch({ type: 'UPDATE_PREFERENCES', payload: prefs }),
-    setValidationErrors: (step: string, errors: ValidationErrors) =>
-      dispatch({ type: 'SET_VALIDATION_ERRORS', payload: { step, errors } }),
-    setSubmitting: (isSubmitting: boolean) =>
-      dispatch({ type: 'SET_SUBMITTING', payload: isSubmitting }),
-  }), [dispatch]);
+  return useMemo(
+    () => ({
+      nextStep: () => dispatch({ type: 'NEXT_STEP' }),
+      prevStep: () => dispatch({ type: 'PREV_STEP' }),
+      updatePersonalInfo: (info: PersonalInfo) =>
+        dispatch({ type: 'UPDATE_PERSONAL_INFO', payload: info }),
+      updateAccountDetails: (details: AccountDetails) =>
+        dispatch({ type: 'UPDATE_ACCOUNT_DETAILS', payload: details }),
+      updatePreferences: (prefs: UserPreferences) =>
+        dispatch({ type: 'UPDATE_PREFERENCES', payload: prefs }),
+      setValidationErrors: (step: string, errors: ValidationErrors) =>
+        dispatch({ type: 'SET_VALIDATION_ERRORS', payload: { step, errors } }),
+      setSubmitting: (isSubmitting: boolean) =>
+        dispatch({ type: 'SET_SUBMITTING', payload: isSubmitting }),
+    }),
+    [dispatch],
+  );
 }
 
 // ✅ Now form steps are clean and focused
@@ -502,16 +473,12 @@ When migrating from prop drilling to context, be aware of these performance impl
 
 ### Context Value Memoization
 
-```typescript
+```tsx
 // ❌ This causes all consumers to re-render on every provider render
 function TodoProvider({ children }: { children: ReactNode }) {
   const [todos, dispatch] = useReducer(todoReducer, []);
 
-  return (
-    <TodoContext.Provider value={{ todos, dispatch }}>
-      {children}
-    </TodoContext.Provider>
-  );
+  return <TodoContext.Provider value={{ todos, dispatch }}>{children}</TodoContext.Provider>;
 }
 
 // ✅ Memoize the context value
@@ -520,14 +487,10 @@ function TodoProvider({ children }: { children: ReactNode }) {
 
   const contextValue = useMemo(
     () => ({ todos, dispatch }),
-    [todos, dispatch] // dispatch is stable from useReducer
+    [todos, dispatch], // dispatch is stable from useReducer
   );
 
-  return (
-    <TodoContext.Provider value={contextValue}>
-      {children}
-    </TodoContext.Provider>
-  );
+  return <TodoContext.Provider value={contextValue}>{children}</TodoContext.Provider>;
 }
 ```
 
@@ -535,7 +498,7 @@ function TodoProvider({ children }: { children: ReactNode }) {
 
 For better performance with large state objects, consider splitting your context:
 
-```typescript
+```tsx
 // ✅ Split state and actions for better performance
 const TodoStateContext = createContext<Todo[] | undefined>(undefined);
 const TodoDispatchContext = createContext<Dispatch<TodoAction> | undefined>(undefined);
@@ -560,9 +523,7 @@ export function useTodoDispatch() {
 function AddTodoButton() {
   const dispatch = useTodoDispatch();
   return (
-    <button onClick={() => dispatch(todoActions.addTodo('New todo', 'medium'))}>
-      Add Todo
-    </button>
+    <button onClick={() => dispatch(todoActions.addTodo('New todo', 'medium'))}>Add Todo</button>
   );
 }
 ```
@@ -571,7 +532,7 @@ function AddTodoButton() {
 
 Proper testing becomes more straightforward after the migration:
 
-```typescript
+```tsx
 import { render, screen, fireEvent } from '@testing-library/react';
 import { TodoProvider, useTodoActions, useTodoState } from './TodoContext';
 
@@ -589,7 +550,7 @@ function TestComponent() {
     <div>
       <span data-testid="todo-count">{todos.length}</span>
       <button onClick={() => addTodo('Test todo', 'high')}>Add Todo</button>
-      {todos.map(todo => (
+      {todos.map((todo) => (
         <div key={todo.id}>
           <span data-testid={`todo-${todo.id}`}>{todo.text}</span>
           <button onClick={() => toggleTodo(todo.id)}>Toggle</button>
@@ -629,7 +590,7 @@ test('useTodoActions provides expected interface', () => {
 
 ### Pitfall 1: Forgetting to Memoize Action Creators
 
-```typescript
+```tsx
 // ❌ This causes infinite re-renders
 function useTodoActions() {
   const { dispatch } = useTodoContext();
@@ -660,7 +621,7 @@ function useTodoActions() {
 
 ### Pitfall 2: Context Provider Placement
 
-```typescript
+```tsx
 // ❌ Provider too low in the tree
 function App() {
   return (
@@ -692,7 +653,7 @@ function App() {
 
 ### Pitfall 3: Over-using Context
 
-```typescript
+```tsx
 // ❌ Don't put everything in global context
 function AppProvider() {
   return (
@@ -717,9 +678,7 @@ function AppProvider() {
 function AppProviders({ children }: { children: ReactNode }) {
   return (
     <UserProvider>
-      <ThemeProvider>
-        {children}
-      </ThemeProvider>
+      <ThemeProvider>{children}</ThemeProvider>
     </UserProvider>
   );
 }

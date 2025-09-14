@@ -15,7 +15,7 @@ Think of `flushSync` as the emergency brake of React's rendering system. It's in
 
 `flushSync` is a function from `react-dom` that forces React to flush any pending updates synchronously before continuing. When you wrap a state update in `flushSync`, React immediately applies that update to the DOM—no batching, no concurrent scheduling, no waiting around.
 
-```typescript
+```tsx
 import { flushSync } from 'react-dom';
 
 function MyComponent() {
@@ -45,7 +45,7 @@ Most of the time, you don't need `flushSync`. React's default behavior of batchi
 
 One of the most common legitimate uses is managing focus after DOM changes:
 
-```typescript
+```tsx
 function SearchableList({ items }: { items: string[] }) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -55,29 +55,25 @@ function SearchableList({ items }: { items: string[] }) {
     if (e.key === 'ArrowDown') {
       // We need the DOM to update before focusing
       flushSync(() => {
-        setSelectedIndex(prev =>
-          Math.min(prev + 1, filteredItems.length - 1)
-        );
+        setSelectedIndex((prev) => Math.min(prev + 1, filteredItems.length - 1));
       });
 
       // Now we can safely focus the newly selected item
       const selectedItem = listRef.current?.querySelector(
-        `[data-index="${selectedIndex}"]`
+        `[data-index="${selectedIndex}"]`,
       ) as HTMLElement;
       selectedItem?.focus();
     }
   };
 
-  const filteredItems = items.filter(item =>
-    item.toLowerCase().includes(query.toLowerCase())
-  );
+  const filteredItems = items.filter((item) => item.toLowerCase().includes(query.toLowerCase()));
 
   return (
     <div>
       <input
         type="text"
         value={query}
-        onChange={e => setQuery(e.target.value)}
+        onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Search items..."
       />
@@ -88,7 +84,7 @@ function SearchableList({ items }: { items: string[] }) {
             data-index={index}
             tabIndex={-1}
             style={{
-              backgroundColor: index === selectedIndex ? '#e0e0e0' : 'white'
+              backgroundColor: index === selectedIndex ? '#e0e0e0' : 'white',
             }}
           >
             {item}
@@ -106,7 +102,7 @@ Without `flushSync`, the focus call might happen before React has updated the DO
 
 Sometimes you need to measure elements immediately after a state change:
 
-```typescript
+```tsx
 function CollapsiblePanel({ children }: { children: React.ReactNode }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [height, setHeight] = useState<number | undefined>();
@@ -131,9 +127,7 @@ function CollapsiblePanel({ children }: { children: React.ReactNode }) {
 
   return (
     <div>
-      <button onClick={handleToggle}>
-        {isExpanded ? 'Collapse' : 'Expand'}
-      </button>
+      <button onClick={handleToggle}>{isExpanded ? 'Collapse' : 'Expand'}</button>
       <div
         ref={contentRef}
         style={{
@@ -155,7 +149,7 @@ Here, we need the content to be rendered (expanded) before we can measure its na
 
 When integrating with libraries that expect immediate DOM updates:
 
-```typescript
+```tsx
 function ChartComponent({ data }: { data: ChartData[] }) {
   const [chartType, setChartType] = useState<'bar' | 'line'>('bar');
   const chartRef = useRef<HTMLDivElement>(null);
@@ -204,7 +198,7 @@ The chart library needs the DOM to reflect the current state before it can prope
 
 React normally batches multiple state updates into a single render cycle. `flushSync` breaks this optimization:
 
-```typescript
+```tsx
 // ❌ Bad: Multiple flushSync calls
 function BadExample() {
   const [name, setName] = useState('');
@@ -241,7 +235,7 @@ function GoodExample() {
 
 `flushSync` forces synchronous work on the main thread, potentially causing jank:
 
-```typescript
+```tsx
 // ❌ Problematic: Large synchronous update
 function ProblematicList({ items }: { items: Item[] }) {
   const [filter, setFilter] = useState('');
@@ -256,13 +250,11 @@ function ProblematicList({ items }: { items: Item[] }) {
     performDOMWork();
   };
 
-  const filteredItems = items.filter(item =>
-    item.name.includes(filter)
-  );
+  const filteredItems = items.filter((item) => item.name.includes(filter));
 
   return (
     <ul>
-      {filteredItems.map(item => (
+      {filteredItems.map((item) => (
         <li key={item.id}>{item.name}</li>
       ))}
     </ul>
@@ -291,7 +283,7 @@ function BetterList({ items }: { items: Item[] }) {
 
 Only reach for `flushSync` when you have a specific coordination requirement:
 
-```typescript
+```tsx
 // ✅ Good: Clear coordination need
 function Modal({ isOpen, onClose }: ModalProps) {
   const firstButtonRef = useRef<HTMLButtonElement>(null);
@@ -323,7 +315,7 @@ function Counter() {
 
 Often, React's built-in mechanisms can handle your needs without `flushSync`:
 
-```typescript
+```tsx
 // Instead of flushSync for DOM measurements, use useLayoutEffect
 function MeasuredComponent({ content }: { content: string }) {
   const [height, setHeight] = useState<number>(0);
@@ -344,7 +336,7 @@ function MeasuredComponent({ content }: { content: string }) {
 
 If you must use `flushSync`, bundle related updates together:
 
-```typescript
+```tsx
 // ✅ Good: Bundle related updates
 const handleComplexUpdate = () => {
   flushSync(() => {
@@ -373,7 +365,7 @@ With React 18's concurrent features, `flushSync` has some additional considerati
 
 `flushSync` will interrupt any ongoing transitions:
 
-```typescript
+```tsx
 function SearchResults() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Result[]>([]);
@@ -401,7 +393,7 @@ function SearchResults() {
 
 `flushSync` doesn't play nicely with Suspense boundaries:
 
-```typescript
+```tsx
 // ❌ Problematic: flushSync with Suspense
 function ProblematicComponent() {
   const [showSuspenseful, setShowSuspenseful] = useState(false);
@@ -413,11 +405,7 @@ function ProblematicComponent() {
     });
   };
 
-  return (
-    <Suspense fallback={<Loading />}>
-      {showSuspenseful && <LazyComponent />}
-    </Suspense>
-  );
+  return <Suspense fallback={<Loading />}>{showSuspenseful && <LazyComponent />}</Suspense>;
 }
 ```
 
@@ -429,7 +417,7 @@ When things go wrong with `flushSync`, here are common debugging approaches:
 
 The React DevTools Profiler can show you the performance impact:
 
-```typescript
+```tsx
 // Add labels to make profiling clearer
 function ProfiledComponent() {
   const handleUpdate = () => {
@@ -446,7 +434,7 @@ function ProfiledComponent() {
 
 Measure the synchronous work:
 
-```typescript
+```tsx
 function TimedComponent() {
   const handleUpdate = () => {
     console.time('flushSync-update');
@@ -467,7 +455,7 @@ Here are some common anti-patterns to avoid:
 
 ### Form Validation
 
-```typescript
+```tsx
 // ❌ Don't use flushSync for form validation
 function BadForm() {
   const [errors, setErrors] = useState<string[]>([]);
@@ -485,7 +473,7 @@ function BadForm() {
 
 ### Animation Triggers
 
-```typescript
+```tsx
 // ❌ Don't use flushSync for CSS animations
 function BadAnimation() {
   const [isAnimating, setIsAnimating] = useState(false);
@@ -510,7 +498,7 @@ function GoodAnimation() {
 
 ### Data Fetching
 
-```typescript
+```tsx
 // ❌ Don't use flushSync for loading states
 function BadDataFetching() {
   const [isLoading, setIsLoading] = useState(false);
@@ -532,7 +520,7 @@ function BadDataFetching() {
 
 Here's a complete example showing proper `flushSync` usage for modal focus management:
 
-```typescript
+```tsx
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -572,7 +560,7 @@ function Modal({ isOpen, onClose, children, title }: ModalProps) {
     // Trap focus within modal
     if (e.key === 'Tab') {
       const focusableElements = modalRef.current?.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
 
       if (focusableElements && focusableElements.length > 0) {
@@ -593,10 +581,7 @@ function Modal({ isOpen, onClose, children, title }: ModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div
-      className="modal-overlay"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
+    <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div
         ref={modalRef}
         className="modal-content"
@@ -607,17 +592,11 @@ function Modal({ isOpen, onClose, children, title }: ModalProps) {
       >
         <div className="modal-header">
           <h2 id="modal-title">{title}</h2>
-          <button
-            ref={closeButtonRef}
-            onClick={onClose}
-            aria-label="Close modal"
-          >
+          <button ref={closeButtonRef} onClick={onClose} aria-label="Close modal">
             ×
           </button>
         </div>
-        <div className="modal-body">
-          {children}
-        </div>
+        <div className="modal-body">{children}</div>
       </div>
     </div>
   );
@@ -637,15 +616,9 @@ function App() {
     <div>
       <button onClick={openModal}>Open Modal</button>
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Example Modal"
-      >
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Example Modal">
         <p>This modal properly manages focus using flushSync where needed.</p>
-        <button onClick={() => setIsModalOpen(false)}>
-          Close from inside
-        </button>
+        <button onClick={() => setIsModalOpen(false)}>Close from inside</button>
       </Modal>
     </div>
   );

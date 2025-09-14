@@ -15,7 +15,7 @@ The stakes are high: a single poorly optimized library import can bloat your bun
 
 Tree shaking relies on static analysis of ES6 modules. Bundlers like Webpack, Rollup, and Vite analyze your import/export statements to build a dependency graph, then eliminate any exports that aren't imported anywhere.
 
-```typescript
+```tsx
 // utils.ts - Library with multiple exports
 export const add = (a: number, b: number) => a + b;
 export const subtract = (a: number, b: number) => a - b;
@@ -41,7 +41,7 @@ Tree shaking works because ES6 modules have **static structure**—imports and e
 
 ### The Static Analysis Process
 
-```typescript
+```tsx
 // Bundler analysis process:
 
 // 1. Parse all modules and build dependency graph
@@ -72,7 +72,7 @@ const eliminatedExports = [
 
 ### Problem 1: Side Effect Imports
 
-```typescript
+```tsx
 // ❌ This prevents tree shaking of the entire module
 import 'some-library'; // Side effect import
 import { specificFunction } from 'some-library';
@@ -90,7 +90,7 @@ import { specificFunction } from 'some-library';
 
 ### Problem 2: Default Exports and Barrel Files
 
-```typescript
+```tsx
 // ❌ Barrel files can prevent tree shaking
 // components/index.ts
 export { default as Button } from './Button';
@@ -114,7 +114,7 @@ export { DataTable } from './DataTable';
 
 ### Problem 3: Class Instantiation
 
-```typescript
+```tsx
 // ❌ Class instantiation can pull in entire classes
 import { UtilityClass } from 'big-library';
 
@@ -130,7 +130,7 @@ const result = utilityFunction(); // Only the function included
 
 ### Lodash Optimization
 
-```typescript
+```tsx
 // ❌ Imports entire Lodash library (~70KB)
 import _ from 'lodash';
 import * as _ from 'lodash';
@@ -152,7 +152,7 @@ import { debounce } from 'es-toolkit'; // Modern, smaller alternative
 
 ### Material-UI / MUI Optimization
 
-```typescript
+```tsx
 // ❌ Imports entire component library
 import { Button, TextField, Dialog } from '@mui/material';
 
@@ -188,7 +188,7 @@ import UserIcon from '@mui/icons-material/User';
 
 ### React Icons Optimization
 
-```typescript
+```tsx
 // ❌ Bad: Imports all icon sets
 import { FaHome, MdSettings } from 'react-icons/fa';
 
@@ -203,8 +203,8 @@ import { Icon } from './components/Icon';
 import { lazy } from 'react';
 
 const iconMap = {
-  home: lazy(() => import('react-icons/fa').then(icons => ({ default: icons.FaHome }))),
-  settings: lazy(() => import('react-icons/md').then(icons => ({ default: icons.MdSettings }))),
+  home: lazy(() => import('react-icons/fa').then((icons) => ({ default: icons.FaHome }))),
+  settings: lazy(() => import('react-icons/md').then((icons) => ({ default: icons.MdSettings }))),
 };
 
 export function Icon({ name, ...props }: { name: keyof typeof iconMap }) {
@@ -337,7 +337,7 @@ module.exports = {
 
 ### Bundle Analysis for Tree Shaking
 
-```typescript
+```tsx
 // analyze-tree-shaking.js
 const fs = require('fs');
 const webpack = require('webpack');
@@ -461,7 +461,7 @@ async function analyzeTreeShaking() {
 
 ### Runtime Tree Shaking Validation
 
-```typescript
+```tsx
 // Development utility to detect unused imports
 function detectUnusedImports() {
   if (process.env.NODE_ENV !== 'development') return;
@@ -544,7 +544,7 @@ module.exports = function ({ types: t }) {
 
 ### Date Libraries
 
-```typescript
+```tsx
 // ❌ Moment.js - not tree-shakeable, includes all locales
 import moment from 'moment';
 const formatted = moment().format('YYYY-MM-DD');
@@ -560,7 +560,7 @@ const formatted = dayjs().format('YYYY-MM-DD');
 
 ### Icon Libraries
 
-```typescript
+```tsx
 // Custom tree-shakeable icon solution
 // icons/index.ts
 export { ReactComponent as HomeIcon } from './home.svg';
@@ -586,13 +586,7 @@ export function Icon({ name, size = 24, className }: IconProps) {
     return null;
   }
 
-  return (
-    <IconComponent
-      width={size}
-      height={size}
-      className={className}
-    />
-  );
+  return <IconComponent width={size} height={size} className={className} />;
 }
 
 // Usage - only imports the icons you actually use
@@ -610,7 +604,7 @@ function App() {
 
 ### Utility Libraries
 
-```typescript
+```tsx
 // Create your own tree-shakeable utility library
 // utils/index.ts
 export { debounce } from './debounce';
@@ -777,7 +771,7 @@ monitor.checkTreeShaking().catch(console.error);
 
 ### Pitfall: Side Effects in Pure Functions
 
-```typescript
+```tsx
 // ❌ This looks pure but has side effects
 let globalCounter = 0;
 
@@ -800,7 +794,7 @@ export function createCounter(initialValue = 0) {
 
 ### Pitfall: Dynamic Imports Breaking Static Analysis
 
-```typescript
+```tsx
 // ❌ Dynamic require breaks tree shaking
 const utils = require('./utils');
 const functionName = someCondition ? 'add' : 'subtract';
@@ -813,7 +807,7 @@ const result = someCondition ? add(a, b) : subtract(a, b);
 
 ### Pitfall: Re-exports Without Tree Shaking
 
-```typescript
+```tsx
 // ❌ This might export everything from lodash
 export * from 'lodash';
 

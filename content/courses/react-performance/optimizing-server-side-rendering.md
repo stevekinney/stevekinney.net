@@ -28,7 +28,7 @@ Traditional SSR waits for your entire page to render before sending any HTML. St
 
 React's `renderToReadableStream` enables streaming out of the box:
 
-```typescript
+```tsx
 // Traditional blocking SSR
 export async function renderPage(url: string) {
   // ❌ Waits for everything to complete
@@ -57,7 +57,7 @@ export async function renderPageStreaming(url: string) {
 
 Place `Suspense` boundaries around components that might delay the initial render:
 
-```typescript
+```tsx
 function ProductPage({ productId }: { productId: string }) {
   return (
     <div>
@@ -107,7 +107,7 @@ The biggest SSR performance killer is sequential data fetching. Your components 
 
 Start data fetching early in your request handler, before React even begins rendering:
 
-```typescript
+```tsx
 export async function handleRequest(request: Request) {
   const url = new URL(request.url);
   const productId = url.searchParams.get('productId');
@@ -126,7 +126,7 @@ export async function handleRequest(request: Request) {
       userPromise={dataPromises.user}
       categoriesPromise={dataPromises.categories}
     />,
-    { bootstrapScripts: ['/client.js'] }
+    { bootstrapScripts: ['/client.js'] },
   );
 
   return new Response(stream, {
@@ -139,7 +139,7 @@ export async function handleRequest(request: Request) {
 
 React 19's `use()` hook lets components consume promises directly, eliminating the need for complex state management:
 
-```typescript
+```tsx
 function ProductDetails({ productPromise }: { productPromise: Promise<Product> }) {
   // ✅ Suspends until promise resolves
   const product = use(productPromise);
@@ -166,7 +166,7 @@ function ProductPage({ productPromise }: { productPromise: Promise<Product> }) {
 
 Fetch independent data in parallel and handle failures gracefully:
 
-```typescript
+```tsx
 async function getPageData(productId: string) {
   // ✅ Fetch everything in parallel
   const [productResult, reviewsResult, recommendationsResult] = await Promise.allSettled([
@@ -178,10 +178,11 @@ async function getPageData(productId: string) {
   return {
     product: productResult.status === 'fulfilled' ? productResult.value : null,
     reviews: reviewsResult.status === 'fulfilled' ? reviewsResult.value : [],
-    recommendations: recommendationsResult.status === 'fulfilled' ? recommendationsResult.value : [],
+    recommendations:
+      recommendationsResult.status === 'fulfilled' ? recommendationsResult.value : [],
     errors: [productResult, reviewsResult, recommendationsResult]
-      .filter(result => result.status === 'rejected')
-      .map(result => result.reason),
+      .filter((result) => result.status === 'rejected')
+      .map((result) => result.reason),
   };
 }
 
@@ -194,13 +195,9 @@ function ProductPage({ data }: { data: Awaited<ReturnType<typeof getPageData>> }
     <div>
       <ProductDetails product={data.product} />
 
-      {data.reviews.length > 0 && (
-        <ProductReviews reviews={data.reviews} />
-      )}
+      {data.reviews.length > 0 && <ProductReviews reviews={data.reviews} />}
 
-      {data.recommendations.length > 0 && (
-        <Recommendations items={data.recommendations} />
-      )}
+      {data.recommendations.length > 0 && <Recommendations items={data.recommendations} />}
     </div>
   );
 }
@@ -214,10 +211,11 @@ Effective SSR caching operates at multiple levels: HTTP responses, rendered comp
 
 Cache complete HTML responses for pages that don't change frequently:
 
-```typescript
+```tsx
 const cache = new Map<string, { html: string; timestamp: number }>();
 
-export async function renderWithCache(url: string, ttl = 300000) { // 5 minutes
+export async function renderWithCache(url: string, ttl = 300000) {
+  // 5 minutes
   const cacheKey = url;
   const cached = cache.get(cacheKey);
 
@@ -226,7 +224,7 @@ export async function renderWithCache(url: string, ttl = 300000) { // 5 minutes
     return new Response(cached.html, {
       headers: {
         'Content-Type': 'text/html',
-        'X-Cache': 'HIT'
+        'X-Cache': 'HIT',
       },
     });
   }
@@ -241,7 +239,7 @@ export async function renderWithCache(url: string, ttl = 300000) { // 5 minutes
   return new Response(html, {
     headers: {
       'Content-Type': 'text/html',
-      'X-Cache': 'MISS'
+      'X-Cache': 'MISS',
     },
   });
 }
@@ -265,13 +263,10 @@ async function streamToString(stream: ReadableStream): Promise<string> {
 
 Cache expensive component renders independently of the full page:
 
-```typescript
+```tsx
 const componentCache = new Map<string, React.ReactElement>();
 
-function CachedExpensiveComponent({ data, ttl = 60000 }: {
-  data: ComplexData;
-  ttl?: number;
-}) {
+function CachedExpensiveComponent({ data, ttl = 60000 }: { data: ComplexData; ttl?: number }) {
   const cacheKey = `expensive-${data.id}-${data.version}`;
 
   // Check for cached component
@@ -300,14 +295,10 @@ function CachedExpensiveComponent({ data, ttl = 60000 }: {
 
 Prevent duplicate API calls when multiple components need the same data:
 
-```typescript
+```tsx
 const dataCache = new Map<string, Promise<any>>();
 
-export function cachedFetch<T>(
-  url: string,
-  options: RequestInit = {},
-  ttl = 300000
-): Promise<T> {
+export function cachedFetch<T>(url: string, options: RequestInit = {}, ttl = 300000): Promise<T> {
   const cacheKey = `${url}-${JSON.stringify(options)}`;
 
   // Return existing promise if already fetching
@@ -317,7 +308,7 @@ export function cachedFetch<T>(
 
   // Create new fetch promise
   const promise = fetch(url, options)
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
@@ -349,7 +340,7 @@ Hydration is where SSR applications often stumble—the server-rendered HTML bec
 
 Don't hydrate everything at once. Use Suspense boundaries to hydrate components progressively:
 
-```typescript
+```tsx
 function App() {
   return (
     <div>
@@ -379,7 +370,7 @@ function App() {
 
 Less JavaScript means faster hydration. Code-split aggressively and lazy-load non-critical components:
 
-```typescript
+```tsx
 import { lazy } from 'react';
 
 // ✅ Load heavy components only when needed
@@ -407,12 +398,8 @@ function ProductPage() {
         </Suspense>
       )}
 
-      <button onClick={() => setShowChart(true)}>
-        Show Analytics
-      </button>
-      <button onClick={() => setShowComments(true)}>
-        Add Comment
-      </button>
+      <button onClick={() => setShowChart(true)}>Show Analytics</button>
+      <button onClick={() => setShowComments(true)}>Add Comment</button>
     </div>
   );
 }
@@ -422,7 +409,7 @@ function ProductPage() {
 
 Server-client mismatches force React to re-render everything from scratch. Common culprits include timestamps, random IDs, and browser-specific APIs:
 
-```typescript
+```tsx
 // ❌ Will cause hydration mismatch
 function CurrentTime() {
   return <div>Current time: {new Date().toLocaleString()}</div>;
@@ -470,7 +457,7 @@ Here's a practical approach for implementing optimized SSR in your application:
 
 Establish performance baselines before making changes:
 
-```typescript
+```tsx
 // Add performance timing to your SSR handler
 export async function handleSSRRequest(request: Request) {
   const start = performance.now();
@@ -497,16 +484,18 @@ export async function handleSSRRequest(request: Request) {
 
 Start with a solid SSR foundation, then layer on optimizations:
 
-```typescript
+```tsx
 export class SSROptimizer {
   private cacheEnabled = false;
   private streamingEnabled = false;
 
-  constructor(private options: {
-    enableCache?: boolean;
-    enableStreaming?: boolean;
-    cacheMaxAge?: number;
-  } = {}) {
+  constructor(
+    private options: {
+      enableCache?: boolean;
+      enableStreaming?: boolean;
+      cacheMaxAge?: number;
+    } = {},
+  ) {
     this.cacheEnabled = options.enableCache ?? false;
     this.streamingEnabled = options.enableStreaming ?? false;
   }
@@ -553,7 +542,7 @@ export class SSROptimizer {
 
 Set up monitoring to track the metrics that matter:
 
-```typescript
+```tsx
 interface SSRMetrics {
   renderTime: number;
   dataFetchTime: number;
@@ -596,7 +585,7 @@ export function trackSSRMetrics(): SSRMetrics {
 
 Don't fetch data you won't use. Use conditional data fetching based on user permissions, feature flags, or URL parameters:
 
-```typescript
+```tsx
 // ❌ Always fetches all data
 async function getPageData(userId: string) {
   const [user, posts, comments, analytics] = await Promise.all([
@@ -638,7 +627,7 @@ async function getPageData(userId: string, currentUser?: User) {
 
 Keep cache invalidation simple with consistent patterns:
 
-```typescript
+```tsx
 export class CacheManager {
   private cache = new Map<string, any>();
   private tags = new Map<string, Set<string>>(); // tag -> cache keys

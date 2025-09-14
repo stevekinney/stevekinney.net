@@ -363,7 +363,7 @@ const LeakyComponent = () => {
 
 Don't wait for users to report performance regressions. Integrate performance testing into your build process:
 
-```typescript
+```tsx
 // Performance test using Lighthouse CI
 const performanceTest = async () => {
   const lighthouse = await import('lighthouse');

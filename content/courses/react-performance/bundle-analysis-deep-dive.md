@@ -95,7 +95,7 @@ module.exports = {
 
 The bundle analyzer shows three key metrics for each module:
 
-```typescript
+```tsx
 interface ModuleAnalysis {
   // Raw size from webpack stats
   statSize: number;
@@ -590,17 +590,17 @@ module.exports = {
 
 ### Code Splitting Optimization
 
-```typescript
+```tsx
 // React component with optimized code splitting
 import { lazy, Suspense, ComponentType } from 'react';
 
 // Lazy loading with error boundaries
 function lazyWithRetry<T extends ComponentType<any>>(
-  componentImport: () => Promise<{ default: T }>
+  componentImport: () => Promise<{ default: T }>,
 ): React.LazyExoticComponent<T> {
   return lazy(async () => {
     const pageHasAlreadyBeenForceRefreshed = JSON.parse(
-      window.sessionStorage.getItem('page-has-been-force-refreshed') || 'false'
+      window.sessionStorage.getItem('page-has-been-force-refreshed') || 'false',
     );
 
     try {
@@ -789,7 +789,7 @@ async function runBundleTests() {
 
 ## Continuous Monitoring
 
-```typescript
+```tsx
 // Bundle monitoring dashboard data
 interface BundleMetrics {
   timestamp: Date;

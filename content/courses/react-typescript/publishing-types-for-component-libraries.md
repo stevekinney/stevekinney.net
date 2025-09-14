@@ -100,7 +100,7 @@ The components you export and how you structure their props become your public A
 
 Be intentional about what you export. Don't accidentally expose internal utilities:
 
-```typescript
+```tsx
 // ✅ Explicit, intentional exports
 export { Button } from './Button';
 export { Input } from './Input';
@@ -119,7 +119,7 @@ export * from './Button'; // This might export internal helpers
 
 Design your component props with future extensibility in mind:
 
-```typescript
+```tsx
 // ✅ Well-designed component props
 interface ButtonProps {
   /** The button content */
@@ -150,7 +150,7 @@ This pattern provides a clean interface while allowing HTML attributes to be pas
 
 Generics make your components more flexible, but use them judiciously:
 
-```typescript
+```tsx
 // ✅ Good use of generics for data-driven components
 interface SelectOption<T = string> {
   label: string;
@@ -165,12 +165,7 @@ interface SelectProps<T = string> {
   placeholder?: string;
 }
 
-export function Select<T = string>({
-  options,
-  value,
-  onChange,
-  placeholder
-}: SelectProps<T>) {
+export function Select<T = string>({ options, value, onChange, placeholder }: SelectProps<T>) {
   // Implementation
 }
 
@@ -179,7 +174,7 @@ const numericSelect = (
   <Select<number>
     options={[
       { label: 'One', value: 1 },
-      { label: 'Two', value: 2 }
+      { label: 'Two', value: 2 },
     ]}
     onChange={(value) => {
       // value is correctly typed as number
@@ -197,7 +192,7 @@ Real-world components often have complex prop relationships that need careful ty
 
 When props depend on each other, use discriminated unions:
 
-```typescript
+```tsx
 // ✅ Discriminated union ensures correct prop combinations
 type ModalProps =
   | {
@@ -240,7 +235,7 @@ export function Modal(props: ModalProps) {
 
 For components that can render as different HTML elements:
 
-```typescript
+```tsx
 // Polymorphic component that can render as different elements
 type AsProp<C extends React.ElementType> = {
   as?: C;
@@ -248,10 +243,9 @@ type AsProp<C extends React.ElementType> = {
 
 type PropsToOmit<C extends React.ElementType, P> = keyof (AsProp<C> & P);
 
-type PolymorphicComponentProp<
-  C extends React.ElementType,
-  Props = {}
-> = React.PropsWithChildren<Props & AsProp<C>> &
+type PolymorphicComponentProp<C extends React.ElementType, Props = {}> = React.PropsWithChildren<
+  Props & AsProp<C>
+> &
   Omit<React.ComponentPropsWithoutRef<C>, PropsToOmit<C, Props>>;
 
 interface BoxProps {
@@ -269,10 +263,7 @@ export function Box<C extends React.ElementType = 'div'>({
   const Component = as || 'div';
 
   return (
-    <Component
-      className={`box box--${variant} box--${padding}`}
-      {...props}
-    >
+    <Component className={`box box--${variant} box--${padding}`} {...props}>
       {children}
     </Component>
   );
@@ -282,7 +273,7 @@ export function Box<C extends React.ElementType = 'div'>({
 const linkBox = (
   <Box
     as="a"
-    href="/home"  // TypeScript knows this is valid for anchor elements
+    href="/home" // TypeScript knows this is valid for anchor elements
     variant="outlined"
   >
     Click me
@@ -340,7 +331,7 @@ export default {
 
 Sometimes you want to export types without any runtime code:
 
-```typescript
+```tsx
 // types/index.ts - pure type exports
 export type { ButtonProps } from '../components/Button';
 export type { InputProps } from '../components/Input';
@@ -365,7 +356,7 @@ Changes to your TypeScript definitions can break consuming code just like runtim
 
 These require a major version bump:
 
-```typescript
+```tsx
 // v1.0.0
 interface ButtonProps {
   variant: 'primary' | 'secondary';
@@ -390,7 +381,7 @@ interface ButtonProps {
 
 These can be minor versions:
 
-```typescript
+```tsx
 // v1.0.0
 interface ButtonProps {
   variant: 'primary' | 'secondary';
@@ -416,7 +407,7 @@ interface ButtonProps {
 
 Only for truly non-breaking improvements:
 
-```typescript
+```tsx
 // v1.0.0
 interface ButtonProps {
   onClick: (event: Event) => void; // Too generic
@@ -445,7 +436,7 @@ npm install --save-dev tsd
 
 Create type tests in a `test-types` directory:
 
-```typescript
+```tsx
 // test-types/button.test-d.ts
 import { expectType, expectError } from 'tsd';
 import { Button, ButtonProps } from '../src';
@@ -455,7 +446,7 @@ import { ComponentPropsWithoutRef } from 'react';
 expectType<JSX.Element>(
   <Button variant="primary" onClick={() => {}}>
     Click me
-  </Button>
+  </Button>,
 );
 
 // Test prop types
@@ -469,19 +460,14 @@ expectType<ButtonProps>({
 expectError(
   <Button variant="invalid" onClick={() => {}}>
     Should error
-  </Button>
+  </Button>,
 );
 
 // Test HTML attributes are forwarded
 expectType<JSX.Element>(
-  <Button
-    variant="primary"
-    onClick={() => {}}
-    data-testid="button"
-    className="custom-class"
-  >
+  <Button variant="primary" onClick={() => {}} data-testid="button" className="custom-class">
     With HTML attrs
-  </Button>
+  </Button>,
 );
 ```
 
@@ -503,7 +489,7 @@ Add to your `package.json`:
 
 Remember to test both your runtime behavior and your types:
 
-```typescript
+```tsx
 // __tests__/Button.test.tsx - Runtime tests
 import { render } from '@testing-library/react';
 import { Button } from '../Button';
@@ -516,9 +502,7 @@ describe('Button', () => {
 
   it('calls onClick when clicked', () => {
     const handleClick = jest.fn();
-    const { getByRole } = render(
-      <Button onClick={handleClick}>Click me</Button>
-    );
+    const { getByRole } = render(<Button onClick={handleClick}>Click me</Button>);
 
     getByRole('button').click();
     expect(handleClick).toHaveBeenCalled();
@@ -534,7 +518,7 @@ Great types are self-documenting, but examples help users understand the intende
 
 Use JSDoc comments to provide rich documentation that appears in IDE tooltips:
 
-````typescript
+````tsx
 interface TooltipProps {
   /**
    * Content to show inside the tooltip
@@ -622,7 +606,7 @@ When you need to make breaking changes, provide migration paths for your users.
 
 Use TypeScript's `@deprecated` JSDoc tag to warn about upcoming changes:
 
-```typescript
+```tsx
 interface ButtonProps {
   /**
    * @deprecated Use `variant` instead. Will be removed in v2.0.0

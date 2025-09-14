@@ -71,7 +71,7 @@ Let's look at some frequent offenders and their leaner alternatives:
 
 Moment.js was once the go-to date library, but it's heavy (67KB minified) and no longer maintained. For many use cases, native JavaScript is sufficient:
 
-```typescript
+```tsx
 // ❌ Heavy: Using Moment.js for simple operations
 import moment from 'moment';
 
@@ -95,7 +95,7 @@ const isToday = (date: Date) => {
 
 If you need more complex date operations, consider [date-fns](https://date-fns.org/), which is modular and tree-shakable:
 
-```typescript
+```tsx
 // Only import what you need
 import { format, isToday } from 'date-fns';
 
@@ -106,7 +106,7 @@ const formatDate = (date: Date) => format(date, 'MM/dd/yyyy');
 
 Lodash is incredibly useful, but importing the entire library for a few utilities is wasteful:
 
-```typescript
+```tsx
 // ❌ Bad: Importing entire Lodash (70KB)
 import _ from 'lodash';
 
@@ -140,7 +140,7 @@ const grouped = users.reduce(
 
 The Fetch API is now widely supported and handles most HTTP needs:
 
-```typescript
+```tsx
 // ❌ Heavy: Axios for simple requests
 import axios from 'axios';
 
@@ -161,7 +161,7 @@ const fetchUser = async (id: string) => {
 
 For more complex scenarios, you might create a lightweight wrapper:
 
-```typescript
+```tsx
 // Custom fetch wrapper with error handling
 const api = {
   async get<T>(url: string): Promise<T> {
@@ -190,7 +190,7 @@ const api = {
 
 Tree-shaking eliminates dead code from your bundle, but it only works when libraries are built with ES modules and your imports are specific:
 
-```typescript
+```tsx
 // ❌ Bad: Entire library gets bundled
 import * as utils from 'my-utils';
 
@@ -226,7 +226,7 @@ module.exports = {
 
 Sometimes the best dependency is no dependency. For simple utilities, consider rolling your own:
 
-```typescript
+```tsx
 // Custom debounce function (instead of importing Lodash)
 export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,

@@ -393,7 +393,7 @@ preload('https://api.external.com/data', {
 
 Make sure your server is setting appropriate cache headers for preloaded resources. If your API responses have `Cache-Control: no-cache`, preloading them won't help much since they can't be cached.
 
-```typescript
+```tsx
 // Your API endpoint should include proper cache headers
 app.get('/api/products/:id', (req, res) => {
   res.setHeader('Cache-Control', 'public, max-age=300'); // 5 minutes

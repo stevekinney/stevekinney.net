@@ -16,7 +16,7 @@ The real magic happens when you combine `React.lazy()` with TypeScript's type in
 
 Let's start with the fundamentals. `React.lazy()` expects a function that returns a promise resolving to a module with a default export. Here's the simplest possible example:
 
-```typescript
+```tsx
 import React, { Suspense, lazy } from 'react';
 
 // ✅ This works - default export component
@@ -36,7 +36,7 @@ function App() {
 
 The key requirement here is that `ExpensiveChart` must be a **default export**. This trips up a lot of developers who prefer named exports, but React's lazy loading mechanism specifically looks for the default export from the imported module.
 
-```typescript
+```tsx
 // ✅ Good - default export
 export default function ExpensiveChart() {
   return <div>Complex chart goes here</div>;
@@ -52,7 +52,7 @@ export function ExpensiveChart() {
 
 The real question is: how do you pass props to lazy components while maintaining type safety? The good news is that TypeScript's inference handles this beautifully once you get the export structure right.
 
-```typescript
+```tsx
 // components/UserProfile.tsx
 interface UserProfileProps {
   userId: string;
@@ -71,7 +71,7 @@ export default function UserProfile({ userId, showAvatar = true, onUserUpdate }:
 }
 ```
 
-```typescript
+```tsx
 // App.tsx
 import React, { Suspense, lazy } from 'react';
 
@@ -85,11 +85,7 @@ function App() {
   return (
     <div>
       <Suspense fallback={<div>Loading user profile...</div>}>
-        <LazyUserProfile
-          userId="123"
-          showAvatar={false}
-          onUserUpdate={handleUserUpdate}
-        />
+        <LazyUserProfile userId="123" showAvatar={false} onUserUpdate={handleUserUpdate} />
       </Suspense>
     </div>
   );
@@ -102,7 +98,7 @@ TypeScript automatically infers the prop types from the component's default expo
 
 Sometimes you have a component that's not the default export, or you need to lazy-load a specific named export. You can handle this by creating a small wrapper module or using dynamic imports creatively:
 
-```typescript
+```tsx
 // Method 1: Re-export as default
 // components/LazyDashboard.ts
 export { Dashboard as default } from './Dashboard';
@@ -125,10 +121,16 @@ Each approach has its merits. Method 1 is clean for simple re-exports, Method 2 
 
 When components fail to load—network issues, missing chunks, or server problems—you want graceful degradation. Error boundaries combined with Suspense give you complete control over the loading experience:
 
-```typescript
+```tsx
 import React, { ErrorBoundary } from 'react-error-boundary';
 
-function ChunkErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
+function ChunkErrorFallback({
+  error,
+  resetErrorBoundary,
+}: {
+  error: Error;
+  resetErrorBoundary: () => void;
+}) {
   return (
     <div role="alert" className="error-fallback">
       <h2>Something went wrong loading this section</h2>
@@ -158,10 +160,10 @@ function App() {
 
 Sometimes you want to load components before they're actually needed. Maybe you know a user will likely navigate to a certain section, or you want to preload during idle time. React doesn't provide this out of the box, but you can build it yourself:
 
-```typescript
+```tsx
 // Create a preloadable lazy component
 function createPreloadableComponent<T extends React.ComponentType<any>>(
-  importFunc: () => Promise<{ default: T }>
+  importFunc: () => Promise<{ default: T }>,
 ) {
   const LazyComponent = lazy(importFunc);
 
@@ -172,9 +174,7 @@ function createPreloadableComponent<T extends React.ComponentType<any>>(
 }
 
 // Usage
-const LazyUserSettings = createPreloadableComponent(
-  () => import('./components/UserSettings')
-);
+const LazyUserSettings = createPreloadableComponent(() => import('./components/UserSettings'));
 
 function App() {
   // Preload on hover or any other trigger
@@ -184,9 +184,7 @@ function App() {
 
   return (
     <div>
-      <button onMouseEnter={handleMouseEnter}>
-        Settings
-      </button>
+      <button onMouseEnter={handleMouseEnter}>Settings</button>
       <Suspense fallback={<div>Loading...</div>}>
         <LazyUserSettings />
       </Suspense>
@@ -201,7 +199,7 @@ This pattern gives you fine-grained control over when chunks load, which can sig
 
 The most common place to implement code splitting is at the route level. Each page becomes its own chunk, loaded only when users navigate there:
 
-```typescript
+```tsx
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
@@ -237,7 +235,7 @@ This approach can dramatically reduce your initial bundle size. Users downloadin
 
 When you're working with more complex component hierarchies, TypeScript's type inference continues to work seamlessly. Generic components, higher-order components, and forwarded refs all play nicely with lazy loading:
 
-```typescript
+```tsx
 // Generic lazy component
 interface ListProps<T> {
   items: T[];
@@ -260,7 +258,7 @@ function DataList<T>({ items, renderItem, loading = false }: ListProps<T>) {
 export default DataList;
 ```
 
-```typescript
+```tsx
 // Usage with full type safety
 const LazyDataList = lazy(() => import('./components/DataList'));
 
@@ -275,7 +273,11 @@ function UserList({ users }: { users: User[] }) {
     <Suspense fallback={<div>Loading user list...</div>}>
       <LazyDataList
         items={users}
-        renderItem={(user) => <span>{user.name} - {user.email}</span>}
+        renderItem={(user) => (
+          <span>
+            {user.name} - {user.email}
+          </span>
+        )}
       />
     </Suspense>
   );
@@ -290,7 +292,7 @@ TypeScript correctly infers that `user` in the `renderItem` callback is of type 
 
 This is probably the most common mistake developers make when implementing code splitting:
 
-```typescript
+```tsx
 // ❌ This will cause runtime errors
 export function MyComponent() {
   return <div>Hello</div>;
@@ -302,7 +304,7 @@ const LazyComponent = lazy(() => import('./MyComponent'));
 
 The error message isn't particularly helpful, but the fix is simple—ensure your component has a default export:
 
-```typescript
+```tsx
 // ✅ Fixed version
 function MyComponent() {
   return <div>Hello</div>;
@@ -315,7 +317,7 @@ export default MyComponent;
 
 Another common issue is placing Suspense boundaries too high or too low in your component tree:
 
-```typescript
+```tsx
 // ❌ Too high - entire app shows loading state
 function App() {
   return (
@@ -349,7 +351,7 @@ Place Suspense boundaries close to where the lazy components are actually used, 
 
 Be careful with dynamic import expressions—they need to be static enough for bundlers to understand:
 
-```typescript
+```tsx
 // ❌ Too dynamic - bundler can't analyze
 const LazyComponent = lazy(() => import(someVariable));
 

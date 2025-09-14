@@ -15,7 +15,7 @@ The challenge isn't just making things move—it's making them move smoothly whi
 
 Before optimizing animations, understand what happens when the browser renders a frame:
 
-```typescript
+```tsx
 // Browser rendering pipeline for each frame (16.67ms for 60fps)
 interface RenderingPipeline {
   // 1. JavaScript (1-2ms budget)
@@ -73,7 +73,7 @@ The golden rule: animate properties that only trigger compositing. Transform and
 
 ### Hardware-Accelerated Transitions
 
-```typescript
+```tsx
 // Performant modal animation using transforms
 interface ModalProps {
   isOpen: boolean;
@@ -105,10 +105,7 @@ function PerformantModal({ isOpen, onClose, children }: ModalProps) {
   if (!shouldRender) return null;
 
   return (
-    <div
-      className={`modal-overlay ${isVisible ? 'modal-overlay--visible' : ''}`}
-      onClick={onClose}
-    >
+    <div className={`modal-overlay ${isVisible ? 'modal-overlay--visible' : ''}`} onClick={onClose}>
       <div
         className={`modal-content ${isVisible ? 'modal-content--visible' : ''}`}
         onClick={(e) => e.stopPropagation()}
@@ -166,7 +163,7 @@ const modalStyles = `
 
 ### List Animation with Transforms
 
-```typescript
+```tsx
 // Performant list animations avoiding layout thrashing
 interface AnimatedListItem {
   id: string;
@@ -283,7 +280,7 @@ const listAnimationStyles = `
 
 ### Physics-Based Animations
 
-```typescript
+```tsx
 // High-performance spring animations with react-spring
 import { useSpring, animated, useTransition, config } from '@react-spring/web';
 
@@ -296,18 +293,14 @@ interface SpringCardProps {
 function SpringCard({ isHovered, onClick, children }: SpringCardProps) {
   // Spring animation with optimized config
   const springProps = useSpring({
-    transform: isHovered
-      ? 'translateY(-8px) scale(1.02)'
-      : 'translateY(0px) scale(1)',
-    boxShadow: isHovered
-      ? '0 20px 40px rgba(0, 0, 0, 0.15)'
-      : '0 2px 10px rgba(0, 0, 0, 0.1)',
+    transform: isHovered ? 'translateY(-8px) scale(1.02)' : 'translateY(0px) scale(1)',
+    boxShadow: isHovered ? '0 20px 40px rgba(0, 0, 0, 0.15)' : '0 2px 10px rgba(0, 0, 0, 0.1)',
 
     // Optimized spring config for performance
     config: {
-      tension: 300,  // Stiffness of spring
-      friction: 30,  // Damping
-      mass: 1,       // Mass of object
+      tension: 300, // Stiffness of spring
+      friction: 30, // Damping
+      mass: 1, // Mass of object
     },
 
     // Optimize by skipping intermediate values
@@ -315,11 +308,7 @@ function SpringCard({ isHovered, onClick, children }: SpringCardProps) {
   });
 
   return (
-    <animated.div
-      style={springProps}
-      onClick={onClick}
-      className="spring-card"
-    >
+    <animated.div style={springProps} onClick={onClick} className="spring-card">
       {children}
     </animated.div>
   );
@@ -332,27 +321,23 @@ interface ListTransitionProps<T> {
   getKey: (item: T) => string;
 }
 
-function StaggeredListTransition<T>({
-  items,
-  renderItem,
-  getKey
-}: ListTransitionProps<T>) {
+function StaggeredListTransition<T>({ items, renderItem, getKey }: ListTransitionProps<T>) {
   const transitions = useTransition(items, {
     from: {
       opacity: 0,
-      transform: 'translateX(-100px) scale(0.8)'
+      transform: 'translateX(-100px) scale(0.8)',
     },
     enter: (item, index) => async (next) => {
       // Stagger animations by index
-      await new Promise(resolve => setTimeout(resolve, index * 50));
+      await new Promise((resolve) => setTimeout(resolve, index * 50));
       await next({
         opacity: 1,
-        transform: 'translateX(0px) scale(1)'
+        transform: 'translateX(0px) scale(1)',
       });
     },
     leave: {
       opacity: 0,
-      transform: 'translateX(100px) scale(0.8)'
+      transform: 'translateX(100px) scale(0.8)',
     },
     keys: getKey,
 
@@ -401,7 +386,7 @@ function DraggableCard({ onDismiss }: { onDismiss: () => void }) {
       // Return to center
       api.start({
         x: active ? mx : 0,
-        rotate: active ? mx / 100 * 5 : 0,
+        rotate: active ? (mx / 100) * 5 : 0,
         scale: active ? 1.05 : 1,
         opacity: 1,
         immediate: active,
@@ -432,7 +417,7 @@ function DraggableCard({ onDismiss }: { onDismiss: () => void }) {
 
 ### Performance Monitoring for Animations
 
-```typescript
+```tsx
 // Animation performance monitor
 class AnimationPerformanceMonitor {
   private frameCount = 0;
@@ -441,11 +426,13 @@ class AnimationPerformanceMonitor {
   private isMonitoring = false;
   private onSlowFrame?: (fps: number) => void;
 
-  constructor(private config: {
-    targetFPS?: number;
-    warningThreshold?: number;
-    sampleSize?: number;
-  } = {}) {
+  constructor(
+    private config: {
+      targetFPS?: number;
+      warningThreshold?: number;
+      sampleSize?: number;
+    } = {},
+  ) {
     this.config.targetFPS = config.targetFPS || 60;
     this.config.warningThreshold = config.warningThreshold || 45;
     this.config.sampleSize = config.sampleSize || 120; // 2 seconds at 60fps
@@ -600,7 +587,7 @@ function MonitoredAnimation({ children }: { children: React.ReactNode }) {
 
 ### Frame Budget Management
 
-```typescript
+```tsx
 // Frame budget manager for complex animations
 class FrameBudgetManager {
   private taskQueue: Array<() => Promise<void> | void> = [];
@@ -609,7 +596,10 @@ class FrameBudgetManager {
   private readonly frameDeadline = 16; // 16ms for 60fps
   private readonly safetyMargin = 2; // 2ms safety margin
 
-  scheduleTask(task: () => Promise<void> | void, priority: 'high' | 'normal' | 'low' = 'normal'): void {
+  scheduleTask(
+    task: () => Promise<void> | void,
+    priority: 'high' | 'normal' | 'low' = 'normal',
+  ): void {
     if (priority === 'high') {
       this.taskQueue.unshift(task);
     } else {
@@ -647,7 +637,7 @@ class FrameBudgetManager {
 
   private hasTimeRemaining(): boolean {
     const elapsed = performance.now() - this.frameStart;
-    return elapsed < (this.frameDeadline - this.safetyMargin);
+    return elapsed < this.frameDeadline - this.safetyMargin;
   }
 
   getRemainingTime(): number {
@@ -660,12 +650,12 @@ class FrameBudgetManager {
 function useFrameBudget() {
   const budgetManager = useRef(new FrameBudgetManager());
 
-  const scheduleAnimation = useCallback((
-    animationFn: () => Promise<void> | void,
-    priority: 'high' | 'normal' | 'low' = 'normal'
-  ) => {
-    budgetManager.current.scheduleTask(animationFn, priority);
-  }, []);
+  const scheduleAnimation = useCallback(
+    (animationFn: () => Promise<void> | void, priority: 'high' | 'normal' | 'low' = 'normal') => {
+      budgetManager.current.scheduleTask(animationFn, priority);
+    },
+    [],
+  );
 
   return { scheduleAnimation };
 }
@@ -678,11 +668,11 @@ function ComplexAnimationComponent() {
   const animateItems = useCallback(async () => {
     // High priority: Update visible items first
     scheduleAnimation(() => {
-      setItems(prevItems =>
-        prevItems.map(item => ({
+      setItems((prevItems) =>
+        prevItems.map((item) => ({
           ...item,
           isVisible: true,
-        }))
+        })),
       );
     }, 'high');
 
@@ -692,7 +682,7 @@ function ComplexAnimationComponent() {
       for (const element of elements) {
         (element as HTMLElement).style.transform = 'scale(1.05)';
         // Yield control if we're running out of time
-        await new Promise(resolve => setTimeout(resolve, 0));
+        await new Promise((resolve) => setTimeout(resolve, 0));
       }
     });
 
@@ -708,7 +698,7 @@ function ComplexAnimationComponent() {
   return (
     <div>
       <button onClick={animateItems}>Animate Items</button>
-      {items.map(item => (
+      {items.map((item) => (
         <div key={item.id} className="animated-item">
           {item.content}
         </div>
@@ -722,7 +712,7 @@ function ComplexAnimationComponent() {
 
 ### Avoiding Layout Thrashing
 
-```typescript
+```tsx
 // ❌ Bad: Animating layout properties
 function BadSlider({ items }: { items: Item[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -837,14 +827,14 @@ function GoodAccordion({ isExpanded }: { isExpanded: boolean }) {
 
 ### Preventing Animation Blocking
 
-```typescript
+```tsx
 // ❌ Bad: Synchronous state updates during animation
 function BadAnimatedCounter({ target }: { target: number }) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
     const animate = () => {
-      setCount(prevCount => {
+      setCount((prevCount) => {
         const newCount = prevCount + 1;
 
         // ❌ Synchronous DOM update blocks animation
@@ -950,7 +940,7 @@ function CSSAnimatedCounter({ target }: { target: number }) {
 
 ### Intersection Observer for Performance
 
-```typescript
+```tsx
 // Performance-conscious animation with Intersection Observer
 function useInViewAnimation(threshold = 0.1) {
   const [isVisible, setIsVisible] = useState(false);
@@ -972,7 +962,7 @@ function useInViewAnimation(threshold = 0.1) {
         threshold,
         // Add margin to trigger animation before element is fully visible
         rootMargin: '50px 0px',
-      }
+      },
     );
 
     observer.observe(element);
@@ -988,10 +978,7 @@ function LazyAnimatedCard({ children }: { children: React.ReactNode }) {
   const { isVisible, elementRef } = useInViewAnimation();
 
   return (
-    <div
-      ref={elementRef}
-      className={`animated-card ${isVisible ? 'animated-card--visible' : ''}`}
-    >
+    <div ref={elementRef} className={`animated-card ${isVisible ? 'animated-card--visible' : ''}`}>
       {children}
     </div>
   );
@@ -1027,15 +1014,12 @@ const lazyAnimationStyles = `
 
 ### Web Animations API Integration
 
-```typescript
+```tsx
 // High-performance animations with Web Animations API
 function useWebAnimation() {
   const elementRef = useRef<HTMLElement>(null);
 
-  const animate = useCallback((
-    keyframes: Keyframe[],
-    options: KeyframeAnimationOptions = {}
-  ) => {
+  const animate = useCallback((keyframes: Keyframe[], options: KeyframeAnimationOptions = {}) => {
     if (!elementRef.current) return;
 
     const animation = elementRef.current.animate(keyframes, {
@@ -1051,26 +1035,22 @@ function useWebAnimation() {
   const fadeIn = useCallback(() => {
     return animate([
       { opacity: 0, transform: 'scale(0.9)' },
-      { opacity: 1, transform: 'scale(1)' }
+      { opacity: 1, transform: 'scale(1)' },
     ]);
   }, [animate]);
 
   const slideUp = useCallback(() => {
-    return animate([
-      { transform: 'translateY(100%)' },
-      { transform: 'translateY(0)' }
-    ]);
+    return animate([{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }]);
   }, [animate]);
 
   const pulse = useCallback(() => {
-    return animate([
-      { transform: 'scale(1)' },
-      { transform: 'scale(1.05)' },
-      { transform: 'scale(1)' }
-    ], {
-      duration: 600,
-      iterations: 3,
-    });
+    return animate(
+      [{ transform: 'scale(1)' }, { transform: 'scale(1.05)' }, { transform: 'scale(1)' }],
+      {
+        duration: 600,
+        iterations: 3,
+      },
+    );
   }, [animate]);
 
   return {
@@ -1083,7 +1063,10 @@ function useWebAnimation() {
 }
 
 // Component using Web Animations API
-function WebAnimatedButton({ children, onClick }: {
+function WebAnimatedButton({
+  children,
+  onClick,
+}: {
   children: React.ReactNode;
   onClick: () => void;
 }) {
@@ -1127,7 +1110,7 @@ function WebAnimatedButton({ children, onClick }: {
 
 ## Testing Animation Performance
 
-```typescript
+```tsx
 // Animation performance testing utilities
 class AnimationTester {
   async testAnimationPerformance(

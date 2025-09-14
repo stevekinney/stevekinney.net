@@ -15,7 +15,7 @@ The challenge with performance testing in React is that performance varies drama
 
 Just like the testing pyramid for functional tests, performance testing has layers:
 
-```typescript
+```tsx
 // Performance Testing Pyramid (bottom to top)
 
 // 1. Unit Performance Tests (Most tests, fastest feedback)
@@ -61,7 +61,7 @@ interface PerformanceTestStrategy {
 
 ### Component Render Performance
 
-```typescript
+```tsx
 // utils/performance-test-helpers.ts
 import { render } from '@testing-library/react';
 import { Profiler, ProfilerOnRenderCallback } from 'react';
@@ -76,7 +76,7 @@ interface RenderMetrics {
 
 export function measureRenderPerformance<T>(
   component: React.ReactElement,
-  testName: string
+  testName: string,
 ): Promise<RenderMetrics> {
   return new Promise((resolve) => {
     let metrics: RenderMetrics;
@@ -87,7 +87,7 @@ export function measureRenderPerformance<T>(
       actualDuration,
       baseDuration,
       startTime,
-      commitTime
+      commitTime,
     ) => {
       if (phase === 'mount' || phase === 'update') {
         metrics = {
@@ -103,7 +103,7 @@ export function measureRenderPerformance<T>(
     render(
       <Profiler id={testName} onRender={onRender}>
         {component}
-      </Profiler>
+      </Profiler>,
     );
 
     // Allow React to complete rendering
@@ -137,7 +137,7 @@ expect.extend({
 
 ### Component Performance Test Examples
 
-```typescript
+```tsx
 // components/__tests__/UserList.performance.test.tsx
 import { measureRenderPerformance } from '../utils/performance-test-helpers';
 import { UserList } from '../UserList';
@@ -156,7 +156,7 @@ describe('UserList Performance', () => {
 
     const metrics = await measureRenderPerformance(
       <UserList users={users} />,
-      'UserList-100-items'
+      'UserList-100-items',
     );
 
     expect(metrics).toRenderWithinTime(50);
@@ -167,7 +167,7 @@ describe('UserList Performance', () => {
 
     const metrics = await measureRenderPerformance(
       <UserList users={users} />,
-      'UserList-1000-items'
+      'UserList-1000-items',
     );
 
     // Larger lists should still be reasonable
@@ -205,7 +205,7 @@ describe('UserList Performance', () => {
 
 ### Hook Performance Testing
 
-```typescript
+```tsx
 // hooks/__tests__/useExpensiveCalculation.performance.test.ts
 import { renderHook } from '@testing-library/react';
 import { performance } from 'perf_hooks';
@@ -262,7 +262,7 @@ describe('useExpensiveCalculation Performance', () => {
 
 ### Memory Usage Testing
 
-```typescript
+```tsx
 // utils/memory-test-helpers.ts
 export function measureMemoryUsage(testFn: () => void): Promise<{
   heapUsedBefore: number;
@@ -335,7 +335,7 @@ export class MemoryLeakDetector {
 
 ### Page Load Performance Tests
 
-```typescript
+```tsx
 // tests/integration/page-performance.test.ts
 import { chromium, Browser, Page } from 'playwright';
 
@@ -440,7 +440,7 @@ describe('Page Performance Integration', () => {
 
 ### Bundle Size Performance Tests
 
-```typescript
+```tsx
 // tests/integration/bundle-performance.test.ts
 import { exec } from 'child_process';
 import { promisify } from 'util';
@@ -619,7 +619,7 @@ module.exports = {
 
 ### Custom Performance Test Suite
 
-```typescript
+```tsx
 // tests/e2e/performance-suite.ts
 import { chromium, Browser } from 'playwright';
 
@@ -844,7 +844,7 @@ describe('E2E Performance', () => {
 
 ### Performance Regression Detection
 
-```typescript
+```tsx
 // scripts/performance-regression-check.ts
 interface PerformanceBaseline {
   timestamp: string;
@@ -933,7 +933,7 @@ class PerformanceRegressionDetector {
 
 ### Test Data Management
 
-```typescript
+```tsx
 // utils/performance-test-data.ts
 export class PerformanceTestDataGenerator {
   static generateUsers(count: number) {
@@ -981,7 +981,7 @@ export class PerformanceTestDataGenerator {
 
 ### Performance Test Utilities
 
-```typescript
+```tsx
 // utils/performance-assertions.ts
 export function expectPerformanceWithin(actual: number, expected: number, tolerance: number = 0.1) {
   const lowerBound = expected * (1 - tolerance);
