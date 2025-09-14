@@ -15,7 +15,7 @@ But migration isn't just "turn it on and delete all your memoization." The compi
 
 The React Compiler analyzes your components during build time and automatically inserts optimizations. It's like having an expert React performance engineer review every component and apply the perfect optimizations.
 
-```typescript
+```tsx
 // What you write
 function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const discountedPrice = product.price * (1 - product.discount);
@@ -35,22 +35,25 @@ function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
 // What the compiler generates (conceptually)
 function ProductCard({ product, onAddToCart }: ProductCardProps) {
-  const discountedPrice = useMemo(() =>
-    product.price * (1 - product.discount),
-    [product.price, product.discount]
+  const discountedPrice = useMemo(
+    () => product.price * (1 - product.discount),
+    [product.price, product.discount],
   );
 
   const handleClick = useCallback(() => {
     onAddToCart(product.id);
   }, [onAddToCart, product.id]);
 
-  return useMemo(() => (
-    <div className="product-card">
-      <h3>{product.name}</h3>
-      <p>${discountedPrice.toFixed(2)}</p>
-      <button onClick={handleClick}>Add to Cart</button>
-    </div>
-  ), [product.name, discountedPrice, handleClick]);
+  return useMemo(
+    () => (
+      <div className="product-card">
+        <h3>{product.name}</h3>
+        <p>${discountedPrice.toFixed(2)}</p>
+        <button onClick={handleClick}>Add to Cart</button>
+      </div>
+    ),
+    [product.name, discountedPrice, handleClick],
+  );
 }
 ```
 
@@ -76,7 +79,7 @@ rg "memo\(|React\.memo|React\.forwardRef" --type tsx --type ts -A 5 -B 5
 rg "useEffect.*\[\]|useState.*function" --type tsx --type ts
 ```
 
-```typescript
+```tsx
 // audit-optimizations.ts - Script to analyze your current optimizations
 import fs from 'fs';
 import path from 'path';
@@ -373,7 +376,7 @@ module.exports = {
 }
 ```
 
-```typescript
+```tsx
 // react-compiler.d.ts - Type definitions for compiler annotations
 declare namespace ReactCompiler {
   /**
@@ -399,17 +402,14 @@ declare namespace ReactCompiler {
 
 Start with simple, leaf components that don't have complex dependencies:
 
-```typescript
+```tsx
 // ✅ Good candidates for early migration
 // Simple components with clear props
 'use optimize'; // Compiler directive
 
 function Button({ children, variant, onClick }: ButtonProps) {
   return (
-    <button
-      className={`btn btn-${variant}`}
-      onClick={onClick}
-    >
+    <button className={`btn btn-${variant}`} onClick={onClick}>
       {children}
     </button>
   );
@@ -419,11 +419,7 @@ function UserAvatar({ user, size = 'medium' }: UserAvatarProps) {
   const sizeClass = size === 'small' ? 'w-8 h-8' : size === 'large' ? 'w-16 h-16' : 'w-12 h-12';
 
   return (
-    <img
-      src={user.avatar}
-      alt={`${user.name} avatar`}
-      className={`rounded-full ${sizeClass}`}
-    />
+    <img src={user.avatar} alt={`${user.name} avatar`} className={`rounded-full ${sizeClass}`} />
   );
 }
 
@@ -438,9 +434,7 @@ function ProductCard({ product }: ProductCardProps) {
       <h3>{product.name}</h3>
       <div className="price">
         <span className={hasDiscount ? 'line-through' : ''}>${product.price}</span>
-        {hasDiscount && (
-          <span className="discount-price">${discountedPrice.toFixed(2)}</span>
-        )}
+        {hasDiscount && <span className="discount-price">${discountedPrice.toFixed(2)}</span>}
       </div>
     </div>
   );
@@ -451,7 +445,7 @@ function ProductCard({ product }: ProductCardProps) {
 
 After validating the compiler works with leaf components, move to container components:
 
-```typescript
+```tsx
 // Container component with state management
 'use optimize';
 
@@ -460,8 +454,8 @@ function UserList({ users, onUserSelect }: UserListProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Compiler will automatically memoize this filtering
-  const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Compiler will automatically memoize this handler
@@ -472,13 +466,10 @@ function UserList({ users, onUserSelect }: UserListProps) {
 
   return (
     <div className="user-list">
-      <SearchInput
-        value={searchQuery}
-        onChange={setSearchQuery}
-      />
+      <SearchInput value={searchQuery} onChange={setSearchQuery} />
 
       <div className="users">
-        {filteredUsers.map(user => (
+        {filteredUsers.map((user) => (
           <UserCard
             key={user.id}
             user={user}
@@ -496,16 +487,11 @@ function UserList({ users, onUserSelect }: UserListProps) {
 
 Finally, migrate complex components with effects, refs, and advanced patterns:
 
-```typescript
+```tsx
 // Complex component with effects and refs
 'use optimize';
 
-function DataTable({
-  data,
-  columns,
-  onSort,
-  onFilter
-}: DataTableProps) {
+function DataTable({ data, columns, onSort, onFilter }: DataTableProps) {
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
   const [filterConfig, setFilterConfig] = useState<FilterConfig>({});
   const [virtualizer, setVirtualizer] = useState<VirtualizerAPI | null>(null);
@@ -515,7 +501,7 @@ function DataTable({
 
   // Complex data processing - compiler will optimize automatically
   const processedData = data
-    .filter(row => {
+    .filter((row) => {
       return Object.entries(filterConfig).every(([column, filter]) => {
         const value = row[column];
         return filter.type === 'contains'
@@ -551,7 +537,7 @@ function DataTable({
 
   // Complex event handlers - compiler will memoize appropriately
   const handleSort = (column: string) => {
-    setSortConfig(prevSort => ({
+    setSortConfig((prevSort) => ({
       column,
       direction: prevSort?.column === column && prevSort.direction === 'asc' ? 'desc' : 'asc',
     }));
@@ -559,7 +545,7 @@ function DataTable({
   };
 
   const handleFilter = (column: string, filter: FilterValue) => {
-    setFilterConfig(prev => ({
+    setFilterConfig((prev) => ({
       ...prev,
       [column]: filter,
     }));
@@ -571,7 +557,7 @@ function DataTable({
       <table ref={tableRef} className="data-table">
         <thead ref={headerRef}>
           <tr>
-            {columns.map(column => (
+            {columns.map((column) => (
               <TableHeader
                 key={column.id}
                 column={column}
@@ -590,13 +576,7 @@ function DataTable({
               virtualizer={virtualizer}
             />
           ) : (
-            processedData.map(row => (
-              <TableRow
-                key={row.id}
-                data={row}
-                columns={columns}
-              />
-            ))
+            processedData.map((row) => <TableRow key={row.id} data={row} columns={columns} />)
           )}
         </tbody>
       </table>
@@ -609,7 +589,7 @@ function DataTable({
 
 ### Common Issues and Solutions
 
-```typescript
+```tsx
 // ❌ Issue: Dynamic hook usage (violates Rules of Hooks)
 function ProblematicComponent({ condition }: { condition: boolean }) {
   if (condition) {
@@ -650,7 +630,7 @@ function FixedComponent({ config }: { config: Config }) {
 // ❌ Issue: Side effects in render
 function ProblematicComponent({ items }: { items: Item[] }) {
   // ❌ Side effect during render
-  items.forEach(item => {
+  items.forEach((item) => {
     localStorage.setItem(`item-${item.id}`, JSON.stringify(item));
   });
 
@@ -660,7 +640,7 @@ function ProblematicComponent({ items }: { items: Item[] }) {
 // ✅ Solution: Move side effects to useEffect
 function FixedComponent({ items }: { items: Item[] }) {
   useEffect(() => {
-    items.forEach(item => {
+    items.forEach((item) => {
       localStorage.setItem(`item-${item.id}`, JSON.stringify(item));
     });
   }, [items]);
@@ -673,7 +653,7 @@ function FixedComponent({ items }: { items: Item[] }) {
 
 Sometimes you need to disable the compiler for specific components:
 
-```typescript
+```tsx
 // Disable compiler for specific component
 'use no-optimize';
 
@@ -709,7 +689,7 @@ function ComplexComponent({ data }: ComplexProps) {
   }, [data]);
 
   // Regular logic that compiler can optimize automatically
-  const filteredData = data.filter(item => item.active);
+  const filteredData = data.filter((item) => item.active);
 
   return (
     <div>
@@ -724,7 +704,7 @@ function ComplexComponent({ data }: ComplexProps) {
 
 Design your APIs to work well with the compiler:
 
-```typescript
+```tsx
 // ✅ Compiler-friendly API design
 interface APIDesign {
   // Prefer simple props over complex objects
@@ -771,7 +751,7 @@ function useOptimizedSearch(items: Item[], searchTerm: string) {
 
 ### Before/After Comparison
 
-```typescript
+```tsx
 // performance-comparison.ts - Script to measure compiler impact
 import { performance } from 'perf_hooks';
 
@@ -786,7 +766,7 @@ class CompilerPerformanceValidator {
   async measureComponent(
     Component: React.ComponentType<any>,
     props: any,
-    iterations: number = 100
+    iterations: number = 100,
   ): Promise<PerformanceMetrics> {
     const renderTimes: number[] = [];
     let reRenderCount = 0;
@@ -815,7 +795,7 @@ class CompilerPerformanceValidator {
     render(<TestWrapper />);
 
     // Wait for all renders to complete
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     return {
       renderTime: renderTimes.reduce((sum, time) => sum + time, 0) / renderTimes.length,
@@ -828,7 +808,7 @@ class CompilerPerformanceValidator {
   async compareVersions(
     OriginalComponent: React.ComponentType<any>,
     OptimizedComponent: React.ComponentType<any>,
-    props: any
+    props: any,
   ) {
     console.log('🔄 Measuring original component...');
     const originalMetrics = await this.measureComponent(OriginalComponent, props);
@@ -837,9 +817,16 @@ class CompilerPerformanceValidator {
     const optimizedMetrics = await this.measureComponent(OptimizedComponent, props);
 
     const improvement = {
-      renderTime: ((originalMetrics.renderTime - optimizedMetrics.renderTime) / originalMetrics.renderTime) * 100,
-      bundleSize: ((originalMetrics.bundleSize - optimizedMetrics.bundleSize) / originalMetrics.bundleSize) * 100,
-      memoryUsage: ((originalMetrics.memoryUsage - optimizedMetrics.memoryUsage) / originalMetrics.memoryUsage) * 100,
+      renderTime:
+        ((originalMetrics.renderTime - optimizedMetrics.renderTime) / originalMetrics.renderTime) *
+        100,
+      bundleSize:
+        ((originalMetrics.bundleSize - optimizedMetrics.bundleSize) / originalMetrics.bundleSize) *
+        100,
+      memoryUsage:
+        ((originalMetrics.memoryUsage - optimizedMetrics.memoryUsage) /
+          originalMetrics.memoryUsage) *
+        100,
       reRenderCount: originalMetrics.reRenderCount - optimizedMetrics.reRenderCount,
     };
 
@@ -881,13 +868,17 @@ ${this.generateRecommendations(improvement)}
     const recommendations = [];
 
     if (improvement.renderTime > 20) {
-      recommendations.push('🚀 Excellent render performance improvement - keep the compiler enabled');
+      recommendations.push(
+        '🚀 Excellent render performance improvement - keep the compiler enabled',
+      );
     } else if (improvement.renderTime < 0) {
       recommendations.push('⚠️ Performance regression detected - review compiler configuration');
     }
 
     if (improvement.bundleSize < -10) {
-      recommendations.push('📦 Bundle size increased significantly - consider selective optimization');
+      recommendations.push(
+        '📦 Bundle size increased significantly - consider selective optimization',
+      );
     }
 
     if (improvement.reRenderCount === 0) {
@@ -903,7 +894,7 @@ ${this.generateRecommendations(improvement)}
 
 ### Strategy for Removing Manual Optimizations
 
-```typescript
+```tsx
 // migration-helper.ts - Tools to help remove manual optimizations
 class OptimizationRemovalHelper {
   /**
@@ -1085,7 +1076,7 @@ module.exports = {
 
 ### Debugging Compiled Components
 
-```typescript
+```tsx
 // Development utilities for debugging compiler output
 function createCompilerDebugTools() {
   if (process.env.NODE_ENV !== 'development') {

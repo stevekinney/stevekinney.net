@@ -15,7 +15,7 @@ Let's build some helper functions that give you bulletproof context with TypeScr
 
 Here's what most developers reach for when creating typed context:
 
-```typescript
+```tsx
 import { createContext, useContext, ReactNode } from 'react';
 
 interface UserContextType {
@@ -54,13 +54,8 @@ This pattern works, but it's brittle. Every custom hook needs that runtime check
 
 Let's build a helper that eliminates these problems:
 
-```typescript
-import {
-  createContext,
-  useContext,
-  Context,
-  ReactNode
-} from 'react';
+```tsx
+import { createContext, useContext, Context, ReactNode } from 'react';
 
 /**
  * Creates a context that never returns undefined and provides a typed hook
@@ -82,7 +77,7 @@ export function createSafeContext<T>(displayName: string) {
     if (contextValue === null) {
       throw new Error(
         `use${displayName} must be used within a ${displayName}Provider. ` +
-        `Make sure your component is wrapped with <${displayName}Provider>.`
+          `Make sure your component is wrapped with <${displayName}Provider>.`,
       );
     }
 
@@ -90,18 +85,8 @@ export function createSafeContext<T>(displayName: string) {
   }
 
   // ✅ Provider component that prevents null values
-  function ContextProvider({
-    children,
-    value
-  }: {
-    children: ReactNode;
-    value: T;
-  }) {
-    return (
-      <context.Provider value={value}>
-        {children}
-      </context.Provider>
-    );
+  function ContextProvider({ children, value }: { children: ReactNode; value: T }) {
+    return <context.Provider value={value}>{children}</context.Provider>;
   }
 
   // Set display names for better debugging
@@ -116,7 +101,7 @@ export function createSafeContext<T>(displayName: string) {
 
 Now your context creation becomes clean and safe:
 
-```typescript
+```tsx
 interface UserContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
@@ -168,13 +153,11 @@ function UserProfile() {
 
 For more complex state, you might want separate contexts for state and actions (this prevents unnecessary re-renders when components only need to dispatch actions):
 
-```typescript
+```tsx
 /**
  * Creates separate state and actions contexts for performance optimization
  */
-export function createStateActionContext<State, Actions>(
-  displayName: string
-) {
+export function createStateActionContext<State, Actions>(displayName: string) {
   const StateContext = createContext<State | null>(null);
   const ActionsContext = createContext<Actions | null>(null);
 
@@ -186,9 +169,7 @@ export function createStateActionContext<State, Actions>(
   function useStateHook(): State {
     const state = useContext(StateContext);
     if (state === null) {
-      throw new Error(
-        `use${displayName}State must be used within a ${displayName}Provider`
-      );
+      throw new Error(`use${displayName}State must be used within a ${displayName}Provider`);
     }
     return state;
   }
@@ -196,9 +177,7 @@ export function createStateActionContext<State, Actions>(
   function useActionsHook(): Actions {
     const actions = useContext(ActionsContext);
     if (actions === null) {
-      throw new Error(
-        `use${displayName}Actions must be used within a ${displayName}Provider`
-      );
+      throw new Error(`use${displayName}Actions must be used within a ${displayName}Provider`);
     }
     return actions;
   }
@@ -214,9 +193,7 @@ export function createStateActionContext<State, Actions>(
   }) {
     return (
       <StateContext.Provider value={state}>
-        <ActionsContext.Provider value={actions}>
-          {children}
-        </ActionsContext.Provider>
+        <ActionsContext.Provider value={actions}>{children}</ActionsContext.Provider>
       </StateContext.Provider>
     );
   }
@@ -233,7 +210,7 @@ export function createStateActionContext<State, Actions>(
 
 Here's how you'd use it with a todo list:
 
-```typescript
+```tsx
 interface TodoState {
   todos: Todo[];
   filter: 'all' | 'active' | 'completed';
@@ -247,8 +224,10 @@ interface TodoActions {
   setFilter: (filter: TodoState['filter']) => void;
 }
 
-const [useTodoState, useTodoActions, TodoProvider] =
-  createStateActionContext<TodoState, TodoActions>('Todo');
+const [useTodoState, useTodoActions, TodoProvider] = createStateActionContext<
+  TodoState,
+  TodoActions
+>('Todo');
 
 export function TodoManager({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(todoReducer, {
@@ -296,34 +275,31 @@ function TodoFilters() {
 
 For extra safety, you can combine this pattern with runtime validation:
 
-```typescript
+```tsx
 import { z } from 'zod';
 
 const UserContextSchema = z.object({
-  user: z.object({
-    id: z.string(),
-    name: z.string(),
-    email: z.string().email(),
-  }).nullable(),
+  user: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      email: z.string().email(),
+    })
+    .nullable(),
   login: z.function(),
   logout: z.function(),
 });
 
 type UserContextType = z.infer<typeof UserContextSchema>;
 
-export function createValidatedContext<T>(
-  displayName: string,
-  schema: z.ZodSchema<T>
-) {
+export function createValidatedContext<T>(displayName: string, schema: z.ZodSchema<T>) {
   const context = createContext<T | null>(null);
 
   function useContextHook(): T {
     const contextValue = useContext(context);
 
     if (contextValue === null) {
-      throw new Error(
-        `use${displayName} must be used within a ${displayName}Provider`
-      );
+      throw new Error(`use${displayName} must be used within a ${displayName}Provider`);
     }
 
     // ✅ Runtime validation ensures the context value matches your schema
@@ -331,36 +307,21 @@ export function createValidatedContext<T>(
 
     if (!validationResult.success) {
       console.error(`${displayName} context validation failed:`, validationResult.error);
-      throw new Error(
-        `${displayName} context value is invalid. Check the console for details.`
-      );
+      throw new Error(`${displayName} context value is invalid. Check the console for details.`);
     }
 
     return validationResult.data;
   }
 
-  function ContextProvider({
-    children,
-    value
-  }: {
-    children: ReactNode;
-    value: T;
-  }) {
-    return (
-      <context.Provider value={value}>
-        {children}
-      </context.Provider>
-    );
+  function ContextProvider({ children, value }: { children: ReactNode; value: T }) {
+    return <context.Provider value={value}>{children}</context.Provider>;
   }
 
   return [useContextHook, ContextProvider, context] as const;
 }
 
 // Usage with validation
-const [useValidatedUser, ValidatedUserProvider] = createValidatedContext(
-  'User',
-  UserContextSchema
-);
+const [useValidatedUser, ValidatedUserProvider] = createValidatedContext('User', UserContextSchema);
 ```
 
 > [!WARNING]
@@ -370,7 +331,7 @@ const [useValidatedUser, ValidatedUserProvider] = createValidatedContext(
 
 ### Theme Context with System Preference Detection
 
-```typescript
+```tsx
 interface ThemeContextType {
   theme: 'light' | 'dark' | 'system';
   resolvedTheme: 'light' | 'dark';
@@ -411,16 +372,14 @@ function ThemeToggle() {
   const { theme, setTheme } = useTheme(); // Never undefined!
 
   return (
-    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-      Toggle Theme
-    </button>
+    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>Toggle Theme</button>
   );
 }
 ```
 
 ### Shopping Cart with Optimistic Updates
 
-```typescript
+```tsx
 interface CartItem {
   id: string;
   name: string;
@@ -441,8 +400,10 @@ interface CartActions {
   clearCart: () => void;
 }
 
-const [useCartState, useCartActions, CartProvider] =
-  createStateActionContext<CartState, CartActions>('Cart');
+const [useCartState, useCartActions, CartProvider] = createStateActionContext<
+  CartState,
+  CartActions
+>('Cart');
 
 // Usage in components
 function CartBadge() {
@@ -455,11 +416,7 @@ function CartBadge() {
 function AddToCartButton({ product }: { product: Product }) {
   const { addItem } = useCartActions(); // Never re-renders
 
-  return (
-    <button onClick={() => addItem(product)}>
-      Add to Cart
-    </button>
-  );
+  return <button onClick={() => addItem(product)}>Add to Cart</button>;
 }
 ```
 
@@ -467,7 +424,7 @@ function AddToCartButton({ product }: { product: Product }) {
 
 Testing becomes much cleaner when you're not dealing with undefined context values:
 
-```typescript
+```tsx
 import { render, screen, fireEvent } from '@testing-library/react';
 import { UserProvider, useUser } from './UserContext';
 
@@ -491,11 +448,11 @@ test('provides user context correctly', () => {
       value={{
         user: mockUser,
         login: jest.fn(),
-        logout: mockLogout
+        logout: mockLogout,
       }}
     >
       <TestComponent />
-    </UserProvider>
+    </UserProvider>,
   );
 
   expect(screen.getByTestId('user-name')).toHaveTextContent('Alice');
@@ -518,22 +475,25 @@ These helper functions add minimal overhead, but here are some tips for optimal 
 
 ### Provider Value Memoization
 
-```typescript
+```tsx
 export function OptimizedUserProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   // ✅ Memoize the context value to prevent unnecessary re-renders
-  const contextValue = useMemo(() => ({
-    user: currentUser,
-    login: async (email: string, password: string) => {
-      const user = await authApi.login(email, password);
-      setCurrentUser(user);
-    },
-    logout: () => {
-      authApi.logout();
-      setCurrentUser(null);
-    },
-  }), [currentUser]);
+  const contextValue = useMemo(
+    () => ({
+      user: currentUser,
+      login: async (email: string, password: string) => {
+        const user = await authApi.login(email, password);
+        setCurrentUser(user);
+      },
+      logout: () => {
+        authApi.logout();
+        setCurrentUser(null);
+      },
+    }),
+    [currentUser],
+  );
 
   return <UserProvider value={contextValue}>{children}</UserProvider>;
 }
@@ -541,7 +501,7 @@ export function OptimizedUserProvider({ children }: { children: ReactNode }) {
 
 ### Callback Stability
 
-```typescript
+```tsx
 export function StableCallbackProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 

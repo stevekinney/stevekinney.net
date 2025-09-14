@@ -21,7 +21,7 @@ The three Core Web Vitals measure different aspects of user experience:
 
 Here's what good scores look like:
 
-```typescript
+```tsx
 // Target scores for Core Web Vitals
 const goodScores = {
   largestContentfulPaint: 2500, // ≤ 2.5 seconds
@@ -73,7 +73,7 @@ LCP measures when the largest element in the viewport finishes rendering. In Rea
 
 ### Identifying Your LCP Element
 
-```typescript
+```tsx
 // Hook to identify LCP element in development
 function useLCPDetection() {
   useEffect(() => {
@@ -111,7 +111,7 @@ function App() {
 
 **1. Optimize Critical Path Resources**
 
-```typescript
+```tsx
 // Hero component optimized for LCP
 function OptimizedHero({ title, image, subtitle }: HeroProps) {
   return (
@@ -132,7 +132,7 @@ function OptimizedHero({ title, image, subtitle }: HeroProps) {
         height={image.height}
         alt={image.alt}
         loading="eager" // Don't lazy load LCP images!
-        decoding="sync"  // Prioritize decoding
+        decoding="sync" // Prioritize decoding
         className="hero__image"
       />
 
@@ -175,7 +175,7 @@ function DocumentHead() {
 
 **2. Server-Side Rendering and Streaming**
 
-```typescript
+```tsx
 // Optimize initial HTML delivery
 function StreamingApp() {
   return (
@@ -194,8 +194,9 @@ function StreamingApp() {
 // Inline critical CSS for LCP elements
 function CriticalCSS() {
   return (
-    <style dangerouslySetInnerHTML={{
-      __html: `
+    <style
+      dangerouslySetInnerHTML={{
+        __html: `
         .hero {
           display: block;
           width: 100%;
@@ -211,15 +212,16 @@ function CriticalCSS() {
           font-weight: 700;
           margin: 0;
         }
-      `
-    }} />
+      `,
+      }}
+    />
   );
 }
 ```
 
 **3. Image Optimization Techniques**
 
-```typescript
+```tsx
 // Modern image optimization
 function OptimizedImage({ src, alt, ...props }: ImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -273,13 +275,13 @@ INP (which replaces FID) measures the latency of all user interactions throughou
 
 ### Common INP Problems in React
 
-```typescript
+```tsx
 // ❌ Bad: Blocking the main thread with expensive work
 function SlowButton({ items }: { items: Item[] }) {
   const handleClick = () => {
     // This blocks the UI thread
     const result = items
-      .map(item => expensiveCalculation(item))
+      .map((item) => expensiveCalculation(item))
       .sort((a, b) => a.value - b.value)
       .slice(0, 10);
 
@@ -300,7 +302,7 @@ function ResponsiveButton({ items }: { items: Item[] }) {
     // Defer the expensive work
     startTransition(() => {
       const result = items
-        .map(item => expensiveCalculation(item))
+        .map((item) => expensiveCalculation(item))
         .sort((a, b) => a.value - b.value)
         .slice(0, 10);
 
@@ -319,31 +321,34 @@ function ResponsiveButton({ items }: { items: Item[] }) {
 
 ### Advanced INP Optimization
 
-```typescript
+```tsx
 // Time slicing for large lists
 function useTimeSlicing<T>(items: T[], processItem: (item: T) => any, chunkSize = 50) {
   const [results, setResults] = useState<any[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const processChunk = useCallback(async (startIndex: number) => {
-    const endIndex = Math.min(startIndex + chunkSize, items.length);
-    const chunk = items.slice(startIndex, endIndex);
+  const processChunk = useCallback(
+    async (startIndex: number) => {
+      const endIndex = Math.min(startIndex + chunkSize, items.length);
+      const chunk = items.slice(startIndex, endIndex);
 
-    // Process chunk
-    const chunkResults = chunk.map(processItem);
+      // Process chunk
+      const chunkResults = chunk.map(processItem);
 
-    // Update state
-    setResults(prev => [...prev, ...chunkResults]);
+      // Update state
+      setResults((prev) => [...prev, ...chunkResults]);
 
-    // Continue processing if there are more items
-    if (endIndex < items.length) {
-      // Yield control back to browser
-      await new Promise(resolve => setTimeout(resolve, 0));
-      return processChunk(endIndex);
-    } else {
-      setIsProcessing(false);
-    }
-  }, [items, processItem, chunkSize]);
+      // Continue processing if there are more items
+      if (endIndex < items.length) {
+        // Yield control back to browser
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        return processChunk(endIndex);
+      } else {
+        setIsProcessing(false);
+      }
+    },
+    [items, processItem, chunkSize],
+  );
 
   const startProcessing = useCallback(() => {
     setResults([]);
@@ -359,7 +364,7 @@ function TimeSlicedList({ items }: { items: Item[] }) {
   const { results, isProcessing, startProcessing } = useTimeSlicing(
     items,
     (item) => ({ ...item, processed: true }),
-    100 // Process 100 items at a time
+    100, // Process 100 items at a time
   );
 
   return (
@@ -382,30 +387,33 @@ function useWebWorkerTask<T, R>(workerScript: string) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const executeTask = useCallback(async (data: T): Promise<R> => {
-    return new Promise((resolve, reject) => {
-      setIsLoading(true);
-      setError(null);
+  const executeTask = useCallback(
+    async (data: T): Promise<R> => {
+      return new Promise((resolve, reject) => {
+        setIsLoading(true);
+        setError(null);
 
-      const worker = new Worker(workerScript);
+        const worker = new Worker(workerScript);
 
-      worker.onmessage = (event) => {
-        setResult(event.data);
-        setIsLoading(false);
-        resolve(event.data);
-        worker.terminate();
-      };
+        worker.onmessage = (event) => {
+          setResult(event.data);
+          setIsLoading(false);
+          resolve(event.data);
+          worker.terminate();
+        };
 
-      worker.onerror = (error) => {
-        setError(new Error(error.message));
-        setIsLoading(false);
-        reject(error);
-        worker.terminate();
-      };
+        worker.onerror = (error) => {
+          setError(new Error(error.message));
+          setIsLoading(false);
+          reject(error);
+          worker.terminate();
+        };
 
-      worker.postMessage(data);
-    });
-  }, [workerScript]);
+        worker.postMessage(data);
+      });
+    },
+    [workerScript],
+  );
 
   return { result, isLoading, error, executeTask };
 }
@@ -428,7 +436,7 @@ self.onmessage = function(e) {
 
 ### Optimizing Event Handlers
 
-```typescript
+```tsx
 // Debounce frequent events
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -455,20 +463,11 @@ function SearchInput({ onSearch }: { onSearch: (query: string) => void }) {
     onSearch(debouncedQuery);
   }, [debouncedQuery, onSearch]);
 
-  return (
-    <input
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-      placeholder="Search..."
-    />
-  );
+  return <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search..." />;
 }
 
 // Throttle scroll events
-function useThrottle<T extends (...args: any[]) => any>(
-  callback: T,
-  delay: number
-): T {
+function useThrottle<T extends (...args: any[]) => any>(callback: T, delay: number): T {
   const [shouldWait, setShouldWait] = useState(false);
 
   return useCallback(
@@ -482,7 +481,7 @@ function useThrottle<T extends (...args: any[]) => any>(
         setShouldWait(false);
       }, delay);
     }) as T,
-    [callback, delay, shouldWait]
+    [callback, delay, shouldWait],
   );
 }
 ```
@@ -493,7 +492,7 @@ CLS measures how much content shifts around during loading. React's dynamic rend
 
 ### Common CLS Problems
 
-```typescript
+```tsx
 // ❌ Bad: Images without dimensions cause layout shift
 function BadImageGallery({ images }: { images: Image[] }) {
   return (
@@ -533,7 +532,7 @@ function GoodImageGallery({ images }: { images: Image[] }) {
 
 ### Skeleton Loading Patterns
 
-```typescript
+```tsx
 // Skeleton component that matches final content size
 function UserCardSkeleton() {
   return (
@@ -590,7 +589,7 @@ function UserCard({ user }: { user: User | null }) {
 
 ### Font Loading Optimization
 
-```typescript
+```tsx
 // Prevent font swap layout shifts
 function FontOptimization() {
   return (
@@ -605,8 +604,9 @@ function FontOptimization() {
       />
 
       {/* Font CSS with swap strategy */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
           @font-face {
             font-family: 'Inter';
             src: url('/fonts/inter-var.woff2') format('woff2');
@@ -625,14 +625,21 @@ function FontOptimization() {
           body {
             font-family: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
           }
-        `
-      }} />
+        `,
+        }}
+      />
     </Head>
   );
 }
 
 // Component-level font loading
-function TextWithFallback({ children, className }: { children: React.ReactNode; className?: string }) {
+function TextWithFallback({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
@@ -648,9 +655,7 @@ function TextWithFallback({ children, className }: { children: React.ReactNode; 
     <span
       className={`${className} ${fontLoaded ? 'font-loaded' : 'font-loading'}`}
       style={{
-        fontFamily: fontLoaded
-          ? 'Inter, sans-serif'
-          : 'Arial, sans-serif', // Fallback while loading
+        fontFamily: fontLoaded ? 'Inter, sans-serif' : 'Arial, sans-serif', // Fallback while loading
       }}
     >
       {children}
@@ -661,7 +666,7 @@ function TextWithFallback({ children, className }: { children: React.ReactNode; 
 
 ### Dynamic Content and Layout Shifts
 
-```typescript
+```tsx
 // Reserve space for dynamic content
 function NewsletterSignup() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -685,9 +690,7 @@ function NewsletterSignup() {
       ) : (
         <form className="signup-form">
           <input type="email" placeholder="Enter your email" />
-          <button disabled={isSubmitting}>
-            {isSubmitting ? 'Subscribing...' : 'Subscribe'}
-          </button>
+          <button disabled={isSubmitting}>{isSubmitting ? 'Subscribing...' : 'Subscribe'}</button>
         </form>
       )}
     </div>
@@ -714,7 +717,7 @@ function AnimatedContent({ show }: { show: boolean }) {
 
 ## Monitoring Core Web Vitals in Production
 
-```typescript
+```tsx
 // Comprehensive Web Vitals monitoring
 class WebVitalsMonitor {
   private metrics: Map<string, number> = new Map();
@@ -796,7 +799,7 @@ const webVitalsMonitor = new WebVitalsMonitor();
 
 ## Testing and Debugging
 
-```typescript
+```tsx
 // Development tools for Web Vitals debugging
 function WebVitalsDevTools() {
   const [metrics, setMetrics] = useState<Record<string, number>>({});
@@ -806,7 +809,7 @@ function WebVitalsDevTools() {
       // Import web-vitals in development
       import('web-vitals').then(({ getLCP, getFID, getCLS }) => {
         getLCP((metric) => {
-          setMetrics(prev => ({ ...prev, LCP: metric.value }));
+          setMetrics((prev) => ({ ...prev, LCP: metric.value }));
 
           // Highlight LCP element
           if (metric.entries.length > 0) {
@@ -819,11 +822,11 @@ function WebVitalsDevTools() {
         });
 
         getFID((metric) => {
-          setMetrics(prev => ({ ...prev, FID: metric.value }));
+          setMetrics((prev) => ({ ...prev, FID: metric.value }));
         });
 
         getCLS((metric) => {
-          setMetrics(prev => ({ ...prev, CLS: metric.value }));
+          setMetrics((prev) => ({ ...prev, CLS: metric.value }));
         });
       });
     }
@@ -834,17 +837,19 @@ function WebVitalsDevTools() {
   }
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 10,
-      right: 10,
-      background: '#000',
-      color: '#fff',
-      padding: 10,
-      borderRadius: 5,
-      fontSize: 12,
-      zIndex: 9999,
-    }}>
+    <div
+      style={{
+        position: 'fixed',
+        top: 10,
+        right: 10,
+        background: '#000',
+        color: '#fff',
+        padding: 10,
+        borderRadius: 5,
+        fontSize: 12,
+        zIndex: 9999,
+      }}
+    >
       <div>LCP: {metrics.LCP?.toFixed(0)}ms</div>
       <div>FID: {metrics.FID?.toFixed(0)}ms</div>
       <div>CLS: {metrics.CLS?.toFixed(3)}</div>
@@ -857,7 +862,7 @@ function WebVitalsDevTools() {
 
 ### Pitfall: Optimizing for Lab Data Only
 
-```typescript
+```tsx
 // ❌ Bad: Only testing with fast connections
 // Lighthouse with default settings doesn't represent real users
 

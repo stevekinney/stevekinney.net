@@ -15,7 +15,7 @@ The insidious nature of memory leaks makes them particularly dangerous—they're
 
 Memory leaks occur when your JavaScript code holds references to objects that should be garbage collected. In React applications, this often happens when:
 
-```typescript
+```tsx
 // Common memory leak patterns in React
 
 // 1. Event listeners that aren't removed
@@ -40,7 +40,7 @@ function LeakyTimer() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCount(prev => prev + 1);
+      setCount((prev) => prev + 1);
     }, 1000);
 
     // ❌ Missing cleanup - interval keeps running after unmount
@@ -56,7 +56,7 @@ function LeakyClosures({ largeDataset }: { largeDataset: LargeObject[] }) {
 
   const processItems = useCallback(() => {
     // ❌ Closure captures entire largeDataset even if we only need small part
-    const processed = largeDataset.map(item => ({
+    const processed = largeDataset.map((item) => ({
       id: item.id,
       name: item.name,
       // Only using 2 properties but entire object is retained
@@ -94,7 +94,7 @@ Chrome DevTools provides powerful tools for detecting memory leaks:
 
 ### Taking Memory Snapshots
 
-```typescript
+```tsx
 // Memory profiling utility for development
 class MemoryProfiler {
   private snapshots: Array<{
@@ -123,8 +123,8 @@ class MemoryProfiler {
   }
 
   compareSnapshots(before: string, after: string): void {
-    const beforeSnapshot = this.snapshots.find(s => s.name === before);
-    const afterSnapshot = this.snapshots.find(s => s.name === after);
+    const beforeSnapshot = this.snapshots.find((s) => s.name === before);
+    const afterSnapshot = this.snapshots.find((s) => s.name === after);
 
     if (!beforeSnapshot || !afterSnapshot) {
       console.error('Snapshots not found');
@@ -205,7 +205,7 @@ function ProfiledComponent() {
 
 ### Automated Memory Leak Detection
 
-```typescript
+```tsx
 // Automated memory leak detector
 class MemoryLeakDetector {
   private isMonitoring = false;
@@ -361,7 +361,7 @@ function useMemoryLeakDetection(componentName: string) {
 
 ### Event Listeners and DOM References
 
-```typescript
+```tsx
 // ❌ Leaky event listener pattern
 function LeakyEventListener() {
   const [isVisible, setIsVisible] = useState(false);
@@ -409,7 +409,7 @@ function useEventListener<T extends keyof WindowEventMap>(
   eventName: T,
   handler: (event: WindowEventMap[T]) => void,
   element: Window | Document | HTMLElement = window,
-  options?: AddEventListenerOptions
+  options?: AddEventListenerOptions,
 ) {
   // Use ref to store handler to avoid effect re-runs
   const savedHandler = useRef(handler);
@@ -437,11 +437,7 @@ function useEventListener<T extends keyof WindowEventMap>(
 function SafeScrollComponent() {
   const [scrollY, setScrollY] = useState(0);
 
-  useEventListener('scroll',
-    (e) => setScrollY(window.scrollY),
-    window,
-    { passive: true }
-  );
+  useEventListener('scroll', (e) => setScrollY(window.scrollY), window, { passive: true });
 
   return <div>Scroll position: {scrollY}</div>;
 }
@@ -449,7 +445,7 @@ function SafeScrollComponent() {
 
 ### Timer and Interval Leaks
 
-```typescript
+```tsx
 // ❌ Leaky timers
 function LeakyTimers() {
   const [count, setCount] = useState(0);
@@ -458,7 +454,7 @@ function LeakyTimers() {
   useEffect(() => {
     // Timer that's never cleared
     setInterval(() => {
-      setCount(prev => prev + 1);
+      setCount((prev) => prev + 1);
     }, 1000);
 
     // Timeout that's never cleared
@@ -479,7 +475,7 @@ function CleanTimers() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCount(prev => prev + 1);
+      setCount((prev) => prev + 1);
     }, 1000);
 
     const timeout = setTimeout(() => {
@@ -492,7 +488,11 @@ function CleanTimers() {
     };
   }, []);
 
-  return <div>Count: {count}, Data: {data}</div>;
+  return (
+    <div>
+      Count: {count}, Data: {data}
+    </div>
+  );
 }
 
 // ✅ Custom hooks for timers
@@ -537,7 +537,7 @@ function SafeTimerComponent() {
   const [count, setCount] = useState(0);
 
   useInterval(() => {
-    setCount(prev => prev + 1);
+    setCount((prev) => prev + 1);
   }, 1000);
 
   useTimeout(() => {
@@ -550,19 +550,22 @@ function SafeTimerComponent() {
 
 ### Closure and Reference Leaks
 
-```typescript
+```tsx
 // ❌ Leaky closures holding large objects
 function LeakyClosures({ largeDataset }: { largeDataset: LargeObject[] }) {
   const [filteredIds, setFilteredIds] = useState<string[]>([]);
 
   // ❌ Closure captures entire largeDataset
-  const filterData = useCallback((searchTerm: string) => {
-    const filtered = largeDataset
-      .filter(item => item.name.includes(searchTerm))
-      .map(item => item.id);
+  const filterData = useCallback(
+    (searchTerm: string) => {
+      const filtered = largeDataset
+        .filter((item) => item.name.includes(searchTerm))
+        .map((item) => item.id);
 
-    setFilteredIds(filtered);
-  }, [largeDataset]); // Entire array is captured in closure
+      setFilteredIds(filtered);
+    },
+    [largeDataset],
+  ); // Entire array is captured in closure
 
   return <SearchInput onSearch={filterData} />;
 }
@@ -572,18 +575,21 @@ function CleanClosures({ largeDataset }: { largeDataset: LargeObject[] }) {
   const [filteredIds, setFilteredIds] = useState<string[]>([]);
 
   // ✅ Only capture the data we actually need
-  const searchableData = useMemo(() =>
-    largeDataset.map(item => ({ id: item.id, name: item.name })),
-    [largeDataset]
+  const searchableData = useMemo(
+    () => largeDataset.map((item) => ({ id: item.id, name: item.name })),
+    [largeDataset],
   );
 
-  const filterData = useCallback((searchTerm: string) => {
-    const filtered = searchableData
-      .filter(item => item.name.includes(searchTerm))
-      .map(item => item.id);
+  const filterData = useCallback(
+    (searchTerm: string) => {
+      const filtered = searchableData
+        .filter((item) => item.name.includes(searchTerm))
+        .map((item) => item.id);
 
-    setFilteredIds(filtered);
-  }, [searchableData]); // Much smaller object in closure
+      setFilteredIds(filtered);
+    },
+    [searchableData],
+  ); // Much smaller object in closure
 
   return <SearchInput onSearch={filterData} />;
 }
@@ -601,8 +607,8 @@ function RefBasedComponent({ largeDataset }: { largeDataset: LargeObject[] }) {
   // Callback doesn't capture large dataset
   const filterData = useCallback((searchTerm: string) => {
     const filtered = dataRef.current
-      .filter(item => item.name.includes(searchTerm))
-      .map(item => item.id);
+      .filter((item) => item.name.includes(searchTerm))
+      .map((item) => item.id);
 
     setFilteredIds(filtered);
   }, []); // No dependencies, no closure capture
@@ -613,7 +619,7 @@ function RefBasedComponent({ largeDataset }: { largeDataset: LargeObject[] }) {
 
 ### Global State and Subscription Leaks
 
-```typescript
+```tsx
 // ❌ Leaky global subscriptions
 const globalEventBus = new EventTarget();
 const globalSubscribers = new Set<Function>();
@@ -658,10 +664,7 @@ function CleanSubscription() {
 }
 
 // ✅ Custom hook for subscriptions
-function useGlobalSubscription<T>(
-  eventName: string,
-  initialValue: T
-): [T, (value: T) => void] {
+function useGlobalSubscription<T>(eventName: string, initialValue: T): [T, (value: T) => void] {
   const [value, setValue] = useState<T>(initialValue);
 
   useEffect(() => {
@@ -676,11 +679,12 @@ function useGlobalSubscription<T>(
     };
   }, [eventName]);
 
-  const publish = useCallback((newValue: T) => {
-    globalEventBus.dispatchEvent(
-      new CustomEvent(eventName, { detail: newValue })
-    );
-  }, [eventName]);
+  const publish = useCallback(
+    (newValue: T) => {
+      globalEventBus.dispatchEvent(new CustomEvent(eventName, { detail: newValue }));
+    },
+    [eventName],
+  );
 
   return [value, publish];
 }
@@ -692,9 +696,7 @@ function SafeSubscriptionComponent() {
   return (
     <div>
       <p>User: {userData?.name}</p>
-      <button onClick={() => setUserData({ name: 'John', id: '123' })}>
-        Update User
-      </button>
+      <button onClick={() => setUserData({ name: 'John', id: '123' })}>Update User</button>
     </div>
   );
 }
@@ -704,7 +706,7 @@ function SafeSubscriptionComponent() {
 
 ### Custom Memory Profiler Component
 
-```typescript
+```tsx
 // Production-safe memory monitoring
 class ProductionMemoryMonitor {
   private isEnabled: boolean;
@@ -716,8 +718,9 @@ class ProductionMemoryMonitor {
 
   constructor() {
     // Only enable in development or with explicit flag
-    this.isEnabled = process.env.NODE_ENV === 'development' ||
-                     window.location.search.includes('memoryProfile=true');
+    this.isEnabled =
+      process.env.NODE_ENV === 'development' ||
+      window.location.search.includes('memoryProfile=true');
   }
 
   recordMetric(component?: string): void {
@@ -753,8 +756,12 @@ class ProductionMemoryMonitor {
     const oldAverage = recentMetrics.slice(0, 25).reduce((sum, m) => sum + m.heapUsed, 0) / 25;
     const newAverage = recentMetrics.slice(25).reduce((sum, m) => sum + m.heapUsed, 0) / 25;
 
-    const trend = newAverage > oldAverage * 1.1 ? 'increasing' :
-                  newAverage < oldAverage * 0.9 ? 'decreasing' : 'stable';
+    const trend =
+      newAverage > oldAverage * 1.1
+        ? 'increasing'
+        : newAverage < oldAverage * 0.9
+          ? 'decreasing'
+          : 'stable';
 
     // Analyze component-specific patterns
     const componentMetrics = this.groupMetricsByComponent();
@@ -772,7 +779,7 @@ class ProductionMemoryMonitor {
   private groupMetricsByComponent(): Map<string, Array<{ timestamp: number; heapUsed: number }>> {
     const grouped = new Map();
 
-    this.metrics.forEach(metric => {
+    this.metrics.forEach((metric) => {
       if (!metric.component) return;
 
       if (!grouped.has(metric.component)) {
@@ -789,7 +796,7 @@ class ProductionMemoryMonitor {
   }
 
   private findSuspiciousComponents(
-    componentMetrics: Map<string, Array<{ timestamp: number; heapUsed: number }>>
+    componentMetrics: Map<string, Array<{ timestamp: number; heapUsed: number }>>,
   ): string[] {
     const suspicious: string[] = [];
 
@@ -812,10 +819,7 @@ class ProductionMemoryMonitor {
     return suspicious;
   }
 
-  private generateRecommendations(
-    trend: string,
-    suspiciousComponents: string[]
-  ): string[] {
+  private generateRecommendations(trend: string, suspiciousComponents: string[]): string[] {
     const recommendations: string[] = [];
 
     if (trend === 'increasing') {
@@ -823,7 +827,9 @@ class ProductionMemoryMonitor {
     }
 
     if (suspiciousComponents.length > 0) {
-      recommendations.push(`Check these components for memory leaks: ${suspiciousComponents.join(', ')}`);
+      recommendations.push(
+        `Check these components for memory leaks: ${suspiciousComponents.join(', ')}`,
+      );
     }
 
     recommendations.push('Review event listeners, timers, and subscriptions for proper cleanup');
@@ -833,11 +839,15 @@ class ProductionMemoryMonitor {
   }
 
   exportData(): string {
-    return JSON.stringify({
-      metrics: this.metrics,
-      analysis: this.analyzeLeaks(),
-      timestamp: Date.now(),
-    }, null, 2);
+    return JSON.stringify(
+      {
+        metrics: this.metrics,
+        analysis: this.analyzeLeaks(),
+        timestamp: Date.now(),
+      },
+      null,
+      2,
+    );
   }
 }
 
@@ -857,11 +867,14 @@ function useMemoryMonitoring(componentName: string, enabled = false) {
     };
   }, [componentName, enabled]);
 
-  const recordEvent = useCallback((eventName: string) => {
-    if (enabled) {
-      monitor.current.recordMetric(`${componentName}:${eventName}`);
-    }
-  }, [componentName, enabled]);
+  const recordEvent = useCallback(
+    (eventName: string) => {
+      if (enabled) {
+        monitor.current.recordMetric(`${componentName}:${eventName}`);
+      }
+    },
+    [componentName, enabled],
+  );
 
   return {
     recordEvent,
@@ -896,17 +909,19 @@ function MemoryProfilerPanel() {
   if (process.env.NODE_ENV !== 'development') return null;
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 10,
-      right: 10,
-      background: '#000',
-      color: '#fff',
-      padding: 15,
-      borderRadius: 5,
-      fontSize: 12,
-      zIndex: 9999,
-    }}>
+    <div
+      style={{
+        position: 'fixed',
+        top: 10,
+        right: 10,
+        background: '#000',
+        color: '#fff',
+        padding: 15,
+        borderRadius: 5,
+        fontSize: 12,
+        zIndex: 9999,
+      }}
+    >
       <h4>Memory Profiler</h4>
 
       <button onClick={runAnalysis}>Analyze Memory</button>
@@ -927,13 +942,13 @@ function MemoryProfilerPanel() {
 
 ## Testing for Memory Leaks
 
-```typescript
+```tsx
 // Automated memory leak testing
 class MemoryLeakTester {
   async testComponentForLeaks<T>(
     Component: React.ComponentType<T>,
     props: T,
-    iterations: number = 100
+    iterations: number = 100,
   ): Promise<{
     hasLeak: boolean;
     initialMemory: number;
@@ -956,7 +971,7 @@ class MemoryLeakTester {
       root.render(<Component {...props} />);
 
       // Let component render
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
       root.unmount();
       document.body.removeChild(container);
@@ -976,9 +991,11 @@ class MemoryLeakTester {
     const finalMemory = (performance as any).memory?.usedJSHeapSize || 0;
 
     const leakSize = finalMemory - initialMemory;
-    const averageGrowth = memorySnapshots.length > 1
-      ? (memorySnapshots[memorySnapshots.length - 1] - memorySnapshots[0]) / memorySnapshots.length
-      : 0;
+    const averageGrowth =
+      memorySnapshots.length > 1
+        ? (memorySnapshots[memorySnapshots.length - 1] - memorySnapshots[0]) /
+          memorySnapshots.length
+        : 0;
 
     // Consider it a leak if memory grew by more than 1MB
     const hasLeak = leakSize > 1024 * 1024;
@@ -992,11 +1009,13 @@ class MemoryLeakTester {
     };
   }
 
-  async runLeakTestSuite(components: Array<{
-    name: string;
-    Component: React.ComponentType<any>;
-    props: any;
-  }>): Promise<void> {
+  async runLeakTestSuite(
+    components: Array<{
+      name: string;
+      Component: React.ComponentType<any>;
+      props: any;
+    }>,
+  ): Promise<void> {
     console.log('🔍 Running memory leak test suite...');
 
     for (const { name, Component, props } of components) {
@@ -1028,22 +1047,14 @@ describe('Memory Leak Tests', () => {
   const tester = new MemoryLeakTester();
 
   it('should not leak memory in UserProfile component', async () => {
-    const results = await tester.testComponentForLeaks(
-      UserProfile,
-      { user: mockUser },
-      100
-    );
+    const results = await tester.testComponentForLeaks(UserProfile, { user: mockUser }, 100);
 
     expect(results.hasLeak).toBe(false);
     expect(results.leakSize).toBeLessThan(1024 * 1024); // < 1MB growth
   });
 
   it('should detect memory leaks in problematic components', async () => {
-    const results = await tester.testComponentForLeaks(
-      LeakyComponent,
-      { data: mockData },
-      50
-    );
+    const results = await tester.testComponentForLeaks(LeakyComponent, { data: mockData }, 50);
 
     // This test expects a leak to verify our detection works
     expect(results.hasLeak).toBe(true);
@@ -1104,15 +1115,9 @@ const timerCleanupRule = {
 
 ### Memory-Safe Component Patterns
 
-```typescript
+```tsx
 // Template for memory-safe React components
-function MemorySafeComponent({
-  data,
-  onUpdate
-}: {
-  data: any[];
-  onUpdate: (data: any) => void;
-}) {
+function MemorySafeComponent({ data, onUpdate }: { data: any[]; onUpdate: (data: any) => void }) {
   // 1. Use refs for stable references to avoid closure captures
   const dataRef = useRef(data);
   const onUpdateRef = useRef(onUpdate);
@@ -1125,7 +1130,7 @@ function MemorySafeComponent({
 
   // 2. Memoize expensive computations
   const processedData = useMemo(() => {
-    return data.map(item => ({
+    return data.map((item) => ({
       id: item.id,
       name: item.name,
       // Only include fields you actually need
@@ -1155,7 +1160,7 @@ function MemorySafeComponent({
 
   return (
     <div>
-      {processedData.map(item => (
+      {processedData.map((item) => (
         <ItemComponent key={item.id} item={item} />
       ))}
     </div>

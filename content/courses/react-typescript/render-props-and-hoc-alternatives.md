@@ -13,11 +13,9 @@ Higher-Order Components (HOCs) used to be React's go-to pattern for sharing logi
 
 Before we dive into solutions, let's understand what we're solving. HOCs wrap your components to inject props or behavior, but they come with some TypeScript pain points:
 
-```typescript
+```tsx
 // ❌ Classic HOC - typing gets messy fast
-function withAuth<P extends object>(
-  Component: React.ComponentType<P & { user: User }>
-) {
+function withAuth<P extends object>(Component: React.ComponentType<P & { user: User }>) {
   return function AuthenticatedComponent(props: Omit<P, 'user'>) {
     const user = useAuth();
     if (!user) return <LoginForm />;
@@ -28,7 +26,11 @@ function withAuth<P extends object>(
 // Using it requires type gymnastics
 const ProfilePage = withAuth<{ title: string }>(({ user, title }) => {
   // IntelliSense struggles here - it doesn't know about 'user'
-  return <h1>{title}: {user.name}</h1>;
+  return (
+    <h1>
+      {title}: {user.name}
+    </h1>
+  );
 });
 ```
 
@@ -38,7 +40,7 @@ The issues become more apparent when you start composing HOCs or when TypeScript
 
 Render props flip the script. Instead of wrapping your component, you pass a function that receives the data and returns JSX. TypeScript loves this pattern because the data flow is explicit and type inference works beautifully.
 
-```typescript
+```tsx
 // ✅ Render prop component with excellent TypeScript support
 interface AuthRenderProps {
   user: User | null;
@@ -82,7 +84,7 @@ The magic happens in that `children` prop type: `(props: AuthRenderProps) => Rea
 
 When you need to handle different data types, generics make render props even more powerful:
 
-```typescript
+```tsx
 interface DataFetcher<T> {
   data: T | null;
   loading: boolean;
@@ -156,7 +158,7 @@ Notice how TypeScript automatically infers that `user` is of type `User` inside 
 
 Sometimes you don't need the component wrapper at all. Custom hooks can provide the same logic sharing with even cleaner syntax:
 
-```typescript
+```tsx
 function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -211,7 +213,7 @@ Custom hooks give you the best of both worlds: shared logic without component wr
 
 For more complex UI patterns, you can combine render props with compound components to create flexible, reusable interfaces:
 
-```typescript
+```tsx
 interface DropdownContextValue {
   isOpen: boolean;
   toggle: () => void;
@@ -231,20 +233,23 @@ function Dropdown({ children, onSelect }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
-  const toggle = useCallback(() => setIsOpen(prev => !prev), []);
+  const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
   const close = useCallback(() => setIsOpen(false), []);
-  const select = useCallback((value: string) => {
-    setSelectedValue(value);
-    onSelect?.(value);
-    close();
-  }, [onSelect, close]);
+  const select = useCallback(
+    (value: string) => {
+      setSelectedValue(value);
+      onSelect?.(value);
+      close();
+    },
+    [onSelect, close],
+  );
 
   const contextValue: DropdownContextValue = {
     isOpen,
     toggle,
     close,
     selectedValue,
-    select
+    select,
   };
 
   return (
@@ -268,7 +273,7 @@ function DropdownList({ children }: DropdownListProps) {
   if (!context.isOpen) return null;
 
   return (
-    <div className="absolute top-full left-0 bg-white shadow-lg border rounded">
+    <div className="absolute top-full left-0 rounded border bg-white shadow-lg">
       {children(context)}
     </div>
   );
@@ -287,11 +292,11 @@ function UserSelector() {
 
               return (
                 <>
-                  {users?.map(user => (
+                  {users?.map((user) => (
                     <button
                       key={user.id}
                       onClick={() => select(user.id.toString())}
-                      className={`block w-full text-left p-2 hover:bg-gray-100 ${
+                      className={`block w-full p-2 text-left hover:bg-gray-100 ${
                         selectedValue === user.id.toString() ? 'bg-blue-50' : ''
                       }`}
                     >
@@ -315,7 +320,7 @@ This pattern gives you maximum flexibility while maintaining excellent type safe
 
 One common concern with render props is performance. Since you're creating a new function on each render, React might unnecessarily re-render child components. Here are some strategies to optimize:
 
-```typescript
+```tsx
 // ✅ Memoize expensive render functions
 function ExpensiveComponent() {
   const renderUsers = useCallback(({ data: users, loading }: DataFetcher<User[]>) => {
@@ -323,18 +328,14 @@ function ExpensiveComponent() {
 
     return (
       <div>
-        {users?.map(user => (
+        {users?.map((user) => (
           <ExpensiveUserCard key={user.id} user={user} />
         ))}
       </div>
     );
   }, []);
 
-  return (
-    <FetchData<User[]> url="/api/users">
-      {renderUsers}
-    </FetchData>
-  );
+  return <FetchData<User[]> url="/api/users">{renderUsers}</FetchData>;
 }
 
 // ✅ Or use React.memo for the render prop component
@@ -381,7 +382,7 @@ Here are some practical scenarios where these patterns shine:
 
 ### Form Field Management
 
-```typescript
+```tsx
 interface FieldState<T> {
   value: T;
   error: string | null;
@@ -411,26 +412,33 @@ function FormField<T>({ initialValue, validator, children }: FormFieldProps<T>) 
     return true;
   }, [value, validator]);
 
-  const handleSetValue = useCallback((newValue: T) => {
-    setValue(newValue);
-    if (touched && validator) {
-      setError(validator(newValue));
-    }
-  }, [touched, validator]);
+  const handleSetValue = useCallback(
+    (newValue: T) => {
+      setValue(newValue);
+      if (touched && validator) {
+        setError(validator(newValue));
+      }
+    },
+    [touched, validator],
+  );
 
   const handleSetTouched = useCallback(() => {
     setTouched(true);
     validate();
   }, [validate]);
 
-  return <>{children({
-    value,
-    error,
-    touched,
-    setValue: handleSetValue,
-    setTouched: handleSetTouched,
-    validate
-  })}</>;
+  return (
+    <>
+      {children({
+        value,
+        error,
+        touched,
+        setValue: handleSetValue,
+        setTouched: handleSetTouched,
+        validate,
+      })}
+    </>
+  );
 }
 
 // Usage with perfect type inference
@@ -439,9 +447,7 @@ function SignupForm() {
     <form>
       <FormField<string>
         initialValue=""
-        validator={(email) =>
-          email.includes('@') ? null : 'Please enter a valid email'
-        }
+        validator={(email) => (email.includes('@') ? null : 'Please enter a valid email')}
       >
         {({ value, error, setValue, setTouched }) => (
           <div>
@@ -463,7 +469,7 @@ function SignupForm() {
 
 ### API State Management
 
-```typescript
+```tsx
 interface ApiState<T, E = unknown> {
   data: T | null;
   loading: boolean;
@@ -471,16 +477,16 @@ interface ApiState<T, E = unknown> {
 }
 
 function useApiState<T, E = string>(
-  apiCall: () => Promise<T>
+  apiCall: () => Promise<T>,
 ): ApiState<T, E> & { execute: () => Promise<void> } {
   const [state, setState] = useState<ApiState<T, E>>({
     data: null,
     loading: false,
-    error: null
+    error: null,
   });
 
   const execute = useCallback(async () => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
+    setState((prev) => ({ ...prev, loading: true, error: null }));
 
     try {
       const data = await apiCall();
@@ -489,7 +495,7 @@ function useApiState<T, E = string>(
       setState({
         data: null,
         loading: false,
-        error: error as E
+        error: error as E,
       });
     }
   }, [apiCall]);
@@ -500,7 +506,7 @@ function useApiState<T, E = string>(
 // Clean usage with excellent error handling
 function UserDashboard({ userId }: { userId: number }) {
   const userApi = useApiState(() =>
-    fetch(`/api/users/${userId}`).then(r => r.json() as Promise<User>)
+    fetch(`/api/users/${userId}`).then((r) => r.json() as Promise<User>),
   );
 
   useEffect(() => {
@@ -519,11 +525,9 @@ function UserDashboard({ userId }: { userId: number }) {
 
 If you're stuck with existing HOCs, here's a gradual migration strategy:
 
-```typescript
+```tsx
 // Step 1: Create a render prop version alongside your HOC
-function withAuthRenderProp<T extends object>(
-  Component: React.ComponentType<T & { user: User }>
-) {
+function withAuthRenderProp<T extends object>(Component: React.ComponentType<T & { user: User }>) {
   return function AuthWrapper(props: Omit<T, 'user'>) {
     return (
       <AuthProvider>

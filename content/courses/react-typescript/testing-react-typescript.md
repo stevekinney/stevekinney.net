@@ -37,7 +37,7 @@ npm install -D @vitejs/plugin-react jsdom
 
 Create a `vitest.config.ts`:
 
-```typescript
+```tsx
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
@@ -81,7 +81,7 @@ module.exports = {
 
 Both approaches need a setup file (`src/test-setup.ts`) to configure React Testing Library:
 
-```typescript
+```tsx
 import '@testing-library/jest-dom';
 ```
 
@@ -91,7 +91,7 @@ This gives you typed matchers like `toBeInTheDocument()` and `toHaveTextContent(
 
 Let's start with a simple component and build up complexity:
 
-```typescript
+```tsx
 // Button.tsx
 interface ButtonProps {
   children: React.ReactNode;
@@ -104,7 +104,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   onClick,
   variant = 'primary',
-  disabled = false
+  disabled = false,
 }) => {
   return (
     <button
@@ -121,7 +121,7 @@ export const Button: React.FC<ButtonProps> = ({
 
 Now let's test it with full type safety:
 
-```typescript
+```tsx
 // Button.test.tsx
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -149,7 +149,11 @@ describe('Button', () => {
   });
 
   it('applies variant classes correctly', () => {
-    render(<Button onClick={() => {}} variant="secondary">Click me</Button>);
+    render(
+      <Button onClick={() => {}} variant="secondary">
+        Click me
+      </Button>,
+    );
 
     const button = screen.getByRole('button');
     expect(button).toHaveClass('btn--secondary');
@@ -159,19 +163,23 @@ describe('Button', () => {
 
 Notice how TypeScript catches issues at compile time:
 
-```typescript
+```tsx
 // ❌ TypeScript error: Type 'string' is not assignable to type '() => void'
 render(<Button onClick="invalid">Click me</Button>);
 
 // ❌ TypeScript error: Type '"invalid"' is not assignable to type '"primary" | "secondary"'
-render(<Button onClick={() => {}} variant="invalid">Click me</Button>);
+render(
+  <Button onClick={() => {}} variant="invalid">
+    Click me
+  </Button>,
+);
 ```
 
 ## Type-Safe Queries and Matchers
 
 React Testing Library provides several query methods, each with different TypeScript implications:
 
-```typescript
+```tsx
 import { render, screen } from '@testing-library/react';
 
 // Most specific queries return HTMLElement (never null)
@@ -197,7 +205,7 @@ expect(emailInput.type).toBe('email');
 
 TypeScript really shines when testing component contracts:
 
-```typescript
+```tsx
 // UserCard.tsx
 interface User {
   id: string;
@@ -226,14 +234,14 @@ export const UserCard: React.FC<UserCardProps> = ({ user, onEdit, showEmail = fa
 
 Testing this component with proper TypeScript safety:
 
-```typescript
+```tsx
 // UserCard.test.tsx
 describe('UserCard', () => {
   const mockUser: User = {
     id: '1',
     name: 'John Doe',
     email: 'john@example.com',
-    avatar: 'https://example.com/avatar.jpg'
+    avatar: 'https://example.com/avatar.jpg',
   };
 
   it('displays user information correctly', () => {
@@ -273,7 +281,7 @@ describe('UserCard', () => {
 
 Custom hooks need testing too, and TypeScript helps ensure you're testing the right contract:
 
-```typescript
+```tsx
 // useCounter.ts
 import { useState, useCallback } from 'react';
 
@@ -297,7 +305,7 @@ export const useCounter = (initialValue = 0): UseCounterReturn => {
 
 Testing hooks with React Testing Library's `renderHook`:
 
-```typescript
+```tsx
 // useCounter.test.ts
 import { renderHook, act } from '@testing-library/react';
 import { useCounter } from './useCounter';
@@ -351,7 +359,7 @@ Mocking in TypeScript requires extra care to maintain type safety. Here are patt
 
 ### Mocking External Dependencies
 
-```typescript
+```tsx
 // api.ts
 export interface ApiResponse<T> {
   data: T;
@@ -364,7 +372,7 @@ export const fetchUser = async (id: string): Promise<ApiResponse<User>> => {
 };
 ```
 
-```typescript
+```tsx
 // UserProfile.test.tsx
 import { vi } from 'vitest';
 import { fetchUser } from '../api';
@@ -386,7 +394,7 @@ describe('UserProfile', () => {
     const mockResponse: ApiResponse<User> = {
       data: { id: '1', name: 'Jane Doe', email: 'jane@example.com' },
       status: 200,
-      message: 'Success'
+      message: 'Success',
     };
 
     mockFetchUser.mockResolvedValue(mockResponse);
@@ -416,7 +424,7 @@ describe('UserProfile', () => {
 
 For complex objects, create type-safe factories:
 
-```typescript
+```tsx
 // test-utils.ts
 export const createMockUser = (overrides: Partial<User> = {}): User => ({
   id: '1',
@@ -432,7 +440,7 @@ export const createMockApiResponse = <T>(data: T): ApiResponse<T> => ({
 });
 ```
 
-```typescript
+```tsx
 // Usage in tests
 const mockUser = createMockUser({ name: 'Alice' });
 const mockResponse = createMockApiResponse(mockUser);
@@ -442,7 +450,7 @@ const mockResponse = createMockApiResponse(mockUser);
 
 TypeScript helps catch timing issues and async behavior problems:
 
-```typescript
+```tsx
 // AsyncUserList.tsx
 interface AsyncUserListProps {
   onUserSelect: (user: User) => void;
@@ -455,11 +463,11 @@ export const AsyncUserList: React.FC<AsyncUserListProps> = ({ onUserSelect }) =>
 
   useEffect(() => {
     fetchUsers()
-      .then(response => {
+      .then((response) => {
         setUsers(response.data);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err.message);
         setLoading(false);
       });
@@ -470,11 +478,9 @@ export const AsyncUserList: React.FC<AsyncUserListProps> = ({ onUserSelect }) =>
 
   return (
     <ul>
-      {users.map(user => (
+      {users.map((user) => (
         <li key={user.id}>
-          <button onClick={() => onUserSelect(user)}>
-            {user.name}
-          </button>
+          <button onClick={() => onUserSelect(user)}>{user.name}</button>
         </li>
       ))}
     </ul>
@@ -482,7 +488,7 @@ export const AsyncUserList: React.FC<AsyncUserListProps> = ({ onUserSelect }) =>
 };
 ```
 
-```typescript
+```tsx
 // AsyncUserList.test.tsx
 import { waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 
@@ -535,7 +541,7 @@ describe('AsyncUserList', () => {
 
 ### Avoiding `any` in Tests
 
-```typescript
+```tsx
 // ❌ Loses type safety
 const mockProps: any = { user: mockUser, onEdit: vi.fn() };
 
@@ -551,7 +557,7 @@ const mockProps: Partial<UserCardProps> = { user: mockUser };
 
 ### Testing Error Boundaries
 
-```typescript
+```tsx
 // ErrorBoundary test
 it('catches and displays errors', () => {
   const ThrowError = () => {
@@ -564,7 +570,7 @@ it('catches and displays errors', () => {
   render(
     <ErrorBoundary>
       <ThrowError />
-    </ErrorBoundary>
+    </ErrorBoundary>,
   );
 
   expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
@@ -575,13 +581,11 @@ it('catches and displays errors', () => {
 
 ### Testing Context Providers
 
-```typescript
+```tsx
 // Custom render with context
 const renderWithUserContext = (ui: React.ReactElement, user: User) => {
   return render(
-    <UserContext.Provider value={{ user, setUser: vi.fn() }}>
-      {ui}
-    </UserContext.Provider>
+    <UserContext.Provider value={{ user, setUser: vi.fn() }}>{ui}</UserContext.Provider>,
   );
 };
 
@@ -598,7 +602,7 @@ it('displays user name from context', () => {
 
 While not strictly about TypeScript, testing performance-sensitive components requires type-aware approaches:
 
-```typescript
+```tsx
 // MemoizedExpensiveComponent.test.tsx
 import { render } from '@testing-library/react';
 import { MemoizedExpensiveComponent } from './MemoizedExpensiveComponent';
@@ -608,21 +612,13 @@ describe('MemoizedExpensiveComponent', () => {
     const expensiveCalculation = vi.fn().mockReturnValue('calculated');
 
     const { rerender } = render(
-      <MemoizedExpensiveComponent
-        data={[1, 2, 3]}
-        calculate={expensiveCalculation}
-      />
+      <MemoizedExpensiveComponent data={[1, 2, 3]} calculate={expensiveCalculation} />,
     );
 
     expect(expensiveCalculation).toHaveBeenCalledOnce();
 
     // Re-render with same props
-    rerender(
-      <MemoizedExpensiveComponent
-        data={[1, 2, 3]}
-        calculate={expensiveCalculation}
-      />
-    );
+    rerender(<MemoizedExpensiveComponent data={[1, 2, 3]} calculate={expensiveCalculation} />);
 
     // Should not call expensive calculation again
     expect(expensiveCalculation).toHaveBeenCalledOnce();

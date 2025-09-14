@@ -21,7 +21,7 @@ Performance budgets are measurable limits on performance-impacting resources. Th
 
 Here's how different types serve different purposes:
 
-```typescript
+```tsx
 // Example performance budget configuration
 interface PerformanceBudget {
   // Resource budgets - what you ship
@@ -58,7 +58,7 @@ interface PerformanceBudget {
 
 Your budgets should reflect real user constraints, not aspirational thinking. Here's how to set evidence-based limits:
 
-```typescript
+```tsx
 // Analyze your users' devices and connections
 const userAnalytics = {
   // Based on your actual user data
@@ -102,7 +102,7 @@ console.log(budget3G); // { criticalPath: 300KB, totalPage: 1MB }
 
 Don't just set app-wide budgets—allocate performance budgets to specific features and components:
 
-```typescript
+```tsx
 // Feature-based budget allocation
 const featureBudgets = {
   // Critical path features
@@ -127,7 +127,7 @@ const featureBudgets = {
 // React component budget decorator
 function withBudget<T extends React.ComponentType<any>>(
   Component: T,
-  budget: { renderTime: number; memoryUsage: number }
+  budget: { renderTime: number; memoryUsage: number },
 ): T {
   const BudgetedComponent = (props: any) => {
     const startTime = performance.now();
@@ -141,11 +141,15 @@ function withBudget<T extends React.ComponentType<any>>(
       const memoryDelta = endMemory - startMemory;
 
       if (renderTime > budget.renderTime) {
-        console.warn(`Component exceeded render time budget: ${renderTime}ms > ${budget.renderTime}ms`);
+        console.warn(
+          `Component exceeded render time budget: ${renderTime}ms > ${budget.renderTime}ms`,
+        );
       }
 
       if (memoryDelta > budget.memoryUsage) {
-        console.warn(`Component exceeded memory budget: ${memoryDelta} bytes > ${budget.memoryUsage} bytes`);
+        console.warn(
+          `Component exceeded memory budget: ${memoryDelta} bytes > ${budget.memoryUsage} bytes`,
+        );
       }
     });
 
@@ -196,7 +200,7 @@ module.exports = {
 
 Create a tool that runs in your CI/CD pipeline:
 
-```typescript
+```tsx
 // scripts/check-budgets.ts
 interface BudgetCheck {
   name: string;
@@ -473,7 +477,7 @@ module.exports = {
 
 ### Real User Monitoring (RUM) Setup
 
-```typescript
+```tsx
 // utils/performance-monitoring.ts
 class PerformanceMonitor {
   private budgets: PerformanceBudget;
@@ -640,7 +644,7 @@ const performanceMonitor = new PerformanceMonitor({
 
 ### Slack Integration for Budget Violations
 
-```typescript
+```tsx
 // utils/budget-alerts.ts
 class BudgetAlertSystem {
   private webhookUrl: string;
@@ -703,7 +707,7 @@ class BudgetAlertSystem {
 
 ### Pitfall: Setting Unrealistic Budgets
 
-```typescript
+```tsx
 // ❌ Bad: Aspirational budgets that are impossible to meet
 const unrealisticBudgets = {
   resources: {
@@ -727,7 +731,7 @@ const realisticBudgets = {
 
 ### Pitfall: Ignoring Budget Violations
 
-```typescript
+```tsx
 // ❌ Bad: Disabling budget checks when they fail
 // webpack.config.js
 module.exports = {

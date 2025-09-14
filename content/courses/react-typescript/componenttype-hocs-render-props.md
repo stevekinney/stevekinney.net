@@ -15,7 +15,7 @@ Think of `ComponentType` as TypeScript's way of saying "this could be any valid 
 
 Before we dive into complex patterns, let's understand what `ComponentType` actually represents:
 
-```typescript
+```tsx
 // From React's type definitions
 type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;
 
@@ -26,13 +26,11 @@ type ComponentClass<P = {}> = new (props: P) => Component<P, any>;
 
 In practical terms, `ComponentType<Props>` represents any component that accepts `Props` and renders React elements. This is incredibly useful when you want to write functions that work with any component type:
 
-```typescript
+```tsx
 import { ComponentType } from 'react';
 
 // ✅ This accepts any component that takes ButtonProps
-function enhanceButton<P extends ButtonProps>(
-  Component: ComponentType<P>
-): ComponentType<P> {
+function enhanceButton<P extends ButtonProps>(Component: ComponentType<P>): ComponentType<P> {
   return function EnhancedButton(props: P) {
     return (
       <div className="button-wrapper">
@@ -55,9 +53,9 @@ class MyClassButton extends React.Component<ButtonProps> {
 }
 
 // Works with forwardRef components
-const MyForwardRefButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (props, ref) => <button ref={ref} {...props} />
-);
+const MyForwardRefButton = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => (
+  <button ref={ref} {...props} />
+));
 
 // All of these work seamlessly
 const EnhancedFunctionButton = enhanceButton(MyButton);
@@ -71,7 +69,7 @@ This flexibility is what makes `ComponentType` the backbone of advanced composit
 
 HOCs are functions that take a component and return a new component with enhanced functionality. `ComponentType` makes it possible to write HOCs that work with any kind of component while preserving type safety:
 
-```typescript
+```tsx
 interface WithLoadingProps {
   isLoading?: boolean;
   loadingText?: string;
@@ -79,7 +77,7 @@ interface WithLoadingProps {
 
 // Generic HOC that adds loading functionality to any component
 function withLoading<P extends {}>(
-  WrappedComponent: ComponentType<P>
+  WrappedComponent: ComponentType<P>,
 ): ComponentType<P & WithLoadingProps> {
   return function WithLoadingComponent(props: P & WithLoadingProps) {
     const { isLoading = false, loadingText = 'Loading...', ...restProps } = props;
@@ -113,14 +111,14 @@ const LoadingUserProfile = withLoading(UserProfile);
   showAvatar={true}
   isLoading={false}
   loadingText="Fetching user data..."
-/>
+/>;
 ```
 
 ### Advanced HOC Pattern: Injecting Props
 
 Sometimes you want your HOC to inject props that the wrapped component expects, but consumers shouldn't have to provide:
 
-```typescript
+```tsx
 interface WithUserProps {
   user: User | null;
   isLoadingUser: boolean;
@@ -133,7 +131,7 @@ interface UserContextValue {
 
 // HOC that injects user context
 function withUser<P extends WithUserProps>(
-  WrappedComponent: ComponentType<P>
+  WrappedComponent: ComponentType<P>,
 ): ComponentType<Omit<P, keyof WithUserProps>> {
   return function WithUserComponent(props: Omit<P, keyof WithUserProps>) {
     const { user, isLoading } = useContext(UserContext);
@@ -142,7 +140,7 @@ function withUser<P extends WithUserProps>(
     const enhancedProps = {
       ...props,
       user,
-      isLoadingUser: isLoading
+      isLoadingUser: isLoading,
     } as P;
 
     return <WrappedComponent {...enhancedProps} />;
@@ -169,7 +167,7 @@ const Dashboard = ({ title, user, isLoadingUser }: DashboardProps) => {
 const ConnectedDashboard = withUser(Dashboard);
 
 // Consumers only provide title - user props are injected
-<ConnectedDashboard title="My Dashboard" />
+<ConnectedDashboard title="My Dashboard" />;
 ```
 
 The key insight here is using `Omit<P, keyof WithUserProps>` to remove the injected props from the consumer-facing interface while ensuring the wrapped component receives everything it expects.
@@ -178,7 +176,7 @@ The key insight here is using `Omit<P, keyof WithUserProps>` to remove the injec
 
 Render props flip the control—instead of wrapping a component, you provide a function that gets called with data and returns JSX. `ComponentType` helps when you want to support both render prop patterns and direct component usage:
 
-```typescript
+```tsx
 interface DataFetcherState<T> {
   data: T | null;
   loading: boolean;
@@ -198,11 +196,11 @@ function DataFetcher<T>({ url, children, component: Component, render }: DataFet
   const [state, setState] = useState<Omit<DataFetcherState<T>, 'refetch'>>({
     data: null,
     loading: true,
-    error: null
+    error: null,
   });
 
   const fetchData = useCallback(async () => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
+    setState((prev) => ({ ...prev, loading: true, error: null }));
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch');
@@ -212,7 +210,7 @@ function DataFetcher<T>({ url, children, component: Component, render }: DataFet
       setState({
         data: null,
         loading: false,
-        error: err instanceof Error ? err.message : 'Unknown error'
+        error: err instanceof Error ? err.message : 'Unknown error',
       });
     }
   }, [url]);
@@ -223,7 +221,7 @@ function DataFetcher<T>({ url, children, component: Component, render }: DataFet
 
   const stateWithRefetch: DataFetcherState<T> = {
     ...state,
-    refetch: fetchData
+    refetch: fetchData,
   };
 
   // Support multiple render patterns
@@ -241,11 +239,13 @@ function DataFetcher<T>({ url, children, component: Component, render }: DataFet
     if (error) return <div>Error: {error}</div>;
     return (
       <ul>
-        {users?.map(user => <li key={user.id}>{user.name}</li>)}
+        {users?.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
       </ul>
     );
   }}
-</DataFetcher>
+</DataFetcher>;
 
 // Usage with component prop
 const UsersList = ({ data: users, loading, error }: DataFetcherState<User[]>) => {
@@ -253,12 +253,14 @@ const UsersList = ({ data: users, loading, error }: DataFetcherState<User[]>) =>
   if (error) return <div>Error: {error}</div>;
   return (
     <ul>
-      {users?.map(user => <li key={user.id}>{user.name}</li>)}
+      {users?.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
     </ul>
   );
 };
 
-<DataFetcher<User[]> url="/api/users" component={UsersList} />
+<DataFetcher<User[]> url="/api/users" component={UsersList} />;
 ```
 
 This pattern gives consumers maximum flexibility—they can use whichever render pattern feels most natural for their use case.
@@ -267,7 +269,7 @@ This pattern gives consumers maximum flexibility—they can use whichever render
 
 Sometimes you want to create components dynamically based on configuration. `ComponentType` makes this possible while maintaining type safety:
 
-```typescript
+```tsx
 interface BaseComponentProps {
   className?: string;
   children?: React.ReactNode;
@@ -326,7 +328,7 @@ const CardButton = createFactory({
 
 One of the most powerful uses of `ComponentType` is building polymorphic components—components that can render as different HTML elements or other components while maintaining type safety:
 
-```typescript
+```tsx
 interface PolymorphicProps<C extends ElementType> {
   as?: C;
   children?: React.ReactNode;
@@ -369,7 +371,7 @@ The magic here is that TypeScript automatically infers the correct props based o
 
 Let's put it all together with a practical example—a flexible modal system that supports multiple render patterns:
 
-```typescript
+```tsx
 interface ModalState {
   isOpen: boolean;
   open: () => void;
@@ -394,7 +396,7 @@ function Modal({
   render,
   initialOpen = false,
   closeOnOverlayClick = true,
-  closeOnEscape = true
+  closeOnEscape = true,
 }: ModalProps) {
   const [isOpen, setIsOpen] = useState(initialOpen);
 
@@ -417,23 +419,20 @@ function Modal({
   }, [isOpen, close, closeOnEscape]);
 
   // Render using the preferred pattern
-  const content = Component ? <Component {...state} />
-                 : render ? render(state)
-                 : children ? children(state)
-                 : null;
+  const content = Component ? (
+    <Component {...state} />
+  ) : render ? (
+    render(state)
+  ) : children ? (
+    children(state)
+  ) : null;
 
   return (
     <>
       {content}
       {isOpen && (
-        <div
-          className="modal-overlay"
-          onClick={closeOnOverlayClick ? close : undefined}
-        >
-          <div
-            className="modal-content"
-            onClick={e => e.stopPropagation()}
-          >
+        <div className="modal-overlay" onClick={closeOnOverlayClick ? close : undefined}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button onClick={close} className="modal-close">
               ×
             </button>
@@ -474,7 +473,11 @@ const ConfirmationModal = ({ isOpen, open, close }: ModalState) => (
       <div>
         <h3>Are you sure?</h3>
         <button onClick={close}>Cancel</button>
-        <button onClick={() => { /* delete logic */ close(); }}>
+        <button
+          onClick={() => {
+            /* delete logic */ close();
+          }}
+        >
           Confirm Delete
         </button>
       </div>
@@ -482,7 +485,7 @@ const ConfirmationModal = ({ isOpen, open, close }: ModalState) => (
   </>
 );
 
-<Modal component={ConfirmationModal} closeOnOverlayClick={false} />
+<Modal component={ConfirmationModal} closeOnOverlayClick={false} />;
 ```
 
 ## Performance Considerations
@@ -491,7 +494,7 @@ When using these patterns, there are a few performance considerations to keep in
 
 ### Memoization with ComponentType
 
-```typescript
+```tsx
 // ✅ Memoize components created by HOCs
 const MemoizedWithLoading = React.memo(withLoading(ExpensiveComponent));
 
@@ -501,16 +504,14 @@ function UserList() {
     if (loading) return <LoadingSpinner />;
     return (
       <div>
-        {users?.map(user => <UserCard key={user.id} user={user} />)}
+        {users?.map((user) => (
+          <UserCard key={user.id} user={user} />
+        ))}
       </div>
     );
   }, []);
 
-  return (
-    <DataFetcher<User[]> url="/api/users">
-      {renderUsers}
-    </DataFetcher>
-  );
+  return <DataFetcher<User[]> url="/api/users">{renderUsers}</DataFetcher>;
 }
 
 // ✅ Extract components when possible
@@ -518,31 +519,31 @@ const UsersRenderer = ({ data: users, loading }: DataFetcherState<User[]>) => {
   if (loading) return <LoadingSpinner />;
   return (
     <div>
-      {users?.map(user => <UserCard key={user.id} user={user} />)}
+      {users?.map((user) => (
+        <UserCard key={user.id} user={user} />
+      ))}
     </div>
   );
 };
 
 // More performant than inline render prop
-<DataFetcher<User[]> url="/api/users" component={UsersRenderer} />
+<DataFetcher<User[]> url="/api/users" component={UsersRenderer} />;
 ```
 
 ### Avoiding Unnecessary Re-renders
 
-```typescript
+```tsx
 // ❌ Creates new function on every render
 <Modal>
-  {({ isOpen, open, close }) => (
-    <SomeExpensiveComponent onOpen={open} onClose={close} />
-  )}
-</Modal>
+  {({ isOpen, open, close }) => <SomeExpensiveComponent onOpen={open} onClose={close} />}
+</Modal>;
 
 // ✅ Stable component reference
 const ModalContent = React.memo(({ isOpen, open, close }: ModalState) => (
   <SomeExpensiveComponent onOpen={open} onClose={close} />
 ));
 
-<Modal component={ModalContent} />
+<Modal component={ModalContent} />;
 ```
 
 ## When to Use Each Pattern
@@ -579,7 +580,7 @@ Here's a practical guide for choosing the right approach:
 
 ### Generic Constraints Matter
 
-```typescript
+```tsx
 // ❌ Too permissive
 function badHOC<T>(Component: ComponentType<T>) {
   // TypeScript can't guarantee T has object properties
@@ -593,20 +594,18 @@ function goodHOC<T extends {}>(Component: ComponentType<T>) {
 
 ### Ref Forwarding with ComponentType
 
-```typescript
+```tsx
 // ✅ Handle ref forwarding properly
 function withRefForwarding<T extends {}, R = any>(
-  WrappedComponent: ComponentType<T & { ref?: React.ForwardedRef<R> }>
+  WrappedComponent: ComponentType<T & { ref?: React.ForwardedRef<R> }>,
 ) {
-  return React.forwardRef<R, T>((props, ref) => (
-    <WrappedComponent {...props} ref={ref} />
-  ));
+  return React.forwardRef<R, T>((props, ref) => <WrappedComponent {...props} ref={ref} />);
 }
 ```
 
 ### Type Assertions in HOCs
 
-```typescript
+```tsx
 // Sometimes necessary, but use judiciously
 function withInjectedProps<T extends {}>(WrappedComponent: ComponentType<T & InjectedProps>) {
   return function EnhancedComponent(props: Omit<T, keyof InjectedProps>) {

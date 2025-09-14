@@ -15,7 +15,7 @@ Real User Monitoring (RUM) bridges the gap between synthetic testing and actual 
 
 RUM collects performance metrics from actual user sessions, providing insights into how your React app performs in the wild:
 
-```typescript
+```tsx
 // Real User Monitoring architecture
 interface RUMData {
   // Core Web Vitals - Google's user experience metrics
@@ -64,7 +64,7 @@ Unlike synthetic monitoring that runs in controlled environments, RUM captures t
 
 ### Web Vitals Library Integration
 
-```typescript
+```tsx
 // rum/web-vitals-collector.ts
 import { getLCP, getFID, getCLS, getFCP, getTTFB } from 'web-vitals';
 
@@ -256,7 +256,7 @@ const webVitalsCollector = new WebVitalsCollector({
 
 ### React-Specific Performance Monitoring
 
-```typescript
+```tsx
 // rum/react-performance-monitor.ts
 import { Profiler, ProfilerOnRenderCallback } from 'react';
 
@@ -275,11 +275,13 @@ class ReactPerformanceMonitor {
   private slowRenders: ReactPerformanceData[] = [];
   private componentCounts = new Map<string, number>();
 
-  constructor(private config: {
-    slowRenderThreshold?: number;
-    maxDataPoints?: number;
-    reportingEndpoint?: string;
-  } = {}) {
+  constructor(
+    private config: {
+      slowRenderThreshold?: number;
+      maxDataPoints?: number;
+      reportingEndpoint?: string;
+    } = {},
+  ) {
     this.config.slowRenderThreshold = config.slowRenderThreshold || 16; // 60fps
     this.config.maxDataPoints = config.maxDataPoints || 1000;
   }
@@ -309,7 +311,7 @@ class ReactPerformanceMonitor {
 
         if (process.env.NODE_ENV === 'development') {
           console.warn(
-            `🐌 Slow render detected in ${componentName}: ${actualDuration.toFixed(2)}ms`
+            `🐌 Slow render detected in ${componentName}: ${actualDuration.toFixed(2)}ms`,
           );
         }
       }
@@ -335,14 +337,15 @@ class ReactPerformanceMonitor {
     const totalRenders = this.renderData.length;
     const slowRenderCount = this.slowRenders.length;
 
-    const avgRenderTime = totalRenders > 0
-      ? this.renderData.reduce((sum, data) => sum + data.actualDuration, 0) / totalRenders
-      : 0;
+    const avgRenderTime =
+      totalRenders > 0
+        ? this.renderData.reduce((sum, data) => sum + data.actualDuration, 0) / totalRenders
+        : 0;
 
     // Analyze slowest components
     const componentStats = new Map<string, { totalTime: number; count: number }>();
 
-    this.renderData.forEach(data => {
+    this.renderData.forEach((data) => {
       const existing = componentStats.get(data.componentName) || { totalTime: 0, count: 0 };
       componentStats.set(data.componentName, {
         totalTime: existing.totalTime + data.actualDuration,
@@ -363,11 +366,15 @@ class ReactPerformanceMonitor {
     const recommendations: string[] = [];
 
     if (slowRenderCount / totalRenders > 0.1) {
-      recommendations.push('High percentage of slow renders detected - review component optimization');
+      recommendations.push(
+        'High percentage of slow renders detected - review component optimization',
+      );
     }
 
     if (slowestComponents.length > 0 && slowestComponents[0].avgTime > 50) {
-      recommendations.push(`Consider optimizing ${slowestComponents[0].component} - average render time: ${slowestComponents[0].avgTime.toFixed(2)}ms`);
+      recommendations.push(
+        `Consider optimizing ${slowestComponents[0].component} - average render time: ${slowestComponents[0].avgTime.toFixed(2)}ms`,
+      );
     }
 
     const frequentReRenders = Array.from(this.componentCounts.entries())
@@ -375,7 +382,9 @@ class ReactPerformanceMonitor {
       .map(([component]) => component);
 
     if (frequentReRenders.length > 0) {
-      recommendations.push(`These components re-render frequently: ${frequentReRenders.join(', ')}`);
+      recommendations.push(
+        `These components re-render frequently: ${frequentReRenders.join(', ')}`,
+      );
     }
 
     return {
@@ -402,10 +411,7 @@ class ReactPerformanceMonitor {
 
     try {
       if (navigator.sendBeacon) {
-        navigator.sendBeacon(
-          this.config.reportingEndpoint,
-          JSON.stringify(payload)
-        );
+        navigator.sendBeacon(this.config.reportingEndpoint, JSON.stringify(payload));
       } else {
         fetch(this.config.reportingEndpoint, {
           method: 'POST',
@@ -429,7 +435,7 @@ const reactPerformanceMonitor = new ReactPerformanceMonitor({
 // HOC for automatic profiling
 function withPerformanceMonitoring<T extends {}>(
   Component: React.ComponentType<T>,
-  componentName?: string
+  componentName?: string,
 ): React.ComponentType<T> {
   const name = componentName || Component.displayName || Component.name || 'UnknownComponent';
 
@@ -453,7 +459,7 @@ function usePerformanceMonitoring(componentName: string) {
 
 ## Error and Performance Correlation
 
-```typescript
+```tsx
 // rum/error-performance-correlator.ts
 interface PerformanceError {
   error: Error;
@@ -506,17 +512,26 @@ class ErrorPerformanceCorrelator {
     const correlations: string[] = [];
 
     // Check for slow render correlation
-    if (performanceData.renderTime && performanceData.renderTime > this.performanceThresholds.slowRender) {
+    if (
+      performanceData.renderTime &&
+      performanceData.renderTime > this.performanceThresholds.slowRender
+    ) {
       correlations.push(`slow-render-${performanceData.renderTime}ms`);
     }
 
     // Check for high memory correlation
-    if (performanceData.memoryUsage && performanceData.memoryUsage > this.performanceThresholds.highMemory) {
+    if (
+      performanceData.memoryUsage &&
+      performanceData.memoryUsage > this.performanceThresholds.highMemory
+    ) {
       correlations.push(`high-memory-${Math.round(performanceData.memoryUsage / 1024 / 1024)}MB`);
     }
 
     // Check for slow network correlation
-    if (performanceData.networkSpeed && this.performanceThresholds.slowNetwork.includes(performanceData.networkSpeed)) {
+    if (
+      performanceData.networkSpeed &&
+      this.performanceThresholds.slowNetwork.includes(performanceData.networkSpeed)
+    ) {
       correlations.push(`slow-network-${performanceData.networkSpeed}`);
     }
 
@@ -547,14 +562,14 @@ class ErrorPerformanceCorrelator {
     performanceCorrelatedErrors: number;
     topCorrelations: Array<{ correlation: string; count: number }>;
   } {
-    const performanceCorrelatedErrors = this.errors.filter(error =>
-      (error as any).performanceCorrelations?.length > 0
+    const performanceCorrelatedErrors = this.errors.filter(
+      (error) => (error as any).performanceCorrelations?.length > 0,
     );
 
     // Count correlation patterns
     const correlationCounts = new Map<string, number>();
 
-    performanceCorrelatedErrors.forEach(error => {
+    performanceCorrelatedErrors.forEach((error) => {
       const correlations = (error as any).performanceCorrelations || [];
       correlations.forEach((correlation: string) => {
         const count = correlationCounts.get(correlation) || 0;
@@ -624,7 +639,7 @@ class PerformanceAwareErrorBoundary extends React.Component<
 
 ## Performance Alerting System
 
-```typescript
+```tsx
 // rum/performance-alerting.ts
 interface PerformanceAlert {
   type: 'web-vital' | 'react-performance' | 'error-spike' | 'memory-leak';
@@ -818,7 +833,7 @@ if (process.env.NODE_ENV === 'development') {
 
 ## Analytics Integration
 
-```typescript
+```tsx
 // rum/analytics-integration.ts
 interface AnalyticsEvent {
   category: 'Performance';
@@ -979,7 +994,7 @@ const performanceAnalytics = new PerformanceAnalytics({
 
 ## Dashboard and Reporting
 
-```typescript
+```tsx
 // rum/performance-dashboard.ts
 interface DashboardData {
   webVitals: {
@@ -1021,7 +1036,7 @@ class PerformanceDashboard {
     const reactScore = this.calculateReactScore(data.reactMetrics);
     const errorScore = this.calculateErrorScore(data.errors);
 
-    return Math.round((webVitalsScore * 0.5) + (reactScore * 0.3) + (errorScore * 0.2));
+    return Math.round(webVitalsScore * 0.5 + reactScore * 0.3 + errorScore * 0.2);
   }
 
   private calculateWebVitalsScore(vitals: DashboardData['webVitals']): number {
@@ -1035,11 +1050,11 @@ class PerformanceDashboard {
 
   private calculateReactScore(reactMetrics: DashboardData['reactMetrics']): number {
     // Score based on React performance
-    const avgRenderScore = reactMetrics.averageRenderTime <= 16 ? 100 :
-                          reactMetrics.averageRenderTime <= 50 ? 70 : 40;
+    const avgRenderScore =
+      reactMetrics.averageRenderTime <= 16 ? 100 : reactMetrics.averageRenderTime <= 50 ? 70 : 40;
 
-    const slowRenderScore = reactMetrics.slowRenders === 0 ? 100 :
-                           reactMetrics.slowRenders < 10 ? 80 : 50;
+    const slowRenderScore =
+      reactMetrics.slowRenders === 0 ? 100 : reactMetrics.slowRenders < 10 ? 80 : 50;
 
     return (avgRenderScore + slowRenderScore) / 2;
   }
@@ -1050,8 +1065,8 @@ class PerformanceDashboard {
     const errorRate = errors.performanceRelated / errors.total;
 
     if (errorRate < 0.01) return 100; // < 1%
-    if (errorRate < 0.05) return 80;  // < 5%
-    if (errorRate < 0.1) return 60;   // < 10%
+    if (errorRate < 0.05) return 80; // < 5%
+    if (errorRate < 0.1) return 60; // < 10%
     return 40;
   }
 
@@ -1060,29 +1075,41 @@ class PerformanceDashboard {
 
     // Web Vitals recommendations
     if (data.webVitals.lcp.p75 > 2500) {
-      recommendations.push('Optimize Largest Contentful Paint - consider image optimization, preloading critical resources');
+      recommendations.push(
+        'Optimize Largest Contentful Paint - consider image optimization, preloading critical resources',
+      );
     }
 
     if (data.webVitals.cls.p75 > 0.1) {
-      recommendations.push('Reduce Cumulative Layout Shift - ensure images have dimensions, avoid dynamic content insertion');
+      recommendations.push(
+        'Reduce Cumulative Layout Shift - ensure images have dimensions, avoid dynamic content insertion',
+      );
     }
 
     if (data.webVitals.fid.p75 > 100) {
-      recommendations.push('Improve First Input Delay - reduce JavaScript execution time, use code splitting');
+      recommendations.push(
+        'Improve First Input Delay - reduce JavaScript execution time, use code splitting',
+      );
     }
 
     // React recommendations
     if (data.reactMetrics.averageRenderTime > 16) {
-      recommendations.push('Optimize React render performance - review component memoization and state management');
+      recommendations.push(
+        'Optimize React render performance - review component memoization and state management',
+      );
     }
 
     if (data.reactMetrics.slowRenders > 50) {
-      recommendations.push(`High number of slow renders (${data.reactMetrics.slowRenders}) - investigate top slow components`);
+      recommendations.push(
+        `High number of slow renders (${data.reactMetrics.slowRenders}) - investigate top slow components`,
+      );
     }
 
     // Error recommendations
     if (data.errors.performanceRelated / data.errors.total > 0.05) {
-      recommendations.push('High rate of performance-related errors - review error-performance correlations');
+      recommendations.push(
+        'High rate of performance-related errors - review error-performance correlations',
+      );
     }
 
     return recommendations;

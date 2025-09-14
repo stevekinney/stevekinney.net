@@ -15,7 +15,7 @@ React 18's streaming capabilities transform slow SSR from a liability into a com
 
 Traditional SSR is synchronous—the server must complete the entire page before sending any HTML:
 
-```typescript
+```tsx
 // Traditional SSR - All or nothing approach
 app.get('/', async (req, res) => {
   // Server waits for ALL data before rendering
@@ -26,7 +26,7 @@ app.get('/', async (req, res) => {
 
   // Only now can we render and send HTML
   const html = renderToString(
-    <App user={user} posts={posts} comments={comments} recommendations={recommendations} />
+    <App user={user} posts={posts} comments={comments} recommendations={recommendations} />,
   );
 
   res.send(`
@@ -45,29 +45,26 @@ app.get('/', async (req, res) => {
 
 Streaming SSR breaks this bottleneck by sending HTML incrementally:
 
-```typescript
+```tsx
 // Streaming SSR - Progressive HTML delivery
 import { renderToPipeableStream } from 'react-dom/server';
 
 app.get('/', (req, res) => {
   // Start streaming immediately
-  const { pipe } = renderToPipeableStream(
-    <App />,
-    {
-      bootstrapScripts: ['/client.js'],
-      onShellReady() {
-        // Send initial HTML shell immediately
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/html');
-        pipe(res);
-      },
-      onError(error) {
-        console.error('Streaming error:', error);
-        res.statusCode = 500;
-        res.end('Server Error');
-      },
-    }
-  );
+  const { pipe } = renderToPipeableStream(<App />, {
+    bootstrapScripts: ['/client.js'],
+    onShellReady() {
+      // Send initial HTML shell immediately
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/html');
+      pipe(res);
+    },
+    onError(error) {
+      console.error('Streaming error:', error);
+      res.statusCode = 500;
+      res.end('Server Error');
+    },
+  });
 });
 
 // Result: Sub-100ms TTFB, immediate visual feedback
@@ -77,7 +74,7 @@ app.get('/', (req, res) => {
 
 ### Basic Streaming Setup
 
-```typescript
+```tsx
 // server/streaming-ssr.ts
 import { createReadableStream } from 'stream/web';
 import { renderToPipeableStream } from 'react-dom/server';
@@ -180,7 +177,7 @@ app.get('*', (req, res) => {
       <Body>
         <App url={req.url} />
       </Body>
-    </Html>
+    </Html>,
   );
 
   // Convert web stream to Node stream for Express
@@ -191,7 +188,7 @@ app.get('*', (req, res) => {
 
 ### Suspense Boundaries for Streaming
 
-```typescript
+```tsx
 // components/StreamingApp.tsx
 import { Suspense, lazy } from 'react';
 
@@ -222,7 +219,10 @@ function ProductRecommendationsSkeleton() {
         {Array.from({ length: 4 }, (_, i) => (
           <div key={i} className="product-skeleton">
             <div className="skeleton product-image" style={{ width: '100%', height: 200 }} />
-            <div className="skeleton product-title" style={{ width: '80%', height: 16, margin: '8px 0' }} />
+            <div
+              className="skeleton product-title"
+              style={{ width: '80%', height: 16, margin: '8px 0' }}
+            />
             <div className="skeleton product-price" style={{ width: '40%', height: 20 }} />
           </div>
         ))}
@@ -275,7 +275,7 @@ export function StreamingApp() {
 
 ### Data Fetching for Streaming
 
-```typescript
+```tsx
 // utils/streaming-data.ts
 import { Suspense } from 'react';
 
@@ -286,12 +286,9 @@ const streamingCache = new Map<string, Promise<any>>();
  * Suspend component rendering until data is available
  * Integrates with React's streaming SSR
  */
-function suspendUntilData<T>(
-  key: string,
-  fetcher: () => Promise<T>
-): T {
+function suspendUntilData<T>(key: string, fetcher: () => Promise<T>): T {
   if (!streamingCache.has(key)) {
-    const promise = fetcher().catch(error => {
+    const promise = fetcher().catch((error) => {
       // Remove failed promise from cache so it can be retried
       streamingCache.delete(key);
       throw error;
@@ -338,7 +335,7 @@ function ProductRecommendations() {
   // Suspend until recommendations are loaded
   const recommendations = suspendUntilData('product-recommendations', async () => {
     // Simulate slow recommendation algorithm
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const response = await fetch('/api/recommendations');
     if (!response.ok) throw new Error('Failed to fetch recommendations');
@@ -360,7 +357,7 @@ function ProductRecommendations() {
 // Advanced: Streaming with error boundaries
 function StreamingErrorBoundary({
   children,
-  fallback
+  fallback,
 }: {
   children: React.ReactNode;
   fallback: React.ComponentType<{ error: Error }>;
@@ -382,9 +379,7 @@ function StreamingErrorBoundary({
         }
       }}
     >
-      <Suspense fallback={<div>Loading...</div>}>
-        {children}
-      </Suspense>
+      <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
     </ErrorBoundary>
   );
 }
@@ -394,13 +389,13 @@ function StreamingErrorBoundary({
 
 ### Priority-Based Streaming
 
-```typescript
+```tsx
 // Priority-based streaming for optimal user experience
 interface StreamingPriority {
-  critical: React.ReactNode[];    // Above-the-fold content
-  important: React.ReactNode[];   // User-specific data
-  nice: React.ReactNode[];        // Recommendations, ads
-  background: React.ReactNode[];  // Analytics, tracking
+  critical: React.ReactNode[]; // Above-the-fold content
+  important: React.ReactNode[]; // User-specific data
+  nice: React.ReactNode[]; // Recommendations, ads
+  background: React.ReactNode[]; // Analytics, tracking
 }
 
 function PriorityStreamingApp({ content }: { content: StreamingPriority }) {
@@ -411,23 +406,17 @@ function PriorityStreamingApp({ content }: { content: StreamingPriority }) {
 
       {/* Priority 2: Important content - fast timeout */}
       <Suspense fallback={<ImportantContentSkeleton />}>
-        <StreamingBoundary timeout={500}>
-          {content.important}
-        </StreamingBoundary>
+        <StreamingBoundary timeout={500}>{content.important}</StreamingBoundary>
       </Suspense>
 
       {/* Priority 3: Nice-to-have - longer timeout */}
       <Suspense fallback={<NiceContentSkeleton />}>
-        <StreamingBoundary timeout={2000}>
-          {content.nice}
-        </StreamingBoundary>
+        <StreamingBoundary timeout={2000}>{content.nice}</StreamingBoundary>
       </Suspense>
 
       {/* Priority 4: Background - no timeout, fail silently */}
       <Suspense fallback={null}>
-        <StreamingBoundary timeout={Infinity}>
-          {content.background}
-        </StreamingBoundary>
+        <StreamingBoundary timeout={Infinity}>{content.background}</StreamingBoundary>
       </Suspense>
     </div>
   );
@@ -437,7 +426,7 @@ function PriorityStreamingApp({ content }: { content: StreamingPriority }) {
 function StreamingBoundary({
   children,
   timeout,
-  fallback = null
+  fallback = null,
 }: {
   children: React.ReactNode;
   timeout: number;
@@ -465,7 +454,7 @@ function StreamingBoundary({
 
 ### Streaming with Real-Time Updates
 
-```typescript
+```tsx
 // Combine streaming SSR with real-time updates
 function LiveStreamingApp() {
   return (
@@ -497,7 +486,7 @@ function LiveDataStream() {
 
     ws.onmessage = (event) => {
       const update = JSON.parse(event.data);
-      setData(current => ({ ...current, ...update }));
+      setData((current) => ({ ...current, ...update }));
     };
 
     return () => ws.close();
@@ -518,7 +507,7 @@ function LiveDataStream() {
 
 ## Progressive Hydration
 
-```typescript
+```tsx
 // Progressive hydration for streaming SSR
 class ProgressiveHydrator {
   private hydrated = new Set<string>();
@@ -527,11 +516,7 @@ class ProgressiveHydrator {
   /**
    * Hydrate component when it becomes visible
    */
-  hydrateOnVisible(
-    componentId: string,
-    Component: React.ComponentType<any>,
-    props: any
-  ) {
+  hydrateOnVisible(componentId: string, Component: React.ComponentType<any>, props: any) {
     if (this.hydrated.has(componentId)) return;
 
     const element = document.querySelector(`[data-component-id="${componentId}"]`);
@@ -547,7 +532,7 @@ class ProgressiveHydrator {
           }
         });
       },
-      { rootMargin: '50px' } // Start hydrating 50px before visible
+      { rootMargin: '50px' }, // Start hydrating 50px before visible
     );
 
     observer.observe(element);
@@ -561,7 +546,7 @@ class ProgressiveHydrator {
     componentId: string,
     Component: React.ComponentType<any>,
     props: any,
-    events = ['mouseenter', 'click', 'focus', 'touchstart']
+    events = ['mouseenter', 'click', 'focus', 'touchstart'],
   ) {
     if (this.hydrated.has(componentId)) return;
 
@@ -572,13 +557,13 @@ class ProgressiveHydrator {
       this.performHydration(componentId, Component, props, element as HTMLElement);
 
       // Remove event listeners
-      events.forEach(event => {
+      events.forEach((event) => {
         element.removeEventListener(event, hydrate);
       });
     };
 
     // Add event listeners
-    events.forEach(event => {
+    events.forEach((event) => {
       element.addEventListener(event, hydrate, { once: true, passive: true });
     });
   }
@@ -586,11 +571,7 @@ class ProgressiveHydrator {
   /**
    * Hydrate component immediately (high priority)
    */
-  hydrateImmediately(
-    componentId: string,
-    Component: React.ComponentType<any>,
-    props: any
-  ) {
+  hydrateImmediately(componentId: string, Component: React.ComponentType<any>, props: any) {
     if (this.hydrated.has(componentId)) return;
 
     const element = document.querySelector(`[data-component-id="${componentId}"]`);
@@ -601,7 +582,7 @@ class ProgressiveHydrator {
       () => {
         this.performHydration(componentId, Component, props, element as HTMLElement);
       },
-      { timeout: 1000 } // Fallback after 1 second
+      { timeout: 1000 }, // Fallback after 1 second
     );
   }
 
@@ -609,7 +590,7 @@ class ProgressiveHydrator {
     componentId: string,
     Component: React.ComponentType<any>,
     props: any,
-    element: HTMLElement
+    element: HTMLElement,
   ) {
     if (this.hydrated.has(componentId)) return;
 
@@ -682,7 +663,7 @@ hydrator.hydrateOnVisible('footer', Footer, footerProps);
 
 ### Streaming Performance Monitoring
 
-```typescript
+```tsx
 // Monitor streaming SSR performance
 class StreamingPerformanceMonitor {
   private metrics = {
@@ -796,7 +777,7 @@ class ServerStreamingMonitor {
 
 ### Cache-Friendly Streaming
 
-```typescript
+```tsx
 // Implement caching for streaming components
 class StreamingCache {
   private cache = new Map<
@@ -914,7 +895,7 @@ setInterval(() => {
 
 ### Streaming Error Recovery
 
-```typescript
+```tsx
 // Robust error handling for streaming SSR
 class StreamingErrorHandler {
   private errorCount = 0;
@@ -1004,7 +985,7 @@ class StreamingErrorHandler {
 
 ## Testing Streaming SSR
 
-```typescript
+```tsx
 // Testing utilities for streaming SSR
 class StreamingSSRTester {
   async testStreamingResponse(url: string): Promise<{
