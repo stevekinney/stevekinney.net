@@ -10,7 +10,7 @@ Let's head on over to `examples/accident-counter`.
 
 ## Setting Up Testing Library's Matchers
 
-In `examples/accident-counter/src/counter.test.jsx`, we can extend the methods provided by `expect` by pulling in `@testing-library/jest-dom`.
+In `examples/accident-counter/src/counter.test.jsx`, we can extend the methods provided by `expect` by pulling in `@testing-library/jest-dom/vitest`.
 
 ```jsx
 import { render, screen } from '@testing-library/react';
@@ -18,7 +18,7 @@ import userEvent from '@testing-library/user-event';
 
 import { Counter } from './counter';
 
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 ```
 
 This will call `expect.extend()`, which allows us to set up [customer matchers](custom-matchers.md). This will give us the following new methods on `expect`.
