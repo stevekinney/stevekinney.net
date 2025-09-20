@@ -3,7 +3,8 @@ title: Compound Tasks in Visual Studio Code
 description: >-
   Explore advanced task capabilities including watch modes, compound tasks, and
   task inputs for efficient development workflows
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-18T06:15:05-05:00'
 ---
 
 Compound tasks allow you to run multiple tasks in sequence. This is useful for orchestrating complex workflows.

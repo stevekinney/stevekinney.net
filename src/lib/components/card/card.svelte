@@ -24,7 +24,7 @@
     date,
     url,
     variant = 'default',
-    as = url ? 'a' : 'div',
+    as = 'div',
     children,
   }: CardBaseProps = $props();
 </script>

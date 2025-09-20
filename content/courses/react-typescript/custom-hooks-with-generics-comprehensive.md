@@ -1,10 +1,16 @@
 ---
 title: Custom Hooks with Generics
-description: Build reusable hooks with proper generic constraints—type-safe data fetching, localStorage, and form management patterns.
+description: >-
+  Build reusable hooks with proper generic constraints—type-safe data fetching,
+  localStorage, and form management patterns.
 date: 2025-09-06T22:23:57.314Z
-modified: 2025-09-06T22:23:57.314Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'hooks', 'generics']
+tags:
+  - react
+  - typescript
+  - hooks
+  - generics
 ---
 
 Custom hooks are one of React's most powerful features, and when combined with TypeScript generics, they become incredibly versatile tools for building reusable, type-safe abstractions. Instead of copying and pasting similar state logic across components, you can create hooks that adapt to different data types while maintaining complete type safety. Let's explore how to build custom hooks with generics that are both flexible and bulletproof.
@@ -693,3 +699,104 @@ Generic custom hooks unlock incredible reusability while maintaining full type s
 The key is to think about the common patterns in your application and abstract them into generic hooks that can work with any relevant data type. Your components stay clean, your logic stays DRY, and TypeScript keeps everything type-safe.
 
 Start with simple generic hooks and gradually add more sophisticated type constraints and conditional logic as your needs grow. The payoff in code reusability and maintainability is enormous.
+
+## Creating Type-Safe Custom Hooks
+
+Custom hooks in React 19 + TypeScript can be incredibly powerful when properly typed. Here's a practical example of a hook for managing API state:
+
+```tsx
+// src/hooks/useApiState.ts
+import { useState, useEffect, useCallback } from 'react';
+
+interface ApiState<T> {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+}
+
+interface UseApiStateOptions {
+  immediate?: boolean;
+}
+
+export function useApiState<T>(apiCall: () => Promise<T>, options: UseApiStateOptions = {}) {
+  const { immediate = true } = options;
+
+  const [state, setState] = useState<ApiState<T>>({
+    data: null,
+    loading: false,
+    error: null,
+  });
+
+  const execute = useCallback(async () => {
+    setState((prev) => ({ ...prev, loading: true, error: null }));
+
+    try {
+      const data = await apiCall();
+      setState({ data, loading: false, error: null });
+      return data;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred';
+      setState((prev) => ({ ...prev, loading: false, error: errorMessage }));
+      throw error;
+    }
+  }, [apiCall]);
+
+  useEffect(() => {
+    if (immediate) {
+      execute();
+    }
+  }, [execute, immediate]);
+
+  const reset = useCallback(() => {
+    setState({ data: null, loading: false, error: null });
+  }, []);
+
+  return {
+    ...state,
+    execute,
+    reset,
+    isLoading: state.loading,
+    hasError: !!state.error,
+    hasData: !!state.data,
+  };
+}
+```
+
+Usage example:
+
+```tsx
+// src/components/UserProfile.tsx
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+async function fetchUser(userId: string): Promise<User> {
+  const response = await fetch(`/api/users/${userId}`);
+  if (!response.ok) throw new Error('Failed to fetch user');
+  return response.json();
+}
+
+export function UserProfile({ userId }: { userId: string }) {
+  const {
+    data: user,
+    isLoading,
+    hasError,
+    error,
+    execute,
+  } = useApiState(() => fetchUser(userId), { immediate: true });
+
+  if (isLoading) return <div>Loading user...</div>;
+  if (hasError) return <div>Error: {error}</div>;
+  if (!user) return <div>No user found</div>;
+
+  return (
+    <div>
+      <h2>{user.name}</h2>
+      <p>Email: {user.email}</p>
+      <button onClick={execute}>Refresh</button>
+    </div>
+  );
+}
+```

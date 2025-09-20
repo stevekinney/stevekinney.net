@@ -1,7 +1,8 @@
 ---
 title: Styles Versus Variables
 description: 'Figma styles, variables, and the difference between them.'
-modified: 2024-10-02T08:49:23-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T06:28:51-06:00'
 ---
 
 If you're thinking to yourself that there might be some overlap between variables and [styles](styles.md) in Figma, you're definitely in good company.

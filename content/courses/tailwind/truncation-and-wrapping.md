@@ -3,8 +3,8 @@ title: Truncation and Wrapping
 description: >-
   Manage text overflow with Tailwind utilities for truncation, line clamping,
   and text wrapping control
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Text behavior within containers is fundamental for well-structured interfaces. Tailwind provides utilities for controlling text wrapping and truncation.

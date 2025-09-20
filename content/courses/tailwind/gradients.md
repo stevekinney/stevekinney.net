@@ -3,8 +3,8 @@ title: Gradients
 description: >-
   Create stunning gradients with Tailwind 4's enhanced utilities for linear,
   radial, and conic gradients with OKLCH interpolation
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Tailwind 4 enhances gradients with OKLCH interpolation for smoother transitions and the ability to animate gradient stops.

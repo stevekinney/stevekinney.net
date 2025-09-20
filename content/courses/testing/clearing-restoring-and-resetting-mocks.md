@@ -1,7 +1,8 @@
 ---
 title: 'Clearing, Restoring, and Resetting Mocks'
 description: Learn how to manage mocks effectively using Vitest.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 Mocking is all well and good when it's intended, but it's going to haunt you if old mocks linger on well past their welcome. Once you've mocked something, you want to make sure that those mocks don't stick around like a bad code smell. That's why **clearing**, **restoring**, and **resetting** mocks are vital parts of your testing toolkit. So, let's break it down like refactoring a confusing callback hell into promise chains.

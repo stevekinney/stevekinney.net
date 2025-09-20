@@ -1,7 +1,8 @@
 ---
 title: Building a Card Component in Tailwind
 description: Let's build a simple Card component together using Tailwind.
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Let's start with our basic HTML structure.

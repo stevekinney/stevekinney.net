@@ -1,10 +1,17 @@
 ---
 title: Polymorphic Components and the as Prop
-description: Build components that render different tags while preserving proper props—no any, no lies, just safe polymorphism.
+description: >-
+  Build components that render different tags while preserving proper props—no
+  any, no lies, just safe polymorphism.
 date: 2025-09-06T22:04:44.911Z
-modified: 2025-09-06T22:04:44.911Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'polymorphic-components', 'as-prop', 'component-composition']
+tags:
+  - react
+  - typescript
+  - polymorphic-components
+  - as-prop
+  - component-composition
 ---
 
 Ever wanted to build a `Button` component that could render as a `button`, an `a` tag, or even a custom React component—while still giving you proper TypeScript intellisense for whatever element it's actually rendering? Welcome to polymorphic components, where we trade a bit of type complexity for a lot of reusability. By the end of this, you'll understand how to build components that adapt their HTML output and TypeScript types based on an `as` prop, all without resorting to `any` or lying to the type checker.

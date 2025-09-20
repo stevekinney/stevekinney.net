@@ -1,7 +1,8 @@
 ---
 title: Building a Simple Extension
-modified: 2025-04-28T17:33:44-06:00
 description: A quick guide to building a Visual Studio Code extension.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-18T06:15:05-05:00'
 ---
 
 Let's build a simple extension that finds all of the `FIXME`s in a JavaScript file and then decorates them so that we can see them easily.

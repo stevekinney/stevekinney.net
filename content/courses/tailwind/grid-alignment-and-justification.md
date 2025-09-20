@@ -3,8 +3,8 @@ title: Grid Alignment and Justification
 description: >-
   Master CSS Grid alignment with Tailwind utilities for aligning and justifying
   content, items, and self positioning.
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Controlling alignment and justification of items within grid areas and content within the grid container is fundamental to CSS Grid. Tailwind CSS provides utility classes for managing these properties directly in HTML.

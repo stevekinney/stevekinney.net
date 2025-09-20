@@ -1,10 +1,18 @@
 ---
 title: DOM and React Event Types Without Tears
-description: Never guess again—use React's built‑in event types for forms, mouse, keyboard, and more.
+description: >-
+  Never guess again—use React's built‑in event types for forms, mouse, keyboard,
+  and more.
 date: 2025-09-06T22:23:57.265Z
-modified: 2025-09-06T22:23:57.265Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'events', 'dom', 'synthetic-events', 'event-handlers']
+tags:
+  - react
+  - typescript
+  - events
+  - dom
+  - synthetic-events
+  - event-handlers
 ---
 
 Event handling is where React meets the messiness of user interaction—clicks, keystrokes, form submissions, and all the chaos that makes web apps feel alive. TypeScript can help you tame this complexity with precise event handler typing, but only if you know which types to use when. Let's explore how to type React events properly so your handlers work predictably and your IDE becomes your ally instead of your adversary.

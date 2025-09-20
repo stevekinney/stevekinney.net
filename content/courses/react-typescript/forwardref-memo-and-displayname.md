@@ -1,10 +1,18 @@
 ---
-title: forwardRef, memo, and displayName with TypeScript
-description: Compose forwardRef and memo without losing types—fix common inference pitfalls and keep good devtools labels.
+title: 'forwardRef, memo, and displayName with TypeScript'
+description: >-
+  Compose forwardRef and memo without losing types—fix common inference pitfalls
+  and keep good devtools labels.
 date: 2025-09-06T22:04:44.912Z
-modified: 2025-09-06T22:04:44.912Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'forward-ref', 'memo', 'display-name', 'performance']
+tags:
+  - react
+  - typescript
+  - forward-ref
+  - memo
+  - display-name
+  - performance
 ---
 
 React's `forwardRef`, `memo`, and `displayName` are fantastic tools for building performant, reusable components. But when you mix them with TypeScript—especially when you start combining them—things can get tricky fast. Type inference breaks, generics get confused, and your beautiful component APIs start looking like alphabet soup. Let's fix that.
@@ -83,7 +91,7 @@ const List = forwardRef(
 
 That type assertion at the end is necessary because `forwardRef` doesn't play nicely with generic functions. It's verbose, but it preserves your generic API.
 
-## memo: When and How to Use It
+## `memo`: When and How to Use It
 
 `React.memo` prevents unnecessary re-renders by memoizing your component. It's React's equivalent of `PureComponent` for function components.
 
@@ -147,7 +155,7 @@ const ExpensiveComponent = memo<ExpensiveComponentProps>(
 > [!WARNING]
 > Be careful with custom comparison functions. They run on every render and can become performance bottlenecks if they're too complex. Also, ignoring function props (like `onUpdate` above) can lead to stale closures.
 
-## displayName: Making DevTools Readable
+## `displayName`: Making DevTools Readable
 
 `displayName` is crucial for debugging. Without it, your DevTools show generic names that make debugging a nightmare.
 
@@ -181,7 +189,7 @@ const ComplexButton = memo(
 ComplexButton.displayName = 'memo(forwardRef(Button))';
 ```
 
-## Composing forwardRef and memo Correctly
+## Composing `forwardRef` and `memo` Correctly
 
 Now let's put it all together. Here's the pattern that works reliably:
 
@@ -315,7 +323,7 @@ const JustAButton = ({ onClick }: { onClick: () => void }) => (
 );
 ```
 
-### Pitfall 4: Forgetting useCallback with memo
+### Pitfall 4: Forgetting `useCallback` with `memo`
 
 ```tsx
 // ❌ memo is useless because handleClick changes every render
@@ -401,14 +409,14 @@ This component is:
 
 ### When to Use Each API
 
-**forwardRef**:
+**`forwardRef`**:
 
 - ✅ Building reusable UI components (inputs, buttons)
 - ✅ Creating component libraries
 - ✅ When parent components need imperative access to DOM elements
 - ❌ Every component (only use when refs are actually needed)
 
-**memo**:
+**`memo`**:
 
 - ✅ Components that receive stable props most of the time
 - ✅ Expensive components that render frequently
@@ -416,7 +424,7 @@ This component is:
 - ❌ Components that always receive new props
 - ❌ Very cheap components (the memo check might cost more than re-rendering)
 
-**displayName**:
+**`displayName`**:
 
 - ✅ Always use with HOCs (memo, forwardRef, etc.)
 - ✅ Complex component compositions
@@ -474,9 +482,9 @@ Guess which one is easier to debug at 2 AM?
 
 `forwardRef`, `memo`, and `displayName` are powerful tools, but they're also easy to misuse. The key is understanding when each provides value:
 
-- **forwardRef**: Use when refs need to pass through your component
-- **memo**: Use for expensive components with stable props
-- **displayName**: Always use with HOCs for better debugging
+- **`forwardRef`**: Use when refs need to pass through your component
+- **`memo`**: Use for expensive components with stable props
+- **`displayName`**: Always use with HOCs for better debugging
 
 When you combine them thoughtfully with TypeScript, you get components that are performant, type-safe, and maintainable. Your future self (and your teammates) will thank you for the extra effort.
 

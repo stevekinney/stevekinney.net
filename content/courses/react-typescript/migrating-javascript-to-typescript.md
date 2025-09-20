@@ -1,10 +1,17 @@
 ---
 title: Migrating a React App from JS to TS
-description: Convert safely—incremental tsconfig, strictness ratchet, and patterns for typing legacy components without churn.
+description: >-
+  Convert safely—incremental tsconfig, strictness ratchet, and patterns for
+  typing legacy components without churn.
 date: 2025-09-06T22:04:45.010Z
-modified: 2025-09-06T22:04:45.010Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'typescript', 'migration', 'javascript', 'refactoring']
+tags:
+  - react
+  - typescript
+  - migration
+  - javascript
+  - refactoring
 ---
 
 Moving your React application from JavaScript to TypeScript doesn't have to be the kind of heroic weekend effort that leaves you questioning your life choices. With the right strategy, you can migrate incrementally—file by file, component by component—while keeping your app running in production. Let's explore how to convert safely using an incremental TypeScript configuration, a gradual strictness ratchet, and proven patterns for typing legacy components without causing unnecessary churn.
@@ -493,61 +500,3 @@ const UserProfile = ({ userId }: { userId: string }) => {
   // ...
 };
 ```
-
-## Creating a Migration Plan
-
-Here's a practical checklist for your migration:
-
-### Week 1: Foundation
-
-- [ ] Install TypeScript and necessary @types packages
-- [ ] Set up permissive tsconfig.json
-- [ ] Ensure your build process works with .tsx files
-- [ ] Convert one simple utility function to validate the setup
-
-### Week 2-4: Low-hanging Fruit
-
-- [ ] Convert utility functions and constants
-- [ ] Migrate simple presentational components
-- [ ] Type your most commonly used custom hooks
-- [ ] Add types for API response interfaces
-
-### Week 4-8: Core Components
-
-- [ ] Convert main layout components
-- [ ] Type complex form components
-- [ ] Migrate state management (context, reducers)
-- [ ] Add stricter compiler options gradually
-
-### Week 8+: Polish and Strictness
-
-- [ ] Enable strict mode in tsconfig.json
-- [ ] Remove any remaining `any` types
-- [ ] Add comprehensive prop types for all components
-- [ ] Set up pre-commit hooks to prevent new JavaScript files
-
-> [!TIP]
-> Track your progress with a simple metric: percentage of files converted. Celebrate milestones like "50% TypeScript" or "No more `.js` files in components/".
-
-## When You're Done
-
-A successfully migrated React TypeScript app should:
-
-- Have strict TypeScript configuration enabled
-- Use explicit types for all props, state, and API data
-- Leverage TypeScript's IDE features for better development experience
-- Catch type-related bugs at compile time instead of runtime
-- Provide clear interfaces that serve as documentation for other developers
-
-The migration is complete when you can enable `strict: true` in your TypeScript config without any errors, and new team members can understand component APIs just by looking at the type definitions.
-
-## Next Steps
-
-Once your migration is complete, consider exploring:
-
-- **Advanced TypeScript patterns** like discriminated unions for complex state
-- **Generic components** for reusable UI elements
-- **Strict mode features** like exact prop types and exhaustiveness checking
-- **Integration with form libraries** that provide excellent TypeScript support
-
-Remember: migrating to TypeScript is an investment in your codebase's future. The initial time spent on conversion pays dividends in reduced bugs, improved developer experience, and easier onboarding for new team members. Take it one component at a time, and before you know it, you'll wonder how you ever shipped JavaScript without types.

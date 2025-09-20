@@ -1,10 +1,18 @@
 ---
 title: Typing the use() Hook and Suspense Data
-description: Consume promises and resources directly—type use() calls, Suspense fallbacks, and async component returns.
+description: >-
+  Consume promises and resources directly—type use() calls, Suspense fallbacks,
+  and async component returns.
 date: 2025-09-06T22:04:44.914Z
-modified: 2025-09-06T22:04:44.914Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'use-hook', 'suspense', 'react-19', 'async']
+tags:
+  - react
+  - typescript
+  - use-hook
+  - suspense
+  - react-19
+  - async
 ---
 
 React's `use()` hook is a game-changer for handling async data—it lets you consume promises and resources directly without the usual `useEffect` ceremony. Combined with Suspense boundaries, you can build components that handle loading and error states elegantly. The tricky part? Making sure TypeScript understands what's happening when your components start throwing promises around (literally).
@@ -190,7 +198,7 @@ function MultiResource({ userPromise, profilePromise, mode }: MultiResourceProps
 }
 ```
 
-## Typing Suspense Boundaries
+## Typing `Suspense` Boundaries
 
 Suspense boundaries themselves don't need special typing, but the components you wrap in them do. Here's how to create a well-typed async component structure:
 

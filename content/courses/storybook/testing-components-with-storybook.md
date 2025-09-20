@@ -1,7 +1,8 @@
 ---
 title: Testing Components with Storybook
 description: 'In Storybook, you can use Play functions to test polymorphic components.'
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T06:28:51-06:00'
 ---
 
 In almost every application that I have ever worked on there is a concept that a link can look like a button. There is a pattern in React, where we can use polymorphic components. We talk a lot about how to do this in the course on React and Typescript, but for now, let's just be a little hand-wavvy.

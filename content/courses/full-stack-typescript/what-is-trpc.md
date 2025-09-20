@@ -3,7 +3,8 @@ title: What is tRPC?
 description: >-
   Discover tRPC, a TypeScript-first API framework that enables end-to-end type
   safety with zero codegen or schema definitions.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 tRPC (TypeScript Remote Procedure Call) gives you:

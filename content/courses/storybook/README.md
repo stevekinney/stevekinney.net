@@ -3,10 +3,10 @@ title: Building Design Systems in Storybook
 description: An exploration in building a design system using Storybook.
 layout: page
 date: 2024-03-05T19:56:55.000Z
-modified: 2025-04-16T17:51:06-06:00
+modified: '2025-07-29T15:09:56-06:00'
 ---
 
-The material in this course is intended to go along with the [Design Systems with Storybook, v2](https://frontendmasters.com/courses/design-systems-v2/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) course with [Frontend Masters](https://frontendmasters.com/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon).
+The material in this course is intended to go along with the [Design Systems with Storybook, v2](https://frontendmasters.com/courses/design-systems-v2/?utm_source=kinney&utm_medium=social&code=kinney) course with [Frontend Masters](https://frontendmasters.com/?utm_source=kinney&utm_medium=social&code=kinney).
 
 Even if you don't work on the design systems team at your company, over a long enough period of time, you're likely to find yourself working on a design system or component library. Having a standardized set of components saves you from having to reinvent the wheel every single time you tackle a new feature. And—arguably more importantly, it allows you to make large-scale changes without the tedium of manually tweaking every single element in your project.
 

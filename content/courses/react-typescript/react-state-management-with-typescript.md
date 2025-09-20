@@ -1,19 +1,25 @@
 ---
 title: Complete Guide to React State Management with TypeScript
-description: Master useState, useReducer, and action typing—from inference patterns to discriminated unions that prevent impossible states.
+description: >-
+  Master useState, useReducer, and action typing—from inference patterns to
+  discriminated unions that prevent impossible states.
 date: 2025-09-06T22:23:57.266Z
-modified: 2025-09-06T22:23:57.266Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'hooks', 'state-management']
+tags:
+  - react
+  - typescript
+  - hooks
+  - state-management
 ---
 
 React's state management hooks are beautifully simple in JavaScript, but TypeScript transforms them into precision instruments that catch bugs before they happen. Instead of crossing your fingers and hoping your state updates work correctly, you can model your state with discriminated unions, use proper type guards, and build reducers that make impossible states literally impossible to represent. Let's explore how to wield these hooks with the full power of TypeScript's type system.
 
-## useState: Inference, Patterns, and Pitfalls
+## `useState`: Inference, Patterns, and Pitfalls
 
 TypeScript's inference with `useState` follows predictable patterns, but there are edge cases that can catch you off guard. Understanding these patterns helps you write more reliable state management code and avoid runtime surprises.
 
-### How useState Inference Works
+### How `useState` Inference Works
 
 TypeScript infers the state type from the initial value you pass to `useState`. This works beautifully for straightforward cases:
 
@@ -156,11 +162,11 @@ useEffect(() => {
 }, []);
 ```
 
-## useReducer: Advanced State with Type Safety
+## `useReducer`: Advanced State with Type Safety
 
 `useReducer` shines when your state logic gets complex. With proper typing, you get compile-time guarantees about your actions and state transitions.
 
-### Basic useReducer Typing
+### Basic `useReducer` Typing
 
 The simplest case of `useReducer` with TypeScript:
 

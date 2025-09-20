@@ -1,10 +1,12 @@
 ---
-title: React Server Components: Type-Safe Boundaries
-description: Type server-only and client-only components—share contracts, serialize safely, and enforce correct usage.
-date: 2025-09-06T22:04:44.919Z
-modified: 2025-09-06T22:04:44.919Z
-published: true
-tags: ['react', 'typescript', 'server-components', 'ssr', 'serialization', 'boundaries']
+title: React Server Components Types
+description: >-
+  React Server Components fundamentally change how we think about the
+  client-server boundary in React applications. Instead of rendering everything
+  on the client and fetching data through APIs, some components run on the
+  server, some on th...
+modified: '2025-09-06T17:49:18-06:00'
+date: '2025-09-06T17:49:18-06:00'
 ---
 
 React Server Components fundamentally change how we think about the client-server boundary in React applications. Instead of rendering everything on the client and fetching data through APIs, some components run on the server, some on the client, and some can do both depending on where they're imported. This flexibility is powerful, but it comes with a catch: you need to be deliberate about what data crosses the network and how you enforce these boundaries with TypeScript.

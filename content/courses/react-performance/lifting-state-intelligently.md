@@ -1,10 +1,16 @@
 ---
 title: Lifting State Intelligently
-description: Lift state only when multiple peers truly need it. Contain churn and stop render ripples before they swamp your UI.
+description: >-
+  Lift state only when multiple peers truly need it. Contain churn and stop
+  render ripples before they swamp your UI.
 date: 2025-09-06T21:46:42.696Z
-modified: 2025-09-06T21:46:42.696Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'state-management', 'architecture']
+tags:
+  - react
+  - performance
+  - state-management
+  - architecture
 ---
 
 "Lift state up" is one of React's most repeated mantras—and for good reason. When multiple components need the same piece of data, moving it to their closest common ancestor makes perfect sense. But like most architectural advice, it's easy to take this too far and accidentally create performance bottlenecks that ripple through your entire component tree.
@@ -203,7 +209,7 @@ function App() {
 }
 ```
 
-### Contain State Changes with React.memo
+### Contain State Changes with `React.memo`
 
 When you do need to lift state but want to minimize re-render impact, use `React.memo` to create render boundaries:
 
@@ -390,10 +396,16 @@ When you're unsure whether to lift state, profile your app's performance. React 
 > [!TIP]
 > A few unnecessary re-renders aren't always a problem—React is quite fast. Focus on the ones that cause noticeable lag or expensive computations.
 
+## Related Topics
+
+- **[Colocation of State](./colocation-of-state.md)** - Keep state close to where it's used for better performance
+- **[Derived vs Stored State](./derived-vs-stored-state.md)** - Decide whether to lift state or derive it locally
+- **[Context API Performance Pitfalls](./context-api-performance-pitfalls.md)** - Alternative patterns for sharing state without prop drilling
+- **[Separating Actions from State: Two Contexts](./separating-actions-from-state-two-contexts.md)** - Advanced context patterns for lifted state
+- **[Component Granularity Splitting](./component-granularity-splitting.md)** - How component boundaries affect state architecture
+
 ## Next Steps
 
 Smart state management is about finding the right balance between organization and performance. Start local, lift intentionally, and use React's built-in optimization tools to contain the impact of necessary state sharing.
 
 Your users will thank you for the snappy interactions, and your future self will thank you for the maintainable code structure. Remember: the best state architecture is the one that makes your app both fast and understandable—not necessarily the most clever one.
-
-**Up next**: We'll explore how to optimize expensive computations with `useMemo` and `useCallback` without overdoing it.

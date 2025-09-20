@@ -1,17 +1,23 @@
 ---
 title: Suspense for Data Fetching
-description: Stream UI progressively instead of blocking on everything—compose boundaries that keep pages interactive and informative.
+description: >-
+  Stream UI progressively instead of blocking on everything—compose boundaries
+  that keep pages interactive and informative.
 date: 2025-09-06T22:01:30.022Z
-modified: 2025-09-06T22:01:30.022Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'suspense', 'data-fetching']
+tags:
+  - react
+  - performance
+  - suspense
+  - data-fetching
 ---
 
 React Suspense fundamentally changes how we think about loading states and data fetching. Instead of manually wiring up loading spinners and error boundaries throughout your component tree, Suspense lets you declaratively define loading boundaries that handle async operations gracefully. You compose these boundaries strategically to keep parts of your UI interactive while other parts are still loading—turning the traditional "everything waits for everything" pattern into something that feels more like progressive enhancement.
 
 The real power comes from how Suspense boundaries work together with modern data fetching patterns to create streaming UIs that reveal content as soon as it's ready, rather than blocking the entire page on the slowest data dependency.
 
-## What Makes Suspense Different
+## What Makes `Suspense` Different
 
 Before Suspense, data fetching in React typically followed a "fetch-on-render" pattern where each component handled its own loading states:
 
@@ -63,7 +69,7 @@ function App() {
 
 The component becomes simpler—it just declares what it needs and assumes the data will be there. The Suspense boundary handles the loading state.
 
-## Setting Up Suspense Boundaries
+## Setting Up `Suspense` Boundaries
 
 Suspense boundaries are like try-catch blocks for async operations. You place them strategically around components that might suspend:
 
@@ -124,7 +130,7 @@ function Dashboard() {
 
 If `UserHeader` loads quickly but `StatsPanel` is slow, users see the header immediately with just the stats section showing a skeleton.
 
-## Data Fetching Patterns with Suspense
+## Data Fetching Patterns with `Suspense`
 
 To work with Suspense, your data fetching needs to follow the "render-as-you-fetch" pattern. Here's how to implement a suspense-compatible data fetching hook:
 
@@ -176,7 +182,7 @@ This pattern ensures that:
 > [!TIP]
 > In production, use libraries like [SWR](https://swr.vercel.app/), [TanStack Query](https://tanstack.com/query), or [Relay](https://relay.dev/) that have built-in Suspense support instead of rolling your own cache.
 
-## Error Boundaries with Suspense
+## Error Boundaries with `Suspense`
 
 Suspense handles loading states, but you need Error Boundaries for error states. They work together beautifully:
 
@@ -405,7 +411,7 @@ function App() {
 }
 ```
 
-## When to Use Suspense
+## When to Use `Suspense`
 
 Suspense shines in these scenarios:
 
@@ -419,6 +425,14 @@ It's less useful for:
 - Simple forms with minimal async operations
 - Apps with mostly static content
 - Cases where you need fine-grained loading control for individual fields
+
+## Related Topics
+
+- **[React Server Components (RSC)](./react-server-components-rsc.md)** - Combine Suspense with Server Components for optimal data fetching patterns
+- **[Skeleton Screens & Perceived Performance](./skeleton-screens-perceived-performance.md)** - Create sophisticated loading states within Suspense boundaries
+- **[useDeferredValue Patterns](./usedeferredvalue-patterns.md)** - Handle non-urgent updates while Suspense manages critical data loading
+- **[Streaming SSR Optimization](./streaming-ssr-optimization.md)** - Implement server-side streaming with Suspense for faster perceived performance
+- **[The use Hook](./the-use-hook.md)** - Master React 19's use() hook for data fetching within Suspense boundaries
 
 ## Next Steps
 

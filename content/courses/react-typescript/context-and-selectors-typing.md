@@ -1,10 +1,18 @@
 ---
 title: Typing Context and Selector Patterns
-description: Create fully typed contexts—state/actions split, selectors that minimize re-renders, and ergonomic Provider APIs.
+description: >-
+  Create fully typed contexts—state/actions split, selectors that minimize
+  re-renders, and ergonomic Provider APIs.
 date: 2025-09-06T22:04:44.911Z
-modified: 2025-09-06T22:04:44.911Z
+modified: '2025-09-14T11:49:08-06:00'
 published: true
-tags: ['react', 'typescript', 'context', 'state-management', 'selectors', 'performance']
+tags:
+  - react
+  - typescript
+  - context
+  - state-management
+  - selectors
+  - performance
 ---
 
 Context in React is like that friend who knows everyone at the party—incredibly useful for sharing data across your component tree, but without proper typing, it can become a source of runtime surprises and debugging headaches. Let's explore how to build fully typed contexts with TypeScript that not only prevent bugs but also provide excellent developer ergonomics through state/action patterns and performance-optimized selectors.

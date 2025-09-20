@@ -1,7 +1,8 @@
 ---
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
 title: Writing Stories in Storybook
 description: How to write basic stories in Storybook.
+date: '2024-04-15T06:28:51-06:00'
 ---
 
 Consider this super-naïve button component. Let's say that this is in `src/components/button.tsx`.

@@ -1,7 +1,8 @@
 ---
 title: List of Events You Can Fire
 description: A complete list of DOM events that can be fired.
-modified: 2024-10-02T08:49:23-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 In case you wanted to see a full list of the events that you can fire, I looked it up [in the source code for you](https://raw.githubusercontent.com/testing-library/dom-testing-library/main/src/event-map.js).

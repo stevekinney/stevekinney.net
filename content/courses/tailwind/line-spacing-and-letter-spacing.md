@@ -3,8 +3,8 @@ title: Line Spacing and Letter Spacing
 description: >-
   Control typography with Tailwind's leading (line height) and tracking (letter
   spacing) utilities.
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Tailwind manages line spacing (leading) and letter spacing (tracking) with utility classes in your HTML.

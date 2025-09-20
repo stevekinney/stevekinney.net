@@ -4,7 +4,7 @@ description: >-
   An in-depth guide to configuring TypeScript with strict type checking and
   other important compiler options for maximum safety and reliability.
 date: 2025-03-15T22:58:14.000Z
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
 ---
 
 Let's consider this `tsconfig.json` for a hot minute.

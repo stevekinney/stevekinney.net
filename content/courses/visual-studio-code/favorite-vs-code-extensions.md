@@ -3,7 +3,8 @@ title: Favorite Visual Studio Code Extensions
 description: >-
   A curated list of useful Visual Studio Code extensions to enhance your
   development workflow
-modified: 2025-03-18T06:15:05-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 Here is a list of extensions that I like—or that I found when I Google'd _best vscode extensions_. I put the list in alphabetical order so that I didn't appear like I was playing favorites.
@@ -15,7 +16,7 @@ Here is a list of extensions that I like—or that I found when I Google'd _best
 - [Color Info](https://marketplace.visualstudio.com/items?itemName=bierner.color-info)
 - [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
 - [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)
-- [Github Pull Requests](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github)
+- [GitHub Pull Requests](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github)
 - [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
 - [Gremlins Tracker](https://marketplace.visualstudio.com/items?itemName=nhoizey.gremlins)
 - [HTMLHint](https://marketplace.visualstudio.com/items?itemName=HTMLHint.vscode-htmlhint)

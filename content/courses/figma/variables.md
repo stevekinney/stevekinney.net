@@ -5,7 +5,7 @@ description: >-
   efficient update of multiple elements, ensuring consistency and adaptability
   across projects.
 date: 2024-03-09T19:25:35.000Z
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
 ---
 
 Just like in JavaScript, variables in Figma act as placeholders that store specific—and reusable—values. These values can be anything from color codes, font sizes, spacing measurements, to text strings. Once defined, these variables can be applied to properties of different design elements within your Figma files.

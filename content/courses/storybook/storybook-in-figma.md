@@ -4,7 +4,8 @@ description: >-
   Publish your project on Chromatic. Copy Storybook URL. In Figma Dev Mode,
   search for Storybook plugin, connect Chromatic, paste URL, and see components
   side by side.
-modified: 2024-10-18T19:45:04-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T06:28:51-06:00'
 ---
 
 You'll need to have your project published on [Chromatic](visual-tests.md). But, once you have that in place, go to your project and copy the URL the particular component that you want to link up with Figma.

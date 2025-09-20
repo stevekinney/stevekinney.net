@@ -1,10 +1,17 @@
 ---
 title: useMemo and useCallback in React 19
-description: Use memoization as a scalpel, not a sledgehammer—cache expensive work or stabilize identities where it truly pays off.
+description: >-
+  Use memoization as a scalpel, not a sledgehammer—cache expensive work or
+  stabilize identities where it truly pays off.
 date: 2025-09-06T21:16:28.100Z
-modified: 2025-09-06T21:16:28.100Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'hooks', 'memoization', 'react-19']
+tags:
+  - react
+  - performance
+  - hooks
+  - memoization
+  - react-19
 ---
 
 React's `useMemo` and `useCallback` are performance optimization hooks—emphasis on _optimization_. They're not magic bullets that make your app fast, but surgical tools for addressing specific performance bottlenecks. With React 19's compiler optimizations and better default behavior, understanding when and how to use these hooks becomes even more crucial (and thankfully, less frequent).
@@ -24,7 +31,7 @@ Think of memoization as caching—you're storing a result and reusing it until t
 > [!WARNING]
 > Memoization isn't free. Every memoized value requires memory to store and comparison logic to check dependencies. Don't memoize unless you're solving a real performance problem.
 
-## useMemo: Caching Expensive Calculations
+## `useMemo`: Caching Expensive Calculations
 
 `useMemo` caches the result of a computation and only recalculates when its dependencies change.
 
@@ -53,7 +60,7 @@ function ExpensiveComponent({ items, searchTerm }: Props) {
 
 Without `useMemo`, this filtering and sorting would happen on every render—even if `items` and `searchTerm` haven't changed. With thousands of items, that's wasteful.
 
-### When useMemo Actually Helps
+### When `useMemo` Actually Helps
 
 Here are the scenarios where `useMemo` provides real value:
 
@@ -141,7 +148,7 @@ const ExpensiveChart = React.memo(({ data, config }: ChartProps) => {
 });
 ```
 
-### When useMemo Doesn't Help (and Can Hurt)
+### When `useMemo` Doesn't Help (and Can Hurt)
 
 **1. Simple calculations**
 
@@ -193,7 +200,7 @@ function Counter({ count }: { count: number }) {
 }
 ```
 
-## useCallback: Stabilizing Function References
+## `useCallback`: Stabilizing Function References
 
 `useCallback` memoizes a function definition—not its result. This is primarily useful for preventing unnecessary re-renders of child components that rely on function reference equality.
 
@@ -236,7 +243,7 @@ const TodoItem = React.memo(({ todo, onToggleEdit, isEditing }: TodoItemProps) =
 
 Without `useCallback`, `handleToggleEdit` would be a new function on every render, causing all `TodoItem` components to re-render even when their `todo` prop hasn't changed.
 
-### Real-World useCallback Patterns
+### Real-World `useCallback` Patterns
 
 **1. Event handlers for memoized components**
 
@@ -308,7 +315,7 @@ function SearchResults({ searchTerm, onResultClick }: Props) {
 }
 ```
 
-### When useCallback Becomes Pointless
+### When `useCallback` Becomes Pointless
 
 **1. No memoized children**
 
@@ -543,6 +550,30 @@ React 19's improvements mean you can often skip manual optimization in these cas
 Remember: **premature optimization is the root of all evil**. Start with clean, readable code. Add memoization when you have actual performance problems, not imaginary ones.
 
 ## Wrapping Up
+
+## Related Topics
+
+- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - Understanding compiler-based optimizations
+- **[React.memo in React 19 and Compiler Era](./react-memo-react-19-and-compiler-era.md)** - Component-level memoization
+- **[Avoiding Over-memoization](./avoiding-over-memoization.md)** - Decision framework and anti-patterns
+- **[Identity Stability Props](./identity-stability-props.md)** - Reference equality and prop stability
+- **[Custom Equality Checks (areEqual)](./custom-equality-checks-areequal.md)** - Advanced comparison strategies
+
+## Prerequisites
+
+- Solid understanding of React hooks
+- Knowledge of JavaScript reference vs. value equality
+- Experience with React DevTools Profiler
+- Basic understanding of performance measurement
+
+## Practical Examples
+
+Real-world scenarios where manual memoization remains valuable:
+
+- **Data dashboards** - Complex calculations on large datasets
+- **Search interfaces** - Expensive filtering and sorting operations
+- **Real-time applications** - Stabilizing callbacks for WebSocket events
+- **Forms with complex validation** - Memoizing validation rules and results
 
 `useMemo` and `useCallback` are powerful tools when used correctly—as surgical instruments for specific performance bottlenecks, not as blanket optimizations. With React 19's compiler doing much of the heavy lifting automatically, you'll reach for these hooks less frequently, but when you do, make sure you're solving a real problem.
 

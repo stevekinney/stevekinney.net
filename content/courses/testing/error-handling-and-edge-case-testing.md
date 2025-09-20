@@ -1,7 +1,8 @@
 ---
 title: Testing Errors and Handling Edge Cases
 description: Learn to test error handling and edge cases using Vitest.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 Let's talk about those error-prone, sneaky little troublemakers we like to call _edge cases_. You know—the weird stuff users (and co-workers) do that you didn't see coming.

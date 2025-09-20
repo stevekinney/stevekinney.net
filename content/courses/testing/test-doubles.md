@@ -1,7 +1,8 @@
 ---
 title: Understanding Test Doubles in Unit Testing
 description: Learn the purpose and types of test doubles in unit testing.
-modified: 2024-12-17T12:47:42-07:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 When writing unit tests, the goal is to test a piece of code in isolation. However, the real-world code we write often depends on other pieces of code or external systems like databases, APIs, or third-party services. These dependencies can introduce variability, slowness, or complexity into our tests, making them harder to write, understand, and maintain.

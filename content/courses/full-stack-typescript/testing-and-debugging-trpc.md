@@ -1,12 +1,10 @@
 ---
-modified: 2025-04-28T17:33:44-06:00
+title: Testing And Debugging Trpc
 description: >-
-  Learn to efficiently run server-side unit tests for tRPC using
-  `createCaller()` without needing an Express server setup. Includes tips for
-  debugging to ensure seamless development.
-title: >-
-  "Efficient Server-Side Unit Testing with tRPC: Using `createCaller()` without
-  Express"
+  tRPC offers a handy createCaller() to directly call your procedures without
+  spinning up an Express server. Combine this with a test DB or mocking:
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 ## Server-Side Unit Tests

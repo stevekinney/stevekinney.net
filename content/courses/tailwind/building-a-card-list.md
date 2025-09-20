@@ -3,8 +3,8 @@ title: Building a Card List with Top Border
 description: >-
   Let's build a card list with separator borders using Tailwind's not-first
   selector to avoid borders on the first item.
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Let's start with our basic HTML structure for a simple list of notification cards.

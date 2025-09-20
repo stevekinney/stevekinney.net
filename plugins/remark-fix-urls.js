@@ -33,9 +33,13 @@ const transformInternalUrl = (url, baseUrl) => {
 
   // Normalize and join, then strip the extension on the final segment
   const joined = pathPosix.normalize(pathPosix.join(baseUrl || '/', base));
-  const withoutExt = joined.endsWith(URL_PATTERNS.MARKDOWN_EXTENSION)
+  let withoutExt = joined.endsWith(URL_PATTERNS.MARKDOWN_EXTENSION)
     ? joined.slice(0, -URL_PATTERNS.MARKDOWN_EXTENSION.length)
     : joined;
+  // Treat README and _index as directory roots
+  withoutExt = withoutExt.replace(/\/(README|_index)$/i, '/');
+  // Collapse duplicate trailing slashes
+  if (withoutExt.length > 1) withoutExt = withoutExt.replace(/\/+$/, '/');
   return `${withoutExt}${query}${hash}`;
 };
 
@@ -48,12 +52,13 @@ const transformInternalUrl = (url, baseUrl) => {
  * @returns {string} Calculated base URL
  */
 const getBaseUrl = (fileData, contentPath) => {
-  const filename = fileData.filename || '';
-  const cwd = fileData.cwd || process.cwd();
-  if (!filename) return '/';
-  const rel = filename.replace(`${cwd}/`, '');
-  const dir = dirname(rel).replace(`${contentPath}/`, '');
-  return '/' + dir;
+  const filePath = (fileData.filename || '').replace(/\\/g, '/');
+  const cwd = (fileData.cwd || process.cwd()).replace(/\\/g, '/');
+  if (!filePath) return '/';
+  let rel = filePath.startsWith(cwd + '/') ? filePath.slice(cwd.length + 1) : filePath;
+  if (rel.startsWith(contentPath + '/')) rel = rel.slice(contentPath.length + 1);
+  const dir = dirname(rel).replace(/\\/g, '/');
+  return dir === '.' ? '/' : '/' + dir;
 };
 
 /**

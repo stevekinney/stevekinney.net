@@ -4,7 +4,7 @@ description: >-
   A brief guide for getting started writing Python on a Mac using virtual
   environments.
 date: 2024-08-06T16:00:00.006Z
-modified: 2024-10-02T08:49:23-05:00
+modified: 2025-07-29T21:09:56.000Z
 published: true
 tags:
   - python

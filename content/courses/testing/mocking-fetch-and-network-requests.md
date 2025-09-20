@@ -1,7 +1,8 @@
 ---
 title: Mocking Fetch And Network Requests With Vitest
 description: Learn how to mock fetch and network requests using Vitest.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 Let's talk about something near and dear to every developer's heart — dealing with and testing **network requests**. If you're working on an app that even _sniffs_ at the internet, you're going to have to call APIs, and eventually, you're going to need to test that code. When that time comes, there's no reason to actually hit the API every time you run your test suite — after all, let's _maybe_ not DDoS the API server, or worse: make your tests super slow. That's where **mocking network requests** comes in, and thankfully, mocking `fetch` with Vitest is a breeze.

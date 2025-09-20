@@ -1,10 +1,16 @@
 ---
 title: Tree Shaking Optimization
-description: Master dead code elimination through advanced tree shaking. Eliminate unused imports, optimize side effects, and shrink bundles.
+description: >-
+  Master dead code elimination through advanced tree shaking. Eliminate unused
+  imports, optimize side effects, and shrink bundles.
 date: 2025-09-06T23:45:00.000Z
-modified: 2025-09-06T23:45:00.000Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'bundling', 'tree-shaking']
+tags:
+  - react
+  - performance
+  - bundling
+  - tree-shaking
 ---
 
 Tree shaking is the process of eliminating dead code from your bundle—code that's imported but never actually used. In theory, it sounds simple: if you import a function but never call it, don't include it in the final bundle. In practice, JavaScript's dynamic nature, CommonJS modules, and side effects make tree shaking a complex optimization that requires understanding how bundlers analyze your code dependencies.
@@ -767,6 +773,16 @@ const monitor = new TreeShakingMonitor({
 monitor.checkTreeShaking().catch(console.error);
 ```
 
+## Bundle Analysis Integration
+
+When using webpack-bundle-analyzer with tree-shaking, focus on:
+
+- **Unused exports**: Modules importing more than they use
+- **Side-effect files**: Files marked with sideEffects but not actually needed
+- **Large dependencies**: Libraries that don't tree-shake well
+
+For detailed bundle analysis techniques, see [Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md).
+
 ## Common Pitfalls and Solutions
 
 ### Pitfall: Side Effects in Pure Functions
@@ -824,6 +840,14 @@ export { debounce, throttle };
 ## Next Steps
 
 Effective tree shaking requires:
+
+## Related Topics
+
+- **[Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)** - Analyze your bundle to identify tree shaking opportunities and measure improvements
+- **[SWC Speedy Web Compiler](./swc-speedy-web-compiler.md)** - Configure SWC for optimal tree shaking performance
+- **[Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md)** - Combine tree shaking with code splitting for maximum bundle optimization
+- **[Performance Budgets and Monitoring](./performance-budgets-and-monitoring.md)** - Set and monitor bundle size budgets to maintain tree shaking benefits
+- **[CDN Caching Immutable Assets](./cdn-caching-immutable-assets.md)** - Cache your optimized, tree-shaken bundles effectively
 
 1. **Consistent ES6 module usage** - Avoid CommonJS in your source code
 2. **Careful library selection** - Prefer tree-shake-friendly alternatives

@@ -1,17 +1,25 @@
 ---
-title: useRef, Callback Refs, and Imperative Handles
-description: Type refs to DOM nodes and components—safely expose imperative APIs with forwardRef and useImperativeHandle.
+title: 'useRef, Callback Refs, and Imperative Handles'
+description: >-
+  Type refs to DOM nodes and components—safely expose imperative APIs with
+  forwardRef and useImperativeHandle.
 date: 2025-09-06T22:04:44.910Z
-modified: 2025-09-06T22:04:44.910Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'refs', 'useref', 'imperative-handle', 'dom']
+tags:
+  - react
+  - typescript
+  - refs
+  - useref
+  - imperative-handle
+  - dom
 ---
 
 Sometimes React's declarative model isn't quite enough—you need to imperatively focus an input, measure a DOM node, or call a method on a third-party library. Enter refs: React's escape hatch for direct DOM access and component imperative APIs. We'll explore how to type refs properly in TypeScript, understand when callback refs shine over `useRef`, and build clean imperative interfaces with `forwardRef` and `useImperativeHandle`.
 
 If you've ever found yourself muttering "just let me grab that DOM element," then refs are your friend. But like any power tool, they come with sharp edges—especially in TypeScript where you need to wrangle types for DOM elements, mutable ref objects, and component interfaces.
 
-## The useRef Playground
+## The `useRef` Playground
 
 Let's start with the most common ref pattern: `useRef` for accessing DOM elements. TypeScript needs to know what you're storing, and DOM elements have specific types.
 
@@ -71,7 +79,7 @@ export function DOMReferences() {
 }
 ```
 
-## Storing Values with useRef
+## Storing Values with `useRef`
 
 `useRef` isn't just for DOM elements—it's also perfect for storing mutable values that persist across renders without triggering re-renders. Think of it as a "box" you can put anything into.
 
@@ -130,7 +138,7 @@ export function TimerComponent() {
 > [!TIP]
 > When storing non-DOM values in refs, always type them explicitly. `useRef<number>()` without an initial value creates `MutableRefObject<number | undefined>`, which is usually what you want for timer IDs or other optional values.
 
-## Callback Refs: When useRef Isn't Enough
+## Callback Refs: When `useRef` Isn't Enough
 
 Sometimes `useRef` feels clunky—like when you need to run code immediately when a DOM element becomes available, or when you're working with dynamic elements. Callback refs let you pass a function instead of a ref object, and React calls it with the element.
 

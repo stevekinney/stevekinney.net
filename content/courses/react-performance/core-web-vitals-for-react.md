@@ -1,10 +1,15 @@
 ---
 title: Core Web Vitals for React Applications
-description: Master LCP, FID, and CLS optimization in React apps. Practical techniques to improve user experience and search rankings.
+description: >-
+  Master LCP, FID, and CLS optimization in React apps. Practical techniques to
+  improve user experience and search rankings.
 date: 2025-09-06T23:15:00.000Z
-modified: 2025-09-06T23:15:00.000Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'web-vitals']
+tags:
+  - react
+  - performance
+  - web-vitals
 ---
 
 Core Web Vitals aren't just Google's latest SEO ranking factor—they're a measurement of real user frustration. That 4-second Largest Contentful Paint means users are staring at a blank screen. The 300ms First Input Delay means clicks feel broken. The 0.25 Cumulative Layout Shift means content is jumping around like a bouncy castle. For React developers, optimizing these metrics requires understanding how React's rendering behavior affects user experience.
@@ -893,6 +898,16 @@ async function testRealWorldConditions() {
   await browser.close();
 }
 ```
+
+## Related Topics
+
+- **[Image and Asset Optimization](./image-and-asset-optimization.md)** - Optimize images for better LCP scores
+- **[CDN Caching & Immutable Assets](./cdn-caching-immutable-assets.md)** - Speed up resource delivery for LCP
+- **[Concurrent React Scheduling](./concurrent-react-scheduling.md)** - Use transitions to improve INP scores
+- **[Web Workers with React](./web-workers-with-react.md)** - Offload heavy work to improve INP
+- **[Skeleton Screens Perceived Performance](./skeleton-screens-perceived-performance.md)** - Prevent CLS with proper loading states
+- **[Production Performance Monitoring](./production-performance-monitoring.md)** - Monitor Core Web Vitals in production
+- **[INP Optimization Long Tasks](./inp-optimization-long-tasks.md)** - Advanced INP optimization strategies
 
 ## Next Steps
 

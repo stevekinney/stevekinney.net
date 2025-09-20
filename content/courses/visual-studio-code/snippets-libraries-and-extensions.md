@@ -3,7 +3,8 @@ title: Snippet Libraries and Extensions
 description: >-
   Exploring built-in snippets, community snippet extensions, and how to create
   your own snippet extensions
-modified: 2025-03-18T09:13:03-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 ## Snippet Libraries and Extensions

@@ -1,10 +1,16 @@
 ---
 title: Speedy Web Compiler (SWC) for React Apps
-description: Compile and minify at warp speed. Configure SWC to speed local builds and keep production bundles lean and modern.
+description: >-
+  Compile and minify at warp speed. Configure SWC to speed local builds and keep
+  production bundles lean and modern.
 date: 2025-09-06T22:30:49.275Z
-modified: 2025-09-06T22:30:49.275Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'bundling', 'build-tools']
+tags:
+  - react
+  - performance
+  - bundling
+  - build-tools
 ---
 
 If your React build times feel like they're stuck in molasses, it might be time to meet SWC—the Rust-powered JavaScript compiler that's making Babel look like it's running on a potato. SWC (Speedy Web Compiler) transforms and bundles your JavaScript up to 20x faster than traditional tools, without sacrificing the transformations your modern React app needs. Whether you're wrestling with sluggish development server startup times or production builds that take forever, SWC can help you get back to shipping features instead of waiting around.
@@ -533,6 +539,14 @@ While SWC is excellent for most React projects, there are some scenarios where s
 - **Legacy project constraints**: If you're in a complex monorepo setup where changing the build tool would require extensive coordination
 
 ## Next Steps
+
+## Related Topics
+
+- **[Tree Shaking Optimization](./tree-shaking-optimization.md)** - Configure SWC for optimal tree shaking and dead code elimination
+- **[Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)** - Analyze the impact of SWC on your bundle size and compilation speed
+- **[Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md)** - Implement code splitting patterns that work efficiently with SWC
+- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - Understand how SWC integrates with React 19's new compiler features
+- **[Performance Testing Strategy](./performance-testing-strategy.md)** - Measure the build performance improvements from SWC adoption
 
 Once you've got SWC humming along nicely, consider these optimizations:
 

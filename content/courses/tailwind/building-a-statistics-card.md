@@ -3,8 +3,8 @@ title: Building a Stat Card Container Grid
 description: >-
   Let's build a responsive stat card grid that adapts based on container size
   using Tailwind's container query utilities.
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Let's start with our basic HTML structure for a collection of stat cards.

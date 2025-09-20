@@ -1,7 +1,10 @@
 ---
 title: Claude Code Thinking
-description: Leverage extended thinking modes and Ultrathink capabilities for complex problem-solving, strategic planning, and architectural decisions
-modified: 2025-07-29T12:15:47-06:00
+description: >-
+  Leverage extended thinking modes and Ultrathink capabilities for complex
+  problem-solving, strategic planning, and architectural decisions
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 Claude Code leverages an advanced "thinking" mode, including the super poweful **Ultrathink** capability, to enhance its problem-solving, planning, and code generation processes. This feature allows Claude to allocate additional computational resources for deeper analysis, moving beyond superficial responses to deliver more comprehensive and accurate results.

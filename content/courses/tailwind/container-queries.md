@@ -3,7 +3,8 @@ title: Container Queries
 description: >-
   Build truly responsive components with native CSS container queries support in
   Tailwind 4 for parent-based styling
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:11:25-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Container queries let you style elements based on their parent's size, not the viewport. Perfect for reusable components.

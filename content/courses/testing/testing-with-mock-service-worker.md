@@ -1,7 +1,8 @@
 ---
 title: Using Mock Service Worker With Vitest For API Testing
 description: Learn how to use Mock Service Worker with Vitest for API testing.
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 Mocking external network requests is a crucial part of testing applications that rely on APIs. **Mock Service Worker (MSW)** is a powerful tool that allows you to intercept and mock network requests at the network level. When combined with **Vitest**, a fast and modern JavaScript testing framework, you can create robust and reliable tests for your applications.

@@ -1,7 +1,10 @@
 ---
 title: Using Cursor Background Agents for Asynchronous Coding
-description: Master background agents in Cursor for parallel AI-powered code editing and autonomous task execution.
-modified: 2025-07-24T15:21:53-06:00
+description: >-
+  Master background agents in Cursor for parallel AI-powered code editing and
+  autonomous task execution.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 Background agents are **asynchronous remote agents** in Cursor that operate in a remote environment, allowing you to **spawn tasks that edit and run code independently in the background**. They function like an AI "multiplier," enabling developers to offload specific, repetitive, or time-consuming tasks and focus their time and mental cycles on more important roadmap items. Unlike traditional AI tools, Cursor integrates directly with your local project and understands your entire codebase contextually.

@@ -3,7 +3,8 @@ title: Integrated Terminal in Visual Studio Code
 description: >-
   Learn how to use and customize Visual Studio Code's integrated terminal for
   efficient development workflows
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 The built-in terminal is pretty straight-forward, but let's look at some of the ways that we can take it the Next Level™, as they say.
@@ -45,7 +46,7 @@ In your settings JSON file (or through the GUI), look for `terminal.integrated.*
 ## Tasks and the Terminal
 
 > [!NOTE] We'll talk more about tasks in a little bit
-> You can take a sneak peak [here](vscode-tasks.md), if you're so inclined.
+> You can take a sneak peek [here](vscode-tasks.md), if you're so inclined.
 
 Visual Studio Code tasks often run directly in the integrated terminal by default. This includes build tasks, test tasks, lint tasks, and more. Tasks let you automate repetitive workflows, and the integrated terminal provides a convenient, visible way to see your scripts in action. If you've set up multiple terminals, you can even watch a task run in one while you continue manual commands in another.
 

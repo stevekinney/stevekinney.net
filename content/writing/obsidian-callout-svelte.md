@@ -9,7 +9,7 @@ tags:
   - storybook
   - design-systems
 published: false
-modified: 2025-04-16T12:27:20-06:00
+modified: 2025-07-29T21:09:56.000Z
 ---
 
 I use [Obsidian](https://obsidian.md) for a lot of my writing and note gathering when I'm working on a course. I wouldn't mind using [Obsidian Publish](https://obsidian.md/publish) for hosting my notes and—as of this writing—I do have a paid account, but given that I want a high-level of customization and the ability to include code along with my content, I need a bit more control over how the content is hosted than Obsidian Publish is willing to give me.

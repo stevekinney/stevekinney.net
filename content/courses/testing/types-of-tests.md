@@ -1,7 +1,8 @@
 ---
 title: 'Unit, Integration, and End-To-End Tests Explained'
 description: 'Understanding the spectrum of unit, integration, and E2E tests.'
-modified: 2024-12-17T12:47:42-07:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 These terms tend to be overloaded and have a lot of wiggle room, but let's at least draw some lines in the sand.

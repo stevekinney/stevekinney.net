@@ -1,10 +1,16 @@
 ---
 title: Understanding Reconciliation in React 19
-description: Demystify how React compares trees, chooses updates, and schedules work—then apply the rules to ship snappy, predictable UIs.
+description: >-
+  Demystify how React compares trees, chooses updates, and schedules work—then
+  apply the rules to ship snappy, predictable UIs.
 date: 2025-09-06T21:09:12.712Z
-modified: 2025-09-06T21:09:12.712Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'reconciliation', 'react-19']
+tags:
+  - react
+  - performance
+  - reconciliation
+  - react-19
 ---
 
 React's reconciliation process is the magic behind how your components update efficiently—but it's also where most performance problems hide. If you've ever wondered why your React app feels sluggish, or why changing one component causes unexpected re-renders elsewhere, you're in the right place. Let's demystify how React compares component trees, decides what needs updating, and schedules that work in React 19.
@@ -32,7 +38,7 @@ When React encounters elements of different types in the same position, it tears
 
 ```tsx
 // ❌ This will destroy and recreate the entire subtree
-function App({ isLoggedIn }: { isLoggedIn: boolean }) {
+function Application({ isLoggedIn }: { isLoggedIn: boolean }) {
   if (isLoggedIn) {
     return <div>Welcome back!</div>;
   }
@@ -40,7 +46,7 @@ function App({ isLoggedIn }: { isLoggedIn: boolean }) {
 }
 
 // ✅ Better: Same element type, different content
-function App({ isLoggedIn }: { isLoggedIn: boolean }) {
+function Application({ isLoggedIn }: { isLoggedIn: boolean }) {
   return <div>{isLoggedIn ? 'Welcome back!' : 'Please log in'}</div>;
 }
 ```
@@ -273,7 +279,7 @@ In the first example, `MainContent`'s position in the tree changes when `showSid
 
 Here are some practical strategies for writing reconciliation-friendly components:
 
-### Use React.memo() Strategically
+### Use `React.memo()` Strategically
 
 ```tsx
 // ✅ Memo prevents re-renders when props haven't changed
@@ -474,6 +480,14 @@ Compound components provide consistent tree structure while keeping the API flex
 ## Next Steps
 
 Understanding reconciliation gives you a mental model for writing efficient React components. Here's what to focus on next:
+
+## Related Topics
+
+- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - Understand how React 19's compiler automatically optimizes reconciliation
+- **[Key Stability in Lists](./key-stability-in-lists.md)** - Master proper key usage for efficient list reconciliation
+- **[Identity Stability in Props](./identity-stability-props.md)** - Prevent unnecessary re-renders by maintaining stable object and function references
+- **[Virtual DOM & Fiber Architecture](./virtual-dom-fiber-architecture.md)** - Deep dive into React's reconciliation engine and Fiber architecture
+- **[Component Granularity and Splitting](./component-granularity-splitting.md)** - Optimize component boundaries for better reconciliation performance
 
 1. **Profile your app**: Use React DevTools to identify actual performance bottlenecks
 2. **Measure before optimizing**: Don't prematurely optimize based on assumptions

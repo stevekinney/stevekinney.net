@@ -3,7 +3,8 @@ title: 'Visual Studio Code Tasks: Tips and Tricks'
 description: >-
   Advanced techniques for customizing Visual Studio Code tasks with problem
   matchers, presentation options, and environment variables
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 ## Custom Problem Matchers

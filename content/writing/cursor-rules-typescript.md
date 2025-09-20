@@ -3,7 +3,7 @@ title: Cursor Rules for TypeScript Engineers
 description: >-
   A collection of some potentially useful Cursor rules as well as a rundown of
   what potentially makes a Cursor rule great.
-modified: 2025-05-13T09:54:07-06:00
+modified: 2025-07-30T11:07:02.000Z
 date: 2025-05-13T14:15:52.000Z
 published: true
 ---
@@ -210,7 +210,7 @@ const fetchUserSafe = async (id: string): Promise<User | null> => {
 };
 ```
 
-Luckily, I just recently taught a [Frontend Masters workshop on full-stack type-safety](https://frontendmasters.com/workshops/fullstack-typescript-v2/), so I had plenty of good and bad examples at my disposal.
+Luckily, I just recently taught a [Frontend Masters workshop on full-stack type-safety](https://frontendmasters.com/workshops/fullstack-typescript-v2/?utm_source=kinney&utm_medium=social&code=kinney), so I had plenty of good and bad examples at my disposal.
 
 ### A Bun in the Oven
 

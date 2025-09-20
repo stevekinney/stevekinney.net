@@ -3,7 +3,8 @@ title: >-
   Building a To-Do List Application In React Using Test-Driven Development With
   Vitest
 description: A guide to building a To-Do List app using TDD with React and Vitest.
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 ## Building a To-Do List Application in React Using Test-Driven Development with Vitest

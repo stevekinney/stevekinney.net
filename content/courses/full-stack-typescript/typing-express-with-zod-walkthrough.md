@@ -1,10 +1,11 @@
 ---
 title: 'Demonstration: Typing Express with Zod'
-modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn to integrate Zod schema validation in an Express app to ensure data
   integrity, covering tasks like creation, updates, and database queries with
   TypeScript.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-20T08:54:40-05:00'
 ---
 
 Let's add some schema validation to our Express application. We'll start by sketching out our schemas.
@@ -112,4 +113,4 @@ app.put('/tasks/:id', async (req: Request, res: Response) => {
 
 ## Next
 
-- [Validating Request Parameters](express-zod-params)
+- [Validating Request Parameters](express-zod-params.md)

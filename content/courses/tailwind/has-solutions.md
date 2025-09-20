@@ -1,7 +1,8 @@
 ---
 title: Solutions for `has-*` Challenges
 description: A solution for some challenges from Steve's Tailwind course.
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 ## Challenge 1: Checkbox Container

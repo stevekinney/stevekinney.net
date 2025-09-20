@@ -1,7 +1,8 @@
 ---
 title: Creating a Button Component
 description: A walkthrough for creating a button component in Figma.
-modified: 2024-10-02T08:49:23-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T08:48:38-06:00'
 ---
 
 Let's walk through the steps of creating a button component in Figma. One of the things that makes the button component particularly interesting to work on is the sheer numbers of flavors that it comes in.
@@ -34,7 +35,7 @@ The first and easiest thing to do is start with some text for the label of the b
 
 ![Just some text as the starting point for a button](assets/figma-text-starting-point-for-a-button.png)
 
-Next, we'll convert to an [auto-layout](auto layout.md) layer by pressing **Shift-A**. Figma will do its best to set some padding, but we'll need to do some adjustments.
+Next, we'll convert to an [auto-layout](auto-layout.md) layer by pressing **Shift-A**. Figma will do its best to set some padding, but we'll need to do some adjustments.
 
 We'll give the following values:
 

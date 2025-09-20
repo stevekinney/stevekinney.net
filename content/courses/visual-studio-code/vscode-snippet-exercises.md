@@ -1,7 +1,8 @@
 ---
 title: Visual Studio Code Snippet Exercises
 description: Practice creating various code snippets in Visual Studio Code
-modified: 2025-03-17T16:36:04-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 1. **Basic Function:** Create a snippet that, when you type `func`, generates a basic TypeScript function declaration. It should include placeholders for the function name, parameters, and return type, with tab stops to easily navigate between them. Add a descriptive label.
@@ -22,4 +23,4 @@ modified: 2025-03-17T16:36:04-05:00
 16. **Transform to Uppercase:** Design a snippet with the prefix `toupper` that takes a word as input through a placeholder and then inserts both the original word and its uppercase version. Use a transform to convert the placeholder text to uppercase. Add a description.
 17. **Surround with `try…catch`:** Develop a snippet with the prefix `trycatch` that is designed to surround selected TypeScript code with a `try…catch` block. It should use the `$TM_SELECTED_TEXT` variable to represent the highlighted code. Add a description.
 
-You can take a look at some of the proposed solutions [here](vscode-snippets-solutions).
+You can take a look at some of the proposed solutions [here](vscode-snippets-solutions.md).

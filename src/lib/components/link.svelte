@@ -37,7 +37,7 @@
   {role}
   {tabindex}
   {target}
-  {rel}
+  rel={target === '_blank' ? (rel ? rel : 'noopener noreferrer') : rel}
   {download}
   {title}
   aria-label={ariaLabel}

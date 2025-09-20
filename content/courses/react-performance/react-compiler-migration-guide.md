@@ -1,10 +1,16 @@
 ---
 title: React Compiler Migration Guide
-description: Complete guide to adopting React 19's compiler. Migrate from manual optimizations, handle edge cases, and measure improvements.
+description: >-
+  Complete guide to adopting React 19's compiler. Migrate from manual
+  optimizations, handle edge cases, and measure improvements.
 date: 2025-09-07T00:15:00.000Z
-modified: 2025-09-07T00:15:00.000Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'react-19', 'compiler']
+tags:
+  - react
+  - performance
+  - react-19
+  - compiler
 ---
 
 The React Compiler fundamentally changes how we think about performance optimization in React. Instead of manually placing `useMemo`, `useCallback`, and `React.memo` throughout your codebase, the compiler automatically optimizes your components at build time. It's not magic—it's sophisticated static analysis that understands React's rendering model and applies optimizations where they actually matter.
@@ -1155,6 +1161,29 @@ if (process.env.NODE_ENV === 'development') {
   window.debugCompiler = debugTools;
 }
 ```
+
+## Related Topics
+
+- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - Conceptual understanding of the compiler
+- **[React.memo in React 19 and Compiler Era](./react-memo-react-19-and-compiler-era.md)** - When to keep manual memoization
+- **[useMemo and useCallback in React 19](./usememo-usecallback-in-react-19.md)** - Hook behavior with compiler
+- **[Avoiding Over-memoization](./avoiding-over-memoization.md)** - Decision framework for optimization
+
+## Prerequisites
+
+- Familiarity with React optimization techniques
+- Understanding of build tools and configuration
+- Knowledge of React's Rules of React
+- Experience with TypeScript/JavaScript AST manipulation (for codemods)
+
+## Practical Examples
+
+Common migration scenarios:
+
+- **E-commerce applications** - Migrating product lists and shopping carts
+- **Dashboard applications** - Optimizing data tables and charts
+- **Content management systems** - Handling dynamic content rendering
+- **Social media apps** - Optimizing feeds and user interactions
 
 ## Next Steps
 

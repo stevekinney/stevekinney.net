@@ -1,17 +1,19 @@
 ---
-title: flushSync: Forcing Synchronous Flushes Carefully
-description: Force React to flush updates now—use sparingly to coordinate with imperative APIs like focus, measurements, and animations.
-date: 2025-09-06T22:17:45.101Z
-modified: 2025-09-06T22:17:45.101Z
-published: true
-tags: ['react', 'performance', 'concurrent', 'dom']
+title: Flushsync In React Dom
+description: >-
+  React's concurrent rendering is one of its most powerful features—it batches
+  updates, prioritizes work, and keeps your app responsive by breaking rendering
+  into chunks. But sometimes you need to tell React, "No, really, I need this
+  updat...
+modified: '2025-09-20T10:39:54-06:00'
+date: '2025-09-06T17:49:18-06:00'
 ---
 
 React's concurrent rendering is one of its most powerful features—it batches updates, prioritizes work, and keeps your app responsive by breaking rendering into chunks. But sometimes you need to tell React, "No, really, I need this update to happen right now." That's where `flushSync` comes in—a sharp tool that forces React to synchronously flush updates immediately.
 
 Think of `flushSync` as the emergency brake of React's rendering system. It's incredibly useful when you need to coordinate with imperative APIs (like focusing elements, measuring DOM nodes, or triggering animations), but it comes with performance tradeoffs that make it something you should reach for sparingly and with intention.
 
-## What is flushSync?
+## What is `flushSync`?
 
 `flushSync` is a function from `react-dom` that forces React to flush any pending updates synchronously before continuing. When you wrap a state update in `flushSync`, React immediately applies that update to the DOM—no batching, no concurrent scheduling, no waiting around.
 
@@ -37,7 +39,7 @@ function MyComponent() {
 
 The key difference is timing: normally, React batches updates and flushes them during the next render cycle. With `flushSync`, you're forcing that flush to happen immediately within the current synchronous execution.
 
-## When You Actually Need flushSync
+## When You Actually Need `flushSync`
 
 Most of the time, you don't need `flushSync`. React's default behavior of batching updates is usually what you want. But there are specific scenarios where synchronous updates become necessary:
 
@@ -389,7 +391,7 @@ function SearchResults() {
 }
 ```
 
-### Working with Suspense
+### Working with `Suspense`
 
 `flushSync` doesn't play nicely with Suspense boundaries:
 
@@ -409,7 +411,7 @@ function ProblematicComponent() {
 }
 ```
 
-## Debugging flushSync Issues
+## Debugging `flushSync` Issues
 
 When things go wrong with `flushSync`, here are common debugging approaches:
 
@@ -449,7 +451,7 @@ function TimedComponent() {
 }
 ```
 
-## When NOT to Use flushSync
+## When NOT to Use `flushSync`
 
 Here are some common anti-patterns to avoid:
 
@@ -624,6 +626,13 @@ function App() {
   );
 }
 ```
+
+## Related Topics
+
+- **[Concurrent React Scheduling](./concurrent-react-scheduling.md)** - Understand React's scheduling system that flushSync overrides
+- **[useTransition and startTransition](./usetransition-and-starttransition.md)** - Alternative patterns for coordinating updates
+- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - How the compiler affects flushSync usage
+- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Impact of synchronous updates on performance metrics
 
 ## Wrapping Up
 

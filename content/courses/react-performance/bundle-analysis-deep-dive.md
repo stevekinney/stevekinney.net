@@ -1,10 +1,16 @@
 ---
 title: Bundle Analysis Deep Dive
-description: Master webpack-bundle-analyzer, source maps, and dependency auditing to eliminate bloat and optimize your React bundle.
+description: >-
+  Master webpack-bundle-analyzer, source maps, and dependency auditing to
+  eliminate bloat and optimize your React bundle.
 date: 2025-09-06T23:30:00.000Z
-modified: 2025-09-06T23:30:00.000Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'bundling', 'analysis']
+tags:
+  - react
+  - performance
+  - bundling
+  - analysis
 ---
 
 Your React bundle is a black box until you crack it open. That 2MB JavaScript file could contain duplicate dependencies, unused code, or a single poorly chosen library that's 10x larger than alternatives. Bundle analysis transforms guesswork into data-driven optimization—showing you exactly what's shipped, why it's there, and where you can cut the fat without breaking functionality.
@@ -508,85 +514,13 @@ async function generateDependencyReport() {
 
 ### Tree Shaking Enhancement
 
-```javascript
-// Webpack config optimized for tree shaking
-module.exports = {
-  mode: 'production',
+Tree shaking removes unused code from your bundle. When analyzing bundles, look for:
 
-  // Ensure modules are not transformed to CommonJS
-  module: {
-    rules: [
-      {
-        test: /\.m?js$/,
-        resolve: {
-          fullySpecified: false, // Allow imports without file extensions
-        },
-      },
-      {
-        test: /\.[jt]sx?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              ['@babel/preset-env', {
-                modules: false, // Keep ES6 modules for tree shaking
-              }],
-              '@babel/preset-react',
-            ],
-          },
-        },
-      },
-    ],
-  },
+- Modules importing entire libraries when only using a few functions
+- Large unused exports that weren't eliminated
+- CommonJS modules that can't be tree-shaken
 
-  // Mark side-effect-free files
-  optimization: {
-    usedExports: true,
-    sideEffects: false, // Or array of files with side effects
-
-    // Advanced tree shaking
-    innerGraph: true,
-    providedExports: true,
-
-    splitChunks: {
-      chunks: 'all',
-      cacheGroups: {
-        // Separate vendor bundle for better caching
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          priority: 10,
-          reuseExistingChunk: true,
-        },
-
-        // Common utilities
-        common: {
-          name: 'common',
-          minChunks: 2,
-          priority: 5,
-          reuseExistingChunk: true,
-        },
-      },
-    },
-  },
-
-  // Help webpack understand which modules are safe to tree shake
-  resolve: {
-    mainFields: ['module', 'browser', 'main'],
-  },
-};
-
-// Mark side-effect-free modules in package.json
-{
-  "sideEffects": [
-    "*.css",
-    "*.scss",
-    "./src/polyfills.js",
-    "./src/setupTests.js"
-  ]
-}
-```
+For detailed tree-shaking configuration and optimization, see [Tree Shaking Optimization](./tree-shaking-optimization.md).
 
 ### Code Splitting Optimization
 
@@ -861,6 +795,13 @@ class BundleMetricsCollector {
   }
 }
 ```
+
+## Related Topics
+
+- **Tree Shaking**: [Tree Shaking Optimization](./tree-shaking-optimization.md)
+- **Build Tools**: [SWC (Speedy Web Compiler)](./swc-speedy-web-compiler.md)
+- **Code Splitting**: [Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md)
+- **Dependency Management**: [Avoiding Unnecessary Dependencies](./avoiding-unnecessary-dependencies.md)
 
 ## Next Steps
 

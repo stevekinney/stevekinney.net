@@ -3,7 +3,8 @@ title: Editing Settings Through JSON
 description: >-
   Learn how to directly edit Visual Studio Code settings using the settings.json
   file for advanced configuration
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 The Settings Editor provides a convenient visual interface, directly editing the `settings.json` file offers more advanced control and is essential for certain customizations. `settings.json` files are plain text files formatted in JSON (JavaScript Object Notation).

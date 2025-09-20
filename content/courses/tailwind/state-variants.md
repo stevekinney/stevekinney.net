@@ -3,8 +3,8 @@ title: State Variants
 description: >-
   Apply styles conditionally using Tailwind's state variants for pseudo-classes,
   media queries, and attribute selectors
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 State variants apply utility classes conditionally based on element state or context. Prefix any utility with a variant name and colon: `hover:bg-blue-500`, `md:text-lg`.

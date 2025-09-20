@@ -1,7 +1,10 @@
 ---
 title: Claude Code Sub-Agents
-description: Create and manage specialized sub-agents for parallel task execution, code review, debugging, and multi-agent development workflows
-modified: 2025-07-28T07:24:16-06:00
+description: >-
+  Create and manage specialized sub-agents for parallel task execution, code
+  review, debugging, and multi-agent development workflows
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 The primary goal of using sub agents is to parallelize work and leverage specialized expertise, leading to increased efficiency, precision, and throughput in complex development workflows.

@@ -1,7 +1,10 @@
 ---
 title: Setting Up Cursor Rules for Consistent AI Behavior
-description: Configure project and user-level rules to enforce coding standards and guide AI behavior in Cursor.
-modified: 2025-07-28T06:58:25-06:00
+description: >-
+  Configure project and user-level rules to enforce coding standards and guide
+  AI behavior in Cursor.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 Cursor Rules are **persistent instructions that you define for the AI to follow every time it edits or interacts with your codebase**. They act as a **built-in, lightweight linter and style guide for the AI collaborator**, helping to enforce coding conventions, architectural guidelines, and specific preferences across your project. These rules ensure the AI provides more relevant and accurate suggestions by deeply understanding your project's context and your desired coding style.

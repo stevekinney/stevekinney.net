@@ -1,7 +1,10 @@
 ---
 title: Installing and Setting Up Claude Code
-description: Complete installation guide for Claude Code CLI tool with system requirements and initial configuration.
-modified: 2025-07-29T12:30:30-06:00
+description: >-
+  Complete installation guide for Claude Code CLI tool with system requirements
+  and initial configuration.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 Claude Code is a **powerful agentic AI coding assistant** that transforms how developers approach their workflows. Unlike traditional code completion tools, it operates directly in your terminal, understanding your entire codebase and executing complex development tasks through natural language commands. It functions less like a suggestion tool and more like an **intelligent partner** or a junior developer on your team.

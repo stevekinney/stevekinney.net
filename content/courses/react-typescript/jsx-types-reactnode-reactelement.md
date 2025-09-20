@@ -1,10 +1,18 @@
 ---
 title: Typing Children and When to Use ReactNode
-description: Children can be strings, elements, arrays—learn the correct types and helpers without guesswork.
+description: >-
+  Children can be strings, elements, arrays—learn the correct types and helpers
+  without guesswork.
 date: 2025-09-06T22:23:57.264Z
-modified: 2025-09-06T22:23:57.264Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'children', 'reactnode', 'reactelement', 'jsx']
+tags:
+  - react
+  - typescript
+  - children
+  - reactnode
+  - reactelement
+  - jsx
 ---
 
 Children in React can be almost anything: strings, numbers, JSX elements, arrays of elements, fragments, or even `null`. But when you're writing TypeScript, how do you type that `children` prop without breaking half your use cases or being overly permissive?

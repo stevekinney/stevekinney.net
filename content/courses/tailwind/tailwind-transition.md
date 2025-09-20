@@ -3,8 +3,8 @@ title: Transitions
 description: >-
   Create smooth animations with Tailwind's transition utilities for duration,
   timing, delay, and property-specific transitions
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 CSS transitions animate changes to CSS properties over time, creating smooth effects like fading elements, color changes, or layout shifts. Tailwind provides utility classes for implementing transitions directly in HTML.

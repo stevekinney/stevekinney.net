@@ -1,6 +1,10 @@
 ---
 title: Building a Modal Dialog
-description: Let's build a professional modal dialog with backdrop, animations, and proper content structure step by step using Tailwind CSS.
+description: >-
+  Let's build a professional modal dialog with backdrop, animations, and proper
+  content structure step by step using Tailwind CSS.
+modified: '2025-06-13T07:53:56-05:00'
+date: '2025-06-13T07:27:15-05:00'
 ---
 
 Let's start with our basic HTML structure for a modal dialog component.

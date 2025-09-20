@@ -3,7 +3,8 @@ title: Type Guards vs Schema Validation
 description: >-
   Compare traditional TypeScript type guards with schema validation libraries
   like Zod for runtime data validation.
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 Type guards are way to use runtime logic to help put TypeScript at ease that a given object is actually the type you think it ought to be. Here is a quick example.

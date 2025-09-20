@@ -1,7 +1,10 @@
 ---
 title: Claude Code Plan Mode
-description: Use strategic planning phases to improve code quality and reduce iterations by having Claude create detailed implementation plans before coding
-modified: 2025-07-24T15:32:53-06:00
+description: >-
+  Use strategic planning phases to improve code quality and reduce iterations by
+  having Claude create detailed implementation plans before coding
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 Claude Code excels when given a clear, verifiable target. For complex problems, simply asking Claude to "write code" can lead to inefficiencies, context loss, and a higher chance of incorrect outputs. A dedicated planning phase serves to:

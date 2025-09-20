@@ -1,10 +1,12 @@
 ---
-title: Safer Context: Custom createContext and Hooks
-description: No more maybe‑undefined context—return a typed hook and Provider tuple that never lies.
-date: 2025-09-06T22:23:57.272Z
-modified: 2025-09-06T22:23:57.272Z
-published: true
-tags: ['react', 'typescript', 'context', 'create-context', 'helpers', 'type-safety']
+title: Safer Createcontext Helpers
+description: >-
+  React Context is powerful, but the default createContext API leaves you with
+  an uncomfortable truth: your context value might be undefined if someone
+  forgets to wrap their component tree in a Provider. This leads to defensive
+  programming...
+modified: '2025-09-14T11:49:08-06:00'
+date: '2025-09-06T17:49:18-06:00'
 ---
 
 React Context is powerful, but the default `createContext` API leaves you with an uncomfortable truth: your context value might be `undefined` if someone forgets to wrap their component tree in a Provider. This leads to defensive programming, runtime checks, and the occasional late-night debugging session when you realize why your app is throwing errors in production.

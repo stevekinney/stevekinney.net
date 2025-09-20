@@ -1,7 +1,8 @@
 ---
-modified: 2025-04-16T12:27:20-06:00
 title: 'Emmet in Visual Studio Code: Exercises'
 description: Some quick exercises for getting comfortable using Emmet inside of VS Code.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-18T06:15:05-05:00'
 ---
 
 We don't have a ton of opportunities for hands-on practice in this course. So, let's take the opportunity since we have one.
@@ -74,4 +75,4 @@ Form an Emmet abbreviation to generate a `<header>` that contains a `<nav>` with
 
 ## Solutions
 
-You can find the solutions [here](vscode-emmet-solutions).
+You can find the solutions [here](vscode-emmet-solutions.md).

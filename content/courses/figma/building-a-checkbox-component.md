@@ -1,7 +1,8 @@
 ---
 title: Building a Checkbox Component
 description: Creating an interactive checkbox component with variants in Figma.
-modified: 2024-10-02T08:49:23-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T06:28:51-06:00'
 ---
 
 > [!success] Solution
@@ -36,7 +37,7 @@ You can see in action [here](https://www.figma.com/proto/k2WU0bJ53LG4Kl6hoBCITR/
 
 ## Expanding the Component
 
-Next, we're going to expand our checkbox to be a checklist item. This isn't anything we haven't seen before. We just need to create a component that also has some text and [auto-layout](auto layout.md).
+Next, we're going to expand our checkbox to be a checklist item. This isn't anything we haven't seen before. We just need to create a component that also has some text and [auto-layout](auto-layout.md).
 
 ![The checklist item component](assets/figma-checklist-item.png)
 

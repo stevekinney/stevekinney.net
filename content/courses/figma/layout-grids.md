@@ -4,7 +4,7 @@ description: >-
   Layout grids in Figma enhance your designs with structure and consistency.
   Learn to utilize columns, rows, and grids for precise alignment.
 date: 2024-03-09T19:20:40.000Z
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
 tags:
   - figma
   - course

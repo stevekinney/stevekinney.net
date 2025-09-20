@@ -1,10 +1,12 @@
 ---
-title: Typed Data Layer: React Query and tRPC
-description: End‑to‑end types—from server router to client calls—plus cached queries with proper key typing.
-date: 2025-09-06T22:23:57.350Z
-modified: 2025-09-06T22:23:57.350Z
-published: true
-tags: ['react', 'typescript', 'react-query', 'trpc', 'data-fetching', 'rpc']
+title: Server packages
+description: >-
+  Building a fully type-safe data layer between your React frontend and backend
+  is one of those things that sounds complicated but becomes surprisingly
+  elegant once you get the pieces in place. When you combine React Query's
+  powerful cachi...
+modified: '2025-09-06T17:49:18-06:00'
+date: '2025-09-06T17:49:18-06:00'
 ---
 
 Building a fully type-safe data layer between your React frontend and backend is one of those things that sounds complicated but becomes surprisingly elegant once you get the pieces in place. When you combine React Query's powerful caching and state management with tRPC's end-to-end type safety, you get something magical: full TypeScript inference from your server functions all the way to your React components, with zero manual type definitions.
@@ -704,3 +706,9 @@ The combination of tRPC and React Query creates a incredibly productive developm
 - **Testing strategies** for components that use tRPC queries
 
 The key insight is that modern type-safe data fetching isn't just about preventing bugs (though it does that beautifully)—it's about creating a development experience where your tools understand your data flow and can help you build features faster and more confidently.
+
+## See Also
+
+- [Real‑time Typing: WebSockets and SSE](realtime-typing-websockets-and-sse.md)
+- [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md)
+- [MSW + Contracts: Typed Handlers](msw-and-contract-testing.md)

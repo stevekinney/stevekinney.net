@@ -1,10 +1,12 @@
 ---
-title: Styling Types: csstype, CSS Modules, and Inline Styles
-description: Type your styles—inline style objects, CSS Modules declarations, and styled-system props without any escapes.
-date: 2025-09-06T22:04:44.932Z
-modified: 2025-09-06T22:04:44.932Z
-published: true
-tags: ['react', 'typescript', 'styling', 'css-type', 'css-modules', 'css']
+title: Styling Csstype And Css Modules
+description: >-
+  Styling in React with TypeScript doesn't have to feel like a constant battle
+  with the type checker. Whether you're using inline styles, CSS Modules, or
+  building a design system, TypeScript can actually make your styling more
+  robust and d...
+modified: '2025-09-06T17:49:18-06:00'
+date: '2025-09-06T17:49:18-06:00'
 ---
 
 Styling in React with TypeScript doesn't have to feel like a constant battle with the type checker. Whether you're using inline styles, CSS Modules, or building a design system, TypeScript can actually make your styling more robust and developer-friendly. Let's explore how to properly type your styles using `csstype`, CSS Modules, and inline style patterns that scale.
@@ -28,7 +30,7 @@ The [`csstype`](https://www.npmjs.com/package/csstype) package provides comprehe
 npm install csstype
 ```
 
-### Basic csstype Usage
+### Basic `csstype` Usage
 
 At its simplest, `csstype` gives you precise types for CSS properties:
 
@@ -159,6 +161,10 @@ const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', style })
   );
 };
 ```
+
+## See Also
+
+- [Tailwind + CVA: Typed Variants and Slots](tailwind-cva-typed-variants.md)
 
 ## CSS Modules with TypeScript
 

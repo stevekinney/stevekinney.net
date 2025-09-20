@@ -3,7 +3,8 @@ title: Popular Visual Studio Code Settings
 description: >-
   Discover valuable Visual Studio Code settings to customize your editor for
   maximum productivity and a better development experience
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 ## Steve's Favorites

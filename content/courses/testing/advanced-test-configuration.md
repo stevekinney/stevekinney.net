@@ -1,7 +1,8 @@
 ---
 title: Advanced Test Configuration With Vitest
 description: Dive into advanced Vitest configurations for better efficiency.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 ## Customizing the `vitest.config.ts`
@@ -9,7 +10,7 @@ modified: 2025-04-28T17:33:44-06:00
 Vitest is pretty awesome right out of the box, but sometimes you need to customize things to fit your project. This brings us to the `vitest.config.ts` file.
 
 > \[!NOTE] This is Mostly Vite-Related Content
-> Most of what we're covering here related to Vite—and thereby Vitest. Our friends at [Frontend Masters](https://frontendmasters.com?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) have [a whole course on Vite](https://frontendmasters.com/courses/vite/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) that is taught by a _very_ dapper instructor.
+> Most of what we're covering here related to Vite—and thereby Vitest. Our friends at [Frontend Masters](https://frontendmasters.com/?utm_source=kinney&utm_medium=social&code=kinney) have [a whole course on Vite](https://frontendmasters.com/courses/vite/?utm_source=kinney&utm_medium=social&code=kinney) that is taught by a _very_ dapper instructor.
 
 Here's a basic one as a refresher:
 

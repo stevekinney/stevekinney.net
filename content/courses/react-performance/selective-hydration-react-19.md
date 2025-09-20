@@ -1,10 +1,16 @@
 ---
 title: Selective Hydration in Modern React Apps
-description: Hydrate what matters first. Prioritize above‑the‑fold work so pages feel interactive even while the rest continues to load.
+description: >-
+  Hydrate what matters first. Prioritize above‑the‑fold work so pages feel
+  interactive even while the rest continues to load.
 date: 2025-09-06T22:05:42.929Z
-modified: 2025-09-06T22:05:42.929Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'hydration', 'ssr']
+tags:
+  - react
+  - performance
+  - hydration
+  - ssr
 ---
 
 Your users don't care about the footer interactive when they're trying to click "Add to Cart." Selective hydration in React 18+ lets you prioritize what gets hydrated first, making your server-rendered apps feel snappy where it matters most—even while the rest of your page is still waking up in the background.
@@ -54,7 +60,7 @@ When a user tries to interact with a component that hasn't hydrated yet, React a
 
 Let's build a realistic example. Imagine an e-commerce product page with several distinct sections that have different priorities.
 
-### Basic Setup with Suspense Boundaries
+### Basic Setup with `Suspense` Boundaries
 
 ```tsx
 import { Suspense, lazy } from 'react';
@@ -375,5 +381,28 @@ Focus on:
 ## The Bottom Line
 
 Selective hydration transforms server-rendered apps from "all or nothing" to "progressive by default." By wrapping less critical components in Suspense boundaries and leveraging React's automatic prioritization, you can create apps that feel responsive from the moment they load—even while parts are still hydrating in the background.
+
+## Related Topics
+
+- **[Streaming SSR Optimization](./streaming-ssr-optimization.md)** - Advanced server-side rendering with streaming
+- **[Optimizing Server-Side Rendering](./optimizing-server-side-rendering.md)** - Complete SSR performance guide
+- **[The use() Hook](./the-use-hook.md)** - Modern data fetching with Suspense
+- **[Suspense for Data Fetching](./suspense-for-data-fetching.md)** - Core Suspense patterns
+
+## Prerequisites
+
+- Understanding of React Server-Side Rendering
+- Experience with React 18+ concurrent features
+- Knowledge of Suspense and error boundaries
+- Familiarity with lazy loading patterns
+
+## Practical Examples
+
+Ideal scenarios for selective hydration:
+
+- **E-commerce product pages** - Prioritize "Add to Cart" over reviews
+- **News websites** - Article content first, comments later
+- **Dashboards** - Critical widgets before auxiliary charts
+- **Social media** - Main feed before sidebar recommendations
 
 Start with your most critical user flows (shopping cart, login, primary actions), wrap secondary content in Suspense boundaries, and let React handle the complexity of prioritization. Your users will notice the difference immediately, even if they don't know why your app suddenly feels so much faster.

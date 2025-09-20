@@ -1,10 +1,17 @@
 ---
 title: Function Overloads for Flexible APIs
-description: Use overloads to model ergonomic APIs—curried helpers, either‑or props, and safe fallbacks.
+description: >-
+  Use overloads to model ergonomic APIs—curried helpers, either‑or props, and
+  safe fallbacks.
 date: 2025-09-06T22:23:57.282Z
-modified: 2025-09-06T22:23:57.282Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'function-overloads', 'api-design', 'flexible-apis']
+tags:
+  - react
+  - typescript
+  - function-overloads
+  - api-design
+  - flexible-apis
 ---
 
 Function overloads in TypeScript let you define multiple type signatures for a single implementation, creating APIs that feel intuitive and adapt to how developers actually want to use them. In React applications, this translates to components and hooks that "just work" regardless of whether you pass a string, an object, or different combinations of arguments. We'll explore how to design flexible, type-safe APIs that make your components feel as polished as React's built-ins.
@@ -272,7 +279,7 @@ const query2 = new QueryBuilder<User>().where({ age: 25, status: 'active' }).bui
 
 ## Gotchas and Best Practices
 
-### 1. Implementation Must Handle All Cases
+### Implementation Must Handle All Cases
 
 Your implementation function must handle every possible combination defined in your overloads:
 
@@ -300,7 +307,7 @@ function processData(data: string | number[]): string | number {
 }
 ```
 
-### 2. Order Matters
+### Order Matters
 
 TypeScript checks overloads from top to bottom and uses the first match:
 
@@ -316,7 +323,7 @@ function format(value: string): string;
 function format(value: any): string;
 ```
 
-### 3. Don't Overuse Overloads
+### Don't Overuse Overloads
 
 Sometimes a simple union type or generic is clearer than overloads:
 

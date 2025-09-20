@@ -4,7 +4,7 @@ description: >-
   A comprehensive guide to using Prisma with tRPC, Express, and TypeScript for
   end-to-end type safety in your database operations.
 date: 2025-03-15T23:00:07.000Z
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
 ---
 
 Below is a step‑by‑step tutorial that not only shows you how to set up Prisma with Express and TypeScript for a simple todo app but also highlights the changes you made—replacing your custom TaskClient with Prisma for full type safety. Let's jump in.

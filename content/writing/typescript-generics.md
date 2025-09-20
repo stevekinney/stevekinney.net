@@ -4,7 +4,7 @@ description: >-
   Let's learn a little bit about what generics are in TypeScript, why they're
   useful, and how to use them.
 date: 2021-08-16T16:00:00.006Z
-modified: 2025-04-16T12:27:20-06:00
+modified: 2025-07-29T21:09:56.000Z
 published: true
 tags:
   - typescript

@@ -1,10 +1,16 @@
 ---
 title: Avoiding Unnecessary Dependencies
-description: Trim the fat. Replace heavy libraries with native APIs or lighter alts and lean on tree‑shaking to cut bundle size.
+description: >-
+  Trim the fat. Replace heavy libraries with native APIs or lighter alts and
+  lean on tree‑shaking to cut bundle size.
 date: 2025-09-06T22:09:43.427Z
-modified: 2025-09-06T22:09:43.427Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'bundling', 'dependencies']
+tags:
+  - react
+  - performance
+  - bundling
+  - dependencies
 ---
 
 Every dependency you add to your React project is a bet—a bet that the value it provides outweighs its cost in bundle size, maintenance overhead, and potential security vulnerabilities. Too often, we reach for popular libraries without considering whether we actually need them or if there's a lighter alternative. Let's explore how to audit your dependencies, identify unnecessary bloat, and make informed choices that keep your React applications lean and fast.
@@ -380,6 +386,12 @@ Dependency management is an ongoing process, not a destination. Start by:
 3. **Replace one dependency at a time** to minimize risk
 4. **Set up monitoring** to catch future bundle bloat
 5. **Establish a decision framework** for evaluating new dependencies
+
+## Related Topics
+
+- **Bundle Analysis**: [Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)
+- **Tree Shaking**: [Tree Shaking Optimization](./tree-shaking-optimization.md)
+- **Code Splitting**: [Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md)
 
 Remember: every dependency should earn its place in your bundle. When in doubt, favor native solutions and custom implementations over heavy libraries. Your users will thank you with faster load times, and your future self will thank you with fewer dependency-related headaches.
 

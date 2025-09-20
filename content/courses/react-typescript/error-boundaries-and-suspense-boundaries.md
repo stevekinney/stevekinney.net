@@ -1,10 +1,17 @@
 ---
 title: Error Boundaries and Suspense Boundaries
-description: Type error and suspense boundaries—ensure fallback components and error info props are accurately modeled.
+description: >-
+  Type error and suspense boundaries—ensure fallback components and error info
+  props are accurately modeled.
 date: 2025-09-06T22:04:44.917Z
-modified: 2025-09-06T22:04:44.917Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'typescript', 'error-boundaries', 'suspense', 'error-handling']
+tags:
+  - react
+  - typescript
+  - error-boundaries
+  - suspense
+  - error-handling
 ---
 
 Error boundaries and Suspense boundaries are React's tools for gracefully handling the unexpected—crashes and loading states, respectively. But here's the thing: they're class components and special APIs that don't get the same TypeScript attention as your typical hooks and function components. Let's fix that by learning how to properly type these boundaries so your fallbacks and error handling are as bulletproof as the rest of your application.
@@ -84,21 +91,23 @@ interface ErrorFallbackProps {
   resetErrorBoundary?: () => void;
 }
 
-const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, errorInfo, resetErrorBoundary }) => (
-  <div className="error-boundary">
-    <h2>Oops! Something went wrong</h2>
-    <p>{error.message}</p>
+function ErrorFallback({ error, errorInfo, resetErrorBoundary }: ErrorFallbackProps) {
+  return (
+    <div className="error-boundary">
+      <h2>Oops! Something went wrong</h2>
+      <p>{error.message}</p>
 
-    {process.env.NODE_ENV === 'development' && errorInfo && (
-      <details>
-        <summary>Error Details (Dev Only)</summary>
-        <pre>{errorInfo.componentStack}</pre>
-      </details>
-    )}
+      {process.env.NODE_ENV === 'development' && errorInfo && (
+        <details>
+          <summary>Error Details (Dev Only)</summary>
+          <pre>{errorInfo.componentStack}</pre>
+        </details>
+      )}
 
-    {resetErrorBoundary && <button onClick={resetErrorBoundary}>Try Again</button>}
-  </div>
-);
+      {resetErrorBoundary && <button onClick={resetErrorBoundary}>Try Again</button>}
+    </div>
+  );
+}
 ```
 
 ### Enhanced Error Boundary with Reset Capability
@@ -173,7 +182,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 > [!TIP]
 > Use generics when your error boundaries need to handle specific error types. For example, `ErrorBoundary<ApiError>` could provide typed access to API-specific error properties.
 
-## Suspense Boundaries: Handling Async Gracefully
+## `Suspense` Boundaries: Handling Async Gracefully
 
 Suspense boundaries are much simpler to type since they're built-in React components, but the fallback prop and error handling still need proper typing:
 
@@ -185,17 +194,19 @@ interface LoadingFallbackProps {
   progress?: number;
 }
 
-const LoadingFallback: React.FC<LoadingFallbackProps> = ({ message = 'Loading...', progress }) => (
-  <div className="loading-boundary">
-    <div className="spinner" />
-    <p>{message}</p>
-    {progress !== undefined && (
-      <div className="progress-bar">
-        <div className="progress-fill" style={{ width: `${progress}%` }} />
-      </div>
-    )}
-  </div>
-);
+function LoadingFallback({ message = 'Loading...', progress }: LoadingFallbackProps) {
+  return (
+    <div className="loading-boundary">
+      <div className="spinner" />
+      <p>{message}</p>
+      {progress !== undefined && (
+        <div className="progress-bar">
+          <div className="progress-fill" style={{ width: `${progress}%` }} />
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface AsyncWrapperProps {
   children: ReactNode;
@@ -203,14 +214,16 @@ interface AsyncWrapperProps {
   loadingMessage?: string;
 }
 
-const AsyncWrapper: React.FC<AsyncWrapperProps> = ({ children, fallback, loadingMessage }) => (
-  <Suspense fallback={fallback || <LoadingFallback message={loadingMessage} />}>
-    {children}
-  </Suspense>
-);
+function AsyncWrapper({ children, fallback, loadingMessage }: AsyncWrapperProps) {
+  return (
+    <Suspense fallback={fallback || <LoadingFallback message={loadingMessage} />}>
+      {children}
+    </Suspense>
+  );
+}
 ```
 
-### Combining Error and Suspense Boundaries
+### Combining Error and `Suspense` Boundaries
 
 In practice, you'll often want both error and suspense handling. Here's a typed wrapper that handles both concerns:
 
@@ -222,16 +235,18 @@ interface BoundaryWrapperProps {
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
-const BoundaryWrapper: React.FC<BoundaryWrapperProps> = ({
+function BoundaryWrapper({
   children,
   loadingFallback = <LoadingFallback />,
   errorFallback = ErrorFallback,
   onError,
-}) => (
-  <ErrorBoundary fallback={errorFallback} onError={onError}>
-    <Suspense fallback={loadingFallback}>{children}</Suspense>
-  </ErrorBoundary>
-);
+}: BoundaryWrapperProps) {
+  return (
+    <ErrorBoundary fallback={errorFallback} onError={onError}>
+      <Suspense fallback={loadingFallback}>{children}</Suspense>
+    </ErrorBoundary>
+  );
+}
 
 // Usage with proper type safety
 <BoundaryWrapper
@@ -261,31 +276,35 @@ interface RouteErrorBoundaryProps {
   routeName: string;
 }
 
-const RouteErrorBoundary: React.FC<RouteErrorBoundaryProps> = ({ children, routeName }) => (
-  <ErrorBoundary
-    fallback={(error, errorInfo) => (
-      <RouteFallback error={error} errorInfo={errorInfo} routeName={routeName} />
-    )}
-    onError={(error, errorInfo) => {
-      logError(`Route ${routeName} error:`, error, errorInfo);
-    }}
-  >
-    <Suspense fallback={<RouteLoadingSpinner />}>{children}</Suspense>
-  </ErrorBoundary>
-);
+function RouteErrorBoundary({ children, routeName }: RouteErrorBoundaryProps) {
+  return (
+    <ErrorBoundary
+      fallback={(error, errorInfo) => (
+        <RouteFallback error={error} errorInfo={errorInfo} routeName={routeName} />
+      )}
+      onError={(error, errorInfo) => {
+        logError(`Route ${routeName} error:`, error, errorInfo);
+      }}
+    >
+      <Suspense fallback={<RouteLoadingSpinner />}>{children}</Suspense>
+    </ErrorBoundary>
+  );
+}
 
 interface RouteFallbackProps extends ErrorFallbackProps {
   routeName: string;
 }
 
-const RouteFallback: React.FC<RouteFallbackProps> = ({ error, routeName }) => (
-  <div className="route-error">
-    <h1>Page Unavailable</h1>
-    <p>The {routeName} page encountered an error:</p>
-    <code>{error.message}</code>
-    <button onClick={() => window.location.reload()}>Refresh Page</button>
-  </div>
-);
+function RouteFallback({ error, routeName }: RouteFallbackProps) {
+  return (
+    <div className="route-error">
+      <h1>Page Unavailable</h1>
+      <p>The {routeName} page encountered an error:</p>
+      <code>{error.message}</code>
+      <button onClick={() => window.location.reload()}>Refresh Page</button>
+    </div>
+  );
+}
 ```
 
 ### Context-Aware Error Boundaries

@@ -3,7 +3,8 @@ title: Tailwind CSS 4
 description: >-
   Major evolution of Tailwind with CSS-first configuration, native variables,
   modern CSS features, and the new Oxide engine
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:11:25-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Tailwind 4 is a ground-up rewrite of the framework.

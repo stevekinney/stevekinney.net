@@ -3,7 +3,8 @@ title: Color Palettes in Storybook
 description: >-
   Storybook provides a Docs Block for rendering your design system's color
   palette.
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T06:28:51-06:00'
 ---
 
 Storybook provides a Docs Block for rendering your design system's color palette. For example, you can create a `.mdx` file that looks like this.
@@ -94,6 +95,6 @@ export default {
 
 ## Exercise
 
-Can you take the more limited set of colors from our theme and generate a color palette? If you get stuck [you can check out this potential solution](color-palette-solution).
+Can you take the more limited set of colors from our theme and generate a color palette? If you get stuck [you can check out this potential solution](color-palette-solution.md).
 
 ![A programmatically generated color palette displayed in Storybook](assets/storybook-progamatically-generated-color-palette.png)

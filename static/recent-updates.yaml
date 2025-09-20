@@ -1,0 +1,529 @@
+- title: Cursor Rules for TypeScript Engineers
+  description: A collection of some potentially useful Cursor rules as well as a
+    rundown of what potentially makes a Cursor rule great.
+  modified: 2025-07-30T11:07:02.000Z
+  path: /writing/cursor-rules-typescript
+- title: Using Anthropic's Message Batches API with Temporal
+  description: Build scalable, cost-efficient AI processing with Anthropic's
+    Message Batches API and Temporal workflows.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/anthropic-batch-api-with-temporal
+- title: "What If It Goes Wrong?: The Hidden Dangers of Counterfactual Reasoning
+    in AI"
+  description: Exploring the pitfalls of counterfactual reasoning in AI,
+    highlighting its fragility, chaotic nature, and alignment with Nassim
+    Taleb's critique of prediction in complex systems.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/counter-factual-reasoning-in-ai
+- title: Cursor Rules for Writing Temporal Workflows with TypeScript
+  description: Essential guidelines and best practices for writing reliable
+    Temporal workflows in TypeScript, covering serialization, determinism, and
+    workflow patterns.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/cursor-rules-temporal-typescript
+- title: Getting the Most Out of GPT-4.1
+  description: "A naïve guide to get the most out of GPT-4.1: context window
+    optimization, coding tips, prompt best practices, and when to choose GPT-4.1
+    over GPT-4.5."
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/getting-the-most-out-of-gpt-4-1
+- title: Neural Networks
+  description: A friendly intro to neural networks, what they are, how they learn,
+    and why they matter for software engineers exploring the world of generative
+    AI.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/neural-networks
+- title: Implementing Obsidian's Callout in Svelte
+  description: A gentle walkthrough where we build our take on Obsidian's callout
+    component in Svelte.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/obsidian-callout-svelte
+- title: Setting Up a Python Environment on macOS
+  description: A brief guide for getting started writing Python on a Mac using
+    virtual environments.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/setup-python
+- title: Creating a Markdown Preprocessor for Svelte
+  description: Let's look at how to write our own preprocessor for SvelteKit.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/svelte-markdown-preprocessor
+- title: A Gentle Introduction to Svelte Stores
+  description: Svelte stores simplify state management across components. Let's
+    learn how they're implemented.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/svelte-stores
+- title: Positives, Negatives, and Alternatives to Using Tailwind for a Design System
+  description: Is Tailwind the best choice when building out a design system? It depends.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/tailwind-and-design-systems
+- title: Understanding Generics in TypeScript
+  description: Let's learn a little bit about what generics are in TypeScript, why
+    they're useful, and how to use them.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/typescript-generics
+- title: A Gentle Introduction to Using a Vector Database
+  description: In which we learn how to build a simple vector database using
+    Pinecone and OpenAI embeddings, and discover it was way easier than we might
+    have expected.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/using-a-vector-database
+- title: Performance Testing Implementation Guide
+  description: Implement comprehensive performance testing with E2E testing,
+    Lighthouse CI, continuous monitoring, and automated performance regression
+    detection.
+  modified: 2025-09-20T21:27:16.545Z
+  path: /courses/react-performance/performance-testing-implementation
+- title: Advanced Image Optimization Techniques
+  description: Master advanced image optimization with CDN integration, build-time
+    processing, performance monitoring, and automated optimization pipelines.
+  modified: 2025-09-20T21:24:59.127Z
+  path: /courses/react-performance/image-optimization-advanced
+- title: Complete Guide to React 19 with TypeScript
+  description: Master React 19's new features with TypeScript—server components,
+    actions, concurrent features, and modern patterns for production
+    applications.
+  modified: 2025-09-20T21:24:31.866Z
+  path: /courses/react-typescript/react-19-typescript-guide
+- title: Apollo Client Performance Optimization
+  description: Master Apollo Client performance with cache optimization, query
+    batching, optimistic updates, and efficient subscription management
+    strategies.
+  modified: 2025-09-20T21:18:31.287Z
+  path: /courses/react-performance/apollo-client-optimization
+- title: Advanced Animation Performance Techniques
+  description: Master advanced animation techniques including Intersection
+    Observer optimization, Web Animations API integration, and comprehensive
+    performance testing strategies.
+  modified: 2025-09-20T21:13:10.072Z
+  path: /courses/react-performance/animation-performance-advanced
+- title: Complete Guide to React Component Props with TypeScript
+  description: Master typing React props from basics to advanced patterns—required
+    vs optional, defaults, unions, generics, and building self-documenting
+    component APIs.
+  modified: 2025-09-20T21:03:21.400Z
+  path: /courses/react-typescript/component-props-complete-guide
+- title: Code‑Splitting and Lazy Loading
+  description: Load less JavaScript upfront. Split routes, components, and vendors
+    to speed first paint and boost Core Web Vitals.
+  modified: 2025-09-20T15:36:56-06:00
+  path: /courses/react-performance/code-splitting-and-lazy-loading
+- title: Memory Management Deep Dive
+  description: Master React memory management, leak detection, and garbage
+    collection optimization for production applications
+  modified: 2025-09-20T15:36:56-06:00
+  path: /courses/react-performance/memory-management-deep-dive
+- title: Performance Budgets and Monitoring
+  description: Overview of performance budgets and monitoring strategies for React
+    applications
+  modified: 2025-09-20T15:36:56-06:00
+  path: /courses/react-performance/performance-budgets-and-monitoring
+- title: Advanced Error Handling Patterns
+  description: Build resilient React applications with type-safe error recovery,
+    retry strategies, and fallback patterns
+  modified: 2025-09-20T15:36:56-06:00
+  path: /courses/react-typescript/advanced-error-handling-patterns
+- title: Redux Toolkit with TypeScript
+  description: Master modern Redux patterns with RTK, createAsyncThunk, RTK Query,
+    and type-safe state management
+  modified: 2025-09-20T15:36:56-06:00
+  path: /courses/react-typescript/redux-toolkit-with-typescript
+- title: Building and Development Scripts
+  description: Set up essential build and development scripts for React TypeScript
+    projects, including dev servers, builds, testing, and linting.
+  modified: 2025-09-20T10:40:36-06:00
+  path: /courses/react-typescript/building-development-scripts
+- title: Common Pitfalls with React and TypeScript
+  description: Learn about common pitfalls when using React with TypeScript and
+    how to avoid them, including type safety patterns and best practices.
+  modified: 2025-09-20T10:40:36-06:00
+  path: /courses/react-typescript/common-pitfalls-with-react-and-typescript
+- title: Setting Up Linting and Formatting
+  description: Configure ESLint, Prettier, and type-aware rules for React
+    TypeScript projects with modern tooling and best practices.
+  modified: 2025-09-20T10:40:36-06:00
+  path: /courses/react-typescript/setting-up-linting-and-formatting
+- title: "Setting Up: React and TypeScript"
+  description: Set up React 19 with TypeScript from scratch—tsconfig, JSX runtime,
+    strict mode, linting, and project structure that scales.
+  modified: 2025-09-20T10:40:36-06:00
+  path: /courses/react-typescript/setting-up-react-and-typescript
+- title: Type-Safe Environment Variables
+  description: Implement type-safe environment variable handling in React
+    TypeScript applications with validation and runtime safety.
+  modified: 2025-09-20T10:40:36-06:00
+  path: /courses/react-typescript/typesafe-environment-variables
+- title: Claude Code Hook Examples
+  description: Practical examples and cookbook for implementing custom hooks to
+    automate workflows and enforce development policies
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/ai-development/claude-code-hook-examples
+- title: The Attention Mechanism
+  description: Build intuition for self-attention, Q/K/V projections, multi-head
+    attention, masking, and positional information in Transformers.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/python-ai/attention-mechanism
+- title: Decoders and Text Generation
+  description: Practical guide to causal decoders and generation strategies like
+    greedy, beam search, top-k/top-p sampling, temperature, and penalties.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/python-ai/decoders
+- title: DreamBooth — Personalizing Text-to-Image Models
+  description: Fine-tune a text-to-image model on a few photos to learn a specific
+    subject; cover dataset prep, prior preservation, training, and inference.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/python-ai/dreambooth
+- title: Fine-Tuning Transformer Models
+  description: Prepare datasets, choose an approach (full, LoRA/PEFT), configure
+    training with the Trainer API, evaluate, and ship safely to production.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/python-ai/fine-tuning
+- title: Text-to-Image Generation (Stable Diffusion)
+  description: Understand Stable Diffusion's components, schedulers, guidance
+    scale, prompt craft, safety, and performance for text-to-image tasks.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/python-ai/image-generation
+- title: Image-to-Image Transformations
+  description: Generate new images guided by both a textual prompt and an initial
+    image; control fidelity with strength and guidance.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/python-ai/image-to-image
+- title: Pipeline Basics (Hugging Face)
+  description: Understand Hugging Face Pipelines, tasks, model/tokenizer loading,
+    batching, devices, and configuration for quick, production-ready inference.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/python-ai/pipeline-basics
+- title: Tokenization — From Text to Tensors
+  description: Learn how text becomes model-ready tensors via subword
+    tokenization, special tokens, padding, truncation, and attention masks.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/python-ai/tokenization
+- title: Animation Performance in React
+  description: Build silky smooth 60fps animations. Master hardware acceleration,
+    avoid layout thrashing, and create performant micro-interactions.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/animation-performance
+- title: Avoiding Over‑Memoization
+  description: Stop paying rent for caches you never use. Learn to remove
+    unnecessary memoization and let React do less work.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/avoiding-over-memoization
+- title: Avoiding Unnecessary Dependencies
+  description: Trim the fat. Replace heavy libraries with native APIs or lighter
+    alts and lean on tree‑shaking to cut bundle size.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/avoiding-unnecessary-dependencies
+- title: Bundle Analysis Deep Dive
+  description: Master webpack-bundle-analyzer, source maps, and dependency
+    auditing to eliminate bloat and optimize your React bundle.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/bundle-analysis-deep-dive
+- title: CDN Caching & Immutable Assets
+  description: Optimize React app delivery with CDN caching strategies, immutable
+    deployments, and hashed chunking patterns
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/cdn-caching-immutable-assets
+- title: Colocation of State
+  description: Keep state near its consumers to reduce render storms, simplify
+    data flow, and make components easier to reason about.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/colocation-of-state
+- title: Component Granularity Splitting
+  description: Component splitting is React performance optimization's
+    double-edged sword. Split too little and you get monolithic components that
+    re-render everything when a single prop changes. Split too much and you end
+    up with component confetti—do...
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/component-granularity-splitting
+- title: Concurrent React and Scheduling
+  description: Learn how React can pause and resume work to keep interactions
+    smooth—design components that play nicely with the scheduler.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/concurrent-react-scheduling
+- title: Context API Performance Pitfalls
+  description: Avoid the Context API traps that cause unnecessary re-renders.
+    Learn patterns for efficient context usage, splitting strategies, and when
+    to reach for alternatives.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/context-api-performance-pitfalls
+- title: Core Web Vitals for React Applications
+  description: Master LCP, FID, and CLS optimization in React apps. Practical
+    techniques to improve user experience and search rankings.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/core-web-vitals-for-react
+- title: Custom Equality Checks with areEqual
+  description: Write domain-smart equality functions that avoid deep-compare traps
+    and make memoized components both fast and correct.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/custom-equality-checks-areequal
+- title: Debugging React Performance Issues
+  description: Master the systematic approach to finding and fixing performance
+    problems. Use React DevTools, Chrome Performance tab, and proven debugging
+    workflows.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/debugging-performance-issues
+- title: Derived vs Stored State
+  description: Store less, derive more. Compute on demand to avoid desyncs, extra
+    memory, and unnecessary re-renders.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/derived-vs-stored-state
+- title: Flushsync In React Dom
+  description: React's concurrent rendering is one of its most powerful
+    features—it batches updates, prioritizes work, and keeps your app responsive
+    by breaking rendering into chunks. But sometimes you need to tell React,
+    "No, really, I need this updat...
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/flushsync-in-react-dom
+- title: GPU Acceleration Patterns
+  description: Leverage GPU acceleration for high-performance React animations, 3D
+    graphics, and computational tasks
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/gpu-acceleration-patterns
+- title: GraphQL & React Performance
+  description: Optimize GraphQL queries in React apps. Master fragment colocation,
+    query batching, caching strategies, and avoid the N+1 query problem.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/graphql-react-performance
+- title: Identity Stability Props
+  description: React's performance model is built on comparing values to decide
+    when components need to re-render. When you pass objects, arrays, or
+    functions as props, their **identity**—not just their contents—determines
+    whether React considers them...
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/identity-stability-props
+- title: Image & Asset Optimization for React
+  description: Master image optimization in React apps. Implement responsive
+    images, modern formats, lazy loading, and CDN strategies for blazing-fast
+    visual content.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/image-and-asset-optimization
+- title: INP Optimization & Long Tasks
+  description: Master Interaction to Next Paint (INP) by breaking up long tasks,
+    using scheduler APIs, and optimizing React interactivity
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/inp-optimization-long-tasks
+- title: INP Production Monitoring
+  description: Measure, track, and improve Interaction to Next Paint (INP) in
+    production React applications with real user data
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/inp-production-monitoring
+- title: Key Stability in Lists
+  description: Master keys to keep state, focus, and animations intact—no more
+    mysterious remounts or janky list updates.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/key-stability-in-lists
+- title: Lifting State Intelligently
+  description: Lift state only when multiple peers truly need it. Contain churn
+    and stop render ripples before they swamp your UI.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/lifting-state-intelligently
+- title: Measuring Performance with Real Tools
+  description: Stop guessing. Use React DevTools, Chrome Performance, and
+    flamegraphs to find real bottlenecks and prove improvements.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/measuring-performance-with-real-tools
+- title: Memory Leak Detection in React Applications
+  description: Find and fix memory leaks that kill performance. Master Chrome
+    DevTools, detect common patterns, and build leak-free React apps.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/memory-leak-detection
+- title: Micro-Frontend Performance
+  description: Build performant micro-frontend architectures with React. Master
+    Module Federation, shared dependencies, runtime optimization, and cross-team
+    coordination.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/micro-frontend-performance
+- title: OffscreenCanvas & WebGL for React
+  description: Leverage OffscreenCanvas and WebGL to create high-performance
+    visualizations and graphics in React applications
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/offscreen-canvas-webgl
+- title: Optimizing Server‑Side Rendering
+  description: Speed up SSR with streaming, caching, and smarter data
+    fetching—reduce time‑to‑first‑byte and hydrate faster.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/optimizing-server-side-rendering
+- title: Performance Budgets & Automation
+  description: Set and enforce performance budgets in your React apps. Automate
+    testing, catch regressions in CI/CD, and maintain fast applications at
+    scale.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/performance-budgets-and-automation
+- title: Performance Testing Strategy
+  description: Build comprehensive performance tests for React apps. Unit test
+    performance, catch regressions, and automate optimization validation.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/performance-testing-strategy
+- title: Priority Hints & Resource Loading
+  description: Master browser resource loading with priority hints, preconnect,
+    dns-prefetch, and modern loading strategies
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/priority-hints-resource-loading
+- title: Production Performance Monitoring
+  description: Monitor real user performance, set up RUM, track Core Web Vitals,
+    and catch regressions before users complain.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/production-performance-monitoring
+- title: The React 19 Compiler
+  description: Master the React Compiler from basics to advanced patterns. Migrate
+    from manual optimizations, handle edge cases, and measure real-world
+    improvements.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/react-19-compiler-guide
+- title: The cache() API
+  description: Stabilize and dedupe expensive work across requests and renders—use
+    cache() to turn pure functions into shared resources.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/react-cache-api
+- title: React Compiler Migration Guide
+  description: Complete guide to adopting React 19's compiler. Migrate from manual
+    optimizations, handle edge cases, and measure improvements.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/react-compiler-migration-guide
+- title: React.memo in React 19 and the Compiler Era
+  description: Learn where React.memo still shines, when a compiler or bailouts
+    make it redundant, and how to write fair areEqual checks.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/react-memo-react-19-and-compiler-era
+- title: React Server Components
+  description: Move heavy work to the server and hydrate only where needed—ship
+    less JS and free the main thread for interactions.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/react-server-components-rsc
+- title: Real-Time Data Performance in React
+  description: Handle high-frequency updates without killing performance. Master
+    WebSockets, Server-Sent Events, throttling, and efficient state updates for
+    real-time React apps.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/real-time-data-performance
+- title: Real-Time at Scale Strategies
+  description: Handle high-frequency real-time data in React with backpressure
+    management, batching, and reconciliation strategies
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/real-time-scale-strategies
+- title: Resource Preloading APIs
+  description: Prime the cache for what users will do next—preload, prefetch, and
+    preinit without double‑loading or hurting metrics.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/resource-preloading-apis
+- title: Selective Hydration in Modern React Apps
+  description: Hydrate what matters first. Prioritize above‑the‑fold work so pages
+    feel interactive even while the rest continues to load.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/selective-hydration-react-19
+- title: Separating Actions from State with Two Contexts
+  description: Split read and write paths. Pass immutable state and stable actions
+    to cut re-renders and improve testability.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/separating-actions-from-state-two-contexts
+- title: Service Worker Strategies for React Apps
+  description: Implement service workers for offline-first React apps. Master
+    caching strategies, background sync, and push notifications for blazing-fast
+    performance.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/service-worker-strategies
+- title: Skeleton Screens & Perceived Performance
+  description: Make your React app feel instant with skeleton screens. Master
+    loading states, progressive enhancement, and psychological performance
+    tricks.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/skeleton-screens-perceived-performance
+- title: Speculation Rules & bfcache Optimization
+  description: Implement instant navigation with Speculation Rules API and
+    optimize for back/forward cache in React applications
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/speculation-rules-bfcache
+- title: Streaming SSR Optimization
+  description: Master React 18+ streaming SSR. Optimize TTFB, implement
+    progressive hydration, and deliver instant page loads.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/streaming-ssr-optimization
+- title: Suspense for Data Fetching
+  description: Stream UI progressively instead of blocking on everything—compose
+    boundaries that keep pages interactive and informative.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/suspense-for-data-fetching
+- title: Speedy Web Compiler (SWC) for React Apps
+  description: Compile and minify at warp speed. Configure SWC to speed local
+    builds and keep production bundles lean and modern.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/swc-speedy-web-compiler
+- title: The use() Hook
+  description: Simplify async and context consumption by letting components 'use'
+    resources directly, with Suspense driving the UI flow.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/the-use-hook
+- title: Tree Shaking Optimization
+  description: Master dead code elimination through advanced tree shaking.
+    Eliminate unused imports, optimize side effects, and shrink bundles.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/tree-shaking-optimization
+- title: Understanding Reconciliation in React 19
+  description: Demystify how React compares trees, chooses updates, and schedules
+    work—then apply the rules to ship snappy, predictable UIs.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/understanding-reconciliation-react-19
+- title: Useactionstate Performance
+  description: Forms and mutations are where React apps traditionally become
+    sluggish and confusing. React 19's useActionState hook elegantly solves the
+    coordination problem of managing pending, success, and error states while
+    keeping your components p...
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/useactionstate-performance
+- title: useDeferredValue Patterns
+  description: Keep typing fluid by deferring expensive derived values. Pair with
+    transitions and memoization for silky search UIs.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/usedeferredvalue-patterns
+- title: Performance Characteristics of useLayoutEffect
+  description: Know when layout effects are necessary—and when they block paint.
+    Prefer passive effects and measure before forcing sync work.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/uselayouteffect-performance
+- title: useMemo and useCallback in React 19
+  description: Use memoization as a scalpel, not a sledgehammer—cache expensive
+    work or stabilize identities where it truly pays off.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/usememo-usecallback-in-react-19
+- title: useTransition and startTransition
+  description: Mark non-urgent updates so urgent ones stay snappy—keep typing
+    smooth while expensive UI catches up in the background.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/usetransition-and-starttransition
+- title: View Transitions API for React
+  description: Create smooth, native-like page transitions in React apps using the
+    View Transitions API
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/view-transitions-api
+- title: Virtual DOM & Fiber Architecture Deep Dive
+  description: Understand how React really works under the hood. Master the Fiber
+    architecture, priority scheduling, and reconciliation to write truly
+    optimized React apps.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/virtual-dom-fiber-architecture
+- title: Web Workers with React
+  description: Offload expensive computations to Web Workers. Keep your UI
+    responsive with parallel processing, proper state synchronization, and
+    TypeScript support.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/web-workers-with-react
+- title: WebAssembly Integration in React
+  description: Supercharge React with WebAssembly for CPU-intensive tasks. Learn
+    when and how to use WASM for image processing, cryptography, and complex
+    calculations.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/webassembly-integration
+- title: Windowing and Virtualization
+  description: Render only what users see. Use react-window to make 10,000-row
+    lists fast without sacrificing UX or accessibility.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/windowing-and-virtualization
+- title: CI/CD Type Checking with GitHub Actions
+  description: Automate TypeScript validation in CI/CD—GitHub Actions workflows,
+    parallel checking, caching strategies, and PR automation.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-typescript/cicd-type-checking-github-actions
+- title: ComponentType, HOCs, and Render Props
+  description: This content has been split into focused guides on HOCs and render
+    props patterns.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-typescript/componenttype-hocs-render-props

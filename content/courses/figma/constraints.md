@@ -4,7 +4,7 @@ description: >-
   Learn how to master constraints in Figma for responsive design. Ensure your UI
   adapts seamlessly across devices with this essential guide
 date: 2024-03-09T19:13:01.000Z
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
 tags:
   - figma
   - course

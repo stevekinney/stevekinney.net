@@ -3,7 +3,8 @@ title: Tailwind Anti-Patterns
 description: >-
   Common Tailwind anti-patterns to avoid for cleaner, maintainable code and
   proper utility-first development practices.
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 ## Overusing the `@apply` Directive

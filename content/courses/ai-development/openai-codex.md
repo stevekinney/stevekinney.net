@@ -1,8 +1,17 @@
 ---
 title: Understanding OpenAI Codex for Code Generation
-description: Explore OpenAI Codex's AI-powered code generation capabilities and autonomous software engineering features.
-modified: 2025-07-28T08:05:10-06:00
+description: >-
+  Explore OpenAI Codex's AI-powered code generation capabilities and autonomous
+  software engineering features.
+modified: '2025-07-30T07:02:20-05:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
+
+> [!NOTE] About model names and what’s current
+> This page preserves the “Codex” framing because it matches the course recordings. In current OpenAI terminology, you’ll typically use the o‑series and GPT‑4o family for coding tasks (for example, o3 or o3‑mini for strong reasoning and low‑latency iterations, and GPT‑4o variants when you want multimodal context like screenshots or diagrams). The Assistants API and Realtime API are the common integration surfaces. The guidance below still maps well: where this page says “Codex,” think “current OpenAI coding models (o‑series/GPT‑4o) used with your repo, tests, and PR flow.”
+
+> [!IMPORTANT] Historical context
+> “OpenAI Codex” as a model name has been superseded. We keep the original language to stay faithful to the course and to illustrate a robust agent workflow. When implementing today, substitute the current model you prefer (e.g., o3 for reasoning‑heavy refactors or GPT‑4o for code + images) without changing the overall workflow: connect the repo, write tasks, run tests, and produce verifiable patches/PRs.
 
 OpenAI Codex is an artificial intelligence model and a cloud-based software engineering agent developed by OpenAI, designed to transform how developers interact with codebases and build software. It is also available as a lightweight, open-source command-line interface (CLI) tool.
 
@@ -15,8 +24,8 @@ Here's a detailed breakdown of what OpenAI Codex is:
 
 ## Underlying Technology and Models
 
-- At its core, Codex utilizes **machine learning and deep learning**. It's built on the **same base as GPT-3** and is powered by **codex-1**, a specialized version of OpenAI's o3 model. The codex-1 model is fine-tuned for the nuances of software engineering through rigorous reinforcement learning on real-world coding tasks across various environments.
-- A smaller version, **codex-mini-latest** (a specialized version of o4-mini), is the default model for the Codex CLI, optimized for low-latency code Q&A and editing while retaining strong instruction-following and style capabilities.
+- At its core, Codex utilizes **machine learning and deep learning**. It's built on the **same base as GPT-3** and is described here as powered by a specialized “codex-1” model for code work. In today’s stack, you would choose an o‑series model (e.g., o3 or o3‑mini) or a GPT‑4o family model depending on the task (see the callout above).
+- A smaller version, described here as “codex‑mini,” maps well to a lightweight, lower‑latency model choice (for example, o3‑mini or a 4o‑mini variant) for quick edits, Q&A, and iterative drafts.
 - The model's training objective is to generate code that functions flawlessly, mirrors human stylistic preferences, adheres precisely to instructions, and can iteratively run tests until a passing result is achieved. It is trained on massive amounts of public code repositories, tutorials, and open-source projects.
 
 ## Key Capabilities and Features

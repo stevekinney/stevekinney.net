@@ -1,7 +1,8 @@
 ---
 title: Handling Large Data Structures In Testing
 description: Examples of complex data structures and using asymmetric matchers.
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 The little examples that we have are easy to grok, but they don't always properly demonstrate what you might see in the wild. (This is mostly because it can take days or weeks to fully grok a large code base, so I'm choosing to simplify things a bit.)

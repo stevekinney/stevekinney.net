@@ -1,7 +1,10 @@
 ---
 title: Choosing the Right AI Model in Cursor
-description: Strategic guide to selecting between Claude, GPT, Gemini, and other models for optimal coding results.
-modified: 2025-07-24T15:20:52-06:00
+description: >-
+  Strategic guide to selecting between Claude, GPT, Gemini, and other models for
+  optimal coding results.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 Cursor offers a ton of different AI models from leading providers like OpenAI (GPT series), Anthropic (Claude series), and Google (Gemini), along with its own custom models and support for local models. Different models excel in different areas, and choosing wisely can significantly impact quality, latency, and cost.
@@ -60,3 +63,12 @@ Here's a guide to model selection in Cursor, detailing when to use what model fo
 - **"Auto" Mode:** Cursor offers an "Auto" mode that intelligently selects the most appropriate premium model for a given query based on its complexity, current performance, and server reliability.
 - **Personal API Keys:** For greater control over costs or to leverage enterprise-specific plans, you can configure your own API keys for services like OpenAI or Anthropic. However, remember that requests are still proxied through Cursor's infrastructure.
 - **Cost Management:** Be mindful of usage quotas, especially with premium models. Heavy use can lead to unexpectedly high bills.
+
+## Quick Choice Checklist
+
+- Small, localized change or boilerplate: pick a lighter model (GPT‑3.5 or Haiku) to draft, then verify.
+- Multi‑file refactor or cross‑module impact: Claude Sonnet or GPT‑4o; enable Agent mode and add @Files.
+- Architecture/design exploration: Claude Opus or GPT‑4(o) with explicit constraints and examples.
+- Docs/screenshot driven work: GPT‑4o (multimodal), optionally pair with NotebookLM for grounding.
+- Privacy‑sensitive code: local model or DeepSeek hosted by Cursor; avoid external tools.
+- If output degrades: switch provider (Claude ↔ GPT) and add @‑context rather than retrying blindly.

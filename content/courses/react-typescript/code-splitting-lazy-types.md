@@ -1,11 +1,19 @@
 ---
 title: Code-Splitting and Lazy Types
-description: Split components with React.lazy and keep types intact—ensure default exports, props, and suspense fallbacks match.
+description: >-
+  Split components with React.lazy and keep types intact—ensure default exports,
+  props, and suspense fallbacks match.
 date: 2025-09-06T22:04:44.931Z
-modified: 2025-09-06T22:04:44.931Z
+modified: '2025-09-14T11:49:08-06:00'
 published: true
 tags:
-  ['react', 'typescript', 'code-splitting', 'lazy-loading', 'suspense', 'performance', 'bundling']
+  - react
+  - typescript
+  - code-splitting
+  - lazy-loading
+  - suspense
+  - performance
+  - bundling
 ---
 
 Code-splitting is one of those performance optimizations that sounds scary but is surprisingly straightforward once you understand the mechanics. You're basically telling your bundler (probably Webpack or Vite) to create separate JavaScript chunks that load on-demand rather than cramming everything into one massive bundle. With React's `lazy` function and TypeScript's type system, you can split your components while keeping your type safety intact—no compromises required.
@@ -119,7 +127,7 @@ Each approach has its merits. Method 1 is clean for simple re-exports, Method 2 
 
 ## Advanced Patterns with Error Boundaries
 
-When components fail to load—network issues, missing chunks, or server problems—you want graceful degradation. Error boundaries combined with Suspense give you complete control over the loading experience:
+When components fail to load—network issues, missing chunks, or server problems—you want graceful degradation. Error boundaries combined with `Suspense` give you complete control over the loading experience:
 
 ```tsx
 import React, { ErrorBoundary } from 'react-error-boundary';
@@ -154,7 +162,7 @@ function App() {
 ```
 
 > [!TIP]
-> Always wrap lazy components in both Suspense (for loading states) and ErrorBoundary (for failure states). Your users will thank you when their flaky mobile connection acts up.
+> Always wrap lazy components in both `Suspense` (for loading states) and `ErrorBoundary` (for failure states). Your users will thank you when their flaky mobile connection acts up.
 
 ## Preloading Strategies
 
@@ -313,9 +321,9 @@ function MyComponent() {
 export default MyComponent;
 ```
 
-### Suspense Boundary Placement
+### `Suspense` Boundary Placement
 
-Another common issue is placing Suspense boundaries too high or too low in your component tree:
+Another common issue is placing `Suspense` boundaries too high or too low in your component tree:
 
 ```tsx
 // ❌ Too high - entire app shows loading state
@@ -345,7 +353,7 @@ function App() {
 }
 ```
 
-Place Suspense boundaries close to where the lazy components are actually used, so other parts of your UI remain interactive during loading.
+Place `Suspense` boundaries close to where the lazy components are actually used, so other parts of your UI remain interactive during loading.
 
 ### Dynamic Import Expressions
 

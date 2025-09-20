@@ -3,7 +3,8 @@ title: Not Utility
 description: >-
   Apply styles when conditions are NOT met using Tailwind 4's powerful not-*
   variant for negating states
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:11:25-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 > [!INFO] This is new in Tailwind 4!

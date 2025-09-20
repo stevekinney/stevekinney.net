@@ -1,10 +1,16 @@
 ---
 title: The use() Hook
-description: Simplify async and context consumption by letting components 'use' resources directly, with Suspense driving the UI flow.
+description: >-
+  Simplify async and context consumption by letting components 'use' resources
+  directly, with Suspense driving the UI flow.
 date: 2025-09-06T22:15:46.931Z
-modified: 2025-09-06T22:15:46.931Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'hooks', 'react-19']
+tags:
+  - react
+  - performance
+  - hooks
+  - react-19
 ---
 
 React 19's `use()` hook fundamentally changes how you handle asynchronous data and context in your components. Instead of managing loading states, error boundaries, and promise resolution yourself, `use()` lets you "unwrap" promises and context values directly in your component body—while Suspense handles the coordination. It's like having `await` for React components, but with better composition and cleaner error handling.
@@ -337,7 +343,7 @@ Each section can load independently, providing a better user experience than wai
 
 ## Migration Strategies
 
-### From useEffect + useState
+### From `useEffect` + `useState`
 
 If you're migrating from traditional `useEffect` + `useState` patterns:
 
@@ -443,5 +449,28 @@ The `use()` hook represents React's vision for simpler, more declarative async p
 - **Better DevX**: Less boilerplate, clearer intent, easier debugging
 
 As the ecosystem evolves, expect to see more libraries and frameworks embrace `use()` for cleaner async patterns. The key is understanding when and how to apply it effectively—which often means rethinking your data flow from imperative state management to declarative resource consumption.
+
+## Related Topics
+
+- **[Suspense for Data Fetching](./suspense-for-data-fetching.md)** - Understanding Suspense mechanics and patterns
+- **[React Cache API](./react-cache-api.md)** - Caching strategies for the use() hook
+- **[React Server Components (RSC)](./react-server-components-rsc.md)** - Server-side data fetching with use()
+- **[Selective Hydration React 19](./selective-hydration-react-19.md)** - SSR optimization with Suspense
+
+## Prerequisites
+
+- Understanding of React Suspense and error boundaries
+- Experience with promises and async/await in JavaScript
+- Basic knowledge of React context
+- Familiarity with data fetching patterns
+
+## Practical Examples
+
+Real-world scenarios where use() excels:
+
+- **Dashboard applications** - Multiple data sources loading in parallel
+- **Content management systems** - Progressive content loading
+- **E-commerce sites** - Product details with related items
+- **Social media feeds** - Posts, comments, and user data composition
 
 Start small by migrating a few simple async components to `use()`, get comfortable with the Suspense boundary patterns, and gradually apply it to more complex data fetching scenarios. Your future self (and your teammates) will thank you for the cleaner, more maintainable code.

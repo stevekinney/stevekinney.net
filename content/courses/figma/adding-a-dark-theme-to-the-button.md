@@ -1,7 +1,8 @@
 ---
 title: Adding a Dark Mode
 description: Using variable modes to add a dark mode to a button component in Figma.
-modified: 2024-10-02T08:49:23-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T08:48:38-06:00'
 ---
 
 Let's say we want to add a dark mode theme to our button.

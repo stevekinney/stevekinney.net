@@ -1,10 +1,18 @@
 ---
-title: Typed Forms, Actions, and useActionState
-description: Model form mutations in React 19—type Actions and useActionState for safe server and client flows.
+title: 'Typed Forms, Actions, and useActionState'
+description: >-
+  Model form mutations in React 19—type Actions and useActionState for safe
+  server and client flows.
 date: 2025-09-06T22:04:44.913Z
-modified: 2025-09-06T22:04:44.913Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'forms', 'actions', 'use-action-state', 'react-19']
+tags:
+  - react
+  - typescript
+  - forms
+  - actions
+  - use-action-state
+  - react-19
 ---
 
 React 19 introduces a powerful new pattern for handling form submissions and mutations: Actions and the `useActionState` hook. If you've ever found yourself wrestling with form validation, loading states, error handling, and the inevitable TypeScript gymnastics that come with it all, you're in for a treat. Actions let you encapsulate the entire flow of a form submission—from validation to server communication to state updates—in a type-safe, declarative way that actually makes sense.

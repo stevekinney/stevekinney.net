@@ -1,7 +1,8 @@
 ---
 title: Overriding Object Properties
 description: Learn how to override object properties in Vitest with various methods.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 In some test scenarios, you may need to override or mock specific properties of objects rather than functions. This can be useful when testing code that relies on object properties like environment variables, configuration settings, or dynamic values that are read from objects at runtime. In Vitest, you can override object properties using `vi.spyOn()` or directly setting properties to mock values during your tests.

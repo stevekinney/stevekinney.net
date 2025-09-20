@@ -1,10 +1,17 @@
 ---
 title: Story-Driven Development with TypeScript
-description: Use Storybook as a type lab—derive controls from props, test edge cases, and publish typed stories.
+description: >-
+  Use Storybook as a type lab—derive controls from props, test edge cases, and
+  publish typed stories.
 date: 2025-09-06T22:04:45.042Z
-modified: 2025-09-06T22:04:45.042Z
+modified: '2025-09-14T11:49:08-06:00'
 published: true
-tags: ['react', 'typescript', 'storybook', 'story-driven-development', 'component-stories']
+tags:
+  - react
+  - typescript
+  - storybook
+  - story-driven-development
+  - component-stories
 ---
 
 Storybook isn't just a component catalog—it's your TypeScript testing ground. When you pair Storybook with TypeScript, you get a powerful development environment where your types drive your component development, your stories validate edge cases, and your documentation stays perpetually in sync. Let's explore how to use Storybook as a "type lab" where your TypeScript definitions become living, interactive documentation.

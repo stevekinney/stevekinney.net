@@ -1,9 +1,11 @@
 ---
 title: React with TypeScript
-description: Comprehensive guide to building type-safe React applications with TypeScript and React 19
+description: >-
+  Comprehensive guide to building type-safe React applications with TypeScript
+  and React 19
 layout: page
-date: 2025-09-07T12:00:00-06:00
-modified: 2025-09-07T12:00:00-06:00
+date: 2025-09-07T18:00:00.000Z
+modified: '2025-09-06T18:13:36-06:00'
 ---
 
 This comprehensive course material covers everything you need to build robust, type-safe React applications using TypeScript with React 19. From basic setup to advanced patterns, you'll learn how to leverage TypeScript's powerful type system to catch bugs early, improve developer experience, and build maintainable React applications.

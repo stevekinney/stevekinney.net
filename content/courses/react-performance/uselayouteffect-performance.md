@@ -1,10 +1,16 @@
 ---
 title: Performance Characteristics of useLayoutEffect
-description: Know when layout effects are necessary—and when they block paint. Prefer passive effects and measure before forcing sync work.
+description: >-
+  Know when layout effects are necessary—and when they block paint. Prefer
+  passive effects and measure before forcing sync work.
 date: 2025-09-06T22:29:02.602Z
-modified: 2025-09-06T22:29:02.602Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'hooks', 'effects']
+tags:
+  - react
+  - performance
+  - hooks
+  - effects
 ---
 
 `useLayoutEffect` runs synchronously after all DOM mutations but before the browser paints. This timing makes it powerful for preventing visual glitches but potentially expensive for performance. Let's explore when you need it, when you don't, and how to measure its impact on your application's responsiveness.
@@ -43,7 +49,7 @@ Here's what happens during a typical render cycle:
 
 This synchronous execution is both `useLayoutEffect`'s superpower and its performance pitfall.
 
-## When You Actually Need useLayoutEffect
+## When You Actually Need `useLayoutEffect`
 
 Use `useLayoutEffect` when you need to read from or write to the DOM before the browser paints—typically to prevent visual flicker or measure elements.
 
@@ -264,7 +270,7 @@ function ResizeObserverExample() {
 
 ## Common Anti-Patterns to Avoid
 
-### Using useLayoutEffect for Non-DOM Side Effects
+### Using `useLayoutEffect` for Non-DOM Side Effects
 
 ```tsx
 // ❌ Bad - doesn't need to block paint
@@ -369,6 +375,14 @@ function PerformanceTest() {
   );
 }
 ```
+
+## Related Topics
+
+- **[Animation Performance](./animation-performance.md)** - Use useLayoutEffect for smooth animations without layout thrashing
+- **[Flushsync in React DOM](./flushsync-in-react-dom.md)** - Understand synchronous DOM updates and when they're necessary
+- **[INP Optimization & Long Tasks](./inp-optimization-long-tasks.md)** - Minimize useLayoutEffect impact on Interaction to Next Paint metrics
+- **[GPU Acceleration Patterns](./gpu-acceleration-patterns.md)** - Combine useLayoutEffect with GPU-accelerated properties for optimal performance
+- **[Debugging Performance Issues](./debugging-performance-issues.md)** - Profile and identify useLayoutEffect performance bottlenecks
 
 ## The Bottom Line
 

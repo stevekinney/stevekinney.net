@@ -1,7 +1,10 @@
 ---
 title: Common Sub-Agent Anti-Patterns and Pitfalls
-description: Avoid common mistakes when using Claude Code's sub-agent system for delegation and task management.
-modified: 2025-07-29T09:05:22-06:00
+description: >-
+  Avoid common mistakes when using Claude Code's sub-agent system for delegation
+  and task management.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 At the time of this writing, sub-agents are still pretty new. (Like, less than a week old.) So, they still have some rough edges.

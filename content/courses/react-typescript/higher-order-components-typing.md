@@ -1,10 +1,17 @@
 ---
 title: Typing Higher-Order Components Without Tears
-description: Wrap components and keep their props—model HOCs with generics, Omit, and proper ref forwarding.
+description: >-
+  Wrap components and keep their props—model HOCs with generics, Omit, and
+  proper ref forwarding.
 date: 2025-09-06T22:04:44.912Z
-modified: 2025-09-06T22:04:44.912Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'hocs', 'higher-order-components', 'composition']
+tags:
+  - react
+  - typescript
+  - hocs
+  - higher-order-components
+  - composition
 ---
 
 Higher-Order Components (HOCs) were React's original answer to component reusability before hooks arrived on the scene. While hooks have largely replaced HOCs for most use cases, you'll still encounter them in the wild—especially in older codebases or when integrating with libraries that haven't migrated to hooks yet. The challenge? Getting TypeScript to understand what your HOC is doing without losing your mind (or your component's prop types) in the process.
@@ -270,7 +277,7 @@ const CustomWrapped = withConditionalLoading(MyComponent, true);
 
 ## Common Pitfalls and How to Avoid Them
 
-### The `any` Escape Hatch (Don't!)
+### The `any` Escape Hatch 👎
 
 ```ts
 // ❌ Tempting but defeats the purpose

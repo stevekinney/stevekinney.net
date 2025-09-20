@@ -1,7 +1,8 @@
 ---
 title: Installing the Hugging Face CLI
 description: A brief guide on how to install the Hugging Face CLI.
-modified: 2025-08-01T05:18:46-05:00
+modified: '2025-08-01T09:15:48-05:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 > [!NOTE] You most likely won't have to do this.

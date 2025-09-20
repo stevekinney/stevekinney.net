@@ -1,7 +1,10 @@
 ---
 title: Integrating Claude Code with GitHub Actions
-description: Set up AI-powered automation in GitHub workflows using Claude Code for code reviews and pull requests.
-modified: 2025-07-29T14:38:32-06:00
+description: >-
+  Set up AI-powered automation in GitHub workflows using Claude Code for code
+  reviews and pull requests.
+modified: '2025-09-06T14:36:25-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 Claude Code GitHub Actions enable AI-powered automation within your GitHub workflows. By simply mentioning `@claude` in a pull request (PR) or issue, Claude can analyze your code, create PRs, implement features, and fix bugs, all while adhering to your project's defined standards. It's built on the Claude Code SDK, which allows programmatic integration.
@@ -87,6 +90,26 @@ To maximize the effectiveness of Claude Code with GitHub Actions:
 - **Leverage Headless Mode**: Use Claude Code in headless mode with the `-p` flag (`claude -p`) for automation and scripting. This is ideal for integrating Claude into CI/CD pipelines or for large-scale migrations. Headless mode does not persist between sessions, so you have to trigger it each session.
 - **Pipelining**: Claude can be integrated into existing data/processing pipelines by piping data in and out. For example, `cat build-error.txt | claude -p 'concisely explain the root cause of this build error' > output.txt`. JSON output can provide structured data for easier automated processing.
 - **Commit Often**: Frequently commit changes within your repository to maintain a granular version history. Claude can draft commit messages automatically by looking at your changes and recent history. You can also add pre-commit checks to your repo to ensure code quality before Claude commits changes.
+
+### CI Safety Checklist
+
+- [ ] Run on least‑privilege: set `permissions:` per job (e.g., `pull-requests: write`; avoid `contents: write` unless needed).
+- [ ] Gate destructive tools: configure `allowed_tools` and block risky commands in hooks or workflow steps.
+- [ ] Require tests before PR creation: run unit, lint, and type checks; fail fast on errors.
+- [ ] Timebox and budget: set `timeout_minutes` and limit turns/iterations.
+- [ ] Secrets: use `${{ secrets.* }}` only; never echo secrets or write them to artifacts.
+- [ ] Logs: redact tokens; attach succinct logs to PR comments, not raw traces.
+- [ ] Human in the loop: require review/approval before merging AI‑authored changes.
+
+### AI Code Review Checklist
+
+- [ ] Scope: Does the diff match the stated goal? Anything unexpected?
+- [ ] Tests: Are there new/updated unit tests? Do all tests pass?
+- [ ] Types & lint: Typecheck/lint clean? Any any/ts‑ignore or disabled rules?
+- [ ] Security: Inputs validated? Safe file/FS/net operations? Secrets untouched?
+- [ ] Performance: Any obvious N+1, synchronous I/O in hot path, missing memoization/caching?
+- [ ] API contracts: Request/response shapes and error handling consistent? OpenAPI/typing updated?
+- [ ] Docs: Changelog/README/CLAUDE.md updated if behavior changed?
 
 ## Example Use Cases
 

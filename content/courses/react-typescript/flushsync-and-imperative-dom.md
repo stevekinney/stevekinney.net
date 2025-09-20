@@ -1,10 +1,18 @@
 ---
 title: flushSync and Imperative DOM with Types
-description: Coordinate with the DOM—type helpers that force sync updates for focus, measurement, and animations sparingly.
+description: >-
+  Coordinate with the DOM—type helpers that force sync updates for focus,
+  measurement, and animations sparingly.
 date: 2025-09-06T22:04:45.040Z
-modified: 2025-09-06T22:04:45.040Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'flush-sync', 'imperative-dom', 'refs', 'dom-manipulation']
+tags:
+  - react
+  - typescript
+  - flush-sync
+  - imperative-dom
+  - refs
+  - dom-manipulation
 ---
 
 React's declarative model is brilliant—until you need to coordinate with the DOM itself. Sometimes you need to measure elements, focus inputs, or time animations precisely. Enter `flushSync` and React's imperative DOM helpers, which let you step outside React's async world when the situation calls for it (and TypeScript helps ensure you do it safely).
@@ -38,7 +46,7 @@ function AsyncExample() {
 
 This batching is usually what you want, but sometimes you need updates to happen immediately—that's where `flushSync` comes in.
 
-## When to Use flushSync
+## When to Use `flushSync`
 
 `flushSync` forces React to synchronously flush updates to the DOM. Use it sparingly for these specific scenarios:
 
@@ -50,7 +58,7 @@ This batching is usually what you want, but sometimes you need updates to happen
 > [!WARNING]
 > `flushSync` can hurt performance by preventing React's optimizations. Only use it when you have a specific timing requirement.
 
-## Basic flushSync Usage with Types
+## Basic `flushSync` Usage with Types
 
 Here's how to use `flushSync` with proper TypeScript types:
 
@@ -427,7 +435,7 @@ function TodoApp() {
 
 ## Common Pitfalls and Best Practices
 
-### ❌ Bad: Overusing flushSync
+### ❌ Bad: Overusing `flushSync`
 
 ```tsx
 // Don't do this - unnecessary flushSync usage
@@ -445,7 +453,7 @@ function BadCounter() {
 }
 ```
 
-### ✅ Good: Strategic flushSync usage
+### ✅ Good: Strategic `flushSync` usage
 
 ```tsx
 // Do this - flushSync only when you need DOM coordination
@@ -515,7 +523,7 @@ flushSync(() => setLoading(false));
 flushSync(() => setError(null));
 ```
 
-## When to Use useLayoutEffect Instead
+## When to Use `useLayoutEffect` Instead
 
 Sometimes `useLayoutEffect` is a better choice than `flushSync`:
 

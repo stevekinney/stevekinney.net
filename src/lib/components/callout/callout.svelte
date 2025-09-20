@@ -49,6 +49,8 @@
     if (foldable) open = !open;
   }
 
+  const contentId = `callout-content-${Math.random().toString(36).slice(2)}`;
+
   /** Base container classes with variant-specific styling. */
   const containerClass = $derived(
     merge('space-y-2 rounded-md border p-4 shadow-sm', getVariationColor(variant), className),
@@ -67,25 +69,28 @@
 </script>
 
 <div class={containerClass} {...rest}>
-  <svelte:element
-    this={foldable ? 'button' : 'div'}
-    class={headerClass}
-    onclick={toggleOpen}
-    role={foldable ? undefined : 'button'}
-    aria-expanded={foldable ? open : undefined}
-    type={foldable ? 'button' : undefined}
-  >
-    <Icon class="w-4" aria-hidden="true" />
-    <span class="font-bold">{title}</span>
-
-    {#if foldable}
+  {#if foldable}
+    <button
+      class={headerClass}
+      onclick={toggleOpen}
+      aria-expanded={open}
+      type="button"
+      aria-controls={contentId}
+    >
+      <Icon class="w-4" aria-hidden="true" />
+      <span class="font-bold">{title}</span>
       <ChevronDown class={chevronClass} aria-hidden="true" />
-    {/if}
-  </svelte:element>
+    </button>
+  {:else}
+    <div class={headerClass}>
+      <Icon class="w-4" aria-hidden="true" />
+      <span class="font-bold">{title}</span>
+    </div>
+  {/if}
 
   <!-- Content section (either children or description) -->
   {#if children || description}
-    <div class={contentClass} aria-hidden={foldable && !open ? true : undefined}>
+    <div id={contentId} class={contentClass} aria-hidden={foldable && !open ? true : undefined}>
       {#if children}
         {@render children()}
       {:else if description}
