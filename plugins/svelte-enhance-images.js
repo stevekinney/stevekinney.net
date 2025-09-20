@@ -17,7 +17,13 @@ const classes = ['max-w-full', 'rounded-md', 'shadow-md'];
  * Add image optimization to the Markdown content.
  * @returns {import('svelte/compiler').PreprocessorGroup}
  */
-export const processImages = () => {
+export const processImages = (opts = {}) => {
+  const options = {
+    widths: [480, 768, 1024],
+    mainWidth: 902,
+    // formats are currently avif + webp; keeping fixed for broad compatibility
+    ...opts,
+  };
   /** @type {import('svelte/compiler').PreprocessorGroup} */
   const preprocessor = {
     name: 'markdown-image-optimization',
@@ -28,7 +34,18 @@ export const processImages = () => {
       const { instance, html } = parse(content, { filename });
       const s = new MagicString(content);
 
-      /** @type {Map<string, {url: string, id: string, metaId?: string, setId?: string, hasMeta: boolean, hasSrcset: boolean}>} */
+      /** @type {Map<string, {url: string,
+       *  webpId: string,
+       *  avifId: string,
+       *  webpSetId?: string,
+       *  avifSetId?: string,
+       *  metaId?: string,
+       *  hasMeta: boolean,
+       *  hasSrcset: boolean,
+       *  isGif?: boolean,
+       *  isVideo?: boolean,
+       *  videoId?: string
+       * }>} */
       const images = new Map();
 
       // Walk the HTML AST and find all the image elements.
@@ -42,26 +59,51 @@ export const processImages = () => {
 
           if (!srcValue) continue;
 
-          let url = decodeURIComponent(srcValue.data);
+          let urlRaw = srcValue.data;
+          // Skip external absolute URLs
+          if (/^(https?:)?\/\//i.test(urlRaw)) continue;
+          let url;
+          try {
+            url = decodeURIComponent(urlRaw);
+          } catch {
+            url = urlRaw;
+          }
 
           if (url.startsWith('assets/')) url = `./${url}`;
 
-          const id = '_' + camelCase(url);
+          const baseId = '_' + camelCase(url);
           const isGif = url.toLowerCase().endsWith('.gif');
-          const metaId = isGif ? undefined : id + '_meta';
-          const setId = isGif ? undefined : id + '_set';
+          const isVid = isVideo(url);
+          const metaId = isGif ? undefined : baseId + '_meta';
+          const webpSetId = isGif ? undefined : baseId + '_webp_set';
+          const avifSetId = isGif ? undefined : baseId + '_avif_set';
+          const webpId = baseId + '_webp';
+          const avifId = baseId + '_avif';
+          const videoId = isVid ? baseId + '_video' : undefined;
 
-          images.set(url, { id, url, metaId, setId, hasMeta: !isGif, hasSrcset: !isGif });
+          images.set(url, {
+            url,
+            webpId,
+            avifId,
+            webpSetId,
+            avifSetId,
+            metaId,
+            hasMeta: !isGif && !isVid,
+            hasSrcset: !isGif && !isVid,
+            isGif,
+            isVideo: isVid,
+            videoId,
+          });
 
-          if (isVideo(url)) {
-            formatVideo(s, node, id);
+          if (isVid && videoId) {
+            formatVideo(s, node, videoId);
             continue;
           }
 
           formatImage(
             s,
             node,
-            id,
+            baseId,
             srcValue,
             images.get(url) ?? { hasMeta: false, hasSrcset: false },
           );
@@ -72,30 +114,72 @@ export const processImages = () => {
       if (instance) {
         for (const node of walk(instance)) {
           if (node.type === 'Program') {
-            const imports = Array.from(images.entries())
-              .map(([url, cfg]) => {
-                const lines = [];
-                if (cfg.hasSrcset) {
-                  // Multiple widths for responsive images
-                  lines.push(
-                    `import ${cfg.setId} from '${url}?w=480;768;1024&format=avif&srcset';`,
-                  );
-                }
-                // Main src (single reasonably large width)
-                const mainSrc = url.toLowerCase().endsWith('gif')
-                  ? url
-                  : `${url}?w=902&format=avif&withoutEnlargement`;
-                lines.push(`import ${cfg.id} from '${mainSrc}';`);
-                if (cfg.hasMeta && cfg.metaId) {
-                  lines.push(`import ${cfg.metaId} from '${url}?metadata';`);
-                }
-                return lines.join('\n');
-              })
-              .join('\n');
-
-            s.appendLeft(node.end, imports);
+            const importLines = [];
+            for (const [url, cfg] of images.entries()) {
+              if (cfg.isVideo) {
+                const videoLine = `import ${cfg.videoId} from '${url}';`;
+                if (!content.includes(videoLine)) importLines.push(videoLine);
+              } else if (!cfg.isGif && cfg.hasSrcset) {
+                const avifSet = `import ${cfg.avifSetId} from '${url}?w=${options.widths.join(
+                  ';',
+                )}&format=avif&srcset';`;
+                const webpSet = `import ${cfg.webpSetId} from '${url}?w=${options.widths.join(
+                  ';',
+                )}&format=webp&srcset';`;
+                if (!content.includes(avifSet)) importLines.push(avifSet);
+                if (!content.includes(webpSet)) importLines.push(webpSet);
+              }
+              // Main sources
+              if (cfg.isGif) {
+                const webpMain = `import ${cfg.webpId} from '${url}';`;
+                if (!content.includes(webpMain)) importLines.push(webpMain);
+              } else if (!cfg.isVideo) {
+                const avifMain = `import ${cfg.avifId} from '${url}?w=${options.mainWidth}&format=avif&withoutEnlargement';`;
+                const webpMain = `import ${cfg.webpId} from '${url}?w=${options.mainWidth}&format=webp&withoutEnlargement';`;
+                if (!content.includes(avifMain)) importLines.push(avifMain);
+                if (!content.includes(webpMain)) importLines.push(webpMain);
+              }
+              if (cfg.hasMeta && cfg.metaId) {
+                const metaLine = `import ${cfg.metaId} from '${url}?metadata';`;
+                if (!content.includes(metaLine)) importLines.push(metaLine);
+              }
+            }
+            if (importLines.length > 0) {
+              s.appendLeft(node.end, `\n${importLines.join('\n')}\n`);
+            }
             break;
           }
+        }
+      } else if (images.size > 0) {
+        // No <script> block present; create one
+        const lines = [];
+        for (const [url, cfg] of images.entries()) {
+          if (cfg.isVideo) {
+            lines.push(`import ${cfg.videoId} from '${url}';`);
+          } else if (!cfg.isGif && cfg.hasSrcset) {
+            lines.push(
+              `import ${cfg.avifSetId} from '${url}?w=${options.widths.join(';')}&format=avif&srcset';`,
+            );
+            lines.push(
+              `import ${cfg.webpSetId} from '${url}?w=${options.widths.join(';')}&format=webp&srcset';`,
+            );
+          }
+          if (cfg.isGif) {
+            lines.push(`import ${cfg.webpId} from '${url}';`);
+          } else if (!cfg.isVideo) {
+            lines.push(
+              `import ${cfg.avifId} from '${url}?w=${options.mainWidth}&format=avif&withoutEnlargement';`,
+            );
+            lines.push(
+              `import ${cfg.webpId} from '${url}?w=${options.mainWidth}&format=webp&withoutEnlargement';`,
+            );
+          }
+          if (cfg.hasMeta && cfg.metaId) {
+            lines.push(`import ${cfg.metaId} from '${url}?metadata';`);
+          }
+        }
+        if (lines.length > 0) {
+          s.prepend(`<script>\n${lines.join('\n')}\n</script>\n`);
         }
       }
 
@@ -142,64 +226,51 @@ const getAttributeValue = (attr) => {
  * @param {AstNode} node
  * @param {string} id
  * @param {SvelteTextNode} src
- * @param {{ metaId?: string, setId?: string, hasMeta: boolean, hasSrcset: boolean }} cfg
+ * @param {{ metaId?: string, setId?: string, webpId?: string, avifId?: string, webpSetId?: string, avifSetId?: string, hasMeta: boolean, hasSrcset: boolean, isGif?: boolean }} cfg
  * @returns {void}
  */
 const formatImage = (s, node, id, src, cfg) => {
-  s.update(src.start, src.end, `{${id}}`);
+  const altAttr = getAttribute(node, 'alt');
+  const altValue = altAttr ? getAttributeValue(altAttr) : undefined;
+  const alt = altValue ? altValue.data : '';
 
   const classAttr = getAttribute(node, 'class');
+  const classValue = classAttr ? getAttributeValue(classAttr) : undefined;
+  const mergedClass =
+    classValue && classValue.data.trim() ? merge(classValue.data, classes) : classes.join(' ');
 
-  if (classAttr) {
-    const classValue = getAttributeValue(classAttr);
-    if (!classValue || !classValue.data.trim()) {
-      // If the class attribute is empty, append the default classes
-      s.appendLeft(node.start + 4, ` class="${classes.join(' ')}"`);
+  const sizes = `(min-width: 1280px) 902px, (min-width: 768px) 80vw, 100vw`;
+
+  // Build width/height attributes if metadata available
+  const dimAttrs =
+    cfg && cfg.hasMeta && cfg.metaId
+      ? ` width="{${cfg.metaId}.width}" height="{${cfg.metaId}.height}"`
+      : '';
+
+  // If GIF, keep as a simple img
+  if (cfg && cfg.isGif) {
+    s.update(src.start, src.end, `{${cfg.webpId}}`);
+    // Ensure class/loading/decoding
+    if (classAttr && classValue && classValue.data.trim()) {
+      s.update(classValue.start, classValue.end, mergedClass);
     } else {
-      s.update(classValue.start, classValue.end, merge(classValue.data, classes));
+      s.appendLeft(node.start + 4, ` class="${mergedClass}"`);
     }
-  } else {
-    // Add the class attributes right after `<img`.
-    s.appendLeft(node.start + 4, ` class="${classes.join(' ')}"`);
+    if (!getAttribute(node, 'loading')) s.appendLeft(node.start + 4, ` loading="lazy"`);
+    if (!getAttribute(node, 'decoding')) s.appendLeft(node.start + 4, ` decoding="async"`);
+    if (dimAttrs) s.appendLeft(node.start + 4, dimAttrs);
+    return;
   }
 
-  // Add loading and decoding hints if not present
-  const loadingAttr = getAttribute(node, 'loading');
-  if (!loadingAttr) {
-    s.appendLeft(node.start + 4, ` loading="lazy"`);
-  }
-  const decodingAttr = getAttribute(node, 'decoding');
-  if (!decodingAttr) {
-    s.appendLeft(node.start + 4, ` decoding="async"`);
-  }
+  // Replace <img> with <picture> that prefers AVIF, falls back to WebP, then img
+  const replacement = `
+<picture>
+  <source type="image/avif" srcset="{${cfg.avifSetId}}" sizes="${sizes}" />
+  <source type="image/webp" srcset="{${cfg.webpSetId}}" sizes="${sizes}" />
+  <img src="{${cfg.webpId}}" alt=${JSON.stringify(alt)} class="${mergedClass}" loading="lazy" decoding="async"${dimAttrs} />
+</picture>`;
 
-  // Add width/height to reduce CLS when metadata is available
-  if (cfg && cfg.hasMeta && cfg.metaId) {
-    const widthAttr = getAttribute(node, 'width');
-    if (!widthAttr) {
-      s.appendLeft(node.start + 4, ` width="{${cfg.metaId}.width}"`);
-    }
-    const heightAttr = getAttribute(node, 'height');
-    if (!heightAttr) {
-      s.appendLeft(node.start + 4, ` height="{${cfg.metaId}.height}"`);
-    }
-  }
-
-  // Add srcset and sizes if configured
-  if (cfg && cfg.hasSrcset && cfg.setId) {
-    const srcsetAttr = getAttribute(node, 'srcset');
-    if (!srcsetAttr) {
-      s.appendLeft(node.start + 4, ` srcset="{${cfg.setId}}"`);
-    }
-    const sizesAttr = getAttribute(node, 'sizes');
-    if (!sizesAttr) {
-      // Default sizes: full width on small screens, cap at ~902px otherwise
-      s.appendLeft(
-        node.start + 4,
-        ` sizes="(min-width: 1280px) 902px, (min-width: 768px) 80vw, 100vw"`,
-      );
-    }
-  }
+  s.update(node.start, node.end, replacement);
 };
 
 /**

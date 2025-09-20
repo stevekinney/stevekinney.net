@@ -72,8 +72,8 @@
     <h1 class="whitespace-nowrap lg:order-1">
       <a
         href="/"
-        class="font-header decoration-primary-700 text-6xl text-black hover:underline dark:text-white"
-        aria-label="{author}'s homepage"
+        class="font-header decoration-primary-700 dark:decoration-primary-400 text-6xl text-black hover:underline dark:text-white"
+        aria-label={`${author}'s homepage`}
       >
         {author}
       </a>

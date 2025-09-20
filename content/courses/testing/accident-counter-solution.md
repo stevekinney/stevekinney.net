@@ -1,9 +1,10 @@
 ---
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
 title: 'Accident Counter: Solution'
 description: >-
   The solution for the Accident Counter exercise in the "Introduction to
   Testing" course for Frontend Masters.
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 Your code might look a bit different, but here is one possible solution.

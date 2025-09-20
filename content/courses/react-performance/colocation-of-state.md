@@ -1,10 +1,16 @@
 ---
 title: Colocation of State
-description: Keep state near its consumers to reduce render storms, simplify data flow, and make components easier to reason about.
+description: >-
+  Keep state near its consumers to reduce render storms, simplify data flow, and
+  make components easier to reason about.
 date: 2025-09-06T21:48:02.336Z
-modified: 2025-09-06T21:48:02.336Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'architecture', 'state-management']
+tags:
+  - react
+  - performance
+  - architecture
+  - state-management
 ---
 
 State colocation is one of those React performance patterns that sounds fancy but is really just common sense: keep your state as close as possible to where it's actually used. Instead of hoisting everything to the top of your component tree "just in case," you put state right where it belongs—near the components that actually need it.
@@ -410,6 +416,14 @@ Before you decide where to put state, ask yourself:
 - **Does this state need to persist when components unmount?** If yes, consider lifting it.
 - **Is this truly global state** (like authentication or theme)? If yes, put it in a provider or global store.
 - **Am I lifting state "just in case"?** Don't do this—start colocated and lift when needed.
+
+## Related Topics
+
+- **[Lifting State Intelligently](./lifting-state-intelligently.md)** - When and how to lift state up the component tree
+- **[Derived vs Stored State](./derived-vs-stored-state.md)** - Decide whether to derive or store state values
+- **[Separating Actions from State: Two Contexts](./separating-actions-from-state-two-contexts.md)** - Split context for better colocation
+- **[Context API Performance Pitfalls](./context-api-performance-pitfalls.md)** - Avoid context-related performance issues
+- **[Component Granularity Splitting](./component-granularity-splitting.md)** - Break down components for better state boundaries
 
 ## Wrapping Up
 

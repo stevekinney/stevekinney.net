@@ -1,7 +1,8 @@
 ---
 title: 'Walkthrough: Basic Math Exercise'
 description: A short walk through for the Basic Math exercise.
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 Here is a walkthrough for the exercise at the end of the section on [implementing some basic tests](basic-math.md).

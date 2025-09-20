@@ -3,7 +3,8 @@ title: Flexbox Multi-Directional Layouts
 description: >-
   Build layouts that adapt to LTR and RTL text directions using Tailwind's
   logical properties and directional variants.
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Adapting layouts for multiple text directions (LTR and RTL) is crucial for global web applications. Traditional CSS, using physical properties like `left` and `right`, makes this complex. Tailwind 4 uses modern CSS logical properties and directional variants for more intuitive multi-directional layouts. While Flexbox arranges items, Tailwind's directionality handling relies on these logical properties and variants, applicable within any layout, including Flexbox.

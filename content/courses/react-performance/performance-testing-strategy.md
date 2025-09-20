@@ -1,10 +1,16 @@
 ---
 title: Performance Testing Strategy
-description: Build comprehensive performance tests for React apps. Unit test performance, catch regressions, and automate optimization validation.
+description: >-
+  Build comprehensive performance tests for React apps. Unit test performance,
+  catch regressions, and automate optimization validation.
 date: 2025-09-07T00:00:00.000Z
-modified: 2025-09-07T00:00:00.000Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'testing', 'automation']
+tags:
+  - react
+  - performance
+  - testing
+  - automation
 ---
 
 Performance without tests is just wishful thinking. You might optimize a component today, but without automated testing, tomorrow's feature addition could undo all your work. Performance testing isn't just about catching regressions—it's about establishing performance as a first-class concern in your development process, ensuring that every code change is evaluated not just for correctness, but for its impact on user experience.
@@ -519,6 +525,8 @@ describe('Bundle Performance', () => {
 
 ### Lighthouse CI Integration
 
+For comprehensive CI/CD pipeline configuration including performance budgets, see [performance-budgets-and-automation.md](./performance-budgets-and-automation.md).
+
 ```yaml
 # .github/workflows/performance.yml
 name: Performance Testing
@@ -1004,6 +1012,14 @@ export function expectBundleSizeWithinBudget(actualSize: number, budget: number)
   expect(actualSize).toBeLessThan(budget);
 }
 ```
+
+## Related Topics
+
+- **[Performance Budgets & Automation](./performance-budgets-and-automation.md)** - Setting pass/fail criteria and CI integration
+- **[Measuring Performance with Real Tools](./measuring-performance-with-real-tools.md)** - DevTools and profiling implementation details
+- **[Production Performance Monitoring](./production-performance-monitoring.md)** - Real-world performance tracking
+- **[Debugging Performance Issues](./debugging-performance-issues.md)** - Performance investigation playbook
+- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Key metrics for testing
 
 ## Next Steps
 

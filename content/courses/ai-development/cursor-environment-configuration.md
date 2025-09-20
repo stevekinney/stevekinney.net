@@ -1,7 +1,10 @@
 ---
 title: Configuring Cursor Environments with environment.json
-description: Set up reproducible cloud development environments for Cursor's background agents using environment.json configuration.
-modified: 2025-07-24T15:25:29-06:00
+description: >-
+  Set up reproducible cloud development environments for Cursor's background
+  agents using environment.json configuration.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 `environment.json` in Cursor serves as the **definitive configuration file for Cursor Environments**, which are **reproducible, cloud-hosted development boxes**. It acts as a canonical "recipe" that defines the setup and runtime behavior of these remote environments, primarily powering Cursor's **Background Agents** and facilitating **remote IDE sessions**.

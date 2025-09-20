@@ -3,7 +3,8 @@ title: Adding Dark Mode to Our Components
 description: >-
   Tailwind makes it easy to support a custom dark-mode theme for your
   application.
-modified: 2024-10-02T08:49:23-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T08:48:38-06:00'
 ---
 
 There are a number of ways that we can add dark mode to our component, but let's start by leveraging the path of least resistance using Tailwind since we already laid the groundwork [earlier](setting-up-tailwind.md).

@@ -17,20 +17,24 @@
     children,
     ...props
   }: ButtonProps = $props();
+
+  const isLink = Boolean(href);
 </script>
 
 <svelte:element
-  this={href ? 'a' : 'button'}
-  role={href ? 'link' : 'button'}
+  this={isLink ? 'a' : 'button'}
   {href}
   class={merge(variants({ variant, size, iconPosition }), full && 'w-full', className)}
+  aria-busy={loading ? 'true' : undefined}
+  {...!isLink ? { type: 'button', disabled: loading || undefined } : {}}
+  {...isLink && loading ? { 'aria-disabled': 'true', tabindex: -1 } : {}}
   {...props}
 >
   {#if loading}
-    <Loading />
+    <Loading aria-hidden="true" />
   {:else if icon}
     {@const Icon = icon}
-    <Icon />
+    <Icon aria-hidden="true" />
   {/if}
   {#if children}
     {@render children()}

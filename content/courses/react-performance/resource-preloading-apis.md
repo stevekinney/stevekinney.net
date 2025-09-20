@@ -1,10 +1,16 @@
 ---
 title: Resource Preloading APIs
-description: Prime the cache for what users will do next—preload, prefetch, and preinit without double‑loading or hurting metrics.
+description: >-
+  Prime the cache for what users will do next—preload, prefetch, and preinit
+  without double‑loading or hurting metrics.
 date: 2025-09-06T22:20:28.822Z
-modified: 2025-09-06T22:20:28.822Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'preloading', 'react-19']
+tags:
+  - react
+  - performance
+  - preloading
+  - react-19
 ---
 
 Waiting for resources to load is one of those things that makes web apps feel sluggish, even when they're actually pretty fast. Users click a button, stare at a spinner, and wonder if they should refresh the page (spoiler: they probably will). Enter React 19's resource preloading APIs—a set of functions that let you prime the browser's cache with the resources users are _about_ to need, before they actually need them.
@@ -414,6 +420,14 @@ Here's a quick checklist for using resource preloading effectively:
 - ❌ Don't preload resources "just in case"—be strategic
 - ❌ Don't forget CORS headers for cross-origin resources
 - ❌ Don't preload large resources unless you're confident they'll be needed
+
+## Related Topics
+
+- **[Priority Hints Resource Loading](./priority-hints-resource-loading.md)** - Control resource loading priority with fetchpriority and priority hints
+- **[Image and Asset Optimization](./image-and-asset-optimization.md)** - Optimize images and assets that you're preloading for maximum performance benefit
+- **[Service Worker Strategies](./service-worker-strategies.md)** - Combine preloading with service worker caching for sophisticated resource strategies
+- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Understand how preloading impacts your Core Web Vitals metrics
+- **[CDN Caching Immutable Assets](./cdn-caching-immutable-assets.md)** - Set up proper caching headers for preloaded resources
 
 ## Wrapping Up
 

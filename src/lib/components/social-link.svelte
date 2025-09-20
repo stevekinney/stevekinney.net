@@ -46,7 +46,7 @@
 >
   <Icon
     class={merge(
-      'hover:stroke-primary-700 active:stroke-primary-600 transition-colors',
+      'hover:stroke-primary-700 active:stroke-primary-600 dark:hover:stroke-primary-300 dark:active:stroke-primary-400 transition-colors',
       String(className),
     )}
     aria-hidden="true"

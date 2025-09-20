@@ -3,7 +3,8 @@ title: Personalizing Dev Containers
 description: >-
   Learn how to customize your development container environment with dotfiles
   and advanced configuration options
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 `dotfiles` are configuration files (often starting with a dot, hence the name) that control the behavior of shell environments, editors, and other tools, typically found in your home directory (e.g., `.bashrc`, `.zshrc`, `.vimrc`, `.gitconfig`).

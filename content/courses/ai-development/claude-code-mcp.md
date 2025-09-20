@@ -1,7 +1,10 @@
 ---
 title: Claude Code and MCP
-description: Extend Claude Code's capabilities with Model Context Protocol servers for database access, cloud services, and specialized development tools
-modified: 2025-07-24T15:42:12-06:00
+description: >-
+  Extend Claude Code's capabilities with Model Context Protocol servers for
+  database access, cloud services, and specialized development tools
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 MCP is an **open protocol** designed to standardize how AI applications, including Claude Code, connect with external tools and data sources. Unlike traditional AI coding assistants that might offer advanced autocompletion or chatbot features, Claude Code, when combined with MCP servers, transforms into an active, autonomous development partner that can manage complex workflows.

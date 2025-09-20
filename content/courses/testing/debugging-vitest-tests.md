@@ -1,7 +1,8 @@
 ---
 title: Debugging Vitest Tests
 description: Learn essential tools for debugging tests in Vitest effectively.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 You've just written the best code of your life, you hit `npm run test`, and oof—something's broken. But now the real fun begins: _debugging_. That's right, if debugging your code wasn't enough, you get to debug your tests too.

@@ -3,7 +3,8 @@ title: Controlling Settings with Environment Variables in Visual Studio Code
 description: >-
   Learn how to use environment variables to dynamically configure Visual Studio
   Code settings across different environments
-modified: 2025-03-18T09:13:03-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 Environment variables allow you to dynamically configure Visual Studio Code settings based on your system environment. This is useful for adapting settings to different operating systems, development stages (development, staging, production), or user-specific configurations. You can reference environment variables in `settings.json` using the `${env:VARIABLE_NAME}` syntax.

@@ -1,10 +1,12 @@
 ---
-title: Prop Combinations: Permit, Limit, and Require
-description: Make illegal prop combos unrepresentable—use unions, XOR patterns, and overloads.
-date: 2025-09-06T22:23:57.314Z
-modified: 2025-09-06T22:23:57.314Z
-published: true
-tags: ['react', 'typescript', 'prop-combinations', 'unions', 'conditional-props']
+title: Prop Combinations And Unions
+description: >-
+  Component APIs are contracts—they define what combinations of props make sense
+  and which ones don't. But too often, we design interfaces that allow
+  nonsensical combinations to slip through, creating runtime confusion and
+  maintenance head...
+modified: '2025-09-06T17:49:18-06:00'
+date: '2025-09-06T17:49:18-06:00'
 ---
 
 Component APIs are contracts—they define what combinations of props make sense and which ones don't. But too often, we design interfaces that allow nonsensical combinations to slip through, creating runtime confusion and maintenance headaches. TypeScript gives us the tools to encode these rules directly into our types, making invalid states literally impossible to represent.

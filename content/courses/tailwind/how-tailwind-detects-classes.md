@@ -3,7 +3,8 @@ title: How Tailwind Detects Classes
 description: >-
   Learn how Tailwind automatically detects utility classes and manages content
   detection without configuration.
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Tailwind scans your project for utility classes to generate minimal CSS. It basically tries to strip out everything that you're not using and only include what you _are_ using.

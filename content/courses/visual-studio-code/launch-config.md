@@ -3,13 +3,14 @@ title: Launch Configurations in Visual Studio Code
 description: >-
   Detailed guide to creating and customizing launch.json files for different
   debugging scenarios
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 > [!QUESTION] Should I use `tasks.json` or `launch.json` for development?
 > If your goal is to **start** your development server as part of your workflow without debugging, configure it in `tasks.json`. If you need to **debug** your development server, set up the necessary configurations in `launch.json`. For scenarios where you want to start the server and then attach a debugger, you can define a task in `tasks.json` to start the server and a corresponding configuration in `launch.json` to attach the debugger to the running server.
 
-Let's walk through all of the sertings that you can play around with in `launch.json`.
+Let's walk through all of the settings that you can play around with in `launch.json`.
 
 `launch.json` is a JSON file with two main top-level properties:
 

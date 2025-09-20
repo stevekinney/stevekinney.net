@@ -3,8 +3,8 @@ title: Building a Checklist Item
 description: >-
   Let's build an interactive checklist item that strikes through when completed
   using Tailwind's :has() selector utilities.
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Let's start with our basic HTML structure for a simple checklist item.

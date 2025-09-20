@@ -1,7 +1,10 @@
 ---
 title: Managing Costs and Token Usage in Claude Code
-description: Learn strategies for cost-effective Claude Code usage through model selection, context management, and subscription plans.
-modified: 2025-07-29T14:37:50-06:00
+description: >-
+  Learn strategies for cost-effective Claude Code usage through model selection,
+  context management, and subscription plans.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 As we've discussed ad nauseum, the primary cost driver when using Claude Code is **token consumption**. Each message sent, and the entire conversation history re-processed, consumes tokens, leading to accumulating costs. Factors that increase token usage and thus cost include:

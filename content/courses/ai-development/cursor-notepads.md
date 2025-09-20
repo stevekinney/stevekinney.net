@@ -1,7 +1,10 @@
 ---
 title: Using Cursor Notepads for Context Management
-description: Create reusable context bundles with Cursor Notepads to streamline prompts and improve AI responses.
-modified: 2025-07-29T09:58:36-06:00
+description: >-
+  Create reusable context bundles with Cursor Notepads to streamline prompts and
+  improve AI responses.
+modified: '2025-07-30T06:07:02-05:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 Cursor Notepads are essentially **drop-in Markdown pads that can bundle prompts, documentation links, file references, and rules**. They extend the capabilities of `.cursor/rules` files by offering reusable contexts for your development process. Notepads accept rich text and can include `@file` mentions, allowing you to pin code or documents directly within the pad. They are accessible by their name using the `@` syntax (e.g., `@NotepadName`).

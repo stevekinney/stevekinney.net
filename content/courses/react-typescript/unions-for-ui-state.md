@@ -1,10 +1,17 @@
 ---
 title: Model UI State with Discriminated Unions
-description: Express loading/success/error cleanly—exhaustive checks stop the foot‑guns before they fire.
+description: >-
+  Express loading/success/error cleanly—exhaustive checks stop the foot‑guns
+  before they fire.
 date: 2025-09-06T22:23:57.267Z
-modified: 2025-09-06T22:23:57.267Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'unions', 'state-management', 'ui-state']
+tags:
+  - react
+  - typescript
+  - unions
+  - state-management
+  - ui-state
 ---
 
 Managing UI state is where many React applications fall apart. You've seen the code: boolean flags scattered everywhere (`isLoading`, `hasError`, `isSuccess`), impossible states that somehow become possible at runtime, and endless `if` statements checking combinations that should never exist. Discriminated unions give you a better way—model your UI state so invalid combinations are literally unrepresentable.

@@ -1,7 +1,8 @@
 ---
 title: 'Testing the DOM: The Setup'
 description: Learn about JSDOM and Happy DOM for testing in Vitest.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 Yes. Node runs JavaScript just like the browser. It's also missing a bunch of stuff that you'll normally find in your browser of choice—namely, the DOM.

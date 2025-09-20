@@ -1,7 +1,8 @@
 ---
 title: Why You Don't Need 100% Code Coverage
 description: "Code coverage is a tool, not a goal. Let's discuss why."
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-09-20T10:39:54-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 Ah, [code coverage](code-coverage.md)—the metric that tempts us with thoughts of **perfection**. It dangles the promise that, if only we got 100%, our software would be an impenetrable fortress of correctness. But like many things in the beautiful yet chaotic world of development, that's just not true.

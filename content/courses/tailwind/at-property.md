@@ -3,8 +3,8 @@ title: '@property'
 description: >-
   Understand how Tailwind leverages the @property CSS rule for modern features
   and performance improvements.
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Tailwind 4 uses the CSS `@property` rule internally to enable modern features and performance improvements.

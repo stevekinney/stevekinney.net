@@ -1,10 +1,18 @@
 ---
 title: Data Fetching and Runtime Validation
-description: Fetch safely—type APIs, validate at runtime, and keep server/client boundaries honest under React 19.
+description: >-
+  Fetch safely—type APIs, validate at runtime, and keep server/client boundaries
+  honest under React 19.
 date: 2025-09-06T22:04:44.916Z
-modified: 2025-09-06T22:04:44.916Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'typescript', 'data-fetching', 'validation', 'zod', 'runtime-validation']
+tags:
+  - react
+  - typescript
+  - data-fetching
+  - validation
+  - zod
+  - runtime-validation
 ---
 
 When you're fetching data in React, TypeScript gives you excellent compile-time safety—but it can't magically guarantee that the API you're calling returns what you expect. That's where runtime validation comes in, bridging the gap between TypeScript's static analysis and the wild, unpredictable world of external data sources. React 19's improved async patterns make this even more critical (and thankfully, more elegant) to get right.
@@ -105,7 +113,7 @@ async function fetchUserSafely(id: string): Promise<User | null> {
 
 This approach lets you handle network failures, HTTP errors, and validation failures with different strategies—maybe you retry on network errors but log and return null on validation failures.
 
-## React 19 and the use Hook
+## React 19 and the `use` Hook
 
 React 19 introduces the experimental `use` hook, which can consume promises directly. This pairs beautifully with validated data fetching:
 
@@ -398,7 +406,12 @@ function getCachedSchema<T>(key: string, schema: z.ZodSchema<T>) {
 
 ### Partial Validation
 
-Sometimes you only need to validate specific fields. Zod supports partial schemas:
+## See Also
+
+- [MSW + Contracts: Typed Handlers](msw-and-contract-testing.md)
+- [Typed Data Layer: React Query and tRPC](react-query-trpc.md)
+- [Real‑time Typing: WebSockets and SSE](realtime-typing-websockets-and-sse.md)
+  Sometimes you only need to validate specific fields. Zod supports partial schemas:
 
 ```ts
 // Only validate the fields you actually need

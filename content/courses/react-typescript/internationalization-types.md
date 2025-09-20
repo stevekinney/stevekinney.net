@@ -1,10 +1,17 @@
 ---
 title: Internationalization with Type Safety
-description: Localize without footguns—type message IDs, params, and locales so missing strings can't slip through.
+description: >-
+  Localize without footguns—type message IDs, params, and locales so missing
+  strings can't slip through.
 date: 2025-09-06T22:04:45.041Z
-modified: 2025-09-06T22:04:45.041Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'i18n', 'internationalization', 'localization']
+tags:
+  - react
+  - typescript
+  - i18n
+  - internationalization
+  - localization
 ---
 
 Building an international app means dealing with translations, pluralization rules, and region-specific formatting—while making sure you don't accidentally ship missing strings or break when someone adds a new language. TypeScript can help you catch these issues at compile time instead of discovering them when a user in Japan tries to use your app and sees `{{user.name}}` instead of their actual name.

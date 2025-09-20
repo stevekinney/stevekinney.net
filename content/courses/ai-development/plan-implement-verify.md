@@ -1,7 +1,10 @@
 ---
 title: Plan-Implement-Verify Pattern
-description: Structure AI coding tasks using the Plan-Implement-Verify pattern for better results and fewer errors.
-modified: 2025-07-29T14:36:07-06:00
+description: >-
+  Structure AI coding tasks using the Plan-Implement-Verify pattern for better
+  results and fewer errors.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 When you ask AI to write code immediately, it makes assumptions—often wrong ones. The **Plan → Implement → Verify** pattern forces AI to:

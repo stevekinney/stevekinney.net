@@ -3,7 +3,8 @@ title: Snippets in Visual Studio Code
 description: >-
   Learn how to use and create code snippets to boost your productivity with
   reusable code templates
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 Snippets are pre-written blocks of code that you can quickly insert into your editor using a short keyword or prefix. It's not unfair of them as code templates or shortcuts for frequently used code structures. In Visual Studio Code, snippets are more than just static text; they are dynamic and interactive, allowing you to customize and adapt them to your specific needs.

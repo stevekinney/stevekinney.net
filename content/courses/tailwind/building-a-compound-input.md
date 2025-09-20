@@ -3,8 +3,8 @@ title: 'Building an Input with Prefix, Suffix, and Internal Buttons'
 description: >-
   Let's build a compound input field that supports prefixes, suffixes, and
   internal buttons step by step using Tailwind's advanced selector utilities.
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Let's start with our basic HTML structure for a simple search input field.

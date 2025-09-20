@@ -1,7 +1,8 @@
 ---
 title: Using Test.each And Describe.each To Generate Tests And Suites
 description: Learn to programmatically generate tests using test.each.
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 We can use test.each and describe.each to programmatically generate tests and test suites for us. Consider the following example:

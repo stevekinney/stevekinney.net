@@ -1,10 +1,16 @@
 ---
 title: Derived vs Stored State
-description: Store less, derive more. Compute on demand to avoid desyncs, extra memory, and unnecessary re-renders.
+description: >-
+  Store less, derive more. Compute on demand to avoid desyncs, extra memory, and
+  unnecessary re-renders.
 date: 2025-09-06T21:49:55.844Z
-modified: 2025-09-06T21:49:55.844Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'state-management', 'architecture']
+tags:
+  - react
+  - performance
+  - state-management
+  - architecture
 ---
 
 State management in React often feels like a balancing act between "store everything" and "compute everything." But here's the thing—most developers lean too heavily toward storing state when they should be deriving it. When you store redundant state that can be computed from other values, you're signing up for synchronization bugs, extra memory usage, and unnecessary re-renders. Let's explore when to store state versus when to derive it, and how making the right choice can dramatically improve your app's performance and reliability.
@@ -163,7 +169,7 @@ Notice how we only store the essential state:
 
 Everything else is derived on each render. This keeps our component simple and eliminates synchronization issues.
 
-## Performance Considerations with useMemo
+## Performance Considerations with `useMemo`
 
 Sometimes derived state computations can be expensive. That's where `useMemo` comes in:
 
@@ -378,6 +384,14 @@ function ProductCatalog() {
 4. **Consider the user experience**. A slight computation delay might be better than a sync bug that shows wrong data.
 
 5. **Test your state management**. Write tests that verify your computed values stay in sync with your stored state.
+
+## Related Topics
+
+- **[Colocation of State](./colocation-of-state.md)** - Keep state close to where it's used for better architecture
+- **[Lifting State Intelligently](./lifting-state-intelligently.md)** - Know when to lift state vs keep it derived locally
+- **[useMemo useCallback in React 19](./usememo-usecallback-in-react-19.md)** - Optimize expensive derived computations
+- **[Avoiding Over Memoization](./avoiding-over-memoization.md)** - Balance performance with complexity in derived state
+- **[Identity Stability Props](./identity-stability-props.md)** - Ensure derived objects don't cause unnecessary re-renders
 
 ## Wrapping Up
 

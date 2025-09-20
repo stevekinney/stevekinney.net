@@ -1,9 +1,10 @@
 ---
-modified: 2024-10-18T19:45:04-06:00
+modified: '2025-07-29T15:09:56-06:00'
 title: Parameters
 description: >-
   Parameters are a set of static, named metadata about a story, used to control
   the behavior or appearance of components within Storybook.
+date: '2024-04-15T06:28:51-06:00'
 ---
 
 Parameters are a set of static, named metadata about a story, used to control the behavior or appearance of components within Storybook. They can be set globally to affect all stories or locally to affect individual stories.

@@ -1,7 +1,10 @@
 ---
 title: Using Git Worktrees for Parallel AI Development
-description: Set up Git worktrees to run multiple Claude Code instances simultaneously for parallel development workflows.
-modified: 2025-07-28T07:43:02-06:00
+description: >-
+  Set up Git worktrees to run multiple Claude Code instances simultaneously for
+  parallel development workflows.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 [Git Worktree](https://git-scm.com/docs/git-worktree) is a Git feature that allows developers to create multiple working directories from a single Git repository. Each working directory is linked to a specific branch within the repository, enabling concurrent work on different branches or features without constantly switching between them. This feature was introduced with Git version 2.5 and helps streamline workflows, save time, and reduce the risk of accidentally committing changes to the wrong branch.

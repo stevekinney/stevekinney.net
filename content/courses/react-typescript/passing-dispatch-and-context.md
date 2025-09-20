@@ -1,10 +1,18 @@
 ---
 title: From Passing Dispatch to Context
-description: Stop prop drilling—introduce a typed Context and migrate dispatch to a Provider with safety.
+description: >-
+  Stop prop drilling—introduce a typed Context and migrate dispatch to a
+  Provider with safety.
 date: 2025-09-06T22:23:57.270Z
-modified: 2025-09-06T22:23:57.270Z
+modified: '2025-09-14T11:49:08-06:00'
 published: true
-tags: ['react', 'typescript', 'dispatch', 'context', 'state-management', 'reducers']
+tags:
+  - react
+  - typescript
+  - dispatch
+  - context
+  - state-management
+  - reducers
 ---
 
 You've built a reasonably sized React application with TypeScript, and somewhere along the way, you started passing dispatch functions down through multiple component layers. Maybe it started innocently enough—just passing `dispatch` from your `useReducer` down one level. But now you're threading it through four components that don't even need it, just so it can reach the component that actually does.

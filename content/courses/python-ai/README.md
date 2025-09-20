@@ -2,8 +2,8 @@
 title: AI Fundamentals with Python
 description: Learning about the basics of AI with Python and Hugging Face.
 layout: page
-date: 2025-08-01
-modified: 2025-08-01
+date: 2025-08-01T00:00:00.000Z
+modified: '2025-08-01T09:39:45-05:00'
 ---
 
 These notebooks provide a comprehensive overview of both natural language processing and image generation techniques, primarily utilizing the Hugging Face library. The NLP section begins with the fundamentals of using Transformer Pipelines for tasks such as sentiment analysis, text generation, and summarization. It then delves into the crucial preprocessing step of tokenization, which converts text into a numerical format that models can understand. Building on this, the notebooks explain the attention mechanism, which allows models to weigh the importance of different words in a sentence, and decoder architectures that use causal attention for text generation. Finally, the NLP concepts culminate in a practical guide to fine-tuning a pre-trained model on a custom dataset to create a specialized quote generator.

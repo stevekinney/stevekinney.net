@@ -4,7 +4,7 @@ description: >-
   Auto layout in Figma helps designers make flexible designs easily.
   Understanding and using this feature improves design workflow.
 date: 2024-03-09T19:20:45.000Z
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
 tags:
   - figma
   - course

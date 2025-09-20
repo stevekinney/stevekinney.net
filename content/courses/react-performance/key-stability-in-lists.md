@@ -1,10 +1,16 @@
 ---
 title: Key Stability in Lists
-description: Master keys to keep state, focus, and animations intact—no more mysterious remounts or janky list updates.
+description: >-
+  Master keys to keep state, focus, and animations intact—no more mysterious
+  remounts or janky list updates.
 date: 2025-09-06T21:53:48.824Z
-modified: 2025-09-06T21:53:48.824Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'keys', 'lists']
+tags:
+  - react
+  - performance
+  - keys
+  - lists
 ---
 
 You've probably seen the warning: "Each child in a list should have a unique 'key' prop." Maybe you've even thrown in some `Math.random()` keys to make it go away (we've all been there). But keys aren't just about silencing warnings—they're about keeping your UI stable, performant, and predictable when lists change. Get them wrong, and you'll see mysterious component remounts, lost focus, broken animations, and performance issues that'll make you question your life choices.
@@ -406,6 +412,13 @@ test('preserves input focus when list items are reordered', async () => {
   expect(stillFocusedInput).toHaveFocus();
 });
 ```
+
+## Related Topics
+
+- **[Identity Stability Props](./identity-stability-props.md)** - Deeper dive into React's identity concepts and performance implications
+- **[Windowing and Virtualization](./windowing-and-virtualization.md)** - Handle large lists efficiently while maintaining stable keys
+- **[Component Granularity Splitting](./component-granularity-splitting.md)** - How component boundaries affect key stability
+- **[Understanding Reconciliation React 19](./understanding-reconciliation-react-19.md)** - How React's diffing algorithm uses keys
 
 ## Key Takeaways
 

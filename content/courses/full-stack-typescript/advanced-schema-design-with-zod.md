@@ -3,8 +3,8 @@ title: Advanced Schema Design with Zod
 description: >-
   Zod offers advanced schema design patterns to handle complex validation
   scenarios effectively.
-
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 Zod offers advanced schema design patterns to handle complex validation scenarios effectively.

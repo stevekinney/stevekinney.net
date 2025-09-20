@@ -1,10 +1,11 @@
 ---
 title: Adding Client-Side Schema Validation
-modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn to implement client-side schema validation in a React app with
   TypeScript and Express, using `busy-bee-schema` to ensure API response
   integrity and handle CRUD operations efficiently.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-20T08:54:40-05:00'
 ---
 
 Now that we have everything set up in our Express application, can we do something similar in our React application.
@@ -126,4 +127,4 @@ export const deleteTask = async (id: string): Promise<void> => {
 };
 ```
 
-**Next**: [Validating the Data Layer](validating-the-data-layer)
+**Next**: [Validating the Data Layer](validating-the-data-layer.md)

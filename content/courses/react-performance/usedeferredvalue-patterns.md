@@ -1,10 +1,16 @@
 ---
 title: useDeferredValue Patterns
-description: Keep typing fluid by deferring expensive derived values. Pair with transitions and memoization for silky search UIs.
+description: >-
+  Keep typing fluid by deferring expensive derived values. Pair with transitions
+  and memoization for silky search UIs.
 date: 2025-09-06T22:26:45.103Z
-modified: 2025-09-06T22:26:45.103Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'hooks', 'concurrent']
+tags:
+  - react
+  - performance
+  - hooks
+  - concurrent
 ---
 
 You've built a search component that filters a massive list of products. Your users start typing "iPhone" and immediately notice the input field feels sluggish—each keystroke seems to hang for a split second. The UI thread is getting hammered by expensive operations triggered on every character change, making your otherwise snappy interface feel clunky.
@@ -235,7 +241,7 @@ function SearchWithLoadingState() {
 
 The `isStale` check is your friend—it tells you when the UI is showing outdated results while new ones are being computed.
 
-## When NOT to Use useDeferredValue
+## When NOT to Use `useDeferredValue`
 
 Not every expensive operation benefits from `useDeferredValue`. Here are some cases where it's not the right tool:
 
@@ -453,6 +459,14 @@ function GoodExample({ items, query }: { items: Item[]; query: string }) {
 ## Wrapping Up
 
 `useDeferredValue` is a powerful tool for building responsive UIs that handle expensive operations gracefully. The key principles to remember:
+
+## Related Topics
+
+- **[useTransition and startTransition](./usetransition-and-starttransition.md)** - Combine non-blocking transitions with deferred values for comprehensive performance optimization
+- **[Real-Time Data Performance](./real-time-data-performance.md)** - Use useDeferredValue to handle high-frequency updates without blocking the UI
+- **[Concurrent React Scheduling](./concurrent-react-scheduling.md)** - Understand how React prioritizes and schedules deferred updates
+- **[Windowing and Virtualization](./windowing-and-virtualization.md)** - Defer expensive list operations for better scrolling performance
+- **[Avoiding Over-Memoization](./avoiding-over-memoization.md)** - Balance deferred values with proper memoization strategies
 
 - **Defer the inputs**, not the outputs
 - **Always memoize** the expensive computation

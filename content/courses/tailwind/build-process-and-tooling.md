@@ -3,7 +3,7 @@ title: Build Process & Tooling Integration
 description: >-
   Learn how to integrate Tailwind CSS into your development workflow with modern
   build tools and CLI commands.
-date: 2024-07-26
+date: 2024-07-26T00:00:00.000Z
 tags:
   - tailwind
   - vite
@@ -11,7 +11,7 @@ tags:
   - build-tools
   - configuration
 published: true
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:24:01-06:00'
 ---
 
 Setting up Tailwind CSS properly in your development environment is pretty simple—if you follow the happy path, at least.

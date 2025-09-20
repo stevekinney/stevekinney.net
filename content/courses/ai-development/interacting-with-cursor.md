@@ -1,7 +1,10 @@
 ---
 title: Interacting with Cursor's AI Features
-description: Master Cursor's Tab completion, Inline Edit, AI Chat, and Agent modes for effective AI-powered coding.
-modified: 2025-07-29T09:22:30-06:00
+description: >-
+  Master Cursor's Tab completion, Inline Edit, AI Chat, and Agent modes for
+  effective AI-powered coding.
+modified: '2025-07-30T06:07:02-05:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 Cursor AI is an AI-powered code editor built on the VS Code foundation, designed to act as an AI pair programmer by integrating directly into your coding environment and understanding your entire codebase contextually. It aims to make coding smarter, faster, and safer.

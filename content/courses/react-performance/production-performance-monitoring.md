@@ -1,10 +1,16 @@
 ---
 title: Production Performance Monitoring
-description: Monitor real user performance, set up RUM, track Core Web Vitals, and catch regressions before users complain.
+description: >-
+  Monitor real user performance, set up RUM, track Core Web Vitals, and catch
+  regressions before users complain.
 date: 2025-09-07T01:00:00.000Z
-modified: 2025-09-07T01:00:00.000Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'monitoring', 'rum']
+tags:
+  - react
+  - performance
+  - monitoring
+  - rum
 ---
 
 Your React app passes all performance tests in development, achieves perfect Lighthouse scores in CI, and feels blazing fast on your MacBook Pro. Then you deploy to production and discover the harsh reality: your users are on slow devices, unreliable networks, and older browsers. That 2-second page load becomes 8 seconds on a Moto G4 over 3G in India. Without production performance monitoring, you're flying blind.
@@ -1202,6 +1208,19 @@ function PerformanceDashboardComponent() {
 }
 ```
 
+## Related Topics
+
+- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Deep dive into optimizing LCP, CLS, and INP
+- **[Performance Budgets and Automation](./performance-budgets-and-automation.md)** - Setting thresholds and CI enforcement
+- **[Debugging Performance Issues](./debugging-performance-issues.md)** - Systematic troubleshooting approach
+- **[Measuring Performance with Real Tools](./measuring-performance-with-real-tools.md)** - Local profiling and measurement
+
+## Prerequisites
+
+- Understanding of Core Web Vitals metrics
+- Basic knowledge of React performance concepts
+- Familiarity with browser performance APIs
+
 ## Next Steps
 
 Production performance monitoring is essential for maintaining React app performance at scale:
@@ -1215,3 +1234,12 @@ Production performance monitoring is essential for maintaining React app perform
 The key is balancing comprehensive monitoring with performance impact—monitoring shouldn't slow down your app. Use sampling, batch data collection, and fail-silent error handling to ensure your monitoring enhances rather than degrades user experience.
 
 Remember: you can't improve what you don't measure. Production monitoring transforms performance from guesswork into data-driven optimization.
+
+## Practical Examples
+
+Common monitoring implementation patterns:
+
+- **Startup monitoring** - Track initial app load performance across user segments
+- **Feature-specific monitoring** - Monitor critical user journeys (checkout, search, etc.)
+- **A/B testing integration** - Compare performance across feature variants
+- **Progressive enhancement tracking** - Monitor how features degrade on low-end devices

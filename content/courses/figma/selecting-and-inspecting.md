@@ -3,7 +3,7 @@ title: Selecting and Inspecting
 description: >-
   Let's look at some of the tools Figma provides for measuring sizes and
   distances.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
 date: 2024-03-05T20:04:49.000Z
 tags:
   - figma

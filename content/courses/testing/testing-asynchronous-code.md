@@ -1,7 +1,8 @@
 ---
 title: Using Async/Await
 description: Handling asynchronous code with async/await in Vitest.
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 As with almost everything in JavaScript, asynchronous code makes everything harder. (**Spoiler**: But, also—as with almost everything in JavaScript relating to asynchronous code, `async`/`await` tends to make that hard part easier.)

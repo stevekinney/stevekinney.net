@@ -1,7 +1,8 @@
 ---
 title: Challenges with `has` Utility
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
 description: Getting our hands dirty with the `has` utility in Tailwind.
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Can you implement the following?
@@ -12,4 +13,4 @@ Can you implement the following?
 4. **Multi-Element Response**: Design a contact form container that responds differently to text inputs vs textareas
 5. **Complex Attribute Targeting**: Create a file upload zone that responds to both focus states and file type attributes
 
-The [solutions can be found here](has-solutions).
+The [solutions can be found here](has-solutions.md).

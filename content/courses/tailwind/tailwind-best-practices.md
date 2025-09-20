@@ -3,7 +3,8 @@ title: Tailwind Best Practices
 description: >-
   Modern Tailwind CSS best practices using cascade layers, utilities-first
   approach, and native CSS features for maintainable code.
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:11:25-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 As of Tailwind 4 and later, Tailwind fully embraces modern CSS—cascade layers, OKLCH colors, container queries, and native CSS variables. The framework stays out of your way if you keep a utility-first mindset and lean on configuration rather than custom CSS.

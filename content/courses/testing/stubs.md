@@ -1,7 +1,8 @@
 ---
 title: Using Stubs
 description: Learn how to use stubs to simulate behavior in testing.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 A stub is a type of test double used to replace a real function with a simplified, controlled version for testing purposes. The primary purpose of a stub is to simulate the behavior of real code by providing predefined responses. Stubs do not track how often a function is called or with what arguments—it only replaces the real implementation to ensure that tests run in a predictable, isolated environment.

@@ -1,7 +1,10 @@
 ---
 title: Creating Custom Coding Assistants with Gemini Gems
-description: Build specialized AI chatbots for coding tasks using Gemini's Gems feature with custom personas and context.
-modified: 2025-07-28T07:31:35-06:00
+description: >-
+  Build specialized AI chatbots for coding tasks using Gemini's Gems feature
+  with custom personas and context.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 Gems are like your own personalized AI chatbots within Gemini, customized versions of the model that retain specific characteristics and preferences you assign. They are designed to solve the "repetitive prompting" problem by allowing you to pre-save contextual information—such as programming language, framework, coding standards, or project goals—so you don't have to repeat it in every prompt.

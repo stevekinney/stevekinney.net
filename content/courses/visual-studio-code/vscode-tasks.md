@@ -3,7 +3,8 @@ title: Tasks in Visual Studio Code
 description: >-
   Understand how to configure and use Visual Studio Code tasks to automate your
   development workflow
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 `tasks.json` is a configuration file in Visual Studio Code that defines automated tasks you can run from the editor. Instead of manually typing the same build or test commands in the terminal (ugh, repetitive strain, anyone?), you can click a button, press a shortcut, or let Visual Studio Code trigger these tasks automatically.

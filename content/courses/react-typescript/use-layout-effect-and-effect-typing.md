@@ -1,10 +1,12 @@
 ---
-title: useLayoutEffect vs useEffect: Typing and Pitfalls
-description: Type effects that touch the DOM—avoid layout thrash and ensure cleanups are correctly captured and typed.
-date: 2025-09-06T22:04:45.031Z
-modified: 2025-09-06T22:04:45.031Z
-published: true
-tags: ['react', 'typescript', 'hooks', 'use-effect', 'use-layout-effect']
+title: Use Layout Effect And Effect Typing
+description: >-
+  React's useEffect and useLayoutEffect look nearly identical on the surface,
+  but their timing differences can make or break your UI. One runs after the DOM
+  updates, the other runs synchronously before the browser paints—and choosing
+  wrong...
+modified: '2025-09-06T17:49:18-06:00'
+date: '2025-09-06T17:49:18-06:00'
 ---
 
 React's `useEffect` and `useLayoutEffect` look nearly identical on the surface, but their timing differences can make or break your UI. One runs after the DOM updates, the other runs synchronously before the browser paints—and choosing wrong can lead to flickering layouts or janky animations. With TypeScript, we can make these effects type-safe and catch common pitfalls before they reach production.
@@ -34,7 +36,7 @@ Think of it this way: `useEffect` is like sending a postcard—it gets there eve
 > [!NOTE]
 > Both hooks have identical TypeScript signatures, but their timing implications affect how you should type their dependencies and cleanup functions.
 
-## When to Use useLayoutEffect
+## When to Use `useLayoutEffect`
 
 Use `useLayoutEffect` when you need to:
 

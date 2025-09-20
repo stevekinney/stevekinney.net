@@ -1,10 +1,16 @@
 ---
 title: Custom Equality Checks with areEqual
-description: Write domain-smart equality functions that avoid deep-compare traps and make memoized components both fast and correct.
+description: >-
+  Write domain-smart equality functions that avoid deep-compare traps and make
+  memoized components both fast and correct.
 date: 2025-09-06T21:18:40.221Z
-modified: 2025-09-06T21:18:40.221Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'memoization', 'equality']
+tags:
+  - react
+  - performance
+  - memoization
+  - equality
 ---
 
 React's memoization features like `React.memo()`, `useMemo()`, and `useCallback()` are powerful performance tools, but they're only as smart as their equality checks. By default, React uses shallow comparison—which works great until it doesn't. When you need more control over when your components re-render, custom equality functions with `areEqual` let you write domain-specific logic that's both performant and correct.
@@ -465,6 +471,14 @@ const memoizedCallback = useCallback(
   [currentUser?.id], // Only recreate when current user changes
 );
 ```
+
+## Related Topics
+
+- **[Identity Stability Props](./identity-stability-props.md)** - Understand the deeper principles behind stable references
+- **[React Memo React 19 and Compiler Era](./react-memo-react-19-and-compiler-era.md)** - How memoization evolves with the React compiler
+- **[Avoiding Over Memoization](./avoiding-over-memoization.md)** - Balance custom equality with development complexity
+- **[useMemo useCallback in React 19](./usememo-usecallback-in-react-19.md)** - Apply equality concepts to hook dependencies
+- **[Context API Performance Pitfalls](./context-api-performance-pitfalls.md)** - Use custom equality to optimize context consumers
 
 ## Wrapping Up
 

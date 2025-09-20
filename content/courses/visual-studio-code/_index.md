@@ -1,7 +1,8 @@
 ---
+title: Visual Studio Code
+description: Contents for the Visual Studio Code course.
 layout: contents
-
-modified: 2025-04-16T12:27:20-06:00
+modified: 2025-09-14T09:28:00-06:00
 ---
 
 ## Basics

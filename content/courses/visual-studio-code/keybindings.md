@@ -1,7 +1,8 @@
 ---
-modified: 2025-04-28T17:33:44-06:00
 title: Keybindings
 description: Setting key bindings in Visual Studio Code.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-18T08:10:27-05:00'
 ---
 
 Keybindings are the magic shortcuts that let you summon commands with a single keystroke. You can view and customize them directly from the Command Palette by searching for `Preferences: Open Keyboard Shortcuts`. This view lists every available command and any default or custom bindings.

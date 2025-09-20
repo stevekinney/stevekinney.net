@@ -3,7 +3,8 @@ title: Advanced Debugging Techniques in Visual Studio Code
 description: >-
   Master powerful debugging features like conditional breakpoints, logpoints,
   and more for efficient troubleshooting
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 ## Conditional Breakpoints

@@ -1,10 +1,12 @@
 ---
-title: Tooling: ESLint, Prettier, and Build Pipelines
-description: Wire type‑aware lint rules, format consistently, and split transpile vs type‑check for speedy builds.
-date: 2025-09-06T22:23:57.316Z
-modified: 2025-09-06T22:23:57.316Z
-published: true
-tags: ['react', 'typescript', 'tooling', 'eslint', 'prettier', 'build']
+title: 'Development: blazing fast with real-time feedback'
+description: >-
+  Setting up tooling for TypeScript React projects feels like assembling
+  furniture from three different stores—everything should work together, but the
+  instructions never quite align. Let's build a complete tooling setup that
+  combines ESLi...
+modified: '2025-09-06T17:49:18-06:00'
+date: '2025-09-06T17:49:18-06:00'
 ---
 
 Setting up tooling for TypeScript React projects feels like assembling furniture from three different stores—everything should work together, but the instructions never quite align. Let's build a complete tooling setup that combines ESLint's type-aware linting, Prettier's consistent formatting, and a build pipeline that's both fast for development and bulletproof for production. By the end, you'll have a development environment that catches bugs early, formats code automatically, and builds blazingly fast.

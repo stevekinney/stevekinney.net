@@ -1,10 +1,16 @@
 ---
 title: Windowing and Virtualization
-description: Render only what users see. Use react-window to make 10,000-row lists fast without sacrificing UX or accessibility.
+description: >-
+  Render only what users see. Use react-window to make 10,000-row lists fast
+  without sacrificing UX or accessibility.
 date: 2025-09-06T21:56:05.091Z
-modified: 2025-09-06T21:56:05.092Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'virtualization', 'lists']
+tags:
+  - react
+  - performance
+  - virtualization
+  - lists
 ---
 
 Rendering 10,000 list items in React? Your browser will politely decline with a frozen UI and a memory leak. The solution isn't to throw more RAM at the problem—it's to be smarter about what you render. Windowing (also called virtualization) renders only the items visible in the viewport, keeping your UI snappy even with massive datasets. We'll explore how to implement this with `react-window`, handle edge cases, and keep accessibility in mind while turning sluggish lists into buttery-smooth experiences.
@@ -513,6 +519,14 @@ Windowing isn't always the right solution:
 - **SEO-critical content**: Search engines can't index virtualized content
 
 ## Next Steps
+
+## Related Topics
+
+- **[Real-Time Data Performance](./real-time-data-performance.md)** - Efficiently handle high-frequency updates in virtualized lists
+- **[Real-Time Scale Strategies](./real-time-scale-strategies.md)** - Combine virtualization with backpressure management for massive data streams
+- **[Memory Management Deep Dive](./memory-management-deep-dive.md)** - Optimize memory usage in large virtualized lists
+- **[useDeferredValue Patterns](./usedeferredvalue-patterns.md)** - Defer expensive list operations for smoother scrolling
+- **[Animation Performance](./animation-performance.md)** - Create smooth scrolling animations in virtualized components
 
 You now have the tools to implement performant lists that scale to thousands of items. Some areas to explore further:
 

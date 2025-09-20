@@ -1,10 +1,16 @@
 ---
 title: Code‑Splitting and Lazy Loading
-description: Load less JavaScript upfront. Split routes, components, and vendors to speed first paint and boost Core Web Vitals.
+description: >-
+  Load less JavaScript upfront. Split routes, components, and vendors to speed
+  first paint and boost Core Web Vitals.
 date: 2025-09-06T22:08:00.761Z
-modified: 2025-09-06T22:08:00.761Z
+modified: '2025-09-20T15:36:56-06:00'
 published: true
-tags: ['react', 'performance', 'bundling', 'web-vitals']
+tags:
+  - react
+  - performance
+  - bundling
+  - web-vitals
 ---
 
 Your JavaScript bundle is getting out of hand. What started as a modest React app has grown into a 2MB monolith that takes forever to load, especially on slower connections. Users are bouncing before they even see your beautiful loading spinner (which is probably over-engineered anyway). Enter code-splitting and lazy loading—the performance optimization techniques that let you serve only what users actually need, when they need it.
@@ -193,12 +199,12 @@ Use webpack-bundle-analyzer or similar tools to identify optimization opportunit
 # Install the analyzer
 npm install --save-dev webpack-bundle-analyzer
 
-# For Create React App users
+# For analyzing bundle composition
 npm install --save-dev source-map-explorer
 
 # Analyze your bundle
 npm run build
-npx source-map-explorer 'build/static/js/*.js'
+npx source-map-explorer 'dist/assets/*.js'
 ```
 
 This visualization shows exactly which libraries are eating up your bundle size, helping you decide what to split or replace.
@@ -357,11 +363,17 @@ Always provide meaningful loading states. Users shouldn't see blank screens or b
 
 Implement code-splitting early in development, not as an afterthought when performance becomes a problem. It's much easier to architect for splitting from the start.
 
+## Related Topics
+
+- **[Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)** - Analyze bundles to identify splitting opportunities
+- **[CDN Caching & Immutable Assets](./cdn-caching-immutable-assets.md)** - Cache split chunks efficiently
+- **[Resource Preloading APIs](./resource-preloading-apis.md)** - Preload critical split chunks
+- **[Priority Hints Resource Loading](./priority-hints-resource-loading.md)** - Control chunk loading priority
+- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Measure splitting impact on metrics
+- **[React Server Components RSC](./react-server-components-rsc.md)** - Server-side code splitting patterns
+
 ## Next Steps
 
 Code-splitting and lazy loading are fundamental performance optimizations for modern React applications. Start with route-based splitting for quick wins, then move to component-based splitting for fine-grained control. Always measure the impact and prioritize splits based on actual bundle analysis.
 
 Your users will thank you with faster load times, better Core Web Vitals scores, and—most importantly—they'll actually stick around to use your application instead of bouncing to a competitor with a snappier experience.
-
-> [!NOTE]
-> Want to go deeper? Check out our guides on [Image Optimization](image-optimization.md) and [React Server Components](server-components.md) for even more performance wins.

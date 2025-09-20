@@ -1,7 +1,8 @@
 ---
 title: Generating an Icon Library
 description: Let's generate a reusable Icon component in Figma using icons from Lucide.
-modified: 2024-10-02T08:49:23-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T06:28:51-06:00'
 ---
 
 ![Icons](assets/figma-icon-set.png)

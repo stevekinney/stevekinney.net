@@ -1,10 +1,17 @@
 ---
 title: useOptimistic and Typed Optimistic Updates
-description: Model optimistic UI updates safely—design optimistic state and reconcile server results with precise types.
+description: >-
+  Model optimistic UI updates safely—design optimistic state and reconcile
+  server results with precise types.
 date: 2025-09-06T22:04:44.928Z
-modified: 2025-09-06T22:04:44.928Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'use-optimistic', 'optimistic-updates', 'react-19']
+tags:
+  - react
+  - typescript
+  - use-optimistic
+  - optimistic-updates
+  - react-19
 ---
 
 React's `useOptimistic` hook lets you show users immediate feedback while their actions are still processing on the server. Think of it as showing a "like" button as already pressed while the API call is still in flight—your users get instant gratification, and you handle the complexities behind the scenes. But here's the thing: without proper TypeScript modeling, optimistic updates can quickly turn into a debugging nightmare when server responses don't match your assumptions.

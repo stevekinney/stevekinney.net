@@ -45,7 +45,7 @@ modified: 2025-04-16T12:27:20-06:00
 - [Hook Control Flow](claude-code-hook-control-flow.md)
 - [Using MCP Servers](claude-code-mcp.md)
 - [Git Worktrees](git-worktrees.md)
-- [Integrating with Github Actions](integrating-with-github-actions.md)
+- [Integrating with GitHub Actions](integrating-with-github-actions.md)
 
 ## Additional Tools
 

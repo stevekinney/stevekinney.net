@@ -1,10 +1,11 @@
 ---
 title: Validating Path and Query Parameters with Middleware
-modified: 2025-04-16T12:27:20-06:00
 description: >-
   Learn how to create middleware in Express to validate path and query
   parameters using Zod schemas for robust request handling. Transform your
   request validation process with ease.
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-20T08:54:40-05:00'
 ---
 
 We can create similar middleware for validating queries and paths.
@@ -77,4 +78,4 @@ export const validate = (schemas: ValidationOptions) => {
 };
 ```
 
-**Next**: [Adding Client-Side Validations](adding-client-side-validation)
+**Next**: [Adding Client-Side Validations](adding-client-side-validation.md)

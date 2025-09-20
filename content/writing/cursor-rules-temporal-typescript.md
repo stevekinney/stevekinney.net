@@ -5,7 +5,7 @@ description: >-
   workflows in TypeScript, covering serialization, determinism, and workflow
   patterns.
 date: 2025-05-14T15:00:00.000Z
-modified: 2025-05-14T09:40:20-06:00
+modified: 2025-07-29T21:09:56.000Z
 published: true
 ---
 

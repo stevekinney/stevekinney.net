@@ -1,10 +1,17 @@
 ---
 title: Tsconfig That Loves React 19
-description: Dial in strictness, module resolution, JSX settings, and project references—fast builds without losing safety.
+description: >-
+  Dial in strictness, module resolution, JSX settings, and project
+  references—fast builds without losing safety.
 date: 2025-09-06T22:23:57.262Z
-modified: 2025-09-06T22:23:57.262Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'tsconfig', 'react-19', 'configuration']
+tags:
+  - react
+  - typescript
+  - tsconfig
+  - react-19
+  - configuration
 ---
 
 Your TypeScript configuration is the foundation of your React 19 project—it controls how your code compiles, how modules resolve, and how strictly TypeScript validates your types. Getting it right means faster builds, better developer experience, and fewer runtime surprises. Getting it wrong? Well, you'll spend more time fighting your toolchain than building features.

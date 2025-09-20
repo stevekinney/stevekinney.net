@@ -3,8 +3,8 @@ title: Screen Reader Support
 description: >-
   Implement accessibility with Tailwind utilities for screen readers, focus
   indicators, and text selection.
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 For elements that need to be present for screen readers but visually hidden, Tailwind offers specific utilities.

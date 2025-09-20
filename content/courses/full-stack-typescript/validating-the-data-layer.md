@@ -1,9 +1,10 @@
 ---
 title: Validating the Data Layer
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
 description: >-
   Explore methods to validate your database layer using TypeScript, emphasizing
   the TaskClient class to perform CRUD operations securely.
+date: '2025-03-20T08:54:40-05:00'
 ---
 
 We're still putting a lot of trust in our database layer as well. We should make sure that it's also giving us back what we think it is.

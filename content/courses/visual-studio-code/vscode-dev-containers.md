@@ -3,7 +3,8 @@ title: Dev Containers in Visual Studio Code
 description: >-
   Understanding how to use Docker containers for consistent development
   environments in Visual Studio Code
-modified: 2025-03-17T16:36:04-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 Imagine having a perfectly tailored development environment for each project, encapsulated and isolated from your host machine. That's precisely what Dev Containers offer. At their core, Dev Containers utilize **Docker containers** to define and provide a complete development environment.

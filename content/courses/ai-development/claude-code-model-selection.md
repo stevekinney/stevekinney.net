@@ -1,7 +1,10 @@
 ---
 title: Claude Code Model Selection
-description: Choose the right Claude model (Opus, Sonnet, Haiku) for your development tasks based on complexity, cost, and performance requirements
-modified: 2025-07-24T15:30:08-06:00
+description: >-
+  Choose the right Claude model (Opus, Sonnet, Haiku) for your development tasks
+  based on complexity, cost, and performance requirements
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 **Claude Opus** and **Claude Sonnet** represent different points on an "agency spectrum" for AI coding systems. I guess there is also Haiku.
@@ -72,6 +75,15 @@ While not the main focus, **Haiku** is the **cheapest and fastest** model, best 
 - **Simple utility scripts or throwaway code**.
 
 Haiku provides the **most compact output** and generally uses the **fewest turns**.
+
+## Quick Choice Matrix
+
+- High risk or ambiguous architecture changes: Prefer Sonnet; escalate to Opus for deep design trade‑offs or unknown unknowns.
+- Multi‑file refactor with tests: Sonnet (agent mode); Opus for plan/review if the refactor spans boundaries.
+- One‑off edits, small scripts, formatting, or conversions: Haiku.
+- PR review with judgment calls: Sonnet; Opus for final review on critical code.
+- Exploration or doc writing: Sonnet → Haiku for summarization passes.
+- Cost pressure: default to Haiku, promote to Sonnet when you hit uncertainty.
 
 ## Performance and Cost Implications
 

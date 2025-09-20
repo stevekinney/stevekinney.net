@@ -3,7 +3,8 @@ title: Source Control in Visual Studio Code
 description: >-
   Learn how to use Visual Studio Code's integrated Git features for effective
   version control
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 Git is baked right into Visual Studio Code, making version control feel like second nature. From staging and committing changes to handling merges and pushing to remote repositories, the built-in UI provides a smooth, visual workflow. Let's explore how to leverage these features—plus a few extras like Git blame, GitHub integration, and interactive rebase—to keep your code pristine and your team happy.
@@ -55,11 +56,11 @@ Visual Studio Code provides native support for GitHub, GitLab, and Bitbucket wor
 - **Create pull requests** using the GitHub Pull Requests extension (or a similar extension for GitLab or Bitbucket). This gives you a specialized view in Visual Studio Code to manage pull requests, add comments, and review code without leaving your editor.
 - **Push to private or public repos** by using the same `Push` or `Publish Branch` features in the Source Control menu.
 
-> [!TIP] Even More Github Integration
+> [!TIP] Even More GitHub Integration
 > If you want to integrate more deeply, the official GitHub extension suite lets you sign in to GitHub and manage issues, pull requests, and more, all from within Visual Studio Code.
 
 ## Another Option
 
-Alternatively, I also really like [Github Desktop](https://github.com/desktop).
+Alternatively, I also really like [GitHub Desktop](https://github.com/desktop).
 
-![Github Desktop](assets/github-desktop.png)
+![GitHub Desktop](assets/github-desktop.png)

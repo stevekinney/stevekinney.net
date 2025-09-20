@@ -3,7 +3,8 @@ title: Command Palette in Visual Studio Code
 description: >-
   Master Visual Studio Code's Command Palette to quickly access commands and
   customize keybindings
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 The Command Palette solves this by offering fuzzy-search across all commands. Even if you only remember part of a command's name, typing snippets of it in the Command Palette often reveals exactly what you need. For instance, typing `pref key` might surface commands like `Preferences: Open Keyboard Shortcuts` or `Preferences: Open User Settings`.

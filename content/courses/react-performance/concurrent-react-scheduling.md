@@ -1,10 +1,16 @@
 ---
 title: Concurrent React and Scheduling
-description: Learn how React can pause and resume work to keep interactions smooth—design components that play nicely with the scheduler.
+description: >-
+  Learn how React can pause and resume work to keep interactions smooth—design
+  components that play nicely with the scheduler.
 date: 2025-09-06T21:57:38.385Z
-modified: 2025-09-06T21:57:38.385Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'concurrent', 'scheduling']
+tags:
+  - react
+  - performance
+  - concurrent
+  - scheduling
 ---
 
 React 18 introduced concurrent features that fundamentally change how React processes updates. Instead of blocking the main thread until every component renders, React can now pause and resume work—keeping your app responsive even during expensive operations. This isn't just about making things faster; it's about making the _right things_ fast and ensuring user interactions never feel sluggish.
@@ -356,10 +362,17 @@ function PaymentForm() {
 }
 ```
 
+## Related Topics
+
+- **[useTransition and startTransition](./usetransition-and-starttransition.md)** - Detailed API guide and advanced patterns
+- **[useDeferredValue Patterns](./usedeferredvalue-patterns.md)** - In-depth deferred value techniques
+- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - How the compiler optimizes concurrent rendering
+- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Measure the impact of concurrent features on INP
+- **[INP Optimization Long Tasks](./inp-optimization-long-tasks.md)** - Break up long tasks for better scheduling
+- **[flushSync in React DOM](./flushsync-in-react-dom.md)** - Override scheduling for urgent updates
+
 ## Next Steps
 
 React's concurrent features give you fine-grained control over when work happens, but they're tools that require thoughtful application. Start by identifying the expensive operations in your app—data processing, complex renders, or heavy computations—and experiment with wrapping them in transitions.
 
 The goal isn't to make everything concurrent, but to ensure user interactions always feel responsive while non-critical work happens in the background. Your users will notice the difference, even if they can't quite put their finger on why your app feels more polished than the competition.
-
-For deeper exploration, check out the [React 18 Working Group discussions](https://github.com/reactwg/react-18/discussions) where many of these patterns were first discussed, and consider how server components (another React 18 feature) can reduce the client-side work that needs scheduling in the first place.

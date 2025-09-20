@@ -1,7 +1,8 @@
 ---
 title: 'Mocking Timers, Dates, And System Utilities'
 description: 'Learn how to mock timers, dates, and utilities in Vitest.'
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 A lot of UIs tend to show stuff like time and dates. As we've discussed previously, we want our tests to be consistent. As [Steve Miller once wrote](https://www.youtube.com/watch?v=HlItAutxJzk&list=OLAK5uy_lRxgtVPfsBuzpgFdYdFi0Ej0J2mNwzz2A), (but let's be honest, you 're thinking of [Seal's version from the Space Jam soundtrack](https://www.youtube.com/watch?v=gxbBp9SH81U)):

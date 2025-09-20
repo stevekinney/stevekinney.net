@@ -1,10 +1,16 @@
 ---
 title: React Server Components
-description: Move heavy work to the server and hydrate only where needed—ship less JS and free the main thread for interactions.
+description: >-
+  Move heavy work to the server and hydrate only where needed—ship less JS and
+  free the main thread for interactions.
 date: 2025-09-06T22:03:39.880Z
-modified: 2025-09-06T22:03:39.880Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'rsc', 'server-components']
+tags:
+  - react
+  - performance
+  - rsc
+  - server-components
 ---
 
 React Server Components (RSC) fundamentally change how we think about React applications by moving computation to the server and streaming interactive pieces to the client. Instead of shipping massive JavaScript bundles and making every component client-side by default, RSC lets you render components on the server—keeping heavy data fetching, third-party libraries, and business logic away from your user's device while hydrating only the pieces that need interactivity.
@@ -208,7 +214,7 @@ export default async function PostPage({ slug }: { slug: string }) {
 }
 ```
 
-### Pattern 2: Streaming with Suspense
+### Pattern 2: Streaming with `Suspense`
 
 Server Components work beautifully with React's Suspense to stream content as it becomes available:
 
@@ -461,6 +467,14 @@ They're less ideal for:
 - **Highly interactive applications**: Real-time games, drawing apps, rich text editors
 - **Client-side routing heavy apps**: Where you need instant navigation
 - **Apps with lots of personalized, dynamic content**: That can't be computed server-side
+
+## Related Topics
+
+- **[Suspense for Data Fetching](./suspense-for-data-fetching.md)** - Learn how Suspense enables streaming Server Components and improves perceived performance
+- **[Optimizing Server-Side Rendering](./optimizing-server-side-rendering.md)** - Explore advanced SSR techniques that complement Server Components
+- **[Streaming SSR Optimization](./streaming-ssr-optimization.md)** - Deep dive into streaming patterns for faster initial page loads
+- **[Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md)** - Reduce client bundle sizes by strategically splitting Client Components
+- **[Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)** - Measure the bundle size improvements from Server Components adoption
 
 ## Looking Forward
 

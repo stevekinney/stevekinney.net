@@ -1,10 +1,12 @@
 ---
-title: Build Pipeline: tsc, SWC, and Vite
-description: Choose the right compiler and checker—separate type checking from transpile for fast builds and reliable CI.
-date: 2025-09-06T22:04:44.974Z
-modified: 2025-09-06T22:04:44.974Z
-published: true
-tags: ['react', 'typescript', 'build-tools', 'tsc', 'swc', 'vite', 'performance', 'tooling']
+title: Traditional approach - does everything
+description: >-
+  Modern TypeScript build tooling has evolved beyond the "just use tsc for
+  everything" approach. Today's fastest development setups separate type
+  checking from transpilation, using specialized tools for each job. Let's
+  explore how to build...
+modified: '2025-09-06T17:49:18-06:00'
+date: '2025-09-06T17:49:18-06:00'
 ---
 
 Modern TypeScript build tooling has evolved beyond the "just use `tsc` for everything" approach. Today's fastest development setups separate type checking from transpilation, using specialized tools for each job. Let's explore how to build a robust pipeline with TypeScript's compiler (`tsc`), the ultra-fast SWC transpiler, and Vite's development server—and understand when to use each tool.

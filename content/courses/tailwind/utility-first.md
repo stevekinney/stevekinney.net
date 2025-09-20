@@ -3,7 +3,8 @@ title: Utility-First CSS
 description: >-
   Learn the utility-first CSS methodology that prioritizes small, single-purpose
   classes for rapid development
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 Behold, the `<button>`. After Tailwind strips most of the built-in browser styles as part of it's [Preflight](https://tailwindcss.com/docs/preflight). In fact, it barely looks like a button.

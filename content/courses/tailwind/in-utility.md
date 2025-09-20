@@ -3,8 +3,8 @@ title: In Utility
 description: >-
   Apply styles based on ancestor element states without explicit group classes
   using Tailwind's in-* variant
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 The `in-*` variant (new in Tailwind 4) styles elements based on _any_ ancestor's state. No `group` class required!

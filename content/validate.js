@@ -12,7 +12,12 @@ addFormats(ajv);
 const schema = await readFile(path.resolve('content/schema.json'), 'utf8').then(JSON.parse);
 const validate = ajv.compile(schema);
 
-const patterns = ['content/**/*.md', '!content/**/meta-*.md', '!content/**/README.md'];
+const patterns = [
+  'content/**/*.md',
+  '!content/**/meta-*.md',
+  '!content/**/README.md',
+  '!content/**/_index.md',
+];
 
 for (const filePath of glob.sync(patterns)) {
   const content = await readFile(filePath, 'utf8');

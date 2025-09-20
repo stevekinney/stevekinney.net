@@ -1,13 +1,21 @@
 ---
 title: Avoiding Over‑Memoization
-description: Stop paying rent for caches you never use. Learn to remove unnecessary memoization and let React do less work.
+description: >-
+  Stop paying rent for caches you never use. Learn to remove unnecessary
+  memoization and let React do less work.
 date: 2025-09-06T21:20:43.626Z
-modified: 2025-09-06T21:20:43.626Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'memoization', 'hooks']
+tags:
+  - react
+  - performance
+  - memoization
+  - hooks
 ---
 
-React's memoization hooks—`useMemo`, `useCallback`, and `memo`—are powerful performance tools. But like any tool, you can absolutely overuse them. When you memoize everything "just to be safe," you might actually make your app slower. Let's explore when memoization helps, when it hurts, and how to find the sweet spot where your app runs fast without drowning in unnecessary cache management.
+React's memoization hooks are powerful performance tools. But like any tool, you can absolutely overuse them. When you memoize everything "just to be safe," you might actually make your app slower. This guide focuses on identifying and avoiding over-memoization anti-patterns.
+
+For API details, see [useMemo and useCallback in React 19](./usememo-usecallback-in-react-19.md). For component memoization, see [React.memo in React 19 and the Compiler Era](./react-memo-react-19-and-compiler-era.md).
 
 ## The Memoization Tax
 
@@ -264,14 +272,11 @@ function TodoItem({ todo }: { todo: Todo }) {
 }
 ```
 
-## React 19 and the Future of Memoization
+## React 19 and Automatic Optimization
 
-React 19 introduces the React Compiler, which automatically optimizes your components without requiring manual memoization. The compiler analyzes your code and inserts memoization where it would actually help performance.
+For detailed information on how React 19's compiler changes memoization needs, see [React.memo in React 19 and the Compiler Era](./react-memo-react-19-and-compiler-era.md) and [useMemo and useCallback in React 19](./usememo-usecallback-in-react-19.md).
 
-This means the future of React development involves **less** manual memoization, not more. The compiler handles the tedious optimization work, letting you focus on building features.
-
-> [!NOTE]
-> When the React Compiler is stable and widely adopted, many of these manual optimizations will become unnecessary. The compiler will be smarter about when to memoize than we could ever be by hand.
+The key takeaway: The React Compiler will handle many optimizations automatically, making manual memoization less necessary over time.
 
 ## Measuring the Impact
 
@@ -303,5 +308,12 @@ Instead of adding `useMemo` and `useCallback` everywhere, try this approach:
 4. **Remove when in doubt**: If you can't measure the benefit, remove the memoization
 
 Remember: premature optimization is the root of all evil, but so is ignoring real performance problems. The key is finding the balance—and that balance usually involves less memoization than you might think.
+
+## Related Topics
+
+- **API Details**: [useMemo and useCallback in React 19](./usememo-usecallback-in-react-19.md)
+- **Component Memoization**: [React.memo in React 19 and the Compiler Era](./react-memo-react-19-and-compiler-era.md)
+- **Identity Stability**: [Prop Identity Stability](./identity-stability-props.md)
+- **Custom Comparisons**: [Custom Equality Checks with areEqual](./custom-equality-checks-areequal.md)
 
 Your users will thank you for fast, responsive apps. They won't thank you for micro-optimizations that make your code harder to read and maintain. Focus on the performance improvements that actually matter, and let React handle the rest.

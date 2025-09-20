@@ -1,7 +1,10 @@
 ---
 title: Installing and Getting Started with Cursor
-description: Download, install, and configure Cursor AI code editor with VS Code migration and core interaction modes.
-modified: 2025-07-29T14:36:18-06:00
+description: >-
+  Download, install, and configure Cursor AI code editor with VS Code migration
+  and core interaction modes.
+modified: '2025-07-30T07:29:10-05:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 You can [download Cursor here](https://cursor.com). The installation process is straightforward and feels similar to installing Visual Studio Code (and for a good reason, right?): download, run, and it's done.

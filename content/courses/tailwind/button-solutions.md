@@ -3,8 +3,8 @@ title: Secondary and Dangerous Buttons
 description: >-
   Solutions for a exercise in building buttons as part of Steve's course on
   Tailwind.
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 ## Secondary Button

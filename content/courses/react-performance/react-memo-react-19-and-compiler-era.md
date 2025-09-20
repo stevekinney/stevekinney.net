@@ -1,15 +1,22 @@
 ---
 title: React.memo in React 19 and the Compiler Era
-description: Learn where React.memo still shines, when a compiler or bailouts make it redundant, and how to write fair areEqual checks.
+description: >-
+  Learn where React.memo still shines, when a compiler or bailouts make it
+  redundant, and how to write fair areEqual checks.
 date: 2025-09-06T21:12:33.129Z
-modified: 2025-09-06T21:12:33.129Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'memoization', 'react-19', 'compiler']
+tags:
+  - react
+  - performance
+  - memoization
+  - react-19
+  - compiler
 ---
 
 React 19 brings the React Compiler to general availability, promising to automatically optimize your components for performance. But does that mean `React.memo` is obsolete? Not quite. While the compiler handles many scenarios that previously required manual memoization, understanding when and how to use `React.memo` effectively remains crucial for building performant React applications. Let's explore where `React.memo` still shines, when modern React makes it redundant, and how to write proper equality comparisons when you need them.
 
-## What is React.memo?
+## What is `React.memo`?
 
 `React.memo` is a higher-order component that prevents unnecessary re-renders by memoizing the result of a component. It compares the current props with the previous props using shallow equality and only re-renders if they've changed. Think of it as a performance optimization that says "Hey React, only re-render this component if the props actually changed."
 
@@ -65,7 +72,7 @@ The compiler is smart about when to apply these optimizations. It won't memoize 
 > [!NOTE]
 > The React Compiler is opt-in for React 19. You'll need to enable it in your build configuration to take advantage of automatic optimizations.
 
-## When React.memo Still Matters
+## When `React.memo` Still Matters
 
 Even with the compiler, there are scenarios where manual `React.memo` usage remains valuable:
 
@@ -255,7 +262,7 @@ const FlexibleComponent = React.memo(
 );
 ```
 
-## When NOT to Use React.memo
+## When NOT to Use `React.memo`
 
 ### Components That Always Re-render
 
@@ -403,6 +410,29 @@ The key is understanding when the compiler has your back and when you need to st
 4. **Profile before optimizing** to ensure you're solving real performance problems
 5. **Don't memoize everything**—cheap components often don't benefit from memoization
 6. **Be careful with function props**—ensure they're stable or handled appropriately in comparisons
+
+## Related Topics
+
+- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - Comprehensive understanding of compiler behavior
+- **[React Compiler Migration Guide](./react-compiler-migration-guide.md)** - Migrating from manual to automatic optimization
+- **[useMemo and useCallback in React 19](./usememo-usecallback-in-react-19.md)** - Hook-based memoization strategies
+- **[Custom Equality Checks (areEqual)](./custom-equality-checks-areequal.md)** - Deep dive into custom comparison functions
+- **[Avoiding Over-memoization](./avoiding-over-memoization.md)** - Decision framework for optimization
+
+## Prerequisites
+
+- Solid understanding of React component re-rendering
+- Experience with React optimization patterns
+- Basic knowledge of JavaScript object equality
+
+## Practical Examples
+
+Real-world scenarios where React.memo remains valuable:
+
+- **Data visualization components** - Complex charts that are expensive to re-render
+- **Third-party component integration** - Libraries not optimized by compiler
+- **List items with stable references** - Large lists where individual items rarely change
+- **Configuration-driven components** - Components with complex config objects
 
 Remember, premature optimization is still the root of all evil. Use `React.memo` when you have identified actual performance issues, not as a default optimization strategy. The React Compiler is designed to handle the common cases automatically, leaving you to focus on the unique requirements of your application.
 

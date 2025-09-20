@@ -2,11 +2,11 @@
 title: Tailwind
 description: An introduction to testing using JavaScript
 layout: page
-date: 2025-06-13T12:56:55-07:00
-modified: 2025-06-13T05:22:52-05:00
+date: 2025-06-13T19:56:55.000Z
+modified: '2025-06-13T07:27:15-05:00'
 ---
 
-These are _all_ of my notes for the [Tailwind 4 course for Frontend Masters](https://frontendmasters.com/workshops/tailwind-css-v2/). It's definitely a lot more that we could ever hope to cover in a day, so you can treat some of this material as further research. But, more importantly—most of the topics that I do _cover_ in the course are also outlined here step-by-step for your reference.
+These are _all_ of my notes for the [Tailwind 4 course for Frontend Masters](https://frontendmasters.com/workshops/tailwind-css-v2/?utm_source=kinney&utm_medium=social&code=kinney). It's definitely a lot more that we could ever hope to cover in a day, so you can treat some of this material as further research. But, more importantly—most of the topics that I do _cover_ in the course are also outlined here step-by-step for your reference.
 
 > [!TODO] Course Materials
 >

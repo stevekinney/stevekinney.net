@@ -1,7 +1,8 @@
 ---
 title: Filtering Tests
 description: 'Learn how to filter tests in Vitest by name, directory, and more.'
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 Vitest gives you a bunch of interesting ways to only run _some_ of your tests. Let's walking some of the more popular ones.

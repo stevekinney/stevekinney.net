@@ -3,7 +3,8 @@ title: Settings for Managing Files in Visual Studio Code
 description: >-
   Configure file associations, exclusions, and default behaviors for efficient
   file management in Visual Studio Code
-modified: 2025-03-18T09:13:03-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 The **Files and Workspaces** settings category allows you to configure how Visual Studio Code handles files, folders, and workspaces, streamlining project management and file type associations.

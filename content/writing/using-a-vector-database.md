@@ -4,7 +4,7 @@ description: >-
   In which we learn how to build a simple vector database using Pinecone and
   OpenAI embeddings, and discover it was way easier than we might have expected.
 date: 2024-12-31T00:07:17.000Z
-modified: 2025-04-28T17:33:44-06:00
+modified: 2025-07-29T21:09:56.000Z
 published: true
 tags:
   - open-ai

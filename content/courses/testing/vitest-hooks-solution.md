@@ -1,7 +1,8 @@
 ---
 title: Creating the Character Using a Hook
 description: Learn how to create the Character class using a hook.
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 We could create the `Character` using a hook as follows seen below.

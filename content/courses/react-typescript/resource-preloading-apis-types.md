@@ -1,11 +1,18 @@
 ---
 title: Resource Preloading APIs with TypeScript
-description: Preload, preinit, and prefetch with confidence—type helpers to avoid duplicate loads and mismatched priorities.
+description: >-
+  Preload, preinit, and prefetch with confidence—type helpers to avoid duplicate
+  loads and mismatched priorities.
 date: 2025-09-06T22:04:44.920Z
-modified: 2025-09-06T22:04:44.920Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
 tags:
-  ['react', 'typescript', 'resource-preloading', 'preloading-apis', 'performance', 'optimization']
+  - react
+  - typescript
+  - resource-preloading
+  - preloading-apis
+  - performance
+  - optimization
 ---
 
 Web performance isn't just about fast servers and optimized bundles—it's about loading the right resources at the right time. React's resource preloading APIs (`preload`, `preinit`, and `prefetch`) let you fine-tune when and how critical assets are fetched, but without proper TypeScript setup, you might end up loading the same stylesheet twice or preloading a script with the wrong priority. Let's build type-safe helpers that make resource preloading both reliable and developer-friendly.

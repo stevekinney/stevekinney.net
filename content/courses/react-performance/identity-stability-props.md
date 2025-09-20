@@ -1,10 +1,12 @@
 ---
-title: Identity Stability: Taming Objects, Arrays, and Functions as Props
-description: Stop accidental re-renders from unstable references. Learn where identity matters and how to keep it stable without over-caching.
-date: 2025-09-06T21:14:12.379Z
-modified: 2025-09-06T21:14:12.379Z
-published: true
-tags: ['react', 'performance', 'props', 'references']
+title: Identity Stability Props
+description: >-
+  React's performance model is built on comparing values to decide when
+  components need to re-render. When you pass objects, arrays, or functions as
+  props, their **identity**—not just their contents—determines whether React
+  considers them...
+modified: '2025-09-20T10:39:54-06:00'
+date: '2025-09-06T17:49:18-06:00'
 ---
 
 React's performance model is built on comparing values to decide when components need to re-render. When you pass objects, arrays, or functions as props, their **identity**—not just their contents—determines whether React considers them "the same." Get this wrong, and you'll trigger unnecessary re-renders that can cascade through your component tree. Get it right, and your app stays snappy even as it grows.
@@ -48,7 +50,7 @@ function App() {
 }
 ```
 
-### useEffect Dependencies
+### `useEffect` Dependencies
 
 Unstable references in dependency arrays cause effects to run on every render, even when the actual data hasn't changed:
 
@@ -194,7 +196,7 @@ function Dashboard() {
 }
 ```
 
-### 2. useMemo for Expensive Computations
+### 2. `useMemo` for Expensive Computations
 
 Use `useMemo` when you're doing work that you genuinely don't want to repeat:
 
@@ -217,7 +219,7 @@ function ProductGrid({ products, filters, sortBy }: Props) {
 }
 ```
 
-### 3. useCallback for Function Stability
+### 3. `useCallback` for Function Stability
 
 Use `useCallback` when the function identity affects child component rendering:
 
@@ -596,6 +598,14 @@ function ShoppingApp() {
   );
 }
 ```
+
+## Related Topics
+
+- **[Custom Equality Checks areEqual](./custom-equality-checks-areequal.md)** - Advanced techniques for fine-tuning re-render behavior
+- **[useMemo useCallback in React 19](./usememo-usecallback-in-react-19.md)** - How memoization APIs evolve with the React compiler
+- **[Avoiding Over Memoization](./avoiding-over-memoization.md)** - Balance identity stability with complexity
+- **[Key Stability in Lists](./key-stability-in-lists.md)** - Apply identity principles to list rendering
+- **[Context API Performance Pitfalls](./context-api-performance-pitfalls.md)** - Ensure stable context values
 
 ## When Performance Actually Matters
 

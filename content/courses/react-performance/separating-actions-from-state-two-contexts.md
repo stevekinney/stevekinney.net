@@ -1,10 +1,16 @@
 ---
 title: Separating Actions from State with Two Contexts
-description: Split read and write paths. Pass immutable state and stable actions to cut re-renders and improve testability.
+description: >-
+  Split read and write paths. Pass immutable state and stable actions to cut
+  re-renders and improve testability.
 date: 2025-09-06T21:51:43.345Z
-modified: 2025-09-06T21:51:43.345Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'context', 'state-management']
+tags:
+  - react
+  - performance
+  - context
+  - state-management
 ---
 
 React Context is powerful for sharing state across components, but it comes with a performance trap that catches most of us at some point: every time the context value changes, every consumer re-renders. This becomes particularly painful when you're passing both state and the functions to update that state through the same context—because creating those updater functions inline means the context value changes on every render, even when the actual state hasn't.
@@ -189,7 +195,7 @@ function AddTodoForm() {
 
 Notice how `TodoItem` and `AddTodoForm` never re-render when the todos array changes—they only care about the actions. Meanwhile, `TodoList` re-renders when todos change but isn't affected by action function recreation.
 
-## Advanced Pattern: useReducer Alternative
+## Advanced Pattern: `useReducer` Alternative
 
 For more complex state management, you can combine this pattern with `useReducer` for even more predictable updates:
 
@@ -496,6 +502,14 @@ It might be overkill for:
 - More boilerplate: You need separate contexts, providers, and hooks
 - Slightly more complex mental model: Developers need to understand the split
 - Potential over-engineering: Can be overkill for simple state scenarios
+
+## Related Topics
+
+- **[Context API Performance Pitfalls](./context-api-performance-pitfalls.md)** - Learn about common Context performance issues and how to avoid them
+- **[Avoiding Unnecessary Dependencies](./avoiding-unnecessary-dependencies.md)** - Prevent dependency arrays from causing unwanted re-renders in action functions
+- **[Identity Stability in Props](./identity-stability-props.md)** - Understand how object and function identity affects React performance
+- **[Component Granularity and Splitting](./component-granularity-splitting.md)** - Split components effectively to minimize the impact of context changes
+- **[Colocation of State](./colocation-of-state.md)** - Keep state close to where it's used to reduce unnecessary context complexity
 
 ## Wrapping Up
 

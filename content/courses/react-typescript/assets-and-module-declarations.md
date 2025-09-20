@@ -1,10 +1,19 @@
 ---
 title: Assets and Module Declarations
-description: Teach TypeScript about CSS, images, and SVGs—write module declarations that make imports type-safe.
+description: >-
+  Teach TypeScript about CSS, images, and SVGs—write module declarations that
+  make imports type-safe.
 date: 2025-09-06T22:04:44.964Z
-modified: 2025-09-06T22:04:44.964Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'module-declarations', 'assets', 'css', 'svg', 'bundling']
+tags:
+  - react
+  - typescript
+  - module-declarations
+  - assets
+  - css
+  - svg
+  - bundling
 ---
 
 When you're building a React application, you're not just writing JavaScript and TypeScript. You're importing CSS files, images, SVGs, fonts, and all sorts of other assets that help make your application actually look good and work properly. But here's the thing: TypeScript doesn't know what to do with these non-JavaScript files by default, and it'll throw a fit every time you try to import them.

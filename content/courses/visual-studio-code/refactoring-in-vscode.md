@@ -3,7 +3,8 @@ title: Refactoring in Visual Studio Code
 description: >-
   Master essential code refactoring techniques in Visual Studio Code, from
   renaming symbols to extracting methods and variables
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 There are a bunch of little niceties in Visual Studio Code that make refactoring _way_ easier.

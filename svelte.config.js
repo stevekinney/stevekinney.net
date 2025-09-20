@@ -86,7 +86,13 @@ const config = {
   preprocess: [
     vitePreprocess(),
     mdsvex(mdsvexOptions),
-    /** @type {any} */ (processImages()),
+    /** @type {any} */ (
+      processImages({
+        // Explicitly configure responsive image generation
+        widths: [480, 768, 1024],
+        mainWidth: 902,
+      })
+    ),
     processCallouts(),
     importTailwindPlayground(),
   ],
@@ -108,6 +114,16 @@ const config = {
       '$courses/*': 'content/courses/*',
       'content/*': 'content/*',
       $merge: 'src/lib/merge.ts',
+    },
+
+    prerender: {
+      // Be strict, but ignore only malformed multi-URL fetch attempts from srcset
+      handleHttpError: ({ status, path, message }) => {
+        if (status === 404 && path.startsWith('/_app/immutable/assets/') && path.includes(',')) {
+          return; // skip this specific bad fetch; real 404s still throw
+        }
+        throw new Error(message);
+      },
     },
   },
 };

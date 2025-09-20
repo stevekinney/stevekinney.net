@@ -1,7 +1,10 @@
 ---
 title: Mastering Context Management in Cursor
-description: Comprehensive guide to providing effective context to Cursor's AI using @ symbols, rules, and notepads.
-modified: 2025-07-29T09:25:33-06:00
+description: >-
+  Comprehensive guide to providing effective context to Cursor's AI using @
+  symbols, rules, and notepads.
+modified: '2025-07-30T06:07:02-05:00'
+date: '2025-07-29T15:09:56-06:00'
 ---
 
 Cursor's design is based on providing the LLM with two fundamental types of context: "intent context" (what the user wants to achieve) and "state context" (the current state of the environment, such as code snippets, error messages, or project structure). Effectively combining both intent and state in your prompts is crucial for optimal results, as providing one without the other can lead to guesswork, hallucinations, or inefficient code.
@@ -45,7 +48,7 @@ Here's how to use various `@` symbols effectively:
 
 For consistent, project-specific guidance, Cursor provides ways to define persistent context:
 
-- **`.cursor/rules` and `.cursor/rules`**: These files act as a "constitution" for how the AI should behave within a specific project, enforcing consistent code style, language preferences, and quality guidelines.
+- **Project Rules and User Rules**: These files act as a "constitution" for how the AI should behave within a specific project, enforcing consistent code style, language preferences, and quality guidelines.
   - **Project Rules (`.cursor/rules`)**: Stored as Markdown files within the project's repository, these are version-controlled and shared with the entire team. They can specify preferred frameworks, style guidelines, or persistent instructions (e.g., "always write docstrings"). They can be configured to apply "always," "auto-attach" based on file patterns, be "agent requested," or invoked "manually".
   - **User Rules**: Global rules configured in Cursor's settings that apply to all projects, best for personal preferences like tone of response.
   - `.cursor/rules` (Legacy): A single-file system located at the project root, still supported but newer project rules are recommended for flexibility.

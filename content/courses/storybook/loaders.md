@@ -3,7 +3,8 @@ title: Loaders
 description: >-
   Loaders in Storybook offer a way to asynchronously load data or perform
   actions before a story is rendered.
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T06:28:51-06:00'
 ---
 
 Loaders in Storybook offer a way to asynchronously load data or perform actions _before_ a story is rendered. This can be especially useful when you need to fetch mock data from an API, perform setup tasks, or dynamically manipulate props or globals based on external factors before the story is displayed. Similar to [parameters](parameters.md) loaders can be applied globally to affect all stories or locally to affect specific stories.

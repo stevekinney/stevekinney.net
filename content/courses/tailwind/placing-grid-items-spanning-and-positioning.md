@@ -3,8 +3,8 @@ title: 'Placing Grid Items: Spanning and Positioning'
 description: >-
   Control grid item placement with Tailwind's spanning and positioning utilities
   for CSS Grid.
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 This guide covers placing items within a grid using Tailwind CSS, focusing on spanning and positioning.

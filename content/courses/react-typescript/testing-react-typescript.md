@@ -1,10 +1,19 @@
 ---
 title: Testing React Components with TypeScript
-description: Configure Jest/Vitest and RTL for TypeScript—type-safe queries, user events, and mock helpers.
+description: >-
+  Configure Jest/Vitest and RTL for TypeScript—type-safe queries, user events,
+  and mock helpers.
 date: 2025-09-06T22:04:44.939Z
-modified: 2025-09-06T22:04:44.939Z
+modified: '2025-09-14T11:49:08-06:00'
 published: true
-tags: ['react', 'typescript', 'testing', 'jest', 'vitest', 'rtl', 'mocking']
+tags:
+  - react
+  - typescript
+  - testing
+  - jest
+  - vitest
+  - rtl
+  - mocking
 ---
 
 Testing React components can feel like a chore when you're deep in the flow of building features. But when you're working with TypeScript, testing becomes your safety net—not just for catching bugs, but for ensuring your component APIs work as expected and your types actually match reality. We'll explore how to set up a robust testing environment with Jest or Vitest, leverage React Testing Library's type-safe queries, and write tests that catch the kinds of issues TypeScript alone can't prevent.
@@ -630,7 +639,7 @@ describe('MemoizedExpensiveComponent', () => {
 
 Here are the key takeaways for maintaining type safety in your React tests:
 
-### Do:
+### Do
 
 - Use `vi.mocked()` or `jest.mocked()` for type-safe mocks
 - Create mock factories with `Partial<T>` for flexible test data
@@ -638,7 +647,7 @@ Here are the key takeaways for maintaining type safety in your React tests:
 - Use specific queries (`getByRole`, `getByLabelText`) over generic ones
 - Test async behavior with `waitFor` and proper error boundaries
 
-### Don't:
+### Don't
 
 - Resort to `any` types in tests—it defeats the purpose
 - Mock everything—test integration where it makes sense
@@ -655,3 +664,9 @@ Here are the key takeaways for maintaining type safety in your React tests:
 The goal isn't to test _everything_ TypeScript guarantees—it's to test the gaps where types meet runtime behavior. When you nail this balance, your tests become a powerful complement to TypeScript's compile-time safety, catching the issues that matter while staying maintainable and fast.
 
 Your components work at compile-time AND runtime. Your users will thank you for it.
+
+## See Also
+
+- [MSW + Contracts: Typed Handlers](msw-and-contract-testing.md)
+- [Type-Level Testing in Practice](type-level-testing-in-practice.md)
+- [Story-Driven Development with TypeScript](story-driven-development-with-types.md)

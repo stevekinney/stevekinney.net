@@ -1,7 +1,8 @@
 ---
 title: Mocking Reading And Writing Files
 description: Learn how to mock file operations using Vitest and fs/promises.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 Usually, when you're testing something like file operations, you don't actually want your tests messing around with your file system. We don't want some rogue unit test changing the file that holds your coworkers' lunch preferences or—god forbid—deleting it entirely. That's where mocking comes in. With mocking, we can just _pretend_ we're reading and writing files. Vitest and modern tools like `fs/promises` make this super straightforward. So, let's dig in.

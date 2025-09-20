@@ -1,7 +1,8 @@
 ---
 title: Creating Semantic Colors
 description: A pattern for creating semantic color variables for use in Figma designs.
-modified: 2024-10-02T08:49:23-05:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T06:28:51-06:00'
 ---
 
 Once we have our wider color palette, it might make sense to create a curated subset of those colors that have some actual meaning. For example, we might have some callouts or alerts that we want to have a standard background color for. We can start with something like this.

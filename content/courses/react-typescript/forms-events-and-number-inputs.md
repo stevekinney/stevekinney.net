@@ -1,10 +1,18 @@
 ---
-title: Forms, Events, and Number Inputs That Don't Lie
-description: Type form handlers once, reuse everywhere—and tame <input type="number"> returning strings.
+title: "Forms, Events, and Number Inputs That Don't Lie"
+description: >-
+  Type form handlers once, reuse everywhere—and tame <input type="number">
+  returning strings.
 date: 2025-09-06T22:23:57.266Z
-modified: 2025-09-06T22:23:57.266Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'typescript', 'forms', 'events', 'input-types', 'validation']
+tags:
+  - react
+  - typescript
+  - forms
+  - events
+  - input-types
+  - validation
 ---
 
 Building forms in React with TypeScript should be straightforward—define your state, handle events, render inputs. But then you hit the classic gotchas: event types that make no sense, `<input type="number">` that cheerfully returns strings anyway, and form handlers that need the same boilerplate everywhere. Let's fix all of that with some solid patterns that'll make your forms both type-safe and actually pleasant to work with.
@@ -458,3 +466,9 @@ The key takeaways:
 5. Don't over-engineer simple cases
 
 Start with the simple patterns and add complexity only when you need it. Your future self will thank you when you're debugging forms at 2 AM and everything just works as expected.
+
+## See Also
+
+- [React Hook Form with Zod Types](react-hook-form-with-zod-types.md)
+- [Forms: File Inputs and Validation](forms-file-uploads-typing.md)
+- [Forms, Actions, and useActionState](forms-actions-and-useactionstate.md)

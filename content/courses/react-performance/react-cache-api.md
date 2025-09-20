@@ -1,10 +1,16 @@
 ---
 title: The cache() API
-description: Stabilize and dedupe expensive work across requests and renders—use cache() to turn pure functions into shared resources.
+description: >-
+  Stabilize and dedupe expensive work across requests and renders—use cache() to
+  turn pure functions into shared resources.
 date: 2025-09-06T22:22:56.456Z
-modified: 2025-09-06T22:22:56.456Z
+modified: '2025-09-20T10:39:54-06:00'
 published: true
-tags: ['react', 'performance', 'caching', 'react-19']
+tags:
+  - react
+  - performance
+  - caching
+  - react-19
 ---
 
 React's `cache()` function takes pure functions and makes them memoized, deduplicated, and stable across your entire React tree. Think of it as a supercharged version of `useMemo()` that works at the function level instead of the component level—and crucially, shares results between components when they call the same function with the same arguments.
@@ -402,6 +408,29 @@ Cache isn't always the right choice:
 ## Next Steps
 
 Now that you understand `cache()`, you can eliminate redundant work across your React applications. Consider how this pairs with other React 19 features like Server Components and the `use()` hook for building efficient, performant applications.
+
+## Related Topics
+
+- **[The use() Hook](./the-use-hook.md)** - Consuming cached promises with the use() hook
+- **[React Server Components (RSC)](./react-server-components-rsc.md)** - Server-side caching strategies
+- **[Suspense for Data Fetching](./suspense-for-data-fetching.md)** - Integrating cache() with Suspense
+- **[Memory Management Deep Dive](./memory-management-deep-dive.md)** - Understanding cache memory implications
+
+## Prerequisites
+
+- Understanding of React Server Components
+- Knowledge of async/await patterns
+- Experience with database queries and API calls
+- Basic understanding of function purity
+
+## Practical Examples
+
+Common use cases for cache() API:
+
+- **Blog platforms** - Caching user data across post components
+- **E-commerce sites** - Product information shared between components
+- **Data dashboards** - Expensive calculations used in multiple visualizations
+- **Content management** - Author details displayed in various contexts
 
 The key insight is treating expensive operations as shared resources rather than component-local concerns. With `cache()`, you can write components that naturally collaborate to minimize redundant work while maintaining clean, readable code.
 

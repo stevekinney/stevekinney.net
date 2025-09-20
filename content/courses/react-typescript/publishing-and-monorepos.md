@@ -1,10 +1,18 @@
 ---
 title: Publishing Types and Monorepos
-description: Emit declarations, design stable public APIs, and speed checks with project references in monorepos.
+description: >-
+  Emit declarations, design stable public APIs, and speed checks with project
+  references in monorepos.
 date: 2025-09-06T22:23:57.380Z
-modified: 2025-09-06T22:23:57.380Z
+modified: '2025-09-06T17:49:18-06:00'
 published: true
-tags: ['react', 'typescript', 'monorepos', 'publishing', 'project-references', 'workspace']
+tags:
+  - react
+  - typescript
+  - monorepos
+  - publishing
+  - project-references
+  - workspace
 ---
 
 Publishing TypeScript libraries feels straightforward until you need to support multiple entry points, maintain backward compatibility, or coordinate releases across a dozen packages. That's when you discover the subtle art of declaration file generation, the power of TypeScript project references, and why "it works on my machine" becomes a battle cry when your consumers can't import your carefully crafted types.

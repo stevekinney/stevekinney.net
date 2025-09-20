@@ -3,7 +3,8 @@ title: Debugging Running Node Processes in Visual Studio Code
 description: >-
   Learn how to attach Visual Studio Code's debugger to existing Node.js
   processes for better runtime troubleshooting
-modified: 2025-04-16T12:27:20-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-03-16T17:35:22-06:00'
 ---
 
 Alternatively, you can attach the debugger to an already running Node process. To do this, start your Node program with the inspector enabled (e.g. `node --inspect-brk app.js` to break on the first line, or `node --inspect app.js` to just listen). Then use a configuration with `"request": "attach"`, specifying the `"port"` (default 9229 for Node inspector) and `"address"` (e.g. `"localhost"` if running locally). For example:

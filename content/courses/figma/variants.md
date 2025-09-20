@@ -5,7 +5,7 @@ description: >-
   for simplicity and consistency. Enhance efficiency and collaboration in your
   projects.
 date: 2024-03-09T19:21:25.000Z
-modified: 2024-10-02T08:49:23-05:00
+modified: '2025-07-29T15:09:56-06:00'
 ---
 
 ![Loki and his variants](assets/figma-loki-variants.jpg)

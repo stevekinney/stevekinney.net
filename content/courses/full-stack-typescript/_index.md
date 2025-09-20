@@ -1,6 +1,8 @@
 ---
+title: Full Stack TypeScript
+description: Contents for the Full Stack TypeScript course.
 layout: contents
-modified: 2025-04-28T17:33:44-06:00
+modified: 2025-09-14T09:12:00-06:00
 ---
 
 ## TypeScript Best Practices
@@ -24,7 +26,7 @@ modified: 2025-04-28T17:33:44-06:00
 - [Best Practices with Zod](zod-best-practices.md)
 - [Structuring Zod Schemas Efficiently](structuring-zod-schemas-efficiently.md)
 
-## API Type Safely
+## API Type Safety
 
 - [Adding Types to Express Requests](adding-types-to-express.md)
 - [Adding Types to Express Responses](adding-types-to-express-responses.md)
@@ -44,16 +46,16 @@ modified: 2025-04-28T17:33:44-06:00
 - [Zod to OpenAPI](zod-to-open-api.md)
 - [Generating Types from an OpenAPI Specification](generating-types-from-open-api.md)
 - [Generating Zod Schemas from OpenAPI](generating-zod-openapi.md)
-- [Validating Your API with OpenAPI](validating-your-api-openai.md)
+- [Validating Your API with OpenAPI](validating-your-api-openapi.md)
 
 ## tRPC
 
 - [What is tRPC?](what-is-trpc.md)
 - [tRPC on the Server](trpc-on-the-server.md)
 - [tRPC on the Client](trpc-on-the-client.md)
-- [Subscriptions with tRPC](subscriptions-with-trpcs.md)
+- [Subscriptions with tRPC](subscriptions-with-trpc.md)
 - [Middleware and Authentication with tRPC](middleware-auth-logging-for-trpc.md)
-- [Custom Data Transformers with tRPC](custom-data-transformers-with-trpcs.md)
+- [Custom Data Transformers with tRPC](custom-data-transformers-with-trpc.md)
 - [Testing and Debugging with tRPC](testing-and-debugging-trpc.md)
 
 ## Databases
@@ -73,5 +75,5 @@ modified: 2025-04-28T17:33:44-06:00
 - [Type Safe Route Registration](type-safe-route-registration-with-express.md)
 - [Type Safe Asynchronous Route Handlers](type-safe-asynchronous-route-handlers-with-express.md)
 - [Typing Headers and Cookies](typing-headers-and-cookies-in-express.md)
-- [Type Safe Route Registration](type-safe-routes-in-express.md)
+- [Type Safe Routes in Express](type-safe-routes-in-express.md)
 - [Type Safe Middleware with Express](type-safe-middleware-with-express.md)

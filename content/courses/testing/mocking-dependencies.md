@@ -1,7 +1,8 @@
 ---
 title: Mocking Dependencies
 description: Learn how to mock dependencies using Vitest for reliable tests.
-modified: 2025-04-28T17:33:44-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-10-02T08:49:23-05:00'
 ---
 
 When writing unit tests, it's _super important_ to isolate the code under test from its external dependencies. Dependencies could include services like databases, external APIs, file systems, or third-party libraries that you don't want to interact with directly in your tests. By mocking these dependencies, you can simulate their behavior, control their output, and ensure that your tests remain fast, reliable, and focused on the logic being tested.

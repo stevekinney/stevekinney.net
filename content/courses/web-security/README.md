@@ -3,10 +3,10 @@ title: Web Security
 description: An introduction to the fundamentals of web security.
 layout: page
 date: 2024-04-05T19:56:55.000Z
-modified: 2025-04-16T17:51:06-06:00
+modified: '2025-07-29T15:09:56-06:00'
 ---
 
-The content below is supplimentary content for the [Web Security, v2](https://frontendmasters.com/courses/web-security-v2/?code=kinney&utm_source=kinney&utm_medium=social&utm_campaign=teacher_coupon) course with **Frontend Masters**.
+The content below is supplimentary content for the [Web Security, v2](https://frontendmasters.com/courses/web-security-v2/?utm_source=kinney&utm_medium=social&code=kinney) course with **Frontend Masters**.
 
 This workshop is designed to provide frontend web developers and JavaScript engineers with a comprehensive understanding of web security. Covering topics from basic principles to advanced security techniques, participants will learn about common vulnerabilities, prevention strategies, and best practices to secure their web applications. The workshop includes practical exercises to apply the learned concepts in real-world scenarios.
 

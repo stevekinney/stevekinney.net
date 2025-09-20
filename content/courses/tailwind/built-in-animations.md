@@ -3,8 +3,8 @@ title: Built-In Animations
 description: >-
   Apply CSS transforms like rotate, scale, and translate with Tailwind's
   comprehensive transform utility classes.
-
-modified: 2025-06-11T19:05:33-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2025-06-11T19:05:33-06:00'
 ---
 
 CSS transforms (rotate, scale, skew, translate) add visual impact to UIs. Tailwind CSS provides utility classes for these properties, allowing you to apply them directly in HTML.

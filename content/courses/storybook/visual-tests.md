@@ -1,7 +1,8 @@
 ---
 title: Setting Up Chromatic
 description: Checking for visual regressions in your components.
-modified: 2024-10-18T19:45:04-06:00
+modified: '2025-07-29T15:09:56-06:00'
+date: '2024-04-15T06:28:51-06:00'
 ---
 
 [Chromatic](https://www.chromatic.com/) is a cloud-based software tool created by the maintainers of Storybook that automates visual testing for UI components and web applications. Since it's made by the maintainers of Storybook, you can imagine that It integrates seamlessly with Storybook and allows you to capture snapshots of every story and compare them across different commits to identify visual changes.
