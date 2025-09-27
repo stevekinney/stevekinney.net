@@ -5,10 +5,10 @@ description: >-
   and React 19
 layout: page
 date: 2025-09-07T18:00:00.000Z
-modified: '2025-09-06T18:13:36-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 ---
 
-This comprehensive course material covers everything you need to build robust, type-safe React applications using TypeScript with React 19. From basic setup to advanced patterns, you'll learn how to leverage TypeScript's powerful type system to catch bugs early, improve developer experience, and build maintainable React applications.
+These are the notes for my [React && TypeScript workshop](https://frontendmasters.com/workshops/react-typescript-v3/) for [Frontend Masters](https://frontendmasters.com).
 
 > [!TODO] Prerequisites
 >

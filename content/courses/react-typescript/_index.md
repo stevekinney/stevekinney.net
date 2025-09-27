@@ -6,30 +6,30 @@ modified: 2025-09-20T19:00:00-06:00
 ## TypeScript Foundations
 
 - [TypeScript Without Trying](typescript-without-trying.md)
+- [Setting Up React and TypeScript](setting-up-react-and-typescript.md)
+- [An Even Deeper Dive into `tsconfig.json`](tsconfig-deep-dive-react.md)
 - [Mental Models for React and TypeScript](react-typescript-mental-models.md)
-- [TypeScript and React: Foundations](setting-up-react-and-typescript.md)
-- [Common Pitfalls with React and TypeScript](common-pitfalls-with-react-and-typescript.md)
 
-## TypeScript Deep Dive
+## Enough TypeScript to Be Dangerous
 
-- [TypeScript Type System Fundamentals](typescript-type-system-fundamentals.md)
-- [TypeScript Structural Typing](typescript-structural-typing.md)
-- [TypeScript Type Inference Mastery](typescript-type-inference-mastery.md)
-- [TypeScript Type Narrowing and Control Flow](typescript-type-narrowing-control-flow.md)
-- [TypeScript Unions, Intersections, and Guards](typescript-unions-intersections-guards.md)
-- **[TypeScript Discriminated Unions](typescript-discriminated-unions.md)** ⭐ _Comprehensive guide_
-- **[TypeScript Generics Deep Dive](typescript-generics-deep-dive.md)** ⭐ _Includes React patterns_
-- [TypeScript Conditional and Mapped Types](typescript-conditional-mapped-types.md)
-- [TypeScript Template Literal Types](typescript-template-literal-types.md)
-- [TypeScript Utility Types Complete](typescript-utility-types-complete.md)
-- [TypeScript Type-Level Programming](typescript-type-level-programming.md)
-- [TypeScript Unknown vs Any](typescript-unknown-vs-any.md)
-- [TypeScript Modules and Declarations](typescript-modules-declarations.md)
-- [TypeScript Performance in Large Codebases](typescript-performance-large-codebases.md)
+- [Type System Fundamentals](typescript-type-system-fundamentals.md)
+- [Structural Typing](typescript-structural-typing.md)
+- [Type Inference Mastery](typescript-type-inference-mastery.md)
+- [Type Narrowing and Control Flow](typescript-type-narrowing-control-flow.md)
+- [Unions, Intersections, and Guards](typescript-unions-intersections-guards.md)
+- [Discriminated Unions](typescript-discriminated-unions.md)
+- [Generics](typescript-generics-deep-dive.md)
+- [Conditional and Mapped Types](typescript-conditional-mapped-types.md)
+- [Template Literal Types](typescript-template-literal-types.md)
+- [Utility Types](typescript-utility-types-complete.md)
+- [Type-Level Programming](typescript-type-level-programming.md)
+- [`unknown` vs `any`](typescript-unknown-vs-any.md)
+- [Modules and Declarations](typescript-modules-declarations.md)
+- [Performance in Large Codebases](typescript-performance-large-codebases.md)
 
 ## Props and Component Patterns
 
-- **[Complete Guide to React Component Props](component-props-complete-guide.md)** ⭐ _Start here_
+- [Complete Guide to React Component Props](component-props-complete-guide.md)
 - [JSX Types: ReactNode, ReactElement](jsx-types-reactnode-reactelement.md)
 - [Mirror DOM Props](mirror-dom-props.md)
 - [Prop Combinations and Unions](prop-combinations-and-unions.md)
@@ -54,7 +54,7 @@ modified: 2025-09-20T19:00:00-06:00
 
 ## React 19 and Modern Features
 
-- **[Complete Guide to React 19 with TypeScript](react-19-typescript-guide.md)** ⭐ _Comprehensive guide_
+- [Complete Guide to React 19 with TypeScript](react-19-typescript-guide.md)
 - [React Server Components Types](react-server-components-types.md)
 - [RSC Server Actions](rsc-server-actions.md)
 - [Forms, Actions, and `useActionState`](forms-actions-and-useactionstate.md)
@@ -90,7 +90,7 @@ modified: 2025-09-20T19:00:00-06:00
 - [Testing React TypeScript](testing-react-typescript.md)
 - [MSW + Contracts: Typed Handlers](msw-and-contract-testing.md)
 - [Type-Level Testing in Practice](type-level-testing-in-practice.md)
-- **[Tooling: ESLint, Prettier, Builds](tooling-eslint-prettier-builds.md)** ⭐ _Complete setup guide_
+- [Tooling: ESLint, Prettier, Builds](tooling-eslint-prettier-builds.md)
 - [DevTools and Type-Driven DX](dev-tools-and-type-driven-dx.md)
 - [Build Pipeline: TSC, SWC](build-pipeline-tsc-swc.md)
 - [Debugging TypeScript Errors Guide](debugging-typescript-errors-guide.md)
@@ -134,8 +134,3 @@ modified: 2025-09-20T19:00:00-06:00
 - [Migrating from PropTypes](migrating-from-proptypes.md)
 - [State Libraries and Context Interoperability](state-libraries-and-context-interoperability.md)
 - [Story Driven Development with Types](story-driven-development-with-types.md)
-
----
-
-> [!NOTE] Content Refactoring Complete
-> This course has been reorganized for clarity and to eliminate duplication. Files marked with ⭐ are comprehensive guides that consolidate related topics.

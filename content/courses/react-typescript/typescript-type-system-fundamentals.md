@@ -4,7 +4,7 @@ description: >-
   Master TypeScript's type system from the ground up—structural typing, type
   inference, narrowing, and the mental models that make everything click.
 date: 2025-09-14T18:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - typescript
@@ -270,69 +270,9 @@ function move(animal: Bird | Fish) {
 }
 ```
 
-### Discriminated Unions
-
-Discriminated unions are one of TypeScript's most powerful patterns for handling complex state. They use a common property to distinguish between different shapes of data.
-
-**See: [TypeScript Discriminated Unions](typescript-discriminated-unions.md)** for comprehensive coverage including:
-
-- Complete pattern explanation and examples
-- React-specific use cases
-- Exclusive props patterns
-- Runtime validation approaches
-
-### Custom Type Predicates
-
-```typescript
-// User-defined type guards
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
-// This is a type predicate
-function isUser(value: unknown): value is User {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'id' in value &&
-    'name' in value &&
-    'email' in value &&
-    typeof (value as User).id === 'string' &&
-    typeof (value as User).name === 'string' &&
-    typeof (value as User).email === 'string'
-  );
-}
-
-// Using the type predicate
-function processData(data: unknown) {
-  if (isUser(data)) {
-    // TypeScript knows data is User
-    console.log(`User: ${data.name} (${data.email})`);
-  } else {
-    console.log('Not a valid user');
-  }
-}
-
-// Array type guards
-function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((item) => typeof item === 'string');
-}
-
-function processArray(value: unknown) {
-  if (isStringArray(value)) {
-    // TypeScript knows value is string[]
-    value.forEach((str) => console.log(str.toUpperCase()));
-  }
-}
-```
-
-## Unknown vs Any: Type Safety Levels
+## The Problem with `any`
 
 Understanding the difference between `unknown` and `any` is crucial for type safety.
-
-### The Problem with Any
 
 ```typescript
 // any disables all type checking - avoid it!
@@ -352,7 +292,7 @@ const data: any = 'not an array';
 data.map((x) => x * 2); // No TypeScript error, runtime crash
 ```
 
-### Unknown: The Safe Alternative
+### `unknown`: The Safe Alternative
 
 ```typescript
 // unknown requires type checking before use
@@ -384,7 +324,7 @@ async function getData() {
 }
 ```
 
-### Never: The Impossible Type
+### `never`: The Impossible Type
 
 ```typescript
 // never represents values that never occur

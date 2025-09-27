@@ -4,7 +4,7 @@ description: >-
   Build a rock‑solid mental model—JSX as function calls, compile‑time vs
   runtime, and why types are executable design docs.
 date: 2025-09-06T22:23:57.258Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -240,9 +240,4 @@ function ProductItem({ product, displayMode, onAddToCart, onToggleWishlist }: Pr
 
 These mental models work together to create a powerful development experience. JSX as function calls helps you understand component composition. Compile-time vs runtime awareness keeps you safe from external data. Types as documentation make your code self-explaining. React 19's improvements make everything smoother. And the feedback loop helps you build better software.
 
-The key insight is that TypeScript + React isn't about adding complexity—it's about surfacing complexity that was already there and giving you tools to manage it systematically. Once you internalize these mental models, you'll find yourself writing components that are easier to understand, modify, and debug.
-
-> [!TIP]
-> Start with one mental model at a time. Pick the "JSX as function calls" concept and practice seeing your components through that lens for a week. Then add the compile-time vs runtime model. Building these intuitions gradually is much more effective than trying to absorb everything at once.
-
-The beautiful thing about mental models is that they compound. Each one you internalize makes the next one easier to grasp, until suddenly you're thinking in React + TypeScript fluently—and wondering how you ever built user interfaces any other way.
+The key insight is that TypeScript + React isn't about adding complexity—it's about surfacing complexity that was already there and giving you tools to manage it systematically. Once you internalize these mental models, you'll find yourself writing components that are easier to understand, modify, and debug. The beautiful thing about mental models is that they compound. Each one you internalize makes the next one easier to grasp, until suddenly you're thinking in React + TypeScript fluently—and wondering how you ever built user interfaces any other way.
