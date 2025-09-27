@@ -106,6 +106,11 @@
     strict mode, linting, and project structure that scales.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/setting-up-react-and-typescript
+- title: Modules and Declaration Files
+  description: Master TypeScript's module system and create declaration files for
+    JavaScript libraries
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/typescript-modules-declarations
 - title: Unions, Intersections, and Type Guards
   description: Master TypeScript's union and intersection types for flexible yet
     type-safe code
@@ -518,8 +523,3 @@
     Prefer passive effects and measure before forcing sync work.
   modified: 2025-09-20T10:39:54-06:00
   path: /courses/react-performance/uselayouteffect-performance
-- title: useMemo and useCallback in React 19
-  description: Use memoization as a scalpel, not a sledgehammer—cache expensive
-    work or stabilize identities where it truly pays off.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/usememo-usecallback-in-react-19
