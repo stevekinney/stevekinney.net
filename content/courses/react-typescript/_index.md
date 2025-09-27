@@ -26,6 +26,12 @@ modified: 2025-09-20T19:00:00-06:00
 - [`unknown` vs `any`](typescript-unknown-vs-any.md)
 - [Modules and Declarations](typescript-modules-declarations.md)
 
+## React-Specific TypeScript Patterns
+
+- [React-Specific TypeScript Patterns](typescript-react-patterns.md)
+- [TypeScript Patterns for React Hooks](typescript-react-hooks.md)
+- [TypeScript Patterns for React Testing](typescript-react-testing.md)
+
 ## Props and Component Patterns
 
 - [React Component Props](component-props-complete-guide.md)
