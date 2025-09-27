@@ -4,7 +4,7 @@ description: >-
   Master TypeScript's type system from the ground up—structural typing, type
   inference, narrowing, and the mental models that make everything click.
 date: 2025-09-14T18:00:00.000Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T13:14:43-06:00'
 published: true
 tags:
   - typescript
@@ -19,839 +19,187 @@ Let's build a rock-solid foundation in TypeScript's type system. Once you unders
 
 ## Structural Typing: The Foundation
 
-TypeScript doesn't care about names or declarations—it cares about shape. This is the most important concept to internalize.
+TypeScript doesn't care about names or declarations—it cares about shape. This is the most important concept to internalize. Unlike nominally-typed languages like Java or C#, TypeScript uses structural typing where type compatibility is determined by the structure of the types, not their names.
 
-### Understanding Structural Typing
+**See: [Structural Typing in TypeScript](typescript-structural-typing.md)** for comprehensive coverage including:
 
-```typescript
-// These are the same to TypeScript
-interface User {
-  name: string;
-  age: number;
-}
-
-interface Person {
-  name: string;
-  age: number;
-}
-
-// TypeScript sees them as interchangeable
-const user: User = { name: 'Alice', age: 30 };
-const person: Person = user; // ✅ No error!
-
-// It's all about the shape
-function greet(someone: { name: string }) {
-  console.log(`Hello, ${someone.name}`);
-}
-
-greet(user); // ✅ Works - user has a name
-greet(person); // ✅ Works - person has a name
-greet({ name: 'Bob', age: 25, city: 'NYC' }); // ✅ Works - has name and more
-```
-
-### Duck Typing in Practice
-
-```typescript
-// TypeScript doesn't need explicit types if the shape matches
-class Duck {
-  swim() {
-    console.log('Swimming like a duck');
-  }
-
-  quack() {
-    console.log('Quack!');
-  }
-}
-
-class Person {
-  swim() {
-    console.log('Swimming like a human');
-  }
-
-  quack() {
-    console.log('I can quack too!');
-  }
-}
-
-// If it has swim and quack, it's duck-like enough
-function makeItSwimAndQuack(duck: { swim(): void; quack(): void }) {
-  duck.swim();
-  duck.quack();
-}
-
-makeItSwimAndQuack(new Duck()); // ✅ Works
-makeItSwimAndQuack(new Person()); // ✅ Also works!
-```
-
-### Excess Property Checking
-
-```typescript
-// Direct object literals get stricter checking
-interface Config {
-  url: string;
-  timeout: number;
-}
-
-// ❌ Error: Object literal may only specify known properties
-const config1: Config = {
-  url: 'api.example.com',
-  timeout: 5000,
-  extra: 'oops' // Error!
-};
-
-// ✅ But this works (object comes from a variable)
-const settings = {
-  url: 'api.example.com',
-  timeout: 5000,
-  extra: 'not a problem'
-};
-const config2: Config = settings; // No error - has required shape
-
-// This is why you see this pattern in React props
-interface ButtonProps {
-  label: string;
-  onClick: () => void;
-}
-
-// ❌ Inline object literal - excess property checking
-<Button label="Click" onClick={() => {}} extra="oops" />
-
-// ✅ Object from variable - no excess property checking
-const props = { label: "Click", onClick: () => {}, extra: "ok" };
-<Button {...props} />
-```
+- Duck typing patterns
+- Excess property checking
+- React props and component composition
+- Class compatibility rules
+- Real-world patterns and best practices
 
 ## Type Inference: Let TypeScript Do the Work
 
-TypeScript is incredibly good at figuring out types. Understanding when to let inference work and when to be explicit is key.
+TypeScript is incredibly good at figuring out types. Understanding when to let inference work and when to be explicit is key to writing clean, maintainable code with less boilerplate.
 
-### Basic Inference
+**See: [Type Inference Mastery](typescript-type-inference-mastery.md)** for comprehensive coverage including:
 
-```typescript
-// TypeScript infers types from values
-let message = 'Hello'; // Type: string
-let count = 42; // Type: number
-let isActive = true; // Type: boolean
-
-// Arrays and objects too
-let numbers = [1, 2, 3]; // Type: number[]
-let user = { name: 'Alice', age: 30 }; // Type: { name: string; age: number }
-
-// Function return types
-function add(a: number, b: number) {
-  return a + b; // Return type inferred as number
-}
-
-// Complex inference
-const users = [
-  { id: 1, name: 'Alice' },
-  { id: 2, name: 'Bob' },
-]; // Type: Array<{ id: number; name: string }>
-```
-
-### Contextual Typing
-
-```typescript
-// TypeScript infers from context
-const numbers = [1, 2, 3];
-
-// TypeScript knows 'n' is a number from array context
-numbers.map((n) => n * 2);
-
-// Event handlers get contextual types
-document.addEventListener('click', (e) => {
-  // TypeScript knows 'e' is MouseEvent
-  console.log(e.clientX, e.clientY);
-});
-
-// Function parameters from expected types
-interface Calculator {
-  add(a: number, b: number): number;
-}
-
-const calc: Calculator = {
-  add(a, b) {
-    // a and b are inferred as numbers
-    return a + b;
-  },
-};
-```
-
-### Const Assertions for Literal Types
-
-```typescript
-// Without const assertion - mutable, wider types
-let config1 = {
-  endpoint: 'api.example.com',
-  port: 8080,
-  protocol: 'https',
-};
-// Type: { endpoint: string; port: number; protocol: string }
-
-// With const assertion - readonly, narrower types
-const config2 = {
-  endpoint: 'api.example.com',
-  port: 8080,
-  protocol: 'https',
-} as const;
-// Type: {
-//   readonly endpoint: "api.example.com";
-//   readonly port: 8080;
-//   readonly protocol: "https"
-// }
-
-// Const assertions with arrays
-const colors1 = ['red', 'green', 'blue'];
-// Type: string[]
-
-const colors2 = ['red', 'green', 'blue'] as const;
-// Type: readonly ["red", "green", "blue"]
-
-// Extracting literal types
-type Color = (typeof colors2)[number]; // "red" | "green" | "blue"
-```
+- When to rely on inference vs being explicit
+- Contextual typing patterns
+- Const assertions and literal types
+- React-specific inference patterns
+- Performance considerations
 
 ## Type Narrowing: Progressive Type Refinement
 
-TypeScript understands control flow and narrows types based on your code's logic.
+TypeScript understands control flow and narrows types based on your code's logic. This enables you to write safer code with precise type checking.
 
-### Type Guards
+**See: [Type Narrowing and Control Flow](typescript-type-narrowing-control-flow.md)** for comprehensive coverage including:
 
-```typescript
-// typeof type guards
-function processValue(value: string | number) {
-  if (typeof value === 'string') {
-    // TypeScript knows value is string here
-    console.log(value.toUpperCase());
-  } else {
-    // TypeScript knows value is number here
-    console.log(value.toFixed(2));
-  }
-}
+- Type guards (typeof, instanceof, in operator)
+- Custom type guards and assertion functions
+- Control flow analysis
+- Discriminated unions and exhaustiveness checking
+- React-specific narrowing patterns
 
-// instanceof type guards
-class Cat {
-  meow() {
-    console.log('Meow!');
-  }
-}
+## Type Safety with `unknown` and `any`
 
-class Dog {
-  bark() {
-    console.log('Woof!');
-  }
-}
+Understanding the difference between `unknown` and `any` is crucial for type safety. While `any` disables type checking, `unknown` requires you to validate types before use.
 
-function makeSound(animal: Cat | Dog) {
-  if (animal instanceof Cat) {
-    animal.meow(); // TypeScript knows it's a Cat
-  } else {
-    animal.bark(); // TypeScript knows it's a Dog
-  }
-}
+**See: [`unknown` vs `any`](typescript-unknown-vs-any.md)** for comprehensive coverage including:
 
-// in operator type guards
-interface Bird {
-  fly(): void;
-  layEggs(): void;
-}
-
-interface Fish {
-  swim(): void;
-  layEggs(): void;
-}
-
-function move(animal: Bird | Fish) {
-  if ('fly' in animal) {
-    animal.fly(); // It's a Bird
-  } else {
-    animal.swim(); // It's a Fish
-  }
-}
-```
-
-## The Problem with `any`
-
-Understanding the difference between `unknown` and `any` is crucial for type safety.
-
-```typescript
-// any disables all type checking - avoid it!
-let value: any = 42;
-value = "now I'm a string";
-value = { suddenly: "I'm an object" };
-value.foo.bar.baz; // No error, but will crash at runtime
-
-// any spreads like a virus
-function processAny(value: any) {
-  const result = value.someMethod(); // result is any
-  return result.someProperty; // returns any
-}
-
-// any breaks type safety
-const data: any = 'not an array';
-data.map((x) => x * 2); // No TypeScript error, runtime crash
-```
-
-### `unknown`: The Safe Alternative
-
-```typescript
-// unknown requires type checking before use
-let value: unknown = 42;
-value = "now I'm a string";
-value = { suddenly: "I'm an object" };
-
-// ❌ Can't use unknown without checking
-value.someMethod(); // Error!
-
-// ✅ Must narrow the type first
-if (typeof value === 'object' && value !== null && 'suddenly' in value) {
-  console.log(value.suddenly); // Now it works
-}
-
-// Safe API responses
-async function fetchData(): Promise<unknown> {
-  const response = await fetch('/api/data');
-  return response.json(); // Returns unknown
-}
-
-async function getData() {
-  const data = await fetchData();
-
-  // Must validate before using
-  if (isUser(data)) {
-    console.log(data.name); // Safe!
-  }
-}
-```
-
-### `never`: The Impossible Type
-
-```typescript
-// never represents values that never occur
-function throwError(message: string): never {
-  throw new Error(message);
-}
-
-function infiniteLoop(): never {
-  while (true) {
-    // Never returns
-  }
-}
-
-// Exhaustiveness checking with never
-type Shape = 'circle' | 'square' | 'triangle';
-
-function getArea(shape: Shape): number {
-  switch (shape) {
-    case 'circle':
-      return Math.PI * 10 * 10;
-    case 'square':
-      return 10 * 10;
-    case 'triangle':
-      return (10 * 10) / 2;
-    default:
-      // If we get here, shape is never
-      const exhaustive: never = shape;
-      throw new Error(`Unhandled shape: ${exhaustive}`);
-  }
-}
-
-// never in conditional types
-type NonNullable<T> = T extends null | undefined ? never : T;
-
-type Result = NonNullable<string | null | undefined>; // string
-```
+- Why `any` is dangerous and how it spreads
+- Safe handling of dynamic types with `unknown`
+- The `never` type for exhaustiveness checking
+- Migration strategies from `any` to `unknown`
+- Real-world patterns for type-safe API handling
 
 ## Type Aliases vs Interfaces
 
-When to use `type` vs `interface` is a common question. Here's the definitive guide.
+When to use `type` vs `interface` is a common question in TypeScript. While both can describe object shapes, they each have unique capabilities.
 
-### Interfaces: Object Shapes and Classes
+**Key Differences:**
+
+- **Interfaces** are best for object shapes, support declaration merging, and work well with classes
+- **Type aliases** can represent any type (unions, tuples, primitives), support intersection types, and work with mapped/conditional types
+
+**Quick Guidelines:**
 
 ```typescript
-// Interfaces are great for object shapes
+// Use interface for object shapes
 interface User {
   id: string;
   name: string;
-  email: string;
 }
 
-// Interface extension
-interface Admin extends User {
-  permissions: string[];
-}
-
-// Multiple interface extension
-interface SuperAdmin extends User, Admin {
-  sudo: boolean;
-}
-
-// Interface merging (declaration merging)
-interface Window {
-  myCustomProperty: string;
-}
-
-interface Window {
-  anotherProperty: number;
-}
-// Both properties are merged
-
-// Interfaces with classes
-interface Drivable {
-  speed: number;
-  drive(): void;
-}
-
-class Car implements Drivable {
-  speed = 0;
-  drive() {
-    console.log('Driving...');
-  }
-}
-```
-
-### Type Aliases: Everything Else
-
-```typescript
-// Type aliases for primitives
-type ID = string | number;
-type Status = 'pending' | 'active' | 'deleted';
-
-// Type aliases for unions
-type Result<T> = T | Error;
-
-// Type aliases for tuples
-type Coordinate = [number, number];
-type RGB = [red: number, green: number, blue: number]; // Named tuple
-
-// Type aliases for functions
-type Callback<T> = (data: T) => void;
-type Predicate<T> = (value: T) => boolean;
-
-// Type aliases for complex types
-type DeepReadonly<T> = {
-  readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
-};
-
-// Type aliases for conditional types
-type IsArray<T> = T extends any[] ? true : false;
-
-// Intersection types (only with type aliases)
-type Combined = User & { lastLogin: Date } & { isActive: boolean };
-```
-
-### When to Use Which
-
-```typescript
-// Use interface when:
-// 1. Defining object shapes
-interface UserProfile {
-  name: string;
-  bio: string;
-}
-
-// 2. You need declaration merging
-interface Config {
-  url: string;
-}
-interface Config {
-  timeout: number;
-}
-
-// 3. Working with classes
-interface Serializable {
-  serialize(): string;
-}
-
-// Use type alias when:
-// 1. Creating union types
-type Status = 'loading' | 'success' | 'error';
-
-// 2. Creating function types
+// Use type for unions, functions, and complex types
+type Status = 'idle' | 'loading' | 'success' | 'error';
 type Handler = (event: Event) => void;
-
-// 3. Working with tuples
-type Point = [x: number, y: number];
-
-// 4. Creating complex mapped or conditional types
-type Readonly<T> = { readonly [P in keyof T]: T[P] };
-
-// 5. Need intersection types
-type AdminUser = User & Admin;
+type Nullable<T> = T | null;
 ```
+
+For more patterns with type aliases and interfaces, see:
+
+- **[Unions, Intersections, and Guards](typescript-unions-intersections-guards.md)** for union and intersection patterns
+- **[Utility Types](typescript-utility-types-complete.md)** for advanced type transformations
 
 ## Literal Types and Template Literals
 
-TypeScript's literal types are more powerful than they first appear.
+TypeScript's literal types allow you to specify exact values as types, enabling precise type checking and powerful string manipulation patterns.
 
-### String Literal Types
+**See: [Template Literal Types](typescript-template-literal-types.md)** for comprehensive coverage including:
 
-```typescript
-// Exact string values as types
-type Direction = 'north' | 'south' | 'east' | 'west';
-
-function move(direction: Direction) {
-  // direction can only be one of the four strings
-}
-
-move('north'); // ✅
-move('up'); // ❌ Error
-
-// Combining with generics
-type EventName = 'click' | 'focus' | 'blur';
-type EventHandler<T extends EventName> = T extends 'click'
-  ? (e: MouseEvent) => void
-  : (e: FocusEvent) => void;
-```
-
-### Numeric and Boolean Literals
-
-```typescript
-// Numeric literals
-type DiceRoll = 1 | 2 | 3 | 4 | 5 | 6;
-type HttpSuccessCode = 200 | 201 | 204;
-
-// Boolean literals
-type True = true;
-type False = false;
-
-// Using in conditional types
-type IsZero<N extends number> = N extends 0 ? true : false;
-type Test = IsZero<0>; // true
-type Test2 = IsZero<5>; // false
-```
-
-### Template Literal Types
-
-```typescript
-// Basic template literals
-type Color = 'red' | 'green' | 'blue';
-type Brightness = 'light' | 'dark';
-type Theme = `${Brightness}-${Color}`;
-// Type: "light-red" | "light-green" | "light-blue" | "dark-red" | "dark-green" | "dark-blue"
-
-// CSS units
-type Unit = 'px' | 'em' | 'rem' | '%';
-type CSSValue = `${number}${Unit}`;
-
-const width: CSSValue = '100px'; // ✅
-const height: CSSValue = '50%'; // ✅
-const invalid: CSSValue = '10'; // ❌ Error
-
-// Event handler names
-type EventName = 'click' | 'focus' | 'change';
-type HandlerName<T extends EventName> = `on${Capitalize<T>}`;
-
-type ClickHandler = HandlerName<'click'>; // "onClick"
-type FocusHandler = HandlerName<'focus'>; // "onFocus"
-
-// Property getters/setters
-type Getters<T> = {
-  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
-};
-
-interface Person {
-  name: string;
-  age: number;
-}
-
-type PersonGetters = Getters<Person>;
-// Type: {
-//   getName: () => string;
-//   getAge: () => number;
-// }
-```
+- String, numeric, and boolean literal types
+- Template literal type patterns
+- String manipulation utilities
+- Dynamic property names and event handlers
+- Real-world React patterns
 
 ## Type Assertions and Casting
 
-Sometimes you know more than TypeScript. Here's how to tell it.
+Sometimes you know more than TypeScript about a value's type. Type assertions let you override TypeScript's inferred type, but use them carefully—they bypass type safety.
 
-### Basic Type Assertions
+**Common Patterns:**
 
-```typescript
-// Using 'as' syntax (preferred)
-const input = document.getElementById('user-input') as HTMLInputElement;
-input.value = 'Hello'; // TypeScript knows it's an input
+- `as` syntax for type assertions (preferred in JSX)
+- Non-null assertion operator (`!`) when you're certain a value exists
+- `as const` for literal type inference
+- Assertion functions for runtime type validation
 
-// Angle bracket syntax (doesn't work in JSX)
-const input2 = <HTMLInputElement>document.getElementById('user-input');
+**See: [Type Narrowing and Control Flow](typescript-type-narrowing-control-flow.md)** for safer alternatives using:
 
-// Double assertion for tricky cases
-const value = 'hello' as unknown as number; // Dangerous but sometimes necessary
-
-// Const assertions
-const config = {
-  endpoint: 'api.example.com',
-  port: 8080,
-} as const;
-
-// Type assertions in object literals
-const user = {
-  id: '123',
-  name: 'Alice',
-} as User;
-```
-
-### Non-Null Assertions
-
-```typescript
-// The ! operator tells TypeScript a value isn't null/undefined
-function processUser(user?: User) {
-  // Without assertion
-  console.log(user?.name); // Safe but verbose
-
-  // With assertion (when you're certain)
-  console.log(user!.name); // Dangerous but concise
-}
-
-// Common in DOM manipulation
-const button = document.querySelector('button')!; // I know it exists
-button.addEventListener('click', () => {});
-
-// In array access
-const users = [{ id: 1, name: 'Alice' }];
-const firstUser = users[0]!; // I know the array isn't empty
-```
-
-### Assertion Functions
-
-```typescript
-// Custom assertion functions
-function assertIsString(value: unknown): asserts value is string {
-  if (typeof value !== 'string') {
-    throw new Error('Value must be a string');
-  }
-}
-
-function processValue(value: unknown) {
-  assertIsString(value);
-  // TypeScript knows value is string after assertion
-  console.log(value.toUpperCase());
-}
-
-// Non-null assertion function
-function assertDefined<T>(value: T | undefined | null): asserts value is T {
-  if (value === undefined || value === null) {
-    throw new Error('Value must be defined');
-  }
-}
-
-function example(value?: string) {
-  assertDefined(value);
-  // TypeScript knows value is string, not undefined
-  console.log(value.length);
-}
-```
+- Type guards instead of assertions
+- Assertion functions with runtime checks
+- Control flow analysis for automatic narrowing
 
 ## Function Types and Overloads
 
-Functions in TypeScript are more flexible than you might think.
+Functions in TypeScript support powerful typing patterns including overloads, optional parameters, and callable interfaces.
 
-### Function Type Expressions
+**Key Concepts:**
 
-```typescript
-// Basic function types
-type GreetFunction = (name: string) => string;
+- Function type expressions for defining function signatures
+- Function overloads for multiple call signatures
+- Optional and rest parameters
+- Functions with properties
 
-const greet: GreetFunction = (name) => `Hello, ${name}`;
+**Related Topics:**
 
-// Optional and rest parameters
-type Logger = (message: string, ...args: unknown[]) => void;
-
-const log: Logger = (message, ...args) => {
-  console.log(message, ...args);
-};
-
-// Functions with properties
-interface CallableWithProperties {
-  (x: number): number;
-  description: string;
-}
-
-const double: CallableWithProperties = (x) => x * 2;
-double.description = 'Doubles a number';
-```
-
-### Function Overloads
+- **[Generics Deep Dive](typescript-generics-deep-dive.md)** for generic function patterns
+- **[Type Narrowing](typescript-type-narrowing-control-flow.md)** for type guard functions
 
 ```typescript
-// Multiple function signatures
-function createElement(tag: 'div'): HTMLDivElement;
-function createElement(tag: 'span'): HTMLSpanElement;
-function createElement(tag: 'button'): HTMLButtonElement;
-function createElement(tag: string): HTMLElement;
-function createElement(tag: string): HTMLElement {
-  return document.createElement(tag);
+// Quick example: Function overloads
+function parse(value: string): object;
+function parse(value: number): string;
+function parse(value: string | number): object | string {
+  return typeof value === 'string' ? JSON.parse(value) : value.toString();
 }
-
-const div = createElement('div'); // Type: HTMLDivElement
-const span = createElement('span'); // Type: HTMLSpanElement
-const generic = createElement('section'); // Type: HTMLElement
-
-// Overloads with different parameter counts
-function makeDate(timestamp: number): Date;
-function makeDate(year: number, month: number, day: number): Date;
-function makeDate(yearOrTimestamp: number, month?: number, day?: number): Date {
-  if (month !== undefined && day !== undefined) {
-    return new Date(yearOrTimestamp, month, day);
-  }
-  return new Date(yearOrTimestamp);
-}
-
-const date1 = makeDate(2023, 0, 1); // From parts
-const date2 = makeDate(Date.now()); // From timestamp
 ```
 
-### Generic Functions
+## Generic Functions and Type Parameters
 
-Generics enable writing reusable, type-safe functions that work with any type.
+Generics enable writing reusable, type-safe functions that work with any type while maintaining type relationships.
 
 **See: [TypeScript Generics Deep Dive](typescript-generics-deep-dive.md)** for comprehensive coverage including:
 
-- Complete generics patterns and constraints
+- Generic functions, interfaces, and classes
+- Type constraints and conditional types
 - React component generics
-- Advanced type parameters
-- Real-world applications
+- Advanced patterns with multiple type parameters
+- Real-world applications and best practices
 
-## Index Signatures and Mapped Types
+## Index Signatures and Dynamic Types
 
-Dynamic property access is common in JavaScript. Here's how TypeScript handles it.
+TypeScript provides several ways to work with objects that have dynamic property names.
 
-### Index Signatures
+**Key Patterns:**
+
+- Index signatures for dynamic property access
+- Record types for mapping keys to values
+- Template literal patterns for property names
+
+**See Advanced Coverage:**
+
+- **[Conditional and Mapped Types](typescript-conditional-mapped-types.md)** for mapped type transformations
+- **[Template Literal Types](typescript-template-literal-types.md)** for template literal patterns
+- **[Utility Types](typescript-utility-types-complete.md)** for Record, Partial, and other utilities
 
 ```typescript
-// String index signatures
-interface StringDictionary {
-  [key: string]: string;
-}
+// Quick example: Record type
+type Status = 'idle' | 'loading' | 'success' | 'error';
+type StatusMessages = Record<Status, string>;
 
-const dict: StringDictionary = {
-  hello: 'world',
-  foo: 'bar',
-};
-
-// Number index signatures
-interface StringArray {
-  [index: number]: string;
-}
-
-const arr: StringArray = ['hello', 'world'];
-
-// Mixed index signatures
-interface MixedDictionary {
-  [key: string]: string | number;
-  length: number; // Specific properties must be compatible
-  name: string;
-}
-
-// Template literal index signatures
-interface EventHandlers {
-  [key: `on${string}`]: Function;
-}
-
-const handlers: EventHandlers = {
-  onClick: () => {},
-  onFocus: () => {},
-  regularMethod: () => {}, // ❌ Error: doesn't match pattern
+const messages: StatusMessages = {
+  idle: 'Ready',
+  loading: 'Please wait...',
+  success: 'Complete!',
+  error: 'Something went wrong',
 };
 ```
 
-### Record Types
+## Module Systems and Type Declarations
 
-```typescript
-// Record for object types
-type Role = 'admin' | 'user' | 'guest';
-type Permissions = Record<Role, string[]>;
+Understanding TypeScript's module system is crucial for organizing code and working with external libraries.
 
-const permissions: Permissions = {
-  admin: ['read', 'write', 'delete'],
-  user: ['read', 'write'],
-  guest: ['read'],
-};
+**See: [Modules and Declarations](typescript-modules-declarations.md)** for comprehensive coverage including:
 
-// Partial records
-type PartialPermissions = Partial<Record<Role, string[]>>;
-
-const somePermissions: PartialPermissions = {
-  admin: ['read', 'write'],
-  // user and guest are optional
-};
-```
-
-## Module Systems and Namespaces
-
-Understanding TypeScript's module system is crucial for organizing code.
-
-### ES Modules
-
-```typescript
-// Named exports
-export interface User {
-  id: string;
-  name: string;
-}
-
-export function createUser(name: string): User {
-  return { id: Math.random().toString(), name };
-}
-
-export const DEFAULT_USER: User = {
-  id: '0',
-  name: 'Anonymous',
-};
-
-// Default export
-export default class UserService {
-  getUser(id: string): User | undefined {
-    // Implementation
-  }
-}
-
-// Re-exports
-export { User, createUser } from './user';
-export * from './types';
-export { default as UserService } from './UserService';
-```
-
-### Type-Only Imports
-
-```typescript
-// Import only types (removed at runtime)
-import type { User } from './types';
-import type { ComponentProps } from 'react';
-
-// Mixed imports with type modifier
-import UserService, { type User, type UserOptions } from './user';
-
-// Type-only re-exports
-export type { User, UserOptions } from './user';
-```
-
-### Ambient Declarations
-
-```typescript
-// Declare types for modules without types
-declare module 'some-untyped-library' {
-  export function doSomething(value: string): void;
-  export class SomeClass {
-    constructor(options: any);
-  }
-}
-
-// Global augmentation
-declare global {
-  interface Window {
-    myGlobalFunction: () => void;
-  }
-}
-
-// Module augmentation
-declare module 'express' {
-  interface Request {
-    user?: User;
-  }
-}
-```
+- ES modules and CommonJS interop
+- Type-only imports and exports
+- Declaration files for JavaScript libraries
+- Module augmentation patterns
+- Namespace and global type declarations
 
 ## Best Practices and Mental Models
 
