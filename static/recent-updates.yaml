@@ -116,6 +116,11 @@
     type-safe code
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/typescript-unions-intersections-guards
+- title: Unknown vs Any - The Safe Way to Handle Dynamic Types
+  description: Learn when to use unknown vs any and how to safely handle dynamic
+    data in TypeScript
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/typescript-unknown-vs-any
 - title: Using TypeScript Without Even Trying
   description: Let inference do the heavy lifting—see how much TypeScript you get
     "for free" in everyday React files.
@@ -518,8 +523,3 @@
     transitions and memoization for silky search UIs.
   modified: 2025-09-20T10:39:54-06:00
   path: /courses/react-performance/usedeferredvalue-patterns
-- title: Performance Characteristics of useLayoutEffect
-  description: Know when layout effects are necessary—and when they block paint.
-    Prefer passive effects and measure before forcing sync work.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/uselayouteffect-performance

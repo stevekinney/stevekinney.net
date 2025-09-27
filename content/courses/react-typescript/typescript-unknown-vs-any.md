@@ -3,13 +3,13 @@ title: Unknown vs Any - The Safe Way to Handle Dynamic Types
 description: >-
   Learn when to use unknown vs any and how to safely handle dynamic data in
   TypeScript
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-09-14T18:55:29.322Z'
 ---
 
-Let's talk about TypeScript's two ways of saying "I don't know what type this is" - `any` and `unknown`. One of them is a dangerous escape hatch that defeats the purpose of TypeScript, while the other is a safe way to handle truly dynamic data. Let's learn when and how to use each one (spoiler: you'll almost always want `unknown`).
+Let's talk about TypeScript's two ways of saying "I don't know what type this is"—`any` and `unknown`. One of them is a dangerous escape hatch that defeats the purpose of TypeScript, while the other is a safe way to handle truly dynamic data. Let's learn when and how to use each one (**Spoiler Alert**: you'll almost always want `unknown`).
 
-## The Problem with Any
+## The Problem with `any`
 
 When you use `any`, you're essentially turning off TypeScript:
 
@@ -25,7 +25,7 @@ const result = value + 'hello'; // Works, but what's the result?
 
 It's like telling TypeScript "trust me, I know what I'm doing" - except you might not, and TypeScript won't help you when you're wrong.
 
-## Enter Unknown: The Safe Alternative
+## Enter `unknown`: The Safe Alternative
 
 `unknown` is like `any`'s responsible sibling. It can hold any value, but you must check what it is before using it:
 
