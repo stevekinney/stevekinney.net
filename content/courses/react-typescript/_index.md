@@ -25,13 +25,12 @@ modified: 2025-09-20T19:00:00-06:00
 - [Type-Level Programming](typescript-type-level-programming.md)
 - [`unknown` vs `any`](typescript-unknown-vs-any.md)
 - [Modules and Declarations](typescript-modules-declarations.md)
-- [Performance in Large Codebases](typescript-performance-large-codebases.md)
 
 ## Props and Component Patterns
 
-- [Complete Guide to React Component Props](component-props-complete-guide.md)
-- [JSX Types: ReactNode, ReactElement](jsx-types-reactnode-reactelement.md)
-- [Mirror DOM Props](mirror-dom-props.md)
+- [React Component Props](component-props-complete-guide.md)
+- [JSX Types: `ReactNode`, `ReactElement`](jsx-types-reactnode-reactelement.md)
+- [Mirroring DOM Props](mirror-dom-props.md)
 - [Prop Combinations and Unions](prop-combinations-and-unions.md)
 - [`forwardRef`, `memo`, and `displayName`](forwardref-memo-and-displayname.md)
 
@@ -134,3 +133,7 @@ modified: 2025-09-20T19:00:00-06:00
 - [Migrating from PropTypes](migrating-from-proptypes.md)
 - [State Libraries and Context Interoperability](state-libraries-and-context-interoperability.md)
 - [Story Driven Development with Types](story-driven-development-with-types.md)
+
+## Appendix
+
+- [Performance in Large Codebases](typescript-performance-large-codebases.md)

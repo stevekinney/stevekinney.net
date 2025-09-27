@@ -3,7 +3,7 @@ title: 'Unions, Intersections, and Type Guards'
 description: >-
   Master TypeScript's union and intersection types for flexible yet type-safe
   code
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-09-14T18:58:22.492Z'
 ---
 
@@ -63,7 +63,16 @@ function handlePet(pet: Pet) {
 
 ## Type Guards: Narrowing Unions
 
-To access type-specific properties, you need type guards:
+Type guards allow you to narrow union types to access type-specific properties. TypeScript provides several built-in type guards and allows you to create custom ones.
+
+**See: [Type Narrowing and Control Flow](typescript-type-narrowing-control-flow.md)** for comprehensive coverage of type guards including:
+
+- Built-in type guards (typeof, instanceof, in operator)
+- Custom type guard functions
+- Control flow analysis
+- Assertion functions
+
+Here's a quick example with union types:
 
 ```typescript
 // Type predicate
@@ -76,15 +85,6 @@ function handlePet(pet: Pet) {
     pet.fly(); // ✅ TypeScript knows pet is Bird
   } else {
     pet.swim(); // ✅ TypeScript knows pet is Fish
-  }
-}
-
-// Using 'in' operator
-function handlePetAlternative(pet: Pet) {
-  if ('fly' in pet) {
-    pet.fly(); // pet is Bird
-  } else {
-    pet.swim(); // pet is Fish
   }
 }
 ```
@@ -215,32 +215,22 @@ function makeSound(animal: Animal) {
 
 ### Custom Type Guard Functions
 
+For more advanced type guard patterns and custom type guard functions, **see: [Type Narrowing and Control Flow](typescript-type-narrowing-control-flow.md)**.
+
+Here's an example specific to working with union types:
+
 ```typescript
-// Generic type guard
-function isType<T>(value: unknown, check: (value: unknown) => boolean): value is T {
-  return check(value);
-}
-
-// Specific guards
-function isString(value: unknown): value is string {
-  return typeof value === 'string';
-}
-
-function isNumber(value: unknown): value is number {
-  return typeof value === 'number' && !isNaN(value);
-}
-
-function isArray<T>(value: unknown, itemGuard: (item: unknown) => item is T): value is T[] {
+// Array type guard for unions
+function isArrayOf<T>(value: unknown, itemGuard: (item: unknown) => item is T): value is T[] {
   return Array.isArray(value) && value.every(itemGuard);
 }
 
-// Usage
-function processValue(value: unknown) {
-  if (isString(value)) {
-    console.log(value.toUpperCase());
-  } else if (isNumber(value)) {
-    console.log(value.toFixed(2));
-  } else if (isArray(value, isString)) {
+// Usage with union types
+type StringOrNumber = string | number;
+
+function processData(value: unknown) {
+  if (isArrayOf(value, (item): item is string => typeof item === 'string')) {
+    // value is string[]
     console.log(value.join(', '));
   }
 }

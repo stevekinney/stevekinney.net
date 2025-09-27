@@ -67,6 +67,16 @@
     have expected.
   modified: 2025-07-29T21:09:56.000Z
   path: /writing/using-a-vector-database
+- title: TypeScript Patterns for React Hooks
+  description: Master TypeScript with React Hooks—from useState generics to custom
+    hook patterns that scale
+  modified: 2025-09-27T19:30:05.343Z
+  path: /courses/react-typescript/typescript-react-hooks
+- title: React-Specific TypeScript Patterns
+  description: Essential TypeScript patterns every React developer needs to
+    know—from component typing to ref forwarding
+  modified: 2025-09-27T19:28:37.973Z
+  path: /courses/react-typescript/typescript-react-patterns
 - title: tsconfig.json Deep Dive
   description: Let's tweak our TypeScript and React setup.
   modified: 2025-09-27T18:58:51.877Z
@@ -75,6 +85,12 @@
   description: Short descriptions of each "recommended" rules.
   modified: 2025-09-27T18:32:37.177Z
   path: /courses/react-typescript/typescript-react-eslint-rules
+- title: TypeScript Type System Fundamentals
+  description: Master TypeScript's type system from the ground up—structural
+    typing, type inference, narrowing, and the mental models that make
+    everything click.
+  modified: 2025-09-27T13:14:43-06:00
+  path: /courses/react-typescript/typescript-type-system-fundamentals
 - title: React 19 + TypeScript Mental Models
   description: Build a rock‑solid mental model—JSX as function calls, compile‑time
     vs runtime, and why types are executable design docs.
@@ -85,12 +101,11 @@
     strict mode, linting, and project structure that scales.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/setting-up-react-and-typescript
-- title: TypeScript Type System Fundamentals
-  description: Master TypeScript's type system from the ground up—structural
-    typing, type inference, narrowing, and the mental models that make
-    everything click.
+- title: Unions, Intersections, and Type Guards
+  description: Master TypeScript's union and intersection types for flexible yet
+    type-safe code
   modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/typescript-type-system-fundamentals
+  path: /courses/react-typescript/typescript-unions-intersections-guards
 - title: Using TypeScript Without Even Trying
   description: Let inference do the heavy lifting—see how much TypeScript you get
     "for free" in everyday React files.
@@ -508,20 +523,3 @@
     smooth while expensive UI catches up in the background.
   modified: 2025-09-20T10:39:54-06:00
   path: /courses/react-performance/usetransition-and-starttransition
-- title: View Transitions API for React
-  description: Create smooth, native-like page transitions in React apps using the
-    View Transitions API
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/view-transitions-api
-- title: Virtual DOM & Fiber Architecture Deep Dive
-  description: Understand how React really works under the hood. Master the Fiber
-    architecture, priority scheduling, and reconciliation to write truly
-    optimized React apps.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/virtual-dom-fiber-architecture
-- title: Web Workers with React
-  description: Offload expensive computations to Web Workers. Keep your UI
-    responsive with parallel processing, proper state synchronization, and
-    TypeScript support.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/web-workers-with-react
