@@ -67,6 +67,11 @@
     have expected.
   modified: 2025-07-29T21:09:56.000Z
   path: /writing/using-a-vector-database
+- title: TypeScript Patterns for React Testing
+  description: Write type-safe tests for React components with Testing Library,
+    mocks, and custom matchers
+  modified: 2025-09-27T19:39:31.332Z
+  path: /courses/react-typescript/typescript-react-testing
 - title: TypeScript Patterns for React Hooks
   description: Master TypeScript with React Hooks—from useState generics to custom
     hook patterns that scale
@@ -518,8 +523,3 @@
     work or stabilize identities where it truly pays off.
   modified: 2025-09-20T10:39:54-06:00
   path: /courses/react-performance/usememo-usecallback-in-react-19
-- title: useTransition and startTransition
-  description: Mark non-urgent updates so urgent ones stay snappy—keep typing
-    smooth while expensive UI catches up in the background.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/usetransition-and-starttransition
