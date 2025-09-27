@@ -67,6 +67,35 @@
     have expected.
   modified: 2025-07-29T21:09:56.000Z
   path: /writing/using-a-vector-database
+- title: tsconfig.json Deep Dive
+  description: Let's tweak our TypeScript and React setup.
+  modified: 2025-09-27T18:58:51.877Z
+  path: /courses/react-typescript/tsconfig-deep-dive-react
+- title: Recommended ESLint Rules for TypeScript and React
+  description: Short descriptions of each "recommended" rules.
+  modified: 2025-09-27T18:32:37.177Z
+  path: /courses/react-typescript/typescript-react-eslint-rules
+- title: React 19 + TypeScript Mental Models
+  description: Build a rock‑solid mental model—JSX as function calls, compile‑time
+    vs runtime, and why types are executable design docs.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/react-typescript-mental-models
+- title: "Setting Up: React and TypeScript"
+  description: Set up React 19 with TypeScript from scratch—tsconfig, JSX runtime,
+    strict mode, linting, and project structure that scales.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/setting-up-react-and-typescript
+- title: TypeScript Type System Fundamentals
+  description: Master TypeScript's type system from the ground up—structural
+    typing, type inference, narrowing, and the mental models that make
+    everything click.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/typescript-type-system-fundamentals
+- title: Using TypeScript Without Even Trying
+  description: Let inference do the heavy lifting—see how much TypeScript you get
+    "for free" in everyday React files.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/typescript-without-trying
 - title: Performance Testing Implementation Guide
   description: Implement comprehensive performance testing with E2E testing,
     Lighthouse CI, continuous monitoring, and automated performance regression
@@ -132,21 +161,11 @@
     projects, including dev servers, builds, testing, and linting.
   modified: 2025-09-20T10:40:36-06:00
   path: /courses/react-typescript/building-development-scripts
-- title: Common Pitfalls with React and TypeScript
-  description: Learn about common pitfalls when using React with TypeScript and
-    how to avoid them, including type safety patterns and best practices.
-  modified: 2025-09-20T10:40:36-06:00
-  path: /courses/react-typescript/common-pitfalls-with-react-and-typescript
 - title: Setting Up Linting and Formatting
   description: Configure ESLint, Prettier, and type-aware rules for React
     TypeScript projects with modern tooling and best practices.
   modified: 2025-09-20T10:40:36-06:00
   path: /courses/react-typescript/setting-up-linting-and-formatting
-- title: "Setting Up: React and TypeScript"
-  description: Set up React 19 with TypeScript from scratch—tsconfig, JSX runtime,
-    strict mode, linting, and project structure that scales.
-  modified: 2025-09-20T10:40:36-06:00
-  path: /courses/react-typescript/setting-up-react-and-typescript
 - title: Type-Safe Environment Variables
   description: Implement type-safe environment variable handling in React
     TypeScript applications with validation and runtime safety.
@@ -506,24 +525,3 @@
     TypeScript support.
   modified: 2025-09-20T10:39:54-06:00
   path: /courses/react-performance/web-workers-with-react
-- title: WebAssembly Integration in React
-  description: Supercharge React with WebAssembly for CPU-intensive tasks. Learn
-    when and how to use WASM for image processing, cryptography, and complex
-    calculations.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/webassembly-integration
-- title: Windowing and Virtualization
-  description: Render only what users see. Use react-window to make 10,000-row
-    lists fast without sacrificing UX or accessibility.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/windowing-and-virtualization
-- title: CI/CD Type Checking with GitHub Actions
-  description: Automate TypeScript validation in CI/CD—GitHub Actions workflows,
-    parallel checking, caching strategies, and PR automation.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-typescript/cicd-type-checking-github-actions
-- title: ComponentType, HOCs, and Render Props
-  description: This content has been split into focused guides on HOCs and render
-    props patterns.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-typescript/componenttype-hocs-render-props

@@ -4,7 +4,7 @@ description: >-
   Let inference do the heavy lifting—see how much TypeScript you get "for free"
   in everyday React files.
 date: 2025-09-06T22:23:57.262Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -14,20 +14,19 @@ tags:
   - beginner
 ---
 
-TypeScript's biggest superpower isn't the explicit types you write—it's the types you _don't_ have to write. Modern TypeScript is super good at figuring out what you meant, often giving you bulletproof type safety with zero extra effort. Let's explore how much robust typing you get just by letting inference do its thing in your React components.
+**Here is a main theme for this workshop**: TypeScript's biggest superpower isn't the explicit types you write—it's the types you _don't_ have to write. Modern TypeScript is super good at figuring out what you meant, often giving you bulletproof type safety with zero extra effort. In our time together, I am going to argue that you know you're on the right path when you can barely tell that you're using TypeScript at all in your project.
 
 ## The Magic of Type Inference
 
-TypeScript's inference engine has gotten scary good. In many cases, you can write what looks like regular JavaScript and still get comprehensive type checking, autocomplete, and refactoring support. The secret? TypeScript analyzes your code's structure, function signatures, and return values to build a complete picture of your types.
+TypeScript's inference engine has gotten _scary good_. In many cases, you can write what looks like regular JavaScript and still get comprehensive type checking, autocomplete, and refactoring support. The secret? TypeScript analyzes your code's structure, function signatures, and return values to build a complete picture of your types.
 
 Here's the beautiful part: you're probably already getting more TypeScript benefits than you realize.
 
 ## Component Props: Inference in Action
 
-Let's start with a simple React component. Even without explicit type annotations, TypeScript can infer a surprising amount:
+Consider this silly little component. As far as we can tell at this point, there is little-to-no evidence that it uses TypeScript at all. Granted, it both looks like JavaScript and behaves like JavaScript. If TypeScript cannot figure out the type of a given property, it will just denote it as `any`.
 
 ```tsx
-// ✅ TypeScript infers the prop types automatically
 function Welcome({ name, age, isOnline }) {
   return (
     <div>
@@ -38,9 +37,10 @@ function Welcome({ name, age, isOnline }) {
   );
 }
 
-// TypeScript knows this is wrong even without explicit typing
-<Welcome name="Alice" age="thirty" isOnline={true} />; // ❌ Error: age expects number
+<Welcome name="Steve" age="forty-one" isOnline={true} />;
 ```
+
+It technically works, and we get a _tiny_ benefit: IntelliSense is at least aware of what properties this component can take—even if it doesn't know what the types those values ought to be.
 
 While this works, we can get even better inference by providing default parameters:
 

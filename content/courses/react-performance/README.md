@@ -5,10 +5,10 @@ description: >-
   with React 19
 layout: page
 date: 2025-09-07T18:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 ---
 
-This comprehensive course material covers everything you need to build performant React applications, from understanding performance fundamentals to implementing advanced optimization techniques. Learn to identify bottlenecks, apply the right optimizations, and leverage React 19's latest performance features including the React Compiler.
+These are my notes for [my React Performance workshop](https://frontendmasters.com/workshops/react-performance-v2/) for [Frontend Masters](https://frontendmasters.com).
 
 > [!TODO] Prerequisites
 >
@@ -79,7 +79,7 @@ By the end of this course, you'll master:
 
 ### Modern React APIs
 
-- **[The use() Hook](./the-use-hook.md)** - Master React 19's use() API for async and context
+- **[The `use()` Hook](./the-use-hook.md)** - Master React 19's use() API for async and context
 - **[React Cache API](./react-cache-api.md)** - Canonical guide for cache() function and patterns
 - **[useTransition and startTransition](./usetransition-and-starttransition.md)** - Priority-based updates and scheduling
 
