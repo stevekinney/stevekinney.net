@@ -4,7 +4,7 @@ description: >-
   Set up React 19 with TypeScript from scratch—tsconfig, JSX runtime, strict
   mode, linting, and project structure that scales.
 date: 2025-09-06T22:04:44.905Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T13:14:43-06:00'
 published: true
 tags:
   - react
@@ -311,6 +311,99 @@ rules: {
     allowExportNames: ['meta', 'links', 'handle', 'loader'], // For frameworks like Remix
   }],
 }
+```
+
+## Prettier: Consistent Code Formatting
+
+While ESLint handles code quality, Prettier handles formatting. They work great together when configured properly.
+
+### Installation
+
+```bash
+npm install -D prettier eslint-config-prettier
+```
+
+### Prettier Configuration
+
+Create `.prettierrc.json`:
+
+```json
+{
+  "semi": true,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "endOfLine": "lf"
+}
+```
+
+And `.prettierignore`:
+
+```
+node_modules
+dist
+build
+coverage
+*.min.js
+```
+
+### Integrating with ESLint
+
+To avoid conflicts between ESLint and Prettier, add `eslint-config-prettier` to your ESLint config. This disables ESLint rules that would conflict with Prettier's formatting.
+
+## Package Scripts
+
+Add these scripts to your `package.json` for a smooth development workflow:
+
+```json
+{
+  "scripts": {
+    // Development
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+
+    // Type checking
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "tsc --noEmit --watch",
+
+    // Linting and formatting
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+
+    // Combined checks (useful for CI/pre-commit)
+    "check-all": "npm run type-check && npm run lint && npm run format:check",
+    "fix-all": "npm run lint:fix && npm run format"
+  }
+}
+```
+
+### Development Workflow
+
+During development, run these in separate terminals for the best experience:
+
+```bash
+# Terminal 1: Dev server with hot reload
+npm run dev
+
+# Terminal 2: Type checking in watch mode
+npm run type-check:watch
+```
+
+Before committing:
+
+```bash
+# Check everything
+npm run check-all
+
+# Or auto-fix what's possible
+npm run fix-all
 ```
 
 ## Real-World Configuration Examples

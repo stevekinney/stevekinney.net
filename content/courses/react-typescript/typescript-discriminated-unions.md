@@ -3,7 +3,7 @@ title: Discriminated Unions
 description: >-
   Master TypeScript's most powerful pattern for representing state and handling
   complex types
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: 2025-09-14T18:54:09.603Z
 ---
 
@@ -23,6 +23,9 @@ type Status =
 
 // The 'type' field is the discriminator
 ```
+
+> [!QUESTION] What's the difference between a union and a discriminated union?
+> In TypeScript, a union type is just a way of saying a value can be one of several different types—for example, `string | number` means the value could be either a string or a number, but TypeScript doesn't inherently know which one at any given time. A discriminated union (sometimes called a tagged union) adds a special common property, usually a literal type like `kind: "circle" | "square"`, that acts as a label to tell the compiler (and you) which branch of the union you're working with. This “discriminator” lets TypeScript narrow the type automatically in a type-safe way when you check the value of that property, making discriminated unions far more powerful for modeling structured data and ensuring exhaustive checks.
 
 ## Why They're Powerful
 
@@ -217,6 +220,123 @@ const LoginComponent = () => {
     </form>
   );
 };
+```
+
+## Validation Rules with Discriminated Unions
+
+You can also model validation rules as a discriminated union for clear, exhaustive handling.
+
+```typescript
+type ValidationRule<T> =
+  | { type: 'required'; message?: string }
+  | { type: 'minLength'; value: number; message?: string }
+  | { type: 'maxLength'; value: number; message?: string }
+  | { type: 'pattern'; value: RegExp; message?: string }
+  | { type: 'custom'; validate: (value: T) => boolean | string };
+
+function validateField<T>(value: T, rules: ValidationRule<T>[]): string | null {
+  for (const rule of rules) {
+    switch (rule.type) {
+      case 'required':
+        if (!value) {
+          return rule.message || 'This field is required';
+        }
+        break;
+
+      case 'minLength':
+        if (typeof value === 'string' && value.length < rule.value) {
+          return rule.message || `Minimum length is ${rule.value}`;
+        }
+        break;
+
+      case 'maxLength':
+        if (typeof value === 'string' && value.length > rule.value) {
+          return rule.message || `Maximum length is ${rule.value}`;
+        }
+        break;
+
+      case 'pattern':
+        if (typeof value === 'string' && !rule.value.test(value)) {
+          return rule.message || 'Invalid format';
+        }
+        break;
+
+      case 'custom':
+        const result = rule.validate(value);
+        if (result !== true) {
+          return typeof result === 'string' ? result : 'Validation failed';
+        }
+        break;
+    }
+  }
+
+  return null;
+}
+```
+
+## Form Submission Workflow
+
+Whole-form workflows often benefit from tagged states like validating, validation-error, submitting, success, and error.
+
+```typescript
+type FormState<T> =
+  | { status: 'idle' }
+  | { status: 'validating' }
+  | { status: 'validation-error'; errors: Record<keyof T, string[]> }
+  | { status: 'submitting'; data: T }
+  | { status: 'success'; result: string }
+  | { status: 'error'; error: string };
+
+interface LoginForm {
+  email: string;
+  password: string;
+}
+
+function LoginForm() {
+  const [state, setState] = useState<FormState<LoginForm>>({ status: 'idle' });
+  const [formData, setFormData] = useState<LoginForm>({ email: '', password: '' });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setState({ status: 'validating' });
+
+    const errors = validateForm(formData);
+    if (Object.keys(errors).length > 0) {
+      setState({ status: 'validation-error', errors });
+      return;
+    }
+
+    setState({ status: 'submitting', data: formData });
+
+    try {
+      const result = await submitLogin(formData);
+      setState({ status: 'success', result });
+    } catch (error) {
+      setState({ status: 'error', error: error instanceof Error ? error.message : String(error) });
+    }
+  };
+
+  switch (state.status) {
+    case 'idle':
+    case 'validating':
+      return (
+        <form onSubmit={handleSubmit} aria-busy={state.status === 'validating'}>
+          {/* inputs omitted for brevity */}
+          <button type="submit" disabled={state.status === 'validating'}>
+            {state.status === 'validating' ? 'Validating…' : 'Login'}
+          </button>
+        </form>
+      );
+    case 'validation-error':
+      return <ErrorsList errors={state.errors} />;
+    case 'submitting':
+      return <Spinner label={`Submitting for ${state.data.email}…`} />;
+    case 'success':
+      return <Success message={state.result} />;
+    case 'error':
+      return <ErrorBanner message={state.error} />;
+  }
+}
 ```
 
 ## Actions and Reducers
@@ -713,7 +833,7 @@ describe('UserProfile', () => {
 
 ## Common Patterns and Tips
 
-### 1. Always Include a Discriminator
+### Always Include a Discriminator
 
 ```typescript
 // ✅ Good - has discriminator
@@ -724,7 +844,7 @@ type Shape = { radius: number } | { size: number };
 // TypeScript can't easily tell these apart
 ```
 
-### 2. Use Literal Types for Discriminators
+### Use Literal Types for Discriminators
 
 ```typescript
 // ✅ Good - literal types
@@ -735,7 +855,7 @@ type Status = { success: true } | { success: false };
 // Harder to extend and less clear
 ```
 
-### 3. Keep Related Data Together
+### Keep Related Data Together
 
 ```typescript
 // ✅ Good - error with its message
@@ -749,7 +869,7 @@ interface Result {
 }
 ```
 
-### 4. Use Exhaustive Checks
+### Use Exhaustive Checks
 
 ```typescript
 function handle(value: 'a' | 'b' | 'c') {
@@ -1046,6 +1166,34 @@ function Button(props: ButtonProps) {
 
 This is particularly valuable for components that receive props from APIs or configuration files where TypeScript can't help.
 
+### Runtime Validation for Async UI State
+
+You can also validate tagged UI state at runtime with a reusable schema factory:
+
+```typescript
+import { z } from 'zod';
+
+const AsyncStateSchema = <T extends z.ZodTypeAny, E extends z.ZodTypeAny = z.ZodString>(
+  dataSchema: T,
+  errorSchema?: E,
+) =>
+  z.discriminatedUnion('status', [
+    z.object({ status: z.literal('idle') }),
+    z.object({ status: z.literal('loading') }),
+    z.object({ status: z.literal('success'), data: dataSchema }),
+    z.object({ status: z.literal('error'), error: (errorSchema ?? z.string()) as E }),
+  ]);
+
+const UserSchema = z.object({ id: z.string(), name: z.string(), email: z.string().email() });
+const UserAsyncSchema = AsyncStateSchema(UserSchema);
+type UserAsyncState = z.infer<typeof UserAsyncSchema>;
+
+function parseUserAsync(input: unknown): UserAsyncState | null {
+  const result = UserAsyncSchema.safeParse(input);
+  return result.success ? result.data : null;
+}
+```
+
 ## Performance Considerations
 
 Discriminated unions and exclusive props are compile-time constructs—they add zero runtime overhead. The discriminant checks become simple property access, and TypeScript's union narrowing is eliminated during compilation.
@@ -1131,7 +1279,6 @@ Master this pattern, and you'll write React applications that are not just type-
 - **[Type Narrowing and Control Flow](typescript-type-narrowing-control-flow.md)** - Learn how TypeScript narrows union types
 - **[Utility Types](typescript-utility-types-complete.md)** - Explore built-in types like `Extract` and `Exclude` for working with unions
 - **[Generics Deep Dive](typescript-generics-deep-dive.md)** - Create generic discriminated unions
-- **[Unions for UI State](unions-for-ui-state.md)** - Apply discriminated unions to React state management
 
 ## Next Steps
 

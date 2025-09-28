@@ -4,7 +4,7 @@ description: >-
   Build reusable hooks with proper generic constraints—type-safe data fetching,
   localStorage, and form management patterns.
 date: 2025-09-06T22:23:57.314Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -630,7 +630,7 @@ describe('useLocalStorage', () => {
 
 ## Common Pitfalls and Solutions
 
-### 1. Over-constraining Generics
+### Over-constraining Generics
 
 ```tsx
 // ❌ Too restrictive - only works with objects that have exactly these properties
@@ -644,7 +644,7 @@ function useGoodSelection<T extends { id: string }>(items: T[]) {
 }
 ```
 
-### 2. Not Providing Good Defaults
+### Not Providing Good Defaults
 
 ```tsx
 // ❌ Forces users to always specify the type
@@ -658,7 +658,7 @@ function useApiData<T = any>(url: string): { data: T | null } {
 }
 ```
 
-### 3. Complex Return Types
+### Complex Return Types
 
 ```tsx
 // ❌ Hard to understand return type

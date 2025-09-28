@@ -4,7 +4,7 @@ description: >-
   Configure Jest/Vitest and RTL for TypeScript—type-safe queries, user events,
   and mock helpers.
 date: 2025-09-06T22:04:44.939Z
-modified: '2025-09-14T11:49:08-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -667,6 +667,4 @@ Your components work at compile-time AND runtime. Your users will thank you for 
 
 ## See Also
 
-- [MSW + Contracts: Typed Handlers](msw-and-contract-testing.md)
 - [Type-Level Testing in Practice](type-level-testing-in-practice.md)
-- [Story-Driven Development with TypeScript](story-driven-development-with-types.md)

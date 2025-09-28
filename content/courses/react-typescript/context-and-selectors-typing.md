@@ -4,7 +4,7 @@ description: >-
   Create fully typed contexts—state/actions split, selectors that minimize
   re-renders, and ergonomic Provider APIs.
 date: 2025-09-06T22:04:44.911Z
-modified: '2025-09-14T11:49:08-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -393,7 +393,7 @@ function AuthenticatedApp() {
 
 Here are some scenarios where these patterns really shine:
 
-### 1. Shopping Cart with Performance Optimization
+### Shopping Cart with Performance Optimization
 
 ```tsx
 // Separate contexts for cart data and UI state
@@ -415,7 +415,7 @@ function CartDrawer() {
 }
 ```
 
-### 2. Multi-Step Form with Validation State
+### Multi-Step Form with Validation State
 
 ```tsx
 type FormState = {
@@ -434,7 +434,7 @@ function PersonalInfoStep() {
 }
 ```
 
-### 3. Real-Time Dashboard
+### Real-Time Dashboard
 
 ```tsx
 // Dashboard components can subscribe to specific metrics

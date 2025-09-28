@@ -4,7 +4,7 @@ description: >-
   Model form mutations in React 19—type Actions and useActionState for safe
   server and client flows.
 date: 2025-09-06T22:04:44.913Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -34,18 +34,15 @@ This pattern shines because it:
 
 ## Basic Action Setup
 
-Let's start with a simple contact form to see how the pieces fit together. First, we'll define our form data types:
+Let's start with a simple contact form to see how the pieces fit together. For comprehensive runtime validation patterns with Zod, see [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md).
 
 ```ts
-import { z } from 'zod';
-
-const ContactFormSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
-});
-
-type ContactFormData = z.infer<typeof ContactFormSchema>;
+// Define the shape of our form data
+interface ContactFormData {
+  name: string;
+  email: string;
+  message: string;
+}
 
 // This represents the result of our action
 type ContactFormResult = {
@@ -65,19 +62,23 @@ async function submitContactForm(
   formData: FormData,
 ): Promise<ContactFormResult> {
   // Extract data from FormData
-  const rawData = {
+  const data: ContactFormData = {
     name: formData.get('name') as string,
     email: formData.get('email') as string,
     message: formData.get('message') as string,
   };
 
-  // Validate with Zod
-  const result = ContactFormSchema.safeParse(rawData);
+  // Basic validation
+  const errors: Record<string, string[]> = {};
+  if (!data.name) errors.name = ['Name is required'];
+  if (!data.email || !data.email.includes('@')) errors.email = ['Invalid email address'];
+  if (!data.message || data.message.length < 10)
+    errors.message = ['Message must be at least 10 characters'];
 
-  if (!result.success) {
+  if (Object.keys(errors).length > 0) {
     return {
       success: false,
-      errors: result.error.flatten().fieldErrors,
+      errors,
     };
   }
 
@@ -86,7 +87,7 @@ async function submitContactForm(
     await fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(result.data),
+      body: JSON.stringify(data),
     });
 
     return {
@@ -177,7 +178,7 @@ What's happening here? The `useActionState` hook returns three things:
 
 ## Advanced Type Safety with Generic Actions
 
-The basic pattern works, but we can make it more reusable and type-safe. Let's create a generic Action creator that handles the common patterns:
+The basic pattern works, but we can make it more reusable and type-safe. For runtime validation with Zod, see [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md). Here's a TypeScript-first approach using a generic Action creator:
 
 ```ts
 type ActionResult<TData = unknown> = {
@@ -188,9 +189,12 @@ type ActionResult<TData = unknown> = {
 };
 
 type ActionHandler<TInput, TOutput = unknown> = (input: TInput) => Promise<ActionResult<TOutput>>;
+type Validator<T> = (
+  data: unknown,
+) => { valid: true; data: T } | { valid: false; errors: Record<string, string[]> };
 
 function createAction<TInput, TOutput = unknown>(
-  schema: z.ZodSchema<TInput>,
+  validator: Validator<TInput>,
   handler: ActionHandler<TInput, TOutput>,
 ) {
   return async function action(
@@ -201,12 +205,12 @@ function createAction<TInput, TOutput = unknown>(
     const rawData = Object.fromEntries(formData);
 
     // Validate input
-    const result = schema.safeParse(rawData);
+    const result = validator(rawData);
 
-    if (!result.success) {
+    if (!result.valid) {
       return {
         success: false,
-        errors: result.error.flatten().fieldErrors,
+        errors: result.errors,
       };
     }
 
@@ -226,25 +230,51 @@ function createAction<TInput, TOutput = unknown>(
 Now we can create type-safe Actions with much less boilerplate:
 
 ```ts
-// Define our schemas
-const LoginSchema = z.object({
-  email: z.string().email('Invalid email'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-});
+// Define our types and validators
+interface LoginData {
+  email: string;
+  password: string;
+}
 
-const SignupSchema = z
-  .object({
-    email: z.string().email('Invalid email'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
-  });
+interface SignupData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+const validateLogin: Validator<LoginData> = (data: unknown) => {
+  const d = data as any;
+  const errors: Record<string, string[]> = {};
+
+  if (!d.email || !d.email.includes('@')) errors.email = ['Invalid email'];
+  if (!d.password || d.password.length < 6)
+    errors.password = ['Password must be at least 6 characters'];
+
+  if (Object.keys(errors).length > 0) {
+    return { valid: false, errors };
+  }
+
+  return { valid: true, data: d as LoginData };
+};
+
+const validateSignup: Validator<SignupData> = (data: unknown) => {
+  const d = data as any;
+  const errors: Record<string, string[]> = {};
+
+  if (!d.email || !d.email.includes('@')) errors.email = ['Invalid email'];
+  if (!d.password || d.password.length < 8)
+    errors.password = ['Password must be at least 8 characters'];
+  if (d.password !== d.confirmPassword) errors.confirmPassword = ["Passwords don't match"];
+
+  if (Object.keys(errors).length > 0) {
+    return { valid: false, errors };
+  }
+
+  return { valid: true, data: d as SignupData };
+};
 
 // Create typed Actions
-const loginAction = createAction(LoginSchema, async (credentials) => {
+const loginAction = createAction(validateLogin, async (credentials) => {
   const response = await fetch('/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -264,7 +294,7 @@ const loginAction = createAction(LoginSchema, async (credentials) => {
   };
 });
 
-const signupAction = createAction(SignupSchema, async (userData) => {
+const signupAction = createAction(validateSignup, async (userData) => {
   // Remove confirmPassword before sending to API
   const { confirmPassword, ...signupData } = userData;
 
@@ -321,18 +351,24 @@ type WizardState = {
   message?: string;
 };
 
-const PersonalInfoSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Invalid email'),
-});
+// For runtime validation with Zod, see Data Fetching and Runtime Validation guide
+const validatePersonalInfo = (data: any): { valid: boolean; errors?: Record<string, string[]> } => {
+  const errors: Record<string, string[]> = {};
+  if (!data.firstName) errors.firstName = ['First name is required'];
+  if (!data.lastName) errors.lastName = ['Last name is required'];
+  if (!data.email || !data.email.includes('@')) errors.email = ['Invalid email'];
+  return Object.keys(errors).length > 0 ? { valid: false, errors } : { valid: true };
+};
 
-const BillingInfoSchema = z.object({
-  address: z.string().min(1, 'Address is required'),
-  city: z.string().min(1, 'City is required'),
-  zipCode: z.string().regex(/^\d{5}$/, 'Invalid ZIP code'),
-  paymentMethod: z.enum(['card', 'paypal']),
-});
+const validateBillingInfo = (data: any): { valid: boolean; errors?: Record<string, string[]> } => {
+  const errors: Record<string, string[]> = {};
+  if (!data.address) errors.address = ['Address is required'];
+  if (!data.city) errors.city = ['City is required'];
+  if (!data.zipCode || !/^\d{5}$/.test(data.zipCode)) errors.zipCode = ['Invalid ZIP code'];
+  if (!['card', 'paypal'].includes(data.paymentMethod))
+    errors.paymentMethod = ['Invalid payment method'];
+  return Object.keys(errors).length > 0 ? { valid: false, errors } : { valid: true };
+};
 
 function createWizardAction() {
   return async function wizardAction(
@@ -357,37 +393,39 @@ function createWizardAction() {
 
       case 'next': {
         if (step === 'personal') {
-          const result = PersonalInfoSchema.safeParse(Object.fromEntries(formData));
+          const data = Object.fromEntries(formData);
+          const result = validatePersonalInfo(data);
 
-          if (!result.success) {
+          if (!result.valid) {
             return {
               ...prevState,
-              errors: result.error.flatten().fieldErrors,
+              errors: result.errors,
             };
           }
 
           return {
             ...prevState,
             currentStep: 'billing',
-            personalInfo: result.data,
+            personalInfo: data as any,
             errors: undefined,
           };
         }
 
         if (step === 'billing') {
-          const result = BillingInfoSchema.safeParse(Object.fromEntries(formData));
+          const data = Object.fromEntries(formData);
+          const result = validateBillingInfo(data);
 
-          if (!result.success) {
+          if (!result.valid) {
             return {
               ...prevState,
-              errors: result.error.flatten().fieldErrors,
+              errors: result.errors,
             };
           }
 
           return {
             ...prevState,
             currentStep: 'confirmation',
-            billingInfo: result.data,
+            billingInfo: data as any,
             errors: undefined,
           };
         }
@@ -552,30 +590,35 @@ type TodoState = {
   message?: string;
 };
 
-const AddTodoSchema = z.object({
-  text: z.string().min(1, 'Todo text is required'),
-});
+// See Data Fetching and Runtime Validation guide for Zod validation patterns
+const validateAddTodo = (data: any): { valid: boolean; errors?: Record<string, string[]> } => {
+  const errors: Record<string, string[]> = {};
+  if (!data.text || data.text.length === 0) errors.text = ['Todo text is required'];
+  return Object.keys(errors).length > 0 ? { valid: false, errors } : { valid: true };
+};
 
-const ToggleTodoSchema = z.object({
-  todoId: z.string(),
-  completed: z.boolean(),
-});
+const validateToggleTodo = (data: any): { valid: boolean; errors?: Record<string, string[]> } => {
+  const errors: Record<string, string[]> = {};
+  if (!data.todoId) errors.todoId = ['Todo ID is required'];
+  return Object.keys(errors).length > 0 ? { valid: false, errors } : { valid: true };
+};
 
 function createTodoActions() {
   const addTodo = async (prevState: TodoState, formData: FormData): Promise<TodoState> => {
-    const result = AddTodoSchema.safeParse(Object.fromEntries(formData));
+    const data = Object.fromEntries(formData);
+    const result = validateAddTodo(data);
 
-    if (!result.success) {
+    if (!result.valid) {
       return {
         ...prevState,
-        errors: result.error.flatten().fieldErrors,
+        errors: result.errors,
       };
     }
 
     // Optimistic update - add the todo immediately
     const optimisticTodo: TodoItem = {
       id: crypto.randomUUID(),
-      text: result.data.text,
+      text: data.text as string,
       completed: false,
       optimistic: true,
     };
@@ -740,8 +783,13 @@ type RobustFormState = {
   isRetrying: boolean;
 };
 
+// For runtime validation with Zod, see Data Fetching and Runtime Validation guide
+type Validator<T> = (
+  data: unknown,
+) => { valid: true; data: T } | { valid: false; errors: Record<string, string[]> };
+
 function createRobustAction<TInput>(
-  schema: z.ZodSchema<TInput>,
+  validator: Validator<TInput>,
   handler: (input: TInput) => Promise<unknown>,
   options: {
     maxRetries?: number;
@@ -782,10 +830,11 @@ function createRobustAction<TInput>(
     }
 
     // Validate input
-    const result = schema.safeParse(Object.fromEntries(formData));
+    const data = Object.fromEntries(formData);
+    const result = validator(data);
 
-    if (!result.success) {
-      const fieldErrors = result.error.flatten().fieldErrors;
+    if (!result.valid) {
+      const fieldErrors = result.errors;
       const errors: FormError[] = Object.entries(fieldErrors).map(([field, messages]) => ({
         type: ErrorType.VALIDATION,
         field,
@@ -803,11 +852,11 @@ function createRobustAction<TInput>(
     }
 
     try {
-      const data = await handler(result.data);
+      const responseData = await handler(result.data);
 
       return {
         success: true,
-        data,
+        data: responseData,
         errors: [],
         fieldErrors: {},
         retryCount: 0,
@@ -964,9 +1013,12 @@ function useDebounced<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-function createDebouncedValidation<TInput>(
-  schema: z.ZodSchema<TInput>,
-  asyncValidator?: (input: TInput) => Promise<Record<string, string[]>>
+// For runtime validation with Zod, see Data Fetching and Runtime Validation guide
+type FieldValidator = (value: string) => string | null;
+
+function createDebouncedValidation(
+  validator: FieldValidator,
+  asyncValidator?: (value: string) => Promise<string | null>
 ) {
   return function DebouncedField({
     name,
@@ -992,13 +1044,10 @@ function createDebouncedValidation<TInput>(
         setIsValidating(true);
 
         // Local validation first
-        const localResult = schema.pick({ [name]: true }).safeParse({
-          [name]: debouncedValue
-        });
+        const localError = validator(debouncedValue);
 
-        if (!localResult.success) {
-          const fieldErrors = localResult.error.flatten().fieldErrors;
-          setErrors(fieldErrors[name] || []);
+        if (localError) {
+          setErrors([localError]);
           setIsValidating(false);
           return;
         }
@@ -1006,8 +1055,8 @@ function createDebouncedValidation<TInput>(
         // Async validation if provided
         if (asyncValidator) {
           try {
-            const asyncErrors = await asyncValidator(localResult.data);
-            setErrors(asyncErrors[name] || []);
+            const asyncError = await asyncValidator(debouncedValue);
+            setErrors(asyncError ? [asyncError] : []);
           } catch (error) {
             setErrors(['Validation failed']);
           }
@@ -1019,7 +1068,7 @@ function createDebouncedValidation<TInput>(
       };
 
       validate();
-    }, [debouncedValue, name, schema, asyncValidator]);
+    }, [debouncedValue, validator, asyncValidator]);
 
     return (
       <div className="field-wrapper">
@@ -1127,3 +1176,9 @@ The key insight is that Actions + `useActionState` give you a declarative way to
 Rather than fighting with scattered state and imperative event handlers, you're describing what should happen when forms are submitted—and React handles the rest. Your forms become more predictable, your error handling becomes more consistent, and your users get better experiences with proper loading states and progressive enhancement.
 
 The future of form handling in React is typed, declarative, and surprisingly pleasant to work with. Give these patterns a try in your next project—you might find yourself actually looking forward to implementing that next form.
+
+## See Also
+
+- [Forms, Events, and Number Inputs](forms-events-and-number-inputs.md) - TypeScript patterns for event handlers and input types
+- [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md) - Comprehensive Zod validation patterns
+- [The `use` Hook and Suspense Typing](the-use-hook-and-suspense-typing.md) - Async patterns in React 19

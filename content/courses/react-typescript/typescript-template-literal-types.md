@@ -3,7 +3,7 @@ title: Template Literal Types
 description: >-
   Master TypeScript's template literal types for type-safe string manipulation
   and CSS-in-JS
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-09-14T18:57:01.949Z'
 ---
 
@@ -542,7 +542,7 @@ function transition(currentState: State, action: Action): State {
 
 ## Best Practices
 
-### 1. Use for Consistency
+### Use for Consistency
 
 ```typescript
 // ✅ Good: Enforce naming patterns
@@ -551,7 +551,7 @@ type HookName = `use${Capitalize<string>}`;
 type HandlerName = `handle${Capitalize<string>}`;
 ```
 
-### 2. Avoid Over-Complexity
+### Avoid Over-Complexity
 
 ```typescript
 // ❌ Too complex
@@ -561,7 +561,7 @@ type ComplexPattern = `${Uppercase<string>}_${number}_${Lowercase<string>}-${str
 type SimplePattern = `${string}-${number}`;
 ```
 
-### 3. Combine with Other Features
+### Combine with Other Features
 
 ```typescript
 // Template literals + mapped types
@@ -581,7 +581,7 @@ type UserGetters = Getters<User>;
 // }
 ```
 
-### 4. Document Intent
+### Document Intent
 
 ```typescript
 // Make the pattern clear

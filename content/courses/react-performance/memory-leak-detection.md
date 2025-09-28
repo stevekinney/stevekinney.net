@@ -4,7 +4,7 @@ description: >-
   Find and fix memory leaks that kill performance. Master Chrome DevTools,
   detect common patterns, and build leak-free React apps.
 date: 2025-09-07T00:45:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -333,7 +333,7 @@ function useMemoryLeakDetection(componentName: string) {
 
 For detailed patterns and advanced optimization techniques, see [Memory Management Deep Dive](./memory-management-deep-dive.md). Here are the key patterns to watch for:
 
-### 1. Event Listener Detection
+### Event Listener Detection
 
 **Symptoms**: Memory growth during user interactions, especially scrolling or clicking
 **Detection**: Check for missing cleanup in `useEffect`
@@ -352,7 +352,7 @@ useEffect(() => {
 }, []);
 ```
 
-### 2. Timer Leak Detection
+### Timer Leak Detection
 
 **Symptoms**: Components updating after unmount, console errors
 **Detection**: Check all `setInterval` and `setTimeout` calls
@@ -369,7 +369,7 @@ useEffect(() => {
 }, []);
 ```
 
-### 3. Closure Leak Detection
+### Closure Leak Detection
 
 **Symptoms**: Memory growth proportional to data size, sluggish performance
 **Detection**: Check dependency arrays in `useCallback` and `useMemo`
@@ -393,7 +393,7 @@ const processData = useCallback(
 );
 ```
 
-### 4. Subscription Leak Detection
+### Subscription Leak Detection
 
 **Symptoms**: Multiple event handlers firing, unexpected state updates
 **Detection**: Use browser dev tools to inspect global event listeners

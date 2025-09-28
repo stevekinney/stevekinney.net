@@ -4,7 +4,7 @@ description: >-
   Use types to encode identity contracts—memo boundaries, readonly data, stable
   references, and type-safe performance monitoring.
 date: 2025-09-06T22:23:57.383Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -17,7 +17,7 @@ TypeScript isn't just about catching bugs at compile time—it's also a surprisi
 
 The secret sauce here is using TypeScript's type system to make performance intentions explicit rather than implicit. Instead of crossing your fingers and hoping React.memo works as expected, you can design types that make it impossible to accidentally break your performance optimizations.
 
-## The Problem: Performance Through Hope and Prayer
+## The Problem: Performance Through Hope
 
 Let's start with a common scenario that looks innocent but hides performance landmines:
 
@@ -692,5 +692,4 @@ Remember: premature optimization is the root of all evil, but predictable patter
 
 ## See Also
 
-- [Web Workers and Comlink Typing](web-workers-and-comlink-typing.md)
 - [Typing Concurrent Features: Transitions and Deferrals](concurrent-features-typing.md)

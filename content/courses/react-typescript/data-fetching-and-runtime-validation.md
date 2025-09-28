@@ -4,7 +4,7 @@ description: >-
   Fetch safely—type APIs, validate at runtime, and keep server/client boundaries
   honest under React 19.
 date: 2025-09-06T22:04:44.916Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -408,7 +408,6 @@ function getCachedSchema<T>(key: string, schema: z.ZodSchema<T>) {
 
 ## See Also
 
-- [MSW + Contracts: Typed Handlers](msw-and-contract-testing.md)
 - [Typed Data Layer: React Query and tRPC](react-query-trpc.md)
 - [Real‑time Typing: WebSockets and SSE](realtime-typing-websockets-and-sse.md)
   Sometimes you only need to validate specific fields. Zod supports partial schemas:

@@ -4,7 +4,7 @@ description: >-
   Never guess again—use React's built‑in event types for forms, mouse, keyboard,
   and more.
 date: 2025-09-06T22:23:57.265Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -256,7 +256,7 @@ function FormElementExamples() {
 
 Sometimes you want to write reusable event handlers that work with multiple element types. TypeScript generics make this possible:
 
-```ts
+````ts
 import { ChangeEvent } from 'react';
 
 // ✅ Generic handler that works with any form element
@@ -279,23 +279,70 @@ function createFormHandler<T extends HTMLElement>(
   };
 }
 
-function GenericForm() {
-  const handleChange = createFormHandler((name, value) => {
-    console.log(`Field ${name} changed to: ${value}`);
-  });
+## Typed Event Helpers and Overloads
 
-  return (
-    <form>
-      <input name="firstName" onChange={handleChange} />
-      <textarea name="bio" onChange={handleChange} />
-      <select name="country" onChange={handleChange}>
-        <option value="us">United States</option>
-        <option value="ca">Canada</option>
-      </select>
-    </form>
-  );
+Sometimes you want ergonomic handlers that accept either raw events or pre-extracted values. You can model this with function overloads while keeping call sites clean.
+
+```tsx
+// Overload to accept either the event or the extracted value
+function onInputChange(handler: (value: string) => void): (e: React.ChangeEvent<HTMLInputElement>) => void;
+function onInputChange(handler: (e: React.ChangeEvent<HTMLInputElement>) => void): (e: React.ChangeEvent<HTMLInputElement>) => void;
+function onInputChange(
+  handler: ((value: string) => void) | ((e: React.ChangeEvent<HTMLInputElement>) => void),
+) {
+  return (e: React.ChangeEvent<HTMLInputElement>) => {
+    // If the handler expects a value, pass value; otherwise pass event
+    if (handler.length === 1) {
+      try {
+        (handler as (value: string) => void)(e.target.value);
+        return;
+      } catch {
+        // fall-through to event
+      }
+    }
+    (handler as (e: React.ChangeEvent<HTMLInputElement>) => void)(e);
+  };
 }
-```
+
+// Usage
+<input onChange={onInputChange((value) => setQuery(value))} />
+<input onChange={onInputChange((e) => console.log(e.target.selectionStart))} />
+
+// Key handlers with discriminated keys
+type ArrowKey = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight';
+
+function onArrow(handler: (key: ArrowKey, e: React.KeyboardEvent) => void) {
+  return (e: React.KeyboardEvent) => {
+    const k = e.key as ArrowKey;
+    if (k === 'ArrowUp' || k === 'ArrowDown' || k === 'ArrowLeft' || k === 'ArrowRight') {
+      handler(k, e);
+    }
+  };
+}
+
+<div onKeyDown={onArrow((key) => console.log('pressed', key))} />
+````
+
+These helpers keep component code concise while preserving strong typing for both ergonomic and low-level cases.
+
+function GenericForm() {
+const handleChange = createFormHandler((name, value) => {
+console.log(`Field ${name} changed to: ${value}`);
+});
+
+return (
+<form>
+<input name="firstName" onChange={handleChange} />
+<textarea name="bio" onChange={handleChange} />
+<select name="country" onChange={handleChange}>
+<option value="us">United States</option>
+<option value="ca">Canada</option>
+</select>
+</form>
+);
+}
+
+````
 
 ## Custom Event Handlers and Event Delegation
 
@@ -349,7 +396,7 @@ function EventDelegationExample() {
     </ul>
   );
 }
-```
+````
 
 ## Common Patterns and Best Practices
 

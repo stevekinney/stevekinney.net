@@ -4,7 +4,7 @@ description: >-
   Speed up SSR with streaming, caching, and smarter data fetching—reduce
   time‑to‑first‑byte and hydrate faster.
 date: 2025-09-06T22:13:49.769Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -454,7 +454,7 @@ function StableComponent() {
 
 Here's a practical approach for implementing optimized SSR in your application:
 
-### 1. Measure First, Optimize Second
+### Measure First, Optimize Second
 
 Establish performance baselines before making changes:
 
@@ -481,7 +481,7 @@ export async function handleSSRRequest(request: Request) {
 }
 ```
 
-### 2. Progressive Enhancement Approach
+### Progressive Enhancement Approach
 
 Start with a solid SSR foundation, then layer on optimizations:
 
@@ -539,7 +539,7 @@ export class SSROptimizer {
 }
 ```
 
-### 3. Monitor and Iterate
+### Monitor and Iterate
 
 Set up monitoring to track the metrics that matter:
 

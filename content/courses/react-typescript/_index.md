@@ -3,143 +3,137 @@ layout: contents
 modified: 2025-09-20T19:00:00-06:00
 ---
 
-## TypeScript Foundations
+## Setup and Strictness
 
-- [TypeScript Without Trying](typescript-without-trying.md)
 - [Setting Up React and TypeScript](setting-up-react-and-typescript.md)
 - [An Even Deeper Dive into `tsconfig.json`](tsconfig-deep-dive-react.md)
-- [Mental Models for React and TypeScript](react-typescript-mental-models.md)
+- [Strictness Options for React](strictness-options-for-react.md)
+- [Module Resolution and Paths](module-resolution-and-paths.md)
+- [Setting Up Linting and Formatting](setting-up-linting-and-formatting.md)
+- [TypeScript React ESLint Rules](typescript-react-eslint-rules.md)
 
-## Enough TypeScript to Be Dangerous
+## Everyday TypeScript Mechanics
 
-- [Type System Fundamentals](typescript-type-system-fundamentals.md)
-- [Structural Typing](typescript-structural-typing.md)
-- [Type Inference Mastery](typescript-type-inference-mastery.md)
 - [Type Narrowing and Control Flow](typescript-type-narrowing-control-flow.md)
-- [Unions, Intersections, and Guards](typescript-unions-intersections-guards.md)
-- [Discriminated Unions](typescript-discriminated-unions.md)
-- [Generics](typescript-generics-deep-dive.md)
-- [Conditional and Mapped Types](typescript-conditional-mapped-types.md)
+- [Type Inference](typescript-type-inference-mastery.md)
+- [Advanced Type Tricks for React](advanced-type-tricks-for-react.md)
+- [Utility Types in Practice](utility-types-in-practice.md)
 - [Template Literal Types](typescript-template-literal-types.md)
-- [Utility Types](typescript-utility-types-complete.md)
-- [Type-Level Programming](typescript-type-level-programming.md)
 - [`unknown` vs `any`](typescript-unknown-vs-any.md)
-- [Modules and Declarations](typescript-modules-declarations.md)
+- [Structural Typing](typescript-structural-typing.md)
 
-## React-Specific TypeScript Patterns
+## How JSX Is Typed
 
-- [React-Specific TypeScript Patterns](typescript-react-patterns.md)
-- [TypeScript Patterns for React Hooks](typescript-react-hooks.md)
-- [TypeScript Patterns for React Testing](typescript-react-testing.md)
+- [JSX Types: `ReactNode`, `ReactElement`](jsx-types-reactnode-reactelement.md)
+- [Polymorphic Components and `as` Prop](polymorphic-components-and-as-prop.md)
 
-## Props and Component Patterns
+## Component Props and Children
 
 - [React Component Props](component-props-complete-guide.md)
-- [JSX Types: `ReactNode`, `ReactElement`](jsx-types-reactnode-reactelement.md)
-- [Mirroring DOM Props](mirror-dom-props.md)
 - [Prop Combinations and Unions](prop-combinations-and-unions.md)
-- [`forwardRef`, `memo`, and `displayName`](forwardref-memo-and-displayname.md)
+- [Render Props and HOC Alternatives](render-props-and-hoc-alternatives.md)
 
-## Advanced Component Patterns
+## State Management
+
+- [useState with TypeScript: The Basics](usestate-typescript-basics.md)
+- [React State Management with TypeScript](react-state-management-with-typescript.md)
+- [Discriminated Unions](typescript-discriminated-unions.md)
+- [Loading States and Error Handling](loading-states-error-handling.md)
+- [Fetching Data with useState and useEffect](fetching-data-usestate.md)
+- [Sending Data](creating-todos-post-typescript.md)
+- [Optimistic Updates](updating-todos-optimistic.md)
+- [`DELETE` Requests and State Cleanup](deleting-todos-state-cleanup.md)
+
+## Action Creators and Exhaustiveness
+
+- [React State Management with TypeScript](react-state-management-with-typescript.md)
+- [Discriminated Unions](typescript-discriminated-unions.md)
+
+## Context API Patterns
+
+- [Context and Selectors Typing](context-and-selectors-typing.md)
+- [Safer `createContext` Helpers](safer-createcontext-helpers.md)
+- [Passing Dispatch and Context](passing-dispatch-and-context.md)
+
+## Compound Components, Refs, and Polymorphism
+
+- [Compound Components and Slots Typing](compound-components-and-slots-typing.md)
+- [`useRef` and Imperative Handles](useref-and-imperative-handles.md)
+- [`forwardRef`, `memo`, and `displayName`](forwardref-memo-and-displayname.md)
+- [Polymorphic Components and `as` Prop](polymorphic-components-and-as-prop.md)
+
+## Mirroring Intrinsic Element Props
+
+- [Mirroring DOM Props](mirror-dom-props.md)
+
+## Events and Handlers
+
+- [Typing DOM and React Events](typing-dom-and-react-events.md)
+- [Forms, Events, and Number Inputs](forms-events-and-number-inputs.md)
+
+## Higher-Order Components
 
 - [Higher Order Components Typing](higher-order-components-typing.md)
 - [Render Props and HOC Alternatives](render-props-and-hoc-alternatives.md)
-- [Polymorphic Components and `as` Prop](polymorphic-components-and-as-prop.md)
-- [Compound Components and Slots Typing](compound-components-and-slots-typing.md)
-- [Function Overloads in React](function-overloads-in-react.md)
-- [Advanced Error Handling Patterns](advanced-error-handling-patterns.md)
 
-## State and Context
+## Hooks and Performance
 
-- [React State Management with TypeScript](react-state-management-with-typescript.md)
-- [Context and Selectors Typing](context-and-selectors-typing.md)
-- [Safer createContext Helpers](safer-createcontext-helpers.md)
-- [Passing Dispatch and Context](passing-dispatch-and-context.md)
-- [Unions for UI State](unions-for-ui-state.md)
-
-## React 19 and Modern Features
-
-- [Complete Guide to React 19 with TypeScript](react-19-typescript-guide.md)
-- [React Server Components Types](react-server-components-types.md)
-- [RSC Server Actions](rsc-server-actions.md)
-- [Forms, Actions, and `useActionState`](forms-actions-and-useactionstate.md)
-- [The `use` Hook and `Suspense` Typing](the-use-hook-and-suspense-typing.md)
-- [`useOptimistic`: Typed Optimism](useoptimistic-typed-optimism.md)
-- [Concurrent Features Typing Patterns](concurrent-features-typing-patterns.md)
-- [React Compiler TypeScript Integration](react-compiler-typescript-integration.md)
-- [Error Boundaries and `Suspense` Boundaries](error-boundaries-and-suspense-boundaries.md)
-- [TSConfig for React 19](tsconfig-for-react-19.md)
-
-## Forms and Events
-
-- [Forms, Events, and Number Inputs](forms-events-and-number-inputs.md)
-- [React Hook Form with Zod Types](react-hook-form-with-zod-types.md)
-- [Forms: File Inputs and Validation](forms-file-uploads-typing.md)
-- [Typing DOM and React Events](typing-dom-and-react-events.md)
-- [`useRef` and Imperative Handles](useref-and-imperative-handles.md)
-- [`flushSync` and Imperative DOM](flushsync-and-imperative-dom.md)
-- [`useLayoutEffect` and Effect Typing](use-layout-effect-and-effect-typing.md)
-
-## Performance and Optimization
-
+- [TypeScript React Hooks](typescript-react-hooks.md)
 - [React Performance with TypeScript](react-performance-with-typescript.md)
-- [Code Splitting Lazy Types](code-splitting-lazy-types.md)
-- [Web Workers and Comlink Typing](web-workers-and-comlink-typing.md)
-- [Resource Preloading APIs Types](resource-preloading-apis-types.md)
-- [Edge SSR and Runtime Types](edge-ssr-and-runtime-types.md)
-- [Streaming SSR with TypeScript](streaming-ssr-typescript.md)
-- [Vite React TypeScript Optimization](vite-react-typescript-optimization.md)
 
-## Testing and Tooling
+## Async Data and Suspense
 
-- [Testing React TypeScript](testing-react-typescript.md)
-- [MSW + Contracts: Typed Handlers](msw-and-contract-testing.md)
-- [Type-Level Testing in Practice](type-level-testing-in-practice.md)
-- [Tooling: ESLint, Prettier, Builds](tooling-eslint-prettier-builds.md)
-- [DevTools and Type-Driven DX](dev-tools-and-type-driven-dx.md)
-- [Build Pipeline: TSC, SWC](build-pipeline-tsc-swc.md)
-- [Debugging TypeScript Errors Guide](debugging-typescript-errors-guide.md)
-- [CI/CD Type Checking with GitHub Actions](cicd-type-checking-github-actions.md)
-
-## Advanced Patterns
-
-- [Custom Hooks with Generics Comprehensive](custom-hooks-with-generics-comprehensive.md)
-- [Utility Types in Practice](utility-types-in-practice.md)
-- [Advanced Type Tricks for React](advanced-type-tricks-for-react.md)
+- [The `use` Hook and `Suspense` Typing](the-use-hook-and-suspense-typing.md)
+- [Error Boundaries and `Suspense` Boundaries](error-boundaries-and-suspense-boundaries.md)
 - [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md)
 - [React Query TRPC](react-query-trpc.md)
-- [Real‑time Typing: WebSockets and SSE](realtime-typing-websockets-and-sse.md)
-- [Result/Either Patterns for React](result-types-and-error-handling.md)
-- [Redux Toolkit with TypeScript](redux-toolkit-with-typescript.md)
 
-## Configuration and Architecture
+## Server vs Client Boundaries
 
-- [Module Resolution and Paths](module-resolution-and-paths.md)
-- [Assets and Module Declarations](assets-and-module-declarations.md)
-- [Styling: CSSType and CSS Modules](styling-csstype-and-css-modules.md)
-- [Tailwind + CVA: Typed Variants and Slots](tailwind-cva-typed-variants.md)
-- [Routing and Params Typing](routing-and-parameters-typing.md)
-- [Internationalization Types](internationalization-types.md)
+- [React Server Components Types](react-server-components-types.md)
+- [RSC Server Actions](rsc-server-actions.md)
+- [Edge SSR and Runtime Types](edge-ssr-and-runtime-types.md)
+- [Edge, SSR, and Hydration Payload Types](edge-ssr-hydration.md)
+
+## Accessibility and Passthrough Props
+
 - [Accessibility and ARIA Typing](accessibility-and-aria-typing.md)
 - [Security and Escaping Types](security-and-escaping-types.md)
-- [Type-Safe Environment Variables](typesafe-environment-variables.md)
-- [Module Federation with TypeScript](module-federation-typescript.md)
-- [OpenAPI/Swagger TypeScript Integration](openapi-swagger-typescript-integration.md)
 
-## Publishing and Monorepos
+## Testing with Types in Mind
 
-- [Publishing Types for Component Libraries](publishing-types-for-component-libraries.md)
-- [Publishing and Monorepos](publishing-and-monorepos.md)
-- [Monorepos and Shared UI Types](monorepos-and-shared-ui-types.md)
-
-## Migration Guides
-
-- [Migrating JavaScript to TypeScript](migrating-javascript-to-typescript.md)
-- [Migration Strategies: JavaScript to TypeScript](migration-strategies-javascript-typescript.md)
-- [Migrating from PropTypes](migrating-from-proptypes.md)
-- [State Libraries and Context Interoperability](state-libraries-and-context-interoperability.md)
-- [Story Driven Development with Types](story-driven-development-with-types.md)
+- [Testing React TypeScript](testing-react-typescript.md)
+- [TypeScript React Testing](typescript-react-testing.md)
+- [Type-Level Testing in Practice](type-level-testing-in-practice.md)
 
 ## Appendix
 
+- [Type System Fundamentals](typescript-type-system-fundamentals.md)
+- [Type-Level Programming](typescript-type-level-programming.md)
 - [Performance in Large Codebases](typescript-performance-large-codebases.md)
+- [Modules and Declarations](typescript-modules-declarations.md)
+- [Build Pipeline: TSC, SWC](build-pipeline-tsc-swc.md)
+- [Module Federation with TypeScript](module-federation-typescript.md)
+- [Tailwind + CVA: Typed Variants and Slots](tailwind-cva-typed-variants.md)
+- [Real‑time Typing: WebSockets and SSE](realtime-typing-websockets-and-sse.md)
+- [Result/Either Patterns for React](result-types-and-error-handling.md)
+- [Type-Safe Environment Variables](typesafe-environment-variables.md)
+- [Publishing Types for Component Libraries](publishing-types-for-component-libraries.md)
+- [Monorepos and Shared UI Types](monorepos-and-shared-ui-types.md)
+- [Advanced Error Handling Patterns](advanced-error-handling-patterns.md)
+- [Code Splitting Lazy Types](code-splitting-lazy-types.md)
+- [Resource Preloading APIs Types](resource-preloading-apis-types.md)
+- [Streaming SSR with TypeScript](streaming-ssr-typescript.md)
+- [Vite React TypeScript Optimization](vite-react-typescript-optimization.md)
+- [DevTools and Type-Driven DX](dev-tools-and-type-driven-dx.md)
+- [Debugging TypeScript Errors Guide](debugging-typescript-errors-guide.md)
+- [Routing and Params Typing](routing-and-parameters-typing.md)
+- [Styling: CSSType and CSS Modules](styling-csstype-and-css-modules.md)
+- [TypeScript Without Trying](typescript-without-trying.md)
+- [Mental Models for React and TypeScript](react-typescript-mental-models.md)
+
+### Migration Guides
+
+- [Migrating JavaScript to TypeScript](migrating-javascript-to-typescript.md)
+- [Migrating from PropTypes](migrating-from-proptypes.md)
+- [State Libraries and Context Interoperability](state-libraries-and-context-interoperability.md)

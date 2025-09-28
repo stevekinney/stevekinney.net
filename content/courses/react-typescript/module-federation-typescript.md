@@ -1,11 +1,16 @@
 ---
 title: Module Federation with TypeScript
 description: Build type-safe micro-frontends with Webpack Module Federation and TypeScript
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-09-14T19:33:59.523Z'
 ---
 
-Module Federation revolutionizes how we build and deploy React applications. Instead of monolithic bundles, you can create micro-frontends that share components, libraries, and even entire applications at runtime. But with great power comes great complexity, especially when adding TypeScript to the mix. Let's explore how to build type-safe federated applications.
+Module Federation is a technique for how we build and deploy React applications—particularly in large companies where teams haven't figured out how to talk to each other. Instead of one monolithic bundle, you can create micro-frontends that share components, libraries, and even entire applications at runtime. But with great power comes great complexity, especially when adding TypeScript to the mix. Let's explore how to build type-safe federated applications.
+
+> [!WARNING] I don't think micro-frontends are a Good Idea™
+> I am coming up on almost of a decade of thinking micro-frontends are a technical solution for an organizational problem. So, don't ask me to defend this practice or any of the ridiculous hoops people jump through below.
+>
+> This content exists so that if someone asks me about it, I can point them to this page and hopefully, they'll read this warning box.
 
 ## Understanding Module Federation
 
@@ -1243,7 +1248,7 @@ export const federationMonitor = new FederationMonitor();
 
 ## Best Practices
 
-### 1. Type Safety First
+### Type Safety First
 
 ```typescript
 // ✅ Always define types for remote modules
@@ -1264,7 +1269,7 @@ if (!isValidComponent(RemoteComponent)) {
 const validatedProps = validateRemoteProps(props, isValidProps);
 ```
 
-### 2. Error Boundaries Everywhere
+### Error Boundaries Everywhere
 
 ```typescript
 // ✅ Wrap remote components in error boundaries
@@ -1280,7 +1285,7 @@ const FallbackComponent = () => (
 );
 ```
 
-### 3. Performance Optimization
+### Performance Optimization
 
 ```typescript
 // ✅ Lazy load remote components
@@ -1301,7 +1306,7 @@ useEffect(() => {
 </Suspense>
 ```
 
-### 4. Version Management
+### Version Management
 
 ```typescript
 // ✅ Use semantic versioning in shared dependencies
@@ -1329,4 +1334,4 @@ Module Federation with TypeScript enables:
 4. **Graceful fallbacks** when remote modules fail
 5. **Event-driven communication** between federated apps
 
-The key is balancing the flexibility of runtime module loading with the safety of compile-time type checking. Use type declarations, runtime validation, and robust error handling to build resilient federated applications that scale across teams and deployments.
+If this looks like a pain to you. Then, you and I agree.

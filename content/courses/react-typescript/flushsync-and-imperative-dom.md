@@ -4,7 +4,7 @@ description: >-
   Coordinate with the DOM—type helpers that force sync updates for focus,
   measurement, and animations sparingly.
 date: 2025-09-06T22:04:45.040Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -559,7 +559,7 @@ function AutoResizeTextarea() {
 
 Here are some practical scenarios where these patterns shine:
 
-### 1. Form Validation with Focus
+### Form Validation with Focus
 
 ```tsx
 interface FormError {
@@ -616,7 +616,7 @@ function ValidatedForm() {
 }
 ```
 
-### 2. Dynamic Content with Scroll Preservation
+### Dynamic Content with Scroll Preservation
 
 ```tsx
 function ChatMessages() {

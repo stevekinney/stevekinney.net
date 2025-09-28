@@ -3,7 +3,7 @@ title: Utility Types Complete Guide
 description: >-
   Master TypeScript's built-in utility types and create your own for cleaner,
   more maintainable code
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-09-14T19:01:07.875Z'
 ---
 
@@ -667,7 +667,7 @@ function processUser(user: Partial<User> | User) {
 
 ## Performance Considerations
 
-### 1. Avoid Deep Nesting
+### Avoid Deep Nesting
 
 ```typescript
 // ❌ Can be slow
@@ -683,7 +683,7 @@ type LimitedDepth<T, D extends number = 3> = D extends 0
 type Prev = [never, 0, 1, 2, 3];
 ```
 
-### 2. Use Type Aliases
+### Use Type Aliases
 
 ```typescript
 // ✅ Good: Reusable and clear
@@ -697,7 +697,7 @@ function display(user: Pick<User, 'id' | 'name' | 'email'>) {}
 
 ## Best Practices
 
-### 1. Combine for Clarity
+### Combine for Clarity
 
 ```typescript
 // Instead of complex inline types
@@ -711,7 +711,7 @@ type UserFormData2 = {
 };
 ```
 
-### 2. Create Domain-Specific Utilities
+### Create Domain-Specific Utilities
 
 ```typescript
 // Project-specific utilities
@@ -731,7 +731,7 @@ type Identifiable<T> = T & {
 };
 ```
 
-### 3. Document Complex Utilities
+### Document Complex Utilities
 
 ```typescript
 /**

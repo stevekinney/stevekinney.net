@@ -3,13 +3,13 @@ title: Conditional and Mapped Types
 description: >-
   Transform and manipulate types at compile time with TypeScript's most powerful
   features
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-09-14T18:59:44.932Z'
 ---
 
 If TypeScript's type system is a programming language, then conditional and mapped types are its control flow and loops. They let you transform types, create new types based on existing ones, and build incredibly sophisticated type-level logic. These are the tools that make libraries like React Hook Form and tRPC possible. Let's master them.
 
-## Conditional Types: If-Then-Else for Types
+## Conditional Types: `If-Then-Else` for Types
 
 Conditional types follow the pattern `T extends U ? X : Y`:
 
@@ -565,7 +565,7 @@ type APIClient = {
 
 ## Performance Tips
 
-### 1. Avoid Deep Recursion
+### Avoid Deep Recursion
 
 ```typescript
 // ❌ Can hit recursion limit
@@ -581,7 +581,7 @@ type Keys<T, Depth extends number = 5> = [Depth] extends [0]
 type Prev = [never, 0, 1, 2, 3, 4];
 ```
 
-### 2. Use Type Aliases for Complex Types
+### Use Type Aliases for Complex Types
 
 ```typescript
 // ✅ Good: Break down complex types
@@ -598,7 +598,7 @@ type FunctionKeys<T> = {
 
 ## Best Practices
 
-### 1. Start Simple
+### Start Simple
 
 ```typescript
 // Build up complexity gradually
@@ -607,7 +607,7 @@ type Medium<T> = T extends `${infer Prefix}_${infer Suffix}` ? [Prefix, Suffix] 
 type Complex<T> = T extends Record<infer K, infer V> ? /* ... */ : never;
 ```
 
-### 2. Document Complex Types
+### Document Complex Types
 
 ```typescript
 /**
@@ -621,7 +621,7 @@ type DeepPartial<T> = {
 };
 ```
 
-### 3. Test Your Types
+### Test Your Types
 
 ```typescript
 // Use type assertions to test

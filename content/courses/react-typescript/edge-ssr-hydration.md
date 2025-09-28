@@ -4,7 +4,7 @@ description: >-
   Target multiple runtimes—DOM vs Node types, serializable payloads, and safe
   hydration contracts.
 date: 2025-09-06T22:23:57.384Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -569,6 +569,5 @@ The result is React applications with rock-solid type safety that works seamless
 
 ## See Also
 
-- [Typed Env and Config Boundaries](typed-environment-and-configuration-boundaries.md)
 - [Edge, SSR, and Runtime Types](edge-ssr-and-runtime-types.md)
 - [Security and Escaping Types](security-and-escaping-types.md)

@@ -4,7 +4,7 @@ description: >-
   Convert safely—incremental tsconfig, strictness ratchet, and patterns for
   typing legacy components without churn.
 date: 2025-09-06T22:04:45.010Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -466,6 +466,98 @@ const MyComponent: React.FC<MyComponentProps> = ({
 };
 ```
 
+## Migration Strategies and Patterns
+
+### The Migration Mindset
+
+Before diving deeper, understand this: **migration is not about perfection**. It's about progress. Every file you convert makes your codebase more maintainable, even if you haven't touched the rest.
+
+```typescript
+// This is perfectly valid during migration
+// someFile.js - Still JavaScript
+import { processUser } from './userProcessor.ts'; // TypeScript file
+
+// userProcessor.ts - Now TypeScript
+export function processUser(user: any): string {
+  return `Hello, ${user.name}`; // `any` is okay for now
+}
+```
+
+### Start with Type Declaration Files
+
+Create `.d.ts` files for your existing modules before converting them. This gives you type safety benefits even before migration:
+
+```typescript
+// types/api.d.ts - Describe existing JS API
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+}
+
+export interface Post {
+  id: string;
+  title: string;
+  content: string;
+  authorId: string;
+  createdAt: string;
+}
+
+// Describe your existing JS API functions
+export declare function fetchUsers(): Promise<User[]>;
+export declare function createPost(data: Omit<Post, 'id' | 'createdAt'>): Promise<Post>;
+```
+
+### The `any` Escape Hatch Strategy
+
+Use `any` strategically during migration:
+
+```typescript
+// migration-helpers.ts - Temporary utility types
+export type TODO_TYPE = any; // Mark things to fix later
+export type LEGACY_PROPS = any; // For old component props
+export type API_RESPONSE = any; // For untyped API responses
+
+// Use in components during migration
+interface UserListProps {
+  users: TODO_TYPE[]; // Will fix this later
+  filters: LEGACY_PROPS; // Legacy component props
+  onUserSelect: (user: TODO_TYPE) => void; // Gradually type these
+}
+```
+
+### File-by-File Strictness
+
+Use comment directives for file-level control:
+
+```typescript
+// @ts-check - Enable checking in JS files
+// users.js
+// @ts-check
+
+/**
+ * @param {string} name
+ * @param {number} age
+ * @returns {string}
+ */
+function formatUser(name, age) {
+  return `${name} (${age})`;
+}
+
+// TypeScript will catch errors even in JS!
+formatUser('Alice', '30'); // Error: Argument of type 'string' is not assignable to parameter of type 'number'
+```
+
+```typescript
+// Disable strict checks temporarily
+// legacy-component.tsx
+// @ts-nocheck - Skip this file entirely (temporary)
+
+// Or disable specific lines
+const userData = api.getUserData(); // @ts-ignore - Will fix this later
+```
+
 ## Tools to Help Your Migration
 
 ### TypeScript Migration Assistant
@@ -477,13 +569,24 @@ VS Code has excellent TypeScript support with helpful quick fixes. Look for the 
 Add these ESLint rules to catch common issues during migration:
 
 ```json
+// .eslintrc.json - Gradual rule introduction
 {
   "extends": ["@typescript-eslint/recommended"],
   "rules": {
-    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-explicit-any": "warn", // Allow during migration
     "@typescript-eslint/no-unused-vars": "error",
-    "@typescript-eslint/explicit-function-return-type": "off" // Too strict during migration
-  }
+    "@typescript-eslint/no-non-null-assertion": "warn", // Discourage !
+    "@typescript-eslint/explicit-function-return-type": "off", // Too strict for migration
+    "@typescript-eslint/explicit-module-boundary-types": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "error" // Stricter for new TS files
+      }
+    }
+  ]
 }
 ```
 
@@ -500,3 +603,108 @@ const UserProfile = ({ userId }: { userId: string }) => {
   // ...
 };
 ```
+
+### Migration Scripts
+
+Create helper scripts to automate common migration tasks:
+
+```bash
+#!/bin/bash
+# migrate-file.sh - Helper script to migrate a file
+
+file=$1
+if [ -z "$file" ]; then
+  echo "Usage: ./migrate-file.sh <file-path>"
+  exit 1
+fi
+
+# Rename file
+if [[ $file == *.js ]]; then
+  new_file="${file%.js}.ts"
+elif [[ $file == *.jsx ]]; then
+  new_file="${file%.jsx}.tsx"
+else
+  echo "File must be .js or .jsx"
+  exit 1
+fi
+
+mv "$file" "$new_file"
+echo "Migrated $file to $new_file"
+echo "Don't forget to:"
+echo "1. Add proper prop types"
+echo "2. Type event handlers"
+echo "3. Update imports in other files"
+```
+
+## Team Migration Strategy
+
+### Code Review Guidelines
+
+Create a PR template for migration work:
+
+```markdown
+## TypeScript Migration Checklist
+
+- [ ] Props interfaces defined for new/modified components
+- [ ] Event handlers properly typed
+- [ ] API responses typed (even if loosely)
+- [ ] No new `any` types without `TODO_TYPE` marker
+- [ ] Tests updated with basic types
+- [ ] README updated if new patterns introduced
+
+## Migration Progress
+
+- Files converted: `___` / `___`
+- Components typed: `___` / `___`
+- API endpoints typed: `___` / `___`
+```
+
+### Track Your Progress
+
+Monitor your migration with simple metrics:
+
+```javascript
+// migration-stats.js - Run weekly
+const fs = require('fs');
+const path = require('path');
+
+function countFiles(dir, ext) {
+  const files = fs.readdirSync(dir, { withFileTypes: true });
+  let count = 0;
+
+  for (const file of files) {
+    if (file.isDirectory()) {
+      count += countFiles(path.join(dir, file.name), ext);
+    } else if (file.name.endsWith(ext)) {
+      count++;
+    }
+  }
+
+  return count;
+}
+
+const srcDir = './src';
+const jsFiles = countFiles(srcDir, '.js') + countFiles(srcDir, '.jsx');
+const tsFiles = countFiles(srcDir, '.ts') + countFiles(srcDir, '.tsx');
+const total = jsFiles + tsFiles;
+
+console.log(`Migration Progress:
+TypeScript files: ${tsFiles}
+JavaScript files: ${jsFiles}
+Total files: ${total}
+Progress: ${Math.round((tsFiles / total) * 100)}%`);
+```
+
+## Key Takeaways
+
+Successful TypeScript migration is about **progress, not perfection**:
+
+1. **Start permissive** - Allow JavaScript, disable strict checks initially
+2. **Migrate boundaries first** - Component props, API functions, hooks
+3. **Use escape hatches** - `any` is okay temporarily
+4. **Go file by file** - Don't try to migrate everything at once
+5. **Maintain compatibility** - Don't break existing JavaScript code
+6. **Track progress** - Measure and celebrate incremental improvements
+7. **Enable strictness gradually** - Turn on rules as you improve coverage
+
+Remember: A partially migrated TypeScript codebase is infinitely better than a JavaScript codebase you're afraid to change. Every type you add makes your application more maintainable, even if the rest isn't perfect yet. The goal isn't to have perfect types everywhere—it's to catch more bugs, improve developer experience, and make your code more maintainable over time.
