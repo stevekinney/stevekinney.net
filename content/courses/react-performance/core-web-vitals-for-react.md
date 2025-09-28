@@ -4,7 +4,7 @@ description: >-
   Master LCP, FID, and CLS optimization in React apps. Practical techniques to
   improve user experience and search rankings.
 date: 2025-09-06T23:15:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -114,7 +114,7 @@ function App() {
 
 ### LCP Optimization Strategies
 
-**1. Optimize Critical Path Resources**
+#### Optimize Critical Path Resources
 
 ```tsx
 // Hero component optimized for LCP
@@ -178,7 +178,7 @@ function DocumentHead() {
 }
 ```
 
-**2. Server-Side Rendering and Streaming**
+#### Server-Side Rendering and Streaming
 
 ```tsx
 // Optimize initial HTML delivery
@@ -224,7 +224,7 @@ function CriticalCSS() {
 }
 ```
 
-**3. Image Optimization Techniques**
+#### Image Optimization Techniques
 
 ```tsx
 // Modern image optimization
@@ -898,16 +898,6 @@ async function testRealWorldConditions() {
   await browser.close();
 }
 ```
-
-## Related Topics
-
-- **[Image and Asset Optimization](./image-and-asset-optimization.md)** - Optimize images for better LCP scores
-- **[CDN Caching & Immutable Assets](./cdn-caching-immutable-assets.md)** - Speed up resource delivery for LCP
-- **[Concurrent React Scheduling](./concurrent-react-scheduling.md)** - Use transitions to improve INP scores
-- **[Web Workers with React](./web-workers-with-react.md)** - Offload heavy work to improve INP
-- **[Skeleton Screens Perceived Performance](./skeleton-screens-perceived-performance.md)** - Prevent CLS with proper loading states
-- **[Production Performance Monitoring](./production-performance-monitoring.md)** - Monitor Core Web Vitals in production
-- **[INP Optimization Long Tasks](./inp-optimization-long-tasks.md)** - Advanced INP optimization strategies
 
 ## Next Steps
 

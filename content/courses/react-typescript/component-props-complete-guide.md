@@ -5,7 +5,7 @@ description: >-
   optional, defaults, unions, generics, and building self-documenting component
   APIs.
 date: 2025-09-20T17:00:00.000Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T18:40:11-06:00'
 published: true
 tags:
   - react
@@ -350,7 +350,7 @@ function Button(props: ButtonProps) {
 
 Generics make components truly reusable while maintaining type safety:
 
-```typescript
+````typescript
 interface SelectProps<T> {
   options: T[];
   value?: T;
@@ -360,57 +360,103 @@ interface SelectProps<T> {
   placeholder?: string;
 }
 
-function Select<T>({
-  options,
-  value,
-  onChange,
-  getLabel,
-  getValue,
-  placeholder = 'Select an option'
-}: SelectProps<T>) {
+## Generic TextField with Typed onChange
+
+Create a `TextField` that accepts `value`/`defaultValue` generically and narrows `onChange` to the right event based on the underlying element.
+
+```tsx
+type TextFieldAs = 'input' | 'textarea';
+
+type TextFieldCommon = {
+  label: string;
+  error?: string;
+  as?: TextFieldAs;
+};
+
+type InputFieldProps = TextFieldCommon & Omit<JSX.IntrinsicElements['input'], 'onChange'> & {
+  as?: 'input';
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+type TextareaFieldProps = TextFieldCommon & Omit<JSX.IntrinsicElements['textarea'], 'onChange'> & {
+  as: 'textarea';
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+};
+
+type TextFieldProps = InputFieldProps | TextareaFieldProps;
+
+export function TextField(props: TextFieldProps) {
+  const { label, error, as = 'input', ...rest } = props as TextFieldProps & { as: TextFieldAs };
+
   return (
-    <select
-      value={value ? getValue(value) : ''}
-      onChange={(e) => {
-        const selected = options.find(
-          opt => String(getValue(opt)) === e.target.value
-        );
-        if (selected) onChange(selected);
-      }}
-    >
-      <option value="">{placeholder}</option>
-      {options.map((option, index) => (
-        <option key={index} value={getValue(option)}>
-          {getLabel(option)}
-        </option>
-      ))}
-    </select>
+    <label className={`text-field ${error ? 'has-error' : ''}`}>
+      <span className="label">{label}</span>
+      {as === 'textarea' ? (
+        <textarea {...(rest as TextareaFieldProps)} />
+      ) : (
+        <input {...(rest as InputFieldProps)} />
+      )}
+      {error && <span className="error">{error}</span>}
+    </label>
   );
+}
+
+// Usage with correct event narrowing
+<TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} />
+<TextField as="textarea" label="Bio" defaultValue={bio} onChange={(e) => setBio(e.target.value)} />
+````
+
+function Select<T>({
+options,
+value,
+onChange,
+getLabel,
+getValue,
+placeholder = 'Select an option'
+}: SelectProps<T>) {
+return (
+<select
+value={value ? getValue(value) : ''}
+onChange={(e) => {
+const selected = options.find(
+opt => String(getValue(opt)) === e.target.value
+);
+if (selected) onChange(selected);
+}} >
+<option value="">{placeholder}</option>
+{options.map((option, index) => (
+<option key={index} value={getValue(option)}>
+{getLabel(option)}
+</option>
+))}
+</select>
+);
 }
 
 // Type-safe usage with different types
 interface User {
-  id: number;
-  name: string;
-  email: string;
+id: number;
+name: string;
+email: string;
 }
 
 <Select<User>
-  options={users}
-  value={selectedUser}
-  onChange={setSelectedUser}
-  getLabel={(user) => user.name}
-  getValue={(user) => user.id}
+options={users}
+value={selectedUser}
+onChange={setSelectedUser}
+getLabel={(user) => user.name}
+getValue={(user) => user.id}
 />
 
 <Select<string>
-  options={['Red', 'Green', 'Blue']}
-  value={color}
-  onChange={setColor}
-  getLabel={(c) => c}
-  getValue={(c) => c}
+options={['Red', 'Green', 'Blue']}
+value={color}
+onChange={setColor}
+getLabel={(c) => c}
+getValue={(c) => c}
 />
-```
+
+````
 
 ## Extending HTML Element Props
 
@@ -458,7 +504,7 @@ function Input({ onChange, ...props }: InputProps) {
     />
   );
 }
-```
+````
 
 ## React's Built-in Helper Types
 

@@ -4,7 +4,7 @@ description: >-
   Wrap components and keep their props—model HOCs with generics, Omit, and
   proper ref forwarding.
 date: 2025-09-06T22:04:44.912Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -222,6 +222,80 @@ const inputRef = useRef<HTMLInputElement>(null);
 ```
 
 The key insight is using `forwardRef` in your HOC and ensuring the generic types line up correctly.
+
+## `withErrorBoundary<P>` vs `useErrorBoundary()`
+
+Wrap any component in a typed error boundary HOC, and compare DX with a hook-based approach.
+
+```tsx
+import React, { Component, ComponentType, ErrorInfo, ReactNode } from 'react';
+
+type ErrorFallbackProps<E extends Error = Error> = {
+  error: E;
+  reset?: () => void;
+};
+
+type WithErrorBoundaryOptions<E extends Error = Error> = {
+  Fallback?: ComponentType<ErrorFallbackProps<E>>;
+  onError?: (error: E, info: ErrorInfo) => void;
+};
+
+export function withErrorBoundary<P, E extends Error = Error>(
+  Wrapped: ComponentType<P>,
+  options: WithErrorBoundaryOptions<E> = {},
+) {
+  const { Fallback, onError } = options;
+
+  return class ErrorBoundary extends Component<P, { error?: E }> {
+    static displayName = `withErrorBoundary(${Wrapped.displayName || Wrapped.name || 'Component'})`;
+
+    static getDerivedStateFromError(error: E) {
+      return { error };
+    }
+
+    componentDidCatch(error: E, info: ErrorInfo) {
+      onError?.(error, info);
+    }
+
+    reset = () => this.setState({ error: undefined });
+
+    render(): ReactNode {
+      if (this.state?.error) {
+        return Fallback ? <Fallback error={this.state.error} reset={this.reset} /> : null;
+      }
+      return <Wrapped {...(this.props as P)} />;
+    }
+  };
+}
+
+// Hook alternative: more composable ergonomics in function components
+export function useErrorBoundary<E extends Error = Error>() {
+  const [error, setError] = React.useState<E | null>(null);
+  const reset = React.useCallback(() => setError(null), []);
+  const capture = React.useCallback((e: E) => setError(e), []);
+  return { error, capture, reset } as const;
+}
+
+// Usage comparison
+const Fallback = ({ error, reset }: ErrorFallbackProps) => (
+  <div role="alert">
+    <pre>{error.message}</pre>
+    <button onClick={reset}>Try again</button>
+  </div>
+);
+
+// HOC
+const SafeProfile = withErrorBoundary(Profile, { Fallback });
+
+// Hook
+function ProfileWithHook(props: ProfileProps) {
+  const { error, capture, reset } = useErrorBoundary();
+  if (error) return <Fallback error={error} reset={reset} />;
+  return <Profile {...props} onError={capture} />;
+}
+```
+
+HOC works well for class or third‑party components; the hook is more ergonomic in new function components and keeps error handling closer to the failure site.
 
 ## Advanced Pattern: Conditional Props
 

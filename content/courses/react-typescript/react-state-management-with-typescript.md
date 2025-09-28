@@ -4,7 +4,7 @@ description: >-
   Master useState, useReducer, and action typing—from inference patterns to
   discriminated unions that prevent impossible states.
 date: 2025-09-06T22:23:57.266Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T18:40:11-06:00'
 published: true
 tags:
   - react
@@ -357,7 +357,7 @@ type UserAction = AsyncAction<'FETCH_USER', User> | AsyncAction<'DELETE_USER'>;
 
 Here's a practical example that showcases advanced typing patterns for form management:
 
-```ts
+````ts
 interface FormState {
   fields: {
     email: string;
@@ -369,78 +369,151 @@ interface FormState {
   submitCount: number;
 }
 
-type FormAction =
-  | { type: 'updateField'; field: keyof FormState['fields']; value: string }
-  | { type: 'setError'; field: keyof FormState['fields']; error: string }
-  | { type: 'clearError'; field: keyof FormState['fields'] }
-  | { type: 'setSubmitting'; isSubmitting: boolean }
-  | { type: 'submitAttempt' }
-  | { type: 'reset' };
+## Reducer-Driven Form with Derived Action/Dispatch Types
 
-function formReducer(state: FormState, action: FormAction): FormState {
+Derive `Action` and `Dispatch` directly from action creators to keep everything in sync and prove exhaustiveness with `never`.
+
+```tsx
+// 1) State
+interface LoginState {
+  email: string;
+  password: string;
+  status: 'idle' | 'submitting' | 'success' | 'error';
+  error?: string;
+}
+
+// 2) Action creators (as const for literal types)
+const loginActions = {
+  updateEmail: (value: string) => ({ type: 'updateEmail', value } as const),
+  updatePassword: (value: string) => ({ type: 'updatePassword', value } as const),
+  submit: () => ({ type: 'submit' } as const),
+  success: () => ({ type: 'success' } as const),
+  failure: (message: string) => ({ type: 'failure', message } as const),
+};
+
+// 3) Derive Action and Dispatch from creators
+type LoginAction = ReturnType<(typeof loginActions)[keyof typeof loginActions]>;
+type LoginDispatch = React.Dispatch<LoginAction>;
+
+// 4) Reducer with exhaustive check
+function loginReducer(state: LoginState, action: LoginAction): LoginState {
   switch (action.type) {
-    case 'updateField':
-      return {
-        ...state,
-        fields: {
-          ...state.fields,
-          [action.field]: action.value,
-        },
-        // Clear error when user starts typing
-        errors: {
-          ...state.errors,
-          [action.field]: undefined,
-        },
-      };
-    case 'setError':
-      return {
-        ...state,
-        errors: {
-          ...state.errors,
-          [action.field]: action.error,
-        },
-      };
-    case 'clearError':
-      return {
-        ...state,
-        errors: {
-          ...state.errors,
-          [action.field]: undefined,
-        },
-      };
-    case 'setSubmitting':
-      return { ...state, isSubmitting: action.isSubmitting };
-    case 'submitAttempt':
-      return { ...state, submitCount: state.submitCount + 1 };
-    case 'reset':
-      return {
-        fields: { email: '', password: '', confirmPassword: '' },
-        errors: {},
-        isSubmitting: false,
-        submitCount: 0,
-      };
-    default:
+    case 'updateEmail':
+      return { ...state, email: action.value };
+    case 'updatePassword':
+      return { ...state, password: action.value };
+    case 'submit':
+      return { ...state, status: 'submitting', error: undefined };
+    case 'success':
+      return { ...state, status: 'success' };
+    case 'failure':
+      return { ...state, status: 'error', error: action.message };
+    default: {
       const _exhaustive: never = action;
       return state;
+    }
   }
 }
 
-function useForm() {
-  const [state, dispatch] = useReducer(formReducer, {
-    fields: { email: '', password: '', confirmPassword: '' },
-    errors: {},
-    isSubmitting: false,
-    submitCount: 0,
+// 5) Hook that exposes typed dispatch
+function useLoginForm() {
+  const [state, dispatch] = useReducer(loginReducer, {
+    email: '',
+    password: '',
+    status: 'idle',
   });
 
-  const updateField = (field: keyof FormState['fields'], value: string) => {
-    dispatch({ type: 'updateField', field, value });
+  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch(loginActions.updateEmail(e.target.value));
+  const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch(loginActions.updatePassword(e.target.value));
+
+  const submit = async () => {
+    dispatch(loginActions.submit());
+    try {
+      await fakeLogin(state.email, state.password);
+      dispatch(loginActions.success());
+    } catch (e) {
+      dispatch(loginActions.failure(e instanceof Error ? e.message : 'Unknown error'));
+    }
   };
 
-  const validateAndSubmit = async () => {
-    // Validation logic here...
-    dispatch({ type: 'submitAttempt' });
-    dispatch({ type: 'setSubmitting', isSubmitting: true });
+  return { state, dispatch: dispatch as LoginDispatch, onEmailChange, onPasswordChange, submit };
+}
+````
+
+type FormAction =
+| { type: 'updateField'; field: keyof FormState['fields']; value: string }
+| { type: 'setError'; field: keyof FormState['fields']; error: string }
+| { type: 'clearError'; field: keyof FormState['fields'] }
+| { type: 'setSubmitting'; isSubmitting: boolean }
+| { type: 'submitAttempt' }
+| { type: 'reset' };
+
+function formReducer(state: FormState, action: FormAction): FormState {
+switch (action.type) {
+case 'updateField':
+return {
+...state,
+fields: {
+...state.fields,
+[action.field]: action.value,
+},
+// Clear error when user starts typing
+errors: {
+...state.errors,
+[action.field]: undefined,
+},
+};
+case 'setError':
+return {
+...state,
+errors: {
+...state.errors,
+[action.field]: action.error,
+},
+};
+case 'clearError':
+return {
+...state,
+errors: {
+...state.errors,
+[action.field]: undefined,
+},
+};
+case 'setSubmitting':
+return { ...state, isSubmitting: action.isSubmitting };
+case 'submitAttempt':
+return { ...state, submitCount: state.submitCount + 1 };
+case 'reset':
+return {
+fields: { email: '', password: '', confirmPassword: '' },
+errors: {},
+isSubmitting: false,
+submitCount: 0,
+};
+default:
+const \_exhaustive: never = action;
+return state;
+}
+}
+
+function useForm() {
+const [state, dispatch] = useReducer(formReducer, {
+fields: { email: '', password: '', confirmPassword: '' },
+errors: {},
+isSubmitting: false,
+submitCount: 0,
+});
+
+const updateField = (field: keyof FormState['fields'], value: string) => {
+dispatch({ type: 'updateField', field, value });
+};
+
+const validateAndSubmit = async () => {
+// Validation logic here...
+dispatch({ type: 'submitAttempt' });
+dispatch({ type: 'setSubmitting', isSubmitting: true });
 
     try {
       // Submit logic...
@@ -450,11 +523,13 @@ function useForm() {
     } finally {
       dispatch({ type: 'setSubmitting', isSubmitting: false });
     }
-  };
 
-  return { state, updateField, validateAndSubmit, dispatch };
+};
+
+return { state, updateField, validateAndSubmit, dispatch };
 }
-```
+
+````
 
 ## Functional Updates and Type Safety
 
@@ -483,7 +558,7 @@ setForm((prev) => ({
   ...prev,
   errors: [...prev.errors, 'Email is required'], // TypeScript validates everything
 }));
-```
+````
 
 > [!WARNING]
 > Be careful not to mutate state directly, even with functional updates. Always return a new object or array.

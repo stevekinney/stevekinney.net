@@ -4,7 +4,7 @@ description: >-
   Wrap native elements without losing typing—pass through every valid prop and
   keep autocomplete.
 date: 2025-09-06T22:23:57.294Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T18:40:11-06:00'
 published: true
 tags:
   - react
@@ -813,3 +813,65 @@ The patterns we've covered—from simple wrappers to polymorphic components—sc
 Remember: the goal isn't just to make TypeScript happy, but to create components that feel like natural extensions of HTML. When you nail that balance, building UIs becomes a joy rather than a chore.
 
 **Next up**: We'll explore advanced prop patterns, including render props, compound components, and event handler composition that work seamlessly with the DOM prop foundation we've established here.
+
+## Typed Button with `as` and Safe Refs
+
+Build a single `Button` that mirrors intrinsic attributes, supports `as="a" | "button"`, and forwards refs with correct types.
+
+```tsx
+import { forwardRef } from 'react';
+
+type ButtonAs = 'button' | 'a';
+
+type ButtonCommonProps = {
+  variant?: 'primary' | 'secondary';
+  children: React.ReactNode;
+};
+
+type ButtonAsButton = {
+  as?: 'button';
+} & JSX.IntrinsicElements['button'];
+
+type ButtonAsLink = {
+  as: 'a';
+} & JSX.IntrinsicElements['a'];
+
+type ButtonProps = ButtonCommonProps & (ButtonAsButton | ButtonAsLink);
+
+export const Button = forwardRef<HTMLElement, ButtonProps>(function Button(props, ref) {
+  const {
+    variant = 'primary',
+    children,
+    as = 'button',
+    ...rest
+  } = props as ButtonProps & {
+    as: ButtonAs;
+  };
+
+  const className = `btn btn-${variant} ${(rest as any).className ?? ''}`.trim();
+
+  if (as === 'a') {
+    const linkProps = rest as JSX.IntrinsicElements['a'];
+    return (
+      <a ref={ref as React.ForwardedRef<HTMLAnchorElement>} {...linkProps} className={className}>
+        {children}
+      </a>
+    );
+  }
+
+  const buttonProps = rest as JSX.IntrinsicElements['button'];
+  return (
+    <button
+      ref={ref as React.ForwardedRef<HTMLButtonElement>}
+      {...buttonProps}
+      className={className}
+    >
+      {children}
+    </button>
+  );
+});
+```
+
+- Mirrors native props via `JSX.IntrinsicElements` so you get accurate attributes and events.
+- Restricts `as` to `'a' | 'button'` to avoid surprising combinations.
+- Forwards refs with the correct underlying element type.
