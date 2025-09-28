@@ -4,7 +4,7 @@ description: >-
   Master useState, useReducer, and action typing—from inference patterns to
   discriminated unions that prevent impossible states.
 date: 2025-09-06T22:23:57.266Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -304,7 +304,7 @@ function counterReducer(state: number, action: CounterAction): number {
 
 Create type-safe action creators that prevent malformed actions:
 
-```ts
+```tsx
 // Action creators with proper typing
 const counterActions = {
   increment: (): CounterAction => ({ type: 'increment' }),
@@ -561,7 +561,7 @@ function useOptimizedState() {
 
 ## Common Pitfalls and Best Practices
 
-### 1. Over-specifying Generic Types
+### Over-specifying Generic Types
 
 ```ts
 // ❌ Unnecessary - TypeScript can infer this
@@ -574,7 +574,7 @@ const [name, setName] = useState('');
 const [user, setUser] = useState<User | null>(null);
 ```
 
-### 2. Not Exhausting Discriminated Unions
+### Not Exhausting Discriminated Unions
 
 ```ts
 type Status = 'loading' | 'success' | 'error' | 'idle';
@@ -596,7 +596,7 @@ function handleStatus(status: Status) {
 }
 ```
 
-### 3. Forgetting About Stale Closures
+### Forgetting About Stale Closures
 
 ```ts
 function Timer() {

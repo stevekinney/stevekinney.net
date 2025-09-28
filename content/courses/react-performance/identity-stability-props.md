@@ -5,7 +5,7 @@ description: >-
   components need to re-render. When you pass objects, arrays, or functions as
   props, their **identity**—not just their contents—determines whether React
   considers them...
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-09-06T17:49:18-06:00'
 ---
 
@@ -166,7 +166,7 @@ function SearchResults({ query }: { query: string }) {
 
 The key is applying the right technique at the right time. Here's your toolkit:
 
-### 1. Move Static Values Outside Components
+### Move Static Values Outside Components
 
 If the value never changes, define it outside the component:
 
@@ -196,7 +196,7 @@ function Dashboard() {
 }
 ```
 
-### 2. `useMemo` for Expensive Computations
+### `useMemo` for Expensive Computations
 
 Use `useMemo` when you're doing work that you genuinely don't want to repeat:
 
@@ -219,7 +219,7 @@ function ProductGrid({ products, filters, sortBy }: Props) {
 }
 ```
 
-### 3. `useCallback` for Function Stability
+### `useCallback` for Function Stability
 
 Use `useCallback` when the function identity affects child component rendering:
 
@@ -255,7 +255,7 @@ function DataTable({ data }: { data: TableRow[] }) {
 }
 ```
 
-### 4. Extract Child Components
+### Extract Child Components
 
 Sometimes the cleanest solution is to pull complex JSX into separate components:
 

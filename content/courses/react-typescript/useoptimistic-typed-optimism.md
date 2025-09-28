@@ -4,7 +4,7 @@ description: >-
   Model optimistic UI updates safely—design optimistic state and reconcile
   server results with precise types.
 date: 2025-09-06T22:04:44.928Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -337,7 +337,7 @@ function PostsWithOptimisticUpdates() {
 
 Robust optimistic updates require thoughtful error handling. Here are some patterns that work well:
 
-### 1. Graceful Degradation
+### Graceful Degradation
 
 ```ts
 function useResilientOptimisticUpdates<T, A>(
@@ -389,7 +389,7 @@ function useResilientOptimisticUpdates<T, A>(
 }
 ```
 
-### 2. Retry Logic
+### Retry Logic
 
 For critical actions, you might want automatic retries:
 
@@ -465,7 +465,7 @@ describe('OptimisticLikes', () => {
 
 When implementing optimistic updates in production applications, keep these patterns in mind:
 
-### 1. Conflict Resolution
+### Conflict Resolution
 
 When multiple users modify the same data simultaneously, you need strategies for handling conflicts:
 
@@ -499,7 +499,7 @@ function resolveOptimisticConflict<T>(
 }
 ```
 
-### 2. Bandwidth Considerations
+### Bandwidth Considerations
 
 For users on slow connections, consider batching optimistic updates:
 
@@ -531,7 +531,7 @@ function useBatchedOptimisticUpdates<T>(
 }
 ```
 
-### 3. Accessibility
+### Accessibility
 
 Don't forget to announce optimistic state changes to screen readers:
 

@@ -4,7 +4,7 @@ description: >-
   Make imports sane—align tsconfig paths with your bundler and avoid circular
   snags.
 date: 2025-09-06T22:23:57.321Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -358,7 +358,7 @@ export default defineConfig({
 
 ## Common Gotchas and Solutions
 
-### 1. Aliases Not Working in Tests
+### Aliases Not Working in Tests
 
 **Problem**: Your aliases work in development but fail in tests.
 
@@ -378,7 +378,7 @@ export default defineConfig({
 });
 ```
 
-### 2. Import Auto-completion Not Working
+### Import Auto-completion Not Working
 
 **Problem**: Your editor doesn't suggest files when using aliases.
 
@@ -388,7 +388,7 @@ export default defineConfig({
 - Make sure `baseUrl` is set correctly
 - Verify your paths don't have typos
 
-### 3. Build Works but Types Don't
+### Build Works but Types Don't
 
 **Problem**: Your bundler resolves aliases correctly, but TypeScript complains.
 
@@ -402,7 +402,7 @@ export default defineConfig({
 "@/": ["src/"]
 ```
 
-### 4. Barrel Exports Creating Performance Issues
+### Barrel Exports Creating Performance Issues
 
 **Problem**: Using `index.ts` files with aliases can slow down development.
 

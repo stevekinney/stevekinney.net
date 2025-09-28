@@ -4,7 +4,7 @@ description: >-
   Build a rock‑solid mental model—JSX as function calls, compile‑time vs
   runtime, and why types are executable design docs.
 date: 2025-09-06T22:23:57.258Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T13:14:43-06:00'
 published: true
 tags:
   - react
@@ -63,7 +63,7 @@ function UserProfile({ name, email }: { name: string; email: string }) {
 const profile = UserProfile({ name: 'Alice', email: 'alice@example.com' });
 ```
 
-This is why props work the way they do—they're just function parameters! And it's why TypeScript can give you such precise intellisense: it knows exactly what arguments each "function" expects.
+This is why props work the way they do—they're just function parameters. And it's why TypeScript can give you such precise IntelliSense: it knows exactly what arguments each function expects.
 
 ## Compile-Time vs Runtime Reality
 
@@ -168,11 +168,6 @@ interface UserListProps {
   onUserSelect: (userId: User['id']) => void;
 }
 ```
-
-**Further Exploration**:
-
-- [Discriminated Unions](typescript-discriminated-unions.md)
-- [TypeScript and React 19](setting-up-react-and-typescript.md)
 
 ## The TypeScript-React Feedback Loop
 

@@ -4,7 +4,7 @@ description: >-
   Type form handlers once, reuse everywhere—and tame <input type="number">
   returning strings.
 date: 2025-09-06T22:23:57.266Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -157,19 +157,20 @@ function PriceInput() {
 
 ## Form Submission Without the Footguns
 
-Form submission is another area where TypeScript can help prevent runtime errors. Here's a pattern that validates your form data before submission:
+Form submission is another area where TypeScript can help prevent runtime errors. You'll want to validate your form data before submission—this is where runtime validation becomes essential.
+
+For comprehensive coverage of runtime validation with Zod including form validation patterns, see [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md).
+
+Here's a simple TypeScript-first approach for basic form submission:
 
 ```tsx
 import { FormEvent } from 'react';
-import { z } from 'zod';
 
-const ContactFormSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
-  age: z.number().min(0).max(120),
-});
-
-type ContactFormData = z.infer<typeof ContactFormSchema>;
+interface ContactFormData {
+  name: string;
+  email: string;
+  age: number;
+}
 
 function ContactForm() {
   const [formData, setFormData] = useState<ContactFormData>({
@@ -183,22 +184,20 @@ function ContactForm() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const result = ContactFormSchema.safeParse(formData);
+    // Basic validation
+    const fieldErrors: Record<string, string> = {};
+    if (!formData.name) fieldErrors.name = 'Name is required';
+    if (!formData.email.includes('@')) fieldErrors.email = 'Invalid email';
+    if (formData.age < 0 || formData.age > 120) fieldErrors.age = 'Invalid age';
 
-    if (!result.success) {
-      const fieldErrors: Record<string, string> = {};
-      result.error.errors.forEach((error) => {
-        if (error.path[0]) {
-          fieldErrors[error.path[0] as string] = error.message;
-        }
-      });
+    if (Object.keys(fieldErrors).length > 0) {
       setErrors(fieldErrors);
       return;
     }
 
     // Clear errors and submit
     setErrors({});
-    submitForm(result.data);
+    submitForm(formData);
   };
 
   return (
@@ -211,7 +210,7 @@ function ContactForm() {
 ```
 
 > [!TIP]
-> Using Zod for form validation gives you runtime type safety and consistent error messages. The `safeParse` method won't throw—it returns a result object you can check instead.
+> For production applications, use a schema validation library like Zod for runtime type safety and consistent error messages. See [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md) for complete examples.
 
 ## Controlled vs Uncontrolled: Pick Your Poison
 
@@ -259,7 +258,7 @@ For most cases, I stick with controlled components. But if you have a large form
 
 ## Advanced: Type-Safe Form Builder
 
-Here's a more advanced pattern that creates type-safe form builders. This is overkill for simple forms, but handy when you're building form-heavy applications:
+For a more robust approach with runtime validation, see the Zod examples in [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md). Here's a TypeScript-focused pattern that creates type-safe form builders:
 
 ```tsx
 type FormFieldConfig<T> = {
@@ -383,7 +382,7 @@ This pattern gives you type safety, reusable validation, and consistent error ha
 
 ## Common Pitfalls and How to Avoid Them
 
-### 1. Fighting the DOM API
+### Fighting the DOM API
 
 Remember: HTML inputs always return strings. Don't fight it, convert it:
 
@@ -395,7 +394,7 @@ const age: number = e.target.value; // Type error
 const age: number = Number(e.target.value) || 0;
 ```
 
-### 2. Overly Complex Event Types
+### Overly Complex Event Types
 
 You don't need to memorize every React event type. Start simple:
 
@@ -406,7 +405,7 @@ const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 };
 ```
 
-### 3. Not Handling Edge Cases
+### Not Handling Edge Cases
 
 Empty strings, NaN values, and null refs are real—handle them:
 
@@ -461,7 +460,7 @@ The key takeaways:
 
 1. Use generic event handlers to reduce boilerplate
 2. Always convert number input values explicitly
-3. Validate with runtime schema validation (like Zod)
+3. Add proper TypeScript types to all event handlers
 4. Consider performance implications for large forms
 5. Don't over-engineer simple cases
 
@@ -469,6 +468,6 @@ Start with the simple patterns and add complexity only when you need it. Your fu
 
 ## See Also
 
-- [React Hook Form with Zod Types](react-hook-form-with-zod-types.md)
-- [Forms: File Inputs and Validation](forms-file-uploads-typing.md)
-- [Forms, Actions, and useActionState](forms-actions-and-useactionstate.md)
+- [Forms, Actions, and useActionState](forms-actions-and-useactionstate.md) - React 19 form patterns with Actions
+- [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md) - Comprehensive Zod validation patterns
+- [Typing DOM and React Events](typing-dom-and-react-events.md) - Deep dive into event types

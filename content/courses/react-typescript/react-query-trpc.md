@@ -5,7 +5,7 @@ description: >-
   is one of those things that sounds complicated but becomes surprisingly
   elegant once you get the pieces in place. When you combine React Query's
   powerful cachi...
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-09-06T17:49:18-06:00'
 ---
 
@@ -203,7 +203,7 @@ Notice how there's no manual typing needed—tRPC inferred the return types from
 
 tRPC mutations work seamlessly with React Query's optimistic update patterns:
 
-```tsx
+````tsx
 function CreateUserForm() {
   const utils = trpc.useUtils();
 
@@ -257,7 +257,47 @@ function CreateUserForm() {
     </form>
   );
 }
-```
+
+## Vanilla React Query: Typed Patterns
+
+Even without tRPC, you can get strong typing with plain React Query by typing your fetchers, query keys, and error types.
+
+```ts
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
+
+// 1) Typed fetchers + inferred data
+async function fetchUser(id: string) {
+  const res = await fetch(`/api/users/${id}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as { id: string; name: string };
+}
+
+type InferPromise<T> = T extends Promise<infer U> ? U : never;
+type UserData = InferPromise<ReturnType<typeof fetchUser>>; // { id: string; name: string }
+
+// 2) Tuple query keys with const assertions for safety
+const userKey = (id: string) => ['user', id] as const;
+
+// 3) Typed error channel (e.g., Error)
+function useUser(id: string): UseQueryResult<UserData, Error> {
+  return useQuery<UserData, Error>({
+    queryKey: userKey(id),
+    queryFn: () => fetchUser(id),
+    // Select can further transform types
+    select: (u) => ({ ...u, display: u.name.toUpperCase() }),
+    staleTime: 60_000,
+  });
+}
+
+// Usage
+const { data, error } = useUser('123');
+````
+
+- Use `as const` on query keys to keep them literal and stable.
+- Prefer returning typed data from fetchers and inferring with `ReturnType` or a small `InferPromise` helper.
+- Specify the error type parameter for consistent `error` handling in UI.
+
+````
 
 ## Advanced Query Patterns
 
@@ -290,7 +330,7 @@ function UserWithPosts({ userId }: { userId: string }) {
     </div>
   );
 }
-```
+````
 
 ### Infinite Queries
 
@@ -711,4 +751,3 @@ The key insight is that modern type-safe data fetching isn't just about preventi
 
 - [Real‑time Typing: WebSockets and SSE](realtime-typing-websockets-and-sse.md)
 - [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md)
-- [MSW + Contracts: Typed Handlers](msw-and-contract-testing.md)

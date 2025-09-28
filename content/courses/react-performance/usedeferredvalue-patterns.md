@@ -4,7 +4,7 @@ description: >-
   Keep typing fluid by deferring expensive derived values. Pair with transitions
   and memoization for silky search UIs.
 date: 2025-09-06T22:26:45.103Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -336,7 +336,7 @@ function ModernSearchApp() {
 
 Here are some practical tips for getting the most out of `useDeferredValue`:
 
-### 1. Measure Before Optimizing
+### Measure Before Optimizing
 
 ```tsx
 // Use React DevTools Profiler to identify actual bottlenecks
@@ -354,7 +354,7 @@ function ExpensiveComponent({ data }: { data: string }) {
 }
 ```
 
-### 2. Granular Deferrals
+### Granular Deferrals
 
 Sometimes it's better to defer specific parts rather than entire objects:
 
@@ -369,7 +369,7 @@ const deferredCategory = useDeferredValue(filters.category);
 const sortOrder = filters.sortOrder;
 ```
 
-### 3. Custom Hooks for Common Patterns
+### Custom Hooks for Common Patterns
 
 Create reusable hooks for common deferral patterns:
 

@@ -4,7 +4,7 @@ description: >-
   Build components that render different tags while preserving proper props—no
   any, no lies, just safe polymorphism.
 date: 2025-09-06T22:04:44.911Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -200,7 +200,7 @@ type PolymorphicComponent<DefaultElement extends ElementType, Props = {}> = <
 
 Now you can build polymorphic components with less boilerplate:
 
-```tsx
+````tsx
 interface CardProps {
   padding?: 'sm' | 'md' | 'lg';
   shadow?: boolean;
@@ -219,7 +219,55 @@ const Card: PolymorphicComponent<'div', CardProps> = forwardRef(
     );
   },
 );
-```
+
+## “asChild” Pattern
+
+Some design systems expose an `asChild` prop to render whatever child element you pass while preserving the component’s styling and behavior. This keeps DOM semantics under your control (use a `Link`, `button`, or any element) without sacrificing typing.
+
+```tsx
+import { forwardRef, cloneElement, isValidElement } from 'react';
+
+type AsChildProps = {
+  asChild?: boolean;
+  children: React.ReactElement;
+};
+
+type BaseButtonProps = {
+  variant?: 'primary' | 'secondary';
+  disabled?: boolean;
+} & AsChildProps;
+
+const cx = (...xs: Array<string | false | undefined>) => xs.filter(Boolean).join(' ');
+
+export const Button = forwardRef<HTMLElement, BaseButtonProps>(
+  ({ asChild, children, variant = 'primary', disabled, ...rest }, ref) => {
+    const className = cx('btn', `btn-${variant}`, disabled && 'btn-disabled');
+
+    if (asChild) {
+      // Render the passed child, merging props and ref
+      if (isValidElement(children)) {
+        return cloneElement(children as React.ReactElement, {
+          className: cx((children.props as any).className, className),
+          ref,
+          ...rest,
+        });
+      }
+      return null;
+    }
+
+    return (
+      <button className={className} disabled={disabled} ref={ref as any} {...rest}>
+        {children}
+      </button>
+    );
+  },
+);
+````
+
+- Use `asChild` when you need to control the rendered element (e.g., Next.js `Link`, Reach Router links) but want to keep Button’s styling and behavior.
+- The ref type becomes a bit more flexible (generic + element guards are possible); for most cases, forwarding as `HTMLElement` works well with DOM elements.
+
+````
 
 ## Real-World Use Cases™
 
@@ -240,7 +288,7 @@ const Text: PolymorphicComponent<'span', TextProps> = /* ... */;
 <Text as="h1" variant="heading" weight="bold">Page Title</Text>
 <Text as="p" variant="body">Regular paragraph text</Text>
 <Text as="label" variant="caption" weight="medium">Form label</Text>
-```
+````
 
 ### Router Integration
 

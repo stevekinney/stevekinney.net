@@ -4,7 +4,7 @@ description: >-
   Wrap native elements without losing typing—pass through every valid prop and
   keep autocomplete.
 date: 2025-09-06T22:23:57.294Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -465,6 +465,317 @@ const MyButton = ((props) => {
   return <button {...props} />;
 }) satisfies React.FC<ComponentPropsWithoutRef<'button'>>;
 ```
+
+## React's DOM Utility Types Arsenal
+
+While `ComponentPropsWithoutRef` is your go-to for most cases, React provides a suite of more specialized DOM typing utilities. Understanding when and why to use each one will level up your TypeScript game.
+
+### HTMLAttributes vs HTMLProps vs AllHTMLAttributes
+
+These types provide different levels of HTML attribute support, each with specific use cases:
+
+```tsx
+import { HTMLAttributes, HTMLProps, AllHTMLAttributes } from 'react';
+
+// HTMLAttributes: Standard HTML attributes without form-specific props
+interface DivWrapperProps extends HTMLAttributes<HTMLDivElement> {
+  variant?: 'card' | 'panel';
+}
+
+// HTMLProps: HTMLAttributes + form element props (value, checked, etc.)
+interface CustomInputProps extends HTMLProps<HTMLInputElement> {
+  label: string;
+}
+
+// AllHTMLAttributes: Union of all possible HTML attributes
+interface GenericWrapperProps extends AllHTMLAttributes<HTMLElement> {
+  as?: keyof JSX.IntrinsicElements;
+}
+```
+
+Let's break down the differences:
+
+### HTMLAttributes: The Foundation
+
+`HTMLAttributes` includes all the common HTML attributes but excludes element-specific props:
+
+```tsx
+// HTMLAttributes includes these common props:
+interface HTMLAttributes<T> {
+  // Core attributes
+  className?: string;
+  id?: string;
+  style?: CSSProperties;
+
+  // Event handlers
+  onClick?: MouseEventHandler<T>;
+  onMouseEnter?: MouseEventHandler<T>;
+  onKeyDown?: KeyboardEventHandler<T>;
+
+  // ARIA and data attributes
+  'aria-label'?: string;
+  'data-testid'?: string;
+
+  // And many more...
+  // But NOT element-specific like 'value', 'checked', 'href', etc.
+}
+
+// Perfect for wrapper components that don't need specific element props
+function Panel<T extends HTMLElement = HTMLDivElement>({
+  children,
+  className,
+  ...props
+}: HTMLAttributes<T> & { children?: ReactNode }) {
+  return (
+    <div className={`panel ${className || ''}`} {...props}>
+      {children}
+    </div>
+  );
+}
+```
+
+### HTMLProps: The Full Package
+
+`HTMLProps` extends `HTMLAttributes` with element-specific props. This is what `ComponentPropsWithoutRef` uses under the hood:
+
+```tsx
+// HTMLProps includes everything from HTMLAttributes PLUS element-specific props
+type InputHTMLProps = HTMLProps<HTMLInputElement>;
+// Includes: value, checked, type, placeholder, etc.
+
+type AnchorHTMLProps = HTMLProps<HTMLAnchorElement>;
+// Includes: href, target, rel, download, etc.
+
+// Use HTMLProps when you need ALL props including element-specific ones
+interface EnhancedInputProps extends HTMLProps<HTMLInputElement> {
+  label: string;
+  error?: string;
+}
+
+function EnhancedInput({ label, error, ...inputProps }: EnhancedInputProps) {
+  return (
+    <div className="form-field">
+      <label>{label}</label>
+      <input {...inputProps} className={error ? 'error' : ''} />
+      {error && <span className="error-message">{error}</span>}
+    </div>
+  );
+}
+
+// All input-specific props work:
+<EnhancedInput
+  label="Email"
+  type="email"
+  value={email}
+  onChange={handleChange}
+  required
+  placeholder="Enter your email"
+/>;
+```
+
+### AllHTMLAttributes: The Kitchen Sink
+
+`AllHTMLAttributes` is the union of all HTML element attributes. Use it when building highly generic components:
+
+```tsx
+// AllHTMLAttributes includes EVERY possible HTML attribute
+interface GenericElementProps extends AllHTMLAttributes<HTMLElement> {
+  as?: keyof JSX.IntrinsicElements;
+}
+
+function GenericElement({
+  as: Component = 'div',
+  ...props
+}: GenericElementProps) {
+  return <Component {...props} />;
+}
+
+// Can use ANY HTML attribute
+<GenericElement as="input" type="text" value="test" />
+<GenericElement as="a" href="/home" target="_blank" />
+<GenericElement as="button" onClick={() => {}} disabled />
+```
+
+> [!WARNING]
+> `AllHTMLAttributes` can lead to confusing APIs since it allows any HTML attribute regardless of the element type. Use it sparingly and prefer more specific types when possible.
+
+### JSX.IntrinsicElements: Type-Safe Element Maps
+
+`JSX.IntrinsicElements` provides a mapping of all HTML element names to their prop types:
+
+```tsx
+// JSX.IntrinsicElements maps element names to their prop types
+type DivProps = JSX.IntrinsicElements['div'];
+type InputProps = JSX.IntrinsicElements['input'];
+type ButtonProps = JSX.IntrinsicElements['button'];
+
+// Use it to create type-safe element factories
+function createElement<K extends keyof JSX.IntrinsicElements>(
+  type: K,
+  props: JSX.IntrinsicElements[K],
+): ReactElement {
+  return React.createElement(type, props);
+}
+
+// Type-safe based on element type
+createElement('input', { type: 'text', value: 'test' }); // ✅
+createElement('div', { type: 'text' }); // ❌ Type error: div doesn't have 'type'
+```
+
+This is incredibly powerful for building polymorphic components with proper type safety:
+
+```tsx
+// Type-safe polymorphic component using JSX.IntrinsicElements
+interface PolymorphicProps<T extends keyof JSX.IntrinsicElements> {
+  as?: T;
+  children?: ReactNode;
+}
+
+type PolymorphicComponentProps<T extends keyof JSX.IntrinsicElements> =
+  PolymorphicProps<T> & JSX.IntrinsicElements[T];
+
+function Polymorphic<T extends keyof JSX.IntrinsicElements = 'div'>({
+  as,
+  children,
+  ...props
+}: PolymorphicComponentProps<T>) {
+  const Component = as || 'div';
+  return <Component {...props}>{children}</Component>;
+}
+
+// Type-safe usage - props are validated based on 'as' prop
+<Polymorphic as="button" onClick={() => {}} disabled>
+  Button
+</Polymorphic>
+
+<Polymorphic as="a" href="/home" target="_blank">
+  Link
+</Polymorphic>
+
+<Polymorphic as="input" type="text" value="test" />
+```
+
+### Choosing the Right Type: A Decision Matrix
+
+Here's when to use each DOM utility type:
+
+```tsx
+// Use ComponentPropsWithoutRef for most wrapper components
+interface ButtonWrapperProps extends ComponentPropsWithoutRef<'button'> {
+  loading?: boolean;
+}
+
+// Use HTMLAttributes when you DON'T need element-specific props
+interface PanelProps extends HTMLAttributes<HTMLDivElement> {
+  title: string;
+}
+
+// Use HTMLProps when you need EVERYTHING (rare)
+interface SuperInputProps extends HTMLProps<HTMLInputElement> {
+  validate?: (value: string) => boolean;
+}
+
+// Use AllHTMLAttributes for highly generic components (use sparingly)
+interface GenericProps extends AllHTMLAttributes<HTMLElement> {
+  component?: string;
+}
+
+// Use JSX.IntrinsicElements for type-safe polymorphism
+type ButtonOrLinkProps =
+  | ({ as: 'button' } & JSX.IntrinsicElements['button'])
+  | ({ as: 'a' } & JSX.IntrinsicElements['a']);
+```
+
+### Real-World Example: Building a Form Field System
+
+Let's see how these types work together in a real form system:
+
+```tsx
+// Base field wrapper using HTMLAttributes (no input-specific props needed)
+interface FieldWrapperProps extends HTMLAttributes<HTMLDivElement> {
+  label: string;
+  error?: string;
+  required?: boolean;
+}
+
+function FieldWrapper({ label, error, required, children, ...props }: FieldWrapperProps) {
+  return (
+    <div {...props} className={`field ${error ? 'field--error' : ''}`}>
+      <label>
+        {label}
+        {required && <span className="required">*</span>}
+      </label>
+      {children}
+      {error && <span className="error">{error}</span>}
+    </div>
+  );
+}
+
+// Input field using JSX.IntrinsicElements for precise typing
+interface TextFieldProps extends JSX.IntrinsicElements['input'] {
+  label: string;
+  error?: string;
+}
+
+function TextField({ label, error, required, ...inputProps }: TextFieldProps) {
+  return (
+    <FieldWrapper label={label} error={error} required={required}>
+      <input {...inputProps} className="field-input" />
+    </FieldWrapper>
+  );
+}
+
+// Select field with proper option typing
+interface SelectFieldProps<T> extends Omit<JSX.IntrinsicElements['select'], 'value' | 'onChange'> {
+  label: string;
+  options: Array<{ value: T; label: string }>;
+  value?: T;
+  onChange?: (value: T) => void;
+  error?: string;
+}
+
+function SelectField<T extends string | number>({
+  label,
+  options,
+  value,
+  onChange,
+  error,
+  required,
+  ...selectProps
+}: SelectFieldProps<T>) {
+  return (
+    <FieldWrapper label={label} error={error} required={required}>
+      <select
+        {...selectProps}
+        value={value}
+        onChange={(e) => onChange?.(e.target.value as T)}
+        className="field-select"
+      >
+        {options.map(opt => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+    </FieldWrapper>
+  );
+}
+```
+
+### Performance and Bundle Size Considerations
+
+These utility types are purely compile-time constructs with zero runtime overhead:
+
+```tsx
+// All of these compile to the same JavaScript
+const props1: ComponentPropsWithoutRef<'button'> = { onClick: () => {} };
+const props2: HTMLProps<HTMLButtonElement> = { onClick: () => {} };
+const props3: JSX.IntrinsicElements['button'] = { onClick: () => {} };
+
+// In JavaScript, they're all just: { onClick: () => {} }
+```
+
+The choice between them is about developer experience and type safety, not performance.
 
 ## Migration Strategy
 

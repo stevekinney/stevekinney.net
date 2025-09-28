@@ -3,7 +3,7 @@ title: Type Narrowing and Control Flow
 description: >-
   Master TypeScript's control flow analysis to write safer code with precise
   type checking
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-09-14T18:52:34.152Z'
 ---
 
@@ -775,7 +775,7 @@ const FormComponent = ({ form }: { form: Form }) => {
 
 ## Best Practices
 
-### 1. Use Discriminated Unions
+### Use Discriminated Unions
 
 ```typescript
 // ✅ Good - Easy to narrow
@@ -789,7 +789,7 @@ interface Result<T> {
 }
 ```
 
-### 2. Make Invalid States Unrepresentable
+### Make Invalid States Unrepresentable
 
 ```typescript
 // ✅ Good - Can't have both data and error
@@ -807,7 +807,7 @@ interface State<T> {
 }
 ```
 
-### 3. Use Exhaustive Checks
+### Use Exhaustive Checks
 
 ```typescript
 // ✅ Always include exhaustive checks
@@ -826,7 +826,7 @@ function handle(value: 'a' | 'b' | 'c') {
 }
 ```
 
-### 4. Prefer Type Guards Over Type Assertions
+### Prefer Type Guards Over Type Assertions
 
 ```typescript
 // ✅ Good - Safe type narrowing

@@ -3,7 +3,7 @@ title: Unknown vs Any - The Safe Way to Handle Dynamic Types
 description: >-
   Learn when to use unknown vs any and how to safely handle dynamic data in
   TypeScript
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T13:49:38-06:00'
 date: '2025-09-14T18:55:29.322Z'
 ---
 
@@ -522,7 +522,7 @@ function processData(data: unknown): number {
 
 There are rare cases where `any` might be acceptable:
 
-### 1. Migration Code
+### Migration Code
 
 ```typescript
 // Temporarily during migration
@@ -530,7 +530,7 @@ There are rare cases where `any` might be acceptable:
 const legacyData: any = getLegacyData();
 ```
 
-### 2. Test Code
+### Test Code
 
 ```typescript
 // In tests where type safety is less critical
@@ -540,7 +540,7 @@ it('handles any input', () => {
 });
 ```
 
-### 3. Console Logging
+### Console Logging
 
 ```typescript
 // For debugging only
@@ -587,7 +587,7 @@ function isCachedValid(value: unknown): boolean {
 
 ## Best Practices
 
-### 1. Default to Unknown
+### Default to Unknown
 
 ```typescript
 // ✅ Start with unknown
@@ -601,7 +601,7 @@ function processInput(input: any) {
 }
 ```
 
-### 2. Create Reusable Type Guards
+### Create Reusable Type Guards
 
 ```typescript
 // Define once, use everywhere
@@ -618,7 +618,7 @@ const typeGuards = {
 };
 ```
 
-### 3. Validate at Boundaries
+### Validate at Boundaries
 
 ```typescript
 // Validate data as it enters your application
@@ -635,7 +635,7 @@ async function fetchData(): Promise<ValidatedData> {
 }
 ```
 
-### 4. Use Assertion Functions
+### Use Assertion Functions
 
 ```typescript
 function assertString(value: unknown): asserts value is string {

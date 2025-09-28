@@ -4,7 +4,7 @@ description: >-
   Target multiple runtimes—align DOM vs Node types, edge constraints, and SSR
   data contracts with TypeScript.
 date: 2025-09-06T22:04:45.055Z
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -43,7 +43,6 @@ function MyComponent() {
 
 ## See Also
 
-- [Typed Environment and Config Boundaries](typed-environment-and-configuration-boundaries.md)
 - [Edge, SSR, and Hydration Payload Types](edge-ssr-hydration.md)
 - [Security and Escaping Types](security-and-escaping-types.md)
 

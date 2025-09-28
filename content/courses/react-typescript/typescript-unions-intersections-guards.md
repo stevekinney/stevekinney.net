@@ -3,13 +3,13 @@ title: 'Unions, Intersections, and Type Guards'
 description: >-
   Master TypeScript's union and intersection types for flexible yet type-safe
   code
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T13:35:28-06:00'
 date: '2025-09-14T18:58:22.492Z'
 ---
 
 Union and intersection types are the building blocks of TypeScript's type algebra. They let you compose types in powerful ways - unions for "or" relationships, intersections for "and" relationships. Combined with type guards, they give you incredible flexibility without sacrificing type safety. Let's master these fundamental concepts.
 
-## Union Types: This OR That
+## Union Types: This _or_ That
 
 Union types represent values that can be one of several types:
 
@@ -17,6 +17,7 @@ Union types represent values that can be one of several types:
 type StringOrNumber = string | number;
 
 let value: StringOrNumber = 'hello'; // ✅ Valid
+
 value = 42; // ✅ Valid
 value = true; // ❌ Error
 
@@ -165,53 +166,9 @@ const Button = ({ children, variant = 'primary', size = 'medium', ...rest }: But
 </Button>
 ```
 
-## Discriminated Unions in React
-
-Discriminated unions are the most powerful pattern for handling complex state in React components.
-
-**See: [TypeScript Discriminated Unions](typescript-discriminated-unions.md)** for complete coverage of this pattern, including:
-
-- React component examples
-- Form field state management
-- Exclusive props patterns
-- Best practices and common pitfalls
-
 ## Advanced Type Guards
 
-### Multiple Type Guards
-
-```typescript
-interface Cat {
-  type: 'cat';
-  meow(): void;
-}
-
-interface Dog {
-  type: 'dog';
-  bark(): void;
-}
-
-interface Bird {
-  type: 'bird';
-  chirp(): void;
-}
-
-type Animal = Cat | Dog | Bird;
-
-function makeSound(animal: Animal) {
-  switch (animal.type) {
-    case 'cat':
-      return animal.meow();
-    case 'dog':
-      return animal.bark();
-    case 'bird':
-      return animal.chirp();
-    default:
-      const _exhaustive: never = animal;
-      throw new Error(`Unknown animal: ${_exhaustive}`);
-  }
-}
-```
+For exhaustive, discriminator-based narrowing patterns (tagged/discriminated unions), see the canonical guide: [TypeScript Discriminated Unions](typescript-discriminated-unions.md).
 
 ### Custom Type Guard Functions
 
@@ -438,51 +395,7 @@ if (isArrayOf(data, (item): item is string => typeof item === 'string')) {
 
 ## React Hook with Union State
 
-```typescript
-type AsyncState<T, E = Error> =
-  | { status: 'idle' }
-  | { status: 'loading' }
-  | { status: 'success'; data: T }
-  | { status: 'error'; error: E };
-
-function useAsync<T, E = Error>(
-  asyncFunction: () => Promise<T>
-): [AsyncState<T, E>, () => void] {
-  const [state, setState] = useState<AsyncState<T, E>>({ status: 'idle' });
-
-  const execute = useCallback(() => {
-    setState({ status: 'loading' });
-
-    asyncFunction()
-      .then(data => setState({ status: 'success', data }))
-      .catch(error => setState({ status: 'error', error }));
-  }, [asyncFunction]);
-
-  return [state, execute];
-}
-
-// Using the hook
-const MyComponent = () => {
-  const [state, fetchData] = useAsync(() =>
-    fetch('/api/data').then(r => r.json())
-  );
-
-  if (state.status === 'idle') {
-    return <button onClick={fetchData}>Load Data</button>;
-  }
-
-  if (state.status === 'loading') {
-    return <div>Loading...</div>;
-  }
-
-  if (state.status === 'error') {
-    return <div>Error: {state.error.message}</div>;
-  }
-
-  // state.status === 'success'
-  return <div>Data: {JSON.stringify(state.data)}</div>;
-};
-```
+For exhaustive async state patterns in React (idle/loading/success/error and beyond), see [TypeScript Discriminated Unions](typescript-discriminated-unions.md).
 
 ## Utility Types for Unions and Intersections
 
@@ -510,58 +423,7 @@ type Test = UnionToIntersection<{ a: string } | { b: number }>;
 
 ## Form Validation with Unions
 
-```typescript
-type ValidationRule<T> =
-  | { type: 'required'; message?: string }
-  | { type: 'minLength'; value: number; message?: string }
-  | { type: 'maxLength'; value: number; message?: string }
-  | { type: 'pattern'; value: RegExp; message?: string }
-  | { type: 'custom'; validate: (value: T) => boolean | string };
-
-interface FieldConfig<T> {
-  name: string;
-  rules: ValidationRule<T>[];
-}
-
-function validateField<T>(value: T, rules: ValidationRule<T>[]): string | null {
-  for (const rule of rules) {
-    switch (rule.type) {
-      case 'required':
-        if (!value) {
-          return rule.message || 'This field is required';
-        }
-        break;
-
-      case 'minLength':
-        if (typeof value === 'string' && value.length < rule.value) {
-          return rule.message || `Minimum length is ${rule.value}`;
-        }
-        break;
-
-      case 'maxLength':
-        if (typeof value === 'string' && value.length > rule.value) {
-          return rule.message || `Maximum length is ${rule.value}`;
-        }
-        break;
-
-      case 'pattern':
-        if (typeof value === 'string' && !rule.value.test(value)) {
-          return rule.message || 'Invalid format';
-        }
-        break;
-
-      case 'custom':
-        const result = rule.validate(value);
-        if (result !== true) {
-          return typeof result === 'string' ? result : 'Validation failed';
-        }
-        break;
-    }
-  }
-
-  return null;
-}
-```
+This section has moved to the canonical guide: [TypeScript Discriminated Unions](typescript-discriminated-unions.md).
 
 ## Branded Types with Intersections
 
@@ -604,56 +466,15 @@ const userId = 'user-123' as UserId;
 
 ## React Router with Type Guards
 
-```typescript
-type Route =
-  | { path: '/home' }
-  | { path: '/user'; userId: string }
-  | { path: '/post'; postId: string; section?: 'comments' | 'edit' }
-  | { path: '/search'; query: string; filters?: string[] };
-
-function isUserRoute(route: Route): route is Extract<Route, { path: '/user' }> {
-  return route.path === '/user';
-}
-
-function isPostRoute(route: Route): route is Extract<Route, { path: '/post' }> {
-  return route.path === '/post';
-}
-
-const Router = ({ route }: { route: Route }) => {
-  if (route.path === '/home') {
-    return <HomePage />;
-  }
-
-  if (isUserRoute(route)) {
-    return <UserPage userId={route.userId} />;
-  }
-
-  if (isPostRoute(route)) {
-    return (
-      <PostPage
-        postId={route.postId}
-        section={route.section}
-      />
-    );
-  }
-
-  // Must be search route
-  return (
-    <SearchPage
-      query={route.query}
-      filters={route.filters}
-    />
-  );
-};
-```
+For router state modeled as tagged unions and exhaustive rendering, see [TypeScript Discriminated Unions](typescript-discriminated-unions.md).
 
 ## Best Practices
 
-### 1. Use Discriminated Unions Over Optional Properties
+### Use Discriminated Unions Over Optional Properties
 
 **See: [TypeScript Discriminated Unions](typescript-discriminated-unions.md)** for complete patterns and best practices for discriminated unions.
 
-### 2. Create Reusable Type Guards
+### Create Reusable Type Guards
 
 ```typescript
 // Define once, use everywhere
@@ -667,7 +488,7 @@ const guards = {
 } as const;
 ```
 
-### 3. Prefer Type Predicates Over Type Assertions
+### Prefer Type Predicates Over Type Assertions
 
 ```typescript
 // ✅ Good: Type predicate
@@ -679,7 +500,7 @@ function isUser(value: unknown): value is User {
 const user = data as User; // Unsafe!
 ```
 
-### 4. Use Exhaustive Checks
+### Use Exhaustive Checks
 
 ```typescript
 function handle(value: 'a' | 'b' | 'c') {

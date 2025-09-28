@@ -1,11 +1,13 @@
 ---
-title: tsconfig.json Deep Dive
-description: Let's tweak our TypeScript and React setup.
-modified: '2025-09-27T18:58:51.877Z'
+title: tsconfig.json Deep Dive for React
+description: >-
+  Master TypeScript configuration for React applications, from basic setup to
+  React 19 features
+modified: '2025-09-27T13:14:43-06:00'
 date: '2025-09-27T18:53:50.164Z'
 ---
 
-As we saw in the [previous section](./setting-up-react-and-typescript.md).The `tsconfig.json` file is the command center for TypeScript in your project. It tells TypeScript:
+As we saw in the [previous section](./setting-up-react-and-typescript.md), the `tsconfig.json` file is the command center for TypeScript in your project. It tells TypeScript:
 
 - How to compile your code—or in React's case—how to type-check it.
 - Which files to include/exclude.
@@ -26,6 +28,7 @@ Let's build the optimal `tsconfig.json` step by step:
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
 
     // JavaScript Support
     "allowJs": true,
@@ -133,6 +136,20 @@ Let's build the optimal `tsconfig.json` step by step:
 - More permissive than `"node16"` but safer than legacy `"node"`
 
 **Legacy option:** `"node"` - still common but less accurate for modern bundlers
+
+### `"allowImportingTsExtensions": true`
+
+**What it does:** Lets you import TypeScript files with explicit extensions.
+
+**Why enable?** Allows explicit imports that some bundlers prefer:
+
+```typescript
+// Now you can be explicit about imports
+import { UserSchema } from './schemas/user.schema.ts';
+import { Button } from '../components/Button.tsx';
+```
+
+This is especially valuable in monorepos where different packages might have different build outputs
 
 ## JavaScript Support
 
@@ -482,6 +499,49 @@ Stricter for production:
 }
 ```
 
+### Server Components config (`tsconfig.server.json`)
+
+If using React Server Components:
+
+```json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2023"], // No DOM for server
+    "types": ["node"] // Node.js types instead
+  },
+  "include": ["src/app/**/*server*", "src/lib/server/**/*"]
+}
+```
+
+### Development vs Production Configs
+
+You might want different strictness levels during development:
+
+```json
+// tsconfig.dev.json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  }
+}
+```
+
+Then in your package.json:
+
+```json
+{
+  "scripts": {
+    "dev": "vite --mode development",
+    "type-check": "tsc --project tsconfig.json --noEmit",
+    "type-check:dev": "tsc --project tsconfig.dev.json --noEmit",
+    "build": "tsc --project tsconfig.json --noEmit && vite build"
+  }
+}
+```
+
 ## Where We Chose Developer Experience Over Strictness
 
 ### `noUncheckedIndexedAccess` (not included)
@@ -489,9 +549,29 @@ Stricter for production:
 **What it does:** Makes indexed access return `T | undefined`
 
 ```typescript
+// Without noUncheckedIndexedAccess
 const arr = [1, 2, 3];
-const first = arr[0]; // number | undefined with flag
+const first = arr[0]; // Type: number (could be undefined!)
+
+// With noUncheckedIndexedAccess
+const first = arr[0]; // Type: number | undefined
 // Requires constant checking even for "safe" access
+```
+
+**React 19 consideration:** This option is particularly valuable with Server Components and dynamic imports:
+
+```typescript
+// Without noUncheckedIndexedAccess - runtime error possible!
+function getUser(users: User[], id: string) {
+  return users[parseInt(id)]; // Could be undefined!
+}
+
+// With noUncheckedIndexedAccess - TypeScript catches it
+function getUser(users: User[], id: string) {
+  const user = users[parseInt(id)]; // Type: User | undefined
+  if (!user) throw new Error('User not found');
+  return user; // Now safely typed as User
+}
 ```
 
 In my humble opinion, this is much friction for most React applications. Consider for high-reliability applications. Every time I try to be a good person and use this, I end up turning it off _real fast_.
@@ -556,4 +636,66 @@ npx tsc --showConfig
 npx tsc --noEmit --explain-files | grep "yourfile.tsx"
 ```
 
-Remember: TypeScript is a tool to help you ship better code faster, not to fight with you. This config embodies that philosophy.
+## React 19 and Modern React Features
+
+### Supporting the `use` Hook
+
+React 19's `use` hook requires proper async typing:
+
+```typescript
+// Ensure promises are well-typed for the use hook
+async function fetchUser(id: string): Promise<User> {
+  const response = await fetch(`/api/users/${id}`);
+  if (!response.ok) throw new Error('Failed to fetch user');
+  return response.json(); // Make sure this matches User type
+}
+
+function UserProfile({ userId }: { userId: string }) {
+  // TypeScript ensures the promise resolves to User
+  const user = use(fetchUser(userId));
+  return <div>{user.name}</div>;
+}
+```
+
+### Concurrent Features Type Safety
+
+React 19's concurrent features benefit from strict async patterns. The configuration above ensures:
+
+- Promises are properly typed
+- Async boundaries are clear
+- Suspense boundaries work correctly with TypeScript
+
+## Validating Your Configuration
+
+Create a simple test file to verify your configuration works:
+
+```typescript
+// test-config.tsx - Put this in your src folder temporarily
+import { use } from 'react'; // React 19 import should work
+import { Button } from './components/Button.tsx'; // Extension import should work
+
+// This should type-check properly
+const asyncData: Promise<{ name: string }> = Promise.resolve({ name: 'Test' });
+
+function TestComponent() {
+  const data = use(asyncData); // Should be properly typed
+  return <Button variant="primary">{data.name}</Button>;
+}
+
+// Strictness test - this should error with your strict config
+const maybeUser: { name: string } | undefined = undefined;
+console.log(maybeUser.name); // Should error with strict checks
+```
+
+Run `tsc --noEmit` to verify everything type-checks correctly, then delete the test file.
+
+## Keeping Your Config Updated
+
+React and TypeScript evolve quickly. Here's how to stay current:
+
+1. **Follow React's TypeScript integration updates** in their release notes
+2. **Monitor TypeScript's release blog** for new compiler options
+3. **Use tools like `@typescript-eslint/parser`** to ensure your config stays compatible with your linting setup
+4. **Test your config with new TypeScript versions** before upgrading
+
+Remember: TypeScript is a tool to help you ship better code faster, not to fight with you. This config embodies that philosophy, while being ready for React 19's latest features.

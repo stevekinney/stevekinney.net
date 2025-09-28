@@ -1,7 +1,7 @@
 ---
-title: Type Inference Mastery
+title: Type Inference
 description: Master TypeScript's type inference to write cleaner code with less boilerplate
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-09-14T18:51:09.028Z'
 ---
 
@@ -35,7 +35,7 @@ const MyComponent = () => {
 
 TypeScript is surprisingly good at figuring things out from context. Here are the situations where you can trust inference:
 
-### 1. Variable Initialization
+### Variable Initialization
 
 ```typescript
 // TypeScript infers these perfectly
@@ -50,7 +50,7 @@ const doubled = items.map((x) => x * 2); // number[]
 const names = users.map((u) => u.name); // string[]
 ```
 
-### 2. Function Return Types (Sometimes)
+### Function Return Types (Sometimes)
 
 ```typescript
 // Return type is inferred from implementation
@@ -66,7 +66,7 @@ const Button = ({ onClick, children }: ButtonProps) => {
 };
 ```
 
-### 3. Array Methods and Callbacks
+### Array Methods and Callbacks
 
 ```typescript
 const numbers = [1, 2, 3, 4, 5];
@@ -90,7 +90,7 @@ const adults = users.filter((user) => user.age >= 18); // same type as users
 
 Now let's talk about when you SHOULD write types explicitly:
 
-### 1. Function Parameters
+### Function Parameters
 
 ```typescript
 // ❌ This won't work - parameters need types
@@ -105,7 +105,7 @@ function greet(name: string) {
 }
 ```
 
-### 2. Component Props
+### Component Props
 
 ```typescript
 // ❌ Don't rely on inference for props
@@ -124,7 +124,7 @@ const Button = ({ onClick, children }: ButtonProps) => {
 };
 ```
 
-### 3. Empty Arrays and Objects
+### Empty Arrays and Objects
 
 ```typescript
 // ❌ TypeScript can't know what you'll put in here
@@ -141,7 +141,7 @@ items.push(123); // Error!
 const cache: Record<string, User> = {};
 ```
 
-### 4. When You Want to Constrain Types
+### When You Want to Constrain Types
 
 ```typescript
 // You want to ensure this can only be specific values
@@ -344,7 +344,7 @@ config.port.toFixed(); // Works! port is number
 
 ## Common Inference Pitfalls
 
-### 1. Widening
+### Widening
 
 ```typescript
 // TypeScript widens types by default
@@ -358,7 +358,7 @@ const status = 'pending'; // 'pending'
 let status: 'pending' | 'complete' = 'pending';
 ```
 
-### 2. Object Property Inference
+### Object Property Inference
 
 ```typescript
 // Properties are widened
@@ -376,7 +376,7 @@ const config = {
 // Type: { readonly retries: 3; readonly timeout: 1000 }
 ```
 
-### 3. Function Return Type Issues
+### Function Return Type Issues
 
 ```typescript
 // Sometimes you need explicit return types
@@ -398,7 +398,7 @@ function createUser(name: string): User {
 
 ## Best Practices for React
 
-### 1. Let Hooks Infer When Possible
+### Let Hooks Infer When Possible
 
 ```typescript
 // ✅ Good - let TypeScript infer
@@ -412,7 +412,7 @@ const mounted = useRef<boolean>(false);
 const id: string = useId();
 ```
 
-### 2. Be Explicit at Component Boundaries
+### Be Explicit at Component Boundaries
 
 ```typescript
 // ✅ Always type props
@@ -435,7 +435,7 @@ const Card = ({ title, description }: CardProps) => {
 };
 ```
 
-### 3. Use Inference for Event Handlers
+### Use Inference for Event Handlers
 
 ```typescript
 const SearchForm = () => {

@@ -5,7 +5,7 @@ description: >-
   and React 19
 layout: page
 date: 2025-09-07T18:00:00.000Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T13:14:43-06:00'
 ---
 
 These are the notes for my [React && TypeScript workshop](https://frontendmasters.com/workshops/react-typescript-v3/) for [Frontend Masters](https://frontendmasters.com).
@@ -63,3 +63,7 @@ By the end of this course, you'll be able to:
 - Work effectively with React 19's latest features and TypeScript
 - Set up development environments optimized for React TypeScript development
 - Write maintainable code that scales with your team and application size
+
+## Appendix Topics
+
+The Appendix collects advanced/optional topics that are helpful in production or at scale but are not core to day‑to‑day React + TypeScript authoring. Use these when you need deeper guidance on build pipelines, module resolution, federation/microfrontends, linting/formatting, type‑safe environment variables, publishing types for component libraries, and monorepo/shared UI type strategies. They’re great references, but you can safely skip them on a first pass through the main material.
