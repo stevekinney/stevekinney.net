@@ -122,6 +122,22 @@
     hook patterns that scale
   modified: 2025-09-27T19:30:05.343Z
   path: /courses/react-typescript/typescript-react-hooks
+- title: Complete Guide to React Component Props with TypeScript
+  description: Master typing React props from basics to advanced patterns—required
+    vs optional, defaults, unions, generics, and building self-documenting
+    component APIs.
+  modified: 2025-09-27T18:40:11-06:00
+  path: /courses/react-typescript/component-props-complete-guide
+- title: Mirroring DOM Props with ComponentPropsWithoutRef
+  description: Wrap native elements without losing typing—pass through every valid
+    prop and keep autocomplete.
+  modified: 2025-09-27T18:40:11-06:00
+  path: /courses/react-typescript/mirror-dom-props
+- title: Complete Guide to React State Management with TypeScript
+  description: Master useState, useReducer, and action typing—from inference
+    patterns to discriminated unions that prevent impossible states.
+  modified: 2025-09-27T18:40:11-06:00
+  path: /courses/react-typescript/react-state-management-with-typescript
 - title: Recommended ESLint Rules for TypeScript and React
   description: Short descriptions of each "recommended" rules.
   modified: 2025-09-27T18:32:37.177Z
@@ -172,6 +188,16 @@
     "for free" in everyday React files.
   modified: 2025-09-27T13:14:43-06:00
   path: /courses/react-typescript/typescript-without-trying
+- title: Concurrent React and Scheduling
+  description: Learn how React can pause and resume work to keep interactions
+    smooth—design components that play nicely with the scheduler.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-performance/concurrent-react-scheduling
+- title: Core Web Vitals for React Applications
+  description: Master LCP, FID, and CLS optimization in React apps. Practical
+    techniques to improve user experience and search rankings.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-performance/core-web-vitals-for-react
 - title: Identity Stability Props
   description: React's performance model is built on comparing values to decide
     when components need to re-render. When you pass objects, arrays, or
@@ -179,6 +205,11 @@
     whether React considers them...
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-performance/identity-stability-props
+- title: Measuring Performance with Real Tools
+  description: Stop guessing. Use React DevTools, Chrome Performance, and
+    flamegraphs to find real bottlenecks and prove improvements.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-performance/measuring-performance-with-real-tools
 - title: Memory Leak Detection in React Applications
   description: Find and fix memory leaks that kill performance. Master Chrome
     DevTools, detect common patterns, and build leak-free React apps.
@@ -189,17 +220,33 @@
     fetching—reduce time‑to‑first‑byte and hydrate faster.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-performance/optimizing-server-side-rendering
+- title: The React 19 Compiler
+  description: Master the React Compiler from basics to advanced patterns. Migrate
+    from manual optimizations, handle edge cases, and measure real-world
+    improvements.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-performance/react-19-compiler-guide
+- title: Suspense for Data Fetching
+  description: Stream UI progressively instead of blocking on everything—compose
+    boundaries that keep pages interactive and informative.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-performance/suspense-for-data-fetching
+- title: The use() Hook
+  description: Simplify async and context consumption by letting components 'use'
+    resources directly, with Suspense driving the UI flow.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-performance/the-use-hook
 - title: useDeferredValue Patterns
   description: Keep typing fluid by deferring expensive derived values. Pair with
     transitions and memoization for silky search UIs.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-performance/usedeferredvalue-patterns
-- title: Complete Guide to React Component Props with TypeScript
-  description: Master typing React props from basics to advanced patterns—required
-    vs optional, defaults, unions, generics, and building self-documenting
-    component APIs.
+- title: Virtual DOM & Fiber Architecture
+  description: Understand how React really works under the hood. Master the Fiber
+    architecture, priority scheduling, and reconciliation to write truly
+    optimized React apps.
   modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/component-props-complete-guide
+  path: /courses/react-performance/virtual-dom-fiber-architecture
 - title: Typing Context and Selector Patterns
   description: Create fully typed contexts—state/actions split, selectors that
     minimize re-renders, and ergonomic Provider APIs.
@@ -240,6 +287,11 @@
     type="number"> returning strings.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/forms-events-and-number-inputs
+- title: Typing Higher-Order Components Without Tears
+  description: Wrap components and keep their props—model HOCs with generics,
+    Omit, and proper ref forwarding.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/higher-order-components-typing
 - title: Typing Children and When to Use ReactNode
   description: Children can be strings, elements, arrays—learn the correct types
     and helpers without guesswork.
@@ -255,11 +307,6 @@
     patterns for typing legacy components without churn.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/migrating-javascript-to-typescript
-- title: Mirroring DOM Props with ComponentPropsWithoutRef
-  description: Wrap native elements without losing typing—pass through every valid
-    prop and keep autocomplete.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/mirror-dom-props
 - title: Module Federation with TypeScript
   description: Build type-safe micro-frontends with Webpack Module Federation and TypeScript
   modified: 2025-09-22T09:27:10-06:00
@@ -286,16 +333,23 @@
     React Query's powerful cachi...
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/react-query-trpc
-- title: Complete Guide to React State Management with TypeScript
-  description: Master useState, useReducer, and action typing—from inference
-    patterns to discriminated unions that prevent impossible states.
+- title: Safer Createcontext Helpers
+  description: "React Context is powerful, but the default createContext API
+    leaves you with an uncomfortable truth: your context value might be
+    undefined if someone forgets to wrap their component tree in a Provider.
+    This leads to defensive programming..."
   modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/react-state-management-with-typescript
+  path: /courses/react-typescript/safer-createcontext-helpers
 - title: Testing React Components with TypeScript
   description: Configure Jest/Vitest and RTL for TypeScript—type-safe queries,
     user events, and mock helpers.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/testing-react-typescript
+- title: Type-Level Testing in Practice
+  description: Assert your types with tsd/expectTypeOf—lock generics, prevent
+    regressions, and add type coverage to CI.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/type-level-testing-in-practice
 - title: Conditional and Mapped Types
   description: Transform and manipulate types at compile time with TypeScript's
     most powerful features
@@ -463,59 +517,3 @@
     auditing to eliminate bloat and optimize your React bundle.
   modified: 2025-09-20T10:39:54-06:00
   path: /courses/react-performance/bundle-analysis-deep-dive
-- title: CDN Caching & Immutable Assets
-  description: Optimize React app delivery with CDN caching strategies, immutable
-    deployments, and hashed chunking patterns
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/cdn-caching-immutable-assets
-- title: Colocation of State
-  description: Keep state near its consumers to reduce render storms, simplify
-    data flow, and make components easier to reason about.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/colocation-of-state
-- title: Component Granularity Splitting
-  description: Component splitting is React performance optimization's
-    double-edged sword. Split too little and you get monolithic components that
-    re-render everything when a single prop changes. Split too much and you end
-    up with component confetti—do...
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/component-granularity-splitting
-- title: Concurrent React and Scheduling
-  description: Learn how React can pause and resume work to keep interactions
-    smooth—design components that play nicely with the scheduler.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/concurrent-react-scheduling
-- title: Context API Performance Pitfalls
-  description: Avoid the Context API traps that cause unnecessary re-renders.
-    Learn patterns for efficient context usage, splitting strategies, and when
-    to reach for alternatives.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/context-api-performance-pitfalls
-- title: Core Web Vitals for React Applications
-  description: Master LCP, FID, and CLS optimization in React apps. Practical
-    techniques to improve user experience and search rankings.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/core-web-vitals-for-react
-- title: Custom Equality Checks with areEqual
-  description: Write domain-smart equality functions that avoid deep-compare traps
-    and make memoized components both fast and correct.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/custom-equality-checks-areequal
-- title: Debugging React Performance Issues
-  description: Master the systematic approach to finding and fixing performance
-    problems. Use React DevTools, Chrome Performance tab, and proven debugging
-    workflows.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/debugging-performance-issues
-- title: Derived vs Stored State
-  description: Store less, derive more. Compute on demand to avoid desyncs, extra
-    memory, and unnecessary re-renders.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/derived-vs-stored-state
-- title: Flushsync In React Dom
-  description: React's concurrent rendering is one of its most powerful
-    features—it batches updates, prioritizes work, and keeps your app responsive
-    by breaking rendering into chunks. But sometimes you need to tell React,
-    "No, really, I need this updat...
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/flushsync-in-react-dom

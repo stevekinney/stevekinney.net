@@ -4,7 +4,7 @@ description: >-
   Stop guessing. Use React DevTools, Chrome Performance, and flamegraphs to find
   real bottlenecks and prove improvements.
 date: 2025-09-06T22:11:29.695Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -19,7 +19,7 @@ React performance debugging used to be a mix of console logs, timing code, and e
 
 ## The React DevTools Profiler: Your First Stop
 
-The React DevTools Profiler is purpose-built for React apps and should be your go-to tool for understanding component behavior. It shows you which components rendered, why they rendered, and how long they took.
+The [React Developer Tools Profiler](https://react.dev/learn/react-developer-tools) is purpose-built for React apps and should be your go-to tool for understanding component behavior. It shows you which components rendered, why they rendered, and how long they took.
 
 ### Getting Started with the Profiler
 
@@ -393,14 +393,6 @@ const performanceTest = async () => {
   await browser.close();
 };
 ```
-
-## Related Topics
-
-- **[Debugging Performance Issues](./debugging-performance-issues.md)** - Systematic debugging workflow using these tools
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Measure real user performance metrics
-- **[Production Performance Monitoring](./production-performance-monitoring.md)** - Monitor performance in production environments
-- **[Memory Management Deep Dive](./memory-management-deep-dive.md)** - Advanced memory analysis techniques
-- **[Performance Budgets and Automation](./performance-budgets-and-automation.md)** - Set up automated performance testing
 
 ## Key Takeaways
 

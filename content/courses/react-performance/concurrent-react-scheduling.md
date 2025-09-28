@@ -4,7 +4,7 @@ description: >-
   Learn how React can pause and resume work to keep interactions smooth—design
   components that play nicely with the scheduler.
 date: 2025-09-06T21:57:38.385Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -361,15 +361,6 @@ function PaymentForm() {
   };
 }
 ```
-
-## Related Topics
-
-- **[useTransition and startTransition](./usetransition-and-starttransition.md)** - Detailed API guide and advanced patterns
-- **[useDeferredValue Patterns](./usedeferredvalue-patterns.md)** - In-depth deferred value techniques
-- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - How the compiler optimizes concurrent rendering
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Measure the impact of concurrent features on INP
-- **[INP Optimization Long Tasks](./inp-optimization-long-tasks.md)** - Break up long tasks for better scheduling
-- **[flushSync in React DOM](./flushsync-in-react-dom.md)** - Override scheduling for urgent updates
 
 ## Next Steps
 

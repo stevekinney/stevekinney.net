@@ -4,7 +4,7 @@ description: >-
   Assert your types with tsd/expectTypeOf—lock generics, prevent regressions,
   and add type coverage to CI.
 date: 2025-09-14T18:00:00.000Z
-modified: '2025-09-14T23:11:40.856Z'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -101,6 +101,41 @@ expectType<JSX.Element>(<Button />);
 
 - Export types (`export type { ButtonProps }`) and assert them in `test:types`.
 - Lock down overloads and generic defaults with targeted assertions.
+
+## Snapshot Public Component Types
+
+Lock down your public API with type snapshots using `tsd` or `expectTypeOf`.
+
+```ts
+// tsd: Button and TextField public types
+import type { ComponentProps } from 'react';
+import { expectType } from 'tsd';
+import { Button } from '../dist';
+import { TextField } from '../dist';
+
+// Button supports as="a" | "button" and mirrors intrinsic attrs
+type ButtonProps = ComponentProps<typeof Button>;
+expectType<ButtonProps>({ as: 'button', onClick: () => {} });
+expectType<ButtonProps>({ as: 'a', href: '/home' });
+// @ts-expect-error - anchors need href
+expectType<ButtonProps>({ as: 'a' });
+
+// TextField narrows onChange to the correct event type
+type TextFieldProps = ComponentProps<typeof TextField>;
+expectType<TextFieldProps>({ label: 'Name', value: '', onChange: (e) => e.target.value });
+expectType<TextFieldProps>({
+  as: 'textarea',
+  label: 'Bio',
+  defaultValue: '',
+  onChange: (e) => e.target.value,
+});
+// @ts-expect-error - wrong event type for textarea
+expectType<TextFieldProps>({
+  as: 'textarea',
+  label: 'Bio',
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => {},
+});
+```
 
 ## See Also
 

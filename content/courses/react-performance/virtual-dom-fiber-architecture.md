@@ -1,11 +1,11 @@
 ---
-title: Virtual DOM & Fiber Architecture Deep Dive
+title: Virtual DOM & Fiber Architecture
 description: >-
   Understand how React really works under the hood. Master the Fiber
   architecture, priority scheduling, and reconciliation to write truly optimized
   React apps.
 date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -15,7 +15,11 @@ tags:
   - architecture
 ---
 
-You've heard it a thousand times: "React uses a Virtual DOM for performance." But when pressed for details, most developers hand-wave something about "diffing" and "batching updates." The truth is far more fascinating. React's Fiber architecture is a complete rewrite of React's core algorithm, introducing concepts like time-slicing, priority scheduling, and interruptible rendering that fundamentally change how we should think about React performance.
+You've heard it a thousand times:
+
+> React uses a Virtual DOM for performance.
+
+But when pressed for details, most developers hand-wave something about "diffing" and "batching updates." The truth is far more fascinating. React's Fiber architecture is a complete rewrite of React's core algorithm, introducing concepts like time-slicing, priority scheduling, and interruptible rendering that fundamentally change how we should think about React performance.
 
 Understanding Fiber isn't just academic curiosity—it directly impacts how you write performant React code. When you know how React schedules work, prioritizes updates, and decides what to render when, you can structure your components and state updates to work with React's algorithm instead of against it. This deep dive reveals the inner workings that power every React application.
 
@@ -859,13 +863,6 @@ function SuspenseBoundaries() {
 The Virtual DOM and Fiber architecture are the beating heart of React's performance story. The Virtual DOM provides the declarative programming model we love, while Fiber transforms that model into an efficient, interruptible, priority-aware rendering machine. Understanding these internals isn't just academic—it directly informs how you structure components, manage state, and optimize performance.
 
 The key insights: React can interrupt and resume work, different updates have different priorities, and the reconciliation algorithm rewards stable keys and shallow component trees. Write your React code with these principles in mind, and you're working with the framework's natural grain rather than against it.
-
-## Related Topics
-
-- **[Understanding Reconciliation React 19](./understanding-reconciliation-react-19.md)** - React 19 updates to reconciliation
-- **[Concurrent React Scheduling](./concurrent-react-scheduling.md)** - Deep dive into scheduling and prioritization
-- **[useTransition and startTransition](./usetransition-and-starttransition.md)** - Practical concurrent features
-- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - How compiler optimizes at Fiber level
 
 ## Prerequisites
 

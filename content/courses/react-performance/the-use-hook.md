@@ -4,7 +4,7 @@ description: >-
   Simplify async and context consumption by letting components 'use' resources
   directly, with Suspense driving the UI flow.
 date: 2025-09-06T22:15:46.931Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -86,7 +86,7 @@ function UserCard({ userId }: { userId: string }) {
 // Wrap with Suspense to handle the loading state
 function App() {
   return (
-    <Suspense fallback={<div>Loading user...</div>}>
+    <Suspense fallback={<div>Loading user…</div>}>
       <UserCard userId="123" />
     </Suspense>
   );
@@ -449,13 +449,6 @@ The `use()` hook represents React's vision for simpler, more declarative async p
 - **Better DevX**: Less boilerplate, clearer intent, easier debugging
 
 As the ecosystem evolves, expect to see more libraries and frameworks embrace `use()` for cleaner async patterns. The key is understanding when and how to apply it effectively—which often means rethinking your data flow from imperative state management to declarative resource consumption.
-
-## Related Topics
-
-- **[Suspense for Data Fetching](./suspense-for-data-fetching.md)** - Understanding Suspense mechanics and patterns
-- **[React Cache API](./react-cache-api.md)** - Caching strategies for the use() hook
-- **[React Server Components (RSC)](./react-server-components-rsc.md)** - Server-side data fetching with use()
-- **[Selective Hydration React 19](./selective-hydration-react-19.md)** - SSR optimization with Suspense
 
 ## Prerequisites
 

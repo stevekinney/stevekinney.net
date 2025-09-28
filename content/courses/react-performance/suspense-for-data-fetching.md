@@ -4,7 +4,7 @@ description: >-
   Stream UI progressively instead of blocking on everything—compose boundaries
   that keep pages interactive and informative.
 date: 2025-09-06T22:01:30.022Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 published: true
 tags:
   - react
@@ -17,118 +17,11 @@ React Suspense fundamentally changes how we think about loading states and data 
 
 The real power comes from how Suspense boundaries work together with modern data fetching patterns to create streaming UIs that reveal content as soon as it's ready, rather than blocking the entire page on the slowest data dependency.
 
-## What Makes `Suspense` Different
-
-Before Suspense, data fetching in React typically followed a "fetch-on-render" pattern where each component handled its own loading states:
-
-```tsx
-// ❌ Traditional approach: each component manages loading
-function UserProfile({ userId }: { userId: string }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchUser(userId)
-      .then(setUser)
-      .catch(() => setError('Failed to load user'))
-      .finally(() => setLoading(false));
-  }, [userId]);
-
-  if (loading) return <div>Loading user...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-  return <div>Hello, {user?.name}</div>;
-}
-```
-
-This approach creates a few problems:
-
-- **Loading states cascade**: Every component waits for its own data, creating waterfalls
-- **Repetitive boilerplate**: Each component reimplements the same loading/error logic
-- **Poor user experience**: Users see multiple loading spinners appearing sequentially
-- **Difficult coordination**: Hard to show unified loading states across related data
-
-Suspense flips this model. Instead of components managing their own loading states, they throw promises when data isn't ready, and Suspense boundaries catch those promises to show fallback UI:
-
-```tsx
-// ✅ Suspense approach: boundaries handle loading declaratively
-function UserProfile({ userId }: { userId: string }) {
-  const user = useUser(userId); // This hook throws a promise if data isn't ready
-  return <div>Hello, {user.name}</div>;
-}
-
-function App() {
-  return (
-    <Suspense fallback={<div>Loading user...</div>}>
-      <UserProfile userId="123" />
-    </Suspense>
-  );
-}
-```
-
-The component becomes simpler—it just declares what it needs and assumes the data will be there. The Suspense boundary handles the loading state.
+> See also: [The use Hook](./the-use-hook.md) for `use()`-specific patterns, basic Suspense composition, and error handling. This page focuses on Suspense-centric data fetching patterns, cache mechanics (throwing promises), and common pitfalls.
 
 ## Setting Up `Suspense` Boundaries
 
-Suspense boundaries are like try-catch blocks for async operations. You place them strategically around components that might suspend:
-
-```tsx
-import { Suspense } from 'react';
-
-function App() {
-  return (
-    <div>
-      <h1>My Dashboard</h1>
-
-      {/* This boundary catches any suspending components inside */}
-      <Suspense fallback={<UserProfileSkeleton />}>
-        <UserProfile userId="123" />
-      </Suspense>
-
-      <Suspense fallback={<NotificationsSkeleton />}>
-        <NotificationsList />
-      </Suspense>
-
-      <Suspense fallback={<ProjectsSkeleton />}>
-        <ProjectsList />
-      </Suspense>
-    </div>
-  );
-}
-```
-
-This creates three independent loading zones. If `UserProfile` is still loading, users can still interact with notifications and projects once their data arrives.
-
-### Nested Boundaries for Progressive Loading
-
-You can nest Suspense boundaries to create more granular loading experiences:
-
-```tsx
-function Dashboard() {
-  return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      {/* Outer boundary: shows skeleton for entire dashboard */}
-      <div className="dashboard">
-        <UserHeader />
-
-        <div className="dashboard-content">
-          <Suspense fallback={<StatsSkeleton />}>
-            {/* Inner boundary: shows skeleton just for stats */}
-            <StatsPanel />
-          </Suspense>
-
-          <Suspense fallback={<ActivitySkeleton />}>
-            <ActivityFeed />
-          </Suspense>
-        </div>
-      </div>
-    </Suspense>
-  );
-}
-```
-
-If `UserHeader` loads quickly but `StatsPanel` is slow, users see the header immediately with just the stats section showing a skeleton.
+This guide assumes familiarity with basic boundary composition. For a primer and progressive enhancement examples, see [The use Hook](./the-use-hook.md).
 
 ## Data Fetching Patterns with `Suspense`
 
@@ -184,71 +77,11 @@ This pattern ensures that:
 
 ## Error Boundaries with `Suspense`
 
-Suspense handles loading states, but you need Error Boundaries for error states. They work together beautifully:
-
-```tsx
-import { ErrorBoundary } from 'react-error-boundary';
-
-function ErrorFallback({
-  error,
-  resetErrorBoundary,
-}: {
-  error: Error;
-  resetErrorBoundary: () => void;
-}) {
-  return (
-    <div className="error-container">
-      <h2>Something went wrong</h2>
-      <p>{error.message}</p>
-      <button onClick={resetErrorBoundary}>Try again</button>
-    </div>
-  );
-}
-
-function App() {
-  return (
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-      onReset={() => {
-        // Clear any cached data to force refetch
-        cache.clear();
-      }}
-    >
-      <Suspense fallback={<UserProfileSkeleton />}>
-        <UserProfile userId="123" />
-      </Suspense>
-    </ErrorBoundary>
-  );
-}
-```
-
-Now if the data fetch fails, users see a proper error message with a retry option.
+Refer to [The use Hook](./the-use-hook.md) for foundational error boundary patterns with Suspense and `use()`. This page focuses on caching, streaming, and pitfalls rather than general error handling.
 
 ## Real World Pattern: Streaming Data
 
-One of Suspense's most powerful features is how it enables streaming experiences. Instead of waiting for all data before showing anything, you can reveal content progressively:
-
-```tsx
-function BlogPost({ postId }: { postId: string }) {
-  return (
-    <article>
-      <Suspense fallback={<PostHeaderSkeleton />}>
-        <PostHeader postId={postId} />
-      </Suspense>
-
-      <Suspense fallback={<PostContentSkeleton />}>
-        <PostContent postId={postId} />
-      </Suspense>
-
-      <Suspense fallback={<CommentsSkeleton />}>
-        <Comments postId={postId} />
-      </Suspense>
-    </article>
-  );
-}
-```
-
-If the post header loads in 100ms, content in 300ms, and comments in 800ms, users see each section appear as soon as it's ready rather than waiting 800ms to see anything.
+See progressive composition examples in [The use Hook](./the-use-hook.md). Below we focus on initiating requests early to avoid waterfalls.
 
 ### Starting Requests Early
 

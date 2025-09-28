@@ -5,7 +5,7 @@ description: >-
   an uncomfortable truth: your context value might be undefined if someone
   forgets to wrap their component tree in a Provider. This leads to defensive
   programming...
-modified: '2025-09-14T11:49:08-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-09-06T17:49:18-06:00'
 ---
 
@@ -212,66 +212,98 @@ export function createStateActionContext<State, Actions>(displayName: string) {
 
 Here's how you'd use it with a todo list:
 
-```tsx
+````tsx
 interface TodoState {
   todos: Todo[];
   filter: 'all' | 'active' | 'completed';
   isLoading: boolean;
 }
 
+## Example: Non‑Nullable ThemeContext
+
+A concrete example with a `ThemeContext` that can’t be used outside its provider.
+
+```tsx
+type Theme = 'light' | 'dark';
+
+interface ThemeContextValue {
+  theme: Theme;
+  setTheme: (next: Theme) => void;
+}
+
+const [useTheme, ThemeProvider] = createSafeContext<ThemeContextValue>('Theme');
+
+export function AppThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<Theme>('light');
+  const value = useMemo(() => ({ theme, setTheme }), [theme]);
+  return <ThemeProvider value={value}>{children}</ThemeProvider>;
+}
+
+// ❌ If you forget to wrap with <AppThemeProvider>, useTheme() will throw
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme(); // Never undefined
+  return (
+    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+      Theme: {theme}
+    </button>
+  );
+}
+````
+
 interface TodoActions {
-  addTodo: (text: string) => void;
-  toggleTodo: (id: string) => void;
-  deleteTodo: (id: string) => void;
-  setFilter: (filter: TodoState['filter']) => void;
+addTodo: (text: string) => void;
+toggleTodo: (id: string) => void;
+deleteTodo: (id: string) => void;
+setFilter: (filter: TodoState['filter']) => void;
 }
 
 const [useTodoState, useTodoActions, TodoProvider] = createStateActionContext<
-  TodoState,
-  TodoActions
->('Todo');
+TodoState,
+TodoActions
+
+> ('Todo');
 
 export function TodoManager({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(todoReducer, {
-    todos: [],
-    filter: 'all',
-    isLoading: false,
-  });
+const [state, dispatch] = useReducer(todoReducer, {
+todos: [],
+filter: 'all',
+isLoading: false,
+});
 
-  const actions: TodoActions = {
-    addTodo: (text) => dispatch({ type: 'ADD_TODO', payload: { text } }),
-    toggleTodo: (id) => dispatch({ type: 'TOGGLE_TODO', payload: { id } }),
-    deleteTodo: (id) => dispatch({ type: 'DELETE_TODO', payload: { id } }),
-    setFilter: (filter) => dispatch({ type: 'SET_FILTER', payload: { filter } }),
-  };
+const actions: TodoActions = {
+addTodo: (text) => dispatch({ type: 'ADD_TODO', payload: { text } }),
+toggleTodo: (id) => dispatch({ type: 'TOGGLE_TODO', payload: { id } }),
+deleteTodo: (id) => dispatch({ type: 'DELETE_TODO', payload: { id } }),
+setFilter: (filter) => dispatch({ type: 'SET_FILTER', payload: { filter } }),
+};
 
-  return (
-    <TodoProvider state={state} actions={actions}>
-      {children}
-    </TodoProvider>
-  );
+return (
+<TodoProvider state={state} actions={actions}>
+{children}
+</TodoProvider>
+);
 }
 
 // ✅ Components only re-render when their specific slice changes
 function TodoFilters() {
-  const { filter } = useTodoState(); // Only re-renders when filter changes
-  const { setFilter } = useTodoActions(); // Never re-renders
+const { filter } = useTodoState(); // Only re-renders when filter changes
+const { setFilter } = useTodoActions(); // Never re-renders
 
-  return (
-    <div>
-      {(['all', 'active', 'completed'] as const).map((filterOption) => (
-        <button
-          key={filterOption}
-          onClick={() => setFilter(filterOption)}
-          className={filter === filterOption ? 'active' : ''}
-        >
-          {filterOption}
-        </button>
-      ))}
-    </div>
-  );
+return (
+<div>
+{(['all', 'active', 'completed'] as const).map((filterOption) => (
+<button
+key={filterOption}
+onClick={() => setFilter(filterOption)}
+className={filter === filterOption ? 'active' : ''} >
+{filterOption}
+</button>
+))}
+</div>
+);
 }
-```
+
+````
 
 ## Runtime Validation with Zod
 
@@ -324,7 +356,7 @@ export function createValidatedContext<T>(displayName: string, schema: z.ZodSche
 
 // Usage with validation
 const [useValidatedUser, ValidatedUserProvider] = createValidatedContext('User', UserContextSchema);
-```
+````
 
 > [!WARNING]
 > Runtime validation adds overhead, so use it judiciously. It's great during development and for contexts that receive data from external sources, but you might want to disable it in production builds.
