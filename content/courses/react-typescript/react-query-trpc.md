@@ -5,7 +5,7 @@ description: >-
   is one of those things that sounds complicated but becomes surprisingly
   elegant once you get the pieces in place. When you combine React Query's
   powerful cachi...
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T18:40:11-06:00'
 date: '2025-09-06T17:49:18-06:00'
 ---
 
@@ -297,8 +297,6 @@ const { data, error } = useUser('123');
 - Prefer returning typed data from fetchers and inferring with `ReturnType` or a small `InferPromise` helper.
 - Specify the error type parameter for consistent `error` handling in UI.
 
-````
-
 ## Advanced Query Patterns
 
 ### Dependent Queries
@@ -330,7 +328,7 @@ function UserWithPosts({ userId }: { userId: string }) {
     </div>
   );
 }
-````
+```
 
 ### Infinite Queries
 

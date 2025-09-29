@@ -5,7 +5,7 @@ description: >-
   optional, defaults, unions, generics, and building self-documenting component
   APIs.
 date: 2025-09-20T17:00:00.000Z
-modified: '2025-09-27T18:40:11-06:00'
+modified: '2025-09-28T15:41:40-06:00'
 published: true
 tags:
   - react
@@ -404,7 +404,6 @@ export function TextField(props: TextFieldProps) {
 // Usage with correct event narrowing
 <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} />
 <TextField as="textarea" label="Bio" defaultValue={bio} onChange={(e) => setBio(e.target.value)} />
-````
 
 function Select<T>({
 options,
@@ -504,7 +503,7 @@ function Input({ onChange, ...props }: InputProps) {
     />
   );
 }
-````
+```
 
 ## React's Built-in Helper Types
 
