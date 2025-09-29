@@ -4,7 +4,7 @@ description: >-
   Never guess again—use React's built‑in event types for forms, mouse, keyboard,
   and more.
 date: 2025-09-06T22:23:57.265Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T18:40:11-06:00'
 published: true
 tags:
   - react
@@ -321,10 +321,11 @@ function onArrow(handler: (key: ArrowKey, e: React.KeyboardEvent) => void) {
 }
 
 <div onKeyDown={onArrow((key) => console.log('pressed', key))} />
-````
+```
 
 These helpers keep component code concise while preserving strong typing for both ergonomic and low-level cases.
 
+```tsx
 function GenericForm() {
 const handleChange = createFormHandler((name, value) => {
 console.log(`Field ${name} changed to: ${value}`);
@@ -341,8 +342,7 @@ return (
 </form>
 );
 }
-
-````
+```
 
 ## Custom Event Handlers and Event Delegation
 

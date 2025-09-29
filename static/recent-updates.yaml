@@ -67,6 +67,24 @@
     have expected.
   modified: 2025-07-29T21:09:56.000Z
   path: /writing/using-a-vector-database
+- title: Complete Guide to React Component Props with TypeScript
+  description: Master typing React props from basics to advanced patterns—required
+    vs optional, defaults, unions, generics, and building self-documenting
+    component APIs.
+  modified: 2025-09-28T15:41:40-06:00
+  path: /courses/react-typescript/component-props-complete-guide
+- title: Complete Guide to React State Management with TypeScript
+  description: Master useState, useReducer, and action typing—from inference
+    patterns to discriminated unions that prevent impossible states.
+  modified: 2025-09-28T15:41:40-06:00
+  path: /courses/react-typescript/react-state-management-with-typescript
+- title: Safer Createcontext Helpers
+  description: "React Context is powerful, but the default createContext API
+    leaves you with an uncomfortable truth: your context value might be
+    undefined if someone forgets to wrap their component tree in a Provider.
+    This leads to defensive programming..."
+  modified: 2025-09-28T15:41:40-06:00
+  path: /courses/react-typescript/safer-createcontext-helpers
 - title: Updating Todos - PUT/PATCH with Optimistic Updates
   description: Master optimistic updates with TypeScript—implement instant UI
     updates, handle rollbacks on failure, and sync state with PUT/PATCH
@@ -122,22 +140,28 @@
     hook patterns that scale
   modified: 2025-09-27T19:30:05.343Z
   path: /courses/react-typescript/typescript-react-hooks
-- title: Complete Guide to React Component Props with TypeScript
-  description: Master typing React props from basics to advanced patterns—required
-    vs optional, defaults, unions, generics, and building self-documenting
-    component APIs.
-  modified: 2025-09-27T18:40:11-06:00
-  path: /courses/react-typescript/component-props-complete-guide
 - title: Mirroring DOM Props with ComponentPropsWithoutRef
   description: Wrap native elements without losing typing—pass through every valid
     prop and keep autocomplete.
   modified: 2025-09-27T18:40:11-06:00
   path: /courses/react-typescript/mirror-dom-props
-- title: Complete Guide to React State Management with TypeScript
-  description: Master useState, useReducer, and action typing—from inference
-    patterns to discriminated unions that prevent impossible states.
+- title: Polymorphic Components and the as Prop
+  description: Build components that render different tags while preserving proper
+    props—no any, no lies, just safe polymorphism.
   modified: 2025-09-27T18:40:11-06:00
-  path: /courses/react-typescript/react-state-management-with-typescript
+  path: /courses/react-typescript/polymorphic-components-and-as-prop
+- title: Server packages
+  description: Building a fully type-safe data layer between your React frontend
+    and backend is one of those things that sounds complicated but becomes
+    surprisingly elegant once you get the pieces in place. When you combine
+    React Query's powerful cachi...
+  modified: 2025-09-27T18:40:11-06:00
+  path: /courses/react-typescript/react-query-trpc
+- title: DOM and React Event Types Without Tears
+  description: Never guess again—use React's built‑in event types for forms,
+    mouse, keyboard, and more.
+  modified: 2025-09-27T18:40:11-06:00
+  path: /courses/react-typescript/typing-dom-and-react-events
 - title: Recommended ESLint Rules for TypeScript and React
   description: Short descriptions of each "recommended" rules.
   modified: 2025-09-27T18:32:37.177Z
@@ -316,30 +340,11 @@
     circular snags.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/module-resolution-and-paths
-- title: Polymorphic Components and the as Prop
-  description: Build components that render different tags while preserving proper
-    props—no any, no lies, just safe polymorphism.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/polymorphic-components-and-as-prop
 - title: React Performance with TypeScript
   description: Use types to encode identity contracts—memo boundaries, readonly
     data, stable references, and type-safe performance monitoring.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/react-performance-with-typescript
-- title: Server packages
-  description: Building a fully type-safe data layer between your React frontend
-    and backend is one of those things that sounds complicated but becomes
-    surprisingly elegant once you get the pieces in place. When you combine
-    React Query's powerful cachi...
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/react-query-trpc
-- title: Safer Createcontext Helpers
-  description: "React Context is powerful, but the default createContext API
-    leaves you with an uncomfortable truth: your context value might be
-    undefined if someone forgets to wrap their component tree in a Provider.
-    This leads to defensive programming..."
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/safer-createcontext-helpers
 - title: Testing React Components with TypeScript
   description: Configure Jest/Vitest and RTL for TypeScript—type-safe queries,
     user events, and mock helpers.
@@ -384,11 +389,6 @@
     cleaner, more maintainable code
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/typescript-utility-types-complete
-- title: DOM and React Event Types Without Tears
-  description: Never guess again—use React's built‑in event types for forms,
-    mouse, keyboard, and more.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/typing-dom-and-react-events
 - title: useOptimistic and Typed Optimistic Updates
   description: Model optimistic UI updates safely—design optimistic state and
     reconcile server results with precise types.

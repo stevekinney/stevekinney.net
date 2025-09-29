@@ -4,7 +4,7 @@ description: >-
   Build components that render different tags while preserving proper props—no
   any, no lies, just safe polymorphism.
 date: 2025-09-06T22:04:44.911Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-27T18:40:11-06:00'
 published: true
 tags:
   - react
@@ -264,10 +264,8 @@ export const Button = forwardRef<HTMLElement, BaseButtonProps>(
 );
 ````
 
-- Use `asChild` when you need to control the rendered element (e.g., Next.js `Link`, Reach Router links) but want to keep Button’s styling and behavior.
+- Use `asChild` when you need to control the rendered element (e.g., Next.js `Link`, Reach Router links) but want to keep Button's styling and behavior.
 - The ref type becomes a bit more flexible (generic + element guards are possible); for most cases, forwarding as `HTMLElement` works well with DOM elements.
-
-````
 
 ## Real-World Use Cases™
 
@@ -288,7 +286,7 @@ const Text: PolymorphicComponent<'span', TextProps> = /* ... */;
 <Text as="h1" variant="heading" weight="bold">Page Title</Text>
 <Text as="p" variant="body">Regular paragraph text</Text>
 <Text as="label" variant="caption" weight="medium">Form label</Text>
-````
+```
 
 ### Router Integration
 

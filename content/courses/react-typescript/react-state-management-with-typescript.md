@@ -4,7 +4,7 @@ description: >-
   Master useState, useReducer, and action typing—from inference patterns to
   discriminated unions that prevent impossible states.
 date: 2025-09-06T22:23:57.266Z
-modified: '2025-09-27T18:40:11-06:00'
+modified: '2025-09-28T15:41:40-06:00'
 published: true
 tags:
   - react
@@ -357,7 +357,7 @@ type UserAction = AsyncAction<'FETCH_USER', User> | AsyncAction<'DELETE_USER'>;
 
 Here's a practical example that showcases advanced typing patterns for form management:
 
-````ts
+```ts
 interface FormState {
   fields: {
     email: string;
@@ -368,6 +368,7 @@ interface FormState {
   isSubmitting: boolean;
   submitCount: number;
 }
+```
 
 ## Reducer-Driven Form with Derived Action/Dispatch Types
 
@@ -384,11 +385,11 @@ interface LoginState {
 
 // 2) Action creators (as const for literal types)
 const loginActions = {
-  updateEmail: (value: string) => ({ type: 'updateEmail', value } as const),
-  updatePassword: (value: string) => ({ type: 'updatePassword', value } as const),
-  submit: () => ({ type: 'submit' } as const),
-  success: () => ({ type: 'success' } as const),
-  failure: (message: string) => ({ type: 'failure', message } as const),
+  updateEmail: (value: string) => ({ type: 'updateEmail', value }) as const,
+  updatePassword: (value: string) => ({ type: 'updatePassword', value }) as const,
+  submit: () => ({ type: 'submit' }) as const,
+  success: () => ({ type: 'success' }) as const,
+  failure: (message: string) => ({ type: 'failure', message }) as const,
 };
 
 // 3) Derive Action and Dispatch from creators
@@ -440,8 +441,9 @@ function useLoginForm() {
 
   return { state, dispatch: dispatch as LoginDispatch, onEmailChange, onPasswordChange, submit };
 }
-````
+```
 
+```ts
 type FormAction =
 | { type: 'updateField'; field: keyof FormState['fields']; value: string }
 | { type: 'setError'; field: keyof FormState['fields']; error: string }
@@ -529,7 +531,7 @@ dispatch({ type: 'setSubmitting', isSubmitting: true });
 return { state, updateField, validateAndSubmit, dispatch };
 }
 
-````
+```
 
 ## Functional Updates and Type Safety
 
@@ -558,7 +560,7 @@ setForm((prev) => ({
   ...prev,
   errors: [...prev.errors, 'Email is required'], // TypeScript validates everything
 }));
-````
+```
 
 > [!WARNING]
 > Be careful not to mutate state directly, even with functional updates. Always return a new object or array.
