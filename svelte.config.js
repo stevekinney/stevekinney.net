@@ -6,7 +6,7 @@ import { escapeSvelte, mdsvex } from 'mdsvex';
 import rehypeSlug from 'rehype-slug';
 import unwrapImages from 'rehype-unwrap-images';
 import remarkGfm from 'remark-gfm';
-import { bundledLanguages, createHighlighterCore } from 'shiki';
+import { bundledLanguages, codeToHtml } from 'shiki';
 
 // Node.js path utilities
 import { dirname, join } from 'path';
@@ -23,37 +23,8 @@ import { importTailwindPlayground } from './plugins/import-tailwind-playground.j
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Create a singleton highlighter instance
-let highlighterPromise = null;
-async function getHighlighter() {
-  if (!highlighterPromise) {
-    highlighterPromise = (async () => {
-      const { createOnigurumaEngine } = await import('shiki/engine/oniguruma');
-
-      // Dynamically import languages, handling special cases
-      const langImports = await Promise.all(
-        Object.keys(bundledLanguages).map(async (lang) => {
-          try {
-            // Handle special language names that need escaping
-            const langName =
-              lang === 'c++' ? 'cpp' : lang === 'c#' ? 'csharp' : lang === 'f#' ? 'fsharp' : lang;
-            return await import(`shiki/langs/${langName}.mjs`);
-          } catch {
-            console.warn(`Failed to load language: ${lang}`);
-            return null;
-          }
-        }),
-      );
-
-      return createHighlighterCore({
-        themes: [await import('shiki/themes/night-owl.mjs')],
-        langs: langImports.filter(Boolean),
-        engine: createOnigurumaEngine(import('shiki/wasm')),
-      });
-    })();
-  }
-  return highlighterPromise;
-}
+// Cache for highlighted code blocks
+const highlightCache = new Map();
 
 /**
  * MDSvex configuration options
@@ -83,9 +54,14 @@ const mdsvexOptions = {
       if (!lang) return code;
       if (!(lang in bundledLanguages)) return code;
 
-      const highlighter = await getHighlighter();
+      // Create cache key
+      const cacheKey = `${lang}:${code}`;
+      if (highlightCache.has(cacheKey)) {
+        return highlightCache.get(cacheKey);
+      }
+
       const html = escapeSvelte(
-        highlighter.codeToHtml(code, {
+        await codeToHtml(code, {
           lang,
           theme: 'night-owl',
         }),
@@ -102,7 +78,9 @@ const mdsvexOptions = {
         'not-last:mb-4',
       ];
 
-      return `<div class="${classes.join(' ')}" data-language="${lang}" data-metastring="${metastring}">${html}</div>`;
+      const result = `<div class="${classes.join(' ')}" data-language="${lang}" data-metastring="${metastring}">${html}</div>`;
+      highlightCache.set(cacheKey, result);
+      return result;
     },
   },
 };
