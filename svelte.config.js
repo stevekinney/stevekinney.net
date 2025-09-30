@@ -6,7 +6,7 @@ import { escapeSvelte, mdsvex } from 'mdsvex';
 import rehypeSlug from 'rehype-slug';
 import unwrapImages from 'rehype-unwrap-images';
 import remarkGfm from 'remark-gfm';
-import { bundledLanguages, codeToHtml } from 'shiki';
+import { bundledLanguages, createHighlighterCore } from 'shiki';
 
 // Node.js path utilities
 import { dirname, join } from 'path';
@@ -22,6 +22,38 @@ import { importTailwindPlayground } from './plugins/import-tailwind-playground.j
 // Define directory paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// Create a singleton highlighter instance
+let highlighterPromise = null;
+async function getHighlighter() {
+  if (!highlighterPromise) {
+    highlighterPromise = (async () => {
+      const { createOnigurumaEngine } = await import('shiki/engine/oniguruma');
+
+      // Dynamically import languages, handling special cases
+      const langImports = await Promise.all(
+        Object.keys(bundledLanguages).map(async (lang) => {
+          try {
+            // Handle special language names that need escaping
+            const langName =
+              lang === 'c++' ? 'cpp' : lang === 'c#' ? 'csharp' : lang === 'f#' ? 'fsharp' : lang;
+            return await import(`shiki/langs/${langName}.mjs`);
+          } catch {
+            console.warn(`Failed to load language: ${lang}`);
+            return null;
+          }
+        }),
+      );
+
+      return createHighlighterCore({
+        themes: [await import('shiki/themes/night-owl.mjs')],
+        langs: langImports.filter(Boolean),
+        engine: createOnigurumaEngine(import('shiki/wasm')),
+      });
+    })();
+  }
+  return highlighterPromise;
+}
 
 /**
  * MDSvex configuration options
@@ -51,8 +83,9 @@ const mdsvexOptions = {
       if (!lang) return code;
       if (!(lang in bundledLanguages)) return code;
 
+      const highlighter = await getHighlighter();
       const html = escapeSvelte(
-        await codeToHtml(code, {
+        highlighter.codeToHtml(code, {
           lang,
           theme: 'night-owl',
         }),
@@ -88,9 +121,9 @@ const config = {
     mdsvex(mdsvexOptions),
     /** @type {any} */ (
       processImages({
-        // Explicitly configure responsive image generation
-        widths: [480, 768, 1024],
-        mainWidth: 902,
+        // Reduce variants to speed up build
+        widths: [480, 768],
+        mainWidth: 800,
       })
     ),
     processCallouts(),

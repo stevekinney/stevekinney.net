@@ -26,4 +26,13 @@ export default defineConfig({
       allow: [searchForWorkspaceRoot(process.cwd()), '/content/**'],
     },
   },
+  build: {
+    rollupOptions: {
+      cache: true,
+    },
+  },
+  optimizeDeps: {
+    force: false,
+  },
+  cacheDir: 'node_modules/.vite',
 });
