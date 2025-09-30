@@ -29,10 +29,15 @@ export default defineConfig({
   build: {
     rollupOptions: {
       cache: true,
+      maxParallelFileOps: 20,
     },
+    chunkSizeWarningLimit: 1000,
   },
   optimizeDeps: {
     force: false,
   },
   cacheDir: 'node_modules/.vite',
+  worker: {
+    format: 'es',
+  },
 });
