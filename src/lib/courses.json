@@ -1,65 +1,79 @@
 [
   {
-    "title": "AI Fundamentals",
-    "description": "An introduction to the fundamentals of AI.",
-    "date": "2025-07-30T00:00:00.000Z",
-    "modified": "2025-07-29T21:08:44.000Z",
-    "slug": "python-ai"
-  },
-  {
-    "title": "Visual Studio Code",
-    "description": "A in-depth guide covering everyhing you would ever want to know about using Visual Studio Code.",
-    "date": "2025-03-18T16:45:00.000Z",
-    "modified": "2025-04-16T18:27:20.000Z",
-    "slug": "visual-studio-code"
-  },
-  {
-    "title": "Building Design Systems in Storybook",
-    "description": "An exploration in building a design system using Storybook.",
-    "date": "2024-03-05T19:56:55.000Z",
-    "modified": "2025-04-16T23:51:06.000Z",
-    "slug": "storybook"
-  },
-  {
     "title": "Developing with AI Tools",
     "description": "A course covering everything that Steve has learned to date about developing software with Cursor and Claude Code.",
     "date": "2025-07-30T00:00:00.000Z",
-    "modified": "2025-07-29T21:08:44.000Z",
+    "modified": "2025-07-30T13:28:49.000Z",
     "slug": "ai-development"
-  },
-  {
-    "title": "Tailwind",
-    "description": "An introduction to testing using JavaScript",
-    "date": "2025-06-13T19:56:55.000Z",
-    "modified": "2025-06-13T10:22:52.000Z",
-    "slug": "tailwind"
-  },
-  {
-    "title": "Introduction to Testing",
-    "description": "An introduction to testing using JavaScript",
-    "date": "2024-09-28T19:56:55.000Z",
-    "modified": "2025-04-28T23:33:44.000Z",
-    "slug": "testing"
   },
   {
     "title": "Figma for Developers",
     "description": "An high level introduction to Steve's Figma for Developers course.",
     "date": "2024-03-05T19:56:55.000Z",
-    "modified": "2025-04-28T23:33:44.000Z",
+    "modified": "2025-07-29T21:09:56.000Z",
     "slug": "figma"
   },
   {
     "title": "Full Stack TypeScript",
     "description": "Add type-safety across the stack.",
     "date": "2025-03-20T19:00:00.000Z",
-    "modified": "2025-04-28T23:33:44.000Z",
+    "modified": "2025-07-29T21:09:56.000Z",
     "slug": "full-stack-typescript"
+  },
+  {
+    "title": "AI Fundamentals with Python",
+    "description": "Learning about the basics of AI with Python and Hugging Face.",
+    "date": "2025-08-01T00:00:00.000Z",
+    "modified": "2025-08-01T14:39:45.000Z",
+    "slug": "python-ai"
+  },
+  {
+    "title": "React Performance",
+    "description": "Master React performance optimization from fundamentals to advanced techniques with React 19",
+    "date": "2025-09-07T18:00:00.000Z",
+    "modified": "2025-09-22T15:27:10.000Z",
+    "slug": "react-performance"
+  },
+  {
+    "title": "React with TypeScript",
+    "description": "Comprehensive guide to building type-safe React applications with TypeScript and React 19",
+    "date": "2025-09-07T18:00:00.000Z",
+    "modified": "2025-09-27T19:14:43.000Z",
+    "slug": "react-typescript"
+  },
+  {
+    "title": "Building Design Systems in Storybook",
+    "description": "An exploration in building a design system using Storybook.",
+    "date": "2024-03-05T19:56:55.000Z",
+    "modified": "2025-07-29T21:09:56.000Z",
+    "slug": "storybook"
+  },
+  {
+    "title": "Tailwind",
+    "description": "An introduction to testing using JavaScript",
+    "date": "2025-06-13T19:56:55.000Z",
+    "modified": "2025-06-13T12:27:15.000Z",
+    "slug": "tailwind"
+  },
+  {
+    "title": "Introduction to Testing",
+    "description": "An introduction to testing using JavaScript",
+    "date": "2024-09-28T19:56:55.000Z",
+    "modified": "2025-07-29T21:09:56.000Z",
+    "slug": "testing"
+  },
+  {
+    "title": "Visual Studio Code",
+    "description": "An in-depth guide covering everything you would ever want to know about using Visual Studio Code.",
+    "date": "2025-03-18T16:45:00.000Z",
+    "modified": "2025-07-29T21:09:56.000Z",
+    "slug": "visual-studio-code"
   },
   {
     "title": "Web Security",
     "description": "An introduction to the fundamentals of web security.",
     "date": "2024-04-05T19:56:55.000Z",
-    "modified": "2025-04-16T23:51:06.000Z",
+    "modified": "2025-07-29T21:09:56.000Z",
     "slug": "web-security"
   }
 ]
