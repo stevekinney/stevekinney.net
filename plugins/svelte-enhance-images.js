@@ -30,6 +30,9 @@ export const processImages = (opts = {}) => {
     markup({ content, filename }) {
       if (!filename || !filename.endsWith('.md')) return undefined;
 
+      // Quick check: if no img tags, skip processing entirely
+      if (!content.includes('<img')) return undefined;
+
       // Parse the content with the Svelte Compiler and create a MagicString instance.
       const { instance, html } = parse(content, { filename });
       const s = new MagicString(content);
