@@ -973,8 +973,3 @@ Creating todos with TypeScript involves:
 
 Now that we can create todos, let's explore reading and displaying them with proper pagination, filtering, and search functionality.
 
-## See Also
-
-- [Reading Todos: GET Requests and Type Safety](reading-todos-get-typescript.md) - Next tutorial
-- [Forms, Events, and Number Inputs](forms-events-and-number-inputs.md) - Form handling patterns
-- [Forms, Actions, and useActionState](forms-actions-and-useactionstate.md) - React 19 patterns

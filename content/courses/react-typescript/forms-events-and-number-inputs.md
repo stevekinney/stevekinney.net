@@ -466,8 +466,3 @@ The key takeaways:
 
 Start with the simple patterns and add complexity only when you need it. Your future self will thank you when you're debugging forms at 2 AM and everything just works as expected.
 
-## See Also
-
-- [Forms, Actions, and useActionState](forms-actions-and-useactionstate.md) - React 19 form patterns with Actions
-- [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md) - Comprehensive Zod validation patterns
-- [Typing DOM and React Events](typing-dom-and-react-events.md) - Deep dive into event types

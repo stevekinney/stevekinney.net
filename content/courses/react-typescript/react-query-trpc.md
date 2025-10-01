@@ -745,7 +745,3 @@ The combination of tRPC and React Query creates a incredibly productive developm
 
 The key insight is that modern type-safe data fetching isn't just about preventing bugs (though it does that beautifully)—it's about creating a development experience where your tools understand your data flow and can help you build features faster and more confidently.
 
-## See Also
-
-- [Real‑time Typing: WebSockets and SSE](realtime-typing-websockets-and-sse.md)
-- [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md)

@@ -764,8 +764,3 @@ Optimistic updates provide instant feedback while maintaining data integrity. Ke
 
 Let's complete our CRUD operations by implementing DELETE with proper state cleanup.
 
-## See Also
-
-- [Deleting Todos: DELETE Requests and State Cleanup](deleting-todos-state-cleanup.md) - Next tutorial
-- [useOptimistic: Typed Optimism](useoptimistic-typed-optimism.md) - React 19 patterns
-- [Discriminated Unions](typescript-discriminated-unions.md) - State modeling patterns

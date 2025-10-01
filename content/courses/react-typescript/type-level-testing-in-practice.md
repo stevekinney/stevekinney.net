@@ -137,8 +137,3 @@ expectType<TextFieldProps>({
 });
 ```
 
-## See Also
-
-- [Testing React TypeScript](testing-react-typescript.md)
-- [Publishing Types for Component Libraries](publishing-types-for-component-libraries.md)
-- [Advanced Type Tricks for React](advanced-type-tricks-for-react.md)

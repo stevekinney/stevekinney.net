@@ -1177,8 +1177,3 @@ Rather than fighting with scattered state and imperative event handlers, you're 
 
 The future of form handling in React is typed, declarative, and surprisingly pleasant to work with. Give these patterns a try in your next project—you might find yourself actually looking forward to implementing that next form.
 
-## See Also
-
-- [Forms, Events, and Number Inputs](forms-events-and-number-inputs.md) - TypeScript patterns for event handlers and input types
-- [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md) - Comprehensive Zod validation patterns
-- [The `use` Hook and Suspense Typing](the-use-hook-and-suspense-typing.md) - Async patterns in React 19

@@ -107,9 +107,3 @@ function Input({ label, helper, className, ...rest }: InputProps) {
 }
 ```
 
-## See Also
-
-- [Styling: CSSType and CSS Modules](styling-csstype-and-css-modules.md)
-- [Polymorphic Components and As Prop](polymorphic-components-and-as-prop.md)
-- [Compound Components and Slots Typing](compound-components-and-slots-typing.md)
-- [Advanced Type Tricks for React](advanced-type-tricks-for-react.md)

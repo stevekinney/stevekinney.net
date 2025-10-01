@@ -545,8 +545,3 @@ function TodoManager() {
 
 Now that you understand the fundamentals of useState with TypeScript, you're ready to tackle async data fetching. In the next tutorial, we'll combine useState with useEffect to fetch real todos from the JSONPlaceholder API, handle loading states, and manage errors—all with complete type safety.
 
-## See Also
-
-- [React State Management with TypeScript](react-state-management-with-typescript.md) - Deep dive into useReducer and complex state patterns
-- [Fetching Data with useState and useEffect](fetching-data-usestate.md) - Next tutorial in this series
-- [TypeScript Type Inference Mastery](typescript-type-inference-mastery.md) - Understanding how TypeScript infers types
