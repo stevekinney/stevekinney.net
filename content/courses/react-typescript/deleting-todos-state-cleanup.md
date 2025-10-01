@@ -859,8 +859,3 @@ Proper delete operations require:
 
 Now let's bring everything together in a complete CRUD todo application.
 
-## See Also
-
-- [Full CRUD Todo App: Putting It All Together](full-crud-todo-app.md) - Next tutorial
-- [Advanced Error Handling Patterns](advanced-error-handling-patterns.md) - Error strategies
-- [React State Management with TypeScript](react-state-management-with-typescript.md) - State patterns

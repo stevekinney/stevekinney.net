@@ -852,17 +852,3 @@ interface ConfusingStates {
 5. **Keep props flat when possible**: Deeply nested props are harder to use
 6. **Use generics for truly reusable components**: But don't over-engineer
 
-## Related Topics
-
-- **[TypeScript Discriminated Unions](typescript-discriminated-unions.md)** - Deep dive into union types for props
-- **[JSX Types: ReactNode and ReactElement](jsx-types-reactnode-reactelement.md)** - Understanding children and render prop types
-- **[Mirror DOM Props](mirror-dom-props.md)** - Extending HTML element props
-- **[Polymorphic Components](polymorphic-components-and-as-prop.md)** - Building flexible component APIs
-
-## Next Steps
-
-Now that you understand prop patterns:
-
-- Explore **[Generic Components](typescript-generics-deep-dive.md#generics-in-react-components)** for maximum reusability
-- Learn about **[forwardRef and Component Types](forwardref-memo-and-displayname.md)**
-- Master **[Custom Hooks with TypeScript](custom-hooks-with-generics-comprehensive.md)**

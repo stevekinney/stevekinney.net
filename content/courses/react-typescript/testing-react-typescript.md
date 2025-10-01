@@ -665,6 +665,3 @@ The goal isn't to test _everything_ TypeScript guarantees—it's to test the gap
 
 Your components work at compile-time AND runtime. Your users will thank you for it.
 
-## See Also
-
-- [Type-Level Testing in Practice](type-level-testing-in-practice.md)

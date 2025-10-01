@@ -121,8 +121,3 @@ const res = await getUser('123')
   .mapErr((e) => (e === 'NotFound' ? 'UserMissing' : 'Unknown')); // re-map domain errors
 ```
 
-## See Also
-
-- [Error Boundaries and Suspense Boundaries](error-boundaries-and-suspense-boundaries.md)
-- [Forms, Actions, and useActionState](forms-actions-and-useactionstate.md)
-- [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md)

@@ -910,8 +910,3 @@ Reading todos efficiently requires:
 
 Now that we can create and read todos, let's implement updating with optimistic updates and proper rollback strategies.
 
-## See Also
-
-- [Updating Todos: PUT/PATCH with Optimistic Updates](updating-todos-optimistic.md) - Next tutorial
-- [Fetching Data with useState and useEffect](fetching-data-usestate.md) - Data fetching basics
-- [React Query TRPC](react-query-trpc.md) - Advanced data fetching patterns

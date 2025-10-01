@@ -838,8 +838,3 @@ Proper loading states and error handling are crucial for production React applic
 
 Now that we can handle loading and errors properly, let's start implementing CRUD operations. The next tutorial covers creating todos with POST requests.
 
-## See Also
-
-- [Creating Todos: POST Requests with TypeScript](creating-todos-post-typescript.md) - Next tutorial
-- [Discriminated Unions](typescript-discriminated-unions.md) - Deep dive into state modeling with tagged unions
-- [Advanced Error Handling Patterns](advanced-error-handling-patterns.md) - Production error strategies

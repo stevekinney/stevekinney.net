@@ -1274,16 +1274,3 @@ Discriminated unions are one of TypeScript's killer features for React developme
 
 Master this pattern, and you'll write React applications that are not just type-safe, but architecturally sound. Your future self (and your teammates) will thank you!
 
-## Related Topics
-
-- **[Type Narrowing and Control Flow](typescript-type-narrowing-control-flow.md)** - Learn how TypeScript narrows union types
-- **[Utility Types](typescript-utility-types-complete.md)** - Explore built-in types like `Extract` and `Exclude` for working with unions
-- **[Generics Deep Dive](typescript-generics-deep-dive.md)** - Create generic discriminated unions
-
-## Next Steps
-
-Now that you understand discriminated unions:
-
-- Explore **[Conditional and Mapped Types](typescript-conditional-mapped-types.md)** for advanced type transformations
-- Learn about **[Template Literal Types](typescript-template-literal-types.md)** for string-based discriminants
-- Master **[Type-Level Programming](typescript-type-level-programming.md)** for complex type manipulations

@@ -1146,14 +1146,3 @@ Generics are the key to writing truly reusable TypeScript code. They let you cre
 
 The key to mastering generics is to start simple and gradually add complexity as needed. Use descriptive names, add constraints when they make sense, and remember that the goal is to make your code both reusable and safe. With the patterns and techniques in this guide, you're ready to leverage generics to their full potential in your React and TypeScript applications.
 
-## Related Topics
-
-- **[Custom Hooks with Generics](custom-hooks-with-generics-comprehensive.md)** - Deep dive into generic custom hooks
-- **[Utility Types](typescript-utility-types-complete.md)** - Built-in generic utility types
-- **[Conditional and Mapped Types](typescript-conditional-mapped-types.md)** - Advanced generic type transformations
-
-## Next Steps
-
-- Practice creating generic components for your common UI patterns
-- Explore generic custom hooks for data fetching and state management
-- Learn about variance and advanced constraints for library development

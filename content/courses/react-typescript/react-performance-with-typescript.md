@@ -690,6 +690,3 @@ Try implementing one of these patterns in your current project—start with stab
 
 Remember: premature optimization is the root of all evil, but predictable patterns that prevent obvious performance footguns? That's just good engineering.
 
-## See Also
-
-- [Typing Concurrent Features: Transitions and Deferrals](concurrent-features-typing.md)

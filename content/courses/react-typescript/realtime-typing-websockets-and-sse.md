@@ -111,8 +111,3 @@ function LiveView() {
 }
 ```
 
-## See Also
-
-- [Typed Data Layer: React Query and tRPC](react-query-trpc.md)
-- [Typing Concurrent Features: Transitions and Deferrals](concurrent-features-typing.md)
-- [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md)

@@ -567,7 +567,3 @@ Building reliable hydration payload types requires thinking beyond TypeScript's 
 
 The result is React applications with rock-solid type safety that works seamlessly across any deployment target—whether you're running on traditional servers, serverless functions, or edge runtimes. Your users won't see hydration mismatches, and your fellow developers will thank you for the predictable, well-typed data contracts.
 
-## See Also
-
-- [Edge, SSR, and Runtime Types](edge-ssr-and-runtime-types.md)
-- [Security and Escaping Types](security-and-escaping-types.md)

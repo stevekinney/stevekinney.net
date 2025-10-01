@@ -839,8 +839,3 @@ With these patterns, you can build robust data fetching that handles all the edg
 
 In the next tutorial, we'll dive deeper into loading states and error handling patterns, including discriminated unions for representing async states, error boundaries, and user-friendly error messages.
 
-## See Also
-
-- [Loading States and Error Handling](loading-states-error-handling.md) - Next tutorial in this series
-- [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md) - Runtime validation with Zod
-- [Custom Hooks with Generics](custom-hooks-with-generics-comprehensive.md) - Building reusable data fetching hooks

@@ -890,9 +890,3 @@ Through this series, you've mastered:
 
 Congratulations! You now have the knowledge to build production-ready React applications with TypeScript. The patterns you've learned here apply to any data-driven application, not just todos.
 
-## See Also
-
-- [React State Management with TypeScript](react-state-management-with-typescript.md)
-- [Data Fetching and Runtime Validation](data-fetching-and-runtime-validation.md)
-- [React Query TRPC](react-query-trpc.md) - Advanced data fetching patterns
-- [Testing React TypeScript](testing-react-typescript.md) - Comprehensive testing guide
