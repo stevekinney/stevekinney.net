@@ -887,38 +887,3 @@ interface MicroFrontendBestPractices {
 }
 ```
 
-## Related Topics
-
-**Prerequisites**:
-
-- [Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md) - Foundation for micro-frontend loading patterns
-- [React Architecture Patterns](../react-architecture/_index.md) - Component architecture fundamentals
-
-**Bundle Optimization**:
-
-- [Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md) - Analyzing shared dependencies and vendor chunks
-- [Tree Shaking Optimization](./tree-shaking-optimization.md) - Eliminating unused code across micro-frontends
-
-**Performance Strategies**:
-
-- [CDN Caching Immutable Assets](./cdn-caching-immutable-assets.md) - Caching micro-frontend assets efficiently
-- [Production Performance Monitoring](./production-performance-monitoring.md) - Monitoring distributed micro-frontend performance
-- [Resource Preloading APIs](./resource-preloading-apis.md) - Optimizing micro-frontend loading priorities
-
-**Advanced Patterns**:
-
-- [Service Worker Strategies](./service-worker-strategies.md) - Caching strategies for micro-frontends
-- [Performance Testing Strategy](./performance-testing-strategy.md) - Testing micro-frontend performance
-- [Web Workers with React](./web-workers-with-react.md) - Offloading processing in micro-frontends
-
-## Summary
-
-Micro-frontend performance requires balancing independence with efficiency:
-
-1. **Shared Dependencies** - Optimize vendor sharing while maintaining version flexibility
-2. **Runtime Loading** - Implement smart loading strategies with proper fallbacks
-3. **Communication Patterns** - Use efficient cross-boundary communication
-4. **Independent Optimization** - Enable teams to optimize their slices independently
-5. **Monitoring & Deployment** - Track performance per micro-frontend with coordinated deployments
-
-The goal is applications that scale organizationally without sacrificing technical performance. Master the patterns in this guide, and your micro-frontends will deliver both team autonomy and fast user experiences.

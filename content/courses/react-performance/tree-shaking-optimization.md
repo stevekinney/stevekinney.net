@@ -841,20 +841,3 @@ export { debounce, throttle };
 
 Effective tree shaking requires:
 
-## Related Topics
-
-- **[Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)** - Analyze your bundle to identify tree shaking opportunities and measure improvements
-- **[SWC Speedy Web Compiler](./swc-speedy-web-compiler.md)** - Configure SWC for optimal tree shaking performance
-- **[Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md)** - Combine tree shaking with code splitting for maximum bundle optimization
-- **[Performance Budgets and Monitoring](./performance-budgets-and-monitoring.md)** - Set and monitor bundle size budgets to maintain tree shaking benefits
-- **[CDN Caching Immutable Assets](./cdn-caching-immutable-assets.md)** - Cache your optimized, tree-shaken bundles effectively
-
-1. **Consistent ES6 module usage** - Avoid CommonJS in your source code
-2. **Careful library selection** - Prefer tree-shake-friendly alternatives
-3. **Proper bundler configuration** - Enable all tree shaking optimizations
-4. **Regular analysis** - Monitor bundle composition over time
-5. **Team education** - Ensure all developers understand import best practices
-
-Start by analyzing your current bundle with webpack-bundle-analyzer, then systematically optimize your largest dependencies. The biggest wins often come from replacing a single large library with a smaller, tree-shakeable alternative.
-
-Remember: tree shaking is not magic—it requires cooperation between your code structure, library choices, and build configuration. When done right, it can eliminate 50-80% of unused code from your bundle.

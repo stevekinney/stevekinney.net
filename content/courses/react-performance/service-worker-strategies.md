@@ -980,18 +980,3 @@ interface ServiceWorkerBestPractices {
 }
 ```
 
-## Related Topics
-
-- **[Resource Preloading APIs](./resource-preloading-apis.md)** - Combine preloading with service worker caching for sophisticated resource strategies
-- **[CDN Caching Immutable Assets](./cdn-caching-immutable-assets.md)** - Implement proper caching layers that work together with service worker strategies
-- **[Real-Time Data Performance](./real-time-data-performance.md)** - Handle real-time updates in offline-capable applications
-- **[Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md)** - Cache JavaScript chunks efficiently with service worker patterns
-- **[Performance Budgets and Monitoring](./performance-budgets-and-monitoring.md)** - Monitor the performance impact of your caching strategies
-
-## Wrapping Up
-
-Service Workers transform React apps from network-dependent applications into offline-capable, instantly-loading experiences. They're your secret weapon for performance, enabling sophisticated caching strategies, background synchronization, and push notifications that keep users engaged even without connectivity.
-
-The key is choosing the right caching strategy for each resource type, implementing proper cache management to prevent stale content, and handling updates gracefully to ensure users always have the latest version. Combined with React's component model, Service Workers create progressive web apps that rival native applications in performance and capability.
-
-Master Service Workers, and your React apps will load instantly, work offline, and provide the resilient, app-like experience users expect in today's mobile-first world.

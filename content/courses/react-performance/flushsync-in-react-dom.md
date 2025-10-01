@@ -627,29 +627,3 @@ function App() {
 }
 ```
 
-## Related Topics
-
-- **[Concurrent React Scheduling](./concurrent-react-scheduling.md)** - Understand React's scheduling system that flushSync overrides
-- **[useTransition and startTransition](./usetransition-and-starttransition.md)** - Alternative patterns for coordinating updates
-- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - How the compiler affects flushSync usage
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Impact of synchronous updates on performance metrics
-
-## Wrapping Up
-
-`flushSync` is a powerful but sharp tool in React's toolkit. It's designed for specific coordination scenarios where you need to bridge React's declarative rendering with imperative DOM operations. The key is understanding when you actually need synchronous updates versus when React's default batching and scheduling will serve you better.
-
-Use `flushSync` when you need to:
-
-- Coordinate with focus management after DOM changes
-- Measure DOM elements immediately after updates
-- Integrate with imperative third-party libraries
-- Ensure specific DOM state before imperative operations
-
-Avoid `flushSync` for:
-
-- General state updates that don't require coordination
-- Form validation and error handling
-- Loading states and data fetching
-- CSS animations and transitions
-
-Remember, every time you use `flushSync`, you're trading some of React's performance optimizations for synchronous behavior. Make sure that trade-off is worth it for your specific use case, and always measure the performance impact in your actual application.

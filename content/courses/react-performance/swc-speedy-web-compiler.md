@@ -540,21 +540,3 @@ While SWC is excellent for most React projects, there are some scenarios where s
 
 ## Next Steps
 
-## Related Topics
-
-- **[Tree Shaking Optimization](./tree-shaking-optimization.md)** - Configure SWC for optimal tree shaking and dead code elimination
-- **[Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)** - Analyze the impact of SWC on your bundle size and compilation speed
-- **[Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md)** - Implement code splitting patterns that work efficiently with SWC
-- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - Understand how SWC integrates with React 19's new compiler features
-- **[Performance Testing Strategy](./performance-testing-strategy.md)** - Measure the build performance improvements from SWC adoption
-
-Once you've got SWC humming along nicely, consider these optimizations:
-
-1. **Bundle analysis**: Use tools like `webpack-bundle-analyzer` to identify large dependencies
-2. **Code splitting**: Implement route-based and component-based code splitting
-3. **Tree shaking**: Ensure your imports are tree-shake friendly
-4. **Dependency optimization**: Audit and optimize your `node_modules`
-
-SWC isn't just about faster builds—it's about getting back to what matters: building great React applications. The time you save on compilation can be invested in better user experiences, more thorough testing, or just getting home a bit earlier. And honestly, isn't that what we're all really after?
-
-The Rust-powered future of JavaScript tooling is here, and it's time to embrace the speed.

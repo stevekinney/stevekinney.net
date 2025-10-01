@@ -485,13 +485,3 @@ Here's a practical approach for splitting existing components:
 
 The goal is components that are **focused, testable, and performant**—not the maximum number of components possible. Every split should have a clear justification: either performance, maintainability, or reusability.
 
-## Related Topics
-
-- **[Windowing and Virtualization](./windowing-and-virtualization.md)** - Handle large lists without splitting every item
-- **[React Memo React 19 and Compiler Era](./react-memo-react-19-and-compiler-era.md)** - Memoize expensive split components
-- **[Custom Equality Checks areEqual](./custom-equality-checks-areequal.md)** - Fine-tune when split components re-render
-- **[Colocation of State](./colocation-of-state.md)** - Keep state close to split components
-- **[Identity Stability Props](./identity-stability-props.md)** - Prevent unnecessary re-renders in split components
-- **[Avoiding Over Memoization](./avoiding-over-memoization.md)** - Balance splitting with memoization
-
-Remember: good component granularity isn't about following rules blindly—it's about understanding your app's specific patterns and optimizing for them. Start with larger components and split strategically when you identify performance bottlenecks or maintenance pain points.

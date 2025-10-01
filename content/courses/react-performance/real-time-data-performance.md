@@ -1016,18 +1016,3 @@ interface RealTimeBestPractices {
 }
 ```
 
-## Related Topics
-
-- **[Real-Time Scale Strategies](./real-time-scale-strategies.md)** - Advanced patterns for scaling real-time applications to handle massive concurrent loads
-- **[Web Workers with React](./web-workers-with-react.md)** - Offload heavy processing to Web Workers for better real-time performance
-- **[Windowing and Virtualization](./windowing-and-virtualization.md)** - Essential techniques for efficiently rendering large real-time data sets
-- **[useDeferredValue Patterns](./usedeferredvalue-patterns.md)** - Use React 19's useDeferredValue to handle high-frequency updates gracefully
-- **[Service Worker Strategies](./service-worker-strategies.md)** - Implement offline-first patterns and background data processing for real-time apps
-
-## Wrapping Up
-
-Real-time data performance in React is about managing the flow, not just handling it. The key is creating buffers between the fire hose of incoming data and React's rendering cycle. Throttle and batch updates to respect the frame budget, virtualize large lists to render only what's visible, use Web Workers to process data off the main thread, and implement selective updates to minimize re-renders.
-
-Remember that real-time doesn't mean instant—it means fast enough that users perceive no delay. Sometimes that means showing data 100ms later but at a smooth 60fps, rather than immediately at 10fps. Master these patterns, and you'll build React applications that handle real-time data streams gracefully, maintaining responsiveness even under extreme load.
-
-The secret to real-time performance isn't processing every update—it's processing the right updates at the right frequency while maintaining a responsive UI.

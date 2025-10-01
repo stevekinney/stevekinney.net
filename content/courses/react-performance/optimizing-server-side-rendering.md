@@ -674,36 +674,3 @@ cacheManager.set('posts-user-123', userPosts, ['posts', 'user-123']);
 cacheManager.invalidateByTags(['user-123']);
 ```
 
-## Related Topics
-
-**Core SSR Techniques**:
-
-- [Streaming SSR Optimization](./streaming-ssr-optimization.md) - Deep dive into streaming implementation patterns
-- [Selective Hydration React 19](./selective-hydration-react-19.md) - Optimizing the hydration process
-
-**Data & Caching**:
-
-- [React Server Components RSC](./react-server-components-rsc.md) - Ultra-efficient server rendering patterns
-- [CDN Caching Immutable Assets](./cdn-caching-immutable-assets.md) - Optimizing asset delivery
-
-**Performance Measurement**:
-
-- [Core Web Vitals for React](./core-web-vitals-for-react.md) - Measuring SSR performance impact
-- [Production Performance Monitoring](./production-performance-monitoring.md) - Monitoring SSR in production
-
-**Advanced Patterns**:
-
-- [Service Worker Strategies](./service-worker-strategies.md) - Client-side caching for SSR apps
-- [React Cache API](./react-cache-api.md) - Modern caching patterns
-
-## Summary
-
-Effective SSR optimization focuses on:
-
-1. **Streaming** - Send HTML progressively to reduce TTFB
-2. **Smart Data Fetching** - Avoid waterfalls and fetch in parallel
-3. **Caching Strategies** - Cache at multiple levels (data, components, pages)
-4. **Selective Hydration** - Hydrate only what's needed when it's needed
-5. **Performance Monitoring** - Measure real user metrics, not synthetic benchmarks
-
-Start with streaming and parallel data fetching for the biggest wins with the least complexity. Measure impact with real user metrics and iterate from there.

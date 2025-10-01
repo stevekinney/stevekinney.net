@@ -417,18 +417,3 @@ Before you decide where to put state, ask yourself:
 - **Is this truly global state** (like authentication or theme)? If yes, put it in a provider or global store.
 - **Am I lifting state "just in case"?** Don't do this—start colocated and lift when needed.
 
-## Related Topics
-
-- **[Lifting State Intelligently](./lifting-state-intelligently.md)** - When and how to lift state up the component tree
-- **[Derived vs Stored State](./derived-vs-stored-state.md)** - Decide whether to derive or store state values
-- **[Separating Actions from State: Two Contexts](./separating-actions-from-state-two-contexts.md)** - Split context for better colocation
-- **[Context API Performance Pitfalls](./context-api-performance-pitfalls.md)** - Avoid context-related performance issues
-- **[Component Granularity Splitting](./component-granularity-splitting.md)** - Break down components for better state boundaries
-
-## Wrapping Up
-
-State colocation is fundamentally about being intentional with your state placement. Start with state as close to its consumers as possible, and only lift it when you have a concrete reason to do so.
-
-Your components will be more performant, easier to test, and simpler to reason about. Plus, when requirements change (and they will), you'll have a much easier time refactoring because your state boundaries align with your component responsibilities.
-
-The goal isn't to avoid all state lifting—it's to make deliberate choices about where state lives based on how it's actually used, not where we think it might be used someday.

@@ -413,21 +413,3 @@ test('preserves input focus when list items are reordered', async () => {
 });
 ```
 
-## Related Topics
-
-- **[Identity Stability Props](./identity-stability-props.md)** - Deeper dive into React's identity concepts and performance implications
-- **[Windowing and Virtualization](./windowing-and-virtualization.md)** - Handle large lists efficiently while maintaining stable keys
-- **[Component Granularity Splitting](./component-granularity-splitting.md)** - How component boundaries affect key stability
-- **[Understanding Reconciliation React 19](./understanding-reconciliation-react-19.md)** - How React's diffing algorithm uses keys
-
-## Key Takeaways
-
-1. **Use stable, unique identifiers** as keys whenever possible—prefer actual IDs over array indices
-2. **Keys control component identity**—same key means same component instance across renders
-3. **Unstable keys cause bugs**—lost state, broken focus, unnecessary re-renders, and janky animations
-4. **Keys are scoped to siblings**—they only need to be unique within their parent, not globally
-5. **Don't overthink it**—simple, stable keys are better than clever, complex ones
-
-Keys might seem like a small detail, but they're fundamental to React's reconciliation algorithm. Get them right, and your lists will be fast, stable, and predictable. Get them wrong, and you'll spend hours debugging mysterious issues that seem to come and go randomly.
-
-The next time you see that "unique key prop" warning, don't just sprinkle in some `Math.random()`—take a moment to think about what makes each item in your list truly unique, and use that. Your users (and your future debugging self) will thank you.

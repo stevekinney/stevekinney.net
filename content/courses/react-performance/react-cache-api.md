@@ -409,30 +409,3 @@ Cache isn't always the right choice:
 
 Now that you understand `cache()`, you can eliminate redundant work across your React applications. Consider how this pairs with other React 19 features like Server Components and the `use()` hook for building efficient, performant applications.
 
-## Related Topics
-
-- **[The use() Hook](./the-use-hook.md)** - Consuming cached promises with the use() hook
-- **[React Server Components (RSC)](./react-server-components-rsc.md)** - Server-side caching strategies
-- **[Suspense for Data Fetching](./suspense-for-data-fetching.md)** - Integrating cache() with Suspense
-- **[Memory Management Deep Dive](./memory-management-deep-dive.md)** - Understanding cache memory implications
-
-## Prerequisites
-
-- Understanding of React Server Components
-- Knowledge of async/await patterns
-- Experience with database queries and API calls
-- Basic understanding of function purity
-
-## Practical Examples
-
-Common use cases for cache() API:
-
-- **Blog platforms** - Caching user data across post components
-- **E-commerce sites** - Product information shared between components
-- **Data dashboards** - Expensive calculations used in multiple visualizations
-- **Content management** - Author details displayed in various contexts
-
-The key insight is treating expensive operations as shared resources rather than component-local concerns. With `cache()`, you can write components that naturally collaborate to minimize redundant work while maintaining clean, readable code.
-
-> [!TIP]
-> Start by identifying expensive operations that multiple components perform with the same inputs. Database queries, API calls, and heavy computations are prime candidates for `cache()` optimization.

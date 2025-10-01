@@ -814,18 +814,3 @@ interface AnomalyResult {
 - Highlight regression risks
 - Provide fix recommendations
 
-## Related Topics
-
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Comprehensive guide to measuring INP and other Core Web Vitals
-- **[Production Performance Monitoring](./production-performance-monitoring.md)** - Broader production monitoring strategies beyond INP
-- **[INP Optimization Long Tasks](./inp-optimization-long-tasks.md)** - Fix the INP issues you discover through monitoring
-- **[Debugging Performance Issues](./debugging-performance-issues.md)** - Debug INP problems identified in production
-- **[Performance Budgets and Automation](./performance-budgets-and-automation.md)** - Set up automated INP alerting
-
-## Conclusion
-
-Production INP monitoring isn't about collecting data—it's about understanding real user pain. Every slow interaction you catch is a frustrated user you can help. Every pattern you identify is an opportunity to improve.
-
-The monitoring system we've built doesn't just measure INP; it tells you exactly what's slow, where it's slow, and why it's slow. It correlates interactions with components, tracks degradation over time, and alerts you before users notice problems.
-
-Remember: synthetic tests lie, but production metrics tell the truth. Build your monitoring system to capture that truth, and use it to deliver the responsive, instant interactions your users deserve. Because in the end, performance monitoring is really user experience monitoring. And that's what matters most.

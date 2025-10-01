@@ -733,18 +733,3 @@ Keep these snippets handy for quick debugging:
 })();
 ```
 
-## Related Topics
-
-- **[Measuring Performance with Real Tools](./measuring-performance-with-real-tools.md)** - Comprehensive guide to performance measurement tools
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Debug specific Core Web Vitals issues
-- **[Memory Management Deep Dive](./memory-management-deep-dive.md)** - Debug memory leaks and excessive memory usage
-- **[Production Performance Monitoring](./production-performance-monitoring.md)** - Debug issues in production environments
-- **[INP Optimization Long Tasks](./inp-optimization-long-tasks.md)** - Specific debugging for interaction performance
-
-## Wrapping Up
-
-Debugging React performance issues is a skill that improves with practice. Start with React DevTools for component-level issues, escalate to Chrome Performance tab for runtime analysis, and always measure before and after your fixes. Remember that not all perceived performance issues are real performance issues—sometimes it's about managing user expectations with loading states and progressive enhancement.
-
-The key is having a systematic approach: reproduce, measure, hypothesize, fix, and verify. With the tools and techniques in this guide, you can track down even the most elusive performance problems and, more importantly, prove that your fixes actually work.
-
-Performance debugging isn't about perfection—it's about finding the bottlenecks that actually matter to your users and fixing them efficiently. Master these debugging techniques, and you'll be able to diagnose and fix performance issues in minutes instead of hours.

@@ -1104,36 +1104,3 @@ describe('Streaming SSR', () => {
 });
 ```
 
-## Related Topics
-
-**Prerequisites**:
-
-- [Optimizing Server-Side Rendering](./optimizing-server-side-rendering.md) - SSR overview and general optimization patterns
-- [Suspense for Data Fetching](./suspense-for-data-fetching.md) - Understanding Suspense boundaries
-
-**React 19 Features**:
-
-- [Selective Hydration React 19](./selective-hydration-react-19.md) - Optimizing hydration with streaming
-- [React Server Components RSC](./react-server-components-rsc.md) - Modern server rendering patterns
-
-**Performance Optimization**:
-
-- [Core Web Vitals for React](./core-web-vitals-for-react.md) - Measuring streaming SSR impact
-- [Performance Testing Strategy](./performance-testing-strategy.md) - Testing SSR performance
-
-**Production Considerations**:
-
-- [Production Performance Monitoring](./production-performance-monitoring.md) - Monitoring streaming SSR
-- [CDN Caching Immutable Assets](./cdn-caching-immutable-assets.md) - Optimizing asset delivery for SSR
-
-## Summary
-
-Streaming SSR transforms server rendering from a blocking operation into a progressive enhancement:
-
-1. **Immediate TTFB** - Send shell HTML instantly while content loads
-2. **Progressive Loading** - Stream content as data becomes available
-3. **Suspense Integration** - Use boundaries to control streaming behavior
-4. **Error Resilience** - Graceful fallbacks when streaming fails
-5. **Performance Monitoring** - Track streaming-specific metrics
-
-The result is server-rendered apps that feel instant, improving both user experience and Core Web Vitals scores. Start with critical path optimization and build progressive enhancement from there.

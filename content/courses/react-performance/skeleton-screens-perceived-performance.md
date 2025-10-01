@@ -904,18 +904,3 @@ interface SkeletonBestPractices {
 }
 ```
 
-## Related Topics
-
-- **[Suspense for Data Fetching](./suspense-for-data-fetching.md)** - Implement declarative loading states with React Suspense boundaries
-- **[Image and Asset Optimization](./image-and-asset-optimization.md)** - Optimize image loading to reduce the time skeleton screens are visible
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Understand how perceived performance affects your Core Web Vitals scores
-- **[Animation Performance](./animation-performance.md)** - Create smooth skeleton animations that don't impact performance
-- **[Resource Preloading APIs](./resource-preloading-apis.md)** - Preload content to minimize skeleton screen duration
-
-## Wrapping Up
-
-Skeleton screens are the ultimate performance hack—they make your app feel faster without actually being faster. By showing users the shape of content before it arrives, you transform dead waiting time into active anticipation. The psychology is simple: uncertainty makes time drag, while visible progress makes it fly.
-
-The key is accuracy and subtlety. Your skeletons should match your content structure exactly to prevent jarring transitions. Animations should be smooth but not distracting. And most importantly, the skeleton-to-content transition should feel natural, not like two completely different states.
-
-Master skeleton screens, and you'll have users perceiving your React app as lightning-fast, even when it's waiting on that slow API or crunching through complex calculations. Sometimes the best performance optimization isn't making things faster—it's making them feel faster.

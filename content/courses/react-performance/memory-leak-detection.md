@@ -884,31 +884,3 @@ function MemorySafeComponent({ data, onUpdate }: { data: any[]; onUpdate: (data:
 }
 ```
 
-## Related Topics
-
-**Prerequisites**:
-
-- [Understanding React Hooks](../react-hooks/useeffect.md) - Effect cleanup patterns
-- [JavaScript fundamentals](../javascript/closures.md) - Reference and closure concepts
-
-**Related Performance Topics**:
-
-- [Memory Management Deep Dive](./memory-management-deep-dive.md) - Theory, GC internals, and advanced patterns
-- [Debugging Performance Issues](./debugging-performance-issues.md) - General performance debugging workflow
-- [Measuring Performance with Real Tools](./measuring-performance-with-real-tools.md) - Chrome DevTools and profiling
-
-**Next Steps**:
-
-- [Production Performance Monitoring](./production-performance-monitoring.md) - Monitor memory in production
-- [Performance Testing Strategy](./performance-testing-strategy.md) - Automated memory leak testing
-
-## Summary
-
-Memory leak detection is about building systematic practices:
-
-1. **Recognize patterns** - Know the common leak sources (listeners, timers, closures, subscriptions)
-2. **Use detection tools** - Chrome DevTools, automated profilers, and memory monitoring
-3. **Build prevention habits** - Cleanup checklists and defensive coding patterns
-4. **Test systematically** - Automated leak tests and regular profiling
-
-Every component that creates external references needs cleanup. Make memory leak prevention a standard part of your React development workflow—it's far easier to prevent leaks than to hunt them down in production.

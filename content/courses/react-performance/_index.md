@@ -88,18 +88,9 @@ modified: 2025-09-07T12:00:00-06:00
 - [Speculation Rules & `bfcache`](speculation-rules-bfcache.md)
 - [Image & Asset Optimization](image-and-asset-optimization.md)
 
-### Data & Real-Time
-
-- [GraphQL & React Performance](graphql-react-performance.md)
-- [Real-Time Data Performance](real-time-data-performance.md)
-- [Real-Time at Scale Strategies](real-time-scale-strategies.md)
-
 ### Advanced Graphics & Threading
 
 - [Web Workers with React](web-workers-with-react.md)
-- [OffscreenCanvas & WebGL](offscreen-canvas-webgl.md)
-- [WebAssembly Integration](webassembly-integration.md)
-- [GPU Acceleration Patterns](gpu-acceleration-patterns.md)
 - [View Transitions API](view-transitions-api.md)
 
 ### Memory & Architecture

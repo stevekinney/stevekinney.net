@@ -1013,25 +1013,3 @@ export function expectBundleSizeWithinBudget(actualSize: number, budget: number)
 }
 ```
 
-## Related Topics
-
-- **[Performance Budgets & Automation](./performance-budgets-and-automation.md)** - Setting pass/fail criteria and CI integration
-- **[Measuring Performance with Real Tools](./measuring-performance-with-real-tools.md)** - DevTools and profiling implementation details
-- **[Production Performance Monitoring](./production-performance-monitoring.md)** - Real-world performance tracking
-- **[Debugging Performance Issues](./debugging-performance-issues.md)** - Performance investigation playbook
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Key metrics for testing
-
-## Next Steps
-
-Effective performance testing requires:
-
-1. **Automated integration** - Run performance tests on every PR
-2. **Realistic test data** - Use production-like data volumes and complexity
-3. **Multiple device profiles** - Test on various devices and network conditions
-4. **Baseline tracking** - Monitor performance trends over time
-5. **Clear thresholds** - Set measurable performance targets
-6. **Fast feedback loops** - Keep unit tests fast, save comprehensive tests for CI
-
-Start with unit performance tests for your most critical components, then gradually expand to integration and E2E testing. The goal is to catch performance regressions before they reach production while maintaining development velocity.
-
-Remember: performance is a feature, not an afterthought. Test it like you would test any other critical functionality.

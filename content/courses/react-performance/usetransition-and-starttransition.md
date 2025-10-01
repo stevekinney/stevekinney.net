@@ -471,30 +471,3 @@ startTransition(() => {
 
 Now that you understand transitions, you're ready to build more responsive React applications. The key is identifying which updates are urgent (user input, navigation) versus which can wait (search results, data visualization).
 
-## Related Topics
-
-- **[Concurrent React Scheduling](./concurrent-react-scheduling.md)** - Understanding React's scheduling and prioritization
-- **[useDeferredValue Patterns](./usedeferredvalue-patterns.md)** - Alternative approach to deferring updates
-- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - Automatic optimizations that complement transitions
-- **[INP Optimization Long Tasks](./inp-optimization-long-tasks.md)** - Reducing input delay with transitions
-
-## Prerequisites
-
-- Understanding of React state management
-- Knowledge of performance profiling with React DevTools
-- Experience with React 18+ concurrent features
-- Basic understanding of event loop and main thread blocking
-
-## Practical Examples
-
-Ideal use cases for transitions:
-
-- **Search interfaces** - Smooth typing while filtering large datasets
-- **Data tables** - Responsive sorting and filtering controls
-- **Dashboard filters** - Immediate UI feedback with deferred chart updates
-- **Tab switching** - Instant tab highlighting with lazy content loading
-
-Start with your most problematic components—the ones where users notice UI freezing—and gradually apply transitions where they provide measurable improvements. Your users will thank you for the smoother experience.
-
-> [!NOTE]
-> Transitions work best alongside other React 18 features like **Suspense** and **concurrent rendering**. Consider exploring these complementary features for even better performance.

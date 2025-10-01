@@ -726,18 +726,3 @@ const TodoList: React.FC = () => {
 - Maintain spatial context
 - Communicate state changes
 
-## Related Topics
-
-- **[Animation Performance](./animation-performance.md)** - Optimize view transitions for smooth 60fps animations
-- **[Speculation Rules & bfcache](./speculation-rules-bfcache.md)** - Create seamless transitions between prerendered pages
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Understand how view transitions affect your performance metrics
-- **[GPU Acceleration Patterns](./gpu-acceleration-patterns.md)** - Leverage hardware acceleration for complex view transitions
-- **[Skeleton Screens & Perceived Performance](./skeleton-screens-perceived-performance.md)** - Combine view transitions with loading states for optimal UX
-
-## Conclusion
-
-The View Transitions API isn't just about making things move—it's about creating a coherent visual language that guides users through your app. Every transition should have a purpose: maintaining context, showing relationships, or indicating progress.
-
-When done right, view transitions make your React app feel less like a website and more like a native application. They turn abrupt page changes into smooth journeys. They transform jarring updates into elegant morphs. Most importantly, they reduce cognitive load by showing users not just where they are, but how they got there.
-
-The future of web navigation isn't just fast—it's smooth, contextual, and delightful. The View Transitions API makes that future possible today. Use it wisely, and your users will feel the difference in every click.

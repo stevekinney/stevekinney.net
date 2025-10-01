@@ -539,30 +539,6 @@ class MemoryAwareCache<K, V> {
 - Run memory leak tests
 - Monitor long-running sessions
 
-## Related Topics
-
-**Prerequisites**:
-
-- [JavaScript fundamentals](../javascript/closures.md) - Understanding closures and references
-- [React Hooks](../react-hooks/_index.md) - Hook patterns and lifecycle management
-
-**Practical Applications**:
-
-- [Memory Leak Detection](./memory-leak-detection.md) - Detection tools, patterns, and debugging workflows
-- [Identity Stability Props](./identity-stability-props.md) - Preventing unnecessary re-renders through stable references
-- [Custom Equality Checks](./custom-equality-checks-areequal.md) - Optimizing memoization with custom comparisons
-
-**Advanced Topics**:
-
-- [Web Workers with React](./web-workers-with-react.md) - Offloading memory-intensive tasks
-- [Production Performance Monitoring](./production-performance-monitoring.md) - Real-world memory monitoring
-- [Performance Testing Strategy](./performance-testing-strategy.md) - Automated memory testing
-
-**Architecture Patterns**:
-
-- [Windowing and Virtualization](./windowing-and-virtualization.md) - Managing large datasets efficiently
-- [Component Granularity Splitting](./component-granularity-splitting.md) - Architectural patterns for memory efficiency
-
 ## Summary
 
 Memory management in React requires understanding both JavaScript's garbage collection and React's specific patterns:

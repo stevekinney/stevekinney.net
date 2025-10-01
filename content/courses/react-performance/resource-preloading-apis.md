@@ -421,18 +421,3 @@ Here's a quick checklist for using resource preloading effectively:
 - ❌ Don't forget CORS headers for cross-origin resources
 - ❌ Don't preload large resources unless you're confident they'll be needed
 
-## Related Topics
-
-- **[Priority Hints Resource Loading](./priority-hints-resource-loading.md)** - Control resource loading priority with fetchpriority and priority hints
-- **[Image and Asset Optimization](./image-and-asset-optimization.md)** - Optimize images and assets that you're preloading for maximum performance benefit
-- **[Service Worker Strategies](./service-worker-strategies.md)** - Combine preloading with service worker caching for sophisticated resource strategies
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Understand how preloading impacts your Core Web Vitals metrics
-- **[CDN Caching Immutable Assets](./cdn-caching-immutable-assets.md)** - Set up proper caching headers for preloaded resources
-
-## Wrapping Up
-
-Resource preloading APIs give you a powerful way to make your React applications feel faster and more responsive. By thinking one step ahead of your users and strategically preloading the resources they'll likely need next, you can eliminate those frustrating loading delays that make apps feel sluggish.
-
-The key is to be thoughtful about what you preload and when. Start with the highest-impact resources—the ones that users are most likely to need and that take the longest to load. Monitor your performance metrics to ensure your preloading strategy is actually helping, and adjust based on real user behavior.
-
-Remember: the best loading time is no loading time at all. With React 19's resource preloading APIs, you can get pretty close to that ideal.

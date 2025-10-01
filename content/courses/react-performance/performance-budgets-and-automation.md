@@ -763,18 +763,3 @@ test.describe('Performance E2E Tests', () => {
 
 Performance dashboards and alerting systems should be integrated with your automation pipeline to provide visibility into budget compliance over time. For comprehensive dashboard implementation and production alerting, see [production-performance-monitoring.md](./production-performance-monitoring.md).
 
-## Related Topics
-
-- **[Performance Testing Strategy](./performance-testing-strategy.md)** - Comprehensive testing patterns and methodologies
-- **[Production Performance Monitoring](./production-performance-monitoring.md)** - Real-time monitoring, dashboards, and alerting
-- **[Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)** - Understanding and optimizing bundle composition
-- **[Measuring Performance with Real Tools](./measuring-performance-with-real-tools.md)** - DevTools and profiling techniques
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Understanding the metrics that matter
-
-## Wrapping Up
-
-Performance budgets transform performance from an abstract goal into a concrete, measurable feature. By setting realistic budgets based on your baseline measurements, automating their enforcement in CI/CD, and monitoring them in production, you create a system that prevents performance degradation rather than just detecting it.
-
-The key is making performance visible and actionable at every stage of development. When a developer's PR is blocked because it adds 100KB to the bundle, they'll find a smaller library. When the dashboard shows FCP creeping toward the budget limit, the team will prioritize optimization. When performance becomes part of your definition of "done," you'll ship fast apps and keep them fast.
-
-Remember: performance budgets aren't about perfection—they're about maintaining a consistent, acceptable level of performance that serves your users well. Start with generous budgets, tighten them gradually, and always measure the impact on real users.

@@ -294,21 +294,3 @@ describe('Animation Performance', () => {
 });
 ```
 
-## Related Topics
-
-- **Core Animation Concepts**: Start with the fundamentals in [Animation Performance in React](./animation-performance.md)
-- **GPU Optimization**: For detailed GPU acceleration techniques, see [GPU Acceleration Patterns](./gpu-acceleration-patterns.md)
-- **View Transitions**: For page transitions and DOM state changes, see [View Transitions API](./view-transitions-api.md)
-- **Performance Testing**: For comprehensive testing strategies, see [Performance Testing Strategy](./performance-testing-strategy.md)
-- **Real-Time Performance**: For animation in real-time data contexts, see [Real-Time Data Performance](./real-time-data-performance.md)
-
-## Next Steps
-
-These advanced animation techniques require:
-
-1. **Solid understanding of fundamentals** - Master basic transform/opacity animations first
-2. **Performance measurement setup** - Implement monitoring before optimizing
-3. **Testing on target devices** - Always validate performance on minimum supported hardware
-4. **Gradual implementation** - Introduce advanced techniques incrementally
-
-Advanced animation performance is about creating sophisticated interactions while maintaining 60fps performance across all target devices. These techniques separate professional applications from amateur implementations.

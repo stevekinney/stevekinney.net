@@ -729,18 +729,3 @@ const SpeculativeRouter: React.FC<{ children: React.ReactNode }> = ({ children }
 - Adapt to network conditions
 - Clean up unused speculation
 
-## Related Topics
-
-- **[Resource Preloading APIs](./resource-preloading-apis.md)** - Combine speculation rules with resource preloading for comprehensive performance optimization
-- **[Service Worker Strategies](./service-worker-strategies.md)** - Implement offline caching strategies that complement bfcache optimization
-- **[View Transitions API](./view-transitions-api.md)** - Create smooth transitions between prerendered pages
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Understand how instant navigation affects your performance metrics
-- **[Priority Hints Resource Loading](./priority-hints-resource-loading.md)** - Control resource loading priority during prerendering
-
-## Conclusion
-
-Instant navigation isn't about making your server faster or your bundles smaller (though those help). It's about being ready before the user even clicks. The Speculation Rules API lets you prerender entire pages. The bfcache lets you restore them instantly. Together, they eliminate navigation latency entirely.
-
-But with great power comes great responsibility. Prerender too aggressively, and you waste bandwidth. Block the bfcache carelessly, and you throw away free performance. The key is balance: speculate intelligently, cache properly, and always measure the impact.
-
-Your users won't understand the technology. They'll just know that your app feels impossibly fast. And in a world where every millisecond counts, that feeling is everything.

@@ -851,18 +851,3 @@ function checkLayerCount(): void {
 - Provide CPU alternatives
 - Adapt to device capabilities
 
-## Related Topics
-
-- **[Animation Performance](./animation-performance.md)** - High-level animation strategies that complement GPU acceleration
-- **[Offscreen Canvas WebGL](./offscreen-canvas-webgl.md)** - Advanced WebGL rendering techniques for complex graphics
-- **[Web Workers with React](./web-workers-with-react.md)** - Offload computation to keep the main thread smooth
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - How GPU acceleration affects LCP and CLS
-- **[View Transitions API](./view-transitions-api.md)** - Browser-native transitions that leverage GPU acceleration
-
-## Conclusion
-
-GPU acceleration isn't just about making things faster—it's about unlocking capabilities that would be impossible with CPU alone. Those 60fps animations, real-time data visualizations, and complex visual effects? They're all within reach when you know how to harness the GPU.
-
-The key is understanding what each processor does best. Let the CPU handle your business logic, state management, and complex decision trees. Let the GPU handle parallel operations, visual transforms, and mathematical computations. Together, they can deliver experiences that feel impossibly smooth.
-
-Start small—accelerate a few animations with CSS transforms. Then explore WebGL for visualizations. Before you know it, you'll be shipping React apps that rival native performance. Your users' GPUs are waiting. Put them to work.
