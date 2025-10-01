@@ -485,4 +485,4 @@ As the ecosystem matures, expect to see more libraries supporting Server Compone
 > [!NOTE]
 > Server Components are available in Next.js 13+ with the App Router. Other frameworks like Remix and SvelteKit have similar concepts with different implementations. Always check your framework's documentation for specific setup requirements.
 
-**Next**: [Streaming and Suspense Patterns](streaming-and-suspense-patterns.md)
+**Next**: [Streaming SSR Optimization](streaming-ssr-optimization.md)

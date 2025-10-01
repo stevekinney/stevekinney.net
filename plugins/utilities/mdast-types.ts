@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z } from 'zod';
 import type { Parent, RootContentMap, Node } from 'mdast';
 
 export type { Node, Parent } from 'mdast';

@@ -933,7 +933,7 @@ interface FrameTimer {
 **Prerequisites**:
 
 - [Understanding React Hooks](../react-hooks/_index.md) - Hook patterns for worker integration
-- [Web APIs fundamentals](../web-apis/workers.md) - Web Worker basics
+- [Web Workers with React](web-workers-with-react.md) - Web Worker basics and React integration
 
 **Worker Integration**:
 
