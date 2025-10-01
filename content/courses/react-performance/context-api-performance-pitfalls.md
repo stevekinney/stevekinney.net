@@ -740,18 +740,3 @@ const WellStructuredApp = () => (
 );
 ```
 
-## Related Topics
-
-- **[Separating Actions from State: Two Contexts](./separating-actions-from-state-two-contexts.md)** - Deep dive into the state/dispatch separation pattern
-- **[Colocation of State](./colocation-of-state.md)** - Keep state close to consumers instead of in global context
-- **[React Memo React 19 and Compiler Era](./react-memo-react-19-and-compiler-era.md)** - Use memoization to prevent context cascade re-renders
-- **[Identity Stability Props](./identity-stability-props.md)** - Ensure stable context values to prevent unnecessary re-renders
-- **[Custom Equality Checks areEqual](./custom-equality-checks-areequal.md)** - Fine-tune when context consumers re-render
-
-## Wrapping Up
-
-Context API performance issues aren't inevitable—they're preventable. The key is understanding that Context is a dependency injection system, not a state management solution. It broadcasts values to consumers, and every consumer re-renders when those values change. That's it. No optimization, no diffing, no magic.
-
-Use Context for what it's good at: providing stable, infrequently changing values to a component tree. Split contexts by concern, separate state from dispatch, memoize context values, and don't be afraid to reach for alternatives when Context isn't the right tool. Master these patterns, and you'll build React apps that leverage Context's convenience without sacrificing performance.
-
-Remember: the fastest re-render is the one that never happens. Structure your contexts to minimize re-renders, and your apps will thank you with smooth, responsive interfaces.

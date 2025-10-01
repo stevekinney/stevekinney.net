@@ -385,18 +385,3 @@ function ProductCatalog() {
 
 5. **Test your state management**. Write tests that verify your computed values stay in sync with your stored state.
 
-## Related Topics
-
-- **[Colocation of State](./colocation-of-state.md)** - Keep state close to where it's used for better architecture
-- **[Lifting State Intelligently](./lifting-state-intelligently.md)** - Know when to lift state vs keep it derived locally
-- **[useMemo useCallback in React 19](./usememo-usecallback-in-react-19.md)** - Optimize expensive derived computations
-- **[Avoiding Over Memoization](./avoiding-over-memoization.md)** - Balance performance with complexity in derived state
-- **[Identity Stability Props](./identity-stability-props.md)** - Ensure derived objects don't cause unnecessary re-renders
-
-## Wrapping Up
-
-The choice between derived and stored state isn't just about performance—it's about code quality, maintainability, and correctness. By defaulting to derived state and only storing what you absolutely need, you'll build more reliable applications with less code.
-
-Remember: your React components should be like a well-designed spreadsheet. Store the raw data in cells, then use formulas (derived state) to compute everything else. When the raw data changes, all the computed values update automatically—no manual synchronization required.
-
-The next time you find yourself writing multiple `setState` calls to keep related values in sync, step back and ask: "Could I derive this instead?" Your future self (and your users) will thank you for it.

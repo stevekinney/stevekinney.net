@@ -678,22 +678,3 @@ function useImagePerformanceMonitoring() {
 }
 ```
 
-## Related Topics
-
-- **Image Fundamentals**: Start with the basics in [Image and Asset Optimization](./image-and-asset-optimization.md)
-- **CDN Configuration**: For general CDN setup, see [CDN Caching and Immutable Assets](./cdn-caching-immutable-assets.md)
-- **Bundle Optimization**: Optimize your build process with [Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)
-- **Performance Monitoring**: Track image performance in production with [Production Performance Monitoring](./production-performance-monitoring.md)
-- **Core Web Vitals**: Optimize image loading for [Core Web Vitals for React](./core-web-vitals-for-react.md)
-
-## Next Steps
-
-Advanced image optimization requires:
-
-1. **CDN Strategy**: Choose and configure the right CDN for your needs
-2. **Build Pipeline**: Integrate image optimization into your build process
-3. **Performance Monitoring**: Track image performance metrics in production
-4. **Adaptive Loading**: Implement network-aware loading strategies
-5. **Cache Optimization**: Configure proper cache headers and strategies
-
-Master these advanced techniques to achieve optimal image performance at scale while maintaining excellent user experience across all devices and network conditions.

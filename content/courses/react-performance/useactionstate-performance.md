@@ -471,18 +471,3 @@ Keep using `useState` for:
 
 `useActionState` adds minimal overhead—it's essentially a specialized `useReducer` with built-in async handling. The performance benefits from reduced renders typically outweigh the small bundle size increase.
 
-## Related Topics
-
-- **[The use Hook](./the-use-hook.md)** - Understand React 19's use() hook that complements useActionState for data fetching
-- **[Separating Actions from State with Two Contexts](./separating-actions-from-state-two-contexts.md)** - Learn patterns for organizing action functions and state management
-- **[Flushsync in React DOM](./flushsync-in-react-dom.md)** - Handle synchronous state updates when needed with useActionState
-- **[Context API Performance Pitfalls](./context-api-performance-pitfalls.md)** - Avoid common performance issues when using useActionState with Context
-- **[useTransition and startTransition](./usetransition-and-starttransition.md)** - Combine non-blocking transitions with action state management
-
-## Wrapping Up
-
-`useActionState` represents a major step forward in React's approach to handling mutations and form submissions. By consolidating loading, error, and success states into a single hook, it eliminates boilerplate, reduces renders, and provides a more consistent UX pattern across your application.
-
-The key insight is treating actions as first-class citizens in your React architecture. Instead of sprinkling async operations throughout your components, you extract them into dedicated action functions that return complete state updates. This separation makes your code more testable, your UI more predictable, and your users happier.
-
-Start small—pick one form or mutation in your app and refactor it to use `useActionState`. You'll quickly see how much cleaner the code becomes and how much better the user experience feels. From there, you can gradually migrate other parts of your application to this more efficient pattern.

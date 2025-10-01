@@ -363,17 +363,3 @@ Always provide meaningful loading states. Users shouldn't see blank screens or b
 
 Implement code-splitting early in development, not as an afterthought when performance becomes a problem. It's much easier to architect for splitting from the start.
 
-## Related Topics
-
-- **[Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)** - Analyze bundles to identify splitting opportunities
-- **[CDN Caching & Immutable Assets](./cdn-caching-immutable-assets.md)** - Cache split chunks efficiently
-- **[Resource Preloading APIs](./resource-preloading-apis.md)** - Preload critical split chunks
-- **[Priority Hints Resource Loading](./priority-hints-resource-loading.md)** - Control chunk loading priority
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Measure splitting impact on metrics
-- **[React Server Components RSC](./react-server-components-rsc.md)** - Server-side code splitting patterns
-
-## Next Steps
-
-Code-splitting and lazy loading are fundamental performance optimizations for modern React applications. Start with route-based splitting for quick wins, then move to component-based splitting for fine-grained control. Always measure the impact and prioritize splits based on actual bundle analysis.
-
-Your users will thank you with faster load times, better Core Web Vitals scores, and—most importantly—they'll actually stick around to use your application instead of bouncing to a competitor with a snappier experience.

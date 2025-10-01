@@ -599,23 +599,3 @@ function ShoppingApp() {
 }
 ```
 
-## Related Topics
-
-- **[Custom Equality Checks areEqual](./custom-equality-checks-areequal.md)** - Advanced techniques for fine-tuning re-render behavior
-- **[useMemo useCallback in React 19](./usememo-usecallback-in-react-19.md)** - How memoization APIs evolve with the React compiler
-- **[Avoiding Over Memoization](./avoiding-over-memoization.md)** - Balance identity stability with complexity
-- **[Key Stability in Lists](./key-stability-in-lists.md)** - Apply identity principles to list rendering
-- **[Context API Performance Pitfalls](./context-api-performance-pitfalls.md)** - Ensure stable context values
-
-## When Performance Actually Matters
-
-Remember, premature optimization is still the root of all evil. Focus on identity stability when:
-
-1. **You've identified actual performance problems** through profiling
-2. **You're working with large datasets** (hundreds or thousands of items)
-3. **You have deeply nested component trees** where re-renders cascade
-4. **Users report sluggish interactions** during typing, scrolling, or animations
-
-For small applications with simple component trees, the overhead of `useMemo` and `useCallback` might outweigh their benefits. Start simple, measure performance, then optimize where it matters.
-
-Identity stability is a powerful tool in your React performance toolkit. Use it judiciously, and your applications will stay responsive as they grow in complexity. The goal isn't to eliminate every re-render—it's to eliminate the ones that hurt your user experience.

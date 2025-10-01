@@ -387,12 +387,3 @@ Dependency management is an ongoing process, not a destination. Start by:
 4. **Set up monitoring** to catch future bundle bloat
 5. **Establish a decision framework** for evaluating new dependencies
 
-## Related Topics
-
-- **Bundle Analysis**: [Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)
-- **Tree Shaking**: [Tree Shaking Optimization](./tree-shaking-optimization.md)
-- **Code Splitting**: [Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md)
-
-Remember: every dependency should earn its place in your bundle. When in doubt, favor native solutions and custom implementations over heavy libraries. Your users will thank you with faster load times, and your future self will thank you with fewer dependency-related headaches.
-
-The goal isn't to avoid all dependencies—it's to make thoughtful choices that balance developer productivity with application performance. Sometimes a well-chosen library is exactly what you need. The key is making that choice deliberately, with full awareness of the costs and benefits involved.

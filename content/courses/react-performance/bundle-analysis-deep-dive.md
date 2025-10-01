@@ -796,22 +796,3 @@ class BundleMetricsCollector {
 }
 ```
 
-## Related Topics
-
-- **Tree Shaking**: [Tree Shaking Optimization](./tree-shaking-optimization.md)
-- **Build Tools**: [SWC (Speedy Web Compiler)](./swc-speedy-web-compiler.md)
-- **Code Splitting**: [Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md)
-- **Dependency Management**: [Avoiding Unnecessary Dependencies](./avoiding-unnecessary-dependencies.md)
-
-## Next Steps
-
-Bundle analysis is most effective when it's:
-
-1. **Automated** - Integrated into your CI/CD pipeline
-2. **Regular** - Run on every build, not just when performance issues arise
-3. **Actionable** - Connected to clear optimization strategies
-4. **Monitored** - Tracked over time to catch regressions
-
-Start by running webpack-bundle-analyzer on your current build to identify the biggest wins. Focus on the largest modules first—a 50KB reduction in your biggest dependency often has more impact than optimizing 10 smaller modules.
-
-Remember: bundle size directly correlates with user experience, especially on mobile networks. Every kilobyte you eliminate is a millisecond saved in your users' loading experience.

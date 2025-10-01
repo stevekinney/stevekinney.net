@@ -41,8 +41,3 @@ Key topics covered:
 
 For detailed Interaction to Next Paint monitoring strategies, see **[INP Production Monitoring](./inp-production-monitoring.md)**.
 
-## Related Topics
-
-- **[Performance Testing Strategy](./performance-testing-strategy.md)** - Build comprehensive performance tests
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Optimize for Core Web Vitals
-- **[Debugging Performance Issues](./debugging-performance-issues.md)** - Find and fix performance problems

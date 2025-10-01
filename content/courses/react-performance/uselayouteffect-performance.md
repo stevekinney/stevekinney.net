@@ -376,16 +376,3 @@ function PerformanceTest() {
 }
 ```
 
-## Related Topics
-
-- **[Animation Performance](./animation-performance.md)** - Use useLayoutEffect for smooth animations without layout thrashing
-- **[Flushsync in React DOM](./flushsync-in-react-dom.md)** - Understand synchronous DOM updates and when they're necessary
-- **[INP Optimization & Long Tasks](./inp-optimization-long-tasks.md)** - Minimize useLayoutEffect impact on Interaction to Next Paint metrics
-- **[GPU Acceleration Patterns](./gpu-acceleration-patterns.md)** - Combine useLayoutEffect with GPU-accelerated properties for optimal performance
-- **[Debugging Performance Issues](./debugging-performance-issues.md)** - Profile and identify useLayoutEffect performance bottlenecks
-
-## The Bottom Line
-
-`useLayoutEffect` is a precision tool—use it when you need synchronous DOM access before paint, not as a general-purpose effect hook. The performance cost is real and measurable. When in doubt, start with `useEffect` and only upgrade to `useLayoutEffect` when you can demonstrate that the synchronous timing prevents a specific visual problem.
-
-Remember: every millisecond spent in `useLayoutEffect` is a millisecond your users are waiting to see their update. Make those milliseconds count.

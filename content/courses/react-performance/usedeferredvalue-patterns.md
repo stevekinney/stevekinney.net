@@ -460,20 +460,3 @@ function GoodExample({ items, query }: { items: Item[]; query: string }) {
 
 `useDeferredValue` is a powerful tool for building responsive UIs that handle expensive operations gracefully. The key principles to remember:
 
-## Related Topics
-
-- **[useTransition and startTransition](./usetransition-and-starttransition.md)** - Combine non-blocking transitions with deferred values for comprehensive performance optimization
-- **[Real-Time Data Performance](./real-time-data-performance.md)** - Use useDeferredValue to handle high-frequency updates without blocking the UI
-- **[Concurrent React Scheduling](./concurrent-react-scheduling.md)** - Understand how React prioritizes and schedules deferred updates
-- **[Windowing and Virtualization](./windowing-and-virtualization.md)** - Defer expensive list operations for better scrolling performance
-- **[Avoiding Over-Memoization](./avoiding-over-memoization.md)** - Balance deferred values with proper memoization strategies
-
-- **Defer the inputs**, not the outputs
-- **Always memoize** the expensive computation
-- **Use it for non-critical updates** that shouldn't block user interactions
-- **Combine with transitions** for comprehensive performance optimization
-- **Provide visual feedback** when values are stale
-
-When used correctly, `useDeferredValue` can transform a sluggish interface into one that feels snappy and responsive—even when doing heavy computational work under the hood. Your users will appreciate the fluid typing experience, even if they never realize the complex performance optimizations happening behind the scenes.
-
-Remember: the best performance optimization is the one your users never notice, because everything just feels fast and responsive. That's exactly what `useDeferredValue` helps you achieve.

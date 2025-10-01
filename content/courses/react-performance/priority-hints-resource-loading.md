@@ -669,18 +669,3 @@ const AdaptiveResourceLoader: React.FC = () => {
 - Adjust for slow connections
 - Consider device memory
 
-## Related Topics
-
-- **[Resource Preloading APIs](./resource-preloading-apis.md)** - React 19's `preload`, `preinit`, and `prefetchDNS` functions
-- **[Image and Asset Optimization](./image-and-asset-optimization.md)** - LCP image optimization and responsive loading
-- **[Code Splitting and Lazy Loading](./code-splitting-and-lazy-loading.md)** - Module preloading for split bundles
-- **[Speculation Rules & BFCache](./speculation-rules-bfcache.md)** - Advanced prefetching and prerendering
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Measuring the impact of resource optimization
-
-## Conclusion
-
-Resource hints aren't magic—they're instructions. You're not asking the browser to load things faster; you're telling it what matters most. Every preconnect saves a round trip. Every preload pulls critical resources forward. Every fetchpriority ensures the right things load first.
-
-The key is intentionality. Don't preload everything. Don't preconnect to every domain. Instead, understand your critical rendering path, identify the bottlenecks, and surgically apply these techniques where they'll have the most impact.
-
-Your users won't notice the individual optimizations. They'll just notice that your app feels instant. And in the world of web performance, perception is reality.

@@ -750,18 +750,3 @@ const useINPMonitoring = () => {
 - Identify slow interactions
 - Report metrics to analytics
 
-## Related Topics
-
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Comprehensive guide to INP and other Core Web Vitals
-- **[Concurrent React Scheduling](./concurrent-react-scheduling.md)** - Use React's scheduler to optimize interactions
-- **[Web Workers with React](./web-workers-with-react.md)** - Offload heavy computation to keep interactions responsive
-- **[Debugging Performance Issues](./debugging-performance-issues.md)** - Debug slow interactions and long tasks
-- **[Production Performance Monitoring](./production-performance-monitoring.md)** - Monitor INP in production
-
-## Conclusion
-
-INP isn't just another metric—it's a promise to your users that every interaction matters. Every click should feel instant. Every keypress should respond immediately. Every gesture should trigger visible feedback within 200 milliseconds.
-
-The techniques we've covered—breaking up long tasks, using scheduler APIs, optimizing React rendering—aren't just performance optimizations. They're about respecting your users' time and maintaining the illusion of instantaneous response that makes apps feel native.
-
-Remember: users don't care about your complex state management or your sophisticated algorithms. They care that when they click a button, something happens immediately. Make that happen, and you've won the performance game.

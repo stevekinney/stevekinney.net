@@ -881,18 +881,3 @@ const useRealTimeMetrics = () => {
 - Monitor memory usage
 - Alert on degradation
 
-## Related Topics
-
-- **[Real-Time Data Performance](./real-time-data-performance.md)** - Foundation patterns for building performant real-time React applications
-- **[Web Workers with React](./web-workers-with-react.md)** - Offload heavy data processing to background threads for better scale
-- **[Windowing and Virtualization](./windowing-and-virtualization.md)** - Handle massive data sets efficiently with virtual rendering techniques
-- **[Memory Management Deep Dive](./memory-management-deep-dive.md)** - Prevent memory leaks and optimize garbage collection in high-frequency update scenarios
-- **[Production Performance Monitoring](./production-performance-monitoring.md)** - Monitor real-time application performance in production environments
-
-## Conclusion
-
-Real-time data at scale isn't about processing every single update—it's about processing the right updates at the right time. It's about knowing when to drop, when to batch, and when to aggregate. It's about respecting the fundamental constraints of browsers while delivering the real-time experience users expect.
-
-The strategies we've covered—backpressure, batching, snapshot isolation—aren't just performance optimizations. They're survival techniques for applications that need to handle data flows that would otherwise overwhelm any browser.
-
-Remember: users don't care if you're processing 1000 messages per second. They care that the UI stays responsive and the data stays accurate. Master these techniques, and you can deliver both, even when the data firehose is turned to full blast.

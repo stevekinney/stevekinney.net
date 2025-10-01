@@ -481,20 +481,3 @@ Compound components provide consistent tree structure while keeping the API flex
 
 Understanding reconciliation gives you a mental model for writing efficient React components. Here's what to focus on next:
 
-## Related Topics
-
-- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - Understand how React 19's compiler automatically optimizes reconciliation
-- **[Key Stability in Lists](./key-stability-in-lists.md)** - Master proper key usage for efficient list reconciliation
-- **[Identity Stability in Props](./identity-stability-props.md)** - Prevent unnecessary re-renders by maintaining stable object and function references
-- **[Virtual DOM & Fiber Architecture](./virtual-dom-fiber-architecture.md)** - Deep dive into React's reconciliation engine and Fiber architecture
-- **[Component Granularity and Splitting](./component-granularity-splitting.md)** - Optimize component boundaries for better reconciliation performance
-
-1. **Profile your app**: Use React DevTools to identify actual performance bottlenecks
-2. **Measure before optimizing**: Don't prematurely optimize based on assumptions
-3. **Start with architectural changes**: Moving state and splitting components often has bigger impact than micro-optimizations
-4. **Learn the React Compiler**: React 19's compiler can automatically optimize many reconciliation issues
-
-The reconciliation algorithm is React's superpower—and now it's yours too. Write components that work with the algorithm rather than against it, and you'll build React apps that stay fast as they grow.
-
-> [!TIP]
-> The best reconciliation optimization is often the one you don't need to do. Focus on keeping your component tree structure stable and your props predictable, and React will handle the rest efficiently.

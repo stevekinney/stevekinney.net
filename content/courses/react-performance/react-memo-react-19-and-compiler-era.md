@@ -411,29 +411,3 @@ The key is understanding when the compiler has your back and when you need to st
 5. **Don't memoize everything**—cheap components often don't benefit from memoization
 6. **Be careful with function props**—ensure they're stable or handled appropriately in comparisons
 
-## Related Topics
-
-- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - Comprehensive understanding of compiler behavior
-- **[React Compiler Migration Guide](./react-compiler-migration-guide.md)** - Migrating from manual to automatic optimization
-- **[useMemo and useCallback in React 19](./usememo-usecallback-in-react-19.md)** - Hook-based memoization strategies
-- **[Custom Equality Checks (areEqual)](./custom-equality-checks-areequal.md)** - Deep dive into custom comparison functions
-- **[Avoiding Over-memoization](./avoiding-over-memoization.md)** - Decision framework for optimization
-
-## Prerequisites
-
-- Solid understanding of React component re-rendering
-- Experience with React optimization patterns
-- Basic knowledge of JavaScript object equality
-
-## Practical Examples
-
-Real-world scenarios where React.memo remains valuable:
-
-- **Data visualization components** - Complex charts that are expensive to re-render
-- **Third-party component integration** - Libraries not optimized by compiler
-- **List items with stable references** - Large lists where individual items rarely change
-- **Configuration-driven components** - Components with complex config objects
-
-Remember, premature optimization is still the root of all evil. Use `React.memo` when you have identified actual performance issues, not as a default optimization strategy. The React Compiler is designed to handle the common cases automatically, leaving you to focus on the unique requirements of your application.
-
-The era of the React Compiler doesn't eliminate the need for understanding memoization—it just makes it more strategic. Know when to let the compiler work its magic and when to take manual control for optimal performance.

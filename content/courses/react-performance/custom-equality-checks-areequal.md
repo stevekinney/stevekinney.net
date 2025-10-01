@@ -472,18 +472,3 @@ const memoizedCallback = useCallback(
 );
 ```
 
-## Related Topics
-
-- **[Identity Stability Props](./identity-stability-props.md)** - Understand the deeper principles behind stable references
-- **[React Memo React 19 and Compiler Era](./react-memo-react-19-and-compiler-era.md)** - How memoization evolves with the React compiler
-- **[Avoiding Over Memoization](./avoiding-over-memoization.md)** - Balance custom equality with development complexity
-- **[useMemo useCallback in React 19](./usememo-usecallback-in-react-19.md)** - Apply equality concepts to hook dependencies
-- **[Context API Performance Pitfalls](./context-api-performance-pitfalls.md)** - Use custom equality to optimize context consumers
-
-## Wrapping Up
-
-Custom equality functions with `areEqual` give you precise control over React's memoization behavior. The key is being strategic: focus on the properties that actually affect your component's output, avoid deep comparisons that are slower than re-rendering, and always measure the performance impact.
-
-Remember that premature optimization is still the root of all evil—profile first, then optimize the components that actually need it. When you do need custom equality, these patterns will help you write functions that are both fast and correct.
-
-Your components will thank you by staying snappy, and your users will thank you by sticking around instead of bouncing to a faster competitor. That's what I call a win-win.

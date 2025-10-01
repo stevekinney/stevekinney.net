@@ -23,7 +23,7 @@ But when pressed for details, most developers hand-wave something about "diffing
 
 Understanding Fiber isn't just academic curiosity—it directly impacts how you write performant React code. When you know how React schedules work, prioritizes updates, and decides what to render when, you can structure your components and state updates to work with React's algorithm instead of against it. This deep dive reveals the inner workings that power every React application.
 
-## The Virtual DOM: More Than Just a Diff
+## The Virtual DOM: More Than a Feeling
 
 The Virtual DOM isn't just a performance optimization—it's a programming model that enables declarative UI:
 

@@ -660,22 +660,3 @@ ${result.violations.length > 0 ? `**Violations:**\n${result.violations.map((v) =
 }
 ```
 
-## Related Topics
-
-- **Performance Fundamentals**: Start with [Performance Testing Strategy](./performance-testing-strategy.md)
-- **Core Web Vitals**: Understand metrics with [Core Web Vitals for React](./core-web-vitals-for-react.md)
-- **Production Monitoring**: Set up monitoring with [Production Performance Monitoring](./production-performance-monitoring.md)
-- **Bundle Analysis**: Optimize for testing with [Bundle Analysis Deep Dive](./bundle-analysis-deep-dive.md)
-- **CI/CD Integration**: Automate testing in your pipeline
-
-## Next Steps
-
-Implement comprehensive performance testing:
-
-1. **Set up Lighthouse CI** for automated performance audits
-2. **Create custom test suites** for your specific use cases
-3. **Establish performance budgets** and regression detection
-4. **Integrate with CI/CD** for continuous monitoring
-5. **Monitor production metrics** to validate test results
-
-Performance testing is essential for maintaining fast, reliable React applications. These implementation strategies ensure your performance optimizations are effective and sustainable.

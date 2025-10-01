@@ -1204,28 +1204,3 @@ Web Workers are your escape hatch from JavaScript's single-threaded limitations.
 
 The key is knowing when to use them (computations over 16ms, large data processing, background sync) and when not to (simple calculations, frequent small operations, DOM manipulation). With proper TypeScript typing, efficient data transfer using Transferable objects, and careful lifecycle management, Workers become a powerful tool in your React performance arsenal.
 
-## Related Topics
-
-- **[INP Optimization Long Tasks](./inp-optimization-long-tasks.md)** - Reducing input delay with off-main-thread processing
-- **[OffScreen Canvas WebGL](./offscreen-canvas-webgl.md)** - GPU rendering in workers
-- **[WebAssembly Integration](./webassembly-integration.md)** - High-performance computing in workers
-- **[Memory Management Deep Dive](./memory-management-deep-dive.md)** - Managing worker memory efficiently
-
-## Prerequisites
-
-- Understanding of JavaScript event loop and main thread
-- Experience with async/await and Promise patterns
-- Basic knowledge of browser APIs and limitations
-- Familiarity with TypeScript for better Worker typing
-
-## Practical Examples
-
-Ideal use cases for Web Workers:
-
-- **Data processing dashboards** - Large dataset transformations and calculations
-- **Image/video processing** - Filters, compression, format conversion
-- **Cryptographic operations** - Hashing, encryption in background
-- **Background sync** - Offline-first applications with periodic sync
-- **Search indexing** - Full-text search on large datasets
-
-Remember: the goal isn't to move everything to Workers—it's to keep the main thread free for what it does best: responding to user interactions and updating the UI. Master this balance, and you'll create React apps that stay smooth even when doing heavy lifting.

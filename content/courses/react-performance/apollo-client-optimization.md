@@ -510,22 +510,3 @@ function MessageList({ channelId }: { channelId: string }) {
 }
 ```
 
-## Related Topics
-
-- **GraphQL Fundamentals**: Start with the basics in [GraphQL & React Performance](./graphql-react-performance.md)
-- **Fragment Optimization**: Learn query organization with Fragment Colocation patterns
-- **Bundle Optimization**: Reduce Apollo Client bundle size with selective imports
-- **Performance Monitoring**: Track GraphQL performance in production
-- **Real-Time Data**: For advanced subscription patterns, see [Real-Time Data Performance](./real-time-data-performance.md)
-
-## Next Steps
-
-Apollo Client optimization requires:
-
-1. **Cache Strategy**: Design your cache structure before implementing queries
-2. **Batching Setup**: Configure query batching for your application patterns
-3. **Optimistic Updates**: Implement optimistic UI for better perceived performance
-4. **Subscription Management**: Use smart subscription patterns to minimize resource usage
-5. **Performance Monitoring**: Track cache hit rates and query performance
-
-Master these Apollo Client techniques to build GraphQL applications that perform well at scale while maintaining excellent user experience.

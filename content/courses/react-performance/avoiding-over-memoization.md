@@ -309,11 +309,3 @@ Instead of adding `useMemo` and `useCallback` everywhere, try this approach:
 
 Remember: premature optimization is the root of all evil, but so is ignoring real performance problems. The key is finding the balance—and that balance usually involves less memoization than you might think.
 
-## Related Topics
-
-- **API Details**: [useMemo and useCallback in React 19](./usememo-usecallback-in-react-19.md)
-- **Component Memoization**: [React.memo in React 19 and the Compiler Era](./react-memo-react-19-and-compiler-era.md)
-- **Identity Stability**: [Prop Identity Stability](./identity-stability-props.md)
-- **Custom Comparisons**: [Custom Equality Checks with areEqual](./custom-equality-checks-areequal.md)
-
-Your users will thank you for fast, responsive apps. They won't thank you for micro-optimizations that make your code harder to read and maintain. Focus on the performance improvements that actually matter, and let React handle the rest.

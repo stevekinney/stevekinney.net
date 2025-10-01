@@ -503,18 +503,3 @@ It might be overkill for:
 - Slightly more complex mental model: Developers need to understand the split
 - Potential over-engineering: Can be overkill for simple state scenarios
 
-## Related Topics
-
-- **[Context API Performance Pitfalls](./context-api-performance-pitfalls.md)** - Learn about common Context performance issues and how to avoid them
-- **[Avoiding Unnecessary Dependencies](./avoiding-unnecessary-dependencies.md)** - Prevent dependency arrays from causing unwanted re-renders in action functions
-- **[Identity Stability in Props](./identity-stability-props.md)** - Understand how object and function identity affects React performance
-- **[Component Granularity and Splitting](./component-granularity-splitting.md)** - Split components effectively to minimize the impact of context changes
-- **[Colocation of State](./colocation-of-state.md)** - Keep state close to where it's used to reduce unnecessary context complexity
-
-## Wrapping Up
-
-Separating actions from state with two contexts is a powerful pattern for building performant React applications. By splitting read and write paths, you gain surgical control over re-renders while maintaining clean, testable code.
-
-The key insight is that state and state-updating functions have different lifecycles and different consumers. State changes when your data changes. Actions should remain stable across renders. By giving them separate contexts, you let components subscribe to exactly what they need—nothing more, nothing less.
-
-Start with a single context for simplicity, then reach for this pattern when performance becomes a concern or when you notice components re-rendering unnecessarily. Your future self (and your app's users) will thank you for the smoother, more responsive experience.

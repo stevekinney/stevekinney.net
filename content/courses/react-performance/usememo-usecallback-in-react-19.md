@@ -551,30 +551,3 @@ Remember: **premature optimization is the root of all evil**. Start with clean, 
 
 ## Wrapping Up
 
-## Related Topics
-
-- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - Understanding compiler-based optimizations
-- **[React.memo in React 19 and Compiler Era](./react-memo-react-19-and-compiler-era.md)** - Component-level memoization
-- **[Avoiding Over-memoization](./avoiding-over-memoization.md)** - Decision framework and anti-patterns
-- **[Identity Stability Props](./identity-stability-props.md)** - Reference equality and prop stability
-- **[Custom Equality Checks (areEqual)](./custom-equality-checks-areequal.md)** - Advanced comparison strategies
-
-## Prerequisites
-
-- Solid understanding of React hooks
-- Knowledge of JavaScript reference vs. value equality
-- Experience with React DevTools Profiler
-- Basic understanding of performance measurement
-
-## Practical Examples
-
-Real-world scenarios where manual memoization remains valuable:
-
-- **Data dashboards** - Complex calculations on large datasets
-- **Search interfaces** - Expensive filtering and sorting operations
-- **Real-time applications** - Stabilizing callbacks for WebSocket events
-- **Forms with complex validation** - Memoizing validation rules and results
-
-`useMemo` and `useCallback` are powerful tools when used correctly—as surgical instruments for specific performance bottlenecks, not as blanket optimizations. With React 19's compiler doing much of the heavy lifting automatically, you'll reach for these hooks less frequently, but when you do, make sure you're solving a real problem.
-
-The golden rule: measure first, optimize second. Your users (and your future self) will thank you for the thoughtful, performance-conscious code that doesn't sacrifice readability for premature micro-optimizations.

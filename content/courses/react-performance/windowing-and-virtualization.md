@@ -520,19 +520,3 @@ Windowing isn't always the right solution:
 
 ## Next Steps
 
-## Related Topics
-
-- **[Real-Time Data Performance](./real-time-data-performance.md)** - Efficiently handle high-frequency updates in virtualized lists
-- **[Real-Time Scale Strategies](./real-time-scale-strategies.md)** - Combine virtualization with backpressure management for massive data streams
-- **[Memory Management Deep Dive](./memory-management-deep-dive.md)** - Optimize memory usage in large virtualized lists
-- **[useDeferredValue Patterns](./usedeferredvalue-patterns.md)** - Defer expensive list operations for smoother scrolling
-- **[Animation Performance](./animation-performance.md)** - Create smooth scrolling animations in virtualized components
-
-You now have the tools to implement performant lists that scale to thousands of items. Some areas to explore further:
-
-1. **Horizontal virtualization**: Lists that scroll sideways (like data grids)
-2. **Masonry layouts**: Pinterest-style grids with variable item sizes
-3. **Integration with state management**: Using windowing with Redux or Zustand
-4. **Custom windowing implementations**: Building your own for specific use cases
-
-The key takeaway: windowing transforms otherwise unusable interfaces into smooth, responsive experiences. Your users (and their devices) will thank you for not trying to render 10,000 DOM nodes at once.

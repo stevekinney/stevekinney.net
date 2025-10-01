@@ -1162,39 +1162,3 @@ if (process.env.NODE_ENV === 'development') {
 }
 ```
 
-## Related Topics
-
-- **[React 19 Compiler Guide](./react-19-compiler-guide.md)** - Conceptual understanding of the compiler
-- **[React.memo in React 19 and Compiler Era](./react-memo-react-19-and-compiler-era.md)** - When to keep manual memoization
-- **[useMemo and useCallback in React 19](./usememo-usecallback-in-react-19.md)** - Hook behavior with compiler
-- **[Avoiding Over-memoization](./avoiding-over-memoization.md)** - Decision framework for optimization
-
-## Prerequisites
-
-- Familiarity with React optimization techniques
-- Understanding of build tools and configuration
-- Knowledge of React's Rules of React
-- Experience with TypeScript/JavaScript AST manipulation (for codemods)
-
-## Practical Examples
-
-Common migration scenarios:
-
-- **E-commerce applications** - Migrating product lists and shopping carts
-- **Dashboard applications** - Optimizing data tables and charts
-- **Content management systems** - Handling dynamic content rendering
-- **Social media apps** - Optimizing feeds and user interactions
-
-## Next Steps
-
-React Compiler migration is most successful when approached incrementally:
-
-1. **Start small** - Begin with leaf components and simple logic
-2. **Measure everything** - Compare performance before and after
-3. **Handle conflicts** - Address compiler warnings and incompatibilities
-4. **Remove redundancy** - Gradually remove manual optimizations that are now redundant
-5. **Monitor production** - Watch for regressions in real-world usage
-
-The compiler represents the future of React performance optimization—automatic, intelligent, and comprehensive. By migrating thoughtfully, you'll not only improve current performance but also future-proof your codebase for continued optimization improvements.
-
-Remember: the goal isn't to immediately remove all manual optimizations, but to let the compiler handle the common cases while you focus on the truly complex performance challenges that require human insight.

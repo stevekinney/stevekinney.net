@@ -1208,38 +1208,3 @@ function PerformanceDashboardComponent() {
 }
 ```
 
-## Related Topics
-
-- **[Core Web Vitals for React](./core-web-vitals-for-react.md)** - Deep dive into optimizing LCP, CLS, and INP
-- **[Performance Budgets and Automation](./performance-budgets-and-automation.md)** - Setting thresholds and CI enforcement
-- **[Debugging Performance Issues](./debugging-performance-issues.md)** - Systematic troubleshooting approach
-- **[Measuring Performance with Real Tools](./measuring-performance-with-real-tools.md)** - Local profiling and measurement
-
-## Prerequisites
-
-- Understanding of Core Web Vitals metrics
-- Basic knowledge of React performance concepts
-- Familiarity with browser performance APIs
-
-## Next Steps
-
-Production performance monitoring is essential for maintaining React app performance at scale:
-
-1. **Start with Core Web Vitals** - These directly impact user experience and SEO
-2. **Implement React-specific monitoring** - Track component render performance
-3. **Correlate errors with performance** - Identify performance-related failures
-4. **Set up alerting** - Get notified before users complain
-5. **Create dashboards** - Visualize trends and make data-driven decisions
-
-The key is balancing comprehensive monitoring with performance impact—monitoring shouldn't slow down your app. Use sampling, batch data collection, and fail-silent error handling to ensure your monitoring enhances rather than degrades user experience.
-
-Remember: you can't improve what you don't measure. Production monitoring transforms performance from guesswork into data-driven optimization.
-
-## Practical Examples
-
-Common monitoring implementation patterns:
-
-- **Startup monitoring** - Track initial app load performance across user segments
-- **Feature-specific monitoring** - Monitor critical user journeys (checkout, search, etc.)
-- **A/B testing integration** - Compare performance across feature variants
-- **Progressive enhancement tracking** - Monitor how features degrade on low-end devices
