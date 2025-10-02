@@ -10,48 +10,8 @@ modified: '2025-09-27T13:14:43-06:00'
 
 These are the notes for my [React && TypeScript workshop](https://frontendmasters.com/workshops/react-typescript-v3/) for [Frontend Masters](https://frontendmasters.com).
 
-> [!TODO] Prerequisites
->
-> - Solid understanding of React fundamentals (components, hooks, state management)
-> - Basic JavaScript/ES6+ knowledge
-> - Familiarity with modern build tools (npm/pnpm, bundlers)
-> - Basic TypeScript knowledge helpful but not required
-
-## What You'll Learn
-
-This course covers the complete spectrum of React TypeScript development:
-
-- **Type-Safe Components**: Learn to properly type props, state, and component patterns
-- **React 19 Features**: Master Server Components, actions, and new hooks with TypeScript
-- **Advanced Patterns**: Implement HOCs, render props, and polymorphic components safely
-- **State Management**: Type context, reducers, and modern state solutions effectively
-- **Performance**: Optimize React apps while maintaining type safety
-- **Testing**: Write comprehensive tests for TypeScript React applications
-- **Tooling**: Configure ESLint, Prettier, and build tools for the best DX
-
-## Who This Course Is For
-
-This material is designed for:
-
-- **React developers** wanting to add robust type safety to their applications
-- **TypeScript developers** learning React-specific patterns and best practices
-- **Teams** looking to establish consistent, type-safe development practices
-- **Library authors** building reusable React components with great TypeScript support
-
-## Course Structure
-
-The course is organized into logical progressions from foundations to advanced topics:
-
-1. **Start with TypeScript fundamentals** and React 19 setup
-2. **Master component typing patterns** from basic props to complex compositions
-3. **Explore advanced patterns** like polymorphic and compound components
-4. **Learn state management** with context, reducers, and external libraries
-5. **Dive into React 19 features** including Server Components and new hooks
-6. **Handle forms and events** with full type safety
-7. **Optimize for performance** without sacrificing type correctness
-8. **Set up comprehensive testing** and development tooling
-9. **Implement advanced patterns** with generics and utility types
-10. **Deploy and publish** type-safe component libraries
+> [!NOTE] Course Repository
+> We'll me working through the content in [this repository](https://github.com/stevekinney/react-typescript-labs).
 
 ## Key Benefits
 
@@ -64,6 +24,34 @@ By the end of this course, you'll be able to:
 - Set up development environments optimized for React TypeScript development
 - Write maintainable code that scales with your team and application size
 
-## Appendix Topics
+## Appendix
 
-The Appendix collects advanced/optional topics that are helpful in production or at scale but are not core to day‑to‑day React + TypeScript authoring. Use these when you need deeper guidance on build pipelines, module resolution, federation/microfrontends, linting/formatting, type‑safe environment variables, publishing types for component libraries, and monorepo/shared UI type strategies. They’re great references, but you can safely skip them on a first pass through the main material.
+- [Type System Fundamentals](typescript-type-system-fundamentals.md)
+- [Type-Level Programming](typescript-type-level-programming.md)
+- [Performance in Large Codebases](typescript-performance-large-codebases.md)
+- [Modules and Declarations](typescript-modules-declarations.md)
+- [Build Pipeline: TSC, SWC](build-pipeline-tsc-swc.md)
+- [Module Federation with TypeScript](module-federation-typescript.md)
+- [Tailwind + CVA: Typed Variants and Slots](tailwind-cva-typed-variants.md)
+- [Real-time Typing: WebSockets and SSE](realtime-typing-websockets-and-sse.md)
+- [Result/Either Patterns for React](result-types-and-error-handling.md)
+- [Type-Safe Environment Variables](typesafe-environment-variables.md)
+- [Publishing Types for Component Libraries](publishing-types-for-component-libraries.md)
+- [Monorepos and Shared UI Types](monorepos-and-shared-ui-types.md)
+- [Advanced Error Handling Patterns](advanced-error-handling-patterns.md)
+- [Code Splitting Lazy Types](code-splitting-lazy-types.md)
+- [Resource Preloading APIs Types](resource-preloading-apis-types.md)
+- [Streaming SSR with TypeScript](streaming-ssr-typescript.md)
+- [Vite React TypeScript Optimization](vite-react-typescript-optimization.md)
+- [DevTools and Type-Driven DX](dev-tools-and-type-driven-dx.md)
+- [Debugging TypeScript Errors Guide](debugging-typescript-errors-guide.md)
+- [Routing and Params Typing](routing-and-parameters-typing.md)
+- [Styling: CSSType and CSS Modules](styling-csstype-and-css-modules.md)
+- [TypeScript Without Trying](typescript-without-trying.md)
+- [Mental Models for React and TypeScript](react-typescript-mental-models.md)
+
+### Migration Guides
+
+- [Migrating JavaScript to TypeScript](migrating-javascript-to-typescript.md)
+- [Migrating from PropTypes](migrating-from-proptypes.md)
+- [State Libraries and Context Interoperability](state-libraries-and-context-interoperability.md)
