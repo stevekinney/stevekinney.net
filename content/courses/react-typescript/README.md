@@ -12,6 +12,8 @@ These are the notes for my [React && TypeScript workshop](https://frontendmaster
 
 > [!NOTE] Course Repository
 > We'll me working through the content in [this repository](https://github.com/stevekinney/react-typescript-labs).
+>
+> Also, at some points, we may pop into the [TypeScript Playground](https://www.typescriptlang.org/play).
 
 ## Key Benefits
 
