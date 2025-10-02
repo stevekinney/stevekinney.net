@@ -10,7 +10,7 @@ modified: 2025-09-20T19:00:00-06:00
 - [Strictness Options for React](strictness-options-for-react.md)
 - [Module Resolution and Paths](module-resolution-and-paths.md)
 - [Setting Up Linting and Formatting](setting-up-linting-and-formatting.md)
-- [TypeScript React ESLint Rules](typescript-react-eslint-rules.md)
+- [ESLint Rules](typescript-react-eslint-rules.md)
 
 ## Everyday TypeScript Mechanics
 
@@ -105,35 +105,3 @@ modified: 2025-09-20T19:00:00-06:00
 - [Testing React TypeScript](testing-react-typescript.md)
 - [TypeScript React Testing](typescript-react-testing.md)
 - [Type-Level Testing in Practice](type-level-testing-in-practice.md)
-
-## Appendix
-
-- [Type System Fundamentals](typescript-type-system-fundamentals.md)
-- [Type-Level Programming](typescript-type-level-programming.md)
-- [Performance in Large Codebases](typescript-performance-large-codebases.md)
-- [Modules and Declarations](typescript-modules-declarations.md)
-- [Build Pipeline: TSC, SWC](build-pipeline-tsc-swc.md)
-- [Module Federation with TypeScript](module-federation-typescript.md)
-- [Tailwind + CVA: Typed Variants and Slots](tailwind-cva-typed-variants.md)
-- [Real‑time Typing: WebSockets and SSE](realtime-typing-websockets-and-sse.md)
-- [Result/Either Patterns for React](result-types-and-error-handling.md)
-- [Type-Safe Environment Variables](typesafe-environment-variables.md)
-- [Publishing Types for Component Libraries](publishing-types-for-component-libraries.md)
-- [Monorepos and Shared UI Types](monorepos-and-shared-ui-types.md)
-- [Advanced Error Handling Patterns](advanced-error-handling-patterns.md)
-- [Code Splitting Lazy Types](code-splitting-lazy-types.md)
-- [Resource Preloading APIs Types](resource-preloading-apis-types.md)
-- [Streaming SSR with TypeScript](streaming-ssr-typescript.md)
-- [Vite React TypeScript Optimization](vite-react-typescript-optimization.md)
-- [DevTools and Type-Driven DX](dev-tools-and-type-driven-dx.md)
-- [Debugging TypeScript Errors Guide](debugging-typescript-errors-guide.md)
-- [Routing and Params Typing](routing-and-parameters-typing.md)
-- [Styling: CSSType and CSS Modules](styling-csstype-and-css-modules.md)
-- [TypeScript Without Trying](typescript-without-trying.md)
-- [Mental Models for React and TypeScript](react-typescript-mental-models.md)
-
-### Migration Guides
-
-- [Migrating JavaScript to TypeScript](migrating-javascript-to-typescript.md)
-- [Migrating from PropTypes](migrating-from-proptypes.md)
-- [State Libraries and Context Interoperability](state-libraries-and-context-interoperability.md)

@@ -123,26 +123,22 @@ There are also stuff that React deems as even less urgent, but there isn't offic
 Once we've finished with our render, commit the changes to the DOM.
 
 1. Before mutation phase (a.k.a. snapshot phase)
-
    - React calls any lifecycle methods or hooks that need to read the DOM before React mutates it.
    - Example: getSnapshotBeforeUpdate.
    - No DOM writes yet, just reads.
 
 2. Mutation phase
-
    - React applies all the changes it decided on during the render phase.
    - Creates, updates, or deletes DOM nodes.
    - Runs ref cleanup (ref = null) for removed nodes.
    - Runs passive effect cleanups scheduled for this commit (from the previous render).
 
 3. Layout phase (a.k.a. layout effects)
-
    - Now React calls useLayoutEffect callbacks (and class componentDidMount / componentDidUpdate).
    - These run after the DOM mutations but before the browser paints.
    - Perfect for measuring DOM layout or adjusting scroll positions.
 
 4. Passive effect phase
-
    - After the browser has painted, React schedules useEffect callbacks.
    - These run asynchronously, so they don't block the paint.
    - Great for data fetching, subscriptions, logging, timers, etc.
@@ -163,7 +159,7 @@ import {
   unstable_scheduleCallback as scheduleCallback,
   unstable_NormalPriority as NormalPriority,
   unstable_shouldYield as shouldYield,
-} from "scheduler";
+} from 'scheduler';
 
 function workLoop(root: FiberRoot) {
   let next: Fiber | null = root.workInProgress;
@@ -305,7 +301,7 @@ A higher-order component that wraps your component. This basically says, "I don'
 1. React checks if the old and new props objects have the same number of keys.
 2. It then iterates over each key in the props object and compares the previous value with the current value using the `Object.is` comparison algorithm.
 
-- **Justification**: Use `React.memo` when the `React Profiler` shows that a component is re-rendering frequently, but the "Why did this render?" feature indicates the cause was its parent re-rendering, not a change in its own props or state.1 It is most effective on components that are expensive to render and are often rendered with the same props.
+- **Justification**: Use `React.memo` when the `React Profiler` shows that a component is re-rendering frequently, but the "Why did this render?" feature indicates the cause was its parent re-rendering, not a change in its own props or state. It is most effective on components that are expensive to render and are often rendered with the same props.
 - **Contraindication**: Do not wrap simple components that render quickly or components whose props are almost always different on every render. The cost of the prop comparison can outweigh the benefit of skipping the render.
 
 #### useMemo
@@ -435,7 +431,7 @@ So, manual memoization has some fundamental problems. The first and foremost bei
 
 ## Appendix
 
-There is a whole bunch of interesting tidbits that we *probably* won't get to today, but I have some notes in case you want to dive in as an extension. Some of it is just supplementary material or references in case one of y'all throws me a curveball question.
+There is a whole bunch of interesting tidbits that we _probably_ won't get to today, but I have some notes in case you want to dive in as an extension. Some of it is just supplementary material or references in case one of y'all throws me a curveball question.
 
 ### Migration Guides
 
