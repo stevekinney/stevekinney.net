@@ -7,10 +7,10 @@ This is where the code lives for [my super cool website](https://stevekinney.net
 Start a development server:
 
 ```bash
-pnpm dev
+bun dev
 
 # or start the server and open the app in a new browser tab
-pnpm dev --open
+bun dev --open
 ```
 
 ### Building
@@ -18,5 +18,5 @@ pnpm dev --open
 To create a production version of your app:
 
 ```bash
-pnpm build
+bun build
 ```

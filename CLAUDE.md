@@ -2,13 +2,13 @@
 
 ## Build Commands
 
-- `pnpm dev` - Start dev server on port 4444
-- `pnpm build` - Build for production
-- `pnpm lint` - Run ESLint and Prettier checks
-- `pnpm format` - Format code with Prettier
-- `pnpm test:unit` - Run Vitest tests
-- `pnpm test:unit -- [test file path]` - Run specific test
-- `pnpm storybook` - Run Storybook on port 6006
+- `bun dev` - Start dev server on port 4444
+- `bun build` - Build for production
+- `bun lint` - Run ESLint and Prettier checks
+- `bun format` - Format code with Prettier
+- `bun test:unit` - Run Vitest tests
+- `bun test:unit -- [test file path]` - Run specific test
+- `bun storybook` - Run Storybook on port 6006
 
 ## Code Style
 
