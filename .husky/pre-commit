@@ -7,7 +7,7 @@ STAGED_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'content
 # Reconstruct malformed/missing frontmatter for staged Markdown files
 if [ -n "$STAGED_FILES" ]; then
   echo "Reconstructing frontmatter for staged Markdown files..."
-  node scripts/reconstruct-frontmatter.js $STAGED_FILES
+  bun run scripts/reconstruct-frontmatter.ts $STAGED_FILES
   git add $STAGED_FILES
 fi
 
@@ -15,25 +15,25 @@ fi
 COURSE_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'content/courses/**/*.md')"
 if [ -n "$COURSE_FILES" ]; then
   echo "Auditing frontmatter (title/description) for staged course files..."
-  node scripts/audit-courses-frontmatter.js $COURSE_FILES
+  bun run scripts/audit-courses-frontmatter.ts $COURSE_FILES
   git add $COURSE_FILES
 fi
 
 if [ -n "$STAGED_FILES" ]; then
   echo "Updating frontmatter 'modified' from Git for staged Markdown files..."
-  node scripts/update-modified-from-git.js $STAGED_FILES
+  bun run scripts/update-modified-from-git.ts $STAGED_FILES
   # Re-stage any changes made by the script
   git add $STAGED_FILES
 fi
 
 # Always regenerate recent updates YAML after syncing modified dates
 echo "Generating recent updates YAML..."
-node scripts/generate-recent-updates.js
+bun run scripts/generate-recent-updates.ts
 git add static/recent-updates.yaml
 
 # Generate JSON content lists (posts and courses)
 echo "Generating content lists..."
-node scripts/generate-content-lists.js
+bun run scripts/generate-content-lists.ts
 git add content/writing/posts.json content/courses/courses.json
 
 npx lint-staged

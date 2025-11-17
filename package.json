@@ -16,7 +16,10 @@
     "test:storybook": "test-storybook",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "postinstall": "svelte-kit sync",
+    "generate:indices": "bun run scripts/generate-content-lists.ts && bun run scripts/generate-recent-updates.ts",
+    "generate:content-lists": "bun run scripts/generate-content-lists.ts",
+    "generate:recent-updates": "bun run scripts/generate-recent-updates.ts",
+    "postinstall": "svelte-kit sync && bun run generate:indices",
     "prepare": "husky"
   },
   "devDependencies": {
