@@ -122,27 +122,9 @@
     "simple-git": "^3.27.0",
     "zod": "^3.25.28"
   },
-  "pnpm": {
-    "supportedArchitectures": {
-      "os": [
-        "linux",
-        "darwin",
-        "current"
-      ],
-      "cpu": [
-        "x64",
-        "arm64",
-        "current"
-      ]
-    },
-    "overrides": {
-      "sharp": "0.33.5",
-      "@img/sharp-libvips-darwin-arm64": "1.0.4"
-    }
-  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,svelte,css,md,html,json}": "prettier --write",
     "*.{js,jsx,ts,tsx,svelte}": "eslint --fix"
   },
-  "packageManager": "pnpm@9.15.1"
+  "packageManager": "bun@1.1.0"
 }

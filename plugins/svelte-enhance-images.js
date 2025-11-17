@@ -125,10 +125,10 @@ export const processImages = (opts = {}) => {
               } else if (!cfg.isGif && cfg.hasSrcset) {
                 const avifSet = `import ${cfg.avifSetId} from '${url}?w=${options.widths.join(
                   ';',
-                )}&format=avif&srcset';`;
+                )}&format=avif&as=srcset';`;
                 const webpSet = `import ${cfg.webpSetId} from '${url}?w=${options.widths.join(
                   ';',
-                )}&format=webp&srcset';`;
+                )}&format=webp&as=srcset';`;
                 if (!content.includes(avifSet)) importLines.push(avifSet);
                 if (!content.includes(webpSet)) importLines.push(webpSet);
               }
@@ -161,10 +161,10 @@ export const processImages = (opts = {}) => {
             lines.push(`import ${cfg.videoId} from '${url}';`);
           } else if (!cfg.isGif && cfg.hasSrcset) {
             lines.push(
-              `import ${cfg.avifSetId} from '${url}?w=${options.widths.join(';')}&format=avif&srcset';`,
+              `import ${cfg.avifSetId} from '${url}?w=${options.widths.join(';')}&format=avif&as=srcset';`,
             );
             lines.push(
-              `import ${cfg.webpSetId} from '${url}?w=${options.widths.join(';')}&format=webp&srcset';`,
+              `import ${cfg.webpSetId} from '${url}?w=${options.widths.join(';')}&format=webp&as=srcset';`,
             );
           }
           if (cfg.isGif) {
