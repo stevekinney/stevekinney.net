@@ -3,11 +3,47 @@
     rundown of what potentially makes a Cursor rule great.
   modified: 2025-07-30T11:07:02.000Z
   path: /writing/cursor-rules-typescript
+- title: Neural Networks
+  description: A friendly intro to neural networks, what they are, how they learn,
+    and why they matter for software engineers exploring the world of generative
+    AI.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/neural-networks
+- title: Positives, Negatives, and Alternatives to Using Tailwind for a Design System
+  description: Is Tailwind the best choice when building out a design system? It depends.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/tailwind-and-design-systems
+- title: A Gentle Introduction to Using a Vector Database
+  description: In which we learn how to build a simple vector database using
+    Pinecone and OpenAI embeddings, and discover it was way easier than we might
+    have expected.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/using-a-vector-database
+- title: Understanding Generics in TypeScript
+  description: Let's learn a little bit about what generics are in TypeScript, why
+    they're useful, and how to use them.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/typescript-generics
+- title: Setting Up a Python Environment on macOS
+  description: A brief guide for getting started writing Python on a Mac using
+    virtual environments.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/setup-python
 - title: Using Anthropic's Message Batches API with Temporal
   description: Build scalable, cost-efficient AI processing with Anthropic's
     Message Batches API and Temporal workflows.
   modified: 2025-07-29T21:09:56.000Z
   path: /writing/anthropic-batch-api-with-temporal
+- title: Creating a Markdown Preprocessor for Svelte
+  description: Let's look at how to write our own preprocessor for SvelteKit.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/svelte-markdown-preprocessor
+- title: Getting the Most Out of GPT-4.1
+  description: "A naïve guide to get the most out of GPT-4.1: context window
+    optimization, coding tips, prompt best practices, and when to choose GPT-4.1
+    over GPT-4.5."
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/getting-the-most-out-of-gpt-4-1
 - title: "What If It Goes Wrong?: The Hidden Dangers of Counterfactual Reasoning
     in AI"
   description: Exploring the pitfalls of counterfactual reasoning in AI,
@@ -15,64 +51,22 @@
     Taleb's critique of prediction in complex systems.
   modified: 2025-07-29T21:09:56.000Z
   path: /writing/counter-factual-reasoning-in-ai
+- title: A Gentle Introduction to Svelte Stores
+  description: Svelte stores simplify state management across components. Let's
+    learn how they're implemented.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/svelte-stores
+- title: Implementing Obsidian's Callout in Svelte
+  description: A gentle walkthrough where we build our take on Obsidian's callout
+    component in Svelte.
+  modified: 2025-07-29T21:09:56.000Z
+  path: /writing/obsidian-callout-svelte
 - title: Cursor Rules for Writing Temporal Workflows with TypeScript
   description: Essential guidelines and best practices for writing reliable
     Temporal workflows in TypeScript, covering serialization, determinism, and
     workflow patterns.
   modified: 2025-07-29T21:09:56.000Z
   path: /writing/cursor-rules-temporal-typescript
-- title: Getting the Most Out of GPT-4.1
-  description: "A naïve guide to get the most out of GPT-4.1: context window
-    optimization, coding tips, prompt best practices, and when to choose GPT-4.1
-    over GPT-4.5."
-  modified: 2025-07-29T21:09:56.000Z
-  path: /writing/getting-the-most-out-of-gpt-4-1
-- title: Neural Networks
-  description: A friendly intro to neural networks, what they are, how they learn,
-    and why they matter for software engineers exploring the world of generative
-    AI.
-  modified: 2025-07-29T21:09:56.000Z
-  path: /writing/neural-networks
-- title: Implementing Obsidian's Callout in Svelte
-  description: A gentle walkthrough where we build our take on Obsidian's callout
-    component in Svelte.
-  modified: 2025-07-29T21:09:56.000Z
-  path: /writing/obsidian-callout-svelte
-- title: Setting Up a Python Environment on macOS
-  description: A brief guide for getting started writing Python on a Mac using
-    virtual environments.
-  modified: 2025-07-29T21:09:56.000Z
-  path: /writing/setup-python
-- title: Creating a Markdown Preprocessor for Svelte
-  description: Let's look at how to write our own preprocessor for SvelteKit.
-  modified: 2025-07-29T21:09:56.000Z
-  path: /writing/svelte-markdown-preprocessor
-- title: A Gentle Introduction to Svelte Stores
-  description: Svelte stores simplify state management across components. Let's
-    learn how they're implemented.
-  modified: 2025-07-29T21:09:56.000Z
-  path: /writing/svelte-stores
-- title: Positives, Negatives, and Alternatives to Using Tailwind for a Design System
-  description: Is Tailwind the best choice when building out a design system? It depends.
-  modified: 2025-07-29T21:09:56.000Z
-  path: /writing/tailwind-and-design-systems
-- title: Understanding Generics in TypeScript
-  description: Let's learn a little bit about what generics are in TypeScript, why
-    they're useful, and how to use them.
-  modified: 2025-07-29T21:09:56.000Z
-  path: /writing/typescript-generics
-- title: A Gentle Introduction to Using a Vector Database
-  description: In which we learn how to build a simple vector database using
-    Pinecone and OpenAI embeddings, and discover it was way easier than we might
-    have expected.
-  modified: 2025-07-29T21:09:56.000Z
-  path: /writing/using-a-vector-database
-- title: Complete Guide to React Component Props with TypeScript
-  description: Master typing React props from basics to advanced patterns—required
-    vs optional, defaults, unions, generics, and building self-documenting
-    component APIs.
-  modified: 2025-09-28T15:41:40-06:00
-  path: /courses/react-typescript/component-props-complete-guide
 - title: Complete Guide to React State Management with TypeScript
   description: Master useState, useReducer, and action typing—from inference
     patterns to discriminated unions that prevent impossible states.
@@ -85,6 +79,12 @@
     This leads to defensive programming..."
   modified: 2025-09-28T15:41:40-06:00
   path: /courses/react-typescript/safer-createcontext-helpers
+- title: Complete Guide to React Component Props with TypeScript
+  description: Master typing React props from basics to advanced patterns—required
+    vs optional, defaults, unions, generics, and building self-documenting
+    component APIs.
+  modified: 2025-09-28T15:41:40-06:00
+  path: /courses/react-typescript/component-props-complete-guide
 - title: Updating Todos - PUT/PATCH with Optimistic Updates
   description: Master optimistic updates with TypeScript—implement instant UI
     updates, handle rollbacks on failure, and sync state with PUT/PATCH
@@ -140,16 +140,16 @@
     hook patterns that scale
   modified: 2025-09-27T19:30:05.343Z
   path: /courses/react-typescript/typescript-react-hooks
-- title: Mirroring DOM Props with ComponentPropsWithoutRef
-  description: Wrap native elements without losing typing—pass through every valid
-    prop and keep autocomplete.
-  modified: 2025-09-27T18:40:11-06:00
-  path: /courses/react-typescript/mirror-dom-props
 - title: Polymorphic Components and the as Prop
   description: Build components that render different tags while preserving proper
     props—no any, no lies, just safe polymorphism.
   modified: 2025-09-27T18:40:11-06:00
   path: /courses/react-typescript/polymorphic-components-and-as-prop
+- title: Mirroring DOM Props with ComponentPropsWithoutRef
+  description: Wrap native elements without losing typing—pass through every valid
+    prop and keep autocomplete.
+  modified: 2025-09-27T18:40:11-06:00
+  path: /courses/react-typescript/mirror-dom-props
 - title: Server packages
   description: Building a fully type-safe data layer between your React frontend
     and backend is one of those things that sounds complicated but becomes
@@ -176,21 +176,16 @@
     context of React development
   modified: 2025-09-27T13:49:32-06:00
   path: /courses/react-typescript/typescript-modules-declarations
-- title: React-Specific TypeScript Patterns
-  description: Essential TypeScript patterns every React developer needs to
-    know—from component typing to ref forwarding
-  modified: 2025-09-27T13:35:28-06:00
-  path: /courses/react-typescript/typescript-react-patterns
 - title: Unions, Intersections, and Type Guards
   description: Master TypeScript's union and intersection types for flexible yet
     type-safe code
   modified: 2025-09-27T13:35:28-06:00
   path: /courses/react-typescript/typescript-unions-intersections-guards
-- title: React 19 + TypeScript Mental Models
-  description: Build a rock‑solid mental model—JSX as function calls, compile‑time
-    vs runtime, and why types are executable design docs.
-  modified: 2025-09-27T13:14:43-06:00
-  path: /courses/react-typescript/react-typescript-mental-models
+- title: React-Specific TypeScript Patterns
+  description: Essential TypeScript patterns every React developer needs to
+    know—from component typing to ref forwarding
+  modified: 2025-09-27T13:35:28-06:00
+  path: /courses/react-typescript/typescript-react-patterns
 - title: "Setting Up: React and TypeScript"
   description: Set up React 19 with TypeScript from scratch—tsconfig, JSX runtime,
     strict mode, linting, and project structure that scales.
@@ -201,27 +196,32 @@
     setup to React 19 features
   modified: 2025-09-27T13:14:43-06:00
   path: /courses/react-typescript/tsconfig-deep-dive-react
+- title: Using TypeScript Without Even Trying
+  description: Let inference do the heavy lifting—see how much TypeScript you get
+    "for free" in everyday React files.
+  modified: 2025-09-27T13:14:43-06:00
+  path: /courses/react-typescript/typescript-without-trying
 - title: TypeScript Type System Fundamentals
   description: Master TypeScript's type system from the ground up—structural
     typing, type inference, narrowing, and the mental models that make
     everything click.
   modified: 2025-09-27T13:14:43-06:00
   path: /courses/react-typescript/typescript-type-system-fundamentals
-- title: Using TypeScript Without Even Trying
-  description: Let inference do the heavy lifting—see how much TypeScript you get
-    "for free" in everyday React files.
+- title: React 19 + TypeScript Mental Models
+  description: Build a rock‑solid mental model—JSX as function calls, compile‑time
+    vs runtime, and why types are executable design docs.
   modified: 2025-09-27T13:14:43-06:00
-  path: /courses/react-typescript/typescript-without-trying
+  path: /courses/react-typescript/react-typescript-mental-models
 - title: Concurrent React and Scheduling
   description: Learn how React can pause and resume work to keep interactions
     smooth—design components that play nicely with the scheduler.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-performance/concurrent-react-scheduling
-- title: Core Web Vitals for React Applications
-  description: Master LCP, FID, and CLS optimization in React apps. Practical
-    techniques to improve user experience and search rankings.
+- title: Memory Leak Detection in React Applications
+  description: Find and fix memory leaks that kill performance. Master Chrome
+    DevTools, detect common patterns, and build leak-free React apps.
   modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-performance/core-web-vitals-for-react
+  path: /courses/react-performance/memory-leak-detection
 - title: Identity Stability Props
   description: React's performance model is built on comparing values to decide
     when components need to re-render. When you pass objects, arrays, or
@@ -229,122 +229,113 @@
     whether React considers them...
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-performance/identity-stability-props
-- title: Measuring Performance with Real Tools
-  description: Stop guessing. Use React DevTools, Chrome Performance, and
-    flamegraphs to find real bottlenecks and prove improvements.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-performance/measuring-performance-with-real-tools
-- title: Memory Leak Detection in React Applications
-  description: Find and fix memory leaks that kill performance. Master Chrome
-    DevTools, detect common patterns, and build leak-free React apps.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-performance/memory-leak-detection
-- title: Optimizing Server‑Side Rendering
-  description: Speed up SSR with streaming, caching, and smarter data
-    fetching—reduce time‑to‑first‑byte and hydrate faster.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-performance/optimizing-server-side-rendering
 - title: The React 19 Compiler
   description: Master the React Compiler from basics to advanced patterns. Migrate
     from manual optimizations, handle edge cases, and measure real-world
     improvements.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-performance/react-19-compiler-guide
+- title: Measuring Performance with Real Tools
+  description: Stop guessing. Use React DevTools, Chrome Performance, and
+    flamegraphs to find real bottlenecks and prove improvements.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-performance/measuring-performance-with-real-tools
 - title: Suspense for Data Fetching
   description: Stream UI progressively instead of blocking on everything—compose
     boundaries that keep pages interactive and informative.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-performance/suspense-for-data-fetching
-- title: The use() Hook
-  description: Simplify async and context consumption by letting components 'use'
-    resources directly, with Suspense driving the UI flow.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-performance/the-use-hook
-- title: useDeferredValue Patterns
-  description: Keep typing fluid by deferring expensive derived values. Pair with
-    transitions and memoization for silky search UIs.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-performance/usedeferredvalue-patterns
 - title: Virtual DOM & Fiber Architecture
   description: Understand how React really works under the hood. Master the Fiber
     architecture, priority scheduling, and reconciliation to write truly
     optimized React apps.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-performance/virtual-dom-fiber-architecture
-- title: Typing Context and Selector Patterns
-  description: Create fully typed contexts—state/actions split, selectors that
-    minimize re-renders, and ergonomic Provider APIs.
+- title: Core Web Vitals for React Applications
+  description: Master LCP, FID, and CLS optimization in React apps. Practical
+    techniques to improve user experience and search rankings.
   modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/context-and-selectors-typing
-- title: Custom Hooks with Generics
-  description: Build reusable hooks with proper generic constraints—type-safe data
-    fetching, localStorage, and form management patterns.
+  path: /courses/react-performance/core-web-vitals-for-react
+- title: useDeferredValue Patterns
+  description: Keep typing fluid by deferring expensive derived values. Pair with
+    transitions and memoization for silky search UIs.
   modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/custom-hooks-with-generics-comprehensive
-- title: Data Fetching and Runtime Validation
-  description: Fetch safely—type APIs, validate at runtime, and keep server/client
-    boundaries honest under React 19.
+  path: /courses/react-performance/usedeferredvalue-patterns
+- title: The use() Hook
+  description: Simplify async and context consumption by letting components 'use'
+    resources directly, with Suspense driving the UI flow.
   modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/data-fetching-and-runtime-validation
-- title: Edge, SSR, and Runtime Types
-  description: Target multiple runtimes—align DOM vs Node types, edge constraints,
-    and SSR data contracts with TypeScript.
+  path: /courses/react-performance/the-use-hook
+- title: Optimizing Server‑Side Rendering
+  description: Speed up SSR with streaming, caching, and smarter data
+    fetching—reduce time‑to‑first‑byte and hydrate faster.
   modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/edge-ssr-and-runtime-types
-- title: Edge, SSR, and Hydration Payload Types
-  description: Target multiple runtimes—DOM vs Node types, serializable payloads,
-    and safe hydration contracts.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/edge-ssr-hydration
-- title: flushSync and Imperative DOM with Types
-  description: Coordinate with the DOM—type helpers that force sync updates for
-    focus, measurement, and animations sparingly.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/flushsync-and-imperative-dom
-- title: Typed Forms, Actions, and useActionState
-  description: Model form mutations in React 19—type Actions and useActionState
-    for safe server and client flows.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/forms-actions-and-useactionstate
-- title: Forms, Events, and Number Inputs That Don't Lie
-  description: Type form handlers once, reuse everywhere—and tame <input
-    type="number"> returning strings.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/forms-events-and-number-inputs
-- title: Typing Higher-Order Components Without Tears
-  description: Wrap components and keep their props—model HOCs with generics,
-    Omit, and proper ref forwarding.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/higher-order-components-typing
-- title: Typing Children and When to Use ReactNode
-  description: Children can be strings, elements, arrays—learn the correct types
-    and helpers without guesswork.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/jsx-types-reactnode-reactelement
+  path: /courses/react-performance/optimizing-server-side-rendering
 - title: Migrating from PropTypes to TypeScript
   description: Replace runtime warnings with compile‑time safety—move prop
     validation into your types and editor.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/migrating-from-proptypes
-- title: Migrating a React App from JS to TS
-  description: Convert safely—incremental tsconfig, strictness ratchet, and
-    patterns for typing legacy components without churn.
+- title: Edge, SSR, and Hydration Payload Types
+  description: Target multiple runtimes—DOM vs Node types, serializable payloads,
+    and safe hydration contracts.
   modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/migrating-javascript-to-typescript
-- title: Module Federation with TypeScript
-  description: Build type-safe micro-frontends with Webpack Module Federation and TypeScript
+  path: /courses/react-typescript/edge-ssr-hydration
+- title: Conditional and Mapped Types
+  description: Transform and manipulate types at compile time with TypeScript's
+    most powerful features
   modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/module-federation-typescript
-- title: Module Resolution and Path Aliases
-  description: Make imports sane—align tsconfig paths with your bundler and avoid
-    circular snags.
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/module-resolution-and-paths
+  path: /courses/react-typescript/typescript-conditional-mapped-types
 - title: React Performance with TypeScript
   description: Use types to encode identity contracts—memo boundaries, readonly
     data, stable references, and type-safe performance monitoring.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/react-performance-with-typescript
+- title: Data Fetching and Runtime Validation
+  description: Fetch safely—type APIs, validate at runtime, and keep server/client
+    boundaries honest under React 19.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/data-fetching-and-runtime-validation
+- title: Typing Higher-Order Components Without Tears
+  description: Wrap components and keep their props—model HOCs with generics,
+    Omit, and proper ref forwarding.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/higher-order-components-typing
+- title: Custom Hooks with Generics
+  description: Build reusable hooks with proper generic constraints—type-safe data
+    fetching, localStorage, and form management patterns.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/custom-hooks-with-generics-comprehensive
+- title: Edge, SSR, and Runtime Types
+  description: Target multiple runtimes—align DOM vs Node types, edge constraints,
+    and SSR data contracts with TypeScript.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/edge-ssr-and-runtime-types
+- title: Migrating a React App from JS to TS
+  description: Convert safely—incremental tsconfig, strictness ratchet, and
+    patterns for typing legacy components without churn.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/migrating-javascript-to-typescript
+- title: Typing Context and Selector Patterns
+  description: Create fully typed contexts—state/actions split, selectors that
+    minimize re-renders, and ergonomic Provider APIs.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/context-and-selectors-typing
+- title: Type Inference
+  description: Master TypeScript's type inference to write cleaner code with less
+    boilerplate
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/typescript-type-inference-mastery
+- title: Discriminated Unions
+  description: Master TypeScript's most powerful pattern for representing state
+    and handling complex types
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/typescript-discriminated-unions
+- title: Type Narrowing and Control Flow
+  description: Master TypeScript's control flow analysis to write safer code with
+    precise type checking
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/typescript-type-narrowing-control-flow
 - title: Testing React Components with TypeScript
   description: Configure Jest/Vitest and RTL for TypeScript—type-safe queries,
     user events, and mock helpers.
@@ -355,45 +346,54 @@
     regressions, and add type coverage to CI.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/type-level-testing-in-practice
-- title: Conditional and Mapped Types
-  description: Transform and manipulate types at compile time with TypeScript's
-    most powerful features
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/typescript-conditional-mapped-types
-- title: Discriminated Unions
-  description: Master TypeScript's most powerful pattern for representing state
-    and handling complex types
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/typescript-discriminated-unions
-- title: Template Literal Types
-  description: Master TypeScript's template literal types for type-safe string
-    manipulation and CSS-in-JS
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/typescript-template-literal-types
-- title: Type Inference
-  description: Master TypeScript's type inference to write cleaner code with less
-    boilerplate
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/typescript-type-inference-mastery
-- title: Type-Level Programming
-  description: Master advanced TypeScript patterns for type-level computation and validation
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/typescript-type-level-programming
-- title: Type Narrowing and Control Flow
-  description: Master TypeScript's control flow analysis to write safer code with
-    precise type checking
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/typescript-type-narrowing-control-flow
-- title: Utility Types Complete Guide
-  description: Master TypeScript's built-in utility types and create your own for
-    cleaner, more maintainable code
-  modified: 2025-09-22T09:27:10-06:00
-  path: /courses/react-typescript/typescript-utility-types-complete
 - title: useOptimistic and Typed Optimistic Updates
   description: Model optimistic UI updates safely—design optimistic state and
     reconcile server results with precise types.
   modified: 2025-09-22T09:27:10-06:00
   path: /courses/react-typescript/useoptimistic-typed-optimism
+- title: Module Resolution and Path Aliases
+  description: Make imports sane—align tsconfig paths with your bundler and avoid
+    circular snags.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/module-resolution-and-paths
+- title: flushSync and Imperative DOM with Types
+  description: Coordinate with the DOM—type helpers that force sync updates for
+    focus, measurement, and animations sparingly.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/flushsync-and-imperative-dom
+- title: Forms, Events, and Number Inputs That Don't Lie
+  description: Type form handlers once, reuse everywhere—and tame <input
+    type="number"> returning strings.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/forms-events-and-number-inputs
+- title: Typed Forms, Actions, and useActionState
+  description: Model form mutations in React 19—type Actions and useActionState
+    for safe server and client flows.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/forms-actions-and-useactionstate
+- title: Utility Types Complete Guide
+  description: Master TypeScript's built-in utility types and create your own for
+    cleaner, more maintainable code
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/typescript-utility-types-complete
+- title: Template Literal Types
+  description: Master TypeScript's template literal types for type-safe string
+    manipulation and CSS-in-JS
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/typescript-template-literal-types
+- title: Module Federation with TypeScript
+  description: Build type-safe micro-frontends with Webpack Module Federation and TypeScript
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/module-federation-typescript
+- title: Typing Children and When to Use ReactNode
+  description: Children can be strings, elements, arrays—learn the correct types
+    and helpers without guesswork.
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/jsx-types-reactnode-reactelement
+- title: Type-Level Programming
+  description: Master advanced TypeScript patterns for type-level computation and validation
+  modified: 2025-09-22T09:27:10-06:00
+  path: /courses/react-typescript/typescript-type-level-programming
 - title: Performance Testing Implementation Guide
   description: Implement comprehensive performance testing with E2E testing,
     Lighthouse CI, continuous monitoring, and automated performance regression
@@ -422,98 +422,103 @@
     to speed first paint and boost Core Web Vitals.
   modified: 2025-09-20T15:36:56-06:00
   path: /courses/react-performance/code-splitting-and-lazy-loading
-- title: Memory Management Deep Dive
-  description: Master React memory management, leak detection, and garbage
-    collection optimization for production applications
-  modified: 2025-09-20T15:36:56-06:00
-  path: /courses/react-performance/memory-management-deep-dive
 - title: Performance Budgets and Monitoring
   description: Overview of performance budgets and monitoring strategies for React
     applications
   modified: 2025-09-20T15:36:56-06:00
   path: /courses/react-performance/performance-budgets-and-monitoring
+- title: Memory Management Deep Dive
+  description: Master React memory management, leak detection, and garbage
+    collection optimization for production applications
+  modified: 2025-09-20T15:36:56-06:00
+  path: /courses/react-performance/memory-management-deep-dive
 - title: Advanced Error Handling Patterns
   description: Build resilient React applications with type-safe error recovery,
     retry strategies, and fallback patterns
   modified: 2025-09-20T15:36:56-06:00
   path: /courses/react-typescript/advanced-error-handling-patterns
-- title: Building and Development Scripts
-  description: Set up essential build and development scripts for React TypeScript
-    projects, including dev servers, builds, testing, and linting.
-  modified: 2025-09-20T10:40:36-06:00
-  path: /courses/react-typescript/building-development-scripts
 - title: Setting Up Linting and Formatting
   description: Configure ESLint, Prettier, and type-aware rules for React
     TypeScript projects with modern tooling and best practices.
   modified: 2025-09-20T10:40:36-06:00
   path: /courses/react-typescript/setting-up-linting-and-formatting
+- title: Building and Development Scripts
+  description: Set up essential build and development scripts for React TypeScript
+    projects, including dev servers, builds, testing, and linting.
+  modified: 2025-09-20T10:40:36-06:00
+  path: /courses/react-typescript/building-development-scripts
 - title: Type-Safe Environment Variables
   description: Implement type-safe environment variable handling in React
     TypeScript applications with validation and runtime safety.
   modified: 2025-09-20T10:40:36-06:00
   path: /courses/react-typescript/typesafe-environment-variables
-- title: Claude Code Hook Examples
-  description: Practical examples and cookbook for implementing custom hooks to
-    automate workflows and enforce development policies
+- title: CDN Caching & Immutable Assets
+  description: Optimize React app delivery with CDN caching strategies, immutable
+    deployments, and hashed chunking patterns
   modified: 2025-09-20T10:39:54-06:00
-  path: /courses/ai-development/claude-code-hook-examples
-- title: The Attention Mechanism
-  description: Build intuition for self-attention, Q/K/V projections, multi-head
-    attention, masking, and positional information in Transformers.
+  path: /courses/react-performance/cdn-caching-immutable-assets
+- title: useMemo and useCallback in React 19
+  description: Use memoization as a scalpel, not a sledgehammer—cache expensive
+    work or stabilize identities where it truly pays off.
   modified: 2025-09-20T10:39:54-06:00
-  path: /courses/python-ai/attention-mechanism
-- title: Decoders and Text Generation
-  description: Practical guide to causal decoders and generation strategies like
-    greedy, beam search, top-k/top-p sampling, temperature, and penalties.
+  path: /courses/react-performance/usememo-usecallback-in-react-19
+- title: React.memo in React 19 and the Compiler Era
+  description: Learn where React.memo still shines, when a compiler or bailouts
+    make it redundant, and how to write fair areEqual checks.
   modified: 2025-09-20T10:39:54-06:00
-  path: /courses/python-ai/decoders
-- title: DreamBooth — Personalizing Text-to-Image Models
-  description: Fine-tune a text-to-image model on a few photos to learn a specific
-    subject; cover dataset prep, prior preservation, training, and inference.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/python-ai/dreambooth
-- title: Fine-Tuning Transformer Models
-  description: Prepare datasets, choose an approach (full, LoRA/PEFT), configure
-    training with the Trainer API, evaluate, and ship safely to production.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/python-ai/fine-tuning
-- title: Text-to-Image Generation (Stable Diffusion)
-  description: Understand Stable Diffusion's components, schedulers, guidance
-    scale, prompt craft, safety, and performance for text-to-image tasks.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/python-ai/image-generation
-- title: Image-to-Image Transformations
-  description: Generate new images guided by both a textual prompt and an initial
-    image; control fidelity with strength and guidance.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/python-ai/image-to-image
-- title: Pipeline Basics (Hugging Face)
-  description: Understand Hugging Face Pipelines, tasks, model/tokenizer loading,
-    batching, devices, and configuration for quick, production-ready inference.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/python-ai/pipeline-basics
-- title: Tokenization — From Text to Tensors
-  description: Learn how text becomes model-ready tensors via subword
-    tokenization, special tokens, padding, truncation, and attention masks.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/python-ai/tokenization
-- title: Animation Performance in React
-  description: Build silky smooth 60fps animations. Master hardware acceleration,
-    avoid layout thrashing, and create performant micro-interactions.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/animation-performance
-- title: Avoiding Over‑Memoization
-  description: Stop paying rent for caches you never use. Learn to remove
-    unnecessary memoization and let React do less work.
-  modified: 2025-09-20T10:39:54-06:00
-  path: /courses/react-performance/avoiding-over-memoization
+  path: /courses/react-performance/react-memo-react-19-and-compiler-era
 - title: Avoiding Unnecessary Dependencies
   description: Trim the fat. Replace heavy libraries with native APIs or lighter
     alts and lean on tree‑shaking to cut bundle size.
   modified: 2025-09-20T10:39:54-06:00
   path: /courses/react-performance/avoiding-unnecessary-dependencies
+- title: Custom Equality Checks with areEqual
+  description: Write domain-smart equality functions that avoid deep-compare traps
+    and make memoized components both fast and correct.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/custom-equality-checks-areequal
+- title: Image & Asset Optimization for React
+  description: Master image optimization in React apps. Implement responsive
+    images, modern formats, lazy loading, and CDN strategies for blazing-fast
+    visual content.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/image-and-asset-optimization
+- title: Service Worker Strategies for React Apps
+  description: Implement service workers for offline-first React apps. Master
+    caching strategies, background sync, and push notifications for blazing-fast
+    performance.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/service-worker-strategies
 - title: Bundle Analysis Deep Dive
   description: Master webpack-bundle-analyzer, source maps, and dependency
     auditing to eliminate bloat and optimize your React bundle.
   modified: 2025-09-20T10:39:54-06:00
   path: /courses/react-performance/bundle-analysis-deep-dive
+- title: Flushsync In React Dom
+  description: React's concurrent rendering is one of its most powerful
+    features—it batches updates, prioritizes work, and keeps your app responsive
+    by breaking rendering into chunks. But sometimes you need to tell React,
+    "No, really, I need this updat...
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/flushsync-in-react-dom
+- title: Skeleton Screens & Perceived Performance
+  description: Make your React app feel instant with skeleton screens. Master
+    loading states, progressive enhancement, and psychological performance
+    tricks.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/skeleton-screens-perceived-performance
+- title: INP Optimization & Long Tasks
+  description: Master Interaction to Next Paint (INP) by breaking up long tasks,
+    using scheduler APIs, and optimizing React interactivity
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/inp-optimization-long-tasks
+- title: Selective Hydration in Modern React Apps
+  description: Hydrate what matters first. Prioritize above‑the‑fold work so pages
+    feel interactive even while the rest continues to load.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/selective-hydration-react-19
+- title: Key Stability in Lists
+  description: Master keys to keep state, focus, and animations intact—no more
+    mysterious remounts or janky list updates.
+  modified: 2025-09-20T10:39:54-06:00
+  path: /courses/react-performance/key-stability-in-lists
