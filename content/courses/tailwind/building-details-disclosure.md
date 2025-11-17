@@ -192,7 +192,7 @@ This creates sophisticated interaction feedback—the hover colors are contextua
 Finally, let's add a subtle border accent that also responds to the open state for complete visual cohesion.
 
 ```html tailwind
-<details class="rounded-lg border border-slate-200 p-4 transition-colors in-open:border-blue-200">
+<details class="rounded-lg border border-slate-200 p-4 transition-colors open:border-blue-200">
   <summary
     class="flex cursor-pointer items-center justify-between font-medium text-slate-900 transition-colors hover:text-slate-700 in-open:text-blue-600 in-open:hover:text-blue-700"
   >
@@ -218,7 +218,7 @@ Finally, let's add a subtle border accent that also responds to the open state f
 Border state enhancements:
 
 - `transition-colors` on details: Smoothly animates border color changes
-- `in-open:border-blue-200`: Light blue border when expanded, creating subtle visual connection with the blue text and icon
+- `open:border-blue-200`: Light blue border when expanded, creating subtle visual connection with the blue text and icon
 
 Now the entire component—text, icon, and border—all shift to the blue accent color family when opened, creating a cohesive and polished experience.
 
