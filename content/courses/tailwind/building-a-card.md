@@ -165,7 +165,7 @@ We added the following classes to the container:
 
 ## Constraining the Width
 
-It's still a little too wide for my tastes. Let's set a maximum with for the card using `max-w-sm` on the container.
+It's still a little too wide for my tastes. Let's set a maximum width for the card using `max-w-sm` on the container.
 
 ```html tailwind
 <div
