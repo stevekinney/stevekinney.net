@@ -125,6 +125,9 @@
     "simple-git": "^3.30.0",
     "zod": "^4.3.5"
   },
+  "optionalDependencies": {
+    "@img/sharp-libvips-linux-x64": "1.2.4"
+  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,svelte,css,md,html,json}": "prettier --write",
     "*.{js,jsx,ts,tsx,svelte}": "eslint --fix"
