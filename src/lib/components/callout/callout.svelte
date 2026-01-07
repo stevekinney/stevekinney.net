@@ -42,7 +42,13 @@
   const Icon = $derived(getIcon(variant));
 
   // State for foldable callouts - open by default if not foldable.
-  let open = $state(!foldable);
+  let open = $state(false);
+
+  $effect(() => {
+    if (!foldable) {
+      open = true;
+    }
+  });
 
   // Toggle the open state for foldable callouts.
   function toggleOpen() {
