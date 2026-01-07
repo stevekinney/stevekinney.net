@@ -1,7 +1,7 @@
 ---
 title: Setting Up GitHub Actions to Run Vitest Unit Tests
 description: Learn how to automate testing with GitHub Actions and Vitest.
-modified: '2025-07-29T15:09:56-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2024-10-02T08:49:23-05:00'
 ---
 
@@ -19,7 +19,7 @@ Continuous Integration (CI) is a crucial practice in modern software development
 - A GitHub repository containing your project.
 - Vitest installed and configured in your project.
 - Existing unit tests written with Vitest.
-- Node.js and npm configured in your project.
+- Node.js and a package manager configured in your project (npm, pnpm, yarn, or bun).
 
 ## Step-by-Step Guide
 
@@ -52,14 +52,14 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x]
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -77,6 +77,8 @@ jobs:
 - **`runs-on`**: Specifies the OS environment (`ubuntu-latest`).
 - **`strategy.matrix.node-version`**: Allows testing on different Node.js versions (adjust as needed).
 - **`steps`**: Lists the steps to execute in the job.
+
+> **Note**: Node.js 16 is deprecated and no longer supported by GitHub Actions. Use the active LTS versions (for example, 18.x/20.x/22.x).
 
 ### Breakdown of Workflow Steps
 
@@ -123,6 +125,25 @@ Nothing particularly special to see here. This installs project dependencies def
 ```
 
 This executes the test script defined in your `package.json`.
+
+### Using pnpm, yarn, or bun instead of npm
+
+If you use a different package manager, add its setup step and swap the install/test commands. For example, with **pnpm**:
+
+```yaml
+- name: Set up pnpm
+  uses: pnpm/action-setup@v4
+  with:
+    version: 9
+
+- name: Install dependencies
+  run: pnpm install
+
+- name: Run tests
+  run: pnpm test
+```
+
+For **yarn**, enable Corepack and use `yarn install`/`yarn test`. For **bun**, use `oven-sh/setup-bun@v2` and run `bun install`/`bun test`. Adjust the `cache` value in `actions/setup-node` to match your package manager (`pnpm`/`yarn`).
 
 ### Commit and Push the Workflow File
 
@@ -229,7 +250,7 @@ with:
 ```yaml
 strategy:
   matrix:
-    node-version: [14.x, 16.x, 18.x]
+    node-version: [18.x, 20.x, 22.x]
 ```
 
 **Fail Fast**: Use the `fail-fast` option to stop running jobs on first failure.
