@@ -4,7 +4,7 @@ description: >-
   Learn where React.memo still shines, when a compiler or bailouts make it
   redundant, and how to write fair areEqual checks.
 date: 2025-09-06T21:12:33.129Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -410,4 +410,3 @@ The key is understanding when the compiler has your back and when you need to st
 4. **Profile before optimizing** to ensure you're solving real performance problems
 5. **Don't memoize everything**—cheap components often don't benefit from memoization
 6. **Be careful with function props**—ensure they're stable or handled appropriately in comparisons
-

@@ -4,7 +4,7 @@ description: >-
   Demystify how React compares trees, chooses updates, and schedules work—then
   apply the rules to ship snappy, predictable UIs.
 date: 2025-09-06T21:09:12.712Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -480,4 +480,3 @@ Compound components provide consistent tree structure while keeping the API flex
 ## Next Steps
 
 Understanding reconciliation gives you a mental model for writing efficient React components. Here's what to focus on next:
-

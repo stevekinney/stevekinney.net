@@ -4,7 +4,7 @@ description: >-
   Assert your types with tsd/expectTypeOf—lock generics, prevent regressions,
   and add type coverage to CI.
 date: 2025-09-14T18:00:00.000Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -136,4 +136,3 @@ expectType<TextFieldProps>({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => {},
 });
 ```
-

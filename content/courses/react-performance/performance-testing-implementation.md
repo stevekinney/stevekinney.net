@@ -4,7 +4,7 @@ description: >-
   Implement comprehensive performance testing with E2E testing, Lighthouse CI,
   continuous monitoring, and automated performance regression detection.
 date: 2025-09-20T01:15:00.000Z
-modified: '2025-09-20T21:27:16.545Z'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -659,4 +659,3 @@ ${result.violations.length > 0 ? `**Violations:**\n${result.violations.map((v) =
   }
 }
 ```
-

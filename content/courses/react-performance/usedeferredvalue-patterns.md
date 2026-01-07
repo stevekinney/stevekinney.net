@@ -4,7 +4,7 @@ description: >-
   Keep typing fluid by deferring expensive derived values. Pair with transitions
   and memoization for silky search UIs.
 date: 2025-09-06T22:26:45.103Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -459,4 +459,3 @@ function GoodExample({ items, query }: { items: Item[]; query: string }) {
 ## Wrapping Up
 
 `useDeferredValue` is a powerful tool for building responsive UIs that handle expensive operations gracefully. The key principles to remember:
-

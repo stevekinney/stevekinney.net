@@ -4,7 +4,7 @@ description: >-
   Leverage OffscreenCanvas and WebGL to create high-performance visualizations
   and graphics in React applications
 date: 2025-01-14T00:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 status: published
 tags:
   - React
@@ -927,4 +927,3 @@ interface FrameTimer {
 - Track worker utilization
 - Measure transfer overhead
 - Identify bottlenecks
-

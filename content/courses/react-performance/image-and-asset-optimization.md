@@ -4,7 +4,7 @@ description: >-
   Master image optimization in React apps. Implement responsive images, modern
   formats, lazy loading, and CDN strategies for blazing-fast visual content.
 date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -676,4 +676,3 @@ interface ImageOptimizationChecklist {
   };
 }
 ```
-

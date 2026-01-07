@@ -4,7 +4,7 @@ description: >-
   Master TypeScript generics from basics to advanced patterns—type parameters,
   constraints, variance, and real-world applications.
 date: 2025-09-14T18:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - typescript
@@ -1145,4 +1145,3 @@ function Modal<T>({
 Generics are the key to writing truly reusable TypeScript code. They let you create flexible abstractions while maintaining complete type safety. From simple type parameters to complex conditional and mapped types, generics give you the power to express sophisticated type relationships.
 
 The key to mastering generics is to start simple and gradually add complexity as needed. Use descriptive names, add constraints when they make sense, and remember that the goal is to make your code both reusable and safe. With the patterns and techniques in this guide, you're ready to leverage generics to their full potential in your React and TypeScript applications.
-

@@ -4,7 +4,7 @@ description: >-
   Keep state near its consumers to reduce render storms, simplify data flow, and
   make components easier to reason about.
 date: 2025-09-06T21:48:02.336Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -416,4 +416,3 @@ Before you decide where to put state, ask yourself:
 - **Does this state need to persist when components unmount?** If yes, consider lifting it.
 - **Is this truly global state** (like authentication or theme)? If yes, put it in a provider or global store.
 - **Am I lifting state "just in case"?** Don't do this—start colocated and lift when needed.
-

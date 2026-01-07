@@ -5,7 +5,7 @@ description: >-
   is one of those things that sounds complicated but becomes surprisingly
   elegant once you get the pieces in place. When you combine React Query's
   powerful cachi...
-modified: '2025-09-27T18:40:11-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 date: '2025-09-06T17:49:18-06:00'
 ---
 
@@ -744,4 +744,3 @@ The combination of tRPC and React Query creates a incredibly productive developm
 - **Testing strategies** for components that use tRPC queries
 
 The key insight is that modern type-safe data fetching isn't just about preventing bugs (though it does that beautifully)—it's about creating a development experience where your tools understand your data flow and can help you build features faster and more confidently.
-

@@ -4,7 +4,7 @@ description: >-
   Set and enforce performance budgets in your React apps. Automate testing,
   catch regressions in CI/CD, and maintain fast applications at scale.
 date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -762,4 +762,3 @@ test.describe('Performance E2E Tests', () => {
 ## Performance Dashboard Integration
 
 Performance dashboards and alerting systems should be integrated with your automation pipeline to provide visibility into budget compliance over time. For comprehensive dashboard implementation and production alerting, see [production-performance-monitoring.md](./production-performance-monitoring.md).
-

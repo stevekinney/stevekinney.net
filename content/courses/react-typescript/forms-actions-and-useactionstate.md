@@ -4,7 +4,7 @@ description: >-
   Model form mutations in React 19—type Actions and useActionState for safe
   server and client flows.
 date: 2025-09-06T22:04:44.913Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -1176,4 +1176,3 @@ The key insight is that Actions + `useActionState` give you a declarative way to
 Rather than fighting with scattered state and imperative event handlers, you're describing what should happen when forms are submitted—and React handles the rest. Your forms become more predictable, your error handling becomes more consistent, and your users get better experiences with proper loading states and progressive enhancement.
 
 The future of form handling in React is typed, declarative, and surprisingly pleasant to work with. Give these patterns a try in your next project—you might find yourself actually looking forward to implementing that next form.
-

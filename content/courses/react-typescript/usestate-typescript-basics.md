@@ -4,7 +4,7 @@ description: >-
   Master TypeScript with React's useState hook—from type inference patterns to
   explicit typing strategies for bulletproof state management.
 date: 2025-09-27T12:00:00.000Z
-modified: '2025-09-27T22:02:11.457Z'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -544,4 +544,3 @@ function TodoManager() {
 ## What's Next?
 
 Now that you understand the fundamentals of useState with TypeScript, you're ready to tackle async data fetching. In the next tutorial, we'll combine useState with useEffect to fetch real todos from the JSONPlaceholder API, handle loading states, and manage errors—all with complete type safety.
-

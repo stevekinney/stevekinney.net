@@ -4,7 +4,7 @@ description: >-
   Stream UI progressively instead of blocking on everything—compose boundaries
   that keep pages interactive and informative.
 date: 2025-09-06T22:01:30.022Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -258,4 +258,3 @@ It's less useful for:
 - Simple forms with minimal async operations
 - Apps with mostly static content
 - Cases where you need fine-grained loading control for individual fields
-

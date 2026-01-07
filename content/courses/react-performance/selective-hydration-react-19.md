@@ -4,7 +4,7 @@ description: >-
   Hydrate what matters first. Prioritize above‑the‑fold work so pages feel
   interactive even while the rest continues to load.
 date: 2025-09-06T22:05:42.929Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -381,4 +381,3 @@ Focus on:
 ## The Bottom Line
 
 Selective hydration transforms server-rendered apps from "all or nothing" to "progressive by default." By wrapping less critical components in Suspense boundaries and leveraging React's automatic prioritization, you can create apps that feel responsive from the moment they load—even while parts are still hydrating in the background.
-

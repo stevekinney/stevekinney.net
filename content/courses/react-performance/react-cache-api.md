@@ -4,7 +4,7 @@ description: >-
   Stabilize and dedupe expensive work across requests and renders—use cache() to
   turn pure functions into shared resources.
 date: 2025-09-06T22:22:56.456Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -408,4 +408,3 @@ Cache isn't always the right choice:
 ## Next Steps
 
 Now that you understand `cache()`, you can eliminate redundant work across your React applications. Consider how this pairs with other React 19 features like Server Components and the `use()` hook for building efficient, performant applications.
-

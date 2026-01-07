@@ -4,7 +4,7 @@ description: >-
   Compile and minify at warp speed. Configure SWC to speed local builds and keep
   production bundles lean and modern.
 date: 2025-09-06T22:30:49.275Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -539,4 +539,3 @@ While SWC is excellent for most React projects, there are some scenarios where s
 - **Legacy project constraints**: If you're in a complex monorepo setup where changing the build tool would require extensive coordination
 
 ## Next Steps
-
