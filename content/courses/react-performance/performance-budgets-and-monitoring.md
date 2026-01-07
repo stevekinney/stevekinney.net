@@ -4,7 +4,7 @@ description: >-
   Overview of performance budgets and monitoring strategies for React
   applications
 date: 2025-09-06T23:00:00.000Z
-modified: '2025-09-20T15:36:56-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -40,4 +40,3 @@ Key topics covered:
 ## INP-Specific Monitoring
 
 For detailed Interaction to Next Paint monitoring strategies, see **[INP Production Monitoring](./inp-production-monitoring.md)**.
-

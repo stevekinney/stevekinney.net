@@ -4,7 +4,7 @@ description: >-
   Use memoization as a scalpel, not a sledgehammer—cache expensive work or
   stabilize identities where it truly pays off.
 date: 2025-09-06T21:16:28.100Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -550,4 +550,3 @@ React 19's improvements mean you can often skip manual optimization in these cas
 Remember: **premature optimization is the root of all evil**. Start with clean, readable code. Add memoization when you have actual performance problems, not imaginary ones.
 
 ## Wrapping Up
-

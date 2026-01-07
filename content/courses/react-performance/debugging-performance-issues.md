@@ -4,7 +4,7 @@ description: >-
   Master the systematic approach to finding and fixing performance problems. Use
   React DevTools, Chrome Performance tab, and proven debugging workflows.
 date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -732,4 +732,3 @@ Keep these snippets handy for quick debugging:
   console.log('Long task monitoring enabled');
 })();
 ```
-

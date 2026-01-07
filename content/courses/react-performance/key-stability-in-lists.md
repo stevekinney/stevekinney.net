@@ -4,7 +4,7 @@ description: >-
   Master keys to keep state, focus, and animations intact—no more mysterious
   remounts or janky list updates.
 date: 2025-09-06T21:53:48.824Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -412,4 +412,3 @@ test('preserves input focus when list items are reordered', async () => {
   expect(stillFocusedInput).toHaveFocus();
 });
 ```
-

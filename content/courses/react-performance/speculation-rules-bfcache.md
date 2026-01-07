@@ -4,7 +4,7 @@ description: >-
   Implement instant navigation with Speculation Rules API and optimize for
   back/forward cache in React applications
 date: 2025-01-14T00:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 status: published
 tags:
   - React
@@ -728,4 +728,3 @@ const SpeculativeRouter: React.FC<{ children: React.ReactNode }> = ({ children }
 - Consider data saver mode
 - Adapt to network conditions
 - Clean up unused speculation
-

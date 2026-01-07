@@ -3,7 +3,7 @@ title: Adding Types to Express
 description: >-
   Learn how to leverage TypeScript with Express to build type-safe APIs and web
   applications.
-modified: '2025-07-29T15:09:56-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-03-16T17:35:22-06:00'
 ---
 
@@ -28,7 +28,8 @@ interface Request<
   ReqBody = any,
   ReqQuery = ParsedQs,
   Locals extends Record<string, any> = Record<string, any>,
-> extends core.Request {}
+>
+  extends core.Request {}
 
 interface Response<ResBody = any, Locals extends Record<string, any> = Record<string, any>>
   extends core.Response {}

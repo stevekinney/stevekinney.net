@@ -4,7 +4,7 @@ description: >-
   Master GET requests with TypeScript—implement pagination, filtering, search,
   and caching strategies for efficient todo list management.
 date: 2025-09-27T12:00:00.000Z
-modified: '2025-09-27T22:09:27.825Z'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -909,4 +909,3 @@ Reading todos efficiently requires:
 ## What's Next?
 
 Now that we can create and read todos, let's implement updating with optimistic updates and proper rollback strategies.
-

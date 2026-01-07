@@ -4,7 +4,7 @@ description: >-
   Stop paying rent for caches you never use. Learn to remove unnecessary
   memoization and let React do less work.
 date: 2025-09-06T21:20:43.626Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -308,4 +308,3 @@ Instead of adding `useMemo` and `useCallback` everywhere, try this approach:
 4. **Remove when in doubt**: If you can't measure the benefit, remove the memoization
 
 Remember: premature optimization is the root of all evil, but so is ignoring real performance problems. The key is finding the balance—and that balance usually involves less memoization than you might think.
-

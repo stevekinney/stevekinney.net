@@ -4,7 +4,7 @@ description: >-
   Handle DELETE operations with TypeScript—implement soft delete, undo
   functionality, cascading deletes, and proper state cleanup patterns.
 date: 2025-09-27T12:00:00.000Z
-modified: '2025-09-27T22:13:31.916Z'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -858,4 +858,3 @@ Proper delete operations require:
 ## What's Next?
 
 Now let's bring everything together in a complete CRUD todo application.
-

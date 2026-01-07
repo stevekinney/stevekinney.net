@@ -5,7 +5,7 @@ description: >-
   operations, prevent race conditions, and manage component lifecycle with
   TypeScript.
 date: 2025-09-27T12:00:00.000Z
-modified: '2025-09-27T22:03:32.022Z'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -838,4 +838,3 @@ With these patterns, you can build robust data fetching that handles all the edg
 ## What's Next?
 
 In the next tutorial, we'll dive deeper into loading states and error handling patterns, including discriminated unions for representing async states, error boundaries, and user-friendly error messages.
-

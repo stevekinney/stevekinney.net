@@ -18,7 +18,7 @@
     ...props
   }: ButtonProps = $props();
 
-  const isLink = Boolean(href);
+  const isLink = $derived(Boolean(href));
 </script>
 
 <svelte:element

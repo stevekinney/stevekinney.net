@@ -3,7 +3,7 @@ title: Tailwind Cva Typed Variants
 description: >-
   Pair Tailwind with class-variance-authority (CVA) to create discoverable,
   type-safe variant APIs—no more stringly-typed class soups.
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 date: '2025-09-14T18:35:49.574Z'
 ---
 
@@ -106,4 +106,3 @@ function Input({ label, helper, className, ...rest }: InputProps) {
   );
 }
 ```
-

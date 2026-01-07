@@ -5,7 +5,7 @@ description: >-
   confusing. React 19's useActionState hook elegantly solves the coordination
   problem of managing pending, success, and error states while keeping your
   components p...
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 date: '2025-09-06T17:49:18-06:00'
 ---
 
@@ -470,4 +470,3 @@ Keep using `useState` for:
 ### Memory and Bundle Size
 
 `useActionState` adds minimal overhead—it's essentially a specialized `useReducer` with built-in async handling. The performance benefits from reduced renders typically outweigh the small bundle size increase.
-

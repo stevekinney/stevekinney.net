@@ -4,7 +4,7 @@ description: >-
   Trim the fat. Replace heavy libraries with native APIs or lighter alts and
   lean on tree‑shaking to cut bundle size.
 date: 2025-09-06T22:09:43.427Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -386,4 +386,3 @@ Dependency management is an ongoing process, not a destination. Start by:
 3. **Replace one dependency at a time** to minimize risk
 4. **Set up monitoring** to catch future bundle bloat
 5. **Establish a decision framework** for evaluating new dependencies
-

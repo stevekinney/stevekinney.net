@@ -4,7 +4,7 @@ description: >-
   Configure Jest/Vitest and RTL for TypeScript—type-safe queries, user events,
   and mock helpers.
 date: 2025-09-06T22:04:44.939Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -664,4 +664,3 @@ Here are the key takeaways for maintaining type safety in your React tests:
 The goal isn't to test _everything_ TypeScript guarantees—it's to test the gaps where types meet runtime behavior. When you nail this balance, your tests become a powerful complement to TypeScript's compile-time safety, catching the issues that matter while staying maintainable and fast.
 
 Your components work at compile-time AND runtime. Your users will thank you for it.
-

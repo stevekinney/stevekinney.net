@@ -9,7 +9,7 @@
   <div class="order-1 flex flex-col gap-2 lg:gap-8">
     <h2 class="text-lg font-bold">Further Reading</h2>
     <ul class="space-y-4">
-      {#each data.posts as post}
+      {#each data.posts as post (post.slug)}
         <PostLink {post} href="/writing/{post.slug}" as="li" />
       {/each}
     </ul>

@@ -4,7 +4,7 @@ description: >-
   Target multiple runtimes—align DOM vs Node types, edge constraints, and SSR
   data contracts with TypeScript.
 date: 2025-09-06T22:04:45.055Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -40,4 +40,3 @@ function MyComponent() {
   return <div>Window size: {windowSize.width}x{windowSize.height}</div>;
 }
 ```
-

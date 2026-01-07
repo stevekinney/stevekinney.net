@@ -4,7 +4,7 @@ description: >-
   Master Apollo Client performance with cache optimization, query batching,
   optimistic updates, and efficient subscription management strategies.
 date: 2025-09-20T01:15:00.000Z
-modified: '2025-09-20T21:18:31.287Z'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -509,4 +509,3 @@ function MessageList({ channelId }: { channelId: string }) {
   );
 }
 ```
-

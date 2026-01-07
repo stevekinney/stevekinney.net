@@ -4,7 +4,7 @@ description: >-
   Complete guide to adopting React 19's compiler. Migrate from manual
   optimizations, handle edge cases, and measure improvements.
 date: 2025-09-07T00:15:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -1161,4 +1161,3 @@ if (process.env.NODE_ENV === 'development') {
   window.debugCompiler = debugTools;
 }
 ```
-

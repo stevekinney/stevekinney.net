@@ -12,7 +12,7 @@
   <section class="prose dark:prose-invert max-w-none">
     <h2>Full Course Walkthroughs</h2>
     <ul>
-      {#each data.walkthroughs as walkthrough}
+      {#each data.walkthroughs as walkthrough (walkthrough.slug)}
         <li>
           <a href="/courses/{walkthrough.slug}">
             {walkthrough.title}
@@ -40,7 +40,7 @@
   </section>
 
   <ul class="not-prose grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-    {#each courses as course}
+    {#each courses as course (course.href)}
       <Card title={course.title} description={course.description} url={course.href} as="li" />
     {/each}
   </ul>

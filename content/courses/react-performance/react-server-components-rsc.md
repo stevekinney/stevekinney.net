@@ -4,7 +4,7 @@ description: >-
   Move heavy work to the server and hydrate only where needed—ship less JS and
   free the main thread for interactions.
 date: 2025-09-06T22:03:39.880Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -467,4 +467,3 @@ They're less ideal for:
 - **Highly interactive applications**: Real-time games, drawing apps, rich text editors
 - **Client-side routing heavy apps**: Where you need instant navigation
 - **Apps with lots of personalized, dynamic content**: That can't be computed server-side
-
