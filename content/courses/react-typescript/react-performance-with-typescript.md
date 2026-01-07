@@ -4,7 +4,7 @@ description: >-
   Use types to encode identity contracts—memo boundaries, readonly data, stable
   references, and type-safe performance monitoring.
 date: 2025-09-06T22:23:57.383Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -689,4 +689,3 @@ The best performance optimization is the one you never had to make because your 
 Try implementing one of these patterns in your current project—start with stable reference types if you have components that re-render frequently, or readonly data contracts if you're dealing with complex state mutations. You'll be surprised how much clearer your performance intentions become when they're encoded in the type system.
 
 Remember: premature optimization is the root of all evil, but predictable patterns that prevent obvious performance footguns? That's just good engineering.
-

@@ -4,7 +4,7 @@ description: >-
   Fetch safely—type APIs, validate at runtime, and keep server/client boundaries
   honest under React 19.
 date: 2025-09-06T22:04:44.916Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -405,4 +405,3 @@ function getCachedSchema<T>(key: string, schema: z.ZodSchema<T>) {
 ```
 
 ### Partial Validation
-

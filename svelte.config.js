@@ -102,6 +102,7 @@ const config = {
         // Reduce variants to speed up build
         widths: [480, 768],
         mainWidth: 800,
+        includeMetadata: false,
       })
     ),
     processCallouts(),

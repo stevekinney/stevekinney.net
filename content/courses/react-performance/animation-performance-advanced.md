@@ -5,7 +5,7 @@ description: >-
   optimization, Web Animations API integration, and comprehensive performance
   testing strategies.
 date: 2025-09-20T01:15:00.000Z
-modified: '2025-09-20T21:13:10.072Z'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -293,4 +293,3 @@ describe('Animation Performance', () => {
   });
 });
 ```
-

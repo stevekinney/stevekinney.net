@@ -4,7 +4,7 @@ description: >-
   Build type-safe POST requests with React and TypeScript—handle form
   submission, optimistic updates, and sync local state with server responses.
 date: 2025-09-27T12:00:00.000Z
-modified: '2025-09-27T22:07:22.719Z'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -972,4 +972,3 @@ Creating todos with TypeScript involves:
 ## What's Next?
 
 Now that we can create todos, let's explore reading and displaying them with proper pagination, filtering, and search functionality.
-

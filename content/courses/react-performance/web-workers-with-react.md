@@ -4,7 +4,7 @@ description: >-
   Offload expensive computations to Web Workers. Keep your UI responsive with
   parallel processing, proper state synchronization, and TypeScript support.
 date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -1203,4 +1203,3 @@ useEffect(() => {
 Web Workers are your escape hatch from JavaScript's single-threaded limitations. They let you run expensive computations without freezing your UI, process data in parallel on multi-core devices, and create truly responsive React applications even under heavy load.
 
 The key is knowing when to use them (computations over 16ms, large data processing, background sync) and when not to (simple calculations, frequent small operations, DOM manipulation). With proper TypeScript typing, efficient data transfer using Transferable objects, and careful lifecycle management, Workers become a powerful tool in your React performance arsenal.
-

@@ -9,7 +9,7 @@
 <SEO title={data.title} description={data.description} />
 
 <ul class="not-prose space-y-8">
-  {#each data.posts as post}
+  {#each data.posts as post (post.slug)}
     <li class="block">
       <a
         href="/writing/{post.slug}"

@@ -4,7 +4,7 @@ description: >-
   Model errors without exceptions—neverthrow/Either, action error unions, and
   ergonomic component APIs.
 date: 2025-09-14T18:00:00.000Z
-modified: '2025-09-14T23:11:40.852Z'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -120,4 +120,3 @@ const res = await getUser('123')
   .map((u) => u.name)
   .mapErr((e) => (e === 'NotFound' ? 'UserMissing' : 'Unknown')); // re-map domain errors
 ```
-

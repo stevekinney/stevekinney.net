@@ -4,7 +4,7 @@ description: >-
   Speed up SSR with streaming, caching, and smarter data fetching—reduce
   time‑to‑first‑byte and hydrate faster.
 date: 2025-09-06T22:13:49.769Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -673,4 +673,3 @@ cacheManager.set('posts-user-123', userPosts, ['posts', 'user-123']);
 // Invalidate all user-related cache when user updates
 cacheManager.invalidateByTags(['user-123']);
 ```
-

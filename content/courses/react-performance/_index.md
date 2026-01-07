@@ -53,4 +53,3 @@ modified: 2025-09-07T12:00:00-06:00
 - [Tree Shaking Optimization](tree-shaking-optimization.md)
 - [Performance Budgets and Automation](performance-budgets-and-automation.md)
 - [Production Performance Monitoring](production-performance-monitoring.md)
-

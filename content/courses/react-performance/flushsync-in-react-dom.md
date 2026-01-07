@@ -5,7 +5,7 @@ description: >-
   updates, prioritizes work, and keeps your app responsive by breaking rendering
   into chunks. But sometimes you need to tell React, "No, really, I need this
   updat...
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 date: '2025-09-06T17:49:18-06:00'
 ---
 
@@ -626,4 +626,3 @@ function App() {
   );
 }
 ```
-

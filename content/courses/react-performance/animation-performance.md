@@ -4,7 +4,7 @@ description: >-
   Build silky smooth 60fps animations. Master hardware acceleration, avoid
   layout thrashing, and create performant micro-interactions.
 date: 2025-09-07T01:15:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -948,4 +948,3 @@ Key advanced topics covered:
 - **Web Animations API**: Lower-level control for complex animation sequences
 - **Performance Testing**: Automated testing frameworks for animation performance validation
 - **Advanced Optimization**: GPU layer management and composite optimization
-

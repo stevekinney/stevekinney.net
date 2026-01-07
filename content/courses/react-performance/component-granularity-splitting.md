@@ -5,7 +5,7 @@ description: >-
   Split too little and you get monolithic components that re-render everything
   when a single prop changes. Split too much and you end up with component
   confetti—do...
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 date: '2025-09-06T17:49:18-06:00'
 ---
 
@@ -484,4 +484,3 @@ Here's a practical approach for splitting existing components:
 5. **Profile and measure** - Verify that splits actually improve performance
 
 The goal is components that are **focused, testable, and performant**—not the maximum number of components possible. Every split should have a clear justification: either performance, maintainability, or reusability.
-

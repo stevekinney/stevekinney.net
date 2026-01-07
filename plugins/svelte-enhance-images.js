@@ -21,6 +21,8 @@ export const processImages = (opts = {}) => {
   const options = {
     widths: [480, 768, 1024],
     mainWidth: 902,
+    includeMetadata: true,
+    skipImages: [],
     // formats are currently avif + webp; keeping fixed for broad compatibility
     ...opts,
   };
@@ -74,10 +76,14 @@ export const processImages = (opts = {}) => {
 
           if (url.startsWith('assets/')) url = `./${url}`;
 
+          if (options.skipImages.some((pattern) => url.endsWith(pattern))) {
+            continue;
+          }
+
           const baseId = '_' + camelCase(url);
           const isGif = url.toLowerCase().endsWith('.gif');
           const isVid = isVideo(url);
-          const metaId = isGif ? undefined : baseId + '_meta';
+          const metaId = !isGif && options.includeMetadata ? baseId + '_meta' : undefined;
           const webpSetId = isGif ? undefined : baseId + '_webp_set';
           const avifSetId = isGif ? undefined : baseId + '_avif_set';
           const webpId = baseId + '_webp';
@@ -91,7 +97,7 @@ export const processImages = (opts = {}) => {
             webpSetId,
             avifSetId,
             metaId,
-            hasMeta: !isGif && !isVid,
+            hasMeta: !isGif && !isVid && options.includeMetadata,
             hasSrcset: !isGif && !isVid,
             isGif,
             isVideo: isVid,

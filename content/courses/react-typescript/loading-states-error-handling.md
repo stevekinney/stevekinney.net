@@ -4,7 +4,7 @@ description: >-
   Master async state patterns with discriminated unions—model loading, success,
   and error states in TypeScript to make impossible states unrepresentable.
 date: 2025-09-27T12:00:00.000Z
-modified: '2025-09-27T23:09:05.551Z'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -837,4 +837,3 @@ Proper loading states and error handling are crucial for production React applic
 ## What's Next?
 
 Now that we can handle loading and errors properly, let's start implementing CRUD operations. The next tutorial covers creating todos with POST requests.
-

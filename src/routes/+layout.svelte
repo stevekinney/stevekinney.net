@@ -87,7 +87,7 @@
     role="complementary"
     aria-label="Social media links"
   >
-    {#each socialLinks as { href, icon, label }}
+    {#each socialLinks as { href, icon, label } (href)}
       <SocialLink {href} {icon} name={label} />
     {/each}
   </div>

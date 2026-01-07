@@ -5,7 +5,7 @@ description: >-
   with the type checker. Whether you're using inline styles, CSS Modules, or
   building a design system, TypeScript can actually make your styling more
   robust and d...
-modified: '2025-09-06T17:49:18-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 date: '2025-09-06T17:49:18-06:00'
 ---
 
@@ -161,4 +161,3 @@ const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', style })
   );
 };
 ```
-

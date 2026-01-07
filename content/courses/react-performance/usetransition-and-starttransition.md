@@ -4,7 +4,7 @@ description: >-
   Mark non-urgent updates so urgent ones stay snappy—keep typing smooth while
   expensive UI catches up in the background.
 date: 2025-09-06T21:59:36.420Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -470,4 +470,3 @@ startTransition(() => {
 ## Next Steps
 
 Now that you understand transitions, you're ready to build more responsive React applications. The key is identifying which updates are urgent (user input, navigation) versus which can wait (search results, data visualization).
-
