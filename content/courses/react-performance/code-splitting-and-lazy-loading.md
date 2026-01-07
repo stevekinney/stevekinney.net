@@ -4,7 +4,7 @@ description: >-
   Load less JavaScript upfront. Split routes, components, and vendors to speed
   first paint and boost Core Web Vitals.
 date: 2025-09-06T22:08:00.761Z
-modified: '2025-09-20T15:36:56-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -362,4 +362,3 @@ Always provide meaningful loading states. Users shouldn't see blank screens or b
 ### Splitting Too Late
 
 Implement code-splitting early in development, not as an afterthought when performance becomes a problem. It's much easier to architect for splitting from the start.
-

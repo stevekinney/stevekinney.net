@@ -3,7 +3,7 @@ title: Discriminated Unions
 description: >-
   Master TypeScript's most powerful pattern for representing state and handling
   complex types
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 date: 2025-09-14T18:54:09.603Z
 ---
 
@@ -1273,4 +1273,3 @@ Discriminated unions are one of TypeScript's killer features for React developme
 5. **Simplify testing** - Each state is easy to test in isolation
 
 Master this pattern, and you'll write React applications that are not just type-safe, but architecturally sound. Your future self (and your teammates) will thank you!
-

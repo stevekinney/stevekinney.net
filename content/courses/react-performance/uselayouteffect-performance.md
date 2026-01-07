@@ -4,7 +4,7 @@ description: >-
   Know when layout effects are necessary—and when they block paint. Prefer
   passive effects and measure before forcing sync work.
 date: 2025-09-06T22:29:02.602Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -375,4 +375,3 @@ function PerformanceTest() {
   );
 }
 ```
-

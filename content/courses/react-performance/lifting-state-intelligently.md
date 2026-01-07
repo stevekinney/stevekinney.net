@@ -4,7 +4,7 @@ description: >-
   Lift state only when multiple peers truly need it. Contain churn and stop
   render ripples before they swamp your UI.
 date: 2025-09-06T21:46:42.696Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -395,4 +395,3 @@ When you're unsure whether to lift state, profile your app's performance. React 
 
 > [!TIP]
 > A few unnecessary re-renders aren't always a problem—React is quite fast. Focus on the ones that cause noticeable lag or expensive computations.
-

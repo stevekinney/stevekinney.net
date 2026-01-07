@@ -4,7 +4,7 @@ description: >-
   Type form handlers once, reuse everywhere—and tame <input type="number">
   returning strings.
 date: 2025-09-06T22:23:57.266Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -465,4 +465,3 @@ The key takeaways:
 5. Don't over-engineer simple cases
 
 Start with the simple patterns and add complexity only when you need it. Your future self will thank you when you're debugging forms at 2 AM and everything just works as expected.
-

@@ -4,7 +4,7 @@ description: >-
   Prime the cache for what users will do next—preload, prefetch, and preinit
   without double‑loading or hurting metrics.
 date: 2025-09-06T22:20:28.822Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -420,4 +420,3 @@ Here's a quick checklist for using resource preloading effectively:
 - ❌ Don't preload resources "just in case"—be strategic
 - ❌ Don't forget CORS headers for cross-origin resources
 - ❌ Don't preload large resources unless you're confident they'll be needed
-

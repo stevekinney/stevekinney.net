@@ -4,7 +4,7 @@ description: >-
   Make your React app feel instant with skeleton screens. Master loading states,
   progressive enhancement, and psychological performance tricks.
 date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -903,4 +903,3 @@ interface SkeletonBestPractices {
   };
 }
 ```
-

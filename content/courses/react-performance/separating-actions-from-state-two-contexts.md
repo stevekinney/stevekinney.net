@@ -4,7 +4,7 @@ description: >-
   Split read and write paths. Pass immutable state and stable actions to cut
   re-renders and improve testability.
 date: 2025-09-06T21:51:43.345Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -502,4 +502,3 @@ It might be overkill for:
 - More boilerplate: You need separate contexts, providers, and hooks
 - Slightly more complex mental model: Developers need to understand the split
 - Potential over-engineering: Can be overkill for simple state scenarios
-

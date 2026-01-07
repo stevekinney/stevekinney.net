@@ -4,7 +4,7 @@ description: >-
   Write domain-smart equality functions that avoid deep-compare traps and make
   memoized components both fast and correct.
 date: 2025-09-06T21:18:40.221Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -471,4 +471,3 @@ const memoizedCallback = useCallback(
   [currentUser?.id], // Only recreate when current user changes
 );
 ```
-

@@ -5,7 +5,7 @@ description: >-
   optional, defaults, unions, generics, and building self-documenting component
   APIs.
 date: 2025-09-20T17:00:00.000Z
-modified: '2025-09-28T15:41:40-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -851,4 +851,3 @@ interface ConfusingStates {
 4. **Document complex props**: Use JSDoc comments for additional context
 5. **Keep props flat when possible**: Deeply nested props are harder to use
 6. **Use generics for truly reusable components**: But don't over-engineer
-

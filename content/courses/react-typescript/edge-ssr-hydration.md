@@ -4,7 +4,7 @@ description: >-
   Target multiple runtimes—DOM vs Node types, serializable payloads, and safe
   hydration contracts.
 date: 2025-09-06T22:23:57.384Z
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-10-01T00:19:35-05:00'
 published: true
 tags:
   - react
@@ -566,4 +566,3 @@ Building reliable hydration payload types requires thinking beyond TypeScript's 
 6. **Plan for errors**—hydration mismatches will happen; handle them gracefully
 
 The result is React applications with rock-solid type safety that works seamlessly across any deployment target—whether you're running on traditional servers, serverless functions, or edge runtimes. Your users won't see hydration mismatches, and your fellow developers will thank you for the predictable, well-typed data contracts.
-

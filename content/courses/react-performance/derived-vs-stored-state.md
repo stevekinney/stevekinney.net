@@ -4,7 +4,7 @@ description: >-
   Store less, derive more. Compute on demand to avoid desyncs, extra memory, and
   unnecessary re-renders.
 date: 2025-09-06T21:49:55.844Z
-modified: '2025-09-20T10:39:54-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 published: true
 tags:
   - react
@@ -384,4 +384,3 @@ function ProductCatalog() {
 4. **Consider the user experience**. A slight computation delay might be better than a sync bug that shows wrong data.
 
 5. **Test your state management**. Write tests that verify your computed values stay in sync with your stored state.
-

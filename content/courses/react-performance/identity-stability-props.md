@@ -5,7 +5,7 @@ description: >-
   components need to re-render. When you pass objects, arrays, or functions as
   props, their **identity**—not just their contents—determines whether React
   considers them...
-modified: '2025-09-22T09:27:10-06:00'
+modified: '2025-09-30T21:02:22-05:00'
 date: '2025-09-06T17:49:18-06:00'
 ---
 
@@ -598,4 +598,3 @@ function ShoppingApp() {
   );
 }
 ```
-
