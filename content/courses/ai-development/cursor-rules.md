@@ -52,8 +52,7 @@ Rules can be configured to apply in various ways, offering flexibility in how th
 
 ## Real-World Examples of Cursor Rules
 
-```
-Personal Coding Preferences:
+### Personal Coding Preferences
 
 - Default to TypeScript when language is ambiguous
 - Use 2 spaces for indentation, never tabs
@@ -64,7 +63,6 @@ Personal Coding Preferences:
 - Prefer early returns over nested conditionals
 - Use optional chaining (?.) and nullish coalescing (??)
 - Format: Prettier with single quotes and no semicolons
-```
 
 Cursor Rules can cover a wide range of instructions, from general coding practices to highly specific project requirements:
 
