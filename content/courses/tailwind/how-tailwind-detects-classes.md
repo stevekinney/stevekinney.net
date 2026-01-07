@@ -3,7 +3,7 @@ title: How Tailwind Detects Classes
 description: >-
   Learn how Tailwind automatically detects utility classes and manages content
   detection without configuration.
-modified: '2025-07-29T15:09:56-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2025-06-11T19:05:33-06:00'
 ---
 
@@ -32,7 +32,7 @@ For files missed by automatic detection (e.g., external libraries), use `@source
 
 ```css
 @import 'tailwindcss';
-@source "../node_modules/my-library/src/components";
+@source '../node_modules/my-library/src/components';
 ```
 
 Set base path with `source()`:
@@ -45,7 +45,7 @@ Ignore paths with `@source not`:
 
 ```css
 @import 'tailwindcss';
-@source not "../legacy";
+@source not '../legacy';
 ```
 
 Disable automatic detection: `source(none)`.
@@ -56,33 +56,33 @@ Force generation of specific classes with `@source inline()` (replaces Tailwind 
 
 ```css
 @import 'tailwindcss';
-@source inline("inline-block");
+@source inline('inline-block');
 ```
 
 Include variants:
 
 ```css
 @import 'tailwindcss';
-@source inline("underline", "hover:underline", "focus:underline");
+@source inline('underline', 'hover:underline', 'focus:underline');
 ```
 
 Or use brace expansion:
 
 ```css
 @import 'tailwindcss';
-@source inline("{hover:,focus:,}underline");
+@source inline('{hover:,focus:,}underline');
 ```
 
 Generate ranges:
 
 ```css
 @import 'tailwindcss';
-@source inline("{hover:,}bg-red-{100..900 by 100,50,950}");
+@source inline('{hover:,}bg-red-{100..900 by 100,50,950}');
 ```
 
 Exclude classes with `@source not inline()`:
 
 ```css
 @import 'tailwindcss';
-@source not inline("{hover:,focus:,}bg-red-{100..900,50,950}");
+@source not inline('{hover:,focus:,}bg-red-{100..900,50,950}');
 ```

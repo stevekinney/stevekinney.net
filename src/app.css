@@ -1,8 +1,8 @@
 @import '@fontsource/league-gothic';
 @import 'tailwindcss';
 
-@plugin "@tailwindcss/typography";
-@plugin "@tailwindcss/container-queries";
+@plugin '@tailwindcss/typography';
+@plugin '@tailwindcss/container-queries';
 
 @theme {
   --font-header: 'League Gothic', sans-serif;

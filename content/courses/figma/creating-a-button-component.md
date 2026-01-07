@@ -1,7 +1,7 @@
 ---
 title: Creating a Button Component
 description: A walkthrough for creating a button component in Figma.
-modified: '2025-07-29T15:09:56-06:00'
+modified: '2025-09-22T09:27:10-06:00'
 date: '2024-04-15T08:48:38-06:00'
 ---
 
@@ -96,4 +96,4 @@ The same process should do the trick for the other variations as well. To do thi
 There are two next things we can do:
 
 - [Supporting a dark theme with modes](adding-a-dark-theme-to-the-button.md)
-- [Adding icons to our button](adding-icons-to-our-button.md)
+- [Generating an icon library](generating-an-icon-library.md)

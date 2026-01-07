@@ -14,7 +14,7 @@
   <section class="space-y-4">
     <h2 class="text-xl font-bold">Recent Posts</h2>
     <ul class="space-y-2">
-      {#each data.posts as post}
+      {#each data.posts as post (post.slug)}
         <li class="space-x-2">
           <Link href="/writing/{post.slug}">{post.title}</Link>
           <time class="text-primary-800 dark:text-primary-200 text-sm" datetime={post.date}>

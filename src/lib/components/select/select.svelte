@@ -41,7 +41,7 @@
           {@render children()}
         {:else}
           <option disabled selected>Select an option...</option>
-          {#each options || [] as option}
+          {#each options || [] as option (option.value)}
             <option value={option.value}>{option.label || option.value}</option>
           {/each}
         {/if}

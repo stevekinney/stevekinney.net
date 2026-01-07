@@ -2,6 +2,7 @@ import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import globals from 'globals';
 import tsParser from '@typescript-eslint/parser';
 import parser from 'svelte-eslint-parser';
+import svelte from 'eslint-plugin-svelte';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
@@ -34,12 +35,9 @@ export default [
       '**/.obsidian',
     ],
   },
-  ...compat.extends(
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:svelte/recommended',
-    'prettier',
-  ),
+  ...compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'),
+  ...svelte.configs['flat/recommended'],
+  ...svelte.configs['flat/prettier'],
   {
     plugins: {
       '@typescript-eslint': typescriptEslint,
@@ -88,6 +86,12 @@ export default [
     rules: {
       'no-undef': 'off',
       'svelte/valid-compile': 'off',
+      'svelte/no-navigation-without-resolve': [
+        'error',
+        {
+          ignoreLinks: true,
+        },
+      ],
 
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -96,6 +100,12 @@ export default [
           argsIgnorePattern: '^_',
         },
       ],
+    },
+  },
+  {
+    files: ['**/+layout.svelte'],
+    rules: {
+      'svelte/valid-prop-names-in-kit-pages': 'off',
     },
   },
 ];

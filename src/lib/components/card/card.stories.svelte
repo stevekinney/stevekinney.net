@@ -5,6 +5,7 @@
   const { Story } = defineMeta({
     title: 'Card',
     component: Card,
+    render: template,
     tags: ['autodocs'],
     argTypes: {
       variant: {
@@ -18,7 +19,7 @@
   });
 </script>
 
-{#snippet content(args: CardBaseProps)}
+{#snippet template(args: CardBaseProps)}
   <Card {...args}>
     <div class="prose dark:prose-invert">
       <h2>Card Title</h2>
@@ -34,38 +35,14 @@
   </Card>
 {/snippet}
 
-<Story name="Default" args={{ variant: 'default' }}>
-  {#snippet children(args: CardBaseProps)}
-    {@render content(args)}
-  {/snippet}
-</Story>
+<Story name="Default" args={{ variant: 'default' }} />
 
-<Story name="Success" args={{ variant: 'success' }}>
-  {#snippet children(args: CardBaseProps)}
-    {@render content(args)}
-  {/snippet}
-</Story>
+<Story name="Success" args={{ variant: 'success' }} />
 
-<Story name="Warning" args={{ variant: 'warning' }}>
-  {#snippet children(args: CardBaseProps)}
-    {@render content(args)}
-  {/snippet}
-</Story>
+<Story name="Warning" args={{ variant: 'warning' }} />
 
-<Story name="Danger" args={{ variant: 'danger' }}>
-  {#snippet children(args: CardBaseProps)}
-    {@render content(args)}
-  {/snippet}
-</Story>
+<Story name="Danger" args={{ variant: 'danger' }} />
 
-<Story name="Information" args={{ variant: 'information' }}>
-  {#snippet children(args: CardBaseProps)}
-    {@render content(args)}
-  {/snippet}
-</Story>
+<Story name="Information" args={{ variant: 'information' }} />
 
-<Story name="Error" args={{ variant: 'error' }}>
-  {#snippet children(args: CardBaseProps)}
-    {@render content(args)}
-  {/snippet}
-</Story>
+<Story name="Error" args={{ variant: 'error' }} />

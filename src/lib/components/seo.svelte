@@ -23,6 +23,17 @@
     backgroundColor?: string;
     hideFooter?: boolean;
   };
+  type ImageConfig = Pick<
+    SEOProps,
+    | 'title'
+    | 'description'
+    | 'accentColor'
+    | 'secondaryAccentColor'
+    | 'textColor'
+    | 'backgroundColor'
+    | 'hideFooter'
+    | 'imageParams'
+  >;
 
   const {
     title,
@@ -42,15 +53,20 @@
     hideFooter,
   }: SEOProps = $props();
 
-  const formattedTitle = formatPageTitle(title);
-  const currentUrl = page.url.href;
+  const formattedTitle = $derived(formatPageTitle(title));
+  const currentUrl = $derived(page.url.href);
 
-  // Create image URL with all provided parameters
-  const createImageUrl = (
-    title: string,
-    description: string,
-    config: Record<string, unknown> = {},
-  ): string => {
+  // Create image URL with all provided parameters.
+  const createImageUrl = ({
+    title,
+    description,
+    accentColor,
+    secondaryAccentColor,
+    textColor,
+    backgroundColor,
+    hideFooter,
+    imageParams,
+  }: ImageConfig): string => {
     const params = {
       title,
       description,
@@ -59,16 +75,27 @@
       ...(textColor ? { textColor } : {}),
       ...(backgroundColor ? { backgroundColor } : {}),
       ...(hideFooter !== undefined ? { hideFooter: String(hideFooter) } : {}),
-      ...config,
+      ...(imageParams ?? {}),
     };
     const query = encodeParameters(params);
     return `${baseUrl}/open-graph?${query}`;
   };
 
-  const image = createImageUrl(title, description, imageParams);
+  const image = $derived(
+    createImageUrl({
+      title,
+      description,
+      accentColor,
+      secondaryAccentColor,
+      textColor,
+      backgroundColor,
+      hideFooter,
+      imageParams,
+    }),
+  );
 
-  const dateIso = date ? new Date(date).toISOString() : undefined;
-  const modifiedIso = modified ? new Date(modified).toISOString() : undefined;
+  const dateIso = $derived(date ? new Date(date).toISOString() : undefined);
+  const modifiedIso = $derived(modified ? new Date(modified).toISOString() : undefined);
 </script>
 
 <svelte:head>
