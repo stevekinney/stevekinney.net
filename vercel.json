@@ -1,0 +1,4 @@
+{
+  "installCommand": "bun install",
+  "buildCommand": "LD_LIBRARY_PATH=$PWD/node_modules/@img/sharp-libvips-linux-x64/lib bun run build"
+}
