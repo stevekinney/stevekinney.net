@@ -15,3 +15,10 @@ When using DOMPurify for HTML sanitization:
 - **Form elements need comprehensive coverage**: Include `select`, `option`, and `textarea` in ALLOWED_TAGS. Add form-related attributes: `name`, `disabled`, `checked`, `selected`, `rows`, `cols`, `readonly`, `required`, `multiple`.
 
 - **Serverless/Edge incompatibility**: `isomorphic-dompurify` uses `jsdom` on the server, which causes 500 errors in Vercel serverless functions. Move sanitization to build time (e.g., in remark/rehype plugins) instead of runtime.
+  <<<<<<< Updated upstream
+  =======
+
+- **Don't forget inline formatting**: Include `em`, `strong`, `b`, `i`, `u`, `small`, `mark`, `del`, `ins`, `sub`, `sup`, `br`, `hr` in ALLOWED_TAGS.
+
+- **Style attribute for layout examples**: Add `style` to ALLOWED_ATTR if examples use inline CSS (grid layouts, etc.).
+  > > > > > > > Stashed changes
