@@ -5,17 +5,8 @@ import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite';
 import { imagetools } from 'vite-imagetools';
 
 import { getBaseUrl } from './plugins/get-base-url';
-import { getTailwindExamples } from './plugins/process-tailwind-examples';
-
 export default defineConfig({
-  plugins: [
-    getBaseUrl(),
-    getTailwindExamples(),
-    sveltekit(),
-    enhancedImages(),
-    imagetools(),
-    tailwindcss() as Plugin[],
-  ],
+  plugins: [getBaseUrl(), sveltekit(), enhancedImages(), imagetools(), tailwindcss() as Plugin[]],
 
   esbuild: {
     jsxFactory: 'h',
