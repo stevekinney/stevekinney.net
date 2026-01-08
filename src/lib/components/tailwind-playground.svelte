@@ -39,7 +39,22 @@
         'code',
         'pre',
       ],
-      ALLOWED_ATTR: ['class', 'id', 'href', 'src', 'alt', 'title', 'type', 'value', 'placeholder'],
+      ALLOWED_ATTR: [
+        'class',
+        'id',
+        'href',
+        'src',
+        'alt',
+        'title',
+        'type',
+        'value',
+        'placeholder',
+        'for',
+        'role',
+        'tabindex',
+        'aria-*',
+        'data-*',
+      ],
     }),
   );
 
@@ -64,7 +79,7 @@
 <section
   class="mb-2 flex flex-col gap-4 rounded-md bg-slate-200 p-4 shadow-md dark:bg-slate-900"
   bind:this={host}
-  style:visibility={mounted ? 'visible' : 'hidden'}
+  style:display={mounted ? 'block' : 'none'}
 >
   <template shadowrootmode="open">
     <link rel="stylesheet" href={appStylesUrl} />
