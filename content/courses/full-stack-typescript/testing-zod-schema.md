@@ -7,7 +7,7 @@ modified: '2025-07-29T15:09:56-06:00'
 date: '2025-03-16T17:35:22-06:00'
 ---
 
-Writing comprehensive unit tests for your Zod schemas is essential to ensure their correctness and2 prevent regressions as your application evolves. Here are key strategies for testing Zod schemas:
+Writing comprehensive unit tests for your Zod schemas is essential to ensure their correctness and prevent regressions as your application evolves. Here are key strategies for testing Zod schemas:
 
 ## Test Valid Inputs
 
