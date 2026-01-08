@@ -13,25 +13,35 @@
     // This avoids hydration issues with declarative shadow DOM
     const root = host.attachShadow({ mode: 'open' });
 
-    // Add stylesheet
+    // Add stylesheet with transition styles
+    const style = document.createElement('style');
+    style.textContent = `
+      :host { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease-out; }
+      :host(.loaded) { grid-template-rows: 1fr; }
+      .content { overflow: hidden; }
+    `;
+    root.appendChild(style);
+
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = appStylesUrl;
     root.appendChild(link);
 
-    // Add the sanitized HTML content
+    // Add the sanitized HTML content wrapped for animation
     const content = document.createElement('div');
+    content.className = 'content';
     content.innerHTML = html;
     root.appendChild(content);
 
-    loaded = true;
+    // Trigger animation after a frame
+    requestAnimationFrame(() => {
+      host.classList.add('loaded');
+      loaded = true;
+    });
   });
 </script>
 
-<section
-  class="mb-2 flex flex-col gap-4 rounded-md bg-slate-100 p-4 shadow-sm dark:bg-slate-800"
-  bind:this={host}
->
+<section class="mb-2 rounded-md bg-slate-100 p-4 shadow-sm dark:bg-slate-800" bind:this={host}>
   {#if !loaded}
     <div class="flex animate-pulse items-center gap-3">
       <div class="h-8 w-24 rounded bg-slate-300 dark:bg-slate-700"></div>
