@@ -1,29 +1,30 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import appStylesUrl from '../../app.css?url';
 
-  const { hash } = $props();
+  const { html } = $props<{ html: string }>();
 
-  let iframe: HTMLIFrameElement;
-  let height = $state(0);
+  let host: HTMLElement;
 
   onMount(() => {
-    iframe.contentWindow?.postMessage({ type: 'initialize' }, '*');
-    iframe.contentWindow?.addEventListener('message', (event) => {
-      if (event.data.type === 'initialize') {
-        console.log(event.data);
-        iframe.style.height = `${event.data.height}px`;
-      }
-    });
+    if (host.shadowRoot) return;
+
+    const template = host.querySelector('template[shadowrootmode="open"]');
+    if (!(template instanceof HTMLTemplateElement)) return;
+
+    const root = host.attachShadow({ mode: 'open' });
+    root.appendChild(template.content);
+    template.remove();
   });
 </script>
 
-<section class="mb-2 flex flex-col gap-4 rounded-md bg-slate-200 p-4 shadow-md dark:bg-slate-900">
-  <iframe
-    src={`/tailwind-${hash}.html`}
-    title="Tailwind Playground"
-    {height}
-    bind:this={iframe}
-    sandbox="allow-scripts allow-same-origin"
-    referrerpolicy="no-referrer"
-  ></iframe>
+<section
+  class="mb-2 flex flex-col gap-4 rounded-md bg-slate-200 p-4 shadow-md dark:bg-slate-900"
+  bind:this={host}
+>
+  <template shadowrootmode="open">
+    <link rel="stylesheet" href={appStylesUrl} />
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+    {@html html}
+  </template>
 </section>
