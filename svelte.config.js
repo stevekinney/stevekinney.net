@@ -12,6 +12,13 @@ import { bundledLanguages, codeToHtml } from 'shiki';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
+// Determine site URL for prerendering (used in Open Graph meta tags)
+const siteUrl =
+  process.env.PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : 'http://localhost:4444');
+
 // Custom plugins
 import { fixMarkdownUrls } from './plugins/remark-fix-urls.js';
 import remarkEscapeComparators from './plugins/remark-escape-comparators.js';
@@ -131,6 +138,7 @@ const config = {
     },
 
     prerender: {
+      origin: siteUrl,
       // Be strict, but ignore only malformed multi-URL fetch attempts from srcset
       handleHttpError: ({ status, path, message }) => {
         if (status === 404 && path.startsWith('/_app/immutable/assets/') && path.includes(',')) {

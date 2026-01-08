@@ -10,10 +10,6 @@ declare module '*.md' {
   export const metadata: Record<string, unknown>;
 }
 
-declare module 'virtual:base-url' {
-  export default InstanceType<ArrayBuffer>;
-}
-
 declare module 'svelte/compiler' {
   export function parse(source: string): Ast;
   export function walk<T extends TemplateNode | Style | Script, N extends BaseNode>(

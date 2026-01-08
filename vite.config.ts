@@ -4,9 +4,8 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite';
 import { imagetools } from 'vite-imagetools';
 
-import { getBaseUrl } from './plugins/get-base-url';
 export default defineConfig({
-  plugins: [getBaseUrl(), sveltekit(), enhancedImages(), imagetools(), tailwindcss() as Plugin[]],
+  plugins: [sveltekit(), enhancedImages(), imagetools(), tailwindcss() as Plugin[]],
 
   esbuild: {
     jsxFactory: 'h',
