@@ -1,5 +1,2 @@
-import { hydrateShadowRoots } from '@webcomponents/template-shadowroot';
-
-export const init = () => {
-  hydrateShadowRoots(document);
-};
+// Shadow root hydration is handled by individual TailwindPlayground components
+// after they mount, to avoid timing issues with Svelte's hydration process
