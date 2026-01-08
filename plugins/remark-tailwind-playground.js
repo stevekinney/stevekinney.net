@@ -36,6 +36,20 @@ const DOMPURIFY_CONFIG = {
     'aside',
     'code',
     'pre',
+    // Inline formatting elements
+    'em',
+    'strong',
+    'b',
+    'i',
+    'u',
+    'small',
+    'mark',
+    'del',
+    'ins',
+    'sub',
+    'sup',
+    'br',
+    'hr',
   ],
   ALLOWED_ATTR: [
     'class',
@@ -71,6 +85,8 @@ const DOMPURIFY_CONFIG = {
     'stroke-linecap',
     'stroke-linejoin',
     'xmlns',
+    // Inline styles (needed for grid layout examples)
+    'style',
   ],
   // DOMPurify defaults allow aria-* and data-* attributes
 };
