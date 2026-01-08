@@ -26,14 +26,4 @@ if [ -n "$STAGED_FILES" ]; then
   git add $STAGED_FILES
 fi
 
-# Always regenerate recent updates YAML after syncing modified dates
-echo "Generating recent updates YAML..."
-bun run scripts/generate-recent-updates.ts
-git add static/recent-updates.yaml
-
-# Generate JSON content lists (posts and courses)
-echo "Generating content lists..."
-bun run scripts/generate-content-lists.ts
-git add content/writing/posts.json content/courses/courses.json
-
 npx lint-staged

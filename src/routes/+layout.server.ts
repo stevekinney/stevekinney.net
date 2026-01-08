@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import posts from '$lib/posts.json';
+import { getPostIndex } from '$lib/server/content';
 import { inject } from '@vercel/analytics';
 import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 
@@ -11,5 +11,5 @@ if (!dev) {
 export const prerender = true;
 
 export async function load() {
-  return { posts };
+  return { posts: getPostIndex() };
 }

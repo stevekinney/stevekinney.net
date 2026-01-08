@@ -16,10 +16,7 @@
     "test:storybook": "test-storybook",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "generate:indices": "bun run scripts/generate-content-lists.ts && bun run scripts/generate-recent-updates.ts",
-    "generate:content-lists": "bun run scripts/generate-content-lists.ts",
-    "generate:recent-updates": "bun run scripts/generate-recent-updates.ts",
-    "postinstall": "svelte-kit sync && bun run generate:indices",
+    "postinstall": "svelte-kit sync",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -106,8 +103,7 @@
     "vite": "^7.3.1",
     "vite-imagetools": "^9.0.2",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^4.0.16",
-    "yaml": "^2.8.2"
+    "vitest": "^4.0.16"
   },
   "type": "module",
   "dependencies": {
