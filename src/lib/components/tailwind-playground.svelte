@@ -1,29 +1,40 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { hydrateShadowRoots } from '@webcomponents/template-shadowroot';
   import appStylesUrl from '../../app.css?url';
 
   // HTML is pre-sanitized at build time by remark-tailwind-playground plugin
   const { html } = $props<{ html: string }>();
 
   let host: HTMLElement;
-  let mounted = $state(false);
 
   onMount(() => {
-    mounted = true;
+    // If shadow root already exists (declarative shadow DOM worked during SSR), we're done
+    if (host.shadowRoot) return;
 
-    // Only hydrate if browser didn't natively support declarative shadow DOM
-    // Modern browsers (Chrome, Edge) process <template shadowrootmode> during HTML parsing
-    if (host && !host.shadowRoot) {
-      hydrateShadowRoots(host);
-    }
+    // For browsers without declarative shadow DOM support (older Safari) or
+    // client-side navigation, manually create the shadow root and populate it.
+    const root = host.attachShadow({ mode: 'open' });
+
+    // Add stylesheet
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = appStylesUrl;
+    root.appendChild(link);
+
+    // Add the sanitized HTML content
+    const content = document.createElement('div');
+    content.innerHTML = html;
+    root.appendChild(content);
+
+    // Remove the template element since we handled it manually
+    const template = host.querySelector('template');
+    template?.remove();
   });
 </script>
 
 <section
-  class="mb-2 flex flex-col gap-4 rounded-md bg-slate-200 p-4 shadow-md dark:bg-slate-900"
+  class="mb-2 flex flex-col gap-4 rounded-md bg-slate-100 p-4 shadow-sm dark:bg-slate-800"
   bind:this={host}
-  style:display={mounted ? undefined : 'none'}
 >
   <template shadowrootmode="open">
     <link rel="stylesheet" href={appStylesUrl} />
