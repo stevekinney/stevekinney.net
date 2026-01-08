@@ -112,6 +112,7 @@
     "@fontsource/league-gothic": "^5.2.8",
     "@fontsource/roboto": "^5.2.9",
     "@vercel/analytics": "^1.6.1",
+    "@webcomponents/template-shadowroot": "^0.2.1",
     "chalk": "^5.6.2",
     "class-variance-authority": "^0.7.1",
     "hast-util-to-html": "^9.0.5",

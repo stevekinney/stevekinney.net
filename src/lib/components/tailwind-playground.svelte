@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import DOMPurify from 'isomorphic-dompurify';
+  import { hydrateShadowRoots } from '@webcomponents/template-shadowroot';
   import appStylesUrl from '../../app.css?url';
 
   const { html } = $props<{ html: string }>();
@@ -64,15 +65,7 @@
   onMount(() => {
     mounted = true;
 
-    // Fallback for browsers that don't support declarative shadow DOM
-    if (!host.shadowRoot) {
-      const template = host.querySelector('template[shadowrootmode="open"]');
-      if (template instanceof HTMLTemplateElement) {
-        const root = host.attachShadow({ mode: 'open' });
-        root.appendChild(template.content.cloneNode(true));
-        template.remove();
-      }
-    }
+    hydrateShadowRoots(host);
   });
 </script>
 

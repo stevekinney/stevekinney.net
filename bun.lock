@@ -10,6 +10,7 @@
         "@fontsource/league-gothic": "^5.2.8",
         "@fontsource/roboto": "^5.2.9",
         "@vercel/analytics": "^1.6.1",
+        "@webcomponents/template-shadowroot": "^0.2.1",
         "chalk": "^5.6.2",
         "class-variance-authority": "^0.7.1",
         "hast-util-to-html": "^9.0.5",
@@ -969,6 +970,8 @@
     "@vue/language-core": ["@vue/language-core@2.2.0", "", { "dependencies": { "@volar/language-core": "2.4.23", "@vue/compiler-dom": "3.5.21", "@vue/compiler-vue2": "2.7.16", "@vue/shared": "3.5.21", "alien-signals": "0.4.14", "minimatch": "9.0.5", "muggle-string": "0.4.1", "path-browserify": "1.0.1" }, "optionalDependencies": { "typescript": "5.9.3" } }, "sha512-O1ZZFaaBGkKbsRfnVH1ifOK1/1BUkyK+3SQsfnh6PmMmD4qJcTU8godCeA96jjDRTL6zgnK7YzCHfaUlH2r0Mw=="],
 
     "@vue/shared": ["@vue/shared@3.5.21", "", {}, "sha512-+2k1EQpnYuVuu3N7atWyG3/xoFWIVJZq4Mz8XNOdScFI0etES75fbny/oU4lKWk/577P1zmg0ioYvpGEDZ3DLw=="],
+
+    "@webcomponents/template-shadowroot": ["@webcomponents/template-shadowroot@0.2.1", "", {}, "sha512-fXL/vIUakyZL62hyvUh+EMwbVoTc0hksublmRz6ai6et8znHkJa6gtqMUZo1oc7dIz46exHSIImml9QTdknMHg=="],
 
     "abbrev": ["abbrev@3.0.1", "", {}, "sha512-AO2ac6pjRB3SJmGJo+v5/aK6Omggp6fsLrs6wN9bd35ulu4cCwaAU9+7ZhXjeqHVkaHThLuzH0nZr0YpCDhygg=="],
 
