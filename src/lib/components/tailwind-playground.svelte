@@ -12,7 +12,11 @@
   onMount(() => {
     mounted = true;
 
-    hydrateShadowRoots(host);
+    // Only hydrate if browser didn't natively support declarative shadow DOM
+    // Modern browsers (Chrome, Edge) process <template shadowrootmode> during HTML parsing
+    if (host && !host.shadowRoot) {
+      hydrateShadowRoots(host);
+    }
   });
 </script>
 
