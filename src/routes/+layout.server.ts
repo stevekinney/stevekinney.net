@@ -8,6 +8,8 @@ if (!dev) {
   inject({ mode: 'production' });
 }
 
+export const prerender = true;
+
 export async function load() {
   return { posts: getPostIndex() };
 }
