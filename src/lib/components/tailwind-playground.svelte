@@ -53,9 +53,19 @@
         'for',
         'role',
         'tabindex',
-        'aria-*',
-        'data-*',
+        // SVG attributes
+        'd',
+        'viewBox',
+        'fill',
+        'stroke',
+        'width',
+        'height',
+        'stroke-width',
+        'stroke-linecap',
+        'stroke-linejoin',
+        'xmlns',
       ],
+      // DOMPurify defaults allow aria-* and data-* attributes (ALLOW_ARIA_ATTR and ALLOW_DATA_ATTR are true by default)
     }),
   );
 
@@ -72,7 +82,7 @@
 <section
   class="mb-2 flex flex-col gap-4 rounded-md bg-slate-200 p-4 shadow-md dark:bg-slate-900"
   bind:this={host}
-  style:display={mounted ? 'block' : 'none'}
+  style:display={mounted ? undefined : 'none'}
 >
   <template shadowrootmode="open">
     <link rel="stylesheet" href={appStylesUrl} />
