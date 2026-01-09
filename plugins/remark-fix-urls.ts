@@ -67,9 +67,11 @@ const getBaseUrl = (fileData: FileData, contentPath: string): string => {
  */
 export function fixMarkdownUrls(contentPath = DEFAULT_CONTENT_PATH): Transformer<Root> {
   return function transformer(tree, file: VFile) {
+    // MDSvex may use 'filename' instead of 'path'
+    const anyFile = file as VFile & { filename?: string };
     const fileData: FileData = {
-      filename: file.path ?? '',
-      cwd: file.cwd ?? process.cwd(),
+      filename: anyFile.filename ?? anyFile.path ?? '',
+      cwd: anyFile.cwd ?? process.cwd(),
     };
     const baseUrl = getBaseUrl(fileData, contentPath);
 
