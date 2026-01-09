@@ -1,17 +1,17 @@
+import type { PreprocessorGroup } from 'svelte/compiler';
 import { parse } from 'svelte/compiler';
-
 import MagicString from 'magic-string';
 import { walk } from 'svelte-tree-walker';
 
 /**
  * Represents a callout message component.
- *
- * @typedef {Object} Callout
- * @property {string} title - The title of the callout
- * @property {string} variant - The variant of the callout (e.g., "info", "warning")
- * @property {string} [description] - Optional detailed description for the callout
- * @property {boolean} [foldable] - Whether the callout can be expanded/collapsed
  */
+export interface Callout {
+  title: string;
+  variant: string;
+  description?: string;
+  foldable: boolean;
+}
 
 /**
  * A regular expression that matches callouts in Markdown.
@@ -22,9 +22,8 @@ const CALLOUT_PATTERN = /\[!\s*(\w+)\s*\]([+-]?)\s+([^<>\n]+)/i;
 
 /**
  * Turn Obsidian callouts into Svelte components.
- * @returns {import('svelte/compiler').PreprocessorGroup} A Svelte preprocessor
  */
-export const processCallouts = () => {
+export const processCallouts = (): PreprocessorGroup => {
   return {
     name: 'markdown-process-callouts',
     markup: ({ content, filename }) => {
@@ -36,8 +35,8 @@ export const processCallouts = () => {
 
       for (const node of walk(html)) {
         if ('name' in node && node.name === 'blockquote') {
-          const start = node.start;
-          const end = node.end;
+          const start = (node as { start: number }).start;
+          const end = (node as { end: number }).end;
           const callout = parseCallout(content.substring(start, end));
 
           if (callout) {
@@ -50,7 +49,10 @@ export const processCallouts = () => {
       if (hasCallouts && instance) {
         for (const node of walk(instance)) {
           if (node.type === 'Program') {
-            s.appendLeft(node.end, `\n\timport Callout from '$lib/components/callout';\n`);
+            s.appendLeft(
+              (node as { end: number }).end,
+              `\n\timport Callout from '$lib/components/callout';\n`,
+            );
             break;
           }
         }
@@ -66,10 +68,8 @@ export const processCallouts = () => {
 
 /**
  * Parse callout text into an object.
- * @param {string} markup - The blockquote content that may contain a callout
- * @returns {Callout | null} The parsed callout data or null if not a valid callout
  */
-export function parseCallout(markup) {
+export function parseCallout(markup: string): Callout | null {
   const match = markup.match(CALLOUT_PATTERN);
   if (!match) return null;
 
@@ -99,12 +99,10 @@ export function parseCallout(markup) {
 
 /**
  * Compile a callout object into Svelte component markup.
- * @param {Callout} callout - The callout data to compile
- * @returns {string} The Svelte component markup
  */
-export const compileCallout = (callout) => {
+export const compileCallout = (callout: Callout): string => {
   const { title, variant, description, foldable } = callout;
-  const attributes = [];
+  const attributes: string[] = [];
 
   if (title) attributes.push(`title="${title}"`);
   if (variant) attributes.push(`variant="${variant}"`);

@@ -1,8 +1,11 @@
+import type { Code, Html, Parent, Root } from 'mdast';
+import type { Transformer } from 'unified';
+import type { VFile } from 'vfile';
 import { visit } from 'unist-util-visit';
 import DOMPurify from 'isomorphic-dompurify';
 
 // DOMPurify configuration for sanitizing Tailwind playground HTML at build time
-const DOMPURIFY_CONFIG = {
+const DOMPURIFY_CONFIG: DOMPurify.Config = {
   ALLOWED_TAGS: [
     'div',
     'span',
@@ -94,16 +97,13 @@ const DOMPURIFY_CONFIG = {
 /**
  * Injects Tailwind playground components before HTML code blocks flagged with `tailwind`.
  * HTML is sanitized at build time to prevent XSS and avoid runtime jsdom dependency.
- * @returns {import('unified').Transformer<import('mdast').Root>}
  */
-export default function remarkTailwindPlayground() {
-  /** @type {import('unified').Transformer<import('mdast').Root>} */
-  return function transformer(tree, file) {
-    const anyFile = /** @type {any} */ (file);
-    const filePath = (anyFile?.path ?? anyFile?.filename ?? '').toString();
+export default function remarkTailwindPlayground(): Transformer<Root> {
+  return function transformer(tree, file: VFile) {
+    const filePath = (file?.path ?? '').toString();
     if (!filePath.endsWith('.md') || !filePath.includes('tailwind')) return;
 
-    visit(tree, 'code', (node, index, parent) => {
+    visit(tree, 'code', (node: Code, index: number | undefined, parent: Parent | undefined) => {
       if (!parent || typeof index !== 'number') return;
       if (!Array.isArray(parent.children)) return;
       if (node.lang !== 'html') return;
@@ -112,10 +112,10 @@ export default function remarkTailwindPlayground() {
       // Sanitize HTML at build time to prevent XSS
       const sanitizedHtml = DOMPurify.sanitize(node.value ?? '', DOMPURIFY_CONFIG);
       const htmlLiteral = JSON.stringify(sanitizedHtml);
-      const playgroundNode = /** @type {import('mdast').Html} */ ({
+      const playgroundNode: Html = {
         type: 'html',
         value: `<TailwindPlayground html={${htmlLiteral}} />`,
-      });
+      };
 
       parent.children.splice(index, 0, playgroundNode);
 

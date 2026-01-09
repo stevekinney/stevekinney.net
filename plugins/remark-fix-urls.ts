@@ -1,4 +1,7 @@
 import { dirname, posix as pathPosix } from 'path';
+import type { Link, Root } from 'mdast';
+import type { Transformer } from 'unified';
+import type { VFile } from 'vfile';
 import { visit } from 'unist-util-visit';
 
 /**
@@ -13,19 +16,14 @@ const DEFAULT_CONTENT_PATH = 'content';
 
 /**
  * Determines if a URL points to an external resource
- * @param {string} url - URL to check
- * @returns {boolean} True if the URL is external
  */
-const isExternalUrl = (url) =>
+const isExternalUrl = (url: string): boolean =>
   URL_PATTERNS.EXTERNAL.test(url) || url.startsWith('mailto:') || url.startsWith('tel:');
 
 /**
  * Transforms a markdown link to its corresponding route path
- * @param {string} url - Original URL from markdown
- * @param {string} baseUrl - Base URL path
- * @returns {string} Transformed URL
  */
-const transformInternalUrl = (url, baseUrl) => {
+const transformInternalUrl = (url: string, baseUrl: string): string => {
   const match = url.match(/^[^?#]+/);
   const base = match ? match[0] : url;
   const query = url.slice(base.length).replace(/([^#]*)#.*/, '$1');
@@ -43,15 +41,15 @@ const transformInternalUrl = (url, baseUrl) => {
   return `${withoutExt}${query}${hash}`;
 };
 
+interface FileData {
+  filename: string;
+  cwd: string;
+}
+
 /**
  * Calculates the base URL for a file relative to the content directory
- * @param {object} fileData - Object containing file information
- * @param {string} fileData.filename - Full path to the file
- * @param {string} fileData.cwd - Current working directory
- * @param {string} contentPath - Root content directory path
- * @returns {string} Calculated base URL
  */
-const getBaseUrl = (fileData, contentPath) => {
+const getBaseUrl = (fileData: FileData, contentPath: string): string => {
   const filePath = (fileData.filename || '').replace(/\\/g, '/');
   const cwd = (fileData.cwd || process.cwd()).replace(/\\/g, '/');
   if (!filePath) return '/';
@@ -65,25 +63,17 @@ const getBaseUrl = (fileData, contentPath) => {
  * A remark plugin that processes internal markdown links to generate correct routing URLs.
  * Transforms `.md` extensions and handles path resolution while preserving external links.
  *
- * @param {string} contentPath - Root directory containing content files (defaults to 'content')
- * @returns {import('unified').Plugin} A unified plugin function
+ * @param contentPath - Root directory containing content files (defaults to 'content')
  */
-/**
- * @param {string} [contentPath]
- * @returns {import('unified').Transformer<import('mdast').Root>}
- */
-export function fixMarkdownUrls(contentPath = DEFAULT_CONTENT_PATH) {
-  /** @type {import('unified').Transformer<import('mdast').Root>} */
-  return function transformer(tree, file) {
-    // Support vfile.path or our filename/cwd fields
-    const anyFile = /** @type {any} */ (file);
-    const fileData = {
-      filename: anyFile.filename ?? anyFile.path ?? '',
-      cwd: anyFile.cwd ?? process.cwd(),
+export function fixMarkdownUrls(contentPath = DEFAULT_CONTENT_PATH): Transformer<Root> {
+  return function transformer(tree, file: VFile) {
+    const fileData: FileData = {
+      filename: file.path ?? '',
+      cwd: file.cwd ?? process.cwd(),
     };
     const baseUrl = getBaseUrl(fileData, contentPath);
 
-    visit(tree, 'link', (/** @type {import('mdast').Link} */ node) => {
+    visit(tree, 'link', (node: Link) => {
       const { url } = node;
 
       // Skip processing if the URL is external or doesn't contain a markdown extension

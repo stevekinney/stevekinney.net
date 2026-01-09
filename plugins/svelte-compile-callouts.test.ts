@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { compileCallout, parseCallout } from './svelte-compile-callouts.js';
+import { compileCallout, parseCallout, type Callout } from './svelte-compile-callouts';
 
 describe('compileCallout', () => {
   it('should compile a callout object into HTML', () => {
-    const callout = {
+    const callout: Callout = {
       title: 'Title',
       variant: 'note',
       description: '<p>Description</p>',
@@ -16,7 +16,7 @@ describe('compileCallout', () => {
   });
 
   it('should compile a callout object without a description', () => {
-    const callout = {
+    const callout: Callout = {
       title: 'Title',
       variant: 'note',
       description: undefined,
@@ -152,8 +152,8 @@ describe('compilers/callouts/parse-callout', () => {
       </blockquote>
     `.trim();
 
-    /** @type {import('./svelte-compile-callouts.js').Callout */
-    const { title, variant, description } = parseCallout(callout);
+    const result = parseCallout(callout);
+    const { title, variant, description } = result as Callout;
 
     expect(title).toBe('Title');
     expect(variant).toBe('note');
