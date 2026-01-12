@@ -1,10 +1,14 @@
 <script lang="ts">
   import { page } from '$app/state';
+  import { env } from '$env/dynamic/public';
   import { encodeParameters } from '$lib/encode-parameters';
   import { formatPageTitle } from '$lib/format-page-title';
   import { author, title as siteTitle } from '$lib/metadata';
   import type { Snippet } from 'svelte';
-  import baseUrl from 'virtual:base-url';
+
+  // Use PUBLIC_SITE_URL if set, otherwise fall back to page origin
+  // (works correctly in both SSR and prerendering via kit.prerender.origin)
+  const baseUrl = env.PUBLIC_SITE_URL || page.url.origin;
 
   type SEOProps = {
     title: string;

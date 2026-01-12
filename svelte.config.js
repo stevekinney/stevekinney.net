@@ -12,13 +12,20 @@ import { bundledLanguages, codeToHtml } from 'shiki';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
+// Determine site URL for prerendering (used in Open Graph meta tags)
+const siteUrl =
+  process.env.PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : 'http://localhost:4444');
+
 // Custom plugins
-import { fixMarkdownUrls } from './plugins/remark-fix-urls.js';
-import remarkEscapeComparators from './plugins/remark-escape-comparators.js';
-import remarkTailwindPlayground from './plugins/remark-tailwind-playground.js';
-import { processCallouts } from './plugins/svelte-compile-callouts.js';
-import { processImages } from './plugins/svelte-enhance-images.js';
-import { importTailwindPlayground } from './plugins/import-tailwind-playground.js';
+import { importTailwindPlayground } from './plugins/import-tailwind-playground.ts';
+import { fixMarkdownUrls } from './plugins/remark-fix-urls.ts';
+import remarkEscapeComparators from './plugins/remark-escape-comparators.ts';
+import remarkCallouts from './plugins/remark-callouts.ts';
+import remarkTailwindPlayground from './plugins/remark-tailwind-playground.ts';
+import { processImages } from './plugins/svelte-enhance-images.ts';
 
 // Define directory paths
 const __filename = fileURLToPath(import.meta.url);
@@ -40,6 +47,7 @@ const mdsvexOptions = {
     /** @type {any} */ (remarkEscapeComparators),
     /** @type {any} */ (fixMarkdownUrls),
     remarkGfm,
+    remarkCallouts,
     remarkTailwindPlayground,
   ],
   rehypePlugins: [rehypeSlug, unwrapImages],
@@ -99,6 +107,7 @@ const config = {
   preprocess: [
     vitePreprocess(),
     mdsvex(mdsvexOptions),
+    importTailwindPlayground(),
     /** @type {any} */ (
       processImages({
         // Reduce variants to speed up build
@@ -107,8 +116,6 @@ const config = {
         includeMetadata: false,
       })
     ),
-    processCallouts(),
-    importTailwindPlayground(),
   ],
 
   kit: {
@@ -131,6 +138,7 @@ const config = {
     },
 
     prerender: {
+      origin: siteUrl,
       // Be strict, but ignore only malformed multi-URL fetch attempts from srcset
       handleHttpError: ({ status, path, message }) => {
         if (status === 404 && path.startsWith('/_app/immutable/assets/') && path.includes(',')) {

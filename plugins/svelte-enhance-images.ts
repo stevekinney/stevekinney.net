@@ -1,33 +1,67 @@
+import type { PreprocessorGroup } from 'svelte/compiler';
 import { camelCase } from 'change-case';
 import MagicString from 'magic-string';
 import { walk } from 'svelte-tree-walker';
 import { parse } from 'svelte/compiler';
 import { twMerge as merge } from 'tailwind-merge';
 
-/**
- * @typedef {{ name: string; value: { type: string; data: string; start: number; end: number }[] }} SvelteAttribute
- * @typedef {{ type: string; data: string; start: number; end: number }} SvelteTextNode
- * @typedef {any} AstNode
- * @typedef {import('magic-string').SourceMap} SourceMap // Keep this if needed elsewhere
- */
+interface SvelteTextNode {
+  type: string;
+  data: string;
+  start: number;
+  end: number;
+}
+
+interface SvelteAttribute {
+  name: string;
+  value: SvelteTextNode[];
+}
+
+interface AstNode {
+  name?: string;
+  type?: string;
+  start: number;
+  end: number;
+  attributes: SvelteAttribute[];
+}
+
+interface ImageConfig {
+  url: string;
+  webpId: string;
+  avifId: string;
+  webpSetId?: string;
+  avifSetId?: string;
+  metaId?: string;
+  hasMeta: boolean;
+  hasSrcset: boolean;
+  isGif?: boolean;
+  isVideo?: boolean;
+  videoId?: string;
+}
+
+interface ProcessImagesOptions {
+  widths?: number[];
+  mainWidth?: number;
+  includeMetadata?: boolean;
+  skipImages?: string[];
+}
 
 const classes = ['max-w-full', 'rounded-md', 'shadow-md'];
 
 /**
  * Add image optimization to the Markdown content.
- * @returns {import('svelte/compiler').PreprocessorGroup}
  */
-export const processImages = (opts = {}) => {
+export const processImages = (opts: ProcessImagesOptions = {}): PreprocessorGroup => {
   const options = {
     widths: [480, 768, 1024],
     mainWidth: 902,
     includeMetadata: true,
-    skipImages: [],
+    skipImages: [] as string[],
     // formats are currently avif + webp; keeping fixed for broad compatibility
     ...opts,
   };
-  /** @type {import('svelte/compiler').PreprocessorGroup} */
-  const preprocessor = {
+
+  const preprocessor: PreprocessorGroup = {
     name: 'markdown-image-optimization',
     markup({ content, filename }) {
       if (!filename || !filename.endsWith('.md')) return undefined;
@@ -39,24 +73,13 @@ export const processImages = (opts = {}) => {
       const { instance, html } = parse(content, { filename });
       const s = new MagicString(content);
 
-      /** @type {Map<string, {url: string,
-       *  webpId: string,
-       *  avifId: string,
-       *  webpSetId?: string,
-       *  avifSetId?: string,
-       *  metaId?: string,
-       *  hasMeta: boolean,
-       *  hasSrcset: boolean,
-       *  isGif?: boolean,
-       *  isVideo?: boolean,
-       *  videoId?: string
-       * }>} */
-      const images = new Map();
+      const images = new Map<string, ImageConfig>();
 
       // Walk the HTML AST and find all the image elements.
       for (const node of walk(html)) {
         if ('name' in node && node.name === 'img') {
-          const src = getAttribute(node, 'src');
+          const astNode = node as AstNode;
+          const src = getAttribute(astNode, 'src');
 
           if (!src) continue;
 
@@ -64,10 +87,10 @@ export const processImages = (opts = {}) => {
 
           if (!srcValue) continue;
 
-          let urlRaw = srcValue.data;
+          const urlRaw = srcValue.data;
           // Skip external absolute URLs
           if (/^(https?:)?\/\//i.test(urlRaw)) continue;
-          let url;
+          let url: string;
           try {
             url = decodeURIComponent(urlRaw);
           } catch {
@@ -105,17 +128,11 @@ export const processImages = (opts = {}) => {
           });
 
           if (isVid && videoId) {
-            formatVideo(s, node, videoId);
+            formatVideo(s, astNode, videoId);
             continue;
           }
 
-          formatImage(
-            s,
-            node,
-            baseId,
-            srcValue,
-            images.get(url) ?? { hasMeta: false, hasSrcset: false },
-          );
+          formatImage(s, astNode, baseId, srcValue, images.get(url)!);
         }
       }
 
@@ -123,18 +140,14 @@ export const processImages = (opts = {}) => {
       if (instance) {
         for (const node of walk(instance)) {
           if (node.type === 'Program') {
-            const importLines = [];
+            const importLines: string[] = [];
             for (const [url, cfg] of images.entries()) {
               if (cfg.isVideo) {
                 const videoLine = `import ${cfg.videoId} from '${url}';`;
                 if (!content.includes(videoLine)) importLines.push(videoLine);
               } else if (!cfg.isGif && cfg.hasSrcset) {
-                const avifSet = `import ${cfg.avifSetId} from '${url}?w=${options.widths.join(
-                  ';',
-                )}&format=avif&as=srcset';`;
-                const webpSet = `import ${cfg.webpSetId} from '${url}?w=${options.widths.join(
-                  ';',
-                )}&format=webp&as=srcset';`;
+                const avifSet = `import ${cfg.avifSetId} from '${url}?w=${options.widths.join(';')}&format=avif&as=srcset';`;
+                const webpSet = `import ${cfg.webpSetId} from '${url}?w=${options.widths.join(';')}&format=webp&as=srcset';`;
                 if (!content.includes(avifSet)) importLines.push(avifSet);
                 if (!content.includes(webpSet)) importLines.push(webpSet);
               }
@@ -154,14 +167,14 @@ export const processImages = (opts = {}) => {
               }
             }
             if (importLines.length > 0) {
-              s.appendLeft(node.end, `\n${importLines.join('\n')}\n`);
+              s.appendLeft((node as { end: number }).end, `\n${importLines.join('\n')}\n`);
             }
             break;
           }
         }
       } else if (images.size > 0) {
         // No <script> block present; create one
-        const lines = [];
+        const lines: string[] = [];
         for (const [url, cfg] of images.entries()) {
           if (cfg.isVideo) {
             lines.push(`import ${cfg.videoId} from '${url}';`);
@@ -203,42 +216,36 @@ export const processImages = (opts = {}) => {
 
 /**
  * Check if the URL is a video.
- * @param {string} url
- * @returns {boolean}
  */
-const isVideo = (url) => url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.ogg');
+const isVideo = (url: string): boolean =>
+  url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.ogg');
 
 /**
  * Gets an attribute by name.
- * @param {AstNode} node
- * @param {string} name
- * @returns {SvelteAttribute | undefined}
- **/
-const getAttribute = (node, name) =>
-  node.attributes.find((/** @type {SvelteAttribute} */ attr) => attr.name === name);
+ */
+const getAttribute = (node: AstNode, name: string): SvelteAttribute | undefined =>
+  node.attributes.find((attr) => attr.name === name);
 
 /**
  * Gets the value of an attribute.
- * @param {SvelteAttribute} attr
- * @returns {SvelteTextNode | undefined}
  */
-const getAttributeValue = (attr) => {
+const getAttributeValue = (attr: SvelteAttribute): SvelteTextNode | undefined => {
   if (attr.value.length === 0) return;
   const [value] = attr.value;
   if (value.type === 'Text') return value;
 };
 
 /**
- * Adds the imported image refernce to as the image `src`.
+ * Adds the imported image reference to as the image `src`.
  * Adds the Tailwind classes to the element.
- * @param {MagicString} s
- * @param {AstNode} node
- * @param {string} id
- * @param {SvelteTextNode} src
- * @param {{ metaId?: string, setId?: string, webpId?: string, avifId?: string, webpSetId?: string, avifSetId?: string, hasMeta: boolean, hasSrcset: boolean, isGif?: boolean }} cfg
- * @returns {void}
  */
-const formatImage = (s, node, id, src, cfg) => {
+const formatImage = (
+  s: MagicString,
+  node: AstNode,
+  _id: string,
+  src: SvelteTextNode,
+  cfg: ImageConfig,
+): void => {
   const altAttr = getAttribute(node, 'alt');
   const altValue = altAttr ? getAttributeValue(altAttr) : undefined;
   const alt = altValue ? altValue.data : '';
@@ -283,14 +290,10 @@ const formatImage = (s, node, id, src, cfg) => {
 };
 
 /**
- * Adds the imported video refernce to as the video `src`.
+ * Adds the imported video reference to as the video `src`.
  * Adds the Tailwind classes to the element.
- * @param {MagicString} s
- * @param {AstNode} node
- * @param {string} id
- * @returns {void}
  */
-const formatVideo = (s, node, id) => {
+const formatVideo = (s: MagicString, node: AstNode, id: string): void => {
   s.update(
     node.start,
     node.end,
