@@ -1,5 +1,5 @@
 {
   "installCommand": "bun install",
   "buildCommand": "LD_LIBRARY_PATH=$PWD/node_modules/@img/sharp-libvips-linux-x64/lib bun run build",
-  "ignoreCommand": "if [ -n \"$VERCEL_GIT_PULL_REQUEST_ID\" ] && [ \"$VERCEL_GIT_REPO_OWNER\" != \"stevekinney\" ]; then echo \"Skipping preview build for fork PR\"; exit 0; fi; exit 1"
+  "ignoreCommand": "if [ -n \"$VERCEL_GIT_PULL_REQUEST_ID\" ] && [ \"$VERCEL_GIT_COMMIT_AUTHOR_LOGIN\" != \"stevekinney\" ]; then echo \"Skipping preview build for fork PR\"; exit 0; fi; exit 1"
 }
