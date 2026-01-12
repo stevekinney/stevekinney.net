@@ -19,3 +19,4 @@ content/.obsidian/workspace.json
 **/.claude/settings.local.json
 test-results/
 package-lock.json
+.env*.local

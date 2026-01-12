@@ -116,4 +116,31 @@ describe('remarkCallouts', () => {
     const blockquote = getBlockquote(tree);
     expect(blockquote.data).toBeUndefined();
   });
+
+  it('marks callouts with - indicator as foldable (collapsed by default)', () => {
+    const blockquote = run('> [!Example]- Exercise\n>\n> Body');
+    const data = getData(blockquote);
+
+    expect(data?.hProperties?.['data-callout']).toBe('example');
+    expect(data?.hProperties?.['data-foldable']).toBe('');
+    expect(data?.hProperties?.['data-default-open']).toBeUndefined();
+  });
+
+  it('marks callouts with + indicator as foldable (expanded by default)', () => {
+    const blockquote = run('> [!TIP]+ Hint\n>\n> Body');
+    const data = getData(blockquote);
+
+    expect(data?.hProperties?.['data-callout']).toBe('tip');
+    expect(data?.hProperties?.['data-foldable']).toBe('');
+    expect(data?.hProperties?.['data-default-open']).toBe('');
+  });
+
+  it('does not mark regular callouts as foldable', () => {
+    const blockquote = run('> [!NOTE] Title\n>\n> Body');
+    const data = getData(blockquote);
+
+    expect(data?.hProperties?.['data-callout']).toBe('note');
+    expect(data?.hProperties?.['data-foldable']).toBeUndefined();
+    expect(data?.hProperties?.['data-default-open']).toBeUndefined();
+  });
 });

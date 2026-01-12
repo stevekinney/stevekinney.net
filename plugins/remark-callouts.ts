@@ -197,8 +197,10 @@ export default function remarkCallouts(): Transformer<Root> {
       const match = CALLOUT_PATTERN.exec(text);
       if (!match) return;
 
-      const [, rawVariant, , rawTitle] = match;
+      const [, rawVariant, foldIndicator, rawTitle] = match;
       const variant = normalizeVariant(rawVariant);
+      const foldable = foldIndicator === '+' || foldIndicator === '-';
+      const defaultOpen = foldIndicator === '+';
       const fallbackTitle = rawTitle.trim() || toTitle(rawVariant);
       const variantClasses = variationColors[variant] ?? variationColors.note;
 
@@ -215,6 +217,12 @@ export default function remarkCallouts(): Transformer<Root> {
       data.hName = 'div';
       data.hProperties ??= {};
       data.hProperties['data-callout'] = variant;
+      if (foldable) {
+        data.hProperties['data-foldable'] = '';
+        if (defaultOpen) {
+          data.hProperties['data-default-open'] = '';
+        }
+      }
     });
   };
 }
