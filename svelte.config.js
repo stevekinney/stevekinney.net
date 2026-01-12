@@ -20,12 +20,12 @@ const siteUrl =
     : 'http://localhost:4444');
 
 // Custom plugins
+import { importTailwindPlayground } from './plugins/import-tailwind-playground.ts';
 import { fixMarkdownUrls } from './plugins/remark-fix-urls.ts';
 import remarkEscapeComparators from './plugins/remark-escape-comparators.ts';
+import remarkCallouts from './plugins/remark-callouts.ts';
 import remarkTailwindPlayground from './plugins/remark-tailwind-playground.ts';
-import { processCallouts } from './plugins/svelte-compile-callouts.ts';
 import { processImages } from './plugins/svelte-enhance-images.ts';
-import { importTailwindPlayground } from './plugins/import-tailwind-playground.ts';
 
 // Define directory paths
 const __filename = fileURLToPath(import.meta.url);
@@ -47,6 +47,7 @@ const mdsvexOptions = {
     /** @type {any} */ (remarkEscapeComparators),
     /** @type {any} */ (fixMarkdownUrls),
     remarkGfm,
+    remarkCallouts,
     remarkTailwindPlayground,
   ],
   rehypePlugins: [rehypeSlug, unwrapImages],
@@ -106,6 +107,7 @@ const config = {
   preprocess: [
     vitePreprocess(),
     mdsvex(mdsvexOptions),
+    importTailwindPlayground(),
     /** @type {any} */ (
       processImages({
         // Reduce variants to speed up build
@@ -114,8 +116,6 @@ const config = {
         includeMetadata: false,
       })
     ),
-    processCallouts(),
-    importTailwindPlayground(),
   ],
 
   kit: {

@@ -16,7 +16,7 @@ import remarkStringify from 'remark-stringify';
 import { remove } from 'unist-util-remove';
 import type { Root } from 'mdast';
 
-type RepoRef = { owner: string; repo: string };
+type Repository = { owner: string; repo: string };
 
 /**
  * Strips HTML nodes from markdown content while preserving the markdown formatting.
@@ -78,7 +78,7 @@ function getOriginRemoteUrl(): string {
   return url;
 }
 
-function parseGitHubRepo(remoteUrl: string): RepoRef {
+function parseGitHubRepo(remoteUrl: string): Repository {
   // Supports:
   // - git@github.com:OWNER/REPO.git
   // - https://github.com/OWNER/REPO.git
@@ -165,7 +165,7 @@ type PullRequest = {
 
 async function findOpenPrNumberForBranch(
   token: string,
-  repo: RepoRef,
+  repo: Repository,
   branch: string,
 ): Promise<number | null> {
   const head = `${repo.owner}:${branch}`;
@@ -322,7 +322,7 @@ function hasSuggestionBlock(body: string): boolean {
 
 async function fetchPullRequestInfo(
   token: string,
-  repo: RepoRef,
+  repo: Repository,
   prNumber: number,
 ): Promise<PullRequestInfo> {
   const resp = await githubGraphQL<PRInfoResponse>(token, PR_INFO_QUERY, {
@@ -371,7 +371,7 @@ async function fetchPullRequestInfo(
 
 async function fetchUnresolvedReviewComments(
   token: string,
-  repo: RepoRef,
+  repo: Repository,
   prNumber: number,
 ): Promise<UnresolvedReviewComment[]> {
   const results: UnresolvedReviewComment[] = [];

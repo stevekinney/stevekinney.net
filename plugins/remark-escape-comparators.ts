@@ -3,18 +3,21 @@ import type { Transformer } from 'unified';
 import { visit } from 'unist-util-visit';
 
 /**
- * Remark plugin to escape less-than characters used as textual comparators
- * so they don't get interpreted as HTML by mdsvex/Svelte.
+ * Remark plugin to escape less-than characters in text nodes so they don't get
+ * interpreted as HTML by mdsvex/Svelte.
  *
- * Replaces occurrences of '<' in plain text nodes when followed by a space or digit
- * with the HTML entity '&lt;'. Code blocks and inline code are left untouched.
+ * This intentionally escapes every raw '<' in text nodes to cover comparators
+ * and other permutations like "<=", "<<", "<-", "<3", "x<y", or "<\n".
+ * Code blocks and inline code are left untouched because they are separate nodes.
  */
 export default function remarkEscapeComparators(): Transformer<Root> {
   return function transformer(tree) {
     visit(tree, 'text', (node: Text) => {
       if (!node || typeof node.value !== 'string') return;
-      // Replace '<' that would otherwise be interpreted as HTML
-      node.value = node.value.replace(/<(\s|\d)/g, '&lt;$1');
+      if (!node.value.includes('<')) return;
+
+      // Replace any raw '<' so Svelte doesn't parse it as markup.
+      node.value = node.value.replace(/</g, '&lt;');
     });
   };
 }

@@ -5,7 +5,9 @@ import { visit } from 'unist-util-visit';
 import DOMPurify from 'isomorphic-dompurify';
 
 // DOMPurify configuration for sanitizing Tailwind playground HTML at build time
-const DOMPURIFY_CONFIG: DOMPurify.Config = {
+type DomPurifyConfig = Parameters<typeof DOMPurify.sanitize>[1];
+
+const DOMPURIFY_CONFIG: DomPurifyConfig = {
   ALLOWED_TAGS: [
     'div',
     'span',
@@ -95,13 +97,14 @@ const DOMPURIFY_CONFIG: DOMPurify.Config = {
 };
 
 /**
- * Injects Tailwind playground components before HTML code blocks flagged with `tailwind`.
+ * Injects Tailwind playground custom elements before HTML code blocks flagged with `tailwind`.
  * HTML is sanitized at build time to prevent XSS and avoid runtime jsdom dependency.
  */
 export default function remarkTailwindPlayground(): Transformer<Root> {
   return function transformer(tree, file: VFile) {
-    const filePath = (file?.path ?? '').toString();
-    if (!filePath.endsWith('.md') || !filePath.includes('tailwind')) return;
+    const anyFile = file as VFile & { filename?: string };
+    const filePath = (anyFile.filename ?? file.path ?? '').toString();
+    if (filePath && !filePath.endsWith('.md')) return;
 
     visit(tree, 'code', (node: Code, index: number | undefined, parent: Parent | undefined) => {
       if (!parent || typeof index !== 'number') return;

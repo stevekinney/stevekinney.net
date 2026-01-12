@@ -1,24 +1,22 @@
 import type { PreprocessorGroup } from 'svelte/compiler';
 import MagicString from 'magic-string';
-import { walk } from 'svelte-tree-walker';
 import { parse } from 'svelte/compiler';
+import { walk } from 'svelte-tree-walker';
 
 /**
- * Creates a preprocessor to handle <TailwindPlayground /> components in markdown files.
+ * Creates a preprocessor to auto-import <TailwindPlayground /> components in markdown files.
  */
 export const importTailwindPlayground = (): PreprocessorGroup => {
   return {
-    name: 'tailwind-example',
+    name: 'tailwind-playground-imports',
     markup: ({ content, filename }) => {
       if (!filename?.endsWith('.md')) return;
       if (!content.includes('<TailwindPlayground')) return;
 
-      // Parse the content with the Svelte Compiler
       const { instance, html } = parse(content, { filename });
       const s = new MagicString(content);
 
       let needsImport = false;
-      // Find all <TailwindPlayground> components and ensure import exists
       for (const node of walk(html)) {
         if ('name' in node && node.name === 'TailwindPlayground') {
           needsImport = true;
@@ -26,19 +24,17 @@ export const importTailwindPlayground = (): PreprocessorGroup => {
         }
       }
 
-      // Avoid duplicate import if already present
-      const hasImportAlready = /from ['"]\$lib\/components\/tailwind-playground\.svelte['"];?/.test(
-        content,
-      );
+      const hasImportAlready =
+        content.includes("from '$lib/components/tailwind-playground.svelte'") ||
+        content.includes('from "$lib/components/tailwind-playground.svelte"');
 
       if (needsImport && !hasImportAlready) {
-        const importLine = `\nimport TailwindPlayground from '$lib/components/tailwind-playground.svelte';\n`;
+        const importLine =
+          "import TailwindPlayground from '$lib/components/tailwind-playground.svelte';";
         if (instance) {
-          // Insert into existing <script> (instance) block
-          s.appendRight((instance.content as { end: number }).end, `\n${importLine}`);
+          s.appendRight((instance.content as { end: number }).end, `\n${importLine}\n`);
         } else {
-          // Create a <script> block at the top with the import
-          s.prepend(`<script>\n${importLine}</script>\n`);
+          s.prepend(`<script>\n${importLine}\n</script>\n`);
         }
       }
 
