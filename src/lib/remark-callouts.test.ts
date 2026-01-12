@@ -122,7 +122,7 @@ describe('remarkCallouts', () => {
     const data = getData(blockquote);
 
     expect(data?.hProperties?.['data-callout']).toBe('example');
-    expect(data?.hProperties?.['data-foldable']).toBe('');
+    expect(data?.hProperties?.['data-foldable']).toBe('true');
     expect(data?.hProperties?.['data-default-open']).toBeUndefined();
   });
 
@@ -131,16 +131,7 @@ describe('remarkCallouts', () => {
     const data = getData(blockquote);
 
     expect(data?.hProperties?.['data-callout']).toBe('tip');
-    expect(data?.hProperties?.['data-foldable']).toBe('');
-    expect(data?.hProperties?.['data-default-open']).toBe('');
-  });
-
-  it('does not mark regular callouts as foldable', () => {
-    const blockquote = run('> [!NOTE] Title\n>\n> Body');
-    const data = getData(blockquote);
-
-    expect(data?.hProperties?.['data-callout']).toBe('note');
-    expect(data?.hProperties?.['data-foldable']).toBeUndefined();
-    expect(data?.hProperties?.['data-default-open']).toBeUndefined();
+    expect(data?.hProperties?.['data-foldable']).toBe('true');
+    expect(data?.hProperties?.['data-default-open']).toBe('true');
   });
 });

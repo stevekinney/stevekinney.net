@@ -218,9 +218,9 @@ export default function remarkCallouts(): Transformer<Root> {
       data.hProperties ??= {};
       data.hProperties['data-callout'] = variant;
       if (foldable) {
-        data.hProperties['data-foldable'] = '';
+        data.hProperties['data-foldable'] = 'true';
         if (defaultOpen) {
-          data.hProperties['data-default-open'] = '';
+          data.hProperties['data-default-open'] = 'true';
         }
       }
     });
