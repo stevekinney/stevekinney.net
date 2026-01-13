@@ -1,3 +1,5 @@
+set -e
+
 # Collect staged Markdown files under content
 STAGED_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'content/**/*.md')"
 
