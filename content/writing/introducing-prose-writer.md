@@ -47,6 +47,21 @@ const prompt = write('You are a helpful assistant.')
   .toString();
 ```
 
+Output:
+
+```md
+You are a helpful assistant.
+
+## Guidelines
+
+- Be concise
+- Cite sources
+
+<input>
+USER_TEXT
+</input>
+```
+
 Some highlights that have already saved me time:
 
 - **Chainable blocks**: `.section()`, `.list()`, `.tag()`, `.codeblock()`.
@@ -55,6 +70,141 @@ Some highlights that have already saved me time:
 - **Structured output helpers**: `.json()` and `.yaml()` to set expectations.
 - **Safety by default**: `prose-writer/safe` escapes markdown when needed.
 - **Token awareness**: `.tokens()` gives a rough size estimate.
+
+## A Few More Examples
+
+### Inline formatting
+
+```ts
+import { write } from 'prose-writer';
+import { bold } from 'prose-writer/markdown';
+
+const prompt = write('You are a', bold('helpful assistant.'))
+  .write('Please help the user with their request.')
+  .toString();
+```
+
+Output:
+
+```md
+You are a **helpful assistant.**
+Please help the user with their request.
+```
+
+### Lists and nesting
+
+```ts
+import { write } from 'prose-writer';
+
+const plan = write('Project Plan:').unorderedList((l) => {
+  l.item('Setup');
+  l.unorderedList((sl) => {
+    sl.item('Install dependencies');
+    sl.item('Configure tools');
+  });
+  l.item('Development');
+  l.item('Deployment');
+});
+```
+
+Output:
+
+```md
+Project Plan:
+
+- Setup
+  - Install dependencies
+  - Configure tools
+- Development
+- Deployment
+```
+
+### Task lists
+
+```ts
+import { write } from 'prose-writer';
+
+const todos = write('Todo:').tasks((l) => {
+  l.done('Initialize repository');
+  l.todo('Implement core logic');
+  l.task(false, 'Write documentation');
+});
+```
+
+Output:
+
+```md
+Todo:
+
+- [x] Initialize repository
+- [ ] Implement core logic
+- [ ] Write documentation
+```
+
+### Code blocks and setup steps
+
+```ts
+import { write } from 'prose-writer';
+
+const setup = write('Setup:').codeblock('bash', (w) => {
+  w.write('npm install');
+  w.write('npm run build');
+});
+```
+
+Output:
+
+````md
+Setup:
+
+```bash
+npm install
+npm run build
+```
+````
+
+### Tags for LLM-friendly structure
+
+```ts
+import { write } from 'prose-writer';
+
+const prompt = write('Analyze this document:')
+  .tag('document', 'The content to analyze goes here.')
+  .tag('instructions', 'Summarize the key points.')
+  .toString();
+```
+
+Output:
+
+```md
+Analyze this document:
+
+<document>
+The content to analyze goes here.
+</document>
+
+<instructions>
+Summarize the key points.
+</instructions>
+```
+
+### Safe mode for untrusted input
+
+```ts
+import { write } from 'prose-writer/safe';
+
+const prompt = write('User input:', userInput).tag('context', userInput).toString();
+```
+
+Output:
+
+```md
+User input: USER_INPUT
+
+<context>
+USER_INPUT
+</context>
+```
 
 ## Common Use Cases
 
