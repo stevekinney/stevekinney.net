@@ -1,15 +1,8 @@
 #!/bin/sh
-. "$(dirname -- "$0")/_/husky.sh"
+set -e
 
 # Collect staged Markdown files under content
 STAGED_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'content/**/*.md')"
-
-# Reconstruct malformed/missing frontmatter for staged Markdown files
-if [ -n "$STAGED_FILES" ]; then
-  echo "Reconstructing frontmatter for staged Markdown files..."
-  bun run scripts/reconstruct-frontmatter.ts $STAGED_FILES
-  git add $STAGED_FILES
-fi
 
 # Audit frontmatter for staged course files first
 COURSE_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'content/courses/**/*.md')"
@@ -17,13 +10,6 @@ if [ -n "$COURSE_FILES" ]; then
   echo "Auditing frontmatter (title/description) for staged course files..."
   bun run scripts/audit-courses-frontmatter.ts $COURSE_FILES
   git add $COURSE_FILES
-fi
-
-if [ -n "$STAGED_FILES" ]; then
-  echo "Updating frontmatter 'modified' from Git for staged Markdown files..."
-  bun run scripts/update-modified-from-git.ts $STAGED_FILES
-  # Re-stage any changes made by the script
-  git add $STAGED_FILES
 fi
 
 npx lint-staged
