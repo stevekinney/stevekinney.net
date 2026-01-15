@@ -1,3 +1,4 @@
+#!/bin/sh
 set -e
 
 # Collect staged Markdown files under content
