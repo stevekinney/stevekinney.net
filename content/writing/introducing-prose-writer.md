@@ -1,5 +1,5 @@
 ---
-title: Introducing Prose Writer (Beta)
+title: Introducing Prose Writer
 description: >-
   A little TypeScript library for building Markdown-friendly strings without
   template literal sprawl.
