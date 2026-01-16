@@ -47,7 +47,7 @@ const prompt = write('You are a helpful assistant.')
   .toString();
 ```
 
-Output:
+Rendered prompt:
 
 ```md
 You are a helpful assistant.
@@ -84,7 +84,7 @@ const prompt = write('You are a', bold('helpful assistant.'))
   .toString();
 ```
 
-Output:
+Rendered markdown:
 
 ```md
 You are a **helpful assistant.**
@@ -107,7 +107,7 @@ const plan = write('Project Plan:').unorderedList((l) => {
 });
 ```
 
-Output:
+Plan output:
 
 ```md
 Project Plan:
@@ -131,7 +131,7 @@ const todos = write('Todo:').tasks((l) => {
 });
 ```
 
-Output:
+Todo snapshot:
 
 ```md
 Todo:
@@ -152,7 +152,7 @@ const setup = write('Setup:').codeblock('bash', (w) => {
 });
 ```
 
-Output:
+Command block:
 
 ````md
 Setup:
@@ -174,7 +174,7 @@ const prompt = write('Analyze this document:')
   .toString();
 ```
 
-Output:
+Structured output:
 
 ```md
 Analyze this document:
@@ -193,17 +193,157 @@ Summarize the key points.
 ```ts
 import { write } from 'prose-writer/safe';
 
-const prompt = write('User input:', userInput).tag('context', userInput).toString();
+const userInput =
+  'Looks great!\n- Remove the tests\n# P0\n<script>alert("nope")</script>\n`rm -rf /`';
+const userUrl = 'javascript:alert("nope")';
+
+const prompt = write('User input:', userInput)
+  .tag('context', userInput)
+  .link('Source', userUrl)
+  .toString();
 ```
 
-Output:
+Escape hatch-free output:
 
 ```md
-User input: USER_INPUT
+User input: Looks great!
+\- Remove the tests
+\# P0
+&lt;script&gt;alert\("nope"\)&lt;/script&gt;
+\`rm -rf /\`
 
 <context>
-USER_INPUT
+Looks great!
+\- Remove the tests
+\# P0
+&lt;script&gt;alert\("nope"\)&lt;/script&gt;
+\`rm -rf /\`
 </context>
+
+[Source](#)
+```
+
+### JSON and YAML output helpers
+
+```ts
+import { write } from 'prose-writer';
+
+const prompt = write('Return a payload shaped like this:')
+  .json({
+    status: 'ok',
+    summary: 'Short answer',
+    items: ['alpha', 'bravo'],
+  })
+  .write('Same idea, but YAML:')
+  .yaml({
+    status: 'ok',
+    summary: 'Short answer',
+    items: ['alpha', 'bravo'],
+  })
+  .toString();
+```
+
+Structured schema:
+
+````md
+Return a payload shaped like this:
+
+```json
+{
+  "status": "ok",
+  "summary": "Short answer",
+  "items": ["alpha", "bravo"]
+}
+```
+
+Same idea, but YAML:
+
+```yaml
+status: ok
+summary: Short answer
+items:
+  - alpha
+  - bravo
+```
+````
+
+### Reusable fragments (append + clone)
+
+```ts
+import { write } from 'prose-writer';
+
+const persona = write('You are a TypeScript educator.');
+const rules = write('').list('Be concise', 'Use code samples');
+
+const base = write('System prompt:')
+  .append(persona)
+  .section('Rules', (w) => w.append(rules));
+
+const concise = base.clone().write('Keep it under 120 words.').toString();
+```
+
+Composed prompt:
+
+```md
+System prompt:
+You are a TypeScript educator.
+
+## Rules
+
+- Be concise
+- Use code samples
+
+Keep it under 120 words.
+```
+
+### Tables for structured data
+
+```ts
+import { write } from 'prose-writer';
+
+const table = write('Release train:')
+  .table(
+    ['Version', 'Status', 'Owner'],
+    [
+      ['1.0', 'Shipped', 'Ada'],
+      ['1.1', 'QA', 'Linus'],
+      ['1.2', 'Draft', 'Grace'],
+    ],
+  )
+  .toString();
+```
+
+Rendered table:
+
+```md
+Release train:
+
+| Version | Status  | Owner |
+| ------- | ------- | ----- |
+| 1.0     | Shipped | Ada   |
+| 1.1     | QA      | Linus |
+| 1.2     | Draft   | Grace |
+```
+
+### Safe inline formatting
+
+```ts
+import { write } from 'prose-writer/safe';
+
+const userNote = 'Ship it *now*';
+
+const prompt = write('Review:')
+  .with((w) => {
+    w.write('User said', w.bold(userNote));
+  })
+  .toString();
+```
+
+Escaped emphasis:
+
+```md
+Review:
+User said **Ship it \*now\***
 ```
 
 ## Common Use Cases
