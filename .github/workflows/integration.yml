@@ -2,6 +2,12 @@ name: Integration Tests
 
 on:
   pull_request:
+    paths-ignore:
+      - 'content/**'
+      - 'static/**'
+      - 'README.md'
+      - 'style-guide.md'
+      - 'TASKS.md'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
