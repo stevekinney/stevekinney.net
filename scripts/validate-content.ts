@@ -11,7 +11,7 @@ const CONTENT_ROOT = path.resolve('content');
 const COURSES_ROOT = path.join(CONTENT_ROOT, 'courses');
 const STATIC_ROOT = path.resolve('static');
 
-const WRITING_REQUIRED = ['title', 'description', 'date', 'modified', 'published'] as const;
+const WRITING_REQUIRED = ['title', 'description', 'date', 'modified'] as const;
 const COURSE_REQUIRED = ['title', 'description', 'date', 'modified'] as const;
 
 const externalPrefixes = ['http://', 'https://', 'mailto:', 'tel:', 'data:', 'ftp:'];

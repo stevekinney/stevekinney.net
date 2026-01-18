@@ -9,7 +9,7 @@ modified: 2025-07-29T21:09:56.000Z
 published: true
 ---
 
-The other day, I shared my [Cursor rules for working with TypeScript projects](./cursor-rules-typescript). It occured to me shortly after that it might _also_ be useful to show y'all some of the rules that I've been working on when working with [Temporal](https://temporal.io) workflows.
+The other day, I shared my [Cursor rules for working with TypeScript projects](./cursor-rules-typescript.md). It occured to me shortly after that it might _also_ be useful to show y'all some of the rules that I've been working on when working with [Temporal](https://temporal.io) workflows.
 
 > [!NOTE] This ended up also just being a post about best practices using Temporal.
 > As I ended up explaining the rules, I realized that what's good advice for models is good advice for any of us. So, you'll also find some general strategies that I've picked up over the years as well. Again, this topic probably deserves it's own post, but let's stick to the matter at hand.
