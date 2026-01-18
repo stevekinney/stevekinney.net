@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vite dev --port 4444",
     "build": "NODE_OPTIONS=--disable-warning=ExperimentalWarning vite build",
+    "build:stats": "BUNDLE_STATS=1 bun run build",
     "preview": "vite preview",
     "test": "bun run test:integration && bun run test:unit",
     "check": "NODE_OPTIONS=--disable-warning=ExperimentalWarning svelte-kit sync && NODE_OPTIONS=--disable-warning=ExperimentalWarning svelte-check --tsconfig ./tsconfig.json",
@@ -95,6 +96,7 @@
     "rehype-unwrap-images": "^1.0.0",
     "remark-gfm": "^4.0.1",
     "remark-mermaid-plugin": "^1.0.2",
+    "rollup-plugin-visualizer": "^6.0.5",
     "satori": "^0.18.3",
     "shiki": "^3.21.0",
     "storybook": "^10.1.11",
