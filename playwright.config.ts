@@ -1,16 +1,20 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 
+const host = '127.0.0.1';
+const port = 4445;
+const baseURL = `http://${host}:${port}`;
+
 const config: PlaywrightTestConfig = {
   webServer: {
-    command: 'bun run build && bun run preview -- --port 4173 --strictPort',
-    url: 'http://localhost:4173',
+    command: `bun run build && bun run preview -- --host ${host} --port ${port} --strictPort`,
+    url: baseURL,
     timeout: 240000,
     reuseExistingServer: false,
   },
   testDir: 'tests',
   testMatch: /(.+\.)?(test|spec)\.[jt]s/,
   use: {
-    baseURL: 'http://localhost:4173',
+    baseURL,
   },
 };
 

@@ -1,5 +1,5 @@
 import { dirname, posix as pathPosix } from 'path';
-import type { Link, Root } from 'mdast';
+import type { Definition, Link, Root } from 'mdast';
 import type { Transformer } from 'unified';
 import type { VFile } from 'vfile';
 import { visit } from 'unist-util-visit';
@@ -10,6 +10,7 @@ import { visit } from 'unist-util-visit';
 const URL_PATTERNS = {
   EXTERNAL_SCHEME: /^[a-zA-Z][a-zA-Z+.-]*:/,
   PROTOCOL_RELATIVE: /^\/\//,
+  WINDOWS_DRIVE: /^[a-zA-Z]:[\\/]/,
 };
 
 const MARKDOWN_EXTENSIONS = ['.mdx', '.markdown', '.md'];
@@ -20,10 +21,13 @@ const DEFAULT_CONTENT_PATH = 'content';
  * Determines if a URL points to an external resource
  */
 const isExternalUrl = (url: string): boolean =>
-  URL_PATTERNS.PROTOCOL_RELATIVE.test(url) || URL_PATTERNS.EXTERNAL_SCHEME.test(url);
+  URL_PATTERNS.PROTOCOL_RELATIVE.test(url) ||
+  URL_PATTERNS.EXTERNAL_SCHEME.test(url) ||
+  URL_PATTERNS.WINDOWS_DRIVE.test(url);
 
 const normalizePathSeparators = (value: string): string => value.replace(/\\/g, '/');
 const trimTrailingSlashes = (value: string): string => value.replace(/\/+$/, '');
+const trimSlashes = (value: string): string => value.replace(/^\/+|\/+$/g, '');
 
 const splitUrl = (url: string): { path: string; query: string; hash: string } => {
   const hashIndex = url.indexOf('#');
@@ -82,12 +86,20 @@ interface FileData {
 /**
  * Calculates the base URL for a file relative to the content directory
  */
-const getBaseUrl = (fileData: FileData, contentPath: string): string => {
-  const filePath = normalizePathSeparators(fileData.filename || '');
-  const cwd = normalizePathSeparators(fileData.cwd || process.cwd());
-  if (!filePath) return '/';
-  let rel = filePath.startsWith(cwd + '/') ? filePath.slice(cwd.length + 1) : filePath;
-  if (rel.startsWith(contentPath + '/')) rel = rel.slice(contentPath.length + 1);
+const getBaseUrl = (fileData: FileData, contentPath: string): string | null => {
+  const filePath = pathPosix.normalize(normalizePathSeparators(fileData.filename || ''));
+  const cwd = pathPosix.normalize(normalizePathSeparators(fileData.cwd || process.cwd()));
+  const normalizedContentPath = trimSlashes(normalizePathSeparators(contentPath));
+  if (!filePath || !normalizedContentPath) return null;
+
+  let rel = filePath;
+  if (cwd && (filePath === cwd || filePath.startsWith(cwd + '/'))) {
+    rel = filePath === cwd ? '' : filePath.slice(cwd.length + 1);
+  }
+
+  if (!rel.startsWith(normalizedContentPath + '/')) return null;
+
+  rel = rel.slice(normalizedContentPath.length + 1);
   const dir = normalizePathSeparators(dirname(rel));
   return dir === '.' ? '/' : '/' + dir;
 };
@@ -107,8 +119,9 @@ export function fixMarkdownUrls(contentPath = DEFAULT_CONTENT_PATH): Transformer
       cwd: anyFile.cwd ?? process.cwd(),
     };
     const baseUrl = getBaseUrl(fileData, contentPath);
+    if (!baseUrl) return;
 
-    visit(tree, 'link', (node: Link) => {
+    const rewriteUrl = (node: Link | Definition) => {
       const { url } = node;
 
       if (!url || isExternalUrl(url)) return;
@@ -122,6 +135,9 @@ export function fixMarkdownUrls(contentPath = DEFAULT_CONTENT_PATH): Transformer
 
       // Transform the URL
       node.url = transformInternalUrl(url, baseUrl);
-    });
+    };
+
+    visit(tree, 'link', (node) => rewriteUrl(node));
+    visit(tree, 'definition', (node) => rewriteUrl(node));
   };
 }

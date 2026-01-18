@@ -113,6 +113,7 @@ const config = {
         // Reduce variants to speed up build
         widths: [480, 768],
         mainWidth: 800,
+        sizes: '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw',
         includeMetadata: false,
       })
     ),
