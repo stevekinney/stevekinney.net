@@ -8,7 +8,7 @@
 - [x] Add a CI job for `bun run test:integration` with Playwright browser caching and artifacts on failure.
 - [x] Add CI caching for Bun dependencies, Playwright browsers, and `.svelte-kit` outputs.
 - [x] Add CI concurrency settings to cancel redundant runs on the same branch.
-- [ ] Pin runtime versions by adding `.node-version` and `package.json` `engines` (optionally `.tool-versions`).
+- [x] Pin runtime versions by adding `.node-version` and `package.json` `engines` (optionally `.tool-versions`).
 
 ## P1 - Speed and developer ergonomics
 
