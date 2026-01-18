@@ -4,7 +4,7 @@
 
 - [x] Add `scripts/audit-courses-frontmatter.ts` so `.husky/pre-commit` no longer references a missing script; validate required metadata and fail on errors.
 - [x] Update `.husky/pre-commit` to use `bunx lint-staged` and guard against empty file lists.
-- [ ] Create `.github/workflows/ci.yml` to run `bun install`, `bun run lint`, `bun run check`, and `bun run test:unit` on PRs.
+- [x] Create `.github/workflows/ci.yml` to run `bun install`, `bun run lint`, `bun run check`, and `bun run test:unit` on PRs.
 - [ ] Add a CI job for `bun run test:integration` with Playwright browser caching and artifacts on failure.
 - [ ] Add CI caching for Bun dependencies, Playwright browsers, and `.svelte-kit` outputs.
 - [ ] Add CI concurrency settings to cancel redundant runs on the same branch.
