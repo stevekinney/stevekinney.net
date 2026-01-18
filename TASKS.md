@@ -22,7 +22,7 @@
 
 ## P2 - Scale and visibility
 
-- [ ] Introduce Git LFS (or external asset storage) for large binary assets and document usage.
+- [x] Introduce Git LFS (or external asset storage) for large binary assets and document usage.
 - [ ] Add a `build:stats` script to generate bundle size reports and track growth over time.
 - [ ] Add CI artifact upload for Playwright traces/screenshots to speed up debugging.
 - [ ] Add `CONTRIBUTING.md` with local fast vs full build/test guidance.
