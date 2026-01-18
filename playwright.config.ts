@@ -8,7 +8,7 @@ const useWebServer = process.env.PLAYWRIGHT_WEB_SERVER !== '0';
 const config: PlaywrightTestConfig = {
   webServer: useWebServer
     ? {
-        command: `bun run build && bun run preview -- --host ${host} --port ${port} --strictPort`,
+        command: `bun run preview -- --host ${host} --port ${port} --strictPort`,
         url: baseURL,
         timeout: 240000,
         reuseExistingServer: false,
