@@ -13,7 +13,7 @@
 ## P1 - Speed and developer ergonomics
 
 - [x] Add a `clean` script to remove `build`, `.svelte-kit`, `test-results`, and `.vite` caches.
-- [ ] Enable lint caching (`prettier --cache`, `eslint --cache`) and update scripts accordingly.
+- [x] Enable lint caching (`prettier --cache`, `eslint --cache`) and update scripts accordingly.
 - [ ] Add a `test:integration:dev` script that reuses an existing preview server and skips `bun run build`.
 - [ ] Split integration test flow to build once, then reuse the output for Playwright (faster CI/local runs).
 - [ ] Add `PLAYWRIGHT_BASE_URL`/`PLAYWRIGHT_PORT` support in `playwright.config.ts` to avoid hard-coded ports.
