@@ -1,8 +1,12 @@
 #!/bin/sh
 set -e
 
-# Collect staged Markdown files under content
-STAGED_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'content/**/*.md')"
+# Collect staged files
+STAGED_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB)"
+if [ -z "$STAGED_FILES" ]; then
+  echo "No staged files; skipping pre-commit checks."
+  exit 0
+fi
 
 # Audit frontmatter for staged course files first
 COURSE_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'content/courses/**/*.md')"
@@ -12,4 +16,4 @@ if [ -n "$COURSE_FILES" ]; then
   git add $COURSE_FILES
 fi
 
-npx lint-staged
+bunx lint-staged
