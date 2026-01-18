@@ -1,0 +1,213 @@
+{
+  "meta": {
+    "generatedAt": "2026-01-18T23:15:12.314Z",
+    "hash": "1ab6f789445fa6f300965d77ab51fe106c286f928399cabe90448c4607e0726c"
+  },
+  "posts": [
+    {
+      "title": "Introducing Prose Writer",
+      "description": "A little TypeScript library for building Markdown-friendly strings without template literal sprawl.",
+      "date": "2026-01-12T18:00:31.000Z",
+      "modified": "2026-01-12T18:02:20.000Z",
+      "published": true,
+      "tags": [],
+      "slug": "introducing-prose-writer"
+    },
+    {
+      "title": "Cursor Rules for Writing Temporal Workflows with TypeScript",
+      "description": "Essential guidelines and best practices for writing reliable Temporal workflows in TypeScript, covering serialization, determinism, and workflow patterns.",
+      "date": "2025-05-14T15:00:00.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": true,
+      "tags": [],
+      "slug": "cursor-rules-temporal-typescript"
+    },
+    {
+      "title": "Cursor Rules for TypeScript Engineers",
+      "description": "A collection of some potentially useful Cursor rules as well as a rundown of what potentially makes a Cursor rule great.",
+      "date": "2025-05-13T14:15:52.000Z",
+      "modified": "2025-07-30T11:07:02.000Z",
+      "published": true,
+      "tags": [],
+      "slug": "cursor-rules-typescript"
+    },
+    {
+      "title": "Using Anthropic's Message Batches API with Temporal",
+      "description": "Build scalable, cost-efficient AI processing with Anthropic's Message Batches API and Temporal workflows.",
+      "date": "2025-05-08T20:05:36.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": true,
+      "tags": [],
+      "slug": "anthropic-batch-api-with-temporal"
+    },
+    {
+      "title": "What If It Goes Wrong?: The Hidden Dangers of Counterfactual Reasoning in AI",
+      "description": "Exploring the pitfalls of counterfactual reasoning in AI, highlighting its fragility, chaotic nature, and alignment with Nassim Taleb's critique of prediction in complex systems.",
+      "date": "2025-04-21T16:48:47.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": true,
+      "tags": [],
+      "slug": "counter-factual-reasoning-in-ai"
+    },
+    {
+      "title": "Getting the Most Out of GPT-4.1",
+      "description": "A naïve guide to get the most out of GPT-4.1: context window optimization, coding tips, prompt best practices, and when to choose GPT-4.1 over GPT-4.5.",
+      "date": "2025-04-17T13:14:14.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": true,
+      "tags": [],
+      "slug": "getting-the-most-out-of-gpt-4-1"
+    },
+    {
+      "title": "Neural Networks",
+      "description": "A friendly intro to neural networks, what they are, how they learn, and why they matter for software engineers exploring the world of generative AI.",
+      "date": "2025-04-16T19:49:56.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": true,
+      "tags": ["ai", "machine-learning", "neural-networks", "transformers"],
+      "slug": "neural-networks"
+    },
+    {
+      "title": "A Gentle Introduction to Using a Vector Database",
+      "description": "In which we learn how to build a simple vector database using Pinecone and OpenAI embeddings, and discover it was way easier than we might have expected.",
+      "date": "2024-12-31T00:07:17.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": true,
+      "tags": ["open-ai", "pinecone", "artificial-intelligence"],
+      "slug": "using-a-vector-database"
+    },
+    {
+      "title": "Setting Up a Python Environment on macOS",
+      "description": "A brief guide for getting started writing Python on a Mac using virtual environments.",
+      "date": "2024-08-06T16:00:00.006Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": true,
+      "tags": ["python", "virtual-env"],
+      "slug": "setup-python"
+    },
+    {
+      "title": "Implementing Obsidian's Callout in Svelte",
+      "description": "A gentle walkthrough where we build our take on Obsidian's callout component in Svelte.",
+      "date": "2024-04-07T16:29:29.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": false,
+      "tags": ["svelte", "storybook", "design-systems"],
+      "slug": "obsidian-callout-svelte"
+    },
+    {
+      "title": "Positives, Negatives, and Alternatives to Using Tailwind for a Design System",
+      "description": "Is Tailwind the best choice when building out a design system? It depends.",
+      "date": "2024-04-06T22:30:00.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": true,
+      "tags": ["css", "tailwind", "design-systems"],
+      "slug": "tailwind-and-design-systems"
+    },
+    {
+      "title": "Creating a Markdown Preprocessor for Svelte",
+      "description": "Let's look at how to write our own preprocessor for SvelteKit.",
+      "date": "2024-01-14T20:21:01.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": true,
+      "tags": ["svelte", "ast"],
+      "slug": "svelte-markdown-preprocessor"
+    },
+    {
+      "title": "Understanding Generics in TypeScript",
+      "description": "Let's learn a little bit about what generics are in TypeScript, why they're useful, and how to use them.",
+      "date": "2021-08-16T16:00:00.006Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": true,
+      "tags": ["typescript"],
+      "slug": "typescript-generics"
+    },
+    {
+      "title": "A Gentle Introduction to Svelte Stores",
+      "description": "Svelte stores simplify state management across components. Let's learn how they're implemented.",
+      "date": "2021-08-10T16:00:00.006Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "published": true,
+      "tags": ["svelte"],
+      "slug": "svelte-stores"
+    }
+  ],
+  "courses": [
+    {
+      "title": "Developing with AI Tools",
+      "description": "A course covering everything that Steve has learned to date about developing software with Cursor and Claude Code.",
+      "date": "2025-07-30T00:00:00.000Z",
+      "modified": "2025-07-30T13:28:49.000Z",
+      "slug": "ai-development"
+    },
+    {
+      "title": "Figma for Developers",
+      "description": "An high level introduction to Steve's Figma for Developers course.",
+      "date": "2024-03-05T19:56:55.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "slug": "figma"
+    },
+    {
+      "title": "Full Stack TypeScript",
+      "description": "Add type-safety across the stack.",
+      "date": "2025-03-20T19:00:00.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "slug": "full-stack-typescript"
+    },
+    {
+      "title": "AI Fundamentals with Python",
+      "description": "Learning about the basics of AI with Python and Hugging Face.",
+      "date": "2025-08-01T00:00:00.000Z",
+      "modified": "2025-08-01T14:39:45.000Z",
+      "slug": "python-ai"
+    },
+    {
+      "title": "React Performance",
+      "description": "Master React performance optimization from fundamentals to advanced techniques with React 19",
+      "date": "2025-09-07T18:00:00.000Z",
+      "modified": "2025-09-22T15:27:10.000Z",
+      "slug": "react-performance"
+    },
+    {
+      "title": "React with TypeScript",
+      "description": "Comprehensive guide to building type-safe React applications with TypeScript and React 19",
+      "date": "2025-09-07T18:00:00.000Z",
+      "modified": "2025-09-27T19:14:43.000Z",
+      "slug": "react-typescript"
+    },
+    {
+      "title": "Building Design Systems in Storybook",
+      "description": "An exploration in building a design system using Storybook.",
+      "date": "2024-03-05T19:56:55.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "slug": "storybook"
+    },
+    {
+      "title": "Tailwind",
+      "description": "An introduction to testing using JavaScript",
+      "date": "2025-06-13T19:56:55.000Z",
+      "modified": "2025-06-13T12:27:15.000Z",
+      "slug": "tailwind"
+    },
+    {
+      "title": "Introduction to Testing",
+      "description": "An introduction to testing using JavaScript",
+      "date": "2024-09-28T19:56:55.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "slug": "testing"
+    },
+    {
+      "title": "Visual Studio Code",
+      "description": "An in-depth guide covering everything you would ever want to know about using Visual Studio Code.",
+      "date": "2025-03-18T16:45:00.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "slug": "visual-studio-code"
+    },
+    {
+      "title": "Web Security",
+      "description": "An introduction to the fundamentals of web security.",
+      "date": "2024-04-05T19:56:55.000Z",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "slug": "web-security"
+    }
+  ]
+}

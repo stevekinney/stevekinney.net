@@ -26,5 +26,5 @@
 - [x] Add a `build:stats` script to generate bundle size reports and track growth over time.
 - [x] Add CI artifact upload for Playwright traces/screenshots to speed up debugging.
 - [x] Add `CONTRIBUTING.md` with local fast vs full build/test guidance.
-- [ ] Precompute and cache content indexes so SSG doesn't glob large trees on every build.
+- [x] Precompute and cache content indexes so SSG doesn't glob large trees on every build.
 - [ ] Add an image pipeline cache so `processImages` doesn't recompute on every run.
