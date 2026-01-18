@@ -16,6 +16,7 @@
     "lint": "prettier --cache --check . && eslint --cache .",
     "format": "prettier --write .",
     "clean": "rm -rf build .svelte-kit test-results .vite",
+    "content:validate": "bun run scripts/validate-content.ts",
     "test:integration": "bun run build && env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning playwright test",
     "test:integration:dev": "PLAYWRIGHT_WEB_SERVER=0 env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning playwright test",
     "test:unit": "NODE_OPTIONS=--disable-warning=ExperimentalWarning vitest",

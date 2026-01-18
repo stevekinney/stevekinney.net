@@ -17,7 +17,7 @@
 - [x] Add a `test:integration:dev` script that reuses an existing preview server and skips `bun run build`.
 - [x] Split integration test flow to build once, then reuse the output for Playwright (faster CI/local runs).
 - [x] Add `PLAYWRIGHT_BASE_URL`/`PLAYWRIGHT_PORT` support in `playwright.config.ts` to avoid hard-coded ports.
-- [ ] Add a `content:validate` script to check frontmatter completeness, slug uniqueness, internal links, and missing assets.
+- [x] Add a `content:validate` script to check frontmatter completeness, slug uniqueness, internal links, and missing assets.
 - [ ] Add path-based CI gating to skip heavy jobs when only docs/content change.
 
 ## P2 - Scale and visibility
