@@ -25,6 +25,6 @@
 - [x] Introduce Git LFS (or external asset storage) for large binary assets and document usage.
 - [x] Add a `build:stats` script to generate bundle size reports and track growth over time.
 - [x] Add CI artifact upload for Playwright traces/screenshots to speed up debugging.
-- [ ] Add `CONTRIBUTING.md` with local fast vs full build/test guidance.
+- [x] Add `CONTRIBUTING.md` with local fast vs full build/test guidance.
 - [ ] Precompute and cache content indexes so SSG doesn't glob large trees on every build.
 - [ ] Add an image pipeline cache so `processImages` doesn't recompute on every run.
