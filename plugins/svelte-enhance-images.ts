@@ -1,3 +1,6 @@
+import { createHash } from 'node:crypto';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import type { PreprocessorGroup } from 'svelte/compiler';
 import { camelCase } from 'change-case';
 import MagicString from 'magic-string';
@@ -54,6 +57,7 @@ interface ProcessImagesOptions {
   includeMetadata?: boolean;
   skipImages?: string[];
   sizes?: string;
+  cacheDir?: string;
 }
 
 interface ProgramNode {
@@ -69,6 +73,42 @@ interface ProgramNode {
 }
 
 const classes = ['max-w-full', 'rounded-md', 'shadow-md'];
+const cacheVersion = '1';
+const transformCache = new Map<string, { code: string; map: string | null }>();
+
+const isMissingFile = (error: unknown): boolean =>
+  typeof error === 'object' &&
+  error !== null &&
+  'code' in error &&
+  (error as NodeJS.ErrnoException).code === 'ENOENT';
+
+const readCacheEntry = async (
+  cacheKey: string,
+  cachePath: string,
+): Promise<{ code: string; map: string | null } | null> => {
+  const cached = transformCache.get(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const contents = await readFile(cachePath, 'utf8');
+    const entry = JSON.parse(contents) as { code: string; map: string | null };
+    transformCache.set(cacheKey, entry);
+    return entry;
+  } catch (error) {
+    if (isMissingFile(error)) return null;
+    throw error;
+  }
+};
+
+const writeCacheEntry = async (
+  cacheKey: string,
+  cachePath: string,
+  entry: { code: string; map: string | null },
+): Promise<void> => {
+  await mkdir(path.dirname(cachePath), { recursive: true });
+  await writeFile(cachePath, JSON.stringify(entry), 'utf8');
+  transformCache.set(cacheKey, entry);
+};
 
 /**
  * Add image optimization to the Markdown content.
@@ -80,6 +120,7 @@ export const processImages = (opts: ProcessImagesOptions = {}): PreprocessorGrou
     includeMetadata: true,
     skipImages: [] as string[],
     sizes: undefined as string | undefined,
+    cacheDir: '.svelte-kit/process-images',
     // formats are currently avif + webp; keeping fixed for broad compatibility
     ...opts,
   };
@@ -87,14 +128,37 @@ export const processImages = (opts: ProcessImagesOptions = {}): PreprocessorGrou
   const widths = normalizeWidths(options.widths, options.mainWidth);
   const defaultSizes =
     options.sizes ?? `(min-width: 1280px) ${options.mainWidth}px, (min-width: 768px) 80vw, 100vw`;
+  const cacheDir = options.cacheDir ? path.resolve(options.cacheDir) : null;
+  const cacheOptions = JSON.stringify({
+    widths,
+    mainWidth: options.mainWidth,
+    includeMetadata: options.includeMetadata,
+    skipImages: [...options.skipImages].sort(),
+    sizes: defaultSizes,
+  });
+  const cachePrefix = createHash('sha256').update(cacheVersion).update(cacheOptions).digest('hex');
 
   const preprocessor: PreprocessorGroup = {
     name: 'markdown-image-optimization',
-    markup({ content, filename }) {
+    async markup({ content, filename }) {
       if (!filename || !filename.endsWith('.md')) return undefined;
 
       // Quick check: if no img tags, skip processing entirely
       if (!content.includes('<img')) return undefined;
+
+      const cacheKey = createHash('sha256')
+        .update(cachePrefix)
+        .update(filename)
+        .update(content)
+        .digest('hex');
+      const cachePath = cacheDir ? path.join(cacheDir, `${cacheKey}.json`) : null;
+
+      if (cachePath) {
+        const cached = await readCacheEntry(cacheKey, cachePath);
+        if (cached) {
+          return { code: cached.code, map: cached.map ?? undefined };
+        }
+      }
 
       // Parse the content with the Svelte Compiler and create a MagicString instance.
       const { instance, html } = parse(content, { filename }) as {
@@ -214,10 +278,17 @@ export const processImages = (opts: ProcessImagesOptions = {}): PreprocessorGrou
         s.prepend(`<script>\n${importLines.join('\n')}\n</script>\n`);
       }
 
-      return {
+      const map = s.generateMap({ hires: true });
+      const result = {
         code: s.toString(),
-        map: s.generateMap({ hires: true }),
+        map: map.toString(),
       };
+
+      if (cachePath) {
+        await writeCacheEntry(cacheKey, cachePath, result);
+      }
+
+      return result;
     },
   };
   return preprocessor;

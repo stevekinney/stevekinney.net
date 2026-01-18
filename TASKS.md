@@ -27,4 +27,4 @@
 - [x] Add CI artifact upload for Playwright traces/screenshots to speed up debugging.
 - [x] Add `CONTRIBUTING.md` with local fast vs full build/test guidance.
 - [x] Precompute and cache content indexes so SSG doesn't glob large trees on every build.
-- [ ] Add an image pipeline cache so `processImages` doesn't recompute on every run.
+- [x] Add an image pipeline cache so `processImages` doesn't recompute on every run.
