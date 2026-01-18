@@ -18,10 +18,14 @@ const config: PlaywrightTestConfig = {
         reuseExistingServer: false,
       }
     : undefined,
+  reporter: [['list'], ['html', { open: 'never' }]],
   testDir: 'tests',
   testMatch: /(.+\.)?(test|spec)\.[jt]s/,
   use: {
     baseURL,
+    screenshot: 'only-on-failure',
+    trace: 'retain-on-failure',
+    video: 'retain-on-failure',
   },
 };
 
