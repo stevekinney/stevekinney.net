@@ -18,5 +18,7 @@ content/.obsidian/workspace.json
 
 **/.claude/settings.local.json
 test-results/
+playwright-report/
+.eslintcache
 package-lock.json
 .env*.local
