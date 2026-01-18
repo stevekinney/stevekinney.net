@@ -17,6 +17,7 @@
     "format": "prettier --write .",
     "clean": "rm -rf build .svelte-kit test-results .vite",
     "test:integration": "env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning playwright test",
+    "test:integration:dev": "PLAYWRIGHT_WEB_SERVER=0 bun run test:integration",
     "test:unit": "NODE_OPTIONS=--disable-warning=ExperimentalWarning vitest",
     "test:storybook": "test-storybook",
     "storybook": "storybook dev -p 6006",
