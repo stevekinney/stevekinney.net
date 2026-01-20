@@ -19,6 +19,7 @@
     ".svelte-kit/ambient.d.ts",
     ".svelte-kit/non-ambient.d.ts",
     ".svelte-kit/types/**/$types.d.ts",
+    "plugins/**/*.ts",
     "plugins/**/*.tsx",
     "src/**/*",
     "svelte.config.js",

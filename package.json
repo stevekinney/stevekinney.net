@@ -7,8 +7,8 @@
     "bun": "1.1.0"
   },
   "scripts": {
-    "dev": "vite dev --port 4444",
-    "build": "bun run content:index && NODE_OPTIONS=--disable-warning=ExperimentalWarning vite build",
+    "dev": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" vite dev --port 4444",
+    "build": "bun run content:index && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" vite build",
     "build:stats": "BUNDLE_STATS=1 bun run build",
     "preview": "vite preview",
     "test": "bun run test:integration && bun run test:unit",
