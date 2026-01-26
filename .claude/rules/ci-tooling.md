@@ -20,4 +20,4 @@ paths:
 - Load `@sveltejs/enhanced-img` lazily (or guard it) so builds don’t fail when `sharp` is unavailable in CI.
 - On Linux CI, ensure both `@img/sharp-linux-x64` and `@img/sharp-libvips-linux-x64` are present so sharp can load its native libs.
 - When `vitest.config.ts` imports `vite.config.ts`, run Vitest with `NODE_OPTIONS="--import tsx"` to avoid `.ts` loader errors.
-- Prefer `node ./node_modules/vite/bin/vite.js` with `NODE_OPTIONS="--import tsx"` for CI builds so worker threads inherit the TS loader.
+- Prefer `node --import tsx ./node_modules/vite/bin/vite.js` for CI builds so worker threads inherit the TS loader.
