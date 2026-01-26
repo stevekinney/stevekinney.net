@@ -22,7 +22,7 @@
     "content:index": "bun run scripts/generate-content-index.ts",
     "test:integration": "bun run build && env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning playwright test",
     "test:integration:dev": "PLAYWRIGHT_WEB_SERVER=0 env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning playwright test",
-    "test:unit": "NODE_OPTIONS=--disable-warning=ExperimentalWarning vitest",
+    "test:unit": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" vitest",
     "test:storybook": "test-storybook",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
