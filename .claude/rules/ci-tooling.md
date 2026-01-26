@@ -1,6 +1,7 @@
 ---
 paths:
   - 'package.json'
+  - 'bunfig.toml'
   - 'bun.lock'
   - 'bun.lockb'
   - '.github/workflows/*.yml'
@@ -16,8 +17,8 @@ paths:
 - When `PLAYWRIGHT_BASE_URL` omits a port, build a resolved URL with the preview port and reuse it for both `webServer.url` and `use.baseURL`.
 - Keep Node requirements consistent across `.node-version`, `CONTRIBUTING.md`, and `package.json` `engines.node`.
 - If Rollup plugin types conflict with Vite types, cast the plugin to Vite's `Plugin` in `vite.config.ts`.
-- If `svelte.config.js` imports `.ts` plugins, run `svelte-check` with `NODE_OPTIONS="--import tsx"` so Node can load TypeScript in CI.
+- Prefer `.js` build-time plugins in `svelte.config.js` (worker threads won’t honor `--import tsx`), and only rely on `NODE_OPTIONS="--import tsx"` for tools that actually need TS loaders (e.g. `svelte-check`, `vitest`).
 - Load `@sveltejs/enhanced-img` lazily (or guard it) so builds don’t fail when `sharp` is unavailable in CI.
 - On Linux CI, ensure both `@img/sharp-linux-x64` and `@img/sharp-libvips-linux-x64` are present so sharp can load its native libs.
 - When `vitest.config.ts` imports `vite.config.ts`, run Vitest with `NODE_OPTIONS="--import tsx"` to avoid `.ts` loader errors.
-- Prefer `node --import tsx ./node_modules/vite/bin/vite.js` for CI builds so worker threads inherit the TS loader.
+- Add `bunfig.toml` `[test] root = "src"` so `bun test` doesn’t try to run Playwright specs in `tests/`.

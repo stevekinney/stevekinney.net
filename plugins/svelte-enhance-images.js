@@ -1,97 +1,77 @@
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import type { PreprocessorGroup } from 'svelte/compiler';
 import { camelCase } from 'change-case';
 import MagicString from 'magic-string';
 import { parse } from 'svelte/compiler';
 import { twMerge as merge } from 'tailwind-merge';
 
-interface SvelteTextNode {
-  type: string;
-  data: string;
-  raw?: string;
-  start: number;
-  end: number;
-}
-
-interface SvelteAttributeNode {
-  type: string;
-  name?: string;
-  value?: SvelteTextNode[];
-  start: number;
-  end: number;
-}
-
-interface AstNode {
-  name?: string;
-  type?: string;
-  start: number;
-  end: number;
-  attributes: SvelteAttributeNode[];
-  children?: AstNode[];
-}
-
-interface ImageConfig {
-  url: string;
-  fallbackId: string;
-  fallbackSrc: string;
-  webpSetId?: string;
-  webpSetSrc?: string;
-  avifSetId?: string;
-  avifSetSrc?: string;
-  metaId?: string;
-  metaSrc?: string;
-  hasMeta: boolean;
-  hasSrcset: boolean;
-  isGif?: boolean;
-  isVideo?: boolean;
-  isPassthrough?: boolean;
-  videoId?: string;
-  videoSrc?: string;
-}
-
-interface ProcessImagesOptions {
-  widths?: number[];
-  mainWidth?: number;
-  includeMetadata?: boolean;
-  skipImages?: string[];
-  sizes?: string;
-  cacheDir?: string;
-}
-
-interface ProgramNode {
-  start: number;
-  end: number;
-  body: Array<{
-    type: string;
-    start: number;
-    end: number;
-    source?: { value?: string };
-    specifiers?: Array<{ type: string; local?: { name: string } }>;
-  }>;
-}
+/**
+ * @typedef {{ type: string, data: string, raw?: string, start: number, end: number }} SvelteTextNode
+ * @typedef {{ type: string, name?: string, value?: SvelteTextNode[], start: number, end: number }} SvelteAttributeNode
+ * @typedef {{ name?: string, type?: string, start: number, end: number, attributes: SvelteAttributeNode[], children?: AstNode[] }} AstNode
+ * @typedef {{
+ *  url: string,
+ *  fallbackId: string,
+ *  fallbackSrc: string,
+ *  webpSetId?: string,
+ *  webpSetSrc?: string,
+ *  avifSetId?: string,
+ *  avifSetSrc?: string,
+ *  metaId?: string,
+ *  metaSrc?: string,
+ *  hasMeta: boolean,
+ *  hasSrcset: boolean,
+ *  isGif?: boolean,
+ *  isVideo?: boolean,
+ *  isPassthrough?: boolean,
+ *  videoId?: string,
+ *  videoSrc?: string
+ * }} ImageConfig
+ * @typedef {{
+ *  widths?: number[],
+ *  mainWidth?: number,
+ *  includeMetadata?: boolean,
+ *  skipImages?: string[],
+ *  sizes?: string,
+ *  cacheDir?: string
+ * }} ProcessImagesOptions
+ * @typedef {{
+ *  start: number,
+ *  end: number,
+ *  body: Array<{
+ *    type: string,
+ *    start: number,
+ *    end: number,
+ *    source?: { value?: string },
+ *    specifiers?: Array<{ type: string, local?: { name: string } }>
+ *  }>
+ * }} ProgramNode
+ */
 
 const classes = ['max-w-full', 'rounded-md', 'shadow-md'];
 const cacheVersion = '1';
-const transformCache = new Map<string, { code: string; map: string | null }>();
+/** @type {Map<string, { code: string, map: string | null }>} */
+const transformCache = new Map();
 
-const isMissingFile = (error: unknown): boolean =>
-  typeof error === 'object' &&
-  error !== null &&
-  'code' in error &&
-  (error as NodeJS.ErrnoException).code === 'ENOENT';
+/**
+ * @param {unknown} error
+ */
+const isMissingFile = (error) =>
+  typeof error === 'object' && error !== null && 'code' in error && error.code === 'ENOENT';
 
-const readCacheEntry = async (
-  cacheKey: string,
-  cachePath: string,
-): Promise<{ code: string; map: string | null } | null> => {
+/**
+ * @param {string} cacheKey
+ * @param {string} cachePath
+ * @returns {Promise<{ code: string, map: string | null } | null>}
+ */
+const readCacheEntry = async (cacheKey, cachePath) => {
   const cached = transformCache.get(cacheKey);
   if (cached) return cached;
 
   try {
     const contents = await readFile(cachePath, 'utf8');
-    const entry = JSON.parse(contents) as { code: string; map: string | null };
+    const entry = JSON.parse(contents);
     transformCache.set(cacheKey, entry);
     return entry;
   } catch (error) {
@@ -100,11 +80,12 @@ const readCacheEntry = async (
   }
 };
 
-const writeCacheEntry = async (
-  cacheKey: string,
-  cachePath: string,
-  entry: { code: string; map: string | null },
-): Promise<void> => {
+/**
+ * @param {string} cacheKey
+ * @param {string} cachePath
+ * @param {{ code: string, map: string | null }} entry
+ */
+const writeCacheEntry = async (cacheKey, cachePath, entry) => {
   await mkdir(path.dirname(cachePath), { recursive: true });
   await writeFile(cachePath, JSON.stringify(entry), 'utf8');
   transformCache.set(cacheKey, entry);
@@ -113,13 +94,19 @@ const writeCacheEntry = async (
 /**
  * Add image optimization to the Markdown content.
  */
-export const processImages = (opts: ProcessImagesOptions = {}): PreprocessorGroup => {
+/**
+ * Add image optimization to the Markdown content.
+ * @param {ProcessImagesOptions} [opts]
+ * @returns {import('svelte/compiler').PreprocessorGroup}
+ */
+export const processImages = (opts = {}) => {
+  /** @type {{ widths: number[], mainWidth: number, includeMetadata: boolean, skipImages: string[], sizes?: string, cacheDir: string }} */
   const options = {
     widths: [480, 768, 1024],
     mainWidth: 902,
     includeMetadata: true,
-    skipImages: [] as string[],
-    sizes: undefined as string | undefined,
+    skipImages: [],
+    sizes: undefined,
     cacheDir: '.svelte-kit/process-images',
     // formats are currently avif + webp; keeping fixed for broad compatibility
     ...opts,
@@ -138,9 +125,13 @@ export const processImages = (opts: ProcessImagesOptions = {}): PreprocessorGrou
   });
   const cachePrefix = createHash('sha256').update(cacheVersion).update(cacheOptions).digest('hex');
 
-  const preprocessor: PreprocessorGroup = {
+  const preprocessor = {
     name: 'markdown-image-optimization',
-    async markup({ content, filename }) {
+    /**
+     * @param {{ content: string, filename?: string }} context
+     */
+    async markup(context) {
+      const { content, filename } = context;
       if (!filename || !filename.endsWith('.md')) return undefined;
 
       // Quick check: if no img tags, skip processing entirely
@@ -161,13 +152,11 @@ export const processImages = (opts: ProcessImagesOptions = {}): PreprocessorGrou
       }
 
       // Parse the content with the Svelte Compiler and create a MagicString instance.
-      const { instance, html } = parse(content, { filename }) as {
-        instance?: { content: ProgramNode } | null;
-        html: AstNode;
-      };
+      const { instance, html } = parse(content, { filename });
       const s = new MagicString(content);
 
-      const images = new Map<string, ImageConfig>();
+      /** @type {Map<string, ImageConfig>} */
+      const images = new Map();
       const importMap = collectExistingImports(instance?.content);
 
       // Walk the HTML AST and find all the image elements.
@@ -296,13 +285,18 @@ export const processImages = (opts: ProcessImagesOptions = {}): PreprocessorGrou
 
 /**
  * Check if the URL is a video.
+ * @param {string} url
  */
-const isVideo = (url: string): boolean => {
+const isVideo = (url) => {
   const extension = getFileExtension(url);
   return extension === 'mp4' || extension === 'webm' || extension === 'ogg';
 };
 
-const getVideoMimeType = (url: string): string | undefined => {
+/**
+ * @param {string} url
+ * @returns {string | undefined}
+ */
+const getVideoMimeType = (url) => {
   const extension = getFileExtension(url);
   if (extension === 'mp4') return 'video/mp4';
   if (extension === 'webm') return 'video/webm';
@@ -312,37 +306,51 @@ const getVideoMimeType = (url: string): string | undefined => {
 
 /**
  * Gets an attribute by name.
+ * @param {AstNode} node
+ * @param {string} name
+ * @returns {SvelteAttributeNode | undefined}
  */
-const getAttribute = (node: AstNode, name: string): SvelteAttributeNode | undefined =>
+const getAttribute = (node, name) =>
   node.attributes.find((attr) => attr.type === 'Attribute' && attr.name === name);
 
-const hasAttribute = (node: AstNode, name: string): boolean => Boolean(getAttribute(node, name));
+/**
+ * @param {AstNode} node
+ * @param {string} name
+ */
+const hasAttribute = (node, name) => Boolean(getAttribute(node, name));
 
 /**
  * Gets the value of a static text attribute.
+ * @param {SvelteAttributeNode | undefined} attr
+ * @returns {SvelteTextNode | undefined}
  */
-const getStaticAttributeValueNode = (attr?: SvelteAttributeNode): SvelteTextNode | undefined => {
+const getStaticAttributeValueNode = (attr) => {
   if (!attr || attr.type !== 'Attribute' || !attr.value || attr.value.length !== 1) return;
   const [value] = attr.value;
   if (value.type === 'Text') return value;
 };
 
-const getStaticAttributeText = (attr?: SvelteAttributeNode): string | undefined =>
-  getStaticAttributeValueNode(attr)?.data;
+/**
+ * @param {SvelteAttributeNode | undefined} attr
+ * @returns {string | undefined}
+ */
+const getStaticAttributeText = (attr) => getStaticAttributeValueNode(attr)?.data;
 
-const getRawAttribute = (attr: SvelteAttributeNode, content: string): string =>
-  content.slice(attr.start, attr.end);
+/**
+ * @param {SvelteAttributeNode} attr
+ * @param {string} content
+ */
+const getRawAttribute = (attr, content) => content.slice(attr.start, attr.end);
 
 /**
  * Adds the imported image reference to as the image `src`.
  * Adds the Tailwind classes to the element.
+ * @param {MagicString} s
+ * @param {AstNode} node
+ * @param {SvelteTextNode} src
+ * @param {ImageConfig} cfg
  */
-const formatInlineImage = (
-  s: MagicString,
-  node: AstNode,
-  src: SvelteTextNode,
-  cfg: ImageConfig,
-): void => {
+const formatInlineImage = (s, node, src, cfg) => {
   s.update(src.start, src.end, `{${cfg.fallbackId}}`);
 
   const classAttr = getAttribute(node, 'class');
@@ -352,7 +360,7 @@ const formatInlineImage = (
 
   const hasPriority = hasAttribute(node, 'data-priority') || hasAttribute(node, 'fetchpriority');
 
-  const additions: string[] = [];
+  const additions = [];
 
   if (classAttr && classValueNode) {
     s.update(classValueNode.start, classValueNode.end, mergedClass);
@@ -373,14 +381,16 @@ const formatInlineImage = (
   }
 };
 
-const buildImageAttributes = (
-  content: string,
-  node: AstNode,
-  cfg: ImageConfig,
-  defaultSizes: string,
-): { imgAttributes: string; sizesAttr: string } => {
-  const otherAttrs: string[] = [];
-  let sizesAttrRaw: string | undefined;
+/**
+ * @param {string} content
+ * @param {AstNode} node
+ * @param {ImageConfig} cfg
+ * @param {string} defaultSizes
+ * @returns {{ imgAttributes: string, sizesAttr: string }}
+ */
+const buildImageAttributes = (content, node, cfg, defaultSizes) => {
+  const otherAttrs = [];
+  let sizesAttrRaw;
   let hasAlt = false;
   let hasClass = false;
   let classIsStatic = false;
@@ -448,7 +458,7 @@ const buildImageAttributes = (
   }
 
   const mergedClass = classValue.trim() ? merge(classValue, classes) : classes.join(' ');
-  const imgAttrs: string[] = [`src={${cfg.fallbackId}}`];
+  const imgAttrs = [`src={${cfg.fallbackId}}`];
 
   if (!hasAlt) imgAttrs.push('alt=""');
 
@@ -475,14 +485,13 @@ const buildImageAttributes = (
 
 /**
  * Replace <img> with <picture> that prefers AVIF, falls back to WebP, then original.
+ * @param {MagicString} s
+ * @param {AstNode} node
+ * @param {ImageConfig} cfg
+ * @param {string} content
+ * @param {string} defaultSizes
  */
-const formatPicture = (
-  s: MagicString,
-  node: AstNode,
-  cfg: ImageConfig,
-  content: string,
-  defaultSizes: string,
-): void => {
+const formatPicture = (s, node, cfg, content, defaultSizes) => {
   const { imgAttributes, sizesAttr } = buildImageAttributes(content, node, cfg, defaultSizes);
   const sizesSnippet = sizesAttr ? ` ${sizesAttr}` : '';
 
@@ -496,8 +505,13 @@ const formatPicture = (
   s.update(node.start, node.end, replacement);
 };
 
-const buildVideoAttributes = (content: string, node: AstNode): string => {
-  const otherAttrs: string[] = [];
+/**
+ * @param {string} content
+ * @param {AstNode} node
+ * @returns {string}
+ */
+const buildVideoAttributes = (content, node) => {
+  const otherAttrs = [];
   let hasClass = false;
   let classIsStatic = false;
   let classValue = '';
@@ -532,7 +546,7 @@ const buildVideoAttributes = (content: string, node: AstNode): string => {
   }
 
   const mergedClass = classValue.trim() ? merge(classValue, classes) : classes.join(' ');
-  const attrs: string[] = [];
+  const attrs = [];
 
   if (hasClass && classIsStatic) {
     attrs.push(`class="${mergedClass}"`);
@@ -548,8 +562,12 @@ const buildVideoAttributes = (content: string, node: AstNode): string => {
 /**
  * Adds the imported video reference as the video `src`.
  * Adds the Tailwind classes to the element.
+ * @param {MagicString} s
+ * @param {AstNode} node
+ * @param {ImageConfig} cfg
+ * @param {string} content
  */
-const formatVideo = (s: MagicString, node: AstNode, cfg: ImageConfig, content: string): void => {
+const formatVideo = (s, node, cfg, content) => {
   if (!cfg.videoId) return;
 
   const videoAttrs = buildVideoAttributes(content, node);
@@ -564,11 +582,13 @@ const formatVideo = (s: MagicString, node: AstNode, cfg: ImageConfig, content: s
   );
 };
 
-const buildImportLines = (
-  images: Map<string, ImageConfig>,
-  importMap: Map<string, string>,
-): string[] => {
-  const lines: string[] = [];
+/**
+ * @param {Map<string, ImageConfig>} images
+ * @param {Map<string, string>} importMap
+ * @returns {string[]}
+ */
+const buildImportLines = (images, importMap) => {
+  const lines = [];
   const added = new Set(importMap.keys());
 
   for (const config of images.values()) {
@@ -610,8 +630,13 @@ const buildImportLines = (
   return lines;
 };
 
-const collectExistingImports = (program?: ProgramNode | null): Map<string, string> => {
-  const importMap = new Map<string, string>();
+/**
+ * @param {ProgramNode | null | undefined} program
+ * @returns {Map<string, string>}
+ */
+const collectExistingImports = (program) => {
+  /** @type {Map<string, string>} */
+  const importMap = new Map();
   if (!program?.body) return importMap;
 
   for (const node of program.body) {
@@ -629,7 +654,11 @@ const collectExistingImports = (program?: ProgramNode | null): Map<string, strin
   return importMap;
 };
 
-const getImportInsertPosition = (program: ProgramNode): number => {
+/**
+ * @param {ProgramNode} program
+ * @returns {number}
+ */
+const getImportInsertPosition = (program) => {
   let insertAt = program.start;
   for (const node of program.body) {
     if (node.type === 'ImportDeclaration') insertAt = node.end;
@@ -637,13 +666,20 @@ const getImportInsertPosition = (program: ProgramNode): number => {
   return insertAt;
 };
 
-const resolveImportId = (
-  importMap: Map<string, string>,
-  source: string,
-  fallback: string,
-): string => importMap.get(source) ?? fallback;
+/**
+ * @param {Map<string, string>} importMap
+ * @param {string} source
+ * @param {string} fallback
+ * @returns {string}
+ */
+const resolveImportId = (importMap, source, fallback) => importMap.get(source) ?? fallback;
 
-const normalizeWidths = (widths: number[] | undefined, mainWidth?: number): number[] => {
+/**
+ * @param {number[] | undefined} widths
+ * @param {number | undefined} mainWidth
+ * @returns {number[]}
+ */
+const normalizeWidths = (widths, mainWidth) => {
   const values = [...(widths ?? [])];
   if (typeof mainWidth === 'number') values.push(mainWidth);
 
@@ -652,16 +688,26 @@ const normalizeWidths = (widths: number[] | undefined, mainWidth?: number): numb
   return unique;
 };
 
-const stripQueryHash = (url: string): string => url.split(/[?#]/)[0];
+/**
+ * @param {string} url
+ */
+const stripQueryHash = (url) => url.split(/[?#]/)[0];
 
-const getFileExtension = (url: string): string => {
+/**
+ * @param {string} url
+ */
+const getFileExtension = (url) => {
   const cleanUrl = stripQueryHash(url);
   const index = cleanUrl.lastIndexOf('.');
   if (index === -1) return '';
   return cleanUrl.slice(index + 1).toLowerCase();
 };
 
-const safeDecode = (value: string): string => {
+/**
+ * @param {string} value
+ * @returns {string}
+ */
+const safeDecode = (value) => {
   try {
     return decodeURIComponent(value);
   } catch {
@@ -669,23 +715,31 @@ const safeDecode = (value: string): string => {
   }
 };
 
-const isExternalUrl = (value: string): boolean => {
+/**
+ * @param {string} value
+ */
+const isExternalUrl = (value) => {
   if (/^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(value)) return true;
   return /^(data|blob|mailto|tel|javascript):/i.test(value);
 };
 
-const appendQuery = (url: string, query: string): string => {
+/**
+ * @param {string} url
+ * @param {string} query
+ */
+const appendQuery = (url, query) => {
   const [base, hash] = url.split('#');
   const separator = base.includes('?') ? '&' : '?';
   const next = `${base}${separator}${query}`;
   return hash ? `${next}#${hash}` : next;
 };
 
-const walkHtml = (
-  node: AstNode,
-  visit: (node: AstNode, ancestors: AstNode[]) => void,
-  ancestors: AstNode[] = [],
-): void => {
+/**
+ * @param {any} node
+ * @param {(node: AstNode, ancestors: AstNode[]) => void} visit
+ * @param {AstNode[]} [ancestors]
+ */
+const walkHtml = (node, visit, ancestors = []) => {
   if (!node || typeof node !== 'object') return;
 
   const isElement = node.type === 'Element';
@@ -699,11 +753,11 @@ const walkHtml = (
     if (Array.isArray(value)) {
       for (const entry of value) {
         if (entry && typeof entry === 'object' && 'type' in entry) {
-          walkHtml(entry as AstNode, visit, ancestors);
+          walkHtml(entry, visit, ancestors);
         }
       }
     } else if (typeof value === 'object' && 'type' in value) {
-      walkHtml(value as AstNode, visit, ancestors);
+      walkHtml(value, visit, ancestors);
     }
   }
 

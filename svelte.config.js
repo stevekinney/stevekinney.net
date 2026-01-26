@@ -20,12 +20,12 @@ const siteUrl =
     : 'http://localhost:4444');
 
 // Custom plugins
-import { importTailwindPlayground } from './plugins/import-tailwind-playground.ts';
-import { fixMarkdownUrls } from './plugins/remark-fix-urls.ts';
-import remarkEscapeComparators from './plugins/remark-escape-comparators.ts';
-import remarkCallouts from './plugins/remark-callouts.ts';
-import remarkTailwindPlayground from './plugins/remark-tailwind-playground.ts';
-import { processImages } from './plugins/svelte-enhance-images.ts';
+import { importTailwindPlayground } from './plugins/import-tailwind-playground.js';
+import { fixMarkdownUrls } from './plugins/remark-fix-urls.js';
+import remarkEscapeComparators from './plugins/remark-escape-comparators.js';
+import remarkCallouts from './plugins/remark-callouts.js';
+import remarkTailwindPlayground from './plugins/remark-tailwind-playground.js';
+import { processImages } from './plugins/svelte-enhance-images.js';
 
 // Define directory paths
 const __filename = fileURLToPath(import.meta.url);

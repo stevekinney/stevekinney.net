@@ -1,8 +1,15 @@
-import type { Blockquote, LinkReference, Paragraph, Root, Text } from 'mdast';
-import type { Properties } from 'hast';
-import type { Transformer } from 'unified';
 import { toString } from 'mdast-util-to-string';
 import { visit } from 'unist-util-visit';
+
+/**
+ * @typedef {import('hast').Properties} Properties
+ * @typedef {import('mdast').Blockquote} Blockquote
+ * @typedef {import('mdast').LinkReference} LinkReference
+ * @typedef {import('mdast').Paragraph} Paragraph
+ * @typedef {import('mdast').Root} Root
+ * @typedef {import('mdast').Text} Text
+ * @typedef {{ hName?: string, hProperties?: Properties & { className?: string | string[] } }} HastData
+ */
 
 const CALLOUT_PATTERN = /^\s*\[?\s*!\s*([^\]\s+-]+)\s*\]?([+-])?\s*([\s\S]*)$/i;
 const CALLOUT_MARKER = /^\s*\[?\s*!\s*[^\]\s+-]+\s*\]?([+-])?\s*/i;
@@ -10,7 +17,8 @@ const CALLOUT_MARKER = /^\s*\[?\s*!\s*[^\]\s+-]+\s*\]?([+-])?\s*/i;
 const BASE_CLASSES = 'space-y-2 rounded-md border p-4 shadow-sm';
 const TITLE_CLASS = 'font-bold';
 
-const variationAliases: Record<string, string> = {
+/** @type {Record<string, string>} */
+const variationAliases = {
   attention: 'warning',
   caution: 'warning',
   check: 'success',
@@ -28,7 +36,8 @@ const variationAliases: Record<string, string> = {
   tldr: 'abstract',
 };
 
-const variationColors: Record<string, string> = {
+/** @type {Record<string, string>} */
+const variationColors = {
   abstract:
     'bg-green-50 text-green-700 border-green-100 dark:bg-green-950 dark:text-green-50 dark:border-green-900',
   bug: 'bg-red-50 text-red-700 border-red-100 dark:bg-red-950 dark:text-red-50 dark:border-red-900',
@@ -52,17 +61,27 @@ const variationColors: Record<string, string> = {
     'bg-orange-50 text-orange-700 border-orange-100 dark:bg-orange-950 dark:text-orange-50 dark:border-orange-900',
 };
 
-const normalizeVariant = (variant: string): string => {
+/**
+ * @param {string} variant
+ */
+const normalizeVariant = (variant) => {
   const lower = variant.toLowerCase();
   return variationAliases[lower] ?? lower;
 };
 
-const toTitle = (variant: string): string => {
+/**
+ * @param {string} variant
+ */
+const toTitle = (variant) => {
   const lower = variant.toLowerCase();
   return lower ? lower[0].toUpperCase() + lower.slice(1) : '';
 };
 
-const mergeClassNames = (value: unknown, next: string[]): string[] => {
+/**
+ * @param {unknown} value
+ * @param {string[]} next
+ */
+const mergeClassNames = (value, next) => {
   const existing = Array.isArray(value)
     ? value
     : typeof value === 'string'
@@ -71,29 +90,40 @@ const mergeClassNames = (value: unknown, next: string[]): string[] => {
   return [...existing, ...next];
 };
 
-type HastData = {
-  hName?: string;
-  hProperties?: Properties & { className?: string | string[] };
-};
-
-const getHastData = (node: { data?: unknown }): HastData => {
+/**
+ * @param {{ data?: unknown }} node
+ * @returns {HastData}
+ */
+const getHastData = (node) => {
   if (!node.data) node.data = {};
-  return node.data as HastData;
+  return /** @type {HastData} */ (node.data);
 };
 
-const applyClasses = (node: { data?: unknown }, classes: string[]) => {
+/**
+ * @param {{ data?: unknown }} node
+ * @param {string[]} classes
+ */
+const applyClasses = (node, classes) => {
   const data = getHastData(node);
   data.hProperties ??= {};
   const hProperties = data.hProperties;
   hProperties.className = mergeClassNames(hProperties.className, classes);
 };
 
-const isCalloutReference = (node: Paragraph['children'][number]): node is LinkReference =>
+/**
+ * @param {Paragraph['children'][number]} node
+ * @returns {node is LinkReference}
+ */
+const isCalloutReference = (node) =>
   node.type === 'linkReference' &&
   typeof node.identifier === 'string' &&
   node.identifier.startsWith('!');
 
-const stripMarkerFromParagraph = (paragraph: Paragraph, fallbackTitle: string): void => {
+/**
+ * @param {Paragraph} paragraph
+ * @param {string} fallbackTitle
+ */
+const stripMarkerFromParagraph = (paragraph, fallbackTitle) => {
   let stripped = false;
 
   if (paragraph.children.length > 0) {
@@ -140,14 +170,20 @@ const stripMarkerFromParagraph = (paragraph: Paragraph, fallbackTitle: string): 
   });
 
   if (!hasContent) {
-    const textNode: Text = { type: 'text', value: fallbackTitle };
+    /** @type {Text} */
+    const textNode = { type: 'text', value: fallbackTitle };
     paragraph.children = [textNode];
   }
 };
 
-const splitParagraphAtNewline = (paragraph: Paragraph, fallbackTitle: string): Paragraph | null => {
-  const titleChildren: Paragraph['children'] = [];
-  const bodyChildren: Paragraph['children'] = [];
+/**
+ * @param {Paragraph} paragraph
+ * @param {string} fallbackTitle
+ * @returns {Paragraph | null}
+ */
+const splitParagraphAtNewline = (paragraph, fallbackTitle) => {
+  const titleChildren = [];
+  const bodyChildren = [];
   let split = false;
 
   for (const child of paragraph.children) {
@@ -187,9 +223,18 @@ const splitParagraphAtNewline = (paragraph: Paragraph, fallbackTitle: string): P
   return { type: 'paragraph', children: bodyChildren };
 };
 
-export default function remarkCallouts(): Transformer<Root> {
+/**
+ * @returns {import('unified').Transformer}
+ */
+export default function remarkCallouts() {
+  /**
+   * @param {import('unist').Node} tree
+   */
   return function transformer(tree) {
-    visit(tree, 'blockquote', (node: Blockquote) => {
+    /**
+     * @param {Blockquote} node
+     */
+    const handleBlockquote = (node) => {
       const firstChild = node.children[0];
       if (!firstChild || firstChild.type !== 'paragraph') return;
 
@@ -223,6 +268,8 @@ export default function remarkCallouts(): Transformer<Root> {
           data.hProperties['data-default-open'] = 'true';
         }
       }
-    });
+    };
+
+    visit(tree, 'blockquote', handleBlockquote);
   };
 }

@@ -1,15 +1,23 @@
-import type { PreprocessorGroup } from 'svelte/compiler';
 import MagicString from 'magic-string';
 import { parse } from 'svelte/compiler';
 import { walk } from 'svelte-tree-walker';
 
 /**
- * Creates a preprocessor to auto-import <TailwindPlayground /> components in markdown files.
+ * @typedef {import('svelte/compiler').PreprocessorGroup} PreprocessorGroup
  */
-export const importTailwindPlayground = (): PreprocessorGroup => {
+
+/**
+ * Creates a preprocessor to auto-import <TailwindPlayground /> components in markdown files.
+ * @returns {PreprocessorGroup}
+ */
+export const importTailwindPlayground = () => {
   return {
     name: 'tailwind-playground-imports',
-    markup: ({ content, filename }) => {
+    /**
+     * @param {{ content: string, filename?: string }} options
+     */
+    markup: (options) => {
+      const { content, filename } = options;
       if (!filename?.endsWith('.md')) return;
       if (!content.includes('<TailwindPlayground')) return;
 
@@ -32,7 +40,7 @@ export const importTailwindPlayground = (): PreprocessorGroup => {
         const importLine =
           "import TailwindPlayground from '$lib/components/tailwind-playground.svelte';";
         if (instance) {
-          s.appendRight((instance.content as { end: number }).end, `\n${importLine}\n`);
+          s.appendRight(instance.content.end, `\n${importLine}\n`);
         } else {
           s.prepend(`<script>\n${importLine}\n</script>\n`);
         }
