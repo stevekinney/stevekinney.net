@@ -18,3 +18,4 @@ paths:
 - If Rollup plugin types conflict with Vite types, cast the plugin to Vite's `Plugin` in `vite.config.ts`.
 - If `svelte.config.js` imports `.ts` plugins, run `svelte-check` with `NODE_OPTIONS="--import tsx"` so Node can load TypeScript in CI.
 - Load `@sveltejs/enhanced-img` lazily (or guard it) so builds don’t fail when `sharp` is unavailable in CI.
+- On Linux CI, ensure both `@img/sharp-linux-x64` and `@img/sharp-libvips-linux-x64` are present so sharp can load its native libs.
