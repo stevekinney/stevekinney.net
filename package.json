@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "test": "bun run test:integration && bun run test:unit",
     "sync": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" svelte-kit sync",
-    "check": "bun run sync && NODE_OPTIONS=--disable-warning=ExperimentalWarning svelte-check --tsconfig ./tsconfig.json",
+    "check": "bun run sync && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "bun run sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --cache --check . && eslint --cache .",
     "format": "prettier --write .",

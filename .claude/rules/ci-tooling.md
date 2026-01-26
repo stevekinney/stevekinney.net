@@ -16,3 +16,5 @@ paths:
 - When `PLAYWRIGHT_BASE_URL` omits a port, build a resolved URL with the preview port and reuse it for both `webServer.url` and `use.baseURL`.
 - Keep Node requirements consistent across `.node-version`, `CONTRIBUTING.md`, and `package.json` `engines.node`.
 - If Rollup plugin types conflict with Vite types, cast the plugin to Vite's `Plugin` in `vite.config.ts`.
+- If `svelte.config.js` imports `.ts` plugins, run `svelte-check` with `NODE_OPTIONS="--import tsx"` so Node can load TypeScript in CI.
+- Load `@sveltejs/enhanced-img` lazily (or guard it) so builds don’t fail when `sharp` is unavailable in CI.
