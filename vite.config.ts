@@ -26,7 +26,7 @@ export default defineConfig({
               gzipSize: true,
               brotliSize: true,
               open: false,
-            }),
+            }) as Plugin,
           ),
           applyClientBuildOnly(
             visualizer({
@@ -34,7 +34,7 @@ export default defineConfig({
               template: 'raw-data',
               gzipSize: true,
               brotliSize: true,
-            }),
+            }) as Plugin,
           ),
         ]
       : []),

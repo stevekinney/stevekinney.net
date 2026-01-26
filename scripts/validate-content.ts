@@ -184,8 +184,13 @@ for (const dir of courseDirs) {
 
 for (const file of courseFiles) {
   const relative = path.relative(COURSES_ROOT, file);
-  const [courseDir, filename] = relative.split(path.sep);
-  if (!courseDir) continue;
+  const parts = relative.split(path.sep);
+  const courseDir = parts[0];
+  const filename = parts.at(-1);
+  if (!courseDir || !filename) {
+    addError(file, 'Course file must live under a course directory.');
+    continue;
+  }
   if (filename === 'README.md' || filename === '_index.md') continue;
 
   const slug = path.basename(filename, '.md');
