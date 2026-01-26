@@ -40,7 +40,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .svelte-kit
-          key: ${{ runner.os }}-sveltekit-${{ hashFiles('svelte.config.js', 'src/**', 'content/**', 'plugins/**', 'package.json', 'bun.lock') }}
+          key: ${{ runner.os }}-sveltekit-${{ hashFiles('svelte.config.js', 'vite.config.ts', 'src/**', 'content/**', 'plugins/**', 'package.json', 'bun.lock') }}
           restore-keys: |
             ${{ runner.os }}-sveltekit-
 
