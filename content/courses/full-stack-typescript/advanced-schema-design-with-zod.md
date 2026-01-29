@@ -17,16 +17,9 @@ Handle schemas that reference themselves recursively (e.g., tree-like structures
 interface Category {
   name: string;
   subcategories?: Category[]; // Recursive reference
-  name: string;
-  subcategories?: Category[]; // Recursive reference
 }
 
-const categorySchema: z.ZodSchema<Category> = z.lazy(
-  () =>
-    z.object({
-      name: z.string(),
-      subcategories: z.array(categorySchema).optional(), // Use lazy schema here
-    }),
+const categorySchema: z.ZodSchema<Category> = z.lazy(() =>
   z.object({
     name: z.string(),
     subcategories: z.array(categorySchema).optional(), // Use lazy schema here
