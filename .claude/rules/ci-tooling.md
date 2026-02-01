@@ -22,3 +22,4 @@ paths:
 - On Linux CI, ensure both `@img/sharp-linux-x64` and `@img/sharp-libvips-linux-x64` are present so sharp can load its native libs.
 - When `vitest.config.ts` imports `vite.config.ts`, run Vitest with `NODE_OPTIONS="--import tsx"` to avoid `.ts` loader errors.
 - Add `bunfig.toml` `[test] root = "src"` so `bun test` doesn’t try to run Playwright specs in `tests/`.
+- Playwright screenshot baselines are platform-specific (`*-linux.png` in CI); ensure Linux snapshots exist and push LFS objects (`git lfs push --all origin <branch>`) so CI can fetch them.
