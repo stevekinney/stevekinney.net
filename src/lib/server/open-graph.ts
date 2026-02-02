@@ -89,7 +89,10 @@ export const createOpenGraphResponse = (
     ? 'public, max-age=31536000, immutable, no-transform'
     : 'public, max-age=3600, stale-while-revalidate=86400, no-transform';
 
-  return new Response(image, {
+  const body = new ArrayBuffer(image.byteLength);
+  new Uint8Array(body).set(image);
+
+  return new Response(body, {
     headers: {
       'Content-Type': 'image/jpeg',
       'Cache-Control': cacheControl,
