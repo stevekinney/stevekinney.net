@@ -1,5 +1,3 @@
-import type { Root, Text } from 'mdast';
-import type { Transformer } from 'unified';
 import { visit } from 'unist-util-visit';
 
 /**
@@ -9,15 +7,24 @@ import { visit } from 'unist-util-visit';
  * This intentionally escapes every raw '<' in text nodes to cover comparators
  * and other permutations like "<=", "<<", "<-", "<3", "x<y", or "<\n".
  * Code blocks and inline code are left untouched because they are separate nodes.
+ * @returns {import('unified').Transformer}
  */
-export default function remarkEscapeComparators(): Transformer<Root> {
+export default function remarkEscapeComparators() {
+  /**
+   * @param {import('unist').Node} tree
+   */
   return function transformer(tree) {
-    visit(tree, 'text', (node: Text) => {
+    /**
+     * @param {import('mdast').Text} node
+     */
+    const escapeText = (node) => {
       if (!node || typeof node.value !== 'string') return;
       if (!node.value.includes('<')) return;
 
       // Replace any raw '<' so Svelte doesn't parse it as markup.
       node.value = node.value.replace(/</g, '&lt;');
-    });
+    };
+
+    visit(tree, 'text', escapeText);
   };
 }

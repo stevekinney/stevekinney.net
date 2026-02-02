@@ -2,21 +2,31 @@
   "name": "stevekinney.net",
   "version": "0.0.1",
   "private": true,
+  "engines": {
+    "node": ">=20.11.0",
+    "bun": "1.1.0"
+  },
   "scripts": {
-    "dev": "vite dev --port 4444",
-    "build": "vite build",
+    "dev": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" vite dev --port 4444",
+    "build": "bun run content:index && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ./node_modules/vite/bin/vite.js build",
+    "build:stats": "BUNDLE_STATS=1 bun run build",
     "preview": "vite preview",
     "test": "bun run test:integration && bun run test:unit",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "prettier --check . && eslint .",
+    "sync": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" svelte-kit sync",
+    "check": "bun run sync && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "bun run sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --cache --check . && eslint --cache .",
     "format": "prettier --write .",
-    "test:integration": "playwright test",
-    "test:unit": "vitest",
+    "clean": "rm -rf build .svelte-kit test-results .vite",
+    "content:validate": "bun run scripts/validate-content.ts",
+    "content:index": "bun run scripts/generate-content-index.ts",
+    "test:integration": "bun run build && env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning playwright test",
+    "test:integration:dev": "PLAYWRIGHT_WEB_SERVER=0 env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning playwright test",
+    "test:unit": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" vitest",
     "test:storybook": "test-storybook",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "postinstall": "svelte-kit sync",
+    "postinstall": "bun run sync",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -88,6 +98,7 @@
     "rehype-unwrap-images": "^1.0.0",
     "remark-gfm": "^4.0.1",
     "remark-mermaid-plugin": "^1.0.2",
+    "rollup-plugin-visualizer": "^6.0.5",
     "satori": "^0.18.3",
     "shiki": "^3.21.0",
     "storybook": "^10.1.11",
@@ -97,6 +108,7 @@
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
     "tslib": "^2.8.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "unified": "^11.0.5",
     "unist-util-remove": "^4.0.0",
@@ -122,7 +134,8 @@
     "zod": "^4.3.5"
   },
   "optionalDependencies": {
-    "@img/sharp-libvips-linux-x64": "1.2.4"
+    "@img/sharp-libvips-linux-x64": "1.2.4",
+    "@img/sharp-linux-x64": "0.34.5"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,svelte,css,md,html,json}": "prettier --write",
@@ -131,6 +144,7 @@
   "packageManager": "bun@1.1.0",
   "overrides": {
     "sharp": "0.34.5",
-    "@img/sharp-libvips-darwin-arm64": "1.2.4"
+    "@img/sharp-libvips-darwin-arm64": "1.2.4",
+    "@img/sharp-linux-x64": "0.34.5"
   }
 }

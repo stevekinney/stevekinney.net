@@ -13,11 +13,36 @@ const collectUrls = (tree: Root): string[] => {
   return urls;
 };
 
-const apply = (markdown: string, filePath = '/repo/content/writing/post.md'): string[] => {
+const collectDefinitionUrls = (tree: Root): string[] => {
+  const urls: string[] = [];
+  visit(tree, 'definition', (node) => {
+    urls.push(node.url);
+  });
+  return urls;
+};
+
+const apply = (
+  markdown: string,
+  filePath = '/repo/content/writing/post.md',
+  contentPath = 'content',
+  cwd = '/repo',
+): string[] => {
   const tree = fromMarkdown(markdown) as Root;
-  const file = new VFile({ path: filePath, cwd: '/repo' });
-  fixMarkdownUrls()(tree, file, () => {});
+  const file = new VFile({ path: filePath, cwd });
+  fixMarkdownUrls(contentPath)(tree, file, () => {});
   return collectUrls(tree);
+};
+
+const applyDefinitions = (
+  markdown: string,
+  filePath = '/repo/content/writing/post.md',
+  contentPath = 'content',
+  cwd = '/repo',
+): string[] => {
+  const tree = fromMarkdown(markdown) as Root;
+  const file = new VFile({ path: filePath, cwd });
+  fixMarkdownUrls(contentPath)(tree, file, () => {});
+  return collectDefinitionUrls(tree);
 };
 
 describe('fixMarkdownUrls', () => {
@@ -87,6 +112,20 @@ describe('fixMarkdownUrls', () => {
     ]);
   });
 
+  it('skips additional external schemes', () => {
+    const urls = apply(
+      '[Tel](tel:+15551231234) [Data](data:text/plain,hello) [Blob](blob:https://example.com/1) [JS](javascript:void(0)) [FTP](ftp://example.com/file.md) [File](file:///tmp/readme.md)',
+    );
+    expect(urls).toEqual([
+      'tel:+15551231234',
+      'data:text/plain,hello',
+      'blob:https://example.com/1',
+      'javascript:void(0)',
+      'ftp://example.com/file.md',
+      'file:///tmp/readme.md',
+    ]);
+  });
+
   it('leaves hash-only links alone', () => {
     const [url] = apply('[Jump](#section)');
     expect(url).toBe('#section');
@@ -116,5 +155,35 @@ describe('fixMarkdownUrls', () => {
     fixMarkdownUrls()(tree, file, () => {});
     const [url] = collectUrls(tree);
     expect(url).toBe('/courses/storybook/');
+  });
+
+  it('treats Windows absolute URLs as external', () => {
+    const [url] = apply(String.raw`[Doc](C:\docs\readme.md)`);
+    expect(url).toBe(String.raw`C:\docs\readme.md`);
+  });
+
+  it('normalizes UNC-style paths as rooted URLs', () => {
+    const [url] = apply(String.raw`[Share](\\server\share\readme.md)`);
+    expect(url).toBe('/server/share/');
+  });
+
+  it('treats leading backslashes as rooted URLs', () => {
+    const [url] = apply(String.raw`[Root](\courses\storybook\README.md)`);
+    expect(url).toBe('/courses/storybook/');
+  });
+
+  it('rewrites reference-style definitions', () => {
+    const [url] = applyDefinitions('[Next][ref]\n\n[ref]: ./next.md');
+    expect(url).toBe('/writing/next');
+  });
+
+  it('normalizes content paths with leading or trailing slashes', () => {
+    const [url] = apply('[Next](./next.md)', '/repo/content/writing/post.md', '/content/');
+    expect(url).toBe('/writing/next');
+  });
+
+  it('skips rewriting when file is outside the content path', () => {
+    const [url] = apply('[Next](./next.md)', '/repo/notes/post.md');
+    expect(url).toBe('./next.md');
   });
 });

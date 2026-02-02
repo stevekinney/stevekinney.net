@@ -16,7 +16,7 @@ Here is a run down of the key features:
 
 ## Setting Up Chromatic
 
-You'll need to make an account if you don't already have one. The good news is that this is easy enough since you can just use your [Github](https:/github.com) account to authenticate.
+You'll need to make an account if you don't already have one. The good news is that this is easy enough since you can just use your [Github](https://github.com) account to authenticate.
 
 Once you're in, you can either choose an existing project or create a new one.
 

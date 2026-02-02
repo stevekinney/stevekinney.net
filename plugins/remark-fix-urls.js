@@ -1,7 +1,4 @@
 import { dirname, posix as pathPosix } from 'path';
-import type { Link, Root } from 'mdast';
-import type { Transformer } from 'unified';
-import type { VFile } from 'vfile';
 import { visit } from 'unist-util-visit';
 
 /**
@@ -10,6 +7,7 @@ import { visit } from 'unist-util-visit';
 const URL_PATTERNS = {
   EXTERNAL_SCHEME: /^[a-zA-Z][a-zA-Z+.-]*:/,
   PROTOCOL_RELATIVE: /^\/\//,
+  WINDOWS_DRIVE: /^[a-zA-Z]:[\\/]/,
 };
 
 const MARKDOWN_EXTENSIONS = ['.mdx', '.markdown', '.md'];
@@ -19,13 +17,31 @@ const DEFAULT_CONTENT_PATH = 'content';
 /**
  * Determines if a URL points to an external resource
  */
-const isExternalUrl = (url: string): boolean =>
-  URL_PATTERNS.PROTOCOL_RELATIVE.test(url) || URL_PATTERNS.EXTERNAL_SCHEME.test(url);
+/**
+ * @param {string} url
+ */
+const isExternalUrl = (url) =>
+  URL_PATTERNS.PROTOCOL_RELATIVE.test(url) ||
+  URL_PATTERNS.EXTERNAL_SCHEME.test(url) ||
+  URL_PATTERNS.WINDOWS_DRIVE.test(url);
 
-const normalizePathSeparators = (value: string): string => value.replace(/\\/g, '/');
-const trimTrailingSlashes = (value: string): string => value.replace(/\/+$/, '');
+/**
+ * @param {string} value
+ */
+const normalizePathSeparators = (value) => value.replace(/\\/g, '/');
+/**
+ * @param {string} value
+ */
+const trimTrailingSlashes = (value) => value.replace(/\/+$/, '');
+/**
+ * @param {string} value
+ */
+const trimSlashes = (value) => value.replace(/^\/+|\/+$/g, '');
 
-const splitUrl = (url: string): { path: string; query: string; hash: string } => {
+/**
+ * @param {string} url
+ */
+const splitUrl = (url) => {
   const hashIndex = url.indexOf('#');
   const queryIndex = url.indexOf('?');
   const end = Math.min(
@@ -40,17 +56,26 @@ const splitUrl = (url: string): { path: string; query: string; hash: string } =>
   return { path, query, hash };
 };
 
-const findMarkdownExtension = (pathname: string): string | undefined => {
+/**
+ * @param {string} pathname
+ */
+const findMarkdownExtension = (pathname) => {
   const lower = pathname.toLowerCase();
   return MARKDOWN_EXTENSIONS.find((ext) => lower.endsWith(ext));
 };
 
-const stripMarkdownExtension = (pathname: string): string => {
+/**
+ * @param {string} pathname
+ */
+const stripMarkdownExtension = (pathname) => {
   const ext = findMarkdownExtension(pathname);
   return ext ? pathname.slice(0, -ext.length) : pathname;
 };
 
-const normalizeRoutePath = (pathname: string): string => {
+/**
+ * @param {string} pathname
+ */
+const normalizeRoutePath = (pathname) => {
   let normalized = pathname.replace(/\/(README|_index|index)$/i, '/');
   if (normalized.length > 1) normalized = normalized.replace(/\/+$/, '/');
   return normalized;
@@ -59,7 +84,11 @@ const normalizeRoutePath = (pathname: string): string => {
 /**
  * Transforms a markdown link to its corresponding route path
  */
-const transformInternalUrl = (url: string, baseUrl: string): string => {
+/**
+ * @param {string} url
+ * @param {string} baseUrl
+ */
+const transformInternalUrl = (url, baseUrl) => {
   const { path, query, hash } = splitUrl(url);
   const normalizedPath = trimTrailingSlashes(normalizePathSeparators(path));
   const isAbsolute = normalizedPath.startsWith('/');
@@ -74,20 +103,27 @@ const transformInternalUrl = (url: string, baseUrl: string): string => {
   return `${normalizedRoute}${query}${hash}`;
 };
 
-interface FileData {
-  filename: string;
-  cwd: string;
-}
-
 /**
  * Calculates the base URL for a file relative to the content directory
  */
-const getBaseUrl = (fileData: FileData, contentPath: string): string => {
-  const filePath = normalizePathSeparators(fileData.filename || '');
-  const cwd = normalizePathSeparators(fileData.cwd || process.cwd());
-  if (!filePath) return '/';
-  let rel = filePath.startsWith(cwd + '/') ? filePath.slice(cwd.length + 1) : filePath;
-  if (rel.startsWith(contentPath + '/')) rel = rel.slice(contentPath.length + 1);
+/**
+ * @param {{ filename: string, cwd: string }} fileData
+ * @param {string} contentPath
+ */
+const getBaseUrl = (fileData, contentPath) => {
+  const filePath = pathPosix.normalize(normalizePathSeparators(fileData.filename || ''));
+  const cwd = pathPosix.normalize(normalizePathSeparators(fileData.cwd || process.cwd()));
+  const normalizedContentPath = trimSlashes(normalizePathSeparators(contentPath));
+  if (!filePath || !normalizedContentPath) return null;
+
+  let rel = filePath;
+  if (cwd && (filePath === cwd || filePath.startsWith(cwd + '/'))) {
+    rel = filePath === cwd ? '' : filePath.slice(cwd.length + 1);
+  }
+
+  if (!rel.startsWith(normalizedContentPath + '/')) return null;
+
+  rel = rel.slice(normalizedContentPath.length + 1);
   const dir = normalizePathSeparators(dirname(rel));
   return dir === '.' ? '/' : '/' + dir;
 };
@@ -98,17 +134,29 @@ const getBaseUrl = (fileData: FileData, contentPath: string): string => {
  *
  * @param contentPath - Root directory containing content files (defaults to 'content')
  */
-export function fixMarkdownUrls(contentPath = DEFAULT_CONTENT_PATH): Transformer<Root> {
-  return function transformer(tree, file: VFile) {
+/**
+ * @param {string} [contentPath]
+ * @returns {import('unified').Transformer}
+ */
+export function fixMarkdownUrls(contentPath = DEFAULT_CONTENT_PATH) {
+  /**
+   * @param {import('unist').Node} tree
+   * @param {import('vfile').VFile & { filename?: string }} file
+   */
+  return function transformer(tree, file) {
     // MDSvex may use 'filename' instead of 'path'
-    const anyFile = file as VFile & { filename?: string };
-    const fileData: FileData = {
+    const anyFile = /** @type {import('vfile').VFile & { filename?: string }} */ (file);
+    const fileData = {
       filename: anyFile.filename ?? anyFile.path ?? '',
       cwd: anyFile.cwd ?? process.cwd(),
     };
     const baseUrl = getBaseUrl(fileData, contentPath);
+    if (!baseUrl) return;
 
-    visit(tree, 'link', (node: Link) => {
+    /**
+     * @param {import('mdast').Link | import('mdast').Definition} node
+     */
+    const rewriteUrl = (node) => {
       const { url } = node;
 
       if (!url || isExternalUrl(url)) return;
@@ -122,6 +170,9 @@ export function fixMarkdownUrls(contentPath = DEFAULT_CONTENT_PATH): Transformer
 
       // Transform the URL
       node.url = transformInternalUrl(url, baseUrl);
-    });
+    };
+
+    visit(tree, 'link', (node) => rewriteUrl(node));
+    visit(tree, 'definition', (node) => rewriteUrl(node));
   };
 }
