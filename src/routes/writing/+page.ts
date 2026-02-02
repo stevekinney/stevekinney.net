@@ -1,3 +1,5 @@
+export const prerender = true;
+
 export async function load() {
   const title = 'Writing';
   const description =

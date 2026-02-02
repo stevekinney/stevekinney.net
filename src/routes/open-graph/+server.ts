@@ -1,35 +1,6 @@
-import satori from 'satori';
-import sharp from 'sharp';
-
 import metadata from '$lib/metadata';
-import { OpenGraphImage } from './open-graph';
+import { createOpenGraphResponse, renderOpenGraphImage } from '$lib/server/open-graph';
 import type { RequestHandler } from '@sveltejs/kit';
-
-// Constants for image dimensions
-const IMAGE_WIDTH = 1200;
-const IMAGE_HEIGHT = 630;
-
-// Configuration for fonts
-const FONT_INFO = [
-  {
-    name: 'Fira Sans',
-    weight: 300,
-    style: 'normal',
-    path: '/fonts/fira-sans-300-normal.woff',
-  },
-  {
-    name: 'Fira Sans',
-    weight: 500,
-    style: 'normal',
-    path: '/fonts/fira-sans-500-normal.woff',
-  },
-  {
-    name: 'League Gothic',
-    weight: 500, // As per original Satori config, Satori matches this weight.
-    style: 'normal',
-    path: '/fonts/league-gothic-400-normal.woff',
-  },
-] as const;
 
 /**
  * Parse boolean parameters from URL query string
@@ -54,22 +25,8 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
   const handle = url.searchParams.get('handle') ?? undefined;
   const siteUrl = url.searchParams.get('url') ?? undefined;
 
-  // Load fonts in parallel
-  const loadedFontData = await Promise.all(
-    FONT_INFO.map((font) => fetch(font.path).then((res: Response) => res.arrayBuffer())),
-  );
-
-  // Prepare fonts for Satori
-  const satoriFontsConfig = FONT_INFO.map((font, index) => ({
-    name: font.name,
-    weight: font.weight,
-    style: font.style,
-    data: loadedFontData[index],
-  }));
-
-  // Generate SVG with satori
-  const svg = await satori(
-    OpenGraphImage({
+  const image = await renderOpenGraphImage(
+    {
       title,
       description,
       backgroundColor,
@@ -79,24 +36,9 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
       hideFooter,
       handle,
       url: siteUrl,
-    }),
-    {
-      width: IMAGE_WIDTH,
-      height: IMAGE_HEIGHT,
-      fonts: satoriFontsConfig,
     },
+    fetch,
   );
 
-  // Convert SVG to JPEG
-  const image = await sharp(Buffer.from(svg)).jpeg().toBuffer();
-
-  // Return response with appropriate headers
-  return new Response(new Uint8Array(image), {
-    headers: {
-      'Content-Type': 'image/jpeg',
-      'Cache-Control': 'public, max-age=31536000, immutable, no-transform',
-      'Access-Control-Allow-Origin': '*',
-      'Content-Length': image.length.toString(),
-    },
-  });
+  return createOpenGraphResponse(image, { isVersioned: true });
 };

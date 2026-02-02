@@ -18,6 +18,7 @@ const siteUrl =
   (process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : 'http://localhost:4444');
+const skipImageOptimizations = process.env.SKIP_IMAGE_OPTIMIZATION === '1';
 
 // Custom plugins
 import { importTailwindPlayground } from './plugins/import-tailwind-playground.js';
@@ -108,15 +109,19 @@ const config = {
     vitePreprocess(),
     mdsvex(mdsvexOptions),
     importTailwindPlayground(),
-    /** @type {any} */ (
-      processImages({
-        // Reduce variants to speed up build
-        widths: [480, 768],
-        mainWidth: 800,
-        sizes: '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw',
-        includeMetadata: false,
-      })
-    ),
+    ...(skipImageOptimizations
+      ? []
+      : [
+          /** @type {any} */ (
+            processImages({
+              // Reduce variants to speed up build
+              widths: [480, 768],
+              mainWidth: 800,
+              sizes: '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw',
+              includeMetadata: false,
+            })
+          ),
+        ]),
   ],
 
   kit: {

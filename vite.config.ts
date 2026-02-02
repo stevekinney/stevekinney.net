@@ -1,17 +1,26 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
-import { defineConfig, searchForWorkspaceRoot, type Plugin, type PluginOption } from 'vite';
+import { defineConfig, searchForWorkspaceRoot, type PluginOption } from 'vite';
 import { imagetools } from 'vite-imagetools';
+import { ViteToml } from 'vite-plugin-toml';
 
 const enableBundleStats = process.env.BUNDLE_STATS === '1';
-const applyClientBuildOnly = <T extends Plugin>(plugin: T): T => {
-  plugin.apply = (_config, env) => env.command === 'build' && !env.isSsrBuild;
-  return plugin;
+const skipImageOptimizations = process.env.SKIP_IMAGE_OPTIMIZATION === '1';
+const applyClientBuildOnly = (plugin: unknown): PluginOption => {
+  if (plugin && typeof plugin === 'object' && !Array.isArray(plugin)) {
+    (
+      plugin as {
+        apply?: (config: unknown, env: { command: string; isSsrBuild: boolean }) => boolean;
+      }
+    ).apply = (_config, env) => env.command === 'build' && !env.isSsrBuild;
+  }
+
+  return plugin as PluginOption;
 };
 
 const loadEnhancedImages = async (): Promise<PluginOption> => {
-  if (process.env.DISABLE_ENHANCED_IMAGES === '1') {
+  if (process.env.DISABLE_ENHANCED_IMAGES === '1' || skipImageOptimizations) {
     return null;
   }
 
@@ -30,8 +39,9 @@ export default defineConfig({
   plugins: [
     sveltekit(),
     enhancedImagesPlugin,
-    imagetools(),
-    tailwindcss() as Plugin[],
+    ...(skipImageOptimizations ? [] : [imagetools()]),
+    ViteToml(),
+    tailwindcss(),
     ...(enableBundleStats
       ? [
           applyClientBuildOnly(
@@ -41,7 +51,7 @@ export default defineConfig({
               gzipSize: true,
               brotliSize: true,
               open: false,
-            }) as Plugin,
+            }),
           ),
           applyClientBuildOnly(
             visualizer({
@@ -49,11 +59,11 @@ export default defineConfig({
               template: 'raw-data',
               gzipSize: true,
               brotliSize: true,
-            }) as Plugin,
+            }),
           ),
         ]
       : []),
-  ],
+  ] as PluginOption[],
 
   esbuild: {
     jsxFactory: 'h',

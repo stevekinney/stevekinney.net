@@ -1,6 +1,8 @@
 import { getCourseIndex } from '$lib/server/content';
 import type { PageServerLoad } from './$types';
 
+export const prerender = true;
+
 const title = 'Courses';
 const description =
   "A collection of courses that I've taught over the years, including full course walkthroughs and recordings from Frontend Masters.";

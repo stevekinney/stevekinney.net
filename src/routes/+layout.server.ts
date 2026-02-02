@@ -8,7 +8,7 @@ if (!dev) {
   inject({ mode: 'production' });
 }
 
-export const prerender = true;
+export const prerender = process.env.PRERENDER_ALL === '1';
 
 export async function load() {
   return { posts: getPostIndex() };
