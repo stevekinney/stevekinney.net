@@ -190,7 +190,11 @@ export const processImages = (opts = {}) => {
 
         let config = images.get(url);
         if (!config) {
-          const baseId = '_' + camelCase(urlForMatch);
+          const importIdSuffix =
+            url === urlForMatch
+              ? ''
+              : `_${createHash('sha256').update(url).digest('hex').slice(0, 8)}`;
+          const baseId = `_${camelCase(urlForMatch)}${importIdSuffix}`;
           const fallbackSrc = url;
           const fallbackId = resolveImportId(importMap, fallbackSrc, `${baseId}_src`);
 
