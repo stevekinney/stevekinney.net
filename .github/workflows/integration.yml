@@ -50,7 +50,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .svelte-kit/process-images
-          key: ${{ runner.os }}-process-images-${{ hashFiles('svelte.config.js', 'plugins/svelte-enhance-images.js', 'content/**/*.md') }}
+          key: ${{ runner.os }}-process-images-${{ hashFiles('svelte.config.js', 'plugins/svelte-enhance-images.js', 'content/**/*.md', 'content/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
           restore-keys: |
             ${{ runner.os }}-process-images-
 

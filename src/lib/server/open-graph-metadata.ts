@@ -1,4 +1,5 @@
 import metadata from '$lib/metadata';
+import { normalizeOpenGraphPath } from '$lib/og/paths';
 import { getCourseIndex, getPostIndex } from '$lib/server/content';
 import { CourseMarkdownSchema } from '$lib/schemas/courses';
 
@@ -25,15 +26,6 @@ const STATIC_ROUTES = new Map<string, StaticRoute>([
   ['/writing', WRITING_INDEX],
   ['/courses', COURSES_INDEX],
 ]);
-
-const normalizePathname = (pathname: string): string => {
-  if (!pathname) return '/';
-  const withLeadingSlash = pathname.startsWith('/') ? pathname : `/${pathname}`;
-  if (withLeadingSlash.length > 1 && withLeadingSlash.endsWith('/')) {
-    return withLeadingSlash.slice(0, -1);
-  }
-  return withLeadingSlash;
-};
 
 const safeDecode = (value: string): string => {
   try {
@@ -86,23 +78,28 @@ const resolveCourseMetadata = async (pathname: string): Promise<OpenGraphOptions
     };
   }
 
-  const { metadata: lessonMetadata } = CourseMarkdownSchema.parse(
-    await import(`../../../content/courses/${courseId}/${lessonId}.md`),
-  );
+  let lessonMetadata: { title?: string; description?: string } | null = null;
 
-  const lessonTitle = lessonMetadata.title;
+  try {
+    const lessonModule = await import(`../../../content/courses/${courseId}/${lessonId}.md`);
+    lessonMetadata = CourseMarkdownSchema.parse(lessonModule).metadata;
+  } catch {
+    return null;
+  }
+
+  const lessonTitle = lessonMetadata?.title;
   const title = lessonTitle ? `${lessonTitle} | ${course.title}` : course.title;
 
   return {
     title,
-    description: lessonMetadata.description || course.description || metadata.description,
+    description: lessonMetadata?.description || course.description || metadata.description,
   };
 };
 
 export const resolveOpenGraphMetadata = async (
   pathname: string,
 ): Promise<OpenGraphOptions | null> => {
-  const normalized = normalizePathname(pathname);
+  const normalized = normalizeOpenGraphPath(pathname);
 
   const staticMetadata = getStaticMetadata(normalized);
   if (staticMetadata) return staticMetadata;
@@ -116,4 +113,4 @@ export const resolveOpenGraphMetadata = async (
   return null;
 };
 
-export const normalizeOpenGraphPath = normalizePathname;
+export { normalizeOpenGraphPath };

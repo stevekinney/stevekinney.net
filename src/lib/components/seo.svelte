@@ -5,6 +5,7 @@
   import { formatPageTitle } from '$lib/format-page-title';
   import { author, title as siteTitle } from '$lib/metadata';
   import { buildOpenGraphHash } from '$lib/og/hash';
+  import { normalizeOpenGraphPath } from '$lib/og/paths';
   import type { Snippet } from 'svelte';
 
   // Use PUBLIC_SITE_URL if set, otherwise fall back to page origin
@@ -61,11 +62,6 @@
   const formattedTitle = $derived(formatPageTitle(title));
   const currentUrl = $derived(page.url.href);
 
-  const normalizePathname = (pathname: string): string => {
-    if (pathname === '/') return '/';
-    return pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
-  };
-
   const createPerRouteImage = (pathname: string, version: string): string => {
     const path = pathname === '/' ? '/open-graph.jpg' : `${pathname}/open-graph.jpg`;
     return `${baseUrl}${path}?v=${version}`;
@@ -119,7 +115,7 @@
     }),
   );
 
-  const normalizedPath = $derived(normalizePathname(page.url.pathname));
+  const normalizedPath = $derived(normalizeOpenGraphPath(page.url.pathname));
 
   const perRouteImage = $derived(createPerRouteImage(normalizedPath, perRouteHash));
 
