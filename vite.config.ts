@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, searchForWorkspaceRoot, type Plugin, type PluginOption } from 'vite';
 import { imagetools } from 'vite-imagetools';
+import { ViteToml } from 'vite-plugin-toml';
 
 const enableBundleStats = process.env.BUNDLE_STATS === '1';
 const applyClientBuildOnly = <T extends Plugin>(plugin: T): T => {
@@ -31,6 +32,7 @@ export default defineConfig({
     sveltekit(),
     enhancedImagesPlugin,
     imagetools(),
+    ViteToml(),
     tailwindcss() as Plugin[],
     ...(enableBundleStats
       ? [
