@@ -4,6 +4,7 @@
   import { encodeParameters } from '$lib/encode-parameters';
   import { formatPageTitle } from '$lib/format-page-title';
   import { author, title as siteTitle } from '$lib/metadata';
+  import { buildOpenGraphHash } from '$lib/og/hash';
   import type { Snippet } from 'svelte';
 
   // Use PUBLIC_SITE_URL if set, otherwise fall back to page origin
@@ -60,6 +61,16 @@
   const formattedTitle = $derived(formatPageTitle(title));
   const currentUrl = $derived(page.url.href);
 
+  const normalizePathname = (pathname: string): string => {
+    if (pathname === '/') return '/';
+    return pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+  };
+
+  const createPerRouteImage = (pathname: string, version: string): string => {
+    const path = pathname === '/' ? '/open-graph.jpg' : `${pathname}/open-graph.jpg`;
+    return `${baseUrl}${path}?v=${version}`;
+  };
+
   // Create image URL with all provided parameters.
   const createImageUrl = ({
     title,
@@ -85,7 +96,34 @@
     return `${baseUrl}/open-graph?${query}`;
   };
 
-  const image = $derived(
+  const usesCustomImage = $derived(
+    Boolean(
+      imageParams ||
+      accentColor ||
+      secondaryAccentColor ||
+      textColor ||
+      backgroundColor ||
+      hideFooter !== undefined,
+    ),
+  );
+
+  const perRouteHash = $derived(
+    buildOpenGraphHash({
+      title,
+      description,
+      accentColor,
+      secondaryAccentColor,
+      textColor,
+      backgroundColor,
+      hideFooter,
+    }),
+  );
+
+  const normalizedPath = $derived(normalizePathname(page.url.pathname));
+
+  const perRouteImage = $derived(createPerRouteImage(normalizedPath, perRouteHash));
+
+  const queryImage = $derived(
     createImageUrl({
       title,
       description,
@@ -97,6 +135,8 @@
       imageParams,
     }),
   );
+
+  const image = $derived(usesCustomImage ? queryImage : perRouteImage);
 
   const dateIso = $derived(date ? new Date(date).toISOString() : undefined);
   const modifiedIso = $derived(modified ? new Date(modified).toISOString() : undefined);

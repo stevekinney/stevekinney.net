@@ -8,7 +8,7 @@
 </script>
 
 <SEO
-  title="{data.title} | {data.course.title}"
+  title={`${data.title} | ${data.course.title}`}
   description={data.description}
   published={data.published}
 />
