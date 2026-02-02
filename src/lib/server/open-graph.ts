@@ -46,8 +46,19 @@ let fontDataPromise: Promise<ArrayBuffer[]> | null = null;
 const loadFonts = async (fetch: RequestEvent['fetch']): Promise<ArrayBuffer[]> => {
   if (!fontDataPromise) {
     fontDataPromise = Promise.all(
-      FONT_INFO.map((font) => fetch(font.path).then((res: Response) => res.arrayBuffer())),
-    );
+      FONT_INFO.map(async (font) => {
+        const res = await fetch(font.path);
+
+        if (!res.ok) {
+          throw new Error(`Failed to load font ${font.path}: ${res.status} ${res.statusText}`);
+        }
+
+        return res.arrayBuffer();
+      }),
+    ).catch((error) => {
+      fontDataPromise = null;
+      throw error;
+    });
   }
 
   return fontDataPromise;

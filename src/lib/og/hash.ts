@@ -46,5 +46,5 @@ export const buildOpenGraphHash = ({
     toPart(hideFooter),
   ];
 
-  return fnv1a(parts.join('|'));
+  return fnv1a(JSON.stringify(parts));
 };
