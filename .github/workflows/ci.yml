@@ -38,6 +38,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-sveltekit-
 
+      - name: Cache image preprocessing outputs
+        uses: actions/cache@v4
+        with:
+          path: .svelte-kit/process-images
+          key: ${{ runner.os }}-process-images-${{ hashFiles('svelte.config.js', 'plugins/svelte-enhance-images.js', 'content/**/*.md') }}
+          restore-keys: |
+            ${{ runner.os }}-process-images-
+
       - name: Install dependencies
         run: bun install --frozen-lockfile
 

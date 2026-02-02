@@ -6,13 +6,14 @@ import { imagetools } from 'vite-imagetools';
 import { ViteToml } from 'vite-plugin-toml';
 
 const enableBundleStats = process.env.BUNDLE_STATS === '1';
+const skipImageOptimizations = process.env.SKIP_IMAGE_OPTIMIZATION === '1';
 const applyClientBuildOnly = <T extends Plugin>(plugin: T): T => {
   plugin.apply = (_config, env) => env.command === 'build' && !env.isSsrBuild;
   return plugin;
 };
 
 const loadEnhancedImages = async (): Promise<PluginOption> => {
-  if (process.env.DISABLE_ENHANCED_IMAGES === '1') {
+  if (process.env.DISABLE_ENHANCED_IMAGES === '1' || skipImageOptimizations) {
     return null;
   }
 
@@ -31,7 +32,7 @@ export default defineConfig({
   plugins: [
     sveltekit(),
     enhancedImagesPlugin,
-    imagetools(),
+    ...(skipImageOptimizations ? [] : [imagetools()]),
     ViteToml(),
     tailwindcss() as Plugin[],
     ...(enableBundleStats

@@ -1,3 +1,7 @@
+<script module>
+  export const prerender = true;
+</script>
+
 ## Hi, I'm Steve.
 
 I'm a **software engineer** and **educator** based in Denver. Previously, I led Front-End Engineering and Developer Tools at [Temporal](https://temporal.io), where I tackled the fascinating challenge of building interfaces for distributed systems—which is just a fancy way of saying "making complex things simple enough that people actually want to use them."
