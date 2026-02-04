@@ -290,7 +290,7 @@ This means that we'll never end up with a partially-rendered UI.
 
 We have three main ways to memoize stuff in React:
 
-1. `React.memo()` is a higher-order components that precents a component from re-rendering if it's problems have not changed.
+1. `React.memo()` is a higher-order components that prevents a component from re-rendering if it's props have not changed.
 2. `useMemo()` is a hook that memoizes the _result_ or an expensive calculation.
 3. `useCallback()` is a hook that memoizes a function definition, preventing child components that receiving it as a prop from re-rendering.
 
