@@ -15,6 +15,7 @@ meta-*
 *storybook.log
 content/.obsidian/workspace.json
 **/.svelte-kit
+**/.turbo
 
 **/.claude/settings.local.json
 test-results/

@@ -1,0 +1,312 @@
+{
+  "meta": {
+    "generatedAt": "2026-02-21T20:37:39.829Z",
+    "hash": "412e834ba2066b57157ef28dbeb67d321777f930fb1aa10b0b336637e5c5c0a4"
+  },
+  "course": {
+    "slug": "ai-development",
+    "title": "Developing with AI Tools",
+    "description": "A course covering everything that Steve has learned to date about developing software with Cursor and Claude Code.",
+    "date": "2025-07-30T00:00:00.000Z",
+    "modified": "2025-07-30T13:28:49.000Z",
+    "contentsFile": "courses/ai-development/_index.md"
+  },
+  "lessons": [
+    {
+      "slug": "claude-code-and-bash-scripts",
+      "title": "Claude Code and Bash Scripts",
+      "description": "Learn how Claude Code integrates with shell environments to create, execute, and iterate on bash scripts for automated development workflows",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-and-bash-scripts.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "claude-code-commands",
+      "title": "Claude Code Commands",
+      "description": "Create and use custom slash commands to encapsulate expertise and workflows into reusable, project-scoped and user-scoped command templates",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-commands.md",
+      "modified": "2025-07-30T12:02:20.000Z"
+    },
+    {
+      "slug": "claude-code-compaction",
+      "title": "Claude Code Compaction",
+      "description": "Manage context windows and reduce token costs by compacting conversation history into focused summaries while preserving key information",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-compaction.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "claude-code-hook-control-flow",
+      "title": "Claude Code Hook Control Flow",
+      "description": "Master hook communication through exit codes and JSON output to control Claude's behavior with blocking, approval, and continuation mechanisms",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-hook-control-flow.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "claude-code-hook-examples",
+      "title": "Claude Code Hook Examples",
+      "description": "Practical examples and cookbook for implementing custom hooks to automate workflows and enforce development policies",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-hook-examples.md",
+      "modified": "2025-09-20T16:39:54.000Z"
+    },
+    {
+      "slug": "claude-code-hooks",
+      "title": "Claude Code Hooks",
+      "description": "Learn how to use event-driven hooks to provide deterministic control over Claude's behavior and automate development workflows",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-hooks.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "claude-code-mcp",
+      "title": "Claude Code and MCP",
+      "description": "Extend Claude Code's capabilities with Model Context Protocol servers for database access, cloud services, and specialized development tools",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-mcp.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "claude-code-model-selection",
+      "title": "Claude Code Model Selection",
+      "description": "Choose the right Claude model (Opus, Sonnet, Haiku) for your development tasks based on complexity, cost, and performance requirements",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-model-selection.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "claude-code-permissions",
+      "title": "Claude Code Permissions",
+      "description": "Configure and manage Claude Code's permission system to balance safety and productivity while maintaining security boundaries",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-permissions.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "claude-code-plan-mode",
+      "title": "Claude Code Plan Mode",
+      "description": "Use strategic planning phases to improve code quality and reduce iterations by having Claude create detailed implementation plans before coding",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-plan-mode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "claude-code-session-management",
+      "title": "Claude Code Session Management",
+      "description": "Manage Claude Code sessions, memory, context, and permissions for optimal development workflows and cost efficiency",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-session-management.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "claude-code-sub-agents",
+      "title": "Claude Code Sub-Agents",
+      "description": "Create and manage specialized sub-agents for parallel task execution, code review, debugging, and multi-agent development workflows",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-sub-agents.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "claude-code-thinking",
+      "title": "Claude Code Thinking",
+      "description": "Leverage extended thinking modes and Ultrathink capabilities for complex problem-solving, strategic planning, and architectural decisions",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-code-thinking.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "claude-dot-md",
+      "title": "CLAUDE.md",
+      "description": "Create and maintain CLAUDE.md files as persistent project memory and authoritative system rules for consistent AI behavior",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/claude-dot-md.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "cost-management",
+      "title": "Managing Costs and Token Usage in Claude Code",
+      "description": "Learn strategies for cost-effective Claude Code usage through model selection, context management, and subscription plans.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/cost-management.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "cursor-background-agents",
+      "title": "Using Cursor Background Agents for Asynchronous Coding",
+      "description": "Master background agents in Cursor for parallel AI-powered code editing and autonomous task execution.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/cursor-background-agents.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "cursor-checkpoints",
+      "title": "Understanding Cursor Checkpoints for Safe AI Edits",
+      "description": "Learn how Cursor's automatic checkpoints provide a safety net for AI-driven code changes and modifications.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/cursor-checkpoints.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "cursor-context",
+      "title": "Mastering Context Management in Cursor",
+      "description": "Comprehensive guide to providing effective context to Cursor's AI using @ symbols, rules, and notepads.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/cursor-context.md",
+      "modified": "2025-07-30T11:07:02.000Z"
+    },
+    {
+      "slug": "cursor-environment-configuration",
+      "title": "Configuring Cursor Environments with environment.json",
+      "description": "Set up reproducible cloud development environments for Cursor's background agents using environment.json configuration.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/cursor-environment-configuration.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "cursor-ghost-mode",
+      "title": "Cursor Ghost Mode for Maximum Privacy",
+      "description": "Enable Cursor's Ghost Mode to ensure zero data leaves your machine while using AI coding features.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/cursor-ghost-mode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "cursor-model-selection",
+      "title": "Choosing the Right AI Model in Cursor",
+      "description": "Strategic guide to selecting between Claude, GPT, Gemini, and other models for optimal coding results.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/cursor-model-selection.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "cursor-notepads",
+      "title": "Using Cursor Notepads for Context Management",
+      "description": "Create reusable context bundles with Cursor Notepads to streamline prompts and improve AI responses.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/cursor-notepads.md",
+      "modified": "2025-07-30T11:07:02.000Z"
+    },
+    {
+      "slug": "cursor-rules",
+      "title": "Setting Up Cursor Rules for Consistent AI Behavior",
+      "description": "Configure project and user-level rules to enforce coding standards and guide AI behavior in Cursor.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/cursor-rules.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "gemini-and-gems",
+      "title": "Creating Custom Coding Assistants with Gemini Gems",
+      "description": "Build specialized AI chatbots for coding tasks using Gemini's Gems feature with custom personas and context.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/gemini-and-gems.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "git-worktrees",
+      "title": "Using Git Worktrees for Parallel AI Development",
+      "description": "Set up Git worktrees to run multiple Claude Code instances simultaneously for parallel development workflows.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/git-worktrees.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "installing-claude-code",
+      "title": "Installing and Setting Up Claude Code",
+      "description": "Complete installation guide for Claude Code CLI tool with system requirements and initial configuration.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/installing-claude-code.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "installing-cursor",
+      "title": "Installing and Getting Started with Cursor",
+      "description": "Download, install, and configure Cursor AI code editor with VS Code migration and core interaction modes.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/installing-cursor.md",
+      "modified": "2025-07-30T12:29:10.000Z"
+    },
+    {
+      "slug": "integrating-with-github-actions",
+      "title": "Integrating Claude Code with GitHub Actions",
+      "description": "Set up AI-powered automation in GitHub workflows using Claude Code for code reviews and pull requests.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/integrating-with-github-actions.md",
+      "modified": "2025-09-06T20:36:25.000Z"
+    },
+    {
+      "slug": "interacting-with-cursor",
+      "title": "Interacting with Cursor's AI Features",
+      "description": "Master Cursor's Tab completion, Inline Edit, AI Chat, and Agent modes for effective AI-powered coding.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/interacting-with-cursor.md",
+      "modified": "2025-07-30T11:07:02.000Z"
+    },
+    {
+      "slug": "mcp-for-claude-code-and-cursor",
+      "title": "Popular MCP Servers for Claude Code and Cursor",
+      "description": "Explore essential MCP servers for knowledge, databases, web automation, and specialized development tasks.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/mcp-for-claude-code-and-cursor.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mcp",
+      "title": "Understanding Model Context Protocol (MCP)",
+      "description": "Learn how MCP enables AI tools to connect with external systems for enhanced context and capabilities.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/mcp.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "notebooklm",
+      "title": "Using NotebookLM for AI Development",
+      "description": "Leverage Google's NotebookLM for research, documentation analysis, and knowledge synthesis in AI projects.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/notebooklm.md",
+      "modified": "2025-09-06T19:33:06.000Z"
+    },
+    {
+      "slug": "openai-codex",
+      "title": "Understanding OpenAI Codex for Code Generation",
+      "description": "Explore OpenAI Codex's AI-powered code generation capabilities and autonomous software engineering features.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/openai-codex.md",
+      "modified": "2025-07-30T12:02:20.000Z"
+    },
+    {
+      "slug": "plan-implement-verify",
+      "title": "Plan-Implement-Verify Pattern",
+      "description": "Structure AI coding tasks using the Plan-Implement-Verify pattern for better results and fewer errors.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/plan-implement-verify.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "referencing-files-in-claude-code",
+      "title": "Referencing Files and Resources in Claude Code",
+      "description": "Master the @ symbol system in Claude Code to reference files, directories, and MCP resources effectively.",
+      "date": "2025-07-24T21:30:36.000Z",
+      "file": "courses/ai-development/referencing-files-in-claude-code.md",
+      "modified": "2025-07-30T12:02:20.000Z"
+    },
+    {
+      "slug": "subagent-anti-patterns",
+      "title": "Common Sub-Agent Anti-Patterns and Pitfalls",
+      "description": "Avoid common mistakes when using Claude Code's sub-agent system for delegation and task management.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/subagent-anti-patterns.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "test-driven-development-with-claude",
+      "title": "Test-Driven Development with Claude Code",
+      "description": "Implement TDD workflows using Claude Code for iterative, test-first development with automated feedback loops.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/ai-development/test-driven-development-with-claude.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    }
+  ]
+}

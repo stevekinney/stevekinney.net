@@ -1,0 +1,668 @@
+{
+  "meta": {
+    "generatedAt": "2026-02-21T20:37:39.827Z",
+    "hash": "ef2121f1002ba7492a279e83eb8cca950d261ab47b71a4d3ff2872e5df23ca25"
+  },
+  "course": {
+    "slug": "react-performance",
+    "title": "React Performance",
+    "description": "Master React performance optimization from fundamentals to advanced techniques with React 19",
+    "date": "2025-09-07T18:00:00.000Z",
+    "modified": "2025-09-22T15:27:10.000Z",
+    "contentsFile": "courses/react-performance/_index.md"
+  },
+  "lessons": [
+    {
+      "slug": "animation-performance-advanced",
+      "title": "Advanced Animation Performance Techniques",
+      "description": "Master advanced animation techniques including Intersection Observer optimization, Web Animations API integration, and comprehensive performance testing strategies.",
+      "date": "2025-09-20T01:15:00.000Z",
+      "file": "courses/react-performance/animation-performance-advanced.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "animations", "advanced"]
+    },
+    {
+      "slug": "animation-performance",
+      "title": "Animation Performance in React",
+      "description": "Build silky smooth 60fps animations. Master hardware acceleration, avoid layout thrashing, and create performant micro-interactions.",
+      "date": "2025-09-07T01:15:00.000Z",
+      "file": "courses/react-performance/animation-performance.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "animations"]
+    },
+    {
+      "slug": "apollo-client-optimization",
+      "title": "Apollo Client Performance Optimization",
+      "description": "Master Apollo Client performance with cache optimization, query batching, optimistic updates, and efficient subscription management strategies.",
+      "date": "2025-09-20T01:15:00.000Z",
+      "file": "courses/react-performance/apollo-client-optimization.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "graphql", "apollo", "caching"]
+    },
+    {
+      "slug": "avoiding-over-memoization",
+      "title": "Avoiding Over‑Memoization",
+      "description": "Stop paying rent for caches you never use. Learn to remove unnecessary memoization and let React do less work.",
+      "date": "2025-09-06T21:20:43.626Z",
+      "file": "courses/react-performance/avoiding-over-memoization.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "memoization", "hooks"]
+    },
+    {
+      "slug": "avoiding-unnecessary-dependencies",
+      "title": "Avoiding Unnecessary Dependencies",
+      "description": "Trim the fat. Replace heavy libraries with native APIs or lighter alts and lean on tree‑shaking to cut bundle size.",
+      "date": "2025-09-06T22:09:43.427Z",
+      "file": "courses/react-performance/avoiding-unnecessary-dependencies.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "bundling", "dependencies"]
+    },
+    {
+      "slug": "bundle-analysis-deep-dive",
+      "title": "Bundle Analysis Deep Dive",
+      "description": "Master webpack-bundle-analyzer, source maps, and dependency auditing to eliminate bloat and optimize your React bundle.",
+      "date": "2025-09-06T23:30:00.000Z",
+      "file": "courses/react-performance/bundle-analysis-deep-dive.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "bundling", "analysis"]
+    },
+    {
+      "slug": "cdn-caching-immutable-assets",
+      "title": "CDN Caching & Immutable Assets",
+      "description": "Optimize React app delivery with CDN caching strategies, immutable deployments, and hashed chunking patterns",
+      "date": "2025-01-14T00:00:00.000Z",
+      "file": "courses/react-performance/cdn-caching-immutable-assets.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "tags": ["React", "Performance", "CDN", "Caching", "Build Optimization"]
+    },
+    {
+      "slug": "code-splitting-and-lazy-loading",
+      "title": "Code‑Splitting and Lazy Loading",
+      "description": "Load less JavaScript upfront. Split routes, components, and vendors to speed first paint and boost Core Web Vitals.",
+      "date": "2025-09-06T22:08:00.761Z",
+      "file": "courses/react-performance/code-splitting-and-lazy-loading.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "bundling", "web-vitals"]
+    },
+    {
+      "slug": "colocation-of-state",
+      "title": "Colocation of State",
+      "description": "Keep state near its consumers to reduce render storms, simplify data flow, and make components easier to reason about.",
+      "date": "2025-09-06T21:48:02.336Z",
+      "file": "courses/react-performance/colocation-of-state.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "architecture", "state-management"]
+    },
+    {
+      "slug": "component-granularity-splitting",
+      "title": "Component Granularity Splitting",
+      "description": "Component splitting is React performance optimization's double-edged sword. Split too little and you get monolithic components that re-render everything when a single prop changes. Split too much and you end up with component confetti—do...",
+      "date": "2025-09-06T23:49:18.000Z",
+      "file": "courses/react-performance/component-granularity-splitting.md",
+      "modified": "2025-10-01T02:02:22.000Z"
+    },
+    {
+      "slug": "concurrent-react-scheduling",
+      "title": "Concurrent React and Scheduling",
+      "description": "Learn how React can pause and resume work to keep interactions smooth—design components that play nicely with the scheduler.",
+      "date": "2025-09-06T21:57:38.385Z",
+      "file": "courses/react-performance/concurrent-react-scheduling.md",
+      "modified": "2025-09-22T15:27:10.000Z",
+      "published": true,
+      "tags": ["react", "performance", "concurrent", "scheduling"]
+    },
+    {
+      "slug": "context-api-performance-pitfalls",
+      "title": "Context API Performance Pitfalls",
+      "description": "Avoid the Context API traps that cause unnecessary re-renders. Learn patterns for efficient context usage, splitting strategies, and when to reach for alternatives.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/context-api-performance-pitfalls.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "context", "state-management"]
+    },
+    {
+      "slug": "core-web-vitals-for-react",
+      "title": "Core Web Vitals for React Applications",
+      "description": "Master LCP, FID, and CLS optimization in React apps. Practical techniques to improve user experience and search rankings.",
+      "date": "2025-09-06T23:15:00.000Z",
+      "file": "courses/react-performance/core-web-vitals-for-react.md",
+      "modified": "2025-09-22T15:27:10.000Z",
+      "published": true,
+      "tags": ["react", "performance", "web-vitals"]
+    },
+    {
+      "slug": "custom-equality-checks-areequal",
+      "title": "Custom Equality Checks with areEqual",
+      "description": "Write domain-smart equality functions that avoid deep-compare traps and make memoized components both fast and correct.",
+      "date": "2025-09-06T21:18:40.221Z",
+      "file": "courses/react-performance/custom-equality-checks-areequal.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "memoization", "equality"]
+    },
+    {
+      "slug": "debugging-performance-issues",
+      "title": "Debugging React Performance Issues",
+      "description": "Master the systematic approach to finding and fixing performance problems. Use React DevTools, Chrome Performance tab, and proven debugging workflows.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/debugging-performance-issues.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "debugging", "devtools"]
+    },
+    {
+      "slug": "derived-vs-stored-state",
+      "title": "Derived vs Stored State",
+      "description": "Store less, derive more. Compute on demand to avoid desyncs, extra memory, and unnecessary re-renders.",
+      "date": "2025-09-06T21:49:55.844Z",
+      "file": "courses/react-performance/derived-vs-stored-state.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "state-management", "architecture"]
+    },
+    {
+      "slug": "flushsync-in-react-dom",
+      "title": "Flushsync In React Dom",
+      "description": "React's concurrent rendering is one of its most powerful features—it batches updates, prioritizes work, and keeps your app responsive by breaking rendering into chunks. But sometimes you need to tell React, \"No, really, I need this updat...",
+      "date": "2025-09-06T23:49:18.000Z",
+      "file": "courses/react-performance/flushsync-in-react-dom.md",
+      "modified": "2025-10-01T02:02:22.000Z"
+    },
+    {
+      "slug": "gpu-acceleration-patterns",
+      "title": "GPU Acceleration Patterns",
+      "description": "Leverage GPU acceleration for high-performance React animations, 3D graphics, and computational tasks",
+      "date": "2025-01-14T00:00:00.000Z",
+      "file": "courses/react-performance/gpu-acceleration-patterns.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "tags": ["React", "Performance", "GPU", "WebGL", "CSS Transforms"]
+    },
+    {
+      "slug": "graphql-react-performance",
+      "title": "GraphQL & React Performance",
+      "description": "Optimize GraphQL queries in React apps. Master fragment colocation, query batching, caching strategies, and avoid the N+1 query problem.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/graphql-react-performance.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "graphql", "apollo", "data-fetching"]
+    },
+    {
+      "slug": "identity-stability-props",
+      "title": "Identity Stability Props",
+      "description": "React's performance model is built on comparing values to decide when components need to re-render. When you pass objects, arrays, or functions as props, their **identity**—not just their contents—determines whether React considers them...",
+      "date": "2025-09-06T23:49:18.000Z",
+      "file": "courses/react-performance/identity-stability-props.md",
+      "modified": "2025-10-01T02:02:22.000Z"
+    },
+    {
+      "slug": "image-and-asset-optimization",
+      "title": "Image & Asset Optimization for React",
+      "description": "Master image optimization in React apps. Implement responsive images, modern formats, lazy loading, and CDN strategies for blazing-fast visual content.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/image-and-asset-optimization.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "images", "optimization", "assets"]
+    },
+    {
+      "slug": "image-optimization-advanced",
+      "title": "Advanced Image Optimization Techniques",
+      "description": "Master advanced image optimization with CDN integration, build-time processing, performance monitoring, and automated optimization pipelines.",
+      "date": "2025-09-20T01:15:00.000Z",
+      "file": "courses/react-performance/image-optimization-advanced.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "images", "cdn", "build-optimization"]
+    },
+    {
+      "slug": "inp-optimization-long-tasks",
+      "title": "INP Optimization & Long Tasks",
+      "description": "Master Interaction to Next Paint (INP) by breaking up long tasks, using scheduler APIs, and optimizing React interactivity",
+      "date": "2025-01-14T00:00:00.000Z",
+      "file": "courses/react-performance/inp-optimization-long-tasks.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "tags": ["React", "Performance", "INP", "Core Web Vitals", "Interactivity"]
+    },
+    {
+      "slug": "inp-production-monitoring",
+      "title": "INP Production Monitoring",
+      "description": "Measure, track, and improve Interaction to Next Paint (INP) in production React applications with real user data",
+      "date": "2025-01-14T00:00:00.000Z",
+      "file": "courses/react-performance/inp-production-monitoring.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "tags": ["React", "Performance", "INP", "Monitoring", "Core Web Vitals"]
+    },
+    {
+      "slug": "key-stability-in-lists",
+      "title": "Key Stability in Lists",
+      "description": "Master keys to keep state, focus, and animations intact—no more mysterious remounts or janky list updates.",
+      "date": "2025-09-06T21:53:48.824Z",
+      "file": "courses/react-performance/key-stability-in-lists.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "keys", "lists"]
+    },
+    {
+      "slug": "lifting-state-intelligently",
+      "title": "Lifting State Intelligently",
+      "description": "Lift state only when multiple peers truly need it. Contain churn and stop render ripples before they swamp your UI.",
+      "date": "2025-09-06T21:46:42.696Z",
+      "file": "courses/react-performance/lifting-state-intelligently.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "state-management", "architecture"]
+    },
+    {
+      "slug": "measuring-performance-with-real-tools",
+      "title": "Measuring Performance with Real Tools",
+      "description": "Stop guessing. Use React DevTools, Chrome Performance, and flamegraphs to find real bottlenecks and prove improvements.",
+      "date": "2025-09-06T22:11:29.695Z",
+      "file": "courses/react-performance/measuring-performance-with-real-tools.md",
+      "modified": "2025-09-22T15:27:10.000Z",
+      "published": true,
+      "tags": ["react", "performance", "monitoring", "devtools"]
+    },
+    {
+      "slug": "memory-leak-detection",
+      "title": "Memory Leak Detection in React Applications",
+      "description": "Find and fix memory leaks that kill performance. Master Chrome DevTools, detect common patterns, and build leak-free React apps.",
+      "date": "2025-09-07T00:45:00.000Z",
+      "file": "courses/react-performance/memory-leak-detection.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "debugging", "memory"]
+    },
+    {
+      "slug": "memory-management-deep-dive",
+      "title": "Memory Management Deep Dive",
+      "description": "Master React memory management, leak detection, and garbage collection optimization for production applications",
+      "date": "2025-01-14T00:00:00.000Z",
+      "file": "courses/react-performance/memory-management-deep-dive.md",
+      "modified": "2025-09-20T21:36:56.000Z",
+      "tags": ["React", "Performance", "Memory Management", "Garbage Collection", "Memory Leaks"]
+    },
+    {
+      "slug": "micro-frontend-performance",
+      "title": "Micro-Frontend Performance",
+      "description": "Build performant micro-frontend architectures with React. Master Module Federation, shared dependencies, runtime optimization, and cross-team coordination.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/micro-frontend-performance.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "micro-frontends", "module-federation", "architecture"]
+    },
+    {
+      "slug": "offscreen-canvas-webgl",
+      "title": "OffscreenCanvas & WebGL for React",
+      "description": "Leverage OffscreenCanvas and WebGL to create high-performance visualizations and graphics in React applications",
+      "date": "2025-01-14T00:00:00.000Z",
+      "file": "courses/react-performance/offscreen-canvas-webgl.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "tags": ["React", "Performance", "OffscreenCanvas", "WebGL", "Graphics"]
+    },
+    {
+      "slug": "optimizing-server-side-rendering",
+      "title": "Optimizing Server‑Side Rendering",
+      "description": "Speed up SSR with streaming, caching, and smarter data fetching—reduce time‑to‑first‑byte and hydrate faster.",
+      "date": "2025-09-06T22:13:49.769Z",
+      "file": "courses/react-performance/optimizing-server-side-rendering.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "ssr", "hydration"]
+    },
+    {
+      "slug": "performance-budgets-and-automation",
+      "title": "Performance Budgets & Automation",
+      "description": "Set and enforce performance budgets in your React apps. Automate testing, catch regressions in CI/CD, and maintain fast applications at scale.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/performance-budgets-and-automation.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "automation", "ci-cd", "testing"]
+    },
+    {
+      "slug": "performance-budgets-and-monitoring",
+      "title": "Performance Budgets and Monitoring",
+      "description": "Overview of performance budgets and monitoring strategies for React applications",
+      "date": "2025-09-06T23:00:00.000Z",
+      "file": "courses/react-performance/performance-budgets-and-monitoring.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "monitoring", "budgets"]
+    },
+    {
+      "slug": "performance-testing-implementation",
+      "title": "Performance Testing Implementation Guide",
+      "description": "Implement comprehensive performance testing with E2E testing, Lighthouse CI, continuous monitoring, and automated performance regression detection.",
+      "date": "2025-09-20T01:15:00.000Z",
+      "file": "courses/react-performance/performance-testing-implementation.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "testing", "ci-cd", "lighthouse"]
+    },
+    {
+      "slug": "performance-testing-strategy",
+      "title": "Performance Testing Strategy",
+      "description": "Build comprehensive performance tests for React apps. Unit test performance, catch regressions, and automate optimization validation.",
+      "date": "2025-09-07T00:00:00.000Z",
+      "file": "courses/react-performance/performance-testing-strategy.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "testing", "automation"]
+    },
+    {
+      "slug": "priority-hints-resource-loading",
+      "title": "Priority Hints & Resource Loading",
+      "description": "Master browser resource loading with priority hints, preconnect, dns-prefetch, and modern loading strategies",
+      "date": "2025-01-14T00:00:00.000Z",
+      "file": "courses/react-performance/priority-hints-resource-loading.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "tags": ["React", "Performance", "Resource Loading", "Priority Hints", "Network Optimization"]
+    },
+    {
+      "slug": "production-performance-monitoring",
+      "title": "Production Performance Monitoring",
+      "description": "Monitor real user performance, set up RUM, track Core Web Vitals, and catch regressions before users complain.",
+      "date": "2025-09-07T01:00:00.000Z",
+      "file": "courses/react-performance/production-performance-monitoring.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "monitoring", "rum"]
+    },
+    {
+      "slug": "react-19-compiler-guide",
+      "title": "The React 19 Compiler",
+      "description": "Master the React Compiler from basics to advanced patterns. Migrate from manual optimizations, handle edge cases, and measure real-world improvements.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/react-19-compiler-guide.md",
+      "modified": "2025-09-22T15:27:10.000Z",
+      "published": true,
+      "tags": ["react", "performance", "react-19", "compiler", "optimization"]
+    },
+    {
+      "slug": "react-cache-api",
+      "title": "The cache() API",
+      "description": "Stabilize and dedupe expensive work across requests and renders—use cache() to turn pure functions into shared resources.",
+      "date": "2025-09-06T22:22:56.456Z",
+      "file": "courses/react-performance/react-cache-api.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "caching", "react-19"]
+    },
+    {
+      "slug": "react-compiler-migration-guide",
+      "title": "React Compiler Migration Guide",
+      "description": "Complete guide to adopting React 19's compiler. Migrate from manual optimizations, handle edge cases, and measure improvements.",
+      "date": "2025-09-07T00:15:00.000Z",
+      "file": "courses/react-performance/react-compiler-migration-guide.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "react-19", "compiler"]
+    },
+    {
+      "slug": "react-memo-react-19-and-compiler-era",
+      "title": "React.memo in React 19 and the Compiler Era",
+      "description": "Learn where React.memo still shines, when a compiler or bailouts make it redundant, and how to write fair areEqual checks.",
+      "date": "2025-09-06T21:12:33.129Z",
+      "file": "courses/react-performance/react-memo-react-19-and-compiler-era.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "memoization", "react-19", "compiler"]
+    },
+    {
+      "slug": "react-server-components-rsc",
+      "title": "React Server Components",
+      "description": "Move heavy work to the server and hydrate only where needed—ship less JS and free the main thread for interactions.",
+      "date": "2025-09-06T22:03:39.880Z",
+      "file": "courses/react-performance/react-server-components-rsc.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "rsc", "server-components"]
+    },
+    {
+      "slug": "real-time-data-performance",
+      "title": "Real-Time Data Performance in React",
+      "description": "Handle high-frequency updates without killing performance. Master WebSockets, Server-Sent Events, throttling, and efficient state updates for real-time React apps.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/real-time-data-performance.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "real-time", "websockets", "streaming"]
+    },
+    {
+      "slug": "real-time-scale-strategies",
+      "title": "Real-Time at Scale Strategies",
+      "description": "Handle high-frequency real-time data in React with backpressure management, batching, and reconciliation strategies",
+      "date": "2025-01-14T00:00:00.000Z",
+      "file": "courses/react-performance/real-time-scale-strategies.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "tags": ["React", "Performance", "Real-Time", "WebSocket", "Scalability"]
+    },
+    {
+      "slug": "resource-preloading-apis",
+      "title": "Resource Preloading APIs",
+      "description": "Prime the cache for what users will do next—preload, prefetch, and preinit without double‑loading or hurting metrics.",
+      "date": "2025-09-06T22:20:28.822Z",
+      "file": "courses/react-performance/resource-preloading-apis.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "preloading", "react-19"]
+    },
+    {
+      "slug": "selective-hydration-react-19",
+      "title": "Selective Hydration in Modern React Apps",
+      "description": "Hydrate what matters first. Prioritize above‑the‑fold work so pages feel interactive even while the rest continues to load.",
+      "date": "2025-09-06T22:05:42.929Z",
+      "file": "courses/react-performance/selective-hydration-react-19.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "hydration", "ssr"]
+    },
+    {
+      "slug": "separating-actions-from-state-two-contexts",
+      "title": "Separating Actions from State with Two Contexts",
+      "description": "Split read and write paths. Pass immutable state and stable actions to cut re-renders and improve testability.",
+      "date": "2025-09-06T21:51:43.345Z",
+      "file": "courses/react-performance/separating-actions-from-state-two-contexts.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "context", "state-management"]
+    },
+    {
+      "slug": "service-worker-strategies",
+      "title": "Service Worker Strategies for React Apps",
+      "description": "Implement service workers for offline-first React apps. Master caching strategies, background sync, and push notifications for blazing-fast performance.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/service-worker-strategies.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "service-workers", "pwa", "caching"]
+    },
+    {
+      "slug": "skeleton-screens-perceived-performance",
+      "title": "Skeleton Screens & Perceived Performance",
+      "description": "Make your React app feel instant with skeleton screens. Master loading states, progressive enhancement, and psychological performance tricks.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/skeleton-screens-perceived-performance.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "ux", "loading", "skeleton-screens"]
+    },
+    {
+      "slug": "speculation-rules-bfcache",
+      "title": "Speculation Rules & bfcache Optimization",
+      "description": "Implement instant navigation with Speculation Rules API and optimize for back/forward cache in React applications",
+      "date": "2025-01-14T00:00:00.000Z",
+      "file": "courses/react-performance/speculation-rules-bfcache.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "tags": ["React", "Performance", "Speculation Rules", "bfcache", "Navigation"]
+    },
+    {
+      "slug": "streaming-ssr-optimization",
+      "title": "Streaming SSR Optimization",
+      "description": "Master React 18+ streaming SSR. Optimize TTFB, implement progressive hydration, and deliver instant page loads.",
+      "date": "2025-09-07T00:30:00.000Z",
+      "file": "courses/react-performance/streaming-ssr-optimization.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "ssr", "streaming", "react-18"]
+    },
+    {
+      "slug": "suspense-for-data-fetching",
+      "title": "Suspense for Data Fetching",
+      "description": "Stream UI progressively instead of blocking on everything—compose boundaries that keep pages interactive and informative.",
+      "date": "2025-09-06T22:01:30.022Z",
+      "file": "courses/react-performance/suspense-for-data-fetching.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "suspense", "data-fetching"]
+    },
+    {
+      "slug": "swc-speedy-web-compiler",
+      "title": "Speedy Web Compiler (SWC) for React Apps",
+      "description": "Compile and minify at warp speed. Configure SWC to speed local builds and keep production bundles lean and modern.",
+      "date": "2025-09-06T22:30:49.275Z",
+      "file": "courses/react-performance/swc-speedy-web-compiler.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "bundling", "build-tools"]
+    },
+    {
+      "slug": "the-use-hook",
+      "title": "The use() Hook",
+      "description": "Simplify async and context consumption by letting components 'use' resources directly, with Suspense driving the UI flow.",
+      "date": "2025-09-06T22:15:46.931Z",
+      "file": "courses/react-performance/the-use-hook.md",
+      "modified": "2025-09-22T15:27:10.000Z",
+      "published": true,
+      "tags": ["react", "performance", "hooks", "react-19"]
+    },
+    {
+      "slug": "tree-shaking-optimization",
+      "title": "Tree Shaking Optimization",
+      "description": "Master dead code elimination through advanced tree shaking. Eliminate unused imports, optimize side effects, and shrink bundles.",
+      "date": "2025-09-06T23:45:00.000Z",
+      "file": "courses/react-performance/tree-shaking-optimization.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "bundling", "tree-shaking"]
+    },
+    {
+      "slug": "understanding-reconciliation-react-19",
+      "title": "Understanding Reconciliation in React 19",
+      "description": "Demystify how React compares trees, chooses updates, and schedules work—then apply the rules to ship snappy, predictable UIs.",
+      "date": "2025-09-06T21:09:12.712Z",
+      "file": "courses/react-performance/understanding-reconciliation-react-19.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "reconciliation", "react-19"]
+    },
+    {
+      "slug": "useactionstate-performance",
+      "title": "Useactionstate Performance",
+      "description": "Forms and mutations are where React apps traditionally become sluggish and confusing. React 19's useActionState hook elegantly solves the coordination problem of managing pending, success, and error states while keeping your components p...",
+      "date": "2025-09-06T23:49:18.000Z",
+      "file": "courses/react-performance/useactionstate-performance.md",
+      "modified": "2025-10-01T02:02:22.000Z"
+    },
+    {
+      "slug": "usedeferredvalue-patterns",
+      "title": "useDeferredValue Patterns",
+      "description": "Keep typing fluid by deferring expensive derived values. Pair with transitions and memoization for silky search UIs.",
+      "date": "2025-09-06T22:26:45.103Z",
+      "file": "courses/react-performance/usedeferredvalue-patterns.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "hooks", "concurrent"]
+    },
+    {
+      "slug": "uselayouteffect-performance",
+      "title": "Performance Characteristics of useLayoutEffect",
+      "description": "Know when layout effects are necessary—and when they block paint. Prefer passive effects and measure before forcing sync work.",
+      "date": "2025-09-06T22:29:02.602Z",
+      "file": "courses/react-performance/uselayouteffect-performance.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "hooks", "effects"]
+    },
+    {
+      "slug": "usememo-usecallback-in-react-19",
+      "title": "useMemo and useCallback in React 19",
+      "description": "Use memoization as a scalpel, not a sledgehammer—cache expensive work or stabilize identities where it truly pays off.",
+      "date": "2025-09-06T21:16:28.100Z",
+      "file": "courses/react-performance/usememo-usecallback-in-react-19.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "hooks", "memoization", "react-19"]
+    },
+    {
+      "slug": "usetransition-and-starttransition",
+      "title": "useTransition and startTransition",
+      "description": "Mark non-urgent updates so urgent ones stay snappy—keep typing smooth while expensive UI catches up in the background.",
+      "date": "2025-09-06T21:59:36.420Z",
+      "file": "courses/react-performance/usetransition-and-starttransition.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "hooks", "concurrent"]
+    },
+    {
+      "slug": "view-transitions-api",
+      "title": "View Transitions API for React",
+      "description": "Create smooth, native-like page transitions in React apps using the View Transitions API",
+      "date": "2025-01-14T00:00:00.000Z",
+      "file": "courses/react-performance/view-transitions-api.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "tags": ["React", "Performance", "View Transitions", "Animation", "UX"]
+    },
+    {
+      "slug": "virtual-dom-fiber-architecture",
+      "title": "Virtual DOM & Fiber Architecture",
+      "description": "Understand how React really works under the hood. Master the Fiber architecture, priority scheduling, and reconciliation to write truly optimized React apps.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/virtual-dom-fiber-architecture.md",
+      "modified": "2025-09-22T15:27:10.000Z",
+      "published": true,
+      "tags": ["react", "performance", "virtual-dom", "fiber", "architecture"]
+    },
+    {
+      "slug": "web-workers-with-react",
+      "title": "Web Workers with React",
+      "description": "Offload expensive computations to Web Workers. Keep your UI responsive with parallel processing, proper state synchronization, and TypeScript support.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/web-workers-with-react.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "web-workers", "parallel-processing"]
+    },
+    {
+      "slug": "webassembly-integration",
+      "title": "WebAssembly Integration in React",
+      "description": "Supercharge React with WebAssembly for CPU-intensive tasks. Learn when and how to use WASM for image processing, cryptography, and complex calculations.",
+      "date": "2025-09-14T12:00:00.000Z",
+      "file": "courses/react-performance/webassembly-integration.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "webassembly", "wasm", "optimization"]
+    },
+    {
+      "slug": "windowing-and-virtualization",
+      "title": "Windowing and Virtualization",
+      "description": "Render only what users see. Use react-window to make 10,000-row lists fast without sacrificing UX or accessibility.",
+      "date": "2025-09-06T21:56:05.091Z",
+      "file": "courses/react-performance/windowing-and-virtualization.md",
+      "modified": "2025-10-01T02:02:22.000Z",
+      "published": true,
+      "tags": ["react", "performance", "virtualization", "lists"]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "@stevekinney/writing",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "manifest": "bun run ../../packages/scripts/generate-writing-manifest.ts",
+    "build": "bun run manifest"
+  }
+}

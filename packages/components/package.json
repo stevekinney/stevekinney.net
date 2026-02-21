@@ -1,0 +1,8 @@
+{
+  "name": "@stevekinney/components",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./*"
+  }
+}

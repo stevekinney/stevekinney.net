@@ -1,0 +1,61 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["packages/scripts/**", "packages/content-types/**", "turbo.json"],
+  "tasks": {
+    "manifest": {
+      "outputs": ["manifest.json"]
+    },
+    "build": {
+      "dependsOn": ["^build", "^manifest"],
+      "outputs": ["build/**", ".svelte-kit/**", "src/lib/server/content-index.json"]
+    },
+    "build:stats": {
+      "dependsOn": ["build"]
+    },
+    "preview": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "sync": {},
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "check": {
+      "dependsOn": ["^check"]
+    },
+    "check:watch": {
+      "cache": false,
+      "persistent": true
+    },
+    "test": {
+      "dependsOn": ["build", "^test"],
+      "outputs": ["playwright-report/**", "test-results/**"]
+    },
+    "test:integration": {
+      "dependsOn": ["build"]
+    },
+    "test:integration:dev": {
+      "cache": false
+    },
+    "test:unit": {
+      "dependsOn": ["build"]
+    },
+    "test:storybook": {
+      "dependsOn": ["build-storybook"]
+    },
+    "storybook": {
+      "cache": false,
+      "persistent": true
+    },
+    "build-storybook": {},
+    "content:index": {},
+    "content:validate": {},
+    "clean": {
+      "cache": false
+    }
+  }
+}

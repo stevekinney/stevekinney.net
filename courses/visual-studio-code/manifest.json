@@ -1,0 +1,448 @@
+{
+  "meta": {
+    "generatedAt": "2026-02-21T20:37:39.830Z",
+    "hash": "c1d5bd7d374f04bcc2fd30168adde04412a13c321f3a77fc1a641850325d9b21"
+  },
+  "course": {
+    "slug": "visual-studio-code",
+    "title": "Visual Studio Code",
+    "description": "An in-depth guide covering everything you would ever want to know about using Visual Studio Code.",
+    "date": "2025-03-18T16:45:00.000Z",
+    "modified": "2025-07-29T21:09:56.000Z",
+    "contentsFile": "courses/visual-studio-code/_index.md"
+  },
+  "lessons": [
+    {
+      "slug": "advanced-debugging-techniques",
+      "title": "Advanced Debugging Techniques in Visual Studio Code",
+      "description": "Master powerful debugging features like conditional breakpoints, logpoints, and more for efficient troubleshooting",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/advanced-debugging-techniques.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "advanced-snippet-techniques-vscode",
+      "title": "Advanced Snippet Techniques in Visual Studio Code",
+      "description": "Master nested snippets and regular expressions to create powerful, dynamic code templates",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/advanced-snippet-techniques-vscode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-a-simple-vscode-extension",
+      "title": "Building a Simple Extension",
+      "description": "A quick guide to building a Visual Studio Code extension.",
+      "date": "2025-03-18T11:15:05.000Z",
+      "file": "courses/visual-studio-code/building-a-simple-vscode-extension.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "built-in-problem-matchers",
+      "title": "Built-in Problem Matchers",
+      "description": "The problem matchers built-in to Visual Studio Code.",
+      "date": "2025-03-18T14:13:03.000Z",
+      "file": "courses/visual-studio-code/built-in-problem-matchers.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "compound-tasks-vscode",
+      "title": "Compound Tasks in Visual Studio Code",
+      "description": "Explore advanced task capabilities including watch modes, compound tasks, and task inputs for efficient development workflows",
+      "date": "2025-03-18T11:15:05.000Z",
+      "file": "courses/visual-studio-code/compound-tasks-vscode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "creating-a-multi-root-workspace",
+      "title": "Creating Multi-Root Workspaces in Visual Studio Code",
+      "description": "Step-by-step guide to creating and configuring multi-root workspaces to manage multiple projects together",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/creating-a-multi-root-workspace.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "debugging-running-node-processes",
+      "title": "Debugging Running Node Processes in Visual Studio Code",
+      "description": "Learn how to attach Visual Studio Code's debugger to existing Node.js processes for better runtime troubleshooting",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/debugging-running-node-processes.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "debugging-web-applications",
+      "title": "Debugging Web Applications in Visual Studio Code",
+      "description": "Configure Visual Studio Code to debug front-end web applications with breakpoints, variable inspection, and more",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/debugging-web-applications.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "dev-containers-and-dockerfiles",
+      "title": "Using Dockerfiles with Dev Containers",
+      "description": "Learn how to create custom development environments with Dockerfiles for maximum control and flexibility",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/dev-containers-and-dockerfiles.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "editing-settings-through-json",
+      "title": "Editing Settings Through JSON",
+      "description": "Learn how to directly edit Visual Studio Code settings using the settings.json file for advanced configuration",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/editing-settings-through-json.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "editing-settings-through-the-vs-code-ui",
+      "title": "Editing Settings Through the Visual Studio Code UI",
+      "description": "Learn how to configure Visual Studio Code settings using the visual Settings Editor interface",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/editing-settings-through-the-vs-code-ui.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "exploring-devcontainer-json",
+      "title": "Configuring Your Dev Container",
+      "description": "Detailed explanation of the devcontainer.json file and its properties to customize your development environment",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/exploring-devcontainer-json.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "favorite-vs-code-extensions",
+      "title": "Favorite Visual Studio Code Extensions",
+      "description": "A curated list of useful Visual Studio Code extensions to enhance your development workflow",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/favorite-vs-code-extensions.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "favorite-vs-code-settings",
+      "title": "Popular Visual Studio Code Settings",
+      "description": "Discover valuable Visual Studio Code settings to customize your editor for maximum productivity and a better development experience",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/favorite-vs-code-settings.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "keybindings-for-snippets-vscode",
+      "title": "Keybindings for Snippets",
+      "description": "Add Keybindings for your Snippets in Visual Studio Code.",
+      "date": "2025-03-17T15:32:33.000Z",
+      "file": "courses/visual-studio-code/keybindings-for-snippets-vscode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "keybindings",
+      "title": "Keybindings",
+      "description": "Setting key bindings in Visual Studio Code.",
+      "date": "2025-03-18T13:10:27.000Z",
+      "file": "courses/visual-studio-code/keybindings.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "launch-config",
+      "title": "Launch Configurations in Visual Studio Code",
+      "description": "Detailed guide to creating and customizing launch.json files for different debugging scenarios",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/launch-config.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "more-on-multi-root-namespaces",
+      "title": "More on Mutli-Root Namespaces",
+      "description": "Some additional notes on using mutli-root namespaces in Visual Studio Code.",
+      "date": "2025-03-18T14:13:03.000Z",
+      "file": "courses/visual-studio-code/more-on-multi-root-namespaces.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "multi-root-workspaces",
+      "title": "Multi-Root Workspaces in Visual Studio Code",
+      "description": "Work with multiple projects simultaneously in a single Visual Studio Code window to improve productivity and reduce context switching",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/multi-root-workspaces.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "multiple-cursors-with-find-and-replace",
+      "title": "Multiple Cursors with Find and Replace",
+      "description": "Learn how to use search results to create multiple cursors for efficient text editing in Visual Studio Code",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/multiple-cursors-with-find-and-replace.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "navigating-vscode",
+      "title": "Navigating Visual Studio Code",
+      "description": "Master the essential navigation features in Visual Studio Code to efficiently move through your codebase",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/navigating-vscode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "personalizing-dev-containers",
+      "title": "Personalizing Dev Containers",
+      "description": "Learn how to customize your development container environment with dotfiles and advanced configuration options",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/personalizing-dev-containers.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "placeholders-and-variables-in-vscode-snippets",
+      "title": "Placeholders and Variables in Snippets",
+      "description": "Learn how to navigate placeholders, and use transformations to maximize your snippet efficiency in Visual Studio Code.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/placeholders-and-variables-in-vscode-snippets.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "prebuilt-dev-containers-in-vscode",
+      "title": "Prebuilt Dev Containers in Visual Studio Code",
+      "description": "Using and customizing prebuilt container definitions to quickly set up development environments",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/prebuilt-dev-containers-in-vscode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "refactoring-in-vscode",
+      "title": "Refactoring in Visual Studio Code",
+      "description": "Master essential code refactoring techniques in Visual Studio Code, from renaming symbols to extracting methods and variables",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/refactoring-in-vscode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "search-and-replace-vscode",
+      "title": "Search and Replace in Visual Studio Code",
+      "description": "Master powerful search and replace techniques including regular expressions and multi-file operations",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/search-and-replace-vscode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "setting-up-dev-containers",
+      "title": "Setting Up Dev Containers in Visual Studio Code",
+      "description": "A step-by-step guide to setting up and customizing development containers in Visual Studio Code",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/setting-up-dev-containers.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "settings-precedence-vscode",
+      "title": "Settings Precedence in Visual Studio Code",
+      "description": "Understand how Visual Studio Code's hierarchical settings system works across default, user, workspace, and folder levels",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/settings-precedence-vscode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "settings-profiles-vscode",
+      "title": "Setting Up Profiles in Visual Studio Code",
+      "description": "Learn how to create, switch between, and manage different settings profiles for various development scenarios",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/settings-profiles-vscode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "settings-via-env-vars-vscode",
+      "title": "Controlling Settings with Environment Variables in Visual Studio Code",
+      "description": "Learn how to use environment variables to dynamically configure Visual Studio Code settings across different environments",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/settings-via-env-vars-vscode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "snippets-libraries-and-extensions",
+      "title": "Snippet Libraries and Extensions",
+      "description": "Exploring built-in snippets, community snippet extensions, and how to create your own snippet extensions",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/snippets-libraries-and-extensions.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "snippets-regex",
+      "title": "Using Snippets with Regular Expressions in Visual Studio Code",
+      "description": "Master regex transformations in snippets to create advanced dynamic templates with powerful text manipulation",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/snippets-regex.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "using-dev-containers-in-vscode",
+      "title": "Setting Up a Dev Container",
+      "description": "Complete guide to installing, creating, and customizing development containers in Visual Studio Code",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/using-dev-containers-in-vscode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-command-palette",
+      "title": "Command Palette in Visual Studio Code",
+      "description": "Master Visual Studio Code's Command Palette to quickly access commands and customize keybindings",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-command-palette.md",
+      "modified": "2025-09-22T15:27:10.000Z"
+    },
+    {
+      "slug": "vscode-debugging-basics",
+      "title": "Debugging: The Basics in Visual Studio Code",
+      "description": "Learn fundamental debugging techniques in Visual Studio Code including launch configurations, breakpoints, and stepping through code",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-debugging-basics.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-dev-containers",
+      "title": "Dev Containers in Visual Studio Code",
+      "description": "Understanding how to use Docker containers for consistent development environments in Visual Studio Code",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-dev-containers.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-editor-layout",
+      "title": "Editor Layout in Visual Studio Code",
+      "description": "Customize your Visual Studio Code workspace with flexible layouts, split views, and Zen Mode for an optimal coding experience",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-editor-layout.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-emmet-exercises",
+      "title": "Emmet in Visual Studio Code: Exercises",
+      "description": "Some quick exercises for getting comfortable using Emmet inside of VS Code.",
+      "date": "2025-03-18T11:15:05.000Z",
+      "file": "courses/visual-studio-code/vscode-emmet-exercises.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-emmet-solutions",
+      "title": "Emmet in Visual Studio Code: Solutions",
+      "description": "Explore solutions for Emmet exercises in Visual Studio Code, featuring classic HTML structures like paragraphs, lists, and nested elements. Streamline your coding with these concise examples!",
+      "date": "2025-03-18T11:15:05.000Z",
+      "file": "courses/visual-studio-code/vscode-emmet-solutions.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-emmet",
+      "title": "Emmet in Visual Studio Code",
+      "description": "Learn how to use Emmet's powerful abbreviation syntax to speed up HTML and CSS development in Visual Studio Code",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-emmet.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-extension-scaffold",
+      "title": "Scaffolding an Extension",
+      "description": "A little note on how to get started building a Visual Studio Code plugin.",
+      "date": "2025-03-18T11:15:05.000Z",
+      "file": "courses/visual-studio-code/vscode-extension-scaffold.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-integrated-terminal",
+      "title": "Integrated Terminal in Visual Studio Code",
+      "description": "Learn how to use and customize Visual Studio Code's integrated terminal for efficient development workflows",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-integrated-terminal.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-keyboard-shortcuts",
+      "title": "Some Keyboard Shortcuts for Visual Studio Code",
+      "description": "An index of commonly-used extensions for Visual Studio Code.",
+      "date": "2025-03-18T11:15:05.000Z",
+      "file": "courses/visual-studio-code/vscode-keyboard-shortcuts.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-multiple-cursors",
+      "title": "Multiple Cursors in Visual Studio Code",
+      "description": "Learn how to use multiple cursors for efficient simultaneous editing across multiple locations in your code",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-multiple-cursors.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-regular-expressionist",
+      "title": "Building a Text Completion Extension",
+      "description": "A guide for building a little regular expression builder as a Visual Studio Code extension.",
+      "date": "2025-03-18T11:15:05.000Z",
+      "file": "courses/visual-studio-code/vscode-regular-expressionist.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-settings-for-managing-files",
+      "title": "Settings for Managing Files in Visual Studio Code",
+      "description": "Configure file associations, exclusions, and default behaviors for efficient file management in Visual Studio Code",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-settings-for-managing-files.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-snippet-exercises",
+      "title": "Visual Studio Code Snippet Exercises",
+      "description": "Practice creating various code snippets in Visual Studio Code",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-snippet-exercises.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-snippets-solutions",
+      "title": "Visual Studio Code Snippet Exercise Solutions",
+      "description": "Solutions to the Visual Studio Code snippet creation exercises with complete code examples",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-snippets-solutions.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-snippets",
+      "title": "Snippets in Visual Studio Code",
+      "description": "Learn how to use and create code snippets to boost your productivity with reusable code templates",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-snippets.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-source-control",
+      "title": "Source Control in Visual Studio Code",
+      "description": "Learn how to use Visual Studio Code's integrated Git features for effective version control",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-source-control.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-task-examples",
+      "title": "Examples of Visual Studio Code Tasks",
+      "description": "Practical examples of Visual Studio Code tasks for common development scenarios including building, testing, and deployments",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-task-examples.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-tasks-tips-and-tricks",
+      "title": "Visual Studio Code Tasks: Tips and Tricks",
+      "description": "Advanced techniques for customizing Visual Studio Code tasks with problem matchers, presentation options, and environment variables",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-tasks-tips-and-tricks.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vscode-tasks",
+      "title": "Tasks in Visual Studio Code",
+      "description": "Understand how to configure and use Visual Studio Code tasks to automate your development workflow",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/vscode-tasks.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "working-with-dev-containers",
+      "title": "Working with Dev Containers in Visual Studio Code",
+      "description": "Learn how to use, rebuild and interact with development containers in Visual Studio Code",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/visual-studio-code/working-with-dev-containers.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    }
+  ]
+}

@@ -1,0 +1,440 @@
+{
+  "meta": {
+    "generatedAt": "2026-02-21T20:37:39.839Z",
+    "hash": "14ab3b3946693d6bc29a8f1ea9b40f6ce9b61e9f93e8b977fb2985cb79df1a49"
+  },
+  "course": {
+    "slug": "full-stack-typescript",
+    "title": "Full Stack TypeScript",
+    "description": "Add type-safety across the stack.",
+    "date": "2025-03-20T19:00:00.000Z",
+    "modified": "2025-07-29T21:09:56.000Z",
+    "contentsFile": "courses/full-stack-typescript/_index.md"
+  },
+  "lessons": [
+    {
+      "slug": "adding-client-side-validation",
+      "title": "Adding Client-Side Schema Validation",
+      "description": "Learn to implement client-side schema validation in a React app with TypeScript and Express, using `busy-bee-schema` to ensure API response integrity and handle CRUD operations efficiently.",
+      "date": "2025-03-20T13:54:40.000Z",
+      "file": "courses/full-stack-typescript/adding-client-side-validation.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "adding-types-to-express-responses",
+      "title": "Adding Types to Express Responses",
+      "description": "Learn how to add comprehensive type safety to Express response objects for better API consistency and reliability.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/adding-types-to-express-responses.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "adding-types-to-express",
+      "title": "Adding Types to Express",
+      "description": "Learn how to leverage TypeScript with Express to build type-safe APIs and web applications.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/adding-types-to-express.md",
+      "modified": "2025-09-22T15:27:10.000Z"
+    },
+    {
+      "slug": "advanced-schema-design-with-zod",
+      "title": "Advanced Schema Design with Zod",
+      "description": "Zod offers advanced schema design patterns to handle complex validation scenarios effectively.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/advanced-schema-design-with-zod.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "advanced-types-with-zod",
+      "title": "Advanced Types with Zod",
+      "description": "Learn about advanced type constructs in Zod including literals, enums, tuples, unions, discriminated unions, and more.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/advanced-types-with-zod.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "branded-types-express",
+      "title": "Branded Types with Express",
+      "description": "Learn how to use branded types in Express applications to enhance type safety for IDs, tokens, and other special string values.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/branded-types-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "class-validator-class-transformer-express",
+      "title": "Advanced Validation Techniques in Express with TypeScript",
+      "description": "Learn how to implement object-oriented validation in Express using class-validator and class-transformer libraries.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/class-validator-class-transformer-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "custom-data-transformers-with-trpc",
+      "title": "Custom Data Transformers with tRPC",
+      "description": "Learn how to use data transformers like SuperJSON to properly serialize complex data types in tRPC applications.",
+      "date": "2025-09-14T18:05:51.833Z",
+      "file": "courses/full-stack-typescript/custom-data-transformers-with-trpc.md",
+      "modified": "2025-09-14T23:11:40.805Z"
+    },
+    {
+      "slug": "express-zod-api",
+      "title": "Building Type-Safe APIs with express-zod-api",
+      "description": "Learn how to use express-zod-api to build type-safe and validated API endpoints by combining Express with Zod schemas.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/express-zod-api.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "express-zod-params",
+      "title": "Validating Request Parameters",
+      "description": "Learn how to validate and coerce request parameters into the correct types using Zod schemas, ensuring your path and query parameters are properly parsed as numbers or booleans.",
+      "date": "2025-03-20T13:54:40.000Z",
+      "file": "courses/full-stack-typescript/express-zod-params.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "generating-open-api-from-express",
+      "title": "Generating OpenAPI Contracts from an Existing Express API",
+      "description": "Learn how to generate OpenAPI specifications from your existing Express API using tools like swagger-jsdoc.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/generating-open-api-from-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "generating-types-from-open-api",
+      "title": "Generating Types from an Open API specification",
+      "description": "Learn how to generate TypeScript types from an OpenAPI spec using `openapi-typescript`, creating a type-safe client with `openapi-fetch`, enhancing your API's type safety and developer experience.",
+      "date": "2025-03-20T13:54:40.000Z",
+      "file": "courses/full-stack-typescript/generating-types-from-open-api.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "generating-zod-openapi",
+      "title": "Generating Zod Schemas from OpenAPI",
+      "description": "Learn how to use `orval` to generate Zod schemas from OpenAPI specifications, enhancing type safety and productivity in your projects.",
+      "date": "2025-03-20T13:54:40.000Z",
+      "file": "courses/full-stack-typescript/generating-zod-openapi.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "global-error-types-express",
+      "title": "Global Error Types in Express",
+      "description": "Learn how to define and implement standardized error types across your Express application for consistent error handling.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/global-error-types-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "input-validation-with-zod",
+      "title": "Input Validation with Zod",
+      "description": "Use Zod with React Hook Form to create robust, type-safe form validation in your frontend applications.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/input-validation-with-zod.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "introduction-to-zod",
+      "title": "Introduction to Zod",
+      "description": "Get started with Zod, a TypeScript-first schema validation library for ensuring runtime type safety in your applications.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/introduction-to-zod.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "middleware-auth-logging-for-trpc",
+      "title": "Middleware for Auth & Logging in tRPC",
+      "description": "Learn how to implement authentication and logging middleware in tRPC for secure and well-monitored API endpoints.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/middleware-auth-logging-for-trpc.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "open-api-swagger-express",
+      "title": "Type-Safe APIs with OpenAPI and TypeScript",
+      "description": "Learn to create type-safe APIs with OpenAPI and TypeScript. Define APIs, generate TypeScript types, and integrate them with Express for consistent, error-free development.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/open-api-swagger-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "prisma-trpc",
+      "title": "Generate a tRPC Service with Prisma",
+      "description": "Learn to create a tRPC service using Prisma with the prisma-trpc-generator. Explore setup options and integrate with Zod, all detailed in this guide.",
+      "date": "2025-03-20T13:54:40.000Z",
+      "file": "courses/full-stack-typescript/prisma-trpc.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "refining-types-with-zod",
+      "title": "Refining Types with Zod",
+      "description": "A guide to creating and using custom validation schemas in Zod, including refining schemas, custom validation, nested types, branded types, and best practices for error handling and testing.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/refining-types-with-zod.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "structuring-zod-schemas-efficiently",
+      "title": "Structuring Zod Schemas Efficiently",
+      "description": "Explore Zod schema structuring tips, focusing on modularization, reuse, type inference, composition, and naming for efficient schema management and maintainable application architecture.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/structuring-zod-schemas-efficiently.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "subscriptions-with-trpc",
+      "title": "Real-time Subscriptions with tRPC",
+      "description": "Learn how to implement real-time updates using tRPC's subscription capabilities with Server-Sent Events or WebSockets.",
+      "date": "2025-09-14T18:05:49.651Z",
+      "file": "courses/full-stack-typescript/subscriptions-with-trpc.md",
+      "modified": "2025-09-14T23:11:40.808Z"
+    },
+    {
+      "slug": "testing-and-debugging-trpc",
+      "title": "Testing And Debugging Trpc",
+      "description": "tRPC offers a handy createCaller() to directly call your procedures without spinning up an Express server. Combine this with a test DB or mocking:",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/testing-and-debugging-trpc.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-with-zod-and-express",
+      "title": "Testing Express APIs with Zod Fixtures and Superagent",
+      "description": "Learn how to effectively test your Express APIs using Zod fixtures for test data generation and Superagent for HTTP request testing.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/testing-with-zod-and-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-zod-schema",
+      "title": "Testing with Zod: Building Robust and Maintainable Schemas",
+      "description": "Learn effective strategies for testing Zod schemas to ensure their correctness and prevent regressions as your application evolves.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/testing-zod-schema.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "transforms-and-coercion-with-zod",
+      "title": "Transforms and Coercion with Zod",
+      "description": "Master Zod transformations and data coercion to convert, refine, and prepare your data in type-safe ways.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/transforms-and-coercion-with-zod.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "trpc-on-the-client",
+      "title": "tRPC on the Client",
+      "description": "Learn how to set up and use tRPC on the client side with React and React Query integration for type-safe API calls.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/trpc-on-the-client.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "trpc-on-the-server",
+      "title": "tRPC on the Server",
+      "description": "Learn how to set up a tRPC server with Express to create type-safe API endpoints with routers, procedures, and contexts.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/trpc-on-the-server.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "type-branding-with-zod",
+      "title": "Type Branding with Zod",
+      "description": "Use Zod for type branding to create nominal type relationships while maintaining runtime type safety.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/type-branding-with-zod.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "type-guards-vs-schema-validation",
+      "title": "Type Guards vs Schema Validation",
+      "description": "Compare traditional TypeScript type guards with schema validation libraries like Zod for runtime data validation.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/type-guards-vs-schema-validation.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "type-safe-asynchronous-route-handlers-with-express",
+      "title": "Type-Safe Async Error Handling in Express Routes",
+      "description": "Learn how to use a type-safe wrapper in Express to handle asynchronous route handlers and ensure errors are correctly managed.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/type-safe-asynchronous-route-handlers-with-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "type-safe-middleware-with-express",
+      "title": "Type-Safe Middleware with Express",
+      "description": "Add type-safety to middleware when using Express.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/type-safe-middleware-with-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "type-safe-route-registration-with-express",
+      "title": "Building a Type-Safe Router for Express with TypeScript",
+      "description": "Learn to build a type-safe router for Express in TypeScript, ensuring handlers receive correctly typed requests while defining routes with more reliability and clarity.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/type-safe-route-registration-with-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "type-safe-routes-in-express",
+      "title": "Type-Safe Route Registration",
+      "description": "Discover how to implement type-safe route registration in Express, ensuring handlers receive correctly typed requests for enhanced reliability.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/type-safe-routes-in-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "type-safety-vs-runtime-validation",
+      "title": "Type Safety Vs. Runtime Validation: Two Sides of the Same Coin",
+      "description": "Understand the complementary relationship between TypeScript static type checking and runtime validation with Zod.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/type-safety-vs-runtime-validation.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "type-stripping",
+      "title": "Type Stripping in Node.js",
+      "description": "Learn how Node.js handles TypeScript files by stripping types at runtime without a separate build step.",
+      "date": "2025-03-15T22:50:56.000Z",
+      "file": "courses/full-stack-typescript/type-stripping.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "typed-error-middleware-with-express",
+      "title": "Typed-Error Middleware with Express",
+      "description": "Add type-safety to Express errors.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/typed-error-middleware-with-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "typesafe-database-with-prisma",
+      "title": "Type-Safe Database Access with Prisma",
+      "description": "A comprehensive guide to using Prisma with tRPC, Express, and TypeScript for end-to-end type safety in your database operations.",
+      "date": "2025-03-15T23:00:07.000Z",
+      "file": "courses/full-stack-typescript/typesafe-database-with-prisma.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "typescript-configuration-best-practices",
+      "title": "TypeScript Configuration Best Practices",
+      "description": "An in-depth guide to configuring TypeScript with strict type checking and other important compiler options for maximum safety and reliability.",
+      "date": "2025-03-15T22:58:14.000Z",
+      "file": "courses/full-stack-typescript/typescript-configuration-best-practices.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "typing-express-with-zod-walkthrough",
+      "title": "Demonstration: Typing Express with Zod",
+      "description": "Learn to integrate Zod schema validation in an Express app to ensure data integrity, covering tasks like creation, updates, and database queries with TypeScript.",
+      "date": "2025-03-20T13:54:40.000Z",
+      "file": "courses/full-stack-typescript/typing-express-with-zod-walkthrough.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "typing-headers-and-cookies-in-express",
+      "title": "Adding Types to Headers and Cookies with Express",
+      "description": "Learn how to add TypeScript types to headers and cookies in Express for safer HTTP communication, ensuring better type safety in your applications.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/typing-headers-and-cookies-in-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "using-zod-with-express",
+      "title": "Using Zod with Express",
+      "description": "Learn how to integrate Zod with Express for type-safe, runtime validation of request bodies, query parameters, and URL parameters.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/using-zod-with-express.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "validating-query-and-path-parameters",
+      "title": "Validating Path and Query Parameters with Middleware",
+      "description": "Learn how to create middleware in Express to validate path and query parameters using Zod schemas for robust request handling. Transform your request validation process with ease.",
+      "date": "2025-03-20T13:54:40.000Z",
+      "file": "courses/full-stack-typescript/validating-query-and-path-parameters.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "validating-schema-with-middleware",
+      "title": "Validating Schema with Middleware",
+      "description": "Learn to create middleware for validating request bodies using Zod schemas in TypeScript, ensuring data integrity for `POST` and `PUT` operations in your Express applications.",
+      "date": "2025-03-20T13:54:40.000Z",
+      "file": "courses/full-stack-typescript/validating-schema-with-middleware.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "validating-the-data-layer",
+      "title": "Validating the Data Layer",
+      "description": "Explore methods to validate your database layer using TypeScript, emphasizing the TaskClient class to perform CRUD operations securely.",
+      "date": "2025-03-20T13:54:40.000Z",
+      "file": "courses/full-stack-typescript/validating-the-data-layer.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "validating-your-api-openapi",
+      "title": "Validating the API with OpenAPI",
+      "description": "Learn how to ensure your API adheres to specifications using `express-openapi-validator` middleware for request and response validation.",
+      "date": "2025-09-14T18:05:47.485Z",
+      "file": "courses/full-stack-typescript/validating-your-api-openapi.md",
+      "modified": "2025-09-14T23:11:40.814Z"
+    },
+    {
+      "slug": "validating-zod-schema-exercises",
+      "title": "Validating Zod Schemas (Exercises)",
+      "description": "Practice your Zod skills with these hands-on exercises that cover schema validation, transformations, and advanced Zod features.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/validating-zod-schema-exercises.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "validating-zod-schemas-solution",
+      "title": "Validating Zod Schemas (Solutions)",
+      "description": "Complete solutions for the Zod validation exercises, demonstrating how to implement various validation techniques with Zod.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/validating-zod-schemas-solution.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "what-is-trpc",
+      "title": "What is tRPC?",
+      "description": "Discover tRPC, a TypeScript-first API framework that enables end-to-end type safety with zero codegen or schema definitions.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/what-is-trpc.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "working-backwards-from-types-with-zod",
+      "title": "Working Backwards from Types",
+      "description": "Learn how to create Zod schemas that match existing TypeScript types using the satisfies operator for perfect type alignment.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/working-backwards-from-types-with-zod.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "zod-best-practices",
+      "title": "Best Practices with Zod",
+      "description": "Learn best practices with Zod for efficient runtime validation, including avoiding redundant checks, reusing schemas, and optimizing performance in large-scale data scenarios.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/zod-best-practices.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "zod-schemas-from-prisma",
+      "title": "Generate Zod Schemas from Prisma",
+      "description": "Learn to generate Zod schemas from Prisma using `zod-prisma-types`. Simplify validation by integrating Zod with your Prisma setup effortlessly.",
+      "date": "2025-03-20T13:54:40.000Z",
+      "file": "courses/full-stack-typescript/zod-schemas-from-prisma.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "zod-to-open-api",
+      "title": "Generating OpenAPI Contracts from Zod Schemas",
+      "description": "Learn to generate OpenAPI docs for a TypeScript Express server using Zod schemas, providing clear API metadata and seamless integration with Swagger UI for interactive documentation.",
+      "date": "2025-03-16T23:35:22.000Z",
+      "file": "courses/full-stack-typescript/zod-to-open-api.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    }
+  ]
+}

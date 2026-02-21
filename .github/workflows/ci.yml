@@ -33,16 +33,16 @@ jobs:
       - name: Cache SvelteKit outputs
         uses: actions/cache@v4
         with:
-          path: .svelte-kit
-          key: ${{ runner.os }}-sveltekit-${{ hashFiles('svelte.config.js', 'vite.config.ts', 'src/**', 'content/**', 'plugins/**', 'package.json', 'bun.lock') }}
+          path: applications/website/.svelte-kit
+          key: ${{ runner.os }}-sveltekit-${{ hashFiles('applications/website/svelte.config.js', 'applications/website/vite.config.ts', 'applications/website/src/**', 'content/writing/**', 'courses/**', 'packages/**', 'package.json', 'bun.lock', 'turbo.json') }}
           restore-keys: |
             ${{ runner.os }}-sveltekit-
 
       - name: Cache image preprocessing outputs
         uses: actions/cache@v4
         with:
-          path: .svelte-kit/process-images
-          key: ${{ runner.os }}-process-images-${{ hashFiles('svelte.config.js', 'plugins/svelte-enhance-images.js', 'content/**/*.md', 'content/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
+          path: applications/website/.svelte-kit/process-images
+          key: ${{ runner.os }}-process-images-${{ hashFiles('applications/website/svelte.config.js', 'packages/plugins/svelte-enhance-images.js', 'content/writing/**/*.md', 'courses/**/*.md', 'content/writing/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}', 'courses/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
           restore-keys: |
             ${{ runner.os }}-process-images-
 

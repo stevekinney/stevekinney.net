@@ -1,0 +1,8 @@
+{
+  "name": "@stevekinney/scripts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "content:validate": "bun run validate-content.ts"
+  }
+}

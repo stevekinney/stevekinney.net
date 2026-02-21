@@ -1,0 +1,25 @@
+{
+  "name": "@stevekinney/website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "SKIP_IMAGE_OPTIMIZATION=1 NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ../../node_modules/vite/bin/vite.js dev --port 4444",
+    "build": "SKIP_IMAGE_OPTIMIZATION=1 bun run content:index && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ../../node_modules/vite/bin/vite.js build",
+    "build:stats": "BUNDLE_STATS=1 bun run build",
+    "preview": "node ../../node_modules/vite/bin/vite.js preview",
+    "test": "bun run test:integration && bun run test:unit",
+    "sync": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" ../../node_modules/.bin/svelte-kit sync",
+    "check": "bun run sync && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" ../../node_modules/.bin/svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "bun run sync && ../../node_modules/.bin/svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --cache --check . && eslint --cache .",
+    "clean": "rm -rf build .svelte-kit test-results .vite",
+    "content:validate": "bun run ../../packages/scripts/validate-content.ts",
+    "content:index": "bun run ../../packages/scripts/generate-site-content-index.ts",
+    "test:integration": "bun run build && env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning ../../node_modules/.bin/playwright test",
+    "test:integration:dev": "PLAYWRIGHT_WEB_SERVER=0 env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning ../../node_modules/.bin/playwright test",
+    "test:unit": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" ../../node_modules/.bin/vitest",
+    "test:storybook": "../../node_modules/.bin/test-storybook",
+    "storybook": "../../node_modules/.bin/storybook dev -p 6006",
+    "build-storybook": "../../node_modules/.bin/storybook build"
+  }
+}
