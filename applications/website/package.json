@@ -2,9 +2,13 @@
   "name": "@stevekinney/website",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "SKIP_IMAGE_OPTIMIZATION=1 NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ../../node_modules/vite/bin/vite.js dev --port 4444",
-    "build": "SKIP_IMAGE_OPTIMIZATION=1 bun run content:index && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ../../node_modules/vite/bin/vite.js build",
+    "build": "export LD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-linux-x64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\"; export DYLD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-darwin-arm64/lib${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}\"; bun run content:index && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ../../node_modules/vite/bin/vite.js build",
+    "build:no-image-optimization": "export LD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-linux-x64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\"; export DYLD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-darwin-arm64/lib${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}\"; SKIP_IMAGE_OPTIMIZATION=1 bun run content:index && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ../../node_modules/vite/bin/vite.js build",
     "build:stats": "BUNDLE_STATS=1 bun run build",
     "preview": "node ../../node_modules/vite/bin/vite.js preview",
     "test": "bun run test:integration && bun run test:unit",

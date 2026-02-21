@@ -54,6 +54,7 @@
     "build-storybook": {},
     "content:index": {},
     "content:validate": {},
+    "content:images:check": {},
     "clean": {
       "cache": false
     }

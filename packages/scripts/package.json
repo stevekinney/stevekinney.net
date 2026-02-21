@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "content:validate": "bun run validate-content.ts"
+    "content:validate": "bun run validate-content.ts",
+    "content:images:check": "export LD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-linux-x64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\"; export DYLD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-darwin-arm64/lib${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}\"; bun run validate-image-compatibility.ts"
   }
 }

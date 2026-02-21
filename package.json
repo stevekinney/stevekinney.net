@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "engines": {
-    "node": ">=20.11.0",
+    "node": "24.x",
     "bun": "1.3.2"
   },
   "scripts": {
     "dev": "turbo run dev --filter=@stevekinney/website",
-    "build": "turbo run manifest && turbo run build --filter=@stevekinney/website",
+    "build": "turbo run manifest && turbo run build --filter=@stevekinney/website && if [ -n \"$VERCEL\" ] && [ -d applications/website/.vercel/output ]; then mkdir -p .vercel/output && cp -R applications/website/.vercel/output/. .vercel/output/; fi",
     "build:stats": "turbo run build:stats --filter=@stevekinney/website",
     "preview": "turbo run preview --filter=@stevekinney/website",
     "test": "turbo run manifest && turbo run test --filter=@stevekinney/website",
@@ -19,6 +19,7 @@
     "format": "prettier --write .",
     "clean": "turbo run clean --filter=@stevekinney/website && rm -rf node_modules",
     "content:validate": "turbo run content:validate --filter=@stevekinney/scripts",
+    "content:images:check": "turbo run content:images:check --filter=@stevekinney/scripts",
     "content:index": "turbo run manifest && turbo run content:index --filter=@stevekinney/website",
     "manifest": "turbo run manifest",
     "test:integration": "turbo run manifest && turbo run test:integration --filter=@stevekinney/website",

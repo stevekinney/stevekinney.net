@@ -125,7 +125,7 @@ const config = {
   kit: {
     // Choose adapter based on deployment target
     adapter: process.env.VERCEL
-      ? vercelAdapter()
+      ? vercelAdapter({ runtime: 'nodejs24.x' })
       : staticAdapter({
           strict: false,
           fallback: '404.html',
