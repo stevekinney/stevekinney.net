@@ -476,7 +476,3 @@ function UserTable({ users }: { users: User[] }) {
 ```
 
 Compound components provide consistent tree structure while keeping the API flexible and reconciliation-friendly.
-
-## Next Steps
-
-Understanding reconciliation gives you a mental model for writing efficient React components. Here's what to focus on next:
