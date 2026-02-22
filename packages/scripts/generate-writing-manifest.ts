@@ -1,11 +1,12 @@
 import { createHash } from 'node:crypto';
-import { readFile, stat, writeFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fg from 'fast-glob';
 import matter from 'gray-matter';
 
 import type { PostManifestEntry, WritingManifest } from '@stevekinney/content-types';
+import { writeFormattedJson } from './write-formatted-json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
@@ -83,7 +84,7 @@ const main = async () => {
     posts: await buildPosts(markdownFiles),
   };
 
-  await writeFile(OUTPUT_PATH, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
+  await writeFormattedJson(OUTPUT_PATH, manifest);
   console.log(
     `Wrote writing manifest to ${normalizePath(path.relative(process.cwd(), OUTPUT_PATH))}.`,
   );

@@ -1,10 +1,11 @@
 import { createHash } from 'node:crypto';
-import { readFile, stat, writeFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fg from 'fast-glob';
 
 import type { CourseManifest, SiteContentIndex, WritingManifest } from '@stevekinney/content-types';
+import { writeFormattedJson } from './write-formatted-json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
@@ -81,7 +82,7 @@ const main = async () => {
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
   };
 
-  await writeFile(OUTPUT_PATH, `${JSON.stringify(index, null, 2)}\n`, 'utf8');
+  await writeFormattedJson(OUTPUT_PATH, index);
   console.log(`Wrote content index to ${normalizePath(path.relative(REPO_ROOT, OUTPUT_PATH))}.`);
 };
 
