@@ -1,0 +1,328 @@
+{
+  "meta": {
+    "generatedAt": "2026-02-21T20:37:39.837Z",
+    "hash": "4e985c829723c08736115885c4a72cf87d4d2903bad994abda7d6b6dda9da84b"
+  },
+  "course": {
+    "slug": "storybook",
+    "title": "Building Design Systems in Storybook",
+    "description": "An exploration in building a design system using Storybook.",
+    "date": "2024-03-05T19:56:55.000Z",
+    "modified": "2025-07-29T21:09:56.000Z",
+    "contentsFile": "courses/storybook/_index.md"
+  },
+  "lessons": [
+    {
+      "slug": "accessibility-testing",
+      "title": "Accessibility Testing in Storybook",
+      "description": "Storybook allows you to conduct accessibility audits on your stories using the @storybook/addon-a11y.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/accessibility-testing.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "add-an-addon",
+      "title": "Add an Addon to Storybook",
+      "description": "If you need to manually add an addon in Storybook, you can follow these steps to get going.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/add-an-addon.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "adding-a-size-variant",
+      "title": "Adding a Size Variant with CVA",
+      "description": "Adding variants using Class Variance Authority.",
+      "date": "2024-04-15T14:48:38.000Z",
+      "file": "courses/storybook/adding-a-size-variant.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "adding-button-sizes-exercise",
+      "title": "Exercise: Adding Button Size Variant and Controls",
+      "description": "Buttons can come in all shapes and sizes. Let's support that.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/adding-button-sizes-exercise.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "adding-button-sizes-solution",
+      "title": "Solution: Adding Button Size Variants and Controls",
+      "description": "A solution for an exercise.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/adding-button-sizes-solution.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "adding-dark-mode-to-our-components",
+      "title": "Adding Dark Mode to Our Components",
+      "description": "Tailwind makes it easy to support a custom dark-mode theme for your application.",
+      "date": "2024-04-15T14:48:38.000Z",
+      "file": "courses/storybook/adding-dark-mode-to-our-components.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "adding-variants",
+      "title": "Adding Variants",
+      "description": "Let's add button variants using props and clsx for dynamic class composition.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/adding-variants.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "arg-types",
+      "title": "Improving ArgTypes with Metadata",
+      "description": "Storybook tries it's best to infer as much as it can, but the more data you add, the better table you're going to get. Let's walk through this example.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/arg-types.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "callout-component-exercise",
+      "title": "Implementing a Callout Component",
+      "description": "Let's build a callout component in Figma.",
+      "date": "2024-04-15T14:48:38.000Z",
+      "file": "courses/storybook/callout-component-exercise.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "callout-component-solution",
+      "title": "Implementing a Calllout Component",
+      "description": "A solution for the exercise where we create a callout component.",
+      "date": "2024-04-15T14:48:38.000Z",
+      "file": "courses/storybook/callout-component-solution.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "class-variance-authority",
+      "title": "Class Variance Authority",
+      "description": "A framework agnostic tool for creating variants of a component with different classes.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/class-variance-authority.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "color-palette-solution",
+      "title": "Creating a Color Palette from Your Tailwind Theme",
+      "description": "A potential solution for the exercise where we create a color palette from a Tailwind theme.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/color-palette-solution.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "color-palette",
+      "title": "Color Palettes in Storybook",
+      "description": "Storybook provides a Docs Block for rendering your design system's color palette.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/color-palette.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "controls",
+      "title": "Addings Controls",
+      "description": "Storybook allows us to create custom controls that we can manipulate on our stories.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/controls.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "creating-an-icon-component",
+      "title": "Creating an Icon Component",
+      "description": "A brief walkthroigh where we create an Icon component in Storybook.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/creating-an-icon-component.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "customizing-tailwind-colors",
+      "title": "Customizing the Colors in Our Theme",
+      "description": "Changing or replacing the colors in the built-in Tailwind theme.",
+      "date": "2024-04-15T14:48:38.000Z",
+      "file": "courses/storybook/customizing-tailwind-colors.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "dark-mode-alternative",
+      "title": "An Alternative Approach to Implementing Dark Mode",
+      "description": "In which we use semantic colors for elements that reference CSS variables that are switched to different values when in dark mode.",
+      "date": "2024-04-17T13:17:16.000Z",
+      "file": "courses/storybook/dark-mode-alternative.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "decorators",
+      "title": "Decorators",
+      "description": "Decorators allow you to wrap the component in your story with another component.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/decorators.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "default-args",
+      "title": "Default Arguments in Storybook",
+      "description": "Setting default values for component parameters in Storybook.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/default-args.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "figma-in-storybook",
+      "title": "Integrating Figma Designs into Storybook",
+      "description": "Integrate Figma designs with Storybook using the @storybook/addon-designs addon by installing it, copying your Figma link, and adding it as a parameter in your story.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/figma-in-storybook.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "forcing-dark-mode",
+      "title": "Forcing Dark Mode",
+      "description": "Use the force to force Dark Mode™ upond your users regardless of your user's system preferences.",
+      "date": "2024-04-15T14:48:38.000Z",
+      "file": "courses/storybook/forcing-dark-mode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "icon-gallery",
+      "title": "Adding an Icon Gallery to Storybook",
+      "description": "Create a gallery for your icons in Storybook with this one weird trick.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/icon-gallery.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "importing-fontsource-fonts",
+      "title": "Importing Fonts from Fontsource",
+      "description": "Import fonts from Fontsource by installing the specific font package, importing it in your CSS or JS file, and adding the import path to your project configuration if necessary.",
+      "date": "2024-04-15T14:48:38.000Z",
+      "file": "courses/storybook/importing-fontsource-fonts.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "loaders",
+      "title": "Loaders",
+      "description": "Loaders in Storybook offer a way to asynchronously load data or perform actions before a story is rendered.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/loaders.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mdx",
+      "title": "Documenting Components with MDX",
+      "description": "MDX is a flavor of Markdown that allows you to embed React components.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/mdx.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mock-service-worker",
+      "title": "Mock Service Worker with Storybook",
+      "description": "To use Mock Service Worker (MSW) in Storybook, install MSW, create a handler for the API endpoint, and configure it in Storybook to intercept requests during testing.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/mock-service-worker.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "naming-and-hierarchy",
+      "title": "Organizing Components and Hierarchy",
+      "description": "Storybook uses the way that our components are named to form some story of hierarchy.",
+      "date": "2024-04-15T14:48:38.000Z",
+      "file": "courses/storybook/naming-and-hierarchy.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "parameters",
+      "title": "Parameters",
+      "description": "Parameters are a set of static, named metadata about a story, used to control the behavior or appearance of components within Storybook.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/parameters.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "play-functions",
+      "title": "Play Functions",
+      "description": "Play functions in Storybook allow you to automate interactions and assertions to test your components effectively.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/play-functions.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "sandboxes",
+      "title": "Storybook Sandboxes",
+      "description": "Storybook allows you to set up pre-configured sandboxes. This is useful if you just want to test something out or—hypothetically—if you're teaching a workshop and want to spin up a quick example.",
+      "date": "2024-04-03T15:59:52.000Z",
+      "file": "courses/storybook/sandboxes.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "setting-up-tailwind",
+      "title": "Setting Up Tailwind and Theming",
+      "description": "To integrate Tailwind with Storybook, install Tailwind, import styles, configure dark mode, and use the Themes addon with a data attribute.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/setting-up-tailwind.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "setting-up",
+      "title": "Setting Up Storybook",
+      "description": "Initialize Storybook with necessary dependencies and creates .storybook files for React, TypeScript, and Vite, starting a server on port 6006.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/setting-up.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "storybook-in-figma",
+      "title": "Integrating Storybook into Figma",
+      "description": "Publish your project on Chromatic. Copy Storybook URL. In Figma Dev Mode, search for Storybook plugin, connect Chromatic, paste URL, and see components side by side.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/storybook-in-figma.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "test-runner",
+      "title": "Setting Up a Test Runner",
+      "description": "To run Storybook Play functions, install the test runner, start Storybook, and use npx test-storybook. Optionally add to package.json scripts.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/test-runner.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-components-with-storybook",
+      "title": "Testing Components with Storybook",
+      "description": "In Storybook, you can use Play functions to test polymorphic components.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/testing-components-with-storybook.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "text-area-disabled-play-function-solution",
+      "title": "Solution: Checking a Disabled Text Area",
+      "description": "The solution for a challenge in Steve's course on using Storybook.",
+      "date": "2024-04-17T13:17:16.000Z",
+      "file": "courses/storybook/text-area-disabled-play-function-solution.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "typeset",
+      "title": "Using the TypeSet Doc Block",
+      "description": "Storybook provides components for rendering your design system's typography.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/typeset.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "visual-tests",
+      "title": "Setting Up Chromatic",
+      "description": "Checking for visual regressions in your components.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/visual-tests.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "writing-stories",
+      "title": "Writing Stories in Storybook",
+      "description": "How to write basic stories in Storybook.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/storybook/writing-stories.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    }
+  ]
+}

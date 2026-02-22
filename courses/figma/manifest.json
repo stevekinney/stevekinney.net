@@ -1,0 +1,265 @@
+{
+  "meta": {
+    "generatedAt": "2026-02-21T20:37:39.831Z",
+    "hash": "1de75f33e585668075d49484368dad71e6290d13a52680b32a1bb25db9df3ce9"
+  },
+  "course": {
+    "slug": "figma",
+    "title": "Figma for Developers",
+    "description": "An high level introduction to Steve's Figma for Developers course.",
+    "date": "2024-03-05T19:56:55.000Z",
+    "modified": "2025-07-29T21:09:56.000Z",
+    "contentsFile": "courses/figma/_index.md"
+  },
+  "lessons": [
+    {
+      "slug": "adding-a-dark-theme-to-the-button",
+      "title": "Adding a Dark Mode",
+      "description": "Using variable modes to add a dark mode to a button component in Figma.",
+      "date": "2024-04-15T14:48:38.000Z",
+      "file": "courses/figma/adding-a-dark-theme-to-the-button.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "aligning-objects",
+      "title": "Aligning Objects",
+      "description": "Let's explore some of the useful utilities that Figma provides to for aligning and spacing objects quickly and easily.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/figma/aligning-objects.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "auto-layout",
+      "title": "Auto Layout",
+      "description": "Auto layout in Figma helps designers make flexible designs easily. Understanding and using this feature improves design workflow.",
+      "date": "2024-03-09T19:20:45.000Z",
+      "file": "courses/figma/auto-layout.md",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "tags": ["figma", "course", "frontendmasters"]
+    },
+    {
+      "slug": "building-a-checkbox-component",
+      "title": "Building a Checkbox Component",
+      "description": "Creating an interactive checkbox component with variants in Figma.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/figma/building-a-checkbox-component.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "component-properties",
+      "title": "Components Properties",
+      "description": "Leverage Figma components for scalable and efficient design. Create, reuse, and manage elements easily for consistency and collaboration across projects.",
+      "date": "2024-03-09T19:21:18.000Z",
+      "file": "courses/figma/component-properties.md",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "tags": ["figma", "course", "frontendmasters"]
+    },
+    {
+      "slug": "components",
+      "title": "Components",
+      "description": "Leverage Figma components for scalable and efficient design. Create, reuse, and manage elements easily for consistency and collaboration across projects.",
+      "date": "2024-03-09T19:21:18.000Z",
+      "file": "courses/figma/components.md",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "tags": ["figma", "course", "frontendmasters"]
+    },
+    {
+      "slug": "constraints",
+      "title": "Constraints",
+      "description": "Learn how to master constraints in Figma for responsive design. Ensure your UI adapts seamlessly across devices with this essential guide",
+      "date": "2024-03-09T19:13:01.000Z",
+      "file": "courses/figma/constraints.md",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "tags": ["figma", "course", "frontendmasters"]
+    },
+    {
+      "slug": "creating-a-button-component",
+      "title": "Creating a Button Component",
+      "description": "A walkthrough for creating a button component in Figma.",
+      "date": "2024-04-15T14:48:38.000Z",
+      "file": "courses/figma/creating-a-button-component.md",
+      "modified": "2025-09-22T15:27:10.000Z"
+    },
+    {
+      "slug": "creating-a-callout-component",
+      "title": "Creating a Callout Component",
+      "description": "Using variables, variables, and nested components to create a Callout component.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/figma/creating-a-callout-component.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "cropped-grid-components",
+      "title": "Cropped Grid Components",
+      "description": "Using the cropped grid pattern for dynamically displaying content in Figma components.",
+      "date": "2024-03-28T19:06:40.000Z",
+      "file": "courses/figma/cropped-grid-components.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "dev-mode",
+      "title": "Developer Mode",
+      "description": "Dev Mode in Figma optimizes the design-to-development handoff by providing detailed design specifications and code snippets, enhancing efficiency and accuracy in development.",
+      "date": "2024-03-09T19:27:23.000Z",
+      "file": "courses/figma/dev-mode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "generating-a-color-palette",
+      "title": "Generating a Color Palette",
+      "description": "Using a Figma plugin to generate a set of color variable that we can use in our project.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/figma/generating-a-color-palette.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "generating-an-icon-library",
+      "title": "Generating an Icon Library",
+      "description": "Let's generate a reusable Icon component in Figma using icons from Lucide.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/figma/generating-an-icon-library.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "getting-started",
+      "title": "Getting Started with Figma",
+      "description": "Let's get learn our way around Figma and get comfortable with some of the basic tools.",
+      "date": "2024-03-05T20:04:49.000Z",
+      "file": "courses/figma/getting-started.md",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "tags": ["figma", "course", "frontendmasters"]
+    },
+    {
+      "slug": "interactive-components",
+      "title": "Interactive Components",
+      "description": "Utilize Figma's interactive components to bring prototypes to life with realistic interactions, streamlining the design process and enhancing user experience.",
+      "date": "2024-03-09T19:42:38.000Z",
+      "file": "courses/figma/interactive-components.md",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "tags": ["figma", "course", "frontendmasters"]
+    },
+    {
+      "slug": "layers",
+      "title": "Working with Layers",
+      "description": "In which we learn how to use frames, sections, slices, and groups in Figma—and the difference between them.",
+      "date": "2024-03-05T20:04:49.000Z",
+      "file": "courses/figma/layers.md",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "tags": ["figma", "course", "frontendmasters"]
+    },
+    {
+      "slug": "layout-grids",
+      "title": "Layout Grids",
+      "description": "Layout grids in Figma enhance your designs with structure and consistency. Learn to utilize columns, rows, and grids for precise alignment.",
+      "date": "2024-03-09T19:20:40.000Z",
+      "file": "courses/figma/layout-grids.md",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "tags": ["figma", "course", "frontendmasters"]
+    },
+    {
+      "slug": "libraries",
+      "title": "Working with Libraries in Figma",
+      "description": "Harness the power of Figma libraries to streamline your design process, ensuring consistency and efficiency with a shared repository of components and styles.",
+      "date": "2024-03-09T19:26:58.000Z",
+      "file": "courses/figma/libraries.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "number-variable-tokens",
+      "title": "Using Variables for Tokens",
+      "description": "Using Figma variables for design system tokens.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/figma/number-variable-tokens.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "placeholder-components",
+      "title": "Placeholder Components",
+      "description": "A pattern for swapping out the contents of a component in Figma.",
+      "date": "2024-03-28T19:11:56.000Z",
+      "file": "courses/figma/placeholder-components.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "prototyping",
+      "title": "Prototyping",
+      "description": "Prototyping in Figma enables designers to create interactive simulations of their designs, offering a practical tool for testing, feedback, and collaboration.",
+      "date": "2024-03-09T19:25:10.000Z",
+      "file": "courses/figma/prototyping.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "publishing-figma-libraries",
+      "title": "Publishing Libraries",
+      "description": "How to publish shared component and variable libraries for use across your organization.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/figma/publishing-figma-libraries.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "selecting-and-inspecting",
+      "title": "Selecting and Inspecting",
+      "description": "Let's look at some of the tools Figma provides for measuring sizes and distances.",
+      "date": "2024-03-05T20:04:49.000Z",
+      "file": "courses/figma/selecting-and-inspecting.md",
+      "modified": "2025-07-29T21:09:56.000Z",
+      "tags": ["figma", "course", "frontendmasters"]
+    },
+    {
+      "slug": "semantic-colors",
+      "title": "Creating Semantic Colors",
+      "description": "A pattern for creating semantic color variables for use in Figma designs.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/figma/semantic-colors.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "styles-vs-variables",
+      "title": "Styles Versus Variables",
+      "description": "Figma styles, variables, and the difference between them.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/figma/styles-vs-variables.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "styles",
+      "title": "Styles",
+      "description": "Master consistency and efficiency in Figma with Shared Styles. Simplify your workflow by reusing design attributes for text, colors, and effects across projects.",
+      "date": "2024-03-09T19:19:54.000Z",
+      "file": "courses/figma/styles.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "typography",
+      "title": "Text and Typography",
+      "description": "Setting up a reusuable typography system in Figma.",
+      "date": "2024-03-21T13:29:19.000Z",
+      "file": "courses/figma/typography.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "variables-variants-responsive-text",
+      "title": "Using Variants and Variables for Responsive Text",
+      "description": "Patterns for creating reponsive text components in Figma.",
+      "date": "2024-04-15T12:28:51.000Z",
+      "file": "courses/figma/variables-variants-responsive-text.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "variables",
+      "title": "Variables",
+      "description": "Variables in Figma revolutionize design workflows by allowing for the efficient update of multiple elements, ensuring consistency and adaptability across projects.",
+      "date": "2024-03-09T19:25:35.000Z",
+      "file": "courses/figma/variables.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "variants",
+      "title": "Variants",
+      "description": "Streamline design with Figma variants, combining multiple component iterations for simplicity and consistency. Enhance efficiency and collaboration in your projects.",
+      "date": "2024-03-09T19:21:25.000Z",
+      "file": "courses/figma/variants.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    }
+  ]
+}

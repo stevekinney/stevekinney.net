@@ -1,0 +1,13 @@
+{
+  "name": "@stevekinney/plugins",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./import-tailwind-playground": "./import-tailwind-playground.js",
+    "./remark-callouts": "./remark-callouts.js",
+    "./remark-escape-comparators": "./remark-escape-comparators.js",
+    "./remark-fix-urls": "./remark-fix-urls.js",
+    "./remark-tailwind-playground": "./remark-tailwind-playground.js",
+    "./svelte-enhance-images": "./svelte-enhance-images.js"
+  }
+}

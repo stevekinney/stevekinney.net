@@ -9,10 +9,10 @@ if [ -z "$STAGED_FILES" ]; then
 fi
 
 # Audit frontmatter for staged course files first
-COURSE_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'content/courses/**/*.md')"
+COURSE_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'courses/**/*.md')"
 if [ -n "$COURSE_FILES" ]; then
   echo "Auditing frontmatter (title/description) for staged course files..."
-  bun run scripts/audit-courses-frontmatter.ts $COURSE_FILES
+  bun run --cwd packages/scripts audit-courses-frontmatter.ts $COURSE_FILES
   git add $COURSE_FILES
 fi
 

@@ -1,0 +1,682 @@
+{
+  "meta": {
+    "generatedAt": "2026-02-21T20:37:39.915Z",
+    "hash": "c7f48d7cace89255291df8ebc790e0426c284d47b881393e2547ee020028dff9"
+  },
+  "course": {
+    "slug": "tailwind",
+    "title": "Tailwind",
+    "description": "An introduction to testing using JavaScript",
+    "date": "2025-06-13T19:56:55.000Z",
+    "modified": "2025-06-13T12:27:15.000Z",
+    "contentsFile": "courses/tailwind/_index.md"
+  },
+  "lessons": [
+    {
+      "slug": "aria-integration",
+      "title": "ARIA Integration",
+      "description": "Style elements based on ARIA attributes for better accessibility with Tailwind's ARIA variants and utilities",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/aria-integration.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "at-property",
+      "title": "@property",
+      "description": "Understand how Tailwind leverages the @property CSS rule for modern features and performance improvements.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/at-property.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "before-and-after-pseudo-selectors",
+      "title": "Before & After Pseudo-Selectors",
+      "description": "Style ::before and ::after pseudo-elements with Tailwind's before: and after: variants for decorative content.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/before-and-after-pseudo-selectors.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "border-outline-ring",
+      "title": "Border, Outline, and Ring",
+      "description": "Understand the differences between borders, outlines, and rings in CSS and when to use each for your design needs.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/border-outline-ring.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "breakpoint-utilities",
+      "title": "Breakpoint Utilities",
+      "description": "Build responsive designs with Tailwind's mobile-first breakpoint system and viewport-based conditional styling.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/breakpoint-utilities.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "build-process-and-tooling",
+      "title": "Build Process & Tooling Integration",
+      "description": "Learn how to integrate Tailwind CSS into your development workflow with modern build tools and CLI commands.",
+      "date": "2024-07-26T00:00:00.000Z",
+      "file": "courses/tailwind/build-process-and-tooling.md",
+      "modified": "2025-07-29T21:24:01.000Z",
+      "published": true,
+      "tags": ["tailwind", "vite", "cli", "build-tools", "configuration"]
+    },
+    {
+      "slug": "building-a-blog-layout",
+      "title": "Building a Blog Layout with Named Areas",
+      "description": "Let's build a semantic 2-column blog layout that collapses gracefully using CSS Grid Template Areas and container queries.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-a-blog-layout.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-a-button",
+      "title": "Building a Button",
+      "description": "Let's build a button from scratch using Tailwind.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-a-button.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-a-card-list",
+      "title": "Building a Card List with Top Border",
+      "description": "Let's build a card list with separator borders using Tailwind's not-first selector to avoid borders on the first item.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-a-card-list.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-a-card",
+      "title": "Building a Card Component in Tailwind",
+      "description": "Let's build a simple Card component together using Tailwind.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-a-card.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-a-compound-input",
+      "title": "Building an Input with Prefix, Suffix, and Internal Buttons",
+      "description": "Let's build a compound input field that supports prefixes, suffixes, and internal buttons step by step using Tailwind's advanced selector utilities.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-a-compound-input.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-a-dashboard",
+      "title": "Building a Dashboard with CSS Grid Template Areas",
+      "description": "Let's build a responsive dashboard layout using CSS Grid Template Areas for semantic, maintainable grid layouts with named regions.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-a-dashboard.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-a-form-input",
+      "title": "Building a Form Input",
+      "description": "Let's build a professional input field component step by step using Tailwind CSS.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-a-form-input.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-a-modal",
+      "title": "Building a Modal Dialog",
+      "description": "Let's build a professional modal dialog with backdrop, animations, and proper content structure step by step using Tailwind CSS.",
+      "date": "2025-06-13T12:27:15.000Z",
+      "file": "courses/tailwind/building-a-modal.md",
+      "modified": "2025-06-13T12:53:56.000Z"
+    },
+    {
+      "slug": "building-a-popover",
+      "title": "Building a Popover Menu",
+      "description": "Let's build a modern popover menu using the native HTML Popover API and Tailwind CSS for styling.",
+      "date": "2025-06-13T12:27:15.000Z",
+      "file": "courses/tailwind/building-a-popover.md",
+      "modified": "2025-06-13T12:53:56.000Z"
+    },
+    {
+      "slug": "building-a-statistics-card",
+      "title": "Building a Stat Card Container Grid",
+      "description": "Let's build a responsive stat card grid that adapts based on container size using Tailwind's container query utilities.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-a-statistics-card.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-an-image-card-hover-overlay",
+      "title": "Building an Image Card with Hover Overlay",
+      "description": "Let's build an image card with an interactive hover overlay step by step using Tailwind CSS group utilities.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-an-image-card-hover-overlay.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-an-interactive-checklist",
+      "title": "Building a Checklist Item",
+      "description": "Let's build an interactive checklist item that strikes through when completed using Tailwind's :has() selector utilities.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-an-interactive-checklist.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-an-invoice-table",
+      "title": "Building an Invoice Table with Subgrid",
+      "description": "Let's build a responsive invoice table that uses CSS Subgrid and container queries to create perfectly aligned columns that adapt to any container size.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-an-invoice-table.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "building-details-disclosure",
+      "title": "Building a Details Disclosure with Accent",
+      "description": "Let's build an interactive disclosure component that changes color when expanded using Tailwind's in-open pseudo-class utilities.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/building-details-disclosure.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "built-in-animations",
+      "title": "Built-In Animations",
+      "description": "Apply CSS transforms like rotate, scale, and translate with Tailwind's comprehensive transform utility classes.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/built-in-animations.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "button-exemplars",
+      "title": "Button Exemplars",
+      "description": "Fully built-out buttons in Tailwind.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/button-exemplars.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "button-solutions",
+      "title": "Secondary and Dangerous Buttons",
+      "description": "Solutions for a exercise in building buttons as part of Steve's course on Tailwind.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/button-solutions.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "caret-and-accent-color",
+      "title": "Caret and Accent Color",
+      "description": "Customize cursor and form control colors using Tailwind's caret and accent color utilities for brand consistency.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/caret-and-accent-color.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "clsx-and-tailwind-merge",
+      "title": "Merging and Deduplicating Class Names",
+      "description": "Using tailwind-merge and clsx to keep your classes from clashing.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/clsx-and-tailwind-merge.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "color-mix",
+      "title": "color-mix()",
+      "description": "Learn how Tailwind 4 uses the native color-mix() CSS function for opacity modifiers and color blending.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/color-mix.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "colors-and-css-variables",
+      "title": "Colors and CSS Variables",
+      "description": "Define custom colors and theme values using CSS variables with Tailwind 4's @theme directive for better integration.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/colors-and-css-variables.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "complex-grid-templates",
+      "title": "Complex Grid Templates",
+      "description": "Build advanced grid layouts using Tailwind's grid template utilities for complex multi-column and row designs.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/complex-grid-templates.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "container-queries",
+      "title": "Container Queries",
+      "description": "Build truly responsive components with native CSS container queries support in Tailwind 4 for parent-based styling",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/container-queries.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "css-grid-the-basics",
+      "title": "CSS Grid The Basics",
+      "description": "Learn CSS Grid layout fundamentals with Tailwind 4's grid utilities for two-dimensional layouts.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/css-grid-the-basics.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "current-color",
+      "title": "Current Color",
+      "description": "Use currentColor utilities to create contextually adaptive styles that inherit text color for borders, fills, and more",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/current-color.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "cva-tailwind",
+      "title": "Class Variance Authority",
+      "description": "A framework agnostic tool for creating variants of a component with different classes.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/cva-tailwind.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "dark-mode",
+      "title": "Dark Mode",
+      "description": "Implement dark mode with Tailwind's dark variant, supporting system preferences and manual toggles.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/dark-mode.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "data-attribute-variants",
+      "title": "Data Attribute Variants",
+      "description": "Style elements based on HTML data attributes using Tailwind's data-* variant for semantic state management",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/data-attribute-variants.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "defining-grid-columns-and-rows",
+      "title": "Defining Grid Columns and Rows",
+      "description": "Create grid layouts with precise column and row definitions using Tailwind's grid template utilities.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/defining-grid-columns-and-rows.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "flexbox-aligning-individual-items",
+      "title": "Flexbox Aligning Individual Items",
+      "description": "Override container alignment for specific flex items using Tailwind's align-self utilities.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/flexbox-aligning-individual-items.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "flexbox-alignment",
+      "title": "Flexbox Alignment",
+      "description": "Master flexbox alignment utilities in Tailwind CSS including justify-content, align-items, and align-self for perfect layouts",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/flexbox-alignment.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "flexbox-direction-and-wrapping",
+      "title": "Flexbox Direction and Wrapping",
+      "description": "Control the flow and wrapping of flex items with Tailwind utilities for flex-direction and flex-wrap properties",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/flexbox-direction-and-wrapping.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "flexbox-growing-and-shrinking",
+      "title": "Flexbox Growing and Shrinking",
+      "description": "Master flex-grow and flex-shrink utilities to control how flex items expand and contract in available space",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/flexbox-growing-and-shrinking.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "flexbox-initial-size",
+      "title": "Flexbox Initial Size",
+      "description": "Control the initial size of flex items before growing or shrinking with Tailwind's flex-basis utilities",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/flexbox-initial-size.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "flexbox-multi-directional-layouts",
+      "title": "Flexbox Multi-Directional Layouts",
+      "description": "Build layouts that adapt to LTR and RTL text directions using Tailwind's logical properties and directional variants.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/flexbox-multi-directional-layouts.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "flexbox-order-manipulation",
+      "title": "Flexbox Order Manipulation",
+      "description": "Reorder flex items visually without changing HTML structure using Tailwind's order utilities.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/flexbox-order-manipulation.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "focus-states",
+      "title": "Focus States",
+      "description": "Understanding focus, focus-visible, and focus-within utilities in Tailwind for accessible keyboard navigation",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/focus-states.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "form-improvements",
+      "title": "Advanced Form Input Styling",
+      "description": "Building on our professional form inputs with enhanced states, custom styling, and interactive feedback using Tailwind CSS.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/form-improvements.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "gradients",
+      "title": "Gradients",
+      "description": "Create stunning gradients with Tailwind 4's enhanced utilities for linear, radial, and conic gradients with OKLCH interpolation",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/gradients.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "grid-alignment-and-justification",
+      "title": "Grid Alignment and Justification",
+      "description": "Master CSS Grid alignment with Tailwind utilities for aligning and justifying content, items, and self positioning.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/grid-alignment-and-justification.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "grid-arbitrary-column-counts",
+      "title": "Grid Arbitrary Column Counts",
+      "description": "Define custom grid column structures using arbitrary values and CSS variables for maximum layout flexibility.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/grid-arbitrary-column-counts.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "grid-auto-fit-and-auto-fill-patterns",
+      "title": "Grid Auto-fit and Auto-fill Patterns",
+      "description": "Create responsive grids that automatically adjust column count using CSS Grid's auto-fit and auto-fill with Tailwind.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/grid-auto-fit-and-auto-fill-patterns.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "grid-auto-placement-and-implicit-tracks",
+      "title": "Grid Auto-Placement and Implicit Tracks",
+      "description": "Understanding CSS Grid's auto-placement algorithm and implicit track creation for dynamic, flexible grid layouts",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/grid-auto-placement-and-implicit-tracks.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "grid-dynamic-columns",
+      "title": "Grid Dynamic Columns",
+      "description": "Implement dynamic grid columns with subgrids for perfectly aligned nested layouts in CSS Grid.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/grid-dynamic-columns.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "grid-multi-column-layouts-columns-utility",
+      "title": "Grid Multi-column Layouts Columns Utility",
+      "description": "Create magazine-style layouts with CSS multi-column using Tailwind's columns utilities.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/grid-multi-column-layouts-columns-utility.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "grid-subgrids",
+      "title": "Grid Subgrids",
+      "description": "Use CSS subgrids in Tailwind to inherit parent grid tracks for aligned nested grid structures.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/grid-subgrids.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "group-and-peer-modifiers",
+      "title": "Group and Peer Modifiers",
+      "description": "Style elements based on parent or sibling states using Tailwind's group and peer modifiers for complex interactions",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/group-and-peer-modifiers.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "has-challenges",
+      "title": "Challenges with `has` Utility",
+      "description": "Getting our hands dirty with the `has` utility in Tailwind.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/has-challenges.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "has-solutions",
+      "title": "Solutions for `has-*` Challenges",
+      "description": "A solution for some challenges from Steve's Tailwind course.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/has-solutions.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "has-utility",
+      "title": "Has Utility",
+      "description": "Style parent elements based on their descendants' state or content using Tailwind's has-* variant",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/has-utility.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "how-tailwind-detects-classes",
+      "title": "How Tailwind Detects Classes",
+      "description": "Learn how Tailwind automatically detects utility classes and manages content detection without configuration.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/how-tailwind-detects-classes.md",
+      "modified": "2025-09-22T15:27:10.000Z"
+    },
+    {
+      "slug": "in-utility",
+      "title": "In Utility",
+      "description": "Apply styles based on ancestor element states without explicit group classes using Tailwind's in-* variant",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/in-utility.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "inert-utility",
+      "title": "Inert Utility",
+      "description": "Style non-interactive elements with Tailwind's inert variant for accessibility and visual communication.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/inert-utility.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "line-spacing-and-letter-spacing",
+      "title": "Line Spacing and Letter Spacing",
+      "description": "Control typography with Tailwind's leading (line height) and tracking (letter spacing) utilities.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/line-spacing-and-letter-spacing.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "navigation-menu-container-queries",
+      "title": "Building an Adaptive Navigation Menu",
+      "description": "Let's build a navigation menu that transforms from horizontal links to compact layout to hamburger menu based on container width using Tailwind's container queries.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/navigation-menu-container-queries.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "not-utility",
+      "title": "Not Utility",
+      "description": "Apply styles when conditions are NOT met using Tailwind 4's powerful not-* variant for negating states",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/not-utility.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "oklch-colors",
+      "title": "OKLCH Colors",
+      "description": "Understanding Tailwind 4's perceptually uniform OKLCH color space for better gradients, accessibility, and P3 gamut support",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/oklch-colors.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "placing-grid-items-spanning-and-positioning",
+      "title": "Placing Grid Items: Spanning and Positioning",
+      "description": "Control grid item placement with Tailwind's spanning and positioning utilities for CSS Grid.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/placing-grid-items-spanning-and-positioning.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "pulse-and-loading-indicator-patterns",
+      "title": "Pulse and Loading Indicator Patterns",
+      "description": "Create loading states and skeleton screens in Tailwind CSS using animate-pulse and custom animations.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/pulse-and-loading-indicator-patterns.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "screen-reader-support",
+      "title": "Screen Reader Support",
+      "description": "Implement accessibility with Tailwind utilities for screen readers, focus indicators, and text selection.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/screen-reader-support.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "spacing-and-dividing-utilities",
+      "title": "Spacing and Dividing Utilities",
+      "description": "Master the space and divide utilities in Tailwind for managing spacing and borders between child elements",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/spacing-and-dividing-utilities.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "starting-style",
+      "title": "Starting Style",
+      "description": "Using the starting variant in Tailwind 4 for smooth entry animations and transitions from display:none to visible states",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/starting-style.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "state-variants",
+      "title": "State Variants",
+      "description": "Apply styles conditionally using Tailwind's state variants for pseudo-classes, media queries, and attribute selectors",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/state-variants.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "styling-form-state",
+      "title": "Styling Form State",
+      "description": "Use Tailwind's form state variants to style inputs, textareas, and buttons based on validation, focus, and disabled states",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/styling-form-state.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "tailwind-4",
+      "title": "Tailwind CSS 4",
+      "description": "Major evolution of Tailwind with CSS-first configuration, native variables, modern CSS features, and the new Oxide engine",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/tailwind-4.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "tailwind-anti-patterns",
+      "title": "Tailwind Anti-Patterns",
+      "description": "Common Tailwind anti-patterns to avoid for cleaner, maintainable code and proper utility-first development practices.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/tailwind-anti-patterns.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "tailwind-best-practices",
+      "title": "Tailwind Best Practices",
+      "description": "Modern Tailwind CSS best practices using cascade layers, utilities-first approach, and native CSS features for maintainable code.",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/tailwind-best-practices.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "tailwind-color-schemes",
+      "title": "Tailwind Color Schemes",
+      "description": "Master CSS-first color management in Tailwind 4 using theme variables, dark mode, and the color-scheme property",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/tailwind-color-schemes.md",
+      "modified": "2025-07-29T21:11:25.000Z"
+    },
+    {
+      "slug": "tailwind-oxide",
+      "title": "Tailwind Oxide",
+      "description": "Exploring Oxide - Tailwind's high-performance engine built with Rust and Lightning CSS for blazing fast builds",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/tailwind-oxide.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "tailwind-plugins",
+      "title": "Tailwind Plugins",
+      "description": "Essential plugins for Tailwind CSS including forms, typography, and UI component libraries like shadcn/ui",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/tailwind-plugins.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "tailwind-transform",
+      "title": "Tailwind Transform",
+      "description": "Apply 2D and 3D transforms with Tailwind utilities for rotating, scaling, skewing, and translating elements",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/tailwind-transform.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "tailwind-transition",
+      "title": "Transitions",
+      "description": "Create smooth animations with Tailwind's transition utilities for duration, timing, delay, and property-specific transitions",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/tailwind-transition.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "text-styles-and-font-families",
+      "title": "Text Styles and Font Families",
+      "description": "Master typography in Tailwind with utilities for font families, sizes, weights, styles, and text decoration",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/text-styles-and-font-families.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "theme-customization",
+      "title": "Theme Customization",
+      "description": "Create, customize, and manage design systems using Tailwind's powerful CSS-native theme variable system",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/theme-customization.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "truncation-and-wrapping",
+      "title": "Truncation and Wrapping",
+      "description": "Manage text overflow with Tailwind utilities for truncation, line clamping, and text wrapping control",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/truncation-and-wrapping.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "user-preference-variants",
+      "title": "User Preference Variants",
+      "description": "Create adaptive interfaces with Tailwind variants for dark mode, reduced motion, contrast preferences, and more",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/user-preference-variants.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "utility-first",
+      "title": "Utility-First CSS",
+      "description": "Learn the utility-first CSS methodology that prioritizes small, single-purpose classes for rapid development",
+      "date": "2025-06-12T01:05:33.000Z",
+      "file": "courses/tailwind/utility-first.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    }
+  ]
+}

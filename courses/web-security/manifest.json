@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "generatedAt": "2026-02-21T20:37:39.815Z",
+    "hash": "79e4e78bfb66beef6fe38783b56a78084a813aec66be8a90c7a08316fee72b08"
+  },
+  "course": {
+    "slug": "web-security",
+    "title": "Web Security",
+    "description": "An introduction to the fundamentals of web security.",
+    "date": "2024-04-05T19:56:55.000Z",
+    "modified": "2025-07-29T21:09:56.000Z"
+  },
+  "lessons": []
+}

@@ -1,0 +1,656 @@
+{
+  "meta": {
+    "generatedAt": "2026-02-21T20:37:39.838Z",
+    "hash": "7b033c7fc6861de340ea6503e7fe43242939dcdebb94c38de1604673026a83c5"
+  },
+  "course": {
+    "slug": "testing",
+    "title": "Introduction to Testing",
+    "description": "An introduction to testing using JavaScript",
+    "date": "2024-09-28T19:56:55.000Z",
+    "modified": "2025-07-29T21:09:56.000Z",
+    "contentsFile": "courses/testing/_index.md"
+  },
+  "lessons": [
+    {
+      "slug": "accident-counter-solution",
+      "title": "Accident Counter: Solution",
+      "description": "The solution for the Accident Counter exercise in the \"Introduction to Testing\" course for Frontend Masters.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/accident-counter-solution.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "accident-counter-with-user-event",
+      "title": "Install userEvent",
+      "description": "Refactor your tests to use userEvent instead of fireEvent.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/accident-counter-with-user-event.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "advanced-test-configuration",
+      "title": "Advanced Test Configuration With Vitest",
+      "description": "Dive into advanced Vitest configurations for better efficiency.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/advanced-test-configuration.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "alternatives-to-using-test-doubles",
+      "title": "Alternatives To Using Test Doubles",
+      "description": "Explore alternatives to using test doubles in your testing strategy.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/alternatives-to-using-test-doubles.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "assert-versus-expect",
+      "title": "The Key Difference Between assert and expect",
+      "description": "Differences in usage patterns and APIs between assert and expect.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/assert-versus-expect.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "asymmetric-matchers-exercise",
+      "title": "Testing the Character Class",
+      "description": "Writing tests for the Character class and its key attributes.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/asymmetric-matchers-exercise.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "asymmetric-matchers-solution",
+      "title": "Implementing Tests for the Character Class",
+      "description": "Example of how to implement tests for the Character class.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/asymmetric-matchers-solution.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "asymmetric-matchers",
+      "title": "Understanding Asymmetric Matchers in Testing",
+      "description": "Why asymmetric matchers are essential to writing flexible tests.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/asymmetric-matchers.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "asymmetric-matching-example",
+      "title": "Handling Large Data Structures In Testing",
+      "description": "Examples of complex data structures and using asymmetric matchers.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/asymmetric-matching-example.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "authentication-example",
+      "title": "Building An Authentication System Using Test-Driven Development With Express And Vitest",
+      "description": "Learn how to create an authentication system with TDD using Express and Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/authentication-example.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "auto-mocking",
+      "title": "Auto-Mocking in Vitest",
+      "description": "Let Vitest mock dependencies on your behalf.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/auto-mocking.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "basic-math-exercise-walkthrough",
+      "title": "Walkthrough: Basic Math Exercise",
+      "description": "A short walk through for the Basic Math exercise.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/basic-math-exercise-walkthrough.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "basic-math",
+      "title": "Implementing Some Basic Tests",
+      "description": "Learn to implement and test simple arithmetic functions with TDD.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/basic-math.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "beyond-strict-equality",
+      "title": "Using toBe and toEqual for Strict Equality",
+      "description": "Learn the difference between toBe and toEqual in Vitest testing.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/beyond-strict-equality.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "clearing-restoring-and-resetting-mocks",
+      "title": "Clearing, Restoring, and Resetting Mocks",
+      "description": "Learn how to manage mocks effectively using Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/clearing-restoring-and-resetting-mocks.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "code-coverage",
+      "title": "Installing a Code Coverage Tool",
+      "description": "A guide to setting up and managing code coverage in Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/code-coverage.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "continuous-integration",
+      "title": "Setting Up GitHub Actions to Run Vitest Unit Tests",
+      "description": "Learn how to automate testing with GitHub Actions and Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/continuous-integration.md",
+      "modified": "2025-09-22T15:27:10.000Z"
+    },
+    {
+      "slug": "cross-browser-testing-with-playwright",
+      "title": "Cross-Browser Testing with Playwright",
+      "description": "Learn how to perform cross-browser testing with Vitest and Playwright.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/cross-browser-testing-with-playwright.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "custom-matchers",
+      "title": "Customer Matchers in Vitest",
+      "description": "Create custom matchers in Vitest for specialized assertions.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/custom-matchers.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "debugging-vitest-tests",
+      "title": "Debugging Vitest Tests",
+      "description": "Learn essential tools for debugging tests in Vitest effectively.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/debugging-vitest-tests.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "dependency-injection",
+      "title": "Dependency Injection In JavaScript: What, Why, And How",
+      "description": "Learn the basics and benefits of Dependency Injection in JavaScript.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/dependency-injection.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "differences-between-jest-and-vitest",
+      "title": "Differences Between Jest and Vitest",
+      "description": "Comparing Jest and Vitest's ecosystems, speed, and features.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/differences-between-jest-and-vitest.md",
+      "modified": "2025-09-20T16:39:54.000Z"
+    },
+    {
+      "slug": "error-handling-and-edge-case-testing",
+      "title": "Testing Errors and Handling Edge Cases",
+      "description": "Learn to test error handling and edge cases using Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/error-handling-and-edge-case-testing.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "exercise-add-timestamp",
+      "title": "Adding a Timestamp Field To An Object",
+      "description": "Implement a function that adds a timestamp field to an object.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/exercise-add-timestamp.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "filtering-tests",
+      "title": "Filtering Tests",
+      "description": "Learn how to filter tests in Vitest by name, directory, and more.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/filtering-tests.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "fire-event-events",
+      "title": "List of Events You Can Fire",
+      "description": "A complete list of DOM events that can be fired.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/fire-event-events.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "guess-the-number-example",
+      "title": "Building A \"Guess The Number\" Game Using Test-Driven Development With Vitest",
+      "description": "Learn to build a \"Guess the Number\" game using TDD with Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/guess-the-number-example.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "guessing-game-solution",
+      "title": "Guessing Game Solution",
+      "description": "The solution to the \"Guessing Game\" exercise in the \"Introduction to Testing\" course.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/guessing-game-solution.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "how-tests-work",
+      "title": "How Tests Work",
+      "description": "Explore techniques to ensure tests fail when expected.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/how-tests-work.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "in-source-testing",
+      "title": "In-Source Testing",
+      "description": "Explore in-source testing with Vitest for quick experimentation.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/in-source-testing.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mock-spy-secret-input-example",
+      "title": "Mocking and Spying on Local Storage",
+      "description": "An example where we mock and spy on local storage.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/mock-spy-secret-input-example.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mocking-best-practices",
+      "title": "An Incomplete List of Best Practices for Mocking",
+      "description": "Learn best practices and avoid common pitfalls when mocking.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/mocking-best-practices.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mocking-dependencies",
+      "title": "Mocking Dependencies",
+      "description": "Learn how to mock dependencies using Vitest for reliable tests.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/mocking-dependencies.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mocking-dom-methods",
+      "title": "Mocking DOM Methods",
+      "description": "Let's take a look at mocking methods… in the DOM.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/mocking-dom-methods.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mocking-environment-variables",
+      "title": "Testing Environment-Dependent Code with Spies",
+      "description": "Learn how to reset VITE_ENV in Vitest using beforeEach and vi.stubEnv.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/mocking-environment-variables.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mocking-fetch-and-network-requests",
+      "title": "Mocking Fetch And Network Requests With Vitest",
+      "description": "Learn how to mock fetch and network requests using Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/mocking-fetch-and-network-requests.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mocking-the-file-system",
+      "title": "Mocking Reading And Writing Files",
+      "description": "Learn how to mock file operations using Vitest and fs/promises.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/mocking-the-file-system.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mocking-time",
+      "title": "Mocking Timers, Dates, And System Utilities",
+      "description": "Learn how to mock timers, dates, and utilities in Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/mocking-time.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "mocks",
+      "title": "A Comprehensive Guide to Mocks in Testing",
+      "description": "Learn how mocks simplify tests by controlling behavior.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/mocks.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "organizing-and-annotating-tests",
+      "title": "Organizing and Annotating Tests",
+      "description": "Learn how to use describe for organizing tests in suites.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/organizing-and-annotating-tests.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "overriding-object-properties",
+      "title": "Overriding Object Properties",
+      "description": "Learn how to override object properties in Vitest with various methods.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/overriding-object-properties.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "parallelizing-tests",
+      "title": "Parallelizing Tests Using Test Context",
+      "description": "Learn how to parallelize long-running asynchronous tests.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/parallelizing-tests.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "parameterizing-tests",
+      "title": "Using Test.each And Describe.each To Generate Tests And Suites",
+      "description": "Learn to programmatically generate tests using test.each.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/parameterizing-tests.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "running-tests-for-related-files",
+      "title": "Only Running Tests For Related Files",
+      "description": "Learn how to run only related tests in Vitest to save time.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/running-tests-for-related-files.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "running-tests",
+      "title": "Running Tests with Vitest",
+      "description": "Learn how to run tests using Vitest and Vitest UI in your project.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/running-tests.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "setting-up-and-tearing-down-with-hooks",
+      "title": "Understanding Hooks",
+      "description": "Learn how to use hooks for setup, teardown, and test isolation in Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/setting-up-and-tearing-down-with-hooks.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "snapshot-test-alternatives",
+      "title": "Alternatives to Snapshot Tests",
+      "description": "Explore alternatives to snapshot tests for efficient testing.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/snapshot-test-alternatives.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "snapshot-test-maintenance",
+      "title": "Maintaining Snapshot Tests",
+      "description": "A quick and easy guide to understanding snapshot testing with Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/snapshot-test-maintenance.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "snapshot-testing",
+      "title": "Snapshot Testing",
+      "description": "Learn how to implement snapshot testing using Vitest framework.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/snapshot-testing.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "spies",
+      "title": "Using Spies",
+      "description": "Learn how to use spies in Vitest to monitor function calls.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/spies.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "strategies-for-testing-conditional-logic",
+      "title": "Strategies For Testing Conditional Logic",
+      "description": "Learn how to effectively test conditional logic in your code.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/strategies-for-testing-conditional-logic.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "structure-of-a-unit-test",
+      "title": "Arrange-Act-Assert (AAA) Pattern",
+      "description": "Learn the AAA pattern for writing clear, maintainable unit tests.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/structure-of-a-unit-test.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "stubs",
+      "title": "Using Stubs",
+      "description": "Learn how to use stubs to simulate behavior in testing.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/stubs.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "task-list-example",
+      "title": "Building a To-Do List Application In React Using Test-Driven Development With Vitest",
+      "description": "A guide to building a To-Do List app using TDD with React and Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/task-list-example.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "test-context",
+      "title": "Understanding Test Context",
+      "description": "Learn how to use the test context feature in Vitest effectively.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/test-context.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "test-doubles",
+      "title": "Understanding Test Doubles in Unit Testing",
+      "description": "Learn the purpose and types of test doubles in unit testing.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/test-doubles.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "test-driven-development",
+      "title": "Understanding Test-Driven Development",
+      "description": "A simple explanation of the steps in Test-Driven Development.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/test-driven-development.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "test-runners-and-assertion-libraries",
+      "title": "Which Testing Framework Should I Use?",
+      "description": "An overview of testing frameworks like Jest, Vitest, and Jasmine.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/test-runners-and-assertion-libraries.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-a-reducer-solution",
+      "title": "Solution: Testing a Reducer in Zod",
+      "description": "Tests I write during development compared to maintenance.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-a-reducer-solution.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-asynchronous-code",
+      "title": "Using Async/Await",
+      "description": "Handling asynchronous code with async/await in Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-asynchronous-code.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-asynchronous-errors",
+      "title": "Testing Asynchronous Errors",
+      "description": "Learn how to write unit tests that test for asynchronous errors.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-asynchronous-errors.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-for-errors-exercise",
+      "title": "Testing Division By Zero in JavaScript",
+      "description": "Learn how to test division by zero in JavaScript utilities.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-for-errors-exercise.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-function-arguments",
+      "title": "Testing Function Arguments",
+      "description": "Learn how to verify function arguments using spies and mocks in Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-function-arguments.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-library-matchers",
+      "title": "Working with Testing Library's Matchers",
+      "description": "Learn how to test DOM nodes more effectively using Testing Library's Matchers",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-library-matchers.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-library-solution",
+      "title": "Refactoring Our Button Test",
+      "description": "Let's look at a solution for using Testing Library to test a button.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-library-solution.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-library",
+      "title": "Using Testing Library",
+      "description": "Learn to write user-focused tests using Testing Library with Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-library.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-local-storage",
+      "title": "Testing Local Storage",
+      "description": "We can emulate the DOM for those times when we need to test stuff that is not available in Node",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-local-storage.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-promises",
+      "title": "Testing Promises",
+      "description": "Learn how to test promises in Vitest for both resolution and rejection.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-promises.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-the-dom-example",
+      "title": "Testing a DOM Element",
+      "description": "Learn how to test DOM interactions using Vitest and DOM Testing Library.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-the-dom-example.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-the-dom",
+      "title": "Testing the DOM: The Setup",
+      "description": "Learn about JSDOM and Happy DOM for testing in Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-the-dom.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "testing-with-mock-service-worker",
+      "title": "Using Mock Service Worker With Vitest For API Testing",
+      "description": "Learn how to use Mock Service Worker with Vitest for API testing.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/testing-with-mock-service-worker.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "the-basics",
+      "title": "Starting with Simple Tests",
+      "description": "Learn how to test basic expressions and functions using Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/the-basics.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "tic-tac-toe-example",
+      "title": "Building A Tic Tac Toe Game Using Test-Driven Development With Vitest",
+      "description": "Learn to build a Tic Tac Toe game using TDD and Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/tic-tac-toe-example.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "types-of-tests",
+      "title": "Unit, Integration, and End-To-End Tests Explained",
+      "description": "Understanding the spectrum of unit, integration, and E2E tests.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/types-of-tests.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "unhappy-path",
+      "title": "Unhappy Path",
+      "description": "Learn how to test edge cases and errors to improve robustness.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/unhappy-path.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "user-event",
+      "title": "FireEvent vs UserEvent in Testing",
+      "description": "Learn how to simulate user events in testing using userEvent.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/user-event.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vitest-hooks-solution",
+      "title": "Creating the Character Using a Hook",
+      "description": "Learn how to create the Character class using a hook.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/vitest-hooks-solution.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vitest-reporters",
+      "title": "Reporters in Vitest",
+      "description": "Learn how to create and implement custom reporters in Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/vitest-reporters.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "vitests-hooks-exercise",
+      "title": "Using BeforeEach Hook for Character Tests",
+      "description": "Refactor Character tests using the beforeEach hook in Vitest.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/vitests-hooks-exercise.md",
+      "modified": "2025-07-29T21:09:56.000Z"
+    },
+    {
+      "slug": "you-dont-need-perfect-code-coverage",
+      "title": "Why You Don't Need 100% Code Coverage",
+      "description": "Code coverage is a tool, not a goal. Let's discuss why.",
+      "date": "2024-10-02T13:49:23.000Z",
+      "file": "courses/testing/you-dont-need-perfect-code-coverage.md",
+      "modified": "2025-09-20T16:39:54.000Z"
+    }
+  ]
+}

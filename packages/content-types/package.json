@@ -1,0 +1,8 @@
+{
+  "name": "@stevekinney/content-types",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  }
+}

@@ -1,6 +1,6 @@
 ## stevekinney.net
 
-This is where the code lives for [my super cool website](https://stevekinney.net).
+This repository is a Bun workspace monorepo powered by Turborepo.
 
 ### Developing
 
@@ -12,6 +12,8 @@ bun dev
 # or start the server and open the app in a new browser tab
 bun dev --open
 ```
+
+The website application lives in `applications/website`.
 
 ### Building
 

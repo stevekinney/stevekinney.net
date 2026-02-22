@@ -1,0 +1,112 @@
+{
+  "meta": {
+    "generatedAt": "2026-02-21T20:37:39.911Z",
+    "hash": "7ff8fb5d03b71d1454ffd1c6b28cb1aed96179a401025c6a8aaf38b0fc6b1bd4"
+  },
+  "course": {
+    "slug": "python-ai",
+    "title": "AI Fundamentals with Python",
+    "description": "Learning about the basics of AI with Python and Hugging Face.",
+    "date": "2025-08-01T00:00:00.000Z",
+    "modified": "2025-08-01T14:39:45.000Z",
+    "contentsFile": "courses/python-ai/_index.md"
+  },
+  "lessons": [
+    {
+      "slug": "attention-and-pipeline-checklist",
+      "title": "Quick Checklists — Pipelines, Attention, Generation",
+      "description": "Compact, practical checklists to configure pipelines, reason about attention, and choose text generation settings.",
+      "date": "2025-09-14T19:16:10.021Z",
+      "file": "courses/python-ai/attention-and-pipeline-checklist.md",
+      "modified": "2025-09-14T23:11:40.817Z"
+    },
+    {
+      "slug": "attention-mechanism",
+      "title": "The Attention Mechanism",
+      "description": "Build intuition for self-attention, Q/K/V projections, multi-head attention, masking, and positional information in Transformers.",
+      "date": "2025-09-14T19:37:01.227Z",
+      "file": "courses/python-ai/attention-mechanism.md",
+      "modified": "2025-09-20T16:39:54.000Z"
+    },
+    {
+      "slug": "decoders",
+      "title": "Decoders and Text Generation",
+      "description": "Practical guide to causal decoders and generation strategies like greedy, beam search, top-k/top-p sampling, temperature, and penalties.",
+      "date": "2025-09-14T19:43:52.263Z",
+      "file": "courses/python-ai/decoders.md",
+      "modified": "2025-09-20T16:39:54.000Z"
+    },
+    {
+      "slug": "dreambooth",
+      "title": "DreamBooth — Personalizing Text-to-Image Models",
+      "description": "Fine-tune a text-to-image model on a few photos to learn a specific subject; cover dataset prep, prior preservation, training, and inference.",
+      "date": "2025-09-14T20:01:48.429Z",
+      "file": "courses/python-ai/dreambooth.md",
+      "modified": "2025-09-20T16:39:54.000Z"
+    },
+    {
+      "slug": "fine-tuning",
+      "title": "Fine-Tuning Transformer Models",
+      "description": "Prepare datasets, choose an approach (full, LoRA/PEFT), configure training with the Trainer API, evaluate, and ship safely to production.",
+      "date": "2025-09-14T20:03:50.784Z",
+      "file": "courses/python-ai/fine-tuning.md",
+      "modified": "2025-09-20T16:39:54.000Z"
+    },
+    {
+      "slug": "hugging-face-pipeline-tasks",
+      "title": "Hugging Face Pipeline Tasks",
+      "description": "A list of all of the things you can do with a Hugging Face Transformers.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/python-ai/hugging-face-pipeline-tasks.md",
+      "modified": "2025-08-01T14:15:48.000Z"
+    },
+    {
+      "slug": "image-generation",
+      "title": "Text-to-Image Generation (Stable Diffusion)",
+      "description": "Understand Stable Diffusion's components, schedulers, guidance scale, prompt craft, safety, and performance for text-to-image tasks.",
+      "date": "2025-09-14T19:50:51.150Z",
+      "file": "courses/python-ai/image-generation.md",
+      "modified": "2025-09-20T16:39:54.000Z"
+    },
+    {
+      "slug": "image-to-image",
+      "title": "Image-to-Image Transformations",
+      "description": "Generate new images guided by both a textual prompt and an initial image; control fidelity with strength and guidance.",
+      "date": "2025-09-14T19:53:32.494Z",
+      "file": "courses/python-ai/image-to-image.md",
+      "modified": "2025-09-20T16:39:54.000Z"
+    },
+    {
+      "slug": "installing-hugging-face",
+      "title": "Installing the Hugging Face CLI",
+      "description": "A brief guide on how to install the Hugging Face CLI.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/python-ai/installing-hugging-face.md",
+      "modified": "2025-08-01T14:15:48.000Z"
+    },
+    {
+      "slug": "pipeline-basics",
+      "title": "Pipeline Basics (Hugging Face)",
+      "description": "Understand Hugging Face Pipelines, tasks, model/tokenizer loading, batching, devices, and configuration for quick, production-ready inference.",
+      "date": "2025-09-14T19:39:41.572Z",
+      "file": "courses/python-ai/pipeline-basics.md",
+      "modified": "2025-09-20T16:39:54.000Z"
+    },
+    {
+      "slug": "tokenization",
+      "title": "Tokenization — From Text to Tensors",
+      "description": "Learn how text becomes model-ready tensors via subword tokenization, special tokens, padding, truncation, and attention masks.",
+      "date": "2025-09-14T19:38:17.032Z",
+      "file": "courses/python-ai/tokenization.md",
+      "modified": "2025-09-20T16:39:54.000Z"
+    },
+    {
+      "slug": "what-is-hugging-face",
+      "title": "What is Hugging Face?",
+      "description": "A quick overview of what exactly Hugging Face is.",
+      "date": "2025-07-29T21:09:56.000Z",
+      "file": "courses/python-ai/what-is-hugging-face.md",
+      "modified": "2025-09-06T20:36:25.000Z"
+    }
+  ]
+}

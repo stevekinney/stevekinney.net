@@ -1,32 +1,34 @@
 {
-  "name": "stevekinney.net",
+  "name": "stevekinney.net-monorepo",
   "version": "0.0.1",
   "private": true,
   "engines": {
-    "node": ">=20.11.0",
+    "node": "24.x",
     "bun": "1.3.2"
   },
   "scripts": {
-    "dev": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" vite dev --port 4444",
-    "build": "bun run content:index && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ./node_modules/vite/bin/vite.js build",
-    "build:stats": "BUNDLE_STATS=1 bun run build",
-    "preview": "vite preview",
-    "test": "bun run test:integration && bun run test:unit",
-    "sync": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" svelte-kit sync",
-    "check": "bun run sync && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "bun run sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "dev": "turbo run dev --filter=@stevekinney/website",
+    "build": "turbo run manifest && turbo run build --filter=@stevekinney/website && if [ -n \"$VERCEL\" ] && [ -d applications/website/.vercel/output ]; then mkdir -p .vercel/output && cp -R applications/website/.vercel/output/. .vercel/output/; fi",
+    "build:stats": "turbo run build:stats --filter=@stevekinney/website",
+    "preview": "turbo run preview --filter=@stevekinney/website",
+    "test": "turbo run manifest && turbo run test --filter=@stevekinney/website",
+    "sync": "turbo run sync --filter=@stevekinney/website",
+    "check": "turbo run check --filter=@stevekinney/website",
+    "check:watch": "turbo run check:watch --filter=@stevekinney/website",
     "lint": "prettier --cache --check . && eslint --cache .",
     "format": "prettier --write .",
-    "clean": "rm -rf build .svelte-kit test-results .vite",
-    "content:validate": "bun run scripts/validate-content.ts",
-    "content:index": "bun run scripts/generate-content-index.ts",
-    "test:integration": "bun run build && env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning playwright test",
-    "test:integration:dev": "PLAYWRIGHT_WEB_SERVER=0 env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning playwright test",
-    "test:unit": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" vitest",
-    "test:storybook": "test-storybook",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "postinstall": "bun run sync",
+    "clean": "turbo run clean --filter=@stevekinney/website && rm -rf node_modules",
+    "content:validate": "turbo run content:validate --filter=@stevekinney/scripts",
+    "content:images:check": "turbo run content:images:check --filter=@stevekinney/scripts",
+    "content:index": "turbo run manifest && turbo run content:index --filter=@stevekinney/website",
+    "manifest": "turbo run manifest",
+    "test:integration": "turbo run manifest && turbo run test:integration --filter=@stevekinney/website",
+    "test:integration:dev": "turbo run manifest && turbo run test:integration:dev --filter=@stevekinney/website",
+    "test:unit": "turbo run test:unit --filter=@stevekinney/website",
+    "test:storybook": "turbo run test:storybook --filter=@stevekinney/website",
+    "storybook": "turbo run storybook --filter=@stevekinney/website",
+    "build-storybook": "turbo run build-storybook --filter=@stevekinney/website",
+    "postinstall": "turbo run sync --filter=@stevekinney/website",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -117,7 +119,8 @@
     "vite-imagetools": "^9.0.2",
     "vite-plugin-dts": "^4.5.4",
     "vite-plugin-toml": "^0.8.7",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.16",
+    "turbo": "^2.4.4"
   },
   "type": "module",
   "dependencies": {
@@ -136,7 +139,9 @@
   },
   "optionalDependencies": {
     "@img/sharp-libvips-linux-x64": "1.2.4",
-    "@img/sharp-linux-x64": "0.34.5"
+    "@img/sharp-linux-x64": "0.34.5",
+    "@img/sharp-libvips-darwin-arm64": "1.2.4",
+    "@img/sharp-darwin-arm64": "0.34.5"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,svelte,css,md,html,json}": "prettier --write",
@@ -147,5 +152,11 @@
     "sharp": "0.34.5",
     "@img/sharp-libvips-darwin-arm64": "1.2.4",
     "@img/sharp-linux-x64": "0.34.5"
-  }
+  },
+  "workspaces": [
+    "applications/*",
+    "courses/*",
+    "content/*",
+    "packages/*"
+  ]
 }
