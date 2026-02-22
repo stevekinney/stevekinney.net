@@ -25,8 +25,9 @@
     </ul>
   </section>
 
-  <img
-    src="/portrait.png"
+  <enhanced:img
+    src="$assets/self-portrait.jpg?w=736;768"
+    sizes="(min-width: 640px) 768px, 736px"
     class="block aspect-[3/4] max-w-full rounded-md shadow-lg sm:w-72 md:w-96"
     alt="Steve Kinney"
   />
