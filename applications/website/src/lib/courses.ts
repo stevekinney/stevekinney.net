@@ -1,5 +1,59 @@
 export default [
   {
+    title: 'React and TypeScript, v3',
+    description:
+      'Learn to build robust React apps with TypeScript by typing hooks, reducers, and component APIs for safer, more maintainable code.',
+    href: 'https://frontendmasters.com/courses/react-typescript-v3/?utm_source=kinney&utm_medium=social&code=kinney',
+  },
+  {
+    title: 'React Performance, v2',
+    description:
+      'Profile and optimize React apps with modern tools and patterns to reduce re-renders, speed up interactions, and improve perceived performance.',
+    href: 'https://frontendmasters.com/courses/react-performance-v2/?utm_source=kinney&utm_medium=social&code=kinney',
+  },
+  {
+    title: 'Cursor & Claude Code: Professional AI Setup',
+    description:
+      'Build a practical AI-assisted developer workflow with Cursor and Claude Code, from quick edits to larger delegated implementation tasks.',
+    href: 'https://frontendmasters.com/courses/pro-ai/?utm_source=kinney&utm_medium=social&code=kinney',
+  },
+  {
+    title: 'Open Source AI with Python & Hugging Face',
+    description:
+      'Learn hands-on AI development with Python and Hugging Face, including image generation, fine-tuning, and model pipelines.',
+    href: 'https://frontendmasters.com/courses/python-ai/?utm_source=kinney&utm_medium=social&code=kinney',
+  },
+  {
+    title: 'Tailwind CSS 4+',
+    description:
+      'Master Tailwind CSS 4 with utility-first styling, design tokens, responsive layouts, and maintainable patterns for modern UI development.',
+    href: 'https://frontendmasters.com/courses/tailwind-css-v2/?utm_source=kinney&utm_medium=social&code=kinney',
+  },
+  {
+    title: 'Fullstack TypeScript, v2 (feat. Zod)',
+    description:
+      'Learn fullstack TypeScript across frontend and backend, including API design, schema validation with Zod, and shared type-safe contracts.',
+    href: 'https://frontendmasters.com/courses/fullstack-typescript-v2/?utm_source=kinney&utm_medium=social&code=kinney',
+  },
+  {
+    title: 'Become a VS Code Power User',
+    description:
+      'Boost your productivity with advanced VS Code workflows, debugging tools, customizations, and features that speed up daily development.',
+    href: 'https://frontendmasters.com/courses/vs-code-v2/?utm_source=kinney&utm_medium=social&code=kinney',
+  },
+  {
+    title: 'Testing Fundamentals',
+    description:
+      'Build confidence in your codebase with practical testing techniques, including assertions, mocks, integration tests, and testing strategy.',
+    href: 'https://frontendmasters.com/courses/testing/?utm_source=kinney&utm_medium=social&code=kinney',
+  },
+  {
+    title: 'Web Security, v2',
+    description:
+      'Learn modern web security fundamentals including authentication, authorization, common vulnerabilities, and practical mitigation techniques.',
+    href: 'https://frontendmasters.com/courses/web-security-v2/?utm_source=kinney&utm_medium=social&code=kinney',
+  },
+  {
     title: 'Design Systems with Storybook, v2',
     description:
       'Learn to create scalable design systems with Storybook. Build reusable UI components, test components, implement dark mode, and generate comprehensive documentation.',
@@ -8,19 +62,13 @@ export default [
   {
     title: 'Figma for Developers, v2',
     description:
-      "Learn to use Figma's developer-friendly features like constraints, auto layout, component properties and CSS generation to efficiently build and translate designs to code. Bridge the gap between design and development.",
+      "Learn to use Figma's developer-friendly features like constraints, auto layout, component properties and CSS generation to efficiently build and translate designs to code.",
     href: 'https://frontendmasters.com/courses/figma-v2/?utm_source=kinney&utm_medium=social&code=kinney',
-  },
-  {
-    title: 'Tailwind CSS',
-    description:
-      'Learn Tailwind CSS‘s utility-first approach for responsive, and customizable web designs. Master themes, layers, responsive breakpoints, dark mode, and more to create maintainable and visually appealing user interfaces!',
-    href: 'https://frontendmasters.com/courses/tailwind-css/?utm_source=kinney&utm_medium=social&code=kinney',
   },
   {
     title: 'Vite',
     description:
-      "Master Vite, the modern build tool for faster and leaner web development. Learn to integrate with React, optimize assets, and extend with plugins. See what it's like to actually enjoy using your build tools!",
+      'Master Vite, the modern build tool for faster and leaner web development. Learn to integrate with React, optimize assets, and extend with plugins.',
     href: 'https://frontendmasters.com/courses/vite/?utm_source=kinney&utm_medium=social&code=kinney',
   },
   {
@@ -52,24 +100,6 @@ export default [
     description:
       "Write more performant and maintainable Redux at scale. In this course, you'll use Redux Toolkit to simplify reducer logic and actions, use TypeScript with Redux, add tests, and use RTK Query to fetch data in real-world projects.",
     href: 'https://frontendmasters.com/courses/advanced-redux/?utm_source=kinney&utm_medium=social&code=kinney',
-  },
-  {
-    title: 'React Performance',
-    description:
-      'Write performant React apps by learning to structure components and memoize to avoid re-renders, load code on-demand, and leverage new concurrent features in React 18.',
-    href: 'https://frontendmasters.com/courses/react-performance/?utm_source=kinney&utm_medium=social&code=kinney',
-  },
-  {
-    title: 'React and TypeScript, v2',
-    description:
-      'Use TypeScript with Components, Context API, React Hooks, and type props to build more robust and reliable React applications at scale.',
-    href: 'https://frontendmasters.com/courses/react-typescript-v2/?utm_source=kinney&utm_medium=social&code=kinney',
-  },
-  {
-    title: 'Figma for Developers',
-    description:
-      'Learn Figma for creating user interface prototypes. Make shapes and frames that will hold the different pieces of the UI. You’ll also learn how to use reusable styles, typography, and components that you can use to create prototypes.',
-    href: 'https://frontendmasters.com/courses/figma/?utm_source=kinney&utm_medium=social&code=kinney',
   },
   {
     title: 'Testing Web Apps with Cypress',
