@@ -1,0 +1,120 @@
+{
+  "meta": {
+    "generatedAt": "2026-03-01T22:52:44.198Z",
+    "hash": "c7d0d1a0447551f1b60b9cf125b6d9360c2c01f205a033717a163245e35c6456"
+  },
+  "course": {
+    "slug": "enterprise-ui",
+    "title": "Enterprise UI",
+    "description": "This course teaches senior frontend engineers how to scale applications beyond a single-team SPA — covering composition patterns, operational infrastructure, and migration strategies.",
+    "date": "2026-03-01T00:00:00.000Z",
+    "modified": "2026-03-01T07:00:00.000Z",
+    "contentsFile": "courses/enterprise-ui/_index.md"
+  },
+  "lessons": [
+    {
+      "slug": "architectural-linting-exercise",
+      "title": "Exercise 6: Architectural Linting",
+      "description": "Configure eslint-plugin-boundaries to encode the intended dependency graph as lint rules, preventing cross-package internal imports and circular dependencies.",
+      "date": "2026-03-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/architectural-linting-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "build-time-composition-exercise",
+      "title": "Exercise 2: Build-Time Composition",
+      "description": "Take the same analytics module from Exercise 1 and consume it as a regular workspace package in a monorepo — no remote entry, no shared dependency negotiation, just an npm import.",
+      "date": "2026-03-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/build-time-composition-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "cicd-pipeline-exercise",
+      "title": "Exercise 7: CI/CD Pipeline",
+      "description": "Build a GitHub Actions workflow that runs the full quality gate on every push, uses Turborepo for caching, and adds Lighthouse CI performance budgets to catch regressions before they ship.",
+      "date": "2026-03-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/cicd-pipeline-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "design-system-governance",
+      "title": "Design System Governance",
+      "description": "How to treat a design system as a platform contract across independently deployed applications—tokens, components, CSS isolation, enforcement, and the organizational patterns that keep it all from drifting apart.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/design-system-governance.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "monorepo-setup-exercise",
+      "title": "Exercise 4: Monorepo Setup",
+      "description": "Create a Turborepo configuration to get cached, dependency-aware builds. Experience the difference between rebuilding everything and FULL TURBO cache hits.",
+      "date": "2026-03-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/monorepo-setup-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "runtime-composition-exercise",
+      "title": "Exercise 1: Runtime Composition",
+      "description": "Wire up a Module Federation host shell and remote analytics module, configure shared dependency negotiation, and solve the cross-boundary state management problem using nanostores.",
+      "date": "2026-03-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/runtime-composition-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "scaling-typescript",
+      "title": "Scaling TypeScript",
+      "description": "Where TypeScript starts to buckle under the weight of a large codebase, and the strategies that keep your tooling fast as the project grows.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/scaling-typescript.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "strangler-fig-and-codemods-exercise",
+      "title": "Exercise 9: Strangler Fig & Codemods",
+      "description": "Set up a routing-level strangler fig so legacy and modern apps coexist, migrate one route, and write a jscodeshift codemod that automates import transformations for the rest of the codebase.",
+      "date": "2026-03-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/strangler-fig-and-codemods-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "strangler-fig-introduction",
+      "title": "The Strangler Fig Pattern",
+      "description": "An incremental replacement strategy for legacy systems: keep a stable front door, move one slice at a time, and delete the old path when the new one proves itself.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/strangler-fig-introduction.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "streaming-and-suspense-exercise",
+      "title": "Exercise 3: Streaming & Suspense",
+      "description": "Add Suspense boundaries around independently-fetching components and implement renderToPipeableStream for streaming SSR so each section renders progressively as its data arrives.",
+      "date": "2026-03-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/streaming-and-suspense-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "testing-strategies-exercise",
+      "title": "Exercise 8: Testing Strategies",
+      "description": "Write Playwright E2E tests for cross-route navigation, mock API responses with MSW, record HAR fixtures for deterministic replay, and discuss where contract testing fills the gaps.",
+      "date": "2026-03-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/testing-strategies-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "typescript-references-exercise",
+      "title": "Exercise 5: TypeScript References",
+      "description": "Add composite builds and project references to each package so TypeScript can do incremental cross-package type checking and skip rechecking packages whose inputs have not changed.",
+      "date": "2026-03-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/typescript-references-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "workspace-package-managers",
+      "title": "npm vs pnpm vs Bun: Workspace Package Managers",
+      "description": "How npm, pnpm, and Bun workspaces compare when your monorepo grows past the point where install speed is the only thing that matters.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/workspace-package-managers.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    }
+  ]
+}
