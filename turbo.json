@@ -7,7 +7,12 @@
     },
     "build": {
       "dependsOn": ["^build", "^manifest"],
-      "outputs": ["build/**", ".svelte-kit/**", "src/lib/server/content-index.json"]
+      "outputs": [
+        "build/**",
+        ".svelte-kit/**",
+        ".vercel/output/**",
+        "src/lib/server/content-index.json"
+      ]
     },
     "build:stats": {
       "dependsOn": ["build"]
