@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generatedAt": "2026-03-01T22:52:44.198Z",
-    "hash": "c7d0d1a0447551f1b60b9cf125b6d9360c2c01f205a033717a163245e35c6456"
+    "generatedAt": "2026-03-02T12:54:02.498Z",
+    "hash": "9ed5fe59df00303bf44c44a4f480b5ba332def06c7d01c36194165f71df47456"
   },
   "course": {
     "slug": "enterprise-ui",
@@ -13,11 +13,27 @@
   },
   "lessons": [
     {
+      "slug": "api-contract-testing",
+      "title": "API Contract Testing",
+      "description": "How contract testing lets each side of an integration verify compatibility independently—without assembling every service into one slow, flaky end-to-end suite that nobody enjoys maintaining.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/api-contract-testing.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
       "slug": "architectural-linting-exercise",
       "title": "Exercise 6: Architectural Linting",
       "description": "Configure eslint-plugin-boundaries to encode the intended dependency graph as lint rules, preventing cross-package internal imports and circular dependencies.",
       "date": "2026-03-01T00:00:00.000Z",
       "file": "courses/enterprise-ui/architectural-linting-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "backends-for-frontends",
+      "title": "Backends for Frontends",
+      "description": "A client-specific backend layer where each user experience gets its own server-side façade—why it exists, where it earns its keep, and the failure modes that turn it back into the monolith it was supposed to replace.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/backends-for-frontends.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
@@ -45,6 +61,54 @@
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
+      "slug": "design-systems-across-microfrontends",
+      "title": "Design Systems Across Microfrontends",
+      "description": "How to deliver a design system when your applications are independently deployed—Module Federation sharing, theming, Storybook composition, and testing across boundaries.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/design-systems-across-microfrontends.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "github-actions",
+      "title": "GitHub Actions",
+      "description": "GitHub's built-in automation system for CI, CD, and everything else humans keep trying to do by hand—how the workflow model works, where the security surface lives, and the footguns that look like features until they go off.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/github-actions.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "island-architecture",
+      "title": "Island Architecture",
+      "description": "An HTML-first rendering pattern where most of the page stays static and only the interactive regions get JavaScript—how it works, where it shines, and where it gets awkward.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/island-architecture.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "mock-service-worker",
+      "title": "Mock Service Worker",
+      "description": "A client-agnostic, standards-based way to describe network behavior once and reuse it across browser development, Node tests, and debugging—without stubbing fetch or patching Axios.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/mock-service-worker.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "module-federation",
+      "title": "Module Federation",
+      "description": "A runtime code-sharing model where multiple independent builds form a single application—how it works, what the configuration surface actually means, and where the sharp edges live.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/module-federation.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "monoliths-microfrontends-and-monorepos",
+      "title": "Monoliths, Microfrontends, Monorepos, and the Real Tradeoffs",
+      "description": "Three axes people keep shoving into one argument—runtime composition, repository topology, and deployment topology—separated so the tradeoffs stop sounding mystical and start sounding like engineering.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/monoliths-microfrontends-and-monorepos.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
       "slug": "monorepo-setup-exercise",
       "title": "Exercise 4: Monorepo Setup",
       "description": "Create a Turborepo configuration to get cached, dependency-aware builds. Experience the difference between rebuilding everything and FULL TURBO cache hits.",
@@ -66,6 +130,14 @@
       "description": "Where TypeScript starts to buckle under the weight of a large codebase, and the strategies that keep your tooling fast as the project grows.",
       "date": "2026-03-01T07:00:00.000Z",
       "file": "courses/enterprise-ui/scaling-typescript.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "server-components-and-streaming",
+      "title": "Server Components and Streaming SSR",
+      "description": "How Server Components, the client boundary, renderToPipeableStream, and Suspense-driven streaming fit together—and the common mistakes that happen when you learn the names but miss the boundaries.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/server-components-and-streaming.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
@@ -101,11 +173,27 @@
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
+      "slug": "turborepo",
+      "title": "Turborepo",
+      "description": "A cache- and graph-aware task runner for JavaScript and TypeScript workspaces—how it thinks about packages and tasks, where caching actually lives, and the ways teams most reliably sabotage themselves.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/turborepo.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
       "slug": "typescript-references-exercise",
       "title": "Exercise 5: TypeScript References",
       "description": "Add composite builds and project references to each package so TypeScript can do incremental cross-package type checking and skip rechecking packages whose inputs have not changed.",
       "date": "2026-03-01T00:00:00.000Z",
       "file": "courses/enterprise-ui/typescript-references-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "versioning-and-release-management",
+      "title": "Versioning and Release Management",
+      "description": "How to version a multi-package design system with semver contracts, DTCG tokens, a layered package graph, and Changesets for coordinated releases.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/versioning-and-release-management.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
