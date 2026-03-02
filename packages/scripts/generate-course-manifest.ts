@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fg from 'fast-glob';
@@ -13,7 +13,7 @@ const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const OUTPUT_PATH = path.resolve(process.cwd(), 'manifest.json');
 const README_FILE = 'README.md';
 const CONTENTS_FILE = '_index.md';
-const MANIFEST_HASH_VERSION = 'course-manifest:v2';
+const MANIFEST_HASH_VERSION = 'course-manifest:v3';
 
 const normalizePath = (value: string): string => value.split(path.sep).join('/');
 
@@ -24,8 +24,9 @@ const toDate = (value: unknown): Date | null => {
 };
 
 const getFileSignature = async (file: string): Promise<string> => {
-  const fileStat = await stat(file);
-  return `${file}:${fileStat.size}:${fileStat.mtimeMs}`;
+  const contents = await readFile(file);
+  const contentHash = createHash('sha256').update(contents).digest('hex');
+  return `${file}:${contentHash}`;
 };
 
 const readExistingManifest = async (): Promise<CourseManifest | null> => {

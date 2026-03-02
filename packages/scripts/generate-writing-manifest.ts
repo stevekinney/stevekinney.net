@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fg from 'fast-glob';
@@ -21,8 +21,9 @@ const toDate = (value: unknown): Date | null => {
 };
 
 const getFileSignature = async (file: string): Promise<string> => {
-  const fileStat = await stat(file);
-  return `${file}:${fileStat.size}:${fileStat.mtimeMs}`;
+  const contents = await readFile(file);
+  const contentHash = createHash('sha256').update(contents).digest('hex');
+  return `${file}:${contentHash}`;
 };
 
 const readExistingManifest = async (): Promise<WritingManifest | null> => {
