@@ -120,8 +120,8 @@ Create `turbo.json` at the root of the repository:
     },
     "dev": {
       "cache": false,
-      "persistent": true
       // [!note Long-running dev servers should never be cached.]
+      "persistent": true
     }
   }
 }
@@ -150,12 +150,12 @@ Open the root `package.json` and replace the existing `scripts` section. The old
 {
   "scripts": {
     "build": "turbo build",
+    // [!note All scripts now delegate to Turborepo instead of running pnpm -r directly.]
     "typecheck": "turbo typecheck",
     "lint": "turbo lint",
     "test": "turbo test",
     "dev": "turbo dev",
   },
-  // [!note All scripts now delegate to Turborepo instead of running pnpm -r directly.]
 }
 ```
 
@@ -209,7 +209,15 @@ Cached:    6 cached, 6 total
 Every task shows "cache hit." The total time drops to under a second. `FULL TURBO` means every single task was served from cache.
 
 > [!NOTE] How Turborepo's cache works
-> For each task, Turborepo computes a hash from: (1) the source files in the package, (2) the hashes of all dependency packages, (3) the task definition in `turbo.json`, (4) relevant environment variables, and (5) the lockfile entries for external dependencies. If the hash matches a previous run, Turborepo restores the cached `outputs` (the `dist/` directory) and replays the logged stdout/stderr instead of executing the command. The cache is local by default (stored in `node_modules/.cache/turbo`), but can be shared across CI runners with remote caching.
+> For each task, Turborepo computes a hash from:
+>
+> 1. The source files in the package
+> 2. The hashes of all dependency packages
+> 3. The task definition in `turbo.json`
+> 4. Relevant environment variables
+> 5. The lockfile entries for external dependencies
+>
+> If the hash matches a previous run, Turborepo restores the cached `outputs` (the `dist/` directory) and replays the logged stdout/stderr instead of executing the command. The cache is local by default (stored in `node_modules/.cache/turbo`), but can be shared across CI runners with remote caching.
 
 ### Checkpoint
 
@@ -289,7 +297,33 @@ This generates a graph showing only the subgraph relevant to `@pulse/analytics` 
 
 You can visualize the dependency graph and identify which packages are upstream and downstream of any given package.
 
-![Turborepo dependency graph visualization](assets/exercise-03-dependency-graph.png)
+```mermaid
+graph TD
+    Dashboard["@pulse/dashboard#build"]
+    Users["@pulse/users#build"]
+    Analytics["@pulse/analytics#build"]
+    UI["@pulse/ui#build"]
+    Shared["@pulse/shared#build"]
+    Legacy["@pulse/legacy#build"]
+    Mocks["@pulse/mocks#build"]
+    Codemods["@pulse/codemods#build"]
+    Root(("Root"))
+
+    Dashboard --> Users
+    Dashboard --> Analytics
+    Dashboard --> UI
+    Dashboard --> Shared
+    Users --> UI
+    Users --> Shared
+    Analytics --> UI
+    Analytics --> Shared
+    UI --> Shared
+    Legacy --> Mocks
+    Mocks --> Shared
+    Codemods --> Shared
+    Codemods --> Root
+    Shared --> Root
+```
 
 ## Stretch Goals
 
