@@ -22,15 +22,13 @@ const BUTTON_CLASSES = [
 ].join(' ');
 
 const CONTAINER_BASE_CLASSES = [
-  'absolute',
-  'right-2',
-  'z-10',
   'flex',
   'gap-1',
   'opacity-0',
   'group-hover:opacity-100',
   'transition-opacity',
 ];
+const CONTAINER_FLOATING_CLASSES = ['absolute', 'right-2', 'top-2', 'z-10'];
 
 function showFeedback(button: HTMLButtonElement, success: boolean, originalSvg: string): void {
   button.innerHTML = success ? CHECK_SVG : ERROR_SVG;
@@ -101,9 +99,8 @@ export function enhanceCodeBlocks(node: HTMLElement): { destroy: () => void } {
   for (const codeBlock of codeBlocks) {
     codeBlock.classList.add('relative', 'group');
 
-    const hasTitle = codeBlock.querySelector('.code-block-header') !== null;
+    const header = codeBlock.querySelector<HTMLElement>('.code-block-header');
     const container = document.createElement('div');
-    container.className = [...CONTAINER_BASE_CLASSES, hasTitle ? 'top-10' : 'top-2'].join(' ');
 
     container.appendChild(createCopyTextButton(codeBlock));
 
@@ -111,7 +108,14 @@ export function enhanceCodeBlocks(node: HTMLElement): { destroy: () => void } {
       container.appendChild(createCopyImageButton(codeBlock, container));
     }
 
-    codeBlock.appendChild(container);
+    if (header) {
+      container.className = CONTAINER_BASE_CLASSES.join(' ');
+      header.appendChild(container);
+    } else {
+      container.className = [...CONTAINER_BASE_CLASSES, ...CONTAINER_FLOATING_CLASSES].join(' ');
+      codeBlock.appendChild(container);
+    }
+
     containers.push(container);
   }
 

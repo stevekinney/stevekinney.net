@@ -212,7 +212,10 @@
 
 /* Filename header */
 .code-block-header {
-  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
   font-size: 0.8125rem;
   font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
   color: #7e8fa3;
