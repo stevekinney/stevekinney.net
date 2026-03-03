@@ -384,7 +384,7 @@ The codemod transforms legacy imports to modern package imports. The diff shows 
 
 Open `codemods/src/__tests__/migrate-legacy-import.test.ts` and add test cases:
 
-```typescript
+```typescript title="codemods/src/__tests__/migrate-legacy-import.test.ts"
 import { describe, it, expect } from 'vitest';
 import jscodeshift from 'jscodeshift';
 import transform from '../migrate-legacy-import';
@@ -396,6 +396,7 @@ function applyTransform(input: string): string {
   );
   return result;
 }
+// [!note Tests codemods as string-to-string transforms with no file system needed.]
 
 describe('migrate-legacy-import', () => {
   it('transforms a single legacy import', () => {

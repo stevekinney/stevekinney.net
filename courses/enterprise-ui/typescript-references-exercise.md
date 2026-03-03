@@ -102,7 +102,7 @@ Open `packages/shared/tsconfig.json`. It should look something like:
 
 Add `"composite": true` and `"declaration": true` to `compilerOptions`:
 
-```jsonc title="packages/shared/tsconfig.json" {3,4}
+```jsonc title="packages/shared/tsconfig.json" {4,5}
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -155,7 +155,7 @@ References tell TypeScript which other projects a package depends on. This mirro
 
 `packages/ui/tsconfig.json` references `@pulse/shared`:
 
-```jsonc title="packages/ui/tsconfig.json" {8}
+```jsonc title="packages/ui/tsconfig.json" {10}
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -172,7 +172,7 @@ References tell TypeScript which other projects a package depends on. This mirro
 
 `packages/analytics/tsconfig.json` references `@pulse/ui` and `@pulse/shared`:
 
-```jsonc title="packages/analytics/tsconfig.json" {9-10}
+```jsonc title="packages/analytics/tsconfig.json" {10-12}
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -192,7 +192,7 @@ References tell TypeScript which other projects a package depends on. This mirro
 
 `packages/users/tsconfig.json` gets the same references as analytics:
 
-```jsonc title="packages/users/tsconfig.json" {9-10}
+```jsonc title="packages/users/tsconfig.json" {10-12}
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -212,7 +212,7 @@ References tell TypeScript which other projects a package depends on. This mirro
 
 `apps/dashboard/tsconfig.json` references all packages:
 
-```jsonc title="apps/dashboard/tsconfig.json" {9-12}
+```jsonc title="apps/dashboard/tsconfig.json" {10-14}
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -239,7 +239,7 @@ References tell TypeScript which other projects a package depends on. This mirro
 
 Create or update `tsconfig.json` at the repository root so `tsc --build` knows about all projects:
 
-```jsonc title="tsconfig.json" {2-7}
+```jsonc title="tsconfig.json" {2-8}
 {
   "files": [],
   // [!note No files to compile here — this is just an entry point for tsc --build.]

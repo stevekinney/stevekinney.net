@@ -8,27 +8,11 @@ date: 2026-03-01T00:00:00.000Z
 modified: '2026-03-01T00:00:00-07:00'
 ---
 
-## What You're Doing
-
 The workspace has four packages (`analytics`, `users`, `ui`, `shared`) and a dashboard app, but there is no build orchestration. Running `pnpm -r build` rebuilds everything every time, even unchanged packages. You're going to create a `turbo.json` configuration and wire up Turborepo so builds are cached, dependency-aware, and fast.
 
 ## Why It Matters
 
 Without a build orchestrator, every CI run and every local build starts from scratch. In a monorepo with 5 packages that takes a few seconds; in a monorepo with 50 packages it takes minutes. Turborepo's content-aware hashing means a build that has already succeeded with the same inputs is never repeated. The second build is free. Changing one leaf package only rebuilds its dependents, not the entire graph. This is the tool that makes monorepos viable at scale.
-
-## Prerequisites
-
-- Node.js 20+
-- pnpm 9+
-
-## Setup
-
-You should be continuing from where Exercise 3 left off. If you need to catch up:
-
-```bash
-git checkout 03-monorepo-start
-pnpm install
-```
 
 > [!NOTE]
 > At this point the workspace has `packages/users` — a feature package for user management. It follows the same pattern as `packages/analytics`: its own `package.json`, `tsconfig.json`, and `src/index.ts` with an explicit public API.
@@ -162,7 +146,7 @@ Create `turbo.json` at the root of the repository:
 
 Open the root `package.json` and replace the existing `scripts` section. The old scripts ran pnpm commands directly—the new ones delegate to Turborepo:
 
-```jsonc title="package.json" {2-6}
+```jsonc title="package.json" {2-7}
 {
   "scripts": {
     "build": "turbo build",

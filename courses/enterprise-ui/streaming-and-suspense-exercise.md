@@ -405,31 +405,24 @@ export { createSuspenseResource } from './api-client';
 
 Open `packages/analytics/src/stats-bar.tsx` again. You're making three changes: (1) swap the imports—drop `useEffect`, `useState`, and `LoadingSkeleton`, add `createSuspenseResource`; (2) replace the `useEffect`/`useState` fetch with a module-level Suspense resource; (3) delete the `if (!stats)` loading guard—Suspense handles that now. Update the file to:
 
-```typescript
-// CHANGED: Removed useEffect and useState—no more manual state management.
+```typescript title="packages/analytics/src/stats-bar.tsx"
 import React from "react";
 import type { SummaryStats } from "@pulse/shared";
-// CHANGED: Added createSuspenseResource (replaces the useEffect fetch).
 import { createSuspenseResource } from "@pulse/shared";
-// CHANGED: Removed LoadingSkeleton—the Suspense boundary in the parent handles loading now.
 import { StatCard } from "@pulse/ui";
+// [!note Swapped useEffect/useState/LoadingSkeleton for createSuspenseResource — Suspense handles loading now]
 
 // ... keep formatNumber, formatCurrency, formatPercentage functions ...
 
-// NEW: Create the resource at module scope. The fetch starts immediately when this file loads,
-// not when the component renders—so data is already in flight before React reaches StatsBar.
 const statsResource = createSuspenseResource<SummaryStats>(
   fetch("/api/analytics/summary").then((r) => r.json()),
 );
+// [!note Module-level resource — the fetch starts at import time, not at render time]
 
 export function StatsBar(): React.ReactElement {
-  // CHANGED: Replaced useState + useEffect with a single read() call.
-  // If the data isn't ready yet, this throws a promise—React catches it
-  // and shows the nearest Suspense fallback instead of rendering this component.
   const stats = statsResource.read();
+  // [!note Throws a promise if data is not ready — React shows the Suspense fallback instead]
 
-  // REMOVED: The `if (!stats)` loading guard is gone. This component never renders
-  // until data is available—Suspense prevents it from reaching this point while pending.
   return (
     <div className="grid grid-cols-4 gap-4">
       <StatCard label="Total Users" value={formatNumber(stats.totalUsers)} />
@@ -446,22 +439,18 @@ export function StatsBar(): React.ReactElement {
 
 Open `packages/analytics/src/chart.tsx` again. The same three changes apply—swap imports, replace `useEffect` with a Suspense resource, remove the loading guard—but the chart has a twist: data depends on the `range` prop, so you can't use a single module-level resource. Instead, use a `Map` that caches one resource per range value. Update the file to:
 
-```typescript
-// CHANGED: Removed useEffect, useState, and LoadingSkeleton.
+```typescript title="packages/analytics/src/chart.tsx"
 import React from "react";
 import type { ChartDataPoint, TimeRange } from "@pulse/shared";
-// CHANGED: Added createSuspenseResource (replaces the useEffect fetch).
 import { createSuspenseResource } from "@pulse/shared";
+// [!note Swapped useEffect/useState/LoadingSkeleton for createSuspenseResource — Suspense handles loading now]
 
-// NEW: A Map that caches one Suspense resource per time range ("7d", "30d", "90d").
-// Unlike StatsBar, we can't use a single module-level resource because the
-// fetch URL depends on the range prop.
 const chartCache = new Map<
   TimeRange,
   ReturnType<typeof createSuspenseResource<ChartDataPoint[]>>
 >();
+// [!note Map-based cache because the fetch URL depends on the range prop]
 
-// NEW: Creates a resource on first access for each range, then reuses it.
 function getChartResource(range: TimeRange) {
   if (!chartCache.has(range)) {
     chartCache.set(
@@ -479,9 +468,8 @@ export function Chart({
 }: {
   range?: TimeRange;
 }): React.ReactElement {
-  // CHANGED: Replaced useState + useEffect with a resource read.
-  // Throws a promise if data for this range isn't ready yet.
   const data = getChartResource(range).read();
+  // [!note Throws a promise if data for this range is not ready yet]
 
   if (data.length === 0) {
     return (
@@ -539,14 +527,12 @@ export function Chart({
 
 Open `packages/analytics/src/big-table.tsx` again. Same pattern as `StatsBar`—swap imports, replace `useEffect` with a module-level resource, delete the loading guard. Update the file to:
 
-```typescript
-// CHANGED: Removed useEffect and useState.
+```typescript title="packages/analytics/src/big-table.tsx"
 import React from "react";
 import type { TableRow, PaginatedResponse } from "@pulse/shared";
-// CHANGED: Added createSuspenseResource (replaces the useEffect fetch).
 import { createSuspenseResource } from "@pulse/shared";
-// CHANGED: Removed LoadingSkeleton—the Suspense boundary handles loading now.
 import { DataTable } from "@pulse/ui";
+// [!note Swapped useEffect/useState/LoadingSkeleton for createSuspenseResource — Suspense handles loading now]
 
 const columns = [
   { key: "user" as const, header: "User" },
@@ -564,20 +550,17 @@ const columns = [
   },
 ];
 
-// NEW: Module-level resource—the fetch starts at import time.
-// The .then chain extracts result.data from the PaginatedResponse wrapper.
 const tableResource = createSuspenseResource<TableRow[]>(
   fetch("/api/analytics/table?page=1")
     .then((r) => r.json())
     .then((result: PaginatedResponse<TableRow>) => result.data),
 );
+// [!note Module-level resource — the fetch starts at import time]
 
 export function BigTable(): React.ReactElement {
-  // CHANGED: Replaced useState + useEffect with a single read() call.
-  // Throws a promise if data isn't ready yet.
   const data = tableResource.read();
+  // [!note Throws a promise if data is not ready — React shows the Suspense fallback instead]
 
-  // REMOVED: The `if (!data)` loading guard is gone—Suspense handles it.
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6">
       <h3 className="mb-4 font-medium text-gray-900">Recent Activity</h3>
@@ -596,38 +579,33 @@ Now open `packages/analytics/src/analytics-dashboard.tsx` one more time. You're 
 
 Update the imports at the top of the file—add `Suspense` from React and `LoadingSkeleton` from `@pulse/ui`:
 
-```typescript
-// CHANGED: Added Suspense to the React import.
+```typescript title="packages/analytics/src/analytics-dashboard.tsx"
 import React, { Suspense, useState } from 'react';
-// NEW: LoadingSkeleton is now used here for Suspense fallbacks (it was previously
-// used inside each child component, but those loading guards are gone now).
 import { LoadingSkeleton } from '@pulse/ui';
+// [!note Added Suspense and moved LoadingSkeleton here — child components no longer handle their own loading]
 // ... other imports stay the same ...
 ```
 
 Then wrap each child component in the JSX. Find `<StatsBar />`, `<Chart />`, and `<BigTable />` and wrap each one:
 
-```typescript
-{/* NEW: Suspense catches the thrown promise from statsResource.read()
-    and shows the card skeleton until data resolves (~200ms). */}
+```typescript title="packages/analytics/src/analytics-dashboard.tsx"
 <Suspense fallback={<LoadingSkeleton variant="card" count={4} />}>
   <StatsBar />
 </Suspense>
+// [!note Suspense catches the thrown promise from statsResource.read() and shows a skeleton]
 
 <div className="rounded-lg border border-gray-200 bg-white p-6">
   {/* ... time range buttons stay the same ... */}
-  {/* NEW: Suspense catches the thrown promise from getChartResource().read()
-      and shows the chart skeleton until data resolves (~800ms). */}
   <Suspense fallback={<LoadingSkeleton variant="chart" />}>
     <Chart range={timeRange} />
   </Suspense>
+  // [!note Each Suspense boundary resolves independently as its data arrives]
 </div>
 
-{/* NEW: Suspense catches the thrown promise from tableResource.read()
-    and shows the table skeleton until data resolves (~2000ms). */}
 <Suspense fallback={<LoadingSkeleton variant="table" />}>
   <BigTable />
 </Suspense>
+// [!note Table data takes ~2000ms — its skeleton stays visible the longest]
 ```
 
 Save and reload the page. Watch the rendering sequence:
@@ -652,20 +630,18 @@ Each section of the analytics dashboard now loads independently via Suspense. Th
 
 The Suspense boundaries you added in Step 2 serve double duty. On the client, they show skeleton fallbacks while data loads. On the server, they tell React's streaming SSR where to split the HTML stream. Here's what a streaming SSR implementation looks like using the Suspense boundaries you've already built:
 
-```typescript
+```typescript title="server/render.tsx"
 import { renderToPipeableStream } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
 import { App } from "./app";
 import type { Request, Response } from "express";
 
 export function render(req: Request, res: Response) {
-  // renderToPipeableStream returns a pipe function that streams HTML chunks to the response.
   const { pipe } = renderToPipeableStream(
     <StaticRouter location={req.url}>
       <App />
     </StaticRouter>,
     {
-      // The client-side entry point—React loads this to hydrate the streamed HTML.
       bootstrapScripts: ["/src/main.tsx"],
       onShellReady() {
         // The shell (everything outside Suspense boundaries) is ready.

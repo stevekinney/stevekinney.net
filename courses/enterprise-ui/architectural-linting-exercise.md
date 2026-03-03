@@ -166,7 +166,7 @@ Then add the import resolver configuration to the same object in `eslint.config.
 
 Add the `boundaries/element-types` rule to the same configuration object in `eslint.config.js` to define which element types are allowed to import from which:
 
-```javascript title="eslint.config.js" {17-27}
+```javascript title="eslint.config.js" {19-31}
 {
   plugins: {
     boundaries,
@@ -271,7 +271,7 @@ This bypasses the public API defined in `@pulse/analytics/src/index.ts`. Add a r
 
 Add `boundaries/no-private` to the rules object in `eslint.config.js`:
 
-```javascript title="eslint.config.js" {13}
+```javascript title="eslint.config.js" {14}
 rules: {
   "boundaries/element-types": [
     "error",
