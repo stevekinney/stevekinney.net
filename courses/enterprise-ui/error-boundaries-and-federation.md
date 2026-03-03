@@ -37,6 +37,12 @@ Your `<ErrorBoundary>` lives inside `<App>`, which lives inside `bootstrap.tsx`.
 
 ## What Actually Works
 
+| Strategy                    | Where it runs                   | Catches bootstrap crash         | Catches render errors | Complexity |
+| --------------------------- | ------------------------------- | ------------------------------- | --------------------- | ---------- |
+| Catch bootstrap failure     | `index.tsx` (plain JS)          | Yes                             | No                    | Low        |
+| Make remote optional        | `React.lazy` `.catch()`         | Only if not in static `remotes` | Yes                   | Medium     |
+| Dynamic remote registration | Runtime API (`registerRemotes`) | Yes                             | Yes                   | Higher     |
+
 There are a few strategies for handling this, and they operate at different levels.
 
 ### Catch the bootstrap failure

@@ -34,7 +34,7 @@ Start by understanding how the monorepo is organized.
 
 Open `pnpm-workspace.yaml` — it declares four workspace groups:
 
-```yaml
+```yaml title="pnpm-workspace.yaml"
 packages:
   - 'apps/*'
   - 'packages/*'
@@ -44,7 +44,7 @@ packages:
 
 Open `packages/analytics/package.json` — find the entry point:
 
-```json
+```json title="packages/analytics/package.json"
 "main": "./src/index.ts",
 "types": "./src/index.ts"
 ```
@@ -54,7 +54,7 @@ Open `packages/analytics/package.json` — find the entry point:
 
 Open `packages/analytics/src/index.ts` — note the explicit public API:
 
-```typescript
+```typescript title="packages/analytics/src/index.ts"
 export { AnalyticsDashboard } from './analytics-dashboard';
 ```
 
@@ -62,7 +62,7 @@ Only `AnalyticsDashboard` is exported. Internal components like `StatsBar`, `Cha
 
 Open `apps/dashboard/src/routes/analytics.tsx` — the route imports from the package:
 
-```typescript
+```typescript title="apps/dashboard/src/routes/analytics.tsx"
 import { AnalyticsDashboard } from '@pulse/analytics';
 ```
 
@@ -77,6 +77,31 @@ You should see the dashboard running at `http://localhost:5173` with:
 - A bar chart with time range toggles (7d / 30d / 90d)
 - A "Recent Activity" table below the chart
 - A green **"Viewing as: Grace Hopper"** badge in the header
+
+![Analytics dashboard with stat cards, bar chart, and activity table](assets/exercise-01-analytics-dashboard.png)
+
+## Package Dependency Graph
+
+The workspace packages form a directed graph. The dashboard app sits at the top, consuming feature packages that in turn depend on lower-level shared libraries.
+
+```mermaid
+graph TD
+    Dashboard["apps/dashboard"]
+    Analytics["packages/analytics"]
+    Users["packages/users"]
+    UI["packages/ui"]
+    Shared["packages/shared"]
+
+    Dashboard --> Analytics
+    Dashboard --> Users
+    Dashboard --> UI
+    Dashboard --> Shared
+    Analytics --> UI
+    Analytics --> Shared
+    Users --> UI
+    Users --> Shared
+    UI --> Shared
+```
 
 ## Compare with Runtime Composition
 
@@ -127,7 +152,7 @@ The analytics package only exports `AnalyticsDashboard` from its `index.ts`. But
 
 Open `apps/dashboard/src/routes/analytics.tsx` and try adding a direct import of an internal component:
 
-```typescript
+```typescript title="apps/dashboard/src/routes/analytics.tsx"
 import { StatsBar } from '@pulse/analytics/src/stats-bar';
 ```
 
@@ -157,20 +182,15 @@ The dashboard has routing — unlike the federation setup which only had a singl
 
 Navigation between Analytics and Settings works. The sidebar highlights the active route. Both pages load data from MSW mock handlers.
 
+![Settings page with organization data](assets/exercise-01-settings-page.png)
+
+![Users page with user list](assets/exercise-01-users-page.png)
+
 ## Stretch Goals
 
 - **Add a new component to `packages/analytics`:** Create a `summary-header.tsx` component, export it from `index.ts`, and use it in the dashboard. See how TypeScript integration works across the boundary.
 - **Explore the mock API:** Open `mocks/src/handlers.ts` and change the delay on `/api/analytics/summary` from `200` to `3000`. Observe how the loading state behaves when the API is slow.
 - **Trace the dependency graph:** Starting from `apps/dashboard/package.json`, trace which packages depend on which. Draw the graph. This is the graph that Turborepo will optimize in Exercise 4.
-
-## Solution
-
-If you need to catch up, the completed state for this exercise is available on the `02-streaming-start` branch:
-
-```bash
-git checkout 02-streaming-start
-pnpm install
-```
 
 ## What's Next
 

@@ -17,9 +17,9 @@ If what you actually need is independent deployability per slice, then this is t
 
 ## Where It Makes Sense
 
-Build-time microfrontends make sense when the real problem is code ownership, package boundaries, and team-scale maintainability—not runtime autonomy. They're a good fit when you want separate teams to own vertical slices of a product, but you're still happy shipping one artifact, one SSR/SSG output, one release, and one browser runtime. Fowler's guidance says teams should be organized around vertical business slices, often whole pages, rather than technical layers like styling or validation. single-spa similarly recommends route-based application splits over component-sized fragmentation.
+Build-time microfrontends make sense when the real problem is code ownership, package boundaries, and team-scale maintainability—not runtime autonomy. They're a good fit when you want separate teams to own vertical slices of a product, but you're still happy shipping one artifact, one SSR/SSG output, one release, and one browser runtime. Fowler's guidance says teams should be organized around vertical business slices, often whole pages, rather than technical layers like styling or validation. [single-spa](https://single-spa.js.org/) similarly recommends route-based application splits over component-sized fragmentation.
 
-That last point matters more than people admit. If your "microfrontends" are really just `@org/button`, `@org/forms`, and `@org/date-utils`, you don't have microfrontends. You have libraries, which is fine, but let's not put a fake mustache on package management and call it strategy. single-spa explicitly distinguishes route-based applications from utility modules, and it treats things like a component library, shared auth, and global error handling as utility modules, not as the main product slices.
+That last point matters more than people admit. If your "microfrontends" are really just `@org/button`, `@org/forms`, and `@org/date-utils`, you don't have microfrontends. You have libraries, which is fine, but let's not put a fake mustache on package management and call it strategy. [single-spa](https://single-spa.js.org/) explicitly distinguishes route-based applications from utility modules, and it treats things like a component library, shared auth, and global error handling as utility modules, not as the main product slices.
 
 A healthy build-time setup usually looks like one shell plus a small set of domain or route packages, with a few truly shared utility packages beside them.
 
@@ -36,7 +36,7 @@ repo/
     api-client/
 ```
 
-That shape lines up with Fowler's page-level slicing and with the common "applications plus utility modules" split described in single-spa guidance.
+That shape lines up with Fowler's page-level slicing and with the common "applications plus utility modules" split described in [single-spa](https://single-spa.js.org/) guidance.
 
 ## The Main Flavors
 
@@ -162,9 +162,19 @@ And they break when package hygiene is weak. Deep imports create accidental APIs
 
 ## Build-Time Versus Runtime
 
+| Dimension              | Build-time                          | Runtime                               |
+| ---------------------- | ----------------------------------- | ------------------------------------- |
+| Composition timing     | During application build            | In the browser or at server runtime   |
+| Number of builds       | One final artifact                  | Multiple independent builds           |
+| Independent deployment | No (lockstep release)               | Yes                                   |
+| Shared dependencies    | Deduplicated by bundler             | Negotiated at runtime (share scopes)  |
+| Bundle behavior        | Standard bundler output             | Async remote loading                  |
+| Operational complexity | Lower (one deploy pipeline)         | Higher (per-remote pipelines)         |
+| Best for               | Package boundaries, team modularity | Autonomy, independent release cadence |
+
 The clean distinction is this. Build-time microfrontends give you package boundaries, static imports, one application build, one release artifact, and ordinary bundler behavior. Runtime microfrontends keep multiple builds alive past compilation and compose them in the browser or at runtime. single-spa's recommended setup is based on in-browser ES modules and import maps, where each application can be independently developed and deployed. Webpack describes Module Federation as providing and consuming modules from separate builds at runtime.
 
-Build-time microfrontends optimize for simpler operations and stronger compile-time integration. Runtime microfrontends optimize for autonomy and late binding. single-spa also highlights the runtime advantages directly: common libraries can be downloaded once, lazy loading of applications is straightforward, and teams can deploy on their own schedules. If those are the benefits you need, build-time packages are the wrong answer. If those aren't your bottleneck, runtime composition may just be extra machinery with a heroic marketing budget.
+Build-time microfrontends optimize for simpler operations and stronger compile-time integration. Runtime microfrontends optimize for autonomy and late binding. [single-spa](https://single-spa.js.org/) also highlights the runtime advantages directly: common libraries can be downloaded once, lazy loading of applications is straightforward, and teams can deploy on their own schedules. If those are the benefits you need, build-time packages are the wrong answer. If those aren't your bottleneck, runtime composition may just be extra machinery with a heroic marketing budget.
 
 ## The Recommendation
 

@@ -18,11 +18,49 @@ A BFF exists to translate backend capabilities into a client-shaped interface. T
 
 The simplest mental model is this: the client should ask for what _that client_ needs, not for the raw internal structure of your service estate. That sounds obvious, which is why teams reliably ignore it until the mobile app is making six calls to paint one screen and everyone pretends this is "just how distributed systems work." A BFF gives you one place to compose those calls for that experience without making every client learn your backend decomposition.
 
+```mermaid
+sequenceDiagram
+    participant Client as Mobile App
+    participant BFF as Mobile BFF
+    participant Cat as Catalog
+    participant Inv as Inventory
+    participant Price as Pricing
+
+    Client->>BFF: GET /products/featured
+    BFF->>Cat: GET /catalog/featured
+    BFF->>Inv: GET /inventory/batch
+    BFF->>Price: GET /prices/batch
+    Cat-->>BFF: Product list
+    Inv-->>BFF: Stock levels
+    Price-->>BFF: Current prices
+    BFF-->>Client: Merged product view
+    Note over Client,BFF: One call out, one response back
+    Note over BFF,Price: Three parallel calls inside the datacenter
+```
+
 A typical shape:
 
-```text
-Web app    → optional gateway / API management → web BFF    → services
-Mobile app → optional gateway / API management → mobile BFF → services
+```mermaid
+graph LR
+    Web["Web App"]
+    Mobile["Mobile App"]
+    GW["API Gateway"]
+    WebBFF["Web BFF"]
+    MobileBFF["Mobile BFF"]
+    Catalog["Catalog"]
+    Users["Users"]
+    Orders["Orders"]
+
+    Web --> GW
+    Mobile --> GW
+    GW --> WebBFF
+    GW --> MobileBFF
+    WebBFF --> Catalog
+    WebBFF --> Users
+    WebBFF --> Orders
+    MobileBFF --> Catalog
+    MobileBFF --> Users
+    MobileBFF --> Orders
 ```
 
 In that layout, the gateway layer handles generic ingress concerns, while each BFF handles client-specific composition and adaptation. Azure's example is exactly this shape: API Management handles authorization, monitoring, caching, routing, and aggregation into client-specific BFF services, with one BFF optimized for mobile and another for desktop.
@@ -34,6 +72,15 @@ A BFF is not supposed to become your new shared enterprise API. [Microsoft's API
 That doesn't mean every concern must live outside the BFF. Newman explicitly notes that some teams keep authentication, authorization, or request logging inside the BFF because adding more upstream layers also adds latency and operational complexity. The real rule isn't "never put cross-cutting concerns in a BFF." The real rule is "don't let client-specific code and generic perimeter policy collapse into one giant, multi-tenant blob."
 
 ## BFF Versus API Gateway
+
+| Dimension             | API gateway                       | BFF                              | GraphQL                                      |
+| --------------------- | --------------------------------- | -------------------------------- | -------------------------------------------- |
+| Scope                 | General-purpose ingress           | Client-specific façade           | Schema-driven query layer                    |
+| Ownership             | Platform / infra team             | Frontend team (ideally)          | Varies (platform or federated)               |
+| Data shaping          | Minimal (routing + passthrough)   | Aggregation, trimming, reshaping | Client-driven field selection                |
+| Client coupling       | Low (serves all clients equally)  | High (one per experience)        | Medium (schema shared, queries differ)       |
+| Typical use alongside | BFFs or direct services           | Thin gateway in front            | May replace BFF or live inside one           |
+| Best for              | Auth, rate limiting, SSL, routing | Client-specific orchestration    | Flexible data fetching, multi-client schemas |
 
 The cleanest distinction: an API gateway is usually a general-purpose ingress layer, while a BFF is a client-specific façade. Microsoft's docs describe the gateway as the single entry point for a group of services, responsible for routing and potentially for auth, SSL termination, caching, rate limiting, logging, and other cross-cutting concerns. The BFF pattern appears when you split that gateway layer into multiple smaller façades based on client type or business boundary so each client gets an interface tailored to its needs.
 
@@ -75,6 +122,29 @@ What should _not_ live there is broad domain logic that really belongs in shared
 
 For browser-based applications, BFF has a very specific modern meaning in OAuth and OIDC architecture. The current [IETF browser-based apps draft][4] describes BFF as one of the main architectural patterns for browser apps and gives it three core responsibilities: the BFF acts as a confidential OAuth client, manages access and refresh tokens in a cookie-based session so tokens aren't directly exposed to the browser, and forwards API requests to resource servers with the correct access token attached. The same document explicitly says the BFF _becomes_ the OAuth client for the frontend application.
 
+```mermaid
+sequenceDiagram
+    participant Browser as Browser (SPA)
+    participant BFF as BFF Server
+    participant Auth as Auth Server
+    participant API as Resource API
+
+    Browser->>BFF: Click "Log in"
+    BFF->>Auth: Authorization code request
+    Auth-->>Browser: Login page redirect
+    Browser->>Auth: Credentials
+    Auth-->>BFF: Authorization code
+    BFF->>Auth: Exchange code for tokens
+    Auth-->>BFF: Access + refresh tokens
+    Note over BFF: Tokens stored server-side
+    BFF-->>Browser: Set-Cookie (session)
+    Browser->>BFF: GET /api/data (cookie)
+    BFF->>API: GET /data (access token)
+    API-->>BFF: Response
+    BFF-->>Browser: Response
+    Note over Browser: No tokens in JavaScript
+```
+
 That security property is the big reason BFF has become popular again. If tokens never reach browser JavaScript, you eliminate a whole class of token-exfiltration problems. The IETF draft says the architecture mitigates token theft scenarios precisely because there are no tokens for malicious code to steal from the browser, and because the BFF, as a confidential client, is the party that exchanges codes for tokens. [Auth0's overview][5] describes the same flow in practical terms: login goes through the backend, the backend stores tokens and issues a session cookie, and the SPA calls the backend with the cookie instead of calling the resource server directly with tokens.
 
 That doesn't mean the browser suddenly becomes a sacred temple of safety. The same IETF guidance says malicious JavaScript running in the browser can still send requests to the BFF through the user's browser, so BFF is not a magic shield against XSS-like abuse of the user's current session. It mainly removes direct token exposure and moves OAuth duties into a more controlled server-side environment. That's a major improvement, not an absolution certificate.
@@ -94,6 +164,25 @@ A BFF adds an extra network hop, so it's not free. Azure says to review service-
 The reason BFFs still improve user experience so often is that they can remove more latency than they add. Instead of asking a mobile client or SPA to make many remote calls, a BFF can aggregate those calls inside the datacenter and return one client-shaped response. Microsoft explicitly calls out this reduction in chattiness as especially important for remote apps, and Newman recommends running downstream calls in parallel where possible to keep total call time down.
 
 The tricky part is failure behavior. Newman's example is a good one: if a wishlist page depends on wishlist, catalog, and inventory services, do you really want the whole screen to fail when only inventory is down? His answer is basically "probably not." A BFF should often degrade gracefully, returning a partial response the client knows how to render instead of treating every downstream failure as total failure. This is one of the reasons BFFs are valuable: they let you encode experience-specific resilience policy close to the experience.
+
+```mermaid
+sequenceDiagram
+    participant Client as Browser
+    participant BFF as Wishlist BFF
+    participant WL as Wishlist
+    participant Cat as Catalog
+    participant Inv as Inventory
+
+    Client->>BFF: GET /my-wishlist
+    BFF->>WL: GET /items
+    BFF->>Cat: GET /products/batch
+    BFF->>Inv: GET /stock/batch
+    WL-->>BFF: Saved items
+    Cat-->>BFF: Product details
+    Inv--xBFF: 503 Service Unavailable
+    Note over BFF: Inventory down, degrade gracefully
+    BFF-->>Client: Items + details (stock: unknown)
+```
 
 Caching belongs in this same discussion. Newman notes that a reverse proxy in front of a BFF can cache the results of aggregated calls, but the expiry of the aggregate has to respect the shortest-lived or most freshness-sensitive component in the response. Azure's example also uses API Management request caching in front of client-specific BFFs. So, yes, caching aggregated responses is useful, but it has to be done with actual cache semantics, not with the traditional method of "we'll just cache it for a bit and hope the business doesn't notice."
 

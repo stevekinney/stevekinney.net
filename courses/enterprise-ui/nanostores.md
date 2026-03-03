@@ -113,6 +113,62 @@ Computed stores are read-only—you can't call `.set()` on them. They update aut
 
 You can depend on any combination of atoms, maps, and other computed stores. The dependency graph is resolved lazily—a computed store only recalculates when someone is actively subscribed to it. If nobody is listening, it skips the work.
 
+## How Stores Work Under the Hood
+
+An atom is a remarkably small data structure. If you strip away the edge-case handling and lifecycle hooks, the entire implementation is a value, a `Set` of listener functions, and a few methods that read, write, and notify. Something roughly like this:
+
+```typescript
+function atom(initialValue) {
+  let value = initialValue;
+  const listeners = new Set();
+
+  return {
+    get() {
+      return value;
+    },
+    set(newValue) {
+      value = newValue;
+      for (const fn of listeners) fn(value);
+    },
+    subscribe(fn) {
+      listeners.add(fn);
+      fn(value); // call immediately with current value
+      return () => listeners.delete(fn);
+    },
+    listen(fn) {
+      listeners.add(fn);
+      return () => listeners.delete(fn);
+    },
+  };
+}
+```
+
+That's the whole idea. `.set()` replaces the value and iterates through the listener set. `.subscribe()` adds a callback, calls it immediately with the current value, and returns a function that removes it. `.listen()` is identical but skips the initial call. The real nanostores implementation adds lifecycle hooks, batching, and some safety checks, but the shape above is the essential machinery you're working with.
+
+Computed stores are atoms that subscribe to other stores. When any dependency fires, the computed store recalculates its value and—if it actually changed—notifies its own subscribers.
+
+```typescript
+function computed(dependencies, derive) {
+  const store = atom(derive(...dependencies.map((d) => d.get())));
+
+  for (const dep of dependencies) {
+    dep.listen(() => {
+      store.set(derive(...dependencies.map((d) => d.get())));
+    });
+  }
+
+  return { get: store.get, subscribe: store.subscribe, listen: store.listen };
+}
+```
+
+The real implementation is lazier than this—a computed store only subscribes to its dependencies when someone subscribes to _it_. If nobody is listening to the computed store, the dependency subscriptions don't exist, and no recalculation happens. That lazy evaluation is what makes it safe to define a lot of computed stores without worrying about wasted work.
+
+Maps use the same listener set, but `.setKey()` includes information about _which_ key changed when it notifies subscribers. That's what lets framework bindings like `@nanostores/react` skip re-renders for components that only depend on one key of a map. An atom holding an object would fire on every `.set()` regardless of what changed—a map is smarter because it gives subscribers enough information to decide whether they care.
+
+The subscriber count is also what drives the lifecycle model covered in the next section. When the listener set goes from empty to non-empty, `onMount` fires. When the last listener unsubscribes and the set empties again, the cleanup function runs. The entire lifecycle system is just a counter on a `Set`.
+
+Now that you can see the machinery is just callbacks in a set, the framework bindings start to look almost trivially simple—because they are.
+
 ## Framework Bindings
 
 Nanostores itself is pure JavaScript. The framework bindings are separate packages that turn store subscriptions into idiomatic reactive state for each framework.
@@ -265,6 +321,14 @@ Both `nanostores` and `@nanostores/react` also need to be singletons. If the sto
 For cross-boundary communication that doesn't depend on singleton shared modules, [`BroadcastChannel`](/courses/enterprise-ui/broadcast-channel) is the alternative. It trades synchronous reads and reactive subscriptions for origin-scoped messaging that works regardless of how modules are bundled. Many teams use both: nanostores for in-page reactivity, `BroadcastChannel` for cross-tab sync.
 
 ## Nanostores versus the Alternatives
+
+| Alternative            | Framework coupling | Bundle size  | Cross-boundary use | Key tradeoff                                     |
+| ---------------------- | ------------------ | ------------ | ------------------ | ------------------------------------------------ |
+| Nanostores             | None               | ~1 KB        | Excellent          | No middleware, devtools, or opinionated patterns |
+| Redux / Zustand        | React-first        | Medium–large | Poor               | Rich ecosystem but framework-locked              |
+| Jotai / Recoil         | React-only         | Small–medium | Poor               | Suspense integration but no cross-framework use  |
+| RxJS `BehaviorSubject` | None               | Large (RxJS) | Good               | Full reactive toolkit but heavy for simple state |
+| Plain `EventTarget`    | None               | Zero         | Good               | No computed stores, no framework bindings, DIY   |
 
 **Versus Redux/Zustand**: Both are React-first. Redux has middleware, time-travel debugging, and a massive ecosystem. Zustand is smaller and simpler but still React-specific. Nanostores is dramatically smaller than both and works across frameworks, but it doesn't have middleware, devtools, or the opinionated patterns (actions, reducers, slices) that Redux provides. If you need those patterns, nanostores is not a replacement. If you need cross-framework portability, Redux and Zustand can't provide it.
 

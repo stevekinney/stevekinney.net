@@ -109,6 +109,15 @@ That's why Module Federation feels magical until you remember it's "just" a runt
 
 ## Build Plugin Mode Versus Pure Runtime Mode
 
+| Aspect                     | Build plugin mode                  | Pure runtime mode                             |
+| -------------------------- | ---------------------------------- | --------------------------------------------- |
+| Registration               | Declared in bundler config         | `createInstance()` + `registerRemotes()`      |
+| Import syntax              | Normal `import()` / `React.lazy`   | `loadRemote()` from runtime API               |
+| Type hints                 | Yes (via `dts`)                    | Manual (`consumeTypes.remoteTypeUrls`)        |
+| Shared dependency handling | Automatic bidirectional            | Manual via `registerShared()`                 |
+| Dynamic remote addition    | Limited                            | Full (`registerRemotes`)                      |
+| Best for                   | Standard setups with known remotes | Dynamic registration, multi-instance, Node.js |
+
 The [official runtime docs][9] say there are two ways to register and load modules: declare them in the build plugin, or register and load them directly through the runtime API. The two modes can be mixed. The big difference is that build-plugin mode supports direct `import`-style loading and remote type hints, while pure runtime mode supports dynamic registration and works without the build plugin—but you load with `loadRemote()` rather than normal import syntax.
 
 If you use the build plugin, an MF instance is created automatically and stored in memory. That's why `loadRemote()` can be imported directly from `@module-federation/enhanced/runtime` and still know which application instance it belongs to. If you don't use the build plugin, you must call `createInstance()` yourself. The [docs specifically call out][10] pure-runtime use, multiple separate MF instances, and custom partitioning as reasons to create your own instance.
@@ -168,6 +177,14 @@ webpack's native plugin also documents advanced hints that aren't always front-a
 
 One subtle rule from webpack's concepts page is worth remembering: shared requests with a trailing slash, such as `"react/"`, match all module requests with that prefix. That's how you deliberately share subpath imports rather than just the package root.
 
+### Who Decides the Blessed Version
+
+The mechanics above explain _how_ version selection works, but the more interesting question is _who decides_. In practice, the host shell's `package.json` is usually the source of truth. The host initializes the share scope first, and the host's version of React is the one that populates the `"default"` share scope before any remote gets a say. Remotes that declare `singleton: true` and a compatible `requiredVersion` will reuse whatever the host provided. That's not a formal contract—it's just the consequence of initialization order.
+
+What happens when a remote pins a different major version is where things get uncomfortable. If the host provides React 18 and a remote expects React 17, the runtime has to make a call. Without `strictVersion`, it uses the highest semver match—which means the remote gets React 18 whether it wanted it or not. If React 18's API surface changed in ways the remote relies on, the remote breaks silently at runtime. With `strictVersion: true`, the mismatch throws an error, which is at least honest about the problem even if it doesn't fix it.
+
+The practical pattern most teams converge on is this: pin shared dependencies to the same major range across all remotes, use `requiredVersion` to express that range, and let `singleton: true` handle the dedup. Treat a shared dependency major bump as a coordinated change across the whole federated system, not something one team does on a Thursday afternoon. Some teams enforce this with CI checks that compare each remote's declared `requiredVersion` against the host's installed version. Others just have a Slack channel where someone says "we're bumping React next sprint" and everyone nods. The CI check is better, but both happen.
+
 ## Share Scopes and Multiple Pools
 
 A **share scope** is just a named pool of shared dependencies. The default is `"default"`, but the [MF 2.0 docs][14] support multiple share scopes so you can isolate reuse domains. The producer declares which scopes it initializes through `shareScope`, each shared dependency picks a scope through `shared[*].shareScope`, and the consumer can align specific remotes to one or more scopes with `remotes[remote].shareScope`.
@@ -175,6 +192,11 @@ A **share scope** is just a named pool of shared dependencies. The default is `"
 That means you can keep React in the default pool while isolating something like an internal design system or special runtime into a separate scope. This is useful when two apps should reuse some things globally but shouldn't accidentally unify everything. It's not magic isolation—it's just explicit dependency pooling, which is honestly a healthier idea than most frontend architecture slogans.
 
 ## Share Strategy and Startup Behavior
+
+| Strategy        | When remotes load              | Version selection                  | Offline remote behavior                   | Best for                            |
+| --------------- | ------------------------------ | ---------------------------------- | ----------------------------------------- | ----------------------------------- |
+| `version-first` | All loaded during startup      | Highest compatible semver selected | Startup can hang or fail                  | Strict version coordination         |
+| `loaded-first`  | Loaded on first module request | Reuses already-loaded dependencies | Only fails if you request the dead remote | Resilience and graceful degradation |
 
 MF 2.0 introduces [`shareStrategy`][15], with two official modes: `'version-first'` and `'loaded-first'`. The default is `'version-first'`, which loads all remotes during initialization so shared dependencies can register and the highest compatible versions can be selected. `'loaded-first'` delays remote loading until a module is actually requested and prioritizes reuse of already loaded shared dependencies.
 
@@ -189,6 +211,15 @@ webpack's official docs support **promise-based dynamic remotes**. Instead of a 
 That's the canonical solution for tenant routing, feature flags, environment switching, or version pinning at runtime. It's also the conceptual bridge to MF 2.0's runtime registration APIs like `registerRemotes`, which let you add or override remotes after startup. The docs even use remote override as an example and warn that `force: true` should be used carefully because it replaces loaded modules and clears caches.
 
 ## Manifests Versus `remoteEntry.js`
+
+| Aspect                  | `remoteEntry.js`                | `mf-manifest.json`                       |
+| ----------------------- | ------------------------------- | ---------------------------------------- |
+| Format                  | Executable JavaScript           | Declarative JSON                         |
+| Dynamic type hints      | No                              | Yes                                      |
+| Resource preloading     | No                              | Yes                                      |
+| Chrome DevTools support | No                              | Yes                                      |
+| Ecosystem maturity      | Classic (webpack 5 era)         | MF 2.0+                                  |
+| Use when                | Simple setups, no extras needed | You want types, preloading, and devtools |
 
 Classic webpack federation revolves around `remoteEntry.js`. MF 2.0 adds [`mf-manifest.json`][16], which the docs describe as a runtime-oriented manifest consumers can use, and the [remotes docs][8] say manifest-based remotes unlock dynamic type hints, resource preloading, and Chrome DevTools features. If you want the modern toolchain around federation, manifest-based remotes are the more capable choice.
 
@@ -257,6 +288,75 @@ The official [style-isolation docs][25] are blunt: Module Federation does not di
 The [recommended approaches][26] are to solve CSS in the producer, not in Federation itself—use CSS Modules, prefixes or BEM, CSS-in-JS, unified component-library versions, or directly export Shadow DOM components when that tradeoff is acceptable.
 
 The practical takeaway is simple: don't expect Federation to save you from global CSS. Keep styling boundaries inside the remote, or you'll end up debugging load order at 2 a.m. like the world's saddest stage magician.
+
+## Routing and URL Ownership
+
+Module Federation doesn't have an opinion about routing, which means you need to have one. The default answer—and usually the right one—is that the host shell owns the router and the URL bar. The host defines the top-level routes, and each route mounts the appropriate remote as a component. The remote renders inside the host's layout, not in its own browser tab.
+
+A typical pattern looks like this: the host has routes for `/`, `/analytics`, `/catalog`, and `/settings`. The `/analytics` route lazy-loads the analytics remote, the `/catalog` route lazy-loads the catalog remote, and so on. Each remote is wrapped in `React.lazy` and `<Suspense>`, so the host router controls when the remote mounts and what the user sees while it loads.
+
+```jsx
+const Analytics = React.lazy(() => import('analytics/Dashboard'));
+const Catalog = React.lazy(() => import('catalog/ProductList'));
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route
+        path="/analytics/*"
+        element={
+          <Suspense fallback={<Loading />}>
+            <Analytics />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/catalog/*"
+        element={
+          <Suspense fallback={<Loading />}>
+            <Catalog />
+          </Suspense>
+        }
+      />
+    </Routes>
+  );
+}
+```
+
+The `/*` wildcard on those routes is important. It tells the host router to match any subpath under `/analytics/` and pass it through. That gives the remote room for internal sub-views—`/analytics/metrics`, `/analytics/funnels`, whatever—without the host needing to know about them. The remote can use its own nested `<Routes>` for those sub-views, but it doesn't own its own `<BrowserRouter>`. It reads the URL and renders accordingly, but the host's router is the one managing the history stack.
+
+Cross-remote navigation just uses the host's router. When the analytics remote wants to link to a catalog page, it uses `<Link to="/catalog/123">` or `navigate("/catalog/123")`—the same way any component inside the host would navigate. The host router handles the transition, unmounts the analytics remote, and mounts the catalog remote. No full page reload, because the host shell never unmounts.
+
+Browser back and forward work naturally for the same reason. The host router manages `window.history`, and the remotes are just components that mount and unmount as the URL changes. Deep linking also works as long as the host router knows which route prefixes map to which remotes—if a user bookmarks `/analytics/funnels` and comes back later, the host router matches `/analytics/*`, loads the analytics remote, and the remote's internal routing renders the funnels view.
+
+The one way to break all of this is for a remote to create its own `<BrowserRouter>`. Two routers fighting over `window.history` produces exactly the kind of state corruption that makes people regret architectural decisions. If a remote needs sub-routing, use `<Routes>` or `useRoutes` without wrapping them in a separate `<BrowserRouter>`. The remote should read the URL, not own it.
+
+## Version Skew and Deployment Timing
+
+Shared dependency negotiation has runtime machinery—semver matching, singleton resolution, `strictVersion`. Exposed module interfaces have _nothing_. An exposed module is just a JavaScript export. There's no runtime contract check, no version negotiation, no compatibility handshake. Whatever the remote deployed most recently is what the host gets when it calls `container.get("./ProductCard")`.
+
+That makes version skew between independently deployed remotes a quiet, operational problem rather than a loud runtime error. Here's the scenario that actually happens: on Tuesday, the catalog team deploys a remote that exposes `<ProductCard>` expecting `{ title, price }` as props. On Thursday, the team agrees to add a required `currency` prop. On Friday, the host deploys with `<ProductCard title="Widget" price={9.99} currency="USD" />`. But the catalog remote hasn't redeployed yet. The version running in production still expects `{ title, price }` and ignores `currency` entirely—or worse, the new remote deploys first and the _host_ isn't passing `currency` yet, so the component renders with `undefined` where a currency symbol should be.
+
+The runtime won't tell you this happened. The module loads successfully. The component renders. The missing or extra prop is silently `undefined`. There's no `strictVersion` equivalent for exposed module APIs. If you're lucky, it looks wrong. If you're unlucky, it looks _almost_ right.
+
+The practical answer is to treat exposed modules like public APIs. Keep changes backwards-compatible: add optional props with defaults rather than adding required ones, don't rename or remove props that consumers rely on. MF 2.0's `dts` feature helps here—if the host downloads the remote's TypeScript types during build, the host gets a build-time error when the contract changes. That's the closest thing to a compile-time compatibility check across federation boundaries.
+
+When a breaking change is unavoidable, coordinate the deploy order. Update the producer first with a backwards-compatible version that supports both the old and new interface. Deploy consumers. Then deploy the producer again to remove the backwards-compatible shim. That's the same "expand, migrate, contract" pattern you'd use for any API migration, just applied to component props instead of HTTP endpoints.
+
+The organizational backstop is contract tests—automated tests that verify the host can render the remote's exposed modules with the props it actually passes. These run in CI against the remote's published types or a locally built version, and they fail before deploy if the contract broke. Teams that skip this step find out about version skew from users, which is the most expensive test environment available.
+
+## Failure Isolation
+
+If a remote is listed in the static `remotes` configuration and that remote is unreachable, the default behavior is catastrophic: the federation runtime's manifest fetch fails during the share-scope negotiation phase, the error propagates up through the async `import("./bootstrap")`, and the entire host application fails to mount. The user sees a blank white page. Not a fallback component, not an error message—nothing.
+
+The reason this is worse than you'd expect is that the failure happens _before React mounts_. React error boundaries catch errors during rendering, but federation's negotiation phase runs before `createRoot` is ever called. The error boundary exists in your source code, but it was never instantiated in the DOM. You can't catch errors in a component tree that doesn't exist yet.
+
+There are three patterns that actually work. First, catch the bootstrap failure itself—wrap `import("./bootstrap")` in a `.catch()` in `index.tsx` and render a plain DOM fallback. That's ugly (raw DOM manipulation in a React app), but it's the only thing that can run at that point in the lifecycle. Second, make remotes optional at the import level—wrap `React.lazy` imports with `.catch()` so a dead remote returns a fallback component instead of crashing. Third, and cleanest, use dynamic remote registration via the runtime API so the remote is never in the static config and its failure can't crash the negotiation phase.
+
+The [error boundaries lecture](/courses/enterprise-ui/error-boundaries-and-federation) walks through each of these patterns in detail, including the exact failure timeline from script load to blank page and working code for each recovery strategy.
+
+The architectural takeaway is simple: assume remotes _will_ fail. Design the host shell so that a dead remote costs one empty panel, not a dead application. The difference between a good federated architecture and a bad one is usually not in how it works when everything is up—it's in what happens when one piece goes down and the rest of the system has to decide whether to care.
 
 ## Debugging and Observability
 

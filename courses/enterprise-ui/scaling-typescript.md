@@ -15,6 +15,17 @@ And here's the thing that trips people up: build slowness and editor slowness ar
 
 ## Where It Breaks
 
+| Failure mode            | Symptom                                        | Primary fix                                                   |
+| ----------------------- | ---------------------------------------------- | ------------------------------------------------------------- |
+| Oversized program       | Slow builds, high memory                       | Narrow `include`, set `"types": []`                           |
+| Barrel files            | One import pulls hundreds of modules           | Direct imports, remove re-export index files                  |
+| Complex types           | Slow checking, quadratic unions                | Prefer interfaces, name conditional types                     |
+| Anonymous exports       | Huge `.d.ts` output                            | Add explicit return types to exports                          |
+| Ambient type pollution  | Slow startup, duplicate globals                | Set `"types": []`, list only what's needed                    |
+| Typed linting           | Slow ESLint, full project analysis             | Narrow `tsconfig` for linting, disable type rules selectively |
+| Module-resolution drift | Works locally, breaks consumers                | Use `nodenext`, avoid extensionless imports                   |
+| Circular dependencies   | Deep instantiation errors, runtime `undefined` | Break cycles, restructure package graph                       |
+
 **Program size** is the most straightforward failure mode. A single `tsconfig` that accidentally includes source, tests, generated files, extra `@types` packages, and parts of `node_modules` turns every edit into a much larger problem than it needs to be. TypeScript's [performance guide][2] calls out oversized `include` globs, mixed project folders, tests living next to product code, and heavy directories under source roots as common causes of slow builds and high memory use.
 
 **Barrel files** make program size worse by hiding it. You know the pattern—an `index.ts` that re-exports everything from a directory so consumers can write a clean one-line import. At small scale, it's a nice convenience. At large scale, it's a performance disaster. When you import a single component through a barrel file, TypeScript has to parse the _entire_ module graph connected to that barrel—every re-exported file, and every downstream dependency of those files. One import becomes a cascading chain of hundreds of modules.

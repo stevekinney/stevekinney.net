@@ -73,6 +73,13 @@ That approach keeps the hook portable and keeps complicated logic out of shell. 
 
 ## When to Use Which Hook
 
+| Hook                 | When it runs             | Bypass with `--no-verify` | Best for                                 | Speed requirement     |
+| -------------------- | ------------------------ | ------------------------- | ---------------------------------------- | --------------------- |
+| `pre-commit`         | Before commit is created | Yes                       | Formatting, linting staged files         | Fast (seconds)        |
+| `commit-msg`         | After message is written | Yes                       | Message validation, conventional commits | Fast                  |
+| `pre-push`           | During `git push`        | Yes                       | Full test runs, broader checks           | Moderate (minutes OK) |
+| `prepare-commit-msg` | Before editor opens      | No                        | Template insertion, ticket prefixing     | Fast                  |
+
 Use `pre-commit` for **fast, staged-file-only work**. That's where lint-staged belongs. Use `commit-msg` for commit-message validation or normalization. Use `pre-push` for slower checks that are too expensive or too repo-wide for `pre-commit`, such as a fuller test run. Git's [hook semantics][1] line up exactly with that division.
 
 A practical setup might look like this:

@@ -118,12 +118,13 @@ pnpm add -Dw turbo
 
 Create `turbo.json` at the root of the repository:
 
-```json
+```json title="turbo.json" {4,5}
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      // [!note The ^ prefix builds dependencies first. "outputs" tells Turborepo what to cache.]
       "outputs": ["dist/**"]
     },
     "typecheck": {
@@ -136,6 +137,7 @@ Create `turbo.json` at the root of the repository:
     "dev": {
       "cache": false,
       "persistent": true
+      // [!note Long-running dev servers should never be cached.]
     }
   }
 }
@@ -160,15 +162,16 @@ Create `turbo.json` at the root of the repository:
 
 Open the root `package.json` and replace the existing `scripts` section. The old scripts ran pnpm commands directly—the new ones delegate to Turborepo:
 
-```jsonc
+```jsonc title="package.json" {2-6}
 {
   "scripts": {
-    "build": "turbo build", // CHANGED: was "pnpm -r build"
-    "typecheck": "turbo typecheck", // CHANGED: was "pnpm -r typecheck"
-    "lint": "turbo lint", // CHANGED: was "pnpm -r lint"
-    "test": "turbo test", // CHANGED: was "pnpm -r test"
-    "dev": "turbo dev", // CHANGED: was "pnpm -r dev"
+    "build": "turbo build",
+    "typecheck": "turbo typecheck",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "dev": "turbo dev",
   },
+  // [!note All scripts now delegate to Turborepo instead of running pnpm -r directly.]
 }
 ```
 

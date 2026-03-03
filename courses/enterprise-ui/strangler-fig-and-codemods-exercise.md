@@ -36,7 +36,7 @@ Start by understanding what you're migrating from.
 
 Open `apps/legacy/src/legacy-app.tsx`. Note the patterns that mark this as legacy code:
 
-```typescript
+```typescript title="apps/legacy/src/legacy-app.tsx"
 // Old-style React — no packages, no separation of concerns
 import { LegacyAnalytics } from "./legacy-analytics";
 
@@ -60,7 +60,7 @@ export function LegacyApp() {
 
 Open `apps/legacy/src/legacy-analytics.tsx`. This component does what `@pulse/analytics` does, but without package separation:
 
-```typescript
+```typescript title="apps/legacy/src/legacy-analytics.tsx"
 import { LegacyChart } from './legacy-chart';
 
 export function LegacyAnalytics() {
@@ -101,7 +101,7 @@ flowchart TD
 
 Open `apps/dashboard/vite.config.ts` and add a proxy configuration that forwards legacy routes to the legacy app's dev server:
 
-```typescript
+```typescript title="apps/dashboard/vite.config.ts" {8-13}
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
@@ -110,14 +110,12 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
-    // NEW: Forward any request starting with /legacy to the legacy app's dev server.
-    // This is the strangler fig routing layer—the modern app decides which requests
-    // it handles and which get proxied to the legacy app.
     proxy: {
       '/legacy': {
         target: 'http://localhost:5174',
         changeOrigin: true,
       },
+      // [!note The proxy is the strangler fig — it routes legacy paths to the old app.]
     },
   },
 });
@@ -125,7 +123,7 @@ export default defineConfig({
 
 Next, add the base path to the legacy app's dev server. Open `apps/legacy/vite.config.ts` and add `base: "/legacy/"`:
 
-```typescript
+```typescript title="apps/legacy/vite.config.ts" {7}
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -134,7 +132,8 @@ export default defineConfig({
   server: {
     port: 5174,
   },
-  base: '/legacy/', // NEW: Serve all assets under /legacy/ so the proxy routing works correctly.
+  base: '/legacy/',
+  // [!note Serves all assets under /legacy/ so the proxy routing works correctly.]
 });
 ```
 
@@ -170,26 +169,23 @@ Add a redirect in the legacy app for the migrated route. Replace the full `Legac
 
 Open `apps/legacy/src/legacy-app.tsx` and replace the component:
 
-```typescript
-// CHANGED: The entire component body is replaced with routing logic.
-// Previously this rendered the full legacy UI with navigation and LegacyAnalytics.
+```typescript title="apps/legacy/src/legacy-app.tsx" {4-7}
 export function LegacyApp() {
   const path = window.location.pathname;
 
-  // NEW: Redirect the migrated analytics route to the modern app.
-  // Users who bookmarked /legacy/analytics will be sent to / automatically.
   if (path === "/legacy/analytics") {
     window.location.href = "/";
     return <p>Redirecting to modern analytics...</p>;
   }
+  // [!note Redirects the migrated route to the modern app so old bookmarks still work.]
 
-  // CHANGED: The legacy app no longer renders analytics—just a stub for remaining routes.
   return (
     <div style={{ fontFamily: "sans-serif", padding: "20px" }}>
       <h1 style={{ color: "#333" }}>Pulse (Legacy)</h1>
       <p>Settings and other legacy routes still live here.</p>
     </div>
   );
+  // [!note Only unmigrated routes remain — analytics is now served by the modern app.]
 }
 ```
 
@@ -227,7 +223,7 @@ flowchart LR
 
 Open `codemods/src/migrate-legacy-import.ts`. It contains a stub:
 
-```typescript
+```typescript title="codemods/src/migrate-legacy-import.ts"
 import type { API, FileInfo } from 'jscodeshift';
 
 export default function transform(file: FileInfo, api: API) {
@@ -254,7 +250,7 @@ import { Chart } from '@pulse/analytics';
 
 Replace the stub in `codemods/src/migrate-legacy-import.ts` with this implementation:
 
-```typescript
+```typescript title="codemods/src/migrate-legacy-import.ts" {3-8,17-19}
 import type { API, FileInfo } from 'jscodeshift';
 
 const IMPORT_MAP: Record<string, { source: string; name: string }> = {
@@ -263,6 +259,7 @@ const IMPORT_MAP: Record<string, { source: string; name: string }> = {
   LegacyDataTable: { source: '@pulse/ui', name: 'DataTable' },
   LegacyButton: { source: '@pulse/ui', name: 'Button' },
 };
+// [!note Maps each legacy component to its modern package and name.]
 
 export default function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift;
@@ -275,6 +272,7 @@ export default function transform(file: FileInfo, api: API) {
       const source = path.node.source.value;
       return typeof source === 'string' && source.startsWith('./legacy-');
     })
+    // [!note Finds AST nodes for imports from ./legacy-* paths.]
     .forEach((path) => {
       const specifiers = path.node.specifiers;
       if (!specifiers) return;
@@ -306,6 +304,7 @@ export default function transform(file: FileInfo, api: API) {
       if (replacements.length > 0) {
         j(path).replaceWith(replacements);
       }
+      // [!note Replaces the legacy import node with one or more modern package imports.]
     });
 
   // Replace usage of old component names with new names
@@ -313,6 +312,7 @@ export default function transform(file: FileInfo, api: API) {
     root.find(j.JSXIdentifier, { name: oldName }).forEach((path) => {
       path.node.name = newName;
     });
+    // [!note Renames JSX elements like <LegacyChart> to <Chart> throughout the file.]
 
     root
       .find(j.Identifier, { name: oldName })

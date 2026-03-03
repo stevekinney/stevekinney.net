@@ -13,6 +13,7 @@ import rehypeSlug from 'rehype-slug';
 import unwrapImages from 'rehype-unwrap-images';
 import remarkGfm from 'remark-gfm';
 import { bundledLanguages, codeToHtml } from 'shiki';
+import { transformerMetaHighlight } from '@shikijs/transformers';
 
 // Node.js path utilities
 import { dirname, join } from 'path';
@@ -32,6 +33,123 @@ const __dirname = dirname(__filename);
 
 // Cache for highlighted code blocks
 const highlightCache = new Map();
+
+/**
+ * Extract title="..." from the metastring.
+ * @param {string | undefined} metastring
+ * @returns {{ title: string | null, remaining: string }}
+ */
+function parseTitle(metastring) {
+  if (!metastring) return { title: null, remaining: '' };
+  const match = metastring.match(/title="([^"]+)"/);
+  const title = match ? match[1] : null;
+  const remaining = metastring.replace(/title="[^"]+"\s*/, '').trim();
+  return { title, remaining };
+}
+
+/**
+ * Annotation patterns for different comment styles.
+ * Each captures the annotation text in group 1.
+ */
+const ANNOTATION_PATTERNS = [
+  /^\s*\/\/\s*\[!note\s+(.*?)\]\s*$/,
+  /^\s*#\s*\[!note\s+(.*?)\]\s*$/,
+  /^\s*\/\*\s*\[!note\s+(.*?)\]\s*\*\/\s*$/,
+  /^\s*<!--\s*\[!note\s+(.*?)\]\s*-->\s*$/,
+];
+
+/**
+ * Strip annotation comment lines from code. Returns cleaned code and a map
+ * of line indices (0-based, in the cleaned output) to annotation text.
+ * Each annotation attaches to the code line immediately above it.
+ * @param {string} code
+ * @returns {{ cleanedCode: string, annotations: Map<number, string> }}
+ */
+function extractAnnotations(code) {
+  const lines = code.split('\n');
+  const cleanedLines = [];
+  const annotations = new Map();
+
+  for (const line of lines) {
+    let annotationText = null;
+    for (const pattern of ANNOTATION_PATTERNS) {
+      const match = line.match(pattern);
+      if (match) {
+        annotationText = match[1];
+        break;
+      }
+    }
+
+    if (annotationText !== null) {
+      const previousIndex = cleanedLines.length - 1;
+      if (previousIndex >= 0) {
+        annotations.set(previousIndex, annotationText);
+      }
+    } else {
+      cleanedLines.push(line);
+    }
+  }
+
+  return { cleanedCode: cleanedLines.join('\n'), annotations };
+}
+
+/**
+ * Escape characters that Svelte would interpret as template syntax.
+ * Used for annotation text injected after escapeSvelte has already run.
+ * @param {string} text
+ * @returns {string}
+ */
+function escapeSvelteText(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\{/g, '&#123;')
+    .replace(/\}/g, '&#125;')
+    .replace(/`/g, '&#96;');
+}
+
+/**
+ * Inject annotation HTML elements after the specified lines in Shiki output.
+ * Splits on <span class="line"> boundaries and inserts annotation spans.
+ * @param {string} html
+ * @param {Map<number, string>} annotations
+ * @returns {string}
+ */
+function injectAnnotations(html, annotations) {
+  if (annotations.size === 0) return html;
+
+  const parts = html.split(/(?=<span class="line">)/);
+  const result = [];
+  let lineIndex = 0;
+
+  for (const part of parts) {
+    if (part.startsWith('<span class="line">')) {
+      if (lineIndex > 0) {
+        const annotation = annotations.get(lineIndex - 1);
+        if (annotation !== undefined) {
+          result.push(
+            `\n<span class="code-annotation"><span class="code-annotation-indicator">Note</span> ${escapeSvelteText(annotation)}</span>`,
+          );
+        }
+      }
+      lineIndex++;
+    }
+    result.push(part);
+  }
+
+  // Handle annotation on the very last line
+  const lastAnnotation = annotations.get(lineIndex - 1);
+  if (lastAnnotation !== undefined) {
+    const last = result.length - 1;
+    result[last] = result[last].replace(
+      '</code></pre>',
+      `\n<span class="code-annotation"><span class="code-annotation-indicator">Note</span> ${escapeSvelteText(lastAnnotation)}</span></code></pre>`,
+    );
+  }
+
+  return result.join('');
+}
 
 /**
  * MDSvex configuration options
@@ -62,38 +180,69 @@ const mdsvexOptions = {
     highlighter: async (code, lang = 'text', metastring) => {
       if (!lang) lang = 'text';
 
-      const classes = [
+      // Mermaid blocks are rendered client-side as diagrams, not syntax-highlighted.
+      if (lang === 'mermaid') {
+        const escaped = escapeSvelte(code);
+        return `<div data-mermaid class="not-prose overflow-x-auto rounded-md border-2 border-slate-800 bg-[#011627] p-4 not-last:mb-4"><pre class="mermaid-source" style="margin:0;color:#d6deeb;white-space:pre-wrap">${escaped}</pre></div>`;
+      }
+
+      const { title, remaining: remainingMeta } = parseTitle(metastring);
+      const { cleanedCode, annotations } = extractAnnotations(code);
+
+      const cacheKey = `${lang}:${metastring || ''}:${code}`;
+      if (highlightCache.has(cacheKey)) {
+        return highlightCache.get(cacheKey);
+      }
+
+      const baseClasses = [
         'bg-[#011627]',
         'not-prose',
-        'overflow-x-scroll',
         'rounded-md',
         'border-2',
         'border-slate-800',
-        'p-4',
         'not-last:mb-4',
       ];
 
       // Languages not supported by Shiki (e.g. "text") get a plain <pre>
       // wrapper so whitespace and newlines are preserved.
       if (!(lang in bundledLanguages)) {
-        const escaped = escapeSvelte(code);
-        return `<div class="${classes.join(' ')}" data-language="${lang}" data-metastring="${metastring}"><pre style="background:transparent;margin:0;padding:0"><code>${escaped}</code></pre></div>`;
+        const escaped = escapeSvelte(cleanedCode);
+        let inner = `<pre style="background:transparent;margin:0;padding:0;color:#d6deeb"><code>${escaped}</code></pre>`;
+
+        const titleHtml = title
+          ? `<div class="code-block-header">${escapeSvelte(title)}</div>`
+          : '';
+        const wrapperClasses = title ? baseClasses : [...baseClasses, 'overflow-x-scroll', 'p-4'];
+        const contentWrapper = title ? `<div class="overflow-x-auto p-4">${inner}</div>` : inner;
+
+        const result = `<div class="${wrapperClasses.join(' ')}" data-language="${lang}" data-metastring="${metastring}">${titleHtml}${contentWrapper}</div>`;
+        highlightCache.set(cacheKey, result);
+        return result;
       }
 
-      // Create cache key
-      const cacheKey = `${lang}:${code}`;
-      if (highlightCache.has(cacheKey)) {
-        return highlightCache.get(cacheKey);
+      const transformers = [];
+      if (remainingMeta && /\{[\d,\s-]+\}/.test(remainingMeta)) {
+        transformers.push(transformerMetaHighlight());
       }
 
-      const html = escapeSvelte(
-        await codeToHtml(code, {
+      let html = escapeSvelte(
+        await codeToHtml(cleanedCode, {
           lang,
           theme: 'night-owl',
+          meta: { __raw: remainingMeta || '' },
+          transformers,
         }),
       ).replace(/\stabindex="[^"]*"/g, '');
 
-      const result = `<div class="${classes.join(' ')}" data-language="${lang}" data-metastring="${metastring}">${html}</div>`;
+      if (annotations.size > 0) {
+        html = injectAnnotations(html, annotations);
+      }
+
+      const titleHtml = title ? `<div class="code-block-header">${escapeSvelte(title)}</div>` : '';
+      const wrapperClasses = title ? baseClasses : [...baseClasses, 'overflow-x-scroll', 'p-4'];
+      const contentWrapper = title ? `<div class="overflow-x-auto p-4">${html}</div>` : html;
+
+      const result = `<div class="${wrapperClasses.join(' ')}" data-language="${lang}" data-metastring="${metastring}">${titleHtml}${contentWrapper}</div>`;
       highlightCache.set(cacheKey, result);
       return result;
     },

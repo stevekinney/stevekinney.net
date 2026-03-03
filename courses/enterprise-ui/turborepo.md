@@ -175,6 +175,12 @@ Turborepo's [official guidance on dependency management][14] is simple and good:
 
 The docs also distinguish [application packages from library packages][15]. Application packages are typically your deployable endpoints, often living under `apps/`, and are best treated as the end of the package graph. Library packages are the shared internal packages that support them. That distinction helps keep the graph directional instead of turning your repo into a social network of mutual dependency.
 
+| Strategy           | Exports        | Build step                | Turborepo caching | TypeScript `paths` | Best for                                 |
+| ------------------ | -------------- | ------------------------- | ----------------- | ------------------ | ---------------------------------------- |
+| Just-in-Time (JIT) | Raw source     | None (consumer's bundler) | No build to cache | Not supported      | Simple internal packages, fast iteration |
+| Compiled           | Built output   | `tsc` or similar          | Yes               | Supported          | Shared libraries with stable APIs        |
+| Publishable        | npm-ready dist | Full build + pack         | Yes               | Supported          | Packages published to a registry         |
+
 For internal packages, the docs describe three strategies: **Just-in-Time packages**, **Compiled packages**, and **Publishable packages**. [JIT packages][16] export source directly and rely on consuming bundlers to compile them. Compiled packages build themselves with tools like `tsc`. Publishable packages prepare for npm publication. The docs note that JIT packages are low-config but can't have their own Turborepo-cached build step, because there's no build step to cache. They also warn that JIT packages can't use TypeScript `paths` the way people often hope.
 
 For TypeScript internal libraries, the [official docs recommend][17] using `tsc` to compile packages whenever possible instead of bundling, because bundling adds extra complexity and can make downstream debugging harder. They also recommend `declaration` and `declarationMap` for compiled packages so editor go-to-definition works across package boundaries.

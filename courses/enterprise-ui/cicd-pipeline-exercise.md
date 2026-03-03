@@ -36,7 +36,7 @@ Open `.github/workflows/ci.yml` — it contains a placeholder with the trigger c
 
 Build the workflow file from scratch. Open `.github/workflows/ci.yml` and add the foundation:
 
-```yaml
+```yaml title=".github/workflows/ci.yml"
 name: CI
 
 on:
@@ -52,6 +52,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
+      # [!note Minimal clone depth for Turborepo change detection without downloading full history.]
 
       - uses: pnpm/action-setup@v4
         with:
@@ -61,8 +62,10 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
+      # [!note Caches ~/.pnpm-store across runs so only new packages are downloaded.]
 
       - run: pnpm install --frozen-lockfile
+      # [!note Fails the build if the lockfile is out of date, preventing dependency drift.]
 ```
 
 > [!NOTE] Lockfiles
@@ -87,9 +90,9 @@ You have a workflow that installs dependencies. It doesn't run any checks yet, b
 
 ## Add Turborepo-Powered Quality Checks
 
-Add the typecheck, lint, test, and build steps. Each one delegates to Turborepo so it benefits from caching and dependency-aware execution:
+Add the typecheck, lint, test, and build steps to the `build` job in `.github/workflows/ci.yml`. Each one delegates to Turborepo so it benefits from caching and dependency-aware execution:
 
-```yaml
+```yaml title=".github/workflows/ci.yml"
 - name: Typecheck
   run: pnpm turbo typecheck
 
@@ -112,14 +115,15 @@ These run sequentially in the `build` job. Each step uses Turborepo's local cach
 
 Turborepo's local cache lives on the runner's filesystem and is discarded when the runner shuts down. Remote caching stores build artifacts in a shared cache that persists across CI runs.
 
-Add environment variables for remote caching. Update the `build` job:
+Add environment variables for remote caching. Update the `build` job in `.github/workflows/ci.yml`:
 
-```yaml
+```yaml title=".github/workflows/ci.yml"
 build:
   runs-on: ubuntu-latest
   env:
     TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
     TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  # [!note These environment variables enable Turborepo remote caching across CI runs.]
   steps:
     # ... existing steps
 ```
@@ -134,14 +138,15 @@ The behavior change is significant. Without remote caching, the first CI run aft
 
 ## Add Matrix Strategy for Parallel Testing
 
-When test suites grow, running them sequentially becomes a bottleneck. A matrix strategy runs each package's tests in its own parallel job:
+When test suites grow, running them sequentially becomes a bottleneck. Add a second job to `.github/workflows/ci.yml`—a matrix strategy that runs each package's tests in its own parallel job:
 
-```yaml
+```yaml title=".github/workflows/ci.yml" {2-4,14}
 test:
   runs-on: ubuntu-latest
   strategy:
     matrix:
       package: [analytics, users, ui, shared]
+  # [!note Matrix strategy spawns four parallel jobs, one per package.]
   steps:
     - uses: actions/checkout@v4
       with:
@@ -160,6 +165,7 @@ test:
 
     - name: Test ${{ matrix.package }}
       run: pnpm turbo test --filter=@pulse/${{ matrix.package }}
+      # [!note Each job tests only its assigned package using Turborepo's filter.]
 ```
 
 This creates four parallel jobs — one for each package in the matrix. Each job installs dependencies and runs tests for only its assigned package.
@@ -172,12 +178,13 @@ This creates four parallel jobs — one for each package in the matrix. Each job
 
 ## Add Lighthouse CI Performance Budgets
 
-Performance budgets catch regressions before they ship. Add a Lighthouse CI step that builds the dashboard and asserts performance metrics:
+Performance budgets catch regressions before they ship. Add a third job to `.github/workflows/ci.yml`—a Lighthouse CI step that builds the dashboard and asserts performance metrics:
 
-```yaml
+```yaml title=".github/workflows/ci.yml" {3}
 lighthouse:
   runs-on: ubuntu-latest
   needs: build
+  # [!note This job waits for the build job to succeed before running.]
   steps:
     - uses: actions/checkout@v4
       with:
@@ -208,13 +215,14 @@ Create a `lighthouserc.cjs` file at the root of the repository:
 > [!NOTE]
 > The `.cjs` extension is required because the root `package.json` sets `"type": "module"`, which treats `.js` files as ESM. The `module.exports` syntax is CommonJS, and the `.cjs` extension tells Node.js to use CommonJS regardless of `"type": "module"`.
 
-```javascript
+```javascript title="lighthouserc.cjs"
 module.exports = {
   ci: {
     collect: {
       startServerCommand: 'pnpm --filter @pulse/dashboard preview',
       url: ['http://localhost:4173'],
       numberOfRuns: 3,
+      // [!note Three runs reduce variance in performance measurements.]
     },
     assert: {
       assertions: {
@@ -222,6 +230,7 @@ module.exports = {
         'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
         'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
         'total-byte-weight': ['error', { maxNumericValue: 200000 }],
+        // [!note Each assertion defines a performance budget that fails the CI pipeline if exceeded.]
       },
     },
     upload: {
@@ -247,6 +256,42 @@ The Lighthouse CI configuration is valid. The assertions define concrete perform
 
 ## Review the Complete Workflow
 
+The three jobs form a dependency graph. The `build` job runs the sequential quality gate. The `test` job uses a matrix strategy to run each package's tests in parallel. The `lighthouse` job depends on `build` completing first.
+
+```mermaid
+flowchart TD
+    Push["Push / Pull Request"]
+
+    subgraph Build["build job"]
+        direction TB
+        Checkout1["Checkout + Install"]
+        TC["Typecheck (turbo)"]
+        Lint["Lint (turbo)"]
+        Test1["Test (turbo)"]
+        B["Build (turbo)"]
+        Checkout1 --> TC --> Lint --> Test1 --> B
+    end
+
+    subgraph TestMatrix["test job (matrix)"]
+        direction TB
+        T_Analytics["Test @pulse/analytics"]
+        T_Users["Test @pulse/users"]
+        T_UI["Test @pulse/ui"]
+        T_Shared["Test @pulse/shared"]
+    end
+
+    subgraph LH["lighthouse job"]
+        direction TB
+        LH_Build["Build Dashboard"]
+        LH_Run["Lighthouse CI Assertions"]
+        LH_Build --> LH_Run
+    end
+
+    Push --> Build
+    Push --> TestMatrix
+    Build -->|"needs: build"| LH
+```
+
 The final `.github/workflows/ci.yml` should have three jobs:
 
 1. **`build`**: Installs dependencies, runs typecheck/lint/test/build with Turborepo
@@ -265,20 +310,15 @@ Or paste it into GitHub's workflow editor (Actions tab in the repository) to che
 
 The CI workflow YAML is valid. It covers type checking, linting, testing, building, and performance budgets. Turborepo handles caching within each job. Remote caching is configured for cross-run artifact sharing.
 
+![GitHub Actions CI workflow overview](assets/exercise-06-ci-workflow.png)
+
+![Lighthouse CI configuration and performance budgets](assets/exercise-06-lighthouse-config.png)
+
 ## Stretch Goals
 
 - **PR comment with Lighthouse scores:** Add a step that posts the Lighthouse report as a comment on the pull request using `marocchino/sticky-pull-request-comment@v2`. This gives reviewers performance data inline with the code review.
 - **Affected-only testing:** Replace the matrix strategy with `turbo test --filter=...[HEAD^1]` to only test packages affected by the current push. This is Turborepo's change detection — it compares the current commit against the parent and only runs tasks for packages with changed files.
 - **Deployment step:** Add a conditional deployment step that only runs on pushes to `main` (not pull requests). Deploy the built dashboard to Vercel, Netlify, or a static hosting provider.
-
-## Solution
-
-If you need to catch up, the completed state for this exercise is available on the `07-testing-start` branch:
-
-```bash
-git checkout 07-testing-start
-pnpm install
-```
 
 ## What's Next
 

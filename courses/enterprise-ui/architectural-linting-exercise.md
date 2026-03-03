@@ -36,7 +36,7 @@ Before adding any rules, prove that the architecture can be violated without con
 
 Open `packages/analytics/src/analytics-dashboard.tsx` and add this import at the top:
 
-```typescript
+```typescript title="packages/analytics/src/analytics-dashboard.tsx"
 import { UserList } from '@pulse/users/src/user-list';
 ```
 
@@ -53,7 +53,7 @@ pnpm turbo lint
 
 Now try an even worse violation. Open `packages/shared/src/api-client.ts` and add:
 
-```typescript
+```typescript title="packages/shared/src/api-client.ts"
 import { AnalyticsDashboard } from '@pulse/analytics';
 ```
 
@@ -101,22 +101,19 @@ Open the root `eslint.config.js`. It should have basic ESLint configuration but 
 
 Import the boundaries plugin at the top of `eslint.config.js`:
 
-```javascript
+```javascript title="eslint.config.js"
 import boundaries from 'eslint-plugin-boundaries';
 ```
 
 Add a configuration object to `eslint.config.js` with the plugin and element type settings:
 
-```javascript
+```javascript title="eslint.config.js"
 export default [
   // ... existing config entries (keep these in place)
   {
-    // NEW: Register the boundaries plugin so ESLint knows about its rules.
     plugins: {
       boundaries,
     },
-    // NEW: Define the architectural vocabulary—what categories of code exist
-    // in this repo and which files belong to which category.
     settings: {
       'boundaries/elements': [
         { type: 'app', pattern: 'apps/*' },
@@ -124,6 +121,7 @@ export default [
         { type: 'mock', pattern: 'mocks' },
         { type: 'test', pattern: 'tests/*' },
       ],
+      // [!note Element types define the architectural vocabulary for your boundary rules.]
       'boundaries/ignore': ['**/*.test.*', '**/*.spec.*'],
     },
   },
@@ -132,19 +130,18 @@ export default [
 
 Then add the import resolver configuration to the same object in `eslint.config.js` so the boundaries plugin can map `@pulse/analytics` to `packages/analytics`. Without this, the plugin can't determine which element type an import belongs to and silently skips enforcement:
 
-```javascript
+```javascript title="eslint.config.js"
 {
   plugins: {
     boundaries,
   },
   settings: {
-    // NEW: The import resolver maps package specifiers like "@pulse/analytics"
-    // to actual file paths so the boundaries plugin can classify them.
     "import/resolver": {
       typescript: {
         project: "./tsconfig.base.json",
       },
     },
+    // [!note The resolver maps @pulse/analytics to packages/analytics so boundaries can classify imports.]
     "boundaries/elements": [
       { type: "app", pattern: "apps/*" },
       { type: "package", pattern: "packages/*" },
@@ -169,7 +166,7 @@ Then add the import resolver configuration to the same object in `eslint.config.
 
 Add the `boundaries/element-types` rule to the same configuration object in `eslint.config.js` to define which element types are allowed to import from which:
 
-```javascript
+```javascript title="eslint.config.js" {17-27}
 {
   plugins: {
     boundaries,
@@ -188,12 +185,12 @@ Add the `boundaries/element-types` rule to the same configuration object in `esl
     ],
     "boundaries/ignore": ["**/*.test.*", "**/*.spec.*"],
   },
-  // NEW: These rules encode the allowed dependency directions.
   rules: {
     "boundaries/element-types": [
       "error",
       {
-        default: "disallow",  // Deny by default—only explicitly allowed imports pass.
+        default: "disallow",
+        // [!note Deny by default — only explicitly allowed imports pass.]
         rules: [
           { from: "app", allow: ["package", "mock"] },
           { from: "package", allow: ["package"] },
@@ -228,7 +225,7 @@ Add the `boundaries/element-types` rule to the same configuration object in `esl
 
 Try adding an architectural violation. Open `packages/shared/src/api-client.ts` and add:
 
-```typescript
+```typescript title="packages/shared/src/api-client.ts"
 import { AnalyticsDashboard } from '@pulse/analytics';
 ```
 
@@ -242,7 +239,7 @@ With proper import resolution, this would produce an error about circular depend
 
 Remove that violation, then try another one. Open `packages/ui/src/button.tsx` and add:
 
-```typescript
+```typescript title="packages/ui/src/button.tsx"
 import { App } from '@pulse/dashboard/src/app';
 ```
 
@@ -274,7 +271,7 @@ This bypasses the public API defined in `@pulse/analytics/src/index.ts`. Add a r
 
 Add `boundaries/no-private` to the rules object in `eslint.config.js`:
 
-```javascript
+```javascript title="eslint.config.js" {13}
 rules: {
   "boundaries/element-types": [
     "error",
@@ -288,13 +285,14 @@ rules: {
       ],
     },
   ],
-  "boundaries/no-private": ["error"],  // NEW: Flags imports that bypass a package's public API.
+  "boundaries/no-private": ["error"],
+  // [!note Prevents deep imports that bypass a package's public API.]
 },
 ```
 
 Test it by opening `apps/dashboard/src/routes/analytics.tsx` and adding:
 
-```typescript
+```typescript title="apps/dashboard/src/routes/analytics.tsx"
 import { StatsBar } from '@pulse/analytics/src/stats-bar';
 ```
 
@@ -336,7 +334,7 @@ pnpm turbo lint
 
 All packages should pass. The final `eslint.config.js` should include:
 
-```javascript
+```javascript title="eslint.config.js"
 import boundaries from 'eslint-plugin-boundaries';
 
 export default [

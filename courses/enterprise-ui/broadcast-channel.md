@@ -252,9 +252,16 @@ useEffect(() => {
 
 Both solve the cross-boundary communication problem, but with different tradeoffs.
 
-**Nanostores** gives you synchronous reads, reactive subscriptions, and a familiar store-based mental model. The downside is the singleton dependency chain—if any link in that chain breaks, state silently stops flowing. It also only works within a single page. If you open the app in two tabs, each tab has its own nanostore instances.
-
-**`BroadcastChannel`** gives you origin-scoped messaging that works across tabs, iframes, and independently bundled code without any shared dependencies. The downside is the async timing gap on initial load and the need to manage initial state yourself.
+| Dimension                | Nanostores                     | `BroadcastChannel`                      |
+| ------------------------ | ------------------------------ | --------------------------------------- |
+| Scope                    | Single page (one JS context)   | Same-origin (cross-tab, cross-iframe)   |
+| Initial value            | Synchronous `.get()`           | None (must request or use localStorage) |
+| Subscription model       | Reactive (`.subscribe()`)      | Event-based (`message` event)           |
+| Shared dependency needed | Yes (singleton chain required) | No                                      |
+| Serialization            | None (same memory)             | Structured clone (no functions/DOM)     |
+| Cross-tab support        | No                             | Yes                                     |
+| Framework bindings       | React, Vue, Svelte, Angular    | None needed (browser-native)            |
+| Failure mode             | Silent if singleton breaks     | Silent if no listener is ready          |
 
 In practice, many teams use both. Nanostores for in-page reactivity, `BroadcastChannel` for cross-tab sync. That's not over-engineering. That's using each tool where it's actually strong.
 

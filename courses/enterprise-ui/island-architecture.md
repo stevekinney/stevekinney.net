@@ -50,6 +50,15 @@ The third benefit is **blast radius**. [Patterns.dev notes][2] that progressive 
 
 People use "islands," "partial hydration," and "selective hydration" loosely, which is how frontend vocabulary turns into swamp gas.
 
+| Concept                 | What it reduces          | Granularity           | When JS ships                   | Framework examples         |
+| ----------------------- | ------------------------ | --------------------- | ------------------------------- | -------------------------- |
+| Full hydration          | Nothing (baseline)       | Entire app            | Always, for everything          | React SPA, Vue SPA         |
+| Partial hydration       | Amount of hydration work | Varies                | Only for interactive regions    | Gatsby (Partial Hydration) |
+| Islands                 | Amount of hydration work | Per component/region  | Per island, independently       | Astro, Fresh, Bridgetown   |
+| Streaming SSR           | Time to first byte       | Per Suspense boundary | Progressively as data resolves  | React 18, Qwik             |
+| React Server Components | Client bundle size       | Per module boundary   | Only for `'use client'` modules | Next.js App Router         |
+| Resumability            | Hydration replay cost    | Sub-component         | On interaction (lazy)           | Qwik, Marko                |
+
 Astro describes Islands Architecture as building on a technique also known as partial or selective hydration. [Gatsby][5], however, is explicit that its own Partial Hydration is not the same implementation as Astro's islands, even if the results look similar.
 
 The useful way to think about it: **partial hydration** names the broad family of techniques that avoid hydrating the whole page. **Islands** names one concrete architecture for doing that by isolating interactive regions as separate units.

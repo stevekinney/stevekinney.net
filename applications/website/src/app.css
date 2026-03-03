@@ -78,3 +78,181 @@
     content: none;
   }
 }
+
+/* Mermaid diagram styling — matches Night Owl code block aesthetic */
+.mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+/* Node text — avoid font-weight changes that cause measurement mismatch with Mermaid */
+.mermaid-diagram .nodeLabel,
+.mermaid-diagram .label {
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color: #d6deeb;
+}
+
+/* foreignObject clips text when CSS makes it wider than Mermaid measured */
+.mermaid-diagram foreignObject {
+  overflow: visible;
+}
+
+.mermaid-diagram foreignObject > div {
+  overflow: visible !important;
+}
+
+/* Round node corners to match site's rounded-md convention */
+.mermaid-diagram .node rect,
+.mermaid-diagram .node polygon,
+.mermaid-diagram .node circle {
+  rx: 8;
+  ry: 8;
+  stroke-width: 2;
+}
+
+/* Subgraph/cluster labels */
+.mermaid-diagram .cluster-label .nodeLabel {
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Subgraph borders */
+.mermaid-diagram .cluster rect {
+  rx: 10;
+  ry: 10;
+  stroke-width: 1.5;
+  stroke-dasharray: 6 3;
+}
+
+/* Edge labels */
+.mermaid-diagram .edgeLabel {
+  font-size: 0.8125rem;
+}
+
+/* Sequence diagram participant boxes */
+.mermaid-diagram .actor {
+  rx: 8;
+  ry: 8;
+  stroke-width: 2;
+}
+
+/* Gantt bars */
+.mermaid-diagram .task {
+  rx: 6;
+  ry: 6;
+}
+
+/* Edge strokes */
+.mermaid-diagram .flowchart-link {
+  stroke-width: 2;
+}
+
+/* Arrow markers */
+.mermaid-diagram marker path {
+  fill: #7e8fa3;
+}
+
+/* Sequence diagram lines and message arrows */
+.mermaid-diagram line {
+  stroke-width: 2;
+}
+
+.mermaid-diagram .messageLine0,
+.mermaid-diagram .messageLine1 {
+  stroke-width: 2;
+}
+
+/* Diamond/rhombus (decision) nodes */
+.mermaid-diagram .node .label-container {
+  stroke-width: 2;
+}
+
+/* Remove default mermaid background rectangles that fight the container */
+.mermaid-diagram .mermaid-main-bg {
+  display: none;
+}
+
+/* Improve edge path rendering */
+.mermaid-diagram path.path {
+  stroke-width: 2;
+}
+
+/* Sequence diagram activation bars */
+.mermaid-diagram .activation0,
+.mermaid-diagram .activation1,
+.mermaid-diagram .activation2 {
+  stroke-width: 1.5;
+}
+
+/* Sequence diagram note boxes */
+.mermaid-diagram .note {
+  rx: 6;
+  ry: 6;
+  stroke-width: 1.5;
+}
+
+/* Flowchart stadium-shaped nodes (rounded ends) */
+.mermaid-diagram .node .label {
+  padding: 8px 12px;
+}
+
+/* Curly brace nodes */
+.mermaid-diagram .node.default > rect {
+  stroke-width: 2;
+}
+
+/* === Code block enhancements === */
+
+/* Filename header */
+.code-block-header {
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  color: #7e8fa3;
+  background-color: #0b2942;
+  border-bottom: 1px solid #1d3b53;
+  user-select: none;
+}
+
+/* Highlighted lines */
+.shiki .line.highlighted {
+  display: inline-block;
+  width: calc(100% + 2rem);
+  margin-left: -1rem;
+  padding-left: calc(1rem - 3px);
+  border-left: 3px solid #c792ea;
+  background-color: rgba(99, 72, 145, 0.15);
+}
+
+/* Annotations */
+.code-annotation {
+  display: block;
+  padding: 0.375rem 0.75rem;
+  margin: 0.25rem 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #d6deeb;
+  background-color: rgba(29, 59, 83, 0.6);
+  border-left: 3px solid #82aaff;
+  border-radius: 0 0.25rem 0.25rem 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.code-annotation-indicator {
+  font-weight: 600;
+  color: #82aaff;
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  margin-right: 0.5rem;
+}

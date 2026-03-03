@@ -32,6 +32,19 @@ That distinction matters because "schema valid" is weaker than "compatible." [Pa
 
 **Bi-directional contract testing.** In this model, the provider publishes a contract artifact such as OpenAPI, consumers publish their own expectation artifacts or test-derived contracts, and compatibility is checked without requiring direct code access to both sides. [PactFlow positions this][8] as a way to reuse existing tools and let more roles participate—including testers and QA engineers—which makes it useful in design-first or mixed-tooling organizations. It's a real workflow pattern, but the specific label is largely vendor terminology rather than a universal standard.
 
+| Style                  | Who writes the contract  | Who verifies                         | Strengths                                           | Tradeoffs                                                          |
+| ---------------------- | ------------------------ | ------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------------ |
+| Provider-driven (spec) | Provider (OpenAPI, etc.) | Provider + consumers                 | Single source of truth, broad tooling, design-first | Consumers can't express usage-specific expectations                |
+| Consumer-driven (CDC)  | Consumer (Pact, etc.)    | Provider verifies consumer contracts | Catches real consumer breakages, minimal contracts  | Requires broker/coordination, provider must run consumer contracts |
+| Bi-directional         | Both independently       | Compatibility check (e.g., PactFlow) | Reuses existing tools, no direct code access needed | Weaker guarantees than CDC, vendor-specific tooling                |
+
+| Protocol      | Contract artifact | Schema diffing      | Interaction testing          | Key tooling              |
+| ------------- | ----------------- | ------------------- | ---------------------------- | ------------------------ |
+| REST/HTTP     | OpenAPI           | oasdiff             | Schemathesis, Dredd          | OpenAPI Generator, Prism |
+| GraphQL       | GraphQL schema    | GraphQL Inspector   | Document/fragment validation | Apollo, The Guild        |
+| gRPC/Protobuf | `.proto` files    | Buf breaking        | Pact plugin (sync messages)  | Buf, grpcurl             |
+| Events/Async  | AsyncAPI          | AsyncAPI diff tools | Pact (message pacts)         | AsyncAPI Generator       |
+
 ## HTTP and REST APIs
 
 For REST APIs, the clean baseline is provider-owned OpenAPI plus runtime conformance checks. The [OpenAPI Initiative][6] describes OAS as a standard, language-agnostic interface description for HTTP APIs that lets humans and tools understand a service without source access. That makes OpenAPI the natural contract artifact for documentation, SDK generation, linting, schema validation, and compatibility diffing.

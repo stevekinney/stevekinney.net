@@ -18,6 +18,8 @@ Runtime microfrontends give teams independent builds and deploys—but they come
 
 You can _probably_ get away with slightly older versions of both. But, for own own sanity, let's assume you have the following versions of the prerequisites.
 
+For this exercise, we're working through the [enterprise-ui-federation](https://github.com/stevekinney/enterprise-ui-federation) repository.
+
 - [Node](https://nodejs.org/) 24+
 - [pnpm](https://pnpm.io/) 10+
 
@@ -29,6 +31,39 @@ pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) (the **host application**) and [http://localhost:3001](http://localhost:3001) (the **remote standalone**).
+
+## Architecture Overview
+
+Before diving into the code, here's how the host and remote connect at runtime. The host fetches the remote's manifest over the network, negotiates shared dependencies, and loads the exposed modules — all before any remote component renders.
+
+```mermaid
+graph TD
+    subgraph Host["Host Shell (Port 3000)"]
+        H_App["App Component"]
+        H_Lazy["React.lazy + Suspense"]
+        H_Auth["AuthProvider (React Context)"]
+        H_Shared["Shared Dependencies"]
+    end
+
+    subgraph Remote["Remote Analytics (Port 3001)"]
+        R_Manifest["mf-manifest.json"]
+        R_Dashboard["AnalyticsDashboard"]
+        R_Chunks["JS Chunks"]
+    end
+
+    subgraph SharedScope["Shared Scope (Runtime)"]
+        SS_React["React (singleton)"]
+        SS_Nano["nanostores (singleton)"]
+        SS_Pkg["@pulse/shared (singleton)"]
+    end
+
+    H_App --> H_Lazy
+    H_Lazy -->|"dynamic import()"| R_Manifest
+    R_Manifest -->|"resolve modules"| R_Chunks
+    R_Chunks --> R_Dashboard
+    H_Shared --> SharedScope
+    R_Dashboard --> SharedScope
+```
 
 ## Explore the Federation Setup
 
@@ -56,7 +91,7 @@ Now let's look at the configuration that makes this work.
 
 Open [`host/rsbuild.config.ts`](https://github.com/stevekinney/enterprise-ui-federation/blob/main/host/rsbuild.config.ts) and find the `remotes` configuration:
 
-```typescript
+```typescript title="host/rsbuild.config.ts"
 remotes: {
   remoteAnalytics:
     "remoteAnalytics@http://localhost:3001/mf-manifest.json",
@@ -70,7 +105,7 @@ This tells the host where to find the remote's module manifest at runtime. The m
 
 Open [`remote-analytics/rsbuild.config.ts`](https://github.com/stevekinney/enterprise-ui-federation/blob/main/remote-analytics/rsbuild.config.ts) and find the `exposes` configuration:
 
-```typescript
+```typescript title="remote-analytics/rsbuild.config.ts"
 exposes: {
   "./analytics-dashboard": "./src/analytics-dashboard",
 },
@@ -80,7 +115,7 @@ This declares which modules the remote makes available to consumers. Think of `e
 
 Open [`host/src/app.tsx`](https://github.com/stevekinney/enterprise-ui-federation/blob/main/host/src/app.tsx) to see the dynamic import:
 
-```typescript
+```typescript title="host/src/app.tsx"
 const AnalyticsDashboard = React.lazy(() => import('remoteAnalytics/analytics-dashboard'));
 ```
 
@@ -106,7 +141,7 @@ Both the host and remote use React. Without shared dependency configuration, eac
 
 In both rsbuild config files ([`host/rsbuild.config.ts`](https://github.com/stevekinney/enterprise-ui-federation/blob/main/host/rsbuild.config.ts) and [`remote-analytics/rsbuild.config.ts`](https://github.com/stevekinney/enterprise-ui-federation/blob/main/remote-analytics/rsbuild.config.ts)), find the `shared` configuration. Both files set `singleton: true` and `eager: true` on all shared dependencies:
 
-```typescript
+```typescript title="rsbuild.config.ts (shared)"
 shared: {
   react: { singleton: true, eager: true },
   "react-dom": { singleton: true, eager: true },
@@ -124,7 +159,7 @@ shared: {
 
 **Experiment:** Add `requiredVersion` and `strictVersion` to your existing React entry in the remote's [`rsbuild.config.ts`](https://github.com/stevekinney/enterprise-ui-federation/blob/main/remote-analytics/rsbuild.config.ts). Keep `singleton: true` and `eager: true` in place—only add the two new fields:
 
-```typescript
+```typescript title="rsbuild.config.ts (shared)"
 shared: {
   react: {
     singleton: true,
@@ -166,9 +201,25 @@ Now look at the analytics dashboard more carefully. Something is wrong.
 
 ### Why This Happens
 
+React Context relies on object identity — the same `createContext()` call must produce the same object on both sides. In a federation setup, separately built bundles create separate context objects, so the provider and consumer never match.
+
+```mermaid
+sequenceDiagram
+    participant Host as Host Bundle
+    participant Context as React Context Registry
+    participant Remote as Remote Bundle
+
+    Host->>Context: createContext() → ContextA
+    Host->>Context: Provide value via ContextA
+    Remote->>Context: createContext() → ContextB
+    Remote->>Context: useContext(ContextB)
+    Context-->>Remote: Default value (no match)
+    Note over Host,Remote: ContextA !== ContextB — different object identity
+```
+
 Open [`host/src/shell/auth-provider.tsx`](https://github.com/stevekinney/enterprise-ui-federation/blob/main/host/src/shell/auth-provider.tsx). The host fetches the current user from `/api/users/me` and provides it via React Context:
 
-```typescript
+```typescript title="host/src/shell/auth-provider.tsx"
 const AuthContext = createContext<AuthContextType>({ ... });
 
 export function AuthProvider({ children }) {
@@ -179,11 +230,12 @@ export function AuthProvider({ children }) {
 
 Now open [`remote-analytics/src/analytics-dashboard.tsx`](https://github.com/stevekinney/enterprise-ui-federation/blob/main/remote-analytics/src/analytics-dashboard.tsx). Find the hardcoded auth values near the top of the component:
 
-```typescript
+```typescript title="remote-analytics/src/analytics-dashboard.tsx"
 // THE BUG: This component has no access to the host's auth context.
 // It cannot read the current user or auth token.
 // On the main branch, this is intentionally broken.
 const isAuthenticated = false;
+// [!note These are hardcoded because React Context can't cross federation boundaries]
 const userName: string | null = null;
 ```
 
@@ -209,7 +261,7 @@ Create a new file `shared/src/auth-store.ts` (note: [`auth.ts`](https://github.c
 > [!NOTE] What is a nanostore atom?
 > An `atom` is the simplest primitive in nanostores—a reactive container for a single value. Calling `atom(initialValue)` returns a store object with three methods: `.get()` to read the current value, `.set(newValue)` to write a new value and notify all subscribers, and `.subscribe(callback)` to listen for changes. The `useStore` hook from [`@nanostores/react`](https://github.com/nanostores/react) wraps `.subscribe()` in a React hook, re-rendering the component whenever the atom's value changes. The atom itself has zero React dependency—it's plain JavaScript, which is precisely why it can cross framework and federation boundaries that React-specific primitives cannot.
 
-```typescript
+```typescript title="shared/src/auth-store.ts"
 import { atom } from 'nanostores';
 import type { AuthContext } from './types';
 
@@ -222,7 +274,7 @@ export const authStore = atom<AuthContext>({
 
 Then add the following export to [`shared/src/index.ts`](https://github.com/stevekinney/enterprise-ui-federation/blob/main/shared/src/index.ts):
 
-```typescript
+```typescript title="shared/src/index.ts"
 export * from './auth-store';
 ```
 
@@ -235,14 +287,14 @@ Add a second import from `@pulse/shared`—keep it separate from the existing ty
 > [!NOTE]
 > TypeScript's `import type` syntax is erased entirely at compile time—it exists only for type checking and produces no JavaScript output. A runtime value like `authStore` cannot be included in an `import type` statement. Keeping them as two separate `import` lines is the clearest way to signal which imports are type-only and which carry runtime code.
 
-```typescript
+```typescript title="host/src/shell/auth-provider.tsx"
 import type { User, AuthContext as AuthContextType } from '@pulse/shared';
 import { authStore } from '@pulse/shared';
 ```
 
 Inside the `useEffect`, write to the nanostore immediately after the two existing state calls in the `try` block:
 
-```typescript
+```typescript title="host/src/shell/auth-provider.tsx"
 try {
   const response = await fetch('/api/users/me');
   const data: User = await response.json();
@@ -253,6 +305,7 @@ try {
     isAuthenticated: true,
     token: 'mock-jwt-token-' + data.id,
   });
+  // [!note Writes to the shared nanostore so the remote can read it]
 } catch (error) {
   console.error('Failed to fetch current user:', error);
 }
@@ -273,7 +326,7 @@ Now open [`remote-analytics/src/analytics-dashboard.tsx`](https://github.com/ste
 
 Add these imports:
 
-```typescript
+```typescript title="remote-analytics/src/analytics-dashboard.tsx"
 import { useStore } from '@nanostores/react';
 import { authStore } from '@pulse/shared';
 ```
@@ -289,9 +342,10 @@ const isAuthenticated = false;
 const userName: string | null = null;
 ```
 
-```typescript
+```typescript title="remote-analytics/src/analytics-dashboard.tsx"
 // Add these three lines in their place:
 const auth = useStore(authStore);
+// [!note Reads from the same atom instance the host writes to]
 const isAuthenticated = auth.isAuthenticated;
 const userName = auth.user?.name ?? null;
 ```
@@ -326,14 +380,6 @@ The analytics dashboard now shows a green **"Viewing as: Grace Hopper"** badge i
 - [BroadcastChannel for Cross-Boundary Communication](/courses/enterprise-ui/broadcast-channel): Implement the same cross-boundary auth using the browser's `BroadcastChannel` API instead of nanostores—no singleton shared dependencies required.
 - [Error Boundaries and Module Federation](/courses/enterprise-ui/error-boundaries-and-federation): Stop the remote dev server, reload the host, and discover why React error boundaries can't catch federation failures.
 - [Standalone Remotes](/courses/enterprise-ui/standalone-remotes): Visit `localhost:3001` directly and understand why standalone mode is the most important developer experience decision in a federation architecture.
-
-## Solution
-
-The completed implementation is on the `solution` branch:
-
-```bash
-git checkout solution
-```
 
 ## What's Next
 

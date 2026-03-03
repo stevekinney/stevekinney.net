@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generatedAt": "2026-03-03T10:48:21.407Z",
-    "hash": "e0afd60fa6bbe7e86f2f80ecc21218fd3fe32e939869f608b4e3566549ba325c"
+    "generatedAt": "2026-03-03T13:18:13.952Z",
+    "hash": "6e2d456cc38b657f9c05efa84fd30b11d7c1df11990c98598b36876abbd21659"
   },
   "course": {
     "slug": "enterprise-ui",
@@ -66,6 +66,14 @@
       "description": "Build a GitHub Actions workflow that runs the full quality gate on every push, uses Turborepo for caching, and adds Lighthouse CI performance budgets to catch regressions before they ship.",
       "date": "2026-03-01T00:00:00.000Z",
       "file": "courses/enterprise-ui/cicd-pipeline-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "comlink",
+      "title": "Comlink",
+      "description": "A tiny library that turns postMessage-style communication into an RPC-like API built on ES6 Proxy—making Web Workers feel like normal function calls instead of message-passing ceremonies.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/comlink.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
@@ -157,6 +165,30 @@
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
+      "slug": "observability",
+      "title": "Observability",
+      "description": "Observability is the ability to understand a system from the outside—here is how to instrument sanely, what signals matter, and how to keep the cost from becoming a political issue.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/observability.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "performance-budgets",
+      "title": "Performance Budgets",
+      "description": "Performance budgets turn \"we care about speed\" from a personality trait into a release policy—here is what to budget, how to set thresholds, and how to enforce them at build time, in CI, and in production.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/performance-budgets.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "rsbuild-configuration",
+      "title": "Configuring Rsbuild",
+      "description": "A walkthrough of the rsbuild.config.ts files used in this course—defineConfig, the plugin system, pluginReact, pluginModuleFederation, shared dependency options, dev server settings, and HTML templates.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/rsbuild-configuration.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
       "slug": "rspack-webpack-and-vite",
       "title": "Rspack, webpack, and Vite",
       "description": "Rspack keeps the webpack mental model but reimplements the engine in Rust—here is how it compares to webpack and Vite, when each one makes sense, and why the honest comparison is usually Rsbuild versus Vite, not Rspack versus Vite.",
@@ -186,6 +218,14 @@
       "description": "How Server Components, the client boundary, renderToPipeableStream, and Suspense-driven streaming fit together—and the common mistakes that happen when you learn the names but miss the boundaries.",
       "date": "2026-03-01T07:00:00.000Z",
       "file": "courses/enterprise-ui/server-components-and-streaming.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "server-rendering-across-frameworks",
+      "title": "Server Rendering Across Frameworks",
+      "description": "How Vue/Nuxt, SvelteKit, Astro, Qwik, and Angular each solve the same problems React Server Components address—server/client code boundaries, data loading, streaming, and mutations—with different tradeoffs and different opinions.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/server-rendering-across-frameworks.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {

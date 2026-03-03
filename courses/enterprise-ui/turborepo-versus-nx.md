@@ -70,6 +70,22 @@ That makes Rush especially attractive in large JavaScript package ecosystems whe
 
 That makes moon compelling for teams who want more structure than Turborepo, more toolchain management than Nx usually foregrounds, and far less conceptual weight than Bazel. Its docs also note that action distribution across multiple machines is coming soon, which is an important current limitation if distributed CI is a must-have today rather than a nice future story. So, moon is real and interesting, but it's still a different maturity and ecosystem position from Nx, Turborepo, or Bazel.
 
+## Quick Reference
+
+| Capability            | Turborepo             | Nx                                   | Bazel                  | Lerna                  | pnpm                  | Rush                     | moon                    |
+| --------------------- | --------------------- | ------------------------------------ | ---------------------- | ---------------------- | --------------------- | ------------------------ | ----------------------- |
+| Primary role          | Task runner and cache | Monorepo platform                    | Polyglot build system  | Versioning/publishing  | Package manager       | Monorepo manager         | Repository orchestrator |
+| Task orchestration    | Yes (turbo.json)      | Yes (project/task graphs)            | Yes (BUILD files)      | Via Nx under the hood  | Recursive commands    | Yes (incremental builds) | Yes (smart hashing)     |
+| Local caching         | Yes                   | Yes                                  | Yes                    | Via Nx                 | No                    | Yes (cobuild)            | Yes                     |
+| Remote caching        | Yes                   | Yes (Nx Cloud)                       | Yes (remote execution) | Via Nx Cloud           | No                    | Yes (cobuild)            | Yes                     |
+| Affected analysis     | Via `turbo-ignore`    | First-class (`nx affected`)          | Dependency analysis    | Via Nx                 | No                    | Subset builds            | Yes                     |
+| Distributed execution | No                    | Yes (Nx Agents)                      | Yes (remote execution) | Via Nx Agents          | No                    | Cobuild                  | Coming soon             |
+| Code generation       | No                    | Yes (generators)                     | Via Starlark rules     | No                     | No                    | No                       | Yes                     |
+| Boundary enforcement  | No                    | Yes (module boundaries)              | Via BUILD visibility   | No                     | No                    | Via policy files         | Yes (code ownership)    |
+| Release/publishing    | No                    | Yes (Nx Release)                     | No                     | Yes (core feature)     | Via Changesets        | Yes (core feature)       | No                      |
+| Language support      | JavaScript/TypeScript | JS/TS + plugins (.NET, Gradle, etc.) | Any language           | JavaScript/TypeScript  | JavaScript/TypeScript | JavaScript/TypeScript    | Web ecosystem (tiered)  |
+| Build model           | Workspace scripts     | Project graph + plugins              | Hermetic (Starlark)    | Workspace scripts (Nx) | Workspace scripts     | Workspace scripts        | Task graph + toolchain  |
+
 ## The Decision Framework
 
 If your repo is mostly JavaScript or TypeScript, already uses workspaces, and your main goal is "make local tasks and CI faster without changing the entire social contract of the repo," Turborepo is the cleanest default. Its worldview is narrow in the good way: package graph from the package manager, task graph from config, cache the results, optionally share the cache, skip unaffected work when you can.

@@ -44,7 +44,7 @@ Before writing tests, look at how the test environment is configured.
 
 Open `tests/e2e/playwright.config.ts`:
 
-```typescript
+```typescript title="tests/e2e/playwright.config.ts"
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
@@ -57,6 +57,7 @@ export default defineConfig({
     command: 'pnpm --filter @pulse/dashboard dev',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
+    // [!note Reuses a running dev server locally but always starts fresh in CI.]
   },
 });
 ```
@@ -67,11 +68,30 @@ export default defineConfig({
 > [!NOTE] Mock Service Worker
 > MSW intercepts network requests at the Service Worker level, not by monkey-patching `fetch` or `XMLHttpRequest`. MSW registers a Service Worker in the browser (or uses a request interception library in Node.js) that sits between your application code and the network. When your component calls `fetch("/api/analytics/summary")`, the request is intercepted by the Service Worker before it ever leaves the browser, and MSW's handlers return a mock response as if a real server had responded. Because interception happens at the network level, your application code is completely unaware that the response is mocked — the `fetch` call, the promise resolution, the response parsing all behave identically to a real network request. This is a fundamental advantage over mocking `fetch` directly: you test the actual network code path your application uses in production, including request headers, response status codes, and error handling, without running a real backend server.
 
+The diagram below shows how MSW intercepts network requests at the Service Worker level — your application's `fetch` calls are caught before they reach the network, and mock responses are returned as if a real server responded.
+
+```mermaid
+sequenceDiagram
+    participant Component as React Component
+    participant Fetch as fetch()
+    participant SW as MSW Service Worker
+    participant Handler as MSW Handler
+    participant Network as Network
+
+    Component->>Fetch: fetch("/api/analytics/summary")
+    Fetch->>SW: Request intercepted
+    SW->>Handler: Match against handlers
+    Handler-->>SW: Mock response (200ms delay)
+    SW-->>Fetch: Response object
+    Fetch-->>Component: JSON data
+    Note over Network: Request never reaches the network
+```
+
 Next, open `mocks/src/handlers.ts` — these MSW handlers run during development and serve as the baseline API behavior during tests. The handlers return deterministic data with fixed delays.
 
 Then open `tests/e2e/cross-remote.spec.ts` — the stub file where you'll write tests:
 
-```typescript
+```typescript title="tests/e2e/cross-remote.spec.ts"
 import { test, expect } from '@playwright/test';
 
 // TODO: Add cross-route navigation tests
@@ -87,7 +107,7 @@ Playwright is installed and configured. The dev server starts automatically when
 
 Replace the stub in `tests/e2e/cross-remote.spec.ts` with real tests:
 
-```typescript
+```typescript title="tests/e2e/cross-remote.spec.ts"
 import { test, expect } from '@playwright/test';
 
 test.describe('Cross-route navigation', () => {
@@ -112,6 +132,7 @@ test.describe('Cross-route navigation', () => {
     // Verify analytics data is still present
     await expect(page.getByText('Total Users')).toBeVisible();
     await expect(page.getByText('12,847')).toBeVisible();
+    // [!note Verifies that data survives a full round-trip navigation between routes.]
   });
 
   test('users page shows user data with roles', async ({ page }) => {
@@ -153,6 +174,8 @@ npx playwright test tests/e2e/cross-remote.spec.ts --config tests/e2e/playwright
 
 At least three E2E tests pass. They cover navigation between analytics, users, and settings, verifying that data loads correctly across route transitions.
 
+![Playwright test results showing passing tests](assets/exercise-07-playwright-results.png)
+
 ## Write Tests with MSW Data Verification
 
 The dashboard uses MSW's `setupWorker` which registers a Service Worker in the browser. The Suspense resources from Exercise 2 fire their fetch calls at module import time — before Playwright's `page.route()` can intercept them. This means per-test API overrides via `page.route()` won't work for the initial data load. Instead, write tests that verify the MSW mock data renders correctly and that interactive features work.
@@ -162,7 +185,7 @@ The dashboard uses MSW's `setupWorker` which registers a Service Worker in the b
 
 Create a new test file `tests/e2e/analytics.spec.ts`:
 
-```typescript
+```typescript title="tests/e2e/analytics.spec.ts"
 import { test, expect } from '@playwright/test';
 
 test.describe('Analytics with mocked API', () => {
@@ -175,6 +198,7 @@ test.describe('Analytics with mocked API', () => {
     await expect(page.getByText('3,291')).toBeVisible();
     await expect(page.getByText('$284,100')).toBeVisible();
     await expect(page.getByText('3.2%')).toBeVisible();
+    // [!note MSW intercepts these fetches at the Service Worker level, returning deterministic data.]
   });
 
   test('chart time range toggles work', async ({ page }) => {
@@ -209,13 +233,14 @@ HAR (HTTP Archive) files capture real network interactions as JSON. Playwright c
 > [!NOTE] HAR (HTTP Archive)
 > A HAR file captures every detail of a network request-response cycle: the request URL, method, headers, and body; the response status code, headers, and body; and timing information including DNS lookup, connection, TLS handshake, and time-to-first-byte. The format was originally designed for browser developer tools (you can export HAR files from Chrome DevTools' Network tab) and is supported by virtually every HTTP debugging tool. Playwright's `routeFromHAR` method reads these files and replays the recorded responses when matching requests are detected, making your tests completely independent of any running server. The key advantage over hand-written mocks is fidelity: a HAR file captures the exact response shape, headers, and status codes that a real server produced, so you are testing against realistic data without maintaining mock definitions by hand.
 
-Start by recording a HAR file. Add a recording test:
+Start by recording a HAR file. Add a recording test to `tests/e2e/analytics.spec.ts`:
 
-```typescript
+```typescript title="tests/e2e/analytics.spec.ts"
 test('record HAR fixture', async ({ page }) => {
   // Start recording all API calls
   await page.routeFromHAR('tests/fixtures/analytics-summary.har', {
     update: true,
+    // [!note Setting update to true records live responses into the HAR file.]
     url: '**/api/analytics/**',
   });
 
@@ -244,13 +269,14 @@ ls tests/fixtures/analytics-summary.har
 
 The HAR file contains the full request/response cycle for every API call that matched the URL pattern. Open it — it's JSON with request headers, response headers, response body, and timing information.
 
-Now write a test that replays the HAR instead of hitting the live API:
+Now add a test to `tests/e2e/analytics.spec.ts` that replays the HAR instead of hitting the live API:
 
-```typescript
+```typescript title="tests/e2e/analytics.spec.ts"
 test('renders analytics from HAR fixture', async ({ page }) => {
   // Replay recorded responses instead of hitting the live API
   await page.routeFromHAR('tests/fixtures/analytics-summary.har', {
     update: false,
+    // [!note Setting update to false replays the recorded responses for deterministic results.]
     url: '**/api/analytics/**',
   });
 
@@ -262,9 +288,9 @@ test('renders analytics from HAR fixture', async ({ page }) => {
 });
 ```
 
-Finally, remove the recording test (or skip it) — you only need it when regenerating fixtures:
+Finally, remove the recording test in `tests/e2e/analytics.spec.ts` (or skip it) — you only need it when regenerating fixtures:
 
-```typescript
+```typescript title="tests/e2e/analytics.spec.ts"
 test.skip('record HAR fixture', async ({ page }) => {
   // ...
 });
@@ -296,20 +322,13 @@ This is a discussion point, not a hands-on exercise. Think about where in your C
 
 All Playwright tests pass. You can articulate the testing pyramid for a monorepo: unit tests (Vitest) for component logic, E2E tests (Playwright) for integration behavior, and contract tests (Pact) for API compatibility.
 
+![Playwright HTML report with test summary](assets/exercise-07-playwright-report.png)
+
 ## Stretch Goals
 
 - **Visual regression testing:** Add `expect(page).toHaveScreenshot()` to capture a screenshot of the analytics dashboard and compare it against a baseline. Run the test twice — the second run compares against the first. Change a CSS class and watch the test fail.
 - **Accessibility testing:** Install `@axe-core/playwright` and add an accessibility audit to your test. Assert that the analytics dashboard has no critical accessibility violations.
 - **Parallel test execution:** Configure Playwright to run tests with `workers: 4` and verify they still pass. Check for shared state issues — tests that pass in isolation but fail when run in parallel are usually reading/writing shared state.
-
-## Solution
-
-If you need to catch up, the completed state for this exercise is available on the `08-migration-start` branch:
-
-```bash
-git checkout 08-migration-start
-pnpm install
-```
 
 ## What's Next
 

@@ -72,6 +72,21 @@ Moving from webpack to Vite is a bigger conceptual change. You are leaving the w
 
 Moving from Vite to Rspack means the opposite shift. You are trading some of Vite's dev-server simplicity for a webpack-like compilation model, usually because you need stronger webpack ecosystem compatibility, more bundler-centric features, or a more familiar path for large existing apps. If you take that route, evaluate Rsbuild too, because it is the layer meant to soften that transition into something closer to normal application development.
 
+## Quick Reference
+
+| Dimension              | webpack                                | Rspack                                         | Vite                                       |
+| ---------------------- | -------------------------------------- | ---------------------------------------------- | ------------------------------------------ |
+| Mental model           | Bundler-first compiler                 | Webpack-compatible, Rust-powered bundler       | Native ESM dev server + Rollup prod build  |
+| Language               | JavaScript                             | Rust (with JS interop)                         | JavaScript (esbuild + Rollup)              |
+| Plugin model           | Compiler/compilation lifecycle hooks   | Webpack-compatible plugin API                  | Rollup plugin interface + Vite hooks       |
+| Loader model           | `module.rules` transformations         | Webpack-compatible + built-in SWC              | Rollup `transform` hook                    |
+| Dev server             | webpack-dev-server (compilation-first) | Built-in (compilation-first, lazy compilation) | Native ESM (on-demand transforms)          |
+| HMR                    | Bundle-based replacement               | Bundle-based (default on)                      | Native ESM boundary invalidation           |
+| Dev/prod consistency   | Same bundler pipeline                  | Same bundler pipeline                          | Different pipelines (ESM dev, Rollup prod) |
+| Module Federation      | Core concept (v1)                      | Built-in v1.5 + enhanced v2                    | Not native (Rollup/Vite plugin world)      |
+| Migration from webpack | N/A                                    | Lowest friction (deliberate alignment)         | Redesign (different plugin/loader model)   |
+| Higher-level tool      | Create React App (retired), Next.js    | Rsbuild                                        | Vite itself (or Nuxt, SvelteKit, etc.)     |
+
 ## What I'd Actually Recommend
 
 Use webpack if you need the deepest, most established compiler ecosystem and you already have a mature webpack setup that is not causing enough pain to justify moving. It is still the most flexible and most canonical version of the bundler-first model.

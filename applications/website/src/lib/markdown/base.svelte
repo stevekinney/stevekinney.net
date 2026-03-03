@@ -1,5 +1,7 @@
 <script lang="ts">
   import { toDataAttributes } from '$lib/to-data-attributes';
+  import { enhanceCodeBlocks } from '$lib/actions/enhance-code-blocks';
+  import { enhanceMermaidDiagrams } from '$lib/actions/enhance-mermaid-diagrams';
   import type { Snippet } from 'svelte';
 
   type Props = {
@@ -12,6 +14,12 @@
   const { as = 'section', class: className = '', children, ...rest }: Props = $props();
 </script>
 
-<svelte:element this={as} class={className} {...toDataAttributes(rest)}>
+<svelte:element
+  this={as}
+  class={className}
+  {...toDataAttributes(rest)}
+  use:enhanceCodeBlocks
+  use:enhanceMermaidDiagrams
+>
   {@render children?.()}
 </svelte:element>

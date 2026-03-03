@@ -89,7 +89,7 @@ The `composite` flag tells TypeScript that this project is part of a larger buil
 
 Open `packages/shared/tsconfig.json`. It should look something like:
 
-```json
+```json title="packages/shared/tsconfig.json"
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -102,12 +102,13 @@ Open `packages/shared/tsconfig.json`. It should look something like:
 
 Add `"composite": true` and `"declaration": true` to `compilerOptions`:
 
-```jsonc
+```jsonc title="packages/shared/tsconfig.json" {3,4}
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true, // NEW: Marks this project as part of a composite build.
-    "declaration": true, // NEW: Generates .d.ts files for downstream packages to read.
+    "composite": true,
+    "declaration": true,
+    // [!note These two fields enable incremental cross-package type checking.]
     "outDir": "./dist",
     "rootDir": "./src",
   },
@@ -139,7 +140,7 @@ References tell TypeScript which other projects a package depends on. This mirro
 
 `packages/shared/tsconfig.json` needs no references. It's a leaf package with no internal dependencies:
 
-```json
+```json title="packages/shared/tsconfig.json"
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -154,7 +155,7 @@ References tell TypeScript which other projects a package depends on. This mirro
 
 `packages/ui/tsconfig.json` references `@pulse/shared`:
 
-```jsonc
+```jsonc title="packages/ui/tsconfig.json" {8}
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -164,13 +165,14 @@ References tell TypeScript which other projects a package depends on. This mirro
     "rootDir": "./src",
   },
   "include": ["src"],
-  "references": [{ "path": "../shared" }], // NEW: Tells tsc that @pulse/ui depends on @pulse/shared.
+  "references": [{ "path": "../shared" }],
+  // [!note Declares the TypeScript-level dependency on @pulse/shared.]
 }
 ```
 
 `packages/analytics/tsconfig.json` references `@pulse/ui` and `@pulse/shared`:
 
-```jsonc
+```jsonc title="packages/analytics/tsconfig.json" {9-10}
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -181,15 +183,16 @@ References tell TypeScript which other projects a package depends on. This mirro
   },
   "include": ["src"],
   "references": [
-    { "path": "../ui" }, // NEW: @pulse/analytics imports from @pulse/ui.
-    { "path": "../shared" }, // NEW: @pulse/analytics imports from @pulse/shared.
+    { "path": "../ui" },
+    { "path": "../shared" },
+    // [!note Mirror the dependencies from package.json so tsc builds in the right order.]
   ],
 }
 ```
 
 `packages/users/tsconfig.json` gets the same references as analytics:
 
-```jsonc
+```jsonc title="packages/users/tsconfig.json" {9-10}
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -200,15 +203,16 @@ References tell TypeScript which other projects a package depends on. This mirro
   },
   "include": ["src"],
   "references": [
-    { "path": "../ui" }, // NEW: @pulse/users imports from @pulse/ui.
-    { "path": "../shared" }, // NEW: @pulse/users imports from @pulse/shared.
+    { "path": "../ui" },
+    { "path": "../shared" },
+    // [!note Same references as analytics — both feature packages depend on ui and shared.]
   ],
 }
 ```
 
 `apps/dashboard/tsconfig.json` references all packages:
 
-```jsonc
+```jsonc title="apps/dashboard/tsconfig.json" {9-12}
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
@@ -219,10 +223,11 @@ References tell TypeScript which other projects a package depends on. This mirro
   },
   "include": ["src"],
   "references": [
-    { "path": "../../packages/analytics" }, // NEW: Dashboard imports from all four packages.
+    { "path": "../../packages/analytics" },
     { "path": "../../packages/users" },
     { "path": "../../packages/ui" },
     { "path": "../../packages/shared" },
+    // [!note The dashboard references all four packages since it imports from each one.]
   ],
 }
 ```
@@ -234,9 +239,10 @@ References tell TypeScript which other projects a package depends on. This mirro
 
 Create or update `tsconfig.json` at the repository root so `tsc --build` knows about all projects:
 
-```jsonc
+```jsonc title="tsconfig.json" {2-7}
 {
-  "files": [], // No files to compile here—this is just an entry point for tsc --build.
+  "files": [],
+  // [!note No files to compile here — this is just an entry point for tsc --build.]
   "references": [
     { "path": "packages/shared" },
     { "path": "packages/ui" },
@@ -309,7 +315,7 @@ flowchart TD
 
 Open `packages/shared/src/types.ts` and add a new field to the `User` interface:
 
-```typescript
+```typescript title="packages/shared/src/types.ts" {8}
 export interface User {
   id: string;
   name: string;
@@ -317,7 +323,8 @@ export interface User {
   role: 'admin' | 'member' | 'viewer';
   avatar?: string;
   createdAt: string;
-  department?: string; // <-- Add this line
+  department?: string;
+  // [!note Adding a new exported field changes the .d.ts output and triggers downstream rechecks.]
 }
 ```
 

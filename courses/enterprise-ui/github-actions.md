@@ -191,6 +191,12 @@ That setup is tidy because networking is simpler when both the job and the servi
 
 ## Reusing Logic
 
+| Reuse mechanism    | Scope           | Invoked with         | Runner context     | Secrets access                   | Best for                           |
+| ------------------ | --------------- | -------------------- | ------------------ | -------------------------------- | ---------------------------------- |
+| Action (JS/Docker) | Single step     | `uses:` in `steps`   | Caller's runner    | Via `with:` inputs               | Reusable single-step operations    |
+| Composite action   | Bundle of steps | `uses:` in `steps`   | Caller's runner    | Via `with:` inputs               | Multi-step recipes as one step     |
+| Reusable workflow  | Whole jobs      | `uses:` at job level | Own runner per job | `secrets:` or `secrets: inherit` | Full job patterns (build + deploy) |
+
 You can reuse logic at three levels. Use an action when you want a reusable step. Use a [composite action][19] when you want a bundle of steps that still behaves like one step. Use a reusable workflow when you want to reuse whole jobs, permissions, environments, matrices, or deployment structure. GitHub's own docs put composite actions and reusable workflows side by side for exactly this reason.
 
 Actions themselves can live in the same repository, in a public repository, or in a Docker Hub image. GitHub doesn't support redirects for actions or reusable workflows, so if an action or workflow is renamed or moved, old references fail. Local actions use a relative path from `github.workspace`, which is why you almost always need `actions/checkout` first before calling a local action.
@@ -204,6 +210,14 @@ Reusable workflows also have some sharp edges. You can nest at most ten levels o
 Organization-level [workflow templates][22] are a separate feature. If you put templates in an organization-owned `.github` repository under `workflow-templates/`, GitHub can offer them when people create new workflows. The template metadata lives in a matching `.properties.json` file. Useful for standardizing bootstrap workflows across many repositories without forcing everything through one giant reusable workflow file.
 
 ## Caches, Artifacts, and Summaries
+
+| Aspect          | Cache                                   | Artifact                              |
+| --------------- | --------------------------------------- | ------------------------------------- |
+| Purpose         | Reuse dependencies across runs          | Preserve or transfer build outputs    |
+| Keyed by        | Deterministic key (e.g., lockfile hash) | Name + run ID                         |
+| Lifetime        | Evicted by key match or 7-day default   | Configurable `retention-days`         |
+| Cross-job use   | Restored by key in any job              | Downloaded by name in downstream jobs |
+| Typical content | `node_modules`, `.cache`, build deps    | Coverage, binaries, screenshots, logs |
 
 [Caches and artifacts][23] solve different problems. A cache is for reusing dependencies or intermediate files across workflow runs, keyed by a deterministic cache key. An [artifact][24] is a named file bundle produced by a workflow run—things like coverage reports, test results, binaries, screenshots, or build outputs you want to keep, inspect, or hand to a downstream job. Confusing the two is one of the classic GitHub Actions mistakes.
 
