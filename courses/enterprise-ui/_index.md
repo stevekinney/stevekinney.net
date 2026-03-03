@@ -12,10 +12,16 @@ modified: 2026-03-01T00:00:00-07:00
 
 - [Module Federation](module-federation.md)
 - [Exercise 1: Runtime Composition](runtime-composition-exercise.md)
+- [Nanostores](nanostores.md)
+- [BroadcastChannel for Cross-Boundary Communication](broadcast-channel.md)
+- [Error Boundaries and Module Federation](error-boundaries-and-federation.md)
+- [Standalone Remotes](standalone-remotes.md)
 
 ## Build-Time Composition
 
+- [Build-Time Microfrontends](build-time-microfrontends.md)
 - [Exercise 2: Build-Time Composition](build-time-composition-exercise.md)
+- [Rspack, webpack, and Vite](rspack-webpack-and-vite.md)
 
 ## App Shell & Islands Architecture
 
@@ -29,6 +35,7 @@ modified: 2026-03-01T00:00:00-07:00
 ## Monorepos
 
 - [Turborepo](turborepo.md)
+- [Turborepo versus Nx, Bazel, Lerna, and Friends](turborepo-versus-nx.md)
 - [Exercise 4: Monorepo Setup](monorepo-setup-exercise.md)
 
 ## Backends for Frontends
@@ -54,6 +61,7 @@ modified: 2026-03-01T00:00:00-07:00
 
 ## ESLint as Architectural Guardrails
 
+- [Writing Our Own ESLint Rules](writing-eslint-rules.md)
 - [Exercise 6: Architectural Linting](architectural-linting-exercise.md)
 
 ## Design System Governance
@@ -66,6 +74,7 @@ modified: 2026-03-01T00:00:00-07:00
 ## CI/CD
 
 - [GitHub Actions](github-actions.md)
+- [Husky and lint-staged](husky-and-lint-staged.md)
 - [Exercise 7: CI/CD Pipeline](cicd-pipeline-exercise.md)
 
 ## Testing Strategies

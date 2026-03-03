@@ -1,5 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
+import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, searchForWorkspaceRoot, type PluginOption } from 'vite';
@@ -48,12 +49,67 @@ const loadImageTools = async (): Promise<PluginOption> => {
   }
 };
 
+const IMAGE_MIME_TYPES: Record<string, string> = {
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+  '.avif': 'image/avif',
+};
+
+/**
+ * Serves static image assets from `courses/` and `content/` directories during development.
+ *
+ * In production, the `processImages` preprocessor converts markdown image references into Vite
+ * imports. In development that preprocessor is skipped for speed, so the browser requests images
+ * by their literal relative paths. This plugin intercepts those requests and serves the files
+ * directly from the workspace root.
+ */
+function serveContentAssets(): PluginOption {
+  return {
+    name: 'serve-content-assets',
+    configureServer(server) {
+      server.middlewares.use(async (request, response, next) => {
+        if (!request.url) return next();
+
+        const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+
+        if (!pathname.startsWith('/courses/') && !pathname.startsWith('/content/')) {
+          return next();
+        }
+
+        const contentType = IMAGE_MIME_TYPES[path.extname(pathname).toLowerCase()];
+        if (!contentType) return next();
+
+        const filePath = path.resolve(workspaceRoot, pathname.slice(1));
+        if (!filePath.startsWith(workspaceRoot)) return next();
+
+        try {
+          const fileStat = await stat(filePath);
+          if (!fileStat.isFile()) return next();
+
+          const content = await readFile(filePath);
+          response.setHeader('Content-Type', contentType);
+          response.setHeader('Content-Length', content.length);
+          response.setHeader('Cache-Control', 'no-cache');
+          response.end(content);
+        } catch {
+          next();
+        }
+      });
+    },
+  };
+}
+
 const enhancedImagesPlugin = await loadEnhancedImages();
 const imagetoolsPlugin = await loadImageTools();
 
 export default defineConfig({
   plugins: [
     sveltekit(),
+    serveContentAssets(),
     enhancedImagesPlugin,
     imagetoolsPlugin,
     ViteToml(),

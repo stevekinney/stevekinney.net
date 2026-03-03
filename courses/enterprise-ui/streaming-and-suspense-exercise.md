@@ -38,15 +38,13 @@ pnpm dev
 
 Open [http://localhost:5173](http://localhost:5173).
 
----
-
-## Step 1: Refactor to Per-Component Data Fetching
+## Refactor to Per-Component Data Fetching
 
 Currently, `AnalyticsDashboard` fetches all three datasets in a single `Promise.all` and passes them as props. This means the entire page waits for the slowest response (the table at ~2000ms) before anything renders. You're going to refactor so each component fetches its own data — which is a prerequisite for Suspense boundaries to work.
 
 ### What to Look At First
 
-1. Open `packages/analytics/src/analytics-dashboard.tsx`. Notice the centralized fetch pattern:
+Open `packages/analytics/src/analytics-dashboard.tsx` and notice the centralized fetch pattern:
 
 ```typescript
 const [summaryResponse, chartResponse, tableResponse] = await Promise.all([
@@ -58,16 +56,16 @@ const [summaryResponse, chartResponse, tableResponse] = await Promise.all([
 
 All three responses are fetched together and passed as props to child components.
 
-2. Open `mocks/src/handlers.ts` and find the three analytics endpoints. Note the `delay()` calls — 200ms, 800ms, and 2000ms. These are deterministic, not randomized. Right now, the user waits 2000ms for everything because `Promise.all` blocks until the slowest one resolves.
+Next, open `mocks/src/handlers.ts` and find the three analytics endpoints. Note the `delay()` calls — 200ms, 800ms, and 2000ms. These are deterministic, not randomized. Right now, the user waits 2000ms for everything because `Promise.all` blocks until the slowest one resolves.
 
-> [!NOTE]
-> **There are three common patterns for fetching data, and each has a different performance profile.** Sequential fetching (fetch A, then fetch B, then fetch C) creates a "waterfall" where each request waits for the previous one to finish — total wait time is the sum of all response times. `Promise.all` fires all requests simultaneously, eliminating the waterfall, but the UI still blocks until the slowest response arrives — total wait time equals the maximum response time. Per-component fetching (what you are about to implement) also fires requests simultaneously, but each component renders independently as soon as its own data arrives — the user sees results progressively. The waterfall pattern is the worst case and often appears accidentally when data fetching is nested inside sequential `await` calls or `useEffect` chains that depend on each other's results.
+> [!NOTE] Three data-fetching patterns
+> Sequential fetching (fetch A, then fetch B, then fetch C) creates a "waterfall" where each request waits for the previous one to finish — total wait time is the sum of all response times. `Promise.all` fires all requests simultaneously, eliminating the waterfall, but the UI still blocks until the slowest response arrives — total wait time equals the maximum response time. Per-component fetching (what you are about to implement) also fires requests simultaneously, but each component renders independently as soon as its own data arrives — the user sees results progressively. The waterfall pattern is the worst case and often appears accidentally when data fetching is nested inside sequential `await` calls or `useEffect` chains that depend on each other's results.
 
 ### Refactor Each Component
 
 Move data fetching into each component so it manages its own loading state.
 
-3. Open `packages/analytics/src/stats-bar.tsx`. Add local data fetching:
+Open `packages/analytics/src/stats-bar.tsx` and add local data fetching:
 
 ```typescript
 import React, { useEffect, useState } from "react";
@@ -117,7 +115,7 @@ export function StatsBar(): React.ReactElement {
 }
 ```
 
-4. Open `packages/analytics/src/chart.tsx`. Add local data fetching with a `range` prop:
+Open `packages/analytics/src/chart.tsx` and add local data fetching with a `range` prop:
 
 ```typescript
 import React, { useEffect, useState } from "react";
@@ -192,7 +190,7 @@ export function Chart({ range = "30d" }: { range?: TimeRange }): React.ReactElem
 }
 ```
 
-5. Open `packages/analytics/src/big-table.tsx`. Add local data fetching:
+Open `packages/analytics/src/big-table.tsx` and add local data fetching:
 
 ```typescript
 import React, { useEffect, useState } from "react";
@@ -237,10 +235,10 @@ export function BigTable(): React.ReactElement {
 }
 ```
 
-> [!NOTE]
-> **The table API returns a paginated response.** The `/api/analytics/table?page=1` endpoint wraps the rows in a `PaginatedResponse<TableRow>` object with `data`, `page`, `pageSize`, and `total` fields. You need to extract `result.data` to get the array of `TableRow` items.
+> [!NOTE] The table API returns a paginated response
+> The `/api/analytics/table?page=1` endpoint wraps the rows in a `PaginatedResponse<TableRow>` object with `data`, `page`, `pageSize`, and `total` fields. You need to extract `result.data` to get the array of `TableRow` items.
 
-6. Now simplify `analytics-dashboard.tsx`. It no longer fetches data — it's just a layout shell:
+Now simplify `analytics-dashboard.tsx` since it no longer fetches data — it is just a layout shell:
 
 ```typescript
 import React, { useState } from "react";
@@ -305,22 +303,20 @@ export function AnalyticsDashboard(): React.ReactElement {
 export default AnalyticsDashboard;
 ```
 
-> [!NOTE]
-> **Why each component fetches its own data:** This is a deliberate architectural choice. By colocating data fetching with the component that needs it, each section can render independently as soon as its data arrives. The `StatsBar` renders after ~200ms without waiting for the table's ~2000ms response. This pattern is what makes Suspense boundaries useful in Step 2: they give React the granularity to show partial results while other fetches are still in flight.
+> [!NOTE] Why each component fetches its own data
+> This is a deliberate architectural choice. By colocating data fetching with the component that needs it, each section can render independently as soon as its data arrives. The `StatsBar` renders after ~200ms without waiting for the table's ~2000ms response. This pattern is what makes Suspense boundaries useful in Step 2: they give React the granularity to show partial results while other fetches are still in flight.
 
 ### Checkpoint
 
 Reload the page at `http://localhost:5173`. You should now see each section appear independently — the stats bar first (~200ms), then the chart (~800ms), then the table (~2000ms). Each shows its own loading skeleton while waiting. This is the per-component fetching pattern you need before adding Suspense.
 
----
-
-## Step 2: Make Data Fetching Suspense-Compatible
+## Make Data Fetching Suspense-Compatible
 
 The per-component `useEffect` + `useState` pattern from Step 1 already gives each section its own loading state. But Suspense boundaries need a different mechanism — a data source that **throws a promise** during loading instead of returning `null`. This is React's signal for "not ready yet."
 
 ### Create a Suspense Resource Helper
 
-1. Open `packages/shared/src/api-client.ts` and add a `createSuspenseResource` function:
+Open `packages/shared/src/api-client.ts` and add a `createSuspenseResource` function:
 
 ```typescript
 interface SuspenseResource<T> {
@@ -353,18 +349,18 @@ export function createSuspenseResource<T>(promise: Promise<T>): SuspenseResource
 }
 ```
 
-2. Export it from `packages/shared/src/index.ts`:
+Then export it from `packages/shared/src/index.ts`:
 
 ```typescript
 export { createSuspenseResource } from './api-client';
 ```
 
-> [!IMPORTANT]
-> **How the throw-promise pattern works:** When a component calls `resource.read()` and the data isn't ready, the function throws the pending promise. React catches this thrown promise, shows the nearest `<Suspense>` fallback, and re-renders the component when the promise resolves. This is fundamentally different from `useEffect` — instead of rendering with `null` and updating state later, the component _never renders_ until data is available. This is what makes Suspense boundaries useful: they intercept the thrown promise and show a fallback UI.
+> [!IMPORTANT] How the throw-promise pattern works
+> When a component calls `resource.read()` and the data isn't ready, the function throws the pending promise. React catches this thrown promise, shows the nearest `<Suspense>` fallback, and re-renders the component when the promise resolves. This is fundamentally different from `useEffect` — instead of rendering with `null` and updating state later, the component _never renders_ until data is available. This is what makes Suspense boundaries useful: they intercept the thrown promise and show a fallback UI.
 
 ### Update Components to Use Suspense Resources
 
-3. Update `packages/analytics/src/stats-bar.tsx` to use `createSuspenseResource` instead of `useEffect`:
+Update `packages/analytics/src/stats-bar.tsx` to use `createSuspenseResource` instead of `useEffect`:
 
 ```typescript
 import React from "react";
@@ -395,7 +391,7 @@ export function StatsBar(): React.ReactElement {
 }
 ```
 
-4. Update `packages/analytics/src/chart.tsx` to use `createSuspenseResource`. Since the chart data depends on the `range` prop, use a `Map`-based cache so each range gets its own resource:
+Update `packages/analytics/src/chart.tsx` to use `createSuspenseResource`. Since the chart data depends on the `range` prop, use a `Map`-based cache so each range gets its own resource:
 
 ```typescript
 import React from "react";
@@ -480,7 +476,7 @@ export function Chart({
 }
 ```
 
-5. Update `packages/analytics/src/big-table.tsx` to use a module-level Suspense resource:
+Update `packages/analytics/src/big-table.tsx` to use a module-level Suspense resource:
 
 ```typescript
 import React from "react";
@@ -522,12 +518,12 @@ export function BigTable(): React.ReactElement {
 }
 ```
 
-> [!NOTE]
-> **Module-level resources execute immediately.** The `statsResource` and `tableResource` are created at import time, which means the fetch starts as soon as the module loads — not when the component renders. This is actually desirable for Suspense: the earlier the fetch starts, the sooner data arrives. For resources that depend on props (like the chart's time range), the `Map`-based cache creates a new resource on first access for each range value.
+> [!NOTE] Module-level resources execute immediately
+> The `statsResource` and `tableResource` are created at import time, which means the fetch starts as soon as the module loads — not when the component renders. This is actually desirable for Suspense: the earlier the fetch starts, the sooner data arrives. For resources that depend on props (like the chart's time range), the `Map`-based cache creates a new resource on first access for each range value.
 
 ### Add Suspense Boundaries
 
-6. Now wrap each component in a Suspense boundary. Update `analytics-dashboard.tsx`:
+Now wrap each component in a Suspense boundary. Update `analytics-dashboard.tsx` to import `Suspense`:
 
 ```typescript
 import React, { Suspense, useState } from 'react';
@@ -535,7 +531,7 @@ import { LoadingSkeleton } from '@pulse/ui';
 // ... other imports stay the same ...
 ```
 
-Wrap each child component:
+Then wrap each child component:
 
 ```typescript
 <Suspense fallback={<LoadingSkeleton variant="card" count={4} />}>
@@ -554,20 +550,19 @@ Wrap each child component:
 </Suspense>
 ```
 
-7. Save and reload the page. Watch the rendering sequence:
-   - The page shell (sidebar, header) renders immediately
-   - Skeleton fallbacks appear for each section
-   - `StatsBar` appears after ~200ms as the skeleton is replaced
-   - `Chart` appears after ~800ms
-   - `BigTable` appears after ~2000ms
+Save and reload the page. Watch the rendering sequence:
+
+- The page shell (sidebar, header) renders immediately
+- Skeleton fallbacks appear for each section
+- `StatsBar` appears after ~200ms as the skeleton is replaced
+- `Chart` appears after ~800ms
+- `BigTable` appears after ~2000ms
 
 ### Checkpoint
 
 Each section of the analytics dashboard now loads independently via Suspense. The stats bar with its four metric cards appears first, the chart follows about 600ms later, and the table arrives last. Each shows its own skeleton placeholder while loading. The key difference from Step 1: the loading state is now managed by React's Suspense mechanism, not by manual `useState` in each component.
 
----
-
-## Step 3: Understanding Streaming SSR with `renderToPipeableStream`
+## Streaming SSR with `renderToPipeableStream`
 
 The Suspense boundaries you added in Step 2 serve double duty. On the client, they show skeleton fallbacks while data loads. On the server, they tell React's streaming SSR where to split the HTML stream. Here's what a streaming SSR implementation looks like using the Suspense boundaries you've already built:
 
@@ -597,25 +592,23 @@ export function render(req: Request, res: Response) {
 }
 ```
 
-> [!NOTE]
-> **`onShellReady` vs. `onAllReady`:** The `renderToPipeableStream` API gives you two callback options for when to start piping HTML to the client. `onShellReady` fires as soon as everything _outside_ of Suspense boundaries has rendered — the app shell, navigation, and skeleton fallbacks. Content inside Suspense boundaries streams in later as each one resolves. `onAllReady` waits until everything has resolved, including all Suspense boundaries — this gives you the old "wait for everything" behavior. For progressive rendering, always use `onShellReady`. Use `onAllReady` only for static site generation or crawlers that need complete HTML.
+> [!NOTE] `onShellReady` vs. `onAllReady`
+> The `renderToPipeableStream` API gives you two callback options for when to start piping HTML to the client. `onShellReady` fires as soon as everything _outside_ of Suspense boundaries has rendered — the app shell, navigation, and skeleton fallbacks. Content inside Suspense boundaries streams in later as each one resolves. `onAllReady` waits until everything has resolved, including all Suspense boundaries — this gives you the old "wait for everything" behavior. For progressive rendering, always use `onShellReady`. Use `onAllReady` only for static site generation or crawlers that need complete HTML.
 
-> [!NOTE]
-> **How streaming replacement works under the hood:** When `onShellReady` fires, React sends the complete HTML for the shell — including the fallback content of each Suspense boundary rendered as real HTML (the skeleton components). As each Suspense boundary resolves on the server, React sends a `<script>` tag containing the resolved HTML and a tiny function that swaps it into the right place in the DOM. The browser executes this inline script immediately, replacing the skeleton with the final content — no JavaScript framework needed for the swap. This is why the page appears to "fill in" progressively even before React hydrates on the client.
+> [!NOTE] How streaming replacement works under the hood
+> When `onShellReady` fires, React sends the complete HTML for the shell — including the fallback content of each Suspense boundary rendered as real HTML (the skeleton components). As each Suspense boundary resolves on the server, React sends a `<script>` tag containing the resolved HTML and a tiny function that swaps it into the right place in the DOM. The browser executes this inline script immediately, replacing the skeleton with the final content — no JavaScript framework needed for the swap. This is why the page appears to "fill in" progressively even before React hydrates on the client.
 
-> [!NOTE]
-> **This step is conceptual.** Setting up Express middleware or Vite SSR mode is outside the scope of this exercise. The key takeaway is that your Suspense boundaries automatically work with `renderToPipeableStream` — you don't need to change any component code to enable streaming SSR. The architecture you've built in Steps 1-2 is SSR-ready by design.
+> [!NOTE] This step is conceptual
+> Setting up Express middleware or Vite SSR mode is outside the scope of this exercise. The key takeaway is that your Suspense boundaries automatically work with `renderToPipeableStream` — you don't need to change any component code to enable streaming SSR. The architecture you've built in Steps 1-2 is SSR-ready by design.
 
-> [!NOTE]
-> **Hydration is the process where React attaches event listeners and interactive behavior to server-rendered HTML.** When the browser receives the initial HTML from streaming SSR, it is static markup — buttons do not respond to clicks, state changes do not trigger re-renders, and effects do not run. Hydration is when React walks the existing DOM, compares it against the component tree it would have rendered on the client, and "adopts" those DOM nodes by wiring up event handlers, refs, and state management. After hydration completes, the application becomes fully interactive. This is why streaming SSR is valuable even before hydration finishes: the user sees real content immediately (server-rendered HTML), and the page becomes interactive incrementally as React hydrates each Suspense boundary. A hydration mismatch — where the server-rendered HTML differs from what the client would render — causes React to discard the server markup and re-render from scratch, negating the performance benefit.
+> [!NOTE] Hydration
+> When the browser receives the initial HTML from streaming SSR, it is static markup — buttons do not respond to clicks, state changes do not trigger re-renders, and effects do not run. Hydration is when React walks the existing DOM, compares it against the component tree it would have rendered on the client, and "adopts" those DOM nodes by wiring up event handlers, refs, and state management. After hydration completes, the application becomes fully interactive. This is why streaming SSR is valuable even before hydration finishes: the user sees real content immediately (server-rendered HTML), and the page becomes interactive incrementally as React hydrates each Suspense boundary. A hydration mismatch — where the server-rendered HTML differs from what the client would render — causes React to discard the server markup and re-render from scratch, negating the performance benefit.
 
 ### Checkpoint
 
 You understand how `renderToPipeableStream` uses your Suspense boundaries to progressively stream HTML. The shell (sidebar, header, skeleton fallbacks) ships first, then each resolved Suspense boundary streams as a replacement `<script>` tag.
 
----
-
-## Step 4: Experiment with Boundary Placement
+## Experiment with Boundary Placement
 
 The placement of Suspense boundaries changes the user experience. Try different configurations to feel the trade-offs.
 
@@ -661,8 +654,8 @@ Each section renders as soon as its data is ready. Maximum progressiveness, but 
 
 Stats bar streams in first (fast feedback), then chart and table appear together when the table resolves. Two layout shifts instead of three. The chart data is ready at 800ms but waits until 2000ms to render because it shares a boundary with BigTable.
 
-> [!IMPORTANT]
-> **There is no universally correct placement.** Configuration B gives the fastest time-to-first-content, but causes three layout shifts. Configuration C reduces layout shifts but delays the chart by 1200ms. Configuration A has the worst time-to-first-content but zero layout shifts. The right choice depends on your product: a real-time dashboard benefits from progressive rendering (B), while a data-dense report might prefer the stability of grouped boundaries (C). This is why Suspense boundaries are architectural decisions — they encode product priorities into your component tree.
+> [!IMPORTANT] There is no universally correct placement
+> Configuration B gives the fastest time-to-first-content, but causes three layout shifts. Configuration C reduces layout shifts but delays the chart by 1200ms. Configuration A has the worst time-to-first-content but zero layout shifts. The right choice depends on your product: a real-time dashboard benefits from progressive rendering (B), while a data-dense report might prefer the stability of grouped boundaries (C). This is why Suspense boundaries are architectural decisions — they encode product priorities into your component tree.
 
 ### Try Each One
 
@@ -672,15 +665,11 @@ Switch between configurations A, B, and C. Watch the network waterfall in DevToo
 
 You've tried at least two different Suspense boundary placements and observed how each changes the loading experience. You can articulate the trade-off between time-to-first-content and layout stability.
 
----
-
 ## Stretch Goals
 
 - **Add error boundaries alongside Suspense boundaries:** Wrap each Suspense boundary in an `ErrorBoundary` from `@pulse/ui`. Stop the mock API for one endpoint (modify the MSW handler to return a 500) and verify the error boundary catches it without crashing the rest of the dashboard.
 - **Nested Suspense:** Add a Suspense boundary inside `BigTable` around the pagination controls. When the user changes pages, the table header stays visible while only the rows show a loading state.
 - **`useTransition` for navigation:** Wrap route changes in `useTransition` so the previous route stays visible while the next route's data loads, instead of showing a page-level skeleton.
-
----
 
 ## Solution
 
@@ -690,8 +679,6 @@ If you need to catch up, the completed state for this exercise is available on t
 git checkout 03-monorepo-start
 pnpm install
 ```
-
----
 
 ## What's Next
 

@@ -30,11 +30,16 @@ Module Federation, shared dependency negotiation, cross-boundary state managemen
 
 - [Module Federation](/courses/enterprise-ui/module-federation)
 - [Exercise 1: Runtime Composition](/courses/enterprise-ui/runtime-composition-exercise)
+- [Nanostores](/courses/enterprise-ui/nanostores)
+- [BroadcastChannel for Cross-Boundary Communication](/courses/enterprise-ui/broadcast-channel)
+- [Error Boundaries and Module Federation](/courses/enterprise-ui/error-boundaries-and-federation)
+- [Standalone Remotes](/courses/enterprise-ui/standalone-remotes)
 
 ### Build-Time Composition
 
 Same product consumed as a monorepo package instead of a federated remote.
 
+- [Build-Time Microfrontends](/courses/enterprise-ui/build-time-microfrontends)
 - [Exercise 2: Build-Time Composition](/courses/enterprise-ui/build-time-composition-exercise)
 
 ### App Shell & Islands Architecture
@@ -55,6 +60,7 @@ Conceptual patterns for progressive loading and partial hydration.
 pnpm workspaces, Turborepo pipelines, caching, affected-package detection.
 
 - [Turborepo](/courses/enterprise-ui/turborepo)
+- [Turborepo versus Nx, Bazel, Lerna, and Friends](/courses/enterprise-ui/turborepo-versus-nx)
 - [Exercise 4: Monorepo Setup](/courses/enterprise-ui/monorepo-setup-exercise)
 
 ### Backends for Frontends
@@ -94,6 +100,7 @@ Project references, composite builds, incremental checking.
 
 `eslint-plugin-boundaries`, encoding dependency rules in tooling.
 
+- [Writing Our Own ESLint Rules](/courses/enterprise-ui/writing-eslint-rules)
 - [Exercise 6: Architectural Linting](/courses/enterprise-ui/architectural-linting-exercise)
 
 ### Design System Governance
@@ -112,6 +119,7 @@ Lighthouse CI, making performance constraints enforceable.
 GitHub Actions with Turborepo caching and matrix parallelization.
 
 - [GitHub Actions](/courses/enterprise-ui/github-actions)
+- [Husky and lint-staged](/courses/enterprise-ui/husky-and-lint-staged)
 - [Exercise 7: CI/CD Pipeline](/courses/enterprise-ui/cicd-pipeline-exercise)
 
 ### Testing Strategies

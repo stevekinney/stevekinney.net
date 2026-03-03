@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generatedAt": "2026-03-02T13:04:52.878Z",
-    "hash": "fa3349968f7a7e7461823b2717003883c26a7ef06e2ba31f224aacf5837d23cd"
+    "generatedAt": "2026-03-03T10:48:21.407Z",
+    "hash": "e0afd60fa6bbe7e86f2f80ecc21218fd3fe32e939869f608b4e3566549ba325c"
   },
   "course": {
     "slug": "enterprise-ui",
@@ -37,11 +37,27 @@
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
+      "slug": "broadcast-channel",
+      "title": "BroadcastChannel for Cross-Boundary Communication",
+      "description": "The BroadcastChannel API is a browser-native way to send messages across browsing contexts—tabs, iframes, workers, and Module Federation boundaries—without shared module singletons or framework-specific state.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/broadcast-channel.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
       "slug": "build-time-composition-exercise",
       "title": "Exercise 2: Build-Time Composition",
-      "description": "Take the same analytics module from Exercise 1 and consume it as a regular workspace package in a monorepo — no remote entry, no shared dependency negotiation, just an npm import.",
+      "description": "Take the same analytics module from Exercise 1 and consume it as a regular workspace package in a monorepo—no remote entry, no shared dependency negotiation, just an npm import.",
       "date": "2026-03-01T00:00:00.000Z",
       "file": "courses/enterprise-ui/build-time-composition-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "build-time-microfrontends",
+      "title": "Build-Time Microfrontends",
+      "description": "Build-time microfrontends trade runtime autonomy for package boundaries, static imports, and one shipped artifact—when that tradeoff is the right one, the result is a modular monolith with better manners instead of a distributed system you didn't need.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/build-time-microfrontends.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
@@ -69,11 +85,27 @@
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
+      "slug": "error-boundaries-and-federation",
+      "title": "Error Boundaries and Module Federation",
+      "description": "React error boundaries can't catch what happens before React mounts—and Module Federation's runtime negotiation happens before React mounts, which means a dead remote produces a blank page, not a fallback UI.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/error-boundaries-and-federation.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
       "slug": "github-actions",
       "title": "GitHub Actions",
       "description": "GitHub's built-in automation system for CI, CD, and everything else humans keep trying to do by hand—how the workflow model works, where the security surface lives, and the footguns that look like features until they go off.",
       "date": "2026-03-01T07:00:00.000Z",
       "file": "courses/enterprise-ui/github-actions.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "husky-and-lint-staged",
+      "title": "Husky and lint-staged",
+      "description": "Git hooks are just scripts, but managing them across a team is where things get interesting—Husky wires native hooks into version control, lint-staged runs tasks only on staged files, and together they keep pre-commit fast enough that nobody reaches for --no-verify.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/husky-and-lint-staged.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
@@ -117,6 +149,22 @@
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
+      "slug": "nanostores",
+      "title": "Nanostores",
+      "description": "A tiny, framework-agnostic reactive state library that works across React, Vue, Svelte, Angular, and vanilla JS—which makes it unusually useful for cross-boundary state in microfrontend architectures.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/nanostores.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "rspack-webpack-and-vite",
+      "title": "Rspack, webpack, and Vite",
+      "description": "Rspack keeps the webpack mental model but reimplements the engine in Rust—here is how it compares to webpack and Vite, when each one makes sense, and why the honest comparison is usually Rsbuild versus Vite, not Rspack versus Vite.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/rspack-webpack-and-vite.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
       "slug": "runtime-composition-exercise",
       "title": "Exercise 1: Runtime Composition",
       "description": "Wire up a Module Federation host shell and remote analytics module, configure shared dependency negotiation, and solve the cross-boundary state management problem using nanostores.",
@@ -138,6 +186,14 @@
       "description": "How Server Components, the client boundary, renderToPipeableStream, and Suspense-driven streaming fit together—and the common mistakes that happen when you learn the names but miss the boundaries.",
       "date": "2026-03-01T07:00:00.000Z",
       "file": "courses/enterprise-ui/server-components-and-streaming.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "standalone-remotes",
+      "title": "Standalone Remotes",
+      "description": "A Module Federation remote that can run independently—with its own dev server, mock data, and UI—is dramatically easier to develop, test, and debug than one that requires the host to be running.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/standalone-remotes.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
@@ -173,6 +229,14 @@
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
+      "slug": "turborepo-versus-nx",
+      "title": "Turborepo versus Nx, Bazel, Lerna, and Friends",
+      "description": "The monorepo tooling landscape is muddy because these tools overlap without being the same thing—here's how Turborepo, Nx, Bazel, Lerna, pnpm, Rush, and moon actually differ, and when each one is the right call.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/turborepo-versus-nx.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
       "slug": "turborepo",
       "title": "Turborepo",
       "description": "A cache- and graph-aware task runner for JavaScript and TypeScript workspaces—how it thinks about packages and tasks, where caching actually lives, and the ways teams most reliably sabotage themselves.",
@@ -202,6 +266,14 @@
       "description": "How npm, pnpm, and Bun workspaces compare when your monorepo grows past the point where install speed is the only thing that matters.",
       "date": "2026-03-01T07:00:00.000Z",
       "file": "courses/enterprise-ui/workspace-package-managers.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "writing-eslint-rules",
+      "title": "Writing Our Own ESLint Rules",
+      "description": "How to write custom ESLint rules in the flat-config era—when a rule is the right tool, what the modern API actually looks like, and how to avoid building a brittle little policy goblin that everybody resents.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/writing-eslint-rules.md",
       "modified": "2026-03-01T07:00:00.000Z"
     }
   ]

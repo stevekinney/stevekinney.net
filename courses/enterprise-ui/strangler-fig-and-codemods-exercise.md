@@ -30,13 +30,11 @@ git checkout 08-migration-start
 pnpm install
 ```
 
----
-
-## Step 1: Explore the Legacy Application
+## Explore the Legacy Application
 
 Start by understanding what you're migrating from.
 
-1. Open `apps/legacy/src/legacy-app.tsx`. Note the patterns that mark this as legacy code:
+Open `apps/legacy/src/legacy-app.tsx`. Note the patterns that mark this as legacy code:
 
 ```typescript
 // Old-style React — no packages, no separation of concerns
@@ -57,10 +55,10 @@ export function LegacyApp() {
 }
 ```
 
-> [!NOTE]
-> **What makes this "legacy":** It's not about the age of the code — it's about the patterns. Inline styles instead of a design system. Local file imports instead of package imports. No TypeScript types from `@pulse/shared`. No separation between feature packages. Everything lives in a flat directory. This is the monolith before architecture.
+> [!NOTE] What makes this "legacy"
+> It's not about the age of the code — it's about the patterns. Inline styles instead of a design system. Local file imports instead of package imports. No TypeScript types from `@pulse/shared`. No separation between feature packages. Everything lives in a flat directory. This is the monolith before architecture.
 
-2. Open `apps/legacy/src/legacy-analytics.tsx`. This component does what `@pulse/analytics` does, but without package separation:
+Open `apps/legacy/src/legacy-analytics.tsx`. This component does what `@pulse/analytics` does, but without package separation:
 
 ```typescript
 import { LegacyChart } from './legacy-chart';
@@ -72,22 +70,20 @@ export function LegacyAnalytics() {
 }
 ```
 
-3. Compare with `packages/analytics/src/analytics-dashboard.tsx`. Same product feature, completely different architecture. The modern version uses `@pulse/ui` components, `@pulse/shared` types, Suspense boundaries, and colocated data fetching. The legacy version has everything inlined.
+Compare with `packages/analytics/src/analytics-dashboard.tsx`. Same product feature, completely different architecture. The modern version uses `@pulse/ui` components, `@pulse/shared` types, Suspense boundaries, and colocated data fetching. The legacy version has everything inlined.
 
 ### Checkpoint
 
 You understand the structural differences between the legacy and modern apps. The legacy app has no package boundaries, no shared types, and no design system integration.
 
----
-
-## Step 2: Set Up the Routing Strangler Fig
+## Set Up the Routing Strangler Fig
 
 The strangler fig pattern works by placing a routing layer in front of both apps. New paths go to the modern app, legacy paths go to the legacy app. Over time, you move paths from legacy to modern until the legacy app has no routes left.
 
-> [!NOTE]
-> **The strangler fig pattern is named after the strangler fig tree, which grows by wrapping itself around a host tree.** In nature, a strangler fig seed germinates in the canopy of an existing tree, sends roots down to the ground, and gradually envelops the host trunk with its own root structure. Over years, the fig's roots thicken and fuse until they form a self-supporting lattice, and the original host tree — no longer needed — decays away. Martin Fowler borrowed this metaphor for software migration: instead of rewriting a legacy system from scratch (a notoriously risky approach), you build the new system around the old one, routing traffic to the new system one endpoint or feature at a time. The old system continues to serve any routes that have not been migrated yet, and it shrinks incrementally until it handles no traffic at all and can be safely removed. The pattern is valuable precisely because it eliminates the "big bang" cutover — at every point during the migration, you have a working system, and each individual migration step is small enough to review, test, and revert independently.
+> [!NOTE] The strangler fig pattern
+> The strangler fig pattern is named after the strangler fig tree, which grows by wrapping itself around a host tree. In nature, a strangler fig seed germinates in the canopy of an existing tree, sends roots down to the ground, and gradually envelops the host trunk with its own root structure. Over years, the fig's roots thicken and fuse until they form a self-supporting lattice, and the original host tree — no longer needed — decays away. Martin Fowler borrowed this metaphor for software migration: instead of rewriting a legacy system from scratch (a notoriously risky approach), you build the new system around the old one, routing traffic to the new system one endpoint or feature at a time. The old system continues to serve any routes that have not been migrated yet, and it shrinks incrementally until it handles no traffic at all and can be safely removed. The pattern is valuable precisely because it eliminates the "big bang" cutover — at every point during the migration, you have a working system, and each individual migration step is small enough to review, test, and revert independently.
 
-1. Open `apps/dashboard/vite.config.ts` and add a proxy configuration that forwards legacy routes to the legacy app's dev server:
+Open `apps/dashboard/vite.config.ts` and add a proxy configuration that forwards legacy routes to the legacy app's dev server:
 
 ```typescript
 import { defineConfig } from 'vite';
@@ -108,7 +104,7 @@ export default defineConfig({
 });
 ```
 
-2. Add the base path to the legacy app's dev server. Open `apps/legacy/vite.config.ts` and add `base: "/legacy/"`:
+Next, add the base path to the legacy app's dev server. Open `apps/legacy/vite.config.ts` and add `base: "/legacy/"`:
 
 ```typescript
 import { defineConfig } from 'vite';
@@ -126,33 +122,32 @@ export default defineConfig({
 > [!NOTE]
 > The `port: 5174` is already set in the starting configuration. The only change needed here is adding `base: "/legacy/"` so that the legacy app's assets are served under the `/legacy/` path prefix, which is required for the proxy to route them correctly.
 
-3. Start both dev servers. Add a script to the root `package.json` or run them manually:
+Start both dev servers. Add a script to the root `package.json` or run them manually:
 
 ```bash
 pnpm --filter @pulse/dashboard dev &
 pnpm --filter @pulse/legacy dev &
 ```
 
-4. Test the routing:
-   - Open [http://localhost:5173](http://localhost:5173) — the modern dashboard loads
-   - Open [http://localhost:5173/legacy/](http://localhost:5173/legacy/) — the legacy app loads, proxied through the modern app's server
+Test the routing:
 
-> [!IMPORTANT]
-> **The proxy is the strangler.** The modern app's dev server is the single entry point. It owns the routing decision: requests to `/legacy/*` are forwarded to the legacy server, everything else is handled by the modern app. To migrate a route, you stop forwarding it to legacy and add it to the modern app's router instead. The user never knows which app served the page — the URL structure stays the same. In production, this proxy would be a reverse proxy (Nginx, CloudFront, or your CDN's edge routing) rather than Vite's dev proxy.
+- Open [http://localhost:5173](http://localhost:5173) — the modern dashboard loads
+- Open [http://localhost:5173/legacy/](http://localhost:5173/legacy/) — the legacy app loads, proxied through the modern app's server
+
+> [!IMPORTANT] The proxy is the strangler
+> The modern app's dev server is the single entry point. It owns the routing decision: requests to `/legacy/*` are forwarded to the legacy server, everything else is handled by the modern app. To migrate a route, you stop forwarding it to legacy and add it to the modern app's router instead. The user never knows which app served the page — the URL structure stays the same. In production, this proxy would be a reverse proxy (Nginx, CloudFront, or your CDN's edge routing) rather than Vite's dev proxy.
 
 ### Checkpoint
 
 Both apps are accessible through a single entry point at `localhost:5173`. Modern routes render from the dashboard app. Legacy routes are proxied to the legacy app on port 5174.
 
----
-
-## Step 3: Migrate One Route
+## Migrate One Route
 
 Take the legacy analytics view and replace it with the modern `@pulse/analytics` package.
 
-1. The legacy analytics route is at `/legacy/analytics`. You want to move it so that `/analytics` (or `/`) serves the modern version. This is already the case — the modern dashboard's router handles `/` with the analytics route. The strangler fig means users who bookmarked `/legacy/analytics` should eventually be redirected to `/`.
+The legacy analytics route is at `/legacy/analytics`. You want to move it so that `/analytics` (or `/`) serves the modern version. This is already the case — the modern dashboard's router handles `/` with the analytics route. The strangler fig means users who bookmarked `/legacy/analytics` should eventually be redirected to `/`.
 
-2. Add a redirect in the legacy app for the migrated route. Open `apps/legacy/src/legacy-app.tsx` and replace the analytics component with a redirect notice:
+Add a redirect in the legacy app for the migrated route. Open `apps/legacy/src/legacy-app.tsx` and replace the analytics component with a redirect notice:
 
 ```typescript
 export function LegacyApp() {
@@ -173,25 +168,24 @@ export function LegacyApp() {
 }
 ```
 
-3. Verify the migration:
-   - Navigate to [http://localhost:5173/legacy/analytics](http://localhost:5173/legacy/analytics) — it should redirect to `/` (the modern analytics dashboard)
-   - Navigate to [http://localhost:5173/legacy/settings](http://localhost:5173/legacy/settings) — the legacy settings page still loads normally
-   - Navigate to [http://localhost:5173/](http://localhost:5173/) — the modern analytics dashboard renders with all the architecture from Exercises 2-8
+Verify the migration:
 
-> [!NOTE]
-> **Migration is a one-route-at-a-time process.** In a real project, you'd migrate the simplest or highest-traffic route first — to validate the pattern and build confidence. Each migration is a separate pull request: update the proxy/routing, verify the modern version works, add the redirect from legacy. The legacy app shrinks with each PR. When every route has been migrated, you delete `apps/legacy/` entirely. The key discipline is: never migrate two routes in the same PR. Each migration should be independently revertable.
+- Navigate to [http://localhost:5173/legacy/analytics](http://localhost:5173/legacy/analytics) — it should redirect to `/` (the modern analytics dashboard)
+- Navigate to [http://localhost:5173/legacy/settings](http://localhost:5173/legacy/settings) — the legacy settings page still loads normally
+- Navigate to [http://localhost:5173/](http://localhost:5173/) — the modern analytics dashboard renders with all the architecture from Exercises 2-8
+
+> [!NOTE] Migration is a one-route-at-a-time process
+> In a real project, you'd migrate the simplest or highest-traffic route first — to validate the pattern and build confidence. Each migration is a separate pull request: update the proxy/routing, verify the modern version works, add the redirect from legacy. The legacy app shrinks with each PR. When every route has been migrated, you delete `apps/legacy/` entirely. The key discipline is: never migrate two routes in the same PR. Each migration should be independently revertable.
 
 ### Checkpoint
 
 The analytics route is fully migrated. Legacy analytics redirects to the modern app. Other legacy routes still work through the proxy.
 
----
-
-## Step 4: Write a jscodeshift Codemod
+## Write a jscodeshift Codemod
 
 The legacy app has import patterns that need to be transformed for the modern architecture. You're going to write a codemod that automates this.
 
-1. Open `codemods/src/migrate-legacy-import.ts`. It contains a stub:
+Open `codemods/src/migrate-legacy-import.ts`. It contains a stub:
 
 ```typescript
 import type { API, FileInfo } from 'jscodeshift';
@@ -206,7 +200,7 @@ export default function transform(file: FileInfo, api: API) {
 }
 ```
 
-2. Implement the transform. The codemod should find imports like:
+Implement the transform. The codemod should find imports like:
 
 ```typescript
 import { LegacyChart } from './legacy-chart';
@@ -296,17 +290,15 @@ export default function transform(file: FileInfo, api: API) {
 }
 ```
 
-> [!NOTE]
-> **How jscodeshift works:** jscodeshift parses JavaScript/TypeScript into an Abstract Syntax Tree (AST), lets you search and transform nodes in that tree, then prints the modified tree back to source code. Unlike regex-based find-and-replace, AST transforms understand the structure of the code — they can distinguish between a `LegacyChart` in an import statement and a `LegacyChart` in a JSX element. The `j.find()` method searches for AST nodes matching a pattern, and `j.replaceWith()` swaps them for new nodes. The transform function receives one file at a time and returns the modified source.
+> [!NOTE] How jscodeshift works
+> jscodeshift parses JavaScript/TypeScript into an Abstract Syntax Tree (AST), lets you search and transform nodes in that tree, then prints the modified tree back to source code. Unlike regex-based find-and-replace, AST transforms understand the structure of the code — they can distinguish between a `LegacyChart` in an import statement and a `LegacyChart` in a JSX element. The `j.find()` method searches for AST nodes matching a pattern, and `j.replaceWith()` swaps them for new nodes. The transform function receives one file at a time and returns the modified source.
 
-> [!NOTE]
-> **An Abstract Syntax Tree (AST) is a tree-shaped data structure that represents the grammatical structure of source code.** When a parser reads `import { Chart } from "@pulse/analytics"`, it does not see a flat string of characters — it produces a tree where the top node is an `ImportDeclaration`, with child nodes for each imported specifier (`Chart`) and the source string (`"@pulse/analytics"`). Every construct in the language — variable declarations, function calls, JSX elements, binary expressions — becomes a node in this tree, with its sub-expressions as children. Tools like jscodeshift, ESLint, Babel, and Prettier all operate on ASTs rather than raw text because tree operations are structurally aware: you can find "all import declarations whose source starts with `./legacy-`" without worrying about whitespace, comments, or formatting variations that would trip up a regular expression. The "abstract" in AST means the tree omits syntactic details that do not affect meaning (like parentheses used only for grouping or semicolons) and focuses on the logical structure of the program.
+> [!NOTE] Abstract Syntax Trees
+> An Abstract Syntax Tree (AST) is a tree-shaped data structure that represents the grammatical structure of source code. When a parser reads `import { Chart } from "@pulse/analytics"`, it does not see a flat string of characters — it produces a tree where the top node is an `ImportDeclaration`, with child nodes for each imported specifier (`Chart`) and the source string (`"@pulse/analytics"`). Every construct in the language — variable declarations, function calls, JSX elements, binary expressions — becomes a node in this tree, with its sub-expressions as children. Tools like jscodeshift, ESLint, Babel, and Prettier all operate on ASTs rather than raw text because tree operations are structurally aware: you can find "all import declarations whose source starts with `./legacy-`" without worrying about whitespace, comments, or formatting variations that would trip up a regular expression. The "abstract" in AST means the tree omits syntactic details that do not affect meaning (like parentheses used only for grouping or semicolons) and focuses on the logical structure of the program.
 
----
+## Test the Codemod
 
-## Step 5: Test the Codemod
-
-1. Run the codemod against the legacy app's source files:
+Run the codemod against the legacy app's source files:
 
 ```bash
 npx jscodeshift \
@@ -315,7 +307,7 @@ npx jscodeshift \
   apps/legacy/src/
 ```
 
-2. Check the diff to see what changed:
+Check the diff to see what changed:
 
 ```bash
 git diff apps/legacy/src/
@@ -323,31 +315,30 @@ git diff apps/legacy/src/
 
 You should see imports transformed from local legacy paths to modern package paths, and component names updated from `LegacyChart` to `Chart`, `LegacyButton` to `Button`, etc.
 
-3. Verify the transforms are correct. Open the modified files and check:
-   - Old: `import { LegacyChart } from "./legacy-chart"`
-   - New: `import { Chart } from "@pulse/analytics"`
-   - Old: `<LegacyChart data={data} />`
-   - New: `<Chart data={data} />`
+Verify the transforms are correct. Open the modified files and check:
 
-> [!IMPORTANT]
-> **Always review codemod output.** Codemods are powerful but not infallible. Edge cases — aliased imports, re-exports, dynamic imports, template literal interpolation — can produce incorrect transforms. Run the codemod, review the diff, run the type checker and tests, then commit. Treat the codemod as a time-saver, not an autopilot.
+- Old: `import { LegacyChart } from "./legacy-chart"`
+- New: `import { Chart } from "@pulse/analytics"`
+- Old: `<LegacyChart data={data} />`
+- New: `<Chart data={data} />`
 
-4. Run the type checker on the modified files to catch any issues:
+> [!IMPORTANT] Always review codemod output
+> Codemods are powerful but not infallible. Edge cases — aliased imports, re-exports, dynamic imports, template literal interpolation — can produce incorrect transforms. Run the codemod, review the diff, run the type checker and tests, then commit. Treat the codemod as a time-saver, not an autopilot.
+
+Run the type checker on the modified files to catch any issues:
 
 ```bash
 pnpm turbo typecheck
 ```
 
-> [!NOTE]
-> **Typecheck will fail here — and that's expected.** The codemod transforms `import { LegacyChart } from "./legacy-chart"` to `import { Chart } from "@pulse/analytics"`, but the legacy app doesn't have `@pulse/analytics` as a dependency. In a real migration, you would add the modern packages to the legacy app's `package.json` before running the type checker. For this exercise, the type error confirms the codemod is producing the correct output — just revert the files with `git checkout apps/legacy/src/` and move on to writing tests.
+> [!NOTE] Typecheck will fail here
+> The codemod transforms `import { LegacyChart } from "./legacy-chart"` to `import { Chart } from "@pulse/analytics"`, but the legacy app doesn't have `@pulse/analytics` as a dependency. In a real migration, you would add the modern packages to the legacy app's `package.json` before running the type checker. For this exercise, the type error confirms the codemod is producing the correct output — just revert the files with `git checkout apps/legacy/src/` and move on to writing tests.
 
 ### Checkpoint
 
 The codemod transforms legacy imports to modern package imports. The diff shows clean, expected changes.
 
----
-
-## Step 6: Write Codemod Tests
+## Write Codemod Tests
 
 Open `codemods/src/__tests__/migrate-legacy-import.test.ts` and add test cases:
 
@@ -407,22 +398,18 @@ Run the tests:
 pnpm --filter codemods test
 ```
 
-> [!NOTE]
-> **Testing codemods is testing string-to-string transforms.** You provide an input source string, run the transform, and assert properties of the output string. The test doesn't need a real file system or a running application. This makes codemod tests fast and easy to write — add a test case for every edge case you encounter. When a codemod produces incorrect output on a real file, copy that file's problematic section into a test case, fix the transform, and verify the test passes.
+> [!NOTE] Testing codemods is testing string-to-string transforms
+> You provide an input source string, run the transform, and assert properties of the output string. The test doesn't need a real file system or a running application. This makes codemod tests fast and easy to write — add a test case for every edge case you encounter. When a codemod produces incorrect output on a real file, copy that file's problematic section into a test case, fix the transform, and verify the test passes.
 
 ### Checkpoint
 
 Codemod tests pass. Each test verifies a specific transformation scenario. Edge cases are covered.
-
----
 
 ## Stretch Goals
 
 - **Handle aliased imports:** Extend the codemod to handle `import { LegacyChart as MyChart } from "./legacy-chart"` and preserve the alias: `import { Chart as MyChart } from "@pulse/analytics"`.
 - **Dry-run mode:** Run the codemod with `--dry` to see which files would be modified without actually changing them. Use this in CI to verify that no unmigrated legacy imports remain.
 - **Add a second codemod:** Write a codemod that transforms inline styles (`style={{ color: "#333" }}`) to Tailwind CSS classes (`className="text-gray-700"`). This is a harder transform because it requires a mapping from CSS properties to Tailwind classes.
-
----
 
 ## Solution
 
@@ -432,8 +419,6 @@ If you want to see the fully completed workshop, the solution is available:
 git checkout solution
 pnpm install
 ```
-
----
 
 ## What's Next
 

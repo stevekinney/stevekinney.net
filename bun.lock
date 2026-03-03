@@ -99,6 +99,7 @@
         "tslib": "^2.8.1",
         "tsx": "^4.21.0",
         "turbo": "^2.4.4",
+        "turborepo": "^0.0.1",
         "typescript": "^5.9.3",
         "unified": "^11.0.5",
         "unist-util-remove": "^4.0.0",
@@ -124,6 +125,9 @@
     },
     "courses/ai-development": {
       "name": "@stevekinney/ai-development",
+    },
+    "courses/enterprise-ui": {
+      "name": "@stevekinney/enterprise-ui",
     },
     "courses/figma": {
       "name": "@stevekinney/figma",
@@ -675,6 +679,8 @@
     "@stevekinney/components": ["@stevekinney/components@workspace:packages/components"],
 
     "@stevekinney/content-types": ["@stevekinney/content-types@workspace:packages/content-types"],
+
+    "@stevekinney/enterprise-ui": ["@stevekinney/enterprise-ui@workspace:courses/enterprise-ui"],
 
     "@stevekinney/figma": ["@stevekinney/figma@workspace:courses/figma"],
 
@@ -2501,6 +2507,8 @@
     "turbo-windows-64": ["turbo-windows-64@2.8.10", "", { "os": "win32", "cpu": "x64" }, "sha512-hdeF5qmVY/NFgiucf8FW0CWJWtyT2QPm5mIsX0W1DXAVzqKVXGq+Zf+dg4EUngAFKjDzoBeN6ec2Fhajwfztkw=="],
 
     "turbo-windows-arm64": ["turbo-windows-arm64@2.8.10", "", { "os": "win32", "cpu": "arm64" }, "sha512-QGdr/Q8LWmj+ITMkSvfiz2glf0d7JG0oXVzGL3jxkGqiBI1zXFj20oqVY0qWi+112LO9SVrYdpHS0E/oGFrMbQ=="],
+
+    "turborepo": ["turborepo@0.0.1", "", {}, "sha512-x+4Q9iy252nr6zuU/TvQIF4na8OVLe2pBTwTJKA/aTPzdR4W8q0uhEj/U69G09IznNDjMg8jXG2nm9gan4KQ1g=="],
 
     "type-check": ["type-check@0.4.0", "", { "dependencies": { "prelude-ls": "^1.2.1" } }, "sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew=="],
 
