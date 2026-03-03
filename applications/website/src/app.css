@@ -46,8 +46,26 @@
 }
 
 @layer utilities {
+  .prose :where([data-callout]):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+
+  .prose
+    :where([data-callout] > :first-child):not(
+      :where([class~='not-prose'], [class~='not-prose'] *)
+    ) {
+    margin-top: 0;
+  }
+
+  .prose
+    :where([data-callout] > :last-child):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    margin-bottom: 0;
+  }
+
   .prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-    padding: 0.1rem 0.25rem;
+    padding: 0.1rem 0.15rem;
+
     background-color: color-mix(in oklch, var(--color-black-pearl-50) 20%, transparent);
     border-radius: 0.25rem;
   }

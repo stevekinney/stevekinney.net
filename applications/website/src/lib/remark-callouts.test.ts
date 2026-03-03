@@ -33,7 +33,7 @@ const run = (markdown: string): Blockquote => {
 };
 
 describe('remarkCallouts', () => {
-  it('converts callout blockquotes to styled divs', () => {
+  it('converts callout blockquotes to styled divs with explicit title', () => {
     const blockquote = run('> [!NOTE] Title\n>\n> Body');
     const paragraph = blockquote.children[0] as Paragraph;
     const data = getData(blockquote);
@@ -48,12 +48,16 @@ describe('remarkCallouts', () => {
     expect((paragraph.children[0] as { value: string }).value).toBe('Title');
   });
 
-  it('uses the variant name as a fallback title', () => {
+  it('does not show a title when no explicit title is given', () => {
     const blockquote = run('> [!TIP]\n>\n> Body');
-    const paragraph = blockquote.children[0] as Paragraph;
+    const data = getData(blockquote);
 
-    expect((paragraph.children[0] as { value: string }).value).toBe('Tip');
-    expect(getData(blockquote)?.hProperties?.['data-callout']).toBe('tip');
+    expect(data?.hProperties?.['data-callout']).toBe('tip');
+    expect(blockquote.children).toHaveLength(1);
+
+    const body = blockquote.children[0] as Paragraph;
+    expect((body.children[0] as { value: string }).value).toBe('Body');
+    expect(getClassList(getData(body)?.hProperties?.className ?? [])).not.toContain('font-bold');
   });
 
   it('splits inline callouts into title and body paragraphs', () => {
@@ -115,6 +119,124 @@ describe('remarkCallouts', () => {
     remarkCallouts()(tree, new VFile(), () => {});
     const blockquote = getBlockquote(tree);
     expect(blockquote.data).toBeUndefined();
+  });
+
+  it('omits fallback title when marker and body share a paragraph (no blank line)', () => {
+    const blockquote = run('> [!NOTE]\n> Body');
+    const body = blockquote.children[0] as Paragraph;
+
+    expect(blockquote.children).toHaveLength(1);
+    expect((body.children[0] as { value: string }).value).toBe('Body');
+    expect(getClassList(getData(body)?.hProperties?.className ?? [])).not.toContain('font-bold');
+  });
+
+  it('omits fallback title for linkReference markers without inline title', () => {
+    const tree: Root = {
+      type: 'root',
+      children: [
+        {
+          type: 'blockquote',
+          children: [
+            {
+              type: 'paragraph',
+              children: [
+                {
+                  type: 'linkReference',
+                  identifier: '!note',
+                  label: '!NOTE',
+                  referenceType: 'shortcut',
+                  children: [{ type: 'text', value: '!NOTE' }],
+                },
+                { type: 'text', value: '\nBody content here.' },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    remarkCallouts()(tree, new VFile(), () => {});
+    const blockquote = getBlockquote(tree);
+    const body = blockquote.children[0] as Paragraph;
+
+    expect(getData(blockquote)?.hProperties?.['data-callout']).toBe('note');
+    expect(blockquote.children).toHaveLength(1);
+    expect((body.children[0] as { value: string }).value).toBe('Body content here.');
+    expect(getClassList(getData(body)?.hProperties?.className ?? [])).not.toContain('font-bold');
+  });
+
+  it('splits on break nodes (mdsvex may use these instead of newlines)', () => {
+    const tree: Root = {
+      type: 'root',
+      children: [
+        {
+          type: 'blockquote',
+          children: [
+            {
+              type: 'paragraph',
+              children: [
+                {
+                  type: 'linkReference',
+                  identifier: '!note',
+                  label: '!NOTE',
+                  referenceType: 'shortcut',
+                  children: [{ type: 'text', value: '!NOTE' }],
+                },
+                { type: 'break' } as never,
+                { type: 'inlineCode', value: '@nanostores/react' } as never,
+                { type: 'text', value: ' appears in the shared config.' },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    remarkCallouts()(tree, new VFile(), () => {});
+    const blockquote = getBlockquote(tree);
+    const body = blockquote.children[0] as Paragraph;
+
+    expect(getData(blockquote)?.hProperties?.['data-callout']).toBe('note');
+    expect(blockquote.children).toHaveLength(1);
+    expect(body.children[0].type).toBe('inlineCode');
+    expect(getClassList(getData(body)?.hProperties?.className ?? [])).not.toContain('font-bold');
+  });
+
+  it('separates body from title when no newline or break node exists after linkReference', () => {
+    const tree: Root = {
+      type: 'root',
+      children: [
+        {
+          type: 'blockquote',
+          children: [
+            {
+              type: 'paragraph',
+              children: [
+                {
+                  type: 'linkReference',
+                  identifier: '!note',
+                  label: '!NOTE',
+                  referenceType: 'shortcut',
+                  children: [{ type: 'text', value: '!NOTE' }],
+                },
+                { type: 'text', value: ' ' },
+                { type: 'inlineCode', value: '@nanostores/react' } as never,
+                { type: 'text', value: ' appears in the shared config.' },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    remarkCallouts()(tree, new VFile(), () => {});
+    const blockquote = getBlockquote(tree);
+    const body = blockquote.children[0] as Paragraph;
+
+    expect(getData(blockquote)?.hProperties?.['data-callout']).toBe('note');
+    expect(blockquote.children).toHaveLength(1);
+    expect(body.children[0].type).toBe('inlineCode');
+    expect(getClassList(getData(body)?.hProperties?.className ?? [])).not.toContain('font-bold');
   });
 
   it('marks callouts with - indicator as foldable (collapsed by default)', () => {

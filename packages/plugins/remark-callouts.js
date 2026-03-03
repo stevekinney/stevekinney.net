@@ -11,10 +11,10 @@ import { visit } from 'unist-util-visit';
  * @typedef {{ hName?: string, hProperties?: Properties & { className?: string | string[] } }} HastData
  */
 
-const CALLOUT_PATTERN = /^\s*\[?\s*!\s*([^\]\s+-]+)\s*\]?([+-])?\s*([\s\S]*)$/i;
-const CALLOUT_MARKER = /^\s*\[?\s*!\s*[^\]\s+-]+\s*\]?([+-])?\s*/i;
+const CALLOUT_PATTERN = /^\s*\[?\s*!\s*([a-zA-Z]+)[^\S\n]*\]?([+-])?[^\S\n]*(.*)/i;
+const CALLOUT_MARKER = /^\s*\[?\s*!\s*[a-zA-Z]+[^\S\n]*\]?([+-])?[^\S\n]*/i;
 
-const BASE_CLASSES = 'space-y-2 rounded-md border p-4 shadow-sm';
+const BASE_CLASSES = 'space-y-2 rounded-md border px-4 py-2 shadow-sm';
 const TITLE_CLASS = 'font-bold';
 
 /** @type {Record<string, string>} */
@@ -133,7 +133,7 @@ const stripMarkerFromParagraph = (paragraph, fallbackTitle) => {
       stripped = true;
       const nextChild = paragraph.children[0];
       if (nextChild?.type === 'text') {
-        nextChild.value = nextChild.value.replace(/^\s+/, '');
+        nextChild.value = nextChild.value.replace(/^[+-]?[^\S\n]*/, '');
       }
     }
   }
@@ -152,13 +152,19 @@ const stripMarkerFromParagraph = (paragraph, fallbackTitle) => {
     }
   }
 
-  for (const child of paragraph.children) {
-    if (child.type !== 'text') continue;
-    const updated = child.value.replace(CALLOUT_MARKER, '').trimStart();
-    if (updated !== child.value) {
-      child.value = updated;
-      stripped = true;
-      break;
+  // Only scan remaining text nodes for a callout marker when the marker
+  // was not already removed as a linkReference or bracket-text pattern above.
+  // Running this unconditionally would strip leading spaces from body text
+  // nodes (e.g. " branch." → "branch.").
+  if (!stripped) {
+    for (const child of paragraph.children) {
+      if (child.type !== 'text') continue;
+      const updated = child.value.replace(CALLOUT_MARKER, '').replace(/^[^\S\n]+/, '');
+      if (updated !== child.value) {
+        child.value = updated;
+        stripped = true;
+        break;
+      }
     }
   }
 
@@ -189,6 +195,13 @@ const splitParagraphAtNewline = (paragraph, fallbackTitle) => {
   for (const child of paragraph.children) {
     if (split) {
       bodyChildren.push(child);
+      continue;
+    }
+
+    // mdsvex may represent line breaks as break/softBreak nodes
+    // instead of \n characters inside text nodes.
+    if (child.type === 'break') {
+      split = true;
       continue;
     }
 
@@ -242,20 +255,55 @@ export default function remarkCallouts() {
       const match = CALLOUT_PATTERN.exec(text);
       if (!match) return;
 
-      const [, rawVariant, foldIndicator, rawTitle] = match;
+      const [, rawVariant, foldIndicator] = match;
       const variant = normalizeVariant(rawVariant);
       const foldable = foldIndicator === '+' || foldIndicator === '-';
       const defaultOpen = foldIndicator === '+';
-      const fallbackTitle = rawTitle.trim() || toTitle(rawVariant);
+      const fallbackTitle = toTitle(rawVariant);
       const variantClasses = variationColors[variant] ?? variationColors.note;
 
       stripMarkerFromParagraph(firstChild, fallbackTitle);
-      const bodyParagraph = splitParagraphAtNewline(firstChild, fallbackTitle);
+      let bodyParagraph = splitParagraphAtNewline(firstChild, fallbackTitle);
+
+      // When the newline split failed, check if the first remaining child in
+      // the paragraph is empty text or a break node — this means the callout
+      // marker was on its own line and the remaining children are body content.
+      // mdsvex can represent the line break as a break node, a space, or strip
+      // it entirely, so splitParagraphAtNewline may not find a split point.
+      if (!bodyParagraph && firstChild.children.length > 0) {
+        const first = firstChild.children[0];
+        const markerWasAlone =
+          first.type === 'break' || (first.type === 'text' && !first.value.trim());
+
+        if (markerWasAlone) {
+          const bodyChildren = firstChild.children.filter((child) => {
+            if (child.type === 'text' && !child.value.trim()) return false;
+            if (child.type === 'break') return false;
+            return true;
+          });
+          if (bodyChildren.length) {
+            bodyParagraph = { type: 'paragraph', children: bodyChildren };
+            /** @type {Text} */
+            const textNode = { type: 'text', value: toTitle(rawVariant) };
+            firstChild.children = [textNode];
+          }
+        }
+      }
+
       if (bodyParagraph) {
         node.children.splice(1, 0, bodyParagraph);
       }
 
-      applyClasses(firstChild, [TITLE_CLASS]);
+      // Check if the title paragraph is just the fallback (variant name).
+      // If so, the author didn't provide an explicit title — remove the
+      // title paragraph entirely and let the body stand on its own.
+      const titleText = toString(firstChild).trim();
+      if (titleText === fallbackTitle) {
+        node.children.shift();
+      } else {
+        applyClasses(firstChild, [TITLE_CLASS]);
+      }
+
       applyClasses(node, [BASE_CLASSES, variantClasses]);
 
       const data = getHastData(node);

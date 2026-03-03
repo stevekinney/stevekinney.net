@@ -60,8 +60,25 @@ const mdsvexOptions = {
 
   highlight: {
     highlighter: async (code, lang = 'text', metastring) => {
-      if (!lang) return code;
-      if (!(lang in bundledLanguages)) return code;
+      if (!lang) lang = 'text';
+
+      const classes = [
+        'bg-[#011627]',
+        'not-prose',
+        'overflow-x-scroll',
+        'rounded-md',
+        'border-2',
+        'border-slate-800',
+        'p-4',
+        'not-last:mb-4',
+      ];
+
+      // Languages not supported by Shiki (e.g. "text") get a plain <pre>
+      // wrapper so whitespace and newlines are preserved.
+      if (!(lang in bundledLanguages)) {
+        const escaped = escapeSvelte(code);
+        return `<div class="${classes.join(' ')}" data-language="${lang}" data-metastring="${metastring}"><pre style="background:transparent;margin:0;padding:0"><code>${escaped}</code></pre></div>`;
+      }
 
       // Create cache key
       const cacheKey = `${lang}:${code}`;
@@ -75,17 +92,6 @@ const mdsvexOptions = {
           theme: 'night-owl',
         }),
       ).replace(/\stabindex="[^"]*"/g, '');
-
-      const classes = [
-        'bg-[#011627]',
-        'not-prose',
-        'overflow-x-scroll',
-        'rounded-md',
-        'border-2',
-        'border-slate-800',
-        'p-4',
-        'not-last:mb-4',
-      ];
 
       const result = `<div class="${classes.join(' ')}" data-language="${lang}" data-metastring="${metastring}">${html}</div>`;
       highlightCache.set(cacheKey, result);

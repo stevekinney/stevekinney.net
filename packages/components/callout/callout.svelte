@@ -59,7 +59,7 @@
 
   /** Base container classes with variant-specific styling. */
   const containerClass = $derived(
-    merge('space-y-2 rounded-md border p-4 shadow-sm', getVariationColor(variant), className),
+    merge('space-y-2 rounded-md border px-4 py-2 shadow-sm', getVariationColor(variant), className),
   );
 
   /** Header styles for the callout title area. */
