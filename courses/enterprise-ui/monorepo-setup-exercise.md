@@ -60,6 +60,54 @@ Same time. Same output. Every package rebuilt even though nothing changed. pnpm'
 
 You've run `pnpm -r build` twice and both runs took roughly the same time. There is no caching, no dependency ordering, no parallelization.
 
+## How Turborepo Orchestrates Builds
+
+Turborepo reads the dependency graph from your `package.json` files and uses the `^` prefix in `dependsOn` to determine build order. Packages at the same depth build in parallel. The cache stores outputs keyed by a hash of each package's inputs.
+
+```mermaid
+graph TD
+    Shared["@pulse/shared"]
+    UI["@pulse/ui"]
+    Analytics["@pulse/analytics"]
+    Users["@pulse/users"]
+    Dashboard["@pulse/dashboard"]
+
+    Dashboard --> Analytics
+    Dashboard --> Users
+    Dashboard --> UI
+    Dashboard --> Shared
+    Analytics --> UI
+    Analytics --> Shared
+    Users --> UI
+    Users --> Shared
+    UI --> Shared
+```
+
+```mermaid
+flowchart LR
+    subgraph Inputs
+        Src["Source Files"]
+        Deps["Dependency Hashes"]
+        Env["Environment Variables"]
+        Lock["Lockfile Entries"]
+        Config["turbo.json Task Config"]
+    end
+
+    Hash["Content Hash"]
+    Cache{{"Cache Lookup"}}
+    Hit["Cache Hit → Restore dist/ + replay logs"]
+    Miss["Cache Miss → Execute build → Store in cache"]
+
+    Src --> Hash
+    Deps --> Hash
+    Env --> Hash
+    Lock --> Hash
+    Config --> Hash
+    Hash --> Cache
+    Cache -->|"match"| Hit
+    Cache -->|"no match"| Miss
+```
+
 ## Install Turborepo and Create `turbo.json`
 
 Install Turborepo as a dev dependency at the workspace root:
@@ -68,7 +116,7 @@ Install Turborepo as a dev dependency at the workspace root:
 pnpm add -Dw turbo
 ```
 
-Create a `turbo.json` file at the root of the repository:
+Create `turbo.json` at the root of the repository:
 
 ```json
 {
@@ -110,17 +158,17 @@ Create a `turbo.json` file at the root of the repository:
 
 ## Update Root `package.json` Scripts
 
-Open the root `package.json` and update the scripts to use Turborepo:
+Open the root `package.json` and replace the existing `scripts` section. The old scripts ran pnpm commands directly—the new ones delegate to Turborepo:
 
-```json
+```jsonc
 {
   "scripts": {
-    "build": "turbo build",
-    "typecheck": "turbo typecheck",
-    "lint": "turbo lint",
-    "test": "turbo test",
-    "dev": "turbo dev"
-  }
+    "build": "turbo build", // CHANGED: was "pnpm -r build"
+    "typecheck": "turbo typecheck", // CHANGED: was "pnpm -r typecheck"
+    "lint": "turbo lint", // CHANGED: was "pnpm -r lint"
+    "test": "turbo test", // CHANGED: was "pnpm -r test"
+    "dev": "turbo dev", // CHANGED: was "pnpm -r dev"
+  },
 }
 ```
 
@@ -141,6 +189,7 @@ Watch the output. Turborepo prints each task as it runs, showing the dependency 
 
 ```
 @pulse/shared:build: cache miss, executing
+@pulse/legacy:build: cache miss, executing
 @pulse/ui:build: cache miss, executing
 @pulse/analytics:build: cache miss, executing
 @pulse/users:build: cache miss, executing
@@ -159,13 +208,14 @@ Now the output is different:
 
 ```
 @pulse/shared:build: cache hit, replaying logs
+@pulse/legacy:build: cache hit, replaying logs
 @pulse/ui:build: cache hit, replaying logs
 @pulse/analytics:build: cache hit, replaying logs
 @pulse/users:build: cache hit, replaying logs
 @pulse/dashboard:build: cache hit, replaying logs
 
- Tasks:    5 successful, 5 total
-Cached:    5 cached, 5 total
+ Tasks:    6 successful, 6 total
+Cached:    6 cached, 6 total
   Time:    103ms >>> FULL TURBO
 ```
 
@@ -177,6 +227,10 @@ Every task shows "cache hit." The total time drops to under a second. `FULL TURB
 ### Checkpoint
 
 `pnpm turbo build` on a clean cache builds everything. The second run shows `FULL TURBO` and completes in under a second.
+
+![First turbo build showing cache misses for all packages](assets/exercise-03-turbo-cache-miss.png)
+
+![Second turbo build showing FULL TURBO with all cache hits](assets/exercise-03-turbo-full-turbo.png)
 
 ## Observe Partial Rebuilds
 
@@ -248,20 +302,13 @@ This generates a graph showing only the subgraph relevant to `@pulse/analytics` 
 
 You can visualize the dependency graph and identify which packages are upstream and downstream of any given package.
 
+![Turborepo dependency graph visualization](assets/exercise-03-dependency-graph.png)
+
 ## Stretch Goals
 
 - **Filter builds:** Run `pnpm turbo build --filter=@pulse/analytics...` to build only analytics and its dependencies. Compare the task count to a full build.
 - **Dry run:** Run `pnpm turbo build --dry-run=json` to see exactly what Turborepo would execute without running anything. Inspect the JSON output to understand the hash computation.
 - **Environment variables:** Add an environment variable to the `build` task's `env` key in `turbo.json` and observe that changing the variable invalidates the cache.
-
-## Solution
-
-If you need to catch up, the completed state for this exercise is available on the `04-typescript-start` branch:
-
-```bash
-git checkout 04-typescript-start
-pnpm install
-```
 
 ## What's Next
 

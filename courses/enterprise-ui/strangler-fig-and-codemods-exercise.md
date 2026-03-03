@@ -76,9 +76,25 @@ Compare with `packages/analytics/src/analytics-dashboard.tsx`. Same product feat
 
 You understand the structural differences between the legacy and modern apps. The legacy app has no package boundaries, no shared types, and no design system integration.
 
+![Legacy application with inline styles and flat structure](assets/exercise-08-legacy-app.png)
+
+![Modern application with package-based architecture](assets/exercise-08-modern-app.png)
+
 ## Set Up the Routing Strangler Fig
 
 The strangler fig pattern works by placing a routing layer in front of both apps. New paths go to the modern app, legacy paths go to the legacy app. Over time, you move paths from legacy to modern until the legacy app has no routes left.
+
+```mermaid
+flowchart TD
+    User["User Browser"]
+    Proxy["Vite Dev Server (Port 5173)"]
+    Modern["Modern Dashboard App"]
+    Legacy["Legacy App (Port 5174)"]
+
+    User -->|"all requests"| Proxy
+    Proxy -->|"/legacy/*"| Legacy
+    Proxy -->|"everything else"| Modern
+```
 
 > [!NOTE] The strangler fig pattern
 > The strangler fig pattern is named after the strangler fig tree, which grows by wrapping itself around a host tree. In nature, a strangler fig seed germinates in the canopy of an existing tree, sends roots down to the ground, and gradually envelops the host trunk with its own root structure. Over years, the fig's roots thicken and fuse until they form a self-supporting lattice, and the original host tree — no longer needed — decays away. Martin Fowler borrowed this metaphor for software migration: instead of rewriting a legacy system from scratch (a notoriously risky approach), you build the new system around the old one, routing traffic to the new system one endpoint or feature at a time. The old system continues to serve any routes that have not been migrated yet, and it shrinks incrementally until it handles no traffic at all and can be safely removed. The pattern is valuable precisely because it eliminates the "big bang" cutover — at every point during the migration, you have a working system, and each individual migration step is small enough to review, test, and revert independently.
@@ -94,6 +110,9 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
+    // NEW: Forward any request starting with /legacy to the legacy app's dev server.
+    // This is the strangler fig routing layer—the modern app decides which requests
+    // it handles and which get proxied to the legacy app.
     proxy: {
       '/legacy': {
         target: 'http://localhost:5174',
@@ -115,7 +134,7 @@ export default defineConfig({
   server: {
     port: 5174,
   },
-  base: '/legacy/', // Add this line
+  base: '/legacy/', // NEW: Serve all assets under /legacy/ so the proxy routing works correctly.
 });
 ```
 
@@ -147,18 +166,24 @@ Take the legacy analytics view and replace it with the modern `@pulse/analytics`
 
 The legacy analytics route is at `/legacy/analytics`. You want to move it so that `/analytics` (or `/`) serves the modern version. This is already the case — the modern dashboard's router handles `/` with the analytics route. The strangler fig means users who bookmarked `/legacy/analytics` should eventually be redirected to `/`.
 
-Add a redirect in the legacy app for the migrated route. Open `apps/legacy/src/legacy-app.tsx` and replace the analytics component with a redirect notice:
+Add a redirect in the legacy app for the migrated route. Replace the full `LegacyApp` component with a version that redirects migrated routes. The component used to render navigation and the `LegacyAnalytics` component—now it checks the URL path and redirects `/legacy/analytics` to the modern app at `/`.
+
+Open `apps/legacy/src/legacy-app.tsx` and replace the component:
 
 ```typescript
+// CHANGED: The entire component body is replaced with routing logic.
+// Previously this rendered the full legacy UI with navigation and LegacyAnalytics.
 export function LegacyApp() {
   const path = window.location.pathname;
 
+  // NEW: Redirect the migrated analytics route to the modern app.
+  // Users who bookmarked /legacy/analytics will be sent to / automatically.
   if (path === "/legacy/analytics") {
-    // This route has been migrated to the modern app
     window.location.href = "/";
     return <p>Redirecting to modern analytics...</p>;
   }
 
+  // CHANGED: The legacy app no longer renders analytics—just a stub for remaining routes.
   return (
     <div style={{ fontFamily: "sans-serif", padding: "20px" }}>
       <h1 style={{ color: "#333" }}>Pulse (Legacy)</h1>
@@ -184,6 +209,21 @@ The analytics route is fully migrated. Legacy analytics redirects to the modern 
 ## Write a jscodeshift Codemod
 
 The legacy app has import patterns that need to be transformed for the modern architecture. You're going to write a codemod that automates this.
+
+A codemod parses source code into an Abstract Syntax Tree, finds nodes that match a pattern, replaces them with new nodes, and prints the modified tree back to source code.
+
+```mermaid
+flowchart LR
+    Source["Source Code"]
+    Parse["Parser (tsx)"]
+    AST["Abstract Syntax Tree"]
+    Find["Find: ImportDeclaration\nfrom './legacy-*'"]
+    Replace["Replace with:\n@pulse/analytics\n@pulse/ui"]
+    Print["Print to Source"]
+    Output["Transformed Code"]
+
+    Source --> Parse --> AST --> Find --> Replace --> Print --> Output
+```
 
 Open `codemods/src/migrate-legacy-import.ts`. It contains a stub:
 
@@ -212,7 +252,7 @@ And transform them to:
 import { Chart } from '@pulse/analytics';
 ```
 
-Here's the implementation:
+Replace the stub in `codemods/src/migrate-legacy-import.ts` with this implementation:
 
 ```typescript
 import type { API, FileInfo } from 'jscodeshift';
@@ -338,6 +378,8 @@ pnpm turbo typecheck
 
 The codemod transforms legacy imports to modern package imports. The diff shows clean, expected changes.
 
+![Git diff showing codemod import transformations](assets/exercise-08-codemod-diff.png)
+
 ## Write Codemod Tests
 
 Open `codemods/src/__tests__/migrate-legacy-import.test.ts` and add test cases:
@@ -405,20 +447,13 @@ pnpm --filter codemods test
 
 Codemod tests pass. Each test verifies a specific transformation scenario. Edge cases are covered.
 
+![Codemod test results showing all tests passing](assets/exercise-08-codemod-tests.png)
+
 ## Stretch Goals
 
 - **Handle aliased imports:** Extend the codemod to handle `import { LegacyChart as MyChart } from "./legacy-chart"` and preserve the alias: `import { Chart as MyChart } from "@pulse/analytics"`.
 - **Dry-run mode:** Run the codemod with `--dry` to see which files would be modified without actually changing them. Use this in CI to verify that no unmigrated legacy imports remain.
 - **Add a second codemod:** Write a codemod that transforms inline styles (`style={{ color: "#333" }}`) to Tailwind CSS classes (`className="text-gray-700"`). This is a harder transform because it requires a mapping from CSS properties to Tailwind classes.
-
-## Solution
-
-If you want to see the fully completed workshop, the solution is available:
-
-```bash
-git checkout solution
-pnpm install
-```
 
 ## What's Next
 

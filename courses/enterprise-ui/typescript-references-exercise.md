@@ -60,6 +60,29 @@ Turborepo caches the result, so the second run is fast. But this is Turborepo's 
 
 You've measured the baseline typecheck time. Every package checks independently with no incremental state.
 
+## How Project References Work
+
+TypeScript project references create a build graph that mirrors your package dependencies. Each package generates `.d.ts` declaration files that downstream packages read instead of re-parsing source. When an upstream package's declarations haven't changed, downstream packages skip their recheck entirely.
+
+```mermaid
+graph TD
+    Shared["@pulse/shared\ncomposite → .d.ts + .tsbuildinfo"]
+    UI["@pulse/ui\nreferences: shared"]
+    Analytics["@pulse/analytics\nreferences: ui, shared"]
+    Users["@pulse/users\nreferences: ui, shared"]
+    Dashboard["apps/dashboard\nreferences: all packages"]
+
+    Dashboard --> Analytics
+    Dashboard --> Users
+    Dashboard --> UI
+    Dashboard --> Shared
+    Analytics --> UI
+    Analytics --> Shared
+    Users --> UI
+    Users --> Shared
+    UI --> Shared
+```
+
 ## Add `composite: true` to Each Package
 
 The `composite` flag tells TypeScript that this project is part of a larger build and should generate the metadata needed for incremental compilation.
@@ -79,16 +102,16 @@ Open `packages/shared/tsconfig.json`. It should look something like:
 
 Add `"composite": true` and `"declaration": true` to `compilerOptions`:
 
-```json
+```jsonc
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
-    "declaration": true,
+    "composite": true, // NEW: Marks this project as part of a composite build.
+    "declaration": true, // NEW: Generates .d.ts files for downstream packages to read.
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
   },
-  "include": ["src"]
+  "include": ["src"],
 }
 ```
 
@@ -97,6 +120,8 @@ Add `"composite": true` and `"declaration": true` to `compilerOptions`:
 
 > [!NOTE] Declaration files
 > A `.d.ts` file contains the type signatures of every exported function, class, interface, and variable, but no implementation code — no function bodies, no expressions, no runtime logic. When TypeScript type-checks a file that imports from another package, it reads the declaration file instead of re-parsing and re-analyzing the full source code. This is dramatically faster because declaration files are smaller and already fully resolved — no type inference needed. In a monorepo with `composite: true`, TypeScript generates these declaration files automatically and uses them as the "contract" between projects: if a declaration file has not changed since the last build, downstream projects can skip rechecking entirely.
+
+The `"composite": true` and `"declaration": true` lines are the only changes—everything else in each `tsconfig.json` stays the same.
 
 Repeat for every package. Add `"composite": true` and `"declaration": true` to:
 
@@ -129,70 +154,76 @@ References tell TypeScript which other projects a package depends on. This mirro
 
 `packages/ui/tsconfig.json` references `@pulse/shared`:
 
-```json
+```jsonc
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
   },
   "include": ["src"],
-  "references": [{ "path": "../shared" }]
+  "references": [{ "path": "../shared" }], // NEW: Tells tsc that @pulse/ui depends on @pulse/shared.
 }
 ```
 
 `packages/analytics/tsconfig.json` references `@pulse/ui` and `@pulse/shared`:
 
-```json
+```jsonc
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
   },
   "include": ["src"],
-  "references": [{ "path": "../ui" }, { "path": "../shared" }]
+  "references": [
+    { "path": "../ui" }, // NEW: @pulse/analytics imports from @pulse/ui.
+    { "path": "../shared" }, // NEW: @pulse/analytics imports from @pulse/shared.
+  ],
 }
 ```
 
 `packages/users/tsconfig.json` gets the same references as analytics:
 
-```json
+```jsonc
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
   },
   "include": ["src"],
-  "references": [{ "path": "../ui" }, { "path": "../shared" }]
+  "references": [
+    { "path": "../ui" }, // NEW: @pulse/users imports from @pulse/ui.
+    { "path": "../shared" }, // NEW: @pulse/users imports from @pulse/shared.
+  ],
 }
 ```
 
 `apps/dashboard/tsconfig.json` references all packages:
 
-```json
+```jsonc
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
   },
   "include": ["src"],
   "references": [
-    { "path": "../../packages/analytics" },
+    { "path": "../../packages/analytics" }, // NEW: Dashboard imports from all four packages.
     { "path": "../../packages/users" },
     { "path": "../../packages/ui" },
-    { "path": "../../packages/shared" }
-  ]
+    { "path": "../../packages/shared" },
+  ],
 }
 ```
 
@@ -201,18 +232,18 @@ References tell TypeScript which other projects a package depends on. This mirro
 
 ## Create a Root Build Configuration
 
-Create or update the root `tsconfig.json` so `tsc --build` knows about all projects:
+Create or update `tsconfig.json` at the repository root so `tsc --build` knows about all projects:
 
-```json
+```jsonc
 {
-  "files": [],
+  "files": [], // No files to compile here—this is just an entry point for tsc --build.
   "references": [
     { "path": "packages/shared" },
     { "path": "packages/ui" },
     { "path": "packages/analytics" },
     { "path": "packages/users" },
-    { "path": "apps/dashboard" }
-  ]
+    { "path": "apps/dashboard" },
+  ],
 }
 ```
 
@@ -251,7 +282,30 @@ The second run should be noticeably faster. TypeScript reads each `.tsbuildinfo`
 
 `tsc --build` completes successfully. Each package has a `.tsbuildinfo` file. The second run is faster because TypeScript uses incremental state.
 
+![First tsc --build run processing all projects](assets/exercise-04-tsc-build-first-run.png)
+
+![Subsequent tsc --build run with incremental checking](assets/exercise-04-tsc-build-incremental.png)
+
 ## Test Incremental Rechecking
+
+When you change a type in `@pulse/shared`, the cascade flows through the reference graph. Only packages with a dependency path to the changed package get rechecked — everything else is skipped.
+
+```mermaid
+flowchart TD
+    Change["Change User interface\nin @pulse/shared"]
+    Shared["@pulse/shared\n.d.ts output changes"]
+    UI["@pulse/ui\nreads shared .d.ts"]
+    Analytics["@pulse/analytics\nreads shared + ui .d.ts"]
+    Users["@pulse/users\nreads shared + ui .d.ts"]
+    Dashboard["apps/dashboard\nreads all .d.ts"]
+
+    Change --> Shared
+    Shared -->|".d.ts changed"| UI
+    Shared -->|".d.ts changed"| Analytics
+    Shared -->|".d.ts changed"| Users
+    UI --> Dashboard
+    Analytics --> Dashboard
+```
 
 Open `packages/shared/src/types.ts` and add a new field to the `User` interface:
 
@@ -303,15 +357,6 @@ Changing a type in `@pulse/shared` causes all downstream packages to recheck. Ch
 - **Measure the speedup:** Add 10 more interfaces to `@pulse/shared/src/types.ts`, run `tsc --build` to populate the cache, then change one interface and run `tsc --build --verbose` again. With more projects and more types, the incremental speedup becomes more dramatic.
 - **`declarationMap`:** Add `"declarationMap": true` to `compilerOptions`. This generates `.d.ts.map` files that let your editor "Go to Definition" on a type from `@pulse/shared` and jump to the actual `.ts` source, not the `.d.ts` output.
 - **Path aliases:** Configure path aliases in `tsconfig.base.json` so `@pulse/shared` resolves cleanly without relative paths. Check that both `tsc --build` and Vite resolve the aliases correctly.
-
-## Solution
-
-If you need to catch up, the completed state for this exercise is available on the `05-linting-start` branch:
-
-```bash
-git checkout 05-linting-start
-pnpm install
-```
 
 ## What's Next
 

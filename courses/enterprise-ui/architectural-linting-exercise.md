@@ -71,25 +71,52 @@ Remove both imports. You're about to make the linter catch them.
 
 You've confirmed that cross-package internal imports and circular dependencies compile and lint without errors. The architecture is unenforced.
 
+## The Allowed Dependency Graph
+
+The boundary rules encode a directed graph of allowed imports. Element types define categories of code, and rules define which types can import from which. Arrows represent allowed import directions — anything not shown is denied by default.
+
+```mermaid
+graph TD
+    Test["test"]
+    App["app"]
+    Mock["mock"]
+    Package["package"]
+
+    Test -->|"allowed"| App
+    Test -->|"allowed"| Package
+    Test -->|"allowed"| Mock
+    App -->|"allowed"| Package
+    App -->|"allowed"| Mock
+    Mock -->|"allowed"| Package
+    Package -->|"allowed"| Package
+
+    App x-.-x|"denied"| App
+    Package x-.-x|"denied"| App
+    Package x-.-x|"denied"| Mock
+```
+
 ## Configure Element Types
 
-Open `eslint.config.js`. It should have basic ESLint configuration but no boundaries rules. You're going to add the boundaries plugin and define the element types that make up your architecture.
+Open the root `eslint.config.js`. It should have basic ESLint configuration but no boundaries rules. You're going to add the boundaries plugin and define the element types that make up your architecture.
 
-Import the boundaries plugin at the top of the file:
+Import the boundaries plugin at the top of `eslint.config.js`:
 
 ```javascript
 import boundaries from 'eslint-plugin-boundaries';
 ```
 
-Add a configuration object with the plugin and element type settings:
+Add a configuration object to `eslint.config.js` with the plugin and element type settings:
 
 ```javascript
 export default [
-  // ... existing config entries
+  // ... existing config entries (keep these in place)
   {
+    // NEW: Register the boundaries plugin so ESLint knows about its rules.
     plugins: {
       boundaries,
     },
+    // NEW: Define the architectural vocabulary—what categories of code exist
+    // in this repo and which files belong to which category.
     settings: {
       'boundaries/elements': [
         { type: 'app', pattern: 'apps/*' },
@@ -103,7 +130,7 @@ export default [
 ];
 ```
 
-Then add the import resolver configuration so the boundaries plugin can map `@pulse/analytics` to `packages/analytics`. Without this, the plugin can't determine which element type an import belongs to and silently skips enforcement:
+Then add the import resolver configuration to the same object in `eslint.config.js` so the boundaries plugin can map `@pulse/analytics` to `packages/analytics`. Without this, the plugin can't determine which element type an import belongs to and silently skips enforcement:
 
 ```javascript
 {
@@ -111,6 +138,8 @@ Then add the import resolver configuration so the boundaries plugin can map `@pu
     boundaries,
   },
   settings: {
+    // NEW: The import resolver maps package specifiers like "@pulse/analytics"
+    // to actual file paths so the boundaries plugin can classify them.
     "import/resolver": {
       typescript: {
         project: "./tsconfig.base.json",
@@ -138,7 +167,7 @@ Then add the import resolver configuration so the boundaries plugin can map `@pu
 
 ## Define Allowed Dependencies
 
-Add the `boundaries/element-types` rule to define which element types are allowed to import from which:
+Add the `boundaries/element-types` rule to the same configuration object in `eslint.config.js` to define which element types are allowed to import from which:
 
 ```javascript
 {
@@ -159,11 +188,12 @@ Add the `boundaries/element-types` rule to define which element types are allowe
     ],
     "boundaries/ignore": ["**/*.test.*", "**/*.spec.*"],
   },
+  // NEW: These rules encode the allowed dependency directions.
   rules: {
     "boundaries/element-types": [
       "error",
       {
-        default: "disallow",
+        default: "disallow",  // Deny by default—only explicitly allowed imports pass.
         rules: [
           { from: "app", allow: ["package", "mock"] },
           { from: "package", allow: ["package"] },
@@ -230,6 +260,8 @@ Remove the violation.
 
 The element-type rules are configured. Run `pnpm turbo lint` and confirm all packages pass with no violations (after removing the test imports).
 
+![Lint output showing a boundary violation error](assets/exercise-05-lint-boundary-error.png)
+
 ## Add the `no-private` Rule
 
 The element-type rules enforce the dependency graph between packages. But they don't prevent reaching into a package's internals. You can still do:
@@ -240,7 +272,7 @@ import { StatsBar } from '@pulse/analytics/src/stats-bar';
 
 This bypasses the public API defined in `@pulse/analytics/src/index.ts`. Add a rule to prevent it.
 
-Add `boundaries/no-private` to the rules object:
+Add `boundaries/no-private` to the rules object in `eslint.config.js`:
 
 ```javascript
 rules: {
@@ -256,7 +288,7 @@ rules: {
       ],
     },
   ],
-  "boundaries/no-private": ["error"],
+  "boundaries/no-private": ["error"],  // NEW: Flags imports that bypass a package's public API.
 },
 ```
 
@@ -350,20 +382,13 @@ export default [
 
 The complete boundary configuration is in place. Apps can import from packages. Packages can import from other packages. No one can import private internals. The architecture is encoded in tooling.
 
+![Clean lint output with no boundary violations](assets/exercise-05-lint-clean.png)
+
 ## Stretch Goals
 
 - **Banned external imports:** Add an ESLint rule that prevents any package except `@pulse/shared` from importing `lodash` directly. All utility usage must go through shared wrappers. This is how you prevent 12 versions of lodash across your monorepo.
 - **`boundaries/entry-point` rule:** Configure entry point restrictions so that `@pulse/analytics` can only be imported via its top-level package name, not via subpaths like `@pulse/analytics/src/index`.
 - **Custom rule for `displayName`:** Write a simple ESLint rule that requires all exported React components to have a `displayName` property. This helps with debugging in React DevTools and error boundaries.
-
-## Solution
-
-If you need to catch up, the completed state for this exercise is available on the `06-cicd-start` branch:
-
-```bash
-git checkout 06-cicd-start
-pnpm install
-```
 
 ## What's Next
 
