@@ -165,8 +165,8 @@ References tell TypeScript which other projects a package depends on. This mirro
     "rootDir": "./src",
   },
   "include": ["src"],
-  "references": [{ "path": "../shared" }],
   // [!note Declares the TypeScript-level dependency on @pulse/shared.]
+  "references": [{ "path": "../shared" }],
 }
 ```
 
@@ -184,8 +184,8 @@ References tell TypeScript which other projects a package depends on. This mirro
   "include": ["src"],
   "references": [
     { "path": "../ui" },
-    { "path": "../shared" },
     // [!note Mirror the dependencies from package.json so tsc builds in the right order.]
+    { "path": "../shared" },
   ],
 }
 ```
@@ -204,8 +204,8 @@ References tell TypeScript which other projects a package depends on. This mirro
   "include": ["src"],
   "references": [
     { "path": "../ui" },
-    { "path": "../shared" },
     // [!note Same references as analytics — both feature packages depend on ui and shared.]
+    { "path": "../shared" },
   ],
 }
 ```
@@ -226,8 +226,8 @@ References tell TypeScript which other projects a package depends on. This mirro
     { "path": "../../packages/analytics" },
     { "path": "../../packages/users" },
     { "path": "../../packages/ui" },
-    { "path": "../../packages/shared" },
     // [!note The dashboard references all four packages since it imports from each one.]
+    { "path": "../../packages/shared" },
   ],
 }
 ```

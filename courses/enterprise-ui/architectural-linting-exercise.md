@@ -285,8 +285,8 @@ rules: {
       ],
     },
   ],
-  "boundaries/no-private": ["error"],
   // [!note Prevents deep imports that bypass a package's public API.]
+  "boundaries/no-private": ["error"],
 },
 ```
 

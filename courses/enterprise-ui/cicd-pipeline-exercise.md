@@ -140,7 +140,7 @@ The behavior change is significant. Without remote caching, the first CI run aft
 
 When test suites grow, running them sequentially becomes a bottleneck. Add a second job to `.github/workflows/ci.yml`—a matrix strategy that runs each package's tests in its own parallel job:
 
-```yaml title=".github/workflows/ci.yml" {2-4,14}
+```yaml title=".github/workflows/ci.yml" {2-5}
 test:
   runs-on: ubuntu-latest
   strategy:

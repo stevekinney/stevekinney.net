@@ -12,7 +12,11 @@ Most pages are not fully interactive applications. A product page, article, docs
 
 **Island Architecture** is an HTML-first rendering pattern where most of the page is rendered as static or server-rendered HTML, and only the small interactive regions get JavaScript and hydrate independently. The term traces back to Katie Sylor-Miller and was popularized by [Jason Miller's write-up][3], which framed the page as a mostly static document with a few self-contained "islands" of interactivity. Astro later pushed the pattern into the mainstream, but the idea is broader than any one framework.
 
+Or, in less diplomatic terms: islands stop shipping a whole frontend cathedral so one carousel can rotate.
+
 ## A Super Naïve Version
+
+This is more conceptual than practical. Bear with me.
 
 ```html
 <h1>Mostly HTML</h1>
@@ -35,7 +39,6 @@ Most pages are not fully interactive applications. A product page, article, docs
 We could have an HTML page like this.
 
 ```html
-<!-- index.html -->
 <!doctype html>
 <html lang="en">
   <head>
@@ -63,7 +66,33 @@ We could have an HTML page like this.
 </html>
 ```
 
-Or, in less diplomatic terms: islands stop shipping a whole frontend cathedral so one carousel can rotate.
+And then our ridiculous JavaScript might look like this…
+
+```tsx
+import React, { useState } from 'react';
+import { createRoot } from 'react-dom/client';
+
+function Counter({ label }: { label: string }) {
+  const [count, setCount] = useState(0);
+  return (
+    <button type="button" onClick={() => setCount((c) => c + 1)}>
+      {label}: {count}
+    </button>
+  );
+}
+
+function mount(id: string, el: React.ReactNode) {
+  const node = document.getElementById(id);
+  if (!node) return; // page might not include every island
+  createRoot(node).render(el);
+}
+
+mount('island-a', <Counter label="A clicks" />);
+mount('island-b', <Counter label="B clicks" />);
+mount('island-c', <Counter label="C clicks" />);
+```
+
+None of this is _really_ how it works. I'm just trying to make it simple.
 
 ## How It Works
 

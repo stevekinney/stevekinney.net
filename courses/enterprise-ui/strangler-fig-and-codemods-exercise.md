@@ -123,7 +123,7 @@ export default defineConfig({
 
 Next, add the base path to the legacy app's dev server. Open `apps/legacy/vite.config.ts` and add `base: "/legacy/"`:
 
-```typescript title="apps/legacy/vite.config.ts" {7}
+```typescript title="apps/legacy/vite.config.ts" {9}
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 

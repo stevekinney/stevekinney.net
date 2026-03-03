@@ -8,8 +8,6 @@ date: 2026-03-01T00:00:00.000Z
 modified: '2026-03-01T00:00:00-07:00'
 ---
 
-## What You're Doing
-
 The analytics dashboard makes three API calls at different speeds: summary stats (200ms), chart data (800ms), and activity table (2000ms). Right now, the entire page shows a single loading spinner until all three resolve. You're going to add Suspense boundaries around each section and implement `renderToPipeableStream` for streaming SSR so each section renders progressively as its data arrives.
 
 ## Why It Matters
@@ -35,7 +33,7 @@ gantt
     App Shell + Skeletons       :active, shell, 0, 200
     Stats visible + 2 loading   :active, s1, 200, 800
     Stats + Chart + 1 loading   :active, s2, 800, 2000
-    Fully loaded                :active, s3, 2000, 2100
+    Fully loaded                :active, s3\, 2000, 2100
 ```
 
 ## Refactor to Per-Component Data Fetching
