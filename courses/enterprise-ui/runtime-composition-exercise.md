@@ -32,39 +32,6 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) (the **host application**) and [http://localhost:3001](http://localhost:3001) (the **remote standalone**).
 
-## Architecture Overview
-
-Before diving into the code, here's how the host and remote connect at runtime. The host fetches the remote's manifest over the network, negotiates shared dependencies, and loads the exposed modules — all before any remote component renders.
-
-```mermaid
-graph TD
-    subgraph Host["Host Shell (Port 3000)"]
-        H_App["App Component"]
-        H_Lazy["React.lazy + Suspense"]
-        H_Auth["AuthProvider (React Context)"]
-        H_Shared["Shared Dependencies"]
-    end
-
-    subgraph Remote["Remote Analytics (Port 3001)"]
-        R_Manifest["mf-manifest.json"]
-        R_Dashboard["AnalyticsDashboard"]
-        R_Chunks["JS Chunks"]
-    end
-
-    subgraph SharedScope["Shared Scope (Runtime)"]
-        SS_React["React (singleton)"]
-        SS_Nano["nanostores (singleton)"]
-        SS_Pkg["@pulse/shared (singleton)"]
-    end
-
-    H_App --> H_Lazy
-    H_Lazy -->|"dynamic import()"| R_Manifest
-    R_Manifest -->|"resolve modules"| R_Chunks
-    R_Chunks --> R_Dashboard
-    H_Shared --> SharedScope
-    R_Dashboard --> SharedScope
-```
-
 ## Explore the Federation Setup
 
 Let's start by seeing the running application, then understand how [Module Federation](/courses/enterprise-ui/module-federation.md) connects the pieces.
@@ -381,6 +348,42 @@ The analytics dashboard now shows a green **"Viewing as: Grace Hopper"** badge i
 - [Error Boundaries and Module Federation](/courses/enterprise-ui/error-boundaries-and-federation): Stop the remote dev server, reload the host, and discover why React error boundaries can't catch federation failures.
 - [Standalone Remotes](/courses/enterprise-ui/standalone-remotes): Visit `localhost:3001` directly and understand why standalone mode is the most important developer experience decision in a federation architecture.
 
+## Runtime vs. Build-Time Composition
+
+You've now worked through the full operational cost of Module Federation. Before moving on, it's worth being honest about where that cost is and isn't justified.
+
+### Where Runtime Composition Wins
+
+**Independent deployments.** This is the only reason to reach for Module Federation. When the analytics team and the shell team ship on different schedules, runtime composition lets them deploy independently — the host fetches whatever the remote is currently serving without a coordinated release. No other composition strategy gives you this.
+
+**Technology isolation.** Because the boundary is a network contract (the manifest and exposed module paths), different remotes can use different frameworks, different React versions, or even different build tools — as long as they expose a compatible interface. You can have a React 18 host load a React 19 remote, or mix React and Vue, in ways that a shared bundle can't accommodate.
+
+**Incremental strangling.** A remote can wrap legacy code and expose it as a modern component. The host never needs to know. This makes Module Federation a practical tool for migrating large legacy applications without a big-bang rewrite — something you'll explore directly in [Exercise 9](/courses/enterprise-ui/strangler-fig-and-codemods-exercise.md).
+
+### Where It Costs You
+
+**Developer experience.** You ran two dev servers, configured manifest URLs, debugged async bootstrap errors, and wrestled with `singleton`/`eager` flags. None of that exists in a workspace monorepo. The DX tax is real and ongoing — every new developer on the team needs to understand the federation topology before they can debug effectively.
+
+**Type safety stops at the boundary.** TypeScript can't see across a remote entry. The host's `import('remoteAnalytics/analytics-dashboard')` returns `any` unless you manually maintain type stubs or use a plugin that generates them. Errors that would be caught at compile time in a monorepo become runtime failures in production.
+
+**State management becomes a constraint.** React Context, Zustand stores, Redux, and any other module-instance-dependent state library break silently across federation boundaries. You have to reach for framework-agnostic primitives — nanostores, BroadcastChannel, custom events — and declare everything shared as a singleton. It works, but it adds a layer of complexity that doesn't exist in build-time composition.
+
+**Failure modes are invisible.** When a remote fails to load, React's error boundaries can't catch the federation runtime error — you get a blank section with no visible indication of what went wrong. Debugging requires knowing to check the Network tab for the manifest request, then the console for federation runtime warnings, then the remote's standalone URL to verify it's even running.
+
+### The Decision
+
+|                              | Runtime (Federation)            | Build-Time (Workspace)   |
+| ---------------------------- | ------------------------------- | ------------------------ |
+| Independent deployments      | Yes                             | No                       |
+| Compile-time type checking   | No (manual stubs)               | Yes, across all packages |
+| Hot reload across boundaries | No (rebuild remote)             | Yes                      |
+| Cross-boundary state         | nanostores / BroadcastChannel   | React Context            |
+| Shared dependency config     | Required (`singleton`, `eager`) | None needed              |
+| Dev servers                  | One per remote + host           | One                      |
+| Debugging complexity         | High                            | Low                      |
+
+The right choice is almost always build-time composition — until it isn't. If your teams deploy on different schedules, or your codebase spans technology boundaries that can't be unified, Module Federation earns its cost. Otherwise, you're paying operational overhead for a problem you don't have.
+
 ## What's Next
 
-You've felt the operational overhead of runtime composition: two development servers, remote entry manifests, shared dependency negotiation, cross-boundary state management. The natural follow-up question is: what if you consumed this same analytics module as a regular package in a monorepo—no federation, no remote entry, no shared dependency negotiation? Same product, radically simpler architecture. That's the trade-off [build-time composition](/courses/enterprise-ui/build-time-composition-exercise.md) explores.
+You've felt what runtime composition actually costs. The natural follow-up question is: what if you consumed this same analytics module as a regular workspace package — no remote entry, no manifest, no shared dependency negotiation? Same product, radically simpler architecture. That's what [build-time composition](/courses/enterprise-ui/build-time-composition-exercise.md) explores.

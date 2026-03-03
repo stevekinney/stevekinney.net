@@ -16,23 +16,6 @@ The analytics dashboard makes three API calls at different speeds: summary stats
 
 Suspense boundaries are architectural decisions, not styling choices. Where you place them determines what the user sees while waiting, what streams in together versus independently, and how your loading states compose across package boundaries. In a monorepo with feature packages that each fetch their own data, getting this right means the difference between a responsive application and one that feels frozen for two seconds every page load.
 
-## Setup
-
-You should be continuing from where [Exercise 2](./build-time-composition-exercise.md) left off. If you need to catch up:
-
-```bash
-git checkout 02-streaming-start
-pnpm install
-```
-
-Start the dev server:
-
-```bash
-pnpm dev
-```
-
-Open [http://localhost:5173](http://localhost:5173).
-
 ## How Progressive Rendering Works
 
 With per-component data fetching and Suspense boundaries, each section renders independently as its data arrives. The timeline below shows what the user sees at each moment.
