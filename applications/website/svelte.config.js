@@ -215,7 +215,7 @@ const mdsvexOptions = {
         const wrapperClasses = title ? baseClasses : [...baseClasses, 'overflow-x-scroll', 'p-4'];
         const contentWrapper = title ? `<div class="overflow-x-auto p-4">${inner}</div>` : inner;
 
-        const result = `<div class="${wrapperClasses.join(' ')}" data-language="${lang}" data-metastring="${metastring}">${titleHtml}${contentWrapper}</div>`;
+        const result = `<div class="${wrapperClasses.join(' ')}" data-language="${lang}">${titleHtml}${contentWrapper}</div>`;
         highlightCache.set(cacheKey, result);
         return result;
       }
@@ -242,7 +242,7 @@ const mdsvexOptions = {
       const wrapperClasses = title ? baseClasses : [...baseClasses, 'overflow-x-scroll', 'p-4'];
       const contentWrapper = title ? `<div class="overflow-x-auto p-4">${html}</div>` : html;
 
-      const result = `<div class="${wrapperClasses.join(' ')}" data-language="${lang}" data-metastring="${metastring}">${titleHtml}${contentWrapper}</div>`;
+      const result = `<div class="${wrapperClasses.join(' ')}" data-language="${lang}">${titleHtml}${contentWrapper}</div>`;
       highlightCache.set(cacheKey, result);
       return result;
     },
