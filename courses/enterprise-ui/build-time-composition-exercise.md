@@ -30,7 +30,51 @@ Open [http://localhost:5173](http://localhost:5173).
 
 ## Explore the Workspace Structure
 
-Start by understanding how the monorepo is organized.
+Here's the full layout of what you're working with:
+
+```text
+enterprise-ui-workshop/
+├── apps/
+│   └── dashboard/              # The Vite + React host application
+│       └── src/
+│           ├── app.tsx
+│           ├── main.tsx
+│           ├── routes/
+│           │   ├── analytics.tsx
+│           │   ├── settings.tsx
+│           │   └── users.tsx
+│           └── shell/
+│               ├── auth-provider.tsx
+│               ├── layout.tsx
+│               └── nav.tsx
+├── packages/
+│   ├── analytics/              # @pulse/analytics — analytics feature package
+│   │   └── src/
+│   │       ├── index.ts        # Public API: exports only AnalyticsDashboard
+│   │       ├── analytics-dashboard.tsx
+│   │       ├── stats-bar.tsx
+│   │       ├── chart.tsx
+│   │       └── big-table.tsx
+│   ├── ui/                     # @pulse/ui — shared component library
+│   │   └── src/
+│   │       ├── button.tsx
+│   │       ├── card.tsx
+│   │       ├── stat-card.tsx
+│   │       ├── loading-skeleton.tsx
+│   │       └── ...
+│   ├── shared/                 # @pulse/shared — types, hooks, and utilities
+│   │   └── src/
+│   │       ├── types.ts
+│   │       ├── auth.ts
+│   │       └── api-client.ts
+│   └── users/                  # @pulse/users — user management feature package
+├── mocks/                      # MSW mock API handlers (shared across all apps)
+│   └── src/
+│       └── handlers.ts
+└── pnpm-workspace.yaml
+```
+
+The dashboard app is the only runnable application. The four packages under `packages/` are workspace dependencies — consumed via regular npm imports, resolved at build time through pnpm symlinks. `mocks/` is its own workspace package, imported by the dashboard's Vite config to intercept API calls during development.
 
 Open `pnpm-workspace.yaml` — it declares four workspace groups:
 
