@@ -73,7 +73,6 @@ Open `packages/analytics/src/stats-bar.tsx`. Right now, `StatsBar` receives `sta
 import React, { useEffect, useState } from "react";
 import type { SummaryStats } from "@pulse/shared";
 import { StatCard, LoadingSkeleton } from "@pulse/ui";
-// [!note Added useEffect, useState, and LoadingSkeleton — data previously came via props]
 
 function formatNumber(value: number): string {
   return value.toLocaleString();
@@ -92,21 +91,17 @@ function formatPercentage(value: number): string {
 }
 
 export function StatsBar(): React.ReactElement {
-// [!note The stats prop is gone — this component fetches its own data now]
   const [stats, setStats] = useState<SummaryStats | null>(null);
-  // [!note Local state replaces the prop that the parent used to pass in]
 
   useEffect(() => {
     fetch("/api/analytics/summary")
       .then((response) => response.json())
       .then(setStats);
   }, []);
-  // [!note Fetch on mount — this request previously lived in the parent's Promise.all]
-
+  // [!note Fetches summary stats on mount—the fastest API at ~200ms]
   if (!stats) {
     return <LoadingSkeleton variant="card" count={4} />;
   }
-  // [!note Show skeleton while loading — the parent no longer handles this]
 
   return (
     <div className="grid grid-cols-4 gap-4">
@@ -128,25 +123,21 @@ Open `packages/analytics/src/chart.tsx`. This component previously received its 
 import React, { useEffect, useState } from "react";
 import type { ChartDataPoint, TimeRange } from "@pulse/shared";
 import { LoadingSkeleton } from "@pulse/ui";
-// [!note Added useEffect, useState, and LoadingSkeleton — data previously came via props]
 
 export function Chart({ range = "30d" }: { range?: TimeRange }): React.ReactElement {
-// [!note Removed the data prop — kept range since it drives the fetch URL]
   const [data, setData] = useState<ChartDataPoint[] | null>(null);
-  // [!note Local state replaces the prop that the parent used to pass in]
 
   useEffect(() => {
     setData(null);
+    // [!note Reset to null so the skeleton shows while refetching]
     fetch(`/api/analytics/chart?range=${range}`)
       .then((response) => response.json())
       .then(setData);
   }, [range]);
-  // [!note Fetch chart data whenever the range changes]
-
+  // [!note Re-fetches whenever the time range changes]
   if (!data) {
     return <LoadingSkeleton variant="chart" />;
   }
-  // [!note Show skeleton while loading — the parent no longer handles this]
 
   if (data.length === 0) {
     return (
@@ -208,7 +199,6 @@ Open `packages/analytics/src/big-table.tsx`. Like the other two components, `Big
 import React, { useEffect, useState } from "react";
 import type { TableRow, PaginatedResponse } from "@pulse/shared";
 import { DataTable, LoadingSkeleton } from "@pulse/ui";
-// [!note Added useEffect, useState, and LoadingSkeleton — data previously came via props]
 
 const columns = [
   { key: "user" as const, header: "User" },
@@ -227,21 +217,17 @@ const columns = [
 ];
 
 export function BigTable(): React.ReactElement {
-// [!note The data prop is gone — this component fetches its own table rows now]
   const [data, setData] = useState<TableRow[] | null>(null);
-  // [!note Local state replaces the prop that the parent used to pass in]
 
   useEffect(() => {
     fetch("/api/analytics/table?page=1")
       .then((response) => response.json())
       .then((result: PaginatedResponse<TableRow>) => setData(result.data));
   }, []);
-  // [!note Fetch on mount — this request previously lived in the parent's Promise.all]
-
+  // [!note Fetches on mount—the slowest API at ~2000ms]
   if (!data) {
     return <LoadingSkeleton variant="table" />;
   }
-  // [!note Show skeleton while loading — the parent no longer handles this]
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6">
@@ -264,12 +250,10 @@ import { useAuth } from "@pulse/shared";
 import { StatsBar } from "./stats-bar";
 import { Chart } from "./chart";
 import { BigTable } from "./big-table";
-// [!note Removed useEffect and all API-related imports — no more data fetching here]
-
+// [!note No data-fetching imports—this component is a pure layout shell]
 export function AnalyticsDashboard(): React.ReactElement {
   const { user, isAuthenticated } = useAuth();
   const [timeRange, setTimeRange] = useState<TimeRange>("30d");
-  // [!note The Promise.all and per-dataset useState calls are gone]
 
   return (
     <div className="space-y-6">
@@ -291,7 +275,6 @@ export function AnalyticsDashboard(): React.ReactElement {
       </div>
 
       <StatsBar />
-      // [!note No data prop — StatsBar fetches its own summary data now]
 
       <div className="rounded-lg border border-gray-200 bg-white p-6">
         <div className="mb-4 flex items-center justify-between">
@@ -313,11 +296,9 @@ export function AnalyticsDashboard(): React.ReactElement {
           </div>
         </div>
         <Chart range={timeRange} />
-        // [!note No data prop — Chart fetches its own data based on the range]
       </div>
 
       <BigTable />
-      // [!note No data prop — BigTable fetches its own table rows now]
     </div>
   );
 }
@@ -393,19 +374,16 @@ import React from "react";
 import type { SummaryStats } from "@pulse/shared";
 import { createSuspenseResource } from "@pulse/shared";
 import { StatCard } from "@pulse/ui";
-// [!note Swapped useEffect/useState/LoadingSkeleton for createSuspenseResource — Suspense handles loading now]
-
+// [!note No useEffect, no useState, no LoadingSkeleton—Suspense handles all of that]
 // ... keep formatNumber, formatCurrency, formatPercentage functions ...
 
 const statsResource = createSuspenseResource<SummaryStats>(
   fetch("/api/analytics/summary").then((r) => r.json()),
 );
-// [!note Module-level resource — the fetch starts at import time, not at render time]
-
+// [!note Module-level resource—the fetch starts at import time, not at render time]
 export function StatsBar(): React.ReactElement {
   const stats = statsResource.read();
-  // [!note Throws a promise if data is not ready — React shows the Suspense fallback instead]
-
+  // [!note Throws a promise if data is not ready—React shows the Suspense fallback instead]
   return (
     <div className="grid grid-cols-4 gap-4">
       <StatCard label="Total Users" value={formatNumber(stats.totalUsers)} />
@@ -426,14 +404,12 @@ Open `packages/analytics/src/chart.tsx` again. The same three changes apply—sw
 import React from "react";
 import type { ChartDataPoint, TimeRange } from "@pulse/shared";
 import { createSuspenseResource } from "@pulse/shared";
-// [!note Swapped useEffect/useState/LoadingSkeleton for createSuspenseResource — Suspense handles loading now]
-
+// [!note No useEffect, no useState, no LoadingSkeleton—Suspense handles all of that]
 const chartCache = new Map<
   TimeRange,
   ReturnType<typeof createSuspenseResource<ChartDataPoint[]>>
 >();
 // [!note Map-based cache because the fetch URL depends on the range prop]
-
 function getChartResource(range: TimeRange) {
   if (!chartCache.has(range)) {
     chartCache.set(
@@ -453,7 +429,6 @@ export function Chart({
 }): React.ReactElement {
   const data = getChartResource(range).read();
   // [!note Throws a promise if data for this range is not ready yet]
-
   if (data.length === 0) {
     return (
       <div className="flex h-64 items-center justify-center text-gray-400">
@@ -515,8 +490,7 @@ import React from "react";
 import type { TableRow, PaginatedResponse } from "@pulse/shared";
 import { createSuspenseResource } from "@pulse/shared";
 import { DataTable } from "@pulse/ui";
-// [!note Swapped useEffect/useState/LoadingSkeleton for createSuspenseResource — Suspense handles loading now]
-
+// [!note No useEffect, no useState, no LoadingSkeleton—Suspense handles all of that]
 const columns = [
   { key: "user" as const, header: "User" },
   { key: "action" as const, header: "Action" },
@@ -538,12 +512,10 @@ const tableResource = createSuspenseResource<TableRow[]>(
     .then((r) => r.json())
     .then((result: PaginatedResponse<TableRow>) => result.data),
 );
-// [!note Module-level resource — the fetch starts at import time]
-
+// [!note Module-level resource—the fetch starts at import time]
 export function BigTable(): React.ReactElement {
   const data = tableResource.read();
-  // [!note Throws a promise if data is not ready — React shows the Suspense fallback instead]
-
+  // [!note Throws a promise if data is not ready—React shows the Suspense fallback instead]
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6">
       <h3 className="mb-4 font-medium text-gray-900">Recent Activity</h3>
@@ -565,7 +537,7 @@ Update the imports at the top of the file—add `Suspense` from React and `Loadi
 ```typescript title="packages/analytics/src/analytics-dashboard.tsx"
 import React, { Suspense, useState } from 'react';
 import { LoadingSkeleton } from '@pulse/ui';
-// [!note Added Suspense and moved LoadingSkeleton here — child components no longer handle their own loading]
+// [!note Suspense for async boundaries; LoadingSkeleton for the fallback UI]
 // ... other imports stay the same ...
 ```
 
@@ -576,7 +548,6 @@ Then wrap each child component in the JSX. Find `<StatsBar />`, `<Chart />`, and
   <StatsBar />
 </Suspense>
 // [!note Suspense catches the thrown promise from statsResource.read() and shows a skeleton]
-
 <div className="rounded-lg border border-gray-200 bg-white p-6">
   {/* ... time range buttons stay the same ... */}
   <Suspense fallback={<LoadingSkeleton variant="chart" />}>
@@ -588,7 +559,7 @@ Then wrap each child component in the JSX. Find `<StatsBar />`, `<Chart />`, and
 <Suspense fallback={<LoadingSkeleton variant="table" />}>
   <BigTable />
 </Suspense>
-// [!note Table data takes ~2000ms — its skeleton stays visible the longest]
+// [!note Table data takes ~2000ms—its skeleton stays visible the longest]
 ```
 
 Save and reload the page. Watch the rendering sequence:

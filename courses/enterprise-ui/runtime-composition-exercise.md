@@ -168,7 +168,7 @@ Now look at the analytics dashboard more carefully. Something is wrong.
 
 ### Why This Happens
 
-React Context relies on object identity — the same `createContext()` call must produce the same object on both sides. In a federation setup, separately built bundles create separate context objects, so the provider and consumer never match.
+React Context relies on object identity—the same `createContext()` call must produce the same object on both sides. In a federation setup, separately built bundles create separate context objects, so the provider and consumer never match.
 
 ```mermaid
 sequenceDiagram
@@ -181,7 +181,7 @@ sequenceDiagram
     Remote->>Context: createContext() → ContextB
     Remote->>Context: useContext(ContextB)
     Context-->>Remote: Default value (no match)
-    Note over Host,Remote: ContextA !== ContextB — different object identity
+    Note over Host,Remote: ContextA !== ContextB—different object identity
 ```
 
 Open [`host/src/shell/auth-provider.tsx`](https://github.com/stevekinney/enterprise-ui-federation/blob/main/host/src/shell/auth-provider.tsx). The host fetches the current user from `/api/users/me` and provides it via React Context:
@@ -354,21 +354,21 @@ You've now worked through the full operational cost of Module Federation. Before
 
 ### Where Runtime Composition Wins
 
-**Independent deployments.** This is the only reason to reach for Module Federation. When the analytics team and the shell team ship on different schedules, runtime composition lets them deploy independently — the host fetches whatever the remote is currently serving without a coordinated release. No other composition strategy gives you this.
+**Independent deployments.** This is the only reason to reach for Module Federation. When the analytics team and the shell team ship on different schedules, runtime composition lets them deploy independently—the host fetches whatever the remote is currently serving without a coordinated release. No other composition strategy gives you this.
 
-**Technology isolation.** Because the boundary is a network contract (the manifest and exposed module paths), different remotes can use different frameworks, different React versions, or even different build tools — as long as they expose a compatible interface. You can have a React 18 host load a React 19 remote, or mix React and Vue, in ways that a shared bundle can't accommodate.
+**Technology isolation.** Because the boundary is a network contract (the manifest and exposed module paths), different remotes can use different frameworks, different React versions, or even different build tools—as long as they expose a compatible interface. You can have a React 18 host load a React 19 remote, or mix React and Vue, in ways that a shared bundle can't accommodate.
 
-**Incremental strangling.** A remote can wrap legacy code and expose it as a modern component. The host never needs to know. This makes Module Federation a practical tool for migrating large legacy applications without a big-bang rewrite — something you'll explore directly in [Exercise 9](/courses/enterprise-ui/strangler-fig-and-codemods-exercise.md).
+**Incremental strangling.** A remote can wrap legacy code and expose it as a modern component. The host never needs to know. This makes Module Federation a practical tool for migrating large legacy applications without a big-bang rewrite—something you'll explore directly in [Exercise 9](/courses/enterprise-ui/strangler-fig-and-codemods-exercise.md).
 
 ### Where It Costs You
 
-**Developer experience.** You ran two dev servers, configured manifest URLs, debugged async bootstrap errors, and wrestled with `singleton`/`eager` flags. None of that exists in a workspace monorepo. The DX tax is real and ongoing — every new developer on the team needs to understand the federation topology before they can debug effectively.
+**Developer experience.** You ran two dev servers, configured manifest URLs, debugged async bootstrap errors, and wrestled with `singleton`/`eager` flags. None of that exists in a workspace monorepo. The DX tax is real and ongoing—every new developer on the team needs to understand the federation topology before they can debug effectively.
 
 **Type safety stops at the boundary.** TypeScript can't see across a remote entry. The host's `import('remoteAnalytics/analytics-dashboard')` returns `any` unless you manually maintain type stubs or use a plugin that generates them. Errors that would be caught at compile time in a monorepo become runtime failures in production.
 
-**State management becomes a constraint.** React Context, Zustand stores, Redux, and any other module-instance-dependent state library break silently across federation boundaries. You have to reach for framework-agnostic primitives — nanostores, BroadcastChannel, custom events — and declare everything shared as a singleton. It works, but it adds a layer of complexity that doesn't exist in build-time composition.
+**State management becomes a constraint.** React Context, Zustand stores, Redux, and any other module-instance-dependent state library break silently across federation boundaries. You have to reach for framework-agnostic primitives—nanostores, BroadcastChannel, custom events—and declare everything shared as a singleton. It works, but it adds a layer of complexity that doesn't exist in build-time composition.
 
-**Failure modes are invisible.** When a remote fails to load, React's error boundaries can't catch the federation runtime error — you get a blank section with no visible indication of what went wrong. Debugging requires knowing to check the Network tab for the manifest request, then the console for federation runtime warnings, then the remote's standalone URL to verify it's even running.
+**Failure modes are invisible.** When a remote fails to load, React's error boundaries can't catch the federation runtime error—you get a blank section with no visible indication of what went wrong. Debugging requires knowing to check the Network tab for the manifest request, then the console for federation runtime warnings, then the remote's standalone URL to verify it's even running.
 
 ### The Decision
 
@@ -382,8 +382,8 @@ You've now worked through the full operational cost of Module Federation. Before
 | Dev servers                  | One per remote + host           | One                      |
 | Debugging complexity         | High                            | Low                      |
 
-The right choice is almost always build-time composition — until it isn't. If your teams deploy on different schedules, or your codebase spans technology boundaries that can't be unified, Module Federation earns its cost. Otherwise, you're paying operational overhead for a problem you don't have.
+The right choice is almost always build-time composition—until it isn't. If your teams deploy on different schedules, or your codebase spans technology boundaries that can't be unified, Module Federation earns its cost. Otherwise, you're paying operational overhead for a problem you don't have.
 
 ## What's Next
 
-You've felt what runtime composition actually costs. The natural follow-up question is: what if you consumed this same analytics module as a regular workspace package — no remote entry, no manifest, no shared dependency negotiation? Same product, radically simpler architecture. That's what [build-time composition](/courses/enterprise-ui/build-time-composition-exercise.md) explores.
+You've felt what runtime composition actually costs. The natural follow-up question is: what if you consumed this same analytics module as a regular workspace package—no remote entry, no manifest, no shared dependency negotiation? Same product, radically simpler architecture. That's what [build-time composition](/courses/enterprise-ui/build-time-composition-exercise.md) explores.

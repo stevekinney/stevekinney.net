@@ -12,6 +12,57 @@ Most pages are not fully interactive applications. A product page, article, docs
 
 **Island Architecture** is an HTML-first rendering pattern where most of the page is rendered as static or server-rendered HTML, and only the small interactive regions get JavaScript and hydrate independently. The term traces back to Katie Sylor-Miller and was popularized by [Jason Miller's write-up][3], which framed the page as a mostly static document with a few self-contained "islands" of interactivity. Astro later pushed the pattern into the mainstream, but the idea is broader than any one framework.
 
+## A Super Naïve Version
+
+```html
+<h1>Mostly HTML</h1>
+<p>No JavaScript for any of this.</p>
+
+<button id="counter">Clicks: 0</button>
+
+<script type="module">
+  let count = 0;
+  const btn = document.querySelector('#counter');
+  btn.addEventListener('click', () => {
+    count += 1;
+    btn.textContent = `Clicks: ${count}`;
+  });
+</script>
+```
+
+### A Super Naïve Version—with React
+
+We could have an HTML page like this.
+
+```html
+<!-- index.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DIY React Islands</title>
+  </head>
+  <body>
+    <h1>Mostly HTML</h1>
+    <p>This content never hydrates. It stays plain HTML.</p>
+
+    <hr />
+
+    <h2>Island A</h2>
+    <div id="island-a"></div>
+
+    <h2>Island B</h2>
+    <div id="island-b"></div>
+
+    <h2>Island C</h2>
+    <div id="island-c"></div>
+
+    <script type="module" src="/client.tsx"></script>
+  </body>
+</html>
+```
+
 Or, in less diplomatic terms: islands stop shipping a whole frontend cathedral so one carousel can rotate.
 
 ## How It Works
@@ -92,6 +143,26 @@ Islands reduce the _amount_ of hydration. Resumability tries to avoid hydration 
 [Marko][9] goes in a different direction—its compiler does analysis to bundle only the truly interactive JavaScript at the sub-template level, not at the component level.
 
 A useful contrast: islands draw boundaries around _components_, resumability avoids replaying the _app_, and fine-grained bundling ships only the exact interactive _grains_ rather than whole component islands.
+
+## How It Relates to Module Federation and Monorepo Composition
+
+Module Federation and build-time composition (workspace monorepos) both answer the same question: how do you split a JavaScript application across independently-developed pieces? The page is assumed to be a full client-side application. The only debate is where the code comes from and when it gets resolved.
+
+Island Architecture answers a different question: should the page be a JavaScript application at all?
+
+|                      | Module Federation       | Build-Time (Monorepo) | Islands                    |
+| -------------------- | ----------------------- | --------------------- | -------------------------- |
+| Unit of composition  | Deployed remote app     | Workspace package     | Individual component       |
+| Default rendering    | Client JavaScript       | Client JavaScript     | Static HTML                |
+| JavaScript budget    | Full app per remote     | Full app, one bundle  | Only interactive regions   |
+| Cross-boundary state | Needs nanostores        | React Context works   | Needs cross-island signals |
+| Primary goal         | Independent deployments | Code organization     | Minimize JavaScript        |
+
+The axes are orthogonal. Module Federation solves an organizational problem (teams that need independent deploy cadences). Build-time composition solves a developer experience problem (type safety, hot reload, single dev server). Islands solve a performance problem (most content pages shouldn't be full JavaScript applications).
+
+They can also compose. An Astro page could contain a client island that loads a Module Federation remote. A monorepo could produce both an SPA dashboard (build-time composition between packages) and a marketing site (islands). The patterns operate at different levels of the stack and don't compete with each other.
+
+The antipattern is reaching for the wrong one. Module Federation on a page that's 90% static content is paying for deployment independence nobody asked for. Islands on a dense, stateful dashboard is fighting the architecture at every turn. If the page is mostly interactive, you're in application-composition territory (federation or monorepo). If the page is mostly content with a few interactive controls, islands is the right frame.
 
 ## What Real Implementations Look Like
 

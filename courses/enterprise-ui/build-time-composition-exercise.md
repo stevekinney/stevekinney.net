@@ -8,7 +8,7 @@ date: 2026-03-01T00:00:00.000Z
 modified: '2026-03-01T00:00:00-07:00'
 ---
 
-You've seen [Module Federation](/courses/enterprise-ui/module-federation.md)'s runtime composition in [Exercise 1](./runtime-composition-exercise.md) — two dev servers, remote entry manifests, shared dependency negotiation, cross-boundary state management. Now take the same analytics module and consume it as a regular workspace package. No remote entry, no shared dependency negotiation — just an npm import in a monorepo.
+You've seen [Module Federation](/courses/enterprise-ui/module-federation.md)'s runtime composition in [Exercise 1](./runtime-composition-exercise.md)—two dev servers, remote entry manifests, shared dependency negotiation, cross-boundary state management. Now take the same analytics module and consume it as a regular workspace package. No remote entry, no shared dependency negotiation—just an npm import in a monorepo.
 
 ## Why It Matters
 
@@ -48,35 +48,35 @@ enterprise-ui-workshop/
 │               ├── layout.tsx
 │               └── nav.tsx
 ├── packages/
-│   ├── analytics/              # @pulse/analytics — analytics feature package
+│   ├── analytics/              # @pulse/analytics—analytics feature package
 │   │   └── src/
 │   │       ├── index.ts        # Public API: exports only AnalyticsDashboard
 │   │       ├── analytics-dashboard.tsx
 │   │       ├── stats-bar.tsx
 │   │       ├── chart.tsx
 │   │       └── big-table.tsx
-│   ├── ui/                     # @pulse/ui — shared component library
+│   ├── ui/                     # @pulse/ui—shared component library
 │   │   └── src/
 │   │       ├── button.tsx
 │   │       ├── card.tsx
 │   │       ├── stat-card.tsx
 │   │       ├── loading-skeleton.tsx
 │   │       └── ...
-│   ├── shared/                 # @pulse/shared — types, hooks, and utilities
+│   ├── shared/                 # @pulse/shared—types, hooks, and utilities
 │   │   └── src/
 │   │       ├── types.ts
 │   │       ├── auth.ts
 │   │       └── api-client.ts
-│   └── users/                  # @pulse/users — user management feature package
+│   └── users/                  # @pulse/users—user management feature package
 ├── mocks/                      # MSW mock API handlers (shared across all apps)
 │   └── src/
 │       └── handlers.ts
 └── pnpm-workspace.yaml
 ```
 
-The dashboard app is the only runnable application. The four packages under `packages/` are workspace dependencies — consumed via regular npm imports, resolved at build time through pnpm symlinks. `mocks/` is its own workspace package, imported by the dashboard's Vite config to intercept API calls during development.
+The dashboard app is the only runnable application. The four packages under `packages/` are workspace dependencies—consumed via regular npm imports, resolved at build time through pnpm symlinks. `mocks/` is its own workspace package, imported by the dashboard's Vite config to intercept API calls during development.
 
-Open `pnpm-workspace.yaml` — it declares four workspace groups:
+Open `pnpm-workspace.yaml`—it declares four workspace groups:
 
 ```yaml title="pnpm-workspace.yaml"
 packages:
@@ -86,7 +86,7 @@ packages:
   - 'codemods'
 ```
 
-Open `packages/analytics/package.json` — find the entry point:
+Open `packages/analytics/package.json`—find the entry point:
 
 ```json title="packages/analytics/package.json"
 "main": "./src/index.ts",
@@ -94,9 +94,9 @@ Open `packages/analytics/package.json` — find the entry point:
 ```
 
 > [!NOTE] Source imports, not built artifacts
-> The `main` field points directly at TypeScript source. Vite resolves workspace packages via pnpm's symlinks and processes them with its own TypeScript transform — no separate build step needed. This is the standard monorepo DX pattern: packages are consumed as source during development. You only need `dist/` output for publishing to a registry or for production builds.
+> The `main` field points directly at TypeScript source. Vite resolves workspace packages via pnpm's symlinks and processes them with its own TypeScript transform—no separate build step needed. This is the standard monorepo DX pattern: packages are consumed as source during development. You only need `dist/` output for publishing to a registry or for production builds.
 
-Open `packages/analytics/src/index.ts` — note the explicit public API:
+Open `packages/analytics/src/index.ts`—note the explicit public API:
 
 ```typescript title="packages/analytics/src/index.ts"
 export { AnalyticsDashboard } from './analytics-dashboard';
@@ -104,13 +104,13 @@ export { AnalyticsDashboard } from './analytics-dashboard';
 
 Only `AnalyticsDashboard` is exported. Internal components like `StatsBar`, `Chart`, and `BigTable` are not part of the public API.
 
-Open `apps/dashboard/src/routes/analytics.tsx` — the route imports from the package:
+Open `apps/dashboard/src/routes/analytics.tsx`—the route imports from the package:
 
 ```typescript title="apps/dashboard/src/routes/analytics.tsx"
 import { AnalyticsDashboard } from '@pulse/analytics';
 ```
 
-This is a regular import — resolved at build time through the workspace, not fetched at runtime from a remote server.
+This is a regular import—resolved at build time through the workspace, not fetched at runtime from a remote server.
 
 ### Checkpoint
 
@@ -162,29 +162,29 @@ Think about the differences between this setup and the federation approach from 
 | Entry point complexity        | Async bootstrap + manifest      | Regular `import`         |
 
 > [!NOTE] The `workspace:*` protocol is pnpm's way of declaring local dependencies
-> When you see `"@pulse/analytics": "workspace:*"` in a `package.json`, it tells pnpm to resolve that dependency to the matching package inside the monorepo workspace rather than fetching it from the npm registry. The `*` means "accept whatever version the local package declares." pnpm creates a symlink from `node_modules/@pulse/analytics` to the actual `packages/analytics/` directory, which is why Vite can resolve imports to TypeScript source files without a build step. When you publish packages to a registry, pnpm automatically replaces `workspace:*` with the real version number at publish time — so this protocol is purely a development-time convenience that disappears in production artifacts.
+> When you see `"@pulse/analytics": "workspace:*"` in a `package.json`, it tells pnpm to resolve that dependency to the matching package inside the monorepo workspace rather than fetching it from the npm registry. The `*` means "accept whatever version the local package declares." pnpm creates a symlink from `node_modules/@pulse/analytics` to the actual `packages/analytics/` directory, which is why Vite can resolve imports to TypeScript source files without a build step. When you publish packages to a registry, pnpm automatically replaces `workspace:*` with the real version number at publish time—so this protocol is purely a development-time convenience that disappears in production artifacts.
 
 ### What to Try
 
-1. Open `apps/dashboard/src/shell/auth-provider.tsx` — the auth provider uses standard React Context. Compare this to Exercise 1 where you needed nanostores to cross the federation boundary.
+1. Open `apps/dashboard/src/shell/auth-provider.tsx`—the auth provider uses standard React Context. Compare this to Exercise 1 where you needed nanostores to cross the federation boundary.
 
-2. Open `packages/analytics/src/analytics-dashboard.tsx` — it imports `useAuth` from `@pulse/shared` directly. No nanostores, no store subscription — just `useContext` under the hood.
+2. Open `packages/analytics/src/analytics-dashboard.tsx`—it imports `useAuth` from `@pulse/shared` directly. No nanostores, no store subscription—just `useContext` under the hood.
 
 > [!NOTE] Why React Context works here
-> In build-time composition, all packages are bundled into a single React application. There is exactly one React instance, one component tree, and one context registry. When the `AuthProvider` in `apps/dashboard` provides a value, the `useAuth()` hook in `packages/analytics` reads from the same context — because they share the same module instance of `@pulse/shared`. This is the fundamental difference from federation, where separate builds create separate module instances.
+> In build-time composition, all packages are bundled into a single React application. There is exactly one React instance, one component tree, and one context registry. When the `AuthProvider` in `apps/dashboard` provides a value, the `useAuth()` hook in `packages/analytics` reads from the same context—because they share the same module instance of `@pulse/shared`. This is the fundamental difference from federation, where separate builds create separate module instances.
 
 ## Test Cross-Package Hot Reload
 
 One of the biggest DX wins of build-time composition is seamless hot reload across package boundaries.
 
-Open `packages/analytics/src/chart.tsx` and change the bar fill class from `fill-gray-800` to `fill-blue-600`. Save the file — the browser updates instantly without a full page reload.
+Open `packages/analytics/src/chart.tsx` and change the bar fill class from `fill-gray-800` to `fill-blue-600`. Save the file—the browser updates instantly without a full page reload.
 
 In the federation setup, changes to the remote required rebuilding the remote and refreshing the host. Here, Vite watches all workspace packages and processes changes through its own transform pipeline.
 
 Revert the change back to `fill-gray-800`.
 
 > [!NOTE] Hot Module Replacement (HMR)
-> HMR swaps changed modules in the running application without a full page reload. When you save a file, Vite detects the change, recompiles only that module, and sends the update to the browser over a WebSocket connection. The browser replaces the old module in memory and re-renders the affected components while preserving application state — form inputs, scroll position, React component state, and navigation all survive the update. This is fundamentally different from a full page reload, which tears down the entire application, re-fetches all resources, re-parses all JavaScript, and restarts from the initial state. In a monorepo with build-time composition, HMR works across package boundaries because Vite treats all workspace packages as part of a single module graph — a change in `packages/analytics/src/chart.tsx` triggers an HMR update in `apps/dashboard` without any rebuild step.
+> HMR swaps changed modules in the running application without a full page reload. When you save a file, Vite detects the change, recompiles only that module, and sends the update to the browser over a WebSocket connection. The browser replaces the old module in memory and re-renders the affected components while preserving application state—form inputs, scroll position, React component state, and navigation all survive the update. This is fundamentally different from a full page reload, which tears down the entire application, re-fetches all resources, re-parses all JavaScript, and restarts from the initial state. In a monorepo with build-time composition, HMR works across package boundaries because Vite treats all workspace packages as part of a single module graph—a change in `packages/analytics/src/chart.tsx` triggers an HMR update in `apps/dashboard` without any rebuild step.
 
 ### Checkpoint
 
@@ -200,7 +200,7 @@ Open `apps/dashboard/src/routes/analytics.tsx` and try adding a direct import of
 import { StatsBar } from '@pulse/analytics/src/stats-bar';
 ```
 
-TypeScript resolves this just fine — the import works. But it bypasses the package's public API. This is a common source of coupling in monorepos.
+TypeScript resolves this just fine—the import works. But it bypasses the package's public API. This is a common source of coupling in monorepos.
 
 > [!IMPORTANT] This import should not be allowed
 > In Exercise 6, you'll configure `eslint-plugin-boundaries` to flag this as a lint error. For now, just note that the architectural boundary exists in convention (only `index.ts` exports are public) but is not enforced by tooling.
@@ -209,15 +209,15 @@ Remove the import when you're done.
 
 ### Checkpoint
 
-You've confirmed that internal imports work but shouldn't — the public API is defined by `index.ts` exports, but nothing enforces it yet.
+You've confirmed that internal imports work but shouldn't—the public API is defined by `index.ts` exports, but nothing enforces it yet.
 
 ## Navigate the Application
 
-The dashboard has routing — unlike the federation setup which only had a single analytics view.
+The dashboard has routing—unlike the federation setup which only had a single analytics view.
 
 1. Click **"Settings"** in the sidebar navigation
 2. The settings page loads showing org information (Pulse Inc., pro plan)
-3. Click **"Analytics"** to go back — the analytics data is still loaded
+3. Click **"Analytics"** to go back—the analytics data is still loaded
 
 > [!NOTE]
 > The routes are lazy-loaded using `React.lazy()` and `Suspense`. When you navigate to Settings for the first time, React dynamically imports the route module. The `LoadingSkeleton` component shows during the import. On subsequent navigations, the module is cached.
