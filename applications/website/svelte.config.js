@@ -207,8 +207,11 @@ const mdsvexOptions = {
 
       // Languages not supported by Shiki (e.g. "text") get a plain <pre>
       // wrapper so whitespace and newlines are preserved.
+      // HTML-escape < and > so Svelte's compiler doesn't treat them as elements.
       if (!(lang in bundledLanguages)) {
-        const escaped = escapeSvelte(cleanedCode);
+        const escaped = escapeSvelte(
+          cleanedCode.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+        );
         let inner = `<pre style="background:transparent;margin:0;padding:0;color:#d6deeb"><code>${escaped}</code></pre>`;
 
         const titleHtml = title
