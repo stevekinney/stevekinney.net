@@ -230,6 +230,15 @@ Navigation between Analytics and Settings works. The sidebar highlights the acti
 
 ![Users page with user list](assets/exercise-01-users-page.png)
 
+## Solution
+
+If you need to catch up, the completed state for this exercise is available on the `02-streaming-start` branch:
+
+```bash
+git checkout 02-streaming-start
+pnpm install
+```
+
 ## Stretch Goals
 
 - **Add a new component to `packages/analytics`:** Create a `summary-header.tsx` component, export it from `index.ts`, and use it in the dashboard. See how TypeScript integration works across the boundary.

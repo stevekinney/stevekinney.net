@@ -457,3 +457,25 @@ For release safety, canary all contract-affecting releases. Evaluate against exp
 **GitHub Primer**: high-quality contribution and documentation standards. The lesson is that stable foundations plus rigorous review processes improve long-term consistency, even when it slows down the initial contribution cycle.
 
 The cross-case pattern: contract clarity plus migration tooling plus operational release discipline is the durable formula. No amount of Figma polish substitutes for those three things.
+
+---
+
+## Slides
+
+_Note: The existing slide deck already contains a "Design System Governance" slide. The slides below provide additional depth for this section._
+
+### Slide: Governance That Scales
+
+> Rules without tooling are just suggestions.
+
+- **Lint rules** enforce token usage and component API conventions at build time.
+- **Visual regression tests** (Chromatic, Percy) catch unintended visual changes in CI.
+- **Deprecation workflow** — mark old patterns, provide codemods, set removal timelines.
+- **Adoption dashboards** — track which apps use which versions. Know where the debt is.
+
+**The governance stack:**
+
+1. Tokens → enforced by lint rules
+2. Components → enforced by visual regression + a11y tests
+3. Patterns → enforced by architectural lint rules + code review
+4. Contribution → enforced by RFC process + SLA on reviews

@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generatedAt": "2026-03-03T15:21:23.570Z",
-    "hash": "d98534f3d1fffa20c5679f06b2294824017f1eaa7c17d13370280f0448f3ed4e"
+    "generatedAt": "2026-03-04T10:50:06.843Z",
+    "hash": "77c3d5fa171023572d17a4389a32215af9f91edebb8fd16e4db5f3456b22d1db"
   },
   "course": {
     "slug": "enterprise-ui",
@@ -12,6 +12,14 @@
     "contentsFile": "courses/enterprise-ui/_index.md"
   },
   "lessons": [
+    {
+      "slug": "ai-integration-patterns",
+      "title": "AI and LLM Integration Patterns",
+      "description": "The frontend architecture that changes when you add LLM-powered features—streaming responses, prompt management, tool use, RAG citation UI, non-deterministic error handling, and the BFF pattern extended into an AI gateway.",
+      "date": "2026-03-04T07:00:00.000Z",
+      "file": "courses/enterprise-ui/ai-integration-patterns.md",
+      "modified": "2026-03-04T07:00:00.000Z"
+    },
     {
       "slug": "api-contract-testing",
       "title": "API Contract Testing",
@@ -26,6 +34,14 @@
       "description": "Configure eslint-plugin-boundaries to encode the intended dependency graph as lint rules, preventing cross-package internal imports and circular dependencies.",
       "date": "2026-03-01T00:00:00.000Z",
       "file": "courses/enterprise-ui/architectural-linting-exercise.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "authentication-and-authorization",
+      "title": "Authentication, Authorization, and Multi-Tenancy",
+      "description": "How enterprise frontends handle identity, access control, and tenant isolation—from SSO protocols and token management to RBAC versus ABAC versus ReBAC, the BFF pattern, microfrontend auth boundaries, and the routing and branding patterns that make multi-tenant SaaS work.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/authentication-and-authorization.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
@@ -69,11 +85,35 @@
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
+      "slug": "codemods-at-scale",
+      "title": "Codemods at Scale",
+      "description": "How AST-based code transforms turn risky, manual migration work into repeatable, testable scripts—when to reach for jscodeshift, how the AST pipeline works, and why companies like Meta and Google distribute codemods alongside breaking changes.",
+      "date": "2026-03-04T07:00:00.000Z",
+      "file": "courses/enterprise-ui/codemods-at-scale.md",
+      "modified": "2026-03-04T07:00:00.000Z"
+    },
+    {
       "slug": "comlink",
       "title": "Comlink",
       "description": "A tiny library that turns postMessage-style communication into an RPC-like API built on ES6 Proxy—making Web Workers feel like normal function calls instead of message-passing ceremonies.",
       "date": "2026-03-01T07:00:00.000Z",
       "file": "courses/enterprise-ui/comlink.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "dependency-management",
+      "title": "Dependency Management in Monorepos",
+      "description": "Dependencies are where architecture stops being a whiteboard and starts becoming an operations problem—version drift, diamond dependencies, phantom imports, and upgrade noise all get worse in multi-package repos, and the fix is making dependency policy executable in tooling rather than hoping everyone reads the wiki.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/dependency-management.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "deployment-and-release-patterns",
+      "title": "Deployment and Release Patterns",
+      "description": "Deploying code and releasing features are two different decisions—here is how immutable assets, CDN caching, feature flags, canary rollouts, and preview environments let you separate them without losing sleep.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/deployment-and-release-patterns.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
@@ -101,6 +141,22 @@
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
+      "slug": "framework-migration-patterns",
+      "title": "Framework Migration Patterns",
+      "description": "The technical and organizational patterns for moving a large frontend from one framework, data layer, or rendering model to another without stopping feature work—bridge engineering, data architecture migration, the \"two systems tax,\" the 70% stall, and what Etsy and Lyft learned the hard way.",
+      "date": "2026-03-04T07:00:00.000Z",
+      "file": "courses/enterprise-ui/framework-migration-patterns.md",
+      "modified": "2026-03-04T07:00:00.000Z"
+    },
+    {
+      "slug": "frontend-security",
+      "title": "Frontend Security and Supply Chain Safety",
+      "description": "The security surface of an enterprise frontend extends well beyond XSS—from Content Security Policy and Trusted Types to dependency supply chain attacks, third-party script sandboxing, SRI, security headers, and the organizational patterns that make secure-by-default actually work.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/frontend-security.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
       "slug": "github-actions",
       "title": "GitHub Actions",
       "description": "GitHub's built-in automation system for CI, CD, and everything else humans keep trying to do by hand—how the workflow model works, where the security surface lives, and the footguns that look like features until they go off.",
@@ -123,6 +179,14 @@
       "date": "2026-03-01T07:00:00.000Z",
       "file": "courses/enterprise-ui/island-architecture.md",
       "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "maintaining-a-design-system",
+      "title": "Maintaining a Design System at Scale",
+      "description": "The problems that emerge after you ship a design system—component sprawl, fork culture, version fragmentation, token entropy, and the organizational patterns that keep maintenance from becoming a second full-time job.",
+      "date": "2026-03-04T07:00:00.000Z",
+      "file": "courses/enterprise-ui/maintaining-a-design-system.md",
+      "modified": "2026-03-04T07:00:00.000Z"
     },
     {
       "slug": "mock-service-worker",
@@ -167,9 +231,17 @@
     {
       "slug": "observability",
       "title": "Observability",
-      "description": "Observability is the ability to understand a system from the outside—here is how to instrument sanely, what signals matter, and how to keep the cost from becoming a political issue.",
+      "description": "Observability is the ability to understand a system from the outside—from backend signals and OpenTelemetry to the frontend-specific challenges of error boundaries, session replay, source map security, microfrontend attribution, and resilience patterns that keep enterprise UIs standing when dependencies fall over.",
       "date": "2026-03-01T07:00:00.000Z",
       "file": "courses/enterprise-ui/observability.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "performance-at-scale",
+      "title": "Performance at Scale",
+      "description": "Enterprise frontend performance is a different game than optimizing a landing page—long sessions, dense data, memory pressure, and the organizational discipline to keep it all from quietly getting worse.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/performance-at-scale.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
@@ -259,6 +331,14 @@
       "date": "2026-03-01T00:00:00.000Z",
       "file": "courses/enterprise-ui/streaming-and-suspense-exercise.md",
       "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "testing-at-scale",
+      "title": "Testing Strategy for Large Applications",
+      "description": "How testing changes when your application spans dozens of packages, multiple teams, and independently deployed services—test shapes, flakiness management, enterprise-specific patterns, and the operational infrastructure that keeps a large test suite from becoming the thing everyone dreads.",
+      "date": "2026-03-04T07:00:00.000Z",
+      "file": "courses/enterprise-ui/testing-at-scale.md",
+      "modified": "2026-03-04T07:00:00.000Z"
     },
     {
       "slug": "testing-strategies-exercise",

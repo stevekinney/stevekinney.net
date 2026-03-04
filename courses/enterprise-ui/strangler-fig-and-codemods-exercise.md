@@ -450,6 +450,15 @@ Codemod tests pass. Each test verifies a specific transformation scenario. Edge 
 
 ![Codemod test results showing all tests passing](assets/exercise-08-codemod-tests.png)
 
+## Solution
+
+If you need to catch up, the completed state for this exercise is available on the `solution` branch:
+
+```bash
+git checkout solution
+pnpm install
+```
+
 ## Stretch Goals
 
 - **Handle aliased imports:** Extend the codemod to handle `import { LegacyChart as MyChart } from "./legacy-chart"` and preserve the alias: `import { Chart as MyChart } from "@pulse/analytics"`.

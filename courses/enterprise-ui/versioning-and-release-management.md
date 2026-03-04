@@ -182,3 +182,27 @@ The compatibility window is the difference between "we deprecated this" and "we 
 [8]: https://nx.dev/docs/features/enforce-module-boundaries 'Enforce Module Boundaries'
 [17]: https://www.designtokens.org/TR/2025.10/format/ 'Design Tokens Format Module 2025.10'
 [18]: https://changesets-docs.vercel.app/ 'Changesets'
+
+---
+
+## Slides
+
+### Slide: Changesets
+
+> Human-readable release management for monorepos.
+
+```
+Developer workflow:
+1. Make changes
+2. Run `npx changeset` → writes a markdown file describing the change
+3. Commit the changeset file with the PR
+4. On merge, CI collects changesets → bumps versions → publishes → writes CHANGELOG
+```
+
+- Each changeset declares: which packages changed, semver bump type, description.
+- Supports independent versioning (each package has its own version) or fixed (all packages share a version).
+- Automates the "what changed in this release?" question.
+
+```
+
+```

@@ -48,6 +48,7 @@ modified: 2026-03-01T00:00:00-07:00
 ## Dependency Management
 
 - [npm vs pnpm vs Bun: Workspace Package Managers](workspace-package-managers.md)
+- [Dependency Management in Monorepos](dependency-management.md)
 
 ## Versioning & Release Management
 
@@ -66,26 +67,46 @@ modified: 2026-03-01T00:00:00-07:00
 ## Design System Governance
 
 - [Design System Governance](design-system-governance.md)
+- [Maintaining a Design System at Scale](maintaining-a-design-system.md)
 - [Design Systems Across Microfrontends](design-systems-across-microfrontends.md)
 
-## Performance Budgets
+## Performance at Scale
 
+- [Performance at Scale](performance-at-scale.md)
 - [Performance Budgets](performance-budgets.md)
 
-## CI/CD
+## CI/CD and Deployment
 
 - [GitHub Actions](github-actions.md)
+- [Deployment and Release Patterns](deployment-and-release-patterns.md)
 - [Husky and lint-staged](husky-and-lint-staged.md)
 - [**Exercise 7**: CI/CD Pipeline](cicd-pipeline-exercise.md)
 
 ## Testing Strategies
 
+- [Testing Strategy for Large Applications](testing-at-scale.md)
 - [Mock Service Worker](mock-service-worker.md)
 - [**Exercise 8**: Testing Strategies](testing-strategies-exercise.md)
 
 ## API Contract Testing
 
 - [API Contract Testing](api-contract-testing.md)
+
+## Authentication, Authorization & Multi-Tenancy
+
+- [Authentication, Authorization, and Multi-Tenancy](authentication-and-authorization.md)
+
+## Frontend Security & Supply Chain Safety
+
+- [Frontend Security and Supply Chain Safety](frontend-security.md)
+
+## AI and LLM Integration
+
+- [AI and LLM Integration Patterns](ai-integration-patterns.md)
+
+## Organizational Patterns & Team Topology
+
+- [Organizational Patterns and Team Topology](organizational-patterns-and-team-topology.md)
 
 ## Observability
 
@@ -94,4 +115,6 @@ modified: 2026-03-01T00:00:00-07:00
 ## Migration Patterns
 
 - [The Strangler Fig Pattern](strangler-fig-introduction.md)
+- [Framework Migration Patterns](framework-migration-patterns.md)
+- [Codemods at Scale](codemods-at-scale.md)
 - [**Exercise 9**: Strangler Fig & Codemods](strangler-fig-and-codemods-exercise.md)

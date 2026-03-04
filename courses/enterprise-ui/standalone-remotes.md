@@ -123,3 +123,39 @@ If you're setting up a new remote and want standalone mode from the start, the c
 - Make sure the remote's dev server config serves the standalone entry point, not just the federation manifest
 
 That's it. The remote is now a real application that also happens to be consumable via federation. Development stays fast, testing stays isolated, and the federation layer only matters when you're integrating with the host.
+
+---
+
+## Slides
+
+### Slide: Standalone Remotes
+
+> Run any remote independently — without the host.
+
+- Every remote should boot on its own for development and testing.
+- Set `eager: true` for shared dependencies so the remote loads its own copies.
+- Mock shared context (auth state, feature flags) with MSW or local providers.
+
+**Minimum viable standalone remote:**
+
+1. Boots with `npm run dev` — no host required
+2. Has mock data for API dependencies
+3. Provides its own auth context
+4. Runs its own test suite in isolation
+
+---
+
+### Slide: Standalone Drift
+
+> The risk: your standalone remote diverges from reality.
+
+- Mock data gets stale — the real API changed, your mocks didn't.
+- Auth context in standalone doesn't match the host's token shape.
+- Shared dependency versions drift between standalone and host.
+
+**Mitigation:**
+
+- Integration tests that boot the full composed application (CI only).
+- Contract tests between remotes and the host.
+- Shared MSW handlers across standalone and test environments.
+- Regular "compose and smoke test" pipeline — not just unit tests.

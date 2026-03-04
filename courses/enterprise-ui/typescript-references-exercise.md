@@ -359,6 +359,15 @@ Revert both changes when you're done.
 
 Changing a type in `@pulse/shared` causes all downstream packages to recheck. Changing an internal file in `@pulse/ui` only rechecks `@pulse/ui` and its dependents, not `@pulse/shared`. Incremental checking works.
 
+## Solution
+
+If you need to catch up, the completed state for this exercise is available on the `05-linting-start` branch:
+
+```bash
+git checkout 05-linting-start
+pnpm install
+```
+
 ## Stretch Goals
 
 - **Measure the speedup:** Add 10 more interfaces to `@pulse/shared/src/types.ts`, run `tsc --build` to populate the cache, then change one interface and run `tsc --build --verbose` again. With more projects and more types, the incremental speedup becomes more dramatic.

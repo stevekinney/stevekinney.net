@@ -325,6 +325,15 @@ graph TD
     Shared --> Root
 ```
 
+## Solution
+
+If you need to catch up, the completed state for this exercise is available on the `04-typescript-start` branch:
+
+```bash
+git checkout 04-typescript-start
+pnpm install
+```
+
 ## Stretch Goals
 
 - **Filter builds:** Run `pnpm turbo build --filter=@pulse/analytics...` to build only analytics and its dependencies. Compare the task count to a full build.

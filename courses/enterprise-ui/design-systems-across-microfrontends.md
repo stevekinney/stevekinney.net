@@ -156,3 +156,64 @@ That setup isn't glamorous, which is precisely why it tends to survive contact w
 [15]: https://storybook.js.org/docs/8/writing-tests/accessibility-testing 'Accessibility tests'
 [16]: https://playwright.dev/docs/test-components 'Components (experimental) | Playwright'
 [17]: https://www.designtokens.org/TR/2025.10/format/ 'Design Tokens Format Module 2025.10'
+
+---
+
+## Slides
+
+### Slide: What Is a Design System?
+
+> More than a component library.
+
+- **Design tokens** — the atomic values: colors, spacing, typography, shadows.
+- **Primitives** — base components: Button, Input, Card, Modal.
+- **Composed components** — patterns built from primitives: DataTable, FormField, Navigation.
+- **Documentation** — usage guidelines, do/don't examples, accessibility requirements.
+- **Tooling** — Storybook, visual regression tests, lint rules.
+
+**The goal:** Consistency across independently deployed applications, maintained by independent teams.
+
+---
+
+### Slide: Distributing a Design System
+
+> How components get from the design system to the applications.
+
+| Strategy                       | Trade-off                                     |
+| ------------------------------ | --------------------------------------------- |
+| **npm packages** (versioned)   | Explicit upgrades, version fragmentation risk |
+| **Module Federation** (shared) | Always latest, singleton version challenges   |
+| **CDN (bundled)**              | Simple consumption, hard to tree-shake        |
+| **Web Components**             | Framework-agnostic, Shadow DOM isolation      |
+
+**Recommended starting point:** Versioned npm packages from a monorepo. Explicit dependency management. Teams upgrade on their own schedule.
+
+Add Module Federation sharing later for components that _must_ be in sync across remotes (e.g., global navigation).
+
+---
+
+### Slide: Theming Across Boundaries
+
+> CSS custom properties — the only theming mechanism that crosses Shadow DOM.
+
+```css
+/* Design system tokens — set by the host */
+:root {
+  --ds-color-primary: #0066cc;
+  --ds-spacing-md: 16px;
+  --ds-font-body: 'Inter', sans-serif;
+}
+```
+
+```css
+/* Remote component — consumes tokens */
+.button {
+  background: var(--ds-color-primary);
+  padding: var(--ds-spacing-md);
+  font-family: var(--ds-font-body);
+}
+```
+
+- Tokens as CSS custom properties cascade into iframes and Shadow DOM.
+- Use semantic names (`--ds-color-primary`) not literal ones (`--ds-blue-500`).
+- The host sets the theme. Remotes consume it. No coupling.

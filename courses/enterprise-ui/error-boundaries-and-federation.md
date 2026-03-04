@@ -118,4 +118,82 @@ The broader lesson isn't just about Module Federation. It's about the gap betwee
 
 In a traditional single-build application, this gap barely matters because there's very little that can go wrong between "JavaScript loads" and "React mounts." Module Federation makes that gap much wider by inserting a whole negotiation phase—manifest fetches, shared dependency resolution, remote module loading—into the space between script execution and application rendering.
 
+---
+
+## Slides
+
+### Slide: The Bootstrap Problem
+
+> Error boundaries don't catch the failure you actually have.
+
+- React error boundaries catch render-time errors inside the tree.
+- A federated remote fails _before_ it renders — during script fetch or container initialization.
+- The error boundary never fires because the component never mounts.
+
+```
+Timeline:
+1. Host renders <Suspense> + <ErrorBoundary>
+2. React calls lazy(() => loadRemote("checkout/Cart"))
+3. Network request for remoteEntry.js → 404 / timeout / JS error
+4. Promise rejects → Unhandled rejection (outside React's lifecycle)
+5. ErrorBoundary: "I didn't see anything." 🤷
+```
+
+---
+
+### Slide: Catching Bootstrap Failures
+
+> Wrap the import, not just the component.
+
+```tsx
+const SafeRemote = lazy(() =>
+  import('checkout/Cart').catch(() => {
+    return { default: () => <FallbackCart /> };
+  }),
+);
+```
+
+- The `.catch()` returns a valid module with a fallback component.
+- React never knows the remote failed — it gets a component either way.
+- Combine with `<Suspense>` for the loading state.
+
+---
+
+### Slide: The RemoteBoundary Pattern
+
+> A reusable wrapper for every federated remote.
+
+- Catches bootstrap failures (network, JS errors)
+- Catches render-time errors (standard error boundary)
+- Reports _which_ remote failed, not just _that_ something failed
+- Renders a fallback UI scoped to the remote's region
+
+```tsx
+<RemoteBoundary
+  name="checkout"
+  fallback={<FallbackCart />}
+  onError={(error) => reportError('checkout', error)}
+>
+  <Suspense fallback={<CartSkeleton />}>
+    <RemoteCart />
+  </Suspense>
+</RemoteBoundary>
+```
+
+---
+
+### Slide: Making Remotes Optional
+
+> Not all remotes are critical. Treat them accordingly.
+
+| Remote type   | Failure behavior               | Example                      |
+| ------------- | ------------------------------ | ---------------------------- |
+| **Critical**  | Show error + block interaction | Checkout, Auth               |
+| **Important** | Show degraded UI               | Product recommendations      |
+| **Optional**  | Hide silently                  | Analytics widget, A/B banner |
+
+- Feature flags to disable remotes entirely without a deploy.
+- Health checks before attempting to load non-critical remotes.
+- Stale-while-revalidate: serve cached version while fetching new one.
+
 So, the rule of thumb: error boundaries handle runtime rendering failures. Everything before that needs plain JavaScript error handling at the bootstrap level. If your architecture depends on external resources being available before React can mount, you need a fallback strategy that doesn't depend on React.

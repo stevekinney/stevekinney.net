@@ -313,3 +313,34 @@ The boring default wins here. Husky for native hook wiring. lint-staged for fast
 [5]: https://typicode.github.io/husky/how-to.html 'How To | Husky'
 [6]: https://github.com/lint-staged/lint-staged 'GitHub - lint-staged/lint-staged'
 [7]: https://typicode.github.io/husky/troubleshoot.html 'Troubleshoot | Husky'
+
+---
+
+## Slides
+
+### Slide: Git Hooks as Guardrails
+
+> Enforce standards before code reaches CI.
+
+- **Husky** — manages Git hooks. `husky init` sets up `.husky/` directory.
+- **lint-staged** — runs tools _only on staged files_. Fast, even in large repos.
+
+```json
+// package.json
+{
+  "lint-staged": {
+    "*.{ts,tsx}": ["eslint --fix", "prettier --write"],
+    "*.css": ["stylelint --fix"]
+  }
+}
+```
+
+- Pre-commit: lint + format staged files.
+- Commit-msg: validate conventional commit format.
+- Pre-push: run type-check.
+
+**In a monorepo:** Per-package lint-staged configs. Each package defines its own rules.
+
+```
+
+```

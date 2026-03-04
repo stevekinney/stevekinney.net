@@ -382,6 +382,15 @@ The complete boundary configuration is in place. Apps can import from packages. 
 
 ![Clean lint output with no boundary violations](assets/exercise-05-lint-clean.png)
 
+## Solution
+
+If you need to catch up, the completed state for this exercise is available on the `06-design-system-start` branch:
+
+```bash
+git checkout 06-design-system-start
+pnpm install
+```
+
 ## Stretch Goals
 
 - **Banned external imports:** Add an ESLint rule that prevents any package except `@pulse/shared` from importing `lodash` directly. All utility usage must go through shared wrappers. This is how you prevent 12 versions of lodash across your monorepo.

@@ -324,6 +324,15 @@ All Playwright tests pass. You can articulate the testing pyramid for a monorepo
 
 ![Playwright HTML report with test summary](assets/exercise-07-playwright-report.png)
 
+## Solution
+
+If you need to catch up, the completed state for this exercise is available on the `09-migration-start` branch:
+
+```bash
+git checkout 09-migration-start
+pnpm install
+```
+
 ## Stretch Goals
 
 - **Visual regression testing:** Add `expect(page).toHaveScreenshot()` to capture a screenshot of the analytics dashboard and compare it against a baseline. Run the test twice — the second run compares against the first. Change a CSS class and watch the test fail.

@@ -705,6 +705,15 @@ Switch between configurations A, B, and C. Watch the network waterfall in DevToo
 
 You've tried at least two different Suspense boundary placements and observed how each changes the loading experience. You can articulate the trade-off between time-to-first-content and layout stability.
 
+## Solution
+
+If you need to catch up, the completed state for this exercise is available on the `03-monorepo-start` branch:
+
+```bash
+git checkout 03-monorepo-start
+pnpm install
+```
+
 ## Stretch Goals
 
 - **Add error boundaries alongside Suspense boundaries:** Wrap each Suspense boundary in an `ErrorBoundary` from `@pulse/ui`. Stop the mock API for one endpoint (modify the MSW handler to return a 500) and verify the error boundary catches it without crashing the rest of the dashboard.

@@ -314,6 +314,15 @@ The CI workflow YAML is valid. It covers type checking, linting, testing, buildi
 
 ![Lighthouse CI configuration and performance budgets](assets/exercise-06-lighthouse-config.png)
 
+## Solution
+
+If you need to catch up, the completed state for this exercise is available on the `08-testing-start` branch:
+
+```bash
+git checkout 08-testing-start
+pnpm install
+```
+
 ## Stretch Goals
 
 - **PR comment with Lighthouse scores:** Add a step that posts the Lighthouse report as a comment on the pull request using `marocchino/sticky-pull-request-comment@v2`. This gives reviewers performance data inline with the code review.

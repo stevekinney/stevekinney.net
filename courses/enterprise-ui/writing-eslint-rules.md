@@ -376,3 +376,100 @@ That's the whole game. ESLint rule authoring isn't hard. It's just easy to do sl
 [10]: https://eslint.org/docs/latest/use/configure/plugins 'Configure Plugins - ESLint'
 [11]: https://eslint.org/docs/latest/contribute/core-rules 'Contribute to Core Rules - ESLint'
 [12]: https://eslint.org/docs/latest/extend/custom-parsers 'Custom Parsers - ESLint'
+
+---
+
+## Slides
+
+### Slide: When to Write a Custom Rule
+
+> The decision tree.
+
+- Can you solve it with an existing rule or plugin? → Use that.
+- Is it a convention specific to _your_ codebase? → Write a custom rule.
+- Does it enforce an architectural boundary? → Definitely write a rule.
+
+**Examples of custom rules worth writing:**
+
+- No direct imports from another team's internal packages
+- Enforce event naming conventions across microfrontends
+- Require error boundaries around federated remote imports
+- Ban specific API patterns that cause production issues
+
+---
+
+### Slide: Rule Anatomy
+
+> Every ESLint rule is an AST visitor.
+
+```javascript
+export default {
+  meta: {
+    type: 'problem', // 'problem' | 'suggestion' | 'layout'
+    docs: { description: '...' },
+    schema: [], // options the rule accepts
+    fixable: 'code', // can auto-fix? 'code' | 'whitespace' | null
+  },
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        // Runs every time the parser encounters an import statement
+        if (isForbiddenImport(node.source.value)) {
+          context.report({
+            node,
+            message: 'Do not import from {{source}}',
+            data: { source: node.source.value },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+---
+
+### Slide: The AST Visitor Pattern
+
+> You declare which node types you care about. ESLint walks the tree.
+
+```
+Program
+├── ImportDeclaration          ← "import X from 'Y'"
+│   ├── ImportDefaultSpecifier ← "X"
+│   └── Literal                ← "'Y'"
+├── FunctionDeclaration        ← "function foo() {}"
+│   └── BlockStatement
+│       └── ReturnStatement
+└── ExportDefaultDeclaration   ← "export default ..."
+```
+
+- Use [AST Explorer](https://astexplorer.net) to see what nodes your code produces.
+- Visitor keys match node type names: `ImportDeclaration`, `CallExpression`, `MemberExpression`.
+- You can also use CSS-like selectors: `CallExpression[callee.name="require"]`.
+
+---
+
+### Slide: Testing Rules with RuleTester
+
+> Rules are pure functions. Test them like pure functions.
+
+```javascript
+const { RuleTester } = require('eslint');
+const rule = require('./no-cross-team-imports');
+
+const ruleTester = new RuleTester();
+
+ruleTester.run('no-cross-team-imports', rule, {
+  valid: [`import { Button } from '@design-system/ui'`, `import { utils } from './local-utils'`],
+  invalid: [
+    {
+      code: `import { internal } from '@team-checkout/internals'`,
+      errors: [{ message: /Do not import from/ }],
+    },
+  ],
+});
+```
+
+- Every valid case must not report. Every invalid case must report exactly the expected errors.
+- Test edge cases: re-exports, dynamic imports, type-only imports.

@@ -318,3 +318,36 @@ But none of that is necessary to understand the federation configuration, which 
 [8]: https://module-federation.io/configure/exposes 'Exposes - Module Federation'
 [9]: https://module-federation.io/configure/shared 'Shared - Module Federation'
 [10]: https://rsbuild.rs/config/html/template 'html.template - Rsbuild'
+
+---
+
+## Slides
+
+### Slide: Rsbuild for Module Federation
+
+> The modern alternative to webpack for federated apps.
+
+- Built on **Rspack** (Rust-based webpack alternative) — 5-10x faster builds.
+- First-class Module Federation plugin.
+- Compatible with webpack's federation protocol — can interop with webpack hosts/remotes.
+
+```typescript
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+
+export default defineConfig({
+  plugins: [
+    pluginReact(),
+    pluginModuleFederation({
+      name: 'checkout',
+      exposes: { './Cart': './src/Cart.tsx' },
+      shared: { react: { singleton: true } },
+    }),
+  ],
+});
+```
+
+```
+
+```
