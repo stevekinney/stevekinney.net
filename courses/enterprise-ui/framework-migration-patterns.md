@@ -23,10 +23,8 @@ flowchart TD
     Shell --> Router["Route Dispatcher"]
     Router -->|"modern routes"| Modern["React App"]
     Router -->|"legacy routes"| Legacy["AngularJS App"]
-    Modern -->|"shared state"| Bridge["Bridge Layer"]
-    Bridge -->|"shared state"| Modern
-    Legacy -->|"shared state"| Bridge
-    Bridge -->|"shared state"| Legacy
+    Modern <-->|"shared state"| Bridge["Bridge Layer"]
+    Legacy <-->|"shared state"| Bridge
     Bridge --> AuthStore["Shared Auth\n(JWT in cookie)"]
     Bridge --> StateAdapter["State Adapter\n(event bus / shared store)"]
 ```

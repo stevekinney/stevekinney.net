@@ -181,8 +181,10 @@ const mdsvexOptions = {
       if (!lang) lang = 'text';
 
       // Mermaid blocks are rendered client-side as diagrams, not syntax-highlighted.
+      // HTML-escape < and > so Svelte's compiler doesn't treat them as elements.
+      // The client-side renderer reads via textContent, which decodes entities automatically.
       if (lang === 'mermaid') {
-        const escaped = escapeSvelte(code);
+        const escaped = escapeSvelte(code.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
         return `<div data-mermaid class="not-prose overflow-x-auto rounded-md border-2 border-slate-800 bg-[#011627] p-4 not-last:mb-4"><pre class="mermaid-source" style="margin:0;color:#d6deeb;white-space:pre-wrap">${escaped}</pre></div>`;
       }
 
