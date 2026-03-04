@@ -119,6 +119,21 @@
     },
     "applications/website": {
       "name": "@stevekinney/website",
+      "dependencies": {
+        "@stevekinney/ai-development": "workspace:*",
+        "@stevekinney/enterprise-ui": "workspace:*",
+        "@stevekinney/figma": "workspace:*",
+        "@stevekinney/full-stack-typescript": "workspace:*",
+        "@stevekinney/python-ai": "workspace:*",
+        "@stevekinney/react-performance": "workspace:*",
+        "@stevekinney/react-typescript": "workspace:*",
+        "@stevekinney/storybook": "workspace:*",
+        "@stevekinney/tailwind": "workspace:*",
+        "@stevekinney/testing": "workspace:*",
+        "@stevekinney/visual-studio-code": "workspace:*",
+        "@stevekinney/web-security": "workspace:*",
+        "@stevekinney/writing": "workspace:*",
+      },
     },
     "content/writing": {
       "name": "@stevekinney/writing",

@@ -5,6 +5,21 @@
   "engines": {
     "node": "24.x"
   },
+  "dependencies": {
+    "@stevekinney/ai-development": "workspace:*",
+    "@stevekinney/enterprise-ui": "workspace:*",
+    "@stevekinney/figma": "workspace:*",
+    "@stevekinney/full-stack-typescript": "workspace:*",
+    "@stevekinney/python-ai": "workspace:*",
+    "@stevekinney/react-performance": "workspace:*",
+    "@stevekinney/react-typescript": "workspace:*",
+    "@stevekinney/storybook": "workspace:*",
+    "@stevekinney/tailwind": "workspace:*",
+    "@stevekinney/testing": "workspace:*",
+    "@stevekinney/visual-studio-code": "workspace:*",
+    "@stevekinney/web-security": "workspace:*",
+    "@stevekinney/writing": "workspace:*"
+  },
   "scripts": {
     "dev": "bun run content:index && SKIP_IMAGE_OPTIMIZATION=1 NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ../../node_modules/vite/bin/vite.js dev --port 4444",
     "build": "export LD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-linux-x64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\"; export DYLD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-darwin-arm64/lib${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}\"; bun run content:index && NODE_OPTIONS=\"--max-old-space-size=7168 --import tsx --disable-warning=ExperimentalWarning\" node ../../node_modules/vite/bin/vite.js build",
