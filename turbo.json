@@ -1,12 +1,18 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["packages/scripts/**", "packages/content-types/**", "turbo.json"],
+  "globalDependencies": [
+    "packages/scripts/generate-course-manifest.ts",
+    "packages/scripts/generate-site-content-index.ts",
+    "packages/content-types/index.ts"
+  ],
   "tasks": {
     "manifest": {
+      "inputs": ["**/*.md", "package.json"],
       "outputs": ["manifest.json"]
     },
     "build": {
       "dependsOn": ["^build", "^manifest"],
+      "env": ["VERCEL", "SKIP_IMAGE_OPTIMIZATION"],
       "outputs": [
         "build/**",
         ".svelte-kit/**",
@@ -15,7 +21,8 @@
       ]
     },
     "build:stats": {
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "env": ["BUNDLE_STATS"]
     },
     "preview": {
       "dependsOn": ["build"],
@@ -26,12 +33,8 @@
       "persistent": true
     },
     "sync": {},
-    "lint": {
-      "dependsOn": ["^lint"]
-    },
-    "check": {
-      "dependsOn": ["^check"]
-    },
+    "lint": {},
+    "check": {},
     "check:watch": {
       "cache": false,
       "persistent": true
@@ -41,14 +44,13 @@
       "outputs": ["playwright-report/**", "test-results/**"]
     },
     "test:integration": {
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "outputs": ["playwright-report/**", "test-results/**"]
     },
     "test:integration:dev": {
       "cache": false
     },
-    "test:unit": {
-      "dependsOn": ["build"]
-    },
+    "test:unit": {},
     "test:storybook": {
       "dependsOn": ["build-storybook"]
     },
