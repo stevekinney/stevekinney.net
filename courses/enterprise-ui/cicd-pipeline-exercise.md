@@ -1,5 +1,5 @@
 ---
-title: 'Exercise 7: CI/CD Pipeline'
+title: 'Exercise 8: CI/CD Pipeline'
 description: >-
   Build a GitHub Actions workflow that runs the full quality gate on every push,
   uses Turborepo for caching, and adds Lighthouse CI performance budgets to
@@ -23,10 +23,10 @@ A CI pipeline is where architecture decisions become enforceable. The boundary r
 
 ## Setup
 
-You should be continuing from where Exercise 6 left off. If you need to catch up:
+You should be continuing from where Exercise 7 (Design System Governance) left off. If you need to catch up:
 
 ```bash
-git checkout 06-cicd-start
+git checkout 07-cicd-start
 pnpm install
 ```
 

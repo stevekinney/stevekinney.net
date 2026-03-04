@@ -1,5 +1,5 @@
 ---
-title: 'Exercise 9: Strangler Fig & Codemods'
+title: 'Exercise 10: Strangler Fig & Codemods'
 description: >-
   Set up a routing-level strangler fig so legacy and modern apps coexist,
   migrate one route, and write a jscodeshift codemod that automates import
@@ -23,10 +23,10 @@ Nobody gets to start from scratch. In the real world, you inherit legacy code an
 
 ## Setup
 
-You should be continuing from where Exercise 8 left off. If you need to catch up:
+You should be continuing from where Exercise 9 (Testing Strategies) left off. If you need to catch up:
 
 ```bash
-git checkout 08-migration-start
+git checkout 09-migration-start
 pnpm install
 ```
 

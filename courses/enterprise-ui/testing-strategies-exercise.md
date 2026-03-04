@@ -1,5 +1,5 @@
 ---
-title: 'Exercise 8: Testing Strategies'
+title: 'Exercise 9: Testing Strategies'
 description: >-
   Write Playwright E2E tests for cross-route navigation, mock API responses with
   MSW, record HAR fixtures for deterministic replay, and discuss where contract
@@ -23,10 +23,10 @@ In a monorepo architecture, unit tests verify that individual components work in
 
 ## Setup
 
-You should be continuing from where Exercise 7 left off. If you need to catch up:
+You should be continuing from where Exercise 8 (CI/CD Pipeline) left off. If you need to catch up:
 
 ```bash
-git checkout 07-testing-start
+git checkout 08-testing-start
 pnpm install
 ```
 
