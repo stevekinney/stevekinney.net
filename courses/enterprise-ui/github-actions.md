@@ -357,3 +357,60 @@ GitHub Actions is easy to begin and serious to operate. At small scale it's a pl
 [33]: https://docs.github.com/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect 'OpenID Connect - GitHub Docs'
 [34]: https://docs.github.com/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds 'Using artifact attestations to establish provenance for builds - GitHub Docs'
 [35]: https://docs.github.com/en/actions/reference/limits 'Actions limits - GitHub Docs'
+
+---
+
+## TL;DR
+
+### The Mental Model
+
+> Workflows contain jobs. Jobs contain steps. Jobs run in isolation on separate runners.
+
+- **Workflow:** Triggered by an event. Lives in `.github/workflows/`.
+- **Job:** Runs on a fresh runner. Passes state to other jobs explicitly via `outputs` and `needs`.
+- **Step:** Runs sequentially inside a job. Shares the filesystem with other steps in the same job.
+- State flows _within_ a job via `GITHUB_ENV` and `GITHUB_OUTPUT`. State flows _between_ jobs via `needs.job_id.outputs`.
+
+---
+
+### Trigger Semantics
+
+> Not all triggers are created equal.
+
+| Trigger               | Runs on          | Has secrets? | Risk level |
+| --------------------- | ---------------- | ------------ | ---------- |
+| `push`                | Pushed commit    | Yes          | Low        |
+| `pull_request`        | Merge commit SHA | Read-only    | Low        |
+| `pull_request_target` | Base branch      | Full         | High       |
+| `workflow_dispatch`   | Manual trigger   | Yes          | Low        |
+
+- `pull_request` uses the _merge commit_, not the head commit. That's why the SHA doesn't match what you pushed.
+- `pull_request_target` runs with full secrets on the _base_ branch—never checkout untrusted code here.
+
+---
+
+### Reuse Mechanisms
+
+> Three levels of reuse, each with different tradeoffs.
+
+| Mechanism             | Scope       | Secrets access | Defined in           |
+| --------------------- | ----------- | -------------- | -------------------- |
+| **Action**            | Single step | Caller's       | `action.yml`         |
+| **Composite action**  | Multi-step  | Caller's       | `action.yml`         |
+| **Reusable workflow** | Full job(s) | Caller's + own | `.github/workflows/` |
+
+- Actions are the smallest unit—one step, one concern.
+- Composite actions bundle multiple steps but can't define jobs or secrets.
+- Reusable workflows can define entire job graphs with their own `permissions` blocks.
+
+---
+
+### Security Essentials
+
+> The defaults are permissive. Tighten them.
+
+- Set `permissions` to `read-all` or narrower at the workflow level. Don't rely on repo defaults.
+- Pin third-party actions to full commit SHAs, not tags. Tags are mutable.
+- Never run `pull_request_target` with `actions/checkout` pointed at `github.event.pull_request.head.ref`.
+- Use OIDC for cloud auth instead of long-lived credential secrets.
+- Treat `${{ github.event.*.title }}` and other user-controlled fields as injection vectors—always use intermediate environment variables.

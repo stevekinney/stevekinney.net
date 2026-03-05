@@ -185,9 +185,9 @@ The compatibility window is the difference between "we deprecated this" and "we 
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: Changesets
+### Changesets
 
 > Human-readable release management for monorepos.
 
@@ -202,7 +202,3 @@ Developer workflow:
 - Each changeset declares: which packages changed, semver bump type, description.
 - Supports independent versioning (each package has its own version) or fixed (all packages share a version).
 - Automates the "what changed in this release?" question.
-
-```
-
-```

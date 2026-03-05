@@ -252,6 +252,40 @@ Tools like **Turborepo** and **Nx** analyze your dependency graph to run tasks i
 
 Keep external dependency versions uniform across all packages. If one package uses React 18 and another uses React 19, you're in for diamond dependency conflicts and mysterious runtime bugs. Tools like **Syncpack** can audit and auto-fix `package.json` files across the repo to enforce version alignment.
 
+## Quick reference
+
+### Compiler options
+
+| Option                                      | What it does                                                                                                                                                                 |
+| :------------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `composite`                                 | Marks a project as a buildable unit for project references. Required for `tsc -b` to work.                                                                                   |
+| `declaration`                               | Emits `.d.ts` files so referenced projects resolve through declaration output instead of full source.                                                                        |
+| `declarationMap`                            | Generates source maps for declarations, giving you cross-project "Go to Definition" and rename support in editors.                                                           |
+| `incremental`                               | Stores build state in a `.tsbuildinfo` file so subsequent builds only re-check what changed.                                                                                 |
+| `isolatedModules`                           | Warns about constructs that single-file transpilers like esbuild and SWC cannot safely handle.                                                                               |
+| `isolatedDeclarations`                      | Makes declaration generation mostly syntactic. Paired with `noCheck`, enables much faster declaration emit.                                                                  |
+| `noCheck`                                   | Skips full type checking during emit. Useful when a fast transpiler handles JavaScript and `tsc` only emits `.d.ts` files.                                                   |
+| `noEmit`                                    | Type-checks without producing output. The standard flag for "let the bundler emit, let TypeScript check."                                                                    |
+| `skipLibCheck`                              | Skips type-checking `.d.ts` files in `node_modules`. Speeds up builds but can hide misconfiguration.                                                                         |
+| `types`                                     | Controls which `@types` packages are auto-included. Setting `[]` stops ambient type pollution from slowing startup.                                                          |
+| `verbatimModuleSyntax`                      | Enforces explicit `import type` syntax so transpilers can safely drop type-only imports.                                                                                     |
+| `assumeChangesOnlyAffectDirectDependencies` | In watch mode, limits rechecking to direct dependents of the changed file. Useful when most edits have local impact.                                                         |
+| `disableReferencedProjectLoad`              | Stops the language service from eagerly loading all referenced projects. Trades some cross-project awareness for lower memory.                                               |
+| `disableSolutionSearching`                  | Stops the language service from walking the full solution graph. Another memory pressure valve for large workspaces.                                                         |
+| `disableSourceOfProjectReferenceRedirect`   | Uses on-disk `.d.ts` files instead of generating in-memory declaration redirects. Reduces editor memory at the cost of needing a prior build.                                |
+| `module` / `moduleResolution`               | Controls how imports are resolved. `nodenext` for Node packages, `preserve` or `esnext` for bundled code. `bundler` resolution can leak unsafe specifiers into declarations. |
+| `rootDir` / `outDir`                        | Separates source from output. Prevents consumers from accidentally loading `.ts` files instead of `.d.ts`.                                                                   |
+
+### Diagnostic flags
+
+| Flag                    | What it shows                                                                                          |
+| :---------------------- | :----------------------------------------------------------------------------------------------------- |
+| `--extendedDiagnostics` | Time breakdown across phases: I/O, parsing, binding, checking, emit. Start here.                       |
+| `--listFilesOnly`       | Every file TypeScript decided to include. You will probably be surprised by a few of them.             |
+| `--explainFiles`        | Why each file was pulled in—which import or reference caused it.                                       |
+| `--traceResolution`     | Step-by-step module resolution decisions. Useful for debugging why a wrong `.d.ts` is being picked up. |
+| `--generateTrace`       | Produces a Chrome DevTools–compatible trace. Look at `checkSourceFile` and `checkExpression` events.   |
+
 ## A Default Setup That Ages Well
 
 The setup that tends to survive growth is boring in the best way. Put shared strictness and syntax defaults in a root base config. Put only `references` in a root solution config. Give each package its own `tsconfig` with `composite`, `declaration`, `incremental`, and clear `rootDir`/`outDir` boundaries. Scope `types` tightly. Use real package dependencies and real package exports. For app packages, let the bundler emit and let TypeScript check. For library packages, make declaration quality a first-class concern.
@@ -268,3 +302,73 @@ When TypeScript starts to feel slow, resist the urge to hunt for one magical fla
 [8]: https://www.typescriptlang.org/tsconfig/module 'TypeScript: TSConfig Option: module'
 [9]: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-7.html 'TypeScript: Documentation - TypeScript 4.7'
 [10]: https://www.typescriptlang.org/docs/handbook/modules/guides/choosing-compiler-options.html 'TypeScript: Documentation - Modules - Choosing Compiler Options'
+
+---
+
+## TL;DR
+
+### Where TypeScript Breaks
+
+> Build slowness and editor slowness are the same problem wearing different outfits.
+
+| Failure mode           | Symptom                                | Fix                                          |
+| ---------------------- | -------------------------------------- | -------------------------------------------- |
+| Oversized program      | Slow builds, high memory               | Narrow `include`, set `"types": []`          |
+| Barrel files           | One import pulls hundreds of modules   | Direct imports, remove re-export index files |
+| Complex types          | Slow checking, quadratic unions        | Prefer interfaces, name conditional types    |
+| Anonymous exports      | Huge `.d.ts` output                    | Add explicit return types to exports         |
+| Ambient type pollution | Slow startup, duplicate globals        | Set `"types": []`, list only what's needed   |
+| Circular dependencies  | Deep instantiation errors, `undefined` | Break cycles, restructure package graph      |
+
+- Atlassian removed barrel files: **75%** faster builds, **30%** faster IDE highlighting, **88%** fewer tests per PR.
+
+---
+
+### Measure First
+
+> Before flipping flags, figure out where the time is actually going.
+
+```bash
+tsc -p tsconfig.json --extendedDiagnostics
+tsc -p tsconfig.json --listFilesOnly
+tsc -p tsconfig.json --explainFiles > explain.txt
+tsc -p tsconfig.json --generateTrace .trace --incremental false
+```
+
+- High `Files` + high `I/O Read time` → problem is your file set or module resolution.
+- High `Check time` → problem is your types.
+- `--generateTrace` produces a Chrome-compatible trace. Look at `checkSourceFile` and `checkExpression`.
+
+---
+
+### Project References
+
+> Split the monorepo into independently buildable units.
+
+```jsonc
+// Root solution config — only references, no files
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/shared" },
+    { "path": "./packages/api" },
+    { "path": "./packages/web" },
+  ],
+}
+```
+
+- Each package: `composite: true`, `declaration: true`, `incremental: true`.
+- Imports resolve through declaration output, not full source.
+- `declarationMap` gives you cross-project "Go to Definition."
+- 5–20 projects is the empirical sweet spot.
+
+---
+
+### The Default Setup
+
+> The setup that survives growth is boring in the best way.
+
+- **Apps:** Let the bundler emit JavaScript. Run `tsc --noEmit` separately.
+- **Libraries:** Keep `tsc` in charge of declarations. Make declaration quality a first-class concern.
+- **All packages:** Narrow `include`. Set `"types": []`. Separate `rootDir` and `outDir`. Use real `package.json` exports.
+- **When it feels slow:** Check file count first. Then check whether the pain is in program construction, resolution, or checking. Then fix the structure.

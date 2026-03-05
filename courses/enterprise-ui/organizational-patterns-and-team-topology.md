@@ -424,3 +424,61 @@ The role of the architect in this world isn't to dictate code from above. It's t
 [9]: https://www.jeremiahlee.com/posts/failed-squad-goals/ "Spotify's Failed #SquadGoals — Jeremiah Lee"
 [10]: https://handbook.gitlab.com/job-families/engineering/development/frontend/staff/ 'Staff Frontend Engineer — GitLab Handbook'
 [11]: https://dora.dev/guides/dora-metrics-four-keys/ 'DORA Metrics — dora.dev'
+
+---
+
+## TL;DR
+
+### Conway's Law
+
+> "Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations."
+
+- Tight team coupling produces monolithic code. Loose coupling produces modular architectures.
+- **Inverse Conway Maneuver:** Reshape the org structure _first_ to produce the architecture you want.
+- Layer-based teams (frontend team, backend team, database team) create handoff bottlenecks. Every feature crosses every layer.
+- Vertical slices—one team owns search end-to-end, another owns checkout—align naturally with microfrontend boundaries.
+
+---
+
+### Four Team Topologies
+
+> A vocabulary for how teams interact, not a mandate for how to organize.
+
+| Topology                  | Purpose                          | Interaction mode          |
+| ------------------------- | -------------------------------- | ------------------------- |
+| **Stream-aligned**        | Delivers business value directly | Owns a vertical slice     |
+| **Platform**              | Reduces cognitive load           | X-as-a-Service            |
+| **Enabling**              | Transfers capability             | Collaboration (temporary) |
+| **Complicated-subsystem** | Isolates specialist domain       | X-as-a-Service            |
+
+- Platform teams must treat stream-aligned teams as _customers_, not subordinates.
+- Enabling teams exist to make themselves unnecessary—they mentor, then step away.
+- If a platform team is blocking feature delivery, it's not a platform team. It's a bottleneck.
+
+---
+
+### Architecture Decision Records
+
+> ADRs make decisions discoverable without making them bureaucratic.
+
+- **Status:** Proposed → Accepted → Deprecated → Superseded.
+- **Context:** What forces are at play? What's the problem?
+- **Decision:** What did we decide and why?
+- **Consequences:** What changes? What do we gain? What do we lose?
+- Store ADRs in version control alongside the code they describe. Not in Confluence. Not in Slack.
+- Decisions are _immutable_. New decisions supersede old ones—they don't edit them.
+
+---
+
+### Measuring What Matters
+
+> If you can't measure it, you're guessing.
+
+| Category           | What to measure                                        | Tool / Source     |
+| ------------------ | ------------------------------------------------------ | ----------------- |
+| **Process health** | Deploy frequency, lead time, failure rate, MTTR (DORA) | CI/CD metrics     |
+| **Code health**    | Bundle size, test coverage, dependency freshness       | Fitness functions |
+| **Team health**    | Cognitive load, tooling friction, onboarding time      | DX surveys        |
+
+- DORA metrics measure the _process_. Fitness functions measure the _code_. DX surveys measure the _people_.
+- Track cognitive load in three buckets: intrinsic (domain complexity), extraneous (tooling friction), germane (novel problem-solving).

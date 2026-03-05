@@ -321,9 +321,9 @@ But none of that is necessary to understand the federation configuration, which 
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: Rsbuild for Module Federation
+### Rsbuild for Module Federation
 
 > The modern alternative to webpack for federated apps.
 
@@ -346,8 +346,4 @@ export default defineConfig({
     }),
   ],
 });
-```
-
-```
-
 ```

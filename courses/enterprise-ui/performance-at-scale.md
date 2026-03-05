@@ -268,9 +268,9 @@ The applications that stay fast are the ones where performance is treated as an 
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: Performance in Enterprise Context
+### Performance in Enterprise Context
 
 > Enterprise performance ≠ consumer performance.
 
@@ -286,7 +286,7 @@ The applications that stay fast are the ones where performance is treated as an 
 
 ---
 
-### Slide: Code Splitting Strategies
+### Code Splitting Strategies
 
 > Three levels of splitting for microfrontends.
 
@@ -299,7 +299,3 @@ The applications that stay fast are the ones where performance is treated as an 
 - **Barrel file trap:** `index.ts` that re-exports everything defeats tree-shaking. Import directly from the module.
 - **Shared chunks:** Configure bundler to extract common dependencies into shared chunks across remotes.
 - Use `modulepreload` for critical federated remotes the user will likely need.
-
-```
-
-```

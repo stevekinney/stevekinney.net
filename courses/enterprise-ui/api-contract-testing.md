@@ -152,3 +152,45 @@ That combination gives you fast local feedback, review-time compatibility checks
 [18]: https://buf.build/docs/breaking/ 'Breaking change detection - Buf Docs'
 [19]: https://docs.pact.io/implementation_guides/javascript/docs/messages 'Event Driven Systems | Pact Docs'
 [20]: https://docs.pact.io/pact_broker/client_cli/readme 'README | Pact Docs'
+
+---
+
+## TL;DR
+
+### Three Contract Styles
+
+> Contract testing validates two applications in isolation—without assembling every service into one slow, flaky end-to-end suite.
+
+| Style               | Who writes the contract | Who verifies        | Strengths                                    |
+| ------------------- | ----------------------- | ------------------- | -------------------------------------------- |
+| **Provider-driven** | Provider (spec-first)   | Both sides          | Single source of truth, early schema diffing |
+| **Consumer-driven** | Consumer (Pact-style)   | Provider replays    | Catches real usage patterns                  |
+| **Bi-directional**  | Both independently      | Compatibility check | Works without code access to the other side  |
+
+- Provider-driven: write the OpenAPI/AsyncAPI/Protobuf spec first, generate clients and tests from it.
+- Consumer-driven: consumers record interactions, providers replay them. Catches "the field exists but nobody sends it" bugs.
+- Bi-directional: each side publishes their own artifact, a broker checks compatibility. Good for cross-organization boundaries.
+
+---
+
+### Protocol Matrix
+
+> Different protocols need different contract artifacts and tooling.
+
+| Protocol    | Contract artifact | Schema diffing    | Interaction testing | Tooling              |
+| ----------- | ----------------- | ----------------- | ------------------- | -------------------- |
+| **REST**    | OpenAPI spec      | oasdiff           | Pact, Schemathesis  | Pact Broker          |
+| **GraphQL** | Schema + ops      | GraphQL Inspector | Pact, client tests  | Apollo Studio        |
+| **gRPC**    | Protobuf          | Buf breaking      | Generated stubs     | Buf, protoc          |
+| **Events**  | AsyncAPI          | AsyncAPI diff     | Pact message pacts  | Pact, AsyncAPI tools |
+
+---
+
+### A Practical Pipeline
+
+> Four layers, each catching a different class of problem.
+
+- **Contract versioning:** Publish contract artifacts alongside code. Tag with version and environment.
+- **Pull request checks:** Diff the contract against the deployed version. Flag breaking changes before merge.
+- **Conformance tests:** Provider replays consumer interactions (or consumer validates against provider spec) in CI.
+- **Release gating:** Check compatibility against the environment you're deploying _into_, not just "latest."

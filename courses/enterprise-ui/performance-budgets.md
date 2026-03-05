@@ -175,3 +175,48 @@ That is the whole trick. Budget the user experience in the field, budget proxies
 [13]: https://developer.chrome.com/docs/lighthouse/performance/first-meaningful-paint 'First Meaningful Paint | Chrome for Developers'
 [14]: https://web.dev/articles/use-lighthouse-for-performance-budgets 'Use Lighthouse for performance budgets | web.dev'
 [15]: https://developer.chrome.com/docs/lighthouse/performance/performance-scoring 'Lighthouse performance scoring | Chrome for Developers'
+
+---
+
+## TL;DR
+
+### Three Budget Layers
+
+> Budget the user experience in the field, proxies in CI, and bytes at build time.
+
+| Layer     | What you measure           | Where it runs | Tooling                           |
+| --------- | -------------------------- | ------------- | --------------------------------- |
+| **Field** | Real user metrics (RUM)    | Production    | web-vitals, Datadog, Sentry       |
+| **Lab**   | Synthetic audits           | CI            | Lighthouse CI, WebPageTest        |
+| **Asset** | Bundle size, request count | Build time    | webpack `performance`, bundlesize |
+
+- Field budgets catch what users actually experience.
+- Lab budgets catch regressions before deploy.
+- Asset budgets catch problems before the build ships.
+
+---
+
+### Core Web Vitals Thresholds
+
+> These are the numbers that matter at p75.
+
+| Metric  | Good     | Needs Improvement | Poor     |
+| ------- | -------- | ----------------- | -------- |
+| **LCP** | ≤ 2.5 s  | ≤ 4.0 s           | > 4.0 s  |
+| **INP** | ≤ 200 ms | ≤ 500 ms          | > 500 ms |
+| **CLS** | ≤ 0.1    | ≤ 0.25            | > 0.25   |
+
+- Budget separately for mobile and desktop—they're different populations.
+- INP can't be measured in lab. Use TBT as a CI proxy.
+- Lab LCP can differ from field LCP by 2x or more because of TTFB variance.
+
+---
+
+### Enforcement Points
+
+> A budget nobody enforces is dashboard wallpaper.
+
+- **Build time:** webpack `performance.maxAssetSize` and `maxEntrypointSize` fail the build when bundles exceed limits.
+- **CI:** Lighthouse CI asserts against metric thresholds per route. Use `median` aggregation and path-based overrides.
+- **Production:** Collect field data with `web-vitals`, send to your analytics pipeline, alert when p75 regresses.
+- Set warnings at 85–90% of the hard ceiling. Teams need early smoke alarms, not just hard stops.

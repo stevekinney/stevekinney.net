@@ -16,13 +16,16 @@ The **Strangler Fig pattern** is an incremental replacement strategy. You put a 
 
 At its simplest:
 
-```text
-Clients
-   │
-Façade / proxy / router
-  ┌─┴─┐
-  │   │
-Legacy   New component
+```mermaid
+flowchart TD
+    Clients["Clients"]
+    Facade["Facade / Proxy / Router"]
+    Legacy["Legacy System"]
+    New["New Component"]
+
+    Clients --> Facade
+    Facade --> Legacy
+    Facade --> New
 ```
 
 The façade is the control point. Early on, it routes almost everything to the legacy system. As new slices are implemented, it starts sending only those slices to the new code. The client ideally doesn't need to know which side owns a given feature.
@@ -146,3 +149,40 @@ We'll put this into practice in [Exercise 9](strangler-fig-and-codemods-exercise
 [4]: https://cloud.google.com/resources/rearchitecting-to-cloud-native 'Re-architecting To Cloud Native | Google Cloud'
 [5]: https://martinfowler.com/bliki/BranchByAbstraction.html 'Branch By Abstraction'
 [6]: https://learn.microsoft.com/en-us/azure/architecture/patterns/strangler-fig 'Strangler Fig Pattern - Azure Architecture Center | Microsoft Learn'
+
+---
+
+## TL;DR
+
+### The Three-Phase Loop
+
+> Transform, coexist, eliminate. Repeat until the legacy system is gone.
+
+- **Transform:** Build the new implementation for one slice.
+- **Coexist:** Run both systems behind a façade (proxy, router, feature flag). Roll back if needed.
+- **Eliminate:** Delete the legacy code path entirely. If you skip this step, you don't have a migration—you have two systems forever.
+- New features go to the new system. Always. Feeding features back into legacy prevents strangulation.
+
+---
+
+### What Counts as a Slice
+
+> The migration unit is a vertical slice with clear business meaning.
+
+- Has visible value to someone (users, operators, another team).
+- Has a clear owner.
+- Has low blast radius—if it breaks, the damage is contained.
+- Is _not_ "rewrite the data layer" or "migrate all the forms." Those are horizontal cuts that never finish.
+- Start with the easiest slice, not the most important one. You're building confidence in the process.
+
+---
+
+### Common Failure Modes
+
+> Most strangler fig migrations don't fail because of the technology.
+
+- **Façade becomes a bottleneck:** The routing layer accumulates logic and becomes its own monolith.
+- **Wrong decomposition:** You carved along technical boundaries instead of business boundaries. Now every feature change touches both systems.
+- **Permanent dual-writes:** The "temporary" data synchronization layer becomes load-bearing infrastructure nobody dares remove.
+- **No cleanup:** Compatibility layers and adapters survive long past their usefulness. Schedule the deletion. Put it on the roadmap.
+- **The monolith keeps growing:** If new features still land in the legacy system, the migration will never converge.

@@ -316,9 +316,9 @@ The boring default wins here. Husky for native hook wiring. lint-staged for fast
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: Git Hooks as Guardrails
+### Git Hooks as Guardrails
 
 > Enforce standards before code reaches CI.
 
@@ -340,7 +340,3 @@ The boring default wins here. Husky for native hook wiring. lint-staged for fast
 - Pre-push: run type-check.
 
 **In a monorepo:** Per-package lint-staged configs. Each package defines its own rules.
-
-```
-
-```

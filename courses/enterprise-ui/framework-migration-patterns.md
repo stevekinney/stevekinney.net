@@ -271,9 +271,9 @@ We'll apply these patterns hands-on in [Exercise 9](strangler-fig-and-codemods-e
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: The Bridge Layer
+### The Bridge Layer
 
 > Two frameworks coexist — a bridge makes them talk.
 
@@ -288,7 +288,7 @@ We'll apply these patterns hands-on in [Exercise 9](strangler-fig-and-codemods-e
 
 ---
 
-### Slide: The Two Systems Tax
+### The Two Systems Tax
 
 > Running two frameworks simultaneously has a cost.
 
@@ -304,7 +304,3 @@ We'll apply these patterns hands-on in [Exercise 9](strangler-fig-and-codemods-e
 - **Migration-first rule** — new features are built in the new framework only.
 
 **The 70% stall:** Most migrations stall at ~70% because the remaining 30% is the hardest code. Use a ratcheting approach — once a module is migrated, it can never go back.
-
-```
-
-```

@@ -129,7 +129,7 @@ function injectAnnotations(html, annotations) {
         const annotation = annotations.get(lineIndex - 1);
         if (annotation !== undefined) {
           result.push(
-            `\n<span class="code-annotation"><span class="code-annotation-indicator">Note</span> ${escapeSvelteText(annotation)}</span>`,
+            `<span class="code-annotation"><span class="code-annotation-indicator">Note</span> ${escapeSvelteText(annotation)}</span>`,
           );
         }
       }
@@ -144,7 +144,7 @@ function injectAnnotations(html, annotations) {
     const last = result.length - 1;
     result[last] = result[last].replace(
       '</code></pre>',
-      `\n<span class="code-annotation"><span class="code-annotation-indicator">Note</span> ${escapeSvelteText(lastAnnotation)}</span></code></pre>`,
+      `<span class="code-annotation"><span class="code-annotation-indicator">Note</span> ${escapeSvelteText(lastAnnotation)}</span></code></pre>`,
     );
   }
 

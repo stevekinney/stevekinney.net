@@ -212,3 +212,53 @@ We'll put this into practice in [Exercise 9](strangler-fig-and-codemods-exercise
 [5]: https://ts-morph.com/ 'ts-morph'
 [6]: https://postcss.org/ 'PostCSS'
 [7]: https://github.com/inikulin/parse5 'parse5'
+
+---
+
+## TL;DR
+
+### The AST Pipeline
+
+> Parse → find → transform → print. That's the whole idea.
+
+```text
+Source Code → Parse → Abstract Syntax Tree → Find & Transform → Print → Modified Source
+```
+
+- Text-based transforms (regex, sed) break on multiline expressions, import aliases, and content inside comments or strings.
+- AST transforms understand program _structure_. They match nodes, not characters.
+- The printer preserves original formatting (whitespace, quotes, semicolons) for everything it didn't touch.
+
+---
+
+### jscodeshift
+
+> Meta's toolkit for writing and running AST-based code transforms at scale.
+
+```typescript
+export default function transform(file, api) {
+  const j = api.jscodeshift;
+  const root = j(file.source);
+
+  root.find(j.ImportDeclaration, { source: { value: '@legacy/analytics' } }).forEach((path) => {
+    path.node.source.value = '@modern/analytics';
+  });
+
+  return root.toSource();
+}
+```
+
+- jQuery-like API: `find()`, `filter()`, `forEach()`, `replaceWith()`.
+- Runs transforms in parallel across large codebases.
+- Use AST Explorer to prototype transforms before committing to them.
+
+---
+
+### When Codemods Earn Their Keep
+
+> Codemods are worth it when the transformation is mechanical, repetitive, and testable.
+
+- **Mechanical:** The old pattern maps directly to the new pattern. No business-logic judgment required.
+- **Repetitive:** Dozens to hundreds of call sites. If it's three files, do it by hand.
+- **Testable:** String-in, string-out. Write input/output pairs, run the transform, compare.
+- Ship codemods _with_ breaking changes. The library team that renames the API writes the codemod. Migration cost shifts from consumers to producers.

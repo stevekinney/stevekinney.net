@@ -42,28 +42,26 @@ If you're running a [Module Federation](module-federation.md) setup with indepen
 ### Which shape fits?
 
 ```mermaid
-block-beta
-  columns 3
-
-  block:pyramid["Test Pyramid"]:1
-    columns 1
+flowchart TB
+  subgraph pyramid["Test Pyramid"]
+    direction TB
     p3["E2E"]
     p2["Integration"]
-    p1["Unit Tests"]
+    p1["Unit Tests ✦"]
   end
 
-  block:trophy["Testing Trophy"]:1
-    columns 1
+  subgraph trophy["Testing Trophy"]
+    direction TB
     t4["E2E"]
-    t3["Integration"]
+    t3["Integration ✦"]
     t2["Unit"]
     t1["Static Analysis"]
   end
 
-  block:honeycomb["Testing Honeycomb"]:1
-    columns 1
+  subgraph honeycomb["Testing Honeycomb"]
+    direction TB
     h3["System E2E"]
-    h2["Service Integration"]
+    h2["Service Integration ✦"]
     h1["Implementation"]
   end
 
@@ -79,7 +77,7 @@ block-beta
   style h3 fill:#f87171,color:#000
 ```
 
-The green layer is where each model concentrates effort. The shapes disagree on what that layer should be.
+The ✦ marks each model's center of gravity—the layer where it concentrates the most testing effort.
 
 | Model     | Center of gravity   | Best fit                                            |
 | :-------- | :------------------ | :-------------------------------------------------- |
@@ -520,9 +518,9 @@ The overarching principle: testing at scale is an organizational problem, not ju
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: Test Shapes
+### Test Shapes
 
 > Three models for how much of each test type to write.
 
@@ -541,7 +539,7 @@ The overarching principle: testing at scale is an organizational problem, not ju
 
 ---
 
-### Slide: Visual Regression Testing
+### Visual Regression Testing
 
 > Catch unintended visual changes automatically.
 

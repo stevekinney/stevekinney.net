@@ -251,3 +251,62 @@ Once it's arranged that way, MSW stops feeling like test glue and starts feeling
 [17]: https://mswjs.io/docs/api/graphql/ 'graphql - Mock Service Worker'
 [18]: https://mswjs.io/docs/websocket/ 'Mocking WebSocket - Mock Service Worker'
 [19]: https://mswjs.io/docs/faq/ 'FAQ - Mock Service Worker'
+
+---
+
+## TL;DR
+
+### Network-Level Interception
+
+> MSW intercepts at the network boundary, not at the call site.
+
+- Works with `fetch`, Axios, Apollo, React Query—anything that makes HTTP requests.
+- **Browser:** Service Worker intercepts outgoing requests. Requires `mockServiceWorker.js` in your public assets.
+- **Node:** Native module interception. No worker file, no polyfills.
+- Same handlers work in both environments. Write once, use in tests, Storybook, and local development.
+
+---
+
+### Handler Anatomy
+
+> Two parts: a predicate (which requests match) and a resolver (what to return).
+
+```typescript
+import { http, HttpResponse } from 'msw';
+
+export const handlers = [
+  http.get('/api/users/:id', ({ params }) => {
+    return HttpResponse.json({ id: params.id, name: 'Ada Lovelace' });
+  }),
+
+  http.post('/api/users', async ({ request }) => {
+    const body = await request.json();
+    return HttpResponse.json(body, { status: 201 });
+  }),
+];
+```
+
+- Route-style matching with path params, regex, and wildcard support.
+- Resolvers receive the full `request` object—read headers, body, cookies.
+
+---
+
+### Runtime Overrides
+
+> Base handlers define the happy path. Per-test overrides handle the exceptions.
+
+```typescript
+it('shows an error when the API fails', async () => {
+  server.use(
+    http.get('/api/users/:id', () => {
+      return new HttpResponse(null, { status: 500 });
+    }),
+  );
+  // ...assert the error UI appears
+});
+```
+
+- `server.use()` prepends handlers for the duration of the test.
+- `server.resetHandlers()` in `afterEach` restores the base handlers.
+- Add `{ once: true }` for one-shot overrides that auto-remove.
+- Avoid asserting _that_ a request was made. Assert the _user-visible behavior_ that results from it.
