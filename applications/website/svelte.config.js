@@ -316,6 +316,8 @@ const config = {
         }
         throw new Error(message);
       },
+      // Paginated routes may have no entries when post count fits on one page
+      handleUnseenRoutes: 'ignore',
     },
   },
 };

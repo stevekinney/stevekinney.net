@@ -6,6 +6,7 @@
   import formatDate from '$lib/format-date';
   import { description, title } from '$lib/metadata';
   import { buildPersonSchema, buildWebSiteSchema } from '$lib/structured-data';
+  import { POSTS_PER_PAGE } from '$lib/pagination';
   import Biography from './biography.md';
 
   import selfPortraitAvif from '$assets/self-portrait.jpg?w=384;768&format=avif&as=srcset&withoutEnlargement';
@@ -13,6 +14,9 @@
   import selfPortraitMeta from '$assets/self-portrait.jpg?metadata';
 
   const { data } = $props();
+
+  const recentPosts = $derived(data.posts.slice(0, POSTS_PER_PAGE));
+  const hasMorePosts = $derived(data.posts.length > POSTS_PER_PAGE);
 
   const jsonLd = [buildWebSiteSchema(), buildPersonSchema()];
 </script>
@@ -24,7 +28,7 @@
     <section class="space-y-4">
       <h2 class="text-xl font-bold">Recent Posts</h2>
       <ul class="space-y-2">
-        {#each data.posts as post (post.slug)}
+        {#each recentPosts as post (post.slug)}
           <li class="space-x-2">
             <Link href="/writing/{post.slug}">{post.title}</Link>
             <time class="text-primary-800 dark:text-primary-200 text-sm" datetime={post.date}>
@@ -33,6 +37,11 @@
           </li>
         {/each}
       </ul>
+      {#if hasMorePosts}
+        <p>
+          <Link href="/writing">View all writing</Link>
+        </p>
+      {/if}
     </section>
 
     <picture>
