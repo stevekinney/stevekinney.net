@@ -1,10 +1,18 @@
 <script lang="ts">
+  import { dev } from '$app/environment';
   import { page } from '$app/stores';
+  import { injectAnalytics } from '@vercel/analytics/sveltekit';
+  import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
   import { author } from '$lib/metadata';
   import { toDataAttributes } from '$lib/to-data-attributes';
   import { merge } from '$merge';
   import { Github, Instagram, Linkedin, Twitter, Youtube } from 'lucide-svelte';
   import type { Snippet } from 'svelte';
+
+  if (!dev) {
+    injectAnalytics({ mode: 'production' });
+    injectSpeedInsights();
+  }
 
   import type { ExtendElement } from '$lib/components/component.types';
   import Navigation from '$lib/components/navigation.svelte';
