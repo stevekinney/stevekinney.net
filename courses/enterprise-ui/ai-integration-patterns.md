@@ -613,9 +613,9 @@ The guiding principles:
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: Where Inference Lives
+### Where Inference Lives
 
 > The first decision: where does the AI processing happen?
 
@@ -631,7 +631,7 @@ The guiding principles:
 
 ---
 
-### Slide: Streaming UI Patterns
+### Streaming UI Patterns
 
 > LLM responses arrive token by token. That changes everything.
 
@@ -644,7 +644,7 @@ The guiding principles:
 
 ---
 
-### Slide: Prompt Management
+### Prompt Management
 
 > Prompts are versioned, tested, reviewed artifacts — not ad-hoc strings.
 
@@ -663,7 +663,7 @@ The guiding principles:
 
 ---
 
-### Slide: Tool Use and Agentic Patterns
+### Tool Use and Agentic Patterns
 
 > The AI doesn't just say things — it does things.
 
@@ -683,7 +683,7 @@ LLM  → "I found 3 documents..."
 
 ---
 
-### Slide: RAG and Citation UI
+### RAG and Citation UI
 
 > Retrieval-Augmented Generation grounds answers in your documents.
 
@@ -699,7 +699,7 @@ LLM  → "I found 3 documents..."
 
 ---
 
-### Slide: Graceful Degradation for AI
+### Graceful Degradation for AI
 
 > Every AI feature needs a non-AI fallback.
 
@@ -717,7 +717,7 @@ LLM  → "I found 3 documents..."
 
 ---
 
-### Slide: AI-Specific Observability
+### AI-Specific Observability
 
 > Different failure modes, different metrics.
 

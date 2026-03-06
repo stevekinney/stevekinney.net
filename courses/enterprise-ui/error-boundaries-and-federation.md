@@ -120,9 +120,9 @@ In a traditional single-build application, this gap barely matters because there
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: The Bootstrap Problem
+### The Bootstrap Problem
 
 > Error boundaries don't catch the failure you actually have.
 
@@ -141,7 +141,7 @@ Timeline:
 
 ---
 
-### Slide: Catching Bootstrap Failures
+### Catching Bootstrap Failures
 
 > Wrap the import, not just the component.
 
@@ -159,7 +159,7 @@ const SafeRemote = lazy(() =>
 
 ---
 
-### Slide: The RemoteBoundary Pattern
+### The RemoteBoundary Pattern
 
 > A reusable wrapper for every federated remote.
 
@@ -182,7 +182,7 @@ const SafeRemote = lazy(() =>
 
 ---
 
-### Slide: Making Remotes Optional
+### Making Remotes Optional
 
 > Not all remotes are critical. Treat them accordingly.
 

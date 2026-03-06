@@ -159,9 +159,9 @@ That setup isn't glamorous, which is precisely why it tends to survive contact w
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: What Is a Design System?
+### What Is a Design System?
 
 > More than a component library.
 
@@ -175,7 +175,7 @@ That setup isn't glamorous, which is precisely why it tends to survive contact w
 
 ---
 
-### Slide: Distributing a Design System
+### Distributing a Design System
 
 > How components get from the design system to the applications.
 
@@ -192,7 +192,7 @@ Add Module Federation sharing later for components that _must_ be in sync across
 
 ---
 
-### Slide: Theming Across Boundaries
+### Theming Across Boundaries
 
 > CSS custom properties — the only theming mechanism that crosses Shadow DOM.
 

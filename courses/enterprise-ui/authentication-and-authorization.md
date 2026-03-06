@@ -526,9 +526,9 @@ The organizations that treat identity management as a platform service—rather 
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: Auth in Distributed Frontends
+### Auth in Distributed Frontends
 
 > The hardest cross-cutting concern.
 
@@ -543,7 +543,7 @@ The organizations that treat identity management as a platform service—rather 
 
 ---
 
-### Slide: The BFF Token Pattern
+### The BFF Token Pattern
 
 > Tokens stay server-side. The browser gets a session cookie.
 
@@ -563,7 +563,7 @@ Browser ←→ BFF (session cookie, httpOnly)
 
 ---
 
-### Slide: Authorization Models
+### Authorization Models
 
 > Pick the model that matches your complexity.
 
@@ -579,7 +579,7 @@ Browser ←→ BFF (session cookie, httpOnly)
 
 ---
 
-### Slide: Session Propagation Across Remotes
+### Session Propagation Across Remotes
 
 > All remotes share one session. Here's how.
 

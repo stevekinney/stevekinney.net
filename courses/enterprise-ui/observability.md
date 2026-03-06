@@ -539,9 +539,9 @@ The sampling and cost guidance from earlier in this section still applies. The f
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: Structured Logging
+### Structured Logging
 
 > Logs that machines can parse and humans can read.
 

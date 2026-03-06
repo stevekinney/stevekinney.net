@@ -460,11 +460,11 @@ The cross-case pattern: contract clarity plus migration tooling plus operational
 
 ---
 
-## Slides
+## TL;DR
 
 _Note: The existing slide deck already contains a "Design System Governance" slide. The slides below provide additional depth for this section._
 
-### Slide: Governance That Scales
+### Governance That Scales
 
 > Rules without tooling are just suggestions.
 

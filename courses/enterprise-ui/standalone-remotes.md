@@ -126,9 +126,9 @@ That's it. The remote is now a real application that also happens to be consumab
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: Standalone Remotes
+### Standalone Remotes
 
 > Run any remote independently — without the host.
 
@@ -145,7 +145,7 @@ That's it. The remote is now a real application that also happens to be consumab
 
 ---
 
-### Slide: Standalone Drift
+### Standalone Drift
 
 > The risk: your standalone remote diverges from reality.
 

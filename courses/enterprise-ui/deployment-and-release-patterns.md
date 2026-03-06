@@ -256,9 +256,9 @@ The organizations that ship fast and break little aren't the ones with the most 
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: Separate Deployment from Release
+### Separate Deployment from Release
 
 > Deployment is putting code on servers. Release is exposing it to users.
 
@@ -276,7 +276,7 @@ Deploy v2.3.1 → 0% of users see it (feature flag off)
 
 ---
 
-### Slide: Release Strategies
+### Release Strategies
 
 > Graduated exposure to limit blast radius.
 
@@ -295,7 +295,7 @@ Deploy v2.3.1 → 0% of users see it (feature flag off)
 
 ---
 
-### Slide: Preview Environments
+### Preview Environments
 
 > Every PR gets its own deployed environment.
 

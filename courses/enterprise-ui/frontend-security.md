@@ -411,9 +411,9 @@ The practices described in this section—SBOM generation, CSP violation reporti
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: The Browser's Trust Model
+### The Browser's Trust Model
 
 > Your code runs in an environment you don't control.
 
@@ -430,7 +430,7 @@ The practices described in this section—SBOM generation, CSP violation reporti
 
 ---
 
-### Slide: Content Security Policy
+### Content Security Policy
 
 > CSP tells the browser which scripts are allowed to execute.
 
@@ -450,7 +450,7 @@ Content-Security-Policy:
 
 ---
 
-### Slide: Supply Chain Security
+### Supply Chain Security
 
 > You ship your dependencies' bugs too.
 
@@ -474,7 +474,7 @@ Content-Security-Policy:
 
 ---
 
-### Slide: Sandboxing Third-Party Code
+### Sandboxing Third-Party Code
 
 > Isolation strategies when you can't fully trust the code.
 

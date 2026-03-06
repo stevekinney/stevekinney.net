@@ -461,9 +461,9 @@ A design system is a product. Products that ship once and never iterate die. The
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: Maintaining a Design System
+### Maintaining a Design System
 
 > The post-launch challenges.
 

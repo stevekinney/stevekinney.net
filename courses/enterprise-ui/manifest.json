@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generatedAt": "2026-03-04T10:50:06.843Z",
-    "hash": "77c3d5fa171023572d17a4389a32215af9f91edebb8fd16e4db5f3456b22d1db"
+    "generatedAt": "2026-03-04T14:18:03.268Z",
+    "hash": "2836ad0435c9e9aa66455e6338e05820afe538f0b6cc3ea4c9a6a4a4c9b87141"
   },
   "course": {
     "slug": "enterprise-ui",
@@ -78,7 +78,7 @@
     },
     {
       "slug": "cicd-pipeline-exercise",
-      "title": "Exercise 7: CI/CD Pipeline",
+      "title": "Exercise 8: CI/CD Pipeline",
       "description": "Build a GitHub Actions workflow that runs the full quality gate on every push, uses Turborepo for caching, and adds Lighthouse CI performance budgets to catch regressions before they ship.",
       "date": "2026-03-01T00:00:00.000Z",
       "file": "courses/enterprise-ui/cicd-pipeline-exercise.md",
@@ -115,6 +115,14 @@
       "date": "2026-03-01T07:00:00.000Z",
       "file": "courses/enterprise-ui/deployment-and-release-patterns.md",
       "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "design-system-governance-exercise",
+      "title": "Exercise 7: Design System Governance",
+      "description": "Refactor disconnected design tokens into CSS custom properties, connect them to components, and add visual regression tests to catch unintended cascading changes.",
+      "date": "2026-03-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/design-system-governance-exercise.md",
+      "modified": "2026-03-04T07:00:00.000Z"
     },
     {
       "slug": "design-system-governance",
@@ -189,6 +197,13 @@
       "modified": "2026-03-04T07:00:00.000Z"
     },
     {
+      "slug": "MISSING-SLIDES-DRAFT",
+      "title": "Missing Slides Draft",
+      "description": "Draft content for missing slides organized by section, ready to be added to the slide deck.",
+      "date": "1970-01-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/MISSING-SLIDES-DRAFT.md"
+    },
+    {
       "slug": "mock-service-worker",
       "title": "Mock Service Worker",
       "description": "A client-agnostic, standards-based way to describe network behavior once and reuse it across browser development, Node tests, and debugging—without stubbing fetch or patching Axios.",
@@ -234,6 +249,14 @@
       "description": "Observability is the ability to understand a system from the outside—from backend signals and OpenTelemetry to the frontend-specific challenges of error boundaries, session replay, source map security, microfrontend attribution, and resilience patterns that keep enterprise UIs standing when dependencies fall over.",
       "date": "2026-03-01T07:00:00.000Z",
       "file": "courses/enterprise-ui/observability.md",
+      "modified": "2026-03-01T07:00:00.000Z"
+    },
+    {
+      "slug": "organizational-patterns-and-team-topology",
+      "title": "Organizational Patterns and Team Topology",
+      "description": "How team structure dictates frontend architecture—Conway's Law, Team Topologies, vertical slices, platform teams, ADRs, inner-source, DORA metrics, and the organizational patterns that make (or break) large-scale frontend systems.",
+      "date": "2026-03-01T07:00:00.000Z",
+      "file": "courses/enterprise-ui/organizational-patterns-and-team-topology.md",
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
@@ -301,6 +324,13 @@
       "modified": "2026-03-01T07:00:00.000Z"
     },
     {
+      "slug": "SLIDE-DECK-GAP-ANALYSIS",
+      "title": "Enterprise UI Slide Deck Gap Analysis",
+      "description": "Comparison of course content markdown files against the slide deck PDF, identifying topics missing from the slides.",
+      "date": "1970-01-01T00:00:00.000Z",
+      "file": "courses/enterprise-ui/SLIDE-DECK-GAP-ANALYSIS.md"
+    },
+    {
       "slug": "standalone-remotes",
       "title": "Standalone Remotes",
       "description": "A Module Federation remote that can run independently—with its own dev server, mock data, and UI—is dramatically easier to develop, test, and debug than one that requires the host to be running.",
@@ -310,7 +340,7 @@
     },
     {
       "slug": "strangler-fig-and-codemods-exercise",
-      "title": "Exercise 9: Strangler Fig & Codemods",
+      "title": "Exercise 10: Strangler Fig & Codemods",
       "description": "Set up a routing-level strangler fig so legacy and modern apps coexist, migrate one route, and write a jscodeshift codemod that automates import transformations for the rest of the codebase.",
       "date": "2026-03-01T00:00:00.000Z",
       "file": "courses/enterprise-ui/strangler-fig-and-codemods-exercise.md",
@@ -342,7 +372,7 @@
     },
     {
       "slug": "testing-strategies-exercise",
-      "title": "Exercise 8: Testing Strategies",
+      "title": "Exercise 9: Testing Strategies",
       "description": "Write Playwright E2E tests for cross-route navigation, mock API responses with MSW, record HAR fixtures for deterministic replay, and discuss where contract testing fills the gaps.",
       "date": "2026-03-01T00:00:00.000Z",
       "file": "courses/enterprise-ui/testing-strategies-exercise.md",

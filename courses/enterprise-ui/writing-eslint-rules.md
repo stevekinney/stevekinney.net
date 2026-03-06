@@ -379,9 +379,9 @@ That's the whole game. ESLint rule authoring isn't hard. It's just easy to do sl
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: When to Write a Custom Rule
+### When to Write a Custom Rule
 
 > The decision tree.
 
@@ -398,7 +398,7 @@ That's the whole game. ESLint rule authoring isn't hard. It's just easy to do sl
 
 ---
 
-### Slide: Rule Anatomy
+### Rule Anatomy
 
 > Every ESLint rule is an AST visitor.
 
@@ -429,7 +429,7 @@ export default {
 
 ---
 
-### Slide: The AST Visitor Pattern
+### The AST Visitor Pattern
 
 > You declare which node types you care about. ESLint walks the tree.
 
@@ -450,7 +450,7 @@ Program
 
 ---
 
-### Slide: Testing Rules with RuleTester
+### Testing Rules with RuleTester
 
 > Rules are pure functions. Test them like pure functions.
 

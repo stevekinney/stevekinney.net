@@ -50,10 +50,6 @@ modified: 2026-03-01T00:00:00-07:00
 - [npm vs pnpm vs Bun: Workspace Package Managers](workspace-package-managers.md)
 - [Dependency Management in Monorepos](dependency-management.md)
 
-## Versioning & Release Management
-
-- [Versioning and Release Management](versioning-and-release-management.md)
-
 ## Scaling TypeScript
 
 - [Scaling TypeScript](scaling-typescript.md)
@@ -67,6 +63,7 @@ modified: 2026-03-01T00:00:00-07:00
 ## Design System Governance
 
 - [Design System Governance](design-system-governance.md)
+- [Versioning and Release Management](versioning-and-release-management.md)
 - [Maintaining a Design System at Scale](maintaining-a-design-system.md)
 - [Design Systems Across Microfrontends](design-systems-across-microfrontends.md)
 

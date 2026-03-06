@@ -352,9 +352,9 @@ Treat shared packages as products. Give them explicit `exports`. Version them wi
 
 ---
 
-## Slides
+## TL;DR
 
-### Slide: pnpm Catalogs
+### pnpm Catalogs
 
 > One place to define dependency versions for the entire monorepo.
 
