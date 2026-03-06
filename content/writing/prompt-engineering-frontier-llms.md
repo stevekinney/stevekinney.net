@@ -13,17 +13,17 @@ tags:
   - llms
 ---
 
-It's easy to overlook if you're just one person chatting back and forth with the **Future Robotic Overlord™** of your choice. But if you've spent any time integrating LLMs into production systems through the OpenAI, Anthropic, or Gemini APIs, you've probably noticed something: the difference between a prompt that _works_ and a prompt that _works reliably_ is enormous. And the gap between "works reliably on one model" and "works reliably across providers" is wider still.
+It's easy to overlook if you're just one person chatting back and forth with the **Future Robotic Overlord™** of your choice. But if you've spent any time integrating LLMs into production systems through the OpenAI, Anthropic, or Gemini APIs, you've probably noticed something: the difference between a prompt that works and a prompt that works _reliably_ is enormous. And the gap between "works reliably on _one_ model" and "works reliably _across providers_" is wider still.
 
-I've come to think of this less as "prompt engineering" and more as what Anthropic has started calling **context engineering**—designing the entire context window (system instructions, tool schemas, injected documents, examples, the query itself) as an interface contract between a probabilistic generator and your deterministic software system. The most reliable prompts aren't clever. They're explicit: explicit task definition, explicit input boundaries, explicit output requirements, explicit failure behavior, and an explicit verification loop. Every provider's guidance converges on this. There are no magic prompts.
+I've come to think of this less as "prompt engineering" and more as what Anthropic has started calling [**context engineering**](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)—designing the entire context window—system instructions, tool schemas, injected documents, examples, the query itself—as an interface contract between a probabilistic generator and your deterministic software system. The most reliable prompts aren't clever. They're explicit: explicit task definition, explicit input boundaries, explicit output requirements, explicit failure behavior, and an explicit verification loop. Every provider's guidance converges on this. There are no magic prompts.
 
-Some of these practices might seem tedious if you're typing them out by hand. They're trivial to implement if your system assembles prompts programmatically—which, if you're reading this, it probably does.
+Some of these practices might seem a bit tedious if you're typing them out by hand. But, they're trivial to implement if your system assembles prompts programmatically—which, if you're doing this at scale, then that's probably how you already roll.
 
 ## The Mental Model
 
 If there's one principle that transfers across every frontier model, it's this: **separate your instructions from your data**.
 
-Put behavioral instructions first. Place context—documents, user-provided text, logs, code—inside clear delimiters. Put the question or task at the end. OpenAI recommends placing instructions at the beginning and using delimiters like `###` or `"""` to separate instructions from context. Claude's guidance stresses that explicit tags separating instructions, context, and inputs reduce misinterpretation. Gemini's prompting guide emphasizes the same ordering: clear instructions, explicit constraints, deliberate component placement.
+Put behavioral instructions first. Place context—documents, user-provided text, logs, code—inside clear delimiters (e.g. something that looks suspiciously like XML). Put the question or task at the end. OpenAI recommends placing instructions at the beginning and using delimiters like `###` or `"""` to separate instructions from context. Claude's guidance stresses that explicit tags separating instructions, context, and inputs reduce misinterpretation. Gemini's prompting guide emphasizes the same ordering: clear instructions, explicit constraints, deliberate component placement.
 
 This isn't a stylistic preference. It's a reliability primitive. When instructions and data blur together, the model has to guess where one ends and the other begins. That guessing is where things go sideways.
 
@@ -120,7 +120,7 @@ Problem:
 
 ### Structured Prompting
 
-**Structured prompting**—using explicit sections, tags, and schemas—reduces instruction/data confusion. Claude's docs treat XML tagging as a first-class best practice. OpenAI recommends Markdown structure and XML tags. Gemini emphasizes consistent formatting and notes that showing positive patterns is more effective than showing "anti-pattern" examples.
+**Structured prompting**—using explicit sections, tags, and schemas—reduces instruction/data confusion. Claude's documentation treat XML tagging as a first-class best practice. OpenAI recommends Markdown structure and XML tags. Gemini emphasizes consistent formatting and notes that showing positive patterns is more effective than showing "anti-pattern" examples.
 
 ```xml
 <instructions>
@@ -158,16 +158,16 @@ The mental model shift matters: instead of asking the model to _know_ things, yo
 
 Most prompt engineering advice is universal. But there are real, concrete differences between the APIs that affect how you structure prompts, configure parameters, and design systems. Here's a compact summary of where the providers actually disagree.
 
-| Dimension                 | OpenAI                                                  | Anthropic (Claude)                                       | Google (Gemini)                                        |
-| ------------------------- | ------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------ |
-| **Structure preference**  | Markdown + XML tags                                     | XML tags (first-class best practice)                     | Clear sections, consistent example formatting          |
-| **Long-context ordering** | Bookend: instructions at beginning _and_ end            | Data first, query at end (up to 30% improvement claimed) | Data first, query at end                               |
-| **Reasoning controls**    | `reasoning_effort`; reasoning vs. GPT-style split       | Extended thinking; effort settings                       | `thinkingLevel` / `thinkingBudget`; dynamic by default |
-| **Structured outputs**    | JSON Schema enforcement at API level                    | `output_config.format`; cannot combine with citations    | JSON Schema via config; combinable with tools          |
-| **Grounding / citations** | Tool calling for retrieval; developer formats citations | Citations API (structured linkage to source docs)        | Google Search grounding with `groundingMetadata`       |
-| **Temperature**           | Low/0 recommended for factual tasks                     | Default behavior                                         | Keep at 1.0 for Gemini 3; lower can cause looping      |
-| **Prompt caching**        | Stable prefix at beginning                              | Exact prefix match; documented cache breakpoints         | Context caching for long-context workloads             |
-| **Few-shot philosophy**   | Start zero-shot, add as needed                          | 3–5 diverse examples recommended                         | Always include examples; watch for overfit             |
+| Dimension                 | OpenAI                                                  | Anthropic (Claude)                                         | Google (Gemini)                                        |
+| ------------------------- | ------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------ |
+| **Structure preference**  | Markdown + XML tags                                     | XML tags (first-class best practice)                       | Clear sections, consistent example formatting          |
+| **Long-context ordering** | Bookend: instructions at beginning _and_ end            | Data first, query at end (up to 30% improvement claimed)   | Data first, query at end                               |
+| **Reasoning controls**    | `reasoning_effort`; reasoning vs. GPT-style split       | Extended thinking; effort settings                         | `thinkingLevel` / `thinkingBudget`; dynamic by default |
+| **Structured outputs**    | JSON Schema enforcement at API level                    | `output_config.format`; cannot combine with citations      | JSON Schema via config; combinable with tools          |
+| **Grounding / citations** | Tool calling for retrieval; developer formats citations | Citations API (structured linkage to source documentation) | Google Search grounding with `groundingMetadata`       |
+| **Temperature**           | Low/0 recommended for factual tasks                     | Default behavior                                           | Keep at 1.0 for Gemini 3; lower can cause looping      |
+| **Prompt caching**        | Stable prefix at beginning                              | Exact prefix match; documented cache breakpoints           | Context caching for long-context workloads             |
+| **Few-shot philosophy**   | Start zero-shot, add as needed                          | 3–5 diverse examples recommended                           | Always include examples; watch for overfit             |
 
 A few of these deserve more context.
 
@@ -181,7 +181,7 @@ All three providers now offer JSON Schema-based structured outputs—the most ro
 
 ### Overprompting and tool-use calibration
 
-Claude's docs warn that prompts designed for older models can cause problems with newer ones. Instructions like "ALWAYS use the search tool before answering" that were necessary to get older models to use tools at all can cause _over-triggering_ in newer, more tool-competent models. The recommendation is to dial back aggressive tool-forcing language and use effort controls instead. This is a concrete example of why cross-model portability fails when prompt libraries carry legacy "booster" instructions that become miscalibrated as models improve.
+Claude's documentation warn that prompts designed for older models can cause problems with newer ones. Instructions like "ALWAYS use the search tool before answering" that were necessary to get older models to use tools at all can cause _over-triggering_ in newer, more tool-competent models. The recommendation is to dial back aggressive tool-forcing language and use effort controls instead. This is a concrete example of why cross-model portability fails when prompt libraries carry legacy "booster" instructions that become miscalibrated as models improve.
 
 ### Prompt caching architecture
 
@@ -195,7 +195,7 @@ This section could be its own article, but skipping it in a production guide wou
 
 ### The attack surface
 
-Prompt injection is the big one. It happens when untrusted content—user input, RAG results, web pages, tool outputs, MCP responses—contains instructions that the model follows as if they came from you. OpenAI's docs explicitly warn that injection can ride in web pages, file-search results, or search inputs. Google's system-instruction documentation states that system instructions don't fully prevent jailbreaks or leaks. Anthropic has dedicated guidance on mitigating prompt injections.
+Prompt injection is the big one. It happens when untrusted content—user input, RAG results, web pages, tool outputs, MCP responses—contains instructions that the model follows as if they came from you. OpenAI's documentation explicitly warn that injection can ride in web pages, file-search results, or search inputs. Google's system-instruction documentation states that system instructions don't fully prevent jailbreaks or leaks. Anthropic has dedicated guidance on mitigating prompt injections.
 
 The mental model: anything that isn't your developer/system instruction is _untrusted input_. User messages, obviously. But also retrieved documents, tool call results, scraped web content, and file uploads. All of it can contain adversarial instructions.
 
@@ -217,13 +217,13 @@ None of these are perfect. Defense in depth is the only responsible posture—la
 
 ## Two Workflows, Brittle to Hardened
 
-The vendor docs tell you _what_ to do. Let me show you what it looks like to go from a prompt that seemed to work to one that actually holds up.
+The vendor documentation tell you _what_ to do. Let me show you what it looks like to go from a prompt that seemed to work to one that actually holds up.
 
 ### Document Q&A with quote-grounding
 
-The task: answer questions about a set of policy documents. The answer must cite specific passages, refuse when the documents don't contain the answer, and return structured JSON.
+Okay, imagine we're working on the building our something that tackles the following task: answer questions about a set of policy documents. The answer must cite specific passages, refuse when the documents don't contain the answer, and return structured JSON.
 
-The brittle version looks like this:
+A brittle version might look a little something like this:
 
 ```markdown
 You are a helpful assistant. Answer questions about the provided documents.
@@ -237,7 +237,7 @@ Question: {question}
 
 This works in demos. In production, it hallucinates citations, invents quotes that sound plausible but don't exist in the source, and occasionally answers questions the documents don't address. The output format is inconsistent—sometimes it returns numbered citations, sometimes inline references, sometimes nothing.
 
-The hardened version separates concerns and makes the model's intermediate evidence explicit:
+The much better version separates concerns and makes the model's intermediate evidence explicit:
 
 ```xml
 <instructions>
@@ -308,7 +308,7 @@ sequenceDiagram
     System->>System: Assemble prompt stack (system instruction + documents + query)
     System->>Model: Prompt + output schema
     Model-->>System: Structured JSON (quotes + answer)
-    System->>Validator: Schema check + verify quotes exist in source docs
+    System->>Validator: Schema check + verify quotes exist in source documentation
     Validator-->>System: Pass / Fail
     alt Validation passes
         System-->>User: Answer with verified citations
@@ -323,9 +323,7 @@ The eval loop for this workflow checks three things: do the extracted quotes act
 
 ### An agentic tool-using workflow
 
-The task: an agent that helps users debug application errors by searching logs, querying a database, and suggesting fixes.
-
-The brittle version:
+The task: an agent that helps users debug application errors by searching logs, querying a database, and suggesting fixes. Here is what a brittle version might look like:
 
 ```markdown
 You are a debugging assistant. You have access to the following tools:
@@ -340,9 +338,9 @@ database to verify your findings. Be thorough.
 User question: {question}
 ```
 
-The problems multiply fast. "ALWAYS search logs" means the agent searches on every single turn, even for follow-up questions where the logs are already in context. "ALWAYS query the database" means it runs speculative queries even when unnecessary. The `query_database` tool accepts arbitrary SQL, so a prompt injection in a log message could theoretically cause the agent to run destructive queries. And "be thorough" is a blank check for unbounded tool calling.
+The problems multiply _fast_. "ALWAYS search logs" means the agent searches on every single turn, even for follow-up questions where the logs are already in context. "ALWAYS query the database" means it runs speculative queries even when unnecessary. The `query_database` tool accepts arbitrary SQL, so a prompt injection in a log message could theoretically cause the agent to run destructive queries. And "be thorough" is a blank check for unbounded tool calling.
 
-The hardened version:
+Our new and improved version, on the other hand, might look a bit more like this:
 
 ```xml
 <instructions>
@@ -442,7 +440,7 @@ graph LR
     F --> A
 ```
 
-This loop isn't glamorous, but it's the difference between "it seemed to work when I tried it" and "I have evidence that this prompt performs well across 500 test cases." OpenAI provides an Evals API for continuous evaluation. Anthropic provides console tooling for side-by-side comparisons and prompt versioning. Gemini offers logging and datasets in its developer tooling for observation and reruns. The tooling differs, but the discipline is the same.
+This loop isn't glamorous, but it's the difference between "it seemed to work when I tried it" and "I have evidence that this prompt performs well across 500 test cases." OpenAI provides an [Evals framework](https://github.com/openai/evals) for continuous evaluation. Anthropic provides console tooling for side-by-side comparisons and prompt versioning. Gemini offers logging and datasets in its developer tooling for observation and reruns. The tooling differs, but the discipline is the same.
 
 ## What This Adds Up To
 
