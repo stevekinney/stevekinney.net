@@ -1,9 +1,18 @@
 {
   "meta": {
-    "generatedAt": "2026-03-04T14:18:17.088Z",
-    "hash": "1851cd2d2ffa33dbcceaddb811ea18cc08887379542f1a6e8364adf66e66d475"
+    "generatedAt": "2026-03-06T17:43:58.838Z",
+    "hash": "d7bd4e97b893f90e0f388b4c1fe60322ed8394584d3e75dd4bb3e1bd8c13236a"
   },
   "posts": [
+    {
+      "title": "Prompt Engineering Across the OpenAI, Anthropic, and Gemini APIs",
+      "description": "A practical guide to writing reliable prompts across the major LLM APIs—covering core techniques, where the providers actually diverge, trust boundaries, and two production workflows built from brittle to hardened.",
+      "date": "2026-03-06T12:00:00.000Z",
+      "modified": "2026-03-06T12:00:00.000Z",
+      "published": true,
+      "tags": ["ai", "prompt-engineering", "llms"],
+      "slug": "prompt-engineering-frontier-llms"
+    },
     {
       "title": "Introducing Prose Writer",
       "description": "A little TypeScript library for building Markdown-friendly strings without template literal sprawl.",
