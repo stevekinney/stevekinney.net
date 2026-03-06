@@ -5,6 +5,8 @@ import { resolveOpenGraphMetadata } from '$lib/server/open-graph-metadata';
 
 import type { RequestHandler } from '@sveltejs/kit';
 
+export const prerender = false;
+
 export const GET: RequestHandler = async ({ url, fetch }) => {
   const metadata = await resolveOpenGraphMetadata('/courses');
 

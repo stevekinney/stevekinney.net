@@ -11,6 +11,8 @@ import {
 
 import type { RequestHandler } from '@sveltejs/kit';
 
+export const prerender = false;
+
 const safeDecode = (value: string): string => {
   try {
     return decodeURIComponent(value);

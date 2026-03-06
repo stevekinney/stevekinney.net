@@ -186,4 +186,34 @@ describe('fixMarkdownUrls', () => {
     const [url] = apply('[Next](./next.md)', '/repo/notes/post.md');
     expect(url).toBe('./next.md');
   });
+
+  it('rewrites relative links in _index.md to include the course prefix', () => {
+    const [url] = apply(
+      '[Mock Service Worker](mock-service-worker.md)',
+      '/repo/courses/enterprise-ui/_index.md',
+      '../../courses',
+      '/repo/applications/website',
+    );
+    expect(url).toBe('/courses/enterprise-ui/mock-service-worker');
+  });
+
+  it('rewrites relative links in course lesson files', () => {
+    const [url] = apply(
+      '[MSW](mock-service-worker.md)',
+      '/repo/courses/enterprise-ui/testing-at-scale.md',
+      '../../courses',
+      '/repo/applications/website',
+    );
+    expect(url).toBe('/courses/enterprise-ui/mock-service-worker');
+  });
+
+  it('rewrites links when VFile has filename instead of path (mdsvex compat)', () => {
+    const tree = fromMarkdown('[MSW](mock-service-worker.md)') as Root;
+    // mdsvex sets filename on the VFile, not path
+    const file = new VFile({ cwd: '/repo/applications/website' });
+    (file as unknown as Record<string, unknown>).filename = '/repo/courses/enterprise-ui/_index.md';
+    fixMarkdownUrls('../../courses')(tree, file, () => {});
+    const urls = collectUrls(tree);
+    expect(urls[0]).toBe('/courses/enterprise-ui/mock-service-worker');
+  });
 });

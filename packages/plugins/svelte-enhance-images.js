@@ -55,8 +55,6 @@ import { twMerge as merge } from 'tailwind-merge';
 
 const defaultClasses = ['max-w-full'];
 const cacheVersion = '1';
-/** @type {Map<string, { code: string, map: string | null }>} */
-const transformCache = new Map();
 
 /**
  * @param {unknown} error
@@ -69,15 +67,10 @@ const isMissingFile = (error) =>
  * @param {string} cachePath
  * @returns {Promise<{ code: string, map: string | null } | null>}
  */
-const readCacheEntry = async (cacheKey, cachePath) => {
-  const cached = transformCache.get(cacheKey);
-  if (cached) return cached;
-
+const readCacheEntry = async (cachePath) => {
   try {
     const contents = await readFile(cachePath, 'utf8');
-    const entry = JSON.parse(contents);
-    transformCache.set(cacheKey, entry);
-    return entry;
+    return JSON.parse(contents);
   } catch (error) {
     if (isMissingFile(error)) return null;
     throw error;
@@ -89,10 +82,9 @@ const readCacheEntry = async (cacheKey, cachePath) => {
  * @param {string} cachePath
  * @param {{ code: string, map: string | null }} entry
  */
-const writeCacheEntry = async (cacheKey, cachePath, entry) => {
+const writeCacheEntry = async (cachePath, entry) => {
   await mkdir(path.dirname(cachePath), { recursive: true });
   await writeFile(cachePath, JSON.stringify(entry), 'utf8');
-  transformCache.set(cacheKey, entry);
 };
 
 /**
@@ -153,7 +145,7 @@ export const processImages = (opts = {}) => {
       const cachePath = cacheDir ? path.join(cacheDir, `${cacheKey}.json`) : null;
 
       if (cachePath) {
-        const cached = await readCacheEntry(cacheKey, cachePath);
+        const cached = await readCacheEntry(cachePath);
         if (cached) {
           return { code: cached.code, map: cached.map ?? undefined };
         }
@@ -293,7 +285,7 @@ export const processImages = (opts = {}) => {
       };
 
       if (cachePath) {
-        await writeCacheEntry(cacheKey, cachePath, result);
+        await writeCacheEntry(cachePath, result);
       }
 
       return result;

@@ -136,7 +136,6 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      cache: true,
       maxParallelFileOps: 20,
     },
     chunkSizeWarningLimit: 1000,

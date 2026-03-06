@@ -31,8 +31,8 @@ const skipImageOptimizations = process.env.SKIP_IMAGE_OPTIMIZATION === '1';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Cache for highlighted code blocks
-const highlightCache = new Map();
+// No in-memory highlight cache — each code block is processed exactly once
+// during build. Caching just accumulates memory that persists into the adapter phase.
 
 /**
  * Extract title="..." from the metastring.
@@ -162,7 +162,7 @@ const mdsvexOptions = {
   // Custom remark plugins (typed via casts to satisfy TS)
   remarkPlugins: [
     /** @type {any} */ (remarkEscapeComparators),
-    /** @type {any} */ (fixMarkdownUrls(['../../writing', '../../courses'])),
+    /** @type {any} */ ([fixMarkdownUrls, ['../../writing', '../../courses']]),
     remarkGfm,
     remarkCallouts,
     remarkTailwindPlayground,
@@ -191,11 +191,6 @@ const mdsvexOptions = {
       const { title, remaining: remainingMeta } = parseTitle(metastring);
       const { cleanedCode, annotations } = extractAnnotations(code);
 
-      const cacheKey = `${lang}:${metastring || ''}:${code}`;
-      if (highlightCache.has(cacheKey)) {
-        return highlightCache.get(cacheKey);
-      }
-
       const baseClasses = [
         'bg-[#011627]',
         'not-prose',
@@ -220,9 +215,7 @@ const mdsvexOptions = {
         const wrapperClasses = title ? baseClasses : [...baseClasses, 'overflow-x-scroll', 'p-4'];
         const contentWrapper = title ? `<div class="overflow-x-auto p-4">${inner}</div>` : inner;
 
-        const result = `<div class="${wrapperClasses.join(' ')}" data-language="${lang}">${titleHtml}${contentWrapper}</div>`;
-        highlightCache.set(cacheKey, result);
-        return result;
+        return `<div class="${wrapperClasses.join(' ')}" data-language="${lang}">${titleHtml}${contentWrapper}</div>`;
       }
 
       const transformers = [];
@@ -247,9 +240,7 @@ const mdsvexOptions = {
       const wrapperClasses = title ? baseClasses : [...baseClasses, 'overflow-x-scroll', 'p-4'];
       const contentWrapper = title ? `<div class="overflow-x-auto p-4">${html}</div>` : html;
 
-      const result = `<div class="${wrapperClasses.join(' ')}" data-language="${lang}">${titleHtml}${contentWrapper}</div>`;
-      highlightCache.set(cacheKey, result);
-      return result;
+      return `<div class="${wrapperClasses.join(' ')}" data-language="${lang}">${titleHtml}${contentWrapper}</div>`;
     },
   },
 };
@@ -312,7 +303,16 @@ const config = {
       // Be strict, but ignore only malformed multi-URL fetch attempts from srcset
       handleHttpError: ({ status, path, message }) => {
         if (status === 404 && path.startsWith('/_app/immutable/assets/') && path.includes(',')) {
-          return; // skip this specific bad fetch; real 404s still throw
+          return;
+        }
+        // Dynamic endpoints served at runtime but not during prerendering
+        if (status === 404 && (path.endsWith('/llms.txt') || path.endsWith('/open-graph.jpg'))) {
+          return;
+        }
+        // Broken .md cross-references in course content — warn instead of failing
+        if (status === 404 && path.endsWith('.md')) {
+          console.warn(`[prerender] Broken link: ${path}`);
+          return;
         }
         throw new Error(message);
       },

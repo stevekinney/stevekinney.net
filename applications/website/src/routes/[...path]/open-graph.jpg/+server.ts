@@ -5,6 +5,8 @@ import { normalizeOpenGraphPath, resolveOpenGraphMetadata } from '$lib/server/op
 
 import type { RequestHandler } from '@sveltejs/kit';
 
+export const prerender = false;
+
 export const GET: RequestHandler = async ({ params, url, fetch }) => {
   const path = normalizeOpenGraphPath(params.path ? `/${params.path}` : '/');
   const metadata = await resolveOpenGraphMetadata(path);

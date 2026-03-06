@@ -1,6 +1,6 @@
 import { getPostIndex } from '$lib/server/content';
 
-export const prerender = process.env.PRERENDER_ALL === '1';
+export const prerender = true;
 
 export async function load() {
   return { posts: getPostIndex() };

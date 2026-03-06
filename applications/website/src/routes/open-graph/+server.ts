@@ -2,6 +2,8 @@ import metadata from '$lib/metadata';
 import { createOpenGraphResponse, renderOpenGraphImage } from '$lib/server/open-graph';
 import type { RequestHandler } from '@sveltejs/kit';
 
+export const prerender = false;
+
 /**
  * Parse boolean parameters from URL query string
  */
