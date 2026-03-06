@@ -8,6 +8,10 @@
   import { buildPersonSchema, buildWebSiteSchema } from '$lib/structured-data';
   import Biography from './biography.md';
 
+  import selfPortraitAvif from '$assets/self-portrait.jpg?w=384;768&format=avif&as=srcset&withoutEnlargement';
+  import selfPortraitSrc from '$assets/self-portrait.jpg?w=768';
+  import selfPortraitMeta from '$assets/self-portrait.jpg?metadata';
+
   const { data } = $props();
 
   const jsonLd = [buildWebSiteSchema(), buildPersonSchema()];
@@ -31,12 +35,19 @@
       </ul>
     </section>
 
-    <enhanced:img
-      src="$assets/self-portrait.jpg?w=736;768"
-      sizes="(min-width: 640px) 768px, 736px"
-      class="block aspect-[3/4] max-w-full rounded-md shadow-lg sm:w-72 md:w-96"
-      alt="Steve Kinney"
-    />
+    <picture>
+      <source type="image/avif" srcset={selfPortraitAvif} sizes="(min-width: 768px) 384px, 288px" />
+      <img
+        src={selfPortraitSrc}
+        width={selfPortraitMeta.width}
+        height={selfPortraitMeta.height}
+        class="block aspect-[3/4] max-w-full rounded-md shadow-lg sm:w-72 md:w-96"
+        alt="Steve Kinney"
+        fetchpriority="high"
+        loading="eager"
+        decoding="auto"
+      />
+    </picture>
 
     <Biography class="prose dark:prose-invert order-first max-w-none md:order-last md:col-span-2" />
   </div>

@@ -21,20 +21,6 @@ const applyClientBuildOnly = (plugin: unknown): PluginOption => {
   return plugin as PluginOption;
 };
 
-const loadEnhancedImages = async (): Promise<PluginOption> => {
-  if (process.env.DISABLE_ENHANCED_IMAGES === '1' || skipImageOptimizations) {
-    return null;
-  }
-
-  try {
-    const { enhancedImages } = await import('@sveltejs/enhanced-img');
-    return enhancedImages();
-  } catch (error) {
-    console.warn('[vite] Skipping enhanced images because sharp is unavailable.', error);
-    return null;
-  }
-};
-
 const loadImageTools = async (): Promise<PluginOption> => {
   if (skipImageOptimizations) {
     return null;
@@ -103,14 +89,12 @@ function serveContentAssets(): PluginOption {
   };
 }
 
-const enhancedImagesPlugin = await loadEnhancedImages();
 const imagetoolsPlugin = await loadImageTools();
 
 export default defineConfig({
   plugins: [
     sveltekit(),
     serveContentAssets(),
-    enhancedImagesPlugin,
     imagetoolsPlugin,
     ViteToml(),
     tailwindcss(),

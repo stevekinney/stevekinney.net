@@ -15,8 +15,8 @@
     buildArticleSchema({
       title: data.meta.title,
       description: data.meta.description,
-      datePublished: new Date(data.meta.date).toISOString(),
-      dateModified: data.meta.modified ? new Date(data.meta.modified).toISOString() : undefined,
+      datePublished: data.meta.date,
+      dateModified: data.meta.modified,
       articleUrl: `${url}/writing/${data.slug}`,
       imageUrl: `${baseUrl}/writing/${data.slug}/open-graph.jpg`,
     }),

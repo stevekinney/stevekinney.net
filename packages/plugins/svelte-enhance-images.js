@@ -14,13 +14,14 @@ import { twMerge as merge } from 'tailwind-merge';
  *  url: string,
  *  fallbackId: string,
  *  fallbackSrc: string,
- *  webpSetId?: string,
- *  webpSetSrc?: string,
  *  avifSetId?: string,
  *  avifSetSrc?: string,
  *  metaId?: string,
  *  metaSrc?: string,
+ *  lqipId?: string,
+ *  lqipSrc?: string,
  *  hasMeta: boolean,
+ *  hasLqip: boolean,
  *  hasSrcset: boolean,
  *  isGif?: boolean,
  *  isVideo?: boolean,
@@ -34,7 +35,10 @@ import { twMerge as merge } from 'tailwind-merge';
  *  includeMetadata?: boolean,
  *  skipImages?: string[],
  *  sizes?: string,
- *  cacheDir?: string
+ *  cacheDir?: string,
+ *  classes?: string[],
+ *  firstImagePriority?: boolean,
+ *  lqip?: boolean
  * }} ProcessImagesOptions
  * @typedef {{
  *  start: number,
@@ -49,7 +53,7 @@ import { twMerge as merge } from 'tailwind-merge';
  * }} ProgramNode
  */
 
-const classes = ['max-w-full', 'rounded-md', 'shadow-md'];
+const defaultClasses = ['max-w-full'];
 const cacheVersion = '1';
 /** @type {Map<string, { code: string, map: string | null }>} */
 const transformCache = new Map();
@@ -93,24 +97,25 @@ const writeCacheEntry = async (cacheKey, cachePath, entry) => {
 
 /**
  * Add image optimization to the Markdown content.
- */
-/**
- * Add image optimization to the Markdown content.
  * @param {ProcessImagesOptions} [opts]
  * @returns {import('svelte/compiler').PreprocessorGroup}
  */
 export const processImages = (opts = {}) => {
-  /** @type {{ widths: number[], mainWidth: number, includeMetadata: boolean, skipImages: string[], sizes?: string, cacheDir: string }} */
+  /** @type {{ widths: number[], mainWidth: number, includeMetadata: boolean, skipImages: string[], sizes?: string, cacheDir: string, classes: string[], firstImagePriority: boolean, lqip: boolean }} */
   const options = {
-    widths: [480, 768, 1024],
-    mainWidth: 902,
+    widths: [480, 1024, 1600],
+    mainWidth: 1600,
     includeMetadata: true,
     skipImages: [],
     sizes: undefined,
     cacheDir: '.svelte-kit/process-images',
-    // formats are currently avif + webp; keeping fixed for broad compatibility
+    classes: defaultClasses,
+    firstImagePriority: false,
+    lqip: false,
     ...opts,
   };
+
+  const imageClasses = options.classes;
 
   const widths = normalizeWidths(options.widths, options.mainWidth);
   const defaultSizes =
@@ -122,6 +127,9 @@ export const processImages = (opts = {}) => {
     includeMetadata: options.includeMetadata,
     skipImages: [...options.skipImages].sort(),
     sizes: defaultSizes,
+    classes: options.classes,
+    firstImagePriority: options.firstImagePriority,
+    lqip: options.lqip,
   });
   const cachePrefix = createHash('sha256').update(cacheVersion).update(cacheOptions).digest('hex');
 
@@ -160,6 +168,7 @@ export const processImages = (opts = {}) => {
       const importMap = collectExistingImports(instance?.content);
 
       // Walk the HTML AST and find all the image elements.
+      let imageIndex = 0;
       walkHtml(html, (node, ancestors) => {
         if (node.name !== 'img') return;
         if (ancestors.some((ancestor) => ancestor.name === 'picture')) return;
@@ -179,6 +188,9 @@ export const processImages = (opts = {}) => {
 
         const urlForMatch = stripQueryHash(url);
         if (options.skipImages.some((pattern) => urlForMatch.endsWith(pattern))) return;
+
+        const isFirstImage = imageIndex === 0 && options.firstImagePriority;
+        imageIndex++;
 
         const extension = getFileExtension(urlForMatch);
         const isGif = extension === 'gif';
@@ -205,17 +217,19 @@ export const processImages = (opts = {}) => {
             : undefined;
 
           const hasSrcset = !isGif && !isVid && !isPassthrough;
-          const webpSetSrc = hasSrcset
-            ? appendQuery(url, `w=${widths.join(';')}&format=webp&as=srcset&withoutEnlargement`)
-            : undefined;
           const avifSetSrc = hasSrcset
             ? appendQuery(url, `w=${widths.join(';')}&format=avif&as=srcset&withoutEnlargement`)
             : undefined;
-          const webpSetId = webpSetSrc
-            ? resolveImportId(importMap, webpSetSrc, `${baseId}_webp_set`)
-            : undefined;
           const avifSetId = avifSetSrc
             ? resolveImportId(importMap, avifSetSrc, `${baseId}_avif_set`)
+            : undefined;
+
+          const hasLqip = options.lqip && hasSrcset;
+          const lqipSrc = hasLqip
+            ? appendQuery(url, 'w=24&format=webp&quality=30&blur=10')
+            : undefined;
+          const lqipId = lqipSrc
+            ? resolveImportId(importMap, lqipSrc, `${baseId}_lqip`)
             : undefined;
 
           const videoId = isVid ? resolveImportId(importMap, url, `${baseId}_video`) : undefined;
@@ -224,13 +238,14 @@ export const processImages = (opts = {}) => {
             url,
             fallbackId,
             fallbackSrc,
-            webpSetId,
-            webpSetSrc,
             avifSetId,
             avifSetSrc,
             metaId,
             metaSrc,
+            lqipId,
+            lqipSrc,
             hasMeta: Boolean(metaId),
+            hasLqip: Boolean(lqipId),
             hasSrcset,
             isGif,
             isVideo: isVid,
@@ -243,16 +258,16 @@ export const processImages = (opts = {}) => {
         }
 
         if (config.isVideo && config.videoId) {
-          formatVideo(s, node, config, content);
+          formatVideo(s, node, config, content, imageClasses);
           return;
         }
 
         if (config.hasSrcset) {
-          formatPicture(s, node, config, content, defaultSizes);
+          formatPicture(s, node, config, content, defaultSizes, imageClasses, isFirstImage);
           return;
         }
 
-        formatInlineImage(s, node, srcValue, config);
+        formatInlineImage(s, node, srcValue, config, imageClasses, isFirstImage);
       });
 
       const importLines = buildImportLines(images, importMap);
@@ -353,16 +368,19 @@ const getRawAttribute = (attr, content) => content.slice(attr.start, attr.end);
  * @param {AstNode} node
  * @param {SvelteTextNode} src
  * @param {ImageConfig} cfg
+ * @param {string[]} imageClasses
+ * @param {boolean} isFirstImage
  */
-const formatInlineImage = (s, node, src, cfg) => {
+const formatInlineImage = (s, node, src, cfg, imageClasses, isFirstImage) => {
   s.update(src.start, src.end, `{${cfg.fallbackId}}`);
 
   const classAttr = getAttribute(node, 'class');
   const classValueNode = getStaticAttributeValueNode(classAttr);
   const classValue = classValueNode?.data ?? '';
-  const mergedClass = classValue.trim() ? merge(classValue, classes) : classes.join(' ');
+  const mergedClass = classValue.trim() ? merge(classValue, imageClasses) : imageClasses.join(' ');
 
-  const hasPriority = hasAttribute(node, 'data-priority') || hasAttribute(node, 'fetchpriority');
+  const hasPriority =
+    isFirstImage || hasAttribute(node, 'data-priority') || hasAttribute(node, 'fetchpriority');
 
   const additions = [];
 
@@ -372,8 +390,16 @@ const formatInlineImage = (s, node, src, cfg) => {
     additions.push(` class="${mergedClass}"`);
   }
 
-  if (!hasAttribute(node, 'loading') && !hasPriority) additions.push(' loading="lazy"');
-  if (!hasAttribute(node, 'decoding') && !hasPriority) additions.push(' decoding="async"');
+  if (isFirstImage && !hasAttribute(node, 'fetchpriority')) {
+    additions.push(' fetchpriority="high"');
+  }
+
+  if (!hasAttribute(node, 'loading')) {
+    additions.push(hasPriority ? ' loading="eager"' : ' loading="lazy"');
+  }
+  if (!hasAttribute(node, 'decoding')) {
+    additions.push(hasPriority ? ' decoding="auto"' : ' decoding="async"');
+  }
 
   if (cfg.hasMeta && cfg.metaId) {
     if (!hasAttribute(node, 'width')) additions.push(` width={${cfg.metaId}.width}`);
@@ -390,9 +416,11 @@ const formatInlineImage = (s, node, src, cfg) => {
  * @param {AstNode} node
  * @param {ImageConfig} cfg
  * @param {string} defaultSizes
+ * @param {string[]} imageClasses
+ * @param {boolean} isFirstImage
  * @returns {{ imgAttributes: string, sizesAttr: string }}
  */
-const buildImageAttributes = (content, node, cfg, defaultSizes) => {
+const buildImageAttributes = (content, node, cfg, defaultSizes, imageClasses, isFirstImage) => {
   const otherAttrs = [];
   let sizesAttrRaw;
   let hasAlt = false;
@@ -404,6 +432,7 @@ const buildImageAttributes = (content, node, cfg, defaultSizes) => {
   let hasWidth = false;
   let hasHeight = false;
   let hasPriority = false;
+  let hasFetchpriority = false;
 
   for (const attr of node.attributes) {
     const raw = getRawAttribute(attr, content);
@@ -449,7 +478,13 @@ const buildImageAttributes = (content, node, cfg, defaultSizes) => {
         otherAttrs.push(raw);
         continue;
       }
-      if (attr.name === 'fetchpriority' || attr.name === 'data-priority') {
+      if (attr.name === 'fetchpriority') {
+        hasPriority = true;
+        hasFetchpriority = true;
+        otherAttrs.push(raw);
+        continue;
+      }
+      if (attr.name === 'data-priority') {
         hasPriority = true;
         otherAttrs.push(raw);
         continue;
@@ -461,7 +496,9 @@ const buildImageAttributes = (content, node, cfg, defaultSizes) => {
     }
   }
 
-  const mergedClass = classValue.trim() ? merge(classValue, classes) : classes.join(' ');
+  if (isFirstImage) hasPriority = true;
+
+  const mergedClass = classValue.trim() ? merge(classValue, imageClasses) : imageClasses.join(' ');
   const imgAttrs = [`src={${cfg.fallbackId}}`];
 
   if (!hasAlt) imgAttrs.push('alt=""');
@@ -472,12 +509,24 @@ const buildImageAttributes = (content, node, cfg, defaultSizes) => {
     imgAttrs.push(`class="${mergedClass}"`);
   }
 
-  if (!hasLoading && !hasPriority) imgAttrs.push('loading="lazy"');
-  if (!hasDecoding && !hasPriority) imgAttrs.push('decoding="async"');
+  if (isFirstImage && !hasFetchpriority) {
+    imgAttrs.push('fetchpriority="high"');
+  }
+
+  if (!hasLoading) {
+    imgAttrs.push(hasPriority ? 'loading="eager"' : 'loading="lazy"');
+  }
+  if (!hasDecoding) {
+    imgAttrs.push(hasPriority ? 'decoding="auto"' : 'decoding="async"');
+  }
 
   if (cfg.hasMeta && cfg.metaId) {
     if (!hasWidth) imgAttrs.push(`width={${cfg.metaId}.width}`);
     if (!hasHeight) imgAttrs.push(`height={${cfg.metaId}.height}`);
+  }
+
+  if (cfg.hasLqip && cfg.lqipId) {
+    imgAttrs.push(`style="background-size:cover;background-image:url({${cfg.lqipId}})"`);
   }
 
   const sizesAttr = sizesAttrRaw?.trim() || `sizes="${defaultSizes}"`;
@@ -488,21 +537,29 @@ const buildImageAttributes = (content, node, cfg, defaultSizes) => {
 };
 
 /**
- * Replace <img> with <picture> that prefers AVIF, falls back to WebP, then original.
+ * Replace <img> with <picture> that prefers AVIF, falls back to original format.
  * @param {MagicString} s
  * @param {AstNode} node
  * @param {ImageConfig} cfg
  * @param {string} content
  * @param {string} defaultSizes
+ * @param {string[]} imageClasses
+ * @param {boolean} isFirstImage
  */
-const formatPicture = (s, node, cfg, content, defaultSizes) => {
-  const { imgAttributes, sizesAttr } = buildImageAttributes(content, node, cfg, defaultSizes);
+const formatPicture = (s, node, cfg, content, defaultSizes, imageClasses, isFirstImage) => {
+  const { imgAttributes, sizesAttr } = buildImageAttributes(
+    content,
+    node,
+    cfg,
+    defaultSizes,
+    imageClasses,
+    isFirstImage,
+  );
   const sizesSnippet = sizesAttr ? ` ${sizesAttr}` : '';
 
   const replacement = `
 <picture>
   <source type="image/avif" srcset="{${cfg.avifSetId}}"${sizesSnippet} />
-  <source type="image/webp" srcset="{${cfg.webpSetId}}"${sizesSnippet} />
   <img ${imgAttributes} />
 </picture>`;
 
@@ -512,9 +569,10 @@ const formatPicture = (s, node, cfg, content, defaultSizes) => {
 /**
  * @param {string} content
  * @param {AstNode} node
+ * @param {string[]} imageClasses
  * @returns {string}
  */
-const buildVideoAttributes = (content, node) => {
+const buildVideoAttributes = (content, node, imageClasses) => {
   const otherAttrs = [];
   let hasClass = false;
   let classIsStatic = false;
@@ -549,7 +607,7 @@ const buildVideoAttributes = (content, node) => {
     }
   }
 
-  const mergedClass = classValue.trim() ? merge(classValue, classes) : classes.join(' ');
+  const mergedClass = classValue.trim() ? merge(classValue, imageClasses) : imageClasses.join(' ');
   const attrs = [];
 
   if (hasClass && classIsStatic) {
@@ -570,11 +628,12 @@ const buildVideoAttributes = (content, node) => {
  * @param {AstNode} node
  * @param {ImageConfig} cfg
  * @param {string} content
+ * @param {string[]} imageClasses
  */
-const formatVideo = (s, node, cfg, content) => {
+const formatVideo = (s, node, cfg, content, imageClasses) => {
   if (!cfg.videoId) return;
 
-  const videoAttrs = buildVideoAttributes(content, node);
+  const videoAttrs = buildVideoAttributes(content, node, imageClasses);
   const mimeType = getVideoMimeType(cfg.url);
   const typeAttr = mimeType ? ` type="${mimeType}"` : '';
   const attrs = videoAttrs ? ` ${videoAttrs}` : '';
@@ -611,13 +670,6 @@ const buildImportLines = (images, importMap) => {
       }
     }
 
-    if (config.hasSrcset && config.webpSetId && config.webpSetSrc) {
-      if (!added.has(config.webpSetSrc)) {
-        lines.push(`import ${config.webpSetId} from '${config.webpSetSrc}';`);
-        added.add(config.webpSetSrc);
-      }
-    }
-
     if (!added.has(config.fallbackSrc)) {
       lines.push(`import ${config.fallbackId} from '${config.fallbackSrc}';`);
       added.add(config.fallbackSrc);
@@ -627,6 +679,13 @@ const buildImportLines = (images, importMap) => {
       if (!added.has(config.metaSrc)) {
         lines.push(`import ${config.metaId} from '${config.metaSrc}';`);
         added.add(config.metaSrc);
+      }
+    }
+
+    if (config.hasLqip && config.lqipId && config.lqipSrc) {
+      if (!added.has(config.lqipSrc)) {
+        lines.push(`import ${config.lqipId} from '${config.lqipSrc}';`);
+        added.add(config.lqipSrc);
       }
     }
   }

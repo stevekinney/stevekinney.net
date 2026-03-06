@@ -12,6 +12,18 @@
     },
     "build": {
       "dependsOn": ["^build", "^manifest"],
+      "inputs": [
+        "**/*.md",
+        "**/*.png",
+        "**/*.jpg",
+        "**/*.jpeg",
+        "**/*.svg",
+        "**/*.gif",
+        "**/*.avif",
+        "**/*.webp",
+        "package.json",
+        "src/**"
+      ],
       "env": ["VERCEL", "SKIP_IMAGE_OPTIMIZATION"],
       "outputs": [
         "build/**",
@@ -59,7 +71,9 @@
       "persistent": true
     },
     "build-storybook": {},
-    "content:index": {},
+    "content:index": {
+      "dependsOn": ["^manifest"]
+    },
     "content:validate": {},
     "content:images:check": {},
     "clean": {

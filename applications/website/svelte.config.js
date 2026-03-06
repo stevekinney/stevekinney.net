@@ -272,11 +272,13 @@ const config = {
       : [
           /** @type {any} */ (
             processImages({
-              // Reduce variants to speed up build
-              widths: [480, 768],
-              mainWidth: 800,
+              widths: [480, 1024, 1600],
+              mainWidth: 1600,
               sizes: '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw',
-              includeMetadata: false,
+              includeMetadata: true,
+              firstImagePriority: true,
+              lqip: true,
+              classes: ['max-w-full'],
             })
           ),
         ]),
