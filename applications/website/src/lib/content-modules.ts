@@ -7,7 +7,7 @@ export type MarkdownModule = {
 
 type MarkdownLoader = () => Promise<MarkdownModule>;
 
-const writingMarkdownModules = import.meta.glob<MarkdownModule>('../../../../content/writing/*.md');
+const writingMarkdownModules = import.meta.glob<MarkdownModule>('../../../../writing/*.md');
 const courseMarkdownModules = import.meta.glob<MarkdownModule>('../../../../courses/*/*.md');
 
 const markdownExtensionPattern = /\.md$/i;
@@ -39,10 +39,7 @@ const loadFromMap = async (
 };
 
 export const loadWritingMarkdown = async (slug: string): Promise<MarkdownModule> =>
-  loadFromMap(
-    writingMarkdownModules,
-    `../../../../content/writing/${normalizeMarkdownSlug(slug)}.md`,
-  );
+  loadFromMap(writingMarkdownModules, `../../../../writing/${normalizeMarkdownSlug(slug)}.md`);
 
 export const loadCourseReadmeMarkdown = async (courseSlug: string): Promise<MarkdownModule> =>
   loadFromMap(courseMarkdownModules, getCourseMarkdownKey(courseSlug, 'README.md'));

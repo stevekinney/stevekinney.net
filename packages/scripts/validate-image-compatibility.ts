@@ -12,7 +12,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const STATIC_ROOT = path.resolve(REPO_ROOT, 'applications/website/static');
 
-const MARKDOWN_PATTERNS = ['content/writing/**/*.md', 'courses/**/*.md'];
+const MARKDOWN_PATTERNS = ['writing/**/*.md', 'courses/**/*.md'];
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif']);
 const NON_TRANSFORMED_EXTENSIONS = new Set(['.webp', '.avif', '.gif']);
 const EXTERNAL_PREFIXES = ['http://', 'https://', 'mailto:', 'tel:', 'data:', 'ftp:'];

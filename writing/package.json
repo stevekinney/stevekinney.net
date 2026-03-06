@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "manifest": "bun run ../../packages/scripts/generate-writing-manifest.ts",
+    "manifest": "bun run ../packages/scripts/generate-writing-manifest.ts",
     "build": "bun run manifest"
   }
 }

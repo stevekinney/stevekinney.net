@@ -52,4 +52,4 @@
   {/if}
 </article>
 
-<PullRequest repoPath="content/writing/{data.slug}.md" />
+<PullRequest repoPath="writing/{data.slug}.md" />

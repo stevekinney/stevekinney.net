@@ -162,7 +162,7 @@ const mdsvexOptions = {
   // Custom remark plugins (typed via casts to satisfy TS)
   remarkPlugins: [
     /** @type {any} */ (remarkEscapeComparators),
-    /** @type {any} */ (fixMarkdownUrls(['../../content/writing', '../../courses'])),
+    /** @type {any} */ (fixMarkdownUrls(['../../writing', '../../courses'])),
     remarkGfm,
     remarkCallouts,
     remarkTailwindPlayground,
@@ -301,7 +301,7 @@ const config = {
       '$lib/components/*': '../../packages/components/*',
       '$assets/*': 'src/assets/*',
       '$courses/*': '../../courses/*',
-      '$writing/*': '../../content/writing/*',
+      '$writing/*': '../../writing/*',
       'content/*': '../../content/*',
       'courses/*': '../../courses/*',
       $merge: 'src/lib/merge.ts',

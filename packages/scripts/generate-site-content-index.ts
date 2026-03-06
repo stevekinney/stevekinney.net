@@ -9,7 +9,7 @@ import { writeFormattedJson } from './write-formatted-json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const WRITING_MANIFEST_PATH = path.resolve(REPO_ROOT, 'content/writing/manifest.json');
+const WRITING_MANIFEST_PATH = path.resolve(REPO_ROOT, 'writing/manifest.json');
 const OUTPUT_PATH = path.resolve(
   REPO_ROOT,
   'applications/website/src/lib/server/content-index.json',

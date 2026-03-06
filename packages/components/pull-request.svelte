@@ -1,5 +1,5 @@
 <script lang="ts">
-  const { repoPath }: { repoPath: `courses/${string}` | `content/writing/${string}` } = $props();
+  const { repoPath }: { repoPath: `courses/${string}` | `writing/${string}` } = $props();
 </script>
 
 <footer

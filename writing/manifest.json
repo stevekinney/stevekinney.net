@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generatedAt": "2026-03-06T18:49:53.789Z",
-    "hash": "501d65b05e52a9a6989d12ede9e84627a84f9340e58ddd07054f75e947111234"
+    "generatedAt": "2026-03-06T20:12:42.938Z",
+    "hash": "a6b248b75cf96a0a6ebcbd8e01adfab9c52dc1db0b18c2c815731712dcbe1bf3"
   },
   "posts": [
     {
@@ -12,7 +12,7 @@
       "published": true,
       "tags": ["ai", "prompt-engineering", "llms"],
       "slug": "prompt-engineering-frontier-llms",
-      "file": "content/writing/prompt-engineering-frontier-llms.md"
+      "file": "writing/prompt-engineering-frontier-llms.md"
     },
     {
       "title": "Introducing Prose Writer",
@@ -22,7 +22,7 @@
       "published": true,
       "tags": [],
       "slug": "introducing-prose-writer",
-      "file": "content/writing/introducing-prose-writer.md"
+      "file": "writing/introducing-prose-writer.md"
     },
     {
       "title": "Cursor Rules for Writing Temporal Workflows with TypeScript",
@@ -32,7 +32,7 @@
       "published": true,
       "tags": [],
       "slug": "cursor-rules-temporal-typescript",
-      "file": "content/writing/cursor-rules-temporal-typescript.md"
+      "file": "writing/cursor-rules-temporal-typescript.md"
     },
     {
       "title": "Cursor Rules for TypeScript Engineers",
@@ -42,7 +42,7 @@
       "published": true,
       "tags": [],
       "slug": "cursor-rules-typescript",
-      "file": "content/writing/cursor-rules-typescript.md"
+      "file": "writing/cursor-rules-typescript.md"
     },
     {
       "title": "Using Anthropic's Message Batches API with Temporal",
@@ -52,7 +52,7 @@
       "published": true,
       "tags": [],
       "slug": "anthropic-batch-api-with-temporal",
-      "file": "content/writing/anthropic-batch-api-with-temporal.md"
+      "file": "writing/anthropic-batch-api-with-temporal.md"
     },
     {
       "title": "What If It Goes Wrong?: The Hidden Dangers of Counterfactual Reasoning in AI",
@@ -62,7 +62,7 @@
       "published": true,
       "tags": [],
       "slug": "counter-factual-reasoning-in-ai",
-      "file": "content/writing/counter-factual-reasoning-in-ai.md"
+      "file": "writing/counter-factual-reasoning-in-ai.md"
     },
     {
       "title": "Getting the Most Out of GPT-4.1",
@@ -72,7 +72,7 @@
       "published": true,
       "tags": [],
       "slug": "getting-the-most-out-of-gpt-4-1",
-      "file": "content/writing/getting-the-most-out-of-gpt-4-1.md"
+      "file": "writing/getting-the-most-out-of-gpt-4-1.md"
     },
     {
       "title": "Neural Networks",
@@ -82,7 +82,7 @@
       "published": true,
       "tags": ["ai", "machine-learning", "neural-networks", "transformers"],
       "slug": "neural-networks",
-      "file": "content/writing/neural-networks.md"
+      "file": "writing/neural-networks.md"
     },
     {
       "title": "A Gentle Introduction to Using a Vector Database",
@@ -92,7 +92,7 @@
       "published": true,
       "tags": ["open-ai", "pinecone", "artificial-intelligence"],
       "slug": "using-a-vector-database",
-      "file": "content/writing/using-a-vector-database.md"
+      "file": "writing/using-a-vector-database.md"
     },
     {
       "title": "Setting Up a Python Environment on macOS",
@@ -102,7 +102,7 @@
       "published": true,
       "tags": ["python", "virtual-env"],
       "slug": "setup-python",
-      "file": "content/writing/setup-python.md"
+      "file": "writing/setup-python.md"
     },
     {
       "title": "Implementing Obsidian's Callout in Svelte",
@@ -112,7 +112,7 @@
       "published": false,
       "tags": ["svelte", "storybook", "design-systems"],
       "slug": "obsidian-callout-svelte",
-      "file": "content/writing/obsidian-callout-svelte.md"
+      "file": "writing/obsidian-callout-svelte.md"
     },
     {
       "title": "Positives, Negatives, and Alternatives to Using Tailwind for a Design System",
@@ -122,7 +122,7 @@
       "published": true,
       "tags": ["css", "tailwind", "design-systems"],
       "slug": "tailwind-and-design-systems",
-      "file": "content/writing/tailwind-and-design-systems.md"
+      "file": "writing/tailwind-and-design-systems.md"
     },
     {
       "title": "Creating a Markdown Preprocessor for Svelte",
@@ -132,7 +132,7 @@
       "published": true,
       "tags": ["svelte", "ast"],
       "slug": "svelte-markdown-preprocessor",
-      "file": "content/writing/svelte-markdown-preprocessor.md"
+      "file": "writing/svelte-markdown-preprocessor.md"
     },
     {
       "title": "Understanding Generics in TypeScript",
@@ -142,7 +142,7 @@
       "published": true,
       "tags": ["typescript"],
       "slug": "typescript-generics",
-      "file": "content/writing/typescript-generics.md"
+      "file": "writing/typescript-generics.md"
     },
     {
       "title": "A Gentle Introduction to Svelte Stores",
@@ -152,7 +152,7 @@
       "published": true,
       "tags": ["svelte"],
       "slug": "svelte-stores",
-      "file": "content/writing/svelte-stores.md"
+      "file": "writing/svelte-stores.md"
     }
   ]
 }

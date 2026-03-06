@@ -23,8 +23,8 @@ const collectDefinitionUrls = (tree: Root): string[] => {
 
 const apply = (
   markdown: string,
-  filePath = '/repo/content/writing/post.md',
-  contentPath = 'content',
+  filePath = '/repo/writing/post.md',
+  contentPath = 'writing',
   cwd = '/repo',
 ): string[] => {
   const tree = fromMarkdown(markdown) as Root;
@@ -35,8 +35,8 @@ const apply = (
 
 const applyDefinitions = (
   markdown: string,
-  filePath = '/repo/content/writing/post.md',
-  contentPath = 'content',
+  filePath = '/repo/writing/post.md',
+  contentPath = 'writing',
   cwd = '/repo',
 ): string[] => {
   const tree = fromMarkdown(markdown) as Root;
@@ -57,7 +57,7 @@ describe('fixMarkdownUrls', () => {
   });
 
   it('resolves parent directories against the file path', () => {
-    const [url] = apply('[About](../about.md)', '/repo/content/writing/subdir/page.md');
+    const [url] = apply('[About](../about.md)', '/repo/writing/subdir/page.md');
     expect(url).toBe('/writing/about');
   });
 
@@ -178,7 +178,7 @@ describe('fixMarkdownUrls', () => {
   });
 
   it('normalizes content paths with leading or trailing slashes', () => {
-    const [url] = apply('[Next](./next.md)', '/repo/content/writing/post.md', '/content/');
+    const [url] = apply('[Next](./next.md)', '/repo/writing/post.md', '/writing/');
     expect(url).toBe('/writing/next');
   });
 

@@ -10,7 +10,7 @@ import { visit } from 'unist-util-visit';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const WRITING_ROOT = path.resolve(REPO_ROOT, 'content/writing');
+const WRITING_ROOT = path.resolve(REPO_ROOT, 'writing');
 const COURSES_ROOT = path.resolve(REPO_ROOT, 'courses');
 const STATIC_ROOT = path.resolve(REPO_ROOT, 'applications/website/static');
 
@@ -164,7 +164,7 @@ const checkLinkTarget = (
   }
 };
 
-const writingFiles = await fg('content/writing/*.md', { cwd: REPO_ROOT, absolute: true });
+const writingFiles = await fg('writing/*.md', { cwd: REPO_ROOT, absolute: true });
 const courseFiles = await fg('courses/**/*.md', { cwd: REPO_ROOT, absolute: true });
 const courseDirs = await fg('courses/*', { cwd: REPO_ROOT, absolute: true, onlyDirectories: true });
 
@@ -180,7 +180,7 @@ for (const file of writingFiles) {
 }
 
 for (const slug of writingDuplicates) {
-  addError('content/writing', `Duplicate writing slug '${slug}'.`);
+  addError('writing', `Duplicate writing slug '${slug}'.`);
 }
 
 const courseMap = new Map<string, Set<string>>();

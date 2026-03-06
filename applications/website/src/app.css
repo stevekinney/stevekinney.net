@@ -7,7 +7,7 @@
  * playground examples and external components.
  */
 @source '../**/*.{svelte,js,ts,md}';
-@source '../../../content/writing/**/*.md';
+@source '../../../writing/**/*.md';
 @source '../../../courses/**/*.md';
 @source '../../../packages/components/**/*.{svelte,js,ts}';
 
