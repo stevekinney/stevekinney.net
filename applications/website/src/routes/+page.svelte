@@ -5,12 +5,15 @@
   import courses from '$lib/courses';
   import formatDate from '$lib/format-date';
   import { description, title } from '$lib/metadata';
+  import { buildPersonSchema, buildWebSiteSchema } from '$lib/structured-data';
   import Biography from './biography.md';
 
   const { data } = $props();
+
+  const jsonLd = [buildWebSiteSchema(), buildPersonSchema()];
 </script>
 
-<SEO {title} {description} />
+<SEO {title} {description} {jsonLd} />
 
 <div class="space-y-10">
   <div class="grid grid-cols-1 gap-8 md:grid-cols-[1fr_fit]">

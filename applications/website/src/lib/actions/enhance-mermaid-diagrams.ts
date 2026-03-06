@@ -167,12 +167,112 @@ function getMermaid(): Promise<typeof import('mermaid')> {
   return mermaidReady;
 }
 
+/**
+ * Insert invisible edges (~~~) between consecutive disconnected nodes within
+ * subgraphs. Dagre places unconnected nodes in a staircase pattern; linking
+ * them with invisible edges forces vertical stacking.
+ */
+function connectDisconnectedSubgraphNodes(source: string): string {
+  const lines = source.split('\n');
+  const result: string[] = [];
+  const subgraphStack: { nodes: string[]; startIndex: number }[] = [];
+
+  const nodeDefinitionPattern = /^(\w+)\s*(\[|\(|\{|>)/;
+  const edgePattern = /-->|~~~|==>|-\.->|---/;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (trimmed.startsWith('subgraph ')) {
+      subgraphStack.push({ nodes: [], startIndex: result.length });
+      result.push(line);
+      continue;
+    }
+
+    if (trimmed === 'end' && subgraphStack.length > 0) {
+      const subgraph = subgraphStack.pop()!;
+
+      // Find which nodes are already connected by edges within this subgraph
+      const connectedNodes = new Set<string>();
+      const bodyLines = result.slice(subgraph.startIndex + 1);
+      for (const bodyLine of bodyLines) {
+        if (edgePattern.test(bodyLine)) {
+          const ids = bodyLine.trim().match(/\b(\w+)\b/g) || [];
+          for (const id of ids) connectedNodes.add(id);
+        }
+      }
+
+      const disconnected = subgraph.nodes.filter((n) => !connectedNodes.has(n));
+
+      if (disconnected.length >= 2) {
+        for (let i = 0; i < disconnected.length - 1; i++) {
+          result.push(`    ${disconnected[i]} ~~~ ${disconnected[i + 1]}`);
+        }
+      }
+
+      result.push(line);
+      continue;
+    }
+
+    // Track node definitions inside subgraphs
+    if (subgraphStack.length > 0) {
+      const match = trimmed.match(nodeDefinitionPattern);
+      if (match && !trimmed.startsWith('direction') && !edgePattern.test(trimmed)) {
+        subgraphStack[subgraphStack.length - 1].nodes.push(match[1]);
+      }
+    }
+
+    result.push(line);
+  }
+
+  return result.join('\n');
+}
+
+/**
+ * After CSS changes label width (uppercase, font-weight, letter-spacing),
+ * the foreignObject is too narrow, causing left-aligned overflow.
+ * Widen each cluster label's foreignObject to match its cluster rect
+ * and recenter the label's g transform.
+ */
+function recenterClusterLabels(wrapper: HTMLElement): void {
+  const clusters = wrapper.querySelectorAll<SVGGElement>('.cluster');
+  for (const cluster of clusters) {
+    const rect = cluster.querySelector<SVGRectElement>('rect');
+    const labelG = cluster.querySelector<SVGGElement>('.cluster-label');
+    if (!rect || !labelG) continue;
+
+    const fo = labelG.querySelector<SVGForeignObjectElement>('foreignObject');
+    if (!fo) continue;
+
+    const rectX = +rect.getAttribute('x')!;
+    const rectWidth = +rect.getAttribute('width')!;
+
+    // Give the foreignObject the full cluster width and position at x=0
+    fo.setAttribute('width', String(rectWidth));
+    fo.setAttribute('x', '0');
+
+    // Reposition the label g to start at the rect's x
+    const currentTransform = labelG.getAttribute('transform') || '';
+    const yMatch = currentTransform.match(/translate\([^,]+,\s*([^)]+)\)/);
+    const y = yMatch ? yMatch[1].trim() : '8';
+    labelG.setAttribute('transform', `translate(${rectX}, ${y})`);
+  }
+}
+
 async function renderMermaidDiagram(container: HTMLElement): Promise<void> {
   const sourceElement = container.querySelector('.mermaid-source');
   if (!sourceElement) return;
 
-  const source = sourceElement.textContent?.trim();
+  let source = sourceElement.textContent?.trim();
   if (!source) return;
+
+  // Replace literal \n (backslash + n) with <br/> for Mermaid line breaks.
+  // Content files use \n inside node labels for multi-line text, but Mermaid's
+  // htmlLabels rendering path doesn't convert them automatically.
+  source = source.replace(/\\n/g, '<br/>');
+
+  // Connect disconnected nodes in subgraphs to prevent staircase layout.
+  source = connectDisconnectedSubgraphNodes(source);
 
   const { default: mermaid } = await getMermaid();
   const id = `mermaid-diagram-${mermaidIdCounter++}`;
@@ -185,6 +285,7 @@ async function renderMermaidDiagram(container: HTMLElement): Promise<void> {
     diagramWrapper.className = 'mermaid-diagram flex items-center justify-center';
     diagramWrapper.innerHTML = svg;
     container.prepend(diagramWrapper);
+    recenterClusterLabels(diagramWrapper);
   } catch (error) {
     console.error('Failed to render mermaid diagram:', error);
   }

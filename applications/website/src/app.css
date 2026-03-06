@@ -118,9 +118,19 @@
 }
 
 /* Subgraph/cluster labels */
+.mermaid-diagram .cluster-label foreignObject > div {
+  display: flex !important;
+  justify-content: center;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 .mermaid-diagram .cluster-label .nodeLabel {
-  letter-spacing: 0.02em;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+  padding-top: 4px;
 }
 
 /* Subgraph borders */
@@ -196,11 +206,6 @@
   rx: 6;
   ry: 6;
   stroke-width: 1.5;
-}
-
-/* Flowchart stadium-shaped nodes (rounded ends) */
-.mermaid-diagram .node .label {
-  padding: 8px 12px;
 }
 
 /* Curly brace nodes */

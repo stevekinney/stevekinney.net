@@ -28,6 +28,7 @@
     textColor?: string;
     backgroundColor?: string;
     hideFooter?: boolean;
+    jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   };
   type ImageConfig = Pick<
     SEOProps,
@@ -57,7 +58,16 @@
     textColor,
     backgroundColor,
     hideFooter,
+    jsonLd,
   }: SEOProps = $props();
+
+  const jsonLdScript = $derived.by(() => {
+    if (!jsonLd) return '';
+    const data = Array.isArray(jsonLd)
+      ? { '@context': 'https://schema.org', '@graph': jsonLd }
+      : jsonLd;
+    return '<script type="application/ld+json">' + JSON.stringify(data) + '</' + 'script>';
+  });
 
   const formattedTitle = $derived(formatPageTitle(title));
   const currentUrl = $derived(page.url.href);
@@ -141,7 +151,20 @@
 <svelte:head>
   <title>{formattedTitle}</title>
   <link rel="canonical" href={currentUrl} />
+  <link
+    rel="alternate"
+    type="application/atom+xml"
+    title="Steve Kinney's Writing"
+    href="/writing/rss"
+  />
+  <link
+    rel="alternate"
+    type="text/plain"
+    title="LLM-readable content"
+    href={`${normalizedPath === '/' ? '' : normalizedPath}/llms.txt`}
+  />
 
+  <meta name="robots" content={published ? 'index, follow' : 'noindex, nofollow'} />
   <meta name="description" content={description} />
   <meta name="author" content={author} />
 
@@ -155,6 +178,7 @@
   <meta property="og:image" content={image} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={formattedTitle} />
 
   <!-- Twitter -->
   <meta name="twitter:card" content={twitterCard} />
@@ -163,6 +187,7 @@
   <meta name="twitter:description" content={description} />
   <meta name="twitter:creator" content={twitterCreator} />
   <meta name="twitter:image" content={image} />
+  <meta name="twitter:image:alt" content={formattedTitle} />
 
   <!-- Publication dates for SEO and social sharing -->
   {#if published && dateIso}
@@ -173,6 +198,12 @@
   {#if published && modifiedIso}
     <meta name="last-modified" content={modifiedIso} />
     <meta property="article:modified_time" content={modifiedIso} />
+  {/if}
+
+  <!-- Structured Data -->
+  {#if jsonLdScript}
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+    {@html jsonLdScript}
   {/if}
 
   <!-- Additional tags from parent component -->

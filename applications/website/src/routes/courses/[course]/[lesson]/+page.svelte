@@ -3,14 +3,30 @@
   import Date from '$lib/components/date.svelte';
   import PullRequest from '$lib/components/pull-request.svelte';
   import SEO from '$lib/components/seo.svelte';
+  import { url } from '$lib/metadata';
+  import { buildBreadcrumbSchema, buildCourseSchema } from '$lib/structured-data';
 
   const { data } = $props();
+
+  const jsonLd = $derived([
+    buildCourseSchema({
+      name: data.course.title,
+      description: data.course.description,
+      courseUrl: `${url}/courses/${data.course.slug}`,
+    }),
+    buildBreadcrumbSchema([
+      { name: 'Courses', url: `${url}/courses` },
+      { name: data.course.title, url: `${url}/courses/${data.course.slug}` },
+      { name: data.title, url: `${url}/courses/${data.course.slug}/${page.params.lesson}` },
+    ]),
+  ]);
 </script>
 
 <SEO
   title={`${data.title} | ${data.course.title}`}
   description={data.description}
   published={data.published}
+  {jsonLd}
 />
 
 <div class="space-y-10">

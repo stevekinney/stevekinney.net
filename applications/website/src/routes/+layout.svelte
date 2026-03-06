@@ -96,7 +96,7 @@
   <Navigation class="sm:col-start-2 sm:justify-end lg:order-2 lg:justify-center" />
 
   <!-- Main content container -->
-  <div class="my-6 sm:col-span-full lg:order-3" data-content-container>
+  <main class="my-6 sm:col-span-full lg:order-3" data-content-container>
     {@render children?.()}
-  </div>
+  </main>
 </div>
