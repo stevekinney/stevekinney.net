@@ -1,15 +1,18 @@
 <script lang="ts">
   import { Rss } from 'lucide-svelte';
   import PostLink from '$lib/components/post-link.svelte';
+  import { POSTS_PER_PAGE } from '$lib/pagination';
 
   const { data, children } = $props();
+
+  const recentPosts = $derived(data.posts.slice(0, POSTS_PER_PAGE));
 </script>
 
 <div class="grid grid-cols-1 gap-10 lg:grid-cols-4">
   <div class="order-1 flex flex-col gap-2 lg:gap-8">
     <h2 class="text-lg font-bold">Further Reading</h2>
     <ul class="space-y-4">
-      {#each data.posts as post (post.slug)}
+      {#each recentPosts as post (post.slug)}
         <PostLink {post} href="/writing/{post.slug}" as="li" />
       {/each}
     </ul>
