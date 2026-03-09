@@ -1,9 +1,18 @@
 {
   "meta": {
-    "generatedAt": "2026-03-09T13:40:36.231Z",
-    "hash": "f9036e7ff2dba123d15be18b58f137fb2a19e252e9f2815ed61dc4a117fb6ae6"
+    "generatedAt": "2026-03-09T18:52:50.307Z",
+    "hash": "3ada6776d130d89ea7f400697a97b20ae75e0d6c22f244a39c48d9815a2c5c72"
   },
   "posts": [
+    {
+      "title": "MCP Apps and the Missing Middle of AI Tooling",
+      "description": "MCP servers return data. MCP Apps let them ship a UI alongside that data—so the tool author, not the client, decides how results look.",
+      "date": "2026-03-10T12:00:00.000Z",
+      "modified": "2026-03-10T12:00:00.000Z",
+      "published": true,
+      "tags": ["ai", "mcp", "tooling"],
+      "slug": "mcp-apps"
+    },
     {
       "title": "build-temporal-workflow: Faster Temporal Workflow Bundling with esbuild",
       "description": "A drop-in replacement for @temporalio/worker's bundleWorkflowCode that swaps Webpack for esbuild—delivering 9–11x faster builds and 94% less memory usage.",
