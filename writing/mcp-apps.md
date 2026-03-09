@@ -88,7 +88,7 @@ The ecosystem is early but surprisingly broad for an extension that's been publi
 
 The [`@modelcontextprotocol/ext-apps`][ext-apps] SDK is the official TypeScript package. It ships starter templates for React, Vue, Svelte, Preact, Solid, and vanilla JavaScript—so you're not locked into a framework. On the Python side, [FastMCP][fastmcp] added MCP Apps support in v3.0 with both a declarative Prefab UI system (a Python DSL for layouts, charts, and forms that compiles to JSON) and full custom HTML apps.
 
-Client support is wider than I expected. Claude (web and desktop), ChatGPT, VS Code Insiders, Goose, Postman, and Cursor all support MCP Apps today. JetBrains and Google DeepMind have publicly expressed interest.
+Client support is wider than I expected. The [extension support matrix][client-matrix] on the MCP site tracks adoption: [Claude][claude-apps] (web and desktop), [ChatGPT][chatgpt-apps], [VS Code][vscode-apps], [Goose][goose-apps], and [Postman][postman-apps] all shipped support at or near launch. [Cursor][cursor-apps] added it in v2.6.
 
 The spec itself is governed by the [Agentic AI Foundation][agentic-ai] under the Linux Foundation—not by a single company. MCP was donated there in December 2025, which means MCP Apps is an open standard with independent governance. That matters if you're going to build on it.
 
@@ -103,3 +103,10 @@ MCP decoupled AI tools from specific models. MCP Apps decouple tool _output_ fro
 [spec]: https://apps.extensions.modelcontextprotocol.io/api/documents/Overview.html
 [fastmcp]: https://github.com/jlowin/fastmcp
 [agentic-ai]: https://agenticaiproject.org
+[client-matrix]: https://modelcontextprotocol.io/extensions/client-matrix
+[claude-apps]: https://claude.com/blog/interactive-tools-in-claude
+[chatgpt-apps]: https://alternativeto.net/news/2026/2/chatgpt-announces-full-support-for-mcp-apps-open-standard/
+[vscode-apps]: https://code.visualstudio.com/blogs/2026/01/26/mcp-apps-support
+[goose-apps]: https://block.github.io/goose/blog/2026/01/06/mcp-apps/
+[postman-apps]: https://blog.postman.com/january-2026-product-updates/
+[cursor-apps]: https://cursor.com/changelog/2-6
