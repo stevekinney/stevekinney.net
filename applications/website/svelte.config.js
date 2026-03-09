@@ -36,7 +36,7 @@ const __dirname = dirname(__filename);
 
 /**
  * Extract title="..." from the metastring.
- * @param {string | undefined} metastring
+ * @param {string | null | undefined} metastring
  * @returns {{ title: string | null, remaining: string }}
  */
 function parseTitle(metastring) {

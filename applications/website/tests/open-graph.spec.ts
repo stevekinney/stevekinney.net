@@ -22,7 +22,10 @@ for (const scenario of scenarios) {
     expect(ogUrl, 'og:image content should be present').toBeTruthy();
     expect(ogUrl).toContain('/open-graph.jpg?v=');
 
-    const response = await page.request.get(ogUrl as string);
+    // Fetch using path only so we always hit the preview server, regardless of
+    // the origin baked into prerendered HTML (which may point at port 4444).
+    const { pathname, search } = new URL(ogUrl as string);
+    const response = await page.request.get(`${pathname}${search}`);
     expect(response.ok()).toBeTruthy();
 
     const contentType = response.headers()['content-type'] ?? '';

@@ -25,3 +25,18 @@ declare module 'rehype-unwrap-images' {
 declare module 'rehype-slug' {
   export default import('unified').Plugin;
 }
+
+declare module '*&as=srcset&withoutEnlargement' {
+  const srcset: string;
+  export default srcset;
+}
+
+declare module '*?w=768' {
+  const src: string;
+  export default src;
+}
+
+declare module '*?metadata' {
+  const metadata: { width: number; height: number; format: string };
+  export default metadata;
+}

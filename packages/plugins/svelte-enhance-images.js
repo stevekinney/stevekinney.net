@@ -63,7 +63,6 @@ const isMissingFile = (error) =>
   typeof error === 'object' && error !== null && 'code' in error && error.code === 'ENOENT';
 
 /**
- * @param {string} cacheKey
  * @param {string} cachePath
  * @returns {Promise<{ code: string, map: string | null } | null>}
  */
@@ -78,7 +77,6 @@ const readCacheEntry = async (cachePath) => {
 };
 
 /**
- * @param {string} cacheKey
  * @param {string} cachePath
  * @param {{ code: string, map: string | null }} entry
  */

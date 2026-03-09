@@ -14,6 +14,9 @@ tags:
 
 If you've built a [Temporal](https://temporal.io) worker in TypeScript, you've had some passing exposure to `bundleWorkflowCode` doing its thing. A while back, I wrote about [best practices for Temporal workflows](./cursor-rules-temporal-typescript.md). One thing I didn't get into was the build tooling, because at the time I was just living with it. But after enough accumulated waiting, I finally sat down and asked: what is Webpack actually _doing_ here? The fact that it includes Webpack as a dependency at all led me to believe that I could probably build a faster version. So, with that, let's take a look at what `bundleWorkflowCode` actually does and then how we can make a better, more performant version.
 
+> [!TIP]
+> For more information, you can check out the README on [npm](https://www.npmjs.com/package/build-temporal-workflow) or [Github](https://github.com/stevekinney/build-temporal-workflow).
+
 ## What `bundleWorkflowCode` actually does
 
 Temporal's workflow sandbox runs your code inside a V8 isolate. The isolate can't resolve modules at runtime—it needs everything in a single file, up front. So `bundleWorkflowCode` does two things: it resolves your workflow code's dependency graph, and it concatenates everything into a single CommonJS file that can run inside that sandbox.
