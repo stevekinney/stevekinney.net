@@ -31,4 +31,8 @@ const taskSchema = z.object({
 }) satisfies z.ZodType<Task>;
 ```
 
+> [!NOTE] Zod v4
+>
+> In Zod v4, `z.string().uuid()` is preferably `z.uuid()`. The `z.ZodType` generic changed from three parameters to two (the `Def` parameter was removed), but `satisfies z.ZodType<Task>` still works since it only uses the first parameter.
+
 If our schema does _not_ match the type that it's supposed to satisfy, then TypeScript will be the one yelling at us.

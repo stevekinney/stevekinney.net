@@ -175,4 +175,8 @@ baseObj.parse({ name: 'Zod', age: 99 });
 // => { name: "Zod" } (age is stripped out)
 ```
 
+> [!NOTE] Zod v4
+>
+> In Zod v4, `.strict()` and `.passthrough()` still work, but the preferred approach is to use the top-level constructors `z.strictObject({...})` and `z.looseObject({...})` when defining new schemas.
+
 Use the mode that best suits your data. Strict is good when you want to ensure no unexpected fields slip in; passthrough is handy if you want to keep them for logging or debugging.

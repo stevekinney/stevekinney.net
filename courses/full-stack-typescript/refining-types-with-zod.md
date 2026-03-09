@@ -103,6 +103,10 @@ userWithAddressSchema.parse({
 }); // passes
 ```
 
+> [!NOTE] Zod v4
+>
+> In Zod v4, `.nonempty()` still enforces a minimum length of 1 at runtime, but it no longer narrows the inferred TypeScript type to a non-empty tuple (`[T, ...T[]]`). The inferred type will be `T[]` instead.
+
 Keep nesting all you like. If your data structure is complicated, at least Zod's layered approach keeps the validator logic tidy.
 
 ## Branded Types for Extra Semantics
@@ -117,6 +121,10 @@ type UserId = z.infer<typeof userIdSchema>; // string & { __brand: "UserId" }
 const userId = userIdSchema.parse('7c45ae8a-cf6e-4f72-b12f-6fbb21ce3ab9'); // works
 userIdSchema.parse('not-a-uuid'); // throws ZodError
 ```
+
+> [!NOTE] Zod v4
+>
+> In Zod v4, `z.string().uuid()` is preferably written as `z.uuid()`. The `.brand()` method also accepts an optional second argument for placement: `"in"`, `"out"`, or `"inout"`.
 
 This _can_ help catch mistakes if you accidentally pass the wrong string to a function expecting a UserId.
 

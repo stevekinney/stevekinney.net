@@ -426,6 +426,10 @@ const mySchema = z.string().errorMap((issue, ctx) => {
 });
 ```
 
+> [!NOTE] Zod v4
+>
+> In Zod v4, the schema-level `.errorMap()` method no longer exists. Use the `error` parameter directly on individual validators instead. The global `z.setErrorMap()` has also been replaced by `z.config()`.
+
 ### Why Use Error Maps?
 
 - Centralized, consistent error styling.
@@ -482,6 +486,10 @@ const merged = schemaA.merge(schemaB);
 //      email: z.string().email(),
 //    });
 ```
+
+> [!NOTE] Zod v4
+>
+> In Zod v4, `.merge()` is deprecated. Use `.extend()` instead: `schemaA.extend(schemaB.shape)`.
 
 ### Difference vs. Intersection
 

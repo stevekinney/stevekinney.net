@@ -31,4 +31,8 @@ sendEmail('unbranded string');
 // Type error: not EmailAddress
 ```
 
+> [!NOTE] Zod v4
+>
+> In Zod v4, `z.string().email()` is preferably written as `z.email()`. The `.brand()` method also accepts an optional second argument (`"in"`, `"out"`, or `"inout"`) to control where the brand appears in the inferred type.
+
 Branding is purely a TypeScript compile-time trick, but it helps you avoid passing, for example, a plain string where an `EmailAddress` is required. You can brand objects, too.
