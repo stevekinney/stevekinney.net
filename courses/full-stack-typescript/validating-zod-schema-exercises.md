@@ -111,6 +111,10 @@ Below is a list of 10 hands-on challenges that will move you from Zod novice to 
 
 **Goal**: Learn how branding can help differentiate between two string-based types in your code. No more mixing up user IDs with email addresses.
 
+> [!NOTE] Zod v4
+>
+> In Zod v4, `z.string().uuid()` is preferably written as the top-level `z.uuid()`.
+
 ### Making “Partial,” “Pick,” or “Omit” Your Best Friends
 
 **Concepts**: Utility methods (`.partial()`, `.pick()`, `.omit()`)

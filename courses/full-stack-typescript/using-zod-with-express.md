@@ -59,6 +59,10 @@ app.post(
 );
 ```
 
+> [!NOTE] Zod v4
+>
+> In Zod v4, `z.string().email()` is preferably `z.email()`. The `ZodType` generic signature also changed from `ZodType<Output, Def, Input>` to `ZodType<Output, Input>` (the `Def` parameter was removed). The `z.ZodTypeAny` alias used here still works in v4.
+
 ## Validating Query Parameters
 
 When working with GET endpoints that include query strings, you can define a schema for req.query. Since query parameters always arrive as strings, you might need z.string().transform(…) or z.coerce.number() to convert them.
@@ -124,6 +128,10 @@ app.get(
   },
 );
 ```
+
+> [!NOTE] Zod v4
+>
+> In Zod v4, `z.string().uuid()` is preferably `z.uuid()`. The v4 `z.uuid()` enforces stricter RFC 9562 validation; use `z.guid()` for v3-compatible behavior.
 
 ## Validating Responses
 

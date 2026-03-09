@@ -37,6 +37,10 @@ const validateBody =
   };
 ```
 
+> [!NOTE] Zod v4
+>
+> In Zod v4, `ZodSchema` still works as a type alias. The underlying `ZodType` generic changed from `ZodType<Output, Def, Input>` to `ZodType<Output, Input>`, but this middleware pattern works identically in both versions.
+
 ## Validating `POST`
 
 ```ts

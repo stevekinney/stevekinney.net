@@ -100,6 +100,10 @@ export const UserSchema = z.object({
 export type UserType = z.infer<typeof UserSchema>;
 ```
 
+> [!NOTE] Zod v4
+>
+> In Zod v4, string format validators like `.email()` have top-level equivalents: `z.email()`, `z.uuid()`, `z.url()`, etc. The chained form (`z.string().email()`) still works. Additionally, the `{ message: "..." }` option in validators is deprecated in favor of `{ error: "..." }`.
+
 Once you have a schema, you can use Zod to validate objects to make sure that they match that schema.
 
 ```ts
@@ -150,6 +154,10 @@ type Product = z.infer<typeof ProductSchema>;
 // Now, Product is:
 // { id: string; name: string; price: number; }
 ```
+
+> [!NOTE] Zod v4
+>
+> In Zod v4, `z.string().uuid()` can be written as `z.uuid()`. Note that `z.uuid()` in v4 enforces stricter RFC 9562 validation. Use `z.guid()` if you need the more permissive v3 behavior.
 
 Your validated data automatically gets the correct TypeScript type—no more mismatched types between your runtime checks and compile-time expectations.
 

@@ -276,6 +276,10 @@ try {
 }
 ```
 
+> [!NOTE] Zod v4
+>
+> In Zod v4, this would be written as `z.uuid().brand<'UserId'>()`. The top-level `z.uuid()` replaces `z.string().uuid()`, and v4's `z.uuid()` enforces stricter RFC 9562 validation. Use `z.guid()` for v3-compatible behavior.
+
 **Test Branding**: If you have a function that expects a UserId type, passing a normal string should fail type-check (in TypeScript). This won't fail at runtime, but at compile time.
 
 ## Solutions
@@ -474,6 +478,10 @@ try {
   console.error('Invalid form data failed as expected:', err);
 }
 ```
+
+> [!NOTE] Zod v4
+>
+> In Zod v4, `z.string().email()` is preferably `z.email()`, and the `{ message: "..." }` option in validators like `.min()` and `.refine()` is deprecated in favor of `{ error: "..." }`.
 
 **Key Takeaways**:
 
