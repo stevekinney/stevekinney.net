@@ -1,9 +1,19 @@
 {
   "meta": {
-    "generatedAt": "2026-03-06T20:12:42.938Z",
-    "hash": "a6b248b75cf96a0a6ebcbd8e01adfab9c52dc1db0b18c2c815731712dcbe1bf3"
+    "generatedAt": "2026-03-09T13:40:35.778Z",
+    "hash": "9fc10cb72be44a350ec84463d09bf2522e5614e36cf4c9b295e5d84a20a10e5b"
   },
   "posts": [
+    {
+      "title": "build-temporal-workflow: Faster Temporal Workflow Bundling with esbuild",
+      "description": "A drop-in replacement for @temporalio/worker's bundleWorkflowCode that swaps Webpack for esbuild—delivering 9–11x faster builds and 94% less memory usage.",
+      "date": "2026-03-09T12:00:00.000Z",
+      "modified": "2026-03-09T12:00:00.000Z",
+      "published": true,
+      "tags": ["temporal", "typescript", "tooling"],
+      "slug": "build-temporal-workflow",
+      "file": "writing/build-temporal-workflow.md"
+    },
     {
       "title": "Prompt Engineering Across the OpenAI, Anthropic, and Gemini APIs",
       "description": "A practical guide to writing reliable prompts across the major LLM APIs—covering core techniques, where the providers actually diverge, trust boundaries, and two production workflows built from brittle to hardened.",
