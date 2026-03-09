@@ -22,17 +22,17 @@ That's the whole job. There's no code splitting, because the isolate loads one f
 
 The enforced constraints look like this:
 
-- `bundle: true` — required for workflow isolation
-- `format: 'cjs'` — Temporal's sandbox requires CommonJS
-- `minify: false` — preserves workflow function names
-- `splitting: false` — not supported in the workflow sandbox
-- `keepNames: true` — required for workflow type inference
+- `bundle: true`: required for workflow isolation
+- `format: 'cjs'`: Temporal's sandbox requires CommonJS
+- `minify: false`: preserves workflow function names
+- `splitting: false`: not supported in the workflow sandbox
+- `keepNames: true`: required for workflow type inference
 
 That's a bundler running with most of its features turned off.
 
 ## Why Webpack is the wrong tool for this
 
-Webpack is a capable tool. I've used it for years and it handles complex web application builds well. But its generality is a liability here.
+Webpack is a capable tool. I've used it for years and it handles complex web application builds well. But, its _generality_ is a liability here.
 
 When you call `bundleWorkflowCode` with the stock Temporal SDK, here's what actually happens under the hood. Webpack parses its own configuration schema. It initializes its plugin system—the full `tapable` event pipeline with its hooks for compilation, module factories, resolvers, and optimizers. It builds a module graph through its own resolution algorithm, which is separate from Node's. It runs multiple optimization passes, including scope hoisting analysis, chunk graph construction, and code generation—all for a bundle that deliberately opts out of every optimization Webpack offers.
 
