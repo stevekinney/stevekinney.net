@@ -34,7 +34,7 @@
     "clean": "rm -rf build .svelte-kit test-results .vite",
     "content:validate": "bun run ../../packages/scripts/validate-content.ts",
     "content:index": "bun run ../../packages/scripts/generate-site-content-index.ts",
-    "test:integration": "bun run build && env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning ../../node_modules/.bin/playwright test",
+    "test:integration": "env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning ../../node_modules/.bin/playwright test",
     "test:integration:dev": "PLAYWRIGHT_WEB_SERVER=0 env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning ../../node_modules/.bin/playwright test",
     "test:unit": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" ../../node_modules/.bin/vitest",
     "test:storybook": "../../node_modules/.bin/test-storybook",

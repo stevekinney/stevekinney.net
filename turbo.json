@@ -11,7 +11,7 @@
       "outputs": ["manifest.json"]
     },
     "build": {
-      "dependsOn": ["^build", "^manifest"],
+      "dependsOn": ["^manifest"],
       "inputs": [
         "**/*.md",
         "**/*.png",
@@ -26,6 +26,7 @@
       ],
       "env": ["VERCEL", "SKIP_IMAGE_OPTIMIZATION"],
       "outputs": [
+        "manifest.json",
         "build/**",
         ".svelte-kit/**",
         ".vercel/output/**",
