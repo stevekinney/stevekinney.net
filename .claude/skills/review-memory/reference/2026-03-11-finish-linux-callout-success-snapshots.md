@@ -1,0 +1,1 @@
+- When CI visual diffs show only a subset of stale baselines after a bulk update, patch only the remaining platform-specific snapshot files (for this workflow: `*-linux.png`) from that exact failed run artifact.
