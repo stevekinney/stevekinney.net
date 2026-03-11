@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "turbo run dev --filter=@stevekinney/website",
-    "build": "if [ -n \"$VERCEL\" ]; then turbo run build --filter=@stevekinney/website --remote-cache-read-only; else turbo run build --filter=@stevekinney/website; fi && if [ -n \"$VERCEL\" ] && [ -d applications/website/.vercel/output ]; then mkdir -p .vercel/output && cp -R applications/website/.vercel/output/. .vercel/output/; fi",
+    "build": "if [ -n \"$VERCEL\" ]; then turbo run build --filter=@stevekinney/website --cache=local:rw,remote:r; else turbo run build --filter=@stevekinney/website; fi && if [ -n \"$VERCEL\" ] && [ -d applications/website/.vercel/output ]; then mkdir -p .vercel/output && cp -R applications/website/.vercel/output/. .vercel/output/; fi",
     "build:stats": "turbo run build:stats --filter=@stevekinney/website",
     "preview": "turbo run preview --filter=@stevekinney/website",
     "test": "turbo run test --filter=@stevekinney/website",
