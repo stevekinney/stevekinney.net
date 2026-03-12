@@ -26,3 +26,4 @@ package-lock.json
 
 # Turborepo
 .turbo
+/.claude/worktrees
