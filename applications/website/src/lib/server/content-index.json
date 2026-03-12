@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generatedAt": "2026-03-09T18:52:50.307Z",
-    "hash": "3ada6776d130d89ea7f400697a97b20ae75e0d6c22f244a39c48d9815a2c5c72"
+    "generatedAt": "2026-03-12T16:56:07.688Z",
+    "hash": "0fe06a17dbb915b71947c6717729afb35d2bce1f214aff7e33f3feef36a1bb4c"
   },
   "posts": [
     {
       "title": "MCP Apps and the Missing Middle of AI Tooling",
       "description": "MCP servers return data. MCP Apps let them ship a UI alongside that data—so the tool author, not the client, decides how results look.",
-      "date": "2026-03-10T12:00:00.000Z",
-      "modified": "2026-03-10T12:00:00.000Z",
+      "date": "2026-03-12T12:00:00.000Z",
+      "modified": "2026-03-12T12:00:00.000Z",
       "published": true,
       "tags": ["ai", "mcp", "tooling"],
       "slug": "mcp-apps"

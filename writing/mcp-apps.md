@@ -3,8 +3,8 @@ title: MCP Apps and the Missing Middle of AI Tooling
 description: >-
   MCP servers return data. MCP Apps let them ship a UI alongside that data—so the
   tool author, not the client, decides how results look.
-date: 2026-03-10T12:00:00.000Z
-modified: 2026-03-10T12:00:00.000Z
+date: 2026-03-12T12:00:00.000Z
+modified: 2026-03-12T12:00:00.000Z
 published: true
 tags:
   - ai
@@ -12,7 +12,11 @@ tags:
   - tooling
 ---
 
-If you've built an MCP server, you've run into this wall. Your tool does something useful—queries a database, fetches metrics, searches documents—and it returns structured data. The model sees that data, summarizes it, and relays the summary to the user. The user sees... a paragraph of text. Maybe some JSON if they're lucky. The tool author has zero say in how those results get presented. A monitoring tool can surface CPU usage but can't show a chart. A search tool can return ten results but can't show a filterable table. The client decides what the user sees, and most clients don't try very hard.
+If you've built an MCP server, you've run into this wall. Your tool does something useful—queries a database, fetches metrics, searches documents—and it returns structured data. The model sees that data, summarizes it, and relays the summary to the user. The user sees a paragraph of text. Maybe some JSON if they're lucky.
+
+The tool author has zero say in how those results get presented. A monitoring tool can surface CPU usage but can't show a chart. A search tool can return ten results but can't show a filterable table. The client decides what the user sees, and most clients don't try very hard.
+
+Now imagine your database tool returns query results _and_ an interactive chart the user can filter without prompting again. Or your deployment tool walks users through a config wizard instead of dumping YAML. MCP Apps make this real—they let the tool author ship a UI alongside the data, and the client renders it in a sandboxed iframe. That's the gap this post is about.
 
 ## The gap between tool output and user experience
 
@@ -30,13 +34,15 @@ The distinction between an MCP server and an MCP App is additive, not categorica
 
 Here's what the difference looks like in practice:
 
-|                       | Standard MCP server           | MCP server with Apps                                  |
-| --------------------- | ----------------------------- | ----------------------------------------------------- |
-| **Output**            | Text, images, structured JSON | Interactive HTML in a sandboxed iframe                |
-| **User interaction**  | User prompts the model again  | Direct manipulation—clicks, forms, drag-and-drop      |
-| **State**             | Stateless between tool calls  | Persistent UI state across interactions               |
-| **Real-time updates** | Requires re-running tools     | Live updates via persistent `postMessage` channel     |
-| **Tool visibility**   | All tools visible to model    | Tools can be app-only for UI controls like pagination |
+|                       | Standard MCP server           | MCP server with Apps                                       |
+| --------------------- | ----------------------------- | ---------------------------------------------------------- |
+| **Output**            | Text, images, structured JSON | Interactive HTML in a sandboxed iframe                     |
+| **User interaction**  | User prompts the model again  | Direct manipulation—clicks, forms, drag-and-drop           |
+| **State**             | Stateless between tool calls  | Can persist UI state across interactions (host-dependent)  |
+| **Real-time updates** | Requires re-running tools     | Can stream live updates via `postMessage` (host-dependent) |
+| **Tool visibility**   | All tools visible to model    | Tools can be app-only (e.g., pagination controls)          |
+
+These capabilities are defined by the spec, but how fully a given host implements them varies. Persistent state and live updates depend on the host maintaining the iframe across interactions—check the [extension support matrix][client-matrix] for current coverage.
 
 The mechanism is a `_meta.ui.resourceUri` field on the tool definition. When the host sees this field, it knows the tool has an interactive UI available:
 
@@ -52,21 +58,79 @@ The mechanism is a `_meta.ui.resourceUri` field on the tool definition. When the
 
 Hosts can prefetch the UI template before the tool is even called, so by the time the model invokes the tool, the view is ready to render.
 
+### A minimal example
+
+Here's what a minimal MCP App server looks like using the official SDK. This one registers a `show-metrics` tool with a UI resource and an app-only `refresh-metrics` tool that the View can call but the model never sees.
+
+```typescript
+import { registerAppTool } from '@modelcontextprotocol/ext-apps';
+
+registerAppTool(
+  server,
+  'show-metrics',
+  {
+    title: 'System Metrics',
+    description: 'Live system metrics dashboard',
+    inputSchema: {},
+    _meta: { ui: { resourceUri: 'ui://metrics/dashboard.html' } },
+  },
+  async () => ({
+    content: [{ type: 'text', text: JSON.stringify(await getMetrics()) }],
+  }),
+);
+
+registerAppTool(
+  server,
+  'refresh-metrics',
+  {
+    title: 'Refresh',
+    description: 'Poll for updated metrics',
+    inputSchema: {},
+    _meta: { ui: { visibility: ['app'] } },
+  },
+  async () => ({
+    content: [{ type: 'text', text: JSON.stringify(await getMetrics()) }],
+  }),
+);
+```
+
+On the View side, the `App` class handles the connection to the host and provides hooks for receiving tool results.
+
+```typescript
+import { App } from '@modelcontextprotocol/ext-apps';
+
+const app = new App({ name: 'System Metrics', version: '1.0.0' });
+
+app.ontoolresult = (result) => {
+  const metrics = JSON.parse(result.content[0].text);
+  renderDashboard(metrics);
+};
+
+document.querySelector('#refresh').addEventListener('click', () => {
+  app.callServerTool('refresh-metrics', {});
+});
+
+await app.connect();
+```
+
+The model sees `show-metrics` and can invoke it. The `refresh-metrics` tool is invisible to the model but callable from the View's refresh button. If the host doesn't support MCP Apps, the model still gets the JSON metrics as plain text—nothing breaks.
+
 ## How the rendering works
 
 The architecture introduces a third entity beyond the standard server-host pair. In regular MCP, the server exposes tools to the host (the chat client). With MCP Apps, a **View**—the UI running inside a sandboxed iframe—acts as an MCP client that communicates with the host, which proxies requests to the server.
 
-<!-- TODO: Add communication chain diagram showing: Server <-> MCP Protocol (stdio/SSE) <-> Host (Chat Client) <-> JSON-RPC over postMessage <-> View (Sandboxed iframe). The two transport layers should be visually distinct. -->
+The communication chain has two distinct transport layers. The server and host talk over the standard MCP protocol—stdio or SSE, same as any MCP server. The host and the View talk over JSON-RPC messages sent through `postMessage` across the iframe boundary. So a tool call from the View travels: View sends JSON-RPC via `postMessage` to the host, the host proxies it over stdio or SSE to the server, and the response travels back the same path in reverse. The host sits in the middle of both layers, which means it can audit, throttle, or reject any message in either direction.
 
 When the host renders a View, it initializes the iframe and passes host context—theme (light or dark), locale, timezone, display mode, container dimensions. The View then receives the tool's input arguments and results, rendering them however the tool author designed. From there, the View can call server tools, send messages into the conversation, update the model's context, and request that the host open external links. All of this happens over JSON-RPC through `postMessage`, so the host can audit every message.
 
 Views render in three **display modes**: **inline** (embedded in the chat flow, good for charts and forms), **fullscreen** (for editors, dashboards, or anything that needs room), and **picture-in-picture** (a persistent overlay for things like music players or timers). Hosts provide CSS custom properties for visual cohesion, so apps automatically adapt to dark mode and host-specific styling without extra work from the tool author.
 
 > [!NOTE] Sandboxing
-> MCP Apps run in sandboxed iframes with no access to the host DOM, cookies,
-> or storage. Communication is auditable JSON-RPC through `postMessage`. If
-> the server doesn't declare external network domains via CSP metadata, no
-> outbound connections are allowed.
+> MCP App Views run in sandboxed iframes with no access to the host page's
+> DOM, cookies, or storage. Communication is auditable JSON-RPC through
+> `postMessage`. Network access is governed by CSP metadata declared by the
+> server and enforced by the host—if no external domains are declared, the
+> View cannot make outbound connections.
 
 ## What you could actually build with this
 
@@ -88,7 +152,7 @@ The ecosystem is early but surprisingly broad for an extension that's been publi
 
 The [`@modelcontextprotocol/ext-apps`][ext-apps] SDK is the official TypeScript package. It ships starter templates for React, Vue, Svelte, Preact, Solid, and vanilla JavaScript—so you're not locked into a framework. On the Python side, [FastMCP][fastmcp] added MCP Apps support in v3.0 with both a declarative Prefab UI system (a Python DSL for layouts, charts, and forms that compiles to JSON) and full custom HTML apps.
 
-Client support is wider than I expected. The [extension support matrix][client-matrix] on the MCP site tracks adoption: [Claude][claude-apps] (web and desktop), [ChatGPT][chatgpt-apps], [VS Code][vscode-apps], [Goose][goose-apps], and [Postman][postman-apps] all shipped support at or near launch. [Cursor][cursor-apps] added it in v2.6.
+Client support is wider than I expected. The [extension support matrix][client-matrix] on the MCP site tracks adoption, and the list is growing: [Claude][claude-apps] (web and desktop), [ChatGPT][chatgpt-apps], [VS Code][vscode-apps], [Goose][goose-apps], [Postman][postman-apps], and [Cursor][cursor-apps] (added in v2.6) all support MCP Apps as of this writing. Some hosts are already extending beyond the base spec—ChatGPT, for example, exposes vendor-specific `window.openai` APIs for checkout, file operations, and modals on top of the standard `postMessage` bridge.
 
 The spec itself is governed by the [Agentic AI Foundation][agentic-ai] under the Linux Foundation—not by a single company. MCP was donated there in December 2025, which means MCP Apps is an open standard with independent governance. That matters if you're going to build on it.
 
@@ -97,7 +161,23 @@ The spec itself is governed by the [Agentic AI Foundation][agentic-ai] under the
 > scenes to real-time system monitors. It's the best place to start if you
 > want to build one.
 
-MCP decoupled AI tools from specific models. MCP Apps decouple tool _output_ from specific clients' rendering decisions. That's the same architectural move, applied one layer up. Whether it catches on depends on whether tool authors actually adopt it—but the fact that it degrades gracefully to plain MCP output means there's very little cost to trying. You ship a UI alongside your data, and if the client supports it, the user gets a better experience. If the client doesn't, nothing breaks. That's a reasonable bet.
+## What gets harder
+
+Shipping a UI alongside your data is not free. There are real costs, and they're worth naming before you commit.
+
+Two transport layers—MCP protocol between server and host, JSON-RPC over `postMessage` between host and View—mean two places where messages can fail or get misrouted. The sandboxed iframe limits what you can see in browser DevTools, too. Debugging a standard MCP tool is straightforward; debugging a View that's not receiving tool results requires tracing across both layers.
+
+With standard MCP tools, the host controls rendering and can apply its own accessibility patterns. With MCP Apps, the tool author owns the rendered HTML. That means keyboard navigation, screen reader support, and ARIA attributes are your responsibility. The spec doesn't enforce any of it.
+
+You also need two test harnesses: one server-side (does the tool return correct data?) and one browser-based (does the View render and behave correctly?). Integration testing that covers the full chain—tool call through server, proxy through host, render in View—is not mature yet.
+
+Graceful degradation is a feature of the architecture, but it means maintaining two output paths. The text-only fallback needs to be genuinely useful, not an afterthought. If you only invest in the rich View, users on clients without MCP Apps support get a worse experience than they would from a well-crafted text response.
+
+MCP decoupled AI tools from specific models. MCP Apps decouple tool _output_ from specific clients' rendering decisions. That's the same architectural move, applied one layer up.
+
+Whether it catches on depends on whether tool authors actually adopt it. But the fact that it degrades gracefully to plain MCP output means there's very little cost to trying—you maintain two output paths, but only one breaks new ground.
+
+You ship a UI alongside your data. If the client supports it, the user gets a richer experience. If it doesn't, nothing breaks.
 
 [ext-apps]: https://github.com/modelcontextprotocol/ext-apps
 [spec]: https://apps.extensions.modelcontextprotocol.io/api/documents/Overview.html
@@ -105,7 +185,7 @@ MCP decoupled AI tools from specific models. MCP Apps decouple tool _output_ fro
 [agentic-ai]: https://agenticaiproject.org
 [client-matrix]: https://modelcontextprotocol.io/extensions/client-matrix
 [claude-apps]: https://claude.com/blog/interactive-tools-in-claude
-[chatgpt-apps]: https://alternativeto.net/news/2026/2/chatgpt-announces-full-support-for-mcp-apps-open-standard/
+[chatgpt-apps]: https://developers.openai.com/apps-sdk/mcp-apps-in-chatgpt/
 [vscode-apps]: https://code.visualstudio.com/blogs/2026/01/26/mcp-apps-support
 [goose-apps]: https://block.github.io/goose/blog/2026/01/06/mcp-apps/
 [postman-apps]: https://blog.postman.com/january-2026-product-updates/
