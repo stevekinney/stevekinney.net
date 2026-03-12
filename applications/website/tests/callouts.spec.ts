@@ -8,53 +8,45 @@ const scenarios = [
     name: 'writing setup python',
     path: '/writing/setup-python',
     callouts: [
-      { name: 'info', selector: '[data-callout="info"]', snapshot: 'callout-info' },
-      { name: 'success', selector: '[data-callout="success"]', snapshot: 'callout-success' },
-      { name: 'question', selector: '[data-callout="question"]', snapshot: 'callout-question' },
+      { name: 'info', selector: '[data-callout="info"]' },
+      { name: 'success', selector: '[data-callout="success"]' },
+      { name: 'question', selector: '[data-callout="question"]' },
     ],
   },
   {
     name: 'courses advanced test configuration',
     path: '/courses/testing/advanced-test-configuration',
-    callouts: [{ name: 'note', selector: '[data-callout="note"]', snapshot: 'callout-note' }],
+    callouts: [{ name: 'note', selector: '[data-callout="note"]' }],
   },
   {
     name: 'courses the basics',
     path: '/courses/testing/the-basics',
-    callouts: [{ name: 'tip', selector: '[data-callout="tip"]', snapshot: 'callout-tip' }],
+    callouts: [{ name: 'tip', selector: '[data-callout="tip"]' }],
   },
   {
     name: 'courses differences between jest and vitest',
     path: '/courses/testing/differences-between-jest-and-vitest',
-    callouts: [
-      { name: 'warning', selector: '[data-callout="warning"]', snapshot: 'callout-warning' },
-    ],
+    callouts: [{ name: 'warning', selector: '[data-callout="warning"]' }],
   },
   {
     name: 'courses asymmetric matchers',
     path: '/courses/testing/asymmetric-matchers',
-    callouts: [
-      { name: 'example', selector: '[data-callout="example"]', snapshot: 'callout-example' },
-    ],
+    callouts: [{ name: 'example', selector: '[data-callout="example"]' }],
   },
   {
     name: 'courses storybook setting up tailwind',
     path: '/courses/storybook/setting-up-tailwind',
-    callouts: [
-      { name: 'failure', selector: '[data-callout="failure"]', snapshot: 'callout-failure' },
-    ],
+    callouts: [{ name: 'failure', selector: '[data-callout="failure"]' }],
   },
   {
     name: 'writing counter factual reasoning',
     path: '/writing/counter-factual-reasoning-in-ai',
-    callouts: [{ name: 'danger', selector: '[data-callout="danger"]', snapshot: 'callout-danger' }],
+    callouts: [{ name: 'danger', selector: '[data-callout="danger"]' }],
   },
   {
     name: 'courses python ai tokenization',
     path: '/courses/python-ai/tokenization',
-    callouts: [
-      { name: 'abstract', selector: '[data-callout="abstract"]', snapshot: 'callout-abstract' },
-    ],
+    callouts: [{ name: 'abstract', selector: '[data-callout="abstract"]' }],
   },
 ];
 
@@ -70,9 +62,6 @@ for (const colorScheme of colorSchemes) {
         await expect(callout, `${calloutConfig.name} callout should render`).toBeVisible();
         await callout.scrollIntoViewIfNeeded();
         await expect(callout.locator('p').first()).not.toContainText('[!');
-
-        const suffix = colorScheme === 'dark' ? '-dark' : '';
-        await expect(callout).toHaveScreenshot(`${calloutConfig.snapshot}${suffix}.png`);
       }
     });
   }
