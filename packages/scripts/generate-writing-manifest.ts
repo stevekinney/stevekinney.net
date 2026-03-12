@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fg from 'fast-glob';
+import yaml from 'js-yaml';
 import matter from 'gray-matter';
 
 import type { PostManifestEntry, WritingManifest } from '@stevekinney/content-types';
@@ -12,12 +13,28 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const OUTPUT_PATH = path.resolve(process.cwd(), 'manifest.json');
 
+/** Parse frontmatter with CORE schema so date-like strings stay as strings (avoids js-yaml timezone bugs). */
+const parseFrontmatter = (contents: string) =>
+	matter(contents, {
+		engines: {
+			yaml: {
+				parse: (str: string) => yaml.load(str, { schema: yaml.CORE_SCHEMA }) as Record<string, unknown>,
+			},
+		},
+	});
+
 const normalizePath = (value: string): string => value.split(path.sep).join('/');
 
+/** Parse date from frontmatter. Date-only strings (YYYY-MM-DD) are parsed as UTC to avoid timezone shifts. */
 const toDate = (value: unknown): Date | null => {
-  if (!value) return null;
-  const date = value instanceof Date ? value : new Date(String(value));
-  return Number.isNaN(date.getTime()) ? null : date;
+	if (!value) return null;
+	const str = String(value);
+	if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+		const [y, m, d] = str.split('-').map(Number);
+		return new Date(Date.UTC(y, m - 1, d));
+	}
+	const date = value instanceof Date ? value : new Date(str);
+	return Number.isNaN(date.getTime()) ? null : date;
 };
 
 const getFileSignature = async (file: string): Promise<string> => {
@@ -41,7 +58,7 @@ const buildPosts = async (files: string[]): Promise<PostManifestEntry[]> => {
     files.map(async (file) => {
       const absoluteFile = path.resolve(process.cwd(), file);
       const contents = await readFile(absoluteFile, 'utf8');
-      const { data } = matter(contents);
+      const { data } = parseFrontmatter(contents);
       const date = toDate(data.date) ?? new Date(0);
       const modified = toDate(data.modified) ?? date;
 
