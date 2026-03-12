@@ -68,13 +68,22 @@ jobs:
             ${{ runner.os }}-playwright-
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: Run postinstall with Turbo cache
+        run: bun run postinstall
+        env:
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
       - name: Install Playwright browsers
         run: bunx playwright install --with-deps
 
       - name: Run integration tests
         run: bun run test:integration
+        env:
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
       - name: Upload Playwright artifacts
         if: failure()
