@@ -14,11 +14,16 @@ tags:
   - infrastructure
 ---
 
-So, you (or, in this case—a younger, less-wise version of me) want to build a platform that accepts a Git repository URL from a stranger, runs whatever code is inside it on your infrastructure, and produces something you're willing to serve to the internet. That's the pitch, anyway. The reality is that every interesting design decision in this kind of system follows from a single uncomfortable fact: you are running untrusted code.
+So, you (or, in this case—a younger, less-wise version of _me_) want to build a platform that accepts a Git repository URL from a _stranger_, runs whatever code is inside it on your infrastructure, and produces something you're willing to serve to the internet. Or, in my case—maybe you just want to pull down a repository and do some static analysis on the code with an agent or perhaps even make modifications to it. The specific flavors of what you might be doing, but they all share a few things in common. The reality is that every interesting design decision in this kind of system follows from a single uncomfortable fact: you are running untrusted code.
 
-It sounds obvious when you say it out loud. But the implications are sneaky. Every `npm install` is arbitrary code execution—`postinstall` scripts run whatever they want. Every `pip install` can execute a `setup.py`. Every `go generate` runs shell commands embedded in source comments. The build step itself is just more arbitrary code execution on top of that. You're not just compiling source files. You're handing a stranger a shell on your machine and hoping they do something reasonable with it.
+And, there are a thousand flavors of this: Everything from a CodeSandbox-flavored runtime to some of the products we're seeing now like Claude Code for Web or Cursor's Agents.
 
-This post walks through the design of a system like that—from the moment a build request arrives to the moment an artifact is ready for deployment. I'll cover the pipeline stages, the security model, the architecture of the control plane and workers, and the operational realities of running it. The goal is to be concrete enough that you could actually start building this, while staying vendor-neutral enough that the design decisions transfer regardless of which cloud you're on.
+It sounds obvious when you say it out loud: but, the implications are sneaky. Every `npm install` is arbitrary code execution—`postinstall` scripts run whatever they want. Every `pip install` can execute a `setup.py`. Every `go generate` runs shell commands embedded in source comments. The build step itself is just more arbitrary code execution on top of that. You're not just compiling source files. You're handing a stranger a shell on your machine and hoping they do something reasonable with it. And, like, we haven't even gotten to the unpredictable LLM-powered agent that might be working on the code that you just cloned. (I have _not_ played around with Deno as much as I should—but my understanding is that a non-zero amount of protection from these kinds of vulnerabilities is baked into it.)
+
+> [!NOTE] A somewhat important disclaimer
+> For a while, I was building something similar to what Claude Code or Cursor do on the web: pull down a repository into a container and have an agent make changes. Needless to say, I have some experience in this area, but I should note that my thoughts on this topic are definitely still evolving—and I reserve the right to update some of my thoughts on this topic.
+
+This post walks through the design of a system like that—from the moment a build request arrives to the moment an artifact is ready for deployment. I'll cover the pipeline stages (source fetch, dependency install, build execution, artifact packaging), the security model (isolation tiers, network egress filtering, secrets lifecycle, threat modeling), the architecture of the control plane and ephemeral workers, and the landscape of managed sandbox platforms that can run these workloads for you. Then we'll get into the operational realities: caching and cache poisoning, build logs and secret scrubbing, retries and failure recovery, SLOs, billing, and debugging. The goal is to be concrete enough that you could actually start building this, while staying grounded enough in the real product landscape that the design decisions transfer regardless of which cloud or platform you're on.
 
 ## The shape of a build
 
@@ -32,9 +37,9 @@ graph LR
     D -->|"artifact"| E["Deployment Handoff"]
 ```
 
-**Source fetch:** clone the customer's repository and get the relevant files onto disk. **Dependency install:** resolve and fetch third-party packages. **Build execution:** run the customer's build command (or infer one). **Artifact packaging:** normalize the build output into a format your deployment system understands. **Deployment handoff:** store the artifact and notify the downstream system that it's ready.
+**Source fetch**: clone the customer's repository and get the relevant files onto disk. **Dependency install**: resolve and fetch third-party packages. **Build execution**: run the customer's build command (or infer one). **Artifact packaging**: normalize the build output into a format your deployment system understands. **Deployment handoff**: store the artifact and notify the downstream system that it's ready.
 
-That's the whole pipeline. It's conceptually linear, but the implementation is anything but—caching, concurrency, security boundaries, and failure recovery all add nonlinear complexity. We'll start at the beginning and work our way through, stopping at each point where things get harder than they look.
+That's the whole pipeline. It's conceptually linear, but the implementation is anything decidedly _not_. Caching, concurrency, security boundaries, and failure recovery all add nonlinear complexity. We'll start at the beginning and work our way through, stopping at each point where things get harder than they look.
 
 ## Source fetch and the trust boundary it creates
 
@@ -155,74 +160,9 @@ The `scriptDisableFlag` is the key safety lever. If you disable lifecycle script
 
 The second approach is simpler and more compatible, but it means your isolation boundary needs to be up before dependency installation, not just before build execution. That's a meaningful architectural decision.
 
-## Build graph resolution
+## Caching and cache poisoning
 
-Now we have source code and dependencies on disk. For a single-package repository, the next step is straightforward: read the build command from the project configuration and run it. But monorepos—repositories that contain multiple packages with interdependencies—require understanding the dependency graph before you can decide what to build and in what order.
-
-Consider a monorepo with four packages:
-
-```mermaid
-graph TD
-    Web["@app/web"] --> UI["@app/ui"]
-    Web --> Shared["@app/shared"]
-    API["@app/api"] --> Shared
-    UI --> Shared
-```
-
-You can't build `@app/web` before `@app/ui` and `@app/shared`, because it imports from both. You can't build `@app/ui` before `@app/shared`. But you _can_ build `@app/api` and `@app/ui` in parallel, since neither depends on the other—as long as `@app/shared` is built first.
-
-This is a textbook topological sort. Walk the dependency graph, find nodes with no unresolved dependencies, mark them as ready to build, and repeat.
-
-```typescript title="build-graph.ts"
-interface PackageNode {
-  name: string;
-  dependencies: string[];
-  buildCommand: string;
-}
-
-function resolveBuildOrder(packages: PackageNode[]): string[][] {
-  const remaining = new Map(packages.map((p) => [p.name, new Set(p.dependencies)]));
-  const levels: string[][] = [];
-
-  while (remaining.size > 0) {
-    // [!note Packages with no unresolved dependencies can build in parallel.]
-    const ready = [...remaining.entries()]
-      .filter(([, deps]) => deps.size === 0)
-      .map(([name]) => name);
-
-    if (ready.length === 0) {
-      const cycle = [...remaining.keys()].join(' -> ');
-      throw new Error(`Dependency cycle detected: ${cycle}`);
-    }
-
-    levels.push(ready);
-
-    for (const name of ready) {
-      remaining.delete(name);
-    }
-
-    for (const deps of remaining.values()) {
-      for (const name of ready) {
-        deps.delete(name);
-      }
-    }
-  }
-
-  return levels;
-}
-```
-
-The return type—`string[][]`—is a list of levels. Each level contains packages that can build concurrently. Level 0 might be `['@app/shared']`, level 1 might be `['@app/ui', '@app/api']`, and level 2 might be `['@app/web']`.
-
-**Affected detection** is the optimization that makes monorepo builds practical at scale. If a commit only touches files in `@app/api`, there's no reason to rebuild `@app/web` or `@app/ui`. You need git history to determine which files changed, which is why shallow clones can be a problem—without history, you can't diff against the previous build's commit. The common approach is to clone with enough history to reach the last successful build's commit SHA, then use `git diff` to identify changed files and map them back to the packages they belong to.
-
-## Concurrency, incrementalism, and caching
-
-With a build graph in hand, you want to run builds as fast as possible. That means three things: executing independent tasks in parallel, skipping work that hasn't changed, and caching aggressively so you don't repeat work across builds.
-
-Concurrent execution follows directly from the topological sort. Tasks at the same level can run in parallel, subject to resource constraints. If you have four packages at level 1 but only two CPU cores available, you'll run two at a time. The scheduler needs to balance parallelism against resource contention—CPU, memory, and disk I/O all become bottlenecks when you're running multiple builds simultaneously.
-
-Incrementalism is about skipping work entirely. If the inputs to a build step haven't changed, the output won't change either. The trick is defining "inputs" precisely enough that cache hits are reliable and broadly enough that cache misses are rare. A content-addressable model works well: hash everything that affects the output, and use that hash as a cache key.
+If the inputs to a build step haven't changed, the output won't change either. Caching aggressively—so you don't repeat work across builds—is the obvious optimization. The trick is defining "inputs" precisely enough that cache hits are reliable and broadly enough that cache misses are rare. A content-addressable model works well: hash everything that affects the output, and use that hash as a cache key.
 
 ```typescript title="cache.ts"
 async function computeCacheKey(task: BuildTask): Promise<string> {
@@ -286,6 +226,44 @@ The operational cost is higher than containers. You need to manage VM images, ha
 Most multi-tenant build platforms that take security seriously have converged on microVMs or equivalent technologies. The startup latency penalty over containers is small (hundreds of milliseconds), and the security improvement is large (an entirely separate kernel).
 
 The choice you make here cascades through the rest of the architecture. If you use microVMs, you need a provisioning pipeline that can create and destroy VMs at the rate you receive build requests. If you use containers, you need a host-level security posture that accounts for the shared kernel. If you use full VMs, you need a warm pool to absorb startup latency. We'll come back to provisioning when we discuss the control plane.
+
+## Ephemeral sandboxes and where to run them
+
+So, you've decided on an isolation _technology_—containers, microVMs, whatever. The next question is where these things actually run. And, increasingly, the answer is: you don't build it yourself.
+
+An **ephemeral sandbox** is an isolation boundary that exists for the duration of a single task and is destroyed afterward. No state carries over between sandboxes. No two builds share a filesystem, a process namespace, or a kernel. The sandbox is created, the work happens inside it, the output is extracted, and the whole thing is torn down. This is the model you want for running untrusted code, because it eliminates an entire category of cross-contamination bugs by making them architecturally impossible. There's no state to leak if the state doesn't survive the sandbox.
+
+The good news is that the landscape of managed ephemeral sandbox platforms has gotten genuinely interesting. You don't necessarily need to operate your own fleet of Firecracker hosts anymore—though you still can, and sometimes should.
+
+**E2B** is probably the most direct answer to "I need a sandbox for AI agent workloads." It runs Firecracker microVMs behind an API. You call `Sandbox.create()`, get a sandbox with its own filesystem, its own network namespace, and its own kernel—booted in roughly 150 milliseconds. You can run shell commands, read and write files, install packages, and interact with the sandbox over WebSocket or HTTP. Sandboxes persist for up to 24 hours, and they support pause/resume—snapshotting the full VM state (filesystem, memory, running processes) so you can pick up where you left off. The orchestration layer uses Nomad and Terraform under the hood, and the infrastructure is open source. If you're building something where an LLM needs to execute code—which is basically what this whole post is about—E2B is purpose-built for that use case.
+
+**Vercel Sandbox** is the newer entrant, generally available since early 2026. It's also Firecracker under the hood—the same infrastructure that powers Vercel's own build system (they process millions of deployments per day on it). Each sandbox is a full microVM running Amazon Linux 2023, with up to 8 vCPUs and 16 GB of memory. You get `sudo` access, a real filesystem, and the ability to install arbitrary system packages. Vercel bills on "active CPU" time—you're only charged when the CPU is actually computing, not when it's idle waiting on I/O—which is a genuinely useful pricing model for build workloads that spend a lot of time waiting on network. Snapshots let you capture filesystem state and restore from it faster than a cold start. If you're already in the Vercel ecosystem, or if you've seen what v0 does when it generates and runs code in the browser, that's this product.
+
+**Cloudflare** has two relevant offerings, and they sit at different points on the isolation spectrum. **Workers** use V8 isolates—the same sandboxing technology that keeps browser tabs from interfering with each other. Each Worker runs in its own isolate with 128 MB of memory and sub-millisecond cold starts. The tradeoff is that you're constrained to JavaScript and WebAssembly, and you don't get a filesystem or a shell. For running `npm install` and a build command: not the right tool. But, for lighter workloads where you need to run untrusted JavaScript specifically, the startup speed and cost efficiency are hard to beat. **Cloudflare Containers** is the heavier offering—Firecracker microVMs with full Linux environments, controlled through their Workers platform. You get a real filesystem, real networking, and the ability to run arbitrary binaries. The Sandbox SDK layers a developer-friendly API on top of Containers, giving you programmatic access to execute commands, read and write files, and manage the sandbox lifecycle.
+
+**AWS** is where Firecracker was born. Lambda and Fargate both use Firecracker under the hood to isolate tenant workloads—each function invocation or Fargate task runs inside its own microVM with a dedicated kernel. You can't use raw Firecracker through a managed AWS API (it's infrastructure _for_ their services, not a service itself), but you _can_ run Firecracker directly on bare-metal EC2 instances if you want full control over the orchestration. This is the "build it yourself" path: maximum flexibility, maximum operational burden.
+
+**Google Cloud** takes a different approach with **gVisor**, a user-space kernel written in Go. Cloud Run and GKE Sandbox both use gVisor to intercept system calls from the sandboxed process and handle them without passing them to the host kernel. It's not a VM—there's no hardware virtualization boundary—but it dramatically reduces the kernel attack surface compared to a regular container. The Sentry (gVisor's core component) re-implements a significant chunk of the Linux syscall interface, which means most code runs without modification. Google also layers hardware-backed isolation on top of gVisor in Cloud Run, giving you two boundaries: a software kernel layer _and_ a hardware virtualization layer.
+
+**Deno Subhosting** is worth mentioning if your workload is JavaScript or TypeScript. It uses V8 isolates with additional OS-level isolation: seccomp syscall filtering, cgroup resource limits, and separate network namespaces. Each deployment runs in its own isolate in its own process. Filesystem access is virtualized—it looks like a real filesystem from inside the sandbox, but it's scoped and ephemeral. The runner acts as an "isolate hypervisor," managing the lifecycle of V8 isolates the way a traditional hypervisor manages VMs. If you're building a platform where users deploy JavaScript—think a CodeSandbox competitor or a serverless functions platform—Subhosting is essentially the isolation layer, packaged as a service.
+
+**Fly.io** runs Firecracker microVMs and gives you a managed API for creating and destroying them. **Modal** has sandboxes designed specifically for AI workloads—you can spin up a container, run code in it, and tear it down through their Python SDK.
+
+The common thread across all of these is that the isolation boundary is ephemeral and the API is programmatic. You don't SSH into a box and start a Docker container. You make an API call, get a sandbox, do your work, and the sandbox disappears. The differences are in the isolation technology (V8 isolates vs. gVisor vs. Firecracker vs. full VMs), the API surface (SDK vs. REST vs. CLI), and the operational model (fully managed vs. self-hosted with tooling).
+
+| Platform              | Isolation Technology    | Startup Latency  | Full Linux Environment | Primary Use Case              |
+| --------------------- | ----------------------- | ---------------- | ---------------------- | ----------------------------- |
+| E2B                   | Firecracker microVMs    | ~150ms           | Yes                    | AI agent code execution       |
+| Vercel Sandbox        | Firecracker microVMs    | Sub-second       | Yes                    | AI agents and build execution |
+| Cloudflare Workers    | V8 isolates             | ~5ms             | No                     | Lightweight JS/Wasm execution |
+| Cloudflare Containers | Firecracker microVMs    | ~2–10s (prewarm) | Yes                    | General-purpose sandboxing    |
+| AWS Lambda/Fargate    | Firecracker microVMs    | ~125ms           | Yes (constrained)      | Serverless compute            |
+| Google Cloud Run      | gVisor + hardware VM    | ~1–2s            | Yes                    | Container workloads           |
+| Deno Subhosting       | V8 isolates + OS layers | <1s              | No (virtualized FS)    | JavaScript/TypeScript hosting |
+| Fly.io                | Firecracker microVMs    | ~500ms           | Yes                    | General-purpose compute       |
+| Modal                 | Containers (gVisor)     | ~1s              | Yes                    | AI/ML workloads               |
+
+For a build system running untrusted code—the thing this whole post is about—you want a full Linux environment (because builds need `npm`, `pip`, `go`, and all the associated tooling), you want kernel-level isolation (because you're running a stranger's code), and you want sub-second startup (because builds are latency-sensitive). That narrows the field to Firecracker-based options: E2B, Vercel Sandbox, Cloudflare Containers, Fly.io, or rolling your own on bare metal with Firecracker directly. The choice between managed and self-hosted depends on how much operational complexity you're willing to absorb—and how much control you need over the networking and storage layers that wrap the sandbox.
 
 ## Network egress and supply-chain exposure
 
