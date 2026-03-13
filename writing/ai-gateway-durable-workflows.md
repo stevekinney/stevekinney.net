@@ -19,13 +19,13 @@ Most production AI integrations start the _same-ish_ way. Someone writes a funct
 That's two problems, really, and they decompose into two layers: a **gateway** and a **durable workflow engine**.
 
 > [!NOTE] I am well aware that there are projects that do this.
-> I know things like [Temporal](https://temporal.io) exist. But, what I wanted to do in this post is talk about little about how something like this might work under the hood. Having worked at Temporal, my thinking is somewhat anchored in how Temporal works, but I tried to be as agnostic as possible.
+> I know things like [Temporal](https://temporal.io) exist. But, what I wanted to do in this post is talk about little about how something like this might work under the hood. Having worked at Temporal, my thinking is somewhat anchored in how Temporal works, but I tried to be as agnostic as possible. You should probably just use an existing service. This is more of an inellectual exercise than anything else. **Disclaimer**: I used to work at Temporal and I'm still a shareholder—so, take my opinions with a grain of salt.
 
 ## The two-layer problem
 
-If you squint at enough production AI systems, you start to see the same architecture emerge—despite how unique each creator will insist that theirs is. There's a stateless layer that handles individual model calls—normalizing requests, enforcing policies, tracking costs, routing to providers. And there's a stateful layer that orchestrates multi-step tasks—managing queues, recording events, pausing for human input, recovering from failures.
+If you squint at enough production AI systems, you start to see a similar architecture emerge—despite how unique each creator will insist that their approach is. (It's usually not. They all tend to rhyme.) There's a stateless layer that handles individual model calls—normalizing requests, enforcing policies, tracking costs, routing to providers. And there's a stateful layer that orchestrates multi-step tasks—managing queues, recording events, pausing for human input, recovering from failures.
 
-The gateway is the bouncer. It doesn't care what your workflow is doing or why. It just makes sure every outbound model call is normalized, observable, policy-compliant, and resilient. The workflow engine is the stage manager. It doesn't care which provider handles a given call. It just makes sure the sequence of steps executes correctly, durably, and recoverably.
+The gateway is the **bouncer**. It doesn't care what your workflow is doing or why. It just makes sure every outbound model call is normalized, observable, policy-compliant, and resilient. The workflow engine is the stage manager. It doesn't care which provider handles a given call. It just makes sure the sequence of steps executes correctly, durably, and recoverably.
 
 Neither layer is particularly useful in isolation. A gateway without a workflow engine can't handle multi-step tasks. A workflow engine without a gateway is calling raw provider APIs with no policy enforcement. Together, they make the difference between a demo and a system.
 
@@ -557,7 +557,7 @@ interface WorkflowState {
 }
 ```
 
-There's a tension between storing minimal state (just enough to resume) and rich state (everything you need for debugging and observability). Minimal state is smaller and faster to serialize. Rich state makes debugging much easier—when a workflow fails, you can inspect exactly what each step saw and produced.
+There's a definite tension between storing minimal state (just enough to resume) and rich state (everything you need for debugging and observability). Minimal state is smaller and faster to serialize. Rich state makes debugging much easier—when a workflow fails, you can inspect exactly what each step saw and produced. Honestly, I think this a topic that probably deserves it's own post. Workflows are durable, but conversations can grow very large and if you're passing in the _entire_ conversation to each step and that entire history is getting saved as the inputs, it will grow exponentially. That said, it makes the debugging experience _very_ clean—you basically backed yourself into all of the nice parts of functional programming whether you know it or now.
 
 I lean toward rich state. Disk is cheap. Debugging time is expensive.
 
