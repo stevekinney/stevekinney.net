@@ -7,11 +7,11 @@
     {
       "title": "Designing a Build System That Runs Untrusted Code",
       "description": "A deep technical walkthrough of what it takes to design a build system that securely executes arbitrary customer repositories and turns build output into deployable artifacts—covering the pipeline, the security model, the architecture, and the operational realities.",
-      "date": "2026-03-12T12:00:00.000Z",
-      "modified": "2026-03-12T12:00:00.000Z",
+      "date": "2026-03-16T12:00:00.000Z",
+      "modified": "2026-03-16T12:00:00.000Z",
       "published": true,
       "tags": ["architecture", "security", "infrastructure"],
-      "slug": "designing-a-build-system"
+      "slug": "designing-a-system-to-run-untrusted-code"
     },
     {
       "title": "MCP Apps and the Missing Middle of AI Tooling",
