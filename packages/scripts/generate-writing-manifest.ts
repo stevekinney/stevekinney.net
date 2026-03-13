@@ -3,22 +3,14 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fg from 'fast-glob';
-import matter from 'gray-matter';
 
 import type { PostManifestEntry, WritingManifest } from '@stevekinney/content-types';
+import { normalizePath, parseFrontmatter, toDate } from './frontmatter';
 import { writeFormattedJson } from './write-formatted-json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const OUTPUT_PATH = path.resolve(process.cwd(), 'manifest.json');
-
-const normalizePath = (value: string): string => value.split(path.sep).join('/');
-
-const toDate = (value: unknown): Date | null => {
-  if (!value) return null;
-  const date = value instanceof Date ? value : new Date(String(value));
-  return Number.isNaN(date.getTime()) ? null : date;
-};
 
 const getFileSignature = async (file: string): Promise<string> => {
   const contents = await readFile(file);
@@ -41,7 +33,7 @@ const buildPosts = async (files: string[]): Promise<PostManifestEntry[]> => {
     files.map(async (file) => {
       const absoluteFile = path.resolve(process.cwd(), file);
       const contents = await readFile(absoluteFile, 'utf8');
-      const { data } = matter(contents);
+      const { data } = parseFrontmatter(contents);
       const date = toDate(data.date) ?? new Date(0);
       const modified = toDate(data.modified) ?? date;
 

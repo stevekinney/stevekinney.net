@@ -3,9 +3,9 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fg from 'fast-glob';
-import matter from 'gray-matter';
 
 import type { CourseManifest, CourseManifestEntry } from '@stevekinney/content-types';
+import { normalizePath, parseFrontmatter, toDate } from './frontmatter';
 import { writeFormattedJson } from './write-formatted-json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -14,14 +14,6 @@ const OUTPUT_PATH = path.resolve(process.cwd(), 'manifest.json');
 const README_FILE = 'README.md';
 const CONTENTS_FILE = '_index.md';
 const MANIFEST_HASH_VERSION = 'course-manifest:v3';
-
-const normalizePath = (value: string): string => value.split(path.sep).join('/');
-
-const toDate = (value: unknown): Date | null => {
-  if (!value) return null;
-  const date = value instanceof Date ? value : new Date(String(value));
-  return Number.isNaN(date.getTime()) ? null : date;
-};
 
 const getFileSignature = async (file: string): Promise<string> => {
   const contents = await readFile(file);
@@ -51,7 +43,7 @@ const asOptionalStringArray = (value: unknown): string[] | undefined => {
 const buildLessonEntry = async (file: string): Promise<CourseManifestEntry> => {
   const absoluteFile = path.resolve(process.cwd(), file);
   const contents = await readFile(absoluteFile, 'utf8');
-  const { data } = matter(contents);
+  const { data } = parseFrontmatter(contents);
   const date = toDate(data.date) ?? new Date(0);
   const modified = toDate(data.modified);
 
@@ -97,7 +89,7 @@ const main = async () => {
 
   const readmePath = path.resolve(process.cwd(), README_FILE);
   const readmeContents = await readFile(readmePath, 'utf8');
-  const { data: readmeData } = matter(readmeContents);
+  const { data: readmeData } = parseFrontmatter(readmeContents);
 
   const date = toDate(readmeData.date) ?? new Date(0);
   const modified = toDate(readmeData.modified);
