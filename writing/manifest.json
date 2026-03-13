@@ -1,9 +1,19 @@
 {
   "meta": {
-    "generatedAt": "2026-03-12T16:56:07.162Z",
-    "hash": "1b50f79222828d3128da9fd9139a013ec41e95d48f2a35ef2b5d047895630e9a"
+    "generatedAt": "2026-03-12T18:27:32.164Z",
+    "hash": "6a4717c1a6b62f9465b06aa1d0550a9b9c527ad162701d675202faa723eea407"
   },
   "posts": [
+    {
+      "title": "Designing an AI Gateway and Durable Workflow System",
+      "description": "A two-layer architecture for production AI systems: a gateway that abstracts providers, enforces policies, and tracks costs, paired with a durable workflow engine that makes long-running agentic tasks survive failures, pause for human approval, and replay deterministically.",
+      "date": "2026-03-12T12:00:00.000Z",
+      "modified": "2026-03-12T12:00:00.000Z",
+      "published": true,
+      "tags": ["ai", "architecture", "workflows"],
+      "slug": "ai-gateway-durable-workflows",
+      "file": "writing/ai-gateway-durable-workflows.md"
+    },
     {
       "title": "MCP Apps and the Missing Middle of AI Tooling",
       "description": "MCP servers return data. MCP Apps let them ship a UI alongside that data—so the tool author, not the client, decides how results look.",
@@ -13,6 +23,16 @@
       "tags": ["ai", "mcp", "tooling"],
       "slug": "mcp-apps",
       "file": "writing/mcp-apps.md"
+    },
+    {
+      "title": "My Ridiculous AI-Assisted Development Workflow",
+      "description": "A walkthrough of the system I use to ship code with AI agents—from planning in Linear to worktrees, linting gauntlets, and a small army of code review bots.",
+      "date": "2026-03-11T12:00:00.000Z",
+      "modified": "2026-03-11T12:00:00.000Z",
+      "published": true,
+      "tags": ["ai", "tooling", "workflow"],
+      "slug": "ai-assisted-development-workflow",
+      "file": "writing/ai-assisted-development-workflow.md"
     },
     {
       "title": "build-temporal-workflow: Faster Temporal Workflow Bundling with esbuild",
