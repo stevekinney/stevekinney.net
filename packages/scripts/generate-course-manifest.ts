@@ -3,10 +3,9 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fg from 'fast-glob';
-import yaml from 'js-yaml';
-import matter from 'gray-matter';
 
 import type { CourseManifest, CourseManifestEntry } from '@stevekinney/content-types';
+import { normalizePath, parseFrontmatter, toDate } from './frontmatter';
 import { writeFormattedJson } from './write-formatted-json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -15,30 +14,6 @@ const OUTPUT_PATH = path.resolve(process.cwd(), 'manifest.json');
 const README_FILE = 'README.md';
 const CONTENTS_FILE = '_index.md';
 const MANIFEST_HASH_VERSION = 'course-manifest:v3';
-
-/** Parse frontmatter with CORE schema so date-like strings stay as strings (avoids js-yaml timezone bugs). */
-const parseFrontmatter = (contents: string) =>
-	matter(contents, {
-		engines: {
-			yaml: {
-				parse: (str: string) => yaml.load(str, { schema: yaml.CORE_SCHEMA }) as Record<string, unknown>,
-			},
-		},
-	});
-
-const normalizePath = (value: string): string => value.split(path.sep).join('/');
-
-/** Parse date from frontmatter. Date-only strings (YYYY-MM-DD) are parsed as UTC to avoid timezone shifts. */
-const toDate = (value: unknown): Date | null => {
-	if (!value) return null;
-	const str = String(value);
-	if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-		const [y, m, d] = str.split('-').map(Number);
-		return new Date(Date.UTC(y, m - 1, d));
-	}
-	const date = value instanceof Date ? value : new Date(str);
-	return Number.isNaN(date.getTime()) ? null : date;
-};
 
 const getFileSignature = async (file: string): Promise<string> => {
   const contents = await readFile(file);
