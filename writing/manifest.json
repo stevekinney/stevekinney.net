@@ -1,9 +1,19 @@
 {
   "meta": {
-    "generatedAt": "2026-03-12T16:56:07.162Z",
-    "hash": "1b50f79222828d3128da9fd9139a013ec41e95d48f2a35ef2b5d047895630e9a"
+    "generatedAt": "2026-03-12T19:38:12.626Z",
+    "hash": "476813a0fa769d4b7ae3beed2bd1f73bda903cbecdf13a49ab7d6cf96470474a"
   },
   "posts": [
+    {
+      "title": "Designing a Build System That Runs Untrusted Code",
+      "description": "A deep technical walkthrough of what it takes to design a build system that securely executes arbitrary customer repositories and turns build output into deployable artifacts—covering the pipeline, the security model, the architecture, and the operational realities.",
+      "date": "2026-03-16T12:00:00.000Z",
+      "modified": "2026-03-16T12:00:00.000Z",
+      "published": true,
+      "tags": ["architecture", "security", "infrastructure"],
+      "slug": "designing-a-system-to-run-untrusted-code",
+      "file": "writing/designing-a-system-to-run-untrusted-code.md"
+    },
     {
       "title": "MCP Apps and the Missing Middle of AI Tooling",
       "description": "MCP servers return data. MCP Apps let them ship a UI alongside that data—so the tool author, not the client, decides how results look.",
@@ -13,6 +23,16 @@
       "tags": ["ai", "mcp", "tooling"],
       "slug": "mcp-apps",
       "file": "writing/mcp-apps.md"
+    },
+    {
+      "title": "My Ridiculous AI-Assisted Development Workflow",
+      "description": "A walkthrough of the system I use to ship code with AI agents—from planning in Linear to worktrees, linting gauntlets, and a small army of code review bots.",
+      "date": "2026-03-11T12:00:00.000Z",
+      "modified": "2026-03-11T12:00:00.000Z",
+      "published": true,
+      "tags": ["ai", "tooling", "workflow"],
+      "slug": "ai-assisted-development-workflow",
+      "file": "writing/ai-assisted-development-workflow.md"
     },
     {
       "title": "build-temporal-workflow: Faster Temporal Workflow Bundling with esbuild",
