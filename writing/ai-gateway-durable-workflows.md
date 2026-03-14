@@ -19,7 +19,7 @@ Most production AI integrations start the _same-ish_ way. Someone writes a funct
 That's two problems, really, and they decompose into two layers: a **gateway** and a **durable workflow engine**.
 
 > [!NOTE] I am well aware that there are projects that do this.
-> I know things like [Temporal](https://temporal.io) exist. But, what I wanted to do in this post is talk about little about how something like this might work under the hood. Having worked at Temporal, my thinking is somewhat anchored in how Temporal works, but I tried to be as agnostic as possible. You should probably just use an existing service. This is more of an inellectual exercise than anything else. **Disclaimer**: I used to work at Temporal and I'm still a shareholder—so, take my opinions with a grain of salt.
+> I know things like [Temporal](https://temporal.io) exist. But, what I wanted to do in this post is talk about little about how something like this might work under the hood. Having worked at Temporal, my thinking is somewhat anchored in how Temporal works, but I tried to be as agnostic as possible. You should probably just use an existing service. This is more of an inellectual exercise than anything else. **Disclaimer**: I used to work at Temporal and I'm still a shareholder—so, take my opinions with a grain of salt. So, yea—use Temporal if any of this interests you.
 
 ## The two-layer problem
 
@@ -55,6 +55,9 @@ The gateway sits between your application code and every model provider. Its job
 The foundational design decision is the canonical request/response shape. Your application sends a `CompletionRequest`; the gateway translates it into whatever the provider expects. Your application receives a `CompletionResponse`; the gateway translated it from whatever the provider returned. Swapping providers or models becomes a configuration change, not a code change.
 
 This matters more than it sounds. The major providers agree on the _concept_ of messages, roles, and tool calls, but disagree on nearly every detail: how tool calls are structured, how streaming chunks are shaped, how token counts are reported, what the error format looks like. The abstraction layer eats that divergence.
+
+> [!WARN] Treat all code in this essay as psuedo-code
+> Any code in this essay is mostly to help me save words and should not be considered as working code or even a recommendation. For how you _should_ do any of this.
 
 ```typescript
 interface CompletionRequest {
