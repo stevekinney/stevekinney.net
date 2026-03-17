@@ -113,6 +113,7 @@ const uploadIfMissing = async (
   const blob = await put(pathname, bytes, {
     access: 'public',
     addRandomSuffix: false,
+    allowOverwrite: true,
     contentType,
   });
 
@@ -297,6 +298,7 @@ const processImage = async (
           const blob = await put(avifPathname, avifBuffer, {
             access: 'public',
             addRandomSuffix: false,
+            allowOverwrite: true,
             contentType: 'image/avif',
           });
           avifVariants.push({ width: targetWidth, url: blob.url });
@@ -314,6 +316,7 @@ const processImage = async (
           const blob = await put(avifPathname, avifBuffer, {
             access: 'public',
             addRandomSuffix: false,
+            allowOverwrite: true,
             contentType: 'image/avif',
           });
           avifVariants.push({ width: targetWidth, url: blob.url });
