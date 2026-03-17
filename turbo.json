@@ -28,7 +28,6 @@
       "outputs": [
         "manifest.json",
         "build/**",
-        ".svelte-kit/**",
         ".vercel/output/**",
         "src/lib/server/content-index.json"
       ]

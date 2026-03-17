@@ -34,14 +34,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bun-
 
-      - name: Cache SvelteKit outputs
-        uses: actions/cache@v4
-        with:
-          path: applications/website/.svelte-kit
-          key: ${{ runner.os }}-sveltekit-${{ hashFiles('applications/website/svelte.config.js', 'applications/website/vite.config.ts', 'applications/website/src/**', 'writing/**', 'courses/**', 'packages/**', 'package.json', 'bun.lock', 'turbo.json') }}
-          restore-keys: |
-            ${{ runner.os }}-sveltekit-
-
       - name: Cache image preprocessing outputs
         uses: actions/cache@v4
         with:
