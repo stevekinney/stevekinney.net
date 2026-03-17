@@ -5,9 +5,8 @@ description: >-
   securely executes arbitrary customer repositories and turns build output into
   deployable artifacts—covering the pipeline, the security model, the
   architecture, and the operational realities.
-date: '2026-03-16T12:00:00.000Z'
-modified: '2026-03-16T12:00:00.000Z'
-published: true
+date: 2026-03-16
+modified: 2026-03-17
 tags:
   - architecture
   - security
