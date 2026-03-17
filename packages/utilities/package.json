@@ -5,6 +5,8 @@
   "exports": {
     "./content-types": "./content-types.ts",
     "./frontmatter": "./frontmatter.ts",
+    "./image-discovery": "./image-discovery.ts",
+    "./image-manifest": "./image-manifest.ts",
     "./write-formatted-json": "./write-formatted-json.ts"
   }
 }

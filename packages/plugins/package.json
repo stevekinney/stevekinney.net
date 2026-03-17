@@ -5,6 +5,9 @@
   "scripts": {
     "build": "tsc"
   },
+  "dependencies": {
+    "@stevekinney/utilities": "workspace:*"
+  },
   "exports": {
     "./import-tailwind-playground": "./dist/import-tailwind-playground.js",
     "./remark-callouts": "./dist/remark-callouts.js",

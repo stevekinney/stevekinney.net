@@ -1,11 +1,10 @@
-import { createHash } from 'node:crypto';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { camelCase } from 'change-case';
 import MagicString from 'magic-string';
 import { parse } from 'svelte/compiler';
 import type { PreprocessorGroup } from 'svelte/compiler';
 import { twMerge as merge } from 'tailwind-merge';
+import type { ImageManifest, ImageManifestEntry } from '@stevekinney/utilities/image-manifest';
 
 // ---------------------------------------------------------------------------
 // Domain types
@@ -36,170 +35,64 @@ type AstNode = {
   children?: AstNode[];
 };
 
-type ImageConfig = {
-  url: string;
-  fallbackId: string;
-  fallbackSrc: string;
-  avifSetId?: string;
-  avifSetSrc?: string;
-  metaId?: string;
-  metaSrc?: string;
-  lqipId?: string;
-  lqipSrc?: string;
-  hasMeta: boolean;
-  hasLqip: boolean;
-  hasSrcset: boolean;
-  isGif?: boolean;
-  isVideo?: boolean;
-  isPassthrough?: boolean;
-  videoId?: string;
-  videoSrc?: string;
-};
-
 type ProcessImagesOptions = {
-  widths?: number[];
-  mainWidth?: number;
-  includeMetadata?: boolean;
-  skipImages?: string[];
+  manifestPath?: string;
   sizes?: string;
-  cacheDir?: string;
   classes?: string[];
   firstImagePriority?: boolean;
-  lqip?: boolean;
-};
-
-/**
- * A minimal representation of an ESTree Program node as returned by Svelte's
- * legacy `parse`. We only model the fields this module actually reads.
- */
-type ProgramNode = {
-  start: number;
-  end: number;
-  body: Array<{
-    type: string;
-    start: number;
-    end: number;
-    source?: { value?: string };
-    specifiers?: Array<{ type: string; local?: { name: string } }>;
-  }>;
 };
 
 // ---------------------------------------------------------------------------
-// Cache helpers
+// Manifest loading
 // ---------------------------------------------------------------------------
 
-const defaultClasses = ['max-w-full'];
-const cacheVersion = '1';
+let cachedManifest: ImageManifest | null = null;
+let cachedManifestPath: string | null = null;
 
-const isMissingFile = (error: unknown): boolean =>
-  typeof error === 'object' && error !== null && 'code' in error && error.code === 'ENOENT';
+const loadManifest = (manifestPath: string): ImageManifest => {
+  if (cachedManifest && cachedManifestPath === manifestPath) return cachedManifest;
 
-const readCacheEntry = async (
-  cachePath: string,
-): Promise<{ code: string; map: string | null } | null> => {
   try {
-    const contents = await readFile(cachePath, 'utf8');
-    return JSON.parse(contents) as { code: string; map: string | null };
-  } catch (error) {
-    if (isMissingFile(error)) return null;
-    throw error;
+    const raw = readFileSync(manifestPath, 'utf8');
+    cachedManifest = JSON.parse(raw) as ImageManifest;
+    cachedManifestPath = manifestPath;
+    return cachedManifest;
+  } catch {
+    cachedManifest = { version: 1, images: {} };
+    cachedManifestPath = manifestPath;
+    return cachedManifest;
   }
-};
-
-const writeCacheEntry = async (
-  cachePath: string,
-  entry: { code: string; map: string | null },
-): Promise<void> => {
-  await mkdir(path.dirname(cachePath), { recursive: true });
-  await writeFile(cachePath, JSON.stringify(entry), 'utf8');
 };
 
 // ---------------------------------------------------------------------------
 // Public API
 // ---------------------------------------------------------------------------
 
-/**
- * Add image optimization to the Markdown content.
- */
+const defaultClasses = ['max-w-full'];
+
 export const processImages = (opts: ProcessImagesOptions = {}): PreprocessorGroup => {
-  const options: {
-    widths: number[];
-    mainWidth: number;
-    includeMetadata: boolean;
-    skipImages: string[];
-    sizes?: string;
-    cacheDir: string;
-    classes: string[];
-    firstImagePriority: boolean;
-    lqip: boolean;
-  } = {
-    widths: [480, 1024, 1600],
-    mainWidth: 1600,
-    includeMetadata: true,
-    skipImages: [],
-    sizes: undefined,
-    cacheDir: '.svelte-kit/process-images',
-    classes: defaultClasses,
-    firstImagePriority: false,
-    lqip: false,
-    ...opts,
-  };
+  const manifestPath =
+    opts.manifestPath ?? path.resolve(process.cwd(), '..', '..', 'image-manifest.json');
+  const defaultSizes = opts.sizes ?? '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw';
+  const imageClasses = opts.classes ?? defaultClasses;
+  const firstImagePriority = opts.firstImagePriority ?? false;
 
-  const imageClasses = options.classes;
-
-  const widths = normalizeWidths(options.widths, options.mainWidth);
-  const defaultSizes =
-    options.sizes ?? `(min-width: 1280px) ${options.mainWidth}px, (min-width: 768px) 80vw, 100vw`;
-  const cacheDir = options.cacheDir ? path.resolve(options.cacheDir) : null;
-  const cacheOptions = JSON.stringify({
-    widths,
-    mainWidth: options.mainWidth,
-    includeMetadata: options.includeMetadata,
-    skipImages: [...options.skipImages].sort(),
-    sizes: defaultSizes,
-    classes: options.classes,
-    firstImagePriority: options.firstImagePriority,
-    lqip: options.lqip,
-  });
-  const cachePrefix = createHash('sha256').update(cacheVersion).update(cacheOptions).digest('hex');
-
-  const preprocessor: PreprocessorGroup = {
+  return {
     name: 'markdown-image-optimization',
-    async markup(context: { content: string; filename?: string }) {
+    markup(context: { content: string; filename?: string }) {
       const { content, filename } = context;
       if (!filename || !filename.endsWith('.md')) return undefined;
-
-      // Quick check: if no img tags, skip processing entirely
       if (!content.includes('<img')) return undefined;
 
-      const cacheKey = createHash('sha256')
-        .update(cachePrefix)
-        .update(filename)
-        .update(content)
-        .digest('hex');
-      const cachePath = cacheDir ? path.join(cacheDir, `${cacheKey}.json`) : null;
+      const manifest = loadManifest(manifestPath);
 
-      if (cachePath) {
-        const cached = await readCacheEntry(cachePath);
-        if (cached) {
-          return { code: cached.code, map: cached.map ?? undefined };
-        }
-      }
-
-      // Parse the content with the Svelte Compiler and create a MagicString instance.
       const parsed = parse(content, { filename }) as {
-        instance?: { content: ProgramNode };
         html: AstNode;
       };
-      const { instance, html } = parsed;
       const s = new MagicString(content);
 
-      const images = new Map<string, ImageConfig>();
-      const importMap = collectExistingImports(instance?.content);
-
-      // Walk the HTML AST and find all the image elements.
       let imageIndex = 0;
-      walkHtml(html, (node, ancestors) => {
+      walkHtml(parsed.html, (node, ancestors) => {
         if (node.name !== 'img') return;
         if (ancestors.some((ancestor) => ancestor.name === 'picture')) return;
 
@@ -210,144 +103,80 @@ export const processImages = (opts: ProcessImagesOptions = {}): PreprocessorGrou
         if (!srcValue) return;
 
         const urlRaw = srcValue.data;
-        // Skip external absolute URLs
         if (isExternalUrl(urlRaw)) return;
 
         let url = safeDecode(urlRaw);
         if (url.startsWith('assets/')) url = `./${url}`;
 
         const urlForMatch = stripQueryHash(url);
-        if (options.skipImages.some((pattern) => urlForMatch.endsWith(pattern))) return;
-
-        const isFirstImage = imageIndex === 0 && options.firstImagePriority;
+        const isFirstImage = imageIndex === 0 && firstImagePriority;
         imageIndex++;
 
+        // Resolve the image path relative to the markdown file, then make it repo-relative
+        const manifestKey = resolveManifestKey(filename, urlForMatch);
+        const entry = manifest.images[manifestKey];
+
+        if (!entry) {
+          // Not in manifest — leave unchanged for dev fallback
+          return;
+        }
+
         const extension = getFileExtension(urlForMatch);
-        const isGif = extension === 'gif';
-        const isVid = isVideo(urlForMatch);
+
+        if (entry.videoMimeType) {
+          formatVideo(s, node, entry, content, imageClasses);
+          return;
+        }
+
+        if (entry.avif.length > 0) {
+          formatPicture(s, node, entry, content, defaultSizes, imageClasses, isFirstImage);
+          return;
+        }
+
         const isSvg = extension === 'svg';
-        const isWebp = extension === 'webp';
-        const isAvif = extension === 'avif';
-        const isPassthrough = isSvg || isWebp || isAvif;
-
-        let config = images.get(url);
-        if (!config) {
-          const importIdSuffix =
-            url === urlForMatch
-              ? ''
-              : `_${createHash('sha256').update(url).digest('hex').slice(0, 8)}`;
-          const baseId = `_${camelCase(urlForMatch)}${importIdSuffix}`;
-          const fallbackSrc = url;
-          const fallbackId = resolveImportId(importMap, fallbackSrc, `${baseId}_src`);
-
-          const hasMeta = options.includeMetadata && !isGif && !isVid && !isSvg;
-          const metaSrc = hasMeta ? appendQuery(url, 'metadata') : undefined;
-          const metaId = metaSrc
-            ? resolveImportId(importMap, metaSrc, `${baseId}_meta`)
-            : undefined;
-
-          const hasSrcset = !isGif && !isVid && !isPassthrough;
-          const avifSetSrc = hasSrcset
-            ? appendQuery(url, `w=${widths.join(';')}&format=avif&as=srcset&withoutEnlargement`)
-            : undefined;
-          const avifSetId = avifSetSrc
-            ? resolveImportId(importMap, avifSetSrc, `${baseId}_avif_set`)
-            : undefined;
-
-          const hasLqip = options.lqip && hasSrcset;
-          const lqipSrc = hasLqip
-            ? appendQuery(url, 'w=24&format=webp&quality=30&blur=10')
-            : undefined;
-          const lqipId = lqipSrc
-            ? resolveImportId(importMap, lqipSrc, `${baseId}_lqip`)
-            : undefined;
-
-          const videoId = isVid ? resolveImportId(importMap, url, `${baseId}_video`) : undefined;
-
-          config = {
-            url,
-            fallbackId,
-            fallbackSrc,
-            avifSetId,
-            avifSetSrc,
-            metaId,
-            metaSrc,
-            lqipId,
-            lqipSrc,
-            hasMeta: Boolean(metaId),
-            hasLqip: Boolean(lqipId),
-            hasSrcset,
-            isGif,
-            isVideo: isVid,
-            isPassthrough,
-            videoId,
-            videoSrc: isVid ? url : undefined,
-          };
-
-          images.set(url, config);
-        }
-
-        if (config.isVideo && config.videoId) {
-          formatVideo(s, node, config, content, imageClasses);
-          return;
-        }
-
-        if (config.hasSrcset) {
-          formatPicture(s, node, config, content, defaultSizes, imageClasses, isFirstImage);
-          return;
-        }
-
-        formatInlineImage(s, node, srcValue, config, imageClasses, isFirstImage);
+        const isGif = extension === 'gif';
+        formatInlineImage(s, node, entry, imageClasses, isFirstImage, isSvg || isGif);
       });
 
-      const importLines = buildImportLines(images, importMap);
+      const code = s.toString();
+      if (code === content) return undefined;
 
-      // Add the correct import statements at the top of the file.
-      if (instance?.content && importLines.length > 0) {
-        const insertAt = getImportInsertPosition(instance.content);
-        const block = `${importLines.join('\n')}\n`;
-        if (insertAt === instance.content.start) {
-          s.appendLeft(insertAt, block);
-        } else {
-          s.appendLeft(insertAt, `\n${block}`);
-        }
-      } else if (importLines.length > 0) {
-        // No <script> block present; create one
-        s.prepend(`<script>\n${importLines.join('\n')}\n</script>\n`);
-      }
-
-      const map = s.generateMap({ hires: true });
-      const result = {
-        code: s.toString(),
-        map: map.toString(),
+      return {
+        code,
+        map: s.generateMap({ hires: true }).toString(),
       };
-
-      if (cachePath) {
-        await writeCacheEntry(cachePath, result);
-      }
-
-      return result;
     },
   };
-  return preprocessor;
 };
+
+// ---------------------------------------------------------------------------
+// Manifest key resolution
+// ---------------------------------------------------------------------------
+
+/**
+ * Given a markdown file path and a relative image URL, resolve to the repo-relative
+ * manifest key (forward slashes, relative to repo root).
+ */
+const resolveManifestKey = (markdownFile: string, imageUrl: string): string => {
+  let resolved: string;
+  if (imageUrl.startsWith('/')) {
+    // Root-relative paths point to `applications/website/static/`
+    const staticRoot = path.resolve(process.cwd(), 'static');
+    resolved = path.resolve(staticRoot, imageUrl.slice(1));
+  } else {
+    resolved = path.resolve(path.dirname(markdownFile), imageUrl);
+  }
+
+  // Find repo root (two levels up from applications/website or wherever cwd is)
+  const repoRoot = path.resolve(process.cwd(), '..', '..');
+  return normalizePath(path.relative(repoRoot, resolved));
+};
+
+const normalizePath = (value: string): string => value.split(path.sep).join('/');
 
 // ---------------------------------------------------------------------------
 // URL / path utilities
 // ---------------------------------------------------------------------------
-
-const isVideo = (url: string): boolean => {
-  const extension = getFileExtension(url);
-  return extension === 'mp4' || extension === 'webm' || extension === 'ogg';
-};
-
-const getVideoMimeType = (url: string): string | undefined => {
-  const extension = getFileExtension(url);
-  if (extension === 'mp4') return 'video/mp4';
-  if (extension === 'webm') return 'video/webm';
-  if (extension === 'ogg') return 'video/ogg';
-  return undefined;
-};
 
 const stripQueryHash = (url: string): string => url.split(/[?#]/)[0];
 
@@ -369,13 +198,6 @@ const safeDecode = (value: string): string => {
 const isExternalUrl = (value: string): boolean => {
   if (/^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(value)) return true;
   return /^(data|blob|mailto|tel|javascript):/i.test(value);
-};
-
-const appendQuery = (url: string, query: string): string => {
-  const [base, hash] = url.split('#');
-  const separator = base.includes('?') ? '&' : '?';
-  const next = `${base}${separator}${query}`;
-  return hash ? `${next}#${hash}` : next;
 };
 
 // ---------------------------------------------------------------------------
@@ -432,376 +254,181 @@ const walkHtml = (
 };
 
 // ---------------------------------------------------------------------------
-// Import management
-// ---------------------------------------------------------------------------
-
-const resolveImportId = (
-  importMap: Map<string, string>,
-  source: string,
-  fallback: string,
-): string => importMap.get(source) ?? fallback;
-
-const collectExistingImports = (program: ProgramNode | null | undefined): Map<string, string> => {
-  const importMap = new Map<string, string>();
-  if (!program?.body) return importMap;
-
-  for (const node of program.body) {
-    if (node.type !== 'ImportDeclaration') continue;
-    const source = node.source?.value;
-    if (!source || typeof source !== 'string') continue;
-    const defaultSpecifier = node.specifiers?.find(
-      (specifier) => specifier.type === 'ImportDefaultSpecifier',
-    );
-    if (defaultSpecifier?.local?.name) {
-      importMap.set(source, defaultSpecifier.local.name);
-    }
-  }
-
-  return importMap;
-};
-
-const getImportInsertPosition = (program: ProgramNode): number => {
-  let insertAt = program.start;
-  for (const node of program.body) {
-    if (node.type === 'ImportDeclaration') insertAt = node.end;
-  }
-  return insertAt;
-};
-
-const buildImportLines = (
-  images: Map<string, ImageConfig>,
-  importMap: Map<string, string>,
-): string[] => {
-  const lines: string[] = [];
-  const added = new Set(importMap.keys());
-
-  for (const config of images.values()) {
-    if (config.isVideo && config.videoId && config.videoSrc) {
-      if (!added.has(config.videoSrc)) {
-        lines.push(`import ${config.videoId} from '${config.videoSrc}';`);
-        added.add(config.videoSrc);
-      }
-      continue;
-    }
-
-    if (config.hasSrcset && config.avifSetId && config.avifSetSrc) {
-      if (!added.has(config.avifSetSrc)) {
-        lines.push(`import ${config.avifSetId} from '${config.avifSetSrc}';`);
-        added.add(config.avifSetSrc);
-      }
-    }
-
-    if (!added.has(config.fallbackSrc)) {
-      lines.push(`import ${config.fallbackId} from '${config.fallbackSrc}';`);
-      added.add(config.fallbackSrc);
-    }
-
-    if (config.hasMeta && config.metaId && config.metaSrc) {
-      if (!added.has(config.metaSrc)) {
-        lines.push(`import ${config.metaId} from '${config.metaSrc}';`);
-        added.add(config.metaSrc);
-      }
-    }
-
-    if (config.hasLqip && config.lqipId && config.lqipSrc) {
-      if (!added.has(config.lqipSrc)) {
-        lines.push(`import ${config.lqipId} from '${config.lqipSrc}';`);
-        added.add(config.lqipSrc);
-      }
-    }
-  }
-
-  return lines;
-};
-
-// ---------------------------------------------------------------------------
-// Width normalization
-// ---------------------------------------------------------------------------
-
-const normalizeWidths = (widths: number[] | undefined, mainWidth: number | undefined): number[] => {
-  const values = [...(widths ?? [])];
-  if (typeof mainWidth === 'number') values.push(mainWidth);
-
-  const unique = Array.from(new Set(values.filter((value) => Number.isFinite(value) && value > 0)));
-  unique.sort((a, b) => a - b);
-  return unique;
-};
-
-// ---------------------------------------------------------------------------
 // HTML generation
 // ---------------------------------------------------------------------------
 
 const formatInlineImage = (
   s: MagicString,
   node: AstNode,
-  src: SvelteTextNode,
-  cfg: ImageConfig,
+  entry: ImageManifestEntry,
   imageClasses: string[],
   isFirstImage: boolean,
+  isPassthrough: boolean,
 ): void => {
-  s.update(src.start, src.end, `{${cfg.fallbackId}}`);
-
-  const classAttr = getAttribute(node, 'class');
-  const classValueNode = getStaticAttributeValueNode(classAttr);
-  const classValue = classValueNode?.data ?? '';
-  const mergedClass = classValue.trim() ? merge(classValue, imageClasses) : imageClasses.join(' ');
-
   const hasPriority =
     isFirstImage || hasAttribute(node, 'data-priority') || hasAttribute(node, 'fetchpriority');
 
-  const additions: string[] = [];
+  const attrs: string[] = [`src="${entry.original}"`];
 
-  if (classAttr && classValueNode) {
-    s.update(classValueNode.start, classValueNode.end, mergedClass);
-  } else if (!classAttr) {
-    additions.push(` class="${mergedClass}"`);
+  // Preserve alt
+  const altAttr = getAttribute(node, 'alt');
+  if (altAttr) {
+    const altText = getStaticAttributeText(altAttr) ?? '';
+    attrs.push(`alt="${altText}"`);
+  } else {
+    attrs.push('alt=""');
   }
 
+  // Class
+  const classAttr = getAttribute(node, 'class');
+  const classValue = getStaticAttributeText(classAttr) ?? '';
+  const mergedClass = classValue.trim() ? merge(classValue, imageClasses) : imageClasses.join(' ');
+  attrs.push(`class="${mergedClass}"`);
+
+  // Priority
   if (isFirstImage && !hasAttribute(node, 'fetchpriority')) {
-    additions.push(' fetchpriority="high"');
+    attrs.push('fetchpriority="high"');
   }
 
+  // Loading/decoding
   if (!hasAttribute(node, 'loading')) {
-    additions.push(hasPriority ? ' loading="eager"' : ' loading="lazy"');
+    attrs.push(hasPriority ? 'loading="eager"' : 'loading="lazy"');
   }
   if (!hasAttribute(node, 'decoding')) {
-    additions.push(hasPriority ? ' decoding="auto"' : ' decoding="async"');
+    attrs.push(hasPriority ? 'decoding="auto"' : 'decoding="async"');
   }
 
-  if (cfg.hasMeta && cfg.metaId) {
-    if (!hasAttribute(node, 'width')) additions.push(` width={${cfg.metaId}.width}`);
-    if (!hasAttribute(node, 'height')) additions.push(` height={${cfg.metaId}.height}`);
+  // Dimensions
+  if (!isPassthrough && entry.width && entry.height) {
+    if (!hasAttribute(node, 'width')) attrs.push(`width="${entry.width}"`);
+    if (!hasAttribute(node, 'height')) attrs.push(`height="${entry.height}"`);
   }
 
-  if (additions.length > 0) {
-    s.appendLeft(node.start + 4, additions.join(''));
-  }
+  s.update(node.start, node.end, `<img ${attrs.join(' ')} />`);
 };
 
-const buildImageAttributes = (
-  content: string,
-  node: AstNode,
-  cfg: ImageConfig,
-  defaultSizes: string,
-  imageClasses: string[],
-  isFirstImage: boolean,
-): { imgAttributes: string; sizesAttr: string } => {
-  const otherAttrs: string[] = [];
-  let sizesAttrRaw: string | undefined;
-  let hasAlt = false;
-  let hasClass = false;
-  let classIsStatic = false;
-  let classValue = '';
-  let hasLoading = false;
-  let hasDecoding = false;
-  let hasWidth = false;
-  let hasHeight = false;
-  let hasPriority = false;
-  let hasFetchpriority = false;
-
-  for (const attr of node.attributes) {
-    const raw = getRawAttribute(attr, content);
-    if (attr.type === 'Attribute') {
-      if (attr.name === 'src' || attr.name === 'srcset') continue;
-      if (attr.name === 'sizes') {
-        sizesAttrRaw = raw;
-        continue;
-      }
-      if (attr.name === 'class') {
-        hasClass = true;
-        const value = getStaticAttributeText(attr);
-        if (value !== undefined) {
-          classIsStatic = true;
-          classValue = value;
-        } else {
-          otherAttrs.push(raw);
-        }
-        continue;
-      }
-      if (attr.name === 'alt') {
-        hasAlt = true;
-        otherAttrs.push(raw);
-        continue;
-      }
-      if (attr.name === 'loading') {
-        hasLoading = true;
-        otherAttrs.push(raw);
-        continue;
-      }
-      if (attr.name === 'decoding') {
-        hasDecoding = true;
-        otherAttrs.push(raw);
-        continue;
-      }
-      if (attr.name === 'width') {
-        hasWidth = true;
-        otherAttrs.push(raw);
-        continue;
-      }
-      if (attr.name === 'height') {
-        hasHeight = true;
-        otherAttrs.push(raw);
-        continue;
-      }
-      if (attr.name === 'fetchpriority') {
-        hasPriority = true;
-        hasFetchpriority = true;
-        otherAttrs.push(raw);
-        continue;
-      }
-      if (attr.name === 'data-priority') {
-        hasPriority = true;
-        otherAttrs.push(raw);
-        continue;
-      }
-
-      otherAttrs.push(raw);
-    } else {
-      otherAttrs.push(raw);
-    }
-  }
-
-  if (isFirstImage) hasPriority = true;
-
-  const mergedClass = classValue.trim() ? merge(classValue, imageClasses) : imageClasses.join(' ');
-  const imgAttrs: string[] = [`src={${cfg.fallbackId}}`];
-
-  if (!hasAlt) imgAttrs.push('alt=""');
-
-  if (hasClass && classIsStatic) {
-    imgAttrs.push(`class="${mergedClass}"`);
-  } else if (!hasClass) {
-    imgAttrs.push(`class="${mergedClass}"`);
-  }
-
-  if (isFirstImage && !hasFetchpriority) {
-    imgAttrs.push('fetchpriority="high"');
-  }
-
-  if (!hasLoading) {
-    imgAttrs.push(hasPriority ? 'loading="eager"' : 'loading="lazy"');
-  }
-  if (!hasDecoding) {
-    imgAttrs.push(hasPriority ? 'decoding="auto"' : 'decoding="async"');
-  }
-
-  if (cfg.hasMeta && cfg.metaId) {
-    if (!hasWidth) imgAttrs.push(`width={${cfg.metaId}.width}`);
-    if (!hasHeight) imgAttrs.push(`height={${cfg.metaId}.height}`);
-  }
-
-  if (cfg.hasLqip && cfg.lqipId) {
-    imgAttrs.push(`style="background-size:cover;background-image:url({${cfg.lqipId}})"`);
-  }
-
-  const sizesAttr = sizesAttrRaw?.trim() || `sizes="${defaultSizes}"`;
-  return {
-    imgAttributes: imgAttrs.concat(otherAttrs).join(' '),
-    sizesAttr,
-  };
-};
-
-/**
- * Replace <img> with <picture> that prefers AVIF, falls back to original format.
- */
 const formatPicture = (
   s: MagicString,
   node: AstNode,
-  cfg: ImageConfig,
+  entry: ImageManifestEntry,
   content: string,
   defaultSizes: string,
   imageClasses: string[],
   isFirstImage: boolean,
 ): void => {
-  const { imgAttributes, sizesAttr } = buildImageAttributes(
-    content,
-    node,
-    cfg,
-    defaultSizes,
-    imageClasses,
-    isFirstImage,
-  );
-  const sizesSnippet = sizesAttr ? ` ${sizesAttr}` : '';
+  const hasPriority =
+    isFirstImage || hasAttribute(node, 'data-priority') || hasAttribute(node, 'fetchpriority');
+
+  // Build AVIF srcset
+  const avifSrcset = entry.avif.map((v) => `${v.url} ${v.width}w`).join(', ');
+
+  // Determine sizes
+  const sizesAttr = getAttribute(node, 'sizes');
+  const sizesValue = getStaticAttributeText(sizesAttr) ?? defaultSizes;
+
+  // Build img attributes
+  const imgAttrs: string[] = [`src="${entry.original}"`];
+
+  // Preserve alt
+  const altAttr = getAttribute(node, 'alt');
+  if (altAttr) {
+    const altText = getStaticAttributeText(altAttr) ?? '';
+    imgAttrs.push(`alt="${altText}"`);
+  } else {
+    imgAttrs.push('alt=""');
+  }
+
+  // Class
+  const classAttr = getAttribute(node, 'class');
+  const classValue = getStaticAttributeText(classAttr) ?? '';
+  const mergedClass = classValue.trim() ? merge(classValue, imageClasses) : imageClasses.join(' ');
+  imgAttrs.push(`class="${mergedClass}"`);
+
+  // Priority
+  if (isFirstImage && !hasAttribute(node, 'fetchpriority')) {
+    imgAttrs.push('fetchpriority="high"');
+  }
+
+  // Loading/decoding
+  if (!hasAttribute(node, 'loading')) {
+    imgAttrs.push(hasPriority ? 'loading="eager"' : 'loading="lazy"');
+  }
+  if (!hasAttribute(node, 'decoding')) {
+    imgAttrs.push(hasPriority ? 'decoding="auto"' : 'decoding="async"');
+  }
+
+  // Dimensions
+  if (entry.width && entry.height) {
+    if (!hasAttribute(node, 'width')) imgAttrs.push(`width="${entry.width}"`);
+    if (!hasAttribute(node, 'height')) imgAttrs.push(`height="${entry.height}"`);
+  }
+
+  // LQIP
+  if (entry.lqip) {
+    imgAttrs.push(`style="background-size:cover;background-image:url(${entry.lqip})"`);
+  }
+
+  // Preserve other attributes (data-*, etc.)
+  for (const attr of node.attributes) {
+    if (attr.type !== 'Attribute') continue;
+    const skip = new Set([
+      'src',
+      'srcset',
+      'sizes',
+      'alt',
+      'class',
+      'loading',
+      'decoding',
+      'width',
+      'height',
+      'fetchpriority',
+      'data-priority',
+    ]);
+    if (attr.name && !skip.has(attr.name)) {
+      imgAttrs.push(getRawAttribute(attr, content));
+    }
+  }
 
   const replacement = `
 <picture>
-  <source type="image/avif" srcset="{${cfg.avifSetId}}"${sizesSnippet} />
-  <img ${imgAttributes} />
+  <source type="image/avif" srcset="${avifSrcset}" sizes="${sizesValue}" />
+  <img ${imgAttrs.join(' ')} />
 </picture>`;
 
   s.update(node.start, node.end, replacement);
 };
 
-const buildVideoAttributes = (content: string, node: AstNode, imageClasses: string[]): string => {
-  const otherAttrs: string[] = [];
-  let hasClass = false;
-  let classIsStatic = false;
-  let classValue = '';
-  let hasControls = false;
-
-  for (const attr of node.attributes) {
-    const raw = getRawAttribute(attr, content);
-    if (attr.type === 'Attribute') {
-      if (attr.name === 'src' || attr.name === 'srcset' || attr.name === 'sizes') continue;
-      if (attr.name === 'alt') continue;
-      if (attr.name === 'class') {
-        hasClass = true;
-        const value = getStaticAttributeText(attr);
-        if (value !== undefined) {
-          classIsStatic = true;
-          classValue = value;
-        } else {
-          otherAttrs.push(raw);
-        }
-        continue;
-      }
-      if (attr.name === 'controls') {
-        hasControls = true;
-        otherAttrs.push(raw);
-        continue;
-      }
-
-      otherAttrs.push(raw);
-    } else {
-      otherAttrs.push(raw);
-    }
-  }
-
-  const mergedClass = classValue.trim() ? merge(classValue, imageClasses) : imageClasses.join(' ');
-  const attrs: string[] = [];
-
-  if (hasClass && classIsStatic) {
-    attrs.push(`class="${mergedClass}"`);
-  } else if (!hasClass) {
-    attrs.push(`class="${mergedClass}"`);
-  }
-
-  if (!hasControls) attrs.push('controls');
-
-  return attrs.concat(otherAttrs).join(' ');
-};
-
-/**
- * Adds the imported video reference as the video `src`.
- * Adds the Tailwind classes to the element.
- */
 const formatVideo = (
   s: MagicString,
   node: AstNode,
-  cfg: ImageConfig,
+  entry: ImageManifestEntry,
   content: string,
   imageClasses: string[],
 ): void => {
-  if (!cfg.videoId) return;
+  const classAttr = getAttribute(node, 'class');
+  const classValue = getStaticAttributeText(classAttr) ?? '';
+  const mergedClass = classValue.trim() ? merge(classValue, imageClasses) : imageClasses.join(' ');
 
-  const videoAttrs = buildVideoAttributes(content, node, imageClasses);
-  const mimeType = getVideoMimeType(cfg.url);
-  const typeAttr = mimeType ? ` type="${mimeType}"` : '';
-  const attrs = videoAttrs ? ` ${videoAttrs}` : '';
+  const hasControls = hasAttribute(node, 'controls');
+
+  const attrs: string[] = [`class="${mergedClass}"`];
+  if (!hasControls) attrs.push('controls');
+
+  // Preserve other attributes
+  for (const attr of node.attributes) {
+    if (attr.type !== 'Attribute') continue;
+    const skip = new Set(['src', 'srcset', 'sizes', 'alt', 'class', 'controls']);
+    if (attr.name && !skip.has(attr.name)) {
+      attrs.push(getRawAttribute(attr, content));
+    }
+  }
+
+  const typeAttr = entry.videoMimeType ? ` type="${entry.videoMimeType}"` : '';
+  const attrsString = attrs.length > 0 ? ` ${attrs.join(' ')}` : '';
 
   s.update(
     node.start,
     node.end,
-    `<video${attrs}><source src={${cfg.videoId}}${typeAttr} /></video>`,
+    `<video${attrsString}><source src="${entry.original}"${typeAttr} /></video>`,
   );
 };

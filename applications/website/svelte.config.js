@@ -25,7 +25,6 @@ const siteUrl =
   (process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : 'http://localhost:4444');
-const skipImageOptimizations = process.env.SKIP_IMAGE_OPTIMIZATION === '1';
 
 // Define directory paths
 const __filename = fileURLToPath(import.meta.url);
@@ -257,21 +256,13 @@ const config = {
     vitePreprocess(),
     mdsvex(mdsvexOptions),
     importTailwindPlayground(),
-    ...(skipImageOptimizations
-      ? []
-      : [
-          /** @type {any} */ (
-            processImages({
-              widths: [480, 1024, 1600],
-              mainWidth: 1600,
-              sizes: '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw',
-              includeMetadata: true,
-              firstImagePriority: true,
-              lqip: true,
-              classes: ['max-w-full'],
-            })
-          ),
-        ]),
+    /** @type {any} */ (
+      processImages({
+        sizes: '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw',
+        firstImagePriority: true,
+        classes: ['max-w-full'],
+      })
+    ),
   ],
 
   kit: {
