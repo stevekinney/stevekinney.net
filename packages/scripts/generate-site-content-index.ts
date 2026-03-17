@@ -4,8 +4,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fg from 'fast-glob';
 
-import type { CourseManifest, SiteContentIndex, WritingManifest } from '@stevekinney/content-types';
-import { writeFormattedJson } from './write-formatted-json';
+import type {
+  CourseManifest,
+  SiteContentIndex,
+  WritingManifest,
+} from '@stevekinney/utilities/content-types';
+import { writeFormattedJson } from '@stevekinney/utilities/write-formatted-json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');

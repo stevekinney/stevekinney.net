@@ -4,95 +4,135 @@ import path from 'node:path';
 import { camelCase } from 'change-case';
 import MagicString from 'magic-string';
 import { parse } from 'svelte/compiler';
+import type { PreprocessorGroup } from 'svelte/compiler';
 import { twMerge as merge } from 'tailwind-merge';
 
+// ---------------------------------------------------------------------------
+// Domain types
+// ---------------------------------------------------------------------------
+
+type SvelteTextNode = {
+  type: string;
+  data: string;
+  raw?: string;
+  start: number;
+  end: number;
+};
+
+type SvelteAttributeNode = {
+  type: string;
+  name?: string;
+  value?: SvelteTextNode[];
+  start: number;
+  end: number;
+};
+
+type AstNode = {
+  name?: string;
+  type?: string;
+  start: number;
+  end: number;
+  attributes: SvelteAttributeNode[];
+  children?: AstNode[];
+};
+
+type ImageConfig = {
+  url: string;
+  fallbackId: string;
+  fallbackSrc: string;
+  avifSetId?: string;
+  avifSetSrc?: string;
+  metaId?: string;
+  metaSrc?: string;
+  lqipId?: string;
+  lqipSrc?: string;
+  hasMeta: boolean;
+  hasLqip: boolean;
+  hasSrcset: boolean;
+  isGif?: boolean;
+  isVideo?: boolean;
+  isPassthrough?: boolean;
+  videoId?: string;
+  videoSrc?: string;
+};
+
+type ProcessImagesOptions = {
+  widths?: number[];
+  mainWidth?: number;
+  includeMetadata?: boolean;
+  skipImages?: string[];
+  sizes?: string;
+  cacheDir?: string;
+  classes?: string[];
+  firstImagePriority?: boolean;
+  lqip?: boolean;
+};
+
 /**
- * @typedef {{ type: string, data: string, raw?: string, start: number, end: number }} SvelteTextNode
- * @typedef {{ type: string, name?: string, value?: SvelteTextNode[], start: number, end: number }} SvelteAttributeNode
- * @typedef {{ name?: string, type?: string, start: number, end: number, attributes: SvelteAttributeNode[], children?: AstNode[] }} AstNode
- * @typedef {{
- *  url: string,
- *  fallbackId: string,
- *  fallbackSrc: string,
- *  avifSetId?: string,
- *  avifSetSrc?: string,
- *  metaId?: string,
- *  metaSrc?: string,
- *  lqipId?: string,
- *  lqipSrc?: string,
- *  hasMeta: boolean,
- *  hasLqip: boolean,
- *  hasSrcset: boolean,
- *  isGif?: boolean,
- *  isVideo?: boolean,
- *  isPassthrough?: boolean,
- *  videoId?: string,
- *  videoSrc?: string
- * }} ImageConfig
- * @typedef {{
- *  widths?: number[],
- *  mainWidth?: number,
- *  includeMetadata?: boolean,
- *  skipImages?: string[],
- *  sizes?: string,
- *  cacheDir?: string,
- *  classes?: string[],
- *  firstImagePriority?: boolean,
- *  lqip?: boolean
- * }} ProcessImagesOptions
- * @typedef {{
- *  start: number,
- *  end: number,
- *  body: Array<{
- *    type: string,
- *    start: number,
- *    end: number,
- *    source?: { value?: string },
- *    specifiers?: Array<{ type: string, local?: { name: string } }>
- *  }>
- * }} ProgramNode
+ * A minimal representation of an ESTree Program node as returned by Svelte's
+ * legacy `parse`. We only model the fields this module actually reads.
  */
+type ProgramNode = {
+  start: number;
+  end: number;
+  body: Array<{
+    type: string;
+    start: number;
+    end: number;
+    source?: { value?: string };
+    specifiers?: Array<{ type: string; local?: { name: string } }>;
+  }>;
+};
+
+// ---------------------------------------------------------------------------
+// Cache helpers
+// ---------------------------------------------------------------------------
 
 const defaultClasses = ['max-w-full'];
 const cacheVersion = '1';
 
-/**
- * @param {unknown} error
- */
-const isMissingFile = (error) =>
+const isMissingFile = (error: unknown): boolean =>
   typeof error === 'object' && error !== null && 'code' in error && error.code === 'ENOENT';
 
-/**
- * @param {string} cachePath
- * @returns {Promise<{ code: string, map: string | null } | null>}
- */
-const readCacheEntry = async (cachePath) => {
+const readCacheEntry = async (
+  cachePath: string,
+): Promise<{ code: string; map: string | null } | null> => {
   try {
     const contents = await readFile(cachePath, 'utf8');
-    return JSON.parse(contents);
+    return JSON.parse(contents) as { code: string; map: string | null };
   } catch (error) {
     if (isMissingFile(error)) return null;
     throw error;
   }
 };
 
-/**
- * @param {string} cachePath
- * @param {{ code: string, map: string | null }} entry
- */
-const writeCacheEntry = async (cachePath, entry) => {
+const writeCacheEntry = async (
+  cachePath: string,
+  entry: { code: string; map: string | null },
+): Promise<void> => {
   await mkdir(path.dirname(cachePath), { recursive: true });
   await writeFile(cachePath, JSON.stringify(entry), 'utf8');
 };
 
+// ---------------------------------------------------------------------------
+// Public API
+// ---------------------------------------------------------------------------
+
 /**
  * Add image optimization to the Markdown content.
- * @param {ProcessImagesOptions} [opts]
- * @returns {import('svelte/compiler').PreprocessorGroup}
  */
-export const processImages = (opts = {}) => {
-  /** @type {{ widths: number[], mainWidth: number, includeMetadata: boolean, skipImages: string[], sizes?: string, cacheDir: string, classes: string[], firstImagePriority: boolean, lqip: boolean }} */
-  const options = {
+export const processImages = (opts: ProcessImagesOptions = {}): PreprocessorGroup => {
+  const options: {
+    widths: number[];
+    mainWidth: number;
+    includeMetadata: boolean;
+    skipImages: string[];
+    sizes?: string;
+    cacheDir: string;
+    classes: string[];
+    firstImagePriority: boolean;
+    lqip: boolean;
+  } = {
     widths: [480, 1024, 1600],
     mainWidth: 1600,
     includeMetadata: true,
@@ -123,12 +163,9 @@ export const processImages = (opts = {}) => {
   });
   const cachePrefix = createHash('sha256').update(cacheVersion).update(cacheOptions).digest('hex');
 
-  const preprocessor = {
+  const preprocessor: PreprocessorGroup = {
     name: 'markdown-image-optimization',
-    /**
-     * @param {{ content: string, filename?: string }} context
-     */
-    async markup(context) {
+    async markup(context: { content: string; filename?: string }) {
       const { content, filename } = context;
       if (!filename || !filename.endsWith('.md')) return undefined;
 
@@ -150,11 +187,14 @@ export const processImages = (opts = {}) => {
       }
 
       // Parse the content with the Svelte Compiler and create a MagicString instance.
-      const { instance, html } = parse(content, { filename });
+      const parsed = parse(content, { filename }) as {
+        instance?: { content: ProgramNode };
+        html: AstNode;
+      };
+      const { instance, html } = parsed;
       const s = new MagicString(content);
 
-      /** @type {Map<string, ImageConfig>} */
-      const images = new Map();
+      const images = new Map<string, ImageConfig>();
       const importMap = collectExistingImports(instance?.content);
 
       // Walk the HTML AST and find all the image elements.
@@ -292,20 +332,16 @@ export const processImages = (opts = {}) => {
   return preprocessor;
 };
 
-/**
- * Check if the URL is a video.
- * @param {string} url
- */
-const isVideo = (url) => {
+// ---------------------------------------------------------------------------
+// URL / path utilities
+// ---------------------------------------------------------------------------
+
+const isVideo = (url: string): boolean => {
   const extension = getFileExtension(url);
   return extension === 'mp4' || extension === 'webm' || extension === 'ogg';
 };
 
-/**
- * @param {string} url
- * @returns {string | undefined}
- */
-const getVideoMimeType = (url) => {
+const getVideoMimeType = (url: string): string | undefined => {
   const extension = getFileExtension(url);
   if (extension === 'mp4') return 'video/mp4';
   if (extension === 'webm') return 'video/webm';
@@ -313,55 +349,196 @@ const getVideoMimeType = (url) => {
   return undefined;
 };
 
-/**
- * Gets an attribute by name.
- * @param {AstNode} node
- * @param {string} name
- * @returns {SvelteAttributeNode | undefined}
- */
-const getAttribute = (node, name) =>
+const stripQueryHash = (url: string): string => url.split(/[?#]/)[0];
+
+const getFileExtension = (url: string): string => {
+  const cleanUrl = stripQueryHash(url);
+  const index = cleanUrl.lastIndexOf('.');
+  if (index === -1) return '';
+  return cleanUrl.slice(index + 1).toLowerCase();
+};
+
+const safeDecode = (value: string): string => {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+};
+
+const isExternalUrl = (value: string): boolean => {
+  if (/^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(value)) return true;
+  return /^(data|blob|mailto|tel|javascript):/i.test(value);
+};
+
+const appendQuery = (url: string, query: string): string => {
+  const [base, hash] = url.split('#');
+  const separator = base.includes('?') ? '&' : '?';
+  const next = `${base}${separator}${query}`;
+  return hash ? `${next}#${hash}` : next;
+};
+
+// ---------------------------------------------------------------------------
+// AST helpers
+// ---------------------------------------------------------------------------
+
+const getAttribute = (node: AstNode, name: string): SvelteAttributeNode | undefined =>
   node.attributes.find((attr) => attr.type === 'Attribute' && attr.name === name);
 
-/**
- * @param {AstNode} node
- * @param {string} name
- */
-const hasAttribute = (node, name) => Boolean(getAttribute(node, name));
+const hasAttribute = (node: AstNode, name: string): boolean => Boolean(getAttribute(node, name));
 
-/**
- * Gets the value of a static text attribute.
- * @param {SvelteAttributeNode | undefined} attr
- * @returns {SvelteTextNode | undefined}
- */
-const getStaticAttributeValueNode = (attr) => {
+const getStaticAttributeValueNode = (
+  attr: SvelteAttributeNode | undefined,
+): SvelteTextNode | undefined => {
   if (!attr || attr.type !== 'Attribute' || !attr.value || attr.value.length !== 1) return;
   const [value] = attr.value;
   if (value.type === 'Text') return value;
 };
 
-/**
- * @param {SvelteAttributeNode | undefined} attr
- * @returns {string | undefined}
- */
-const getStaticAttributeText = (attr) => getStaticAttributeValueNode(attr)?.data;
+const getStaticAttributeText = (attr: SvelteAttributeNode | undefined): string | undefined =>
+  getStaticAttributeValueNode(attr)?.data;
 
-/**
- * @param {SvelteAttributeNode} attr
- * @param {string} content
- */
-const getRawAttribute = (attr, content) => content.slice(attr.start, attr.end);
+const getRawAttribute = (attr: SvelteAttributeNode, content: string): string =>
+  content.slice(attr.start, attr.end);
 
-/**
- * Adds the imported image reference to as the image `src`.
- * Adds the Tailwind classes to the element.
- * @param {MagicString} s
- * @param {AstNode} node
- * @param {SvelteTextNode} src
- * @param {ImageConfig} cfg
- * @param {string[]} imageClasses
- * @param {boolean} isFirstImage
- */
-const formatInlineImage = (s, node, src, cfg, imageClasses, isFirstImage) => {
+const walkHtml = (
+  node: unknown,
+  visit: (node: AstNode, ancestors: AstNode[]) => void,
+  ancestors: AstNode[] = [],
+): void => {
+  if (!node || typeof node !== 'object') return;
+
+  const typedNode = node as AstNode;
+  const isElement = typedNode.type === 'Element';
+  if (isElement) {
+    visit(typedNode, ancestors);
+    ancestors.push(typedNode);
+  }
+
+  for (const value of Object.values(node as Record<string, unknown>)) {
+    if (!value) continue;
+    if (Array.isArray(value)) {
+      for (const entry of value) {
+        if (entry && typeof entry === 'object' && 'type' in entry) {
+          walkHtml(entry, visit, ancestors);
+        }
+      }
+    } else if (typeof value === 'object' && 'type' in value) {
+      walkHtml(value, visit, ancestors);
+    }
+  }
+
+  if (isElement) ancestors.pop();
+};
+
+// ---------------------------------------------------------------------------
+// Import management
+// ---------------------------------------------------------------------------
+
+const resolveImportId = (
+  importMap: Map<string, string>,
+  source: string,
+  fallback: string,
+): string => importMap.get(source) ?? fallback;
+
+const collectExistingImports = (program: ProgramNode | null | undefined): Map<string, string> => {
+  const importMap = new Map<string, string>();
+  if (!program?.body) return importMap;
+
+  for (const node of program.body) {
+    if (node.type !== 'ImportDeclaration') continue;
+    const source = node.source?.value;
+    if (!source || typeof source !== 'string') continue;
+    const defaultSpecifier = node.specifiers?.find(
+      (specifier) => specifier.type === 'ImportDefaultSpecifier',
+    );
+    if (defaultSpecifier?.local?.name) {
+      importMap.set(source, defaultSpecifier.local.name);
+    }
+  }
+
+  return importMap;
+};
+
+const getImportInsertPosition = (program: ProgramNode): number => {
+  let insertAt = program.start;
+  for (const node of program.body) {
+    if (node.type === 'ImportDeclaration') insertAt = node.end;
+  }
+  return insertAt;
+};
+
+const buildImportLines = (
+  images: Map<string, ImageConfig>,
+  importMap: Map<string, string>,
+): string[] => {
+  const lines: string[] = [];
+  const added = new Set(importMap.keys());
+
+  for (const config of images.values()) {
+    if (config.isVideo && config.videoId && config.videoSrc) {
+      if (!added.has(config.videoSrc)) {
+        lines.push(`import ${config.videoId} from '${config.videoSrc}';`);
+        added.add(config.videoSrc);
+      }
+      continue;
+    }
+
+    if (config.hasSrcset && config.avifSetId && config.avifSetSrc) {
+      if (!added.has(config.avifSetSrc)) {
+        lines.push(`import ${config.avifSetId} from '${config.avifSetSrc}';`);
+        added.add(config.avifSetSrc);
+      }
+    }
+
+    if (!added.has(config.fallbackSrc)) {
+      lines.push(`import ${config.fallbackId} from '${config.fallbackSrc}';`);
+      added.add(config.fallbackSrc);
+    }
+
+    if (config.hasMeta && config.metaId && config.metaSrc) {
+      if (!added.has(config.metaSrc)) {
+        lines.push(`import ${config.metaId} from '${config.metaSrc}';`);
+        added.add(config.metaSrc);
+      }
+    }
+
+    if (config.hasLqip && config.lqipId && config.lqipSrc) {
+      if (!added.has(config.lqipSrc)) {
+        lines.push(`import ${config.lqipId} from '${config.lqipSrc}';`);
+        added.add(config.lqipSrc);
+      }
+    }
+  }
+
+  return lines;
+};
+
+// ---------------------------------------------------------------------------
+// Width normalization
+// ---------------------------------------------------------------------------
+
+const normalizeWidths = (widths: number[] | undefined, mainWidth: number | undefined): number[] => {
+  const values = [...(widths ?? [])];
+  if (typeof mainWidth === 'number') values.push(mainWidth);
+
+  const unique = Array.from(new Set(values.filter((value) => Number.isFinite(value) && value > 0)));
+  unique.sort((a, b) => a - b);
+  return unique;
+};
+
+// ---------------------------------------------------------------------------
+// HTML generation
+// ---------------------------------------------------------------------------
+
+const formatInlineImage = (
+  s: MagicString,
+  node: AstNode,
+  src: SvelteTextNode,
+  cfg: ImageConfig,
+  imageClasses: string[],
+  isFirstImage: boolean,
+): void => {
   s.update(src.start, src.end, `{${cfg.fallbackId}}`);
 
   const classAttr = getAttribute(node, 'class');
@@ -372,7 +549,7 @@ const formatInlineImage = (s, node, src, cfg, imageClasses, isFirstImage) => {
   const hasPriority =
     isFirstImage || hasAttribute(node, 'data-priority') || hasAttribute(node, 'fetchpriority');
 
-  const additions = [];
+  const additions: string[] = [];
 
   if (classAttr && classValueNode) {
     s.update(classValueNode.start, classValueNode.end, mergedClass);
@@ -401,18 +578,16 @@ const formatInlineImage = (s, node, src, cfg, imageClasses, isFirstImage) => {
   }
 };
 
-/**
- * @param {string} content
- * @param {AstNode} node
- * @param {ImageConfig} cfg
- * @param {string} defaultSizes
- * @param {string[]} imageClasses
- * @param {boolean} isFirstImage
- * @returns {{ imgAttributes: string, sizesAttr: string }}
- */
-const buildImageAttributes = (content, node, cfg, defaultSizes, imageClasses, isFirstImage) => {
-  const otherAttrs = [];
-  let sizesAttrRaw;
+const buildImageAttributes = (
+  content: string,
+  node: AstNode,
+  cfg: ImageConfig,
+  defaultSizes: string,
+  imageClasses: string[],
+  isFirstImage: boolean,
+): { imgAttributes: string; sizesAttr: string } => {
+  const otherAttrs: string[] = [];
+  let sizesAttrRaw: string | undefined;
   let hasAlt = false;
   let hasClass = false;
   let classIsStatic = false;
@@ -489,7 +664,7 @@ const buildImageAttributes = (content, node, cfg, defaultSizes, imageClasses, is
   if (isFirstImage) hasPriority = true;
 
   const mergedClass = classValue.trim() ? merge(classValue, imageClasses) : imageClasses.join(' ');
-  const imgAttrs = [`src={${cfg.fallbackId}}`];
+  const imgAttrs: string[] = [`src={${cfg.fallbackId}}`];
 
   if (!hasAlt) imgAttrs.push('alt=""');
 
@@ -528,15 +703,16 @@ const buildImageAttributes = (content, node, cfg, defaultSizes, imageClasses, is
 
 /**
  * Replace <img> with <picture> that prefers AVIF, falls back to original format.
- * @param {MagicString} s
- * @param {AstNode} node
- * @param {ImageConfig} cfg
- * @param {string} content
- * @param {string} defaultSizes
- * @param {string[]} imageClasses
- * @param {boolean} isFirstImage
  */
-const formatPicture = (s, node, cfg, content, defaultSizes, imageClasses, isFirstImage) => {
+const formatPicture = (
+  s: MagicString,
+  node: AstNode,
+  cfg: ImageConfig,
+  content: string,
+  defaultSizes: string,
+  imageClasses: string[],
+  isFirstImage: boolean,
+): void => {
   const { imgAttributes, sizesAttr } = buildImageAttributes(
     content,
     node,
@@ -556,14 +732,8 @@ const formatPicture = (s, node, cfg, content, defaultSizes, imageClasses, isFirs
   s.update(node.start, node.end, replacement);
 };
 
-/**
- * @param {string} content
- * @param {AstNode} node
- * @param {string[]} imageClasses
- * @returns {string}
- */
-const buildVideoAttributes = (content, node, imageClasses) => {
-  const otherAttrs = [];
+const buildVideoAttributes = (content: string, node: AstNode, imageClasses: string[]): string => {
+  const otherAttrs: string[] = [];
   let hasClass = false;
   let classIsStatic = false;
   let classValue = '';
@@ -598,7 +768,7 @@ const buildVideoAttributes = (content, node, imageClasses) => {
   }
 
   const mergedClass = classValue.trim() ? merge(classValue, imageClasses) : imageClasses.join(' ');
-  const attrs = [];
+  const attrs: string[] = [];
 
   if (hasClass && classIsStatic) {
     attrs.push(`class="${mergedClass}"`);
@@ -614,13 +784,14 @@ const buildVideoAttributes = (content, node, imageClasses) => {
 /**
  * Adds the imported video reference as the video `src`.
  * Adds the Tailwind classes to the element.
- * @param {MagicString} s
- * @param {AstNode} node
- * @param {ImageConfig} cfg
- * @param {string} content
- * @param {string[]} imageClasses
  */
-const formatVideo = (s, node, cfg, content, imageClasses) => {
+const formatVideo = (
+  s: MagicString,
+  node: AstNode,
+  cfg: ImageConfig,
+  content: string,
+  imageClasses: string[],
+): void => {
   if (!cfg.videoId) return;
 
   const videoAttrs = buildVideoAttributes(content, node, imageClasses);
@@ -633,186 +804,4 @@ const formatVideo = (s, node, cfg, content, imageClasses) => {
     node.end,
     `<video${attrs}><source src={${cfg.videoId}}${typeAttr} /></video>`,
   );
-};
-
-/**
- * @param {Map<string, ImageConfig>} images
- * @param {Map<string, string>} importMap
- * @returns {string[]}
- */
-const buildImportLines = (images, importMap) => {
-  const lines = [];
-  const added = new Set(importMap.keys());
-
-  for (const config of images.values()) {
-    if (config.isVideo && config.videoId && config.videoSrc) {
-      if (!added.has(config.videoSrc)) {
-        lines.push(`import ${config.videoId} from '${config.videoSrc}';`);
-        added.add(config.videoSrc);
-      }
-      continue;
-    }
-
-    if (config.hasSrcset && config.avifSetId && config.avifSetSrc) {
-      if (!added.has(config.avifSetSrc)) {
-        lines.push(`import ${config.avifSetId} from '${config.avifSetSrc}';`);
-        added.add(config.avifSetSrc);
-      }
-    }
-
-    if (!added.has(config.fallbackSrc)) {
-      lines.push(`import ${config.fallbackId} from '${config.fallbackSrc}';`);
-      added.add(config.fallbackSrc);
-    }
-
-    if (config.hasMeta && config.metaId && config.metaSrc) {
-      if (!added.has(config.metaSrc)) {
-        lines.push(`import ${config.metaId} from '${config.metaSrc}';`);
-        added.add(config.metaSrc);
-      }
-    }
-
-    if (config.hasLqip && config.lqipId && config.lqipSrc) {
-      if (!added.has(config.lqipSrc)) {
-        lines.push(`import ${config.lqipId} from '${config.lqipSrc}';`);
-        added.add(config.lqipSrc);
-      }
-    }
-  }
-
-  return lines;
-};
-
-/**
- * @param {ProgramNode | null | undefined} program
- * @returns {Map<string, string>}
- */
-const collectExistingImports = (program) => {
-  /** @type {Map<string, string>} */
-  const importMap = new Map();
-  if (!program?.body) return importMap;
-
-  for (const node of program.body) {
-    if (node.type !== 'ImportDeclaration') continue;
-    const source = node.source?.value;
-    if (!source || typeof source !== 'string') continue;
-    const defaultSpecifier = node.specifiers?.find(
-      (specifier) => specifier.type === 'ImportDefaultSpecifier',
-    );
-    if (defaultSpecifier?.local?.name) {
-      importMap.set(source, defaultSpecifier.local.name);
-    }
-  }
-
-  return importMap;
-};
-
-/**
- * @param {ProgramNode} program
- * @returns {number}
- */
-const getImportInsertPosition = (program) => {
-  let insertAt = program.start;
-  for (const node of program.body) {
-    if (node.type === 'ImportDeclaration') insertAt = node.end;
-  }
-  return insertAt;
-};
-
-/**
- * @param {Map<string, string>} importMap
- * @param {string} source
- * @param {string} fallback
- * @returns {string}
- */
-const resolveImportId = (importMap, source, fallback) => importMap.get(source) ?? fallback;
-
-/**
- * @param {number[] | undefined} widths
- * @param {number | undefined} mainWidth
- * @returns {number[]}
- */
-const normalizeWidths = (widths, mainWidth) => {
-  const values = [...(widths ?? [])];
-  if (typeof mainWidth === 'number') values.push(mainWidth);
-
-  const unique = Array.from(new Set(values.filter((value) => Number.isFinite(value) && value > 0)));
-  unique.sort((a, b) => a - b);
-  return unique;
-};
-
-/**
- * @param {string} url
- */
-const stripQueryHash = (url) => url.split(/[?#]/)[0];
-
-/**
- * @param {string} url
- */
-const getFileExtension = (url) => {
-  const cleanUrl = stripQueryHash(url);
-  const index = cleanUrl.lastIndexOf('.');
-  if (index === -1) return '';
-  return cleanUrl.slice(index + 1).toLowerCase();
-};
-
-/**
- * @param {string} value
- * @returns {string}
- */
-const safeDecode = (value) => {
-  try {
-    return decodeURIComponent(value);
-  } catch {
-    return value;
-  }
-};
-
-/**
- * @param {string} value
- */
-const isExternalUrl = (value) => {
-  if (/^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(value)) return true;
-  return /^(data|blob|mailto|tel|javascript):/i.test(value);
-};
-
-/**
- * @param {string} url
- * @param {string} query
- */
-const appendQuery = (url, query) => {
-  const [base, hash] = url.split('#');
-  const separator = base.includes('?') ? '&' : '?';
-  const next = `${base}${separator}${query}`;
-  return hash ? `${next}#${hash}` : next;
-};
-
-/**
- * @param {any} node
- * @param {(node: AstNode, ancestors: AstNode[]) => void} visit
- * @param {AstNode[]} [ancestors]
- */
-const walkHtml = (node, visit, ancestors = []) => {
-  if (!node || typeof node !== 'object') return;
-
-  const isElement = node.type === 'Element';
-  if (isElement) {
-    visit(node, ancestors);
-    ancestors.push(node);
-  }
-
-  for (const value of Object.values(node)) {
-    if (!value) continue;
-    if (Array.isArray(value)) {
-      for (const entry of value) {
-        if (entry && typeof entry === 'object' && 'type' in entry) {
-          walkHtml(entry, visit, ancestors);
-        }
-      }
-    } else if (typeof value === 'object' && 'type' in value) {
-      walkHtml(value, visit, ancestors);
-    }
-  }
-
-  if (isElement) ancestors.pop();
 };

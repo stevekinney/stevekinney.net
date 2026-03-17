@@ -124,6 +124,7 @@
         "@stevekinney/enterprise-ui": "workspace:*",
         "@stevekinney/figma": "workspace:*",
         "@stevekinney/full-stack-typescript": "workspace:*",
+        "@stevekinney/plugins": "workspace:*",
         "@stevekinney/python-ai": "workspace:*",
         "@stevekinney/react-performance": "workspace:*",
         "@stevekinney/react-typescript": "workspace:*",
@@ -174,14 +175,17 @@
     "packages/components": {
       "name": "@stevekinney/components",
     },
-    "packages/content-types": {
-      "name": "@stevekinney/content-types",
-    },
     "packages/plugins": {
       "name": "@stevekinney/plugins",
     },
     "packages/scripts": {
       "name": "@stevekinney/scripts",
+      "dependencies": {
+        "@stevekinney/utilities": "workspace:*",
+      },
+    },
+    "packages/utilities": {
+      "name": "@stevekinney/utilities",
     },
     "writing": {
       "name": "@stevekinney/writing",
@@ -657,8 +661,6 @@
 
     "@stevekinney/components": ["@stevekinney/components@workspace:packages/components"],
 
-    "@stevekinney/content-types": ["@stevekinney/content-types@workspace:packages/content-types"],
-
     "@stevekinney/enterprise-ui": ["@stevekinney/enterprise-ui@workspace:courses/enterprise-ui"],
 
     "@stevekinney/figma": ["@stevekinney/figma@workspace:courses/figma"],
@@ -680,6 +682,8 @@
     "@stevekinney/tailwind": ["@stevekinney/tailwind@workspace:courses/tailwind"],
 
     "@stevekinney/testing": ["@stevekinney/testing@workspace:courses/testing"],
+
+    "@stevekinney/utilities": ["@stevekinney/utilities@workspace:packages/utilities"],
 
     "@stevekinney/visual-studio-code": ["@stevekinney/visual-studio-code@workspace:courses/visual-studio-code"],
 

@@ -18,7 +18,8 @@
     "@stevekinney/testing": "workspace:*",
     "@stevekinney/visual-studio-code": "workspace:*",
     "@stevekinney/web-security": "workspace:*",
-    "@stevekinney/writing": "workspace:*"
+    "@stevekinney/writing": "workspace:*",
+    "@stevekinney/plugins": "workspace:*"
   },
   "scripts": {
     "dev": "bun run content:index && SKIP_IMAGE_OPTIMIZATION=1 NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ../../node_modules/vite/bin/vite.js dev --port 4444",

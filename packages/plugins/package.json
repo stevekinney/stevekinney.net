@@ -2,12 +2,15 @@
   "name": "@stevekinney/plugins",
   "private": true,
   "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
   "exports": {
-    "./import-tailwind-playground": "./import-tailwind-playground.js",
-    "./remark-callouts": "./remark-callouts.js",
-    "./remark-escape-comparators": "./remark-escape-comparators.js",
-    "./remark-fix-urls": "./remark-fix-urls.js",
-    "./remark-tailwind-playground": "./remark-tailwind-playground.js",
-    "./svelte-enhance-images": "./svelte-enhance-images.js"
+    "./import-tailwind-playground": "./dist/import-tailwind-playground.js",
+    "./remark-callouts": "./dist/remark-callouts.js",
+    "./remark-escape-comparators": "./dist/remark-escape-comparators.js",
+    "./remark-fix-urls": "./dist/remark-fix-urls.js",
+    "./remark-tailwind-playground": "./dist/remark-tailwind-playground.js",
+    "./svelte-enhance-images": "./dist/svelte-enhance-images.js"
   }
 }

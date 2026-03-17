@@ -1,0 +1,10 @@
+{
+  "name": "@stevekinney/utilities",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./content-types": "./content-types.ts",
+    "./frontmatter": "./frontmatter.ts",
+    "./write-formatted-json": "./write-formatted-json.ts"
+  }
+}

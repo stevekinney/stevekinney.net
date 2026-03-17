@@ -3,7 +3,7 @@
   "globalDependencies": [
     "packages/scripts/generate-course-manifest.ts",
     "packages/scripts/generate-site-content-index.ts",
-    "packages/content-types/index.ts"
+    "packages/utilities/content-types.ts"
   ],
   "tasks": {
     "manifest": {
@@ -11,7 +11,7 @@
       "outputs": ["manifest.json"]
     },
     "build": {
-      "dependsOn": ["^manifest"],
+      "dependsOn": ["^build", "^manifest"],
       "inputs": [
         "**/*.md",
         "**/*.png",
@@ -27,6 +27,7 @@
       "env": ["VERCEL", "SKIP_IMAGE_OPTIMIZATION"],
       "outputs": [
         "manifest.json",
+        "dist/**",
         "build/**",
         ".vercel/output/**",
         "src/lib/server/content-index.json"
@@ -41,7 +42,7 @@
       "cache": false
     },
     "dev": {
-      "dependsOn": ["^manifest"],
+      "dependsOn": ["^build", "^manifest"],
       "cache": false,
       "persistent": true
     },

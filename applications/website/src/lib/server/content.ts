@@ -1,4 +1,4 @@
-import type { SiteContentIndex } from '@stevekinney/content-types';
+import type { SiteContentIndex } from '@stevekinney/utilities/content-types';
 import type { PostWithSlug } from '$lib/posts';
 import contentIndex from './content-index.json';
 

@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import fg from 'fast-glob';
 import simpleGit from 'simple-git';
 
-import { parseFrontmatter, toDateString } from './frontmatter';
+import { parseFrontmatter, toDateString } from '@stevekinney/utilities/frontmatter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');

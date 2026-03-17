@@ -1,23 +1,12 @@
 import MagicString from 'magic-string';
 import { parse } from 'svelte/compiler';
 import { walk } from 'svelte-tree-walker';
+import type { PreprocessorGroup } from 'svelte/compiler';
 
-/**
- * @typedef {import('svelte/compiler').PreprocessorGroup} PreprocessorGroup
- */
-
-/**
- * Creates a preprocessor to auto-import <TailwindPlayground /> components in markdown files.
- * @returns {PreprocessorGroup}
- */
-export const importTailwindPlayground = () => {
+export const importTailwindPlayground = (): PreprocessorGroup => {
   return {
     name: 'tailwind-playground-imports',
-    /**
-     * @param {{ content: string, filename?: string }} options
-     */
-    markup: (options) => {
-      const { content, filename } = options;
+    markup: ({ content, filename }: { content: string; filename?: string }) => {
       if (!filename?.endsWith('.md')) return;
       if (!content.includes('<TailwindPlayground')) return;
 

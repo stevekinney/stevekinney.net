@@ -1,13 +1,9 @@
 import { visit } from 'unist-util-visit';
 import DOMPurify from 'isomorphic-dompurify';
-
-/**
- * @typedef {import('mdast').Code} Code
- * @typedef {import('mdast').Html} Html
- * @typedef {import('mdast').Parent} Parent
- * @typedef {import('mdast').Root} Root
- * @typedef {import('vfile').VFile} VFile
- */
+import type { Transformer } from 'unified';
+import type { Code, Html, Parent, Root } from 'mdast';
+import type { Config } from 'dompurify';
+import type { VFile } from 'vfile';
 
 // DOMPurify configuration for sanitizing Tailwind playground HTML at build time
 const DOMPURIFY_CONFIG = {
@@ -97,29 +93,24 @@ const DOMPURIFY_CONFIG = {
     'style',
   ],
   // DOMPurify defaults allow aria-* and data-* attributes
-};
+} satisfies Config;
+
+type VFileWithFilename = VFile & { filename?: string };
 
 /**
  * Injects Tailwind playground custom elements before HTML code blocks flagged with `tailwind`.
  * HTML is sanitized at build time to prevent XSS and avoid runtime jsdom dependency.
- * @returns {import('unified').Transformer<Root>}
  */
-export default function remarkTailwindPlayground() {
-  /**
-   * @param {import('unist').Node} tree
-   * @param {import('vfile').VFile & { filename?: string }} file
-   */
-  return function transformer(tree, file) {
-    const anyFile = /** @type {import('vfile').VFile & { filename?: string }} */ (file);
-    const filePath = (anyFile.filename ?? file.path ?? '').toString();
+export default function remarkTailwindPlayground(): Transformer<Root> {
+  return function transformer(tree: Root, file: VFileWithFilename): void {
+    const filePath = (file.filename ?? file.path ?? '').toString();
     if (filePath && !filePath.endsWith('.md')) return;
 
-    /**
-     * @param {Code} node
-     * @param {number | undefined} index
-     * @param {Parent | undefined} parent
-     */
-    const handleCode = (node, index, parent) => {
+    const handleCode = (
+      node: Code,
+      index: number | undefined,
+      parent: Parent | undefined,
+    ): number | undefined => {
       if (!parent || typeof index !== 'number') return;
       if (!Array.isArray(parent.children)) return;
       if (node.lang !== 'html') return;
@@ -128,8 +119,7 @@ export default function remarkTailwindPlayground() {
       // Sanitize HTML at build time to prevent XSS
       const sanitizedHtml = DOMPurify.sanitize(node.value ?? '', DOMPURIFY_CONFIG);
       const htmlLiteral = JSON.stringify(sanitizedHtml);
-      /** @type {Html} */
-      const playgroundNode = {
+      const playgroundNode: Html = {
         type: 'html',
         value: `<TailwindPlayground html={${htmlLiteral}} />`,
       };
