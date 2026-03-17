@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generatedAt": "2026-03-12T18:27:32.164Z",
-    "hash": "6a4717c1a6b62f9465b06aa1d0550a9b9c527ad162701d675202faa723eea407"
+    "generatedAt": "2026-03-13T21:34:22.192Z",
+    "hash": "91ae64d6190f02bac2067ff18ad60cc8bfc3e980d4cfbf872fd6b02b45611802"
   },
   "posts": [
     {
       "title": "Designing an AI Gateway and Durable Workflow System",
       "description": "A two-layer architecture for production AI systems: a gateway that abstracts providers, enforces policies, and tracks costs, paired with a durable workflow engine that makes long-running agentic tasks survive failures, pause for human approval, and replay deterministically.",
-      "date": "2026-03-12T12:00:00.000Z",
-      "modified": "2026-03-12T12:00:00.000Z",
+      "date": "2026-03-13T12:00:00.000Z",
+      "modified": "2026-03-13T12:00:00.000Z",
       "published": true,
       "tags": ["ai", "architecture", "workflows"],
       "slug": "ai-gateway-durable-workflows",
