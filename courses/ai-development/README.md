@@ -3,8 +3,9 @@ modified: 2026-03-17
 title: Developing with AI Tools
 layout: page
 description: >-
-  A course covering everything that Steve has learned to date about developing
-  software with Cursor and Claude Code.
+  Set up a practical AI-assisted development workflow with Cursor and Claude
+  Code—covering context management, custom commands, hooks, MCP servers, and
+  model selection.
 date: 2025-07-30
 ---
 

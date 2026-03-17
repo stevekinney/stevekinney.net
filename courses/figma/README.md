@@ -1,6 +1,9 @@
 ---
 title: Figma for Developers
-description: An high level introduction to Steve's Figma for Developers course.
+description: >-
+  Learn Figma's developer-friendly features—constraints, auto layout, component
+  properties, variables, and CSS generation—to bridge the gap between design and
+  code.
 layout: page
 date: 2024-03-05
 modified: 2026-03-17

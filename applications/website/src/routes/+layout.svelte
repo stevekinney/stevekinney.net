@@ -107,4 +107,28 @@
   <main class="my-6 sm:col-span-full lg:order-3" data-content-container>
     {@render children?.()}
   </main>
+
+  <!-- Email subscription -->
+  <footer class="sm:col-span-full lg:order-4">
+    <form
+      action="https://buttondown.com/api/emails/embed-subscribe/stevekinney"
+      method="post"
+      class="flex flex-col items-center gap-3 sm:flex-row sm:justify-center"
+    >
+      <label for="bd-email" class="sr-only">Enter your email</label>
+      <input
+        type="email"
+        name="email"
+        id="bd-email"
+        placeholder="Enter your email"
+        required
+        class="focus:border-primary-600 focus:ring-primary-600 dark:focus:border-primary-400 dark:focus:ring-primary-400 w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 placeholder-gray-500 focus:ring-2 focus:outline-none sm:w-64 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
+      />
+      <input
+        type="submit"
+        value="Subscribe"
+        class="bg-primary-700 hover:bg-primary-600 focus:ring-primary-600 active:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-500 dark:active:bg-primary-700 cursor-pointer rounded-md px-5 py-2 text-sm font-medium text-white transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
+      />
+    </form>
+  </footer>
 </div>

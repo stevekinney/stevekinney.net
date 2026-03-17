@@ -1,6 +1,9 @@
 ---
 title: Building Design Systems in Storybook
-description: An exploration in building a design system using Storybook.
+description: >-
+  Build a scalable design system with Storybook—creating reusable components,
+  writing interaction tests, implementing dark mode, and generating
+  documentation.
 layout: page
 date: 2024-03-05
 modified: 2026-03-17

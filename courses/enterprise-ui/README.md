@@ -1,9 +1,9 @@
 ---
 title: Enterprise UI
 description: >-
-  This course teaches senior frontend engineers how to scale applications beyond
-  a single-team SPA — covering composition patterns, operational infrastructure,
-  and migration strategies.
+  Scale frontend applications beyond a single-team SPA with composition
+  patterns, module federation, operational infrastructure, and migration
+  strategies.
 layout: page
 date: 2026-03-01
 modified: 2026-03-17

@@ -1,6 +1,9 @@
 ---
 title: AI Fundamentals with Python
-description: Learning about the basics of AI with Python and Hugging Face.
+description: >-
+  Get hands-on with AI development using Python and Hugging Face—from
+  tokenization and attention to fine-tuning models and generating images with
+  Stable Diffusion.
 layout: page
 date: 2025-08-01
 modified: 2026-03-17

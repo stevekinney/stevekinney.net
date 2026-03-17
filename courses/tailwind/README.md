@@ -1,6 +1,8 @@
 ---
 title: Tailwind
-description: An introduction to testing using JavaScript
+description: >-
+  Learn Tailwind CSS from utility-first fundamentals through design tokens,
+  responsive layouts, dark mode, and the new features in Tailwind 4.
 layout: page
 date: 2025-06-13
 modified: 2026-03-17

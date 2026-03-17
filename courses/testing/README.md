@@ -1,6 +1,8 @@
 ---
 title: Introduction to Testing
-description: An introduction to testing using JavaScript
+description: >-
+  Build confidence in your codebase with practical testing techniques—covering
+  assertions, mocking, integration tests, and testing strategy.
 layout: page
 date: 2024-09-28
 modified: 2026-03-17

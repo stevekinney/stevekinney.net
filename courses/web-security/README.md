@@ -1,6 +1,8 @@
 ---
 title: Web Security
-description: An introduction to the fundamentals of web security.
+description: >-
+  Understand modern web security fundamentals—from authentication and
+  authorization to XSS, CSRF, and practical mitigation techniques.
 layout: page
 date: 2024-04-05
 modified: 2026-03-17

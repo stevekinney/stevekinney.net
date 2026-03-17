@@ -1,8 +1,8 @@
 ---
 title: React with TypeScript
 description: >-
-  Comprehensive guide to building type-safe React applications with TypeScript
-  and React 19
+  Build type-safe React applications with TypeScript and React 19—covering
+  hooks, reducers, context, component APIs, and generics.
 layout: page
 date: 2025-09-07
 modified: 2026-03-17

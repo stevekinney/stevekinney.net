@@ -1,8 +1,9 @@
 ---
 title: React Performance
 description: >-
-  Master React performance optimization from fundamentals to advanced techniques
-  with React 19
+  Profile, measure, and optimize React applications—from understanding
+  reconciliation and re-renders to memoization, code splitting, and React 19's
+  concurrent features.
 layout: page
 date: 2025-09-07
 modified: 2026-03-17

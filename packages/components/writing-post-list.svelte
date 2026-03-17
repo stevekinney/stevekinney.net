@@ -15,7 +15,7 @@
     <li class="block">
       <a
         href="/writing/{post.slug}"
-        class="group grid grid-cols-[50px_1fr] gap-4 rounded bg-slate-50 p-4 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-900"
+        class="group grid grid-cols-[50px_1fr] gap-4 rounded-md bg-slate-100 p-6 shadow-md hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700"
       >
         <NotebookPen size={28} class="m-2" />
         <div>

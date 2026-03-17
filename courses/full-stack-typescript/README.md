@@ -1,6 +1,8 @@
 ---
 title: Full Stack TypeScript
-description: Add type-safety across the stack.
+description: >-
+  Wire up end-to-end type safety across the frontend and backend with
+  TypeScript, Express, Zod, tRPC, and branded types.
 layout: page
 date: 2025-03-20
 modified: 2026-03-17

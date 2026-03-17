@@ -9,15 +9,16 @@
 <SEO title={data.title} description={data.description} />
 
 <div class="space-y-8">
-  <section class="prose dark:prose-invert max-w-none">
-    <h2>Full Course Walkthroughs</h2>
-    <ul>
+  <section>
+    <h2 class="prose dark:prose-invert mb-6 text-2xl font-bold">Full Course Walkthroughs</h2>
+    <ul class="not-prose grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
       {#each data.walkthroughs as walkthrough (walkthrough.slug)}
-        <li>
-          <a href="/courses/{walkthrough.slug}">
-            {walkthrough.title}
-          </a>
-        </li>
+        <Card
+          title={walkthrough.title}
+          description={walkthrough.description}
+          url="/courses/{walkthrough.slug}"
+          as="li"
+        />
       {/each}
     </ul>
   </section>

@@ -10,4 +10,5 @@
 <nav class={merge('flex items-center gap-4', className)} aria-label="Main Navigation">
   <Link href="/writing">Writing</Link>
   <Link href="/courses">Courses</Link>
+  <Link href="https://buttondown.com/stevekinney" target="_blank">Newsletter</Link>
 </nav>
