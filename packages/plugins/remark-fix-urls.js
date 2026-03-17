@@ -14,6 +14,9 @@ const MARKDOWN_EXTENSIONS = ['.mdx', '.markdown', '.md'];
 
 const DEFAULT_CONTENT_PATHS = ['content'];
 
+const FRONTEND_MASTERS_ORIGIN = 'https://frontendmasters.com';
+const FRONTEND_MASTERS_UTM = 'utm_source=kinney&utm_medium=social&code=kinney';
+
 /**
  * @param {string} value
  */
@@ -169,6 +172,21 @@ const getBaseUrl = (fileData, contentPaths) => {
 };
 
 /**
+ * Appends UTM tracking parameters to Frontend Masters URLs.
+ *
+ * @param {import('mdast').Link | import('mdast').Definition} node
+ */
+const appendFrontendMastersUtm = (node) => {
+  const { url } = node;
+  if (!url || !url.startsWith(FRONTEND_MASTERS_ORIGIN)) return;
+  if (url.includes(FRONTEND_MASTERS_UTM)) return;
+
+  const { path, query, hash } = splitUrl(url);
+  const newQuery = query ? `${query}&${FRONTEND_MASTERS_UTM}` : `?${FRONTEND_MASTERS_UTM}`;
+  node.url = `${path}${newQuery}${hash}`;
+};
+
+/**
  * A remark plugin that rewrites internal markdown links to route paths.
  *
  * @param {string | string[]} [contentPaths]
@@ -189,6 +207,9 @@ export function fixMarkdownUrls(contentPaths = DEFAULT_CONTENT_PATHS) {
       filename: anyFile?.filename ?? anyFile?.path ?? '',
       cwd: anyFile?.cwd ?? process.cwd(),
     };
+
+    visit(tree, 'link', (node) => appendFrontendMastersUtm(node));
+    visit(tree, 'definition', (node) => appendFrontendMastersUtm(node));
 
     if (!fileData.filename) return;
 
