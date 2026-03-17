@@ -7,6 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 
 const MARKDOWN_PATTERNS = ['writing/**/*.md', 'courses/**/*.md'];
+const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg']);
 const NON_TRANSFORMED_EXTENSIONS = new Set(['.webp', '.avif', '.gif', '.svg']);
 
 type ValidationIssue = {
@@ -24,6 +25,8 @@ const imageSources = await discoverAllImages(MARKDOWN_PATTERNS, REPO_ROOT);
 
 for (const source of imageSources.values()) {
   const extension = path.extname(source.resolvedPath).toLowerCase();
+  if (VIDEO_EXTENSIONS.has(extension)) continue;
+
   const fileLabel = toRepoPath(source.resolvedPath);
 
   try {
