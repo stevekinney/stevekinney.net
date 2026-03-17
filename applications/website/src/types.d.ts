@@ -18,6 +18,11 @@ declare module 'svelte/compiler' {
   ): void;
 }
 
+declare module '*.toml' {
+  const value: Record<string, unknown>;
+  export default value;
+}
+
 declare module 'rehype-unwrap-images' {
   export default import('unified').Plugin;
 }

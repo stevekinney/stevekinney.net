@@ -1,7 +1,10 @@
 <script lang="ts">
   import Card from '$lib/components/card';
   import SEO from '$lib/components/seo.svelte';
-  import courses from '$lib/courses';
+  import coursesData from '$lib/courses.toml';
+  import type { Recording } from '$lib/recording-types';
+
+  const recordings = coursesData.recording as Recording[];
 
   const { data } = $props();
 </script>
@@ -38,8 +41,17 @@
   </section>
 
   <ul class="not-prose grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-    {#each courses as course (course.href)}
-      <Card title={course.title} description={course.description} url={course.href} as="li" />
+    {#each recordings as recording (recording.slug)}
+      <Card
+        title={recording.title}
+        description={recording.description}
+        url={recording.href}
+        as="li"
+      >
+        {#if recording.duration}
+          <p class="text-sm text-slate-500 dark:text-slate-400">{recording.duration}</p>
+        {/if}
+      </Card>
     {/each}
   </ul>
 </div>
