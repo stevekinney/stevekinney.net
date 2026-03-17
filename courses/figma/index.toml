@@ -1,0 +1,113 @@
+[[section]]
+title = "The Basics"
+
+[[section.item]]
+title = "Getting Started"
+href = "getting-started.md"
+
+[[section.item]]
+title = "Aligning Objects"
+href = "aligning-objects.md"
+
+[[section.item]]
+title = "Working with Layers"
+href = "layers.md"
+
+[[section.item]]
+title = "Selecting and Inspecting"
+href = "selecting-and-inspecting.md"
+
+[[section]]
+title = "Layout"
+
+[[section.item]]
+title = "Constraints"
+href = "constraints.md"
+
+[[section.item]]
+title = "Layout Grids"
+href = "layout-grids.md"
+
+[[section.item]]
+title = "Auto Layout"
+href = "auto-layout.md"
+
+[[section]]
+title = "Styling"
+
+[[section.item]]
+title = "Styles"
+href = "styles.md"
+
+[[section.item]]
+title = "Typography"
+href = "typography.md"
+
+[[section.item]]
+title = "Variables"
+href = "variables.md"
+
+[[section.item]]
+title = "Generating a Color Palette"
+href = "generating-a-color-palette.md"
+
+[[section.item]]
+title = "Semantic Colors"
+href = "semantic-colors.md"
+
+[[section]]
+title = "Components"
+
+[[section.item]]
+title = "Components"
+href = "components.md"
+
+[[section.item]]
+title = "Component Properties"
+href = "component-properties.md"
+
+[[section.item]]
+title = "Variants"
+href = "variants.md"
+
+[[section.item]]
+title = "Generating an Icon Library"
+href = "generating-an-icon-library.md"
+
+[[section.item]]
+title = "Creating a Callout Component"
+href = "creating-a-callout-component.md"
+
+[[section.item]]
+title = "Interactive Components"
+href = "interactive-components.md"
+
+[[section]]
+title = "Prototyping and Developing"
+
+[[section.item]]
+title = "Prototyping"
+href = "prototyping.md"
+
+[[section.item]]
+title = "Dev Mode"
+href = "dev-mode.md"
+
+[[section.item]]
+title = "Publishing Libraries"
+href = "publishing-figma-libraries.md"
+
+[[section]]
+title = "Advanced Component Patterns"
+
+[[section.item]]
+title = "Variants and Variable Modes for Responsive Text"
+href = "variables-variants-responsive-text.md"
+
+[[section.item]]
+title = "Placeholder Components"
+href = "placeholder-components.md"
+
+[[section.item]]
+title = "Cropped Grid Components"
+href = "cropped-grid-components.md"

@@ -1,19 +1,19 @@
 import {
   findCourseForLessonSlug,
   hasCourseReadmeMarkdown,
-  loadCourseContentsMarkdown,
+  loadCourseContents,
   loadCourseReadmeMarkdown,
   MarkdownModuleNotFoundError,
+  type CourseContentsData,
 } from '$lib/content-modules';
 import type { CourseMetadata } from '$lib/schemas/courses';
 import { CourseMarkdownSchema } from '$lib/schemas/courses';
 import { error, redirect } from '@sveltejs/kit';
-import type { Component } from 'svelte';
 import type { LayoutLoad } from './$types';
 
 type CourseLayoutData = {
   course: CourseMetadata & { slug: string };
-  contents?: Component;
+  contents?: CourseContentsData;
 };
 
 export const load: LayoutLoad = async ({ params }): Promise<CourseLayoutData> => {
@@ -46,10 +46,10 @@ export const load: LayoutLoad = async ({ params }): Promise<CourseLayoutData> =>
     slug: courseId,
   };
 
-  const contentsModule = await loadCourseContentsMarkdown(courseId);
-  if (contentsModule) {
+  const contents = await loadCourseContents(courseId);
+  if (contents) {
     return {
-      contents: contentsModule.default,
+      contents,
       course,
     };
   }

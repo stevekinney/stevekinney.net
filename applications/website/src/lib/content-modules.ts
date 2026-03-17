@@ -7,8 +7,20 @@ export type MarkdownModule = {
 
 type MarkdownLoader = () => Promise<MarkdownModule>;
 
+export type CourseContentsRelatedLink = { title: string; href: string };
+export type CourseContentsItem = {
+  title: string;
+  href: string;
+  related?: CourseContentsRelatedLink[];
+};
+export type CourseContentsSection = { title?: string; item: CourseContentsItem[] };
+export type CourseContentsData = { section: CourseContentsSection[] };
+
 const writingMarkdownModules = import.meta.glob<MarkdownModule>('../../../../writing/*.md');
 const courseMarkdownModules = import.meta.glob<MarkdownModule>('../../../../courses/*/*.md');
+const courseContentsModules = import.meta.glob<CourseContentsData>(
+  '../../../../courses/*/index.toml',
+);
 
 const markdownExtensionPattern = /\.md$/i;
 
@@ -44,12 +56,13 @@ export const loadWritingMarkdown = async (slug: string): Promise<MarkdownModule>
 export const loadCourseReadmeMarkdown = async (courseSlug: string): Promise<MarkdownModule> =>
   loadFromMap(courseMarkdownModules, getCourseMarkdownKey(courseSlug, 'README.md'));
 
-export const loadCourseContentsMarkdown = async (
+export const loadCourseContents = async (
   courseSlug: string,
-): Promise<MarkdownModule | null> => {
-  const key = getCourseMarkdownKey(courseSlug, '_index.md');
-  const loader = courseMarkdownModules[key];
-  return loader ? loader() : null;
+): Promise<CourseContentsData | null> => {
+  const key = `../../../../courses/${courseSlug}/index.toml`;
+  const loader = courseContentsModules[key];
+  if (!loader) return null;
+  return loader();
 };
 
 export const loadCourseLessonMarkdown = async (
@@ -70,7 +83,7 @@ const courseLessonRouteMap = Object.keys(courseMarkdownModules).reduce<Map<strin
     if (!match) return map;
 
     const [, courseSlug, fileSlug] = match;
-    if (fileSlug === 'README' || fileSlug === '_index') return map;
+    if (fileSlug === 'README') return map;
 
     const existingCourse = map.get(fileSlug);
     if (existingCourse && existingCourse !== courseSlug) {
@@ -89,5 +102,4 @@ export const findCourseForLessonSlug = (lessonSlug: string): string | null =>
 
 export const listWritingMarkdownModulePaths = (): string[] => Object.keys(writingMarkdownModules);
 
-export const listCourseMarkdownModulePaths = (): string[] =>
-  Object.keys(courseMarkdownModules).filter((filePath) => !filePath.endsWith('/_index.md'));
+export const listCourseMarkdownModulePaths = (): string[] => Object.keys(courseMarkdownModules);

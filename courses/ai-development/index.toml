@@ -1,0 +1,169 @@
+[[section]]
+title = "High-Level"
+
+[[section.item]]
+title = "Plan → Implement → Verify Prompt Pattern"
+href = "plan-implement-verify.md"
+
+[[section]]
+title = "Cursor"
+
+[[section.item]]
+title = "Installation and Configuration"
+href = "installing-cursor.md"
+
+[[section.item]]
+title = "Interacting with Cursor"
+href = "interacting-with-cursor.md"
+
+[[section.item]]
+title = "Context is King"
+href = "cursor-context.md"
+
+[[section.item]]
+title = "Model Selection Strategy"
+href = "cursor-model-selection.md"
+
+[[section.item]]
+title = "Cursor Rules"
+href = "cursor-rules.md"
+
+[[section.item]]
+title = "Notepads"
+href = "cursor-notepads.md"
+
+[[section.item]]
+title = "Background Agents"
+href = "cursor-background-agents.md"
+
+[[section.item]]
+title = "Cursor Checkpoints"
+href = "cursor-checkpoints.md"
+
+[[section]]
+title = "Model Context Protocol"
+
+[[section.item]]
+title = "Model Context Protocol"
+href = "mcp.md"
+
+[[section.item]]
+title = "Some MCP Servers"
+href = "mcp-for-claude-code-and-cursor.md"
+
+[[section]]
+title = "Claude Code"
+
+[[section.item]]
+title = "Installation and Configuration"
+href = "installing-claude-code.md"
+
+[[section.item]]
+title = "Session Management"
+href = "claude-code-session-management.md"
+
+[[section.item]]
+title = "CLAUDE.md"
+href = "claude-dot-md.md"
+
+[[section.item]]
+title = "Model Selection"
+href = "claude-code-model-selection.md"
+
+[[section.item]]
+title = "Referencing Files"
+href = "referencing-files-in-claude-code.md"
+
+[[section.item]]
+title = "Compacting"
+href = "claude-code-compaction.md"
+
+[[section.item]]
+title = "Encouraging Thinking"
+href = "claude-code-thinking.md"
+
+[[section.item]]
+title = "Test-Driven Development"
+href = "test-driven-development-with-claude.md"
+
+[[section.item]]
+title = "Plan Mode"
+href = "claude-code-plan-mode.md"
+
+[[section.item]]
+title = "Sub-Agents"
+href = "claude-code-sub-agents.md"
+
+[[section.item]]
+title = "Sub-Agent Anti-Patterns"
+href = "subagent-anti-patterns.md"
+
+[[section.item]]
+title = "Claude Code and Bash Scripts"
+href = "claude-code-and-bash-scripts.md"
+
+[[section.item]]
+title = "Cost Management"
+href = "cost-management.md"
+
+[[section.item]]
+title = "Claude Code's Permission System"
+href = "claude-code-permissions.md"
+
+[[section.item]]
+title = "Claude Code Commands"
+href = "claude-code-commands.md"
+
+[[section.item]]
+title = "Claude Code's Hooks"
+href = "claude-code-hooks.md"
+
+[[section.item]]
+title = "Hook Cookbook"
+href = "claude-code-hook-examples.md"
+
+[[section.item]]
+title = "Hook Control Flow"
+href = "claude-code-hook-control-flow.md"
+
+[[section.item]]
+title = "Using MCP Servers"
+href = "claude-code-mcp.md"
+
+[[section.item]]
+title = "Git Worktrees"
+href = "git-worktrees.md"
+
+[[section.item]]
+title = "Integrating with GitHub Actions"
+href = "integrating-with-github-actions.md"
+
+[[section]]
+title = "Additional Tools"
+
+[[section.item]]
+title = "Repomix"
+href = "https://repomix.com/"
+
+[[section.item]]
+title = "NotebookLM"
+href = "notebooklm.md"
+
+[[section.item]]
+title = "Gemini and Gems"
+href = "gemini-and-gems.md"
+
+[[section.item]]
+title = "OpenAI Codex"
+href = "openai-codex.md"
+
+[[section]]
+title = "Appendix"
+
+[[section.item]]
+title = "Cursor Environment Configuration"
+href = "cursor-environment-configuration.md"
+
+[[section.item]]
+title = "Cursor Ghost Mode"
+href = "cursor-ghost-mode.md"

@@ -1,0 +1,222 @@
+[[section]]
+title = "Basics"
+
+[[section.item]]
+title = "Editor Layout"
+href = "vscode-editor-layout.md"
+
+[[section.item]]
+title = "The Command Palette"
+href = "vscode-command-palette.md"
+
+[[section.item]]
+title = "Keybindings"
+href = "keybindings.md"
+
+[[section.item]]
+title = "The Integrated Terminal"
+href = "vscode-integrated-terminal.md"
+
+[[section.item]]
+title = "Navigation"
+href = "navigating-vscode.md"
+
+[[section.item]]
+title = "Source Control"
+href = "vscode-source-control.md"
+
+[[section.item]]
+title = "Search and Replace"
+href = "search-and-replace-vscode.md"
+
+[[section.item]]
+title = "Multiple Cursors"
+href = "vscode-multiple-cursors.md"
+
+[[section.item]]
+title = "Multiple Cursors with Find and Replace"
+href = "multiple-cursors-with-find-and-replace.md"
+
+[[section.item]]
+title = "Refactoring"
+href = "refactoring-in-vscode.md"
+
+[[section.item]]
+title = "Emmet"
+href = "vscode-emmet.md"
+
+  [[section.item.related]]
+  title = "Exercises"
+  href = "vscode-emmet-exercises.md"
+
+[[section.item]]
+title = "A Tour of Extensions"
+href = "favorite-vs-code-extensions.md"
+
+[[section]]
+title = "Settings"
+
+[[section.item]]
+title = "Editing Settings (Visually)"
+href = "editing-settings-through-the-vs-code-ui.md"
+
+[[section.item]]
+title = "Editing Settings via JSON"
+href = "editing-settings-through-json.md"
+
+[[section.item]]
+title = "Steve's Favorite and Other Popular Settings"
+href = "favorite-vs-code-settings.md"
+
+[[section.item]]
+title = "Settings for Managing Files"
+href = "vscode-settings-for-managing-files.md"
+
+[[section.item]]
+title = "Settings Profiles"
+href = "settings-profiles-vscode.md"
+
+[[section.item]]
+title = "Controlling Settings With Environment Variables"
+href = "settings-via-env-vars-vscode.md"
+
+[[section]]
+title = "Snippets"
+
+[[section.item]]
+title = "Using Snippets"
+href = "vscode-snippets.md"
+
+  [[section.item.related]]
+  title = "Exercises"
+  href = "vscode-snippet-exercises.md"
+
+[[section.item]]
+title = "Placeholders and Variables"
+href = "placeholders-and-variables-in-vscode-snippets.md"
+
+[[section.item]]
+title = "Snippets and Regular Expressions"
+href = "snippets-regex.md"
+
+[[section.item]]
+title = "Advanced Snippet Techniques"
+href = "advanced-snippet-techniques-vscode.md"
+
+[[section.item]]
+title = "Assigning Keybindings to Snippets"
+href = "keybindings-for-snippets-vscode.md"
+
+[[section.item]]
+title = "Snippets Libraries and Extensions"
+href = "snippets-libraries-and-extensions.md"
+
+[[section]]
+title = "Tasks"
+
+[[section.item]]
+title = "Visual Studio Code Tasks"
+href = "vscode-tasks.md"
+
+[[section.item]]
+title = "Tasks: Examples"
+href = "vscode-task-examples.md"
+
+[[section.item]]
+title = "Tasks: Tips and Tricks"
+href = "vscode-tasks-tips-and-tricks.md"
+
+[[section.item]]
+title = "Compound Tasks"
+href = "compound-tasks-vscode.md"
+
+[[section.item]]
+title = "Built-in Problem Matchers"
+href = "built-in-problem-matchers.md"
+
+[[section]]
+title = "Debugging"
+
+[[section.item]]
+title = "Debugging Basics"
+href = "vscode-debugging-basics.md"
+
+[[section.item]]
+title = "launch.json"
+href = "launch-config.md"
+
+[[section.item]]
+title = "Debugging Web Applications"
+href = "debugging-web-applications.md"
+
+[[section.item]]
+title = "Debugging Running Node Processes"
+href = "debugging-running-node-processes.md"
+
+[[section.item]]
+title = "Advanced Debugging Techniques"
+href = "advanced-debugging-techniques.md"
+
+[[section]]
+title = "Multi-Root Workspaces"
+
+[[section.item]]
+title = "Multi-Root Workspaces"
+href = "multi-root-workspaces.md"
+
+[[section.item]]
+title = "Creating Multi-Root Workspaces"
+href = "creating-a-multi-root-workspace.md"
+
+[[section.item]]
+title = "More on Multi-Root Namespaces"
+href = "more-on-multi-root-namespaces.md"
+
+[[section]]
+title = "Dev Containers"
+
+[[section.item]]
+title = "Dev Containers"
+href = "vscode-dev-containers.md"
+
+[[section.item]]
+title = "Setting Up Dev Containers"
+href = "setting-up-dev-containers.md"
+
+[[section.item]]
+title = "Exploring devcontainer.json"
+href = "exploring-devcontainer-json.md"
+
+[[section.item]]
+title = "Working with Dev Containers"
+href = "working-with-dev-containers.md"
+
+[[section.item]]
+title = "Dev Containers and Dockerfiles"
+href = "dev-containers-and-dockerfiles.md"
+
+[[section.item]]
+title = "Personalizing Your Container Environment"
+href = "personalizing-dev-containers.md"
+
+[[section]]
+title = "Extensions"
+
+[[section.item]]
+title = "Scaffolding an Extension"
+href = "vscode-extension-scaffold.md"
+
+[[section.item]]
+title = "Building a Simple Extension"
+href = "building-a-simple-vscode-extension.md"
+
+[[section.item]]
+title = "Building an Extension with a Web View"
+href = "vscode-regular-expressionist.md"
+
+[[section]]
+title = "Appendix"
+
+[[section.item]]
+title = "Some Keyboard Shortcuts"
+href = "vscode-keyboard-shortcuts.md"

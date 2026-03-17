@@ -29,10 +29,8 @@ const getFirstCommitDate = async (file: string): Promise<string | null> => {
   }
 };
 
-const shouldSkip = (filePath: string, data: Record<string, unknown>): boolean => {
-  if (path.basename(filePath) === '_index.md') return true;
-  if (data.layout === 'contents') return true;
-  return false;
+const shouldSkip = (filePath: string): boolean => {
+  return path.basename(filePath) === 'README.md';
 };
 
 /** Extract the raw frontmatter block (between --- markers) from file contents. */
@@ -63,7 +61,7 @@ const processFile = async (filePath: string): Promise<boolean> => {
   // Use parseFrontmatter (CORE_SCHEMA) to read data safely
   const { data } = parseFrontmatter(contents);
 
-  if (shouldSkip(filePath, data)) return false;
+  if (shouldSkip(filePath)) return false;
 
   const extracted = extractFrontmatterBlock(contents);
   if (!extracted) return false;

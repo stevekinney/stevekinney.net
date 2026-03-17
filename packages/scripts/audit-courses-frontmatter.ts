@@ -18,10 +18,8 @@ if (files.length === 0) {
   process.exit(0);
 }
 
-const shouldSkipFile = (filePath: string, data: Record<string, unknown>): boolean => {
-  if (path.basename(filePath) === '_index.md') return true;
-  if (data.layout === 'contents') return true;
-  return false;
+const shouldSkipFile = (filePath: string): boolean => {
+  return path.basename(filePath) === 'README.md';
 };
 
 const errors: FrontmatterError[] = [];
@@ -47,7 +45,7 @@ for (const file of files) {
 
   const { data } = matter(contents);
 
-  if (shouldSkipFile(file, data)) {
+  if (shouldSkipFile(file)) {
     continue;
   }
 

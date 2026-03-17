@@ -1,0 +1,228 @@
+[[section]]
+title = "TypeScript Best Practices"
+
+[[section.item]]
+title = "TypeScript Configuration Best Practices"
+href = "typescript-configuration-best-practices.md"
+
+[[section.item]]
+title = "Type Stripping"
+href = "type-stripping.md"
+
+[[section]]
+title = "Schema Validation with Zod"
+
+[[section.item]]
+title = "Type Safety vs. Runtime Validation"
+href = "type-safety-vs-runtime-validation.md"
+
+[[section.item]]
+title = "Type Guards and Schema Validation"
+href = "type-guards-vs-schema-validation.md"
+
+[[section.item]]
+title = "Introduction to Zod"
+href = "introduction-to-zod.md"
+
+[[section.item]]
+title = "Advanced Types with Zod"
+href = "advanced-types-with-zod.md"
+
+[[section.item]]
+title = "Refining Types with Zod"
+href = "refining-types-with-zod.md"
+
+[[section.item]]
+title = "Type Branding with Zod"
+href = "type-branding-with-zod.md"
+
+[[section.item]]
+title = "Transforms and Coercion with Zod"
+href = "transforms-and-coercion-with-zod.md"
+
+[[section.item]]
+title = "Validating Zod Schema (Exercise)"
+href = "validating-zod-schema-exercises.md"
+
+[[section.item]]
+title = "Working Backwards from Types with Zod"
+href = "working-backwards-from-types-with-zod.md"
+
+[[section.item]]
+title = "Advanced Schema Design with Zod"
+href = "advanced-schema-design-with-zod.md"
+
+[[section.item]]
+title = "Testing Zod Schema"
+href = "testing-zod-schema.md"
+
+[[section.item]]
+title = "Best Practices with Zod"
+href = "zod-best-practices.md"
+
+[[section.item]]
+title = "Structuring Zod Schemas Efficiently"
+href = "structuring-zod-schemas-efficiently.md"
+
+[[section]]
+title = "API Type Safety"
+
+[[section.item]]
+title = "Adding Types to Express Requests"
+href = "adding-types-to-express.md"
+
+[[section.item]]
+title = "Adding Types to Express Responses"
+href = "adding-types-to-express-responses.md"
+
+[[section.item]]
+title = "Adding Types to Express with Zod"
+href = "typing-express-with-zod-walkthrough.md"
+
+[[section.item]]
+title = "Adding Zod Schemas to Path Parameters"
+href = "express-zod-params.md"
+
+[[section.item]]
+title = "Validating Query and Path Parameters"
+href = "validating-query-and-path-parameters.md"
+
+[[section.item]]
+title = "Validating Schema with Middleware"
+href = "validating-schema-with-middleware.md"
+
+[[section.item]]
+title = "Using Zod with Express"
+href = "using-zod-with-express.md"
+
+[[section.item]]
+title = "Adding Client-Side Validation"
+href = "adding-client-side-validation.md"
+
+[[section.item]]
+title = "Testing with Zod and Express"
+href = "testing-with-zod-and-express.md"
+
+[[section.item]]
+title = "Validating the Data Layer"
+href = "validating-the-data-layer.md"
+
+[[section]]
+title = "API Contracts"
+
+[[section.item]]
+title = "OpenAPI/Swagger Contracts"
+href = "open-api-swagger-express.md"
+
+[[section.item]]
+title = "Generating OpenAPI from Express"
+href = "generating-open-api-from-express.md"
+
+[[section.item]]
+title = "Zod to OpenAPI"
+href = "zod-to-open-api.md"
+
+[[section.item]]
+title = "Generating Types from an OpenAPI Specification"
+href = "generating-types-from-open-api.md"
+
+[[section.item]]
+title = "Generating Zod Schemas from OpenAPI"
+href = "generating-zod-openapi.md"
+
+[[section.item]]
+title = "Validating Your API with OpenAPI"
+href = "validating-your-api-openapi.md"
+
+[[section]]
+title = "tRPC"
+
+[[section.item]]
+title = "What is tRPC?"
+href = "what-is-trpc.md"
+
+[[section.item]]
+title = "tRPC on the Server"
+href = "trpc-on-the-server.md"
+
+[[section.item]]
+title = "tRPC on the Client"
+href = "trpc-on-the-client.md"
+
+[[section.item]]
+title = "Subscriptions with tRPC"
+href = "subscriptions-with-trpc.md"
+
+[[section.item]]
+title = "Middleware and Authentication with tRPC"
+href = "middleware-auth-logging-for-trpc.md"
+
+[[section.item]]
+title = "Custom Data Transformers with tRPC"
+href = "custom-data-transformers-with-trpc.md"
+
+[[section.item]]
+title = "Testing and Debugging with tRPC"
+href = "testing-and-debugging-trpc.md"
+
+[[section]]
+title = "Databases"
+
+[[section.item]]
+title = "Prisma"
+href = "typesafe-database-with-prisma.md"
+
+[[section.item]]
+title = "Generate Zod Schemas from Prisma"
+href = "zod-schemas-from-prisma.md"
+
+[[section.item]]
+title = "Generate tRPC with Prisma"
+href = "prisma-trpc.md"
+
+[[section]]
+title = "Appendix"
+
+[[section.item]]
+title = "Express Zod API"
+href = "express-zod-api.md"
+
+[[section.item]]
+title = "Input Validation with Zod"
+href = "input-validation-with-zod.md"
+
+[[section.item]]
+title = "Class Validator and Class Transformer"
+href = "class-validator-class-transformer-express.md"
+
+[[section.item]]
+title = "Typed Error Middleware with Express"
+href = "typed-error-middleware-with-express.md"
+
+[[section.item]]
+title = "Branded Types with Express"
+href = "branded-types-express.md"
+
+[[section.item]]
+title = "Global Error Types with Express"
+href = "global-error-types-express.md"
+
+[[section.item]]
+title = "Type Safe Route Registration"
+href = "type-safe-route-registration-with-express.md"
+
+[[section.item]]
+title = "Type Safe Asynchronous Route Handlers"
+href = "type-safe-asynchronous-route-handlers-with-express.md"
+
+[[section.item]]
+title = "Typing Headers and Cookies"
+href = "typing-headers-and-cookies-in-express.md"
+
+[[section.item]]
+title = "Type Safe Routes in Express"
+href = "type-safe-routes-in-express.md"
+
+[[section.item]]
+title = "Type Safe Middleware with Express"
+href = "type-safe-middleware-with-express.md"

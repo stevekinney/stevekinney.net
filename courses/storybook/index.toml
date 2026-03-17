@@ -1,0 +1,148 @@
+[[section]]
+title = "Getting Started"
+
+[[section.item]]
+title = "Setting Up Storybook"
+href = "setting-up.md"
+
+[[section.item]]
+title = "Storybook Sandboxes"
+href = "sandboxes.md"
+
+[[section.item]]
+title = "How to Write a Story"
+href = "writing-stories.md"
+
+[[section.item]]
+title = "Adding Variants to a Story"
+href = "adding-variants.md"
+
+[[section.item]]
+title = "Adding Controls to a Story"
+href = "controls.md"
+
+[[section.item]]
+title = "Adding Button Sizes"
+href = "adding-button-sizes-exercise.md"
+
+[[section.item]]
+title = "Setting Default Arguments"
+href = "default-args.md"
+
+[[section]]
+title = "Styling"
+
+[[section.item]]
+title = "Importing Styles, Using Tailwind, and Using Themes"
+href = "setting-up-tailwind.md"
+
+[[section.item]]
+title = "Customizing Tailwind Colors"
+href = "customizing-tailwind-colors.md"
+
+[[section.item]]
+title = "Importing Fonts from Fontsource"
+href = "importing-fontsource-fonts.md"
+
+[[section]]
+title = "Documenting Components"
+
+[[section.item]]
+title = "Using Storybook with MDX"
+href = "mdx.md"
+
+[[section.item]]
+title = "Improving argTypes with Metadata"
+href = "arg-types.md"
+
+[[section.item]]
+title = "Color Palette"
+href = "color-palette.md"
+
+[[section.item]]
+title = "Icon Gallery"
+href = "icon-gallery.md"
+
+[[section.item]]
+title = "Type Set"
+href = "typeset.md"
+
+[[section.item]]
+title = "Organizing Stories and Documentation"
+href = "naming-and-hierarchy.md"
+
+[[section]]
+title = "Component Styling Techniques"
+
+[[section.item]]
+title = "Class Variance Authority"
+href = "class-variance-authority.md"
+
+[[section.item]]
+title = "Adding a Size Variant with CVA"
+href = "adding-a-size-variant.md"
+
+[[section.item]]
+title = "Supporting Dark Mode"
+href = "adding-dark-mode-to-our-components.md"
+
+[[section.item]]
+title = "Forcing Dark Mode"
+href = "forcing-dark-mode.md"
+
+[[section.item]]
+title = "An Alternative Approach to Dark Mode"
+href = "dark-mode-alternative.md"
+
+[[section.item]]
+title = "Implementing a Callout Component"
+href = "callout-component-exercise.md"
+
+[[section]]
+title = "Testing and Interactions"
+
+[[section.item]]
+title = "Play Functions"
+href = "play-functions.md"
+
+[[section.item]]
+title = "Testing Components"
+href = "testing-components-with-storybook.md"
+
+[[section.item]]
+title = "Setting Up a Test Runner"
+href = "test-runner.md"
+
+[[section.item]]
+title = "Visual Tests"
+href = "visual-tests.md"
+
+[[section.item]]
+title = "Accessibility Testing"
+href = "accessibility-testing.md"
+
+[[section]]
+title = "APIs, Context, and External Dependencies"
+
+[[section.item]]
+title = "Using Decorators for Context"
+href = "decorators.md"
+
+[[section.item]]
+title = "Using Loaders to Fetch Data"
+href = "loaders.md"
+
+[[section]]
+title = "Appendix"
+
+[[section.item]]
+title = "Integration with Mock Service Worker"
+href = "mock-service-worker.md"
+
+[[section.item]]
+title = "Storybook in Figma"
+href = "storybook-in-figma.md"
+
+[[section.item]]
+title = "Figma in Storybook"
+href = "figma-in-storybook.md"

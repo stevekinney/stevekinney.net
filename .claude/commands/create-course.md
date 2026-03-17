@@ -12,7 +12,7 @@ Use AskUserQuestion to collect the following from the user. Ask all questions in
 1. **Course title** — The human-readable title (e.g., "Introduction to Testing", "React Performance").
 2. **Course slug** — The kebab-case directory name (e.g., `testing`, `react-performance`). Suggest one derived from the title but let the user override.
 3. **Course description** — A brief description of the course content.
-4. **Initial sections** — Ask for the high-level section names that will appear in `_index.md` (e.g., "The Basics", "Advanced Topics", "Next Steps"). These are just organizational headers — all lesson files live flat in the course root.
+4. **Initial sections** — Ask for the high-level section names that will appear in `index.toml` (e.g., "The Basics", "Advanced Topics", "Next Steps"). These are just organizational headers — all lesson files live flat in the course root.
 5. **Repository URL** — Optional link to a practice/lab repository on GitHub.
 6. **Frontend Masters URL slug** — Optional. If this course is on Frontend Masters, the URL path segment (e.g., `testing` for `frontendmasters.com/courses/testing/`).
 
@@ -58,23 +58,36 @@ The material in this course is intended to go along with the [<Course Title>](ht
 
 - [Practice Lab Repository](repository-url)
 
-<Sections from the \_index.md mirrored here with absolute paths like `/courses/<slug>/lesson-name`>
+<Sections from index.toml mirrored here with absolute paths like `/courses/<slug>/lesson-name`>
 ```
 
-### `_index.md`
+### `index.toml`
 
-The table of contents file. Use `layout: contents` in frontmatter. This file organizes lessons into sections using relative markdown links.
+The table of contents file. This file organizes lessons into sections using TOML.
 
-```markdown
----
-layout: contents
+```toml
+[[section]]
+title = "<Section Name>"
 
-modified: <current ISO 8601 date>
----
+[[section.item]]
+title = "Lesson Title"
+href = "lesson-slug.md"
+```
 
-## <Section Name>
+Items can have optional `related` links for exercises and solutions:
 
-- [Lesson Title](lesson-slug.md)
+```toml
+[[section.item]]
+title = "Some Topic"
+href = "some-topic.md"
+
+  [[section.item.related]]
+  title = "Exercise"
+  href = "some-topic-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "some-topic-solution.md"
 ```
 
 Start with the section headers the user provided. Leave them empty (no lesson links yet) — the user will add lessons later.
@@ -96,5 +109,5 @@ Tell the user what was created and remind them:
 - Optional fields: `published` (boolean), `tags` (array of strings).
 - Exercises and solutions follow the pattern: `topic-exercise.md` and `topic-solution.md`.
 - Images go in an `assets/` subdirectory.
-- After adding lessons, link them in `_index.md` with relative paths and in `README.md` with absolute paths (`/courses/<slug>/lesson-slug`).
+- After adding lessons, link them in `index.toml` with relative `.md` hrefs and in `README.md` with absolute paths (`/courses/<slug>/lesson-slug`).
 - Run `bun run manifest` from the course directory to regenerate `manifest.json` after changes.

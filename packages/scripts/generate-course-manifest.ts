@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,7 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const OUTPUT_PATH = path.resolve(process.cwd(), 'manifest.json');
 const README_FILE = 'README.md';
-const CONTENTS_FILE = '_index.md';
+const CONTENTS_FILE = 'index.toml';
 const MANIFEST_HASH_VERSION = 'course-manifest:v3';
 
 const getFileSignature = async (file: string): Promise<string> => {
@@ -106,7 +107,7 @@ const main = async () => {
   if (tags) course.tags = tags;
 
   const lessonFiles = markdownFiles
-    .filter((file) => file !== README_FILE && file !== CONTENTS_FILE)
+    .filter((file) => file !== README_FILE)
     .sort((a, b) => a.localeCompare(b));
 
   const lessons = await Promise.all(lessonFiles.map((file) => buildLessonEntry(file)));
@@ -121,7 +122,7 @@ const main = async () => {
   };
 
   const contentsPath = path.resolve(process.cwd(), CONTENTS_FILE);
-  if (markdownFiles.includes(CONTENTS_FILE)) {
+  if (existsSync(contentsPath)) {
     manifest.course.contentsFile = normalizePath(path.relative(REPO_ROOT, contentsPath));
   }
 

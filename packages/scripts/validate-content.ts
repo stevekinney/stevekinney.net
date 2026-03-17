@@ -47,12 +47,6 @@ const addError = (file: string, message: string) => {
   errors.push(`${file}: ${message}`);
 };
 
-const shouldSkipCourseFile = (filePath: string, data: Record<string, unknown>): boolean => {
-  if (path.basename(filePath) === '_index.md') return true;
-  if (data.layout === 'contents') return true;
-  return false;
-};
-
 const checkFrontmatter = (
   file: string,
   data: Record<string, unknown>,
@@ -194,7 +188,7 @@ for (const file of courseFiles) {
     addError(toRepoPath(file), 'Course file must live under a course directory.');
     continue;
   }
-  if (filename === 'README.md' || filename === '_index.md') continue;
+  if (filename === 'README.md') continue;
 
   const slug = path.basename(filename, '.md');
   const lessons = courseMap.get(courseDir) ?? new Set<string>();
@@ -217,9 +211,7 @@ for (const file of courseFiles) {
   const contents = await readFile(file, 'utf8');
   const { data, content } = matter(contents);
 
-  if (shouldSkipCourseFile(file, data)) {
-    continue;
-  }
+  if (path.basename(file) === 'README.md') continue;
 
   checkFrontmatter(toRepoPath(file), data, COURSE_REQUIRED);
 

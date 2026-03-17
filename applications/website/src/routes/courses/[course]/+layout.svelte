@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CourseContentsSidebar from '$lib/course-contents-sidebar.svelte';
   import type { Snippet } from 'svelte';
   import type { LayoutData } from './$types';
 
@@ -10,6 +11,6 @@
     {@render children?.()}
   </section>
   {#if data.contents}
-    <data.contents as="aside" />
+    <CourseContentsSidebar data={data.contents} courseSlug={data.course.slug} />
   {/if}
 </div>

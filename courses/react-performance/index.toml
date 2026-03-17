@@ -1,0 +1,140 @@
+[[section]]
+title = "Setting the Stage"
+
+[[section.item]]
+title = "Virtual DOM and Fiber Architecture"
+href = "virtual-dom-fiber-architecture.md"
+
+[[section.item]]
+title = "Understanding Reconciliation in React 19"
+href = "understanding-reconciliation-react-19.md"
+
+[[section]]
+title = "Measurement and Debugging"
+
+[[section.item]]
+title = "Measuring Performance"
+href = "measuring-performance-with-real-tools.md"
+
+[[section.item]]
+title = "Debugging React Performance Issues"
+href = "debugging-performance-issues.md"
+
+[[section.item]]
+title = "Core Web Vitals for React"
+href = "core-web-vitals-for-react.md"
+
+[[section]]
+title = "Rendering and State"
+
+[[section.item]]
+title = "Colocation of State"
+href = "colocation-of-state.md"
+
+[[section.item]]
+title = "Lifting State Intelligently"
+href = "lifting-state-intelligently.md"
+
+[[section.item]]
+title = "Derived vs Stored State"
+href = "derived-vs-stored-state.md"
+
+[[section]]
+title = "Memoization in Context"
+
+[[section.item]]
+title = "React.memo"
+href = "react-memo-react-19-and-compiler-era.md"
+
+[[section.item]]
+title = "useMemo and useCallback"
+href = "usememo-usecallback-in-react-19.md"
+
+[[section.item]]
+title = "Avoiding Over Memoization"
+href = "avoiding-over-memoization.md"
+
+[[section.item]]
+title = "Prop Identity Stability"
+href = "identity-stability-props.md"
+
+[[section.item]]
+title = "Key Stability in Lists"
+href = "key-stability-in-lists.md"
+
+[[section.item]]
+title = "Avoiding Unnecessary Dependencies"
+href = "avoiding-unnecessary-dependencies.md"
+
+[[section.item]]
+title = "Custom Equality Checks with areEqual"
+href = "custom-equality-checks-areequal.md"
+
+[[section]]
+title = "The Context API"
+
+[[section.item]]
+title = "Context API Performance Pitfalls"
+href = "context-api-performance-pitfalls.md"
+
+[[section.item]]
+title = "Separating Actions from State: Two Contexts"
+href = "separating-actions-from-state-two-contexts.md"
+
+[[section.item]]
+title = "Component Granularity Splitting"
+href = "component-granularity-splitting.md"
+
+[[section]]
+title = "Modern React Features"
+
+[[section.item]]
+title = "React 19 Compiler"
+href = "react-19-compiler-guide.md"
+
+[[section.item]]
+title = "Concurrent React Scheduling"
+href = "concurrent-react-scheduling.md"
+
+[[section.item]]
+title = "useTransition and startTransition"
+href = "usetransition-and-starttransition.md"
+
+[[section.item]]
+title = "useDeferredValue Patterns"
+href = "usedeferredvalue-patterns.md"
+
+[[section.item]]
+title = "useActionState Performance"
+href = "useactionstate-performance.md"
+
+[[section.item]]
+title = "The use Hook"
+href = "the-use-hook.md"
+
+[[section.item]]
+title = "Suspense for Data Fetching"
+href = "suspense-for-data-fetching.md"
+
+[[section]]
+title = "Bundle Performance"
+
+[[section.item]]
+title = "Code Splitting and Lazy Loading"
+href = "code-splitting-and-lazy-loading.md"
+
+[[section.item]]
+title = "Bundle Analysis Deep Dive"
+href = "bundle-analysis-deep-dive.md"
+
+[[section.item]]
+title = "Tree Shaking Optimization"
+href = "tree-shaking-optimization.md"
+
+[[section.item]]
+title = "Performance Budgets and Automation"
+href = "performance-budgets-and-automation.md"
+
+[[section.item]]
+title = "Production Performance Monitoring"
+href = "production-performance-monitoring.md"
