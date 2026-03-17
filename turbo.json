@@ -46,7 +46,9 @@
       "cache": false,
       "persistent": true
     },
-    "sync": {},
+    "sync": {
+      "dependsOn": ["^build"]
+    },
     "lint": {},
     "check": {},
     "check:watch": {
