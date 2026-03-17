@@ -3,9 +3,8 @@ title: Understanding Generics in TypeScript
 description: >-
   Let's learn a little bit about what generics are in TypeScript, why they're
   useful, and how to use them.
-date: 2021-08-16T16:00:00.006Z
-modified: 2025-07-29T21:09:56.000Z
-published: true
+date: 2021-08-16
+modified: 2026-03-17
 tags:
   - typescript
 ---

@@ -3,8 +3,8 @@ title: Claude Code Permissions
 description: >-
   Configure and manage Claude Code's permission system to balance safety and
   productivity while maintaining security boundaries
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 By default, Claude Code takes a **conservative approach to safety**, requiring your permission for actions that could modify your system, such as writing files, executing many bash commands, or using Model Context Protocol (MCP) tools. When Claude Code attempts one of these actions, it will pause and prompt you for approval.

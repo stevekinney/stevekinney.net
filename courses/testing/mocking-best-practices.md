@@ -1,8 +1,8 @@
 ---
 title: An Incomplete List of Best Practices for Mocking
 description: Learn best practices and avoid common pitfalls when mocking.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 Let's look at some best practices when it comes to using [mocks](mocks.md), [stubs](stubs.md), [spies](spies.md), and other kinds of [test doubles](test-doubles.md).

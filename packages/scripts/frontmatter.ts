@@ -25,4 +25,14 @@ export const toDate = (value: unknown): Date | null => {
   return Number.isNaN(date.getTime()) ? null : date;
 };
 
+/** Format any date-like value as a YYYY-MM-DD string (UTC). Returns null if the value is not a valid date. */
+export const toDateString = (value: unknown): string | null => {
+  const date = toDate(value);
+  if (!date) return null;
+  const y = date.getUTCFullYear();
+  const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const d = String(date.getUTCDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
 export const normalizePath = (value: string): string => value.split(path.sep).join('/');

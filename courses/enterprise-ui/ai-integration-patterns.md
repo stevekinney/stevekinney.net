@@ -4,8 +4,8 @@ description: >-
   The frontend architecture that changes when you add LLM-powered features—streaming
   responses, prompt management, tool use, RAG citation UI, non-deterministic error
   handling, and the BFF pattern extended into an AI gateway.
-modified: '2026-03-04T00:00:00-07:00'
-date: '2026-03-04T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-04
 ---
 
 Adding an LLM-powered feature to a frontend application isn't like adding a new API integration. When you call a REST endpoint, you send a request, wait a predictable amount of time, and get back a deterministic response. When you call a language model, you send a prompt, wait _seconds_ (not milliseconds), and get back a stream of tokens that will be different every time—even for the same input. The response might be brilliant. It might be wrong. It might get filtered by a safety system halfway through generation. And it's going to cost you real money per token.

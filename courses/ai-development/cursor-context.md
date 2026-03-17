@@ -3,8 +3,8 @@ title: Mastering Context Management in Cursor
 description: >-
   Comprehensive guide to providing effective context to Cursor's AI using @
   symbols, rules, and notepads.
-modified: '2025-07-30T06:07:02-05:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 Cursor's design is based on providing the LLM with two fundamental types of context: "intent context" (what the user wants to achieve) and "state context" (the current state of the environment, such as code snippets, error messages, or project structure). Effectively combining both intent and state in your prompts is crucial for optimal results, as providing one without the other can lead to guesswork, hallucinations, or inefficient code.

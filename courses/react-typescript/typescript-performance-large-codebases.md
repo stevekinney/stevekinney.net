@@ -3,9 +3,8 @@ title: TypeScript Performance for Large Codebases
 description: >-
   Scale TypeScript in massive React apps—project references, incremental builds,
   type optimization, and monorepo strategies.
-date: 2025-09-14T18:00:00.000Z
-modified: '2025-09-20T10:39:54-06:00'
-published: true
+date: 2025-09-14
+modified: 2026-03-17
 tags:
   - react
   - typescript

@@ -3,8 +3,8 @@ title: Claude Code Commands
 description: >-
   Create and use custom slash commands to encapsulate expertise and workflows
   into reusable, project-scoped and user-scoped command templates
-modified: '2025-07-30T07:02:20-05:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 At their core, custom slash commands are Markdown files that contain instructions for Claude Code. When you invoke a slash command, its content becomes the prompt sent to Claude. This mechanism allows you to codify expertise and best practices into an executable format, enhancing user convenience and standardizing team knowledge.

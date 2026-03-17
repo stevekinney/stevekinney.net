@@ -1,8 +1,8 @@
 ---
 title: 'Emmet in Visual Studio Code: Exercises'
 description: Some quick exercises for getting comfortable using Emmet inside of VS Code.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-18T06:15:05-05:00'
+modified: 2026-03-17
+date: 2025-03-18
 ---
 
 We don't have a ton of opportunities for hands-on practice in this course. So, let's take the opportunity since we have one.

@@ -3,8 +3,8 @@ title: Template Literal Types
 description: >-
   Master TypeScript's template literal types for type-safe string manipulation
   and CSS-in-JS
-modified: '2025-09-22T09:27:10-06:00'
-date: '2025-09-14T18:57:01.949Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 Remember template literals in JavaScript? TypeScript took that concept and turned it into a superpower for type-level string manipulation. Template literal types let you create new string literal types by combining and transforming existing ones. They're incredibly useful for CSS-in-JS, API routes, event names, and anywhere you need type-safe string patterns.

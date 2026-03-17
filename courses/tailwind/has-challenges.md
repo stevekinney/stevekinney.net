@@ -1,8 +1,8 @@
 ---
 title: Challenges with `has` Utility
-modified: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
 description: Getting our hands dirty with the `has` utility in Tailwind.
-date: '2025-06-11T19:05:33-06:00'
+date: 2025-06-12
 ---
 
 Can you implement the following?

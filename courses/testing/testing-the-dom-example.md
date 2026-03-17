@@ -1,8 +1,8 @@
 ---
 title: Testing a DOM Element
 description: Learn how to test DOM interactions using Vitest and DOM Testing Library.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 Imagine you have a button, and when you click it, something happens. Classic case, right? Let's whip up a basic test for that interaction. Here's a simple function, found in `examples/element-factory/src/button.js`, that creates our DOM structure and adds some behavior:

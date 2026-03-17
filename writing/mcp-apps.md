@@ -3,9 +3,8 @@ title: MCP Apps and the Missing Middle of AI Tooling
 description: >-
   MCP servers return data. MCP Apps let them ship a UI alongside that data—so the
   tool author, not the client, decides how results look.
-date: 2026-03-12T12:00:00.000Z
-modified: 2026-03-12T12:00:00.000Z
-published: true
+date: 2026-03-12
+modified: 2026-03-17
 tags:
   - ai
   - mcp

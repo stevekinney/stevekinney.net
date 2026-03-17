@@ -15,7 +15,6 @@
   type SEOProps = {
     title: string;
     description: string;
-    published?: boolean;
     date?: Date | string;
     modified?: Date | string;
     children?: Snippet;
@@ -45,7 +44,6 @@
   const {
     title,
     description,
-    published = true,
     date,
     modified,
     children,
@@ -164,7 +162,7 @@
     href={`${normalizedPath === '/' ? '' : normalizedPath}/llms.txt`}
   />
 
-  <meta name="robots" content={published ? 'index, follow' : 'noindex, nofollow'} />
+  <meta name="robots" content="index, follow" />
   <meta name="description" content={description} />
   <meta name="author" content={author} />
 
@@ -190,12 +188,12 @@
   <meta name="twitter:image:alt" content={formattedTitle} />
 
   <!-- Publication dates for SEO and social sharing -->
-  {#if published && dateIso}
+  {#if dateIso}
     <meta name="date" content={dateIso} />
     <meta property="article:published_time" content={dateIso} />
   {/if}
 
-  {#if published && modifiedIso}
+  {#if modifiedIso}
     <meta name="last-modified" content={modifiedIso} />
     <meta property="article:modified_time" content={modifiedIso} />
   {/if}

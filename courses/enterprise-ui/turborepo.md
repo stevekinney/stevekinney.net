@@ -4,8 +4,8 @@ description: >-
   A cache- and graph-aware task runner for JavaScript and TypeScript
   workspaces—how it thinks about packages and tasks, where caching actually
   lives, and the ways teams most reliably sabotage themselves.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Turborepo is Vercel's build system for JavaScript and TypeScript codebases. It's designed for monorepos, but the [official docs][2] are very clear that it also works for single-package workspaces. One current-version detail is worth getting out of the way immediately: modern Turborepo configuration uses `tasks` in `turbo.json`. If you run into older articles using `pipeline`, you're reading old material, and the official codemods literally include a `rename-pipeline` migration for 2.x. The internet, naturally, remains full of archaeological debris.

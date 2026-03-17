@@ -3,9 +3,8 @@ title: Separating Actions from State with Two Contexts
 description: >-
   Split read and write paths. Pass immutable state and stable actions to cut
   re-renders and improve testability.
-date: 2025-09-06T21:51:43.345Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

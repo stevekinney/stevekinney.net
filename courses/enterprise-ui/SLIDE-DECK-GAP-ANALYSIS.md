@@ -1,6 +1,8 @@
 ---
 title: Enterprise UI Slide Deck Gap Analysis
 description: Comparison of course content markdown files against the slide deck PDF, identifying topics missing from the slides.
+date: 2026-03-04
+modified: 2026-03-17
 ---
 
 # Enterprise UI Slide Deck — Gap Analysis

@@ -42,7 +42,6 @@ const buildPosts = async (files: string[]): Promise<PostManifestEntry[]> => {
         description: data.description ? String(data.description) : '',
         date: date.toISOString(),
         modified: modified.toISOString(),
-        published: Boolean(data.published),
         tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
         slug: path.basename(file, '.md'),
         file: normalizePath(path.relative(REPO_ROOT, absoluteFile)),

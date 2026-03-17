@@ -3,8 +3,8 @@ title: Integrated Terminal in Visual Studio Code
 description: >-
   Learn how to use and customize Visual Studio Code's integrated terminal for
   efficient development workflows
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 The built-in terminal is pretty straight-forward, but let's look at some of the ways that we can take it the Next Level™, as they say.

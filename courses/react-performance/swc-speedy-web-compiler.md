@@ -3,9 +3,8 @@ title: Speedy Web Compiler (SWC) for React Apps
 description: >-
   Compile and minify at warp speed. Configure SWC to speed local builds and keep
   production bundles lean and modern.
-date: 2025-09-06T22:30:49.275Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

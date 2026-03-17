@@ -3,8 +3,8 @@ title: Choosing the Right AI Model in Cursor
 description: >-
   Strategic guide to selecting between Claude, GPT, Gemini, and other models for
   optimal coding results.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 Cursor offers a ton of different AI models from leading providers like OpenAI (GPT series), Anthropic (Claude series), and Google (Gemini), along with its own custom models and support for local models. Different models excel in different areas, and choosing wisely can significantly impact quality, latency, and cost.

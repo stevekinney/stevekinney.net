@@ -3,9 +3,8 @@ title: Error Boundaries and Suspense Boundaries
 description: >-
   Type error and suspense boundaries—ensure fallback components and error info
   props are accurately modeled.
-date: 2025-09-06T22:04:44.917Z
-modified: '2025-09-20T10:39:54-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

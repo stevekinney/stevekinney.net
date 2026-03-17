@@ -1,8 +1,8 @@
 ---
 title: What is Hugging Face?
 description: A quick overview of what exactly Hugging Face is.
-modified: '2025-09-06T14:36:25-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 > [!NOTE] Our main interaction today will be with the libraries.

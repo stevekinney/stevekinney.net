@@ -4,8 +4,8 @@ description: >-
   Learn how to create middleware in Express to validate path and query
   parameters using Zod schemas for robust request handling. Transform your
   request validation process with ease.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-20T08:54:40-05:00'
+modified: 2026-03-17
+date: 2025-03-20
 ---
 
 We can create similar middleware for validating queries and paths.

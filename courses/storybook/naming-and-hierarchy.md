@@ -4,8 +4,8 @@ description: >-
   Storybook uses the way that our components are named to form some story of
   hierarchy.
 exclude: false
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-04-15T08:48:38-06:00'
+modified: 2026-03-17
+date: 2024-04-15
 ---
 
 If you look at our sidebar, it's _already_ getting a little unorganized. Luckily, it's pretty easy to bring some level of organization to our components. Storybook uses the way that our components are named to form some story of hierarchy.

@@ -3,8 +3,8 @@ title: Color Palettes in Storybook
 description: >-
   Storybook provides a Docs Block for rendering your design system's color
   palette.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-04-15T06:28:51-06:00'
+modified: 2026-03-17
+date: 2024-04-15
 ---
 
 Storybook provides a Docs Block for rendering your design system's color palette. For example, you can create a `.mdx` file that looks like this.

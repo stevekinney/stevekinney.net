@@ -4,8 +4,8 @@ description: >-
   An HTML-first rendering pattern where most of the page stays static and only
   the interactive regions get JavaScript—how it works, where it shines, and
   where it gets awkward.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Most pages are not fully interactive applications. A product page, article, docs page, pricing page, or account overview usually contains a lot of static markup and only a handful of dynamic controls. Traditional full-page hydration still ships JavaScript and hydration work for the entire app tree, including regions that never needed client interactivity in the first place.

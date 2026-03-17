@@ -1,8 +1,8 @@
 ---
 title: Recommended ESLint Rules for TypeScript and React
 description: Short descriptions of each "recommended" rules.
-modified: '2025-09-27T18:32:37.177Z'
-date: '2025-09-27T18:30:48.289Z'
+modified: 2026-03-17
+date: 2025-09-27
 ---
 
 Here's what each rule does:

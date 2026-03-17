@@ -4,8 +4,8 @@ description: >-
   A Module Federation remote that can run independently—with its own dev server,
   mock data, and UI—is dramatically easier to develop, test, and debug than one
   that requires the host to be running.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 In the [runtime composition exercise](/courses/enterprise-ui/runtime-composition-exercise), the analytics remote runs on `localhost:3001` and the host loads it at runtime. But if you visit `localhost:3001` directly, you'll see the analytics dashboard running on its own—no host required. It has its own HTML shell, its own mock data via [MSW](https://mswjs.io/), and its own entry point. The remote is a standalone application that _also_ happens to expose modules for federation.

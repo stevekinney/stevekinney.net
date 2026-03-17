@@ -3,8 +3,8 @@ title: Claude Code Model Selection
 description: >-
   Choose the right Claude model (Opus, Sonnet, Haiku) for your development tasks
   based on complexity, cost, and performance requirements
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 **Claude Opus** and **Claude Sonnet** represent different points on an "agency spectrum" for AI coding systems. I guess there is also Haiku.

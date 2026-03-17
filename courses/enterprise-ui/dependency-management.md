@@ -6,8 +6,8 @@ description: >-
   imports, and upgrade noise all get worse in multi-package repos, and the fix
   is making dependency policy executable in tooling rather than hoping everyone
   reads the wiki.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Dependencies are where architecture stops being a whiteboard and starts becoming an operations problem. In a monolith, one lockfile and one deployable artifact can hide a lot of bad habits. In a multi-package repo or any distributed frontend estate, those same habits turn into version drift, duplicate dependency trees, phantom imports from hoisting, and a flood of upgrade PRs nobody wants to review.

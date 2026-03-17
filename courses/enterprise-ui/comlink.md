@@ -4,8 +4,8 @@ description: >-
   A tiny library that turns postMessage-style communication into an RPC-like API
   built on ES6 Proxy—making Web Workers feel like normal function calls instead
   of message-passing ceremonies.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 [Comlink][1] is a tiny library that turns `postMessage`-style communication into an RPC-like API built on ES6 `Proxy`. Instead of manually serializing requests, wiring message IDs, and pairing responses to callbacks like some kind of ritual punishment, you `expose()` a value on one side and `wrap()` it on the other. The [Comlink docs][1] describe it exactly that way: an RPC implementation for `postMessage` and proxies, built to make Web Workers easier to use. It also depends on `Proxy`; browsers without native `Proxy` support need a polyfill.

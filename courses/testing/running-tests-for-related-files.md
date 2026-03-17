@@ -1,8 +1,8 @@
 ---
 title: Only Running Tests For Related Files
 description: Learn how to run only related tests in Vitest to save time.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 Picture this: You've been cranking away on some code, making changes, darting between files like a superhero full of caffeine. Then comes the dreaded moment—time to rerun the tests. All. Of. Them.

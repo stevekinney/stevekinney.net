@@ -3,8 +3,8 @@ title: Claude Code and Bash Scripts
 description: >-
   Learn how Claude Code integrates with shell environments to create, execute,
   and iterate on bash scripts for automated development workflows
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 Claude Code is designed to integrate seamlessly with your shell environment, providing a flexible and scriptable power tool for developers.

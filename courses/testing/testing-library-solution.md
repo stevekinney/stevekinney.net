@@ -1,8 +1,8 @@
 ---
 title: Refactoring Our Button Test
 description: Let's look at a solution for using Testing Library to test a button.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 Again, we're likely going to want to bring in our libraries:

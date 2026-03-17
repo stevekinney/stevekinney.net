@@ -1,8 +1,8 @@
 ---
 title: Implementing a Callout Component
 description: Let's build a callout component in Figma.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-04-15T08:48:38-06:00'
+modified: 2026-03-17
+date: 2024-04-15
 ---
 
 Okay, it's your turn to try this out. Consider this [Callout component](https://www.figma.com/file/Qhb4PJucNK8bgvf4N65Jrm/Anthology?type=design&node-id=2-2372&mode=design). Consider the following. You can choose to ignore the fact that they have different icons if you'd like.

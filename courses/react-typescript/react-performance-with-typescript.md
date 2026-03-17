@@ -3,9 +3,8 @@ title: React Performance with TypeScript
 description: >-
   Use types to encode identity contracts—memo boundaries, readonly data, stable
   references, and type-safe performance monitoring.
-date: 2025-09-06T22:23:57.383Z
-modified: '2025-10-01T00:19:35-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

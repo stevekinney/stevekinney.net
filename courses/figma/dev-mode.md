@@ -4,8 +4,8 @@ description: >-
   Dev Mode in Figma optimizes the design-to-development handoff by providing
   detailed design specifications and code snippets, enhancing efficiency and
   accuracy in development.
-date: 2024-03-09T19:27:23.000Z
-modified: '2025-07-29T15:09:56-06:00'
+date: 2024-03-09
+modified: 2026-03-17
 ---
 
 [Dev Mode](https://www.figma.com/dev-mode/) is a specialized view within Figma designed for developers—as you can probably gather from the name. It allows them to access detailed information about the design, such as measurements, color codes, font properties, and code snippets for CSS, iOS, and Android. This mode is aimed at making it easier for developers to understand and implement the design as intended, reducing back-and-forth communication and ensuring accuracy in the final product.

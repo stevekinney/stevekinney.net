@@ -3,9 +3,8 @@ title: flushSync and Imperative DOM with Types
 description: >-
   Coordinate with the DOM—type helpers that force sync updates for focus,
   measurement, and animations sparingly.
-date: 2025-09-06T22:04:45.040Z
-modified: '2025-09-22T09:27:10-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

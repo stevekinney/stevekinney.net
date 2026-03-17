@@ -4,8 +4,8 @@ description: >-
   Explore Zod schema structuring tips, focusing on modularization, reuse, type
   inference, composition, and naming for efficient schema management and
   maintainable application architecture.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 ## Modularize schemas by domain

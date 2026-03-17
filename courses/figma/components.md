@@ -3,8 +3,8 @@ title: Components
 description: >-
   Leverage Figma components for scalable and efficient design. Create, reuse,
   and manage elements easily for consistency and collaboration across projects.
-date: 2024-03-09T19:21:18.000Z
-modified: '2025-07-29T15:09:56-06:00'
+date: 2024-03-09
+modified: 2026-03-17
 tags:
   - figma
   - course

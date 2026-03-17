@@ -3,9 +3,8 @@ title: Testing React Components with TypeScript
 description: >-
   Configure Jest/Vitest and RTL for TypeScript—type-safe queries, user events,
   and mock helpers.
-date: 2025-09-06T22:04:44.939Z
-modified: '2025-10-01T00:19:35-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

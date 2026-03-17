@@ -4,8 +4,8 @@ description: >-
   A walkthrough of the rsbuild.config.ts files used in this course—defineConfig,
   the plugin system, pluginReact, pluginModuleFederation, shared dependency
   options, dev server settings, and HTML templates.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 The [Rspack, webpack, and Vite](/courses/enterprise-ui/rspack-webpack-and-vite) lecture established that Rsbuild is the higher-level build tool sitting on top of Rspack—comparable to Vite in ergonomics, but using a bundler-first model in both development and production. This lecture walks through the actual `rsbuild.config.ts` files used in the [runtime composition exercise](/courses/enterprise-ui/runtime-composition-exercise), explaining what each piece of configuration does, why it's there, and what happens when you change it.

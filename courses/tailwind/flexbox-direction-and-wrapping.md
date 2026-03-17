@@ -3,8 +3,8 @@ title: Flexbox Direction and Wrapping
 description: >-
   Control the flow and wrapping of flex items with Tailwind utilities for
   flex-direction and flex-wrap properties
-modified: '2025-07-29T15:11:25-06:00'
-date: '2025-06-11T19:05:33-06:00'
+modified: 2026-03-17
+date: 2025-06-12
 ---
 
 Use `flex` to create a flex container. Control layout direction and wrapping with Tailwind's flexbox utilities.

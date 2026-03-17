@@ -4,8 +4,8 @@ description: >-
   Explore solutions for Emmet exercises in Visual Studio Code, featuring classic
   HTML structures like paragraphs, lists, and nested elements. Streamline your
   coding with these concise examples!
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-18T06:15:05-05:00'
+modified: 2026-03-17
+date: 2025-03-18
 ---
 
 Here are some possible solutions to [these exercises](vscode-emmet-exercises.md).

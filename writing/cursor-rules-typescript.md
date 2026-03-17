@@ -3,9 +3,8 @@ title: Cursor Rules for TypeScript Engineers
 description: >-
   A collection of some potentially useful Cursor rules as well as a rundown of
   what potentially makes a Cursor rule great.
-modified: 2025-07-30T11:07:02.000Z
-date: 2025-05-13T14:15:52.000Z
-published: true
+modified: 2026-03-17
+date: 2025-05-13
 ---
 
 I've been playing around with [Cursor](https://www.cursor.com) a bit over the last few days and I've definitely enjoyed using it—despite my [snarky comments on various social media platforms](https://x.com/stevekinney/status/1922129480400748607).

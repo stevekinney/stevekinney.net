@@ -3,8 +3,8 @@ title: Building Type-Safe APIs with express-zod-api
 description: >-
   Learn how to use express-zod-api to build type-safe and validated API
   endpoints by combining Express with Zod schemas.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 [`express-zod-api`](https://www.npmjs.com/package/express-zod-api) is a powerful library that combines the type safety of Zod with the flexibility of Express, allowing you to define and validate your API endpoints with ease. This guide will walk you through setting up and using `express-zod-api` to create robust and type-safe APIs.

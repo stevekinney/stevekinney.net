@@ -1,8 +1,8 @@
 ---
 title: Module Federation with TypeScript
 description: Build type-safe micro-frontends with Webpack Module Federation and TypeScript
-modified: '2025-09-22T09:27:10-06:00'
-date: '2025-09-14T19:33:59.523Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 Module Federation is a technique for how we build and deploy React applications—particularly in large companies where teams haven't figured out how to talk to each other. Instead of one monolithic bundle, you can create micro-frontends that share components, libraries, and even entire applications at runtime. But with great power comes great complexity, especially when adding TypeScript to the mix. Let's explore how to build type-safe federated applications.

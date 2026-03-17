@@ -3,9 +3,8 @@ title: Result/Either Patterns for React
 description: >-
   Model errors without exceptions—neverthrow/Either, action error unions, and
   ergonomic component APIs.
-date: 2025-09-14T18:00:00.000Z
-modified: '2025-10-01T00:19:35-05:00'
-published: true
+date: 2025-09-14
+modified: 2026-03-17
 tags:
   - react
   - typescript

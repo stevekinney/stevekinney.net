@@ -4,8 +4,8 @@ description: >-
   Master consistency and efficiency in Figma with Shared Styles. Simplify your
   workflow by reusing design attributes for text, colors, and effects across
   projects.
-date: 2024-03-09T19:19:54.000Z
-modified: '2025-07-29T15:09:56-06:00'
+date: 2024-03-09
+modified: 2026-03-17
 ---
 
 > [!NOTE] Styles and Variables

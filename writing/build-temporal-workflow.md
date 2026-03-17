@@ -3,9 +3,8 @@ title: 'build-temporal-workflow: Faster Temporal Workflow Bundling with esbuild'
 description: >-
   A drop-in replacement for @temporalio/worker's bundleWorkflowCode that swaps
   Webpack for esbuild—delivering 9–11x faster builds and 94% less memory usage.
-date: 2026-03-09T12:00:00.000Z
-modified: 2026-03-09T12:00:00.000Z
-published: true
+date: 2026-03-09
+modified: 2026-03-17
 tags:
   - temporal
   - typescript

@@ -1,8 +1,8 @@
 ---
 title: Type Inference
 description: Master TypeScript's type inference to write cleaner code with less boilerplate
-modified: '2025-09-22T09:27:10-06:00'
-date: '2025-09-14T18:51:09.028Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 You've probably noticed TypeScript can be pretty smart about figuring out types on its own. But when should you let it work its magic, and when should you be explicit? Let's master the art of type inference to write cleaner React code with less boilerplate.

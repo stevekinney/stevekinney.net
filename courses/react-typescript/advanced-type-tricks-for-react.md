@@ -3,9 +3,8 @@ title: Advanced Type Tricks for React APIs
 description: >-
   Pull out the big guns—satisfies, const assertions, conditional and mapped
   types that make UIs safer and nicer.
-date: 2025-09-06T22:04:45.047Z
-modified: '2025-09-06T17:49:18-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

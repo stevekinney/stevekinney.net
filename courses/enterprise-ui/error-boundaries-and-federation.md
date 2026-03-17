@@ -4,8 +4,8 @@ description: >-
   React error boundaries can't catch what happens before React mounts—and Module
   Federation's runtime negotiation happens before React mounts, which means a
   dead remote produces a blank page, not a fallback UI.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 If you stop the remote dev server in the [runtime composition exercise](/courses/enterprise-ui/runtime-composition-exercise) and reload the host, you'll see a blank white page. Not the `<Suspense>` fallback. Not the error boundary's fallback UI. Just nothing. The console tells you what happened: `ERR_CONNECTION_REFUSED` on `mf-manifest.json`, followed by a `Federation Runtime` error. The error boundary never had a chance.

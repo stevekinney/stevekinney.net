@@ -3,9 +3,8 @@ title: React 19 + TypeScript Mental Models
 description: >-
   Build a rock‑solid mental model—JSX as function calls, compile‑time vs
   runtime, and why types are executable design docs.
-date: 2025-09-06T22:23:57.258Z
-modified: '2025-09-27T13:14:43-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

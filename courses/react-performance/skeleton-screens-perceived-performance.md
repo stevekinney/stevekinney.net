@@ -3,9 +3,8 @@ title: Skeleton Screens & Perceived Performance
 description: >-
   Make your React app feel instant with skeleton screens. Master loading states,
   progressive enhancement, and psychological performance tricks.
-date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-14
+modified: 2026-03-17
 tags:
   - react
   - performance

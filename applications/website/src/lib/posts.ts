@@ -5,10 +5,9 @@ import { loadWritingMarkdown } from '$lib/content-modules';
 const PostMetadataSchema = z.object({
   title: z.string(),
   description: z.string(),
-  date: z.string().datetime(),
-  modified: z.string().datetime(),
+  date: z.string(),
+  modified: z.string(),
   tags: z.array(z.string()).optional(),
-  published: z.boolean(),
 });
 
 const IndividualPostSchema = z.object({
@@ -26,7 +25,6 @@ export type PostWithSlug = {
   slug: string;
   description: string;
   modified: string;
-  published: boolean;
   tags: string[];
 };
 

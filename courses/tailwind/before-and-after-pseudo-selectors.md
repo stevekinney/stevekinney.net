@@ -3,8 +3,8 @@ title: Before & After Pseudo-Selectors
 description: >-
   Style ::before and ::after pseudo-elements with Tailwind's before: and after:
   variants for decorative content.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-06-11T19:05:33-06:00'
+modified: 2026-03-17
+date: 2025-06-12
 ---
 
 ## Basic Usage

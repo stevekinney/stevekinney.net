@@ -4,8 +4,8 @@ description: >-
   Deploying code and releasing features are two different decisions—here is how
   immutable assets, CDN caching, feature flags, canary rollouts, and preview
   environments let you separate them without losing sleep.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 If you've ever worked on a team where "deploying" and "releasing" mean the same thing, you've felt the tension. Deploying means pushing code to production infrastructure. Releasing means letting users see it. When those two actions are fused into one, every deploy is a public event, every rollback is an emergency, and nobody ships on Fridays because Fridays are for the brave or the reckless.

@@ -3,9 +3,8 @@ title: Strictness Options That Pay Off for React
 description: >-
   Turn on strict TypeScript options—catch subtle runtime bugs early without
   drowning in red squiggles.
-date: 2025-09-06T22:04:44.908Z
-modified: '2025-09-06T17:49:18-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

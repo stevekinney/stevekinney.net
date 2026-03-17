@@ -4,8 +4,8 @@ description: >-
   A client-specific backend layer where each user experience gets its own
   server-side façade—why it exists, where it earns its keep, and the failure
   modes that turn it back into the monolith it was supposed to replace.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 A **backend for frontend**, or BFF, is a client-specific backend layer: one backend per user experience, instead of one shared "general-purpose" backend trying to please web, mobile, desktop, and every external consumer at once. [Sam Newman][2] describes it as a single-purpose edge service for a UI or external party, and [Azure's architecture guidance][1] uses the same core idea: decouple frontend implementations from shared backend services so each interface gets something tailored to its needs. In the healthiest version, the BFF is owned by the same team as the frontend, so the API and the UI can evolve together instead of negotiating through a central platform queue.

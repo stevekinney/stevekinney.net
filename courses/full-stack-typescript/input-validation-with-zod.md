@@ -3,8 +3,8 @@ title: Input Validation with Zod
 description: >-
   Use Zod with React Hook Form to create robust, type-safe form validation in
   your frontend applications.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 One popular approach is to use [React Hook Form](https://react-hook-form.com/) in combination with [Zod](https://zod.dev). React Hook Form has official support for Zod via a resolver. The setup looks like this:

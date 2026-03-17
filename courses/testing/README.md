@@ -2,8 +2,8 @@
 title: Introduction to Testing
 description: An introduction to testing using JavaScript
 layout: page
-date: 2024-09-28T19:56:55.000Z
-modified: '2025-07-29T15:09:56-06:00'
+date: 2024-09-28
+modified: 2026-03-17
 ---
 
 The material in this course is intended to go along with the [Introduction to Testing](https://frontendmasters.com/courses/testing/?utm_source=kinney&utm_medium=social&code=kinney) course with [Frontend Masters](https://frontendmasters.com/?utm_source=kinney&utm_medium=social&code=kinney).

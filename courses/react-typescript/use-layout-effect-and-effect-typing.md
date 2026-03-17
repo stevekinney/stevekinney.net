@@ -5,8 +5,8 @@ description: >-
   but their timing differences can make or break your UI. One runs after the DOM
   updates, the other runs synchronously before the browser paints—and choosing
   wrong...
-modified: '2025-09-06T17:49:18-06:00'
-date: '2025-09-06T17:49:18-06:00'
+modified: 2026-03-17
+date: 2025-09-06
 ---
 
 React's `useEffect` and `useLayoutEffect` look nearly identical on the surface, but their timing differences can make or break your UI. One runs after the DOM updates, the other runs synchronously before the browser paints—and choosing wrong can lead to flickering layouts or janky animations. With TypeScript, we can make these effects type-safe and catch common pitfalls before they reach production.

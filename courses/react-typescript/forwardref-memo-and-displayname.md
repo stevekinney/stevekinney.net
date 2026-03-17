@@ -3,9 +3,8 @@ title: 'forwardRef, memo, and displayName with TypeScript'
 description: >-
   Compose forwardRef and memo without losing types—fix common inference pitfalls
   and keep good devtools labels.
-date: 2025-09-06T22:04:44.912Z
-modified: '2025-09-06T17:49:18-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

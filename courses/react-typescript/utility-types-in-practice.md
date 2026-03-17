@@ -3,9 +3,8 @@ title: Utility Types That Unlock Clean React APIs
 description: >-
   Partial, Pick, Omit, Record—use them to clean up state updates, prop shaping,
   and public surfaces.
-date: 2025-09-06T22:23:57.288Z
-modified: '2025-09-06T17:49:18-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

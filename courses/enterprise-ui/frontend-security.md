@@ -5,8 +5,8 @@ description: >-
   Content Security Policy and Trusted Types to dependency supply chain attacks,
   third-party script sandboxing, SRI, security headers, and the organizational
   patterns that make secure-by-default actually work.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Frontend security used to be a short conversation. Escape your outputs, set some headers, do not put secrets in the bundle. That was about it. The frontend was a thin rendering layer, and the real security work happened on the server.

@@ -3,8 +3,8 @@ title: Type-Safe Environment Variables
 description: >-
   Implement type-safe environment variable handling in React TypeScript
   applications with validation and runtime safety.
-date: 2025-09-20T18:00:00.000Z
-modified: '2025-09-20T10:40:36-06:00'
+date: 2025-09-20
+modified: 2026-03-17
 ---
 
 ## Type-Safe Environment Variables

@@ -9,7 +9,6 @@
    * @typedef {Object} Props
    * @property {string} title
    * @property {string} description
-   * @property {boolean} [published]
    * @property {Date | string | undefined} [date]
    * @property {Date | string | undefined} [modified]
    * @property {string} [class]

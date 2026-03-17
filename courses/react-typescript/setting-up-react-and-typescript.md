@@ -3,9 +3,8 @@ title: 'Setting Up: React and TypeScript'
 description: >-
   Set up React 19 with TypeScript from scratch—tsconfig, JSX runtime, strict
   mode, linting, and project structure that scales.
-date: 2025-09-06T22:04:44.905Z
-modified: '2025-09-27T13:14:43-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

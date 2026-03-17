@@ -1,8 +1,8 @@
 ---
-modified: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
 title: Working with Testing Library's Matchers
 description: Learn how to test DOM nodes more effectively using Testing Library's Matchers
-date: '2024-10-02T08:49:23-05:00'
+date: 2024-10-02
 ---
 
 Testing Library also includes some useful matchers for making expectations on DOM elements. As a fun bonus, we're going to use React as well—just to show you how little of a difference it makes when it comes to testing your UI in the DOM.

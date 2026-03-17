@@ -4,8 +4,8 @@ description: >-
   Performance budgets turn "we care about speed" from a personality trait into a
   release policy—here is what to budget, how to set thresholds, and how to
   enforce them at build time, in CI, and in production.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Performance budgets are the point where "we care about speed" stops being a personality trait and becomes an engineering constraint. In the plainest terms, a **performance budget** is a set of limits on metrics that affect user-perceived performance, such as page weight, request counts, load timing, or specific user-centric metrics. [web.dev][1] frames budgets as a reference point for decisions about design, technology, and new features, while [MDN][2] frames them as limits meant to prevent regressions.

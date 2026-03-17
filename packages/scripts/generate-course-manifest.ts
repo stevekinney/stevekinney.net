@@ -56,7 +56,6 @@ const buildLessonEntry = async (file: string): Promise<CourseManifestEntry> => {
   };
 
   if (modified) entry.modified = modified.toISOString();
-  if (typeof data.published === 'boolean') entry.published = data.published;
 
   const tags = asOptionalStringArray(data.tags);
   if (tags) entry.tags = tags;
@@ -102,7 +101,6 @@ const main = async () => {
   };
 
   if (modified) course.modified = modified.toISOString();
-  if (typeof readmeData.published === 'boolean') course.published = readmeData.published;
 
   const tags = asOptionalStringArray(readmeData.tags);
   if (tags) course.tags = tags;

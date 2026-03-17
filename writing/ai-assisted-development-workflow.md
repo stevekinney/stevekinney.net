@@ -3,9 +3,8 @@ title: My Ridiculous AI-Assisted Development Workflow
 description: >-
   A walkthrough of the system I use to ship code with AI agents—from planning in
   Linear to worktrees, linting gauntlets, and a small army of code review bots.
-date: 2026-03-11T12:00:00.000Z
-modified: 2026-03-11T12:00:00.000Z
-published: true
+date: 2026-03-11
+modified: 2026-03-17
 tags:
   - ai
   - tooling

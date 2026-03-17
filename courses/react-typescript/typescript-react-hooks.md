@@ -3,9 +3,8 @@ title: TypeScript Patterns for React Hooks
 description: >-
   Master TypeScript with React Hooks—from useState generics to custom hook
   patterns that scale
-date: 2025-09-27T10:00:00.000Z
-modified: '2025-09-27T19:30:05.343Z'
-published: true
+date: 2025-09-27
+modified: 2026-03-17
 tags:
   - typescript
   - react

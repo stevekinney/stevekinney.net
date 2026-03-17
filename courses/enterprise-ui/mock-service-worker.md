@@ -4,8 +4,8 @@ description: >-
   A client-agnostic, standards-based way to describe network behavior once and
   reuse it across browser development, Node tests, and debugging—without
   stubbing fetch or patching Axios.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Mock Service Worker—usually just MSW—is best understood as a network-behavior layer. You don't stub `fetch`, patch Axios, or teach React Query about a fake backend. You describe how the network should behave, and the application keeps making real requests. MSW intercepts them at the boundary where your app meets the network, not at the call site where one library happened to issue the request.

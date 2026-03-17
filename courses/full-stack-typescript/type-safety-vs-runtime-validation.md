@@ -3,8 +3,8 @@ title: 'Type Safety Vs. Runtime Validation: Two Sides of the Same Coin'
 description: >-
   Understand the complementary relationship between TypeScript static type
   checking and runtime validation with Zod.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 TypeScript's strength lies in its static type system. During development, TypeScript meticulously analyzes your code, catching type errors before they ever reach runtime. This compile-time type checking is invaluable for preventing a vast array of potential issues, improving code maintainability, and fostering developer confidence.

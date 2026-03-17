@@ -1,8 +1,8 @@
 ---
 title: Type-Level Programming
 description: Master advanced TypeScript patterns for type-level computation and validation
-modified: '2025-09-22T09:27:10-06:00'
-date: '2025-09-14T19:02:39.867Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 Welcome to the deep end of TypeScript. If anything in this tutorial makes you want to cry, that's probably a natural reaction. This is some nerdy stuff. Type-level programming means writing "code" that runs at compile time using TypeScript's type system. It's like having a programming language within a programming language. This is where TypeScript transforms from a type checker into a powerful meta-programming tool. Let's explore how to compute, validate, and transform types at compile time.

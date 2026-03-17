@@ -3,8 +3,8 @@ title: Cursor Ghost Mode for Maximum Privacy
 description: >-
   Enable Cursor's Ghost Mode to ensure zero data leaves your machine while using
   AI coding features.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 Ghost mode is a stringent privacy feature in Cursor that ensures **zero data leaves your local machine**, operating as a "Local / No-Storage Mode".

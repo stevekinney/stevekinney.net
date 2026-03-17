@@ -3,9 +3,8 @@ title: Performance Budgets and Monitoring
 description: >-
   Overview of performance budgets and monitoring strategies for React
   applications
-date: 2025-09-06T23:00:00.000Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

@@ -3,8 +3,8 @@ title: 'Unions, Intersections, and Type Guards'
 description: >-
   Master TypeScript's union and intersection types for flexible yet type-safe
   code
-modified: '2025-09-27T13:35:28-06:00'
-date: '2025-09-14T18:58:22.492Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 Union and intersection types are the building blocks of TypeScript's type algebra. They let you compose types in powerful ways - unions for "or" relationships, intersections for "and" relationships. Combined with type guards, they give you incredible flexibility without sacrificing type safety. Let's master these fundamental concepts.

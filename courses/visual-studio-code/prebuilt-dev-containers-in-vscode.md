@@ -3,8 +3,8 @@ title: Prebuilt Dev Containers in Visual Studio Code
 description: >-
   Using and customizing prebuilt container definitions to quickly set up
   development environments
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 Visual Studio Code and the community provide a rich collection of pre-built Dev Container definitions. These are incredibly useful for quickly setting up common development environments without writing `devcontainer.json` from scratch.

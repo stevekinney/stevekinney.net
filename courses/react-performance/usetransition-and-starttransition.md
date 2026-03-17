@@ -3,9 +3,8 @@ title: useTransition and startTransition
 description: >-
   Mark non-urgent updates so urgent ones stay snappy—keep typing smooth while
   expensive UI catches up in the background.
-date: 2025-09-06T21:59:36.420Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

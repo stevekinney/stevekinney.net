@@ -4,8 +4,8 @@ description: >-
   The monorepo tooling landscape is muddy because these tools overlap without
   being the same thing—here's how Turborepo, Nx, Bazel, Lerna, pnpm, Rush, and
   moon actually differ, and when each one is the right call.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 This comparison gets muddy because these tools overlap without being the same thing. [Turborepo][1] and Nx are both task orchestration and caching systems that sit on top of a repo. Bazel is a broader build system built for multi-language, multi-platform work with hermetic and remotely executable builds. Lerna is now a JavaScript monorepo tool whose task running, caching, graphing, and distribution story is powered by Nx, while [pnpm][2] is a package manager with built-in workspace support rather than a build system. Rush is a monorepo manager with strong policy, publishing, and deployment workflows, and moon positions itself as a repository management and orchestration tool for the web ecosystem, sitting somewhere between shell-script chaos and Bazel-level structure.

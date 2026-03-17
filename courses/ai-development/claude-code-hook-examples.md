@@ -3,8 +3,8 @@ title: Claude Code Hook Examples
 description: >-
   Practical examples and cookbook for implementing custom hooks to automate
   workflows and enforce development policies
-modified: '2025-09-20T10:39:54-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 This cookbook shows copy-ready hook configurations and shell scripts for common guardrails and automations. Hooks run shell commands on specific events (see Hook Control Flow) and can block actions in PreToolUse by exiting with code 2 and writing the explanation to stderr.

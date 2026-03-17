@@ -1,8 +1,8 @@
 ---
 title: Implementing Tests for the Character Class
 description: Example of how to implement tests for the Character class.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 Here is one way to implement tests for our `Character` class in [the previous exercise](asymmetric-matchers-exercise.md) using [Asymmetric Matchers](asymmetric-matchers.md).

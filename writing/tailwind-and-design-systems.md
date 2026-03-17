@@ -1,13 +1,12 @@
 ---
 title: 'Positives, Negatives, and Alternatives to Using Tailwind for a Design System'
 description: Is Tailwind the best choice when building out a design system? It depends.
-date: 2024-04-06T22:30:00.000Z
-modified: 2025-07-29T21:09:56.000Z
+date: 2024-04-06
+modified: 2026-03-17
 tags:
   - css
   - tailwind
   - design-systems
-published: true
 ---
 
 [Tailwind](https://tailwindcss.com) is great for a lot of reasons. We've been using it at [Temporal](https://temporal.io) for years and we don't regret it—which is basically the highest praise that I can give to any technology that I've used for that kind of length of time.

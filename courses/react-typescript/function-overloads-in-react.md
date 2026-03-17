@@ -3,9 +3,8 @@ title: Function Overloads for Flexible APIs
 description: >-
   Use overloads to model ergonomic APIs—curried helpers, either‑or props, and
   safe fallbacks.
-date: 2025-09-06T22:23:57.282Z
-modified: '2025-09-06T17:49:18-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

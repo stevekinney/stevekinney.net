@@ -3,9 +3,8 @@ title: Accessibility Types and ARIA Props
 description: >-
   Bake a11y into types—ensure valid ARIA usage and constrain props so
   inaccessible states can't compile.
-date: 2025-09-06T22:04:44.936Z
-modified: '2025-09-06T17:49:18-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

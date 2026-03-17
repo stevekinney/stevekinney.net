@@ -4,8 +4,8 @@ description: >-
   Utilize Figma's interactive components to bring prototypes to life with
   realistic interactions, streamlining the design process and enhancing user
   experience.
-date: 2024-03-09T19:42:38.000Z
-modified: '2025-07-29T15:09:56-06:00'
+date: 2024-03-09
+modified: 2026-03-17
 tags:
   - figma
   - course

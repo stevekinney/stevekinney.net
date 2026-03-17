@@ -4,8 +4,8 @@ description: >-
   Rspack keeps the webpack mental model but reimplements the engine in Rust—here
   is how it compares to webpack and Vite, when each one makes sense, and why the
   honest comparison is usually Rsbuild versus Vite, not Rspack versus Vite.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 [Rspack][1] is a high-performance JavaScript bundler written in Rust, and its entire pitch is basically this: keep the webpack mental model, keep a lot of the webpack ecosystem, but make the thing meaningfully faster. That already tells you where it sits. Architecturally, Rspack is much closer to webpack than to Vite. [webpack][2] is a static module bundler that builds a dependency graph and emits bundles; Vite's dev story is different because it serves source over native ESM and only bundles for production.

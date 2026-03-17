@@ -3,9 +3,8 @@ title: useOptimistic and Typed Optimistic Updates
 description: >-
   Model optimistic UI updates safely—design optimistic state and reconcile
   server results with precise types.
-date: 2025-09-06T22:04:44.928Z
-modified: '2025-09-22T09:27:10-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

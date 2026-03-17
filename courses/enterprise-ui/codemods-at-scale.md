@@ -5,8 +5,8 @@ description: >-
   repeatable, testable scripts—when to reach for jscodeshift, how the AST
   pipeline works, and why companies like Meta and Google distribute codemods
   alongside breaking changes.
-date: '2026-03-04T00:00:00-07:00'
-modified: '2026-03-04T00:00:00-07:00'
+date: 2026-03-04
+modified: 2026-03-17
 ---
 
 If you've ever needed to rename an import across two thousand files, your first instinct was probably find-and-replace. And for a simple rename—`oldThing` to `newThing`—that works. But the moment you need something slightly more structural—changing a named import to a default import, rewriting a function call to use a different argument order, replacing a deprecated API with one that takes different options—find-and-replace starts producing false positives, missing edge cases, and occasionally destroying template literals.

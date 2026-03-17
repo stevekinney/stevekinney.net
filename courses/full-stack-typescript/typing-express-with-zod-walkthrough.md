@@ -4,8 +4,8 @@ description: >-
   Learn to integrate Zod schema validation in an Express app to ensure data
   integrity, covering tasks like creation, updates, and database queries with
   TypeScript.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-20T08:54:40-05:00'
+modified: 2026-03-17
+date: 2025-03-20
 ---
 
 Let's add some schema validation to our Express application. We'll start by sketching out our schemas.

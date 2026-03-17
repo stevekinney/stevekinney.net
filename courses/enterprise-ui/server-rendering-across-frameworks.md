@@ -5,8 +5,8 @@ description: >-
   problems React Server Components address—server/client code boundaries, data
   loading, streaming, and mutations—with different tradeoffs and different
   opinions.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 The [previous lecture](/courses/enterprise-ui/server-components-and-streaming) covered React's answer to a set of questions that every server-rendered framework has to answer. Where does the server/client boundary sit? How does data get from the server to the component that needs it? How does HTML reach the browser? How do mutations flow back? React's answers—RSC module boundaries, async Server Components, `renderToPipeableStream` with Suspense, Server Functions—are one coherent set of tradeoffs. They are not the only set.

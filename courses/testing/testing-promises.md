@@ -1,8 +1,8 @@
 ---
 title: Testing Promises
 description: Learn how to test promises in Vitest for both resolution and rejection.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 You _could_ use the strategies from [Testing Asynchronous Code](testing-asynchronous-code.md), but let's dig in just a little bit more on promises, in particular.

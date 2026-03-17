@@ -4,9 +4,8 @@ description: >-
   Avoid the Context API traps that cause unnecessary re-renders. Learn patterns
   for efficient context usage, splitting strategies, and when to reach for
   alternatives.
-date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-14
+modified: 2026-03-17
 tags:
   - react
   - performance

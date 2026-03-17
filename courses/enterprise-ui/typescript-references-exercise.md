@@ -4,8 +4,8 @@ description: >-
   Add composite builds and project references to each package so TypeScript can
   do incremental cross-package type checking and skip rechecking packages whose
   inputs have not changed.
-date: 2026-03-01T00:00:00.000Z
-modified: '2026-03-01T00:00:00-07:00'
+date: 2026-03-01
+modified: 2026-03-17
 ---
 
 ## What You're Doing

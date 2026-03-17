@@ -3,9 +3,8 @@ title: Streaming SSR Optimization
 description: >-
   Master React 18+ streaming SSR. Optimize TTFB, implement progressive
   hydration, and deliver instant page loads.
-date: 2025-09-07T00:30:00.000Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-07
+modified: 2026-03-17
 tags:
   - react
   - performance

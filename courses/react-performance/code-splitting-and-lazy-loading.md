@@ -3,9 +3,8 @@ title: Code‑Splitting and Lazy Loading
 description: >-
   Load less JavaScript upfront. Split routes, components, and vendors to speed
   first paint and boost Core Web Vitals.
-date: 2025-09-06T22:08:00.761Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

@@ -5,8 +5,8 @@ description: >-
   vulnerabilities, and React applications aren't immune. While React's JSX
   provides some built-in protections by escaping values by default, there are
   still plen...
-modified: '2025-09-06T17:49:18-06:00'
-date: '2025-09-06T17:49:18-06:00'
+modified: 2026-03-17
+date: 2025-09-06
 ---
 
 Cross-Site Scripting (XSS) attacks remain one of the most common web security vulnerabilities, and React applications aren't immune. While React's JSX provides some built-in protections by escaping values by default, there are still plenty of ways to shoot yourself in the foot—especially when dealing with user-generated content, third-party APIs, or that seemingly innocent `dangerouslySetInnerHTML` prop. Let's explore how TypeScript can help us build safer React applications by creating type-safe abstractions for handling untrusted content.

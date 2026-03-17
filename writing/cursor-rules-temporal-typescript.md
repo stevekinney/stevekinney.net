@@ -4,9 +4,8 @@ description: >-
   Essential guidelines and best practices for writing reliable Temporal
   workflows in TypeScript, covering serialization, determinism, and workflow
   patterns.
-date: 2025-05-14T15:00:00.000Z
-modified: 2025-07-29T21:09:56.000Z
-published: true
+date: 2025-05-14
+modified: 2026-03-17
 ---
 
 The other day, I shared my [Cursor rules for working with TypeScript projects](./cursor-rules-typescript.md). It occured to me shortly after that it might _also_ be useful to show y'all some of the rules that I've been working on when working with [Temporal](https://temporal.io) workflows.

@@ -3,8 +3,8 @@ title: Understanding Cursor Checkpoints for Safe AI Edits
 description: >-
   Learn how Cursor's automatic checkpoints provide a safety net for AI-driven
   code changes and modifications.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 In Cursor, **checkpoints are automatic snapshots of the Agent's changes to your codebase**. They serve as a **disposable safety net** for AI-driven edits, allowing you to **undo Agent modifications if needed**.

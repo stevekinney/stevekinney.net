@@ -3,8 +3,8 @@ title: Testing Local Storage
 description: >-
   We can emulate the DOM for those times when we need to test stuff that is not
   available in Node
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 Let's say we have some code that touches `localStorage`. Normally, our tests run in Node, but `localStorage` isn't in Node. Sure, we _could_ use [mocks](mocks.md) or [stubs](stubs.md), but we could also just emulate the browser environment.

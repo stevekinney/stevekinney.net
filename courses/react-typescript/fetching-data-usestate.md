@@ -4,9 +4,8 @@ description: >-
   Combine useState with useEffect for type-safe data fetching—handle async
   operations, prevent race conditions, and manage component lifecycle with
   TypeScript.
-date: 2025-09-27T12:00:00.000Z
-modified: '2025-10-01T00:19:35-05:00'
-published: true
+date: 2025-09-27
+modified: 2026-03-17
 tags:
   - react
   - typescript

@@ -3,9 +3,8 @@ title: Code-Splitting and Lazy Types
 description: >-
   Split components with React.lazy and keep types intact—ensure default exports,
   props, and suspense fallbacks match.
-date: 2025-09-06T22:04:44.931Z
-modified: '2025-09-14T11:49:08-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

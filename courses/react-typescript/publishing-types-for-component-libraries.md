@@ -3,9 +3,8 @@ title: Publishing Types for Component Libraries
 description: >-
   Ship library-quality types—d.ts output, stable public APIs, and semver
   discipline for React component kits.
-date: 2025-09-06T22:04:45.049Z
-modified: '2025-09-14T11:49:08-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

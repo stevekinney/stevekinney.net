@@ -3,9 +3,8 @@ title: Interoperability with State Libraries and Context
 description: >-
   Type Redux Toolkit, Zustand, and context selectors—strongly typed stores that
   feel native in React.
-date: 2025-09-06T22:04:44.940Z
-modified: '2025-09-14T23:11:40.853Z'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

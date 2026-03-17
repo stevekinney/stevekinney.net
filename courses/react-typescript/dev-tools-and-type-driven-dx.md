@@ -3,9 +3,8 @@ title: Developer Tools and Type-Driven DX
 description: >-
   Use types to supercharge Developer Tools—component labels, prop hints, and
   action logs that reflect your TypeScript models.
-date: 2025-09-06T22:04:45.077Z
-modified: '2025-09-14T23:11:40.841Z'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

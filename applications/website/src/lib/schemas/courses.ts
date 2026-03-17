@@ -7,7 +7,6 @@ export const CourseMetadataSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
   modified: z.string().optional(),
-  published: z.boolean().optional().default(true),
   tags: z.array(z.string()).optional().default([]),
 });
 

@@ -4,8 +4,8 @@ description: >-
   Master React performance optimization from fundamentals to advanced techniques
   with React 19
 layout: page
-date: 2025-09-07T18:00:00.000Z
-modified: '2025-09-22T09:27:10-06:00'
+date: 2025-09-07
+modified: 2026-03-17
 ---
 
 These are my notes for [my React Performance workshop](https://frontendmasters.com/workshops/react-performance-v2/) for [Frontend Masters](https://frontendmasters.com).

@@ -3,8 +3,8 @@ title: 'npm vs pnpm vs Bun: Workspace Package Managers'
 description: >-
   How npm, pnpm, and Bun workspaces compare when your monorepo grows past the
   point where install speed is the only thing that matters.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 All three tools solve the same problem: one repository, many packages, one dependency graph. The difference isn't _whether_ they can do workspaces. The difference is what they optimize for when the repository gets large, when teams get bigger, and when CI cost starts to matter.
