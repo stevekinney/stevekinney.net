@@ -27,3 +27,8 @@ package-lock.json
 # Turborepo
 .turbo
 /.claude/worktrees
+
+# Generated content manifests (built by Turborepo)
+writing/manifest.json
+courses/*/manifest.json
+applications/website/src/lib/server/content-index.json

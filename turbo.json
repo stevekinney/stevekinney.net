@@ -42,6 +42,7 @@
       "cache": false
     },
     "dev": {
+      "dependsOn": ["^manifest"],
       "cache": false,
       "persistent": true
     },
