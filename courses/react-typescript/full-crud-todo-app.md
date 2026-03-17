@@ -4,9 +4,8 @@ description: >-
   Build a production-ready todo application with complete CRUD operations,
   optimistic updates, error handling, and TypeScript throughout—your complete
   guide to real-world React development.
-date: 2025-09-27T12:00:00.000Z
-modified: '2025-10-01T00:19:35-05:00'
-published: true
+date: 2025-09-27
+modified: 2026-03-17
 tags:
   - react
   - typescript

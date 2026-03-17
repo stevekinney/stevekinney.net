@@ -8,7 +8,6 @@ const PostMetadataSchema = z.object({
   date: z.string().datetime(),
   modified: z.string().datetime(),
   tags: z.array(z.string()).optional(),
-  published: z.boolean(),
 });
 
 const IndividualPostSchema = z.object({
@@ -26,7 +25,6 @@ export type PostWithSlug = {
   slug: string;
   description: string;
   modified: string;
-  published: boolean;
   tags: string[];
 };
 

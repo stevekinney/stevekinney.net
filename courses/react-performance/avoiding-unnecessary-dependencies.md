@@ -3,9 +3,8 @@ title: Avoiding Unnecessary Dependencies
 description: >-
   Trim the fat. Replace heavy libraries with native APIs or lighter alts and
   lean on tree‑shaking to cut bundle size.
-date: 2025-09-06T22:09:43.427Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

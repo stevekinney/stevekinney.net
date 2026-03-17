@@ -4,8 +4,8 @@ description: >-
   How to write custom ESLint rules in the flat-config era—when a rule is the
   right tool, what the modern API actually looks like, and how to avoid building
   a brittle little policy goblin that everybody resents.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Writing custom ESLint rules is one of those things that sounds much more mystical than it is. Underneath the ceremony, a [rule][1] is just code that walks an AST, decides whether something is wrong, and optionally reports a fix or suggestion. The trick isn't _how_ to write one. The trick is knowing when a custom rule is actually the right tool, how to write it in the current flat-config-era API, and how to avoid building a brittle little policy goblin that everybody resents.

@@ -4,8 +4,8 @@ description: >-
   Comprehensive guide to building type-safe React applications with TypeScript
   and React 19
 layout: page
-date: 2025-09-07T18:00:00.000Z
-modified: '2025-09-27T13:14:43-06:00'
+date: 2025-09-07
+modified: 2026-03-17
 ---
 
 These are the notes for my [React && TypeScript workshop](https://frontendmasters.com/workshops/react-typescript-v3/) for [Frontend Masters](https://frontendmasters.com).

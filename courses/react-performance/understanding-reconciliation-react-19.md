@@ -3,9 +3,8 @@ title: Understanding Reconciliation in React 19
 description: >-
   Demystify how React compares trees, chooses updates, and schedules work—then
   apply the rules to ship snappy, predictable UIs.
-date: 2025-09-06T21:09:12.712Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

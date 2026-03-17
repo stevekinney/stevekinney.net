@@ -3,8 +3,8 @@ title: Tokenization — From Text to Tensors
 description: >-
   Learn how text becomes model-ready tensors via subword tokenization, special
   tokens, padding, truncation, and attention masks.
-modified: '2025-09-20T10:39:54-06:00'
-date: '2025-09-14T19:38:17.032Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 > [!ABSTRACT] Key Takeaways

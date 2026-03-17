@@ -3,8 +3,8 @@ title: Tailwind Plugins
 description: >-
   Essential plugins for Tailwind CSS including forms, typography, and UI
   component libraries like shadcn/ui
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-06-11T19:05:33-06:00'
+modified: 2026-03-17
+date: 2025-06-12
 ---
 
 - [@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms)

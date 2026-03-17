@@ -3,9 +3,8 @@ title: Complete Guide to React State Management with TypeScript
 description: >-
   Master useState, useReducer, and action typing—from inference patterns to
   discriminated unions that prevent impossible states.
-date: 2025-09-06T22:23:57.266Z
-modified: '2025-09-28T15:41:40-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

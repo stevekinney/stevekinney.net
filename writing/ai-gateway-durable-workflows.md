@@ -5,9 +5,8 @@ description: >-
   providers, enforces policies, and tracks costs, paired with a durable workflow
   engine that makes long-running agentic tasks survive failures, pause for human
   approval, and replay deterministically.
-date: 2026-03-13T12:00:00.000Z
-modified: 2026-03-13T12:00:00.000Z
-published: true
+date: 2026-03-13
+modified: 2026-03-17
 tags:
   - ai
   - architecture

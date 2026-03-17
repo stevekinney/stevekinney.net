@@ -3,8 +3,8 @@ title: Understanding Model Context Protocol (MCP)
 description: >-
   Learn how MCP enables AI tools to connect with external systems for enhanced
   context and capabilities.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 [**Model Context Protocol (MCP)** ](https://modelcontextprotocol.io/overview) is an **open standard protocol** that enables different AI models and tools to **talk to one another seamlessly**. It functions like a universal connector, similar to how USB-C replaced various chargers and connectors, standardizing how Large Language Models (LLMs) and AI agentic frameworks interact with external systems. Essentially, MCP creates a common way for AI tools to communicate.

@@ -3,9 +3,8 @@ title: Mirroring DOM Props with ComponentPropsWithoutRef
 description: >-
   Wrap native elements without losing typing—pass through every valid prop and
   keep autocomplete.
-date: 2025-09-06T22:23:57.294Z
-modified: '2025-09-27T18:40:11-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

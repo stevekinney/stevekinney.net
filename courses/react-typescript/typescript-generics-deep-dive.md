@@ -3,9 +3,8 @@ title: TypeScript Generics Deep Dive
 description: >-
   Master TypeScript generics from basics to advanced patterns—type parameters,
   constraints, variance, and real-world applications.
-date: 2025-09-14T18:00:00.000Z
-modified: '2025-10-01T00:19:35-05:00'
-published: true
+date: 2025-09-14
+modified: 2026-03-17
 tags:
   - typescript
   - generics

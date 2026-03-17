@@ -3,9 +3,8 @@ title: Typing Compound Components and Slots
 description: >-
   Model parent-child relationships—Menu, Tabs, and List components with typed
   items and slot props.
-date: 2025-09-06T22:04:45.015Z
-modified: '2025-09-06T17:49:18-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

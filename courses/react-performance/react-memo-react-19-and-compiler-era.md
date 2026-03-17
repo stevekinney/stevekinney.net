@@ -3,9 +3,8 @@ title: React.memo in React 19 and the Compiler Era
 description: >-
   Learn where React.memo still shines, when a compiler or bailouts make it
   redundant, and how to write fair areEqual checks.
-date: 2025-09-06T21:12:33.129Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

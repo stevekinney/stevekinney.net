@@ -1,8 +1,8 @@
 ---
 title: Alternatives To Using Test Doubles
 description: Explore alternatives to using test doubles in your testing strategy.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 Put on your imagination cap for a second: You're writing a test, and you _could_ mock something out, but it just feels… wrong.

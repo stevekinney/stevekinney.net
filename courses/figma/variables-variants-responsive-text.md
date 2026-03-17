@@ -1,8 +1,8 @@
 ---
 title: Using Variants and Variables for Responsive Text
-modified: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
 description: Patterns for creating reponsive text components in Figma.
-date: '2024-04-15T06:28:51-06:00'
+date: 2024-04-15
 ---
 
 Let's start with a component that looks something like this:

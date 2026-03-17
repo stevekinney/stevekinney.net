@@ -5,8 +5,8 @@ description: >-
   and which ones don't. But too often, we design interfaces that allow
   nonsensical combinations to slip through, creating runtime confusion and
   maintenance head...
-modified: '2025-09-06T17:49:18-06:00'
-date: '2025-09-06T17:49:18-06:00'
+modified: 2026-03-17
+date: 2025-09-06
 ---
 
 Component APIs are contracts—they define what combinations of props make sense and which ones don't. But too often, we design interfaces that allow nonsensical combinations to slip through, creating runtime confusion and maintenance headaches. TypeScript gives us the tools to encode these rules directly into our types, making invalid states literally impossible to represent.

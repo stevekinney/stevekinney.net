@@ -3,9 +3,8 @@ title: Polymorphic Components and the as Prop
 description: >-
   Build components that render different tags while preserving proper props—no
   any, no lies, just safe polymorphism.
-date: 2025-09-06T22:04:44.911Z
-modified: '2025-09-27T18:40:11-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

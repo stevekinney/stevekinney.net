@@ -4,8 +4,8 @@ description: >-
   An incremental replacement strategy for legacy systems: keep a stable front
   door, move one slice at a time, and delete the old path when the new one
   proves itself.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 So, you've got a legacy system. Maybe it's a monolith that's been accumulating features for years. Maybe it's a frontend built on a framework that's two major versions behind. The business can't stop shipping features while you rewrite it, the system still has to serve real traffic, and a full rewrite is—let's be honest—a gamble that rarely pays off on schedule.

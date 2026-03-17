@@ -3,9 +3,8 @@ title: Routing and Typed URL Parameters
 description: >-
   Make routes type-safe—constrain path parameters, search parameters, and
   loaders so links and pages never disagree.
-date: 2025-09-06T22:04:44.949Z
-modified: '2025-09-14T23:11:40.852Z'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

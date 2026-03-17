@@ -3,8 +3,8 @@ title: Discriminated Unions
 description: >-
   Master TypeScript's most powerful pattern for representing state and handling
   complex types
-modified: '2025-10-01T00:19:35-05:00'
-date: 2025-09-14T18:54:09.603Z
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 If there's one TypeScript pattern that will transform how you think about state management in React, it's discriminated unions. They're the secret weapon for making invalid states impossible to represent, and they'll save you from countless bugs. Let's dive deep into this game-changing pattern.

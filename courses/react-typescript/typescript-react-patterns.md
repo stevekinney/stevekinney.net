@@ -3,9 +3,8 @@ title: React-Specific TypeScript Patterns
 description: >-
   Essential TypeScript patterns every React developer needs to know—from
   component typing to ref forwarding
-date: 2025-09-27T10:00:00.000Z
-modified: '2025-09-27T13:35:28-06:00'
-published: true
+date: 2025-09-27
+modified: 2026-03-17
 tags:
   - typescript
   - react

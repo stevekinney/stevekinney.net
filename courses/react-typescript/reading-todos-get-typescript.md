@@ -3,9 +3,8 @@ title: Reading Todos - GET Requests and Type Safety
 description: >-
   Master GET requests with TypeScript—implement pagination, filtering, search,
   and caching strategies for efficient todo list management.
-date: 2025-09-27T12:00:00.000Z
-modified: '2025-10-01T00:19:35-05:00'
-published: true
+date: 2025-09-27
+modified: 2026-03-17
 tags:
   - react
   - typescript

@@ -3,8 +3,8 @@ title: Claude Code Hook Control Flow
 description: >-
   Master hook communication through exit codes and JSON output to control
   Claude's behavior with blocking, approval, and continuation mechanisms
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 Hooks communicate status back to Claude Code primarily through **shell exit codes** and, for more sophisticated control, **structured JSON output** to standard output (stdout). Hooks receive JSON data via standard input (stdin) that provides session and event-specific information, such as `session_id`, `transcript_path`, `tool_name`, `tool_input`, and `tool_response` (depending on the hook event).

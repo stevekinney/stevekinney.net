@@ -3,9 +3,8 @@ title: Measuring Performance with Real Tools
 description: >-
   Stop guessing. Use React DevTools, Chrome Performance, and flamegraphs to find
   real bottlenecks and prove improvements.
-date: 2025-09-06T22:11:29.695Z
-modified: '2025-09-22T09:27:10-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

@@ -57,7 +57,6 @@ const checkFrontmatter = (
   file: string,
   data: Record<string, unknown>,
   required: readonly string[],
-  allowPublished: boolean,
 ) => {
   for (const key of required) {
     const value = data[key];
@@ -71,10 +70,6 @@ const checkFrontmatter = (
     if (!ensureString(value)) {
       addError(file, `Missing required '${key}' frontmatter.`);
     }
-  }
-
-  if (allowPublished && typeof data.published !== 'boolean') {
-    addError(file, "Missing or invalid 'published' frontmatter (expected boolean).");
   }
 };
 
@@ -215,7 +210,7 @@ for (const file of courseFiles) {
 for (const file of writingFiles) {
   const contents = await readFile(file, 'utf8');
   const { data } = matter(contents);
-  checkFrontmatter(toRepoPath(file), data, WRITING_REQUIRED, true);
+  checkFrontmatter(toRepoPath(file), data, WRITING_REQUIRED);
 }
 
 for (const file of courseFiles) {
@@ -226,7 +221,7 @@ for (const file of courseFiles) {
     continue;
   }
 
-  checkFrontmatter(toRepoPath(file), data, COURSE_REQUIRED, false);
+  checkFrontmatter(toRepoPath(file), data, COURSE_REQUIRED);
 
   const tree = unified().use(remarkParse).parse(content);
   visit(tree, ['link', 'image', 'definition'], (node) => {

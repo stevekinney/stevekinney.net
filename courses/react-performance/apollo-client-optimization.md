@@ -3,9 +3,8 @@ title: Apollo Client Performance Optimization
 description: >-
   Master Apollo Client performance with cache optimization, query batching,
   optimistic updates, and efficient subscription management strategies.
-date: 2025-09-20T01:15:00.000Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-20
+modified: 2026-03-17
 tags:
   - react
   - performance

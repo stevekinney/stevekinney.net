@@ -3,9 +3,8 @@ title: Setting Up a Python Environment on macOS
 description: >-
   A brief guide for getting started writing Python on a Mac using virtual
   environments.
-date: 2024-08-06T16:00:00.006Z
-modified: 2025-07-29T21:09:56.000Z
-published: true
+date: 2024-08-06
+modified: 2026-03-17
 tags:
   - python
   - virtual-env

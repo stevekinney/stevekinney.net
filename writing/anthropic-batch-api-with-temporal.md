@@ -1,11 +1,10 @@
 ---
-published: true
 title: Using Anthropic's Message Batches API with Temporal
 description: >-
   Build scalable, cost-efficient AI processing with Anthropic's Message Batches
   API and Temporal workflows.
-modified: 2025-07-29T21:09:56.000Z
-date: 2025-05-08T20:05:36.000Z
+modified: 2026-03-17
+date: 2025-05-08
 ---
 
 When I'm doing research, I typically write down any questions that I have or terms that I wanted to learn more about. Later, I'd run a little script to do some quick research on the topics and questions that I jotted down earlier.

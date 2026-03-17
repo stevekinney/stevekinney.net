@@ -4,9 +4,8 @@ description: >-
   A practical guide to writing reliable prompts across the major LLM APIs—covering
   core techniques, where the providers actually diverge, trust boundaries, and two
   production workflows built from brittle to hardened.
-date: 2026-03-06T12:00:00.000Z
-modified: 2026-03-06T12:00:00.000Z
-published: true
+date: 2026-03-06
+modified: 2026-03-17
 tags:
   - ai
   - prompt-engineering

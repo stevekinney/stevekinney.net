@@ -4,8 +4,8 @@ description: >-
   Set up a routing-level strangler fig so legacy and modern apps coexist,
   migrate one route, and write a jscodeshift codemod that automates import
   transformations for the rest of the codebase.
-date: 2026-03-01T00:00:00.000Z
-modified: '2026-03-01T00:00:00-07:00'
+date: 2026-03-01
+modified: 2026-03-17
 ---
 
 ## What You're Doing

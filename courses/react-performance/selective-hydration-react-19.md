@@ -3,9 +3,8 @@ title: Selective Hydration in Modern React Apps
 description: >-
   Hydrate what matters first. Prioritize above‑the‑fold work so pages feel
   interactive even while the rest continues to load.
-date: 2025-09-06T22:05:42.929Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

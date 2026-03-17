@@ -3,8 +3,8 @@ title: Validating Zod Schemas (Exercises)
 description: >-
   Practice your Zod skills with these hands-on exercises that cover schema
   validation, transformations, and advanced Zod features.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 Below is a list of 10 hands-on challenges that will move you from Zod novice to Zod wizard. Start at the top, work your way down, and you'll get a tour of Zod's many features and peculiarities along the way.

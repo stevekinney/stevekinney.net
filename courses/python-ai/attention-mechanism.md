@@ -3,8 +3,8 @@ title: The Attention Mechanism
 description: >-
   Build intuition for self-attention, Q/K/V projections, multi-head attention,
   masking, and positional information in Transformers.
-modified: '2025-09-20T10:39:54-06:00'
-date: '2025-09-14T19:37:01.227Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 > [!ABSTRACT] Key Takeaways

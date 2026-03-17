@@ -4,9 +4,8 @@ description: >-
   Understand how React really works under the hood. Master the Fiber
   architecture, priority scheduling, and reconciliation to write truly optimized
   React apps.
-date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-22T09:27:10-06:00'
-published: true
+date: 2025-09-14
+modified: 2026-03-17
 tags:
   - react
   - performance

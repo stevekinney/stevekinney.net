@@ -4,8 +4,8 @@ description: >-
   The BroadcastChannel API is a browser-native way to send messages across
   browsing contexts—tabs, iframes, workers, and Module Federation
   boundaries—without shared module singletons or framework-specific state.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Most frontend state management assumes a single page with a single JavaScript context. React Context, Zustand, nanostores, Redux—they all live in one memory space, one component tree, one bundle. That assumption breaks in at least three common situations: when you open the same app in multiple tabs, when you compose an app from iframes or Module Federation remotes, and when you need to coordinate between the main thread and a Service Worker or Shared Worker.

@@ -1,8 +1,8 @@
 ---
 title: Typed-Error Middleware with Express
 description: Add type-safety to Express errors.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 ### Typed Error Middleware

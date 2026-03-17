@@ -3,9 +3,8 @@ title: The React 19 Compiler
 description: >-
   Master the React Compiler from basics to advanced patterns. Migrate from
   manual optimizations, handle edge cases, and measure real-world improvements.
-date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-22T09:27:10-06:00'
-published: true
+date: 2025-09-14
+modified: 2026-03-17
 tags:
   - react
   - performance

@@ -3,8 +3,8 @@ title: Claude Code Session Management
 description: >-
   Manage Claude Code sessions, memory, context, and permissions for optimal
   development workflows and cost efficiency
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 To begin a session, simply open your terminal in your project directory and type `claude`. You can also start a session with an initial prompt directly from the command line, for example, `claude "explain this project"`. It is recommended to open Claude Code within a specific project folder where you are writing code, rather than your root directory, to ensure it has the correct context.

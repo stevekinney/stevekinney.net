@@ -1,8 +1,8 @@
 ---
 title: Mocking DOM Methods
 description: Let's take a look at mocking methods… in the DOM.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 Way back [in the beginning](the-basics.md), we got `add` working, but let's up our game. Let's assume we've got a button that increments a counter when clicked. We want to test that the user sees the count increase.

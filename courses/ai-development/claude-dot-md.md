@@ -3,8 +3,8 @@ title: CLAUDE.md
 description: >-
   Create and maintain CLAUDE.md files as persistent project memory and
   authoritative system rules for consistent AI behavior
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 `CLAUDE.md` files are fundamental to Claude Code's operation and are treated as **authoritative system rules** that define operational boundaries, taking precedence over user prompts.

@@ -5,8 +5,8 @@ description: >-
   static imports, and one shipped artifact—when that tradeoff is the right one,
   the result is a modular monolith with better manners instead of a distributed
   system you didn't need.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Build-time microfrontends are the package-based version of microfrontends. Instead of loading independently deployed slices at runtime, you publish or link each slice as a package and let the shell import them as ordinary dependencies during the application build. Martin Fowler's [microfrontends article][1] describes this exact pattern: each microfrontend is published as a package and the container app includes them as library dependencies. He also calls out the central tradeoff immediately—you get a single deployable JavaScript bundle and can deduplicate common dependencies, but any change in one slice means recompiling and releasing the whole application.

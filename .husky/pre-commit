@@ -8,6 +8,14 @@ if [ -z "$STAGED_FILES" ]; then
   exit 0
 fi
 
+# Update content dates (modified → today, normalize formats, remove published)
+CONTENT_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'writing/*.md' 'courses/**/*.md')"
+if [ -n "$CONTENT_FILES" ]; then
+  echo "Updating content dates..."
+  bun run --cwd packages/scripts update-content-dates.ts $CONTENT_FILES
+  git add $CONTENT_FILES
+fi
+
 # Audit frontmatter for staged course files first
 COURSE_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'courses/**/*.md')"
 if [ -n "$COURSE_FILES" ]; then

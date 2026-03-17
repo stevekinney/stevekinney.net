@@ -3,9 +3,8 @@ title: Render Props and HOC Alternatives
 description: >-
   When generics beat HOCs—type render props for flexibility while keeping
   IntelliSense delightful.
-date: 2025-09-06T22:04:45.031Z
-modified: '2025-09-14T11:49:08-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

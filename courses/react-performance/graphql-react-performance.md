@@ -3,9 +3,8 @@ title: GraphQL & React Performance
 description: >-
   Optimize GraphQL queries in React apps. Master fragment colocation, query
   batching, caching strategies, and avoid the N+1 query problem.
-date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-14
+modified: 2026-03-17
 tags:
   - react
   - performance

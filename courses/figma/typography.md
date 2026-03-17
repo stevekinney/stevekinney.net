@@ -1,7 +1,7 @@
 ---
 title: Text and Typography
-date: 2024-03-21T13:29:19.000Z
-modified: '2025-07-29T15:09:56-06:00'
+date: 2024-03-21
+modified: 2026-03-17
 description: Setting up a reusuable typography system in Figma.
 ---
 

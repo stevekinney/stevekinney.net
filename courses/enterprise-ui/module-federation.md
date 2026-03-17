@@ -4,8 +4,8 @@ description: >-
   A runtime code-sharing model where multiple independent builds form a single
   application—how it works, what the configuration surface actually means, and
   where the sharp edges live.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Module Federation is a runtime code-sharing model for JavaScript applications. The original [webpack concept][1] is straightforward but powerful: multiple separate builds should form a single application, where each build can act as a container, expose modules, and consume modules from other containers at runtime. The high-level `ModuleFederationPlugin` is the ergonomic wrapper over webpack's lower-level `ContainerPlugin` and `ContainerReferencePlugin`.

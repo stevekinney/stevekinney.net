@@ -4,8 +4,8 @@ description: >-
   Streamline design with Figma variants, combining multiple component iterations
   for simplicity and consistency. Enhance efficiency and collaboration in your
   projects.
-date: 2024-03-09T19:21:25.000Z
-modified: '2025-07-29T15:09:56-06:00'
+date: 2024-03-09
+modified: 2026-03-17
 ---
 
 ![Loki and his variants](assets/figma-loki-variants.jpg)

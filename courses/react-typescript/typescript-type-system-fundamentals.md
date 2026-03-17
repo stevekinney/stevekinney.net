@@ -3,9 +3,8 @@ title: TypeScript Type System Fundamentals
 description: >-
   Master TypeScript's type system from the ground up—structural typing, type
   inference, narrowing, and the mental models that make everything click.
-date: 2025-09-14T18:00:00.000Z
-modified: '2025-09-27T13:14:43-06:00'
-published: true
+date: 2025-09-14
+modified: 2026-03-17
 tags:
   - typescript
   - fundamentals

@@ -5,8 +5,8 @@ description: >-
   teams, and independently deployed services—test shapes, flakiness management,
   enterprise-specific patterns, and the operational infrastructure that keeps a
   large test suite from becoming the thing everyone dreads.
-modified: '2026-03-04T00:00:00-07:00'
-date: '2026-03-04T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-04
 ---
 
 When you have one application and one team, your testing strategy is whatever the team agrees on during a standup. Unit tests for business logic. A few integration tests for the happy path. Maybe some Playwright runs before a release if someone remembers. It works.

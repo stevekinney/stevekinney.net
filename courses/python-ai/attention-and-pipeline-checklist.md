@@ -3,8 +3,8 @@ title: 'Quick Checklists — Pipelines, Attention, Generation'
 description: >-
   Compact, practical checklists to configure pipelines, reason about attention,
   and choose text generation settings.
-modified: '2025-09-14T23:11:40.817Z'
-date: '2025-09-14T19:16:10.021Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 ## Pipeline Setup Checklist

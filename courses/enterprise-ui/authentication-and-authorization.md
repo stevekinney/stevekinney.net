@@ -5,8 +5,8 @@ description: >-
   SSO protocols and token management to RBAC versus ABAC versus ReBAC, the BFF
   pattern, microfrontend auth boundaries, and the routing and branding patterns
   that make multi-tenant SaaS work.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Authentication, authorization, and multi-tenancy are three problems that enterprise frontend teams tend to treat as "someone else's job" right up until they are not. The identity provider handles auth, the backend enforces permissions, the platform team manages tenants—and the frontend just… calls an API and hopes for the best.

@@ -3,9 +3,8 @@ title: Typing Context and Selector Patterns
 description: >-
   Create fully typed contexts—state/actions split, selectors that minimize
   re-renders, and ergonomic Provider APIs.
-date: 2025-09-06T22:04:44.911Z
-modified: '2025-09-22T09:27:10-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

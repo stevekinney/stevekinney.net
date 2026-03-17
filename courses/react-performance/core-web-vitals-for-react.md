@@ -3,9 +3,8 @@ title: Core Web Vitals for React Applications
 description: >-
   Master LCP, FID, and CLS optimization in React apps. Practical techniques to
   improve user experience and search rankings.
-date: 2025-09-06T23:15:00.000Z
-modified: '2025-09-22T09:27:10-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

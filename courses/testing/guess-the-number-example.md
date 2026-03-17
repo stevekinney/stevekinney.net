@@ -1,8 +1,8 @@
 ---
 title: Building A "Guess The Number" Game Using Test-Driven Development With Vitest
 description: Learn to build a "Guess the Number" game using TDD with Vitest.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 ## Building a "Guess the Number" Game Using Test-Driven Development with Vitest

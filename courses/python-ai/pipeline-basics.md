@@ -3,8 +3,8 @@ title: Pipeline Basics (Hugging Face)
 description: >-
   Understand Hugging Face Pipelines, tasks, model/tokenizer loading, batching,
   devices, and configuration for quick, production-ready inference.
-modified: '2025-09-20T10:39:54-06:00'
-date: '2025-09-14T19:39:41.572Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 > [!ABSTRACT] Key Takeaways

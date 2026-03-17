@@ -3,9 +3,8 @@ title: 'Typed Forms, Actions, and useActionState'
 description: >-
   Model form mutations in React 19—type Actions and useActionState for safe
   server and client flows.
-date: 2025-09-06T22:04:44.913Z
-modified: '2025-10-01T00:19:35-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

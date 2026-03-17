@@ -3,8 +3,8 @@ title: tRPC on the Client
 description: >-
   Learn how to set up and use tRPC on the client side with React and React Query
   integration for type-safe API calls.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 This guide documents how we migrated the client-side API from using direct REST calls to using tRPC. Before implementing these changes, the following were set up:

@@ -4,9 +4,8 @@ description: >-
   Handle high-frequency updates without killing performance. Master WebSockets,
   Server-Sent Events, throttling, and efficient state updates for real-time
   React apps.
-date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-14
+modified: 2026-03-17
 tags:
   - react
   - performance

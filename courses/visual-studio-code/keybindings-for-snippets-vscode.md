@@ -1,8 +1,8 @@
 ---
 title: Keybindings for Snippets
 description: Add Keybindings for your Snippets in Visual Studio Code.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-17T09:32:33-06:00'
+modified: 2026-03-17
+date: 2025-03-17
 ---
 
 Custom keybindings aren't limited to built-in commands. You can also bind snippets, custom tasks, or extension-specific features.

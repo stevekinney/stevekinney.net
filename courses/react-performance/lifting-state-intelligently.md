@@ -3,9 +3,8 @@ title: Lifting State Intelligently
 description: >-
   Lift state only when multiple peers truly need it. Contain churn and stop
   render ripples before they swamp your UI.
-date: 2025-09-06T21:46:42.696Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

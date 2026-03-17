@@ -4,8 +4,8 @@ description: >-
   Configure eslint-plugin-boundaries to encode the intended dependency graph as
   lint rules, preventing cross-package internal imports and circular
   dependencies.
-date: 2026-03-01T00:00:00.000Z
-modified: '2026-03-01T00:00:00-07:00'
+date: 2026-03-01
+modified: 2026-03-17
 ---
 
 ## What You're Doing

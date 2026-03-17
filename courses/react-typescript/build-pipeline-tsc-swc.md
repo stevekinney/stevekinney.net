@@ -5,8 +5,8 @@ description: >-
   everything" approach. Today's fastest development setups separate type
   checking from transpilation, using specialized tools for each job. Let's
   explore how to build...
-modified: '2025-09-06T17:49:18-06:00'
-date: '2025-09-06T17:49:18-06:00'
+modified: 2026-03-17
+date: 2025-09-06
 ---
 
 Modern TypeScript build tooling has evolved beyond the "just use `tsc` for everything" approach. Today's fastest development setups separate type checking from transpilation, using specialized tools for each job. Let's explore how to build a robust pipeline with TypeScript's compiler (`tsc`), the ultra-fast SWC transpiler, and Vite's development server—and understand when to use each tool.

@@ -3,9 +3,8 @@ title: The cache() API
 description: >-
   Stabilize and dedupe expensive work across requests and renders—use cache() to
   turn pure functions into shared resources.
-date: 2025-09-06T22:22:56.456Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

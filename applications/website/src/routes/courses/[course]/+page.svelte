@@ -16,12 +16,7 @@
   );
 </script>
 
-<SEO
-  title={data.title}
-  description={data.description}
-  published={data.published}
-  jsonLd={courseJsonLd}
-/>
+<SEO title={data.title} description={data.description} jsonLd={courseJsonLd} />
 
 <data.content />
 

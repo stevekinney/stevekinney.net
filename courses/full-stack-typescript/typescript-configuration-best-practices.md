@@ -3,8 +3,8 @@ title: TypeScript Configuration Best Practices
 description: >-
   An in-depth guide to configuring TypeScript with strict type checking and
   other important compiler options for maximum safety and reliability.
-date: 2025-03-15T22:58:14.000Z
-modified: '2025-07-29T15:09:56-06:00'
+date: 2025-03-15
+modified: 2026-03-17
 ---
 
 Let's consider this `tsconfig.json` for a hot minute.

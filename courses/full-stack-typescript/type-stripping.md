@@ -3,8 +3,8 @@ title: Type Stripping in Node.js
 description: >-
   Learn how Node.js handles TypeScript files by stripping types at runtime
   without a separate build step.
-date: 2025-03-15T22:50:56.000Z
-modified: '2025-07-29T15:09:56-06:00'
+date: 2025-03-15
+modified: 2026-03-17
 ---
 
 Type stripping is Node.js's way of “magically” running TypeScript files without a separate build step—by literally erasing all the type syntax from your source code at runtime. In other words, Node takes your `.ts` file, removes things like type annotations, interfaces, and type-only imports (by replacing them with whitespace so that line numbers stay the same), and then executes the remaining JavaScript code as if you'd handwritten it. It's like having a “do it live” button for TypeScript—but don't forget, it doesn't check your types at runtime!

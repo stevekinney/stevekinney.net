@@ -3,8 +3,8 @@ title: Speculation Rules & bfcache Optimization
 description: >-
   Implement instant navigation with Speculation Rules API and optimize for
   back/forward cache in React applications
-date: 2025-01-14T00:00:00.000Z
-modified: '2025-09-30T21:02:22-05:00'
+date: 2025-01-14
+modified: 2026-03-17
 status: published
 tags:
   - React

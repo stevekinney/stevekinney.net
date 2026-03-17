@@ -3,8 +3,8 @@ title: Building a Popover Menu
 description: >-
   Let's build a modern popover menu using the native HTML Popover API and
   Tailwind CSS for styling.
-modified: '2025-06-13T07:53:56-05:00'
-date: '2025-06-13T07:27:15-05:00'
+modified: 2026-03-17
+date: 2025-06-13
 ---
 
 Let's start with our basic HTML structure using the native Popover API.

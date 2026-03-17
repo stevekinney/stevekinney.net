@@ -3,9 +3,8 @@ title: Introducing Prose Writer
 description: >-
   A little TypeScript library for building Markdown-friendly strings without
   template literal sprawl.
-date: 2026-01-12T18:00:31.000Z
-modified: 2026-01-12T18:02:20.000Z
-published: true
+date: 2026-01-12
+modified: 2026-03-17
 ---
 
 I just published [`prose-writer`](https://www.npmjs.com/package/prose-writer) to npm. It is still in **beta**, but it already fixes a small but constant annoyance: building structured text in code without turning your prompt or doc template into a fragile mess of `\n` and `join()` calls. I've been using it for a while now. Pretty much the only reason that I'm calling it a beta is because I'm the only one using it. If y'all try it out and don't find any deal breakers, then I'll go ahead and bump it up to 1.0.0.

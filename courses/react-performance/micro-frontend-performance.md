@@ -4,9 +4,8 @@ description: >-
   Build performant micro-frontend architectures with React. Master Module
   Federation, shared dependencies, runtime optimization, and cross-team
   coordination.
-date: 2025-09-14T12:00:00.000Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-14
+modified: 2026-03-17
 tags:
   - react
   - performance

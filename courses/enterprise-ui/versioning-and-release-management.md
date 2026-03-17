@@ -3,8 +3,8 @@ title: Versioning and Release Management
 description: >-
   How to version a multi-package design system with semver contracts, DTCG
   tokens, a layered package graph, and Changesets for coordinated releases.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 Before we talk about version numbers, we need to talk about what we're versioning. A design system isn't one package. It's a graph of packages—tokens, themes, foundations, primitives, framework-specific components—that evolve at different speeds. If you try to version them all in lockstep, you end up with major bumps to the icon package because someone renamed a button prop. If you version them independently with no coordination, you end up with consumers pinned to six incompatible versions of things that are supposed to work together.

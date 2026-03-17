@@ -3,9 +3,8 @@ title: React Server Components and Server Actions
 description: >-
   Respect the server/client boundary—serialize safely, type async components,
   and model actions.
-date: 2025-09-06T22:23:57.350Z
-modified: '2025-09-06T17:49:18-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

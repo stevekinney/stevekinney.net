@@ -4,8 +4,8 @@ description: >-
   Learn to implement client-side schema validation in a React app with
   TypeScript and Express, using `busy-bee-schema` to ensure API response
   integrity and handle CRUD operations efficiently.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-20T08:54:40-05:00'
+modified: 2026-03-17
+date: 2025-03-20
 ---
 
 Now that we have everything set up in our Express application, can we do something similar in our React application.

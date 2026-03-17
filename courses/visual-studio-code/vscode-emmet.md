@@ -3,8 +3,8 @@ title: Emmet in Visual Studio Code
 description: >-
   Learn how to use Emmet's powerful abbreviation syntax to speed up HTML and CSS
   development in Visual Studio Code
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 Emmet is a powerful shorthand system for HTML and CSS, built right into Visual Studio Code. It dramatically speeds up your front-end workflow by letting you write concise abbreviations that expand into full-fledged markup or style rules. Below are the core features and tips for making Emmet work for you, particularly when writing React in TSX or JSX.

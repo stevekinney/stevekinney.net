@@ -3,8 +3,8 @@ title: Navigating Visual Studio Code
 description: >-
   Master the essential navigation features in Visual Studio Code to efficiently
   move through your codebase
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 Navigating large codebases can feel like exploring a maze. I have a long rant about how one of the best skills you can learn is how to drop into a large codebase and quickly get your bearings. Visual Studio Code offers a range of tools to help you zip around files and symbols—quickly tracking down definitions, references, and more. Let's take a closer look at these essential navigation features.

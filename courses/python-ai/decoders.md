@@ -3,8 +3,8 @@ title: Decoders and Text Generation
 description: >-
   Practical guide to causal decoders and generation strategies like greedy, beam
   search, top-k/top-p sampling, temperature, and penalties.
-modified: '2025-09-20T10:39:54-06:00'
-date: '2025-09-14T19:43:52.263Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 > [!ABSTRACT] Key Takeaways

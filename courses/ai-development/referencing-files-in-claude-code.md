@@ -3,8 +3,8 @@ title: Referencing Files and Resources in Claude Code
 description: >-
   Master the @ symbol system in Claude Code to reference files, directories, and
   MCP resources effectively.
-modified: '2025-07-30T07:02:20-05:00'
-date: 2025-07-24T21:30:36.000Z
+modified: 2026-03-17
+date: 2025-07-24
 ---
 
 In Claude Code—just like in Cursor, the `@` symbol is a powerful mechanism used to **reference files, directories, and even external Model Context Protocol (MCP) resources**, enabling Claude to access and integrate relevant information directly into its context. This feature significantly enhances Claude Code's ability to understand your project, execute tasks, and provide accurate responses by providing it with explicit, structured context.

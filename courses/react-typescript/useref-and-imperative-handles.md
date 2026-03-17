@@ -3,9 +3,8 @@ title: 'useRef, Callback Refs, and Imperative Handles'
 description: >-
   Type refs to DOM nodes and components—safely expose imperative APIs with
   forwardRef and useImperativeHandle.
-date: 2025-09-06T22:04:44.910Z
-modified: '2025-09-06T17:49:18-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

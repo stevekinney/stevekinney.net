@@ -3,9 +3,8 @@ title: React Server Components
 description: >-
   Move heavy work to the server and hydrate only where needed—ship less JS and
   free the main thread for interactions.
-date: 2025-09-06T22:03:39.880Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

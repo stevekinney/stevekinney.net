@@ -3,9 +3,8 @@ title: From Passing Dispatch to Context
 description: >-
   Stop prop drilling—introduce a typed Context and migrate dispatch to a
   Provider with safety.
-date: 2025-09-06T22:23:57.270Z
-modified: '2025-09-14T11:49:08-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

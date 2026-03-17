@@ -3,8 +3,8 @@ title: Utility Types Complete Guide
 description: >-
   Master TypeScript's built-in utility types and create your own for cleaner,
   more maintainable code
-modified: '2025-09-22T09:27:10-06:00'
-date: '2025-09-14T19:01:07.875Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 TypeScript provides a treasure trove of built-in utility types that save you from writing boilerplate type transformations. Think of them as your type-level standard library - pre-built tools for common type manipulations. Let's explore every utility type and learn how to create our own.

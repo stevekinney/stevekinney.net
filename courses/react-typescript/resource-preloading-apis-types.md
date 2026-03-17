@@ -3,9 +3,8 @@ title: Resource Preloading APIs with TypeScript
 description: >-
   Preload, preinit, and prefetch with confidence—type helpers to avoid duplicate
   loads and mismatched priorities.
-date: 2025-09-06T22:04:44.920Z
-modified: '2025-09-06T17:49:18-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

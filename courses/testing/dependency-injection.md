@@ -1,8 +1,8 @@
 ---
 title: 'Dependency Injection In JavaScript: What, Why, And How'
 description: Learn the basics and benefits of Dependency Injection in JavaScript.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 Big fancy name, simple idea: **injecting dependencies** into a function or class rather than having the function or class create them itself.

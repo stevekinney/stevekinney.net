@@ -5,8 +5,8 @@ description: >-
   components need to re-render. When you pass objects, arrays, or functions as
   props, their **identity**—not just their contents—determines whether React
   considers them...
-modified: '2025-09-30T21:02:22-05:00'
-date: '2025-09-06T17:49:18-06:00'
+modified: 2026-03-17
+date: 2025-09-06
 ---
 
 React's performance model is built on comparing values to decide when components need to re-render. When you pass objects, arrays, or functions as props, their **identity**—not just their contents—determines whether React considers them "the same." Get this wrong, and you'll trigger unnecessary re-renders that can cascade through your component tree. Get it right, and your app stays snappy even as it grows.

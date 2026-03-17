@@ -1,11 +1,11 @@
 ---
-modified: '2025-07-30T08:28:49-05:00'
+modified: 2026-03-17
 title: Developing with AI Tools
 layout: page
 description: >-
   A course covering everything that Steve has learned to date about developing
   software with Cursor and Claude Code.
-date: 2025-07-30T00:00:00.000Z
+date: 2025-07-30
 ---
 
 This course covers all the things that I have learned about using AI-powered tools like [Cursor](https://cursor.com) and [Claude Code](https://www.anthropic.com/claude-code) to write software. Since this kind of stuff can go out of date quickly, I try to focus on the battle-tested approaches that have worked for decades: thinking things through before you jump into the code, maintaining good Git discipline so you can revert back to a known good state whenever things go off the rails, testing, linting code quality, and more.

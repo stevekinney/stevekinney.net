@@ -5,8 +5,8 @@ description: >-
   confusing. React 19's useActionState hook elegantly solves the coordination
   problem of managing pending, success, and error states while keeping your
   components p...
-modified: '2025-09-30T21:02:22-05:00'
-date: '2025-09-06T17:49:18-06:00'
+modified: 2026-03-17
+date: 2025-09-06
 ---
 
 Forms and mutations are where React apps traditionally become sluggish and confusing. React 19's `useActionState` hook elegantly solves the coordination problem of managing pending, success, and error states while keeping your components performant. Instead of scattered `useState` calls and manual loading flags, you get a single hook that handles the entire mutation lifecycle—with built-in optimizations that prevent unnecessary renders and provide clear UX feedback.

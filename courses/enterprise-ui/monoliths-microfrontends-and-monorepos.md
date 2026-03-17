@@ -4,8 +4,8 @@ description: >-
   Three axes people keep shoving into one argument—runtime composition,
   repository topology, and deployment topology—separated so the tradeoffs
   stop sounding mystical and start sounding like engineering.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 This is not one argument. It's three arguments that people keep shoving into the same trench. **Monolith vs microfrontend** is mostly a question about runtime composition and deployability. **Monorepo vs polyrepo** is mostly a question about where source code lives and how builds are managed. Then there's a third axis—**single deployable vs many deployables vs truly independent deployables**. Once you separate those axes, half the debate stops sounding mystical and starts sounding like ordinary engineering tradeoffs again. A microfrontend is "an architectural style where independently deliverable frontend applications are composed into a greater whole," while a monorepo is simply a single Git repository containing multiple applications and libraries. Those aren't rival definitions, so a system can absolutely be both a microfrontend architecture _and_ a monorepo, or neither.

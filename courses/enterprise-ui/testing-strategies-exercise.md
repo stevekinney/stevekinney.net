@@ -4,8 +4,8 @@ description: >-
   Write Playwright E2E tests for cross-route navigation, mock API responses with
   MSW, record HAR fixtures for deterministic replay, and discuss where contract
   testing fills the gaps.
-date: 2026-03-01T00:00:00.000Z
-modified: '2026-03-01T00:00:00-07:00'
+date: 2026-03-01
+modified: 2026-03-17
 ---
 
 ## What You're Doing

@@ -4,8 +4,8 @@ description: >-
   A tiny, framework-agnostic reactive state library that works across React,
   Vue, Svelte, Angular, and vanilla JS—which makes it unusually useful for
   cross-boundary state in microfrontend architectures.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 [Nanostores](https://github.com/nanostores/nanostores) is a state management library that's small enough to almost not exist. The core package is under 1 KB. It has no framework dependency, no provider components, no context wrappers, no boilerplate setup. You create a store, read from it, write to it, and subscribe to changes. That's the entire programming model.

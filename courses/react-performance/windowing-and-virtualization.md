@@ -3,9 +3,8 @@ title: Windowing and Virtualization
 description: >-
   Render only what users see. Use react-window to make 10,000-row lists fast
   without sacrificing UX or accessibility.
-date: 2025-09-06T21:56:05.091Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

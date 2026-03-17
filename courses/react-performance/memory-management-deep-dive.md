@@ -3,8 +3,8 @@ title: Memory Management Deep Dive
 description: >-
   Master React memory management, leak detection, and garbage collection
   optimization for production applications
-date: 2025-01-14T00:00:00.000Z
-modified: '2025-09-20T15:36:56-06:00'
+date: 2025-01-14
+modified: 2026-03-17
 status: published
 tags:
   - React

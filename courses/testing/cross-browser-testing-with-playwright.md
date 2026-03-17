@@ -1,8 +1,8 @@
 ---
 title: Cross-Browser Testing with Playwright
 description: Learn how to perform cross-browser testing with Vitest and Playwright.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 Let's talk about cross-browser testing, because let's be real, the odds that your app is only ever going to be used on the latest Chrome version are about as good as finishing a Friday without hitting _at least_ one merge conflict. You've got users out there with different setups—Safari, Firefox, Edge, maybe even IE11 (gross).

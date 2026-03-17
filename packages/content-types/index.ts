@@ -8,7 +8,6 @@ export type PostManifestEntry = {
   description: string;
   date: string;
   modified: string;
-  published: boolean;
   tags: string[];
   slug: string;
   file: string;
@@ -25,7 +24,6 @@ export type CourseManifestEntry = {
   description: string;
   date: string;
   modified?: string;
-  published?: boolean;
   tags?: string[];
   file: string;
 };
@@ -38,7 +36,6 @@ export type CourseManifest = {
     description: string;
     date: string;
     modified?: string;
-    published?: boolean;
     tags?: string[];
     contentsFile?: string;
   };
@@ -52,7 +49,6 @@ export type SiteContentIndex = {
     description: string;
     date: string;
     modified: string;
-    published: boolean;
     tags: string[];
     slug: string;
   }>;

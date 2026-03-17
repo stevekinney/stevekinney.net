@@ -3,9 +3,8 @@ title: Custom Hooks with Generics
 description: >-
   Build reusable hooks with proper generic constraints—type-safe data fetching,
   localStorage, and form management patterns.
-date: 2025-09-06T22:23:57.314Z
-modified: '2025-09-22T09:27:10-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

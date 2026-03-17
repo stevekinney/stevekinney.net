@@ -8,9 +8,8 @@ tags:
   - machine-learning
   - neural-networks
   - transformers
-published: true
-modified: 2025-07-29T21:09:56.000Z
-date: 2025-04-16T19:49:56.000Z
+modified: 2026-03-17
+date: 2025-04-16
 ---
 
 At its core, a [**neural network**](https://en.wikipedia.org/wiki/Neural_network_%28machine_learning%29) is like a very complex function or a pipeline you might build in your programming language of choice. You can think of it as a series of processing steps chained together—like a `pipe` function. You feed data in one end (function arguments or parameters), it goes through various transformations, and you get an output (like a return value).

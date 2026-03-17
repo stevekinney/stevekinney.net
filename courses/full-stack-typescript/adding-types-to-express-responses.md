@@ -3,8 +3,8 @@ title: Adding Types to Express Responses
 description: >-
   Learn how to add comprehensive type safety to Express response objects for
   better API consistency and reliability.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 Just as we type request inputs, we should type response outputs to ensure API consistency.

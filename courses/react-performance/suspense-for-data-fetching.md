@@ -3,9 +3,8 @@ title: Suspense for Data Fetching
 description: >-
   Stream UI progressively instead of blocking on everything—compose boundaries
   that keep pages interactive and informative.
-date: 2025-09-06T22:01:30.022Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

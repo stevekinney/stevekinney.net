@@ -1,8 +1,8 @@
 ---
 title: Testing the Character Class
 description: Writing tests for the Character class and its key attributes.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-10-02T08:49:23-05:00'
+modified: 2026-03-17
+date: 2024-10-02
 ---
 
 Let's head over to `examples/characters` and spend a moment reflecting on this `Character` class, which is a subset of the `Person` class we were just looking at.

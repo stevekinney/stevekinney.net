@@ -3,9 +3,8 @@ title: Concurrent React and Scheduling
 description: >-
   Learn how React can pause and resume work to keep interactions smooth—design
   components that play nicely with the scheduler.
-date: 2025-09-06T21:57:38.385Z
-modified: '2025-09-22T09:27:10-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

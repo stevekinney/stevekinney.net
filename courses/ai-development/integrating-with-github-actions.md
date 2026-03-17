@@ -3,8 +3,8 @@ title: Integrating Claude Code with GitHub Actions
 description: >-
   Set up AI-powered automation in GitHub workflows using Claude Code for code
   reviews and pull requests.
-modified: '2025-09-06T14:36:25-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 Claude Code GitHub Actions enable AI-powered automation within your GitHub workflows. By simply mentioning `@claude` in a pull request (PR) or issue, Claude can analyze your code, create PRs, implement features, and fix bugs, all while adhering to your project's defined standards. It's built on the Claude Code SDK, which allows programmatic integration.

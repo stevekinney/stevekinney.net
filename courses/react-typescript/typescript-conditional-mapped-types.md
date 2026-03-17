@@ -3,8 +3,8 @@ title: Conditional and Mapped Types
 description: >-
   Transform and manipulate types at compile time with TypeScript's most powerful
   features
-modified: '2025-09-22T09:27:10-06:00'
-date: '2025-09-14T18:59:44.932Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 If TypeScript's type system is a programming language, then conditional and mapped types are its control flow and loops. They let you transform types, create new types based on existing ones, and build incredibly sophisticated type-level logic. These are the tools that make libraries like React Hook Form and tRPC possible. Let's master them.

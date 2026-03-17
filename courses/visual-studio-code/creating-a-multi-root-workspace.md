@@ -3,8 +3,8 @@ title: Creating Multi-Root Workspaces in Visual Studio Code
 description: >-
   Step-by-step guide to creating and configuring multi-root workspaces to manage
   multiple projects together
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 1. **Open Visual Studio Code:** Launch Visual Studio Code.

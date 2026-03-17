@@ -3,8 +3,8 @@ title: Using Zod with Express
 description: >-
   Learn how to integrate Zod with Express for type-safe, runtime validation of
   request bodies, query parameters, and URL parameters.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 Type definitions in TypeScript help you catch mistakes at compile time, but they can't validate data when your code is actually running. That's where a schema validation library like [zod](https://www.npmjs.com/package/zod) shines. It bridges the gap by enforcing runtime checks while preserving type safety.

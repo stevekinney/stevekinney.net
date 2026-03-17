@@ -26,7 +26,6 @@
 <SEO
   title={data.meta.title}
   description={data.meta.description}
-  published={data.meta.published}
   date={data.meta.date}
   modified={data.meta.modified}
   type="article"
@@ -45,7 +44,7 @@
 
   <data.content class="prose dark:prose-invert max-w-none" as="section" />
 
-  {#if data.meta.published && data.meta.modified}
+  {#if data.meta.modified}
     <p class="my-6 text-right text-sm text-slate-500 dark:text-gray-400">
       Last modified on <Date date={data.meta.modified} />.
     </p>

@@ -3,9 +3,8 @@ title: Performance Testing Strategy
 description: >-
   Build comprehensive performance tests for React apps. Unit test performance,
   catch regressions, and automate optimization validation.
-date: 2025-09-07T00:00:00.000Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-07
+modified: 2026-03-17
 tags:
   - react
   - performance

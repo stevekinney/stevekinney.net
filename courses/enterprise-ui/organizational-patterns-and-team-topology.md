@@ -5,8 +5,8 @@ description: >-
   Topologies, vertical slices, platform teams, ADRs, inner-source, DORA
   metrics, and the organizational patterns that make (or break) large-scale
   frontend systems.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 You can spend weeks designing the perfect microfrontend boundary. You can draw the cleanest dependency graph anyone has ever seen. And then the org chart will route around your architecture like water finding cracks in concrete.

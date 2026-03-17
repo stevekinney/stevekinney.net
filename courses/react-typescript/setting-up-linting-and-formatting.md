@@ -3,8 +3,8 @@ title: Setting Up Linting and Formatting
 description: >-
   Configure ESLint, Prettier, and type-aware rules for React TypeScript projects
   with modern tooling and best practices.
-date: 2025-09-20T18:00:00.000Z
-modified: '2025-09-20T10:40:36-06:00'
+date: 2025-09-20
+modified: 2026-03-17
 ---
 
 ## Setting Up Linting and Formatting

@@ -1,11 +1,11 @@
 ---
 title: Refining Types with Zod
-modified: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
 description: >-
   A guide to creating and using custom validation schemas in Zod, including
   refining schemas, custom validation, nested types, branded types, and best
   practices for error handling and testing.
-date: '2025-03-16T17:35:22-06:00'
+date: 2025-03-16
 ---
 
 Zod ships with a generous spread of primitive and composite schema definitions right out of the box. If your “custom type” can be expressed as a straightforward Zod object or union, just use one of those like we saw in the [introduction earlier](introduction-to-zod.md).

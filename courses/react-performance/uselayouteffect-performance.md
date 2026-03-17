@@ -3,9 +3,8 @@ title: Performance Characteristics of useLayoutEffect
 description: >-
   Know when layout effects are necessary—and when they block paint. Prefer
   passive effects and measure before forcing sync work.
-date: 2025-09-06T22:29:02.602Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

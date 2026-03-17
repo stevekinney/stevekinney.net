@@ -3,8 +3,8 @@ title: Multiple Cursors with Find and Replace
 description: >-
   Learn how to use search results to create multiple cursors for efficient text
   editing in Visual Studio Code
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-16T17:35:22-06:00'
+modified: 2026-03-17
+date: 2025-03-16
 ---
 
 > [!tip] This is it's own section because I think it's _super helpful_ and I didn't want to forget about it.

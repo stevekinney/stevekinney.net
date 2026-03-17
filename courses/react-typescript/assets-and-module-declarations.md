@@ -3,9 +3,8 @@ title: Assets and Module Declarations
 description: >-
   Teach TypeScript about CSS, images, and SVGs—write module declarations that
   make imports type-safe.
-date: 2025-09-06T22:04:44.964Z
-modified: '2025-09-06T17:49:18-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

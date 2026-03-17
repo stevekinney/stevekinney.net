@@ -3,8 +3,8 @@ title: Class Variance Authority
 description: >-
   A framework agnostic tool for creating variants of a component with different
   classes.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2024-04-15T06:28:51-06:00'
+modified: 2026-03-17
+date: 2024-04-15
 ---
 
 [Class Variance Authority](https://cva.style) is a framework agnostic tool for creating variants of a component with different classes. It's super simple and you probably _could_ write it yourself if you had to—but, you don't have to because it already exists.

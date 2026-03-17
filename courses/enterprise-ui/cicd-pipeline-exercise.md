@@ -4,8 +4,8 @@ description: >-
   Build a GitHub Actions workflow that runs the full quality gate on every push,
   uses Turborepo for caching, and adds Lighthouse CI performance budgets to
   catch regressions before they ship.
-date: 2026-03-01T00:00:00.000Z
-modified: '2026-03-01T00:00:00-07:00'
+date: 2026-03-01
+modified: 2026-03-17
 ---
 
 ## What You're Doing

@@ -3,9 +3,8 @@ title: DOM and React Event Types Without Tears
 description: >-
   Never guess again—use React's built‑in event types for forms, mouse, keyboard,
   and more.
-date: 2025-09-06T22:23:57.265Z
-modified: '2025-09-27T18:40:11-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

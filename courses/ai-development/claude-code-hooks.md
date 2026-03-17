@@ -3,8 +3,8 @@ title: Claude Code Hooks
 description: >-
   Learn how to use event-driven hooks to provide deterministic control over
   Claude's behavior and automate development workflows
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 Claude Code Hooks are **user-defined shell commands that trigger automatically based on specific events** within a Claude Code session. They provide a **deterministic control layer** over the agent's behavior, ensuring that certain actions or rules are _always_ enforced, rather than relying on the Large Language Model (LLM) to remember or choose to run them. This deterministic enforcement is a key distinction from mere prompting instructions.

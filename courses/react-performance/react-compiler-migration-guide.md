@@ -3,9 +3,8 @@ title: React Compiler Migration Guide
 description: >-
   Complete guide to adopting React 19's compiler. Migrate from manual
   optimizations, handle edge cases, and measure improvements.
-date: 2025-09-07T00:15:00.000Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-07
+modified: 2026-03-17
 tags:
   - react
   - performance

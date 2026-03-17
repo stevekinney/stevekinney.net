@@ -4,8 +4,8 @@ description: >-
   Storybook allows you to set up pre-configured sandboxes. This is useful if you
   just want to test something out or—hypothetically—if you're teaching a
   workshop and want to spin up a quick example.
-date: 2024-04-03T15:59:52.000Z
-modified: '2025-07-29T15:09:56-06:00'
+date: 2024-04-03
+modified: 2026-03-17
 ---
 
 > [!NOTE] We'll be using our own repository for this course

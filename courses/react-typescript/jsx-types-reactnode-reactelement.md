@@ -3,9 +3,8 @@ title: Typing Children and When to Use ReactNode
 description: >-
   Children can be strings, elements, arrays—learn the correct types and helpers
   without guesswork.
-date: 2025-09-06T22:23:57.264Z
-modified: '2025-09-22T09:27:10-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

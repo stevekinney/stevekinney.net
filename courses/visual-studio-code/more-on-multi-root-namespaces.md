@@ -1,8 +1,8 @@
 ---
 title: More on Mutli-Root Namespaces
 description: Some additional notes on using mutli-root namespaces in Visual Studio Code.
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-03-18T09:13:03-05:00'
+modified: 2026-03-17
+date: 2025-03-18
 ---
 
 Some additional notes that we _probably_ won't get to, but I'll include here just in case.

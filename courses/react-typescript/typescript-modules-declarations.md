@@ -3,8 +3,8 @@ title: Modules and Declaration Files for React
 description: >-
   Master TypeScript's module system and declaration files in the context of
   React development
-modified: '2025-09-27T13:49:32-06:00'
-date: '2025-09-14T19:04:10.739Z'
+modified: 2026-03-17
+date: 2025-09-14
 ---
 
 Every React project eventually hits the "Cannot find module" error. Maybe it's that CSS-in-JS library without types, an image import that TypeScript doesn't understand, or a legacy JavaScript component you're trying to integrate. Declaration files are your escape hatch—they tell TypeScript about code it can't figure out on its own.

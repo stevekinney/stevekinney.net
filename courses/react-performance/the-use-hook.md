@@ -3,9 +3,8 @@ title: The use() Hook
 description: >-
   Simplify async and context consumption by letting components 'use' resources
   directly, with Suspense driving the UI flow.
-date: 2025-09-06T22:15:46.931Z
-modified: '2025-09-22T09:27:10-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

@@ -3,9 +3,8 @@ title: Using TypeScript Without Even Trying
 description: >-
   Let inference do the heavy lifting—see how much TypeScript you get "for free"
   in everyday React files.
-date: 2025-09-06T22:23:57.262Z
-modified: '2025-09-27T13:14:43-06:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - typescript

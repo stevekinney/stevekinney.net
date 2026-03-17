@@ -3,8 +3,8 @@ title: Claude Code Compaction
 description: >-
   Manage context windows and reduce token costs by compacting conversation
   history into focused summaries while preserving key information
-modified: '2025-07-29T15:09:56-06:00'
-date: '2025-07-29T15:09:56-06:00'
+modified: 2026-03-17
+date: 2025-07-29
 ---
 
 Compacting in Claude Code is a **feature designed to manage the conversation's context window**, which is the amount of information the AI agent can process at one time.

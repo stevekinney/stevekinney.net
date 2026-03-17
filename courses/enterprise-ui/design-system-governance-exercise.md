@@ -4,8 +4,8 @@ description: >-
   Refactor disconnected design tokens into CSS custom properties, connect them
   to components, and add visual regression tests to catch unintended cascading
   changes.
-date: 2026-03-01T00:00:00.000Z
-modified: '2026-03-04T00:00:00-07:00'
+date: 2026-03-01
+modified: 2026-03-17
 ---
 
 ## What You're Doing

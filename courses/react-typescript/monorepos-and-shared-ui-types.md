@@ -5,8 +5,8 @@ description: >-
   utilities, or types across multiple projects. That's when you realize you've
   been copy-pasting the same button component and duplicating TypeScript
   interfaces...
-modified: '2025-09-06T17:49:18-06:00'
-date: '2025-09-06T17:49:18-06:00'
+modified: 2026-03-17
+date: 2025-09-06
 ---
 
 Building applications in isolation is fine until you need to share components, utilities, or types across multiple projects. That's when you realize you've been copy-pasting the same button component and duplicating TypeScript interfaces like it's 2015 (we've all been there). Enter monorepos—a single repository containing multiple packages that can import from each other while maintaining proper type safety and development workflows.

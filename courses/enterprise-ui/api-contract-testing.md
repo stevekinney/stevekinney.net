@@ -4,8 +4,8 @@ description: >-
   How contract testing lets each side of an integration verify compatibility
   independently—without assembling every service into one slow, flaky end-to-end
   suite that nobody enjoys maintaining.
-modified: '2026-03-01T00:00:00-07:00'
-date: '2026-03-01T00:00:00-07:00'
+modified: 2026-03-17
+date: 2026-03-01
 ---
 
 API contract testing is an umbrella term, not one specific technique with a catchy logo. In the integration sense, it means checking two applications in isolation to make sure the messages they send and receive conform to a shared understanding. In the single-application sense, it can also mean verifying that one implementation actually conforms to its documented contract—an OpenAPI document, say—without reference to any specific consumer. The two sides are usually called the **consumer** and the **provider**, and the contract can be provider-driven or consumer-driven.

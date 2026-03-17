@@ -22,12 +22,7 @@
   ]);
 </script>
 
-<SEO
-  title={`${data.title} | ${data.course.title}`}
-  description={data.description}
-  published={data.published}
-  {jsonLd}
-/>
+<SEO title={`${data.title} | ${data.course.title}`} description={data.description} {jsonLd} />
 
 <div class="space-y-10">
   <hgroup class="space-y-2">

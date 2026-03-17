@@ -3,9 +3,8 @@ title: Resource Preloading APIs
 description: >-
   Prime the cache for what users will do next—preload, prefetch, and preinit
   without double‑loading or hurting metrics.
-date: 2025-09-06T22:20:28.822Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance

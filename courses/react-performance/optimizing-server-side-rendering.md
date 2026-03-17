@@ -3,9 +3,8 @@ title: Optimizing Server‑Side Rendering
 description: >-
   Speed up SSR with streaming, caching, and smarter data fetching—reduce
   time‑to‑first‑byte and hydrate faster.
-date: 2025-09-06T22:13:49.769Z
-modified: '2025-09-30T21:02:22-05:00'
-published: true
+date: 2025-09-06
+modified: 2026-03-17
 tags:
   - react
   - performance
