@@ -98,7 +98,8 @@ const rehypeEnhanceImages: Plugin<[Options?], Root> = (options = {}) => {
 
   return function transformer(tree: Root, file: VFile): void {
     const manifest = loadManifest(manifestPath);
-    const filename = file.path ?? file.history[0];
+    const filename =
+      file.path ?? (file as unknown as { filename?: string }).filename ?? file.history[0];
     if (!filename) return;
 
     let imageIndex = 0;
