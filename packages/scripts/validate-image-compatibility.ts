@@ -21,7 +21,14 @@ const toRepoPath = (absolutePath: string): string =>
 
 const issues: ValidationIssue[] = [];
 
-const imageSources = await discoverAllImages(MARKDOWN_PATTERNS, REPO_ROOT);
+const { images: imageSources, missing } = await discoverAllImages(MARKDOWN_PATTERNS, REPO_ROOT);
+
+for (const entry of missing) {
+  issues.push({
+    file: toRepoPath(entry.markdownFile),
+    message: `Missing image '${entry.imageUrl}' (${toRepoPath(entry.resolvedPath)}).`,
+  });
+}
 
 for (const source of imageSources.values()) {
   const extension = path.extname(source.resolvedPath).toLowerCase();

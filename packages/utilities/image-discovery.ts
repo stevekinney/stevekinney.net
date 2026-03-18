@@ -17,6 +17,17 @@ export type SourceImage = {
   repoRelativePath: string;
 };
 
+export type MissingImage = {
+  markdownFile: string;
+  imageUrl: string;
+  resolvedPath: string;
+};
+
+export type DiscoveryResult = {
+  images: Map<string, SourceImage>;
+  missing: MissingImage[];
+};
+
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.svg']);
 const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg']);
 const ALL_ASSET_EXTENSIONS = new Set([...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS]);
@@ -83,9 +94,10 @@ export const discoverAllImages = async (
   patterns: string[],
   repoRoot: string,
   staticRoot?: string,
-): Promise<Map<string, SourceImage>> => {
+): Promise<DiscoveryResult> => {
   const resolvedStaticRoot = staticRoot ?? path.resolve(repoRoot, 'applications/website/static');
   const images = new Map<string, SourceImage>();
+  const missing: MissingImage[] = [];
 
   const markdownFiles = await fg(patterns, {
     cwd: repoRoot,
@@ -114,6 +126,7 @@ export const discoverAllImages = async (
       try {
         await access(resolvedPath);
       } catch {
+        missing.push({ markdownFile, imageUrl: normalized, resolvedPath });
         continue;
       }
 
@@ -130,5 +143,5 @@ export const discoverAllImages = async (
     }
   }
 
-  return images;
+  return { images, missing };
 };

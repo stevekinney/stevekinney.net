@@ -26,10 +26,18 @@ try {
 }
 
 // Discover all image references
-const allImages = await discoverAllImages(MARKDOWN_PATTERNS, REPO_ROOT);
+const { images: allImages, missing: missingFiles } = await discoverAllImages(
+  MARKDOWN_PATTERNS,
+  REPO_ROOT,
+);
 
 const missing: string[] = [];
 const staleHash: string[] = [];
+
+// Report files referenced in markdown but not found on disk
+for (const entry of missingFiles) {
+  missing.push(entry.resolvedPath);
+}
 
 for (const [key, source] of allImages) {
   const entry = manifest.images[key];

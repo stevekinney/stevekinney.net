@@ -4,7 +4,7 @@ export type ImageVariant = {
 };
 
 export type ImageManifestEntry = {
-  /** SHA-256 of source image bytes */
+  /** Truncated SHA-256 of source image bytes (first 16 hex chars) */
   hash: string;
   /** Original pixel dimensions */
   width: number;

@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [
+    "image-manifest.json",
     "packages/scripts/generate-course-manifest.ts",
     "packages/scripts/generate-site-content-index.ts",
     "packages/utilities/content-types.ts"

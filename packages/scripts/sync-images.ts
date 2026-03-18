@@ -94,17 +94,8 @@ const listAllBlobs = async (prefix: string): Promise<Set<string>> => {
   return paths;
 };
 
-/** Upload bytes to blob storage if the pathname doesn't already exist. */
-const uploadIfMissing = async (
-  pathname: string,
-  bytes: Buffer,
-  contentType: string,
-  existingBlobs: Set<string>,
-): Promise<string> => {
-  if (existingBlobs.has(pathname)) {
-    return `https://placeholder-already-exists/${pathname}`;
-  }
-
+/** Upload bytes to blob storage. Re-puts even if the blob exists to retrieve the canonical URL. */
+const upload = async (pathname: string, bytes: Buffer, contentType: string): Promise<string> => {
   if (dryRun) {
     console.log(`  [dry-run] Would upload: ${pathname}`);
     return `https://dry-run/${pathname}`;
@@ -166,7 +157,7 @@ const processImage = async (
   if (VIDEO_EXTENSIONS.has(extension)) {
     const pathname = `images/${hash}/original${extension}`;
     const mimeType = VIDEO_MIME_TYPES[extension] ?? 'application/octet-stream';
-    const url = await uploadIfMissing(pathname, bytes, mimeType, existingBlobs);
+    const url = await upload(pathname, bytes, mimeType);
     if (!existingBlobs.has(pathname)) uploaded++;
 
     return {
@@ -188,7 +179,7 @@ const processImage = async (
   // --- SVG ---
   if (extension === '.svg') {
     const pathname = `images/${hash}/original.svg`;
-    const url = await uploadIfMissing(pathname, bytes, 'image/svg+xml', existingBlobs);
+    const url = await upload(pathname, bytes, 'image/svg+xml');
     if (!existingBlobs.has(pathname)) uploaded++;
 
     // SVG metadata can fail — use 0,0 as fallback
@@ -219,7 +210,7 @@ const processImage = async (
     };
     const contentType = mimeMap[extension] ?? 'application/octet-stream';
     const pathname = `images/${hash}/original${extension}`;
-    const url = await uploadIfMissing(pathname, bytes, contentType, existingBlobs);
+    const url = await upload(pathname, bytes, contentType);
     if (!existingBlobs.has(pathname)) uploaded++;
 
     const meta = await sharp(source.resolvedPath).metadata();
@@ -255,27 +246,12 @@ const processImage = async (
     };
     const originalContentType = mimeMap[extension] ?? 'image/png';
 
-    let originalUrl: string;
-    if (existingBlobs.has(originalPathname)) {
-      originalUrl = await uploadIfMissing(
-        originalPathname,
-        bytes,
-        originalContentType,
-        existingBlobs,
-      );
-    } else {
-      const resizedOriginal = await sharp(source.resolvedPath)
-        .resize({ width: MAIN_WIDTH, withoutEnlargement: true })
-        .toBuffer();
+    const resizedOriginal = await sharp(source.resolvedPath)
+      .resize({ width: MAIN_WIDTH, withoutEnlargement: true })
+      .toBuffer();
 
-      originalUrl = await uploadIfMissing(
-        originalPathname,
-        resizedOriginal,
-        originalContentType,
-        existingBlobs,
-      );
-      uploaded++;
-    }
+    const originalUrl = await upload(originalPathname, resizedOriginal, originalContentType);
+    if (!existingBlobs.has(originalPathname)) uploaded++;
 
     // Generate and upload AVIF variants
     const avifVariants: { width: number; url: string }[] = [];
@@ -356,7 +332,7 @@ const processImage = async (
 
   // Fallback: upload original as-is
   const pathname = `images/${hash}/original${extension}`;
-  const url = await uploadIfMissing(pathname, bytes, 'application/octet-stream', existingBlobs);
+  const url = await upload(pathname, bytes, 'application/octet-stream');
   if (!existingBlobs.has(pathname)) uploaded++;
 
   return {
@@ -380,7 +356,7 @@ const processImage = async (
 // ---------------------------------------------------------------------------
 
 console.log('Discovering image references...');
-const allImages = await discoverAllImages(MARKDOWN_PATTERNS, REPO_ROOT);
+const { images: allImages } = await discoverAllImages(MARKDOWN_PATTERNS, REPO_ROOT);
 console.log(`Found ${allImages.size} unique image references.`);
 
 console.log('Loading existing manifest...');
