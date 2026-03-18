@@ -4,11 +4,7 @@ import { VFile } from 'vfile';
 import remarkTailwindPlayground from '@stevekinney/plugins/remark-tailwind-playground';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const transform = (remarkTailwindPlayground as any)() as (
-  tree: Root,
-  file: VFile,
-  next: () => void,
-) => void;
+const transform = (remarkTailwindPlayground as any)() as (tree: Root, file: VFile) => void;
 
 /** Build a minimal AST with a single code block. */
 const makeTree = (lang: string, meta: string | null, value: string): Root => ({
@@ -18,7 +14,7 @@ const makeTree = (lang: string, meta: string | null, value: string): Root => ({
 
 /** Run the plugin on a tree with the given VFile. */
 const run = (tree: Root, file?: VFile): Root => {
-  transform(tree, file ?? new VFile({ path: 'test.md' }), () => {});
+  transform(tree, file ?? new VFile({ path: 'test.md' }));
   return tree;
 };
 
@@ -78,6 +74,18 @@ describe('remarkTailwindPlayground', () => {
 
     expect(tree.children).toHaveLength(1);
     expect(tree.children[0].type).toBe('code');
+  });
+
+  it('escapes Svelte template delimiters in playground HTML', () => {
+    const tree = run(
+      makeTree('html', 'tailwind', '<div>{expression}</div><code>`backtick`</code>'),
+    );
+    const [playground] = htmlNodes(tree);
+
+    expect(playground.value).not.toContain('{expression}');
+    expect(playground.value).toContain('&#123;expression&#125;');
+    expect(playground.value).not.toMatch(/(?<!&\w*)`/);
+    expect(playground.value).toContain('&#96;');
   });
 
   it('handles multiple playground blocks in one file', () => {
