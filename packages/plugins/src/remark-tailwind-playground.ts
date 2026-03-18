@@ -118,10 +118,9 @@ export default function remarkTailwindPlayground(): Transformer<Root> {
 
       // Sanitize HTML at build time to prevent XSS
       const sanitizedHtml = DOMPurify.sanitize(node.value ?? '', DOMPURIFY_CONFIG);
-      const htmlLiteral = JSON.stringify(sanitizedHtml);
       const playgroundNode: Html = {
         type: 'html',
-        value: `<TailwindPlayground html={${htmlLiteral}} />`,
+        value: `<div class="tailwind-playground not-prose mb-2 rounded-md bg-slate-100 p-4 shadow-sm dark:bg-slate-800" data-tailwind-playground>${sanitizedHtml}</div>`,
       };
 
       parent.children.splice(index, 0, playgroundNode);
