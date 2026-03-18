@@ -263,7 +263,11 @@ const config = {
   extensions: ['.svelte', '.md'],
 
   // Preprocessing steps for content
-  preprocess: [vitePreprocess(), mdsvex(mdsvexOptions), importTailwindPlayground()],
+  preprocess: [
+    vitePreprocess(),
+    /** @type {any} */ (mdsvex(mdsvexOptions)),
+    importTailwindPlayground(),
+  ],
 
   kit: {
     // Choose adapter based on deployment target
