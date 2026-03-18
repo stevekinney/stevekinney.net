@@ -16,3 +16,5 @@ When developing remark or unified plugins:
 - **Use data attributes for component integration**: Set `data.hProperties` with semantic attributes (e.g., `data-callout`, `data-foldable`, `data-default-open`) rather than baking behavior into class names. This allows Svelte components to respond to the attributes appropriately.
 
 - **Test edge cases in content**: Search the content directory for real-world usage patterns (e.g., `grep -r '\[!.*\]-'`) before assuming a feature isn't used. Existing content often uses features that aren't immediately obvious.
+
+- **Escape Svelte delimiters in emitted HTML**: When a remark plugin emits `type: 'html'` nodes, mdsvex compiles them as Svelte template markup. Curly braces (`{`, `}`) and backticks (`` ` ``) must be escaped as HTML entities (`&#123;`, `&#125;`, `&#96;`) to prevent Svelte from interpreting them as expressions. Use the same `escapeSvelte`-style replacement the highlighter in `svelte.config.js` uses.
