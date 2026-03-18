@@ -31,9 +31,9 @@ const IMAGE_MIME_TYPES: Record<string, string> = {
 };
 
 /**
- * Serves static image assets from `courses/` and `content/` directories during development.
+ * Serves static image assets from content directories during development.
  *
- * In production, the preprocessor rewrites image src attributes to blob storage URLs.
+ * In production, the rehype plugin rewrites image src attributes to blob storage URLs.
  * In development, images not yet in the manifest fall through to this middleware, which
  * serves them directly from the workspace root.
  */
@@ -46,7 +46,11 @@ function serveContentAssets(): PluginOption {
 
         const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
 
-        if (!pathname.startsWith('/courses/') && !pathname.startsWith('/content/')) {
+        if (
+          !pathname.startsWith('/courses/') &&
+          !pathname.startsWith('/content/') &&
+          !pathname.startsWith('/writing/')
+        ) {
           return next();
         }
 

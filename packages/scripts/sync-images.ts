@@ -39,7 +39,7 @@ const pruneBlobs = args.includes('--prune-blobs');
 // Token check
 // ---------------------------------------------------------------------------
 
-if (!process.env.BLOB_READ_WRITE_TOKEN) {
+if (!dryRun && !process.env.BLOB_READ_WRITE_TOKEN) {
   console.error(
     'BLOB_READ_WRITE_TOKEN is not set. Set it in your environment or .env file.\n' +
       'You can create a blob store at https://vercel.com/dashboard/stores and generate a token there.',

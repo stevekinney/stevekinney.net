@@ -11,6 +11,10 @@ const MANIFEST_PATH = path.resolve(REPO_ROOT, 'image-manifest.json');
 
 const MARKDOWN_PATTERNS = ['writing/**/*.md', 'courses/**/*.md'];
 
+const normalizePath = (value: string): string => value.split(path.sep).join('/');
+const toRepoPath = (absolutePath: string): string =>
+  normalizePath(path.relative(REPO_ROOT, absolutePath));
+
 const computeHash = (bytes: Buffer): string =>
   createHash('sha256').update(bytes).digest('hex').slice(0, 16);
 
@@ -31,22 +35,25 @@ const { images: allImages, missing: missingFiles } = await discoverAllImages(
   REPO_ROOT,
 );
 
-const missing: string[] = [];
+const notOnDisk: string[] = [];
+const notInManifest: string[] = [];
 const staleHash: string[] = [];
 
-// Report files referenced in markdown but not found on disk
+// Files referenced in markdown but not found on disk
 for (const entry of missingFiles) {
-  missing.push(entry.resolvedPath);
+  notOnDisk.push(
+    `${toRepoPath(entry.resolvedPath)} (referenced from ${toRepoPath(entry.markdownFile)})`,
+  );
 }
 
+// Files on disk but not in manifest, or with stale hashes
 for (const [key, source] of allImages) {
   const entry = manifest.images[key];
   if (!entry) {
-    missing.push(key);
+    notInManifest.push(key);
     continue;
   }
 
-  // Verify hash matches
   const bytes = await readFile(source.resolvedPath);
   const currentHash = computeHash(bytes);
   if (entry.hash !== currentHash) {
@@ -54,10 +61,19 @@ for (const [key, source] of allImages) {
   }
 }
 
-if (missing.length > 0 || staleHash.length > 0) {
-  if (missing.length > 0) {
-    console.error(`\n${missing.length} image(s) missing from manifest:`);
-    for (const key of missing) {
+const hasErrors = notOnDisk.length > 0 || notInManifest.length > 0 || staleHash.length > 0;
+
+if (hasErrors) {
+  if (notOnDisk.length > 0) {
+    console.error(`\n${notOnDisk.length} image(s) not found on disk:`);
+    for (const entry of notOnDisk) {
+      console.error(`  - ${entry}`);
+    }
+  }
+
+  if (notInManifest.length > 0) {
+    console.error(`\n${notInManifest.length} image(s) not in manifest:`);
+    for (const key of notInManifest) {
       console.error(`  - ${key}`);
     }
   }

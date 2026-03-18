@@ -33,6 +33,7 @@ for (const entry of missing) {
 for (const source of imageSources.values()) {
   const extension = path.extname(source.resolvedPath).toLowerCase();
   if (VIDEO_EXTENSIONS.has(extension)) continue;
+  if (NON_TRANSFORMED_EXTENSIONS.has(extension)) continue;
 
   const fileLabel = toRepoPath(source.resolvedPath);
 
@@ -44,10 +45,6 @@ for (const source of imageSources.values()) {
       file: fileLabel,
       message: `sharp metadata read failed: ${reason}`,
     });
-    continue;
-  }
-
-  if (NON_TRANSFORMED_EXTENSIONS.has(extension)) {
     continue;
   }
 

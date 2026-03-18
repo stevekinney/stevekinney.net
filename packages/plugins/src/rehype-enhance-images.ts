@@ -52,10 +52,12 @@ const resolveManifestKey = (markdownFile: string, imageUrl: string): string => {
   }
 
   const repoRoot = path.resolve(cwd, '..', '..');
-  return resolved
-    .split(path.sep)
-    .join('/')
-    .replace(repoRoot.split(path.sep).join('/') + '/', '');
+  const relative = path.relative(repoRoot, resolved);
+
+  // If the path escapes the repo root, it can't match a manifest key
+  if (relative.startsWith('..')) return '';
+
+  return relative.split(path.sep).join('/');
 };
 
 // ---------------------------------------------------------------------------
