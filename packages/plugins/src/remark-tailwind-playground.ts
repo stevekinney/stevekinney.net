@@ -95,6 +95,11 @@ const DOMPURIFY_CONFIG = {
   // DOMPurify defaults allow aria-* and data-* attributes
 } satisfies Config;
 
+/** Escape characters that Svelte would interpret as template syntax. */
+function escapeSvelteDelimiters(html: string): string {
+  return html.replace(/[{}`]/g, (c) => ({ '{': '&#123;', '}': '&#125;', '`': '&#96;' })[c]!);
+}
+
 type VFileWithFilename = VFile & { filename?: string };
 
 /**
@@ -116,12 +121,14 @@ export default function remarkTailwindPlayground(): Transformer<Root> {
       if (node.lang !== 'html') return;
       if (!node.meta || !node.meta.includes('tailwind')) return;
 
-      // Sanitize HTML at build time to prevent XSS
-      const sanitizedHtml = DOMPurify.sanitize(node.value ?? '', DOMPURIFY_CONFIG);
-      const htmlLiteral = JSON.stringify(sanitizedHtml);
+      // Sanitize HTML at build time to prevent XSS, then escape Svelte
+      // delimiters so mdsvex doesn't interpret {/}/` as template syntax.
+      const sanitizedHtml = escapeSvelteDelimiters(
+        DOMPurify.sanitize(node.value ?? '', DOMPURIFY_CONFIG),
+      );
       const playgroundNode: Html = {
         type: 'html',
-        value: `<TailwindPlayground html={${htmlLiteral}} />`,
+        value: `<div class="tailwind-playground not-prose mb-2 rounded-md bg-slate-100 p-4 shadow-sm dark:bg-slate-800" data-tailwind-playground>${sanitizedHtml}</div>`,
       };
 
       parent.children.splice(index, 0, playgroundNode);

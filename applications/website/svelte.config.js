@@ -1,7 +1,6 @@
 import staticAdapter from '@sveltejs/adapter-static';
 import vercelAdapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import { importTailwindPlayground } from '@stevekinney/plugins/import-tailwind-playground';
 import remarkCallouts from '@stevekinney/plugins/remark-callouts';
 import remarkEscapeComparators from '@stevekinney/plugins/remark-escape-comparators';
 import { fixMarkdownUrls } from '@stevekinney/plugins/remark-fix-urls';
@@ -263,11 +262,7 @@ const config = {
   extensions: ['.svelte', '.md'],
 
   // Preprocessing steps for content
-  preprocess: [
-    vitePreprocess(),
-    /** @type {any} */ (mdsvex(mdsvexOptions)),
-    importTailwindPlayground(),
-  ],
+  preprocess: [vitePreprocess(), /** @type {any} */ (mdsvex(mdsvexOptions))],
 
   kit: {
     // Choose adapter based on deployment target
