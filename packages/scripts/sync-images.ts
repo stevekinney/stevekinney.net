@@ -387,12 +387,20 @@ for (const result of results) {
   else totalProcessed++;
 }
 
-// Prune stale entries
+// Collect orphaned blob URLs: removed keys + changed hashes
 const referencedKeys = new Set(allImages.keys());
+const orphanedEntries: ImageManifestEntry[] = [];
 const staleKeys: string[] = [];
-for (const key of Object.keys(existingManifest.images)) {
+
+for (const [key, oldEntry] of Object.entries(existingManifest.images)) {
   if (!referencedKeys.has(key)) {
     staleKeys.push(key);
+    orphanedEntries.push(oldEntry);
+  } else {
+    const newEntry = newManifest.images[key];
+    if (newEntry && newEntry.hash !== oldEntry.hash) {
+      orphanedEntries.push(oldEntry);
+    }
   }
 }
 
@@ -401,13 +409,12 @@ if (staleKeys.length > 0) {
   for (const key of staleKeys) {
     console.log(`  - ${key}`);
   }
+}
 
-  if (pruneBlobs && !dryRun) {
-    console.log('Deleting orphaned blobs...');
-    for (const key of staleKeys) {
-      const entry = existingManifest.images[key];
-      if (!entry) continue;
-
+if (orphanedEntries.length > 0 && pruneBlobs) {
+  if (!dryRun) {
+    console.log(`Deleting ${orphanedEntries.length} orphaned blob set(s)...`);
+    for (const entry of orphanedEntries) {
       const urlsToDelete = [entry.original, ...entry.avif.map((v) => v.url)].filter(Boolean);
 
       for (const url of urlsToDelete) {
@@ -419,8 +426,8 @@ if (staleKeys.length > 0) {
         }
       }
     }
-  } else if (pruneBlobs && dryRun) {
-    console.log('[dry-run] Would delete orphaned blobs for stale entries.');
+  } else {
+    console.log(`[dry-run] Would delete ${orphanedEntries.length} orphaned blob set(s).`);
   }
 }
 

@@ -77,7 +77,7 @@ const isExternalUrl = (value: string): boolean => {
 
 const safeDecode = (value: string): string => {
   try {
-    return decodeURIComponent(value);
+    return decodeURI(value);
   } catch {
     return value;
   }
@@ -119,12 +119,12 @@ const rehypeEnhanceImages: Plugin<[Options?], Root> = (options = {}) => {
       if (url.startsWith('assets/')) url = `./${url}`;
       const urlForMatch = stripQueryHash(url);
 
-      const isFirstImage = imageIndex === 0 && firstImagePriority;
-      imageIndex++;
-
       const key = resolveManifestKey(filename, urlForMatch);
       const entry = manifest.images[key];
       if (!entry) return;
+
+      const isFirstImage = imageIndex === 0 && firstImagePriority;
+      imageIndex++;
 
       const extension = getExtension(urlForMatch);
 
@@ -169,13 +169,13 @@ const loadingProps = (isFirstImage: boolean, node: Element): Properties => {
 
   const props: Properties = {};
 
-  if (!node.properties?.loading) {
-    props.loading = hasPriority ? 'eager' : 'lazy';
-  }
-  if (!node.properties?.decoding) {
-    props.decoding = hasPriority ? 'auto' : 'async';
-  }
-  if (isFirstImage && !node.properties?.fetchpriority) {
+  // Preserve explicit values; only add defaults when absent
+  props.loading = node.properties?.loading ?? (hasPriority ? 'eager' : 'lazy');
+  props.decoding = node.properties?.decoding ?? (hasPriority ? 'auto' : 'async');
+
+  if (node.properties?.fetchpriority) {
+    props.fetchpriority = node.properties.fetchpriority;
+  } else if (isFirstImage) {
     props.fetchpriority = 'high';
   }
 
@@ -192,10 +192,9 @@ const preservedProperties = (node: Element): Properties => {
     'className',
     'loading',
     'decoding',
-    'width',
-    'height',
     'fetchpriority',
     'data-priority',
+    'alt',
   ]);
 
   const props: Properties = {};
