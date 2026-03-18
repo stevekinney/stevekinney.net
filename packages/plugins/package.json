@@ -14,6 +14,6 @@
     "./remark-escape-comparators": "./dist/remark-escape-comparators.js",
     "./remark-fix-urls": "./dist/remark-fix-urls.js",
     "./remark-tailwind-playground": "./dist/remark-tailwind-playground.js",
-    "./svelte-enhance-images": "./dist/svelte-enhance-images.js"
+    "./rehype-enhance-images": "./dist/rehype-enhance-images.js"
   }
 }

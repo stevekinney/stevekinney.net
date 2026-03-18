@@ -6,7 +6,7 @@ import remarkCallouts from '@stevekinney/plugins/remark-callouts';
 import remarkEscapeComparators from '@stevekinney/plugins/remark-escape-comparators';
 import { fixMarkdownUrls } from '@stevekinney/plugins/remark-fix-urls';
 import remarkTailwindPlayground from '@stevekinney/plugins/remark-tailwind-playground';
-import { processImages } from '@stevekinney/plugins/svelte-enhance-images';
+import rehypeEnhanceImages from '@stevekinney/plugins/rehype-enhance-images';
 
 import { escapeSvelte, mdsvex } from 'mdsvex';
 import rehypeSlug from 'rehype-slug';
@@ -166,7 +166,18 @@ const mdsvexOptions = {
     remarkCallouts,
     remarkTailwindPlayground,
   ],
-  rehypePlugins: [rehypeSlug, unwrapImages],
+  rehypePlugins: [
+    rehypeSlug,
+    unwrapImages,
+    /** @type {any} */ ([
+      rehypeEnhanceImages,
+      {
+        sizes: '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw',
+        firstImagePriority: true,
+        classes: ['max-w-full'],
+      },
+    ]),
+  ],
 
   // Layout templates for markdown content
   layout: {
@@ -252,18 +263,7 @@ const config = {
   extensions: ['.svelte', '.md'],
 
   // Preprocessing steps for content
-  preprocess: [
-    vitePreprocess(),
-    mdsvex(mdsvexOptions),
-    importTailwindPlayground(),
-    /** @type {any} */ (
-      processImages({
-        sizes: '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw',
-        firstImagePriority: true,
-        classes: ['max-w-full'],
-      })
-    ),
-  ],
+  preprocess: [vitePreprocess(), mdsvex(mdsvexOptions), importTailwindPlayground()],
 
   kit: {
     // Choose adapter based on deployment target
