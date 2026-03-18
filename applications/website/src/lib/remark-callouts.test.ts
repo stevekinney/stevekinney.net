@@ -5,6 +5,9 @@ import type { Blockquote, Paragraph, Root } from 'mdast';
 import { VFile } from 'vfile';
 import remarkCallouts from '@stevekinney/plugins/remark-callouts';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const transform = (remarkCallouts as any)() as (tree: Root, file: VFile, next: () => void) => void;
+
 const getBlockquote = (tree: Root): Blockquote => {
   const node = tree.children.find((child) => child.type === 'blockquote');
   return node as Blockquote;
@@ -28,7 +31,7 @@ const getData = (node: { data?: unknown }): HastData | undefined =>
 
 const run = (markdown: string): Blockquote => {
   const tree = fromMarkdown(markdown) as Root;
-  remarkCallouts()(tree, new VFile(), () => {});
+  transform(tree, new VFile(), () => {});
   return getBlockquote(tree);
 };
 
@@ -98,7 +101,7 @@ describe('remarkCallouts', () => {
       ],
     };
 
-    remarkCallouts()(tree, new VFile(), () => {});
+    transform(tree, new VFile(), () => {});
     const blockquote = getBlockquote(tree);
     const paragraph = blockquote.children[0] as Paragraph;
 
@@ -116,7 +119,7 @@ describe('remarkCallouts', () => {
 
   it('leaves non-callout blockquotes unchanged', () => {
     const tree = fromMarkdown('> Just a quote') as Root;
-    remarkCallouts()(tree, new VFile(), () => {});
+    transform(tree, new VFile(), () => {});
     const blockquote = getBlockquote(tree);
     expect(blockquote.data).toBeUndefined();
   });
@@ -155,7 +158,7 @@ describe('remarkCallouts', () => {
       ],
     };
 
-    remarkCallouts()(tree, new VFile(), () => {});
+    transform(tree, new VFile(), () => {});
     const blockquote = getBlockquote(tree);
     const body = blockquote.children[0] as Paragraph;
 
@@ -192,7 +195,7 @@ describe('remarkCallouts', () => {
       ],
     };
 
-    remarkCallouts()(tree, new VFile(), () => {});
+    transform(tree, new VFile(), () => {});
     const blockquote = getBlockquote(tree);
     const body = blockquote.children[0] as Paragraph;
 
@@ -229,7 +232,7 @@ describe('remarkCallouts', () => {
       ],
     };
 
-    remarkCallouts()(tree, new VFile(), () => {});
+    transform(tree, new VFile(), () => {});
     const blockquote = getBlockquote(tree);
     const body = blockquote.children[0] as Paragraph;
 

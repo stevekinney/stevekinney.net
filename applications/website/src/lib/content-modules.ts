@@ -62,7 +62,8 @@ export const loadCourseContents = async (
   const key = `../../../../courses/${courseSlug}/index.toml`;
   const loader = courseContentsModules[key];
   if (!loader) return null;
-  return loader();
+  const module = (await loader()) as CourseContentsData | { default: CourseContentsData };
+  return 'default' in module ? module.default : module;
 };
 
 export const loadCourseLessonMarkdown = async (

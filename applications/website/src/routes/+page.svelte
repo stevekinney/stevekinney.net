@@ -13,9 +13,14 @@
 
   const recordings = coursesData.recording as Recording[];
 
-  import selfPortraitAvif from '$assets/self-portrait.jpg?w=384;768&format=avif&as=srcset&withoutEnlargement';
-  import selfPortraitSrc from '$assets/self-portrait.jpg?w=768';
-  import selfPortraitMeta from '$assets/self-portrait.jpg?metadata';
+  const selfPortrait = {
+    src: 'https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/889e826f59de6854/original.jpg',
+    avifSrcset:
+      'https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/889e826f59de6854/avif-384w.avif 384w, https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/889e826f59de6854/avif-768w.avif 768w',
+    width: 768,
+    height: 1024,
+    lqip: 'data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAACwAwCdASoYACAAPwl0sVA/rK8isBgMA/AhCWcAsswX5hRot+ZR4AD+3aY6a5cpdwaqhYvkAeTUd/4ZPf2L+WAA',
+  };
 
   const { data } = $props();
 
@@ -49,16 +54,21 @@
     </section>
 
     <picture>
-      <source type="image/avif" srcset={selfPortraitAvif} sizes="(min-width: 768px) 384px, 288px" />
+      <source
+        type="image/avif"
+        srcset={selfPortrait.avifSrcset}
+        sizes="(min-width: 768px) 384px, 288px"
+      />
       <img
-        src={selfPortraitSrc}
-        width={selfPortraitMeta.width}
-        height={selfPortraitMeta.height}
+        src={selfPortrait.src}
+        width={selfPortrait.width}
+        height={selfPortrait.height}
         class="block aspect-[3/4] max-w-full rounded-md shadow-lg sm:w-72 md:w-96"
         alt="Steve Kinney"
         fetchpriority="high"
         loading="eager"
         decoding="auto"
+        style="background-size:cover;background-image:url({selfPortrait.lqip})"
       />
     </picture>
 

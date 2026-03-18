@@ -6,7 +6,7 @@ import remarkCallouts from '@stevekinney/plugins/remark-callouts';
 import remarkEscapeComparators from '@stevekinney/plugins/remark-escape-comparators';
 import { fixMarkdownUrls } from '@stevekinney/plugins/remark-fix-urls';
 import remarkTailwindPlayground from '@stevekinney/plugins/remark-tailwind-playground';
-import { processImages } from '@stevekinney/plugins/svelte-enhance-images';
+import rehypeEnhanceImages from '@stevekinney/plugins/rehype-enhance-images';
 
 import { escapeSvelte, mdsvex } from 'mdsvex';
 import rehypeSlug from 'rehype-slug';
@@ -25,7 +25,6 @@ const siteUrl =
   (process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : 'http://localhost:4444');
-const skipImageOptimizations = process.env.SKIP_IMAGE_OPTIMIZATION === '1';
 
 // Define directory paths
 const __filename = fileURLToPath(import.meta.url);
@@ -167,7 +166,18 @@ const mdsvexOptions = {
     remarkCallouts,
     remarkTailwindPlayground,
   ],
-  rehypePlugins: [rehypeSlug, unwrapImages],
+  rehypePlugins: [
+    rehypeSlug,
+    unwrapImages,
+    /** @type {any} */ ([
+      rehypeEnhanceImages,
+      {
+        sizes: '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw',
+        firstImagePriority: true,
+        classes: ['max-w-full'],
+      },
+    ]),
+  ],
 
   // Layout templates for markdown content
   layout: {
@@ -255,23 +265,8 @@ const config = {
   // Preprocessing steps for content
   preprocess: [
     vitePreprocess(),
-    mdsvex(mdsvexOptions),
+    /** @type {any} */ (mdsvex(mdsvexOptions)),
     importTailwindPlayground(),
-    ...(skipImageOptimizations
-      ? []
-      : [
-          /** @type {any} */ (
-            processImages({
-              widths: [480, 1024, 1600],
-              mainWidth: 1600,
-              sizes: '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw',
-              includeMetadata: true,
-              firstImagePriority: true,
-              lqip: true,
-              classes: ['max-w-full'],
-            })
-          ),
-        ]),
   ],
 
   kit: {

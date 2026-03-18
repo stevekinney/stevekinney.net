@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [
+    "image-manifest.json",
     "packages/scripts/generate-course-manifest.ts",
     "packages/scripts/generate-site-content-index.ts",
     "packages/utilities/content-types.ts"
@@ -24,7 +25,7 @@
         "package.json",
         "src/**"
       ],
-      "env": ["VERCEL", "SKIP_IMAGE_OPTIMIZATION"],
+      "env": ["VERCEL"],
       "outputs": [
         "manifest.json",
         "dist/**",
@@ -77,6 +78,13 @@
     "build-storybook": {},
     "content:index": {
       "dependsOn": ["^manifest"]
+    },
+    "images:sync": {
+      "cache": false,
+      "env": ["BLOB_READ_WRITE_TOKEN"]
+    },
+    "images:check": {
+      "cache": false
     },
     "content:validate": {},
     "content:images:check": {},

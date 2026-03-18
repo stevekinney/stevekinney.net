@@ -7,7 +7,6 @@ import { defineConfig, searchForWorkspaceRoot, type PluginOption } from 'vite';
 import { ViteToml } from 'vite-plugin-toml';
 
 const enableBundleStats = process.env.BUNDLE_STATS === '1';
-const skipImageOptimizations = process.env.SKIP_IMAGE_OPTIMIZATION === '1';
 const workspaceRoot = searchForWorkspaceRoot(process.cwd());
 const applyClientBuildOnly = (plugin: unknown): PluginOption => {
   if (plugin && typeof plugin === 'object' && !Array.isArray(plugin)) {
@@ -21,20 +20,6 @@ const applyClientBuildOnly = (plugin: unknown): PluginOption => {
   return plugin as PluginOption;
 };
 
-const loadImageTools = async (): Promise<PluginOption> => {
-  if (skipImageOptimizations) {
-    return null;
-  }
-
-  try {
-    const { imagetools } = await import('vite-imagetools');
-    return imagetools();
-  } catch (error) {
-    console.warn('[vite] Skipping imagetools because sharp is unavailable.', error);
-    return null;
-  }
-};
-
 const IMAGE_MIME_TYPES: Record<string, string> = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
@@ -46,12 +31,11 @@ const IMAGE_MIME_TYPES: Record<string, string> = {
 };
 
 /**
- * Serves static image assets from `courses/` and `content/` directories during development.
+ * Serves static image assets from content directories during development.
  *
- * In production, the `processImages` preprocessor converts markdown image references into Vite
- * imports. In development that preprocessor is skipped for speed, so the browser requests images
- * by their literal relative paths. This plugin intercepts those requests and serves the files
- * directly from the workspace root.
+ * In production, the rehype plugin rewrites image src attributes to blob storage URLs.
+ * In development, images not yet in the manifest fall through to this middleware, which
+ * serves them directly from the workspace root.
  */
 function serveContentAssets(): PluginOption {
   return {
@@ -62,7 +46,11 @@ function serveContentAssets(): PluginOption {
 
         const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
 
-        if (!pathname.startsWith('/courses/') && !pathname.startsWith('/content/')) {
+        if (
+          !pathname.startsWith('/courses/') &&
+          !pathname.startsWith('/content/') &&
+          !pathname.startsWith('/writing/')
+        ) {
           return next();
         }
 
@@ -89,13 +77,10 @@ function serveContentAssets(): PluginOption {
   };
 }
 
-const imagetoolsPlugin = await loadImageTools();
-
 export default defineConfig({
   plugins: [
     sveltekit(),
     serveContentAssets(),
-    imagetoolsPlugin,
     ViteToml(),
     tailwindcss(),
     ...(enableBundleStats
