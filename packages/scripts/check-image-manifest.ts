@@ -25,7 +25,7 @@ try {
   manifest = JSON.parse(raw) as ImageManifest;
 } catch {
   console.error('image-manifest.json not found at repository root.');
-  console.error('Run `bun images:sync` and commit the updated manifest.');
+  console.error('Run `bun run images:sync` and commit the updated manifest.');
   process.exit(1);
 }
 
@@ -85,7 +85,7 @@ if (hasErrors) {
     }
   }
 
-  console.error('\nRun `bun images:sync` and commit the updated manifest.');
+  console.error('\nRun `bun run images:sync` and commit the updated manifest.');
   process.exit(1);
 }
 

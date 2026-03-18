@@ -30,10 +30,14 @@ for (const entry of missing) {
   });
 }
 
+let checkedCount = 0;
+
 for (const source of imageSources.values()) {
   const extension = path.extname(source.resolvedPath).toLowerCase();
   if (VIDEO_EXTENSIONS.has(extension)) continue;
   if (NON_TRANSFORMED_EXTENSIONS.has(extension)) continue;
+
+  checkedCount++;
 
   const fileLabel = toRepoPath(source.resolvedPath);
 
@@ -75,4 +79,6 @@ if (issues.length > 0) {
   process.exit(1);
 }
 
-console.log(`Image compatibility validation passed for ${imageSources.size} referenced assets.`);
+console.log(
+  `Image compatibility validation passed: ${checkedCount} raster images checked, ${imageSources.size - checkedCount} passthrough/video skipped.`,
+);

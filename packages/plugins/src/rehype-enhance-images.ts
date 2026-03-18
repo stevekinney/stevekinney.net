@@ -256,7 +256,9 @@ const buildPicture = (
   }
 
   if (entry.lqip) {
-    imgProps.style = `background-size:cover;background-image:url(${entry.lqip})`;
+    const lqipStyle = `background-size:cover;background-image:url(${entry.lqip})`;
+    const existing = typeof imgProps.style === 'string' ? imgProps.style : '';
+    imgProps.style = existing ? `${existing};${lqipStyle}` : lqipStyle;
   }
 
   return h('picture', [
