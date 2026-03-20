@@ -5,7 +5,7 @@ description: >-
   do incremental cross-package type checking and skip rechecking packages whose
   inputs have not changed.
 date: 2026-03-01
-modified: 2026-03-17
+modified: 2026-03-20
 ---
 
 ## What You're Doing
@@ -26,7 +26,7 @@ In a monorepo with 5 packages, a full typecheck takes a few seconds. In a monore
 You should be continuing from where Exercise 4 left off. If you need to catch up:
 
 ```bash
-git checkout 04-typescript-start
+git checkout 05-typescript-start
 pnpm install
 ```
 
@@ -361,10 +361,10 @@ Changing a type in `@pulse/shared` causes all downstream packages to recheck. Ch
 
 ## Solution
 
-If you need to catch up, the completed state for this exercise is available on the `05-linting-start` branch:
+If you need to catch up, the completed state for this exercise is available on the `06-linting-start` branch:
 
 ```bash
-git checkout 05-linting-start
+git checkout 06-linting-start
 pnpm install
 ```
 

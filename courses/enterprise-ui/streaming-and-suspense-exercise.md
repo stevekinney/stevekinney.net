@@ -5,7 +5,7 @@ description: >-
   renderToPipeableStream for streaming SSR so each section renders progressively
   as its data arrives.
 date: 2026-03-01
-modified: 2026-03-17
+modified: 2026-03-20
 ---
 
 The analytics dashboard makes three API calls at different speeds: summary stats (200ms), chart data (800ms), and activity table (2000ms). Right now, the entire page shows a single loading spinner until all three resolve. You're going to add Suspense boundaries around each section and implement `renderToPipeableStream` for streaming SSR so each section renders progressively as its data arrives.
@@ -707,10 +707,10 @@ You've tried at least two different Suspense boundary placements and observed ho
 
 ## Solution
 
-If you need to catch up, the completed state for this exercise is available on the `03-monorepo-start` branch:
+If you need to catch up, the completed state for this exercise is available on the `04-monorepos-start` branch:
 
 ```bash
-git checkout 03-monorepo-start
+git checkout 04-monorepos-start
 pnpm install
 ```
 
