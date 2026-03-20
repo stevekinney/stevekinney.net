@@ -5,7 +5,7 @@ description: >-
   Experience the difference between rebuilding everything and FULL TURBO cache
   hits.
 date: 2026-03-01
-modified: 2026-03-17
+modified: 2026-03-20
 ---
 
 The workspace has four packages (`analytics`, `users`, `ui`, `shared`) and a dashboard app, but there is no build orchestration. Running `pnpm -r build` rebuilds everything every time, even unchanged packages. You're going to create a `turbo.json` configuration and wire up Turborepo so builds are cached, dependency-aware, and fast.
@@ -327,10 +327,10 @@ graph TD
 
 ## Solution
 
-If you need to catch up, the completed state for this exercise is available on the `04-typescript-start` branch:
+If you need to catch up, the completed state for this exercise is available on the `05-typescript-start` branch:
 
 ```bash
-git checkout 04-typescript-start
+git checkout 05-typescript-start
 pnpm install
 ```
 

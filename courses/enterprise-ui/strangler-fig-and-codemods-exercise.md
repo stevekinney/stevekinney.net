@@ -1,11 +1,11 @@
 ---
-title: 'Exercise 10: Strangler Fig & Codemods'
+title: 'Exercise 9: Strangler Fig & Codemods'
 description: >-
   Set up a routing-level strangler fig so legacy and modern apps coexist,
   migrate one route, and write a jscodeshift codemod that automates import
   transformations for the rest of the codebase.
 date: 2026-03-01
-modified: 2026-03-17
+modified: 2026-03-20
 ---
 
 ## What You're Doing
