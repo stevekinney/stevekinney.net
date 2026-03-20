@@ -4,6 +4,7 @@ description: >-
   Internal working document for content drafting agents. Not published.
 date: 2026-03-18
 modified: 2026-03-18
+published: false
 ---
 
 # AWS for Frontend Engineers — Shared Context Document
