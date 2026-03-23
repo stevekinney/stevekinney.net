@@ -5,16 +5,16 @@ description: >-
   production-hardened version—with context compaction, loop detection, cost
   budgets, and graceful termination—is where things get interesting.
 date: 2026-03-19
-modified: 2026-03-20
+modified: 2026-03-23
 tags:
   - ai
   - agents
   - tooling
 ---
 
-Every agent framework I've looked at—Claude Code, Codex, Cursor, the Vercel AI SDK, LangGraph, smolagents—converges on the same architecture. Not similar. The _same_. A while loop that calls an LLM, checks if the response contains tool calls, executes them if it does, and stops if it doesn't. That's the whole thing.
+Every agent framework I've looked at—[Claude Code](https://code.claude.com/docs/en/overview) (and the [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview) that wraps it), [Codex](https://developers.openai.com/codex/sdk), [Cursor](https://cursor.com), the [Vercel AI SDK](https://ai-sdk.dev/docs/introduction), [LangGraph](https://www.langchain.com/langgraph), [smolagents](https://smolagents.org/)—converges on the same architecture. Not similar. The _same_. A while loop that calls an LLM, checks if the response contains tool calls, executes them if it does, and stops if it doesn't. That's the whole thing.
 
-I spent an unreasonable amount of time reading through the source code of these frameworks expecting to find meaningfully different approaches. Some secret sauce. What I found instead was the same six lines of logic wearing different costumes. The loop is a solved problem. The engineering _around_ the loop—context management, safety controls, graceful degradation, cost containment—is where all the interesting decisions live. And that's what this post is actually about.
+I spent an unreasonable amount of time reading through the source code of these frameworks expecting to find meaningfully different approaches. Some secret sauce. (I may or may not have tried to decompile some binaries along the way.) What I found instead was the same six lines of logic wearing different costumes. The loop is a solved problem. The engineering _around_ the loop—context management, safety controls, graceful degradation, cost containment—is where all the interesting decisions live. And that's what this post is actually about.
 
 ## The loop every framework converges on
 
@@ -33,7 +33,7 @@ while (!done) {
 }
 ```
 
-That's it. But if you haven't worked with tool calling before, the pseudocode above might raise a question: what does "response has tool_calls" actually mean?
+That's it. But if you haven't worked with tool calling before, the pseudocode above might raise a question: what does "response has `tool_calls`" actually mean?
 
 When you send a message to an LLM through its API, you can also pass a list of **tools**—functions the model is allowed to call. Each tool has a name, a description, and a schema for its parameters. If the model decides it needs to use one, it doesn't return plain text. Instead, it returns a structured object that says "call this function with these arguments." Your code executes the function, sends the result back as a new message, and the model continues from there. So when you ask a model "what's the weather in Chicago?" and it has access to a `get_weather` tool, it doesn't guess—it emits a tool call like `get_weather(city="Chicago")`, your code runs it, and the model uses the actual result to form its answer.
 
@@ -71,10 +71,10 @@ Guardrails run at three points: **input** (first turn only, in parallel with the
 
 ### Claude Agent SDK
 
-The [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview) takes a fundamentally different approach. The agent loop doesn't run in your application process at all. It runs inside a bundled Claude Code CLI binary. Your application communicates with it over stdin/stdout using NDJSON:
+The [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview) takes a fundamentally different approach. The agent loop doesn't run in your application process at all. It runs inside a bundled Claude Code CLI binary. Your application communicates with it over stdin/stdout using [NDJSON](https://jsonltools.com/what-is-ndjson):
 
 ```text
-Your App --stdin (NDJSON)--> Claude Code CLI --HTTP--> Anthropic API
+Your Application ➡️ stdin (NDJSON) ➡️ Claude Code CLI ➡️ (HTTP) ➡️ Anthropic API
 ```
 
 This is a _philosophical_ difference, not just an implementation detail. The loop, the tool execution, the context management—all of it happens in a subprocess you don't control directly. You send a prompt in, you get structured messages back. Three streaming granularities: final results only, progress updates, or live token streaming.
