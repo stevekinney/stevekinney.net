@@ -155,7 +155,7 @@ export class VectorDatabase {
 }
 ```
 
-We'll use `this.generateEmbedding` for both storing our documents and then also to create a vector when someone tries to query the database using a string. Next up, let's look at `this.insertDocument`.
+We'll use `this.generateEmbedding` for both storing our documents and then also to create a vector when someone tries to query the database using a string. Next up, let's look at `this.indexDocument`.
 
 ```typescript
 export class VectorDatabase {
