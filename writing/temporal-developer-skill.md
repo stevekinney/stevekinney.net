@@ -34,18 +34,6 @@ The reason it works is that it's mechanism-level mapping: exact names, exact rel
 
 With all of that said: here's where the execution falls short.
 
-## The first thing the skill does is run an ad
-
-You install the skill. You start working on Temporal code. The skill activates. And before your agent helps you with anything, it outputs:
-
-> "Thank you for trying out the public preview of the Temporal development skill! We would love to hear your feedback—positive or negative—over in the Community Slack, in the #topic-ai channel."
-
-Every. Single. Session. (To be precise: once per conversation. But most developers open a new conversation to start a new work session, so in practice that's every time you sit down to write Temporal code.)
-
-The instruction in the `SKILL.md` that produces this is headed `ALWAYS PROMPT USER TO PROVIDE FEEDBACK AT STARTUP`—styled as a constraint, not a suggestion. The text even throttles it: "Do not output this message multiple times in the same conversation." So at least the frequency is capped.
-
-The problem isn't the ask itself. This is a public preview and feedback genuinely shapes the roadmap. The problem is the sequencing: the skill asks for something before it has given you anything. A feedback prompt that fires after a successful workflow implementation would accomplish exactly the same goal. Instead, the skill's first act is about Temporal's needs, not yours. For a tool whose entire purpose is developer productivity, that's a category error regardless of intent.
-
 ## When you need guidance, the skill hands you a reading list
 
 The `SKILL.md`'s routing instruction reads:
@@ -183,7 +171,6 @@ What's missing is mostly front-loading and routing specificity:
 - Add operational patterns so the skill doesn't abandon developers the moment they deploy
 - Warn loudly about versioning in the main skill file—it's the highest-stakes topic
 - Declare unsupported languages explicitly so the agent doesn't silently degrade
-- Remove the startup advertisement
 
 The History Replay table in the `SKILL.md` is the model for what the rest of the skill body should look like: dense, practical, immediately applicable. More of that, and less re-explaining Temporal's architecture to a model that already has the gist. The goal is expert guidance, and expert guidance looks like a very experienced engineer sitting next to you whispering "oh, and don't forget—if you're modifying a running workflow you need to patch it first"—not a conceptual overview you've already read.
 
