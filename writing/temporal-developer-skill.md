@@ -12,7 +12,7 @@ tags:
 
 If you've ever watched a coding agent confidently write `time.sleep(60)` inside a Temporal workflow, you already understand the problem this skill is trying to solve. The model has seen the Temporal docs. It understands what determinism means in the abstract. It still reaches for the platform-agnostic sleep function because that's what training data for "pause for 60 seconds" looks like. The correct version—`workflow.sleep()` in Python, `workflow.Sleep()` in Go, the SDK's timer in TypeScript—requires the kind of specific, internalized, current knowledge that no general-purpose model reliably has.
 
-Temporal's [Developer Skill](https://temporal.io/blog/introducing-temporal-developer-skill) is a serious attempt to close that gap. I've read through [the SKILL.md](https://github.com/temporalio/skill-temporal-developer), explored the reference files, and I think the architecture is genuinely right. To be clear: even as-is, the skill meaningfully improves on what a model produces without it. That's not nothing. But "better than training data alone" is a low bar for a tool that's going to be the default way many developers interact with Temporal through their AI agents. What follows is about closing the gap between what it is and what it could be.
+Temporal's [Developer Skill](https://temporal.io/blog/introducing-temporal-developer-skill) is a serious attempt to close that gap. I've read through [the `SKILL.md`](https://github.com/temporalio/skill-temporal-developer), explored the reference files, and I think the architecture is genuinely right. To be clear: even as-is, the skill meaningfully improves on what a model produces without it. That's not nothing. But "better than training data alone" is a low bar for a tool that's going to be the default way many developers interact with Temporal through their AI agents. What follows is about closing the gap between what it is and what it could be.
 
 ## The foundation is sound
 
@@ -22,7 +22,15 @@ The decision to use the [Agent Skills open specification](https://agentskills.or
 
 The two-tier loading design is smart: roughly 100 tokens of metadata sit in memory at session start, with the full guidance activating only when the agent detects Temporal code. Most of the time, this skill costs you nothing. The reference file organization—splitting content into language-agnostic core concepts and language-specific implementation details—is also sound. Determinism rules are universal; the syntax for expressing them is not.
 
-The History Replay explanation in the SKILL.md is genuinely good. It's a table mapping Workflow Code to Commands to Events—concise, precise, and exactly the kind of thing an agent needs to internalize before touching workflow code. The reason it works is that it's mechanism-level mapping: exact names (`ScheduleActivityTask`, `ActivityTaskScheduled`), exact relationships, the kind of precise detail that models don't reliably carry from training data. More of the SKILL.md should look like this.
+The History Replay explanation in the `SKILL.md` is genuinely good. It maps Workflow Code to Commands to Events:
+
+| Workflow Code    | Command                       | Event                           |
+| ---------------- | ----------------------------- | ------------------------------- |
+| Execute activity | `ScheduleActivityTask`        | `ActivityTaskScheduled`         |
+| Sleep/timer      | `StartTimer`                  | `TimerStarted`                  |
+| Child workflow   | `StartChildWorkflowExecution` | `ChildWorkflowExecutionStarted` |
+
+The reason it works is that it's mechanism-level mapping: exact names, exact relationships, the kind of precise detail that models don't reliably carry from training data. More of the `SKILL.md` should look like this.
 
 With all of that said: here's where the execution falls short.
 
@@ -34,15 +42,21 @@ You install the skill. You start working on Temporal code. The skill activates. 
 
 Every. Single. Session. (To be precise: once per conversation. But most developers open a new conversation to start a new work session, so in practice that's every time you sit down to write Temporal code.)
 
-The SKILL.md explicitly instructs the agent to print this message the first time the skill loads in a conversation. The instruction even acknowledges the friction: "Do not output this message multiple times in the same conversation." So at least the frequency is throttled.
+The instruction in the `SKILL.md` that produces this is headed `ALWAYS PROMPT USER TO PROVIDE FEEDBACK AT STARTUP`—styled as a constraint, not a suggestion. The text even throttles it: "Do not output this message multiple times in the same conversation." So at least the frequency is capped.
 
 The problem isn't the ask itself. This is a public preview and feedback genuinely shapes the roadmap. The problem is the sequencing: the skill asks for something before it has given you anything. A feedback prompt that fires after a successful workflow implementation would accomplish exactly the same goal. Instead, the skill's first act is about Temporal's needs, not yours. For a tool whose entire purpose is developer productivity, that's a category error regardless of intent.
 
 ## When you need guidance, the skill hands you a reading list
 
-The SKILL.md tells you: "First, read the getting started guide for the language you are working in. Second, read appropriate core and language-specific references for the task at hand."
+The `SKILL.md`'s routing instruction reads:
 
-Then it lists seven core reference files. The word "appropriate" is the only routing logic.
+> 1. First, read the getting started guide for the language you are working in:
+>    - Python → `references/python/python.md`
+>    - TypeScript → `references/typescript/typescript.md`
+>    - Go → `references/go/go.md`
+> 2. Second, read appropriate `core` and language-specific references for the task at hand.
+
+Then it lists nine core reference files—`determinism.md`, `patterns.md`, `gotchas.md`, `versioning.md`, `troubleshooting.md`, `error-reference.md`, `interactive-workflows.md`, `dev-management.md`, and `ai-patterns.md`—each with a one-line description. The word "appropriate" is the only routing logic. No conditional instructions. No "if you're doing X, read Y first." Just a list and a suggestion to pick the relevant ones.
 
 For a developer who just wants to know "can I use `setTimeout` in a Temporal workflow?", this is like being handed a library card instead of an answer. The agent will probably load the right file eventually, but it's going to burn tokens and time figuring out which one.
 
@@ -56,15 +70,37 @@ Every new Temporal developer makes the same mistakes. Every LLM generating Tempo
 
 These are the single highest-value things the skill could communicate. They're the "corrections to mistakes the agent will make without being told otherwise" that the [Agent Skills best practices](https://agentskills.org) identify as often the most valuable content a skill can contain.
 
-In this skill, they live in `references/core/gotchas.md`—the seventh file in a list of seven. The agent can certainly find and read that file. The issue is that it would only do so if it recognized the situation as gotcha-relevant. But `time.sleep(60)` doesn't announce itself as a mistake while you're writing it. It looks like correct Python. The agent won't pre-emptively load gotchas.md before writing workflow code unless the skill tells it to—and the skill doesn't. By the time the mistake is recognized, it's already in the code.
+In this skill, they live in `references/core/gotchas.md`—one of nine core reference files. The agent can certainly find and read that file. The issue is that it would only do so if it recognized the situation as gotcha-relevant. But `time.sleep(60)` doesn't announce itself as a mistake while you're writing it. It looks like correct Python. The agent won't pre-emptively load `gotchas.md` before writing workflow code unless the skill tells it to—and the skill doesn't. By the time the mistake is recognized, it's already in the code.
 
-A dozen lines of "NEVER do X in a workflow, ALWAYS do Y instead" in the SKILL.md body itself would prevent more bugs than the entire reference directory. These should be front-loaded, not buried.
+And the `gotchas.md` file is substantial. It covers ten categories: non-idempotent activities, side effects and non-determinism in workflow code, deploying multiple workers with different code versions, overly aggressive retry policies, query handler and update validator mistakes, file organization requirements, testing only happy paths, swallowing errors, cancellation handling, and payload size limits. Every one of these is a mistake an LLM will make on the first try. None of them are surfaced in the `SKILL.md` body.
+
+A dozen lines of "NEVER do X in a workflow, ALWAYS do Y instead" in the `SKILL.md` body itself would prevent more bugs than the entire reference directory. These should be front-loaded, not buried.
 
 ## It explains things the model already knows
 
-The SKILL.md includes an ASCII architecture diagram showing the relationship between the Temporal Cluster, Workers, Workflows, and Activities. It explains that Workflows are deterministic, Activities are not, Workers poll task queues.
+The `SKILL.md` includes this ASCII architecture diagram:
 
-This is concept-level orientation—the kind of general knowledge that's in every Temporal tutorial ever written, and that models have generally absorbed from training data. It's the opposite of the History Replay table we just praised. That table works because it's mechanism-level: exact command names, exact event names, the precise mapping between them. Models don't reliably carry that. The architecture diagram restates things models broadly already know.
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     Temporal Cluster                            │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌────────────────┐  │
+│  │  Event History  │  │   Task Queues   │  │   Visibility   │  │
+│  │  (Durable Log)  │  │  (Work Router)  │  │   (Search)     │  │
+│  └─────────────────┘  └─────────────────┘  └────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+                              ▲
+                              │ Poll / Complete
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                         Worker                                   │
+│  ┌─────────────────────────┐  ┌──────────────────────────────┐  │
+│  │   Workflow Definitions  │  │   Activity Implementations   │  │
+│  │   (Deterministic)       │  │   (Non-deterministic OK)     │  │
+│  └─────────────────────────┘  └──────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+Compare that to the History Replay table above. One is mechanism-level: exact command names, exact event names, the precise mapping between them—the kind of specific, correct-by-exact-name knowledge that models don't reliably have. The other is concept-level orientation: "Workers poll task queues, Activities are non-deterministic." That's the kind of general knowledge that's in every Temporal tutorial ever written, and that models have generally absorbed from training data.
 
 The blog post identifies the problem correctly: models haven't internalized _best practices_, and _new SDK features_ ship faster than training data updates. The solution to both of these is mechanism-level, current, practical guidance—not a rehash of the conceptual model the agent already has a reasonable grasp of.
 
@@ -72,7 +108,7 @@ Every token spent re-explaining that Workflows orchestrate Activities is a token
 
 ## The skill doesn't know what language you're using
 
-The SKILL.md says: "If working in Python, read `references/python/python.md`." But the skill has no mechanism to detect what language the developer is actually using. The agent has to infer this from context—file extensions, project structure, conversation history.
+The `SKILL.md` says: "If working in Python, read `references/python/python.md`." But the skill has no mechanism to detect what language the developer is actually using. The agent has to infer this from context—file extensions, project structure, conversation history.
 
 This is fine for a coding agent that can see your project. But the skill provides no help with the inference. It doesn't say "check for `package.json` vs `pyproject.toml` vs `go.mod`." It presents three parallel tracks and assumes the agent will figure it out.
 
@@ -92,23 +128,35 @@ You built a workflow using the skill's guidance. You deployed it. It's stuck. Yo
 
 The skill has nothing for you.
 
-There's a `references/core/troubleshooting.md`, but it's framed entirely around development-time debugging. There's no guidance on how to read an event history, no explanation of what the different workflow statuses mean operationally, no "if you see this status it usually means that" patterns.
+There is a `references/core/troubleshooting.md`, and to the team's credit it has decision trees for RUNNING, FAILED, TIMED_OUT, and COMPLETED (wrong result) statuses. But it's oriented around diagnosing code problems—wrong task queue, stale worker code, non-determinism errors—rather than teaching you to read what Temporal is actually telling you. There's no guidance on interpreting event history directly, no explanation of what an `ActivityTaskFailed` event contains or how to use it, no patterns for navigating the Web UI to understand what a workflow was doing before it got stuck.
 
 An operations skill is planned—the blog post says so, and that's genuinely good news. A development skill that focuses on development is a fine scoping decision. The problem isn't the scope: it's that the skill doesn't tell you when you've left it. A developer following this skill walks right up to deployment with no warning that the next step is outside what the skill covers. One sentence—"at this point, you've moved into operations territory; this skill can't help you debug a stuck workflow in production"—would cost nothing and prevent a lot of confusion. The handoff doesn't have to be coverage; it just has to exist.
 
 ## Versioning is listed like any other topic
 
-Workflow versioning is one of Temporal's most complex and highest-stakes topics. Deploy the wrong code change to a running workflow and you get a non-determinism error that blocks the workflow entirely. The skill has both `core/versioning.md` and language-specific versioning files.
+Workflow versioning is one of Temporal's most complex and highest-stakes topics. Here's the failure mode, taken directly from `references/core/versioning.md`:
+
+```
+Original Code (recorded in history):
+  await activity_a()
+  await activity_b()
+
+Updated Code (during replay):
+  await activity_a()
+  await activity_c()  ← Different! NondeterminismError
+```
+
+Deploy updated code while a workflow is mid-execution, and the worker tries to replay the history using the new code. The commands don't match. The workflow blocks. This is not a coding mistake—it happens to correct, reviewed, approved code the moment it gets deployed to workers that are handling running workflows.
 
 It's worth being precise about why versioning warrants special emphasis when other topics—activity timeouts, idempotency, signal handling—don't. Every other gotcha in Temporal is an error of omission: you forgot to set a timeout, you forgot an idempotency key, you missed a configuration. Versioning is an error of action. The developer can do everything right—write correct workflow code, review the PR, get it approved, merge it—and then the deployment itself is what breaks running workflows. There's no moment where the mistake looks like a mistake. It looks like progress right up until production starts throwing non-determinism errors.
 
-But versioning is listed as one of seven reference topics, with the same routing weight as "patterns" or "interactive workflows." There's no warning in the SKILL.md body that deploying code changes to running workflows is the category of mistake most likely to cause a production incident.
+But versioning is listed as one of nine reference topics in the `SKILL.md`, with the same routing weight as "patterns" or "interactive workflows." There's no warning in the `SKILL.md` body that deploying code changes to running workflows is the category of mistake most likely to cause a production incident.
 
-An agent using this skill might help a developer write a perfectly correct workflow, then help them modify it for a new requirement, without ever mentioning that the modification will break all currently-running instances unless they use patching or worker versioning. "WARNING: Changing workflow code while workflows are running WILL cause non-determinism errors—read `references/core/versioning.md` BEFORE modifying any workflow that has running executions" in the main SKILL.md body would prevent real outages. The current structure requires the agent to independently decide that a code modification task involves "versioning" and load the right reference. That connection doesn't always get made.
+An agent using this skill might help a developer write a perfectly correct workflow, then help them modify it for a new requirement, without ever mentioning that the modification will break all currently-running instances unless they use patching or worker versioning. "WARNING: Changing workflow code while workflows are running WILL cause non-determinism errors—read `references/core/versioning.md` BEFORE modifying any workflow that has running executions" in the main `SKILL.md` body would prevent real outages. The current structure requires the agent to independently decide that a code modification task involves "versioning" and load the right reference. That connection doesn't always get made.
 
 ## It doesn't tell you what it doesn't know
 
-The skill covers Python, TypeScript, and Go. It does not cover Java, .NET, Ruby, or PHP—all of which have Temporal SDKs. If you're a Java developer and the skill activates, there's nothing in the SKILL.md body that says "Java is not yet covered." The agent will load the skill, see guidance for three languages, and either extrapolate from the available languages (risky, since SDK APIs differ significantly) or silently fall back to training data—which is exactly the problem the skill was supposed to solve.
+The skill covers Python, TypeScript, and Go. It does not cover Java, .NET, Ruby, or PHP—all of which have Temporal SDKs. If you're a Java developer and the skill activates, there's nothing in the `SKILL.md` body that says "Java is not yet covered." The agent will load the skill, see guidance for three languages, and either extrapolate from the available languages (risky, since SDK APIs differ significantly) or silently fall back to training data—which is exactly the problem the skill was supposed to solve.
 
 This matters because the skill's description field triggers on generic phrases like "create a Temporal workflow" and "durable execution"—phrases a Java developer would absolutely use. A simple "If working in Java, .NET, Ruby, or PHP: this skill does not yet cover your language" would set correct expectations and prevent the agent from generating confidently wrong code by analogy.
 
@@ -118,7 +166,7 @@ The foundation is solid. The team clearly understands both Temporal and the Agen
 
 What's missing is mostly front-loading and routing specificity:
 
-- Move the top gotchas into the SKILL.md body so the agent reads them before writing any code
+- Move the top gotchas into the `SKILL.md` body so the agent reads them before writing any code
 - Add conditional routing: "If implementing a new workflow, read X. If modifying an existing workflow, read X and Y. If debugging a failure, read Z"
 - Add language detection hints so the agent loads language-specific files immediately rather than inferring
 - Add scripts for common setup tasks so the skill can _do_ things, not just _know_ things
@@ -127,6 +175,6 @@ What's missing is mostly front-loading and routing specificity:
 - Declare unsupported languages explicitly so the agent doesn't silently degrade
 - Remove the startup advertisement
 
-The History Replay table in the SKILL.md is the model for what the rest of the skill body should look like: dense, practical, immediately applicable. More of that, and less re-explaining Temporal's architecture to a model that already has the gist. The goal is expert guidance, and expert guidance looks like a very experienced engineer sitting next to you whispering "oh, and don't forget—if you're modifying a running workflow you need to patch it first"—not a conceptual overview you've already read.
+The History Replay table in the `SKILL.md` is the model for what the rest of the skill body should look like: dense, practical, immediately applicable. More of that, and less re-explaining Temporal's architecture to a model that already has the gist. The goal is expert guidance, and expert guidance looks like a very experienced engineer sitting next to you whispering "oh, and don't forget—if you're modifying a running workflow you need to patch it first"—not a conceptual overview you've already read.
 
 Right now, this is a promising first draft that prioritizes coverage over impact. With these changes, it could be the reference example of what a great vendor-shipped Agent Skill looks like.
