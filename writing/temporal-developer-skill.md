@@ -1,5 +1,5 @@
 ---
-title: A Constructive Review of the Temporal Developer Skill
+title: "Temporal's Developer Skill Is a Promising First Draft"
 description: >-
   Temporal shipped one of the first major infrastructure vendor agent skills. The diagnosis is right and the architecture is sound. The execution has some fixable gaps.
 date: 2026-03-24
