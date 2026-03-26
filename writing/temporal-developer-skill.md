@@ -3,12 +3,14 @@ title: "Temporal's Developer Skill Is a Promising First Draft"
 description: >-
   Temporal shipped one of the first major infrastructure vendor agent skills. The diagnosis is right and the architecture is sound. The execution has some fixable gaps.
 date: 2026-03-24
-modified: 2026-03-24
+modified: 2026-03-26
 tags:
   - ai
   - temporal
   - tooling
 ---
+
+[Temporal](https://temporal.io) released a [Developer Skill](https://temporal.io/blog/introducing-temporal-developer-skill). I've been working on [an MCP server for Temporal](https://github.com/stevekinney/temporal-mcp) over the last few weeks as well. So, I was eager to kick the tires on it.
 
 If you've ever watched a coding agent confidently write `time.sleep(60)` inside a Temporal workflow, you already understand the problem this skill is trying to solve. The model has seen the Temporal docs. It understands what determinism means in the abstract. It still reaches for the platform-agnostic sleep function because that's what training data for "pause for 60 seconds" looks like. The correct version—`workflow.sleep()` in Python, `workflow.Sleep()` in Go, the SDK's timer in TypeScript—requires the kind of specific, internalized, current knowledge that no general-purpose model reliably has.
 
@@ -16,7 +18,7 @@ Temporal's [Developer Skill](https://temporal.io/blog/introducing-temporal-devel
 
 ## The foundation is sound
 
-Before anything critical: Temporal deserves real credit for shipping this. The blog post identifies the problem precisely—models haven't internalized Temporal best practices, SDK features ship faster than training data, and documentation traversal is token-expensive. All of that is true.
+Before we get into any of the hot takes: Let's give Temporal credit where credit is due. Their [post](https://temporal.io/blog/introducing-temporal-developer-skill) identifies the problem precisely—models haven't internalized Temporal best practices, SDK features ship faster than training data, and documentation traversal is token-expensive. All of that is true.
 
 The decision to use the [Agent Skills open specification](https://agentskills.org) rather than building something proprietary is also the right call. The skill works across Claude Code, Cline, and any future agent that supports the spec. Developers aren't locked into one toolchain to get better Temporal guidance.
 
@@ -48,11 +50,11 @@ Then it lists nine core reference files—`determinism.md`, `patterns.md`, `gotc
 
 For a developer who just wants to know "can I use `setTimeout` in a Temporal workflow?", this is like being handed a library card instead of an answer. The agent will probably load the right file eventually, but it's going to burn tokens and time figuring out which one.
 
-To be clear: this isn't an argument against the two-tier loading design. Conditional routing—"if modifying a workflow, load versioning first"—is still progressive disclosure. The reference files still only load when needed. The difference is specificity: "read appropriate references" is a compass, not a map. A skill for a platform as gotcha-dense as Temporal needs to tell the agent _exactly_ which file to read based on what the developer is trying to do.
+To be clear: this isn't an argument against the two-tier loading design. Conditional routing—"if modifying a workflow, load versioning first"—is still [progressive disclosure](https://en.wikipedia.org/wiki/Progressive_disclosure). The reference files still only load when needed. The difference is specificity: "read appropriate references" is a compass, not a map. A skill for a platform as gotcha-dense as Temporal needs to tell the agent _exactly_ which file to read based on what the developer is trying to do.
 
 Something like "If you're modifying an existing workflow, read `references/core/versioning.md` _before_ reading anything else" would prevent real production incidents. "Read appropriate references" won't.
 
-What would actually help is an explicit diagnostic workflow: step-by-step conditional instructions that name the reference file, the specific thing to look for, and the next action to take. "For a non-determinism error: read `references/core/determinism.md`, then read `references/{language}/versioning.md` for the patching strategy, then retrieve the full event history and identify where the command sequence diverged." That's a decision tree. The current routing instruction is a _card catalog_.
+What would actually help is an explicit diagnostic workflow (no, not _that_ kind of workflow): step-by-step conditional instructions that name the reference file, the specific thing to look for, and the next action to take. "For a non-determinism error: read `references/core/determinism.md`, then read `references/{language}/versioning.md` for the patching strategy, then retrieve the full event history and identify where the command sequence diverged." That's a decision tree. The current routing instruction is a _card catalog_.
 
 And the routing problem doesn't stop inside the skill. In a real developer's environment, the Temporal skill's description competes with every other installed skill for the same trigger phrases. "Create a workflow" could plausibly match a GitHub Actions skill, a CI/CD pipeline builder, or a general workflow orchestration tool. (I have the Temporal skill installed alongside my own MCP server, and I've watched this ambiguity play out firsthand.) The skill needs to win the right routing competitions and lose the wrong ones—which means its description should lean on Temporal-specific language ("deterministic workflow," "activity timeout," "task queue") rather than generic phrases like "durable execution" that could describe half a dozen platforms.
 
@@ -75,16 +77,16 @@ The `SKILL.md` includes this ASCII architecture diagram:
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                     Temporal Cluster                            │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌────────────────┐  │
-│  │  Event History  │  │   Task Queues   │  │   Visibility   │  │
-│  │  (Durable Log)  │  │  (Work Router)  │  │   (Search)     │  │
-│  └─────────────────┘  └─────────────────┘  └────────────────┘  │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌────────────────┐   │
+│  │  Event History  │  │   Task Queues   │  │   Visibility   │   │
+│  │  (Durable Log)  │  │  (Work Router)  │  │   (Search)     │   │
+│  └─────────────────┘  └─────────────────┘  └────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
                               ▲
                               │ Poll / Complete
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                         Worker                                   │
+│                         Worker                                  │
 │  ┌─────────────────────────┐  ┌──────────────────────────────┐  │
 │  │   Workflow Definitions  │  │   Activity Implementations   │  │
 │  │   (Deterministic)       │  │   (Non-deterministic OK)     │  │
