@@ -4,14 +4,14 @@ description: >-
   Create an HTTP API in API Gateway with routes and methods that map to your
   application's endpoints.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - api-gateway
   - http-api
 ---
 
-You picked HTTP APIs. Now you need to create one. On Vercel, an API endpoint exists the moment you create a file in the `api/` directory. On AWS, you create the API explicitly — a named resource with its own URL, its own configuration, and its own lifecycle. The upside is that you control everything. The downside is that you have to create everything.
+You picked HTTP APIs. Now you need to create one. On Vercel, an API endpoint exists the moment you create a file in the `api/` directory. On AWS, you create the API explicitly — a named resource with its own URL, its own configuration, and its own lifecycle. The upside is that you control everything. The downside is that you _have_ to create everything.
 
 The good news: creating an HTTP API from the CLI takes a single command.
 
@@ -27,7 +27,7 @@ aws apigatewayv2 create-api \
   --output json
 ```
 
-The response includes the fields you will need for everything that follows:
+The response includes the fields you'll need for everything that follows:
 
 ```json
 {
@@ -42,8 +42,8 @@ The response includes the fields you will need for everything that follows:
 
 Two things to note here:
 
-- **`ApiId`**: This is the identifier you will use in every subsequent command. Save it. Every route, integration, stage, and domain configuration references this ID.
-- **`ApiEndpoint`**: This is the auto-generated URL where your API will be reachable. It follows the pattern `https://{api-id}.execute-api.{region}.amazonaws.com`. You will replace this with a custom domain later, but it works immediately for testing.
+- **`ApiId`**: This is the identifier you'll use in every subsequent command. Save it. Every route, integration, stage, and domain configuration references this ID.
+- **`ApiEndpoint`**: This is the auto-generated URL where your API will be reachable. It follows the pattern `https://{api-id}.execute-api.{region}.amazonaws.com`. You'll replace this with a custom domain later, but it works immediately for testing.
 
 > [!TIP]
 > Save the `ApiId` to a shell variable so you can reference it in later commands without copying and pasting:
@@ -56,10 +56,10 @@ Two things to note here:
 
 When you create an HTTP API, API Gateway automatically creates a **`$default` stage**. This stage has two important properties:
 
-1. **Auto-deploy is enabled.** Any changes you make to routes, integrations, or configuration are deployed automatically. You do not need to run a separate deploy command.
+1. **Auto-deploy is enabled.** Any changes you make to routes, integrations, or configuration are deployed automatically. You don't need to run a separate deploy command.
 2. **No stage prefix in the URL.** The `$default` stage serves your API at the root of the `ApiEndpoint` URL. If your endpoint is `https://abc123def4.execute-api.us-east-1.amazonaws.com`, a route at `/items` is reachable at `https://abc123def4.execute-api.us-east-1.amazonaws.com/items` — no `/prod` or `/dev` prefix needed.
 
-This is different from REST APIs, where you always have a stage name in the URL (like `/prod/items`). The `$default` stage keeps your URLs clean and matches the routing behavior you are used to from Vercel or Netlify.
+This is different from REST APIs, where you always have a stage name in the URL (like `/prod/items`). The `$default` stage keeps your URLs clean and matches the routing behavior you're used to from Vercel or Netlify.
 
 You can verify the stage exists:
 
@@ -88,13 +88,13 @@ aws apigatewayv2 get-stages \
 
 ## The Route Selection Expression
 
-The `RouteSelectionExpression` in the API output was `${request.method} ${request.path}`. This tells API Gateway how to match incoming requests to routes. For HTTP APIs, this is always `${request.method} ${request.path}` — the HTTP method followed by the path. You cannot change it, and you do not need to.
+The `RouteSelectionExpression` in the API output was `${request.method} ${request.path}`. This tells API Gateway how to match incoming requests to routes. For HTTP APIs, this is always `${request.method} ${request.path}` — the HTTP method followed by the path. You can't change it, and you don't need to.
 
 When a request comes in, API Gateway evaluates the method and path against your defined routes. A route key like `GET /items` matches GET requests to `/items`. A route key like `POST /items` matches POST requests to the same path. If no route matches, the request gets a 404.
 
 ## Quick Create: The Shortcut
 
-If you already have a Lambda function and want to skip the separate integration and route steps (which we will cover in the next lesson), you can use the `--target` flag to create everything in one command:
+If you already have a Lambda function and want to skip the separate integration and route steps (which we'll cover in the next lesson), you can use the `--target` flag to create everything in one command:
 
 ```bash
 aws apigatewayv2 create-api \
@@ -107,10 +107,10 @@ aws apigatewayv2 create-api \
 
 This creates the API, a `$default` catch-all route, and a Lambda proxy integration — all in one shot. It also creates the `$default` stage with auto-deploy enabled.
 
-The catch: quick create wires up a single catch-all route (`$default`) that sends every request to one Lambda function. That is fine for simple APIs where your handler does its own routing, but it gives you less control over per-route configuration. For this course, we will create routes and integrations explicitly so you understand how the pieces fit together.
+The catch: quick create wires up a single catch-all route (`$default`) that sends every request to one Lambda function. That's fine for simple APIs where your handler does its own routing, but it gives you less control over per-route configuration. For this course, we'll create routes and integrations explicitly so you understand how the pieces fit together.
 
 > [!WARNING]
-> Quick create does not automatically grant API Gateway permission to invoke your Lambda function. You still need to run `aws lambda add-permission` separately, which we cover in the next lesson. Without that permission, every request will return a 500 error with an "Internal Server Error" message and no useful details.
+> Quick create doesn't automatically grant API Gateway permission to invoke your Lambda function. You still need to run `aws lambda add-permission` separately, which we cover in the next lesson. Without that permission, every request returns a 500 error with an "Internal Server Error" message and no useful details.
 
 ## Verifying Your API
 
@@ -131,7 +131,7 @@ aws apigatewayv2 get-apis \
   --output json
 ```
 
-At this point, you have an HTTP API with a `$default` stage and an auto-generated URL. The API does not have any routes or integrations yet, so hitting the URL returns a `{"message":"Not Found"}` response. That is correct — you have not told API Gateway where to send requests.
+At this point, you have an HTTP API with a `$default` stage and an auto-generated URL. The API doesn't have any routes or integrations yet, so hitting the URL returns a `{"message":"Not Found"}` response. That's correct — you haven't told API Gateway where to send requests.
 
 ## Cleaning Up
 
@@ -144,8 +144,6 @@ aws apigatewayv2 delete-api \
   --output json
 ```
 
-This removes the API, all its routes, integrations, and stages. The Lambda function is not affected — it still exists, just without an API in front of it.
+This removes the API, all its routes, integrations, and stages. The Lambda function isn't affected — it still exists, just without an API in front of it.
 
-## What is Next
-
-An API without routes is an API that returns 404 for everything. In the next lesson, you will create a Lambda proxy integration and wire routes to your Lambda function so that HTTP requests actually reach your handler. You will also grant API Gateway permission to invoke the function — a step that catches almost everyone the first time.
+An API without routes is an API that returns 404 for everything. In the next lesson, you'll create a Lambda proxy integration and wire routes to your Lambda function so that HTTP requests actually reach your handler. You'll also grant API Gateway permission to invoke the function — a step that catches almost everyone the first time.

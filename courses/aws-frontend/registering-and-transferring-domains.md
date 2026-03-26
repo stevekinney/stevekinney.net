@@ -3,7 +3,7 @@ title: 'Registering and Transferring Domains'
 description: >-
   Register a new domain through Route 53 or transfer an existing domain from another registrar, including configuring nameservers for an externally registered domain.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - route53
@@ -13,7 +13,7 @@ tags:
 
 You need a domain name. Maybe you already own one at GoDaddy or Namecheap or Cloudflare. Maybe you want to register a fresh one through AWS. Either path works, but there are tradeoffs worth understanding before you pick one.
 
-Route 53 is two services in one: a DNS hosting service (hosted zones, which you configured in [Hosted Zones and Record Types](hosted-zones-and-record-types.md)) and a domain registrar. You can use Route 53 for DNS hosting without using it as your registrar, and vice versa. But using Route 53 for both registration and DNS simplifies the setup because AWS handles the nameserver delegation automatically.
+Route 53 is two services in one: a DNS hosting service (hosted zones, which you configured in [Hosted Zones and Record Types](hosted-zones-and-record-types.md)) and a domain registrar. You can use Route 53 for DNS hosting without using it as your registrar, and vice versa. But using Route 53 for both registration and DNS simplifies the setup because AWS handles the nameserver delegation automatically. (I tend to keep my registrations wherever I originally bought the domain and just point the nameservers at Route 53 — less hassle, same result.)
 
 ## Registering a Domain Through Route 53
 
@@ -38,7 +38,7 @@ aws route53domains check-domain-availability \
 }
 ```
 
-If the domain is available, you will see `"Availability": "AVAILABLE"`. Domain registration via the CLI requires the `register-domain` command with contact details, which is verbose. For a one-time registration, the console is the better choice.
+If the domain is available, you'll see `"Availability": "AVAILABLE"`. Domain registration via the CLI requires the `register-domain` command with contact details, which is verbose. For a one-time registration, the console is the better choice.
 
 > [!TIP]
 > Route 53 domain registration operations must use `us-east-1` as the region, regardless of where your other resources live. The `route53domains` API is only available in `us-east-1`.
@@ -55,7 +55,7 @@ In other words, registration through Route 53 skips the manual nameserver config
 
 ### Domain Privacy
 
-Route 53 enables **privacy protection** by default for supported TLDs. This replaces your personal contact information in the public WHOIS database with Route 53's registrar contact details. For TLDs that do not support privacy protection (some country-code TLDs), your contact information will be publicly visible.
+Route 53 enables **privacy protection** by default for supported TLDs. This replaces your personal contact information in the public WHOIS database with Route 53's registrar contact details. For TLDs that don't support privacy protection (some country-code TLDs), your contact information will be publicly visible.
 
 ## Transferring a Domain to Route 53
 
@@ -71,18 +71,18 @@ If you already own a domain at another registrar and want to move everything to 
 
 5. **Wait.** Domain transfers typically take 5-7 days to complete. During this time, your site continues working — the domain still resolves using its current DNS configuration.
 
-After the transfer completes, Route 53 creates a hosted zone (if one does not already exist) and updates the domain's nameservers. Your DNS records carry over if you were already using Route 53 for DNS hosting. If you were using another DNS provider, you will need to recreate your records in the Route 53 hosted zone.
+After the transfer completes, Route 53 creates a hosted zone (if one doesn't already exist) and updates the domain's nameservers. Your DNS records carry over if you were already using Route 53 for DNS hosting. If you were using another DNS provider, you'll need to recreate your records in the Route 53 hosted zone.
 
 > [!WARNING]
-> You cannot transfer a domain within 60 days of registering it or within 60 days of a previous transfer. This is an ICANN rule, not an AWS limitation. Plan accordingly if you recently registered a domain elsewhere and want to move it to Route 53.
+> You can't transfer a domain within 60 days of registering it or within 60 days of a previous transfer. This is an ICANN rule, not an AWS limitation. Plan accordingly if you recently registered a domain elsewhere and want to move it to Route 53.
 
 ## Using Route 53 DNS with an External Registrar
 
-You do not have to transfer your domain registration to Route 53 to use Route 53 for DNS. This is the approach to take if you want to keep your domain at your current registrar (maybe it was cheaper, maybe you have multiple domains managed there) but use Route 53 for hosting your DNS records.
+You don't have to transfer your domain registration to Route 53 to use Route 53 for DNS. This is the approach to take if you want to keep your domain at your current registrar (maybe it was cheaper, maybe you have multiple domains managed there) but use Route 53 for hosting your DNS records.
 
-Here is the process:
+Here's the process:
 
-### Step 1: Create a Hosted Zone in Route 53
+### Create a Hosted Zone in Route 53
 
 ```bash
 aws route53 create-hosted-zone \
@@ -107,13 +107,13 @@ Note the four nameservers in the response:
 }
 ```
 
-### Step 2: Update Nameservers at Your Registrar
+### Update Nameservers at Your Registrar
 
-Log into your registrar (GoDaddy, Namecheap, Cloudflare, etc.) and replace the default nameservers with the four Route 53 nameservers. The exact steps vary by registrar, but you are looking for something like "Custom DNS," "Custom nameservers," or "Change nameservers" in the domain management interface.
+Log into your registrar (GoDaddy, Namecheap, Cloudflare, etc.) and replace the default nameservers with the four Route 53 nameservers. The exact steps vary by registrar, but you're looking for something like "Custom DNS," "Custom nameservers," or "Change nameservers" in the domain management interface.
 
-Enter all four nameservers. Order does not matter.
+Enter all four nameservers. Order doesn't matter.
 
-### Step 3: Wait for Propagation
+### Wait for Propagation
 
 After changing nameservers, DNS queries for your domain will gradually shift from the old nameservers to the Route 53 nameservers. This can take anywhere from a few minutes to 48 hours, depending on TTL values and caching behavior at various resolvers. In practice, most users see the change within a few hours.
 
@@ -125,16 +125,16 @@ dig example.com NS +short
 
 When the output shows the four Route 53 nameservers, delegation is complete.
 
-### Step 4: Create Your DNS Records
+### Create Your DNS Records
 
 With delegation in place, you can now create records in your Route 53 hosted zone — the A and AAAA alias records pointing to your CloudFront distribution, as described in [Pointing a Domain to CloudFront](pointing-a-domain-to-cloudfront.md).
 
 > [!TIP]
-> If you are migrating from another DNS provider that had existing records (MX records for email, TXT records for verification, etc.), recreate all of those records in Route 53 before changing nameservers. Otherwise, email delivery and other services that depend on DNS will break during the transition.
+> If you're migrating from another DNS provider that had existing records (MX records for email, TXT records for verification, etc.), recreate all of those records in Route 53 before changing nameservers. Otherwise, email delivery and other services that depend on DNS will break during the transition.
 
 ## Hosted Zone Auto-Creation Behavior
 
-There is a subtle gotcha when mixing domain registration and hosted zones. If you register a domain through Route 53, AWS automatically creates a hosted zone. If you then delete that hosted zone and create a new one (maybe you wanted a fresh start), the new hosted zone will have different nameservers. But the domain registration still points to the old nameservers.
+There's a subtle gotcha when mixing domain registration and hosted zones. If you register a domain through Route 53, AWS automatically creates a hosted zone. If you then delete that hosted zone and create a new one (maybe you wanted a fresh start), the new hosted zone will have different nameservers. But the domain registration still points to the old nameservers.
 
 You need to update the domain's nameservers to match the new hosted zone:
 
@@ -150,7 +150,7 @@ aws route53domains update-domain-nameservers \
   --output json
 ```
 
-The reverse also matters: if you create a hosted zone first and then register the domain, Route 53 creates a second hosted zone automatically. You will end up with two hosted zones for the same domain, each with different nameservers. Delete the one you are not using and make sure the domain's nameservers match the one you are keeping.
+The reverse also matters: if you create a hosted zone first and then register the domain, Route 53 creates a second hosted zone automatically. You'll end up with two hosted zones for the same domain, each with different nameservers. Delete the one you're not using and make sure the domain's nameservers match the one you're keeping.
 
 ```bash
 aws route53 list-hosted-zones \
@@ -161,14 +161,14 @@ aws route53 list-hosted-zones \
 If you see two entries, one will have only 2 records (the auto-created default) and the other will have your actual DNS records. Delete the empty one.
 
 > [!WARNING]
-> Having two hosted zones for the same domain with different nameservers is a common source of confusion. DNS queries go to whichever hosted zone's nameservers are configured on the domain registration. Records in the other hosted zone are effectively invisible. If your DNS records are not resolving, check whether you have duplicate hosted zones.
+> Having two hosted zones for the same domain with different nameservers is a common source of confusion. DNS queries go to whichever hosted zone's nameservers are configured on the domain registration. Records in the other hosted zone are effectively invisible. If your DNS records aren't resolving, check whether you have duplicate hosted zones.
 
 ## Which Approach Should You Use?
 
-**Register through Route 53** if you are buying a new domain and want the simplest setup. No nameserver configuration, no delegation — it just works.
+**Register through Route 53** if you're buying a new domain and want the simplest setup. No nameserver configuration, no delegation — it just works.
 
-**Keep your existing registrar and use Route 53 for DNS** if you already own a domain and do not want to deal with the transfer process. This is perfectly fine for production use — the registrar's only job is to hold the nameserver delegation, and once that is configured, it does not matter whether registration lives at GoDaddy or Route 53.
+**Keep your existing registrar and use Route 53 for DNS** if you already own a domain and don't want to deal with the transfer process. This is perfectly fine for production use — the registrar's only job is to hold the nameserver delegation, and once that's configured, it doesn't matter whether registration lives at GoDaddy or Route 53.
 
-**Transfer to Route 53** if you want everything in one place and are willing to wait 5-7 days for the transfer. This simplifies management long-term but is not necessary.
+**Transfer to Route 53** if you want everything in one place and are willing to wait 5-7 days for the transfer. This simplifies management long-term but isn't necessary.
 
 For this course, any of the three approaches works. The DNS records you create in Route 53 behave identically regardless of where the domain is registered.

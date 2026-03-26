@@ -3,7 +3,7 @@ title: 'Uploading and Organizing Files'
 description: >-
   Upload files to S3 using the AWS CLI and the console, and understand how S3 key prefixes create a virtual folder structure.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - s3
@@ -11,7 +11,7 @@ tags:
   - cli
 ---
 
-You have a bucket. Now you need files in it. This is your `npm run build` output going to the cloud — the HTML, CSS, JavaScript, and images that make up your frontend application. The AWS CLI gives you two primary commands for getting files into S3: `aws s3 cp` for copying individual files and `aws s3 sync` for keeping a local directory and a bucket in sync. Both are essential, and knowing when to use each will save you time and bandwidth.
+You have a bucket. Now you need files in it. This is your `npm run build` output going to the cloud — the HTML, CSS, JavaScript, and images that make up your frontend application. The AWS CLI gives you two primary commands for getting files into S3: `aws s3 cp` for copying individual files and `aws s3 sync` for keeping a local directory and a bucket in sync. Both are essential, and knowing when to use each saves you time and bandwidth.
 
 ## Copying Files with `aws s3 cp`
 
@@ -52,11 +52,11 @@ The resulting S3 objects will have these keys:
 - `assets/logo.png`
 - `favicon.ico`
 
-Remember: there is no actual `assets/` folder in S3. The forward slash is part of the key string. But every tool — the CLI, the console, the SDK — treats it as a virtual folder, and for practical purposes that is all you need to know.
+Remember: there's no actual `assets/` folder in S3. The forward slash is part of the key string. But every tool — the CLI, the console, the SDK — treats it as a virtual folder, and for practical purposes that's all you need to know.
 
 ## Syncing with `aws s3 sync`
 
-The `sync` command is what you will use for deployments. Unlike `cp`, it only uploads files that have changed — it compares file sizes and timestamps between your local directory and the bucket, and only transfers the differences.
+The `sync` command is what you'll use for deployments. Unlike `cp`, it only uploads files that have changed — it compares file sizes and timestamps between your local directory and the bucket, and only transfers the differences.
 
 ```bash
 aws s3 sync ./build s3://my-frontend-app-assets \
@@ -67,7 +67,7 @@ Run this after every build and only the files that changed will be uploaded. On 
 
 ### The `--delete` Flag
 
-By default, `sync` does not remove files from S3 that no longer exist locally. If you renamed a file or removed a page, the old version stays in the bucket. The `--delete` flag fixes this:
+By default, `sync` doesn't remove files from S3 that no longer exist locally. If you renamed a file or removed a page, the old version stays in the bucket. The `--delete` flag fixes this:
 
 ```bash
 aws s3 sync ./build s3://my-frontend-app-assets \
@@ -78,11 +78,11 @@ aws s3 sync ./build s3://my-frontend-app-assets \
 This makes the S3 bucket an exact mirror of your local `build/` directory. Files that exist in the bucket but not locally are removed.
 
 > [!WARNING]
-> The `--delete` flag permanently removes objects from S3. If you do not have versioning enabled (we will cover this in [S3 Versioning, Lifecycle, and Cost](s3-versioning-lifecycle-and-cost.md)), those files are gone. Always double-check that you are syncing the right directory before using `--delete` in production.
+> The `--delete` flag permanently removes objects from S3. If you don't have versioning enabled (we'll cover this in [S3 Versioning, Lifecycle, and Cost](s3-versioning-lifecycle-and-cost.md)), those files are gone. Always double-check that you're syncing the right directory before using `--delete` in production.
 
 ### The `--exclude` and `--include` Flags
 
-Sometimes you want to sync most of your build output but exclude certain files — maybe a `.DS_Store` that macOS leaves behind, or a `sourcemap` you do not want publicly accessible:
+Sometimes you want to sync most of your build output but exclude certain files — maybe a `.DS_Store` that macOS leaves behind, or a `sourcemap` you don't want publicly accessible:
 
 ```bash
 aws s3 sync ./build s3://my-frontend-app-assets \
@@ -94,9 +94,9 @@ aws s3 sync ./build s3://my-frontend-app-assets \
 
 ## Content Types Matter
 
-Here is the gotcha that trips up every frontend engineer the first time they deploy to S3: **content types**. When you upload a file to S3, the CLI guesses the MIME type based on the file extension. It gets most of them right — `.html` becomes `text/html`, `.css` becomes `text/css`, `.js` becomes `application/javascript`. But it does not always guess correctly, especially for newer file formats like `.woff2`, `.webp`, or `.mjs`.
+Here's the gotcha that trips up every frontend engineer the first time they deploy to S3: **content types**. When you upload a file to S3, the CLI guesses the MIME type based on the file extension. It gets most of them right — `.html` becomes `text/html`, `.css` becomes `text/css`, `.js` becomes `application/javascript`. But it doesn't always guess correctly, especially for newer file formats like `.woff2`, `.webp`, or `.mjs`.
 
-If S3 serves a JavaScript file with the wrong content type, the browser will refuse to execute it. You will see an error in the console like "Refused to execute script because its MIME type is not an executable MIME type."
+If S3 serves a JavaScript file with the wrong content type, the browser will refuse to execute it. You'll see an error in the console like "Refused to execute script because its MIME type is not an executable MIME type." I've spent more time than I'd like to admit debugging this exact issue.
 
 You can set the content type explicitly when uploading:
 
@@ -122,11 +122,11 @@ aws s3 sync ./build s3://my-frontend-app-assets \
 ```
 
 > [!TIP]
-> In practice, the CLI's MIME type guessing works fine for the most common frontend file types. You typically only need to override content types for edge cases. But if your site loads and your JavaScript is not executing, check the content type first — it is almost always the problem.
+> In practice, the CLI's MIME type guessing works fine for the most common frontend file types. You typically only need to override content types for edge cases. But if your site loads and your JavaScript isn't executing, check the content type first — it's almost always the problem.
 
 ## Organizing Files with Key Prefixes
 
-S3 does not have real directories, but **key prefixes** give you a way to organize objects that works well enough. Most frontend build tools already output files into a sensible structure, and that structure translates directly to S3 keys.
+S3 doesn't have real directories, but **key prefixes** give you a way to organize objects that works well enough. Most frontend build tools already output files into a sensible structure, and that structure translates directly to S3 keys.
 
 A common pattern for frontend deployments:
 
@@ -145,7 +145,7 @@ my-frontend-app-assets/
     └── mono.woff2
 ```
 
-The hashed filenames (`main.a1b2c3d4.js`) are important. Most frontend build tools (Vite, webpack, Next.js) add content hashes to filenames so that when you deploy a new version, the new files have different names and the old cached files do not interfere. This is called **cache busting**, and it plays nicely with S3 and CloudFront's caching behavior.
+The hashed filenames (`main.a1b2c3d4.js`) are important. Most frontend build tools (Vite, webpack, Next.js) add content hashes to filenames so that when you deploy a new version, the new files have different names and the old cached files don't interfere. This is called **cache busting**, and it plays nicely with S3 and CloudFront's caching behavior.
 
 ### Listing Objects by Prefix
 
@@ -189,11 +189,11 @@ aws s3api list-objects-v2 \
 
 The AWS console works fine for uploading a file or two during development. Navigate to S3, click your bucket, click "Upload," and drag your files in. The console even lets you set metadata (including content type) per file.
 
-But do not rely on the console for deployments. It is slow, error-prone, and impossible to automate. The CLI is the right tool for anything you will do more than once — and later in this course, you will automate the entire deployment process with the CLI and GitHub Actions.
+But don't rely on the console for deployments. It's slow, error-prone, and impossible to automate. The CLI is the right tool for anything you'll do more than once — and later in this course, you'll automate the entire deployment process with the CLI and GitHub Actions.
 
 ## A Deployment Script
 
-Here is a practical deployment pattern that combines what you have learned. After running your build, sync the output to S3:
+Here's a practical deployment pattern that combines what you've learned. After running your build, sync the output to S3:
 
 ```bash
 # Build the frontend
@@ -206,8 +206,6 @@ aws s3 sync ./build s3://my-frontend-app-assets \
   --exclude ".DS_Store"
 ```
 
-That is a two-command deployment. Not quite as slick as `git push` to Vercel, but you have full control over what gets uploaded, where it goes, and how it is served. And when you add CloudFront invalidation to this script in Module 4, you will have a deployment pipeline that rivals anything Vercel or Netlify provides — except you own every piece of it.
+That's a two-command deployment. Not quite as slick as `git push` to Vercel, but you have full control over what gets uploaded, where it goes, and how it's served. And when you add CloudFront invalidation to this script in Module 4, you'll have a deployment pipeline that rivals anything Vercel or Netlify provides — except you own every piece of it.
 
-## What is Next
-
-Your files are in the bucket, but nobody can see them yet. The bucket is locked down by default with Block Public Access enabled. In the next lesson, you will write a **bucket policy** that grants public read access to your static assets — and understand how bucket policies relate to the IAM policies you wrote in [Writing Your First IAM Policy](writing-your-first-iam-policy.md).
+Your files are in the bucket, but nobody can see them yet. The bucket is locked down by default with Block Public Access enabled. Next, you'll write a **bucket policy** that grants public read access to your static assets — and understand how bucket policies relate to the IAM policies you wrote in [Writing Your First IAM Policy](writing-your-first-iam-policy.md).

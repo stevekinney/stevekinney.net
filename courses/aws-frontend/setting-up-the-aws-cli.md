@@ -4,7 +4,7 @@ description: >-
   Install the AWS CLI v2, configure it with named profiles and access keys, and
   verify that your credentials work.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cli
@@ -148,7 +148,7 @@ region = us-east-1
 output = json
 ```
 
-Notice the asymmetry: in the credentials file, the section header is just `[personal]`. In the config file, it's `[profile personal]`. This inconsistency is annoying, but it's how AWS designed it. The `[default]` profile doesn't use the `profile` prefix in either file.
+Notice the asymmetry: in the credentials file, the section header is just `[personal]`. In the config file, it's `[profile personal]`. This inconsistency is annoying, but it's how AWS designed it. (Honestly, I don't know why. It trips everyone up at least once.) The `[default]` profile doesn't use the `profile` prefix in either file.
 
 You can also set the `AWS_PROFILE` environment variable to avoid typing `--profile` on every command:
 

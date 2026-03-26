@@ -4,7 +4,7 @@ description: >-
   Create a DynamoDB table, define partition keys and sort keys, and understand
   how key design affects query patterns and performance.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - dynamodb
@@ -12,13 +12,13 @@ tags:
   - keys
 ---
 
-Every DynamoDB table needs a primary key, and the key you choose determines how you access your data for the lifetime of that table. You cannot change a table's primary key after creation. This is the most important decision you make when designing a DynamoDB table, and it is worth getting right from the start.
+Every DynamoDB table needs a primary key, and the key you choose determines how you access your data for the lifetime of that table. You can't change a table's primary key after creation. This is the most important decision you make when designing a DynamoDB table, and it's worth getting right from the start.
 
 ## Partition Keys and Sort Keys
 
 DynamoDB supports two types of primary keys:
 
-**Simple primary key (partition key only).** A single attribute that uniquely identifies each item. DynamoDB uses the partition key's value to determine which internal partition stores the item. If you are building a table where each item is accessed by a unique ID — like a users table keyed on `userId` — a simple primary key is sufficient.
+**Simple primary key (partition key only).** A single attribute that uniquely identifies each item. DynamoDB uses the partition key's value to determine which internal partition stores the item. If you're building a table where each item is accessed by a unique ID — like a users table keyed on `userId` — a simple primary key is sufficient.
 
 **Composite primary key (partition key + sort key).** Two attributes that together uniquely identify each item. Items with the same **partition key** are stored together and sorted by the **sort key**. This enables range queries: "give me all items with this partition key where the sort key is between these two values."
 
@@ -37,7 +37,7 @@ With this design, you can:
 - Get all items for a user: query by partition key `user-123` (returns both items, sorted by `itemId`)
 - Get a range of items: query by partition key `user-123` where sort key begins with `item-00`
 
-You cannot efficiently query across partition keys — for example, "get all items with status `done` across all users." That requires a **scan** (which reads every item in the table) or a secondary index. This is the trade-off you accept with DynamoDB: predictable performance on your primary access patterns, at the cost of flexibility on queries you did not plan for.
+You can't efficiently query across partition keys — for example, "get all items with status `done` across all users." That requires a **scan** (which reads every item in the table) or a secondary index. This is the trade-off you accept with DynamoDB: predictable performance on your primary access patterns, at the cost of flexibility on queries you didn't plan for.
 
 ## Choosing Good Keys
 
@@ -56,7 +56,7 @@ Bad partition keys:
 - `date` — all writes on the same day hit the same partition
 
 > [!TIP]
-> If you are coming from a relational database background, think of the partition key as the value you most commonly filter by in a `WHERE` clause. The sort key is what you would `ORDER BY` within that filtered set.
+> If you're coming from a relational database background, think of the partition key as the value you most commonly filter by in a `WHERE` clause. The sort key is what you'd `ORDER BY` within that filtered set.
 
 ## Creating a Table with the CLI
 
@@ -80,7 +80,7 @@ Let's break down what each parameter does:
 
 - **`--table-name`**: The name of the table. This is how you reference it in your Lambda code and IAM policies.
 - **`--attribute-definitions`**: Declares the data types for key attributes. `S` means string. DynamoDB also supports `N` (number) and `B` (binary), but strings cover most frontend use cases.
-- **`--key-schema`**: Defines which attributes form the primary key. `HASH` is the partition key and `RANGE` is the sort key. The naming comes from the internal hashing mechanism DynamoDB uses for partitioning.
+- **`--key-schema`**: Defines which attributes form the primary key. `HASH` is the partition key and `RANGE` is the sort key. (The naming comes from the internal hashing mechanism DynamoDB uses for partitioning — not the most intuitive labels, I know.)
 - **`--billing-mode PAY_PER_REQUEST`**: On-demand pricing. You pay per read and write, with no capacity planning.
 
 The response includes the table description:
@@ -121,11 +121,11 @@ aws dynamodb describe-table \
 Wait until the status changes from `CREATING` to `ACTIVE` before writing data.
 
 > [!WARNING]
-> The `--attribute-definitions` parameter only defines attributes that are used in the key schema (or secondary indexes). You do **not** declare non-key attributes here. DynamoDB is schemaless for non-key attributes — you can add any attributes you want when you write items. This trips up people coming from SQL databases who expect to define all columns up front.
+> The `--attribute-definitions` parameter only defines attributes that are used in the key schema (or secondary indexes). You don't declare non-key attributes here. DynamoDB is schemaless for non-key attributes — you can add any attributes you want when you write items. This trips up people coming from SQL databases who expect to define all columns up front.
 
 ## A Note on Attribute Definitions
 
-It is tempting to list every attribute your items will have in `--attribute-definitions`. Do not do this. DynamoDB will reject your request if you define attributes that are not part of any key schema or index. Only define the attributes that form your keys.
+It's tempting to list every attribute your items will have in `--attribute-definitions`. Don't do this. DynamoDB will reject your request if you define attributes that aren't part of any key schema or index. Only define the attributes that form your keys.
 
 Your items can have as many additional attributes as you want — `title`, `status`, `createdAt`, `priority` — and you never declare them in the table definition. You just include them when you write an item.
 
@@ -137,7 +137,7 @@ Here are common patterns that work well for frontend API backends:
 
 Partition key: `userId`, sort key: `itemId`
 
-This is the pattern you are using for `my-frontend-app-data`. Each user's items are stored together, and you can efficiently query all items for a given user. This covers the most common frontend access pattern: "show me my stuff."
+This is the pattern you're using for `my-frontend-app-data`. Each user's items are stored together, and you can efficiently query all items for a given user. This covers the most common frontend access pattern: "show me my stuff."
 
 ### Timestamp-sorted data
 
@@ -152,8 +152,6 @@ Partition key: `pk`, sort key: `sk`
 Advanced DynamoDB users sometimes store multiple entity types in a single table using generic key names. A user might have `pk=USER#user-123` and `sk=PROFILE`, while their items have `pk=USER#user-123` and `sk=ITEM#item-456`. This is a powerful pattern but adds complexity — stick with the simpler user-scoped pattern unless you have a specific reason to go further.
 
 > [!TIP]
-> For this course, the `userId`/`itemId` composite key is all you need. Single-table design is a real and useful DynamoDB pattern, but it is optimized for applications with many entity types and complex access patterns. A frontend API backend with one or two entity types does not need that level of sophistication.
+> For this course, the `userId`/`itemId` composite key is all you need. Single-table design is a real and useful DynamoDB pattern, but it's optimized for applications with many entity types and complex access patterns. A frontend API backend with one or two entity types doesn't need that level of sophistication.
 
-## What is Next
-
-You have a table with a composite primary key. In the next lesson, you will write data to it and read it back using the AWS SDK v3 from TypeScript — the same language your Lambda handlers are written in.
+You've got a table with a composite primary key. Next up, you'll write data to it and read it back using the AWS SDK v3 from TypeScript — the same language your Lambda handlers are written in.

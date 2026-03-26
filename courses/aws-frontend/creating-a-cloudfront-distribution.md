@@ -3,7 +3,7 @@ title: 'Creating a CloudFront Distribution'
 description: >-
   Create a CloudFront distribution with an S3 origin and configure its basic settings using the AWS CLI.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cloudfront
@@ -16,7 +16,7 @@ On Vercel, this happens automatically when you push to a Git branch. On AWS, you
 
 ## The Distribution Config
 
-Creating a CloudFront distribution through the CLI means passing a JSON configuration to `aws cloudfront create-distribution`. The config is verbose — CloudFront has many options and the CLI requires you to specify most of them, even when you want the defaults. Rather than pretend this is simple, here is the full config with annotations explaining each part.
+Creating a CloudFront distribution through the CLI means passing a JSON configuration to `aws cloudfront create-distribution`. The config is verbose — CloudFront has many options and the CLI requires you to specify most of them, even when you want the defaults. Rather than pretend this is simple, here's the full config with annotations explaining each part.
 
 Save this as `distribution-config.json`:
 
@@ -68,7 +68,7 @@ Save this as `distribution-config.json`:
 }
 ```
 
-That is a lot of JSON. Let's walk through it.
+That's a lot of JSON. Let's walk through it.
 
 ## Breaking Down the Config
 
@@ -86,10 +86,10 @@ A unique string that prevents you from accidentally creating duplicate distribut
 "DefaultRootObject": "index.html"
 ```
 
-When someone requests the root URL of your distribution (`https://d1234abcdef.cloudfront.net/`), CloudFront serves this file. This is the CDN equivalent of S3's index document setting. Without it, a request to `/` returns an error because CloudFront does not know which object to serve.
+When someone requests the root URL of your distribution (`https://d1234abcdef.cloudfront.net/`), CloudFront serves this file. This is the CDN equivalent of S3's index document setting. Without it, a request to `/` returns an error because CloudFront doesn't know which object to serve.
 
 > [!WARNING]
-> `DefaultRootObject` only applies to the root URL (`/`). It does not apply to subdirectory paths like `/about/`. If you need `/about/` to serve `/about/index.html`, you will need a CloudFront Function or Lambda@Edge (covered in Module 9). For single-page applications, this is handled by custom error responses, which you will configure in [Custom Error Pages and SPA Routing](custom-error-pages-and-spa-routing.md).
+> `DefaultRootObject` only applies to the root URL (`/`). It doesn't apply to subdirectory paths like `/about/`. If you need `/about/` to serve `/about/index.html`, you'll need a CloudFront Function or Lambda@Edge (covered in Module 9). For single-page applications, this is handled by custom error responses, which you'll configure in [Custom Error Pages and SPA Routing](custom-error-pages-and-spa-routing.md).
 
 ### PriceClass
 
@@ -116,14 +116,14 @@ Controls which edge locations serve your content. `PriceClass_100` covers North 
 }
 ```
 
-The **origin** is where CloudFront fetches content when it does not have a cached copy. For a static site, that is your S3 bucket. A few things to note:
+The **origin** is where CloudFront fetches content when it doesn't have a cached copy. For a static site, that's your S3 bucket. A few things to note:
 
 - **`Id`**: A label for this origin. You reference it in cache behaviors to tell CloudFront which origin to use for which paths. The name is arbitrary.
-- **`DomainName`**: The S3 bucket's regional domain name. Use the format `<bucket>.s3.<region>.amazonaws.com`, not the S3 website endpoint. CloudFront talks to S3 via the REST API, not the website endpoint.
-- **`S3OriginConfig.OriginAccessIdentity`**: Set to an empty string for now. We are not using the legacy Origin Access Identity (OAI). In the next lesson, you will configure the newer **Origin Access Control** (OAC), which is the recommended approach.
+- **`DomainName`**: The S3 bucket's regional domain name. Use the format `<bucket>.s3.<region>.amazonaws.com`, not the S3 website endpoint. CloudFront talks to S3 via the REST API, not the website endpoint. (This one bit me the first time I set this up — I used the website endpoint and spent way too long debugging.)
+- **`S3OriginConfig.OriginAccessIdentity`**: Set to an empty string for now. We're not using the legacy Origin Access Identity (OAI). In the next lesson, you'll configure the newer **Origin Access Control** (OAC), which is the recommended approach.
 
 > [!WARNING]
-> Do not use the S3 website endpoint URL (e.g., `my-frontend-app-assets.s3-website-us-east-1.amazonaws.com`) as the origin domain name. That endpoint is for direct browser access. CloudFront needs the REST API endpoint (`my-frontend-app-assets.s3.us-east-1.amazonaws.com`) to properly authenticate requests, especially when you add Origin Access Control.
+> Don't use the S3 website endpoint URL (e.g., `my-frontend-app-assets.s3-website-us-east-1.amazonaws.com`) as the origin domain name. That endpoint is for direct browser access. CloudFront needs the REST API endpoint (`my-frontend-app-assets.s3.us-east-1.amazonaws.com`) to properly authenticate requests, especially when you add Origin Access Control.
 
 ### DefaultCacheBehavior
 
@@ -144,7 +144,7 @@ The **origin** is where CloudFront fetches content when it does not have a cache
 }
 ```
 
-This is the default **behavior** — the rules that apply to every request that does not match a more specific path pattern. The important fields:
+This is the default **behavior** — the rules that apply to every request that doesn't match a more specific path pattern. The important fields:
 
 - **`TargetOriginId`**: Must match the `Id` of one of your origins.
 - **`ViewerProtocolPolicy`**: `"redirect-to-https"` means any HTTP request gets a 301 redirect to HTTPS. This is what you want for any production site.
@@ -160,7 +160,7 @@ This is the default **behavior** — the rules that apply to every request that 
 }
 ```
 
-For now, we are using CloudFront's default certificate, which gives you HTTPS on the `*.cloudfront.net` domain. In [Attaching an SSL Certificate](attaching-an-ssl-certificate.md), you will swap this for your ACM certificate to use a custom domain.
+For now, we're using CloudFront's default certificate, which gives you HTTPS on the `*.cloudfront.net` domain. In [Attaching an SSL Certificate](attaching-an-ssl-certificate.md), you'll swap this for your ACM certificate to use a custom domain.
 
 ## Creating the Distribution
 
@@ -188,7 +188,7 @@ The response is large — CloudFront returns the complete distribution configura
 }
 ```
 
-- **`Id`**: Your distribution's unique identifier. You will use this for every subsequent operation — invalidations, updates, deletions.
+- **`Id`**: Your distribution's unique identifier. You'll use this for every subsequent operation — invalidations, updates, deletions.
 - **`DomainName`**: The CloudFront URL where your site is now accessible. This is a `*.cloudfront.net` domain that you can open in a browser.
 - **`Status`**: `"InProgress"` means CloudFront is deploying your distribution to edge locations worldwide. This takes a few minutes.
 
@@ -222,10 +222,10 @@ Once deployed, open the CloudFront domain name in your browser:
 https://d1234abcdef.cloudfront.net
 ```
 
-You should see your site — the same files you uploaded to S3 in [Uploading and Organizing Files](uploading-and-organizing-files.md), now served through CloudFront with HTTPS. The URL is not pretty, but it proves the distribution works. You will attach a custom domain later.
+You should see your site — the same files you uploaded to S3 in [Uploading and Organizing Files](uploading-and-organizing-files.md), now served through CloudFront with HTTPS. The URL isn't pretty, but it proves the distribution works. You'll attach a custom domain later.
 
 > [!TIP]
-> If you see an "Access Denied" XML error, your S3 bucket might not have a public bucket policy yet. For now, the bucket needs to be publicly readable (as configured in [Bucket Policies and Public Access](bucket-policies-and-public-access.md)). In the next lesson, you will lock down the bucket using Origin Access Control so only CloudFront can read from it — removing the need for public access entirely.
+> If you see an "Access Denied" XML error, your S3 bucket might not have a public bucket policy yet. For now, the bucket needs to be publicly readable (as configured in [Bucket Policies and Public Access](bucket-policies-and-public-access.md)). In the next lesson, you'll lock down the bucket using Origin Access Control so only CloudFront can read from it — removing the need for public access entirely.
 
 ## Listing and Describing Distributions
 
@@ -247,8 +247,6 @@ aws cloudfront get-distribution-config \
   --output json
 ```
 
-You will use `get-distribution-config` frequently — updating a distribution requires fetching the current config, modifying it, and submitting it back with the `ETag` from the response. More on that when you update the distribution in later lessons.
+You'll use `get-distribution-config` frequently — updating a distribution requires fetching the current config, modifying it, and submitting it back with the `ETag` from the response. More on that when you update the distribution in later lessons.
 
-## What is Next
-
-Your distribution works, but right now anyone can bypass CloudFront and access your S3 bucket directly. That defeats the purpose of having a CDN — you want all traffic flowing through CloudFront so you get caching, HTTPS, and security headers. In the next lesson, you will configure **Origin Access Control** to lock down the S3 bucket so only CloudFront can read from it.
+Your distribution works, but right now anyone can bypass CloudFront and access your S3 bucket directly. That defeats the purpose of having a CDN — you want all traffic flowing through CloudFront so you get caching, HTTPS, and security headers. In the next lesson, you'll configure **Origin Access Control** to lock down the S3 bucket so only CloudFront can read from it.

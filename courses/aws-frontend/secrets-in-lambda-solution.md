@@ -4,7 +4,7 @@ description: >-
   Complete solution for storing an API key in Parameter Store and reading it
   from a Lambda function at runtime.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - secrets
@@ -12,9 +12,9 @@ tags:
   - solution
 ---
 
-This is the complete solution for the [Exercise: Store and Retrieve a Secret in Lambda](secrets-in-lambda-exercise.md).
+This is the complete solution for the [Exercise: Store and Retrieve a Secret in Lambda](secrets-in-lambda-exercise.md). If you got stuck, don't worry — there are a few gotchas in here that trip everyone up the first time.
 
-## Step 1: Store the Secret
+## Store the Secret
 
 ```bash
 aws ssm put-parameter \
@@ -50,7 +50,7 @@ Expected output:
 }
 ```
 
-## Step 2: Write the Handler
+## Write the Handler
 
 Project setup:
 
@@ -148,7 +148,7 @@ Build:
 npm run build
 ```
 
-## Step 3: Update the Execution Role
+## Update the Execution Role
 
 Create `parameter-store-policy.json`:
 
@@ -205,9 +205,9 @@ aws iam get-role-policy \
   --output json
 ```
 
-## Step 4: Deploy and Invoke
+## Deploy and Invoke
 
-Package the function. You need to include `node_modules` because the Lambda runtime does not include `@aws-sdk/client-ssm` by default:
+Package the function. You need to include `node_modules` because the Lambda runtime doesn't include `@aws-sdk/client-ssm` by default:
 
 ```bash
 cd lambda
@@ -275,7 +275,7 @@ Expected output:
 
 The `keyPrefix` value is `sk_test` — the first 7 characters of `sk_test_exercise_abc123`.
 
-## Step 5: Verify the Secret Is Not in Environment Variables
+## Verify the Secret Isn't in Environment Variables
 
 ```bash
 aws lambda get-function-configuration \
@@ -285,15 +285,15 @@ aws lambda get-function-configuration \
   --output json
 ```
 
-If you have environment variables from a previous exercise (like `TABLE_NAME`), they appear here. The API key does not. It exists only in Parameter Store.
+If you have environment variables from a previous exercise (like `TABLE_NAME`), they appear here. The API key doesn't. It exists only in Parameter Store.
 
 ## Troubleshooting
 
-**"AccessDeniedException" when invoking the function.** The execution role is missing `ssm:GetParameter` or `kms:Decrypt` permissions. Double-check the policy document and verify it is attached to the correct role. Also verify the parameter ARN in the policy matches the parameter name exactly — remember that the ARN path does not double the leading slash.
+**"AccessDeniedException" when invoking the function.** The execution role is missing `ssm:GetParameter` or `kms:Decrypt` permissions. Double-check the policy document and verify it's attached to the correct role. Also verify the parameter ARN in the policy matches the parameter name exactly — remember that the ARN path doesn't double the leading slash.
 
-**"ParameterNotFound" error.** The parameter name in your code does not match the name you used in `put-parameter`. Parameter names are case-sensitive and must include the full path with leading slash.
+**"ParameterNotFound" error.** The parameter name in your code doesn't match the name you used in `put-parameter`. Parameter names are case-sensitive and must include the full path with leading slash.
 
-**Function times out.** The default timeout is 3 seconds, which may not be enough for a cold start that includes an SDK call. Increase the timeout to 10 seconds with:
+**Function times out.** The default timeout is 3 seconds, which may not be enough for a cold start that includes an SDK call. Bump the timeout to 10 seconds with:
 
 ```bash
 aws lambda update-function-configuration \
@@ -303,7 +303,7 @@ aws lambda update-function-configuration \
   --output json
 ```
 
-**"Cannot find module '@aws-sdk/client-ssm'"** The `node_modules` directory was not included in the deployment zip. Make sure you copy `node_modules` into the `dist/` directory before zipping, or zip from the project root and include both `dist/` files and `node_modules/`.
+**"Cannot find module '@aws-sdk/client-ssm'"** The `node_modules` directory wasn't included in the deployment zip. Make sure you copy `node_modules` into the `dist/` directory before zipping, or zip from the project root and include both `dist/` files and `node_modules/`.
 
 ## Stretch Goal Solution: GetParametersByPath
 

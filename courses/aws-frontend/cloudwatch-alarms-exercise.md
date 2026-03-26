@@ -4,20 +4,20 @@ description: >-
   Create CloudWatch alarms for error rate and duration, wire them to SNS email
   notifications, and trigger alarms intentionally to verify the pipeline.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cloudwatch
   - exercise
 ---
 
-You are going to build a complete alerting pipeline from scratch — an SNS topic, an email subscription, and two CloudWatch alarms that watch your Lambda function's error rate and duration. Then you will intentionally trigger the alarms to prove the pipeline works end to end.
+You're going to build a complete alerting pipeline from scratch — an SNS topic, an email subscription, and two CloudWatch alarms that watch your Lambda function's error rate and duration. Then you'll intentionally trigger the alarms to prove the pipeline works end to end.
 
-This is the same monitoring setup you would use for any production Lambda function. Get it working here, and you can replicate it for every function you deploy.
+This is the same monitoring setup you'd use for any production Lambda function. Get it working here, and you can replicate it for every function you deploy.
 
 ## Why It Matters
 
-Dashboards require you to look at them. Logs require you to search them. Neither one wakes you up when something breaks at 2 AM. Alarms are the piece that closes the loop — they watch your metrics continuously and notify you the moment something crosses a threshold. Without alarms, the gap between "something broke" and "someone noticed" is however long it takes a user to file a complaint.
+Dashboards require you to look at them. Logs require you to search them. Neither one wakes you up when something breaks at 2 AM. Alarms are the piece that closes the loop — they watch your metrics continuously and notify you the moment something crosses a threshold. Without alarms, the gap between "something broke" and "someone noticed" is however long it takes a user to file a complaint. I've been on both sides of that gap, and the alarm side is _definitively_ better.
 
 ## Your Task
 
@@ -30,7 +30,7 @@ Set up a monitoring pipeline for `my-frontend-app-api` that:
 
 Use the account ID `123456789012` and region `us-east-1`.
 
-## Step 1: Create an SNS Topic
+## Create an SNS Topic
 
 Create an SNS topic named `my-frontend-app-alerts` that will serve as the notification channel for your alarms.
 
@@ -38,7 +38,7 @@ Create an SNS topic named `my-frontend-app-alerts` that will serve as the notifi
 
 `aws sns list-topics --region us-east-1 --output json` shows a topic with the ARN `arn:aws:sns:us-east-1:123456789012:my-frontend-app-alerts`.
 
-## Step 2: Subscribe Your Email
+## Subscribe Your Email
 
 Subscribe your email address to the topic. After running the subscribe command, check your inbox for the confirmation email and click the confirmation link.
 
@@ -46,7 +46,7 @@ Subscribe your email address to the topic. After running the subscribe command, 
 
 `aws sns list-subscriptions-by-topic --topic-arn arn:aws:sns:us-east-1:123456789012:my-frontend-app-alerts --region us-east-1 --output json` shows your subscription with a real ARN (not `pending confirmation`).
 
-## Step 3: Create the Error Count Alarm
+## Create the Error Count Alarm
 
 Create a CloudWatch alarm named `my-frontend-app-api-error-count` that:
 
@@ -57,7 +57,7 @@ Create a CloudWatch alarm named `my-frontend-app-api-error-count` that:
 - Requires **2 consecutive** evaluation periods before triggering
 - Sends notifications to your SNS topic on both `ALARM` and `OK` transitions
 
-Think about which `--comparison-operator` you need. "Greater than 3" is not the same as "greater than or equal to 3."
+Think about which `--comparison-operator` you need. "Greater than 3" isn't the same as "greater than or equal to 3."
 
 ### Checkpoint
 
@@ -69,7 +69,7 @@ Think about which `--comparison-operator` you need. "Greater than 3" is not the 
 - `Period` of `300`
 - `EvaluationPeriods` of `2`
 
-## Step 4: Create the Duration Alarm
+## Create the Duration Alarm
 
 Create a CloudWatch alarm named `my-frontend-app-api-high-duration` that:
 
@@ -90,7 +90,7 @@ Remember: Lambda `Duration` is measured in milliseconds.
 - `Statistic` of `Average`
 - `Threshold` of `2000.0`
 
-## Step 5: Test the Error Alarm
+## Test the Error Alarm
 
 You can test the notification pipeline without waiting for real errors by manually setting the alarm state:
 
@@ -103,7 +103,7 @@ You can test the notification pipeline without waiting for real errors by manual
 - You received an email from SNS with the alarm details
 - The email includes the alarm name, reason, and the state transition
 
-## Step 6: Trigger a Real Alarm (Optional)
+## Trigger a Real Alarm (Optional)
 
 If you want to see the alarm fire from actual metrics instead of a manual state change, you can intentionally break your Lambda function:
 
@@ -122,7 +122,7 @@ export const handler: APIGatewayProxyHandlerV2 = async () => {
 };
 ```
 
-After verifying the alarm fires, **redeploy your working handler**. Do not leave a broken function deployed.
+After verifying the alarm fires, **redeploy your working handler**. Don't leave a broken function deployed.
 
 ### Checkpoint
 
@@ -130,7 +130,7 @@ After verifying the alarm fires, **redeploy your working handler**. Do not leave
 - You received an SNS email notification
 - After redeploying the working handler, the alarm returns to `OK` (this may take up to 10 minutes)
 
-## Step 7: List and Verify All Alarms
+## List and Verify All Alarms
 
 List all your alarms with the `my-frontend-app` prefix and confirm both are configured correctly:
 
@@ -162,4 +162,4 @@ Two alarms are listed, both pointing to the same SNS topic, with the correct met
 
 - **Check alarm history.** Run `aws cloudwatch describe-alarm-history --alarm-name my-frontend-app-api-error-count --region us-east-1 --output json` to see the history of state transitions for your alarm.
 
-When you are ready, check your work against the [Solution: Set Up Alarms for Your Lambda Functions](cloudwatch-alarms-solution.md).
+When you're ready, check your work against the [Solution: Set Up Alarms for Your Lambda Functions](cloudwatch-alarms-solution.md).

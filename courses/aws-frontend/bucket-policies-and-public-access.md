@@ -3,7 +3,7 @@ title: 'Bucket Policies and Public Access'
 description: >-
   Write a bucket policy that grants public read access to your static assets and understand how bucket policies differ from IAM policies.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - s3
@@ -11,7 +11,7 @@ tags:
   - policies
 ---
 
-Your files are in the bucket, but nobody can access them. That is by design — S3's default posture is "deny everything unless explicitly allowed." To serve a static website, you need to tell S3 that the public is allowed to read your files. You do that with a **bucket policy**.
+Your files are in the bucket, but nobody can access them. That's by design — S3's default posture is "deny everything unless explicitly allowed." To serve a static website, you need to tell S3 that the public is allowed to read your files. You do that with a **bucket policy**.
 
 If you completed [Writing Your First IAM Policy](writing-your-first-iam-policy.md) in Module 1, the structure of a bucket policy will look familiar. The JSON shape is nearly identical. The difference is where the policy lives and who it applies to.
 
@@ -24,16 +24,16 @@ Both are JSON documents with `Version`, `Statement`, `Effect`, `Action`, and `Re
 - **IAM policies** have an implicit principal — whoever the policy is attached to.
 - **Bucket policies** have an explicit **Principal** field that specifies who the policy applies to. For public access, the principal is `"*"`, which means everyone.
 
-Think of it this way: an IAM policy is a badge you wear. A bucket policy is a sign on the door.
+I think of it this way: an IAM policy is a **badge** you wear. A bucket policy is a **sign on the door**.
 
 > [!TIP]
-> When both an IAM policy and a bucket policy apply to the same request, AWS evaluates them together. An explicit `Deny` in either policy wins. If there is no explicit `Deny`, then an `Allow` in either policy grants access. This is called **policy evaluation logic**, and understanding it saves hours of debugging "Access Denied" errors.
+> When both an IAM policy and a bucket policy apply to the same request, AWS evaluates them together. An explicit `Deny` in either policy wins. If there's no explicit `Deny`, then an `Allow` in either policy grants access. This is called **policy evaluation logic**, and understanding it saves hours of debugging "Access Denied" errors.
 
 ## Disabling Block Public Access
 
 Before you can attach a public bucket policy, you need to disable the Block Public Access settings that AWS enables by default. Specifically, you need to turn off `BlockPublicPolicy` (so you can put a public policy on the bucket) and `RestrictPublicBuckets` (so the public policy actually takes effect).
 
-For simplicity and because we are hosting a public static site, we will disable all four Block Public Access settings:
+For simplicity and because we're hosting a public static site, we'll disable all four Block Public Access settings:
 
 ```bash
 aws s3api put-public-access-block \
@@ -64,7 +64,7 @@ aws s3api get-public-access-block \
 ```
 
 > [!WARNING]
-> Disabling Block Public Access is appropriate for a bucket that serves public static website files. It is not appropriate for buckets containing user data, logs, backups, or anything sensitive. When we introduce CloudFront in Module 4, we will use a different approach (Origin Access Control) that keeps the bucket private and lets only CloudFront read from it.
+> Disabling Block Public Access is appropriate for a bucket that serves public static website files. It is not appropriate for buckets containing user data, logs, backups, or anything sensitive. When we introduce CloudFront in Module 4, we'll use a different approach (Origin Access Control) that keeps the bucket private and lets only CloudFront read from it.
 
 ## Writing a Public Read Bucket Policy
 
@@ -117,20 +117,20 @@ aws s3api get-bucket-policy \
   --output json
 ```
 
-The response wraps the policy in a `Policy` field as a JSON string. It is not the prettiest output, but it confirms the policy is in place.
+The response wraps the policy in a `Policy` field as a JSON string. It's not the prettiest output, but it confirms the policy is in place.
 
 ## What This Policy Does (and Does Not Do)
 
-This policy grants one specific permission: anyone can read (download) objects from the bucket. That is exactly what you need for a static website — browsers need to download your HTML, CSS, and JavaScript.
+This policy grants one specific permission: anyone can read (download) objects from the bucket. That's exactly what you need for a static website — browsers need to download your HTML, CSS, and JavaScript.
 
-Here is what this policy does **not** allow:
+Here's what this policy does **not** allow:
 
-- **Listing the bucket contents** (`s3:ListBucket`). A visitor cannot browse your bucket and see all your files. They need to know the exact key.
+- **Listing the bucket contents** (`s3:ListBucket`). A visitor can't browse your bucket and see all your files. They need to know the exact key.
 - **Uploading files** (`s3:PutObject`). Only you (or whatever IAM user or role has upload permissions) can add files to the bucket.
 - **Deleting files** (`s3:DeleteObject`). Same as above — only authorized users can delete.
 - **Modifying the bucket policy** (`s3:PutBucketPolicy`). Only your IAM user or role can change the policy itself.
 
-This is the **principle of least privilege** in action: grant the minimum permissions necessary for the task. The public needs to read your files. They do not need to do anything else.
+This is the **principle of least privilege** in action: grant the minimum permissions necessary for the task. The public needs to read your files. They don't need to do anything else.
 
 ## Testing Public Access
 
@@ -177,7 +177,7 @@ The policy above is the minimum for a public static site. But you might want to 
 }
 ```
 
-This is more work to maintain but limits exposure. In practice, the `/*` wildcard is fine for a static site bucket that contains only build output. If you start putting non-public files in the same bucket (do not do this), a restrictive policy becomes necessary.
+This is more work to maintain but limits exposure. In practice, the `/*` wildcard is fine for a static site bucket that contains only build output. If you start putting non-public files in the same bucket (don't do this), a restrictive policy becomes necessary.
 
 ## Combining IAM and Bucket Policies
 
@@ -188,6 +188,4 @@ Your IAM user from Module 1 can already access this bucket through IAM policies.
 
 If you ever need to debug access issues, remember that AWS evaluates both policies. An explicit `Deny` in either one overrides any `Allow`. The most common mistake is having a bucket policy that allows access but forgetting to disable Block Public Access — the Block Public Access settings act as an additional layer of denial that overrides bucket policies.
 
-## What is Next
-
-You have files in the bucket and a policy that lets the public read them. But navigating to an S3 object URL is not the same as having a website. In the next lesson, you will enable **S3 static website hosting**, which gives you an actual website endpoint with support for index documents (so `https://your-url/` serves `index.html`) and custom error pages.
+You have files in the bucket and a policy that lets the public read them. But navigating to an S3 object URL isn't the same as having a website. Next, you'll enable **S3 static website hosting**, which gives you an actual website endpoint with support for index documents (so `https://your-url/` serves `index.html`) and custom error pages.

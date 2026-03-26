@@ -4,7 +4,7 @@ description: >-
   Store sensitive credentials in Secrets Manager, understand automatic rotation,
   and know when Secrets Manager is worth the cost over Parameter Store.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - secrets-manager
@@ -50,7 +50,7 @@ aws secretsmanager create-secret \
   --output json
 ```
 
-But JSON is the better default. Most credentials have multiple related values — an API key and a secret, a username and password, a client ID and client secret. Storing them together as a JSON object keeps them in sync.
+But JSON is the better default. I almost always reach for it. Most credentials have multiple related values — an API key and a secret, a username and password, a client ID and client secret. Storing them together as a JSON object keeps them in sync.
 
 ## Retrieving a Secret
 
@@ -91,7 +91,7 @@ aws secretsmanager create-secret \
 
 Why would you use a customer-managed key? Two reasons. First, it lets you control who can decrypt the secret independently of who can access Secrets Manager. Second, it lets you track KMS key usage in CloudTrail, giving you a separate audit trail for decryption operations.
 
-For most frontend applications, the default AWS-managed key is fine. You would use a customer-managed key when your organization's security policy requires it, or when you need to share secrets across AWS accounts (cross-account access requires a customer-managed key).
+For most frontend applications, the default AWS-managed key is fine. You'd use a customer-managed key when your organization's security policy requires it, or when you need to share secrets across AWS accounts (cross-account access requires a customer-managed key).
 
 ## Automatic Rotation
 
@@ -127,11 +127,11 @@ Secrets Manager uses **version stages** to manage rotation without downtime. The
 - **`AWSCURRENT`** — the active version. This is what your application gets by default when it retrieves the secret.
 - **`AWSPENDING`** — the version being tested during rotation. Once validated, it becomes `AWSCURRENT`.
 
-There is also **`AWSPREVIOUS`** — the old version, retained so applications that cached the previous value can still authenticate during the rotation window. This is how zero-downtime rotation works: the old credential remains valid until the rotation Lambda explicitly revokes it.
+There's also **`AWSPREVIOUS`** — the old version, retained so applications that cached the previous value can still authenticate during the rotation window. This is how zero-downtime rotation works: the old credential remains valid until the rotation Lambda explicitly revokes it.
 
 ## Pricing
 
-Secrets Manager is not free. Here is the cost breakdown:
+Secrets Manager isn't free. Here's the cost breakdown:
 
 | Component | Cost                       |
 | --------- | -------------------------- |
@@ -142,25 +142,25 @@ Secrets Manager is not free. Here is the cost breakdown:
 
 Ten secrets cost $4.00 per month. A hundred secrets cost $40.00 per month. The API call cost is negligible for most applications — a Lambda function that retrieves a secret once per cold start generates very few API calls.
 
-Compare this to Parameter Store's standard tier, which is free. For a frontend application with a handful of secrets that do not need automatic rotation, the $0.40 per secret per month is hard to justify. For database credentials that must rotate every 30 days with zero downtime, it is worth every penny.
+Compare this to Parameter Store's standard tier, which is free. For a frontend application with a handful of secrets that don't need automatic rotation, the $0.40 per secret per month is hard to justify. For database credentials that must rotate every 30 days with zero downtime, it's worth every penny.
 
 ## When Secrets Manager Is Worth It
 
 Use Secrets Manager when:
 
 - **You need automatic rotation.** This is the primary differentiator. If a credential needs to rotate on a schedule — database passwords, service account keys — Secrets Manager is the tool.
-- **You are using RDS, Redshift, or DocumentDB.** AWS provides pre-built rotation functions for these services. Rotation is nearly turnkey.
+- **You're using RDS, Redshift, or DocumentDB.** AWS provides pre-built rotation functions for these services. Rotation is nearly turnkey.
 - **Your organization requires credential lifecycle management.** Secrets Manager tracks creation dates, rotation dates, and version history. Compliance teams like this.
 - **You need cross-region replication.** Secrets Manager can replicate secrets to multiple regions for disaster recovery.
 
 Use Parameter Store SecureString when:
 
-- **The credential does not need to rotate automatically.** A third-party API key that you update manually once a year does not need Secrets Manager.
+- **The credential doesn't need to rotate automatically.** A third-party API key that you update manually once a year doesn't need Secrets Manager.
 - **Cost matters.** Parameter Store's standard tier is free. For a personal project or an early-stage startup, free is hard to beat.
 - **You want to store configuration and secrets in the same place.** Parameter Store handles both with its hierarchical path structure.
 
 > [!TIP]
-> A common pattern is to use both: Parameter Store for non-sensitive configuration and secrets that do not rotate, Secrets Manager for database credentials and other secrets that need automatic rotation. They are not competing services — they complement each other.
+> A common pattern is to use both: Parameter Store for non-sensitive configuration and secrets that don't rotate, Secrets Manager for database credentials and other secrets that need automatic rotation. They aren't competing services — they complement each other.
 
 ## Updating a Secret
 
@@ -178,7 +178,7 @@ This creates a new version of the secret. The previous version moves to the `AWS
 
 ## Deleting a Secret
 
-Secrets Manager does not delete secrets immediately. Instead, it schedules deletion with a recovery window:
+Secrets Manager doesn't delete secrets immediately. Instead, it schedules deletion with a recovery window:
 
 ```bash
 aws secretsmanager delete-secret \
@@ -188,8 +188,6 @@ aws secretsmanager delete-secret \
   --output json
 ```
 
-During the recovery window (minimum 7 days, default 30 days), you can restore the secret. This protects against accidental deletion. If you are absolutely sure and want to skip the recovery window, add `--force-delete-without-recovery`, but think twice before using it.
-
-## What Is Next
+During the recovery window (minimum 7 days, default 30 days), you can restore the secret. This protects against accidental deletion. If you're absolutely sure and want to skip the recovery window, add `--force-delete-without-recovery`, but think twice before using it.
 
 You know where to store secrets. The next question is: how does your Lambda function actually read them at runtime? The next lesson covers SDK calls, IAM permissions, and the caching strategies that make secret retrieval efficient.

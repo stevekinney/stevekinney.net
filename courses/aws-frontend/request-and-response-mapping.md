@@ -4,7 +4,7 @@ description: >-
   Understand how API Gateway transforms HTTP requests into Lambda event objects
   and how your handler's return value maps to an HTTP response.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - api-gateway
@@ -12,11 +12,11 @@ tags:
   - events
 ---
 
-When a request hits your API Gateway endpoint, it does not arrive at your Lambda function as a raw HTTP request. API Gateway serializes the entire request — method, path, headers, query parameters, body — into a JSON event object and passes it to your handler. Your handler returns a JSON object, and API Gateway turns that back into an HTTP response. Understanding both sides of this transformation is the difference between confidently building an API and guessing at field names until something works.
+When a request hits your API Gateway endpoint, it doesn't arrive at your Lambda function as a raw HTTP request. API Gateway serializes the entire request — method, path, headers, query parameters, body — into a JSON event object and passes it to your handler. Your handler returns a JSON object, and API Gateway turns that back into an HTTP response. Understanding both sides of this transformation is the difference between confidently building an API and guessing at field names until something works.
 
 ## The Incoming Event: `APIGatewayProxyEventV2`
 
-When you use an HTTP API with payload format version 2.0 (which you configured in [Connecting API Gateway to Lambda](connecting-api-gateway-to-lambda.md)), your handler receives an `APIGatewayProxyEventV2` object. Here is what a real event looks like for a `POST /items?category=books` request:
+When you use an HTTP API with payload format version 2.0 (which you configured in [Connecting API Gateway to Lambda](connecting-api-gateway-to-lambda.md)), your handler receives an `APIGatewayProxyEventV2` object. Here's what a real event looks like for a `POST /items?category=books` request:
 
 ```json
 {
@@ -54,7 +54,7 @@ When you use an HTTP API with payload format version 2.0 (which you configured i
 }
 ```
 
-That is a lot of fields. Here are the ones you will use in almost every handler.
+That's a lot of fields. Here are the ones you'll use in almost every handler.
 
 ## The Fields That Matter
 
@@ -84,7 +84,7 @@ const contentType = event.headers['content-type'];
 const authorization = event.headers['authorization'];
 ```
 
-All header names are lowercased. If the client sends `Content-Type`, you access it as `event.headers['content-type']`. This is consistent behavior from API Gateway — you do not need to handle case variations.
+All header names are lowercased. If the client sends `Content-Type`, you access it as `event.headers['content-type']`. This is consistent behavior from API Gateway — you don't need to handle case variations.
 
 ### Request Body
 
@@ -93,7 +93,7 @@ const body = event.body ? JSON.parse(event.body) : null;
 // [!note The body is always a string. You must parse it yourself.]
 ```
 
-The `body` is always a string, even when the client sends `Content-Type: application/json`. API Gateway does not parse it for you. If the request has no body (GET requests, for example), `event.body` is `undefined`.
+The `body` is always a string, even when the client sends `Content-Type: application/json`. API Gateway doesn't parse it for you. If the request has no body (GET requests, for example), `event.body` is `undefined`.
 
 > [!WARNING]
 > Wrap `JSON.parse` in a try/catch. A client can send a malformed body that parses unsuccessfully, and an unhandled exception in your handler returns a 500 with no useful information to the caller.
@@ -119,7 +119,7 @@ If your route includes path parameters (like `GET /items/{id}`), the values are 
 const itemId = event.pathParameters?.id;
 ```
 
-Like `queryStringParameters`, the `pathParameters` field is `undefined` when no path parameters are defined on the route — not an empty object.
+Like `queryStringParameters`, the `pathParameters` field is `undefined` when no path parameters are defined on the route — not an empty object. (I wish it were an empty object, but here we are.)
 
 ### The Stage
 
@@ -146,7 +146,7 @@ return {
 ### Required Fields
 
 - **`statusCode`**: An integer HTTP status code. API Gateway passes this through to the client.
-- **`body`**: A string. If you are returning JSON, you must `JSON.stringify` it. If you forget, the client receives `[object Object]`.
+- **`body`**: A string. If you're returning JSON, you must `JSON.stringify` it. If you forget, the client receives `[object Object]`.
 
 ### Optional Fields
 
@@ -168,7 +168,7 @@ return {
 
 ## A Complete Handler Pattern
 
-Here is a pattern that handles the common cases — routing by method, parsing the body, reading path parameters, and returning proper error responses:
+Here's a pattern that handles the common cases — routing by method, parsing the body, reading path parameters, and returning proper error responses:
 
 ```typescript
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
@@ -242,7 +242,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
 ## Payload Format Version 1.0 vs. 2.0
 
-If you are reading tutorials or Stack Overflow answers, you might see event shapes that look different from what is described here. That is because API Gateway has two payload format versions:
+If you're reading tutorials or Stack Overflow answers, you might see event shapes that look different from what's described here. That's because API Gateway has two payload format versions:
 
 | Feature                  | Version 1.0                             | Version 2.0                        |
 | ------------------------ | --------------------------------------- | ---------------------------------- |
@@ -257,12 +257,10 @@ Version 2.0 is the default for HTTP APIs created with `--payload-format-version 
 
 ## Common Mistakes
 
-**Accessing `event.httpMethod` instead of `event.requestContext.http.method`.** This is a version 1.0 field. In version 2.0, it does not exist. If your code references `event.httpMethod`, you are either using the wrong payload format or following a REST API tutorial.
+**Accessing `event.httpMethod` instead of `event.requestContext.http.method`.** This is a version 1.0 field. In version 2.0, it doesn't exist. If your code references `event.httpMethod`, you're either using the wrong payload format or following a REST API tutorial.
 
 **Returning an object as the body.** The body must be a string. Returning `{ items: [] }` instead of `JSON.stringify({ items: [] })` produces `[object Object]` in the response.
 
-**Not handling undefined fields.** `queryStringParameters`, `pathParameters`, and `body` can all be `undefined`. TypeScript warns you about this if you are using the correct types — pay attention to those warnings.
+**Not handling undefined fields.** `queryStringParameters`, `pathParameters`, and `body` can all be `undefined`. TypeScript warns you about this if you're using the correct types — pay attention to those warnings.
 
-## What is Next
-
-Your API works, but try calling it from a React app running on `localhost:3000`. The browser blocks the request with a CORS error. You have seen this before — and now you are on the server side of the problem. The next lesson covers configuring CORS on your HTTP API so your frontend can actually call it.
+Your API works, but try calling it from a React app running on `localhost:3000`. The browser blocks the request with a CORS error. You've seen this before — and now you're on the server side of the problem. The next lesson covers configuring CORS on your HTTP API so your frontend can actually call it.

@@ -3,7 +3,7 @@ title: 'Solution: Configure DNS for Your Site'
 description: >-
   Complete walkthrough of creating a hosted zone, pointing a domain to CloudFront with alias records, and verifying DNS resolution.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - route53
@@ -13,7 +13,7 @@ tags:
 
 This is the solution for the [Route 53 DNS Exercise](route-53-dns-exercise.md). Each step includes the exact commands, expected output, and troubleshooting guidance.
 
-## Step 1: Create a Hosted Zone
+## Create a Hosted Zone
 
 ```bash
 aws route53 create-hosted-zone \
@@ -82,7 +82,7 @@ aws route53 list-hosted-zones \
 
 - `HostedZoneAlreadyExists`: A hosted zone with this caller reference already exists. Either use the existing zone or pick a different caller reference.
 - `DelegationSetNotAvailable`: Rare. Retry the command — Route 53 will assign different nameservers.
-- `TooManyHostedZones`: You have hit the limit (default 500 zones per account). Delete unused hosted zones.
+- `TooManyHostedZones`: You've hit the limit (default 500 zones per account). Delete unused hosted zones.
 
 ### Configuring Nameservers (External Registrar Only)
 
@@ -110,11 +110,11 @@ ns-890.awsdns-34.co.uk.
 ns-123.awsdns-78.com.
 ```
 
-If you still see the old nameservers, propagation is not complete. This can take up to 48 hours but usually finishes within a few hours.
+If you still see the old nameservers, propagation isn't complete. This can take up to 48 hours but usually finishes within a few hours.
 
-## Step 2: Create an A Alias Record for the Apex Domain
+## Create an A Alias Record for the Apex Domain
 
-Get your CloudFront distribution's domain name if you do not have it saved:
+Get your CloudFront distribution's domain name if you don't have it saved:
 
 ```bash
 aws cloudfront get-distribution \
@@ -165,11 +165,11 @@ aws route53 change-resource-record-sets \
 
 **If something went wrong:**
 
-- `InvalidChangeBatch: Alias target name does not lie within the target zone`: The `DNSName` in your alias target does not match a valid CloudFront distribution. Double-check the distribution domain name.
-- `InvalidChangeBatch: RRSet with DNS name example.com. is not permitted in zone`: You are likely trying to create the record in the wrong hosted zone. Verify that the hosted zone is for `example.com`.
+- `InvalidChangeBatch: Alias target name does not lie within the target zone`: The `DNSName` in your alias target doesn't match a valid CloudFront distribution. Double-check the distribution domain name.
+- `InvalidChangeBatch: RRSet with DNS name example.com. is not permitted in zone`: You're likely trying to create the record in the wrong hosted zone. Verify that the hosted zone is for `example.com`.
 - `NoSuchHostedZone`: The hosted zone ID is wrong. Run `aws route53 list-hosted-zones --output json` to find the correct ID.
 
-## Step 3: Create an AAAA Alias Record for IPv6
+## Create an AAAA Alias Record for IPv6
 
 ```bash
 aws route53 change-resource-record-sets \
@@ -207,7 +207,7 @@ aws route53 change-resource-record-sets \
 
 The output is identical in structure to the A record. The only difference is the `"Type": "AAAA"` in the request.
 
-## Step 4: Create Records for www
+## Create Records for www
 
 Create both A and AAAA alias records for `www.example.com` in a single call:
 
@@ -268,7 +268,7 @@ aws route53 change-resource-record-sets \
   ```
   The output should include both `example.com` and `www.example.com`. If `www.example.com` is missing, update the distribution to add it.
 
-## Step 5: Verify DNS Resolution
+## Verify DNS Resolution
 
 Wait about 60 seconds, then verify:
 
@@ -298,13 +298,13 @@ dig example.com AAAA +short
 2600:9000:2252:a400:1a:b6c1:4a40:93a1
 ```
 
-If you do not see results, query a Route 53 nameserver directly:
+If you don't see results, query a Route 53 nameserver directly:
 
 ```bash
 dig example.com A @ns-1234.awsdns-56.org +short
 ```
 
-If the direct query returns results but the general query does not, DNS propagation from your registrar's nameserver change is still in progress.
+If the direct query returns results but the general query doesn't, DNS propagation from your registrar's nameserver change is still in progress.
 
 For the www subdomain:
 
@@ -324,7 +324,7 @@ Open `https://example.com` in a browser. You should see:
 
 If you created www records, `https://www.example.com` should show the same content.
 
-## Step 6: List All Records
+## List All Records
 
 ```bash
 aws route53 list-resource-record-sets \
@@ -398,9 +398,9 @@ aws route53 list-resource-record-sets \
 
 The key things to confirm:
 
-- **NS and SOA records** exist for `example.com` (auto-created, do not delete).
+- **NS and SOA records** exist for `example.com` (auto-created, don't delete).
 - **A and AAAA alias records** exist for `example.com`, both pointing to your CloudFront distribution.
-- **A and AAAA alias records** exist for `www.example.com` (if you created them in Step 4).
+- **A and AAAA alias records** exist for `www.example.com` (if you created them for the www subdomain).
 - All alias records show `"HostedZoneId": "Z2FDTNDATAQYW2"` and your CloudFront distribution domain name.
 
 ## Summary

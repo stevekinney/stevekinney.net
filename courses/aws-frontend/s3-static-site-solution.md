@@ -3,7 +3,7 @@ title: 'Solution: Deploy a Static Site to S3'
 description: >-
   Complete solution with all commands and expected output for deploying a static site to S3.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - s3
@@ -128,7 +128,7 @@ Create `build/error.html`:
 </html>
 ```
 
-## Step 1: Create the Bucket
+## Create the Bucket
 
 ```bash
 aws s3 mb s3://my-frontend-app-assets \
@@ -153,7 +153,7 @@ Expected output (your date will differ):
 2026-03-18 12:00:00 my-frontend-app-assets
 ```
 
-## Step 2: Disable Block Public Access
+## Disable Block Public Access
 
 ```bash
 aws s3api put-public-access-block \
@@ -187,7 +187,7 @@ Expected output:
 }
 ```
 
-## Step 3: Apply the Bucket Policy
+## Apply the Bucket Policy
 
 ```bash
 aws s3api put-bucket-policy \
@@ -226,7 +226,7 @@ Expected output (the policy is returned as a JSON string inside the `Policy` fie
 }
 ```
 
-## Step 4: Upload Files
+## Upload Files
 
 ```bash
 aws s3 sync ./build s3://my-frontend-app-assets \
@@ -258,7 +258,7 @@ Expected output (sizes and dates will differ):
 2026-03-18 12:00:00        374 styles.css
 ```
 
-## Step 5: Enable Static Website Hosting
+## Enable Static Website Hosting
 
 ```bash
 aws s3 website s3://my-frontend-app-assets/ \
@@ -290,7 +290,7 @@ Expected output:
 }
 ```
 
-## Step 6: View Your Site
+## View Your Site
 
 Open this URL in your browser:
 
@@ -330,7 +330,7 @@ Expected output:
 </html>
 ```
 
-## Step 7: Enable Versioning
+## Enable Versioning
 
 ```bash
 aws s3api put-bucket-versioning \
@@ -358,7 +358,7 @@ Expected output:
 }
 ```
 
-## Step 8: Deploy an Update and Verify Versioning
+## Deploy an Update and Verify Versioning
 
 Edit `build/index.html` and change the `<h1>` tag:
 
@@ -530,4 +530,4 @@ You have deployed a static site to S3 with:
 - Versioning enabled for rollback protection
 - A lifecycle rule to clean up old versions
 
-This is the foundation that every other module in this course builds on top of. In the next module, you will request an SSL certificate from ACM. In Module 4, you will put CloudFront in front of this bucket to add HTTPS, global edge caching, and a proper deployment workflow.
+This is the foundation that every other module in this course builds on top of. In the next module, you'll request an SSL certificate from ACM. In Module 4, you'll put CloudFront in front of this bucket to add HTTPS, global edge caching, and a proper deployment workflow.

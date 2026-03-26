@@ -4,7 +4,7 @@ description: >-
   Create an AWS account, enable MFA on the root user, and understand why root
   should be locked away after initial setup.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - iam
@@ -12,7 +12,7 @@ tags:
   - account-setup
 ---
 
-You've been deploying to Vercel with a GitHub login. You click a button, connect a repo, and your site is live. AWS gives you actual infrastructure, which means actual security responsibility. The account you're about to create controls real resources that cost real money, and if someone compromises it, they can spin up crypto miners on your credit card. So we're going to do this right from the start.
+You've been deploying to Vercel with a GitHub login. You click a button, connect a repo, and your site is live. AWS gives you actual infrastructure, which means actual security responsibility. The account you're about to create controls real resources that cost real money, and if someone compromises it, they can spin up crypto miners on your credit card. So we're going to do this right from the start. (I've seen the horror stories. You don't want to be one.)
 
 ## Creating an AWS Account
 

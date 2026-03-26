@@ -5,14 +5,14 @@ description: >-
   header injection, geolocation-based routing, and lightweight authentication
   checks.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - edge-functions
   - use-cases
 ---
 
-Edge functions solve a specific category of problems: things you need to do on every request (or every response) before the client or origin sees the traffic. On platforms like Vercel or Netlify, this logic lives in configuration files, middleware, or edge functions with similar names. On AWS, it lives in CloudFront Functions or Lambda@Edge, depending on the complexity.
+Edge functions solve a specific category of problems: things you need to do on every request (or every response) before the client or origin sees the traffic. On platforms like Vercel or Netlify, this logic lives in configuration files, middleware, or edge functions with similar names. On AWS, it lives in CloudFront Functions or Lambda@Edge, depending on the complexity. In my experience, the URL rewrite and redirect cases come up constantly — the rest are situational but worth knowing.
 
 This lesson covers the most common use cases for frontend engineers. Each one includes a short code snippet you can adapt. For the full comparison of when to use CloudFront Functions versus Lambda@Edge, refer back to [Lambda@Edge vs CloudFront Functions](edge-compute-comparison.md).
 
@@ -152,7 +152,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
 ```
 
 > [!WARNING]
-> The `cloudfront-viewer-country` header is only available if you have configured your cache behavior to forward it. In your distribution's cache policy or origin request policy, you must whitelist the `CloudFront-Viewer-Country` header. Without this, the header will not appear in your function's event.
+> The `cloudfront-viewer-country` header is only available if you've configured your cache behavior to forward it. In your distribution's cache policy or origin request policy, you must whitelist the `CloudFront-Viewer-Country` header. Without this, the header won't appear in your function's event.
 
 This is a Lambda@Edge function because geolocation routing typically needs to run at the **origin request** level — you want the routing decision to be cacheable per country, not re-evaluated on every viewer request.
 
@@ -182,7 +182,7 @@ function handler(event) {
 }
 ```
 
-This is a minimal example for protecting a staging environment with HTTP Basic Auth (username: `staging`, password: `password`). It is not a production authentication solution — the credentials are hardcoded and base64-encoded in the function.
+This is a minimal example for protecting a staging environment with HTTP Basic Auth (username: `staging`, password: `password`). It's not a production authentication solution — the credentials are hardcoded and base64-encoded in the function.
 
 ### Lambda@Edge (JWT Validation)
 
@@ -272,7 +272,7 @@ This sets a custom header that your origin or another edge function can use to s
 
 ## Choosing the Right Trigger
 
-Every use case above maps to a specific event type. Here is a quick reference:
+Every use case above maps to a specific event type. Here's a quick reference:
 
 | Use Case                  | Event Type      | Recommended                    |
 | ------------------------- | --------------- | ------------------------------ |

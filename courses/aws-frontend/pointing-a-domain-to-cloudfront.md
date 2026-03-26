@@ -3,7 +3,7 @@ title: 'Pointing a Domain to CloudFront'
 description: >-
   Create DNS records that point your custom domain to your CloudFront distribution, making your site accessible at your own domain name.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - route53
@@ -11,13 +11,13 @@ tags:
   - dns
 ---
 
-Your CloudFront distribution is live, but right now you access it at something like `d111111abcdef8.cloudfront.net`. That is not what you ship to production. You want users to visit `example.com` and have it serve your frontend through CloudFront — with your ACM certificate, your cache behaviors, your origin access control. This is where Route 53 ties the infrastructure together: you create DNS records that point your domain at the distribution, and the CloudFront URL disappears behind your brand.
+Your CloudFront distribution is live, but right now you access it at something like `d111111abcdef8.cloudfront.net`. That's not what you ship to production. You want users to visit `example.com` and have it serve your frontend through CloudFront — with your ACM certificate, your cache behaviors, your origin access control. This is where Route 53 ties the infrastructure together: you create DNS records that point your domain at the distribution, and the CloudFront URL disappears behind your brand.
 
 ## Prerequisites
 
 Before you create DNS records, you need three things in place:
 
-1. **A CloudFront distribution** with your domain listed as an **alternate domain name (CNAME)**. You configured this in [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md). If your distribution does not list `example.com` (and optionally `www.example.com`) as an alternate domain name, Route 53 will refuse to create an alias record pointing to it.
+1. **A CloudFront distribution** with your domain listed as an **alternate domain name (CNAME)**. You configured this in [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md). If your distribution doesn't list `example.com` (and optionally `www.example.com`) as an alternate domain name, Route 53 will refuse to create an alias record pointing to it.
 
 2. **An ACM certificate** covering your domain, attached to the distribution. You set this up in [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md). The certificate must be in `us-east-1`.
 
@@ -25,7 +25,7 @@ Before you create DNS records, you need three things in place:
 
 ## Creating an A Alias Record for the Apex Domain
 
-The most common setup is pointing the bare domain (`example.com`) to your CloudFront distribution. Since `example.com` is the **zone apex**, you cannot use a CNAME record here (we cover why in [Alias Records vs. CNAME Records](alias-records-vs-cname-records.md)). Instead, you use a Route 53 **alias record**.
+The most common setup is pointing the bare domain (`example.com`) to your CloudFront distribution. Since `example.com` is the **zone apex**, you can't use a CNAME record here (we cover why in [Alias Records vs. CNAME Records](alias-records-vs-cname-records.md)). Instead, you use a Route 53 **alias record**.
 
 First, get your hosted zone ID:
 
@@ -65,9 +65,9 @@ aws route53 change-resource-record-sets \
 
 A few things to note in that command:
 
-- **`HostedZoneId`** is `Z2FDTNDATAQYW2`. This is not your hosted zone ID — it is the fixed identifier that Route 53 uses for all CloudFront distributions. Every alias record pointing to CloudFront uses this same value.
+- **`HostedZoneId`** is `Z2FDTNDATAQYW2`. This isn't your hosted zone ID — it's the fixed identifier that Route 53 uses for all CloudFront distributions. Every alias record pointing to CloudFront uses this same value.
 - **`DNSName`** is the domain name of your CloudFront distribution (the `d111111abcdef8.cloudfront.net` value).
-- **`EvaluateTargetHealth`** is `false`. CloudFront does not support Route 53 health checks, so this must always be `false` for CloudFront alias targets.
+- **`EvaluateTargetHealth`** is `false`. CloudFront doesn't support Route 53 health checks, so this must always be `false` for CloudFront alias targets.
 - There is no `TTL` field. Alias records inherit the TTL from the target resource — Route 53 handles this automatically.
 
 The response confirms the change:
@@ -110,7 +110,7 @@ aws route53 change-resource-record-sets \
   }'
 ```
 
-The command is identical to the A record, except `"Type"` is `"AAAA"`. Route 53 resolves the alias to the appropriate IPv6 addresses for your CloudFront distribution.
+The command is identical to the A record, except `"Type"` is `"AAAA"`. Route 53 resolves the alias to the appropriate IPv6 addresses for your CloudFront distribution. (I know it feels redundant, but IPv6 support is one of those things you'll be glad you set up from the start.)
 
 > [!TIP]
 > You can combine both records into a single `change-resource-record-sets` call by including both changes in the `Changes` array. This is cleaner for scripts and ensures both records are created atomically.
@@ -161,7 +161,7 @@ Make sure `www.example.com` is listed as an alternate domain name on your CloudF
 
 ### Option B: CNAME from www to Apex
 
-Create a CNAME record that maps `www.example.com` to `example.com`. Since `www` is not the zone apex, CNAME is valid here:
+Create a CNAME record that maps `www.example.com` to `example.com`. Since `www` isn't the zone apex, CNAME is valid here:
 
 ```bash
 aws route53 change-resource-record-sets \
@@ -198,7 +198,7 @@ Check the A record:
 dig example.com A +short
 ```
 
-You should see one or more IP addresses — these are CloudFront edge server IPs. They will vary by region and over time; that is expected.
+You should see one or more IP addresses — these are CloudFront edge server IPs. They'll vary by region and over time; that's expected.
 
 Check the AAAA record:
 
@@ -214,18 +214,18 @@ To bypass caches and query Route 53 directly, use one of the nameservers from yo
 dig example.com A @ns-1234.awsdns-56.org +short
 ```
 
-If this returns the correct IPs but `dig example.com A +short` does not, the records are correct at the source and you are waiting for caches to expire.
+If this returns the correct IPs but `dig example.com A +short` doesn't, the records are correct at the source and you're waiting for caches to expire.
 
 You can also verify in a browser. Navigate to `https://example.com`. If your ACM certificate is attached to the distribution and the alternate domain name is configured, you should see your site served over HTTPS with a valid certificate. Check the browser's address bar for the lock icon.
 
 > [!WARNING]
-> If you see a CloudFront error like "Bad Request" or "The request could not be satisfied," the most likely cause is that your domain is not listed as an alternate domain name on the CloudFront distribution. CloudFront rejects requests for hostnames it does not recognize. Double-check the distribution settings in the console or run `aws cloudfront get-distribution-config --id E1A2B3C4D5E6F7 --output json --query "DistributionConfig.Aliases"`.
+> If you see a CloudFront error like "Bad Request" or "The request could not be satisfied," the most likely cause is that your domain isn't listed as an alternate domain name on the CloudFront distribution. CloudFront rejects requests for hostnames it doesn't recognize. Double-check the distribution settings in the console or run `aws cloudfront get-distribution-config --id E1A2B3C4D5E6F7 --output json --query "DistributionConfig.Aliases"`.
 
 ## Propagation Time
 
-DNS changes in Route 53 take effect within 60 seconds on Route 53's own nameservers. But that does not mean every user on the internet sees the change immediately. Recursive resolvers around the world may have cached the old answer, and they will continue serving it until the TTL expires.
+DNS changes in Route 53 take effect within 60 seconds on Route 53's own nameservers. But that doesn't mean every user on the internet sees the change immediately. Recursive resolvers around the world may have cached the old answer, and they'll continue serving it until the TTL expires.
 
-If you set a TTL of 300 seconds (5 minutes) on the previous record, the worst case is that some users see the old record for up to 5 minutes after the change. For new records that did not previously exist, there is no old cache to expire — the record is visible as soon as Route 53 propagates it.
+If you set a TTL of 300 seconds (5 minutes) on the previous record, the worst case is that some users see the old record for up to 5 minutes after the change. For new records that didn't previously exist, there's no old cache to expire — the record is visible as soon as Route 53 propagates it.
 
 ## What You Built
 

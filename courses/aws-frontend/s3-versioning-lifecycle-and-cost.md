@@ -3,7 +3,7 @@ title: 'S3 Versioning, Lifecycle, and Cost'
 description: >-
   Enable versioning to protect against accidental overwrites, configure lifecycle rules to manage old versions, and understand how S3 pricing works.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - s3
@@ -11,11 +11,11 @@ tags:
   - cost-management
 ---
 
-You have a working static site on S3. Now you need to protect it. Every deployment you run overwrites the previous version of your files. If a bad build goes out and you want to roll back, those old files are gone. If someone on your team accidentally runs `aws s3 sync --delete` against the wrong directory, everything is gone. **Versioning** solves this by keeping every version of every object in the bucket, and **lifecycle rules** keep versioning from running up your storage costs.
+You have a working static site on S3. Now you need to protect it. Every deployment you run overwrites the previous version of your files. If a bad build goes out and you want to roll back, those old files are gone. If someone on your team accidentally runs `aws s3 sync --delete` against the wrong directory, everything is gone. (Ask me how I know.) **Versioning** solves this by keeping every version of every object in the bucket, and **lifecycle rules** keep versioning from running up your storage costs.
 
 ## Why Versioning Matters
 
-Without versioning, S3 is a "last write wins" system. When you upload a new `index.html`, the old one is silently replaced. When you delete `main.js`, it is permanently gone. There is no recycle bin, no undo, no "are you sure?" prompt.
+Without versioning, S3 is a "last write wins" system. When you upload a new `index.html`, the old one is silently replaced. When you delete `main.js`, it's permanently gone. There's no recycle bin, no undo, no "are you sure?" prompt.
 
 With **versioning** enabled, S3 keeps every version of every object. Upload a new `index.html` and the old version is still there, accessible by its version ID. Delete `index.html` and S3 adds a **delete marker** instead of actually removing the object — the current version becomes invisible, but all previous versions are still retrievable.
 
@@ -50,7 +50,7 @@ aws s3api get-bucket-versioning \
 From this point forward, every object you upload gets a version ID, and overwriting or deleting an object preserves the previous versions.
 
 > [!WARNING]
-> Versioning cannot be disabled once enabled — only suspended. When suspended, new objects are stored without version IDs, but existing versioned objects remain. If you enable versioning, plan to keep it on and use lifecycle rules to manage old versions. Toggling versioning on and off creates a confusing mix of versioned and unversioned objects.
+> Versioning can't be disabled once enabled — only suspended. When suspended, new objects are stored without version IDs, but existing versioned objects remain. If you enable versioning, plan to keep it on and use lifecycle rules to manage old versions. Toggling versioning on and off creates a confusing mix of versioned and unversioned objects.
 
 ## Working with Versions
 
@@ -101,9 +101,9 @@ This downloads the older version to a local file called `index-previous.html`. Y
 
 ## The Cost Problem
 
-Versioning is great for safety, but it has a cost: every version of every object takes up storage. If you deploy your frontend three times a day and your build output is 50 MB, that is 150 MB of versioned objects per day — roughly 4.5 GB per month. At S3 Standard pricing ($0.023 per GB per month), that is about $0.10 per month. Not much.
+Versioning is great for safety, but it has a cost: every version of every object takes up storage. If you deploy your frontend three times a day and your build output is 50 MB, that's 150 MB of versioned objects per day — roughly 4.5 GB per month. At S3 Standard pricing ($0.023 per GB per month), that's about $0.10 per month. Not much.
 
-But if you have been running for a year without lifecycle rules, you have 54 GB of old versions sitting around costing you about $1.25 per month. Still not much, but the principle matters: unused data should not accumulate indefinitely. This is where lifecycle rules come in.
+But if you've been running for a year without lifecycle rules, you have 54 GB of old versions sitting around costing you about $1.25 per month. Still not much, but the principle matters: unused data shouldn't accumulate indefinitely. This is where lifecycle rules come in.
 
 ## Lifecycle Rules
 
@@ -112,7 +112,7 @@ A **lifecycle rule** tells S3 what to do with objects (or old versions of object
 1. **Transition** old versions to a cheaper storage class
 2. **Expire** (delete) old versions after a certain number of days
 
-For a static site, the pragmatic approach is to delete noncurrent versions after a reasonable retention period. You rarely need to roll back more than a few days.
+For a static site, the pragmatic approach is to delete noncurrent versions after a reasonable retention period. You'll rarely need to roll back more than a few days.
 
 ### Creating a Lifecycle Rule
 
@@ -156,7 +156,7 @@ aws s3api get-bucket-lifecycle-configuration \
 ```
 
 > [!TIP]
-> Thirty days is a reasonable default for frontend deployments. You get a full month of rollback capability without accumulating years of old versions. If your deployment frequency is high and you are confident in your CI/CD pipeline, you could reduce this to 7 or 14 days.
+> Thirty days is a reasonable default for frontend deployments. You get a full month of rollback capability without accumulating years of old versions. If your deployment frequency is high and you're confident in your CI/CD pipeline, you could reduce this to 7 or 14 days.
 
 ### A More Advanced Rule
 
@@ -185,7 +185,7 @@ If you want to save a bit more before deleting, you can transition old versions 
 }
 ```
 
-This moves noncurrent versions to **S3 Standard-IA** (Infrequent Access) after 30 days, then deletes them after 90 days. Standard-IA costs about $0.0125 per GB per month — roughly half the price of Standard storage. For a frontend site, the savings are tiny, but the pattern is worth knowing for when you manage buckets with more data.
+This moves noncurrent versions to **S3 Standard-IA** (Infrequent Access) after 30 days, then deletes them after 90 days. Standard-IA costs about $0.0125 per GB per month — roughly half the price of Standard storage. For a frontend site, the savings are tiny, but the pattern is worth knowing for when you're managing buckets with more data.
 
 ## Understanding S3 Pricing
 
@@ -195,14 +195,14 @@ S3 pricing has three components:
 
 **Requests.** You pay per request. PUT, COPY, POST, and LIST requests cost $0.005 per 1,000 requests. GET and SELECT requests cost $0.0004 per 1,000 requests. For a low-to-moderate-traffic static site, this is pennies.
 
-**Data transfer.** You pay for data transferred out of S3 to the internet. The first 100 GB per month is free. After that, it is $0.09 per GB for the next 10 TB. For most frontend sites, you will stay well within the free tier — especially once you put CloudFront in front of S3, because CloudFront serves cached content from its edge locations instead of hitting S3 for every request.
+**Data transfer.** You pay for data transferred out of S3 to the internet. The first 100 GB per month is free. After that, it's $0.09 per GB for the next 10 TB. For most frontend sites, you'll stay well within the free tier — especially once you put CloudFront in front of S3, because CloudFront serves cached content from its edge locations instead of hitting S3 for every request.
 
 > [!TIP]
 > The AWS Free Tier includes 5 GB of S3 Standard storage, 20,000 GET requests, and 2,000 PUT requests per month for the first 12 months. A personal project or course exercise will comfortably fit within these limits.
 
 ## Storage Classes at a Glance
 
-S3 offers several **storage classes** with different price and access characteristics. For frontend deployments, you will almost exclusively use S3 Standard, but here is the landscape:
+S3 offers several **storage classes** with different price and access characteristics. For frontend deployments, you'll almost exclusively use S3 Standard, but here's the landscape:
 
 | Storage Class                 | Cost per GB/month | Use Case                                      |
 | ----------------------------- | ----------------- | --------------------------------------------- |
@@ -212,7 +212,7 @@ S3 offers several **storage classes** with different price and access characteri
 | S3 Glacier Flexible Retrieval | $0.0036           | Archive (retrieval takes minutes to hours)    |
 | S3 Glacier Deep Archive       | $0.00099          | Long-term archive (retrieval takes hours)     |
 
-For this course, you only need Standard and possibly Standard-IA for lifecycle transitions. The Glacier classes are for archival workloads that do not need fast access — not for serving a website.
+For this course, you only need Standard and possibly Standard-IA for lifecycle transitions. The Glacier classes are for archival workloads that don't need fast access — not for serving a website.
 
 ## What You Have Built
 
@@ -225,4 +225,4 @@ At this point, you have a complete S3 static site setup:
 - Versioning enabled to protect against accidental overwrites
 - A lifecycle rule to clean up old versions after 30 days
 
-This is a working, publicly accessible website. It is HTTP-only, served from a single region, and uses an ugly S3 endpoint URL — but it works. In the next module, you will learn about SSL certificates with ACM. And in Module 4, you will put CloudFront in front of this bucket to add HTTPS, global edge caching, and the performance your users expect.
+This is a working, publicly accessible website. It's HTTP-only, served from a single region, and uses an ugly S3 endpoint URL — but it works. In the next module, you'll learn about SSL certificates with ACM. And in Module 4, you'll put CloudFront in front of this bucket to add HTTPS, global edge caching, and the performance your users expect.

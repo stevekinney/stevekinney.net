@@ -3,7 +3,7 @@ title: 'Solution: Set Up a CloudFront Distribution'
 description: >-
   Complete solution with all CLI commands for creating a CloudFront distribution with S3 origin, OAC, ACM certificate, and SPA routing.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cloudfront
@@ -13,7 +13,7 @@ tags:
 
 This is the complete solution for the [CloudFront Distribution Exercise](cloudfront-distribution-exercise.md). Every command is shown with its expected output.
 
-## Step 1: Create an Origin Access Control
+## Create an Origin Access Control
 
 ```bash
 aws cloudfront create-origin-access-control \
@@ -49,7 +49,7 @@ Expected output:
 
 Save the `Id` value (`E1OAC2EXAMPLE`).
 
-## Step 2: Create the Distribution
+## Create the Distribution
 
 Save the following as `distribution-config.json`:
 
@@ -226,7 +226,7 @@ aws cloudfront wait distribution-deployed \
 
 This command blocks until the status changes from `InProgress` to `Deployed`. No output means success.
 
-## Step 3: Update the S3 Bucket Policy
+## Update the S3 Bucket Policy
 
 Save the following as `bucket-policy-oac.json`:
 
@@ -297,7 +297,7 @@ Expected:
 HTTP/1.1 403 Forbidden
 ```
 
-## Step 4: Re-enable Block Public Access
+## Re-enable Block Public Access
 
 ```bash
 aws s3api put-public-access-block \
@@ -337,9 +337,9 @@ Verify CloudFront still works:
 curl -I https://d1234abcdef.cloudfront.net/index.html
 ```
 
-Still `200 OK`. The CloudFront service principal policy is not considered a "public" policy.
+Still `200 OK`. The CloudFront service principal policy isn't considered a "public" policy.
 
-## Step 5: Test SPA Routing
+## Test SPA Routing
 
 ```bash
 curl -I https://d1234abcdef.cloudfront.net/dashboard/settings
@@ -352,7 +352,7 @@ HTTP/2 200
 content-type: text/html
 ```
 
-The custom error response intercepts the 403 from S3 (because `/dashboard/settings` does not exist as an object) and returns `/index.html` with a 200 status code. Your client-side router handles the rest.
+The custom error response intercepts the 403 from S3 (because `/dashboard/settings` doesn't exist as an object) and returns `/index.html` with a 200 status code. Your client-side router handles the rest.
 
 Test another non-existent path:
 
@@ -362,7 +362,7 @@ curl -I https://d1234abcdef.cloudfront.net/users/123/profile
 
 Same result: `200 OK` with `text/html`.
 
-## Step 6: Attach the Security Headers Policy
+## Attach the Security Headers Policy
 
 Fetch the current distribution config:
 
@@ -479,4 +479,4 @@ Expected results: CloudFront returns `200 OK` for both the root and the SPA rout
 | Response Headers Policy | `67f7725c-6f97-4210-82d7-5512b31e9d03` (managed SecurityHeadersPolicy) |
 | Cache Policy            | `658327ea-f89d-4fab-a63d-7e88639e58f6` (managed CachingOptimized)      |
 
-Your distribution is live, secured, and ready for a custom domain. That is Route 53 in Module 5.
+Your distribution is live, secured, and ready for a custom domain. That's Route 53 in Module 5.

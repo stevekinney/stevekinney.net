@@ -5,7 +5,7 @@ description: >-
   (CloudFormation, CDK, SST), and see what the infrastructure you built by hand
   looks like when defined in code.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - infrastructure-as-code
@@ -13,11 +13,11 @@ tags:
   - cloudformation
 ---
 
-You have spent this entire course clicking through the AWS console and running CLI commands. You created an S3 bucket, configured a CloudFront distribution, set up an API Gateway, attached IAM roles, provisioned a DynamoDB table, and wired it all together. It works. But there is a problem: if you had to do it all again — on a new account, for a new project, for a teammate — you would need to repeat every step from memory, in the right order, without mistakes.
+You've spent this entire course clicking through the AWS console and running CLI commands. You created an S3 bucket, configured a CloudFront distribution, set up an API Gateway, attached IAM roles, provisioned a DynamoDB table, and wired it all together. It works. But there's a problem: if you had to do it all again — on a new account, for a new project, for a teammate — you'd need to repeat every step from memory, in the right order, without mistakes.
 
-That is the problem **Infrastructure as Code** solves. Instead of manually configuring services through a web console, you write code that describes your infrastructure. You check that code into version control. You deploy it with a single command. And when you need to tear it down, update it, or replicate it, the code is the source of truth — not a series of console clicks you half-remember.
+That's the problem **Infrastructure as Code** solves. Instead of manually configuring services through a web console, you write code that describes your infrastructure. You check that code into version control. You deploy it with a single command. And when you need to tear it down, update it, or replicate it, the code is the source of truth — not a series of console clicks you half-remember.
 
-If you have ever used a `package.json` to describe your project's dependencies, you already understand the concept. IaC is `package.json` for your AWS infrastructure.
+If you've ever used a `package.json` to describe your project's dependencies, you already understand the concept. IaC is `package.json` for your AWS infrastructure.
 
 ## The Pain of Manual Configuration
 
@@ -67,7 +67,7 @@ CloudFormation creates a **stack** — a collection of resources that are manage
 
 The value is clear: this YAML file is your infrastructure. Check it into Git, review it in pull requests, and anyone can deploy the same environment by running one command.
 
-The downside is also clear: CloudFormation templates get verbose fast. A complete static frontend deployment — S3 bucket, bucket policy, CloudFront distribution, OAC, ACM certificate, Route 53 records — can easily be 200–300 lines of YAML. And YAML is not exactly pleasant to write at scale. (Honestly, I am not sure YAML is pleasant to write at any scale.)
+The downside is also clear: CloudFormation templates get verbose fast. A complete static frontend deployment — S3 bucket, bucket policy, CloudFront distribution, OAC, ACM certificate, Route 53 records — can easily be 200-300 lines of YAML. And YAML isn't exactly pleasant to write at scale. (Honestly, I'm not sure YAML is pleasant to write at _any_ scale.)
 
 ## CDK: Infrastructure in TypeScript
 
@@ -129,7 +129,7 @@ export class FrontendStack extends cdk.Stack {
 }
 ```
 
-That is around 45 lines of TypeScript. It creates an S3 bucket with public access blocked, a CloudFront distribution with OAC, HTTPS redirection, SPA error handling, and a Route 53 alias record — everything from Modules 2 through 5 in a single file. And because it is TypeScript, you get autocomplete, type errors, and compile-time validation.
+That's around 45 lines of TypeScript. It creates an S3 bucket with public access blocked, a CloudFront distribution with OAC, HTTPS redirection, SPA error handling, and a Route 53 alias record — everything from Modules 2 through 5 in a single file. And because it's TypeScript, you get autocomplete, type errors, and compile-time validation.
 
 You deploy it with:
 
@@ -144,11 +144,11 @@ CDK synthesizes the TypeScript into a CloudFormation template (often hundreds of
 
 ## SST: CDK for Serverless
 
-**SST** (originally "Serverless Stack") is a framework built on top of CDK that is specifically designed for full-stack serverless applications. If CDK is "Infrastructure as Code in TypeScript," SST is "Infrastructure as Code in TypeScript, but opinionated about the patterns you will actually use."
+**SST** (originally "Serverless Stack") is a framework built on top of CDK that's specifically designed for full-stack serverless applications. If CDK is "Infrastructure as Code in TypeScript," SST is "Infrastructure as Code in TypeScript, but opinionated about the patterns you'll actually use."
 
-SST adds several things that CDK does not provide out of the box:
+SST adds several things that CDK doesn't provide out of the box:
 
-- **Live Lambda development.** Your Lambda function code runs locally and connects to real AWS resources, so you get instant feedback without deploying on every change. If you have used `next dev` or `vite dev`, this is the equivalent for serverless backends.
+- **Live Lambda development.** Your Lambda function code runs locally and connects to real AWS resources, so you get instant feedback without deploying on every change. If you've used `next dev` or `vite dev`, this is the equivalent for serverless backends.
 - **Higher-level constructs.** SST provides components like `StaticSite`, `Api`, and `Table` that bundle together multiple AWS resources into a single, sensible default. Creating a full-stack app takes a few lines instead of a few pages.
 - **Frontend framework integration.** SST knows about Next.js, Astro, SvelteKit, and other frameworks. It can deploy your frontend and backend together, handling the build pipeline automatically.
 
@@ -164,22 +164,22 @@ new sst.aws.StaticSite('Frontend', {
 Two lines. SST creates the S3 bucket, CloudFront distribution, OAC, ACM certificate, and Route 53 records automatically. It applies the same best practices you configured manually throughout Modules 2–5.
 
 > [!WARNING]
-> SST is a third-party open-source project, not an AWS product. It has a strong community and active development, but it is a dependency you take on. If SST's opinions about project structure and deployment patterns do not match yours, CDK gives you the same power with more flexibility.
+> SST is a third-party open-source project, not an AWS product. It has a strong community and active development, but it's a dependency you take on. If SST's opinions about project structure and deployment patterns don't match yours, CDK gives you the same power with more flexibility.
 
 ## Which One Should You Use?
 
-This is not a deep dive into any of these tools. You are not going to learn CDK or SST in this lesson. But here is the honest decision matrix:
+This isn't a deep dive into any of these tools. You're not going to learn CDK or SST in this lesson. But here's the honest decision matrix:
 
-**CloudFormation** is the right choice if you want maximum control, no third-party dependencies, and are willing to write verbose YAML/JSON. Most large organizations use CloudFormation (or tools that generate it) because it is the native AWS primitive.
+**CloudFormation** is the right choice if you want maximum control, no third-party dependencies, and are willing to write verbose YAML/JSON. Most large organizations use CloudFormation (or tools that generate it) because it's the native AWS primitive.
 
 **CDK** is the right choice if you want type safety, reusable abstractions, and are comfortable writing TypeScript (which, as a frontend engineer, you are). CDK is an AWS product with strong support and a large ecosystem.
 
-**SST** is the right choice if you are building exactly the kind of application this course teaches — a frontend with a serverless backend — and you want the fastest path from code to deployed infrastructure. SST's opinions save time when they match your use case.
+**SST** is the right choice if you're building exactly the kind of application this course teaches — a frontend with a serverless backend — and you want the fastest path from code to deployed infrastructure. SST's opinions save time when they match your use case.
 
 All three tools produce CloudFormation templates at the end. The differences are in how you write and maintain the code that generates those templates.
 
 ## The Real Value
 
-Here is the thing that matters: right now, you understand how every service works because you configured them by hand. That understanding is permanent and transferable. It does not matter whether you use CDK, SST, Terraform, Pulumi, or raw CloudFormation — you know what a bucket policy does, why OAC exists, how execution roles work, and what CORS headers mean. You did the hard part.
+Here's the thing that matters: right now, you understand how every service works because you configured them by hand. That understanding is permanent and transferable. It doesn't matter whether you use CDK, SST, Terraform, Pulumi, or raw CloudFormation — you know what a bucket policy does, why OAC exists, how execution roles work, and what CORS headers mean. You did the hard part.
 
-IaC is not a replacement for that understanding. It is a way to encode it. The code you write in CDK is only as good as your knowledge of the underlying services. And because you built everything manually first, you will actually know what the IaC is doing when something goes wrong — which it will, because infrastructure is infrastructure regardless of whether you wrote it in YAML or TypeScript.
+IaC isn't a replacement for that understanding. It's a way to encode it. The code you write in CDK is only as good as your knowledge of the underlying services. And because you built everything manually first, you'll actually know what the IaC is doing when something goes wrong — which it will, because infrastructure is infrastructure regardless of whether you wrote it in YAML or TypeScript.

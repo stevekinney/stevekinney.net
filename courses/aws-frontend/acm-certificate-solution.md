@@ -3,7 +3,7 @@ title: 'Solution: Request and Validate a Certificate'
 description: >-
   Complete walkthrough of requesting an ACM certificate, completing DNS validation, and verifying the issued certificate.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - acm
@@ -13,7 +13,7 @@ tags:
 
 This is the solution for the [ACM Certificate Exercise](acm-certificate-exercise.md). Each step includes the exact commands and expected output. If your output differs, the notes after each command explain what to check.
 
-## Step 1: Request the Certificate
+## Request the Certificate
 
 ```bash
 aws acm request-certificate \
@@ -32,7 +32,7 @@ aws acm request-certificate \
 }
 ```
 
-Store the ARN in a variable so you do not have to copy-paste it for every subsequent command:
+Store the ARN in a variable so you don't have to copy-paste it for every subsequent command:
 
 ```bash
 CERT_ARN="arn:aws:acm:us-east-1:123456789012:certificate/a1b2c3d4-e5f6-7890-abcd-ef1234567890"
@@ -53,10 +53,10 @@ echo "$CERT_ARN"
 
 **If something went wrong:**
 
-- `An error occurred (AccessDeniedException)`: Your IAM user does not have `acm:RequestCertificate` permissions. If you are using the admin user from [Creating and Securing an AWS Account](creating-and-securing-an-aws-account.md), this should not happen. Check that your CLI profile is configured correctly.
-- `An error occurred (LimitExceededException)`: You have hit the ACM certificate limit for your account (default is 2,500 per region). Unlikely for a new account, but if it happens, delete unused certificates with `aws acm delete-certificate`.
+- `An error occurred (AccessDeniedException)`: Your IAM user doesn't have `acm:RequestCertificate` permissions. If you're using the admin user from [Creating and Securing an AWS Account](creating-and-securing-an-aws-account.md), this shouldn't happen. Check that your CLI profile is configured correctly.
+- `An error occurred (LimitExceededException)`: You've hit the ACM certificate limit for your account (default is 2,500 per region). Unlikely for a new account, but if it happens, delete unused certificates with `aws acm delete-certificate`.
 
-## Step 2: Retrieve the Validation Records
+## Retrieve the Validation Records
 
 ```bash
 aws acm describe-certificate \
@@ -91,7 +91,7 @@ Notice that `example.com` and `*.example.com` often share the same CNAME record 
 
 **If the `ResourceRecord` fields are missing:** The CNAME records may take a few seconds to appear after requesting the certificate. Wait 10 seconds and run the command again.
 
-## Step 3: Add the Validation Records to DNS
+## Add the Validation Records to DNS
 
 ### Option A: Route 53 (CLI)
 
@@ -166,7 +166,7 @@ Log into your DNS provider and create a CNAME record. The exact steps vary by pr
 
 ### Verify the Record Exists
 
-After adding the record, confirm it is resolvable:
+After adding the record, confirm it's resolvable:
 
 ```bash
 dig CNAME _abc123.example.com +short
@@ -178,9 +178,9 @@ dig CNAME _abc123.example.com +short
 _def456.acm-validations.aws.
 ```
 
-If you see no output, the record has not propagated yet. Wait a minute and try again. If it still does not appear after 5 minutes, double-check the record in your DNS provider's interface — the most common mistake is entering the record name incorrectly.
+If you see no output, the record hasn't propagated yet. Wait a minute and try again. If it still doesn't appear after 5 minutes, double-check the record in your DNS provider's interface — the most common mistake is entering the record name incorrectly.
 
-## Step 4: Wait for Validation
+## Wait for Validation
 
 Use the ACM waiter to block until the certificate is issued:
 
@@ -190,7 +190,7 @@ aws acm wait certificate-validated \
   --region us-east-1
 ```
 
-This command produces no output on success. It exits silently when the certificate status changes to `ISSUED`. If it times out (after approximately 40 minutes), the DNS record is likely not configured correctly.
+This command produces no output on success. It exits silently when the certificate status changes to `ISSUED`. If it times out (after approximately 40 minutes), the DNS record likely isn't configured correctly.
 
 You can also poll manually:
 
@@ -232,7 +232,7 @@ aws acm describe-certificate \
 ]
 ```
 
-## Step 5: Verify the Certificate
+## Verify the Certificate
 
 ```bash
 aws acm describe-certificate \
@@ -297,4 +297,4 @@ aws acm describe-certificate \
   --query "Certificate.{Status:Status,Domains:SubjectAlternativeNames}"
 ```
 
-You now have an issued certificate in `us-east-1`. In the next module, you will attach this certificate to a CloudFront distribution to serve your frontend over HTTPS.
+You now have an issued certificate in `us-east-1`. In the next module, you'll attach this certificate to a CloudFront distribution to serve your frontend over HTTPS.

@@ -4,7 +4,7 @@ description: >-
   Connect the full request loop from frontend through API Gateway to Lambda to
   DynamoDB, including IAM permissions and a complete CRUD handler.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - dynamodb
@@ -19,7 +19,7 @@ This is the moment the course goes from "I can deploy static files" to "I have a
 
 ## The Full Request Loop
 
-Here is what happens when a user's browser calls your API:
+Here's what happens when a user's browser calls your API:
 
 1. **Frontend** makes a `fetch()` call to your API Gateway URL
 2. **API Gateway** receives the HTTP request and triggers your Lambda function (you configured this in [Connecting API Gateway to Lambda](connecting-api-gateway-to-lambda.md))
@@ -28,7 +28,7 @@ Here is what happens when a user's browser calls your API:
 5. **Lambda** returns an HTTP response to API Gateway
 6. **API Gateway** sends the response back to the browser
 
-The only missing piece: your Lambda function does not have permission to talk to DynamoDB yet. The execution role you created in [Lambda Execution Roles and Permissions](lambda-execution-roles-and-permissions.md) only has logging permissions. You need to add a DynamoDB policy.
+The only missing piece: your Lambda function doesn't have permission to talk to DynamoDB yet. The execution role you created in [Lambda Execution Roles and Permissions](lambda-execution-roles-and-permissions.md) only has logging permissions. You need to add a DynamoDB policy.
 
 ## Updating the Execution Role
 
@@ -56,7 +56,7 @@ Save this as `lambda-dynamodb-policy.json`:
 }
 ```
 
-This follows the principle of least privilege from [Principle of Least Privilege](principle-of-least-privilege.md): the function can read, write, update, delete, and query items — but only on this specific table. It cannot create or delete tables, it cannot scan the entire table, and it cannot touch any other table in your account.
+This follows the principle of least privilege from [Principle of Least Privilege](principle-of-least-privilege.md): the function can read, write, update, delete, and query items — but only on this specific table. It can't create or delete tables, it can't scan the entire table, and it can't touch any other table in your account.
 
 Create and attach the policy:
 
@@ -103,11 +103,11 @@ Expected output:
 ```
 
 > [!WARNING]
-> If you forget to add this policy, your Lambda function will throw an `AccessDeniedException` when it tries to call DynamoDB. The error message will tell you exactly which action was denied on which resource — use that to fix the policy. Do not solve this by granting `dynamodb:*` on `*`. That gives your function access to every DynamoDB table in your account.
+> If you forget to add this policy, your Lambda function will throw an `AccessDeniedException` when it tries to call DynamoDB. The error message will tell you exactly which action was denied on which resource — use that to fix the policy. Don't solve this by granting `dynamodb:*` on `*`. That gives your function access to every DynamoDB table in your account.
 
 ## The Complete Handler
 
-Here is a complete Lambda handler that implements a CRUD API for items stored in DynamoDB. This is the handler you would deploy behind the API Gateway you set up in Module 8.
+Here's a complete Lambda handler that implements a CRUD API for items stored in DynamoDB. This is the handler you'd deploy behind the API Gateway you set up in Module 8.
 
 ```typescript
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
@@ -231,9 +231,9 @@ function respond(statusCode: number, body: Record<string, unknown>) {
 A few things to notice:
 
 - **GET without `itemId`** queries for all items belonging to the user. GET with `itemId` fetches a single item. This is a standard REST pattern.
-- **POST** generates a unique `itemId` using `Date.now()`. For production, you would use a UUID library, but timestamp-based IDs are fine for learning.
-- **The `respond` helper** reduces boilerplate. Every response needs `statusCode`, `Content-Type`, and `Access-Control-Allow-Origin` — putting that in a function means you do not repeat it in every branch.
-- **Error handling** catches DynamoDB errors and returns a 500. In production, you would log the full error and return a sanitized message to the client.
+- **POST** generates a unique `itemId` using `Date.now()`. For production, you'd use a UUID library, but timestamp-based IDs are fine for learning.
+- **The `respond` helper** reduces boilerplate. Every response needs `statusCode`, `Content-Type`, and `Access-Control-Allow-Origin` — putting that in a function means you don't repeat it in every branch.
+- **Error handling** catches DynamoDB errors and returns a 500. In production, you'd log the full error and return a sanitized message to the client.
 
 ## Setting the Table Name as an Environment Variable
 
@@ -247,7 +247,7 @@ aws lambda update-function-configuration \
   --output json
 ```
 
-The handler already reads from `process.env.TABLE_NAME` with a fallback to `my-frontend-app-data`, so this change does not require a code update. But now you can point the same code at a different table by changing the environment variable — useful when you have a `my-frontend-app-data-dev` table for development.
+The handler already reads from `process.env.TABLE_NAME` with a fallback to `my-frontend-app-data`, so this change doesn't require a code update. But now you can point the same code at a different table by changing the environment variable — useful when you have a `my-frontend-app-data-dev` table for development.
 
 ## Deploying and Testing
 
@@ -322,14 +322,14 @@ async function getItems(userId: string) {
 }
 ```
 
-This is the same `fetch` API you use in any frontend application. The only difference is that the URL points to your API Gateway endpoint instead of a Vercel or Netlify function.
+This is the same `fetch` API you use in any frontend application. The only difference is that the URL points to your API Gateway endpoint instead of a Vercel or Netlify function. That's it — from the frontend's perspective, it's just another API.
 
 > [!TIP]
-> If you are getting CORS errors when calling your API from the frontend, check two places: the `Access-Control-Allow-Origin` header in your Lambda response (included in the `respond` helper above) and the CORS configuration on your API Gateway HTTP API (covered in [API Gateway CORS Configuration](api-gateway-cors-configuration.md)). Both need to allow your frontend's origin.
+> If you're getting CORS errors when calling your API from the frontend, check two places: the `Access-Control-Allow-Origin` header in your Lambda response (included in the `respond` helper above) and the CORS configuration on your API Gateway HTTP API (covered in [API Gateway CORS Configuration](api-gateway-cors-configuration.md)). Both need to allow your frontend's origin.
 
 ## What You Have Built
 
-Take a step back and look at what is running:
+Take a step back and look at what's running:
 
 - **S3** hosts your static frontend files (Module 2)
 - **CloudFront** serves them globally with HTTPS (Module 4)
@@ -339,4 +339,4 @@ Take a step back and look at what is running:
 - **DynamoDB** stores your data (this module)
 - **IAM** ties it all together with least-privilege permissions (Module 1)
 
-That is a complete, production-capable full-stack application running on serverless infrastructure. No servers to manage. No databases to patch. No connection pools to tune. You pay for what you use, and at low traffic, what you use costs nearly nothing.
+That's a complete, production-capable full-stack application running on serverless infrastructure. No servers to manage. No databases to patch. No connection pools to tune. You pay for what you use, and at low traffic, what you use costs nearly nothing.

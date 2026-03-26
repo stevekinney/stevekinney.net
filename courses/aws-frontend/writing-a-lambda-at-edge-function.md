@@ -5,7 +5,7 @@ description: >-
   response events, understanding the us-east-1 deployment requirement and the
   replication model.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - lambda-at-edge
@@ -14,7 +14,7 @@ tags:
 
 Lambda@Edge is a full Lambda function that runs at CloudFront's regional edge caches instead of in a single region. If CloudFront Functions are like Vercel Edge Functions — tiny, fast, constrained — then Lambda@Edge is like a Vercel Serverless Function that AWS has moved closer to your users. You get the full Node.js runtime, npm packages, network access, and up to 30 seconds of execution time on origin events.
 
-You already wrote and deployed a Lambda function in [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md). Lambda@Edge follows the same general pattern, but with a handful of additional constraints that trip people up. This lesson walks through all of them.
+You already wrote and deployed a Lambda function in [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md). Lambda@Edge follows the same general pattern, but with a handful of additional constraints that trip people up. This lesson walks through all of them. Honestly, most of the gotchas aren't hard once you know they exist — the problem is that first time when you don't.
 
 ## The us-east-1 Requirement
 
@@ -40,7 +40,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
 };
 ```
 
-The event object wraps the CloudFront data inside `event.Records[0].cf`. This structure exists because Lambda@Edge uses the same event delivery mechanism as other Lambda triggers — a `Records` array — even though there is always exactly one record.
+The event object wraps the CloudFront data inside `event.Records[0].cf`. This structure exists because Lambda@Edge uses the same event delivery mechanism as other Lambda triggers — a `Records` array — even though there's always exactly one record.
 
 ### Event Object Shape
 
@@ -85,7 +85,7 @@ Notice the differences from CloudFront Functions:
 
 - **Headers** are arrays of objects with `key` and `value` properties, not single objects. This is because HTTP headers can have multiple values.
 - **Query string** is a plain string, not a parsed object.
-- **The `origin` property** is present on origin request events and tells you where CloudFront is about to forward the request. You can modify this to change the origin dynamically.
+- **The `origin` property** is present on origin request events and tells you where CloudFront's about to forward the request. You can modify this to change the origin dynamically.
 
 ### Returning a Request vs. a Response
 
@@ -117,9 +117,9 @@ export const handler: CloudFrontRequestHandler = async (event) => {
 
 ## Writing and Deploying the Function
 
-### Step 1: Write the handler
+### Write the handler
 
-Create a Lambda@Edge function that adds a custom header to origin requests. This is useful for passing information to your origin that the viewer did not send.
+Create a Lambda@Edge function that adds a custom header to origin requests. This is useful for passing information to your origin that the viewer didn't send.
 
 ```typescript
 import type { CloudFrontRequestHandler } from 'aws-lambda';
@@ -140,9 +140,9 @@ export const handler: CloudFrontRequestHandler = async (event) => {
 
 Build and package this the same way you did in [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md): compile with TypeScript, zip the output.
 
-### Step 2: Create the execution role
+### Create the execution role
 
-Lambda@Edge requires a trust policy that allows **both** `lambda.amazonaws.com` and `edgelambda.amazonaws.com` to assume the role. This is different from a standard Lambda function, which only needs `lambda.amazonaws.com`.
+Lambda@Edge requires a trust policy that allows **both** `lambda.amazonaws.com` and `edgelambda.amazonaws.com` to assume the role. This is different from a standard Lambda function, which only needs `lambda.amazonaws.com`. It's an easy thing to miss.
 
 ```json
 {
@@ -177,7 +177,7 @@ aws iam attach-role-policy \
   --output json
 ```
 
-### Step 3: Deploy to us-east-1
+### Deploy to us-east-1
 
 ```bash
 aws lambda create-function \
@@ -190,9 +190,9 @@ aws lambda create-function \
   --output json
 ```
 
-### Step 4: Publish a numbered version
+### Publish a numbered version
 
-This is the critical step that differs from standard Lambda. Lambda@Edge **requires** a published, numbered version. You cannot use `$LATEST`.
+This is the critical step that differs from standard Lambda. Lambda@Edge **requires** a published, numbered version. You can't use `$LATEST`.
 
 ```bash
 aws lambda publish-version \
@@ -210,7 +210,7 @@ arn:aws:lambda:us-east-1:123456789012:function:my-frontend-app-edge-rewrite:1
 
 That versioned ARN — with the `:1` at the end — is what you use when associating the function with CloudFront.
 
-### Step 5: Associate with a CloudFront behavior
+### Associate with a CloudFront behavior
 
 Retrieve your distribution config, add a `LambdaFunctionAssociations` block to the behavior, and update:
 
@@ -244,20 +244,20 @@ After the distribution finishes deploying (this takes a few minutes), your Lambd
 
 When you associate a Lambda@Edge function with a CloudFront distribution, AWS replicates your function to regional edge caches worldwide. This has three implications:
 
-1. **Deployment is not instant.** Unlike CloudFront Functions (which propagate in seconds), Lambda@Edge replicas take several minutes to deploy globally.
+1. **Deployment isn't instant.** Unlike CloudFront Functions (which propagate in seconds), Lambda@Edge replicas take several minutes to deploy globally.
 
-2. **You cannot delete the function while replicas exist.** If you remove a Lambda@Edge association from your distribution, AWS does not immediately delete the replicas. You may need to wait hours (sometimes up to a day) before you can delete the Lambda function itself. The API will return a `ReplicatedFunctionStillCreating` or `ResourceConflictException` error until replication cleanup is complete.
+2. **You can't delete the function while replicas exist.** If you remove a Lambda@Edge association from your distribution, AWS doesn't immediately delete the replicas. You may need to wait hours (sometimes up to a day) before you can delete the Lambda function itself. The API will return a `ReplicatedFunctionStillCreating` or `ResourceConflictException` error until replication cleanup is complete.
 
-3. **Each update requires a new version.** You cannot update a version in place. You publish a new version (`:2`, `:3`, etc.), update the CloudFront behavior to point to the new version ARN, and wait for replication.
+3. **Each update requires a new version.** You can't update a version in place. You publish a new version (`:2`, `:3`, etc.), update the CloudFront behavior to point to the new version ARN, and wait for replication.
 
 > [!TIP]
-> Updating a Lambda@Edge function follows this cycle: update the function code, publish a new version, update the CloudFront behavior to reference the new version ARN, wait for distribution deployment. It is more steps than CloudFront Functions, but you get the full Node.js runtime in exchange.
+> Updating a Lambda@Edge function follows this cycle: update the function code, publish a new version, update the CloudFront behavior to reference the new version ARN, wait for distribution deployment. It's more steps than CloudFront Functions, but you get the full Node.js runtime in exchange.
 
 ## Constraints to Remember
 
-- **No environment variables in viewer request/response triggers.** Lambda@Edge does not support environment variables for viewer-triggered functions. You can use environment variables for origin-triggered functions.
+- **No environment variables in viewer request/response triggers.** Lambda@Edge doesn't support environment variables for viewer-triggered functions. You can use environment variables for origin-triggered functions.
 - **128 MB memory cap for viewer events.** If your viewer-triggered function needs more memory, you need to reconsider your approach — either move the logic to an origin trigger (up to 10,240 MB) or simplify it.
-- **5-second timeout for viewer events, 30 seconds for origin events.** A viewer request function that takes 5 seconds will make your site feel broken. Keep viewer-triggered functions fast.
+- **5-second timeout for viewer events, 30 seconds for origin events.** A viewer request function that takes 5 seconds will make your site feel broken. Keep viewer-triggered functions fast — if it's slow enough for the user to notice, it's too slow.
 - **1 MB package size for viewer events.** This is the compressed zip size. If you bundle large libraries, you may exceed this. Use tree-shaking and keep dependencies minimal.
 
 These constraints are covered in detail in [Edge Function Debugging and Limitations](edge-function-debugging-and-limitations.md).

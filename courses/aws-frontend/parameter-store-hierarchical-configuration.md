@@ -5,7 +5,7 @@ description: >-
   hierarchical path structure, including both plain text and SecureString
   parameters.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - parameter-store
@@ -13,13 +13,13 @@ tags:
   - ssm
 ---
 
-**Parameter Store** is part of AWS Systems Manager (SSM). It is a key-value store for configuration data — the same kind of data you have been putting in Lambda environment variables, but with encryption, access control, versioning, and a hierarchical namespace built in.
+**Parameter Store** is part of AWS Systems Manager (SSM). It's a key-value store for configuration data — the same kind of data you've been putting in Lambda environment variables, but with encryption, access control, versioning, and a hierarchical namespace built in.
 
-If Lambda environment variables are like a flat `.env` file, Parameter Store is like a structured configuration tree. You organize parameters by application, environment, and purpose using paths that look like file system directories: `/my-frontend-app/production/api-key`. And unlike environment variables, you can share parameters across multiple Lambda functions without duplicating values.
+If Lambda environment variables are like a flat `.env` file, Parameter Store is like a structured configuration tree. I find that distinction helpful because it changes how you think about organizing your config. You organize parameters by application, environment, and purpose using paths that look like file system directories: `/my-frontend-app/production/api-key`. And unlike environment variables, you can share parameters across multiple Lambda functions without duplicating values.
 
 ## Creating Parameters with the CLI
 
-The `put-parameter` command creates or updates a parameter. Here is a plain text parameter:
+The `put-parameter` command creates or updates a parameter. Here's a plain text parameter:
 
 ```bash
 aws ssm put-parameter \
@@ -53,13 +53,13 @@ aws ssm put-parameter \
 The value is encrypted at rest using an AWS-managed KMS key. You can also specify your own KMS key with the `--key-id` flag, but the default key works fine for most use cases.
 
 > [!TIP]
-> To update an existing parameter, add the `--overwrite` flag. Without it, `put-parameter` fails if the parameter already exists. This is a safety feature — you do not accidentally overwrite production values.
+> To update an existing parameter, add the `--overwrite` flag. Without it, `put-parameter` fails if the parameter already exists. This is a safety feature — you don't accidentally overwrite production values.
 
 ## Hierarchical Paths
 
-The forward slashes in parameter names are not just cosmetic. They define a hierarchy that you can query, and more importantly, they let you scope IAM permissions to entire subtrees.
+The forward slashes in parameter names aren't just cosmetic. They define a hierarchy that you can query, and more importantly, they let you scope IAM permissions to entire subtrees.
 
-Here is a typical structure for a frontend application with two environments:
+Here's a typical structure for a frontend application with two environments:
 
 ```
 /my-frontend-app/
@@ -105,14 +105,14 @@ Parameter Store supports three types:
 | `StringList`   | None       | Comma-separated values                          |
 | `SecureString` | KMS        | API keys, tokens, passwords, connection strings |
 
-**String** parameters are stored in plain text. Use them for configuration that is not sensitive — the same kind of values you would put in Lambda environment variables.
+**String** parameters are stored in plain text. Use them for configuration that isn't sensitive — the same kind of values you'd put in Lambda environment variables.
 
 **SecureString** parameters are encrypted at rest with a KMS key. When you retrieve a SecureString, you must explicitly request decryption with the `--with-decryption` flag (CLI) or `WithDecryption: true` (SDK). Without it, you get the encrypted ciphertext, which is useless.
 
-**StringList** stores comma-separated values as a single parameter. It is occasionally useful, but most of the time you are better off using a JSON string in a regular `String` parameter.
+**StringList** stores comma-separated values as a single parameter. It's occasionally useful, but most of the time you're better off using a JSON string in a regular `String` parameter.
 
 > [!WARNING]
-> SecureString parameters require KMS permissions to decrypt. If your Lambda function's execution role does not have `kms:Decrypt` permission on the KMS key used to encrypt the parameter, the function can read the parameter name but cannot decrypt the value. You will get an access denied error at runtime, not at deploy time.
+> SecureString parameters require KMS permissions to decrypt. If your Lambda function's execution role doesn't have `kms:Decrypt` permission on the KMS key used to encrypt the parameter, the function can read the parameter name but can't decrypt the value. You'll get an access denied error at runtime, not at deploy time.
 
 ## Retrieving Parameters
 
@@ -169,7 +169,7 @@ This returns all four parameters under `/my-frontend-app/production/` in a singl
 
 ## Retrieving Parameters with the SDK
 
-Here is how you retrieve a parameter from a Lambda function using the AWS SDK v3:
+Here's how you retrieve a parameter from a Lambda function using the AWS SDK v3:
 
 ```typescript
 import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
@@ -234,10 +234,10 @@ Parameter Store has two tiers:
 | **Parameter policies**        | No               | Yes (expiration, notification)      |
 | **Throughput**                | 40 TPS (default) | Up to 1,000 TPS (higher throughput) |
 
-For almost every frontend application, the standard tier is more than enough. You are storing a handful of configuration values, not tens of thousands. The 4 KB value limit is the same as Lambda's environment variable limit, and it is plenty for API keys and configuration strings.
+For almost every frontend application, the standard tier is more than enough. You're storing a handful of configuration values, not tens of thousands. The 4 KB value limit is the same as Lambda's environment variable limit, and it's plenty for API keys and configuration strings.
 
 > [!TIP]
-> You do not need to choose a tier upfront. Parameters default to Standard. If you later need Advanced features, you can change a parameter's tier with `put-parameter --tier Advanced --overwrite`. You can also set the tier to `Intelligent-Tiering` and let AWS promote parameters to Advanced only when they exceed Standard limits.
+> You don't need to choose a tier upfront. Parameters default to Standard. If you later need Advanced features, you can change a parameter's tier with `put-parameter --tier Advanced --overwrite`. You can also set the tier to `Intelligent-Tiering` and let AWS promote parameters to Advanced only when they exceed Standard limits.
 
 ## Versioning
 
@@ -253,6 +253,4 @@ aws ssm get-parameter \
 
 This gives you a lightweight audit trail and the ability to roll back a configuration change without redeploying anything.
 
-## What Is Next
-
-Parameter Store handles most configuration needs, but it does not rotate credentials for you. When you need automatic rotation — for database passwords, OAuth tokens, or any credential with a lifecycle — that is where Secrets Manager comes in. The next lesson covers Secrets Manager and when it is worth the cost.
+Parameter Store handles most configuration needs, but it doesn't rotate credentials for you. When you need automatic rotation — for database passwords, OAuth tokens, or any credential with a lifecycle — that's where Secrets Manager comes in. The next lesson covers Secrets Manager and when it's worth the cost.

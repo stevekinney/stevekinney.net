@@ -4,20 +4,20 @@ description: >-
   Write a TypeScript handler that returns a JSON greeting, create an execution
   role, deploy the function, invoke it, and read the logs.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - lambda
   - exercise
 ---
 
-You are going to build and deploy a Lambda function from scratch — no console wizards, no frameworks, no abstractions. By the end of this exercise, you will have a TypeScript function running in AWS that you can invoke from the command line and whose logs you can read in CloudWatch.
+You're going to build and deploy a Lambda function from scratch — no console wizards, no frameworks, no abstractions. By the end of this exercise, you'll have a TypeScript function running in AWS that you can invoke from the command line and whose logs you can read in CloudWatch.
 
-This is the same workflow you will use for every Lambda function you deploy throughout the rest of the course. Get comfortable with it now.
+This is the same workflow you'll use for every Lambda function you deploy throughout the rest of the course. Get comfortable with it now.
 
 ## Why It Matters
 
-On Vercel, deploying a serverless function means pushing code to Git and waiting for the platform to figure out the rest. On AWS, you own every step: writing the handler, creating the execution role, packaging the code, deploying it, and verifying it works. That sounds like more work — and it is — but it means you understand exactly what is running, with what permissions, and where to look when something breaks.
+On Vercel, deploying a serverless function means pushing code to Git and waiting for the platform to figure out the rest. On AWS, you own every step: writing the handler, creating the execution role, packaging the code, deploying it, and verifying it works. That sounds like more work — and it is — but it means you understand exactly what's running, with what permissions, and where to look when something breaks.
 
 ## Your Task
 
@@ -30,7 +30,7 @@ Build and deploy a Lambda function named `my-frontend-app-api` that:
 
 Use the account ID `123456789012`, region `us-east-1`, and the `nodejs20.x` runtime.
 
-## Step 1: Set Up the Project
+## Set Up the Project
 
 Create the project structure:
 
@@ -45,9 +45,9 @@ Create `tsconfig.json` in the `lambda/` directory with a `commonjs` module targe
 
 ### Checkpoint
 
-You have a `lambda/` directory with `package.json`, `tsconfig.json`, `node_modules/`, and an empty `src/` directory.
+You've got a `lambda/` directory with `package.json`, `tsconfig.json`, `node_modules/`, and an empty `src/` directory.
 
-## Step 2: Write the Handler
+## Write the Handler
 
 Create `src/handler.ts` with a handler that:
 
@@ -62,7 +62,7 @@ Add a build script to `package.json` that runs `tsc`, then build the project.
 
 Running `npm run build` produces `dist/handler.js` with no TypeScript errors.
 
-## Step 3: Create the Execution Role
+## Create the Execution Role
 
 Create a trust policy file (`trust-policy.json`) that allows the Lambda service (`lambda.amazonaws.com`) to assume the role.
 
@@ -81,7 +81,7 @@ Remember:
 
 `aws iam get-role --role-name my-frontend-app-lambda-role` returns the role with the correct trust policy. `aws iam list-attached-role-policies --role-name my-frontend-app-lambda-role` shows `AWSLambdaBasicExecutionRole`.
 
-## Step 4: Package and Deploy
+## Package and Deploy
 
 Create the deployment zip from the compiled output:
 
@@ -95,7 +95,7 @@ The handler path should be `handler.handler` — the first `handler` is the file
 
 `aws lambda get-function --function-name my-frontend-app-api --region us-east-1` returns the function configuration showing `nodejs20.x` as the runtime and your execution role's ARN.
 
-## Step 5: Invoke the Function
+## Invoke the Function
 
 Create a test event file (`test-event.json`) that simulates a GET request with the query parameter `name=Lambda`:
 
@@ -119,7 +119,7 @@ Invoke the function using the CLI and read the response file.
 
 The response file contains a JSON object with `statusCode: 200` and a body that, when parsed, includes `greeting: "Hello, Lambda!"` and a valid `timestamp`.
 
-## Step 6: Invoke Without a Name Parameter
+## Invoke Without a Name Parameter
 
 Create a second test event with no `queryStringParameters` (or omit the field entirely) and invoke the function again.
 
@@ -127,7 +127,7 @@ Create a second test event with no `queryStringParameters` (or omit the field en
 
 The response includes `greeting: "Hello, World!"` — your default value works correctly.
 
-## Step 7: Read the Logs
+## Read the Logs
 
 After invoking the function, check that logs are flowing to CloudWatch. Verify that the log group `/aws/lambda/my-frontend-app-api` exists:
 
@@ -156,8 +156,8 @@ The log group exists and contains at least one log stream with events from your 
 
 - **Add an environment variable.** Set a `GREETING_PREFIX` environment variable (e.g., `"Howdy"`) and use it in your handler instead of hardcoding `"Hello"`. Verify the change by invoking the function and checking the response.
 
-- **Check cold start duration.** Invoke the function with `--log-type Tail` and decode the base64 log output. Look for the `Init Duration` field. Invoke again and confirm the second invocation has no `Init Duration` — it was a warm start.
+- **Check cold start duration.** Invoke the function with `--log-type Tail` and decode the base64 log output. Look for the `Init Duration` field. Invoke again and confirm the second invocation has no `Init Duration` — it was a warm start. This is one of those things that's way more satisfying to see for yourself than to read about.
 
-- **Measure deployment package size.** Check the size of `function.zip`. Try adding a dependency (like `lodash`) to see how the zip size changes. Then remove it — you do not need it, and keeping the bundle small matters for cold start performance.
+- **Measure deployment package size.** Check the size of `function.zip`. Try adding a dependency (like `lodash`) to see how the zip size changes. Then remove it — you don't need it, and keeping the bundle small matters for cold start performance.
 
-When you are ready, check your work against the [Solution: Build and Deploy a Lambda Function](lambda-function-solution.md).
+When you're ready, check your work against the [Solution: Build and Deploy a Lambda Function](lambda-function-solution.md).

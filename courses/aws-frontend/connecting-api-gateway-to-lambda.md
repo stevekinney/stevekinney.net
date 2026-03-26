@@ -4,7 +4,7 @@ description: >-
   Wire an HTTP API route to a Lambda function using a Lambda proxy integration,
   so that API requests trigger your function and return its response.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - api-gateway
@@ -12,19 +12,19 @@ tags:
   - integration
 ---
 
-You have an HTTP API with a URL that returns 404 for everything. You have a Lambda function that works when you invoke it directly. Now you connect them. The wiring process has three steps: create an integration, create a route, and grant permission. Skip any one of these and your API returns either 404 or 500 with no helpful error message.
+You have an HTTP API with a URL that returns 404 for everything. You have a Lambda function that works when you invoke it directly. Now you connect them. The wiring process has three steps: create an integration, create a route, and grant permission. Skip any one of these and your API returns either 404 or 500 with no helpful error message. I've seen each of these trip people up at least once.
 
 ## The Three Pieces
 
-Here is how the pieces fit together:
+Here's how the pieces fit together:
 
 1. **Integration** — tells API Gateway which backend to call (your Lambda function) and how to call it (proxy integration with payload format version 2.0).
 2. **Route** — maps an HTTP method and path (like `GET /items`) to that integration.
 3. **Permission** — a resource-based policy on the Lambda function that allows `apigateway.amazonaws.com` to invoke it.
 
-You have already written the handler and deployed it in [Writing a Lambda Handler](writing-a-lambda-handler.md) and [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md). Now you are wiring the HTTP layer.
+You've already written the handler and deployed it in [Writing a Lambda Handler](writing-a-lambda-handler.md) and [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md). Now you're wiring the HTTP layer.
 
-## Step 1: Create the Integration
+## Create the Integration
 
 An **integration** connects your API to a backend service. For this course, the backend is always a Lambda function, making it a **Lambda proxy integration**. "Proxy" means API Gateway passes the entire HTTP request through to Lambda and returns the Lambda response directly to the client — no request or response transformation.
 
@@ -64,9 +64,9 @@ A few things about these options:
 - **`--payload-format-version 2.0`**: This tells API Gateway to use the version 2.0 event format (`APIGatewayProxyEventV2`), which is the format your TypeScript handler expects. Version 1.0 is the older format used by REST APIs. Always use 2.0 with HTTP APIs.
 
 > [!WARNING]
-> If you omit `--payload-format-version`, API Gateway defaults to `1.0` for some integration configurations. This means your Lambda function receives an `APIGatewayProxyEvent` (v1) instead of `APIGatewayProxyEventV2` (v2). The event shapes are different — fields are in different locations, and some fields are missing entirely. If your handler suddenly cannot find `event.requestContext.http.method`, check the payload format version.
+> If you omit `--payload-format-version`, API Gateway defaults to `1.0` for some integration configurations. This means your Lambda function receives an `APIGatewayProxyEvent` (v1) instead of `APIGatewayProxyEventV2` (v2). The event shapes are different — fields are in different locations, and some fields are missing entirely. If your handler suddenly can't find `event.requestContext.http.method`, check the payload format version.
 
-## Step 2: Create Routes
+## Create Routes
 
 A **route** maps an HTTP method and path to an integration. The route key follows the format `METHOD /path`. Create a route for `GET /items`:
 
@@ -131,13 +131,13 @@ aws apigatewayv2 create-route \
   --output json
 ```
 
-The `$default` route matches any request that does not match a more specific route. This is useful when you want a single Lambda function to handle all routing internally — similar to how a Next.js API catch-all route works.
+The `$default` route matches any request that doesn't match a more specific route. This is useful when you want a single Lambda function to handle all routing internally — similar to how a Next.js API catch-all route works.
 
-## Step 3: Grant Permission
+## Grant Permission
 
-This is the step that catches everyone. Your API Gateway can route to the Lambda function, but the Lambda function has not authorized API Gateway to invoke it. Without this permission, every request returns a 500 error.
+This is the step that catches everyone. Your API Gateway can route to the Lambda function, but the Lambda function hasn't authorized API Gateway to invoke it. Without this permission, every request returns a 500 error.
 
-The permission is a **resource-based policy** on the Lambda function — the same concept you learned in [Bucket Policies and Public Access](bucket-policies-and-public-access.md), but applied to a Lambda function instead of an S3 bucket. It tells Lambda: "This API Gateway is allowed to call you."
+The permission is a **resource-based policy** on the Lambda function — the same concept you learned in [Bucket Policies and Public Access](bucket-policies-and-public-access.md), but applied to a Lambda function instead of an S3 bucket. It tells Lambda: "this API Gateway is allowed to call you."
 
 ```bash
 aws lambda add-permission \
@@ -214,10 +214,8 @@ aws apigatewayv2 get-integrations \
 
 **Forgetting the `integrations/` prefix in the `--target`.** The target must be `integrations/{IntegrationId}`, not just the integration ID. Without the prefix, the route is created but has no target, and requests match the route but return 500.
 
-**Using payload format version 1.0 with v2 handler types.** If your handler uses `APIGatewayProxyHandlerV2` but the integration uses payload format 1.0, the event structure will not match your type definitions. Fields like `event.requestContext.http` will be undefined.
+**Using payload format version 1.0 with v2 handler types.** If your handler uses `APIGatewayProxyHandlerV2` but the integration uses payload format 1.0, the event structure won't match your type definitions. Fields like `event.requestContext.http` will be undefined.
 
-**Mismatched API IDs.** When you are working with multiple APIs during development, double-check that you are creating routes and integrations on the right API. The `--api-id` must match across all commands.
+**Mismatched API IDs.** When you're working with multiple APIs during development, double-check that you're creating routes and integrations on the right API. The `--api-id` must match across all commands.
 
-## What is Next
-
-Your API routes are live, but there is a gap between what you see in `curl` and what happens in your Lambda handler. How does an HTTP request become a Lambda event? How does your handler's return value become an HTTP response? The next lesson covers the request and response mapping in detail — the exact shape of the event object your handler receives and the response format API Gateway expects.
+Your API routes are live, but there's a gap between what you see in `curl` and what happens in your Lambda handler. How does an HTTP request become a Lambda event? How does your handler's return value become an HTTP response? The next lesson covers the request and response mapping in detail — the exact shape of the event object your handler receives and the response format API Gateway expects.

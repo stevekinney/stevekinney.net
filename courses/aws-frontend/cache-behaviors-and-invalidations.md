@@ -3,7 +3,7 @@ title: 'Cache Behaviors and Invalidations'
 description: >-
   Configure cache behaviors and TTLs to control how CloudFront caches your content, and create invalidations to force cache refreshes after deployments.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cloudfront
@@ -11,7 +11,7 @@ tags:
   - deployment
 ---
 
-CloudFront's entire value proposition is caching: serve content from edge locations close to users instead of making round trips to your origin. But caching creates a problem you have probably already dealt with — stale content. You deploy a fix, but users still see the old version because the CDN has not picked up the change yet.
+CloudFront's entire value proposition is caching: serve content from edge locations close to users instead of making round trips to your origin. But caching creates a problem you've probably already dealt with — stale content. You deploy a fix, but users still see the old version because the CDN hasn't picked up the change yet.
 
 On Vercel, the platform handles cache busting for you. On AWS, you manage it. That means understanding cache behaviors, TTLs, and invalidation strategies.
 
@@ -33,22 +33,22 @@ A **cache policy** controls three TTL values that determine how long CloudFront 
 | Setting         | CachingOptimized Default      | What It Does                                                                                                     |
 | --------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | **Minimum TTL** | 1 second                      | The floor. CloudFront caches content for at least this long, even if the origin sends `Cache-Control: no-cache`. |
-| **Default TTL** | 86,400 seconds (24 hours)     | Used when the origin does not send `Cache-Control` or `Expires` headers.                                         |
+| **Default TTL** | 86,400 seconds (24 hours)     | Used when the origin doesn't send `Cache-Control` or `Expires` headers.                                          |
 | **Maximum TTL** | 31,536,000 seconds (365 days) | The ceiling. Even if the origin sends `Cache-Control: max-age=999999999`, CloudFront caps caching at this value. |
 
 The managed **CachingOptimized** policy (ID: `658327ea-f89d-4fab-a63d-7e88639e58f6`) that you attached in [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md) uses these defaults. For most static sites, these values are sensible — your content is cached for 24 hours unless your origin specifies otherwise.
 
 ### How TTLs Interact with Origin Headers
 
-CloudFront does not blindly cache everything for the default TTL. It respects `Cache-Control` headers from your origin (S3), within the bounds of the min and max TTLs:
+CloudFront doesn't blindly cache everything for the default TTL. It respects `Cache-Control` headers from your origin (S3), within the bounds of the min and max TTLs:
 
-- Origin sends `Cache-Control: max-age=3600` (1 hour): CloudFront caches for 1 hour (between min and max, so it is honored).
+- Origin sends `Cache-Control: max-age=3600` (1 hour): CloudFront caches for 1 hour (between min and max, so it's honored).
 - Origin sends `Cache-Control: max-age=0`: CloudFront caches for 1 second (the minimum TTL overrides).
 - Origin sends no `Cache-Control` header: CloudFront caches for 24 hours (the default TTL).
 - Origin sends `Cache-Control: max-age=63072000` (2 years): CloudFront caches for 365 days (the maximum TTL caps it).
 
 > [!TIP]
-> You can set `Cache-Control` headers on your S3 objects when uploading them. This gives you per-file control over caching: cache `index.html` for 60 seconds (so users get updates quickly), but cache hashed assets like `main.a1b2c3.js` for a year (they are immutable — the filename changes when the content changes).
+> You can set `Cache-Control` headers on your S3 objects when uploading them. This gives you per-file control over caching: cache `index.html` for 60 seconds (so users get updates quickly), but cache hashed assets like `main.a1b2c3.js` for a year (they're immutable — the filename changes when the content changes).
 
 ```bash
 # Short cache for HTML files
@@ -73,7 +73,7 @@ You can expand the cache key to include:
 - **Request headers**: Different responses for `Accept-Encoding: gzip` vs. `Accept-Encoding: br`.
 - **Cookies**: Different responses for authenticated vs. anonymous users.
 
-For a static site, the default cache key (URL path only) is exactly right. You do not want query strings, headers, or cookies fragmenting your cache. Every request for `/index.html` should get the same cached response regardless of query parameters or cookies.
+For a static site, the default cache key (URL path only) is exactly right. You don't want query strings, headers, or cookies fragmenting your cache. Every request for `/index.html` should get the same cached response regardless of query parameters or cookies.
 
 ## Custom Cache Behaviors
 
@@ -81,7 +81,7 @@ Sometimes you need different caching rules for different paths. Common examples:
 
 - **HTML files**: Cache briefly (60 seconds) so users get updates quickly.
 - **Hashed JS/CSS files**: Cache aggressively (1 year) because the filename changes when the content changes.
-- **API proxy**: Do not cache at all (if you are routing API requests through CloudFront).
+- **API proxy**: Don't cache at all (if you're routing API requests through CloudFront).
 
 You add custom behaviors by updating the distribution config. Each behavior has a path pattern and its own cache policy:
 
@@ -112,7 +112,7 @@ You add custom behaviors by updating the distribution config. Each behavior has 
 
 CloudFront evaluates behaviors in order, from most specific to least specific. The first behavior whose path pattern matches the request wins. The default behavior (`*`) is always evaluated last.
 
-For most frontend deployments, you do not need custom cache behaviors. The combination of the CachingOptimized cache policy and per-file `Cache-Control` headers on your S3 objects gives you enough control. Custom behaviors become useful when you start routing different paths to different origins (e.g., `/api/*` goes to API Gateway while `/*` goes to S3).
+For most frontend deployments, you don't need custom cache behaviors. The combination of the CachingOptimized cache policy and per-file `Cache-Control` headers on your S3 objects gives you enough control. Custom behaviors become useful when you start routing different paths to different origins (e.g., `/api/*` goes to API Gateway while `/*` goes to S3).
 
 ## Cache Invalidations
 
@@ -166,13 +166,13 @@ Invalidations typically complete within a few minutes.
 The first 1,000 invalidation paths per month are free. After that, each path costs $0.005. A `/*` wildcard counts as one path. Individual file paths count as one path each.
 
 > [!WARNING]
-> Invalidating `/*` after every deployment is a common pattern, but it is a blunt instrument. It clears everything from the cache — including files that did not change. If you have a high-traffic site, a full invalidation causes a burst of cache misses across all edge locations. For most frontend projects, this is fine. For sites handling millions of requests per minute, consider targeted invalidations.
+> Invalidating `/*` after every deployment is a common pattern, but it's a blunt instrument. It clears everything from the cache — including files that didn't change. If you have a high-traffic site, a full invalidation causes a burst of cache misses across all edge locations. For most frontend projects, this is fine. For sites handling millions of requests per minute, consider targeted invalidations.
 
 ### Cache Busting: Change the URL
 
 The alternative to invalidation is **cache busting** — changing the filename so CloudFront treats it as a new object. If your build tool generates hashed filenames (e.g., `main.a1b2c3.js` becomes `main.d4e5f6.js` after a change), the new file has a different cache key. CloudFront fetches it fresh from S3, and the old version naturally expires from cache at the end of its TTL.
 
-Modern frontend build tools (Vite, webpack, Next.js) generate hashed filenames by default for JavaScript and CSS bundles. This is why those files can be cached for a year — the hash changes when the content changes. The only file that does not get a hash is `index.html`, because its URL needs to stay stable.
+Modern frontend build tools (Vite, webpack, Next.js) generate hashed filenames by default for JavaScript and CSS bundles. This is why those files can be cached for a year — the hash changes when the content changes. The only file that doesn't get a hash is `index.html`, because its URL needs to stay stable.
 
 ### The Recommended Strategy
 
@@ -182,11 +182,11 @@ For most frontend deployments, the best approach is:
 2. **Short TTL or no-cache** for `index.html`. Either set `Cache-Control: max-age=60` on the S3 object, or rely on invalidations.
 3. **Invalidate `/*`** after every deployment. This ensures `index.html` is refreshed immediately, and the hashed assets are fetched fresh if needed (though they would be new URLs anyway).
 
-This is the same strategy Vercel and Netlify use behind the scenes. Immutable assets get long-lived cache entries. The HTML entry point gets refreshed on every deploy.
+This is the same strategy Vercel and Netlify use behind the scenes. I've used this pattern on every production deployment I've ever set up on AWS, and it just works. Immutable assets get long-lived cache entries. The HTML entry point gets refreshed on every deploy.
 
 ## A Deploy Script
 
-Here is a simple deployment script that ties everything together:
+Here's a simple deployment script that ties everything together:
 
 ```bash
 # Sync hashed assets with long cache
@@ -211,8 +211,6 @@ aws cloudfront create-invalidation \
 ```
 
 > [!TIP]
-> The `--delete` flag on `aws s3 sync` removes files from S3 that no longer exist in your local build directory. This cleans up old hashed assets. Without it, your bucket accumulates every version of every asset you have ever deployed.
+> The `--delete` flag on `aws s3 sync` removes files from S3 that no longer exist in your local build directory. This cleans up old hashed assets. Without it, your bucket accumulates every version of every asset you've ever deployed.
 
-## What is Next
-
-Caching is sorted. But there is another problem: if a user navigates to `/dashboard/settings` in your single-page application, CloudFront asks S3 for a file at that path. S3 does not have a file called `/dashboard/settings`, so it returns a 403 or 404 error. In the next lesson, you will configure custom error responses to handle SPA routing — telling CloudFront to serve `index.html` whenever it encounters one of these errors.
+Caching is sorted. But there's another problem: if a user navigates to `/dashboard/settings` in your single-page application, CloudFront asks S3 for a file at that path. S3 doesn't have a file called `/dashboard/settings`, so it returns a 403 or 404 error. In the next lesson, you'll configure custom error responses to handle SPA routing — telling CloudFront to serve `index.html` whenever it encounters one of these errors.

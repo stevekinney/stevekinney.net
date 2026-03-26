@@ -5,7 +5,7 @@ description: >-
   constraints and deployment limitations that affect Lambda@Edge and CloudFront
   Functions.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - edge-functions
@@ -13,11 +13,11 @@ tags:
   - limitations
 ---
 
-Edge functions are powerful, but they fail in ways that are genuinely confusing the first time you encounter them. Your logs are not where you expect. Your function works locally but fails at the edge. Your deployment succeeds but the function does not seem to run. This lesson covers where to look when things go wrong and what constraints to keep in mind before you write a single line of code.
+Edge functions are powerful, but they fail in ways that are genuinely confusing the first time you encounter them. Your logs aren't where you expect. Your function works locally but fails at the edge. Your deployment succeeds but the function doesn't seem to run. This lesson covers where to look when things go wrong and what constraints to keep in mind before you write a single line of code.
 
 ## Where the Logs Go
 
-This is the number one source of confusion. Lambda@Edge and CloudFront Functions both write to CloudWatch Logs, but they write to **different regions** and with different behaviors.
+This is the number one source of confusion — I can't tell you how many times I've stared at an empty CloudWatch log group in `us-east-1` before remembering the logs are in a different region. Lambda@Edge and CloudFront Functions both write to CloudWatch Logs, but they write to **different regions** and with different behaviors.
 
 ### Lambda@Edge Logs
 
@@ -31,7 +31,7 @@ The log group follows the standard Lambda naming pattern:
 
 Notice the `us-east-1.` prefix — this indicates that the function was deployed in `us-east-1` and replicated to the current region.
 
-To find your Lambda@Edge logs, you need to know (or guess) which region processed the request. If you are testing from your own location, check the CloudFront region nearest to you:
+To find your Lambda@Edge logs, you need to know (or guess) which region processed the request. If you're testing from your own location, check the CloudFront region nearest to you:
 
 ```bash
 aws logs describe-log-groups \
@@ -41,11 +41,11 @@ aws logs describe-log-groups \
 ```
 
 > [!WARNING]
-> If you are debugging a Lambda@Edge function and see no logs in `us-east-1`, that is expected. The function was **deployed** in `us-east-1` but **executed** in whatever region was closest to the user. Check CloudWatch in the region nearest to wherever the request originated.
+> If you're debugging a Lambda@Edge function and see no logs in `us-east-1`, that's expected. The function was **deployed** in `us-east-1` but **executed** in whatever region was closest to the user. Check CloudWatch in the region nearest to wherever the request originated.
 
 ### CloudFront Functions Logs
 
-CloudFront Functions handle logging differently. Execution logs from `console.log()` statements are **not** automatically written to CloudWatch. Instead, CloudFront Functions provide:
+CloudFront Functions handle logging differently. Execution logs from `console.log()` statements aren't automatically written to CloudWatch. Instead, CloudFront Functions provide:
 
 1. **Test output.** When you test a function using `aws cloudfront test-function`, the output includes any `console.log()` statements and the function result.
 2. **CloudWatch metrics.** CloudFront publishes function metrics (invocations, errors, compute utilization, throttles) to CloudWatch in `us-east-1`. These are metrics, not logs — you can see that your function errored, but not the error message.
@@ -57,7 +57,7 @@ To add real-time logging to a CloudFront Function, you can enable CloudWatch Log
 ```
 
 > [!TIP]
-> For quick debugging of CloudFront Functions, use the `test-function` CLI command with different event payloads rather than deploying and waiting for real traffic. It is faster and gives you the full `console.log()` output.
+> For quick debugging of CloudFront Functions, use the `test-function` CLI command with different event payloads rather than deploying and waiting for real traffic. It's faster and gives you the full `console.log()` output.
 
 ## Common Error Patterns
 
@@ -92,16 +92,16 @@ return { statusCode: 200, statusDescription: 'OK' };
 This usually means one of two things:
 
 1. **You published to DEVELOPMENT but not LIVE.** CloudFront Functions have a two-stage deployment. The `test-function` command tests the DEVELOPMENT stage. You must run `publish-function` to promote to LIVE.
-2. **The function is not associated with the right behavior.** Verify the association using `get-distribution-config` and check that the function ARN appears in the correct behavior's `FunctionAssociations` or `LambdaFunctionAssociations`.
+2. **The function isn't associated with the right behavior.** Verify the association using `get-distribution-config` and check that the function ARN appears in the correct behavior's `FunctionAssociations` or `LambdaFunctionAssociations`.
 
 ### "The Lambda function associated with the CloudFront distribution is invalid or doesn't have the required permissions"
 
 This means one or more of:
 
-- The Lambda function does not exist in `us-east-1`
+- The Lambda function doesn't exist in `us-east-1`
 - You referenced `$LATEST` instead of a numbered version
-- The execution role does not include `edgelambda.amazonaws.com` in its trust policy
-- The IAM role does not have the `AWSLambdaBasicExecutionRole` policy attached
+- The execution role doesn't include `edgelambda.amazonaws.com` in its trust policy
+- The IAM role doesn't have the `AWSLambdaBasicExecutionRole` policy attached
 
 Review the role setup in [Writing a Lambda@Edge Function](writing-a-lambda-at-edge-function.md).
 
@@ -121,11 +121,11 @@ Edge functions have strict limits on the response they can generate:
 If your edge function generates a response that exceeds the limit, CloudFront returns a 502 error to the viewer.
 
 > [!WARNING]
-> These limits apply when your function **generates** a response (short-circuits without going to the origin). If you are modifying a response that came from the origin, the response size is governed by CloudFront's standard limits, not the edge function limits.
+> These limits apply when your function **generates** a response (short-circuits without going to the origin). If you're modifying a response that came from the origin, the response size is governed by CloudFront's standard limits, not the edge function limits.
 
 ## Network Access Restrictions
 
-**CloudFront Functions cannot make network calls.** No HTTP requests, no DNS lookups, no socket connections. This is a hard constraint of the runtime. If your function needs to call an external service — validate a JWT against a JWKS endpoint, look up a feature flag, query a database — you must use Lambda@Edge.
+**CloudFront Functions can't make network calls.** No HTTP requests, no DNS lookups, no socket connections. This is a hard constraint of the runtime. If your function needs to call an external service — validate a JWT against a JWKS endpoint, look up a feature flag, query a database — you must use Lambda@Edge.
 
 **Lambda@Edge** can make network calls, but keep in mind:
 
@@ -141,11 +141,11 @@ Lambda@Edge functions are replicated to regional edge caches worldwide. This rep
 - **Updates:** Each new version requires a new association and another round of replication. Budget 5–10 minutes for a full global rollout.
 - **Deletion:** After removing a Lambda@Edge association, replicas are cleaned up asynchronously. You may not be able to delete the Lambda function for hours. The API returns `ReplicatedFunctionStillCreating` or `ResourceConflictException` until cleanup completes.
 
-CloudFront Functions do not have this problem. They propagate in seconds because they run on the CloudFront edge locations themselves, not on separate Lambda infrastructure.
+CloudFront Functions don't have this problem. They propagate in seconds because they run on the CloudFront edge locations themselves, not on separate Lambda infrastructure.
 
 ## Constraints Summary
 
-Here is every constraint in one table for quick reference:
+Here's every constraint in one table for quick reference:
 
 | Constraint            | CloudFront Functions       | Lambda@Edge (Viewer) | Lambda@Edge (Origin) |
 | --------------------- | -------------------------- | -------------------- | -------------------- |
@@ -164,10 +164,10 @@ Here is every constraint in one table for quick reference:
 
 ## Debugging Workflow
 
-When an edge function is not working, follow this sequence:
+When an edge function isn't working, follow this sequence:
 
 1. **Test locally first.** Use `aws cloudfront test-function` for CloudFront Functions. For Lambda@Edge, invoke the function directly with a test event that matches the CloudFront event structure.
 2. **Check the association.** Run `aws cloudfront get-distribution-config --id E1A2B3C4D5E6F7 --region us-east-1 --output json` and verify the function ARN appears in the right behavior and event type.
-3. **Check the right CloudWatch region.** For Lambda@Edge, check the region nearest to where you are making test requests.
+3. **Check the right CloudWatch region.** For Lambda@Edge, check the region nearest to where you're making test requests.
 4. **Check CloudFront metrics.** In the CloudWatch console (in `us-east-1`), look at the CloudFront function metrics: invocation count, error rate, and compute utilization.
 5. **Check the distribution status.** If the distribution is still deploying, your changes are not live yet. Run `aws cloudfront get-distribution --id E1A2B3C4D5E6F7 --region us-east-1 --output json` and check the `Status` field. It should be `Deployed`, not `InProgress`.

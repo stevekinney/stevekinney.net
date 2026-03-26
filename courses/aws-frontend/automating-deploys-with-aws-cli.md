@@ -3,7 +3,7 @@ title: 'Automating Deploys with the AWS CLI'
 description: >-
   Automate your deployment process using AWS CLI commands for syncing files to S3 and creating CloudFront invalidations.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cli
@@ -11,9 +11,9 @@ tags:
   - automation
 ---
 
-Running two CLI commands after every build is fine for a Saturday afternoon project. It is not fine for a team shipping to production. You want a single command: `./deploy.sh` — build the site, upload the files, invalidate the cache, done. This lesson turns the manual deployment process from [The Full Static Site Pipeline](full-static-pipeline.md) into a repeatable, copy-pasteable deploy script.
+Running two CLI commands after every build is fine for a Saturday afternoon project. It's not fine for a team shipping to production. You want a single command: `./deploy.sh` — build the site, upload the files, invalidate the cache, done. This lesson turns the manual deployment process from [The Full Static Site Pipeline](full-static-pipeline.md) into a repeatable, copy-pasteable deploy script.
 
-## The Two Commands You Are Automating
+## The Two Commands You're Automating
 
 You already know the core operations from [Cache Behaviors and Invalidations](cache-behaviors-and-invalidations.md):
 
@@ -108,12 +108,12 @@ The script splits the upload into three phases, each with different `Cache-Contr
 
 ## The `--delete` Flag
 
-The `--delete` flag on `aws s3 sync` is critical. Without it, every version of every hashed asset accumulates in your bucket. After a few months, you have thousands of orphaned files: `main.a1b2c3.js`, `main.d4e5f6.js`, `main.g7h8i9.js`, all sitting in S3, all costing you (very little, but still) storage fees.
+The `--delete` flag on `aws s3 sync` is critical. Without it, every version of every hashed asset accumulates in your bucket. After a few months, you've got thousands of orphaned files: `main.a1b2c3.js`, `main.d4e5f6.js`, `main.g7h8i9.js`, all sitting in S3, all costing you (very little, but still) storage fees.
 
-With `--delete`, `aws s3 sync` compares your local build directory to the bucket and removes anything in the bucket that is not in the local directory. Old hashed assets get cleaned up automatically.
+With `--delete`, `aws s3 sync` compares your local build directory to the bucket and removes anything in the bucket that isn't in the local directory. Old hashed assets get cleaned up automatically.
 
 > [!WARNING]
-> The `--delete` flag means your build directory is the source of truth. If your build is incomplete or broken, `--delete` will remove the working files from S3 and replace them with whatever is in your build directory. Always run your build command before deploying. The script checks that the build directory exists, but it cannot verify that the build succeeded.
+> The `--delete` flag means your build directory is the source of truth. If your build is incomplete or broken, `--delete` will remove the working files from S3 and replace them with whatever is in your build directory. Always run your build command before deploying. The script checks that the build directory exists, but it can't verify that the build succeeded.
 
 ## Selective Invalidation vs. `/*`
 
@@ -139,10 +139,10 @@ aws cloudfront create-invalidation \
   --output json
 ```
 
-**When to use selective invalidation**: If you are deploying to a high-traffic site and most of your cached content did not change, selective invalidation avoids a burst of cache misses for files that are still valid. In practice, since your hashed assets have new filenames on every deploy anyway, the only file that truly needs invalidation is `index.html`. The old hashed assets will expire naturally.
+**When to use selective invalidation**: If you're deploying to a high-traffic site and most of your cached content didn't change, selective invalidation avoids a burst of cache misses for files that are still valid. In practice, since your hashed assets have new filenames on every deploy anyway, the only file that truly needs invalidation is `index.html`. The old hashed assets will expire naturally.
 
 > [!TIP]
-> For most frontend projects, `/*` is the right choice. The first 1,000 invalidation paths per month are free, and `/*` counts as a single path. You are not saving money by being selective — you are saving cache efficiency. Unless you are handling millions of requests per minute, the cache refill after a `/*` invalidation is negligible.
+> For most frontend projects, `/*` is the right choice. The first 1,000 invalidation paths per month are free, and `/*` counts as a single path. You're not saving money by being selective — you're saving cache efficiency. Unless you're handling millions of requests per minute, the cache refill after a `/*` invalidation is negligible.
 
 ## Cache Busting Strategies
 
@@ -152,17 +152,17 @@ The deploy script already uses the most effective cache busting strategy: **hash
 
 Append a version query string to asset URLs: `main.js?v=202603181200`. CloudFront treats each unique URL (including query strings, if the cache policy includes them) as a separate cached object. This avoids invalidations entirely — the new URL is a cache miss by definition.
 
-The problem: CloudFront's default `CachingOptimized` policy does not include query strings in the cache key. You would need a custom cache policy. And your HTML must reference the versioned URLs, which means your build tool must inject the version string. Modern bundlers already hash filenames, which is a better approach because the hash is content-based, not time-based.
+The problem: CloudFront's default `CachingOptimized` policy doesn't include query strings in the cache key. You'd need a custom cache policy. And your HTML must reference the versioned URLs, which means your build tool must inject the version string. Modern bundlers already hash filenames, which is a better approach because the hash is content-based, not time-based.
 
 ### Timestamped Directories
 
 Upload each deployment to a versioned directory: `s3://my-frontend-app-assets/v20260318/`. Point CloudFront at the latest version. This gives you instant rollbacks (just point CloudFront to the previous version) but adds complexity to your deployment pipeline and bucket structure.
 
-For most frontend projects, hashed filenames plus `/*` invalidation is the right balance of simplicity and effectiveness.
+For most frontend projects, hashed filenames plus `/*` invalidation is the right balance of simplicity and effectiveness. Honestly, I've never needed anything more than this.
 
 ## Adding a Build Step
 
-In practice, you rarely deploy without building first. Here is the script extended with a build step:
+In practice, you rarely deploy without building first. Here's the script extended with a build step:
 
 ```bash
 #!/usr/bin/env bash
@@ -212,7 +212,7 @@ INVALIDATION_ID=$(echo "$INVALIDATION_OUTPUT" | grep -o '"Id": "[^"]*"' | head -
 echo "Deploy complete. Invalidation: $INVALIDATION_ID"
 ```
 
-The `set -euo pipefail` at the top ensures the script stops immediately if any command fails. If `npm run build` exits non-zero, the deploy does not proceed. If `aws s3 sync` fails, the invalidation does not run. This prevents partial deployments.
+The `set -euo pipefail` at the top ensures the script stops immediately if any command fails. If `npm run build` exits non-zero, the deploy doesn't proceed. If `aws s3 sync` fails, the invalidation doesn't run. This prevents partial deployments.
 
 ## Deployment Versioning
 
@@ -236,6 +236,4 @@ echo "{\"commit\": \"$GIT_SHA\", \"timestamp\": \"$DEPLOY_TIMESTAMP\"}" | \
 
 Now you can always check which version is deployed by fetching `https://example.com/_deploy-manifest.json`.
 
-## What is Next
-
-The deploy script works, but you still have to run it manually. In the next lesson, you will move this into a GitHub Actions workflow that runs automatically on every push to `main`, including how to authenticate GitHub Actions with AWS using OIDC instead of long-lived access keys.
+The deploy script works, but you still have to run it manually. Next up, you'll move this into a GitHub Actions workflow that runs automatically on every push to `main`, including how to authenticate GitHub Actions with AWS using OIDC instead of long-lived access keys.

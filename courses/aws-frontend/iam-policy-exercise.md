@@ -4,7 +4,7 @@ description: >-
   Create an IAM user and policy that can only sync files to an S3 bucket and
   create CloudFront invalidations.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - iam
@@ -13,7 +13,7 @@ tags:
 
 You're going to create a **deploy bot** — an IAM user whose sole purpose is to deploy your frontend. This user can sync files to a specific S3 bucket and invalidate a specific CloudFront distribution's cache. It can't do anything else. No reading DynamoDB tables, no creating Lambda functions, no changing IAM permissions.
 
-This is the same deploy bot you'll wire into a GitHub Actions pipeline later in the course. You're building it now so you understand exactly what permissions it has and why.
+This is the same deploy bot you'll wire into a GitHub Actions pipeline later in the course. I want you to build it now so you understand exactly what permissions it has and why.
 
 ## Why It Matters
 
@@ -35,7 +35,7 @@ Use the account ID `123456789012` and region `us-east-1` for all ARNs.
 
 ## Step-by-Step
 
-### Step 1: Create the IAM User
+### Create the IAM User
 
 In the AWS Console, navigate to **IAM** > **Users** > **Create user**.
 
@@ -53,7 +53,7 @@ aws iam create-user \
   --output json
 ```
 
-### Step 2: Create Access Keys for the User
+### Create Access Keys for the User
 
 Navigate to the `deploy-bot` user's **Security credentials** tab and create an access key. Choose **Other** as the use case.
 
@@ -68,7 +68,7 @@ aws iam create-access-key \
 
 Save the Access Key ID and Secret Access Key somewhere secure. You'll need them later when configuring the deploy pipeline.
 
-### Step 3: Write the Policy
+### Write the Policy
 
 Create a file called `deploy-bot-policy.json` with a policy that:
 
@@ -79,12 +79,12 @@ Create a file called `deploy-bot-policy.json` with a policy that:
 Remember:
 
 - `s3:PutObject` and `s3:DeleteObject` operate on **objects**, so the resource ARN needs `/*` at the end.
-- `s3:ListBucket` operates on the **bucket**, so the resource ARN does not have `/*`.
+- `s3:ListBucket` operates on the **bucket**, so the resource ARN doesn't have `/*`.
 - CloudFront distribution ARNs have no region (use an empty region segment) and follow the pattern `arn:aws:cloudfront::<account-id>:distribution/<distribution-id>`.
 - Every statement needs `Effect`, `Action`, and `Resource`.
 - The policy needs `"Version": "2012-10-17"`.
 
-### Step 4: Create the Policy in IAM
+### Create the Policy in IAM
 
 ```bash
 aws iam create-policy \
@@ -96,7 +96,7 @@ aws iam create-policy \
 
 Note the policy ARN from the output — you'll need it for the next step.
 
-### Step 5: Attach the Policy to the User
+### Attach the Policy to the User
 
 ```bash
 aws iam attach-user-policy \
@@ -106,7 +106,7 @@ aws iam attach-user-policy \
   --output json
 ```
 
-### Step 6: Verify the Setup
+### Verify the Setup
 
 Configure a named profile for the deploy bot:
 
@@ -114,7 +114,7 @@ Configure a named profile for the deploy bot:
 aws configure --profile deploy-bot
 ```
 
-Enter the access key ID and secret access key you saved in Step 2, `us-east-1` as the region, and `json` as the output format.
+Enter the access key ID and secret access key you saved earlier, `us-east-1` as the region, and `json` as the output format.
 
 Verify the identity:
 

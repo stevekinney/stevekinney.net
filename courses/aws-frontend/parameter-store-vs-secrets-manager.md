@@ -4,7 +4,7 @@ description: >-
   Choose between Parameter Store and Secrets Manager based on your use case,
   understanding the tradeoffs in cost, features, and complexity.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - parameter-store
@@ -12,7 +12,7 @@ tags:
   - comparison
 ---
 
-You have two AWS services that can store secrets. That is one too many for anyone who just wants to know where to put an API key. This lesson gives you a clear decision framework so you can stop deliberating and start building.
+You have two AWS services that can store secrets. That's one too many for anyone who just wants to know where to put an API key. This lesson gives you a clear decision framework so you can stop deliberating and start building.
 
 ## The Comparison
 
@@ -34,11 +34,11 @@ The table tells a clear story: Parameter Store is a general-purpose configuratio
 
 ## When to Use Parameter Store
 
-**Non-sensitive configuration.** Table names, API endpoint URLs, feature flag JSON, stage identifiers. These are plain `String` parameters. They are free, versioned, and organized by path. This replaces the Lambda environment variables you have been using — same data, better organization and access control.
+**Non-sensitive configuration.** Table names, API endpoint URLs, feature flag JSON, stage identifiers. These are plain `String` parameters. They're free, versioned, and organized by path. This replaces the Lambda environment variables you've been using — same data, better organization and access control.
 
-**Sensitive values that do not need rotation.** A third-party API key that you update once a year. A static signing secret for JWTs. An encryption key for client-side tokens. Store these as `SecureString` parameters. You get KMS encryption and IAM access control for free.
+**Sensitive values that don't need rotation.** A third-party API key that you update once a year. A static signing secret for JWTs. An encryption key for client-side tokens. Store these as `SecureString` parameters. You get KMS encryption and IAM access control for free.
 
-**Shared configuration across multiple functions.** If five Lambda functions all need the same API endpoint URL, storing it in Parameter Store means you update it in one place. With environment variables, you update it on five functions and hope you do not miss one.
+**Shared configuration across multiple functions.** If five Lambda functions all need the same API endpoint URL, storing it in Parameter Store means you update it in one place. With environment variables, you update it on five functions and hope you don't miss one.
 
 **Projects where cost matters.** Personal projects, side projects, early-stage startups — anything where $0.40 per secret per month feels like an unnecessary expense. Standard Parameter Store is free.
 
@@ -48,13 +48,13 @@ The table tells a clear story: Parameter Store is a general-purpose configuratio
 
 **Credentials that must rotate on a schedule.** Security policies in larger organizations often require credential rotation every 30, 60, or 90 days. Manual rotation is error-prone. Secrets Manager automates it.
 
-**Cross-region disaster recovery.** If you need your secrets available in multiple regions for failover, Secrets Manager supports replication. Parameter Store does not.
+**Cross-region disaster recovery.** If you need your secrets available in multiple regions for failover, Secrets Manager supports replication. Parameter Store doesn't.
 
-**Compliance requirements.** Secrets Manager's version staging (`AWSCURRENT`, `AWSPENDING`, `AWSPREVIOUS`) and built-in rotation audit trail satisfy compliance requirements that Parameter Store's simpler versioning does not.
+**Compliance requirements.** Secrets Manager's version staging (`AWSCURRENT`, `AWSPENDING`, `AWSPREVIOUS`) and built-in rotation audit trail satisfy compliance requirements that Parameter Store's simpler versioning doesn't.
 
 ## The Hybrid Approach
 
-Most production applications use both services together. This is not a compromise — it is the recommended pattern.
+Most production applications use both services together. This isn't a compromise — it's the recommended pattern.
 
 ```
 Parameter Store (free)
@@ -128,13 +128,13 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
 When you have a new configuration value to store, ask these questions in order:
 
-1. **Is it sensitive?** No — use Parameter Store `String`. It is free, versioned, and queryable by path.
+1. **Is it sensitive?** No — use Parameter Store `String`. It's free, versioned, and queryable by path.
 
 2. **Does it need to rotate automatically?** Yes — use Secrets Manager. The cost is justified by the automation.
 
-3. **Is it a sensitive value that does not need rotation?** Use Parameter Store `SecureString`. You get KMS encryption and IAM access control without the Secrets Manager cost.
+3. **Is it a sensitive value that doesn't need rotation?** Use Parameter Store `SecureString`. You get KMS encryption and IAM access control without the Secrets Manager cost.
 
-That is it. Three questions, one answer each time.
+That's it. Three questions, one answer each time.
 
 ## IAM Considerations
 
@@ -172,9 +172,9 @@ Notice the scoping. The SSM statement grants access to parameters under `/my-fro
 
 **Using Secrets Manager for non-sensitive configuration.** Storing a DynamoDB table name in Secrets Manager costs $0.40 per month for no reason. Use Parameter Store.
 
-**Storing secrets in environment variables "just for now."** "Just for now" has a half-life of approximately forever. Put the secret in the right place from the start.
+**Storing secrets in environment variables "just for now."** "Just for now" has a half-life of approximately forever. I've made this mistake myself. Put the secret in the right place from the start.
 
-**Not caching secrets in Lambda.** Every SDK call to Parameter Store or Secrets Manager adds latency and API cost. Cache values in module-level variables and refresh them on a TTL or on cold start. You covered this pattern in [Accessing Secrets from Lambda](accessing-secrets-from-lambda.md).
+**Not caching secrets in Lambda.** Every SDK call to Parameter Store or Secrets Manager adds latency and API cost. Cache values in module-level variables and refresh them on a TTL or on cold start. We covered this pattern in [Accessing Secrets from Lambda](accessing-secrets-from-lambda.md).
 
 **Granting `ssm:GetParameter` on `*` resources.** This gives the function access to every parameter in your account. Scope the resource to the specific path your function needs.
 
@@ -182,4 +182,4 @@ Notice the scoping. The SSM statement grants access to parameters under `/my-fro
 
 Module 11 gave you the tools to move sensitive configuration out of Lambda environment variables and into purpose-built secret storage. Parameter Store handles configuration and static secrets for free. Secrets Manager handles rotating credentials for $0.40 per secret per month. Your Lambda functions read from both at init time, cache the values, and use IAM policies to enforce access control.
 
-The pattern is simple: environment variables for non-sensitive config that does not change between deploys. Parameter Store for everything else that is not rotating. Secrets Manager for credentials that must rotate. Now go move that API key out of your environment variables.
+The pattern is simple: environment variables for non-sensitive config that doesn't change between deploys. Parameter Store for everything else that isn't rotating. Secrets Manager for credentials that must rotate. Now go move that API key out of your environment variables.

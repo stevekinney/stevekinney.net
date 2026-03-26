@@ -5,7 +5,7 @@ description: >-
   runtime, execution limits, supported events, pricing — and know which to
   reach for based on your use case.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - lambda-at-edge
@@ -13,7 +13,7 @@ tags:
   - comparison
 ---
 
-You already know how to write Lambda functions and how CloudFront serves your content. Now you are going to push compute into the CDN itself. AWS gives you two ways to run code at CloudFront's edge locations: **Lambda@Edge** and **CloudFront Functions**. They solve overlapping problems, but they are not interchangeable — the runtimes, execution limits, and pricing are different enough that choosing the wrong one either wastes money or blocks you from doing what you need.
+You already know how to write Lambda functions and how CloudFront serves your content. Now you're going to push compute into the CDN itself. AWS gives you two ways to run code at CloudFront's edge locations: **Lambda@Edge** and **CloudFront Functions**. They solve overlapping problems, but they aren't interchangeable — the runtimes, execution limits, and pricing are different enough that choosing the wrong one either wastes money or blocks you from doing what you need.
 
 Think of it like the difference between a Vercel Edge Function and a Vercel Serverless Function. One runs instantly at the edge with tight constraints. The other gives you a full runtime with more power and higher latency. AWS made the same tradeoff, just with different names.
 
@@ -35,7 +35,7 @@ Both Lambda@Edge and CloudFront Functions hook into CloudFront's request lifecyc
 
 ## The Comparison Table
 
-Here is the side-by-side breakdown. Every time you are deciding which to use, start here.
+Here's the side-by-side breakdown. Every time you're deciding which to use, start here.
 
 | Dimension                  | CloudFront Functions                                              | Lambda@Edge                                                      |
 | -------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------- |
@@ -58,17 +58,17 @@ Here is the side-by-side breakdown. Every time you are deciding which to use, st
 
 ## The Runtime Difference
 
-This is the biggest conceptual difference. CloudFront Functions do **not** run Node.js. They run a purpose-built JavaScript runtime that is compliant with ECMAScript 5.1 and supports select features from ES6 through ES12. You cannot `require()` or `import` modules. You cannot use the AWS SDK. You cannot make HTTP requests. You get pure JavaScript string and object manipulation — and that is it.
+This is the biggest conceptual difference. CloudFront Functions do **not** run Node.js. They run a purpose-built JavaScript runtime that's compliant with ECMAScript 5.1 and supports select features from ES6 through ES12. You can't `require()` or `import` modules. You can't use the AWS SDK. You can't make HTTP requests. You get pure JavaScript string and object manipulation — and that's it.
 
 Lambda@Edge runs a full Node.js or Python runtime. You can bundle npm packages, call external APIs, read from DynamoDB, validate JWTs with a library — anything a normal Lambda function can do, within the execution time limits.
 
-If you have written middleware in Express or Next.js, CloudFront Functions feel like a stripped-down middleware layer. Lambda@Edge feels like a full serverless function that happens to run closer to your users.
+If you've written middleware in Express or Next.js, CloudFront Functions feel like a stripped-down middleware layer. Lambda@Edge feels like a full serverless function that happens to run closer to your users.
 
 ## The Pricing Difference
 
-CloudFront Functions are roughly **six times cheaper** per invocation than Lambda@Edge, and there is no duration-based charge. You pay a flat $0.10 per million invocations regardless of how long each function takes (as long as it stays within the compute utilization limit).
+CloudFront Functions are roughly **six times cheaper** per invocation than Lambda@Edge, and there's no duration-based charge. You pay a flat $0.10 per million invocations regardless of how long each function takes (as long as it stays within the compute utilization limit).
 
-Lambda@Edge charges $0.60 per million invocations **plus** a per-GB-second charge for the compute time your function uses. For a function using 128 MB that runs for 50 ms, that compute cost is small — but it adds up at scale.
+Lambda@Edge charges $0.60 per million invocations **plus** a per-GB-second charge for the compute time your function uses. For a function using 128 MB that runs for 50 ms, that compute cost is small — but I've watched it add up faster than you'd expect at scale.
 
 For a site handling 100 million requests per month:
 
@@ -87,8 +87,8 @@ Use this when choosing:
 - You need to manipulate headers, URLs, or cookies on viewer requests or responses
 - Your logic is simple string manipulation (redirects, rewrites, header injection)
 - You need sub-millisecond execution time
-- You are operating at high scale and cost matters
-- You do not need network access or external dependencies
+- You're operating at high scale and cost matters
+- You don't need network access or external dependencies
 
 **Choose Lambda@Edge when:**
 
@@ -101,17 +101,15 @@ Use this when choosing:
 
 **Choose neither when:**
 
-- CloudFront's built-in features handle it. Response headers policies (which you configured in [CloudFront Headers, CORS, and Security](cloudfront-headers-cors-and-security.md)) can add security headers without any code. Cache policies can handle query string forwarding. Do not write a function for something CloudFront already does natively.
+- CloudFront's built-in features handle it. Response headers policies (which you configured in [CloudFront Headers, CORS, and Security](cloudfront-headers-cors-and-security.md)) can add security headers without any code. Cache policies can handle query string forwarding. Don't write a function for something CloudFront already does natively.
 
 ## The Deployment Model
 
 CloudFront Functions deploy instantly. You write the function, publish it, associate it with a **behavior** on your distribution (recall behaviors from [Cache Behaviors and Invalidations](cache-behaviors-and-invalidations.md)), and it takes effect within seconds.
 
-Lambda@Edge functions must be deployed to `us-east-1` — the same region requirement you encountered with ACM certificates in [Certificate Renewal and us-east-1](certificate-renewal-and-us-east-1.md). Once deployed, you publish a numbered version (not `$LATEST`), and AWS replicates that version to regional edge caches worldwide. This replication takes a few minutes, and you cannot delete a Lambda@Edge function until CloudFront finishes removing all the replicas.
+Lambda@Edge functions must be deployed to `us-east-1` — the same region requirement you encountered with ACM certificates in [Certificate Renewal and us-east-1](certificate-renewal-and-us-east-1.md). Once deployed, you publish a numbered version (not `$LATEST`), and AWS replicates that version to regional edge caches worldwide. This replication takes a few minutes, and you can't delete a Lambda@Edge function until CloudFront finishes removing all the replicas.
 
 > [!WARNING]
-> You cannot use `$LATEST` with Lambda@Edge. You must publish a numbered version and reference that specific version ARN when associating the function with a CloudFront behavior. If you try to use `$LATEST`, CloudFront will reject the association.
+> You can't use `$LATEST` with Lambda@Edge. You must publish a numbered version and reference that specific version ARN when associating the function with a CloudFront behavior. If you try to use `$LATEST`, CloudFront will reject the association.
 
-## What This Means for the Rest of This Module
-
-In the next two lessons, you will write and deploy one of each. [Writing a CloudFront Function](writing-a-cloudfront-function.md) covers a URL rewrite function using the lightweight JavaScript runtime. [Writing a Lambda@Edge Function](writing-a-lambda-at-edge-function.md) covers deploying a Lambda function to the edge with the full Node.js runtime. Both lessons assume you have a working CloudFront distribution from Module 4 — if you do not, go back and set one up first.
+With the comparison in hand, you'll write and deploy one of each in the next two lessons. [Writing a CloudFront Function](writing-a-cloudfront-function.md) covers a URL rewrite function using the lightweight JavaScript runtime. [Writing a Lambda@Edge Function](writing-a-lambda-at-edge-function.md) covers deploying a Lambda function to the edge with the full Node.js runtime. Both lessons assume you have a working CloudFront distribution from Module 4 — if you don't, go back and set one up first.

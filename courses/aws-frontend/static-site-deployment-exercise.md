@@ -3,18 +3,18 @@ title: 'Exercise: End-to-End Static Site Deployment'
 description: >-
   Deploy a complete static site from scratch: S3 bucket, CloudFront with OAC, ACM certificate, Route 53 DNS, and verify HTTPS at your custom domain.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - deployment
   - exercise
 ---
 
-You are going to deploy a static site from zero to production. No shortcuts, no skipping steps. By the end, your site will be live at `https://example.com` — served through CloudFront, secured with an ACM certificate, stored in a private S3 bucket, resolved by Route 53. This exercise integrates everything from Modules 1 through 5.
+You're going to deploy a static site from zero to production. No shortcuts, no skipping steps. This is my favorite exercise in the whole course. By the end, your site will be live at `https://example.com` — served through CloudFront, secured with an ACM certificate, stored in a private S3 bucket, resolved by Route 53. This exercise integrates everything from Modules 1 through 5.
 
 ## Why It Matters
 
-You have built each piece individually across the first five modules. This exercise proves they compose into a working deployment. It is also a dry run for the workflow you will automate with GitHub Actions: every manual step here maps to a step in your CI/CD pipeline. If you can do it by hand, you understand what the automation is doing.
+You've built each piece individually across the first five modules. This exercise proves they compose into a working deployment. It's also a dry run for the workflow you'll automate with GitHub Actions: every manual step here maps to a step in your CI/CD pipeline. If you can do it by hand, you understand what the automation is doing.
 
 ## Prerequisites
 
@@ -22,14 +22,14 @@ Before you start:
 
 - AWS CLI v2 configured with credentials that have admin-level permissions (or at minimum: S3, CloudFront, ACM, Route 53, and IAM access). See [Setting Up the AWS CLI](setting-up-the-aws-cli.md).
 - A domain name you control, either registered through Route 53 or with nameservers pointed at a Route 53 hosted zone. See [Registering and Transferring Domains](registering-and-transferring-domains.md).
-- A static site build directory with at least an `index.html` file. If you do not have one, create a minimal site:
+- A static site build directory with at least an `index.html` file. If you don't have one, create a minimal site:
 
 ```bash
 mkdir -p build
 echo '<!DOCTYPE html><html><head><title>My Site</title></head><body><h1>It works.</h1></body></html>' > build/index.html
 ```
 
-## Step 1: Create the S3 Bucket
+## Create the S3 Bucket
 
 Create a bucket to hold your static files. Block all public access from the start — CloudFront will be the only way to reach these files.
 
@@ -50,7 +50,7 @@ aws s3api get-public-access-block \
 
 All four settings should be `true`.
 
-## Step 2: Upload Your Site
+## Upload Your Site
 
 Sync your build directory to the bucket:
 
@@ -71,7 +71,7 @@ aws s3 ls s3://my-frontend-app-assets \
 
 You should see your `index.html` (and any other files) listed.
 
-## Step 3: Request an ACM Certificate
+## Request an ACM Certificate
 
 Request a certificate in `us-east-1` for your domain. Include both the apex domain and the `www` subdomain:
 
@@ -92,9 +92,9 @@ aws acm describe-certificate \
   --query "Certificate.Status"
 ```
 
-Should return `"ISSUED"`. If it still says `"PENDING_VALIDATION"`, verify your DNS validation records are correct and wait a few minutes.
+This should return `"ISSUED"`. If it still says `"PENDING_VALIDATION"`, verify your DNS validation records are correct and wait a few minutes.
 
-## Step 4: Create an Origin Access Control
+## Create an Origin Access Control
 
 Create an OAC that CloudFront will use to authenticate requests to your S3 bucket:
 
@@ -115,7 +115,7 @@ aws cloudfront list-origin-access-controls \
 
 Your OAC should appear in the list.
 
-## Step 5: Create the CloudFront Distribution
+## Create the CloudFront Distribution
 
 Create a distribution that ties the bucket, OAC, and certificate together. Your distribution config should include:
 
@@ -149,7 +149,7 @@ curl -I https://YOUR_CLOUDFRONT_DOMAIN/index.html
 
 You should get `200 OK`.
 
-## Step 6: Update the S3 Bucket Policy
+## Update the S3 Bucket Policy
 
 Replace the bucket policy to allow only CloudFront to read from the bucket:
 
@@ -176,7 +176,7 @@ curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
 
 Should return `403 Forbidden`.
 
-## Step 7: Create Route 53 DNS Records
+## Create Route 53 DNS Records
 
 Create A alias records that point your domain to the CloudFront distribution:
 
@@ -196,9 +196,9 @@ curl -I https://example.com
 You should get `200 OK` with your site's content served over HTTPS.
 
 > [!TIP]
-> If DNS has not propagated yet, you can verify the distribution directly using the CloudFront domain name (`d1234abcdef.cloudfront.net`). Once DNS resolves, the custom domain will produce the same result.
+> If DNS hasn't propagated yet, you can verify the distribution directly using the CloudFront domain name (`d1234abcdef.cloudfront.net`). Once DNS resolves, the custom domain will produce the same result.
 
-## Step 8: Verify the Complete Pipeline
+## Verify the Complete Pipeline
 
 Run through every layer of the pipeline:
 
@@ -228,7 +228,7 @@ curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
 - [ ] Direct S3 access returns `403 Forbidden`
 - [ ] `curl -I https://www.example.com` also returns `200 OK`
 
-## Step 9: Test a Deployment
+## Test a Deployment
 
 Deploy a change to verify the update cycle works:
 
@@ -266,4 +266,4 @@ Your updated content is live at `https://example.com`. The deployment cycle (syn
 
 - **Deploy script**: Write a `deploy.sh` script that automates the sync and invalidation steps. Refer to [Automating Deploys with the AWS CLI](automating-deploys-with-aws-cli.md) for the template.
 
-When you are ready, check your work against the [Solution: End-to-End Static Site Deployment](static-site-deployment-solution.md).
+When you're ready, check your work against the [Solution: End-to-End Static Site Deployment](static-site-deployment-solution.md).

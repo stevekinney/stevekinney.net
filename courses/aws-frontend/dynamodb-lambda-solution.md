@@ -4,7 +4,7 @@ description: >-
   Complete solution for the DynamoDB Lambda exercise, with all commands, handler
   code, and expected output.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - dynamodb
@@ -12,7 +12,7 @@ tags:
   - solution
 ---
 
-Here is the complete solution for every step, including the DynamoDB table creation, IAM policy, handler code, deployment commands, and expected output at each stage.
+Here's the complete solution for every step, including the DynamoDB table creation, IAM policy, handler code, deployment commands, and expected output at each stage.
 
 ## Create the DynamoDB Table
 
@@ -608,7 +608,7 @@ case 'PATCH': {
 }
 ```
 
-You will also need to add `UpdateCommand` to your imports from `@aws-sdk/lib-dynamodb` and add `dynamodb:UpdateItem` to your IAM policy.
+You'll also need to add `UpdateCommand` to your imports from `@aws-sdk/lib-dynamodb` and add `dynamodb:UpdateItem` to your IAM policy.
 
 ## Cleanup
 
@@ -622,4 +622,4 @@ aws dynamodb delete-table \
 ```
 
 > [!WARNING]
-> Deleting a DynamoDB table is permanent and deletes all data in the table. Only run this if you are done with the exercise and do not need the data.
+> Deleting a DynamoDB table is permanent and deletes all data in the table. Only run this if you're done with the exercise and don't need the data.

@@ -4,16 +4,16 @@ description: >-
   Store an API key in Parameter Store as a SecureString, create a Lambda
   function that reads it at init time, and call it through API Gateway.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - secrets
   - exercise
 ---
 
-You are going to store a secret in Parameter Store, write a Lambda function that reads it at startup, grant the function's execution role the right permissions, and verify the whole chain works through API Gateway.
+You're going to store a secret in Parameter Store, write a Lambda function that reads it at startup, grant the function's execution role the right permissions, and verify the whole chain works through API Gateway.
 
-This is the same workflow you would use in production to keep API keys out of your environment variables and source code.
+This is the same workflow you'd use in production to keep API keys out of your environment variables and source code.
 
 ## Why It Matters
 
@@ -29,7 +29,7 @@ On Vercel, secrets are environment variables — you set them in the dashboard a
 
 Use the account ID `123456789012`, region `us-east-1`, and the `nodejs20.x` runtime.
 
-## Step 1: Store the Secret in Parameter Store
+## Store the Secret in Parameter Store
 
 Create a SecureString parameter at the path `/my-frontend-app/production/third-party-api-key`. Use any value you want for the secret — something like `sk_test_exercise_abc123` is fine.
 
@@ -40,13 +40,13 @@ Use `aws ssm put-parameter` with:
 - `--type` set to `SecureString`
 - `--region us-east-1`
 
-After creating it, verify the parameter exists by retrieving it with `aws ssm get-parameter`. Make sure to include the flag that decrypts the value — without it, you will see ciphertext instead of your key.
+After creating it, verify the parameter exists by retrieving it with `aws ssm get-parameter`. Make sure to include the flag that decrypts the value — without it, you'll see ciphertext instead of your key.
 
 ### Checkpoint
 
 `aws ssm get-parameter --name "/my-frontend-app/production/third-party-api-key" --with-decryption --region us-east-1 --output json` returns your parameter with the decrypted value.
 
-## Step 2: Write the Lambda Handler
+## Write the Lambda Handler
 
 Create a Lambda project (or reuse the one from the [Lambda Function Exercise](lambda-function-exercise.md)) with the following dependencies:
 
@@ -72,11 +72,11 @@ Build the project and verify it compiles without errors.
 
 Running `npm run build` produces `dist/handler.js` with no TypeScript errors.
 
-## Step 3: Update the Execution Role
+## Update the Execution Role
 
 Your Lambda execution role (`my-frontend-app-lambda-role`) needs two new permissions:
 
-1. **`ssm:GetParameter`** on the specific parameter ARN. Remember: the ARN for a parameter named `/my-frontend-app/production/third-party-api-key` is `arn:aws:ssm:us-east-1:123456789012:parameter/my-frontend-app/production/third-party-api-key`. Note the path in the ARN does not double the leading slash.
+1. **`ssm:GetParameter`** on the specific parameter ARN. Remember: the ARN for a parameter named `/my-frontend-app/production/third-party-api-key` is `arn:aws:ssm:us-east-1:123456789012:parameter/my-frontend-app/production/third-party-api-key`. Note the path in the ARN doesn't double the leading slash.
 
 2. **`kms:Decrypt`** on the AWS-managed SSM KMS key, so the function can decrypt the SecureString value.
 
@@ -88,7 +88,7 @@ Verify the policy is attached by listing the role's policies.
 
 The execution role has a policy that grants `ssm:GetParameter` on the specific parameter ARN and `kms:Decrypt` on the KMS key.
 
-## Step 4: Deploy and Invoke
+## Deploy and Invoke
 
 Package and deploy the Lambda function:
 
@@ -117,17 +117,17 @@ Read the response file and verify the function returned the first 7 characters o
 
 The response file contains a 200 status code and a body with a message confirming the secret was loaded. The key prefix matches the first 7 characters of the value you stored.
 
-## Step 5: Test Through API Gateway
+## Test Through API Gateway
 
 If you have an API Gateway HTTP API from [Connecting API Gateway to Lambda](connecting-api-gateway-to-lambda.md), add a route that points to this function — or invoke the existing endpoint if the function is already wired up.
 
-If you do not have an API Gateway set up, you can test with the CLI invocation from Step 4. The API Gateway integration is a stretch goal.
+If you don't have an API Gateway set up, you can test with the CLI invocation from the previous section. The API Gateway integration is a stretch goal.
 
 ### Checkpoint
 
 A `curl` request to your API Gateway endpoint returns the JSON response with the secret loaded successfully.
 
-## Step 6: Verify the Secret Is Not in Environment Variables
+## Verify the Secret Isn't in Environment Variables
 
 Run `get-function-configuration` and confirm the API key is **not** in the environment variables:
 
@@ -143,7 +143,7 @@ The output should show your non-sensitive configuration (like `TABLE_NAME`) but 
 
 ### Checkpoint
 
-The function's environment variables do not contain the API key. The key exists only in Parameter Store.
+The function's environment variables don't contain the API key. The key exists only in Parameter Store.
 
 ## Checkpoints Summary
 
@@ -162,4 +162,4 @@ The function's environment variables do not contain the API key. The key exists 
 
 - **Try the Lambda extension.** Add the AWS Parameters and Secrets Lambda Extension layer to your function. Modify the handler to fetch the parameter via `http://localhost:2773` instead of the SDK. Compare the cold start duration with and without the extension.
 
-When you are ready, check your work against the [Solution: Store and Retrieve a Secret in Lambda](secrets-in-lambda-solution.md).
+When you're ready, check your work against the [Solution: Store and Retrieve a Secret in Lambda](secrets-in-lambda-solution.md).

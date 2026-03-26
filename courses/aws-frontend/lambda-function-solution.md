@@ -4,7 +4,7 @@ description: >-
   Complete solution for the Lambda function exercise, with all commands and
   expected output.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - lambda
@@ -12,7 +12,7 @@ tags:
   - solution
 ---
 
-Here is the complete solution for every step, including the handler code, the trust policy, all CLI commands, and the expected output at each stage.
+Here's the complete solution for every step, including the handler code, the trust policy, all CLI commands, and the expected output at each stage.
 
 ## Project Setup
 
@@ -339,7 +339,7 @@ Expected body:
 }
 ```
 
-The default value `"World"` is used when `queryStringParameters` is missing or does not include `name`.
+The default value `"World"` is used when `queryStringParameters` is missing or doesn't include `name`.
 
 ## Read the Logs
 
@@ -395,7 +395,7 @@ You should see log entries that include:
 - `END RequestId: ...`
 - `REPORT RequestId: ... Duration: X.XX ms Billed Duration: XX ms Memory Size: 128 MB Max Memory Used: XX MB Init Duration: XXX.XX ms`
 
-The `Init Duration` line appears only on cold start invocations. If you invoke the function a second time quickly, it will not appear — the second invocation reused the warm execution environment.
+The `Init Duration` line appears only on cold start invocations. If you invoke the function a second time quickly, it won't appear — the second invocation reused the warm execution environment.
 
 ## Stretch Goal: Environment Variable
 

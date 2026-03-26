@@ -4,7 +4,7 @@ description: >-
   Use Query to retrieve items by partition key with optional sort key conditions
   and understand when and why Scan should be avoided.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - dynamodb
@@ -12,13 +12,13 @@ tags:
   - scan
 ---
 
-GetItem retrieves a single item by its exact primary key. But frontend applications rarely need just one item at a time — you need a list. "Show me all the items for this user." "Show me this user's items created after a certain date." DynamoDB gives you two tools for retrieving multiple items: **Query** and **Scan**. They sound similar, but they are fundamentally different in how they work, what they cost, and when you should use each one.
+GetItem retrieves a single item by its exact primary key. But frontend applications rarely need just one item at a time — you need a list. "Show me all the items for this user." "Show me this user's items created after a certain date." DynamoDB gives you two tools for retrieving multiple items: **Query** and **Scan**. They sound similar, but they're fundamentally different in how they work, what they cost, and when you should use each one.
 
 ## Query: The Right Way to Read Multiple Items
 
 **Query** retrieves items from a single partition. You specify the partition key (required) and optionally filter by the sort key. DynamoDB finds the partition, reads the items within it, and returns them — already sorted by the sort key.
 
-This is efficient because DynamoDB knows exactly where to look. It does not scan the entire table. It goes directly to the partition you specified and reads only the items that match your key condition.
+This is efficient because DynamoDB knows exactly where to look. It doesn't scan the entire table. It goes directly to the partition you specified and reads only the items that match your key condition.
 
 ```typescript
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
@@ -76,7 +76,7 @@ These operators only work on the sort key in a `KeyConditionExpression`. The par
 
 ### Filtering Results
 
-Sometimes you need to filter by attributes that are not part of the key. For this, you add a **`FilterExpression`**:
+Sometimes you need to filter by attributes that aren't part of the key. For this, you add a **`FilterExpression`**:
 
 ```typescript
 async function getPendingItems(userId: string) {
@@ -100,7 +100,7 @@ async function getPendingItems(userId: string) {
 ```
 
 > [!WARNING]
-> A `FilterExpression` does not reduce the amount of data DynamoDB reads — it only reduces what comes back in the response. DynamoDB reads all items matching the `KeyConditionExpression`, then applies the filter to the results. You still pay for the reads. If a partition has 1,000 items and the filter matches 10, you are charged for reading all 1,000. Filters are useful for reducing network transfer, but they are not a substitute for good key design.
+> A `FilterExpression` doesn't reduce the amount of data DynamoDB reads — it only reduces what comes back in the response. DynamoDB reads all items matching the `KeyConditionExpression`, then applies the filter to the results. You still pay for the reads. If a partition has 1,000 items and the filter matches 10, you're charged for reading all 1,000. Filters are useful for reducing network transfer, but they're not a substitute for good key design.
 
 ### Sorting and Limiting
 
@@ -145,7 +145,7 @@ async function getAllItems() {
 }
 ```
 
-This works, and for a table with 50 items during development, it is fine. But Scan has a cost that grows linearly with table size:
+This works, and for a table with 50 items during development, it's fine. But Scan has a cost that grows linearly with table size:
 
 - A table with 100 items: Scan reads 100 items. Fast, cheap.
 - A table with 100,000 items: Scan reads 100,000 items. Slow, expensive.
@@ -154,11 +154,11 @@ This works, and for a table with 50 items during development, it is fine. But Sc
 Query performance depends on the partition size. Scan performance depends on the table size. As your table grows, Query stays fast and Scan gets slower.
 
 > [!TIP]
-> A useful rule of thumb: if you find yourself reaching for Scan, ask whether a different key design would let you use Query instead. Most of the time, the answer is yes. Scan is a code smell in DynamoDB — it usually means your key design does not match your access patterns.
+> A useful rule of thumb: if you find yourself reaching for Scan, ask whether a different key design would let you use Query instead. Most of the time, the answer is yes. Scan is a code smell in DynamoDB — it usually means your key design doesn't match your access patterns.
 
 ### When Scan Is Acceptable
 
-Scan is not always wrong. Reasonable use cases include:
+Scan isn't always wrong. Reasonable use cases include:
 
 - **Admin tools** that need to export or audit the entire table
 - **Small tables** (under a few thousand items) where the cost is negligible
@@ -202,7 +202,7 @@ The pattern:
 2. If the response includes `LastEvaluatedKey`, make another request with that value as `ExclusiveStartKey`
 3. Repeat until `LastEvaluatedKey` is undefined
 
-For frontend APIs, you usually do not want to paginate through everything — you want to return a page of results to the client and let them request the next page. You can pass `LastEvaluatedKey` back to the frontend (base64-encoded) as a pagination cursor:
+For frontend APIs, you usually don't want to paginate through everything — you want to return a page of results to the client and let them request the next page. You can pass `LastEvaluatedKey` back to the frontend (base64-encoded) as a pagination cursor:
 
 ```typescript
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
@@ -245,8 +245,4 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 | Cost                | Proportional to items matched | Proportional to table size |
 | Use for             | Application endpoints         | Admin tools, migrations    |
 
-Design your table keys around Query. Use Scan only when you genuinely need to read everything.
-
-## What is Next
-
-You can read and write individual items, and query for groups of items by partition key. In the next lesson, you will connect everything together: frontend to API Gateway to Lambda to DynamoDB — the full request loop.
+Design your table keys around Query. Use Scan only when you genuinely need to read everything. I've found that if I'm tempted to reach for Scan in production code, it almost always means I need to rethink my key design.

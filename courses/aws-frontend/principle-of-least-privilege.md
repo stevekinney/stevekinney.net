@@ -4,7 +4,7 @@ description: >-
   Apply the principle of least privilege by scoping IAM policies to the narrowest
   set of actions and resources a user or service actually needs.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - iam
@@ -84,14 +84,14 @@ This allows reading and writing files to _every_ S3 bucket in your account. If y
 
 Here's a realistic workflow for getting to least privilege:
 
-### Step 1: Start with What You Need to Do
+### Start with What You Need to Do
 
 Ask yourself: what commands will this user or service run? For a frontend deploy pipeline, the answer is:
 
 - `aws s3 sync ./build s3://my-frontend-app-assets` — uploads files to S3
 - `aws cloudfront create-invalidation` — clears the CDN cache
 
-### Step 2: Map Commands to Actions
+### Map Commands to Actions
 
 Each CLI command maps to one or more IAM actions:
 
@@ -100,7 +100,7 @@ Each CLI command maps to one or more IAM actions:
 | `aws s3 sync` (upload + delete)      | `s3:PutObject`, `s3:DeleteObject`, `s3:ListBucket` |
 | `aws cloudfront create-invalidation` | `cloudfront:CreateInvalidation`                    |
 
-### Step 3: Scope Resources to Specific ARNs
+### Scope Resources to Specific ARNs
 
 Don't use `*`. Identify the exact resources:
 
@@ -108,7 +108,7 @@ Don't use `*`. Identify the exact resources:
 - S3 objects: `arn:aws:s3:::my-frontend-app-assets/*` (for `PutObject`, `DeleteObject`)
 - CloudFront distribution: `arn:aws:cloudfront::123456789012:distribution/E1A2B3C4D5E6F7`
 
-### Step 4: Write the Policy
+### Write the Policy
 
 ```json
 {
@@ -130,7 +130,7 @@ Don't use `*`. Identify the exact resources:
 }
 ```
 
-### Step 5: Test and Iterate
+### Test and Iterate
 
 Run the commands with the new policy. If something fails with an `AccessDenied` error, the error message usually tells you which action was denied. Add that specific action — don't expand to `s3:*` because one thing didn't work.
 
@@ -165,4 +165,4 @@ When in doubt, deny. You can always add permissions later when something breaks 
 
 Start narrow. Add actions one at a time. Always scope resources to specific ARNs. Treat every wildcard as a code smell that needs justification.
 
-This isn't theoretical security advice — this is the practical discipline that separates "I deployed a site to AWS" from "I deployed a site to AWS and didn't end up on the front page of Hacker News for a credential leak." It's worth the extra ten minutes.
+This isn't theoretical security advice — this is the practical discipline that separates "I deployed a site to AWS" from "I deployed a site to AWS and didn't end up on the front page of Hacker News for a credential leak." Honestly, it's worth the extra ten minutes.

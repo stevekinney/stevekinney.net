@@ -4,7 +4,7 @@ description: >-
   Complete solution for the deploy bot IAM policy exercise, with annotations
   explaining each policy statement.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - iam
@@ -12,7 +12,7 @@ tags:
   - solution
 ---
 
-Here's the complete policy, the CLI commands to wire it up, and an explanation of every decision.
+Here's the complete policy, the CLI commands to wire it up, and an explanation of every decision. I'll walk through each statement so you can see the reasoning, not just the end result.
 
 ## The Policy
 

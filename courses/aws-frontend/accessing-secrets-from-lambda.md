@@ -4,7 +4,7 @@ description: >-
   Retrieve secrets and parameters from a Lambda function at runtime using the
   AWS SDK, with proper IAM permissions and caching strategies.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - lambda
@@ -22,7 +22,7 @@ Install the SSM client package in your Lambda project:
 npm install @aws-sdk/client-ssm
 ```
 
-Here is a Lambda function that reads an API key from Parameter Store at init time:
+Here's a Lambda function that reads an API key from Parameter Store at init time:
 
 ```typescript
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
@@ -147,7 +147,7 @@ Your Lambda function's execution role needs permission to read the specific para
 The first statement grants access to all parameters under the `/my-frontend-app/production/` path. The second statement grants permission to decrypt SecureString parameters using the AWS-managed KMS key. If you used a customer-managed KMS key, replace the resource ARN with your key's ARN.
 
 > [!WARNING]
-> The parameter ARN in IAM policies does **not** include a leading slash before the parameter name. The parameter name `/my-frontend-app/production/api-key` has the ARN `arn:aws:ssm:us-east-1:123456789012:parameter/my-frontend-app/production/api-key` — note the single slash between `parameter` and `my-frontend-app`. This trips people up because the parameter name starts with `/` but the ARN path does not double it.
+> The parameter ARN in IAM policies does **not** include a leading slash before the parameter name. The parameter name `/my-frontend-app/production/api-key` has the ARN `arn:aws:ssm:us-east-1:123456789012:parameter/my-frontend-app/production/api-key` — note the single slash between `parameter` and `my-frontend-app`. This trips people up because the parameter name starts with `/` but the ARN path doesn't double it.
 
 ### For Secrets Manager
 
@@ -164,7 +164,7 @@ The first statement grants access to all parameters under the `/my-frontend-app/
 }
 ```
 
-Secrets Manager handles decryption internally when you call `GetSecretValue`, so you do not need a separate `kms:Decrypt` permission — unless you used a customer-managed KMS key. In that case, add a `kms:Decrypt` statement for that key.
+Secrets Manager handles decryption internally when you call `GetSecretValue`, so you don't need a separate `kms:Decrypt` permission — unless you used a customer-managed KMS key. In that case, add a `kms:Decrypt` statement for that key.
 
 ### Attaching the Policy
 
@@ -182,9 +182,9 @@ Or create a managed policy and attach it — the approach you learned in [Writin
 
 ## Caching Strategies
 
-The init-time fetch pattern shown above works well for secrets that do not change while the function is running. But if you use Secrets Manager's automatic rotation, a secret could change while your Lambda execution environment is still warm. The cached value becomes stale.
+The init-time fetch pattern shown above works well for secrets that don't change while the function is running. But if you use Secrets Manager's automatic rotation, a secret could change while your Lambda execution environment is still warm. The cached value becomes stale.
 
-Here is a caching pattern with a time-to-live (TTL):
+Here's a caching pattern with a time-to-live (TTL):
 
 ```typescript
 import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
@@ -221,7 +221,7 @@ const getParameter = async (name: string): Promise<string> => {
 };
 ```
 
-A 5-minute TTL means your function re-fetches the secret at most once every 5 minutes per execution environment. For most applications, this is a good balance between freshness and API call cost.
+A 5-minute TTL means your function re-fetches the secret at most once every 5 minutes per execution environment. For most applications, I've found this to be a good balance between freshness and API call cost.
 
 ## The AWS Parameters and Secrets Lambda Extension
 
@@ -278,11 +278,11 @@ const getSecretFromExtension = async (secretId: string): Promise<string> => {
 The extension caches values with a configurable TTL (default 300 seconds). You control the TTL with the `SSM_PARAMETER_STORE_TTL` and `SECRETS_MANAGER_TTL` environment variables on the function.
 
 > [!TIP]
-> The extension approach trades SDK dependencies for HTTP calls. It is useful when you want caching without writing cache logic, or when you want to keep your deployment package small by not bundling the SSM or Secrets Manager SDK packages. For simple use cases with a few secrets, the direct SDK approach is perfectly fine.
+> The extension approach trades SDK dependencies for HTTP calls. It's useful when you want caching without writing cache logic, or when you want to keep your deployment package small by not bundling the SSM or Secrets Manager SDK packages. For simple use cases with a few secrets, the direct SDK approach is perfectly fine.
 
 ## Putting It All Together
 
-Here is a complete Lambda function that reads a DynamoDB table name from an environment variable (non-sensitive, does not change), an API key from Parameter Store (sensitive, rarely changes), and uses both:
+Here's a complete Lambda function that reads a DynamoDB table name from an environment variable (non-sensitive, doesn't change), an API key from Parameter Store (sensitive, rarely changes), and uses both:
 
 ```typescript
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
@@ -329,8 +329,4 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 };
 ```
 
-This pattern — environment variables for non-sensitive config, Parameter Store or Secrets Manager for sensitive values, init-time caching for both — is the standard approach for Lambda functions in production.
-
-## What Is Next
-
-You have two services that solve similar problems. The next lesson provides a direct comparison between Parameter Store and Secrets Manager to help you decide which one to reach for in different scenarios.
+This pattern — environment variables for non-sensitive config, Parameter Store or Secrets Manager for sensitive values, init-time caching for both — is the standard approach for Lambda functions in production. You now have two services that solve similar problems. The next lesson provides a direct comparison between Parameter Store and Secrets Manager to help you decide which one to reach for in different scenarios.

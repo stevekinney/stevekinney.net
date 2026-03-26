@@ -3,7 +3,7 @@ title: 'Exercise: Set Up a CloudFront Distribution'
 description: >-
   Create a CloudFront distribution with an S3 origin, Origin Access Control, ACM certificate, and custom error responses for SPA routing.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cloudfront
@@ -24,7 +24,7 @@ Before you start, make sure you have:
 - An ACM certificate in `us-east-1` with status `ISSUED`. See [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md) if you need one.
 - The AWS CLI v2 configured with credentials that have CloudFront, S3, and ACM permissions.
 
-## Step 1: Create an Origin Access Control
+## Create an Origin Access Control
 
 Create an OAC that CloudFront will use to authenticate requests to your S3 bucket.
 
@@ -36,7 +36,7 @@ Create an OAC that CloudFront will use to authenticate requests to your S3 bucke
 
 Run `aws cloudfront list-origin-access-controls --region us-east-1 --output json` and confirm your OAC appears in the list.
 
-## Step 2: Create the Distribution
+## Create the Distribution
 
 Create a CloudFront distribution with these settings:
 
@@ -63,7 +63,7 @@ aws cloudfront wait distribution-deployed \
   --region us-east-1
 ```
 
-## Step 3: Update the S3 Bucket Policy
+## Update the S3 Bucket Policy
 
 Replace your bucket's current policy with one that allows only CloudFront to read from it:
 
@@ -90,7 +90,7 @@ curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
 
 You should get `403 Forbidden`.
 
-## Step 4: Re-enable Block Public Access
+## Re-enable Block Public Access
 
 Your bucket no longer needs to be publicly accessible. Re-enable all four Block Public Access settings:
 
@@ -110,11 +110,11 @@ Verify that CloudFront still works after re-enabling Block Public Access:
 curl -I https://YOUR_DISTRIBUTION_DOMAIN/index.html
 ```
 
-Still `200 OK`. The CloudFront service principal policy is not affected by Block Public Access.
+Still `200 OK`. The CloudFront service principal policy isn't affected by Block Public Access.
 
-## Step 5: Test SPA Routing
+## Test SPA Routing
 
-Navigate to a path that does not correspond to a real file in your S3 bucket:
+Navigate to a path that doesn't correspond to a real file in your S3 bucket:
 
 ```bash
 curl -I https://YOUR_DISTRIBUTION_DOMAIN/dashboard/settings
@@ -124,9 +124,9 @@ You should get `200 OK` with `content-type: text/html`. This confirms that the c
 
 ### Checkpoint
 
-Open your distribution's domain in a browser and navigate to a SPA route. The page should load correctly, and refreshing should not produce a 403 or 404 error.
+Open your distribution's domain in a browser and navigate to a SPA route. The page should load correctly, and refreshing shouldn't produce a 403 or 404 error.
 
-## Step 6: Attach a Response Headers Policy
+## Attach a Response Headers Policy
 
 Attach the managed `SecurityHeadersPolicy` (`67f7725c-6f97-4210-82d7-5512b31e9d03`) to your default cache behavior:
 

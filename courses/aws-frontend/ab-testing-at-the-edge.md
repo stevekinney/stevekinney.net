@@ -4,16 +4,16 @@ description: >-
   Implement an A/B testing mechanism using edge functions that routes users to
   different content versions based on cookies or random assignment.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - edge-functions
   - ab-testing
 ---
 
-A/B testing on the frontend usually involves a client-side library like LaunchDarkly or Optimizely that swaps content after the page loads. The problem: there is a flash of content, a layout shift, or a delay while the library initializes and decides which variant to show. Your Lighthouse score takes the hit.
+A/B testing on the frontend usually involves a client-side library like LaunchDarkly or Optimizely that swaps content after the page loads. The problem: there's a flash of content, a layout shift, or a delay while the library initializes and decides which variant to show. Your Lighthouse score takes the hit.
 
-Edge functions eliminate this problem entirely. The routing decision happens **before** the response reaches the browser. The user gets one version of the page — no flicker, no client-side SDK, no additional JavaScript bundle. From the user's perspective, there is no A/B test happening at all.
+Edge functions eliminate this problem entirely. The routing decision happens **before** the response reaches the browser. The user gets one version of the page — no flicker, no client-side SDK, no additional JavaScript bundle. From the user's perspective, there's no A/B test happening at all.
 
 ## How It Works
 
@@ -27,7 +27,7 @@ This approach works with both CloudFront Functions and Lambda@Edge. The example 
 
 ## The Complete CloudFront Function
 
-Here is a full implementation that splits traffic 50/50 between two variants:
+Here's a full implementation that splits traffic 50/50 between two variants:
 
 ```javascript
 function handler(event) {
@@ -69,7 +69,7 @@ This function does three things:
 
 ### Setting the Cookie on the Response
 
-The viewer request function above sets a custom header (`x-ab-variant`) but does not set the cookie — viewer request functions cannot modify the response. You need a companion **viewer response** function to set the cookie:
+The viewer request function above sets a custom header (`x-ab-variant`) but doesn't set the cookie — viewer request functions can't modify the response. You need a companion **viewer response** function to set the cookie:
 
 ```javascript
 function handler(event) {
@@ -118,11 +118,11 @@ aws s3 cp ./build/variant-b/index.html \
   --output json
 ```
 
-Shared assets (CSS, JS, images) do not need to be duplicated. Only the pages that differ between variants need separate versions.
+Shared assets (CSS, JS, images) don't need to be duplicated. Only the pages that differ between variants need separate versions.
 
 ## Lambda@Edge Alternative
 
-If your A/B test needs to route to **different origins** (for example, two different S3 buckets or two different API endpoints), you need Lambda@Edge with an **origin request** trigger. CloudFront Functions cannot change the origin.
+If your A/B test needs to route to **different origins** (for example, two different S3 buckets or two different API endpoints), you need Lambda@Edge with an **origin request** trigger. CloudFront Functions can't change the origin.
 
 ```typescript
 import type { CloudFrontRequestHandler } from 'aws-lambda';
@@ -166,7 +166,7 @@ This function modifies the **origin path** instead of the URI, which means you c
 
 ## Weighted Splits
 
-50/50 is the simplest split, but you often want to roll out changes to a smaller percentage of users first. Adjust the random assignment:
+50/50 is the simplest split, but you'll often want to roll out changes to a smaller percentage of users first. Adjust the random assignment:
 
 ```javascript
 // 90/10 split: 90% variant A, 10% variant B
@@ -188,7 +188,7 @@ if (rand < 0.33) {
 
 ## Caching Considerations
 
-This is the part that trips people up. If CloudFront caches the response for `/` and serves it to everyone, your A/B test breaks — every user gets whatever variant was cached first.
+This is the part that trips people up. (It definitely tripped me up the first time.) If CloudFront caches the response for `/` and serves it to everyone, your A/B test breaks — every user gets whatever variant was cached first.
 
 You need to tell CloudFront to **cache separately by variant**. There are two approaches:
 
@@ -205,7 +205,7 @@ The URI rewrite approach (Approach 2) is simpler and is what the CloudFront Func
 
 When you have a winner, remove the edge functions and serve the winning variant directly. Update your deployment to copy the winning variant's content to the root path, remove the `/a/` and `/b/` directories, and disassociate the CloudFront Functions from the behavior.
 
-Do not forget to handle users who still have the old cookie — it will expire on its own (Max-Age handles this), but if you want to clean it up immediately, a temporary viewer response function can clear it:
+Don't forget to handle users who still have the old cookie — it'll expire on its own (Max-Age handles this), but if you want to clean it up immediately, a temporary viewer response function can clear it:
 
 ```javascript
 function handler(event) {

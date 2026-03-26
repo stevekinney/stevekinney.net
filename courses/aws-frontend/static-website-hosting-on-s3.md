@@ -3,7 +3,7 @@ title: 'Static Website Hosting on S3'
 description: >-
   Enable S3 static website hosting, configure an index document and error document, and access your site through the S3 website endpoint.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - s3
@@ -11,16 +11,16 @@ tags:
   - static-sites
 ---
 
-You have an S3 bucket with files in it and a bucket policy that allows public reads. But if you navigate to `https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/` right now, you get an XML error page — S3 does not know you want it to serve `index.html` when someone hits the root URL. That is because S3's default behavior is object storage, not web hosting. To turn your bucket into an actual website, you need to enable **static website hosting**.
+You have an S3 bucket with files in it and a bucket policy that allows public reads. But if you navigate to `https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/` right now, you get an XML error page — S3 doesn't know you want it to serve `index.html` when someone hits the root URL. That's because S3's default behavior is object storage, not web hosting. To turn your bucket into an actual website, you need to enable **static website hosting**.
 
 ## What Static Website Hosting Adds
 
-Without static website hosting, S3 is a key-value store. You request a specific key, you get a specific object. Request a key that does not exist, you get an XML error. Request the root path, you get nothing useful.
+Without static website hosting, S3 is a key-value store. You request a specific key, you get a specific object. Request a key that doesn't exist, you get an XML error. Request the root path, you get nothing useful.
 
 Enabling static website hosting gives you three things:
 
 1. **An index document** — S3 serves a default file (typically `index.html`) when someone requests a path that ends with `/`. This is the behavior you expect from any web server.
-2. **An error document** — S3 serves a custom error page instead of its default XML error when a requested key does not exist.
+2. **An error document** — S3 serves a custom error page instead of its default XML error when a requested key doesn't exist.
 3. **A website endpoint** — S3 gives you a dedicated URL that serves your bucket as a website, with the index and error document behavior enabled.
 
 This is the difference between "I uploaded files to cloud storage" and "I have a website."
@@ -35,7 +35,7 @@ aws s3 website s3://my-frontend-app-assets/ \
   --error-document error.html
 ```
 
-That is it. Your bucket is now configured to serve `index.html` as the default document and `error.html` for any 404 errors.
+That's it. Your bucket is now configured to serve `index.html` as the default document and `error.html` for any 404 errors.
 
 If you want more control or need to script this in a pipeline, use the lower-level `s3api` command:
 
@@ -86,7 +86,7 @@ http://my-frontend-app-assets.s3-website.us-east-1.amazonaws.com
 For `us-east-1`, the format is `s3-website-us-east-1` (with a hyphen before the region name).
 
 > [!WARNING]
-> S3 website endpoints only support HTTP, not HTTPS. If you load your site over the S3 website URL, the browser will show it as "Not Secure." This is one of the main reasons you will add CloudFront in Module 4 — CloudFront gives you HTTPS with an SSL certificate from ACM. For now, HTTP is fine for testing and development.
+> S3 website endpoints only support HTTP, not HTTPS. If you load your site over the S3 website URL, the browser will show it as "Not Secure." This is one of the main reasons you'll add CloudFront in Module 4 — CloudFront gives you HTTPS with an SSL certificate from ACM. For now, HTTP is fine for testing and development.
 
 ## How the Index Document Works
 
@@ -96,16 +96,16 @@ With static website hosting enabled, S3 handles root and directory requests the 
 - **`/about/`** serves `about/index.html` (if it exists)
 - **`/about`** (without trailing slash) does **not** automatically resolve to `about/index.html` — this catches people off guard
 
-That last point is important. If you have a file at the key `about/index.html` and someone navigates to `/about` (no trailing slash), S3 returns a 404. The trailing slash matters because S3 only looks for the index document suffix when the path ends with `/`.
+That last point is important. If you have a file at the key `about/index.html` and someone navigates to `/about` (no trailing slash), S3 returns a 404. The trailing slash matters because S3 only looks for the index document suffix when the path ends with `/`. I mean, it makes sense once you remember that S3 isn't really a web server — it's object storage pretending to be one.
 
-For a single-page application where all routing happens client-side, this is mostly irrelevant — you only have one `index.html` at the root, and every path that does not match a real file should fall through to the error document (which you configure to also be `index.html`). More on that in a moment.
+For a single-page application where all routing happens client-side, this is mostly irrelevant — you only have one `index.html` at the root, and every path that doesn't match a real file should fall through to the error document (which you configure to also be `index.html`). More on that in a moment.
 
 > [!TIP]
-> If you are deploying a multi-page static site (not a single-page app), make sure your build tool generates `index.html` files inside each directory. For example, an "about" page should live at `about/index.html`, not `about.html`. This ensures that both `/about/` and links to the directory work correctly.
+> If you're deploying a multi-page static site (not a single-page app), make sure your build tool generates `index.html` files inside each directory. For example, an "about" page should live at `about/index.html`, not `about.html`. This ensures that both `/about/` and links to the directory work correctly.
 
 ## Configuring the Error Document for SPAs
 
-If you are deploying a single-page application (React Router, Vue Router, or similar), you need every unmatched route to serve your `index.html` so the client-side router can handle it. On Vercel or Netlify, you configure this with a `rewrites` rule. On S3, you set the error document to `index.html`:
+If you're deploying a single-page application (React Router, Vue Router, or similar), you need every unmatched route to serve your `index.html` so the client-side router can handle it. On Vercel or Netlify, you configure this with a `rewrites` rule. On S3, you set the error document to `index.html`:
 
 ```bash
 aws s3 website s3://my-frontend-app-assets/ \
@@ -115,11 +115,11 @@ aws s3 website s3://my-frontend-app-assets/ \
 
 Now when someone navigates to `/dashboard/settings` and no object exists at that key, S3 serves `index.html` with a 404 status code. Your client-side router picks it up and renders the right page.
 
-There is a catch: S3 still returns a 404 HTTP status code, even though the user sees a valid page. Search engines and some tools interpret that 404 as a broken page. This is another reason CloudFront is important — in Module 4, you will configure CloudFront's custom error responses to return a 200 status code when serving the SPA fallback.
+There's a catch: S3 still returns a 404 HTTP status code, even though the user sees a valid page. Search engines and some tools interpret that 404 as a broken page. This is another reason CloudFront is important — in Module 4, you'll configure CloudFront's custom error responses to return a 200 status code when serving the SPA fallback.
 
 ## Creating an Error Page
 
-If you are not building a SPA, create a proper error page. A simple `error.html`:
+If you're not building a SPA, create a proper error page. A simple `error.html`:
 
 ```html
 <!doctype html>
@@ -175,7 +175,7 @@ aws s3 cp ./error.html s3://my-frontend-app-assets/error.html \
 
 ## Putting It All Together
 
-Here is the complete sequence to go from zero to a working S3-hosted website. If you have been following along, you have already done most of these steps:
+Here's the complete sequence to go from zero to a working S3-hosted website. If you've been following along, you've already done most of these steps:
 
 ```bash
 # 1. Create the bucket
@@ -219,17 +219,15 @@ aws s3 sync ./build s3://my-frontend-app-assets \
 
 Open `http://my-frontend-app-assets.s3-website-us-east-1.amazonaws.com` in your browser. You should see your site.
 
-## What S3 Hosting Does Not Give You
+## What S3 Hosting Doesn't Give You
 
-S3 static website hosting is a starting point, not a complete solution. Here is what you are missing:
+S3 static website hosting is a starting point, not a complete solution. Here's what you're missing:
 
 - **HTTPS** — S3 website endpoints are HTTP only. You need CloudFront and an ACM certificate for HTTPS.
 - **Global performance** — S3 serves files from a single region. Users on the other side of the world get higher latency. CloudFront caches files at edge locations worldwide.
-- **Custom domain** — The S3 website endpoint is not a pretty URL. You need Route 53 (or another DNS provider) to use your own domain.
+- **Custom domain** — The S3 website endpoint isn't a pretty URL. You need Route 53 (or another DNS provider) to use your own domain.
 - **Cache control** — S3 serves files with default caching headers. CloudFront gives you fine-grained control over cache behavior and TTLs.
 
 All of these gaps are filled by services covered in later modules. S3 is the foundation — the place your files live. CloudFront, ACM, and Route 53 are the layers that turn it into a production-grade deployment.
 
-## What is Next
-
-Your site is live on S3, but what happens when you accidentally overwrite a file or delete something you should not have? In the next lesson, you will enable **versioning** to protect against accidental data loss, set up lifecycle rules to manage storage costs, and understand how S3 pricing works so there are no surprises on your bill.
+Your site is live on S3, but what happens when you accidentally overwrite a file or delete something you shouldn't have? Next, you'll enable **versioning** to protect against accidental data loss, set up lifecycle rules to manage storage costs, and understand how S3 pricing works so there are no surprises on your bill.

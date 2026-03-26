@@ -3,7 +3,7 @@ title: 'Solution: End-to-End Static Site Deployment'
 description: >-
   Complete solution with every command and expected output for deploying a static site end to end on AWS.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - deployment
@@ -11,9 +11,9 @@ tags:
   - solution
 ---
 
-This is the complete solution for the [End-to-End Static Site Deployment exercise](static-site-deployment-exercise.md). Every command is shown with its expected output.
+This is the complete solution for the [End-to-End Static Site Deployment exercise](static-site-deployment-exercise.md). I've included every command with its expected output so you can compare as you go.
 
-## Step 1: Create the S3 Bucket
+## Create the S3 Bucket
 
 Create the bucket:
 
@@ -62,9 +62,9 @@ Expected:
 }
 ```
 
-## Step 2: Upload Your Site
+## Upload Your Site
 
-Create a minimal site if you do not have one:
+Create a minimal site if you don't have one:
 
 ```bash
 mkdir -p build
@@ -98,7 +98,7 @@ Expected:
 2026-03-18 12:00:00        102 index.html
 ```
 
-## Step 3: Request an ACM Certificate
+## Request an ACM Certificate
 
 Request the certificate:
 
@@ -235,7 +235,7 @@ Expected:
 "ISSUED"
 ```
 
-## Step 4: Create an Origin Access Control
+## Create an Origin Access Control
 
 ```bash
 aws cloudfront create-origin-access-control \
@@ -271,7 +271,7 @@ Expected:
 
 Save the `Id` value (`E1OAC2EXAMPLE`).
 
-## Step 5: Create the CloudFront Distribution
+## Create the CloudFront Distribution
 
 Save the following as `distribution-config.json`:
 
@@ -391,7 +391,7 @@ HTTP/2 200
 content-type: text/html
 ```
 
-## Step 6: Update the S3 Bucket Policy
+## Update the S3 Bucket Policy
 
 Save the following as `bucket-policy-oac.json`:
 
@@ -444,7 +444,7 @@ curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
 
 Expected: `403 Forbidden`.
 
-## Step 7: Create Route 53 DNS Records
+## Create Route 53 DNS Records
 
 Get your hosted zone ID:
 
@@ -500,7 +500,7 @@ aws route53 change-resource-record-sets \
 ```
 
 > [!TIP]
-> The `HostedZoneId` value `Z2FDTNDATAQYW2` is the fixed hosted zone ID for all CloudFront distributions. This is not your domain's hosted zone ID — it is a constant defined by AWS. You use your domain's hosted zone ID in the `--hosted-zone-id` parameter, and CloudFront's fixed ID in the `AliasTarget`.
+> The `HostedZoneId` value `Z2FDTNDATAQYW2` is the fixed hosted zone ID for all CloudFront distributions. This isn't your domain's hosted zone ID — it's a constant defined by AWS. You use your domain's hosted zone ID in the `--hosted-zone-id` parameter, and CloudFront's fixed ID in the `AliasTarget`.
 
 Expected:
 
@@ -522,7 +522,7 @@ aws route53 wait resource-record-sets-changed \
   --region us-east-1
 ```
 
-## Step 8: Verify the Complete Pipeline
+## Verify the Complete Pipeline
 
 ```bash
 # DNS resolves
@@ -589,7 +589,7 @@ HTTP/2 200
 content-type: text/html
 ```
 
-## Step 9: Test a Deployment
+## Test a Deployment
 
 Update the site content:
 

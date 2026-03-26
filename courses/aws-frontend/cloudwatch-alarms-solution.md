@@ -4,7 +4,7 @@ description: >-
   Complete solution for the CloudWatch alarms exercise, with all commands and
   expected output.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cloudwatch
@@ -12,7 +12,7 @@ tags:
   - solution
 ---
 
-Here is the complete solution for every step, including all CLI commands and the expected output at each stage.
+Here's the complete solution for every step, including all CLI commands and the expected output at each stage.
 
 ## Create the SNS Topic
 
@@ -98,7 +98,7 @@ Expected output after confirmation:
 The `SubscriptionArn` is a real ARN now, not `pending confirmation`.
 
 > [!WARNING]
-> If the `SubscriptionArn` still shows `pending confirmation`, you have not clicked the confirmation link in the email. Check your spam folder. SNS will not deliver alarm notifications until the subscription is confirmed.
+> If the `SubscriptionArn` still shows `pending confirmation`, you haven't clicked the confirmation link in the email. Check your spam folder. SNS won't deliver alarm notifications until the subscription is confirmed.
 
 ## Create the Error Count Alarm
 
@@ -158,7 +158,7 @@ Expected output (relevant fields):
 }
 ```
 
-The `StateValue` of `INSUFFICIENT_DATA` is expected for a new alarm — CloudWatch has not evaluated it yet.
+The `StateValue` of `INSUFFICIENT_DATA` is expected for a new alarm — CloudWatch hasn't evaluated it yet.
 
 ## Create the Duration Alarm
 
@@ -216,7 +216,7 @@ Expected output (relevant fields):
 }
 ```
 
-Note that this alarm only has `AlarmActions` (no `OKActions`). Adding OK actions is one of the stretch goals.
+This alarm only has `AlarmActions` (no `OKActions`). Adding OK actions is one of the stretch goals.
 
 ## Test the Error Alarm
 
@@ -241,7 +241,7 @@ This command produces no output on success. Check your email — you should rece
 The alarm will return to its actual state (`INSUFFICIENT_DATA` or `OK`) on the next evaluation period (within 5 minutes).
 
 > [!TIP]
-> If you do not receive the email, check three things: (1) your SNS subscription is confirmed, (2) the email is not in your spam folder, and (3) the `--alarm-actions` ARN matches your SNS topic ARN exactly.
+> If you don't receive the email, check three things: (1) your SNS subscription is confirmed, (2) the email isn't in your spam folder, and (3) the `--alarm-actions` ARN matches your SNS topic ARN exactly.
 
 ## Trigger a Real Alarm (Optional)
 
@@ -296,7 +296,7 @@ Each invocation will return a `FunctionError` field:
 }
 ```
 
-The `FunctionError: "Unhandled"` indicates the function threw an unhandled exception. Lambda still returns `StatusCode: 200` at the invocation level — the 200 means Lambda successfully invoked the function, not that the function succeeded.
+The `FunctionError: "Unhandled"` indicates the function threw an unhandled exception. Lambda still returns `StatusCode: 200` at the invocation level — the 200 means Lambda successfully _invoked_ the function, not that the function succeeded.
 
 ### Wait for the Alarm
 
@@ -314,7 +314,7 @@ Once the alarm fires, you receive an email notification.
 
 ### Redeploy the Working Handler
 
-Do not leave the broken function deployed. Redeploy your original working handler:
+Don't leave the broken function deployed. Redeploy your original working handler:
 
 ```bash
 cd lambda
@@ -420,7 +420,7 @@ aws cloudwatch put-metric-alarm \
   --output json
 ```
 
-`put-metric-alarm` updates an existing alarm if one with the same name already exists — you do not need to delete it first.
+`put-metric-alarm` updates an existing alarm if one with the same name already exists — you don't need to delete it first.
 
 ## Stretch Goal: Alarm History
 
@@ -454,4 +454,4 @@ Expected output (if you tested the alarm):
 }
 ```
 
-This shows the complete timeline of state transitions — useful for understanding how frequently your alarm fires and whether it is too sensitive or too quiet.
+This shows the complete timeline of state transitions — useful for understanding how frequently your alarm fires and whether it's too sensitive or too quiet.

@@ -5,7 +5,7 @@ description: >-
   latency exceed thresholds, so you know when something breaks before your users
   tell you.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cloudwatch
@@ -13,9 +13,9 @@ tags:
   - sns
 ---
 
-Dashboards are great for when you are actively looking. Alarms are for when you are not. A **CloudWatch alarm** watches a metric and triggers an action when that metric crosses a threshold you define. The most common action: sending you an email through **SNS** (Simple Notification Service). You wake up to an email that says "your Lambda error rate spiked at 3 AM" instead of a user complaint at 9 AM.
+Dashboards are great for when you're actively looking. Alarms are for when you're not. A **CloudWatch alarm** watches a metric and triggers an action when that metric crosses a threshold you define. The most common action: sending you an email through **SNS** (Simple Notification Service). You wake up to an email that says "your Lambda error rate spiked at 3 AM" instead of a user complaint at 9 AM.
 
-If you have used Vercel's deployment notifications or GitHub Actions failure alerts, this is the same concept — except you define exactly what "failure" means and how you get notified.
+If you've used Vercel's deployment notifications or GitHub Actions failure alerts, this is the same concept — except you define exactly what "failure" means and how you get notified.
 
 ## How Alarms Work
 
@@ -33,10 +33,10 @@ Every alarm is in one of three states at any given time:
 
 - **OK**: The metric is within the threshold. Everything is fine.
 - **ALARM**: The metric has breached the threshold for the required number of evaluation periods. Something needs attention.
-- **INSUFFICIENT_DATA**: CloudWatch does not have enough data to evaluate the condition. This is the initial state of every new alarm. It is also the state your alarm enters when your function has not been invoked recently — no invocations means no data points.
+- **INSUFFICIENT_DATA**: CloudWatch doesn't have enough data to evaluate the condition. This is the initial state of every new alarm. It's also the state your alarm enters when your function hasn't been invoked recently — no invocations means no data points.
 
 > [!TIP]
-> A new alarm starts in `INSUFFICIENT_DATA`, not `OK`. This is normal. Once your function receives traffic and CloudWatch has enough data points to evaluate the condition, the alarm will transition to `OK` (or `ALARM`, if you are having a bad day).
+> A new alarm starts in `INSUFFICIENT_DATA`, not `OK`. This is normal. Once your function receives traffic and CloudWatch has enough data points to evaluate the condition, the alarm will transition to `OK` (or `ALARM`, if you're having a bad day).
 
 ## Setting Up SNS
 
@@ -59,7 +59,7 @@ This returns the topic ARN:
 }
 ```
 
-Save that ARN — you will use it when creating alarms.
+Save that ARN — you'll use it when creating alarms.
 
 ### Subscribe Your Email
 
@@ -79,7 +79,7 @@ aws sns subscribe \
 ```
 
 > [!WARNING]
-> You **must** confirm the subscription. AWS sends a confirmation email to the address you specified. Click the link in that email. Until you confirm, SNS will not deliver notifications — your alarms will fire, but you will never see the emails.
+> You **must** confirm the subscription. AWS sends a confirmation email to the address you specified. Click the link in that email. Until you confirm, SNS won't deliver notifications — your alarms will fire, but you'll never see the emails.
 
 ### Verify the Subscription
 
@@ -169,7 +169,7 @@ aws cloudwatch put-metric-alarm \
   --output json
 ```
 
-This alarm uses a single evaluation period and a threshold of zero — any 5XX error in any 5-minute window triggers it immediately. 5XX errors are serious enough that you want to know right away.
+This alarm uses a single evaluation period and a threshold of zero — any 5XX error in any 5-minute window triggers it immediately. 5XX errors are serious enough that you want to know right away. (Trust me on this one.)
 
 ## Verifying Your Alarms
 
@@ -200,7 +200,7 @@ aws cloudwatch set-alarm-state \
 Check your email. You should receive a notification from SNS. After verifying, the alarm will return to its actual state on the next evaluation period.
 
 > [!TIP]
-> Use `set-alarm-state` to test your notification pipeline before a real incident. Discovering that your email subscription is not confirmed during an actual outage is a bad experience.
+> Use `set-alarm-state` to test your notification pipeline before a real incident. Discovering that your email subscription isn't confirmed during an actual outage is a bad experience.
 
 ## Choosing Thresholds
 
@@ -215,6 +215,4 @@ Threshold values depend on your application. Here are starting points for a typi
 
 Start with these, observe how they behave with real traffic, and adjust. If your error alarm fires ten times a day, either your threshold is too low or you have a real problem to fix.
 
-## What is Next
-
-You have alarms that tell you when something goes wrong. But when an alarm fires, you need to figure out _what_ went wrong. In the next lesson, you will learn to trace a single request across API Gateway, Lambda, and DynamoDB using correlation IDs and CloudWatch Logs Insights — turning "something broke" into "this specific request failed at this specific step."
+You now have alarms that tell you when something goes wrong. But when an alarm fires, you need to figure out _what_ went wrong. In the next lesson, you'll learn to trace a single request across API Gateway, Lambda, and DynamoDB using correlation IDs and CloudWatch Logs Insights — turning "something broke" into "this specific request failed at this specific step."

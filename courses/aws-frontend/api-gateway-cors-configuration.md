@@ -4,7 +4,7 @@ description: >-
   Configure CORS on your HTTP API so that your frontend application (running on
   a different origin) can call your API without browser errors.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - api-gateway
@@ -12,13 +12,13 @@ tags:
   - frontend
 ---
 
-You have fought CORS errors before. Every frontend engineer has stared at `Access-Control-Allow-Origin` errors in the browser console, scrambled to add headers somewhere, and eventually gotten it working through a combination of Stack Overflow answers and blind luck. The difference now: you own the API. You are not waiting for a backend team to fix their headers. You configure CORS yourself, on your own HTTP API, and understand exactly what each setting does.
+You've fought CORS errors before. Every frontend engineer has stared at `Access-Control-Allow-Origin` errors in the browser console, scrambled to add headers somewhere, and eventually gotten it working through a combination of Stack Overflow answers and blind luck. The difference now: you own the API. You're not waiting for a backend team to fix their headers. You configure CORS yourself, on your own HTTP API, and understand exactly what each setting does.
 
 ## Why CORS Exists
 
 Your React app runs on `http://localhost:3000` during development. Your API Gateway endpoint is at `https://abc123def4.execute-api.us-east-1.amazonaws.com`. Different origins. The browser's **same-origin policy** blocks requests between different origins unless the server explicitly allows them with CORS headers.
 
-CORS is not an API Gateway concept — it is a browser security mechanism. You first encountered it when you configured CORS headers on S3 in [Bucket Policies and Public Access](bucket-policies-and-public-access.md), and again when setting up CloudFront response headers in [CloudFront Headers, CORS, and Security](cloudfront-headers-cors-and-security.md). The mechanics are the same here: the server must return headers that tell the browser "yes, this origin is allowed to call me."
+CORS isn't an API Gateway concept — it's a browser security mechanism. You first encountered it when you configured CORS headers on S3 in [Bucket Policies and Public Access](bucket-policies-and-public-access.md), and again when setting up CloudFront response headers in [CloudFront Headers, CORS, and Security](cloudfront-headers-cors-and-security.md). The mechanics are the same here: the server must return headers that tell the browser "yes, this origin is allowed to call me."
 
 ## How Preflight Requests Work
 
@@ -30,13 +30,13 @@ The preflight flow:
 2. The browser sends an `OPTIONS /items` request with `Origin`, `Access-Control-Request-Method`, and `Access-Control-Request-Headers` headers
 3. API Gateway responds with `Access-Control-Allow-Origin`, `Access-Control-Allow-Methods`, and `Access-Control-Allow-Headers`
 4. If the response headers permit the request, the browser sends the actual `POST /items` request
-5. If the response headers do not permit the request, the browser blocks it and you see the CORS error
+5. If the response headers don't permit the request, the browser blocks it and you see the CORS error
 
-HTTP APIs handle preflight requests automatically when you configure CORS on the API. You do not need to create an OPTIONS route or write Lambda code to respond to preflight requests. This is one of the advantages of HTTP APIs over REST APIs, where CORS setup requires configuring OPTIONS methods on every resource.
+HTTP APIs handle preflight requests automatically when you configure CORS on the API. You don't need to create an OPTIONS route or write Lambda code to respond to preflight requests. This is one of the advantages of HTTP APIs over REST APIs, where CORS setup requires configuring OPTIONS methods on every resource.
 
 ## Configuring CORS on Your HTTP API
 
-CORS configuration is a property of the API itself. Use `aws apigatewayv2 update-api` to set it:
+CORS configuration is a property of the API itself — which is honestly one of my favorite things about HTTP APIs. Use `aws apigatewayv2 update-api` to set it:
 
 ```bash
 aws apigatewayv2 update-api \
@@ -71,9 +71,9 @@ The response includes the CORS configuration:
 
 **`AllowOrigins`** — The origins that are permitted to call your API. Each value must include the scheme (`http://` or `https://`), hostname, and port (if non-standard). During development, you typically include `http://localhost:3000` (or whatever port your dev server uses). In production, this is your domain: `https://example.com`.
 
-You can use `*` to allow any origin, but do not do this if your API uses authentication. A wildcard origin combined with credentials means any site on the internet can make authenticated requests to your API using your users' tokens.
+You can use `*` to allow any origin, but don't do this if your API uses authentication. A wildcard origin combined with credentials means any site on the internet can make authenticated requests to your API using your users' tokens.
 
-**`AllowMethods`** — The HTTP methods the browser is allowed to use. List only the methods your API actually supports. If your API only has `GET` and `POST` routes, there is no reason to allow `DELETE`.
+**`AllowMethods`** — The HTTP methods the browser is allowed to use. List only the methods your API actually supports. If your API only has `GET` and `POST` routes, there's no reason to allow `DELETE`.
 
 **`AllowHeaders`** — The request headers the browser is allowed to send. `Content-Type` and `Authorization` are the two you almost always need. If you use custom headers, add them here.
 
@@ -81,7 +81,7 @@ You can use `*` to allow any origin, but do not do this if your API uses authent
 
 **`ExposeHeaders`** — Response headers that the browser is allowed to read. By default, the browser only exposes a limited set of "safe" response headers to JavaScript. If your API returns custom headers that your frontend needs to read, list them here.
 
-**`AllowCredentials`** — Set to `true` if your API uses cookies or the `Authorization` header with credentials. When this is `true`, `AllowOrigins` cannot be `*` — you must list specific origins.
+**`AllowCredentials`** — Set to `true` if your API uses cookies or the `Authorization` header with credentials. When this is `true`, `AllowOrigins` can't be `*` — you must list specific origins.
 
 ```bash
 aws apigatewayv2 update-api \
@@ -157,12 +157,10 @@ In a more sophisticated setup, you would use API Gateway stages (covered in [API
 
 ## Common Mistakes
 
-**Including a trailing slash in the origin.** `https://example.com/` is not the same as `https://example.com`. The origin must match exactly, and browsers send origins without a trailing slash.
+**Including a trailing slash in the origin.** `https://example.com/` isn't the same as `https://example.com`. The origin must match exactly, and browsers send origins without a trailing slash.
 
 **Forgetting to include the port for localhost.** `http://localhost` and `http://localhost:3000` are different origins. If your dev server runs on port 3000, the origin must include `:3000`.
 
-**Setting CORS headers in your Lambda function instead of the API configuration.** This can work, but it is fragile — you have to handle OPTIONS requests in your handler and remember to include CORS headers in every response. Let API Gateway handle it. That is what the built-in CORS configuration is for.
-
-## What is Next
+**Setting CORS headers in your Lambda function instead of the API configuration.** This can work, but it's fragile — you have to handle OPTIONS requests in your handler and remember to include CORS headers in every response. Let API Gateway handle it. That's what the built-in CORS configuration is for.
 
 Your API is callable from your frontend. But right now it has a single URL: the auto-generated `execute-api` endpoint. You probably want a custom domain like `api.example.com`, and you might want separate environments for development and production. The next lesson covers stages, deployments, and custom domain names.

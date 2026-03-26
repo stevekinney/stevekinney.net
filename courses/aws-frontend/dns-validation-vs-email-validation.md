@@ -3,7 +3,7 @@ title: 'DNS Validation vs. Email Validation'
 description: >-
   Complete domain validation for your ACM certificate using DNS or email, and understand why DNS validation is the better choice.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - acm
@@ -11,7 +11,7 @@ tags:
   - validation
 ---
 
-You have requested a certificate in ACM and it is sitting at **Pending validation**. ACM needs you to prove that you own the domain before it will issue the certificate. This is not an AWS-specific requirement — every Certificate Authority does this. The question is how you prove it. ACM gives you two options: **DNS validation** and **email validation**. DNS validation is almost always the right choice, and by the end of this lesson you will understand why.
+You've requested a certificate in ACM and it's sitting at **Pending validation**. ACM needs you to prove that you own the domain before it'll issue the certificate. This isn't an AWS-specific requirement — every Certificate Authority does this. The question is how you prove it. ACM gives you two options: **DNS validation** and **email validation**. DNS validation is almost always the right choice, and by the end of this lesson you'll understand why.
 
 ## What Validation Actually Proves
 
@@ -86,7 +86,7 @@ aws route53 change-resource-record-sets \
 If your DNS is hosted elsewhere (GoDaddy, Cloudflare, Namecheap), you add the CNAME record through that provider's DNS management interface. The record name and value come from the ACM output above.
 
 > [!TIP]
-> Some DNS providers require you to enter the CNAME name without the trailing dot and without your domain suffix. If ACM tells you to create `_abc123.example.com.`, you might need to enter just `_abc123` in your DNS provider's interface. Check your provider's documentation if the record is not being found.
+> Some DNS providers require you to enter the CNAME name without the trailing dot and without your domain suffix. If ACM tells you to create `_abc123.example.com.`, you might need to enter just `_abc123` in your DNS provider's interface. Check your provider's documentation if the record isn't being found.
 
 ### Why DNS Validation Is Better
 
@@ -94,7 +94,7 @@ DNS validation wins on three fronts:
 
 1. **Auto-renewal**: This is the big one. ACM uses the same CNAME record to re-validate the domain when the certificate comes up for renewal. As long as the record stays in your DNS, ACM renews the certificate automatically — no human intervention, no emails to respond to, no risk of the certificate expiring because someone was on vacation.
 
-2. **No email infrastructure required**: Email validation requires that someone receive and click a link in an email sent to specific addresses at your domain. If you do not have email set up for your domain (and many frontend engineers running side projects do not), email validation is a non-starter.
+2. **No email infrastructure required**: Email validation requires that someone receive and click a link in an email sent to specific addresses at your domain. If you don't have email set up for your domain (and many frontend engineers running side projects don't), email validation is a non-starter.
 
 3. **Scriptable**: You can automate the entire certificate request and validation process with the CLI. Request the certificate, extract the CNAME records, create them in Route 53, wait for validation — all in a shell script or CI pipeline. Email validation requires a human clicking a link.
 
@@ -108,14 +108,14 @@ With **email validation**, ACM sends an email to a set of predefined addresses a
 - `postmaster@example.com`
 - `webmaster@example.com`
 
-It also sends to the domain's WHOIS contact addresses (if they are not privacy-protected, which they almost always are these days).
+It also sends to the domain's WHOIS contact addresses (if they're not privacy-protected, which they almost always are these days).
 
 The email contains a link. Click the link, and the domain is validated. Simple enough in theory, but fragile in practice.
 
-Email validation exists for cases where you genuinely cannot modify DNS records — maybe your DNS is managed by a different team with a slow change process, or your DNS provider's API does not support CNAME records for the validation subdomain. These situations are uncommon enough that most people never encounter them.
+Email validation exists for cases where you genuinely can't modify DNS records — maybe your DNS is managed by a different team with a slow change process, or your DNS provider's API doesn't support CNAME records for the validation subdomain. These situations are uncommon enough that most people never encounter them.
 
 > [!WARNING]
-> Email-validated certificates do **not** auto-renew through ACM. When the certificate approaches expiration, ACM sends another validation email. If nobody responds to that email, the certificate expires and your site goes down. For any production deployment, DNS validation is the only responsible choice.
+> Email-validated certificates do **not** auto-renew through ACM. When the certificate approaches expiration, ACM sends another validation email. If nobody responds to that email, the certificate expires and your site goes down. For any production deployment, DNS validation is the only responsible choice. I've seen this happen — it's not fun.
 
 ## Checking Validation Status
 
@@ -141,7 +141,7 @@ This command polls every 60 seconds and exits when the certificate status change
 
 ## Multiple Domains Mean Multiple Records
 
-If your certificate covers `example.com` and `www.example.com`, ACM generates a separate CNAME validation record for each domain name. You need to add all of them. If you validate `example.com` but forget `www.example.com`, the certificate stays in **Pending validation** indefinitely.
+If your certificate covers `example.com` and `www.example.com`, ACM generates a separate CNAME validation record for each domain name. You need to add all of them. If you validate `example.com` but forget `www.example.com`, the certificate stays in **Pending validation** indefinitely. (Ask me how I know.)
 
 The `describe-certificate` output shows the validation status for each domain individually, so you can see which ones are still pending:
 
@@ -167,7 +167,7 @@ aws acm describe-certificate \
 ```
 
 > [!TIP]
-> If validation has been pending for more than 72 hours, ACM marks the certificate as **Failed**. You will need to request a new certificate and start over. This timeout applies to both DNS and email validation.
+> If validation has been pending for more than 72 hours, ACM marks the certificate as **Failed**. You'll need to request a new certificate and start over. This timeout applies to both DNS and email validation.
 
 ## The Bottom Line
 

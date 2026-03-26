@@ -3,7 +3,7 @@ title: 'Exercise: Deploy a Static Site to S3'
 description: >-
   Create a bucket, upload a static site, enable website hosting, and access it in the browser.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - s3
@@ -11,15 +11,15 @@ tags:
   - deployment
 ---
 
-You have learned the individual pieces: creating a bucket, uploading files, writing a bucket policy, enabling static website hosting, and configuring versioning. Now put them all together. In this exercise, you will deploy a complete static site to S3 and access it in a browser.
+You've learned the individual pieces: creating a bucket, uploading files, writing a bucket policy, enabling static website hosting, and configuring versioning. Now put them all together. In this exercise, you'll deploy a complete static site to S3 and access it in a browser.
 
 ## Why It Matters
 
-Every frontend deployment is fundamentally the same: take build output, put it somewhere accessible, and point a URL at it. Vercel and Netlify hide this process behind a `git push`. Doing it manually on S3 teaches you what actually happens under the hood — and gives you the foundation for the automated pipeline you will build later in this course.
+Every frontend deployment is fundamentally the same: take build output, put it somewhere accessible, and point a URL at it. Vercel and Netlify hide this process behind a `git push`. Doing it manually on S3 teaches you what actually happens under the hood — and gives you the foundation for the automated pipeline you'll build later in this course.
 
 ## Set Up Your Static Site
 
-Create a minimal static site on your local machine. You do not need a framework — plain HTML, CSS, and JavaScript are enough.
+Create a minimal static site on your local machine. You don't need a framework — plain HTML, CSS, and JavaScript are enough.
 
 Create a directory called `build/` with these three files:
 
@@ -130,7 +130,7 @@ document.getElementById('timestamp').textContent =
 </html>
 ```
 
-## Step 1: Create the Bucket
+## Create the Bucket
 
 Create an S3 bucket. Remember that bucket names are globally unique — if `my-frontend-app-assets` is taken, add a unique suffix.
 
@@ -143,9 +143,9 @@ aws s3 mb s3://my-frontend-app-assets \
 
 Run `aws s3 ls --region us-east-1` and confirm your bucket appears in the list.
 
-## Step 2: Disable Block Public Access
+## Disable Block Public Access
 
-Since you are hosting a public website, disable Block Public Access:
+Since you're hosting a public website, disable Block Public Access:
 
 ```bash
 aws s3api put-public-access-block \
@@ -166,7 +166,7 @@ aws s3api get-public-access-block \
   --output json
 ```
 
-## Step 3: Apply a Bucket Policy
+## Apply a Bucket Policy
 
 Apply a bucket policy that allows public read access:
 
@@ -192,7 +192,7 @@ aws s3api put-bucket-policy \
 
 Run `aws s3api get-bucket-policy --bucket my-frontend-app-assets --region us-east-1 --output json` and confirm the policy is in place.
 
-## Step 4: Upload Your Files
+## Upload Your Files
 
 Sync your local `build/` directory to the bucket:
 
@@ -214,7 +214,7 @@ Expected output:
 2026-03-18 12:00:00        423 styles.css
 ```
 
-## Step 5: Enable Static Website Hosting
+## Enable Static Website Hosting
 
 Configure the bucket for static website hosting:
 
@@ -248,7 +248,7 @@ Expected output:
 }
 ```
 
-## Step 6: View Your Site
+## View Your Site
 
 Open this URL in your browser (substitute your actual bucket name):
 
@@ -265,9 +265,9 @@ You should see the "Hello from S3" page with a timestamp showing the current tim
 - The timestamp appears at the bottom
 - Navigating to a nonexistent path (like `/nonexistent`) shows your custom 404 page
 
-## Step 7: Enable Versioning
+## Enable Versioning
 
-Enable versioning so you are protected against accidental overwrites:
+Enable versioning so you're protected against accidental overwrites:
 
 ```bash
 aws s3api put-bucket-versioning \
@@ -293,7 +293,7 @@ Expected output:
 }
 ```
 
-## Step 8: Deploy an Update
+## Deploy an Update
 
 Make a change to `build/index.html` — update the `<h1>` to say "Hello from S3 (v2)". Then redeploy:
 

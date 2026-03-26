@@ -5,7 +5,7 @@ description: >-
   CloudWatch dashboard that gives you a single view of your application's
   health.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cloudwatch
@@ -13,15 +13,15 @@ tags:
   - dashboards
 ---
 
-Logs tell you what happened. **Metrics** tell you how things are going. Every AWS service you have deployed in this course — Lambda, API Gateway, DynamoDB — publishes numeric measurements to CloudWatch at regular intervals. Invocation counts, error rates, latency percentiles, throttled requests. This data has been accumulating since you first deployed your Lambda function. You just have not looked at it yet.
+Logs tell you what happened. **Metrics** tell you how things are going. Every AWS service you've deployed in this course — Lambda, API Gateway, DynamoDB — publishes numeric measurements to CloudWatch at regular intervals. Invocation counts, error rates, latency percentiles, throttled requests. This data has been accumulating since you first deployed your Lambda function. You just haven't looked at it yet.
 
-In this lesson, you will learn which metrics matter for each service, how to query them from the CLI, and how to build a CloudWatch dashboard that shows your application's health at a glance.
+In this lesson, you'll learn which metrics matter for each service, how to query them from the CLI, and how to build a CloudWatch dashboard that shows your application's health at a glance.
 
 ## How Metrics Work
 
 A **metric** is a time-ordered series of data points. Each data point has a timestamp, a value, and a unit. Lambda publishes a `Duration` data point every time your function runs — the value is the execution time in milliseconds. Over a day, you might have thousands of `Duration` data points, and CloudWatch can aggregate them into averages, maximums, percentiles, or sums over any time window you choose.
 
-Metrics are organized by **namespace** (which service published them), **metric name** (what is being measured), and **dimensions** (which specific resource within that service). For example:
+Metrics are organized by **namespace** (which service published them), **metric name** (what's being measured), and **dimensions** (which specific resource within that service). For example:
 
 - Namespace: `AWS/Lambda`
 - Metric name: `Duration`
@@ -31,7 +31,7 @@ This combination uniquely identifies "how long does my specific Lambda function 
 
 ## Key Metrics by Service
 
-You do not need to monitor every metric AWS publishes. Here are the ones that matter for a frontend application backend.
+You don't need to monitor every metric AWS publishes. Here are the ones that matter for a frontend application backend.
 
 ### Lambda (`AWS/Lambda`)
 
@@ -43,7 +43,7 @@ You do not need to monitor every metric AWS publishes. Here are the ones that ma
 | `Throttles`            | Invocations rejected due to concurrency limits   | `Sum` — should be zero                               |
 | `ConcurrentExecutions` | How many environments are running simultaneously | `Maximum` — peak concurrency                         |
 
-The error rate is `Errors / Invocations`. If `Invocations` is 1,000 and `Errors` is 50, your error rate is 5%. This is the single most important metric for any API backend.
+The error rate is `Errors / Invocations`. If `Invocations` is 1,000 and `Errors` is 50, your error rate is 5%. This is the single most important metric for any API backend. If I could only watch one number, this would be it.
 
 ### API Gateway (`AWS/ApiGateway`)
 
@@ -62,15 +62,15 @@ The gap between `Latency` and `IntegrationLatency` is API Gateway overhead. If `
 
 ### DynamoDB (`AWS/DynamoDB`)
 
-| Metric                       | What It Tells You                            | Statistic to Watch                                                                        |
-| ---------------------------- | -------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `ConsumedReadCapacityUnits`  | Read throughput consumed                     | `Sum` — how much read capacity you are using                                              |
-| `ConsumedWriteCapacityUnits` | Write throughput consumed                    | `Sum` — how much write capacity you are using                                             |
-| `ThrottledRequests`          | Requests rejected due to throughput limits   | `Sum` — should be zero on on-demand tables                                                |
-| `SuccessfulRequestLatency`   | Time DynamoDB took to process a request (ms) | `Average` — DynamoDB is fast; if this spikes, something is wrong with your access pattern |
-| `SystemErrors`               | Internal DynamoDB errors                     | `Sum` — rare, but worth monitoring                                                        |
+| Metric                       | What It Tells You                            | Statistic to Watch                                                                       |
+| ---------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `ConsumedReadCapacityUnits`  | Read throughput consumed                     | `Sum` — how much read capacity you're using                                              |
+| `ConsumedWriteCapacityUnits` | Write throughput consumed                    | `Sum` — how much write capacity you're using                                             |
+| `ThrottledRequests`          | Requests rejected due to throughput limits   | `Sum` — should be zero on on-demand tables                                               |
+| `SuccessfulRequestLatency`   | Time DynamoDB took to process a request (ms) | `Average` — DynamoDB is fast; if this spikes, something's wrong with your access pattern |
+| `SystemErrors`               | Internal DynamoDB errors                     | `Sum` — rare, but worth monitoring                                                       |
 
-If you are using on-demand capacity mode (which you set up in [What is DynamoDB?](what-is-dynamodb.md)), `ThrottledRequests` should stay at zero unless you are hitting account-level limits.
+If you're using on-demand capacity mode (which you set up in [What is DynamoDB?](what-is-dynamodb.md)), `ThrottledRequests` should stay at zero unless you're hitting account-level limits.
 
 ## Querying Metrics from the CLI
 
@@ -135,7 +135,7 @@ A **dashboard** is a customizable page of widgets that display metrics. Instead 
 
 ### Create the Dashboard
 
-CloudWatch dashboards are defined as JSON. Each widget specifies which metrics to graph and how to display them. Here is a dashboard with three widgets: Lambda errors, Lambda duration, and API Gateway latency.
+CloudWatch dashboards are defined as JSON. Each widget specifies which metrics to graph and how to display them. Here's a dashboard with three widgets: Lambda errors, Lambda duration, and API Gateway latency.
 
 ```bash
 aws cloudwatch put-dashboard \
@@ -236,13 +236,11 @@ You can also open the CloudWatch console in your browser, navigate to **Dashboar
 Metrics support multiple statistics, and picking the wrong one gives you a misleading picture.
 
 - **Sum**: Total count. Use for `Invocations`, `Errors`, `Throttles`, `Count`. "How many errors happened in the last hour?"
-- **Average**: Arithmetic mean. Use for `Duration`, `Latency`. "What is the typical response time?" Be careful — averages hide outliers.
+- **Average**: Arithmetic mean. Use for `Duration`, `Latency`. "What's the typical response time?" Be careful — averages hide outliers.
 - **Maximum**: Worst case in the period. Useful for spotting cold starts in `Duration`.
 - **p95 / p99**: Percentile statistics. "95% of requests completed within X milliseconds." This is almost always more useful than Average for latency metrics because it shows you what your slowest users experience.
 - **SampleCount**: How many data points were aggregated. Useful for verifying that your function is actually receiving traffic.
 
-For latency, always graph both Average and p95. If they are close together, your performance is consistent. If p95 is three times the average, you have outliers (often cold starts) that are worth investigating.
+For latency, always graph both Average and p95. If they're close together, your performance is consistent. If p95 is three times the average, you have outliers (often cold starts) that are worth investigating.
 
-## What is Next
-
-You can see your metrics and you have a dashboard. But dashboards require you to look at them. In the next lesson, you will create alarms that watch these metrics for you and send email notifications when something goes wrong — so you find out about problems before your users do.
+You can see your metrics now and you have a dashboard. But dashboards require you to look at them. In the next lesson, you'll create alarms that watch these metrics for you and send email notifications when something goes wrong — so you find out about problems before your users do.

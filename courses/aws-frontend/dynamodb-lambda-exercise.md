@@ -4,20 +4,20 @@ description: >-
   Create a DynamoDB table, write a Lambda handler for GET, POST, and DELETE
   operations, wire it through API Gateway, and call it from the frontend.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - dynamodb
   - exercise
 ---
 
-You are going to build a complete data API backed by DynamoDB. By the end of this exercise, you will have a working endpoint that your frontend can call to create, list, and delete items — with data persisted in a DynamoDB table and served through the same Lambda and API Gateway infrastructure you set up in Modules 7 and 8.
+You're going to build a complete data API backed by DynamoDB. By the end of this exercise, you'll have a working endpoint that your frontend can call to create, list, and delete items — with data persisted in a DynamoDB table and served through the same Lambda and API Gateway infrastructure you set up in Modules 7 and 8.
 
-This is the exercise where "static site" becomes "full-stack application."
+This is the exercise where "static site" becomes "full-stack application." It's my favorite milestone in this whole course.
 
 ## Why It Matters
 
-On Vercel or Netlify, you might use a hosted database like PlanetScale or Supabase and call it from a serverless function. On AWS, you are building the equivalent — but you own every piece. The table, the function, the HTTP layer, the permissions. When something breaks, you know exactly where to look. When something costs money, you know exactly why.
+On Vercel or Netlify, you might use a hosted database like PlanetScale or Supabase and call it from a serverless function. On AWS, you're building the equivalent — but you own every piece. The table, the function, the HTTP layer, the permissions. When something breaks, you know exactly where to look. When something costs money, you know exactly why.
 
 ## Your Task
 
@@ -30,7 +30,7 @@ Build a data API that:
 
 Use account ID `123456789012`, region `us-east-1`, and the table/role names from the course conventions.
 
-## Step 1: Create the DynamoDB Table
+## Create the DynamoDB Table
 
 Create the `my-frontend-app-data` table with:
 
@@ -44,7 +44,7 @@ Use the CLI to create the table and wait for it to become active.
 
 Running `aws dynamodb describe-table --table-name my-frontend-app-data --region us-east-1 --output json --query "Table.TableStatus"` returns `"ACTIVE"`.
 
-## Step 2: Add DynamoDB Permissions to the Lambda Role
+## Add DynamoDB Permissions to the Lambda Role
 
 Your Lambda execution role (`my-frontend-app-lambda-role`) currently only has logging permissions. Create and attach a policy that grants:
 
@@ -55,13 +55,13 @@ Your Lambda execution role (`my-frontend-app-lambda-role`) currently only has lo
 
 Scope the policy to the specific table ARN: `arn:aws:dynamodb:us-east-1:123456789012:table/my-frontend-app-data`.
 
-Remember the principle of least privilege from [Principle of Least Privilege](principle-of-least-privilege.md) — do not grant `dynamodb:*` or use `*` as the resource.
+Remember the principle of least privilege from [Principle of Least Privilege](principle-of-least-privilege.md) — don't grant `dynamodb:*` or use `*` as the resource.
 
 ### Checkpoint
 
 `aws iam list-attached-role-policies --role-name my-frontend-app-lambda-role --region us-east-1 --output json` shows both `AWSLambdaBasicExecutionRole` and your new DynamoDB policy.
 
-## Step 3: Install the SDK and Update the Handler
+## Install the SDK and Update the Handler
 
 Add the DynamoDB SDK packages to your Lambda project:
 
@@ -88,7 +88,7 @@ Build the project and verify it compiles without errors.
 
 `npm run build` completes with no TypeScript errors. `dist/handler.js` exists.
 
-## Step 4: Set the Environment Variable and Deploy
+## Set the Environment Variable and Deploy
 
 Set the `TABLE_NAME` environment variable on your Lambda function:
 
@@ -106,7 +106,7 @@ Package and deploy the updated handler code.
 
 `aws lambda get-function-configuration --function-name my-frontend-app-api --region us-east-1 --output json --query "Environment"` shows `TABLE_NAME` set to `my-frontend-app-data`.
 
-## Step 5: Test Creating an Item
+## Test Creating an Item
 
 Invoke the function with a POST event:
 
@@ -131,7 +131,7 @@ Save this as `test-create.json` and invoke the function. Check the response.
 
 The response has `statusCode: 201` and the body includes `userId`, `itemId`, `title`, `status`, and `createdAt`.
 
-## Step 6: Test Listing Items
+## Test Listing Items
 
 Create a second item with a different title (use the same `userId`), then invoke with a GET event that only includes `userId` — no `itemId`:
 
@@ -153,7 +153,7 @@ Create a second item with a different title (use the same `userId`), then invoke
 
 The response has `statusCode: 200` and the body includes an `items` array with both items you created.
 
-## Step 7: Test Deleting an Item
+## Test Deleting an Item
 
 Use the `itemId` from one of the items you created. Invoke with a DELETE event:
 
@@ -172,13 +172,13 @@ Use the `itemId` from one of the items you created. Invoke with a DELETE event:
 }
 ```
 
-Replace `item-1234567890` with the actual `itemId` from Step 5 or 6. Then list items again with a GET to confirm the item is gone.
+Replace `item-1234567890` with the actual `itemId` from one of your POST responses. Then list items again with a GET to confirm the item is gone.
 
 ### Checkpoint
 
 The DELETE response has `statusCode: 200` and `{ "deleted": true }`. A subsequent GET for the same user shows only one item.
 
-## Step 8: Test Error Cases
+## Test Error Cases
 
 Invoke the function with a missing `userId` parameter and confirm you get a 400 response. Invoke with an unsupported method (like PUT) and confirm you get a 405.
 
@@ -206,4 +206,4 @@ Missing `userId` returns `statusCode: 400`. Unsupported method returns `statusCo
 
 - **Add pagination.** Modify the GET handler to accept a `limit` query parameter and return a `nextCursor` value. The client can pass the cursor back to get the next page of results.
 
-When you are ready, check your work against the [Solution: Build a Lambda-Backed Data API with DynamoDB](dynamodb-lambda-solution.md).
+When you're ready, check your work against the [Solution: Build a Lambda-Backed Data API with DynamoDB](dynamodb-lambda-solution.md).

@@ -4,7 +4,7 @@ description: >-
   Build a mental model of IAM — users, groups, roles, policies, and how AWS
   decides whether to allow or deny a request.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - iam
@@ -12,7 +12,7 @@ tags:
   - permissions
 ---
 
-Think of IAM like role-based access control, but for infrastructure. If you've ever configured permissions in a CMS or set up team roles in GitHub, you already have the intuition. The difference is that IAM controls who can create servers, read files, invoke functions, and rack up charges on your credit card. The stakes are higher than "who can merge to main."
+Think of IAM like role-based access control, but for infrastructure. If you've ever configured permissions in a CMS or set up team roles in GitHub, you already have the intuition. The difference is that IAM controls who can create servers, read files, invoke functions, and rack up charges on your credit card. I mean, the stakes are a _little_ higher than "who can merge to main."
 
 **IAM (Identity and Access Management)** is AWS's system for answering two questions on every single API call: _who are you?_ and _are you allowed to do that?_ Every request to every AWS service — whether it comes from the console, the CLI, or an SDK running in a Lambda function — goes through IAM evaluation. No exceptions.
 

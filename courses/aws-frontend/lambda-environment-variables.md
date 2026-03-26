@@ -5,7 +5,7 @@ description: >-
   handler code, understanding when to use environment variables versus other
   configuration approaches.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - lambda
@@ -13,13 +13,13 @@ tags:
   - environment-variables
 ---
 
-Environment variables work the same way in Lambda as they do in Vercel or Netlify: you set key-value pairs on the function, and your code reads them from `process.env`. The API endpoint for a third-party service, the name of a DynamoDB table, a feature flag — anything that changes between environments or should not be hardcoded goes into an environment variable.
+Environment variables work the same way in Lambda as they do in Vercel or Netlify: you set key-value pairs on the function, and your code reads them from `process.env`. The API endpoint for a third-party service, the name of a DynamoDB table, a feature flag — anything that changes between environments or shouldn't be hardcoded goes into an environment variable.
 
-If you have ever set `NEXT_PUBLIC_API_URL` in a `.env.local` file or configured environment variables in the Vercel dashboard, you already understand the concept. The only difference is how you set them.
+If you've ever set `NEXT_PUBLIC_API_URL` in a `.env.local` file or configured environment variables in the Vercel dashboard, you already understand the concept. The only difference is how you set them.
 
 ## Setting Environment Variables via CLI
 
-You can set environment variables when you create the function or update them on an existing function. Here is how to add them during creation:
+You can set environment variables when you create the function or update them on an existing function. Here's how to add them during creation:
 
 ```bash
 aws lambda create-function \
@@ -48,7 +48,7 @@ aws lambda update-function-configuration \
 
 ## Accessing Environment Variables in Your Handler
 
-In your TypeScript handler, environment variables are available through `process.env`, exactly like they are in Node.js:
+In your TypeScript handler, environment variables are available through `process.env`, exactly like they are in any Node.js application:
 
 ```typescript
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
@@ -82,7 +82,7 @@ There are two patterns worth noting here. First, reading environment variables a
 
 ## Lambda's Built-In Environment Variables
 
-Lambda also sets several environment variables automatically. You do not configure these — they are always present:
+Lambda also sets several environment variables automatically. You don't configure these — they're always present:
 
 | Variable                          | Value                                                  |
 | --------------------------------- | ------------------------------------------------------ |
@@ -93,27 +93,27 @@ Lambda also sets several environment variables automatically. You do not configu
 | `AWS_EXECUTION_ENV`               | The runtime identifier (e.g., `AWS_Lambda_nodejs20.x`) |
 | `_HANDLER`                        | The handler setting (e.g., `handler.handler`)          |
 
-These are useful for logging and debugging. For example, you might include `AWS_REGION` in log output to confirm your function is running where you expect.
+These are useful for logging and debugging. For example, you might include `AWS_REGION` in log output to confirm your function is running where you expect. I like to log the function name and region on every cold start — it saves time when you're debugging across multiple environments.
 
 ## The 4 KB Limit
 
-Lambda imposes a total limit of **4 KB** on all environment variables combined — keys, values, and formatting included. This sounds small, and it is. A handful of short configuration values fit easily; a JSON blob containing your entire application configuration does not.
+Lambda imposes a total limit of **4 KB** on all environment variables combined — keys, values, and formatting included. This sounds small, and it _is_. A handful of short configuration values fit easily; a JSON blob containing your entire application configuration doesn't.
 
-If you are hitting the 4 KB limit, it is a signal that your configuration has outgrown environment variables. At that point, you should move configuration to **Parameter Store** (covered in Module 11), which supports values up to 8 KB per parameter (or 64 KB for advanced parameters) with no total limit on the number of parameters.
+If you're hitting the 4 KB limit, that's a signal that your configuration has outgrown environment variables. At that point, you should move configuration to **Parameter Store** (covered in Module 11), which supports values up to 8 KB per parameter (or 64 KB for advanced parameters) with no total limit on the number of parameters.
 
 > [!TIP]
-> A practical rule of thumb: use environment variables for simple, non-sensitive values that your function needs at startup — table names, stage identifiers, feature flags, API endpoint URLs. Use Parameter Store or Secrets Manager for anything that is sensitive, large, or needs to be shared across multiple functions.
+> A practical rule of thumb: use environment variables for simple, non-sensitive values that your function needs at startup — table names, stage identifiers, feature flags, API endpoint URLs. Use Parameter Store or Secrets Manager for anything that's sensitive, large, or needs to be shared across multiple functions.
 
 ## When Not to Use Environment Variables
 
 Environment variables are the right tool for configuration that:
 
 - Changes between environments (dev, staging, production)
-- Is not sensitive enough to warrant encryption at rest
+- Isn't sensitive enough to warrant encryption at rest
 - Is small (a table name, a URL, a stage identifier)
 - Needs to be available immediately at function startup
 
-They are the **wrong** tool for:
+They're the **wrong** tool for:
 
 - **API keys, database passwords, and tokens.** These should go in Secrets Manager or Parameter Store's `SecureString` type. Environment variables are visible to anyone with `lambda:GetFunctionConfiguration` permission, and they appear in the Lambda console in plain text. Module 11 covers secure configuration in detail.
 - **Large configuration objects.** If your config is approaching the 4 KB limit, move it to Parameter Store.
@@ -154,7 +154,7 @@ aws lambda update-function-configuration \
 
 ## Environment Variables and Cold Starts
 
-Environment variables are available during the init phase, which means you can safely read them in top-level module code. This is actually the recommended pattern: read configuration once during init and reuse it across invocations. Do not read `process.env` inside your handler on every request — it works, but it wastes time doing something that only needs to happen once.
+Environment variables are available during the init phase, which means you can safely read them in top-level module code. This is actually the recommended pattern: read configuration once during init and reuse it across invocations. Don't read `process.env` inside your handler on every request — it works, but it wastes time doing something that only needs to happen once.
 
 ```typescript
 // Good: read once during init
@@ -173,8 +173,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 };
 ```
 
-The performance difference is negligible for a single variable, but the pattern matters: top-level initialization is a Lambda best practice that pays off when you are initializing database clients, parsing complex config, or loading cached data.
+The performance difference is negligible for a single variable, but the pattern matters: top-level initialization is a Lambda best practice that pays off when you're initializing database clients, parsing complex config, or loading cached data.
 
-## What is Next
-
-Your function is deployed, configured, and invocable. The last topic before you connect it to the internet via API Gateway is one that affects every API you build with Lambda: cold starts. In the next lesson, you will learn what causes them, how they affect latency, and what you can do about it.
+Your function is deployed, configured, and invocable. The last topic before you connect it to the internet via API Gateway is one that affects every API you build with Lambda: cold starts. In the next lesson, you'll learn what causes them, how they affect latency, and what you can do about it.

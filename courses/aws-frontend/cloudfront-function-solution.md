@@ -4,7 +4,7 @@ description: >-
   Complete solution for the CloudFront Function exercise, with all function
   code, CLI commands, and expected output.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cloudfront-functions
@@ -12,7 +12,7 @@ tags:
   - solution
 ---
 
-Here is the complete solution for every step, including the function code, all CLI commands, and the expected output at each stage.
+Here's the complete solution for every step, including the function code, all CLI commands, and the expected output at each stage.
 
 ## The Security Headers Function
 
@@ -307,7 +307,7 @@ location: /new-path
 curl -I https://d111111abcdef8.cloudfront.net/about
 ```
 
-Expected: A normal 200 response (or 404 if the page does not exist) with the security headers present and no redirect.
+Expected: A normal 200 response (or 404 if the page doesn't exist) with the security headers present and no redirect.
 
 ## Stretch Goal: Content Security Policy
 

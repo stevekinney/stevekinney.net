@@ -5,27 +5,27 @@ description: >-
   responses, using the lightweight JavaScript runtime available at CloudFront
   edge locations.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cloudfront-functions
   - javascript
 ---
 
-CloudFront Functions give you a way to run lightweight JavaScript at CloudFront's edge locations — all 200+ of them — on every single request. If you have ever written a `_redirects` file on Netlify or a `next.config.js` with redirects and rewrites, you already understand the use case. The difference is that you are writing actual code instead of configuration, which means you can handle dynamic logic that static config files cannot.
+CloudFront Functions give you a way to run lightweight JavaScript at CloudFront's edge locations — all 200+ of them — on every single request. If you've ever written a `_redirects` file on Netlify or a `next.config.js` with redirects and rewrites, you already understand the use case. The difference is that you're writing actual code instead of configuration, which means you can handle dynamic logic that static config files can't.
 
-In this lesson, you will write a CloudFront Function that rewrites URLs, test it in the console, publish it, and associate it with your CloudFront distribution.
+In this lesson, you'll write a CloudFront Function that rewrites URLs, test it in the console, publish it, and associate it with your CloudFront distribution.
 
 ## The Runtime Is Not Node.js
 
-This is the single most important thing to internalize. The CloudFront Functions runtime is a purpose-built JavaScript engine. It is **not** Node.js. There is no `require()`, no `import`, no `Buffer`, no `process.env`, no `setTimeout`, no `fetch`. You get ECMAScript 5.1 with selected features from ES6 through ES12 — things like `let`, `const`, arrow functions, template literals, destructuring, `String.prototype.includes()`, and `Array.prototype.find()`.
+This is the single most important thing to internalize. The CloudFront Functions runtime is a purpose-built JavaScript engine. It's **not** Node.js. There's no `require()`, no `import`, no `Buffer`, no `process.env`, no `setTimeout`, no `fetch`. You get ECMAScript 5.1 with selected features from ES6 through ES12 — things like `let`, `const`, arrow functions, template literals, destructuring, `String.prototype.includes()`, and `Array.prototype.find()`.
 
 What you do **not** get:
 
-- **No network access.** You cannot make HTTP requests. Period.
-- **No file system access.** There is no `fs` module.
+- **No network access.** You can't make HTTP requests. Period.
+- **No file system access.** There's no `fs` module.
 - **No dynamic code evaluation.** No `eval()`, no `new Function()`.
-- **No environment variables.** You cannot read `process.env`.
+- **No environment variables.** You can't read `process.env`.
 - **No modules.** Everything must be in a single file, under 10 KB.
 
 This feels restrictive, but the tradeoff is speed. CloudFront Functions execute in sub-millisecond time and can handle tens of millions of requests per second. The constraints are what make that possible.
@@ -45,7 +45,7 @@ function handler(event) {
 }
 ```
 
-That is it. One function named `handler`, one `event` argument, and you return either the modified request (to let CloudFront continue processing) or a response object (to short-circuit and respond immediately).
+That's it. One function named `handler`, one `event` argument, and you return either the modified request (to let CloudFront continue processing) or a response object (to short-circuit and respond immediately).
 
 ### The Event Object
 
@@ -103,7 +103,7 @@ function handler(event) {
 
 ## Writing a URL Rewrite Function
 
-Here is a practical example: a function that appends `index.html` to directory-style URLs. When someone requests `/about/`, your S3 bucket does not know that `/about/` means `/about/index.html`. This function handles it.
+Here's a practical example: a function that appends `index.html` to directory-style URLs. When someone requests `/about/`, your S3 bucket doesn't know that `/about/` means `/about/index.html`. This function handles it.
 
 ```javascript
 function handler(event) {
@@ -121,7 +121,7 @@ function handler(event) {
 }
 ```
 
-This is one of the most common CloudFront Functions in production. Without it, navigating directly to `/about` on a static site hosted in S3 would return a 404 or a 403 because there is no object with the key `about` — the actual object is `about/index.html`.
+This is one of the most common CloudFront Functions in production. Without it, navigating directly to `/about` on a static site hosted in S3 would return a 404 or a 403 because there's no object with the key `about` — the actual object is `about/index.html`.
 
 ## Creating and Testing the Function
 
@@ -139,7 +139,7 @@ aws cloudfront create-function \
 The response includes an `ETag` value — save it. You need it for every subsequent operation on this function.
 
 > [!WARNING]
-> The `--region` flag does not control where the function runs. CloudFront Functions are global. The region flag tells the CLI which API endpoint to use, and CloudFront's API lives in `us-east-1`.
+> The `--region` flag doesn't control where the function runs. CloudFront Functions are global. The region flag tells the CLI which API endpoint to use, and CloudFront's API lives in `us-east-1`.
 
 ### Test the function
 
@@ -175,9 +175,9 @@ This returns a new `ETag` — the live version's ETag. Save this one too.
 
 ## Associating with a CloudFront Behavior
 
-A function that is not associated with a **behavior** does not do anything. You need to update your CloudFront distribution to attach this function to a cache behavior — typically the default behavior (`*`).
+A function that isn't associated with a **behavior** doesn't do anything. You need to update your CloudFront distribution to attach this function to a cache behavior — typically the default behavior (`*`).
 
-You configured behaviors in [Cache Behaviors and Invalidations](cache-behaviors-and-invalidations.md). Now you are adding a function association to one of those behaviors.
+You configured behaviors in [Cache Behaviors and Invalidations](cache-behaviors-and-invalidations.md). Now you're adding a function association to one of those behaviors.
 
 ```bash
 aws cloudfront get-distribution-config \
@@ -265,11 +265,11 @@ function handler(event) {
 }
 ```
 
-These patterns are building blocks. In [Edge Function Use Cases](edge-function-use-cases.md), you will see more practical examples including security headers, geolocation routing, and language detection.
+These patterns are building blocks. In [Edge Function Use Cases](edge-function-use-cases.md), you'll see more practical examples including security headers, geolocation routing, and language detection.
 
 ## Gotchas
 
-- **10 KB code size limit.** Your entire function, including comments, must fit in 10 KB. Minify aggressively if you are approaching the limit.
-- **No `async`/`await`.** The runtime does not support Promises. Everything is synchronous.
+- **10 KB code size limit.** Your entire function, including comments, must fit in 10 KB. Minify aggressively if you're approaching the limit.
+- **No `async`/`await`.** The runtime doesn't support Promises. Everything is synchronous.
 - **Header names must be lowercase.** When you set or read headers, use lowercase names: `content-type`, not `Content-Type`.
-- **The `ETag` dance.** Every create, update, and publish operation returns a new ETag, and the next operation requires the current ETag. If you lose track, re-fetch with `describe-function`.
+- **The `ETag` dance.** Every create, update, and publish operation returns a new ETag, and the next operation requires the current ETag. I've lost track of these more times than I'd like to admit — if you do too, re-fetch with `describe-function`.

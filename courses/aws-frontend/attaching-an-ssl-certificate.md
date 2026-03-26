@@ -3,7 +3,7 @@ title: 'Attaching an SSL Certificate'
 description: >-
   Attach an ACM certificate to your CloudFront distribution and configure it to serve your site over HTTPS with a custom domain.
 date: 2026-03-18
-modified: 2026-03-18
+modified: 2026-03-26
 tags:
   - aws
   - cloudfront
@@ -11,18 +11,18 @@ tags:
   - https
 ---
 
-Your CloudFront distribution works, but it is still serving content on a `*.cloudfront.net` domain. That is fine for testing, but you need your custom domain with HTTPS before this is production-ready. This lesson connects the ACM certificate you provisioned in Module 3 to your CloudFront distribution.
+Your CloudFront distribution works, but it's still serving content on a `*.cloudfront.net` domain. That's fine for testing, but you need your custom domain with HTTPS before this is production-ready. This lesson connects the ACM certificate you provisioned in Module 3 to your CloudFront distribution.
 
-If you have not yet requested a certificate, go back to [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md) and create one for your domain. You need a certificate in the `ISSUED` state before proceeding.
+If you haven't yet requested a certificate, go back to [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md) and create one for your domain. You need a certificate in the `ISSUED` state before proceeding.
 
 ## The us-east-1 Requirement (Again)
 
-This is worth repeating because it trips people up every time: your ACM certificate **must** be in `us-east-1`. CloudFront is a global service, and its control plane lives in `us-east-1`. It only sees certificates in that region.
+This is worth repeating because it trips people up every single time: your ACM certificate **must** be in `us-east-1`. CloudFront is a global service, and its control plane lives in `us-east-1`. It only sees certificates in that region.
 
-If you provisioned your certificate in a different region, you need a new one in `us-east-1`. There is no way to copy or move certificates between regions. This is covered in detail in [Certificate Renewal and the us-east-1 Requirement](certificate-renewal-and-us-east-1.md).
+If you provisioned your certificate in a different region, you need a new one in `us-east-1`. There's no way to copy or move certificates between regions. This is covered in detail in [Certificate Renewal and the us-east-1 Requirement](certificate-renewal-and-us-east-1.md).
 
 > [!WARNING]
-> CloudFront certificates **must** be in `us-east-1`. If you created your certificate in any other region, CloudFront cannot see it. Verify your certificate is in the right region before updating your distribution:
+> CloudFront certificates **must** be in `us-east-1`. If you created your certificate in any other region, CloudFront can't see it. Verify your certificate is in the right region before updating your distribution:
 >
 > ```bash
 > aws acm list-certificates \
@@ -73,12 +73,12 @@ Replace it with your ACM certificate:
 
 Let's break down each field:
 
-- **`ACMCertificateArn`**: The ARN of your ACM certificate. This replaces `CloudFrontDefaultCertificate`. You cannot have both — it is either the default certificate or your ACM certificate.
-- **`SSLSupportMethod`**: `"sni-only"` means CloudFront uses **Server Name Indication** (SNI) to determine which certificate to present during the TLS handshake. This is the standard approach and is free. The alternative, `"vip"`, uses a dedicated IP address at each edge location — it costs $600/month and exists only for compatibility with ancient clients that do not support SNI. Use `"sni-only"`.
-- **`MinimumProtocolVersion`**: `"TLSv1.2_2021"` is the most current security policy for `sni-only` distributions. It requires TLS 1.2 or higher and uses modern cipher suites. Do not use older versions like `TLSv1` or `TLSv1_2016` — they allow weaker ciphers.
+- **`ACMCertificateArn`**: The ARN of your ACM certificate. This replaces `CloudFrontDefaultCertificate`. You can't have both — it's either the default certificate or your ACM certificate.
+- **`SSLSupportMethod`**: `"sni-only"` means CloudFront uses **Server Name Indication** (SNI) to determine which certificate to present during the TLS handshake. This is the standard approach and is free. The alternative, `"vip"`, uses a dedicated IP address at each edge location — it costs $600/month and exists only for compatibility with ancient clients that don't support SNI. Use `"sni-only"`.
+- **`MinimumProtocolVersion`**: `"TLSv1.2_2021"` is the most current security policy for `sni-only` distributions. It requires TLS 1.2 or higher and uses modern cipher suites. Don't use older versions like `TLSv1` or `TLSv1_2016` — they allow weaker ciphers.
 
 > [!TIP]
-> `"TLSv1.2_2021"` is the recommended minimum protocol version as of this writing. It supports TLS 1.2 and 1.3, with a modern set of ciphers. Virtually every browser released in the last decade supports TLS 1.2, so there is no practical compatibility concern.
+> `"TLSv1.2_2021"` is the recommended minimum protocol version as of this writing. It supports TLS 1.2 and 1.3, with a modern set of ciphers. Virtually every browser released in the last decade supports TLS 1.2, so there's no practical compatibility concern.
 
 ### Part 2: Aliases
 
@@ -107,7 +107,7 @@ Replace it with your domain names. The domains listed here must match the domain
 
 ### Part 3: HTTPS Redirect
 
-Make sure the `ViewerProtocolPolicy` in your `DefaultCacheBehavior` is set to `"redirect-to-https"`. This was already configured in [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md), but verify it is still in place:
+Make sure the `ViewerProtocolPolicy` in your `DefaultCacheBehavior` is set to `"redirect-to-https"`. This was already configured in [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md), but verify it's still in place:
 
 ```json
 {
@@ -142,9 +142,9 @@ aws cloudfront wait distribution-deployed \
   --region us-east-1
 ```
 
-## What Happens Next: DNS
+## DNS: The Missing Piece
 
-After the distribution is deployed with your certificate and aliases, you need to create DNS records that point your domain to the CloudFront distribution. That is covered in Module 5 (Route 53). Until then, your site is accessible at:
+After the distribution is deployed with your certificate and aliases, you need to create DNS records that point your domain to the CloudFront distribution. That's covered in Module 5 (Route 53). Until then, your site is accessible at:
 
 - **CloudFront domain**: `https://d1234abcdef.cloudfront.net` (still works, using the ACM certificate for `*.cloudfront.net` under the hood)
 - **Custom domain**: `https://example.com` (only works after you create DNS records in Module 5)
@@ -167,20 +167,20 @@ This shows the certificate's subject (domain name) and validity dates.
 
 ## Common Mistakes
 
-**Certificate in the wrong region**: CloudFront returns an error like `InvalidViewerCertificate` if the certificate ARN points to a certificate that does not exist in `us-east-1`. Double-check the region.
+**Certificate in the wrong region**: CloudFront returns an error like `InvalidViewerCertificate` if the certificate ARN points to a certificate that doesn't exist in `us-east-1`. Double-check the region.
 
-**Domain not in Aliases**: If your certificate covers `example.com` but you did not add `example.com` to the `Aliases` list, CloudFront will not use the certificate for requests to that domain. The `Aliases` list tells CloudFront which domains this distribution answers for.
+**Domain not in Aliases**: If your certificate covers `example.com` but you didn't add `example.com` to the `Aliases` list, CloudFront won't use the certificate for requests to that domain. The `Aliases` list tells CloudFront which domains this distribution answers for.
 
-**Certificate not yet issued**: If your certificate is still in `PENDING_VALIDATION` status, CloudFront rejects it. Complete the validation process first (see [DNS Validation vs. Email Validation](dns-validation-vs-email-validation.md)).
+**Certificate not yet issued**: If your certificate is still in `PENDING_VALIDATION` status, CloudFront rejects it. Complete the validation process first (see [DNS Validation vs. Email Validation](dns-validation-vs-email-validation.md)). (I've definitely made this mistake — submitted the update before DNS validation propagated and then wondered why CloudFront was yelling at me.)
 
 **Domain already in use**: If `example.com` is already listed as an alias on another CloudFront distribution (even in a different AWS account), CloudFront rejects the update. Each domain can only be associated with one distribution at a time. Remove it from the old distribution first.
 
 > [!TIP]
-> If you get a `CNAMEAlreadyExists` error, it means the domain is already associated with another CloudFront distribution. This can happen if you are migrating from an older setup. Use `aws cloudfront list-distributions` to find the other distribution and remove the alias from it first.
+> If you get a `CNAMEAlreadyExists` error, it means the domain is already associated with another CloudFront distribution. This can happen if you're migrating from an older setup. Use `aws cloudfront list-distributions` to find the other distribution and remove the alias from it first.
 
 ## The Full ViewerCertificate Object
 
-Here is the complete updated distribution config with the certificate, aliases, and HTTPS redirect for reference:
+Here's the complete updated distribution config with the certificate, aliases, and HTTPS redirect for reference:
 
 ```json
 {
@@ -199,8 +199,6 @@ Here is the complete updated distribution config with the certificate, aliases, 
 }
 ```
 
-This gives you HTTPS on your custom domain, enforced via redirect, with TLS 1.2+ and modern ciphers. That is the same level of TLS security you get from Vercel or Netlify by default — you are just configuring it explicitly.
+This gives you HTTPS on your custom domain, enforced via redirect, with TLS 1.2+ and modern ciphers. That's the same level of TLS security you get from Vercel or Netlify by default — you're just configuring it explicitly.
 
-## What is Next
-
-Your distribution has HTTPS, a custom domain (pending DNS), and SPA routing. The last piece of the CloudFront puzzle is response headers: CORS configuration, security headers like HSTS and X-Frame-Options, and cache-control directives. In the next lesson, you will configure a response headers policy that brings your distribution's security posture up to modern standards.
+Your distribution has HTTPS, a custom domain (pending DNS), and SPA routing. The last piece of the CloudFront puzzle is response headers: CORS configuration, security headers like HSTS and X-Frame-Options, and cache-control directives. In the next lesson, you'll configure a response headers policy that brings your distribution's security posture up to modern standards.
