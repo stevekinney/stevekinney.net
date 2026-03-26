@@ -6,7 +6,7 @@ description: >-
   and Dynamics—maps the design space from flat vector stores to RL-driven
   memory management. Here's what the research says and what you can build today.
 date: 2026-03-25
-modified: 2026-03-25
+modified: 2026-03-26
 tags:
   - ai
   - agents
@@ -14,23 +14,28 @@ tags:
   - retrieval
 ---
 
-I've been building an agent memory system for the last few days, and it sent me down one of those rabbit holes where you start reading one paper on arXiv and surface three hours later with forty browser tabs and a completely different understanding of the problem. The thing that triggered it was a simple frustration: every agent I use—[Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview), [Cursor](https://cursor.com), custom stuff I've built with the [Vercel AI SDK](https://ai-sdk.dev)—forgets everything between sessions. They treat every conversation like their first. I've explained my project structure, my preferences, my constraints, and then the context window fills up or the session ends and all of that knowledge evaporates.
+I've been building an agent memory system for the last few days, and it sent me down one of those rabbit holes where you start reading one paper on [arXiv](https://arxiv.org/) and re-surface three hours later with forty browser tabs and a completely different understanding of the problem. The thing that triggered it was a simple frustration: every agent I use—[Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview), [Cursor](https://cursor.com), custom stuff I've built with the [Vercel AI SDK](https://ai-sdk.dev)—forgets everything between sessions. They treat every conversation like their first. I've explained my project structure, my preferences, my constraints, and then the context window fills up or the session ends and all of that knowledge evaporates.
 
-This isn't a new observation. But what _is_ new is that the research community has been remarkably productive on this problem over the last year. In December 2025, Hu et al. published ["Memory in the Age of AI Agents"](https://arxiv.org/abs/2512.13564)—a 107-page survey that attempts to unify a fragmented field. (They also maintain a [companion paper list on GitHub](https://github.com/memory-agent/memory-agent-papers) that's actively updated.) Dozens of other papers have landed since: [A-Mem](https://arxiv.org/abs/2502.12110) bringing Zettelkasten-style linked notes to agent memory with 85–93% token reduction, [StructMemEval](https://arxiv.org/abs/2502.13649) showing that simple retrieval can outperform complex memory hierarchies, [Memori](https://arxiv.org/abs/2503.00760) achieving 81.95% accuracy at 5% of full context cost using semantic triples, and a bunch more I'll reference as we go.
+> [!NOTE]
+> Yes, I know this is increasingly _less_ true as [Claude Code and others have rolled out their own, built-in memory systems](https://code.claude.com/docs/en/memory) over the last few weeks. But, this was _always_ meant to be more of an intellectual exercise than anything else.
 
-The old taxonomy—short-term memory versus long-term memory—is dead. It doesn't capture what modern agent memory systems actually do. The survey proposes a three-axis framework that I've found genuinely useful for thinking about the design space: **Forms** (where does memory live?), **Functions** (why does the agent need memory?), and **Dynamics** (how does memory operate over time?). That framework is what this post is organized around. I'll walk through what the research says at each axis, what's practical today versus what's still on the research frontier, and the design decisions you'll face if you're building a memory system for your own agents.
+Apparently, I was not the only person engaged in this intellectual exercise. The Research Community™ has been remarkably productive on this problem over the last year. In December 2025, Hu et al. published ["Memory in the Age of AI Agents"](https://arxiv.org/abs/2512.13564)—a 107-page survey that attempts to unify a fragmented field. (They also maintain a [companion paper list on GitHub](https://github.com/memory-agent/memory-agent-papers) that's actively updated—if that's your jam.) Dozens of other papers have landed since: [A-Mem](https://arxiv.org/abs/2502.12110) bringing [Zettelkasten](https://en.wikipedia.org/wiki/Zettelkasten)-style linked notes to agent memory with 85–93% token reduction, [StructMemEval](https://arxiv.org/abs/2502.13649) showing that simple retrieval can outperform complex memory hierarchies, [Memori](https://arxiv.org/abs/2503.00760) achieving 81.95% accuracy at 5% of full context cost using semantic triples, and a bunch more I'll reference as we go along on this journey. (And yes, that was just an excuse to use "Zettelkasten" in a sentence unironically.)
 
-One thing I want to be upfront about: I'm synthesizing a lot of material here. I've read the papers and I've been building against some of these ideas, but I'm not a memory systems researcher. If I've mischaracterized someone's work, call me out in the comments.
+The old taxonomy—short-term memory versus long-term memory—isn't really a thing anymore. It doesn't capture what modern agent memory systems actually do. The survey proposes **a three-axis framework** that I've found genuinely useful for thinking about this kind of stuff: **Forms** (Where does memory live?), **Functions** (Why does the agent need memory?), and **Dynamics** (How does memory operate over time?). Let's walk through what the research says at each axis, what's practical today versus what's still on the research frontier, and the design decisions you'll face if you're building a memory system for your own agents—not that I can advise that.
+
+One thing I want to be super upfront about: I'm synthesizing a lot of material here. What follows is basically me selfishly synthesizing my notes in an attempt to better understand. I've read the papers and I've been building against some of these ideas, but I'm not a memory systems researcher. If I've mischaracterized someone's work, call me out in the comments section that doesn't exist.
 
 ## The three forms: where does memory live?
 
 The first axis asks a deceptively simple question: where does the memory physically reside? The answer splits into three categories, and the split matters because it determines what you can actually _build_ with hosted models versus what requires running your own infrastructure.
 
-### Token-level memory (the one you'll actually use)
+### Token-level memory
 
-**Token-level memory** is memory stored as explicit, discrete, human-readable units—text chunks, facts, user profiles, conversation logs. You write it to a database, you read it back, you stuff it into the prompt. It's the form that works with any model, hosted or self-hosted, because it operates entirely outside the model's internals. You can inspect it, debug it, edit it, and swap the underlying model without touching your memory layer.
+Let's start with the one we're all familiar with—and the one you'll _actually_ use.
 
-This is what [Mem0](https://github.com/mem0ai/mem0), [Letta](https://github.com/letta-ai/letta) (formerly MemGPT), [Zep](https://github.com/getzep/zep), and most production memory frameworks implement. And for good reason: it's the only form that's actually tractable if you're using a hosted frontier model through an API.
+**Token-level memory** is memory stored as explicit, discrete, human-readable units—text chunks, facts, user profiles, conversation logs. You write it to a database or the filesystem, you read it back, you stuff it into the prompt. It's the form that works with any model, hosted or self-hosted, because it operates entirely outside the model's internals. You can inspect it, debug it, edit it, and swap the underlying model without touching your memory layer.
+
+This is what [Mem0](https://github.com/mem0ai/mem0), [Letta](https://github.com/letta-ai/letta) (née MemGPT), [Zep](https://github.com/getzep/zep), and most production memory frameworks implement. And for good reason: it's the only form that's actually tractable if you're using a hosted frontier model through an API.
 
 But "token-level" isn't a single design. There's a spectrum of topological complexity within it, and where you land on that spectrum matters:
 
@@ -40,11 +45,14 @@ But "token-level" isn't a single design. There's a spectrum of topological compl
 
 Here's the practical guidance: flat is probably right for your system. I know that sounds anticlimactic after describing the full spectrum, but the [StructMemEval benchmark](https://arxiv.org/abs/2502.13649) showed that simple retrieval can outperform complex memory hierarchies on standard benchmarks like LoCoMo and LongMemEval. Move to planar or hierarchical only when you observe specific retrieval failures that flat retrieval can't solve—like multi-hop questions where the answer requires chaining through multiple entries.
 
-### Latent memory (the one you need to understand but probably won't build)
+### Latent memory
+
+Next up: The one you should probably understand but you probably won't build.
 
 **Latent memory** is memory stored as the model's own internal representations—hidden states, KV cache entries, compressed vectors. It lives inside the model's computation, not in an external database.
 
-Before we go further, I need to address the naming collision that trips up every engineer I've talked to about this. When memory researchers say "KV cache," they do _not_ mean Redis. They do not mean a key-value database. The "Key" and "Value" in a transformer's KV cache are linear projections of each token's hidden state that serve specific roles in the attention mechanism. The Query vector multiplied by the Key vector produces a relevance score, which is then used to weight-blend the Value vectors. It's an internal data structure of the transformer architecture, not a caching layer in the infrastructure sense. (I've seen experienced engineers spend twenty minutes confused about this in paper discussions, so if that was you, you're in good company.)
+> [!NOTE] A Word on Terminology
+> Before we go further, I need to address the naming collision that trips up every engineer I've talked to about this. When memory researchers say "KV cache," they do _not_ mean Redis. They do not mean a key-value database. The "Key" and "Value" in a transformer's KV cache are linear projections of each token's hidden state that serve specific roles in the attention mechanism. The Query vector multiplied by the Key vector produces a relevance score, which is then used to weight-blend the Value vectors. It's an internal data structure of the transformer architecture, not a caching layer in the infrastructure sense. (I've seen experienced engineers spend twenty minutes confused about this in paper discussions, so if that was you, you're in good company.)
 
 With that cleared up, latent memory has three subtypes:
 
@@ -52,13 +60,15 @@ With that cleared up, latent memory has three subtypes:
 - **Transform:** Prune or compress the KV cache to keep only what matters. [SnapKV](https://arxiv.org/abs/2404.14469) uses head-wise voting to decide what to keep. [H2O](https://arxiv.org/abs/2306.14048) evicts "heavy hitter" entries. [PyramidKV](https://arxiv.org/abs/2406.02069) allocates different budgets per layer. The idea is the same across all of them: the model was paying attention to certain tokens more than others, so keep those and drop the rest.
 - **Generate:** Train a separate module to compress input into a handful of "memory tokens." [Gist tokens](https://arxiv.org/abs/2304.08467) (Mu et al., 2023), [AutoCompressor](https://arxiv.org/abs/2305.14788) (Chevalier et al., 2023), and [Titans](https://arxiv.org/abs/2501.00663) (Behrouz et al., 2025—which uses an online-updated MLP to produce latent vectors) all take this approach. The model literally learns to compress its context into a compact representation.
 
-Now here's why I said "probably won't build": every single one of these techniques requires access to internal model state—`past_key_values`, `output_hidden_states`, `output_attentions`, or `inputs_embeds`. These are HuggingFace Transformers access points on PyTorch models. Hosted APIs—Anthropic, OpenAI, Google—expose none of them. You can't reach into Claude's KV cache from the API. You can't inject custom embedding vectors into GPT-4's forward pass.
+Now here's why I said "probably won't build": every single one of these techniques requires access to internal model state—`past_key_values`, `output_hidden_states`, `output_attentions`, or `inputs_embeds`. These are [HuggingFace](https://huggingface.co/) Transformers access points on [PyTorch](https://pytorch.org/) models. Hosted APIs—Anthropic, OpenAI, Google—expose none of them. You can't reach into Claude's KV cache from the API. You can't inject custom embedding vectors into GPT-5.4's forward pass.
 
 What providers _do_ give you is prompt caching (provider-managed KV reuse—Anthropic caches your system prompt, for example) and embeddings endpoints (useful for retrieval but not injectable back into the forward pass). These are related to latent memory, but they're black-box optimizations you can't control or extend.
 
 There's also a language constraint worth noting: this is Python-only territory. PyTorch and HuggingFace Transformers is where the internal access points live. Transformers.js and ONNX Runtime for Node.js don't expose the needed internals. If you're building in TypeScript (and I usually am), latent memory is off the table entirely.
 
-### Parametric memory (the one that changes the model itself)
+### Parametric memory
+
+And finally, we can impact the model's memory by adjust the parameter weights of the model itself.
 
 **Parametric memory** encodes knowledge directly into model weights via fine-tuning, LoRA adapters, or knowledge editing techniques like [ROME](https://arxiv.org/abs/2202.05262) and [MEMIT](https://arxiv.org/abs/2210.07229). When you fine-tune a model on your company's codebase, the knowledge becomes part of the model's parameters. Every conversation benefits from it—no retrieval step needed.
 
@@ -80,7 +90,7 @@ If you're building an agent that talks to Claude, GPT-4, or Gemini through an AP
 
 The second axis asks what memory is _for_. The survey identifies three functional categories, and they map more cleanly to practical design decisions than the forms axis does.
 
-### Factual memory: "What does the agent know?"
+### Factual memory (Or, "What does the agent know?")
 
 This is the most intuitive category—declarative facts about the world. User preferences, environment state, conversation history, project context. "The user prefers TypeScript." "The project uses Tailwind." "Last session, we were debugging a race condition in the checkout flow."
 
@@ -90,9 +100,9 @@ Factual memory enables three properties that matter in practice: **consistency**
 
 This is what most memory frameworks implement today. When people say "agent memory," they usually mean factual memory. Mem0, MemGPT, [MemoryBank](https://arxiv.org/abs/2305.10250), Zep—they all store facts and retrieve them. It's table stakes. The interesting question is what _else_ your memory system should capture.
 
-### Experiential memory: "How does the agent improve?"
+### Experiential memory (Or, "How does the agent improve?")
 
-This is the missing piece in most agent frameworks, and I think it's the most underexplored area for practitioners. Factual memory tells the agent what it knows. Experiential memory tells it how to do things _better_—how it solved problems in the past, what worked, what didn't.
+This is the missing piece in most agent frameworks—and the part that I am kind of obsessed with right now, and I think it's the most underexplored area for practitioners. Factual memory tells the agent what it knows. Experiential memory tells it how to do things _better_—how it solved problems in the past, what worked, what didn't.
 
 Cognitive science calls this **procedural memory**—the kind of memory that lets you ride a bike without thinking about it. In agent systems, experiential memory operates at four levels of abstraction, and the progression is genuinely interesting:
 
@@ -105,9 +115,9 @@ Two patterns from recent work stand out. The **Agentic Context Engineering (ACE)
 
 I think experiential memory is where the biggest gap between current agent implementations and what's possible lives. Most agents I've built or used have factual memory (or at least attempt it). Almost none of them systematically learn from their own successes and failures. Every debugging session starts from scratch.
 
-### Working memory: "What is the agent thinking about right now?"
+### Working memory (Or, "What is the agent thinking about right now?")
 
-Working memory isn't about what's stored long-term—it's about what's in the prompt _right now_. Baddeley's working memory model from cognitive science describes it as capacity-limited, dynamically controlled, and essential for higher-order cognition. The agent equivalent is the context window, but with an important distinction: a context window is a passive buffer by default. **Working memory** actively controls what's in it.
+Working memory isn't about what's stored long-term—it's about what's in the prompt [_right now_](https://www.youtube.com/watch?v=gU7d2EHV_OQ). Baddeley's working memory model from cognitive science describes it as capacity-limited, dynamically controlled, and essential for higher-order cognition. The agent equivalent is the context window, but with an important distinction: a context window is a passive buffer by default. **Working memory** actively controls what's in it.
 
 For single-turn interactions, working memory is mostly about compression—fitting massive inputs into the context window. [LLMLingua](https://arxiv.org/abs/2310.05736) compresses prompts by dropping low-perplexity tokens. Gist tokens (mentioned in the latent memory section) compress input into a handful of learned representations. Observation abstraction converts raw HTML into structured state descriptions—[Synapse](https://arxiv.org/abs/2306.07863) does this for web agents, turning a full DOM into a compact representation of what's actually on screen.
 
@@ -145,7 +155,7 @@ Memories aren't static. New information arrives that contradicts old memories. R
 
 **Updating** resolves conflicts when new information contradicts existing memory. This is where things get subtle. If a user says "we switched from PostgreSQL to MySQL," you need to update the relevant memory—but do you delete the old one or mark it as superseded? Zep's approach is smart: soft-delete with timestamps rather than hard-delete. The old fact is still there for auditability, but it won't surface in retrieval. [LightMem](https://arxiv.org/abs/2501.06579) and MOOM use a dual-phase pattern: fast online writes that accept new information immediately, plus slow offline consolidation that resolves conflicts and merges related entries in the background. [Mem-α](https://arxiv.org/abs/2503.13790) goes further and trains an RL policy for update decisions—the system _learns_ when to update versus when to keep both versions.
 
-**Forgetting** prunes low-value entries. Three signals inform what to forget: time decay (exponential, inspired by the Ebbinghaus forgetting curve—memories naturally fade), access frequency (LRU/LFU policies—rarely accessed memories get evicted), and semantic importance (LLM-judged value—ask the model "is this memory still useful?"). Fair warning: LRU-style forgetting can eliminate rare but essential long-tail knowledge. A memory that's accessed once per year might still be critical when it's needed. Pure frequency-based eviction is dangerous for specialized knowledge.
+It turns out that an important part of remembering is forgetting. **Forgetting** prunes low-value entries. Three signals inform what to forget: time decay (exponential, inspired by the Ebbinghaus forgetting curve—memories naturally fade), access frequency (LRU/LFU policies—rarely accessed memories get evicted), and semantic importance (LLM-judged value—ask the model "is this memory still useful?"). Fair warning: LRU-style forgetting can eliminate rare but essential long-tail knowledge. A memory that's accessed once per year might still be critical when it's needed. Pure frequency-based eviction is dangerous for specialized knowledge.
 
 The field is progressing through three generations of evolution strategies: rule-based (hard-coded decay rates, fixed merge thresholds), LLM-assisted (use the model to judge what to merge, update, or forget), and RL-trained (train a policy that learns optimal memory management through experience). [Memory-R1](https://arxiv.org/abs/2504.01069) and Mem-α represent the RL-trained frontier. Most practical systems today are in the first or second generation, and honestly, LLM-assisted evolution is probably sufficient for most use cases.
 
@@ -153,7 +163,7 @@ One practical insight I keep coming back to: conflict detection at write time is
 
 ### Retrieval: how to access what you stored
 
-Retrieval is where most people start thinking about memory systems, but it's actually the _last_ step in the lifecycle. And here's the meta-insight the survey drives home: retrieval quality is bounded by formation and evolution quality. You can build the most sophisticated retrieval pipeline in the world, but if what's stored is noisy, contradictory, or poorly structured, your retrievals will be noisy, contradictory, and poorly structured. Beyond a certain sophistication of retrieval pipeline, the leverage shifts to making what's stored cleaner.
+Retrieval is where most people start thinking about memory systems, but it's actually the _last_ step in the lifecycle. I guess that makes sense: You can't recall the memories you never stored. (That's a song lyric waiting to happen.) And here's the meta-insight the survey drives home: retrieval quality is bounded by formation and evolution quality. You can build the most sophisticated retrieval pipeline in the world, but if what's stored is noisy, contradictory, or poorly structured, your retrievals will be noisy, contradictory, and poorly structured. Beyond a certain sophistication of retrieval pipeline, the leverage shifts to making what's stored cleaner.
 
 That said, retrieval still matters enormously. Here's the four-step pipeline the survey describes, with the practical implications of each:
 
@@ -229,13 +239,15 @@ The fix is straightforward: incorporate the tenant namespace into cache keys. Pr
 
 ### The right to be forgotten
 
-If a user asks to delete their data, can you guarantee it's gone? Under GDPR Article 17 (Right to Erasure) and CCPA deletion rights, you may be legally required to guarantee it.
+If a user asks to delete their data, can you guarantee it's gone? Under GDPR Article 17 (Right to Erasure) and CCPA deletion rights, you may be legally required to guarantee it. (This brings back painfull memories of when I used to work at a messaging company and your entire contact list was just a bundle of PII.)
 
 The cascade problem makes this harder than it sounds. Deleting the storage entries is step one. But what about the full-text search indexes that contain their data? The embedding caches? The consolidated summaries that reference their memories? The experiential memories derived from interactions with them? A memory that says "when User X asks about feature Y, approach it this way" contains information _about_ User X even though it looks like an agent strategy.
 
 Zep's approach—soft-delete with timestamps rather than hard-delete—preserves auditability while making data inaccessible. The data still exists in storage but is excluded from all retrieval paths. This gives you a window for complete physical deletion while immediately removing the data from the agent's accessible memory.
 
 ### The three pillars of trust
+
+(Also: A great band name.)
 
 The survey frames trustworthy memory around three pillars, and I think the framing is worth internalizing even if you don't implement all of it:
 
@@ -251,7 +263,7 @@ The core of this post has been about what you can build today. This section is a
 
 ### RL-driven memory management
 
-The progression is clear: we've gone from rule-based memory management (hard-coded decay rates, fixed merge thresholds) to LLM-assisted (use the model to judge what to keep and what to forget) and we're now entering RL-driven territory. [Memory-R1](https://arxiv.org/abs/2504.01069) and [Mem-α](https://arxiv.org/abs/2503.13790) train RL policies that learn optimal memory operations through experience—when to store, when to consolidate, when to forget.
+It feels like all roads tend to lead towards reinforcement learning these days: we've gone from rule-based memory management (hard-coded decay rates, fixed merge thresholds) to LLM-assisted (use the model to judge what to keep and what to forget) and we're now entering RL-driven territory. [Memory-R1](https://arxiv.org/abs/2504.01069) and [Mem-α](https://arxiv.org/abs/2503.13790) train RL policies that learn optimal memory operations through experience—when to store, when to consolidate, when to forget.
 
 The deeper argument is provocative: human-inspired memory taxonomies (episodic, semantic, procedural—borrowed from Tulving's cognitive science work) may not be optimal for artificial agents. We inherited these categories because they describe how human brains work, but there's no reason to believe they're the best organization for a system with fundamentally different constraints—unlimited patience, perfect recall of what it _does_ store, no emotional salience signal. Let the agent invent its own memory structures through optimization. [MemEvolve](https://arxiv.org/abs/2502.08413) is a meta-evolutionary framework that jointly evolves both the agents' knowledge and their memory architecture.
 
@@ -271,7 +283,7 @@ The challenges are familiar to anyone who's built distributed systems: consisten
 
 ### The ontological question
 
-I'll end the frontiers section with something that most engineering papers don't ask. The ["Animesis"](https://arxiv.org/abs/2503.16667) paper from March 2026 asks: as agents become persistent and autonomous, what does memory _mean_ for a digital being?
+This is what happens when you let liberal arts majors play with technology. I'll end the frontiers section with something that most engineering papers don't ask. The ["Animesis"](https://arxiv.org/abs/2503.16667) paper from March 2026 asks: as agents become persistent and autonomous, what does memory _mean_ for a digital being?
 
 Current work answers "what memory does"—stores facts, enables retrieval, supports learning. But it doesn't answer "what memory is" in a deeper sense. As agent lifecycles extend from minutes to months—and they are extending, with persistent sessions, scheduled tasks, and always-on infrastructure—the assumption that memory is just a tool for the agent to use starts to break down. Is an agent with a rich memory of a user's preferences, communication style, and project history fundamentally different from an agent without one? Not in capability, but in kind?
 
@@ -281,7 +293,7 @@ I don't have an answer. I'm not sure the question has a clean answer. But I thin
 
 Here's where I land after reading through the research and building against some of these ideas.
 
-For practitioners building memory systems today, the actionable path is clear: master token-level memory with a strong retrieval pipeline. That means hybrid search (BM25 plus semantic embeddings), HyDE for query construction, MMR for diversity, temporal decay for freshness, and aggressive post-retrieval filtering. Start flat. Move to graphs or hierarchies only when you observe specific failures that flat retrieval can't solve.
+For practitioners (e.g. you and me) building memory systems today, the actionable path is clear: master token-level memory with a strong retrieval pipeline. That means hybrid search (BM25 plus semantic embeddings), HyDE for query construction, MMR for diversity, temporal decay for freshness, and aggressive post-retrieval filtering. Start flat. Move to graphs or hierarchies only when you observe specific failures that flat retrieval can't solve.
 
 Add experiential memory to close the learning loop. Your agent should remember _how_ it solved problems, not just what facts it knows. Even a simple strategy store—"approaches that worked for error type X"—can meaningfully reduce the number of times your agent re-derives the same solution.
 
