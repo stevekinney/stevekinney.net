@@ -35,4 +35,12 @@ if [ $# -gt 0 ]; then
   git add "$@"
 fi
 
+# Sync images if any image files were added or modified
+IMAGE_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- '*.png' '*.jpg' '*.jpeg' '*.gif' '*.svg' '*.webp' '*.avif' '*.mp4' '*.webm' | grep -E '^(writing|courses|content)/' || true)"
+if [ -n "$IMAGE_FILES" ]; then
+  echo "New or modified images detected — syncing to Vercel Blob..."
+  bun images:sync
+  git add image-manifest.json
+fi
+
 bunx lint-staged

@@ -63,7 +63,7 @@ if (!OPEN_AI_API_KEY) throw new Error('OpenAI API key is required');
 We're going to create a `VectorDatabase` class to encapsulate our logic. I'm going to keep this intentionally simple and I'll leave it to your to improve it as homework. We'll start with just `constructor` and some properties. I'll add some additional methods once we have that out of the way. For our own sanity, we're going to make sure that those API keys are defined and choose to blow up if they're not.
 
 ```typescript
-export class VectorDatabasse {
+export class VectorDatabsse {
   private pinecone: Pinecone;
   private openai: OpenAI;
 
@@ -155,7 +155,7 @@ export class VectorDatabase {
 }
 ```
 
-We'll use `this.generateEmbedding` for both storing our documents and then also to create a vector when someone tries to query the database using a string. Next up, let's look at `this.insertDocument`.
+We'll use `this.generateEmbedding` for both storing our documents and then also to create a vector when someone tries to query the database using a string. Next up, let's look at `this.indexDocument`.
 
 ```typescript
 export class VectorDatabase {

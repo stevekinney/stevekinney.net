@@ -5,7 +5,7 @@ description: >-
   lint rules, preventing cross-package internal imports and circular
   dependencies.
 date: 2026-03-01
-modified: 2026-03-17
+modified: 2026-03-20
 ---
 
 ## What You're Doing
@@ -26,7 +26,7 @@ In a monorepo, the package dependency graph is your architecture. Packages at th
 You should be continuing from where Exercise 5 left off. If you need to catch up:
 
 ```bash
-git checkout 05-linting-start
+git checkout 06-linting-start
 pnpm install
 ```
 
