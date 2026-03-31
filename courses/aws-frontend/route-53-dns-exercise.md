@@ -3,7 +3,7 @@ title: 'Exercise: Configure DNS for Your Site'
 description: >-
   Create a hosted zone, point a domain to a CloudFront distribution with alias records, and verify DNS resolution.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - route53
@@ -177,6 +177,12 @@ You should see your NS and SOA records (auto-created), plus the A and AAAA alias
 
 - The output includes NS, SOA, A, and AAAA records for your domain.
 - The A and AAAA records show `AliasTarget` with your CloudFront distribution's domain name.
+
+## Failure Diagnosis
+
+- **The alias records look right in Route 53 but the domain does not resolve publicly:** Your registrar is still pointing at old nameservers. Compare the registrar settings with the four Route 53 NS records from your hosted zone.
+- **The CloudFront domain works but `https://example.com` does not:** The apex A and AAAA alias records are missing, or they point at the wrong distribution or hosted zone ID.
+- **`example.com` works but `www.example.com` fails:** You created only the apex records. Add matching `www` alias records if you want both hostnames to resolve.
 
 ## What You Built
 

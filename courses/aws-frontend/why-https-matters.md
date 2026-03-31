@@ -3,7 +3,7 @@ title: 'Why HTTPS Matters'
 description: >-
   Understand why HTTPS is non-negotiable for modern frontends and how SSL/TLS certificates make secure connections possible.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - acm
@@ -14,6 +14,14 @@ tags:
 If you've been deploying to Vercel or Netlify, every site you've shipped has been served over HTTPS. You probably never thought about it. There was no certificate to request, no validation step, no region to worry about. It just worked. On AWS, you need to understand what those platforms were doing for you — because now you're the one responsible for it.
 
 **HTTPS** (HTTP over TLS) encrypts the connection between a user's browser and your server. Without it, every request and response travels in plaintext: HTML, cookies, authentication tokens, form submissions — all readable by anyone sitting between the user and your origin. That alone should be enough motivation, but the modern web has made HTTPS even more consequential than simple encryption.
+
+## Why This Matters
+
+This is not a "nice to have" layer you bolt on at the end. HTTPS determines whether browsers trust your site, whether modern web APIs are available, whether search engines treat the site as normal, and whether users ever see your application instead of a certificate warning.
+
+## Builds On
+
+This lesson builds on the assumption that you have shipped modern frontends before. You already know what cookies, auth tokens, service workers, and secure APIs are. What changes on AWS is that certificate management is now part of your deployment work instead of something Vercel quietly handled for you.
 
 ## The Browser Won't Let You Ship Without It
 
@@ -75,5 +83,17 @@ Compare this to the traditional workflow: buy a certificate from a CA, generate 
 ## The Mental Model
 
 Think of it this way: HTTPS is the lock on the front door. The SSL/TLS certificate is the key that proves you own the door. ACM is the **locksmith** that cuts the key for free and replaces it before it wears out. You still need to install the lock (attach the certificate to CloudFront), and you still need to prove you own the door (domain validation) — but the hard part of managing the key itself is handled for you.
+
+## Verification
+
+- You can name at least three browser features your frontend loses without HTTPS.
+- You can explain the role of the certificate in the TLS handshake without drifting into cargo-cult language about "just enabling SSL."
+- You can run the `openssl s_client` command from this lesson and identify the subject, issuer, and validity dates in the output.
+
+## Common Failure Modes
+
+- **Treating HTTPS as a checkbox for launch week:** On AWS, certificate setup affects DNS, CloudFront, and deployment order, so it belongs in the architecture from the start.
+- **Confusing encryption with identity:** TLS protects both the data in transit and the proof that the server is the one the browser intended to reach.
+- **Assuming the certificate can live in any region:** CloudFront has a region requirement, which is why the ACM details in this module matter operationally.
 
 Now that you know why all of this matters, let's walk through requesting a certificate in ACM — the first step toward serving your frontend over HTTPS on AWS.

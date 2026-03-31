@@ -5,7 +5,7 @@ description: >-
   constraints and deployment limitations that affect Lambda@Edge and CloudFront
   Functions.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - edge-functions
@@ -116,8 +116,6 @@ Edge functions have strict limits on the response they can generate:
 | Origin request (generated response) | 1 MB                                                         |
 | Origin response                     | Cannot generate a response; can only modify the existing one |
 
-<!-- VERIFY: 40 KB viewer request generated response limit. Some sources say 40 KB body only; others include headers. -->
-
 If your edge function generates a response that exceeds the limit, CloudFront returns a 502 error to the viewer.
 
 > [!WARNING]
@@ -155,12 +153,10 @@ Here's every constraint in one table for quick reference:
 | Package size          | 10 KB                      | 1 MB                 | 50 MB                |
 | Network access        | No                         | Yes                  | Yes                  |
 | File system           | No                         | `/tmp` (512 MB)      | `/tmp` (512 MB)      |
-| Environment variables | No                         | No                   | Yes                  |
+| Environment variables | No                         | No                   | No                   |
 | Request body access   | No                         | No                   | Yes                  |
 | Logs location         | `us-east-1`                | Nearest region       | Nearest region       |
 | Deployment speed      | Seconds                    | Minutes              | Minutes              |
-
-<!-- VERIFY: Lambda@Edge viewer triggers support for environment variables. Some documentation says no env vars for any L@E trigger; other sources say origin triggers only. -->
 
 ## Debugging Workflow
 

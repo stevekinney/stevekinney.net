@@ -5,7 +5,7 @@ description: >-
   servers, how invocations work, and how Lambda differs from traditional server
   deployments.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - lambda
@@ -16,6 +16,14 @@ tags:
 If you've ever deployed a serverless function on Vercel, you already know the core idea: you write a function, you deploy it, and the platform runs it when someone makes a request. You don't provision servers, you don't manage uptime, and you don't pay when nothing is happening. **Lambda** is the AWS service that powers this model — and it's literally what Vercel's serverless functions are built on top of.
 
 Up to this point in the course, everything you've deployed has been static. S3 holds files, CloudFront serves them to the world. But the moment your frontend needs to talk to a backend — an API endpoint, a form submission handler, a webhook receiver — you need compute. Lambda gives you compute without giving you servers.
+
+## Why This Matters
+
+This is the point where the course stops being "frontend hosting on AWS" and becomes "full-stack frontend architecture on AWS." The Summit Supply storefront has static pages already. Lambda is how it graduates to live inventory, cart actions, webhooks, and API responses without introducing a server you now have to keep alive.
+
+## Builds On
+
+This lesson builds on the static deployment pipeline from Modules 2 through 6. You already know how assets reach users. Now you are adding compute behind those assets so the frontend can ask questions and change data at runtime.
 
 ## The Execution Model
 
@@ -104,5 +112,17 @@ These constraints push you toward a specific architecture: small, focused functi
 ## Where Logs Go
 
 When your Lambda function runs, anything you write to `console.log` (or `console.error`, `console.warn`) goes to **CloudWatch Logs**. Lambda automatically creates a log group named `/aws/lambda/<function-name>` — in your case, `/aws/lambda/my-frontend-app-api`. Each execution environment gets its own log stream within that group.
+
+## Verification
+
+- You can explain the difference between an invocation, an execution environment, and a warm reuse of that environment.
+- You can look at a frontend feature like "submit the Summit Supply contact form" and describe it as an event that triggers a Lambda function.
+- You know where Lambda logs land before you ever open the CloudWatch console.
+
+## Common Failure Modes
+
+- **Thinking Lambda is an always-on server with a different billing model:** It is event-driven compute with lifecycle constraints, not a tiny VPS.
+- **Ignoring package size and initialization cost:** Those become both latency and cost problems once cold starts enter the picture.
+- **Assuming local process state is durable:** Warm reuse exists, but Lambda is still fundamentally a stateless architecture.
 
 We'll dig into CloudWatch properly in Module 12. For now, just know that your logs exist and where to find them: in the CloudWatch console under **Log groups**, or via the CLI with `aws logs` commands. Next up, you'll write your first Lambda handler in TypeScript — a function that receives an event and returns a JSON response.

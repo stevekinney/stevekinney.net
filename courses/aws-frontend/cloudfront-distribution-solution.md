@@ -3,7 +3,7 @@ title: 'Solution: Set Up a CloudFront Distribution'
 description: >-
   Complete solution with all CLI commands for creating a CloudFront distribution with S3 origin, OAC, ACM certificate, and SPA routing.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cloudfront
@@ -12,6 +12,12 @@ tags:
 ---
 
 This is the complete solution for the [CloudFront Distribution Exercise](cloudfront-distribution-exercise.md). Every command is shown with its expected output.
+
+## Why This Works
+
+- Origin Access Control keeps S3 private while still allowing CloudFront to read the files your users need.
+- Custom error responses make a single-page app behave like a frontend router instead of a pile of missing-object errors.
+- The distribution becomes the enforcement point for HTTPS, caching, and security headers, which is why it sits between your users and the bucket.
 
 ## Create an Origin Access Control
 

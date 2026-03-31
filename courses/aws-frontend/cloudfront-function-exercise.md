@@ -4,7 +4,7 @@ description: >-
   Write a CloudFront Function that adds security headers and redirects a legacy
   URL path, then deploy it to your distribution.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cloudfront-functions
@@ -144,6 +144,12 @@ curl -I https://d111111abcdef8.cloudfront.net/old-path
 - [ ] Both functions are associated with the default behavior on distribution `E1A2B3C4D5E6F7`
 - [ ] `curl -I` confirms security headers in the response
 - [ ] `curl -I /old-path` confirms the 301 redirect
+
+## Failure Diagnosis
+
+- **The function tests pass but production behavior never changes:** CloudFront Functions do not affect traffic until you publish them to `LIVE` and the distribution finishes deploying the new association.
+- **The redirect works but the headers are missing:** The functions are attached to the wrong event types. Redirect logic belongs on `viewer-request`; header mutation belongs on `viewer-response`.
+- **Every path redirects instead of just `/old-path`:** Your condition is too broad. Re-test the request URI comparison before republishing.
 
 ## Stretch Goals
 

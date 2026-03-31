@@ -3,7 +3,7 @@ title: 'Hosted Zones and Record Types'
 description: >-
   Create a hosted zone in Route 53 and understand the common DNS record types (A, AAAA, CNAME, MX, TXT) and when to use each.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - route53
@@ -182,8 +182,6 @@ This returns every record in the zone, including the NS and SOA records that Rou
 ## Hosted Zone Costs
 
 Route 53 charges **$0.50 per hosted zone per month** for the first 25 zones. If you create a hosted zone and delete it within 12 hours, you aren't charged. DNS queries are billed separately at $0.40 per million queries for standard routing — for a typical frontend, this is pennies.
-
-<!-- VERIFY: $0.50/month pricing — confirmed as of March 2026, see https://aws.amazon.com/route53/pricing/ -->
 
 The hosted zone charge is the only ongoing cost you pay just for having DNS configured, regardless of traffic. For a single domain powering your frontend, you're looking at $0.50/month plus negligible query costs.
 

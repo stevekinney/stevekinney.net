@@ -3,7 +3,7 @@ title: 'Solution: End-to-End Static Site Deployment'
 description: >-
   Complete solution with every command and expected output for deploying a static site end to end on AWS.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - deployment
@@ -12,6 +12,12 @@ tags:
 ---
 
 This is the complete solution for the [End-to-End Static Site Deployment exercise](static-site-deployment-exercise.md). I've included every command with its expected output so you can compare as you go.
+
+## Why This Works
+
+- This workflow turns four separate services into one deployment path: S3 stores the files, CloudFront serves them, ACM terminates TLS, and Route 53 points the domain at the edge.
+- The bucket stays private because CloudFront is the only public entry point that needs direct read access.
+- The final sync-plus-invalidation loop is the practical deployment cycle you will repeat long after the exercise is over.
 
 ## Create the S3 Bucket
 

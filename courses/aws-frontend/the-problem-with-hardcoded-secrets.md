@@ -4,7 +4,7 @@ description: >-
   Understand why hardcoding secrets in Lambda environment variables or source
   code is a security risk and what the alternatives look like on AWS.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - secrets
@@ -15,6 +15,14 @@ tags:
 In Vercel, you set environment variables in the dashboard. Your API keys, database URLs, and third-party tokens live there, and the platform handles the rest. In Lambda, you can do the same thing — you set environment variables on the function and read them from `process.env`. You did exactly this in [Lambda Environment Variables](lambda-environment-variables.md).
 
 That approach works. It's also a security problem waiting to happen.
+
+## Why This Matters
+
+By the time Summit Supply has a live inventory API, payment provider keys, and webhook signing secrets, "just put it in an environment variable" stops being a convenience and starts being a liability. This module is where the course shifts from "it works" to "it works without leaking credentials."
+
+## Builds On
+
+This lesson builds on the Lambda configuration work from Module 7 and the IAM work from Module 1. You already know how functions read configuration and how policies control access. Now you are applying those same mechanisms to secrets instead of harmless values like table names or stage labels.
 
 ## What "Hardcoded" Actually Means
 
@@ -85,6 +93,18 @@ By the end of Module 11, your Lambda functions will follow this pattern:
 
 > [!TIP]
 > If you're coming from Vercel, think of Parameter Store as environment variables with encryption, access control, and organization built in. Think of Secrets Manager as the same thing but with automatic rotation added on top. Neither one is complicated — they just solve a problem that Vercel handles behind the scenes for you.
+
+## Verification
+
+- You can name the three common places secrets end up by mistake: source code, deployment configuration, and Lambda environment variables.
+- You can explain why encrypting environment variables at rest is not the same thing as controlling who can read them.
+- You can describe when Parameter Store is enough and when Secrets Manager earns its monthly cost.
+
+## Common Failure Modes
+
+- **Treating "not in Git" as secure enough:** A secret can still leak through Lambda configuration, CI output, or overly broad IAM access.
+- **Using environment variables because rotation feels like a future problem:** Rotation always becomes a current problem on the worst possible day.
+- **Picking Secrets Manager for every value automatically:** Some values are configuration, not secrets, and Parameter Store is the simpler tool.
 
 ## The Principle of Least Surprise
 

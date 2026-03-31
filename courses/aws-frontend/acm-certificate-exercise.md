@@ -3,7 +3,7 @@ title: 'Exercise: Request and Validate a Certificate'
 description: >-
   Request an ACM certificate for your domain, complete DNS validation, and verify the certificate is issued.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - acm
@@ -165,6 +165,12 @@ Expected output:
 - Status is `ISSUED`.
 - The certificate covers both `example.com` and `*.example.com` (or whatever domains you requested).
 - Renewal eligibility is `ELIGIBLE`.
+
+## Failure Diagnosis
+
+- **The certificate stays in `PENDING_VALIDATION`:** The DNS validation CNAME is missing, the name or value was copied incorrectly, or your DNS provider flattened or proxied the record instead of publishing it exactly as ACM requested.
+- **You only validated one name and expected both:** Re-run `describe-certificate` and check the `DomainValidationOptions`. ACM sometimes reuses one validation record for apex and wildcard names, but you still need to confirm what your certificate request actually expects.
+- **The certificate looks fine but CloudFront cannot use it later:** The certificate was requested outside `us-east-1`. CloudFront only accepts ACM certificates from that region.
 
 ## What You Built
 

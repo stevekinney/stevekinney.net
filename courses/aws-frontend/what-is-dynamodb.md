@@ -5,7 +5,7 @@ description: >-
   it's a practical choice for frontend engineers who need a lightweight data
   layer.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - dynamodb
@@ -16,6 +16,15 @@ tags:
 You don't need PostgreSQL for a todo list. You don't need to learn SQL joins, manage connection pools, or pay for a database server that runs 24/7 whether or not anyone is using your app. If your frontend needs a place to store and retrieve data — user preferences, form submissions, a list of items — **DynamoDB** gives you a database without giving you a database server.
 
 DynamoDB is a fully managed, serverless NoSQL database from AWS. You create a table, write data to it, read data from it, and AWS handles everything else: provisioning, replication, patching, backups, scaling. If that sounds familiar, it should — it's the same "you write the code, we run the infrastructure" model you saw with Lambda in [What is Lambda?](what-is-lambda.md).
+
+## Why This Matters
+
+This is the moment Summit Supply stops being "a frontend with an API" and becomes "an application with state." Once you store saved gear lists, lightweight account state, or form submissions, you need a database choice that matches the rest of the stack. DynamoDB fits the same serverless operating model as Lambda, which is why it shows up so often in frontend-heavy AWS architectures.
+
+## Builds On
+
+- [What Lambda Is and Why Frontend Engineers Care](what-is-lambda.md)
+- [Connecting API Gateway to Lambda](connecting-api-gateway-to-lambda.md)
 
 ## How It Differs from SQL Databases
 
@@ -70,15 +79,9 @@ For frontend engineers, this matters because:
 
 DynamoDB offers two pricing modes: **provisioned** and **on-demand**. For a frontend API backend, on-demand is almost always the right choice. You don't need to predict traffic or configure capacity units.
 
-<!-- VERIFY: pricing updated November 2024, confirm still current -->
+AWS cut DynamoDB on-demand request pricing in late 2024, and the service still positions on-demand as the default choice for new or unpredictable workloads. Exact rates vary by Region and can change, so use the current [DynamoDB pricing page](https://aws.amazon.com/dynamodb/pricing/) or the AWS Pricing Calculator when you need a real number for production planning.
 
-With on-demand pricing in `us-east-1`:
-
-- **Read requests**: $0.125 per million read request units
-- **Write requests**: $0.625 per million write request units
-- **Storage**: $0.25 per GB per month (first 25 GB free)
-
-For context: if your frontend app serves 10,000 users per month and each user makes 50 read requests and 10 write requests, that's 500,000 reads and 100,000 writes per month. At on-demand pricing, that costs about $0.06 for reads and $0.06 for writes. Twelve cents a month for your entire data layer.
+The practical point for this course is simpler: low-volume frontend workloads still cost pennies. A hobby project or learning app can read and write plenty of data before DynamoDB becomes a meaningful bill.
 
 > [!WARNING]
 > The DynamoDB free tier includes 25 GB of storage and enough read/write capacity for most development workloads. But the free tier only applies to tables using **provisioned** capacity mode, not on-demand. For learning and development, the cost difference is negligible — on-demand with low traffic will cost pennies. But be aware of this distinction if you're trying to stay strictly within the free tier.
@@ -100,3 +103,20 @@ DynamoDB isn't a good fit when:
 - You need SQL-compatible analytics across your entire dataset
 
 For the typical frontend API backend — storing user data, tracking application state, persisting form submissions — DynamoDB handles the job with less complexity and lower cost than a relational database. Honestly, I reach for it any time I need a data layer for a side project and don't want to think about infrastructure.
+
+## Verification
+
+By the end of this lesson, you should be able to explain why a serverless frontend stack would pick DynamoDB _before_ you ever touch the CLI. If you want a quick concrete check, create a table name on paper and answer these three questions:
+
+- What is the partition key?
+- What are the first three access patterns the app needs?
+- Would those access patterns need joins?
+
+If your answers are specific, you're ready for the table design lesson.
+
+## Common Failure Modes
+
+- **Designing around the data shape instead of the access pattern:** that is the biggest DynamoDB mindset shift.
+- **Assuming flexible ad hoc queries will save you later:** DynamoDB rewards deliberate query design, not "we'll figure it out in production."
+- **Using Scan when you really needed Query:** it works at first, then becomes the slow, expensive habit you regret.
+- **Treating DynamoDB like serverless Postgres:** it is not trying to be that, and life gets easier once you stop asking it to.

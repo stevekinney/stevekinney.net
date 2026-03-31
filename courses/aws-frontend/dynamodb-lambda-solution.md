@@ -4,7 +4,7 @@ description: >-
   Complete solution for the DynamoDB Lambda exercise, with all commands, handler
   code, and expected output.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - dynamodb
@@ -13,6 +13,12 @@ tags:
 ---
 
 Here's the complete solution for every step, including the DynamoDB table creation, IAM policy, handler code, deployment commands, and expected output at each stage.
+
+## Why This Works
+
+- The table schema aligns with the access pattern in the handler: `userId` groups one user's items together and `itemId` uniquely identifies each record within that partition.
+- The Lambda role is scoped to one table, so the API gets the exact data access it needs without turning into `dynamodb:*` on `*`.
+- The POST, GET, and DELETE tests prove the whole request lifecycle, not just whether DynamoDB accepted a table definition.
 
 ## Create the DynamoDB Table
 

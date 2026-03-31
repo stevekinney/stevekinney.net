@@ -4,7 +4,7 @@ description: >-
   Create a DynamoDB table, write a Lambda handler for GET, POST, and DELETE
   operations, wire it through API Gateway, and call it from the frontend.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - dynamodb
@@ -197,6 +197,12 @@ Missing `userId` returns `statusCode: 400`. Unsupported method returns `statusCo
 - [ ] DELETE removes an item
 - [ ] Missing parameters return 400
 - [ ] Unsupported methods return 405
+
+## Failure Diagnosis
+
+- **The Lambda invocation fails with `AccessDeniedException`:** The execution role is missing DynamoDB permissions, or the policy points at the wrong table ARN.
+- **You get validation errors or empty reads even after a successful write:** The `TABLE_NAME` environment variable or the partition/sort key names in your code do not match the actual table schema.
+- **DELETE succeeds but the item still appears on the next GET:** You reused the wrong `itemId`, or the delete request did not include the same `userId` partition key as the original item.
 
 ## Stretch Goals
 

@@ -3,7 +3,7 @@ title: 'CI/CD with GitHub Actions'
 description: >-
   Set up a GitHub Actions workflow that builds your frontend and deploys it to AWS on every push to the main branch.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - github-actions
@@ -37,12 +37,12 @@ This tells AWS to trust tokens issued by GitHub's OIDC endpoint.
 aws iam create-open-id-connect-provider \
   --url "https://token.actions.githubusercontent.com" \
   --client-id-list "sts.amazonaws.com" \
-  --thumbprint-list "1234567890123456789012345678901234567890" \
+  --thumbprint-list "ffffffffffffffffffffffffffffffffffffffff" \
   --region us-east-1 \
   --output json
 ```
 
-<!-- VERIFY: The thumbprint value is a placeholder. AWS no longer validates the thumbprint for GitHub's OIDC provider (GitHub is in AWS's trusted root CA list), but the parameter is still required by the API. Any 40-character hex string works. -->
+AWS no longer validates the thumbprint for GitHub's OIDC provider, but the IAM API still requires a 40-character hex string. In other words, this field is syntactically required and operationally ignored for GitHub's endpoint today. Ridiculous? A little. Still, the command works.
 
 > [!TIP]
 > You only need to create this identity provider once per AWS account. If you have multiple repositories deploying to the same account, they all share this provider. Each repository gets its own IAM role with scoped permissions.

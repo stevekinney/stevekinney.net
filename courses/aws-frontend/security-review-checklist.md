@@ -5,7 +5,7 @@ description: >-
   access, CloudFront settings, Lambda permissions, API Gateway authentication,
   and DynamoDB access.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - security
@@ -16,6 +16,14 @@ tags:
 You've built a full-stack application on AWS. S3 holds your static assets, CloudFront serves them globally, Lambda runs your API logic, API Gateway handles HTTP routing, DynamoDB stores your data, and Secrets Manager keeps your credentials safe. Every one of those services has security configuration, and every one of them defaults to something you should probably change.
 
 This is your pre-flight checklist. Work through it before you point real users at your deployment. None of these items are new — you've configured all of them throughout this course — but seeing them together in one place is how you catch the one you forgot.
+
+## Why This Matters
+
+Security failures in AWS are usually accumulation failures. One permissive IAM policy, one bucket policy left public, one secret still sitting in configuration, one unauthenticated route you meant to lock down later. This lesson is where you review Summit Supply as a system instead of as a pile of individually reasonable decisions.
+
+## Builds On
+
+This lesson builds on every service module in the course. It is intentionally a synthesis lesson: IAM from Module 1, S3 and CloudFront from Modules 2 through 4, DNS and certificates from Modules 3 through 5, Lambda and API Gateway from Modules 7 and 8, DynamoDB from Module 10, and secret storage from Module 11.
 
 ## IAM: Who Can Do What
 
@@ -160,3 +168,15 @@ The real security practice is making this review a habit. Run through this list 
 
 > [!WARNING]
 > The most dangerous moment in AWS security isn't day one — it's month six, when you've forgotten which policies you attached to which roles and a quick `"Action": "*"` feels easier than looking up the right permission. Resist the urge. The checklist exists for a reason.
+
+## Verification
+
+- You can run the one-command audit section and explain what each result means instead of just skimming for the word `DENY`.
+- You can trace one real user request through the stack and identify which IAM role, bucket policy, API route, and data permissions it depends on.
+- You can point at at least one configuration in your current environment that you would reject in a code review today.
+
+## Common Failure Modes
+
+- **Reviewing services in isolation:** Most real exposures come from the way two services interact, not from an obviously broken single screen in the console.
+- **Treating temporary broad permissions as harmless:** Temporary permissions become architecture with enough calendar time.
+- **Assuming a successful deployment implies a secure deployment:** Functionality only proves the happy path works. It says nothing about who else can reach it.

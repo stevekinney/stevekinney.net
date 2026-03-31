@@ -3,7 +3,7 @@ title: 'Solution: Configure DNS for Your Site'
 description: >-
   Complete walkthrough of creating a hosted zone, pointing a domain to CloudFront with alias records, and verifying DNS resolution.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - route53
@@ -12,6 +12,12 @@ tags:
 ---
 
 This is the solution for the [Route 53 DNS Exercise](route-53-dns-exercise.md). Each step includes the exact commands, expected output, and troubleshooting guidance.
+
+## Why This Works
+
+- Alias records let the apex domain point at CloudFront without violating normal DNS rules around CNAMEs at the zone root.
+- Route 53 becomes authoritative only after the registrar delegates the domain to its nameservers, which is why nameserver changes matter as much as record creation.
+- Verifying with both `dig` and the browser proves the stack from DNS to TLS to CloudFront is actually working, not just configured on paper.
 
 ## Create a Hosted Zone
 

@@ -4,7 +4,7 @@ description: >-
   Complete solution for the CloudWatch alarms exercise, with all commands and
   expected output.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cloudwatch
@@ -13,6 +13,12 @@ tags:
 ---
 
 Here's the complete solution for every step, including all CLI commands and the expected output at each stage.
+
+## Why This Works
+
+- SNS decouples notification delivery from the alarm definitions, so multiple alarms can fan into one alert path without duplicating configuration.
+- The alarm thresholds only matter if they observe the right metric, statistic, and dimensions, which is why the metric wiring gets as much attention as the threshold value.
+- Forcing an alarm state is the fastest way to verify the notification pipeline before you trust it with a real outage.
 
 ## Create the SNS Topic
 

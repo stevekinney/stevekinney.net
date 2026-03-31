@@ -3,7 +3,7 @@ title: 'Exercise: Deploy a Static Site to S3'
 description: >-
   Create a bucket, upload a static site, enable website hosting, and access it in the browser.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - s3
@@ -315,6 +315,12 @@ aws s3api list-object-versions \
 ### Checkpoint
 
 You should see two versions of `index.html` — the original and the updated one. The `IsLatest` field on the newer version should be `true`.
+
+## Failure Diagnosis
+
+- **The website endpoint returns `403 Forbidden`:** One of the three public-hosting pieces is missing. Check Block Public Access, the bucket policy, and the website hosting configuration in that order.
+- **Your browser loads HTML with broken styles or JavaScript:** The files either were not synced from `build/` or the object keys do not match the filenames referenced in `index.html`.
+- **You uploaded the update but still see the old page:** Hard-refresh the browser or open the site in a private window. With raw S3 website hosting, browser caching is usually the culprit.
 
 ## Stretch Goals
 

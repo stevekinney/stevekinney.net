@@ -3,7 +3,7 @@ title: 'Exercise: Set Up a CloudFront Distribution'
 description: >-
   Create a CloudFront distribution with an S3 origin, Origin Access Control, ACM certificate, and custom error responses for SPA routing.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cloudfront
@@ -179,6 +179,12 @@ curl -I https://YOUR_DISTRIBUTION_DOMAIN/any/spa/route
 # Verify S3 is locked down
 curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
 ```
+
+## Failure Diagnosis
+
+- **CloudFront returns `403 Forbidden` for files that exist:** The S3 bucket policy does not trust your distribution's Origin Access Control, or the origin is still configured to use the bucket incorrectly.
+- **`/dashboard/settings` returns a 403 or 404 instead of your app shell:** The custom error responses for SPA routing are missing or point at the wrong path.
+- **Direct S3 access still works after CloudFront is configured:** Re-enable Block Public Access and make sure the bucket policy grants read access only to CloudFront, not to `Principal: "*"` anymore.
 
 ## Stretch Goals
 

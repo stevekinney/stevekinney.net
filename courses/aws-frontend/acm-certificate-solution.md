@@ -3,7 +3,7 @@ title: 'Solution: Request and Validate a Certificate'
 description: >-
   Complete walkthrough of requesting an ACM certificate, completing DNS validation, and verifying the issued certificate.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - acm
@@ -12,6 +12,12 @@ tags:
 ---
 
 This is the solution for the [ACM Certificate Exercise](acm-certificate-exercise.md). Each step includes the exact commands and expected output. If your output differs, the notes after each command explain what to check.
+
+## Why This Works
+
+- ACM issues the certificate only after DNS proves you control the domain, which is why the validation record is the real gate in this workflow.
+- Keeping the certificate in `us-east-1` lines it up with CloudFront's regional requirement instead of creating a certificate you cannot attach later.
+- Renewal stays automatic as long as the validation record remains in DNS and the certificate is still associated with an AWS service.
 
 ## Request the Certificate
 

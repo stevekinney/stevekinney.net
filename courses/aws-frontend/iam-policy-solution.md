@@ -4,7 +4,7 @@ description: >-
   Complete solution for the deploy bot IAM policy exercise, with annotations
   explaining each policy statement.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - iam
@@ -13,6 +13,12 @@ tags:
 ---
 
 Here's the complete policy, the CLI commands to wire it up, and an explanation of every decision. I'll walk through each statement so you can see the reasoning, not just the end result.
+
+## Why This Works
+
+- The policy separates bucket-level and object-level permissions, which is the core IAM trick that makes S3 access control feel less arbitrary.
+- The CloudFront permission is scoped to one distribution, so the deploy bot can refresh only the cache it actually owns.
+- The final `get-caller-identity` check proves you did not just create policy JSON. You created a principal that can authenticate with the boundaries you intended.
 
 ## The Policy
 

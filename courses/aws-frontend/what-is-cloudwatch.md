@@ -4,7 +4,7 @@ description: >-
   Understand what CloudWatch is and how it collects logs, metrics, and events
   from the AWS services you've deployed throughout this course.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cloudwatch
@@ -12,9 +12,33 @@ tags:
   - fundamentals
 ---
 
+The Summit Supply storefront is live, people are clicking around, and now the worst kind of bug shows up: "I clicked the button and nothing happened." No stack trace. No obvious repro. Just vibes and disappointment. This is the part where monitoring stops feeling like enterprise garnish and starts feeling like the only way you get your evening back.
+
 On Vercel, you get a dashboard. You can see your function invocations, check error rates, and read logs — all in one place, with zero configuration. AWS gives you the same capabilities through **CloudWatch**, but with more power and more to configure. CloudWatch is the monitoring and observability service that collects data from every AWS service you've built in this course — Lambda, API Gateway, DynamoDB, S3, CloudFront — and gives you a single place to watch what's happening.
 
 You've already seen CloudWatch in passing. Back in [What is Lambda?](what-is-lambda.md), you learned that `console.log` output goes to CloudWatch Logs. In this module, you're going to learn how to actually use that data: how to search logs, track metrics, set up alarms, and trace requests across your entire stack.
+
+## Why This Matters
+
+Logs, metrics, and alarms are how the backend becomes observable instead of mysterious. Once your frontend depends on a Lambda function, an API Gateway route, and a DynamoDB table, "it works on my machine" is no longer a serious debugging plan. You need a record of what happened, where it happened, and whether it is getting worse.
+
+## Builds On
+
+- [What Lambda Is and Why Frontend Engineers Care](what-is-lambda.md)
+- [Creating an HTTP API](creating-an-http-api.md)
+- [What DynamoDB Is and When to Use It](what-is-dynamodb.md)
+
+```mermaid
+flowchart LR
+    Browser["Browser request"] --> APIGateway["API Gateway"]
+    APIGateway --> Lambda["Lambda"]
+    Lambda --> DynamoDB["DynamoDB"]
+
+    APIGateway -. access logs / metrics .-> CloudWatch["CloudWatch"]
+    Lambda -. logs / metrics .-> CloudWatch
+    DynamoDB -. metrics .-> CloudWatch
+    CloudWatch --> Alarm["Alarms / dashboards / queries"]
+```
 
 ## The Three Pillars
 
@@ -84,9 +108,9 @@ The key difference: Vercel gives you opinions. CloudWatch gives you primitives. 
 
 CloudWatch has a generous free tier that covers most small-to-medium applications:
 
-- **Logs**: 5 GB ingestion, 5 GB storage, 5 GB data scanned by Logs Insights per month
-- **Metrics**: 10 custom metrics, 10 alarms, 1 million API requests per month
-- **Dashboards**: 3 dashboards with up to 50 metrics each
+- **Logs**: 5 GB of data across ingestion, archive storage, and Logs Insights scanning per month
+- **Metrics**: 10 custom or detailed monitoring metrics, plus 1 million API requests per month
+- **Dashboards and alarms**: 3 custom dashboards with up to 50 metrics each, plus 10 standard alarm metrics
 
 Built-in metrics from AWS services (the ones in the table above) don't count against your custom metrics quota. You only pay for custom metrics if you publish your own.
 
@@ -103,3 +127,28 @@ Over the next four lessons, you'll:
 4. Trace a single request from API Gateway through Lambda to DynamoDB using correlation IDs and Insights queries.
 
 By the end of this module, you'll have monitoring coverage across every backend service you've deployed in this course — the Lambda functions from [Module 7](what-is-lambda.md), the API Gateway endpoints from [Module 8](creating-an-http-api.md), and the DynamoDB tables from [Module 10](what-is-dynamodb.md).
+
+## Verification
+
+Before moving deeper into the module, make sure CloudWatch is already telling you the truth about one real request:
+
+```bash
+aws logs describe-log-groups \
+  --log-group-name-prefix /aws/lambda/my-frontend-app-api \
+  --region us-east-1 \
+  --output json
+
+aws cloudwatch list-metrics \
+  --namespace AWS/Lambda \
+  --region us-east-1 \
+  --output json
+```
+
+If those commands return your function's log group and Lambda metrics, the observability pipeline exists. You are not starting from zero. You are learning how to read the signals you already have.
+
+## Common Failure Modes
+
+- **Assuming logs equal observability:** raw `console.log` output is better than nothing, but it turns into a junk drawer fast.
+- **Treating metrics like logs:** metrics tell you that the shape of the system changed. They do not tell you why.
+- **Skipping retention settings:** CloudWatch's default is "keep it forever," which is a lovely way to buy storage for logs you will never read.
+- **Expecting every AWS service to log the same way:** Lambda logs by default. API Gateway access logging requires explicit configuration. DynamoDB mostly shows up as metrics unless you add your own instrumentation around the calls.

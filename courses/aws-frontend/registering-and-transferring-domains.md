@@ -3,7 +3,7 @@ title: 'Registering and Transferring Domains'
 description: >-
   Register a new domain through Route 53 or transfer an existing domain from another registrar, including configuring nameservers for an externally registered domain.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - route53
@@ -17,9 +17,7 @@ Route 53 is two services in one: a DNS hosting service (hosted zones, which you 
 
 ## Registering a Domain Through Route 53
 
-Route 53 supports registration for most common TLDs: `.com`, `.net`, `.org`, `.io`, `.dev`, `.link`, `.click`, and hundreds more. Pricing varies by TLD — a `.com` domain runs about $13/year, while cheaper options like `.click` or `.link` start around $3-5/year.
-
-<!-- VERIFY: .com ~$13/year, .click ~$3/year — check https://aws.amazon.com/route53/pricing/ for current pricing -->
+Route 53 supports registration for most common TLDs: `.com`, `.net`, `.org`, `.io`, `.dev`, `.link`, `.click`, and hundreds more. Pricing varies by TLD. As of AWS's September 2025 Route 53 pricing list, a `.com` registration is $15/year and a `.click` registration is $3/year. That spread is the real lesson here: TLD pricing is all over the place, so check the current pricing list before you impulse-buy a clever domain.
 
 You can register a domain through the console or the CLI. The console is simpler for a one-time operation. Navigate to the Route 53 console, select "Registered domains" from the sidebar, and click "Register domain." Search for the domain you want, add it to your cart, fill in the contact details, and complete the purchase.
 

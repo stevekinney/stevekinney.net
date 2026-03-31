@@ -4,7 +4,7 @@ description: >-
   Understand how API Gateway transforms HTTP requests into Lambda event objects
   and how your handler's return value maps to an HTTP response.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - api-gateway
@@ -12,7 +12,29 @@ tags:
   - events
 ---
 
-When a request hits your API Gateway endpoint, it doesn't arrive at your Lambda function as a raw HTTP request. API Gateway serializes the entire request — method, path, headers, query parameters, body — into a JSON event object and passes it to your handler. Your handler returns a JSON object, and API Gateway turns that back into an HTTP response. Understanding both sides of this transformation is the difference between confidently building an API and guessing at field names until something works.
+Say the Summit Supply frontend sends `POST /items` when someone adds a piece of gear to their saved list. The browser thinks in HTTP. Your Lambda function does not. API Gateway sits in the middle, turns that HTTP request into a JSON event object, hands it to Lambda, then turns Lambda's return value back into an HTTP response on the way out. Understanding that translation layer is the difference between confidently building an API and guessing at field names until something works.
+
+## Why This Matters
+
+This is where frontend intuition meets AWS plumbing. If you understand the shape of the event object and the shape of the response object, API Gateway stops feeling magical and starts feeling mechanical. That is exactly what you want. Mechanical systems are easier to debug.
+
+## Builds On
+
+- [What Lambda Is and Why Frontend Engineers Care](what-is-lambda.md)
+- [Creating an HTTP API](creating-an-http-api.md)
+- [Connecting API Gateway to Lambda](connecting-api-gateway-to-lambda.md)
+
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant APIGateway as API Gateway
+    participant Lambda
+
+    Browser->>APIGateway: HTTP request
+    APIGateway->>Lambda: APIGatewayProxyEventV2 JSON
+    Lambda-->>APIGateway: { statusCode, headers, body }
+    APIGateway-->>Browser: HTTP response
+```
 
 ## The Incoming Event: `APIGatewayProxyEventV2`
 
@@ -264,3 +286,32 @@ Version 2.0 is the default for HTTP APIs created with `--payload-format-version 
 **Not handling undefined fields.** `queryStringParameters`, `pathParameters`, and `body` can all be `undefined`. TypeScript warns you about this if you're using the correct types — pay attention to those warnings.
 
 Your API works, but try calling it from a React app running on `localhost:3000`. The browser blocks the request with a CORS error. You've seen this before — and now you're on the server side of the problem. The next lesson covers configuring CORS on your HTTP API so your frontend can actually call it.
+
+## Verification
+
+Use one real request and one direct Lambda invocation to prove you understand the mapping:
+
+```bash
+curl -i https://YOUR_API_ID.execute-api.us-east-1.amazonaws.com/items
+
+aws lambda invoke \
+  --function-name my-frontend-app-api \
+  --payload fileb://test-event.json \
+  --region us-east-1 \
+  --output json \
+  response.json
+```
+
+You should be able to answer these without guessing:
+
+- Which field contains the HTTP method?
+- Which field contains the raw request body?
+- Which field contains the stage name?
+- Which part of your return value becomes the actual browser response body?
+
+## Common Failure Modes
+
+- **Forgetting to parse `event.body`:** API Gateway gives you a string, not an already-parsed object.
+- **Reading the wrong path field:** `requestContext.http.path` and `rawPath` are related, but not interchangeable in every debugging session.
+- **Returning a plain object as `body`:** if you skip `JSON.stringify`, the client gets garbage instead of JSON.
+- **Assuming Express conventions:** there is no `req`, no `res`, and no middleware stack quietly filling in missing pieces.

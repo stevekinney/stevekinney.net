@@ -4,7 +4,7 @@ description: >-
   Deploy your API to stages, configure custom domain names, and understand how
   stages map to different environments (development, production).
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - api-gateway
@@ -184,9 +184,7 @@ aws route53 change-resource-record-sets \
   --output json
 ```
 
-<!-- VERIFY: The hosted zone ID Z1UJRXOUMOOFQ8 is the API Gateway hosted zone for us-east-1. Verify this is current. -->
-
-The `DNSName` is the `ApiGatewayDomainName` from the `create-domain-name` response. The `HostedZoneId` is the API Gateway service's hosted zone for your region — this is a fixed value per region, not your domain's hosted zone.
+The `DNSName` is the `ApiGatewayDomainName` from the `create-domain-name` response. The `HostedZoneId` is the API Gateway service's hosted zone for your region — this is a fixed value per region, not your domain's hosted zone. For regional API Gateway endpoints in `us-east-1`, the Route 53 hosted zone ID is `Z1UJRXOUMOOFQ8`.
 
 > [!WARNING]
 > DNS propagation takes time. After creating the record, your custom domain might not resolve immediately. Give it a few minutes and test with `dig api.example.com` to verify the record is in place before troubleshooting.

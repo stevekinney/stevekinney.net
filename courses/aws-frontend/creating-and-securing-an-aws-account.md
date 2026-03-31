@@ -14,6 +14,14 @@ tags:
 
 You've been deploying to Vercel with a GitHub login. You click a button, connect a repo, and your site is live. AWS gives you actual infrastructure, which means actual security responsibility. The account you're about to create controls real resources that cost real money, and if someone compromises it, they can spin up crypto miners on your credit card. So we're going to do this right from the start.
 
+## Why This Matters
+
+Your AWS account is not just another dashboard login. It is the trust boundary around everything else in this course: IAM users, S3 buckets, CloudFront distributions, Lambda functions, billing, and production data. If you get the first hour wrong, every later lesson inherits that mistake.
+
+## Builds On
+
+This is the starting point for the course, so there is no AWS prerequisite. What you are bringing with you is the mental model from Vercel, Netlify, and GitHub: one account, one team, one deployment surface. AWS exposes more of that machinery directly, and this lesson is where you lock down the foundation before you touch any services.
+
 ## Create the Account
 
 Start on the AWS homepage. Depending on which part of the page AWS is currently promoting, you'll usually see either **Create account** in the header or a larger call-to-action like **Start free with AWS**.
@@ -217,7 +225,7 @@ At this point, the root user should move into break-glass status:
 - do not use it for daily console work
 - do not use it for CLI access
 
-## Verify the Setup
+## Verification
 
 If all of this worked, your account should now look like this:
 
@@ -234,5 +242,11 @@ If all of this worked, your account should now look like this:
 
 > [!TIP]
 > Set up a billing alarm before you do anything else. Navigate to **Billing and Cost Management** and create a small budget. We cover the full flow in [Cost Monitoring and Budget Alarms](cost-monitoring-and-budget-alarms.md), but the short version is simple: spend five minutes on budgets now so you do not spend five hours explaining a surprise bill later.
+
+## Common Failure Modes
+
+- **You keep using the root user because it already works:** Stop. Root is for break-glass account administration, not daily CLI or console work.
+- **You skip MFA because this is "just a sandbox account":** Sandbox accounts still create bills and still become production surprisingly often.
+- **You create the account with a personal email you do not control long-term:** That turns basic recovery and billing work into a future incident.
 
 You now have a properly secured AWS account. The root user is locked down with MFA and gathering dust. Your `admin` user is ready for daily use. Next, we will build a mental model of IAM so you understand what you just configured and why it matters.

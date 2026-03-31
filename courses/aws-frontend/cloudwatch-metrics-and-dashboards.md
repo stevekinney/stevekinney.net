@@ -5,7 +5,7 @@ description: >-
   CloudWatch dashboard that gives you a single view of your application's
   health.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cloudwatch
@@ -214,9 +214,9 @@ aws cloudwatch put-dashboard \
   --output json
 ```
 
-<!-- VERIFY: The p95 stat shorthand in dashboard JSON — docs confirm `"stat": "p95"` works in widget properties, but verify it is not `"stat": "p95.00"`. -->
-
 The `x` and `y` properties control widget placement on a 24-column grid. The `width` and `height` properties control size. Two widgets side by side at width 12 each fill the full row.
+
+For percentile views, CloudWatch dashboard JSON accepts the short statistic form like `"stat": "p95"`. You don't need to spell it as `p95.00`.
 
 ### Verify the Dashboard
 

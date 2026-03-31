@@ -4,7 +4,7 @@ description: >-
   Complete solution for the CloudFront Function exercise, with all function
   code, CLI commands, and expected output.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cloudfront-functions
@@ -13,6 +13,12 @@ tags:
 ---
 
 Here's the complete solution for every step, including the function code, all CLI commands, and the expected output at each stage.
+
+## Why This Works
+
+- Viewer-request functions can change routing before CloudFront decides what to fetch, which is why redirects belong there.
+- Viewer-response functions can mutate headers on the way out, which makes them the right place for security headers.
+- Publishing to `LIVE` and associating the function with the distribution is the operational step that turns working code into real edge behavior.
 
 ## The Security Headers Function
 

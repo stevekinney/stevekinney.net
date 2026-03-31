@@ -5,7 +5,7 @@ description: >-
   (CloudFormation, CDK, SST), and see what the infrastructure you built by hand
   looks like when defined in code.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - infrastructure-as-code
@@ -13,11 +13,29 @@ tags:
   - cloudformation
 ---
 
-You've spent this entire course clicking through the AWS console and running CLI commands. You created an S3 bucket, configured a CloudFront distribution, set up an API Gateway, attached IAM roles, provisioned a DynamoDB table, and wired it all together. It works. But there's a problem: if you had to do it all again — on a new account, for a new project, for a teammate — you'd need to repeat every step from memory, in the right order, without mistakes.
+You've spent this entire course clicking through the AWS console and running CLI commands. You created an S3 bucket, configured a CloudFront distribution, set up an API Gateway, attached IAM roles, provisioned a DynamoDB table, and wired it all together. It works. But there's a problem: if you had to do it all again — on a new account, for a new Summit Supply environment, for a teammate — you'd need to repeat every step from memory, in the right order, without mistakes.
 
 That's the problem **Infrastructure as Code** solves. Instead of manually configuring services through a web console, you write code that describes your infrastructure. You check that code into version control. You deploy it with a single command. And when you need to tear it down, update it, or replicate it, the code is the source of truth — not a series of console clicks you half-remember.
 
 If you've ever used a `package.json` to describe your project's dependencies, you already understand the concept. IaC is `package.json` for your AWS infrastructure.
+
+## Why This Matters
+
+This is the lesson where the course finally turns back on itself. Up to this point, manual setup was the right move because you needed to see every service in the open. But once you understand the pieces, repeating the console dance is not educational anymore. It's just drift waiting to happen.
+
+## Builds On
+
+- [The Full Static Site Pipeline](full-static-pipeline.md)
+- [What Lambda Is and Why Frontend Engineers Care](what-is-lambda.md)
+- [What DynamoDB Is and When to Use It](what-is-dynamodb.md)
+
+```mermaid
+flowchart LR
+    Code["TypeScript / YAML / SST config"] --> Synth["CDK or SST synth"]
+    Synth --> CFN["CloudFormation stack"]
+    CFN --> Infra["AWS resources"]
+    Infra --> Drift["Reproducible changes<br/>instead of console drift"]
+```
 
 ## The Pain of Manual Configuration
 
@@ -183,3 +201,20 @@ All three tools produce CloudFormation templates at the end. The differences are
 Here's the thing that matters: right now, you understand how every service works because you configured them by hand. That understanding is permanent and transferable. It doesn't matter whether you use CDK, SST, Terraform, Pulumi, or raw CloudFormation — you know what a bucket policy does, why OAC exists, how execution roles work, and what CORS headers mean. You did the hard part.
 
 IaC isn't a replacement for that understanding. It's a way to encode it. The code you write in CDK is only as good as your knowledge of the underlying services. And because you built everything manually first, you'll actually know what the IaC is doing when something goes wrong — which it will, because infrastructure is infrastructure regardless of whether you wrote it in YAML or TypeScript.
+
+## Verification
+
+You do not need to deploy CDK in this lesson, but you should be able to verify the mental model:
+
+- Can you point at one manual change in the course and say what it would become in code?
+- Can you explain which CloudFormation resource is hiding under the friendly CDK construct?
+- Can you explain what would happen if a teammate recreated Summit Supply in another account from the same IaC definition?
+
+If those answers are clear, the lesson did its job.
+
+## Common Failure Modes
+
+- **Jumping to abstractions before understanding the services:** that gives you fast scaffolding and terrible debugging instincts.
+- **Treating CDK as magic instead of CloudFormation generation:** when deployment errors happen, you still need the underlying AWS model.
+- **Encoding bad infrastructure faster:** IaC faithfully preserves good decisions _and_ bad ones.
+- **Letting the framework pick everything silently:** sensible defaults are great until they stop matching your actual system.

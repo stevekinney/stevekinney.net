@@ -4,7 +4,7 @@ description: >-
   Understand the differences between API Gateway REST APIs and HTTP APIs, and why
   HTTP APIs are the right default for most frontend-to-Lambda integrations.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - api-gateway
@@ -14,6 +14,14 @@ tags:
 API Gateway offers two flavors of API: **REST APIs** and **HTTP APIs**. If you've ever tried to create an API in the console, you've seen both options sitting side by side with no clear guidance on which to pick. The naming doesn't help — both can serve RESTful endpoints, and both speak HTTP. The difference is in what they include and what they cost.
 
 For this course, you'll use HTTP APIs. They're cheaper, faster, and simpler. But you should understand when REST APIs earn their overhead, because you'll run into them on teams that have been using AWS longer.
+
+## Why This Matters
+
+Choosing the wrong API Gateway product is one of those mistakes that does not break anything immediately. It just quietly makes every request more expensive, every configuration screen more cluttered, and every explanation to your future self more annoying. Summit Supply does not need the heavyweight option, and most frontend-driven backends do not either.
+
+## Builds On
+
+This lesson builds on the Lambda foundation from Module 7. You already have compute. What you need now is the HTTP layer that turns a Lambda function into something your frontend can call with `fetch`.
 
 ## HTTP APIs: The Default Choice
 
@@ -84,5 +92,17 @@ AWS's naming here is genuinely confusing. "REST API" is a product name, not a de
 
 > [!WARNING]
 > The AWS CLI uses different command families for each type. REST APIs use `aws apigateway` (without the "v2"). HTTP APIs use `aws apigatewayv2`. If you're following tutorials or Stack Overflow answers, check which API type the commands target. A `create-rest-api` command won't work when you meant to create an HTTP API.
+
+## Verification
+
+- You can explain why HTTP APIs are the default for this course without reducing the answer to "because they are newer."
+- You can name at least two features that might justify a REST API's extra cost and complexity.
+- You can tell, from the CLI command family alone, whether a tutorial is talking about REST APIs or HTTP APIs.
+
+## Common Failure Modes
+
+- **Picking REST APIs because the name sounds more "correct":** In AWS, the product names are historical, not architectural guidance.
+- **Assuming migration cost is zero:** The handler code is portable, but the gateway configuration and operational surface are not identical.
+- **Following documentation for the wrong API family:** `apigateway` and `apigatewayv2` are easy to confuse and will waste time fast.
 
 Next up, you're going to create an HTTP API using the CLI. The process takes three commands: create the API, create an integration pointing to your Lambda function, and create a route that maps an HTTP method and path to that integration. You already have a deployed Lambda function from [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md) — now you're going to give it a public URL.

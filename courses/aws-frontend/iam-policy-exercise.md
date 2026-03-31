@@ -4,7 +4,7 @@ description: >-
   Create an IAM user and policy that can only sync files to an S3 bucket and
   create CloudFront invalidations.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - iam
@@ -137,6 +137,12 @@ You should see the `deploy-bot` user's ARN in the response.
 - [ ] The CloudFront action is scoped to distribution `E1A2B3C4D5E6F7`
 - [ ] The policy is attached to the `deploy-bot` user
 - [ ] `aws sts get-caller-identity --profile deploy-bot` returns the correct identity
+
+## Failure Diagnosis
+
+- **`aws sts get-caller-identity` fails with `InvalidClientTokenId`:** The named profile is using the wrong access key pair, or the keys were copied incorrectly when you created them.
+- **Later deploy commands fail with `AccessDenied` on S3:** Double-check that object actions use `arn:aws:s3:::my-frontend-app-assets/*` while `s3:ListBucket` uses the bucket ARN without `/*`.
+- **CloudFront invalidation fails even though S3 sync works:** The distribution ARN is wrong. CloudFront ARNs omit the region segment and must point at `E1A2B3C4D5E6F7` in account `123456789012`.
 
 ## Stretch Goals
 

@@ -4,7 +4,7 @@ description: >-
   Complete solution for storing an API key in Parameter Store and reading it
   from a Lambda function at runtime.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - secrets
@@ -13,6 +13,12 @@ tags:
 ---
 
 This is the complete solution for the [Exercise: Store and Retrieve a Secret in Lambda](secrets-in-lambda-exercise.md). If you got stuck, don't worry — there are a few gotchas in here that trip everyone up the first time.
+
+## Why This Works
+
+- Parameter Store becomes the source of truth for the secret, which removes the value from source control and from Lambda configuration.
+- The function loads the secret at initialization time, so you pay the lookup cost once per warm environment instead of on every invocation.
+- The final configuration check matters because a secret is not truly moved until it disappears from environment variables and deployment settings.
 
 ## Store the Secret
 

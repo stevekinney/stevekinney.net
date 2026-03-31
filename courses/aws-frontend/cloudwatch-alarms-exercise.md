@@ -4,7 +4,7 @@ description: >-
   Create CloudWatch alarms for error rate and duration, wire them to SNS email
   notifications, and trigger alarms intentionally to verify the pipeline.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cloudwatch
@@ -153,6 +153,12 @@ Two alarms are listed, both pointing to the same SNS topic, with the correct met
 - [ ] Duration alarm exists with threshold of 2000ms, Average statistic, period of 300s, 2 evaluation periods
 - [ ] Manual alarm state test produced an email notification
 - [ ] Both alarms show in `describe-alarms` with correct configuration
+
+## Failure Diagnosis
+
+- **The alarm exists but you never receive email:** The SNS subscription is still `PendingConfirmation`, or the email landed in spam and was never confirmed.
+- **The alarm never moves out of `INSUFFICIENT_DATA`:** The metric namespace, dimensions, or statistic do not match the resource that is actually emitting data.
+- **The alarm stays in `ALARM` after you fix the problem:** CloudWatch waits for the next evaluation windows. Give it enough time to see fresh healthy datapoints before assuming the configuration is wrong.
 
 ## Stretch Goals
 

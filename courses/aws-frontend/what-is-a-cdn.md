@@ -3,7 +3,7 @@ title: 'What is a CDN?'
 description: >-
   Understand what a CDN does, why it matters for frontend performance, and how CloudFront fits into the AWS ecosystem.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cloudfront
@@ -14,6 +14,14 @@ tags:
 When you deploy to Vercel, your site loads fast in New York and fast in Tokyo. When you deploy to a single S3 bucket in `us-east-1`, your site loads fast in Virginia and noticeably slower everywhere else. The difference is a **CDN** — a Content Delivery Network.
 
 You've been using CDNs your entire career, even if you've never configured one. Every time you deployed to Vercel, Netlify, or Cloudflare Pages, those platforms put a CDN between your files and your users. **CloudFront** is AWS's CDN, and it's what turns your S3 bucket from "files in one region" into "a globally distributed frontend."
+
+## Why This Matters
+
+CDNs are where frontend performance stops being purely an application concern and becomes a geography concern. Once users are far from your origin, the network dominates. CloudFront is the service that makes your site feel local even when the bucket is not.
+
+## Builds On
+
+This lesson builds on the S3 foundation from the previous module. You already have the mental model of "static files in a bucket." Now you're adding the layer that caches those files at the edge, terminates HTTPS for users, and becomes the public face of the deployment.
 
 ## The Problem: Physics
 
@@ -98,5 +106,17 @@ If your users are primarily in North America and Europe, `PriceClass_100` saves 
 Not every project needs a CDN. If you're building an internal tool used by a team of ten people in the same office, S3 static website hosting is fine. If your site has three visitors a day and they're all you, skip CloudFront and save the complexity.
 
 But the moment your site is public-facing, needs HTTPS (it does), or has users outside your S3 bucket's region, CloudFront isn't optional — it's the standard architecture. Every serious AWS deployment puts CloudFront in front of S3.
+
+## Verification
+
+- You can describe the difference between a cache hit and a cache miss in CloudFront's request flow.
+- You can explain why a user in Sydney feels more latency from an S3 bucket in `us-east-1` even when your frontend code is identical.
+- You can choose an initial price class based on user geography instead of guessing.
+
+## Common Failure Modes
+
+- **Thinking CloudFront is only about speed:** It also becomes your HTTPS endpoint, your caching layer, and your first security boundary in front of S3.
+- **Assuming the browser talks directly to S3 once CloudFront exists:** The browser talks to the edge location. CloudFront decides whether it needs the origin.
+- **Choosing a price class without thinking about audience:** That is a cost decision with latency consequences, not a random default.
 
 Now that you know what CloudFront does and why it matters, let's actually create one. In the next lesson, you'll create a CloudFront distribution with your S3 bucket as the origin, configure it via the CLI, and see your site served from edge locations worldwide.

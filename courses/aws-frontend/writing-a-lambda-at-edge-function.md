@@ -5,7 +5,7 @@ description: >-
   response events, understanding the us-east-1 deployment requirement and the
   replication model.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - lambda-at-edge
@@ -255,11 +255,9 @@ When you associate a Lambda@Edge function with a CloudFront distribution, AWS re
 
 ## Constraints to Remember
 
-- **No environment variables in viewer request/response triggers.** Lambda@Edge doesn't support environment variables for viewer-triggered functions. You can use environment variables for origin-triggered functions.
+- **No user-defined environment variables.** Lambda@Edge doesn't support user-defined environment variables at all, whether the function runs on viewer events or origin events.
 - **128 MB memory cap for viewer events.** If your viewer-triggered function needs more memory, you need to reconsider your approach — either move the logic to an origin trigger (up to 10,240 MB) or simplify it.
 - **5-second timeout for viewer events, 30 seconds for origin events.** A viewer request function that takes 5 seconds will make your site feel broken. Keep viewer-triggered functions fast — if it's slow enough for the user to notice, it's too slow.
 - **1 MB package size for viewer events.** This is the compressed zip size. If you bundle large libraries, you may exceed this. Use tree-shaking and keep dependencies minimal.
 
-These constraints are covered in detail in [Edge Function Debugging and Limitations](edge-function-debugging-and-limitations.md).
-
-<!-- VERIFY: Lambda@Edge environment variables restriction — the documentation has changed over time. Some sources say no env vars at all; others say only origin triggers support them. -->
+These constraints are covered in detail in [Edge Function Debugging and Limitations](edge-function-debugging-and-limitations.md). The important one to remember here is the least intuitive: Lambda@Edge doesn't support user-defined environment variables at all, other than the reserved ones AWS injects automatically.

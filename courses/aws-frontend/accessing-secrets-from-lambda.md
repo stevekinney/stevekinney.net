@@ -4,7 +4,7 @@ description: >-
   Retrieve secrets and parameters from a Lambda function at runtime using the
   AWS SDK, with proper IAM permissions and caching strategies.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - lambda
@@ -230,14 +230,21 @@ AWS provides a Lambda extension that handles caching for you. Instead of making 
 Add the extension layer to your function:
 
 ```bash
+EXTENSION_ARN=$(aws ssm get-parameter \
+  --name "/aws/service/aws-parameters-and-secrets-lambda-extension/x86/latest" \
+  --query "Parameter.Value" \
+  --region us-east-1 \
+  --output text)
+
 aws lambda update-function-configuration \
   --function-name my-frontend-app-api \
-  --layers "arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension:12" \
+  --layers "$EXTENSION_ARN" \
   --region us-east-1 \
   --output json
 ```
 
-<!-- VERIFY: Layer ARN version number (12) may have been updated. Check https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-integration-lambda-extensions.html for the latest version in us-east-1. -->
+> [!TIP]
+> AWS now publishes the latest extension ARN as a public Systems Manager parameter. Use the `x86/latest` path above for x86_64 functions and `/aws/service/aws-parameters-and-secrets-lambda-extension/arm64/latest` for arm64 functions. That keeps the lesson correct even when AWS revs the layer version again.
 
 Then retrieve parameters via HTTP:
 

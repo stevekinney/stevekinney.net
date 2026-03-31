@@ -4,7 +4,7 @@ description: >-
   Store an API key in Parameter Store as a SecureString, create a Lambda
   function that reads it at init time, and call it through API Gateway.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - secrets
@@ -153,6 +153,12 @@ The function's environment variables don't contain the API key. The key exists o
 - [ ] Execution role has `ssm:GetParameter` and `kms:Decrypt` permissions
 - [ ] Function invocation returns the first 7 characters of the API key
 - [ ] The API key does **not** appear in the function's environment variables
+
+## Failure Diagnosis
+
+- **The handler throws an access error when reading the parameter:** The execution role is missing either `ssm:GetParameter` for the parameter path or `kms:Decrypt` for the key protecting the SecureString.
+- **The deployment succeeds but the function returns `undefined` or a stale value:** The parameter name in code does not match the stored path, or you updated the parameter but never redeployed the code that references it.
+- **The secret still appears in the function configuration:** You solved the fetch path but kept the old environment variable in place. Remove the secret from Lambda configuration entirely so Parameter Store is the only source of truth.
 
 ## Stretch Goals
 

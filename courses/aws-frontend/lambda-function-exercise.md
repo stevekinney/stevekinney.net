@@ -4,7 +4,7 @@ description: >-
   Write a TypeScript handler that returns a JSON greeting, create an execution
   role, deploy the function, invoke it, and read the logs.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - lambda
@@ -151,6 +151,12 @@ The log group exists and contains at least one log stream with events from your 
 - [ ] Invoking with `name=Lambda` returns `"Hello, Lambda!"`
 - [ ] Invoking without a name returns `"Hello, World!"`
 - [ ] CloudWatch log group `/aws/lambda/my-frontend-app-api` exists and has log events
+
+## Failure Diagnosis
+
+- **`create-function` fails because Lambda cannot assume the role:** The trust policy is wrong. The role must trust the `lambda.amazonaws.com` service principal.
+- **Invocation fails with `Runtime.ImportModuleError` or `Cannot find module`:** The zip file structure is wrong, the handler path does not match the deployed file, or `dist/handler.js` was never built before packaging.
+- **The function runs but no logs appear in CloudWatch:** The execution role is missing `AWSLambdaBasicExecutionRole`, or you checked the logs before the first successful invocation created the stream.
 
 ## Stretch Goals
 

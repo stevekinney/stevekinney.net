@@ -3,7 +3,7 @@ title: 'DNS for Frontend Engineers'
 description: >-
   Understand the DNS resolution process from a frontend engineer's perspective — what happens between typing a URL and receiving a response.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - route53
@@ -14,6 +14,14 @@ tags:
 You've configured custom domains on Vercel. You've pointed a subdomain at a Netlify deployment. You've pasted `CNAME` values into GoDaddy's dashboard and waited for "propagation" to finish. But what was actually happening during all of that? DNS is the system you've been using without fully understanding, and now that you're building your own infrastructure on AWS, understanding it is no longer optional.
 
 **DNS (Domain Name System)** is the protocol that translates human-readable domain names like `example.com` into IP addresses like `192.0.2.1`. Every time a user types your URL into a browser, DNS resolution happens before a single byte of your frontend reaches the screen.
+
+## Why This Matters
+
+DNS problems feel random when you do not have a model for where answers come from and how they get cached. Once you do have that model, most "propagation" problems collapse into a small set of causes: wrong record, wrong nameserver, or stale cache.
+
+## Builds On
+
+This lesson builds on your prior experience pointing domains at hosted frontends. You already know the workflow from the registrar dashboard point of view. What you are adding now is the resolution chain behind that workflow, which becomes important the first time a custom domain does not behave the way you expected.
 
 ## The DNS Resolution Process
 
@@ -107,5 +115,17 @@ Either tool works. `dig` gives you more detail; `nslookup` gives you a simpler a
 If you've deployed to Vercel, you already understood DNS intuitively: "I put a value in my registrar, and my domain pointed at my site." What you might not have understood is the hierarchy — root servers, TLD servers, authoritative servers — or why "propagation" sometimes took minutes and sometimes took hours (it was TTL, not magic). You might not have known why CNAME records work for `www.example.com` but not for `example.com` itself (we'll cover that in [Alias Records vs. CNAME Records](alias-records-vs-cname-records.md)).
 
 I remember the first time I actually ran `dig` on one of my own domains and realized the whole resolution chain was right there in the output. It went from feeling like magic to feeling like plumbing — and honestly, that's the goal here.
+
+## Verification
+
+- You can walk through the order of DNS lookup from browser cache to recursive resolver to authoritative nameserver.
+- You can explain what TTL controls without using the word "propagation" as a black box.
+- You can use `dig` to compare a cached answer with an authoritative answer from a specific nameserver.
+
+## Common Failure Modes
+
+- **Blaming DNS propagation for every problem:** A surprising number of DNS issues are just wrong records or wrong nameservers.
+- **Forgetting that caches exist at multiple layers:** Your browser, operating system, and resolver can all disagree temporarily.
+- **Using a CNAME mental model for every hostname:** Apex domains follow different rules, which is why Route 53 alias records matter later.
 
 Now you know the system. In the next lesson, you'll start configuring it yourself in Route 53.

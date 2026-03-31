@@ -3,7 +3,7 @@ title: 'Exercise: End-to-End Static Site Deployment'
 description: >-
   Deploy a complete static site from scratch: S3 bucket, CloudFront with OAC, ACM certificate, Route 53 DNS, and verify HTTPS at your custom domain.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - deployment
@@ -257,6 +257,12 @@ aws cloudfront create-invalidation \
 ### Checkpoint
 
 Your updated content is live at `https://example.com`. The deployment cycle (sync + invalidate) works end to end.
+
+## Failure Diagnosis
+
+- **`dig` resolves the domain but `curl -I https://example.com` returns `403`:** DNS is fine. The problem is lower in the stack, usually an S3 bucket policy or Origin Access Control mismatch.
+- **HTTPS works on the CloudFront domain but not on your custom domain:** The Route 53 alias records or the alternate domain names on the distribution are incomplete, or the wrong ACM certificate is attached.
+- **The updated page never appears after sync:** The new file reached S3, but CloudFront is still serving the cached version. Confirm the invalidation completed before retesting.
 
 ## Stretch Goals
 

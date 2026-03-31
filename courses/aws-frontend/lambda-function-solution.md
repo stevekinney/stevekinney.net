@@ -4,7 +4,7 @@ description: >-
   Complete solution for the Lambda function exercise, with all commands and
   expected output.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - lambda
@@ -13,6 +13,12 @@ tags:
 ---
 
 Here's the complete solution for every step, including the handler code, the trust policy, all CLI commands, and the expected output at each stage.
+
+## Why This Works
+
+- The execution role and trust policy solve different problems: one tells Lambda it may assume the role, and the other tells the role what the function may do after that.
+- Packaging `dist/handler.js` into the deployment zip gives Lambda exactly the artifact it expects at runtime instead of asking it to transpile TypeScript for you.
+- The CLI invocation and CloudWatch log checks prove both halves of the system work: the code path and the operational path.
 
 ## Project Setup
 

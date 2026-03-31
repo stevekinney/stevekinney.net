@@ -3,7 +3,7 @@ title: 'The Full Static Site Pipeline'
 description: >-
   Walk through the end-to-end architecture of deploying a static site to AWS, connecting S3, CloudFront, ACM, and Route 53 into a working pipeline.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - deployment
@@ -13,23 +13,31 @@ tags:
   - route53
 ---
 
-You've spent five modules learning individual AWS services. You can create an S3 bucket, request a certificate, configure a CloudFront distribution, and point a domain at it. Each piece works on its own. But the value is in how they compose: a user types your domain into a browser, DNS resolves to CloudFront, CloudFront serves cached content from S3 over HTTPS with your certificate, and the whole thing costs pennies. That's the pipeline. This lesson maps out the architecture end-to-end and explains the order of operations: what you create first, what depends on what, and why.
+Imagine someone typing `https://summitsupply.com` into the browser to check whether the new spring camping gear is live yet. They do not care that your storefront is really a private S3 bucket behind CloudFront with a certificate from ACM and DNS in Route 53. They care that the page loads fast, uses HTTPS, and does not fall over when they refresh a deep route. That invisible plumbing is the pipeline you are building now.
+
+You've spent five modules learning individual AWS services. You can create an S3 bucket, request a certificate, configure a CloudFront distribution, and point a domain at it. Each piece works on its own. But the value is in how they compose: a user types your domain into a browser, DNS resolves to CloudFront, CloudFront serves cached content from S3 over HTTPS with your certificate, and the whole thing costs pennies. That's the pipeline. This lesson maps out the architecture end to end and explains the order of operations: what you create first, what depends on what, and why.
+
+## Why This Matters
+
+This is the first moment the course stops being "a bunch of AWS services you now vaguely recognize" and becomes "a deployment you could actually ship." If you understand this flow, every later module has somewhere to attach. Lambda adds compute to the same frontend. API Gateway adds an HTTP edge to the same domain. DynamoDB adds state to the same application. This is the spine.
+
+## Builds On
+
+- [Creating and Configuring a Bucket](creating-and-configuring-a-bucket.md)
+- [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md)
+- [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md)
+- [Pointing a Domain to CloudFront](pointing-a-domain-to-cloudfront.md)
 
 ## The Architecture
 
 Here's what the fully assembled pipeline looks like:
 
-```
-┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-│   Route 53   │────▸│  CloudFront  │────▸│      S3      │     │     ACM      │
-│              │     │              │     │              │     │              │
-│ A alias      │     │ Distribution │     │ Bucket with  │     │ Certificate  │
-│ example.com  │     │ E1A2B3C4D5E6F7│    │ static files │     │ *.example.com│
-│  ──▸ CF dist │     │ OAC ──▸ S3   │     │ (private)    │     │ (us-east-1)  │
-└──────────────┘     │ HTTPS (ACM)  │     └──────────────┘     └──────┬───────┘
-                     └──────┬───────┘                                 │
-                            │              attached to                │
-                            └─────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    Browser["Browser requesting Summit Supply"] --> Route53["Route 53 alias record<br/>example.com"]
+    Route53 --> CloudFront["CloudFront distribution<br/>HTTPS, cache, SPA fallback"]
+    CloudFront -->|cache miss| S3["Private S3 bucket<br/>static assets"]
+    ACM["ACM certificate<br/>us-east-1"] --> CloudFront
 ```
 
 1. **Route 53** resolves `example.com` to the CloudFront distribution using an alias record.
@@ -81,11 +89,11 @@ Once DNS propagates, users can visit `https://example.com` and reach your static
 
 The dependency chain flows in one direction:
 
-```
-S3 ◀── CloudFront ◀── Route 53
-           ▲
-           │
-          ACM
+```mermaid
+flowchart RL
+    Route53["Route 53"] --> CloudFront["CloudFront"]
+    CloudFront --> S3["S3"]
+    ACM["ACM"] --> CloudFront
 ```
 
 - CloudFront depends on S3 (as its origin) and ACM (for the certificate).
@@ -118,6 +126,25 @@ Once the pipeline is deployed, here's what happens when a user visits `https://e
 
 Every layer does one thing. S3 stores files. CloudFront caches and routes. ACM secures. Route 53 resolves. The pieces compose without overlapping.
 
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant Route53
+    participant CloudFront
+    participant S3
+
+    Browser->>Route53: Resolve example.com
+    Route53-->>Browser: CloudFront alias target
+    Browser->>CloudFront: GET /dashboard
+    alt Cache hit
+        CloudFront-->>Browser: Cached response
+    else Cache miss
+        CloudFront->>S3: Signed origin request
+        S3-->>CloudFront: 403 for missing object
+        CloudFront-->>Browser: index.html with SPA fallback
+    end
+```
+
 ## The Deployment Workflow
 
 With the infrastructure in place, deploying a new version of your site is two commands:
@@ -143,3 +170,28 @@ This is the foundation. In the next two lessons, you'll wrap these commands in a
 
 > [!TIP]
 > If you want to test the pipeline before automating it, run the two commands above manually after each build. That's exactly what the automated pipeline does: it just removes you from the loop.
+
+## Verification
+
+Use these checks once the Summit Supply storefront is wired together:
+
+```bash
+dig example.com +short
+curl -I https://example.com
+curl -I https://example.com/collections/tents
+curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
+```
+
+You want four things to be true:
+
+- `dig` resolves to CloudFront, not to a raw EC2 or S3 endpoint.
+- `curl -I https://example.com` returns `200` with a valid TLS handshake.
+- The deep route returns `200` and serves HTML, proving the SPA fallback works.
+- The direct S3 URL returns `403`, proving the bucket is private.
+
+## Common Failure Modes
+
+- **The certificate is in the wrong region:** CloudFront only reads ACM certificates from `us-east-1`.
+- **The bucket is still public:** if the S3 URL works directly, Origin Access Control is not actually protecting the bucket.
+- **The alternate domain name is missing from CloudFront:** Route 53 can point at the distribution, but HTTPS still fails for your custom domain.
+- **The SPA fallback is only configured in S3:** that gives you a page, but often with the wrong status code. CloudFront should own the final browser behavior.

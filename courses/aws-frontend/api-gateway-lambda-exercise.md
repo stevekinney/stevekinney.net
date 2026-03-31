@@ -4,7 +4,7 @@ description: >-
   Build a 2-endpoint API backed by Lambda, configure CORS, and call it from a
   React frontend using fetch.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - api-gateway
@@ -181,6 +181,12 @@ Both `fetch` calls succeed from the browser. The Network tab shows 200/201 respo
 - [ ] `curl` to the API endpoint returns the expected JSON
 - [ ] CORS is configured and preflight requests succeed
 - [ ] React app can call both endpoints without CORS errors
+
+## Failure Diagnosis
+
+- **`curl` returns `{"message":"Internal Server Error"}`:** API Gateway can reach the route, but Lambda permission is missing or your handler threw an exception. Check `aws lambda add-permission` and the CloudWatch logs.
+- **`curl` returns `{"message":"Not Found"}`:** The route does not exist, points at the wrong integration, or you created it under a different method/path combination.
+- **The browser still shows CORS errors even though the CLI works:** Your API Gateway CORS settings do not include the exact frontend origin, methods, or headers the browser is asking for.
 
 ## Stretch Goals
 

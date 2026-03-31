@@ -38,8 +38,6 @@ A typical static frontend build is 5-50 MB. You'd need to store roughly 100 diff
 - 10,000,000 HTTP/HTTPS requests per month
 - 2,000,000 CloudFront Functions invocations per month
 
-<!-- VERIFY: CloudFront free tier was expanded in late 2024 to 1 TB data transfer and 10M requests with no 12-month limit. Confirm this is still current. -->
-
 This is extremely generous. A typical static site serving 100 KB pages would need 10 million page views per month to hit the 1 TB transfer limit. If your personal project is getting 10 million page views, you have much bigger things to think about than your AWS bill. (Congratulations, by the way.)
 
 ### Lambda (Module 7)
@@ -71,7 +69,7 @@ After the 12-month period, HTTP APIs cost $1.00 per million requests. Even a mod
 The 25 GB storage limit is enormous for most frontend-backed applications. The capacity units are enough for roughly 25 reads and 25 writes per second — sustained, continuously. For a side project or small production app, you'll never hit these limits.
 
 > [!TIP]
-> If you created your DynamoDB table with on-demand capacity mode (as recommended in this course), the free tier works differently: you get 25 RCUs and 25 WCUs worth of throughput included. On-demand mode charges per request after that, but at extremely low rates for small workloads.
+> If you created your DynamoDB table with on-demand capacity mode (as recommended in this course), treat DynamoDB costs as request-based rather than provisioned-capacity math. The easiest way to stay accurate is to check the current DynamoDB pricing page or calculator instead of memorizing old free-tier numbers.
 
 ### Route 53 (Module 5)
 
@@ -81,16 +79,13 @@ The 25 GB storage limit is enormous for most frontend-backed applications. The c
 
 **Always free** (no 12-month expiration):
 
-- 10 custom metrics
-- 10 alarms
+- 10 custom or detailed monitoring metrics
+- 10 standard alarm metrics
 - 1,000,000 API requests
-- 5 GB of log data ingestion
-- 5 GB of log data storage (with a short retention period)
+- 5 GB across log ingestion, archive storage, and Logs Insights scanning
 - 3 dashboards with up to 50 metrics each
 
-<!-- VERIFY: CloudWatch free tier limits for alarms (10), dashboards (3), and log ingestion (5 GB). These are commonly cited but should be confirmed against current pricing page. -->
-
-Lambda automatically sends logs to CloudWatch. The 5 GB ingestion limit is where you're most likely to hit a boundary — if your Lambda functions log aggressively, you can exceed this quickly. Set log retention to 7 or 14 days on your log groups to keep storage costs down.
+Lambda automatically sends logs to CloudWatch. The 5 GB shared log allowance is where you're most likely to hit a boundary — if your Lambda functions log aggressively, you can exceed it quickly. Set log retention to 7 or 14 days on your log groups to keep storage costs down.
 
 ## Setting Up a Budget Alarm
 

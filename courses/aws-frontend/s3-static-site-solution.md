@@ -3,7 +3,7 @@ title: 'Solution: Deploy a Static Site to S3'
 description: >-
   Complete solution with all commands and expected output for deploying a static site to S3.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - s3
@@ -12,6 +12,12 @@ tags:
 ---
 
 This is the complete solution for the S3 static site deployment exercise. Every command is shown with its expected output so you can verify each step.
+
+## Why This Works
+
+- S3 website hosting turns a bucket full of objects into an HTTP origin with index and error document behavior.
+- The public-read bucket policy is what makes the website endpoint usable from a browser; the upload alone is not enough.
+- Versioning gives you a recovery path the moment you overwrite `index.html`, which is why it belongs in the same exercise as the first deploy.
 
 ## Create the Static Site Files
 

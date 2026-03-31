@@ -3,8 +3,7 @@ title: Shared Context Document
 description: >-
   Internal working document for content drafting agents. Not published.
 date: 2026-03-18
-modified: 2026-03-18
-published: false
+modified: 2026-03-31
 ---
 
 # AWS for Frontend Engineers — Shared Context Document
@@ -16,6 +15,21 @@ This document is the single source of truth for all content-drafting agents work
 ## 1. Narrative Arc
 
 This course tells a single story: **you already know how to build frontend applications, and now you are going to learn how to deploy, serve, and operate them on AWS.** The 13 modules are not isolated topics — they are chapters in a narrative that builds from "create an account" to "ship with confidence."
+
+### Capstone Application: Summit Supply
+
+From Module 6 onward, the course should stop feeling like a parade of unrelated snippets. The running application is **Summit Supply**, a small outdoor gear storefront:
+
+- Modules 1–5 build the infrastructure for the static storefront and marketing pages.
+- Module 6 deploys the full static Summit Supply frontend end to end.
+- Modules 7–8 add the first backend behavior: product and lightweight storefront APIs that the frontend calls.
+- Module 9 adds edge logic for redirects, experiments, and lightweight request shaping.
+- Module 10 adds DynamoDB-backed user data such as saved gear lists and lightweight account state.
+- Module 11 adds secrets for integrations like Stripe, SendGrid, or other third-party services.
+- Module 12 traces Summit Supply requests across API Gateway, Lambda, and DynamoDB.
+- Module 13 hardens the same deployment for production.
+
+The prose should name Summit Supply when it helps the reader keep context, but all AWS resource names in commands stay generic: `my-frontend-app-*`.
 
 ### Modules 1–5: Build the Foundation
 
@@ -46,6 +60,27 @@ Module 12 (CloudWatch) introduces monitoring and observability. The reader learn
 ### Module 13: Ship with Confidence
 
 Module 13 closes the course by zooming out. The reader performs a security review, sets up billing alerts, gets an introduction to Infrastructure as Code (CloudFormation, CDK, SST), and surveys the AWS services they will eventually need but do not need today. This module is a launchpad, not a deep dive.
+
+### Lesson Shape
+
+Every first instructional lesson in a module should visibly establish the module:
+
+- Open with a concrete scenario the reader can picture.
+- Include a `Why This Matters` section early.
+- Include a `Builds On` section that names the prerequisite lessons or modules.
+- Include at least one concrete example, diagram, or request flow.
+- Include a `Verification` section with commands, browser checks, or console checks.
+- Include a `Common Failure Modes` section that tells the reader what usually goes wrong.
+
+Every exercise should include:
+
+- Explicit prerequisites
+- Exact inputs and commands
+- At least one end-to-end proof step using `curl`, the browser, or logs
+- A checkpoint list
+- A `Failure Diagnosis` section
+
+Every solution should explain _why_ the steps work, not just dump the final answer.
 
 ---
 

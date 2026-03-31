@@ -5,7 +5,7 @@ description: >-
   runtime, execution limits, supported events, pricing — and know which to
   reach for based on your use case.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - lambda-at-edge
@@ -13,9 +13,21 @@ tags:
   - comparison
 ---
 
+Summit Supply is live now, which means the weird requirements start showing up. Marketing wants an A/B test on the homepage hero. You want to redirect a retired campaign URL before it ever touches your origin. Security wants a header added everywhere. These are not "spin up a whole backend" problems. These are _edge_ problems.
+
 You already know how to write Lambda functions and how CloudFront serves your content. Now you're going to push compute into the CDN itself. AWS gives you two ways to run code at CloudFront's edge locations: **Lambda@Edge** and **CloudFront Functions**. They solve overlapping problems, but they aren't interchangeable — the runtimes, execution limits, and pricing are different enough that choosing the wrong one either wastes money or blocks you from doing what you need.
 
 Think of it like the difference between a Vercel Edge Function and a Vercel Serverless Function. One runs instantly at the edge with tight constraints. The other gives you a full runtime with more power and higher latency. AWS made the same tradeoff, just with different names.
+
+## Why This Matters
+
+This decision shows up fast in real systems. If all you need is a redirect or header rewrite, Lambda@Edge is overkill and more expensive. If you need to call an origin, validate a token with a library, or touch the request body, CloudFront Functions hits a wall immediately. The lesson here is not "edge compute exists." The lesson is "pick the smallest tool that can actually do the job."
+
+## Builds On
+
+- [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md)
+- [Cache Behaviors and Invalidations](cache-behaviors-and-invalidations.md)
+- [What Lambda Is and Why Frontend Engineers Care](what-is-lambda.md)
 
 ## Where They Run in the Request Lifecycle
 
@@ -29,6 +41,22 @@ Both Lambda@Edge and CloudFront Functions hook into CloudFront's request lifecyc
 **CloudFront Functions** can only attach to **viewer request** and **viewer response** events. They intercept traffic before the cache layer, which means they run on every single request — cached or not.
 
 **Lambda@Edge** can attach to **all four events**: viewer request, viewer response, origin request, and origin response. This makes Lambda@Edge the only option when you need to modify how CloudFront talks to your origin.
+
+```mermaid
+flowchart LR
+    Viewer["Viewer request"] --> Cache["CloudFront cache"]
+    Cache -->|miss| OriginRequest["Origin request"]
+    OriginRequest --> Origin["Origin"]
+    Origin --> OriginResponse["Origin response"]
+    OriginResponse --> ViewerResponse["Viewer response"]
+
+    Function["CloudFront Functions"] -. viewer request / viewer response .-> Viewer
+    Function -.-> ViewerResponse
+    LambdaEdge["Lambda@Edge"] -. all four events .-> Viewer
+    LambdaEdge -.-> OriginRequest
+    LambdaEdge -.-> OriginResponse
+    LambdaEdge -.-> ViewerResponse
+```
 
 > [!TIP]
 > If you need to transform the request before it hits your S3 bucket (for example, rewriting a URL path), you need an **origin request** trigger — and that means Lambda@Edge.
@@ -48,13 +76,11 @@ Here's the side-by-side breakdown. Every time you're deciding which to use, star
 | **Network access**         | No                                                                | Yes                                                              |
 | **File system access**     | No                                                                | Yes (read-only `/tmp`, up to 512 MB)                             |
 | **Request body access**    | No                                                                | Yes (origin events only)                                         |
-| **Environment variables**  | No                                                                | Yes                                                              |
+| **Environment variables**  | No                                                                | No user-defined environment variables                            |
 | **Pricing**                | $0.10 per 1 million invocations                                   | $0.60 per 1 million invocations + $0.00005001 per GB-second      |
-| **Free tier**              | 2 million invocations per month                                   | 1 million invocations + 400,000 GB-seconds per month             |
+| **Free tier**              | 2 million invocations per month                                   | No CloudFront free-tier allowance for Lambda@Edge                |
 | **Deployment region**      | Global (no region selection needed)                               | Must deploy in `us-east-1`; AWS replicates automatically         |
 | **Scale**                  | 10,000,000+ requests per second                                   | Thousands of concurrent executions per region                    |
-
-<!-- VERIFY: CloudFront Functions free tier of 2 million invocations/month. Lambda@Edge free tier may follow standard Lambda free tier. -->
 
 ## The Runtime Difference
 
@@ -69,6 +95,8 @@ If you've written middleware in Express or Next.js, CloudFront Functions feel li
 CloudFront Functions are roughly **six times cheaper** per invocation than Lambda@Edge, and there's no duration-based charge. You pay a flat $0.10 per million invocations regardless of how long each function takes (as long as it stays within the compute utilization limit).
 
 Lambda@Edge charges $0.60 per million invocations **plus** a per-GB-second charge for the compute time your function uses. For a function using 128 MB that runs for 50 ms, that compute cost is small — but I've watched it add up faster than you'd expect at scale.
+
+CloudFront's free usage tier covers **1 TB of data transfer out, 10 million HTTP/HTTPS requests, and 2 million CloudFront Functions invocations each month**. Lambda@Edge is explicitly excluded from that free-tier bucket, which is a polite AWS way of saying: if a trivial rewrite can be a CloudFront Function, make it a CloudFront Function.
 
 For a site handling 100 million requests per month:
 
@@ -97,7 +125,6 @@ Use this when choosing:
 - Your logic requires npm packages or the AWS SDK
 - You need access to the request body
 - You need more than 2 MB of memory or more than a few milliseconds of execution time
-- You need environment variables
 
 **Choose neither when:**
 
@@ -113,3 +140,20 @@ Lambda@Edge functions must be deployed to `us-east-1` — the same region requir
 > You can't use `$LATEST` with Lambda@Edge. You must publish a numbered version and reference that specific version ARN when associating the function with a CloudFront behavior. If you try to use `$LATEST`, CloudFront will reject the association.
 
 With the comparison in hand, you'll write and deploy one of each in the next two lessons. [Writing a CloudFront Function](writing-a-cloudfront-function.md) covers a URL rewrite function using the lightweight JavaScript runtime. [Writing a Lambda@Edge Function](writing-a-lambda-at-edge-function.md) covers deploying a Lambda function to the edge with the full Node.js runtime. Both lessons assume you have a working CloudFront distribution from Module 4 — if you don't, go back and set one up first.
+
+## Verification
+
+Before you choose, force yourself through this checklist:
+
+- Can the logic run entirely on viewer request or viewer response?
+- Does it need a package, network call, request body, or origin event?
+- Is this happening on every request at high scale, where per-invocation cost matters?
+
+If the honest answers are "yes, no, yes," CloudFront Functions is probably the right call.
+
+## Common Failure Modes
+
+- **Picking Lambda@Edge for a simple redirect:** you pay more, deploy more slowly, and gain nothing.
+- **Picking CloudFront Functions for anything needing network access or SDK calls:** the runtime cannot do it.
+- **Assuming Lambda@Edge supports normal Lambda conveniences:** user-defined environment variables are not available, and deployment rules are stricter.
+- **Forgetting event placement:** a viewer-request function cannot do origin-request work just because you wish it could.

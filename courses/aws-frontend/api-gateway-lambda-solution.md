@@ -4,7 +4,7 @@ description: >-
   Complete solution for the API Gateway and Lambda exercise, with all commands,
   handler code, and expected output.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - api-gateway
@@ -13,6 +13,12 @@ tags:
 ---
 
 Here's the complete solution for every step, including the handler code, all CLI commands, and the expected output at each stage.
+
+## Why This Works
+
+- HTTP API routes hand the whole request to one Lambda function, which keeps the gateway configuration simple and pushes application logic into normal TypeScript code.
+- Lambda permission is the hidden dependency that makes the integration real. Without it, the API exists but cannot invoke anything.
+- The browser test matters because a backend that works in `curl` but fails on CORS is still broken for a frontend team.
 
 ## The Handler
 

@@ -4,7 +4,7 @@ description: >-
   Store sensitive credentials in Secrets Manager, understand automatic rotation,
   and know when Secrets Manager is worth the cost over Parameter Store.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - secrets-manager
@@ -137,8 +137,6 @@ Secrets Manager isn't free. Here's the cost breakdown:
 | --------- | -------------------------- |
 | Storage   | $0.40 per secret per month |
 | API calls | $0.05 per 10,000 API calls |
-
-<!-- VERIFY: Pricing confirmed as of March 2026 from aws.amazon.com/secrets-manager/pricing/ -->
 
 Ten secrets cost $4.00 per month. A hundred secrets cost $40.00 per month. The API call cost is negligible for most applications — a Lambda function that retrieves a secret once per cold start generates very few API calls.
 
