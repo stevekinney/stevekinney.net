@@ -4,7 +4,7 @@ description: >-
   Implement an A/B testing mechanism using edge functions that routes users to
   different content versions based on cookies or random assignment.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - edge-functions
@@ -13,15 +13,26 @@ tags:
 
 A/B testing on the frontend usually involves a client-side library like LaunchDarkly or Optimizely that swaps content after the page loads. The problem: there's a flash of content, a layout shift, or a delay while the library initializes and decides which variant to show. Your Lighthouse score takes the hit.
 
-Edge functions eliminate this problem entirely. The routing decision happens **before** the response reaches the browser. The user gets one version of the page — no flicker, no client-side SDK, no additional JavaScript bundle. From the user's perspective, there's no A/B test happening at all.
+Edge functions eliminate this problem entirely. The routing decision happens **before** the response reaches the browser. The user gets one version of the page—no flicker, no client-side SDK, no additional JavaScript bundle. From the user's perspective, there's no A/B test happening at all.
 
 ## How It Works
 
 The mechanism has three parts:
 
 1. **Assign new visitors to a variant.** When a user makes their first request and has no experiment cookie, the edge function randomly assigns them to variant A or B and sets a cookie.
-2. **Route returning visitors by cookie.** On subsequent requests, the edge function reads the cookie and routes to the same variant — the user gets a consistent experience.
+2. **Route returning visitors by cookie.** On subsequent requests, the edge function reads the cookie and routes to the same variant—the user gets a consistent experience.
 3. **Modify the request based on variant.** The function either rewrites the URI (serving different static files) or sets a header that your origin uses to return different content.
+
+```mermaid
+flowchart LR
+    Request["Viewer request for /"] --> Cookie{"ab-variant cookie present?"}
+    Cookie -- "No" --> Assign["Assign variant A or B"]
+    Cookie -- "Yes" --> Reuse["Reuse existing variant"]
+    Assign --> Rewrite["Rewrite URI to /a/index.html or /b/index.html"]
+    Reuse --> Rewrite
+    Rewrite --> Cache["CloudFront cache by rewritten URI"]
+    Cache --> Response["Viewer response sets or refreshes cookie"]
+```
 
 This approach works with both CloudFront Functions and Lambda@Edge. The example below uses a CloudFront Function because A/B testing at the viewer request level is typically simple enough to fit within its constraints. If your routing logic requires network calls or complex computations, use Lambda@Edge instead.
 
@@ -69,7 +80,7 @@ This function does three things:
 
 ### Setting the Cookie on the Response
 
-The viewer request function above sets a custom header (`x-ab-variant`) but doesn't set the cookie — viewer request functions can't modify the response. You need a companion **viewer response** function to set the cookie:
+The viewer request function above sets a custom header (`x-ab-variant`) but doesn't set the cookie—viewer request functions can't modify the response. You need a companion **viewer response** function to set the cookie:
 
 ```javascript
 function handler(event) {
@@ -81,14 +92,14 @@ function handler(event) {
     value: variant,
     attributes: 'Path=/; Max-Age=2592000; SameSite=Lax',
   };
-  // [!note Max-Age=2592000 is 30 days. The user stays in the same variant for a month.]
+  // [!note `Max-Age=2592000` is 30 days. The user stays in the same variant for a month.]
 
   return response;
 }
 ```
 
 > [!WARNING]
-> You need **two** CloudFront Functions for this pattern — one on `viewer-request` to route the request, and one on `viewer-response` to set the cookie. A single CloudFront Function can only handle one event type per behavior, but a behavior can have both a viewer request and a viewer response function attached.
+> You need **two** CloudFront Functions for this pattern—one on `viewer-request` to route the request, and one on `viewer-response` to set the cookie. A single CloudFront Function can only handle one event type per behavior, but a behavior can have both a viewer request and a viewer response function attached.
 
 ## Setting Up the S3 Structure
 
@@ -188,7 +199,7 @@ if (rand < 0.33) {
 
 ## Caching Considerations
 
-This is the part that trips people up. (It definitely tripped me up the first time.) If CloudFront caches the response for `/` and serves it to everyone, your A/B test breaks — every user gets whatever variant was cached first.
+This is the part that trips people up. (It definitely tripped me up the first time.) If CloudFront caches the response for `/` and serves it to everyone, your A/B test breaks—every user gets whatever variant was cached first.
 
 You need to tell CloudFront to **cache separately by variant**. There are two approaches:
 
@@ -199,13 +210,13 @@ You need to tell CloudFront to **cache separately by variant**. There are two ap
 The URI rewrite approach (Approach 2) is simpler and is what the CloudFront Function example above uses. The cache just works because `/a/index.html` and `/b/index.html` are different cache keys.
 
 > [!TIP]
-> If you use the cookie-based cache key approach, be aware that it increases your cache miss rate. Every unique cookie combination creates a separate cached object. For A/B testing with two variants, this doubles your cache misses at most — which is acceptable. For experiments with many variants, the rewritten URI approach scales better.
+> If you use the cookie-based cache key approach, be aware that it increases your cache miss rate. Every unique cookie combination creates a separate cached object. For A/B testing with two variants, this doubles your cache misses at most—which is acceptable. For experiments with many variants, the rewritten URI approach scales better.
 
 ## Ending the Experiment
 
 When you have a winner, remove the edge functions and serve the winning variant directly. Update your deployment to copy the winning variant's content to the root path, remove the `/a/` and `/b/` directories, and disassociate the CloudFront Functions from the behavior.
 
-Don't forget to handle users who still have the old cookie — it'll expire on its own (Max-Age handles this), but if you want to clean it up immediately, a temporary viewer response function can clear it:
+Don't forget to handle users who still have the old cookie—it'll expire on its own (Max-Age handles this), but if you want to clean it up immediately, a temporary viewer response function can clear it:
 
 ```javascript
 function handler(event) {

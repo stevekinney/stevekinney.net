@@ -77,7 +77,7 @@ interface GreetingResponse {
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   const name = event.queryStringParameters?.name ?? 'World';
-  // [!note The ?. and ?? operators handle the case where queryStringParameters is undefined.]
+  // [!note The `?.` and `??` operators handle the case where `queryStringParameters` is `undefined`.]
 
   const response: GreetingResponse = {
     greeting: `Hello, ${name}!`,
@@ -228,7 +228,7 @@ Expected output:
 ```
 
 > [!TIP]
-> If you get "The role defined for the function cannot be assumed by Lambda," wait 10-15 seconds and try again. IAM role propagation is eventually consistent — the role exists, but Lambda's endpoint might not have seen it yet.
+> If you get "The role defined for the function cannot be assumed by Lambda," wait 10-15 seconds and try again. IAM role propagation is eventually consistent—the role exists, but Lambda's endpoint might not have seen it yet.
 
 ### Verify the function exists
 
@@ -401,7 +401,7 @@ You should see log entries that include:
 - `END RequestId: ...`
 - `REPORT RequestId: ... Duration: X.XX ms Billed Duration: XX ms Memory Size: 128 MB Max Memory Used: XX MB Init Duration: XXX.XX ms`
 
-The `Init Duration` line appears only on cold start invocations. If you invoke the function a second time quickly, it won't appear — the second invocation reused the warm execution environment.
+The `Init Duration` line appears only on cold start invocations. If you invoke the function a second time quickly, it won't appear—the second invocation reused the warm execution environment.
 
 ## Stretch Goal: Environment Variable
 
@@ -482,7 +482,7 @@ Expected body:
 }
 ```
 
-The greeting prefix changed from `"Hello"` to `"Howdy"` without changing the code logic — only the environment variable.
+The greeting prefix changed from `"Hello"` to `"Howdy"` without changing the code logic—only the environment variable.
 
 ## Stretch Goal: Cold Start Measurement
 
@@ -520,4 +520,4 @@ REPORT RequestId: abc-123 Duration: 12.34 ms Billed Duration: 13 ms
 Memory Size: 128 MB Max Memory Used: 67 MB Init Duration: 198.45 ms
 ```
 
-Invoke immediately again. The `Init Duration` field disappears — the second invocation was a warm start.
+Invoke immediately again. The `Init Duration` field disappears—the second invocation was a warm start.

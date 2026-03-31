@@ -4,7 +4,7 @@ description: >-
   Write an IAM policy from scratch, understanding the Version, Statement,
   Effect, Action, and Resource fields.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - iam
@@ -12,7 +12,7 @@ tags:
   - json
 ---
 
-You know how every API endpoint in your frontend app has some middleware that checks whether the user has the right permissions before letting the request through? IAM policies are that middleware, but for all of AWS. They're JSON documents — you already know JSON — and once you understand the five fields that matter, you can write them from scratch instead of copying examples from Stack Overflow and hoping for the best. (I've been there. We've all been there.)
+You know how every API endpoint in your frontend app has some middleware that checks whether the user has the right permissions before letting the request through? IAM policies are that middleware, but for all of AWS. They're JSON documents—you already know JSON—and once you understand the five fields that matter, you can write them from scratch instead of copying examples from Stack Overflow and hoping for the best. (I've been there. We've all been there.)
 
 ## The Structure of an IAM Policy
 
@@ -40,7 +40,7 @@ Five fields. That's it. Let's break each one down.
 "Version": "2012-10-17"
 ```
 
-This is the **policy language version**, not a date you update. The current (and only practical) version is `2012-10-17`. AWS introduced this version in 2012 and has kept it ever since. There's an older version (`2008-10-17`) that lacks features like policy variables — don't use it.
+This is the **policy language version**, not a date you update. The current (and only practical) version is `2012-10-17`. AWS introduced this version in 2012 and has kept it ever since. There's an older version (`2008-10-17`) that lacks features like policy variables—don't use it.
 
 Always include this field. Always set it to `2012-10-17`. Move on.
 
@@ -59,7 +59,7 @@ You can combine these into a single statement with an array of actions (we'll ge
 
 ### Sid (Optional)
 
-The **Sid** (Statement ID) is an optional human-readable label for the statement. It has no functional effect on evaluation — it's purely for you and your teammates.
+The **Sid** (Statement ID) is an optional human-readable label for the statement. It has no functional effect on evaluation—it's purely for you and your human teammates.
 
 ```json
 "Sid": "AllowReadAccessToAssetsBucket"
@@ -73,14 +73,17 @@ I'd recommend always including one. When you're staring at a policy six months f
 
 As we covered in [IAM Mental Model](iam-mental-model.md), `Deny` always beats `Allow`. If one statement says Allow and another says Deny for the same action and resource, the Deny wins.
 
+> [!NOTE] `Effect` versus `Action`
+> Think of **Action** as _what someone is trying to do_ and **Effect** as _AWS's answer to that request_. `s3:GetObject` is the action. `"Allow"` or `"Deny"` is the effect. Put them together and you get a complete rule: "allow `s3:GetObject`" or "deny `s3:GetObject`." Same action, different verdict.
+
 ### Action
 
 An **Action** specifies which AWS API operations the statement applies to. Actions follow the pattern `<service>:<operation>`:
 
-- `s3:GetObject` — read a file from S3
-- `s3:PutObject` — upload a file to S3
-- `cloudfront:CreateInvalidation` — invalidate cached files in CloudFront
-- `iam:CreateUser` — create a new IAM user
+- `s3:GetObject`—read a file from S3
+- `s3:PutObject`—upload a file to S3
+- `cloudfront:CreateInvalidation`—invalidate cached files in CloudFront
+- `iam:CreateUser`—create a new IAM user
 
 You can specify a single action as a string or multiple actions as an array:
 
@@ -110,14 +113,14 @@ A few examples:
 | A specific CloudFront distribution | `arn:aws:cloudfront::123456789012:distribution/E1A2B3C4D5E6F7` |
 | All resources (dangerous)          | `*`                                                            |
 
-Notice that S3 bucket ARNs don't include a region or account ID — bucket names are globally unique, so AWS doesn't need them to identify the resource. Other services do include the region and account. You'll get used to the pattern for each service as you use it.
+Notice that S3 bucket ARNs don't include a region or account ID—bucket names are globally unique, so AWS doesn't need them to identify the resource. Other services do include the region and account. You'll get used to the pattern for each service as you use it.
 
 > [!WARNING]
 > The difference between `arn:aws:s3:::my-frontend-app-assets` (the bucket itself) and `arn:aws:s3:::my-frontend-app-assets/*` (the objects in the bucket) matters. `s3:ListBucket` operates on the bucket, while `s3:GetObject` operates on objects within the bucket. If you mix these up, your policy won't work and the error messages won't tell you why.
 
 ## A Real Policy: Read-Only Access to Your Assets Bucket
 
-Let's write a policy that grants read-only access to your static assets bucket. This is the kind of policy you'd attach to a role that only needs to serve files — no uploading, no deleting.
+Let's write a policy that grants read-only access to your static assets bucket. This is the kind of policy you'd attach to a role that only needs to serve files—no uploading, no deleting.
 
 ```json
 {
@@ -128,14 +131,14 @@ Let's write a policy that grants read-only access to your static assets bucket. 
       "Effect": "Allow",
       "Action": ["s3:ListBucket"],
       "Resource": "arn:aws:s3:::my-frontend-app-assets"
-      // [!note ListBucket operates on the bucket ARN, not the objects inside it.]
+      // [!note `s3:ListBucket` operates on the bucket ARN, not the objects inside it.]
     },
     {
       "Sid": "AllowReadObjects",
       "Effect": "Allow",
       "Action": ["s3:GetObject"],
       "Resource": "arn:aws:s3:::my-frontend-app-assets/*"
-      // [!note GetObject operates on objects, so the ARN ends with /*.]
+      // [!note `s3:GetObject` operates on objects, so the ARN ends with `/*`.]
     }
   ]
 }
@@ -181,7 +184,7 @@ aws iam attach-user-policy \
 
 ## A More Practical Policy: Deploy Permissions
 
-Here's something closer to what you'll actually need. This policy lets a user sync files to an S3 bucket and create CloudFront invalidations — the two operations required to deploy a static frontend:
+Here's something closer to what you'll actually need. This policy lets a user sync files to an S3 bucket and create CloudFront invalidations—the two operations required to deploy a static frontend:
 
 ```json
 {
@@ -204,7 +207,7 @@ Here's something closer to what you'll actually need. This policy lets a user sy
 }
 ```
 
-Notice that the **Resource** field in the CloudFront statement targets a specific distribution by its ARN. The user can't invalidate caches on other distributions — only the one you specified. That's intentional.
+Notice that the **Resource** field in the CloudFront statement targets a specific distribution by its ARN. The user can't invalidate caches on other distributions—only the one you specified. That's intentional.
 
 > [!TIP]
 > When building a policy, start by asking: "What CLI commands or SDK calls does this user need to run?" Each CLI command maps to one or more IAM actions. `aws s3 sync` needs `s3:PutObject`, `s3:DeleteObject`, and `s3:ListBucket`. `aws cloudfront create-invalidation` needs `cloudfront:CreateInvalidation`. Work backwards from the commands to the policy.

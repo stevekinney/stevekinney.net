@@ -33,7 +33,7 @@ function handler(event) {
   headers['x-content-type-options'] = { value: 'nosniff' };
   headers['x-frame-options'] = { value: 'DENY' };
   headers['referrer-policy'] = { value: 'strict-origin-when-cross-origin' };
-  // [!note Setting properties on the existing headers object preserves any headers already present.]
+  // [!note Setting properties on the existing `headers` object preserves any headers already present.]
 
   return response;
 }
@@ -71,7 +71,7 @@ Expected output (abbreviated):
 }
 ```
 
-Save the `ETag` value — you need it for testing and publishing.
+Save the `ETag` value—you need it for testing and publishing.
 
 ### Test the function
 
@@ -174,7 +174,7 @@ aws cloudfront test-function \
   --output json
 ```
 
-Expected: The request passes through unchanged — `FunctionOutput` contains the original request object with `uri: "/about"`.
+Expected: The request passes through unchanged—`FunctionOutput` contains the original request object with `uri: "/about"`.
 
 ## Publish Both Functions
 
@@ -339,7 +339,7 @@ function handler(event) {
 }
 ```
 
-After updating the function code with `aws cloudfront update-function`, remember to publish it again — the update only changes the DEVELOPMENT stage.
+After updating the function code with `aws cloudfront update-function`, remember to publish it again—the update only changes the DEVELOPMENT stage.
 
 ## Stretch Goal: Multiple Redirects
 

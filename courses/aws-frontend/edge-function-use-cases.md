@@ -1,18 +1,18 @@
 ---
 title: Edge Function Use Cases
 description: >-
-  Identify practical use cases for edge functions — URL rewrites, redirects,
+  Identify practical use cases for edge functions—URL rewrites, redirects,
   header injection, geolocation-based routing, and lightweight authentication
   checks.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - edge-functions
   - use-cases
 ---
 
-Edge functions solve a specific category of problems: things you need to do on every request (or every response) before the client or origin sees the traffic. On platforms like Vercel or Netlify, this logic lives in configuration files, middleware, or edge functions with similar names. On AWS, it lives in CloudFront Functions or Lambda@Edge, depending on the complexity. In my experience, the URL rewrite and redirect cases come up constantly — the rest are situational but worth knowing.
+Edge functions solve a specific category of problems: things you need to do on every request (or every response) before the client or origin sees the traffic. On platforms like Vercel or Netlify, this logic lives in configuration files, middleware, or edge functions with similar names. On AWS, it lives in CloudFront Functions or Lambda@Edge, depending on the complexity. In my experience, the URL rewrite and redirect cases come up constantly—the rest are situational but worth knowing.
 
 This lesson covers the most common use cases for frontend engineers. Each one includes a short code snippet you can adapt. For the full comparison of when to use CloudFront Functions versus Lambda@Edge, refer back to [Lambda@Edge vs CloudFront Functions](edge-compute-comparison.md).
 
@@ -100,7 +100,7 @@ function handler(event) {
 
 ## Security Headers
 
-You can add security headers using a CloudFront response headers policy — you set one up in [CloudFront Headers, CORS, and Security](cloudfront-headers-cors-and-security.md). But if you need conditional header logic or headers that depend on the request, an edge function gives you more control.
+You can add security headers using a CloudFront response headers policy—you set one up in [CloudFront Headers, CORS, and Security](cloudfront-headers-cors-and-security.md). But if you need conditional header logic or headers that depend on the request, an edge function gives you more control.
 
 ### CloudFront Function (Viewer Response)
 
@@ -119,7 +119,7 @@ function handler(event) {
   headers['content-security-policy'] = {
     value: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'",
   };
-  // [!note Adjust the CSP directive to match your application's requirements.]
+  // [!note Adjust the `Content-Security-Policy` directive to match your application's requirements.]
 
   return response;
 }
@@ -154,11 +154,11 @@ export const handler: CloudFrontRequestHandler = async (event) => {
 > [!WARNING]
 > The `cloudfront-viewer-country` header is only available if you've configured your cache behavior to forward it. In your distribution's cache policy or origin request policy, you must whitelist the `CloudFront-Viewer-Country` header. Without this, the header won't appear in your function's event.
 
-This is a Lambda@Edge function because geolocation routing typically needs to run at the **origin request** level — you want the routing decision to be cacheable per country, not re-evaluated on every viewer request.
+This is a Lambda@Edge function because geolocation routing typically needs to run at the **origin request** level—you want the routing decision to be cacheable per country, not re-evaluated on every viewer request.
 
 ## Authentication Checks at the Edge
 
-For private content — member-only pages, admin dashboards, staging environments — you can validate authentication before the request ever reaches your origin.
+For private content—member-only pages, admin dashboards, staging environments—you can validate authentication before the request ever reaches your origin.
 
 ### CloudFront Function (Basic Auth for Staging)
 
@@ -182,7 +182,7 @@ function handler(event) {
 }
 ```
 
-This is a minimal example for protecting a staging environment with HTTP Basic Auth (username: `staging`, password: `password`). It's not a production authentication solution — the credentials are hardcoded and base64-encoded in the function.
+This is a minimal example for protecting a staging environment with HTTP Basic Auth (username: `staging`, password: `password`). It's not a production authentication solution—the credentials are hardcoded and base64-encoded in the function.
 
 ### Lambda@Edge (JWT Validation)
 
@@ -235,7 +235,7 @@ function parseCookie(
 }
 ```
 
-This function validates a JWT from a cookie on every viewer request. It uses the `jsonwebtoken` npm package — which is why it must be Lambda@Edge, not a CloudFront Function.
+This function validates a JWT from a cookie on every viewer request. It uses the `jsonwebtoken` npm package—which is why it must be Lambda@Edge, not a CloudFront Function.
 
 > [!TIP]
 > If you embed the public key directly in the function (instead of fetching it from a JWKS endpoint), you avoid a network call on every request. The tradeoff is that you need to redeploy the function when the key rotates.

@@ -3,7 +3,7 @@ title: 'Automating Deploys with the AWS CLI'
 description: >-
   Automate your deployment process using AWS CLI commands for syncing files to S3 and creating CloudFront invalidations.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cli
@@ -11,7 +11,7 @@ tags:
   - automation
 ---
 
-Running two CLI commands after every build is fine for a Saturday afternoon project. It's not fine for a team shipping to production. You want a single command: `./deploy.sh` — build the site, upload the files, invalidate the cache, done. This lesson turns the manual deployment process from [The Full Static Site Pipeline](full-static-pipeline.md) into a repeatable, copy-pasteable deploy script.
+Running two CLI commands after every build is fine for a Saturday afternoon project. It's not fine for a team shipping to production. You want a single command: `./deploy.sh`—build the site, upload the files, invalidate the cache, done. This lesson turns the manual deployment process from [The Full Static Site Pipeline](full-static-pipeline.md) into a repeatable, copy-pasteable deploy script.
 
 ## The Two Commands You're Automating
 
@@ -51,7 +51,7 @@ aws s3 sync "$BUILD_DIR/assets" "s3://$BUCKET/assets" \
   --region "$REGION" \
   --delete \
   --output json
-# [!note The --delete flag removes old hashed files from S3 that your build no longer produces.]
+# [!note The `--delete` flag removes old hashed files from S3 that your build no longer produces.]
 
 # Step 2: Upload index.html with a short cache TTL
 echo "Uploading index.html..."
@@ -142,7 +142,7 @@ aws cloudfront create-invalidation \
 **When to use selective invalidation**: If you're deploying to a high-traffic site and most of your cached content didn't change, selective invalidation avoids a burst of cache misses for files that are still valid. In practice, since your hashed assets have new filenames on every deploy anyway, the only file that truly needs invalidation is `index.html`. The old hashed assets will expire naturally.
 
 > [!TIP]
-> For most frontend projects, `/*` is the right choice. The first 1,000 invalidation paths per month are free, and `/*` counts as a single path. You're not saving money by being selective — you're saving cache efficiency. Unless you're handling millions of requests per minute, the cache refill after a `/*` invalidation is negligible.
+> For most frontend projects, `/*` is the right choice. The first 1,000 invalidation paths per month are free, and `/*` counts as a single path. You're not saving money by being selective—you're saving cache efficiency. Unless you're handling millions of requests per minute, the cache refill after a `/*` invalidation is negligible.
 
 ## Cache Busting Strategies
 
@@ -150,7 +150,7 @@ The deploy script already uses the most effective cache busting strategy: **hash
 
 ### Query String Versioning
 
-Append a version query string to asset URLs: `main.js?v=202603181200`. CloudFront treats each unique URL (including query strings, if the cache policy includes them) as a separate cached object. This avoids invalidations entirely — the new URL is a cache miss by definition.
+Append a version query string to asset URLs: `main.js?v=202603181200`. CloudFront treats each unique URL (including query strings, if the cache policy includes them) as a separate cached object. This avoids invalidations entirely—the new URL is a cache miss by definition.
 
 The problem: CloudFront's default `CachingOptimized` policy doesn't include query strings in the cache key. You'd need a custom cache policy. And your HTML must reference the versioned URLs, which means your build tool must inject the version string. Modern bundlers already hash filenames, which is a better approach because the hash is content-based, not time-based.
 

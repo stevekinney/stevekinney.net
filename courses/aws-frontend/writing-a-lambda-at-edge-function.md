@@ -12,13 +12,13 @@ tags:
   - deployment
 ---
 
-Lambda@Edge is a full Lambda function that runs at CloudFront's regional edge caches instead of in a single region. If CloudFront Functions are like Vercel Edge Functions — tiny, fast, constrained — then Lambda@Edge is like a Vercel Serverless Function that AWS has moved closer to your users. You get the full Node.js runtime, npm packages, network access, and up to 30 seconds of execution time on origin events.
+Lambda@Edge is a full Lambda function that runs at CloudFront's regional edge caches instead of in a single region. If CloudFront Functions are like Vercel Edge Functions—tiny, fast, constrained—then Lambda@Edge is like a Vercel Serverless Function that AWS has moved closer to your users. You get the full Node.js runtime, npm packages, network access, and up to 30 seconds of execution time on origin events.
 
-You already wrote and deployed a Lambda function in [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md). Lambda@Edge follows the same general pattern, but with a handful of additional constraints that trip people up. This lesson walks through all of them. Honestly, most of the gotchas aren't hard once you know they exist — the problem is that first time when you don't.
+You already wrote and deployed a Lambda function in [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md). Lambda@Edge follows the same general pattern, but with a handful of additional constraints that trip people up. This lesson walks through all of them. Honestly, most of the gotchas aren't hard once you know they exist—the problem is that first time when you don't.
 
 ## The us-east-1 Requirement
 
-Lambda@Edge functions **must** be created in `us-east-1`. This is the same requirement you encountered with ACM certificates in [Certificate Renewal and us-east-1](certificate-renewal-and-us-east-1.md) — CloudFront is a global service, and its control plane lives in `us-east-1`. When you associate a Lambda function with a CloudFront distribution, AWS replicates your function code to regional edge caches around the world. But the source of truth for that replication is always `us-east-1`.
+Lambda@Edge functions **must** be created in `us-east-1`. This is the same requirement you encountered with ACM certificates in [Certificate Renewal and us-east-1](certificate-renewal-and-us-east-1.md)—CloudFront is a global service, and its control plane lives in `us-east-1`. When you associate a Lambda function with a CloudFront distribution, AWS replicates your function code to regional edge caches around the world. But the source of truth for that replication is always `us-east-1`.
 
 If you try to associate a Lambda function from any other region with a CloudFront behavior, the API will reject it.
 
@@ -31,7 +31,7 @@ import type { CloudFrontRequestHandler } from 'aws-lambda';
 
 export const handler: CloudFrontRequestHandler = async (event) => {
   const request = event.Records[0].cf.request;
-  // [!note The request lives at event.Records[0].cf.request — not event.request like in CloudFront Functions.]
+  // [!note The request lives at `event.Records[0].cf.request`—not `event.request` like in CloudFront Functions.]
 
   // Modify the request
   request.uri = request.uri.replace(/^\/api\//, '/v2/api/');
@@ -40,7 +40,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
 };
 ```
 
-The event object wraps the CloudFront data inside `event.Records[0].cf`. This structure exists because Lambda@Edge uses the same event delivery mechanism as other Lambda triggers — a `Records` array — even though there's always exactly one record.
+The event object wraps the CloudFront data inside `event.Records[0].cf`. This structure exists because Lambda@Edge uses the same event delivery mechanism as other Lambda triggers—a `Records` array—even though there's always exactly one record.
 
 ### Event Object Shape
 
@@ -208,7 +208,7 @@ The response includes a `Version` field (e.g., `"1"`) and a versioned ARN:
 arn:aws:lambda:us-east-1:123456789012:function:my-frontend-app-edge-rewrite:1
 ```
 
-That versioned ARN — with the `:1` at the end — is what you use when associating the function with CloudFront.
+That versioned ARN—with the `:1` at the end—is what you use when associating the function with CloudFront.
 
 ### Associate with a CloudFront behavior
 
@@ -256,8 +256,8 @@ When you associate a Lambda@Edge function with a CloudFront distribution, AWS re
 ## Constraints to Remember
 
 - **No user-defined environment variables.** Lambda@Edge doesn't support user-defined environment variables at all, whether the function runs on viewer events or origin events.
-- **128 MB memory cap for viewer events.** If your viewer-triggered function needs more memory, you need to reconsider your approach — either move the logic to an origin trigger (up to 10,240 MB) or simplify it.
-- **5-second timeout for viewer events, 30 seconds for origin events.** A viewer request function that takes 5 seconds will make your site feel broken. Keep viewer-triggered functions fast — if it's slow enough for the user to notice, it's too slow.
+- **128 MB memory cap for viewer events.** If your viewer-triggered function needs more memory, you need to reconsider your approach—either move the logic to an origin trigger (up to 10,240 MB) or simplify it.
+- **5-second timeout for viewer events, 30 seconds for origin events.** A viewer request function that takes 5 seconds will make your site feel broken. Keep viewer-triggered functions fast—if it's slow enough for the user to notice, it's too slow.
 - **1 MB package size for viewer events.** This is the compressed zip size. If you bundle large libraries, you may exceed this. Use tree-shaking and keep dependencies minimal.
 
 These constraints are covered in detail in [Edge Function Debugging and Limitations](edge-function-debugging-and-limitations.md). The important one to remember here is the least intuitive: Lambda@Edge doesn't support user-defined environment variables at all, other than the reserved ones AWS injects automatically.

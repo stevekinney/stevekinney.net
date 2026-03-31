@@ -4,7 +4,7 @@ description: >-
   Choose between Parameter Store and Secrets Manager based on your use case,
   understanding the tradeoffs in cost, features, and complexity.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - parameter-store
@@ -13,6 +13,15 @@ tags:
 ---
 
 You have two AWS services that can store secrets. That's one too many for anyone who just wants to know where to put an API key. This lesson gives you a clear decision framework so you can stop deliberating and start building.
+
+```mermaid
+flowchart TD
+    Start["New value to store"] --> Sensitive{"Sensitive?"}
+    Sensitive -- "No" --> String["Parameter Store String"]
+    Sensitive -- "Yes" --> Rotate{"Needs automatic rotation?"}
+    Rotate -- "Yes" --> Secrets["Secrets Manager"]
+    Rotate -- "No" --> Secure["Parameter Store SecureString"]
+```
 
 ## The Comparison
 
@@ -34,17 +43,17 @@ The table tells a clear story: Parameter Store is a general-purpose configuratio
 
 ## When to Use Parameter Store
 
-**Non-sensitive configuration.** Table names, API endpoint URLs, feature flag JSON, stage identifiers. These are plain `String` parameters. They're free, versioned, and organized by path. This replaces the Lambda environment variables you've been using — same data, better organization and access control.
+**Non-sensitive configuration.** Table names, API endpoint URLs, feature flag JSON, stage identifiers. These are plain `String` parameters. They're free, versioned, and organized by path. This replaces the Lambda environment variables you've been using—same data, better organization and access control.
 
 **Sensitive values that don't need rotation.** A third-party API key that you update once a year. A static signing secret for JWTs. An encryption key for client-side tokens. Store these as `SecureString` parameters. You get KMS encryption and IAM access control for free.
 
 **Shared configuration across multiple functions.** If five Lambda functions all need the same API endpoint URL, storing it in Parameter Store means you update it in one place. With environment variables, you update it on five functions and hope you don't miss one.
 
-**Projects where cost matters.** Personal projects, side projects, early-stage startups — anything where $0.40 per secret per month feels like an unnecessary expense. Standard Parameter Store is free.
+**Projects where cost matters.** Personal projects, side projects, early-stage startups—anything where $0.40 per secret per month feels like an unnecessary expense. Standard Parameter Store is free.
 
 ## When to Use Secrets Manager
 
-**Database credentials.** If your Lambda functions connect to RDS, Aurora, or Redshift, Secrets Manager provides pre-built rotation Lambda functions. You enable rotation, set a schedule, and Secrets Manager handles the credential lifecycle — creating new passwords, testing them, and promoting them to active. Your application picks up the new password on the next fetch.
+**Database credentials.** If your Lambda functions connect to RDS, Aurora, or Redshift, Secrets Manager provides pre-built rotation Lambda functions. You enable rotation, set a schedule, and Secrets Manager handles the credential lifecycle—creating new passwords, testing them, and promoting them to active. Your application picks up the new password on the next fetch.
 
 **Credentials that must rotate on a schedule.** Security policies in larger organizations often require credential rotation every 30, 60, or 90 days. Manual rotation is error-prone. Secrets Manager automates it.
 
@@ -54,7 +63,7 @@ The table tells a clear story: Parameter Store is a general-purpose configuratio
 
 ## The Hybrid Approach
 
-Most production applications use both services together. This isn't a compromise — it's the recommended pattern.
+Most production applications use both services together. This isn't a compromise—it's the recommended pattern.
 
 ```
 Parameter Store (free)
@@ -93,7 +102,7 @@ const loadConfig = async () => {
         }),
       ),
     ]);
-    // [!note Fetch multiple parameters in parallel with Promise.all to reduce init time.]
+    // [!note Fetch multiple parameters in parallel with `Promise.all` to reduce init time.]
 
     config = {
       apiEndpoint: endpointResponse.Parameter?.Value ?? '',
@@ -128,9 +137,9 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
 When you have a new configuration value to store, ask these questions in order:
 
-1. **Is it sensitive?** No — use Parameter Store `String`. It's free, versioned, and queryable by path.
+1. **Is it sensitive?** No—use Parameter Store `String`. It's free, versioned, and queryable by path.
 
-2. **Does it need to rotate automatically?** Yes — use Secrets Manager. The cost is justified by the automation.
+2. **Does it need to rotate automatically?** Yes—use Secrets Manager. The cost is justified by the automation.
 
 3. **Is it a sensitive value that doesn't need rotation?** Use Parameter Store `SecureString`. You get KMS encryption and IAM access control without the Secrets Manager cost.
 
@@ -163,7 +172,7 @@ When you use both services, your Lambda execution role needs permissions for bot
 }
 ```
 
-Notice the scoping. The SSM statement grants access to parameters under `/my-frontend-app/production/*`. The Secrets Manager statement does the same for secrets. The KMS statement grants decryption for Parameter Store SecureString values. This follows the principle of least privilege you learned in [Principle of Least Privilege](principle-of-least-privilege.md) — each function gets access to exactly what it needs.
+Notice the scoping. The SSM statement grants access to parameters under `/my-frontend-app/production/*`. The Secrets Manager statement does the same for secrets. The KMS statement grants decryption for Parameter Store SecureString values. This follows the principle of least privilege you learned in [Principle of Least Privilege](principle-of-least-privilege.md)—each function gets access to exactly what it needs.
 
 > [!TIP]
 > If you have separate Lambda functions for different features (one for user management, one for payments), give each function access to only its own secrets. The payments function gets access to `/my-frontend-app/production/stripe-*`. The user management function gets access to `/my-frontend-app/production/auth-*`. Do not give every function access to every secret.

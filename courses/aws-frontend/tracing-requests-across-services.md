@@ -4,7 +4,7 @@ description: >-
   Trace a single request from API Gateway through Lambda to DynamoDB using
   correlation IDs, structured logs, and CloudWatch Logs Insights queries.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cloudwatch
@@ -16,19 +16,30 @@ An alarm tells you something is broken. Logs tell you what happened. But when a 
 
 This is the difference between monitoring and **observability**. Monitoring tells you "errors went up." Observability lets you ask "why did _this specific request_ fail?" and follow the breadcrumbs to the answer. I find this distinction matters more than it sounds like it should.
 
+```mermaid
+flowchart LR
+    Browser["Browser request"] --> APIGateway["API Gateway"]
+    APIGateway --> Lambda["Lambda logs requestId"]
+    Lambda --> DynamoDB["DynamoDB operation"]
+    DynamoDB --> Lambda
+    Lambda --> Logs["Structured logs in CloudWatch"]
+    APIGateway --> Logs
+    Logs --> Insights["Logs Insights query by correlation ID"]
+```
+
 ## The Problem: Disconnected Logs
 
 Right now, your application produces logs in multiple places:
 
 - **API Gateway** logs the incoming HTTP request (method, path, status code, latency)
-- **Lambda** logs whatever you write with `console.log` — and with structured logging from [CloudWatch Log Groups and Structured Logging](cloudwatch-log-groups-and-structured-logging.md), each entry includes fields like `level`, `message`, and `duration`
+- **Lambda** logs whatever you write with `console.log`—and with structured logging from [CloudWatch Log Groups and Structured Logging](cloudwatch-log-groups-and-structured-logging.md), each entry includes fields like `level`, `message`, and `duration`
 - **DynamoDB** publishes metrics (latency, consumed capacity) but doesn't produce per-request logs
 
-The challenge: these logs live in separate log groups with no connection between them. API Gateway processed a request, Lambda ran a function, DynamoDB stored an item — but there's nothing linking those three events together. If the Lambda function failed, you can't tell which API Gateway request triggered it or which DynamoDB operation it was attempting.
+The challenge: these logs live in separate log groups with no connection between them. API Gateway processed a request, Lambda ran a function, DynamoDB stored an item—but there's nothing linking those three events together. If the Lambda function failed, you can't tell which API Gateway request triggered it or which DynamoDB operation it was attempting.
 
 ## Correlation IDs: The Connecting Thread
 
-A **correlation ID** is a unique identifier that follows a request through every service it touches. API Gateway generates one for every incoming request — the `requestId` in the event object that Lambda receives. By including this ID in every log entry your Lambda function writes, you create a thread that ties everything together.
+A **correlation ID** is a unique identifier that follows a request through every service it touches. API Gateway generates one for every incoming request—the `requestId` in the event object that Lambda receives. By including this ID in every log entry your Lambda function writes, you create a thread that ties everything together.
 
 You saw this in the structured logging example from the previous lesson. Here's a more complete version that logs at every stage of the request lifecycle:
 
@@ -53,7 +64,7 @@ function log(entry: LogEntry): void {
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   const requestId = event.requestContext?.requestId ?? crypto.randomUUID();
-  // [!note The requestId from API Gateway becomes the correlation ID for this entire request.]
+  // [!note The `requestId` from API Gateway becomes the correlation ID for this entire request.]
   const method = event.requestContext?.http?.method ?? 'UNKNOWN';
   const path = event.rawPath ?? '/';
 
@@ -153,7 +164,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 };
 ```
 
-Every log entry includes the same `requestId`. A single request produces multiple log entries — "Request started," "DynamoDB read completed," and potentially "Request failed" — all linked by the correlation ID.
+Every log entry includes the same `requestId`. A single request produces multiple log entries—"Request started," "DynamoDB read completed," and potentially "Request failed"—all linked by the correlation ID.
 
 ## Querying by Correlation ID
 
@@ -207,7 +218,7 @@ fields @timestamp, requestId, operation, dynamoDuration, itemId
 | limit 20
 ```
 
-This shows you which requests had the slowest database interactions. If you see `GetItem` operations taking 200+ ms consistently, you might have a hot partition key — revisit [DynamoDB Tables and Keys](dynamodb-tables-and-keys.md) for key design.
+This shows you which requests had the slowest database interactions. If you see `GetItem` operations taking 200+ ms consistently, you might have a hot partition key—revisit [DynamoDB Tables and Keys](dynamodb-tables-and-keys.md) for key design.
 
 ### Find All Failed Requests in the Last Hour
 
@@ -226,7 +237,7 @@ fields @timestamp, requestId, operation, error
 | sort @timestamp desc
 ```
 
-This shows you only the write failures — maybe your Lambda function has insufficient permissions to write to DynamoDB (check the execution role you set up in [Lambda Execution Roles and Permissions](lambda-execution-roles-and-permissions.md)).
+This shows you only the write failures—maybe your Lambda function has insufficient permissions to write to DynamoDB (check the execution role you set up in [Lambda Execution Roles and Permissions](lambda-execution-roles-and-permissions.md)).
 
 ### Calculate DynamoDB Latency Percentiles
 
@@ -238,7 +249,7 @@ filter message = "DynamoDB read completed"
   by bin(5m)
 ```
 
-This gives you a time-series view of your database read latency, broken into 5-minute buckets. If p99 is climbing over time, something's changing — maybe growing table size, maybe a shift in access patterns.
+This gives you a time-series view of your database read latency, broken into 5-minute buckets. If p99 is climbing over time, something's changing—maybe growing table size, maybe a shift in access patterns.
 
 ## Piecing Together the Full Request Path
 
@@ -272,9 +283,9 @@ Three log entries, 50 milliseconds total, 42 of which were spent in DynamoDB. If
 
 ## Beyond Manual Tracing
 
-What you've built here — correlation IDs plus structured logging plus Insights queries — is the foundation of request tracing. AWS offers more sophisticated tracing through **X-Ray**, which automatically instruments SDK calls and produces visual service maps. X-Ray is beyond the scope of this course, but the structured logging patterns you've learned here work with or without it. Correlation IDs and structured logs are the minimum viable observability for any production application.
+What you've built here—correlation IDs plus structured logging plus Insights queries—is the foundation of request tracing. AWS offers more sophisticated tracing through **X-Ray**, which automatically instruments SDK calls and produces visual service maps. X-Ray is beyond the scope of this course, but the structured logging patterns you've learned here work with or without it. Correlation IDs and structured logs are the minimum viable observability for any production application.
 
 > [!TIP]
 > If your frontend returns a request ID to the user (in a response header or error message), support incidents become dramatically easier. The user says "I got error abc-123," you run the Insights query, and you have the full trace in seconds.
 
-You now have the complete monitoring stack: structured logs you can query, metrics dashboards you can glance at, alarms that tell you when things break, and correlation IDs that let you trace individual requests across services. In the exercise that follows, you'll put the alarm skills to practice — creating error and duration alarms for your Lambda function, wiring them to SNS, and triggering them intentionally to verify the pipeline works end to end.
+You now have the complete monitoring stack: structured logs you can query, metrics dashboards you can glance at, alarms that tell you when things break, and correlation IDs that let you trace individual requests across services. In the exercise that follows, you'll put the alarm skills to practice—creating error and duration alarms for your Lambda function, wiring them to SNS, and triggering them intentionally to verify the pipeline works end to end.

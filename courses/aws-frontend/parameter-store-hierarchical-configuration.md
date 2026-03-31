@@ -5,7 +5,7 @@ description: >-
   hierarchical path structure, including both plain text and SecureString
   parameters.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - parameter-store
@@ -13,9 +13,11 @@ tags:
   - ssm
 ---
 
-**Parameter Store** is part of AWS Systems Manager (SSM). It's a key-value store for configuration data — the same kind of data you've been putting in Lambda environment variables, but with encryption, access control, versioning, and a hierarchical namespace built in.
+**Parameter Store** is part of AWS Systems Manager (SSM). It's a key-value store for configuration data—the same kind of data you've been putting in Lambda environment variables, but with encryption, access control, versioning, and a hierarchical namespace built in.
 
 If Lambda environment variables are like a flat `.env` file, Parameter Store is like a structured configuration tree. I find that distinction helpful because it changes how you think about organizing your config. You organize parameters by application, environment, and purpose using paths that look like file system directories: `/my-frontend-app/production/api-key`. And unlike environment variables, you can share parameters across multiple Lambda functions without duplicating values.
+
+![Diagram showing Parameter Store paths grouped by application and environment, with an IAM policy scoped to only the production subtree.](assets/parameter-store-hierarchy-and-iam-scope.svg)
 
 ## Creating Parameters with the CLI
 
@@ -39,7 +41,7 @@ The response includes the version number and the tier:
 }
 ```
 
-Now create a **SecureString** parameter for something sensitive — an API key:
+Now create a **SecureString** parameter for something sensitive—an API key:
 
 ```bash
 aws ssm put-parameter \
@@ -53,7 +55,7 @@ aws ssm put-parameter \
 The value is encrypted at rest using an AWS-managed KMS key. You can also specify your own KMS key with the `--key-id` flag, but the default key works fine for most use cases.
 
 > [!TIP]
-> To update an existing parameter, add the `--overwrite` flag. Without it, `put-parameter` fails if the parameter already exists. This is a safety feature — you don't accidentally overwrite production values.
+> To update an existing parameter, add the `--overwrite` flag. Without it, `put-parameter` fails if the parameter already exists. This is a safety feature—you don't accidentally overwrite production values.
 
 ## Hierarchical Paths
 
@@ -105,7 +107,7 @@ Parameter Store supports three types:
 | `StringList`   | None       | Comma-separated values                          |
 | `SecureString` | KMS        | API keys, tokens, passwords, connection strings |
 
-**String** parameters are stored in plain text. Use them for configuration that isn't sensitive — the same kind of values you'd put in Lambda environment variables.
+**String** parameters are stored in plain text. Use them for configuration that isn't sensitive—the same kind of values you'd put in Lambda environment variables.
 
 **SecureString** parameters are encrypted at rest with a KMS key. When you retrieve a SecureString, you must explicitly request decryption with the `--with-decryption` flag (CLI) or `WithDecryption: true` (SDK). Without it, you get the encrypted ciphertext, which is useless.
 
@@ -183,7 +185,7 @@ const getParameter = async (name: string): Promise<string> => {
       WithDecryption: true,
     }),
   );
-  // [!note WithDecryption: true is required for SecureString parameters. It has no effect on String parameters, so you can safely set it for all parameters.]
+  // [!note `WithDecryption: true` is required for `SecureString` parameters. It has no effect on `String` parameters, so you can safely set it for all parameters.]
 
   if (!response.Parameter?.Value) {
     throw new Error(`Parameter ${name} not found or has no value`);
@@ -213,7 +215,7 @@ const getParametersByPath = async (path: string): Promise<Record<string, string>
   for (const param of response.Parameters ?? []) {
     if (param.Name && param.Value) {
       const key = param.Name.replace(path, '').replace(/^\//, '');
-      // [!note Strip the path prefix to get a clean key like "api-key" instead of the full path.]
+      // [!note Strip the path prefix to get a clean key like `api-key` instead of the full path.]
       parameters[key] = param.Value;
     }
   }
@@ -253,4 +255,4 @@ aws ssm get-parameter \
 
 This gives you a lightweight audit trail and the ability to roll back a configuration change without redeploying anything.
 
-Parameter Store handles most configuration needs, but it doesn't rotate credentials for you. When you need automatic rotation — for database passwords, OAuth tokens, or any credential with a lifecycle — that's where Secrets Manager comes in. The next lesson covers Secrets Manager and when it's worth the cost.
+Parameter Store handles most configuration needs, but it doesn't rotate credentials for you. When you need automatic rotation—for database passwords, OAuth tokens, or any credential with a lifecycle—that's where Secrets Manager comes in. The next lesson covers Secrets Manager and when it's worth the cost.

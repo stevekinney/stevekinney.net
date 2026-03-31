@@ -12,7 +12,17 @@ tags:
   - sdk
 ---
 
-You know how to store secrets in Parameter Store and Secrets Manager. Now you need to read them from a Lambda function. The pattern is straightforward: make an SDK call during initialization, cache the result in a module-level variable, and reuse it across invocations. This is the same init-time pattern you used for environment variables in [Lambda Environment Variables](lambda-environment-variables.md) — the difference is that the value comes from an API call instead of `process.env`.
+You know how to store secrets in Parameter Store and Secrets Manager. Now you need to read them from a Lambda function. The pattern is straightforward: make an SDK call during initialization, cache the result in a module-level variable, and reuse it across invocations. This is the same init-time pattern you used for environment variables in [Lambda Environment Variables](lambda-environment-variables.md)—the difference is that the value comes from an API call instead of `process.env`.
+
+```mermaid
+flowchart LR
+    Cold["Cold start or expired cache"] --> Fetch["Fetch parameter or secret with the SDK"]
+    Fetch --> Cache["Store value in a module-level cache"]
+    Cache --> Handler["Handler uses cached value"]
+    Handler --> Warm{"Warm invocation and TTL still valid?"}
+    Warm -- "Yes" --> Handler
+    Warm -- "No" --> Fetch
+```
 
 ## Reading from Parameter Store
 
@@ -41,7 +51,7 @@ const loadConfig = async () => {
       WithDecryption: true,
     }),
   );
-  // [!note WithDecryption: true is required for SecureString parameters. Without it, you get encrypted ciphertext.]
+  // [!note `WithDecryption: true` is required for `SecureString` parameters. Without it, you get encrypted ciphertext.]
 
   apiKey = response.Parameter?.Value;
 };
@@ -97,7 +107,7 @@ const loadSecrets = async () => {
   }
 
   stripeConfig = JSON.parse(response.SecretString);
-  // [!note Secrets Manager returns the decrypted value automatically. No WithDecryption flag needed.]
+  // [!note Secrets Manager returns the decrypted value automatically. No `WithDecryption` flag needed.]
 };
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
@@ -147,7 +157,7 @@ Your Lambda function's execution role needs permission to read the specific para
 The first statement grants access to all parameters under the `/my-frontend-app/production/` path. The second statement grants permission to decrypt SecureString parameters using the AWS-managed KMS key. If you used a customer-managed KMS key, replace the resource ARN with your key's ARN.
 
 > [!WARNING]
-> The parameter ARN in IAM policies does **not** include a leading slash before the parameter name. The parameter name `/my-frontend-app/production/api-key` has the ARN `arn:aws:ssm:us-east-1:123456789012:parameter/my-frontend-app/production/api-key` — note the single slash between `parameter` and `my-frontend-app`. This trips people up because the parameter name starts with `/` but the ARN path doesn't double it.
+> The parameter ARN in IAM policies does **not** include a leading slash before the parameter name. The parameter name `/my-frontend-app/production/api-key` has the ARN `arn:aws:ssm:us-east-1:123456789012:parameter/my-frontend-app/production/api-key`—note the single slash between `parameter` and `my-frontend-app`. This trips people up because the parameter name starts with `/` but the ARN path doesn't double it.
 
 ### For Secrets Manager
 
@@ -164,7 +174,7 @@ The first statement grants access to all parameters under the `/my-frontend-app/
 }
 ```
 
-Secrets Manager handles decryption internally when you call `GetSecretValue`, so you don't need a separate `kms:Decrypt` permission — unless you used a customer-managed KMS key. In that case, add a `kms:Decrypt` statement for that key.
+Secrets Manager handles decryption internally when you call `GetSecretValue`, so you don't need a separate `kms:Decrypt` permission—unless you used a customer-managed KMS key. In that case, add a `kms:Decrypt` statement for that key.
 
 ### Attaching the Policy
 
@@ -178,7 +188,7 @@ aws iam put-role-policy \
   --output json
 ```
 
-Or create a managed policy and attach it — the approach you learned in [Writing Your First IAM Policy](writing-your-first-iam-policy.md). Either way, the principle of least privilege applies: grant access to the specific parameters your function needs, not to all parameters in your account.
+Or create a managed policy and attach it—the approach you learned in [Writing Your First IAM Policy](writing-your-first-iam-policy.md). Either way, the principle of least privilege applies: grant access to the specific parameters your function needs, not to all parameters in your account.
 
 ## Caching Strategies
 
@@ -336,4 +346,4 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 };
 ```
 
-This pattern — environment variables for non-sensitive config, Parameter Store or Secrets Manager for sensitive values, init-time caching for both — is the standard approach for Lambda functions in production. You now have two services that solve similar problems. The next lesson provides a direct comparison between Parameter Store and Secrets Manager to help you decide which one to reach for in different scenarios.
+This pattern—environment variables for non-sensitive config, Parameter Store or Secrets Manager for sensitive values, init-time caching for both—is the standard approach for Lambda functions in production. You now have two services that solve similar problems. The next lesson provides a direct comparison between Parameter Store and Secrets Manager to help you decide which one to reach for in different scenarios.

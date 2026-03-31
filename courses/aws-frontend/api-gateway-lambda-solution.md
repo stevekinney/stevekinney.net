@@ -41,7 +41,7 @@ const items: Item[] = [
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   const method = event.requestContext.http.method;
-  // [!note Route by HTTP method since both GET and POST /items hit the same Lambda function.]
+  // [!note Route by HTTP method since both `GET /items` and `POST /items` hit the same Lambda function.]
 
   if (method === 'GET') {
     return {
@@ -373,7 +373,7 @@ Expected:
 ```
 
 > [!TIP]
-> If `curl` returns `{"message":"Internal Server Error"}`, the Lambda permission is missing. Run the `add-permission` command above. If the API returns `{"message":"Not Found"}`, the routes weren't created correctly — check `get-routes` to verify.
+> If `curl` returns `{"message":"Internal Server Error"}`, the Lambda permission is missing. Run the `add-permission` command above. If the API returns `{"message":"Not Found"}`, the routes weren't created correctly—check `get-routes` to verify.
 
 ## Configure CORS
 
@@ -457,7 +457,7 @@ export default function Items() {
       <ul>
         {items.map((item) => (
           <li key={item.id}>
-            {item.name} — ${item.price.toFixed(2)}
+            {item.name}—${item.price.toFixed(2)}
           </li>
         ))}
       </ul>
@@ -485,7 +485,7 @@ export default function Items() {
 Open the browser, verify the items list loads, add a new item using the form, and confirm it appears in the list. Check the DevTools Network tab to verify both requests succeed with 200/201 status codes and no CORS errors.
 
 > [!WARNING]
-> The in-memory `items` array in the Lambda handler resets on every cold start. If you add an item through POST and then wait a few minutes (long enough for Lambda to recycle the execution environment), the item will be gone. This is expected — in-memory state isn't persistent. In Module 10, you'll replace this array with DynamoDB for durable storage.
+> The in-memory `items` array in the Lambda handler resets on every cold start. If you add an item through POST and then wait a few minutes (long enough for Lambda to recycle the execution environment), the item will be gone. This is expected—in-memory state isn't persistent. In Module 10, you'll replace this array with DynamoDB for durable storage.
 
 ## Stretch Goal: `GET /items/{id}`
 
@@ -502,7 +502,7 @@ aws apigatewayv2 create-route \
 
 ### Update the handler
 
-Add this block **before** the existing `if (method === 'GET')` check — the more specific route needs to match first:
+Add this block **before** the existing `if (method === 'GET')` check—the more specific route needs to match first:
 
 ```typescript
 if (method === 'GET' && event.pathParameters?.id) {
@@ -579,4 +579,4 @@ aws lambda remove-permission \
   --output json
 ```
 
-The Lambda function and execution role aren't deleted — you'll use them again in later modules.
+The Lambda function and execution role aren't deleted—you'll use them again in later modules.

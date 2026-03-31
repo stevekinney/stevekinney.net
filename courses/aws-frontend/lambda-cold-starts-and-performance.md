@@ -4,7 +4,7 @@ description: >-
   Understand what causes cold starts, how they affect latency, and practical
   strategies for minimizing their impact on your frontend's API calls.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - lambda
@@ -23,8 +23,8 @@ Recall the runtime lifecycle from [What is Lambda?](what-is-lambda.md): every ex
 During the **init phase**, Lambda does the following:
 
 1. **Downloads your deployment package** from internal storage to the execution environment.
-2. **Starts the runtime** — in your case, Node.js 20.
-3. **Runs your top-level module code** — every `import` statement, every module-level variable initialization, every database client constructor.
+2. **Starts the runtime**—in your case, Node.js 20.
+3. **Runs your top-level module code**—every `import` statement, every module-level variable initialization, every database client constructor.
 
 Only after all of that completes does your handler function execute. Steps 1 and 2 are controlled by Lambda. Step 3 is controlled by you.
 
@@ -50,11 +50,11 @@ Node.js and Python have the fastest cold starts among Lambda's managed runtimes.
 
 ### Memory Configuration
 
-Lambda allocates CPU proportionally to memory. A 128 MB function gets a fraction of a vCPU; a 1,024 MB function gets substantially more. More CPU means faster initialization — your `import` statements execute faster, your SDK clients initialize faster. For cold-start-sensitive functions, increasing memory from 128 MB to 512 MB or 1,024 MB often reduces cold start latency by 40-60%, and the cost increase is negligible because the function initializes faster (you pay per millisecond).
+Lambda allocates CPU proportionally to memory. A 128 MB function gets a fraction of a vCPU; a 1,024 MB function gets substantially more. More CPU means faster initialization—your `import` statements execute faster, your SDK clients initialize faster. For cold-start-sensitive functions, increasing memory from 128 MB to 512 MB or 1,024 MB often reduces cold start latency by 40-60%, and the cost increase is negligible because the function initializes faster (you pay per millisecond).
 
 ### VPC Configuration
 
-If your Lambda function is configured to run inside a VPC (Virtual Private Cloud), cold starts include creating and attaching a network interface. This used to add 5-10 seconds of cold start latency, but AWS improved VPC networking significantly — the penalty is now roughly 1-2 seconds. Still, avoid putting functions in a VPC unless they need to access VPC-only resources like an RDS database. For this course, your functions don't need VPC access.
+If your Lambda function is configured to run inside a VPC (Virtual Private Cloud), cold starts include creating and attaching a network interface. This used to add 5-10 seconds of cold start latency, but AWS improved VPC networking significantly—the penalty is now roughly 1-2 seconds. Still, avoid putting functions in a VPC unless they need to access VPC-only resources like an RDS database. For this course, your functions don't need VPC access.
 
 ## When Cold Starts Happen
 
@@ -64,7 +64,7 @@ Cold starts don't happen on every request. They happen when:
 - **Traffic spikes.** If your function is handling 10 concurrent requests and an 11th arrives, Lambda creates a new execution environment for that 11th request. The 11th user experiences a cold start even though the function has been running continuously.
 - **You deploy new code.** After `update-function-code`, existing warm environments use the old code. New environments with the new code experience cold starts.
 
-For a frontend API that receives consistent traffic, cold starts are rare after the initial invocation. For an API that gets sporadic traffic — a few requests per hour from an internal tool — cold starts are the norm.
+For a frontend API that receives consistent traffic, cold starts are rare after the initial invocation. For an API that gets sporadic traffic—a few requests per hour from an internal tool—cold starts are the norm.
 
 ## Practical Mitigation Strategies
 
@@ -92,7 +92,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   if (path === '/generate-thumbnail') {
     // Only loaded when this code path is hit
     const sharp = await import('sharp');
-    // [!note Dynamic imports run only when the code path executes, not during init.]
+    // [!note Dynamic `import()` calls run only when the code path executes, not during init.]
     // ... use sharp
   }
 
@@ -152,7 +152,7 @@ This is a general best practice, not just a cold start optimization. A warm func
 
 ## Provisioned Concurrency
 
-Lambda offers a feature called **provisioned concurrency** that pre-creates a specified number of warm execution environments for your function. These environments are always ready, eliminating cold starts entirely — at a cost.
+Lambda offers a feature called **provisioned concurrency** that pre-creates a specified number of warm execution environments for your function. These environments are always ready, eliminating cold starts entirely—at a cost.
 
 ```bash
 aws lambda put-provisioned-concurrency-config \
@@ -163,9 +163,9 @@ aws lambda put-provisioned-concurrency-config \
   --output json
 ```
 
-This keeps 5 execution environments warm at all times. You pay for them whether they handle requests or not — it's essentially the cost of running a small server continuously.
+This keeps 5 execution environments warm at all times. You pay for them whether they handle requests or not—it's essentially the cost of running a small server continuously.
 
-For most frontend API backends, provisioned concurrency is overkill. It makes sense for latency-critical production workloads where even occasional cold starts are unacceptable (payment processing, real-time gaming). For a typical frontend API, the strategies above — small bundles, increased memory, top-level initialization — are sufficient and far cheaper.
+For most frontend API backends, provisioned concurrency is overkill. It makes sense for latency-critical production workloads where even occasional cold starts are unacceptable (payment processing, real-time gaming). For a typical frontend API, the strategies above—small bundles, increased memory, top-level initialization—are sufficient and far cheaper.
 
 > [!TIP]
 > Before reaching for provisioned concurrency, measure your actual cold start latency. If your function initializes in 200 milliseconds and your API's p95 latency requirement is under 500 milliseconds, you're already fine. Optimize based on measurement, not anxiety.

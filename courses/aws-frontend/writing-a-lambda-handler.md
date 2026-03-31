@@ -4,7 +4,7 @@ description: >-
   Write a Lambda handler in TypeScript that receives an event, processes it, and
   returns a properly formatted response.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - lambda
@@ -12,7 +12,7 @@ tags:
   - handler
 ---
 
-You know what Lambda is and how the execution model works. Now you need to write the code that Lambda actually runs. A Lambda **handler** is just an exported async function with a specific signature — it receives an event, does some work, and returns a response. If you've ever written an API route in Next.js or a serverless function in Vercel, the shape is nearly identical.
+You know what Lambda is and how the execution model works. Now you need to write the code that Lambda actually runs. A Lambda **handler** is just an exported async function with a specific signature—it receives an event, does some work, and returns a response. If you've ever written an API route in Next.js or a serverless function in Vercel, the shape is nearly identical.
 
 ## Project Setup
 
@@ -36,7 +36,7 @@ npm init -y
 npm install -D typescript @types/aws-lambda @types/node
 ```
 
-The key dependency here is `@types/aws-lambda` — this package provides TypeScript type definitions for every Lambda event source. You won't install the AWS SDK as a dependency because Lambda provides it in the execution environment already. You only need the types.
+The key dependency here is `@types/aws-lambda`—this package provides TypeScript type definitions for every Lambda event source. You won't install the AWS SDK as a dependency because Lambda provides it in the execution environment already. You only need the types.
 
 ## The tsconfig.json
 
@@ -91,8 +91,8 @@ Let's break this down.
 
 This type comes from `@types/aws-lambda` and tells TypeScript three things:
 
-1. The `event` parameter is an `APIGatewayProxyEventV2` — an HTTP request from API Gateway's HTTP API.
-2. The return type is an `APIGatewayProxyResultV2` — an HTTP response with `statusCode`, `headers`, and `body`.
+1. The `event` parameter is an `APIGatewayProxyEventV2`—an HTTP request from API Gateway's HTTP API.
+2. The return type is an `APIGatewayProxyResultV2`—an HTTP response with `statusCode`, `headers`, and `body`.
 3. The handler is async and returns a `Promise`.
 
 The "V2" in the name refers to API Gateway's HTTP API (the newer, cheaper, faster version). There's also `APIGatewayProxyHandler` (without V2) for the older REST API. This course uses HTTP APIs, so you'll use the V2 types throughout.
@@ -106,11 +106,11 @@ import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   const method = event.requestContext.http.method;
-  // [!note The HTTP method is nested inside requestContext, not at the top level.]
+  // [!note The HTTP method is nested inside `requestContext`, not at the top level.]
   const path = event.requestContext.http.path;
   const queryParams = event.queryStringParameters;
   const body = event.body ? JSON.parse(event.body) : null;
-  // [!note The body is always a string — you need to parse it yourself.]
+  // [!note `event.body` is always a string—you need to parse it yourself.]
   const headers = event.headers;
 
   return {
@@ -128,7 +128,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
 ### The Response Object
 
-The response must include a `statusCode` and a `body`. The `body` must be a string — if you're returning JSON, you need to `JSON.stringify` it yourself. The `headers` object is optional but you should always set `Content-Type`.
+The response must include a `statusCode` and a `body`. The `body` must be a string—if you're returning JSON, you need to `JSON.stringify` it yourself. The `headers` object is optional but you should always set `Content-Type`.
 
 ```typescript
 return {
@@ -174,7 +174,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   }
 
   const name = event.queryStringParameters?.name ?? 'World';
-  // [!note The nullish coalescing operator handles both missing and undefined query params.]
+  // [!note The `??` operator handles both missing and `undefined` query params.]
 
   const response: GreetingResponse = {
     greeting: `Hello, ${name}!`,
@@ -246,11 +246,11 @@ TypeScript compiles `src/handler.ts` to `dist/handler.js`. The compiled JavaScri
 
 **Returning an object instead of a stringified body.** Lambda expects `body` to be a string. If you pass an object, the response will be mangled. I've lost more time to this one than I'd like to admit.
 
-**Forgetting to handle missing fields.** Query parameters, headers, and the request body can all be `undefined`. TypeScript helps here — the `APIGatewayProxyEventV2` type marks these fields as optional, so the compiler will warn you if you access them without checking.
+**Forgetting to handle missing fields.** Query parameters, headers, and the request body can all be `undefined`. TypeScript helps here—the `APIGatewayProxyEventV2` type marks these fields as optional, so the compiler will warn you if you access them without checking.
 
 **Using callbacks instead of async/await.** Lambda supports both patterns, but the callback pattern (`callback(null, response)`) is a holdover from the Node.js 6 era. Use async handlers. They're cleaner, they work with try/catch, and they're what the types expect.
 
 > [!TIP]
 > The `@types/aws-lambda` package includes types for every Lambda event source: S3 events, DynamoDB streams, SNS messages, CloudFront requests, and more. Even though this course focuses on API Gateway events, the same pattern applies to all of them: import the right handler type, and TypeScript tells you exactly what the event looks like.
 
-You've got a compiled TypeScript handler ready to go. Before you can deploy it, you need an IAM execution role — the role that Lambda assumes when it runs your function. That role determines what AWS services your function can access. You'll create one in the next lesson, building on the IAM concepts from [The IAM Mental Model](iam-mental-model.md).
+You've got a compiled TypeScript handler ready to go. Before you can deploy it, you need an IAM execution role—the role that Lambda assumes when it runs your function. That role determines what AWS services your function can access. You'll create one in the next lesson, building on the IAM concepts from [The IAM Mental Model](iam-mental-model.md).

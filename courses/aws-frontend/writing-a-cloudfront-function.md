@@ -5,20 +5,20 @@ description: >-
   responses, using the lightweight JavaScript runtime available at CloudFront
   edge locations.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - cloudfront-functions
   - javascript
 ---
 
-CloudFront Functions give you a way to run lightweight JavaScript at CloudFront's edge locations — all 200+ of them — on every single request. If you've ever written a `_redirects` file on Netlify or a `next.config.js` with redirects and rewrites, you already understand the use case. The difference is that you're writing actual code instead of configuration, which means you can handle dynamic logic that static config files can't.
+CloudFront Functions give you a way to run lightweight JavaScript at CloudFront's edge locations—all 200+ of them—on every single request. If you've ever written a `_redirects` file on Netlify or a `next.config.js` with redirects and rewrites, you already understand the use case. The difference is that you're writing actual code instead of configuration, which means you can handle dynamic logic that static config files can't.
 
 In this lesson, you'll write a CloudFront Function that rewrites URLs, test it in the console, publish it, and associate it with your CloudFront distribution.
 
 ## The Runtime Is Not Node.js
 
-This is the single most important thing to internalize. The CloudFront Functions runtime is a purpose-built JavaScript engine. It's **not** Node.js. There's no `require()`, no `import`, no `Buffer`, no `process.env`, no `setTimeout`, no `fetch`. You get ECMAScript 5.1 with selected features from ES6 through ES12 — things like `let`, `const`, arrow functions, template literals, destructuring, `String.prototype.includes()`, and `Array.prototype.find()`.
+This is the single most important thing to internalize. The CloudFront Functions runtime is a purpose-built JavaScript engine. It's **not** Node.js. There's no `require()`, no `import`, no `Buffer`, no `process.env`, no `setTimeout`, no `fetch`. You get ECMAScript 5.1 with selected features from ES6 through ES12—things like `let`, `const`, arrow functions, template literals, destructuring, `String.prototype.includes()`, and `Array.prototype.find()`.
 
 What you do **not** get:
 
@@ -31,7 +31,7 @@ What you do **not** get:
 This feels restrictive, but the tradeoff is speed. CloudFront Functions execute in sub-millisecond time and can handle tens of millions of requests per second. The constraints are what make that possible.
 
 > [!TIP]
-> If you need any of the features listed above — network calls, npm packages, environment variables — you need Lambda@Edge instead. See [Lambda@Edge vs CloudFront Functions](edge-compute-comparison.md) for the full comparison.
+> If you need any of the features listed above—network calls, npm packages, environment variables—you need Lambda@Edge instead. See [Lambda@Edge vs CloudFront Functions](edge-compute-comparison.md) for the full comparison.
 
 ## The Function Signature
 
@@ -85,7 +85,7 @@ A few things to notice:
 
 ### Returning a Request vs. a Response
 
-If you return the `request` object (potentially modified), CloudFront continues processing the request — checking the cache, forwarding to the origin if needed, and so on.
+If you return the `request` object (potentially modified), CloudFront continues processing the request—checking the cache, forwarding to the origin if needed, and so on.
 
 If you return a **response** object, CloudFront sends that response directly to the viewer without ever touching the cache or origin:
 
@@ -115,13 +115,13 @@ function handler(event) {
   } else if (!uri.includes('.')) {
     request.uri += '/index.html';
   }
-  // [!note Requests like /about become /about/index.html. Requests for /style.css pass through unchanged.]
+  // [!note Requests like `/about` become `/about/index.html`. Requests for `/style.css` pass through unchanged.]
 
   return request;
 }
 ```
 
-This is one of the most common CloudFront Functions in production. Without it, navigating directly to `/about` on a static site hosted in S3 would return a 404 or a 403 because there's no object with the key `about` — the actual object is `about/index.html`.
+This is one of the most common CloudFront Functions in production. Without it, navigating directly to `/about` on a static site hosted in S3 would return a 404 or a 403 because there's no object with the key `about`—the actual object is `about/index.html`.
 
 ## Creating and Testing the Function
 
@@ -136,7 +136,7 @@ aws cloudfront create-function \
   --output json
 ```
 
-The response includes an `ETag` value — save it. You need it for every subsequent operation on this function.
+The response includes an `ETag` value—save it. You need it for every subsequent operation on this function.
 
 > [!WARNING]
 > The `--region` flag doesn't control where the function runs. CloudFront Functions are global. The region flag tells the CLI which API endpoint to use, and CloudFront's API lives in `us-east-1`.
@@ -171,11 +171,11 @@ aws cloudfront publish-function \
   --output json
 ```
 
-This returns a new `ETag` — the live version's ETag. Save this one too.
+This returns a new `ETag`—the live version's ETag. Save this one too.
 
 ## Associating with a CloudFront Behavior
 
-A function that isn't associated with a **behavior** doesn't do anything. You need to update your CloudFront distribution to attach this function to a cache behavior — typically the default behavior (`*`).
+A function that isn't associated with a **behavior** doesn't do anything. You need to update your CloudFront distribution to attach this function to a cache behavior—typically the default behavior (`*`).
 
 You configured behaviors in [Cache Behaviors and Invalidations](cache-behaviors-and-invalidations.md). Now you're adding a function association to one of those behaviors.
 
@@ -272,4 +272,4 @@ These patterns are building blocks. In [Edge Function Use Cases](edge-function-u
 - **10 KB code size limit.** Your entire function, including comments, must fit in 10 KB. Minify aggressively if you're approaching the limit.
 - **No `async`/`await`.** The runtime doesn't support Promises. Everything is synchronous.
 - **Header names must be lowercase.** When you set or read headers, use lowercase names: `content-type`, not `Content-Type`.
-- **The `ETag` dance.** Every create, update, and publish operation returns a new ETag, and the next operation requires the current ETag. I've lost track of these more times than I'd like to admit — if you do too, re-fetch with `describe-function`.
+- **The `ETag` dance.** Every create, update, and publish operation returns a new ETag, and the next operation requires the current ETag. I've lost track of these more times than I'd like to admit—if you do too, re-fetch with `describe-function`.

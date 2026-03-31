@@ -5,7 +5,7 @@ description: >-
   handler code, understanding when to use environment variables versus other
   configuration approaches.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - lambda
@@ -13,7 +13,7 @@ tags:
   - environment-variables
 ---
 
-Environment variables work the same way in Lambda as they do in Vercel or Netlify: you set key-value pairs on the function, and your code reads them from `process.env`. The API endpoint for a third-party service, the name of a DynamoDB table, a feature flag — anything that changes between environments or shouldn't be hardcoded goes into an environment variable.
+Environment variables work the same way in Lambda as they do in Vercel or Netlify: you set key-value pairs on the function, and your code reads them from `process.env`. The API endpoint for a third-party service, the name of a DynamoDB table, a feature flag—anything that changes between environments or shouldn't be hardcoded goes into an environment variable.
 
 If you've ever set `NEXT_PUBLIC_API_URL` in a `.env.local` file or configured environment variables in the Vercel dashboard, you already understand the concept. The only difference is how you set them.
 
@@ -54,7 +54,7 @@ In your TypeScript handler, environment variables are available through `process
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 
 const tableName = process.env.TABLE_NAME;
-// [!note Reading env vars at the top level runs once during init, not on every invocation.]
+// [!note Reading `process.env` at the top level runs once during init, not on every invocation.]
 const stage = process.env.STAGE ?? 'development';
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
@@ -78,11 +78,11 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 };
 ```
 
-There are two patterns worth noting here. First, reading environment variables at the top level (outside the handler function) means the value is read once during the init phase and reused across invocations. This is more efficient than reading `process.env` on every request. Second, always validate that required environment variables exist — `process.env.TABLE_NAME` is `string | undefined` in TypeScript, and your function should fail clearly if a variable is missing rather than silently breaking.
+There are two patterns worth noting here. First, reading environment variables at the top level (outside the handler function) means the value is read once during the init phase and reused across invocations. This is more efficient than reading `process.env` on every request. Second, always validate that required environment variables exist—`process.env.TABLE_NAME` is `string | undefined` in TypeScript, and your function should fail clearly if a variable is missing rather than silently breaking.
 
 ## Lambda's Built-In Environment Variables
 
-Lambda also sets several environment variables automatically. You don't configure these — they're always present:
+Lambda also sets several environment variables automatically. You don't configure these—they're always present:
 
 | Variable                          | Value                                                  |
 | --------------------------------- | ------------------------------------------------------ |
@@ -93,16 +93,16 @@ Lambda also sets several environment variables automatically. You don't configur
 | `AWS_EXECUTION_ENV`               | The runtime identifier (e.g., `AWS_Lambda_nodejs20.x`) |
 | `_HANDLER`                        | The handler setting (e.g., `handler.handler`)          |
 
-These are useful for logging and debugging. For example, you might include `AWS_REGION` in log output to confirm your function is running where you expect. I like to log the function name and region on every cold start — it saves time when you're debugging across multiple environments.
+These are useful for logging and debugging. For example, you might include `AWS_REGION` in log output to confirm your function is running where you expect. I like to log the function name and region on every cold start—it saves time when you're debugging across multiple environments.
 
 ## The 4 KB Limit
 
-Lambda imposes a total limit of **4 KB** on all environment variables combined — keys, values, and formatting included. This sounds small, and it _is_. A handful of short configuration values fit easily; a JSON blob containing your entire application configuration doesn't.
+Lambda imposes a total limit of **4 KB** on all environment variables combined—keys, values, and formatting included. This sounds small, and it _is_. A handful of short configuration values fit easily; a JSON blob containing your entire application configuration doesn't.
 
 If you're hitting the 4 KB limit, that's a signal that your configuration has outgrown environment variables. At that point, you should move configuration to **Parameter Store** (covered in Module 11), which supports values up to 8 KB per parameter (or 64 KB for advanced parameters) with no total limit on the number of parameters.
 
 > [!TIP]
-> A practical rule of thumb: use environment variables for simple, non-sensitive values that your function needs at startup — table names, stage identifiers, feature flags, API endpoint URLs. Use Parameter Store or Secrets Manager for anything that's sensitive, large, or needs to be shared across multiple functions.
+> A practical rule of thumb: use environment variables for simple, non-sensitive values that your function needs at startup—table names, stage identifiers, feature flags, API endpoint URLs. Use Parameter Store or Secrets Manager for anything that's sensitive, large, or needs to be shared across multiple functions.
 
 ## When Not to Use Environment Variables
 
@@ -154,7 +154,7 @@ aws lambda update-function-configuration \
 
 ## Environment Variables and Cold Starts
 
-Environment variables are available during the init phase, which means you can safely read them in top-level module code. This is actually the recommended pattern: read configuration once during init and reuse it across invocations. Don't read `process.env` inside your handler on every request — it works, but it wastes time doing something that only needs to happen once.
+Environment variables are available during the init phase, which means you can safely read them in top-level module code. This is actually the recommended pattern: read configuration once during init and reuse it across invocations. Don't read `process.env` inside your handler on every request—it works, but it wastes time doing something that only needs to happen once.
 
 ```typescript
 // Good: read once during init

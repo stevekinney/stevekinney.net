@@ -95,7 +95,7 @@ The method and path are nested under `requestContext.http`, not at the top level
 const category = event.queryStringParameters?.category;
 ```
 
-`queryStringParameters` is an object mapping parameter names to values. If the request has no query string, the field is `undefined` — not an empty object. Always use optional chaining.
+`queryStringParameters` is an object mapping parameter names to values. If the request has no query string, the field is `undefined`—not an empty object. Always use optional chaining.
 
 For repeated query parameters (like `?tag=js&tag=ts`), API Gateway joins the values with a comma: `"js,ts"`. If you need individual values, split on the comma.
 
@@ -106,13 +106,13 @@ const contentType = event.headers['content-type'];
 const authorization = event.headers['authorization'];
 ```
 
-All header names are lowercased. If the client sends `Content-Type`, you access it as `event.headers['content-type']`. This is consistent behavior from API Gateway — you don't need to handle case variations.
+All header names are lowercased. If the client sends `Content-Type`, you access it as `event.headers['content-type']`. This is consistent behavior from API Gateway—you don't need to handle case variations.
 
 ### Request Body
 
 ```typescript
 const body = event.body ? JSON.parse(event.body) : null;
-// [!note The body is always a string. You must parse it yourself.]
+// [!note `event.body` is always a string. You must parse it yourself.]
 ```
 
 The `body` is always a string, even when the client sends `Content-Type: application/json`. API Gateway doesn't parse it for you. If the request has no body (GET requests, for example), `event.body` is `undefined`.
@@ -141,7 +141,7 @@ If your route includes path parameters (like `GET /items/{id}`), the values are 
 const itemId = event.pathParameters?.id;
 ```
 
-Like `queryStringParameters`, the `pathParameters` field is `undefined` when no path parameters are defined on the route — not an empty object. (I wish it were an empty object, but here we are.)
+Like `queryStringParameters`, the `pathParameters` field is `undefined` when no path parameters are defined on the route—not an empty object. (I wish it were an empty object, but here we are.)
 
 ### The Stage
 
@@ -149,7 +149,7 @@ Like `queryStringParameters`, the `pathParameters` field is `undefined` when no 
 const stage = event.requestContext.stage;
 ```
 
-For the `$default` stage, this value is `"$default"`. If you create named stages (covered in [API Gateway Stages and Custom Domains](api-gateway-stages-and-custom-domains.md)), the stage name appears here. This can be useful for conditional behavior — different database tables per environment, different log levels, and so on.
+For the `$default` stage, this value is `"$default"`. If you create named stages (covered in [API Gateway Stages and Custom Domains](api-gateway-stages-and-custom-domains.md)), the stage name appears here. This can be useful for conditional behavior—different database tables per environment, different log levels, and so on.
 
 ## The Response Format
 
@@ -172,7 +172,7 @@ return {
 
 ### Optional Fields
 
-- **`headers`**: An object of response headers. You should always set `Content-Type`. You can also set caching headers, custom headers, or CORS headers (though CORS is better handled at the API Gateway level — covered in [API Gateway CORS Configuration](api-gateway-cors-configuration.md)).
+- **`headers`**: An object of response headers. You should always set `Content-Type`. You can also set caching headers, custom headers, or CORS headers (though CORS is better handled at the API Gateway level—covered in [API Gateway CORS Configuration](api-gateway-cors-configuration.md)).
 - **`isBase64Encoded`**: Set to `true` if the body is base64-encoded binary data (images, PDFs). Defaults to `false`.
 - **`cookies`**: An array of `Set-Cookie` header values. Using this field instead of setting cookies in the `headers` object ensures proper formatting when multiple cookies are set.
 
@@ -190,7 +190,7 @@ return {
 
 ## A Complete Handler Pattern
 
-Here's a pattern that handles the common cases — routing by method, parsing the body, reading path parameters, and returning proper error responses:
+Here's a pattern that handles the common cases—routing by method, parsing the body, reading path parameters, and returning proper error responses:
 
 ```typescript
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
@@ -207,7 +207,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
   if (method === 'GET' && path === '/items') {
     const category = event.queryStringParameters?.category;
-    // [!note Use query parameters for filtering, sorting, and pagination.]
+    // [!note Use `event.queryStringParameters` for filtering, sorting, and pagination.]
     const items: Item[] = []; // Fetch from database in a real application
 
     return {
@@ -283,9 +283,9 @@ Version 2.0 is the default for HTTP APIs created with `--payload-format-version 
 
 **Returning an object as the body.** The body must be a string. Returning `{ items: [] }` instead of `JSON.stringify({ items: [] })` produces `[object Object]` in the response.
 
-**Not handling undefined fields.** `queryStringParameters`, `pathParameters`, and `body` can all be `undefined`. TypeScript warns you about this if you're using the correct types — pay attention to those warnings.
+**Not handling undefined fields.** `queryStringParameters`, `pathParameters`, and `body` can all be `undefined`. TypeScript warns you about this if you're using the correct types—pay attention to those warnings.
 
-Your API works, but try calling it from a React app running on `localhost:3000`. The browser blocks the request with a CORS error. You've seen this before — and now you're on the server side of the problem. The next lesson covers configuring CORS on your HTTP API so your frontend can actually call it.
+Your API works, but try calling it from a React app running on `localhost:3000`. The browser blocks the request with a CORS error. You've seen this before—and now you're on the server side of the problem. The next lesson covers configuring CORS on your HTTP API so your frontend can actually call it.
 
 ## Verification
 

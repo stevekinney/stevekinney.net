@@ -4,7 +4,7 @@ description: >-
   Use Query to retrieve items by partition key with optional sort key conditions
   and understand when and why Scan should be avoided.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - dynamodb
@@ -12,11 +12,20 @@ tags:
   - scan
 ---
 
-GetItem retrieves a single item by its exact primary key. But frontend applications rarely need just one item at a time — you need a list. "Show me all the items for this user." "Show me this user's items created after a certain date." DynamoDB gives you two tools for retrieving multiple items: **Query** and **Scan**. They sound similar, but they're fundamentally different in how they work, what they cost, and when you should use each one.
+GetItem retrieves a single item by its exact primary key. But frontend applications rarely need just one item at a time—you need a list. "Show me all the items for this user." "Show me this user's items created after a certain date." DynamoDB gives you two tools for retrieving multiple items: **Query** and **Scan**. They sound similar, but they're fundamentally different in how they work, what they cost, and when you should use each one.
+
+```mermaid
+flowchart LR
+    Query["Query userId = user-123"] --> Partition["Read one matching partition"]
+    Partition --> Results["Return sorted items"]
+    Scan["Scan table"] --> All["Read every partition"]
+    All --> Filter["Filter after reading"]
+    Filter --> Cost["Higher latency and read cost"]
+```
 
 ## Query: The Right Way to Read Multiple Items
 
-**Query** retrieves items from a single partition. You specify the partition key (required) and optionally filter by the sort key. DynamoDB finds the partition, reads the items within it, and returns them — already sorted by the sort key.
+**Query** retrieves items from a single partition. You specify the partition key (required) and optionally filter by the sort key. DynamoDB finds the partition, reads the items within it, and returns them—already sorted by the sort key.
 
 This is efficient because DynamoDB knows exactly where to look. It doesn't scan the entire table. It goes directly to the partition you specified and reads only the items that match your key condition.
 
@@ -39,11 +48,11 @@ async function getItemsForUser(userId: string) {
   );
 
   return result.Items ?? [];
-  // [!note Items is an array of plain JavaScript objects, thanks to the document client.]
+  // [!note `Items` is an array of plain JavaScript objects, thanks to the document client.]
 }
 ```
 
-The **`KeyConditionExpression`** is the critical parameter. It specifies which partition key value to query, and optionally constrains the sort key. The expression uses the same placeholder syntax you saw with UpdateCommand — values prefixed with `:` are defined in `ExpressionAttributeValues`.
+The **`KeyConditionExpression`** is the critical parameter. It specifies which partition key value to query, and optionally constrains the sort key. The expression uses the same placeholder syntax you saw with UpdateCommand—values prefixed with `:` are defined in `ExpressionAttributeValues`.
 
 ### Sort Key Conditions
 
@@ -100,7 +109,7 @@ async function getPendingItems(userId: string) {
 ```
 
 > [!WARNING]
-> A `FilterExpression` doesn't reduce the amount of data DynamoDB reads — it only reduces what comes back in the response. DynamoDB reads all items matching the `KeyConditionExpression`, then applies the filter to the results. You still pay for the reads. If a partition has 1,000 items and the filter matches 10, you're charged for reading all 1,000. Filters are useful for reducing network transfer, but they're not a substitute for good key design.
+> A `FilterExpression` doesn't reduce the amount of data DynamoDB reads—it only reduces what comes back in the response. DynamoDB reads all items matching the `KeyConditionExpression`, then applies the filter to the results. You still pay for the reads. If a partition has 1,000 items and the filter matches 10, you're charged for reading all 1,000. Filters are useful for reducing network transfer, but they're not a substitute for good key design.
 
 ### Sorting and Limiting
 
@@ -125,7 +134,7 @@ async function getRecentItems(userId: string, limit: number) {
 ```
 
 - **`ScanIndexForward: false`** reverses the sort order (descending by sort key). The default is `true` (ascending).
-- **`Limit`** caps the number of items returned. Combined with reverse sort order, this gives you "the N most recent items" — a pattern frontend applications use constantly.
+- **`Limit`** caps the number of items returned. Combined with reverse sort order, this gives you "the N most recent items"—a pattern frontend applications use constantly.
 
 ## Scan: Reading the Entire Table
 
@@ -154,7 +163,7 @@ This works, and for a table with 50 items during development, it's fine. But Sca
 Query performance depends on the partition size. Scan performance depends on the table size. As your table grows, Query stays fast and Scan gets slower.
 
 > [!TIP]
-> A useful rule of thumb: if you find yourself reaching for Scan, ask whether a different key design would let you use Query instead. Most of the time, the answer is yes. Scan is a code smell in DynamoDB — it usually means your key design doesn't match your access patterns.
+> A useful rule of thumb: if you find yourself reaching for Scan, ask whether a different key design would let you use Query instead. Most of the time, the answer is yes. Scan is a code smell in DynamoDB—it usually means your key design doesn't match your access patterns.
 
 ### When Scan Is Acceptable
 
@@ -163,13 +172,13 @@ Scan isn't always wrong. Reasonable use cases include:
 - **Admin tools** that need to export or audit the entire table
 - **Small tables** (under a few thousand items) where the cost is negligible
 - **One-time data migrations** where you need to touch every item
-- **Development and debugging** — scanning a table with 20 test items is fine
+- **Development and debugging**—scanning a table with 20 test items is fine
 
 For a frontend API endpoint that runs on every request, Scan is almost never the right choice.
 
 ## Pagination with `LastEvaluatedKey`
 
-Both Query and Scan return at most 1 MB of data per request. If there are more items to read, the response includes a `LastEvaluatedKey` — a bookmark that tells DynamoDB where to continue on the next request.
+Both Query and Scan return at most 1 MB of data per request. If there are more items to read, the response includes a `LastEvaluatedKey`—a bookmark that tells DynamoDB where to continue on the next request.
 
 ```typescript
 async function getAllItemsForUser(userId: string) {
@@ -202,7 +211,7 @@ The pattern:
 2. If the response includes `LastEvaluatedKey`, make another request with that value as `ExclusiveStartKey`
 3. Repeat until `LastEvaluatedKey` is undefined
 
-For frontend APIs, you usually don't want to paginate through everything — you want to return a page of results to the client and let them request the next page. You can pass `LastEvaluatedKey` back to the frontend (base64-encoded) as a pagination cursor:
+For frontend APIs, you usually don't want to paginate through everything—you want to return a page of results to the client and let them request the next page. You can pass `LastEvaluatedKey` back to the frontend (base64-encoded) as a pagination cursor:
 
 ```typescript
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
