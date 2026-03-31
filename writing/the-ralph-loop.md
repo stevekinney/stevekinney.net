@@ -1,5 +1,5 @@
 ---
-title: 'The Ralph Loop: How a Bash One-Liner Changed How I Think About AI Coding Agents'
+title: 'Entering the Mind of Ralph Wiggum'
 description: >-
   A while-true loop, a prompt file, and a clean context window on every
   iteration. The Ralph Loop is the dumbest-sounding technique that actually
