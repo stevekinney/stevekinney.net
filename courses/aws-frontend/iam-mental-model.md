@@ -4,7 +4,7 @@ description: >-
   Build a mental model of IAM — users, groups, roles, policies, and how AWS
   decides whether to allow or deny a request.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - iam
@@ -103,11 +103,10 @@ Here's a concrete scenario. You're deploying a frontend application to AWS and y
 
 1. **Create an IAM user** called `deploy-bot`. This represents the CI pipeline. No console access needed — just programmatic access keys.
 2. **Write a policy** that allows `s3:PutObject` and `s3:DeleteObject` on your specific bucket, plus `cloudfront:CreateInvalidation` on your specific distribution.
-3. **Attach the policy** to the `deploy-bot` user.
+3. **Create a group** called `deployers` and attach the policy to the group.
+4. **Add the `deploy-bot` user** to that group.
 
 Now the deploy bot can push files and invalidate caches — and nothing else. It can't read your DynamoDB tables. It can't create new users. It can't change billing settings. The policy constrains it to exactly what it needs.
-
-If you had multiple deploy bots (one per project, maybe), you'd create a **group** called `deployers`, attach the policy to the group, and add each bot user to the group.
 
 If you used roles instead (which is the more modern approach), you'd create a role with the same policy and configure GitHub Actions to assume that role using OpenID Connect. No long-lived access keys required.
 
@@ -116,9 +115,12 @@ If you used roles instead (which is the more modern approach), you'd create a ro
 ```
 AWS Account
 ├── IAM Users
-│   ├── admin (has AdministratorAccess policy)
-│   └── deploy-bot (has custom deploy policy)
+│   ├── admin (member of Administrators)
+│   └── deploy-bot (member of deployers)
 ├── IAM Groups
+│   ├── Administrators
+│   │   ├── Members: admin
+│   │   └── Attached policies: AdministratorAccess
 │   └── deployers
 │       ├── Members: deploy-bot
 │       └── Attached policies: DeployPolicy

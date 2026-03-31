@@ -4,7 +4,7 @@ description: >-
   Set up AWS Budgets and billing alerts so you're notified before costs exceed
   your expectations, and understand where the free tier boundaries are.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - billing
@@ -184,11 +184,15 @@ Two tools in the AWS console help you understand where your money is going:
 
 The **Billing and Cost Management Dashboard** shows your current month's charges broken down by service. Open it from the console's top navigation bar (click your account name, then "Billing and Cost Management"). This is the page you should check once a week while you're learning AWS.
 
+![Billing and Cost Management home showing the cost summary, cost monitor, and recommended actions panels.](assets/billing-and-cost-management-home.png)
+
 The dashboard shows:
 
 - **Month-to-date charges** broken down by service
 - **Free tier usage** showing how much of each service's free tier you have consumed
 - **Forecasted end-of-month charges** based on your current usage pattern
+
+If your `admin` user cannot open this page, you probably skipped **IAM user and role access to Billing information** during the initial account setup. Go back to [Creating and Securing an AWS Account](creating-and-securing-an-aws-account.md) and enable it from the billing settings page as root.
 
 ### Cost Explorer
 

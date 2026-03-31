@@ -4,7 +4,7 @@ description: >-
   Create an AWS account, enable MFA on the root user, and understand why root
   should be locked away after initial setup.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-03-31
 tags:
   - aws
   - iam
@@ -12,102 +12,227 @@ tags:
   - account-setup
 ---
 
-You've been deploying to Vercel with a GitHub login. You click a button, connect a repo, and your site is live. AWS gives you actual infrastructure, which means actual security responsibility. The account you're about to create controls real resources that cost real money, and if someone compromises it, they can spin up crypto miners on your credit card. So we're going to do this right from the start. (I've seen the horror stories. You don't want to be one.)
+You've been deploying to Vercel with a GitHub login. You click a button, connect a repo, and your site is live. AWS gives you actual infrastructure, which means actual security responsibility. The account you're about to create controls real resources that cost real money, and if someone compromises it, they can spin up crypto miners on your credit card. So we're going to do this right from the start.
 
-## Creating an AWS Account
+## Create the Account
 
-Head to [https://aws.amazon.com](https://aws.amazon.com) and click "Create an AWS Account." You'll need an email address, a password, and a credit card. A few things to know before you begin:
+Start on the AWS homepage. Depending on which part of the page AWS is currently promoting, you'll usually see either **Create account** in the header or a larger call-to-action like **Start free with AWS**.
 
-- **Use a dedicated email address.** If you have a team email alias or a plus-addressed Gmail (`yourname+aws@gmail.com`), use that. The email tied to this account becomes the **root user** login, and you want it to be something you can recover access to years from now.
-- **Choose a strong, unique password.** This is the most powerful credential in your entire AWS setup. Use a password manager.
-- **The credit card is required**, but AWS has a generous free tier. You won't be charged for the things we build in this course unless you leave resources running indefinitely or go significantly over free tier limits.
+![AWS homepage showing both the Create account button in the header and the Start free with AWS call-to-action in the hero.](assets/aws-homepage.png)
 
-AWS will ask you to choose a support plan. Select the **Basic (Free)** plan. You can upgrade later if you need it, but free tier support is fine for learning.
+After you click into the signup flow, AWS asks for the email address that will own the account and an account name.
 
-Once you've verified your email and entered your payment information, you'll land in the **AWS Management Console**. This is the web interface for everything in AWS. Bookmark it.
+![AWS signup screen asking for the root user email address and AWS account name.](assets/aws-signup.png)
 
-## The Root User: Handle with Care
+A few decisions here matter more than they look:
+
+- **Use a dedicated email address.** A plus-addressed Gmail or a team alias is fine. The important part is that this email remains recoverable for years.
+- **Pick an account name you won't hate later.** It does not need to match a project name exactly, but it should be recognizable when you see it in the console header.
+- **Treat this as root from the first click.** This email becomes the login for the **root user**, which is the highest-privilege identity in the account.
+
+Once AWS verifies your email address, the next screen is where you set the root password.
+
+![Root password screen shown immediately after email verification in the AWS signup flow.](assets/root-user-password.png)
+
+Use a strong password and store it in a password manager immediately. This is not a password you should memorize or reuse anywhere else.
+
+AWS then asks you to choose an account plan. In the current flow shown here, AWS offers a **Free (6 months)** option and a **Paid** option.
+
+![Account plan selection screen offering the Free and Paid account plans during signup.](assets/choose-account-plan.png)
+
+For a personal learning account, choose the free plan if AWS offers it to you. The goal for this course is to learn the platform without accidentally turning your first week into a billing postmortem.
+
+Next comes your contact information.
+
+![Contact information form during AWS account creation asking for name, phone number, address, and country.](assets/contact-information.png)
+
+Fill this out accurately. AWS uses it for account ownership, billing, and recovery. This is not the place for fake data.
+
+After that, AWS asks for billing information.
+
+![Billing information form during AWS signup asking for card details and billing address.](assets/billing-information.png)
+
+Yes, AWS requires a payment method even for a learning account. No, that does not mean you are guaranteed to be charged right away. It means AWS has a way to bill you if you create something outside the free tier or leave paid resources running indefinitely.
+
+You may also see one or more additional steps after billing, such as phone verification or a short account activation wait. Finish those before moving on. The exact screens vary a little, but the principle does not: complete the signup flow, land in the console, and then secure the account before you build anything.
+
+## Lock Down the Root User Immediately
 
 The credentials you just created are the **root user** credentials. The root user is the god-mode account for your entire AWS environment. It can do literally anything: create and delete resources, change billing information, close the account entirely. There is no permission boundary that applies to root.
 
-Think of it this way: if your AWS account were an apartment building, the root user holds the master key to every unit, the mailroom, the electrical panel, and the demolition switch. You don't carry that key to get your morning coffee.
+Think of it this way: if your AWS account were an apartment building, the root user holds the master key to every unit, the mailroom, the electrical panel, and the demolition switch. You do not carry that key to get your morning coffee.
 
-Here's the rule: **use the root user to set up your account, enable MFA, create an admin IAM user, and then stop using it.** Log out. Don't save the password in your browser's autofill. Put the credentials in a password manager vault labeled "BREAK GLASS IN EMERGENCY."
+Here is the rule: use the root user to finish the initial account setup, enable MFA, create an everyday admin IAM user, and then stop using it.
 
-> [!WARNING]
-> Never create access keys for the root user. If root access keys leak — in a GitHub commit, in a `.env` file, anywhere — an attacker has unrestricted access to your entire AWS account. There is no IAM policy that can limit what root can do.
+### Open Security Credentials
 
-## Enabling MFA on the Root User
+From the console home page, click your account menu in the top-right corner and choose **Security credentials**.
 
-**Multi-factor authentication (MFA)** adds a second verification step beyond your password. Even if someone steals your root password, they can't log in without the second factor. This is non-negotiable.
+![Account menu in the AWS console with Security credentials highlighted.](assets/security-credentials-menu.png)
 
-Here's how to enable it:
+That takes you to the root user's security page.
 
-1. Sign in to the AWS Management Console as the root user.
-2. Click your account name in the top-right corner and select **Security credentials**.
-3. In the **Multi-factor authentication (MFA)** section, click **Assign MFA device**.
-4. Give the device a name (something like "root-authenticator").
-5. Choose your MFA device type:
-   - **Authenticator app** — the most common choice. Use an app like Google Authenticator, Authy, or 1Password.
-   - **Security key** — a physical FIDO2 key like a YubiKey. More secure, but costs money.
-   - **Passkey** — AWS now supports passkeys, which are phishing-resistant and tied to your device's biometrics.
-6. Follow the on-screen prompts to scan the QR code (for an authenticator app) or tap your security key.
-7. Enter two consecutive MFA codes to verify and click **Assign MFA**.
+![Root security credentials page showing the warning that MFA is not assigned yet.](assets/root-security-credentials-page.png)
 
-> [!TIP]
-> AWS lets you register up to eight MFA devices on a single account. Consider adding a second device — a backup authenticator app on a different phone, or a security key stored in a safe place. Losing your only MFA device on the root account is a genuinely painful recovery process.
-
-Once MFA is enabled, every root login will require both your password and the MFA code. This is exactly what you want.
-
-## Creating Your First Admin User
-
-The root user should now be retired from daily use. You need a separate **IAM user** with admin permissions for everyday work. We'll cover IAM in depth in [IAM Mental Model](iam-mental-model.md), but here's the short version to get you unblocked:
-
-1. In the AWS Console, navigate to **IAM** (search for it in the top search bar).
-2. In the left sidebar, click **Users**, then **Create user**.
-3. Enter the username `admin`.
-4. Check **Provide user access to the AWS Management Console**.
-5. Select **I want to create an IAM user** (not Identity Center for now — keep it simple).
-6. Set a password and decide whether the user should reset it on first login.
-7. Click **Next**.
-8. On the permissions page, select **Attach policies directly**.
-9. Search for and check `AdministratorAccess`.
-10. Click **Next**, then **Create user**.
-
-You now have an `admin` user with full permissions. **Enable MFA on this user too** — same process as root, just navigate to the user's Security credentials tab in IAM.
+If you see a warning banner telling you MFA is not assigned, good. That means you are in exactly the right place.
 
 > [!WARNING]
-> `AdministratorAccess` is a managed policy that grants `*` on all resources. It's fine for your personal learning account, but in a team environment you'd scope this down significantly. We'll get into that in [Principle of Least Privilege](principle-of-least-privilege.md).
+> Never create access keys for the root user. If root access keys leak, an attacker has unrestricted access to your entire AWS account. There is no IAM policy that can save you from that mistake.
 
-From this point forward, sign into the console using your IAM user credentials, not root. The sign-in URL for IAM users is different from root — it includes your account ID or alias:
+### Enable MFA
 
-```
+Click **Assign MFA** and AWS will walk you through choosing a device type. The screenshots here use a passkey because it is phishing-resistant and tied to a device you already control.
+
+![Assign MFA device screen with Passkey or security key selected as the MFA device type.](assets/select-mfa-device.png)
+
+Other choices are still valid:
+
+- **Passkey or security key**: The best option if your devices support it.
+- **Authenticator app**: The most common fallback and completely reasonable for a personal learning account.
+- **Hardware TOTP token**: Useful if your security model already depends on dedicated hardware.
+
+Once the flow completes, AWS shows a confirmation banner on the root security page.
+
+![Root security credentials page showing the Passkey MFA device assigned confirmation banner.](assets/passkey-mfa-device-assigned.png)
+
+At that point, every future root login requires both the password and the second factor. That is exactly what you want.
+
+## Add the Safety Rails You Will Want Later
+
+Before you retire the root user, there are three small pieces of account hygiene worth handling now.
+
+### Set Alternate Contacts
+
+AWS lets you define separate contacts for billing, operations, and security notifications.
+
+![Alternate contacts section showing separate billing, operations, and security contacts.](assets/alternate-contacts.png)
+
+If this is just your personal learning account, you can leave these empty for now. If you have a shared inbox for billing or a teammate who should receive security notices, set them now while you still remember. It is much easier to do this on day one than during an incident.
+
+### Enable IAM Access to Billing
+
+By default, new IAM users often cannot see billing information. That becomes a problem later when you try to set up budgets or inspect charges without logging back in as root.
+
+![Billing settings section showing IAM user and role access to Billing information deactivated.](assets/iam-user-and-role-access-to-billing-information.png)
+
+Click **Edit** and enable **IAM user and role access to Billing information** before you move on. Your future `admin` user needs this.
+
+### Acknowledge IAM Identity Center, Then Skip It for Now
+
+AWS now surfaces **IAM Identity Center** prominently because it is the preferred long-term answer for workforce access and single sign-on.
+
+![IAM Identity Center landing page inviting you to enable an IAM Identity Center instance.](assets/iam-identity-center.png)
+
+That is a good direction for a team. It is also one more system to understand on the same day you are still learning what an IAM user even is. For this course, we are intentionally keeping the starting point simpler:
+
+- Create one everyday IAM user for yourself.
+- Use that user for console access and CLI setup.
+- Learn IAM concepts before layering on organization-wide identity tooling.
+
+We will talk about better long-term patterns later. Right now, the shortest path to understanding AWS is still the best one.
+
+## Create an Everyday Admin User Through a Group
+
+The root user should now be retired from daily use. You need a separate **IAM user** with admin permissions for everyday work.
+
+One quick note before you follow the screenshots below: the screenshots show the account and username I used while writing this lesson. For the course, stick with the conventions we use everywhere else:
+
+- Create an everyday IAM user named `admin`.
+- Use your own account ID in the IAM sign-in URL.
+
+### Go to IAM
+
+Search for **IAM** from the AWS console header and open the service.
+
+![AWS global search showing IAM as the primary service result.](assets/go-to-iam.png)
+
+### Create an Administrators Group
+
+Before you create the user, create a group named `Administrators` and attach the AWS-managed `AdministratorAccess` policy to that group.
+
+![Create user group flow in IAM with AdministratorAccess selected in the permissions list.](assets/create-administrators-group.png)
+
+This is a better starting shape than attaching the policy directly to the user. Even in a tiny account, it nudges you toward cleaner IAM habits:
+
+- permissions live on groups
+- users join groups
+- you can reason about access without hunting through per-user policy attachments
+
+### Start the User Creation Flow
+
+After the group exists, go to **Users** and click **Create user**.
+
+![IAM users page after creating the Administrators group, with the Create user button visible.](assets/iam-users.png)
+
+On the user details screen, enter `admin` as the username, enable console access, and set the password options you want.
+
+![Specify user details screen in IAM showing console access enabled and a custom password being set.](assets/specify-user-details.png)
+
+For your own learning account, a custom password is fine. If you were creating this user for someone else, you would usually require a password reset on first sign-in.
+
+### Add the User to the Group
+
+On the permissions screen, choose **Add user to group** and select the `Administrators` group.
+
+![Set permissions screen with the Administrators group selected under the Add user to group option.](assets/set-permissions.png)
+
+This is the point where the screenshots and the course conventions intentionally diverge. The screenshot shows a real username from my account. You should still create `admin` and add that user to the `Administrators` group.
+
+### Review and Create
+
+AWS then gives you a review screen so you can confirm the username, console password configuration, and group assignment.
+
+![Review and create screen in IAM showing the selected username and Administrators group assignment.](assets/review-create-user.png)
+
+If the group assignment looks wrong, fix it here. This is much better than creating the user and then cleaning up a bad permission model afterwards.
+
+### Save the Sign-In URL
+
+After the user is created, AWS shows the IAM console sign-in details.
+
+![User creation completion screen showing the IAM console sign-in URL, username, and initial password details.](assets/sign-in-details.png)
+
+Bookmark that IAM sign-in URL. It has this shape:
+
+```text
 https://123456789012.signin.aws.amazon.com/console
 ```
 
-You can find this URL on the IAM dashboard page. Bookmark it.
+You will use your own account ID, not the one shown in the screenshot.
 
-## Verifying Your Setup
+## Sign In as `admin` and Repeat MFA
 
-Let's confirm everything is in order. Sign out of the root user and sign back in as your new `admin` user. You should be prompted for:
+Sign out of the root user. Then sign back in using:
 
-1. Your account ID (or account alias)
-2. Your IAM username (`admin`)
-3. Your password
-4. Your MFA code
+- your account ID or account alias
+- the IAM username `admin`
+- the password you just set
 
-If all four worked, your account is properly secured. You have a root user locked behind MFA that you'll (almost) never touch again, and an admin user for daily work.
+As soon as you are in, repeat the same MFA flow you used for root. Open the user's **Security credentials** tab in IAM, assign MFA, and verify that everyday logins now require the second factor too.
 
-Here's a quick checklist:
+At this point, the root user should move into break-glass status:
+
+- keep the password in a password manager
+- keep MFA registered
+- do not use it for daily console work
+- do not use it for CLI access
+
+## Verify the Setup
+
+If all of this worked, your account should now look like this:
 
 - [ ] AWS account created with a dedicated email address
 - [ ] Root user password stored in a password manager
 - [ ] MFA enabled on the root user
-- [ ] IAM `admin` user created with `AdministratorAccess`
+- [ ] Alternate contacts reviewed or configured
+- [ ] IAM user and role access to Billing and Cost Management enabled
+- [ ] `Administrators` group created with `AdministratorAccess`
+- [ ] IAM `admin` user created and added to `Administrators`
 - [ ] MFA enabled on the `admin` user
-- [ ] Signed in successfully as the `admin` user
+- [ ] IAM sign-in URL bookmarked
+- [ ] Signed in successfully as `admin`
 
 > [!TIP]
-> Set up a billing alarm before you do anything else. Navigate to **Billing and Cost Management** > **Budgets** > **Create a budget**. Create a zero-spend budget or a monthly budget of $10. AWS will email you if your charges exceed the threshold. It's free peace of mind. (Honestly, this should be the very first thing everyone does on a new AWS account.)
+> Set up a billing alarm before you do anything else. Navigate to **Billing and Cost Management** and create a small budget. We cover the full flow in [Cost Monitoring and Budget Alarms](cost-monitoring-and-budget-alarms.md), but the short version is simple: spend five minutes on budgets now so you do not spend five hours explaining a surprise bill later.
 
-You now have a properly secured AWS account. The root user is locked down with MFA and gathering dust. Your `admin` user is ready for daily use. Next, we'll build a mental model of IAM so you understand what you just configured and why it matters.
+You now have a properly secured AWS account. The root user is locked down with MFA and gathering dust. Your `admin` user is ready for daily use. Next, we will build a mental model of IAM so you understand what you just configured and why it matters.
