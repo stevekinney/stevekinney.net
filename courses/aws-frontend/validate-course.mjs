@@ -52,7 +52,7 @@ for (const markdownFile of markdownFiles) {
   for (const match of content.matchAll(/\bModules?\s+\d+(?:\s*(?:-|–|through)\s*\d+)?\b/g)) {
     failures.push(`${markdownFile}: contains raw course-order reference "${match[0]}"`);
   }
-  }
+}
 
 if (failures.length > 0) {
   console.error('AWS frontend course validation failed:\n');
