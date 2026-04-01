@@ -168,7 +168,7 @@ When you use both services, your Lambda execution role needs permissions for bot
     {
       "Effect": "Allow",
       "Action": ["kms:Decrypt"],
-      "Resource": "arn:aws:kms:us-east-1:123456789012:key/aws/ssm"
+      "Resource": "arn:aws:kms:us-east-1:123456789012:alias/aws/ssm"
     }
   ]
 }

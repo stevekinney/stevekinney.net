@@ -150,7 +150,7 @@ Your Lambda function's execution role needs permission to read the specific para
     {
       "Effect": "Allow",
       "Action": ["kms:Decrypt"],
-      "Resource": "arn:aws:kms:us-east-1:123456789012:key/aws/ssm"
+      "Resource": "arn:aws:kms:us-east-1:123456789012:alias/aws/ssm"
     }
   ]
 }
