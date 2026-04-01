@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Bucket policy evaluation</title>
+  <desc id="desc">Diagram comparing IAM policies, bucket policies, and S3 Block Public Access, showing how a public read request is evaluated.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#1f2937" />
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 18; }
+      .card { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; rx: 16; }
+      .accent { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2; rx: 16; }
+      .warn { fill: #fee2e2; stroke: #ef4444; stroke-width: 2; rx: 16; }
+      .green { fill: #dcfce7; stroke: #22c55e; stroke-width: 2; rx: 16; }
+      .callout { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 2; rx: 14; }
+      .line {
+        stroke: #1f2937;
+        stroke-width: 2.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        marker-end: url(#arrow);
+      }
+      .dashed { stroke-dasharray: 8 7; }
+      text { font-family: Arial, sans-serif; fill: #0f172a; }
+      .title { font-size: 32px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #334155; }
+      .heading { font-size: 22px; font-weight: 700; }
+      .label { font-size: 18px; font-weight: 700; }
+      .body { font-size: 16px; fill: #334155; }
+      .small { font-size: 14px; fill: #475569; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="760" />
+
+  <text x="60" y="64" class="title">How public read access reaches an S3 object</text>
+  <text x="60" y="96" class="subtitle">Identity policies answer what a user can do. Bucket policies answer who can touch the bucket. Block Public Access can still override both.</text>
+
+  <rect x="50" y="130" width="330" height="560" class="panel" />
+  <text x="80" y="172" class="heading">Identity side</text>
+  <rect x="90" y="220" width="250" height="84" class="card" />
+  <text x="126" y="266" class="label">IAM user or role</text>
+  <text x="126" y="290" class="small">Carries attached IAM policies</text>
+
+  <rect x="90" y="360" width="250" height="110" class="accent" />
+  <text x="126" y="406" class="label">IAM policy</text>
+  <text x="126" y="432" class="body">Badge on the identity</text>
+  <text x="126" y="456" class="small">Used for admins, deploy bots, Lambda roles</text>
+
+  <path class="line" d="M 215 304 L 215 360" />
+
+  <rect x="430" y="130" width="340" height="560" class="panel" />
+  <text x="460" y="172" class="heading">Resource side</text>
+  <rect x="470" y="220" width="260" height="84" class="card" />
+  <text x="524" y="266" class="label">S3 bucket</text>
+  <text x="504" y="290" class="small">my-frontend-app-assets</text>
+
+  <rect x="470" y="360" width="260" height="110" class="accent" />
+  <text x="506" y="406" class="label">Bucket policy</text>
+  <text x="506" y="432" class="body">Sign on the door</text>
+  <text x="496" y="456" class="small">Principal "*" can read objects</text>
+
+  <path class="line" d="M 600 304 L 600 360" />
+
+  <rect x="820" y="130" width="330" height="560" class="panel" />
+  <text x="850" y="172" class="heading">Guardrail and outcome</text>
+
+  <rect x="860" y="220" width="250" height="110" class="warn" />
+  <text x="892" y="266" class="label">Block Public Access</text>
+  <text x="892" y="292" class="body">Account or bucket guardrail</text>
+  <text x="892" y="316" class="small">Can block a public bucket policy</text>
+
+  <rect x="860" y="400" width="250" height="90" class="green" />
+  <text x="940" y="448" class="label">200 OK</text>
+  <text x="896" y="472" class="body">Object can be downloaded</text>
+
+  <rect x="860" y="540" width="250" height="90" class="warn" />
+  <text x="930" y="588" class="label">403</text>
+  <text x="902" y="612" class="body">Public access still blocked</text>
+
+  <path class="line dashed" d="M 730 415 L 860 415" />
+  <path class="line dashed" d="M 985 330 L 985 400" />
+  <path class="line dashed" d="M 985 330 L 985 540" />
+
+  <rect x="455" y="560" width="290" height="86" class="callout" />
+  <text x="600" y="594" class="small" text-anchor="middle">
+    <tspan x="600" dy="0">Public website setup works only when the</tspan>
+    <tspan x="600" dy="18">bucket policy allows read access and</tspan>
+    <tspan x="600" dy="18">Block Public Access no longer blocks it.</tspan>
+  </text>
+</svg>

@@ -32,3 +32,4 @@ package-lock.json
 writing/manifest.json
 courses/*/manifest.json
 applications/website/src/lib/server/content-index.json
+writing/.obsidian/workspace.json

@@ -1,0 +1,413 @@
+[[section]]
+title = "AWS Account & IAM Foundations"
+
+[[section.item]]
+title = "Creating and Securing an AWS Account"
+href = "creating-and-securing-an-aws-account.md"
+
+[[section.item]]
+title = "The IAM Mental Model"
+href = "iam-mental-model.md"
+
+[[section.item]]
+title = "Writing Your First IAM Policy"
+href = "writing-your-first-iam-policy.md"
+
+[[section.item]]
+title = "The Principle of Least Privilege"
+href = "principle-of-least-privilege.md"
+
+[[section.item]]
+title = "Setting Up the AWS CLI"
+href = "setting-up-the-aws-cli.md"
+
+[[section.item]]
+title = "Exercise: IAM Policy for a Deploy Bot"
+href = "iam-policy-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "iam-policy-solution.md"
+
+[[section]]
+title = "S3 (Static Hosting Foundation)"
+
+[[section.item]]
+title = "What S3 Is and Why Frontend Engineers Care"
+href = "what-is-s3.md"
+
+[[section.item]]
+title = "Creating and Configuring a Bucket"
+href = "creating-and-configuring-a-bucket.md"
+
+[[section.item]]
+title = "Uploading and Organizing Files"
+href = "uploading-and-organizing-files.md"
+
+[[section.item]]
+title = "Bucket Policies and Public Access"
+href = "bucket-policies-and-public-access.md"
+
+[[section.item]]
+title = "Static Website Hosting on S3"
+href = "static-website-hosting-on-s3.md"
+
+[[section.item]]
+title = "Versioning, Lifecycle Rules, and Cost"
+href = "s3-versioning-lifecycle-and-cost.md"
+
+[[section.item]]
+title = "Exercise: Deploy a Static Site to S3"
+href = "s3-static-site-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "s3-static-site-solution.md"
+
+[[section]]
+title = "Domains & DNS Foundations"
+
+[[section.item]]
+title = "DNS for Frontend Engineers"
+href = "dns-for-frontend-engineers.md"
+
+[[section.item]]
+title = "Registering and Transferring Domains"
+href = "registering-and-transferring-domains.md"
+
+[[section.item]]
+title = "Hosted Zones and Record Types"
+href = "hosted-zones-and-record-types.md"
+
+[[section]]
+title = "ACM (SSL/TLS Certificates)"
+
+[[section.item]]
+title = "Why HTTPS Matters"
+href = "why-https-matters.md"
+
+[[section.item]]
+title = "Requesting a Certificate in ACM"
+href = "requesting-a-certificate-in-acm.md"
+
+[[section.item]]
+title = "DNS Validation vs. Email Validation"
+href = "dns-validation-vs-email-validation.md"
+
+[[section.item]]
+title = "Wildcard Certificates and Multiple Domains"
+href = "wildcard-certificates-and-multiple-domains.md"
+
+[[section.item]]
+title = "Certificate Renewal and the us-east-1 Requirement"
+href = "certificate-renewal-and-us-east-1.md"
+
+[[section.item]]
+title = "Exercise: Request and Validate a Certificate"
+href = "acm-certificate-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "acm-certificate-solution.md"
+
+[[section]]
+title = "CloudFront (CDN & Edge Distribution)"
+
+[[section.item]]
+title = "What a CDN Does and Why You Need One"
+href = "what-is-a-cdn.md"
+
+[[section.item]]
+title = "Creating a CloudFront Distribution"
+href = "creating-a-cloudfront-distribution.md"
+
+[[section.item]]
+title = "Origin Access Control for S3"
+href = "origin-access-control-for-s3.md"
+
+[[section.item]]
+title = "Cache Behaviors and Invalidations"
+href = "cache-behaviors-and-invalidations.md"
+
+[[section.item]]
+title = "Custom Error Pages and SPA Routing"
+href = "custom-error-pages-and-spa-routing.md"
+
+[[section.item]]
+title = "Attaching an SSL Certificate"
+href = "attaching-an-ssl-certificate.md"
+
+[[section.item]]
+title = "Headers, CORS, and Security Policies"
+href = "cloudfront-headers-cors-and-security.md"
+
+[[section.item]]
+title = "Exercise: Set Up a CloudFront Distribution"
+href = "cloudfront-distribution-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "cloudfront-distribution-solution.md"
+
+[[section]]
+title = "Route 53 (Custom Domain Routing)"
+
+[[section.item]]
+title = "Alias Records vs. CNAME Records"
+href = "alias-records-vs-cname-records.md"
+
+[[section.item]]
+title = "Pointing a Domain to CloudFront"
+href = "pointing-a-domain-to-cloudfront.md"
+
+[[section.item]]
+title = "Exercise: Configure DNS for Your Site"
+href = "route-53-dns-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "route-53-dns-solution.md"
+
+[[section]]
+title = "Deploying a Full Static Site"
+
+[[section.item]]
+title = "The Full Static Pipeline"
+href = "full-static-pipeline.md"
+
+[[section.item]]
+title = "Automating Deploys with the AWS CLI"
+href = "automating-deploys-with-aws-cli.md"
+
+[[section.item]]
+title = "CI/CD with GitHub Actions"
+href = "cicd-with-github-actions.md"
+
+[[section.item]]
+title = "Exercise: End-to-End Static Site Deployment"
+href = "static-site-deployment-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "static-site-deployment-solution.md"
+
+[[section]]
+title = "Lambda (Serverless Compute)"
+
+[[section.item]]
+title = "What Lambda Is and Why Frontend Engineers Care"
+href = "what-is-lambda.md"
+
+[[section.item]]
+title = "Writing a Lambda Handler in TypeScript"
+href = "writing-a-lambda-handler.md"
+
+[[section.item]]
+title = "Execution Roles and Permissions"
+href = "lambda-execution-roles-and-permissions.md"
+
+[[section.item]]
+title = "Deploying and Testing a Lambda Function"
+href = "deploying-and-testing-a-lambda-function.md"
+
+[[section.item]]
+title = "Environment Variables and Configuration"
+href = "lambda-environment-variables.md"
+
+[[section.item]]
+title = "Cold Starts and Performance"
+href = "lambda-cold-starts-and-performance.md"
+
+[[section.item]]
+title = "Exercise: Build and Deploy a Lambda Function"
+href = "lambda-function-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "lambda-function-solution.md"
+
+[[section]]
+title = "API Gateway (HTTP Layer for Lambda)"
+
+[[section.item]]
+title = "REST APIs vs. HTTP APIs"
+href = "rest-apis-vs-http-apis.md"
+
+[[section.item]]
+title = "Creating an HTTP API"
+href = "creating-an-http-api.md"
+
+[[section.item]]
+title = "Connecting API Gateway to Lambda"
+href = "connecting-api-gateway-to-lambda.md"
+
+[[section.item]]
+title = "Request and Response Mapping"
+href = "request-and-response-mapping.md"
+
+[[section.item]]
+title = "CORS Configuration"
+href = "api-gateway-cors-configuration.md"
+
+[[section.item]]
+title = "Stages, Deployments, and Custom Domains"
+href = "api-gateway-stages-and-custom-domains.md"
+
+[[section.item]]
+title = "Authentication with API Gateway"
+href = "api-gateway-authentication.md"
+
+[[section.item]]
+title = "Exercise: Build an API with API Gateway and Lambda"
+href = "api-gateway-lambda-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "api-gateway-lambda-solution.md"
+
+[[section]]
+title = "Lambda@Edge & CloudFront Functions"
+
+[[section.item]]
+title = "Edge Compute: Lambda@Edge vs. CloudFront Functions"
+href = "edge-compute-comparison.md"
+
+[[section.item]]
+title = "Writing a CloudFront Function"
+href = "writing-a-cloudfront-function.md"
+
+[[section.item]]
+title = "Writing a Lambda@Edge Function"
+href = "writing-a-lambda-at-edge-function.md"
+
+[[section.item]]
+title = "Common Use Cases"
+href = "edge-function-use-cases.md"
+
+[[section.item]]
+title = "A/B Testing at the Edge"
+href = "ab-testing-at-the-edge.md"
+
+[[section.item]]
+title = "Debugging and Limitations"
+href = "edge-function-debugging-and-limitations.md"
+
+[[section.item]]
+title = "Exercise: Add a CloudFront Function"
+href = "cloudfront-function-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "cloudfront-function-solution.md"
+
+[[section]]
+title = "DynamoDB (Lightweight Data Layer)"
+
+[[section.item]]
+title = "What DynamoDB Is and When to Use It"
+href = "what-is-dynamodb.md"
+
+[[section.item]]
+title = "Tables, Partition Keys, and Sort Keys"
+href = "dynamodb-tables-and-keys.md"
+
+[[section.item]]
+title = "Reading and Writing Data with the SDK"
+href = "dynamodb-reading-and-writing-data.md"
+
+[[section.item]]
+title = "Querying and Scanning"
+href = "dynamodb-querying-and-scanning.md"
+
+[[section.item]]
+title = "Connecting DynamoDB to Lambda"
+href = "connecting-dynamodb-to-lambda.md"
+
+[[section.item]]
+title = "Exercise: Build a Data API with DynamoDB"
+href = "dynamodb-lambda-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "dynamodb-lambda-solution.md"
+
+[[section]]
+title = "Secrets Manager & Parameter Store"
+
+[[section.item]]
+title = "The Problem with Hardcoded Secrets"
+href = "the-problem-with-hardcoded-secrets.md"
+
+[[section.item]]
+title = "Parameter Store: Hierarchical Configuration"
+href = "parameter-store-hierarchical-configuration.md"
+
+[[section.item]]
+title = "Secrets Manager: Rotation and Encryption"
+href = "secrets-manager-rotation-and-encryption.md"
+
+[[section.item]]
+title = "Accessing Secrets from Lambda"
+href = "accessing-secrets-from-lambda.md"
+
+[[section.item]]
+title = "Parameter Store vs. Secrets Manager"
+href = "parameter-store-vs-secrets-manager.md"
+
+[[section.item]]
+title = "Exercise: Store and Retrieve a Secret in Lambda"
+href = "secrets-in-lambda-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "secrets-in-lambda-solution.md"
+
+[[section]]
+title = "CloudWatch (Monitoring & Observability)"
+
+[[section.item]]
+title = "What CloudWatch Does and Why You Need It"
+href = "what-is-cloudwatch.md"
+
+[[section.item]]
+title = "Log Groups, Log Streams, and Structured Logging"
+href = "cloudwatch-log-groups-and-structured-logging.md"
+
+[[section.item]]
+title = "Metrics and Dashboards"
+href = "cloudwatch-metrics-and-dashboards.md"
+
+[[section.item]]
+title = "Alarms and Notifications with SNS"
+href = "cloudwatch-alarms-and-sns.md"
+
+[[section.item]]
+title = "Tracing Requests Across Services"
+href = "tracing-requests-across-services.md"
+
+[[section.item]]
+title = "Exercise: Set Up Alarms for Your Lambda Functions"
+href = "cloudwatch-alarms-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "cloudwatch-alarms-solution.md"
+
+[[section]]
+title = "Production Hardening & What's Next"
+
+[[section.item]]
+title = "Security Review Checklist"
+href = "security-review-checklist.md"
+
+[[section.item]]
+title = "Cost Monitoring and Budget Alarms"
+href = "cost-monitoring-and-budget-alarms.md"
+
+[[section.item]]
+title = "Infrastructure as Code: When to Reach for CDK"
+href = "infrastructure-as-code-and-cdk.md"
+
+[[section.item]]
+title = "What's Next: Services You'll Eventually Need"
+href = "whats-next-services-youll-eventually-need.md"

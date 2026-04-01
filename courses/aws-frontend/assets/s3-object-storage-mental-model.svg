@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+  <title id="title">S3 object storage mental model</title>
+  <desc id="desc">Diagram showing that an S3 bucket stores flat object keys and how Route 53, CloudFront, ACM, and S3 fit together to deliver a frontend.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#1f2937" />
+    </marker>
+    <style>
+      .background { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 20; }
+      .bucket-shell { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2.25; rx: 24; }
+      .card { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; rx: 14; }
+      .key-chip { fill: #e0f2fe; stroke: #38bdf8; stroke-width: 2; rx: 12; }
+      .callout { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 2; rx: 16; }
+      .service-browser { fill: #fef3c7; stroke: #f59e0b; stroke-width: 2; rx: 16; }
+      .service-dns { fill: #ede9fe; stroke: #8b5cf6; stroke-width: 2; rx: 16; }
+      .service-edge { fill: #dcfce7; stroke: #22c55e; stroke-width: 2; rx: 16; }
+      .service-origin { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; rx: 16; }
+      .service-acm { fill: #fee2e2; stroke: #ef4444; stroke-width: 2; rx: 16; }
+      .line {
+        fill: none;
+        stroke: #1f2937;
+        stroke-width: 2.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        marker-end: url(#arrow);
+      }
+      text { font-family: Arial, sans-serif; fill: #0f172a; }
+      .title { font-size: 32px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #334155; }
+      .heading { font-size: 22px; font-weight: 700; }
+      .label { font-size: 18px; font-weight: 700; }
+      .body { font-size: 16px; fill: #334155; }
+      .small { font-size: 14px; fill: #475569; }
+      .key { font-size: 18px; font-weight: 700; font-family: 'Courier New', monospace; }
+      .center { text-anchor: middle; }
+      .right { text-anchor: end; }
+    </style>
+  </defs>
+
+  <rect class="background" width="1200" height="820" />
+
+  <text x="60" y="66" class="title">S3 object storage mental model</text>
+  <text x="60" y="98" class="subtitle">
+    Buckets store objects by key. Slash-separated names suggest folders, but S3 still treats them as flat identifiers.
+  </text>
+
+  <rect x="40" y="132" width="600" height="640" class="panel" />
+  <text x="72" y="174" class="heading">Inside the bucket</text>
+
+  <rect x="88" y="208" width="504" height="470" class="bucket-shell" />
+  <text x="120" y="252" class="label">Bucket: my-frontend-app-assets</text>
+  <text x="120" y="282" class="body">One bucket, many object keys, no true directory tree underneath.</text>
+
+  <rect x="120" y="326" width="440" height="74" class="card" />
+  <text x="146" y="372" class="key">index.html</text>
+  <rect x="442" y="344" width="96" height="36" class="key-chip" />
+  <text x="490" y="366" class="small center">root key</text>
+
+  <rect x="120" y="424" width="440" height="74" class="card" />
+  <text x="146" y="470" class="key">assets/main.a1b2c3.js</text>
+  <rect x="390" y="442" width="148" height="36" class="key-chip" />
+  <text x="464" y="464" class="small center">prefix: assets/</text>
+
+  <rect x="120" y="522" width="440" height="74" class="card" />
+  <text x="146" y="568" class="key">images/logo.png</text>
+  <rect x="392" y="540" width="146" height="36" class="key-chip" />
+  <text x="465" y="562" class="small center">prefix: images/</text>
+
+  <rect x="88" y="684" width="504" height="68" class="callout" />
+  <text x="340" y="714" class="body center">
+    <tspan x="340" dy="0">The AWS console groups matching prefixes so humans can browse</tspan>
+    <tspan x="340" dy="22">the bucket like folders.</tspan>
+  </text>
+
+  <rect x="680" y="132" width="480" height="640" class="panel" />
+  <text x="712" y="174" class="heading">How S3 fits in the frontend stack</text>
+
+  <rect x="800" y="220" width="240" height="74" class="service-browser" />
+  <text x="920" y="262" class="label center">Browser request</text>
+  <text x="920" y="284" class="small center">Visitor asks for app.example.com</text>
+
+  <rect x="800" y="332" width="240" height="74" class="service-dns" />
+  <text x="920" y="374" class="label center">Route 53</text>
+  <text x="920" y="396" class="small center">Alias record points to CloudFront</text>
+
+  <rect x="800" y="444" width="240" height="86" class="service-edge" />
+  <text x="920" y="486" class="label center">CloudFront</text>
+  <text x="920" y="508" class="small center">Caches content at the edge</text>
+
+  <rect x="800" y="568" width="240" height="86" class="service-origin" />
+  <text x="920" y="610" class="label center">S3 origin bucket</text>
+  <text x="920" y="632" class="small center">Stores the frontend files by key</text>
+
+  <rect x="672" y="457" width="104" height="60" class="service-acm" />
+  <text x="724" y="491" class="label center">ACM</text>
+  <text x="724" y="511" class="small center">TLS</text>
+
+  <path class="line" d="M 920 294 L 920 332" />
+  <path class="line" d="M 920 406 L 920 444" />
+  <path class="line" d="M 920 530 L 920 568" />
+  <path class="line" d="M 776 487 L 800 487" />
+
+  <text x="920" y="706" class="body center">
+    <tspan x="920" dy="0">CloudFront serves the site and Route 53 sends traffic there.</tspan>
+    <tspan x="920" dy="22">ACM provides the certificate, and S3 remains the origin store.</tspan>
+  </text>
+</svg>

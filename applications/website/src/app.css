@@ -269,3 +269,12 @@
   letter-spacing: 0.05em;
   margin-right: 0.5rem;
 }
+
+.code-annotation code {
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  color: inherit;
+  background-color: rgba(130, 170, 255, 0.12);
+}

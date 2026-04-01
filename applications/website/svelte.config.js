@@ -6,6 +6,7 @@ import remarkEscapeComparators from '@stevekinney/plugins/remark-escape-comparat
 import { fixMarkdownUrls } from '@stevekinney/plugins/remark-fix-urls';
 import remarkTailwindPlayground from '@stevekinney/plugins/remark-tailwind-playground';
 import rehypeEnhanceImages from '@stevekinney/plugins/rehype-enhance-images';
+import { extractAnnotations, injectAnnotations } from './src/lib/code-annotations.js';
 
 import { escapeSvelte, mdsvex } from 'mdsvex';
 import rehypeSlug from 'rehype-slug';
@@ -43,110 +44,6 @@ function parseTitle(metastring) {
   const title = match ? match[1] : null;
   const remaining = metastring.replace(/title="[^"]+"\s*/, '').trim();
   return { title, remaining };
-}
-
-/**
- * Annotation patterns for different comment styles.
- * Each captures the annotation text in group 1.
- */
-const ANNOTATION_PATTERNS = [
-  /^\s*\/\/\s*\[!note\s+(.*?)\]\s*$/,
-  /^\s*#\s*\[!note\s+(.*?)\]\s*$/,
-  /^\s*\/\*\s*\[!note\s+(.*?)\]\s*\*\/\s*$/,
-  /^\s*<!--\s*\[!note\s+(.*?)\]\s*-->\s*$/,
-];
-
-/**
- * Strip annotation comment lines from code. Returns cleaned code and a map
- * of line indices (0-based, in the cleaned output) to annotation text.
- * Each annotation attaches to the code line immediately above it.
- * @param {string} code
- * @returns {{ cleanedCode: string, annotations: Map<number, string> }}
- */
-function extractAnnotations(code) {
-  const lines = code.split('\n');
-  const cleanedLines = [];
-  const annotations = new Map();
-
-  for (const line of lines) {
-    let annotationText = null;
-    for (const pattern of ANNOTATION_PATTERNS) {
-      const match = line.match(pattern);
-      if (match) {
-        annotationText = match[1];
-        break;
-      }
-    }
-
-    if (annotationText !== null) {
-      const previousIndex = cleanedLines.length - 1;
-      if (previousIndex >= 0) {
-        annotations.set(previousIndex, annotationText);
-      }
-    } else {
-      cleanedLines.push(line);
-    }
-  }
-
-  return { cleanedCode: cleanedLines.join('\n'), annotations };
-}
-
-/**
- * Escape characters that Svelte would interpret as template syntax.
- * Used for annotation text injected after escapeSvelte has already run.
- * @param {string} text
- * @returns {string}
- */
-function escapeSvelteText(text) {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\{/g, '&#123;')
-    .replace(/\}/g, '&#125;')
-    .replace(/`/g, '&#96;');
-}
-
-/**
- * Inject annotation HTML elements after the specified lines in Shiki output.
- * Splits on <span class="line"> boundaries and inserts annotation spans.
- * @param {string} html
- * @param {Map<number, string>} annotations
- * @returns {string}
- */
-function injectAnnotations(html, annotations) {
-  if (annotations.size === 0) return html;
-
-  const parts = html.split(/(?=<span class="line">)/);
-  const result = [];
-  let lineIndex = 0;
-
-  for (const part of parts) {
-    if (part.startsWith('<span class="line">')) {
-      if (lineIndex > 0) {
-        const annotation = annotations.get(lineIndex - 1);
-        if (annotation !== undefined) {
-          result.push(
-            `<span class="code-annotation"><span class="code-annotation-indicator">Note</span> ${escapeSvelteText(annotation)}</span>`,
-          );
-        }
-      }
-      lineIndex++;
-    }
-    result.push(part);
-  }
-
-  // Handle annotation on the very last line
-  const lastAnnotation = annotations.get(lineIndex - 1);
-  if (lastAnnotation !== undefined) {
-    const last = result.length - 1;
-    result[last] = result[last].replace(
-      '</code></pre>',
-      `<span class="code-annotation"><span class="code-annotation-indicator">Note</span> ${escapeSvelteText(lastAnnotation)}</span></code></pre>`,
-    );
-  }
-
-  return result.join('');
 }
 
 /**

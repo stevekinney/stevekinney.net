@@ -136,6 +136,9 @@
     "courses/ai-development": {
       "name": "@stevekinney/ai-development",
     },
+    "courses/aws-frontend": {
+      "name": "@stevekinney/aws-frontend",
+    },
     "courses/enterprise-ui": {
       "name": "@stevekinney/enterprise-ui",
     },
@@ -659,6 +662,8 @@
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
     "@stevekinney/ai-development": ["@stevekinney/ai-development@workspace:courses/ai-development"],
+
+    "@stevekinney/aws-frontend": ["@stevekinney/aws-frontend@workspace:courses/aws-frontend"],
 
     "@stevekinney/components": ["@stevekinney/components@workspace:packages/components"],
 
