@@ -92,6 +92,7 @@ export function injectAnnotations(html, annotations) {
   const result = [];
   let lineIndex = 0;
 
+  /** @param {string} annotation */
   const renderAnnotation = (annotation) =>
     `<span class="code-annotation"><span class="code-annotation-indicator">Note</span> ${renderAnnotationHtml(annotation)}</span>`;
 
