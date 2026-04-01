@@ -43,4 +43,11 @@ if [ -n "$IMAGE_FILES" ]; then
   git add image-manifest.json
 fi
 
+# Verify every course workspace is listed in the website's package.json
+COURSE_OR_WEBSITE_PKG="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'courses/*/package.json' 'applications/website/package.json')"
+if [ -n "$COURSE_OR_WEBSITE_PKG" ]; then
+  echo "Checking course workspace dependencies..."
+  bun run packages/scripts/validate-workspace-dependencies.ts
+fi
+
 bunx lint-staged

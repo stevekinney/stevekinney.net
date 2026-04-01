@@ -92,7 +92,17 @@ href = "some-topic.md"
 
 Start with the section headers the user provided. Leave them empty (no lesson links yet) — the user will add lessons later.
 
-## Step 3: Generate the Manifest
+## Step 3: Register the Workspace Dependency
+
+Add the new course package to `applications/website/package.json` under `"dependencies"` (keep alphabetical order):
+
+```json
+"@stevekinney/<slug>": "workspace:*"
+```
+
+Then run `bun install` from the repo root to update the lockfile and verify Turbo picks up the new workspace.
+
+## Step 4: Generate the Manifest
 
 After creating the files, run the manifest generation script:
 
@@ -100,7 +110,7 @@ After creating the files, run the manifest generation script:
 cd courses/<slug> && bun run manifest
 ```
 
-## Step 4: Confirm
+## Step 5: Confirm
 
 Tell the user what was created and remind them:
 
