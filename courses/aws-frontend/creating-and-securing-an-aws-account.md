@@ -4,7 +4,7 @@ description: >-
   Create an AWS account, enable MFA on the root user, and understand why root
   should be locked away after initial setup.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - iam
@@ -12,15 +12,14 @@ tags:
   - account-setup
 ---
 
-You've been deploying to Vercel with a GitHub login. You click a button, connect a repo, and your site is live. AWS gives you actual infrastructure, which means actual security responsibility. The account you're about to create controls real resources that cost real money, and if someone compromises it, they can spin up crypto miners on your credit card. So we're going to do this right from the start.
+You've been deploying to Vercel or Cloudflare, a lot of the infrastructure has been abstracted away for you. That's kind of the value proposition of some of these tools. (Yes, Cloudflare has their own infrastructure and Vercel is an abstraction on top of multiple vendors—but, you get my point.) You click a button, connect a repo, and your site is live. AWS gives you actual infrastructure, which means actual security responsibility. The account you're about to create controls real resources that cost real money, and if someone compromises it, they can spin up crypto miners on your credit card. So we're going to do the Right Way™ from the start.
+
+> [!NOTE]
+> We're going to use a _lot_ of screenshots in this very first section. This is because I'd rather not doxx myself on the life stream. Sorry—but, I'm not sorry. 🤓
 
 ## Why This Matters
 
-Your AWS account is not just another dashboard login. It is the trust boundary around everything else in this course: IAM users, S3 buckets, CloudFront distributions, Lambda functions, billing, and production data. If you get the first hour wrong, every later lesson inherits that mistake.
-
-## Builds On
-
-This is the starting point for the course, so there is no AWS prerequisite. What you are bringing with you is the mental model from Vercel, Netlify, and GitHub: one account, one team, one deployment surface. AWS exposes more of that machinery directly, and this lesson is where you lock down the foundation before you touch any services.
+Your AWS account is _not_ just another dashboard login. It is the trust boundary around everything else in this course: IAM users, S3 buckets, CloudFront distributions, Lambda functions, billing, and production data. If you get the first hour wrong, every later lesson inherits that mistake.
 
 ## Create the Account
 
@@ -99,7 +98,7 @@ Other choices are still valid:
 - **Authenticator app**: The most common fallback and completely reasonable for a personal learning account.
 - **Hardware TOTP token**: Useful if your security model already depends on dedicated hardware.
 
-Once the flow completes, AWS shows a confirmation banner on the root security page.
+I chose a passkey, but you're free to use whatever makes you happiest. Once the flow completes, AWS shows a confirmation banner on the root security page.
 
 ![Root security credentials page showing the Passkey MFA device assigned confirmation banner.](assets/passkey-mfa-device-assigned.png)
 
@@ -127,7 +126,7 @@ Click **Edit** and enable **IAM user and role access to Billing information** be
 
 ### Acknowledge IAM Identity Center, Then Skip It for Now
 
-AWS now surfaces **IAM Identity Center** prominently because it is the preferred long-term answer for workforce access and single sign-on.
+AWS now surfaces [**IAM Identity Center**](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html) prominently because it is the preferred long-term answer for workforce access and single sign-on.
 
 ![IAM Identity Center landing page inviting you to enable an IAM Identity Center instance.](assets/iam-identity-center.png)
 
@@ -205,6 +204,8 @@ Bookmark that IAM sign-in URL. It has this shape:
 ```text
 https://123456789012.signin.aws.amazon.com/console
 ```
+
+Obviously `123456789012` will be _something_ else.
 
 You will use your own account ID, not the one shown in the screenshot.
 

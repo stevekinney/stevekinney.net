@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" role="img" aria-labelledby="title desc">
+  <title id="title">IAM mental model</title>
+  <desc id="desc">Diagram showing IAM users, groups, roles, and policies inside an AWS account, plus the allow and deny evaluation flow for a request.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#1f2937" />
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 18; }
+      .account { fill: #eff6ff; stroke: #60a5fa; stroke-width: 2.25; rx: 24; }
+      .card { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; rx: 16; }
+      .accent { fill: #dcfce7; stroke: #22c55e; stroke-width: 2; rx: 16; }
+      .warn { fill: #fee2e2; stroke: #ef4444; stroke-width: 2; rx: 16; }
+      .line {
+        stroke: #1f2937;
+        stroke-width: 2.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        marker-end: url(#arrow);
+      }
+      .dashed { stroke-dasharray: 8 7; }
+      text { font-family: Arial, sans-serif; fill: #0f172a; }
+      .title { font-size: 32px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #334155; }
+      .heading { font-size: 22px; font-weight: 700; }
+      .label { font-size: 18px; font-weight: 700; }
+      .body { font-size: 16px; fill: #334155; }
+      .small { font-size: 14px; fill: #475569; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="780" />
+
+  <text x="60" y="64" class="title">IAM mental model</text>
+  <text x="60" y="96" class="subtitle">Who can ask for credentials, what permissions they carry, and how AWS evaluates each request.</text>
+
+  <rect x="40" y="130" width="620" height="600" class="account" />
+  <text x="70" y="172" class="heading">AWS account</text>
+
+  <rect x="80" y="210" width="170" height="110" class="card" />
+  <text x="108" y="246" class="label">IAM users</text>
+  <text x="108" y="278" class="body">admin</text>
+  <text x="108" y="304" class="body">deploy-bot</text>
+
+  <rect x="280" y="210" width="170" height="110" class="card" />
+  <text x="308" y="246" class="label">IAM groups</text>
+  <text x="308" y="278" class="body">Administrators</text>
+  <text x="308" y="304" class="body">deployers</text>
+
+  <rect x="480" y="210" width="140" height="110" class="card" />
+  <text x="512" y="246" class="label">Policies</text>
+  <text x="512" y="278" class="body">Allow</text>
+  <text x="512" y="304" class="body">Deny</text>
+
+  <rect x="80" y="380" width="260" height="130" class="card" />
+  <text x="108" y="418" class="label">IAM roles</text>
+  <text x="108" y="450" class="body">my-frontend-app-lambda-role</text>
+  <text x="108" y="476" class="small">Assumed by Lambda for runtime access</text>
+
+  <rect x="380" y="380" width="240" height="130" class="card" />
+  <text x="408" y="418" class="label">Attached permissions</text>
+  <text x="408" y="450" class="body">AWSLambdaBasicExecutionRole</text>
+  <text x="408" y="476" class="body">DeployPolicy / S3ReadOnly</text>
+
+  <rect x="80" y="560" width="540" height="120" class="accent" />
+  <text x="108" y="600" class="label">Mental model</text>
+  <text x="108" y="632" class="body">Users and services request access. Groups and roles collect policies.</text>
+  <text x="108" y="658" class="body">Policies decide which actions are allowed on which resources.</text>
+
+  <path class="line" d="M 250 265 L 280 265" />
+  <path class="line" d="M 450 265 L 480 265" />
+  <path class="line" d="M 210 320 L 210 380" />
+  <path class="line" d="M 340 445 L 380 445" />
+
+  <rect x="720" y="130" width="430" height="600" class="panel" />
+  <text x="750" y="172" class="heading">Request evaluation</text>
+
+  <rect x="820" y="220" width="220" height="74" class="card" />
+  <text x="858" y="264" class="label">Request arrives</text>
+
+  <rect x="800" y="340" width="260" height="90" class="card" />
+  <text x="832" y="384" class="label">Explicit Deny matches?</text>
+
+  <rect x="740" y="490" width="180" height="92" class="warn" />
+  <text x="790" y="530" class="label">Denied</text>
+  <text x="768" y="556" class="body">Deny always wins</text>
+
+  <rect x="960" y="490" width="180" height="92" class="accent" />
+  <text x="1014" y="530" class="label">Allowed</text>
+  <text x="984" y="556" class="body">At least one Allow</text>
+
+  <rect x="800" y="616" width="260" height="92" class="card" />
+  <text x="826" y="652" class="label">No Allow found</text>
+  <text x="826" y="676" class="small">No statements matched</text>
+  <text x="840" y="698" class="body">Implicit deny</text>
+
+  <path class="line" d="M 930 294 L 930 340" />
+  <path class="line" d="M 800 385 L 700 385 L 700 536 L 740 536" />
+  <path class="line" d="M 1060 385 L 1110 385 L 1110 490" />
+  <path class="line dashed" d="M 930 430 L 930 616" />
+
+  <text x="716" y="376" class="small">Yes</text>
+  <text x="1070" y="376" class="small">No, check Allow</text>
+</svg>

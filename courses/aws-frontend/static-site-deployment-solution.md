@@ -3,7 +3,7 @@ title: 'Solution: End-to-End Static Site Deployment'
 description: >-
   Complete solution with every command and expected output for deploying a static site end to end on AWS.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - deployment
@@ -18,6 +18,8 @@ This is the complete solution for the [End-to-End Static Site Deployment exercis
 - This workflow turns four separate services into one deployment path: S3 stores the files, CloudFront serves them, ACM terminates TLS, and Route 53 points the domain at the edge.
 - The bucket stays private because CloudFront is the only public entry point that needs direct read access.
 - The final sync-plus-invalidation loop is the practical deployment cycle you will repeat long after the exercise is over.
+
+If you want the AWS version of the end-to-end workflow open while you work, keep the [S3 static website tutorial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html), the [CloudFront OAC guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html), and the [Route 53 DNS configuration guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring.html) nearby.
 
 ## Create the S3 Bucket
 
@@ -103,6 +105,28 @@ Expected:
 ```
 2026-03-18 12:00:00        102 index.html
 ```
+
+## Confirm Domain and DNS Control
+
+Before requesting the certificate, make sure Route 53 already has the hosted zone:
+
+```bash
+aws route53 list-hosted-zones-by-name \
+  --dns-name example.com \
+  --output json \
+  --query "HostedZones[0].{Id:Id,Name:Name}"
+```
+
+Expected:
+
+```json
+{
+  "Id": "/hostedzone/Z1234567890ABC",
+  "Name": "example.com."
+}
+```
+
+If that query returns nothing useful, go back and finish the domain and DNS setup first. ACM validation needs a place to publish the CNAME records.
 
 ## Request an ACM Certificate
 
@@ -506,7 +530,7 @@ aws route53 change-resource-record-sets \
 ```
 
 > [!TIP]
-> The `HostedZoneId` value `Z2FDTNDATAQYW2` is the fixed hosted zone ID for all CloudFront distributions. This isn't your domain's hosted zone ID — it's a constant defined by AWS. You use your domain's hosted zone ID in the `--hosted-zone-id` parameter, and CloudFront's fixed ID in the `AliasTarget`.
+> The `HostedZoneId` value `Z2FDTNDATAQYW2` is the fixed hosted zone ID for all CloudFront distributions. This isn't your domain's hosted zone ID—it's a constant defined by AWS. You use your domain's hosted zone ID in the `--hosted-zone-id` parameter, and CloudFront's fixed ID in the `AliasTarget`.
 
 Expected:
 

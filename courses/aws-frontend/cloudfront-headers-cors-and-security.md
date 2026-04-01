@@ -3,7 +3,7 @@ title: 'CloudFront Headers, CORS, and Security'
 description: >-
   Configure CloudFront response headers policies for CORS, security headers (HSTS, X-Content-Type-Options, X-Frame-Options), and cache-control directives.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-04-01
 tags:
   - aws
   - cloudfront
@@ -12,6 +12,8 @@ tags:
 ---
 
 Your CloudFront distribution serves your static site over HTTPS, routes SPA paths correctly, and locks down S3 with Origin Access Control. But open your browser's DevTools, inspect the response headers on any request, and you'll notice something missing: there are no security headers. No `Strict-Transport-Security`. No `X-Content-Type-Options`. No `X-Frame-Options`. S3 doesn't add these, and CloudFront doesn't add them by default.
+
+If you want AWS's version of the response-header mechanics while you read, the [CloudFront response headers policy guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/modifying-response-headers.html) is the official reference.
 
 On Vercel, you configure these in `vercel.json` or `next.config.js`. On Netlify, you use `_headers`. On AWS, you use a CloudFront **response headers policy**.
 
@@ -25,7 +27,7 @@ Security headers are HTTP response headers that instruct the browser to behave i
 - **`Referrer-Policy: strict-origin-when-cross-origin`**: Controls how much referrer information is included in requests to other sites. Prevents leaking sensitive URL paths.
 - **`Content-Security-Policy`**: The big one. Defines which sources are allowed to load scripts, styles, images, and other resources. A well-configured CSP is the most effective defense against XSS attacks.
 
-Without these headers, your site isn't dangerous — but it isn't hardened, either. Any security audit will flag their absence.
+Without these headers, your site isn't dangerous—but it isn't hardened, either. Any security audit will flag their absence.
 
 ## Managed vs. Custom Response Headers Policies
 
@@ -41,6 +43,10 @@ The managed policies worth knowing:
 | **CORS-with-preflight-and-SecurityHeadersPolicy** | `eaab4381-ed33-4a86-88ca-d9558dc6cd63` | Everything in CORS-with-preflight plus all security headers                                                                      |
 
 For a static site that doesn't serve API responses and doesn't need CORS (your frontend and your assets are on the same domain), **SecurityHeadersPolicy** is the right starting point. If your frontend calls APIs on a different domain and those APIs are served through this same CloudFront distribution, use **CORS-with-preflight-and-SecurityHeadersPolicy**.
+
+In the console, the **Policies** page under **Response headers** lists all available managed policies with their descriptions.
+
+![The CloudFront Policies page showing the Response headers tab with managed policies including SecurityHeadersPolicy, CORS-With-Preflight, and CORS-and-SecurityHeadersPolicy.](assets/cloudfront-response-headers-policies.png)
 
 ## Attaching a Managed Policy
 
@@ -88,6 +94,10 @@ aws cloudfront update-distribution \
   --output json
 ```
 
+In the console, you attach the policy to a behavior from the **Edit behavior** form. The **Response headers policy** dropdown shows the managed policies alongside any custom policies you've created.
+
+![The CloudFront Edit behavior form showing the Response headers policy section with SecurityHeadersPolicy selected from the dropdown.](assets/cloudfront-behavior-with-headers-policy.png)
+
 After the distribution deploys, every response from CloudFront will include security headers:
 
 ```
@@ -103,7 +113,7 @@ referrer-policy: strict-origin-when-cross-origin
 
 ## Creating a Custom Response Headers Policy
 
-The managed policies cover common cases, but you might need custom configuration — maybe you want HSTS with a longer `max-age`, or you need a `Content-Security-Policy` header tailored to your application. For that, create a custom response headers policy.
+The managed policies cover common cases, but you might need custom configuration—maybe you want HSTS with a longer `max-age`, or you need a `Content-Security-Policy` header tailored to your application. For that, create a custom response headers policy.
 
 Save this as `response-headers-policy.json`:
 
@@ -201,7 +211,7 @@ The security headers config gives you control over each header individually:
 - **`ReferrerPolicy`**: `strict-origin-when-cross-origin` sends the full URL for same-origin requests but only the origin (no path) for cross-origin requests.
 - **`XSSProtection`**: Adds `X-XSS-Protection: 1; mode=block`. This header is deprecated in modern browsers (CSP is the replacement), but it provides defense-in-depth for older browsers. (It doesn't hurt to include it.)
 
-The **`Override`** field on each header determines whether CloudFront's value overrides a value set by the origin. When `true`, CloudFront replaces any existing header from S3 with the value defined in the policy. When `false`, CloudFront only adds the header if the origin didn't include it. For security headers, you almost always want `Override: true` — you're the source of truth for security policy, not S3.
+The **`Override`** field on each header determines whether CloudFront's value overrides a value set by the origin. When `true`, CloudFront replaces any existing header from S3 with the value defined in the policy. When `false`, CloudFront only adds the header if the origin didn't include it. For security headers, you almost always want `Override: true`—you're the source of truth for security policy, not S3.
 
 ### CorsConfig
 
@@ -209,7 +219,7 @@ If your frontend application makes cross-origin API requests that are routed thr
 
 ### CustomHeadersConfig
 
-Any header not covered by the security or CORS sections can be added here. `Permissions-Policy` (formerly `Feature-Policy`) controls which browser features your site can use — disabling camera, microphone, and geolocation access if your site doesn't need them.
+Any header not covered by the security or CORS sections can be added here. `Permissions-Policy` (formerly `Feature-Policy`) controls which browser features your site can use—disabling camera, microphone, and geolocation access if your site doesn't need them.
 
 ## CORS for API Calls
 
@@ -217,7 +227,7 @@ If your frontend calls an API on a different origin (e.g., your React app on `ex
 
 **API served through CloudFront** (e.g., a `/api/*` behavior pointing to API Gateway): Configure CORS in the response headers policy attached to that behavior. CloudFront adds the headers for you.
 
-**API served separately** (e.g., API Gateway with its own domain): Configure CORS on API Gateway directly. That's covered in Module 8.
+**API served separately** (e.g., API Gateway with its own domain): Configure CORS on API Gateway directly. That's covered in the API Gateway section.
 
 For a typical static frontend served entirely through one CloudFront distribution on one domain, you generally don't need CORS headers on your static assets. The browser only enforces CORS on cross-origin requests, and your assets are same-origin.
 
@@ -244,6 +254,6 @@ permissions-policy: camera=(), microphone=(), geolocation=()
 If any headers are missing, verify the response headers policy ID is attached to the correct cache behavior, the distribution has finished deploying, and you're not seeing a cached response from before the update (invalidate if needed).
 
 > [!WARNING]
-> Response headers policies apply to all responses served by the cache behavior they're attached to — including cached responses. If you attach a policy after content is already cached, you may need to create an invalidation to ensure the headers appear immediately. Otherwise, cached responses will lack the new headers until their TTL expires.
+> Response headers policies apply to all responses served by the cache behavior they're attached to—including cached responses. If you attach a policy after content is already cached, you may need to create an invalidation to ensure the headers appear immediately. Otherwise, cached responses will lack the new headers until their TTL expires.
 
-You've got a fully configured CloudFront distribution: S3 origin with OAC, cache behaviors and invalidations for deployments, SPA routing via custom error responses, HTTPS with your ACM certificate, and security headers. The next step is connecting a custom domain — that's Route 53 in Module 5. Before that, the exercise for this module will have you build all of this from scratch.
+You've got a fully configured CloudFront distribution: S3 origin with OAC, cache behaviors and invalidations for deployments, SPA routing via custom error responses, HTTPS with your ACM certificate, and security headers. The next step is connecting a custom domain in the Route 53 custom-domain-routing section. Before that, the exercise for this section will have you build all of this from scratch.

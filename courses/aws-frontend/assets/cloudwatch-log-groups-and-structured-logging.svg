@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">CloudWatch log groups and structured logging</title>
+  <desc id="desc">Diagram showing a Lambda log group containing multiple log streams, a JSON log entry, and a CloudWatch Logs Insights query reading the structured fields.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#1f2937" />
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 18; }
+      .group { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2; rx: 16; }
+      .stream { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; rx: 12; }
+      .json { fill: #dcfce7; stroke: #22c55e; stroke-width: 2; rx: 16; }
+      .line {
+        stroke: #1f2937;
+        stroke-width: 2.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        marker-end: url(#arrow);
+      }
+      text { font-family: Arial, sans-serif; fill: #0f172a; }
+      .title { font-size: 32px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #334155; }
+      .heading { font-size: 24px; font-weight: 700; }
+      .label { font-size: 18px; font-weight: 700; }
+      .body { font-size: 16px; fill: #334155; }
+      .mono { font-size: 15px; fill: #0f172a; font-family: 'Courier New', monospace; }
+      .mono-small { font-size: 14px; fill: #0f172a; font-family: 'Courier New', monospace; }
+      .small { font-size: 14px; fill: #475569; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="760" />
+
+  <text x="60" y="64" class="title">How CloudWatch turns raw logs into something queryable</text>
+  <text x="60" y="96" class="subtitle">One log group contains multiple streams. JSON log entries expose stable fields that Logs Insights can filter and aggregate.</text>
+
+  <rect x="50" y="140" width="340" height="560" class="panel" />
+  <text x="80" y="184" class="heading">Log group</text>
+  <rect x="90" y="220" width="260" height="420" class="group" />
+  <text x="116" y="252" class="label">/aws/lambda/</text>
+  <text x="116" y="278" class="label">my-frontend-app-api</text>
+
+  <rect x="120" y="300" width="200" height="56" class="stream" />
+  <text x="140" y="334" class="mono">2026/03/18/[$LATEST]a1</text>
+
+  <rect x="120" y="388" width="200" height="56" class="stream" />
+  <text x="140" y="422" class="mono">2026/03/18/[$LATEST]b2</text>
+
+  <rect x="120" y="476" width="200" height="56" class="stream" />
+  <text x="140" y="510" class="mono">2026/03/18/[$LATEST]c3</text>
+
+  <text x="110" y="586" class="small">
+    <tspan x="110" dy="0">Each stream represents one</tspan>
+    <tspan x="110" dy="18">execution environment.</tspan>
+  </text>
+
+  <rect x="430" y="140" width="340" height="560" class="panel" />
+  <text x="460" y="184" class="heading">Structured log entry</text>
+  <rect x="470" y="240" width="260" height="230" class="json" />
+  <text x="494" y="282" class="mono">{</text>
+  <text x="510" y="314" class="mono">"level": "INFO",</text>
+  <text x="510" y="346" class="mono">"message": "Request completed",</text>
+  <text x="510" y="378" class="mono">"requestId": "abc-123",</text>
+  <text x="510" y="410" class="mono">"duration": 42,</text>
+  <text x="510" y="442" class="mono">"userId": "user-123"</text>
+  <text x="494" y="474" class="mono">}</text>
+
+  <text x="478" y="536" class="body">
+    <tspan x="478" dy="0">Each field becomes searchable</tspan>
+    <tspan x="478" dy="22">instead of hiding inside</tspan>
+    <tspan x="478" dy="22">one long string.</tspan>
+  </text>
+
+  <rect x="810" y="140" width="340" height="560" class="panel" />
+  <text x="840" y="184" class="heading">Logs Insights</text>
+  <rect x="840" y="240" width="280" height="212" class="group" />
+  <text x="864" y="282" class="mono-small">fields @timestamp,</text>
+  <text x="864" y="312" class="mono-small">requestId, duration</text>
+  <text x="864" y="344" class="mono-small">| filter level = "ERROR"</text>
+  <text x="864" y="376" class="mono-small">| sort @timestamp desc</text>
+  <text x="864" y="408" class="mono-small">| limit 20</text>
+
+  <text x="850" y="520" class="body">
+    <tspan x="850" dy="0">The query can filter, sort,</tspan>
+    <tspan x="850" dy="22">and aggregate by named</tspan>
+    <tspan x="850" dy="22">JSON fields.</tspan>
+  </text>
+
+  <path class="line" d="M 350 414 L 430 414" />
+  <path class="line" d="M 730 355 L 810 355" />
+</svg>

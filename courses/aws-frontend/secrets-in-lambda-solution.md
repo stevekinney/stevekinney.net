@@ -4,7 +4,7 @@ description: >-
   Complete solution for storing an API key in Parameter Store and reading it
   from a Lambda function at runtime.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - secrets
@@ -12,13 +12,15 @@ tags:
   - solution
 ---
 
-This is the complete solution for the [Exercise: Store and Retrieve a Secret in Lambda](secrets-in-lambda-exercise.md). If you got stuck, don't worry — there are a few gotchas in here that trip everyone up the first time.
+This is the complete solution for the [Exercise: Store and Retrieve a Secret in Lambda](secrets-in-lambda-exercise.md). If you got stuck, don't worry—there are a few gotchas in here that trip everyone up the first time.
 
 ## Why This Works
 
 - Parameter Store becomes the source of truth for the secret, which removes the value from source control and from Lambda configuration.
 - The function loads the secret at initialization time, so you pay the lookup cost once per warm environment instead of on every invocation.
 - The final configuration check matters because a secret is not truly moved until it disappears from environment variables and deployment settings.
+
+If you want AWS's version of the secret-storage workflow open while you work, keep the [AWS Secrets Manager overview](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html) and the [Parameter Store documentation](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) nearby.
 
 ## Store the Secret
 
@@ -224,7 +226,7 @@ zip -r ../function.zip .
 cd ..
 ```
 
-Deploy — if updating an existing function:
+Deploy—if updating an existing function:
 
 ```bash
 aws lambda update-function-code \
@@ -279,7 +281,7 @@ Expected output:
 }
 ```
 
-The `keyPrefix` value is `sk_test` — the first 7 characters of `sk_test_exercise_abc123`.
+The `keyPrefix` value is `sk_test`—the first 7 characters of `sk_test_exercise_abc123`.
 
 ## Verify the Secret Isn't in Environment Variables
 
@@ -295,7 +297,7 @@ If you have environment variables from a previous exercise (like `TABLE_NAME`), 
 
 ## Troubleshooting
 
-**"AccessDeniedException" when invoking the function.** The execution role is missing `ssm:GetParameter` or `kms:Decrypt` permissions. Double-check the policy document and verify it's attached to the correct role. Also verify the parameter ARN in the policy matches the parameter name exactly — remember that the ARN path doesn't double the leading slash.
+**"AccessDeniedException" when invoking the function.** The execution role is missing `ssm:GetParameter` or `kms:Decrypt` permissions. Double-check the policy document and verify it's attached to the correct role. Also verify the parameter ARN in the policy matches the parameter name exactly—remember that the ARN path doesn't double the leading slash.
 
 **"ParameterNotFound" error.** The parameter name in your code doesn't match the name you used in `put-parameter`. Parameter names are case-sensitive and must include the full path with leading slash.
 

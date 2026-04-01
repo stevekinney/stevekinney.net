@@ -3,7 +3,7 @@ title: 'Hosted Zones and Record Types'
 description: >-
   Create a hosted zone in Route 53 and understand the common DNS record types (A, AAAA, CNAME, MX, TXT) and when to use each.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - route53
@@ -11,7 +11,11 @@ tags:
   - hosted-zones
 ---
 
-A **hosted zone** is Route 53's container for DNS records. If you think of DNS as a phone book, the hosted zone is the page for your domain — it holds every record that tells the internet how to reach your services. When you create a hosted zone for `example.com`, Route 53 becomes the authoritative nameserver for that domain, and every DNS query for `example.com` or its subdomains gets answered by the records you configure inside the zone.
+A **hosted zone** is Route 53's container for DNS records. If you think of DNS as a phone book, the hosted zone is the page for your domain—it holds every record that tells the internet how to reach your services. When you create a hosted zone for `example.com`, Route 53 becomes the authoritative nameserver for that domain, and every DNS query for `example.com` or its subdomains gets answered by the records you configure inside the zone.
+
+If you want AWS's canonical explanation of hosted zones and delegation, keep the [Route 53 DNS configuration guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring.html) and the [hosted zones guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html) open.
+
+If you registered your domain through Route 53 in the previous lesson, you may already have a hosted zone. If your domain lives somewhere else, this is the step where Route 53 becomes authoritative for DNS.
 
 ## Creating a Hosted Zone
 
@@ -63,7 +67,7 @@ Notice that `ResourceRecordSetCount` starts at 2. Route 53 automatically creates
 Route 53 supports two types of hosted zones:
 
 - **Public hosted zones** respond to DNS queries from the public internet. This is what you use for your frontend: users around the world query DNS for `example.com`, and your public hosted zone answers.
-- **Private hosted zones** respond to DNS queries from within one or more VPCs (Virtual Private Clouds). They're used for internal service discovery — one microservice finding another inside your AWS network. Not something you need for frontend hosting.
+- **Private hosted zones** respond to DNS queries from within one or more VPCs (Virtual Private Clouds). They're used for internal service discovery—one microservice finding another inside your AWS network. Not something you need for frontend hosting.
 
 For this course, every hosted zone is public. If you see `"PrivateZone": false` in your output, you're on the right track.
 
@@ -71,7 +75,7 @@ For this course, every hosted zone is public. If you see `"PrivateZone": false` 
 
 The **NS (Name Server) records** in your hosted zone list the four nameservers that Route 53 assigned. These are the servers that will answer DNS queries for your domain. But there's a catch: having NS records inside your hosted zone doesn't do anything by itself. You also need to tell your domain registrar to use these nameservers.
 
-If you registered your domain through Route 53, this happens automatically — Route 53 creates the hosted zone and updates the registration's nameservers in one step. If you registered your domain elsewhere (GoDaddy, Namecheap, Google Domains, Cloudflare), you need to log into your registrar and replace the default nameservers with the four Route 53 nameservers.
+If you registered your domain through Route 53, this happens automatically—Route 53 creates the hosted zone and updates the registration's nameservers in one step. If you registered your domain elsewhere (GoDaddy, Namecheap, Google Domains, Cloudflare), you need to log into your registrar and replace the default nameservers with the four Route 53 nameservers.
 
 This is the moment of **delegation**: you're telling the DNS hierarchy, "When someone asks for `example.com`, send them to Route 53." Until you do this, your hosted zone exists but nobody knows to ask it anything.
 
@@ -88,13 +92,13 @@ Here are the DNS record types you'll work with in Route 53. Each one serves a di
 
 ### A Records
 
-An **A record** maps a domain name to an IPv4 address. This is the most fundamental DNS record type — it answers the question "what IP address should I connect to?"
+An **A record** maps a domain name to an IPv4 address. This is the most fundamental DNS record type—it answers the question "what IP address should I connect to?"
 
 ```
 example.com.    300    IN    A    192.0.2.1
 ```
 
-In Route 53, you'll often use A records with the **alias** feature instead of pointing to a raw IP address. An alias A record points to an AWS resource (like a CloudFront distribution) and resolves to whatever IP addresses that resource is currently using. We cover this in [Alias Records vs. CNAME Records](alias-records-vs-cname-records.md).
+In Route 53, you'll often use A records with the **alias** feature instead of pointing to a raw IP address. An alias A record points to an AWS resource (like a CloudFront distribution) and resolves to whatever IP addresses that resource is currently using. You'll use that later when you point your domain at CloudFront.
 
 ### AAAA Records
 
@@ -112,7 +116,7 @@ www.example.com.    300    IN    CNAME    d111111abcdef8.cloudfront.net.
 
 When a resolver encounters a CNAME, it follows the chain: it looks up the target domain (`d111111abcdef8.cloudfront.net`) and returns whatever A or AAAA record it finds there.
 
-CNAME records have one critical limitation: **they can't be used at the zone apex**. The zone apex is the bare domain — `example.com` without any subdomain prefix. This is a fundamental DNS protocol rule, not an AWS limitation. If you try to create a CNAME for `example.com`, it would conflict with the NS and SOA records that must exist at the apex. This is exactly why Route 53's alias records exist — they solve this problem.
+CNAME records have one critical limitation: **they can't be used at the zone apex**. The zone apex is the bare domain—`example.com` without any subdomain prefix. This is a fundamental DNS protocol rule, not an AWS limitation. If you try to create a CNAME for `example.com`, it would conflict with the NS and SOA records that must exist at the apex. This is exactly why Route 53's alias records exist—they solve this problem.
 
 ### MX Records
 
@@ -131,7 +135,7 @@ You probably don't need to create MX records for a frontend deployment. But if y
 
 - **Domain verification**: Google Search Console, email providers, and certificate authorities use TXT records to prove you control a domain.
 - **Email authentication**: SPF, DKIM, and DMARC records are all TXT records that help prevent email spoofing.
-- **ACM validation**: When you requested your ACM certificate in [DNS Validation vs. Email Validation](dns-validation-vs-email-validation.md), the CNAME record you added was a form of domain verification. Some services use TXT records for the same purpose.
+- **Certificate or service verification**: Some systems prove domain ownership with TXT records. ACM happens to use CNAME records for DNS validation, but the idea is the same.
 
 ```
 example.com.    300    IN    TXT    "v=spf1 include:_spf.google.com ~all"
@@ -164,7 +168,7 @@ aws route53 change-resource-record-sets \
   }'
 ```
 
-The `UPSERT` action creates the record if it doesn't exist, or updates it if it does. This is almost always what you want — it's idempotent, so running the command twice doesn't cause an error.
+The `UPSERT` action creates the record if it doesn't exist, or updates it if it does. This is almost always what you want—it's idempotent, so running the command twice doesn't cause an error.
 
 You can also list all records in a hosted zone:
 
@@ -181,10 +185,12 @@ This returns every record in the zone, including the NS and SOA records that Rou
 
 ## Hosted Zone Costs
 
-Route 53 charges **$0.50 per hosted zone per month** for the first 25 zones. If you create a hosted zone and delete it within 12 hours, you aren't charged. DNS queries are billed separately at $0.40 per million queries for standard routing — for a typical frontend, this is pennies.
+Route 53 charges **$0.50 per hosted zone per month** for the first 25 zones. If you create a hosted zone and delete it within 12 hours, you aren't charged. DNS queries are billed separately at $0.40 per million queries for standard routing—for a typical frontend, this is pennies.
 
 The hosted zone charge is the only ongoing cost you pay just for having DNS configured, regardless of traffic. For a single domain powering your frontend, you're looking at $0.50/month plus negligible query costs.
 
 ## What You Built
 
-You now understand what a hosted zone is, how to create one, what record types are available, and when to use each one. Honestly, I find this to be one of those areas where the vocabulary is scarier than the actual concepts — once you've seen an NS record and an A record side by side, the whole system clicks into place. In the next lesson, you'll put this to use by creating the DNS records that point your domain to the CloudFront distribution you built in [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md).
+You now understand what a hosted zone is, how to create one, what record types are available, and when to use each one. Honestly, I find this to be one of those areas where the vocabulary is scarier than the actual concepts—once you've seen an NS record and an A record side by side, the whole system clicks into place.
+
+That matters immediately, because the next step is certificate validation. ACM is about to hand you DNS records and ask you to prove you control the domain. That request only makes sense once you know where those records live and who is authoritative for them.

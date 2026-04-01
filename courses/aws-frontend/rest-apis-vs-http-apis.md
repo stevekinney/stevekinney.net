@@ -4,14 +4,16 @@ description: >-
   Understand the differences between API Gateway REST APIs and HTTP APIs, and why
   HTTP APIs are the right default for most frontend-to-Lambda integrations.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - api-gateway
   - comparison
 ---
 
-API Gateway offers two flavors of API: **REST APIs** and **HTTP APIs**. If you've ever tried to create an API in the console, you've seen both options sitting side by side with no clear guidance on which to pick. The naming doesn't help — both can serve RESTful endpoints, and both speak HTTP. The difference is in what they include and what they cost.
+API Gateway offers two flavors of API: **REST APIs** and **HTTP APIs**. If you've ever tried to create an API in the console, you've seen both options sitting side by side with no clear guidance on which to pick. The naming doesn't help—both can serve RESTful endpoints, and both speak HTTP. The difference is in what they include and what they cost.
+
+If you want AWS's version of the product surface while you read, the [HTTP APIs documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html) is the official reference for the flavor this course uses.
 
 For this course, you'll use HTTP APIs. They're cheaper, faster, and simpler. But you should understand when REST APIs earn their overhead, because you'll run into them on teams that have been using AWS longer.
 
@@ -21,20 +23,20 @@ Choosing the wrong API Gateway product is one of those mistakes that does not br
 
 ## Builds On
 
-This lesson builds on the Lambda foundation from Module 7. You already have compute. What you need now is the HTTP layer that turns a Lambda function into something your frontend can call with `fetch`.
+This lesson builds on the Lambda foundation you already put in place. You already have compute. What you need now is the HTTP layer that turns a Lambda function into something your frontend can call with `fetch`.
 
 ## HTTP APIs: The Default Choice
 
 **HTTP APIs** (sometimes called "v2" APIs) launched in 2019 as a streamlined alternative to REST APIs. AWS built them specifically for the most common use case: putting an HTTP layer in front of Lambda functions. Here's what they give you:
 
-- **Lower cost.** HTTP APIs cost roughly 70% less than REST APIs — $1.00 per million requests versus $3.50 per million.
+- **Lower cost.** HTTP APIs cost roughly 70% less than REST APIs—$1.00 per million requests versus $3.50 per million.
 - **Lower latency.** AWS reports that HTTP APIs have up to 60% lower latency compared to REST APIs. That latency reduction compounds when your frontend makes multiple API calls on a single page.
 - **Automatic deployments.** HTTP APIs deploy changes to the `$default` stage automatically. No manual deployment step.
 - **Built-in CORS.** CORS configuration is a first-class setting on the API itself. You configure it once and it applies to all routes.
-- **JWT authorizers.** Native JWT validation without writing a Lambda authorizer — point it at a Cognito user pool or any OIDC provider.
+- **JWT authorizers.** Native JWT validation without writing a Lambda authorizer—point it at a Cognito user pool or any OIDC provider.
 - **Simpler routing.** Routes are defined as `METHOD /path`, and proxy integrations send the entire request to Lambda. No mapping templates, no Velocity templates, no request/response transformation language to learn.
 
-If you're building a frontend that calls a Lambda-backed API — which is exactly what we're doing in this course — HTTP APIs are the right tool.
+If you're building a frontend that calls a Lambda-backed API—which is exactly what we're doing in this course—HTTP APIs are the right tool.
 
 ## REST APIs: When You Need More Control
 
@@ -42,10 +44,10 @@ If you're building a frontend that calls a Lambda-backed API — which is exactl
 
 - **API key usage plans.** If you need to issue API keys to third-party consumers and enforce rate limits per key, REST APIs have built-in usage plans and throttling.
 - **Request validation.** REST APIs can validate request bodies and query parameters against JSON schemas before your Lambda function ever runs. HTTP APIs leave validation to your handler code.
-- **Caching.** REST APIs have built-in response caching — you can cache responses at the API Gateway layer for a configurable TTL, reducing Lambda invocations and latency. HTTP APIs have no caching layer.
+- **Caching.** REST APIs have built-in response caching—you can cache responses at the API Gateway layer for a configurable TTL, reducing Lambda invocations and latency. HTTP APIs have no caching layer.
 - **WAF integration.** REST APIs integrate directly with AWS WAF (Web Application Firewall) for IP-based filtering, rate limiting, and bot detection. HTTP APIs don't.
 - **Resource policies.** REST APIs support resource-based policies that restrict access by IP address, VPC, or AWS account. HTTP APIs rely on authorizers and IAM for access control.
-- **Request/response transformation.** REST APIs include Velocity Template Language (VTL) mapping templates that can transform requests and responses between the client and your integration. This is powerful but complex — and rarely needed when your frontend and backend are both under your control.
+- **Request/response transformation.** REST APIs include Velocity Template Language (VTL) mapping templates that can transform requests and responses between the client and your integration. This is powerful but complex—and rarely needed when your frontend and backend are both under your control.
 
 ## The Decision Table
 
@@ -84,7 +86,7 @@ Start with HTTP APIs. Move to REST APIs only when you hit a feature you actually
 - You need WAF integration for IP filtering or rate limiting
 
 > [!TIP]
-> If you're not sure, use an HTTP API. You can migrate to a REST API later if you need a feature that HTTP APIs lack. The Lambda handler code is the same for both — only the API Gateway configuration differs.
+> If you're not sure, use an HTTP API. You can migrate to a REST API later if you need a feature that HTTP APIs lack. The Lambda handler code is the same for both—only the API Gateway configuration differs.
 
 ## A Note on Naming
 
@@ -105,4 +107,4 @@ AWS's naming here is genuinely confusing. "REST API" is a product name, not a de
 - **Assuming migration cost is zero:** The handler code is portable, but the gateway configuration and operational surface are not identical.
 - **Following documentation for the wrong API family:** `apigateway` and `apigatewayv2` are easy to confuse and will waste time fast.
 
-Next up, you're going to create an HTTP API using the CLI. The process takes three commands: create the API, create an integration pointing to your Lambda function, and create a route that maps an HTTP method and path to that integration. You already have a deployed Lambda function from [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md) — now you're going to give it a public URL.
+Next up, you're going to create an HTTP API using the CLI. The process takes three commands: create the API, create an integration pointing to your Lambda function, and create a route that maps an HTTP method and path to that integration. You already have a deployed Lambda function from [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md)—now you're going to give it a public URL.

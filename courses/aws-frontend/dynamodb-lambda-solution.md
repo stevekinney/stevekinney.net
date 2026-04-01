@@ -4,7 +4,7 @@ description: >-
   Complete solution for the DynamoDB Lambda exercise, with all commands, handler
   code, and expected output.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - dynamodb
@@ -19,6 +19,9 @@ Here's the complete solution for every step, including the DynamoDB table creati
 - The table schema aligns with the access pattern in the handler: `userId` groups one user's items together and `itemId` uniquely identifies each record within that partition.
 - The Lambda role is scoped to one table, so the API gets the exact data access it needs without turning into `dynamodb:*` on `*`.
 - The POST, GET, and DELETE tests prove the whole request lifecycle, not just whether DynamoDB accepted a table definition.
+
+> [!TIP]
+> If you want AWS's version of the table and query behavior open while you work, keep the [`aws dynamodb create-table` command reference](https://docs.aws.amazon.com/cli/latest/reference/dynamodb/create-table.html), the [DynamoDB Query guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.html), and the [DynamoDB Scan guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html) nearby.
 
 ## Create the DynamoDB Table
 
@@ -374,6 +377,10 @@ Expected response (formatted):
 
 The `itemId` and `createdAt` values will differ based on when you run the command.
 
+In the console, the same invocation using the **Test** tab shows the execution result with the 201 status code and the item's data.
+
+![The Lambda Test tab showing the execution result as Succeeded with the response body showing a newly created DynamoDB item.](assets/lambda-dynamodb-invoke-success.png)
+
 ### Create a second item
 
 Save as `test-create-2.json`:
@@ -511,7 +518,7 @@ aws lambda invoke \
 cat response.json
 ```
 
-Expected: the `items` array now contains only one item — the "Deploy to production" item.
+Expected: the `items` array now contains only one item—the "Deploy to production" item.
 
 ## Test Error Cases
 

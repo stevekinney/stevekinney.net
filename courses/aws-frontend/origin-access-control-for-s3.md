@@ -3,7 +3,7 @@ title: 'Origin Access Control for S3'
 description: >-
   Configure Origin Access Control so that your S3 bucket only serves content through CloudFront, not through direct S3 URLs.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-04-01
 tags:
   - aws
   - cloudfront
@@ -11,9 +11,23 @@ tags:
   - security
 ---
 
-Right now, your CloudFront distribution works — it fetches files from your S3 bucket and serves them through edge locations. But your S3 bucket is also publicly accessible. Anyone who knows the bucket URL can bypass CloudFront entirely and access your files directly from S3. That means they skip your caching, skip your HTTPS configuration, skip your security headers, and potentially skip any access controls you put at the edge.
+Right now, your CloudFront distribution works—it fetches files from your S3 bucket and serves them through edge locations. But your S3 bucket is also publicly accessible. Anyone who knows the bucket URL can bypass CloudFront entirely and access your files directly from S3. That means they skip your caching, skip your HTTPS configuration, skip your security headers, and potentially skip any access controls you put at the edge.
+
+If you want AWS's step-by-step version of the same setup, the [CloudFront guide to restricting access to an S3 origin](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) is the official reference.
 
 **Origin Access Control** (OAC) fixes this. It restricts your S3 bucket so that only CloudFront can read from it. Direct S3 URLs return "Access Denied." All traffic flows through your distribution: cached, compressed, secured.
+
+```mermaid
+flowchart LR
+    Viewer["Viewer request"] --> Edge["CloudFront"]
+    Edge --> Cache{"Cache hit?"}
+    Cache -- "Yes" --> Response["Return cached object"]
+    Cache -- "No" --> Signed["Signed origin request via OAC"]
+    Signed --> Bucket["Private S3 bucket"]
+    Bucket --> Edge
+    Edge --> Viewer
+    Direct["Direct S3 URL"] --> Denied["403 Access Denied"]
+```
 
 ## Why OAC Matters
 
@@ -74,10 +88,14 @@ The response includes the OAC's ID:
 A few things about the config:
 
 - **`SigningProtocol`**: `sigv4` is AWS Signature Version 4, the standard signing mechanism for AWS API requests. This is the only supported option for S3 origins.
-- **`SigningBehavior`**: `always` means CloudFront signs every request to S3. The alternative, `no-override`, only signs requests that the origin doesn't already have an `Authorization` header for — you won't need that for a static site.
+- **`SigningBehavior`**: `always` means CloudFront signs every request to S3. The alternative, `no-override`, only signs requests that the origin doesn't already have an `Authorization` header for—you won't need that for a static site.
 - **`OriginAccessControlOriginType`**: `s3` tells CloudFront this OAC is for an S3 origin. CloudFront also supports OAC for other origin types (MediaStore, Lambda function URLs), but S3 is what you need here.
 
-Save the `Id` value — you need it in the next step.
+Save the `Id` value—you need it in the next step.
+
+In the console, the **Create distribution** wizard handles this automatically: selecting "Allow private S3 bucket access to CloudFront" on the Specify origin step creates the OAC and attaches it in one operation.
+
+![The CloudFront wizard showing the Allow private S3 bucket access to CloudFront checkbox checked and the Use recommended origin settings option selected.](assets/cloudfront-oac-create.png)
 
 ## Update the Distribution to Use OAC
 
@@ -92,12 +110,12 @@ aws cloudfront get-distribution-config \
   --output json > distribution-config-current.json
 ```
 
-The response has two top-level fields: `ETag` and `DistributionConfig`. You need both. The `ETag` is a version identifier — CloudFront uses it to prevent concurrent modifications (the same pattern as HTTP conditional requests).
+The response has two top-level fields: `ETag` and `DistributionConfig`. You need both. The `ETag` is a version identifier—CloudFront uses it to prevent concurrent modifications (the same pattern as HTTP conditional requests).
 
 Now edit the config. You need to make two changes to the origin inside `DistributionConfig.Origins.Items[0]`:
 
 1. Add `"OriginAccessControlId": "E1OAC2EXAMPLE"` to the origin.
-2. Ensure `S3OriginConfig.OriginAccessIdentity` is set to `""` (empty string — you're not using the legacy OAI).
+2. Ensure `S3OriginConfig.OriginAccessIdentity` is set to `""` (empty string—you're not using the legacy OAI).
 
 The updated origin should look like this:
 
@@ -123,7 +141,11 @@ aws cloudfront update-distribution \
   --output json
 ```
 
-Replace `E2QWRUHEXAMPLE` with the actual `ETag` from the `get-distribution-config` response. If the `ETag` doesn't match, CloudFront rejects the update — this prevents you from overwriting changes made by someone else (or by a concurrent process).
+Replace `E2QWRUHEXAMPLE` with the actual `ETag` from the `get-distribution-config` response. If the `ETag` doesn't match, CloudFront rejects the update—this prevents you from overwriting changes made by someone else (or by a concurrent process).
+
+In the console, the **Origins** tab of your distribution shows the OAC attached to the S3 origin in the **Origin access** column.
+
+![The CloudFront distribution Origins tab showing the S3 origin with an OAC ID in the Origin access column.](assets/cloudfront-origin-with-oac.png)
 
 ## Update the S3 Bucket Policy
 
@@ -156,7 +178,7 @@ If you followed [Bucket Policies and Public Access](bucket-policies-and-public-a
 This policy does two things:
 
 - **Allows** the CloudFront service principal (`cloudfront.amazonaws.com`) to call `s3:GetObject` on your bucket.
-- **Restricts** that access to your specific distribution using a **Condition**. Only distribution `E1A2B3C4D5E6F7` in account `123456789012` can read from this bucket. Other CloudFront distributions — even ones in the same AWS account — are blocked.
+- **Restricts** that access to your specific distribution using a **Condition**. Only distribution `E1A2B3C4D5E6F7` in account `123456789012` can read from this bucket. Other CloudFront distributions—even ones in the same AWS account—are blocked.
 
 Apply the policy:
 
@@ -166,6 +188,10 @@ aws s3api put-bucket-policy \
   --policy file://bucket-policy-oac.json \
   --region us-east-1
 ```
+
+In the console, the bucket's **Permissions** tab shows the updated policy with the `cloudfront.amazonaws.com` service principal and the distribution ARN in the condition.
+
+![The S3 bucket Permissions tab showing the bucket policy with cloudfront.amazonaws.com as the service principal and a condition restricting access to a specific distribution ARN.](assets/s3-bucket-policy-cloudfront-principal.png)
 
 ## Re-enable Block Public Access
 
@@ -180,7 +206,7 @@ aws s3api put-public-access-block \
 ```
 
 > [!WARNING]
-> Wait — did you just re-enable Block Public Access while having a bucket policy that allows CloudFront? Yes. The CloudFront service principal policy isn't a "public" policy in AWS's definition. Block Public Access blocks policies with `"Principal": "*"` (everyone) or policies that grant access to any anonymous user. A policy scoped to the `cloudfront.amazonaws.com` service principal with a condition on a specific distribution ARN isn't considered public. This is exactly how AWS intends it to work.
+> Wait—did you just re-enable Block Public Access while having a bucket policy that allows CloudFront? Yes. The CloudFront service principal policy isn't a "public" policy in AWS's definition. Block Public Access blocks policies with `"Principal": "*"` (everyone) or policies that grant access to any anonymous user. A policy scoped to the `cloudfront.amazonaws.com` service principal with a condition on a specific distribution ARN isn't considered public. This is exactly how AWS intends it to work.
 
 ## Verifying It Works
 
@@ -198,7 +224,7 @@ Now test that direct S3 access is blocked:
 curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
 ```
 
-You should get a `403 Forbidden` response. The bucket is no longer publicly accessible — only CloudFront can read from it.
+You should get a `403 Forbidden` response. The bucket is no longer publicly accessible—only CloudFront can read from it.
 
 ## The Complete Picture
 
@@ -214,6 +240,6 @@ Here's what the architecture looks like after configuring OAC:
 This is the correct architecture for a static frontend on AWS. Honestly, it's one of those things that feels like a lot of ceremony the first time you set it up, but once it's in place you never think about it again. Your files live in a private S3 bucket, and the only way to access them is through your CloudFront distribution.
 
 > [!TIP]
-> If you ever need to debug OAC issues, check three things: (1) the OAC ID on the distribution origin matches the OAC you created, (2) the bucket policy grants `s3:GetObject` to the `cloudfront.amazonaws.com` service principal with a condition on your distribution's ARN, and (3) the `S3OriginConfig.OriginAccessIdentity` field is an empty string (not omitted — empty).
+> If you ever need to debug OAC issues, check three things: (1) the OAC ID on the distribution origin matches the OAC you created, (2) the bucket policy grants `s3:GetObject` to the `cloudfront.amazonaws.com` service principal with a condition on your distribution's ARN, and (3) the `S3OriginConfig.OriginAccessIdentity` field is an empty string (not omitted—empty).
 
-Your content is locked behind CloudFront and properly secured. In the next lesson, you'll learn how CloudFront caches your content — how cache behaviors, TTLs, and invalidations work — so you can control what gets cached, for how long, and how to force a refresh after deployments.
+Your content is locked behind CloudFront and properly secured. In the next lesson, you'll learn how CloudFront caches your content—how cache behaviors, TTLs, and invalidations work—so you can control what gets cached, for how long, and how to force a refresh after deployments.

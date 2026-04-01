@@ -4,20 +4,23 @@ description: >-
   Create a DynamoDB table, write a Lambda handler for GET, POST, and DELETE
   operations, wire it through API Gateway, and call it from the frontend.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - dynamodb
   - exercise
 ---
 
-You're going to build a complete data API backed by DynamoDB. By the end of this exercise, you'll have a working endpoint that your frontend can call to create, list, and delete items — with data persisted in a DynamoDB table and served through the same Lambda and API Gateway infrastructure you set up in Modules 7 and 8.
+You're going to build a complete data API backed by DynamoDB. By the end of this exercise, you'll have a working endpoint that your frontend can call to create, list, and delete items, with data persisted in a DynamoDB table and served through the same Lambda and API Gateway infrastructure you set up earlier in the course.
 
 This is the exercise where "static site" becomes "full-stack application." It's my favorite milestone in this whole course.
 
+> [!TIP]
+> If you want AWS's version of the table and query behavior open while you work, keep the [`aws dynamodb create-table` command reference](https://docs.aws.amazon.com/cli/latest/reference/dynamodb/create-table.html), the [DynamoDB Query guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.html), and the [DynamoDB Scan guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html) nearby.
+
 ## Why It Matters
 
-On Vercel or Netlify, you might use a hosted database like PlanetScale or Supabase and call it from a serverless function. On AWS, you're building the equivalent — but you own every piece. The table, the function, the HTTP layer, the permissions. When something breaks, you know exactly where to look. When something costs money, you know exactly why.
+On Vercel or Netlify, you might use a hosted database like PlanetScale or Supabase and call it from a serverless function. On AWS, you're building the equivalent—but you own every piece. The table, the function, the HTTP layer, the permissions. When something breaks, you know exactly where to look. When something costs money, you know exactly why.
 
 ## Your Task
 
@@ -40,6 +43,10 @@ Create the `my-frontend-app-data` table with:
 
 Use the CLI to create the table and wait for it to become active.
 
+In the console, the **Tables** list shows the table status as **Active** once provisioning completes.
+
+![The DynamoDB tables list showing the frontend-items table with Active status.](assets/dynamodb-exercise-table-active.png)
+
 ### Checkpoint
 
 Running `aws dynamodb describe-table --table-name my-frontend-app-data --region us-east-1 --output json --query "Table.TableStatus"` returns `"ACTIVE"`.
@@ -55,7 +62,7 @@ Your Lambda execution role (`my-frontend-app-lambda-role`) currently only has lo
 
 Scope the policy to the specific table ARN: `arn:aws:dynamodb:us-east-1:123456789012:table/my-frontend-app-data`.
 
-Remember the principle of least privilege from [Principle of Least Privilege](principle-of-least-privilege.md) — don't grant `dynamodb:*` or use `*` as the resource.
+Remember the principle of least privilege from [Principle of Least Privilege](principle-of-least-privilege.md)—don't grant `dynamodb:*` or use `*` as the resource.
 
 ### Checkpoint
 
@@ -133,7 +140,7 @@ The response has `statusCode: 201` and the body includes `userId`, `itemId`, `ti
 
 ## Test Listing Items
 
-Create a second item with a different title (use the same `userId`), then invoke with a GET event that only includes `userId` — no `itemId`:
+Create a second item with a different title (use the same `userId`), then invoke with a GET event that only includes `userId`—no `itemId`:
 
 ```json
 {
@@ -206,7 +213,7 @@ Missing `userId` returns `statusCode: 400`. Unsupported method returns `statusCo
 
 ## Stretch Goals
 
-- **Wire it through API Gateway.** If you completed the API Gateway exercise in Module 8, connect your function to an HTTP API route and call it from `curl` or the browser instead of using `aws lambda invoke`.
+- **Wire it through API Gateway.** If you completed the API Gateway exercise, connect your function to an HTTP API route and call it from `curl` or the browser instead of using `aws lambda invoke`.
 
 - **Add an update endpoint.** Handle PATCH requests that update the `status` field of an existing item using `UpdateCommand` with an `UpdateExpression`. Return the updated item with `ReturnValues: 'ALL_NEW'`.
 

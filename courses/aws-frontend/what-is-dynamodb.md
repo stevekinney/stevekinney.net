@@ -5,7 +5,7 @@ description: >-
   it's a practical choice for frontend engineers who need a lightweight data
   layer.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - dynamodb
@@ -13,9 +13,9 @@ tags:
   - fundamentals
 ---
 
-You don't need PostgreSQL for a todo list. You don't need to learn SQL joins, manage connection pools, or pay for a database server that runs 24/7 whether or not anyone is using your app. If your frontend needs a place to store and retrieve data — user preferences, form submissions, a list of items — **DynamoDB** gives you a database without giving you a database server.
+You don't need PostgreSQL for a todo list. You don't need to learn SQL joins, manage connection pools, or pay for a database server that runs 24/7 whether or not anyone is using your app. If your frontend needs a place to store and retrieve data—user preferences, form submissions, a list of items—**DynamoDB** gives you a database without giving you a database server.
 
-DynamoDB is a fully managed, serverless NoSQL database from AWS. You create a table, write data to it, read data from it, and AWS handles everything else: provisioning, replication, patching, backups, scaling. If that sounds familiar, it should — it's the same "you write the code, we run the infrastructure" model you saw with Lambda in [What is Lambda?](what-is-lambda.md).
+DynamoDB is a fully managed, serverless NoSQL database from AWS. You create a table, write data to it, read data from it, and AWS handles everything else: provisioning, replication, patching, backups, scaling. If that sounds familiar, it should—it's the same "you write the code, we run the infrastructure" model you saw with Lambda in [What is Lambda?](what-is-lambda.md).
 
 ## Why This Matters
 
@@ -26,23 +26,25 @@ This is the moment Summit Supply stops being "a frontend with an API" and become
 - [What Lambda Is and Why Frontend Engineers Care](what-is-lambda.md)
 - [Connecting API Gateway to Lambda](connecting-api-gateway-to-lambda.md)
 
+![Side-by-side comparison of relational database design starting with schema and joins versus DynamoDB design starting with access patterns and keys.](assets/dynamodb-access-pattern-design.svg)
+
 ## How It Differs from SQL Databases
 
 If you've used PostgreSQL, MySQL, or even SQLite in a side project, you're accustomed to the relational model: tables with rigid schemas, rows and columns, and SQL queries that can join across multiple tables. That model is powerful, but it comes with operational overhead that frontend engineers rarely need.
 
 DynamoDB uses a **key-value and document model** instead. Here's how the two compare:
 
-|                       | Relational Database (PostgreSQL)                     | DynamoDB                                           |
-| --------------------- | ---------------------------------------------------- | -------------------------------------------------- |
-| Schema                | Fixed columns, defined up front                      | Flexible — each item can have different attributes |
-| Query language        | SQL                                                  | API calls (SDK or CLI)                             |
-| Joins                 | Yes, across multiple tables                          | No joins — design around single-table access       |
-| Scaling               | You manage (replicas, read/write scaling)            | Automatic and on-demand                            |
-| Server                | You provision and maintain it                        | Fully managed, no server                           |
-| Connection management | Connection pools, max connections                    | HTTP API — no persistent connections               |
-| Pricing               | Per hour (the server runs whether you use it or not) | Per request (you pay for what you use)             |
+|                       | Relational Database (PostgreSQL)                     | DynamoDB                                         |
+| --------------------- | ---------------------------------------------------- | ------------------------------------------------ |
+| Schema                | Fixed columns, defined up front                      | Flexible—each item can have different attributes |
+| Query language        | SQL                                                  | API calls (SDK or CLI)                           |
+| Joins                 | Yes, across multiple tables                          | No joins—design around single-table access       |
+| Scaling               | You manage (replicas, read/write scaling)            | Automatic and on-demand                          |
+| Server                | You provision and maintain it                        | Fully managed, no server                         |
+| Connection management | Connection pools, max connections                    | HTTP API—no persistent connections               |
+| Pricing               | Per hour (the server runs whether you use it or not) | Per request (you pay for what you use)           |
 
-The mental shift: with a relational database, you design your schema around your data and then figure out queries. With DynamoDB, you design your schema around your **access patterns** — the specific ways your application reads and writes data. This tripped me up at first, but once it clicks, it makes a lot of sense. For a frontend API backend, your access patterns are usually simple: "get this item by ID," "list items for this user," "create a new item," "delete this item." DynamoDB handles these patterns well.
+The mental shift: with a relational database, you design your schema around your data and then figure out queries. With DynamoDB, you design your schema around your **access patterns**—the specific ways your application reads and writes data. This tripped me up at first, but once it clicks, it makes a lot of sense. For a frontend API backend, your access patterns are usually simple: "get this item by ID," "list items for this user," "create a new item," "delete this item." DynamoDB handles these patterns well.
 
 ## The Data Model
 
@@ -63,11 +65,11 @@ Here's what an item looks like:
 This is just a JSON object. There's no schema migration, no `ALTER TABLE`, no ORM. If you want to add a `priority` field next week, you just start including it in new items. Existing items are unaffected.
 
 > [!TIP]
-> If you've used Firebase's Firestore or MongoDB, DynamoDB's data model will feel familiar. The key difference is how you query it — DynamoDB doesn't have the flexible query language that Firestore or MongoDB offers. You trade query flexibility for predictable performance at any scale.
+> If you've used Firebase's Firestore or MongoDB, DynamoDB's data model will feel familiar. The key difference is how you query it—DynamoDB doesn't have the flexible query language that Firestore or MongoDB offers. You trade query flexibility for predictable performance at any scale.
 
 ## Why Serverless and Managed Matters
 
-DynamoDB is serverless in the same way Lambda is serverless: there's no instance to provision, no operating system to patch, no disk to resize. You interact with it through API calls — PutItem, GetItem, Query, Scan — and AWS handles the physical infrastructure.
+DynamoDB is serverless in the same way Lambda is serverless: there's no instance to provision, no operating system to patch, no disk to resize. You interact with it through API calls—PutItem, GetItem, Query, Scan—and AWS handles the physical infrastructure.
 
 For frontend engineers, this matters because:
 
@@ -84,7 +86,7 @@ AWS cut DynamoDB on-demand request pricing in late 2024, and the service still p
 The practical point for this course is simpler: low-volume frontend workloads still cost pennies. A hobby project or learning app can read and write plenty of data before DynamoDB becomes a meaningful bill.
 
 > [!WARNING]
-> The DynamoDB free tier includes 25 GB of storage and enough read/write capacity for most development workloads. But the free tier only applies to tables using **provisioned** capacity mode, not on-demand. For learning and development, the cost difference is negligible — on-demand with low traffic will cost pennies. But be aware of this distinction if you're trying to stay strictly within the free tier.
+> The DynamoDB free tier includes 25 GB of storage and enough read/write capacity for most development workloads. But the free tier only applies to tables using **provisioned** capacity mode, not on-demand. For learning and development, the cost difference is negligible—on-demand with low traffic will cost pennies. But be aware of this distinction if you're trying to stay strictly within the free tier.
 
 ## When DynamoDB Is the Right Choice
 
@@ -102,7 +104,7 @@ DynamoDB isn't a good fit when:
 - Your data model is deeply relational and requires referential integrity
 - You need SQL-compatible analytics across your entire dataset
 
-For the typical frontend API backend — storing user data, tracking application state, persisting form submissions — DynamoDB handles the job with less complexity and lower cost than a relational database. Honestly, I reach for it any time I need a data layer for a side project and don't want to think about infrastructure.
+For the typical frontend API backend—storing user data, tracking application state, persisting form submissions—DynamoDB handles the job with less complexity and lower cost than a relational database. Honestly, I reach for it any time I need a data layer for a side project and don't want to think about infrastructure.
 
 ## Verification
 

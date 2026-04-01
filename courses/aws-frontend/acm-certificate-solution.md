@@ -3,7 +3,7 @@ title: 'Solution: Request and Validate a Certificate'
 description: >-
   Complete walkthrough of requesting an ACM certificate, completing DNS validation, and verifying the issued certificate.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - acm
@@ -12,6 +12,9 @@ tags:
 ---
 
 This is the solution for the [ACM Certificate Exercise](acm-certificate-exercise.md). Each step includes the exact commands and expected output. If your output differs, the notes after each command explain what to check.
+
+> [!TIP]
+> If you want AWS's version of the validation workflow open while you work, keep the [AWS Certificate Manager User Guide](https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html) nearby. It is the fastest way to sanity-check the console flow when ACM moves the buttons around again.
 
 ## Why This Works
 
@@ -101,7 +104,7 @@ Notice that `example.com` and `*.example.com` often share the same CNAME record 
 
 ### Option A: Route 53 (CLI)
 
-If your domain is hosted in Route 53, first find your hosted zone ID:
+If your domain's DNS is hosted in Route 53, first find your hosted zone ID:
 
 ```bash
 aws route53 list-hosted-zones \
@@ -184,7 +187,7 @@ dig CNAME _abc123.example.com +short
 _def456.acm-validations.aws.
 ```
 
-If you see no output, the record hasn't propagated yet. Wait a minute and try again. If it still doesn't appear after 5 minutes, double-check the record in your DNS provider's interface — the most common mistake is entering the record name incorrectly.
+If you see no output, the record hasn't propagated yet. Wait a minute and try again. If it still doesn't appear after 5 minutes, double-check the record in your DNS provider's interface—the most common mistake is entering the record name incorrectly.
 
 ## Wait for Validation
 
@@ -303,4 +306,4 @@ aws acm describe-certificate \
   --query "Certificate.{Status:Status,Domains:SubjectAlternativeNames}"
 ```
 
-You now have an issued certificate in `us-east-1`. In the next module, you'll attach this certificate to a CloudFront distribution to serve your frontend over HTTPS.
+You now have an issued certificate in `us-east-1`. Next, you'll attach this certificate to a CloudFront distribution so your frontend can answer on the real domain instead of a `*.cloudfront.net` URL.

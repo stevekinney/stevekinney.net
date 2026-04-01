@@ -3,7 +3,7 @@ title: 'Solution: Deploy a Static Site to S3'
 description: >-
   Complete solution with all commands and expected output for deploying a static site to S3.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - s3
@@ -12,6 +12,9 @@ tags:
 ---
 
 This is the complete solution for the S3 static site deployment exercise. Every command is shown with its expected output so you can verify each step.
+
+> [!TIP]
+> If the console labels move while you're doing this exercise, keep the [S3 static website tutorial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html) and the [`aws s3 sync` command reference](https://docs.aws.amazon.com/cli/latest/reference/s3/sync.html) open. AWS changes the UI more often than the core concepts.
 
 ## Why This Works
 
@@ -310,6 +313,8 @@ You should see:
 - The text "This site is hosted entirely on Amazon S3."
 - A timestamp showing when the page loaded
 
+![Browser showing the deployed S3 static site with the Hello from S3 heading on a dark background and a page-load timestamp.](assets/s3-exercise-website-live.png)
+
 Test the error page by navigating to a nonexistent path:
 
 ```
@@ -501,7 +506,7 @@ aws s3 cp index-old.html s3://my-frontend-app-assets/index.html \
   --region us-east-1
 ```
 
-Refresh the browser — you should see the original "Hello from S3" heading (without "(v2)").
+Refresh the browser—you should see the original "Hello from S3" heading (without "(v2)").
 
 ## Stretch Goal: Verify Content Types
 
@@ -525,7 +530,7 @@ Expected output (partial):
 }
 ```
 
-The `ContentType` should be `text/css`. Check your JavaScript file the same way — it should be `application/javascript`.
+The `ContentType` should be `text/css`. Check your JavaScript file the same way—it should be `application/javascript`.
 
 ## Summary
 
@@ -536,4 +541,4 @@ You have deployed a static site to S3 with:
 - Versioning enabled for rollback protection
 - A lifecycle rule to clean up old versions
 
-This is the foundation that every other module in this course builds on top of. In the next module, you'll request an SSL certificate from ACM. In Module 4, you'll put CloudFront in front of this bucket to add HTTPS, global edge caching, and a proper deployment workflow.
+This is the foundation that the rest of the hosting arc builds on top of. Next, you'll move into domain control and DNS authority so you can validate an ACM certificate cleanly. After that, you'll put CloudFront in front of this bucket to add HTTPS, global edge caching, and a proper deployment workflow.

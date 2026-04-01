@@ -3,7 +3,7 @@ title: 'Solution: Set Up a CloudFront Distribution'
 description: >-
   Complete solution with all CLI commands for creating a CloudFront distribution with S3 origin, OAC, ACM certificate, and SPA routing.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - cloudfront
@@ -18,6 +18,9 @@ This is the complete solution for the [CloudFront Distribution Exercise](cloudfr
 - Origin Access Control keeps S3 private while still allowing CloudFront to read the files your users need.
 - Custom error responses make a single-page app behave like a frontend router instead of a pile of missing-object errors.
 - The distribution becomes the enforcement point for HTTPS, caching, and security headers, which is why it sits between your users and the bucket.
+
+> [!TIP]
+> If the console or CLI output shifts while you're doing this, keep the [CloudFront Developer Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html) and the [OAC setup guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) open.
 
 ## Create an Origin Access Control
 
@@ -485,4 +488,4 @@ Expected results: CloudFront returns `200 OK` for both the root and the SPA rout
 | Response Headers Policy | `67f7725c-6f97-4210-82d7-5512b31e9d03` (managed SecurityHeadersPolicy) |
 | Cache Policy            | `658327ea-f89d-4fab-a63d-7e88639e58f6` (managed CachingOptimized)      |
 
-Your distribution is live, secured, and ready for a custom domain. That's Route 53 in Module 5.
+Your distribution is live, secured, and ready for a custom domain. That's what the Route 53 custom-domain-routing section handles next.

@@ -4,7 +4,7 @@ description: >-
   Complete solution for the Lambda function exercise, with all commands and
   expected output.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - lambda
@@ -19,6 +19,9 @@ Here's the complete solution for every step, including the handler code, the tru
 - The execution role and trust policy solve different problems: one tells Lambda it may assume the role, and the other tells the role what the function may do after that.
 - Packaging `dist/handler.js` into the deployment zip gives Lambda exactly the artifact it expects at runtime instead of asking it to transpile TypeScript for you.
 - The CLI invocation and CloudWatch log checks prove both halves of the system work: the code path and the operational path.
+
+> [!TIP]
+> If the console or CLI output looks a little different when you do this, keep the [`aws lambda create-function` command reference](https://docs.aws.amazon.com/cli/latest/reference/lambda/create-function.html) and the [`aws lambda update-function-code` command reference](https://docs.aws.amazon.com/cli/latest/reference/lambda/update-function-code.html) open.
 
 ## Project Setup
 
@@ -306,6 +309,10 @@ The `body` is a stringified JSON object. If you parse it, you get:
   "timestamp": "2026-03-18T12:00:00.000Z"
 }
 ```
+
+In the console, the **Test** tab shows the same result with the execution status and response body expanded.
+
+![The Lambda Test tab showing the execution result as Succeeded with the statusCode 200 and Hello from Lambda body visible in the Details section.](assets/lambda-exercise-invoke-success.png)
 
 ### Test event without name parameter
 

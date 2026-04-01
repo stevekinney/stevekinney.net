@@ -4,7 +4,7 @@ description: >-
   Complete solution for the deploy bot IAM policy exercise, with annotations
   explaining each policy statement.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - iam
@@ -19,6 +19,9 @@ Here's the complete policy, the CLI commands to wire it up, and an explanation o
 - The policy separates bucket-level and object-level permissions, which is the core IAM trick that makes S3 access control feel less arbitrary.
 - The CloudFront permission is scoped to one distribution, so the deploy bot can refresh only the cache it actually owns.
 - The final `get-caller-identity` check proves you did not just create policy JSON. You created a principal that can authenticate with the boundaries you intended.
+
+> [!TIP]
+> If you want the AWS version of the policy mechanics while you work, keep the [IAM JSON policy reference](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html) and the [`aws iam create-policy` command reference](https://docs.aws.amazon.com/cli/latest/reference/iam/create-policy.html) open.
 
 ## The Policy
 
@@ -74,7 +77,7 @@ You could combine the S3 actions into a single statement with both resource ARNs
 }
 ```
 
-Both versions work identically. AWS evaluates each action against each resource in the arrays — `s3:ListBucket` matches the bucket ARN, and `s3:PutObject`/`s3:DeleteObject` match the objects ARN. The combined version is more compact. The split version makes it explicit which actions go with which resources. Either approach is fine; pick whichever your team finds more readable.
+Both versions work identically. AWS evaluates each action against each resource in the arrays—`s3:ListBucket` matches the bucket ARN, and `s3:PutObject`/`s3:DeleteObject` match the objects ARN. The combined version is more compact. The split version makes it explicit which actions go with which resources. Either approach is fine; pick whichever your team finds more readable.
 
 The three-statement version is a bit more self-documenting: each Sid tells you exactly what that block is for. When a policy grows to ten or fifteen statements, the extra clarity pays for itself.
 
@@ -91,9 +94,9 @@ The three-statement version is a bit more self-documenting: each Sid tells you e
 }
 ```
 
-- **`s3:PutObject`** — required by `aws s3 sync` to upload new or changed files.
-- **`s3:DeleteObject`** — required by `aws s3 sync --delete` to remove files from S3 that no longer exist in the local build directory. Without this, old files accumulate in your bucket.
-- **Resource ends with `/*`** — these actions operate on individual objects within the bucket, not the bucket itself. The `/*` wildcard matches every object key in the bucket.
+- **`s3:PutObject`**—required by `aws s3 sync` to upload new or changed files.
+- **`s3:DeleteObject`**—required by `aws s3 sync --delete` to remove files from S3 that no longer exist in the local build directory. Without this, old files accumulate in your bucket.
+- **Resource ends with `/*`**—these actions operate on individual objects within the bucket, not the bucket itself. The `/*` wildcard matches every object key in the bucket.
 
 What this doesn't allow: `s3:GetObject` (reading files back), `s3:DeleteBucket` (deleting the bucket itself), or any other S3 action. The deploy bot can push files in and remove stale ones. That's it.
 
@@ -108,8 +111,8 @@ What this doesn't allow: `s3:GetObject` (reading files back), `s3:DeleteBucket` 
 }
 ```
 
-- **`s3:ListBucket`** — required by `aws s3 sync` to compare the local directory against what's already in the bucket. Without list permission, sync can't determine which files need to be uploaded or deleted.
-- **Resource has no `/*`** — `ListBucket` is a bucket-level operation, not an object-level operation. The ARN points to the bucket itself.
+- **`s3:ListBucket`**—required by `aws s3 sync` to compare the local directory against what's already in the bucket. Without list permission, sync can't determine which files need to be uploaded or deleted.
+- **Resource has no `/*`**—`ListBucket` is a bucket-level operation, not an object-level operation. The ARN points to the bucket itself.
 
 This is the distinction that trips people up most often. As covered in [Writing Your First IAM Policy](writing-your-first-iam-policy.md), mixing up the bucket ARN and the object ARN is the most common cause of "my policy doesn't work" debugging sessions.
 
@@ -124,9 +127,9 @@ This is the distinction that trips people up most often. As covered in [Writing 
 }
 ```
 
-- **`cloudfront:CreateInvalidation`** — tells CloudFront to purge cached versions of your files at edge locations worldwide so users see the latest deployment.
-- **Resource targets one specific distribution** — the deploy bot can only invalidate this distribution's cache, not any other distribution in the account.
-- **No region in the ARN** — CloudFront is a global service, so the region segment in the ARN is empty (the `::` between `cloudfront` and the account ID).
+- **`cloudfront:CreateInvalidation`**—tells CloudFront to purge cached versions of your files at edge locations worldwide so users see the latest deployment.
+- **Resource targets one specific distribution**—the deploy bot can only invalidate this distribution's cache, not any other distribution in the account.
+- **No region in the ARN**—CloudFront is a global service, so the region segment in the ARN is empty (the `::` between `cloudfront` and the account ID).
 
 What this doesn't allow: `cloudfront:UpdateDistribution` (changing the distribution's settings), `cloudfront:DeleteDistribution` (removing the distribution), or invalidation on other distributions. The deploy bot can clear the cache. Period.
 
@@ -227,7 +230,7 @@ aws iam list-users \
   --output json
 ```
 
-Expected: an `AccessDenied` error. This is correct behavior — the deploy bot has no IAM permissions. The policy is doing exactly what it should.
+Expected: an `AccessDenied` error. This is correct behavior—the deploy bot has no IAM permissions. The policy is doing exactly what it should.
 
 ## Stretch Goal: Explicit Deny on DeleteBucket
 
@@ -265,4 +268,4 @@ If you attempted the stretch goal of adding an explicit Deny for `s3:DeleteBucke
 }
 ```
 
-The `DenyBucketDeletion` statement is technically redundant here — the deploy bot has no Allow for `s3:DeleteBucket`, so it's already implicitly denied. But as discussed in [Principle of Least Privilege](principle-of-least-privilege.md), explicit Deny statements act as **guardrails**. If someone later modifies this policy and accidentally adds `s3:*` to an Allow statement, the explicit Deny still prevents bucket deletion. Defense in depth.
+The `DenyBucketDeletion` statement is technically redundant here—the deploy bot has no Allow for `s3:DeleteBucket`, so it's already implicitly denied. But as discussed in [Principle of Least Privilege](principle-of-least-privilege.md), explicit Deny statements act as **guardrails**. If someone later modifies this policy and accidentally adds `s3:*` to an Allow statement, the explicit Deny still prevents bucket deletion. Defense in depth.

@@ -4,7 +4,7 @@ description: >-
   Package, deploy, and test a Lambda function using the AWS CLI, including
   creating test events and reading invocation results.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-04-01
 tags:
   - aws
   - lambda
@@ -13,6 +13,8 @@ tags:
 ---
 
 You have a compiled TypeScript handler and an execution role with logging permissions. Now you need to get the code into Lambda and verify it works. The workflow is: compile TypeScript, zip the output, create the function (or update it), invoke it, and read the results. All of this happens through the CLI.
+
+If you want AWS's exact command surface while you work, keep the [`aws lambda create-function` command reference](https://docs.aws.amazon.com/cli/latest/reference/lambda/create-function.html), the [`aws lambda update-function-code` command reference](https://docs.aws.amazon.com/cli/latest/reference/lambda/update-function-code.html), and the [`aws lambda invoke` command reference](https://docs.aws.amazon.com/cli/latest/reference/lambda/invoke.html) open.
 
 ## Building the Deployment Package
 
@@ -31,10 +33,10 @@ zip -r ../function.zip .
 cd ..
 ```
 
-The zip file must contain your handler file at the root level — not nested inside a `dist/` folder. That's why you `cd` into `dist/` before zipping: Lambda looks for the handler at the path you specify (e.g., `handler.handler`), and if your file is at `dist/handler.js` inside the zip, Lambda won't find it.
+The zip file must contain your handler file at the root level—not nested inside a `dist/` folder. That's why you `cd` into `dist/` before zipping: Lambda looks for the handler at the path you specify (e.g., `handler.handler`), and if your file is at `dist/handler.js` inside the zip, Lambda won't find it.
 
 > [!WARNING]
-> If your function uses `node_modules` dependencies (beyond what the Lambda runtime provides), you need to include them in the zip. Copy `node_modules` into the `dist/` directory before zipping. For this lesson, the handler has no runtime dependencies — `@types/aws-lambda` is a dev dependency that's only used during compilation.
+> If your function uses `node_modules` dependencies (beyond what the Lambda runtime provides), you need to include them in the zip. Copy `node_modules` into the `dist/` directory before zipping. For this lesson, the handler has no runtime dependencies—`@types/aws-lambda` is a dev dependency that's only used during compilation.
 
 ## Creating the Function
 
@@ -77,6 +79,14 @@ The response confirms that the function was created:
 
 Notice the defaults: 3-second timeout and 128 MB of memory. These are fine for a simple API handler. You can change them later with `aws lambda update-function-configuration`.
 
+In the console, the **Create function** page lets you select the runtime and configure basic settings before deploying.
+
+![The Lambda Create Function page showing Author from scratch selected, a function name entered, and Node.js runtime selected.](assets/lambda-create-function.png)
+
+After creation, the **Code** tab shows the deployed handler code in the inline editor.
+
+![The Lambda function detail page showing the Code tab with the inline code editor displaying the handler function.](assets/lambda-function-code-view.png)
+
 ## Invoking the Function
 
 Now test it. The `aws lambda invoke` command calls your function directly, without going through API Gateway:
@@ -116,6 +126,14 @@ cat response.json
 
 Your function received the event, read the `name` query parameter, and returned a greeting. It works.
 
+In the console, the **Test** tab lets you configure a test event and run the function directly. The **Event JSON** editor accepts any JSON payload, and the execution result shows the response and logs inline.
+
+![The Lambda Test tab showing the Event JSON editor configured with a sample payload, ready to invoke the function.](assets/lambda-test-event-config.png)
+
+After clicking **Test**, the result expands above the event editor showing the status, response body, and log output.
+
+![The Lambda Test tab showing the execution result as Succeeded with the response JSON expanded showing statusCode 200 and the Hello from Lambda body.](assets/lambda-test-execution-result.png)
+
 > [!TIP]
 > The `--cli-binary-format raw-in-base64-out` flag is required when passing `--payload` with AWS CLI v2. Without it, the CLI tries to base64-encode your payload, which isn't what you want for JSON test events.
 
@@ -152,7 +170,7 @@ aws lambda invoke \
   response.json
 ```
 
-Using `file://` (not `fileb://` — payloads are text, not binary) loads the event from a file. Keep a collection of test events in your project for different scenarios: missing parameters, POST requests, malformed JSON bodies.
+Using `file://` (not `fileb://`—payloads are text, not binary) loads the event from a file. Keep a collection of test events in your project for different scenarios: missing parameters, POST requests, malformed JSON bodies.
 
 ## Updating the Function Code
 
@@ -170,7 +188,7 @@ aws lambda update-function-code \
   --output json
 ```
 
-This replaces the function's code while preserving all configuration (runtime, memory, timeout, environment variables, execution role). The update is atomic — Lambda serves the old code until the new code is ready, then switches over.
+This replaces the function's code while preserving all configuration (runtime, memory, timeout, environment variables, execution role). The update is atomic—Lambda serves the old code until the new code is ready, then switches over.
 
 ## Reading the Logs
 
@@ -193,7 +211,7 @@ aws logs get-log-events \
 
 That nested command finds the most recent log stream and then fetches its events. The output includes your `console.log` messages, the start and end of each invocation, and the billed duration.
 
-We'll cover CloudWatch in depth in Module 12. For now, this command is your debugging tool.
+We'll cover CloudWatch in depth in the CloudWatch section. For now, this command is your debugging tool.
 
 > [!TIP]
 > You can also include `--log-type Tail` on your `aws lambda invoke` command. This returns the last 4 KB of log output as a base64-encoded string in the response, which you can decode with `base64 --decode`. It's quicker than querying CloudWatch for simple debugging.
@@ -231,7 +249,7 @@ aws lambda invoke \
 cat response.json
 ```
 
-This is the manual version. Later in the course, you'll automate this in a GitHub Actions workflow, just like you automated S3 deployments in Module 6.
+This is the manual version. Later in the course, you'll automate this in a GitHub Actions workflow, just like you automated static frontend deployments in the deployment section.
 
 ## Common Mistakes
 
@@ -241,4 +259,4 @@ This is the manual version. Later in the course, you'll automate this in a GitHu
 
 **Role not propagated.** If `create-function` fails with "The role defined for the function cannot be assumed by Lambda," wait 10-15 seconds and try again. IAM role propagation is eventually consistent.
 
-Your function is deployed and you can invoke it directly. But direct invocation isn't how a frontend calls an API — you need an HTTP endpoint. Before we get to API Gateway in Module 8, there are two more Lambda topics to cover: environment variables (for configuration that shouldn't be hardcoded) and cold starts (the performance characteristic that matters most for API latency).
+Your function is deployed and you can invoke it directly. But direct invocation isn't how a frontend calls an API. You need an HTTP endpoint. Before you get to the API Gateway section, there are two more Lambda topics to cover: environment variables, for configuration that shouldn't be hardcoded, and cold starts, the performance characteristic that matters most for API latency.

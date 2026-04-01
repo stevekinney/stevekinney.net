@@ -4,7 +4,7 @@ description: >-
   Complete solution for the CloudFront Function exercise, with all function
   code, CLI commands, and expected output.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - cloudfront-functions
@@ -13,6 +13,8 @@ tags:
 ---
 
 Here's the complete solution for every step, including the function code, all CLI commands, and the expected output at each stage.
+
+If you want AWS's version of the runtime behavior while you read, the [CloudFront Functions guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) is the official reference.
 
 ## Why This Works
 

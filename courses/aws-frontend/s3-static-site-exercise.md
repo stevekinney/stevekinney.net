@@ -3,7 +3,7 @@ title: 'Exercise: Deploy a Static Site to S3'
 description: >-
   Create a bucket, upload a static site, enable website hosting, and access it in the browser.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - s3
@@ -13,13 +13,16 @@ tags:
 
 You've learned the individual pieces: creating a bucket, uploading files, writing a bucket policy, enabling static website hosting, and configuring versioning. Now put them all together. In this exercise, you'll deploy a complete static site to S3 and access it in a browser.
 
+> [!TIP]
+> If the console labels move while you're doing this exercise, keep the [S3 static website tutorial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html) and the [`aws s3 sync` command reference](https://docs.aws.amazon.com/cli/latest/reference/s3/sync.html) open. AWS changes the UI more often than the core concepts.
+
 ## Why It Matters
 
-Every frontend deployment is fundamentally the same: take build output, put it somewhere accessible, and point a URL at it. Vercel and Netlify hide this process behind a `git push`. Doing it manually on S3 teaches you what actually happens under the hood — and gives you the foundation for the automated pipeline you'll build later in this course.
+Every frontend deployment is fundamentally the same: take build output, put it somewhere accessible, and point a URL at it. Vercel and Netlify hide this process behind a `git push`. Doing it manually on S3 teaches you what actually happens under the hood—and gives you the foundation for the automated pipeline you'll build later in this course.
 
 ## Set Up Your Static Site
 
-Create a minimal static site on your local machine. You don't need a framework — plain HTML, CSS, and JavaScript are enough.
+Create a minimal static site on your local machine. You don't need a framework—plain HTML, CSS, and JavaScript are enough.
 
 Create a directory called `build/` with these three files:
 
@@ -132,7 +135,7 @@ document.getElementById('timestamp').textContent =
 
 ## Create the Bucket
 
-Create an S3 bucket. Remember that bucket names are globally unique — if `my-frontend-app-assets` is taken, add a unique suffix.
+Create an S3 bucket. Remember that bucket names are globally unique—if `my-frontend-app-assets` is taken, add a unique suffix.
 
 ```bash
 aws s3 mb s3://my-frontend-app-assets \
@@ -295,7 +298,7 @@ Expected output:
 
 ## Deploy an Update
 
-Make a change to `build/index.html` — update the `<h1>` to say "Hello from S3 (v2)". Then redeploy:
+Make a change to `build/index.html`—update the `<h1>` to say "Hello from S3 (v2)". Then redeploy:
 
 ```bash
 aws s3 sync ./build s3://my-frontend-app-assets \
@@ -314,7 +317,7 @@ aws s3api list-object-versions \
 
 ### Checkpoint
 
-You should see two versions of `index.html` — the original and the updated one. The `IsLatest` field on the newer version should be `true`.
+You should see two versions of `index.html`—the original and the updated one. The `IsLatest` field on the newer version should be `true`.
 
 ## Failure Diagnosis
 

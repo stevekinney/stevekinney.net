@@ -65,6 +65,21 @@ href = "s3-static-site-exercise.md"
   href = "s3-static-site-solution.md"
 
 [[section]]
+title = "Domains & DNS Foundations"
+
+[[section.item]]
+title = "DNS for Frontend Engineers"
+href = "dns-for-frontend-engineers.md"
+
+[[section.item]]
+title = "Registering and Transferring Domains"
+href = "registering-and-transferring-domains.md"
+
+[[section.item]]
+title = "Hosted Zones and Record Types"
+href = "hosted-zones-and-record-types.md"
+
+[[section]]
 title = "ACM (SSL/TLS Certificates)"
 
 [[section.item]]
@@ -135,27 +150,15 @@ href = "cloudfront-distribution-exercise.md"
   href = "cloudfront-distribution-solution.md"
 
 [[section]]
-title = "Route 53 (DNS)"
-
-[[section.item]]
-title = "DNS for Frontend Engineers"
-href = "dns-for-frontend-engineers.md"
-
-[[section.item]]
-title = "Hosted Zones and Record Types"
-href = "hosted-zones-and-record-types.md"
-
-[[section.item]]
-title = "Pointing a Domain to CloudFront"
-href = "pointing-a-domain-to-cloudfront.md"
+title = "Route 53 (Custom Domain Routing)"
 
 [[section.item]]
 title = "Alias Records vs. CNAME Records"
 href = "alias-records-vs-cname-records.md"
 
 [[section.item]]
-title = "Registering and Transferring Domains"
-href = "registering-and-transferring-domains.md"
+title = "Pointing a Domain to CloudFront"
+href = "pointing-a-domain-to-cloudfront.md"
 
 [[section.item]]
 title = "Exercise: Configure DNS for Your Site"

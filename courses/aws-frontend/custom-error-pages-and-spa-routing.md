@@ -3,7 +3,7 @@ title: 'Custom Error Pages and SPA Routing'
 description: >-
   Set up custom error responses that redirect 403 and 404 errors to index.html, enabling client-side routing for single-page applications.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-04-01
 tags:
   - aws
   - cloudfront
@@ -11,26 +11,37 @@ tags:
   - routing
 ---
 
-If you've deployed a single-page application to Vercel or Netlify, you know the drill: you add a `rewrites` rule or a `_redirects` file so that every path serves `index.html`, and your client-side router (React Router, Vue Router, whatever) handles the URL. Without that rule, refreshing the page on `/dashboard/settings` returns a 404 because no file exists at that path — the server doesn't know that your JavaScript handles routing.
+If you've deployed a single-page application to Vercel or Netlify, you know the drill: you add a `rewrites` rule or a `_redirects` file so that every path serves `index.html`, and your client-side router (React Router, Vue Router, whatever) handles the URL. Without that rule, refreshing the page on `/dashboard/settings` returns a 404 because no file exists at that path—the server doesn't know that your JavaScript handles routing.
+
+If you want AWS's version of the underlying feature while you read, the [CloudFront custom error pages guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/creating-custom-error-pages.html) is the official reference.
 
 On AWS, the same problem exists, and the fix is CloudFront's **custom error responses**.
 
 ## The Problem
 
+```mermaid
+flowchart LR
+    Browser["Browser requests /dashboard/settings"] --> CloudFront["CloudFront"]
+    CloudFront --> S3["S3 origin"]
+    S3 --> Missing["Missing object returns 403 or 404"]
+    Missing --> Rewrite["Custom error response serves /index.html"]
+    Rewrite --> Router["SPA router renders /dashboard/settings"]
+```
+
 Here's what happens when a user navigates to `/dashboard/settings` on your CloudFront distribution:
 
 1. CloudFront receives the request for `/dashboard/settings`.
-2. CloudFront checks its edge cache — no cached object for that path.
+2. CloudFront checks its edge cache—no cached object for that path.
 3. CloudFront forwards the request to S3.
 4. S3 looks for an object with the key `dashboard/settings`. No such object exists.
-5. S3 returns a **403 Forbidden** error (because with Origin Access Control, S3 returns 403 instead of 404 for missing objects — helpful, right?).
+5. S3 returns a **403 Forbidden** error (because with Origin Access Control, S3 returns 403 instead of 404 for missing objects—helpful, right?).
 6. CloudFront passes the 403 back to the browser.
 7. The user sees an XML error page instead of your app.
 
-This works fine for the initial page load at `/` (because `index.html` exists), and it works fine for hashed assets like `/assets/main.a1b2c3.js` (because those files exist in S3). But any route that only exists in your client-side router — `/dashboard`, `/settings`, `/users/123` — breaks on a direct visit or a page refresh.
+This works fine for the initial page load at `/` (because `index.html` exists), and it works fine for hashed assets like `/assets/main.a1b2c3.js` (because those files exist in S3). But any route that only exists in your client-side router—`/dashboard`, `/settings`, `/users/123`—breaks on a direct visit or a page refresh.
 
 > [!TIP]
-> Why 403 and not 404? When you use Origin Access Control (configured in [Origin Access Control for S3](origin-access-control-for-s3.md)), S3 returns 403 Forbidden for missing objects instead of 404 Not Found. This is a security measure — S3 doesn't want to reveal whether an object exists or not to unauthorized callers. CloudFront is authorized to read from the bucket, but the object genuinely doesn't exist, so S3 returns 403. You need to handle both 403 and 404 to cover all cases.
+> Why 403 and not 404? When you use Origin Access Control (configured in [Origin Access Control for S3](origin-access-control-for-s3.md)), S3 returns 403 Forbidden for missing objects instead of 404 Not Found. This is a security measure—S3 doesn't want to reveal whether an object exists or not to unauthorized callers. CloudFront is authorized to read from the bucket, but the object genuinely doesn't exist, so S3 returns 403. You need to handle both 403 and 404 to cover all cases.
 
 ## The Fix: Custom Error Responses
 
@@ -92,6 +103,14 @@ aws cloudfront update-distribution \
 
 Replace `E2QWRUHEXAMPLE` with the `ETag` from the `get-distribution-config` response.
 
+In the console, the **Error pages** tab on your distribution shows each custom error response. The form for a single rule maps an HTTP error code to a custom response page and status code.
+
+![The CloudFront Create Custom Error Response form showing HTTP error code 403, response page path /index.html, and HTTP response code 200.](assets/cloudfront-error-response-form.png)
+
+Once both rules are configured, the **Error pages** tab shows the complete mapping.
+
+![The CloudFront Error pages tab showing two custom error responses: 403 and 404 both mapped to /index.html with HTTP response code 200.](assets/cloudfront-custom-error-responses.png)
+
 ## Breaking Down the Config
 
 ### ErrorCode
@@ -112,7 +131,7 @@ The HTTP status code CloudFront returns to the browser along with the custom res
 - **`"200"`**: The browser receives `index.html` with a 200 OK status. Your client-side router processes the URL and renders the appropriate page. Search engines see a valid page.
 - **`"404"`**: The browser receives `index.html` with a 404 status. Your client-side router still works for the user, but search engines interpret the page as "not found" and may de-index it.
 
-For a SPA, use `"200"`. Every route is a valid page — the routing just happens in JavaScript rather than on the server.
+For a SPA, use `"200"`. Every route is a valid page—the routing just happens in JavaScript rather than on the server.
 
 ### ErrorCachingMinTTL
 
@@ -121,7 +140,7 @@ How long (in seconds) CloudFront caches the error response at edge locations. Th
 Why does this matter? Suppose you deploy new content and a path that previously returned a 403 now maps to a real file. With the default 5-minute TTL, users would still see the custom error response (served as `index.html`) for up to 5 minutes instead of the actual file. A lower value means faster recovery.
 
 > [!WARNING]
-> Don't set `ErrorCachingMinTTL` to `0`. CloudFront requires error responses to be cached for at least some duration. A value of `10` is a reasonable balance — short enough that errors don't persist long, but long enough that CloudFront isn't hammering your origin on every request for a missing file.
+> Don't set `ErrorCachingMinTTL` to `0`. CloudFront requires error responses to be cached for at least some duration. A value of `10` is a reasonable balance—short enough that errors don't persist long, but long enough that CloudFront isn't hammering your origin on every request for a missing file.
 
 ## Testing SPA Routing
 
@@ -147,9 +166,9 @@ Try it in a browser: navigate to `https://d1234abcdef.cloudfront.net/dashboard/s
 
 Using `"ResponseCode": "200"` for all client-side routes means CloudFront returns 200 OK for genuinely missing pages too. If someone navigates to `/asdfghjkl`, they get `index.html` with a 200 status code. Your client-side router should render a "not found" page for unknown routes, but the HTTP status code is still 200.
 
-This is the same behavior as Vercel's rewrite rules and Netlify's `_redirects`. It's a trade-off: you lose HTTP-level 404 semantics in exchange for working client-side routing. For most single-page applications, this is the correct trade-off. Your frontend router knows which routes are valid and which aren't — the CDN doesn't.
+This is the same behavior as Vercel's rewrite rules and Netlify's `_redirects`. It's a trade-off: you lose HTTP-level 404 semantics in exchange for working client-side routing. For most single-page applications, this is the correct trade-off. Your frontend router knows which routes are valid and which aren't—the CDN doesn't.
 
-If you need proper 404 status codes for SEO purposes (e.g., a marketing site with some SPA sections), you'd handle this with a CloudFront Function or Lambda@Edge that inspects the URL and returns 404 for genuinely invalid paths. That's covered in Module 9.
+If you need proper 404 status codes for SEO purposes (e.g., a marketing site with some SPA sections), you'd handle this with a CloudFront Function or Lambda@Edge that inspects the URL and returns 404 for genuinely invalid paths. That's covered in the edge-compute section.
 
 ## Multi-Page Sites vs. SPAs
 
@@ -164,6 +183,6 @@ If you're deploying a traditional multi-page static site (not a SPA), you probab
 }
 ```
 
-This returns your custom error page with a 404 status code — the standard behavior for a static website.
+This returns your custom error page with a 404 status code—the standard behavior for a static website.
 
-Your SPA routes work. But your site is still served on a `*.cloudfront.net` domain, and there's no custom SSL certificate. In the next lesson, you'll attach the ACM certificate you provisioned in Module 3 to your CloudFront distribution, enabling HTTPS on your custom domain.
+Your SPA routes work. But your site is still served on a `*.cloudfront.net` domain, and there's no custom SSL certificate. In the next lesson, you'll attach the ACM certificate you already requested to your CloudFront distribution, enabling HTTPS on your custom domain.

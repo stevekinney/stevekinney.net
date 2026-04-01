@@ -4,7 +4,7 @@ description: >-
   Choose between Parameter Store and Secrets Manager based on your use case,
   understanding the tradeoffs in cost, features, and complexity.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - parameter-store
@@ -13,6 +13,8 @@ tags:
 ---
 
 You have two AWS services that can store secrets. That's one too many for anyone who just wants to know where to put an API key. This lesson gives you a clear decision framework so you can stop deliberating and start building.
+
+If you want AWS's official version of the service behavior while you read, the [AWS Secrets Manager overview](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html) and the [Parameter Store documentation](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) are the canonical references.
 
 ```mermaid
 flowchart TD
@@ -189,6 +191,6 @@ Notice the scoping. The SSM statement grants access to parameters under `/my-fro
 
 ## What You Have Learned
 
-Module 11 gave you the tools to move sensitive configuration out of Lambda environment variables and into purpose-built secret storage. Parameter Store handles configuration and static secrets for free. Secrets Manager handles rotating credentials for $0.40 per secret per month. Your Lambda functions read from both at init time, cache the values, and use IAM policies to enforce access control.
+The secrets section gave you the tools to move sensitive configuration out of Lambda environment variables and into purpose-built secret storage. Parameter Store handles configuration and static secrets for free. Secrets Manager handles rotating credentials for $0.40 per secret per month. Your Lambda functions read from both at init time, cache the values, and use IAM policies to enforce access control.
 
 The pattern is simple: environment variables for non-sensitive config that doesn't change between deploys. Parameter Store for everything else that isn't rotating. Secrets Manager for credentials that must rotate. Now go move that API key out of your environment variables.

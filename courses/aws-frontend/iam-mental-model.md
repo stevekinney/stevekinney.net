@@ -1,10 +1,10 @@
 ---
 title: 'IAM Mental Model'
 description: >-
-  Build a mental model of IAM — users, groups, roles, policies, and how AWS
+  Build a mental model of IAM—users, groups, roles, policies, and how AWS
   decides whether to allow or deny a request.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - iam
@@ -14,7 +14,12 @@ tags:
 
 Think of IAM like role-based access control, but for infrastructure. If you've ever configured permissions in a CMS or set up team roles in GitHub, you already have the intuition. The difference is that IAM controls who can create servers, read files, invoke functions, and rack up charges on your credit card. I mean, the stakes are a _little_ higher than "who can merge to main."
 
-**IAM (Identity and Access Management)** is AWS's system for answering two questions on every single API call: _who are you?_ and _are you allowed to do that?_ Every request to every AWS service — whether it comes from the console, the CLI, or an SDK running in a Lambda function — goes through IAM evaluation. No exceptions.
+If you want AWS's canonical version of the same model while you read, the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) and the [IAM best practices guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) are worth keeping open.
+
+> [!NOTE]
+> **IAM (Identity and Access Management)** is AWS's system for answering two questions on every single API call: _who are you?_ and _are you allowed to do that?_ Every request to every AWS service—whether it comes from the console, the CLI, or an SDK running in a Lambda function—goes through IAM evaluation. No exceptions.
+
+![Diagram showing IAM users, groups, roles, and policies inside an AWS account, plus the explicit deny and allow evaluation flow.](assets/iam-mental-model.svg)
 
 ## The Four Building Blocks
 
@@ -22,7 +27,7 @@ IAM has four concepts you need to internalize. Everything else is built on top o
 
 ### Users
 
-An **IAM user** represents a single person or application that needs to interact with AWS. Each user gets their own credentials — a password for console access, or access keys for programmatic access. You created one in [Creating and Securing an AWS Account](creating-and-securing-an-aws-account.md) when you set up your `admin` user.
+An **IAM user** represents a single person or application that needs to interact with AWS. Each user gets their own credentials—a password for console access, or access keys for programmatic access. You created one in [Creating and Securing an AWS Account](creating-and-securing-an-aws-account.md) when you set up your `admin` user.
 
 Users exist within your AWS account. They're not shared across accounts. If you have three developers who need AWS access, you create three IAM users. (Or you use IAM Identity Center for single sign-on, but that's more complexity than we need right now.)
 
@@ -40,14 +45,14 @@ An **IAM role** is like a user, but without permanent credentials. Instead of lo
 
 Roles are critical for two scenarios:
 
-- **AWS services that need permissions.** When a Lambda function needs to read from S3 or write to DynamoDB, it assumes a role. The function doesn't have its own access keys — it borrows permissions from the role every time it runs.
+- **AWS services that need permissions.** When a Lambda function needs to read from S3 or write to DynamoDB, it assumes a role. The function doesn't have its own access keys—it borrows permissions from the role every time it runs.
 - **Cross-account access.** A role in Account A can be assumed by a user in Account B. This is how organizations manage access across multiple AWS accounts without sharing credentials.
 
 If users are employee badges, roles are **visitor passes**: they identify what you're allowed to do, but they expire and you have to get a new one each time.
 
 ### Policies
 
-An **IAM policy** is a JSON document that defines what actions are allowed or denied on which resources. Policies are the actual permission rules. Users, groups, and roles don't inherently have any permissions — they get them from attached policies.
+An **IAM policy** is a JSON document that defines what actions are allowed or denied on which resources. Policies are the actual permission rules. Users, groups, and roles don't inherently have any permissions—they get them from attached policies.
 
 Here's the simplest possible policy:
 
@@ -75,7 +80,7 @@ You'll encounter both types throughout this course. For now, we're focused on id
 
 ## How AWS Evaluates Permissions
 
-Every time you make a request to AWS — clicking a button in the console, running a CLI command, making an SDK call from code — IAM runs an evaluation. The logic is simple but absolute:
+Every time you make a request to AWS—clicking a button in the console, running a CLI command, making an SDK call from code—IAM runs an evaluation. The logic is simple but absolute:
 
 1. **Start with a default deny.** Every request is denied unless something explicitly allows it. A brand-new IAM user with no policies attached can't do anything.
 
@@ -95,18 +100,18 @@ Request comes in
 ```
 
 > [!TIP]
-> A common mistake is thinking that adding an Allow policy fixes access. If there's an explicit Deny somewhere — maybe on the user's group, or an organization-wide policy — no amount of Allow will override it. When debugging access issues, always check for Deny statements first.
+> A common mistake is thinking that adding an Allow policy fixes access. If there's an explicit Deny somewhere—maybe on the user's group, or an organization-wide policy—no amount of Allow will override it. When debugging access issues, always check for Deny statements first.
 
 ## How the Pieces Fit Together
 
 Here's a concrete scenario. You're deploying a frontend application to AWS and you want a CI/CD pipeline (say, GitHub Actions) to push files to S3 and invalidate a CloudFront cache. Here's what the IAM setup looks like:
 
-1. **Create an IAM user** called `deploy-bot`. This represents the CI pipeline. No console access needed — just programmatic access keys.
+1. **Create an IAM user** called `deploy-bot`. This represents the CI pipeline. No console access needed—just programmatic access keys.
 2. **Write a policy** that allows `s3:PutObject` and `s3:DeleteObject` on your specific bucket, plus `cloudfront:CreateInvalidation` on your specific distribution.
 3. **Create a group** called `deployers` and attach the policy to the group.
 4. **Add the `deploy-bot` user** to that group.
 
-Now the deploy bot can push files and invalidate caches — and nothing else. It can't read your DynamoDB tables. It can't create new users. It can't change billing settings. The policy constrains it to exactly what it needs.
+Now the deploy bot can push files and invalidate caches—and nothing else. It can't read your DynamoDB tables. It can't create new users. It can't change billing settings. The policy constrains it to exactly what it needs.
 
 If you used roles instead (which is the more modern approach), you'd create a role with the same policy and configure GitHub Actions to assume that role using OpenID Connect. No long-lived access keys required.
 
@@ -151,6 +156,6 @@ If you've worked with RBAC in a frontend app, the mapping is straightforward:
 | Permission (can_edit_posts)  | IAM policy statement             |
 | Check at request time        | IAM evaluation on every API call |
 
-The main difference: in a frontend app, a misconfigured permission might let someone edit a blog post they shouldn't. In AWS, a misconfigured permission can let someone spin up expensive compute resources, exfiltrate data from a database, or delete your entire deployment. The evaluation model is the same — the blast radius is different.
+The main difference: in a frontend application, a misconfigured permission might let someone edit a blog post they shouldn't. In AWS, a misconfigured permission can let someone spin up expensive compute resources, exfiltrate data from a database, or delete your entire deployment. The evaluation model is the same—the blast radius is different. Very bad stuff.
 
 Now that you have the mental model, let's write an actual policy from scratch in [Writing Your First IAM Policy](writing-your-first-iam-policy.md).

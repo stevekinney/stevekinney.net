@@ -3,18 +3,20 @@ title: 'Exercise: End-to-End Static Site Deployment'
 description: >-
   Deploy a complete static site from scratch: S3 bucket, CloudFront with OAC, ACM certificate, Route 53 DNS, and verify HTTPS at your custom domain.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - deployment
   - exercise
 ---
 
-You're going to deploy a static site from zero to production. No shortcuts, no skipping steps. This is my favorite exercise in the whole course. By the end, your site will be live at `https://example.com` — served through CloudFront, secured with an ACM certificate, stored in a private S3 bucket, resolved by Route 53. This exercise integrates everything from Modules 1 through 5.
+You're going to deploy a static site from zero to production. No shortcuts, no skipping steps. This is my favorite exercise in the whole course. By the end, your site will be live at `https://example.com`—served through CloudFront, secured with an ACM certificate, stored in a private S3 bucket, resolved by Route 53. This exercise integrates the entire early static-hosting arc: IAM, S3, domain control, ACM, CloudFront, and final DNS routing.
 
 ## Why It Matters
 
-You've built each piece individually across the first five modules. This exercise proves they compose into a working deployment. It's also a dry run for the workflow you'll automate with GitHub Actions: every manual step here maps to a step in your CI/CD pipeline. If you can do it by hand, you understand what the automation is doing.
+You've built each piece individually across the early static-hosting sections. This exercise proves they compose into a working deployment. It's also a dry run for the workflow you'll automate with GitHub Actions: every manual step here maps to a step in your CI/CD pipeline. If you can do it by hand, you understand what the automation is doing.
+
+If you want the AWS version of the end-to-end workflow open while you work, keep the [S3 static website tutorial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html), the [CloudFront OAC guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html), and the [Route 53 DNS configuration guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring.html) nearby.
 
 ## Prerequisites
 
@@ -31,7 +33,7 @@ echo '<!DOCTYPE html><html><head><title>My Site</title></head><body><h1>It works
 
 ## Create the S3 Bucket
 
-Create a bucket to hold your static files. Block all public access from the start — CloudFront will be the only way to reach these files.
+Create a bucket to hold your static files. Block all public access from the start—CloudFront will be the only way to reach these files.
 
 - Create the bucket with `aws s3 mb`.
 - Enable Block Public Access with `aws s3api put-public-access-block`.
@@ -70,6 +72,26 @@ aws s3 ls s3://my-frontend-app-assets \
 ```
 
 You should see your `index.html` (and any other files) listed.
+
+## Confirm Domain and DNS Control
+
+Before ACM can issue anything, make sure the domain is actually routed the way you expect:
+
+- Confirm you control the registrar account for the domain.
+- Confirm the domain either uses Route 53 as the registrar or already delegates DNS to a Route 53 hosted zone.
+- Confirm the hosted zone exists in Route 53.
+
+Refer to [Registering and Transferring Domains](registering-and-transferring-domains.md) and [Hosted Zones and Record Types](hosted-zones-and-record-types.md).
+
+### Checkpoint
+
+```bash
+aws route53 list-hosted-zones-by-name \
+  --dns-name example.com \
+  --output json
+```
+
+The output should include your hosted zone for `example.com`.
 
 ## Request an ACM Certificate
 
@@ -183,7 +205,7 @@ Create A alias records that point your domain to the CloudFront distribution:
 - Create an A alias record for `example.com` pointing to your distribution.
 - Create an A alias record for `www.example.com` pointing to the same distribution.
 
-Refer to [Pointing a Domain to CloudFront](pointing-a-domain-to-cloudfront.md) and [Hosted Zones and Record Types](hosted-zones-and-record-types.md).
+Refer to [Alias Records vs. CNAME Records](alias-records-vs-cname-records.md) and [Pointing a Domain to CloudFront](pointing-a-domain-to-cloudfront.md).
 
 ### Checkpoint
 

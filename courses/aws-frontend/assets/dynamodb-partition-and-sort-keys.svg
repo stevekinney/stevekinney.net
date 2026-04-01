@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">DynamoDB partition and sort keys</title>
+  <desc id="desc">Diagram showing items grouped by partition key, ordered by sort key within each group, and how a query targets a single partition.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#1f2937" />
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 18; }
+      .partition { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2; rx: 16; }
+      .item { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; rx: 12; }
+      .line {
+        stroke: #1f2937;
+        stroke-width: 2.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        marker-end: url(#arrow);
+      }
+      text { font-family: Arial, sans-serif; fill: #0f172a; }
+      .title { font-size: 32px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #334155; }
+      .heading { font-size: 24px; font-weight: 700; }
+      .label { font-size: 18px; font-weight: 700; }
+      .body { font-size: 16px; fill: #334155; }
+      .small { font-size: 14px; fill: #475569; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="760" />
+
+  <text x="60" y="64" class="title">How partition keys and sort keys shape the data</text>
+  <text x="60" y="96" class="subtitle">A Query targets one partition key value. The sort key controls ordering and range conditions inside that partition.</text>
+
+  <rect x="50" y="140" width="1100" height="560" class="panel" />
+  <text x="80" y="184" class="heading">Example table: userId + itemId</text>
+
+  <path class="line" d="M 120 250 L 250 250" />
+  <text x="100" y="236" class="body">Query userId = user-123</text>
+
+  <rect x="260" y="220" width="340" height="420" class="partition" />
+  <text x="300" y="262" class="label">Partition: user-123</text>
+  <rect x="300" y="300" width="260" height="70" class="item" />
+  <text x="330" y="342" class="body">item-001  Deploy to S3</text>
+  <rect x="300" y="400" width="260" height="70" class="item" />
+  <text x="330" y="442" class="body">item-002  Configure CloudFront</text>
+  <rect x="300" y="500" width="260" height="70" class="item" />
+  <text x="330" y="542" class="body">item-003  Set up Route 53</text>
+
+  <text x="430" y="598" class="small" text-anchor="middle">
+    <tspan x="430" dy="0">Items stay grouped by partition key</tspan>
+    <tspan x="430" dy="18">and sorted by itemId.</tspan>
+  </text>
+
+  <rect x="660" y="220" width="340" height="420" class="partition" />
+  <text x="700" y="262" class="label">Partition: user-456</text>
+  <rect x="700" y="300" width="260" height="70" class="item" />
+  <text x="730" y="342" class="body">item-001  Write Lambda handler</text>
+  <rect x="700" y="400" width="260" height="70" class="item" />
+  <text x="730" y="442" class="body">item-003  Build API route</text>
+  <rect x="700" y="500" width="260" height="70" class="item" />
+  <text x="730" y="542" class="body">item-004  Add DynamoDB query</text>
+
+  <text x="830" y="598" class="small" text-anchor="middle">
+    <tspan x="830" dy="0">A query for user-123 never reads</tspan>
+    <tspan x="830" dy="18">this partition.</tspan>
+  </text>
+</svg>

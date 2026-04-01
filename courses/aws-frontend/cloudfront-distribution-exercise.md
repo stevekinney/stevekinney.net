@@ -3,7 +3,7 @@ title: 'Exercise: Set Up a CloudFront Distribution'
 description: >-
   Create a CloudFront distribution with an S3 origin, Origin Access Control, ACM certificate, and custom error responses for SPA routing.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - cloudfront
@@ -14,7 +14,10 @@ You have an S3 bucket with static site files and an ACM certificate in `us-east-
 
 ## Why It Matters
 
-Without CloudFront, your site is a single-region S3 bucket with no HTTPS, no edge caching, and no security headers. With CloudFront, you have a globally distributed CDN that serves content from edge locations close to your users, enforces HTTPS, handles SPA routing, and adds security headers — the same infrastructure Vercel and Netlify give you out of the box. This exercise is the bridge from "files in a bucket" to "production deployment."
+Without CloudFront, your site is a single-region S3 bucket with no HTTPS, no edge caching, and no security headers. With CloudFront, you have a globally distributed CDN that serves content from edge locations close to your users, enforces HTTPS, handles SPA routing, and adds security headers—the same infrastructure Vercel and Netlify give you out of the box. This exercise is the bridge from "files in a bucket" to "production deployment."
+
+> [!TIP]
+> If the console or CLI output shifts while you're doing this, keep the [CloudFront Developer Guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html) and the [OAC setup guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) open.
 
 ## Prerequisites
 
@@ -22,6 +25,7 @@ Before you start, make sure you have:
 
 - An S3 bucket (`my-frontend-app-assets`) with at least an `index.html` file uploaded. See [Uploading and Organizing Files](uploading-and-organizing-files.md) if you need to set this up.
 - An ACM certificate in `us-east-1` with status `ISSUED`. See [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md) if you need one.
+- A domain you control, with DNS already lined up in Route 53 or ready for the final alias-record step.
 - The AWS CLI v2 configured with credentials that have CloudFront, S3, and ACM permissions.
 
 ## Create an Origin Access Control
@@ -30,7 +34,7 @@ Create an OAC that CloudFront will use to authenticate requests to your S3 bucke
 
 - Use `aws cloudfront create-origin-access-control` with a JSON config.
 - Set `SigningProtocol` to `sigv4`, `SigningBehavior` to `always`, and `OriginAccessControlOriginType` to `s3`.
-- Save the OAC `Id` from the response — you need it for the distribution config.
+- Save the OAC `Id` from the response—you need it for the distribution config.
 
 ### Checkpoint
 
@@ -120,7 +124,7 @@ Navigate to a path that doesn't correspond to a real file in your S3 bucket:
 curl -I https://YOUR_DISTRIBUTION_DOMAIN/dashboard/settings
 ```
 
-You should get `200 OK` with `content-type: text/html`. This confirms that the custom error response is working — CloudFront is serving `index.html` for missing paths.
+You should get `200 OK` with `content-type: text/html`. This confirms that the custom error response is working—CloudFront is serving `index.html` for missing paths.
 
 ### Checkpoint
 

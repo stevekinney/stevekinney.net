@@ -5,7 +5,7 @@ description: >-
   header injection, geolocation-based routing, and lightweight authentication
   checks.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - edge-functions
@@ -13,6 +13,8 @@ tags:
 ---
 
 Edge functions solve a specific category of problems: things you need to do on every request (or every response) before the client or origin sees the traffic. On platforms like Vercel or Netlify, this logic lives in configuration files, middleware, or edge functions with similar names. On AWS, it lives in CloudFront Functions or Lambda@Edge, depending on the complexity. In my experience, the URL rewrite and redirect cases come up constantly—the rest are situational but worth knowing.
+
+If you want AWS's version of the runtime behavior while you read, the [CloudFront Functions guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) is the official reference.
 
 This lesson covers the most common use cases for frontend engineers. Each one includes a short code snippet you can adapt. For the full comparison of when to use CloudFront Functions versus Lambda@Edge, refer back to [Lambda@Edge vs CloudFront Functions](edge-compute-comparison.md).
 

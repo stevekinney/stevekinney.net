@@ -4,7 +4,7 @@ description: >-
   Connect the full request loop from frontend through API Gateway to Lambda to
   DynamoDB, including IAM permissions and a complete CRUD handler.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - dynamodb
@@ -14,6 +14,8 @@ tags:
 ---
 
 You have all the pieces: a DynamoDB table to store data, a Lambda function to run code, and an API Gateway to expose it over HTTP. Now you connect them into the loop that every full-stack frontend application needs: your React app makes an HTTP request, API Gateway routes it to Lambda, Lambda reads from or writes to DynamoDB, and the response flows back to the browser.
+
+If you want AWS's version of the table access model while you read, the [DynamoDB Developer Guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html) is the official reference.
 
 This is the moment the course goes from "I can deploy static files" to "I have a working backend."
 
@@ -68,6 +70,10 @@ Save this as `lambda-dynamodb-policy.json`:
 
 This follows the principle of least privilege from [Principle of Least Privilege](principle-of-least-privilege.md): the function can read, write, update, delete, and query items—but only on this specific table. It can't create or delete tables, it can't scan the entire table, and it can't touch any other table in your account.
 
+In the console, you can create this policy in the IAM **Create policy** JSON editor—the same place you defined the execution role trust policy.
+
+![The IAM Create Policy JSON editor showing a policy with DynamoDB actions including PutItem, GetItem, UpdateItem, and Query scoped to a specific table ARN.](assets/iam-lambda-dynamodb-policy.png)
+
 Create and attach the policy:
 
 ```bash
@@ -117,7 +123,7 @@ Expected output:
 
 ## The Complete Handler
 
-Here's a complete Lambda handler that implements a CRUD API for items stored in DynamoDB. This is the handler you'd deploy behind the API Gateway you set up in Module 8.
+Here's a complete Lambda handler that implements a CRUD API for items stored in DynamoDB. This is the handler you'd deploy behind the API Gateway you set up earlier in the course.
 
 ```typescript
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
@@ -257,7 +263,11 @@ aws lambda update-function-configuration \
   --output json
 ```
 
-The handler already reads from `process.env.TABLE_NAME` with a fallback to `my-frontend-app-data`, so this change doesn't require a code update. But now you can point the same code at a different table by changing the environment variable—useful when you have a `my-frontend-app-data-dev` table for development.
+The handler already reads from `process.env.TABLE_NAME` with a fallback to `my-frontend-app-data`, so this change doesn't require a code update.
+
+In the console, the **Configuration → Environment variables** section shows `TABLE_NAME` alongside any other variables the function uses.
+
+![The Lambda Edit environment variables form showing TABLE_NAME set to frontend-items.](assets/lambda-env-table-name.png) But now you can point the same code at a different table by changing the environment variable—useful when you have a `my-frontend-app-data-dev` table for development.
 
 ## Deploying and Testing
 
@@ -341,12 +351,12 @@ This is the same `fetch` API you use in any frontend application. The only diffe
 
 Take a step back and look at what's running:
 
-- **S3** hosts your static frontend files (Module 2)
-- **CloudFront** serves them globally with HTTPS (Module 4)
-- **Route 53** points your domain at CloudFront (Module 5)
-- **API Gateway** provides an HTTP endpoint for your API (Module 8)
-- **Lambda** runs your backend logic (Module 7)
+- **S3** hosts your static frontend files.
+- **CloudFront** serves them globally with HTTPS.
+- **Route 53** points your domain at CloudFront.
+- **API Gateway** provides an HTTP endpoint for your API.
+- **Lambda** runs your backend logic.
 - **DynamoDB** stores your data (this module)
-- **IAM** ties it all together with least-privilege permissions (Module 1)
+- **IAM** ties it all together with least-privilege permissions.
 
 That's a complete, production-capable full-stack application running on serverless infrastructure. No servers to manage. No databases to patch. No connection pools to tune. You pay for what you use, and at low traffic, what you use costs nearly nothing.

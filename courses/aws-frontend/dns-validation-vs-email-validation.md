@@ -3,7 +3,7 @@ title: 'DNS Validation vs. Email Validation'
 description: >-
   Complete domain validation for your ACM certificate using DNS or email, and understand why DNS validation is the better choice.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-04-01
 tags:
   - aws
   - acm
@@ -11,7 +11,11 @@ tags:
   - validation
 ---
 
-You've requested a certificate in ACM and it's sitting at **Pending validation**. ACM needs you to prove that you own the domain before it'll issue the certificate. This isn't an AWS-specific requirement — every Certificate Authority does this. The question is how you prove it. ACM gives you two options: **DNS validation** and **email validation**. DNS validation is almost always the right choice, and by the end of this lesson you'll understand why.
+You've requested a certificate in ACM and it's sitting at **Pending validation**. ACM needs you to prove that you own the domain before it'll issue the certificate. This isn't an AWS-specific requirement—every Certificate Authority does this. The question is how you prove it. ACM gives you two options: **DNS validation** and **email validation**. DNS validation is almost always the right choice, and by the end of this lesson you'll understand why.
+
+If you want AWS's version of the validation behavior while you read, the [ACM DNS validation guide](https://docs.aws.amazon.com/acm/latest/userguide/dns-validation.html) is the canonical reference.
+
+![Side-by-side comparison of ACM DNS validation and email validation, including issuance steps and renewal behavior.](assets/certificate-validation-methods.svg)
 
 ## What Validation Actually Proves
 
@@ -92,11 +96,11 @@ If your DNS is hosted elsewhere (GoDaddy, Cloudflare, Namecheap), you add the CN
 
 DNS validation wins on three fronts:
 
-1. **Auto-renewal**: This is the big one. ACM uses the same CNAME record to re-validate the domain when the certificate comes up for renewal. As long as the record stays in your DNS, ACM renews the certificate automatically — no human intervention, no emails to respond to, no risk of the certificate expiring because someone was on vacation.
+1. **Auto-renewal**: This is the big one. ACM uses the same CNAME record to re-validate the domain when the certificate comes up for renewal. As long as the record stays in your DNS, ACM renews the certificate automatically—no human intervention, no emails to respond to, no risk of the certificate expiring because someone was on vacation.
 
 2. **No email infrastructure required**: Email validation requires that someone receive and click a link in an email sent to specific addresses at your domain. If you don't have email set up for your domain (and many frontend engineers running side projects don't), email validation is a non-starter.
 
-3. **Scriptable**: You can automate the entire certificate request and validation process with the CLI. Request the certificate, extract the CNAME records, create them in Route 53, wait for validation — all in a shell script or CI pipeline. Email validation requires a human clicking a link.
+3. **Scriptable**: You can automate the entire certificate request and validation process with the CLI. Request the certificate, extract the CNAME records, create them in Route 53, wait for validation—all in a shell script or CI pipeline. Email validation requires a human clicking a link.
 
 ## Email Validation: When You Might Need It
 
@@ -112,10 +116,10 @@ It also sends to the domain's WHOIS contact addresses (if they're not privacy-pr
 
 The email contains a link. Click the link, and the domain is validated. Simple enough in theory, but fragile in practice.
 
-Email validation exists for cases where you genuinely can't modify DNS records — maybe your DNS is managed by a different team with a slow change process, or your DNS provider's API doesn't support CNAME records for the validation subdomain. These situations are uncommon enough that most people never encounter them.
+Email validation exists for cases where you genuinely can't modify DNS records—maybe your DNS is managed by a different team with a slow change process, or your DNS provider's API doesn't support CNAME records for the validation subdomain. These situations are uncommon enough that most people never encounter them.
 
 > [!WARNING]
-> Email-validated certificates do **not** auto-renew through ACM. When the certificate approaches expiration, ACM sends another validation email. If nobody responds to that email, the certificate expires and your site goes down. For any production deployment, DNS validation is the only responsible choice. I've seen this happen — it's not fun.
+> Email-validated certificates do **not** auto-renew through ACM. When the certificate approaches expiration, ACM sends another validation email. If nobody responds to that email, the certificate expires and your site goes down. For any production deployment, DNS validation is the only responsible choice. I've seen this happen—it's not fun.
 
 ## Checking Validation Status
 
@@ -171,4 +175,6 @@ aws acm describe-certificate \
 
 ## The Bottom Line
 
-Use DNS validation. Add the CNAME record, leave it in place forever, and never think about certificate renewal again. Email validation is a vestige of a time before DNS automation was widespread — it still exists for edge cases, but for a frontend engineer deploying to AWS with CloudFront, DNS validation is the only path that scales.
+Use DNS validation. Add the CNAME record, leave it in place forever, and never think about certificate renewal again. Email validation is a vestige of a time before DNS automation was widespread—it still exists for edge cases, but for a frontend engineer deploying to AWS with CloudFront, DNS validation is the only path that scales.
+
+Next, you'll put that issued certificate to work by attaching it to CloudFront and moving from "I own the domain" to "the CDN can actually serve it over HTTPS."

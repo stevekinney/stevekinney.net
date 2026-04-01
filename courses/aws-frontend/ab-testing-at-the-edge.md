@@ -4,7 +4,7 @@ description: >-
   Implement an A/B testing mechanism using edge functions that routes users to
   different content versions based on cookies or random assignment.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - edge-functions
@@ -12,6 +12,8 @@ tags:
 ---
 
 A/B testing on the frontend usually involves a client-side library like LaunchDarkly or Optimizely that swaps content after the page loads. The problem: there's a flash of content, a layout shift, or a delay while the library initializes and decides which variant to show. Your Lighthouse score takes the hit.
+
+If you want AWS's version of the runtime behavior while you read, the [CloudFront Functions guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) is the official reference.
 
 Edge functions eliminate this problem entirely. The routing decision happens **before** the response reaches the browser. The user gets one version of the page—no flicker, no client-side SDK, no additional JavaScript bundle. From the user's perspective, there's no A/B test happening at all.
 

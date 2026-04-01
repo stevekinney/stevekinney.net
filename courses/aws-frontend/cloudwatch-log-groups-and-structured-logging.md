@@ -5,7 +5,7 @@ description: >-
   logging in your Lambda functions, and query logs using CloudWatch Logs
   Insights.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-04-01
 tags:
   - aws
   - cloudwatch
@@ -13,9 +13,13 @@ tags:
   - structured-logging
 ---
 
-Every `console.log` you've written in your Lambda functions has been landing in CloudWatch Logs since [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md). The logs are there — but if you've ever tried to find a specific error in an unstructured wall of text, you know that having logs and being able to use them are two different things.
+Every `console.log` you've written in your Lambda functions has been landing in CloudWatch Logs since [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md). The logs are there—but if you've ever tried to find a specific error in an unstructured wall of text, you know that having logs and being able to use them are two different things.
 
-In this lesson, you'll learn how CloudWatch organizes logs, how to switch from `console.log('something happened')` to structured JSON logging, and how to query your logs with CloudWatch Logs Insights — a SQL-like query language that makes your logs actually searchable.
+If you want AWS's version of the logging service surface while you read, the [CloudWatch overview](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html) is the official reference to keep nearby.
+
+In this lesson, you'll learn how CloudWatch organizes logs, how to switch from `console.log('something happened')` to structured JSON logging, and how to query your logs with CloudWatch Logs Insights—a SQL-like query language that makes your logs actually searchable.
+
+![Diagram showing a Lambda log group containing multiple log streams, a JSON log entry, and a Logs Insights query reading the structured fields.](assets/cloudwatch-log-groups-and-structured-logging.svg)
 
 ## Log Groups and Log Streams
 
@@ -23,7 +27,7 @@ CloudWatch organizes logs into two levels: **log groups** and **log streams**.
 
 A **log group** is a container for logs from a single source. Lambda creates one automatically for each function, following the naming convention `/aws/lambda/<function-name>`. Your function gets `/aws/lambda/my-frontend-app-api`. API Gateway can also write to log groups if you enable access logging (covered in [API Gateway Stages and Custom Domains](api-gateway-stages-and-custom-domains.md)).
 
-A **log stream** is a sequence of log events within a log group. Lambda creates a new log stream for each execution environment. If your function scales to three concurrent environments, you'll see three log streams. Each stream's name includes the date and a unique identifier — something like `2026/03/18/[$LATEST]a1b2c3d4e5f6`.
+A **log stream** is a sequence of log events within a log group. Lambda creates a new log stream for each execution environment. If your function scales to three concurrent environments, you'll see three log streams. Each stream's name includes the date and a unique identifier—something like `2026/03/18/[$LATEST]a1b2c3d4e5f6`.
 
 To see your log groups from the CLI:
 
@@ -161,7 +165,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 The key difference: instead of `console.log('Error:', error.message)`, you write `console.log(JSON.stringify({ level: 'ERROR', message: 'Request failed', error: error.message }))`. Each log entry is a single-line JSON object that CloudWatch can parse and index.
 
 > [!TIP]
-> You don't need a logging library. A simple `log` helper function that calls `console.log(JSON.stringify(entry))` is all you need for Lambda. Libraries like `pino` or `winston` add features you generally don't need in a serverless context — structured JSON output is the goal, and `JSON.stringify` gets you there.
+> You don't need a logging library. A simple `log` helper function that calls `console.log(JSON.stringify(entry))` is all you need for Lambda. Libraries like `pino` or `winston` add features you generally don't need in a serverless context—structured JSON output is the goal, and `JSON.stringify` gets you there.
 
 ## Querying with CloudWatch Logs Insights
 
@@ -223,7 +227,7 @@ filter level = "INFO" and message = "Request completed"
 
 ### Running Insights Queries from the CLI
 
-You can run Insights queries from the command line using `aws logs start-query` and `aws logs get-query-results`. The query runs asynchronously — you start it, get a query ID, and then poll for results.
+You can run Insights queries from the command line using `aws logs start-query` and `aws logs get-query-results`. The query runs asynchronously—you start it, get a query ID, and then poll for results.
 
 ```bash
 aws logs start-query \
@@ -284,6 +288,6 @@ fields @timestamp, message, error, duration
 
 Results appear in seconds, with every field neatly extracted. You see the error message, the request duration, and the timestamp for each failure. No scrolling, no guessing.
 
-The five minutes you spend switching to structured logging pays for itself the first time you debug a production issue at 11 PM. I learned this the hard way — nothing quite like scrolling through unstructured text at midnight wishing you'd spent those five minutes earlier.
+The five minutes you spend switching to structured logging pays for itself the first time you debug a production issue at 11 PM. I learned this the hard way—nothing quite like scrolling through unstructured text at midnight wishing you'd spent those five minutes earlier.
 
 Now that your logs are structured and queryable, it's time to look at the other side of CloudWatch: the metrics that Lambda, API Gateway, and DynamoDB publish automatically. In the next lesson, you'll build a dashboard that gives you a single view of your application's health.

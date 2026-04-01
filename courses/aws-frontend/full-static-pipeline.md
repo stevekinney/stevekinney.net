@@ -3,7 +3,7 @@ title: 'The Full Static Site Pipeline'
 description: >-
   Walk through the end-to-end architecture of deploying a static site to AWS, connecting S3, CloudFront, ACM, and Route 53 into a working pipeline.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - deployment
@@ -15,7 +15,9 @@ tags:
 
 Imagine someone typing `https://summitsupply.com` into the browser to check whether the new spring camping gear is live yet. They do not care that your storefront is really a private S3 bucket behind CloudFront with a certificate from ACM and DNS in Route 53. They care that the page loads fast, uses HTTPS, and does not fall over when they refresh a deep route. That invisible plumbing is the pipeline you are building now.
 
-You've spent five modules learning individual AWS services. You can create an S3 bucket, request a certificate, configure a CloudFront distribution, and point a domain at it. Each piece works on its own. But the value is in how they compose: a user types your domain into a browser, DNS resolves to CloudFront, CloudFront serves cached content from S3 over HTTPS with your certificate, and the whole thing costs pennies. That's the pipeline. This lesson maps out the architecture end to end and explains the order of operations: what you create first, what depends on what, and why.
+You've spent the early static-hosting arc learning individual AWS services. You can create an S3 bucket, get control of a domain, request a certificate, configure a CloudFront distribution, and point that domain at it. Each piece works on its own. But the value is in how they compose: a user types your domain into a browser, DNS resolves to CloudFront, CloudFront serves cached content from S3 over HTTPS with your certificate, and the whole thing costs pennies. That's the pipeline. This lesson maps out the architecture end to end and explains the order of operations: what you create first, what depends on what, and why.
+
+If you want AWS's canonical building blocks open next to this lesson, keep the [S3 static website tutorial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html), the [CloudFront OAC guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html), and the [Route 53 DNS configuration guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring.html) nearby.
 
 ## Why This Matters
 
@@ -24,6 +26,8 @@ This is the first moment the course stops being "a bunch of AWS services you now
 ## Builds On
 
 - [Creating and Configuring a Bucket](creating-and-configuring-a-bucket.md)
+- [Registering and Transferring Domains](registering-and-transferring-domains.md)
+- [Hosted Zones and Record Types](hosted-zones-and-record-types.md)
 - [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md)
 - [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md)
 - [Pointing a Domain to CloudFront](pointing-a-domain-to-cloudfront.md)
@@ -49,20 +53,26 @@ Four services, four clearly defined responsibilities. No servers. No containers.
 
 ## The Order of Operations
 
-The order matters. You can't attach a certificate to a distribution that doesn't exist. You can't create an alias record for a distribution that has no alternate domain name. Here's the correct sequence and why each step depends on the previous one.
+The order matters. You can't validate a certificate for a domain you don't control. You can't create an alias record for a distribution that has no alternate domain name. Here's the sequence that keeps the dependency chain honest.
 
 ### Create the S3 Bucket
 
-The bucket is the foundation: it holds your files. Nothing else in the pipeline depends on S3 being configured in a specific way at creation time — you can always update the bucket policy later. You covered this in [Creating and Configuring a Bucket](creating-and-configuring-a-bucket.md) and uploaded files in [Uploading and Organizing Files](uploading-and-organizing-files.md).
+The bucket is still the storage foundation: it holds your files. Nothing else in the pipeline depends on S3 being configured in a specific way at creation time—you can always update the bucket policy later. You covered this in [Creating and Configuring a Bucket](creating-and-configuring-a-bucket.md) and uploaded files in [Uploading and Organizing Files](uploading-and-organizing-files.md).
 
-At this stage, the bucket can be public or private. It doesn't matter yet because you'll lock it down with Origin Access Control once CloudFront is in place.
+At this stage, the bucket can be public or private. The course has you make it public temporarily so you can see direct S3 hosting in isolation. That is the learning checkpoint, not the end state. The end state is private bucket plus CloudFront plus OAC.
+
+### Establish Domain Control and DNS Authority
+
+This is the dependency people usually discover the hard way. Before ACM can issue anything, you need a real domain and a place to publish DNS records for it. That means choosing whether the domain lives in Route 53 or at another registrar, and making sure Route 53 is authoritative if you want to use it for validation and final routing.
+
+You covered that in [Registering and Transferring Domains](registering-and-transferring-domains.md) and [Hosted Zones and Record Types](hosted-zones-and-record-types.md). By the end of that work, you should know who the registrar is, whether the nameservers are correct, and which hosted zone ACM should target.
 
 ### Request the ACM Certificate
 
-The certificate must exist and be in the `ISSUED` state before you can attach it to a CloudFront distribution. Certificate validation (especially DNS validation) can take minutes, so you want to start this early. You requested a certificate in [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md) and validated it in [DNS Validation vs. Email Validation](dns-validation-vs-email-validation.md).
+The certificate must exist and be in the `ISSUED` state before you can attach it to a CloudFront distribution. Certificate validation can take minutes, and it depends on the DNS authority you established in the previous step. You requested a certificate in [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md) and validated it in [DNS Validation vs. Email Validation](dns-validation-vs-email-validation.md).
 
 > [!WARNING]
-> The certificate must be in `us-east-1`. CloudFront is a global service, but it only reads certificates from `us-east-1`. You covered this requirement in [Certificate Renewal and us-east-1](certificate-renewal-and-us-east-1.md). If your certificate is in any other region, CloudFront won't see it.
+> The certificate must be in `us-east-1`. CloudFront is a global service, but it only reads certificates from `us-east-1`. You covered this requirement in [Certificate Renewal and the us-east-1 Requirement](certificate-renewal-and-us-east-1.md). If your certificate is in any other region, CloudFront won't see it.
 
 ### Create the CloudFront Distribution with OAC
 
@@ -80,7 +90,7 @@ After creating the distribution, you update the S3 bucket policy to allow only t
 
 DNS comes last because the alias record needs to point at something that exists. You create A alias records for `example.com` and `www.example.com` that resolve to your CloudFront distribution. You did this in [Pointing a Domain to CloudFront](pointing-a-domain-to-cloudfront.md) and learned why alias records are the right choice in [Alias Records vs. CNAME Records](alias-records-vs-cname-records.md).
 
-Once DNS propagates, users can visit `https://example.com` and reach your static site through the full pipeline.
+Once the alias records propagate, users can visit `https://example.com` and reach your static site through the full pipeline.
 
 > [!TIP]
 > If your domain is registered outside Route 53, you need to update the nameservers at your registrar to point to Route 53's nameservers. This was covered in [Registering and Transferring Domains](registering-and-transferring-domains.md). DNS propagation can take up to 48 hours when changing nameservers, though it's often faster.
@@ -96,11 +106,12 @@ flowchart RL
     ACM["ACM"] --> CloudFront
 ```
 
+- ACM depends on domain control and authoritative DNS.
 - CloudFront depends on S3 (as its origin) and ACM (for the certificate).
-- Route 53 depends on CloudFront (as the alias target).
-- S3 and ACM are independent of each other and can be created in parallel.
+- Final Route 53 alias records depend on CloudFront (as the alias target).
+- S3 can be built in parallel with the domain and certificate work, but the learner experience is clearer when you understand both sides before assembling them.
 
-If you try to create Route 53 records before the distribution exists, the alias target doesn't resolve. If you try to attach a certificate before it's issued, CloudFront rejects the configuration. If you try to configure OAC before the distribution exists, there's nothing to attach it to. The order isn't arbitrary: it's dictated by the dependencies between services.
+If you try to request a certificate before you can publish DNS validation records, you stall out. If you try to create Route 53 alias records before the distribution exists, the alias target doesn't resolve. If you try to attach a certificate before it's issued, CloudFront rejects the configuration. If you try to configure OAC before the distribution exists, there's nothing to attach it to. The order isn't arbitrary: it's dictated by the dependencies between services.
 
 ## The IAM Permissions That Make It Work
 

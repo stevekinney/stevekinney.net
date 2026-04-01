@@ -3,7 +3,7 @@ title: 'Certificate Renewal and the us-east-1 Requirement'
 description: >-
   Understand how ACM auto-renews certificates and why CloudFront certificates must live in us-east-1.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-04-01
 tags:
   - aws
   - acm
@@ -11,7 +11,19 @@ tags:
   - us-east-1
 ---
 
-Certificate expiration is one of those problems that doesn't feel urgent until your site is down at 2 a.m. on a Saturday. A valid certificate quietly does its job. An expired certificate triggers a full-page browser warning that tells your users "this site may be trying to steal your information." There's no graceful fallback — the browser blocks the connection entirely. ACM's auto-renewal is the feature that keeps this from happening, but it only works if you set things up correctly.
+Certificate expiration is one of those problems that doesn't feel urgent until your site is down at 2 a.m. on a Saturday. A valid certificate quietly does its job. An expired certificate triggers a full-page browser warning that tells your users "this site may be trying to steal your information." There's no graceful fallback—the browser blocks the connection entirely. ACM's auto-renewal is the feature that keeps this from happening, but it only works if you set things up correctly.
+
+If you want AWS's official framing for the certificate behavior in this lesson, the [AWS Certificate Manager User Guide](https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html) is the source of truth.
+
+```mermaid
+flowchart LR
+    Request["Request certificate in us-east-1"] --> Validate["Validate with DNS CNAME"]
+    Validate --> Attach["Attach certificate to CloudFront"]
+    Attach --> Renew["ACM starts renewal 60 days before expiry"]
+    Renew --> Check{"CNAME still present<br/>and certificate still in use?"}
+    Check -- "Yes" --> Reissue["Renew in place with the same ARN"]
+    Check -- "No" --> Alerts["Health and EventBridge notifications"]
+```
 
 ## How ACM Auto-Renewal Works
 
@@ -19,7 +31,7 @@ ACM public certificates are valid for **13 months** (395 days). Starting **60 da
 
 ### DNS-Validated Certificates
 
-For certificates validated with DNS, ACM checks whether the original CNAME validation record is still present in your DNS. If it is, ACM validates the domain and issues a renewed certificate. The new certificate has the same ARN as the old one — any CloudFront distribution, load balancer, or API Gateway endpoint using that ARN automatically picks up the renewed certificate with zero downtime and zero manual intervention. It's honestly one of the best "set it and forget it" features in all of AWS.
+For certificates validated with DNS, ACM checks whether the original CNAME validation record is still present in your DNS. If it is, ACM validates the domain and issues a renewed certificate. The new certificate has the same ARN as the old one—any CloudFront distribution, load balancer, or API Gateway endpoint using that ARN automatically picks up the renewed certificate with zero downtime and zero manual intervention. It's honestly one of the best "set it and forget it" features in all of AWS.
 
 This is why DNS validation is the default recommendation in [DNS Validation vs. Email Validation](dns-validation-vs-email-validation.md): **the CNAME record is the key to automatic renewal**. Remove it and ACM can't re-validate the domain. Keep it and renewal is invisible.
 
@@ -82,7 +94,7 @@ If `RenewalEligibility` shows `INELIGIBLE`, investigate immediately. Check that 
 
 This is the constraint that trips up nearly every engineer the first time they use ACM with CloudFront. It deserves a full explanation.
 
-**CloudFront** is a global CDN. Your CloudFront distribution doesn't live in a single region — it operates across hundreds of edge locations worldwide. But CloudFront's control plane, the system that manages distribution configurations, runs in `us-east-1`. When you attach a certificate to a CloudFront distribution, CloudFront looks for that certificate in the ACM registry in `us-east-1` and nowhere else.
+**CloudFront** is a global CDN. Your CloudFront distribution doesn't live in a single region—it operates across hundreds of edge locations worldwide. But CloudFront's control plane, the system that manages distribution configurations, runs in `us-east-1`. When you attach a certificate to a CloudFront distribution, CloudFront looks for that certificate in the ACM registry in `us-east-1` and nowhere else.
 
 This means:
 
@@ -92,7 +104,7 @@ This means:
 - There's no way to copy or move a certificate between regions. If you created it in the wrong region, you need to request a new one in `us-east-1`.
 
 > [!WARNING]
-> CloudFront certificates **must** be in `us-east-1`. If you provision your certificate in any other region, it won't appear in the CloudFront console and can't be attached via the CLI. This isn't a bug — it's by design. CloudFront is a global service with a control plane in `us-east-1`, and all global resources (certificates, WAF rules, Lambda@Edge functions) must be provisioned there.
+> CloudFront certificates **must** be in `us-east-1`. If you provision your certificate in any other region, it won't appear in the CloudFront console and can't be attached via the CLI. This isn't a bug—it's by design. CloudFront is a global service with a control plane in `us-east-1`, and all global resources (certificates, WAF rules, Lambda@Edge functions) must be provisioned there.
 
 ### The "I Can't Find My Certificate" Debugging Flow
 
@@ -121,7 +133,7 @@ aws acm list-certificates \
 
 ### Other Services Are Different
 
-This `us-east-1` requirement is specific to CloudFront (and a few other global services like AWS Global Accelerator). If you're using ACM with an Application Load Balancer or API Gateway, the certificate needs to be in the same region as that resource — not necessarily `us-east-1`.
+This `us-east-1` requirement is specific to CloudFront (and a few other global services like AWS Global Accelerator). If you're using ACM with an Application Load Balancer or API Gateway, the certificate needs to be in the same region as that resource—not necessarily `us-east-1`.
 
 For this course, since your frontend is served through CloudFront, `us-east-1` is the only region that matters for ACM. Every `aws acm` command in this course explicitly includes `--region us-east-1`, and yours should too.
 

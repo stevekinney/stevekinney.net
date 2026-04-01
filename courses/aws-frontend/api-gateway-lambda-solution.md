@@ -4,7 +4,7 @@ description: >-
   Complete solution for the API Gateway and Lambda exercise, with all commands,
   handler code, and expected output.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - api-gateway
@@ -19,6 +19,9 @@ Here's the complete solution for every step, including the handler code, all CLI
 - HTTP API routes hand the whole request to one Lambda function, which keeps the gateway configuration simple and pushes application logic into normal TypeScript code.
 - Lambda permission is the hidden dependency that makes the integration real. Without it, the API exists but cannot invoke anything.
 - The browser test matters because a backend that works in `curl` but fails on CORS is still broken for a frontend team.
+
+> [!TIP]
+> If you want AWS's version of the route, integration, and CORS workflow open while you work, keep the [HTTP APIs documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html), the [Lambda integration guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html), and the [HTTP API CORS guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html) nearby.
 
 ## The Handler
 
@@ -112,7 +115,7 @@ Expected: `dist/handler.js` is created with no errors. `function.zip` contains t
 
 ### Update Existing Function
 
-If you have the function from the Module 7 exercise:
+If you have the function from the Lambda exercise:
 
 ```bash
 aws lambda update-function-code \
@@ -318,6 +321,10 @@ aws apigatewayv2 get-routes \
 
 Expected: Two routes with route keys `GET /items` and `POST /items`, both targeting the same integration.
 
+In the console, the **Routes** page shows both routes listed under the API.
+
+![The API Gateway Routes page showing the ANY / route created for the my-frontend-api HTTP API.](assets/apigateway-exercise-routes-configured.png)
+
 ## Grant Permission
 
 ```bash
@@ -485,7 +492,7 @@ export default function Items() {
 Open the browser, verify the items list loads, add a new item using the form, and confirm it appears in the list. Check the DevTools Network tab to verify both requests succeed with 200/201 status codes and no CORS errors.
 
 > [!WARNING]
-> The in-memory `items` array in the Lambda handler resets on every cold start. If you add an item through POST and then wait a few minutes (long enough for Lambda to recycle the execution environment), the item will be gone. This is expected—in-memory state isn't persistent. In Module 10, you'll replace this array with DynamoDB for durable storage.
+> The in-memory `items` array in the Lambda handler resets on every cold start. If you add an item through POST and then wait a few minutes (long enough for Lambda to recycle the execution environment), the item will be gone. This is expected—in-memory state isn't persistent. In the DynamoDB section, you'll replace this array with DynamoDB for durable storage.
 
 ## Stretch Goal: `GET /items/{id}`
 

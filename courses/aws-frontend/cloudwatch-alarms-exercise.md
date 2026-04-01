@@ -4,20 +4,23 @@ description: >-
   Create CloudWatch alarms for error rate and duration, wire them to SNS email
   notifications, and trigger alarms intentionally to verify the pipeline.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - cloudwatch
   - exercise
 ---
 
-You're going to build a complete alerting pipeline from scratch — an SNS topic, an email subscription, and two CloudWatch alarms that watch your Lambda function's error rate and duration. Then you'll intentionally trigger the alarms to prove the pipeline works end to end.
+You're going to build a complete alerting pipeline from scratch—an SNS topic, an email subscription, and two CloudWatch alarms that watch your Lambda function's error rate and duration. Then you'll intentionally trigger the alarms to prove the pipeline works end to end.
+
+> [!TIP]
+> If you want AWS's version of the alarm flow open while you work, keep the [CloudWatch overview](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html) nearby. It is the fastest way to sanity-check console labels and alarm terminology when the UI drifts.
 
 This is the same monitoring setup you'd use for any production Lambda function. Get it working here, and you can replicate it for every function you deploy.
 
 ## Why It Matters
 
-Dashboards require you to look at them. Logs require you to search them. Neither one wakes you up when something breaks at 2 AM. Alarms are the piece that closes the loop — they watch your metrics continuously and notify you the moment something crosses a threshold. Without alarms, the gap between "something broke" and "someone noticed" is however long it takes a user to file a complaint. I've been on both sides of that gap, and the alarm side is _definitively_ better.
+Dashboards require you to look at them. Logs require you to search them. Neither one wakes you up when something breaks at 2 AM. Alarms are the piece that closes the loop—they watch your metrics continuously and notify you the moment something crosses a threshold. Without alarms, the gap between "something broke" and "someone noticed" is however long it takes a user to file a complaint. I've been on both sides of that gap, and the alarm side is _definitively_ better.
 
 ## Your Task
 
@@ -96,7 +99,7 @@ You can test the notification pipeline without waiting for real errors by manual
 
 1. Use `aws cloudwatch set-alarm-state` to force `my-frontend-app-api-error-count` into the `ALARM` state with a reason of `"Testing alarm notification pipeline"`
 2. Check your email for the SNS notification
-3. Wait a few minutes — the alarm will return to its actual state on the next evaluation
+3. Wait a few minutes—the alarm will return to its actual state on the next evaluation
 
 ### Checkpoint
 
@@ -162,7 +165,7 @@ Two alarms are listed, both pointing to the same SNS topic, with the correct met
 
 ## Stretch Goals
 
-- **Add a 5XX alarm for API Gateway.** Create a third alarm that watches the `5XXError` metric in the `AWS/ApiGateway` namespace. Use a threshold of 0 and a single evaluation period — any server error should trigger immediately.
+- **Add a 5XX alarm for API Gateway.** Create a third alarm that watches the `5XXError` metric in the `AWS/ApiGateway` namespace. Use a threshold of 0 and a single evaluation period—any server error should trigger immediately.
 
 - **Add an OK action to the duration alarm.** Update the duration alarm to also notify you when it transitions back to `OK`. Use `aws cloudwatch put-metric-alarm` with the same parameters plus `--ok-actions`.
 

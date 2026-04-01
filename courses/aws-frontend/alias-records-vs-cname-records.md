@@ -3,7 +3,7 @@ title: 'Alias Records vs. CNAME Records'
 description: >-
   Understand the difference between Route 53 alias records and standard CNAME records, and why alias records are preferred for AWS resources.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-04-01
 tags:
   - aws
   - route53
@@ -11,13 +11,17 @@ tags:
   - alias
 ---
 
-If you've managed DNS before, you've probably created CNAME records. They're the standard way to make one domain name point to another. But when you were creating records in [Pointing a Domain to CloudFront](pointing-a-domain-to-cloudfront.md), you used something called an "alias record" instead. This wasn't an arbitrary choice — alias records solve specific problems that CNAME records can't, and understanding the difference will save you from one of the most common DNS configuration mistakes.
+If you've managed DNS before, you've probably created CNAME records. They're the standard way to make one domain name point to another. But the moment you try to point the bare domain at CloudFront, CNAME starts falling apart. This is where Route 53's alias records come in. They solve a specific problem that standard DNS does not solve cleanly, and understanding that difference will save you from one of the most common custom-domain mistakes.
+
+If you want AWS's side-by-side version of this decision, the [Route 53 guide to alias versus non-alias records](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html) is the official reference.
+
+![Diagram showing why a zone apex cannot use a CNAME because NS and SOA already exist there, and how Route 53 alias records resolve a CloudFront distribution instead.](assets/alias-vs-cname-apex-routing.svg)
 
 ## The Zone Apex Problem
 
 Here's the core issue: **CNAME records can't be used at the zone apex**.
 
-The zone apex is your bare domain — `example.com` without any prefix. Every DNS zone requires NS and SOA records at the apex (you saw these created automatically in [Hosted Zones and Record Types](hosted-zones-and-record-types.md)). The DNS specification (RFC 1034) says that if a CNAME record exists for a name, no other record types can exist for that same name. Since NS and SOA records must exist at the apex, a CNAME record there would violate the spec.
+The zone apex is your bare domain—`example.com` without any prefix. Every DNS zone requires NS and SOA records at the apex (you saw these created automatically in [Hosted Zones and Record Types](hosted-zones-and-record-types.md)). The DNS specification (RFC 1034) says that if a CNAME record exists for a name, no other record types can exist for that same name. Since NS and SOA records must exist at the apex, a CNAME record there would violate the spec.
 
 This means you can't do this:
 
@@ -33,13 +37,13 @@ For subdomains, CNAME records are fine:
 www.example.com.    300    IN    CNAME    d111111abcdef8.cloudfront.net.
 ```
 
-This works because `www.example.com` isn't the zone apex — there are no NS or SOA records there to conflict with.
+This works because `www.example.com` isn't the zone apex—there are no NS or SOA records there to conflict with.
 
 But most frontend deployments need to work at the bare domain. Users type `example.com`, not `www.example.com`. You need a way to point `example.com` at your CloudFront distribution without using a CNAME. That's what alias records are for.
 
 ## What an Alias Record Is
 
-An **alias record** is a Route 53-specific extension to DNS. From the outside — from the perspective of a DNS resolver querying your domain — an alias record looks exactly like a standard A or AAAA record. The resolver asks for the A record of `example.com` and gets back an IP address. It has no idea that behind the scenes, Route 53 looked up the current IP addresses of your CloudFront distribution and returned those. (This is one of those things that I think is genuinely clever about Route 53's design.)
+An **alias record** is a Route 53-specific extension to DNS. From the outside—from the perspective of a DNS resolver querying your domain—an alias record looks exactly like a standard A or AAAA record. The resolver asks for the A record of `example.com` and gets back an IP address. It has no idea that behind the scenes, Route 53 looked up the current IP addresses of your CloudFront distribution and returned those. (This is one of those things that I think is genuinely clever about Route 53's design.)
 
 The key difference is in how you configure it. Instead of specifying an IP address, you specify an AWS resource:
 
@@ -88,7 +92,7 @@ With a CNAME, every query is billed. With an alias record, it's zero.
 
 ### They Resolve in One Step
 
-A CNAME adds an extra DNS lookup. When a resolver encounters a CNAME, it has to make a second query to resolve the target domain name. An alias record resolves directly to IP addresses — Route 53 handles the lookup internally and returns the answer in a single response. One fewer round trip means marginally faster DNS resolution.
+A CNAME adds an extra DNS lookup. When a resolver encounters a CNAME, it has to make a second query to resolve the target domain name. An alias record resolves directly to IP addresses—Route 53 handles the lookup internally and returns the answer in a single response. One fewer round trip means marginally faster DNS resolution.
 
 ## When to Use Each
 
@@ -112,13 +116,13 @@ Not every AWS service can be an alias target. Here are the ones you'll encounter
 - **API Gateway custom domain names**: Alias targets are available when you configure a custom domain in API Gateway.
 - **Another Route 53 record in the same hosted zone**: You can alias one record to another within the same zone.
 
-Each target has its own hosted zone ID. CloudFront always uses `Z2FDTNDATAQYW2`. S3 varies by region. You don't need to memorize these — the AWS documentation lists them, and the Route 53 console auto-fills the value when you select a target.
+Each target has its own hosted zone ID. CloudFront always uses `Z2FDTNDATAQYW2`. S3 varies by region. You don't need to memorize these—the AWS documentation lists them, and the Route 53 console auto-fills the value when you select a target.
 
 ## Health Checking Differences
 
 Alias records support Route 53 health checks differently than standard records. For standard records, you can attach a health check directly. For alias records, the `EvaluateTargetHealth` flag determines whether Route 53 considers the target healthy before returning the record.
 
-For CloudFront, `EvaluateTargetHealth` must be `false`. CloudFront is a globally distributed service with its own health management — Route 53 health checks don't apply to it in a meaningful way. For Elastic Load Balancers and other regional resources, you might set this to `true` to enable failover routing.
+For CloudFront, `EvaluateTargetHealth` must be `false`. CloudFront is a globally distributed service with its own health management—Route 53 health checks don't apply to it in a meaningful way. For Elastic Load Balancers and other regional resources, you might set this to `true` to enable failover routing.
 
 For frontend deployments behind CloudFront, you'll always set `EvaluateTargetHealth` to `false` and let CloudFront handle availability at the edge.
 
@@ -129,10 +133,12 @@ A mistake that trips people up: creating a CNAME record for the apex domain and 
 If you inherited a DNS configuration from a previous provider and see a CNAME at the apex, replace it with an alias A record (and an alias AAAA record for IPv6). This is the correct configuration for any AWS resource.
 
 > [!WARNING]
-> If you're migrating from Cloudflare, you may have been using their "CNAME flattening" feature at the apex domain. This is Cloudflare's proprietary workaround for the zone apex problem. Route 53 doesn't support CNAME flattening — you must use alias records instead. The end result is the same (the apex resolves to an IP address), but the configuration looks different.
+> If you're migrating from Cloudflare, you may have been using their "CNAME flattening" feature at the apex domain. This is Cloudflare's proprietary workaround for the zone apex problem. Route 53 doesn't support CNAME flattening—you must use alias records instead. The end result is the same (the apex resolves to an IP address), but the configuration looks different.
 
 ## The Mental Model
 
-Think of it this way: a CNAME record says "go ask someone else." An alias record says "I already asked for you — here's the answer." The resolver never sees the indirection. From the outside, `example.com` looks like it has a plain A record with real IP addresses. The fact that those IP addresses came from a CloudFront distribution lookup is entirely Route 53's business.
+Think of it this way: a CNAME record says "go ask someone else." An alias record says "I already asked for you—here's the answer." The resolver never sees the indirection. From the outside, `example.com` looks like it has a plain A record with real IP addresses. The fact that those IP addresses came from a CloudFront distribution lookup is entirely Route 53's business.
 
-For everything in this course — CloudFront distributions, S3 endpoints, API Gateway custom domains — alias records are the right choice. Use CNAME only when the target is outside AWS or when a service specifically requires it (like ACM validation records).
+For everything in this course—CloudFront distributions, S3 endpoints, API Gateway custom domains—alias records are the right choice. Use CNAME only when the target is outside AWS or when a service specifically requires it (like ACM validation records).
+
+Next, you'll use that rule for the real thing: creating the alias records that point your domain at CloudFront.

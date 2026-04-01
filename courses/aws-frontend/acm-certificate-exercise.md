@@ -3,7 +3,7 @@ title: 'Exercise: Request and Validate a Certificate'
 description: >-
   Request an ACM certificate for your domain, complete DNS validation, and verify the certificate is issued.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - acm
@@ -19,12 +19,13 @@ Every production frontend on AWS needs a certificate. The certificate request-an
 ## Prerequisites
 
 - An AWS account with CLI access configured (see [Setting Up the AWS CLI](setting-up-the-aws-cli.md))
-- A domain name you control. If you don't own a domain, you have two options:
-  - **Register one through Route 53**: Route 53 lets you register domains starting around $3/year for a `.click` domain or $13/year for a `.com`. The advantage is that DNS validation becomes a one-click operation in the ACM console.
-  - **Use a domain from another registrar**: Any registrar works. You will need access to the DNS management interface to add CNAME records.
+- A domain name you control.
+- DNS authority for that domain:
+  - **Recommended path:** Route 53 hosts the domain's DNS, either because you registered the domain there or because you already pointed the registrar at a Route 53 hosted zone.
+  - **Alternate path:** Your DNS is hosted elsewhere and you can add CNAME records manually.
 
 > [!TIP]
-> If you're following along with this course and plan to complete the CloudFront and Route 53 modules, registering a cheap domain through Route 53 now will save time later. A `.click` or `.link` domain costs a few dollars a year and gives you a real domain to work with across the rest of the course.
+> The smoothest version of this exercise is a domain with DNS already hosted in Route 53. If you followed the domain and DNS lessons with a cheap Route 53-registered domain, ACM validation is basically a copy-paste problem instead of a scavenger hunt through another provider's dashboard.
 
 ## Request the Certificate
 
@@ -39,7 +40,7 @@ aws acm request-certificate \
   --output json
 ```
 
-You should see a response containing a `CertificateArn`. Save this value — you'll need it for the remaining steps.
+You should see a response containing a `CertificateArn`. Save this value—you'll need it for the remaining steps.
 
 ```json
 {
@@ -87,11 +88,11 @@ Write down the `Name` and `Value` for each record. You need to add these to your
 
 ## Add the Validation Records to DNS
 
-**If your domain is in Route 53:** The simplest approach is the ACM console. Open the [ACM console](https://console.aws.amazon.com/acm/home?region=us-east-1), find your certificate, expand it, and click **Create records in Route 53**. ACM creates the CNAME records in your hosted zone automatically.
+**If your domain's DNS is in Route 53:** The simplest approach is the ACM console. Open the [ACM console](https://console.aws.amazon.com/acm/home?region=us-east-1), find your certificate, expand it, and click **Create records in Route 53**. ACM creates the CNAME records in your hosted zone automatically.
 
 **If your domain is hosted elsewhere:** Log into your DNS provider's management console and create a CNAME record with:
 
-- **Name/Host**: The value from the `Name` field (e.g., `_abc123.example.com`). Some providers want just `_abc123` without the domain suffix — check your provider's documentation.
+- **Name/Host**: The value from the `Name` field (e.g., `_abc123.example.com`). Some providers want just `_abc123` without the domain suffix—check your provider's documentation.
 - **Type**: CNAME
 - **Value/Points to**: The value from the `Value` field (e.g., `_def456.acm-validations.aws`). Some providers want this without the trailing dot.
 - **TTL**: 300 (5 minutes) is fine.
@@ -174,7 +175,7 @@ Expected output:
 
 ## What You Built
 
-You now have a valid SSL/TLS certificate in `us-east-1` that covers your domain and all subdomains. This certificate will auto-renew as long as the CNAME validation record stays in your DNS and the certificate is associated with an AWS service. You'll use this certificate when you set up CloudFront in the next module.
+You now have a valid SSL/TLS certificate in `us-east-1` that covers your domain and all subdomains. This certificate will auto-renew as long as the CNAME validation record stays in your DNS and the certificate is associated with an AWS service. The next job is attaching it to CloudFront so the distribution can answer for your real domain over HTTPS.
 
 > [!WARNING]
 > Do not delete the CNAME validation records from your DNS. They are required for auto-renewal. Treat them as permanent.
@@ -182,6 +183,6 @@ You now have a valid SSL/TLS certificate in `us-east-1` that covers your domain 
 ## Stretch Goals
 
 - **List all certificates**: Run `aws acm list-certificates --region us-east-1 --output json` to see every certificate in your account. Notice how each one shows its domain and status.
-- **Request a second certificate**: Try requesting a certificate for a different subdomain (e.g., `staging.example.com`) without a wildcard. Compare the validation process — is it any different?
+- **Request a second certificate**: Try requesting a certificate for a different subdomain (e.g., `staging.example.com`) without a wildcard. Compare the validation process—is it any different?
 - **Explore the full output**: Run `aws acm describe-certificate` without the `--query` flag to see the complete certificate metadata: key algorithm, issuer, creation date, and the full `DomainValidationOptions` structure.
 - **Automate it**: Write a short shell script that requests a certificate, extracts the CNAME records, and prints the records you need to add to DNS. Bonus: if your domain is in Route 53, have the script create the records automatically.

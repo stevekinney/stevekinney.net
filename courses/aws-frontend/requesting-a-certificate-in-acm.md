@@ -3,7 +3,7 @@ title: 'Requesting a Certificate in ACM'
 description: >-
   Request a public SSL/TLS certificate in AWS Certificate Manager for your domain using the console and the CLI.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-04-01
 tags:
   - aws
   - acm
@@ -11,11 +11,13 @@ tags:
   - ssl
 ---
 
-You know why HTTPS matters. Now you need a certificate. **AWS Certificate Manager (ACM)** is the service that provisions, manages, and renews SSL/TLS certificates for use with AWS services. Requesting a certificate is straightforward, but there are a few decisions you need to make upfront — and one critical constraint around region that'll save you hours of debugging if you learn it now.
+You know why HTTPS matters. Now you need a certificate. **AWS Certificate Manager (ACM)** is the service that provisions, manages, and renews SSL/TLS certificates for use with AWS services. Requesting a certificate is straightforward, but there are a few decisions you need to make upfront—and one critical constraint around region that'll save you hours of debugging if you learn it now.
+
+At this point in the course, you already have the missing prerequisite that trips most people up: domain control and a place to publish DNS records. That matters because ACM validation is not some abstract certificate ritual. It's a DNS task.
 
 ## Before You Start: The Region Question
 
-ACM certificates are regional resources. A certificate provisioned in `us-west-2` is only available to services running in `us-west-2`. This matters because CloudFront — the CDN you'll use in the next module to serve your frontend — is a global service that requires its certificates to be in **`us-east-1`** (US East, N. Virginia).
+ACM certificates are regional resources. A certificate provisioned in `us-west-2` is only available to services running in `us-west-2`. This matters because CloudFront—the CDN you'll use later in the static-hosting arc to serve your frontend—is a global service that requires its certificates to be in **`us-east-1`** (US East, N. Virginia).
 
 If you provision your certificate in any other region, CloudFront won't see it. The console won't show it in the dropdown. The CLI will return an error. There's no way to move or copy a certificate between regions.
 
@@ -36,7 +38,7 @@ The console workflow gives you a clear picture of what ACM is doing under the ho
 6. Under **Key algorithm**, leave the default: **RSA 2048**. This is compatible with everything.
 7. Click **Request**.
 
-ACM creates the certificate and sets its status to **Pending validation**. The certificate isn't usable yet — you need to prove that you own the domain. That validation step is covered in the next lesson.
+ACM creates the certificate and sets its status to **Pending validation**. The certificate isn't usable yet—you need to prove that you own the domain. That validation step is covered in the next lesson.
 
 ## Requesting a Certificate with the CLI
 
@@ -81,10 +83,10 @@ After you request a certificate, it moves through a series of states. I'd recomm
 
 1. **Pending validation**: ACM has created the certificate but is waiting for you to prove you own the domain. This is where most certificates sit until you complete the validation step.
 2. **Issued**: Validation succeeded. The certificate is ready to attach to a CloudFront distribution, load balancer, or API Gateway endpoint.
-3. **Inactive**: The certificate was issued but isn't currently associated with any AWS service. This is informational — the certificate is still valid.
+3. **Inactive**: The certificate was issued but isn't currently associated with any AWS service. This is informational—the certificate is still valid.
 4. **Expired**: The certificate reached its expiration date without being renewed. ACM auto-renews certificates that are in use and have valid DNS validation records, so this typically only happens if something went wrong with renewal.
 5. **Revoked**: The certificate was explicitly revoked. This is rare.
-6. **Failed**: Validation failed — usually because the DNS or email validation wasn't completed within 72 hours.
+6. **Failed**: Validation failed—usually because the DNS or email validation wasn't completed within 72 hours.
 
 You can check the status of your certificate at any time:
 
@@ -95,7 +97,7 @@ aws acm describe-certificate \
   --output json
 ```
 
-The response includes everything about the certificate — its status, domain names, validation method, and the validation records you need to add to your DNS:
+The response includes everything about the certificate—its status, domain names, validation method, and the validation records you need to add to your DNS:
 
 ```json
 {
@@ -154,8 +156,8 @@ To request a certificate, your IAM user or role needs the `acm:RequestCertificat
 ```
 
 > [!TIP]
-> ACM doesn't support resource-level permissions for `RequestCertificate` — the `Resource` must be `"*"`. You can restrict `DescribeCertificate` and other read operations to specific certificate ARNs after the certificate exists, but the initial request always requires a wildcard resource.
+> ACM doesn't support resource-level permissions for `RequestCertificate`—the `Resource` must be `"*"`. You can restrict `DescribeCertificate` and other read operations to specific certificate ARNs after the certificate exists, but the initial request always requires a wildcard resource.
 
 ## What You Have So Far
 
-At this point, you have a certificate in ACM with a status of **Pending validation**. It exists, it has an ARN, but it isn't usable yet. The next step is proving to ACM that you actually own the domain listed on the certificate — and for that, you need to understand the difference between DNS validation and email validation.
+At this point, you have a certificate in ACM with a status of **Pending validation**. It exists, it has an ARN, but it isn't usable yet. The next step is proving to ACM that you actually own the domain listed on the certificate—and for that, you need to understand the difference between DNS validation and email validation.

@@ -3,7 +3,7 @@ title: 'Static Website Hosting on S3'
 description: >-
   Enable S3 static website hosting, configure an index document and error document, and access your site through the S3 website endpoint.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-04-01
 tags:
   - aws
   - s3
@@ -11,7 +11,12 @@ tags:
   - static-sites
 ---
 
-You have an S3 bucket with files in it and a bucket policy that allows public reads. But if you navigate to `https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/` right now, you get an XML error page — S3 doesn't know you want it to serve `index.html` when someone hits the root URL. That's because S3's default behavior is object storage, not web hosting. To turn your bucket into an actual website, you need to enable **static website hosting**.
+You have an S3 bucket with files in it and a bucket policy that allows public reads. But if you navigate to `https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/` right now, you get an XML error page—S3 doesn't know you want it to serve `index.html` when someone hits the root URL. That's because S3's default behavior is object storage, not web hosting. To turn your bucket into an actual website, you need to enable **static website hosting**.
+
+If you want AWS's exact version of the website-hosting workflow, the [S3 static website tutorial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html) is the official walkthrough.
+
+> [!NOTE] Learning checkpoint, not production target
+> This lesson is the "see the pieces" version of static hosting. It gives you a real website endpoint quickly, which is useful for understanding how S3 behaves as a web origin. It is not the final architecture you want to ship. Later, you'll put CloudFront in front of a private bucket and keep direct S3 access out of the picture.
 
 ## What Static Website Hosting Adds
 
@@ -19,9 +24,9 @@ Without static website hosting, S3 is a key-value store. You request a specific 
 
 Enabling static website hosting gives you three things:
 
-1. **An index document** — S3 serves a default file (typically `index.html`) when someone requests a path that ends with `/`. This is the behavior you expect from any web server.
-2. **An error document** — S3 serves a custom error page instead of its default XML error when a requested key doesn't exist.
-3. **A website endpoint** — S3 gives you a dedicated URL that serves your bucket as a website, with the index and error document behavior enabled.
+1. **An index document**—S3 serves a default file (typically `index.html`) when someone requests a path that ends with `/`. This is the behavior you expect from any web server.
+2. **An error document**—S3 serves a custom error page instead of its default XML error when a requested key doesn't exist.
+3. **A website endpoint**—S3 gives you a dedicated URL that serves your bucket as a website, with the index and error document behavior enabled.
 
 This is the difference between "I uploaded files to cloud storage" and "I have a website."
 
@@ -69,6 +74,18 @@ aws s3api get-bucket-website \
 }
 ```
 
+Before enabling, the **Properties** tab shows **Static website hosting** as **Disabled**.
+
+![The S3 bucket Properties tab showing Static website hosting as Disabled at the bottom of the page.](assets/s3-static-hosting-disabled.png)
+
+In the console, the **Static website hosting** section on the **Properties** tab shows the configuration form where you enter the index and error document names.
+
+![The S3 Edit Static Website Hosting form showing the feature enabled with index document set to index.html and error document set to error.html.](assets/s3-static-hosting-config.png)
+
+After saving, the section shows the **Bucket website endpoint** URL you can open in a browser.
+
+![The S3 bucket Properties tab showing Static website hosting as Enabled with the website endpoint URL displayed.](assets/s3-static-hosting-endpoint.png)
+
 ## The Website Endpoint URL
 
 Once static website hosting is enabled, S3 gives you a dedicated website endpoint. The format depends on your region:
@@ -86,7 +103,7 @@ http://my-frontend-app-assets.s3-website.us-east-1.amazonaws.com
 For `us-east-1`, the format is `s3-website-us-east-1` (with a hyphen before the region name).
 
 > [!WARNING]
-> S3 website endpoints only support HTTP, not HTTPS. If you load your site over the S3 website URL, the browser will show it as "Not Secure." This is one of the main reasons you'll add CloudFront in Module 4 — CloudFront gives you HTTPS with an SSL certificate from ACM. For now, HTTP is fine for testing and development.
+> S3 website endpoints only support HTTP, not HTTPS. If you load your site over the S3 website URL, the browser will show it as "Not Secure." This is one of the main reasons the production path puts CloudFront in front of the bucket—CloudFront gives you HTTPS with an ACM certificate. For now, HTTP is fine for testing and development.
 
 ## How the Index Document Works
 
@@ -94,11 +111,11 @@ With static website hosting enabled, S3 handles root and directory requests the 
 
 - **`/`** serves `index.html` from the bucket root
 - **`/about/`** serves `about/index.html` (if it exists)
-- **`/about`** (without trailing slash) does **not** automatically resolve to `about/index.html` — this catches people off guard
+- **`/about`** (without trailing slash) does **not** automatically resolve to `about/index.html`—this catches people off guard
 
-That last point is important. If you have a file at the key `about/index.html` and someone navigates to `/about` (no trailing slash), S3 returns a 404. The trailing slash matters because S3 only looks for the index document suffix when the path ends with `/`. I mean, it makes sense once you remember that S3 isn't really a web server — it's object storage pretending to be one.
+That last point is important. If you have a file at the key `about/index.html` and someone navigates to `/about` (no trailing slash), S3 returns a 404. The trailing slash matters because S3 only looks for the index document suffix when the path ends with `/`. I mean, it makes sense once you remember that S3 isn't really a web server—it's object storage pretending to be one.
 
-For a single-page application where all routing happens client-side, this is mostly irrelevant — you only have one `index.html` at the root, and every path that doesn't match a real file should fall through to the error document (which you configure to also be `index.html`). More on that in a moment.
+For a single-page application where all routing happens client-side, this is mostly irrelevant—you only have one `index.html` at the root, and every path that doesn't match a real file should fall through to the error document (which you configure to also be `index.html`). More on that in a moment.
 
 > [!TIP]
 > If you're deploying a multi-page static site (not a single-page app), make sure your build tool generates `index.html` files inside each directory. For example, an "about" page should live at `about/index.html`, not `about.html`. This ensures that both `/about/` and links to the directory work correctly.
@@ -115,7 +132,7 @@ aws s3 website s3://my-frontend-app-assets/ \
 
 Now when someone navigates to `/dashboard/settings` and no object exists at that key, S3 serves `index.html` with a 404 status code. Your client-side router picks it up and renders the right page.
 
-There's a catch: S3 still returns a 404 HTTP status code, even though the user sees a valid page. Search engines and some tools interpret that 404 as a broken page. This is another reason CloudFront is important — in Module 4, you'll configure CloudFront's custom error responses to return a 200 status code when serving the SPA fallback.
+There's a catch: S3 still returns a 404 HTTP status code, even though the user sees a valid page. Search engines and some tools interpret that 404 as a broken page. This is another reason CloudFront matters in the production architecture: CloudFront can return a 200 status code while still serving the SPA fallback.
 
 ## Creating an Error Page
 
@@ -223,11 +240,11 @@ Open `http://my-frontend-app-assets.s3-website-us-east-1.amazonaws.com` in your 
 
 S3 static website hosting is a starting point, not a complete solution. Here's what you're missing:
 
-- **HTTPS** — S3 website endpoints are HTTP only. You need CloudFront and an ACM certificate for HTTPS.
-- **Global performance** — S3 serves files from a single region. Users on the other side of the world get higher latency. CloudFront caches files at edge locations worldwide.
-- **Custom domain** — The S3 website endpoint isn't a pretty URL. You need Route 53 (or another DNS provider) to use your own domain.
-- **Cache control** — S3 serves files with default caching headers. CloudFront gives you fine-grained control over cache behavior and TTLs.
+- **HTTPS**—S3 website endpoints are HTTP only. You need CloudFront and an ACM certificate for HTTPS.
+- **Global performance**—S3 serves files from a single region. Users on the other side of the world get higher latency. CloudFront caches files at edge locations worldwide.
+- **Custom domain**—The S3 website endpoint isn't a pretty URL. You need Route 53 (or another DNS provider) to use your own domain.
+- **Cache control**—S3 serves files with default caching headers. CloudFront gives you fine-grained control over cache behavior and TTLs.
 
-All of these gaps are filled by services covered in later modules. S3 is the foundation — the place your files live. CloudFront, ACM, and Route 53 are the layers that turn it into a production-grade deployment.
+All of these gaps are filled by the rest of the static-hosting arc. S3 is the foundation—the place your files live. Domain control, ACM, CloudFront, and Route 53 are the layers that turn it into a production-grade deployment.
 
 Your site is live on S3, but what happens when you accidentally overwrite a file or delete something you shouldn't have? Next, you'll enable **versioning** to protect against accidental data loss, set up lifecycle rules to manage storage costs, and understand how S3 pricing works so there are no surprises on your bill.

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Alias versus CNAME at the zone apex</title>
+  <desc id="desc">Diagram showing why a zone apex cannot use a CNAME because NS and SOA already exist there, and how Route 53 alias records resolve a CloudFront distribution instead.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#1f2937" />
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 18; }
+      .card { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; rx: 16; }
+      .warn { fill: #fee2e2; stroke: #ef4444; stroke-width: 2; rx: 16; }
+      .green { fill: #dcfce7; stroke: #22c55e; stroke-width: 2; rx: 16; }
+      .line {
+        stroke: #1f2937;
+        stroke-width: 2.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        marker-end: url(#arrow);
+      }
+      text { font-family: Arial, sans-serif; fill: #0f172a; }
+      .title { font-size: 32px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #334155; }
+      .heading { font-size: 24px; font-weight: 700; }
+      .label { font-size: 18px; font-weight: 700; }
+      .body { font-size: 16px; fill: #334155; }
+      .small { font-size: 14px; fill: #475569; }
+      .center { text-anchor: middle; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="720" />
+
+  <text x="60" y="64" class="title">Why the apex needs an alias record</text>
+  <text x="60" y="96" class="subtitle">The bare domain already carries NS and SOA records, so a CNAME there would conflict with the DNS rules.</text>
+
+  <rect x="50" y="140" width="500" height="520" class="panel" />
+  <text x="80" y="184" class="heading">What breaks with a CNAME at example.com</text>
+
+  <rect x="120" y="240" width="360" height="84" class="card" />
+  <text x="300" y="286" class="label center">example.com already has NS + SOA</text>
+
+  <rect x="120" y="380" width="360" height="104" class="warn" />
+  <text x="300" y="426" class="label center">Apex CNAME would conflict</text>
+  <text x="300" y="450" class="small center">
+    <tspan x="300" dy="0">A CNAME cannot coexist with</tspan>
+    <tspan x="300" dy="18">NS and SOA at the same name.</tspan>
+  </text>
+
+  <path class="line" d="M 300 324 L 300 380" />
+
+  <rect x="650" y="140" width="500" height="520" class="panel" />
+  <text x="680" y="184" class="heading">What Route 53 alias records do instead</text>
+
+  <rect x="720" y="230" width="360" height="84" class="card" />
+  <text x="900" y="276" class="label center">example.com A / AAAA alias</text>
+
+  <rect x="720" y="380" width="360" height="84" class="card" />
+  <text x="900" y="426" class="label center">CloudFront distribution</text>
+
+  <rect x="710" y="520" width="380" height="104" class="green" />
+  <text x="900" y="562" class="label center">Resolver gets IP addresses</text>
+  <text x="900" y="586" class="small center">
+    <tspan x="900" dy="0">Route 53 looks up CloudFront internally</tspan>
+    <tspan x="900" dy="18">and answers like an A or AAAA record.</tspan>
+  </text>
+
+  <path class="line" d="M 900 314 L 900 380" />
+  <path class="line" d="M 900 464 L 900 520" />
+</svg>

@@ -4,7 +4,7 @@ description: >-
   Understand what causes cold starts, how they affect latency, and practical
   strategies for minimizing their impact on your frontend's API calls.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - lambda
@@ -13,6 +13,8 @@ tags:
 ---
 
 You've deployed a Lambda function, invoked it, and it works. But if you invoke it after a period of inactivity, the first response is noticeably slower than the ones that follow. That first slow response is a **cold start**, and it's the performance characteristic of Lambda that matters most to frontend engineers building API backends.
+
+If you want AWS's version of the lifecycle details behind cold starts, the [Lambda runtime environment guide](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtime-environment.html) and the [Lambda best practices guide](https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html) are the official references.
 
 A cold start adds latency to the first request after an idle period. For an API endpoint that your frontend calls on page load, that latency is the difference between a snappy experience and a visible loading spinner. You can't eliminate cold starts entirely, but you can make them fast enough that users don't notice.
 

@@ -3,7 +3,7 @@ title: 'CI/CD with GitHub Actions'
 description: >-
   Set up a GitHub Actions workflow that builds your frontend and deploys it to AWS on every push to the main branch.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - github-actions
@@ -13,7 +13,9 @@ tags:
 
 You've got a deploy script that works. You run it from your laptop, it uploads to S3, invalidates CloudFront, and the site is updated. The problem: you have to remember to run it. And "you" is a single point of failure. If you're on vacation, nobody deploys. If you deploy from a dirty working tree, broken code goes live. If your laptop dies mid-deploy, the site is in a half-updated state.
 
-CI/CD fixes this. Push to `main`, the pipeline runs, the site deploys. No human in the loop. This lesson sets up a GitHub Actions workflow that does exactly what your deploy script does — but triggered automatically on every push.
+If you want the AWS side of this pipeline open in another tab, keep the [IAM guide for managing access keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html), the [`aws s3 sync` command reference](https://docs.aws.amazon.com/cli/latest/reference/s3/sync.html), and the [`aws cloudfront create-invalidation` command reference](https://docs.aws.amazon.com/cli/latest/reference/cloudfront/create-invalidation.html) handy.
+
+CI/CD fixes this. Push to `main`, the pipeline runs, the site deploys. No human in the loop. This lesson sets up a GitHub Actions workflow that does exactly what your deploy script does—but triggered automatically on every push.
 
 ## Authentication: OIDC vs. Access Keys
 
@@ -23,7 +25,7 @@ Before writing the workflow, you need to decide how GitHub Actions authenticates
 
 **OIDC (OpenID Connect)**: GitHub Actions requests a short-lived token from AWS using federated identity. No long-lived secrets stored anywhere. AWS trusts GitHub's identity provider, verifies the token, and hands back temporary credentials that expire after the workflow finishes.
 
-OIDC is the better choice, and I'd go as far as saying it should be your default. Access keys are static secrets that can leak — if someone gains access to your repository secrets, they have persistent AWS credentials. OIDC tokens are scoped to a single workflow run and expire automatically. AWS and GitHub both recommend OIDC for this reason.
+OIDC is the better choice, and I'd go as far as saying it should be your default. Access keys are static secrets that can leak—if someone gains access to your repository secrets, they have persistent AWS credentials. OIDC tokens are scoped to a single workflow run and expire automatically. AWS and GitHub both recommend OIDC for this reason.
 
 ## Setting Up OIDC: The AWS Side
 
@@ -102,7 +104,7 @@ aws iam attach-role-policy \
   --region us-east-1
 ```
 
-You can reuse the exact same `DeployBotPolicy` — the permissions don't change just because the principal is a role instead of a user. This is the principle of least privilege from [Principle of Least Privilege](principle-of-least-privilege.md) applied to your CI/CD pipeline: the deploy role can sync files and invalidate caches, and nothing else.
+You can reuse the exact same `DeployBotPolicy`—the permissions don't change just because the principal is a role instead of a user. This is the principle of least privilege from [Principle of Least Privilege](principle-of-least-privilege.md) applied to your CI/CD pipeline: the deploy role can sync files and invalidate caches, and nothing else.
 
 ## The GitHub Actions Workflow
 
@@ -236,7 +238,7 @@ Then replace the credentials step in the workflow:
 ```
 
 > [!WARNING]
-> Access keys stored as repository secrets are long-lived credentials. If someone gains access to your repository settings, they have your AWS credentials. Rotate access keys regularly and scope the IAM user's policy as tightly as possible — this is exactly what the [IAM Policy for a Deploy Bot exercise](iam-policy-exercise.md) was designed for. OIDC avoids this risk entirely.
+> Access keys stored as repository secrets are long-lived credentials. If someone gains access to your repository settings, they have your AWS credentials. Rotate access keys regularly and scope the IAM user's policy as tightly as possible—this is exactly what the [IAM Policy for a Deploy Bot exercise](iam-policy-exercise.md) was designed for. OIDC avoids this risk entirely.
 
 ## Verifying the Workflow
 

@@ -5,7 +5,7 @@ description: >-
   access, CloudFront settings, Lambda permissions, API Gateway authentication,
   and DynamoDB access.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - security
@@ -15,7 +15,9 @@ tags:
 
 You've built a full-stack application on AWS. S3 holds your static assets, CloudFront serves them globally, Lambda runs your API logic, API Gateway handles HTTP routing, DynamoDB stores your data, and Secrets Manager keeps your credentials safe. Every one of those services has security configuration, and every one of them defaults to something you should probably change.
 
-This is your pre-flight checklist. Work through it before you point real users at your deployment. None of these items are new — you've configured all of them throughout this course — but seeing them together in one place is how you catch the one you forgot.
+If you want AWS's official security baseline next to this checklist, the [IAM best practices guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html) is the reference worth bookmarking.
+
+This is your pre-flight checklist. Work through it before you point real users at your deployment. None of these items are new—you've configured all of them throughout this course—but seeing them together in one place is how you catch the one you forgot.
 
 ## Why This Matters
 
@@ -23,7 +25,7 @@ Security failures in AWS are usually accumulation failures. One permissive IAM p
 
 ## Builds On
 
-This lesson builds on every service module in the course. It is intentionally a synthesis lesson: IAM from Module 1, S3 and CloudFront from Modules 2 through 4, DNS and certificates from Modules 3 through 5, Lambda and API Gateway from Modules 7 and 8, DynamoDB from Module 10, and secret storage from Module 11.
+This lesson builds on every service section in the course. It is intentionally a synthesis lesson: IAM foundations, static hosting, domain and certificate management, Lambda and API Gateway, DynamoDB, and secret storage all show up here at once.
 
 ## IAM: Who Can Do What
 
@@ -31,9 +33,9 @@ IAM is the foundation everything else sits on. If your IAM policies are too broa
 
 - [ ] **The root user has MFA enabled and isn't used for daily work.** You set this up in [Creating and Securing an AWS Account](creating-and-securing-an-aws-account.md). Go to the IAM dashboard right now and confirm MFA is active on the root account. If you've been using root credentials for CLI work, stop.
 
-- [ ] **No IAM user has `AdministratorAccess` unless they genuinely need it.** Your `admin` user from Module 1 may have broad permissions for learning purposes. In production, even admin users should have scoped policies. Review the policies attached to every IAM user and group in your account.
+- [ ] **No IAM user has `AdministratorAccess` unless they genuinely need it.** Your `admin` user from the IAM foundation section may have broad permissions for learning purposes. In production, even admin users should have scoped policies. Review the policies attached to every IAM user and group in your account.
 
-- [ ] **Lambda execution roles follow least privilege.** Your `my-frontend-app-lambda-role` should only have the permissions your function actually uses. If your Lambda reads from DynamoDB, the role needs `dynamodb:GetItem` and `dynamodb:Query` on your specific table — not `dynamodb:*` on `*`. Revisit the approach from [Principle of Least Privilege](principle-of-least-privilege.md).
+- [ ] **Lambda execution roles follow least privilege.** Your `my-frontend-app-lambda-role` should only have the permissions your function actually uses. If your Lambda reads from DynamoDB, the role needs `dynamodb:GetItem` and `dynamodb:Query` on your specific table—not `dynamodb:*` on `*`. Revisit the approach from [Principle of Least Privilege](principle-of-least-privilege.md).
 
 - [ ] **CI/CD credentials are scoped to deployment actions only.** The IAM user or role your GitHub Actions workflow uses (from [CI/CD with GitHub Actions](cicd-with-github-actions.md)) should have exactly the permissions needed to sync files to S3, create CloudFront invalidations, and update Lambda functions. Nothing more.
 
@@ -56,7 +58,7 @@ S3 buckets are one of the most common sources of AWS security incidents. Misconf
 
 - [ ] **Public access is blocked at the account level (unless you have a specific reason).** S3 has an account-level setting called "Block Public Access" that overrides bucket-level policies. If you're serving assets through CloudFront with Origin Access Control, your bucket should never be directly public.
 
-- [ ] **Your bucket policy only grants access to CloudFront via OAC.** You configured this in [Origin Access Control for S3](origin-access-control-for-s3.md). The bucket policy should reference your CloudFront distribution's service principal — not `"Principal": "*"`. Verify:
+- [ ] **Your bucket policy only grants access to CloudFront via OAC.** You configured this in [Origin Access Control for S3](origin-access-control-for-s3.md). The bucket policy should reference your CloudFront distribution's service principal—not `"Principal": "*"`. Verify:
 
 ```bash
 aws s3api get-bucket-policy \
@@ -103,9 +105,9 @@ aws lambda get-function-configuration \
 
 If you see API keys, database passwords, or tokens in the `Environment.Variables` section, move them to Secrets Manager.
 
-- [ ] **The function timeout is set to a reasonable value.** The default timeout is 3 seconds. If your function calls external APIs, you might need more — but setting it to the maximum (15 minutes) means a runaway function burns compute for 15 minutes before Lambda kills it.
+- [ ] **The function timeout is set to a reasonable value.** The default timeout is 3 seconds. If your function calls external APIs, you might need more—but setting it to the maximum (15 minutes) means a runaway function burns compute for 15 minutes before Lambda kills it.
 
-- [ ] **The function memory is right-sized.** Lambda charges by GB-second. A function with 1024 MB of memory costs twice as much per millisecond as one with 512 MB. But more memory also means more CPU, so a function might run twice as fast with double the memory — netting out to the same cost.
+- [ ] **The function memory is right-sized.** Lambda charges by GB-second. A function with 1024 MB of memory costs twice as much per millisecond as one with 512 MB. But more memory also means more CPU, so a function might run twice as fast with double the memory—netting out to the same cost.
 
 ## API Gateway: Who Can Call Your API
 
@@ -122,21 +124,21 @@ You should get a `401` back, not a `200`.
 
 - [ ] **CORS is configured to allow only your domain.** In [API Gateway CORS Configuration](api-gateway-cors-configuration.md), you set `Access-Control-Allow-Origin`. Make sure it's set to your specific domain (`https://example.com`), not `*`. A wildcard CORS policy lets any website call your API from a user's browser.
 
-- [ ] **Throttling is configured.** API Gateway supports rate limiting. Without it, a single client can overwhelm your Lambda functions (and your bill). The default throttle is 10,000 requests per second — probably more than you want for a personal project.
+- [ ] **Throttling is configured.** API Gateway supports rate limiting. Without it, a single client can overwhelm your Lambda functions (and your bill). The default throttle is 10,000 requests per second—probably more than you want for a personal project.
 
 ## DynamoDB: Who Can Read Your Data
 
-DynamoDB access is controlled entirely through IAM. There are no database usernames or passwords — which is great for simplicity but means IAM policies are your only line of defense.
+DynamoDB access is controlled entirely through IAM. There are no database usernames or passwords—which is great for simplicity but means IAM policies are your only line of defense.
 
 - [ ] **Lambda execution roles specify the exact table ARN.** Your IAM policy should reference `arn:aws:dynamodb:us-east-1:123456789012:table/my-frontend-app-data`, not `arn:aws:dynamodb:us-east-1:123456789012:table/*`. You configured this in [Connecting DynamoDB to Lambda](connecting-dynamodb-to-lambda.md).
 
 - [ ] **Only the actions your function uses are allowed.** If your function only reads data, grant `dynamodb:GetItem` and `dynamodb:Query`. Don't grant `dynamodb:DeleteItem` or `dynamodb:DeleteTable` unless the function actually needs to delete things.
 
-- [ ] **DynamoDB Streams aren't enabled unless you're using them.** Streams capture every change to your table and can trigger Lambda functions. If you enabled streams during experimentation, disable them if you don't need them — they're a potential data exfiltration vector.
+- [ ] **DynamoDB Streams aren't enabled unless you're using them.** Streams capture every change to your table and can trigger Lambda functions. If you enabled streams during experimentation, disable them if you don't need them—they're a potential data exfiltration vector.
 
 ## The One-Command Audit
 
-AWS provides a service called **IAM Access Analyzer** that can scan your account for resources shared with external entities — public S3 buckets, cross-account IAM roles, and similar misconfigurations. It is free to use and takes about 30 seconds to set up:
+AWS provides a service called **IAM Access Analyzer** that can scan your account for resources shared with external entities—public S3 buckets, cross-account IAM roles, and similar misconfigurations. It is free to use and takes about 30 seconds to set up:
 
 ```bash
 aws accessanalyzer create-analyzer \
@@ -162,12 +164,12 @@ If the findings list is empty, nothing in your account is publicly accessible or
 
 ## Security Isn't a One-Time Task
 
-This checklist is a snapshot. It covers the state of your infrastructure right now. But infrastructure changes — you add a new Lambda function, you modify a bucket policy, you create a new IAM user for a contractor. Each change is an opportunity to introduce a misconfiguration.
+This checklist is a snapshot. It covers the state of your infrastructure right now. But infrastructure changes—you add a new Lambda function, you modify a bucket policy, you create a new IAM user for a contractor. Each change is an opportunity to introduce a misconfiguration.
 
 The real security practice is making this review a habit. Run through this list after every significant infrastructure change. Better yet, codify it: Infrastructure as Code (which you'll see in [Infrastructure as Code and CDK](infrastructure-as-code-and-cdk.md)) lets you define security configuration in version-controlled templates, so changes go through code review before they reach AWS.
 
 > [!WARNING]
-> The most dangerous moment in AWS security isn't day one — it's month six, when you've forgotten which policies you attached to which roles and a quick `"Action": "*"` feels easier than looking up the right permission. Resist the urge. The checklist exists for a reason.
+> The most dangerous moment in AWS security isn't day one—it's month six, when you've forgotten which policies you attached to which roles and a quick `"Action": "*"` feels easier than looking up the right permission. Resist the urge. The checklist exists for a reason.
 
 ## Verification
 

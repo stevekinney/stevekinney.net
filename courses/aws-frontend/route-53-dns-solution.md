@@ -3,7 +3,7 @@ title: 'Solution: Configure DNS for Your Site'
 description: >-
   Complete walkthrough of creating a hosted zone, pointing a domain to CloudFront with alias records, and verifying DNS resolution.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - route53
@@ -13,19 +13,20 @@ tags:
 
 This is the solution for the [Route 53 DNS Exercise](route-53-dns-exercise.md). Each step includes the exact commands, expected output, and troubleshooting guidance.
 
+> [!TIP]
+> If the Route 53 console looks a little different when you do this, keep the [Route 53 DNS configuration guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring.html) and the [`aws route53 change-resource-record-sets` command reference](https://docs.aws.amazon.com/cli/latest/reference/route53/change-resource-record-sets.html) open.
+
 ## Why This Works
 
 - Alias records let the apex domain point at CloudFront without violating normal DNS rules around CNAMEs at the zone root.
 - Route 53 becomes authoritative only after the registrar delegates the domain to its nameservers, which is why nameserver changes matter as much as record creation.
 - Verifying with both `dig` and the browser proves the stack from DNS to TLS to CloudFront is actually working, not just configured on paper.
 
-## Create a Hosted Zone
+## Confirm the Hosted Zone
 
 ```bash
-aws route53 create-hosted-zone \
-  --name example.com \
-  --caller-reference "example-com-$(date +%s)" \
-  --region us-east-1 \
+aws route53 list-hosted-zones-by-name \
+  --dns-name example.com \
   --output json
 ```
 
@@ -33,29 +34,16 @@ aws route53 create-hosted-zone \
 
 ```json
 {
-  "Location": "https://route53.amazonaws.com/2013-04-01/hostedzone/Z1234567890ABC",
-  "HostedZone": {
-    "Id": "/hostedzone/Z1234567890ABC",
-    "Name": "example.com.",
-    "CallerReference": "example-com-1710720000",
-    "Config": {
-      "PrivateZone": false
-    },
-    "ResourceRecordSetCount": 2
-  },
-  "ChangeInfo": {
-    "Id": "/change/C1234567890ABC",
-    "Status": "PENDING",
-    "SubmittedAt": "2026-03-18T12:00:00.000Z"
-  },
-  "DelegationSet": {
-    "NameServers": [
-      "ns-1234.awsdns-56.org",
-      "ns-567.awsdns-12.net",
-      "ns-890.awsdns-34.co.uk",
-      "ns-123.awsdns-78.com"
-    ]
-  }
+  "HostedZones": [
+    {
+      "Id": "/hostedzone/Z1234567890ABC",
+      "Name": "example.com.",
+      "Config": {
+        "PrivateZone": false
+      },
+      "ResourceRecordSetCount": 6
+    }
+  ]
 }
 ```
 
@@ -76,23 +64,14 @@ HOSTED_ZONE_ID=$(aws route53 list-hosted-zones \
 echo "$HOSTED_ZONE_ID"
 ```
 
-**If you already have a hosted zone** (e.g., from domain registration), skip creation and just retrieve the ID:
-
-```bash
-aws route53 list-hosted-zones \
-  --output json \
-  --query "HostedZones[?Name=='example.com.'].{Id:Id,Name:Name}"
-```
-
 **If something went wrong:**
 
-- `HostedZoneAlreadyExists`: A hosted zone with this caller reference already exists. Either use the existing zone or pick a different caller reference.
-- `DelegationSetNotAvailable`: Rare. Retry the command — Route 53 will assign different nameservers.
-- `TooManyHostedZones`: You've hit the limit (default 500 zones per account). Delete unused hosted zones.
+- The query returns an empty list: you do not actually have a hosted zone yet. Go back to [Hosted Zones and Record Types](hosted-zones-and-record-types.md), create one, and confirm the registrar points at its nameservers before continuing.
+- The hosted zone exists but public DNS still fails later: the registrar is still using the wrong nameservers.
 
-### Configuring Nameservers (External Registrar Only)
+### Confirming Nameservers (External Registrar Only)
 
-If your domain is registered outside Route 53, update the nameservers at your registrar to:
+If your domain is registered outside Route 53, confirm the registrar is already using the Route 53 nameservers:
 
 ```
 ns-1234.awsdns-56.org
@@ -101,7 +80,7 @@ ns-890.awsdns-34.co.uk
 ns-123.awsdns-78.com
 ```
 
-Use your actual nameservers from the response, not these examples. After updating, verify that delegation is working:
+Use your actual nameservers from the hosted zone, not these examples. After updating, verify that delegation is working:
 
 ```bash
 dig example.com NS +short

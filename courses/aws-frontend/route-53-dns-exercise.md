@@ -3,7 +3,7 @@ title: 'Exercise: Configure DNS for Your Site'
 description: >-
   Create a hosted zone, point a domain to a CloudFront distribution with alias records, and verify DNS resolution.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - route53
@@ -12,6 +12,9 @@ tags:
 
 You have a CloudFront distribution serving your frontend and an ACM certificate attached to it. The distribution works at its `d111111abcdef8.cloudfront.net` URL, but nobody ships a CloudFront domain to production. In this exercise, you'll wire up your own domain so users visit `example.com` and get your site served through CloudFront.
 
+> [!TIP]
+> If the Route 53 console looks a little different when you do this, keep the [Route 53 DNS configuration guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring.html) and the [`aws route53 change-resource-record-sets` command reference](https://docs.aws.amazon.com/cli/latest/reference/route53/change-resource-record-sets.html) open.
+
 ## Why It Matters
 
 DNS is the final piece of the static hosting stack. Without it, your deployment is functional but unreachable at a real domain. Once you complete this exercise, you'll have a full end-to-end deployment: S3 stores the files, CloudFront distributes them, ACM secures the connection, and Route 53 makes the whole thing reachable at your domain name. This is the same stack that production frontend applications run on.
@@ -19,36 +22,34 @@ DNS is the final piece of the static hosting stack. Without it, your deployment 
 ## Prerequisites
 
 - An AWS account with CLI access configured (see [Setting Up the AWS CLI](setting-up-the-aws-cli.md))
-- A CloudFront distribution with your domain listed as an alternate domain name and an ACM certificate attached (see [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md) and [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md))
-- A domain name you control. If you registered one during the ACM exercise, use that. If not, see [Registering and Transferring Domains](registering-and-transferring-domains.md) for options.
+- A CloudFront distribution with your domain listed as an alternate domain name and an ACM certificate attached (see [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md) and [Attaching an SSL Certificate](attaching-an-ssl-certificate.md))
+- A domain name you control, with DNS already hosted in Route 53 or delegated to a Route 53 hosted zone.
 
 > [!TIP]
-> If your domain is already registered through Route 53, a hosted zone was created automatically during registration. You can skip the hosted zone creation and go directly to creating your alias records. Run `aws route53 list-hosted-zones --output json` to confirm.
+> In the new course flow, you should already have the hosted zone by the time you reach this exercise. If you registered the domain through Route 53, AWS probably created it automatically. If the domain lives elsewhere, you should already have pointed the registrar at the Route 53 nameservers during the DNS foundation lessons.
 
-## Create a Hosted Zone
+## Confirm Your Hosted Zone
 
-Create a public hosted zone for your domain. Replace `example.com` with your actual domain:
+Before you add alias records, make sure you're working in the right hosted zone. Replace `example.com` with your actual domain:
 
 ```bash
-aws route53 create-hosted-zone \
-  --name example.com \
-  --caller-reference "example-com-$(date +%s)" \
-  --region us-east-1 \
+aws route53 list-hosted-zones-by-name \
+  --dns-name example.com \
   --output json
 ```
 
 From the response, note two things:
 
-1. The **hosted zone ID** (in the `HostedZone.Id` field, e.g., `/hostedzone/Z1234567890ABC`). You will use the ID portion (`Z1234567890ABC`) in subsequent commands.
-2. The **four nameservers** in the `DelegationSet.NameServers` array.
+1. The **hosted zone ID** (e.g., `/hostedzone/Z1234567890ABC`). You will use the ID portion (`Z1234567890ABC`) in subsequent commands.
+2. The **domain name** on the zone matches the domain you're about to route.
 
-If your domain is registered outside Route 53, log into your registrar and update the domain's nameservers to the four Route 53 nameservers from the response. This step is critical — without it, DNS queries for your domain won't reach Route 53.
+If you do **not** have a hosted zone yet, stop here and create one using [Hosted Zones and Record Types](hosted-zones-and-record-types.md), then make sure your registrar points to the Route 53 nameservers before continuing.
 
 ### Checkpoint
 
-- The `create-hosted-zone` command completed without errors.
+- The hosted zone exists in Route 53.
 - You have the hosted zone ID saved.
-- If your domain is registered externally, you have updated the nameservers at your registrar.
+- If your domain is registered externally, its nameservers already point at Route 53.
 
 ## Create an A Alias Record for the Apex Domain
 
@@ -188,7 +189,7 @@ You should see your NS and SOA records (auto-created), plus the A and AAAA alias
 
 You now have a complete DNS configuration: a hosted zone in Route 53 with alias records pointing your domain to your CloudFront distribution. Your frontend is accessible at `https://example.com` with a valid SSL certificate, global CDN distribution, and DNS resolution handled by Route 53.
 
-This completes the foundation stack: S3 (storage) + CloudFront (CDN) + ACM (certificates) + Route 53 (DNS). I still get a little thrill seeing a real domain resolve to infrastructure I set up myself — it's one of those moments where everything clicks.
+This completes the foundation stack: S3 (storage) + CloudFront (CDN) + ACM (certificates) + Route 53 (DNS). I still get a little thrill seeing a real domain resolve to infrastructure I set up myself—it's one of those moments where everything clicks.
 
 ## Stretch Goals
 

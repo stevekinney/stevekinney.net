@@ -5,7 +5,7 @@ description: >-
   handler code, understanding when to use environment variables versus other
   configuration approaches.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - lambda
@@ -14,6 +14,8 @@ tags:
 ---
 
 Environment variables work the same way in Lambda as they do in Vercel or Netlify: you set key-value pairs on the function, and your code reads them from `process.env`. The API endpoint for a third-party service, the name of a DynamoDB table, a feature flag—anything that changes between environments or shouldn't be hardcoded goes into an environment variable.
+
+If you want AWS's exact rules and limits in front of you while you read, the [Lambda environment variables guide](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html) is the official reference.
 
 If you've ever set `NEXT_PUBLIC_API_URL` in a `.env.local` file or configured environment variables in the Vercel dashboard, you already understand the concept. The only difference is how you set them.
 
@@ -42,6 +44,10 @@ aws lambda update-function-configuration \
   --region us-east-1 \
   --output json
 ```
+
+In the console, the **Configuration → Environment variables** section shows all variables in plain text with an **Edit** button that lets you add, modify, or remove them.
+
+![The Lambda function Configuration tab showing the Environment variables section with TABLE_NAME set to frontend-items.](assets/lambda-environment-variables.png)
 
 > [!WARNING]
 > The `--environment` flag replaces **all** environment variables on the function, not just the ones you specify. If your function has three existing variables and you run `update-function-configuration` with only two, the third variable is deleted. Always include every variable you want the function to have.
@@ -99,7 +105,7 @@ These are useful for logging and debugging. For example, you might include `AWS_
 
 Lambda imposes a total limit of **4 KB** on all environment variables combined—keys, values, and formatting included. This sounds small, and it _is_. A handful of short configuration values fit easily; a JSON blob containing your entire application configuration doesn't.
 
-If you're hitting the 4 KB limit, that's a signal that your configuration has outgrown environment variables. At that point, you should move configuration to **Parameter Store** (covered in Module 11), which supports values up to 8 KB per parameter (or 64 KB for advanced parameters) with no total limit on the number of parameters.
+If you're hitting the 4 KB limit, that's a signal that your configuration has outgrown environment variables. At that point, you should move configuration to **Parameter Store**, which you'll cover in the secrets section. It supports values up to 8 KB per parameter (or 64 KB for advanced parameters) with no total limit on the number of parameters.
 
 > [!TIP]
 > A practical rule of thumb: use environment variables for simple, non-sensitive values that your function needs at startup—table names, stage identifiers, feature flags, API endpoint URLs. Use Parameter Store or Secrets Manager for anything that's sensitive, large, or needs to be shared across multiple functions.
@@ -115,7 +121,7 @@ Environment variables are the right tool for configuration that:
 
 They're the **wrong** tool for:
 
-- **API keys, database passwords, and tokens.** These should go in Secrets Manager or Parameter Store's `SecureString` type. Environment variables are visible to anyone with `lambda:GetFunctionConfiguration` permission, and they appear in the Lambda console in plain text. Module 11 covers secure configuration in detail.
+- **API keys, database passwords, and tokens.** These should go in Secrets Manager or Parameter Store's `SecureString` type. Environment variables are visible to anyone with `lambda:GetFunctionConfiguration` permission, and they appear in the Lambda console in plain text. The secrets section covers secure configuration in detail.
 - **Large configuration objects.** If your config is approaching the 4 KB limit, move it to Parameter Store.
 - **Configuration that changes frequently.** Updating an environment variable requires `update-function-configuration`, which triggers a brief function update. For configuration you want to change without redeploying, Parameter Store lets you update the value and have your function pick it up on the next invocation (with appropriate caching).
 

@@ -4,18 +4,21 @@ description: >-
   Write a CloudFront Function that adds security headers and redirects a legacy
   URL path, then deploy it to your distribution.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - cloudfront-functions
   - exercise
 ---
 
-You're going to write and deploy two CloudFront Functions: one that adds security headers to every response and one that redirects a legacy URL to a new path. By the end of this exercise, your CloudFront distribution will enforce security headers on all responses and automatically redirect `/old-path` to `/new-path` — without touching your origin or your application code.
+You're going to write and deploy two CloudFront Functions: one that adds security headers to every response and one that redirects a legacy URL to a new path. By the end of this exercise, your CloudFront distribution will enforce security headers on all responses and automatically redirect `/old-path` to `/new-path`—without touching your origin or your application code.
 
 ## Why It Matters
 
-On Vercel or Netlify, you configure security headers in a `vercel.json` or `_headers` file. On AWS, you can use a CloudFront response headers policy (which you set up in [CloudFront Headers, CORS, and Security](cloudfront-headers-cors-and-security.md)), but that approach is static configuration. A CloudFront Function gives you **programmable** control over headers — you can add headers conditionally, vary them by path, or include dynamic values. And for redirects, a CloudFront Function replaces what would otherwise be a redirect rule baked into your application code.
+On Vercel or Netlify, you configure security headers in a `vercel.json` or `_headers` file. On AWS, you can use a CloudFront response headers policy (which you set up in [CloudFront Headers, CORS, and Security](cloudfront-headers-cors-and-security.md)), but that approach is static configuration. A CloudFront Function gives you **programmable** control over headers—you can add headers conditionally, vary them by path, or include dynamic values. And for redirects, a CloudFront Function replaces what would otherwise be a redirect rule baked into your application code.
+
+> [!TIP]
+> If you want AWS's version of the runtime limits and deployment flow open while you work, keep the [CloudFront Functions guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) nearby.
 
 This exercise reinforces the CloudFront Functions workflow: write the function, test it, publish it, associate it with a behavior. Once you've got this workflow down, you can adapt it for any of the use cases in [Edge Function Use Cases](edge-function-use-cases.md).
 
@@ -23,8 +26,8 @@ This exercise reinforces the CloudFront Functions workflow: write the function, 
 
 Build and deploy two CloudFront Functions:
 
-1. **`security-headers`** — A viewer response function that adds security headers to every response from your distribution.
-2. **`legacy-redirect`** — A viewer request function that redirects requests for `/old-path` to `/new-path` with a 301 status code.
+1. **`security-headers`**—A viewer response function that adds security headers to every response from your distribution.
+2. **`legacy-redirect`**—A viewer request function that redirects requests for `/old-path` to `/new-path` with a 301 status code.
 
 Use the distribution `E1A2B3C4D5E6F7`, account `123456789012`, and region `us-east-1`.
 
@@ -86,8 +89,8 @@ You have a JavaScript function that returns a 301 response for `/old-path` and r
 
 Create the function using the CLI and test it with two different events:
 
-1. A request to `/old-path` — should return a 301 response with `Location: /new-path`
-2. A request to `/about` — should return the request unchanged (pass-through)
+1. A request to `/old-path`—should return a 301 response with `Location: /new-path`
+2. A request to `/about`—should return the request unchanged (pass-through)
 
 ### Checkpoint
 
@@ -157,6 +160,6 @@ curl -I https://d111111abcdef8.cloudfront.net/old-path
 
 - **Redirect multiple paths.** Extend the redirect function to handle a map of old-to-new paths instead of a single hardcoded path. Keep the function under 10 KB.
 
-- **Combine both functions into one.** You can't have two CloudFront Functions on the same event type for one behavior. But can you handle both security headers (viewer response) and redirects (viewer request) with a single function if they're on different events? Hint: you can't — they require different event types. But it's worth thinking about to understand the constraint.
+- **Combine both functions into one.** You can't have two CloudFront Functions on the same event type for one behavior. But can you handle both security headers (viewer response) and redirects (viewer request) with a single function if they're on different events? Hint: you can't—they require different event types. But it's worth thinking about to understand the constraint.
 
 When you're ready, check your work against the [Solution: Add a CloudFront Function to Your Distribution](cloudfront-function-solution.md).

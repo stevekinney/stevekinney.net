@@ -5,7 +5,7 @@ description: >-
   constraints and deployment limitations that affect Lambda@Edge and CloudFront
   Functions.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - edge-functions
@@ -15,9 +15,11 @@ tags:
 
 Edge functions are powerful, but they fail in ways that are genuinely confusing the first time you encounter them. Your logs aren't where you expect. Your function works locally but fails at the edge. Your deployment succeeds but the function doesn't seem to run. This lesson covers where to look when things go wrong and what constraints to keep in mind before you write a single line of code.
 
+If you want AWS's version of the runtime behavior while you read, the [CloudFront Functions guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) is the official reference.
+
 ## Where the Logs Go
 
-This is the number one source of confusion — I can't tell you how many times I've stared at an empty CloudWatch log group in `us-east-1` before remembering the logs are in a different region. Lambda@Edge and CloudFront Functions both write to CloudWatch Logs, but they write to **different regions** and with different behaviors.
+This is the number one source of confusion—I can't tell you how many times I've stared at an empty CloudWatch log group in `us-east-1` before remembering the logs are in a different region. Lambda@Edge and CloudFront Functions both write to CloudWatch Logs, but they write to **different regions** and with different behaviors.
 
 ### Lambda@Edge Logs
 
@@ -29,7 +31,7 @@ The log group follows the standard Lambda naming pattern:
 /aws/lambda/us-east-1.my-frontend-app-edge-rewrite
 ```
 
-Notice the `us-east-1.` prefix — this indicates that the function was deployed in `us-east-1` and replicated to the current region.
+Notice the `us-east-1.` prefix—this indicates that the function was deployed in `us-east-1` and replicated to the current region.
 
 To find your Lambda@Edge logs, you need to know (or guess) which region processed the request. If you're testing from your own location, check the CloudFront region nearest to you:
 
@@ -48,7 +50,7 @@ aws logs describe-log-groups \
 CloudFront Functions handle logging differently. Execution logs from `console.log()` statements aren't automatically written to CloudWatch. Instead, CloudFront Functions provide:
 
 1. **Test output.** When you test a function using `aws cloudfront test-function`, the output includes any `console.log()` statements and the function result.
-2. **CloudWatch metrics.** CloudFront publishes function metrics (invocations, errors, compute utilization, throttles) to CloudWatch in `us-east-1`. These are metrics, not logs — you can see that your function errored, but not the error message.
+2. **CloudWatch metrics.** CloudFront publishes function metrics (invocations, errors, compute utilization, throttles) to CloudWatch in `us-east-1`. These are metrics, not logs—you can see that your function errored, but not the error message.
 
 To add real-time logging to a CloudFront Function, you can enable CloudWatch Logs by creating a logging configuration. The logs appear in `us-east-1` under a log group named:
 
@@ -70,7 +72,7 @@ This error appears in CloudFront's standard error response (a 502 or 503) when y
 **CloudFront Functions:** Returning a response object with missing required fields. At minimum, you need `statusCode` and `statusDescription`:
 
 ```javascript
-// Wrong — missing statusDescription
+// Wrong—missing statusDescription
 return { statusCode: 200 };
 
 // Correct
@@ -79,7 +81,7 @@ return { statusCode: 200, statusDescription: 'OK' };
 
 ### "Execution timed out"
 
-- **CloudFront Functions:** Your function exceeded the compute utilization limit. This is measured as a percentage (0–100) of the maximum allowed time, not as wall-clock seconds. If you see this, your function is doing too much work — simplify the logic or move it to Lambda@Edge.
+- **CloudFront Functions:** Your function exceeded the compute utilization limit. This is measured as a percentage (0–100) of the maximum allowed time, not as wall-clock seconds. If you see this, your function is doing too much work—simplify the logic or move it to Lambda@Edge.
 - **Lambda@Edge:** Your viewer event function exceeded 5 seconds or your origin event function exceeded 30 seconds. If your function makes network calls, check for timeouts on those calls.
 
 ### "Function exceeded the allowed size"
@@ -123,7 +125,7 @@ If your edge function generates a response that exceeds the limit, CloudFront re
 
 ## Network Access Restrictions
 
-**CloudFront Functions can't make network calls.** No HTTP requests, no DNS lookups, no socket connections. This is a hard constraint of the runtime. If your function needs to call an external service — validate a JWT against a JWKS endpoint, look up a feature flag, query a database — you must use Lambda@Edge.
+**CloudFront Functions can't make network calls.** No HTTP requests, no DNS lookups, no socket connections. This is a hard constraint of the runtime. If your function needs to call an external service—validate a JWT against a JWKS endpoint, look up a feature flag, query a database—you must use Lambda@Edge.
 
 **Lambda@Edge** can make network calls, but keep in mind:
 

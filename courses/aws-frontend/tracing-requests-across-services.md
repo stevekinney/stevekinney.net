@@ -4,7 +4,7 @@ description: >-
   Trace a single request from API Gateway through Lambda to DynamoDB using
   correlation IDs, structured logs, and CloudWatch Logs Insights queries.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - cloudwatch
@@ -13,6 +13,8 @@ tags:
 ---
 
 An alarm tells you something is broken. Logs tell you what happened. But when a user reports "I clicked the button and nothing happened," you need to trace that single request from the moment it hit API Gateway, through your Lambda function, into DynamoDB, and back. That means connecting log entries across services into a single story.
+
+If you want AWS's version of the monitoring stack nearby while you read, the [CloudWatch overview](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html) is the official reference.
 
 This is the difference between monitoring and **observability**. Monitoring tells you "errors went up." Observability lets you ask "why did _this specific request_ fail?" and follow the breadcrumbs to the answer. I find this distinction matters more than it sounds like it should.
 

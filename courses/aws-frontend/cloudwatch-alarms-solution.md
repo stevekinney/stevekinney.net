@@ -4,7 +4,7 @@ description: >-
   Complete solution for the CloudWatch alarms exercise, with all commands and
   expected output.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - cloudwatch
@@ -13,6 +13,9 @@ tags:
 ---
 
 Here's the complete solution for every step, including all CLI commands and the expected output at each stage.
+
+> [!TIP]
+> If you want AWS's version of the alarm flow open while you work, keep the [CloudWatch overview](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html) nearby. It is the fastest way to sanity-check console labels and alarm terminology when the UI drifts.
 
 ## Why This Works
 
@@ -164,7 +167,7 @@ Expected output (relevant fields):
 }
 ```
 
-The `StateValue` of `INSUFFICIENT_DATA` is expected for a new alarm — CloudWatch hasn't evaluated it yet.
+The `StateValue` of `INSUFFICIENT_DATA` is expected for a new alarm—CloudWatch hasn't evaluated it yet.
 
 ## Create the Duration Alarm
 
@@ -237,7 +240,7 @@ aws cloudwatch set-alarm-state \
   --output json
 ```
 
-This command produces no output on success. Check your email — you should receive a notification from `AWS Notifications` with details about the alarm:
+This command produces no output on success. Check your email—you should receive a notification from `AWS Notifications` with details about the alarm:
 
 - **Alarm Name**: `my-frontend-app-api-error-count`
 - **New State**: `ALARM`
@@ -302,7 +305,7 @@ Each invocation will return a `FunctionError` field:
 }
 ```
 
-The `FunctionError: "Unhandled"` indicates the function threw an unhandled exception. Lambda still returns `StatusCode: 200` at the invocation level — the 200 means Lambda successfully _invoked_ the function, not that the function succeeded.
+The `FunctionError: "Unhandled"` indicates the function threw an unhandled exception. Lambda still returns `StatusCode: 200` at the invocation level—the 200 means Lambda successfully _invoked_ the function, not that the function succeeded.
 
 ### Wait for the Alarm
 
@@ -402,7 +405,7 @@ aws cloudwatch put-metric-alarm \
   --output json
 ```
 
-This alarm uses a single evaluation period and a threshold of zero — any 5XX error triggers it immediately.
+This alarm uses a single evaluation period and a threshold of zero—any 5XX error triggers it immediately.
 
 ## Stretch Goal: Add OK Actions to Duration Alarm
 
@@ -426,7 +429,7 @@ aws cloudwatch put-metric-alarm \
   --output json
 ```
 
-`put-metric-alarm` updates an existing alarm if one with the same name already exists — you don't need to delete it first.
+`put-metric-alarm` updates an existing alarm if one with the same name already exists—you don't need to delete it first.
 
 ## Stretch Goal: Alarm History
 
@@ -460,4 +463,4 @@ Expected output (if you tested the alarm):
 }
 ```
 
-This shows the complete timeline of state transitions — useful for understanding how frequently your alarm fires and whether it's too sensitive or too quiet.
+This shows the complete timeline of state transitions—useful for understanding how frequently your alarm fires and whether it's too sensitive or too quiet.

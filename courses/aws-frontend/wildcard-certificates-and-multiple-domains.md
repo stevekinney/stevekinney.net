@@ -3,7 +3,7 @@ title: 'Wildcard Certificates and Multiple Domains'
 description: >-
   Request wildcard certificates or multi-SAN certificates in ACM and know when each approach is appropriate.
 date: 2026-03-18
-modified: 2026-03-26
+modified: 2026-04-01
 tags:
   - aws
   - acm
@@ -13,7 +13,11 @@ tags:
 
 So far, we've requested a certificate covering a specific domain and its `www` subdomain. That works fine when you know exactly which hostnames you need. But what happens when your frontend grows? You might need `staging.example.com` for a staging environment, `api.example.com` for your backend, or `docs.example.com` for your documentation site. Requesting a new certificate for every subdomain gets tedious fast.
 
+If you want AWS's official framing for the certificate behavior in this lesson, the [AWS Certificate Manager User Guide](https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html) is the source of truth.
+
 ACM supports two strategies for covering multiple hostnames: **wildcard certificates** and **Subject Alternative Names (SANs)**. Each has tradeoffs, and knowing when to use which will save you from unnecessary certificate management overhead.
+
+![Diagram comparing apex-only, wildcard, and SAN certificate coverage across example hostnames including excluded cases.](assets/wildcard-vs-san-certificate-coverage.svg)
 
 ## Wildcard Certificates
 
@@ -55,7 +59,7 @@ aws acm request-certificate \
   --output json
 ```
 
-This certificate covers `example.com` and every single-level subdomain. This is the most common pattern for frontend deployments — you want your site to work at both `example.com` and `www.example.com`, and you want room to add more subdomains later.
+This certificate covers `example.com` and every single-level subdomain. This is the most common pattern for frontend deployments—you want your site to work at both `example.com` and `www.example.com`, and you want room to add more subdomains later.
 
 > [!TIP]
 > The `--domain-name` value is the primary domain on the certificate. The `--subject-alternative-names` list adds additional domains. The primary domain is automatically included in the SANs, so you don't need to list it twice.
@@ -137,7 +141,7 @@ aws acm request-certificate \
   --output json
 ```
 
-This gives you one certificate that covers the apex domain and any subdomain. You can point `www.example.com` at your CloudFront distribution today, spin up `staging.example.com` next week, and add `api.example.com` next month — all without touching ACM again.
+This gives you one certificate that covers the apex domain and any subdomain. You can point `www.example.com` at your CloudFront distribution today, spin up `staging.example.com` next week, and add `api.example.com` next month—all without touching ACM again.
 
 > [!WARNING]
 > Remember from [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md): certificates for CloudFront **must** be in `us-east-1`. This applies to wildcard certificates and multi-SAN certificates equally. Always specify `--region us-east-1`.
@@ -158,4 +162,4 @@ aws acm describe-certificate \
 ["example.com", "*.example.com"]
 ```
 
-If a domain is missing, you can't add it to an existing certificate. You'll need to request a new certificate with the correct list of domains and replace the old one on your CloudFront distribution. This is another reason to start with a wildcard — it gives you room to grow without replacing certificates.
+If a domain is missing, you can't add it to an existing certificate. You'll need to request a new certificate with the correct list of domains and replace the old one on your CloudFront distribution. This is another reason to start with a wildcard—it gives you room to grow without replacing certificates.

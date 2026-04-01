@@ -4,7 +4,7 @@ description: >-
   Store an API key in Parameter Store as a SecureString, create a Lambda
   function that reads it at init time, and call it through API Gateway.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - secrets
@@ -15,9 +15,11 @@ You're going to store a secret in Parameter Store, write a Lambda function that 
 
 This is the same workflow you'd use in production to keep API keys out of your environment variables and source code.
 
+If you want AWS's version of the secret-storage workflow open while you work, keep the [AWS Secrets Manager overview](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html) and the [Parameter Store documentation](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) nearby.
+
 ## Why It Matters
 
-On Vercel, secrets are environment variables — you set them in the dashboard and trust the platform. On AWS, you choose where secrets live and who can access them. That choice has consequences: a secret in a Lambda environment variable is visible to anyone who can describe the function. A secret in Parameter Store is encrypted with KMS, scoped by IAM, and audited in CloudTrail. This exercise makes that difference real.
+On Vercel, secrets are environment variables—you set them in the dashboard and trust the platform. On AWS, you choose where secrets live and who can access them. That choice has consequences: a secret in a Lambda environment variable is visible to anyone who can describe the function. A secret in Parameter Store is encrypted with KMS, scoped by IAM, and audited in CloudTrail. This exercise makes that difference real.
 
 ## Your Task
 
@@ -31,7 +33,7 @@ Use the account ID `123456789012`, region `us-east-1`, and the `nodejs20.x` runt
 
 ## Store the Secret in Parameter Store
 
-Create a SecureString parameter at the path `/my-frontend-app/production/third-party-api-key`. Use any value you want for the secret — something like `sk_test_exercise_abc123` is fine.
+Create a SecureString parameter at the path `/my-frontend-app/production/third-party-api-key`. Use any value you want for the secret—something like `sk_test_exercise_abc123` is fine.
 
 Use `aws ssm put-parameter` with:
 
@@ -40,7 +42,7 @@ Use `aws ssm put-parameter` with:
 - `--type` set to `SecureString`
 - `--region us-east-1`
 
-After creating it, verify the parameter exists by retrieving it with `aws ssm get-parameter`. Make sure to include the flag that decrypts the value — without it, you'll see ciphertext instead of your key.
+After creating it, verify the parameter exists by retrieving it with `aws ssm get-parameter`. Make sure to include the flag that decrypts the value—without it, you'll see ciphertext instead of your key.
 
 ### Checkpoint
 
@@ -60,7 +62,7 @@ Write a handler in `src/handler.ts` that:
 1. Imports `SSMClient` and `GetParameterCommand` from `@aws-sdk/client-ssm`
 2. Creates the SSM client at module level
 3. Declares a module-level variable for the cached API key
-4. Defines an async `loadConfig` function that fetches the parameter (with decryption) and caches it — but skips the fetch if the value is already cached
+4. Defines an async `loadConfig` function that fetches the parameter (with decryption) and caches it—but skips the fetch if the value is already cached
 5. Calls `loadConfig()` at the top of the handler
 6. Returns a JSON response with a `message` and the first 7 characters of the API key (to prove the function can read it without exposing the full value)
 
@@ -93,7 +95,7 @@ The execution role has a policy that grants `ssm:GetParameter` on the specific p
 Package and deploy the Lambda function:
 
 1. Build the TypeScript project
-2. Zip the contents of the `dist/` directory (plus `node_modules/` — you need the `@aws-sdk/client-ssm` package in the deployment)
+2. Zip the contents of the `dist/` directory (plus `node_modules/`—you need the `@aws-sdk/client-ssm` package in the deployment)
 3. Create or update the Lambda function
 
 > [!TIP]
@@ -119,7 +121,7 @@ The response file contains a 200 status code and a body with a message confirmin
 
 ## Test Through API Gateway
 
-If you have an API Gateway HTTP API from [Connecting API Gateway to Lambda](connecting-api-gateway-to-lambda.md), add a route that points to this function — or invoke the existing endpoint if the function is already wired up.
+If you have an API Gateway HTTP API from [Connecting API Gateway to Lambda](connecting-api-gateway-to-lambda.md), add a route that points to this function—or invoke the existing endpoint if the function is already wired up.
 
 If you don't have an API Gateway set up, you can test with the CLI invocation from the previous section. The API Gateway integration is a stretch goal.
 

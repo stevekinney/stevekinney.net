@@ -4,7 +4,7 @@ description: >-
   Write an IAM policy from scratch, understanding the Version, Statement,
   Effect, Action, and Resource fields.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - iam
@@ -13,6 +13,8 @@ tags:
 ---
 
 You know how every API endpoint in your frontend app has some middleware that checks whether the user has the right permissions before letting the request through? IAM policies are that middleware, but for all of AWS. They're JSON documents—you already know JSON—and once you understand the five fields that matter, you can write them from scratch instead of copying examples from Stack Overflow and hoping for the best. (I've been there. We've all been there.)
+
+If you want AWS's version of the policy language while you read, the [IAM JSON policy reference](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html) is the official source of truth.
 
 ## The Structure of an IAM Policy
 

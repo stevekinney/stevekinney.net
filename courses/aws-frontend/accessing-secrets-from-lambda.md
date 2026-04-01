@@ -4,7 +4,7 @@ description: >-
   Retrieve secrets and parameters from a Lambda function at runtime using the
   AWS SDK, with proper IAM permissions and caching strategies.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - lambda
@@ -13,6 +13,8 @@ tags:
 ---
 
 You know how to store secrets in Parameter Store and Secrets Manager. Now you need to read them from a Lambda function. The pattern is straightforward: make an SDK call during initialization, cache the result in a module-level variable, and reuse it across invocations. This is the same init-time pattern you used for environment variables in [Lambda Environment Variables](lambda-environment-variables.md)—the difference is that the value comes from an API call instead of `process.env`.
+
+If you want AWS's official version of the runtime side of this pattern, the [AWS Secrets Manager overview](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html) and the [Lambda environment variables guide](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html) are the references worth keeping open.
 
 ```mermaid
 flowchart LR

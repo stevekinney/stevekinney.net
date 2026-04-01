@@ -4,27 +4,30 @@ description: >-
   Build a 2-endpoint API backed by Lambda, configure CORS, and call it from a
   React frontend using fetch.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - api-gateway
   - exercise
 ---
 
-You're going to build a complete API from scratch — an HTTP API in API Gateway with two routes, each wired to a Lambda function, with CORS configured so a React app can call it. By the end of this exercise, you'll have a working API that accepts GET and POST requests and returns JSON responses to your frontend.
+You're going to build a complete API from scratch—an HTTP API in API Gateway with two routes, each wired to a Lambda function, with CORS configured so a React app can call it. By the end of this exercise, you'll have a working API that accepts GET and POST requests and returns JSON responses to your frontend.
 
-This exercise ties together everything from Module 7 (Lambda) and Module 8 (API Gateway). You'll write the handler, deploy the function, create the API, wire the integration, and call it from the browser.
+This exercise ties together everything from the Lambda and API Gateway sections. You'll write the handler, deploy the function, create the API, wire the integration, and call it from the browser.
+
+> [!TIP]
+> If you want AWS's version of the route, integration, and CORS workflow open while you work, keep the [HTTP APIs documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html), the [Lambda integration guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html), and the [HTTP API CORS guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html) nearby.
 
 ## Why It Matters
 
-On Vercel, creating an API endpoint means dropping a file in the `api/` directory. On AWS, you build each layer yourself: the compute (Lambda), the HTTP layer (API Gateway), the routing, the permissions, and the CORS configuration. That sounds like more work — and it is — but when something breaks at 2am, you know exactly where to look because you built every piece. That's the trade-off.
+On Vercel, creating an API endpoint means dropping a file in the `api/` directory. On AWS, you build each layer yourself: the compute (Lambda), the HTTP layer (API Gateway), the routing, the permissions, and the CORS configuration. That sounds like more work—and it is—but when something breaks at 2am, you know exactly where to look because you built every piece. That's the trade-off.
 
 ## Your Task
 
 Build and deploy an API with two endpoints:
 
-- **`GET /items`** — returns a JSON array of items
-- **`POST /items`** — accepts a JSON body with `name` and `price`, returns the created item with a generated `id`
+- **`GET /items`**—returns a JSON array of items
+- **`POST /items`**—accepts a JSON body with `name` and `price`, returns the created item with a generated `id`
 
 Then call both endpoints from a React app running on `localhost:3000` (or `localhost:5173` if using Vite).
 
@@ -48,7 +51,7 @@ Build the project and create the deployment zip.
 
 ## Deploy the Lambda Function
 
-If you already have the `my-frontend-app-api` function from the Module 7 exercise, update its code. If not, create a new function with the execution role from [Lambda Execution Roles and Permissions](lambda-execution-roles-and-permissions.md).
+If you already have the `my-frontend-app-api` function from the Lambda exercise, update its code. If not, create a new function with the execution role from [Lambda Execution Roles and Permissions](lambda-execution-roles-and-permissions.md).
 
 For updating an existing function:
 
@@ -68,7 +71,7 @@ Invoke the function directly with a GET test event and a POST test event. The GE
 
 Create an HTTP API named `my-frontend-app-api` with protocol type `HTTP`.
 
-Save the `ApiId` from the response — you'll need it for every subsequent command.
+Save the `ApiId` from the response—you'll need it for every subsequent command.
 
 ### Checkpoint
 

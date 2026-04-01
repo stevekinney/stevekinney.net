@@ -4,20 +4,23 @@ description: >-
   Create an IAM user and policy that can only sync files to an S3 bucket and
   create CloudFront invalidations.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - iam
   - exercise
 ---
 
-You're going to create a **deploy bot** — an IAM user whose sole purpose is to deploy your frontend. This user can sync files to a specific S3 bucket and invalidate a specific CloudFront distribution's cache. It can't do anything else. No reading DynamoDB tables, no creating Lambda functions, no changing IAM permissions.
+You're going to create a **deploy bot**—an IAM user whose sole purpose is to deploy your frontend. This user can sync files to a specific S3 bucket and invalidate a specific CloudFront distribution's cache. It can't do anything else. No reading DynamoDB tables, no creating Lambda functions, no changing IAM permissions.
 
 This is the same deploy bot you'll wire into a GitHub Actions pipeline later in the course. I want you to build it now so you understand exactly what permissions it has and why.
 
+> [!TIP]
+> If you want the AWS version of the policy mechanics while you work, keep the [IAM JSON policy reference](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html) and the [`aws iam create-policy` command reference](https://docs.aws.amazon.com/cli/latest/reference/iam/create-policy.html) open.
+
 ## Why It Matters
 
-Every CI/CD pipeline needs credentials. On Vercel, the platform handles this for you — you never think about what permissions the deploy process has. On AWS, you control those permissions explicitly. And the permissions you choose determine the blast radius if those credentials leak.
+Every CI/CD pipeline needs credentials. On Vercel, the platform handles this for you—you never think about what permissions the deploy process has. On AWS, you control those permissions explicitly. And the permissions you choose determine the blast radius if those credentials leak.
 
 A deploy bot with `AdministratorAccess` can delete your database. A deploy bot with a scoped policy can, at worst, overwrite your static files. The difference is a bad day versus a catastrophic one.
 
@@ -25,7 +28,7 @@ A deploy bot with `AdministratorAccess` can delete your database. A deploy bot w
 
 Create an IAM user named `deploy-bot` with:
 
-- **No console access** — this user exists purely for CLI/API use.
+- **No console access**—this user exists purely for CLI/API use.
 - **Access keys** for programmatic access.
 - **A custom IAM policy** that allows exactly these operations and nothing more:
   - Sync files to the `my-frontend-app-assets` S3 bucket (upload, delete, and list)
@@ -41,7 +44,7 @@ In the AWS Console, navigate to **IAM** > **Users** > **Create user**.
 
 - Set the username to `deploy-bot`.
 - **Do not** enable console access. This user will only authenticate via access keys.
-- Skip the permissions step for now — you'll attach a policy after creating it.
+- Skip the permissions step for now—you'll attach a policy after creating it.
 - Click through to create the user.
 
 Alternatively, use the CLI:
@@ -94,7 +97,7 @@ aws iam create-policy \
   --output json
 ```
 
-Note the policy ARN from the output — you'll need it for the next step.
+Note the policy ARN from the output—you'll need it for the next step.
 
 ### Attach the Policy to the User
 
@@ -146,7 +149,7 @@ You should see the `deploy-bot` user's ARN in the response.
 
 ## Stretch Goals
 
-- **Test the boundaries.** Try running a command the deploy bot shouldn't have access to — like `aws iam list-users --profile deploy-bot --region us-east-1 --output json`. Confirm that you get an `AccessDenied` error. This is the policy doing its job.
+- **Test the boundaries.** Try running a command the deploy bot shouldn't have access to—like `aws iam list-users --profile deploy-bot --region us-east-1 --output json`. Confirm that you get an `AccessDenied` error. This is the policy doing its job.
 
 - **Add a Deny statement.** Add an explicit Deny statement that prevents the deploy bot from deleting the bucket itself (`s3:DeleteBucket`). Technically the bot already can't do this (the action isn't in the Allow statements), but an explicit Deny acts as a guardrail even if someone later expands the Allow statements.
 

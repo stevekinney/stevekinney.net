@@ -5,7 +5,7 @@ description: >-
   hierarchical path structure, including both plain text and SecureString
   parameters.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - parameter-store
@@ -14,6 +14,8 @@ tags:
 ---
 
 **Parameter Store** is part of AWS Systems Manager (SSM). It's a key-value store for configuration data—the same kind of data you've been putting in Lambda environment variables, but with encryption, access control, versioning, and a hierarchical namespace built in.
+
+If you want AWS's version of the same feature while you read, the [Parameter Store documentation](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) is the official reference.
 
 If Lambda environment variables are like a flat `.env` file, Parameter Store is like a structured configuration tree. I find that distinction helpful because it changes how you think about organizing your config. You organize parameters by application, environment, and purpose using paths that look like file system directories: `/my-frontend-app/production/api-key`. And unlike environment variables, you can share parameters across multiple Lambda functions without duplicating values.
 
@@ -52,6 +54,10 @@ aws ssm put-parameter \
   --output json
 ```
 
+In the console, the **Create parameter** form shows the **SecureString** type option with the KMS key selector.
+
+![The AWS Systems Manager Parameter Store Create parameter form showing the name /my-frontend-app/api-key filled in and SecureString selected as the type with the default KMS key.](assets/parameter-store-create-securestring.png)
+
 The value is encrypted at rest using an AWS-managed KMS key. You can also specify your own KMS key with the `--key-id` flag, but the default key works fine for most use cases.
 
 > [!TIP]
@@ -78,6 +84,10 @@ Here's a typical structure for a frontend application with two environments:
 ```
 
 This hierarchy gives you two things. First, you can retrieve all parameters for a given environment in a single call. Second, you can write an IAM policy that grants a Lambda function access to `/my-frontend-app/production/*` without giving it access to staging parameters.
+
+In the console, the **Parameter Store** list view shows all parameters in your account. You can filter by path to see only the `/my-frontend-app/` hierarchy.
+
+![The AWS Systems Manager Parameter Store list view showing parameters with their names, types, and last modified dates.](assets/parameter-store-hierarchical-list.png)
 
 Let's populate a few more parameters:
 

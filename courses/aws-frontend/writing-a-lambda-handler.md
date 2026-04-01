@@ -4,7 +4,7 @@ description: >-
   Write a Lambda handler in TypeScript that receives an event, processes it, and
   returns a properly formatted response.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - lambda
@@ -13,6 +13,8 @@ tags:
 ---
 
 You know what Lambda is and how the execution model works. Now you need to write the code that Lambda actually runs. A Lambda **handler** is just an exported async function with a specific signature—it receives an event, does some work, and returns a response. If you've ever written an API route in Next.js or a serverless function in Vercel, the shape is nearly identical.
+
+If you want AWS's version of the handler contract in front of you, the [Node.js handler guide for Lambda](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html) is the official reference.
 
 ## Project Setup
 
@@ -69,7 +71,7 @@ Create a `tsconfig.json` in the `lambda/` directory:
 
 ## The Handler Signature
 
-Every Lambda handler follows the same pattern: it's an exported async function that receives an `event` and returns a response. The type of the event depends on what triggers the function. Since you're building an API backend that will sit behind API Gateway (covered in Module 8), you'll use the `APIGatewayProxyHandlerV2` type.
+Every Lambda handler follows the same pattern: it's an exported async function that receives an `event` and returns a response. The type of the event depends on what triggers the function. Since you're building an API backend that will sit behind API Gateway later in the course, you'll use the `APIGatewayProxyHandlerV2` type.
 
 Here's the minimal handler:
 

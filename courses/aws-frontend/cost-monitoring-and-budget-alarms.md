@@ -4,7 +4,7 @@ description: >-
   Set up AWS Budgets and billing alerts so you're notified before costs exceed
   your expectations, and understand where the free tier boundaries are.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - billing
@@ -12,7 +12,9 @@ tags:
   - cost-management
 ---
 
-The scariest thing about AWS isn't IAM policies or CloudFormation templates — it's the billing page. Unlike Vercel or Netlify, where you pick a plan and know what you'll pay, AWS charges you for exactly what you use. That's great for cost efficiency at scale. It's terrifying when you're learning, because a misconfigured service can run up charges before you notice.
+The scariest thing about AWS isn't IAM policies or CloudFormation templates—it's the billing page. Unlike Vercel or Netlify, where you pick a plan and know what you'll pay, AWS charges you for exactly what you use. That's great for cost efficiency at scale. It's terrifying when you're learning, because a misconfigured service can run up charges before you notice.
+
+If you want live numbers instead of lesson-time snapshots, the [AWS Pricing Calculator](https://calculator.aws/), the [AWS Budgets pricing page](https://aws.amazon.com/aws-cost-management/aws-budgets/pricing/), and the current service pricing pages are the sources of truth.
 
 The good news: everything you built in this course fits comfortably within the AWS Free Tier or costs pennies per month. The better news: AWS gives you tools to set up alarms that fire before you spend a single unexpected dollar. Set them up now, before you forget.
 
@@ -20,7 +22,7 @@ The good news: everything you built in this course fits comfortably within the A
 
 Before you set up budget alarms, you need to know what's actually free. Here's every service you've used, with its free tier limits:
 
-### S3 (Module 2)
+### S3
 
 **Free for 12 months** after account creation:
 
@@ -28,9 +30,9 @@ Before you set up budget alarms, you need to know what's actually free. Here's e
 - 20,000 GET requests per month
 - 2,000 PUT requests per month
 
-A typical static frontend build is 5-50 MB. You'd need to store roughly 100 different versions of a large site to approach the 5 GB limit. The request limits are similarly generous — 20,000 GETs per month is well beyond what you'll generate during development.
+A typical static frontend build is 5-50 MB. You'd need to store roughly 100 different versions of a large site to approach the 5 GB limit. The request limits are similarly generous—20,000 GETs per month is well beyond what you'll generate during development.
 
-### CloudFront (Module 4)
+### CloudFront
 
 **Always free** (no 12-month expiration):
 
@@ -40,16 +42,16 @@ A typical static frontend build is 5-50 MB. You'd need to store roughly 100 diff
 
 This is extremely generous. A typical static site serving 100 KB pages would need 10 million page views per month to hit the 1 TB transfer limit. If your personal project is getting 10 million page views, you have much bigger things to think about than your AWS bill. (Congratulations, by the way.)
 
-### Lambda (Module 7)
+### Lambda
 
 **Always free** (no 12-month expiration):
 
 - 1,000,000 invocations per month
 - 400,000 GB-seconds of compute per month
 
-A GB-second is one second of execution with 1 GB of memory. If your function uses 128 MB of memory and runs for 200 ms per invocation, each invocation consumes 0.025 GB-seconds. At that rate, you get 16 million invocations per month before you exceed the compute limit. The request limit of 1 million will be your constraint first — and a million API calls per month is a real application, not a side project.
+A GB-second is one second of execution with 1 GB of memory. If your function uses 128 MB of memory and runs for 200 ms per invocation, each invocation consumes 0.025 GB-seconds. At that rate, you get 16 million invocations per month before you exceed the compute limit. The request limit of 1 million will be your constraint first—and a million API calls per month is a real application, not a side project.
 
-### API Gateway (Module 8)
+### API Gateway
 
 **Free for 12 months** after account creation:
 
@@ -58,7 +60,7 @@ A GB-second is one second of execution with 1 GB of memory. If your function use
 
 After the 12-month period, HTTP APIs cost $1.00 per million requests. Even a moderately active application will cost single digits per month.
 
-### DynamoDB (Module 10)
+### DynamoDB
 
 **Always free** (no 12-month expiration):
 
@@ -66,16 +68,16 @@ After the 12-month period, HTTP APIs cost $1.00 per million requests. Even a mod
 - 25 read capacity units (RCUs)
 - 25 write capacity units (WCUs)
 
-The 25 GB storage limit is enormous for most frontend-backed applications. The capacity units are enough for roughly 25 reads and 25 writes per second — sustained, continuously. For a side project or small production app, you'll never hit these limits.
+The 25 GB storage limit is enormous for most frontend-backed applications. The capacity units are enough for roughly 25 reads and 25 writes per second—sustained, continuously. For a side project or small production app, you'll never hit these limits.
 
 > [!TIP]
 > If you created your DynamoDB table with on-demand capacity mode (as recommended in this course), treat DynamoDB costs as request-based rather than provisioned-capacity math. The easiest way to stay accurate is to check the current DynamoDB pricing page or calculator instead of memorizing old free-tier numbers.
 
-### Route 53 (Module 5)
+### Route 53
 
 **No free tier.** Route 53 charges $0.50 per hosted zone per month, plus $0.40 per million DNS queries for the first billion queries. For a single domain with normal traffic, expect to pay about $0.50–$1.00 per month. This is one of the few services in this course that costs money from day one.
 
-### CloudWatch (Module 12)
+### CloudWatch
 
 **Always free** (no 12-month expiration):
 
@@ -85,7 +87,7 @@ The 25 GB storage limit is enormous for most frontend-backed applications. The c
 - 5 GB across log ingestion, archive storage, and Logs Insights scanning
 - 3 dashboards with up to 50 metrics each
 
-Lambda automatically sends logs to CloudWatch. The 5 GB shared log allowance is where you're most likely to hit a boundary — if your Lambda functions log aggressively, you can exceed it quickly. Set log retention to 7 or 14 days on your log groups to keep storage costs down.
+Lambda automatically sends logs to CloudWatch. The 5 GB shared log allowance is where you're most likely to hit a boundary—if your Lambda functions log aggressively, you can exceed it quickly. Set log retention to 7 or 14 days on your log groups to keep storage costs down.
 
 ## Setting Up a Budget Alarm
 
@@ -99,7 +101,7 @@ The fastest way to set up your first budget:
 2. Click **Budgets** in the left sidebar.
 3. Click **Create budget**.
 4. Select **Customize (advanced)** and then **Cost budget**.
-5. Set the budget amount to something low — $5 or $10 per month is reasonable for a learning account.
+5. Set the budget amount to something low—$5 or $10 per month is reasonable for a learning account.
 6. Add a notification threshold at 80% of your budget. Enter your email address as the notification target.
 7. Add a second notification at 100%.
 8. Click **Create budget**.
@@ -169,7 +171,7 @@ aws budgets create-budget \
 You'll receive an email when your actual spending crosses 80% and 100% of your $10 monthly budget.
 
 > [!WARNING]
-> Budget alerts aren't real-time. AWS evaluates budgets multiple times per day, but there can be a delay of several hours between when you incur a charge and when the alert fires. Don't rely on budget alerts as a hard spending cap — they're an early warning system, not a kill switch.
+> Budget alerts aren't real-time. AWS evaluates budgets multiple times per day, but there can be a delay of several hours between when you incur a charge and when the alert fires. Don't rely on budget alerts as a hard spending cap—they're an early warning system, not a kill switch.
 
 ## The Billing Dashboard and Cost Explorer
 
@@ -191,7 +193,7 @@ If your `admin` user cannot open this page, you probably skipped **IAM user and 
 
 ### Cost Explorer
 
-**Cost Explorer** is more powerful. It lets you visualize spending over time, filter by service, and identify trends. It's particularly useful for answering questions like "why did my bill jump this month?" — you can drill into individual services and see day-by-day spending.
+**Cost Explorer** is more powerful. It lets you visualize spending over time, filter by service, and identify trends. It's particularly useful for answering questions like "why did my bill jump this month?"—you can drill into individual services and see day-by-day spending.
 
 To enable Cost Explorer:
 
@@ -202,7 +204,7 @@ To enable Cost Explorer:
 Cost Explorer itself is free for the basic functionality. The API version charges per request, but you don't need the API for manual investigation.
 
 > [!TIP]
-> Enable **Free Tier usage alerts** in the Billing preferences. Go to Billing, then Preferences, then Billing Preferences, and check "Receive Free Tier Usage Alerts." AWS will email you when any service approaches 85% of its free tier limit — a separate, more granular alert than the budget alarm you set up above.
+> Enable **Free Tier usage alerts** in the Billing preferences. Go to Billing, then Preferences, then Billing Preferences, and check "Receive Free Tier Usage Alerts." AWS will email you when any service approaches 85% of its free tier limit—a separate, more granular alert than the budget alarm you set up above.
 
 ## The Services That Catch People Off Guard
 
@@ -238,4 +240,4 @@ If you're working through this course with a single project, here's what to expe
 - **After the 12-month free tier expires:** $2.00–$5.00 per month for a low-traffic application, assuming Lambda and DynamoDB stay within their always-free limits.
 - **If something goes wrong:** The most common surprise bill is $10–$50 from a forgotten resource or an unexpectedly verbose logging configuration.
 
-Setting up a $10 monthly budget alarm — which you just did — covers all of these scenarios. If you get that email, something is either misconfigured or getting more traffic than you expected. Either way, you'll want to know about it.
+Setting up a $10 monthly budget alarm—which you just did—covers all of these scenarios. If you get that email, something is either misconfigured or getting more traffic than you expected. Either way, you'll want to know about it.

@@ -4,20 +4,23 @@ description: >-
   Write a TypeScript handler that returns a JSON greeting, create an execution
   role, deploy the function, invoke it, and read the logs.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - lambda
   - exercise
 ---
 
-You're going to build and deploy a Lambda function from scratch — no console wizards, no frameworks, no abstractions. By the end of this exercise, you'll have a TypeScript function running in AWS that you can invoke from the command line and whose logs you can read in CloudWatch.
+You're going to build and deploy a Lambda function from scratch—no console wizards, no frameworks, no abstractions. By the end of this exercise, you'll have a TypeScript function running in AWS that you can invoke from the command line and whose logs you can read in CloudWatch.
 
 This is the same workflow you'll use for every Lambda function you deploy throughout the rest of the course. Get comfortable with it now.
 
+> [!TIP]
+> If the console or CLI output looks a little different when you do this, keep the [`aws lambda create-function` command reference](https://docs.aws.amazon.com/cli/latest/reference/lambda/create-function.html) and the [`aws lambda update-function-code` command reference](https://docs.aws.amazon.com/cli/latest/reference/lambda/update-function-code.html) open.
+
 ## Why It Matters
 
-On Vercel, deploying a serverless function means pushing code to Git and waiting for the platform to figure out the rest. On AWS, you own every step: writing the handler, creating the execution role, packaging the code, deploying it, and verifying it works. That sounds like more work — and it is — but it means you understand exactly what's running, with what permissions, and where to look when something breaks.
+On Vercel, deploying a serverless function means pushing code to Git and waiting for the platform to figure out the rest. On AWS, you own every step: writing the handler, creating the execution role, packaging the code, deploying it, and verifying it works. That sounds like more work—and it is—but it means you understand exactly what's running, with what permissions, and where to look when something breaks.
 
 ## Your Task
 
@@ -89,7 +92,7 @@ Create the deployment zip from the compiled output:
 2. Zip the contents (not the directory itself)
 3. Use `aws lambda create-function` with the function name, runtime, role ARN, handler path, and zip file
 
-The handler path should be `handler.handler` — the first `handler` is the filename (without `.js`), the second is the exported function name.
+The handler path should be `handler.handler`—the first `handler` is the filename (without `.js`), the second is the exported function name.
 
 ### Checkpoint
 
@@ -125,7 +128,7 @@ Create a second test event with no `queryStringParameters` (or omit the field en
 
 ### Checkpoint
 
-The response includes `greeting: "Hello, World!"` — your default value works correctly.
+The response includes `greeting: "Hello, World!"`—your default value works correctly.
 
 ## Read the Logs
 
@@ -162,8 +165,8 @@ The log group exists and contains at least one log stream with events from your 
 
 - **Add an environment variable.** Set a `GREETING_PREFIX` environment variable (e.g., `"Howdy"`) and use it in your handler instead of hardcoding `"Hello"`. Verify the change by invoking the function and checking the response.
 
-- **Check cold start duration.** Invoke the function with `--log-type Tail` and decode the base64 log output. Look for the `Init Duration` field. Invoke again and confirm the second invocation has no `Init Duration` — it was a warm start. This is one of those things that's way more satisfying to see for yourself than to read about.
+- **Check cold start duration.** Invoke the function with `--log-type Tail` and decode the base64 log output. Look for the `Init Duration` field. Invoke again and confirm the second invocation has no `Init Duration`—it was a warm start. This is one of those things that's way more satisfying to see for yourself than to read about.
 
-- **Measure deployment package size.** Check the size of `function.zip`. Try adding a dependency (like `lodash`) to see how the zip size changes. Then remove it — you don't need it, and keeping the bundle small matters for cold start performance.
+- **Measure deployment package size.** Check the size of `function.zip`. Try adding a dependency (like `lodash`) to see how the zip size changes. Then remove it—you don't need it, and keeping the bundle small matters for cold start performance.
 
 When you're ready, check your work against the [Solution: Build and Deploy a Lambda Function](lambda-function-solution.md).

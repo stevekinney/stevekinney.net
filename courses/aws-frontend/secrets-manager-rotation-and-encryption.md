@@ -4,7 +4,7 @@ description: >-
   Store sensitive credentials in Secrets Manager, understand automatic rotation,
   and know when Secrets Manager is worth the cost over Parameter Store.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - secrets-manager
@@ -13,6 +13,8 @@ tags:
 ---
 
 **Secrets Manager** is a standalone AWS service built for one thing: storing and rotating sensitive credentials. While Parameter Store can hold encrypted values (SecureString), Secrets Manager goes further with built-in rotation, cross-service integration, and a purpose-built API for credential lifecycle management.
+
+If you want AWS's official version of the service behavior while you read, the [AWS Secrets Manager overview](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html) and the [Parameter Store documentation](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) are the canonical references.
 
 Think of it this way: Parameter Store is a configuration store that happens to support encryption. Secrets Manager is a credential vault with rotation as a first-class feature.
 
@@ -40,6 +42,10 @@ The response includes the secret's ARN and name:
 
 Notice the random suffix on the ARN (`-AbCdEf`). Secrets Manager appends this automatically to ensure uniqueness. When you reference the secret in IAM policies, you can use the name or the full ARN.
 
+In the console, the **Secrets** list shows all secrets in your account with their names, descriptions, and last rotation dates.
+
+![The AWS Secrets Manager Secrets list page showing the list of secrets with columns for name, description, last retrieved, and last changed.](assets/secrets-manager-secret-list.png)
+
 You can also store a plain string instead of JSON:
 
 ```bash
@@ -50,7 +56,7 @@ aws secretsmanager create-secret \
   --output json
 ```
 
-But JSON is the better default. I almost always reach for it. Most credentials have multiple related values — an API key and a secret, a username and password, a client ID and client secret. Storing them together as a JSON object keeps them in sync.
+But JSON is the better default. I almost always reach for it. Most credentials have multiple related values—an API key and a secret, a username and password, a client ID and client secret. Storing them together as a JSON object keeps them in sync.
 
 ## Retrieving a Secret
 
@@ -95,7 +101,7 @@ For most frontend applications, the default AWS-managed key is fine. You'd use a
 
 ## Automatic Rotation
 
-This is the feature that separates Secrets Manager from everything else. You can configure a secret to rotate automatically on a schedule — every 30 days, every 7 days, whatever your security policy requires.
+This is the feature that separates Secrets Manager from everything else. You can configure a secret to rotate automatically on a schedule—every 30 days, every 7 days, whatever your security policy requires.
 
 Rotation works through a Lambda function. When the rotation schedule triggers, Secrets Manager invokes a rotation Lambda that:
 
@@ -124,10 +130,10 @@ For third-party services (Stripe, SendGrid, Twilio), you write your own rotation
 
 Secrets Manager uses **version stages** to manage rotation without downtime. The two important stages are:
 
-- **`AWSCURRENT`** — the active version. This is what your application gets by default when it retrieves the secret.
-- **`AWSPENDING`** — the version being tested during rotation. Once validated, it becomes `AWSCURRENT`.
+- **`AWSCURRENT`**—the active version. This is what your application gets by default when it retrieves the secret.
+- **`AWSPENDING`**—the version being tested during rotation. Once validated, it becomes `AWSCURRENT`.
 
-There's also **`AWSPREVIOUS`** — the old version, retained so applications that cached the previous value can still authenticate during the rotation window. This is how zero-downtime rotation works: the old credential remains valid until the rotation Lambda explicitly revokes it.
+There's also **`AWSPREVIOUS`**—the old version, retained so applications that cached the previous value can still authenticate during the rotation window. This is how zero-downtime rotation works: the old credential remains valid until the rotation Lambda explicitly revokes it.
 
 ## Pricing
 
@@ -138,7 +144,7 @@ Secrets Manager isn't free. Here's the cost breakdown:
 | Storage   | $0.40 per secret per month |
 | API calls | $0.05 per 10,000 API calls |
 
-Ten secrets cost $4.00 per month. A hundred secrets cost $40.00 per month. The API call cost is negligible for most applications — a Lambda function that retrieves a secret once per cold start generates very few API calls.
+Ten secrets cost $4.00 per month. A hundred secrets cost $40.00 per month. The API call cost is negligible for most applications—a Lambda function that retrieves a secret once per cold start generates very few API calls.
 
 Compare this to Parameter Store's standard tier, which is free. For a frontend application with a handful of secrets that don't need automatic rotation, the $0.40 per secret per month is hard to justify. For database credentials that must rotate every 30 days with zero downtime, it's worth every penny.
 
@@ -146,7 +152,7 @@ Compare this to Parameter Store's standard tier, which is free. For a frontend a
 
 Use Secrets Manager when:
 
-- **You need automatic rotation.** This is the primary differentiator. If a credential needs to rotate on a schedule — database passwords, service account keys — Secrets Manager is the tool.
+- **You need automatic rotation.** This is the primary differentiator. If a credential needs to rotate on a schedule—database passwords, service account keys—Secrets Manager is the tool.
 - **You're using RDS, Redshift, or DocumentDB.** AWS provides pre-built rotation functions for these services. Rotation is nearly turnkey.
 - **Your organization requires credential lifecycle management.** Secrets Manager tracks creation dates, rotation dates, and version history. Compliance teams like this.
 - **You need cross-region replication.** Secrets Manager can replicate secrets to multiple regions for disaster recovery.
@@ -158,7 +164,7 @@ Use Parameter Store SecureString when:
 - **You want to store configuration and secrets in the same place.** Parameter Store handles both with its hierarchical path structure.
 
 > [!TIP]
-> A common pattern is to use both: Parameter Store for non-sensitive configuration and secrets that don't rotate, Secrets Manager for database credentials and other secrets that need automatic rotation. They aren't competing services — they complement each other.
+> A common pattern is to use both: Parameter Store for non-sensitive configuration and secrets that don't rotate, Secrets Manager for database credentials and other secrets that need automatic rotation. They aren't competing services—they complement each other.
 
 ## Updating a Secret
 

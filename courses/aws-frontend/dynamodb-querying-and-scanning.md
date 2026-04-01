@@ -4,7 +4,7 @@ description: >-
   Use Query to retrieve items by partition key with optional sort key conditions
   and understand when and why Scan should be avoided.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - dynamodb
@@ -13,6 +13,8 @@ tags:
 ---
 
 GetItem retrieves a single item by its exact primary key. But frontend applications rarely need just one item at a time—you need a list. "Show me all the items for this user." "Show me this user's items created after a certain date." DynamoDB gives you two tools for retrieving multiple items: **Query** and **Scan**. They sound similar, but they're fundamentally different in how they work, what they cost, and when you should use each one.
+
+If you want AWS's exact wording on the trade-off you're making here, keep the [DynamoDB Query guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.html) and the [DynamoDB Scan guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html) open.
 
 ```mermaid
 flowchart LR

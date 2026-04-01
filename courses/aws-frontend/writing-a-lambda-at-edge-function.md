@@ -5,7 +5,7 @@ description: >-
   response events, understanding the us-east-1 deployment requirement and the
   replication model.
 date: 2026-03-18
-modified: 2026-03-31
+modified: 2026-04-01
 tags:
   - aws
   - lambda-at-edge
@@ -13,6 +13,8 @@ tags:
 ---
 
 Lambda@Edge is a full Lambda function that runs at CloudFront's regional edge caches instead of in a single region. If CloudFront Functions are like Vercel Edge Functions—tiny, fast, constrained—then Lambda@Edge is like a Vercel Serverless Function that AWS has moved closer to your users. You get the full Node.js runtime, npm packages, network access, and up to 30 seconds of execution time on origin events.
+
+If you want AWS's version of the runtime and replication model while you read, the [Lambda@Edge guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-at-the-edge.html) is the official reference.
 
 You already wrote and deployed a Lambda function in [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md). Lambda@Edge follows the same general pattern, but with a handful of additional constraints that trip people up. This lesson walks through all of them. Honestly, most of the gotchas aren't hard once you know they exist—the problem is that first time when you don't.
 
