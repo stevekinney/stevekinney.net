@@ -31,8 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
       - name: Cache
         uses: actions/cache@v4
         with:
@@ -40,6 +38,8 @@ jobs:
             node_modules
             ~/.cache/ms-playwright
           key: ${{ runner.os }}-deps-${{ hashFiles('**/bun.lockb') }}
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
       - name: Lint
         run: bun run lint
       - name: Typecheck
