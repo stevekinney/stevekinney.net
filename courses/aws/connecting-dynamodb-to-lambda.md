@@ -285,6 +285,9 @@ aws lambda update-function-code \
   --output json
 ```
 
+> [!NOTE] Why no `node_modules` in the zip?
+> You just added `@aws-sdk/client-dynamodb` and `@aws-sdk/lib-dynamodb` to `package.json`, so you might be wondering whether the zip needs to bundle `node_modules` now. It doesn't: the `nodejs20.x` runtime already ships the AWS SDK v3 packages, so anything under `@aws-sdk/*` resolves at runtime without being in your zip. This is also why your local `npm install` is enough for type checking—the imports work both locally and in Lambda. Once you add a dependency that _isn't_ pre-installed (a Markdown parser, a date library, anything outside `@aws-sdk/*`), you'll need to copy `node_modules` into `dist/` before zipping. See the warning in [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md) for the exact mechanics.
+
 Test creating an item:
 
 ```bash

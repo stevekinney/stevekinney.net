@@ -238,8 +238,8 @@ https://d1234abcdef.cloudfront.net
 
 You should see your site—the same files you uploaded to S3 in [Uploading and Organizing Files](uploading-and-organizing-files.md), now served through CloudFront with HTTPS. The URL isn't pretty, but it proves the distribution works. You'll attach a custom domain later.
 
-> [!TIP]
-> If you see an "Access Denied" XML error, your S3 bucket might not have a public bucket policy yet. For now, the bucket needs to be publicly readable (as configured in [Bucket Policies and Public Access](bucket-policies-and-public-access.md)). In the next lesson, you'll lock down the bucket using Origin Access Control so only CloudFront can read from it—removing the need for public access entirely.
+> [!TIP] Seeing "Access Denied"?
+> If you get an "Access Denied" XML error in the browser, that's expected at this point: CloudFront is reaching S3, but S3 isn't letting it in yet. The fix is the next lesson—you'll wire up **Origin Access Control** so CloudFront has its own identity that the bucket policy trusts. Don't loosen the bucket policy or re-enable public access to make this go away. Move on to [Origin Access Control for S3](origin-access-control-for-s3.md), then come back and reload.
 
 ## Listing and Describing Distributions
 

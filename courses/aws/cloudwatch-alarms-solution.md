@@ -464,3 +464,43 @@ Expected output (if you tested the alarm):
 ```
 
 This shows the complete timeline of state transitions—useful for understanding how frequently your alarm fires and whether it's too sensitive or too quiet.
+
+## Cleanup
+
+If you're done experimenting and don't want stray alarms paging you (or a lingering email subscription you forgot about), tear it all down in the reverse of the order you built it.
+
+Delete the alarms:
+
+```bash
+aws cloudwatch delete-alarms \
+  --alarm-names my-frontend-app-api-error-count my-frontend-app-api-high-duration my-frontend-app-api-5xx \
+  --region us-east-1
+```
+
+Unsubscribe your email from the SNS topic. Grab the subscription ARN first:
+
+```bash
+aws sns list-subscriptions-by-topic \
+  --topic-arn arn:aws:sns:us-east-1:123456789012:my-frontend-app-alerts \
+  --region us-east-1 \
+  --output json
+```
+
+Then unsubscribe using the `SubscriptionArn` from the response:
+
+```bash
+aws sns unsubscribe \
+  --subscription-arn arn:aws:sns:us-east-1:123456789012:my-frontend-app-alerts:abcd1234-... \
+  --region us-east-1
+```
+
+Delete the topic itself:
+
+```bash
+aws sns delete-topic \
+  --topic-arn arn:aws:sns:us-east-1:123456789012:my-frontend-app-alerts \
+  --region us-east-1
+```
+
+> [!NOTE]
+> Alarms and SNS topics in this configuration don't cost anything at rest, but it's still worth cleaning them up so you don't end up with stale alerts firing into an inbox you stopped reading.

@@ -31,7 +31,7 @@ This lesson builds on every service section in the course. It is intentionally a
 
 IAM is the foundation everything else sits on. If your IAM policies are too broad, every other security measure is undermined. I can't overstate this one.
 
-- [ ] **The root user has MFA enabled and isn't used for daily work.** You set this up in [Creating and Securing an AWS Account](creating-and-securing-an-aws-account.md). Go to the IAM dashboard right now and confirm MFA is active on the root account. If you've been using root credentials for CLI work, stop.
+- [ ] **The root user has MFA enabled and isn't used for daily work.** You set this up in [Creating and Securing an AWS Account](creating-and-securing-an-aws-account.md). Go to the IAM dashboard right now and confirm MFA is active on the root user. If you've been using root credentials for CLI work, stop.
 
 - [ ] **No IAM user has `AdministratorAccess` unless they genuinely need it.** Your `admin` user from the IAM foundation section may have broad permissions for learning purposes. In production, even admin users should have scoped policies. Review the policies attached to every IAM user and group in your account.
 

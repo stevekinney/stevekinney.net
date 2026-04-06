@@ -107,6 +107,8 @@ Enter your access key ID, secret access key, `us-east-1` as the region, and `jso
 > [!TIP]
 > We use `us-east-1` throughout this course because it's the region where CloudFront certificates and Lambda@Edge functions must be created. Using a single region for everything keeps things simple while you're learning.
 
+Once you've set a default region with `aws configure`, the `--region` flag becomes optional: if you leave it off, the CLI uses whatever you configured. For the rest of the course, I'll still pass `--region us-east-1` explicitly on every command. It's redundant when your default is already `us-east-1`, but it makes the examples reproducible if you ever change your default and copy a command into a different shell. If you want to drop the flag once you're comfortable, that's fine—just remember which region your default points at.
+
 ## Named Profiles
 
 The default profile works fine when you have one AWS account. But if you ever have a personal account and a work account—or a staging environment and a production environment—you'll want **named profiles**.

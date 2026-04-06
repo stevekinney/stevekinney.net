@@ -158,6 +158,9 @@ aws lambda update-function-configuration \
   --output json
 ```
 
+> [!NOTE] What happens to warm containers?
+> Updating environment variables tells Lambda to swap in a fresh execution environment on the next invocation—the new value is picked up immediately, not gradually. Any warm containers running with the old values are retired in the background. You don't need to redeploy code to push a config change, and you don't need to wait for a rollout: the next request gets the new config.
+
 ## Environment Variables and Cold Starts
 
 Environment variables are available during the init phase, which means you can safely read them in top-level module code. This is actually the recommended pattern: read configuration once during init and reuse it across invocations. Don't read `process.env` inside your handler on every request—it works, but it wastes time doing something that only needs to happen once.
