@@ -3,7 +3,7 @@ title: "Temporal's Developer Skill Is a Promising First Draft"
 description: >-
   Temporal shipped one of the first major infrastructure vendor agent skills. The diagnosis is right and the architecture is sound. The execution has some fixable gaps.
 date: 2026-03-24
-modified: 2026-03-26
+modified: 2026-04-06
 tags:
   - ai
   - temporal
@@ -14,7 +14,7 @@ tags:
 
 If you've ever watched a coding agent confidently write `time.sleep(60)` inside a Temporal workflow, you already understand the problem this skill is trying to solve. The model has seen the Temporal docs. It understands what determinism means in the abstract. It still reaches for the platform-agnostic sleep function because that's what training data for "pause for 60 seconds" looks like. The correct version—`workflow.sleep()` in Python, `workflow.Sleep()` in Go, the SDK's timer in TypeScript—requires the kind of specific, internalized, current knowledge that no general-purpose model reliably has.
 
-Temporal's [Developer Skill](https://temporal.io/blog/introducing-temporal-developer-skill) is a serious attempt to close that gap. I've read through [the `SKILL.md`](https://github.com/temporalio/skill-temporal-developer), explored the reference files, and installed the skill alongside my own Temporal tooling to see how it holds up in practice. The architecture is genuinely right. To be clear: even as-is, the skill meaningfully improves on what a model produces without it. That's not nothing. But, "better than training data alone" is a low bar for a tool that's going to be the default way many developers interact with Temporal through their AI agents.
+Temporal's [Developer Skill](https://temporal.io/blog/introducing-temporal-developer-skill) is a serious attempt to close that gap. I've read through [the `SKILL.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/SKILL.md), explored the reference files, and installed the skill alongside my own Temporal tooling to see how it holds up in practice. The architecture is right. To be clear: even as-is, the skill meaningfully improves on what a model produces without it. That's not nothing. But, "better than training data alone" is a low bar for a tool that's going to be the default way many developers interact with Temporal through their AI agents.
 
 ## The foundation is sound
 
@@ -24,7 +24,7 @@ The decision to use the [Agent Skills open specification](https://agentskills.or
 
 The two-tier loading design is smart: roughly 100 tokens of metadata sit in memory at session start, with the full guidance activating only when the agent detects Temporal code. Most of the time, this skill costs you nothing. The reference file organization—splitting content into language-agnostic core concepts and language-specific implementation details—is also sound. Determinism rules are universal; the syntax for expressing them is not.
 
-The History Replay explanation in the `SKILL.md` is genuinely good. It maps Workflow Code to Commands to Events:
+The History Replay explanation in the `SKILL.md` is the kind of thing the rest of the skill body should look like. It maps Workflow Code to Commands to Events:
 
 | Workflow Code    | Command                       | Event                           |
 | ---------------- | ----------------------------- | ------------------------------- |
@@ -32,7 +32,7 @@ The History Replay explanation in the `SKILL.md` is genuinely good. It maps Work
 | Sleep/timer      | `StartTimer`                  | `TimerStarted`                  |
 | Child workflow   | `StartChildWorkflowExecution` | `ChildWorkflowExecutionStarted` |
 
-The reason it works is that it's mechanism-level mapping: exact names, exact relationships, the kind of precise detail that models don't reliably carry from training data. More of the `SKILL.md` should look like this.
+It works because it's mechanism-level mapping: exact names, exact relationships, the kind of precise detail that models don't reliably carry from training data. More of the `SKILL.md` should look like this.
 
 With all of that said: here's where the execution falls short.
 
@@ -41,20 +41,21 @@ With all of that said: here's where the execution falls short.
 The `SKILL.md`'s routing instruction reads:
 
 > 1. First, read the getting started guide for the language you are working in:
->    - Python → `references/python/python.md`
->    - TypeScript → `references/typescript/typescript.md`
->    - Go → `references/go/go.md`
+>    - Python → [`references/python/python.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/python/python.md)
+>    - TypeScript → [`references/typescript/typescript.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/typescript/typescript.md)
+>    - Java → [`references/java/java.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/java/java.md)
+>    - Go → [`references/go/go.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/go/go.md)
 > 2. Second, read appropriate `core` and language-specific references for the task at hand.
 
-Then it lists nine core reference files—`determinism.md`, `patterns.md`, `gotchas.md`, `versioning.md`, `troubleshooting.md`, `error-reference.md`, `interactive-workflows.md`, `dev-management.md`, and `ai-patterns.md`—each with a one-line description. The word "appropriate" is the only routing logic. No conditional instructions. No "if you're doing X, read Y first." Just a list and a suggestion to pick the relevant ones.
+Then it lists nine core reference files—[`determinism.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/determinism.md), [`patterns.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/patterns.md), [`gotchas.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/gotchas.md), [`versioning.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/versioning.md), [`troubleshooting.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/troubleshooting.md), [`error-reference.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/error-reference.md), [`interactive-workflows.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/interactive-workflows.md), [`dev-management.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/dev-management.md), and [`ai-patterns.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/ai-patterns.md)—each with a one-line description. The word "appropriate" is the only routing logic. No conditional instructions. No "if you're doing X, read Y first." Just a list and a suggestion to pick the relevant ones.
 
 For a developer who just wants to know "can I use `setTimeout` in a Temporal workflow?", this is like being handed a library card instead of an answer. The agent will probably load the right file eventually, but it's going to burn tokens and time figuring out which one.
 
 To be clear: this isn't an argument against the two-tier loading design. Conditional routing—"if modifying a workflow, load versioning first"—is still [progressive disclosure](https://en.wikipedia.org/wiki/Progressive_disclosure). The reference files still only load when needed. The difference is specificity: "read appropriate references" is a compass, not a map. A skill for a platform as gotcha-dense as Temporal needs to tell the agent _exactly_ which file to read based on what the developer is trying to do.
 
-Something like "If you're modifying an existing workflow, read `references/core/versioning.md` _before_ reading anything else" would prevent real production incidents. "Read appropriate references" won't.
+Something like "If you're modifying an existing workflow, read [`references/core/versioning.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/versioning.md) _before_ reading anything else" would prevent real production incidents. "Read appropriate references" won't.
 
-What would actually help is an explicit diagnostic workflow (no, not _that_ kind of workflow): step-by-step conditional instructions that name the reference file, the specific thing to look for, and the next action to take. "For a non-determinism error: read `references/core/determinism.md`, then read `references/{language}/versioning.md` for the patching strategy, then retrieve the full event history and identify where the command sequence diverged." That's a decision tree. The current routing instruction is a _card catalog_.
+What would actually help is an explicit diagnostic workflow (no, not _that_ kind of workflow): step-by-step conditional instructions that name the reference file, the specific thing to look for, and the next action to take. "For a non-determinism error: read [`references/core/determinism.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/determinism.md), then read `references/{language}/versioning.md` for the patching strategy, then retrieve the full event history and identify where the command sequence diverged." That's a decision tree. The current routing instruction is a _card catalog_.
 
 And the routing problem doesn't stop inside the skill. In a real developer's environment, the Temporal skill's description competes with every other installed skill for the same trigger phrases. "Create a workflow" could plausibly match a GitHub Actions skill, a CI/CD pipeline builder, or a general workflow orchestration tool. (I have the Temporal skill installed alongside my own MCP server, and I've watched this ambiguity play out firsthand.) The skill needs to win the right routing competitions and lose the wrong ones—which means its description should lean on Temporal-specific language ("deterministic workflow," "activity timeout," "task queue") rather than generic phrases like "durable execution" that could describe half a dozen platforms.
 
@@ -64,9 +65,9 @@ Every new Temporal developer makes the same mistakes. Every LLM generating Tempo
 
 These are the mistakes that matter most—and the ones an agent will make on the very first try. They're what the [Agent Skills best practices](https://agentskills.org) call "corrections to mistakes the agent will make without being told otherwise"—often the most valuable content a skill can contain.
 
-In this skill, they live in `references/core/gotchas.md`—one of nine core reference files. The agent can certainly find and read that file. The problem is it would only do so if it recognized the situation as gotcha-relevant. But, `time.sleep(60)` doesn't announce itself as a mistake while you're writing it. It looks like correct Python. The agent won't pre-emptively load `gotchas.md` before writing workflow code unless the skill tells it to—and the skill doesn't. By the time the mistake is recognized, it's already in the code.
+In this skill, they live in [`references/core/gotchas.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/gotchas.md)—one of nine core reference files. The agent can certainly find and read that file. The problem is it would only do so if it recognized the situation as gotcha-relevant. But, `time.sleep(60)` doesn't announce itself as a mistake while you're writing it. It looks like correct Python. The agent won't pre-emptively load `gotchas.md` before writing workflow code unless the skill tells it to—and the skill doesn't. By the time the mistake is recognized, it's already in the code.
 
-And the `gotchas.md` file is substantial. It covers ten categories: non-idempotent activities, side effects and non-determinism in workflow code, deploying multiple workers with different code versions, overly aggressive retry policies, query handler and update validator mistakes, file organization requirements, testing only happy paths, swallowing errors, cancellation handling, and payload size limits. Every one of these is a mistake an LLM will make on the first try. None of them are surfaced in the `SKILL.md` body.
+And the [`gotchas.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/gotchas.md) file is substantial. It covers ten categories: non-idempotent activities, side effects and non-determinism in workflow code, deploying multiple workers with different code versions, overly aggressive retry policies, query handler and update validator mistakes, file organization requirements, testing only happy paths, swallowing errors, cancellation handling, and payload size limits. Every one of these is a mistake an LLM will make on the first try. None of them are surfaced in the `SKILL.md` body.
 
 A dozen lines of "NEVER do X in a workflow, ALWAYS do Y instead" in the `SKILL.md` body itself would prevent more bugs than the entire reference directory. These should be front-loaded, not buried.
 
@@ -104,7 +105,7 @@ And the gaps aren't just about structure—some are about freshness. [Temporal S
 
 ## The skill doesn't know what language you're using
 
-The `SKILL.md` says: "If working in Python, read `references/python/python.md`." But, the skill has no mechanism to detect what language the developer is actually using. The agent has to infer this from context—file extensions, project structure, conversation history.
+The `SKILL.md` says: "If working in Python, read [`references/python/python.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/python/python.md)." But, the skill has no mechanism to detect what language the developer is actually using. The agent has to infer this from context—file extensions, project structure, conversation history.
 
 This is fine for a coding agent that can see your project. But, the skill provides no help with the inference. It doesn't say "check for `package.json` vs `pyproject.toml` vs `go.mod`." It presents three parallel tracks and assumes the agent will figure it out.
 
@@ -124,17 +125,17 @@ You built a workflow using the skill's guidance. You deployed it. It's stuck. Yo
 
 The skill can tell you what questions to ask. It cannot ask them.
 
-`references/core/troubleshooting.md` has decision trees for RUNNING, FAILED, TIMED_OUT, and COMPLETED (wrong result) statuses—so the triage content exists. But, the skill has no connection to a live cluster. The diagnostic sequence looks like this: you describe the symptom to the agent, the agent (if it loads the right reference) tells you to run `temporal workflow show --workflow-id <id>` and look for X, you run it, you paste the output back, and the agent reasons about what it sees. You are the relay. (I've done this exact relay dance more times than I'd like to admit.) Every step that requires actual cluster data requires a round-trip through you.
+[`references/core/troubleshooting.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/troubleshooting.md) has decision trees for `RUNNING`, `FAILED`, `TIMED_OUT`, and `COMPLETED` (wrong result) statuses—so the triage content exists. But, the skill has no connection to a live cluster. The diagnostic sequence looks like this: you describe the symptom to the agent, the agent (if it loads the right reference) tells you to run `temporal workflow show --workflow-id <id>` and look for X, you run it, you paste the output back, and the agent reasons about what it sees. You are the relay. (I've done this exact relay dance more times than I'd like to admit.) Every step that requires actual cluster data requires a round-trip through you.
 
 That's the wall you hit. The skill can orient you toward the right questions. But, for a stuck workflow in production, orientation isn't the bottleneck—_data_ is. The troubleshooting guide is also oriented around diagnosing code problems—wrong task queue, stale worker code, non-determinism errors—rather than teaching you to read what Temporal is actually telling you. There's no reference mapping event types to operational meaning: `ActivityTaskScheduled` with no subsequent `ActivityTaskStarted` means no worker is polling that task queue; `ActivityTaskFailed` with an attempt count shows how deep into its retry budget an activity is; `MarkerRecorded` with a `patched` marker name tells you which version branch the workflow took. An `operational-patterns.md` that maps event types to what they mean for your code—the operational equivalent of the History Replay table—is exactly what's missing. [temporal-mcp](https://github.com/stevekinney/temporal-mcp) (disclosure: I built this) takes this approach, pairing the skill's reference files with 28 read-only cluster inspection tools; the `temporal.workflow.history.summarize` tool, for instance, detects non-determinism errors in the event stream and surfaces guidance pointing directly to the versioning and determinism references.
 
-There's a broader distinction worth naming here. Skills and MCP servers solve different problems and the boundary between them matters. A skill owns knowledge and routing: what patterns to follow, which mistakes to avoid, when to load which reference file. That's static, versioned, portable across agents. An MCP server owns capability and live data: querying cluster state, inspecting event histories, describing running workflows. That requires a running server and authenticated access. The skill is the expert sitting next to you; MCP is the terminal they can type into. One without the other is incomplete—the skill without MCP can teach but can't act, MCP without the skill can act but doesn't know the best practices. The skill should declare that boundary explicitly rather than leaving developers to discover it when they hit a wall.
+Skills and MCP servers solve different problems, and the boundary between them matters. A skill owns knowledge and routing: what patterns to follow, which mistakes to avoid, when to load which reference file. That's static, versioned, portable across agents. An MCP server owns capability and live data: querying cluster state, inspecting event histories, describing running workflows. That requires a running server and authenticated access. The skill is the expert sitting next to you; MCP is the terminal they can type into. One without the other is incomplete—the skill without MCP can teach but can't act, MCP without the skill can act but doesn't know the best practices. The skill should declare that boundary explicitly rather than leaving developers to discover it when they hit a wall.
 
 An operations skill is planned—the blog post says so, and it would close a real gap. A development skill that focuses on development is a fine scoping decision. The problem isn't the scope: it's that the skill doesn't tell you when you've left it. A developer following this skill walks right up to deployment with no warning that the next step is outside what the skill covers. One sentence—"at this point, you've moved into operations territory; this skill can't help you debug a stuck workflow in production"—would cost nothing and prevent a lot of confusion. The handoff doesn't have to be coverage; it just has to exist.
 
 ## Versioning is listed like any other topic
 
-Workflow versioning is one of Temporal's most complex and highest-stakes topics. Here's the failure mode, taken directly from `references/core/versioning.md`:
+Workflow versioning is one of Temporal's most complex and highest-stakes topics. Here's the failure mode, taken directly from [`references/core/versioning.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/versioning.md):
 
 ```
 Original Code (recorded in history):
@@ -148,17 +149,17 @@ Updated Code (during replay):
 
 Deploy updated code while a workflow is mid-execution, and the worker tries to replay the history using the new code. The commands don't match. The workflow blocks. This is not a coding mistake—it happens to correct, reviewed, approved code the moment it gets deployed to workers that are handling running workflows. I've seen this exact failure mode in production: you deploy a perfectly correct code change and suddenly every running workflow starts throwing non-determinism errors.
 
-Here's why versioning warrants special emphasis when other topics—activity timeouts, idempotency, signal handling—don't. Every other gotcha in Temporal is an error of omission: you forgot to set a timeout, you forgot an idempotency key, you missed a configuration. Versioning is an error of action. The developer can do everything right—write correct workflow code, review the PR, get it approved, merge it—and then the deployment itself is what breaks running workflows. There's no moment where the mistake looks like a mistake. It looks like progress right up until production starts throwing non-determinism errors.
+Versioning warrants special emphasis in a way that activity timeouts, idempotency, and signal handling don't. Every other gotcha in Temporal is an error of omission: you forgot to set a timeout, you forgot an idempotency key, you missed a configuration. Versioning is an error of action. The developer can do everything right—write correct workflow code, review the PR, get it approved, merge it—and then the deployment itself is what breaks running workflows. There's no moment where the mistake looks like a mistake. It looks like progress right up until production starts throwing non-determinism errors.
 
 But, versioning is listed as one of nine reference topics in the `SKILL.md`, with the same routing weight as "patterns" or "interactive workflows." There's no warning in the `SKILL.md` body that deploying code changes to running workflows is the category of mistake most likely to cause a production incident.
 
-An agent using this skill might help a developer write a perfectly correct workflow, then help them modify it for a new requirement, without ever mentioning that the modification will break all currently-running instances unless they use patching or worker versioning. "WARNING: Changing workflow code while workflows are running WILL cause non-determinism errors—read `references/core/versioning.md` BEFORE modifying any workflow that has running executions" in the main `SKILL.md` body would prevent real outages. The current structure requires the agent to independently decide that a code modification task involves "versioning" and load the right reference. That connection doesn't always get made.
+An agent using this skill might help a developer write a perfectly correct workflow, then help them modify it for a new requirement, without ever mentioning that the modification will break all currently-running instances unless they use patching or worker versioning. "WARNING: Changing workflow code while workflows are running WILL cause non-determinism errors—read [`references/core/versioning.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/versioning.md) BEFORE modifying any workflow that has running executions" in the main `SKILL.md` body would prevent real outages. The current structure requires the agent to independently decide that a code modification task involves "versioning" and load the right reference. That connection doesn't always get made.
 
 ## It doesn't tell you what it doesn't know
 
-The skill covers Python, TypeScript, and Go. It does not cover Java, .NET, Ruby, or PHP—all of which have Temporal SDKs. If you're a Java developer and the skill activates, there's nothing in the `SKILL.md` body that says "Java is not yet covered." The agent will load the skill, see guidance for three languages, and either extrapolate from the available languages (risky, since SDK APIs differ significantly) or silently fall back to training data—which is exactly the problem the skill was supposed to solve.
+The skill covers Python, TypeScript, Go, and—as of [a few days ago](https://github.com/temporalio/skill-temporal-developer/pull/42)—Java. It does not cover .NET, Ruby, or PHP, all of which have Temporal SDKs. If you're a .NET developer and the skill activates, there's nothing in the `SKILL.md` body that says ".NET is not yet covered." The agent will load the skill, see guidance for four languages, and either extrapolate from the available languages (risky, since SDK APIs differ significantly) or silently fall back to training data—which is exactly the problem the skill was supposed to solve.
 
-This matters because the skill's description field triggers on generic phrases like "create a Temporal workflow" and "durable execution"—phrases a Java developer would absolutely use. A simple "If working in Java, .NET, Ruby, or PHP: this skill does not yet cover your language" would set correct expectations and prevent the agent from generating confidently wrong code by analogy.
+This matters because the skill's description field triggers on generic phrases like "create a Temporal workflow" and "durable execution"—phrases a .NET developer would absolutely use. A simple "If working in .NET, Ruby, or PHP: this skill does not yet cover your language" would set correct expectations and prevent the agent from generating confidently wrong code by analogy.
 
 ## What would make it great
 
