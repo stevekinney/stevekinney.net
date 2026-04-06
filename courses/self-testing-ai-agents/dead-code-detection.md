@@ -1,6 +1,6 @@
 ---
 title: Dead Code Detection
-description: Agents leave orphans behind. Knip, ts-prune, and dependency-cruiser find them before the orphans rot into a half-working codebase.
+description: Agents leave orphans behind. Knip and dependency-cruiser find them before the orphans rot into a half-working codebase.
 modified: 2026-04-06
 date: 2026-04-06
 ---
@@ -15,9 +15,9 @@ The answer is dead code detection. Run it continuously. Treat orphans as a quali
 
 ## The tools
 
-Three that I use, in order of how much I lean on them.
+Two that I use, in order of how much I lean on them.
 
-**[knip](https://knip.dev/)** is the most comprehensive. It understands the entire module graph of your project and tells you about unused files, unused exports, unused dependencies, unused types, and unused `devDependencies`. It's configurable but it has sensible defaults for most stacks (including SvelteKit). This is my default.
+**[knip](https://knip.dev/)** is the comprehensive one and it's the default I reach for. It understands the entire module graph of your project and tells you about unused files, unused exports, unused dependencies, unused types, and unused `devDependencies`. It's configurable but it has sensible defaults for most stacks (including SvelteKit).
 
 ```sh
 bun add -D knip
@@ -26,12 +26,8 @@ bunx knip
 
 First run on Shelf: you'll probably see a dozen findings. Most of them will be legitimate. A few will be false positives—things knip thinks are unused but are actually dynamically referenced. Configure knip to ignore those specific cases and move on.
 
-**[ts-prune](https://github.com/nadeesha/ts-prune)** is narrower. It only cares about unused TypeScript exports. It's less sophisticated than knip but it's fast, it's predictable, and it's useful as a second opinion. I run both and cross-check findings—if both agree, the export is definitely dead. If only one flags it, I look more carefully.
-
-```sh
-bun add -D ts-prune
-bunx ts-prune
-```
+> [!NOTE]
+> You may run across older articles recommending `ts-prune` as a peer of knip. Skip it. The project is no longer maintained and its own README points readers at knip as the replacement.
 
 **[dependency-cruiser](https://github.com/sverweij/dependency-cruiser)** is the architectural one. It understands your module graph deeply enough to enforce rules like "nothing under `src/lib/server/` may be imported from `src/routes/`'s client-side code" or "the `legacy-auth/` directory is not allowed to have any incoming edges from outside itself." This is not primarily a dead-code tool—it's a circular-dependency, boundary-enforcement, architectural-rules tool—but it catches dead code as a side effect because orphaned modules are easy to spot in a graph.
 
@@ -89,7 +85,7 @@ The trick with dead code detection is running it _often enough_ that orphans don
 
 - **On every CI run.** Block merge if knip reports new findings.
 - **On every commit via a git hook.** The lint-staged / husky lesson has the details.
-- **On every save, via an editor extension.** Knip doesn't have one, but `ts-prune` is fast enough to wire into a file watcher.
+- **On every save, via a file watcher.** Knip doesn't have an editor extension, but you can wire `bunx knip --no-progress` into a `chokidar` watcher if you want findings without leaving the editor.
 - **On a nightly job** that opens a cleanup PR. This is the lowest-friction version—nobody is blocked, but the cleanup happens automatically.
 
 My default is "on every CI run, with a pinned count." The script:
@@ -162,7 +158,7 @@ I don't always run dependency-cruiser in the fast local loop—it's slower than 
 
 ## When orphan detection gets noisy
 
-Sometimes you'll hit a phase where knip and ts-prune are flagging things you know are fine, and the noise makes the signal invisible. A few recovery patterns:
+Sometimes you'll hit a phase where knip is flagging things you know are fine, and the noise makes the signal invisible. A few recovery patterns:
 
 - **Triage once, aggressively.** Block out an hour, go through every finding, resolve each one as delete, fix, or ignore-with-comment. The baseline-after-triage should be close to zero.
 - **Fail on new findings, not existing ones.** The baseline-ratchet approach. New code is clean, old code gets cleaned up opportunistically.

@@ -7,6 +7,9 @@ date: 2026-04-06
 
 One of the deliberate choices in the Shelf starter repo: there is no `.github/workflows/` directory. You are writing the workflow from scratch, informed by everything you've built today. If you had a broken workflow waiting for you, Shelf would have looked perpetually red in CI for the last six modules, and that would have been a terrible background noise. Blank canvas, your choice, now you have context.
 
+> [!NOTE] Prerequisite
+> This lab assumes you've completed **Lab: Build a Failure Dossier for Shelf**. The workflow below calls `bun run dossier`, which is the script you added to `package.json` in that lab. If you skipped it, either go back and do it, or remove the dossier-related steps from this workflow before running it.
+
 ## The task
 
 Create `.github/workflows/main.yml` that runs on push and on pull request, and includes jobs for every layer we built today.
@@ -134,7 +137,10 @@ jobs:
     # ... full Playwright matrix (chromium, firefox, webkit)
 ```
 
-You don't have to fully implement the HAR refresh today—a stub that runs `bunx playwright test visual.spec.ts --update-snapshots --project=chromium,firefox,webkit` is fine. The point is to have the file in place so the nightly cadence exists.
+You don't have to fully implement these jobs today—comment placeholders like the ones above are fine. The point is to have the file in place so the nightly cadence exists and you can fill the jobs in over the following week.
+
+> [!WARNING]
+> Do **not** wire `playwright test --update-snapshots` into a scheduled job, even as a stub. A cron that updates snapshots will silently rewrite every visual baseline whenever it runs and quietly destroy your visual regression gate. Snapshot updates should always be human-triggered (a `workflow_dispatch` job, or local `--update-snapshots` followed by a PR you review).
 
 ### Step 6: branch protection (optional, but recommended)
 

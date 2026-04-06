@@ -15,6 +15,9 @@ The hypothesis for today is that the problem isn't the agent's intelligence—it
 
 That's the whole workshop in one sentence: **how do we make it cheap and automatic for an agent to check its own work?**
 
+> [!NOTE] About Shelf
+> Every lab in this workshop runs against the same starter project: a small SvelteKit + TypeScript book-rating app called **Shelf**. It uses Vitest for unit tests and Playwright for end-to-end. You'll harden it across the day—adding a CLAUDE.md, a static layer, dossiers, visual regression, and CI—until it's the codebase the rest of the workshop assumes. If a lab tells you to "open the Shelf starter repo," that's the one.
+
 ## Why loops beat prompting discipline
 
 You can get surprisingly far by writing a great prompt. I am not going to tell you to stop doing that. But, prompting discipline has a ceiling, and the ceiling is lower than people think.

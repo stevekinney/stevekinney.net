@@ -7,9 +7,7 @@ date: 2026-04-06
 
 I'm going to move fast through this one. If you want the full treatment of the testing pyramid from first principles, I have two courses for that—[Testing JavaScript Applications](https://frontendmasters.com/courses/testing/) and [Enterprise UI Development](https://frontendmasters.com/courses/enterprise-ui-dev-v2/)—and you don't need to rewatch them to follow along here.
 
-What I do want is for all of us to have the same mental model of the pyramid before we start the [Playwright](https://playwright.dev/)-heavy morning.
-
-What I do want is for all of us to have the same mental model of the pyramid before we start the Playwright-heavy morning. Because when an agent is the one driving the tests, the pyramid stops being an abstract shape about "ratios of tests" and starts being a _feedback hierarchy_. Each layer is a different loop with different cost and different scope, and the agent needs to know which one to hit when.
+What I do want is for all of us to have the same mental model of the pyramid before we start the [Playwright](https://playwright.dev/)-heavy morning. Because when an agent is the one driving the tests, the pyramid stops being an abstract shape about "ratios of tests" and starts being a _feedback hierarchy_. Each layer is a different loop with different cost and different scope, and the agent needs to know which one to hit when.
 
 ## The classic picture, in one paragraph
 

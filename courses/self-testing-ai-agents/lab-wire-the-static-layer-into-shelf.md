@@ -15,20 +15,20 @@ Wire the complete static layer into Shelf and verify every piece fires on a plan
 
 Update `eslint.config.js` to include a `no-restricted-syntax` block that bans:
 
-- `page.waitForTimeout` (anywhere in `tests/end-to-end/`)
-- `page.locator` with a string argument (anywhere in `tests/end-to-end/`)
-- `page.waitForLoadState('networkidle')` (anywhere)
-- Reading `userId` from a request body in a route handler (selector: roughly `MemberExpression[object.property.name='body'][property.name='userId']`)
+- `page.waitForTimeout` (anywhere in `tests/end-to-end/`). Selector: `CallExpression[callee.property.name='waitForTimeout']`. Message: `"page.waitForTimeout is banned. See CLAUDE.md → Playwright → Waiting."`
+- `page.locator` called with a string argument (anywhere in `tests/end-to-end/`). Selector: `CallExpression[callee.property.name='locator'][arguments.0.type='Literal']`. Message: `"Use a getByRole/getByLabel locator. See CLAUDE.md → Playwright → Locators."`
+- `page.waitForLoadState('networkidle')` (anywhere). Selector: `CallExpression[callee.property.name='waitForLoadState'] > Literal[value='networkidle']`. Message: `"networkidle is unreliable. Wait on a real signal."`
+- Reading `userId` from a request body in a route handler. Selector: `MemberExpression[object.type='MemberExpression'][object.property.name='body'][property.name='userId']`. Message: `"Read userId from the session, not the request body. See CLAUDE.md → Auth."`
 
-Each rule should have a message that names the violation and points at the relevant `CLAUDE.md` section.
+Each rule should set both the `selector` and the `message` exactly as listed so the acceptance criteria below can grep for them.
 
 ### Acceptance for Part 1
 
-- [ ] `eslint.config.js` contains the four restricted-syntax rules above.
+- [ ] `eslint.config.js` contains the four restricted-syntax rules above (selector + message).
 - [ ] Running `bun run lint` on the current (clean) Shelf repo exits zero.
-- [ ] Adding a `page.waitForTimeout(1000)` line to a test file makes `bun run lint` fail with the expected custom message.
-- [ ] Adding a `page.locator('.foo')` line to a test file makes `bun run lint` fail.
-- [ ] Reverting the test changes restores a clean lint.
+- [ ] Adding a `page.waitForTimeout(1000)` line to any file under `tests/end-to-end/` makes `bun run lint` exit non-zero, and the output contains the substring `page.waitForTimeout is banned`.
+- [ ] Adding a `page.locator('.foo')` line to any file under `tests/end-to-end/` makes `bun run lint` exit non-zero, and the output contains the substring `Use a getByRole/getByLabel locator`.
+- [ ] Reverting the test changes restores a clean lint (`bun run lint` exits zero).
 
 ## Part 2: TypeScript strict mode
 

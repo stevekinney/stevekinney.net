@@ -24,13 +24,15 @@ That's the user story. Concrete enough to build, vague enough to require real de
 
 ## The prompt
 
-Open Claude Code in the Shelf repo. Paste _exactly_ this prompt, with no modifications:
+First, save the user story so the agent can read it. Create `CAPSTONE.md` at the **root of the Shelf repo** (alongside `CLAUDE.md` and `package.json`) with the four bullet points from "The task" section above as its body. No frontmatter, no preamble—just the bullets under a single `# Reading Goals` heading. The agent will read this file by name in the next step.
+
+Then open Claude Code in the Shelf repo and paste _exactly_ this prompt, with no modifications:
 
 > Implement the reading goals feature as described in `CAPSTONE.md`. Follow every rule in `CLAUDE.md`. When you believe the task is complete, open a pull request and wait for CI to either pass or fail. If CI fails, read the failure dossier, diagnose the issue, fix it, and push a new commit. Repeat until CI is green. Do not ask me for clarification on anything—use the existing Shelf code as ground truth for patterns.
 
 The agent now has everything it needs:
 
-- The task description (in `CAPSTONE.md`, which you should create with the user story above).
+- The task description (in `CAPSTONE.md`, which you just created).
 - The rules (in `CLAUDE.md`, which you've been building all day).
 - The code (the hardened Shelf starter).
 - The verification loops (Playwright, visual regression, custom MCPs, static checks, CI).
