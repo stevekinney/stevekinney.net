@@ -118,7 +118,7 @@
       "name": "@stevekinney/website",
       "dependencies": {
         "@stevekinney/ai-development": "workspace:*",
-        "@stevekinney/aws-frontend": "workspace:*",
+        "@stevekinney/aws": "workspace:*",
         "@stevekinney/enterprise-ui": "workspace:*",
         "@stevekinney/figma": "workspace:*",
         "@stevekinney/full-stack-typescript": "workspace:*",
@@ -137,8 +137,8 @@
     "courses/ai-development": {
       "name": "@stevekinney/ai-development",
     },
-    "courses/aws-frontend": {
-      "name": "@stevekinney/aws-frontend",
+    "courses/aws": {
+      "name": "@stevekinney/aws",
     },
     "courses/enterprise-ui": {
       "name": "@stevekinney/enterprise-ui",
@@ -664,7 +664,7 @@
 
     "@stevekinney/ai-development": ["@stevekinney/ai-development@workspace:courses/ai-development"],
 
-    "@stevekinney/aws-frontend": ["@stevekinney/aws-frontend@workspace:courses/aws-frontend"],
+    "@stevekinney/aws": ["@stevekinney/aws@workspace:courses/aws"],
 
     "@stevekinney/components": ["@stevekinney/components@workspace:packages/components"],
 

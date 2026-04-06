@@ -1,4 +1,12 @@
 [[recording]]
+title = "Enterprise UI Development: Microfrontends, Testing, & Code Quality"
+slug = "enterprise-ui-dev-v2"
+description = "Architect large frontend systems—balancing autonomy and complexity across monoliths, microfrontends, and monorepos with Turborepo, CI/CD, and testing best practices."
+href = "https://frontendmasters.com/courses/enterprise-ui-dev-v2/?utm_source=kinney&utm_medium=social&code=kinney"
+duration = "5h 11m"
+topics = ["React", "TypeScript", "Build Tools"]
+
+[[recording]]
 title = "React and TypeScript, v3"
 slug = "react-typescript-v3"
 description = "Type hooks, reducers, and component APIs to build safer, more maintainable React applications with TypeScript."

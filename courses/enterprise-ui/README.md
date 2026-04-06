@@ -7,6 +7,7 @@ description: >-
 layout: page
 date: 2026-03-01
 modified: 2026-03-17
+url: https://frontendmasters.com/courses/enterprise-ui-dev-v2/?utm_source=kinney&utm_medium=social&code=kinney
 ---
 
 This course teaches senior frontend engineers how to scale applications beyond a single-team SPA—covering composition patterns (microfrontends, monorepos, server components), operational infrastructure (TypeScript scaling, architectural linting, CI/CD, testing), and migration strategies (strangler fig, codemods). Students build and evolve a real codebase across nine hands-on exercises, experiencing the trade-offs firsthand so they can make informed architectural decisions for their own organizations.

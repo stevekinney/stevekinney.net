@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@stevekinney/ai-development": "workspace:*",
-    "@stevekinney/aws-frontend": "workspace:*",
+    "@stevekinney/aws": "workspace:*",
     "@stevekinney/enterprise-ui": "workspace:*",
     "@stevekinney/figma": "workspace:*",
     "@stevekinney/full-stack-typescript": "workspace:*",
