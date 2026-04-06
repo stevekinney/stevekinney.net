@@ -63,7 +63,7 @@ When MCP is the right choice over the CLI: when your agent is already inside an 
 
 ## What Chrome DevTools MCP is for
 
-Chrome DevTools MCP is a different animal. It's Google's official MCP server, [maintained by the ChromeDevTools org on GitHub](https://github.com/ChromeDevTools/chrome-devtools-mcp), and it [shipped to public preview in September 2025](https://developer.chrome.com/blog/chrome-devtools-mcp). As of [Chrome 146](https://developer.chrome.com/blog/new-in-devtools-146), it's generally available in Chrome stable, version 0.19.0, and its scope has grown noticeably.
+Chrome DevTools MCP is a different animal. It's Google's official MCP server, [maintained by the ChromeDevTools org on GitHub](https://github.com/ChromeDevTools/chrome-devtools-mcp), and it [shipped to public preview in September 2025](https://developer.chrome.com/blog/chrome-devtools-mcp). [Version 0.19.0](https://developer.chrome.com/blog/new-in-devtools-146) landed alongside Chrome 146 with a meaningfully larger tool surface—integrated Lighthouse audits, performance insights, and slim mode among them.
 
 The way the Chrome team frames it is the right way to read the product: instead of just scripting browser actions, this lets agents _"see what the code they generate actually does when it runs."_ The fundamental shift is that the agent gets DevTools-grade introspection—not just "here's an accessibility snapshot" but "here's a performance trace, here's a network waterfall, here's a console message with a source-mapped stack trace, here's a Lighthouse audit, here's a memory snapshot."
 
@@ -78,7 +78,7 @@ The current tool surface is around 29 tools across six categories. (That count k
 
 Two things in that list are genuinely distinguishing. First, performance traces: your agent can record a trace, stop it, and then call `performance_analyze_insight` to get back structured performance findings. That's not something Playwright gives you out of the box at anywhere near the same fidelity. Second, `lighthouse_audit` runs as a tool call. If you've ever wired a coding agent to a separate Lighthouse process and tried to round-trip the JSON yourself, you know how big a deal that is.
 
-Chrome DevTools MCP also added a **slim mode** in 0.19.0: a stripped-down 3-tool variant for token-sensitive contexts. (The fact that _both_ Microsoft and Google have built explicit token-efficiency escape hatches into their first-party tools tells you something about where the real failure mode of MCP lives. Tool schemas are heavy. Agents pay for them on every turn. Slim modes are how the platforms admit it without saying it.)
+Chrome DevTools MCP also added a **slim mode** in 0.19.0: a three-tool variant—navigation, script execution, and screenshots—for token-sensitive contexts. (The fact that _both_ Microsoft and Google have built explicit token-efficiency escape hatches into their first-party tools tells you something about where the real failure mode of MCP lives. Tool schemas are heavy. Agents pay for them on every turn. Slim modes are how the platforms admit it without saying it.)
 
 The other piece that matters: connection model. Chrome DevTools MCP can launch a fresh Chrome, connect to a running Chrome via `--browser-url` (HTTP endpoint) or `--ws-endpoint` (WebSocket), and [as of December 2025 it can request a remote debugging connection to the user's _current_ browser session](https://developer.chrome.com/blog/chrome-devtools-mcp-debug-your-browser-session). That last part is the workflow people came for. You're already signed in to staging in your normal Chrome window, you've got a network request selected in DevTools, and you can hand the whole thing—session, selection, and all—over to the agent without re-creating the state somewhere else. The Chrome team's framing is exactly right: _"you don't have to choose between automation and manual control. You can use DevTools yourself or hand over a debugging task to your coding agent."_
 
@@ -149,7 +149,7 @@ Both servers can navigate, click, type, take screenshots, evaluate script, and r
 
 If your agent only needs to do basic driving on Chromium and _also_ wants some inspection—say, "click through this form, take a screenshot, list any console errors"—you can get that from either server. The difference is which side of the workflow degrades when you push harder. Push Playwright MCP toward DevTools-grade performance work, and you'll feel the gap. Push Chrome DevTools MCP toward cross-browser test execution, and you'll hit the wall immediately. Build for the _direction you're going to push_, not the overlap. (For what it's worth, the agents I run day-to-day reach for Playwright MCP first and only switch to Chrome DevTools MCP when they need a real performance trace or a Lighthouse audit. Your mileage will vary based on what you're actually shipping.)
 
-The overlap is also where the token-efficiency story matters most. Both teams shipped thinned-down modes—Playwright with the CLI/skills approach, Chrome DevTools MCP with slim mode—precisely because the MCP "load 29 tool schemas into the model's context on every turn" pattern is a real cost. If your agent is tight on context, the right move inside the overlap is often the leaner variant of whichever side you've already bought into.
+If your agent is tight on context, the right move inside the overlap is the leaner variant of whichever side you've already bought into—the CLI on the Playwright side, slim mode on the Chrome DevTools side.
 
 ## What is not actually a first-class citizen
 
@@ -162,8 +162,6 @@ A few things that look like they belong in this conversation, but don't:
 **Agent frameworks and "browser-using agents"** from large labs and startups: Stagehand, Skyvern, Browser Use, vercel-labs/agent-browser, and the various OS-level computer-use models. Same story. These are higher-level abstractions sitting on top of Playwright or CDP. They're meaningful products in their own right, but they're not what we're comparing here, because they don't change the answer to "which underlying first-party tool should you trust?"
 
 **Puppeteer.** Puppeteer is a real Google project, and it is genuinely the engine inside Chrome DevTools MCP. But Puppeteer is a JavaScript library, not an agent-facing tool. Telling an agent "use Puppeteer" is telling it "go write some code." Telling it "use Chrome DevTools MCP" is giving it a tool surface. Different category.
-
-**Chrome DevTools AI assistance**, again, is adjacent—it's an LLM in a panel for humans, not a tool surface for agents. Easy to confuse because of the name. Not a substitute.
 
 ## The recommendation
 
