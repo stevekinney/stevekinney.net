@@ -38,7 +38,7 @@ test('shelf page matches visual baseline', async ({ page }) => {
 });
 ```
 
-First run: Playwright takes a screenshot and writes it to `tests/end-to-end/rate-book.spec.ts-snapshots/shelf-page.png` (or similar, depending on your config). The test "passes" because there's nothing to compare against.
+First run: Playwright takes a screenshot and writes it to `tests/end-to-end/visual.spec.ts-snapshots/shelf-page.png` (the snapshot directory is named after the test file, so a different `<test-file>.spec.ts` would produce a different `<test-file>.spec.ts-snapshots/` folder). The test "passes" because there's nothing to compare against.
 
 Every subsequent run: Playwright takes a new screenshot and compares it to the committed baseline. If they match pixel-for-pixel (modulo a small tolerance), the test passes. If they don't, the test fails, and Playwright writes three files to your report directory: the baseline, the actual, and a diff image highlighting the changed pixels.
 

@@ -7,7 +7,7 @@ date: 2026-04-06
 
 We're about six hours into the day. Here's where I explain why the lesson you'd have expected to see first is showing up now.
 
-When I sketched this workshop originally, the static layer—[ESLint](https://eslint.org/), [TypeScript](https://www.typescriptlang.org/), Prettier, [knip](https://knip.dev/), [ts-prune](https://github.com/nadeesha/ts-prune), [Husky](https://typicode.github.io/husky/), [lint-staged](https://github.com/lint-staged/lint-staged), [Gitleaks](https://github.com/gitleaks/gitleaks)—was Module 2. Right after the opening. The logic was that static checks are the cheapest feedback loop we have, and you want them in place before anything else, so the agent can lean on them from the start.
+When I sketched this workshop originally, the static layer—[ESLint](https://eslint.org/), [TypeScript](https://www.typescriptlang.org/), Prettier, [knip](https://knip.dev/), [Husky](https://typicode.github.io/husky/), [lint-staged](https://github.com/lint-staged/lint-staged), [Gitleaks](https://github.com/gitleaks/gitleaks)—was Module 2. Right after the opening. The logic was that static checks are the cheapest feedback loop we have, and you want them in place before anything else, so the agent can lean on them from the start.
 
 The logic is correct. The ordering was wrong.
 
@@ -26,7 +26,7 @@ Each of these runs in milliseconds to seconds. None of them require a browser. N
 The specific pieces we're going to cover in this module:
 
 - **ESLint and TypeScript** as opinionated guardrails, including custom rules for the Playwright patterns from this morning.
-- **Dead code detection** with knip, ts-prune, and dependency-cruiser. This is a big one for agent workflows—agents love to leave orphans behind.
+- **Dead code detection** with knip and dependency-cruiser. This is a big one for agent workflows—agents love to leave orphans behind.
 - **Git hooks** with husky and lint-staged, including the "Claude hooks" mention (they're a more specific version of the same idea).
 - **Secret scanning** with gitleaks. Credentials in test fixtures are the canonical agent mistake.
 - A light-touch mention of **axe-core** as the accessibility layer that belongs in the static tier even though it technically runs in a browser.
@@ -73,7 +73,7 @@ My take: hooks are _one_ way to wire a static check into the agent's loop, but t
 I'll say what each of the next lessons covers in one line so you can decide whether to read them in order or pick the ones you care about.
 
 - **Lint and Types as Guardrails**—why ESLint's recommended config isn't enough, and the specific rules I'd add for agent-driven codebases.
-- **Dead Code Detection**—knip, ts-prune, and the one-line script that catches orphaned files before they rot.
+- **Dead Code Detection**—knip and the one-line script that catches orphaned files before they rot.
 - **Git Hooks with Husky and Lint-Staged**—the right hooks, the wrong hooks, and how to not make everyone hate git commits.
 - **Secret Scanning with Gitleaks**—the agent has already committed a fake API key once on my watch. Do not let this be you.
 - **The Lab**—wire the whole stack into Shelf, verify each layer fires on the right mistake.

@@ -13,7 +13,7 @@ What I want to talk about is the rules _beyond_ the defaults: the ones you write
 
 Every rule from this morning is a candidate lint rule. That's the frame.
 
-- Locators: `page.waitForTimeout` is banned. Lint it.
+- Waiting: `page.waitForTimeout` is banned. Lint it.
 - Locators: `page.locator` with a CSS selector is discouraged. Lint it.
 - Authentication: `page.goto('/login')` in a non-setup test file is banned. Lint it.
 - Screenshots: adding a new screenshot baseline without a commit message that mentions it is suspicious. Lint it.

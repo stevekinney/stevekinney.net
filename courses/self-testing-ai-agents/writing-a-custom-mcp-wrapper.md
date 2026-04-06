@@ -17,7 +17,7 @@ For a quick refresher on what the [Model Context Protocol](https://modelcontextp
 
 A small MCP server with a single tool called `verify_shelf_page`. When called, it:
 
-1. Launches Playwright against `http://localhost:5173/shelf` (with storage state).
+1. Launches Playwright against `http://localhost:5173/shelf/<username>` (with storage state). The `<username>` is passed as an argument so the agent can probe any user's shelf.
 2. Waits for the shelf heading to be visible.
 3. Counts the books rendered.
 4. Checks the console for errors.

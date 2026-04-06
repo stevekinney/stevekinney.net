@@ -97,7 +97,7 @@ If the finding is a false positive—a placeholder like `sk-xxxxxxxxxxxxxxxxxxxx
 
 Most of the time you don't need a config file—gitleaks' defaults are good. But two use cases justify one.
 
-**Allowlisting false positives.** Shelf's `sample-config.json` contains a deliberately fake API key, and I want gitleaks to _flag_ it in the Module 8 lab (that's the point) but not continue flagging it forever after. A config like this handles it:
+**Allowlisting false positives.** Shelf's `sample-config.json` contains a deliberately fake API key. The Module 8 lab walks through this in two beats: first, you run gitleaks _without_ any config so the bait file gets flagged—that's the point of the bait, to prove the scanner works on a known-bad input. Then, _after_ you've seen the failure, you add `sample-config.json` to the allowlist so the team isn't tripping the rule on the same intentional file forever after. The config below is the "after the lab" version:
 
 ```toml
 # .gitleaks.toml
@@ -113,7 +113,7 @@ paths = [
 ]
 ```
 
-The `paths` list skips files that match. `sample-config.json` is excluded because it contains an intentional bait. `tests/fixtures/` is excluded because fixtures routinely contain realistic-looking-but-fake data.
+The `paths` list skips files that match. `sample-config.json` is excluded _after_ the lab demonstrates the bait getting caught. `tests/fixtures/` is excluded because fixtures routinely contain realistic-looking-but-fake data.
 
 **Adding custom rules.** If your organization uses a proprietary token format that gitleaks' defaults don't cover, you can add a rule:
 
