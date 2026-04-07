@@ -1,0 +1,21 @@
+{
+  "attachmentFolderPath": "./assets",
+  "useMarkdownLinks": true,
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "relative",
+  "dateFormat": "YYYY-MM-DD",
+  "timeFormat": "HH:mm",
+  "userIgnoreFilters": [
+    "node_modules",
+    "applications",
+    "packages",
+    ".git",
+    ".turbo",
+    ".vercel",
+    ".svelte-kit",
+    "build",
+    "dist",
+    "tmp",
+    ".claude"
+  ]
+}
