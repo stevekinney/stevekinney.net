@@ -167,7 +167,7 @@ A few things that look like they belong in this conversation, but don't:
 
 Here's what I actually do:
 
-Install both. Seriously. They are not zero-sum. The total context cost of having Playwright MCP and Chrome DevTools MCP both registered against the same coding agent, in slim or lean configurations, is much smaller than the cost of being wrong about which one you needed for a given task. Most coding agents will pick reasonably between them if you describe the job clearly.
+Install both. Seriously. (Yes, I know there is a token cost for every MCP you have _enabled_. Notice—that's not the same as _installed_. I will usually have both installed and then both disabled until I need them.) They are not zero-sum. The total context cost of having Playwright MCP and Chrome DevTools MCP both registered against the same coding agent, in slim or lean configurations, is much smaller than the cost of being wrong about which one you needed for a given task—see my parenthetical above. Most coding agents will pick reasonably between them if you describe the job clearly.
 
 For the _driving_ side, default to `@playwright/cli` if your agent is comfortable in a shell loop and you're doing test-shaped work. Shell loops are token-efficient, the CLI has the best story for trace exploration via `npx playwright trace`, and you get cross-browser testing as a side effect. Switch to `@playwright/mcp` when your agent is already inside an MCP host and wiring a CLI loop would mean reinventing the host's tool plumbing. Either way, you're on the same Playwright underneath, with the same accessibility-tree mental model.
 
