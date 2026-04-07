@@ -1,0 +1,19 @@
+{
+  "attachmentFolderPath": "./assets",
+  "useMarkdownLinks": true,
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "relative",
+  "userIgnoreFilters": [
+    "node_modules",
+    "applications",
+    "packages",
+    ".git",
+    ".turbo",
+    ".vercel",
+    ".svelte-kit",
+    "build",
+    "dist",
+    "tmp",
+    ".claude"
+  ]
+}
