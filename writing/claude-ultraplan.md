@@ -113,13 +113,13 @@ msg = client.messages.create(
         {"role": "user", "content": "Draft a migration plan from tRPC v10 to v11."}
     ],
     thinking={"type": "adaptive"},
-    effort="high",
+    output_config={"effort": "high"},
 )
 
 print(msg.content)
 ```
 
-A couple of things to call out. `thinking={"type": "adaptive"}` and `effort="high"` are the modern control surface for Opus 4.6 and Sonnet 4.6—the older `budget_tokens`-style controls are documented as deprecated for those models, so don't cargo-cult an example from 2024. And `claude-opus-4-6` is the current model ID; if you see something with a date suffix in someone's blog post, check the [models overview](https://platform.claude.com/docs/en/about-claude/models/overview) before you copy it. The [Python SDK documentation](https://platform.claude.com/docs/en/api/sdks/python) has the authoritative install and auth guidance.
+A couple of things to call out. `thinking={"type": "adaptive"}` and `output_config={"effort": "high"}` are the modern control surface for Opus 4.6 and Sonnet 4.6—the older `budget_tokens`-style controls are documented as deprecated for those models, so don't cargo-cult an example from 2024. And `claude-opus-4-6` is the current model ID; if you see something with a date suffix in someone's blog post, check the [models overview](https://platform.claude.com/docs/en/about-claude/models/overview) before you copy it. The [Python SDK documentation](https://platform.claude.com/docs/en/api/sdks/python) has the authoritative install and auth guidance.
 
 The TypeScript side is essentially identical:
 
