@@ -1,5 +1,5 @@
 ---
-title: 'Driving the Browser vs. Debugging the Browser'
+title: 'Playwright vs. Chrome DevTools MCP: Driving vs. Debugging'
 description: >-
   Playwright and Chrome DevTools both ship official tools for letting AI agents
   drive a browser, but they're optimized for different jobs. Here's how
@@ -22,9 +22,9 @@ I've burned an embarrassing number of afternoons wiring these into real coding a
 
 ## Playwright and Chrome are solving adjacent problems
 
-The honest framing: Playwright is in the business of _driving_ a browser, and Chrome DevTools is in the business of _inspecting and debugging_ one. When Microsoft's team builds tools for agents, they tend to optimize for "make the page do the thing." When Google's team builds tools for agents, they tend to optimize for "tell me everything that's wrong with this page right now."
+The honest framing: Playwright is in the business of **driving** a browser, and Chrome DevTools is in the business of **debugging** one. When Microsoft's team builds tools for agents, they tend to optimize for "make the page do the thing." When Google's team builds tools for agents, they tend to optimize for "tell me everything that's wrong with this page right now."
 
-Both teams have crossed into each other's lanes a little. Playwright's official MCP server can do limited inspection. Chrome DevTools MCP can do limited driving—it uses [Puppeteer](https://pptr.dev/) under the hood for input automation. But the center of gravity is still very clearly different. If you forget that, you'll choose the wrong tool for any task that _isn't_ squarely in the overlap.
+Both teams have crossed into each other's lanes a little. Playwright's official MCP server can do limited inspection. Chrome DevTools MCP can do limited driving—it uses [Puppeteer](https://pptr.dev/) under the hood for input automation. But, the center of gravity is still very clearly different. If you forget that, you'll choose the wrong tool for any task that _isn't_ squarely in the overlap.
 
 > [!NOTE]
 > Throughout this post, "Playwright CLI" refers to `@playwright/cli`—Playwright's purpose-built command-line tool for coding agents—_not_ `npx playwright test`, which is the regular test runner. They're related, but they are not the same product. More on that in a moment.
@@ -94,7 +94,7 @@ The reason I'm spending a whole section on this is that the names invite confusi
 
 ## The real comparison
 
-Here's the comparison I actually use when I'm choosing between these tools. The first table covers the three first-class citizens. AI assistance gets its own table after, because mixing it in produces fake symmetry.
+Here's the comparison I actually use when I'm choosing between these tools: the first table covers the three first-class citizens. AI assistance gets its own table after, because mixing it in produces fake symmetry.
 
 |                         | **Playwright CLI**                                         | **Playwright MCP**                                      | **Chrome DevTools MCP**                                                    |
 | ----------------------- | ---------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
@@ -145,7 +145,7 @@ A third: my agent needs to triage a console error in production with a real sour
 
 There's a real shared area, and being honest about it matters more than picking a side.
 
-Both servers can navigate, click, type, take screenshots, evaluate script, and read network requests. Both can be connected to a running browser instance—Chrome DevTools MCP via `--browser-url` / `--ws-endpoint` and the new "current session" feature, Playwright MCP via `browser.bind()`. Both run on Chromium just fine. Both can be invoked from Claude Code, Cursor, VS Code, and other MCP hosts.
+Honestly, both servers can navigate, click, type, take screenshots, evaluate script, and read network requests. Both can be connected to a running browser instance—Chrome DevTools MCP via `--browser-url` / `--ws-endpoint` and the new "current session" feature, Playwright MCP via `browser.bind()`. Both run on Chromium just fine. Both can be invoked from Claude Code, Cursor, VS Code, and other MCP hosts.
 
 If your agent only needs to do basic driving on Chromium and _also_ wants some inspection—say, "click through this form, take a screenshot, list any console errors"—you can get that from either server. The difference is which side of the workflow degrades when you push harder. Push Playwright MCP toward DevTools-grade performance work, and you'll feel the gap. Push Chrome DevTools MCP toward cross-browser test execution, and you'll hit the wall immediately. Build for the _direction you're going to push_, not the overlap. (For what it's worth, the agents I run day-to-day reach for Playwright MCP first and only switch to Chrome DevTools MCP when they need a real performance trace or a Lighthouse audit. Your mileage will vary based on what you're actually shipping.)
 
@@ -155,7 +155,7 @@ If your agent is tight on context, the right move inside the overlap is the lean
 
 A few things that look like they belong in this conversation, but don't:
 
-**Community MCP servers wrapping Playwright or CDP.** There are dozens. Some are very good. None of them are first-party. The day Microsoft or Google ships a feature, those wrappers either get adopted into the official path or they don't, and you're back to the choice you started with. If you're building infrastructure you intend to keep, build on the official servers.
+**Community MCP servers wrapping Playwright or CDP.** There are dozens. Some are genuinely good. (None are first-party.) The day Microsoft or Google ships a feature, those wrappers either get adopted into the official path or they don't, and you're back to the choice you started with. If you're building infrastructure you intend to keep, build on the official servers.
 
 **Cloud browser platforms** like [Browserbase](https://www.browserbase.com/), [Anchor Browser](https://anchorbrowser.io/), [BrightData](https://brightdata.com/)'s scraping browser, and similar. These are excellent at what they do—managed, scaled, fingerprint-aware browser sessions for agents—but they are _consumers_ of Playwright and CDP, not alternatives to them. They live one layer up.
 
@@ -165,7 +165,7 @@ A few things that look like they belong in this conversation, but don't:
 
 ## The recommendation
 
-Here's what I actually do.
+Here's what I actually do:
 
 Install both. Seriously. They are not zero-sum. The total context cost of having Playwright MCP and Chrome DevTools MCP both registered against the same coding agent, in slim or lean configurations, is much smaller than the cost of being wrong about which one you needed for a given task. Most coding agents will pick reasonably between them if you describe the job clearly.
 
@@ -177,7 +177,7 @@ For _test generation specifically_, use Playwright Test Agents. Don't have your 
 
 For _human debugging with an LLM at your elbow_, use Chrome DevTools AI assistance. It's the right tool for the job—for the job of helping _you_, sitting at your laptop, work faster. It is not the right tool for an agent loop, and treating it as one will waste your afternoon.
 
-The framing I started with—"Playwright on one side, Chrome DevTools on the other"—is mostly accurate, and it'll keep being accurate for a while. But the more useful framing is the one I opened with: _driving_ versus _debugging_. That's the axis. Pick on it, not on the headlines, and the overlap stops feeling like a tie.
+The framing I started with—"Playwright on one side, Chrome DevTools on the other"—is mostly accurate, and it'll keep being accurate for a while. But, the more useful framing is the one I opened with: _driving_ versus _debugging_. That's the axis. Pick on it, not on the headlines, and the overlap stops feeling like a tie.
 
 ## Key takeaways
 
