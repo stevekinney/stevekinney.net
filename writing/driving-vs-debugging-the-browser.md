@@ -6,7 +6,7 @@ description: >-
   Playwright CLI, Playwright MCP, and Chrome DevTools MCP actually fit together,
   and how to pick between them without guessing.
 date: 2026-04-06
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - ai
   - agents
@@ -24,7 +24,7 @@ I've burned an embarrassing number of afternoons wiring these into real coding a
 
 The honest framing: Playwright is in the business of _driving_ a browser, and Chrome DevTools is in the business of _inspecting and debugging_ one. When Microsoft's team builds tools for agents, they tend to optimize for "make the page do the thing." When Google's team builds tools for agents, they tend to optimize for "tell me everything that's wrong with this page right now."
 
-Both teams have crossed into each other's lanes a little. Playwright's official MCP server can do limited inspection. Chrome DevTools MCP can do limited driving—it [uses Puppeteer under the hood](https://github.com/ChromeDevTools/chrome-devtools-mcp) for input automation. But the center of gravity is still very clearly different. If you forget that, you'll choose the wrong tool for any task that _isn't_ squarely in the overlap.
+Both teams have crossed into each other's lanes a little. Playwright's official MCP server can do limited inspection. Chrome DevTools MCP can do limited driving—it uses [Puppeteer](https://pptr.dev/) under the hood for input automation. But the center of gravity is still very clearly different. If you forget that, you'll choose the wrong tool for any task that _isn't_ squarely in the overlap.
 
 > [!NOTE]
 > Throughout this post, "Playwright CLI" refers to `@playwright/cli`—Playwright's purpose-built command-line tool for coding agents—_not_ `npx playwright test`, which is the regular test runner. They're related, but they are not the same product. More on that in a moment.
@@ -33,7 +33,7 @@ Both teams have crossed into each other's lanes a little. Playwright's official 
 
 The first-party things to actually care about: Microsoft's [`@playwright/cli`](https://playwright.dev/docs/getting-started-cli), a CLI for coding agents distinct from the test runner; Microsoft's [`@playwright/mcp`](https://playwright.dev/docs/getting-started-mcp), the official MCP server; Google's `chrome-devtools-mcp`, [maintained by the ChromeDevTools org on GitHub](https://github.com/ChromeDevTools/chrome-devtools-mcp); [Chrome DevTools AI assistance](https://developer.chrome.com/docs/devtools/ai-assistance), Gemini in the DevTools panel—an official Chrome capability, but _not_ a browser-driving CLI; and [Playwright Test Agents](https://playwright.dev/docs/test-agents)—planner, generator, healer—scoped specifically to the test lifecycle.
 
-People confuse a few of these with first-class citizens, so they're worth flagging. Puppeteer is genuinely a Google project, and Chrome DevTools MCP uses it internally, but Puppeteer itself is a JavaScript library, not an agent-facing tool. WebDriver BiDi is a protocol, not a product. Browserbase, Stagehand, Skyvern, Browser Use, agent-browser, and the various "browser-using agent" frameworks from large labs are all built _on top of_ Playwright, Puppeteer, or CDP—they're not what we're talking about here. They're the next layer up, and they live or die based on whether the underlying first-party tool is good.
+People confuse a few of these with first-class citizens, so they're worth flagging. [Puppeteer](https://pptr.dev/) is genuinely a Google project, and Chrome DevTools MCP uses it internally, but Puppeteer itself is a JavaScript library, not an agent-facing tool. [WebDriver BiDi](https://w3c.github.io/webdriver-bidi/) is a protocol, not a product. [Browserbase](https://www.browserbase.com/), [Stagehand](https://github.com/browserbase/stagehand), [Skyvern](https://github.com/Skyvern-AI/skyvern), [Browser Use](https://github.com/browser-use/browser-use), [agent-browser](https://github.com/vercel-labs/agent-browser), and the various "browser-using agent" frameworks from large labs are all built _on top of_ Playwright, Puppeteer, or CDP—they're not what we're talking about here. They're the next layer up, and they live or die based on whether the underlying first-party tool is good.
 
 ## What Playwright CLI is for
 
@@ -65,7 +65,7 @@ When MCP is the right choice over the CLI: when your agent is already inside an 
 
 Chrome DevTools MCP is a different animal. It's Google's official MCP server, [maintained by the ChromeDevTools org on GitHub](https://github.com/ChromeDevTools/chrome-devtools-mcp), and it [shipped to public preview in September 2025](https://developer.chrome.com/blog/chrome-devtools-mcp). [Version 0.19.0](https://developer.chrome.com/blog/new-in-devtools-146) landed alongside Chrome 146 with a meaningfully larger tool surface—integrated Lighthouse audits, performance insights, and slim mode among them.
 
-The way the Chrome team frames it is the right way to read the product: instead of just scripting browser actions, this lets agents _"see what the code they generate actually does when it runs."_ The fundamental shift is that the agent gets DevTools-grade introspection—not just "here's an accessibility snapshot" but "here's a performance trace, here's a network waterfall, here's a console message with a source-mapped stack trace, here's a Lighthouse audit, here's a memory snapshot."
+The way the Chrome team frames it is the right way to read the product: instead of just scripting browser actions, this lets agents [_"see what the code they generate actually does when it runs."_](https://developer.chrome.com/blog/chrome-devtools-mcp) The fundamental shift is that the agent gets DevTools-grade introspection—not just "here's an accessibility snapshot" but "here's a performance trace, here's a network waterfall, here's a console message with a source-mapped stack trace, here's a Lighthouse audit, here's a memory snapshot."
 
 The current tool surface is around 29 tools across six categories. (That count keeps creeping up version-over-version. Read this in six months and it'll be 30-something.) Here's the breakdown:
 
@@ -157,11 +157,11 @@ A few things that look like they belong in this conversation, but don't:
 
 **Community MCP servers wrapping Playwright or CDP.** There are dozens. Some are very good. None of them are first-party. The day Microsoft or Google ships a feature, those wrappers either get adopted into the official path or they don't, and you're back to the choice you started with. If you're building infrastructure you intend to keep, build on the official servers.
 
-**Cloud browser platforms** like Browserbase, Anchor Browser, BrightData's scraping browser, and similar. These are excellent at what they do—managed, scaled, fingerprint-aware browser sessions for agents—but they are _consumers_ of Playwright and CDP, not alternatives to them. They live one layer up.
+**Cloud browser platforms** like [Browserbase](https://www.browserbase.com/), [Anchor Browser](https://anchorbrowser.io/), [BrightData](https://brightdata.com/)'s scraping browser, and similar. These are excellent at what they do—managed, scaled, fingerprint-aware browser sessions for agents—but they are _consumers_ of Playwright and CDP, not alternatives to them. They live one layer up.
 
-**Agent frameworks and "browser-using agents"** from large labs and startups: Stagehand, Skyvern, Browser Use, vercel-labs/agent-browser, and the various OS-level computer-use models. Same story. These are higher-level abstractions sitting on top of Playwright or CDP. They're meaningful products in their own right, but they're not what we're comparing here, because they don't change the answer to "which underlying first-party tool should you trust?"
+**Agent frameworks and "browser-using agents"** from large labs and startups: [Stagehand](https://github.com/browserbase/stagehand), [Skyvern](https://github.com/Skyvern-AI/skyvern), [Browser Use](https://github.com/browser-use/browser-use), [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser), and the various OS-level computer-use models. Same story. These are higher-level abstractions sitting on top of Playwright or CDP. They're meaningful products in their own right, but they're not what we're comparing here, because they don't change the answer to "which underlying first-party tool should you trust?"
 
-**Puppeteer.** Puppeteer is a real Google project, and it is genuinely the engine inside Chrome DevTools MCP. But Puppeteer is a JavaScript library, not an agent-facing tool. Telling an agent "use Puppeteer" is telling it "go write some code." Telling it "use Chrome DevTools MCP" is giving it a tool surface. Different category.
+**Puppeteer.** [Puppeteer](https://pptr.dev/) is a real Google project, and it is genuinely the engine inside Chrome DevTools MCP. But Puppeteer is a JavaScript library, not an agent-facing tool. Telling an agent "use Puppeteer" is telling it "go write some code." Telling it "use Chrome DevTools MCP" is giving it a tool surface. Different category.
 
 ## The recommendation
 
