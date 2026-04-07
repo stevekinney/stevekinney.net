@@ -494,6 +494,11 @@ Your distribution is live, secured, and ready for a custom domain. That's what t
 
 When you're done with this exercise, tear down the resources to avoid ongoing charges. The distribution must be _disabled_ before CloudFront will let you delete it—and disabling is the slow part (15–30 minutes). The actual deletion is fast once the status reaches `Deployed`.
 
+> [!WARNING] Before you copy these commands
+> The IDs below (`E1A2B3C4D5E6F7` for the distribution, `E1OAC2EXAMPLE` for the OAC) are placeholders — replace them with your actual IDs. Find yours with `aws cloudfront list-distributions --query 'DistributionList.Items[].{Id:Id,Domain:DomainName}' --output table` and `aws cloudfront list-origin-access-controls --output table`.
+>
+> Run these commands in a single shell session so `$ETAG`, `$NEW_ETAG`, and `$OAC_ETAG` stay in scope. If you come back in a new terminal, re-fetch each ETag before running the command that uses it.
+
 Fetch the current config and ETag:
 
 ```bash

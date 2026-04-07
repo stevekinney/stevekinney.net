@@ -211,7 +211,7 @@ aws apigatewayv2 update-api \
 
 ## Throttling
 
-Every API Gateway stage exposes throttling controls that protect your Lambda functions from accidental abuse. Two values matter: **burst limit** (maximum concurrent requests the stage will handle before throttling) and **rate limit** (steady-state requests per second). The account-level defaults—10,000 RPS burst, 5,000 RPS rate—are generous enough to bankrupt a personal project if something goes wrong. Set explicit, conservative limits on your stage:
+Every API Gateway stage exposes throttling controls that protect your Lambda functions from accidental abuse. Two values matter: **burst limit** (the size of the token bucket, which caps short spikes) and **rate limit** (the steady-state refill rate in requests per second). The account-level defaults—**5,000 burst** and **10,000 RPS** steady-state, shared across _all_ APIs in the account—are generous enough to bankrupt a personal project if something goes wrong. Set explicit, conservative limits on your stage:
 
 ```bash
 aws apigatewayv2 update-stage \

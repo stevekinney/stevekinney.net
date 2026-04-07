@@ -508,16 +508,21 @@ aws lambda invoke \
   response.json
 ```
 
-The response includes a `LogResult` field containing base64-encoded log output. Decode it:
+The response includes a `LogResult` field containing base64-encoded log output. You can capture and decode it in a single invocation by swapping `--output json` for `--query 'LogResult' --output text` — that pipes the log string straight into `base64 --decode`:
 
 ```bash
 aws lambda invoke \
   --function-name my-frontend-app-api \
+  --cli-binary-format raw-in-base64-out \
+  --payload file://test-event.json \
   --log-type Tail \
+  --region us-east-1 \
   --query 'LogResult' \
   --output text \
   response.json | base64 --decode
 ```
+
+`response.json` is still written (it's the positional output-file argument), and the `LogResult` field lands on stdout for the pipe.
 
 On a cold start, the output includes:
 

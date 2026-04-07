@@ -501,6 +501,3 @@ aws sns delete-topic \
   --topic-arn arn:aws:sns:us-east-1:123456789012:my-frontend-app-alerts \
   --region us-east-1
 ```
-
-> [!NOTE]
-> Alarms and SNS topics in this configuration don't cost anything at rest, but it's still worth cleaning them up so you don't end up with stale alerts firing into an inbox you stopped reading.

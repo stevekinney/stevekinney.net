@@ -295,11 +295,11 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
 This handler pattern—parse the method, validate parameters, call DynamoDB, return a response—is the same pattern you'll use for every Lambda-backed API endpoint.
 
-## Reducing Read Cost with ProjectionExpression
+## Performance Modifiers
 
-By default, `GetCommand` and `QueryCommand` return every attribute on the item. If your items have large non-key attributes—long text, blobs, deeply nested JSON—that's extra data to transfer over the network on every read.
+Two options on `GetCommand` and `QueryCommand` are worth knowing about. You don't need either for the exercise, but they come up the first time you care about cost or correctness at scale.
 
-`ProjectionExpression` tells DynamoDB which attributes to return. Here's a `GetCommand` that fetches only `id` and `name`:
+**`ProjectionExpression`** tells DynamoDB which attributes to return. By default, every read ships the whole item back—including big attributes like long text, blobs, or nested JSON. A projection narrows the payload:
 
 ```typescript
 const result = await client.send(
@@ -312,15 +312,9 @@ const result = await client.send(
 );
 ```
 
-The `#n` placeholder is necessary because `name` is a DynamoDB reserved word. The same rule applies to projection expressions as to update expressions: if the attribute name might be reserved, use a `#` placeholder.
+The `#n` placeholder is necessary because `name` is a DynamoDB reserved word—the same placeholder rule applies to projections as to update expressions. One thing the docs don't emphasize: `ProjectionExpression` does not reduce `GetItem` RCU charges (DynamoDB bills based on item size, not returned size) and doesn't reduce `Query`/`Scan` RCUs either (billed by data scanned, not projected). What it _does_ reduce is the bytes over the wire—useful for big items at scale, not for a learning exercise.
 
-One clarification on cost: DynamoDB charges `GetItem` by item size, so `ProjectionExpression` on a single-item read doesn't reduce your RCU cost—it only reduces the data transferred over the network. For `Query` and `Scan`, DynamoDB still charges based on the total data scanned, not the projected result. The network savings still matter for items with large non-key attributes, especially at volume.
-
-## Eventual vs. Strong Consistency
-
-DynamoDB reads are eventually consistent by default. When you write an item, the change propagates across DynamoDB's distributed storage within a fraction of a second—but "a fraction of a second" isn't zero, which means a read immediately after a write could theoretically return the old value.
-
-`ConsistentRead: true` forces a strongly consistent read, guaranteeing you see the most recent committed write. It costs twice as many RCUs as an eventually consistent read.
+**`ConsistentRead: true`** forces a strongly consistent read that's guaranteed to see the most recent committed write. By default, reads are eventually consistent: the write propagates across DynamoDB's distributed storage in a fraction of a second, and a read during that window _might_ return the previous value. Strong reads cost twice as many RCUs.
 
 ```typescript
 const result = await client.send(
@@ -332,7 +326,7 @@ const result = await client.send(
 );
 ```
 
-For a typical frontend API backend, eventually consistent reads are fine—the odds of a user reading their own data in the same millisecond they wrote it are low, and even if it happens, a 404 followed by a retry is usually acceptable. Use `ConsistentRead: true` when your handler writes an item and then immediately reads it back in the same request: the write hasn't fully propagated yet, and an eventually consistent read could miss it.
+For a frontend API backend, the default (eventually consistent) is almost always what you want—the odds of a user reading their own data in the same millisecond they wrote it are low, and a 404-plus-retry is usually acceptable. Reach for `ConsistentRead: true` only when a single request both writes an item and reads it back, and the read _must_ reflect the write.
 
 ## Common Mistakes
 

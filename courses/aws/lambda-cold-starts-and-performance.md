@@ -56,7 +56,7 @@ Lambda allocates CPU proportionally to memory. A 128 MB function gets a fraction
 
 ### Architecture Choice
 
-Lambda supports two processor architectures: `x86_64` (the default) and `arm64` (AWS Graviton2). ARM64 functions cost approximately 20% less per GB-second and frequently outperform x86_64 equivalents on Node.js workloads because Graviton2 has better single-threaded performance for I/O-bound tasks. For new functions, `--architectures arm64` is the better default: same API surface, lower cost, often faster cold starts. The only reason to stay on x86_64 is if you're bundling native modules compiled for that architecture.
+Lambda supports `x86_64` (default) and `arm64` (AWS Graviton2). ARM64 costs ~20% less per GB-second and is usually faster for Node.js. Pass `--architectures arm64` on new functions — the only reason to stay on x86_64 is if you're bundling native modules built for it.
 
 ### VPC Configuration
 

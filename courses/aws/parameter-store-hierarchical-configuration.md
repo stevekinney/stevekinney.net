@@ -281,5 +281,3 @@ aws ssm delete-parameters \
   --region us-east-1 \
   --output json
 ```
-
-The response includes a `DeletedParameters` list confirming which names were removed and an `InvalidParameters` list for any names that didn't exist—useful if you're running the command more than once.

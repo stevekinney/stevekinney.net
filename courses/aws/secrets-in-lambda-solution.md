@@ -404,20 +404,7 @@ The response now includes both parameters, loaded in a single API call.
 
 ## Cleanup
 
-Delete the test secret when you're done. Use `--force-delete-without-recovery` to skip the 7-day recovery window that Secrets Manager normally enforces:
-
-```bash
-aws secretsmanager delete-secret \
-  --secret-id /my-frontend-app/production/stripe-api-key \
-  --force-delete-without-recovery \
-  --region us-east-1 \
-  --output json
-```
-
-> [!WARNING]
-> `--force-delete-without-recovery` is only safe for test secrets. Production secrets should use the recovery window—an accidental delete without `--force-delete-without-recovery` is reversible within 7–30 days. With `--force-delete-without-recovery`, deletion is immediate and permanent.
-
-Delete the Parameter Store parameters:
+Delete the Parameter Store parameters when you're done:
 
 ```bash
 aws ssm delete-parameters \

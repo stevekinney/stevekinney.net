@@ -337,13 +337,13 @@ You should see two versions of `index.html`—the original and the updated one. 
 A versioned bucket cannot be deleted until all object versions and delete markers have been removed. Run this two-step sequence to clean up:
 
 ```bash
-# Delete all object versions and delete markers
+# Delete all object versions AND delete markers in one call
 aws s3api delete-objects \
   --bucket my-frontend-app-assets \
   --delete "$(aws s3api list-object-versions \
     --bucket my-frontend-app-assets \
     --output json \
-    --query '{Objects: Versions[].{Key:Key,VersionId:VersionId}}')" \
+    --query '{Objects: (Versions[].{Key:Key,VersionId:VersionId} + DeleteMarkers[].{Key:Key,VersionId:VersionId})[]}')" \
   --region us-east-1 \
   --output json
 
@@ -352,4 +352,4 @@ aws s3 rb s3://my-frontend-app-assets --region us-east-1
 ```
 
 > [!NOTE]
-> If you have delete markers (from deleting objects while versioning was enabled), you'll need a second pass to clean those up too. Run `aws s3api list-object-versions` and check the `DeleteMarkers` array — if it's non-empty, pass those through `delete-objects` the same way before running `rb`.
+> The `--query` expression concatenates the `Versions` array and the `DeleteMarkers` array. If you skip the `DeleteMarkers` part and you've deleted objects while versioning was enabled, `aws s3 rb` will fail with `BucketNotEmpty` even though the bucket looks empty in the console.

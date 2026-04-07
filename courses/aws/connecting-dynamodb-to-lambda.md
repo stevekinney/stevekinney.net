@@ -123,10 +123,7 @@ Expected output:
 
 ## The Complete Handler
 
-Here's a complete Lambda handler that implements a CRUD API for items stored in DynamoDB. This is the handler you'd deploy behind the API Gateway you set up earlier in the course.
-
-> [!WARNING]
-> In a real application, never accept `userId` from query parameters—any caller can forge them. Read it from `event.requestContext.authorizer?.jwt?.claims?.sub` after the JWT authorizer (see [API Gateway Authentication](api-gateway-authentication.md)) has validated the token. We're using query parameters here as a learning simplification only.
+Here's a complete Lambda handler that implements a CRUD API for items stored in DynamoDB. This is the handler you'd deploy behind the API Gateway you set up earlier in the course. The same "`userId` comes from the JWT authorizer, not the query string" warning from [Reading and Writing Data with the SDK](dynamodb-reading-and-writing-data.md) applies here — we're still using query parameters as a learning simplification.
 
 ```typescript
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
@@ -149,8 +146,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   if (!userId) {
     return respond(400, { error: 'Missing userId parameter' });
   }
-
-  // [!note In a real application, read userId from event.requestContext.authorizer?.jwt?.claims?.sub after JWT validation—never from query parameters.]
 
   try {
     switch (method) {
