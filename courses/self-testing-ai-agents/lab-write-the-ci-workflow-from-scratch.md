@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Write the CI Workflow from Scratch'
 description: Build the GitHub Actions workflow for Shelf from an empty directory. Prove each layer runs, uploads artifacts, and fails loud enough for an agent to recover.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Instructions That Wire the Agent In
 description: The one rule for instruction files in this workshop—if the agent can't mechanically act on it, it doesn't belong there.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: The Testing Pyramid as a Feedback Hierarchy
 description: A fast alignment pass on the testing pyramid, reframed as a hierarchy of feedback an agent can actually use.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

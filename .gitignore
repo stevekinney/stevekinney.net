@@ -9,11 +9,10 @@ dist
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-.obsidian/workspace.json
+**/.obsidian/workspace.json
 .vercel
 meta-*
 *storybook.log
-content/.obsidian/workspace.json
 **/.svelte-kit
 **/.turbo
 
@@ -32,5 +31,4 @@ package-lock.json
 writing/manifest.json
 courses/*/manifest.json
 applications/website/src/lib/server/content-index.json
-writing/.obsidian/workspace.json
 tmp/

@@ -1,7 +1,7 @@
 ---
 title: Lint and Types as Guardrails
 description: ESLint's recommended rules are a starting point, not a finish line. The rules that actually help agents are the ones you write for your own codebase.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

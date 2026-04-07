@@ -1,7 +1,7 @@
 ---
 title: The Waiting Story
 description: Why `page.waitForTimeout` is the second-most-common cause of flaky tests, and what to reach for instead.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

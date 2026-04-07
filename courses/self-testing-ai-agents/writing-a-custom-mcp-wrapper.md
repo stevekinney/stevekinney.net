@@ -1,7 +1,7 @@
 ---
 title: Writing a Custom MCP Wrapper
 description: When the off-the-shelf MCPs don't give the agent the exact probe you want, wrap your own. It's fewer lines of code than you think.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Bugbot on a Planted Bug'
 description: Set up Cursor Bugbot on Shelf, open a PR that contains a planted permission bug, and watch the loop close.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

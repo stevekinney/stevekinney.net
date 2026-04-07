@@ -1,7 +1,7 @@
 ---
 title: 'Failure Dossiers: What Agents Actually Need From a Red Build'
 description: A failed test is a prompt. The prompt is only as good as the evidence attached to it.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Git Hooks with Husky and Lint-Staged
 description: Catch the cheap mistakes at the moment of commit, not the moment of CI. Plus a brief tour of Claude hooks as a tighter, agent-specific layer on top.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: CI as the Loop of Last Resort
 description: By the time CI fires, the agent should have caught 95% of mistakes locally. CI is what catches the last 5% plus the environment-specific ones you can't catch locally.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

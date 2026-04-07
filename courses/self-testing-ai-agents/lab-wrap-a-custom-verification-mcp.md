@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wrap a Custom Verification MCP'
 description: Write a small MCP server that exposes a single verification tool for Shelf and wire it into Claude Code.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Secret Scanning with Gitleaks
 description: Agents commit fake API keys. Sometimes they commit real ones. Gitleaks is the boring tool that prevents the latter with almost no configuration.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

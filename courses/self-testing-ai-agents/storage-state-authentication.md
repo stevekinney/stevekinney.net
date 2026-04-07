@@ -1,7 +1,7 @@
 ---
 title: Storage State Authentication
 description: Stop logging in from the UI on every test. Log in once, save the session, reuse it everywhere.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

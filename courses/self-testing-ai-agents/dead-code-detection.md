@@ -1,7 +1,7 @@
 ---
 title: Dead Code Detection
 description: Agents leave orphans behind. Knip and dependency-cruiser find them before the orphans rot into a half-working codebase.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Harden the Flaky Rate-Book Test'
 description: Take a real, deliberately broken Playwright test and apply every Module 3 pattern to make it fast, isolated, and rock-solid.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

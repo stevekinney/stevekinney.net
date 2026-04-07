@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Rewrite the Bad CLAUDE.md'
 description: Take Shelf's deliberately useless instructions file and turn it into one the agent can actually act on.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

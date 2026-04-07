@@ -1,7 +1,7 @@
 ---
 title: Deterministic State and Test Isolation
 description: How to seed, reset, and isolate database state so tests never leak into each other and the suite can run in parallel without tears.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Runtime Probes in the Development Loop
 description: How to wire Playwright MCP into the agent's working loop so it pokes at the UI between edits instead of waiting for you to run the tests.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

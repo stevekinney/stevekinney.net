@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wire the Static Layer into Shelf'
 description: Install and configure the whole stack—ESLint custom rules, TypeScript strict, knip, husky, lint-staged, gitleaks—and prove each layer fires on the right mistake.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

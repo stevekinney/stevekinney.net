@@ -1,7 +1,7 @@
 ---
 title: API and UI Hybrid Tests
 description: Use the `request` fixture to set up state via API and assert via UI. Faster, clearer, and the pattern most teams haven't found yet.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

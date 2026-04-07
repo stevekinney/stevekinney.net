@@ -1,7 +1,7 @@
 ---
 title: Tuning Bugbot for Your Codebase
 description: How to configure Cursor Bugbot so it finds the real issues and shuts up about the rest.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

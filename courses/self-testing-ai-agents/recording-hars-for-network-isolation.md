@@ -1,7 +1,7 @@
 ---
 title: Recording HARs for Network Isolation
 description: How to record a real HTTP session once and replay it deterministically in every test, so your suite stops depending on someone else's server.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 

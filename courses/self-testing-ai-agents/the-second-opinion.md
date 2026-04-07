@@ -1,7 +1,7 @@
 ---
 title: The Second Opinion
 description: Why you want a different agent reviewing the first agent's work, and what kinds of mistakes a review bot actually catches that tests don't.
-modified: 2026-04-06
+modified: 2026-04-07
 date: 2026-04-06
 ---
 
