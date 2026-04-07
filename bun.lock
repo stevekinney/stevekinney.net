@@ -126,6 +126,7 @@
         "@stevekinney/python-ai": "workspace:*",
         "@stevekinney/react-performance": "workspace:*",
         "@stevekinney/react-typescript": "workspace:*",
+        "@stevekinney/self-testing-ai-agents": "workspace:*",
         "@stevekinney/storybook": "workspace:*",
         "@stevekinney/tailwind": "workspace:*",
         "@stevekinney/testing": "workspace:*",
@@ -157,6 +158,9 @@
     },
     "courses/react-typescript": {
       "name": "@stevekinney/react-typescript",
+    },
+    "courses/self-testing-ai-agents": {
+      "name": "@stevekinney/self-testing-ai-agents",
     },
     "courses/storybook": {
       "name": "@stevekinney/storybook",
@@ -683,6 +687,8 @@
     "@stevekinney/react-typescript": ["@stevekinney/react-typescript@workspace:courses/react-typescript"],
 
     "@stevekinney/scripts": ["@stevekinney/scripts@workspace:packages/scripts"],
+
+    "@stevekinney/self-testing-ai-agents": ["@stevekinney/self-testing-ai-agents@workspace:courses/self-testing-ai-agents"],
 
     "@stevekinney/storybook": ["@stevekinney/storybook@workspace:courses/storybook"],
 

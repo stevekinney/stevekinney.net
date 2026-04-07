@@ -5,14 +5,14 @@ description: >-
   shared dependency negotiation, and solve the cross-boundary state management
   problem using nanostores.
 date: 2026-03-01
-modified: 2026-03-17
+modified: 2026-04-07
 ---
 
-Let's take a look at setting up a run-time microfrontend. We're going to wire up a host shell and a remote analytics module using [Module Federation](/courses/enterprise-ui/module-federation.md). The host application (Port `3000`) loads the analytics dashboard from a separately built and served remote (Port `3001`) at runtime. Along the way you'll configure shared dependency negotiation, discover that [React Context](https://react.dev/reference/react/createContext) can't cross federation boundaries, and solve the cross-boundary communication problem using [nanostores](https://github.com/nanostores/nanostores).
+Let's take a look at setting up a run-time microfrontend. We're going to wire up a host shell and a remote analytics module using [Module Federation](/courses/enterprise-ui/module-federation). The host application (Port `3000`) loads the analytics dashboard from a separately built and served remote (Port `3001`) at runtime. Along the way you'll configure shared dependency negotiation, discover that [React Context](https://react.dev/reference/react/createContext) can't cross federation boundaries, and solve the cross-boundary communication problem using [nanostores](https://github.com/nanostores/nanostores).
 
 ## Why It Matters
 
-Runtime microfrontends give teams independent builds and deploys—but they come with real operational costs. Two dev servers, remote entry manifests, shared dependency negotiation, cross-boundary state management. In my humble opinion, you need to experience those costs firsthand so you can make an informed architectural decision about whether you actually need runtime composition or whether build-time composition ([Exercise 2](/courses/enterprise-ui/build-time-composition-exercise.md)) is the better fit.
+Runtime microfrontends give teams independent builds and deploys—but they come with real operational costs. Two dev servers, remote entry manifests, shared dependency negotiation, cross-boundary state management. In my humble opinion, you need to experience those costs firsthand so you can make an informed architectural decision about whether you actually need runtime composition or whether build-time composition ([Exercise 2](/courses/enterprise-ui/build-time-composition-exercise)) is the better fit.
 
 ## Prerequisites
 
@@ -34,7 +34,7 @@ Open [http://localhost:3000](http://localhost:3000) (the **host application**) a
 
 ## Explore the Federation Setup
 
-Let's start by seeing the running application, then understand how [Module Federation](/courses/enterprise-ui/module-federation.md) connects the pieces.
+Let's start by seeing the running application, then understand how [Module Federation](/courses/enterprise-ui/module-federation) connects the pieces.
 
 ### Explore in the Browser
 
@@ -358,7 +358,7 @@ You've now worked through the full operational cost of Module Federation. Before
 
 **Technology isolation.** Because the boundary is a network contract (the manifest and exposed module paths), different remotes can use different frameworks, different React versions, or even different build tools—as long as they expose a compatible interface. You can have a React 18 host load a React 19 remote, or mix React and Vue, in ways that a shared bundle can't accommodate.
 
-**Incremental strangling.** A remote can wrap legacy code and expose it as a modern component. The host never needs to know. This makes Module Federation a practical tool for migrating large legacy applications without a big-bang rewrite—something you'll explore directly in [Exercise 9](/courses/enterprise-ui/strangler-fig-and-codemods-exercise.md).
+**Incremental strangling.** A remote can wrap legacy code and expose it as a modern component. The host never needs to know. This makes Module Federation a practical tool for migrating large legacy applications without a big-bang rewrite—something you'll explore directly in [Exercise 9](/courses/enterprise-ui/strangler-fig-and-codemods-exercise).
 
 ### Where It Costs You
 
@@ -386,4 +386,4 @@ The right choice is almost always build-time composition—until it isn't. If yo
 
 ## What's Next
 
-You've felt what runtime composition actually costs. The natural follow-up question is: what if you consumed this same analytics module as a regular workspace package—no remote entry, no manifest, no shared dependency negotiation? Same product, radically simpler architecture. That's what [build-time composition](/courses/enterprise-ui/build-time-composition-exercise.md) explores.
+You've felt what runtime composition actually costs. The natural follow-up question is: what if you consumed this same analytics module as a regular workspace package—no remote entry, no manifest, no shared dependency negotiation? Same product, radically simpler architecture. That's what [build-time composition](/courses/enterprise-ui/build-time-composition-exercise) explores.

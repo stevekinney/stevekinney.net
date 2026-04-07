@@ -50,4 +50,14 @@ if [ -n "$COURSE_OR_WEBSITE_PKG" ]; then
   bun run packages/scripts/validate-workspace-dependencies.ts
 fi
 
+# Validate the full course registration chain on every commit, regardless of
+# what's staged. The previous staged-file gating is what allowed the
+# self-testing-ai-agents course to land with no README, no package.json, and
+# no website workspace dep — every check was opt-in by file pattern, so a
+# directory with none of the triggering files slipped past silently. This
+# unconditional run guarantees that every courses/<slug>/ directory has its
+# full registration chain intact before any commit lands.
+echo "Validating course registry..."
+bun run packages/scripts/validate-course-registry.ts
+
 bunx lint-staged

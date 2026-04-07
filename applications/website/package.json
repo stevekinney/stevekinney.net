@@ -14,6 +14,7 @@
     "@stevekinney/python-ai": "workspace:*",
     "@stevekinney/react-performance": "workspace:*",
     "@stevekinney/react-typescript": "workspace:*",
+    "@stevekinney/self-testing-ai-agents": "workspace:*",
     "@stevekinney/storybook": "workspace:*",
     "@stevekinney/tailwind": "workspace:*",
     "@stevekinney/testing": "workspace:*",
