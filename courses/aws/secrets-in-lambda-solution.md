@@ -4,7 +4,7 @@ description: >-
   Complete solution for storing an API key in Parameter Store and reading it
   from a Lambda function at runtime.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - secrets
@@ -215,7 +215,7 @@ aws iam get-role-policy \
 
 ## Deploy and Invoke
 
-Package the function. You need to include `node_modules` because the Lambda runtime doesn't include `@aws-sdk/client-ssm` by default:
+Package the function. The `nodejs22.x` runtime bundles the AWS SDK v3, but bundle `node_modules` anyway—AWS pins a specific minor version in the runtime, not the latest, and it varies by region. Bundling your own copy means you control the version and aren't surprised by a runtime update:
 
 ```bash
 cd lambda
@@ -241,7 +241,7 @@ Or create a new function:
 ```bash
 aws lambda create-function \
   --function-name my-frontend-app-api \
-  --runtime nodejs20.x \
+  --runtime nodejs22.x \
   --role arn:aws:iam::123456789012:role/my-frontend-app-lambda-role \
   --handler handler.handler \
   --zip-file fileb://function.zip \
@@ -311,7 +311,7 @@ aws lambda update-function-configuration \
   --output json
 ```
 
-**"Cannot find module '@aws-sdk/client-ssm'"** The `node_modules` directory wasn't included in the deployment zip. Make sure you copy `node_modules` into the `dist/` directory before zipping, or zip from the project root and include both `dist/` files and `node_modules/`.
+**"Cannot find module '@aws-sdk/client-ssm'"** The `node_modules` directory wasn't included in the deployment zip. The `nodejs22.x` runtime does bundle the AWS SDK v3, but this exercise bundles its own copy for version control. Make sure you copy `node_modules` into the `dist/` directory before zipping.
 
 ## Stretch Goal Solution: GetParametersByPath
 
@@ -401,3 +401,18 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 ```
 
 The response now includes both parameters, loaded in a single API call.
+
+## Cleanup
+
+Delete the Parameter Store parameters when you're done:
+
+```bash
+aws ssm delete-parameters \
+  --names \
+    "/my-frontend-app/production/third-party-api-key" \
+    "/my-frontend-app/production/api-endpoint" \
+  --region us-east-1 \
+  --output json
+```
+
+Standard-tier parameters are free, so this is housekeeping rather than a cost concern—but it keeps your parameter namespace clean.

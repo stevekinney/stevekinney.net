@@ -3,7 +3,7 @@ title: 'S3 Versioning, Lifecycle, and Cost'
 description: >-
   Enable versioning to protect against accidental overwrites, configure lifecycle rules to manage old versions, and understand how S3 pricing works.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - s3
@@ -107,7 +107,6 @@ aws s3api get-object \
   --key "index.html" \
   --version-id "2LB2z3tPdN2aRFGhK0mRr" \
   --region us-east-1 \
-  --output json \
   index-previous.html
 ```
 
@@ -246,3 +245,41 @@ At this point, you have a complete S3 static site setup:
 This is a working, publicly accessible website. It's HTTP-only, served from a single region, and uses an ugly S3 endpoint URL—but it works. More importantly, you now understand the storage layer well enough to stop treating it like magic.
 
 Next, you're going to switch to the domain side of the story: how to control a domain, how Route 53 becomes authoritative for it, and why that has to exist before ACM validation can work cleanly. Then you'll come back and build the production path on top of this S3 foundation.
+
+## Cleanup
+
+A versioned bucket cannot be deleted until every object version **and** every delete marker has been removed. Run these two passes—one for versions, one for delete markers—guarded so a fresh bucket with nothing in one list doesn't fail. Then remove the bucket:
+
+```bash
+# 1. Delete every non-current object version (skip if there are none)
+VERSIONS=$(aws s3api list-object-versions \
+  --bucket my-frontend-app-assets \
+  --output json \
+  --query 'Versions[].{Key:Key,VersionId:VersionId}')
+if [ "$VERSIONS" != "null" ] && [ "$VERSIONS" != "[]" ]; then
+  aws s3api delete-objects \
+    --bucket my-frontend-app-assets \
+    --delete "{\"Objects\": $VERSIONS}" \
+    --region us-east-1 \
+    --output json
+fi
+
+# 2. Delete every delete marker (skip if there are none)
+MARKERS=$(aws s3api list-object-versions \
+  --bucket my-frontend-app-assets \
+  --output json \
+  --query 'DeleteMarkers[].{Key:Key,VersionId:VersionId}')
+if [ "$MARKERS" != "null" ] && [ "$MARKERS" != "[]" ]; then
+  aws s3api delete-objects \
+    --bucket my-frontend-app-assets \
+    --delete "{\"Objects\": $MARKERS}" \
+    --region us-east-1 \
+    --output json
+fi
+
+# 3. Remove the now-empty bucket
+aws s3 rb s3://my-frontend-app-assets --region us-east-1
+```
+
+> [!NOTE] Why the shell guards
+> `aws s3api list-object-versions` [returns `Versions` and `DeleteMarkers` as separate arrays](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjects.html) and omits either key entirely when it's empty—a `--query` pulling the missing key back as `null`. Passing `{"Objects": null}` or `{"Objects": []}` to `delete-objects` fails with a parameter validation error, not a silent no-op, so each pass has to check the list before calling the API. Skip either pass when there _are_ entries and `aws s3 rb` will fail with `BucketNotEmpty`: delete markers count as objects. If your bucket has more than 1,000 versions or delete markers, you'll also need to paginate—`list-object-versions` caps each response at 1,000 entries.

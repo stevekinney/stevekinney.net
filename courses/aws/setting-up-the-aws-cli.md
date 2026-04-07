@@ -4,7 +4,7 @@ description: >-
   Install the AWS CLI v2, configure it with named profiles and access keys, and
   verify that your credentials work.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cli
@@ -107,6 +107,8 @@ Enter your access key ID, secret access key, `us-east-1` as the region, and `jso
 > [!TIP]
 > We use `us-east-1` throughout this course because it's the region where CloudFront certificates and Lambda@Edge functions must be created. Using a single region for everything keeps things simple while you're learning.
 
+Once you've set a default region with `aws configure`, the `--region` flag becomes optional: if you leave it off, the CLI uses whatever you configured. For the rest of the course, I'll still pass `--region us-east-1` explicitly on every command. It's redundant when your default is already `us-east-1`, but it makes the examples reproducible if you ever change your default and copy a command into a different shell. If you want to drop the flag once you're comfortable, that's fine—just remember which region your default points at.
+
 ## Named Profiles
 
 The default profile works fine when you have one AWS account. But if you ever have a personal account and a work account—or a staging environment and a production environment—you'll want **named profiles**.
@@ -122,8 +124,7 @@ This creates a separate set of credentials stored under the `personal` profile n
 ```bash
 aws s3 ls \
   --profile personal \
-  --region us-east-1 \
-  --output json
+  --region us-east-1
 ```
 
 The underlying file structure looks like this:
@@ -193,9 +194,11 @@ Let's make sure the CLI can actually talk to a service. Run:
 
 ```bash
 aws s3 ls \
-  --region us-east-1 \
-  --output json
+  --region us-east-1
 ```
+
+> [!NOTE]
+> The high-level `aws s3` commands (`ls`, `sync`, `cp`, `rm`) are convenience wrappers that don't produce JSON output — `--output json` is silently ignored on these commands. Use `--output json` with `aws s3api` commands instead, which map directly to the S3 API and respect the output format flag.
 
 If you haven't created any buckets yet, you'll get an empty response. That's fine—it means the CLI authenticated successfully and S3 responded. If you get an access denied error, your `admin` user's permissions might not be set up correctly—revisit the user setup in [Creating and Securing an AWS Account](creating-and-securing-an-aws-account.md).
 

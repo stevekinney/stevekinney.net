@@ -5,7 +5,7 @@ description: >-
   servers, how invocations work, and how Lambda differs from traditional server
   deployments.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - lambda
@@ -60,7 +60,7 @@ Every Lambda execution environment goes through three phases. Understanding thes
 The first time Lambda needs to run your function (or when it scales up to handle more traffic), it creates a new execution environment. During the **init phase**, Lambda:
 
 - Downloads your deployment package (your zipped code)
-- Starts the runtime (Node.js 20 in our case)
+- Starts the runtime (Node.js 22 in our case)
 - Runs your top-level module code—`import` statements, database client initialization, anything outside your handler function
 
 This phase happens once per execution environment, not once per request. Code you put at the top level of your module runs during init and persists across invocations on the same environment. I think of it as the "warm up the kitchen" step—you do it once, and then you're ready to cook for as many customers as Lambda sends your way.
@@ -77,12 +77,12 @@ The key insight: the init phase is expensive (relatively speaking), and the invo
 
 ## Runtimes
 
-Lambda supports multiple language runtimes. For this course, you'll use **Node.js 20** (`nodejs20.x`). Lambda also supports Python, Java, .NET, Go, Ruby, and custom runtimes via container images.
+Lambda supports multiple language runtimes. For this course, you'll use **Node.js 22** (`nodejs22.x`). Lambda also supports Python, Java, .NET, Go, Ruby, and custom runtimes via container images.
 
 The runtime you choose affects cold start performance, available SDK versions, and how you structure your code. Node.js is a natural fit for frontend engineers: you already know the language, you can share types between your frontend and your Lambda functions, and the Node.js runtime has some of the fastest cold starts among Lambda's managed runtimes.
 
-> [!TIP]
-> Lambda also supports `nodejs22.x` if you want the latest Node.js features. This course uses `nodejs20.x` because it's the current LTS version and widely supported. The concepts are identical regardless of which Node.js version you choose.
+> [!NOTE] Why `nodejs22.x` and not `nodejs24.x`?
+> AWS also supports `nodejs24.x`, which will be supported longer than `nodejs22.x`. This course pins to `nodejs22.x` because it has broader ecosystem adoption at the time of writing—most production codebases you'll join still target Node 22 or below. Upgrading is a one-line change (`--runtime nodejs24.x`). The [AWS Lambda runtimes reference](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) lists every supported runtime along with its end-of-support date; check it before pinning a long-lived project. `nodejs20.x` reaches end of support in April 2026.
 
 ## How Lambda Differs from What You Know
 

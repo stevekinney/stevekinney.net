@@ -3,7 +3,7 @@ title: 'Custom Error Pages and SPA Routing'
 description: >-
   Set up custom error responses that redirect 403 and 404 errors to index.html, enabling client-side routing for single-page applications.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudfront
@@ -139,8 +139,7 @@ How long (in seconds) CloudFront caches the error response at edge locations. Th
 
 Why does this matter? Suppose you deploy new content and a path that previously returned a 403 now maps to a real file. With the default 5-minute TTL, users would still see the custom error response (served as `index.html`) for up to 5 minutes instead of the actual file. A lower value means faster recovery.
 
-> [!WARNING]
-> Don't set `ErrorCachingMinTTL` to `0`. CloudFront requires error responses to be cached for at least some duration. A value of `10` is a reasonable balance—short enough that errors don't persist long, but long enough that CloudFront isn't hammering your origin on every request for a missing file.
+Setting `ErrorCachingMinTTL` to `0` is allowed—CloudFront just won't cache the error response, so every miss triggers an origin request. Fine for a low-traffic SPA, expensive at scale. A value of `10` is a reasonable balance for most projects: short enough that errors don't persist long, but long enough that CloudFront isn't hammering your origin on every cache miss.
 
 ## Testing SPA Routing
 

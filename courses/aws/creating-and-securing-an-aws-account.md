@@ -4,7 +4,7 @@ description: >-
   Create an AWS account, enable MFA on the root user, and understand why root
   should be locked away after initial setup.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - iam
@@ -43,7 +43,7 @@ Once AWS verifies your email address, the next screen is where you set the root 
 
 Use a strong password and store it in a password manager immediately. This is not a password you should memorize or reuse anywhere else.
 
-AWS then asks you to choose an account plan. In the current flow shown here, AWS offers a **Free (6 months)** option and a **Paid** option.
+AWS then asks you to choose an account plan. In the current flow shown here, AWS offers a free option and a **Paid** option. AWS's Free Tier options include an introductory period (the duration varies — check the current offer) and a set of always-free allowances.
 
 ![Account plan selection screen offering the Free and Paid account plans during signup.](assets/choose-account-plan.png)
 

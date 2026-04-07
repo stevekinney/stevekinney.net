@@ -4,7 +4,7 @@ description: >-
   Understand why hardcoding secrets in Lambda environment variables or source
   code is a security risk and what the alternatives look like on AWS.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - secrets
@@ -110,6 +110,6 @@ By the end of the secrets section, your Lambda functions will follow this patter
 - **Using environment variables because rotation feels like a future problem:** Rotation always becomes a current problem on the worst possible day.
 - **Picking Secrets Manager for every value automatically:** Some values are configuration, not secrets, and Parameter Store is the simpler tool.
 
-## The Principle of Least Surprise
+## Use the Right Tool for the Job
 
 This module isn't about making your life harder. It's about using the right tool for the job. Lambda environment variables are designed for non-sensitive configuration. Parameter Store and Secrets Manager are designed for sensitive values. When you put secrets in the right place, you get encryption, access control, audit logging, and rotation—all the things you'd expect a cloud platform to provide. I've seen teams burn entire afternoons tracking down a leaked key that lived in an environment variable for months. The next lesson walks through Parameter Store: how to create parameters, organize them hierarchically, and retrieve them in your code.

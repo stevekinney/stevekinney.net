@@ -3,7 +3,7 @@ title: 'Exercise: Deploy a Static Site to S3'
 description: >-
   Create a bucket, upload a static site, enable website hosting, and access it in the browser.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - s3
@@ -331,3 +331,41 @@ You should see two versions of `index.html`—the original and the updated one. 
 - **Test a rollback.** Download the previous version of `index.html` using its version ID, then re-upload it with `aws s3 cp`. Confirm the site reverts to the original content.
 - **Add a subdirectory.** Create a `build/about/index.html` page and verify that navigating to `/about/` (with trailing slash) serves the page.
 - **Check content types.** Run `aws s3api head-object --bucket my-frontend-app-assets --key "styles.css" --region us-east-1 --output json` and verify the content type is `text/css`.
+
+## Cleanup
+
+A versioned bucket cannot be deleted until every object version **and** every delete marker has been removed. Run these two passes—one for versions, one for delete markers—guarded so a fresh bucket with nothing in one list doesn't fail. Then remove the bucket:
+
+```bash
+# 1. Delete every non-current object version (skip if there are none)
+VERSIONS=$(aws s3api list-object-versions \
+  --bucket my-frontend-app-assets \
+  --output json \
+  --query 'Versions[].{Key:Key,VersionId:VersionId}')
+if [ "$VERSIONS" != "null" ] && [ "$VERSIONS" != "[]" ]; then
+  aws s3api delete-objects \
+    --bucket my-frontend-app-assets \
+    --delete "{\"Objects\": $VERSIONS}" \
+    --region us-east-1 \
+    --output json
+fi
+
+# 2. Delete every delete marker (skip if there are none)
+MARKERS=$(aws s3api list-object-versions \
+  --bucket my-frontend-app-assets \
+  --output json \
+  --query 'DeleteMarkers[].{Key:Key,VersionId:VersionId}')
+if [ "$MARKERS" != "null" ] && [ "$MARKERS" != "[]" ]; then
+  aws s3api delete-objects \
+    --bucket my-frontend-app-assets \
+    --delete "{\"Objects\": $MARKERS}" \
+    --region us-east-1 \
+    --output json
+fi
+
+# 3. Remove the now-empty bucket
+aws s3 rb s3://my-frontend-app-assets --region us-east-1
+```
+
+> [!NOTE] Why the shell guards
+> `list-object-versions` [returns `Versions` and `DeleteMarkers` as separate arrays](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjects.html) and omits either key entirely when it's empty. A `--query` pulling the missing key back gives you `null`, and passing `{"Objects": null}` (or `{"Objects": []}`) to `delete-objects` fails parameter validation—it's not a no-op. The shell guards skip the call when there's nothing to delete. Skip either pass when there _are_ entries and `aws s3 rb` will fail with `BucketNotEmpty`—delete markers count as objects. If you end up with more than 1,000 entries of either kind, you'll also need to paginate: `list-object-versions` caps each response at 1,000.

@@ -3,7 +3,7 @@ title: 'Attaching an SSL Certificate'
 description: >-
   Attach an ACM certificate to your CloudFront distribution and configure it to serve your site over HTTPS with a custom domain.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudfront
@@ -55,8 +55,7 @@ Replace the `ViewerCertificate` section in the `DistributionConfig`. The current
 ```json
 {
   "ViewerCertificate": {
-    "CloudFrontDefaultCertificate": true,
-    "MinimumProtocolVersion": "TLSv1.2_2021"
+    "CloudFrontDefaultCertificate": true
   }
 }
 ```
@@ -64,6 +63,9 @@ Replace the `ViewerCertificate` section in the `DistributionConfig`. The current
 In the console, the **Edit settings** page shows the **Custom SSL certificate** dropdown with no certificate selected (using the default `*.cloudfront.net` certificate).
 
 ![The CloudFront Edit settings form showing the Custom SSL certificate field with an empty Choose certificate dropdown, indicating the default CloudFront certificate is in use.](assets/cloudfront-viewer-certificate-default.png)
+
+> [!NOTE] Default cert ignores `MinimumProtocolVersion`
+> When `CloudFrontDefaultCertificate` is `true`, [CloudFront silently forces the security policy to `TLSv1`](https://docs.aws.amazon.com/AmazonCloudFront/latest/APIReference/API_ViewerCertificate.html) regardless of what you set in `MinimumProtocolVersion`. That's why the default-cert block above doesn't bother with a `MinimumProtocolVersion` field—it would just be a lie. Once you switch to your own ACM certificate (next), the field becomes meaningful.
 
 Replace it with your ACM certificate:
 

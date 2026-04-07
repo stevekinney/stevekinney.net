@@ -5,7 +5,7 @@ description: >-
   hierarchical path structure, including both plain text and SecureString
   parameters.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - parameter-store
@@ -266,3 +266,18 @@ aws ssm get-parameter \
 This gives you a lightweight audit trail and the ability to roll back a configuration change without redeploying anything.
 
 Parameter Store handles most configuration needs, but it doesn't rotate credentials for you. When you need automatic rotation—for database passwords, OAuth tokens, or any credential with a lifecycle—that's where Secrets Manager comes in. The next lesson covers Secrets Manager and when it's worth the cost.
+
+## Cleanup
+
+Standard-tier parameters are free, so there's no billing reason to delete them—but it keeps your parameter namespace clean:
+
+```bash
+aws ssm delete-parameters \
+  --names \
+    "/my-frontend-app/production/table-name" \
+    "/my-frontend-app/production/api-key" \
+    "/my-frontend-app/production/api-endpoint" \
+    "/my-frontend-app/production/feature-flags" \
+  --region us-east-1 \
+  --output json
+```

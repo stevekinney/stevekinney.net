@@ -4,7 +4,7 @@ description: >-
   Create an IAM execution role for your Lambda function and attach policies that
   grant access to the AWS services your function needs.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - lambda
@@ -212,6 +212,6 @@ If you see `AWSLambdaBasicExecutionRole` in the list, your role is ready for the
 
 **Attaching `AdministratorAccess` to get things working.** This is tempting during development and disastrous in production. A Lambda function with admin access can delete your entire AWS account's resources. Use the minimum permissions, even during development. If your function fails with an access denied error, the error message tells you exactly which action and resource you need to add.
 
-**Forgetting to wait for role propagation.** IAM changes are eventually consistent. If you create a role and immediately create a Lambda function using that role, the function creation might fail because IAM hasn't propagated the role to all AWS endpoints yet. Wait a few seconds—or if you're scripting the deployment, add a short delay between role creation and function creation.
+**Forgetting to wait for role propagation.** IAM changes are eventually consistent. If you create a role and immediately create a Lambda function using that role, the function creation might fail because IAM hasn't propagated the role to all AWS endpoints yet. Wait 10–15 seconds—or if you're scripting the deployment, add retry-with-backoff logic on the `create-function` call rather than a fixed sleep, since propagation time isn't guaranteed.
 
 You've got an execution role with logging permissions. In the next lesson, you'll package your TypeScript handler into a deployment zip and use `aws lambda create-function` to deploy it with this role.

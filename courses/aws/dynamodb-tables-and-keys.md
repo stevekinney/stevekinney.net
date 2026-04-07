@@ -4,7 +4,7 @@ description: >-
   Create a DynamoDB table, define partition keys and sort keys, and understand
   how key design affects query patterns and performance.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - dynamodb
@@ -161,9 +161,9 @@ Items are automatically sorted by creation time. You can query for a user's rece
 
 Partition key: `pk`, sort key: `sk`
 
-Advanced DynamoDB users sometimes store multiple entity types in a single table using generic key names. A user might have `pk=USER#user-123` and `sk=PROFILE`, while their items have `pk=USER#user-123` and `sk=ITEM#item-456`. This is a powerful pattern but adds complexity—stick with the simpler user-scoped pattern unless you have a specific reason to go further.
+Advanced DynamoDB users sometimes store multiple entity types in a single table using generic key names. The generic key names (`pk`, `sk`) let one table hold many entity types at once: a user record uses `pk = USER#user-123` and `sk = PROFILE`, while that same user's items use `pk = USER#user-123` and `sk = ITEM#item-456`. A single `Query` on `pk = USER#user-123` fetches the user record _and_ all their items in one round trip.
 
 > [!TIP]
-> For this course, the `userId`/`itemId` composite key is all you need. Single-table design is a real and useful DynamoDB pattern, but it's optimized for applications with many entity types and complex access patterns. A frontend API backend with one or two entity types doesn't need that level of sophistication.
+> You don't need single-table design for this course—the `userId`/`itemId` composite key is all you need. But you'll see the `pk`/`sk` pattern constantly in production DynamoDB code, and now you know why the keys are named so abstractly: they're deliberately generic so one table can mean different things for different items.
 
 You've got a table with a composite primary key. Next up, you'll write data to it and read it back using the AWS SDK v3 from TypeScript—the same language your Lambda handlers are written in.

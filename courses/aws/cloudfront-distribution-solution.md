@@ -3,7 +3,7 @@ title: 'Solution: Set Up a CloudFront Distribution'
 description: >-
   Complete solution with all CLI commands for creating a CloudFront distribution with S3 origin, OAC, ACM certificate, and SPA routing.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudfront
@@ -489,3 +489,66 @@ Expected results: CloudFront returns `200 OK` for both the root and the SPA rout
 | Cache Policy            | `658327ea-f89d-4fab-a63d-7e88639e58f6` (managed CachingOptimized)      |
 
 Your distribution is live, secured, and ready for a custom domain. That's what the Route 53 custom-domain-routing section handles next.
+
+## Cleanup
+
+When you're done with this exercise, tear down the resources to avoid ongoing charges. The distribution must be _disabled_ before CloudFront will let you delete it—and disabling is the slow part (15–30 minutes). The actual deletion is fast once the status reaches `Deployed`.
+
+> [!WARNING] Before you copy these commands
+> The IDs below (`E1A2B3C4D5E6F7` for the distribution, `E1OAC2EXAMPLE` for the OAC) are placeholders—replace them with your actual IDs. Find yours with `aws cloudfront list-distributions --query 'DistributionList.Items[].{Id:Id,Domain:DomainName}' --output table` and `aws cloudfront list-origin-access-controls --output table`.
+>
+> Run these commands in a single shell session so `$ETAG`, `$NEW_ETAG`, and `$OAC_ETAG` stay in scope. If you come back in a new terminal, re-fetch each ETag before running the command that uses it.
+>
+> Double-check that `"Enabled": false` in `distribution-config.json` before submitting the update. Leaving it `true` is the single most common way this cleanup fails—`delete-distribution` rejects an enabled distribution with `DistributionNotDisabled`, and the `wait distribution-deployed` call that follows will look stuck.
+
+Fetch the current config and ETag:
+
+```bash
+ETAG=$(aws cloudfront get-distribution-config \
+  --id E1A2B3C4D5E6F7 \
+  --query 'ETag' --output text)
+
+aws cloudfront get-distribution-config \
+  --id E1A2B3C4D5E6F7 \
+  --query 'DistributionConfig' \
+  --output json > distribution-config.json
+```
+
+Edit `distribution-config.json` and set `"Enabled": false`, then submit the update:
+
+```bash
+aws cloudfront update-distribution \
+  --id E1A2B3C4D5E6F7 \
+  --distribution-config file://distribution-config.json \
+  --if-match "$ETAG"
+```
+
+Wait for `Status: Deployed` (this is the slow step—grab a coffee):
+
+```bash
+aws cloudfront wait distribution-deployed --id E1A2B3C4D5E6F7
+```
+
+Fetch the new ETag (it changes on every update), then delete:
+
+```bash
+NEW_ETAG=$(aws cloudfront get-distribution-config \
+  --id E1A2B3C4D5E6F7 \
+  --query 'ETag' --output text)
+
+aws cloudfront delete-distribution \
+  --id E1A2B3C4D5E6F7 \
+  --if-match "$NEW_ETAG"
+```
+
+Delete the OAC:
+
+```bash
+OAC_ETAG=$(aws cloudfront get-origin-access-control \
+  --id E1OAC2EXAMPLE \
+  --query 'ETag' --output text)
+
+aws cloudfront delete-origin-access-control \
+  --id E1OAC2EXAMPLE \
+  --if-match "$OAC_ETAG"
+```

@@ -5,7 +5,7 @@ description: >-
   logging in your Lambda functions, and query logs using CloudWatch Logs
   Insights.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudwatch
@@ -68,6 +68,8 @@ Valid retention values include 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 4
 
 > [!WARNING]
 > If you don't set a retention policy, your log storage costs will grow indefinitely. This is one of those AWS defaults that silently costs you money over time.
+
+Retention lives on the log group, not on the function. If you delete the function and redeploy it, Lambda creates a fresh log group with infinite retention—your retention setting is gone. Codify retention in your IaC (CDK's `Function` construct exposes `logRetention`), or pre-create the log group with retention set before deploying the function.
 
 ## The Problem with `console.log`
 
@@ -230,9 +232,19 @@ filter level = "INFO" and message = "Request completed"
 You can run Insights queries from the command line using `aws logs start-query` and `aws logs get-query-results`. The query runs asynchronously—you start it, get a query ID, and then poll for results.
 
 ```bash
+# macOS
 aws logs start-query \
   --log-group-name /aws/lambda/my-frontend-app-api \
   --start-time $(date -v-1H +%s) \
+  --end-time $(date +%s) \
+  --query-string 'fields @timestamp, level, message, duration | filter level = "ERROR" | sort @timestamp desc | limit 20' \
+  --region us-east-1 \
+  --output json
+
+# Linux
+aws logs start-query \
+  --log-group-name /aws/lambda/my-frontend-app-api \
+  --start-time $(date -d '1 hour ago' +%s) \
   --end-time $(date +%s) \
   --query-string 'fields @timestamp, level, message, duration | filter level = "ERROR" | sort @timestamp desc | limit 20' \
   --region us-east-1 \

@@ -5,7 +5,7 @@ description: >-
   constraints and deployment limitations that affect Lambda@Edge and CloudFront
   Functions.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - edge-functions
@@ -111,12 +111,12 @@ Review the role setup in [Writing a Lambda@Edge Function](writing-a-lambda-at-ed
 
 Edge functions have strict limits on the response they can generate:
 
-| Trigger                             | Maximum Response Size (including headers)                    |
-| ----------------------------------- | ------------------------------------------------------------ |
-| Viewer request (generated response) | 40 KB                                                        |
-| Viewer response                     | Cannot generate a response; can only modify the existing one |
-| Origin request (generated response) | 1 MB                                                         |
-| Origin response                     | Cannot generate a response; can only modify the existing one |
+| Trigger                             | Maximum Response Size (including headers)                                                                                                                                                               |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Viewer request (generated response) | 40 KB                                                                                                                                                                                                   |
+| Viewer response                     | Can modify the response (status code, headers, body, cookies) but cannot generate a completely new response from scratch the way a viewer request function can short-circuit before reaching the origin |
+| Origin request (generated response) | 1 MB                                                                                                                                                                                                    |
+| Origin response                     | Cannot generate a response; can only modify the existing one                                                                                                                                            |
 
 If your edge function generates a response that exceeds the limit, CloudFront returns a 502 error to the viewer.
 

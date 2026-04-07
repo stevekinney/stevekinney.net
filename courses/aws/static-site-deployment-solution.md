@@ -3,7 +3,7 @@ title: 'Solution: End-to-End Static Site Deployment'
 description: >-
   Complete solution with every command and expected output for deploying a static site end to end on AWS.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - deployment
@@ -492,7 +492,7 @@ Expected:
 "/hostedzone/Z1234567890ABC"
 ```
 
-Create A alias records for both the apex domain and `www`:
+Create A and AAAA alias records for both the apex domain and `www`. The A records handle IPv4; the AAAA records handle IPv6. CloudFront supports both, and including both means visitors on IPv6-only networks (increasingly common on mobile) reach your site without a fallback round trip.
 
 ```bash
 aws route53 change-resource-record-sets \
@@ -514,8 +514,32 @@ aws route53 change-resource-record-sets \
       {
         "Action": "UPSERT",
         "ResourceRecordSet": {
+          "Name": "example.com",
+          "Type": "AAAA",
+          "AliasTarget": {
+            "HostedZoneId": "Z2FDTNDATAQYW2",
+            "DNSName": "d1234abcdef.cloudfront.net",
+            "EvaluateTargetHealth": false
+          }
+        }
+      },
+      {
+        "Action": "UPSERT",
+        "ResourceRecordSet": {
           "Name": "www.example.com",
           "Type": "A",
+          "AliasTarget": {
+            "HostedZoneId": "Z2FDTNDATAQYW2",
+            "DNSName": "d1234abcdef.cloudfront.net",
+            "EvaluateTargetHealth": false
+          }
+        }
+      },
+      {
+        "Action": "UPSERT",
+        "ResourceRecordSet": {
+          "Name": "www.example.com",
+          "Type": "AAAA",
           "AliasTarget": {
             "HostedZoneId": "Z2FDTNDATAQYW2",
             "DNSName": "d1234abcdef.cloudfront.net",

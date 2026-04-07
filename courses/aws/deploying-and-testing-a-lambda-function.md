@@ -4,7 +4,7 @@ description: >-
   Package, deploy, and test a Lambda function using the AWS CLI, including
   creating test events and reading invocation results.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - lambda
@@ -45,7 +45,7 @@ Use `aws lambda create-function` to deploy your function for the first time:
 ```bash
 aws lambda create-function \
   --function-name my-frontend-app-api \
-  --runtime nodejs20.x \
+  --runtime nodejs22.x \
   --role arn:aws:iam::123456789012:role/my-frontend-app-lambda-role \
   --handler handler.handler \
   --zip-file fileb://function.zip \
@@ -56,7 +56,7 @@ aws lambda create-function \
 Let's unpack these flags:
 
 - **`--function-name`**: The name of your function. This is how you reference it everywhere in AWS.
-- **`--runtime`**: The language runtime. `nodejs20.x` gives you Node.js 20 with the AWS SDK v3 pre-installed.
+- **`--runtime`**: The language runtime. `nodejs22.x` runs Node.js 22. The AWS SDK v3 is bundled in this runtime, but AWS pins a specific minor version—not the latest release—and it can vary by region. In production, bundle the SDK in your deployment package so you control the version explicitly.
 - **`--role`**: The ARN of the execution role you created in [Lambda Execution Roles and Permissions](lambda-execution-roles-and-permissions.md).
 - **`--handler`**: The path to your handler function in the format `<filename>.<export>`. Since your compiled file is `handler.js` and the exported function is `handler`, this is `handler.handler`. (Yes, `handler.handler` looks redundant. You get used to it.)
 - **`--zip-file`**: The deployment package. The `fileb://` prefix tells the CLI to read the file as binary data.
@@ -67,7 +67,7 @@ The response confirms that the function was created:
 {
   "FunctionName": "my-frontend-app-api",
   "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:my-frontend-app-api",
-  "Runtime": "nodejs20.x",
+  "Runtime": "nodejs22.x",
   "Role": "arn:aws:iam::123456789012:role/my-frontend-app-lambda-role",
   "Handler": "handler.handler",
   "CodeSize": 1234,
@@ -192,7 +192,17 @@ This replaces the function's code while preserving all configuration (runtime, m
 
 ## Reading the Logs
 
-Your function's `console.log` output goes to CloudWatch Logs. After invoking your function, you can pull the most recent logs with the CLI:
+Your function's `console.log` output goes to CloudWatch Logs. The simplest way to watch logs in real time is `aws logs tail`:
+
+```bash
+aws logs tail /aws/lambda/my-frontend-app-api \
+  --follow \
+  --region us-east-1
+```
+
+`--follow` streams new events as they arrive—useful when you're invoking the function in another terminal and want to see output immediately.
+
+For scripted post-processing—archiving logs, searching for errors in CI—the `describe-log-streams` and `get-log-events` pair gives you more control:
 
 ```bash
 aws logs get-log-events \
@@ -211,7 +221,7 @@ aws logs get-log-events \
 
 That nested command finds the most recent log stream and then fetches its events. The output includes your `console.log` messages, the start and end of each invocation, and the billed duration.
 
-We'll cover CloudWatch in depth in the CloudWatch section. For now, this command is your debugging tool.
+We'll cover CloudWatch in depth in the CloudWatch section. For now, `aws logs tail` is your primary debugging tool.
 
 > [!TIP]
 > You can also include `--log-type Tail` on your `aws lambda invoke` command. This returns the last 4 KB of log output as a base64-encoded string in the response, which you can decode with `base64 --decode`. It's quicker than querying CloudWatch for simple debugging.
@@ -260,3 +270,19 @@ This is the manual version. Later in the course, you'll automate this in a GitHu
 **Role not propagated.** If `create-function` fails with "The role defined for the function cannot be assumed by Lambda," wait 10-15 seconds and try again. IAM role propagation is eventually consistent.
 
 Your function is deployed and you can invoke it directly. But direct invocation isn't how a frontend calls an API. You need an HTTP endpoint. Before you get to the API Gateway section, there are two more Lambda topics to cover: environment variables, for configuration that shouldn't be hardcoded, and cold starts, the performance characteristic that matters most for API latency.
+
+## Cleanup
+
+> [!NOTE]
+> This function is reused in the API Gateway, DynamoDB, Secrets Manager, and CloudWatch sections. Only delete it if you're done with the course entirely.
+
+```bash
+aws lambda delete-function \
+  --function-name my-frontend-app-api \
+  --region us-east-1
+
+# The log group is NOT deleted automatically when the function is deleted
+aws logs delete-log-group \
+  --log-group-name /aws/lambda/my-frontend-app-api \
+  --region us-east-1
+```

@@ -4,7 +4,7 @@ description: >-
   Connect the full request loop from frontend through API Gateway to Lambda to
   DynamoDB, including IAM permissions and a complete CRUD handler.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - dynamodb
@@ -125,6 +125,9 @@ Expected output:
 
 Here's a complete Lambda handler that implements a CRUD API for items stored in DynamoDB. This is the handler you'd deploy behind the API Gateway you set up earlier in the course.
 
+> [!WARNING] `userId` should come from the JWT, not the query string
+> In a real application, read `userId` from `event.requestContext.authorizer?.jwt?.claims?.sub` after JWT validation—never from query parameters, which any caller can forge. We're reading from `queryStringParameters` as a learning simplification. See [Reading and Writing Data with the SDK](dynamodb-reading-and-writing-data.md) for the full explanation.
+
 ```typescript
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
@@ -185,7 +188,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
           return respond(400, { error: 'Missing title in request body' });
         }
 
-        const itemId = `item-${Date.now()}`;
+        const itemId = crypto.randomUUID();
 
         const item = {
           userId,
@@ -236,19 +239,18 @@ function respond(statusCode: number, body: Record<string, unknown>) {
     statusCode,
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
     },
     body: JSON.stringify(body),
   };
 }
-// [!note The `respond` helper keeps response formatting consistent and includes the CORS header.]
+// [!note The `respond` helper keeps response formatting consistent across all branches.]
 ```
 
 A few things to notice:
 
 - **GET without `itemId`** queries for all items belonging to the user. GET with `itemId` fetches a single item. This is a standard REST pattern.
-- **POST** generates a unique `itemId` using `Date.now()`. For production, you'd use a UUID library, but timestamp-based IDs are fine for learning.
-- **The `respond` helper** reduces boilerplate. Every response needs `statusCode`, `Content-Type`, and `Access-Control-Allow-Origin`—putting that in a function means you don't repeat it in every branch.
+- **POST** generates a unique `itemId` with `crypto.randomUUID()`—native in Node 18+, collision-free, and doesn't leak timestamp information the way `Date.now()` does.
+- **The `respond` helper** reduces boilerplate. Every response needs `statusCode` and `Content-Type`—putting that in a function means you don't repeat it in every branch. For HTTP APIs (which this course uses), CORS headers belong in the API Gateway configuration, not in the Lambda response—see [API Gateway CORS Configuration](api-gateway-cors-configuration.md).
 - **Error handling** catches DynamoDB errors and returns a 500. In production, you'd log the full error and return a sanitized message to the client.
 
 ## Setting the Table Name as an Environment Variable
@@ -284,6 +286,9 @@ aws lambda update-function-code \
   --region us-east-1 \
   --output json
 ```
+
+> [!NOTE] Why no `node_modules` in the zip?
+> You just added `@aws-sdk/client-dynamodb` and `@aws-sdk/lib-dynamodb` to `package.json`, so you might be wondering whether the zip needs to bundle `node_modules` now. The `nodejs22.x` runtime bundles the AWS SDK v3, so anything under `@aws-sdk/*` resolves at runtime—and your local `npm install` is enough for type checking during development. That said, AWS pins a specific minor version in the runtime, not the latest release, and it varies by region. For learning, relying on the runtime copy is fine. For production, bundle the SDK yourself so you control the version explicitly and aren't surprised when the runtime's bundled copy changes. Once you add a dependency that _isn't_ pre-installed (a Markdown parser, a date library, anything outside `@aws-sdk/*`), you'll need to copy `node_modules` into `dist/` before zipping regardless. See the warning in [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md) for the exact mechanics.
 
 Test creating an item:
 
@@ -345,7 +350,7 @@ async function getItems(userId: string) {
 This is the same `fetch` API you use in any frontend application. The only difference is that the URL points to your API Gateway endpoint instead of a Vercel or Netlify function. That's it—from the frontend's perspective, it's just another API.
 
 > [!TIP]
-> If you're getting CORS errors when calling your API from the frontend, check two places: the `Access-Control-Allow-Origin` header in your Lambda response (included in the `respond` helper above) and the CORS configuration on your API Gateway HTTP API (covered in [API Gateway CORS Configuration](api-gateway-cors-configuration.md)). Both need to allow your frontend's origin.
+> If you're getting CORS errors when calling your API from the frontend, the fix belongs on your API Gateway HTTP API, not in your Lambda response. See [API Gateway CORS Configuration](api-gateway-cors-configuration.md) for the exact configuration—let API Gateway handle CORS so you don't have to repeat headers in every Lambda branch.
 
 ## What You Have Built
 

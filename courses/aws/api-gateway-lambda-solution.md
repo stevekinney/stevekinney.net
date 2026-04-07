@@ -4,7 +4,7 @@ description: >-
   Complete solution for the API Gateway and Lambda exercise, with all commands,
   handler code, and expected output.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - api-gateway
@@ -144,7 +144,7 @@ aws iam attach-role-policy \
 
 aws lambda create-function \
   --function-name my-frontend-app-api \
-  --runtime nodejs20.x \
+  --runtime nodejs22.x \
   --role arn:aws:iam::123456789012:role/my-frontend-app-lambda-role \
   --handler handler.handler \
   --zip-file fileb://lambda/function.zip \
@@ -387,11 +387,7 @@ Expected:
 ```bash
 aws apigatewayv2 update-api \
   --api-id $API_ID \
-  --cors-configuration \
-    AllowOrigins="http://localhost:3000","http://localhost:5173" \
-    AllowMethods="GET","POST" \
-    AllowHeaders="Content-Type" \
-    MaxAge=86400 \
+  --cors-configuration '{"AllowOrigins":["http://localhost:3000","http://localhost:5173"],"AllowMethods":["GET","POST"],"AllowHeaders":["Content-Type"],"MaxAge":86400}' \
   --region us-east-1 \
   --output json
 ```

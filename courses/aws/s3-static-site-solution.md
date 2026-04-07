@@ -3,7 +3,7 @@ title: 'Solution: Deploy a Static Site to S3'
 description: >-
   Complete solution with all commands and expected output for deploying a static site to S3.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - s3
@@ -495,7 +495,6 @@ aws s3api get-object \
   --key "index.html" \
   --version-id "2LB2z3tPdN2aRFGhK0mRr" \
   --region us-east-1 \
-  --output json \
   index-old.html
 ```
 

@@ -4,7 +4,7 @@ description: >-
   Create an IAM user and policy that can only sync files to an S3 bucket and
   create CloudFront invalidations.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - iam
@@ -12,6 +12,8 @@ tags:
 ---
 
 You're going to create a **deploy bot**—an IAM user whose sole purpose is to deploy your frontend. This user can sync files to a specific S3 bucket and invalidate a specific CloudFront distribution's cache. It can't do anything else. No reading DynamoDB tables, no creating Lambda functions, no changing IAM permissions.
+
+In production, this deploy identity would be an **OIDC-federated IAM role** rather than a user with static access keys—GitHub Actions can request short-lived credentials from AWS without storing any secrets. You'll graduate `deploy-bot` (or its OIDC role equivalent) into the GitHub Actions deploy in the CI/CD lesson. For now, building it as an IAM user with scoped keys is the right learning path: it forces you to think explicitly about which permissions are needed and why.
 
 This is the same deploy bot you'll wire into a GitHub Actions pipeline later in the course. I want you to build it now so you understand exactly what permissions it has and why.
 
@@ -156,3 +158,54 @@ You should see the `deploy-bot` user's ARN in the response.
 - **Use Sids.** If you didn't include `Sid` fields in your policy statements, add descriptive ones. When you revisit this policy in three months, `"Sid": "AllowS3DeploySync"` is worth more than staring at a list of actions trying to remember what they're for.
 
 When you're ready, check your work against the [Solution: IAM Policy for a Deploy Bot](iam-policy-solution.md).
+
+## Cleanup
+
+Keep `deploy-bot` around—you'll use it again in the CI/CD lesson. When you're done with the entire course, run this sequence to tear the user down. IAM has strict ordering rules: deactivate the access key, detach the policy, delete the access key, then delete the user. Miss a step and the final `delete-user` call fails with `DeleteConflict`.
+
+First, find the access key ID (the one you saved earlier works too, but this avoids digging through notes):
+
+```bash
+aws iam list-access-keys \
+  --user-name deploy-bot \
+  --region us-east-1 \
+  --output json
+```
+
+Then deactivate and remove the key:
+
+```bash
+aws iam update-access-key \
+  --user-name deploy-bot \
+  --access-key-id AKIAEXAMPLE \
+  --status Inactive \
+  --region us-east-1
+
+aws iam delete-access-key \
+  --user-name deploy-bot \
+  --access-key-id AKIAEXAMPLE \
+  --region us-east-1
+```
+
+Detach the policy and delete it:
+
+```bash
+aws iam detach-user-policy \
+  --user-name deploy-bot \
+  --policy-arn arn:aws:iam::123456789012:policy/DeployBotPolicy \
+  --region us-east-1
+
+aws iam delete-policy \
+  --policy-arn arn:aws:iam::123456789012:policy/DeployBotPolicy \
+  --region us-east-1
+```
+
+Finally, delete the user:
+
+```bash
+aws iam delete-user \
+  --user-name deploy-bot \
+  --region us-east-1
+```
+
+Also remove the named profile from your local AWS config by opening `~/.aws/credentials` and `~/.aws/config` and deleting the `[deploy-bot]` sections.

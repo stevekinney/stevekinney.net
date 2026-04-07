@@ -4,7 +4,7 @@ description: >-
   Perform basic CRUD operations on DynamoDB items using the AWS SDK v3 with
   PutItem, GetItem, UpdateItem, and DeleteItem from TypeScript.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - dynamodb
@@ -162,6 +162,9 @@ If the item doesn't exist, `DeleteCommand` succeeds silently. No error, no excep
 
 ## Putting It All Together in a Handler
 
+> [!WARNING]
+> In a real application, never accept `userId` from query parameters—any caller can forge them. Read it from `event.requestContext.authorizer?.jwt?.claims?.sub` after the JWT authorizer (see [API Gateway Authentication](api-gateway-authentication.md)) has validated the token. We're using query parameters here as a learning simplification only.
+
 Here's a complete handler that uses all four operations, routed by HTTP method:
 
 ```typescript
@@ -226,7 +229,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
       case 'POST': {
         const body = JSON.parse(event.body ?? '{}');
-        const newItemId = `item-${Date.now()}`;
+        const newItemId = crypto.randomUUID();
 
         await client.send(
           new PutCommand({
@@ -292,12 +295,45 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
 This handler pattern—parse the method, validate parameters, call DynamoDB, return a response—is the same pattern you'll use for every Lambda-backed API endpoint.
 
+## Performance Modifiers
+
+Two options on `GetCommand` and `QueryCommand` are worth knowing about. You don't need either for the exercise, but they come up the first time you care about cost or correctness at scale.
+
+**`ProjectionExpression`** tells DynamoDB which attributes to return. By default, every read ships the whole item back—including big attributes like long text, blobs, or nested JSON. A projection narrows the payload:
+
+```typescript
+const result = await client.send(
+  new GetCommand({
+    TableName: TABLE_NAME,
+    Key: { userId, itemId },
+    ProjectionExpression: 'userId, itemId, #n',
+    ExpressionAttributeNames: { '#n': 'name' },
+  }),
+);
+```
+
+The `#n` placeholder is necessary because `name` is a DynamoDB reserved word—the same placeholder rule applies to projections as to update expressions. One thing the docs don't emphasize: `ProjectionExpression` does not reduce `GetItem` RCU charges (DynamoDB bills based on item size, not returned size) and doesn't reduce `Query`/`Scan` RCUs either (billed by data scanned, not projected). What it _does_ reduce is the bytes over the wire—useful for big items at scale, not for a learning exercise.
+
+**`ConsistentRead: true`** forces a strongly consistent read that's guaranteed to see the most recent committed write. By default, reads are eventually consistent: the write propagates across DynamoDB's distributed storage in a fraction of a second, and a read during that window _might_ return the previous value. Strong reads cost twice as many RCUs.
+
+```typescript
+const result = await client.send(
+  new GetCommand({
+    TableName: TABLE_NAME,
+    Key: { userId, itemId },
+    ConsistentRead: true,
+  }),
+);
+```
+
+For a frontend API backend, the default (eventually consistent) is almost always what you want—the odds of a user reading their own data in the same millisecond they wrote it are low, and a 404-plus-retry is usually acceptable. Reach for `ConsistentRead: true` only when a single request both writes an item and reads it back, and the read _must_ reflect the write.
+
 ## Common Mistakes
 
 **Forgetting the sort key in GetItem or DeleteItem.** If your table has a composite key, you must provide both the partition key and the sort key. Providing only the partition key returns a `ValidationException`, not a list of matching items. To get multiple items by partition key, use Query (covered in the next lesson).
 
 **Not handling `undefined` from GetItem.** DynamoDB doesn't throw when an item is missing—it returns `undefined`. If your frontend receives a 200 response with no data and you didn't check for this, you'll spend an hour debugging what looks like a serialization bug.
 
-**Installing the SDK as a production dependency.** Lambda's Node.js runtime includes the AWS SDK v3 already. You can install `@aws-sdk/client-dynamodb` and `@aws-sdk/lib-dynamodb` as dev dependencies for type checking during development, but they don't need to be in your deployment package. That said, bundling your own copy ensures version consistency—the tradeoff is a slightly larger deployment zip.
+**SDK bundling.** The `nodejs22.x` runtime bundles the AWS SDK v3, so `@aws-sdk/client-dynamodb` and `@aws-sdk/lib-dynamodb` resolve at runtime without being in your zip. For learning, that's fine. For production, bundle the SDK yourself—AWS pins a specific minor version in the runtime (not the latest), and it varies by region. Controlling the version in your own `package.json` means you're never surprised by a runtime update.
 
 Now that you can read and write individual items, the next step is retrieving multiple items at once using Query and Scan—and why you should almost always prefer Query.

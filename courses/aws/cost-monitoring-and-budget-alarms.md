@@ -4,7 +4,7 @@ description: >-
   Set up AWS Budgets and billing alerts so you're notified before costs exceed
   your expectations, and understand where the free tier boundaries are.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - billing
@@ -219,7 +219,7 @@ Most of the services in this course are either always-free or comfortably within
 Run this periodically to check for resources you might have forgotten:
 
 ```bash
-aws s3 ls --region us-east-1 --output json
+aws s3 ls --region us-east-1
 ```
 
 ```bash
@@ -241,3 +241,15 @@ If you're working through this course with a single project, here's what to expe
 - **If something goes wrong:** The most common surprise bill is $10–$50 from a forgotten resource or an unexpectedly verbose logging configuration.
 
 Setting up a $10 monthly budget alarm—which you just did—covers all of these scenarios. If you get that email, something is either misconfigured or getting more traffic than you expected. Either way, you'll want to know about it.
+
+## Cleanup
+
+When you're done with the course, delete the budget to avoid stale notifications:
+
+```bash
+aws budgets delete-budget \
+  --account-id 123456789012 \
+  --budget-name my-frontend-app-monthly
+```
+
+Replace `123456789012` with your actual account ID. AWS Budgets charges $0.02 per budget per day after the first two budgets—for a single learning account, this stays within the free tier indefinitely, but deleting it keeps things tidy.

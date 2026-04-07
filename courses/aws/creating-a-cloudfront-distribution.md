@@ -3,7 +3,7 @@ title: 'Creating a CloudFront Distribution'
 description: >-
   Create a CloudFront distribution with an S3 origin and configure its basic settings using the AWS CLI.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudfront
@@ -62,8 +62,7 @@ Save this as `distribution-config.json`:
     }
   },
   "ViewerCertificate": {
-    "CloudFrontDefaultCertificate": true,
-    "MinimumProtocolVersion": "TLSv1.2_2021"
+    "CloudFrontDefaultCertificate": true
   },
   "Restrictions": {
     "GeoRestriction": {
@@ -161,12 +160,14 @@ This is the default **behavior**—the rules that apply to every request that do
 
 ```json
 "ViewerCertificate": {
-  "CloudFrontDefaultCertificate": true,
-  "MinimumProtocolVersion": "TLSv1.2_2021"
+  "CloudFrontDefaultCertificate": true
 }
 ```
 
 For now, we're using CloudFront's default certificate, which gives you HTTPS on the `*.cloudfront.net` domain. In [Attaching an SSL Certificate](attaching-an-ssl-certificate.md), you'll swap this for your ACM certificate to use a custom domain.
+
+> [!NOTE]
+> While you're using the default `*.cloudfront.net` certificate, CloudFront forces the security policy to TLS 1.0 regardless of what you set here—`MinimumProtocolVersion` is silently ignored when `CloudFrontDefaultCertificate` is `true`. You'll tighten this to `TLSv1.2_2021` in the [Attaching an SSL Certificate](attaching-an-ssl-certificate.md) lesson once you bring your own ACM certificate.
 
 ## Creating the Distribution
 
@@ -238,8 +239,8 @@ https://d1234abcdef.cloudfront.net
 
 You should see your site—the same files you uploaded to S3 in [Uploading and Organizing Files](uploading-and-organizing-files.md), now served through CloudFront with HTTPS. The URL isn't pretty, but it proves the distribution works. You'll attach a custom domain later.
 
-> [!TIP]
-> If you see an "Access Denied" XML error, your S3 bucket might not have a public bucket policy yet. For now, the bucket needs to be publicly readable (as configured in [Bucket Policies and Public Access](bucket-policies-and-public-access.md)). In the next lesson, you'll lock down the bucket using Origin Access Control so only CloudFront can read from it—removing the need for public access entirely.
+> [!TIP] Seeing "Access Denied"?
+> If you get an "Access Denied" XML error in the browser, that's expected at this point: CloudFront is reaching S3, but S3 isn't letting it in yet. The fix is the next lesson—you'll wire up **Origin Access Control** so CloudFront has its own identity that the bucket policy trusts. Don't loosen the bucket policy or re-enable public access to make this go away. Move on to [Origin Access Control for S3](origin-access-control-for-s3.md), then come back and reload.
 
 ## Listing and Describing Distributions
 

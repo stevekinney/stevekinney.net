@@ -3,7 +3,7 @@ title: 'Wildcard Certificates and Multiple Domains'
 description: >-
   Request wildcard certificates or multi-SAN certificates in ACM and know when each approach is appropriate.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - acm
@@ -74,7 +74,7 @@ DNS validation for a wildcard certificate works the same way as for a specific d
 
 Notice the validation record is for `example.com`, not `*.example.com`. ACM validates that you control the parent domain, which is sufficient to prove you control all subdomains under it.
 
-If your certificate includes both `example.com` and `*.example.com`, ACM may generate just one CNAME record that validates both, since they share the same parent domain.
+When your certificate includes both `example.com` and `*.example.com`, ACM generates a single validation CNAME that covers both — you only add it once.
 
 ## Subject Alternative Names (SANs)
 

@@ -3,7 +3,7 @@ title: 'DNS for Frontend Engineers'
 description: >-
   Understand the DNS resolution process from a frontend engineer's perspective—what happens between typing a URL and receiving a response.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - route53
@@ -42,7 +42,7 @@ When someone visits `www.example.com`, the browser doesn't magically know where 
 
 1. **The browser cache.** The browser checks whether it has resolved this domain recently. If it has a cached answer that hasn't expired, it uses that immediately. No network request needed.
 
-2. **The operating system cache.** If the browser doesn't have it, the OS checks its own cache. On macOS, this is the `dnsmasq` or `mDNSResponder` cache. Same idea: if the answer is fresh, use it.
+2. **The operating system cache.** If the browser doesn't have it, the OS checks its own cache. On macOS, this is the `mDNSResponder` cache. Same idea: if the answer is fresh, use it.
 
 3. **The recursive resolver.** If neither cache has the answer, the request goes to a **recursive resolver**—usually operated by your ISP or a public DNS service like Cloudflare (`1.1.1.1`) or Google (`8.8.8.8`). The resolver's job is to chase down the answer on your behalf.
 
@@ -52,7 +52,7 @@ When someone visits `www.example.com`, the browser doesn't magically know where 
 
 6. **The authoritative nameservers.** The resolver asks the authoritative nameservers: "What is the IP address for `www.example.com`?" This is the server that actually knows the answer—it holds the DNS records you configured. It responds with the IP address (or alias, or whatever record type was requested).
 
-7. **The response.** The resolver sends the IP address back to your browser. The browser opens a TCP connection to that IP, performs the TLS handshake (using the certificate you provisioned in [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md)), and finally sends the HTTP request for your page.
+7. **The response.** The resolver sends the IP address back to your browser. The browser opens a TCP connection to that IP, performs the TLS handshake (using your SSL certificate, which you'll provision a few lessons from now), and finally sends the HTTP request for your page.
 
 This entire chain typically completes in under 100 milliseconds. Most of the time, caches at various levels mean the full chain isn't traversed at all.
 

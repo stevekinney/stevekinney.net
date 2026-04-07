@@ -3,7 +3,7 @@ title: 'What is S3?'
 description: >-
   Understand what S3 is, how buckets and objects work, and why it is the natural starting point for frontend engineers deploying to AWS.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - s3
@@ -67,7 +67,7 @@ Every S3 operation starts with a bucket. Here are the things worth knowing upfro
 
 **Region-specific.** Even though bucket names are globally unique, each bucket exists in a specific AWS region. When you create a bucket in `us-east-1`, the objects in that bucket are stored in data centers in Northern Virginia. This affects latency (users closer to the region get faster responses) and is why you'll eventually put CloudFront in front of your bucket—but that comes later.
 
-**One account, many buckets.** You can create up to 100 buckets per AWS account by default (you can request more). For this course, we'll use one bucket for our static assets: `my-frontend-app-assets`.
+**One account, many buckets.** By default, AWS allows up to 10,000 S3 general purpose buckets per account — a limit that was raised from 100 in late 2023. You can request a further increase through Service Quotas if you need more. For this course, we'll use one bucket for our static assets: `my-frontend-app-assets`.
 
 ## Objects: Your Files in the Cloud
 
@@ -85,8 +85,7 @@ You set up the AWS CLI in [Setting Up the AWS CLI](setting-up-the-aws-cli.md). L
 
 ```bash
 aws s3 ls \
-  --region us-east-1 \
-  --output json
+  --region us-east-1
 ```
 
 If this is a fresh account, you'll see an empty list. That's expected—we'll create our first bucket in the next lesson. The point is that `s3` commands are first-class citizens in the AWS CLI, and you'll use them constantly throughout this course.

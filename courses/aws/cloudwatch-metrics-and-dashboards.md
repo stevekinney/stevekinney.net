@@ -5,7 +5,7 @@ description: >-
   CloudWatch dashboard that gives you a single view of your application's
   health.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudwatch
@@ -81,11 +81,16 @@ You can pull metric data directly from the command line with `aws cloudwatch get
 Get Lambda error count for the last hour:
 
 ```bash
+# macOS
+START=$(date -v-1H -u +%Y-%m-%dT%H:%M:%SZ)
+# Linux
+START=$(date -d '1 hour ago' -u +%Y-%m-%dT%H:%M:%SZ)
+
 aws cloudwatch get-metric-statistics \
   --namespace AWS/Lambda \
   --metric-name Errors \
   --dimensions Name=FunctionName,Value=my-frontend-app-api \
-  --start-time $(date -v-1H -u +%Y-%m-%dT%H:%M:%SZ) \
+  --start-time $START \
   --end-time $(date -u +%Y-%m-%dT%H:%M:%SZ) \
   --period 300 \
   --statistics Sum \
@@ -120,7 +125,7 @@ aws cloudwatch get-metric-statistics \
   --namespace AWS/Lambda \
   --metric-name Duration \
   --dimensions Name=FunctionName,Value=my-frontend-app-api \
-  --start-time $(date -v-1H -u +%Y-%m-%dT%H:%M:%SZ) \
+  --start-time $START \
   --end-time $(date -u +%Y-%m-%dT%H:%M:%SZ) \
   --period 300 \
   --statistics Average Maximum \
@@ -246,3 +251,15 @@ Metrics support multiple statistics, and picking the wrong one gives you a misle
 For latency, always graph both Average and p95. If they're close together, your performance is consistent. If p95 is three times the average, you have outliers (often cold starts) that are worth investigating.
 
 You can see your metrics now and you have a dashboard. But dashboards require you to look at them. In the next lesson, you'll create alarms that watch these metrics for you and send email notifications when something goes wrong—so you find out about problems before your users do.
+
+## Cleanup
+
+When you're done with the dashboard, delete it to keep your CloudWatch workspace tidy:
+
+```bash
+aws cloudwatch delete-dashboards \
+  --dashboard-names my-frontend-app-dashboard \
+  --region us-east-1
+```
+
+CloudWatch dashboards are free for the first three, so this isn't a billing concern at course scale—but it's a good habit to clean up what you create.

@@ -4,7 +4,7 @@ description: >-
   Trace a single request from API Gateway through Lambda to DynamoDB using
   correlation IDs, structured logs, and CloudWatch Logs Insights queries.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudwatch
@@ -285,7 +285,7 @@ Three log entries, 50 milliseconds total, 42 of which were spent in DynamoDB. If
 
 ## Beyond Manual Tracing
 
-What you've built here—correlation IDs plus structured logging plus Insights queries—is the foundation of request tracing. AWS offers more sophisticated tracing through **X-Ray**, which automatically instruments SDK calls and produces visual service maps. X-Ray is beyond the scope of this course, but the structured logging patterns you've learned here work with or without it. Correlation IDs and structured logs are the minimum viable observability for any production application.
+What you've built here—correlation IDs plus structured logging plus Insights queries—is the foundation of request tracing. AWS offers more sophisticated tracing through **X-Ray**, which automatically instruments SDK calls and produces visual service maps. X-Ray is the underlying infrastructure; **CloudWatch Application Signals** (GA July 2024) is the modern console surface where you view distributed traces, service maps, and SLOs. Both are beyond the scope of this course, but the structured logging patterns you've learned here work alongside them—correlation IDs and structured logs are the minimum viable observability for any production application.
 
 > [!TIP]
 > If your frontend returns a request ID to the user (in a response header or error message), support incidents become dramatically easier. The user says "I got error abc-123," you run the Insights query, and you have the full trace in seconds.

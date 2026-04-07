@@ -4,7 +4,7 @@ description: >-
   Choose between Parameter Store and Secrets Manager based on your use case,
   understanding the tradeoffs in cost, features, and complexity.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - parameter-store
@@ -175,6 +175,8 @@ When you use both services, your Lambda execution role needs permissions for bot
 ```
 
 Notice the scoping. The SSM statement grants access to parameters under `/my-frontend-app/production/*`. The Secrets Manager statement does the same for secrets. The KMS statement grants decryption for Parameter Store SecureString values. This follows the principle of least privilege you learned in [Principle of Least Privilege](principle-of-least-privilege.md)—each function gets access to exactly what it needs.
+
+The `*` wildcard in the Secrets Manager ARN isn't laziness—it's required. Secrets Manager appends a random 6-character suffix to secret ARNs (e.g., `secret:/my-frontend-app/production/stripe-key-AbCdEf`) to prevent name reuse within the deletion recovery window. You can't predict that suffix at policy-writing time, so your IAM policy has to use `*` or include the full ARN with the suffix.
 
 > [!TIP]
 > If you have separate Lambda functions for different features (one for user management, one for payments), give each function access to only its own secrets. The payments function gets access to `/my-frontend-app/production/stripe-*`. The user management function gets access to `/my-frontend-app/production/auth-*`. Do not give every function access to every secret.

@@ -3,7 +3,7 @@ title: 'Solution: Request and Validate a Certificate'
 description: >-
   Complete walkthrough of requesting an ACM certificate, completing DNS validation, and verifying the issued certificate.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - acm
@@ -307,3 +307,18 @@ aws acm describe-certificate \
 ```
 
 You now have an issued certificate in `us-east-1`. Next, you'll attach this certificate to a CloudFront distribution so your frontend can answer on the real domain instead of a `*.cloudfront.net` URL.
+
+## Cleanup
+
+ACM certificates are free while unused, but the validation CNAME record persists in Route 53. When you're done with the certificate:
+
+```bash
+aws acm delete-certificate \
+  --certificate-arn arn:aws:acm:us-east-1:123456789012:certificate/abcd-1234 \
+  --region us-east-1
+```
+
+Then delete the validation CNAME record from Route 53 using `change-resource-record-sets` with `Action: DELETE`. The record name and value are the same ones you added during validation.
+
+> [!WARNING]
+> If this certificate is still attached to a CloudFront distribution, ACM will refuse to delete it. Detach it from the distribution first.

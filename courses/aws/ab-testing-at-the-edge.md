@@ -4,7 +4,7 @@ description: >-
   Implement an A/B testing mechanism using edge functions that routes users to
   different content versions based on cookies or random assignment.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - edge-functions
@@ -160,7 +160,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
         domainName: 'my-frontend-app-assets.s3.amazonaws.com',
         path: '/variant-b',
         region: 'us-east-1',
-        authMethod: 'origin-access-identity',
+        authMethod: 'none',
       },
     };
     request.headers.host = [
@@ -176,6 +176,9 @@ export const handler: CloudFrontRequestHandler = async (event) => {
 ```
 
 This function modifies the **origin path** instead of the URI, which means you can organize your variants differently in S3 or even point to entirely separate buckets.
+
+> [!NOTE] Why `authMethod: 'none'`
+> The `authMethod` field only tracks OAI, not OAC—AWS documents that it [does not support OAC](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html) at all. With OAC, authentication happens at the distribution layer and is invisible to the Lambda@Edge event, so `'none'` is correct. Use `'origin-access-identity'` only on the legacy OAI pattern.
 
 ## Weighted Splits
 

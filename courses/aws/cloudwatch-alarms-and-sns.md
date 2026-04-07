@@ -5,7 +5,7 @@ description: >-
   latency exceed thresholds, so you know when something breaks before your users
   tell you.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudwatch
@@ -182,6 +182,9 @@ aws cloudwatch put-metric-alarm \
 ```
 
 This alarm uses a single evaluation period and a threshold of zero—any 5XX error in any 5-minute window triggers it immediately. 5XX errors are serious enough that you want to know right away. (Trust me on this one.)
+
+> [!TIP]
+> If your API receives infrequent traffic, alarms will frequently sit in `INSUFFICIENT_DATA` instead of `OK`. Add `--treat-missing-data notBreaching` to any `put-metric-alarm` command to treat periods with no data as non-breaching—this avoids noisy state transitions in low-traffic environments and during development.
 
 ## Verifying Your Alarms
 
