@@ -123,7 +123,10 @@ Expected output:
 
 ## The Complete Handler
 
-Here's a complete Lambda handler that implements a CRUD API for items stored in DynamoDB. This is the handler you'd deploy behind the API Gateway you set up earlier in the course. The same "`userId` comes from the JWT authorizer, not the query string" warning from [Reading and Writing Data with the SDK](dynamodb-reading-and-writing-data.md) applies here — we're still using query parameters as a learning simplification.
+Here's a complete Lambda handler that implements a CRUD API for items stored in DynamoDB. This is the handler you'd deploy behind the API Gateway you set up earlier in the course.
+
+> [!WARNING] `userId` should come from the JWT, not the query string
+> In a real application, read `userId` from `event.requestContext.authorizer?.jwt?.claims?.sub` after JWT validation—never from query parameters, which any caller can forge. We're reading from `queryStringParameters` as a learning simplification. See [Reading and Writing Data with the SDK](dynamodb-reading-and-writing-data.md) for the full explanation.
 
 ```typescript
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
@@ -247,7 +250,7 @@ A few things to notice:
 
 - **GET without `itemId`** queries for all items belonging to the user. GET with `itemId` fetches a single item. This is a standard REST pattern.
 - **POST** generates a unique `itemId` with `crypto.randomUUID()`—native in Node 18+, collision-free, and doesn't leak timestamp information the way `Date.now()` does.
-- **The `respond` helper** reduces boilerplate. Every response needs `statusCode` and `Content-Type`—putting that in a function means you don't repeat it in every branch. CORS headers belong on the API Gateway configuration, not in every Lambda response—see [API Gateway CORS Configuration](api-gateway-cors-configuration.md).
+- **The `respond` helper** reduces boilerplate. Every response needs `statusCode` and `Content-Type`—putting that in a function means you don't repeat it in every branch. For HTTP APIs (which this course uses), CORS headers belong in the API Gateway configuration, not in the Lambda response—see [API Gateway CORS Configuration](api-gateway-cors-configuration.md).
 - **Error handling** catches DynamoDB errors and returns a 500. In production, you'd log the full error and return a sanitized message to the client.
 
 ## Setting the Table Name as an Environment Variable

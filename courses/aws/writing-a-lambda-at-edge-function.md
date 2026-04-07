@@ -89,8 +89,8 @@ Notice the differences from CloudFront Functions:
 - **Query string** is a plain string, not a parsed object.
 - **The `origin` property** is present on origin request events and tells you where CloudFront's about to forward the request. You can modify this to change the origin dynamically.
 
-> [!NOTE]
-> When the distribution uses OAC (Origin Access Control), S3 origin requests carry `authMethod: 'none'` because OAC signing happens at the distribution layer, not in the origin config. The old `origin-access-identity` value was correct for OAI (Origin Access Identity), which is the legacy pattern. For distributions you create today, `'none'` is correct.
+> [!NOTE] Why `authMethod: 'none'`
+> The `authMethod` field only tracks OAI (Origin Access Identity). [AWS documents this explicitly](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html): the field "does not support origin access control (OAC)." If your distribution uses OAC—the modern pattern this course teaches—OAC authentication happens at the distribution layer and is invisible to the Lambda@Edge event. Set `authMethod: 'none'`. If you're on the legacy OAI pattern, use `'origin-access-identity'` instead.
 
 ### Returning a Request vs. a Response
 

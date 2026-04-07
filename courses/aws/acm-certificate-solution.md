@@ -126,7 +126,6 @@ Then create the validation record. Replace the `Name` and `Value` with the actua
 ```bash
 aws route53 change-resource-record-sets \
   --hosted-zone-id Z1234567890ABC \
-  --region us-east-1 \
   --output json \
   --change-batch '{
     "Changes": [

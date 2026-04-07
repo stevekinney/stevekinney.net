@@ -211,7 +211,7 @@ aws apigatewayv2 update-api \
 
 ## Throttling
 
-Every API Gateway stage exposes throttling controls that protect your Lambda functions from accidental abuse. Two values matter: **burst limit** (the size of the token bucket, which caps short spikes) and **rate limit** (the steady-state refill rate in requests per second). The account-level defaults—**5,000 burst** and **10,000 RPS** steady-state, shared across _all_ APIs in the account—are generous enough to bankrupt a personal project if something goes wrong. Set explicit, conservative limits on your stage:
+Every API Gateway stage exposes throttling controls that protect your Lambda functions from accidental abuse. Two values matter: **burst limit** (the size of the token bucket, which caps short spikes) and **rate limit** (the steady-state refill rate in requests per second). The [account-level defaults](https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html)—**5,000 burst** and **10,000 RPS** steady-state, shared across _all_ APIs in the account—are generous enough to bankrupt a personal project if something goes wrong. Set explicit, conservative limits on your stage:
 
 ```bash
 aws apigatewayv2 update-stage \
@@ -222,7 +222,7 @@ aws apigatewayv2 update-stage \
   --output json
 ```
 
-This caps the stage at 50 requests per second sustained and 100 concurrent. Throttled requests receive a `429 Too Many Requests` response. For a personal frontend API, these numbers leave ample headroom for real traffic while preventing runaway clients from generating unexpected Lambda invocation costs.
+This caps the stage at 50 requests per second sustained, with room to absorb short bursts of up to 100 requests before throttling kicks in. (Burst isn't the same as "concurrent executions"—that's a Lambda concept controlled separately. Burst is the token-bucket size that lets traffic briefly exceed the steady-state rate.) Throttled requests receive a `429 Too Many Requests` response. For a personal frontend API, these numbers leave ample headroom for real traffic while preventing runaway clients from generating unexpected Lambda invocation costs.
 
 ## Common Mistakes
 

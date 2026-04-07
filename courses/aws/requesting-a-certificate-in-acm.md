@@ -83,7 +83,7 @@ After you request a certificate, it moves through a series of states. I'd recomm
 
 1. **Pending validation**: ACM has created the certificate but is waiting for you to prove you own the domain. Once you publish the DNS records, validation usually flips to **Issued** within a few minutes, though AWS gives itself up to 30 minutes. You don't have to babysit it—the exercise lesson uses `aws acm wait certificate-validated` to block until the certificate is ready.
 2. **Issued**: Validation succeeded. The certificate is ready to attach to a CloudFront distribution, load balancer, or API Gateway endpoint.
-3. **Inactive**: The certificate exists but is no longer eligible for managed renewal. This usually happens with imported certificates that ACM cannot automatically renew.
+3. **Inactive**: Listed by the [ACM API](https://docs.aws.amazon.com/acm/latest/APIReference/API_CertificateDetail.html) as a possible status, but rare in normal usage. You will not encounter it with the DNS-validated, `AMAZON_ISSUED` certificates this course creates.
 4. **Expired**: The certificate reached its expiration date without being renewed. ACM auto-renews certificates that are in use and have valid DNS validation records, so this typically only happens if something went wrong with renewal.
 5. **Revoked**: The certificate was explicitly revoked. This is rare.
 6. **Failed**: Validation failed—usually because the DNS or email validation wasn't completed within 72 hours.

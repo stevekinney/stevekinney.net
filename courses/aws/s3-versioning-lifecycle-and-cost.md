@@ -248,22 +248,32 @@ Next, you're going to switch to the domain side of the story: how to control a d
 
 ## Cleanup
 
-A versioned bucket cannot be deleted until all object versions and delete markers have been removed. Run this two-step sequence to clean up:
+A versioned bucket cannot be deleted until every object version **and** every delete marker has been removed. Run these two passes—one for versions, one for delete markers—then remove the bucket:
 
 ```bash
-# Delete all object versions AND delete markers in one call
+# 1. Delete every non-current object version
 aws s3api delete-objects \
   --bucket my-frontend-app-assets \
   --delete "$(aws s3api list-object-versions \
     --bucket my-frontend-app-assets \
     --output json \
-    --query '{Objects: (Versions[].{Key:Key,VersionId:VersionId} + DeleteMarkers[].{Key:Key,VersionId:VersionId})[]}')" \
+    --query '{Objects: Versions[].{Key:Key,VersionId:VersionId}}')" \
   --region us-east-1 \
   --output json
 
-# Then remove the empty bucket
+# 2. Delete every delete marker
+aws s3api delete-objects \
+  --bucket my-frontend-app-assets \
+  --delete "$(aws s3api list-object-versions \
+    --bucket my-frontend-app-assets \
+    --output json \
+    --query '{Objects: DeleteMarkers[].{Key:Key,VersionId:VersionId}}')" \
+  --region us-east-1 \
+  --output json
+
+# 3. Remove the now-empty bucket
 aws s3 rb s3://my-frontend-app-assets --region us-east-1
 ```
 
-> [!NOTE]
-> The `--query` expression concatenates the `Versions` array and the `DeleteMarkers` array. If you skip the `DeleteMarkers` part and you've deleted objects while versioning was enabled, `aws s3 rb` will fail with `BucketNotEmpty` even though the bucket looks empty in the console — delete markers count as objects that have to be cleared before the bucket can go.
+> [!NOTE] Why two passes
+> `aws s3api list-object-versions` [returns `Versions` and `DeleteMarkers` as separate arrays](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjects.html) and omits either key entirely if there's nothing in it. Running them as two guarded calls means each pass is a no-op when its array is empty—the alternative is a concatenated query that fails when a fresh bucket has no delete markers. Skip either pass and `aws s3 rb` will fail with `BucketNotEmpty`: delete markers count as objects. If your bucket has more than 1,000 versions or delete markers, you'll need to paginate—`list-object-versions` caps each response at 1,000 entries.

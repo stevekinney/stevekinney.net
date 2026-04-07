@@ -161,7 +161,51 @@ When you're ready, check your work against the [Solution: IAM Policy for a Deplo
 
 ## Cleanup
 
-Keep `deploy-bot` around — you'll use it again in the CI/CD lesson. When you're done with the entire course, see the [Final Teardown Checklist](whats-next-services-youll-eventually-need.md) for the full teardown, including this user.
+Keep `deploy-bot` around—you'll use it again in the CI/CD lesson. When you're done with the entire course, run this sequence to tear the user down. IAM has strict ordering rules: deactivate the access key, detach the policy, delete the access key, then delete the user. Miss a step and the final `delete-user` call fails with `DeleteConflict`.
 
-> [!NOTE]
-> IAM has strict ordering rules for user deletion: deactivate access keys, detach attached policies, delete the keys, then delete the user. Miss a step and the final `delete-user` call fails with `DeleteConflict`.
+First, find the access key ID (the one you saved earlier works too, but this avoids digging through notes):
+
+```bash
+aws iam list-access-keys \
+  --user-name deploy-bot \
+  --region us-east-1 \
+  --output json
+```
+
+Then deactivate and remove the key:
+
+```bash
+aws iam update-access-key \
+  --user-name deploy-bot \
+  --access-key-id AKIAEXAMPLE \
+  --status Inactive \
+  --region us-east-1
+
+aws iam delete-access-key \
+  --user-name deploy-bot \
+  --access-key-id AKIAEXAMPLE \
+  --region us-east-1
+```
+
+Detach the policy and delete it:
+
+```bash
+aws iam detach-user-policy \
+  --user-name deploy-bot \
+  --policy-arn arn:aws:iam::123456789012:policy/DeployBotPolicy \
+  --region us-east-1
+
+aws iam delete-policy \
+  --policy-arn arn:aws:iam::123456789012:policy/DeployBotPolicy \
+  --region us-east-1
+```
+
+Finally, delete the user:
+
+```bash
+aws iam delete-user \
+  --user-name deploy-bot \
+  --region us-east-1
+```
+
+Also remove the named profile from your local AWS config by opening `~/.aws/credentials` and `~/.aws/config` and deleting the `[deploy-bot]` sections.

@@ -177,8 +177,8 @@ export const handler: CloudFrontRequestHandler = async (event) => {
 
 This function modifies the **origin path** instead of the URI, which means you can organize your variants differently in S3 or even point to entirely separate buckets.
 
-> [!NOTE]
-> When the distribution uses OAC, S3 origin requests carry `authMethod: 'none'` because OAC signing happens at the distribution layer, not in the origin config. The old `origin-access-identity` value applied to the legacy OAI pattern.
+> [!NOTE] Why `authMethod: 'none'`
+> The `authMethod` field only tracks OAI, not OAC—AWS documents that it [does not support OAC](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html) at all. With OAC, authentication happens at the distribution layer and is invisible to the Lambda@Edge event, so `'none'` is correct. Use `'origin-access-identity'` only on the legacy OAI pattern.
 
 ## Weighted Splits
 

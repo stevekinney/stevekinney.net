@@ -116,8 +116,7 @@ Resources are listed in reverse dependency order (tear down what depends on othe
 
 **Secrets and Configuration**
 
-- [ ] Delete Secrets Manager secrets. See [Solution: Store and Retrieve a Secret in Lambda](secrets-in-lambda-solution.md) — use `--force-delete-without-recovery` for test secrets only.
-- [ ] Delete Parameter Store parameters. See [Parameter Store: Hierarchical Configuration](parameter-store-hierarchical-configuration.md).
+- [ ] Delete Parameter Store parameters. See [Parameter Store: Hierarchical Configuration](parameter-store-hierarchical-configuration.md) and [Solution: Store and Retrieve a Secret in Lambda](secrets-in-lambda-solution.md). The course's secrets exercise uses Parameter Store only—if you followed along with [Parameter Store vs. Secrets Manager](parameter-store-vs-secrets-manager.md) and spun up a real Secrets Manager secret to compare, delete it with `aws secretsmanager delete-secret --secret-id <name> --force-delete-without-recovery` (test secrets only).
 
 **CloudWatch Monitoring**
 
@@ -133,6 +132,7 @@ Resources are listed in reverse dependency order (tear down what depends on othe
 
 - [ ] Detach and delete the DynamoDB IAM policy. `aws iam detach-role-policy --role-name my-frontend-app-lambda-role --policy-arn arn:aws:iam::123456789012:policy/MyFrontendAppLambdaDynamoDB && aws iam delete-policy --policy-arn arn:aws:iam::123456789012:policy/MyFrontendAppLambdaDynamoDB`
 - [ ] Delete the Lambda execution role. `aws iam delete-role --role-name my-frontend-app-lambda-role`
+- [ ] Tear down the `deploy-bot` IAM user: deactivate the access key, detach `DeployBotPolicy`, delete the key, then delete the user. See [Exercise: IAM Policy for a Deploy Bot](iam-policy-exercise.md) for the full command sequence—IAM ordering rules matter here.
 
 **Billing**
 

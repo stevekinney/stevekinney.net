@@ -64,6 +64,9 @@ In the console, the **Edit settings** page shows the **Custom SSL certificate** 
 
 ![The CloudFront Edit settings form showing the Custom SSL certificate field with an empty Choose certificate dropdown, indicating the default CloudFront certificate is in use.](assets/cloudfront-viewer-certificate-default.png)
 
+> [!NOTE] Default cert ignores `MinimumProtocolVersion`
+> When `CloudFrontDefaultCertificate` is `true`, [CloudFront silently forces the security policy to `TLSv1`](https://docs.aws.amazon.com/AmazonCloudFront/latest/APIReference/API_ViewerCertificate.html) regardless of what you set in `MinimumProtocolVersion`. That's why the default-cert block above doesn't bother with a `MinimumProtocolVersion` field—it would just be a lie. Once you switch to your own ACM certificate (next), the field becomes meaningful.
+
 Replace it with your ACM certificate:
 
 ```json

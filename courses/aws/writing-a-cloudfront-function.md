@@ -155,7 +155,7 @@ aws cloudfront create-function \
   --output json
 ```
 
-The `cloudfront-js-2.0` runtime is the recommended choice for new functions. It supports a broader subset of ES2021 features compared to `1.0`: optional chaining (`?.`), nullish coalescing (`??`), modern string and array methods, and `async`/`await` syntax. One clarification worth knowing: while `2.0` parses `async`/`await` without error, there are no async APIs in the CloudFront Functions environment to actually call—the syntax is valid but has no practical effect. Write synchronous functions.
+The `cloudfront-js-2.0` runtime is the recommended choice for new functions. It supports a broader subset of modern JavaScript than `1.0`—including `async`/`await` syntax and a small set of Promise-based [WebCrypto APIs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-20.html) you can legitimately `await`. In practice, nearly every CloudFront Function use case is synchronous: URL rewrites, header manipulation, A/B routing. Write synchronous functions unless you specifically need WebCrypto for something like signed-cookie verification. The AWS docs describe the runtime as ECMAScript 5.1 with selected ES6–ES12 features, so check the [runtime features page](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-20.html) before relying on any specific ES2020+ syntax.
 
 The response includes an `ETag` value—save it. You need it for every subsequent operation on this function.
 

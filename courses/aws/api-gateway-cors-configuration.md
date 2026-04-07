@@ -99,13 +99,7 @@ You can use `*` to allow any origin, but don't do this if your API uses authenti
 ```bash
 aws apigatewayv2 update-api \
   --api-id abc123def4 \
-  --cors-configuration \
-    AllowOrigins="https://example.com" \
-    AllowMethods="GET","POST" \
-    AllowHeaders="Content-Type","Authorization" \
-    AllowCredentials=true \
-    ExposeHeaders="X-Request-Id" \
-    MaxAge=86400 \
+  --cors-configuration '{"AllowOrigins":["https://example.com"],"AllowMethods":["GET","POST"],"AllowHeaders":["Content-Type","Authorization"],"AllowCredentials":true,"ExposeHeaders":["X-Request-Id"],"MaxAge":86400}' \
   --region us-east-1 \
   --output json
 ```
@@ -158,10 +152,10 @@ No `mode: 'cors'` needed—`fetch` uses CORS mode by default for cross-origin re
 
 ## Development vs. Production Origins
 
-A common pattern is to include both your local development origin and your production domain:
+A common pattern is to include both your local development origin and your production domain. Inside the JSON `--cors-configuration` blob, that looks like:
 
-```bash
-AllowOrigins="http://localhost:3000","http://localhost:5173","https://example.com"
+```json
+"AllowOrigins": ["http://localhost:3000", "http://localhost:5173", "https://example.com"]
 ```
 
 Port `3000` is the typical React dev server port. Port `5173` is the default Vite port. Include whichever ports your development tools use.
@@ -174,6 +168,9 @@ In a more sophisticated setup, you would use API Gateway stages (covered in [API
 
 **Forgetting to include the port for localhost.** `http://localhost` and `http://localhost:3000` are different origins. If your dev server runs on port 3000, the origin must include `:3000`.
 
-**Setting CORS headers in your Lambda function instead of the API configuration.** This can work, but it's fragile—you have to handle OPTIONS requests in your handler and remember to include CORS headers in every response. Let API Gateway handle it. That's what the built-in CORS configuration is for.
+**Setting CORS headers in your Lambda function instead of the API configuration.** For HTTP APIs (which this course uses throughout), this is fragile—you have to handle OPTIONS requests in your handler and remember to include CORS headers in every response. Let API Gateway handle it. That's what the built-in CORS configuration is for.
+
+> [!NOTE] REST APIs are different
+> If you later find yourself on a REST API (the older API Gateway flavor) or a non-proxy integration, CORS is configured differently: there's no `--cors-configuration` flag, and you'll need to configure an OPTIONS method per resource and either enable the CORS helpers in the console or set headers in the method response mapping. The rule "don't put CORS in the handler" still holds, but the place to put it moves.
 
 Your API is callable from your frontend. But right now it has a single URL: the auto-generated `execute-api` endpoint. You probably want a custom domain like `api.example.com`, and you might want separate environments for development and production. The next lesson covers stages, deployments, and custom domain names.
