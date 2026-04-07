@@ -13,6 +13,8 @@ vite.config.ts.timestamp-*
 !**/.obsidian/app.json
 !**/.obsidian/appearance.json
 !**/.obsidian/core-plugins.json
+!**/.obsidian/community-plugins.json
+!**/.obsidian/hotkeys.json
 !**/.obsidian/templates.json
 .vercel
 meta-*
