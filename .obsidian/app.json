@@ -3,6 +3,8 @@
   "useMarkdownLinks": true,
   "alwaysUpdateLinks": true,
   "newLinkFormat": "relative",
+  "dateFormat": "YYYY-MM-DD",
+  "timeFormat": "HH:mm",
   "userIgnoreFilters": [
     "node_modules",
     "applications",
