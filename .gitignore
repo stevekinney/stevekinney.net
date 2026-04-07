@@ -9,7 +9,7 @@ dist
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-**/.obsidian/
+**/.obsidian/*
 !**/.obsidian/app.json
 !**/.obsidian/appearance.json
 !**/.obsidian/core-plugins.json
