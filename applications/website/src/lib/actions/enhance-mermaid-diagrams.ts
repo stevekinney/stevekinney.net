@@ -229,6 +229,86 @@ function connectDisconnectedSubgraphNodes(source: string): string {
 }
 
 /**
+ * Parse a CSS color string into RGB components. Supports `#rgb`, `#rrggbb`,
+ * and `rgb()`/`rgba()` forms. Returns `null` if the color cannot be parsed
+ * (e.g. `none`, `transparent`, unsupported keywords).
+ */
+function parseColor(color: string): { r: number; g: number; b: number } | null {
+  const trimmed = color.trim().toLowerCase();
+  if (!trimmed || trimmed === 'none' || trimmed === 'transparent') return null;
+
+  if (trimmed.startsWith('#')) {
+    const hex = trimmed.slice(1);
+    if (hex.length === 3) {
+      const r = parseInt(hex[0] + hex[0], 16);
+      const g = parseInt(hex[1] + hex[1], 16);
+      const b = parseInt(hex[2] + hex[2], 16);
+      return { r, g, b };
+    }
+    if (hex.length === 6) {
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      return { r, g, b };
+    }
+    return null;
+  }
+
+  const rgbMatch = trimmed.match(/^rgba?\(([^)]+)\)$/);
+  if (rgbMatch) {
+    const parts = rgbMatch[1].split(',').map((p) => parseFloat(p.trim()));
+    if (parts.length >= 3 && parts.every((n) => Number.isFinite(n))) {
+      return { r: parts[0], g: parts[1], b: parts[2] };
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Compute relative luminance (0–1) of an sRGB color per WCAG. Higher values
+ * are lighter; we use this to pick a readable text color for each node.
+ */
+function relativeLuminance({ r, g, b }: { r: number; g: number; b: number }): number {
+  const channel = (c: number) => {
+    const v = c / 255;
+    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+}
+
+/**
+ * Force readable label colors on nodes whose background was overridden by
+ * an inline `style X fill:#...` directive in the diagram source. Mermaid's
+ * dark theme text color (`#d6deeb`) becomes invisible on light fills, so we
+ * inspect each node's shape fill and flip the label color when the contrast
+ * is wrong. Nodes that already set an explicit `color:` are left alone.
+ */
+function fixNodeLabelContrast(wrapper: HTMLElement): void {
+  const nodes = wrapper.querySelectorAll<SVGGElement>('.node');
+  for (const node of nodes) {
+    const shape = node.querySelector<SVGGraphicsElement>('rect, circle, ellipse, polygon, path');
+    if (!shape) continue;
+
+    const fill = getComputedStyle(shape).fill;
+    const rgb = parseColor(fill);
+    if (!rgb) continue;
+
+    const luminance = relativeLuminance(rgb);
+    // Light backgrounds need dark text; dark backgrounds need light text.
+    const textColor = luminance > 0.5 ? '#011627' : '#d6deeb';
+
+    const labels = node.querySelectorAll<HTMLElement | SVGElement>(
+      '.nodeLabel, foreignObject span, foreignObject p, text',
+    );
+    for (const label of labels) {
+      (label as HTMLElement).style.color = textColor;
+      label.setAttribute('fill', textColor);
+    }
+  }
+}
+
+/**
  * After CSS changes label width (uppercase, font-weight, letter-spacing),
  * the foreignObject is too narrow, causing left-aligned overflow.
  * Widen each cluster label's foreignObject to match its cluster rect
@@ -286,6 +366,7 @@ async function renderMermaidDiagram(container: HTMLElement): Promise<void> {
     diagramWrapper.innerHTML = svg;
     container.prepend(diagramWrapper);
     recenterClusterLabels(diagramWrapper);
+    fixNodeLabelContrast(diagramWrapper);
   } catch (error) {
     console.error('Failed to render mermaid diagram:', error);
   }
