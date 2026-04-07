@@ -45,11 +45,11 @@ How it works in practice: you install it (`npm install -g @playwright/cli@latest
 
 The really useful bit, in my experience, isn't the action commands. It's the introspection commands. [Playwright 1.59 added](https://playwright.dev/docs/release-notes) `npx playwright test --debug=cli`, which lets a coding agent attach to a running test via `playwright-cli` and step through it the way a human would use `playwright codegen`. The same release added `npx playwright trace`, which lets the agent open a Playwright trace from the command line and ask structured questions about it: what failed, what was the network state, what was the DOM at frame X. That's the loop that actually pays off—when your coding agent can read a trace the same way you would, "fix the flaky test" stops being a coin flip.
 
-What Playwright CLI is _not_: it is not a DevTools replacement. You will not get a flame chart and a Lighthouse audit out of it. It is not a debugger for _your application code_—it's a debugger for the browser-side test code your agent is producing.
+What Playwright CLI is _not_: it is not a DevTools replacement. You will not get a flame chart and a [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview) audit out of it. It is not a debugger for _your application code_—it's a debugger for the browser-side test code your agent is producing.
 
 ## What Playwright MCP is for
 
-Playwright MCP is the same [Playwright underneath, exposed as an MCP server](https://playwright.dev/docs/getting-started-mcp) instead of as a CLI. It's the path you want when your agent is operating inside an MCP-aware host—Claude Code, Cursor, Claude Desktop, VS Code, Windsurf, and effectively every other MCP client—and you'd rather give it tool calls than shell commands.
+Playwright MCP is the same [Playwright underneath, exposed as an MCP server](https://playwright.dev/docs/getting-started-mcp) instead of as a CLI. It's the path you want when your agent is operating inside an MCP-aware host—[Claude Code](https://www.claude.com/product/claude-code), [Cursor](https://cursor.com), Claude Desktop, VS Code, [Windsurf](https://windsurf.com), and effectively every other MCP client—and you'd rather give it tool calls than shell commands.
 
 The interaction model is the part that matters: Playwright MCP operates on the page's _accessibility tree_, not on screenshots. When your agent asks to click a button, what it gets back is structured data about elements, their roles, names, and refs. That gives you two things at once: deterministic targeting (the same `ref` resolves to the same element across calls) and a sensible fallback for non-vision models that can't reason about pixels at all.
 
@@ -60,6 +60,9 @@ The tool surface is broad: navigation, click/type/fill, screenshots, keyboard an
 [Playwright 1.59 also added](https://playwright.dev/docs/release-notes) something I've come to lean on: `browser.bind()`, an API that lets the `@playwright/mcp` server connect to an already-running browser. This is the closest Playwright gets to the "manual debugging plus agent handoff" workflow that Chrome DevTools MCP is built around—and we'll come back to this in the overlap section.
 
 When MCP is the right choice over the CLI: when your agent is already inside an MCP host and switching to a CLI loop would mean reinventing the host's tool-orchestration plumbing; when you want self-healing flows where the agent retries based on structured snapshot diffs; or when you want exploratory automation where the agent doesn't know in advance which commands it'll need.
+
+> [!TIP] Wiring it up
+> Register the server in your MCP host's config as `npx @playwright/mcp@latest`. Claude Code users can skip the config file entirely with `claude mcp add playwright -- npx @playwright/mcp@latest`. Full setup for every host lives in the [Playwright MCP getting-started guide](https://playwright.dev/docs/getting-started-mcp).
 
 ## What Chrome DevTools MCP is for
 
@@ -78,11 +81,14 @@ The current tool surface is around 29 tools across six categories. (That count k
 
 Two things in that list are genuinely distinguishing. First, performance traces: your agent can record a trace, stop it, and then call `performance_analyze_insight` to get back structured performance findings. That's not something Playwright gives you out of the box at anywhere near the same fidelity. Second, `lighthouse_audit` runs as a tool call. If you've ever wired a coding agent to a separate Lighthouse process and tried to round-trip the JSON yourself, you know how big a deal that is.
 
-Chrome DevTools MCP also added a **slim mode** in 0.19.0: a three-tool variant—navigation, script execution, and screenshots—for token-sensitive contexts. (The fact that _both_ Microsoft and Google have built explicit token-efficiency escape hatches into their first-party tools tells you something about where the real failure mode of MCP lives. Tool schemas are heavy. Agents pay for them on every turn. Slim modes are how the platforms admit it without saying it.)
+Chrome DevTools MCP also added a **slim mode** in 0.19.0: a three-tool variant—navigation, script execution, and screenshots—for token-sensitive contexts. You opt in by passing `--slim` when you start the server. (The fact that _both_ Microsoft and Google have built explicit token-efficiency escape hatches into their first-party tools tells you something about where the real failure mode of MCP lives. Tool schemas are heavy. Agents pay for them on every turn. Slim modes are how the platforms admit it without saying it.)
 
-The other piece that matters: connection model. Chrome DevTools MCP can launch a fresh Chrome, connect to a running Chrome via `--browser-url` (HTTP endpoint) or `--ws-endpoint` (WebSocket), and [as of December 2025 it can request a remote debugging connection to the user's _current_ browser session](https://developer.chrome.com/blog/chrome-devtools-mcp-debug-your-browser-session). That last part is the workflow people came for. You're already signed in to staging in your normal Chrome window, you've got a network request selected in DevTools, and you can hand the whole thing—session, selection, and all—over to the agent without re-creating the state somewhere else. The Chrome team's framing is exactly right: _"you don't have to choose between automation and manual control. You can use DevTools yourself or hand over a debugging task to your coding agent."_
+The other piece that matters: connection model. Chrome DevTools MCP can launch a fresh Chrome, connect to a running Chrome via `--browser-url` (HTTP endpoint) or `--ws-endpoint` (WebSocket), and [as of December 2025 it can request a remote debugging connection to the user's _current_ browser session](https://developer.chrome.com/blog/chrome-devtools-mcp-debug-your-browser-session) via the `--autoConnect` flag (Chrome 144 or newer, with remote debugging enabled at `chrome://inspect/#remote-debugging`). That last part is the workflow people came for. You're already signed in to staging in your normal Chrome window, you've got a network request selected in DevTools, and you can hand the whole thing—session, selection, and all—over to the agent without re-creating the state somewhere else. The Chrome team's framing is exactly right: _"you don't have to choose between automation and manual control. You can use DevTools yourself or hand over a debugging task to your coding agent."_
 
-What Chrome DevTools MCP is _not_: it is not cross-browser. The README is explicit—_"chrome-devtools-mcp officially supports Google Chrome and Chrome for Testing only. Other Chromium-based browsers may work, but this is not guaranteed."_ No Firefox. No WebKit. If "make sure this works in Safari" is on your list, this tool cannot get you there.
+> [!TIP] Wiring it up
+> Register the server as `npx chrome-devtools-mcp@latest` in your MCP host's config (or `claude mcp add chrome-devtools -- npx chrome-devtools-mcp@latest` from the Claude Code CLI). Add `--slim` for the three-tool token-lean variant, or `--autoConnect` to attach to your live Chrome session. Setup details for every major host live in the [project README](https://github.com/ChromeDevTools/chrome-devtools-mcp#getting-started).
+
+What Chrome DevTools MCP is _not_: it is not cross-browser. The README is explicit—_"chrome-devtools-mcp officially supports Google Chrome and [Chrome for Testing](https://developer.chrome.com/blog/chrome-for-testing) only. Other Chromium-based browsers may work, but this is not guaranteed, and you may encounter unexpected behavior."_ No Firefox. No WebKit. If "make sure this works in Safari" is on your list, this tool cannot get you there.
 
 ## Where Chrome DevTools AI assistance fits
 
@@ -96,20 +102,20 @@ The reason I'm spending a whole section on this is that the names invite confusi
 
 Here's the comparison I actually use when I'm choosing between these tools: the first table covers the three first-class citizens. AI assistance gets its own table after, because mixing it in produces fake symmetry.
 
-|                         | **Playwright CLI**                                         | **Playwright MCP**                                      | **Chrome DevTools MCP**                                                    |
-| ----------------------- | ---------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
-| **Primary job**         | Token-efficient browser driving from a shell loop          | Browser driving via MCP tool calls                      | DevTools-grade inspection plus driving                                     |
-| **Control surface**     | CLI subcommands plus installable skills                    | MCP tool schema                                         | MCP tool schema (29 tools; slim mode = 3)                                  |
-| **Best for**            | Coding agents fixing flaky tests; long shell-driven loops  | MCP-native agents in Cursor, Claude Code, Copilot       | Performance, network, console, and DevTools-style debugging from agents    |
-| **Browser coverage**    | Chromium, Firefox, WebKit, Edge (via Playwright)           | Chromium, Firefox, WebKit, Edge                         | Google Chrome and Chrome for Testing only                                  |
-| **Debugging depth**     | Trace exploration via `npx playwright trace`; CLI debugger | Snapshot, network inspection, storage state             | Full DevTools—traces, Lighthouse, memory snapshots, source-mapped logs     |
-| **Performance tooling** | Light (traces only)                                        | Light (traces only)                                     | First-class—perf traces, `performance_analyze_insight`, `lighthouse_audit` |
-| **Test workflow**       | Excellent—built around Playwright's test runner            | Good—code execution escape hatch via `browser_run_code` | Limited—not a test runner                                                  |
-| **CI fit**              | Strong—it's a CLI, it's already CI-shaped                  | Workable but heavier—needs an MCP host                  | Workable, but Chrome-only and DevTools-shaped                              |
-| **Manual handoff**      | Indirect—via traces and screencasts                        | Possible—via `browser.bind()` to a running browser      | Native—connects to your current Chrome session                             |
-| **Agent friendliness**  | High for coding agents that prefer shell loops             | High for MCP-native agents                              | High for inspection-heavy agents                                           |
-| **Determinism**         | High—accessibility refs, deterministic targeting           | High—accessibility refs, deterministic targeting        | High for input; real-browser perf traces will vary                         |
-| **Biggest limitation**  | No deep DevTools inspection                                | Tool schema cost; no DevTools-grade perf                | Chrome only; not a cross-browser test tool                                 |
+|                         | **Playwright CLI**                                         | **Playwright MCP**                                                                       | **Chrome DevTools MCP**                                                    |
+| ----------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| **Primary job**         | Token-efficient browser driving from a shell loop          | Browser driving via MCP tool calls                                                       | DevTools-grade inspection plus driving                                     |
+| **Control surface**     | CLI subcommands plus installable skills                    | MCP tool schema                                                                          | MCP tool schema (29 tools; slim mode = 3)                                  |
+| **Best for**            | Coding agents fixing flaky tests; long shell-driven loops  | MCP-native agents in Cursor, Claude Code, [Copilot](https://github.com/features/copilot) | Performance, network, console, and DevTools-style debugging from agents    |
+| **Browser coverage**    | Chromium, Firefox, WebKit, Edge (via Playwright)           | Chromium, Firefox, WebKit, Edge                                                          | Google Chrome and Chrome for Testing only                                  |
+| **Debugging depth**     | Trace exploration via `npx playwright trace`; CLI debugger | Snapshot, network inspection, storage state, `browser_run_code` escape hatch             | Full DevTools—traces, Lighthouse, memory snapshots, source-mapped logs     |
+| **Performance tooling** | Light (traces only)                                        | Light (traces only)                                                                      | First-class—perf traces, `performance_analyze_insight`, `lighthouse_audit` |
+| **Test workflow**       | Excellent—built around Playwright's test runner            | Good—code execution escape hatch via `browser_run_code`                                  | Limited—not a test runner                                                  |
+| **CI fit**              | Strong—it's a CLI, it's already CI-shaped                  | Workable but heavier—needs an MCP host                                                   | Workable, but Chrome-only and DevTools-shaped                              |
+| **Manual handoff**      | Indirect—via traces and screencasts                        | Possible—via `browser.bind()` to a running browser                                       | Native—connects to your current Chrome session                             |
+| **Agent friendliness**  | High for coding agents that prefer shell loops             | High for MCP-native agents                                                               | High for inspection-heavy agents                                           |
+| **Determinism**         | High—accessibility refs, deterministic targeting           | High—accessibility refs, deterministic targeting                                         | High for input; real-browser perf traces will vary                         |
+| **Biggest limitation**  | No deep DevTools inspection                                | Tool schema cost; no DevTools-grade perf                                                 | Chrome only; not a cross-browser test tool                                 |
 
 And the adjacent comparison, kept separate so it doesn't pretend to be in the same category:
 
@@ -129,7 +135,7 @@ Concretely: my coding agent needs to fix a flaky test. The flake is in `auth.spe
 
 Another one: my agent needs to click through a 15-step onboarding flow repeatedly, in headless mode, on three browsers, with deterministic accessibility-tree targeting. That's Playwright MCP, full stop. The cross-browser story is real and there's no equivalent on the Chrome side.
 
-A third: I'm generating new tests from scratch. I'd reach for [Playwright Test Agents](https://playwright.dev/docs/test-agents)—`npx playwright init-agents` gives me planner, generator, and healer subagents whose entire purpose is exploring an app and producing maintained tests. That is a _test lifecycle_ tool, scoped tightly, and it's almost embarrassingly good at what it does compared to "ask Claude to write Playwright tests."
+A third: I'm generating new tests from scratch. I'd reach for [Playwright Test Agents](https://playwright.dev/docs/test-agents)—`npx playwright init-agents --loop=claude` (or `--loop=vscode` / `--loop=opencode` depending on your host) gives me planner, generator, and healer subagents whose entire purpose is exploring an app and producing maintained tests. That is a _test lifecycle_ tool, scoped tightly, and it's almost embarrassingly good at what it does compared to "ask Claude to write Playwright tests."
 
 ## When Chrome DevTools wins
 
@@ -155,7 +161,7 @@ If your agent is tight on context, the right move inside the overlap is the lean
 
 A few things that look like they belong in this conversation, but don't:
 
-**Community MCP servers wrapping Playwright or CDP.** There are dozens. Some are genuinely good. (None are first-party.) The day Microsoft or Google ships a feature, those wrappers either get adopted into the official path or they don't, and you're back to the choice you started with. If you're building infrastructure you intend to keep, build on the official servers.
+**Community MCP servers wrapping Playwright or the [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP).** There are dozens. Some are genuinely good. (None are first-party.) The day Microsoft or Google ships a feature, those wrappers either get adopted into the official path or they don't, and you're back to the choice you started with. If you're building infrastructure you intend to keep, build on the official servers.
 
 **Cloud browser platforms** like [Browserbase](https://www.browserbase.com/), [Anchor Browser](https://anchorbrowser.io/), [BrightData](https://brightdata.com/)'s scraping browser, and similar. These are excellent at what they do—managed, scaled, fingerprint-aware browser sessions for agents—but they are _consumers_ of Playwright and CDP, not alternatives to them. They live one layer up.
 
