@@ -248,32 +248,38 @@ Next, you're going to switch to the domain side of the story: how to control a d
 
 ## Cleanup
 
-A versioned bucket cannot be deleted until every object version **and** every delete marker has been removed. Run these two passes—one for versions, one for delete markers—then remove the bucket:
+A versioned bucket cannot be deleted until every object version **and** every delete marker has been removed. Run these two passes—one for versions, one for delete markers—guarded so a fresh bucket with nothing in one list doesn't fail. Then remove the bucket:
 
 ```bash
-# 1. Delete every non-current object version
-aws s3api delete-objects \
+# 1. Delete every non-current object version (skip if there are none)
+VERSIONS=$(aws s3api list-object-versions \
   --bucket my-frontend-app-assets \
-  --delete "$(aws s3api list-object-versions \
+  --output json \
+  --query 'Versions[].{Key:Key,VersionId:VersionId}')
+if [ "$VERSIONS" != "null" ] && [ "$VERSIONS" != "[]" ]; then
+  aws s3api delete-objects \
     --bucket my-frontend-app-assets \
-    --output json \
-    --query '{Objects: Versions[].{Key:Key,VersionId:VersionId}}')" \
-  --region us-east-1 \
-  --output json
+    --delete "{\"Objects\": $VERSIONS}" \
+    --region us-east-1 \
+    --output json
+fi
 
-# 2. Delete every delete marker
-aws s3api delete-objects \
+# 2. Delete every delete marker (skip if there are none)
+MARKERS=$(aws s3api list-object-versions \
   --bucket my-frontend-app-assets \
-  --delete "$(aws s3api list-object-versions \
+  --output json \
+  --query 'DeleteMarkers[].{Key:Key,VersionId:VersionId}')
+if [ "$MARKERS" != "null" ] && [ "$MARKERS" != "[]" ]; then
+  aws s3api delete-objects \
     --bucket my-frontend-app-assets \
-    --output json \
-    --query '{Objects: DeleteMarkers[].{Key:Key,VersionId:VersionId}}')" \
-  --region us-east-1 \
-  --output json
+    --delete "{\"Objects\": $MARKERS}" \
+    --region us-east-1 \
+    --output json
+fi
 
 # 3. Remove the now-empty bucket
 aws s3 rb s3://my-frontend-app-assets --region us-east-1
 ```
 
-> [!NOTE] Why two passes
-> `aws s3api list-object-versions` [returns `Versions` and `DeleteMarkers` as separate arrays](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjects.html) and omits either key entirely if there's nothing in it. Running them as two guarded calls means each pass is a no-op when its array is empty—the alternative is a concatenated query that fails when a fresh bucket has no delete markers. Skip either pass and `aws s3 rb` will fail with `BucketNotEmpty`: delete markers count as objects. If your bucket has more than 1,000 versions or delete markers, you'll need to paginate—`list-object-versions` caps each response at 1,000 entries.
+> [!NOTE] Why the shell guards
+> `aws s3api list-object-versions` [returns `Versions` and `DeleteMarkers` as separate arrays](https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjects.html) and omits either key entirely when it's empty—a `--query` pulling the missing key back as `null`. Passing `{"Objects": null}` or `{"Objects": []}` to `delete-objects` fails with a parameter validation error, not a silent no-op, so each pass has to check the list before calling the API. Skip either pass when there _are_ entries and `aws s3 rb` will fail with `BucketNotEmpty`: delete markers count as objects. If your bucket has more than 1,000 versions or delete markers, you'll also need to paginate—`list-object-versions` caps each response at 1,000 entries.

@@ -130,7 +130,12 @@ Resources are listed in reverse dependency order (tear down what depends on othe
 
 **IAM**
 
-- [ ] Detach and delete the DynamoDB IAM policy. `aws iam detach-role-policy --role-name my-frontend-app-lambda-role --policy-arn arn:aws:iam::123456789012:policy/MyFrontendAppLambdaDynamoDB && aws iam delete-policy --policy-arn arn:aws:iam::123456789012:policy/MyFrontendAppLambdaDynamoDB`
+IAM won't let you delete a role until every attached managed policy is detached _and_ every inline policy is removed. The Lambda execution role accumulates several of these over the course—work through them in order before the final `delete-role`:
+
+- [ ] Detach and delete the DynamoDB managed policy. `aws iam detach-role-policy --role-name my-frontend-app-lambda-role --policy-arn arn:aws:iam::123456789012:policy/MyFrontendAppLambdaDynamoDB && aws iam delete-policy --policy-arn arn:aws:iam::123456789012:policy/MyFrontendAppLambdaDynamoDB`
+- [ ] Detach the AWS-managed basic execution role. `aws iam detach-role-policy --role-name my-frontend-app-lambda-role --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole` (Don't try to `delete-policy` on this one—it's owned by AWS.)
+- [ ] Delete the `parameter-store-access` inline policy added in the secrets exercise. `aws iam delete-role-policy --role-name my-frontend-app-lambda-role --policy-name parameter-store-access`
+- [ ] List what's left to confirm the role is bare before deletion. `aws iam list-attached-role-policies --role-name my-frontend-app-lambda-role` and `aws iam list-role-policies --role-name my-frontend-app-lambda-role`—both should return empty arrays.
 - [ ] Delete the Lambda execution role. `aws iam delete-role --role-name my-frontend-app-lambda-role`
 - [ ] Tear down the `deploy-bot` IAM user: deactivate the access key, detach `DeployBotPolicy`, delete the key, then delete the user. See [Exercise: IAM Policy for a Deploy Bot](iam-policy-exercise.md) for the full command sequence—IAM ordering rules matter here.
 
