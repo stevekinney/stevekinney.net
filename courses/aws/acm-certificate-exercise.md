@@ -3,7 +3,7 @@ title: 'Exercise: Request and Validate a Certificate'
 description: >-
   Request an ACM certificate for your domain, complete DNS validation, and verify the certificate is issued.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - acm
@@ -186,3 +186,18 @@ You now have a valid SSL/TLS certificate in `us-east-1` that covers your domain 
 - **Request a second certificate**: Try requesting a certificate for a different subdomain (e.g., `staging.example.com`) without a wildcard. Compare the validation process—is it any different?
 - **Explore the full output**: Run `aws acm describe-certificate` without the `--query` flag to see the complete certificate metadata: key algorithm, issuer, creation date, and the full `DomainValidationOptions` structure.
 - **Automate it**: Write a short shell script that requests a certificate, extracts the CNAME records, and prints the records you need to add to DNS. Bonus: if your domain is in Route 53, have the script create the records automatically.
+
+## Cleanup
+
+ACM certificates are free while unused, but the validation CNAME record persists in Route 53 and can cause confusion if you forget it's there. When you're done with a certificate:
+
+```bash
+aws acm delete-certificate \
+  --certificate-arn arn:aws:acm:us-east-1:123456789012:certificate/abcd-1234 \
+  --region us-east-1
+```
+
+Then delete the validation CNAME record from Route 53 using `change-resource-record-sets` with `Action: DELETE`. The record name and value are the same ones you used to validate — find them with `aws acm describe-certificate` if you don't have them handy.
+
+> [!WARNING]
+> If this certificate is still attached to a CloudFront distribution, ACM will refuse to delete it. Detach it from the distribution first.

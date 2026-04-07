@@ -3,7 +3,7 @@ title: 'S3 Versioning, Lifecycle, and Cost'
 description: >-
   Enable versioning to protect against accidental overwrites, configure lifecycle rules to manage old versions, and understand how S3 pricing works.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - s3
@@ -107,7 +107,6 @@ aws s3api get-object \
   --key "index.html" \
   --version-id "2LB2z3tPdN2aRFGhK0mRr" \
   --region us-east-1 \
-  --output json \
   index-previous.html
 ```
 
@@ -246,3 +245,25 @@ At this point, you have a complete S3 static site setup:
 This is a working, publicly accessible website. It's HTTP-only, served from a single region, and uses an ugly S3 endpoint URL—but it works. More importantly, you now understand the storage layer well enough to stop treating it like magic.
 
 Next, you're going to switch to the domain side of the story: how to control a domain, how Route 53 becomes authoritative for it, and why that has to exist before ACM validation can work cleanly. Then you'll come back and build the production path on top of this S3 foundation.
+
+## Cleanup
+
+A versioned bucket cannot be deleted until all object versions and delete markers have been removed. Run this two-step sequence to clean up:
+
+```bash
+# Delete all object versions and delete markers
+aws s3api delete-objects \
+  --bucket my-frontend-app-assets \
+  --delete "$(aws s3api list-object-versions \
+    --bucket my-frontend-app-assets \
+    --output json \
+    --query '{Objects: Versions[].{Key:Key,VersionId:VersionId}}')" \
+  --region us-east-1 \
+  --output json
+
+# Then remove the empty bucket
+aws s3 rb s3://my-frontend-app-assets --region us-east-1
+```
+
+> [!NOTE]
+> If you have delete markers (from deleting objects while versioning was enabled), you'll need a second pass to clean those up too. Run `aws s3api list-object-versions` and check the `DeleteMarkers` array — if it's non-empty, pass those through `delete-objects` the same way before running `rb`.

@@ -4,7 +4,7 @@ description: >-
   Write a TypeScript handler that returns a JSON greeting, create an execution
   role, deploy the function, invoke it, and read the logs.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - lambda
@@ -31,7 +31,7 @@ Build and deploy a Lambda function named `my-frontend-app-api` that:
 - Runs with a properly scoped execution role (logging permissions only)
 - Can be invoked from the CLI with a test event
 
-Use the account ID `123456789012`, region `us-east-1`, and the `nodejs20.x` runtime.
+Use the account ID `123456789012`, region `us-east-1`, and the `nodejs22.x` runtime.
 
 ## Set Up the Project
 
@@ -90,13 +90,13 @@ Create the deployment zip from the compiled output:
 
 1. Navigate into the `dist/` directory
 2. Zip the contents (not the directory itself)
-3. Use `aws lambda create-function` with the function name, runtime, role ARN, handler path, and zip file
+3. Use `aws lambda create-function` with the function name, runtime, role ARN, handler path, zip file, and `--architectures arm64`
 
 The handler path should be `handler.handler`—the first `handler` is the filename (without `.js`), the second is the exported function name.
 
 ### Checkpoint
 
-`aws lambda get-function --function-name my-frontend-app-api --region us-east-1` returns the function configuration showing `nodejs20.x` as the runtime and your execution role's ARN.
+`aws lambda get-function --function-name my-frontend-app-api --region us-east-1` returns the function configuration showing `nodejs22.x` as the runtime and your execution role's ARN.
 
 ## Invoke the Function
 
@@ -150,7 +150,7 @@ The log group exists and contains at least one log stream with events from your 
 - [ ] `lambda/` project builds with `npm run build` and produces `dist/handler.js`
 - [ ] `my-frontend-app-lambda-role` IAM role exists with the correct trust policy
 - [ ] `AWSLambdaBasicExecutionRole` is attached to the role
-- [ ] `my-frontend-app-api` function is deployed with `nodejs20.x` runtime
+- [ ] `my-frontend-app-api` function is deployed with `nodejs22.x` runtime and `arm64` architecture
 - [ ] Invoking with `name=Lambda` returns `"Hello, Lambda!"`
 - [ ] Invoking without a name returns `"Hello, World!"`
 - [ ] CloudWatch log group `/aws/lambda/my-frontend-app-api` exists and has log events

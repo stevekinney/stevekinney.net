@@ -3,7 +3,7 @@ title: 'CI/CD with GitHub Actions'
 description: >-
   Set up a GitHub Actions workflow that builds your frontend and deploys it to AWS on every push to the main branch.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - github-actions
@@ -83,6 +83,10 @@ The `Condition` block is critical. Without it, _any_ GitHub repository could ass
 > [!WARNING]
 > Don't use `"StringLike": {"token.actions.githubusercontent.com:sub": "repo:your-org/your-repo:*"}` with a trailing wildcard. That allows any branch, any pull request, and any tag in your repository to assume the role. Scope it to `ref:refs/heads/main` if you only want production deploys from the main branch.
 
+As an alternative to branch-scoped trust, you can scope trust to a GitHub Environment (like `production`) using `"repo:your-org/your-repo:environment:production"` as the `sub` pattern. GitHub Environments support required reviewers and wait timers, which means your AWS role can't be assumed until a human approves the deploy in the GitHub UI. This is the pattern you want for workloads where accidental main-branch merges shouldn't hit production.
+
+Note: `pull_request` events from forks generate `sub` values containing `pull_request`, not `refs/heads/main`, so a branch-scoped trust policy won't accidentally let a fork PR assume the role. But don't generalize this behavior to other OIDC providers—AWS only treats GitHub specially.
+
 Create the role:
 
 ```bash
@@ -133,7 +137,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -245,7 +249,7 @@ Then replace the credentials step in the workflow:
 After pushing the workflow file to `main`, go to the **Actions** tab in your GitHub repository. You should see the "Deploy to AWS" workflow running. Each step shows its output:
 
 - **Checkout**: pulls the code.
-- **Setup Node.js**: installs Node 20.
+- **Setup Node.js**: installs Node 22.
 - **Install dependencies**: runs `npm ci` (clean install, faster than `npm install` in CI).
 - **Build**: runs your build command.
 - **Configure AWS credentials**: exchanges the OIDC token for temporary credentials.

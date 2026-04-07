@@ -4,7 +4,7 @@ description: >-
   Store an API key in Parameter Store as a SecureString, create a Lambda
   function that reads it at init time, and call it through API Gateway.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - secrets
@@ -29,7 +29,7 @@ On Vercel, secrets are environment variables—you set them in the dashboard and
 4. Invoke the function and verify it can access the secret
 5. Call the function through API Gateway from a browser or `curl`
 
-Use the account ID `123456789012`, region `us-east-1`, and the `nodejs20.x` runtime.
+Use the account ID `123456789012`, region `us-east-1`, and the `nodejs22.x` runtime.
 
 ## Store the Secret in Parameter Store
 
@@ -95,11 +95,11 @@ The execution role has a policy that grants `ssm:GetParameter` on the specific p
 Package and deploy the Lambda function:
 
 1. Build the TypeScript project
-2. Zip the contents of the `dist/` directory (plus `node_modules/`—you need the `@aws-sdk/client-ssm` package in the deployment)
+2. Zip the contents of the `dist/` directory (plus `node_modules/`—bundle `@aws-sdk/client-ssm` even though the runtime includes it, so you control the exact SDK version rather than relying on whatever AWS pins in the runtime)
 3. Create or update the Lambda function
 
 > [!TIP]
-> If you already have a function named `my-frontend-app-api` from a previous exercise, use `aws lambda update-function-code` instead of `create-function`. You can also create a new function with a different name like `my-frontend-app-secrets-demo`.
+> If you already have a function named `my-frontend-app-api` from a previous exercise, use `aws lambda update-function-code` instead of `create-function`.
 
 Invoke the function with a test event:
 

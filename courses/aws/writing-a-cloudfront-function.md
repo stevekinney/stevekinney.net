@@ -5,7 +5,7 @@ description: >-
   responses, using the lightweight JavaScript runtime available at CloudFront
   edge locations.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudfront-functions
@@ -129,14 +129,33 @@ This is one of the most common CloudFront Functions in production. Without it, n
 
 ### Create the function
 
+Save the function code to `url-rewrite.js`:
+
+```javascript
+function handler(event) {
+  var request = event.request;
+  var uri = request.uri;
+  if (uri.endsWith('/')) {
+    request.uri += 'index.html';
+  } else if (!uri.includes('.')) {
+    request.uri += '/index.html';
+  }
+  return request;
+}
+```
+
+Then create the function using `fileb://` to pass the file contents:
+
 ```bash
 aws cloudfront create-function \
   --name url-rewrite \
   --function-config '{"Comment":"Rewrite directory URLs to index.html","Runtime":"cloudfront-js-2.0"}' \
-  --function-code 'function handler(event) { var request = event.request; var uri = request.uri; if (uri.endsWith("/")) { request.uri += "index.html"; } else if (!uri.includes(".")) { request.uri += "/index.html"; } return request; }' \
+  --function-code fileb://url-rewrite.js \
   --region us-east-1 \
   --output json
 ```
+
+The `cloudfront-js-2.0` runtime is the recommended choice for new functions. It supports a broader subset of ES2021 features compared to `1.0`: optional chaining (`?.`), nullish coalescing (`??`), modern string and array methods, and `async`/`await` syntax. One clarification worth knowing: while `2.0` parses `async`/`await` without error, there are no async APIs in the CloudFront Functions environment to actually call—the syntax is valid but has no practical effect. Write synchronous functions.
 
 The response includes an `ETag` value—save it. You need it for every subsequent operation on this function.
 
@@ -271,7 +290,7 @@ These patterns are building blocks. In [Edge Function Use Cases](edge-function-u
 
 ## Gotchas
 
-- **10 KB code size limit.** Your entire function, including comments, must fit in 10 KB. Minify aggressively if you're approaching the limit.
-- **No `async`/`await`.** The runtime doesn't support Promises. Everything is synchronous.
+- **10 KB code size limit.** Your entire function, including comments, must fit in 10 KB. Minify aggressively if you're approaching the limit. If the pressure comes from embedded lookup data (redirect maps, feature flag tables, etc.), move that data to **CloudFront KeyValueStore** (KVS)—the function reads it at runtime via `cf.kvs()`, keeping the code small while the data scales independently.
+- **No async APIs.** The `cloudfront-js-2.0` runtime parses `async`/`await` syntax without error, but there are no async APIs to call. Everything executes synchronously. Don't reach for `async` expecting it to do useful work.
 - **Header names must be lowercase.** When you set or read headers, use lowercase names: `content-type`, not `Content-Type`.
 - **The `ETag` dance.** Every create, update, and publish operation returns a new ETag, and the next operation requires the current ETag. I've lost track of these more times than I'd like to admit—if you do too, re-fetch with `describe-function`.

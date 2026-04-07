@@ -4,7 +4,7 @@ description: >-
   Complete solution for the CloudFront Function exercise, with all function
   code, CLI commands, and expected output.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudfront-functions
@@ -374,3 +374,23 @@ function handler(event) {
 ```
 
 This scales to as many redirects as you can fit in 10 KB.
+
+## Cleanup
+
+A CloudFront Function cannot be deleted while it's associated with any distribution. Disassociate first, wait for the distribution to reach `Deployed` status, then delete.
+
+```bash
+# After removing FunctionAssociations from the distribution config
+# and waiting for Deployed status, fetch the current ETag:
+ETAG=$(aws cloudfront describe-function \
+  --name url-rewrite \
+  --query 'ETag' --output text \
+  --region us-east-1)
+
+aws cloudfront delete-function \
+  --name url-rewrite \
+  --if-match "$ETAG" \
+  --region us-east-1
+```
+
+Repeat for the `security-headers` function if you also created that one.

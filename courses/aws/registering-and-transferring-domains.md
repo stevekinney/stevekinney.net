@@ -3,7 +3,7 @@ title: 'Registering and Transferring Domains'
 description: >-
   Register a new domain through Route 53 or transfer an existing domain from another registrar, including configuring nameservers for an externally registered domain.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - route53
@@ -106,6 +106,9 @@ Note the four nameservers in the response:
   }
 }
 ```
+
+> [!NOTE]
+> Route 53 is a global service, so `--region` is a no-op on Route 53 commands. The course still passes it explicitly for consistency.
 
 ### Update Nameservers at Your Registrar
 

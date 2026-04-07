@@ -3,7 +3,7 @@ title: 'Attaching an SSL Certificate'
 description: >-
   Attach an ACM certificate to your CloudFront distribution and configure it to serve your site over HTTPS with a custom domain.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudfront
@@ -55,8 +55,7 @@ Replace the `ViewerCertificate` section in the `DistributionConfig`. The current
 ```json
 {
   "ViewerCertificate": {
-    "CloudFrontDefaultCertificate": true,
-    "MinimumProtocolVersion": "TLSv1.2_2021"
+    "CloudFrontDefaultCertificate": true
   }
 }
 ```

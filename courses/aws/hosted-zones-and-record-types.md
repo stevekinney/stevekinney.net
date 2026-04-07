@@ -3,7 +3,7 @@ title: 'Hosted Zones and Record Types'
 description: >-
   Create a hosted zone in Route 53 and understand the common DNS record types (A, AAAA, CNAME, MX, TXT) and when to use each.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - route53
@@ -75,7 +75,7 @@ For this course, every hosted zone is public. If you see `"PrivateZone": false` 
 
 The **NS (Name Server) records** in your hosted zone list the four nameservers that Route 53 assigned. These are the servers that will answer DNS queries for your domain. But there's a catch: having NS records inside your hosted zone doesn't do anything by itself. You also need to tell your domain registrar to use these nameservers.
 
-If you registered your domain through Route 53, this happens automatically—Route 53 creates the hosted zone and updates the registration's nameservers in one step. If you registered your domain elsewhere (GoDaddy, Namecheap, Google Domains, Cloudflare), you need to log into your registrar and replace the default nameservers with the four Route 53 nameservers.
+If you registered your domain through Route 53, this happens automatically—Route 53 creates the hosted zone and updates the registration's nameservers in one step. If you registered your domain elsewhere (GoDaddy, Namecheap, Squarespace, Cloudflare), you need to log into your registrar and replace the default nameservers with the four Route 53 nameservers.
 
 This is the moment of **delegation**: you're telling the DNS hierarchy, "When someone asks for `example.com`, send them to Route 53." Until you do this, your hosted zone exists but nobody knows to ask it anything.
 
@@ -194,3 +194,18 @@ The hosted zone charge is the only ongoing cost you pay just for having DNS conf
 You now understand what a hosted zone is, how to create one, what record types are available, and when to use each one. Honestly, I find this to be one of those areas where the vocabulary is scarier than the actual concepts—once you've seen an NS record and an A record side by side, the whole system clicks into place.
 
 That matters immediately, because the next step is certificate validation. ACM is about to hand you DNS records and ask you to prove you control the domain. That request only makes sense once you know where those records live and who is authoritative for them.
+
+## Cleanup
+
+Hosted zones cost **$0.50/month** for as long as they exist. If you created one for this exercise and no longer need it, delete it. The hosted zone must be empty—down to just the default NS and SOA records—before deletion. Any A, AAAA, or CNAME records you added must be removed first with `change-resource-record-sets` using `Action: DELETE`.
+
+Once the zone is empty:
+
+```bash
+aws route53 delete-hosted-zone \
+  --id Z1234567890ABC \
+  --region us-east-1 \
+  --output json
+```
+
+Replace `Z1234567890ABC` with your actual hosted zone ID from the `list-hosted-zones` output.

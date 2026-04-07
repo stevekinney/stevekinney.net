@@ -4,7 +4,7 @@ description: >-
   Install the AWS CLI v2, configure it with named profiles and access keys, and
   verify that your credentials work.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cli
@@ -124,8 +124,7 @@ This creates a separate set of credentials stored under the `personal` profile n
 ```bash
 aws s3 ls \
   --profile personal \
-  --region us-east-1 \
-  --output json
+  --region us-east-1
 ```
 
 The underlying file structure looks like this:
@@ -195,9 +194,11 @@ Let's make sure the CLI can actually talk to a service. Run:
 
 ```bash
 aws s3 ls \
-  --region us-east-1 \
-  --output json
+  --region us-east-1
 ```
+
+> [!NOTE]
+> The high-level `aws s3` commands (`ls`, `sync`, `cp`, `rm`) are convenience wrappers that don't produce JSON output — `--output json` is silently ignored on these commands. Use `--output json` with `aws s3api` commands instead, which map directly to the S3 API and respect the output format flag.
 
 If you haven't created any buckets yet, you'll get an empty response. That's fine—it means the CLI authenticated successfully and S3 responded. If you get an access denied error, your `admin` user's permissions might not be set up correctly—revisit the user setup in [Creating and Securing an AWS Account](creating-and-securing-an-aws-account.md).
 

@@ -3,7 +3,7 @@ title: 'Automating Deploys with the AWS CLI'
 description: >-
   Automate your deployment process using AWS CLI commands for syncing files to S3 and creating CloudFront invalidations.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cli
@@ -74,13 +74,12 @@ aws s3 sync "$BUILD_DIR" "s3://$BUCKET" \
 
 # Step 4: Invalidate the CloudFront cache
 echo "Creating CloudFront invalidation..."
-INVALIDATION_OUTPUT=$(aws cloudfront create-invalidation \
+INVALIDATION_ID=$(aws cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION_ID" \
   --paths "/*" \
   --region "$REGION" \
-  --output json)
-
-INVALIDATION_ID=$(echo "$INVALIDATION_OUTPUT" | grep -o '"Id": "[^"]*"' | head -1 | cut -d'"' -f4)
+  --query 'Invalidation.Id' \
+  --output text)
 echo "Invalidation created: $INVALIDATION_ID"
 
 echo "Deploy complete."
@@ -204,13 +203,12 @@ aws s3 sync "$BUILD_DIR" "s3://$BUCKET" \
   --delete \
   --output json
 
-INVALIDATION_OUTPUT=$(aws cloudfront create-invalidation \
+INVALIDATION_ID=$(aws cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION_ID" \
   --paths "/*" \
   --region "$REGION" \
-  --output json)
-
-INVALIDATION_ID=$(echo "$INVALIDATION_OUTPUT" | grep -o '"Id": "[^"]*"' | head -1 | cut -d'"' -f4)
+  --query 'Invalidation.Id' \
+  --output text)
 echo "Deploy complete. Invalidation: $INVALIDATION_ID"
 ```
 

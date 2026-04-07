@@ -4,7 +4,7 @@ description: >-
   Add authentication to your API Gateway routes using JWT authorizers or Lambda
   authorizers, protecting your endpoints from unauthorized access.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - api-gateway
@@ -68,7 +68,7 @@ aws apigatewayv2 create-authorizer \
 The key parameters:
 
 - **`--authorizer-type JWT`**—tells API Gateway to validate the token as a JWT.
-- **`--identity-source '$request.header.Authorization'`**—where to find the token. The standard location is the `Authorization` header with a `Bearer` prefix. API Gateway strips the `Bearer ` prefix automatically.
+- **`--identity-source '$request.header.Authorization'`**—where to find the token. API Gateway's HTTP API JWT authorizer accepts an `Authorization` header containing either a bare token or a `Bearer`-prefixed token—you do not need to strip the prefix yourself. The authorizer extracts the token from the identity source and validates the JWT directly; your backend receives the decoded claims, not the raw header string.
 - **`--jwt-configuration Issuer`**—the issuer URL. For Cognito, this is `https://cognito-idp.{region}.amazonaws.com/{userPoolId}`. For Auth0, it's `https://{your-domain}.auth0.com/`. The issuer must match the `iss` claim in the JWT.
 - **`--jwt-configuration Audience`**—the expected audience. For Cognito, this is the app client ID. For Auth0, this is the API identifier. The audience must match the `aud` claim in the JWT.
 

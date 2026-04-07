@@ -4,7 +4,7 @@ description: >-
   Build a mental model of IAM—users, groups, roles, policies, and how AWS
   decides whether to allow or deny a request.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - iam
@@ -99,12 +99,16 @@ Request comes in
     → Neither? → Request DENIED (implicit deny)
 ```
 
+This flow covers identity-based policies. Resource-based policies (like S3 bucket policies) interact with this evaluation differently — cross-account access in particular requires allows in both the identity-based and the resource-based policy.
+
 > [!TIP]
 > A common mistake is thinking that adding an Allow policy fixes access. If there's an explicit Deny somewhere—maybe on the user's group, or an organization-wide policy—no amount of Allow will override it. When debugging access issues, always check for Deny statements first.
 
 ## How the Pieces Fit Together
 
-Here's a concrete scenario. You're deploying a frontend application to AWS and you want a CI/CD pipeline (say, GitHub Actions) to push files to S3 and invalidate a CloudFront cache. Here's what the IAM setup looks like:
+In production, CI/CD pipelines use an **OIDC-federated IAM role** rather than a long-lived IAM user with access keys. GitHub Actions, for instance, can request a short-lived credential from AWS by presenting a cryptographically signed identity token — no static secrets stored anywhere. The CI/CD lesson covers this in detail. For now, you'll build the equivalent using an IAM user and access keys, which is the right starting point for understanding what permissions are actually needed and why.
+
+Here's what the IAM setup looks like in that learning-path form:
 
 1. **Create an IAM user** called `deploy-bot`. This represents the CI pipeline. No console access needed—just programmatic access keys.
 2. **Write a policy** that allows `s3:PutObject` and `s3:DeleteObject` on your specific bucket, plus `cloudfront:CreateInvalidation` on your specific distribution.

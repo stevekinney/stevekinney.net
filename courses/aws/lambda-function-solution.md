@@ -4,7 +4,7 @@ description: >-
   Complete solution for the Lambda function exercise, with all commands and
   expected output.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - lambda
@@ -205,7 +205,8 @@ cd ..
 ```bash
 aws lambda create-function \
   --function-name my-frontend-app-api \
-  --runtime nodejs20.x \
+  --runtime nodejs22.x \
+  --architectures arm64 \
   --role arn:aws:iam::123456789012:role/my-frontend-app-lambda-role \
   --handler handler.handler \
   --zip-file fileb://function.zip \
@@ -219,7 +220,8 @@ Expected output:
 {
   "FunctionName": "my-frontend-app-api",
   "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:my-frontend-app-api",
-  "Runtime": "nodejs20.x",
+  "Runtime": "nodejs22.x",
+  "Architectures": ["arm64"],
   "Role": "arn:aws:iam::123456789012:role/my-frontend-app-lambda-role",
   "Handler": "handler.handler",
   "CodeSize": 1523,
@@ -511,13 +513,10 @@ The response includes a `LogResult` field containing base64-encoded log output. 
 ```bash
 aws lambda invoke \
   --function-name my-frontend-app-api \
-  --cli-binary-format raw-in-base64-out \
-  --payload file://test-event.json \
   --log-type Tail \
-  --region us-east-1 \
-  --output json \
-  response.json \
-  | python3 -c "import sys,json,base64; print(base64.b64decode(json.load(sys.stdin)['LogResult']).decode())"
+  --query 'LogResult' \
+  --output text \
+  response.json | base64 --decode
 ```
 
 On a cold start, the output includes:
@@ -528,3 +527,19 @@ Memory Size: 128 MB Max Memory Used: 67 MB Init Duration: 198.45 ms
 ```
 
 Invoke immediately again. The `Init Duration` field disappears—the second invocation was a warm start.
+
+## Cleanup
+
+> [!NOTE]
+> The `my-frontend-app-api` function and its CloudWatch log group are reused throughout the rest of this course—in the API Gateway, DynamoDB, Secrets Manager, and CloudWatch sections. Only clean up if you're done with the course entirely.
+
+```bash
+aws lambda delete-function \
+  --function-name my-frontend-app-api \
+  --region us-east-1
+
+# The log group is NOT deleted automatically when the function is deleted
+aws logs delete-log-group \
+  --log-group-name /aws/lambda/my-frontend-app-api \
+  --region us-east-1
+```

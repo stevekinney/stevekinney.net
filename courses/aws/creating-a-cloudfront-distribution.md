@@ -3,7 +3,7 @@ title: 'Creating a CloudFront Distribution'
 description: >-
   Create a CloudFront distribution with an S3 origin and configure its basic settings using the AWS CLI.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudfront
@@ -62,8 +62,7 @@ Save this as `distribution-config.json`:
     }
   },
   "ViewerCertificate": {
-    "CloudFrontDefaultCertificate": true,
-    "MinimumProtocolVersion": "TLSv1.2_2021"
+    "CloudFrontDefaultCertificate": true
   },
   "Restrictions": {
     "GeoRestriction": {
@@ -161,12 +160,14 @@ This is the default **behavior**—the rules that apply to every request that do
 
 ```json
 "ViewerCertificate": {
-  "CloudFrontDefaultCertificate": true,
-  "MinimumProtocolVersion": "TLSv1.2_2021"
+  "CloudFrontDefaultCertificate": true
 }
 ```
 
 For now, we're using CloudFront's default certificate, which gives you HTTPS on the `*.cloudfront.net` domain. In [Attaching an SSL Certificate](attaching-an-ssl-certificate.md), you'll swap this for your ACM certificate to use a custom domain.
+
+> [!NOTE]
+> While you're using the default `*.cloudfront.net` certificate, CloudFront forces the security policy to TLS 1.0 regardless of what you set here—`MinimumProtocolVersion` is silently ignored when `CloudFrontDefaultCertificate` is `true`. You'll tighten this to `TLSv1.2_2021` in the [Attaching an SSL Certificate](attaching-an-ssl-certificate.md) lesson once you bring your own ACM certificate.
 
 ## Creating the Distribution
 

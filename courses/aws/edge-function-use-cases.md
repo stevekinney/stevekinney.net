@@ -5,7 +5,7 @@ description: >-
   header injection, geolocation-based routing, and lightweight authentication
   checks.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - edge-functions
@@ -98,7 +98,7 @@ function handler(event) {
 ```
 
 > [!TIP]
-> Keep the redirect map small. Your entire function must fit in 10 KB for CloudFront Functions. If you have hundreds of redirects, consider using a Lambda@Edge function with an origin request trigger, or store the redirect map externally and look it up at the origin.
+> Keep the redirect map small. Your entire function must fit in 10 KB for CloudFront Functions. If you have hundreds of redirects, the right answer is **CloudFront KeyValueStore** (KVS, GA since December 2023): keep the function itself tiny, store the redirect map in a KVS instance, and read it at runtime via the `cf.kvs()` API. The function stays well under the size limit, and the data updates independently without redeploying the function. For truly complex logic that requires network access, use a Lambda@Edge function with an origin request trigger.
 
 ## Security Headers
 

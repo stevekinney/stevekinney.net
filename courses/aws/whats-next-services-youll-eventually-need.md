@@ -5,7 +5,7 @@ description: >-
   Functions, EventBridge, SQS, ECS/Fargate, and WAF—and understand when each
   becomes relevant.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - services
@@ -87,3 +87,56 @@ The pattern for learning new AWS services is the same pattern you followed here:
 You now have that context. You understand IAM policies well enough to grant a new service the permissions it needs. You understand CloudWatch well enough to debug it when it breaks. You understand API Gateway well enough to put it in front of whatever backend you build. These fundamentals transfer to every new service you adopt.
 
 The hardest part of AWS was getting started—understanding the account model, decoding IAM, navigating the console, and building that first deployment pipeline. You've done all of that. Everything from here is incremental: one new service at a time, wired into an architecture you already understand. You know how the pieces fit together. The rest is just adding more pieces.
+
+## Final Teardown Checklist
+
+If you built along with the course and want to tear down everything you created, work through this list. Each section below links to the lesson that has the full teardown commands—this is a checklist, not a second copy of the same commands.
+
+Resources are listed in reverse dependency order (tear down what depends on other things first):
+
+**CloudFront and DNS**
+
+- [ ] Delete the CloudFront distribution (disable it first, then delete after 10–15 minutes). See [CloudFront Distribution Exercise](cloudfront-distribution-exercise.md).
+- [ ] Remove Route 53 alias record pointing at CloudFront. See [Route 53 DNS Exercise](route-53-dns-exercise.md).
+- [ ] Delete the hosted zone. See [Hosted Zones and Record Types](hosted-zones-and-record-types.md).
+- [ ] Delete the ACM certificate (only after the distribution is deleted—CloudFront won't release the cert while it's in use). See [ACM Certificate Exercise](acm-certificate-exercise.md).
+
+**API Gateway**
+
+- [ ] Delete the HTTP API. `aws apigatewayv2 delete-api --api-id your-api-id --region us-east-1`
+
+**Lambda**
+
+- [ ] Delete the Lambda function. `aws lambda delete-function --function-name my-frontend-app-api --region us-east-1`
+- [ ] Delete the CloudWatch log group (Lambda recreates this on deploy). `aws logs delete-log-group --log-group-name /aws/lambda/my-frontend-app-api --region us-east-1`
+
+**DynamoDB**
+
+- [ ] Delete the table. See [Solution: Build a Lambda-Backed Data API with DynamoDB](dynamodb-lambda-solution.md) — there's a Cleanup section at the bottom.
+
+**Secrets and Configuration**
+
+- [ ] Delete Secrets Manager secrets. See [Solution: Store and Retrieve a Secret in Lambda](secrets-in-lambda-solution.md) — use `--force-delete-without-recovery` for test secrets only.
+- [ ] Delete Parameter Store parameters. See [Parameter Store: Hierarchical Configuration](parameter-store-hierarchical-configuration.md).
+
+**CloudWatch Monitoring**
+
+- [ ] Delete CloudWatch alarms. See [Solution: Set Up Alarms for Your Lambda Functions](cloudwatch-alarms-solution.md).
+- [ ] Unsubscribe from and delete the SNS topic. See the same solution file.
+- [ ] Delete the CloudWatch dashboard. See [CloudWatch Metrics and Dashboards](cloudwatch-metrics-and-dashboards.md).
+
+**S3**
+
+- [ ] Empty the S3 bucket, then delete it. `aws s3 rm s3://your-bucket-name --recursive && aws s3api delete-bucket --bucket your-bucket-name --region us-east-1`
+
+**IAM**
+
+- [ ] Detach and delete the DynamoDB IAM policy. `aws iam detach-role-policy --role-name my-frontend-app-lambda-role --policy-arn arn:aws:iam::123456789012:policy/MyFrontendAppLambdaDynamoDB && aws iam delete-policy --policy-arn arn:aws:iam::123456789012:policy/MyFrontendAppLambdaDynamoDB`
+- [ ] Delete the Lambda execution role. `aws iam delete-role --role-name my-frontend-app-lambda-role`
+
+**Billing**
+
+- [ ] Delete the AWS Budget. See [Cost Monitoring and Budget Alarms](cost-monitoring-and-budget-alarms.md).
+
+> [!TIP]
+> After teardown, run `aws s3 ls`, `aws dynamodb list-tables --region us-east-1`, and `aws lambda list-functions --region us-east-1` to confirm nothing was left behind. Forgotten resources are the most common source of surprise charges.

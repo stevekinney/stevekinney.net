@@ -4,7 +4,7 @@ description: >-
   Configure CORS on your HTTP API so that your frontend application (running on
   a different origin) can call your API without browser errors.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - api-gateway
@@ -54,11 +54,7 @@ CORS configuration is a property of the API itself—which is honestly one of my
 ```bash
 aws apigatewayv2 update-api \
   --api-id abc123def4 \
-  --cors-configuration \
-    AllowOrigins="http://localhost:3000","https://example.com" \
-    AllowMethods="GET","POST","PUT","DELETE" \
-    AllowHeaders="Content-Type","Authorization" \
-    MaxAge=86400 \
+  --cors-configuration '{"AllowOrigins":["http://localhost:3000","https://example.com"],"AllowMethods":["GET","POST","PUT","DELETE"],"AllowHeaders":["Content-Type","Authorization"],"MaxAge":86400}' \
   --region us-east-1 \
   --output json
 ```

@@ -4,7 +4,7 @@ description: >-
   Understand what causes cold starts, how they affect latency, and practical
   strategies for minimizing their impact on your frontend's API calls.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - lambda
@@ -53,6 +53,10 @@ Node.js and Python have the fastest cold starts among Lambda's managed runtimes.
 ### Memory Configuration
 
 Lambda allocates CPU proportionally to memory. A 128 MB function gets a fraction of a vCPU; a 1,024 MB function gets substantially more. More CPU means faster initialization—your `import` statements execute faster, your SDK clients initialize faster. For cold-start-sensitive functions, increasing memory from 128 MB to 512 MB or 1,024 MB often reduces cold start latency by 40-60%, and the cost increase is negligible because the function initializes faster (you pay per millisecond).
+
+### Architecture Choice
+
+Lambda supports two processor architectures: `x86_64` (the default) and `arm64` (AWS Graviton2). ARM64 functions cost approximately 20% less per GB-second and frequently outperform x86_64 equivalents on Node.js workloads because Graviton2 has better single-threaded performance for I/O-bound tasks. For new functions, `--architectures arm64` is the better default: same API surface, lower cost, often faster cold starts. The only reason to stay on x86_64 is if you're bundling native modules compiled for that architecture.
 
 ### VPC Configuration
 
@@ -157,13 +161,22 @@ This is a general best practice, not just a cold start optimization. A warm func
 Lambda offers a feature called **provisioned concurrency** that pre-creates a specified number of warm execution environments for your function. These environments are always ready, eliminating cold starts entirely—at a cost.
 
 ```bash
+# Publish a version first
+VERSION=$(aws lambda publish-version \
+  --function-name my-frontend-app-api \
+  --query 'Version' --output text \
+  --region us-east-1)
+
+# Then attach provisioned concurrency to that version
 aws lambda put-provisioned-concurrency-config \
   --function-name my-frontend-app-api \
-  --qualifier $LATEST \
+  --qualifier "$VERSION" \
   --provisioned-concurrent-executions 5 \
   --region us-east-1 \
   --output json
 ```
+
+Provisioned concurrency requires a published, numbered version (or an alias pointing at one)—`$LATEST` is explicitly unsupported and the API will reject it. In production, the typical pattern is to attach provisioned concurrency to an alias (`prod`, `staging`, etc.) that points at a specific published version: the alias absorbs the routing logic, and the provisioned concurrency sticks to whatever version the alias resolves to.
 
 This keeps 5 execution environments warm at all times. You pay for them whether they handle requests or not—it's essentially the cost of running a small server continuously.
 

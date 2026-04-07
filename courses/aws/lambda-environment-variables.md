@@ -5,7 +5,7 @@ description: >-
   handler code, understanding when to use environment variables versus other
   configuration approaches.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - lambda
@@ -26,7 +26,7 @@ You can set environment variables when you create the function or update them on
 ```bash
 aws lambda create-function \
   --function-name my-frontend-app-api \
-  --runtime nodejs20.x \
+  --runtime nodejs22.x \
   --role arn:aws:iam::123456789012:role/my-frontend-app-lambda-role \
   --handler handler.handler \
   --zip-file fileb://function.zip \
@@ -96,7 +96,7 @@ Lambda also sets several environment variables automatically. You don't configur
 | `AWS_LAMBDA_FUNCTION_NAME`        | The function name                                      |
 | `AWS_LAMBDA_FUNCTION_MEMORY_SIZE` | Allocated memory in MB                                 |
 | `AWS_LAMBDA_FUNCTION_VERSION`     | The version of the function being executed             |
-| `AWS_EXECUTION_ENV`               | The runtime identifier (e.g., `AWS_Lambda_nodejs20.x`) |
+| `AWS_EXECUTION_ENV`               | The runtime identifier (e.g., `AWS_Lambda_nodejs22.x`) |
 | `_HANDLER`                        | The handler setting (e.g., `handler.handler`)          |
 
 These are useful for logging and debugging. For example, you might include `AWS_REGION` in log output to confirm your function is running where you expect. I like to log the function name and region on every cold start—it saves time when you're debugging across multiple environments.

@@ -4,7 +4,7 @@ description: >-
   Deploy your API to stages, configure custom domain names, and understand how
   stages map to different environments (development, production).
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - api-gateway
@@ -204,14 +204,25 @@ After setting up a custom domain, update your CORS configuration to include the 
 ```bash
 aws apigatewayv2 update-api \
   --api-id abc123def4 \
-  --cors-configuration \
-    AllowOrigins="https://example.com","http://localhost:3000" \
-    AllowMethods="GET","POST","PUT","DELETE" \
-    AllowHeaders="Content-Type","Authorization" \
-    MaxAge=86400 \
+  --cors-configuration '{"AllowOrigins":["https://example.com","http://localhost:3000"],"AllowMethods":["GET","POST","PUT","DELETE"],"AllowHeaders":["Content-Type","Authorization"],"MaxAge":86400}' \
   --region us-east-1 \
   --output json
 ```
+
+## Throttling
+
+Every API Gateway stage exposes throttling controls that protect your Lambda functions from accidental abuse. Two values matter: **burst limit** (maximum concurrent requests the stage will handle before throttling) and **rate limit** (steady-state requests per second). The account-level defaults—10,000 RPS burst, 5,000 RPS rate—are generous enough to bankrupt a personal project if something goes wrong. Set explicit, conservative limits on your stage:
+
+```bash
+aws apigatewayv2 update-stage \
+  --api-id "$API_ID" \
+  --stage-name '$default' \
+  --default-route-settings '{"ThrottlingBurstLimit":100,"ThrottlingRateLimit":50}' \
+  --region us-east-1 \
+  --output json
+```
+
+This caps the stage at 50 requests per second sustained and 100 concurrent. Throttled requests receive a `429 Too Many Requests` response. For a personal frontend API, these numbers leave ample headroom for real traffic while preventing runaway clients from generating unexpected Lambda invocation costs.
 
 ## Common Mistakes
 

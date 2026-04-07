@@ -3,7 +3,7 @@ title: 'Exercise: Deploy a Static Site to S3'
 description: >-
   Create a bucket, upload a static site, enable website hosting, and access it in the browser.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - s3
@@ -331,3 +331,25 @@ You should see two versions of `index.html`—the original and the updated one. 
 - **Test a rollback.** Download the previous version of `index.html` using its version ID, then re-upload it with `aws s3 cp`. Confirm the site reverts to the original content.
 - **Add a subdirectory.** Create a `build/about/index.html` page and verify that navigating to `/about/` (with trailing slash) serves the page.
 - **Check content types.** Run `aws s3api head-object --bucket my-frontend-app-assets --key "styles.css" --region us-east-1 --output json` and verify the content type is `text/css`.
+
+## Cleanup
+
+A versioned bucket cannot be deleted until all object versions and delete markers have been removed. Run this two-step sequence to clean up:
+
+```bash
+# Delete all object versions and delete markers
+aws s3api delete-objects \
+  --bucket my-frontend-app-assets \
+  --delete "$(aws s3api list-object-versions \
+    --bucket my-frontend-app-assets \
+    --output json \
+    --query '{Objects: Versions[].{Key:Key,VersionId:VersionId}}')" \
+  --region us-east-1 \
+  --output json
+
+# Then remove the empty bucket
+aws s3 rb s3://my-frontend-app-assets --region us-east-1
+```
+
+> [!NOTE]
+> If you have delete markers (from deleting objects while versioning was enabled), you'll need a second pass to clean those up too. Run `aws s3api list-object-versions` and check the `DeleteMarkers` array — if it's non-empty, pass those through `delete-objects` the same way before running `rb`.

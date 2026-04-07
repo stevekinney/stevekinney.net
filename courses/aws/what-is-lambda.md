@@ -5,7 +5,7 @@ description: >-
   servers, how invocations work, and how Lambda differs from traditional server
   deployments.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - lambda
@@ -77,12 +77,12 @@ The key insight: the init phase is expensive (relatively speaking), and the invo
 
 ## Runtimes
 
-Lambda supports multiple language runtimes. For this course, you'll use **Node.js 20** (`nodejs20.x`). Lambda also supports Python, Java, .NET, Go, Ruby, and custom runtimes via container images.
+Lambda supports multiple language runtimes. For this course, you'll use **Node.js 22** (`nodejs22.x`). Lambda also supports Python, Java, .NET, Go, Ruby, and custom runtimes via container images.
 
 The runtime you choose affects cold start performance, available SDK versions, and how you structure your code. Node.js is a natural fit for frontend engineers: you already know the language, you can share types between your frontend and your Lambda functions, and the Node.js runtime has some of the fastest cold starts among Lambda's managed runtimes.
 
 > [!TIP]
-> Lambda also supports `nodejs22.x` if you want the latest Node.js features. This course uses `nodejs20.x` because it's the current LTS version and widely supported. The concepts are identical regardless of which Node.js version you choose.
+> Lambda also supports `nodejs20.x`, the previous LTS version. The concepts in this course are identical regardless of which Node.js version you choose.
 
 ## How Lambda Differs from What You Know
 

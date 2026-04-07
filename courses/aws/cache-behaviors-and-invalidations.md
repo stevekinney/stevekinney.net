@@ -3,7 +3,7 @@ title: 'Cache Behaviors and Invalidations'
 description: >-
   Configure cache behaviors and TTLs to control how CloudFront caches your content, and create invalidations to force cache refreshes after deployments.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudfront
@@ -142,7 +142,7 @@ When you deploy new content to S3, the old versions might still be cached at Clo
 
 ### Invalidation: Tell CloudFront to Drop Cached Copies
 
-An invalidation tells CloudFront to remove specific objects from all edge caches before their TTL expires. The next request for those objects will be a cache miss, and CloudFront will fetch the latest version from S3.
+An invalidation marks cached objects as stale. On the next request for that object at each edge location (after the location receives the invalidation), CloudFront fetches the latest version from the origin. The existing cached copies aren't physically removed—they're just flagged as no-longer-valid.
 
 ```bash
 aws cloudfront create-invalidation \
@@ -181,7 +181,7 @@ The response includes an invalidation ID you can use to check status:
 }
 ```
 
-Invalidations typically complete within a few minutes.
+Invalidations typically take 5–15 minutes to propagate fully across all edge locations, so don't be surprised if an immediate post-invalidation request still returns stale content.
 
 In the console, the **Invalidations** tab lets you create invalidations by entering object paths. The `/*` wildcard invalidates everything in one operation.
 

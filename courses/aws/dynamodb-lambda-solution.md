@@ -4,7 +4,7 @@ description: >-
   Complete solution for the DynamoDB Lambda exercise, with all commands, handler
   code, and expected output.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - dynamodb
@@ -216,7 +216,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
           return respond(400, { error: 'Missing title in request body' });
         }
 
-        const itemId = `item-${Date.now()}`;
+        const itemId = crypto.randomUUID();
 
         const item = {
           userId,
@@ -267,7 +267,6 @@ function respond(statusCode: number, body: Record<string, unknown>) {
     statusCode,
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
     },
     body: JSON.stringify(body),
   };
@@ -368,14 +367,13 @@ Expected response (formatted):
 {
   "statusCode": 201,
   "headers": {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*"
+    "Content-Type": "application/json"
   },
-  "body": "{\"userId\":\"user-123\",\"itemId\":\"item-1710756000000\",\"title\":\"Learn DynamoDB\",\"status\":\"pending\",\"createdAt\":\"2026-03-18T12:00:00.000Z\"}"
+  "body": "{\"userId\":\"user-123\",\"itemId\":\"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\"title\":\"Learn DynamoDB\",\"status\":\"pending\",\"createdAt\":\"2026-03-18T12:00:00.000Z\"}"
 }
 ```
 
-The `itemId` and `createdAt` values will differ based on when you run the command.
+The `itemId` (a UUID) and `createdAt` values will differ based on when you run the command.
 
 In the console, the same invocation using the **Test** tab shows the execution result with the 201 status code and the item's data.
 
@@ -451,14 +449,14 @@ When you parse the body:
   "items": [
     {
       "userId": "user-123",
-      "itemId": "item-1710756000000",
+      "itemId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
       "title": "Learn DynamoDB",
       "status": "pending",
       "createdAt": "2026-03-18T12:00:00.000Z"
     },
     {
       "userId": "user-123",
-      "itemId": "item-1710756001000",
+      "itemId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
       "title": "Deploy to production",
       "status": "pending",
       "createdAt": "2026-03-18T12:00:01.000Z"
@@ -481,12 +479,12 @@ Use the `itemId` from the first created item. Save as `test-delete.json`:
   },
   "queryStringParameters": {
     "userId": "user-123",
-    "itemId": "item-1710756000000"
+    "itemId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
   }
 }
 ```
 
-Replace `item-1710756000000` with the actual `itemId` from your POST response.
+Replace `a1b2c3d4-e5f6-7890-abcd-ef1234567890` with the actual `itemId` from your POST response.
 
 ```bash
 aws lambda invoke \
@@ -621,7 +619,51 @@ case 'PATCH': {
 }
 ```
 
-You'll also need to add `UpdateCommand` to your imports from `@aws-sdk/lib-dynamodb` and add `dynamodb:UpdateItem` to your IAM policy.
+You'll also need to add `UpdateCommand` to your imports from `@aws-sdk/lib-dynamodb` and update your IAM policy to include `dynamodb:UpdateItem`.
+
+Save an updated policy document as `lambda-dynamodb-policy-v2.json`:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowDynamoDBAccess",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:Query"
+      ],
+      "Resource": "arn:aws:dynamodb:us-east-1:123456789012:table/my-frontend-app-data"
+    }
+  ]
+}
+```
+
+Create a new policy version (IAM managed policies support up to 5 versions):
+
+```bash
+aws iam create-policy-version \
+  --policy-arn arn:aws:iam::123456789012:policy/MyFrontendAppLambdaDynamoDB \
+  --policy-document file://lambda-dynamodb-policy-v2.json \
+  --set-as-default \
+  --region us-east-1 \
+  --output json
+```
+
+If you used an inline policy (`aws iam put-role-policy`) instead of a managed policy, update it with the same command and new document:
+
+```bash
+aws iam put-role-policy \
+  --role-name my-frontend-app-lambda-role \
+  --policy-name MyFrontendAppLambdaDynamoDB \
+  --policy-document file://lambda-dynamodb-policy-v2.json \
+  --region us-east-1 \
+  --output json
+```
 
 ## Cleanup
 

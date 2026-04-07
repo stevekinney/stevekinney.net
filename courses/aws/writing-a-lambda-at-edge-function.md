@@ -5,7 +5,7 @@ description: >-
   response events, understanding the us-east-1 deployment requirement and the
   replication model.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - lambda-at-edge
@@ -73,7 +73,7 @@ For an **origin request** event, the event object looks like this:
               domainName: 'my-frontend-app-assets.s3.amazonaws.com',
               path: '',
               region: 'us-east-1',
-              authMethod: 'origin-access-identity',
+              authMethod: 'none',
             },
           },
         },
@@ -88,6 +88,9 @@ Notice the differences from CloudFront Functions:
 - **Headers** are arrays of objects with `key` and `value` properties, not single objects. This is because HTTP headers can have multiple values.
 - **Query string** is a plain string, not a parsed object.
 - **The `origin` property** is present on origin request events and tells you where CloudFront's about to forward the request. You can modify this to change the origin dynamically.
+
+> [!NOTE]
+> When the distribution uses OAC (Origin Access Control), S3 origin requests carry `authMethod: 'none'` because OAC signing happens at the distribution layer, not in the origin config. The old `origin-access-identity` value was correct for OAI (Origin Access Identity), which is the legacy pattern. For distributions you create today, `'none'` is correct.
 
 ### Returning a Request vs. a Response
 
@@ -184,7 +187,7 @@ aws iam attach-role-policy \
 ```bash
 aws lambda create-function \
   --function-name my-frontend-app-edge-rewrite \
-  --runtime nodejs20.x \
+  --runtime nodejs22.x \
   --role arn:aws:iam::123456789012:role/my-frontend-app-edge-role \
   --handler handler.handler \
   --zip-file fileb://function.zip \
@@ -263,3 +266,28 @@ When you associate a Lambda@Edge function with a CloudFront distribution, AWS re
 - **1 MB package size for viewer events.** This is the compressed zip size. If you bundle large libraries, you may exceed this. Use tree-shaking and keep dependencies minimal.
 
 These constraints are covered in detail in [Edge Function Debugging and Limitations](edge-function-debugging-and-limitations.md). The important one to remember here is the least intuitive: Lambda@Edge doesn't support user-defined environment variables at all, other than the reserved ones AWS injects automatically.
+
+## Cleanup
+
+Lambda@Edge replica cleanup takes hours after disassociation. Follow this sequence carefully.
+
+Remove the Lambda@Edge association from your distribution's behavior configuration and wait for the distribution to reach `Deployed` status. Then attempt to delete the function:
+
+```bash
+aws lambda delete-function \
+  --function-name my-frontend-app-edge-rewrite \
+  --region us-east-1
+```
+
+If this returns `ResourceConflictException`, the edge replicas haven't finished cleaning up yet. Wait 30–60 minutes and try again. Once the function is deleted, also clean up the CloudWatch log groups in each region where the function executed—Lambda@Edge creates a log group per region, not just in `us-east-1`:
+
+```bash
+# List all Lambda@Edge log groups (they follow the pattern /aws/lambda/us-east-1.<function-name>)
+aws logs describe-log-groups \
+  --log-group-name-prefix /aws/lambda/ \
+  --region us-east-1 \
+  --query 'logGroups[*].logGroupName' \
+  --output text
+```
+
+Delete each log group in every region where you found one.

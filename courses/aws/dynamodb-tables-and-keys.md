@@ -4,7 +4,7 @@ description: >-
   Create a DynamoDB table, define partition keys and sort keys, and understand
   how key design affects query patterns and performance.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - dynamodb
@@ -162,6 +162,8 @@ Items are automatically sorted by creation time. You can query for a user's rece
 Partition key: `pk`, sort key: `sk`
 
 Advanced DynamoDB users sometimes store multiple entity types in a single table using generic key names. A user might have `pk=USER#user-123` and `sk=PROFILE`, while their items have `pk=USER#user-123` and `sk=ITEM#item-456`. This is a powerful pattern but adds complexity—stick with the simpler user-scoped pattern unless you have a specific reason to go further.
+
+The generic key names (`pk`, `sk`) let a single table hold multiple entity types. A user record might have `pk = USER#user-123` and `sk = PROFILE`. That same user's items each have `pk = USER#user-123` and `sk = ITEM#item-456`. A single `Query` with `pk = USER#user-123` fetches the user and all their items in one round trip. You don't need this pattern for this course—but you'll see it constantly in production DynamoDB code, and now you know why the keys are named so abstractly.
 
 > [!TIP]
 > For this course, the `userId`/`itemId` composite key is all you need. Single-table design is a real and useful DynamoDB pattern, but it's optimized for applications with many entity types and complex access patterns. A frontend API backend with one or two entity types doesn't need that level of sophistication.

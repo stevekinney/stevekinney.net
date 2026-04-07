@@ -4,7 +4,7 @@ description: >-
   Complete solution for the CloudWatch alarms exercise, with all commands and
   expected output.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-07
 tags:
   - aws
   - cloudwatch
@@ -266,11 +266,11 @@ export const handler: APIGatewayProxyHandlerV2 = async () => {
 };
 ```
 
-Build, package, and deploy:
+Replace the content of `src/handler.ts` with the failing handler code above, then build, package, and deploy:
 
 ```bash
 cd lambda
-npx tsc src/failing-handler.ts --outDir dist --esModuleInterop --skipLibCheck
+npm run build
 cd dist && zip -r ../function.zip . && cd ..
 
 aws lambda update-function-code \
