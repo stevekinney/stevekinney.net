@@ -16,13 +16,13 @@ tags:
   - tooling
 ---
 
-Both Playwright and Chrome ship official tools for letting AI agents drive a browser. They are not the same tools and they are not pointed at the same job. If you're picking one because the headlines look interchangeable, you're going to pick the wrong one for at least half your workflows.
+Both [Playwright](https://playwright.dev/) and the [Chrome DevTools MCP](https://github.com/ChromeDevTools/chrome-devtools-mcp) ship official tools for letting AI agents drive a browser. They are not the same tools and they are not pointed at the same job. If you're picking one because the headlines look interchangeable, you're going to pick the wrong one for at least half your workflows.
 
 I've burned an embarrassing number of afternoons wiring these into real coding agents on real codebases, and I have opinions about which one earns its slot in your context window. So, let me share them.
 
 ## Playwright and Chrome are solving adjacent problems
 
-The honest framing: Playwright is in the business of **driving** a browser, and Chrome DevTools is in the business of **debugging** one. When Microsoft's team builds tools for agents, they tend to optimize for "make the page do the thing." When Google's team builds tools for agents, they tend to optimize for "tell me everything that's wrong with this page right now."
+The honest framing: Playwright is in the business of **driving** a browser, and Chrome DevTools MCP is in the business of **debugging** one. When Microsoft's team builds tools for agents, they tend to optimize for "make the page do the thing." When Google's team builds tools for agents, they tend to optimize for "tell me everything that's wrong with this page right now."
 
 Both teams have crossed into each other's lanes a little. Playwright's official MCP server can do limited inspection. Chrome DevTools MCP can do limited driving—it uses [Puppeteer](https://pptr.dev/) under the hood for input automation. But, the center of gravity is still very clearly different. If you forget that, you'll choose the wrong tool for any task that _isn't_ squarely in the overlap.
 
