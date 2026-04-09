@@ -6,7 +6,7 @@ description: >-
   and Dynamics—maps the design space from flat vector stores to RL-driven
   memory management. Here's what the research says and what you can build today.
 date: 2026-03-25
-modified: 2026-03-26
+modified: 2026-04-09
 tags:
   - ai
   - agents
@@ -283,7 +283,7 @@ The challenges are familiar to anyone who's built distributed systems: consisten
 
 ### The ontological question
 
-This is what happens when you let liberal arts majors play with technology. I'll end the frontiers section with something that most engineering papers don't ask. The ["Animesis"](https://arxiv.org/abs/2503.16667) paper from March 2026 asks: as agents become persistent and autonomous, what does memory _mean_ for a digital being?
+This is what happens when you let liberal arts majors play with technology. I'll end the frontiers section with something that most engineering papers don't ask. The ["Animesis"](https://arxiv.org/abs/2603.04740) paper from March 2026 asks: as agents become persistent and autonomous, what does memory _mean_ for a digital being?
 
 Current work answers "what memory does"—stores facts, enables retrieval, supports learning. But it doesn't answer "what memory is" in a deeper sense. As agent lifecycles extend from minutes to months—and they are extending, with persistent sessions, scheduled tasks, and always-on infrastructure—the assumption that memory is just a tool for the agent to use starts to break down. Is an agent with a rich memory of a user's preferences, communication style, and project history fundamentally different from an agent without one? Not in capability, but in kind?
 
