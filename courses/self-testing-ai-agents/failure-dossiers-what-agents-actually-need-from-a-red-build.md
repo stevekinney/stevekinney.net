@@ -88,14 +88,24 @@ import path from 'node:path';
 
 const reportJson = JSON.parse(readFileSync('playwright-report/report.json', 'utf8'));
 
-const failures = reportJson.suites
-  .flatMap((suite: any) => suite.specs ?? [])
-  .flatMap((spec: any) =>
-    (spec.tests ?? []).flatMap((test: any) => {
-      const failedResult = (test.results ?? []).find((result: any) => result.status === 'failed');
-      return failedResult ? [{ spec, failedResult, projectName: test.projectName }] : [];
-    }),
-  );
+function collectSpecs(suites: any[]): any[] {
+  return suites.flatMap((suite: any) => [
+    ...(suite.specs ?? []),
+    ...collectSpecs(suite.suites ?? []),
+  ]);
+}
+
+const failures = collectSpecs(reportJson.suites ?? []).flatMap((spec: any) =>
+  (spec.tests ?? []).flatMap((test: any) => {
+    const failedResult = (test.results ?? []).find((result: any) => result.status === 'failed');
+    return failedResult ? [{ spec, failedResult, projectName: test.projectName }] : [];
+  }),
+);
+
+const screenshot = (attachments: any[]) => {
+  const file = (attachments ?? []).find((a: any) => a.contentType?.startsWith('image/') && a.path);
+  return file ? `**Screenshot**: [${path.basename(file.path)}](${file.path})\n` : '';
+};
 
 const markdown = failures
   .map(
@@ -109,8 +119,7 @@ const markdown = failures
 ${failedResult.error?.message}
 \`\`\`
 
-**Screenshot**: [${path.basename(failedResult.attachments[0].path)}](${failedResult.attachments[0].path})
-
+${screenshot(failedResult.attachments)}
 **Reproduce**:
 \`\`\`sh
 npx playwright test --project=${projectName} ${spec.file} -g "${spec.title}"
