@@ -1,24 +1,24 @@
 ---
 title: 'Lab: Rewrite the Bad CLAUDE.md'
-description: Take Shelf's deliberately useless instructions file and turn it into one the agent can actually act on.
-modified: 2026-04-07
+description: Tighten Shelf's starter instructions file until every rule is mechanically actionable and the UI stays product-facing.
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
 Time to do the thing.
 
-Open the Shelf starter repository. At the root, there's a [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) file. It is bad on purpose. It is the kind of [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) I would have written two years ago, full of aspirational adjectives and zero mechanically checkable rules. Your job is to fix it.
+Open the Shelf starter repository. At the root, there's a [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) file. In the local course baseline, it is no longer terrible—but it is still just a draft. Your job in this lab is to tighten it until every rule is something the agent can mechanically act on.
 
 ## Setup
 
 ```sh
 git clone <shelf-repo-url>
 cd shelf
-bun install
-bun run dev
+npm install
+npm run dev
 ```
 
-Open [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) in your editor. Read it. Notice how every line is technically true and operationally useless.
+Open [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) in your editor. Read it. The Shelf starter ships with route, auth, and testing rules already—this lab is about making those rules _mechanically enforceable_ and short enough that an agent will actually follow them without you repeating yourself. Keep the ones that earn their place and tighten the ones that are still too vague.
 
 ## The task
 
@@ -29,9 +29,12 @@ Specifically, the new file should include:
 - A "what green means" section that names the exact commands the agent should run before declaring a task done. Look in `package.json` for the actual script names. Don't make commands up.
 - At least one rule about how tests get written (TDD ordering, file location, naming convention—your call).
 - At least one rule about how [Playwright](https://playwright.dev/) locators get chosen.
+- At least one rule about user-facing copy staying in the voice of the product. Course notes, test rationale, route names, and infrastructure details belong in docs or comments, not in the UI.
 - At least one rule about something the agent should _not_ do in this codebase (a directory to leave alone, a pattern to avoid, a dependency not to add).
 
 Keep the file under sixty lines. If it's longer than that, you're probably writing instructions to yourself instead of to the agent.
+
+The starter already ships with real paths worth naming. Use that. A rule that says "reuse `src/lib/components`" or "put end-to-end tests in `tests/end-to-end/`" is stronger than a vague rule about staying organized.
 
 ## Acceptance criteria
 
@@ -43,18 +46,53 @@ Each item is independently checkable. Don't move on until all are ticked.
 - [ ] The file contains zero instances of the words "clean," "best practices," "good," or "appropriate" (`grep -iE 'clean|best practices|good|appropriate' CLAUDE.md` returns no matches).
 - [ ] The file contains at least one rule that mentions a specific file path in the repo, and that path resolves (`ls <path>` exits zero for the path you named).
 - [ ] The file contains at least one rule about [Playwright](https://playwright.dev/) locator choice that names a specific [Playwright](https://playwright.dev/) API (e.g., `getByRole`, `getByLabel`, `data-testid`).
-- [ ] You ran `bun lint`, `bun typecheck`, and `bun test` after editing and all three exit zero. (`CLAUDE.md` is markdown, so they should be unaffected, but the habit is the point.)
-- [ ] You committed the change with a message that starts with `docs(claude-md):` and the commit hash is on `HEAD`.
+- [ ] The file contains at least one rule that explicitly keeps user-facing copy about books and reading, and keeps course or testing notes out of the UI.
+- [ ] You ran `npm run lint`, `npm run typecheck`, and `npm run test` after editing and all three exit zero. (`CLAUDE.md` is markdown, so they should be unaffected, but the habit is the point.)
+- [ ] You committed the change with a message that starts with `lab(rewrite-the-bad-claude-md):` and the commit hash is on `HEAD`.
+
+If `npm run test` flakes here because the starter is still using interactive sign-in inside the browser tests, note it and keep going. The very next lab exists to harden that exact failure mode.
+
+### The one-shot probe
+
+Copy and paste this block at the repository root to run every mechanical check above in one go. It exits zero when the file passes and prints the specific failing rule when it does not:
+
+```sh
+set -e
+
+# Length cap
+[ "$(wc -l < CLAUDE.md)" -le 60 ] || { echo "fail: CLAUDE.md has more than 60 lines"; exit 1; }
+
+# Banned vague words
+for word in clean "best practices" good appropriate; do
+  if grep -iq "$word" CLAUDE.md; then
+    echo "fail: CLAUDE.md contains banned word '$word'"
+    exit 1
+  fi
+done
+
+# Commands referenced in CLAUDE.md must exist in package.json
+for cmd in $(grep -oE 'npm run [a-z:-]+' CLAUDE.md | awk '{print $3}' | sort -u); do
+  grep -q "\"$cmd\":" package.json || { echo "fail: npm run $cmd not in package.json"; exit 1; }
+done
+
+# At least one Playwright locator API is named
+grep -qE 'getByRole|getByLabel|getByText|data-testid' CLAUDE.md \
+  || { echo "fail: no Playwright locator rule"; exit 1; }
+
+echo "ok: CLAUDE.md passes every mechanical check"
+```
+
+Run that block inside the repo after each edit to CLAUDE.md. When it prints `ok`, the mechanical half of the lab is done and you can move on to the subjective half ("does the agent actually follow these rules when you give it a task").
 
 ## Checking your work against an agent
 
 Once your file passes the checklist, run the loop end to end at least once:
 
 1. Open Claude Code (or whichever agent you brought) in the Shelf repo.
-2. Give it this exact task: _"Add a `lastReadAt` timestamp to the `ShelfEntry` schema and surface it on the shelf page. Follow the rules in CLAUDE.md."_
+2. Give it this exact task: _"Add a 'finished this year' count to the stats page. Follow the rules in CLAUDE.md."_
 3. Watch what it does. Specifically watch whether it runs the commands you named in the "what green means" section without you reminding it.
 
-If the agent runs your commands without prompting, your file is doing its job. If you have to remind it, your rules are too easy to skip. Tighten the language. ("You should run X before declaring done" is easier to skip than "Run X. Do not report the task as complete if X exits non-zero.")
+If the agent runs your commands without prompting, your file is doing its job. If you have to remind it, your rules are too easy to skip. Tighten the language. ("You should run X before declaring done" is easier to skip than "Run X. Do not report the task as complete if X exits non-zero.") The same goes for copy rules: "Keep the UI product-facing" is weaker than "Do not mention Playwright, seeded fixtures, or course notes in page copy."
 
 ## Stretch goals
 

@@ -1,7 +1,7 @@
 ---
 title: Git Hooks with Husky and Lint-Staged
 description: Catch the cheap mistakes at the moment of commit, not the moment of CI. Plus a brief tour of Claude hooks as a tighter, agent-specific layer on top.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -9,7 +9,7 @@ Git hooks are the moment-of-commit layer. They run _after_ the agent writes the 
 
 Abuse looks like: running the whole test suite on every commit. The team starts hating git commits, starts using `--no-verify`, and now the hook does nothing because nobody runs it. I have seen this happen on every team I've worked on that tried to put "everything" in a pre-commit hook.
 
-Correct use looks like: running the fast, deterministic, high-signal checks on only the files that changed. Lint. Format. Type-check (on changed files). Secret scanning. Maybe a quick targeted unit test on a hot file. That's it.
+Correct use looks like: running the fast, deterministic, high-signal checks on only the files that changed. Lint. Format. Secret scanning. Maybe a quick targeted unit test on a hot file. That's it. Full typecheck usually belongs in pre-push or CI unless you have a genuinely fast incremental command.
 
 The tools are [Husky](https://typicode.github.io/husky/) and [lint-staged](https://github.com/lint-staged/lint-staged). Both are ancient by JavaScript standards, both are boring and reliable, both are what everyone uses.
 
@@ -71,7 +71,7 @@ When you run `git commit`, lint-staged:
 4. If any command fails, the commit is aborted.
 5. If any command modifies files (e.g., `prettier --write`), the changes are restaged automatically.
 
-The result: formatted code, passing lint, typed properly, ready to push. And because it's only running on staged files, it takes a few seconds instead of a few minutes.
+The result: formatted code, passing lint, and clean staged files ready to push. And because it's only running on staged files, it takes a few seconds instead of a few minutes.
 
 ## The pre-push hook for the slightly slower stuff
 
@@ -96,12 +96,14 @@ If you take one thing from this lesson, take this one. Add gitleaks (next lesson
 ```json
 {
   "lint-staged": {
-    "*": ["gitleaks protect --staged --redact --verbose"]
+    "*": ["npx tsx scripts/run-gitleaks-staged.ts"]
   }
 }
 ```
 
-This runs gitleaks on every staged file, looking for API keys, passwords, tokens, and other secrets. If gitleaks finds one, the commit is blocked with a report of what and where. Zero agents and zero humans have any business committing secrets, and this hook is the mechanism that makes it mechanically impossible.
+In the current Shelf workshop repo, that helper script materializes the exact staged snapshot into a temporary directory and runs Gitleaks against it. This is slightly more work than shelling out directly, but it avoids version-specific surprises around staged-file handling and newly added files. If Gitleaks' direct staged mode is reliable in your environment, fine. The important part is that the pre-commit hook is scanning the staged content, not the whole working tree.
+
+If Gitleaks finds something, the commit is blocked with a report of what and where. Zero agents and zero humans have any business committing secrets, and this hook is the mechanism that makes it mechanically difficult to do by accident.
 
 I'll go deeper on gitleaks in the next lesson. For now, just know it belongs in pre-commit and nowhere else—secrets detected after push are already a mitigation exercise, not a prevention one.
 
@@ -109,25 +111,38 @@ I'll go deeper on gitleaks in the next lesson. For now, just know it belongs in 
 
 One short detour before we move on.
 
-Claude Code has its own [hook system](https://docs.claude.com/en/docs/claude-code/hooks) that's distinct from git hooks. A Claude hook fires on agent-specific events—pre-prompt, post-tool-use, pre-submit—and can run arbitrary shell commands whose output gets fed back into the agent's context.
+Claude Code has its own [hook system](https://code.claude.com/docs/en/hooks) that's distinct from git hooks. A Claude hook fires on agent-specific events such as `PostToolUse` and `Stop`, and can run arbitrary shell commands whose output gets fed back into the agent's context.
 
 The two I find useful:
 
-**`post-tool-use` → `bun lint --quiet`**—after the agent edits a file, silently run lint. If it passes, nothing happens. If it fails, the lint output is attached to the agent's next turn, so the agent sees the error immediately without you having to ask "did you run lint?" This closes the feedback loop inside a single conversation.
+**`PostToolUse` → `npm run lint -- --quiet`**—after the agent edits a file, silently run lint. If it passes, nothing happens. If it fails, the lint output is attached to the agent's next turn, so the agent sees the error immediately without you having to ask "did you run lint?" This closes the feedback loop inside a single conversation.
 
-**`pre-submit` → `bun run pre-commit && bun run knip`**—before the agent finalizes a response, run the pre-commit suite. Same logic. Same tight feedback.
+**`Stop` → `npm run pre-commit && npm run knip`**—right before the turn finishes, run the pre-commit suite. Same logic. Same tight feedback.
 
-The config goes in `.claude/hooks.toml` (or similar; check the current Claude Code docs, the exact path has shifted over time). A minimal example:
+> [!NOTE]
+> These hook commands assume `npm` because that's what the Shelf workshop standardizes on. Swap to `bun run` (or `pnpm run`, `yarn`, etc.) to match whatever package manager your repository's scripts are wired to—the important part is that the hook shells out to a real, named script in `package.json`.
 
-```toml
-[[hooks]]
-event = "post-tool-use"
-match = { tool = "Edit" }
-command = "bun run lint --quiet $CLAUDE_TOOL_FILE_PATH || true"
-attach_output = true
+Project-level hook config now lives in `.claude/settings.json` (or `~/.claude/settings.json` for a user-wide setup). A minimal example:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/run-lint.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
 
-The `|| true` is deliberate—we don't want the hook to block the agent, we just want the output attached. The agent decides whether to fix.
+The `run-lint.sh` script can be as small as `npm run lint -- --quiet || true`. The `|| true` is deliberate. We don't want the hook to block the agent, we just want the output attached. The agent decides whether to fix.
 
 My honest take on Claude hooks: they're a tighter loop than git hooks for one specific agent (Claude Code), and they're complementary, not a replacement. The git hook fires for all commits, by anyone, using any agent. The Claude hook fires only for Claude Code's own edits, but fires _during_ the conversation instead of at commit time. Use both. The combination beats either alone.
 

@@ -1,7 +1,7 @@
 ---
 title: Locators and the Accessibility Hierarchy
 description: The single most important habit in a Playwright suite an agent will maintain—locator discipline, ordered by what survives a refactor.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -29,6 +29,8 @@ Because the ordering is aligned with _what a user sees_.
 A screen reader user navigating Shelf doesn't see `.btn-primary` or `.css-3f7g8h`. They see "Add book, button." If your test targets the same thing the screen reader targets, two things happen automatically. One, your test keeps working across refactors because roles and accessible names are stable in a way that CSS classes are not. Two, you get a rough accessibility audit for free—if you can't find the element by its role, _it doesn't have a role_, and that's a real bug, not a Playwright problem.
 
 This is the single best argument for locator discipline: **the refactor-proof test and the accessible component are the same component.** You cannot write a `getByRole` test against an inaccessible button. The locator forces you to fix the component, and the fixed component helps real users. Free wins don't get much freer.
+
+But, do not overread that claim. A good `getByRole` suite gives you upstream pressure toward accessible markup. It does _not_ give you a dedicated accessibility gate. We make that distinction explicit in the next lesson, because "probably accessible" is not a quality bar.
 
 ## What the agent does by default, and why it's wrong
 
@@ -113,5 +115,6 @@ Locate by role and accessible name first. Everything else is an escape hatch, an
 
 ## Additional Reading
 
+- [Accessibility as a Quality Gate](accessibility-as-a-quality-gate.md)
 - [The Waiting Story](the-waiting-story.md)
 - [The Testing Pyramid as a Feedback Hierarchy](the-testing-pyramid-as-a-feedback-hierarchy.md)

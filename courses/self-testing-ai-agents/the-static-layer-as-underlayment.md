@@ -1,7 +1,7 @@
 ---
 title: The Static Layer as Underlayment
 description: Lint, types, dead code, hooks, secret scanning—the cheap stuff that should be running underneath everything. Why it lives at the end of the day.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -23,6 +23,9 @@ Think of static checks as underlayment. You put them down once, they run under e
 
 Each of these runs in milliseconds to seconds. None of them require a browser. None of them require a database. They are the _cheapest_ possible feedback loop, which is why they should be running continuously in the background and why the agent should be wired to trip them constantly.
 
+> [!NOTE]
+> In the local Shelf repository for this workshop, `npm` is the source of truth for verification commands. Some lesson snippets use `bun` for package installation because that's my default elsewhere. Match the repository you are actually in. The real requirement is that the repo exposes stable, named scripts and that the agent is told to run them.
+
 The specific pieces we're going to cover in this module:
 
 - **ESLint and TypeScript** as opinionated guardrails, including custom rules for the Playwright patterns from this morning.
@@ -43,6 +46,10 @@ A test failure five minutes after the edit is expensive—the agent has moved on
 
 A practical consequence: an agent with a tight static layer looks smarter than an agent without one, even if the underlying model is identical. The smartness comes from the feedback loop, not the model.
 
+A concrete example from Shelf: a single `no-restricted-syntax` rule pays for itself the moment someone drops a `page.locator('body')` call into the authentication setup file. The red squiggle shows up before the commit even reaches the agent's next turn. That's the entire value proposition in one line of editor output.
+
+One implementation detail worth calling out because it is easy to cargo-cult the wrong way: Shelf's staged secret scan does _not_ shell out to `gitleaks git --staged`. With the Gitleaks release Shelf uses, that flag was not a reliable pre-commit verifier for newly added files. Instead, the repository copies the exact git index contents into a temporary directory and runs `gitleaks dir` there. Same intent, tighter loop, less ambiguity.
+
 ## The pattern, independent of tools
 
 Every static tool you install is going to follow roughly the same setup pattern:
@@ -62,7 +69,7 @@ Similarly, step 6 is the one that separates a working static layer from a cargo-
 
 A quick aside on Claude Code's hook system, because it comes up in this area and it's worth placing correctly.
 
-Claude Code supports hooks—shell commands that fire on specific events (pre-prompt, post-tool-use, pre-submit, etc.). They're powerful and agent-specific. You can, for example, set a `post-tool-use` hook that runs `bun lint` whenever the agent edits a file, and if the lint fails, the result gets fed back to the agent as context before the next turn.
+Claude Code supports hooks—shell commands that fire on specific events such as `PostToolUse` and `Stop`. They're powerful and agent-specific. You can, for example, set a `PostToolUse` hook that runs `bun lint` whenever the agent edits a file, and if the lint fails, the result gets fed back to the agent as context before the next turn.
 
 That's a real, useful feedback loop. It's also completely Claude Code-specific. Cursor has its own flavor (Rules + Agents), Codex has its own, Copilot has its own.
 

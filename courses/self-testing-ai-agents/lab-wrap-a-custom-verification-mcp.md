@@ -1,60 +1,64 @@
 ---
 title: 'Lab: Wrap a Custom Verification MCP'
-description: Write a small MCP server that exposes a single verification tool for Shelf and wire it into Claude Code.
-modified: 2026-04-07
+description: Write a small MCP server that exposes a single verification tool for Shelf and wire it into the repository-local MCP configuration.
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
 You're going to build the `verify_shelf_page` tool from the previous lesson. By the end, the agent will be able to call a single tool and get back a structured report on the state of `/shelf`.
 
+> [!NOTE] Prerequisite
+> Complete [Writing a Custom MCP Wrapper](writing-a-custom-mcp-wrapper.md) first. This lab assumes you're starting from that lesson's server shape and only filling in the repo-specific details.
+
 ## Setup
 
-From the Shelf repo root:
+From the Shelf repository root:
 
 ```sh
 mkdir -p tools/shelf-verification-server
-cd tools/shelf-verification-server
-bun init -y
-bun add @modelcontextprotocol/sdk playwright
+npm install @modelcontextprotocol/sdk zod
+npm install -D tsx
 ```
 
-Create `server.ts` with the skeleton from the lesson. We're using the [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) to build the server. Adjust file paths to match your repo layout. If you're using TypeScript, also add `tsx` so you can run the server without a build step:
+Create `tools/shelf-verification-server/server.ts` with the skeleton from the lesson. We're using the [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) to build the server and the newer high-level `McpServer` API instead of the older low-level `Server` request-handler example.
 
-```sh
-bun add -D tsx
-```
+Shelf keeps this server in `tools/shelf-verification-server/server.ts` and registers it through the repository-local `.mcp.json`. The tool reads storage state from `playwright/.authentication/user.json` and defaults to `http://127.0.0.1:4173` unless `SHELF_BASE_URL` is set.
 
 ## The task
 
 Implement `verify_shelf_page` so it:
 
-1. Accepts a `username` parameter.
-2. Launches Chromium with the storage state from `playwright/.authentication/user.json`.
-3. Navigates to `http://localhost:5173/shelf/<username>`.
-4. Waits for the shelf heading to be visible.
+1. Accepts a `username` parameter (the lower-cased portion of the reader's email before the `@`).
+2. Launches Chromium. Reuse `playwright/.authentication/user.json` as the storage state when the file exists, so the server stays consistent with the rest of the workshop tooling; fall through to a default context when it doesn't.
+3. Navigates to `http://127.0.0.1:4173/shelf/<username>` by default. Make the base URL overrideable with `SHELF_BASE_URL` so you can also point it at a live dev server.
+4. Waits for the page-level shelf heading to be visible.
 5. Counts the number of `article` elements (each book is an article).
 6. Collects any console errors emitted during the page load.
-7. Closes the browser.
-8. Returns `{ ok: boolean, bookCount: number, consoleErrors: string[] }` as the tool result.
+7. Closes the browser in a `finally` block so one failing navigation never leaks a Chromium process.
+8. Returns `{ ok, bookCount, consoleErrors, url }` as the tool result, where `url` is the exact URL the server hit so the agent can quote it in its summary.
 
-`ok` is `true` when there are zero console errors and at least one book. Adjust the definition if your Shelf has an explicit empty state for "no books yet."
+`ok` is `true` when there are zero console errors. The reference implementation accepts `bookCount >= 0` because the public reader page is a real route even for an empty shelf—tighten the predicate to `bookCount > 0` if your domain logic disagrees.
 
-## Wiring into Claude Code
+## Wiring into your MCP client
 
-Add an entry to `.claude/mcp.json` at the root of the Shelf repo:
+Shelf's MCP config lives in `.mcp.json` at the repository root. Add the server entry alongside any existing ones:
 
 ```json
 {
   "mcpServers": {
     "shelf-verification": {
-      "command": "bunx",
+      "type": "stdio",
+      "command": "npx",
+      "env": {
+        "SHELF_BASE_URL": "http://127.0.0.1:4173"
+      },
       "args": ["tsx", "./tools/shelf-verification-server/server.ts"]
     }
   }
 }
 ```
 
-Restart Claude Code. In the tool list, you should now see `verify_shelf_page` available.
+Restart your MCP host. In the tool list, you should now see `verify_shelf_page` available.
 
 Ask the agent to verify the shelf for alice. Example prompt:
 
@@ -62,12 +66,14 @@ Ask the agent to verify the shelf for alice. Example prompt:
 
 The agent should call the tool, get back structured output, and act on it.
 
+![The public shelf route targeted by `verify_shelf_page`](./assets/lab-custom-mcp-public-shelf.png)
+
 ## Acceptance criteria
 
 - [ ] `tools/shelf-verification-server/server.ts` exists and contains a working MCP server.
-- [ ] Running `bunx tsx tools/shelf-verification-server/server.ts` starts the server without crashing (check with a 2-second `timeout` command or by running and immediately Ctrl-C).
-- [ ] `.claude/mcp.json` registers the server and the path resolves.
-- [ ] After restarting Claude Code, `verify_shelf_page` appears in the agent's available tools.
+- [ ] Running `npx tsx tools/shelf-verification-server/server.ts` starts the server without crashing. If your shell does not have `timeout`, use a short Node wrapper that keeps stdin open for two seconds and then sends `SIGTERM`.
+- [ ] `.mcp.json` registers the server and the path resolves.
+- [ ] After restarting the MCP host, `verify_shelf_page` appears in the agent's available tools.
 - [ ] When you call the tool against a running Shelf dev server, it returns a JSON result with `ok`, `bookCount`, and `consoleErrors` keys.
 - [ ] The tool correctly reports `ok: true` when the shelf has books and no console errors.
 - [ ] The tool correctly reports `ok: false` when you deliberately break something—for example, add `console.error('oops')` to the shelf page and re-run.

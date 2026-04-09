@@ -1,11 +1,14 @@
 ---
 title: Runtime Probes in the Development Loop
 description: How to wire Playwright MCP into the agent's working loop so it pokes at the UI between edits instead of waiting for you to run the tests.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
 You installed Playwright MCP. Great. Now what?
+
+> [!NOTE]
+> As of April 9, 2026, Playwright MCP defaults to a persistent browser profile. For reproducible probes against Shelf, prefer an isolated profile or an explicit storage state so every probe starts from known browser and authentication state.
 
 This lesson is about what to actually _do_ with a runtime tool once the agent has one. The short version is that you want the agent probing the UI between edits, on its own initiative, the way a careful developer would.
 
@@ -66,12 +69,12 @@ The last sentence is the important one. "Attach the screenshot to your summary" 
 
 ## Accessibility tree as the probe's primary observation
 
-When an agent uses [Playwright MCP](https://github.com/microsoft/playwright-mcp) to probe, the single most useful thing it can ask for is the accessibility tree of the region it changed. Not a screenshot—that's the second-most useful thing. The accessibility tree is a text representation of what's on the page structured by role, and it's the form the agent can reason about most effectively.
+When an agent uses [Playwright MCP](https://playwright.dev/) to probe, the single most useful thing it can ask for is the page's structured accessibility snapshot of the region it changed. Not a screenshot—that's the second-most useful thing. The accessibility snapshot is a text representation of what's on the page structured by role, and it's the form the agent can reason about most effectively.
 
 A good probe from the agent looks like:
 
 ```
-> accessibility_tree({ url: 'http://localhost:5173/shelf', selector: '#main' })
+> Open http://localhost:5173/shelf and give me an accessibility snapshot of the main region.
 
 main:
   heading: "Alice's Shelf"
@@ -88,7 +91,7 @@ main:
 
 The agent can read this and confirm "yes, the 'Rating' option is in the combobox and nothing else moved." That's a much stronger observation than "I took a screenshot and it looks fine."
 
-If the accessibility tree doesn't show the new element the agent expected, that's itself a bug—it means the agent wrote a button with no accessible name, or a dropdown with no role, or something similar. Catching that at probe time is exactly the kind of early-warning loop we want.
+If the accessibility snapshot doesn't show the new element the agent expected, that's itself a bug—it means the agent wrote a button with no accessible name, or a dropdown with no role, or something similar. Catching that at probe time is exactly the kind of early-warning loop we want.
 
 ## Running the dev server and keeping it alive
 
@@ -96,9 +99,9 @@ Runtime probes require a running dev server. This sounds obvious but it's the pa
 
 A few patterns that work:
 
-**Let the agent manage the dev server itself.** The agent runs `bun run dev` in a background shell, waits for the "Local: http://localhost:5173" message, and then probes. When it's done, it kills the server. This works but it's fiddly—managing background processes is not the agent's strong suit.
+**Let the agent manage the dev server itself.** The agent runs `npm run dev` in a background shell, waits for the "Local: http://localhost:5173" message, and then probes. When it's done, it kills the server. This works but it's fiddly—managing background processes is not the agent's strong suit.
 
-**Run the dev server out-of-band and tell the agent about it.** You keep `bun run dev` running in a terminal you own. The agent's instructions file says "the dev server is always running at localhost:5173; do not start or stop it." The agent just probes. This is my default for workshop use—simpler, fewer moving parts, easier to reason about.
+**Run the dev server out-of-band and tell the agent about it.** You keep `npm run dev` running in a terminal you own. The agent's instructions file says "the dev server is always running at localhost:5173; do not start or stop it." The agent just probes. This is my default for workshop use—simpler, fewer moving parts, easier to reason about.
 
 **Spin up a test-dedicated dev server.** Your CI or your Playwright config starts a dev server on an unusual port (e.g., 4173) just for probing. The agent uses that port. Your normal dev server on 5173 is untouched by the agent. This is nice for isolation but adds config complexity.
 
@@ -127,8 +130,9 @@ In addition to the probe rule above, I put this in the file:
 
 - The dev server is running at http://localhost:5173 and should not be
   started or stopped by the agent.
-- Use Playwright MCP for probing. Prefer `accessibility_tree` over
-  `screenshot` as the primary observation; use both for visual changes.
+- Use Playwright MCP for probing. Prefer structured accessibility
+  snapshots over screenshots as the primary observation; use both for
+  visual changes.
 - Read the browser console after every interaction. If there is an
   error or a warning that wasn't there before your change, fix it.
 - If a probe reveals a bug, fix it and re-probe before reporting the

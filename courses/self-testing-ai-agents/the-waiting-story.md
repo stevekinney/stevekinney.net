@@ -1,7 +1,7 @@
 ---
 title: The Waiting Story
 description: Why `page.waitForTimeout` is the second-most-common cause of flaky tests, and what to reach for instead.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -75,6 +75,9 @@ Two things to notice. First, you set up the waiter _before_ the action, because 
 
 `page.waitForRequest` exists too, for the "I just want to prove the request went out" case. Both are precise, both beat a timeout every time.
 
+> [!TIP]
+> If the UI already exposes the end state you care about, prefer a locator assertion over a network wait. `waitForResponse` is for the cases where the network event _is_ the signal. If the page shows "Saved" or the new row appears in the table, assert on that instead.
+
 ## Clocks and animations and the Clock API
 
 The ugly class of waits is when the UI has a `setTimeout` somewhere. A toast that auto-dismisses after three seconds. A "just now" timestamp that updates every minute. An animation that takes 250ms. Your test now depends on real wall-clock time, which is an abomination.
@@ -93,7 +96,7 @@ This is how you test the toast that dismisses after three seconds without actual
 
 ## Waiting for the page to "settle"
 
-A common agent mistake: `await page.waitForLoadState('networkidle')`. Don't. `networkidle` means "no network activity for 500ms," which is both slower than what you actually need (why wait for _all_ requests?) and unreliable in pages with long-polling, analytics beacons, or any kind of heartbeat. Every major testing framework has been quietly moving away from networkidle for years.
+A common agent mistake: `await page.waitForLoadState('networkidle')`. Don't. Playwright's own navigation docs mark `networkidle` as discouraged for testing. It means "no network activity for 500ms," which is both slower than what you actually need (why wait for _all_ requests?) and unreliable in pages with long-polling, analytics beacons, or any kind of heartbeat.
 
 Instead, wait for the specific thing you actually care about. If you're waiting for the shelf to render, wait for the shelf content, not for network idle. If you're waiting for an API call to finish, wait for _that_ call, not for all calls to stop. Be specific.
 
@@ -121,9 +124,9 @@ The last rule is the important one, and the hardest one for an agent to follow w
 
 ## A concrete example from Shelf
 
-Shelf ships with a deliberately broken test at `tests/end-to-end/rate-book.spec.ts`. It uses `waitForTimeout(1500)` after submitting a rating, because the agent that originally wrote it was guessing. The test passes most of the time. It fails about one time in fifteen on my machine, and more often on CI under load. Right now the rate-book test is the canonical "flaky test" that blocks releases every few days.
+Shelf's rate-book workflow is the canonical place this all shows up. The rough version of the test uses `waitForTimeout(1500)` after submitting a rating, because the agent that wrote it first was guessing. That version passes most of the time. It fails about one time in fifteen on my machine, and more often on CI under load—classic "flaky test that blocks releases every few days" territory.
 
-We're going to fix it in the next lab. The fix has three parts: replace the locator with a `getByRole` chain, replace the `waitForTimeout` with a `waitForResponse` on the POST, and add an `expect(locator).toHaveText(/Thanks/)` assertion on the confirmation toast. That's it. Three edits, zero magic, and the test stops flaking.
+The next lab walks you through rewriting it. The fix has three parts: replace the locator with a `getByRole` chain, replace the `waitForTimeout` with a `waitForResponse` on the POST, and add an `expect(locator).toHaveText(/Thanks/)` assertion on the confirmation toast. That's it. Three edits, zero magic, and the test stops flaking.
 
 ## The one thing to remember
 

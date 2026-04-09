@@ -1,7 +1,7 @@
 ---
 title: Visual Regression as a Feedback Loop
 description: Screenshot diffs are not just a CI gate. They're the fastest way to tell an agent "this looks wrong" without saying a word.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -38,6 +38,8 @@ test('shelf page matches visual baseline', async ({ page }) => {
 });
 ```
 
+Shelf runs authenticated visual tests inside the same `authenticated` Playwright project the rest of the suite uses, with a `beforeEach` that calls `resetShelfContent` so every diff starts from the same seeded shelf state. If your project has a reason to separate visual reads from write-heavy tests (say, both suites racing the same user's data), you can point a second Playwright project at a different storage-state file, but do not reach for that complexity until a concrete conflict forces it.
+
 First run: Playwright takes a screenshot and writes it to `tests/end-to-end/visual.spec.ts-snapshots/shelf-page.png` (the snapshot directory is named after the test file, so a different `<test-file>.spec.ts` would produce a different `<test-file>.spec.ts-snapshots/` folder). The test "passes" because there's nothing to compare against.
 
 Every subsequent run: Playwright takes a new screenshot and compares it to the committed baseline. If they match pixel-for-pixel (modulo a small tolerance), the test passes. If they don't, the test fails, and Playwright writes three files to your report directory: the baseline, the actual, and a diff image highlighting the changed pixels.
@@ -60,6 +62,7 @@ export default defineConfig({
       animations: 'disabled',
       caret: 'hide',
       scale: 'css',
+      maxDiffPixelRatio: 0.01,
     },
   },
 });
@@ -67,7 +70,7 @@ export default defineConfig({
 
 `animations: 'disabled'` kills CSS transitions. `caret: 'hide'` hides the blinking text cursor in inputs (which changes every half second and ruins screenshots). `scale: 'css'` ensures the screenshot uses CSS pixels regardless of device pixel ratio.
 
-**Dynamic content.** A timestamp that says "2 minutes ago" is going to be "3 minutes ago" by the next run. A user-generated avatar, a random quote of the day, a visible date—any of these will break the diff. You have two options: mock the dynamic content (e.g., install `page.clock` and set a fixed time; seed the database with fixed content) or mask the dynamic regions with the `mask` option:
+**Dynamic content.** A timestamp that says "2 minutes ago" is going to be "3 minutes ago" by the next run. A user-generated avatar, a random quote of the day, a visible date—any of these will break the diff. You have two options: mock the dynamic content (for example, install `page.clock` and set a fixed time, or seed the database with fixed content) or mask the dynamic regions with the `mask` option:
 
 ```ts
 await expect(page).toHaveScreenshot('shelf-page.png', {
@@ -110,6 +113,8 @@ The agent will say things like, "The 'Rate' button is now 4 pixels taller becaus
 
 This is the agent self-correcting on visual feedback. Not long ago, this was science fiction. Now it's a hook in your CI config.
 
+And there is a natural next question after "did the UI change visually?": "did the same change also make the app slower or heavier?" Screenshot diffs do not answer that. The next module does.
+
 ## CLAUDE.md rules
 
 ```markdown
@@ -134,5 +139,6 @@ Visual regression is not insurance. It's a communication channel between you (or
 
 ## Additional Reading
 
+- [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md)
 - [The Waiting Story](the-waiting-story.md)
 - [Lab: Wire Visual Regression Into the Dev Loop](lab-wire-visual-regression-into-the-dev-loop.md)

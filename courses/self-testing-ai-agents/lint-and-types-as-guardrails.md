@@ -1,7 +1,7 @@
 ---
 title: Lint and Types as Guardrails
 description: ESLint's recommended rules are a starting point, not a finish line. The rules that actually help agents are the ones you write for your own codebase.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -64,7 +64,7 @@ export default [
 
 Notice the error message. It names the violation, offers the alternatives, and points at `CLAUDE.md`. When the agent trips this rule, the error message is a self-contained fix prompt—it tells the agent what to do next. Write your lint messages like prompts because they _are_ prompts.
 
-Now extend the same rule to ban raw CSS selectors in locators:
+Now extend the same rule to ban the other Playwright anti-patterns we hit in Module 3, plus one recurring server-side bug — handlers that pull `userId` out of the request body instead of the authenticated session. Each selector is a tiny AST query; read them below the code block for the mental model.
 
 ```js
 {
@@ -74,18 +74,44 @@ Now extend the same rule to ban raw CSS selectors in locators:
       'error',
       {
         selector: "CallExpression[callee.property.name='waitForTimeout']",
-        message: 'page.waitForTimeout is banned. Use expect(locator).toBeVisible() or page.waitForResponse instead.',
+        message: 'page.waitForTimeout is banned. Use expect(locator).toBeVisible() or page.waitForResponse instead. See CLAUDE.md → Playwright waiting.',
       },
       {
         selector: "CallExpression[callee.property.name='locator'][arguments.0.type='Literal']",
         message: 'page.locator with a string selector is discouraged. Use page.getByRole, getByLabel, getByText, or getByTestId. See CLAUDE.md → Playwright locators.',
+      },
+      {
+        selector: "CallExpression[callee.property.name='waitForLoadState'] Literal[value='networkidle']",
+        message: 'page.waitForLoadState("networkidle") is unreliable. Wait on a specific DOM signal or network response instead.',
+      },
+    ],
+  },
+},
+{
+  files: ['src/routes/api/**/*.ts'],
+  rules: {
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: "MemberExpression[object.type='MemberExpression'][object.property.name='body'][property.name='userId']",
+        message: 'Read userId from locals.user, not the request body. Trusting the client on identity is a permission bug.',
       },
     ],
   },
 },
 ```
 
-Two rules, one config file, both firing on every save. The next time the agent reaches for a banned pattern, the editor underlines it in red and the fix is one step away.
+Four rules, one config file. Translating each selector back into English:
+
+- **`CallExpression[callee.property.name='waitForTimeout']`** matches _any_ call whose callee is `<something>.waitForTimeout(...)`. The `CallExpression` part targets a function call. The `[callee.property.name='waitForTimeout']` attribute filter says "the callee has to be a member expression whose property name is `waitForTimeout`." You get `page.waitForTimeout(100)` but also `otherPage.waitForTimeout(100)`, which is fine — both should be rewritten the same way.
+- **`CallExpression[callee.property.name='locator'][arguments.0.type='Literal']`** is the same shape, plus a constraint that the first argument (`arguments.0`) is a string/number/regex literal. That's the "raw CSS" shape; `page.locator(heading)` where `heading` is a variable gets a pass because the first argument is an `Identifier`, not a `Literal`.
+- **`CallExpression[callee.property.name='waitForLoadState'] Literal[value='networkidle']`** uses the _descendant_ combinator (space): "find any `Literal` whose value is exactly the string `networkidle`, anywhere inside a `waitForLoadState` call." That's how you match on the _argument_ string rather than the method name.
+- **`MemberExpression[object.type='MemberExpression'][object.property.name='body'][property.name='userId']`** matches a nested member expression of the shape `<something>.body.userId`. The outer match targets the `.userId` access, and the `object` constraint says the thing being accessed must itself be an `<x>.body` access. It fires on `request.body.userId`, `body.userId`, and anything else of that shape, while leaving `locals.user.id` alone. The rule lives under `src/routes/api/**/*.ts` because that's where the mistake matters.
+
+Four rules, one config file, all firing on every save. The next time the agent reaches for a banned pattern, the editor underlines it in red and the fix is one step away.
+
+> [!TIP] Write your ESLint rule messages like fix prompts
+> Every error message above names the violation, points at the alternative, and references `CLAUDE.md`. When the agent trips the rule, the message _is_ the next instruction in its context. Treat these messages the same way you'd treat the test failure dossier from Module 6: the richer the message, the less work the agent has to do to recover.
 
 ## The tricky one: banning `any` gradually
 
@@ -140,8 +166,8 @@ The lint rules are worth nothing if the agent doesn't run them. Update the instr
 
 Run these before declaring a task done. They must exit zero:
 
-- `bun run lint`—ESLint with strict custom rules
-- `bun run typecheck`—TypeScript strict mode
+- `npm run lint`—ESLint with strict custom rules
+- `npm run typecheck`—TypeScript strict mode
 
 If lint fails, read the error message. It names the violation, the
 file, and the fix. Do not add `eslint-disable` comments to bypass. Do
@@ -153,6 +179,15 @@ before silencing.
 ```
 
 The "do not use `@ts-expect-error`" rule is specifically to prevent the agent's favorite escape hatch. When an agent can't make TypeScript happy, it will default to `@ts-expect-error` with a vague comment and move on. That's a silent regression in your type safety. Block it at the rules level.
+
+## What belongs next to lint and types in the static layer
+
+Lint and types are the _code-shape_ part of the static layer. There are two other checks that belong in the same tier even though they are not ESLint rules. I'm naming them here so you know where they fit; each gets its own lesson.
+
+- **Dead code detection** with `knip`. Orphaned files that nobody imports anymore are a specific kind of lint finding. [Dead Code Detection](dead-code-detection.md) covers the `knip.json` setup.
+- **Secret scanning** with `gitleaks`. This one is worth calling out because the static-layer lab expects you to wire it into `lint-staged` alongside ESLint and Prettier, so there's a single pre-commit command that runs lint, formatting, and secret scan in one pass. See [Secret Scanning with Gitleaks](secret-scanning-with-gitleaks.md) for the full `lint-staged` block and the helper script that scans the _staged_ snapshot rather than the working tree.
+
+You don't need to wire them up yet—that's the lab. But you should have both in your head as "lives next to ESLint in the pre-commit loop" by the time you finish this lesson.
 
 ## The one thing to remember
 

@@ -1,7 +1,7 @@
 ---
 title: CI as the Loop of Last Resort
 description: By the time CI fires, the agent should have caught 95% of mistakes locally. CI is what catches the last 5% plus the environment-specific ones you can't catch locally.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -15,6 +15,10 @@ My framing: **CI is the loop of last resort.** Everything we've built today is a
 
 That shift matters because it changes what you put _in_ CI. If CI is where tests run, you stuff everything into CI and wait ten minutes on every push. If CI is the last resort, you put the _strict versions_ of every check in CI—full Playwright matrix, full visual regression, full secret scan against history, full dependency audit—and you accept that CI is slow because you're running it against the environment you actually care about.
 
+One scope note before we go further: green CI is still not the end of the story. The next core module picks up on what happens after merge or deploy-preview. The appendix builds out the broader nightly and cross-browser loops in more detail.
+
+Shelf's workflows use `npm`, `actions/setup-node@v4`, and cache both `~/.npm` and `~/.cache/ms-playwright`. That's the concrete reference point as you read the rest of this module.
+
 ## What CI uniquely catches
 
 A short list of things that _only_ CI can reliably catch:
@@ -22,7 +26,7 @@ A short list of things that _only_ CI can reliably catch:
 - **Cross-platform differences.** Your laptop is macOS. Production is Linux. Playwright's screenshot pixels differ between them. Your CI runs Linux and catches the drift.
 - **Cross-browser differences.** Locally you run Chromium for speed. CI runs the full matrix (Chromium, Firefox, WebKit) and catches the "works in Chrome, broken in Safari" class of bug.
 - **Clean-slate environment bugs.** The agent's laptop has ten months of cached dependencies, environment variables, and custom shell aliases. CI starts fresh on every run. Anything that only works because of your laptop's accumulated state is going to fail in CI.
-- **Concurrency at scale.** Your local machine runs four Playwright workers. CI runs twelve. Race conditions that only appear under heavier concurrency show up here.
+- **Concurrency at scale.** Once you widen the worker count, CI is where the higher-concurrency races show up. Shelf's local and CI Playwright runs stay pinned to `workers: 1` today because the starter still uses a shared SQLite database; the concept still matters and the knob is easy to turn once per-worker isolation lands.
 - **Time-sensitive checks.** Nightly HAR regeneration, weekly dependency audits, monthly secret rotation verification—these don't make sense locally. CI is where they live.
 - **Artifact enforcement.** Blocking merges, uploading reports, posting status checks on PRs. The workflow glue lives in CI because that's where the API keys to do those things live.
 
@@ -45,81 +49,61 @@ The next lesson walks through the actual YAML. Here's the shape before we get th
 
 On every push to any branch and every PR into main:
 
-1. **Checkout and install.** Clone the repo, restore caches, `bun install`.
-2. **Static fan-out.** Run lint, typecheck, knip, and gitleaks in parallel. These are fast and independent, so there's no reason to serialize them.
-3. **Unit tests.** `bun test`. Fast.
+1. **Checkout and install.** Clone the repo, restore caches, `npm ci --ignore-scripts`.
+2. **Static layer.** Run lint, typecheck, knip, and gitleaks. In the workshop Shelf repo these stay in one `static` job because the setup overhead is larger than the benefit of splitting four short checks across four runners. Use the official Gitleaks action or a direct CLI step depending what your plan and licensing allow.
+3. **Unit tests.** `npm run test:unit`. Fast.
 4. **End-to-end tests.** Playwright, full Chromium run. Upload trace artifacts, screenshots, and the failure dossier if anything fails.
-5. **Visual regression.** Same Playwright run, or a separate job if you want to isolate. Upload diff images on failure.
-6. **Secret scan against history.** Full `gitleaks detect`, not just staged files.
-7. **Post results.** If Bugbot or a similar review tool isn't already posting to the PR from its own integration, a summary step posts test counts, coverage deltas, and any dossier content.
+
+That is the entire `main.yml` Shelf ships: three jobs, not seven. Visual regression rides inside the Playwright suite, and the hosted-only extras (deploy previews, post-deploy smoke) stay out of the main workflow until there is a concrete reason to pay that cost.
 
 On a nightly schedule:
 
 1. **Refresh HAR files** by re-recording against the real Open Library API. Open a PR with the updated HARs if they changed. A human reviews.
-2. **Dependency audit.** Run `bun audit`, open an issue or PR if anything new turns up.
+2. **Dependency audit.** Run `npm audit`, open an issue or PR if anything new turns up.
 3. **Full cross-browser Playwright run.** Chromium, Firefox, WebKit. Surface differences that the daily Chromium-only runs miss.
 
-On every merge to main:
+On a connected GitHub repository, you can add merge-to-main deployment and post-deploy smoke checks later. The next module covers that core loop. The appendix lessons turn the nightly and cross-browser placeholders into fuller patterns once the one-day workshop flow is done.
 
-1. **Deploy to staging.** (Out of scope for this workshop, but the hook is there.)
-2. **Run a smoke-test probe** against staging to verify the deploy was real.
-
-That's the whole shape. Five jobs in the main workflow, three in the nightly workflow, one in the merge workflow. Each is boring. The power is in the composition.
+That's the whole shape Shelf ships: three jobs in the main workflow, three placeholder jobs in the nightly workflow, and no deploy workflow yet. Each is boring. The power is in the composition.
 
 ## Parallelism and caching, the two knobs that matter
 
 Two things you do once and benefit from on every run.
 
-**Parallelism.** GitHub Actions jobs run in parallel by default. Your lint job, typecheck job, knip job, and secret scan job should all run at the same time, not sequentially. Playwright's own sharding can split the end-to-end suite across multiple runners. The difference between a 15-minute sequential CI and a 4-minute parallel CI is usually just understanding that `jobs:` are parallel and `steps:` are sequential, and writing your workflow accordingly.
+**Parallelism.** GitHub Actions jobs run in parallel by default, but that does not mean every check deserves its own job. In Shelf, the static checks stay grouped because the setup overhead is bigger than the benefit of fanning out four short steps. The `unit` and `end-to-end` jobs then run in parallel after `static` passes. Once the suite gets bigger, you can split or shard more aggressively.
 
 Here's the shape of a parallel Shelf workflow:
 
 ```mermaid
 graph LR
-  Checkout["Checkout<br/>& Install"]
-  Lint["Lint"]
-  Types["Typecheck"]
-  Knip["Dead Code"]
-  Secrets["Secret Scan"]
-  Unit["Unit Tests"]
-  E2E["End-to-End"]
-  Visual["Visual Regression"]
+  Static["Static job<br/>lint + typecheck + knip + gitleaks"]
+  Unit["Unit tests"]
+  E2E["End-to-end + screenshots + dossier"]
   Merge{"All Passed?"}
 
-  Checkout --> Lint
-  Checkout --> Types
-  Checkout --> Knip
-  Checkout --> Secrets
-  Checkout --> Unit
-  Checkout --> E2E
-  Checkout --> Visual
-
-  Lint --> Merge
-  Types --> Merge
-  Knip --> Merge
-  Secrets --> Merge
+  Static --> Unit
+  Static --> E2E
   Unit --> Merge
   E2E --> Merge
-  Visual --> Merge
 ```
 
-Notice: checkout and install happen once, then all seven checks run in parallel. Total time is limited by the slowest job (usually E2E), not the sum of all jobs.
+Notice: the static job runs first, then the unit and end-to-end jobs run in parallel. Total time is limited by the slower of those two downstream jobs, not the sum of every individual check.
 
-**Caching.** Bun, npm, and yarn all produce lock-hash-stable caches. Cache the `node_modules` (or Bun's equivalent) directory and CI runs cut 30-60 seconds off the install step. Cache the Playwright browsers and you save another 30 seconds. Cache the TypeScript build info and incremental typecheck gets faster. None of this is hard; it's just the stuff people forget to do because "it works without it." It works without it. It works faster _with_ it.
+**Caching.** Bun, npm, and yarn all produce lock-hash-stable caches. Shelf caches `~/.npm` and `~/.cache/ms-playwright` instead of committing to a `node_modules` cache strategy. That is enough to cut the expensive parts of the workflow without adding a more brittle cache layer.
 
-The actual GitHub Actions `cache` action looks like:
+The actual GitHub Actions `cache` action in Shelf looks like:
 
 ```yaml
 - name: Cache dependencies
   uses: actions/cache@v4
   with:
     path: |
-      node_modules
+      ~/.npm
       ~/.cache/ms-playwright
-    key: ${{ runner.os }}-deps-${{ hashFiles('**/bun.lockb') }}
+    key: ${{ runner.os }}-deps-${{ hashFiles('package-lock.json') }}-playwright-${{ hashFiles('playwright.config.ts') }}
 ```
 
-Two lines of cache config, a minute shaved off every run. Do it.
+That is the exact cache shape Shelf uses. Start there before you invent anything more clever.
 
 ## Fail fast, but not too fast
 
@@ -134,7 +118,7 @@ The exception: job dependencies. If your Playwright job depends on a successful 
 Once the workflow is reliable, turn on branch protection on `main`:
 
 - Require status checks to pass before merging.
-- Require the specific checks you care about: `lint`, `typecheck`, `test`, `playwright`, `secret-scan`.
+- Require the specific checks you care about. In Shelf's current workflow, that means at least `static` and `end-to-end`, and usually `unit` as well.
 - Optionally, require Bugbot (or your review bot of choice) to have completed and left a non-blocking comment.
 - Require a human reviewer for changes outside certain paths.
 
@@ -154,6 +138,8 @@ When CI fails, the agent should be able to recover without a human pasting error
 With those in place, the agent can read the PR, read the status check, download the dossier artifact, and iterate. You don't have to be the relay. The agent iterates until green or until it gets stuck in a way it can report back to you.
 
 I have watched this work. An agent opens a PR, CI fails, the agent reads the dossier artifact, makes a fix, pushes a new commit, CI fails in a different way, the agent reads the new dossier, fixes it, pushes again, CI goes green, and I find out about the whole sequence when I look at the PR thirty minutes later. Entire bug fixes, self-driven, because the CI output is legible to the agent. That's the loop.
+
+If your copy of Shelf does not have a hosted remote yet, you cannot close that loop end-to-end. What you _can_ do is make the workflow legible in advance: valid YAML, real commands, explicit artifact paths, finite retention, and no hidden workflow-only scripts. Once the repository is connected to GitHub, the only missing piece is the hosted runner.
 
 ## CLAUDE.md rules
 
@@ -182,4 +168,6 @@ CI is where the loops you built all day run together, one more time, in a clean 
 ## Additional Reading
 
 - [Failure Dossiers: What Agents Actually Need From a Red Build](failure-dossiers-what-agents-actually-need-from-a-red-build.md)
+- [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md)
+- [Nightly Verification Loops](nightly-verification-loops.md)
 - [Lab: Write the CI Workflow from Scratch](lab-write-the-ci-workflow-from-scratch.md)

@@ -1,7 +1,7 @@
 ---
 title: The Second Opinion
 description: Why you want a different agent reviewing the first agent's work, and what kinds of mistakes a review bot actually catches that tests don't.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -53,17 +53,22 @@ Let me set expectations. Review bots are not magic. They are limited in specific
 
 A few options. All are actively developed as of this workshop.
 
+> [!NOTE]
+> Review-bot pricing, entitlement, and repository-install flows shift quickly. Treat the comparisons in this lesson as an April 9, 2026 snapshot and check the current product docs before you make any of these tools part of required branch protection.
+
 [**Cursor Bugbot**](https://docs.cursor.com/en/bugbot) is the one I'll be using as the primary example, because its posture fits the loop philosophy well. Bugbot comments on PRs with specific, actionable findings and doesn't try to summarize the change or rate it. It's opinionated in a way that produces follow-up commits instead of conversations. I've been using it on real projects and it's the first review bot that I haven't turned off after a week.
 
-**GitHub Copilot review** is built into [GitHub PRs](https://docs.github.com/en/pull-requests) if you have Copilot Enterprise. It's more conversational than Bugbot—it writes a summary, makes suggestions, behaves more like a junior reviewer. The findings are hit-or-miss but it's friction-free to enable and it's already where your team is.
+**GitHub Copilot review** is built into [GitHub pull requests](https://docs.github.com/en/pull-requests) on current Copilot-supported plans, but the exact rollout depends on plan and repository settings. It's more conversational than Bugbot—it writes a summary, makes suggestions, behaves more like a junior reviewer. The findings are hit-or-miss but it's friction-free to enable and it's already where your team is.
 
-**Codex review** (OpenAI's) is the new entrant. It integrates with GitHub and Codex directly. As of this workshop, it's worth a look but I haven't shipped with it seriously yet.
+**Codex review** (OpenAI's) is the new entrant. It now plugs directly into GitHub pull request workflows, but the setup and product surface are still moving quickly enough that I would evaluate it on a pilot repo before I made it a required team gate.
 
 **CodeRabbit** is a long-time dedicated review bot service. More configurable than the built-in options, more setup to get right, powerful once you do. If you want to tune review rules heavily, this is the one I'd evaluate.
 
 **[Claude Code](https://docs.claude.com/en/docs/claude-code/overview) review** as a manual pattern, not a hosted product. You ask Claude Code to "review the diff on this branch" and it does. No CI integration, no PR comments, just a conversation. I use this more than any of the hosted options because it's infinitely tunable and it's already in my tool belt.
 
 We're going to set up Bugbot on Shelf in the next lab. The patterns port to the others.
+
+That last sentence matters more than it sounds like. Bugbot is the example for the core day because it is concrete and easy to teach. The appendix comes back and ports the same second-opinion loop to Copilot, Codex, and plain GitHub review so the process does not depend on one vendor.
 
 ## The rule of three
 
@@ -91,4 +96,5 @@ A different agent reviewing the diff catches the class of mistake the original a
 ## Additional Reading
 
 - [Tuning Bugbot for Your Codebase](tuning-bugbot-for-your-codebase.md)
+- [Review Portability Beyond Bugbot](review-portability-beyond-bugbot.md)
 - [Lab: Bugbot on a Planted Bug](lab-bugbot-on-a-planted-bug.md)

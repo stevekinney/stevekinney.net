@@ -1,7 +1,7 @@
 ---
 title: Recording HARs for Network Isolation
 description: How to record a real HTTP session once and replay it deterministically in every test, so your suite stops depending on someone else's server.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -63,7 +63,7 @@ This is determinism as a file. That's the whole magic trick.
 
 ## The matching rules, and why they bite
 
-The part that trips people up is how Playwright decides which recorded response to serve. By default, it matches on URL and method. If your test makes a request to `https://openlibrary.org/search.json?q=Station+Eleven` and the HAR has a response for that exact URL, you get that response. If the URL differs by a single query parameter, you don't.
+The part that trips people up is how Playwright decides which recorded response to serve. Per the current Playwright docs, HAR replay matches on URL and HTTP method strictly. For `POST` requests it also matches the request payload strictly, and if multiple entries match a request, Playwright picks the one with the most matching headers. If your test makes a request to `https://openlibrary.org/search.json?q=Station+Eleven` and the HAR only has `...q=Station%20Eleven&limit=10`, that is a different request as far as the replay layer is concerned.
 
 This is both a feature and a footgun.
 
@@ -72,11 +72,14 @@ This is both a feature and a footgun.
 
 A few ways to make it less sharp:
 
-**Normalize query parameter order.** If your fetch wrapper serializes query params in a deterministic order, you're fine. If it doesn't, two calls that _should_ be identical can hash differently. Either fix the wrapper or pass a `match` option to `routeFromHAR` that ignores param order.
+**Make the request shape deterministic.** If your fetch wrapper serializes query params in a different order on different runs, or if one code path adds optional params and another does not, your replay will miss. Fix the request generation first. The HAR is not the place to paper over nondeterministic callers.
 
-**Strip volatile headers.** Playwright will record `Authorization` headers, timestamps, user-agents, and other things that shift between runs. Use the `notFound: 'fallback'` option or a custom `matcher` function to be less strict about which headers matter.
+**Keep `notFound: 'abort'` as the default until you have a reason not to.** `notFound: 'fallback'` is useful when you intentionally want unmatched requests to hit the network, but it's the wrong default for deterministic tests because it hides drift. I want a loud failure when the app starts making a request I didn't record.
 
 **Record one scenario at a time.** Don't try to record a HAR that covers the entire test suite at once. One HAR per test file, scoped to one scenario, is easier to regenerate and easier to debug when it breaks.
+
+> [!WARNING]
+> Playwright does not serve HAR responses for requests intercepted by a Service Worker. If requests seem to vanish from the replay layer, check whether the app or your test tooling is registering one. The current Playwright recommendation is to set `serviceWorkers: 'block'` when you rely on request interception or HAR replay.
 
 ## Refreshing HARs
 

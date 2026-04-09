@@ -1,13 +1,13 @@
 ---
 title: Tuning Bugbot for Your Codebase
 description: How to configure Cursor Bugbot so it finds the real issues and shuts up about the rest.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
 A review bot that comments on every PR with low-quality findings is a review bot that gets muted. The second-most-common failure mode (after "finds nothing useful") is "finds something on every PR regardless of whether there's something to find." Both failures kill the loop, because the signal stops being worth reading.
 
-Bugbot—[Cursor's](https://cursor.com/) review bot—lets you dodge both failures with a few specific settings. This lesson is the short version of what I'd hand a teammate on their first day using it.
+Bugbot—[Cursor's](https://docs.cursor.com/en/bugbot) review bot—lets you dodge both failures with a few specific settings. This lesson is the short version of what I'd hand a teammate on their first day using it.
 
 ## Turning it on
 
@@ -17,7 +17,12 @@ This is the posture I want. A summary review is a ritual. An inline comment is a
 
 ## The repo-level config file
 
-Drop a `.cursor/bugbot.md` at the root of the repo. This is Bugbot's instructions file—the same idea as `CLAUDE.md`, but for the reviewer. The file tells the bot what the codebase cares about and what to leave alone.
+Drop a `.cursor/BUGBOT.md` at the root of the repo. This is Bugbot's instructions file—the same idea as `CLAUDE.md`, but for the reviewer. The file tells the bot what the codebase cares about and what to leave alone.
+
+> [!NOTE]
+> As of April 9, 2026, Cursor's docs use `.cursor/BUGBOT.md`. Older screenshots and repos may still show `.cursor/bugbot.md`. Follow the current Cursor docs for the account you're actually using, but keep the filename consistent everywhere in the repository and in your lesson notes.
+
+Shelf commits the tuned `.cursor/BUGBOT.md` to the repository even before the hosted Bugbot review is wired up. The file is the authoring concern; pointing Bugbot at an actual GitHub PR is a deployment concern you handle separately.
 
 ```markdown
 # Bugbot review rules for Shelf
@@ -25,27 +30,39 @@ Drop a `.cursor/bugbot.md` at the root of the repo. This is Bugbot's instruction
 ## Context
 
 Shelf is a reading-tracker built on SvelteKit + TypeScript + Drizzle + SQLite.
-Tests run on Vitest (unit) and Playwright (end-to-end).
+Tests run on Vitest (unit) and Playwright (end-to-end). Better Auth handles
+authentication; authorization helpers live in `src/lib/server/authorization.ts`.
 
 ## What to flag
 
-- API handlers that read user identity from the request body instead of the
-  session. User identity comes from `locals.session.userId`. Never trust the body.
+- API handlers under `src/routes/api/` that read user identity from the
+  request body instead of the viewer. User identity comes from `locals.user`,
+  never the request body.
+- Admin-only route handlers that use plain `locals.user` checks or call
+  something other than `requireAdministrator(locals.user)` from
+  `$lib/server/authorization`. Any handler under `src/routes/api/admin/**` is
+  admin-only.
 - Drizzle queries that don't scope by the current user when operating on
-  user-owned resources (shelf entries, ratings, etc.).
+  user-owned resources (shelf entries, ratings).
 - Error handling that catches an error and returns 200. If we catch, we log
   and return an appropriate non-2xx status.
-- Components that render user-generated content (book titles, reviews)
-  without escaping or sanitization.
-- Playwright tests that use `page.waitForTimeout`, `page.locator` with
-  raw CSS, or UI login. These patterns are banned. See CLAUDE.md.
+- Components that render user-generated content without escaping or
+  sanitization.
+- Playwright tests that use `page.waitForTimeout`, `page.locator` with raw
+  CSS, or UI login. These patterns are banned in `CLAUDE.md`.
+- Changes to the dossier loop that remove `playwright-report/report.json`,
+  retained traces, or the `npm run dossier` script.
 
 ## What to leave alone
 
-- Test fixtures (`tests/fixtures/`)—deliberate bad data lives here.
-- Generated types in `src/lib/generated/`.
+- Generated Playwright artifacts under `playwright-report/`.
+- Storage-state files under `playwright/.authentication/`.
 - Snapshot PNGs in `tests/end-to-end/*-snapshots/`.
-- Any file under `src/lib/legacy-auth/`—scheduled for deletion.
+- HAR fixtures under `tests/fixtures/*.har`.
+- Generated `build/` outputs.
+- Lockfiles.
+- `src/lib/server/db/auth.schema.ts` — regenerated from Better Auth, not
+  hand-edited.
 
 ## Tone
 
@@ -91,7 +108,7 @@ When Bugbot leaves a comment, the workflow is straightforward:
 
 1. **Read the finding.** Not every finding is correct. Plenty are nitpicks or misunderstandings.
 2. **If it's right**, hand it to the agent. "Bugbot flagged this handler for trusting the request body. Fix it." The agent reads the comment, makes the change, pushes. Bugbot re-reviews on push.
-3. **If it's wrong**, say so on the PR and mark the thread resolved. Bugbot learns from resolution patterns over time (on hosted versions that support it). It learns even faster if you update `.cursor/bugbot.md` to say "do not flag X" when X keeps coming up as a false positive.
+3. **If it's wrong**, say so on the PR and mark the thread resolved. Treat any bot-side "learning" as a nice-to-have, not a guarantee. The durable fix is updating `.cursor/BUGBOT.md` so the false positive is less likely to recur.
 4. **If it's neither clearly right nor clearly wrong**, err on the side of fixing it. Review bot findings tend to be symptoms, and even when the diagnosis is off, addressing the symptom usually improves the code. (True of human reviewers too, incidentally.)
 
 ## The escalation ladder (from the previous lesson)
@@ -126,7 +143,7 @@ Treat the bot as the layer between "I finished writing the code" and "a human is
 - If Bugbot flags the same issue three times across three different
   PRs, add a rule to this file that prevents the pattern upstream.
 - Do not argue with Bugbot in comments. If the finding is wrong,
-  resolve the thread and update `.cursor/bugbot.md` to prevent
+  resolve the thread and update `.cursor/BUGBOT.md` to prevent
   the false positive.
 ```
 

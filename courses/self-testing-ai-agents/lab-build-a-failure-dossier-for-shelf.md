@@ -1,11 +1,13 @@
 ---
 title: 'Lab: Build a Failure Dossier for Shelf'
 description: Wire up traces, screenshots, console capture, and a dossier summarizer. Then break a test and watch the agent fix it from the dossier alone.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
 Short lab. Wire up the dossier infrastructure, then run a failure through it to verify the loop closes.
+
+Shelf writes artifacts under `playwright-report/test-results/`, the HTML report to `playwright-report/html/`, the JSON report to `playwright-report/report.json`, and the markdown summary to `playwright-report/dossier.md`. The simplest, most controlled way to force a failure when you want to test the loop is to temporarily move one committed screenshot baseline, run the matching visual test, generate the dossier, then restore the baseline and rerun green.
 
 ## The task
 
@@ -16,13 +18,14 @@ Update the Shelf repo so that every failing Playwright test produces a structure
 In `playwright.config.ts`, ensure the following are set:
 
 ```ts
+outputDir: 'playwright-report/test-results',
 use: {
   trace: 'retain-on-failure',
   screenshot: 'only-on-failure',
   video: 'retain-on-failure',
 },
 reporter: [
-  ['html', { open: 'never' }],
+  ['html', { open: 'never', outputFolder: 'playwright-report/html' }],
   ['json', { outputFile: 'playwright-report/report.json' }],
   ['list'],
 ],
@@ -32,7 +35,7 @@ The JSON reporter is new—your dossier script is going to read from it.
 
 ### Step 2: console and network forwarders
 
-In `tests/end-to-end/fixtures.ts`, extend the `page` fixture to forward browser console errors and failed network responses to the Node process's stderr. Use the patterns from the lesson.
+In `tests/end-to-end/fixtures.ts`, extend the `page` fixture to forward browser console errors and failed network responses to the Node process's stderr. Use the patterns from the lesson, and filter out benign navigation aborts like `ERR_ABORTED` so the output stays actionable.
 
 Verify it works by adding a temporary `console.error('hello')` to any page component and running the rate-book test. You should see `[browser error] hello` in the test output.
 
@@ -45,36 +48,46 @@ Write `scripts/summarize-failure-dossier.ts` that reads `playwright-report/repor
 - Relative path to the screenshot
 - Exact shell command to reproduce the failure
 
+The lesson walks the Playwright report schema and shows the full script in the **Making dossiers agent-readable** section of [Failure Dossiers: What Agents Actually Need From a Red Build](failure-dossiers-what-agents-actually-need-from-a-red-build.md). Work from that sketch, not from memory — the `suites → specs → tests → results` walk and the attachment-picking predicates are easy to get wrong.
+
+The Shelf starter ships a production version at `scripts/summarize-failure-dossier.ts`. Write yours first from the lesson sketch, then open the starter's file to compare. Differences you will see in the shipped version:
+
+- Explicit TypeScript types for `PlaywrightReport`, `PlaywrightSuite`, `PlaywrightSpec`, etc., instead of `any`. Copy the shape if your editor complains about the looser types in the sketch.
+- Visual-regression-aware screenshot picking: on a screenshot assertion failure, Playwright retains `expected`, `actual`, and `diff`. The shipped script prefers the `diff` image so the dossier links to the thing a reviewer actually wants to look at, rather than the baseline.
+- `null`-guarded error access: `result.error?.message ?? result.errors?.[0]?.message ?? 'Unknown error'` instead of the bare `result.error?.message` in the lesson sketch. The lesson cuts the fallback for readability; production code should not.
+
 Add a `package.json` script: `"dossier": "tsx scripts/summarize-failure-dossier.ts"`.
 
 ### Step 4: CLAUDE.md
 
 Add a section titled "When a test fails" with the reproduction instructions from the lesson.
 
+![The Playwright HTML report used as the dossier front door](./assets/lab-failure-dossier-report.png)
+
 ## Acceptance criteria
 
 - [ ] `playwright.config.ts` has `trace: 'retain-on-failure'`, `screenshot: 'only-on-failure'`, and the JSON reporter enabled.
 - [ ] `tests/end-to-end/fixtures.ts` (or equivalent) forwards browser console errors and warnings to stderr. Verify with a deliberate `console.error` and check that it shows up in test output.
-- [ ] `scripts/summarize-failure-dossier.ts` exists and runs without crashing: `bun run dossier` exits zero even when there are no failures (with an appropriate "no failures" message).
+- [ ] `scripts/summarize-failure-dossier.ts` exists and runs without crashing: `npm run dossier` exits zero even when there are no failures (with an appropriate "no failures" message).
 - [ ] `package.json` has a `dossier` script.
-- [ ] `CLAUDE.md` has a "When a test fails" section that names the reproduction command (`bun run dossier`) and the path to the output file.
+- [ ] `CLAUDE.md` has a "When a test fails" section that names the reproduction command (`npm run dossier`) and the path to the output file.
 - [ ] Deliberately break a test (change an assertion so it fails) and run it. Verify:
-  - [ ] `playwright-report/index.html` exists
+  - [ ] `playwright-report/html/index.html` exists
   - [ ] `playwright-report/report.json` exists
-  - [ ] A trace.zip exists somewhere under `playwright-report/`
-  - [ ] A failure screenshot exists somewhere under `playwright-report/`
-  - [ ] `bun run dossier` produces a `playwright-report/dossier.md` with the failure listed
+  - [ ] A `trace.zip` exists somewhere under `playwright-report/test-results/`
+  - [ ] A failure screenshot exists somewhere under `playwright-report/test-results/`
+  - [ ] `npm run dossier` produces a `playwright-report/dossier.md` with the failure listed
   - [ ] The dossier contains the reproduction command
   - [ ] The dossier contains a screenshot link
-- [ ] Revert the broken test. Run the suite green. `bun run dossier` reports no failures.
+- [ ] Revert the broken test. Run the suite green. `npm run dossier` reports no failures.
 
 ## Testing the loop end-to-end
 
 Now the hard part. Verify the loop actually works by giving the agent a failing test and nothing else.
 
 1. Introduce a subtle bug in Shelf. Example: in the "rate book" API handler, accidentally multiply the rating by 2 before saving. (`shelfEntry.rating = input.rating * 2`)
-2. Run `bun playwright test rate-book.spec.ts`. It should fail because the persisted rating doesn't match what the UI shows.
-3. Run `bun run dossier`. Open `playwright-report/dossier.md` to confirm the failure is captured.
+2. Run `npx playwright test --project=chromium tests/end-to-end/rate-book.spec.ts`. It should fail because the persisted rating doesn't match what the UI shows.
+3. Run `npm run dossier`. Open `playwright-report/dossier.md` to confirm the failure is captured.
 4. Open Claude Code. Say: _"Read `playwright-report/dossier.md`. Diagnose the failure. Propose a fix. Apply it."_
 5. Do not give the agent any other context. Do not mention that you multiplied by 2. Let it figure it out from the dossier and the code.
 
@@ -94,7 +107,7 @@ If the agent got stuck, the dossier was missing something. Figure out what it wa
 - Expand the dossier to include the first 20 lines of the trace's action log for each failure (Playwright's trace JSON can be parsed to extract this).
 - Add a "recent git history" section to the dossier—the last 5 commits and their summaries—so the agent has context for what recently changed.
 - Write a second dossier format, `dossier.json`, so tools can consume it programmatically.
-- Add the dossier summarizer to the `test` npm script so it always runs after a failing test run. `"test": "playwright test || (bun run dossier && exit 1)"`.
+- Add the dossier summarizer to the `test` npm script so it always runs after a failing test run. `"test:e2e": "playwright test || (npm run dossier && exit 1)"`.
 
 ## The one thing to remember
 

@@ -1,7 +1,7 @@
 ---
 title: Storage State Authentication
 description: Stop logging in from the UI on every test. Log in once, save the session, reuse it everywhere.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -107,6 +107,9 @@ test('rate a book', async ({ page }) => {
 
 The login code is gone. The login _concern_ is gone. If login breaks, exactly one test fails—the setup test—and the error tells you unambiguously that login itself is broken, not that "everything is flaky."
 
+> [!NOTE] Why the UI login, not a raw POST
+> Shelf's Better Auth configuration rejects raw form-action POSTs with a CSRF-style `403` unless the request carries the same browser context a real form submission would. That's why the setup file above uses `page.goto('/login')` and fills the form through the UI instead of a leaner `request.post('/login?/signInEmail')` shortcut. The UI route is the conservative default, and it also doubles as a smoke test for the login flow.
+
 ## Multiple roles
 
 Shelf has an admin surface for featuring books on the home page. So we need two authenticated contexts: a regular user and an admin. Easy:
@@ -146,20 +149,23 @@ projects: [
 
 Organize the tests by role under subdirectories. Every test inherits the right state automatically. No decorators, no fixtures-within-fixtures, no clever `beforeEach` logic.
 
-## Skipping the UI entirely
+## When skipping the UI is worth it
 
-Everything I just showed you logs in through the real login page. That's the conservative default and it's what I reach for first. But, if you have an API-based login (which Shelf does, via `POST /api/authentication/sign-in`), you can skip the UI entirely and just hit the API:
+Everything above logs in through the real login page. That's the conservative default and it's what Shelf uses. If your app has a lower-level sign-in endpoint that is safe to call from a raw request context—a JSON-only API route, say, or a token issuer the form itself wraps—you can skip the UI entirely and hit that directly:
 
 ```ts
 setup('authenticate as user', async ({ request }) => {
-  await request.post('/api/authentication/sign-in', {
+  // Example endpoint. Replace with whatever your app actually exposes—
+  // Shelf doesn't ship one; this is illustrative, not a real route.
+  const response = await request.post('/api/auth/token', {
     data: { email: 'alice@example.com', password: 'password123' },
   });
+  expect(response.ok()).toBeTruthy();
   await request.storageState({ path: 'playwright/.authentication/user.json' });
 });
 ```
 
-This is faster (no page load, no DOM rendering) and doesn't care if the login form changes. The tradeoff is that it no longer doubles as a smoke test for the login UI. I generally run the UI version in CI (as a safety net) and the API version locally (for speed). You can have both—two setup projects, pick one based on an environment variable.
+This is faster (no page load, no DOM rendering) and doesn't care if the login form changes. The tradeoff is that it no longer doubles as a smoke test for the login UI, and some auth stacks—Shelf's included—reject raw form-action POSTs because of CSRF-style checks baked into the form flow. Prove a raw request shortcut works against your current app before teaching it as the default path.
 
 ## The `.gitignore` you need
 
@@ -179,6 +185,9 @@ Two options exist:
 
 - Regenerate the state file on every Playwright run. The `setup` project approach above does this automatically—every `npx playwright test` runs the login again.
 - Cache the state file with a TTL. There are recipes in the Playwright docs if you want this. I usually don't—regenerating on every run is cheap enough that I don't bother with caching.
+
+> [!TIP]
+> The setup-project pattern is the safest default for workshop code because it gives you a fresh, browser-real authentication state on every run. Cache the file only when you have measured the setup as a bottleneck and you understand the failure modes around expired cookies.
 
 ## CLAUDE.md rules
 

@@ -1,7 +1,7 @@
 ---
 title: Writing a Custom MCP Wrapper
 description: When the off-the-shelf MCPs don't give the agent the exact probe you want, wrap your own. It's fewer lines of code than you think.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -17,13 +17,15 @@ For a quick refresher on what the [Model Context Protocol](https://modelcontextp
 
 A small MCP server with a single tool called `verify_shelf_page`. When called, it:
 
-1. Launches Playwright against `http://localhost:5173/shelf/<username>` (with storage state). The `<username>` is passed as an argument so the agent can probe any user's shelf.
-2. Waits for the shelf heading to be visible.
-3. Counts the books rendered.
-4. Checks the console for errors.
-5. Returns a structured JSON blob: `{ ok: boolean, bookCount: number, consoleErrors: string[] }`.
+1. Launches Playwright against `http://127.0.0.1:4173/shelf/<username>` by default. The `<username>` is the lower-cased portion of the reader's email address before the `@`, so alice@example.com becomes `alice`. `SHELF_BASE_URL` can override the host when needed.
+2. Waits for the page's level-one shelf heading to be visible.
+3. Counts the books rendered as `<article>` elements.
+4. Captures any console errors emitted during page load.
+5. Returns a structured JSON blob: `{ ok: boolean, bookCount: number, consoleErrors: string[], url: string }`.
 
 The agent can now call `verify_shelf_page` and get a one-shot, structured answer to "is this page in good shape?" No composition, no guessing, no "did you remember to check the console?" It's all in the tool.
+
+Shelf registers the server in a repository-local `.mcp.json` and resolves the target URL from `SHELF_BASE_URL`, defaulting to `http://127.0.0.1:4173`. The `/shelf/[username]` route is public, so the server does not strictly need authentication—but it reuses the existing `playwright/.authentication/user.json` storage state when present so the browser session stays consistent with the rest of the workshop tooling.
 
 ## The skeleton
 
@@ -33,71 +35,74 @@ It uses the [Playwright API](https://playwright.dev/docs/api/class-browsertype) 
 
 ```ts
 // tools/shelf-verification-server/server.ts
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { chromium } from 'playwright';
-import path from 'node:path';
+import { z } from 'zod';
 
-const server = new Server(
-  { name: 'shelf-verification', version: '0.1.0' },
-  { capabilities: { tools: {} } },
-);
+const STORAGE_STATE_PATH = path.resolve('playwright/.authentication/user.json');
+const baseUrl = process.env.SHELF_BASE_URL ?? 'http://127.0.0.1:4173';
 
-server.setRequestHandler('tools/list', async () => ({
-  tools: [
-    {
-      name: 'verify_shelf_page',
-      description:
-        'Open the Shelf app and verify the /shelf page renders correctly. Returns book count and any console errors.',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          username: { type: 'string', description: 'Username to view the shelf for' },
-        },
-        required: ['username'],
-      },
+const server = new McpServer({ name: 'shelf-verification', version: '0.1.0' });
+
+server.registerTool(
+  'verify_shelf_page',
+  {
+    description:
+      'Open the Shelf app and verify the public /shelf/[username] route renders correctly.',
+    inputSchema: {
+      username: z.string().min(1),
     },
-  ],
-}));
+    outputSchema: {
+      ok: z.boolean(),
+      status: z.number().int(),
+      bookCount: z.number().int().nonnegative(),
+      consoleErrors: z.array(z.string()),
+      url: z.string(),
+    },
+  },
+  async ({ username }) => {
+    const targetUrl = `${baseUrl}/shelf/${encodeURIComponent(username)}`;
+    const browser = await chromium.launch();
+    try {
+      const contextOptions = fs.existsSync(STORAGE_STATE_PATH)
+        ? { storageState: STORAGE_STATE_PATH }
+        : {};
+      const context = await browser.newContext(contextOptions);
+      const page = await context.newPage();
 
-server.setRequestHandler('tools/call', async (request) => {
-  if (request.params.name !== 'verify_shelf_page') {
-    throw new Error(`Unknown tool: ${request.params.name}`);
-  }
+      const consoleErrors: string[] = [];
+      page.on('console', (message) => {
+        if (message.type() === 'error') consoleErrors.push(message.text());
+      });
 
-  const { username } = request.params.arguments as { username: string };
+      const response = await page.goto(targetUrl);
+      const heading = page.getByRole('heading', { level: 1, name: /shelf/i });
+      await heading.waitFor();
 
-  const browser = await chromium.launch();
-  const context = await browser.newContext({
-    storageState: path.resolve('playwright/.authentication/user.json'),
-  });
-  const page = await context.newPage();
+      const bookCount = await page.getByRole('article').count();
+      const status = response?.status() ?? 0;
+      const headingVisible = await heading.isVisible();
 
-  const consoleErrors: string[] = [];
-  page.on('console', (msg) => {
-    if (msg.type() === 'error') consoleErrors.push(msg.text());
-  });
+      const result = {
+        ok: status >= 200 && status < 300 && headingVisible && consoleErrors.length === 0,
+        status,
+        bookCount,
+        consoleErrors,
+        url: targetUrl,
+      };
 
-  await page.goto(`http://localhost:5173/shelf/${username}`);
-  await page.getByRole('heading', { name: new RegExp(`${username}'s Shelf`, 'i') }).waitFor();
-
-  const bookCount = await page.getByRole('article').count();
-
-  await browser.close();
-
-  return {
-    content: [
-      {
-        type: 'text',
-        text: JSON.stringify({
-          ok: consoleErrors.length === 0 && bookCount > 0,
-          bookCount,
-          consoleErrors,
-        }),
-      },
-    ],
-  };
-});
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        structuredContent: result,
+      };
+    } finally {
+      await browser.close();
+    }
+  },
+);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
@@ -109,27 +114,31 @@ That's the whole server. The three pieces are:
 - **The tool implementation.** When the agent calls the tool, you run whatever code you want, using whatever libraries you want, and return structured output.
 - **The transport.** Stdio transport means the server talks to the agent over standard input and output. The agent runs the server as a subprocess. It's simpler than HTTP and it's the right default for local tools.
 
-## Wiring it up to Claude Code
+> [!TIP]
+> Notice what's missing from the example: `waitUntil: 'networkidle'`. The server waits on the shelf heading because that is the actual success signal for this probe. The same waiting rules from the Playwright lesson apply inside your custom MCPs.
 
-Claude Code's MCP config lives in `.claude/mcp.json` (for this project) or `~/.claude/mcp.json` (for your user). Add an entry:
+## Wiring it up to your local MCP host
+
+In the local Shelf repository for this course, MCP config lives in `.mcp.json` at the repository root. Add an entry:
 
 ```json
 {
   "mcpServers": {
     "shelf-verification": {
-      "command": "node",
-      "args": ["./tools/shelf-verification-server/server.js"],
-      "env": {}
+      "type": "stdio",
+      "command": "npx",
+      "args": ["tsx", "./tools/shelf-verification-server/server.ts"],
+      "env": {
+        "SHELF_BASE_URL": "http://127.0.0.1:4173"
+      }
     }
   }
 }
 ```
 
-(You'll need to compile the TypeScript to JavaScript, or use `tsx` as the command.)
+Restart your MCP host. The new `verify_shelf_page` tool should appear in the tool list. Ask the agent to "verify the shelf page for alice" and it should pick the right tool automatically.
 
-Restart Claude Code. The new `verify_shelf_page` tool should appear in the tool list. Ask the agent to "verify the shelf page for alice" and it should pick the right tool automatically.
-
-For Cursor, the equivalent config is in `~/.cursor/mcp.json` with the same shape. For Codex, it's in the `~/.codex/config.toml`. The concepts are identical; only the config path changes.
+If your editor or agent host uses a different config path, the concept is the same even if the file moves. The only thing that changes is where the subprocess registration lives.
 
 ## Why this beats "compose it yourself"
 
