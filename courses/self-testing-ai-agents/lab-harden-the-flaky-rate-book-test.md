@@ -94,7 +94,7 @@ Finally, add a second assertion using `request.get('/api/shelf/...')` to verify 
 If you finish early, pick one or more:
 
 - Add a second test in the same file that verifies a user _can't_ rate a book they haven't added to their shelf yet. Use the `request` fixture to set up the scenario (book exists, user has not added it) and assert the rating button is disabled.
-- Swap the UI login in `authentication.setup.ts` for a direct `POST` to the app's sign-in action (in the current starter, `/login?/signInEmail`) and compare the speed delta.
+- As a short experiment, try swapping the UI login in `authentication.setup.ts` for a direct `POST` to the app's sign-in action (`/login?/signInEmail`) and confirm that, in the current starter, Better Auth rejects the raw request with a CSRF-style 403. That's why the starter keeps the real UI login for storage-state setup: if you want a working shortcut here, keep using the existing storage-state flow instead of `request.post(...)` to the sign-in action.
 - Run the test under `--repeat-each=50` and see if anything flakes under load.
 - Turn off `fullyParallel` and see if the test still passes. (It should. If it doesn't, you have a seeding leak—fix it.)
 

@@ -57,6 +57,7 @@ server.registerTool(
     },
     outputSchema: {
       ok: z.boolean(),
+      status: z.number().int(),
       bookCount: z.number().int().nonnegative(),
       consoleErrors: z.array(z.string()),
       url: z.string(),
@@ -77,13 +78,17 @@ server.registerTool(
         if (message.type() === 'error') consoleErrors.push(message.text());
       });
 
-      await page.goto(targetUrl);
-      await page.getByRole('heading', { level: 1 }).waitFor();
+      const response = await page.goto(targetUrl);
+      const heading = page.getByRole('heading', { level: 1, name: /shelf/i });
+      await heading.waitFor();
 
       const bookCount = await page.getByRole('article').count();
+      const status = response?.status() ?? 0;
+      const headingVisible = await heading.isVisible();
 
       const result = {
-        ok: consoleErrors.length === 0 && bookCount >= 0,
+        ok: status >= 200 && status < 300 && headingVisible && consoleErrors.length === 0,
+        status,
         bookCount,
         consoleErrors,
         url: targetUrl,

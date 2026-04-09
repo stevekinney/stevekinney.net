@@ -115,9 +115,12 @@ Claude Code has its own [hook system](https://code.claude.com/docs/en/hooks) tha
 
 The two I find useful:
 
-**`PostToolUse` → `bun run lint --quiet`**—after the agent edits a file, silently run lint. If it passes, nothing happens. If it fails, the lint output is attached to the agent's next turn, so the agent sees the error immediately without you having to ask "did you run lint?" This closes the feedback loop inside a single conversation.
+**`PostToolUse` → `npm run lint -- --quiet`**—after the agent edits a file, silently run lint. If it passes, nothing happens. If it fails, the lint output is attached to the agent's next turn, so the agent sees the error immediately without you having to ask "did you run lint?" This closes the feedback loop inside a single conversation.
 
-**`Stop` → `bun run pre-commit && bun run knip`**—right before the turn finishes, run the pre-commit suite. Same logic. Same tight feedback.
+**`Stop` → `npm run pre-commit && npm run knip`**—right before the turn finishes, run the pre-commit suite. Same logic. Same tight feedback.
+
+> [!NOTE]
+> These hook commands assume `npm` because that's what the Shelf workshop standardizes on. Swap to `bun run` (or `pnpm run`, `yarn`, etc.) to match whatever package manager your repository's scripts are wired to—the important part is that the hook shells out to a real, named script in `package.json`.
 
 Project-level hook config now lives in `.claude/settings.json` (or `~/.claude/settings.json` for a user-wide setup). A minimal example:
 
@@ -139,7 +142,7 @@ Project-level hook config now lives in `.claude/settings.json` (or `~/.claude/se
 }
 ```
 
-The `run-lint.sh` script can be as small as `bun run lint --quiet || true`. The `|| true` is deliberate. We don't want the hook to block the agent, we just want the output attached. The agent decides whether to fix.
+The `run-lint.sh` script can be as small as `npm run lint -- --quiet || true`. The `|| true` is deliberate. We don't want the hook to block the agent, we just want the output attached. The agent decides whether to fix.
 
 My honest take on Claude hooks: they're a tighter loop than git hooks for one specific agent (Claude Code), and they're complementary, not a replacement. The git hook fires for all commits, by anyone, using any agent. The Claude hook fires only for Claude Code's own edits, but fires _during_ the conversation instead of at commit time. Use both. The combination beats either alone.
 

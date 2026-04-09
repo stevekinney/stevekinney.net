@@ -155,7 +155,9 @@ Everything above logs in through the real login page. That's the conservative de
 
 ```ts
 setup('authenticate as user', async ({ request }) => {
-  const response = await request.post('/api/authentication/token', {
+  // Example endpoint. Replace with whatever your app actually exposes—
+  // Shelf doesn't ship one; this is illustrative, not a real route.
+  const response = await request.post('/api/auth/token', {
     data: { email: 'alice@example.com', password: 'password123' },
   });
   expect(response.ok()).toBeTruthy();

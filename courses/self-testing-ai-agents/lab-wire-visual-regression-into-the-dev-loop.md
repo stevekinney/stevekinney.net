@@ -60,7 +60,7 @@ Route the new file through the `authenticated` project in `playwright.config.ts`
 ```ts
 {
   name: 'authenticated',
-  testMatch: /(rate-book|accessibility|search|visual-authenticated)\.spec\.ts/,
+  testMatch: /(rate-book|accessibility|search|visual-authenticated|performance)\.spec\.ts/,
   use: {
     ...devices['Desktop Chrome'],
     storageState: storageStatePath,
@@ -77,6 +77,7 @@ expect: {
     animations: 'disabled',
     caret: 'hide',
     scale: 'css',
+    maxDiffPixelRatio: 0.01,
   },
 },
 ```
@@ -92,7 +93,7 @@ Commit the baseline PNGs at `tests/end-to-end/visual.spec.ts-snapshots/` and `te
 ## Part one acceptance criteria
 
 - [ ] Both `visual.spec.ts` (public) and `visual-authenticated.spec.ts` (authenticated) exist and each contains at least one `toHaveScreenshot` assertion.
-- [ ] `playwright.config.ts` sets `animations: 'disabled'`, `caret: 'hide'`, and `scale: 'css'` under `expect.toHaveScreenshot`.
+- [ ] `playwright.config.ts` sets `animations: 'disabled'`, `caret: 'hide'`, `scale: 'css'`, and `maxDiffPixelRatio: 0.01` under `expect.toHaveScreenshot`.
 - [ ] `npm run test:e2e` passes on a clean run (no diffs) — including both visual tests.
 - [ ] Running the suite five times in a row produces zero false positives on either screenshot test: `for i in {1..5}; do npm run test:e2e || break; done` exits zero every iteration.
 - [ ] Both baseline snapshot files exist (`ls tests/end-to-end/visual.spec.ts-snapshots/ tests/end-to-end/visual-authenticated.spec.ts-snapshots/` prints the committed PNGs).
