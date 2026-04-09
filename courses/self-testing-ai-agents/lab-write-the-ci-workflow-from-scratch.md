@@ -131,7 +131,7 @@ Add the `end-to-end` job. This is the biggest one:
 - On failure, generate the dossier and upload both the HTML report and the dossier as artifacts.
 - Optionally: start the dev server if your Playwright config doesn't do it automatically (check `webServer` in `playwright.config.ts`).
 
-In the validated third run, `playwright.config.ts` already starts the preview server through `webServer`, so the workflow does **not** need an extra server boot step.
+In the validated third run, `playwright.config.ts` already starts the preview server through `webServer`, so the workflow does **not** need an extra server boot step. Before writing the workflow step, verify this applies to your config: run `npx playwright test --project=chromium` without starting a server manually. If it fails with "no server running," add `webServer: { command: 'npm run preview', url: 'http://127.0.0.1:4173', reuseExistingServer: !process.env.CI }` to `playwright.config.ts` first.
 
 ### Step 4: the visual regression safety
 

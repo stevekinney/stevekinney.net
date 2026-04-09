@@ -67,7 +67,7 @@ You may also want to use the `request` fixture to verify the rating actually lan
 
 Work top-down. Fix one pattern, run the test, move on.
 
-Start by extracting the login into `tests/end-to-end/authentication.setup.ts` and wiring up `playwright.config.ts` to use it. Delete the login block from the test. In the current Shelf starter, the stable setup is a browser-driven login in the setup project, followed by `page.context().storageState(...)`. Run the suite to make sure authentication still works. Commit. (See the Storage State Authentication lesson for the full pattern.)
+Start by extracting the login into `tests/end-to-end/authentication.setup.ts` and wiring up `playwright.config.ts` to use it. Delete the login block from the test. In the current Shelf starter, the stable setup is a browser-driven login in the setup project: navigate to `/login`, fill the form through the page, and save state with `page.context().storageState(...)`. Do not use a raw `request.post` to the sign-in action—the current auth stack enforces CSRF-style semantics and will reject it with a 403. Run the suite to make sure authentication still works. Commit. (See the Storage State Authentication lesson for the full pattern.)
 
 Next, add (or use) `tests/end-to-end/helpers/seed.ts` to ensure the book you're going to rate is in the database before the test runs. Delete any reliance on "whatever is on the shelf already." Commit.
 
