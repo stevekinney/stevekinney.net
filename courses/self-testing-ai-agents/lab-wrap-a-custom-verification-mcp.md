@@ -7,6 +7,9 @@ date: 2026-04-06
 
 You're going to build the `verify_shelf_page` tool from the previous lesson. By the end, the agent will be able to call a single tool and get back a structured report on the state of `/shelf`.
 
+> [!NOTE] Prerequisite
+> Complete [Writing a Custom MCP Wrapper](writing-a-custom-mcp-wrapper.md) first. This lab assumes you're starting from that lesson's server shape and only filling in the repo-specific details.
+
 ## Setup
 
 From the Shelf repository root:
@@ -37,9 +40,9 @@ Implement `verify_shelf_page` so it:
 
 `ok` is `true` when there are zero console errors and at least one book. Adjust the definition if your Shelf has an explicit empty state for "no books yet."
 
-## Wiring into Claude Code
+## Wiring into your MCP client
 
-Add an entry to `.mcp.json` at the root of the Shelf repository:
+In the validated Shelf workshop repo, MCP config lives in `.mcp.json` at the root. Add an entry there:
 
 ```json
 {

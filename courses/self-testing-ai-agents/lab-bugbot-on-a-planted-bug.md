@@ -7,10 +7,13 @@ date: 2026-04-06
 
 Quick lab. Wire up Bugbot, open a PR containing a bug planted in the starter repo, and verify that Bugbot finds it and the agent can act on it without your help.
 
+> [!NOTE] Prerequisite
+> Complete [Tuning Bugbot for Your Codebase](tuning-bugbot-for-your-codebase.md) first. This lab assumes you already have a tuned reviewer configuration and are now pressure-testing it on a known bug.
+
 > [!NOTE]
 > The local Shelf repository used for this workshop currently has no Git remote configured. In that workspace, treat the lab as two parts:
 >
-> 1. Local preparation: commit `.cursor/bugbot.md`, create the `planted-bug/admin-feature` branch, and verify the planted bug still passes the normal local test gates.
+> 1. Local preparation: commit `.cursor/BUGBOT.md`, create the `planted-bug/admin-feature` branch, and verify the planted bug still passes the normal local test gates.
 > 2. Hosted follow-up: once the repository is pushed to your fork, open the pull request and let Bugbot review it there.
 
 ## Setup
@@ -23,10 +26,10 @@ You'll need:
 
 Install Bugbot on your Shelf fork from the Cursor dashboard and grant it access. Confirm it's active by opening an existing PR—Bugbot should leave a comment within a minute or two.
 
-Drop `.cursor/bugbot.md` in the repo root with the content from the previous lesson (tweak as needed). In the fully hosted version of the lab, commit it directly to `main`. In the local workshop repo, commit it on your current working branch now and merge it into `main` later when the fork exists.
+Drop `.cursor/BUGBOT.md` in the repo root with the content from the previous lesson (tweak as needed). In the fully hosted version of the lab, commit it directly to `main`. In the local workshop repo, commit it on your current working branch now and merge it into `main` later when the fork exists.
 
 > [!NOTE]
-> **Third dry run validation**: The current local replay completed the preparation half of this lab and recorded the hosted gap in `ROADMAP.md`. That means `.cursor/bugbot.md` is committed and tuned, but the actual Bugbot review still depends on pushing the planted branch to a real GitHub fork.
+> **Third dry run validation**: The current local replay completed the preparation half of this lab and recorded the hosted gap in `ROADMAP.md`. That means `.cursor/BUGBOT.md` is committed and tuned, but the actual Bugbot review still depends on pushing the planted branch to a real GitHub fork.
 
 ## The planted bug
 
@@ -48,7 +51,7 @@ Within a minute or two of opening the PR, Bugbot should post at least one inline
 - Explain why it's wrong (e.g., "this checks `session.userId` but not `session.isAdmin`; any logged-in user can call this endpoint").
 - Suggest a fix.
 
-If Bugbot doesn't flag the bug on the first pass, that's useful information—you've found a gap in the config. Update `.cursor/bugbot.md` to include a rule about admin-only endpoints and push again. Iterate until the bot catches it. This is the tuning loop.
+If Bugbot doesn't flag the bug on the first pass, that's useful information—you've found a gap in the config. Update `.cursor/BUGBOT.md` to include a rule about admin-only endpoints and push again. Iterate until the bot catches it. This is the tuning loop.
 
 ## Wiring the fix back through the agent
 
@@ -67,7 +70,7 @@ Bugbot re-reviews on the new push. Either the comment is resolved or a refined f
 
 ## Acceptance criteria
 
-- [ ] `.cursor/bugbot.md` exists at the repo root and contains "what to flag" and "what to leave alone" sections.
+- [ ] `.cursor/BUGBOT.md` exists at the repo root and contains "what to flag" and "what to leave alone" sections.
 - [ ] The `planted-bug/admin-feature` branch exists and introduces only the planted permission bug on top of the clean working branch.
 - [ ] The planted branch still passes the local quality gates (`npm run typecheck`, `npm run lint`, `npm run test`).
 - [ ] If the repository is still local-only, the hosted gap is documented somewhere durable (for example `ROADMAP.md`) instead of being hand-waved.
@@ -79,13 +82,13 @@ Bugbot re-reviews on the new push. Either the comment is resolved or a refined f
 - [ ] You handed the comment to Claude Code without any additional explanation of the bug.
 - [ ] Claude Code applied a fix and pushed a new commit.
 - [ ] Bugbot either resolved the thread on the new push or left a refined follow-up. No "the bug is still there" comments remain.
-- [ ] You committed `.cursor/bugbot.md` to `main` so future PRs inherit the config.
+- [ ] You committed `.cursor/BUGBOT.md` to `main` so future PRs inherit the config.
 - [ ] The conversation log between you, Bugbot, and Claude Code contains zero messages where you had to explain the bug to anyone.
 
 ## Stretch goals
 
 - Plant your own bug in a new branch and see if Bugbot finds it with the current config. If it doesn't, refine the config.
-- Add a rule to `.cursor/bugbot.md` about a pattern specific to your real day-job codebase (not Shelf). See how the framing changes when the context is familiar instead of synthetic.
+- Add a rule to `.cursor/BUGBOT.md` about a pattern specific to your real day-job codebase (not Shelf). See how the framing changes when the context is familiar instead of synthetic.
 - Try the same lab with a different review bot—CodeRabbit, Copilot review, or Codex review—and compare the output on the same planted bug. Note which one was easier to tune, which found the bug first, and which produced actionable comments.
 - Write a `CLAUDE.md` addition that automates the "read Bugbot comments, fix them, push" loop into a single command the agent can run.
 

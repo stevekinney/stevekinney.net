@@ -1,7 +1,7 @@
 ---
 title: Secret Scanning with Gitleaks
 description: Agents commit fake API keys. Sometimes they commit real ones. Gitleaks is the boring tool that prevents the latter with almost no configuration.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -17,12 +17,12 @@ Install it now. Before the agent commits something you actually have to rotate.
 
 [Gitleaks](https://github.com/gitleaks/gitleaks) is a single binary. It scans files (or git history) for patterns that match known secret formats: AWS keys, GitHub tokens, Slack tokens, Stripe keys, OpenAI API keys, private keys, JWTs, generic "looks like a secret" strings. When it finds one, it fails loudly with the file path, line number, and a redacted preview of the match.
 
-It has two modes:
+It has two practical modes in this workshop:
 
-- **`gitleaks detect`**—scan the entire git history. Slow. Use this once when you install it, to confirm your history is clean. Also use it in CI as a safety net.
-- **`gitleaks protect --staged`**—scan only the files staged for the current commit. Fast. Use this in the pre-commit hook.
+- **Full repository or history scan.** Current Gitleaks releases expose this via commands like `gitleaks git ...`, and older tutorials often show `gitleaks detect ...`. Run the full scan once when you install it, and again in CI as a safety net.
+- **Staged-content scan.** In the current Shelf starter, this is a repo-local helper script that snapshots the exact git index and runs `gitleaks dir` on that temporary directory. Fast. Use this in the pre-commit hook.
 
-The combination—`protect` in pre-commit, `detect` in CI—catches both "the agent is about to commit a secret" and "a secret has snuck in through some other path."
+The combination catches both "the agent is about to commit a secret" and "a secret has already snuck in through some other path."
 
 ## Installing Gitleaks
 
@@ -49,16 +49,12 @@ Add to `lint-staged` config:
 ```json
 {
   "lint-staged": {
-    "*": ["gitleaks protect --staged --redact --verbose"]
+    "*": ["npx tsx scripts/run-gitleaks-staged.ts"]
   }
 }
 ```
 
-The flags:
-
-- `--staged` scans only the files currently staged.
-- `--redact` hides the actual secret value in the output (so your terminal history doesn't leak the secret that just leaked).
-- `--verbose` shows enough detail to find the violation.
+In the validated Shelf repo, that script materializes the exact staged snapshot into a temporary directory and runs `gitleaks dir` on it. That is more reliable than depending on whichever staged-file flags your installed Gitleaks version happens to support this month.
 
 Test it:
 
@@ -79,9 +75,13 @@ If the hook didn't fire, double-check gitleaks is installed and lint-staged is w
 
 ## Running it on history, once
 
-If you're adding gitleaks to an existing project, run `gitleaks detect` over the entire git history first. There are almost always findings.
+If you're adding Gitleaks to an existing project, run a full scan over the repository or git history first. There are almost always findings.
 
 ```sh
+# Current releases usually expose this as:
+gitleaks git --redact
+
+# Older tutorials may show:
 gitleaks detect --redact
 ```
 
@@ -129,16 +129,16 @@ Gitleaks will now flag anything matching that pattern. Useful for "we have an in
 
 ## The `.gitleaksignore` file
 
-Sometimes gitleaks flags a specific line that you genuinely want to keep. Maybe it's an example in documentation, maybe it's a literal constant that happens to match a secret pattern. For per-line exemptions, use `.gitleaksignore`:
+Sometimes Gitleaks flags a specific finding that you genuinely want to keep. Maybe it's an example in documentation, maybe it's a literal constant that happens to match a secret pattern. For one-off exemptions, use `.gitleaksignore`:
 
 ```
 # .gitleaksignore
-path/to/file.md:42
+path/to/file.md:generic-api-key:42
 ```
 
-Each line is `path:line` for a specific exception. Much finer-grained than the path allowlist, which skips entire files.
+Current releases generally expect the fingerprint format Gitleaks prints in its own output, not a hand-typed bare line number. Copy the exact identifier from the report instead of inventing it. Much finer-grained than the path allowlist, which skips entire files.
 
-Do not let `.gitleaksignore` become a dumping ground. Every line is a promise you made to not rotate this secret, and every promise should be checked periodically. Review the file on a schedule.
+Do not let `.gitleaksignore` become a dumping ground. Every line is a promise you made to keep ignoring a finding, and every promise should be checked periodically. Review the file on a schedule.
 
 ## CI as the safety net
 
@@ -154,7 +154,10 @@ In GitHub Actions (we'll go deeper on CI in Module 9):
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-The official action is the easy path. It runs `gitleaks detect` on every push and PR, fails the build on any finding. If someone bypasses the local hook, the PR gets blocked at the CI gate, which is exactly what the safety net is for.
+The official action is the easy path. It runs Gitleaks on every push and PR, fails the build on any finding, and gives you a clean CI gate even when someone bypasses the local hook.
+
+> [!NOTE]
+> Check the current licensing and setup requirements for `gitleaks/gitleaks-action@v2` before you standardize on it for organization repos. If the official action is a bad fit for your plan, invoke the CLI directly in a shell step instead. The important part is the CI gate, not the wrapper.
 
 ## `CLAUDE.md` rules
 
@@ -180,8 +183,8 @@ The "obviously-fake values" rule is specifically to prevent the agent's favorite
 ## The 30-second version of this whole lesson
 
 1. Install gitleaks.
-2. Add `gitleaks protect --staged --redact --verbose` to `lint-staged`.
-3. Run `gitleaks detect` once on your existing history. Rotate anything real that it finds.
+2. Add the staged-snapshot helper script to `lint-staged`.
+3. Run a full Gitleaks scan once on your existing history. Rotate anything real that it finds.
 4. Add the gitleaks GitHub Action to your CI as a safety net.
 5. Never bypass the hook. If gitleaks says it found a secret, it found a secret.
 

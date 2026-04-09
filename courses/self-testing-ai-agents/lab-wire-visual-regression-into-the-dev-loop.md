@@ -7,6 +7,9 @@ date: 2026-04-06
 
 Short lab. Two halves. The first half wires the screenshot gate into Shelf. The second half deliberately breaks a component and watches the loop fire.
 
+> [!NOTE] Prerequisite
+> Complete [Visual Regression as a Feedback Loop](visual-regression-as-a-feedback-loop.md) first. This lab assumes the masking, fixed-state, and screenshot-config guidance from that lesson.
+
 ## Setup
 
 Make sure you're on the hardened Shelf from the Module 3 lab. You'll need storage-state authentication and seeding in place. Visual regression without those is a nightmare.
@@ -45,14 +48,13 @@ test.describe('visual regression', () => {
 
   test('shelf page', async ({ page }) => {
     await page.goto('/shelf');
-    await page.waitForLoadState('networkidle');
     await expect(page.getByRole('heading', { name: "Marco's Shelf" })).toBeVisible();
+    await expect(page.getByRole('article')).toHaveCount(3);
     await expect(page).toHaveScreenshot('shelf-page.png', { fullPage: true });
   });
 
   test('book detail page', async ({ page }) => {
     await page.goto('/books/OL1');
-    await page.waitForLoadState('networkidle');
     await expect(page.getByRole('heading', { name: 'Station Eleven' })).toBeVisible();
     await expect(page).toHaveScreenshot('book-detail.png', {
       fullPage: true,

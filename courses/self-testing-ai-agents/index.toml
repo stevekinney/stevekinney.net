@@ -28,6 +28,14 @@ title = "Locators and the Accessibility Hierarchy"
 href = "locators-and-the-accessibility-hierarchy.md"
 
 [[section.item]]
+title = "Accessibility as a Quality Gate"
+href = "accessibility-as-a-quality-gate.md"
+
+  [[section.item.related]]
+  title = "Lab: Wire Accessibility Checks Into Shelf"
+  href = "lab-wire-accessibility-checks-into-shelf.md"
+
+[[section.item]]
 title = "The Waiting Story"
 href = "the-waiting-story.md"
 
@@ -61,6 +69,17 @@ href = "visual-regression-as-a-feedback-loop.md"
   [[section.item.related]]
   title = "Lab: Wire Visual Regression Into the Dev Loop"
   href = "lab-wire-visual-regression-into-the-dev-loop.md"
+
+[[section]]
+title = "Performance Budgets as a Feedback Loop"
+
+[[section.item]]
+title = "Performance Budgets as a Feedback Loop"
+href = "performance-budgets-as-a-feedback-loop.md"
+
+  [[section.item.related]]
+  title = "Lab: Add Performance Budgets to Shelf"
+  href = "lab-add-performance-budgets-to-shelf.md"
 
 [[section]]
 title = "Runtime Tools and Custom MCPs"
@@ -146,8 +165,63 @@ href = "ci-as-the-loop-of-last-resort.md"
   href = "lab-write-the-ci-workflow-from-scratch.md"
 
 [[section]]
+title = "Post-Merge and Post-Deploy Validation"
+
+[[section.item]]
+title = "Post-Merge and Post-Deploy Validation"
+href = "post-merge-and-post-deploy-validation.md"
+
+  [[section.item.related]]
+  title = "Lab: Add Post-Deploy Smoke Checks to Shelf"
+  href = "lab-add-post-deploy-smoke-checks-to-shelf.md"
+
+[[section]]
 title = "Capstone"
 
 [[section.item]]
 title = "The Whole Loop, End to End"
 href = "capstone-the-whole-loop-end-to-end.md"
+
+[[section]]
+title = "Appendix: Review Portability"
+
+[[section.item]]
+title = "Review Portability Beyond Bugbot"
+href = "review-portability-beyond-bugbot.md"
+
+  [[section.item.related]]
+  title = "Lab: Port the Review Loop Beyond Bugbot"
+  href = "lab-port-the-review-loop-beyond-bugbot.md"
+
+[[section]]
+title = "Appendix: Cross-Browser Coverage"
+
+[[section.item]]
+title = "Cross-Browser Validation Without Burning the Dev Loop"
+href = "cross-browser-validation-without-burning-the-dev-loop.md"
+
+  [[section.item.related]]
+  title = "Lab: Add Cross-Browser Coverage"
+  href = "lab-add-cross-browser-coverage.md"
+
+[[section]]
+title = "Appendix: Nightly Verification"
+
+[[section.item]]
+title = "Nightly Verification Loops"
+href = "nightly-verification-loops.md"
+
+  [[section.item.related]]
+  title = "Lab: Add a Nightly Verification Workflow"
+  href = "lab-add-a-nightly-verification-workflow.md"
+
+[[section]]
+title = "Appendix: Porting the Loop"
+
+[[section.item]]
+title = "Porting the Shelf Loop to Another Stack"
+href = "porting-the-shelf-loop-to-another-stack.md"
+
+  [[section.item.related]]
+  title = "Lab: Translate the Shelf Loop to Your Stack"
+  href = "lab-translate-the-shelf-loop-to-your-stack.md"

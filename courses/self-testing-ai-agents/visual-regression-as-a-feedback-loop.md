@@ -73,7 +73,7 @@ export default defineConfig({
 
 `animations: 'disabled'` kills CSS transitions. `caret: 'hide'` hides the blinking text cursor in inputs (which changes every half second and ruins screenshots). `scale: 'css'` ensures the screenshot uses CSS pixels regardless of device pixel ratio.
 
-**Dynamic content.** A timestamp that says "2 minutes ago" is going to be "3 minutes ago" by the next run. A user-generated avatar, a random quote of the day, a visible date—any of these will break the diff. You have two options: mock the dynamic content (e.g., install `page.clock` and set a fixed time; seed the database with fixed content) or mask the dynamic regions with the `mask` option:
+**Dynamic content.** A timestamp that says "2 minutes ago" is going to be "3 minutes ago" by the next run. A user-generated avatar, a random quote of the day, a visible date—any of these will break the diff. You have two options: mock the dynamic content (for example, install `page.clock` and set a fixed time, or seed the database with fixed content) or mask the dynamic regions with the `mask` option:
 
 ```ts
 await expect(page).toHaveScreenshot('shelf-page.png', {
@@ -116,6 +116,8 @@ The agent will say things like, "The 'Rate' button is now 4 pixels taller becaus
 
 This is the agent self-correcting on visual feedback. Not long ago, this was science fiction. Now it's a hook in your CI config.
 
+And there is a natural next question after "did the UI change visually?": "did the same change also make the app slower or heavier?" Screenshot diffs do not answer that. The next module does.
+
 ## CLAUDE.md rules
 
 ```markdown
@@ -140,5 +142,6 @@ Visual regression is not insurance. It's a communication channel between you (or
 
 ## Additional Reading
 
+- [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md)
 - [The Waiting Story](the-waiting-story.md)
 - [Lab: Wire Visual Regression Into the Dev Loop](lab-wire-visual-regression-into-the-dev-loop.md)

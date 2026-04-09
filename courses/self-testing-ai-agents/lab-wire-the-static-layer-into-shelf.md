@@ -132,7 +132,7 @@ If the agent does any of the forbidden things, go look at why the static layer d
 
 ## Stretch goals
 
-- Add a Claude-specific `post-tool-use` hook that runs `npm run lint -- --quiet` after every edit, per the Claude hooks lesson.
+- Add a Claude-specific `PostToolUse` hook that runs `npm run lint -- --quiet` after every edit, per the Claude hooks lesson.
 - Add a pinned knip-count script to pre-push that fails if the unused count goes up from a committed baseline (the ratchet pattern).
 - Configure dependency-cruiser with the `no-orphans` rule and, if your repository still has that boundary, the `legacy-auth` rule, and run it in pre-push.
 - Write a tiny report at the end of the lab: which layer caught what, and which layer never fired. The layers that never fired might be too loose (or might just be working so well there's nothing to catch).

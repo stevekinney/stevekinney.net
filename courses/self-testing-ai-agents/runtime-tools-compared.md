@@ -1,7 +1,7 @@
 ---
 title: 'Runtime Tools Compared: Playwright MCP, Chrome DevTools MCP, and Claude in Chrome'
 description: Three ways to let an agent drive a browser, what each one is actually good at, and when to reach for which.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -9,9 +9,12 @@ We spent the morning making the scripted test suite something an agent can rely 
 
 There are three tools in this space that you should know about, and they are different enough that choosing between them matters.
 
-- [**Playwright MCP**](https://github.com/microsoft/playwright-mcp)—exposes Playwright's browser automation as MCP tools
+- [**Playwright MCP**](https://playwright.dev/)—exposes Playwright's browser automation as MCP tools
 - [**Chrome DevTools MCP**](https://github.com/ChromeDevTools/chrome-devtools-mcp)—exposes Chrome DevTools Protocol as MCP tools
 - [**Claude in Chrome**](https://www.anthropic.com/news/claude-for-chrome)—an actual browser extension that puts the agent inside your live browser session
+
+> [!NOTE]
+> As of April 9, 2026, Playwright also ships a dedicated CLI for coding-agent workflows in addition to Playwright MCP. This workshop still uses MCP as the primary runtime tool because the later lessons depend on MCP-style tool calls, accessibility snapshots, and custom MCP wrappers. Also note that current Playwright MCP defaults to a persistent browser profile; use `--isolated` or an explicit storage state when you want clean-room reproduction.
 
 They all let the agent interact with a browser. They are not interchangeable. This lesson is a field guide to which one to reach for.
 
@@ -19,21 +22,21 @@ They all let the agent interact with a browser. They are not interchangeable. Th
 
 If you want a table to glance at:
 
-| Tool                | Runs                               | Best at                                                                 | Worst at                                              |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------- |
-| Playwright MCP      | A fresh browser the agent spins up | Repeatable probes, scripted exploration, "can you reproduce this bug"   | Interactive work against your real logged-in accounts |
-| Chrome DevTools MCP | A Chrome instance you point it at  | Reading the console, inspecting network, performance profiling          | Writing tests, driving workflows                      |
-| Claude in Chrome    | Inside your live Chrome session    | Real user accounts, complex state, "the thing I'm looking at right now" | Clean-room repro, deterministic scripting             |
+| Tool                | Runs                                                           | Best at                                                                 | Worst at                                              |
+| ------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------- |
+| Playwright MCP      | A Playwright-controlled browser session, persistent by default | Repeatable probes, scripted exploration, "can you reproduce this bug"   | Interactive work against your real logged-in accounts |
+| Chrome DevTools MCP | A Chrome instance you point it at                              | Reading the console, inspecting network, performance profiling          | Writing tests, driving workflows                      |
+| Claude in Chrome    | Inside your live Chrome session                                | Real user accounts, complex state, "the thing I'm looking at right now" | Clean-room repro, deterministic scripting             |
 
 That's the whole lesson compressed. The rest is why.
 
 ## Playwright MCP: the scripted browser for agents
 
-Playwright MCP wraps Playwright's automation API as MCP tools. The agent says "open this URL, click this button, read this text," and under the hood, Playwright spins up a headless (or headed) browser, does the thing, and returns the result to the agent.
+Playwright MCP wraps Playwright's automation API as MCP tools. The agent says "open this URL, click this button, read this text," and under the hood, Playwright launches and controls a browser for it. In current releases that browser profile is persistent unless you opt into isolation, which is great for ongoing work and the wrong default for reproducible debugging unless you configure it intentionally.
 
 What this gives you:
 
-- **Determinism.** The browser starts fresh every session. No cookies, no state, no tabs left over from your actual browsing.
+- **Controllable state.** You can run isolated for clean repro, or persistent when the task benefits from keeping session state around.
 - **Full Playwright API.** Locators, assertions, waits, network interception, screenshots. Everything we spent Module 3 talking about is available to the agent directly.
 - **Reproducibility.** The agent's actions are effectively Playwright calls. If something works, you can often translate it directly into a scripted test.
 
@@ -43,7 +46,7 @@ What this does _not_ give you:
 - **Your real environment.** Extensions, devtools tweaks, the experimental feature flags you've enabled—none of those are present.
 - **Your real tabs.** The agent can't look at what you have open.
 
-This is the tool I reach for when I want the agent to _reproduce_ something. "Here's a bug report, can you open the app, try to reproduce, and report what you see?" is a perfect Playwright MCP task. The agent opens a clean browser, clicks through the steps, and tells you what happened. If it can reproduce, you now have a script you can harden into a test. If it can't, you learn something about the bug report.
+This is the tool I reach for when I want the agent to _reproduce_ something. "Here's a bug report, can you open the app, try to reproduce, and report what you see?" is a perfect Playwright MCP task. The agent opens a browser it controls, clicks through the steps, and tells you what happened. If you need a clean-room repro, run it isolated or with a known storage state. If it can reproduce, you now have a script you can harden into a test. If it can't, you learn something about the bug report.
 
 I also reach for it when I want the agent to _explore_ a UI I'm building. "Open localhost:5173, navigate to /shelf, tell me what happens if you click Add Book without being logged in." The agent pokes around, reports back, and you get a quick sanity check without switching context yourself.
 
@@ -77,7 +80,7 @@ It's also the tool that needs the most user judgment because the agent is intera
 
 ## So which one for this workshop
 
-For today, Playwright MCP is the primary runtime tool, because today is about verification and the verification loop needs to be reproducible. When a lesson says "the agent probes the UI at runtime," assume Playwright MCP unless I specify otherwise.
+For today, Playwright MCP is the primary runtime tool, because today is about verification and the verification loop needs to be reproducible. When a lesson says "the agent probes the UI at runtime," assume Playwright MCP in an isolated or explicitly-configured state unless I specify otherwise.
 
 Chrome DevTools MCP comes in when we talk about failure dossiers in Module 6—reading the console and network is exactly what DevTools MCP is for, and a dossier that includes a captured console log is much more valuable than one that doesn't.
 

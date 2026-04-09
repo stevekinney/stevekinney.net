@@ -24,7 +24,7 @@ Think of static checks as underlayment. You put them down once, they run under e
 Each of these runs in milliseconds to seconds. None of them require a browser. None of them require a database. They are the _cheapest_ possible feedback loop, which is why they should be running continuously in the background and why the agent should be wired to trip them constantly.
 
 > [!NOTE]
-> In the local Shelf repository for this workshop, `npm` is the source of truth. The lesson examples sometimes say `bun`, but the real requirement is that the repository exposes stable, named scripts and that the agent is told to run them.
+> In the local Shelf repository for this workshop, `npm` is the source of truth for verification commands. Some lesson snippets use `bun` for package installation because that's my default elsewhere. Match the repository you are actually in. The real requirement is that the repo exposes stable, named scripts and that the agent is told to run them.
 
 The specific pieces we're going to cover in this module:
 
@@ -69,7 +69,7 @@ Similarly, step 6 is the one that separates a working static layer from a cargo-
 
 A quick aside on Claude Code's hook system, because it comes up in this area and it's worth placing correctly.
 
-Claude Code supports hooks—shell commands that fire on specific events (pre-prompt, post-tool-use, pre-submit, etc.). They're powerful and agent-specific. You can, for example, set a `post-tool-use` hook that runs `bun lint` whenever the agent edits a file, and if the lint fails, the result gets fed back to the agent as context before the next turn.
+Claude Code supports hooks—shell commands that fire on specific events such as `PostToolUse` and `Stop`. They're powerful and agent-specific. You can, for example, set a `PostToolUse` hook that runs `bun lint` whenever the agent edits a file, and if the lint fails, the result gets fed back to the agent as context before the next turn.
 
 That's a real, useful feedback loop. It's also completely Claude Code-specific. Cursor has its own flavor (Rules + Agents), Codex has its own, Copilot has its own.
 

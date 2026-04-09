@@ -14,6 +14,9 @@ Take notes on what fires. Take notes on what doesn't. The notes are the workshop
 > [!NOTE]
 > Third-run validation note: this capstone was replayed locally from a fresh Shelf branch off `main` and revalidated end to end with `npm run lint`, `npm run typecheck`, and `npm run test`. The local workshop clone still has no Git remote, so the hosted pull-request, CI, and review-bot loop remains a documented follow-up rather than a claimed outcome.
 
+> [!NOTE]
+> The core loop now includes accessibility checks, performance budgets, and post-deploy smoke validation. If your Shelf clone is still local-only, mark the hosted post-deploy items as `N/A` instead of pretending they ran. The appendix-only topics—cross-browser expansion, nightly drift checks, and review portability—are follow-ons, not required capstone outcomes.
+
 ## The task
 
 Build a new feature on Shelf: **reading goals.**
@@ -80,6 +83,9 @@ Sit with a notebook or a text file open. As the agent works, note each time one 
 - [ ] The agent runs `npm run test:e2e` for the new end-to-end tests.
 - [ ] The agent calls a custom MCP tool (e.g., `verify_shelf_page`) at least once.
 - [ ] The agent notices a screenshot diff on the shelf or goals page and either updates the baseline or reverts the change.
+- [ ] The agent runs or reads the automated accessibility check for the new UI instead of assuming semantic locators were enough.
+- [ ] The agent treats any new accessibility violation as blocking, or documents a narrowly-scoped suppression with a reason.
+- [ ] The agent runs the performance budget check after the UI change and notices if the route or interaction got slower or heavier.
 - [ ] The agent catches its own mistake via lint (seeing a red squiggle and fixing it before committing).
 - [ ] The agent catches its own mistake via typecheck.
 - [ ] The agent catches its own mistake via a failing Playwright test.
@@ -92,6 +98,8 @@ Sit with a notebook or a text file open. As the agent works, note each time one 
 - [ ] If Bugbot leaves a comment, the agent addresses it.
 - [ ] If CI is available, the final run is green.
 - [ ] If the repository has a Git remote, the final pull request is mergeable.
+- [ ] If a deploy preview or staging target exists, the post-deploy smoke check runs against it after the branch is otherwise ready.
+- [ ] If the post-deploy smoke check fails, the agent reports a stop-ship or rollback recommendation instead of waving the deploy through.
 - [ ] You did not paste any error messages, diagnose any bugs, or explain anything during the conversation.
 
 The last checkbox is the one that matters. Everything else is diagnostic: if the agent finished the task but you had to paste three error messages along the way, the loop is incomplete. Which three loops failed to catch those errors? Those are your tuning targets.
@@ -124,6 +132,7 @@ Answer these questions in a markdown file, `CAPSTONE-retrospective.md`:
 3. Which interventions did I make, and what was the minimal fix that would have prevented me from needing to intervene?
 4. If I were running this workshop tomorrow with a new agent, what would I change in `CLAUDE.md` based on what I saw today?
 5. What was the _biggest_ mistake the agent made that none of the loops caught? Why did they miss it? What loop would catch it next time?
+6. Which of the new core loops—accessibility, performance, or post-deploy validation—saved me the most time, and which still felt too weak to trust?
 
 These questions are the real deliverable of this workshop. The hardened Shelf repo is a nice artifact. The tuned `CLAUDE.md` is a nicer artifact. The retrospective—a list of specific, observed gaps in your agent feedback loop that you can go fix on Monday—is the thing you actually came here for.
 
@@ -147,4 +156,5 @@ Go build the loop. Then go use it.
 
 - [The Hypothesis](the-hypothesis.md)—the bet we made at the start of the day, for comparison after you've built the loop
 - [CI as the Loop of Last Resort](ci-as-the-loop-of-last-resort.md)
+- [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md)
 - [Failure Dossiers: What Agents Actually Need From a Red Build](failure-dossiers-what-agents-actually-need-from-a-red-build.md)

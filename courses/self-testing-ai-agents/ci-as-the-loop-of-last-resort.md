@@ -15,6 +15,8 @@ My framing: **CI is the loop of last resort.** Everything we've built today is a
 
 That shift matters because it changes what you put _in_ CI. If CI is where tests run, you stuff everything into CI and wait ten minutes on every push. If CI is the last resort, you put the _strict versions_ of every check in CI—full Playwright matrix, full visual regression, full secret scan against history, full dependency audit—and you accept that CI is slow because you're running it against the environment you actually care about.
 
+One scope note before we go further: green CI is still not the end of the story. The next core module picks up on what happens after merge or deploy-preview. The appendix builds out the broader nightly and cross-browser loops in more detail.
+
 > [!NOTE]
 > Third-run validation note: in the local Shelf repository for this workshop, the workflows use `npm`, `actions/setup-node@v4`, and cached `~/.npm` plus Playwright browsers. The workspace also has no Git remote configured, so the workflow is validated locally for YAML correctness and command parity before the hosted GitHub Actions run exists.
 
@@ -49,7 +51,7 @@ The next lesson walks through the actual YAML. Here's the shape before we get th
 On every push to any branch and every PR into main:
 
 1. **Checkout and install.** Clone the repo, restore caches, `npm ci --ignore-scripts`.
-2. **Static layer.** Run lint, typecheck, knip, and gitleaks. In the workshop Shelf repo these stay in one `static` job because the setup overhead is larger than the benefit of splitting four short checks across four runners.
+2. **Static layer.** Run lint, typecheck, knip, and gitleaks. In the workshop Shelf repo these stay in one `static` job because the setup overhead is larger than the benefit of splitting four short checks across four runners. Use the official Gitleaks action or a direct CLI step depending what your plan and licensing allow.
 3. **Unit tests.** `npm run test:unit`. Fast.
 4. **End-to-end tests.** Playwright, full Chromium run. Upload trace artifacts, screenshots, and the failure dossier if anything fails.
 
@@ -61,7 +63,7 @@ On a nightly schedule:
 2. **Dependency audit.** Run `npm audit`, open an issue or PR if anything new turns up.
 3. **Full cross-browser Playwright run.** Chromium, Firefox, WebKit. Surface differences that the daily Chromium-only runs miss.
 
-On a connected GitHub repository, you can add merge-to-main deployment and post-deploy smoke checks later. Those are intentionally out of scope for the validated workshop clone.
+On a connected GitHub repository, you can add merge-to-main deployment and post-deploy smoke checks later. The next module covers that core loop. The appendix lessons turn the nightly and cross-browser placeholders into fuller patterns once the one-day workshop flow is done.
 
 That's the whole shape for the third run: three jobs in the main workflow, three placeholder jobs in the nightly workflow, and no deploy workflow yet. Each is boring. The power is in the composition.
 
@@ -167,4 +169,6 @@ CI is where the loops you built all day run together, one more time, in a clean 
 ## Additional Reading
 
 - [Failure Dossiers: What Agents Actually Need From a Red Build](failure-dossiers-what-agents-actually-need-from-a-red-build.md)
+- [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md)
+- [Nightly Verification Loops](nightly-verification-loops.md)
 - [Lab: Write the CI Workflow from Scratch](lab-write-the-ci-workflow-from-scratch.md)

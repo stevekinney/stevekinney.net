@@ -13,6 +13,9 @@ One of the deliberate choices in the Shelf starter repo: there is no `.github/wo
 > [!NOTE]
 > Third-run validation note: the local Shelf repository for this workshop uses `npm`, not Bun. It also has no Git remote configured, which means the workflow can be written and validated locally, but the final hosted GitHub Actions run, artifact download, and branch-protection steps are an explicit follow-up after you connect the repository to GitHub.
 
+> [!NOTE]
+> If `gitleaks/gitleaks-action@v2` is not available under your plan or licensing terms, replace that step with a direct CLI invocation. The CI gate matters more than the wrapper action.
+
 ## The task
 
 Create `.github/workflows/main.yml` that runs on push and on pull request, and includes jobs for every layer we built today.
@@ -160,6 +163,8 @@ jobs:
 
 You don't have to fully implement these jobs today. In the validated third run, each nightly job is a named placeholder with an `echo` command that explains the intended follow-up. The point is to have the file in place so the nightly cadence exists and the missing automation is explicit instead of implied.
 
+The appendix modules come back and turn these placeholders into real cross-browser and nightly loops. For the core day, the explicit placeholder is enough.
+
 > [!WARNING]
 > Do **not** wire `playwright test --update-snapshots` into a scheduled job, even as a stub. A cron that updates snapshots will silently rewrite every visual baseline whenever it runs and quietly destroy your visual regression gate. Snapshot updates should always be human-triggered (a `workflow_dispatch` job, or local `--update-snapshots` followed by a PR you review).
 
@@ -246,4 +251,6 @@ CI is where the whole day's worth of loops meet for the last check before merge.
 ## Additional Reading
 
 - [CI as the Loop of Last Resort](ci-as-the-loop-of-last-resort.md)
+- [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md)
+- [Nightly Verification Loops](nightly-verification-loops.md)
 - [Capstone: The Whole Loop, End to End](capstone-the-whole-loop-end-to-end.md)

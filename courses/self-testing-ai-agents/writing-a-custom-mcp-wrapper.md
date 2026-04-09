@@ -17,7 +17,7 @@ For a quick refresher on what the [Model Context Protocol](https://modelcontextp
 
 A small MCP server with a single tool called `verify_shelf_page`. When called, it:
 
-1. Launches Playwright against `http://localhost:5173/shelf/<username>` (with storage state). The `<username>` is passed as an argument so the agent can probe any user's shelf.
+1. Launches Playwright against `http://127.0.0.1:4173/shelf/<username>` by default (with storage state). The `<username>` is passed as an argument so the agent can probe any user's shelf, and `SHELF_BASE_URL` can override the host when needed.
 2. Waits for the shelf heading to be visible.
 3. Counts the books rendered.
 4. Checks the console for errors.
@@ -43,6 +43,7 @@ import { z } from 'zod';
 import path from 'node:path';
 
 const server = new McpServer({ name: 'shelf-verification', version: '0.1.0' });
+const baseUrl = process.env.SHELF_BASE_URL ?? 'http://127.0.0.1:4173';
 
 server.registerTool(
   'verify_shelf_page',
@@ -70,13 +71,12 @@ server.registerTool(
       if (msg.type() === 'error') consoleErrors.push(msg.text());
     });
 
-    await page.goto(`http://127.0.0.1:4173/shelf/${username}`, {
-      waitUntil: 'networkidle',
-    });
+    await page.goto(`${baseUrl}/shelf/${username}`);
     await page.getByRole('heading', { level: 1, name: /shelf/i }).waitFor();
 
     const bookCount = await page.getByRole('article').count();
 
+    await context.close();
     await browser.close();
 
     return {
@@ -108,6 +108,9 @@ That's the whole server. The three pieces are:
 - **The tool list.** Tell the agent what tools exist and what their inputs look like. This maps directly onto what the agent sees in its tool palette.
 - **The tool implementation.** When the agent calls the tool, you run whatever code you want, using whatever libraries you want, and return structured output.
 - **The transport.** Stdio transport means the server talks to the agent over standard input and output. The agent runs the server as a subprocess. It's simpler than HTTP and it's the right default for local tools.
+
+> [!TIP]
+> Notice what's missing from the example: `waitUntil: 'networkidle'`. The server waits on the shelf heading because that is the actual success signal for this probe. The same waiting rules from the Playwright lesson apply inside your custom MCPs.
 
 ## Wiring it up to your local MCP host
 
