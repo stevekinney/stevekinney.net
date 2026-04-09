@@ -1,7 +1,7 @@
 ---
 title: 'Failure Dossiers: What Agents Actually Need From a Red Build'
 description: A failed test is a prompt. The prompt is only as good as the evidence attached to it.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -33,6 +33,7 @@ In `playwright.config.ts`, use the [tracing configuration options](https://playw
 
 ```ts
 export default defineConfig({
+  outputDir: 'playwright-report/test-results',
   use: {
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
@@ -55,12 +56,17 @@ Three knobs.
 
 ```ts
 reporter: [
-  ['html', { open: 'never' }],
+  ['html', { open: 'never', outputFolder: 'playwright-report/html' }],
   ['list'],
 ],
 ```
 
-The HTML reporter writes `playwright-report/index.html`, and for each failed test it shows the assertion, the screenshot, the error stack, and a link to open the trace. Open it in a browser and you get a gorgeous, readable dossier with zero effort.
+The HTML reporter writes `playwright-report/html/index.html`, and for each failed test it shows the assertion, the screenshot, the error stack, and a link to open the trace. Open it in a browser and you get a gorgeous, readable dossier with zero effort.
+
+> [!NOTE]
+> **Third dry run validation**: In the current Shelf branch, the easiest safe planted failure was a missing visual snapshot. That produced the full dossier artifact set we care about: `report.json`, `dossier.md`, a retained screenshot, a retained video, and a `trace.zip` under `playwright-report/test-results/` without needing to ship a fake application bug just to exercise the reporting loop.
+
+![The Playwright HTML report after a deliberate Shelf failure](./assets/lab-failure-dossier-report.png)
 
 The `open: 'never'` flag keeps Playwright from auto-opening a browser tab when you run tests, which is annoying in CI and distracting locally.
 
@@ -83,26 +89,31 @@ import path from 'node:path';
 const reportJson = JSON.parse(readFileSync('playwright-report/report.json', 'utf8'));
 
 const failures = reportJson.suites
-  .flatMap((suite: any) => suite.tests)
-  .filter((test: any) => test.status === 'failed');
+  .flatMap((suite: any) => suite.specs ?? [])
+  .flatMap((spec: any) =>
+    (spec.tests ?? []).flatMap((test: any) => {
+      const failedResult = (test.results ?? []).find((result: any) => result.status === 'failed');
+      return failedResult ? [{ spec, failedResult, projectName: test.projectName }] : [];
+    }),
+  );
 
 const markdown = failures
   .map(
-    (test: any) => `
-## ${test.title}
+    ({ spec, failedResult, projectName }: any) => `
+## ${spec.title}
 
-**File**: \`${test.file}:${test.line}\`
+**File**: \`${spec.file}:${spec.line}\`
 
 **Error**:
 \`\`\`
-${test.error.message}
+${failedResult.error?.message}
 \`\`\`
 
-**Screenshot**: [${path.basename(test.attachments.screenshot)}](${test.attachments.screenshot})
+**Screenshot**: [${path.basename(failedResult.attachments[0].path)}](${failedResult.attachments[0].path})
 
 **Reproduce**:
 \`\`\`sh
-bun playwright test ${test.file} -g "${test.title}"
+npx playwright test --project=${projectName} ${spec.file} -g "${spec.title}"
 \`\`\`
 `,
   )
@@ -119,7 +130,7 @@ Now you can add to `CLAUDE.md`:
 ```markdown
 ## When a test fails
 
-1. Run `bun run dossier` to generate a summary at `playwright-report/dossier.md`.
+1. Run `npm run dossier` to generate a summary at `playwright-report/dossier.md`.
 2. Read the dossier. It contains the error, screenshot path, and reproduction command for every failure.
 3. Use the reproduction command to rerun just the failing test while iterating.
 4. Do not "fix" by changing the assertion. Fix the underlying code.
@@ -171,9 +182,11 @@ Now any browser console error shows up in the test output. When a test fails, th
 
 ```ts
 page.on('requestfailed', (request) => {
-  console.error(
-    `[network failed] ${request.method()} ${request.url()} - ${request.failure()?.errorText}`,
-  );
+  const failureText = request.failure()?.errorText ?? 'unknown error';
+  if (failureText.includes('ERR_ABORTED') || failureText.includes('NS_BINDING_ABORTED')) {
+    return;
+  }
+  console.error(`[network failed] ${request.method()} ${request.url()} - ${failureText}`);
 });
 page.on('response', async (response) => {
   if (response.status() >= 400) {

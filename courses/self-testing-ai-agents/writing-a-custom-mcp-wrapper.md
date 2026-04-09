@@ -1,7 +1,7 @@
 ---
 title: Writing a Custom MCP Wrapper
 description: When the off-the-shelf MCPs don't give the agent the exact probe you want, wrap your own. It's fewer lines of code than you think.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -25,6 +25,9 @@ A small MCP server with a single tool called `verify_shelf_page`. When called, i
 
 The agent can now call `verify_shelf_page` and get a one-shot, structured answer to "is this page in good shape?" No composition, no guessing, no "did you remember to check the console?" It's all in the tool.
 
+> [!NOTE]
+> **Third dry run validation**: The current Shelf implementation keeps the MCP registration in the repository-local `.mcp.json` and resolves the target URL from `SHELF_BASE_URL`, defaulting to `http://127.0.0.1:4173`. That keeps the same server usable against local preview, local dev, or another running instance without editing code.
+
 ## The skeleton
 
 Here's the whole server, minus error handling for brevity. It's around fifty lines.
@@ -33,71 +36,68 @@ It uses the [Playwright API](https://playwright.dev/docs/api/class-browsertype) 
 
 ```ts
 // tools/shelf-verification-server/server.ts
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { chromium } from 'playwright';
+import { z } from 'zod';
 import path from 'node:path';
 
-const server = new Server(
-  { name: 'shelf-verification', version: '0.1.0' },
-  { capabilities: { tools: {} } },
-);
+const server = new McpServer({ name: 'shelf-verification', version: '0.1.0' });
 
-server.setRequestHandler('tools/list', async () => ({
-  tools: [
-    {
-      name: 'verify_shelf_page',
-      description:
-        'Open the Shelf app and verify the /shelf page renders correctly. Returns book count and any console errors.',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          username: { type: 'string', description: 'Username to view the shelf for' },
-        },
-        required: ['username'],
-      },
+server.registerTool(
+  'verify_shelf_page',
+  {
+    description:
+      'Open the Shelf app and verify the public /shelf/[username] route renders correctly.',
+    inputSchema: {
+      username: z.string().min(1),
     },
-  ],
-}));
+    outputSchema: {
+      ok: z.boolean(),
+      bookCount: z.number().int().nonnegative(),
+      consoleErrors: z.array(z.string()),
+    },
+  },
+  async ({ username }) => {
+    const browser = await chromium.launch();
+    const context = await browser.newContext({
+      storageState: path.resolve('playwright/.authentication/user.json'),
+    });
+    const page = await context.newPage();
 
-server.setRequestHandler('tools/call', async (request) => {
-  if (request.params.name !== 'verify_shelf_page') {
-    throw new Error(`Unknown tool: ${request.params.name}`);
-  }
+    const consoleErrors: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') consoleErrors.push(msg.text());
+    });
 
-  const { username } = request.params.arguments as { username: string };
+    await page.goto(`http://127.0.0.1:4173/shelf/${username}`, {
+      waitUntil: 'networkidle',
+    });
+    await page.getByRole('heading', { level: 1, name: /shelf/i }).waitFor();
 
-  const browser = await chromium.launch();
-  const context = await browser.newContext({
-    storageState: path.resolve('playwright/.authentication/user.json'),
-  });
-  const page = await context.newPage();
+    const bookCount = await page.getByRole('article').count();
 
-  const consoleErrors: string[] = [];
-  page.on('console', (msg) => {
-    if (msg.type() === 'error') consoleErrors.push(msg.text());
-  });
+    await browser.close();
 
-  await page.goto(`http://localhost:5173/shelf/${username}`);
-  await page.getByRole('heading', { name: new RegExp(`${username}'s Shelf`, 'i') }).waitFor();
-
-  const bookCount = await page.getByRole('article').count();
-
-  await browser.close();
-
-  return {
-    content: [
-      {
-        type: 'text',
-        text: JSON.stringify({
-          ok: consoleErrors.length === 0 && bookCount > 0,
-          bookCount,
-          consoleErrors,
-        }),
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            ok: consoleErrors.length === 0 && bookCount > 0,
+            bookCount,
+            consoleErrors,
+          }),
+        },
+      ],
+      structuredContent: {
+        ok: consoleErrors.length === 0 && bookCount > 0,
+        bookCount,
+        consoleErrors,
       },
-    ],
-  };
-});
+    };
+  },
+);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
@@ -109,27 +109,28 @@ That's the whole server. The three pieces are:
 - **The tool implementation.** When the agent calls the tool, you run whatever code you want, using whatever libraries you want, and return structured output.
 - **The transport.** Stdio transport means the server talks to the agent over standard input and output. The agent runs the server as a subprocess. It's simpler than HTTP and it's the right default for local tools.
 
-## Wiring it up to Claude Code
+## Wiring it up to your local MCP host
 
-Claude Code's MCP config lives in `.claude/mcp.json` (for this project) or `~/.claude/mcp.json` (for your user). Add an entry:
+In the local Shelf repository for this course, MCP config lives in `.mcp.json` at the repository root. Add an entry:
 
 ```json
 {
   "mcpServers": {
     "shelf-verification": {
-      "command": "node",
-      "args": ["./tools/shelf-verification-server/server.js"],
-      "env": {}
+      "type": "stdio",
+      "command": "npx",
+      "args": ["tsx", "./tools/shelf-verification-server/server.ts"],
+      "env": {
+        "SHELF_BASE_URL": "http://127.0.0.1:4173"
+      }
     }
   }
 }
 ```
 
-(You'll need to compile the TypeScript to JavaScript, or use `tsx` as the command.)
+Restart your MCP host. The new `verify_shelf_page` tool should appear in the tool list. Ask the agent to "verify the shelf page for alice" and it should pick the right tool automatically.
 
-Restart Claude Code. The new `verify_shelf_page` tool should appear in the tool list. Ask the agent to "verify the shelf page for alice" and it should pick the right tool automatically.
-
-For Cursor, the equivalent config is in `~/.cursor/mcp.json` with the same shape. For Codex, it's in the `~/.codex/config.toml`. The concepts are identical; only the config path changes.
+If your editor or agent host uses a different config path, the concept is the same even if the file moves. The only thing that changes is where the subprocess registration lives.
 
 ## Why this beats "compose it yourself"
 

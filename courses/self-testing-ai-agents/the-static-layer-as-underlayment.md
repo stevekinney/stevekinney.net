@@ -1,7 +1,7 @@
 ---
 title: The Static Layer as Underlayment
 description: Lint, types, dead code, hooks, secret scanning—the cheap stuff that should be running underneath everything. Why it lives at the end of the day.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -23,6 +23,9 @@ Think of static checks as underlayment. You put them down once, they run under e
 
 Each of these runs in milliseconds to seconds. None of them require a browser. None of them require a database. They are the _cheapest_ possible feedback loop, which is why they should be running continuously in the background and why the agent should be wired to trip them constantly.
 
+> [!NOTE]
+> In the local Shelf repository for this workshop, `npm` is the source of truth. The lesson examples sometimes say `bun`, but the real requirement is that the repository exposes stable, named scripts and that the agent is told to run them.
+
 The specific pieces we're going to cover in this module:
 
 - **ESLint and TypeScript** as opinionated guardrails, including custom rules for the Playwright patterns from this morning.
@@ -42,6 +45,10 @@ An agent is a text-in, text-out system. Every piece of feedback it gets is a fut
 A test failure five minutes after the edit is expensive—the agent has moved on, its context has shifted, it has to go back and re-understand what it was doing. A lint error thirty seconds after the edit is almost free—the context is still hot, the fix is immediate, and the loop closes inside a single turn. This is why the static layer has outsized value in an agent workflow: it shortens the feedback distance more than any other layer.
 
 A practical consequence: an agent with a tight static layer looks smarter than an agent without one, even if the underlying model is identical. The smartness comes from the feedback loop, not the model.
+
+On the current Shelf replay, a single static rule paid for itself immediately: the restored `page.locator('body')` call in the authentication setup was rejected by the new restricted-syntax rule before it could quietly survive into later labs. That's the entire value proposition in one line of output.
+
+One detail from the local Shelf implementation is worth calling out because it is easy to cargo-cult the wrong way: the staged secret scan does _not_ shell out to `gitleaks git --staged`. With the current Gitleaks release, that was not a reliable pre-commit verifier for newly added files. Instead, the repository copies the exact git index contents into a temporary directory and runs `gitleaks dir` there. Same intent, tighter loop, less ambiguity.
 
 ## The pattern, independent of tools
 

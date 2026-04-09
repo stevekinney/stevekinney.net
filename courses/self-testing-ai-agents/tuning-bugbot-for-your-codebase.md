@@ -1,7 +1,7 @@
 ---
 title: Tuning Bugbot for Your Codebase
 description: How to configure Cursor Bugbot so it finds the real issues and shuts up about the rest.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -19,6 +19,9 @@ This is the posture I want. A summary review is a ritual. An inline comment is a
 
 Drop a `.cursor/bugbot.md` at the root of the repo. This is Bugbot's instructions file—the same idea as `CLAUDE.md`, but for the reviewer. The file tells the bot what the codebase cares about and what to leave alone.
 
+> [!NOTE]
+> **Third dry run validation**: The current Shelf replay keeps this file local-first. The tuned `.cursor/bugbot.md` is committed in the repository even when the workshop copy is not yet pushed to GitHub, so the hosted Bugbot step becomes a deployment concern rather than a content-authoring concern.
+
 ```markdown
 # Bugbot review rules for Shelf
 
@@ -30,7 +33,9 @@ Tests run on Vitest (unit) and Playwright (end-to-end).
 ## What to flag
 
 - API handlers that read user identity from the request body instead of the
-  session. User identity comes from `locals.session.userId`. Never trust the body.
+  viewer. User identity comes from `locals.viewer`, not the request body.
+- Admin-only route handlers that use `requireViewer(...)` instead of
+  `requireAdministrator(...)`.
 - Drizzle queries that don't scope by the current user when operating on
   user-owned resources (shelf entries, ratings, etc.).
 - Error handling that catches an error and returns 200. If we catch, we log
@@ -38,14 +43,17 @@ Tests run on Vitest (unit) and Playwright (end-to-end).
 - Components that render user-generated content (book titles, reviews)
   without escaping or sanitization.
 - Playwright tests that use `page.waitForTimeout`, `page.locator` with
-  raw CSS, or UI login. These patterns are banned. See CLAUDE.md.
+  raw CSS, or UI login. These patterns are banned. See `CLAUDE.md`.
+- Changes to the dossier loop that remove `playwright-report/report.json`,
+  retained traces, or the `npm run dossier` script.
 
 ## What to leave alone
 
-- Test fixtures (`tests/fixtures/`)—deliberate bad data lives here.
-- Generated types in `src/lib/generated/`.
+- Generated Playwright artifacts under `playwright-report/`.
+- Storage-state files under `playwright/.authentication/`.
 - Snapshot PNGs in `tests/end-to-end/*-snapshots/`.
-- Any file under `src/lib/legacy-auth/`—scheduled for deletion.
+- Seed and baseline data in `src/lib/server/application-baseline.ts`.
+- Lockfiles.
 
 ## Tone
 

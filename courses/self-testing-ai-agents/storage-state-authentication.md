@@ -1,7 +1,7 @@
 ---
 title: Storage State Authentication
 description: Stop logging in from the UI on every test. Log in once, save the session, reuse it everywhere.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -107,6 +107,9 @@ test('rate a book', async ({ page }) => {
 
 The login code is gone. The login _concern_ is gone. If login breaks, exactly one test fails—the setup test—and the error tells you unambiguously that login itself is broken, not that "everything is flaky."
 
+> [!NOTE]
+> **Third dry run validation**: The current Shelf starter uses the browser-driven setup above as the default. Earlier drafts used a raw `request.post('/login?/signInEmail')` shortcut, but the current Better Auth stack can reject that path with a CSRF-style `403` unless the request carries the same browser context a real form submission would.
+
 ## Multiple roles
 
 Shelf has an admin surface for featuring books on the home page. So we need two authenticated contexts: a regular user and an admin. Easy:
@@ -148,18 +151,22 @@ Organize the tests by role under subdirectories. Every test inherits the right s
 
 ## Skipping the UI entirely
 
-Everything I just showed you logs in through the real login page. That's the conservative default and it's what I reach for first. But, if you have an API-based login (which Shelf does, via `POST /api/authentication/sign-in`), you can skip the UI entirely and just hit the API:
+Everything I just showed you logs in through the real login page. That's the conservative default and it's what the current Shelf starter now does. If you already have a lower-level sign-in endpoint that is safe to call from a raw request context, you can skip the UI entirely and hit that directly. Older revisions of Shelf used the SvelteKit form action at `POST /login?/signInEmail`:
 
 ```ts
 setup('authenticate as user', async ({ request }) => {
-  await request.post('/api/authentication/sign-in', {
-    data: { email: 'alice@example.com', password: 'password123' },
+  await request.post('/login?/signInEmail', {
+    form: {
+      email: 'alice@example.com',
+      password: 'password123',
+      returnTo: '/shelf',
+    },
   });
   await request.storageState({ path: 'playwright/.authentication/user.json' });
 });
 ```
 
-This is faster (no page load, no DOM rendering) and doesn't care if the login form changes. The tradeoff is that it no longer doubles as a smoke test for the login UI. I generally run the UI version in CI (as a safety net) and the API version locally (for speed). You can have both—two setup projects, pick one based on an environment variable.
+This is faster (no page load, no DOM rendering) and doesn't care if the login form changes. The tradeoff is that it no longer doubles as a smoke test for the login UI, and in the current Shelf starter it is no longer the recommended default because the auth stack now enforces stricter form-submission semantics. If you do use a raw request shortcut, prove it against the current app before teaching it as the default path.
 
 ## The `.gitignore` you need
 

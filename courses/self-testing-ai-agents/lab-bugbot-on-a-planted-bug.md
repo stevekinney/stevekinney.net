@@ -1,11 +1,17 @@
 ---
 title: 'Lab: Bugbot on a Planted Bug'
 description: Set up Cursor Bugbot on Shelf, open a PR that contains a planted permission bug, and watch the loop close.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
 Quick lab. Wire up Bugbot, open a PR containing a bug planted in the starter repo, and verify that Bugbot finds it and the agent can act on it without your help.
+
+> [!NOTE]
+> The local Shelf repository used for this workshop currently has no Git remote configured. In that workspace, treat the lab as two parts:
+>
+> 1. Local preparation: commit `.cursor/bugbot.md`, create the `planted-bug/admin-feature` branch, and verify the planted bug still passes the normal local test gates.
+> 2. Hosted follow-up: once the repository is pushed to your fork, open the pull request and let Bugbot review it there.
 
 ## Setup
 
@@ -17,7 +23,10 @@ You'll need:
 
 Install Bugbot on your Shelf fork from the Cursor dashboard and grant it access. Confirm it's active by opening an existing PR—Bugbot should leave a comment within a minute or two.
 
-Drop `.cursor/bugbot.md` in the repo root with the content from the previous lesson (tweak as needed). Commit it directly to `main`.
+Drop `.cursor/bugbot.md` in the repo root with the content from the previous lesson (tweak as needed). In the fully hosted version of the lab, commit it directly to `main`. In the local workshop repo, commit it on your current working branch now and merge it into `main` later when the fork exists.
+
+> [!NOTE]
+> **Third dry run validation**: The current local replay completed the preparation half of this lab and recorded the hosted gap in `ROADMAP.md`. That means `.cursor/bugbot.md` is committed and tuned, but the actual Bugbot review still depends on pushing the planted branch to a real GitHub fork.
 
 ## The planted bug
 
@@ -27,7 +36,7 @@ Check out the `planted-bug/admin-feature` branch:
 git checkout planted-bug/admin-feature
 ```
 
-This branch contains a new feature: an endpoint that lets admins feature a book on the home page. The code "works"—tests pass, the feature deploys, the admin UI shows the featured book. It also contains a permission check bug. Do not read the diff before opening the PR. Let Bugbot find it for you.
+In the published version of the workshop, this branch introduces the admin-feature endpoint and plants the bug in the same diff. In the local Shelf repository, that endpoint already exists from the preflight baseline, so the planted branch only weakens the permission check: it swaps `requireAdministrator(...)` for `requireViewer(...)` inside `/api/admin/featured-books`. The code still "works"—tests pass, the admin UI still shows featured books—but any signed-in reader can now call the endpoint.
 
 Open a PR from `planted-bug/admin-feature` into `main`.
 
@@ -58,9 +67,12 @@ Bugbot re-reviews on the new push. Either the comment is resolved or a refined f
 
 ## Acceptance criteria
 
-- [ ] Bugbot is installed on your Shelf fork and active on PRs.
 - [ ] `.cursor/bugbot.md` exists at the repo root and contains "what to flag" and "what to leave alone" sections.
-- [ ] The `planted-bug/admin-feature` branch exists and has not been modified by hand before opening the PR.
+- [ ] The `planted-bug/admin-feature` branch exists and introduces only the planted permission bug on top of the clean working branch.
+- [ ] The planted branch still passes the local quality gates (`npm run typecheck`, `npm run lint`, `npm run test`).
+- [ ] If the repository is still local-only, the hosted gap is documented somewhere durable (for example `ROADMAP.md`) instead of being hand-waved.
+- [ ] Bugbot is installed on your Shelf fork and active on PRs.
+- [ ] The `planted-bug/admin-feature` branch exists and has not been modified by hand after the planted-bug commit.
 - [ ] A PR from `planted-bug/admin-feature` to `main` is open.
 - [ ] Bugbot posted at least one comment on the PR. (If it didn't, update the config and re-push until it does.)
 - [ ] At least one comment identifies the permission check bug on the intended line. (File and line info in the comment should match the planted location.)

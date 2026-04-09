@@ -1,7 +1,7 @@
 ---
 title: Visual Regression as a Feedback Loop
 description: Screenshot diffs are not just a CI gate. They're the fastest way to tell an agent "this looks wrong" without saying a word.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -38,9 +38,14 @@ test('shelf page matches visual baseline', async ({ page }) => {
 });
 ```
 
+In the current Shelf starter, the authenticated page screenshots run under a dedicated Marco storage state so the visual suite does not share Alice's mutable shelf data with the rate-book workflow tests.
+
 First run: Playwright takes a screenshot and writes it to `tests/end-to-end/visual.spec.ts-snapshots/shelf-page.png` (the snapshot directory is named after the test file, so a different `<test-file>.spec.ts` would produce a different `<test-file>.spec.ts-snapshots/` folder). The test "passes" because there's nothing to compare against.
 
 Every subsequent run: Playwright takes a new screenshot and compares it to the committed baseline. If they match pixel-for-pixel (modulo a small tolerance), the test passes. If they don't, the test fails, and Playwright writes three files to your report directory: the baseline, the actual, and a diff image highlighting the changed pixels.
+
+> [!NOTE]
+> **Third dry run validation**: The current Shelf starter still runs Playwright with `workers: 1` because the local SQLite database is shared across browser workers. That does not change the screenshot pattern or the value of the diff. It just means the visual loop favors deterministic output over raw parallel throughput until the app grows stronger test isolation.
 
 You commit the baseline to git. When you make an intentional visual change, you regenerate the baseline (`--update-snapshots`) in the same commit. Reviewers see the old baseline being replaced with the new baseline in the diff and can eyeball whether the change was intentional.
 
@@ -60,6 +65,7 @@ export default defineConfig({
       animations: 'disabled',
       caret: 'hide',
       scale: 'css',
+      maxDiffPixelRatio: 0.01,
     },
   },
 });

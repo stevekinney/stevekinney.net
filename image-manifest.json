@@ -2725,774 +2725,6 @@
       "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYAA0APxFysFAsJqSisAgBgCIJZwDCgC0kAAD+7gixFycXMAA=",
       "videoMimeType": null
     },
-    "courses/python-ai/assets/hugging-face-website.png": {
-      "hash": "3527117fe8f0a880",
-      "width": 1600,
-      "height": 1203,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRuwAAABXRUJQVlA4WAoAAAAQAAAAFwAAEQAAQUxQSJQAAAABuTJE9D80khPbdu3IK1zlj/dSh1A/gAV/+mGPGwXwA4iYgAm4f+d4vHW8ce3vzyVePTscnjx6cDqdrqDJYjJffpJpZLJG8vv16R8va2QxmUy0mEYm07BGFpPRMs0/nWm/aPECy36QtRx8XpiwaJ9GW8taDTlMs6xpWbLOrDXft1Y7WzNZlknTfxbm67Da2QzWtCACVlA4IDIAAAAQAwCdASoYABIAPxGAuFWsKCUjKAgBgCIJaQDI1Bi5GIAA/u6riiAWvtJVSrxYwVUAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-styled-basic-button.png": {
-      "hash": "44948cd2c7266927",
-      "width": 1600,
-      "height": 470,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/44948cd2c7266927/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/44948cd2c7266927/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/44948cd2c7266927/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/44948cd2c7266927/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAcAPxFwsFAsJiSisAgBgCIJaQAAeyAA/u/tsgAAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-basic-button-with-variants@2x.png": {
-      "hash": "9f0dd0f6e7c09d9a",
-      "width": 1600,
-      "height": 1176,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f0dd0f6e7c09d9a/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f0dd0f6e7c09d9a/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f0dd0f6e7c09d9a/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f0dd0f6e7c09d9a/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAACQAwCdASoYABIAPxF2sVAwp6SqMAgCECIJZQC7ACs8w3ZtgS7wAP7cBNPDe24nJIDabODR25ED2NGJVupQsWygTzSeAAAA",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-arg-types-detail.png": {
-      "hash": "636d441ed734078d",
-      "width": 1600,
-      "height": 606,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/636d441ed734078d/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/636d441ed734078d/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/636d441ed734078d/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/636d441ed734078d/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAkAPxFwsFAsJiSisAgBgCIJaQAAeyAA/vALRgAAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-figma-categories-and-subcategories.png": {
-      "hash": "06e8673ef5136fbe",
-      "width": 1600,
-      "height": 828,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/06e8673ef5136fbe/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/06e8673ef5136fbe/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/06e8673ef5136fbe/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/06e8673ef5136fbe/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAgCdASoYAAwAPxFwsFAsJiSisAgBgCIJaQAAeyAA/vAJQAA=",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/callout-component-designs.png": {
-      "hash": "ec9d8e3dcb37b90c",
-      "width": 1600,
-      "height": 1108,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ec9d8e3dcb37b90c/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ec9d8e3dcb37b90c/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ec9d8e3dcb37b90c/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ec9d8e3dcb37b90c/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4WAoAAAAQAAAAFwAAEAAAQUxQSDMAAAABJ/D8/4gID4WQbVUpvAy6GXQVnr/U/0UQ0f8JWGlpx/jjp5rRyoUlSUXYB5DYYh0JD0AAVlA4IDgAAABQAwCdASoYABEAPxFysFAsJqSisAgBgCIJZwDAKCHWnAHDQAD+sEOs/jc42+NyO7fdZkc4uasAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-color-palette.png": {
-      "hash": "0bb3296ee717bd04",
-      "width": 1600,
-      "height": 363,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0bb3296ee717bd04/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0bb3296ee717bd04/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0bb3296ee717bd04/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0bb3296ee717bd04/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAUAPxFysFAsJqSisAgBgCIJaQAAeyAA/u/s5goAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-color-palette-from-tailwind@2x.png": {
-      "hash": "65bf2c92ef6ae474",
-      "width": 1600,
-      "height": 1688,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/65bf2c92ef6ae474/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/65bf2c92ef6ae474/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/65bf2c92ef6ae474/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/65bf2c92ef6ae474/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADQAwCdASoYABkAPxGAtFU4qCSjKAqrECIJYwCnFBbJJOKyLXB9rUAA/uaoXJaYGoK+Qm9wSl11dIR+5EJ+IRYBwEMl/ziij/f0Ud1yhm8ZAAAA",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-progamatically-generated-color-palette.png": {
-      "hash": "82f64821580d6b49",
-      "width": 1600,
-      "height": 1126,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/82f64821580d6b49/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/82f64821580d6b49/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/82f64821580d6b49/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/82f64821580d6b49/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADwAgCdASoYABEAPxGAuFWsKCUjKAgBgCIJaQAAPbVcAAD+70nvHNQfc0AAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-control-disabled-state.png": {
-      "hash": "cbecf067e7e97c3d",
-      "width": 1600,
-      "height": 819,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/cbecf067e7e97c3d/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/cbecf067e7e97c3d/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/cbecf067e7e97c3d/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/cbecf067e7e97c3d/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAADQAgCdASoYAAwAPxFysVAsJqSisAgBgCIJZwAAifQAAP7vtoarz/AA",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-default-control-value.png": {
-      "hash": "d20d71dabb08535b",
-      "width": 1600,
-      "height": 794,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d20d71dabb08535b/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d20d71dabb08535b/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d20d71dabb08535b/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d20d71dabb08535b/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAwAPxFysVAsJqSisAgBgCIJZwAAeyAA/u/X4ZbFAAAA",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-button-controls-additonal-disabled-control.png": {
-      "hash": "f92dcdcf5bb7f0ec",
-      "width": 1600,
-      "height": 1046,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f92dcdcf5bb7f0ec/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f92dcdcf5bb7f0ec/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f92dcdcf5bb7f0ec/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f92dcdcf5bb7f0ec/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYABAAPxFwsFAsJiSisAgBgCIJaQAAeyAA/u/t4YAAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-figma-share-file.png": {
-      "hash": "5041ae144e8dfa7c",
-      "width": 1600,
-      "height": 804,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5041ae144e8dfa7c/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5041ae144e8dfa7c/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5041ae144e8dfa7c/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5041ae144e8dfa7c/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADQAgCdASoYAAwAPxFyslC/pqSisAgD8CIJaQAAfj4AAP6/F6PGG98Opl3IbpgA",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-alongside-figma.png": {
-      "hash": "1572c3bb398247df",
-      "width": 1600,
-      "height": 1011,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1572c3bb398247df/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1572c3bb398247df/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1572c3bb398247df/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1572c3bb398247df/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAACwAgCdASoYAA8APxF0sVCsJqSxsAgCMCIJaQAAeyAA/u+PiV6s/Y16hFAAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-icon-gallery@2x.png": {
-      "hash": "e220d6652fcc4236",
-      "width": 1600,
-      "height": 917,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e220d6652fcc4236/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e220d6652fcc4236/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e220d6652fcc4236/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e220d6652fcc4236/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAAAQAwCdASoYAA4APxFOv1o/oqgkmAPwIgljAJ0AQ1H+7VAA/fafe6k9TvMjbPPaG8lf8OBLxDgAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-mdx-basic@2x.png": {
-      "hash": "86d28944b18e396b",
-      "width": 1600,
-      "height": 1176,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/86d28944b18e396b/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/86d28944b18e396b/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/86d28944b18e396b/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/86d28944b18e396b/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAABwAwCdASoYABIAPxF2sVC/p6SjsAgD8CIJZQCuHCs9kZmpYqAA/twE08N7bbRZNknsNK2Tj48sdq27VpNHgy+U4LAAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-button-mdx.png": {
-      "hash": "a86c948fddecaf1b",
-      "width": 1600,
-      "height": 1049,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a86c948fddecaf1b/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a86c948fddecaf1b/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a86c948fddecaf1b/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a86c948fddecaf1b/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYABAAPxFwsFAsJiSisAgBgCIJaQAAeyAA/u/t4YAAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-components-ordered-nicely.png": {
-      "hash": "e624c1b73bd763fa",
-      "width": 554,
-      "height": 994,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e624c1b73bd763fa/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e624c1b73bd763fa/avif-480w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAAAwAwCdASoYACsAPxGEulcsKCWjpWgBgCIJaQDLaBECe2uAAP7vjJFs3eAbrv4taloTy5q8AAA=",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-text-area-valid.png": {
-      "hash": "5983e6f7f116eaed",
-      "width": 1330,
-      "height": 298,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5983e6f7f116eaed/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5983e6f7f116eaed/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5983e6f7f116eaed/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYAAUAPxFysFAsJqSisAgBgCIJZwDGfC0kAAD+7UngzugAAAA=",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-text-area-invalid.png": {
-      "hash": "feab162a8ebecfe4",
-      "width": 1330,
-      "height": 298,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/feab162a8ebecfe4/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/feab162a8ebecfe4/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/feab162a8ebecfe4/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAUAPxFwsFAsJiSisAgBgCIJaQAAeyAA/uy9XvcKbAAA",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-sandboxes-cli.png": {
-      "hash": "35917e99ae1bd8fa",
-      "width": 1293,
-      "height": 1083,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/35917e99ae1bd8fa/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/35917e99ae1bd8fa/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/35917e99ae1bd8fa/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAAAQAwCdASoYABQAPxGCuFWsKKUjKAgBgCIJZwDI1BanlwAA/u4JLV4IgFLraFU6AAA=",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-addon-themes-success-in-cli.png": {
-      "hash": "edbb83b7d814c007",
-      "width": 1492,
-      "height": 496,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/edbb83b7d814c007/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/edbb83b7d814c007/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/edbb83b7d814c007/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAACwAgCdASoYAAgAPxFysFAsJqSisAgBgCIJZQAAeyAA/u7T0Tc/oPixcAAAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-tailwind-dark-mode@2x.png": {
-      "hash": "aa35fd2e5ec7707c",
-      "width": 1600,
-      "height": 1176,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/aa35fd2e5ec7707c/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/aa35fd2e5ec7707c/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/aa35fd2e5ec7707c/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/aa35fd2e5ec7707c/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAAAQAwCdASoYABIAPxF2slC/p6SjsAgD8CIJZQCo9Cs9rIAA/rgj5Fn/PD5jQChPHANLtemhkNrw2QDhNiiAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-welcome-screen.png": {
-      "hash": "67fb5915c3b59d29",
-      "width": 1600,
-      "height": 1066,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67fb5915c3b59d29/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67fb5915c3b59d29/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67fb5915c3b59d29/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67fb5915c3b59d29/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAAAQAwCdASoYABAAPxGCtFIsKaUisAgBgCIJYwABHtFPVmAA/laiIcCfyGsr/raYNRYR/WSOPEM37BkAAAA=",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-integrated-into-figma.png": {
-      "hash": "88be01cd157a779b",
-      "width": 1600,
-      "height": 729,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/88be01cd157a779b/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/88be01cd157a779b/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/88be01cd157a779b/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/88be01cd157a779b/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAsAPxFysFAsJqSisAgBgCIJaQAAeyAA/u8UhJyOCOAA",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-typeset-docs-block.png": {
-      "hash": "272df5e9a5f834c0",
-      "width": 1600,
-      "height": 1497,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/272df5e9a5f834c0/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/272df5e9a5f834c0/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/272df5e9a5f834c0/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/272df5e9a5f834c0/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADwAgCdASoYABYAPxGAuFWsKCUjKAgBgCIJaQAAPaUIAAD+72iAc8ELMwAAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-chromatic-create-project.png": {
-      "hash": "67d3ee7558f6d8f6",
-      "width": 1600,
-      "height": 1075,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67d3ee7558f6d8f6/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67d3ee7558f6d8f6/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67d3ee7558f6d8f6/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67d3ee7558f6d8f6/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAACwAgCdASoYABAAPxFysFAsJqSisAgBgCIJaQAAeyAA/vAMmlai9usAAAA=",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-chromatic-project-configuration.png": {
-      "hash": "b528f4ab6321e138",
-      "width": 1600,
-      "height": 1075,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b528f4ab6321e138/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b528f4ab6321e138/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b528f4ab6321e138/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b528f4ab6321e138/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYABAAPxFysFAsJqSisAgBgCIJaQAAe/QAAP7v7fclMRwusAA=",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-chromatic-publish-success.png": {
-      "hash": "2d0fc2886562c391",
-      "width": 1600,
-      "height": 1075,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d0fc2886562c391/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d0fc2886562c391/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d0fc2886562c391/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d0fc2886562c391/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYABAAPxFysFCsJqSisAgBgCIJZwAAhAwAAP7vzeleZRS8AAA=",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-chromatic-change-summary.png": {
-      "hash": "4d6ba27739d4fe61",
-      "width": 1600,
-      "height": 1075,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4d6ba27739d4fe61/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4d6ba27739d4fe61/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4d6ba27739d4fe61/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4d6ba27739d4fe61/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYABAAPxFysVCsJqSisAgBgCIJaQDMHC0kAAD+7+sLBhCygAA=",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-chromatic-interface-review.png": {
-      "hash": "f4cc756148898644",
-      "width": 1600,
-      "height": 1107,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f4cc756148898644/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f4cc756148898644/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f4cc756148898644/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f4cc756148898644/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADwAgCdASoYABEAPxGAuFWsKCUjKAgBgCIJaQAAPa6WAAD+780Z5Ptbod12QAAA",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-enable-visual-tests.png": {
-      "hash": "62dfdd8ee223eba6",
-      "width": 1600,
-      "height": 1033,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/62dfdd8ee223eba6/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/62dfdd8ee223eba6/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/62dfdd8ee223eba6/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/62dfdd8ee223eba6/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAADQAgCdASoYAA8APxFysFCsJqSisAgBgCIJaQAAe/QAAP7vy4BLwAAA",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-chromatic-integration-no-changes.png": {
-      "hash": "adeeffc11b046ebd",
-      "width": 1600,
-      "height": 382,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/adeeffc11b046ebd/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/adeeffc11b046ebd/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/adeeffc11b046ebd/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/adeeffc11b046ebd/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAYAPxFysFCsJqSisAgBgCIJaQAAeyAA/u/tsgAAAA==",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-chromatic-visual-regression-changes.png": {
-      "hash": "eba12a7cc8bf700d",
-      "width": 1600,
-      "height": 317,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/eba12a7cc8bf700d/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/eba12a7cc8bf700d/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/eba12a7cc8bf700d/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/eba12a7cc8bf700d/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAADQAgCdASoYAAUAPxFwsFAsJiSisAgBgCIJaQAAe/QAAP7vq8yFFyAA",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-basic-button-story.png": {
-      "hash": "7425731325565b38",
-      "width": 1600,
-      "height": 1255,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7425731325565b38/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7425731325565b38/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7425731325565b38/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7425731325565b38/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRt4AAABXRUJQVlA4WAoAAAAQAAAAFwAAEgAAQUxQSIUAAAAFuQpE9D80ECJJkq0ECMTtKe5++wkkpIGOb6DEREzABDx99+nR/cH9yz5QKt3HM2uuy4Im1zV/bSFjraHF0nJzmmNoscvt5prjZFnW4WamaZC1Dv/5L9OiQ5a1DFaTPy9Gq9E6LXNt0lrTMtYQLedpjIimA4NNRCbTsIW7a47L2ITk9pg2AFZQOCAyAAAAEAMAnQEqGAATAD8RfrdVrCelIygIAYAiCWkAy+AYcrcAAP7vIUm4hv9hh+HAyepZAAA=",
-      "videoMimeType": null
-    },
-    "courses/storybook/assets/storybook-basic-button-props.png": {
-      "hash": "429f1dd5f8cfadf1",
-      "width": 1600,
-      "height": 517,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/429f1dd5f8cfadf1/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/429f1dd5f8cfadf1/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/429f1dd5f8cfadf1/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/429f1dd5f8cfadf1/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAgAPxFwsFAsJiSisAgBgCIJaQAAeyAA/u/smgAAAA==",
-      "videoMimeType": null
-    },
     "courses/aws/assets/alias-vs-cname-apex-routing.svg": {
       "hash": "338e3dd81460010a",
       "width": 1200,
@@ -5385,6 +4617,918 @@
       "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1ef88d7613b0b4ed/original.svg",
       "avif": [],
       "lqip": null,
+      "videoMimeType": null
+    },
+    "courses/python-ai/assets/hugging-face-website.png": {
+      "hash": "3527117fe8f0a880",
+      "width": 1600,
+      "height": 1203,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRuwAAABXRUJQVlA4WAoAAAAQAAAAFwAAEQAAQUxQSJQAAAABuTJE9D80khPbdu3IK1zlj/dSh1A/gAV/+mGPGwXwA4iYgAm4f+d4vHW8ce3vzyVePTscnjx6cDqdrqDJYjJffpJpZLJG8vv16R8va2QxmUy0mEYm07BGFpPRMs0/nWm/aPECy36QtRx8XpiwaJ9GW8taDTlMs6xpWbLOrDXft1Y7WzNZlknTfxbm67Da2QzWtCACVlA4IDIAAAAQAwCdASoYABIAPxGAuFWsKCUjKAgBgCIJaQDI1Bi5GIAA/u6riiAWvtJVSrxYwVUAAA==",
+      "videoMimeType": null
+    },
+    "courses/self-testing-ai-agents/assets/capstone-shelf-reading-goal.png": {
+      "hash": "b62030a13f753ebd",
+      "width": 1400,
+      "height": 1707,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b62030a13f753ebd/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b62030a13f753ebd/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b62030a13f753ebd/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAAAQAwCdASoYAB0APxGCuFWsKKUjKAgBgCIJZwDC+BmKZMAA/u8U23XumKDizZqcAAA=",
+      "videoMimeType": null
+    },
+    "courses/self-testing-ai-agents/assets/capstone-goals-page.png": {
+      "hash": "1155e0e1939e354d",
+      "width": 1400,
+      "height": 1100,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1155e0e1939e354d/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1155e0e1939e354d/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1155e0e1939e354d/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADwAgCdASoYABMAPxGCuFWsKKUjKAgBgCIJZwAARXHPAAD+7und6ph2iDwAAA==",
+      "videoMimeType": null
+    },
+    "courses/self-testing-ai-agents/assets/capstone-admin-goals-page.png": {
+      "hash": "ffdbf9a7bb160235",
+      "width": 1400,
+      "height": 3030,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ffdbf9a7bb160235/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ffdbf9a7bb160235/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ffdbf9a7bb160235/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAABQAwCdASoYADQAPxGIvFgsKKYjpAgBgCIJaQDNDAy+FipQMAD+72RMz4pnOSJxB45szQwA",
+      "videoMimeType": null
+    },
+    "courses/self-testing-ai-agents/assets/lab-failure-dossier-report.png": {
+      "hash": "4eb3f6960db9c86e",
+      "width": 1440,
+      "height": 1100,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4eb3f6960db9c86e/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4eb3f6960db9c86e/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4eb3f6960db9c86e/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAADQAgCdASoYABIAPxGCuFWsKKUjKAgBgCIJaQAAPaOgAP7wCfsAAA==",
+      "videoMimeType": null
+    },
+    "courses/self-testing-ai-agents/assets/lab-harden-rate-book-success.png": {
+      "hash": "de0765d2ae085029",
+      "width": 1440,
+      "height": 1511,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/de0765d2ae085029/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/de0765d2ae085029/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/de0765d2ae085029/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYABkAPxGCuFWsKKUjKAgBgCIJaQDGuBan4gAA/u8Ui2EOGlC3oAAA",
+      "videoMimeType": null
+    },
+    "courses/self-testing-ai-agents/assets/lab-visual-regression-shelf-page.png": {
+      "hash": "5b95bc17638be7eb",
+      "width": 1280,
+      "height": 1433,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5b95bc17638be7eb/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5b95bc17638be7eb/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5b95bc17638be7eb/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYABsAPxGAuFWsKCUjKAgBgCIJaQDLaBan4gAA/u8UrIrnU4/i3IAA",
+      "videoMimeType": null
+    },
+    "courses/self-testing-ai-agents/assets/lab-visual-regression-shelf-page-diff.png": {
+      "hash": "c1fd22a5900beba4",
+      "width": 1280,
+      "height": 1481,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/c1fd22a5900beba4/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/c1fd22a5900beba4/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/c1fd22a5900beba4/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYABwAPxGAuFWsKCUjKAgBgCIJZwDL4BhwnIAA/u+pEywERJQg2JAA",
+      "videoMimeType": null
+    },
+    "courses/self-testing-ai-agents/assets/lab-custom-mcp-public-shelf.png": {
+      "hash": "88d7f94ef2fec158",
+      "width": 1440,
+      "height": 1400,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/88d7f94ef2fec158/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/88d7f94ef2fec158/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/88d7f94ef2fec158/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAAAQAwCdASoYABcAPxGCuVWsKKWjKAgBgCIJaQC84BaoSgAA/u8UQs0NfwX/kKf6AAA=",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-styled-basic-button.png": {
+      "hash": "44948cd2c7266927",
+      "width": 1600,
+      "height": 470,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/44948cd2c7266927/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/44948cd2c7266927/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/44948cd2c7266927/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/44948cd2c7266927/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAcAPxFwsFAsJiSisAgBgCIJaQAAeyAA/u/tsgAAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-basic-button-with-variants@2x.png": {
+      "hash": "9f0dd0f6e7c09d9a",
+      "width": 1600,
+      "height": 1176,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f0dd0f6e7c09d9a/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f0dd0f6e7c09d9a/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f0dd0f6e7c09d9a/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f0dd0f6e7c09d9a/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAACQAwCdASoYABIAPxF2sVAwp6SqMAgCECIJZQC7ACs8w3ZtgS7wAP7cBNPDe24nJIDabODR25ED2NGJVupQsWygTzSeAAAA",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-arg-types-detail.png": {
+      "hash": "636d441ed734078d",
+      "width": 1600,
+      "height": 606,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/636d441ed734078d/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/636d441ed734078d/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/636d441ed734078d/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/636d441ed734078d/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAkAPxFwsFAsJiSisAgBgCIJaQAAeyAA/vALRgAAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-figma-categories-and-subcategories.png": {
+      "hash": "06e8673ef5136fbe",
+      "width": 1600,
+      "height": 828,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/06e8673ef5136fbe/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/06e8673ef5136fbe/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/06e8673ef5136fbe/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/06e8673ef5136fbe/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAgCdASoYAAwAPxFwsFAsJiSisAgBgCIJaQAAeyAA/vAJQAA=",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/callout-component-designs.png": {
+      "hash": "ec9d8e3dcb37b90c",
+      "width": 1600,
+      "height": 1108,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ec9d8e3dcb37b90c/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ec9d8e3dcb37b90c/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ec9d8e3dcb37b90c/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ec9d8e3dcb37b90c/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4WAoAAAAQAAAAFwAAEAAAQUxQSDMAAAABJ/D8/4gID4WQbVUpvAy6GXQVnr/U/0UQ0f8JWGlpx/jjp5rRyoUlSUXYB5DYYh0JD0AAVlA4IDgAAABQAwCdASoYABEAPxFysFAsJqSisAgBgCIJZwDAKCHWnAHDQAD+sEOs/jc42+NyO7fdZkc4uasAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-color-palette.png": {
+      "hash": "0bb3296ee717bd04",
+      "width": 1600,
+      "height": 363,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0bb3296ee717bd04/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0bb3296ee717bd04/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0bb3296ee717bd04/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0bb3296ee717bd04/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAUAPxFysFAsJqSisAgBgCIJaQAAeyAA/u/s5goAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-color-palette-from-tailwind@2x.png": {
+      "hash": "65bf2c92ef6ae474",
+      "width": 1600,
+      "height": 1688,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/65bf2c92ef6ae474/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/65bf2c92ef6ae474/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/65bf2c92ef6ae474/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/65bf2c92ef6ae474/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADQAwCdASoYABkAPxGAtFU4qCSjKAqrECIJYwCnFBbJJOKyLXB9rUAA/uaoXJaYGoK+Qm9wSl11dIR+5EJ+IRYBwEMl/ziij/f0Ud1yhm8ZAAAA",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-progamatically-generated-color-palette.png": {
+      "hash": "82f64821580d6b49",
+      "width": 1600,
+      "height": 1126,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/82f64821580d6b49/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/82f64821580d6b49/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/82f64821580d6b49/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/82f64821580d6b49/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADwAgCdASoYABEAPxGAuFWsKCUjKAgBgCIJaQAAPbVcAAD+70nvHNQfc0AAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-control-disabled-state.png": {
+      "hash": "cbecf067e7e97c3d",
+      "width": 1600,
+      "height": 819,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/cbecf067e7e97c3d/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/cbecf067e7e97c3d/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/cbecf067e7e97c3d/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/cbecf067e7e97c3d/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAADQAgCdASoYAAwAPxFysVAsJqSisAgBgCIJZwAAifQAAP7vtoarz/AA",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-default-control-value.png": {
+      "hash": "d20d71dabb08535b",
+      "width": 1600,
+      "height": 794,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d20d71dabb08535b/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d20d71dabb08535b/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d20d71dabb08535b/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d20d71dabb08535b/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAwAPxFysVAsJqSisAgBgCIJZwAAeyAA/u/X4ZbFAAAA",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-button-controls-additonal-disabled-control.png": {
+      "hash": "f92dcdcf5bb7f0ec",
+      "width": 1600,
+      "height": 1046,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f92dcdcf5bb7f0ec/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f92dcdcf5bb7f0ec/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f92dcdcf5bb7f0ec/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f92dcdcf5bb7f0ec/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYABAAPxFwsFAsJiSisAgBgCIJaQAAeyAA/u/t4YAAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-figma-share-file.png": {
+      "hash": "5041ae144e8dfa7c",
+      "width": 1600,
+      "height": 804,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5041ae144e8dfa7c/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5041ae144e8dfa7c/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5041ae144e8dfa7c/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5041ae144e8dfa7c/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADQAgCdASoYAAwAPxFyslC/pqSisAgD8CIJaQAAfj4AAP6/F6PGG98Opl3IbpgA",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-alongside-figma.png": {
+      "hash": "1572c3bb398247df",
+      "width": 1600,
+      "height": 1011,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1572c3bb398247df/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1572c3bb398247df/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1572c3bb398247df/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1572c3bb398247df/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAACwAgCdASoYAA8APxF0sVCsJqSxsAgCMCIJaQAAeyAA/u+PiV6s/Y16hFAAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-icon-gallery@2x.png": {
+      "hash": "e220d6652fcc4236",
+      "width": 1600,
+      "height": 917,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e220d6652fcc4236/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e220d6652fcc4236/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e220d6652fcc4236/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e220d6652fcc4236/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAAAQAwCdASoYAA4APxFOv1o/oqgkmAPwIgljAJ0AQ1H+7VAA/fafe6k9TvMjbPPaG8lf8OBLxDgAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-mdx-basic@2x.png": {
+      "hash": "86d28944b18e396b",
+      "width": 1600,
+      "height": 1176,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/86d28944b18e396b/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/86d28944b18e396b/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/86d28944b18e396b/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/86d28944b18e396b/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAABwAwCdASoYABIAPxF2sVC/p6SjsAgD8CIJZQCuHCs9kZmpYqAA/twE08N7bbRZNknsNK2Tj48sdq27VpNHgy+U4LAAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-button-mdx.png": {
+      "hash": "a86c948fddecaf1b",
+      "width": 1600,
+      "height": 1049,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a86c948fddecaf1b/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a86c948fddecaf1b/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a86c948fddecaf1b/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a86c948fddecaf1b/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYABAAPxFwsFAsJiSisAgBgCIJaQAAeyAA/u/t4YAAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-components-ordered-nicely.png": {
+      "hash": "e624c1b73bd763fa",
+      "width": 554,
+      "height": 994,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e624c1b73bd763fa/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e624c1b73bd763fa/avif-480w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAAAwAwCdASoYACsAPxGEulcsKCWjpWgBgCIJaQDLaBECe2uAAP7vjJFs3eAbrv4taloTy5q8AAA=",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-text-area-valid.png": {
+      "hash": "5983e6f7f116eaed",
+      "width": 1330,
+      "height": 298,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5983e6f7f116eaed/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5983e6f7f116eaed/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5983e6f7f116eaed/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYAAUAPxFysFAsJqSisAgBgCIJZwDGfC0kAAD+7UngzugAAAA=",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-text-area-invalid.png": {
+      "hash": "feab162a8ebecfe4",
+      "width": 1330,
+      "height": 298,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/feab162a8ebecfe4/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/feab162a8ebecfe4/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/feab162a8ebecfe4/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAUAPxFwsFAsJiSisAgBgCIJaQAAeyAA/uy9XvcKbAAA",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-sandboxes-cli.png": {
+      "hash": "35917e99ae1bd8fa",
+      "width": 1293,
+      "height": 1083,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/35917e99ae1bd8fa/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/35917e99ae1bd8fa/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/35917e99ae1bd8fa/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAAAQAwCdASoYABQAPxGCuFWsKKUjKAgBgCIJZwDI1BanlwAA/u4JLV4IgFLraFU6AAA=",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-addon-themes-success-in-cli.png": {
+      "hash": "edbb83b7d814c007",
+      "width": 1492,
+      "height": 496,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/edbb83b7d814c007/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/edbb83b7d814c007/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/edbb83b7d814c007/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAACwAgCdASoYAAgAPxFysFAsJqSisAgBgCIJZQAAeyAA/u7T0Tc/oPixcAAAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-tailwind-dark-mode@2x.png": {
+      "hash": "aa35fd2e5ec7707c",
+      "width": 1600,
+      "height": 1176,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/aa35fd2e5ec7707c/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/aa35fd2e5ec7707c/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/aa35fd2e5ec7707c/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/aa35fd2e5ec7707c/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAAAQAwCdASoYABIAPxF2slC/p6SjsAgD8CIJZQCo9Cs9rIAA/rgj5Fn/PD5jQChPHANLtemhkNrw2QDhNiiAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-welcome-screen.png": {
+      "hash": "67fb5915c3b59d29",
+      "width": 1600,
+      "height": 1066,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67fb5915c3b59d29/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67fb5915c3b59d29/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67fb5915c3b59d29/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67fb5915c3b59d29/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAAAQAwCdASoYABAAPxGCtFIsKaUisAgBgCIJYwABHtFPVmAA/laiIcCfyGsr/raYNRYR/WSOPEM37BkAAAA=",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-integrated-into-figma.png": {
+      "hash": "88be01cd157a779b",
+      "width": 1600,
+      "height": 729,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/88be01cd157a779b/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/88be01cd157a779b/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/88be01cd157a779b/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/88be01cd157a779b/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAsAPxFysFAsJqSisAgBgCIJaQAAeyAA/u8UhJyOCOAA",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-typeset-docs-block.png": {
+      "hash": "272df5e9a5f834c0",
+      "width": 1600,
+      "height": 1497,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/272df5e9a5f834c0/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/272df5e9a5f834c0/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/272df5e9a5f834c0/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/272df5e9a5f834c0/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADwAgCdASoYABYAPxGAuFWsKCUjKAgBgCIJaQAAPaUIAAD+72iAc8ELMwAAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-chromatic-create-project.png": {
+      "hash": "67d3ee7558f6d8f6",
+      "width": 1600,
+      "height": 1075,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67d3ee7558f6d8f6/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67d3ee7558f6d8f6/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67d3ee7558f6d8f6/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/67d3ee7558f6d8f6/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAACwAgCdASoYABAAPxFysFAsJqSisAgBgCIJaQAAeyAA/vAMmlai9usAAAA=",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-chromatic-project-configuration.png": {
+      "hash": "b528f4ab6321e138",
+      "width": 1600,
+      "height": 1075,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b528f4ab6321e138/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b528f4ab6321e138/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b528f4ab6321e138/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b528f4ab6321e138/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYABAAPxFysFAsJqSisAgBgCIJaQAAe/QAAP7v7fclMRwusAA=",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-chromatic-publish-success.png": {
+      "hash": "2d0fc2886562c391",
+      "width": 1600,
+      "height": 1075,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d0fc2886562c391/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d0fc2886562c391/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d0fc2886562c391/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d0fc2886562c391/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYABAAPxFysFCsJqSisAgBgCIJZwAAhAwAAP7vzeleZRS8AAA=",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-chromatic-change-summary.png": {
+      "hash": "4d6ba27739d4fe61",
+      "width": 1600,
+      "height": 1075,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4d6ba27739d4fe61/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4d6ba27739d4fe61/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4d6ba27739d4fe61/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4d6ba27739d4fe61/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYABAAPxFysVCsJqSisAgBgCIJaQDMHC0kAAD+7+sLBhCygAA=",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-chromatic-interface-review.png": {
+      "hash": "f4cc756148898644",
+      "width": 1600,
+      "height": 1107,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f4cc756148898644/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f4cc756148898644/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f4cc756148898644/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f4cc756148898644/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADwAgCdASoYABEAPxGAuFWsKCUjKAgBgCIJaQAAPa6WAAD+780Z5Ptbod12QAAA",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-enable-visual-tests.png": {
+      "hash": "62dfdd8ee223eba6",
+      "width": 1600,
+      "height": 1033,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/62dfdd8ee223eba6/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/62dfdd8ee223eba6/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/62dfdd8ee223eba6/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/62dfdd8ee223eba6/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAADQAgCdASoYAA8APxFysFCsJqSisAgBgCIJaQAAe/QAAP7vy4BLwAAA",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-chromatic-integration-no-changes.png": {
+      "hash": "adeeffc11b046ebd",
+      "width": 1600,
+      "height": 382,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/adeeffc11b046ebd/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/adeeffc11b046ebd/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/adeeffc11b046ebd/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/adeeffc11b046ebd/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAYAPxFysFCsJqSisAgBgCIJaQAAeyAA/u/tsgAAAA==",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-chromatic-visual-regression-changes.png": {
+      "hash": "eba12a7cc8bf700d",
+      "width": 1600,
+      "height": 317,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/eba12a7cc8bf700d/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/eba12a7cc8bf700d/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/eba12a7cc8bf700d/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/eba12a7cc8bf700d/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAADQAgCdASoYAAUAPxFwsFAsJiSisAgBgCIJaQAAe/QAAP7vq8yFFyAA",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-basic-button-story.png": {
+      "hash": "7425731325565b38",
+      "width": 1600,
+      "height": 1255,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7425731325565b38/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7425731325565b38/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7425731325565b38/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7425731325565b38/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRt4AAABXRUJQVlA4WAoAAAAQAAAAFwAAEgAAQUxQSIUAAAAFuQpE9D80ECJJkq0ECMTtKe5++wkkpIGOb6DEREzABDx99+nR/cH9yz5QKt3HM2uuy4Im1zV/bSFjraHF0nJzmmNoscvt5prjZFnW4WamaZC1Dv/5L9OiQ5a1DFaTPy9Gq9E6LXNt0lrTMtYQLedpjIimA4NNRCbTsIW7a47L2ITk9pg2AFZQOCAyAAAAEAMAnQEqGAATAD8RfrdVrCelIygIAYAiCWkAy+AYcrcAAP7vIUm4hv9hh+HAyepZAAA=",
+      "videoMimeType": null
+    },
+    "courses/storybook/assets/storybook-basic-button-props.png": {
+      "hash": "429f1dd5f8cfadf1",
+      "width": 1600,
+      "height": 517,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/429f1dd5f8cfadf1/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/429f1dd5f8cfadf1/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/429f1dd5f8cfadf1/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/429f1dd5f8cfadf1/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAgAPxFwsFAsJiSisAgBgCIJaQAAeyAA/u/smgAAAA==",
       "videoMimeType": null
     },
     "courses/testing/assets/failing-test-due-to-random-id.png": {

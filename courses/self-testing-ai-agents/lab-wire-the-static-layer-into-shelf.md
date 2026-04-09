@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wire the Static Layer into Shelf'
 description: Install and configure the whole stack—ESLint custom rules, TypeScript strict, knip, husky, lint-staged, gitleaks—and prove each layer fires on the right mistake.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -22,13 +22,19 @@ Update `eslint.config.js` to include a `no-restricted-syntax` block that bans:
 
 Each rule should set both the `selector` and the `message` exactly as listed so the acceptance criteria below can grep for them.
 
+> [!NOTE]
+> In the local Shelf repository for this workshop, `npm` is the source of truth. If your own project uses Bun, translate the commands back to `bun` as appropriate. The important part is that the checks are real, named scripts the agent is required to run.
+
+> [!NOTE]
+> **Third dry run validation**: The current Shelf replay immediately caught one lingering raw locator in `tests/end-to-end/authentication.setup.ts` after the static rules were restored. That is exactly the point of this lab: the rule turned a future testing problem into a fast lint fix on the spot.
+
 ### Acceptance for Part 1
 
 - [ ] `eslint.config.js` contains the four restricted-syntax rules above (selector + message).
-- [ ] Running `bun run lint` on the current (clean) Shelf repo exits zero.
-- [ ] Adding a `page.waitForTimeout(1000)` line to any file under `tests/end-to-end/` makes `bun run lint` exit non-zero, and the output contains the substring `page.waitForTimeout is banned`.
-- [ ] Adding a `page.locator('.foo')` line to any file under `tests/end-to-end/` makes `bun run lint` exit non-zero, and the output contains the substring `Use a getByRole/getByLabel locator`.
-- [ ] Reverting the test changes restores a clean lint (`bun run lint` exits zero).
+- [ ] Running `npm run lint` on the current (clean) Shelf repository exits zero.
+- [ ] Adding a `page.waitForTimeout(1000)` line to any file under `tests/end-to-end/` makes `npm run lint` exit non-zero, and the output contains the substring `page.waitForTimeout is banned`.
+- [ ] Adding a `page.locator('.foo')` line to any file under `tests/end-to-end/` makes `npm run lint` exit non-zero, and the output contains the substring `Use a getByRole/getByLabel locator`.
+- [ ] Reverting the test changes restores a clean lint (`npm run lint` exits zero).
 
 ## Part 2: TypeScript strict mode
 
@@ -38,20 +44,23 @@ Update `tsconfig.json` to enable every strict flag from the lesson, including `n
 
 - [ ] `tsconfig.json` has `strict: true`.
 - [ ] `tsconfig.json` explicitly enables `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noUnusedLocals`, and `noUnusedParameters`.
-- [ ] `bun run typecheck` exits zero on the current Shelf source.
+- [ ] `npm run typecheck` exits zero on the current Shelf source.
 - [ ] Adding `const x: string = items[0]` (without a guard) to any file produces a typecheck error.
 
 ## Part 3: Dead code detection
 
 Install knip. Configure it per the lesson. Run it on Shelf.
 
+> [!NOTE]
+> In this local repository, the `knip` script sets `DATABASE_URL=file:./tmp/knip.db` before invoking knip. That keeps `drizzle.config.ts` loadable during analysis without depending on a developer-specific `.env`.
+
 ### Acceptance for Part 3
 
 - [ ] `knip.json` exists with sensible `entry` and `project` globs.
-- [ ] `bun run knip` exits zero on the current Shelf repo.
-- [ ] Adding an unreferenced `.ts` file under `src/lib/` causes `bun run knip` to report it as unused.
+- [ ] `npm run knip` exits zero on the current Shelf repo.
+- [ ] Adding an unreferenced `.ts` file under `src/lib/` causes `npm run knip` to report it as unused.
 - [ ] Removing the file restores clean knip output.
-- [ ] The `src/lib/legacy-auth/` directory is listed in `ignore` (per the lesson).
+- [ ] If your repository still contains a retired subtree like `src/lib/legacy-auth/`, it is explicitly ignored. If your local Shelf clone does not contain that directory, do not invent it just to satisfy the lab.
 
 ## Part 4: Husky and lint-staged
 
@@ -59,30 +68,34 @@ Install husky and lint-staged. Wire pre-commit and pre-push hooks per the lesson
 
 ### Acceptance for Part 4
 
-- [ ] `.husky/pre-commit` exists and runs `bun run pre-commit`.
-- [ ] `.husky/pre-push` exists and runs at least `bun run typecheck` and `bun run knip`.
+- [ ] `.husky/pre-commit` exists and runs `npm run pre-commit`.
+- [ ] `.husky/pre-push` exists and runs `npm run pre-push`, which in turn runs at least `npm run typecheck` and `npm run knip`.
 - [ ] `package.json` has `pre-commit` and `lint-staged` configuration.
-- [ ] Making a change with a lint error and running `git commit` aborts the commit with the lint error visible.
+- [ ] Making a change with a lint error and running `npm run pre-commit` against the staged diff aborts with the lint error visible.
 - [ ] Auto-fixable issues (formatting) get fixed and restaged automatically.
 
 ## Part 5: Secret scanning
 
-Install gitleaks. Wire it into `lint-staged`. Run it against history.
+Install gitleaks. Wire it into `lint-staged`. Run it against staged content.
+
+> [!NOTE]
+> With the current Gitleaks release used in this workshop, `gitleaks git --staged` was not a reliable pre-commit verifier for newly added files. The local Shelf repository fixes that by materializing the exact git index into a temporary directory and running `gitleaks dir` there from `scripts/run-gitleaks-staged.ts`.
 
 ### Acceptance for Part 5
 
 - [ ] `gitleaks version` runs on your machine.
 - [ ] `lint-staged` has a gitleaks entry.
 - [ ] `.gitleaks.toml` allowlists `sample-config.json` and `tests/fixtures/`.
-- [ ] `gitleaks detect` runs cleanly on the current Shelf history (zero findings).
-- [ ] Attempting to commit a file containing `AKIAIOSFODNN7EXAMPLE` triggers the hook and blocks the commit.
+- [ ] Running the staged-snapshot script (`npx tsx scripts/run-gitleaks-staged.ts`) exits zero for the clean staged state.
+- [ ] Attempting to stage a file containing `BETTER_AUTH_SECRET="7Xse4XqnSo3hcT31Yb2vi7LMt6BYI93w.0EWmIcjHKAdde1SY5TEVqh5fPu6NvFBf"` triggers the hook and blocks the commit.
 - [ ] The `sample-config.json` file can still be committed without issue (the allowlist works).
 
 ## Part 6: the `CLAUDE.md` update
 
 Add sections to `CLAUDE.md` that reflect every layer you wired up. At minimum:
 
-- A "static checks" section listing `bun run lint`, `bun run typecheck`, and `bun run knip` as mandatory pre-done commands.
+- A "static checks" section listing `npm run lint`, `npm run typecheck`, and `npm run knip` as mandatory pre-done commands.
+- In the local Shelf repository, those commands are `npm run lint`, `npm run typecheck`, and `npm run knip`.
 - Rules about `@ts-expect-error`, `eslint-disable`, and `--no-verify`.
 - A secrets section per the gitleaks lesson.
 - A reference back to the Playwright rules from Module 3 (locators, waiting, auth) so the custom lint rules are connected to the same source of truth.
@@ -104,7 +117,7 @@ Watch what the agent does. The correct behavior is:
 
 1. It writes the route handler.
 2. It writes the Playwright test.
-3. It runs `bun lint`, `bun typecheck`, `bun knip`, `bun test`, `bun playwright test`.
+3. It runs `npm run lint`, `npm run typecheck`, `npm run knip`, and `npm run test`.
 4. If any of them fail, it reads the error, fixes it, and re-runs.
 5. It does not use `page.waitForTimeout`, does not use `page.locator` with a CSS selector, does not use UI login, does not read `userId` from the request body, does not leave dead code behind.
 
@@ -119,9 +132,9 @@ If the agent does any of the forbidden things, go look at why the static layer d
 
 ## Stretch goals
 
-- Add a Claude-specific `post-tool-use` hook that runs `bun lint --quiet` after every edit, per the Claude hooks lesson.
+- Add a Claude-specific `post-tool-use` hook that runs `npm run lint -- --quiet` after every edit, per the Claude hooks lesson.
 - Add a pinned knip-count script to pre-push that fails if the unused count goes up from a committed baseline (the ratchet pattern).
-- Configure dependency-cruiser with the `no-orphans` rule and the `legacy-auth` boundary rule, and run it in pre-push.
+- Configure dependency-cruiser with the `no-orphans` rule and, if your repository still has that boundary, the `legacy-auth` rule, and run it in pre-push.
 - Write a tiny report at the end of the lab: which layer caught what, and which layer never fired. The layers that never fired might be too loose (or might just be working so well there's nothing to catch).
 
 ## The one thing to remember

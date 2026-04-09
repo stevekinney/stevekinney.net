@@ -1,13 +1,16 @@
 ---
 title: 'Lab: Harden the Flaky Rate-Book Test'
 description: Take a real, deliberately broken Playwright test and apply every Module 3 pattern to make it fast, isolated, and rock-solid.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
-Time to cash the checks from the last six lessons. Open the Shelf repo. Open `tests/end-to-end/rate-book.spec.ts`. Read it. Try not to wince. (The test deliberately demonstrates all the anti-patterns from Module 3 so you can fix them systematically.)
+Time to cash the checks from the last six lessons. Open the Shelf repo. Open `tests/end-to-end/rate-book.spec.ts`. Read it. Depending on how far you've already pushed the starter, you may not see the exact "bad on purpose" version from the published notes anymore. That's fine. The point of the lab is still the same: make the rate-book workflow obviously isolated, semantic, and fast.
 
-The test works. Sort of. It passes 90% of the time. The other 10% it fails in one of four different ways, and the failures don't reproduce locally, because of course they don't. It has every Playwright anti-pattern I've spent the morning warning you about, in a single forty-line file.
+The intentionally rough version works. Sort of. It passes until the machine gets slower, the selectors drift, or the database state stops matching your assumptions. It bundles every Module 3 anti-pattern into one short file, which makes it a great place to harden the whole loop.
+
+> [!NOTE]
+> **Third dry run validation**: The current Shelf starter still hardens this workflow in four commits, but two implementation details changed since the earlier draft. Storage-state setup now drives the real login page because the form-action shortcut can trip CSRF protection in the current auth stack, and the local Playwright config pins `workers: 1` because the starter still uses one shared SQLite file.
 
 Your job is to fix it. Every pattern we learned in Module 3 applies here.
 
@@ -64,7 +67,7 @@ You may also want to use the `request` fixture to verify the rating actually lan
 
 Work top-down. Fix one pattern, run the test, move on.
 
-Start by extracting the login into `tests/end-to-end/authentication.setup.ts` and wiring up `playwright.config.ts` to use it. Delete the login block from the test. Run the suite to make sure authentication still works. Commit. (See the Storage State Authentication lesson for the full pattern.)
+Start by extracting the login into `tests/end-to-end/authentication.setup.ts` and wiring up `playwright.config.ts` to use it. Delete the login block from the test. In the current Shelf starter, the stable setup is a browser-driven login in the setup project, followed by `page.context().storageState(...)`. Run the suite to make sure authentication still works. Commit. (See the Storage State Authentication lesson for the full pattern.)
 
 Next, add (or use) `tests/end-to-end/helpers/seed.ts` to ensure the book you're going to rate is in the database before the test runs. Delete any reliance on "whatever is on the shelf already." Commit.
 
@@ -80,10 +83,10 @@ Finally, add a second assertion using `request.get('/api/shelf/...')` to verify 
 - [ ] `rg "page.locator\(" tests/end-to-end/rate-book.spec.ts` returns nothing.
 - [ ] `rg "page.goto\('/login'\)" tests/end-to-end/rate-book.spec.ts` returns nothing.
 - [ ] `rg "page.fill\(\[name=" tests/end-to-end/rate-book.spec.ts` returns nothing.
-- [ ] The test passes ten times in a row: `for i in {1..10}; do bun playwright test rate-book.spec.ts || break; done` and no iteration exits non-zero.
-- [ ] The test passes with `fullyParallel: true` in the config (it should already be set; verify no regressions).
-- [ ] Suite wall time for `rate-book.spec.ts` dropped compared to the baseline. Measure with `time bun playwright test rate-book.spec.ts` before and after. Record both numbers in your commit message.
-- [ ] `bun playwright test rate-book.spec.ts --project=chromium --grep="can rate"` completes in under 5 seconds on your machine (fast setup, no redundant waits).
+- [ ] The test passes ten times in a row: `for i in {1..10}; do npx playwright test --project=chromium tests/end-to-end/rate-book.spec.ts || break; done` and no iteration exits non-zero.
+- [ ] The test passes with the current Playwright configuration. In the third dry run that means `workers: 1` because the starter still points every browser worker at the same local SQLite file.
+- [ ] Suite wall time for `rate-book.spec.ts` dropped compared to the baseline. Measure with `time npx playwright test --project=chromium tests/end-to-end/rate-book.spec.ts` before and after. Record both numbers in your commit message.
+- [ ] `npx playwright test --project=chromium --grep="can rate" tests/end-to-end/rate-book.spec.ts` completes in under 5 seconds on your machine when Playwright is reusing an already running local server.
 - [ ] The commit history shows the work broken into at least four commits, each one addressing one pattern (auth, seed, locators, waits).
 
 ## Stretch goals
@@ -91,9 +94,15 @@ Finally, add a second assertion using `request.get('/api/shelf/...')` to verify 
 If you finish early, pick one or more:
 
 - Add a second test in the same file that verifies a user _can't_ rate a book they haven't added to their shelf yet. Use the `request` fixture to set up the scenario (book exists, user has not added it) and assert the rating button is disabled.
-- Swap the UI login in `authentication.setup.ts` for a direct `POST /api/authentication/sign-in` and compare the speed delta.
+- Swap the UI login in `authentication.setup.ts` for a direct `POST` to the app's sign-in action (in the current starter, `/login?/signInEmail`) and compare the speed delta.
 - Run the test under `--repeat-each=50` and see if anything flakes under load.
 - Turn off `fullyParallel` and see if the test still passes. (It should. If it doesn't, you have a seeding leak—fix it.)
+
+## A successful end state
+
+The hardened Shelf starter ends up with an explicit toast and persisted rating after the test clicks through the modal. Your exact styling may differ, but the success state should look like this:
+
+![The hardened rate-book flow showing the persisted success toast and updated shelf summary](./assets/lab-harden-rate-book-success.png)
 
 ## Checking your work against an agent
 

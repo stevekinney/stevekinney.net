@@ -1,7 +1,7 @@
 ---
 title: Instructions That Wire the Agent In
 description: The one rule for instruction files in this workshop—if the agent can't mechanically act on it, it doesn't belong there.
-modified: 2026-04-07
+modified: 2026-04-09
 date: 2026-04-06
 ---
 
@@ -37,11 +37,11 @@ The good news is that the rule is generative, not just restrictive. Once you're 
 
 Things the agent _can_ act on, mechanically:
 
-- "Run `bun test` before declaring a task done. If anything fails, read the failure output and fix it before reporting back."
+- "Run `npm run test` before declaring a task done. If anything fails, read the failure output and fix it before reporting back."
 - "Write a failing test before you write the implementation. The first commit on a task should be the test."
 - "When a Playwright test fails, read the trace file at `playwright-report/trace.zip` before guessing at a fix."
 - "Never use `page.waitForTimeout`. If you're tempted, use `page.waitForResponse` or a `getByRole` with `expect` instead."
-- "The `green` state for this codebase means: `bun lint`, `bun typecheck`, `bun test`, and `bun e2e` all exit zero. Don't say a task is done until all four are green."
+- "The `green` state for this codebase means: `npm run lint`, `npm run typecheck`, `npm run test`, and `npm run test:e2e` all exit zero. Don't say a task is done until all four are green."
 
 Notice what these have in common. Every one of them references a specific command, a specific file path, or a specific API. There's nothing to interpret. The agent reads the rule and either complies or doesn't, and you can tell which from the diff.
 
@@ -56,10 +56,10 @@ A version that does the work:
 
 A task is not done until all four of these exit zero:
 
-1. `bun lint`
-2. `bun typecheck`
-3. `bun test`
-4. `bun playwright test`
+1. `npm run lint`
+2. `npm run typecheck`
+3. `npm run test`
+4. `npm run test:e2e`
 
 If any of them fail, read the output, fix the issue, and re-run. Do not
 report the task as complete with a failing check, even if you "know" the
@@ -96,10 +96,10 @@ Here's the version that wires the agent in:
 
 A task is complete only when all of the following exit zero:
 
-- `bun lint`
-- `bun typecheck`
-- `bun test`
-- `bun playwright test --project=chromium`
+- `npm run lint`
+- `npm run typecheck`
+- `npm run test`
+- `npm run test:e2e`
 
 Run them in that order. Stop and fix the first failure before continuing.
 
