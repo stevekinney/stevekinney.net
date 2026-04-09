@@ -11,9 +11,6 @@ One of the deliberate choices in the Shelf starter repo: there is no `.github/wo
 > This lab assumes you've completed **Lab: Build a Failure Dossier for Shelf**. The workflow below calls `npm run dossier`, which is the script you added to `package.json` in that lab. If you skipped it, either go back and do it, or remove the dossier-related steps from this workflow before running it.
 
 > [!NOTE]
-> Third-run validation note: the local Shelf repository for this workshop uses `npm`, not Bun. It also has no Git remote configured, which means the workflow can be written and validated locally, but the final hosted GitHub Actions run, artifact download, and branch-protection steps are an explicit follow-up after you connect the repository to GitHub.
-
-> [!NOTE]
 > If `gitleaks/gitleaks-action@v2` is not available under your plan or licensing terms, replace that step with a direct CLI invocation. The CI gate matters more than the wrapper action.
 
 ## The task
@@ -107,9 +104,9 @@ That's the skeleton. You'll flesh it out in the steps below.
 
 ### Step 1: the static job
 
-Write the `static` job first. It should run lint, typecheck, knip, and gitleaks. These are fast and independent; keep them in one job with sequential steps, not four jobs with dependencies. In the current Shelf repository, the setup overhead for separate jobs is larger than the benefit of splitting four short checks across four runners.
+Write the `static` job first. It should run lint, typecheck, knip, and gitleaks. These are fast and independent; keep them in one job with sequential steps, not four jobs with dependencies. The setup overhead for separate jobs is larger than the benefit of splitting four short checks across four runners.
 
-If your repository has a Git remote, verify by pushing to a feature branch and watching the job run. In the remote-less workshop repo, validate the YAML locally and make sure every workflow step maps to a real local command:
+If your repository has a Git remote, verify by pushing to a feature branch and watching the job run. Without a remote, validate the YAML locally and make sure every workflow step maps to a real local command:
 
 ```sh
 npm run lint
@@ -134,7 +131,7 @@ Add the `end-to-end` job. This is the biggest one:
 - On failure, generate the dossier and upload both the HTML report and the dossier as artifacts.
 - Optionally: start the dev server if your Playwright config doesn't do it automatically (check `webServer` in `playwright.config.ts`).
 
-In the validated third run, `playwright.config.ts` already starts the preview server through `webServer`, so the workflow does **not** need an extra server boot step. Before writing the workflow step, verify this applies to your config: run `npx playwright test --project=chromium` without starting a server manually. If it fails with "no server running," add `webServer: { command: 'npm run preview', url: 'http://127.0.0.1:4173', reuseExistingServer: !process.env.CI }` to `playwright.config.ts` first.
+Shelf's `playwright.config.ts` already starts the preview server through `webServer`, so the workflow does **not** need an extra server boot step. Before writing the workflow step, verify this applies to your config: run `npx playwright test --project=chromium` without starting a server manually. If it fails with "no server running," add `webServer: { command: 'npm run preview', url: 'http://127.0.0.1:4173', reuseExistingServer: !process.env.CI }` to `playwright.config.ts` first.
 
 ### Step 4: the visual regression safety
 
@@ -161,7 +158,7 @@ jobs:
     # ... full Playwright matrix (chromium, firefox, webkit)
 ```
 
-You don't have to fully implement these jobs today. In the validated third run, each nightly job is a named placeholder with an `echo` command that explains the intended follow-up. The point is to have the file in place so the nightly cadence exists and the missing automation is explicit instead of implied.
+You don't have to fully implement these jobs today. Shelf ships each nightly job as a named placeholder with an `echo` command that explains the intended follow-up. The point is to have the file in place so the nightly cadence exists and the missing automation is explicit instead of implied.
 
 The appendix modules come back and turn these placeholders into real cross-browser and nightly loops. For the core day, the explicit placeholder is enough.
 
@@ -201,8 +198,8 @@ This turns the CI jobs into hard gates.
 
 - If Playwright fails in CI because Chromium is missing, verify that the workflow runs `npx playwright install --with-deps chromium` before `npm run test:e2e`.
 - If the workflow YAML is valid but a named step does not exist locally, fix the repository command surface first. Do not solve that drift with workflow-only shell scripts.
-- If you are using the workshop repository without a Git remote, stop at local command parity plus valid workflow files. Do not claim the hosted artifact-download loop is working until the repository is connected to GitHub.
-- If you split the static checks into multiple jobs, make sure that decision is deliberate and explained. The third-run repository keeps them together because they are short and share the same setup cost.
+- If you are using a clone of Shelf without a Git remote, stop at local command parity plus valid workflow files. Do not claim the hosted artifact-download loop is working until the repository is connected to GitHub.
+- If you split the static checks into multiple jobs, make sure that decision is deliberate and explained. Shelf keeps them together because they are short and share the same setup cost.
 
 ## The agent loop check
 

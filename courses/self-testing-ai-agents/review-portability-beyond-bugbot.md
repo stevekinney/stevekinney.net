@@ -96,6 +96,56 @@ If I want this loop to survive tool churn, I keep three artifacts in the reposit
 
 That is enough to keep the process portable even if the product does not stay still.
 
+### What the review playbook looks like
+
+The review playbook is the vendor-neutral artifact. Its job is to describe the loop in terms any reviewer (human, Bugbot, Copilot, Codex) can apply. Shelf's lives at `docs/review-loop-playbook.md` and has this shape:
+
+```markdown
+# Review loop playbook
+
+## Finding categories
+
+### Blocking
+
+A finding is blocking when it matches one of these patterns:
+
+- Any API handler reading user identity from the request body instead
+  of `locals.user`.
+- Any Drizzle query on user-owned data that does not scope by the
+  current user.
+- Any Playwright spec that uses `page.waitForTimeout` or a raw CSS
+  `page.locator`.
+
+Blocking findings must be fixed before merge.
+
+### Judgment
+
+A finding needs judgment when it is symptom-level — naming, error
+messaging, helper extraction. Worth reading, worth considering,
+not automatically required.
+
+### Noise
+
+A finding counts as noise when it applies to generated artifacts
+(`playwright-report/`, `build/`), test snapshot PNGs, or the
+allowlisted `sample-config.json` bait file. If the reviewer keeps
+producing noise here, update its instruction surface.
+
+## The rule of three
+
+- First two occurrences: fix the PR.
+- Third occurrence: add a rule to `CLAUDE.md`.
+- Still recurring: add a lint rule, test assertion, or CI gate.
+
+## Re-review path
+
+After a fix lands, the reviewer reruns on the next push. If it stays
+silent on a remaining blocking pattern, update its instructions
+file.
+```
+
+Short. Explicit. Mechanical. The whole file fits on a page and every reviewer follows the same three-bucket categorization regardless of which tool is in the reviewer's seat.
+
 ## Success state
 
 You have a portable review loop when:

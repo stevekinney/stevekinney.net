@@ -17,8 +17,7 @@ That shift matters because it changes what you put _in_ CI. If CI is where tests
 
 One scope note before we go further: green CI is still not the end of the story. The next core module picks up on what happens after merge or deploy-preview. The appendix builds out the broader nightly and cross-browser loops in more detail.
 
-> [!NOTE]
-> Third-run validation note: in the local Shelf repository for this workshop, the workflows use `npm`, `actions/setup-node@v4`, and cached `~/.npm` plus Playwright browsers. The workspace also has no Git remote configured, so the workflow is validated locally for YAML correctness and command parity before the hosted GitHub Actions run exists.
+Shelf's workflows use `npm`, `actions/setup-node@v4`, and cache both `~/.npm` and `~/.cache/ms-playwright`. That's the concrete reference point as you read the rest of this module.
 
 ## What CI uniquely catches
 
@@ -27,7 +26,7 @@ A short list of things that _only_ CI can reliably catch:
 - **Cross-platform differences.** Your laptop is macOS. Production is Linux. Playwright's screenshot pixels differ between them. Your CI runs Linux and catches the drift.
 - **Cross-browser differences.** Locally you run Chromium for speed. CI runs the full matrix (Chromium, Firefox, WebKit) and catches the "works in Chrome, broken in Safari" class of bug.
 - **Clean-slate environment bugs.** The agent's laptop has ten months of cached dependencies, environment variables, and custom shell aliases. CI starts fresh on every run. Anything that only works because of your laptop's accumulated state is going to fail in CI.
-- **Concurrency at scale.** Once you widen the worker count, CI is where the higher-concurrency races show up. In the validated third-run Shelf repository, both local and CI Playwright runs stay pinned to one worker because the workshop clone still uses a shared SQLite database. The concept still matters; the repository just has not widened that knob yet.
+- **Concurrency at scale.** Once you widen the worker count, CI is where the higher-concurrency races show up. Shelf's local and CI Playwright runs stay pinned to `workers: 1` today because the starter still uses a shared SQLite database; the concept still matters and the knob is easy to turn once per-worker isolation lands.
 - **Time-sensitive checks.** Nightly HAR regeneration, weekly dependency audits, monthly secret rotation verification—these don't make sense locally. CI is where they live.
 - **Artifact enforcement.** Blocking merges, uploading reports, posting status checks on PRs. The workflow glue lives in CI because that's where the API keys to do those things live.
 
@@ -55,7 +54,7 @@ On every push to any branch and every PR into main:
 3. **Unit tests.** `npm run test:unit`. Fast.
 4. **End-to-end tests.** Playwright, full Chromium run. Upload trace artifacts, screenshots, and the failure dossier if anything fails.
 
-That is the entire validated `main.yml` for the third run: three jobs, not seven. Visual regression rides inside the Playwright suite, and the hosted-only extras stay out of the main workflow until the repository has a real remote and a reason to pay that cost.
+That is the entire `main.yml` Shelf ships: three jobs, not seven. Visual regression rides inside the Playwright suite, and the hosted-only extras (deploy previews, post-deploy smoke) stay out of the main workflow until there is a concrete reason to pay that cost.
 
 On a nightly schedule:
 
@@ -65,7 +64,7 @@ On a nightly schedule:
 
 On a connected GitHub repository, you can add merge-to-main deployment and post-deploy smoke checks later. The next module covers that core loop. The appendix lessons turn the nightly and cross-browser placeholders into fuller patterns once the one-day workshop flow is done.
 
-That's the whole shape for the third run: three jobs in the main workflow, three placeholder jobs in the nightly workflow, and no deploy workflow yet. Each is boring. The power is in the composition.
+That's the whole shape Shelf ships: three jobs in the main workflow, three placeholder jobs in the nightly workflow, and no deploy workflow yet. Each is boring. The power is in the composition.
 
 ## Parallelism and caching, the two knobs that matter
 
@@ -90,9 +89,9 @@ graph LR
 
 Notice: the static job runs first, then the unit and end-to-end jobs run in parallel. Total time is limited by the slower of those two downstream jobs, not the sum of every individual check.
 
-**Caching.** Bun, npm, and yarn all produce lock-hash-stable caches. In the validated third run, Shelf caches `~/.npm` and `~/.cache/ms-playwright` instead of committing to a `node_modules` cache strategy. That is enough to cut the expensive parts of the workflow without adding a more brittle cache layer.
+**Caching.** Bun, npm, and yarn all produce lock-hash-stable caches. Shelf caches `~/.npm` and `~/.cache/ms-playwright` instead of committing to a `node_modules` cache strategy. That is enough to cut the expensive parts of the workflow without adding a more brittle cache layer.
 
-The actual GitHub Actions `cache` action in the workshop repository looks like:
+The actual GitHub Actions `cache` action in Shelf looks like:
 
 ```yaml
 - name: Cache dependencies
@@ -104,7 +103,7 @@ The actual GitHub Actions `cache` action in the workshop repository looks like:
     key: ${{ runner.os }}-deps-${{ hashFiles('package-lock.json') }}-playwright-${{ hashFiles('playwright.config.ts') }}
 ```
 
-That is the exact cache shape the third-run repository uses. Start there before you invent anything more clever.
+That is the exact cache shape Shelf uses. Start there before you invent anything more clever.
 
 ## Fail fast, but not too fast
 
@@ -140,7 +139,7 @@ With those in place, the agent can read the PR, read the status check, download 
 
 I have watched this work. An agent opens a PR, CI fails, the agent reads the dossier artifact, makes a fix, pushes a new commit, CI fails in a different way, the agent reads the new dossier, fixes it, pushes again, CI goes green, and I find out about the whole sequence when I look at the PR thirty minutes later. Entire bug fixes, self-driven, because the CI output is legible to the agent. That's the loop.
 
-In the remote-less workshop clone, you obviously cannot complete that hosted recovery loop yet. What you _can_ do is make the workflow legible in advance: valid YAML, real commands, explicit artifact paths, finite retention, and no hidden workflow-only scripts. That way, once the repository is connected to GitHub, the only missing piece is the hosted runner.
+If your copy of Shelf does not have a hosted remote yet, you cannot close that loop end-to-end. What you _can_ do is make the workflow legible in advance: valid YAML, real commands, explicit artifact paths, finite retention, and no hidden workflow-only scripts. Once the repository is connected to GitHub, the only missing piece is the hosted runner.
 
 ## CLAUDE.md rules
 

@@ -63,8 +63,8 @@ reporter: [
 
 The HTML reporter writes `playwright-report/html/index.html`, and for each failed test it shows the assertion, the screenshot, the error stack, and a link to open the trace. Open it in a browser and you get a gorgeous, readable dossier with zero effort.
 
-> [!NOTE]
-> **Third dry run validation**: In the current Shelf branch, the easiest safe planted failure was a missing visual snapshot. That produced the full dossier artifact set we care about: `report.json`, `dossier.md`, a retained screenshot, a retained video, and a `trace.zip` under `playwright-report/test-results/` without needing to ship a fake application bug just to exercise the reporting loop.
+> [!TIP] The easiest way to see this work
+> If you want to see the whole dossier pipeline end-to-end without planting a fake application bug, temporarily move one committed visual-regression baseline and run the matching visual test. That produces the full artifact set—`report.json`, `dossier.md`, retained screenshot, retained video, and a `trace.zip` under `playwright-report/test-results/`—off a single intentional failure you can undo in one commit.
 
 ![The Playwright HTML report after a deliberate Shelf failure](./assets/lab-failure-dossier-report.png)
 
@@ -76,10 +76,65 @@ Here's where the lesson gets interesting. An HTML report is great for humans. It
 
 A failure dossier summarizer is worth writing. It's a ~50 line script that:
 
-1. Reads `playwright-report/` after a test run.
+1. Reads `playwright-report/report.json` after a test run.
 2. Finds the failed tests.
-3. For each one, extracts the error message, the screenshot path, a short DOM excerpt from the trace, and the first three console errors.
-4. Writes a single `dossier.md` file with all of that, linked to the screenshots.
+3. For each one, extracts the error message, the screenshot path, the retained trace, and the reproduction command.
+4. Writes a single `dossier.md` file with all of that, linked to the attachments.
+
+### What the Playwright report looks like
+
+Before we walk the report, it helps to see the shape you're walking. The JSON reporter writes a nested tree: `suites` at the top, each with its own `suites` and `specs`, each `spec` has `tests`, each `test` has `results`, and each failing `result` has an `error` plus `attachments`. The trimmed shape looks like this:
+
+```jsonc
+{
+  "suites": [
+    {
+      "suites": [],
+      "specs": [
+        {
+          "title": "user can rate Station Eleven",
+          "file": "tests/end-to-end/rate-book.spec.ts",
+          "line": 9,
+          "tests": [
+            {
+              "projectName": "authenticated",
+              "results": [
+                {
+                  "status": "failed",
+                  "error": { "message": "expect(...).toHaveText failed ..." },
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "playwright-report/test-results/.../test-failed-1.png",
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "playwright-report/test-results/.../trace.zip",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
+```
+
+The important fields, in the order the walker will reach them:
+
+- `suites[].suites[]` — suites nest, so the walker is recursive.
+- `specs[].title`, `specs[].file`, `specs[].line` — these are the fields that identify the test.
+- `tests[].projectName` — the Playwright project (e.g. `authenticated`, `public`) that produced the result. We'll use it to build the reproduction command.
+- `results[].status` — check for `failed` or `timedOut`.
+- `results[].error.message` — the primary human-readable error string.
+- `results[].attachments[]` — each attachment has `name`, `contentType`, and `path`. Screenshots land as `image/png`, traces as `application/zip` (and are also named `trace`), videos as `video/webm`.
+
+Now the script. It walks the suite tree, filters to failed results, and renders each one into a markdown section.
 
 ```ts
 // scripts/summarize-failure-dossier.ts
@@ -97,7 +152,9 @@ function collectSpecs(suites: any[]): any[] {
 
 const failures = collectSpecs(reportJson.suites ?? []).flatMap((spec: any) =>
   (spec.tests ?? []).flatMap((test: any) => {
-    const failedResult = (test.results ?? []).find((result: any) => result.status === 'failed');
+    const failedResult = (test.results ?? []).find(
+      (result: any) => result.status === 'failed' || result.status === 'timedOut',
+    );
     return failedResult ? [{ spec, failedResult, projectName: test.projectName }] : [];
   }),
 );
@@ -107,32 +164,80 @@ const screenshot = (attachments: any[]) => {
   return file ? `**Screenshot**: [${path.basename(file.path)}](${file.path})\n` : '';
 };
 
+const trace = (attachments: any[]) => {
+  const file = (attachments ?? []).find((a: any) => a.name === 'trace' && a.path);
+  return file ? `**Trace**: \`npx playwright show-trace ${file.path}\`\n` : '';
+};
+
 const markdown = failures
   .map(
     ({ spec, failedResult, projectName }: any) => `
 ## ${spec.title}
 
+**Project**: \`${projectName}\`
+
 **File**: \`${spec.file}:${spec.line}\`
 
 **Error**:
 \`\`\`
-${failedResult.error?.message}
+${failedResult.error?.message ?? 'Unknown error'}
 \`\`\`
 
-${screenshot(failedResult.attachments)}
+${screenshot(failedResult.attachments)}${trace(failedResult.attachments)}
 **Reproduce**:
 \`\`\`sh
-npx playwright test --project=${projectName} ${spec.file} -g "${spec.title}"
+npx playwright test --project=${projectName} ${spec.file} -g ${JSON.stringify(spec.title)}
 \`\`\`
 `,
   )
   .join('\n---\n');
 
-writeFileSync('playwright-report/dossier.md', markdown);
+writeFileSync(
+  'playwright-report/dossier.md',
+  markdown || '# Playwright failure dossier\n\nNo failing tests.\n',
+);
 console.error(`Wrote dossier for ${failures.length} failures`);
 ```
 
-(Adjust field names to match your Playwright version—the JSON schema shifts between releases. The point is the structure, not the exact API.)
+> [!NOTE] The starter ships the production version
+> Shelf's `scripts/summarize-failure-dossier.ts` is a longer, fully-typed version of this sketch that also picks the `diff` attachment ahead of the baseline on visual regression failures, guards against `result.error` being undefined via `result.errors[0]`, and makes every attachment path relative to the repo root. Read the sketch above to understand the walk, then open the shipped file to see the production shape.
+
+### What the generated `dossier.md` looks like
+
+Given one failing rate-book test, running the script writes this markdown to `playwright-report/dossier.md`:
+
+```markdown
+# Playwright failure dossier
+
+## user can rate Station Eleven
+
+**Project**: `authenticated`
+
+**File**: `tests/end-to-end/rate-book.spec.ts:9`
+
+**Error**:
+
+\`\`\`
+Error: expect(locator).toHaveText(expected) failed
+Locator: getByRole('status')
+Expected string: "Thanks"
+Received string: ""
+\`\`\`
+
+**Screenshot**: [test-failed-1.png](./playwright-report/test-results/.../test-failed-1.png)
+
+**Trace**: `npx playwright show-trace playwright-report/test-results/.../trace.zip`
+
+**Reproduce**:
+
+\`\`\`sh
+npx playwright test --project=authenticated tests/end-to-end/rate-book.spec.ts -g "user can rate Station Eleven"
+\`\`\`
+```
+
+That's exactly what you want in an agent's hand: the test title, the project it lived in, the file and line, the full error message, a link to the screenshot, a one-liner to open the trace, and a reproduction command that isolates just this test. The agent reads one file and knows what to do next.
+
+(Adjust field names to match your Playwright version if needed—the JSON schema shifts between releases. The point is the structure, not the exact API.)
 
 Now you can add to `CLAUDE.md`:
 

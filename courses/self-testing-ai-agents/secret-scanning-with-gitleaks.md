@@ -54,7 +54,7 @@ Add to `lint-staged` config:
 }
 ```
 
-In the validated Shelf repo, that script materializes the exact staged snapshot into a temporary directory and runs `gitleaks dir` on it. That is more reliable than depending on whichever staged-file flags your installed Gitleaks version happens to support this month.
+In Shelf, that script materializes the exact staged snapshot into a temporary directory and runs `gitleaks dir` on it. That is more reliable than depending on whichever staged-file flags your installed Gitleaks version happens to support this month.
 
 Test it:
 

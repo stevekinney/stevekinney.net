@@ -46,9 +46,9 @@ A test failure five minutes after the edit is expensive—the agent has moved on
 
 A practical consequence: an agent with a tight static layer looks smarter than an agent without one, even if the underlying model is identical. The smartness comes from the feedback loop, not the model.
 
-On the current Shelf replay, a single static rule paid for itself immediately: the restored `page.locator('body')` call in the authentication setup was rejected by the new restricted-syntax rule before it could quietly survive into later labs. That's the entire value proposition in one line of output.
+A concrete example from Shelf: a single `no-restricted-syntax` rule pays for itself the moment someone drops a `page.locator('body')` call into the authentication setup file. The red squiggle shows up before the commit even reaches the agent's next turn. That's the entire value proposition in one line of editor output.
 
-One detail from the local Shelf implementation is worth calling out because it is easy to cargo-cult the wrong way: the staged secret scan does _not_ shell out to `gitleaks git --staged`. With the current Gitleaks release, that was not a reliable pre-commit verifier for newly added files. Instead, the repository copies the exact git index contents into a temporary directory and runs `gitleaks dir` there. Same intent, tighter loop, less ambiguity.
+One implementation detail worth calling out because it is easy to cargo-cult the wrong way: Shelf's staged secret scan does _not_ shell out to `gitleaks git --staged`. With the Gitleaks release Shelf uses, that flag was not a reliable pre-commit verifier for newly added files. Instead, the repository copies the exact git index contents into a temporary directory and runs `gitleaks dir` there. Same intent, tighter loop, less ambiguity.
 
 ## The pattern, independent of tools
 

@@ -24,6 +24,16 @@ Update `playwright.config.ts` in Shelf so it defines projects for:
 
 Keep Chromium as the default project you run most often.
 
+The lesson's **The Playwright projects that split the work** section in [Cross-Browser Validation Without Burning the Dev Loop](cross-browser-validation-without-burning-the-dev-loop.md) has a complete four-project configuration block for Shelf: `public` + `authenticated` for the daily Chromium loop, plus `firefox-smoke` and `webkit-smoke` that only match `smoke.spec.ts`. Copy that shape as your starting point. The key trick is that the default `test:e2e` script explicitly lists `--project=setup --project=public --project=authenticated` so the Firefox and WebKit projects stay out of the fast loop.
+
+Before you can actually _run_ the new projects locally, install the alternate browsers Playwright did not pull down when you set up the fast loop:
+
+```sh
+npx playwright install --with-deps firefox webkit
+```
+
+The lesson's **Install the extra browsers first** callout explains why this is required (Playwright defaults to Chromium-only). Do this once per machine; CI runners need it too, which is why Shelf's `nightly.yml` `cross-browser-smoke` job runs the same line before the test step.
+
 ## Step 2: tag the smoke subset
 
 Pick a small set of end-to-end tests and tag them for cross-browser execution.
@@ -35,7 +45,7 @@ Good candidates:
 - one form flow
 - one modal or drawer interaction
 
-Use a tag such as `@cross-browser` in the test titles or a dedicated spec file. The important thing is that the subset is explicit and easy to grep.
+The lesson's **Tag the right tests, not all the tests** section shows the Playwright tag syntax — `test('...', { tag: '@cross-browser' }, async ({ page }) => {...})` — and the matching `--grep @cross-browser` CLI invocation. Use that pattern directly. The simplest shape is a dedicated `smoke.spec.ts` that everything in the `firefox-smoke` / `webkit-smoke` projects automatically picks up via `testMatch`, which is what Shelf does today; tag-based filtering is only necessary when you need per-test granularity inside an otherwise mixed file.
 
 ## Step 3: add focused commands
 

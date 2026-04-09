@@ -27,6 +27,8 @@ Use both:
 
 I recommend scheduling it off the top of the hour. `17 8 * * *` is perfectly civilized.
 
+The lesson's **The minimum nightly workflow** section in [Nightly Verification Loops](nightly-verification-loops.md) shows the full YAML skeleton including the `schedule` + `workflow_dispatch` pair, a real `dependency-audit` job using `npm audit --audit-level=high`, and an explicit echo-based placeholder job that keeps the shape visible in the GitHub UI until the real automation lands. Use that as your starting point.
+
 ## Step 2: add the right jobs
 
 Pick two or three jobs that actually belong in nightly. A strong starter set:

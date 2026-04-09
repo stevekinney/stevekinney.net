@@ -20,13 +20,10 @@ Update `eslint.config.js` to include a `no-restricted-syntax` block that bans:
 - `page.waitForLoadState('networkidle')` (anywhere). Selector: `CallExpression[callee.property.name='waitForLoadState'] > Literal[value='networkidle']`. Message: `"networkidle is unreliable. Wait on a real signal."`
 - Reading `userId` from a request body in a route handler. Selector: `MemberExpression[object.type='MemberExpression'][object.property.name='body'][property.name='userId']`. Message: `"Read userId from the session, not the request body. See CLAUDE.md → Auth."`
 
-Each rule should set both the `selector` and the `message` exactly as listed so the acceptance criteria below can grep for them.
+Each rule should set both the `selector` and the `message` exactly as listed so the acceptance criteria below can grep for them. The lesson's **Writing a `no-restricted-syntax` rule** section in [Lint and Types as Guardrails](lint-and-types-as-guardrails.md) walks each of these four AST selectors in English — read that before you paste the block into `eslint.config.js` so you understand _why_ the `body.userId` rule uses a nested `MemberExpression` match instead of just a property name, and why the `networkidle` rule uses the descendant combinator.
 
 > [!NOTE]
-> In the local Shelf repository for this workshop, `npm` is the source of truth. If your own project uses Bun, translate the commands back to `bun` as appropriate. The important part is that the checks are real, named scripts the agent is required to run.
-
-> [!NOTE]
-> **Third dry run validation**: The current Shelf replay immediately caught one lingering raw locator in `tests/end-to-end/authentication.setup.ts` after the static rules were restored. That is exactly the point of this lab: the rule turned a future testing problem into a fast lint fix on the spot.
+> In the Shelf workshop repository, `npm` is the source of truth. If your own project uses Bun, translate the commands back to `bun` as appropriate. The important part is that the checks are real, named scripts the agent is required to run.
 
 ### Acceptance for Part 1
 

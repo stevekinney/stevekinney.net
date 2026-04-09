@@ -127,7 +127,20 @@ Run them in that order. Stop and fix the first failure before continuing.
 - Do not modify files in `src/lib/legacy-auth/`. That directory is
   scheduled for deletion. If you think you need to touch it, stop and ask.
 - Do not add new dependencies without flagging it in your summary.
+
+## User-facing copy
+
+- User-facing copy stays in the voice of the product. This codebase is a
+  reading app, so visible page text talks about books, shelves, and
+  reading. Do not mention Playwright, seeded fixtures, test IDs, HARs,
+  or course material in rendered page copy.
+- Testing rationale and infrastructure details belong in code comments,
+  `CLAUDE.md`, or `README.md`, never in the UI.
 ```
+
+Notice the last block. Instructions files have to keep the agent honest about more than just commands and lint rules — they also have to keep the agent from leaking the scaffolding into the product. An agent that helpfully writes "Loading seeded fixtures..." into a real shelf page is not being clever; it is bleeding the test layer into the product surface. One mechanically-checkable rule prevents that ("do not mention Playwright, seeded fixtures, test IDs, HARs, or course material in rendered page copy") in a way that "keep the UI clean" cannot.
+
+This is the same shape as the other rules in the file. It names a specific class of strings the agent must not produce, and you can spot a violation by reading the diff. It is also exactly the kind of rule the lab in this section will ask you to add to your own `CLAUDE.md`.
 
 Every line in the second version is something the agent can _do_. The first version is a vibe statement. The second version is a loop.
 

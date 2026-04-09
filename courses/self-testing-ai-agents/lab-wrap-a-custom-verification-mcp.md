@@ -20,29 +20,28 @@ npm install @modelcontextprotocol/sdk zod
 npm install -D tsx
 ```
 
-Create `tools/shelf-verification-server/server.ts` with the skeleton from the lesson. We're using the [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) to build the server. In the local Shelf repository, the server uses the newer high-level `McpServer` API instead of the older low-level `Server` request-handler example.
+Create `tools/shelf-verification-server/server.ts` with the skeleton from the lesson. We're using the [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) to build the server and the newer high-level `McpServer` API instead of the older low-level `Server` request-handler example.
 
-> [!NOTE]
-> **Third dry run validation**: The current Shelf starter keeps this server in `tools/shelf-verification-server/server.ts` and registers it through the repository-local `.mcp.json`. The tool reads storage state from `playwright/.authentication/user.json` and defaults to `http://127.0.0.1:4173` unless `SHELF_BASE_URL` is set.
+Shelf keeps this server in `tools/shelf-verification-server/server.ts` and registers it through the repository-local `.mcp.json`. The tool reads storage state from `playwright/.authentication/user.json` and defaults to `http://127.0.0.1:4173` unless `SHELF_BASE_URL` is set.
 
 ## The task
 
 Implement `verify_shelf_page` so it:
 
-1. Accepts a `username` parameter.
-2. Launches Chromium with the storage state from `playwright/.authentication/user.json`.
+1. Accepts a `username` parameter (the lower-cased portion of the reader's email before the `@`).
+2. Launches Chromium. Reuse `playwright/.authentication/user.json` as the storage state when the file exists, so the server stays consistent with the rest of the workshop tooling; fall through to a default context when it doesn't.
 3. Navigates to `http://127.0.0.1:4173/shelf/<username>` by default. Make the base URL overrideable with `SHELF_BASE_URL` so you can also point it at a live dev server.
 4. Waits for the page-level shelf heading to be visible.
 5. Counts the number of `article` elements (each book is an article).
 6. Collects any console errors emitted during the page load.
-7. Closes the browser.
-8. Returns `{ ok: boolean, bookCount: number, consoleErrors: string[] }` as the tool result.
+7. Closes the browser in a `finally` block so one failing navigation never leaks a Chromium process.
+8. Returns `{ ok, bookCount, consoleErrors, url }` as the tool result, where `url` is the exact URL the server hit so the agent can quote it in its summary.
 
-`ok` is `true` when there are zero console errors and at least one book. Adjust the definition if your Shelf has an explicit empty state for "no books yet."
+`ok` is `true` when there are zero console errors. The reference implementation accepts `bookCount >= 0` because the public reader page is a real route even for an empty shelf—tighten the predicate to `bookCount > 0` if your domain logic disagrees.
 
 ## Wiring into your MCP client
 
-In the validated Shelf workshop repo, MCP config lives in `.mcp.json` at the root. Add an entry there:
+Shelf's MCP config lives in `.mcp.json` at the repository root. Add the server entry alongside any existing ones:
 
 ```json
 {

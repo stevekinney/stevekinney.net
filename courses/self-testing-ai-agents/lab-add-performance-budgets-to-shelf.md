@@ -21,15 +21,22 @@ Add one build-time budget and one runtime budget to Shelf, then expose both thro
 
 ## Step 1: emit machine-readable build stats
 
-Add a `build:stats` script to Shelf that produces both a human-readable report and a machine-readable JSON file.
+Install [`rollup-plugin-visualizer`](https://github.com/btd/rollup-plugin-visualizer) as a dev dependency and wire it into `vite.config.ts` behind a `BUNDLE_STATS=1` environment flag. When the flag is set, Vite should emit two files:
 
-If Shelf uses Vite, mirror the pattern used in this repository's website app:
+- `build/stats.html` — a treemap report for humans
+- `build/stats.json` — the `raw-data` template, keyed for automation
 
-- a script such as `BUNDLE_STATS=1 npm run build`
-- a stats HTML output for humans
-- a stats JSON output for automation
+Add a `build:stats` script to `package.json` that flips the flag:
 
-If Shelf uses a different bundler, use that bundler's equivalent. The important part is the output contract, not the brand name.
+```json
+{
+  "scripts": {
+    "build:stats": "BUNDLE_STATS=1 vite build"
+  }
+}
+```
+
+The important part is the output contract, not the brand name—any bundler that can emit a structured per-chunk size report works.
 
 ## Step 2: capture the current green baseline
 
@@ -53,12 +60,17 @@ Replace the zeroes with the real baseline plus a small buffer. The exact numbers
 
 ## Step 3: add a budget-check script
 
-Create a script such as `scripts/check-performance-budgets.mjs` that:
+Create `scripts/check-performance-budgets.mjs` that:
 
 - reads `build/stats.json`
 - reads `performance-budgets.json`
-- compares the measured values to the stored thresholds
-- exits non-zero when a threshold is exceeded
+- walks `nodeMetas` to compute gzip totals per output bundle file (filtering to client chunks—for SvelteKit, anything under `_app/immutable`)
+- compares the measured totals to the stored thresholds
+- exits zero when everything is inside the budget and non-zero when any threshold is exceeded, printing the exceeding line to stderr
+
+The lesson walks the `nodeMetas` → `moduleParts` → `nodeParts` structure and shows the complete script in the **The checker script** section of [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md). Work from that sketch — the walk is the entire lab.
+
+The Shelf starter ships a production version at `scripts/check-performance-budgets.mjs`. Write yours first, then compare. The only meaningful difference between the lesson sketch and the shipped version is that the shipped one exposes `clientEntries` from the computation so future rules can ask "which chunk got biggest" without re-walking the report.
 
 The agent should be able to run one command and get a plain answer.
 
@@ -95,20 +107,20 @@ Run this against a build-and-preview flow, not a hot dev server.
 
 ## Step 5: expose named commands
 
-Add named commands for both checks. One reasonable shape:
+Add named commands for both checks. Shelf ships this shape:
 
 ```json
 {
   "scripts": {
-    "build:stats": "BUNDLE_STATS=1 npm run build",
+    "build:stats": "BUNDLE_STATS=1 vite build",
     "performance:build": "npm run build:stats && node scripts/check-performance-budgets.mjs",
-    "performance:runtime": "playwright test tests/end-to-end/performance.spec.ts",
+    "performance:runtime": "drizzle-kit push --force && playwright test tests/end-to-end/performance.spec.ts --project=authenticated",
     "performance:check": "npm run performance:build && npm run performance:runtime"
   }
 }
 ```
 
-Use whatever script names fit Shelf's conventions, but give the loop obvious handles.
+The key idea is that the loop has obvious handles the agent can call without composing anything.
 
 ## Acceptance criteria
 

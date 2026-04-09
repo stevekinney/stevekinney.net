@@ -12,9 +12,6 @@ The goal is simple: give the agent a feature to build, step away from the keyboa
 Take notes on what fires. Take notes on what doesn't. The notes are the workshop.
 
 > [!NOTE]
-> Third-run validation note: this capstone was replayed locally from a fresh Shelf branch off `main` and revalidated end to end with `npm run lint`, `npm run typecheck`, and `npm run test`. The local workshop clone still has no Git remote, so the hosted pull-request, CI, and review-bot loop remains a documented follow-up rather than a claimed outcome.
-
-> [!NOTE]
 > The core loop now includes accessibility checks, performance budgets, and post-deploy smoke validation. If your Shelf clone is still local-only, mark the hosted post-deploy items as `N/A` instead of pretending they ran. The appendix-only topics—cross-browser expansion, nightly drift checks, and review portability—are follow-ons, not required capstone outcomes.
 
 ## The task
@@ -61,11 +58,11 @@ The agent now has everything it needs:
 Your job from this point is to _not intervene_.
 
 > [!NOTE]
-> The local Shelf repository used while developing this course currently supports the full local loop, but it may still be missing a Git remote. If so, do not pretend the hosted pull-request or CI steps happened. Finish the local loop, note the hosted gap in `ROADMAP.md`, and continue later once the repository is connected.
+> If your copy of Shelf is still missing a Git remote, do not pretend the hosted pull-request or CI steps happened. Finish the local loop, note the hosted gap in `ROADMAP.md`, and continue later once the repository is connected.
 
 ## Troubleshooting
 
-- If route-level changes do not appear in Playwright after a large replay step, check whether a stale preview server is still listening on port `4173`. In this repository, `reuseExistingServer` is enabled locally, which is fast for repeat runs but can accidentally reuse an older build until you stop that process.
+- If route-level changes do not appear in Playwright after a large refactor, check whether a stale preview server is still listening on port `4173`. Shelf enables `reuseExistingServer` locally, which is fast for repeat runs but can accidentally reuse an older build until you stop that process.
 - If Playwright MCP fails with `ENOENT: no such file or directory, mkdir '/.playwright-mcp'`, that is an environment limitation, not a Shelf bug. Capture the screenshots with local Playwright instead and record the MCP limitation honestly in `ROADMAP.md` or the lesson notes.
 - If the goals routes are present on disk but your browser still shows the old home page or a 404 for `/goals`, kill the preview process and rerun the tests against a fresh build before changing application code.
 

@@ -10,11 +10,7 @@ Quick lab. Wire up Bugbot, open a PR containing a bug planted in the starter rep
 > [!NOTE] Prerequisite
 > Complete [Tuning Bugbot for Your Codebase](tuning-bugbot-for-your-codebase.md) first. This lab assumes you already have a tuned reviewer configuration and are now pressure-testing it on a known bug.
 
-> [!NOTE]
-> The local Shelf repository used for this workshop currently has no Git remote configured. In that workspace, treat the lab as two parts:
->
-> 1. Local preparation: commit `.cursor/BUGBOT.md`, create the `planted-bug/admin-feature` branch, and verify the planted bug still passes the normal local test gates.
-> 2. Hosted follow-up: once the repository is pushed to your fork, open the pull request and let Bugbot review it there.
+The Shelf starter already ships the baseline admin endpoint and a tuned `.cursor/BUGBOT.md`. Your job in this lab is to run the review loop end to end: fork or push the repo, open a PR from the `planted-bug/admin-feature` branch, wait for Bugbot to comment, hand the comment to Claude Code, and watch the fix land without you explaining the bug.
 
 ## Setup
 
@@ -28,9 +24,6 @@ Install Bugbot on your Shelf fork from the Cursor dashboard and grant it access.
 
 Drop `.cursor/BUGBOT.md` in the repo root with the content from the previous lesson (tweak as needed). In the fully hosted version of the lab, commit it directly to `main`. In the local workshop repo, commit it on your current working branch now and merge it into `main` later when the fork exists.
 
-> [!NOTE]
-> **Third dry run validation**: The current local replay completed the preparation half of this lab and recorded the hosted gap in `ROADMAP.md`. That means `.cursor/BUGBOT.md` is committed and tuned, but the actual Bugbot review still depends on pushing the planted branch to a real GitHub fork.
-
 ## The planted bug
 
 Check out the `planted-bug/admin-feature` branch:
@@ -39,9 +32,9 @@ Check out the `planted-bug/admin-feature` branch:
 git checkout planted-bug/admin-feature
 ```
 
-In the published version of the workshop, this branch introduces the admin-feature endpoint and plants the bug in the same diff. In the local Shelf repository, that endpoint already exists from the preflight baseline, so the planted branch only weakens the permission check: it swaps `requireAdministrator(...)` for `requireViewer(...)` inside `/api/admin/featured-books`. The code still "works"—tests pass, the admin UI still shows featured books—but any signed-in reader can now call the endpoint.
+The clean baseline's `/api/admin/featured-books/+server.ts` starts with `requireAdministrator(locals.user)` from `$lib/server/authorization`. The planted branch deletes that line and replaces it with a plain `if (!locals.user)` authentication check. Every signed-in reader can now feature or unfeature any book—but the happy-path tests all still pass because there is no test covering the case of a non-admin reader hitting the endpoint.
 
-Open a PR from `planted-bug/admin-feature` into `main`.
+Open a PR from `planted-bug/admin-feature` into the main starter branch.
 
 ## What should happen
 

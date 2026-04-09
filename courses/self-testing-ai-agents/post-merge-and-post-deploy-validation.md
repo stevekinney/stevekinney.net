@@ -53,6 +53,87 @@ For Shelf, the post-deploy smoke check can stay tiny:
 
 Small is a feature here. If the post-deploy check takes ten minutes, nobody trusts it as a stop-ship signal.
 
+### What the smoke spec actually looks like
+
+A post-deploy smoke test is a regular Playwright spec in a dedicated directory so it does not run as part of the normal end-to-end suite. The only thing that makes it "post-deploy" is that it reads its target URL from an environment variable the deployment workflow injects, so the same file can run against a preview, a staging environment, or production without any code changes.
+
+```ts
+// tests/smoke/post-deploy.spec.ts
+import { expect, test } from '@playwright/test';
+
+const smokeBaseUrl = process.env.SMOKE_BASE_URL ?? 'http://127.0.0.1:4173';
+
+test.use({ baseURL: smokeBaseUrl });
+
+test('home page renders and exposes sign in', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.getByRole('main').getByRole('link', { name: 'Sign in' })).toBeVisible();
+});
+```
+
+Two assertions. That's it. The shipped Shelf version lives at `tests/smoke/post-deploy.spec.ts` and is invoked through a dedicated `playwright.smoke.config.ts` so the default `test:e2e` suite does not accidentally pick it up.
+
+### The deployment workflow that runs the smoke check
+
+The deployment workflow is where the smoke check gets its teeth. A minimal GitHub Actions shape:
+
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --ignore-scripts
+      - run: npm run build
+      - name: Deploy
+        id: deploy
+        run: |
+          # Replace with your real deploy command. The important part
+          # is that this step prints the deployed URL so the smoke job
+          # can read it from the job output.
+          echo "url=https://shelf-preview.example.com" >> "$GITHUB_OUTPUT"
+
+  smoke:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - name: Run post-deploy smoke check
+        env:
+          SMOKE_BASE_URL: ${{ needs.deploy.outputs.url }}
+        run: npm run test:smoke
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-report
+          path: playwright-report/
+          retention-days: 7
+```
+
+Two jobs. The first job does whatever your host needs to deploy and writes the deployed URL into `$GITHUB_OUTPUT` so the next job can read it. The second job installs Playwright, runs `npm run test:smoke` with `SMOKE_BASE_URL` pointing at that URL, and uploads the Playwright report if the check fails. If the smoke job goes red, the deploy either gets rolled back automatically or the workflow posts a stop-ship signal.
+
+> [!NOTE] No deploy target yet?
+> If your Shelf clone doesn't have a hosted deploy target, you can still practice the same loop locally: run `npm run build && npm run preview -- --host 127.0.0.1 --port 4173` in one terminal and `SMOKE_BASE_URL=http://127.0.0.1:4173 npm run test:smoke` in another. Record the gap in your runbook and wire up the real deploy workflow when you have a target.
+
 ## Preview targets count
 
 You do not need a full production rollout to teach this loop well.

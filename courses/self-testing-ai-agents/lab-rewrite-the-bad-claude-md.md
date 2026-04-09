@@ -18,10 +18,7 @@ npm install
 npm run dev
 ```
 
-Open [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) in your editor. Read it. If the local starter already has some solid rules, keep the ones that earn their place and tighten the ones that are still too vague.
-
-> [!NOTE]
-> **Third dry run validation**: The current Shelf starter already has route, auth, and testing rules. This lab is about making those rules _mechanically enforceable_ and short enough that an agent will actually follow them without you repeating yourself.
+Open [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) in your editor. Read it. The Shelf starter ships with route, auth, and testing rules already—this lab is about making those rules _mechanically enforceable_ and short enough that an agent will actually follow them without you repeating yourself. Keep the ones that earn their place and tighten the ones that are still too vague.
 
 ## The task
 
@@ -54,6 +51,38 @@ Each item is independently checkable. Don't move on until all are ticked.
 - [ ] You committed the change with a message that starts with `lab(rewrite-the-bad-claude-md):` and the commit hash is on `HEAD`.
 
 If `npm run test` flakes here because the starter is still using interactive sign-in inside the browser tests, note it and keep going. The very next lab exists to harden that exact failure mode.
+
+### The one-shot probe
+
+Copy and paste this block at the repository root to run every mechanical check above in one go. It exits zero when the file passes and prints the specific failing rule when it does not:
+
+```sh
+set -e
+
+# Length cap
+[ "$(wc -l < CLAUDE.md)" -le 60 ] || { echo "fail: CLAUDE.md has more than 60 lines"; exit 1; }
+
+# Banned vague words
+for word in clean "best practices" good appropriate; do
+  if grep -iq "$word" CLAUDE.md; then
+    echo "fail: CLAUDE.md contains banned word '$word'"
+    exit 1
+  fi
+done
+
+# Commands referenced in CLAUDE.md must exist in package.json
+for cmd in $(grep -oE 'npm run [a-z:-]+' CLAUDE.md | awk '{print $3}' | sort -u); do
+  grep -q "\"$cmd\":" package.json || { echo "fail: npm run $cmd not in package.json"; exit 1; }
+done
+
+# At least one Playwright locator API is named
+grep -qE 'getByRole|getByLabel|getByText|data-testid' CLAUDE.md \
+  || { echo "fail: no Playwright locator rule"; exit 1; }
+
+echo "ok: CLAUDE.md passes every mechanical check"
+```
+
+Run that block inside the repo after each edit to CLAUDE.md. When it prints `ok`, the mechanical half of the lab is done and you can move on to the subjective half ("does the agent actually follow these rules when you give it a task").
 
 ## Checking your work against an agent
 

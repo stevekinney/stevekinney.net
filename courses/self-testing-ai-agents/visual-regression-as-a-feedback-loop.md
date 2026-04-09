@@ -38,14 +38,11 @@ test('shelf page matches visual baseline', async ({ page }) => {
 });
 ```
 
-In the current Shelf starter, the authenticated page screenshots run under a dedicated Marco storage state so the visual suite does not share Alice's mutable shelf data with the rate-book workflow tests.
+Shelf runs authenticated visual tests inside the same `authenticated` Playwright project the rest of the suite uses, with a `beforeEach` that calls `resetShelfContent` so every diff starts from the same seeded shelf state. If your project has a reason to separate visual reads from write-heavy tests (say, both suites racing the same user's data), you can point a second Playwright project at a different storage-state file, but do not reach for that complexity until a concrete conflict forces it.
 
 First run: Playwright takes a screenshot and writes it to `tests/end-to-end/visual.spec.ts-snapshots/shelf-page.png` (the snapshot directory is named after the test file, so a different `<test-file>.spec.ts` would produce a different `<test-file>.spec.ts-snapshots/` folder). The test "passes" because there's nothing to compare against.
 
 Every subsequent run: Playwright takes a new screenshot and compares it to the committed baseline. If they match pixel-for-pixel (modulo a small tolerance), the test passes. If they don't, the test fails, and Playwright writes three files to your report directory: the baseline, the actual, and a diff image highlighting the changed pixels.
-
-> [!NOTE]
-> **Third dry run validation**: The current Shelf starter still runs Playwright with `workers: 1` because the local SQLite database is shared across browser workers. That does not change the screenshot pattern or the value of the diff. It just means the visual loop favors deterministic output over raw parallel throughput until the app grows stronger test isolation.
 
 You commit the baseline to git. When you make an intentional visual change, you regenerate the baseline (`--update-snapshots`) in the same commit. Reviewers see the old baseline being replaced with the new baseline in the diff and can eyeball whether the change was intentional.
 

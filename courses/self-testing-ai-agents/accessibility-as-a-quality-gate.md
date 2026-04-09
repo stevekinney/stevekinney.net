@@ -46,6 +46,32 @@ That class of problem is perfect for an agent loop. The agent reads the violatio
 
 What I do _not_ want is a fuzzy accessibility story where the agent says "I used `getByRole`, so we're probably fine." Probably fine is how regressions get a free ride to production.
 
+## What the gate looks like in code
+
+The Playwright integration for axe-core is small enough to fit in your head. You install one package (`@axe-core/playwright`), import its `AxeBuilder`, point it at a page, and call `.analyze()`. The result has a `violations` array that you assert against:
+
+```ts
+import AxeBuilder from '@axe-core/playwright';
+import { expect, test } from '@playwright/test';
+
+test('shelf page has no automated accessibility violations', async ({ page }) => {
+  await page.goto('/shelf');
+
+  const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+
+  expect(results.violations).toEqual([]);
+});
+```
+
+A few things worth understanding about that block before you start writing your own:
+
+- **`new AxeBuilder({ page })`** binds an axe run to the current Playwright `Page`. Each test gets its own builder; do not try to share one across tests.
+- **`.withTags(['wcag2a', 'wcag2aa'])`** scopes the rule set to WCAG 2.0 levels A and AA. This is the bar I want by default. You can add `'wcag21a'` and `'wcag21aa'` if you want WCAG 2.1, or pin to a specific rule with `.withRules(...)`. Without `withTags`, axe runs every rule it ships with — most of which are not failures you want to gate on.
+- **`.analyze()`** is the await point. It walks the DOM, runs the rule set, and returns a results object with `violations`, `passes`, `incomplete`, and `inapplicable` arrays.
+- **`expect(results.violations).toEqual([])`** is the gate. An empty `violations` array means axe found nothing wrong. Anything else fails the test, with the violation details printed in the failure output.
+
+That is the entire shape. Three lines of setup, one assertion. Shelf ships exactly this pattern in `tests/end-to-end/accessibility.spec.ts`, scoped to its highest-signal authenticated routes; once you understand the four pieces above you can read that file as a real-shape implementation rather than a mystery.
+
 ## What the automated gate cannot prove
 
 Accessibility has a manual layer that you cannot wish away. The [W3C keyboard accessibility guidance](https://www.w3.org/WAI/WCAG22/Understanding/keyboard-accessible.html) is still the right bar here: all functionality must be operable from a keyboard, and focus cannot get trapped in weird places.

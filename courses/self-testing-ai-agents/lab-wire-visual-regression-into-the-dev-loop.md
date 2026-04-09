@@ -14,67 +14,62 @@ Short lab. Two halves. The first half wires the screenshot gate into Shelf. The 
 
 Make sure you're on the hardened Shelf from the Module 3 lab. You'll need storage-state authentication and seeding in place. Visual regression without those is a nightmare.
 
-> [!NOTE]
-> **Third dry run validation**: The current Shelf starter keeps `workers: 1` in `playwright.config.ts` because the local app still uses one shared SQLite file. The visual-regression lab still works exactly the same way; it just uses the current single-worker config instead of assuming broad browser parallelism.
+Shelf's `playwright.config.ts` pins `workers: 1` because the local SQLite database is still shared across workers—see [Deterministic State and Test Isolation](deterministic-state-and-test-isolation.md) for the why. The visual-regression workflow below works exactly the same way under single-worker, so you don't have to do anything special to accommodate it.
 
 ## Part one: wire the screenshot gate
 
-Create or expand `tests/end-to-end/visual.spec.ts`. In the current Shelf starter, the cleanest setup is to keep the design-system screenshot anonymous and run the authenticated screenshots under a dedicated visual-reader storage state so they do not share Alice's mutable shelf data with the rate-book test.
+Shelf splits visual checks across two files so each one runs in the Playwright project whose auth and seeding matches the page under test:
+
+- `tests/end-to-end/visual.spec.ts` — public, no storage state, screenshots `/design-system` (the curated component gallery).
+- `tests/end-to-end/visual-authenticated.spec.ts` — runs under the `authenticated` project, reseeds shelf content before each test, and screenshots `/shelf`.
 
 ```ts
+// tests/end-to-end/visual.spec.ts
 import { expect, test } from '@playwright/test';
-import { emptyStorageState, marcoAuthenticationFile } from './storage-state';
 
-test.describe('visual regression', () => {
-  test.use({ storageState: marcoAuthenticationFile });
-
-  test.beforeEach(async ({ request }) => {
-    await request.post('/api/shelf', {
-      data: { openLibraryId: 'OL1', status: 'reading' },
-    });
-    await request.post('/api/shelf', {
-      data: { openLibraryId: 'OL2', status: 'to-read' },
-    });
-    await request.post('/api/shelf', {
-      data: { openLibraryId: 'OL5', status: 'finished' },
-    });
-    await request.post('/api/shelf/OL1/rating', {
-      data: { rating: 4 },
-    });
-    await request.post('/api/shelf/OL5/rating', {
-      data: { rating: 5 },
-    });
-  });
-
-  test('shelf page', async ({ page }) => {
-    await page.goto('/shelf');
-    await expect(page.getByRole('heading', { name: "Marco's Shelf" })).toBeVisible();
-    await expect(page.getByRole('article')).toHaveCount(3);
-    await expect(page).toHaveScreenshot('shelf-page.png', { fullPage: true });
-  });
-
-  test('book detail page', async ({ page }) => {
-    await page.goto('/books/OL1');
-    await expect(page.getByRole('heading', { name: 'Station Eleven' })).toBeVisible();
-    await expect(page).toHaveScreenshot('book-detail.png', {
-      fullPage: true,
-      mask: [page.getByTestId('last-updated')],
-    });
-  });
-});
-
-test.describe('public visual regression', () => {
-  test.use({ storageState: emptyStorageState });
-
-  test('design system', async ({ page }) => {
-    await page.goto('/design-system');
-    await expect(page.getByRole('heading', { name: /Shelf design system/i })).toBeVisible();
-    await expect(page).toHaveScreenshot('design-system.png', { fullPage: true });
+test('design system matches the starter visual baseline', async ({ page }) => {
+  await page.goto('/design-system');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page).toHaveScreenshot('design-system.png', {
+    fullPage: true,
   });
 });
 ```
 
-Update `playwright.config.ts` to disable animations and hide carets:
+```ts
+// tests/end-to-end/visual-authenticated.spec.ts
+import { expect, test } from '@playwright/test';
+import { resetShelfContent } from './helpers/seed';
+
+test.beforeEach(async ({ request }) => {
+  await resetShelfContent(request);
+});
+
+test('shelf page matches the seeded visual baseline', async ({ page }) => {
+  await page.goto('/shelf');
+
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.getByRole('article', { name: /Station Eleven/ })).toBeVisible();
+
+  await expect(page).toHaveScreenshot('shelf-page.png', { fullPage: true });
+});
+```
+
+Route the new file through the `authenticated` project in `playwright.config.ts`:
+
+```ts
+{
+  name: 'authenticated',
+  testMatch: /(rate-book|accessibility|search|visual-authenticated)\.spec\.ts/,
+  use: {
+    ...devices['Desktop Chrome'],
+    storageState: storageStatePath,
+  },
+  dependencies: ['setup'],
+},
+```
+
+And make sure `expect.toHaveScreenshot` is configured globally:
 
 ```ts
 expect: {
@@ -82,7 +77,6 @@ expect: {
     animations: 'disabled',
     caret: 'hide',
     scale: 'css',
-    maxDiffPixelRatio: 0.01,
   },
 },
 ```
@@ -90,27 +84,19 @@ expect: {
 Generate the baselines:
 
 ```sh
-bun playwright test visual.spec.ts --update-snapshots
+npm run test:e2e -- --update-snapshots
 ```
 
-For the npm-based Shelf starter, the equivalent local command is:
-
-```sh
-npx playwright test tests/end-to-end/visual.spec.ts --project=chromium --update-snapshots
-```
-
-Commit the baseline images. They should be in `tests/end-to-end/visual.spec.ts-snapshots/`. Yes, you commit PNGs to git. That's the deal.
-
-If you are documenting the diff for course material, try the Playwright MCP first. In the current Codex desktop environment it may fail with `ENOENT: mkdir '/.playwright-mcp'`. If that happens, fall back to local Playwright screenshots and say so explicitly in the lesson update instead of pretending the MCP worked.
+Commit the baseline PNGs at `tests/end-to-end/visual.spec.ts-snapshots/` and `tests/end-to-end/visual-authenticated.spec.ts-snapshots/`. Yes, you commit PNGs to git. That's the deal.
 
 ## Part one acceptance criteria
 
-- [ ] `tests/end-to-end/visual.spec.ts` exists and contains at least three `toHaveScreenshot` assertions.
+- [ ] Both `visual.spec.ts` (public) and `visual-authenticated.spec.ts` (authenticated) exist and each contains at least one `toHaveScreenshot` assertion.
 - [ ] `playwright.config.ts` sets `animations: 'disabled'`, `caret: 'hide'`, and `scale: 'css'` under `expect.toHaveScreenshot`.
-- [ ] `npx playwright test tests/end-to-end/visual.spec.ts --project=chromium` passes on a clean run (no diffs).
-- [ ] Running the same test five times in a row produces zero false positives: `for i in {1..5}; do npx playwright test tests/end-to-end/visual.spec.ts --project=chromium || break; done` exits zero every iteration.
-- [ ] The committed baseline files exist at `tests/end-to-end/visual.spec.ts-snapshots/` (verify with `ls`—all three PNGs should be present).
-- [ ] `.gitignore` does not ignore snapshot PNGs (`grep -i snapshot .gitignore` returns nothing obviously conflicting).
+- [ ] `npm run test:e2e` passes on a clean run (no diffs) — including both visual tests.
+- [ ] Running the suite five times in a row produces zero false positives on either screenshot test: `for i in {1..5}; do npm run test:e2e || break; done` exits zero every iteration.
+- [ ] Both baseline snapshot files exist (`ls tests/end-to-end/visual.spec.ts-snapshots/ tests/end-to-end/visual-authenticated.spec.ts-snapshots/` prints the committed PNGs).
+- [ ] `.gitignore` does not ignore snapshot PNGs.
 
 ## The snapshot target in Shelf
 
@@ -120,25 +106,25 @@ Once the suite is wired correctly, the shelf-page baseline should look something
 
 ## Part two: break something, and watch it fire
 
-Now we're going to simulate the loop. Open `src/lib/components/Button.svelte` (or wherever Shelf's button component lives). Change the padding:
+Now we're going to simulate the loop. Open `src/lib/components/button.svelte`. Find the `classes` derived expression and change the base padding:
 
 ```svelte
 <!-- before -->
-<button class="px-4 py-2 ...">
+'inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold ...',
 <!-- after -->
-<button class="px-6 py-3 ...">
+'inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold ...',
 ```
 
-Run the screenshot test again:
+Re-run the visual specs:
 
 ```sh
-npx playwright test tests/end-to-end/visual.spec.ts --project=chromium
+npm run test:e2e -- --grep visual
 ```
 
 It fails. Open the HTML report:
 
 ```sh
-npx playwright show-report
+npx playwright show-report playwright-report/html
 ```
 
 Find the failing test, look at the three-panel view (baseline, actual, diff). The diff image should clearly show the buttons in the screenshots have changed size.

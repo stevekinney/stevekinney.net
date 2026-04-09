@@ -5,12 +5,12 @@ modified: 2026-04-09
 date: 2026-04-06
 ---
 
-Time to cash the checks from the last six lessons. Open the Shelf repo. Open `tests/end-to-end/rate-book.spec.ts`. Read it. Depending on how far you've already pushed the starter, you may not see the exact "bad on purpose" version from the published notes anymore. That's fine. The point of the lab is still the same: make the rate-book workflow obviously isolated, semantic, and fast.
+Time to cash the checks from the last six lessons. The Shelf starter ships with a hardened `tests/end-to-end/rate-book.spec.ts`—study it if you want to see the target. Your job in this lab is to _rebuild_ it by hand, starting from the intentionally rough version below, so every Module 3 pattern lands in your fingers instead of just your eyes.
 
-The intentionally rough version works. Sort of. It passes until the machine gets slower, the selectors drift, or the database state stops matching your assumptions. It bundles every Module 3 anti-pattern into one short file, which makes it a great place to harden the whole loop.
+The rough version works. Sort of. It passes until the machine gets slower, the selectors drift, or the database state stops matching your assumptions. It bundles every Module 3 anti-pattern into one short file, which makes it a great place to harden the whole loop.
 
-> [!NOTE]
-> **Third dry run validation**: The current Shelf starter still hardens this workflow in four commits, but two implementation details changed since the earlier draft. Storage-state setup now drives the real login page because the form-action shortcut can trip CSRF protection in the current auth stack, and the local Playwright config pins `workers: 1` because the starter still uses one shared SQLite file.
+> [!NOTE] Two local-setup details to know
+> Shelf's storage-state setup drives the real login page because the form-action shortcut trips CSRF protection in Better Auth, and `playwright.config.ts` pins `workers: 1` because the starter uses one shared SQLite file. Both are explicit in the repo; neither is a bug.
 
 Your job is to fix it. Every pattern we learned in Module 3 applies here.
 
@@ -84,7 +84,7 @@ Finally, add a second assertion using `request.get('/api/shelf/...')` to verify 
 - [ ] `rg "page.goto\('/login'\)" tests/end-to-end/rate-book.spec.ts` returns nothing.
 - [ ] `rg "page.fill\(\[name=" tests/end-to-end/rate-book.spec.ts` returns nothing.
 - [ ] The test passes ten times in a row: `for i in {1..10}; do npx playwright test --project=chromium tests/end-to-end/rate-book.spec.ts || break; done` and no iteration exits non-zero.
-- [ ] The test passes with the current Playwright configuration. In the third dry run that means `workers: 1` because the starter still points every browser worker at the same local SQLite file.
+- [ ] The test passes with the current Playwright configuration, which pins `workers: 1` because the starter still points every browser worker at the same local SQLite file.
 - [ ] Suite wall time for `rate-book.spec.ts` dropped compared to the baseline. Measure with `time npx playwright test --project=chromium tests/end-to-end/rate-book.spec.ts` before and after. Record both numbers in your commit message.
 - [ ] `npx playwright test --project=chromium --grep="can rate" tests/end-to-end/rate-book.spec.ts` completes in under 5 seconds on your machine when Playwright is reusing an already running local server.
 - [ ] The commit history shows the work broken into at least four commits, each one addressing one pattern (auth, seed, locators, waits).

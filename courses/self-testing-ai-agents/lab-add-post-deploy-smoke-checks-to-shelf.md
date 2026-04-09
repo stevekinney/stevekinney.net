@@ -30,6 +30,8 @@ If auth is required, reuse the existing storage-state or login bootstrap. Do not
 
 The spec should read from an environment variable such as `SMOKE_BASE_URL` so the same test can run against preview, staging, or production.
 
+The lesson shows the exact spec shape in the **What the smoke spec actually looks like** section of [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md). Start from that two-assertion skeleton. Shelf ships the file at `tests/smoke/post-deploy.spec.ts` — write yours first from the lesson, then compare.
+
 ## Step 2: expose a named smoke-test command
 
 Add a command such as this to `package.json`:
@@ -59,7 +61,7 @@ This file exists so the agent can make a crisp recommendation instead of narrati
 
 ## Step 4: wire the workflow
 
-Create or update `.github/workflows/deploy.yml`.
+Create or update `.github/workflows/deploy.yml`. The lesson's **The deployment workflow that runs the smoke check** section has a complete two-job YAML skeleton (deploy + smoke) you can start from. Adapt the `deploy` job's `run` step to your actual host command, then leave the `smoke` job alone — it reads `SMOKE_BASE_URL` from the deploy job's output and runs `npm run test:smoke` against it.
 
 The minimal shape:
 

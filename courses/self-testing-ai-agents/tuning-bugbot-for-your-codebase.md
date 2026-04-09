@@ -22,8 +22,7 @@ Drop a `.cursor/BUGBOT.md` at the root of the repo. This is Bugbot's instruction
 > [!NOTE]
 > As of April 9, 2026, Cursor's docs use `.cursor/BUGBOT.md`. Older screenshots and repos may still show `.cursor/bugbot.md`. Follow the current Cursor docs for the account you're actually using, but keep the filename consistent everywhere in the repository and in your lesson notes.
 
-> [!NOTE]
-> **Third dry run validation**: The current Shelf replay keeps this file local-first. The tuned `.cursor/BUGBOT.md` is committed in the repository even when the workshop copy is not yet pushed to GitHub, so the hosted Bugbot step becomes a deployment concern rather than a content-authoring concern.
+Shelf commits the tuned `.cursor/BUGBOT.md` to the repository even before the hosted Bugbot review is wired up. The file is the authoring concern; pointing Bugbot at an actual GitHub PR is a deployment concern you handle separately.
 
 ```markdown
 # Bugbot review rules for Shelf
@@ -31,22 +30,26 @@ Drop a `.cursor/BUGBOT.md` at the root of the repo. This is Bugbot's instruction
 ## Context
 
 Shelf is a reading-tracker built on SvelteKit + TypeScript + Drizzle + SQLite.
-Tests run on Vitest (unit) and Playwright (end-to-end).
+Tests run on Vitest (unit) and Playwright (end-to-end). Better Auth handles
+authentication; authorization helpers live in `src/lib/server/authorization.ts`.
 
 ## What to flag
 
-- API handlers that read user identity from the request body instead of the
-  viewer. User identity comes from `locals.viewer`, not the request body.
-- Admin-only route handlers that use `requireViewer(...)` instead of
-  `requireAdministrator(...)`.
+- API handlers under `src/routes/api/` that read user identity from the
+  request body instead of the viewer. User identity comes from `locals.user`,
+  never the request body.
+- Admin-only route handlers that use plain `locals.user` checks or call
+  something other than `requireAdministrator(locals.user)` from
+  `$lib/server/authorization`. Any handler under `src/routes/api/admin/**` is
+  admin-only.
 - Drizzle queries that don't scope by the current user when operating on
-  user-owned resources (shelf entries, ratings, etc.).
+  user-owned resources (shelf entries, ratings).
 - Error handling that catches an error and returns 200. If we catch, we log
   and return an appropriate non-2xx status.
-- Components that render user-generated content (book titles, reviews)
-  without escaping or sanitization.
-- Playwright tests that use `page.waitForTimeout`, `page.locator` with
-  raw CSS, or UI login. These patterns are banned. See `CLAUDE.md`.
+- Components that render user-generated content without escaping or
+  sanitization.
+- Playwright tests that use `page.waitForTimeout`, `page.locator` with raw
+  CSS, or UI login. These patterns are banned in `CLAUDE.md`.
 - Changes to the dossier loop that remove `playwright-report/report.json`,
   retained traces, or the `npm run dossier` script.
 
@@ -55,8 +58,11 @@ Tests run on Vitest (unit) and Playwright (end-to-end).
 - Generated Playwright artifacts under `playwright-report/`.
 - Storage-state files under `playwright/.authentication/`.
 - Snapshot PNGs in `tests/end-to-end/*-snapshots/`.
-- Seed and baseline data in `src/lib/server/application-baseline.ts`.
+- HAR fixtures under `tests/fixtures/*.har`.
+- Generated `build/` outputs.
 - Lockfiles.
+- `src/lib/server/db/auth.schema.ts` — regenerated from Better Auth, not
+  hand-edited.
 
 ## Tone
 

@@ -17,16 +17,15 @@ For a quick refresher on what the [Model Context Protocol](https://modelcontextp
 
 A small MCP server with a single tool called `verify_shelf_page`. When called, it:
 
-1. Launches Playwright against `http://127.0.0.1:4173/shelf/<username>` by default (with storage state). The `<username>` is passed as an argument so the agent can probe any user's shelf, and `SHELF_BASE_URL` can override the host when needed.
-2. Waits for the shelf heading to be visible.
-3. Counts the books rendered.
-4. Checks the console for errors.
-5. Returns a structured JSON blob: `{ ok: boolean, bookCount: number, consoleErrors: string[] }`.
+1. Launches Playwright against `http://127.0.0.1:4173/shelf/<username>` by default. The `<username>` is the lower-cased portion of the reader's email address before the `@`, so alice@example.com becomes `alice`. `SHELF_BASE_URL` can override the host when needed.
+2. Waits for the page's level-one shelf heading to be visible.
+3. Counts the books rendered as `<article>` elements.
+4. Captures any console errors emitted during page load.
+5. Returns a structured JSON blob: `{ ok: boolean, bookCount: number, consoleErrors: string[], url: string }`.
 
 The agent can now call `verify_shelf_page` and get a one-shot, structured answer to "is this page in good shape?" No composition, no guessing, no "did you remember to check the console?" It's all in the tool.
 
-> [!NOTE]
-> **Third dry run validation**: The current Shelf implementation keeps the MCP registration in the repository-local `.mcp.json` and resolves the target URL from `SHELF_BASE_URL`, defaulting to `http://127.0.0.1:4173`. That keeps the same server usable against local preview, local dev, or another running instance without editing code.
+Shelf registers the server in a repository-local `.mcp.json` and resolves the target URL from `SHELF_BASE_URL`, defaulting to `http://127.0.0.1:4173`. The `/shelf/[username]` route is public, so the server does not strictly need authentication—but it reuses the existing `playwright/.authentication/user.json` storage state when present so the browser session stays consistent with the rest of the workshop tooling.
 
 ## The skeleton
 
@@ -36,14 +35,17 @@ It uses the [Playwright API](https://playwright.dev/docs/api/class-browsertype) 
 
 ```ts
 // tools/shelf-verification-server/server.ts
+import fs from 'node:fs';
+import path from 'node:path';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { chromium } from 'playwright';
 import { z } from 'zod';
-import path from 'node:path';
+
+const STORAGE_STATE_PATH = path.resolve('playwright/.authentication/user.json');
+const baseUrl = process.env.SHELF_BASE_URL ?? 'http://127.0.0.1:4173';
 
 const server = new McpServer({ name: 'shelf-verification', version: '0.1.0' });
-const baseUrl = process.env.SHELF_BASE_URL ?? 'http://127.0.0.1:4173';
 
 server.registerTool(
   'verify_shelf_page',
@@ -57,45 +59,43 @@ server.registerTool(
       ok: z.boolean(),
       bookCount: z.number().int().nonnegative(),
       consoleErrors: z.array(z.string()),
+      url: z.string(),
     },
   },
   async ({ username }) => {
+    const targetUrl = `${baseUrl}/shelf/${encodeURIComponent(username)}`;
     const browser = await chromium.launch();
-    const context = await browser.newContext({
-      storageState: path.resolve('playwright/.authentication/user.json'),
-    });
-    const page = await context.newPage();
+    try {
+      const contextOptions = fs.existsSync(STORAGE_STATE_PATH)
+        ? { storageState: STORAGE_STATE_PATH }
+        : {};
+      const context = await browser.newContext(contextOptions);
+      const page = await context.newPage();
 
-    const consoleErrors: string[] = [];
-    page.on('console', (msg) => {
-      if (msg.type() === 'error') consoleErrors.push(msg.text());
-    });
+      const consoleErrors: string[] = [];
+      page.on('console', (message) => {
+        if (message.type() === 'error') consoleErrors.push(message.text());
+      });
 
-    await page.goto(`${baseUrl}/shelf/${username}`);
-    await page.getByRole('heading', { level: 1, name: /shelf/i }).waitFor();
+      await page.goto(targetUrl);
+      await page.getByRole('heading', { level: 1 }).waitFor();
 
-    const bookCount = await page.getByRole('article').count();
+      const bookCount = await page.getByRole('article').count();
 
-    await context.close();
-    await browser.close();
-
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify({
-            ok: consoleErrors.length === 0 && bookCount > 0,
-            bookCount,
-            consoleErrors,
-          }),
-        },
-      ],
-      structuredContent: {
-        ok: consoleErrors.length === 0 && bookCount > 0,
+      const result = {
+        ok: consoleErrors.length === 0 && bookCount >= 0,
         bookCount,
         consoleErrors,
-      },
-    };
+        url: targetUrl,
+      };
+
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        structuredContent: result,
+      };
+    } finally {
+      await browser.close();
+    }
   },
 );
 

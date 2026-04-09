@@ -99,9 +99,9 @@ Runtime probes require a running dev server. This sounds obvious but it's the pa
 
 A few patterns that work:
 
-**Let the agent manage the dev server itself.** The agent runs `bun run dev` in a background shell, waits for the "Local: http://localhost:5173" message, and then probes. When it's done, it kills the server. This works but it's fiddly—managing background processes is not the agent's strong suit.
+**Let the agent manage the dev server itself.** The agent runs `npm run dev` in a background shell, waits for the "Local: http://localhost:5173" message, and then probes. When it's done, it kills the server. This works but it's fiddly—managing background processes is not the agent's strong suit.
 
-**Run the dev server out-of-band and tell the agent about it.** You keep `bun run dev` running in a terminal you own. The agent's instructions file says "the dev server is always running at localhost:5173; do not start or stop it." The agent just probes. This is my default for workshop use—simpler, fewer moving parts, easier to reason about.
+**Run the dev server out-of-band and tell the agent about it.** You keep `npm run dev` running in a terminal you own. The agent's instructions file says "the dev server is always running at localhost:5173; do not start or stop it." The agent just probes. This is my default for workshop use—simpler, fewer moving parts, easier to reason about.
 
 **Spin up a test-dedicated dev server.** Your CI or your Playwright config starts a dev server on an unusual port (e.g., 4173) just for probing. The agent uses that port. Your normal dev server on 5173 is untouched by the agent. This is nice for isolation but adds config complexity.
 

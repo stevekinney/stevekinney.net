@@ -50,6 +50,56 @@ A few schedule rules matter more than people think:
 
 That means "run it at 00 minutes past the hour" is the worst lazy default. Pick an off-minute like `17` or `43` so your workflow is not competing with every other repository on earth for the same slot.
 
+## The minimum nightly workflow
+
+Here is the smallest nightly workflow that still teaches the shape. Two jobs: one real (`dependency-audit`, because `npm audit` is always available) and one explicit placeholder (`har-refresh`) that echoes the intended next step so the job exists in the GitHub UI even before the automation lands.
+
+```yaml
+# .github/workflows/nightly.yml
+name: Nightly
+
+on:
+  schedule:
+    # Off the top of the hour to avoid the GitHub Actions stampede.
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+
+  har-refresh:
+    name: Refresh HAR fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Placeholder
+        run: |
+          echo "Placeholder: re-record tests/fixtures/*.har against the real Open Library API"
+          echo "  and open a pull request with the diff so a human can review upstream drift."
+```
+
+A few things to notice:
+
+- **`workflow_dispatch`** is next to `schedule` on purpose. It gives you a "Run workflow" button in the GitHub Actions UI so you can kick off a nightly run on demand without editing the cron.
+- **Placeholder jobs are better than missing jobs.** An `echo` step that describes the intended next step keeps the job name visible in the UI, makes the intent discoverable in `git log`, and fails loudly if someone accidentally deletes the surrounding YAML. An empty `jobs:` key gives you nothing to notice.
+- **Keep each job to one named command.** Even when that command is just `echo`, the shape matches what the real jobs will look like. When the `har-refresh` automation lands, it replaces the `echo` step with `npm run har:refresh` or equivalent without restructuring the workflow.
+
+Expand this shell as the real jobs come online: a `cross-browser-smoke` job that runs the cross-browser smoke subset from the previous appendix, a `performance-audit` job that runs a broader Lighthouse or bundle check, a `data-integrity` job if you have seeded content that can drift.
+
+Shelf already ships the `cross-browser-smoke` job in `nightly.yml`. It implements the cross-browser split using **project-based filtering** rather than the `@cross-browser` tag pattern shown earlier — the `firefox-smoke` and `webkit-smoke` Playwright projects use `testMatch: /smoke\.spec\.ts/`, so any test in a `*.smoke.spec.ts` file is automatically picked up. Project-based and tag-based filtering are equivalent for this case: pick projects when the split is by file (Shelf's situation), pick tags when the split is by individual test inside an otherwise mixed file. The lesson on cross-browser validation walks through both patterns; Shelf chose projects because the smoke set lives in its own file and the project boundary is already meaningful for browser configuration.
+
 ## Nightly failures should land like any other failure
 
 The failure handling should look familiar by now:

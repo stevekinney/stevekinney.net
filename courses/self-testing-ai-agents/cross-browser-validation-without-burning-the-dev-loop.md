@@ -40,6 +40,64 @@ My default split:
 
 That is the balance I have seen teams actually maintain.
 
+## The Playwright projects that split the work
+
+Playwright projects are the mechanism that makes "Chromium on every edit, Firefox and WebKit on a smoke subset" actually work. Each project is a named configuration block inside `playwright.config.ts` that can point at a different browser, a different testMatch, and a different set of options. Shelf's split looks like this:
+
+```ts
+// playwright.config.ts (trimmed)
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: 'tests/end-to-end',
+  projects: [
+    {
+      name: 'public',
+      testMatch: /(smoke|visual)\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'authenticated',
+      testMatch: /(rate-book|accessibility|search|visual-authenticated|performance)\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.authentication/user.json' },
+      dependencies: ['setup'],
+    },
+    // Cross-browser smoke projects. Skipped by default; run via
+    // `npm run test:e2e:cross-browser`.
+    {
+      name: 'firefox-smoke',
+      testMatch: /smoke\.spec\.ts/,
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit-smoke',
+      testMatch: /smoke\.spec\.ts/,
+      use: { ...devices['Desktop Safari'] },
+    },
+  ],
+});
+```
+
+Four projects. `public` and `authenticated` are the default Chromium loop that runs on every edit. `firefox-smoke` and `webkit-smoke` only match the `smoke.spec.ts` file, and they only run when you ask for them explicitly. The default `npm run test:e2e` script pins `--project=setup --project=public --project=authenticated` so Firefox and WebKit do not sneak into the fast loop:
+
+```json
+{
+  "scripts": {
+    "test:e2e": "playwright test --project=setup --project=public --project=authenticated",
+    "test:e2e:cross-browser": "playwright test --project=firefox-smoke --project=webkit-smoke"
+  }
+}
+```
+
+> [!IMPORTANT] Install the extra browsers first
+> Playwright only installs Chromium when you set up the fast loop. Before running `npm run test:e2e:cross-browser` for the first time — locally or in a fresh CI runner — install the cross-browser binaries explicitly:
+>
+> ```sh
+> npx playwright install --with-deps firefox webkit
+> ```
+>
+> Skip this and the alternate-browser projects will fail with a "browser not installed" error that has nothing to do with your test code. Shelf's `nightly.yml` workflow runs the same install line in its `cross-browser-smoke` job for the same reason.
+
 ## Tag the right tests, not all the tests
 
 The mistake people make is trying to run the whole suite everywhere.
@@ -55,6 +113,22 @@ Tag the tests that earn cross-browser coverage:
 - the routes where layout bugs hurt most
 
 This gives you a stable, small "does the product basically work in these engines?" set. The rest can stay Chromium-first unless history tells you otherwise.
+
+Projects are one way to filter. Playwright's built-in test tags are the other, and the two are complementary. Tag a test with `@cross-browser` to mark it as part of the cross-browser smoke set, then run it explicitly via `--grep`:
+
+```ts
+// tests/end-to-end/rate-book.spec.ts
+test('user can rate Station Eleven', { tag: '@cross-browser' }, async ({ page }) => {
+  // ...
+});
+```
+
+```sh
+# Run every @cross-browser-tagged test in both alternate engines:
+npx playwright test --project=firefox-smoke --project=webkit-smoke --grep @cross-browser
+```
+
+Projects say "which browser + which file match pattern." Tags say "which individual tests inside that match pattern." Use projects when the split is by _file_ (all the smoke specs go to Firefox, none of the rate-book specs do), and tags when the split is by _test within a file_ (the rate-book file has ten tests but only two earn cross-browser coverage).
 
 ## WebKit is strong signal, not a legal guarantee
 

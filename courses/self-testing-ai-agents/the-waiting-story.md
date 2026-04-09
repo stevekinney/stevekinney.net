@@ -124,9 +124,9 @@ The last rule is the important one, and the hardest one for an agent to follow w
 
 ## A concrete example from Shelf
 
-Shelf ships with a deliberately broken test at `tests/end-to-end/rate-book.spec.ts`. It uses `waitForTimeout(1500)` after submitting a rating, because the agent that originally wrote it was guessing. The test passes most of the time. It fails about one time in fifteen on my machine, and more often on CI under load. Right now the rate-book test is the canonical "flaky test" that blocks releases every few days.
+Shelf's rate-book workflow is the canonical place this all shows up. The rough version of the test uses `waitForTimeout(1500)` after submitting a rating, because the agent that wrote it first was guessing. That version passes most of the time. It fails about one time in fifteen on my machine, and more often on CI under load—classic "flaky test that blocks releases every few days" territory.
 
-We're going to fix it in the next lab. The fix has three parts: replace the locator with a `getByRole` chain, replace the `waitForTimeout` with a `waitForResponse` on the POST, and add an `expect(locator).toHaveText(/Thanks/)` assertion on the confirmation toast. That's it. Three edits, zero magic, and the test stops flaking.
+The next lab walks you through rewriting it. The fix has three parts: replace the locator with a `getByRole` chain, replace the `waitForTimeout` with a `waitForResponse` on the POST, and add an `expect(locator).toHaveText(/Thanks/)` assertion on the confirmation toast. That's it. Three edits, zero magic, and the test stops flaking.
 
 ## The one thing to remember
 

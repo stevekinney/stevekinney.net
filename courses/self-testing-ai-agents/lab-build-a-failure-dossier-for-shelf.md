@@ -7,8 +7,7 @@ date: 2026-04-06
 
 Short lab. Wire up the dossier infrastructure, then run a failure through it to verify the loop closes.
 
-> [!NOTE]
-> **Third dry run validation**: The current Shelf starter writes artifacts under `playwright-report/test-results/`, the HTML report to `playwright-report/html/`, the JSON report to `playwright-report/report.json`, and the markdown summary to `playwright-report/dossier.md`. A simple, controlled way to force a failure is to temporarily move one committed screenshot baseline, run the matching visual test, generate the dossier, then restore the baseline and rerun green.
+Shelf writes artifacts under `playwright-report/test-results/`, the HTML report to `playwright-report/html/`, the JSON report to `playwright-report/report.json`, and the markdown summary to `playwright-report/dossier.md`. The simplest, most controlled way to force a failure when you want to test the loop is to temporarily move one committed screenshot baseline, run the matching visual test, generate the dossier, then restore the baseline and rerun green.
 
 ## The task
 
@@ -48,6 +47,14 @@ Write `scripts/summarize-failure-dossier.ts` that reads `playwright-report/repor
 - Full error message
 - Relative path to the screenshot
 - Exact shell command to reproduce the failure
+
+The lesson walks the Playwright report schema and shows the full script in the **Making dossiers agent-readable** section of [Failure Dossiers: What Agents Actually Need From a Red Build](failure-dossiers-what-agents-actually-need-from-a-red-build.md). Work from that sketch, not from memory — the `suites → specs → tests → results` walk and the attachment-picking predicates are easy to get wrong.
+
+The Shelf starter ships a production version at `scripts/summarize-failure-dossier.ts`. Write yours first from the lesson sketch, then open the starter's file to compare. Differences you will see in the shipped version:
+
+- Explicit TypeScript types for `PlaywrightReport`, `PlaywrightSuite`, `PlaywrightSpec`, etc., instead of `any`. Copy the shape if your editor complains about the looser types in the sketch.
+- Visual-regression-aware screenshot picking: on a screenshot assertion failure, Playwright retains `expected`, `actual`, and `diff`. The shipped script prefers the `diff` image so the dossier links to the thing a reviewer actually wants to look at, rather than the baseline.
+- `null`-guarded error access: `result.error?.message ?? result.errors?.[0]?.message ?? 'Unknown error'` instead of the bare `result.error?.message` in the lesson sketch. The lesson cuts the fallback for readability; production code should not.
 
 Add a `package.json` script: `"dossier": "tsx scripts/summarize-failure-dossier.ts"`.
 

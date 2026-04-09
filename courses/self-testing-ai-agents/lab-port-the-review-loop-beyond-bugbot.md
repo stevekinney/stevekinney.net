@@ -30,6 +30,8 @@ Document:
 
 This file is the stable part of the loop.
 
+The lesson's **What the review playbook looks like** section in [Review Portability Beyond Bugbot](review-portability-beyond-bugbot.md) has a complete 30-line skeleton for Shelf's playbook. Copy that as your starting point and edit the blocking rules to match whatever your codebase actually cares about. The starter already ships the finished version at `docs/review-loop-playbook.md` — read it after you write yours and borrow the parts you like.
+
 ## Step 2: choose one alternate review surface
 
 Pick one surface besides Bugbot:

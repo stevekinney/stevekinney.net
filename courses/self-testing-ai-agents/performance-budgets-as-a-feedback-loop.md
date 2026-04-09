@@ -42,9 +42,50 @@ That is enough to catch most accidental regressions.
 
 ## Build-time budgets: catch weight gain early
 
-In the validated website repository for this course, `applications/website/package.json` already exposes `bun run build:stats`, and the Vite configuration writes `build/stats.html` plus `build/stats.json` when bundle stats are enabled. That is the exact shape I would copy into Shelf.
+Shelf exposes `npm run build:stats`, which flips a `BUNDLE_STATS=1` environment variable and tells the Vite config to pipe `rollup-plugin-visualizer` into the output—producing both a `build/stats.html` treemap for humans and a `build/stats.json` raw data file for automation. You can follow the same shape with any bundler; the point is not the plugin.
 
-The point is not the plugin. The point is that a green build produces machine-readable numbers you can compare against a threshold in version control.
+The wiring inside `vite.config.ts` is small. You import `visualizer` from `rollup-plugin-visualizer`, conditionally include two instances in the Vite plugin list (one HTML, one JSON), and gate the whole block on the `BUNDLE_STATS` flag so a normal `npm run build` stays fast and silent:
+
+```ts
+// vite.config.ts (trimmed)
+import path from 'node:path';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { visualizer } from 'rollup-plugin-visualizer';
+import { defineConfig } from 'vite';
+
+const shouldEmitBundleStats = process.env.BUNDLE_STATS === '1';
+
+export default defineConfig({
+  plugins: [
+    sveltekit(),
+    ...(shouldEmitBundleStats
+      ? [
+          visualizer({
+            filename: path.resolve('build/stats.html'),
+            template: 'treemap',
+            gzipSize: true,
+            brotliSize: true,
+            emitFile: false,
+          }),
+          visualizer({
+            filename: path.resolve('build/stats.json'),
+            template: 'raw-data',
+            gzipSize: true,
+            brotliSize: true,
+            emitFile: false,
+          }),
+        ]
+      : []),
+  ],
+});
+```
+
+Two notes about that block:
+
+- **`template: 'treemap'`** produces the HTML treemap a human can scroll through. **`template: 'raw-data'`** produces the JSON your check script will parse. You want both — humans use one, the loop uses the other.
+- **`emitFile: false`** writes the report to disk via `filename` instead of pushing it through the Rollup output graph. This keeps the report files out of the published bundle.
+
+Shelf ships exactly this pattern in `vite.config.ts`. The point is that a green build produces machine-readable numbers you can compare against a threshold in version control.
 
 What I want from the build-side loop:
 
@@ -53,6 +94,136 @@ What I want from the build-side loop:
 - stable output file the agent can parse
 
 If those numbers jump, the loop goes red before the regression has a chance to become "well, it still technically works."
+
+### What `build/stats.json` actually looks like
+
+Before you can parse it, you have to know what it contains. `rollup-plugin-visualizer` with `template: 'raw-data'` emits a file that looks roughly like this (trimmed for readability):
+
+```jsonc
+{
+  "version": 2,
+  "tree": {
+    "name": "root",
+    "children": [
+      /* the whole module tree */
+    ],
+  },
+  "nodeMetas": {
+    "abc-1": {
+      "id": "/src/routes/(app)/shelf/+page.svelte",
+      "moduleParts": {
+        "_app/immutable/nodes/4.CdrmuZQ8.js": "abc-1-part",
+      },
+    },
+  },
+  "nodeParts": {
+    "abc-1-part": {
+      "renderedLength": 1820,
+      "gzipLength": 640,
+      "brotliLength": 560,
+    },
+  },
+}
+```
+
+Two keys carry the signal we want:
+
+- **`nodeMetas`** — one entry per source file in the graph. Each meta has a `moduleParts` map whose keys are the _output_ bundle files (like `_app/immutable/chunks/BiOosUrW.js`) and whose values are uids into `nodeParts`.
+- **`nodeParts`** — size information per piece of emitted code: `renderedLength` (raw bytes), `gzipLength`, `brotliLength`.
+
+Summing the gzip bytes for every `nodePart` that belongs to a given output file gives you that file's compressed size. Summing those across every file under `_app/immutable/` (SvelteKit's client chunk prefix) gives you the total client bundle gzip size. The largest of those sums is your worst-case route chunk.
+
+### The checker script
+
+Once you know the shape, the checker is short. It reads both files, walks `nodeMetas` → `moduleParts` → `nodeParts`, aggregates by bundle file, filters to client chunks, and compares the totals against the stored thresholds:
+
+```js
+// scripts/check-performance-budgets.mjs
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+
+const STATS_PATH = resolve('build/stats.json');
+const BUDGETS_PATH = resolve('performance-budgets.json');
+const CLIENT_BUNDLE_PREFIX = '_app/immutable';
+
+const formatKilobytes = (bytes) => (bytes / 1024).toFixed(1);
+
+const computeClientBundleSizes = (stats) => {
+  const parts = stats.nodeParts ?? {};
+  const metas = stats.nodeMetas ?? {};
+  const bundleGzipByFile = new Map();
+
+  for (const meta of Object.values(metas)) {
+    for (const [bundleFile, uid] of Object.entries(meta.moduleParts ?? {})) {
+      const part = parts[uid];
+      if (!part) continue;
+      bundleGzipByFile.set(
+        bundleFile,
+        (bundleGzipByFile.get(bundleFile) ?? 0) + (part.gzipLength ?? 0),
+      );
+    }
+  }
+
+  const clientEntries = [...bundleGzipByFile.entries()].filter(([file]) =>
+    file.startsWith(CLIENT_BUNDLE_PREFIX),
+  );
+  return {
+    totalClientGzipBytes: clientEntries.reduce((sum, [, bytes]) => sum + bytes, 0),
+    largestClientChunkBytes: clientEntries.reduce((max, [, bytes]) => Math.max(max, bytes), 0),
+  };
+};
+
+const [statsRaw, budgetsRaw] = await Promise.all([
+  readFile(STATS_PATH, 'utf8'),
+  readFile(BUDGETS_PATH, 'utf8'),
+]);
+const stats = JSON.parse(statsRaw);
+const budgets = JSON.parse(budgetsRaw);
+
+const { totalClientGzipBytes, largestClientChunkBytes } = computeClientBundleSizes(stats);
+const totalKilobytes = totalClientGzipBytes / 1024;
+const largestKilobytes = largestClientChunkBytes / 1024;
+
+const failures = [];
+if (totalKilobytes > budgets.build.maxTotalGzipKilobytes) {
+  failures.push(
+    `Total client bundle ${formatKilobytes(totalClientGzipBytes)} kB exceeds budget of ${budgets.build.maxTotalGzipKilobytes} kB`,
+  );
+}
+if (largestKilobytes > budgets.build.maxLargestChunkGzipKilobytes) {
+  failures.push(
+    `Largest client chunk ${formatKilobytes(largestClientChunkBytes)} kB exceeds budget of ${budgets.build.maxLargestChunkGzipKilobytes} kB`,
+  );
+}
+
+if (failures.length > 0) {
+  console.error('Performance budget check FAILED:');
+  for (const failure of failures) console.error('  - ' + failure);
+  process.exit(1);
+}
+
+console.log(
+  `Performance budget check OK: total ${formatKilobytes(totalClientGzipBytes)} kB / ${budgets.build.maxTotalGzipKilobytes} kB, ` +
+    `largest chunk ${formatKilobytes(largestClientChunkBytes)} kB / ${budgets.build.maxLargestChunkGzipKilobytes} kB`,
+);
+```
+
+And `performance-budgets.json` is the stored-threshold file next to the script. Start with numbers slightly above the current measured baseline:
+
+```json
+{
+  "build": {
+    "maxTotalGzipKilobytes": 110,
+    "maxLargestChunkGzipKilobytes": 55
+  },
+  "runtime": {
+    "shelfRouteDomContentLoadedMilliseconds": 800
+  }
+}
+```
+
+> [!NOTE] The starter ships this
+> Shelf's `scripts/check-performance-budgets.mjs` is a slightly longer version of this sketch that adds `try/catch` around the JSON parse and exposes `clientEntries` for future rules. The walk is identical. Read the sketch above to understand _how_ the aggregation works, then open the shipped file to see the exact shape.
 
 ## Runtime budgets: catch slowness where the user feels it
 
