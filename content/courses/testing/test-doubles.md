@@ -14,7 +14,7 @@ Before diving into implementation, it's essential to understand what test double
 - **Test Double**: A generic term for any case where you replace a production object with a test-specific version.
 - [**Mock**](mocks.md): An object that registers calls they receive. Mocks can verify that interactions with dependencies occur as expected.
 - [**Spy**](spies.md): A function that records information about its calls, such as arguments and return values, allowing you to assert on how it was used.
-- [**Stubs**](stubs.md)Stub\*\*: An object that provides predefined responses to method calls, usually not concerned with how they are called.
+- [**Stubs**](stubs.md): An object that provides predefined responses to method calls, usually not concerned with how they are called.
 
 ## Why Do We Use Test Doubles in Testing?
 
