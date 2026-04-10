@@ -1,13 +1,13 @@
 ---
 title: The Static Layer as Underlayment
 description: Lint, types, dead code, hooks, secret scanning—the cheap stuff that should be running underneath everything. Why it lives at the end of the day.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
 We're about six hours into the day. Here's where I explain why the lesson you'd have expected to see first is showing up now.
 
-When I sketched this workshop originally, the static layer—[ESLint](https://eslint.org/), [TypeScript](https://www.typescriptlang.org/), Prettier, [knip](https://knip.dev/), [Husky](https://typicode.github.io/husky/), [lint-staged](https://github.com/lint-staged/lint-staged), [Gitleaks](https://github.com/gitleaks/gitleaks)—was Module 2. Right after the opening. The logic was that static checks are the cheapest feedback loop we have, and you want them in place before anything else, so the agent can lean on them from the start.
+When I sketched this workshop originally, the static layer—[ESLint](https://eslint.org/), [TypeScript](https://www.typescriptlang.org/), [Prettier](https://prettier.io/), [knip](https://knip.dev/), [Husky](https://typicode.github.io/husky/), [lint-staged](https://github.com/lint-staged/lint-staged), [Gitleaks](https://github.com/gitleaks/gitleaks)—was Module 2. Right after the opening. The logic was that static checks are the cheapest feedback loop we have, and you want them in place before anything else, so the agent can lean on them from the start.
 
 The logic is correct. The ordering was wrong.
 

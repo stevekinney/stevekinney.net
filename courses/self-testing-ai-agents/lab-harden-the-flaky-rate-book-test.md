@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Harden the Flaky Rate-Book Test'
 description: Take a real, deliberately broken Playwright test and apply every Module 3 pattern to make it fast, isolated, and rock-solid.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -10,7 +10,7 @@ Time to cash the checks from the last six lessons. The Shelf starter ships with 
 The rough version works. Sort of. It passes until the machine gets slower, the selectors drift, or the database state stops matching your assumptions. It bundles every Module 3 anti-pattern into one short file, which makes it a great place to harden the whole loop.
 
 > [!NOTE] Two local-setup details to know
-> Shelf's storage-state setup drives the real login page because the form-action shortcut trips CSRF protection in Better Auth, and `playwright.config.ts` pins `workers: 1` because the starter uses one shared SQLite file. Both are explicit in the repo; neither is a bug.
+> Shelf's storage-state setup drives the real login page because the form-action shortcut trips CSRF protection in [Better Auth](https://www.better-auth.com/), and `playwright.config.ts` pins `workers: 1` because the starter uses one shared SQLite file. Both are explicit in the repo; neither is a bug.
 
 Your job is to fix it. Every pattern we learned in Module 3 applies here.
 
@@ -94,9 +94,10 @@ Finally, add a second assertion using `request.get('/api/shelf/...')` to verify 
 If you finish early, pick one or more:
 
 - Add a second test in the same file that verifies a user _can't_ rate a book they haven't added to their shelf yet. Use the `request` fixture to set up the scenario (book exists, user has not added it) and assert the rating button is disabled.
-- As a short experiment, try swapping the UI login in `authentication.setup.ts` for a direct `POST` to the app's sign-in action (`/login?/signInEmail`) and confirm that, in the current starter, Better Auth rejects the raw request with a CSRF-style 403. That's why the starter keeps the real UI login for storage-state setup: if you want a working shortcut here, keep using the existing storage-state flow instead of `request.post(...)` to the sign-in action.
+- As a short experiment, try swapping the UI login in `authentication.setup.ts` for a direct `request.post('/api/auth/sign-in/email', { data: { email, password } })`. Confirm the tests still pass. Then consider the tradeoff: the raw POST is faster, but you lose the implicit smoke test on the login form.
 - Run the test under `--repeat-each=50` and see if anything flakes under load.
 - Turn off `fullyParallel` and see if the test still passes. (It should. If it doesn't, you have a seeding leak—fix it.)
+- Hunt down the other test that still hits the real Open Library API without HAR isolation. (Hint: it's not in `search.spec.ts`.) Record a new HAR for it using the `UPDATE_HARS` environment variable pattern from the [Approaches to HAR Recording](approaches-to-har-recording.md) lesson, commit the HAR, and verify the test passes in replay mode on airplane Wi-Fi—or at least with your network cable unplugged.
 
 ## A successful end state
 

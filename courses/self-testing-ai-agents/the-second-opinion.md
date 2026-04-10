@@ -1,7 +1,7 @@
 ---
 title: The Second Opinion
 description: Why you want a different agent reviewing the first agent's work, and what kinds of mistakes a review bot actually catches that tests don't.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -62,7 +62,7 @@ A few options. All are actively developed as of this workshop.
 
 **Codex review** (OpenAI's) is the new entrant. It now plugs directly into GitHub pull request workflows, but the setup and product surface are still moving quickly enough that I would evaluate it on a pilot repo before I made it a required team gate.
 
-**CodeRabbit** is a long-time dedicated review bot service. More configurable than the built-in options, more setup to get right, powerful once you do. If you want to tune review rules heavily, this is the one I'd evaluate.
+**[CodeRabbit](https://www.coderabbit.ai/)** is a long-time dedicated review bot service. More configurable than the built-in options, more setup to get right, powerful once you do. If you want to tune review rules heavily, this is the one I'd evaluate.
 
 **[Claude Code](https://docs.claude.com/en/docs/claude-code/overview) review** as a manual pattern, not a hosted product. You ask Claude Code to "review the diff on this branch" and it does. No CI integration, no PR comments, just a conversation. I use this more than any of the hosted options because it's infinitely tunable and it's already in my tool belt.
 

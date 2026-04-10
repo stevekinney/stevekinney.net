@@ -1,7 +1,7 @@
 ---
 title: The Hypothesis
 description: Why we're spending a whole day on feedback loops instead of prompting tricks, and what "self-correcting" actually means.
-modified: 2026-04-07
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -9,14 +9,14 @@ So, here's the bet the rest of the day is built on.
 
 Agents are _fast_ at editing code. They are not particularly good at knowing whether the edit was any good. If every change they make requires you to read the diff, run the thing, click around the UI, eyeball the console, and then prompt the agent to fix what it missed—you haven't automated much. You've traded one kind of typing for another, and some days it's not even obvious which side of the trade you're on.
 
-I've done the relay dance more times than I'd like to admit. The agent ships something confident-looking. I run it. It's wrong in a way the agent would have caught immediately if it had bothered to actually _run_ the code. I paste the error back. It fixes the error and introduces a new one. Repeat until lunch.
+I've done the relay dance more times than I'd like to admit. The agent ships something confident-looking. I run it. It's wrong in a way the agent would have caught immediately if it had bothered to actually _run_ the code. I paste the error back. It fixes the error and introduces a new one. Repeat until lunch—or, I get rate limited.
 
 The hypothesis for today is that the problem isn't the agent's intelligence—it's that we keep making ourselves the feedback loop. If the agent could run lint, types, unit tests, an end-to-end probe, a visual diff, and a second-opinion review on its own, it would catch most of its own mistakes before we ever saw them. We'd stop reviewing every edit and start reviewing the ones that escape the loop.
 
 That's the whole workshop in one sentence: **how do we make it cheap and automatic for an agent to check its own work?**
 
 > [!NOTE] About Shelf
-> Every lab in this workshop runs against the same starter project: a small SvelteKit + TypeScript book-rating app called **Shelf**. It uses Vitest for unit tests and Playwright for end-to-end. You'll harden it across the day—adding a CLAUDE.md, a static layer, dossiers, visual regression, and CI—until it's the codebase the rest of the workshop assumes. If a lab tells you to "open the Shelf starter repo," that's the one.
+> Every lab in this workshop runs against the same starter project: a small [SvelteKit](https://kit.svelte.dev/) + TypeScript book-rating app called [**Shelf**](https://github.com/stevekinney/shelf-life). It uses [Vitest](https://vitest.dev/) for unit tests and [Playwright](https://playwright.dev/) for end-to-end. You'll harden it across the day—adding a CLAUDE.md, a static layer, dossiers, visual regression, and CI—until it's the codebase the rest of the workshop assumes. If a lab tells you to "open the Shelf starter repo," that's the one.
 
 ## Why loops beat prompting discipline
 
@@ -25,6 +25,8 @@ You can get surprisingly far by writing a great prompt. I am not going to tell y
 A prompt is a one-shot instruction. A loop is a process that keeps running until something is true. "Don't use `waitForTimeout`" is a prompt. A lint rule that fails the build when `waitForTimeout` appears is a loop. The first one works until the agent forgets. The second one works until you delete the rule.
 
 The interesting thing about loops is that they compound. Every layer you add catches a class of mistake the previous layer missed, and _also_ makes the next layer cheaper to add. Once your tests run reliably, writing a visual regression gate is a config change. Once your visual regression gate exists, feeding the diff back to the agent is a few lines of glue. The work stacks.
+
+![ralph-wiggum](../../writing/assets/ralph-wiggum.png)
 
 ## The three beats of the day
 
@@ -42,11 +44,11 @@ Think of the arc in three beats.
 
 A few things I want to flag up front so nobody is waiting for the shoe to drop.
 
-We're not doing a testing fundamentals course. If you want the full pyramid from first principles, I have two other courses for that (more on those in Module 2). Today assumes you can write a test and we're focused on what changes when an agent is the one driving.
+We're not doing a testing fundamentals course. The good news is that [we have one of those](https://frontendmasters.com/courses/testing/). If you want the full pyramid from first principles, I have two other courses for that (more on those in **Module 2**). Today assumes you can write a test and we're focused on what changes when an agent is the one driving.
 
-We're not doing a tour of every agent. I'll call out Codex, Cursor, and Copilot where the patterns differ, but the default is [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) and the default stack is TypeScript, [SvelteKit](https://kit.svelte.dev/), [Vitest](https://vitest.dev/), and [Playwright](https://playwright.dev/). The patterns port; the keybindings don't.
+We're not doing a tour of _every_ agent. I'll call out Codex, Cursor, and Copilot where the patterns differ, but the default is [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) and the default stack is TypeScript, [SvelteKit](https://kit.svelte.dev/), [Vitest](https://vitest.dev/), and [Playwright](https://playwright.dev/). The patterns port; the keybindings don't.
 
-We're not doing a prompt engineering seminar. There's exactly one upstream lever we care about—instructions that wire the agent into the loop—and that's the next lesson. Everything else today is about the loop itself.
+We're _not_ doing a prompt engineering seminar. There's exactly one upstream lever we care about—instructions that wire the agent into the loop—and that's the next lesson. Everything else today is about the loop itself.
 
 ## The one thing to remember
 

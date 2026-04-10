@@ -1,7 +1,7 @@
 ---
 title: The Waiting Story
 description: Why `page.waitForTimeout` is the second-most-common cause of flaky tests, and what to reach for instead.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -21,15 +21,15 @@ It's wrong when the machine is fast, because you're sitting there for 1.9 second
 
 ```mermaid
 flowchart LR
-  A["Click button"] --> B["Wait 2 seconds\nwaitForTimeout"]
-  B --> C{"Is text\nvisible?"}
-  C -->|Yes| D["PASS\n~2 seconds elapsed"]
-  C -->|No| E["FAIL\nTimeout"]
+  A["Click button"] --> B["Wait 2 seconds<br>waitForTimeout"]
+  B --> C{"Is text<br>visible?"}
+  C -->|Yes| D["PASS<br>~2 seconds elapsed"]
+  C -->|No| E["FAIL<br>Timeout"]
 
-  F["Click button"] --> G["Auto-retry assertion\nfor 5 seconds"]
-  G --> H{"Is text\nvisible?"}
-  H -->|Yes| I["PASS\n~50ms elapsed"]
-  H -->|No| J["FAIL\nTimeout"]
+  F["Click button"] --> G["Auto-retry assertion<br>for 5 seconds"]
+  G --> H{"Is text<br>visible?"}
+  H -->|Yes| I["PASS<br>~50ms elapsed"]
+  H -->|No| J["FAIL<br>Timeout"]
 
   style B fill:#ffcccc
   style G fill:#ccffcc

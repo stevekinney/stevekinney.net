@@ -1,7 +1,7 @@
 ---
 title: Review Portability Beyond Bugbot
 description: Bugbot is the example, not the law. This appendix translates the second-opinion loop into portable review primitives you can carry to other tools.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -54,7 +54,7 @@ I like three buckets:
 - **Needs judgment**: architecture fit, naming, unclear logic, suspicious patterns
 - **Noise**: low-value style chatter or duplicate comments that do not change the patch
 
-If you classify findings this way, the vendor matters less. The agent or human author now knows how to respond even if the comment came from a different product.
+If you classify findings this way, the vendor matters less. The agent or human author now knows how to respond even if the comment came from a different product. For the mechanical version of this normalization, a shared JSON schema passed to `claude -p --json-schema` or `codex exec --output-schema` forces every review tool into the same output shape—see [Structured CLI Output as Pipeline Glue](structured-cli-output-as-pipeline-glue.md).
 
 ## The rule of three still applies
 

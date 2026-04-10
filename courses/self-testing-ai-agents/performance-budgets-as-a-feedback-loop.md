@@ -1,7 +1,7 @@
 ---
 title: Performance Budgets as a Feedback Loop
 description: Functional and visually correct is not enough if the change made the app slower or heavier. Budgets turn that into a real gate.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -42,7 +42,7 @@ That is enough to catch most accidental regressions.
 
 ## Build-time budgets: catch weight gain early
 
-Shelf exposes `npm run build:stats`, which flips a `BUNDLE_STATS=1` environment variable and tells the Vite config to pipe `rollup-plugin-visualizer` into the output—producing both a `build/stats.html` treemap for humans and a `build/stats.json` raw data file for automation. You can follow the same shape with any bundler; the point is not the plugin.
+Shelf exposes `npm run build:stats`, which flips a `BUNDLE_STATS=1` environment variable and tells the Vite config to pipe [`rollup-plugin-visualizer`](https://github.com/btd/rollup-plugin-visualizer) into the output—producing both a `build/stats.html` treemap for humans and a `build/stats.json` raw data file for automation. You can follow the same shape with any bundler; the point is not the plugin.
 
 The wiring inside `vite.config.ts` is small. You import `visualizer` from `rollup-plugin-visualizer`, conditionally include two instances in the Vite plugin list (one HTML, one JSON), and gate the whole block on the `BUNDLE_STATS` flag so a normal `npm run build` stays fast and silent:
 
@@ -240,9 +240,9 @@ Pick one flow users actually feel. Measure it the same way every time. Store the
 
 That is enough to make the loop real.
 
-## Why I am not defaulting to Lighthouse here
+## Why I am not defaulting to [Lighthouse](https://developer.chrome.com/docs/lighthouse) here
 
-I like Lighthouse. I also know what happens when people wire it in too early: they drown in scores, environment noise, and advice that is technically correct but useless to the task at hand.
+I like [Lighthouse](https://developer.chrome.com/docs/lighthouse). I also know what happens when people wire it in too early: they drown in scores, environment noise, and advice that is technically correct but useless to the task at hand.
 
 For this workshop, I want the cheaper loop:
 

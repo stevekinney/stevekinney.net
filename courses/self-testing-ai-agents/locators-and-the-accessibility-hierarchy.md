@@ -1,7 +1,7 @@
 ---
 title: Locators and the Accessibility Hierarchy
 description: The single most important habit in a Playwright suite an agent will maintain—locator discipline, ordered by what survives a refactor.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -30,7 +30,7 @@ A screen reader user navigating Shelf doesn't see `.btn-primary` or `.css-3f7g8h
 
 This is the single best argument for locator discipline: **the refactor-proof test and the accessible component are the same component.** You cannot write a `getByRole` test against an inaccessible button. The locator forces you to fix the component, and the fixed component helps real users. Free wins don't get much freer.
 
-But, do not overread that claim. A good `getByRole` suite gives you upstream pressure toward accessible markup. It does _not_ give you a dedicated accessibility gate. We make that distinction explicit in the next lesson, because "probably accessible" is not a quality bar.
+But, do not overread that claim. A good `getByRole` suite gives you upstream pressure toward accessible markup. It does _not_ give you a dedicated accessibility gate. We make that distinction explicit in [Accessibility as a Quality Gate](accessibility-as-a-quality-gate.md), because "probably accessible" is not a quality bar.
 
 ## What the agent does by default, and why it's wrong
 
@@ -115,6 +115,9 @@ Locate by role and accessible name first. Everything else is an escape hatch, an
 
 ## Additional Reading
 
+- [Playwright UI Mode](playwright-ui-mode.md)
+- [Playwright Codegen](playwright-codegen.md)
+- [Lab: Locator Challenges](lab-locator-challenges.md)
 - [Accessibility as a Quality Gate](accessibility-as-a-quality-gate.md)
 - [The Waiting Story](the-waiting-story.md)
 - [The Testing Pyramid as a Feedback Hierarchy](the-testing-pyramid-as-a-feedback-hierarchy.md)

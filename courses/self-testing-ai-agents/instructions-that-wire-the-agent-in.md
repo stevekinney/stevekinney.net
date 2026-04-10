@@ -1,31 +1,34 @@
 ---
 title: Instructions That Wire the Agent In
 description: The one rule for instruction files in this workshop—if the agent can't mechanically act on it, it doesn't belong there.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
-If you've used [Claude Code](https://docs.claude.com/en/docs/claude-code/overview), Cursor, or Codex for more than an afternoon, you've written some flavor of instruction file. [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory), `.cursorrules`, `AGENTS.md`—they're all the same idea with different filenames. A markdown file at the root of the repo that the agent reads before it does anything else.
+> [!NOTE] Lets talk about what _not_ to do.
+> Writing a perfect set of instructions is an art in and of itself. Our focus today is what to do when your instructions _aren't_ delivering the results you expect and how to build a system to enforce our preference. That said, it does make sense for us to look at some patterns and anti-patterns so that we're on the same page and we have a shared understanding for _why_ we're doing what we're doing.
 
-I have written a lot of these, and most of mine were bad. Not bad in the "wrong information" sense—bad in the "the agent couldn't actually do anything with what I wrote" sense.
+If you've used [Claude Code](https://docs.claude.com/en/docs/claude-code/overview), [Cursor](https://cursor.com), or Codex for more than an afternoon, you've written some flavor of instruction file. [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory), `AGENTS.md`—they're all the same idea with different filenames. A markdown file at the root of the repo that the agent reads before it does anything else.
 
-This lesson is the one rule I want you to take home about instruction files. Other courses can teach you the full taxonomy of [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) patterns. We're going to focus on one thing: **how to use the instruction file to wire the agent into the feedback loop we're going to spend the rest of the day building.**
+I have written a lot of these, and most of mine were _bad_. Not bad in the "wrong information" sense—bad in the "the agent couldn't actually do anything with what I wrote" sense.
+
+This lesson is the one rule I want you to take home about instruction files. Other courses can teach you the full taxonomy of [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) patterns. We're going to focus on one thing: **how to use the instruction file to wire the agent into the feedback loop we're going to spend the rest of the day building**.
 
 ## The rule
 
-Anything the agent can't mechanically act on doesn't belong in the instructions file.
+> Anything the agent can't mechanically act on doesn't belong in the instructions file.
 
 That's it. That's the whole rule. If you can't imagine the agent reading a line and doing something specific in the next thirty seconds because of it, the line is taking up space.
 
 ## What that excludes
 
-Most of what people write in instruction files, honestly.
+Most of what people write in instruction files, honestly. It turns out that vague instructions don't work for humans or AI agents pretending to be humans.
 
-- "Write clean code." Clean by what measure? The agent has no rubric.
-- "Follow best practices." Whose? Best practices for what stack, what era, what team?
-- "Use good variable names." This is an aesthetic preference dressed up as a directive.
-- "Be concise." The agent will be concise for one response and verbose for the next.
-- "Think carefully before making changes." It's an LLM. It doesn't have a "think more carefully" lever you can pull from a markdown file.
+- **"Write clean code."** Clean by what measure? The agent has no rubric.
+- **"Follow best practices."** Whose? Best practices for what stack, what era, what team?
+- **"Use good variable names."** This is an aesthetic preference dressed up as a directive.
+- **"Be concise."** The agent will be concise for one response and verbose for the next.
+- **"Think carefully before making changes."** It's an LLM. It doesn't have a "think more carefully" lever you can pull from a markdown file.
 
 I'm not picking on these because they're _wrong_—they're not wrong, exactly. They're just not actionable. The agent can't tell whether it's followed them. You can't tell whether it's followed them. They're vibes, and vibes don't survive the next session.
 
@@ -146,7 +149,7 @@ Every line in the second version is something the agent can _do_. The first vers
 
 ## How this maps to other agents
 
-The same pattern works in Cursor (`.cursor/rules/*.mdc`), Codex (`AGENTS.md`), and Copilot (`.github/copilot-instructions.md`). The filenames change, the directory changes, the syntax for nesting and scoping changes. The rule does not. If your rules file is full of adjectives, you're going to have a bad time regardless of which agent is reading it.
+The same pattern works in [Cursor](https://cursor.com/) (`.cursor/rules/*.mdc`), Codex (`AGENTS.md`), and Copilot (`.github/copilot-instructions.md`). The filenames change, the directory changes, the syntax for nesting and scoping changes. The rule does not. If your rules file is full of adjectives, you're going to have a bad time regardless of which agent is reading it.
 
 We'll come back to instruction files in almost every module from here on. Module 3's locator hierarchy ends up as a rule in this file. Module 8's lint config ends up as a rule in this file. Module 9's CI command ends up as the canonical "what green means" in this file. The instruction file is where the rest of the workshop's loop gets _named_ to the agent.
 

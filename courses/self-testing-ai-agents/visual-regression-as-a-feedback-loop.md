@@ -1,7 +1,7 @@
 ---
 title: Visual Regression as a Feedback Loop
 description: Screenshot diffs are not just a CI gate. They're the fastest way to tell an agent "this looks wrong" without saying a word.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -27,7 +27,7 @@ And here's the part I didn't expect: **the diff is legible to the agent.** You c
 
 ## Playwright's built-in: `toHaveScreenshot`
 
-Playwright has a screenshot assertion that's good enough to build a real visual regression suite on. It's not as flashy as [Chromatic](https://www.chromatic.com/) or Percy, but it's free, it runs locally, it commits snapshots to git alongside the code, and it does exactly what we need for the in-dev feedback loop.
+Playwright has a screenshot assertion that's good enough to build a real visual regression suite on. It's not as flashy as [Chromatic](https://www.chromatic.com/) or [Percy](https://www.browserstack.com/percy), but it's free, it runs locally, it commits snapshots to git alongside the code, and it does exactly what we need for the in-dev feedback loop.
 
 [Playwright's `toHaveScreenshot`](https://playwright.dev/docs/test-snapshots) is the tool we'll use for all visual regression in this workshop.
 
@@ -90,7 +90,7 @@ Page-level screenshots are what I showed above: `expect(page).toHaveScreenshot`.
 
 Component-level screenshots are what you want for catching design system drift. If you have a `<Button>` component used everywhere, take a screenshot of `<Button>` in every state (default, hover, disabled, loading) and assert against those. Now if someone changes the base button styles, the component screenshots fail _before_ any page screenshot has a chance to fail, and the failure is much more specific.
 
-Playwright's component testing lets you do this, but honestly, for SvelteKit the simpler pattern is to have a `/design-system` route (or Storybook, if you already use it) that renders every component in every state, and take a page screenshot of _that_. It's less magical and it uses the same tooling as the rest of your end-to-end suite.
+Playwright's component testing lets you do this, but honestly, for SvelteKit the simpler pattern is to have a `/design-system` route (or [Storybook](https://storybook.js.org/), if you already use it) that renders every component in every state, and take a page screenshot of _that_. It's less magical and it uses the same tooling as the rest of your end-to-end suite.
 
 Shelf is going to ship with a `/design-system` route specifically for this purpose. One screenshot test covers it. The whole design system is under visual regression with one line of code.
 
