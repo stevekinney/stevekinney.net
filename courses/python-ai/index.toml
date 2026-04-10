@@ -1,0 +1,55 @@
+[[section]]
+
+[[section.item]]
+title = "Installing Hugging Face"
+href = "installing-hugging-face.md"
+
+[[section.item]]
+title = "What is Hugging Face?"
+href = "what-is-hugging-face.md"
+
+[[section.item]]
+title = "Hugging Face Pipelines"
+href = "hugging-face-pipeline-tasks.md"
+
+[[section]]
+title = "NLP"
+
+[[section.item]]
+title = "Pipeline Basics (Hugging Face)"
+href = "pipeline-basics.md"
+
+[[section.item]]
+title = "Tokenization — From Text to Tensors"
+href = "tokenization.md"
+
+[[section.item]]
+title = "The Attention Mechanism"
+href = "attention-mechanism.md"
+
+[[section.item]]
+title = "Decoders and Text Generation"
+href = "decoders.md"
+
+[[section.item]]
+title = "Quick Checklists — Pipelines, Attention, Generation"
+href = "attention-and-pipeline-checklist.md"
+
+[[section.item]]
+title = "Fine-Tuning Transformer Models"
+href = "fine-tuning.md"
+
+[[section]]
+title = "Images"
+
+[[section.item]]
+title = "Text-to-Image Generation (Stable Diffusion)"
+href = "image-generation.md"
+
+[[section.item]]
+title = "Image-to-Image Transformations"
+href = "image-to-image.md"
+
+[[section.item]]
+title = "DreamBooth — Personalizing Text-to-Image Models"
+href = "dreambooth.md"

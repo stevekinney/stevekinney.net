@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Parameter Store hierarchy and IAM scope</title>
+  <desc id="desc">Diagram showing Parameter Store paths grouped by application and environment, with an IAM policy scoped to only the production subtree.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#1f2937" />
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 18; }
+      .tree { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2; rx: 16; }
+      .card { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; rx: 12; }
+      .scope { fill: #dcfce7; stroke: #22c55e; stroke-width: 2; rx: 16; }
+      .line {
+        stroke: #1f2937;
+        stroke-width: 2.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        marker-end: url(#arrow);
+      }
+      text { font-family: Arial, sans-serif; fill: #0f172a; }
+      .title { font-size: 32px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #334155; }
+      .heading { font-size: 24px; font-weight: 700; }
+      .label { font-size: 18px; font-weight: 700; }
+      .body { font-size: 16px; fill: #334155; }
+      .mono { font-size: 13px; fill: #0f172a; font-family: "Courier New", monospace; }
+      .small { font-size: 14px; fill: #475569; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="760" />
+
+  <text x="60" y="64" class="title">Parameter paths organize config and permissions together</text>
+  <text x="60" y="96" class="subtitle">The hierarchy makes bulk reads easier and gives IAM a clean subtree to allow.</text>
+
+  <rect x="50" y="140" width="700" height="560" class="panel" />
+  <text x="80" y="184" class="heading">Parameter tree</text>
+
+  <rect x="110" y="220" width="280" height="80" class="tree" />
+  <text x="146" y="268" class="label">/my-frontend-app</text>
+
+  <rect x="110" y="360" width="280" height="170" class="tree" />
+  <text x="146" y="404" class="label">production</text>
+  <rect x="150" y="430" width="200" height="40" class="card" />
+  <text x="172" y="456" class="body">table-name</text>
+  <rect x="150" y="478" width="200" height="40" class="card" />
+  <text x="172" y="504" class="body">api-key</text>
+
+  <rect x="430" y="360" width="280" height="170" class="tree" />
+  <text x="466" y="404" class="label">staging</text>
+  <rect x="470" y="430" width="200" height="40" class="card" />
+  <text x="492" y="456" class="body">table-name</text>
+  <rect x="470" y="478" width="200" height="40" class="card" />
+  <text x="492" y="504" class="body">api-key</text>
+
+  <path class="line" d="M 250 300 L 250 360" />
+  <path class="line" d="M 250 330 L 570 330 L 570 360" />
+
+  <rect x="780" y="200" width="350" height="240" class="scope" />
+  <text x="814" y="244" class="label">IAM scope on the Lambda role</text>
+  <text x="814" y="286" class="mono">arn:aws:ssm:us-east-1:</text>
+  <text x="814" y="310" class="mono">123456789012:parameter/</text>
+  <text x="814" y="334" class="mono">my-frontend-app/</text>
+  <text x="814" y="358" class="mono">production/*</text>
+  <text x="814" y="398" class="small">
+    <tspan x="814" dy="0">The same path structure that helps reads</tspan>
+    <tspan x="814" dy="18">also scopes access cleanly.</tspan>
+  </text>
+
+  <path class="line" d="M 390 445 L 780 445" />
+
+  <rect x="780" y="500" width="350" height="140" class="panel" />
+  <text x="814" y="544" class="label">Batch read</text>
+  <text x="814" y="576" class="body">GetParametersByPath</text>
+  <text x="814" y="602" class="small">Read all production settings in one request.</text>
+</svg>

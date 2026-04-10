@@ -1,0 +1,258 @@
+[[section]]
+title = "Introduction & Framing"
+
+[[section.item]]
+title = "Monoliths, Microfrontends, Monorepos, and the Real Tradeoffs"
+href = "monoliths-microfrontends-and-monorepos.md"
+
+[[section]]
+title = "Runtime Composition"
+
+[[section.item]]
+title = "Module Federation"
+href = "module-federation.md"
+
+[[section.item]]
+title = "Exercise 1: Runtime Composition"
+href = "runtime-composition-exercise.md"
+
+[[section.item]]
+title = "Nanostores"
+href = "nanostores.md"
+
+[[section.item]]
+title = "BroadcastChannel for Cross-Boundary Communication"
+href = "broadcast-channel.md"
+
+[[section.item]]
+title = "Comlink"
+href = "comlink.md"
+
+[[section.item]]
+title = "Error Boundaries and Module Federation"
+href = "error-boundaries-and-federation.md"
+
+[[section.item]]
+title = "Standalone Remotes"
+href = "standalone-remotes.md"
+
+[[section]]
+title = "Build-Time Composition"
+
+[[section.item]]
+title = "Build-Time Microfrontends"
+href = "build-time-microfrontends.md"
+
+[[section.item]]
+title = "Exercise 2: Build-Time Composition"
+href = "build-time-composition-exercise.md"
+
+[[section.item]]
+title = "Rspack, webpack, and Vite"
+href = "rspack-webpack-and-vite.md"
+
+[[section.item]]
+title = "Configuring Rsbuild"
+href = "rsbuild-configuration.md"
+
+[[section]]
+title = "App Shell & Islands Architecture"
+
+[[section.item]]
+title = "Island Architecture"
+href = "island-architecture.md"
+
+[[section]]
+title = "Server Components & Streaming"
+
+[[section.item]]
+title = "Server Components and Streaming SSR"
+href = "server-components-and-streaming.md"
+
+[[section.item]]
+title = "Server Rendering Across Frameworks"
+href = "server-rendering-across-frameworks.md"
+
+[[section.item]]
+title = "Exercise 3: Streaming & Suspense"
+href = "streaming-and-suspense-exercise.md"
+
+[[section]]
+title = "Monorepos"
+
+[[section.item]]
+title = "Turborepo"
+href = "turborepo.md"
+
+[[section.item]]
+title = "Turborepo versus Nx, Bazel, Lerna, and Friends"
+href = "turborepo-versus-nx.md"
+
+[[section.item]]
+title = "Exercise 4: Monorepo Setup"
+href = "monorepo-setup-exercise.md"
+
+[[section]]
+title = "Backends for Frontends"
+
+[[section.item]]
+title = "Backends for Frontends"
+href = "backends-for-frontends.md"
+
+[[section]]
+title = "Dependency Management"
+
+[[section.item]]
+title = "npm vs pnpm vs Bun: Workspace Package Managers"
+href = "workspace-package-managers.md"
+
+[[section.item]]
+title = "Dependency Management in Monorepos"
+href = "dependency-management.md"
+
+[[section]]
+title = "Scaling TypeScript"
+
+[[section.item]]
+title = "Scaling TypeScript"
+href = "scaling-typescript.md"
+
+[[section.item]]
+title = "Exercise 5: TypeScript References"
+href = "typescript-references-exercise.md"
+
+[[section]]
+title = "ESLint as Architectural Guardrails"
+
+[[section.item]]
+title = "Writing Our Own ESLint Rules"
+href = "writing-eslint-rules.md"
+
+[[section.item]]
+title = "Exercise 6: Architectural Linting"
+href = "architectural-linting-exercise.md"
+
+[[section]]
+title = "Design System Governance"
+
+[[section.item]]
+title = "Design System Governance"
+href = "design-system-governance.md"
+
+[[section.item]]
+title = "Versioning and Release Management"
+href = "versioning-and-release-management.md"
+
+[[section.item]]
+title = "Maintaining a Design System at Scale"
+href = "maintaining-a-design-system.md"
+
+[[section.item]]
+title = "Design Systems Across Microfrontends"
+href = "design-systems-across-microfrontends.md"
+
+[[section]]
+title = "Performance at Scale"
+
+[[section.item]]
+title = "Performance at Scale"
+href = "performance-at-scale.md"
+
+[[section.item]]
+title = "Performance Budgets"
+href = "performance-budgets.md"
+
+[[section]]
+title = "CI/CD and Deployment"
+
+[[section.item]]
+title = "GitHub Actions"
+href = "github-actions.md"
+
+[[section.item]]
+title = "Deployment and Release Patterns"
+href = "deployment-and-release-patterns.md"
+
+[[section.item]]
+title = "Husky and lint-staged"
+href = "husky-and-lint-staged.md"
+
+[[section.item]]
+title = "Exercise 7: CI/CD Pipeline"
+href = "cicd-pipeline-exercise.md"
+
+[[section]]
+title = "Testing Strategies"
+
+[[section.item]]
+title = "Testing Strategy for Large Applications"
+href = "testing-at-scale.md"
+
+[[section.item]]
+title = "Mock Service Worker"
+href = "mock-service-worker.md"
+
+[[section.item]]
+title = "Exercise 8: Testing Strategies"
+href = "testing-strategies-exercise.md"
+
+[[section]]
+title = "API Contract Testing"
+
+[[section.item]]
+title = "API Contract Testing"
+href = "api-contract-testing.md"
+
+[[section]]
+title = "Authentication, Authorization & Multi-Tenancy"
+
+[[section.item]]
+title = "Authentication, Authorization, and Multi-Tenancy"
+href = "authentication-and-authorization.md"
+
+[[section]]
+title = "Frontend Security & Supply Chain Safety"
+
+[[section.item]]
+title = "Frontend Security and Supply Chain Safety"
+href = "frontend-security.md"
+
+[[section]]
+title = "AI and LLM Integration"
+
+[[section.item]]
+title = "AI and LLM Integration Patterns"
+href = "ai-integration-patterns.md"
+
+[[section]]
+title = "Organizational Patterns & Team Topology"
+
+[[section.item]]
+title = "Organizational Patterns and Team Topology"
+href = "organizational-patterns-and-team-topology.md"
+
+[[section]]
+title = "Observability"
+
+[[section.item]]
+title = "Observability"
+href = "observability.md"
+
+[[section]]
+title = "Migration Patterns"
+
+[[section.item]]
+title = "The Strangler Fig Pattern"
+href = "strangler-fig-introduction.md"
+
+[[section.item]]
+title = "Framework Migration Patterns"
+href = "framework-migration-patterns.md"
+
+[[section.item]]
+title = "Codemods at Scale"
+href = "codemods-at-scale.md"
+
+[[section.item]]
+title = "Exercise 9: Strangler Fig & Codemods"
+href = "strangler-fig-and-codemods-exercise.md"

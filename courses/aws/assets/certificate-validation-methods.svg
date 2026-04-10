@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Certificate validation methods</title>
+  <desc id="desc">Side-by-side comparison of ACM DNS validation and email validation, showing the setup steps and renewal behavior for each method.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#1f2937" />
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 18; }
+      .card { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; rx: 16; }
+      .green { fill: #dcfce7; stroke: #22c55e; stroke-width: 2; rx: 16; }
+      .warn { fill: #fee2e2; stroke: #ef4444; stroke-width: 2; rx: 16; }
+      .line {
+        stroke: #1f2937;
+        stroke-width: 2.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        marker-end: url(#arrow);
+      }
+      text { font-family: Arial, sans-serif; fill: #0f172a; }
+      .title { font-size: 32px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #334155; }
+      .heading { font-size: 24px; font-weight: 700; }
+      .label { font-size: 18px; font-weight: 700; }
+      .body { font-size: 16px; fill: #334155; }
+      .small { font-size: 14px; fill: #475569; }
+      .center { text-anchor: middle; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="720" />
+
+  <text x="60" y="64" class="title">How ACM proves you control the domain</text>
+  <text x="60" y="96" class="subtitle">Both methods can issue a certificate. Only DNS validation scales cleanly into renewal automation.</text>
+
+  <rect x="50" y="140" width="500" height="520" class="panel" />
+  <text x="80" y="184" class="heading">DNS validation</text>
+
+  <rect x="120" y="230" width="360" height="68" class="card" />
+  <text x="300" y="272" class="label center">ACM gives you a CNAME</text>
+
+  <rect x="120" y="340" width="360" height="68" class="card" />
+  <text x="300" y="382" class="label center">Add the CNAME to DNS</text>
+
+  <rect x="120" y="450" width="360" height="68" class="green" />
+  <text x="300" y="484" class="label center">ACM sees the record</text>
+  <text x="300" y="506" class="label center">and issues the cert</text>
+
+  <rect x="120" y="560" width="360" height="68" class="green" />
+  <text x="300" y="594" class="label center">The same record enables</text>
+  <text x="300" y="616" class="label center">auto-renewal</text>
+
+  <path class="line" d="M 300 298 L 300 340" />
+  <path class="line" d="M 300 408 L 300 450" />
+  <path class="line" d="M 300 518 L 300 560" />
+
+  <rect x="650" y="140" width="500" height="520" class="panel" />
+  <text x="680" y="184" class="heading">Email validation</text>
+
+  <rect x="720" y="230" width="360" height="68" class="card" />
+  <text x="900" y="272" class="label center">ACM emails admin addresses</text>
+
+  <rect x="720" y="340" width="360" height="68" class="card" />
+  <text x="900" y="382" class="label center">A human clicks the link</text>
+
+  <rect x="720" y="450" width="360" height="68" class="green" />
+  <text x="900" y="492" class="label center">Certificate gets issued</text>
+
+  <rect x="720" y="548" width="360" height="92" class="warn" />
+  <text x="900" y="584" class="label center">Renewal needs another</text>
+  <text x="900" y="606" class="label center">human response</text>
+  <text x="900" y="628" class="small center">Miss the email and the certificate expires.</text>
+
+  <path class="line" d="M 900 298 L 900 340" />
+  <path class="line" d="M 900 408 L 900 450" />
+  <path class="line" d="M 900 518 L 900 548" />
+</svg>

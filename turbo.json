@@ -1,0 +1,95 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "image-manifest.json",
+    "packages/scripts/generate-course-manifest.ts",
+    "packages/scripts/generate-site-content-index.ts",
+    "packages/utilities/content-types.ts"
+  ],
+  "tasks": {
+    "manifest": {
+      "inputs": ["**/*.md", "package.json"],
+      "outputs": ["manifest.json"]
+    },
+    "build": {
+      "dependsOn": ["^build", "^manifest"],
+      "inputs": [
+        "**/*.md",
+        "**/*.png",
+        "**/*.jpg",
+        "**/*.jpeg",
+        "**/*.svg",
+        "**/*.gif",
+        "**/*.avif",
+        "**/*.webp",
+        "package.json",
+        "src/**"
+      ],
+      "env": ["VERCEL"],
+      "outputs": [
+        "manifest.json",
+        "dist/**",
+        "build/**",
+        ".vercel/output/**",
+        "src/lib/server/content-index.json"
+      ]
+    },
+    "build:stats": {
+      "dependsOn": ["build"],
+      "env": ["BUNDLE_STATS"]
+    },
+    "preview": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "dev": {
+      "dependsOn": ["^build", "^manifest"],
+      "cache": false,
+      "persistent": true
+    },
+    "sync": {
+      "dependsOn": ["^build"]
+    },
+    "lint": {},
+    "check": {},
+    "check:watch": {
+      "cache": false,
+      "persistent": true
+    },
+    "test": {
+      "dependsOn": ["build", "^test"],
+      "outputs": ["playwright-report/**", "test-results/**"]
+    },
+    "test:integration": {
+      "dependsOn": ["build"],
+      "outputs": ["playwright-report/**", "test-results/**"]
+    },
+    "test:integration:dev": {
+      "cache": false
+    },
+    "test:unit": {},
+    "test:storybook": {
+      "dependsOn": ["build-storybook"]
+    },
+    "storybook": {
+      "cache": false,
+      "persistent": true
+    },
+    "build-storybook": {},
+    "content:index": {
+      "dependsOn": ["^manifest"]
+    },
+    "images:sync": {
+      "cache": false,
+      "env": ["BLOB_READ_WRITE_TOKEN"]
+    },
+    "images:check": {
+      "cache": false
+    },
+    "content:validate": {},
+    "content:images:check": {},
+    "clean": {
+      "cache": false
+    }
+  }
+}

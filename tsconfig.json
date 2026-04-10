@@ -1,29 +1,14 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
     "allowImportingTsExtensions": true,
-    "checkJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "sourceMap": true,
     "strict": true,
-    "moduleResolution": "bundler",
-    "jsx": "preserve",
-    "jsxFactory": "h",
-    "jsxFragmentFactory": "Fragment"
+    "types": ["node"]
   },
-  "include": [
-    ".svelte-kit/ambient.d.ts",
-    ".svelte-kit/non-ambient.d.ts",
-    ".svelte-kit/types/**/$types.d.ts",
-    "plugins/**/*.ts",
-    "plugins/**/*.tsx",
-    "src/**/*",
-    "svelte.config.js",
-    "vite.config.ts"
-  ]
-  // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
+  "exclude": ["node_modules"]
 }

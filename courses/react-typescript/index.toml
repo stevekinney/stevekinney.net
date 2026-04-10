@@ -1,0 +1,267 @@
+[[section]]
+title = "Setup and Strictness"
+
+[[section.item]]
+title = "Setting Up React and TypeScript"
+href = "setting-up-react-and-typescript.md"
+
+[[section.item]]
+title = "An Even Deeper Dive into tsconfig.json"
+href = "tsconfig-deep-dive-react.md"
+
+[[section.item]]
+title = "Strictness Options for React"
+href = "strictness-options-for-react.md"
+
+[[section.item]]
+title = "Module Resolution and Paths"
+href = "module-resolution-and-paths.md"
+
+[[section.item]]
+title = "Setting Up Linting and Formatting"
+href = "setting-up-linting-and-formatting.md"
+
+[[section.item]]
+title = "ESLint Rules"
+href = "typescript-react-eslint-rules.md"
+
+[[section]]
+title = "Everyday TypeScript Mechanics"
+
+[[section.item]]
+title = "Type Narrowing and Control Flow"
+href = "typescript-type-narrowing-control-flow.md"
+
+[[section.item]]
+title = "Type Inference"
+href = "typescript-type-inference-mastery.md"
+
+[[section.item]]
+title = "Advanced Type Tricks for React"
+href = "advanced-type-tricks-for-react.md"
+
+[[section.item]]
+title = "Utility Types in Practice"
+href = "utility-types-in-practice.md"
+
+[[section.item]]
+title = "Template Literal Types"
+href = "typescript-template-literal-types.md"
+
+[[section.item]]
+title = "unknown vs any"
+href = "typescript-unknown-vs-any.md"
+
+[[section.item]]
+title = "Structural Typing"
+href = "typescript-structural-typing.md"
+
+[[section]]
+title = "How JSX Is Typed"
+
+[[section.item]]
+title = "JSX Types: ReactNode, ReactElement"
+href = "jsx-types-reactnode-reactelement.md"
+
+[[section.item]]
+title = "Polymorphic Components and as Prop"
+href = "polymorphic-components-and-as-prop.md"
+
+[[section]]
+title = "Component Props and Children"
+
+[[section.item]]
+title = "React Component Props"
+href = "component-props-complete-guide.md"
+
+[[section.item]]
+title = "Prop Combinations and Unions"
+href = "prop-combinations-and-unions.md"
+
+[[section.item]]
+title = "Render Props and HOC Alternatives"
+href = "render-props-and-hoc-alternatives.md"
+
+[[section]]
+title = "State Management"
+
+[[section.item]]
+title = "useState with TypeScript: The Basics"
+href = "usestate-typescript-basics.md"
+
+[[section.item]]
+title = "React State Management with TypeScript"
+href = "react-state-management-with-typescript.md"
+
+[[section.item]]
+title = "Discriminated Unions"
+href = "typescript-discriminated-unions.md"
+
+[[section.item]]
+title = "Loading States and Error Handling"
+href = "loading-states-error-handling.md"
+
+[[section.item]]
+title = "Fetching Data with useState and useEffect"
+href = "fetching-data-usestate.md"
+
+[[section.item]]
+title = "Sending Data"
+href = "creating-todos-post-typescript.md"
+
+[[section.item]]
+title = "Optimistic Updates"
+href = "updating-todos-optimistic.md"
+
+[[section.item]]
+title = "DELETE Requests and State Cleanup"
+href = "deleting-todos-state-cleanup.md"
+
+[[section]]
+title = "Action Creators and Exhaustiveness"
+
+[[section.item]]
+title = "React State Management with TypeScript"
+href = "react-state-management-with-typescript.md"
+
+[[section.item]]
+title = "Discriminated Unions"
+href = "typescript-discriminated-unions.md"
+
+[[section]]
+title = "Context API Patterns"
+
+[[section.item]]
+title = "Context and Selectors Typing"
+href = "context-and-selectors-typing.md"
+
+[[section.item]]
+title = "Safer createContext Helpers"
+href = "safer-createcontext-helpers.md"
+
+[[section.item]]
+title = "Passing Dispatch and Context"
+href = "passing-dispatch-and-context.md"
+
+[[section]]
+title = "Compound Components, Refs, and Polymorphism"
+
+[[section.item]]
+title = "Compound Components and Slots Typing"
+href = "compound-components-and-slots-typing.md"
+
+[[section.item]]
+title = "useRef and Imperative Handles"
+href = "useref-and-imperative-handles.md"
+
+[[section.item]]
+title = "forwardRef, memo, and displayName"
+href = "forwardref-memo-and-displayname.md"
+
+[[section.item]]
+title = "Polymorphic Components and as Prop"
+href = "polymorphic-components-and-as-prop.md"
+
+[[section]]
+title = "Mirroring Intrinsic Element Props"
+
+[[section.item]]
+title = "Mirroring DOM Props"
+href = "mirror-dom-props.md"
+
+[[section]]
+title = "Events and Handlers"
+
+[[section.item]]
+title = "Typing DOM and React Events"
+href = "typing-dom-and-react-events.md"
+
+[[section.item]]
+title = "Forms, Events, and Number Inputs"
+href = "forms-events-and-number-inputs.md"
+
+[[section]]
+title = "Higher-Order Components"
+
+[[section.item]]
+title = "Higher Order Components Typing"
+href = "higher-order-components-typing.md"
+
+[[section.item]]
+title = "Render Props and HOC Alternatives"
+href = "render-props-and-hoc-alternatives.md"
+
+[[section]]
+title = "Hooks and Performance"
+
+[[section.item]]
+title = "TypeScript React Hooks"
+href = "typescript-react-hooks.md"
+
+[[section.item]]
+title = "React Performance with TypeScript"
+href = "react-performance-with-typescript.md"
+
+[[section]]
+title = "Async Data and Suspense"
+
+[[section.item]]
+title = "The use Hook and Suspense Typing"
+href = "the-use-hook-and-suspense-typing.md"
+
+[[section.item]]
+title = "Error Boundaries and Suspense Boundaries"
+href = "error-boundaries-and-suspense-boundaries.md"
+
+[[section.item]]
+title = "Data Fetching and Runtime Validation"
+href = "data-fetching-and-runtime-validation.md"
+
+[[section.item]]
+title = "React Query TRPC"
+href = "react-query-trpc.md"
+
+[[section]]
+title = "Server vs Client Boundaries"
+
+[[section.item]]
+title = "React Server Components Types"
+href = "react-server-components-types.md"
+
+[[section.item]]
+title = "RSC Server Actions"
+href = "rsc-server-actions.md"
+
+[[section.item]]
+title = "Edge SSR and Runtime Types"
+href = "edge-ssr-and-runtime-types.md"
+
+[[section.item]]
+title = "Edge, SSR, and Hydration Payload Types"
+href = "edge-ssr-hydration.md"
+
+[[section]]
+title = "Accessibility and Passthrough Props"
+
+[[section.item]]
+title = "Accessibility and ARIA Typing"
+href = "accessibility-and-aria-typing.md"
+
+[[section.item]]
+title = "Security and Escaping Types"
+href = "security-and-escaping-types.md"
+
+[[section]]
+title = "Testing with Types in Mind"
+
+[[section.item]]
+title = "Testing React TypeScript"
+href = "testing-react-typescript.md"
+
+[[section.item]]
+title = "TypeScript React Testing"
+href = "typescript-react-testing.md"
+
+[[section.item]]
+title = "Type-Level Testing in Practice"
+href = "type-level-testing-in-practice.md"

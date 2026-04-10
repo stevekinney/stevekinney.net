@@ -9,12 +9,18 @@ dist
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-.obsidian/workspace.json
+**/.obsidian/*
+!**/.obsidian/app.json
+!**/.obsidian/appearance.json
+!**/.obsidian/core-plugins.json
+!**/.obsidian/community-plugins.json
+!**/.obsidian/hotkeys.json
+!**/.obsidian/templates.json
 .vercel
 meta-*
 *storybook.log
-content/.obsidian/workspace.json
 **/.svelte-kit
+**/.turbo
 
 **/.claude/settings.local.json
 test-results/
@@ -22,3 +28,13 @@ playwright-report/
 .eslintcache
 package-lock.json
 .env*.local
+
+# Turborepo
+.turbo
+/.claude/worktrees
+
+# Generated content manifests (built by Turborepo)
+writing/manifest.json
+courses/*/manifest.json
+applications/website/src/lib/server/content-index.json
+tmp/

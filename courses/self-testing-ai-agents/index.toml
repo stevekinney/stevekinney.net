@@ -1,0 +1,227 @@
+[[section]]
+title = "Opening: Framing and Upstream Prevention"
+
+[[section.item]]
+title = "The Hypothesis"
+href = "the-hypothesis.md"
+
+[[section.item]]
+title = "Instructions That Wire the Agent In"
+href = "instructions-that-wire-the-agent-in.md"
+
+  [[section.item.related]]
+  title = "Lab: Rewrite the Bad CLAUDE.md"
+  href = "lab-rewrite-the-bad-claude-md.md"
+
+[[section]]
+title = "Testing Pyramid Alignment"
+
+[[section.item]]
+title = "The Testing Pyramid as a Feedback Hierarchy"
+href = "the-testing-pyramid-as-a-feedback-hierarchy.md"
+
+[[section]]
+title = "Playwright Armor"
+
+[[section.item]]
+title = "Locators and the Accessibility Hierarchy"
+href = "locators-and-the-accessibility-hierarchy.md"
+
+[[section.item]]
+title = "Accessibility as a Quality Gate"
+href = "accessibility-as-a-quality-gate.md"
+
+  [[section.item.related]]
+  title = "Lab: Wire Accessibility Checks Into Shelf"
+  href = "lab-wire-accessibility-checks-into-shelf.md"
+
+[[section.item]]
+title = "The Waiting Story"
+href = "the-waiting-story.md"
+
+[[section.item]]
+title = "Storage State Authentication"
+href = "storage-state-authentication.md"
+
+[[section.item]]
+title = "Recording HARs for Network Isolation"
+href = "recording-hars-for-network-isolation.md"
+
+[[section.item]]
+title = "Deterministic State and Test Isolation"
+href = "deterministic-state-and-test-isolation.md"
+
+[[section.item]]
+title = "API and UI Hybrid Tests"
+href = "api-and-ui-hybrid-tests.md"
+
+  [[section.item.related]]
+  title = "Lab: Harden the Flaky Rate-Book Test"
+  href = "lab-harden-the-flaky-rate-book-test.md"
+
+[[section]]
+title = "Visual Regression as a Feedback Loop"
+
+[[section.item]]
+title = "Visual Regression as a Feedback Loop"
+href = "visual-regression-as-a-feedback-loop.md"
+
+  [[section.item.related]]
+  title = "Lab: Wire Visual Regression Into the Dev Loop"
+  href = "lab-wire-visual-regression-into-the-dev-loop.md"
+
+[[section]]
+title = "Performance Budgets as a Feedback Loop"
+
+[[section.item]]
+title = "Performance Budgets as a Feedback Loop"
+href = "performance-budgets-as-a-feedback-loop.md"
+
+  [[section.item.related]]
+  title = "Lab: Add Performance Budgets to Shelf"
+  href = "lab-add-performance-budgets-to-shelf.md"
+
+[[section]]
+title = "Runtime Tools and Custom MCPs"
+
+[[section.item]]
+title = "Runtime Tools Compared"
+href = "runtime-tools-compared.md"
+
+[[section.item]]
+title = "Runtime Probes in the Development Loop"
+href = "runtime-probes-in-the-development-loop.md"
+
+[[section.item]]
+title = "Writing a Custom MCP Wrapper"
+href = "writing-a-custom-mcp-wrapper.md"
+
+  [[section.item.related]]
+  title = "Lab: Wrap a Custom Verification MCP"
+  href = "lab-wrap-a-custom-verification-mcp.md"
+
+[[section]]
+title = "Evidence and Failure Dossiers"
+
+[[section.item]]
+title = "Failure Dossiers: What Agents Actually Need From a Red Build"
+href = "failure-dossiers-what-agents-actually-need-from-a-red-build.md"
+
+  [[section.item.related]]
+  title = "Lab: Build a Failure Dossier for Shelf"
+  href = "lab-build-a-failure-dossier-for-shelf.md"
+
+[[section]]
+title = "The Second Opinion: Review Agents"
+
+[[section.item]]
+title = "The Second Opinion"
+href = "the-second-opinion.md"
+
+[[section.item]]
+title = "Tuning Bugbot for Your Codebase"
+href = "tuning-bugbot-for-your-codebase.md"
+
+  [[section.item.related]]
+  title = "Lab: Bugbot on a Planted Bug"
+  href = "lab-bugbot-on-a-planted-bug.md"
+
+[[section]]
+title = "The Static Layer"
+
+[[section.item]]
+title = "The Static Layer as Underlayment"
+href = "the-static-layer-as-underlayment.md"
+
+[[section.item]]
+title = "Lint and Types as Guardrails"
+href = "lint-and-types-as-guardrails.md"
+
+[[section.item]]
+title = "Dead Code Detection"
+href = "dead-code-detection.md"
+
+[[section.item]]
+title = "Git Hooks with Husky and Lint-Staged"
+href = "git-hooks-with-husky-and-lint-staged.md"
+
+[[section.item]]
+title = "Secret Scanning with Gitleaks"
+href = "secret-scanning-with-gitleaks.md"
+
+  [[section.item.related]]
+  title = "Lab: Wire the Static Layer into Shelf"
+  href = "lab-wire-the-static-layer-into-shelf.md"
+
+[[section]]
+title = "CI Wiring"
+
+[[section.item]]
+title = "CI as the Loop of Last Resort"
+href = "ci-as-the-loop-of-last-resort.md"
+
+  [[section.item.related]]
+  title = "Lab: Write the CI Workflow from Scratch"
+  href = "lab-write-the-ci-workflow-from-scratch.md"
+
+[[section]]
+title = "Post-Merge and Post-Deploy Validation"
+
+[[section.item]]
+title = "Post-Merge and Post-Deploy Validation"
+href = "post-merge-and-post-deploy-validation.md"
+
+  [[section.item.related]]
+  title = "Lab: Add Post-Deploy Smoke Checks to Shelf"
+  href = "lab-add-post-deploy-smoke-checks-to-shelf.md"
+
+[[section]]
+title = "Capstone"
+
+[[section.item]]
+title = "The Whole Loop, End to End"
+href = "capstone-the-whole-loop-end-to-end.md"
+
+[[section]]
+title = "Appendix: Review Portability"
+
+[[section.item]]
+title = "Review Portability Beyond Bugbot"
+href = "review-portability-beyond-bugbot.md"
+
+  [[section.item.related]]
+  title = "Lab: Port the Review Loop Beyond Bugbot"
+  href = "lab-port-the-review-loop-beyond-bugbot.md"
+
+[[section]]
+title = "Appendix: Cross-Browser Coverage"
+
+[[section.item]]
+title = "Cross-Browser Validation Without Burning the Dev Loop"
+href = "cross-browser-validation-without-burning-the-dev-loop.md"
+
+  [[section.item.related]]
+  title = "Lab: Add Cross-Browser Coverage"
+  href = "lab-add-cross-browser-coverage.md"
+
+[[section]]
+title = "Appendix: Nightly Verification"
+
+[[section.item]]
+title = "Nightly Verification Loops"
+href = "nightly-verification-loops.md"
+
+  [[section.item.related]]
+  title = "Lab: Add a Nightly Verification Workflow"
+  href = "lab-add-a-nightly-verification-workflow.md"
+
+[[section]]
+title = "Appendix: Porting the Loop"
+
+[[section.item]]
+title = "Porting the Shelf Loop to Another Stack"
+href = "porting-the-shelf-loop-to-another-stack.md"
+
+  [[section.item.related]]
+  title = "Lab: Translate the Shelf Loop to Your Stack"
+  href = "lab-translate-the-shelf-loop-to-your-stack.md"

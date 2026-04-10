@@ -1,0 +1,9 @@
+{
+  "name": "@stevekinney/full-stack-typescript",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "manifest": "bun run ../../packages/scripts/generate-course-manifest.ts",
+    "build": "bun run manifest"
+  }
+}

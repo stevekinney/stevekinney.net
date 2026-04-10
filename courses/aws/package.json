@@ -1,0 +1,11 @@
+{
+  "name": "@stevekinney/aws",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node ./validate-course.mjs",
+    "manifest": "bun run ../../packages/scripts/generate-course-manifest.ts",
+    "build": "bun run manifest",
+    "qa": "bun run validate && bun run build"
+  }
+}

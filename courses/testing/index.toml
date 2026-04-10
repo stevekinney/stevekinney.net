@@ -1,0 +1,174 @@
+[[section]]
+title = "The Basics"
+
+[[section.item]]
+title = "Writing Your First Tests"
+href = "the-basics.md"
+
+[[section.item]]
+title = "How Tests Work"
+href = "how-tests-work.md"
+
+[[section.item]]
+title = "Implementing Basic Tests"
+href = "basic-math.md"
+
+[[section.item]]
+title = "The Unhappy Path"
+href = "unhappy-path.md"
+
+[[section.item]]
+title = "Testing Edge Cases"
+href = "error-handling-and-edge-case-testing.md"
+
+[[section.item]]
+title = "Referential Equality"
+href = "beyond-strict-equality.md"
+
+[[section.item]]
+title = "Asymmetric Matchers"
+href = "asymmetric-matchers.md"
+
+  [[section.item.related]]
+  title = "Exercise"
+  href = "asymmetric-matchers-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "asymmetric-matchers-solution.md"
+
+[[section.item]]
+title = "Before and After Hooks"
+href = "setting-up-and-tearing-down-with-hooks.md"
+
+  [[section.item.related]]
+  title = "Exercise"
+  href = "vitests-hooks-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "vitest-hooks-solution.md"
+
+[[section.item]]
+title = "Testing Asynchronous Code"
+href = "testing-asynchronous-code.md"
+
+[[section]]
+title = "Testing the DOM"
+
+[[section.item]]
+title = "The Setup"
+href = "testing-the-dom.md"
+
+[[section.item]]
+title = "A Basic Example"
+href = "testing-the-dom-example.md"
+
+[[section.item]]
+title = "Testing Local Storage"
+href = "testing-local-storage.md"
+
+[[section.item]]
+title = "Using Testing Library"
+href = "testing-library.md"
+
+[[section.item]]
+title = "Testing Library's Matchers"
+href = "testing-library-matchers.md"
+
+[[section]]
+title = "Faking It"
+
+[[section.item]]
+title = "Test Doubles"
+href = "test-doubles.md"
+
+[[section.item]]
+title = "Stubs"
+href = "stubs.md"
+
+[[section.item]]
+title = "Spies"
+href = "spies.md"
+
+[[section.item]]
+title = "Mocks"
+href = "mocks.md"
+
+[[section.item]]
+title = "Clearing, Restoring, and Resetting Mocks"
+href = "clearing-restoring-and-resetting-mocks.md"
+
+[[section.item]]
+title = "Spying on Function Arguments"
+href = "testing-function-arguments.md"
+
+[[section.item]]
+title = "Mocking and Spying on Built-in Methods"
+href = "mock-spy-secret-input-example.md"
+
+[[section.item]]
+title = "Mocking Environment Variables"
+href = "mocking-environment-variables.md"
+
+[[section.item]]
+title = "Mocking Dependencies"
+href = "mocking-dependencies.md"
+
+[[section.item]]
+title = "Mocking Fetch and Network Requests"
+href = "mocking-fetch-and-network-requests.md"
+
+[[section.item]]
+title = "Testing Time"
+href = "mocking-time.md"
+
+  [[section.item.related]]
+  title = "Add Timestamp"
+  href = "exercise-add-timestamp.md"
+
+[[section.item]]
+title = "Mock Service Worker"
+href = "testing-with-mock-service-worker.md"
+
+[[section.item]]
+title = "Alternatives to Using Test Doubles"
+href = "alternatives-to-using-test-doubles.md"
+
+[[section.item]]
+title = "Dependency Injection"
+href = "dependency-injection.md"
+
+[[section]]
+title = "Next Steps"
+
+[[section.item]]
+title = "Snapshot Testing"
+href = "snapshot-testing.md"
+
+[[section.item]]
+title = "Snapshot Test Alternatives"
+href = "snapshot-test-alternatives.md"
+
+[[section.item]]
+title = "Snapshot Test Maintenance"
+href = "snapshot-test-maintenance.md"
+
+[[section.item]]
+title = "In-Source Testing"
+href = "in-source-testing.md"
+
+[[section.item]]
+title = "Cross-Browser Tests with Playwright"
+href = "cross-browser-testing-with-playwright.md"
+
+[[section]]
+title = "Infrastructure Week"
+
+[[section.item]]
+title = "Code Coverage"
+href = "code-coverage.md"
+
+[[section.item]]
+title = "Setting Up Continuous Integration"
+href = "continuous-integration.md"

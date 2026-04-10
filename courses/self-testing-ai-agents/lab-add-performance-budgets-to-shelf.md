@@ -1,0 +1,155 @@
+---
+title: 'Lab: Add Performance Budgets to Shelf'
+description: Add a build-size budget, add a targeted runtime threshold, and make both numbers cheap enough that the agent can actually use them.
+modified: 2026-04-09
+date: 2026-04-06
+---
+
+You're going to add two checks to Shelf:
+
+- one that says "the shipped client bundle did not get quietly heavier"
+- one that says "this important route or interaction did not get quietly slower"
+
+That is enough to turn performance from a vague aspiration into a real feedback loop.
+
+> [!NOTE] Prerequisite
+> Complete [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md) first. This lab assumes you are intentionally building the small two-budget version, not a whole performance platform.
+
+## The task
+
+Add one build-time budget and one runtime budget to Shelf, then expose both through named commands the agent can run locally and in CI.
+
+## Step 1: emit machine-readable build stats
+
+Install [`rollup-plugin-visualizer`](https://github.com/btd/rollup-plugin-visualizer) as a dev dependency and wire it into `vite.config.ts` behind a `BUNDLE_STATS=1` environment flag. When the flag is set, Vite should emit two files:
+
+- `build/stats.html` — a treemap report for humans
+- `build/stats.json` — the `raw-data` template, keyed for automation
+
+Add a `build:stats` script to `package.json` that flips the flag:
+
+```json
+{
+  "scripts": {
+    "build:stats": "BUNDLE_STATS=1 vite build"
+  }
+}
+```
+
+The important part is the output contract, not the brand name—any bundler that can emit a structured per-chunk size report works.
+
+## Step 2: capture the current green baseline
+
+Run the new stats build on a clean green branch and write the threshold file into version control.
+
+I recommend a file such as `performance-budgets.json`:
+
+```json
+{
+  "build": {
+    "maxTotalGzipKilobytes": 0,
+    "maxLargestChunkGzipKilobytes": 0
+  },
+  "runtime": {
+    "shelfRouteDomContentLoadedMilliseconds": 0
+  }
+}
+```
+
+Replace the zeroes with the real baseline plus a small buffer. The exact numbers are your call. The existence of the file and its enforcement are not.
+
+## Step 3: add a budget-check script
+
+Create `scripts/check-performance-budgets.mjs` that:
+
+- reads `build/stats.json`
+- reads `performance-budgets.json`
+- walks `nodeMetas` to compute gzip totals per output bundle file (filtering to client chunks—for SvelteKit, anything under `_app/immutable`)
+- compares the measured totals to the stored thresholds
+- exits zero when everything is inside the budget and non-zero when any threshold is exceeded, printing the exceeding line to stderr
+
+The lesson walks the `nodeMetas` → `moduleParts` → `nodeParts` structure and shows the complete script in the **The checker script** section of [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md). Work from that sketch — the walk is the entire lab.
+
+The Shelf starter ships a production version at `scripts/check-performance-budgets.mjs`. Write yours first, then compare. The only meaningful difference between the lesson sketch and the shipped version is that the shipped one exposes `clientEntries` from the computation so future rules can ask "which chunk got biggest" without re-walking the report.
+
+The agent should be able to run one command and get a plain answer.
+
+## Step 4: add one runtime measurement
+
+Pick one important flow in Shelf and measure it against a stable preview target.
+
+Good candidates:
+
+- loading `/shelf`
+- opening the rate-book dialog
+- submitting the add-book form
+
+Use Playwright plus the browser [Performance API](https://developer.mozilla.org/en-US/docs/Web/API/Performance_API/Performance_data) or a retained trace. A minimal version looks like:
+
+```ts
+test('shelf route stays within the performance budget', async ({ page }) => {
+  await page.goto('/shelf');
+
+  const navigationTiming = await page.evaluate(() => {
+    const [entry] = performance.getEntriesByType('navigation');
+    return {
+      domContentLoaded: entry?.domContentLoadedEventEnd ?? 0,
+    };
+  });
+
+  expect(navigationTiming.domContentLoaded).toBeLessThan(800);
+});
+```
+
+Use your real stored threshold, not my placeholder number.
+
+Run this against a build-and-preview flow, not a hot dev server.
+
+## Step 5: expose named commands
+
+Add named commands for both checks. Shelf ships this shape:
+
+```json
+{
+  "scripts": {
+    "build:stats": "BUNDLE_STATS=1 vite build",
+    "performance:build": "npm run build:stats && node scripts/check-performance-budgets.mjs",
+    "performance:runtime": "drizzle-kit push --force && playwright test tests/end-to-end/performance.spec.ts --project=authenticated",
+    "performance:check": "npm run performance:build && npm run performance:runtime"
+  }
+}
+```
+
+The key idea is that the loop has obvious handles the agent can call without composing anything.
+
+## Acceptance criteria
+
+- [ ] Shelf exposes a `build:stats` command or equivalent
+- [ ] A machine-readable stats file is generated by the build
+- [ ] `performance-budgets.json` (or equivalent) exists in version control
+- [ ] A budget-check script compares current build output to the stored thresholds
+- [ ] Shelf has one runtime performance check against a production-like preview target
+- [ ] The runtime check reads an actual browser timing value or trace-derived value
+- [ ] There is a named command that runs the full performance budget loop
+- [ ] Lowering one stored threshold below the current baseline makes the check fail locally
+
+## Troubleshooting
+
+- If the runtime number jumps around wildly, stop measuring against the dev server and switch to build plus preview.
+- If the build stats are hard to parse, simplify the report shape before you add more budgets.
+- If the budget fails after a legitimate feature addition, inspect the stats first. Sometimes the fix is obvious. Sometimes the correct answer is a deliberate budget update with an explanation.
+
+## Stretch goals
+
+- Track a second runtime flow, but only after the first one is stable.
+- Upload the build stats report and runtime trace as CI artifacts when the check fails.
+- Add a workflow summary that prints the before-and-after numbers for faster review.
+
+## The one thing to remember
+
+Performance only becomes part of the loop when there is a number the agent can break. Pick the number, store it in the repository, and make the command cheap enough that the agent will actually run it.
+
+## Additional Reading
+
+- [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md)
+- [Runtime Tools Compared](runtime-tools-compared.md)

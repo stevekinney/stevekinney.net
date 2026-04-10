@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Wildcard versus SAN certificate coverage</title>
+  <desc id="desc">Diagram comparing apex-only, wildcard, and SAN certificate coverage across example hostnames including excluded cases.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 18; }
+      .header { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2; rx: 14; }
+      .cell { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; }
+      text { font-family: Arial, sans-serif; fill: #0f172a; }
+      .title { font-size: 32px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #334155; }
+      .heading { font-size: 24px; font-weight: 700; }
+      .label { font-size: 18px; font-weight: 700; }
+      .header-label { font-size: 16px; font-weight: 700; }
+      .body { font-size: 16px; fill: #334155; }
+      .yes { fill: #166534; font-weight: 700; }
+      .no { fill: #b91c1c; font-weight: 700; }
+      .small { font-size: 14px; fill: #475569; }
+      .center { text-anchor: middle; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="760" />
+
+  <text x="60" y="64" class="title">What each certificate shape actually covers</text>
+  <text x="60" y="96" class="subtitle">Wildcards cover one subdomain level. SANs list exact hostnames. The apex domain still has to be named explicitly.</text>
+
+  <rect x="50" y="140" width="1100" height="580" class="panel" />
+  <text x="80" y="184" class="heading">Coverage map</text>
+
+  <rect x="90" y="220" width="260" height="76" class="header" />
+  <rect x="350" y="220" width="220" height="76" class="header" />
+  <rect x="570" y="220" width="220" height="76" class="header" />
+  <rect x="790" y="220" width="300" height="76" class="header" />
+
+  <text x="220" y="264" class="header-label center">Hostname</text>
+  <text x="460" y="264" class="header-label center">example.com</text>
+  <text x="680" y="264" class="header-label center">*.example.com</text>
+  <text x="940" y="250" class="header-label center">SAN list</text>
+  <text x="940" y="270" class="header-label center">example.com + www</text>
+  <text x="940" y="290" class="header-label center">api + staging</text>
+
+  <rect x="90" y="296" width="260" height="72" class="cell" />
+  <rect x="350" y="296" width="220" height="72" class="cell" />
+  <rect x="570" y="296" width="220" height="72" class="cell" />
+  <rect x="790" y="296" width="300" height="72" class="cell" />
+  <text x="120" y="340" class="body">example.com</text>
+  <text x="460" y="340" class="yes center">Yes</text>
+  <text x="680" y="340" class="no center">No</text>
+  <text x="940" y="340" class="yes center">Yes</text>
+
+  <rect x="90" y="368" width="260" height="72" class="cell" />
+  <rect x="350" y="368" width="220" height="72" class="cell" />
+  <rect x="570" y="368" width="220" height="72" class="cell" />
+  <rect x="790" y="368" width="300" height="72" class="cell" />
+  <text x="120" y="412" class="body">www.example.com</text>
+  <text x="460" y="412" class="no center">No</text>
+  <text x="680" y="412" class="yes center">Yes</text>
+  <text x="940" y="412" class="yes center">Yes</text>
+
+  <rect x="90" y="440" width="260" height="72" class="cell" />
+  <rect x="350" y="440" width="220" height="72" class="cell" />
+  <rect x="570" y="440" width="220" height="72" class="cell" />
+  <rect x="790" y="440" width="300" height="72" class="cell" />
+  <text x="120" y="484" class="body">api.example.com</text>
+  <text x="460" y="484" class="no center">No</text>
+  <text x="680" y="484" class="yes center">Yes</text>
+  <text x="940" y="484" class="yes center">Yes</text>
+
+  <rect x="90" y="512" width="260" height="72" class="cell" />
+  <rect x="350" y="512" width="220" height="72" class="cell" />
+  <rect x="570" y="512" width="220" height="72" class="cell" />
+  <rect x="790" y="512" width="300" height="72" class="cell" />
+  <text x="120" y="556" class="body">beta.staging.example.com</text>
+  <text x="460" y="556" class="no center">No</text>
+  <text x="680" y="556" class="no center">No</text>
+  <text x="940" y="556" class="no center">No</text>
+
+  <rect x="90" y="584" width="260" height="72" class="cell" />
+  <rect x="350" y="584" width="220" height="72" class="cell" />
+  <rect x="570" y="584" width="220" height="72" class="cell" />
+  <rect x="790" y="584" width="300" height="72" class="cell" />
+  <text x="120" y="628" class="body">example.org</text>
+  <text x="460" y="628" class="no center">No</text>
+  <text x="680" y="628" class="no center">No</text>
+  <text x="940" y="628" class="no center">No, unless listed</text>
+
+  <text x="90" y="690" class="small">Common frontend default: request example.com plus *.example.com in the same certificate.</text>
+</svg>
