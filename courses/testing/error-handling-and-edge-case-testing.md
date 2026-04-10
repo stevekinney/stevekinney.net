@@ -157,7 +157,7 @@ For each of these, you have the same two choices:
 
 For example you could just decide that `true` and `false` are fine because they'll get converted to `1` and `0` respectively. You could decide that a number is okay I guess since it'll harmless pass through. In this case, you probably need to rename the function. Otherwise, we probably need another conditional and an error message because if your intention is that numbers and booleans are going to throw an error—well, they're not going to.
 
-If you _are_ going to throw an error. Then you owe it your furture self to have good error messages. The current error message doesn't really describe the problem and in a large more complicated code base, `'[object Object]' cannot be parsed as a number` is decidedly unhelpful.
+If you _are_ going to throw an error. Then you owe it your future self to have good error messages. The current error message doesn't really describe the problem and in a large more complicated code base, `'[object Object]' cannot be parsed as a number` is decidedly unhelpful.
 
 > \[!example] Exercise
 > Can you add tests for some of these less desirable types? Start with the failing test before adding another check for the particular edge case.
@@ -187,4 +187,4 @@ Now your error can say exactly what went wrong. Custom error messages: saving de
 - Throw wild edge cases at your code during testing. If your tests pass, you're cruising toward a production environment with a little more peace of mind.
 
 > \[!example] Exercise
-> Surely our basic arithmetic is going to have an equally hard time with all of the ways that numbers can go sideways in JavaScript. Can you update our tests and implementation to account for this? You can see some potential—but certainly \*not( exhaustic—solutions [here](testing-for-errors-exercise.md).
+> Surely our basic arithmetic is going to have an equally hard time with all of the ways that numbers can go sideways in JavaScript. Can you update our tests and implementation to account for this? You can see some potential—but certainly \*not exhaustic—solutions [here](testing-for-errors-exercise.md).
