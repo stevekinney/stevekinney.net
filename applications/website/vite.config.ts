@@ -31,6 +31,26 @@ const IMAGE_MIME_TYPES: Record<string, string> = {
 };
 
 /**
+ * Watches monorepo content directories so Vite's `import.meta.glob` picks up
+ * newly added files without a manual dev server restart. Vite's default watcher
+ * doesn't always cover directories resolved via deep `../../../../` relative
+ * paths outside the application root.
+ */
+function watchContentDirectories(): PluginOption {
+  return {
+    name: 'watch-content-directories',
+    configureServer(server) {
+      const contentPaths = ['courses', 'writing', 'content'].map((dir) =>
+        path.resolve(workspaceRoot, dir),
+      );
+      for (const dir of contentPaths) {
+        server.watcher.add(dir);
+      }
+    },
+  };
+}
+
+/**
  * Serves static image assets from content directories during development.
  *
  * In production, the rehype plugin rewrites image src attributes to blob storage URLs.
@@ -80,6 +100,7 @@ function serveContentAssets(): PluginOption {
 export default defineConfig({
   plugins: [
     sveltekit(),
+    watchContentDirectories(),
     serveContentAssets(),
     ViteToml(),
     tailwindcss(),
