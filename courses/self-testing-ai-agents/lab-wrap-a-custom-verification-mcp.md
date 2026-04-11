@@ -5,80 +5,160 @@ modified: 2026-04-11
 date: 2026-04-06
 ---
 
-You're going to build the `verify_shelf_page` tool from the previous lesson. By the end, the agent will be able to call a single tool and get back a structured report on the state of `/shelf`.
+Shelf ships the `verify_shelf_page` tool from the previous lesson. By the end of this walkthrough, you'll understand every decision inside it and be able to build an equivalent tool for a different verification target in your own project.
 
 > [!NOTE] Prerequisite
-> Complete [Writing a Custom MCP Wrapper](writing-a-custom-mcp-wrapper.md) first. This lab assumes you're starting from that lesson's server shape and only filling in the repo-specific details.
+> Complete [Writing a Custom MCP Wrapper](writing-a-custom-mcp-wrapper.md) first. This lab assumes you've seen the MCP server shape and know what `McpServer` / `registerTool` / `StdioServerTransport` are for.
 
-## Setup
+> [!NOTE] In the starter
+> The whole server ships at `tools/shelf-verification-server/server.ts` (98 lines), registered through the root `.mcp.json`, with `@modelcontextprotocol/sdk`, `zod`, and `playwright` already in `package.json`. This lab is a walkthrough — you're not installing anything or filling in a skeleton. You're opening the shipped file and understanding why each decision was made.
 
-From the Shelf repository root:
+## 1. The registration — `.mcp.json`
 
-```sh
-mkdir -p tools/shelf-verification-server
-npm install @modelcontextprotocol/sdk zod
-npm install -D tsx
-```
-
-Create `tools/shelf-verification-server/server.ts` with the skeleton from the lesson. We're using the [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) to build the server and the newer high-level `McpServer` API instead of the older low-level `Server` request-handler example.
-
-Shelf keeps this server in `tools/shelf-verification-server/server.ts` and registers it through the repository-local `.mcp.json`. The tool reads storage state from `playwright/.authentication/user.json` and defaults to `http://127.0.0.1:4173` unless `SHELF_BASE_URL` is set.
-
-## The task
-
-Implement `verify_shelf_page` so it:
-
-1. Accepts a `username` parameter (the lower-cased portion of the reader's email before the `@`).
-2. Launches Chromium. Reuse `playwright/.authentication/user.json` as the storage state when the file exists, so the server stays consistent with the rest of the workshop tooling; fall through to a default context when it doesn't.
-3. Navigates to `http://127.0.0.1:4173/shelf/<username>` by default. Make the base URL overrideable with `SHELF_BASE_URL` so you can also point it at a live dev server.
-4. Waits for the page-level shelf heading to be visible.
-5. Counts the number of `article` elements (each book is an article).
-6. Collects any console errors emitted during the page load.
-7. Closes the browser in a `finally` block so one failing navigation never leaks a Chromium process.
-8. Returns `{ ok, bookCount, consoleErrors, url }` as the tool result, where `url` is the exact URL the server hit so the agent can quote it in its summary.
-
-`ok` is `true` when there are zero console errors. The reference implementation accepts `bookCount >= 0` because the public reader page is a real route even for an empty shelf—tighten the predicate to `bookCount > 0` if your domain logic disagrees.
-
-## Wiring into your MCP client
-
-Shelf's MCP config lives in `.mcp.json` at the repository root. Add the server entry alongside any existing ones:
+Open `.mcp.json` at the repository root. Find the `shelf-verification` entry:
 
 ```json
 {
-  "mcpServers": {
-    "shelf-verification": {
-      "type": "stdio",
-      "command": "npx",
-      "env": {
-        "SHELF_BASE_URL": "http://127.0.0.1:4173"
-      },
-      "args": ["tsx", "./tools/shelf-verification-server/server.ts"]
-    }
+  "shelf-verification": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["tsx", "./tools/shelf-verification-server/server.ts"],
+    "env": { "SHELF_BASE_URL": "http://127.0.0.1:4173" }
   }
 }
 ```
 
-Restart your MCP host. In the tool list, you should now see `verify_shelf_page` available.
+Notice it runs under `tsx` (TypeScript directly, no build step) and passes the base URL via environment, not as a command-line argument. That matters because the same server file can point at a local preview, a staging URL, or a live dev server without a code change.
+
+**Question:** why `stdio` instead of HTTP? (Answer: MCP's stdio transport keeps the server scoped to one client and one conversation. No port management, no authentication, no exposed network surface. The MCP host spawns the server as a subprocess and talks to it over pipes — ideal for repo-local tools like this one.)
+
+## 2. The server file — `tools/shelf-verification-server/server.ts`
+
+Open `tools/shelf-verification-server/server.ts`. It's 98 lines. Walk the four sections:
+
+### Lines 13–26: imports, constants, server instance
+
+```ts
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { chromium } from 'playwright';
+import { z } from 'zod';
+
+const STORAGE_STATE_PATH = path.resolve('playwright/.authentication/user.json');
+const baseUrl = process.env.SHELF_BASE_URL ?? 'http://127.0.0.1:4173';
+
+const server = new McpServer({ name: 'shelf-verification', version: '0.1.0' });
+```
+
+Two things to notice. First, `STORAGE_STATE_PATH` points at the same file Playwright's storage-state setup writes — so the MCP tool shares an authenticated browser session with the rest of the test suite. Second, the server name (`shelf-verification`) matches the `.mcp.json` key. That's not enforced by the SDK, but keeping them aligned is the difference between a readable debugger and an indecipherable one.
+
+### Lines 35–49: the tool contract
+
+```ts
+server.registerTool(
+  'verify_shelf_page',
+  {
+    description:
+      'Open the Shelf app and verify the public /shelf/[username] route renders correctly. ...',
+    inputSchema: {
+      username: z.string().min(1).describe('The reader handle, e.g. "alice" for alice@example.com'),
+    },
+    outputSchema: {
+      ok: z.boolean(),
+      bookCount: z.number().int().nonnegative(),
+      consoleErrors: z.array(z.string()),
+      url: z.string(),
+    },
+  } /* handler below */,
+);
+```
+
+This is the whole contract: one input (`username`), four outputs (`ok`, `bookCount`, `consoleErrors`, `url`). The `.describe()` on the input is load-bearing — the agent reads it and uses it to decide what to pass. Without the description, a model could guess `username` means the full email address and the tool would fail to find the reader.
+
+**Question:** why return `url` as part of the output when the agent theoretically knows what URL it asked about? (Answer: the agent only knows the `username` it passed. The server is the one that constructs the real URL — base URL plus path plus encoding. Putting `url` in the structured output means the agent can quote the exact URL in its summary to the user, which is much more useful than "I called verify_shelf_page with username alice.")
+
+### Lines 50–95: the handler
+
+```ts
+async ({ username }) => {
+  const targetUrl = `${baseUrl}/shelf/${encodeURIComponent(username)}`;
+  const browser = await chromium.launch();
+  try {
+    const contextOptions = fs.existsSync(STORAGE_STATE_PATH)
+      ? { storageState: STORAGE_STATE_PATH }
+      : {};
+    const context = await browser.newContext(contextOptions);
+    const page = await context.newPage();
+
+    const consoleErrors: string[] = [];
+    page.on('console', (message) => {
+      if (message.type() === 'error') consoleErrors.push(message.text());
+    });
+
+    await page.goto(targetUrl);
+    await page.getByRole('heading', { level: 1 }).waitFor();
+    const bookCount = await page.getByRole('article').count();
+
+    const result = {
+      ok: consoleErrors.length === 0 && bookCount >= 0,
+      bookCount,
+      consoleErrors,
+      url: targetUrl,
+    };
+
+    return {
+      content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+      structuredContent: result,
+    };
+  } finally {
+    await browser.close();
+  }
+};
+```
+
+The `finally` block is the most important line in the file. Without it, any throw above — a navigation timeout, a network error, a broken locator — leaks a Chromium process. The server stays up, the agent keeps calling the tool, and each failed call eats another 200 MB of RAM. `finally` is not optional.
+
+The `ok` predicate is deliberately loose (`bookCount >= 0`) because the public `/shelf/[username]` route is a real page even for an empty shelf — "no books yet" is a valid render. If your domain says otherwise, tighten to `bookCount > 0`.
+
+The return shape uses both `content` (for MCP hosts that read the text channel) and `structuredContent` (for hosts that honor the structured output schema). Returning both means the tool works against either kind of host without branching.
+
+### Lines 97–98: the transport
+
+```ts
+const transport = new StdioServerTransport();
+await server.connect(transport);
+```
+
+Wire the server to stdio. `server.connect()` is the call that starts listening for JSON-RPC messages on the process's stdin and replying on stdout. Nothing else.
+
+**Question:** why isn't this wrapped in a `try/catch` or a shutdown handler? (Answer: when the MCP host kills the subprocess, stdin closes and the transport unwinds cleanly on its own. Adding a `SIGTERM` handler to "close gracefully" is the kind of defensive code that sounds responsible but leaks complexity. If the subprocess dies hard, the host spawns a new one.)
+
+## 3. Using it
 
 Ask the agent to verify the shelf for alice. Example prompt:
 
 > Run `verify_shelf_page` for username "alice" and report the result. If `ok` is false, diagnose why.
 
-The agent should call the tool, get back structured output, and act on it.
+The agent calls the tool, gets back the structured output, and acts on it.
 
 ![The public shelf route targeted by `verify_shelf_page`](./assets/lab-custom-mcp-public-shelf.png)
 
 ## Acceptance criteria
 
-- [ ] `tools/shelf-verification-server/server.ts` exists and contains a working MCP server.
-- [ ] Running `npx tsx tools/shelf-verification-server/server.ts` starts the server without crashing. If your shell does not have `timeout`, use a short Node wrapper that keeps stdin open for two seconds and then sends `SIGTERM`.
-- [ ] `.mcp.json` registers the server and the path resolves.
-- [ ] After restarting the MCP host, `verify_shelf_page` appears in the agent's available tools.
-- [ ] When you call the tool against a running Shelf dev server, it returns a JSON result with `ok`, `bookCount`, and `consoleErrors` keys.
-- [ ] The tool correctly reports `ok: true` when the shelf has books and no console errors.
-- [ ] The tool correctly reports `ok: false` when you deliberately break something—for example, add `console.error('oops')` to the shelf page and re-run.
-- [ ] The tool closes its browser context cleanly; no zombie Chromium processes (`pgrep -f chromium` returns nothing unexpected after the call completes).
-- [ ] `CLAUDE.md` has been updated with a rule pointing the agent at `verify_shelf_page` as the preferred way to check `/shelf`.
+You can't copy-paste your way through this one — the code is already there. You're done when you can answer each of these without looking:
+
+- [ ] Why does `.mcp.json` use `stdio` instead of HTTP transport?
+- [ ] Why does `STORAGE_STATE_PATH` point at the same file Playwright uses?
+- [ ] Why is the `describe()` on the `username` input load-bearing?
+- [ ] Why does the output include `url` when the agent already passed the username?
+- [ ] What happens if you remove the `finally` block and a `page.goto` throws?
+- [ ] Why is the `ok` predicate `bookCount >= 0` instead of `bookCount > 0`?
+- [ ] Why does the return shape include both `content` and `structuredContent`?
+- [ ] Why is there no explicit shutdown handler on the transport?
+
+Plus one mechanical check:
+
+- [ ] Restart your MCP host. Ask the agent to run `verify_shelf_page` for username `alice`. The result should include `ok: true`, a non-negative `bookCount`, an empty `consoleErrors` array, and the constructed `url`. Now add `console.error('oops')` to `src/routes/shelf/[username]/+page.svelte`, rerun the tool, and confirm `ok` flips to `false` and `consoleErrors` contains your string.
 
 ## Stretch goals
 

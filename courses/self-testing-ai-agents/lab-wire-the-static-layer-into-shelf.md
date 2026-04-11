@@ -7,20 +7,25 @@ date: 2026-04-06
 
 Longest lab of the day. Multi-part. Pace yourself—each part is a self-contained check, and you can stop between parts if you need to.
 
+> [!NOTE] In the starter
+> Shelf already ships the complete static layer: `eslint.config.js` with the four `no-restricted-syntax` rules, `tsconfig.json` with every strict flag, `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts`. Every part below is a walkthrough — open the shipped file, read the rule, understand why it's worded the way it is, then run the planted-bad-input check to prove it fires. You're not writing configuration from scratch; you're learning to read it.
+
 ## The task
 
-Wire the complete static layer into Shelf and verify every piece fires on a planted bad input.
+Walk the complete static layer Shelf ships and verify every piece fires on a planted bad input. For each part: open the shipped file, read the rule, then trigger the probe and watch it catch.
 
 ## Part 1: ESLint custom rules
 
-Update `eslint.config.js` to include a `no-restricted-syntax` block that bans:
+Open `eslint.config.js`. Find the `no-restricted-syntax` block. It bans four patterns:
 
 - `page.waitForTimeout` (anywhere in `tests/end-to-end/`). Selector: `CallExpression[callee.property.name='waitForTimeout']`. Message: `"page.waitForTimeout is banned. See CLAUDE.md → Playwright → Waiting."`
 - `page.locator` called with a string argument (anywhere in `tests/end-to-end/`). Selector: `CallExpression[callee.property.name='locator'][arguments.0.type='Literal']`. Message: `"Use a getByRole/getByLabel locator. See CLAUDE.md → Playwright → Locators."`
 - `page.waitForLoadState('networkidle')` (anywhere). Selector: `CallExpression[callee.property.name='waitForLoadState'] Literal[value='networkidle']`. Message: `"networkidle is unreliable. Wait on a real signal."`
 - Reading `userId` from a request body in a route handler. Selector: `MemberExpression[object.type='MemberExpression'][object.property.name='body'][property.name='userId']`. Message: `"Read userId from the session, not the request body. See CLAUDE.md → Auth."`
 
-Each rule should set both the `selector` and the `message` exactly as listed so the acceptance criteria below can grep for them. The lesson's **Writing a `no-restricted-syntax` rule** section in [Lint and Types as Guardrails](lint-and-types-as-guardrails.md) walks each of these four AST selectors in English — read that before you paste the block into `eslint.config.js` so you understand _why_ the `body.userId` rule uses a nested `MemberExpression` match instead of just a property name, and why the `networkidle` rule uses the descendant combinator.
+Each rule has both a `selector` and a `message`. The message strings are load-bearing — they name the file, the section, and the fix. That's the difference between a lint error the agent ignores and a lint error the agent reads and acts on.
+
+The lesson's **Writing a `no-restricted-syntax` rule** section in [Lint and Types as Guardrails](lint-and-types-as-guardrails.md) walks each of these four AST selectors in English. Read it alongside the shipped file so you understand _why_ the `body.userId` rule uses a nested `MemberExpression` match instead of just a property name, and why the `networkidle` rule uses the descendant combinator.
 
 > [!NOTE]
 > In the Shelf workshop repository, `npm` is the source of truth. If your own project uses Bun, translate the commands back to `bun` as appropriate. The important part is that the checks are real, named scripts the agent is required to run.
@@ -35,7 +40,7 @@ Each rule should set both the `selector` and the `message` exactly as listed so 
 
 ## Part 2: TypeScript strict mode
 
-Update `tsconfig.json` to enable every strict flag from the lesson, including `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`.
+Open `tsconfig.json`. Find every strict flag from the lesson — `strict: true`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`. They're all there. Read each one and make sure you can explain, in one sentence, what kind of bug it catches that `strict: true` alone would miss.
 
 ### Acceptance for Part 2
 
@@ -46,7 +51,7 @@ Update `tsconfig.json` to enable every strict flag from the lesson, including `n
 
 ## Part 3: Dead code detection
 
-Install knip. Configure it per the lesson. Run it on Shelf.
+Open `knip.json`. Read the `entry` and `project` globs — they tell knip which files are roots (SvelteKit pages, tests, scripts) and which files are in-scope for the unused-exports analysis. Then run `npm run knip` to see it report zero findings against the current starter.
 
 > [!NOTE]
 > In this local repository, the `knip` script sets `DATABASE_URL=file:./tmp/knip.db` before invoking knip. That keeps `drizzle.config.ts` loadable during analysis without depending on a developer-specific `.env`.
@@ -61,7 +66,7 @@ Install knip. Configure it per the lesson. Run it on Shelf.
 
 ## Part 4: Lefthook
 
-Install lefthook. Wire `lefthook.yml` per the [Git Hooks with Lefthook](git-hooks-with-lefthook.md) lesson so pre-commit runs the fast checks on staged files and pre-push runs the slightly-slower checks on the whole tree.
+Open `lefthook.yml`. Find the `pre-commit` and `pre-push` blocks. Notice pre-commit runs fast checks on `{staged_files}` with `parallel: true` and `stage_fixed: true`, while pre-push runs the slightly-slower `npm run pre-push` script (which calls typecheck, knip, and unit tests) against the whole tree. Read the [Git Hooks with Lefthook](git-hooks-with-lefthook.md) lesson if you want the reasoning behind the split.
 
 ### Acceptance for Part 4
 
@@ -73,7 +78,7 @@ Install lefthook. Wire `lefthook.yml` per the [Git Hooks with Lefthook](git-hook
 
 ## Part 5: Secret scanning
 
-Install gitleaks. Add a `secrets` command to the `pre-commit` block in `lefthook.yml`. Run it against staged content.
+Open `lefthook.yml` again and find the `secrets` command under `pre-commit` — it shells out to `npx tsx scripts/run-gitleaks-staged.ts`. Then open that script and read how it materializes the staged index into a tmp directory before running `gitleaks dir`. Finally, open `.gitleaks.toml` and notice which paths are allowlisted (`sample-config.json` and `tests/fixtures/`) and why — they're deliberate bait that would otherwise trip the scanner.
 
 > [!NOTE]
 > With the current Gitleaks release used in this workshop, `gitleaks git --staged` was not a reliable pre-commit verifier for newly added files. The local Shelf repository fixes that by materializing the exact git index into a temporary directory and running `gitleaks dir` there from `scripts/run-gitleaks-staged.ts`. That wrapper is what the lefthook `secrets` command shells out to.

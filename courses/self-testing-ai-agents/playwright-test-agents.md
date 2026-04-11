@@ -49,8 +49,7 @@ npx playwright init-agents --loop=opencode
 
 For Claude Code, this creates three agent definitions in `.claude/agents/` (planner, generator, healer) and an MCP server config in `.mcp.json`. It may also scaffold a `specs/README.md` and a default seed test if none exists. Other tools put the definitions elsewhere—VS Code and Copilot use `.github/agents/`, OpenCode uses `.opencode/prompts/`.
 
-> [!WARNING] `init-agents` replaces `.mcp.json`
-> If you already have MCP servers wired into `.mcp.json`—Shelf ships two of them, and the [Wrap a Custom Verification MCP](lab-wrap-a-custom-verification-mcp.md) lab adds a third—`init-agents` will overwrite the file with only the `playwright-test` server. Back it up first, then merge the `playwright-test` entry back in manually. The [lab](lab-generate-and-heal-with-playwright-agents.md) shows the exact merge shape.
+One thing to know: `init-agents` replaces the repo's `.mcp.json`. Shelf doesn't ship one, so this is harmless inside the workshop. If you're running it against your own repo that already registers MCP servers, back the file up first and merge `playwright-test` in after.
 
 Once the agents are generated, you command them through your AI tool of choice. The generated artifacts follow a clean structure we'll look at in a moment.
 

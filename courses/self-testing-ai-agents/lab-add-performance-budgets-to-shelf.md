@@ -15,99 +15,71 @@ That is enough to turn performance from a vague aspiration into a real feedback 
 > [!NOTE] Prerequisite
 > Complete [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md) first. This lab assumes you are intentionally building the small two-budget version, not a whole performance platform.
 
+> [!NOTE] In the starter
+> Shelf already ships every piece of this lab: a stats build, a budget file, a check script, a runtime spec, and the four `npm run performance:*` commands. This lab is a walkthrough — you're not writing any of it from scratch, you're opening each file, reading it, and understanding why each decision was made. The point is that you could rebuild it from scratch in your own project after this.
+
 ## The task
 
-Add one build-time budget and one runtime budget to Shelf, then expose both through named commands the agent can run locally and in CI.
+Open the five pieces of Shelf's performance budget loop in order. For each one, answer the question in its section before moving on. When you're done, falsify one threshold and watch the gate break.
 
-## Step 1: emit machine-readable build stats
+## 1. The stats build — `vite.config.ts`
 
-Install [`rollup-plugin-visualizer`](https://github.com/btd/rollup-plugin-visualizer) as a dev dependency and wire it into `vite.config.ts` behind a `BUNDLE_STATS=1` environment flag. When the flag is set, Vite should emit two files:
+Open `vite.config.ts` and find the `rollup-plugin-visualizer` import. Notice it's wired behind a `BUNDLE_STATS=1` environment flag, so the normal build stays fast and the stats build is opt-in.
+
+When the flag is set, Vite emits two files:
 
 - `build/stats.html` — a treemap report for humans
 - `build/stats.json` — the `raw-data` template, keyed for automation
 
-Add a `build:stats` script to `package.json` that flips the flag:
+**Question:** why behind an env flag instead of always-on? (Answer: the stats generation adds meaningful time to the build, and you only need it when you're about to run the budget check.)
 
-```json
-{
-  "scripts": {
-    "build:stats": "BUNDLE_STATS=1 vite build"
-  }
-}
-```
+## 2. The thresholds — `performance-budgets.json`
 
-The important part is the output contract, not the brand name—any bundler that can emit a structured per-chunk size report works.
-
-## Step 2: capture the current green baseline
-
-Run the new stats build on a clean green branch and write the threshold file into version control.
-
-I recommend a file such as `performance-budgets.json`:
+Open `performance-budgets.json`. It's eight lines:
 
 ```json
 {
   "build": {
-    "maxTotalGzipKilobytes": 0,
-    "maxLargestChunkGzipKilobytes": 0
+    "maxTotalGzipKilobytes": 110,
+    "maxLargestChunkGzipKilobytes": 55
   },
   "runtime": {
-    "shelfRouteDomContentLoadedMilliseconds": 0
+    "shelfRouteDomContentLoadedMilliseconds": 800
   }
 }
 ```
 
-Replace the zeroes with the real baseline plus a small buffer. The exact numbers are your call. The existence of the file and its enforcement are not.
+That's it. Two build numbers, one runtime number, no schema, no tooling. The numbers are baseline-plus-buffer — the current build is ~105 kB total, and 110 gives enough headroom for small feature work without letting a 20% regression slip through.
 
-## Step 3: add a budget-check script
+**Question:** why are the thresholds in a JSON file instead of hardcoded in the check script? (Answer: the file is the contract. Bumping a threshold is a visible commit, which means bumping a threshold is a conversation.)
 
-Create `scripts/check-performance-budgets.mjs` that:
+## 3. The check script — `scripts/check-performance-budgets.mjs`
 
-- reads `build/stats.json`
-- reads `performance-budgets.json`
-- walks `nodeMetas` to compute gzip totals per output bundle file (filtering to client chunks—for SvelteKit, anything under `_app/immutable`)
-- compares the measured totals to the stored thresholds
-- exits zero when everything is inside the budget and non-zero when any threshold is exceeded, printing the exceeding line to stderr
+Open `scripts/check-performance-budgets.mjs`. It's 88 lines. Walk the four sections:
 
-The lesson walks the `nodeMetas` → `moduleParts` → `nodeParts` structure and shows the complete script in the **The checker script** section of [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md). Work from that sketch — the walk is the entire lab.
+- **Lines 12–16: constants.** The `CLIENT_BUNDLE_PREFIX = '_app/immutable'` is the SvelteKit-specific filter — it's what makes the budget "client bundle only" rather than "everything Vite emits."
+- **Lines 18–43: `computeClientBundleSizes`.** This is the whole lesson. Walk `nodeMetas → moduleParts → nodeParts` to sum gzip bytes per output file, filter to client chunks, return `totalClientGzipBytes`, `largestClientChunkBytes`, and `clientEntries`.
+- **Lines 45–83: `main`.** Read both files, compute sizes, compare to budgets, push a human-readable string into `failures` for each exceeded threshold. On failure: print to stderr and exit 1. On success: print the current numbers with their budgets and exit 0.
+- **Lines 85–88: top-level error handler.** Exits 2 on any thrown error so the agent can distinguish "budget exceeded" from "script broke."
 
-The Shelf starter ships a production version at `scripts/check-performance-budgets.mjs`. Write yours first, then compare. The only meaningful difference between the lesson sketch and the shipped version is that the shipped one exposes `clientEntries` from the computation so future rules can ask "which chunk got biggest" without re-walking the report.
+The lesson walks the `nodeMetas` structure in the **The checker script** section of [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md) if you want the data-shape explanation before you open the script.
 
-The agent should be able to run one command and get a plain answer.
+**Question:** why does the script return `clientEntries` from `computeClientBundleSizes` even though `main` doesn't use it? (Answer: future rules like "which chunk grew the most week-over-week" can read it without re-walking the report. The function is written for the next feature, not just this one.)
 
-## Step 4: add one runtime measurement
+## 4. The runtime spec — `tests/end-to-end/performance.spec.ts`
 
-Pick one important flow in Shelf and measure it against a stable preview target.
+Open `tests/end-to-end/performance.spec.ts`. It goes to `/shelf`, reads `performance.getEntriesByType('navigation')[0].domContentLoadedEventEnd` inside the browser context, loads the threshold from `performance-budgets.json`, and asserts the measured value is under it.
 
-Good candidates:
+Two things to notice:
 
-- loading `/shelf`
-- opening the rate-book dialog
-- submitting the add-book form
+- The threshold is read from disk, not hardcoded. Same contract as the build budget — bumping it is a visible commit.
+- The test runs inside the `authenticated` Playwright project, which means it runs against the real build-and-preview flow (via `webServer` in `playwright.config.ts`), not a hot dev server. Dev-server numbers are not the numbers CI would see.
 
-Use Playwright plus the browser [Performance API](https://developer.mozilla.org/en-US/docs/Web/API/Performance_API/Performance_data) or a retained trace. A minimal version looks like:
+**Question:** why measure `domContentLoadedEventEnd` instead of something like `largestContentfulPaint`? (Answer: `domContentLoaded` is cheaper to stabilize because it doesn't depend on image decode or font load. For a budget you want a number that moves only when _your_ code changes, not when an asset pipeline hiccups.)
 
-```ts
-test('shelf route stays within the performance budget', async ({ page }) => {
-  await page.goto('/shelf');
+## 5. The named commands — `package.json`
 
-  const navigationTiming = await page.evaluate(() => {
-    const [entry] = performance.getEntriesByType('navigation');
-    return {
-      domContentLoaded: entry?.domContentLoadedEventEnd ?? 0,
-    };
-  });
-
-  expect(navigationTiming.domContentLoaded).toBeLessThan(800);
-});
-```
-
-Use your real stored threshold, not my placeholder number.
-
-Run this against a build-and-preview flow, not a hot dev server.
-
-## Step 5: expose named commands
-
-Add named commands for both checks. Shelf ships this shape:
+Open `package.json` and find the four performance scripts:
 
 ```json
 {
@@ -120,18 +92,32 @@ Add named commands for both checks. Shelf ships this shape:
 }
 ```
 
-The key idea is that the loop has obvious handles the agent can call without composing anything.
+The shapes matter: `performance:check` is the one command an agent calls to get the full answer. Everything below it is a piece the agent can rerun in isolation when one of the two halves is the one that broke.
+
+**Question:** why does `performance:runtime` run `drizzle-kit push --force` first? (Answer: the runtime spec needs a seeded database or the authenticated fixture can't log in. The push ensures the local SQLite file exists and has the current schema. Leave this out and the runtime spec looks like a perf regression when it's actually a setup failure.)
+
+## Break it
+
+Now that you've read all five pieces, prove you understand how they interact.
+
+1. Open `performance-budgets.json`. Lower `maxTotalGzipKilobytes` from `110` to `50`.
+2. Run `npm run performance:build`.
+3. Read the failure output. It should name the failing budget and the actual measured size.
+4. Restore the threshold. Rerun. Watch it go green.
+
+If the failure didn't look the way you expected, go back to `scripts/check-performance-budgets.mjs` section 3 and re-read `main` — the `failures.push(...)` string is the thing you just saw, word for word.
 
 ## Acceptance criteria
 
-- [ ] Shelf exposes a `build:stats` command or equivalent
-- [ ] A machine-readable stats file is generated by the build
-- [ ] `performance-budgets.json` (or equivalent) exists in version control
-- [ ] A budget-check script compares current build output to the stored thresholds
-- [ ] Shelf has one runtime performance check against a production-like preview target
-- [ ] The runtime check reads an actual browser timing value or trace-derived value
-- [ ] There is a named command that runs the full performance budget loop
-- [ ] Lowering one stored threshold below the current baseline makes the check fail locally
+You can't copy-paste your way through this one — the code is already there. You're done when you can answer each of these without looking:
+
+- [ ] Why is the stats build gated behind `BUNDLE_STATS=1`?
+- [ ] Why do the thresholds live in a JSON file instead of the script?
+- [ ] What does `CLIENT_BUNDLE_PREFIX` filter out, and why?
+- [ ] What's the difference between exit 1 and exit 2 in `check-performance-budgets.mjs`?
+- [ ] Why does the runtime spec run under the `authenticated` project specifically?
+- [ ] Why does `performance:runtime` run `drizzle-kit push --force` before the test?
+- [ ] You lowered `maxTotalGzipKilobytes` to `50`, ran `npm run performance:build`, saw it fail, and restored the threshold. (Mechanical check of the read.)
 
 ## Troubleshooting
 

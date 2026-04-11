@@ -20,28 +20,8 @@ npx playwright init-agents --loop=claude
 
 This creates agent definitions in `.claude/agents/` and an MCP server config in `.mcp.json`. Verify that `.claude/agents/` was created and contains the three agent files (planner, generator, healer) before moving on.
 
-> [!WARNING] This overwrites your existing `.mcp.json`
-> `init-agents` will replace any existing `.mcp.json` at the repo root with a fresh file that only contains the `playwright-test` server. If you already wired a custom MCP in the [Wrap a Custom Verification MCP](lab-wrap-a-custom-verification-mcp.md) lab—or the Shelf starter ships with any other `mcpServers` entries—that config will be silently destroyed. Back `.mcp.json` up first, then merge the `playwright-test` entry back in manually. The merged file should look like this:
->
-> ```json
-> {
->   "mcpServers": {
->     "svelte": { "type": "stdio", "command": "npx", "args": ["-y", "@sveltejs/mcp"], "env": {} },
->     "shelf-verification": {
->       "type": "stdio",
->       "command": "npx",
->       "args": ["tsx", "./tools/shelf-verification-server/server.ts"],
->       "env": { "SHELF_BASE_URL": "http://127.0.0.1:4173" }
->     },
->     "playwright-test": {
->       "command": "npx",
->       "args": ["playwright", "run-test-mcp-server"]
->     }
->   }
-> }
-> ```
->
-> Restart your MCP host after merging so the new tool list picks up every server.
+> [!NOTE] `init-agents` replaces `.mcp.json`
+> If you already have a `.mcp.json` at the repo root, `init-agents` will replace it with a fresh one that only registers `playwright-test`. The Shelf starter does not ship one, so there's nothing to preserve here. If your own project does ship one, back it up before running this command and merge `playwright-test` in after.
 
 ## Write the seed test
 

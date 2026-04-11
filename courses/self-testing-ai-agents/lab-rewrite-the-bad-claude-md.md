@@ -84,15 +84,67 @@ echo "ok: CLAUDE.md passes every mechanical check"
 
 Run that block inside the repo after each edit to CLAUDE.md. When it prints `ok`, the mechanical half of the lab is done and you can move on to the subjective half ("does the agent actually follow these rules when you give it a task").
 
-## Checking your work against an agent
+## What this looks like against a real agent
 
-Once your file passes the checklist, run the loop end to end at least once:
+Once your file passes the mechanical checks, the real question is whether it actually changes agent behavior. Here's what a run against Claude Code looks like with a tightened `CLAUDE.md` in place. The prompt:
 
-1. Open Claude Code (or whichever agent you brought) in the Shelf repo.
-2. Give it this exact task: _"Add a 'finished this year' count to the stats page. Follow the rules in CLAUDE.md."_
-3. Watch what it does. Specifically watch whether it runs the commands you named in the "what green means" section without you reminding it.
+> Add a "finished this year" count to the stats page. Follow the rules in CLAUDE.md.
 
-If the agent runs your commands without prompting, your file is doing its job. If you have to remind it, your rules are too easy to skip. Tighten the language. ("You should run X before declaring done" is easier to skip than "Run X. Do not report the task as complete if X exits non-zero.") The same goes for copy rules: "Keep the UI product-facing" is weaker than "Do not mention Playwright, seeded fixtures, or course notes in page copy."
+A tightened `CLAUDE.md` produces a session that looks roughly like this:
+
+```text
+Reading CLAUDE.md...
+
+I see the "Done means green" section. I'll need to run typecheck, lint,
+knip, and test before I can report this complete.
+
+Let me find the stats page. Grepping for "stats" in src/routes/...
+  → src/routes/(app)/goals/+page.svelte exists. That looks like the
+    closest thing to a stats page Shelf has today.
+
+Reading +page.server.ts for the goals route to understand the data
+shape... the loader already returns shelfEntries with finishedAt
+timestamps. Good — I can compute the "finished this year" count from
+that without adding a new query.
+
+Editing +page.svelte to add a $derived expression:
+  let finishedThisYear = $derived(
+    shelfEntries.filter(entry =>
+      entry.finishedAt &&
+      new Date(entry.finishedAt).getFullYear() === new Date().getFullYear()
+    ).length
+  );
+
+And the rendering:
+  <p>You've finished {finishedThisYear} books this year.</p>
+
+CLAUDE.md says user-facing strings are about books, shelves, and reading.
+This one is. Good.
+
+Running npm run typecheck...
+  → exit 0, 3 pre-existing warnings in playground, not mine.
+
+Running npm run lint...
+  → exit 0.
+
+Running npm run knip...
+  → exit 0.
+
+Running npm run test...
+  → 38 passed. The authenticated visual baseline for /shelf didn't
+    change because I edited /goals, not /shelf.
+
+All four gates green. Task complete.
+```
+
+Two things to notice about this transcript:
+
+- The agent read `CLAUDE.md` first and extracted the "Done means green" rule before touching any code. It didn't need to be reminded.
+- It checked the product-copy rule against its own output before moving on. The rule fired as a guardrail, not a post-hoc check.
+
+A _loose_ `CLAUDE.md` — the one the starter ships — produces a very different session. The agent still writes the feature, but it either skips the gates entirely or runs them out of order, and "please run the gates" becomes something you have to say in the chat. The difference between the two versions is the difference between "instructions the agent consults" and "instructions the agent mechanically obeys." The second one is the one you want.
+
+If you're skeptical, try it yourself: revert `CLAUDE.md` to its starter state (or comment out the "Done means green" section), give Claude Code the same prompt, and compare the transcripts. The feature code will look similar; the process around it will not.
 
 ## Stretch goals
 
