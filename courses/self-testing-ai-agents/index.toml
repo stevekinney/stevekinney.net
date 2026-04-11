@@ -69,12 +69,28 @@ title = "The Waiting Story"
 href = "the-waiting-story.md"
 
 [[section.item]]
+title = "Fixtures: Worker-Scoped, Test-Scoped, and the Trap Between Them"
+href = "fixtures-worker-scoped-test-scoped.md"
+
+[[section.item.related]]
+title = "Lab: Refactor Shelf's Fixtures"
+href = "lab-refactor-shelf-fixtures.md"
+
+[[section.item.related]]
+title = "Solution"
+href = "refactor-shelf-fixtures-solution.md"
+
+[[section.item]]
 title = "Playwright Projects"
 href = "playwright-projects.md"
 
 [[section.item]]
 title = "Storage State Authentication"
 href = "storage-state-authentication.md"
+
+[[section.item]]
+title = "APIRequestContext Beyond Storage State"
+href = "api-request-context-beyond-storage-state.md"
 
 [[section.item]]
 title = "Recording HARs for Network Isolation"
@@ -103,6 +119,18 @@ href = "lab-harden-the-flaky-rate-book-test.md"
 [[section.item.related]]
 title = "Solution"
 href = "harden-the-flaky-rate-book-test-solution.md"
+
+[[section.item]]
+title = "test.step, Tags, and Annotations"
+href = "test-step-tags-annotations.md"
+
+[[section.item.related]]
+title = "Lab: Tag and Step-Annotate the Shelf Suite"
+href = "lab-tag-and-step-annotate-the-shelf-suite.md"
+
+[[section.item.related]]
+title = "Solution"
+href = "tag-and-step-annotate-the-shelf-suite-solution.md"
 
 [[section]]
 title = "Playwright Test Agents"
@@ -190,6 +218,22 @@ href = "lab-build-a-failure-dossier-for-shelf.md"
 [[section.item.related]]
 title = "Solution"
 href = "build-a-failure-dossier-for-shelf-solution.md"
+
+[[section.item]]
+title = "Flaky-Test Triage: When Retries Are Lying to You"
+href = "flaky-test-triage.md"
+
+[[section.item]]
+title = "Reading a Trace"
+href = "reading-a-trace.md"
+
+[[section.item.related]]
+title = "Lab: Triage Three Traces"
+href = "lab-triage-three-traces.md"
+
+[[section.item.related]]
+title = "Solution"
+href = "triage-three-traces-solution.md"
 
 [[section]]
 title = "The Second Opinion: Review Agents"
