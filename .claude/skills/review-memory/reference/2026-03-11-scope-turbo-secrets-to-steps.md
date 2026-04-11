@@ -1,2 +1,0 @@
-- Scope CI secrets to the minimum required step surface area: set `TURBO_TOKEN`/`TURBO_TEAM` only on steps that execute `turbo` (directly or via `bun` scripts), not at job level.
-- When moving Turbo credentials to step-level env, keep `bun install` included if `postinstall` runs Turbo tasks so cache behavior remains consistent.

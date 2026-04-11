@@ -1,2 +1,0 @@
-- In shell task scripts that chain setup and tests, use `&&` (not `;`) after fallback build commands so test execution short-circuits on build failures.
-- For Playwright visual regressions in CI, refresh only the platform-specific baseline files that CI validates (for this workflow: `*-linux.png`) to clear deterministic snapshot drift without introducing unrelated generated-file churn.
