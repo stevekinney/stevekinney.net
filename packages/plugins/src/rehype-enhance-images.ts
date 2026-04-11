@@ -124,7 +124,17 @@ const rehypeEnhanceImages: Plugin<[Options?], Root> = (options = {}) => {
 
       const key = resolveManifestKey(filename, urlForMatch);
       const entry = manifest.images[key];
-      if (!entry) return;
+      if (!entry) {
+        // Unmanifested image: rewrite relative src to a repo-rooted absolute path
+        // so the dev middleware (serveContentAssets) serves it regardless of the
+        // current page URL. Without this, `<img src="assets/foo.png">` on a page
+        // like /courses/<slug> resolves to /courses/assets/foo.png — wrong.
+        // In production the manifest is authoritative, so this branch is a no-op.
+        if (key && !src.startsWith('/') && !isExternalUrl(src)) {
+          node.properties = { ...(node.properties ?? {}), src: `/${key}` };
+        }
+        return;
+      }
 
       const isFirstImage = imageIndex === 0 && firstImagePriority;
       imageIndex++;

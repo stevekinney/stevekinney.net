@@ -1,6 +1,6 @@
 <script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
-  import { Hash, HelpCircle, Info, Check } from 'lucide-svelte';
+  import { Hash, HelpCircle, Info, Check } from '@lucide/svelte';
   import Badge from './badge.svelte';
   import { variants } from '$lib/variants';
 

@@ -1,13 +1,15 @@
 ---
 title: Git Hooks with Lefthook
 description: Wire fast, staged-only checks into every commit and push using Lefthook—a single YAML file that replaces Husky, lint-staged, and half the shell scripts in your repo.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-10
 ---
 
 If you've done the git hook dance before, you know how it usually goes: install [Husky](https://typicode.github.io/husky/), install [lint-staged](https://github.com/lint-staged/lint-staged), wire up a `.husky/pre-commit` shell script that calls a `package.json` script that calls lint-staged that calls the actual linter. Three packages, two config surfaces, one shell script, and a `prepare` hook to glue it all together.
 
 It works. I've shipped it on plenty of projects. But, every time I set it up I think: this is a lot of indirection for "run ESLint on the files I'm about to commit."
+
+![Left Hook](assets/left-hook.png)
 
 [Lefthook](https://github.com/evilmartians/lefthook) is the tool that made me stop thinking that. It's a single binary (written in Go, distributed via npm if you want it) that replaces Husky _and_ lint-staged in one configuration file. One YAML file. No shell scripts. No `prepare` hook. No second package to manage staged-file filtering—Lefthook handles that natively with its `glob` and `run` options.
 

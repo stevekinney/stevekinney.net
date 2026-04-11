@@ -1,21 +1,25 @@
 <script lang="ts">
   import { merge } from '$merge';
-  import type { Icon as IconType } from 'lucide-svelte';
+  import type { Component } from 'svelte';
   import type { ExtendElement } from './component.types';
+
+  // Accepts any Svelte 5 icon component (Lucide, simple-icons, or local SVG wrappers).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type IconComponent = Component<any>;
 
   type SocialLinkProps = ExtendElement<
     'a',
     {
-      icon: typeof IconType;
-      name?: string;
+      icon: IconComponent;
+      name: string;
       size?: number;
     }
   >;
 
   const {
     href,
-    icon,
-    name = icon.name,
+    icon: Icon,
+    name,
     target = '_blank',
     size = 36,
     class: className = '',
@@ -25,8 +29,6 @@
     'aria-describedby': ariaDescribedby,
     title,
   }: SocialLinkProps = $props();
-
-  const Icon = $derived(icon);
 </script>
 
 <a

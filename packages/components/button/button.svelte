@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { LoaderCircle as Loading } from 'lucide-svelte';
+  import { LoaderCircle as Loading } from '@lucide/svelte';
   import { merge } from '$merge';
   import { variants } from './variants';
   import type { ButtonProps } from './types';

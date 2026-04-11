@@ -1,6 +1,6 @@
 <script lang="ts">
   import Button from '$lib/components/button';
-  import { ChevronLeft, ChevronRight } from 'lucide-svelte';
+  import { ChevronLeft, ChevronRight } from '@lucide/svelte';
 
   type Props = {
     currentPage: number;

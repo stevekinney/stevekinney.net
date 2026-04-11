@@ -1,13 +1,15 @@
 ---
 title: Playwright UI Mode
 description: How to use Playwright's visual test runner to inspect the DOM, find locators, and debug failing tests without console.log.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-10
 ---
 
 You've written a test, you've used `getByRole` like a responsible adult, and the test fails with "element not found." Now what? You stare at the error. You add a `console.log`. You add three more. You run the test again. You squint at the terminal output and try to reconstruct the page in your head from a wall of HTML.
 
 Stop doing that. Playwright has a visual test runner that lets you _see_ the page at every step of the test. It's called UI Mode, and once you've used it, the `console.log` archaeology feels almost medieval.
+
+![Playwright UI](assets/playwright-ui.png)
 
 ## Launching UI Mode
 
@@ -34,6 +36,8 @@ The Before/After tabs are particularly useful for `click` and `fill` actions: yo
 ## Pick locator
 
 This is the killer feature for this course.
+
+![Locator panel in Playwright UI](assets/locator-panel.png)
 
 Click the "Pick locator" button in the toolbar, then hover over any element in the DOM snapshot. Playwright suggests a locator for that element—and it follows the same hierarchy from the [locators lesson](locators-and-the-accessibility-hierarchy.md). Role first, then label, then text, then test ID, CSS as a last resort.
 

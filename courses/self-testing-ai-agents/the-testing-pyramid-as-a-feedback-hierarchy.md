@@ -1,7 +1,7 @@
 ---
 title: The Testing Pyramid as a Feedback Hierarchy
 description: A fast alignment pass on the testing pyramid, reframed as a hierarchy of feedback an agent can actually use.
-modified: 2026-04-07
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -12,6 +12,8 @@ What I do want is for all of us to have the same mental model of the pyramid bef
 ## The classic picture, in one paragraph
 
 Unit tests at the bottom—fast, many, narrow. Integration tests in the middle—slower, fewer, wider. End-to-end tests at the top—slowest, fewest, widest. The pyramid shape is prescriptive: you want more fast tests than slow tests because fast tests dominate your feedback loop. If your pyramid is upside down, every change waits on the end-to-end suite and nobody ever runs it locally, which means nobody ever knows if it works, which means it breaks, which means people start ignoring red runs, which means the gate stops being a gate.
+
+![The Testing Pyramid](assets/testing-pyramid.png)
 
 That's the summary. None of that changes when the agent shows up. What _does_ change is who's reading the signal.
 

@@ -1,15 +1,17 @@
 ---
 title: The Hypothesis
 description: Why we're spending a whole day on feedback loops instead of prompting tricks, and what "self-correcting" actually means.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
 So, here's the bet the rest of the day is built on.
 
-Agents are _fast_ at editing code. They are not particularly good at knowing whether the edit was any good. If every change they make requires you to read the diff, run the thing, click around the UI, eyeball the console, and then prompt the agent to fix what it missed—you haven't automated much. You've traded one kind of typing for another, and some days it's not even obvious which side of the trade you're on.
+Agents are _fast_ at editing code. They are not particularly good at knowing whether the edit was any good. If every change they make requires _you_ to read the diff, run the thing, click around the UI, eyeball the console, and then prompt the agent to fix what it missed—you haven't automated much. You've traded one kind of typing for another, and some days it's not even obvious which side of the trade you're on.
 
-I've done the relay dance more times than I'd like to admit. The agent ships something confident-looking. I run it. It's wrong in a way the agent would have caught immediately if it had bothered to actually _run_ the code. I paste the error back. It fixes the error and introduces a new one. Repeat until lunch—or, I get rate limited.
+I've done the relay dance more times than I'd like to admit: The agent ships something confident-looking. I run it. It's wrong in a way the agent would have caught immediately if it had bothered to actually _run_ the code. I paste the error back. It fixes the error and introduces a new one. Repeat until lunch—or, I get rate limited.
+
+![A joke prompt saying that it's very broken](assets/very-broken-joke-prompt.png)
 
 The hypothesis for today is that the problem isn't the agent's intelligence—it's that we keep making ourselves the feedback loop. If the agent could run lint, types, unit tests, an end-to-end probe, a visual diff, and a second-opinion review on its own, it would catch most of its own mistakes before we ever saw them. We'd stop reviewing every edit and start reviewing the ones that escape the loop.
 
@@ -22,11 +24,13 @@ That's the whole workshop in one sentence: **how do we make it cheap and automat
 
 You can get surprisingly far by writing a great prompt. I am not going to tell you to stop doing that. But, prompting discipline has a ceiling, and the ceiling is lower than people think.
 
+![ralph-wiggum](../../writing/assets/ralph-wiggum.png)
+
 A prompt is a one-shot instruction. A loop is a process that keeps running until something is true. "Don't use `waitForTimeout`" is a prompt. A lint rule that fails the build when `waitForTimeout` appears is a loop. The first one works until the agent forgets. The second one works until you delete the rule.
 
 The interesting thing about loops is that they compound. Every layer you add catches a class of mistake the previous layer missed, and _also_ makes the next layer cheaper to add. Once your tests run reliably, writing a visual regression gate is a config change. Once your visual regression gate exists, feeding the diff back to the agent is a few lines of glue. The work stacks.
 
-![ralph-wiggum](../../writing/assets/ralph-wiggum.png)
+![](assets/ralph-loop-diagram.png)
 
 ## The three beats of the day
 

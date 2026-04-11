@@ -1,6 +1,6 @@
 <script lang="ts">
   import { merge } from '$merge';
-  import type { Icon as IconType } from 'lucide-svelte';
+  import type { LucideIcon } from '@lucide/svelte';
   import type { ExtendElement } from '../component.types';
 
   import Label from '../label';
@@ -13,8 +13,8 @@
       details?: string;
       /** Hide label and use it as a placeholder */
       unlabeled?: boolean;
-      before?: typeof IconType;
-      after?: typeof IconType;
+      before?: LucideIcon;
+      after?: LucideIcon;
       prefix?: string;
       suffix?: string;
     }
@@ -36,9 +36,8 @@
   }: InputProps = $props();
 </script>
 
-{#snippet icon(iconType: typeof IconType)}
-  {@const Icon = iconType}
-  <Icon class="pointer-events-none h-4 w-4 dark:text-slate-400" aria-hidden="true" />
+{#snippet icon(IconComponent: LucideIcon)}
+  <IconComponent class="pointer-events-none h-4 w-4 dark:text-slate-400" aria-hidden="true" />
 {/snippet}
 
 <div>
