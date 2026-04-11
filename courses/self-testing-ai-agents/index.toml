@@ -1,5 +1,5 @@
 [[section]]
-title = "Opening: Framing and Upstream Prevention"
+title = "Introduction"
 
 [[section.item]]
 title = "The Hypothesis"
@@ -275,7 +275,7 @@ title = "The Whole Loop, End to End"
 href = "capstone-the-whole-loop-end-to-end.md"
 
 [[section]]
-title = "Appendix: Review Portability"
+title = "Appendix"
 
 [[section.item]]
 title = "Review Portability Beyond Bugbot"
@@ -289,9 +289,6 @@ href = "lab-port-the-review-loop-beyond-bugbot.md"
 title = "Solution"
 href = "port-the-review-loop-beyond-bugbot-solution.md"
 
-[[section]]
-title = "Appendix: Cross-Browser Coverage"
-
 [[section.item]]
 title = "Cross-Browser Validation Without Burning the Dev Loop"
 href = "cross-browser-validation-without-burning-the-dev-loop.md"
@@ -304,9 +301,6 @@ href = "lab-add-cross-browser-coverage.md"
 title = "Solution"
 href = "add-cross-browser-coverage-solution.md"
 
-[[section]]
-title = "Appendix: Nightly Verification"
-
 [[section.item]]
 title = "Nightly Verification Loops"
 href = "nightly-verification-loops.md"
@@ -318,9 +312,6 @@ href = "lab-add-a-nightly-verification-workflow.md"
 [[section.item.related]]
 title = "Solution"
 href = "add-a-nightly-verification-workflow-solution.md"
-
-[[section]]
-title = "Appendix: Porting the Loop"
 
 [[section.item]]
 title = "Porting the Shelf Loop to Another Stack"

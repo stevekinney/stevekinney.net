@@ -1,18 +1,18 @@
 ---
 title: 'Lab: Harden the Flaky Rate-Book Test'
-description: Take a real, deliberately broken Playwright test and apply every Module 3 pattern to make it fast, isolated, and rock-solid.
+description: Take a real, deliberately broken Playwright test and apply every Playwright-armor pattern to make it fast, isolated, and rock-solid.
 modified: 2026-04-11
 date: 2026-04-06
 ---
 
-Time to cash the checks from the last six lessons. The Shelf starter ships with a hardened `tests/end-to-end/rate-book.spec.ts`—study it if you want to see the target. Your job in this lab is to _rebuild_ it by hand, starting from the intentionally rough version below, so every Module 3 pattern lands in your fingers instead of just your eyes.
+Time to cash the checks from the last handful of lessons. The Shelf starter ships with a hardened `tests/end-to-end/rate-book.spec.ts`—study it if you want to see the target. Your job in this lab is to _rebuild_ it by hand, starting from the intentionally rough version below, so every Playwright-armor pattern lands in your fingers instead of just your eyes.
 
-The rough version works. Sort of. It passes until the machine gets slower, the selectors drift, or the database state stops matching your assumptions. It bundles every Module 3 anti-pattern into one short file, which makes it a great place to harden the whole loop.
+The rough version works. Sort of. It passes until the machine gets slower, the selectors drift, or the database state stops matching your assumptions. It bundles every Playwright anti-pattern into one short file, which makes it a great place to harden the whole loop.
 
 > [!NOTE] Two local-setup details to know
 > Shelf's storage-state setup drives the real login page because the form-action shortcut trips CSRF protection in [Better Auth](https://www.better-auth.com/), and `playwright.config.ts` pins `workers: 1` because the starter uses one shared SQLite file. Both are explicit in the repo; neither is a bug.
 
-Your job is to fix it. Every pattern we learned in Module 3 applies here.
+Your job is to fix it. Every pattern we learned in the Playwright lessons applies here.
 
 ## The starting point
 
@@ -107,13 +107,13 @@ The hardened Shelf starter ends up with an explicit toast and persisted rating a
 
 ## Checking your work against an agent
 
-Optional but instructive. Delete your hardened version, restore the original broken test, and ask Claude Code to fix it _without_ pointing it at any of the Module 3 lessons. See how close it gets on its own.
+Optional but instructive. Delete your hardened version, restore the original broken test, and ask Claude Code to fix it _without_ pointing it at any of the Playwright lessons. See how close it gets on its own.
 
 Then do it again, this time after updating `CLAUDE.md` with the rules from the lessons (locator hierarchy, waiting rules, authentication rule, seeding rule). Compare the two outputs. The second attempt should match your hand-written version much more closely. That's your evidence that the instructions file is doing its job.
 
 ## The one thing to remember
 
-Every anti-pattern in the starting file is individually fixable in under five minutes with the right pattern. What made the original test bad wasn't any one mistake—it was the absence of a framework for thinking about tests. Module 3 was that framework. This lab is where it becomes muscle memory.
+Every anti-pattern in the starting file is individually fixable in under five minutes with the right pattern. What made the original test bad wasn't any one mistake—it was the absence of a framework for thinking about tests. The Playwright lessons were that framework. This lab is where it becomes muscle memory.
 
 ## Additional Reading
 

@@ -106,7 +106,7 @@ If you finish early:
 
 A `CLAUDE.md` you would actually want the agent to read. Shorter than the one you started with. More opinionated. Every line earns its place by being something the agent does, not something the agent _is_.
 
-We'll come back to this file in almost every module from here on. By the end of the day, it's going to have rules from Module 3 ([Playwright](https://playwright.dev/) locators, waiting), Module 8 (lint, dead code), and Module 9 (the canonical CI command). The rewrite you do today is the spine that the rest of the day hangs on.
+We'll come back to this file in almost every lesson from here on. By the end of the day, it's going to have rules from [Playwright](https://playwright.dev/) locators and waiting (see [Locators and the Accessibility Hierarchy](locators-and-the-accessibility-hierarchy.md) and [The Waiting Story](the-waiting-story.md)), [lint and dead code detection](lint-and-types-as-guardrails.md), and [the canonical CI command](ci-as-the-loop-of-last-resort.md). The rewrite you do today is the spine that the rest of the day hangs on.
 
 ## Additional Reading
 

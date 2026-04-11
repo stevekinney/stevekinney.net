@@ -95,7 +95,7 @@ Add sections to `CLAUDE.md` that reflect every layer you wired up. At minimum:
 - In the local Shelf repository, those commands are `npm run lint`, `npm run typecheck`, and `npm run knip`.
 - Rules about `@ts-expect-error`, `eslint-disable`, and `--no-verify`.
 - A secrets section per the gitleaks lesson.
-- A reference back to the Playwright rules from Module 3 (locators, waiting, auth) so the custom lint rules are connected to the same source of truth.
+- A reference back to the Playwright rules ([locators](locators-and-the-accessibility-hierarchy.md), [waiting](the-waiting-story.md), [auth](storage-state-authentication.md)) so the custom lint rules are connected to the same source of truth.
 
 ### Acceptance for Part 6
 

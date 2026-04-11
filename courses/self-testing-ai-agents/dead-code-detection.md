@@ -11,7 +11,7 @@ Agents love to leave dead code behind. You ask them to rewrite a module, they wr
 
 This is not a moral failure on the agent's part. It is a predictable consequence of how agents work—they make _additive_ changes efficiently, and they make _subtractive_ changes only to the specific things they were told to change. The result is a codebase that accretes orphaned code at roughly the rate the agent is working, and if you're not catching the orphans, you're drowning in them within a month.
 
-The answer is dead code detection. Run it continuously. Treat orphans as a quality gate, not a cleanup task. This is the module where we turn orphan-detection into a first-class citizen of the loop.
+The answer is dead code detection. Run it continuously. Treat orphans as a quality gate, not a cleanup task. This is the lesson where we turn orphan-detection into a first-class citizen of the loop.
 
 ## The tools
 

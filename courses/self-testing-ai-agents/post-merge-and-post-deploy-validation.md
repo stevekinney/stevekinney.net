@@ -1,7 +1,7 @@
 ---
 title: Post-Merge and Post-Deploy Validation
 description: Green pull requests are not the end of the loop. This is the layer that proves the deployment itself is healthy and tells you when to stop the rollout.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -9,7 +9,7 @@ CI going green is a great feeling. It is also not the same thing as "the deploym
 
 I've shipped enough "perfectly green" pull requests that still broke on the real environment to stop pretending otherwise. Wrong environment variables. Wrong redirect URL. Wrong cookie domain. Background job didn't boot. CDN served the old asset manifest. Database migration passed and the route still exploded on first real traffic. You only need a few of these before "CI passed" stops sounding like a victory speech.
 
-So, this module is about the loop _after_ the merge gate.
+So, this lesson is about the loop _after_ the merge gate.
 
 > [!NOTE] Prerequisite
 > This lesson assumes you've already wired [CI as the Loop of Last Resort](ci-as-the-loop-of-last-resort.md). CI is the last pre-merge gate. Post-deploy validation is the first post-merge one.

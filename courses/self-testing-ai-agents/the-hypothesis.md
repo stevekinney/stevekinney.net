@@ -24,17 +24,17 @@ That's the whole workshop in one sentence: **how do we make it cheap and automat
 
 You can get surprisingly far by writing a great prompt. I am not going to tell you to stop doing that. But, prompting discipline has a ceiling, and the ceiling is lower than people think.
 
-![ralph-wiggum](../../writing/assets/ralph-wiggum.png)
+![Ralph Wiggum at a computer](../../writing/assets/ralph-wiggum.png)
 
 A prompt is a one-shot instruction. A loop is a process that keeps running until something is true. "Don't use `waitForTimeout`" is a prompt. A lint rule that fails the build when `waitForTimeout` appears is a loop. The first one works until the agent forgets. The second one works until you delete the rule.
 
 The interesting thing about loops is that they compound. Every layer you add catches a class of mistake the previous layer missed, and _also_ makes the next layer cheaper to add. Once your tests run reliably, writing a visual regression gate is a config change. Once your visual regression gate exists, feeding the diff back to the agent is a few lines of glue. The work stacks.
 
-![](assets/ralph-loop-diagram.png)
+![A chart diagramming the Ralph Loop](assets/ralph-loop-diagram.png)
 
 ## The three beats of the day
 
-The modules are ordered to start where you probably came here to start—agent-driven verification of real UI work—and to save the broader scaffolding for the end, where it flows naturally into CI.
+The lessons are ordered to start where you probably came here to start—agent-driven verification of real UI work—and to save the broader scaffolding for the end, where it flows naturally into CI.
 
 Think of the arc in three beats.
 
@@ -48,7 +48,7 @@ Think of the arc in three beats.
 
 A few things I want to flag up front so nobody is waiting for the shoe to drop.
 
-We're not doing a testing fundamentals course. The good news is that [we have one of those](https://frontendmasters.com/courses/testing/). If you want the full pyramid from first principles, I have two other courses for that (more on those in **Module 2**). Today assumes you can write a test and we're focused on what changes when an agent is the one driving.
+We're not doing a testing fundamentals course. The good news is that [we have one of those](https://frontendmasters.com/courses/testing/). If you want the full pyramid from first principles, I have two other courses for that — more on those in [The Testing Pyramid as a Feedback Hierarchy](the-testing-pyramid-as-a-feedback-hierarchy.md). Today assumes you can write a test and we're focused on what changes when an agent is the one driving.
 
 We're not doing a tour of _every_ agent. I'll call out Codex, Cursor, and Copilot where the patterns differ, but the default is [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) and the default stack is TypeScript, [SvelteKit](https://kit.svelte.dev/), [Vitest](https://vitest.dev/), and [Playwright](https://playwright.dev/). The patterns port; the keybindings don't.
 

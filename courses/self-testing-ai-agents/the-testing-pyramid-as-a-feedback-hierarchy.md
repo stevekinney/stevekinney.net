@@ -51,7 +51,7 @@ If you buy the loop-speed framing, the pyramid almost inverts: you want the _sho
 
 ## Where agents misuse the pyramid
 
-A few failure modes I see a lot, and that we're going to actively counter in the modules after this one.
+A few failure modes I see a lot, and that we're going to actively counter in the lessons after this one.
 
 **The agent writes end-to-end tests when unit tests would do.** Classic overreach. The agent changes a utility function, writes a [Playwright](https://playwright.dev/) test that clicks three pages to verify the utility function, and calls it done. The utility function needed a three-line [Vitest](https://vitest.dev/) case. The [Playwright](https://playwright.dev/) test is ten times slower, flakier, and tests the wrong thing. The fix: the instructions file explicitly says _what a unit test looks like in this repo, with an example path_, so the agent has a template to copy.
 
@@ -59,13 +59,13 @@ A few failure modes I see a lot, and that we're going to actively counter in the
 
 **The agent doesn't know the difference.** This is the most common failure mode. The agent writes "a test" without any awareness of which layer it's targeting, which means the test ends up halfway between two layers and exercises neither well. The fix is again the instructions file, and again with examples: "Here's what a unit test in this repo looks like. Here's what an integration test looks like. Here's what an end-to-end test looks like." Concrete file paths, not abstract descriptions.
 
-Notice the pattern—every fix routes back through the instructions file we rewrote in Module 1. The pyramid only works as a hierarchy if the agent knows which layer to reach for, and it only knows that because you told it.
+Notice the pattern—every fix routes back through the [instructions file](instructions-that-wire-the-agent-in.md). The pyramid only works as a hierarchy if the agent knows which layer to reach for, and it only knows that because you told it.
 
 ## The one thing to remember
 
 The pyramid, for our purposes, is a hierarchy of loops. Fast loops run continuously, slow loops run at checkpoints, slowest loops run in CI. The agent needs to know which loop a given change triggers, and that knowledge lives in the instructions file as concrete examples and concrete rules, not as "follow the testing pyramid."
 
-The next module picks up here and spends the whole morning on the slowest, most expensive, most pain-prone layer: Playwright. That's where the agent needs the most help, so that's where we spend the most time.
+The next set of lessons picks up here and spends the whole morning on the slowest, most expensive, most pain-prone layer: Playwright. That's where the agent needs the most help, so that's where we spend the most time.
 
 ## Additional Reading
 

@@ -1,7 +1,7 @@
 ---
 title: Instructions That Wire the Agent In
 description: The one rule for instruction files in this workshop—if the agent can't mechanically act on it, it doesn't belong there.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -151,7 +151,7 @@ Every line in the second version is something the agent can _do_. The first vers
 
 The same pattern works in [Cursor](https://cursor.com/) (`.cursor/rules/*.mdc`), Codex (`AGENTS.md`), and Copilot (`.github/copilot-instructions.md`). The filenames change, the directory changes, the syntax for nesting and scoping changes. The rule does not. If your rules file is full of adjectives, you're going to have a bad time regardless of which agent is reading it.
 
-We'll come back to instruction files in almost every module from here on. Module 3's locator hierarchy ends up as a rule in this file. Module 8's lint config ends up as a rule in this file. Module 9's CI command ends up as the canonical "what green means" in this file. The instruction file is where the rest of the workshop's loop gets _named_ to the agent.
+We'll come back to instruction files in almost every lesson from here on. The [locator hierarchy](locators-and-the-accessibility-hierarchy.md) ends up as a rule in this file. The [lint config](lint-and-types-as-guardrails.md) ends up as a rule in this file. The [canonical CI command](ci-as-the-loop-of-last-resort.md) ends up as the "what green means" in this file. The instruction file is where the rest of the workshop's loop gets _named_ to the agent.
 
 ## Additional Reading
 

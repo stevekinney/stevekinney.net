@@ -1,11 +1,11 @@
 ---
 title: 'Runtime Tools Compared: Playwright MCP, Chrome DevTools MCP, and Claude in Chrome'
 description: Three ways to let an agent drive a browser, what each one is actually good at, and when to reach for which.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
-We spent the morning making the scripted test suite something an agent can rely on. That's the slow, durable, repeatable loop. This module is about the fast, interactive loop: letting the agent _drive_ a browser in real time during development, poke at the page, read the console, and figure out what's going on.
+We spent the morning making the scripted test suite something an agent can rely on. That's the slow, durable, repeatable loop. This lesson is about the fast, interactive loop: letting the agent _drive_ a browser in real time during development, poke at the page, read the console, and figure out what's going on.
 
 There are three tools in this space that you should know about, and they are different enough that choosing between them matters.
 
@@ -37,12 +37,12 @@ Playwright MCP wraps Playwright's automation API as MCP tools. The agent says "o
 What this gives you:
 
 - **Controllable state.** You can run isolated for clean repro, or persistent when the task benefits from keeping session state around.
-- **Full Playwright API.** Locators, assertions, waits, network interception, screenshots. Everything we spent Module 3 talking about is available to the agent directly.
+- **Full Playwright API.** Locators, assertions, waits, network interception, screenshots. Everything we covered in the [Playwright](locators-and-the-accessibility-hierarchy.md) lessons is available to the agent directly.
 - **Reproducibility.** The agent's actions are effectively Playwright calls. If something works, you can often translate it directly into a scripted test.
 
 What this does _not_ give you:
 
-- **Your real accounts.** The agent is not logged into Gmail as you. It's logged into nothing, unless you set up storage state the way we did in Module 3.
+- **Your real accounts.** The agent is not logged into Gmail as you. It's logged into nothing, unless you set up [storage state](storage-state-authentication.md) the way we did earlier.
 - **Your real environment.** Extensions, devtools tweaks, the experimental feature flags you've enabled—none of those are present.
 - **Your real tabs.** The agent can't look at what you have open.
 
@@ -82,7 +82,7 @@ It's also the tool that needs the most user judgment because the agent is intera
 
 For today, Playwright MCP is the primary runtime tool, because today is about verification and the verification loop needs to be reproducible. When a lesson says "the agent probes the UI at runtime," assume Playwright MCP in an isolated or explicitly-configured state unless I specify otherwise.
 
-Chrome DevTools MCP comes in when we talk about failure dossiers in Module 6—reading the console and network is exactly what DevTools MCP is for, and a dossier that includes a captured console log is much more valuable than one that doesn't.
+Chrome DevTools MCP comes in when we talk about [failure dossiers](failure-dossiers-what-agents-actually-need-from-a-red-build.md)—reading the console and network is exactly what DevTools MCP is for, and a dossier that includes a captured console log is much more valuable than one that doesn't.
 
 Claude in Chrome is an honorable mention. I'll call it out in a couple of places where the task genuinely needs your real session. It's not the default for anything in this workshop, but it's the right tool for a narrow class of "look at the thing I'm already looking at" problems, and knowing it exists is part of being well-equipped.
 

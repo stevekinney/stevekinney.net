@@ -5,7 +5,7 @@ modified: 2026-04-11
 date: 2026-04-06
 ---
 
-One of the deliberate choices in the Shelf starter repo: there is no `.github/workflows/` directory. You are writing the workflow from scratch, informed by everything you've built today. If you had a broken workflow waiting for you, Shelf would have looked perpetually red in CI for the last six modules, and that would have been a terrible background noise. Blank canvas, your choice, now you have context.
+One of the deliberate choices in the Shelf starter repo: there is no `.github/workflows/` directory. You are writing the workflow from scratch, informed by everything you've built today. If you had a broken workflow waiting for you, Shelf would have looked perpetually red in CI for the last several lessons, and that would have been a terrible background noise. Blank canvas, your choice, now you have context.
 
 > [!NOTE] Prerequisite
 > This lab assumes you've completed **Lab: Build a Failure Dossier for Shelf**. The workflow below calls `npm run dossier`, which is the script you added to `package.json` in that lab. If you skipped it, either go back and do it, or remove the dossier-related steps from this workflow before running it.
@@ -135,7 +135,7 @@ Shelf's `playwright.config.ts` already starts the preview server through `webSer
 
 ### Step 4: the visual regression safety
 
-Your Playwright suite includes the screenshot tests from Module 4. They'll run as part of the `end-to-end` job. Add a step to upload the snapshot diffs as artifacts on failure—`playwright-report/` probably already includes them, but double-check.
+Your Playwright suite includes the screenshot tests from [Visual Regression as a Feedback Loop](visual-regression-as-a-feedback-loop.md). They'll run as part of the `end-to-end` job. Add a step to upload the snapshot diffs as artifacts on failure—`playwright-report/` probably already includes them, but double-check.
 
 ### Step 5: the nightly workflow
 
@@ -160,7 +160,7 @@ jobs:
 
 You don't have to fully implement these jobs today. Shelf ships each nightly job as a named placeholder with an `echo` command that explains the intended follow-up. The point is to have the file in place so the nightly cadence exists and the missing automation is explicit instead of implied.
 
-The appendix modules come back and turn these placeholders into real cross-browser and nightly loops. For the core day, the explicit placeholder is enough.
+The appendix lessons come back and turn these placeholders into real cross-browser and nightly loops. For the core day, the explicit placeholder is enough.
 
 > [!WARNING]
 > Do **not** wire `playwright test --update-snapshots` into a scheduled job, even as a stub. A cron that updates snapshots will silently rewrite every visual baseline whenever it runs and quietly destroy your visual regression gate. Snapshot updates should always be human-triggered (a `workflow_dispatch` job, or local `--update-snapshots` followed by a PR you review).
@@ -203,7 +203,7 @@ This turns the CI jobs into hard gates.
 
 ## The agent loop check
 
-The whole point of this module: when CI fails, can the agent recover without you?
+The whole point of this lesson: when CI fails, can the agent recover without you?
 
 Create a feature branch with a deliberate bug that only CI catches—something environment-specific. One easy option: a test that uses a local-only environment variable (`process.env.MY_MACHINE`) and fails when CI runs it on a fresh Linux box.
 
@@ -237,13 +237,13 @@ The new CI run should go green. You shouldn't need to paste a single error messa
 - Add a matrix strategy to the `end-to-end` job so Playwright runs against Chromium, Firefox, and WebKit on every run (or gate the matrix to PRs only to save minutes).
 - Add Playwright sharding to the `end-to-end` job to parallelize the suite across multiple runners.
 - Add a PR comment step that posts a summary of test results and links to artifacts, using the [GitHub Actions PR comment action](https://github.com/marketplace/actions/add-pr-comment) or equivalent.
-- Hook the custom MCP from Module 5 into a post-deploy smoke test: after a merge to main, run `verify_shelf_page` against the staging environment.
+- Hook the custom MCP from [Writing a Custom MCP Wrapper](writing-a-custom-mcp-wrapper.md) into a post-deploy smoke test: after a merge to main, run `verify_shelf_page` against the staging environment.
 - Run Bugbot (if not already integrated) and make its completion a required status check.
 - Write a single `workflow_dispatch` entry point that lets you manually run the whole pipeline against any branch from the GitHub UI.
 
 ## The one thing to remember
 
-CI is where the whole day's worth of loops meet for the last check before merge. Every job should correspond to a loop you built during the workshop—the static layer from Module 8, the tests from Module 3, the screenshots from Module 4, the dossier from Module 6. And every failure should be legible enough that the agent can recover without you. If CI works and the agent can't recover, the dossier is weak. If the agent can recover but CI is slow, your caching and parallelism need work. Tune both until the loop runs without you.
+CI is where the whole day's worth of loops meet for the last check before merge. Every job should correspond to a loop you built during the workshop—[the static layer](the-static-layer-as-underlayment.md), [the Playwright tests](locators-and-the-accessibility-hierarchy.md), [the screenshots](visual-regression-as-a-feedback-loop.md), [the dossier](failure-dossiers-what-agents-actually-need-from-a-red-build.md). And every failure should be legible enough that the agent can recover without you. If CI works and the agent can't recover, the dossier is weak. If the agent can recover but CI is slow, your caching and parallelism need work. Tune both until the loop runs without you.
 
 ## Additional Reading
 

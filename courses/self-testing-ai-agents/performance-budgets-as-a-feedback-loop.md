@@ -1,7 +1,7 @@
 ---
 title: Performance Budgets as a Feedback Loop
 description: Functional and visually correct is not enough if the change made the app slower or heavier. Budgets turn that into a real gate.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -9,7 +9,7 @@ There is a class of bug agents are weirdly good at introducing: the feature work
 
 Nobody writes that bug on purpose. It still ships all the time.
 
-So, this module is about adding one more loop: a cheap, boring, enforceable performance budget. Not a heroic one. Not a "let's do a full observability program before lunch" one. Just enough of a gate that an agent cannot quietly double your route weight or turn a fast interaction into a sticky one.
+So, this lesson is about adding one more loop: a cheap, boring, enforceable performance budget. Not a heroic one. Not a "let's do a full observability program before lunch" one. Just enough of a gate that an agent cannot quietly double your route weight or turn a fast interaction into a sticky one.
 
 > [!NOTE] Prerequisite
 > This lesson assumes you've already wired visual regression. Screenshot diffs tell you _what changed visually_. Performance budgets tell you whether the same change also made the application heavier or slower.

@@ -224,7 +224,7 @@ npx tsx scripts/run-gitleaks-staged.ts
 
 The shipped `CLAUDE.md` already reflects every layer. The "What done means" section lists the four commands in order. The "Static layer" section names `eslint.config.js`, `tsconfig.json`, and `knip.json` by path and lists the exact compiler flags. The "Git hooks and secrets" section names lefthook, `lefthook.yml`, and gitleaks, explains the `sample-config.json` allowlist, and points at `scripts/run-gitleaks-staged.ts` as the pre-commit secret scanner. The "Do not" section bans `@ts-expect-error`, `eslint-disable`, `--no-verify`, and `any`.
 
-These are not separate additions made during the lab—they are the _same_ sections we walked in the CLAUDE.md solution. The static layer lab is where those sections earn their place. If you completed the CLAUDE.md lab first and left placeholders for the static layer, this is where you fill them in. If you are doing the labs in order, the CLAUDE.md you wrote in Module 2 now has concrete rules to point at.
+These are not separate additions made during the lab—they are the _same_ sections we walked in the CLAUDE.md solution. The static layer lab is where those sections earn their place. If you completed the CLAUDE.md lab first and left placeholders for the static layer, this is where you fill them in. If you are doing the labs in order, the [CLAUDE.md you wrote earlier](lab-rewrite-the-bad-claude-md.md) now has concrete rules to point at.
 
 ## What you still need to run
 

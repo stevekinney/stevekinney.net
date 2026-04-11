@@ -32,7 +32,7 @@ A short list of [ESLint](https://eslint.org/) rules that pay for themselves in a
 - `@typescript-eslint/no-floating-promises`—every unawaited promise in an agent's code is a race condition waiting to happen. Hard error.
 - `@typescript-eslint/no-misused-promises`—`await`ing in a boolean context, passing an async function to a callback that expects sync, etc. Hard error.
 - `@typescript-eslint/strict-boolean-expressions`—forces explicit null checks instead of `if (user)`, which catches a class of "the empty string is falsy" bugs. Worth it.
-- `no-console` with an allowlist for `error` and `warn`—prevents the `console.log` littering I warned about in the Module 6 lesson on dossiers.
+- `no-console` with an allowlist for `error` and `warn`—prevents the `console.log` littering I warned about in [Failure Dossiers](failure-dossiers-what-agents-actually-need-from-a-red-build.md).
 - [`eslint-plugin-unicorn`](https://github.com/sindresorhus/eslint-plugin-unicorn) has a bunch of opinionated rules that catch subtle modern-JavaScript mistakes. I don't enable all of them, but `prefer-node-protocol`, `no-null`, and `error-message` all catch things.
 
 Your mileage varies on the last few based on team aesthetics. The first four are non-negotiable for me.
@@ -64,7 +64,7 @@ export default [
 
 Notice the error message. It names the violation, offers the alternatives, and points at `CLAUDE.md`. When the agent trips this rule, the error message is a self-contained fix prompt—it tells the agent what to do next. Write your lint messages like prompts because they _are_ prompts.
 
-Now extend the same rule to ban the other Playwright anti-patterns we hit in Module 3, plus one recurring server-side bug — handlers that pull `userId` out of the request body instead of the authenticated session. Each selector is a tiny AST query; read them below the code block for the mental model.
+Now extend the same rule to ban the other Playwright anti-patterns we hit in the [Playwright lessons](locators-and-the-accessibility-hierarchy.md), plus one recurring server-side bug — handlers that pull `userId` out of the request body instead of the authenticated session. Each selector is a tiny AST query; read them below the code block for the mental model.
 
 ```js
 {
@@ -111,7 +111,7 @@ Four rules, one config file. Translating each selector back into English:
 Four rules, one config file, all firing on every save. The next time the agent reaches for a banned pattern, the editor underlines it in red and the fix is one step away.
 
 > [!TIP] Write your ESLint rule messages like fix prompts
-> Every error message above names the violation, points at the alternative, and references `CLAUDE.md`. When the agent trips the rule, the message _is_ the next instruction in its context. Treat these messages the same way you'd treat the test failure dossier from Module 6: the richer the message, the less work the agent has to do to recover.
+> Every error message above names the violation, points at the alternative, and references `CLAUDE.md`. When the agent trips the rule, the message _is_ the next instruction in its context. Treat these messages the same way you'd treat the [test failure dossier](failure-dossiers-what-agents-actually-need-from-a-red-build.md): the richer the message, the less work the agent has to do to recover.
 
 ## The tricky one: banning `any` gradually
 

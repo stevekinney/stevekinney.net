@@ -12,7 +12,7 @@ Short lab. Two halves. The first half wires the screenshot gate into Shelf. The 
 
 ## Setup
 
-Make sure you're on the hardened Shelf from the Module 3 lab. You'll need storage-state authentication and seeding in place. Visual regression without those is a nightmare.
+Make sure you're on the hardened Shelf from [Lab: Harden the Flaky Rate-Book Test](lab-harden-the-flaky-rate-book-test.md). You'll need storage-state authentication and seeding in place. Visual regression without those is a nightmare.
 
 Shelf's `playwright.config.ts` pins `workers: 1` because the local SQLite database is still shared across workers—see [Deterministic State and Test Isolation](deterministic-state-and-test-isolation.md) for the why. The visual-regression workflow below works exactly the same way under single-worker, so you don't have to do anything special to accommodate it.
 
@@ -134,7 +134,7 @@ Now simulate the agent loop. You have two options depending on your setup:
 
 **Option A—manual.** Copy the diff image path into your Claude Code conversation and ask: _"The visual regression test failed. Here's the diff. What changed, and is the change intentional?"_ Let the agent look at the image and describe what it sees.
 
-**Option B—hooked.** If you're using Claude Code with a hook that auto-attaches test failures, just run the test and let the hook fire. (We'll wire this kind of hook properly in Module 9. For today, manual is fine.)
+**Option B—hooked.** If you're using Claude Code with a hook that auto-attaches test failures, just run the test and let the hook fire. (We'll wire this kind of hook properly in [Git Hooks with Lefthook](git-hooks-with-lefthook.md). For today, manual is fine.)
 
 Either way, notice what the agent says. It should identify that the buttons got bigger, guess correctly whether the change cascaded to other layout (on Shelf, it probably pushed some cards wider), and propose either reverting the change or updating the baseline.
 

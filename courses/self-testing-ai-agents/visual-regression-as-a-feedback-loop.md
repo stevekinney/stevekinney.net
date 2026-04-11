@@ -1,7 +1,7 @@
 ---
 title: Visual Regression as a Feedback Loop
 description: Screenshot diffs are not just a CI gate. They're the fastest way to tell an agent "this looks wrong" without saying a word.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -107,13 +107,13 @@ My recommendation: start with the built-in. If you find your team is drowning in
 
 Here's the bit that was news to me.
 
-When a screenshot test fails, the failure report includes the diff image. Claude Code and other agents that can read images can look at that diff directly. You can set up a hook (Module 9 has details) that, on a failed screenshot test, attaches the diff image to the agent's context and asks, "Was this change intentional? If not, what needs to be fixed?"
+When a screenshot test fails, the failure report includes the diff image. Claude Code and other agents that can read images can look at that diff directly. You can set up a hook (see [Git Hooks with Lefthook](git-hooks-with-lefthook.md) for details) that, on a failed screenshot test, attaches the diff image to the agent's context and asks, "Was this change intentional? If not, what needs to be fixed?"
 
 The agent will say things like, "The 'Rate' button is now 4 pixels taller because the new icon component has extra padding. The `ShelfCard` component now overflows. Either reduce the padding or increase the card height." That's the diff read back in natural language, as a prompt for the next edit.
 
 This is the agent self-correcting on visual feedback. Not long ago, this was science fiction. Now it's a hook in your CI config.
 
-And there is a natural next question after "did the UI change visually?": "did the same change also make the app slower or heavier?" Screenshot diffs do not answer that. The next module does.
+And there is a natural next question after "did the UI change visually?": "did the same change also make the app slower or heavier?" Screenshot diffs do not answer that. [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md) does.
 
 ## CLAUDE.md rules
 

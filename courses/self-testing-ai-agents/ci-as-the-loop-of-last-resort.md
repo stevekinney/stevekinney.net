@@ -1,11 +1,11 @@
 ---
 title: CI as the Loop of Last Resort
 description: By the time CI fires, the agent should have caught 95% of mistakes locally. CI is what catches the last 5% plus the environment-specific ones you can't catch locally.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
-We're almost done. One module left, and it's the module where everything we built today runs together, unattended, in a [GitHub Actions](https://docs.github.com/en/actions) workflow you own.
+We're almost done. One lesson left, and it's the one where everything we built today runs together, unattended, in a [GitHub Actions](https://docs.github.com/en/actions) workflow you own.
 
 I want to frame this up front, because the standard CI framing is different from mine.
 
@@ -15,9 +15,9 @@ My framing: **CI is the loop of last resort.** Everything we've built today is a
 
 That shift matters because it changes what you put _in_ CI. If CI is where tests run, you stuff everything into CI and wait ten minutes on every push. If CI is the last resort, you put the _strict versions_ of every check in CI—full Playwright matrix, full visual regression, full secret scan against history, full dependency audit—and you accept that CI is slow because you're running it against the environment you actually care about.
 
-One scope note before we go further: green CI is still not the end of the story. The next core module picks up on what happens after merge or deploy-preview. The appendix builds out the broader nightly and cross-browser loops in more detail.
+One scope note before we go further: green CI is still not the end of the story. [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md) picks up on what happens after merge or deploy-preview. The appendix builds out the broader nightly and cross-browser loops in more detail.
 
-Shelf's workflows use `npm`, `actions/setup-node@v4`, and cache both `~/.npm` and `~/.cache/ms-playwright`. That's the concrete reference point as you read the rest of this module.
+Shelf's workflows use `npm`, `actions/setup-node@v4`, and cache both `~/.npm` and `~/.cache/ms-playwright`. That's the concrete reference point as you read the rest of this lesson.
 
 ## What CI uniquely catches
 
@@ -62,7 +62,7 @@ On a nightly schedule:
 2. **Dependency audit.** Run `npm audit`, open an issue or PR if anything new turns up.
 3. **Full cross-browser Playwright run.** Chromium, Firefox, WebKit. Surface differences that the daily Chromium-only runs miss.
 
-On a connected GitHub repository, you can add merge-to-main deployment and post-deploy smoke checks later. The next module covers that core loop. The appendix lessons turn the nightly and cross-browser placeholders into fuller patterns once the one-day workshop flow is done.
+On a connected GitHub repository, you can add merge-to-main deployment and post-deploy smoke checks later. [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md) covers that core loop. The appendix lessons turn the nightly and cross-browser placeholders into fuller patterns once the one-day workshop flow is done.
 
 That's the whole shape Shelf ships: three jobs in the main workflow, three placeholder jobs in the nightly workflow, and no deploy workflow yet. Each is boring. The power is in the composition.
 
@@ -133,7 +133,7 @@ When CI fails, the agent should be able to recover without a human pasting error
 - The failure messages in the status check summary are specific, not "job failed."
 - Artifacts (traces, screenshots, dossier, report JSON) are uploaded to the run.
 - The PR gets a comment with a link to the artifacts and a short summary.
-- The dossier script from Module 6 runs in CI and the output is uploaded as an artifact.
+- The dossier script from [Failure Dossiers](failure-dossiers-what-agents-actually-need-from-a-red-build.md) runs in CI and the output is uploaded as an artifact.
 
 With those in place, the agent can read the PR, read the status check, download the dossier artifact, and iterate. You don't have to be the relay. The agent iterates until green or until it gets stuck in a way it can report back to you.
 

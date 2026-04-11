@@ -7,7 +7,7 @@ date: 2026-04-06
 
 We're about six hours into the day. Here's where I explain why the lesson you'd have expected to see first is showing up now.
 
-When I sketched this workshop originally, the static layer—[ESLint](https://eslint.org/), [TypeScript](https://www.typescriptlang.org/), [Prettier](https://prettier.io/), [knip](https://knip.dev/), [Lefthook](https://github.com/evilmartians/lefthook), [Gitleaks](https://github.com/gitleaks/gitleaks)—was Module 2. Right after the opening. The logic was that static checks are the cheapest feedback loop we have, and you want them in place before anything else, so the agent can lean on them from the start.
+When I sketched this workshop originally, the static layer—[ESLint](https://eslint.org/), [TypeScript](https://www.typescriptlang.org/), [Prettier](https://prettier.io/), [knip](https://knip.dev/), [Lefthook](https://github.com/evilmartians/lefthook), [Gitleaks](https://github.com/gitleaks/gitleaks)—sat right after the opening. The logic was that static checks are the cheapest feedback loop we have, and you want them in place before anything else, so the agent can lean on them from the start.
 
 The logic is correct. The ordering was wrong.
 
@@ -15,7 +15,7 @@ If I'd put the static layer up front, I'd have spent an hour telling you to inst
 
 By now, the context exists. You know why you want that lint rule. You know because you spent an hour this morning explaining the ban to yourself, and now you want the computer to explain it next time. You know why you want a git hook that blocks the commit if the screenshot snapshots changed without an explanation. You know why you want dead code detection. Every static check I'm about to walk through is an answer to a question you've already asked today.
 
-That's why this module is here. Not as a grab bag, but as the _answers_ to the grab bag.
+That's why this lesson is here. Not as a grab bag, but as the _answers_ to the grab bag.
 
 ## The mental model
 
@@ -26,7 +26,7 @@ Each of these runs in milliseconds to seconds. None of them require a browser. N
 > [!NOTE]
 > In the local Shelf repository for this workshop, `npm` is the source of truth for verification commands. Some lesson snippets use `bun` for package installation because that's my default elsewhere. Match the repository you are actually in. The real requirement is that the repo exposes stable, named scripts and that the agent is told to run them.
 
-The specific pieces we're going to cover in this module:
+The specific pieces we're going to cover:
 
 - **ESLint and TypeScript** as opinionated guardrails, including custom rules for the Playwright patterns from this morning.
 - **Dead code detection** with knip and dependency-cruiser. This is a big one for agent workflows—agents love to leave orphans behind.
@@ -73,9 +73,9 @@ Claude Code supports hooks—shell commands that fire on specific events such as
 
 That's a real, useful feedback loop. It's also completely Claude Code-specific. Cursor has its own flavor (Rules + Agents), Codex has its own, Copilot has its own.
 
-My take: hooks are _one_ way to wire a static check into the agent's loop, but they're not the only way, and they're not the most portable way. A git hook via lefthook runs on commit regardless of which agent edited the file. That's my default. If you're committed to Claude Code and want the tighter loop, add Claude hooks on top of the git hooks—they're complementary, not alternatives. We'll cover both in the git hooks lesson later in this module.
+My take: hooks are _one_ way to wire a static check into the agent's loop, but they're not the only way, and they're not the most portable way. A git hook via lefthook runs on commit regardless of which agent edited the file. That's my default. If you're committed to Claude Code and want the tighter loop, add Claude hooks on top of the git hooks—they're complementary, not alternatives. We'll cover both in the [git hooks lesson](git-hooks-with-lefthook.md).
 
-## What's in the rest of the module
+## What's in the rest of this section
 
 I'll say what each of the next lessons covers in one line so you can decide whether to read them in order or pick the ones you care about.
 
