@@ -111,7 +111,7 @@ Names three config files by path: `eslint.config.js`, `tsconfig.json`, `knip.jso
 
 ### Git hooks and secrets
 
-Names `husky`, `lint-staged`, and `gitleaks` by name. Names the exact hook files (`.husky/pre-commit`, `.husky/pre-push`). The rule about `sample-config.json` being deliberate bait prevents the agent from "fixing" an intentional test fixture.
+Names `lefthook` and `gitleaks` by name. Names the exact hook config file (`lefthook.yml`) and the staged-snapshot wrapper (`scripts/run-gitleaks-staged.ts`). The rule about `sample-config.json` being deliberate bait prevents the agent from "fixing" an intentional test fixture.
 
 ### "Do not"
 

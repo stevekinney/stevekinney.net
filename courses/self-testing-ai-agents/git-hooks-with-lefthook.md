@@ -13,7 +13,7 @@ It works. I've shipped it on plenty of projects. But, every time I set it up I t
 
 [Lefthook](https://github.com/evilmartians/lefthook) is the tool that made me stop thinking that. It's a single binary (written in Go, distributed via npm if you want it) that replaces Husky _and_ lint-staged in one configuration file. One YAML file. No shell scripts. No `prepare` hook. No second package to manage staged-file filtering—Lefthook handles that natively with its `glob` and `run` options.
 
-I'm covering it early in the day because the rest of the workshop assumes you have a working hook layer. If you already have Husky wired up and you're happy with it, skip this lesson—the later [Git Hooks with Husky and Lint-Staged](git-hooks-with-husky-and-lint-staged.md) lesson covers that path in depth. But if you're starting fresh or you want a simpler setup, Lefthook is the one I'd reach for now.
+I'm covering it early in the day because the rest of the workshop assumes you have a working hook layer. The Shelf starter ships a lefthook configuration, and the static-layer lab later in the day assumes that's what you're wiring up. If you already have Husky wired up on your own project and you're happy with it, that's fine — the concepts below port directly. But if you're starting fresh, Lefthook is the one I'd reach for now.
 
 ## Installation
 
@@ -137,6 +137,5 @@ Lefthook replaces Husky and lint-staged with a single YAML file. One file, one t
 
 ## Additional Reading
 
-- [Git Hooks with Husky and Lint-Staged](git-hooks-with-husky-and-lint-staged.md)
 - [Lint and Types as Guardrails](lint-and-types-as-guardrails.md)
 - [Secret Scanning with Gitleaks](secret-scanning-with-gitleaks.md)

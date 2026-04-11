@@ -1,6 +1,6 @@
 ---
 title: 'Wire the Static Layer into Shelf: Solution'
-description: Walkthrough of every shipped static-layer artifact—ESLint rules, TypeScript strict flags, knip, husky hooks, gitleaks, and the CLAUDE.md additions—with verification commands for each part.
+description: Walkthrough of every shipped static-layer artifact—ESLint rules, TypeScript strict flags, knip, the lefthook config, gitleaks, and the CLAUDE.md additions—with verification commands for each part.
 modified: 2026-04-11
 date: 2026-04-10
 ---
@@ -144,50 +144,45 @@ The `ignoreDependencies` array handles Tailwind. Tailwind v4 uses CSS `@import` 
 npm run knip
 ```
 
-### Part 4: Husky and lint-staged
+### Part 4: Lefthook
 
-Two hook files. `.husky/pre-commit` contains one line:
+One file. Open `lefthook.yml` at the repo root:
 
-```sh
-npm run pre-commit
+```yaml
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: '*.{ts,svelte,js,mjs,cjs}'
+      run: npx eslint --fix --max-warnings=0 {staged_files}
+      stage_fixed: true
+    format:
+      glob: '*.{ts,svelte,js,mjs,cjs,json,md,yml,yaml,css}'
+      run: npx prettier --write {staged_files}
+      stage_fixed: true
+    secrets:
+      run: npx tsx scripts/run-gitleaks-staged.ts
+
+pre-push:
+  commands:
+    checks:
+      run: npm run pre-push
 ```
 
-`.husky/pre-push` contains one line:
+The `pre-commit` block runs three commands in parallel. The `lint` command expands `{staged_files}` to the staged files matching the `glob` and hands them to ESLint with `--fix --max-warnings=0`—auto-fixable issues get corrected, and any remaining warning becomes an error. The `format` command does the same for Prettier, across a wider glob that also covers JSON, Markdown, YAML, and CSS. Both commands use `stage_fixed: true`, which restages whatever the auto-fixers changed. The `secrets` command runs the gitleaks wrapper we cover in Part 5—it is intentionally unscoped by `glob` because the wrapper re-lists the staged index itself and would be confused by a pre-filtered argument list.
 
-```sh
-npm run pre-push
-```
+The `pre-push` block shells out to `npm run pre-push`, which is the exact same script Shelf uses for local verification: `npm run typecheck && npm run knip && npm run test:unit`. The ordering matters—typecheck is cheapest, knip is next, unit tests are last. If typecheck fails, knip and tests never run.
 
-Both delegate to named scripts in `package.json`:
-
-```json
-"pre-commit": "lint-staged",
-"pre-push": "npm run typecheck && npm run knip && npm run test:unit"
-```
-
-The `pre-commit` script runs `lint-staged`, which processes only the staged files. The `lint-staged` config in `package.json`:
-
-```json
-"lint-staged": {
-  "*.{ts,svelte,js,mjs,cjs}": [
-    "eslint --fix --max-warnings=0",
-    "prettier --write"
-  ]
-}
-```
-
-ESLint runs with `--fix` so auto-fixable issues get corrected and restaged. Prettier runs after ESLint so formatting is always consistent. The `--max-warnings=0` flag means warnings are treated as errors in the staged-file check—no "I'll fix that later" drift.
-
-The `pre-push` script runs the heavier checks: typecheck, knip, and unit tests. These are too slow for every commit but fast enough for every push. The ordering matters: typecheck is cheapest, knip is next, unit tests are last. If typecheck fails, knip and tests never run.
+`lefthook install` is wired into the `prepare` script in `package.json`, so running `npm install` after cloning sets up `.git/hooks/pre-commit` and `.git/hooks/pre-push` automatically. No manual step required.
 
 **Verification:**
 
 ```sh
-# Prove pre-commit fires
-npm run pre-commit
+# Prove pre-commit fires (from repo root, against whatever you have staged)
+npx lefthook run pre-commit
 
 # Prove pre-push fires
-npm run pre-push
+npx lefthook run pre-push
 ```
 
 ### Part 5: Secret scanning with gitleaks
@@ -204,15 +199,14 @@ It resolves the `gitleaks` binary with `which`. If gitleaks is not installed, it
 
 It runs `gitleaks dir <temp-dir> --redact` with the `.gitleaks.toml` config if one exists. The `--redact` flag ensures that if a secret is found, the error output does not echo the secret itself into the terminal.
 
-The `lint-staged` config wires this script as the final step:
+The `secrets` command in `lefthook.yml` shells out to this script as the final pre-commit gate:
 
-```json
-"*.{ts,svelte,js,mjs,cjs}": [
-  "eslint --fix --max-warnings=0",
-  "prettier --write",
-  "tsx scripts/run-gitleaks-staged.ts"
-]
+```yaml
+secrets:
+  run: npx tsx scripts/run-gitleaks-staged.ts
 ```
+
+Note the deliberate lack of a `glob` field. The wrapper script re-enumerates the staged index on its own, so handing it a pre-filtered `{staged_files}` list would double-filter. Let the script do its own listing.
 
 **Verification:**
 
@@ -228,7 +222,7 @@ npx tsx scripts/run-gitleaks-staged.ts
 
 ### Part 6: the CLAUDE.md update
 
-The shipped `CLAUDE.md` already reflects every layer. The "What done means" section lists the four commands in order. The "Static layer" section names `eslint.config.js`, `tsconfig.json`, and `knip.json` by path and lists the exact compiler flags. The "Git hooks and secrets" section names husky, lint-staged, and gitleaks, names the hook files, and explains the `sample-config.json` allowlist. The "Do not" section bans `@ts-expect-error`, `eslint-disable`, `--no-verify`, and `any`.
+The shipped `CLAUDE.md` already reflects every layer. The "What done means" section lists the four commands in order. The "Static layer" section names `eslint.config.js`, `tsconfig.json`, and `knip.json` by path and lists the exact compiler flags. The "Git hooks and secrets" section names lefthook, `lefthook.yml`, and gitleaks, explains the `sample-config.json` allowlist, and points at `scripts/run-gitleaks-staged.ts` as the pre-commit secret scanner. The "Do not" section bans `@ts-expect-error`, `eslint-disable`, `--no-verify`, and `any`.
 
 These are not separate additions made during the lab—they are the _same_ sections we walked in the CLAUDE.md solution. The static layer lab is where those sections earn their place. If you completed the CLAUDE.md lab first and left placeholders for the static layer, this is where you fill them in. If you are doing the labs in order, the CLAUDE.md you wrote in Module 2 now has concrete rules to point at.
 
@@ -246,9 +240,9 @@ npm run typecheck
 # Part 3: Knip
 npm run knip
 
-# Part 4: Husky
-npm run pre-commit
-npm run pre-push
+# Part 4: Lefthook
+npx lefthook run pre-commit
+npx lefthook run pre-push
 
 # Part 5: Gitleaks
 gitleaks version
@@ -274,7 +268,7 @@ All four should exit zero on the clean starter.
 - **Scope your bans.** The `waitForTimeout` rule applies only to test files. The `networkidle` rule applies globally. The `userId` rule applies globally. Each ban is scoped to where the pattern is actually dangerous, not where it is theoretically possible.
 - **Strict mode is a ratchet.** Once `noUncheckedIndexedAccess` is on and the codebase compiles clean, every future contributor inherits that constraint without knowing it was a deliberate choice. The flag _is_ the documentation.
 - **Dead code detection catches what the agent leaves behind.** Agents write code, realize they need a different approach, and leave the first attempt in place. Knip finds it. Without knip, abandoned utilities accumulate until someone notices the import graph is a mess.
-- **Hooks are cheap insurance.** `lint-staged` runs in under two seconds on a typical commit. The pre-push hook adds maybe fifteen seconds. The cost is negligible. The alternative—finding the lint error in CI ten minutes later—is not.
+- **Hooks are cheap insurance.** Lefthook's pre-commit block runs in under two seconds on a typical commit—ESLint, Prettier, and the secret scan all running in parallel against staged files. The pre-push hook adds maybe fifteen seconds for typecheck + knip + unit tests. The cost is negligible. The alternative—finding the lint error in CI ten minutes later—is not.
 - **The gitleaks script is a pragmatic workaround.** Materializing the staged index into a temp directory is more reliable than any of the staged-file flags gitleaks has offered across releases. When the upstream behavior stabilizes, you can simplify. Until then, the script works.
 
 ## Additional Reading
@@ -283,5 +277,5 @@ All four should exit zero on the clean starter.
 - [The Static Layer as Underlayment](the-static-layer-as-underlayment.md)
 - [Lint and Types as Guardrails](lint-and-types-as-guardrails.md)
 - [Dead Code Detection](dead-code-detection.md)
-- [Git Hooks with Husky and Lint-Staged](git-hooks-with-husky-and-lint-staged.md)
+- [Git Hooks with Lefthook](git-hooks-with-lefthook.md)
 - [Secret Scanning with Gitleaks](secret-scanning-with-gitleaks.md)

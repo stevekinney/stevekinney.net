@@ -1,6 +1,6 @@
 ---
 title: 'Lab: Wire the Static Layer into Shelf'
-description: Install and configure the whole stack—ESLint custom rules, TypeScript strict, knip, husky, lint-staged, gitleaks—and prove each layer fires on the right mistake.
+description: Install and configure the whole stack—ESLint custom rules, TypeScript strict, knip, lefthook, gitleaks—and prove each layer fires on the right mistake.
 modified: 2026-04-11
 date: 2026-04-06
 ---
@@ -59,31 +59,31 @@ Install knip. Configure it per the lesson. Run it on Shelf.
 - [ ] Removing the file restores clean knip output.
 - [ ] If your repository still contains a retired subtree like `src/lib/legacy-auth/`, it is explicitly ignored. If your local Shelf clone does not contain that directory, do not invent it just to satisfy the lab.
 
-## Part 4: Husky and lint-staged
+## Part 4: Lefthook
 
-Install husky and lint-staged. Wire pre-commit and pre-push hooks per the lesson.
+Install lefthook. Wire `lefthook.yml` per the [Git Hooks with Lefthook](git-hooks-with-lefthook.md) lesson so pre-commit runs the fast checks on staged files and pre-push runs the slightly-slower checks on the whole tree.
 
 ### Acceptance for Part 4
 
-- [ ] `.husky/pre-commit` exists and runs `npm run pre-commit`.
-- [ ] `.husky/pre-push` exists and runs `npm run pre-push`, which in turn runs at least `npm run typecheck` and `npm run knip`.
-- [ ] `package.json` has `pre-commit` and `lint-staged` configuration.
-- [ ] Making a change with a lint error and running `npm run pre-commit` against the staged diff aborts with the lint error visible.
+- [ ] `lefthook.yml` exists at the repo root.
+- [ ] `pre-commit` runs ESLint, Prettier, and a secret scan against `{staged_files}`, all marked `parallel: true`, and any auto-fixed files are restaged via `stage_fixed: true`.
+- [ ] `pre-push` runs `npm run pre-push`, which in turn runs at least `npm run typecheck` and `npm run knip`.
+- [ ] Making a change with a lint error and running `lefthook run pre-commit` aborts with the lint error visible.
 - [ ] Auto-fixable issues (formatting) get fixed and restaged automatically.
 
 ## Part 5: Secret scanning
 
-Install gitleaks. Wire it into `lint-staged`. Run it against staged content.
+Install gitleaks. Add a `secrets` command to the `pre-commit` block in `lefthook.yml`. Run it against staged content.
 
 > [!NOTE]
-> With the current Gitleaks release used in this workshop, `gitleaks git --staged` was not a reliable pre-commit verifier for newly added files. The local Shelf repository fixes that by materializing the exact git index into a temporary directory and running `gitleaks dir` there from `scripts/run-gitleaks-staged.ts`.
+> With the current Gitleaks release used in this workshop, `gitleaks git --staged` was not a reliable pre-commit verifier for newly added files. The local Shelf repository fixes that by materializing the exact git index into a temporary directory and running `gitleaks dir` there from `scripts/run-gitleaks-staged.ts`. That wrapper is what the lefthook `secrets` command shells out to.
 
 ### Acceptance for Part 5
 
 - [ ] `gitleaks version` runs on your machine.
-- [ ] `lint-staged` has a gitleaks entry.
+- [ ] `lefthook.yml` has a `secrets` command under `pre-commit` that invokes `npx tsx scripts/run-gitleaks-staged.ts`.
 - [ ] `.gitleaks.toml` allowlists `sample-config.json` and `tests/fixtures/`.
-- [ ] Running the staged-snapshot script (`npx tsx scripts/run-gitleaks-staged.ts`) exits zero for the clean staged state.
+- [ ] Running the staged-snapshot script directly (`npx tsx scripts/run-gitleaks-staged.ts`) exits zero for the clean staged state.
 - [ ] Attempting to stage a file containing `BETTER_AUTH_SECRET="7Xse4XqnSo3hcT31Yb2vi7LMt6BYI93w.0EWmIcjHKAdde1SY5TEVqh5fPu6NvFBf"` triggers the hook and blocks the commit.
 - [ ] The `sample-config.json` file can still be committed without issue (the allowlist works).
 
@@ -144,5 +144,5 @@ The static layer is five tools and an hour of setup. Every one of them runs unde
 - [The Static Layer as Underlayment](the-static-layer-as-underlayment.md)
 - [Lint and Types as Guardrails](lint-and-types-as-guardrails.md)
 - [Dead Code Detection](dead-code-detection.md)
-- [Git Hooks with Husky and Lint-Staged](git-hooks-with-husky-and-lint-staged.md)
+- [Git Hooks with Lefthook](git-hooks-with-lefthook.md)
 - [Secret Scanning with Gitleaks](secret-scanning-with-gitleaks.md)

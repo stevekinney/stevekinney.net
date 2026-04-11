@@ -1,7 +1,7 @@
 ---
 title: Secret Scanning with Gitleaks
 description: Agents commit fake API keys. Sometimes they commit real ones. Gitleaks is the boring tool that prevents the latter with almost no configuration.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -44,17 +44,17 @@ gitleaks version
 
 ## Wiring it into the pre-commit hook
 
-Add to `lint-staged` config:
+Add a `secrets` command to the `pre-commit` block in `lefthook.yml`:
 
-```json
-{
-  "lint-staged": {
-    "*": ["npx tsx scripts/run-gitleaks-staged.ts"]
-  }
-}
+```yaml
+pre-commit:
+  parallel: true
+  commands:
+    secrets:
+      run: npx tsx scripts/run-gitleaks-staged.ts
 ```
 
-In Shelf, that script materializes the exact staged snapshot into a temporary directory and runs `gitleaks dir` on it. That is more reliable than depending on whichever staged-file flags your installed Gitleaks version happens to support this month.
+In Shelf, that script materializes the exact staged snapshot into a temporary directory and runs `gitleaks dir` on it. That is more reliable than depending on whichever staged-file flags your installed Gitleaks version happens to support this month. Note the deliberate lack of a `glob` field on the `secrets` command — the wrapper script re-enumerates the staged index itself, so handing it a pre-filtered `{staged_files}` list would double-filter.
 
 Test it:
 
@@ -71,7 +71,7 @@ git reset HEAD fake.env
 rm fake.env
 ```
 
-If the hook didn't fire, double-check gitleaks is installed and lint-staged is wired correctly.
+If the hook didn't fire, double-check gitleaks is installed and the `secrets` command is wired into `lefthook.yml` correctly.
 
 ## Running it on history, once
 
@@ -183,7 +183,7 @@ The "obviously-fake values" rule is specifically to prevent the agent's favorite
 ## The 30-second version of this whole lesson
 
 1. Install gitleaks.
-2. Add the staged-snapshot helper script to `lint-staged`.
+2. Add the staged-snapshot helper script as a `secrets` command in `lefthook.yml`.
 3. Run a full Gitleaks scan once on your existing history. Rotate anything real that it finds.
 4. Add the gitleaks GitHub Action to your CI as a safety net.
 5. Never bypass the hook. If gitleaks says it found a secret, it found a secret.
@@ -196,5 +196,5 @@ Secret scanning is the cheapest, highest-value thing in this entire module. The 
 
 ## Additional Reading
 
-- [Git Hooks with Husky and Lint-Staged](git-hooks-with-husky-and-lint-staged.md)
+- [Git Hooks with Lefthook](git-hooks-with-lefthook.md)
 - [Lab: Wire the Static Layer into Shelf](lab-wire-the-static-layer-into-shelf.md)

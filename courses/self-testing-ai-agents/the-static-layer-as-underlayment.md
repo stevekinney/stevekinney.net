@@ -1,13 +1,13 @@
 ---
 title: The Static Layer as Underlayment
 description: Lint, types, dead code, hooks, secret scanning—the cheap stuff that should be running underneath everything. Why it lives at the end of the day.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
 We're about six hours into the day. Here's where I explain why the lesson you'd have expected to see first is showing up now.
 
-When I sketched this workshop originally, the static layer—[ESLint](https://eslint.org/), [TypeScript](https://www.typescriptlang.org/), [Prettier](https://prettier.io/), [knip](https://knip.dev/), [Husky](https://typicode.github.io/husky/), [lint-staged](https://github.com/lint-staged/lint-staged), [Gitleaks](https://github.com/gitleaks/gitleaks)—was Module 2. Right after the opening. The logic was that static checks are the cheapest feedback loop we have, and you want them in place before anything else, so the agent can lean on them from the start.
+When I sketched this workshop originally, the static layer—[ESLint](https://eslint.org/), [TypeScript](https://www.typescriptlang.org/), [Prettier](https://prettier.io/), [knip](https://knip.dev/), [Lefthook](https://github.com/evilmartians/lefthook), [Gitleaks](https://github.com/gitleaks/gitleaks)—was Module 2. Right after the opening. The logic was that static checks are the cheapest feedback loop we have, and you want them in place before anything else, so the agent can lean on them from the start.
 
 The logic is correct. The ordering was wrong.
 
@@ -30,7 +30,7 @@ The specific pieces we're going to cover in this module:
 
 - **ESLint and TypeScript** as opinionated guardrails, including custom rules for the Playwright patterns from this morning.
 - **Dead code detection** with knip and dependency-cruiser. This is a big one for agent workflows—agents love to leave orphans behind.
-- **Git hooks** with husky and lint-staged, including the "Claude hooks" mention (they're a more specific version of the same idea).
+- **Git hooks** with lefthook, including the "Claude hooks" mention (they're a more specific version of the same idea).
 - **Secret scanning** with gitleaks. Credentials in test fixtures are the canonical agent mistake.
 - A light-touch mention of **axe-core** as the accessibility layer that belongs in the static tier even though it technically runs in a browser.
 
@@ -73,7 +73,7 @@ Claude Code supports hooks—shell commands that fire on specific events such as
 
 That's a real, useful feedback loop. It's also completely Claude Code-specific. Cursor has its own flavor (Rules + Agents), Codex has its own, Copilot has its own.
 
-My take: hooks are _one_ way to wire a static check into the agent's loop, but they're not the only way, and they're not the most portable way. A git hook via husky runs on commit regardless of which agent edited the file. That's my default. If you're committed to Claude Code and want the tighter loop, add Claude hooks on top of the git hooks—they're complementary, not alternatives. We'll cover both in the git hooks lesson later in this module.
+My take: hooks are _one_ way to wire a static check into the agent's loop, but they're not the only way, and they're not the most portable way. A git hook via lefthook runs on commit regardless of which agent edited the file. That's my default. If you're committed to Claude Code and want the tighter loop, add Claude hooks on top of the git hooks—they're complementary, not alternatives. We'll cover both in the git hooks lesson later in this module.
 
 ## What's in the rest of the module
 
@@ -81,7 +81,7 @@ I'll say what each of the next lessons covers in one line so you can decide whet
 
 - **Lint and Types as Guardrails**—why ESLint's recommended config isn't enough, and the specific rules I'd add for agent-driven codebases.
 - **Dead Code Detection**—knip and the one-line script that catches orphaned files before they rot.
-- **Git Hooks with Husky and Lint-Staged**—the right hooks, the wrong hooks, and how to not make everyone hate git commits.
+- **Git Hooks with Lefthook**—the right hooks, the wrong hooks, and how to not make everyone hate git commits.
 - **Secret Scanning with Gitleaks**—the agent has already committed a fake API key once on my watch. Do not let this be you.
 - **The Lab**—wire the whole stack into Shelf, verify each layer fires on the right mistake.
 
@@ -114,5 +114,5 @@ graph TB
 
 - [Lint and Types as Guardrails](lint-and-types-as-guardrails.md)
 - [Dead Code Detection](dead-code-detection.md)
-- [Git Hooks with Husky and Lint-Staged](git-hooks-with-husky-and-lint-staged.md)
+- [Git Hooks with Lefthook](git-hooks-with-lefthook.md)
 - [Secret Scanning with Gitleaks](secret-scanning-with-gitleaks.md)

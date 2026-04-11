@@ -1,7 +1,7 @@
 ---
 title: Dead Code Detection
 description: Agents leave orphans behind. Knip and dependency-cruiser find them before the orphans rot into a half-working codebase.
-modified: 2026-04-07
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -84,7 +84,7 @@ Don't just mute findings. Every ignore is a future bug.
 The trick with dead code detection is running it _often enough_ that orphans don't accumulate. Options, in order of tightness:
 
 - **On every CI run.** Block merge if knip reports new findings.
-- **On every commit via a git hook.** The lint-staged / husky lesson has the details.
+- **On every commit via a git hook.** The [Git Hooks with Lefthook](git-hooks-with-lefthook.md) lesson has the details.
 - **On every save, via a file watcher.** Knip doesn't have an editor extension, but you can wire `bunx knip --no-progress` into a `chokidar` watcher if you want findings without leaving the editor.
 - **On a nightly job** that opens a cleanup PR. This is the lowest-friction version—nobody is blocked, but the cleanup happens automatically.
 
@@ -174,4 +174,4 @@ Agents accrete dead code faster than humans do because additive edits are the ch
 ## Additional Reading
 
 - [Lint and Types as Guardrails](lint-and-types-as-guardrails.md)
-- [Git Hooks with Husky and Lint-Staged](git-hooks-with-husky-and-lint-staged.md)
+- [Git Hooks with Lefthook](git-hooks-with-lefthook.md)

@@ -226,10 +226,6 @@ title = "Dead Code Detection"
 href = "dead-code-detection.md"
 
 [[section.item]]
-title = "Git Hooks with Husky and Lint-Staged"
-href = "git-hooks-with-husky-and-lint-staged.md"
-
-[[section.item]]
 title = "Secret Scanning with Gitleaks"
 href = "secret-scanning-with-gitleaks.md"
 
