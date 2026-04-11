@@ -1,7 +1,7 @@
 ---
 title: Tuning Bugbot for Your Codebase
 description: How to configure Cursor Bugbot so it finds the real issues and shuts up about the rest.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -29,8 +29,8 @@ Shelf commits the tuned `.cursor/BUGBOT.md` to the repository even before the ho
 
 ## Context
 
-Shelf is a reading-tracker built on SvelteKit + TypeScript + Drizzle + SQLite.
-Tests run on Vitest (unit) and Playwright (end-to-end). Better Auth handles
+Shelf is a reading-tracker built on [SvelteKit](https://kit.svelte.dev/) + TypeScript + [Drizzle](https://orm.drizzle.team/) + SQLite.
+Tests run on [Vitest](https://vitest.dev/) (unit) and [Playwright](https://playwright.dev/) (end-to-end). [Better Auth](https://www.better-auth.com/) handles
 authentication; authorization helpers live in `src/lib/server/authorization.ts`.
 
 ## What to flag
@@ -61,7 +61,7 @@ authentication; authorization helpers live in `src/lib/server/authorization.ts`.
 - HAR fixtures under `tests/fixtures/*.har`.
 - Generated `build/` outputs.
 - Lockfiles.
-- `src/lib/server/db/auth.schema.ts` — regenerated from Better Auth, not
+- `src/lib/server/db/auth.schema.ts` — regenerated from [Better Auth](https://www.better-auth.com/), not
   hand-edited.
 
 ## Tone

@@ -1,7 +1,7 @@
 ---
 title: Lint and Types as Guardrails
 description: ESLint's recommended rules are a starting point, not a finish line. The rules that actually help agents are the ones you write for your own codebase.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -33,7 +33,7 @@ A short list of [ESLint](https://eslint.org/) rules that pay for themselves in a
 - `@typescript-eslint/no-misused-promises`—`await`ing in a boolean context, passing an async function to a callback that expects sync, etc. Hard error.
 - `@typescript-eslint/strict-boolean-expressions`—forces explicit null checks instead of `if (user)`, which catches a class of "the empty string is falsy" bugs. Worth it.
 - `no-console` with an allowlist for `error` and `warn`—prevents the `console.log` littering I warned about in the Module 6 lesson on dossiers.
-- `eslint-plugin-unicorn` has a bunch of opinionated rules that catch subtle modern-JavaScript mistakes. I don't enable all of them, but `prefer-node-protocol`, `no-null`, and `error-message` all catch things.
+- [`eslint-plugin-unicorn`](https://github.com/sindresorhus/eslint-plugin-unicorn) has a bunch of opinionated rules that catch subtle modern-JavaScript mistakes. I don't enable all of them, but `prefer-node-protocol`, `no-null`, and `error-message` all catch things.
 
 Your mileage varies on the last few based on team aesthetics. The first four are non-negotiable for me.
 

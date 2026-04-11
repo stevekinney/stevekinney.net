@@ -1,7 +1,7 @@
 ---
 title: Writing a Custom MCP Wrapper
 description: When the off-the-shelf MCPs don't give the agent the exact probe you want, wrap your own. It's fewer lines of code than you think.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -204,4 +204,5 @@ Off-the-shelf MCPs are generic. Custom MCPs encode your specific verification lo
 ## Additional Reading
 
 - [Runtime Probes in the Development Loop](runtime-probes-in-the-development-loop.md)
+- [Structured CLI Output as Pipeline Glue](structured-cli-output-as-pipeline-glue.md)
 - [Lab: Wrap a Custom Verification MCP](lab-wrap-a-custom-verification-mcp.md)

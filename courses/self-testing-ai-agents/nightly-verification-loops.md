@@ -1,7 +1,7 @@
 ---
 title: Nightly Verification Loops
 description: Some checks are too slow, too broad, or too drift-sensitive for the fast loop. This appendix shows how to schedule them without turning them into ignored noise.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -108,7 +108,7 @@ The failure handling should look familiar by now:
 - write a short workflow summary
 - give the agent or human a clean reproduction path
 
-If a nightly job fails and all you get is a red badge, the loop is incomplete. The whole point is to discover drift while there is still time to do something intelligent about it.
+If a nightly job fails and all you get is a red badge, the loop is incomplete. The whole point is to discover drift while there is still time to do something intelligent about it. For nightly jobs that produce text-heavy output, [structured CLI output](structured-cli-output-as-pipeline-glue.md) can turn the results into machine-readable status reports that downstream scripts branch on—opening issues, pinging Slack, or routing to the agent—without a custom parser for each job.
 
 ## Do not auto-update visual baselines on a schedule
 

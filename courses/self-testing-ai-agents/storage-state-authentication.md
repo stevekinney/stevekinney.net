@@ -1,7 +1,7 @@
 ---
 title: Storage State Authentication
 description: Stop logging in from the UI on every test. Log in once, save the session, reuse it everywhere.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -25,13 +25,15 @@ There's a better way. It's not new. It's in the [Playwright docs](https://playwr
 
 ## The idea
 
-Log in once, at the start of the test run. Save the resulting browser state—cookies, localStorage, sessionStorage, all of it—to a JSON file. Tell every test to start from that JSON file instead of starting from a blank browser. Now every test opens already logged in, and you've paid the login cost exactly once.
+Log in once, at the start of the test run. Save the resulting browser state—cookies, `localStorage`, `sessionStorage`, all of it—to a JSON file. Tell every test to start from that JSON file instead of starting from a blank browser. Now every test opens already logged in, and you've paid the login cost exactly once.
 
 Playwright has first-class support for this. You don't need plugins, you don't need clever fixtures, you just need to know where the two knobs are.
 
 ## The setup
 
-Create a Playwright setup file—convention is `tests/end-to-end/authentication.setup.ts`—that logs in and writes the state to a file. (This follows Steve's preference for full words: `authentication.setup.ts` not `auth.setup.ts`.)
+Create a Playwright setup file—convention is `tests/end-to-end/authentication.setup.ts`—that logs in and writes the state to a file. There are two ways to do the "log in" part, and both are worth knowing.
+
+### Option A: Log in through the UI
 
 ```ts
 import { test as setup, expect } from '@playwright/test';
@@ -51,9 +53,72 @@ setup('authenticate', async ({ page }) => {
 });
 ```
 
-Notice this is still using the UI to log in, the same way a real user would. That's fine—it runs _once_ per Playwright invocation, not once per test. It's also a de facto smoke test for your login flow, which is a nice side effect.
+This is the conservative default and the one Shelf uses. It runs the real login flow—the same page, same form, same redirect—just once per Playwright invocation instead of once per test. The side effect is that it doubles as a smoke test: if someone breaks the login form, the setup fails before any other test runs, and the error is obvious.
 
-Then in `playwright.config.ts`, wire the setup as a dependency of the main test project:
+### Option B: Hit the auth endpoint directly
+
+```ts
+import { test as setup, expect } from '@playwright/test';
+import path from 'node:path';
+
+const authenticationFile = path.resolve('playwright/.authentication/user.json');
+
+setup('authenticate', async ({ request }) => {
+  const response = await request.post('/api/auth/sign-in/email', {
+    data: { email: 'alice@example.com', password: 'password123' },
+  });
+
+  expect(response.ok()).toBeTruthy();
+
+  await request.storageState({ path: authenticationFile });
+});
+```
+
+No page load, no DOM rendering, no dependency on the login form's markup. This is faster and more resilient to UI changes. The tradeoff: if someone breaks the login form, the setup still passes, and you won't find out until a user reports it—or until you have a separate test that exercises the login page directly.
+
+### Which one?
+
+Use the UI approach when login is fast and you want the free smoke test. Use the API approach when login is slow (OAuth redirects, CAPTCHAs in staging, multi-step flows) or when you already have a dedicated login test and don't need the setup to double as one.
+
+### What the storage state file looks like
+
+Either way, Playwright writes a JSON file to `playwright/.authentication/user.json` that looks roughly like this:
+
+```json
+{
+  "cookies": [
+    {
+      "name": "session",
+      "value": "eyJhbGciOiJIUzI1NiJ9...",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1748000000,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:5173",
+      "localStorage": [
+        {
+          "name": "shelf:user",
+          "value": "{\"id\":\"usr_01J\",\"email\":\"alice@example.com\"}"
+        }
+      ]
+    }
+  ]
+}
+```
+
+Cookies, `localStorage`, the whole browser context—serialized. Every test that loads this file starts with the browser already in that state, as if those cookies and storage entries were always there.
+
+## Wiring it into the config
+
+This is where [Playwright projects](playwright-projects.md) earn their keep. If you haven't read that lesson yet, the short version: a project is a named block in `playwright.config.ts` with its own settings and dependencies. Playwright runs them in dependency order, like a mini build graph.
+
+For authentication, you split the config into two projects—one that logs in, and one that runs the actual tests:
 
 ```ts
 import { defineConfig } from '@playwright/test';
@@ -76,15 +141,15 @@ export default defineConfig({
 });
 ```
 
-Two projects. The `setup` project runs the login file once. The `chromium` project depends on `setup`, so it always runs after, and it starts every test with the saved authentication state pre-loaded.
+The `setup` project matches only the authentication setup file. The `chromium` project depends on `setup`, so Playwright guarantees the login runs first. Every test in `chromium` starts with the saved session pre-loaded—no login code, no `beforeEach`, nothing.
 
 ```mermaid
 flowchart TD
   A["Setup project runs once"] --> B["User logs in via UI"]
-  B --> C["Browser state saved\nto JSON file"]
+  B --> C["Browser state saved<br>to JSON file"]
   C --> D["Tests run"]
-  D --> E["Each test loads\nstorage state"]
-  E --> F["Tests start\nalready authenticated"]
+  D --> E["Each test loads<br>storage state"]
+  E --> F["Tests start<br>already authenticated"]
 
   style A fill:#e1f5ff
   style C fill:#c8e6c9
@@ -106,9 +171,6 @@ test('rate a book', async ({ page }) => {
 ```
 
 The login code is gone. The login _concern_ is gone. If login breaks, exactly one test fails—the setup test—and the error tells you unambiguously that login itself is broken, not that "everything is flaky."
-
-> [!NOTE] Why the UI login, not a raw POST
-> Shelf's Better Auth configuration rejects raw form-action POSTs with a CSRF-style `403` unless the request carries the same browser context a real form submission would. That's why the setup file above uses `page.goto('/login')` and fills the form through the UI instead of a leaner `request.post('/login?/signInEmail')` shortcut. The UI route is the conservative default, and it also doubles as a smoke test for the login flow.
 
 ## Multiple roles
 
@@ -148,24 +210,6 @@ projects: [
 ```
 
 Organize the tests by role under subdirectories. Every test inherits the right state automatically. No decorators, no fixtures-within-fixtures, no clever `beforeEach` logic.
-
-## When skipping the UI is worth it
-
-Everything above logs in through the real login page. That's the conservative default and it's what Shelf uses. If your app has a lower-level sign-in endpoint that is safe to call from a raw request context—a JSON-only API route, say, or a token issuer the form itself wraps—you can skip the UI entirely and hit that directly:
-
-```ts
-setup('authenticate as user', async ({ request }) => {
-  // Example endpoint. Replace with whatever your app actually exposes—
-  // Shelf doesn't ship one; this is illustrative, not a real route.
-  const response = await request.post('/api/auth/token', {
-    data: { email: 'alice@example.com', password: 'password123' },
-  });
-  expect(response.ok()).toBeTruthy();
-  await request.storageState({ path: 'playwright/.authentication/user.json' });
-});
-```
-
-This is faster (no page load, no DOM rendering) and doesn't care if the login form changes. The tradeoff is that it no longer doubles as a smoke test for the login UI, and some auth stacks—Shelf's included—reject raw form-action POSTs because of CSRF-style checks baked into the form flow. Prove a raw request shortcut works against your current app before teaching it as the default path.
 
 ## The `.gitignore` you need
 
@@ -214,5 +258,6 @@ You log in once per run, not once per test. The cost savings are real, the stabi
 
 ## Additional Reading
 
+- [Playwright Projects](playwright-projects.md)
 - [The Waiting Story](the-waiting-story.md)
 - [Recording HARs for Network Isolation](recording-hars-for-network-isolation.md)

@@ -1,21 +1,21 @@
 ---
 title: Recording HARs for Network Isolation
 description: How to record a real HTTP session once and replay it deterministically in every test, so your suite stops depending on someone else's server.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
 Shelf talks to the [Open Library API](https://openlibrary.org/developers/api) to look up books. It's a lovely free service—and also not something I want my end-to-end test suite to depend on.
 
-Here's the problem in one paragraph. Your CI runs a test that searches for "Station Eleven" against the real Open Library API. Most days it works. Some days Open Library is slow, and the test times out. Some days they change the response shape slightly, and your test starts asserting on fields that have moved. One day they rate-limit you, because of course they do, and every test that touches book search fails at once. Your `main` branch turns red and your team spends twenty minutes figuring out that it's not your code—it's somebody else's server having a bad afternoon.
+Here's the problem. Your CI runs a test that searches for "Station Eleven" against the real Open Library API. Most days it works. Some days they're slow, or they change the response shape, or they rate-limit you. Your `main` branch turns red and your team spends twenty minutes figuring out that it's not your code—it's somebody else's server.
 
-The solution is not to "make the test more resilient." The solution is to stop hitting the real server in tests and replay a recording instead. Playwright has a built-in tool for this, called HAR recording, and it is one of the most underused features in the whole framework.
+The solution is to stop hitting the real server in tests and replay a recording instead. Playwright has a built-in tool for this—HAR recording—and it is one of the most underused features in the whole framework.
 
 ## What a HAR file is
 
-HAR stands for HTTP Archive. It's a JSON format—standardized, though every tool adds its own flavor—that records an entire HTTP session: every request, every response, every header, every body, every timing. Chrome DevTools' Network tab can export one. `curl` can sort of export one. Playwright can both record and replay them.
+HAR stands for HTTP Archive. It's a JSON format—standardized, though every tool adds its own flavor (Chrome embeds page timings, Playwright stores decoded response bodies)—that records an entire HTTP session. The core structure is the same everywhere: `log.entries[]`, where each entry holds one request/response pair with URL, method, headers, body, and timing. Chrome DevTools can export one. Playwright can both record and replay them.
 
-A recorded HAR is a snapshot of what the network _actually did_ during a single browser session. When you replay it, Playwright intercepts outgoing requests from the browser and serves the matching recorded response instead of letting the request go to the real network. Same URL, same method, same headers—serve the recorded response. The browser can't tell the difference.
+A recorded HAR is a snapshot of what the network _actually did_ during a single browser session. When you replay it, Playwright intercepts outgoing requests and serves the matching recorded response instead of letting the request hit the real network. The browser can't tell the difference.
 
 ## Recording
 
@@ -35,9 +35,17 @@ test('search for books', async ({ page }) => {
 });
 ```
 
-Run this once, with `update: true`, pointed at the real API. Playwright records every matching request and writes a HAR file to `tests/fixtures/open-library-search.har`. Open it in your editor—it's JSON, it's enormous, and you should not be tempted to hand-edit it. Treat it as a binary artifact that happens to be JSON-shaped. (See the `.gitignore` section below for handling sensitive data in HARs.)
+The `url` option takes a [glob pattern](https://playwright.dev/docs/network#glob-url-patterns) (`*` matches anything except `/`, `**` matches anything including `/`, and the glob must match the full URL). Playwright also accepts a `RegExp` here. The `update` option is a boolean that defaults to `false` (replay mode).
 
-Commit the HAR file to the repo. This is not optional. The whole point is that the next time this test runs, it reads the HAR from disk and doesn't touch the real network.
+Run this once, with `update: true`, pointed at the real API. Playwright records every matching request and writes a HAR file to `tests/fixtures/open-library-search.har`. Open it in your editor—it's JSON, it's enormous, and you should resist editing it by hand.
+
+> [!WARNING]
+> HARs are machine-generated fixtures with nested request/response data and optional attached body files. Casual hand-edits are brittle—it's easy to break a response body or invalidate a match without realizing. Automate changes with a script and always verify replay afterward.
+
+Commit the HAR file to the repository. This is not optional—the whole point is that the next time this test runs, it reads the HAR from disk and doesn't touch the real network.
+
+> [!TIP]
+> HARs are test fixtures and belong in version control, but review them before committing. Credentials, session cookies, and PII can hide in response bodies and headers. See [Approaches to HAR Recording](approaches-to-har-recording.md) for scrubbing guidance, and use a dedicated test user (see [Storage State Authentication](storage-state-authentication.md)) to minimize what needs scrubbing.
 
 ## Replaying
 
@@ -59,39 +67,53 @@ test('search for books', async ({ page }) => {
 
 Run the test. It runs in milliseconds instead of seconds. It works on a plane. It works when Open Library is down. It works identically on every run, because the response is literally a file on disk.
 
-This is determinism as a file. That's the whole magic trick.
+This is determinism as a file—not determinism from mocking logic you maintain in code, but from a recorded artifact on disk. That's the whole magic trick.
 
 ## The matching rules, and why they bite
 
-The part that trips people up is how Playwright decides which recorded response to serve. Per the current Playwright docs, HAR replay matches on URL and HTTP method strictly. For `POST` requests it also matches the request payload strictly, and if multiple entries match a request, Playwright picks the one with the most matching headers. If your test makes a request to `https://openlibrary.org/search.json?q=Station+Eleven` and the HAR only has `...q=Station%20Eleven&limit=10`, that is a different request as far as the replay layer is concerned.
+The part that trips people up is how Playwright decides which recorded response to serve. HAR replay matches on URL and HTTP method strictly. For `POST` requests it also matches the payload. If multiple entries match, Playwright picks the one with the most matching headers. This tiebreaker rarely matters for API calls—URL + method usually produce a single match—but it comes up for browser-initiated requests where entries share a URL but differ by `Accept` or `Referer`.
+
+If your test makes a request to `https://openlibrary.org/search.json?q=Station+Eleven` and the HAR only has `...q=Station%20Eleven&limit=10`, that is a different request as far as the replay layer is concerned. This isn't Playwright-specific—HTTP treats `?a=1&b=2` and `?b=2&a=1` as different URLs.
 
 This is both a feature and a footgun.
 
-- It's a feature because it means the replay is exact. You're not fuzzing.
-- It's a footgun because your application's HTTP client might send requests that look superficially the same but differ in some header or query param, and the HAR doesn't match, and you get a "request not found in HAR" error that is actively unhelpful.
+- It's a feature because the replay is exact—two tests recording different search queries produce HAR entries that never collide.
+- It's a footgun because your application's HTTP client might send requests that look superficially the same but differ in some header or query param, and the HAR doesn't match.
 
 A few ways to make it less sharp:
 
-**Make the request shape deterministic.** If your fetch wrapper serializes query params in a different order on different runs, or if one code path adds optional params and another does not, your replay will miss. Fix the request generation first. The HAR is not the place to paper over nondeterministic callers.
+**Make the request shape deterministic.** If your fetch wrapper serializes query params in a different order on different runs, your replay will miss. Fix the request generation first—the HAR is not the place to paper over nondeterministic callers.
 
-**Keep `notFound: 'abort'` as the default until you have a reason not to.** `notFound: 'fallback'` is useful when you intentionally want unmatched requests to hit the network, but it's the wrong default for deterministic tests because it hides drift. I want a loud failure when the app starts making a request I didn't record.
+**Keep `notFound: 'abort'` as the default.** `'abort'` (the default) kills unmatched requests immediately—the browser sees a network error, and your test fails loudly. `'fallback'` lets unmatched requests pass through to other route handlers and eventually to the real network. Use `'fallback'` only when you want _some_ requests to be live while replaying only the API traffic.
 
-**Record one scenario at a time.** Don't try to record a HAR that covers the entire test suite at once. One HAR per test file, scoped to one scenario, is easier to regenerate and easier to debug when it breaks.
+**Record one scenario at a time.** One HAR per test file, scoped to one scenario, is easier to regenerate and debug when it breaks.
+
+**When you see "request not found in HAR."** Playwright throws this when a request matches the `url` glob but no HAR entry matches the full URL + method + payload. Common causes: a query parameter changed order, a new header appeared, or the request body is slightly different. **Inspect the diff first**—compare what the test is sending against what the HAR has. Run with `DEBUG=pw:api` to see the exact request Playwright tried to match. Only re-record after you understand _why_ the request changed.
+
+When your app fires concurrent requests to the same endpoint (e.g., three parallel fetches to `/api/books/:id`), Playwright serves them in the order the entries appear in the HAR's `entries` array—each request consumes the next unmatched entry with a matching URL and method.
+
+> [!NOTE]
+> If your app chains API calls—using a URL from response A to make request B—the second URL may differ between recordings. Signed URLs, nonce-bearing redirects, and pagination cursors won't match on replay. For these cases, [`page.route`](https://playwright.dev/docs/mock) with a custom handler is a better tool than HAR replay.
+
+> [!NOTE]
+> HAR replay is stateless—each request gets the same recorded response regardless of what happened earlier in the test. If your test expects a response to _change_ based on a prior action (add a book, then list books expecting the new one), the HAR won't reflect that progression. For state-dependent flows, seed the expected state before the test and record the HAR against that known seed.
 
 > [!WARNING]
-> Playwright does not serve HAR responses for requests intercepted by a Service Worker. If requests seem to vanish from the replay layer, check whether the app or your test tooling is registering one. The current Playwright recommendation is to set `serviceWorkers: 'block'` when you rely on request interception or HAR replay.
+> Service Workers intercept network requests _before_ Playwright's route handler sees them. If your app registers a Service Worker (common in PWAs or when a library installs one for caching), those requests bypass `routeFromHAR` entirely—they're served from the Service Worker's cache, not from the HAR. Set `serviceWorkers: 'block'` in your Playwright config when you rely on HAR replay.
 
 ## Refreshing HARs
 
 HARs go stale. The Open Library team adds a field to the search response, or deprecates a field your app was reading, and your stale HAR doesn't know. The test passes against the recording but the real app is broken.
 
-My rule: **regenerate the HAR files once a week, in CI, on a nightly job.** Not on every run—that defeats the determinism. But on a schedule. When the regeneration fails or the diff looks suspicious, the nightly job opens a PR against the HAR files. Someone reviews that PR, notices that Open Library changed something, and updates the app code accordingly. It's early warning for upstream drift.
+My rule: **regenerate on a schedule, in CI, on a nightly job.** Not on every run—that defeats the determinism. The nightly job targets only HAR-backed tests, re-records with retries disabled and a dedicated test user, diffs the results, and opens a PR if anything changed. A human reviews the diff. The typical signal: a new or removed field in a response body.
 
-We'll wire this nightly job in Module 9 as part of the CI lesson. For now, just know that it exists as a pattern.
+This is _scheduled_ regeneration to catch upstream drift—not on-demand re-recording to silence a failing test. When a test fails because the HAR doesn't match, the first question is _why_ the request shape changed. If your code changed the request, fix the code or re-record deliberately. If the upstream API changed, that's what the nightly job is for. Blind re-recording hides both bugs and drift.
+
+The [nightly verification lesson](nightly-verification-loops.md) shows the CI workflow for this, including the placeholder `har-refresh` job.
 
 ## What the agent should and shouldn't do
 
-HAR recording is not a tool I want agents reaching for unprompted. Recording involves real network calls, real API keys sometimes, and the agent making the recording has no way to verify that the recorded data is safe to commit. (HARs can contain auth tokens. They often do. You have to scrub them.)
+HAR recording is not a tool I want agents reaching for unprompted. Recording involves real network calls, and HARs can contain credentials in several places: `Authorization` and `Cookie` request headers, `Set-Cookie` response headers, and request or response bodies (OAuth exchanges, API key parameters). You have to scrub them.
 
 My instruction file rule for HARs:
 
@@ -109,13 +131,17 @@ My instruction file rule for HARs:
 - When a HAR must be regenerated (e.g., because the upstream API
   legitimately changed), regenerate it in a standalone commit so the
   diff is clear.
+- Approved HAR refresh (the nightly CI job or a human-initiated
+  re-recording workflow) is different from ad-hoc re-recording to
+  silence a failing test. The refresh workflow is expected to change
+  HARs; an agent fixing a red test is not.
 ```
 
-That "do not re-record to fix a failing test" rule is the one you'll thank me for. Agents love to make failing tests pass by re-recording the HAR. Sometimes that's correct. Usually it's masking a real bug. Make it a rule that requires a human in the loop.
+That "do not re-record to fix a failing test" rule is the one you'll thank me for. Agents love to make failing tests pass by re-recording. Usually it's masking a real bug.
 
 ## The alternative: mocking at the request layer
 
-I want to be honest about when HARs are the wrong tool. If your test only needs to mock one endpoint with a hand-written response ("return this exact JSON for this exact URL"), use [`page.route`](https://playwright.dev/docs/mock) directly:
+If your test only needs to mock one endpoint with a hand-written response, use [`page.route`](https://playwright.dev/docs/mock) directly:
 
 ```ts
 await page.route('**/openlibrary.org/search.json*', async (route) => {
@@ -127,13 +153,23 @@ await page.route('**/openlibrary.org/search.json*', async (route) => {
 });
 ```
 
-This is fine. It's more explicit. It's version-controlled as code, not as an opaque JSON blob. Use it when the mock is small and the test cares about a specific response shape. Reach for HARs when the mock is _large_—when you're serving a dozen requests, or when the real response is hundreds of KB of data you don't want to hand-type.
+This is fine—more explicit, version-controlled as code. Use it when the mock is small. Reach for HARs when the mock is _large_—a dozen requests, or hundreds of KB of response data you don't want to hand-type.
+
+`page.route` and `page.routeFromHAR` can coexist. Playwright runs routes in reverse registration order—the _last_ registered route gets first crack. If it calls [`route.fallback()`](https://playwright.dev/docs/api/class-route#route-fallback), control passes to the next (earlier) handler; the request only hits the network if nothing handles it. Register `routeFromHAR` first for bulk API traffic, then `page.route` for an endpoint that needs a custom response—the later route runs first.
+
+If your app's HTTP client changes its request shape, the HAR stops matching and the test fails. That failure is intentional—re-record once you've verified the new shape is correct.
+
+HARs are not the right tool for mocking authentication flows. Use [storage state](storage-state-authentication.md) for login, and HARs for the API traffic that happens _after_ login.
 
 ## The one thing to remember
 
 Your end-to-end suite should not depend on any server you don't control. HARs let you record reality once and replay it forever, which is how you get tests that pass on an airplane. The cost is a weekly refresh job and a rule that recording is not how you fix failing tests. Both are cheap.
 
+For organization, keep one HAR per test file in `tests/fixtures/`, named after the test file it serves. If a HAR grows past a few hundred KB, split the test file so each HAR covers a narrower scenario. Large HARs (images, paginated data) can grow to megabytes—they compress well in git, but that's a sign to narrow the `url` glob.
+
 ## Additional Reading
 
+- [Approaches to HAR Recording](approaches-to-har-recording.md)
+- [Route-Based Network Interception](route-based-network-interception.md)
 - [Storage State Authentication](storage-state-authentication.md)
 - [Deterministic State and Test Isolation](deterministic-state-and-test-isolation.md)

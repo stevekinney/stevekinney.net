@@ -1,7 +1,7 @@
 ---
 title: Deterministic State and Test Isolation
 description: How to seed, reset, and isolate database state so tests never leak into each other and the suite can run in parallel without tears.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -31,7 +31,7 @@ Let's look at both.
 
 ## Rule one: seeding
 
-Shelf uses SQLite via Drizzle. For end-to-end tests, we want a way to reset the database to a known state before each test (or each test file). The naive version is "import the Drizzle client from `$lib/server/db` and wipe the tables"—and that does not work from a Playwright spec, because `$lib/server/...` modules depend on server-only runtime context the test process does not have.
+Shelf uses SQLite via [Drizzle](https://orm.drizzle.team/). For end-to-end tests, we want a way to reset the database to a known state before each test (or each test file). The naive version is "import the Drizzle client from `$lib/server/db` and wipe the tables"—and that does not work from a Playwright spec, because `$lib/server/...` modules depend on server-only runtime context the test process does not have.
 
 The pattern that _does_ work is a dev-only HTTP endpoint that the test calls through the `request` fixture. Shelf ships exactly that at `src/routes/api/testing/seed/+server.ts`. The endpoint is gated on an `ENABLE_TEST_SEED=true` environment variable and only runs inside the Playwright webServer, so it can never fire in production:
 
@@ -99,7 +99,7 @@ Seeding gets you to a known _starting_ state. Isolation gets you to a known _pro
 
 There are three common strategies. Pick one based on your database.
 
-**Per-test transactions.** Wrap every test in a transaction, roll back at the end. This is the fastest option and it requires zero cleanup code, because nothing was ever committed. The catch: it only works if your application code reuses the same database connection the test opens. Node-level connection pooling usually breaks this, and you have to be careful with framework-level request handlers. Drizzle supports this via `database.transaction`, but wiring it into SvelteKit's request handlers takes more than a lesson's worth of plumbing. Worth knowing about; not my default recommendation.
+**Per-test transactions.** Wrap every test in a transaction, roll back at the end. This is the fastest option and it requires zero cleanup code, because nothing was ever committed. The catch: it only works if your application code reuses the same database connection the test opens. Node-level connection pooling usually breaks this, and you have to be careful with framework-level request handlers. [Drizzle](https://orm.drizzle.team/) supports this via `database.transaction`, but wiring it into SvelteKit's request handlers takes more than a lesson's worth of plumbing. Worth knowing about; not my default recommendation.
 
 **Per-worker databases.** [Playwright spins up multiple workers when it runs in parallel.](https://playwright.dev/docs/test-parallel) Each worker gets its own SQLite file, its own schema, its own seed. Tests within a worker share the database but always run serially, so they can't race each other. This is where I want SQLite projects to end up eventually. It looks like:
 

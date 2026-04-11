@@ -1,7 +1,7 @@
 ---
 title: 'Failure Dossiers: What Agents Actually Need From a Red Build'
 description: A failed test is a prompt. The prompt is only as good as the evidence attached to it.
-modified: 2026-04-09
+modified: 2026-04-10
 date: 2026-04-06
 ---
 
@@ -238,6 +238,8 @@ npx playwright test --project=authenticated tests/end-to-end/rate-book.spec.ts -
 That's exactly what you want in an agent's hand: the test title, the project it lived in, the file and line, the full error message, a link to the screenshot, a one-liner to open the trace, and a reproduction command that isolates just this test. The agent reads one file and knows what to do next.
 
 (Adjust field names to match your Playwright version if needed—the JSON schema shifts between releases. The point is the structure, not the exact API.)
+
+For an alternative that skips the custom script entirely and uses the LLM itself to triage the dossier into typed JSON, see [Structured CLI Output as Pipeline Glue](structured-cli-output-as-pipeline-glue.md). That lesson teaches `claude -p --json-schema` with the dossier as input—same data, different consumer.
 
 Now you can add to `CLAUDE.md`:
 
