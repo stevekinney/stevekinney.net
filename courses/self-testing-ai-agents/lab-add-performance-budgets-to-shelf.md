@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Add Performance Budgets to Shelf'
 description: Add a build-size budget, add a targeted runtime threshold, and make both numbers cheap enough that the agent can actually use them.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -151,5 +151,6 @@ Performance only becomes part of the loop when there is a number the agent can b
 
 ## Additional Reading
 
+- [Solution](add-performance-budgets-to-shelf-solution.md)
 - [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md)
 - [Runtime Tools Compared](runtime-tools-compared.md)

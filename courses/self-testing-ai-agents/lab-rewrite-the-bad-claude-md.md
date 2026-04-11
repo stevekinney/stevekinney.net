@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Rewrite the Bad CLAUDE.md'
 description: Tighten Shelf's starter instructions file until every rule is mechanically actionable and the UI stays product-facing.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -110,5 +110,6 @@ We'll come back to this file in almost every module from here on. By the end of 
 
 ## Additional Reading
 
+- [Solution](rewrite-the-bad-claude-md-solution.md)
 - [Instructions That Wire the Agent In](instructions-that-wire-the-agent-in.md)
 - [The Hypothesis](the-hypothesis.md)

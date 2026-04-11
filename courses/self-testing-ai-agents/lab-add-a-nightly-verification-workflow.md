@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Add a Nightly Verification Workflow'
 description: Schedule the slow and broad checks, keep them off the fast loop, and make their failures readable enough that an agent can still act on them.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -105,5 +105,6 @@ Nightly work only earns its keep when it stays out of the fast loop _and_ still 
 
 ## Additional Reading
 
+- [Solution](add-a-nightly-verification-workflow-solution.md)
 - [Nightly Verification Loops](nightly-verification-loops.md)
 - [CI as the Loop of Last Resort](ci-as-the-loop-of-last-resort.md)

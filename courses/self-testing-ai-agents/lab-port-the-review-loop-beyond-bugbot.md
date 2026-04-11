@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Port the Review Loop Beyond Bugbot'
 description: Keep Bugbot if you have it, but write the repository rules so a second review surface can pick up the same job without guesswork.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -107,5 +107,6 @@ Portable review loops come from written policy, not tool loyalty. If the reposit
 
 ## Additional Reading
 
+- [Solution](port-the-review-loop-beyond-bugbot-solution.md)
 - [Review Portability Beyond Bugbot](review-portability-beyond-bugbot.md)
 - [Tuning Bugbot for Your Codebase](tuning-bugbot-for-your-codebase.md)

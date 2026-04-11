@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Write the CI Workflow from Scratch'
 description: Build the GitHub Actions workflow for Shelf from an empty directory. Prove each layer runs, uploads artifacts, and fails loud enough for an agent to recover.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -247,6 +247,7 @@ CI is where the whole day's worth of loops meet for the last check before merge.
 
 ## Additional Reading
 
+- [Solution](write-the-ci-workflow-from-scratch-solution.md)
 - [CI as the Loop of Last Resort](ci-as-the-loop-of-last-resort.md)
 - [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md)
 - [Nightly Verification Loops](nightly-verification-loops.md)

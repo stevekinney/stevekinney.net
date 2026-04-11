@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Translate the Shelf Loop to Your Stack'
 description: Map every core feedback loop from Shelf to your real stack so the course ends with an implementation plan you can actually use.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -104,5 +104,6 @@ A translation map is valuable when it tells the next engineer exactly where each
 
 ## Additional Reading
 
+- [Solution](translate-the-shelf-loop-to-your-stack-solution.md)
 - [Porting the Shelf Loop to Another Stack](porting-the-shelf-loop-to-another-stack.md)
 - [The Hypothesis](the-hypothesis.md)

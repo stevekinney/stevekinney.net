@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Harden the Flaky Rate-Book Test'
 description: Take a real, deliberately broken Playwright test and apply every Module 3 pattern to make it fast, isolated, and rock-solid.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -117,6 +117,7 @@ Every anti-pattern in the starting file is individually fixable in under five mi
 
 ## Additional Reading
 
+- [Solution](harden-the-flaky-rate-book-test-solution.md)
 - [The Waiting Story](the-waiting-story.md)
 - [Storage State Authentication](storage-state-authentication.md)
 - [Deterministic State and Test Isolation](deterministic-state-and-test-isolation.md)

@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Build a Failure Dossier for Shelf'
 description: Wire up traces, screenshots, console capture, and a dossier summarizer. Then break a test and watch the agent fix it from the dossier alone.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -115,5 +115,6 @@ The moment you can hand the agent a single file and say "diagnose this," you've 
 
 ## Additional Reading
 
+- [Solution](build-a-failure-dossier-for-shelf-solution.md)
 - [Failure Dossiers: What Agents Actually Need From a Red Build](failure-dossiers-what-agents-actually-need-from-a-red-build.md)
 - [The Second Opinion](the-second-opinion.md)

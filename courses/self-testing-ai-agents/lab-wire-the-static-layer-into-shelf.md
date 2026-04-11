@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wire the Static Layer into Shelf'
 description: Install and configure the whole stack—ESLint custom rules, TypeScript strict, knip, husky, lint-staged, gitleaks—and prove each layer fires on the right mistake.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -140,6 +140,7 @@ The static layer is five tools and an hour of setup. Every one of them runs unde
 
 ## Additional Reading
 
+- [Solution](wire-the-static-layer-into-shelf-solution.md)
 - [The Static Layer as Underlayment](the-static-layer-as-underlayment.md)
 - [Lint and Types as Guardrails](lint-and-types-as-guardrails.md)
 - [Dead Code Detection](dead-code-detection.md)

@@ -13,6 +13,10 @@ href = "instructions-that-wire-the-agent-in.md"
 title = "Lab: Rewrite the Bad CLAUDE.md"
 href = "lab-rewrite-the-bad-claude-md.md"
 
+[[section.item.related]]
+title = "Solution"
+href = "rewrite-the-bad-claude-md-solution.md"
+
 [[section.item]]
 title = "Git Hooks with Lefthook"
 href = "git-hooks-with-lefthook.md"
@@ -56,6 +60,10 @@ href = "accessibility-as-a-quality-gate.md"
 title = "Lab: Wire Accessibility Checks Into Shelf"
 href = "lab-wire-accessibility-checks-into-shelf.md"
 
+[[section.item.related]]
+title = "Solution"
+href = "wire-accessibility-checks-into-shelf-solution.md"
+
 [[section.item]]
 title = "The Waiting Story"
 href = "the-waiting-story.md"
@@ -92,6 +100,10 @@ href = "api-and-ui-hybrid-tests.md"
 title = "Lab: Harden the Flaky Rate-Book Test"
 href = "lab-harden-the-flaky-rate-book-test.md"
 
+[[section.item.related]]
+title = "Solution"
+href = "harden-the-flaky-rate-book-test-solution.md"
+
 [[section]]
 title = "Playwright Test Agents"
 
@@ -102,6 +114,10 @@ href = "playwright-test-agents.md"
 [[section.item.related]]
 title = "Lab: Generate and Heal a Test Suite with Playwright Agents"
 href = "lab-generate-and-heal-with-playwright-agents.md"
+
+[[section.item.related]]
+title = "Solution"
+href = "generate-and-heal-with-playwright-agents-solution.md"
 
 [[section]]
 title = "Visual Regression as a Feedback Loop"
@@ -114,6 +130,10 @@ href = "visual-regression-as-a-feedback-loop.md"
 title = "Lab: Wire Visual Regression Into the Dev Loop"
 href = "lab-wire-visual-regression-into-the-dev-loop.md"
 
+[[section.item.related]]
+title = "Solution"
+href = "wire-visual-regression-into-the-dev-loop-solution.md"
+
 [[section]]
 title = "Performance Budgets as a Feedback Loop"
 
@@ -124,6 +144,10 @@ href = "performance-budgets-as-a-feedback-loop.md"
 [[section.item.related]]
 title = "Lab: Add Performance Budgets to Shelf"
 href = "lab-add-performance-budgets-to-shelf.md"
+
+[[section.item.related]]
+title = "Solution"
+href = "add-performance-budgets-to-shelf-solution.md"
 
 [[section]]
 title = "Runtime Tools and Custom MCPs"
@@ -144,6 +168,10 @@ href = "writing-a-custom-mcp-wrapper.md"
 title = "Lab: Wrap a Custom Verification MCP"
 href = "lab-wrap-a-custom-verification-mcp.md"
 
+[[section.item.related]]
+title = "Solution"
+href = "wrap-a-custom-verification-mcp-solution.md"
+
 [[section.item]]
 title = "Structured CLI Output as Pipeline Glue"
 href = "structured-cli-output-as-pipeline-glue.md"
@@ -159,6 +187,10 @@ href = "failure-dossiers-what-agents-actually-need-from-a-red-build.md"
 title = "Lab: Build a Failure Dossier for Shelf"
 href = "lab-build-a-failure-dossier-for-shelf.md"
 
+[[section.item.related]]
+title = "Solution"
+href = "build-a-failure-dossier-for-shelf-solution.md"
+
 [[section]]
 title = "The Second Opinion: Review Agents"
 
@@ -173,6 +205,10 @@ href = "tuning-bugbot-for-your-codebase.md"
 [[section.item.related]]
 title = "Lab: Bugbot on a Planted Bug"
 href = "lab-bugbot-on-a-planted-bug.md"
+
+[[section.item.related]]
+title = "Solution"
+href = "bugbot-on-a-planted-bug-solution.md"
 
 [[section]]
 title = "The Static Layer"
@@ -201,6 +237,10 @@ href = "secret-scanning-with-gitleaks.md"
 title = "Lab: Wire the Static Layer into Shelf"
 href = "lab-wire-the-static-layer-into-shelf.md"
 
+[[section.item.related]]
+title = "Solution"
+href = "wire-the-static-layer-into-shelf-solution.md"
+
 [[section]]
 title = "CI Wiring"
 
@@ -212,6 +252,10 @@ href = "ci-as-the-loop-of-last-resort.md"
 title = "Lab: Write the CI Workflow from Scratch"
 href = "lab-write-the-ci-workflow-from-scratch.md"
 
+[[section.item.related]]
+title = "Solution"
+href = "write-the-ci-workflow-from-scratch-solution.md"
+
 [[section]]
 title = "Post-Merge and Post-Deploy Validation"
 
@@ -222,6 +266,10 @@ href = "post-merge-and-post-deploy-validation.md"
 [[section.item.related]]
 title = "Lab: Add Post-Deploy Smoke Checks to Shelf"
 href = "lab-add-post-deploy-smoke-checks-to-shelf.md"
+
+[[section.item.related]]
+title = "Solution"
+href = "add-post-deploy-smoke-checks-to-shelf-solution.md"
 
 [[section]]
 title = "Capstone"
@@ -241,6 +289,10 @@ href = "review-portability-beyond-bugbot.md"
 title = "Lab: Port the Review Loop Beyond Bugbot"
 href = "lab-port-the-review-loop-beyond-bugbot.md"
 
+[[section.item.related]]
+title = "Solution"
+href = "port-the-review-loop-beyond-bugbot-solution.md"
+
 [[section]]
 title = "Appendix: Cross-Browser Coverage"
 
@@ -251,6 +303,10 @@ href = "cross-browser-validation-without-burning-the-dev-loop.md"
 [[section.item.related]]
 title = "Lab: Add Cross-Browser Coverage"
 href = "lab-add-cross-browser-coverage.md"
+
+[[section.item.related]]
+title = "Solution"
+href = "add-cross-browser-coverage-solution.md"
 
 [[section]]
 title = "Appendix: Nightly Verification"
@@ -263,6 +319,10 @@ href = "nightly-verification-loops.md"
 title = "Lab: Add a Nightly Verification Workflow"
 href = "lab-add-a-nightly-verification-workflow.md"
 
+[[section.item.related]]
+title = "Solution"
+href = "add-a-nightly-verification-workflow-solution.md"
+
 [[section]]
 title = "Appendix: Porting the Loop"
 
@@ -273,3 +333,7 @@ href = "porting-the-shelf-loop-to-another-stack.md"
 [[section.item.related]]
 title = "Lab: Translate the Shelf Loop to Your Stack"
 href = "lab-translate-the-shelf-loop-to-your-stack.md"
+
+[[section.item.related]]
+title = "Solution"
+href = "translate-the-shelf-loop-to-your-stack-solution.md"

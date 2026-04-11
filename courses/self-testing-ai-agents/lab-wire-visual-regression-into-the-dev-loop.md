@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wire Visual Regression Into the Dev Loop'
 description: Set up Playwright's screenshot gate on Shelf, commit baselines, and watch an agent respond to a diff.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -163,5 +163,6 @@ A failed screenshot test is a conversation opener. The diff image is the message
 
 ## Additional Reading
 
+- [Solution](wire-visual-regression-into-the-dev-loop-solution.md)
 - [Visual Regression as a Feedback Loop](visual-regression-as-a-feedback-loop.md)
 - [Runtime Probes in the Development Loop](runtime-probes-in-the-development-loop.md)

@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Add Cross-Browser Coverage'
 description: Keep Chromium as the default, then add Firefox and WebKit coverage to a tagged smoke subset so the loop stays fast enough to use.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -117,5 +117,6 @@ The win here is not "we run more browsers." The win is "we run the right browser
 
 ## Additional Reading
 
+- [Solution](add-cross-browser-coverage-solution.md)
 - [Cross-Browser Validation Without Burning the Dev Loop](cross-browser-validation-without-burning-the-dev-loop.md)
 - [Nightly Verification Loops](nightly-verification-loops.md)

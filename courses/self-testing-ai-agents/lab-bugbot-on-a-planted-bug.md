@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Bugbot on a Planted Bug'
 description: Set up Cursor Bugbot on Shelf, open a PR that contains a planted permission bug, and watch the loop close.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -91,6 +91,7 @@ The goal isn't for Bugbot to find every bug. The goal is for Bugbot to find the 
 
 ## Additional Reading
 
+- [Solution](bugbot-on-a-planted-bug-solution.md)
 - [The Second Opinion](the-second-opinion.md)
 - [Tuning Bugbot for Your Codebase](tuning-bugbot-for-your-codebase.md)
 - [The Static Layer as Underlayment](the-static-layer-as-underlayment.md)

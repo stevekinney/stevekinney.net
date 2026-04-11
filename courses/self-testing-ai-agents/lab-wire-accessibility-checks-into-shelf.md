@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wire Accessibility Checks Into Shelf'
 description: Add an automated accessibility scan for critical routes, document the manual keyboard checks, and make accessibility failures part of the loop.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -121,5 +121,6 @@ Accessibility scans are not there to make you feel virtuous. They are there to m
 
 ## Additional Reading
 
+- [Solution](wire-accessibility-checks-into-shelf-solution.md)
 - [Accessibility as a Quality Gate](accessibility-as-a-quality-gate.md)
 - [Locators and the Accessibility Hierarchy](locators-and-the-accessibility-hierarchy.md)

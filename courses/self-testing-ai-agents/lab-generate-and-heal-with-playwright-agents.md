@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Generate and Heal a Test Suite with Playwright Agents'
 description: Use the planner, generator, and healer agents to build a test suite for Shelf's core workflow, then break the UI and watch the healer fix it.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-10
 ---
 
@@ -148,6 +148,7 @@ The test agents handle the mechanical work: exploring, generating locators, patc
 
 ## Additional Reading
 
+- [Solution](generate-and-heal-with-playwright-agents-solution.md)
 - [Playwright Test Agents](playwright-test-agents.md)
 - [Locators and the Accessibility Hierarchy](locators-and-the-accessibility-hierarchy.md)
 - [The Waiting Story](the-waiting-story.md)

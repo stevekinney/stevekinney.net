@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Add Post-Deploy Smoke Checks to Shelf'
 description: Add a deployed-URL smoke test, wire it into a preview or deploy workflow, and document the rollback trigger before you need it.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -127,5 +127,6 @@ The smoke test after deploy should be small enough to trust, fast enough to run 
 
 ## Additional Reading
 
+- [Solution](add-post-deploy-smoke-checks-to-shelf-solution.md)
 - [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md)
 - [CI as the Loop of Last Resort](ci-as-the-loop-of-last-resort.md)

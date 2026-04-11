@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wrap a Custom Verification MCP'
 description: Write a small MCP server that exposes a single verification tool for Shelf and wire it into the repository-local MCP configuration.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -95,5 +95,6 @@ This is the tightest verification loop we're going to build today. The agent mak
 
 ## Additional Reading
 
+- [Solution](wrap-a-custom-verification-mcp-solution.md)
 - [Writing a Custom MCP Wrapper](writing-a-custom-mcp-wrapper.md)
 - [Failure Dossiers: What Agents Actually Need From a Red Build](failure-dossiers-what-agents-actually-need-from-a-red-build.md)
