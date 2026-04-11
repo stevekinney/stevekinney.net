@@ -20,6 +20,29 @@ npx playwright init-agents --loop=claude
 
 This creates agent definitions in `.claude/agents/` and an MCP server config in `.mcp.json`. Verify that `.claude/agents/` was created and contains the three agent files (planner, generator, healer) before moving on.
 
+> [!WARNING] This overwrites your existing `.mcp.json`
+> `init-agents` will replace any existing `.mcp.json` at the repo root with a fresh file that only contains the `playwright-test` server. If you already wired a custom MCP in the [Wrap a Custom Verification MCP](lab-wrap-a-custom-verification-mcp.md) lab—or the Shelf starter ships with any other `mcpServers` entries—that config will be silently destroyed. Back `.mcp.json` up first, then merge the `playwright-test` entry back in manually. The merged file should look like this:
+>
+> ```json
+> {
+>   "mcpServers": {
+>     "svelte": { "type": "stdio", "command": "npx", "args": ["-y", "@sveltejs/mcp"], "env": {} },
+>     "shelf-verification": {
+>       "type": "stdio",
+>       "command": "npx",
+>       "args": ["tsx", "./tools/shelf-verification-server/server.ts"],
+>       "env": { "SHELF_BASE_URL": "http://127.0.0.1:4173" }
+>     },
+>     "playwright-test": {
+>       "command": "npx",
+>       "args": ["playwright", "run-test-mcp-server"]
+>     }
+>   }
+> }
+> ```
+>
+> Restart your MCP host after merging so the new tool list picks up every server.
+
 ## Write the seed test
 
 The planner needs a seed test that bootstraps the app into a usable state. Create `tests/end-to-end/seed.spec.ts` that uses your existing fixtures and navigates to the shelf:

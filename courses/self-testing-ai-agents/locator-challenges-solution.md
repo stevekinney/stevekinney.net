@@ -1,7 +1,7 @@
 ---
 title: 'Locator Challenges: Solution'
 description: Walkthrough and solutions for every locator challenge on Shelf's playground page.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-10
 ---
 
@@ -165,16 +165,19 @@ The page starts with "Loading..." visible and swaps to "Content loaded" after 1 
 ### Challenge 17: Open the dialog
 
 ```ts
-await page.getByRole('button', { name: 'Rate this book' }).click();
+await page.getByRole('button', { name: 'Rate this book' }).last().click();
 await expect(page.getByRole('dialog')).toBeVisible();
 ```
 
 The `RateBookDialog` component renders a `<div role="dialog">`. `getByRole('dialog')` finds it.
 
+> [!NOTE] Why `.last()`?
+> The playground ships **two** "Rate this book" buttons on purpose: one inside the Piranesi article in the "Intermediate: disambiguation and chaining" section, and one inside the "Dialogs" section that actually opens a modal. Without `.last()` (or an equivalent scope), Playwright's strict mode rejects the click because the locator matches both. A cleaner solution in a real codebase would be to scope inside a labeled region—say, `page.getByRole('region', { name: 'Dialogs' }).getByRole('button', { name: 'Rate this book' })`—but the playground's sections don't have accessible names, so `.last()` is the minimum-viable disambiguation for this exercise. If you want a stretch challenge, wrap the Dialogs section in a properly-labeled region and rewrite the locator as a parent chain.
+
 ### Challenge 18: Select 4 stars and save
 
 ```ts
-await page.getByRole('button', { name: 'Rate this book' }).click();
+await page.getByRole('button', { name: 'Rate this book' }).last().click();
 await page.getByLabel('4 stars').check();
 await page.getByRole('button', { name: 'Save rating' }).click();
 await expect(page.getByRole('dialog')).toBeHidden();
@@ -185,13 +188,13 @@ Each star is a radio input with an `aria-label` like "4 stars." `.check()` selec
 ### Challenge 19: Cancel the dialog
 
 ```ts
-await page.getByRole('button', { name: 'Rate this book' }).click();
+await page.getByRole('button', { name: 'Rate this book' }).last().click();
 await expect(page.getByRole('dialog')).toBeVisible();
-await page.getByRole('button', { name: 'Cancel' }).click();
+await page.getByRole('dialog').getByRole('button', { name: 'Cancel' }).click();
 await expect(page.getByRole('dialog')).toBeHidden();
 ```
 
-The dialog has a "Cancel" button. Click it, confirm the dialog disappears.
+The dialog has a "Cancel" button—and so does the "Buttons" section of the playground. Scoping the second click to `page.getByRole('dialog').getByRole('button', { name: 'Cancel' })` keeps the test from matching both.
 
 ## ARIA and roles
 
