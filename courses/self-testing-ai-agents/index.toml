@@ -89,7 +89,11 @@ title = "Storage State Authentication"
 href = "storage-state-authentication.md"
 
 [[section.item]]
-title = "APIRequestContext Beyond Storage State"
+title = "Testing Third-Party Authentication"
+href = "testing-third-party-authentication.md"
+
+[[section.item]]
+title = "APIRequestContext: Beyond Storage State"
 href = "api-request-context-beyond-storage-state.md"
 
 [[section.item]]

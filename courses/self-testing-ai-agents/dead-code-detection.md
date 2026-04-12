@@ -5,9 +5,7 @@ modified: 2026-04-12
 date: 2026-04-06
 ---
 
-I have a specific grievance with agents and I want to get it out of the way at the top of this lesson.
-
-Agents love to leave dead code behind. You ask them to rewrite a module, they write the new version, and the old version is still there, unreferenced, in a file that nobody will delete because nobody notices. You ask them to rename a function, they create the new name, they use the new name in the places they know about, and the old name still exists somewhere and is still exported from a barrel file and still getting imported by some test you forgot about. You ask them to remove a feature, they remove the UI for it and leave the API handler, or they remove the API handler and leave the database column.
+Agents _love_ to leave dead code behind. You ask them to rewrite a module, they write the new version, and the old version is still there, unreferenced, in a file that nobody will delete because nobody notices. You ask them to rename a function, they create the new name, they use the new name in the places they know about, and the old name still exists somewhere and is still exported from a barrel file and still getting imported by some test you forgot about. You ask them to remove a feature, they remove the UI for it and leave the API handler, or they remove the API handler and leave the database column.
 
 This is not a moral failure on the agent's part. It is a predictable consequence of how agents work—they make _additive_ changes efficiently, and they make _subtractive_ changes only to the specific things they were told to change. The result is a codebase that accretes orphaned code at roughly the rate the agent is working, and if you're not catching the orphans, you're drowning in them within a month.
 
@@ -20,8 +18,8 @@ Two that I use, in order of how much I lean on them.
 **[knip](https://knip.dev/)** is the comprehensive one and it's the default I reach for. It understands the entire module graph of your project and tells you about unused files, unused exports, unused dependencies, unused types, and unused `devDependencies`. It's configurable but it has sensible defaults for most stacks (including SvelteKit).
 
 ```sh
-bun add -D knip
-bunx knip
+npm install -D knip
+npx knip
 ```
 
 First run on Shelf: you'll probably see a dozen findings. Most of them will be legitimate. A few will be false positives—things knip thinks are unused but are actually dynamically referenced. Configure knip to ignore those specific cases and move on.
@@ -32,8 +30,8 @@ First run on Shelf: you'll probably see a dozen findings. Most of them will be l
 **[dependency-cruiser](https://github.com/sverweij/dependency-cruiser)** is the architectural one. It understands your module graph deeply enough to enforce rules like "nothing under `src/lib/server/` may be imported from `src/routes/`'s client-side code" or "the `legacy-auth/` directory is not allowed to have any incoming edges from outside itself." This is not primarily a dead-code tool—it's a circular-dependency, boundary-enforcement, architectural-rules tool—but it catches dead code as a side effect because orphaned modules are easy to spot in a graph.
 
 ```sh
-bun add -D dependency-cruiser
-bunx depcruise --init
+npm install -D dependency-cruiser
+npx depcruise --init
 ```
 
 Not everyone needs dependency-cruiser. It's worth it when your codebase has architectural boundaries you care about. For Shelf, I'm using it mainly to lock down the `legacy-auth/` directory so nothing imports from it and we can tell when it's safe to delete.
@@ -64,7 +62,7 @@ Knip's config lives in `knip.json` (or `knip.jsonc`). A reasonable Shelf startin
 Run it:
 
 ```sh
-bunx knip
+npx knip
 ```
 
 Read the output. Delete the things that are actually dead. Configure the things that are false positives. This first pass is the slowest one—after this, each subsequent run is fast and boring.
@@ -85,7 +83,7 @@ The trick with dead code detection is running it _often enough_ that orphans don
 
 - **On every CI run.** Block merge if knip reports new findings.
 - **On every commit via a git hook.** The [Git Hooks with Lefthook](git-hooks-with-lefthook.md) lesson has the details.
-- **On every save, via a file watcher.** Knip doesn't have an editor extension, but you can wire `bunx knip --no-progress` into a `chokidar` watcher if you want findings without leaving the editor.
+- **On every save, via a file watcher.** Knip doesn't have an editor extension, but you can wire `npx knip --no-progress` into a `chokidar` watcher if you want findings without leaving the editor.
 - **On a nightly job** that opens a cleanup PR. This is the lowest-friction version—nobody is blocked, but the cleanup happens automatically.
 
 My default is "on every CI run, with a pinned count." The script:
@@ -93,10 +91,10 @@ My default is "on every CI run, with a pinned count." The script:
 ```sh
 # package.json
 "knip": "knip --reporter compact",
-"knip:check": "knip --reporter compact | tee .knip-output && ...compare to baseline..."
+"knip:check": "knip --reporter compact --max-issues 12"
 ```
 
-Approach: commit the current count to a `.knip-baseline` file. CI fails if the count goes up. Devs can lower it at will. Agents see the check fail, go find the orphan they just created, and clean it up. Over time, the baseline ratchets down to zero.
+Approach: pin the current total in `--max-issues`. CI fails if the count goes above that number. Devs can lower it at will by editing the script downward as they pay off findings. Agents see the check fail, go find the orphan they just created, and clean it up. Over time, the pinned number ratchets down to zero.
 
 Alternative approach, simpler: fail CI if knip finds anything at all. This is strict but it forces cleanup on the PR that introduced the orphan, which is the cheapest possible time to fix it. I prefer this on new codebases and the ratchet approach on old ones.
 
@@ -125,8 +123,8 @@ That last rule is the one I break most often on projects without dead code detec
 Dependency-cruiser's killer feature for our purposes is enforcing "nothing imports from `legacy-auth/`." Here's a minimal config:
 
 ```js
-// .dependency-cruiser.cjs
-module.exports = {
+// .dependency-cruiser.mjs
+export default {
   forbidden: [
     {
       name: 'no-orphans',
@@ -152,7 +150,9 @@ module.exports = {
 };
 ```
 
-Two rules. `no-orphans` flags any file that isn't reachable from the graph. `no-legacy-auth-imports` enforces the directory boundary. Run `bunx depcruise src` and both rules fire on any violation.
+Two rules. `no-orphans` flags any file that isn't reachable from the graph. `no-legacy-auth-imports` enforces the directory boundary. Run `npx depcruise src` and both rules fire on any violation.
+
+Yes, `depcruise --init` may still hand you a CommonJS config in some setups, even in an ESM repository. Rename it to `.dependency-cruiser.mjs` and switch to `export default`. Dependency Cruiser itself uses an `.mjs` config in its own repository, and this repository is already ESM-first (`"type": "module"`), so there is no reason to teach 2019-era CommonJS here.
 
 I don't always run dependency-cruiser in the fast local loop—it's slower than knip. I usually run it in CI and let CI fail on violations. The local loop catches most orphans via knip; dependency-cruiser is the safety net for structural regressions.
 

@@ -18,11 +18,11 @@ I'm covering it early in the day because the rest of the workshop assumes you ha
 ## Installation
 
 ```sh
-bun add -D lefthook
-bunx lefthook install
+npm install --save-dev lefthook
+npx lefthook install
 ```
 
-That's it. `lefthook install` writes the hook scripts into `.git/hooks/` so they fire on the right lifecycle events. No `prepare` script needed—though you can add one if you want automatic installation when teammates run `bun install`.
+That's it. `lefthook install` writes the hook scripts into `.git/hooks/` so they fire on the right lifecycle events. No `prepare` script needed—though you can add one if you want automatic installation when teammates run `npm install`.
 
 ```json
 {
@@ -32,8 +32,10 @@ That's it. `lefthook install` writes the hook scripts into `.git/hooks/` so they
 }
 ```
 
+In npm, [`prepare`](https://docs.npmjs.com/cli/v11/using-npm/scripts/) is a special lifecycle script. It runs on a local `npm install` and before `npm pack` or `npm publish`. In this case, that means "after dependencies are installed, make sure Lefthook writes the Git hook files into `.git/hooks/` again." You are not invoking `prepare` manually here. npm sees the script name and runs it at the right points in the package lifecycle.
+
 > [!NOTE] Why `prepare` is optional
-> Lefthook's `install` command is idempotent. Running it twice does nothing harmful. If your team all knows to run `bunx lefthook install` after cloning, you can skip the `prepare` hook entirely. I add it out of habit because there's always someone who forgets.
+> Lefthook's `install` command is idempotent. Running it twice does nothing harmful. If your team all knows to run `npx lefthook install` after cloning, you can skip the `prepare` hook entirely. I add it out of habit because there's always someone who forgets.
 
 ## The configuration file
 
@@ -45,10 +47,10 @@ pre-commit:
   commands:
     lint:
       glob: '*.{ts,tsx,svelte}'
-      run: bunx eslint --fix --max-warnings=0 {staged_files}
+      run: npx eslint --fix --max-warnings=0 {staged_files}
     format:
       glob: '*.{ts,tsx,svelte,json,md,yml,yaml}'
-      run: bunx prettier --write {staged_files}
+      run: npx prettier --write {staged_files}
 ```
 
 `{staged_files}` is a Lefthook variable that expands to the list of staged files matching the `glob`. This is the lint-staged replacement: Lefthook filters the staged files for you, passes them as arguments, and restages any auto-fixed changes.
@@ -80,10 +82,10 @@ pre-commit:
   commands:
     lint:
       glob: '*.{ts,tsx,svelte}'
-      run: bunx eslint --fix --max-warnings=0 {staged_files}
+      run: npx eslint --fix --max-warnings=0 {staged_files}
     format:
       glob: '*.{ts,tsx,svelte,json,md,yml,yaml}'
-      run: bunx prettier --write {staged_files}
+      run: npx prettier --write {staged_files}
     secrets:
       run: gitleaks git --staged --no-banner
 ```
@@ -107,7 +109,7 @@ Lefthook hooks into every [Git hook](https://git-scm.com/docs/githooks) that Git
 - **`pre-commit`:** Lint, format, secret scan. Staged files only. Under ten seconds.
 - **`commit-msg`:** Validate the commit message format, if you care about that. I mostly don't, but some teams do.
 - **`pre-push`:** Typecheck, dead code scan, unit tests. The slightly-slower-but-still-local checks.
-- **`post-merge`:** Run `bun install` automatically after pulling, so dependencies stay in sync. This one is underrated.
+- **`post-merge`:** Run `npm install` automatically after pulling, so dependencies stay in sync. This one is underrated.
 - **`post-checkout`:** Same idea—reinstall dependencies when switching branches that might have different lockfiles.
 
 You _can_ hook into `pre-rebase`, `post-rewrite`, and a dozen others. I've never needed to. If you're tempted to put logic in `pre-rebase`, you're probably solving a process problem with a technical tool.
@@ -126,6 +128,137 @@ For agents, the rule is simpler:
 - The pre-commit hook completes in under 10 seconds. If you see commits
   taking longer, report it.
 ```
+
+That instruction belongs in `AGENTS.md`, `CLAUDE.md`, or `.cursor/rules`, but if you want an actual enforcement boundary, use the agent's hook or permissions system. The implementation differs quite a bit across tools.
+
+## Stopping `--no-verify`
+
+The goal here is simple: if an agent tries to run `git commit --no-verify`, block the command and tell it to fix the failing hook instead.
+
+### Claude
+
+[Claude Code hooks](https://docs.claude.com/en/docs/claude-code/hooks) are the cleanest option because a `PreToolUse` hook can inspect the full Bash command _before_ it runs and return `permissionDecision: "deny"`.
+
+Add the hook to `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/block-no-verify.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Then inspect the pending shell command:
+
+```js
+import fs from 'node:fs';
+
+const input = JSON.parse(fs.readFileSync(0, 'utf8'));
+const command = input.tool_input?.command ?? '';
+
+if (!/(^|\\s)--no-verify(\\s|$)/.test(command)) {
+  process.exit(0);
+}
+
+process.stdout.write(
+  JSON.stringify({
+    hookSpecificOutput: {
+      hookEventName: 'PreToolUse',
+      permissionDecision: 'deny',
+      permissionDecisionReason:
+        'Never bypass Git hooks with --no-verify. Fix the failing hook instead.',
+    },
+  }),
+);
+```
+
+Because the hook sees the whole command string, this catches `--no-verify` even when it is not the first flag.
+
+### Cursor
+
+Cursor is the awkward one here. Its [CLI permissions](https://docs.cursor.com/cli/reference/permissions) are command-base rules like `Shell(git)`, not argument-aware policies, and the docs are explicit that the allowlist is not a security control. That means there is not a narrow "deny only `--no-verify`" hook example to show today.
+
+The practical permissions-based option is broader: deny all shell `git` commands in `.cursor/cli.json` and leave commits to a human.
+
+```json
+{
+  "agent": {
+    "permissions": {
+      "deny": ["Shell(git)"]
+    }
+  }
+}
+```
+
+That is coarse, but it is mechanically enforceable. If you still want Cursor to run read-only `git status` or `git diff`, the honest answer is that Cursor's documented permissions model does not currently let you deny only `git commit --no-verify`. In that case, keep terminal approval enabled, reject any `--no-verify` command manually, and pair it with a rule in `AGENTS.md` or `.cursor/rules`.
+
+### Codex
+
+[Codex hooks](https://developers.openai.com/codex/hooks) can intercept `Bash` in `PreToolUse`, which makes them the right tool for a flag-level policy like this. [`prefix_rule`](https://developers.openai.com/codex/rules) is great for prefix-based outside-sandbox policy, but `--no-verify` can appear later in the argument list, so a hook is the precise solution.
+
+Enable hooks in `.codex/config.toml`:
+
+```toml
+[features]
+codex_hooks = true
+```
+
+Then register a `PreToolUse` hook in `.codex/hooks.json`:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/block-no-verify.mjs\"",
+            "statusMessage": "Checking for --no-verify"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+And inspect `tool_input.command` before the shell command runs:
+
+```js
+import fs from 'node:fs';
+
+const input = JSON.parse(fs.readFileSync(0, 'utf8'));
+const command = input.tool_input?.command ?? '';
+
+if (!/(^|\\s)--no-verify(\\s|$)/.test(command)) {
+  process.exit(0);
+}
+
+process.stdout.write(
+  JSON.stringify({
+    hookSpecificOutput: {
+      hookEventName: 'PreToolUse',
+      permissionDecision: 'deny',
+      permissionDecisionReason: 'Do not use --no-verify. Fix the failing hook instead.',
+    },
+  }),
+);
+```
+
+If you want a broader Codex policy, use a `.rules` file to forbid `git commit` outside the sandbox entirely and reserve hooks for the more precise "spot this flag anywhere in the command" case.
 
 ## The one thing to remember
 
