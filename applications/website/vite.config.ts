@@ -154,6 +154,6 @@ export default defineConfig({
     format: 'es',
   },
   ssr: {
-    noExternal: ['lucide-svelte'],
+    noExternal: ['@lucide/svelte', '@icons-pack/svelte-simple-icons'],
   },
 });

@@ -1,7 +1,7 @@
 ---
 title: Using Stubs
 description: Learn how to use stubs to simulate behavior in testing.
-modified: 2026-03-17
+modified: 2026-04-12
 date: 2024-10-02
 ---
 
@@ -93,7 +93,9 @@ expect(fetchStub).toHaveBeenCalledTimes(1);
 This ensures that `fetchStub` was called exactly once, which helps verify that the `getConcertDetails` function triggered the expected network request behavior.
 
 Using stubs, you can simulate various responses (e.g., API errors, timeouts, or different data) and assert that your code reacts accordingly, all without relying on real external systems.
+
 <!-- Isn't it two articles merged together? -->
+
 ## Stubs
 
 A _stub_ is a test double that provides pre-determined responses to function calls, typically to replace a real dependency with controlled behavior. Stubs do not track how the function is called; they just serve as replacements that return fixed values.

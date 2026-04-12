@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import Date from '$lib/components/date.svelte';
+  import OpenInObsidian from '$lib/components/open-in-obsidian.svelte';
   import PullRequest from '$lib/components/pull-request.svelte';
   import SEO from '$lib/components/seo.svelte';
   import { url } from '$lib/metadata';
@@ -23,6 +24,8 @@
 </script>
 
 <SEO title={`${data.title} | ${data.course.title}`} description={data.description} {jsonLd} />
+
+<OpenInObsidian repoPath="courses/{page.params.course}/{page.params.lesson}.md" />
 
 <div class="space-y-10">
   <hgroup class="space-y-2">

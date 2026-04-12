@@ -46,6 +46,9 @@ Add a command such as this to `package.json`:
 
 The workflow should set `SMOKE_BASE_URL`. The test command should stay boring.
 
+> [!NOTE] Shelf uses a split config
+> The shipped Shelf version of this script is `"test:smoke": "playwright test --config=playwright.smoke.config.ts"`—a separate Playwright config scoped to the smoke suite. The split exists so the smoke run doesn't inherit the main config's `webServer` block, its authenticated project, or the pinned `workers: 1` (which matters when the smoke target is a hosted URL, not a local SQLite file). Both shapes work; pick the single-config version while you're learning and migrate to a dedicated config when the smoke suite grows its own timing, baseURL, and artifact concerns.
+
 ## Step 3: write the rollback playbook
 
 Create `docs/post-deploy-playbook.md`.

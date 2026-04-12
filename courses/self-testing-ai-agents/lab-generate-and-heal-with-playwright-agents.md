@@ -20,6 +20,9 @@ npx playwright init-agents --loop=claude
 
 This creates agent definitions in `.claude/agents/` and an MCP server config in `.mcp.json`. Verify that `.claude/agents/` was created and contains the three agent files (planner, generator, healer) before moving on.
 
+> [!NOTE] `init-agents` replaces `.mcp.json`
+> If you already have a `.mcp.json` at the repo root, `init-agents` will replace it with a fresh one that only registers `playwright-test`. The Shelf starter does not ship one, so there's nothing to preserve here. If your own project does ship one, back it up before running this command and merge `playwright-test` in after.
+
 ## Write the seed test
 
 The planner needs a seed test that bootstraps the app into a usable state. Create `tests/end-to-end/seed.spec.ts` that uses your existing fixtures and navigates to the shelf:

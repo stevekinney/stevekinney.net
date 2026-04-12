@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Rss } from 'lucide-svelte';
+  import { Rss } from '@lucide/svelte';
   import PostLink from '$lib/components/post-link.svelte';
   import { POSTS_PER_PAGE } from '$lib/pagination';
 

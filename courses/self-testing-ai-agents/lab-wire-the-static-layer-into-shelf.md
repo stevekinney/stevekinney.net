@@ -1,26 +1,31 @@
 ---
 title: 'Lab: Wire the Static Layer into Shelf'
-description: Install and configure the whole stack—ESLint custom rules, TypeScript strict, knip, husky, lint-staged, gitleaks—and prove each layer fires on the right mistake.
+description: Install and configure the whole stack—ESLint custom rules, TypeScript strict, knip, lefthook, gitleaks—and prove each layer fires on the right mistake.
 modified: 2026-04-11
 date: 2026-04-06
 ---
 
 Longest lab of the day. Multi-part. Pace yourself—each part is a self-contained check, and you can stop between parts if you need to.
 
+> [!NOTE] In the starter
+> Shelf already ships the complete static layer: `eslint.config.js` with the four `no-restricted-syntax` rules, `tsconfig.json` with every strict flag, `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts`. Every part below is a walkthrough — open the shipped file, read the rule, understand why it's worded the way it is, then run the planted-bad-input check to prove it fires. You're not writing configuration from scratch; you're learning to read it.
+
 ## The task
 
-Wire the complete static layer into Shelf and verify every piece fires on a planted bad input.
+Walk the complete static layer Shelf ships and verify every piece fires on a planted bad input. For each part: open the shipped file, read the rule, then trigger the probe and watch it catch.
 
 ## Part 1: ESLint custom rules
 
-Update `eslint.config.js` to include a `no-restricted-syntax` block that bans:
+Open `eslint.config.js`. Find the `no-restricted-syntax` block. It bans four patterns:
 
 - `page.waitForTimeout` (anywhere in `tests/end-to-end/`). Selector: `CallExpression[callee.property.name='waitForTimeout']`. Message: `"page.waitForTimeout is banned. See CLAUDE.md → Playwright → Waiting."`
 - `page.locator` called with a string argument (anywhere in `tests/end-to-end/`). Selector: `CallExpression[callee.property.name='locator'][arguments.0.type='Literal']`. Message: `"Use a getByRole/getByLabel locator. See CLAUDE.md → Playwright → Locators."`
 - `page.waitForLoadState('networkidle')` (anywhere). Selector: `CallExpression[callee.property.name='waitForLoadState'] Literal[value='networkidle']`. Message: `"networkidle is unreliable. Wait on a real signal."`
 - Reading `userId` from a request body in a route handler. Selector: `MemberExpression[object.type='MemberExpression'][object.property.name='body'][property.name='userId']`. Message: `"Read userId from the session, not the request body. See CLAUDE.md → Auth."`
 
-Each rule should set both the `selector` and the `message` exactly as listed so the acceptance criteria below can grep for them. The lesson's **Writing a `no-restricted-syntax` rule** section in [Lint and Types as Guardrails](lint-and-types-as-guardrails.md) walks each of these four AST selectors in English — read that before you paste the block into `eslint.config.js` so you understand _why_ the `body.userId` rule uses a nested `MemberExpression` match instead of just a property name, and why the `networkidle` rule uses the descendant combinator.
+Each rule has both a `selector` and a `message`. The message strings are load-bearing — they name the file, the section, and the fix. That's the difference between a lint error the agent ignores and a lint error the agent reads and acts on.
+
+The lesson's **Writing a `no-restricted-syntax` rule** section in [Lint and Types as Guardrails](lint-and-types-as-guardrails.md) walks each of these four AST selectors in English. Read it alongside the shipped file so you understand _why_ the `body.userId` rule uses a nested `MemberExpression` match instead of just a property name, and why the `networkidle` rule uses the descendant combinator.
 
 > [!NOTE]
 > In the Shelf workshop repository, `npm` is the source of truth. If your own project uses Bun, translate the commands back to `bun` as appropriate. The important part is that the checks are real, named scripts the agent is required to run.
@@ -35,7 +40,7 @@ Each rule should set both the `selector` and the `message` exactly as listed so 
 
 ## Part 2: TypeScript strict mode
 
-Update `tsconfig.json` to enable every strict flag from the lesson, including `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`.
+Open `tsconfig.json`. Find every strict flag from the lesson — `strict: true`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`. They're all there. Read each one and make sure you can explain, in one sentence, what kind of bug it catches that `strict: true` alone would miss.
 
 ### Acceptance for Part 2
 
@@ -46,7 +51,7 @@ Update `tsconfig.json` to enable every strict flag from the lesson, including `n
 
 ## Part 3: Dead code detection
 
-Install knip. Configure it per the lesson. Run it on Shelf.
+Open `knip.json`. Read the `entry` and `project` globs — they tell knip which files are roots (SvelteKit pages, tests, scripts) and which files are in-scope for the unused-exports analysis. Then run `npm run knip` to see it report zero findings against the current starter.
 
 > [!NOTE]
 > In this local repository, the `knip` script sets `DATABASE_URL=file:./tmp/knip.db` before invoking knip. That keeps `drizzle.config.ts` loadable during analysis without depending on a developer-specific `.env`.
@@ -59,31 +64,31 @@ Install knip. Configure it per the lesson. Run it on Shelf.
 - [ ] Removing the file restores clean knip output.
 - [ ] If your repository still contains a retired subtree like `src/lib/legacy-auth/`, it is explicitly ignored. If your local Shelf clone does not contain that directory, do not invent it just to satisfy the lab.
 
-## Part 4: Husky and lint-staged
+## Part 4: Lefthook
 
-Install husky and lint-staged. Wire pre-commit and pre-push hooks per the lesson.
+Open `lefthook.yml`. Find the `pre-commit` and `pre-push` blocks. Notice pre-commit runs fast checks on `{staged_files}` with `parallel: true` and `stage_fixed: true`, while pre-push runs the slightly-slower `npm run pre-push` script (which calls typecheck, knip, and unit tests) against the whole tree. Read the [Git Hooks with Lefthook](git-hooks-with-lefthook.md) lesson if you want the reasoning behind the split.
 
 ### Acceptance for Part 4
 
-- [ ] `.husky/pre-commit` exists and runs `npm run pre-commit`.
-- [ ] `.husky/pre-push` exists and runs `npm run pre-push`, which in turn runs at least `npm run typecheck` and `npm run knip`.
-- [ ] `package.json` has `pre-commit` and `lint-staged` configuration.
-- [ ] Making a change with a lint error and running `npm run pre-commit` against the staged diff aborts with the lint error visible.
+- [ ] `lefthook.yml` exists at the repo root.
+- [ ] `pre-commit` runs ESLint, Prettier, and a secret scan against `{staged_files}`, all marked `parallel: true`, and any auto-fixed files are restaged via `stage_fixed: true`.
+- [ ] `pre-push` runs `npm run pre-push`, which in turn runs at least `npm run typecheck` and `npm run knip`.
+- [ ] Making a change with a lint error and running `lefthook run pre-commit` aborts with the lint error visible.
 - [ ] Auto-fixable issues (formatting) get fixed and restaged automatically.
 
 ## Part 5: Secret scanning
 
-Install gitleaks. Wire it into `lint-staged`. Run it against staged content.
+Open `lefthook.yml` again and find the `secrets` command under `pre-commit` — it shells out to `npx tsx scripts/run-gitleaks-staged.ts`. Then open that script and read how it materializes the staged index into a tmp directory before running `gitleaks dir`. Finally, open `.gitleaks.toml` and notice which paths are allowlisted (`sample-config.json` and `tests/fixtures/`) and why — they're deliberate bait that would otherwise trip the scanner.
 
 > [!NOTE]
-> With the current Gitleaks release used in this workshop, `gitleaks git --staged` was not a reliable pre-commit verifier for newly added files. The local Shelf repository fixes that by materializing the exact git index into a temporary directory and running `gitleaks dir` there from `scripts/run-gitleaks-staged.ts`.
+> With the current Gitleaks release used in this workshop, `gitleaks git --staged` was not a reliable pre-commit verifier for newly added files. The local Shelf repository fixes that by materializing the exact git index into a temporary directory and running `gitleaks dir` there from `scripts/run-gitleaks-staged.ts`. That wrapper is what the lefthook `secrets` command shells out to.
 
 ### Acceptance for Part 5
 
 - [ ] `gitleaks version` runs on your machine.
-- [ ] `lint-staged` has a gitleaks entry.
+- [ ] `lefthook.yml` has a `secrets` command under `pre-commit` that invokes `npx tsx scripts/run-gitleaks-staged.ts`.
 - [ ] `.gitleaks.toml` allowlists `sample-config.json` and `tests/fixtures/`.
-- [ ] Running the staged-snapshot script (`npx tsx scripts/run-gitleaks-staged.ts`) exits zero for the clean staged state.
+- [ ] Running the staged-snapshot script directly (`npx tsx scripts/run-gitleaks-staged.ts`) exits zero for the clean staged state.
 - [ ] Attempting to stage a file containing `BETTER_AUTH_SECRET="7Xse4XqnSo3hcT31Yb2vi7LMt6BYI93w.0EWmIcjHKAdde1SY5TEVqh5fPu6NvFBf"` triggers the hook and blocks the commit.
 - [ ] The `sample-config.json` file can still be committed without issue (the allowlist works).
 
@@ -95,7 +100,7 @@ Add sections to `CLAUDE.md` that reflect every layer you wired up. At minimum:
 - In the local Shelf repository, those commands are `npm run lint`, `npm run typecheck`, and `npm run knip`.
 - Rules about `@ts-expect-error`, `eslint-disable`, and `--no-verify`.
 - A secrets section per the gitleaks lesson.
-- A reference back to the Playwright rules from Module 3 (locators, waiting, auth) so the custom lint rules are connected to the same source of truth.
+- A reference back to the Playwright rules ([locators](locators-and-the-accessibility-hierarchy.md), [waiting](the-waiting-story.md), [auth](storage-state-authentication.md)) so the custom lint rules are connected to the same source of truth.
 
 ### Acceptance for Part 6
 
@@ -144,5 +149,5 @@ The static layer is five tools and an hour of setup. Every one of them runs unde
 - [The Static Layer as Underlayment](the-static-layer-as-underlayment.md)
 - [Lint and Types as Guardrails](lint-and-types-as-guardrails.md)
 - [Dead Code Detection](dead-code-detection.md)
-- [Git Hooks with Husky and Lint-Staged](git-hooks-with-husky-and-lint-staged.md)
+- [Git Hooks with Lefthook](git-hooks-with-lefthook.md)
 - [Secret Scanning with Gitleaks](secret-scanning-with-gitleaks.md)

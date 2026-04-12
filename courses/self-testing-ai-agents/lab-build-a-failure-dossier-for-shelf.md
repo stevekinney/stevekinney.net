@@ -1,21 +1,20 @@
 ---
 title: 'Lab: Build a Failure Dossier for Shelf'
 description: Wire up traces, screenshots, console capture, and a dossier summarizer. Then break a test and watch the agent fix it from the dossier alone.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
-Short lab. Wire up the dossier infrastructure, then run a failure through it to verify the loop closes.
+Short lab. Walk the dossier infrastructure Shelf ships, understand why each piece is there, then break a test and watch the loop close.
 
-Shelf writes artifacts under `playwright-report/test-results/`, the HTML report to `playwright-report/html/`, the JSON report to `playwright-report/report.json`, and the markdown summary to `playwright-report/dossier.md`. The simplest, most controlled way to force a failure when you want to test the loop is to temporarily move one committed screenshot baseline, run the matching visual test, generate the dossier, then restore the baseline and rerun green.
+Shelf writes artifacts under `playwright-report/test-results/`, the HTML report to `playwright-report/html/`, the JSON report to `playwright-report/report.json`, and the markdown summary to `playwright-report/dossier.md`. The simplest, most controlled way to force a failure when you want to test the loop is to change one word of copy in `src/routes/design-system/+page.svelte`, run `npm run test:e2e`, watch `[public] › tests/end-to-end/visual.spec.ts:3 › design system matches the starter visual baseline` go red, run `npm run dossier`, read the generated markdown, then revert the copy change and rerun green. Editing a component gives you a deterministic red state that survives re-runs — moving a screenshot baseline aside no longer works, because Playwright will auto-regenerate a missing baseline on the next run instead of failing.
 
-## The task
+> [!NOTE] In the starter
+> Shelf already ships every piece: the config flags, the console forwarders, the dossier script, the `npm run dossier` command, and the CLAUDE.md entry. This lab is a walkthrough. You're opening each file, reading it, and understanding why each decision was made. The "break a test and run the dossier" section at the bottom is the verification — that's the only thing you actively do.
 
-Update the Shelf repo so that every failing Playwright test produces a structured dossier the agent can read without any additional context.
+## 1. The config — `playwright.config.ts`
 
-### Step 1: trace and screenshot config
-
-In `playwright.config.ts`, ensure the following are set:
+Open `playwright.config.ts`. Find the `outputDir`, `use`, and `reporter` keys. They look like this:
 
 ```ts
 outputDir: 'playwright-report/test-results',
@@ -31,55 +30,56 @@ reporter: [
 ],
 ```
 
-The JSON reporter is new—your dossier script is going to read from it.
+The JSON reporter is the load-bearing one — the dossier script reads it. The HTML reporter is what humans look at. The list reporter is what streams to the terminal while the suite runs.
 
-### Step 2: console and network forwarders
+**Question:** why `retain-on-failure` instead of `on`? (Answer: `on` retains traces, screenshots, and videos for every test, pass or fail. On a 38-test suite that adds hundreds of megabytes of artifacts for runs that don't need them. `retain-on-failure` keeps the loop cheap when it's green and generous when it's red.)
 
-In `tests/end-to-end/fixtures.ts`, extend the `page` fixture to forward browser console errors and failed network responses to the Node process's stderr. Use the patterns from the lesson, and filter out benign navigation aborts like `ERR_ABORTED` so the output stays actionable.
+## 2. The console forwarders — `tests/end-to-end/fixtures.ts`
 
-Verify it works by adding a temporary `console.error('hello')` to any page component and running the rate-book test. You should see `[browser error] hello` in the test output.
+Open `tests/end-to-end/fixtures.ts`. Find the extended `page` fixture — it subscribes to `page.on('console', ...)` and `page.on('requestfailed', ...)` and forwards errors to the Node process's stderr with a `[browser error]` or `[network error]` prefix.
 
-### Step 3: the dossier summarizer
+Notice the filter for `ERR_ABORTED`. That code fires whenever Playwright navigates away from a page mid-request, which happens constantly in a test suite. Without the filter the console is unreadable.
 
-Write `scripts/summarize-failure-dossier.ts` that reads `playwright-report/report.json` and produces `playwright-report/dossier.md`. The dossier should include, for each failed test:
+**Question:** why forward to stderr instead of collecting into an array and dumping at the end? (Answer: streaming to stderr means the error lands in the Playwright report under the test it came from, and the list reporter picks it up in real time. An end-of-run dump loses the association between the error and the test that caused it.)
 
-- Test title and file location
-- Full error message
-- Relative path to the screenshot
-- Exact shell command to reproduce the failure
+## 3. The dossier script — `scripts/summarize-failure-dossier.ts`
 
-The lesson walks the Playwright report schema and shows the full script in the **Making dossiers agent-readable** section of [Failure Dossiers: What Agents Actually Need From a Red Build](failure-dossiers-what-agents-actually-need-from-a-red-build.md). Work from that sketch, not from memory — the `suites → specs → tests → results` walk and the attachment-picking predicates are easy to get wrong.
+Open `scripts/summarize-failure-dossier.ts`. It's 199 lines. Walk the six sections:
 
-The Shelf starter ships a production version at `scripts/summarize-failure-dossier.ts`. Write yours first from the lesson sketch, then open the starter's file to compare. Differences you will see in the shipped version:
+- **Lines 16–64: type declarations.** `PlaywrightReport → PlaywrightSuite → PlaywrightSpec → PlaywrightTest → PlaywrightResult → PlaywrightAttachment`. These mirror the shape Playwright's JSON reporter emits. They exist as explicit types instead of `any` so the `suites → specs → tests → results` walk stays honest when the report schema drifts.
+- **Lines 66–76: `collectSpecs` and `pickAttachment`.** Recursive flatten of the nested suite tree plus a generic attachment-picker. Both are small helpers the walk needs.
+- **Lines 78–97: `pickFailureScreenshot`.** This is the visual-regression-aware part. When a `toHaveScreenshot` assertion fails, Playwright retains three images: `expected` (the baseline), `actual` (the new render), and `diff` (the pixel difference). The shipped script prefers `diff`, then `actual`, then any image attachment. The lesson sketch in [Failure Dossiers](failure-dossiers-what-agents-actually-need-from-a-red-build.md) omits this — a reviewer always wants the diff, not the baseline, and shipping the simpler version would lead to a dossier that links to the wrong image on visual failures.
+- **Lines 99–137: `buildFailureList`.** The walk. Iterate every spec, every test inside it, every result inside that. Skip anything that isn't `failed` or `timedOut`. For each failure, pull the error message with a three-level fallback (`result.error?.message ?? result.errors?.[0]?.message ?? 'Unknown error'`), the screenshot path, the trace path, and the video path.
+- **Lines 139–178: `renderDossier`.** Markdown rendering. The crucial line is the `reproduceCommand` at line 155: `npx playwright test --project=${failure.projectName} ${failure.file} -g ${JSON.stringify(failure.title)}`. That's the exact command the agent runs to replay a single failing test — project-scoped, file-scoped, title-grepped. Without those three pieces the "reproduce" command reruns the whole suite.
+- **Lines 180–200: `main`.** Read the report, build the list, ensure the output directory exists, write the markdown, print a summary to stderr. The summary goes to stderr (not stdout) so a calling script can pipe the markdown somewhere without mixing in log lines.
 
-- Explicit TypeScript types for `PlaywrightReport`, `PlaywrightSuite`, `PlaywrightSpec`, etc., instead of `any`. Copy the shape if your editor complains about the looser types in the sketch.
-- Visual-regression-aware screenshot picking: on a screenshot assertion failure, Playwright retains `expected`, `actual`, and `diff`. The shipped script prefers the `diff` image so the dossier links to the thing a reviewer actually wants to look at, rather than the baseline.
-- `null`-guarded error access: `result.error?.message ?? result.errors?.[0]?.message ?? 'Unknown error'` instead of the bare `result.error?.message` in the lesson sketch. The lesson cuts the fallback for readability; production code should not.
+**Question:** why does `buildFailureList` keep `'timedOut'` in the failed-status set? (Answer: a timeout is a failure, and a timeout leaves the same artifacts behind as a regular failure. Leaving it out means the dossier silently drops timeouts, which is the worst kind of gap — "the tests passed" when they actually hung.)
 
-Add a `package.json` script: `"dossier": "tsx scripts/summarize-failure-dossier.ts"`.
+## 4. The named command — `package.json`
 
-### Step 4: CLAUDE.md
+Open `package.json`. Find `"dossier": "tsx scripts/summarize-failure-dossier.ts"`. Notice there's no `&&` chain — the dossier script runs on demand, not after every test run. That's deliberate: most test runs are green, and writing an empty dossier every time adds noise without signal. The agent calls `npm run dossier` only when it needs to look at a failure.
 
-Add a section titled "When a test fails" with the reproduction instructions from the lesson.
+## 5. CLAUDE.md — the reproduction instructions
+
+Open `CLAUDE.md`. Find the "When a test fails" section. It names `npm run dossier` and points at `playwright-report/dossier.md`. That's the whole entry — three lines of markdown, but load-bearing. Without it, the agent would look at a failing test and scroll the terminal output instead of reading the structured file.
 
 ![The Playwright HTML report used as the dossier front door](./assets/lab-failure-dossier-report.png)
 
 ## Acceptance criteria
 
-- [ ] `playwright.config.ts` has `trace: 'retain-on-failure'`, `screenshot: 'only-on-failure'`, and the JSON reporter enabled.
-- [ ] `tests/end-to-end/fixtures.ts` (or equivalent) forwards browser console errors and warnings to stderr. Verify with a deliberate `console.error` and check that it shows up in test output.
-- [ ] `scripts/summarize-failure-dossier.ts` exists and runs without crashing: `npm run dossier` exits zero even when there are no failures (with an appropriate "no failures" message).
-- [ ] `package.json` has a `dossier` script.
-- [ ] `CLAUDE.md` has a "When a test fails" section that names the reproduction command (`npm run dossier`) and the path to the output file.
-- [ ] Deliberately break a test (change an assertion so it fails) and run it. Verify:
-  - [ ] `playwright-report/html/index.html` exists
-  - [ ] `playwright-report/report.json` exists
-  - [ ] A `trace.zip` exists somewhere under `playwright-report/test-results/`
-  - [ ] A failure screenshot exists somewhere under `playwright-report/test-results/`
-  - [ ] `npm run dossier` produces a `playwright-report/dossier.md` with the failure listed
-  - [ ] The dossier contains the reproduction command
-  - [ ] The dossier contains a screenshot link
-- [ ] Revert the broken test. Run the suite green. `npm run dossier` reports no failures.
+You can't copy-paste your way through this one — the code is already there. You're done when you can answer each of these without looking:
+
+- [ ] Why does the config use `retain-on-failure` instead of `on`?
+- [ ] Why does the console forwarder filter `ERR_ABORTED`?
+- [ ] Why does the forwarder stream to stderr rather than dumping at the end?
+- [ ] Why does `pickFailureScreenshot` prefer `diff` over `actual` over any image?
+- [ ] Why does `buildFailureList` treat `'timedOut'` the same as `'failed'`?
+- [ ] What three pieces does the `reproduceCommand` chain together, and why all three?
+- [ ] Why is `npm run dossier` an on-demand command instead of something chained onto `npm run test`?
+
+And one mechanical check:
+
+- [ ] You broke a test, ran the suite, ran `npm run dossier`, and opened `playwright-report/dossier.md` to see the failure listed with a screenshot link and a reproduce command. Then you reverted and reran green.
 
 ## Testing the loop end-to-end
 

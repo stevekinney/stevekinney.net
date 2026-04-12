@@ -1,5 +1,5 @@
 import {
-  type Icon,
+  type LucideIcon,
   AlertTriangle,
   Bug,
   Check,
@@ -13,8 +13,7 @@ import {
   Quote,
   X,
   Zap,
-} from 'lucide-svelte';
-import type { ComponentType } from 'svelte';
+} from '@lucide/svelte';
 
 /**
  * All possible callout variations supported by the component.
@@ -158,7 +157,7 @@ export const getVariationColor = (variation: CalloutVariation): string => {
 /**
  * Icon components for each base callout variation.
  */
-const variationIcons: Record<BaseCalloutVariation, ComponentType<Icon>> = {
+const variationIcons: Record<BaseCalloutVariation, LucideIcon> = {
   abstract: ClipboardList,
   bug: Bug,
   danger: Zap,
@@ -179,7 +178,7 @@ const variationIcons: Record<BaseCalloutVariation, ComponentType<Icon>> = {
  * @param variation - The callout variation.
  * @returns The icon component to use.
  */
-export const getIcon = (variation: CalloutVariation): ComponentType<Icon> => {
+export const getIcon = (variation: CalloutVariation): LucideIcon => {
   const baseVariation = getVariation(variation);
   return variationIcons[baseVariation];
 };

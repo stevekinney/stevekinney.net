@@ -1,7 +1,7 @@
 ---
 title: Lint and Types as Guardrails
 description: ESLint's recommended rules are a starting point, not a finish line. The rules that actually help agents are the ones you write for your own codebase.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -32,7 +32,7 @@ A short list of [ESLint](https://eslint.org/) rules that pay for themselves in a
 - `@typescript-eslint/no-floating-promises`—every unawaited promise in an agent's code is a race condition waiting to happen. Hard error.
 - `@typescript-eslint/no-misused-promises`—`await`ing in a boolean context, passing an async function to a callback that expects sync, etc. Hard error.
 - `@typescript-eslint/strict-boolean-expressions`—forces explicit null checks instead of `if (user)`, which catches a class of "the empty string is falsy" bugs. Worth it.
-- `no-console` with an allowlist for `error` and `warn`—prevents the `console.log` littering I warned about in the Module 6 lesson on dossiers.
+- `no-console` with an allowlist for `error` and `warn`—prevents the `console.log` littering I warned about in [Failure Dossiers](failure-dossiers-what-agents-actually-need-from-a-red-build.md).
 - [`eslint-plugin-unicorn`](https://github.com/sindresorhus/eslint-plugin-unicorn) has a bunch of opinionated rules that catch subtle modern-JavaScript mistakes. I don't enable all of them, but `prefer-node-protocol`, `no-null`, and `error-message` all catch things.
 
 Your mileage varies on the last few based on team aesthetics. The first four are non-negotiable for me.
@@ -64,7 +64,7 @@ export default [
 
 Notice the error message. It names the violation, offers the alternatives, and points at `CLAUDE.md`. When the agent trips this rule, the error message is a self-contained fix prompt—it tells the agent what to do next. Write your lint messages like prompts because they _are_ prompts.
 
-Now extend the same rule to ban the other Playwright anti-patterns we hit in Module 3, plus one recurring server-side bug — handlers that pull `userId` out of the request body instead of the authenticated session. Each selector is a tiny AST query; read them below the code block for the mental model.
+Now extend the same rule to ban the other Playwright anti-patterns we hit in the [Playwright lessons](locators-and-the-accessibility-hierarchy.md), plus one recurring server-side bug — handlers that pull `userId` out of the request body instead of the authenticated session. Each selector is a tiny AST query; read them below the code block for the mental model.
 
 ```js
 {
@@ -111,7 +111,7 @@ Four rules, one config file. Translating each selector back into English:
 Four rules, one config file, all firing on every save. The next time the agent reaches for a banned pattern, the editor underlines it in red and the fix is one step away.
 
 > [!TIP] Write your ESLint rule messages like fix prompts
-> Every error message above names the violation, points at the alternative, and references `CLAUDE.md`. When the agent trips the rule, the message _is_ the next instruction in its context. Treat these messages the same way you'd treat the test failure dossier from Module 6: the richer the message, the less work the agent has to do to recover.
+> Every error message above names the violation, points at the alternative, and references `CLAUDE.md`. When the agent trips the rule, the message _is_ the next instruction in its context. Treat these messages the same way you'd treat the [test failure dossier](failure-dossiers-what-agents-actually-need-from-a-red-build.md): the richer the message, the less work the agent has to do to recover.
 
 ## The tricky one: banning `any` gradually
 
@@ -185,7 +185,7 @@ The "do not use `@ts-expect-error`" rule is specifically to prevent the agent's 
 Lint and types are the _code-shape_ part of the static layer. There are two other checks that belong in the same tier even though they are not ESLint rules. I'm naming them here so you know where they fit; each gets its own lesson.
 
 - **Dead code detection** with `knip`. Orphaned files that nobody imports anymore are a specific kind of lint finding. [Dead Code Detection](dead-code-detection.md) covers the `knip.json` setup.
-- **Secret scanning** with `gitleaks`. This one is worth calling out because the static-layer lab expects you to wire it into `lint-staged` alongside ESLint and Prettier, so there's a single pre-commit command that runs lint, formatting, and secret scan in one pass. See [Secret Scanning with Gitleaks](secret-scanning-with-gitleaks.md) for the full `lint-staged` block and the helper script that scans the _staged_ snapshot rather than the working tree.
+- **Secret scanning** with `gitleaks`. This one is worth calling out because the static-layer lab expects you to wire it into `lefthook.yml` as a `secrets` command alongside the ESLint and Prettier commands, so pre-commit runs lint, formatting, and secret scan in parallel. See [Secret Scanning with Gitleaks](secret-scanning-with-gitleaks.md) for the full `secrets` command and the helper script that scans the _staged_ snapshot rather than the working tree.
 
 You don't need to wire them up yet—that's the lab. But you should have both in your head as "lives next to ESLint in the pre-commit loop" by the time you finish this lesson.
 

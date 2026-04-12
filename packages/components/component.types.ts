@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { Icon as IconType } from 'lucide-svelte';
+import type { LucideIcon } from '@lucide/svelte';
 import type { Snippet } from 'svelte';
 import type { HTMLAttributes, SvelteHTMLElements } from 'svelte/elements';
 
 export type ElementName = keyof SvelteHTMLElements;
 
 export type WithIcon = {
-  icon?: typeof IconType;
+  icon?: LucideIcon;
 };
 
 export type WithChildren = {

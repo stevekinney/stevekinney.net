@@ -92,6 +92,9 @@ If your Shelf repo has a dedicated end-to-end script already, keep the accessibi
 
 The key is that the agent has a named command to run. Hidden rituals do not make good loops.
 
+> [!NOTE] Shelf folds accessibility into `test:e2e`
+> The Shelf starter does **not** ship a standalone `test:accessibility` script. Instead, `accessibility.spec.ts` is matched by the `authenticated` project's `testMatch`, so it runs on every `npm run test:e2e` invocation—alongside the rate-book, search, and visual specs. That's the preferred pattern once the spec is stable: one gate, one command, no side channels. If you're new to the project and haven't built trust in the spec yet, keep the standalone script while you iterate, then fold it in once it stops surprising you.
+
 ## Acceptance criteria
 
 - [ ] `@axe-core/playwright` is installed in the Shelf repository

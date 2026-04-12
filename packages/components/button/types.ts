@@ -1,4 +1,4 @@
-import type { Icon } from 'lucide-svelte';
+import type { LucideIcon } from '@lucide/svelte';
 import type { ButtonVariants } from './variants';
 import type { ExtendElement } from '../component.types';
 
@@ -7,7 +7,7 @@ export type ButtonProps =
       'button',
       ButtonVariants & {
         label?: string;
-        icon?: typeof Icon;
+        icon?: LucideIcon;
         href?: string;
         loading?: boolean;
         full?: boolean;
@@ -18,7 +18,7 @@ export type ButtonProps =
       'a',
       ButtonVariants & {
         label?: string;
-        icon?: typeof Icon;
+        icon?: LucideIcon;
         loading?: boolean;
         full?: boolean;
         download?: string;

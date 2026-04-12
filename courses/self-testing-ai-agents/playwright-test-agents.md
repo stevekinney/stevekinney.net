@@ -1,7 +1,7 @@
 ---
 title: Playwright Test Agents
 description: Playwright ships three built-in agents that can plan, generate, and heal your test suite. Here's how they work and where they fit in the loop.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-10
 ---
 
@@ -48,6 +48,8 @@ npx playwright init-agents --loop=opencode
 > VS Code v1.105 or later is needed for the agentic experience to work properly.
 
 For Claude Code, this creates three agent definitions in `.claude/agents/` (planner, generator, healer) and an MCP server config in `.mcp.json`. It may also scaffold a `specs/README.md` and a default seed test if none exists. Other tools put the definitions elsewhere—VS Code and Copilot use `.github/agents/`, OpenCode uses `.opencode/prompts/`.
+
+One thing to know: `init-agents` replaces the repo's `.mcp.json`. Shelf doesn't ship one, so this is harmless inside the workshop. If you're running it against your own repo that already registers MCP servers, back the file up first and merge `playwright-test` in after.
 
 Once the agents are generated, you command them through your AI tool of choice. The generated artifacts follow a clean structure we'll look at in a moment.
 

@@ -2,6 +2,7 @@
   import { page } from '$app/state';
   import { env } from '$env/dynamic/public';
   import Date from '$lib/components/date.svelte';
+  import OpenInObsidian from '$lib/components/open-in-obsidian.svelte';
   import PullRequest from '$lib/components/pull-request.svelte';
   import SEO from '$lib/components/seo.svelte';
   import { url } from '$lib/metadata';
@@ -31,6 +32,8 @@
   type="article"
   jsonLd={articleJsonLd}
 />
+
+<OpenInObsidian repoPath="writing/{data.slug}.md" />
 
 <article class="space-y-10">
   <hgroup class="space-y-2">

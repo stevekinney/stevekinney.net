@@ -23,7 +23,7 @@
 <script lang="ts">
   import { merge } from '$lib/merge';
   import { sentenceCase } from 'change-case';
-  import { ChevronDown } from 'lucide-svelte';
+  import { ChevronDown } from '@lucide/svelte';
 
   /**
    * Component props with default values.

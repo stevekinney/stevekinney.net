@@ -1,13 +1,13 @@
 ---
 title: Secret Scanning with Gitleaks
 description: Agents commit fake API keys. Sometimes they commit real ones. Gitleaks is the boring tool that prevents the latter with almost no configuration.
-modified: 2026-04-09
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
 Short lesson. Important lesson.
 
-I mentioned in Module 1's lab that Shelf ships with a `sample-config.json` containing a fake API key. That's on purpose. It's bait. The bait is there because an agent will, given half a chance, copy a "real example" secret from one file to another file that's about to be committed, and I want us to see the feedback loop fire on a fake before you ever deploy to a real project.
+I mentioned in the [CLAUDE.md rewrite lab](lab-rewrite-the-bad-claude-md.md) that Shelf ships with a `sample-config.json` containing a fake API key. That's on purpose. It's bait. The bait is there because an agent will, given half a chance, copy a "real example" secret from one file to another file that's about to be committed, and I want us to see the feedback loop fire on a fake before you ever deploy to a real project.
 
 This is not hypothetical. I have personally watched Claude Code, Cursor, and Codex all commit credentials in the last year. Every time, the fix was the same: install gitleaks, configure the hook, and the mistake becomes impossible to repeat. Every time, the reason it happened in the first place was that secret scanning wasn't installed.
 
@@ -44,17 +44,17 @@ gitleaks version
 
 ## Wiring it into the pre-commit hook
 
-Add to `lint-staged` config:
+Add a `secrets` command to the `pre-commit` block in `lefthook.yml`:
 
-```json
-{
-  "lint-staged": {
-    "*": ["npx tsx scripts/run-gitleaks-staged.ts"]
-  }
-}
+```yaml
+pre-commit:
+  parallel: true
+  commands:
+    secrets:
+      run: npx tsx scripts/run-gitleaks-staged.ts
 ```
 
-In Shelf, that script materializes the exact staged snapshot into a temporary directory and runs `gitleaks dir` on it. That is more reliable than depending on whichever staged-file flags your installed Gitleaks version happens to support this month.
+In Shelf, that script materializes the exact staged snapshot into a temporary directory and runs `gitleaks dir` on it. That is more reliable than depending on whichever staged-file flags your installed Gitleaks version happens to support this month. Note the deliberate lack of a `glob` field on the `secrets` command — the wrapper script re-enumerates the staged index itself, so handing it a pre-filtered `{staged_files}` list would double-filter.
 
 Test it:
 
@@ -71,7 +71,7 @@ git reset HEAD fake.env
 rm fake.env
 ```
 
-If the hook didn't fire, double-check gitleaks is installed and lint-staged is wired correctly.
+If the hook didn't fire, double-check gitleaks is installed and the `secrets` command is wired into `lefthook.yml` correctly.
 
 ## Running it on history, once
 
@@ -97,7 +97,7 @@ If the finding is a false positive—a placeholder like `sk-xxxxxxxxxxxxxxxxxxxx
 
 Most of the time you don't need a config file—gitleaks' defaults are good. But two use cases justify one.
 
-**Allowlisting false positives.** Shelf's `sample-config.json` contains a deliberately fake API key. The Module 8 lab walks through this in two beats: first, you run gitleaks _without_ any config so the bait file gets flagged—that's the point of the bait, to prove the scanner works on a known-bad input. Then, _after_ you've seen the failure, you add `sample-config.json` to the allowlist so the team isn't tripping the rule on the same intentional file forever after. The config below is the "after the lab" version:
+**Allowlisting false positives.** Shelf's `sample-config.json` contains a deliberately fake API key. The [static layer lab](lab-wire-the-static-layer-into-shelf.md) walks through this in two beats: first, you run gitleaks _without_ any config so the bait file gets flagged—that's the point of the bait, to prove the scanner works on a known-bad input. Then, _after_ you've seen the failure, you add `sample-config.json` to the allowlist so the team isn't tripping the rule on the same intentional file forever after. The config below is the "after the lab" version:
 
 ```toml
 # .gitleaks.toml
@@ -144,7 +144,7 @@ Do not let `.gitleaksignore` become a dumping ground. Every line is a promise yo
 
 Even with a rock-solid pre-commit hook, run gitleaks in CI too. The pre-commit hook can be bypassed (`--no-verify`), can fail to install (new team member didn't run `bun install`), can be misconfigured in a way that passes locally but not in CI. The CI run is the catch-all.
 
-In GitHub Actions (we'll go deeper on CI in Module 9):
+In GitHub Actions (we'll go deeper on CI in [CI as the Loop of Last Resort](ci-as-the-loop-of-last-resort.md)):
 
 ```yaml
 # .github/workflows/security.yml
@@ -183,7 +183,7 @@ The "obviously-fake values" rule is specifically to prevent the agent's favorite
 ## The 30-second version of this whole lesson
 
 1. Install gitleaks.
-2. Add the staged-snapshot helper script to `lint-staged`.
+2. Add the staged-snapshot helper script as a `secrets` command in `lefthook.yml`.
 3. Run a full Gitleaks scan once on your existing history. Rotate anything real that it finds.
 4. Add the gitleaks GitHub Action to your CI as a safety net.
 5. Never bypass the hook. If gitleaks says it found a secret, it found a secret.
@@ -192,9 +192,9 @@ That's the whole thing. Five steps, most of a Tuesday morning, and the problem o
 
 ## The one thing to remember
 
-Secret scanning is the cheapest, highest-value thing in this entire module. The hook catches mistakes before they're public, the CI run catches mistakes the hook missed, and the allowlist lets you keep false positives out of the way. Install it this afternoon. Thank me later.
+Secret scanning is one of the cheapest, highest-value things in the static layer. The hook catches mistakes before they're public, the CI run catches mistakes the hook missed, and the allowlist lets you keep false positives out of the way. Install it this afternoon. Thank me later.
 
 ## Additional Reading
 
-- [Git Hooks with Husky and Lint-Staged](git-hooks-with-husky-and-lint-staged.md)
+- [Git Hooks with Lefthook](git-hooks-with-lefthook.md)
 - [Lab: Wire the Static Layer into Shelf](lab-wire-the-static-layer-into-shelf.md)

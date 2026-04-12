@@ -1,18 +1,18 @@
 ---
 title: 'Lab: Harden the Flaky Rate-Book Test'
-description: Take a real, deliberately broken Playwright test and apply every Module 3 pattern to make it fast, isolated, and rock-solid.
+description: Take a real, deliberately broken Playwright test and apply every Playwright-armor pattern to make it fast, isolated, and rock-solid.
 modified: 2026-04-11
 date: 2026-04-06
 ---
 
-Time to cash the checks from the last six lessons. The Shelf starter ships with a hardened `tests/end-to-end/rate-book.spec.ts`—study it if you want to see the target. Your job in this lab is to _rebuild_ it by hand, starting from the intentionally rough version below, so every Module 3 pattern lands in your fingers instead of just your eyes.
+Time to cash the checks from the last handful of lessons. The Shelf starter ships with a hardened `tests/end-to-end/rate-book.spec.ts`—study it if you want to see the target. Your job in this lab is to _rebuild_ it by hand, starting from the intentionally rough version below, so every Playwright-armor pattern lands in your fingers instead of just your eyes.
 
-The rough version works. Sort of. It passes until the machine gets slower, the selectors drift, or the database state stops matching your assumptions. It bundles every Module 3 anti-pattern into one short file, which makes it a great place to harden the whole loop.
+The rough version works. Sort of. It passes until the machine gets slower, the selectors drift, or the database state stops matching your assumptions. It bundles every Playwright anti-pattern into one short file, which makes it a great place to harden the whole loop.
 
 > [!NOTE] Two local-setup details to know
 > Shelf's storage-state setup drives the real login page because the form-action shortcut trips CSRF protection in [Better Auth](https://www.better-auth.com/), and `playwright.config.ts` pins `workers: 1` because the starter uses one shared SQLite file. Both are explicit in the repo; neither is a bug.
 
-Your job is to fix it. Every pattern we learned in Module 3 applies here.
+Your job is to fix it. Every pattern we learned in the Playwright lessons applies here.
 
 ## The starting point
 
@@ -105,15 +105,69 @@ The hardened Shelf starter ends up with an explicit toast and persisted rating a
 
 ![The hardened rate-book flow showing the persisted success toast and updated shelf summary](./assets/lab-harden-rate-book-success.png)
 
-## Checking your work against an agent
+## What this looks like against a real agent
 
-Optional but instructive. Delete your hardened version, restore the original broken test, and ask Claude Code to fix it _without_ pointing it at any of the Module 3 lessons. See how close it gets on its own.
+The interesting question isn't whether you can harden this test — you just did. The interesting question is whether an agent can do it given the right context. Here's what that looks like with the rules-laden `CLAUDE.md` from [Lab: Rewrite the Bad CLAUDE.md](lab-rewrite-the-bad-claude-md.md) in place.
 
-Then do it again, this time after updating `CLAUDE.md` with the rules from the lessons (locator hierarchy, waiting rules, authentication rule, seeding rule). Compare the two outputs. The second attempt should match your hand-written version much more closely. That's your evidence that the instructions file is doing its job.
+Restore the broken version of `tests/end-to-end/rate-book.spec.ts` — the one with UI login, `waitForTimeout`, and CSS selectors. Give Claude Code this prompt:
+
+> `tests/end-to-end/rate-book.spec.ts` is flaky. Harden it following the rules in CLAUDE.md.
+
+A typical session:
+
+```text
+Reading CLAUDE.md...
+
+The Playwright locator rules and waiting rules are both explicit:
+- getByRole first, data-testid only as a last resort
+- no waitForTimeout, no waitForLoadState('networkidle')
+- login runs in authentication.setup.ts, specs inherit storage state
+- specs reset with resetShelfContent, not by hitting /login
+
+Reading the current rate-book.spec.ts... counting violations:
+  1. page.goto('/login') + page.fill('[name=email]') — forbidden per
+     the auth rule, should use storage state
+  2. page.waitForTimeout(1000) × 3 — forbidden per the waiting rule
+  3. page.locator('.book-card button.rate') — raw CSS, forbidden per
+     the locator rule
+  4. page.locator('.rating-modal .star[data-value="4"]') — same
+  5. textContent().toContain() — bypasses auto-retry; should be
+     expect(toast).toHaveText(...)
+  6. No seed call, so the test depends on whatever the database has
+
+Fix 1: delete the login block. The authenticated project already
+inherits storage state from authentication.setup.ts.
+
+Fix 2: add resetShelfContent at the top of the test so Station Eleven
+is guaranteed to be on the shelf.
+
+Fix 3: replace the click chain with scoped role locators:
+  const stationEleven = page.getByRole('article', { name: /Station Eleven/ });
+  await stationEleven.getByRole('button', { name: /Rate this book/ }).click();
+
+Fix 4: replace the star click with getByLabel:
+  await page.getByLabel('4 stars').check();
+  await page.getByRole('button', { name: 'Save rating' }).click();
+
+Fix 5: replace the toast check with auto-retry:
+  await expect(page.getByRole('status')).toHaveText(/Thanks/);
+
+Fix 6: every waitForTimeout is now unnecessary because the assertions
+above auto-retry. Delete all three.
+
+Running npm run test --grep "rate a book"...
+  → 1 passed (412ms). That's the whole suite.
+
+Hardened. Every acceptance criterion from the lab hits zero.
+```
+
+Compare this to what the _same_ agent does with an empty `CLAUDE.md`: it still fixes the flakiness, but it fixes the symptoms one at a time — wraps the `waitForTimeout` in a retry, adds a `.first()` to disambiguate selectors — without ever consulting a rule set. The result is a test that passes most of the time and flakes occasionally, which is strictly worse than the version you started with because now the flakiness is hidden.
+
+The difference between the two sessions is the difference between "follow a playbook" and "improvise from the error messages." The playbook is `CLAUDE.md`. If you can read the transcript above and recognize every decision the agent made, you're done — the rules are in your fingers.
 
 ## The one thing to remember
 
-Every anti-pattern in the starting file is individually fixable in under five minutes with the right pattern. What made the original test bad wasn't any one mistake—it was the absence of a framework for thinking about tests. Module 3 was that framework. This lab is where it becomes muscle memory.
+Every anti-pattern in the starting file is individually fixable in under five minutes with the right pattern. What made the original test bad wasn't any one mistake—it was the absence of a framework for thinking about tests. The Playwright lessons were that framework. This lab is where it becomes muscle memory.
 
 ## Additional Reading
 

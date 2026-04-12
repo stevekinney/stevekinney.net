@@ -1,6 +1,6 @@
 <script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
-  import { Zap, DollarSign, User, Globe } from 'lucide-svelte';
+  import { Zap, DollarSign, User, Globe } from '@lucide/svelte';
   import Input from './input.svelte';
 
   const { Story } = defineMeta({

@@ -1,6 +1,6 @@
 <script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
-  import { Zap, HelpCircle, Info, Check } from 'lucide-svelte';
+  import { Zap, HelpCircle, Info, Check } from '@lucide/svelte';
   import Button from './button.svelte';
 
   const { Story } = defineMeta({

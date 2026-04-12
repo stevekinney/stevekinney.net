@@ -111,7 +111,7 @@ Names three config files by path: `eslint.config.js`, `tsconfig.json`, `knip.jso
 
 ### Git hooks and secrets
 
-Names `husky`, `lint-staged`, and `gitleaks` by name. Names the exact hook files (`.husky/pre-commit`, `.husky/pre-push`). The rule about `sample-config.json` being deliberate bait prevents the agent from "fixing" an intentional test fixture.
+Names `lefthook` and `gitleaks` by name. Names the exact hook config file (`lefthook.yml`) and the staged-snapshot wrapper (`scripts/run-gitleaks-staged.ts`). The rule about `sample-config.json` being deliberate bait prevents the agent from "fixing" an intentional test fixture.
 
 ### "Do not"
 
@@ -157,7 +157,7 @@ git commit -m 'lab(rewrite-the-bad-claude-md): tighten instructions for mechanic
 
 The lab asks you to keep the file under 60 lines. The shipped `CLAUDE.md` is roughly 93 lines. That is because later labs—accessibility, HAR recording, database seeding, the static layer—each add a section when you reach them. The file you write _today_ should be under 60 lines. The file you end the course with will be longer, because more rules have earned their place.
 
-If you are doing this lab in isolation, trim to 60. If you are reading this after completing several modules, the shipped 93-line version is the accumulated result of those additions. Both are correct for their moment.
+If you are doing this lab in isolation, trim to 60. If you are reading this after completing several later lessons, the shipped 93-line version is the accumulated result of those additions. Both are correct for their moment.
 
 ## Patterns to take away
 

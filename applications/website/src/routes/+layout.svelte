@@ -6,7 +6,13 @@
   import { author } from '$lib/metadata';
   import { toDataAttributes } from '$lib/to-data-attributes';
   import { merge } from '$merge';
-  import { Github, Instagram, Linkedin, Twitter, Youtube } from 'lucide-svelte';
+  import {
+    SiGithub as Github,
+    SiInstagram as Instagram,
+    SiX as Twitter,
+    SiYoutube as Youtube,
+  } from '@icons-pack/svelte-simple-icons';
+  import Linkedin from '$lib/components/linkedin-icon.svelte';
   import type { Snippet } from 'svelte';
 
   if (!dev) {

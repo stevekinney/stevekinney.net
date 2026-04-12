@@ -1,7 +1,7 @@
 ---
 title: Locators and the Accessibility Hierarchy
 description: The single most important habit in a Playwright suite an agent will maintain—locator discipline, ordered by what survives a refactor.
-modified: 2026-04-10
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -105,7 +105,7 @@ That's nine lines. It's the most valuable nine lines in your instructions file f
 
 Two pieces of feedback hook into locator discipline directly, and you'll see both later today.
 
-**ESLint rule for `page.locator`.** In Module 8 we're going to set up an ESLint rule that warns (or errors) whenever `page.locator` appears in a file under `tests/end-to-end/`. The agent gets a red squiggle the moment it reaches for the escape hatch, which is the fastest possible feedback.
+**ESLint rule for `page.locator`.** Later, in [Lint and Types as Guardrails](lint-and-types-as-guardrails.md), we're going to set up an ESLint rule that warns (or errors) whenever `page.locator` appears in a file under `tests/end-to-end/`. The agent gets a red squiggle the moment it reaches for the escape hatch, which is the fastest possible feedback.
 
 **Playwright's built-in accessibility debugging.** When a `getByRole` query fails, Playwright's error message prints the accessibility tree of the page at the point of failure. That tree is gold for the agent—it shows exactly what roles and names _are_ available, so the agent can correct its query without guessing. We'll lean on this when we talk about failure dossiers.
 

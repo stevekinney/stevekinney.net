@@ -1,7 +1,7 @@
 ---
 title: Dead Code Detection
 description: Agents leave orphans behind. Knip and dependency-cruiser find them before the orphans rot into a half-working codebase.
-modified: 2026-04-07
+modified: 2026-04-11
 date: 2026-04-06
 ---
 
@@ -11,7 +11,7 @@ Agents love to leave dead code behind. You ask them to rewrite a module, they wr
 
 This is not a moral failure on the agent's part. It is a predictable consequence of how agents work—they make _additive_ changes efficiently, and they make _subtractive_ changes only to the specific things they were told to change. The result is a codebase that accretes orphaned code at roughly the rate the agent is working, and if you're not catching the orphans, you're drowning in them within a month.
 
-The answer is dead code detection. Run it continuously. Treat orphans as a quality gate, not a cleanup task. This is the module where we turn orphan-detection into a first-class citizen of the loop.
+The answer is dead code detection. Run it continuously. Treat orphans as a quality gate, not a cleanup task. This is the lesson where we turn orphan-detection into a first-class citizen of the loop.
 
 ## The tools
 
@@ -84,7 +84,7 @@ Don't just mute findings. Every ignore is a future bug.
 The trick with dead code detection is running it _often enough_ that orphans don't accumulate. Options, in order of tightness:
 
 - **On every CI run.** Block merge if knip reports new findings.
-- **On every commit via a git hook.** The lint-staged / husky lesson has the details.
+- **On every commit via a git hook.** The [Git Hooks with Lefthook](git-hooks-with-lefthook.md) lesson has the details.
 - **On every save, via a file watcher.** Knip doesn't have an editor extension, but you can wire `bunx knip --no-progress` into a `chokidar` watcher if you want findings without leaving the editor.
 - **On a nightly job** that opens a cleanup PR. This is the lowest-friction version—nobody is blocked, but the cleanup happens automatically.
 
@@ -174,4 +174,4 @@ Agents accrete dead code faster than humans do because additive edits are the ch
 ## Additional Reading
 
 - [Lint and Types as Guardrails](lint-and-types-as-guardrails.md)
-- [Git Hooks with Husky and Lint-Staged](git-hooks-with-husky-and-lint-staged.md)
+- [Git Hooks with Lefthook](git-hooks-with-lefthook.md)
