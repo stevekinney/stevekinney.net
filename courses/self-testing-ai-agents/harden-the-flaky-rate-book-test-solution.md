@@ -107,7 +107,7 @@ Note the order: you set up the response listener _before_ the click, then await 
 
 Now the test waits for exactly the right signal: the PATCH request to the shelf API returned a 200. Not "1500ms have passed and I hope things worked out." The actual network response.
 
-## An annotated walk-through
+## The shipped file
 
 Here's the final test after all four fixes. The inline comments are teaching annotations layered on top of the shipped shape in `tests/end-to-end/rate-book.spec.ts`.
 

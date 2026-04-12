@@ -46,7 +46,7 @@ gitleaks version
 
 ## Wiring it into the pre-commit hook
 
-Add a `secrets` command to the `pre-commit` block in `lefthook.yml`:
+Add `lint`, `format`, and `secrets` commands to the `pre-commit` block in `lefthook.yml`:
 
 ```yaml
 pre-commit:

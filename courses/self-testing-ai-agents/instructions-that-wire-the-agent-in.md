@@ -44,7 +44,7 @@ Things the agent _can_ act on, mechanically:
 - "Write a failing test before you write the implementation. The first commit on a task should be the test."
 - "When a Playwright test fails, read the trace file at `playwright-report/trace.zip` before guessing at a fix."
 - "Never use `page.waitForTimeout`. If you're tempted, use `page.waitForResponse` or a `getByRole` with `expect` instead."
-- "The `green` state for this codebase means: `npm run lint`, `npm run typecheck`, `npm run test`, and `npm run test:e2e` all exit zero. Don't say a task is done until all four are green."
+- "The `green` state for this codebase means: `npm run typecheck`, `npm run lint`, `npm run knip`, and `npm run test` all exit zero. Don't say a task is done until all four are green."
 
 Notice what these have in common. Every one of them references a specific command, a specific file path, or a specific API. There's nothing to interpret. The agent reads the rule and either complies or doesn't, and you can tell which from the diff.
 

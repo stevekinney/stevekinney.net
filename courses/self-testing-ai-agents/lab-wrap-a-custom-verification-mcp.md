@@ -102,7 +102,7 @@ async ({ username }) => {
     await page.getByRole('heading', { level: 1 }).waitFor();
 
     const bookCount = await page.getByRole('article').count();
-    const result: VerifyShelfPageResult = {
+    const result = {
       ok: consoleErrors.length === 0 && bookCount >= 0,
       bookCount,
       consoleErrors,
