@@ -1,7 +1,7 @@
 ---
 title: Approaches to HAR Recording
 description: Three ways to capture a HAR file—programmatic recording inside a test, the Playwright CLI, and Chrome DevTools—and when each one earns its keep.
-modified: 2026-04-10
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
@@ -156,7 +156,7 @@ When you do need to scrub, use a script that parses the HAR as JSON—not `sed` 
 
 ## My default workflow
 
-For Shelf's test suite, I use programmatic recording for everything. The workflow looks like this:
+For Shelf's test suite, I use programmatic recording for everything. The workflow is straightforward:
 
 Write the test with the `UPDATE_HARS` env var check. Run it once with `UPDATE_HARS=1` against the real API. Commit the HAR. Run it again without the env var to verify replay works. That's it.
 

@@ -1,7 +1,7 @@
 ---
 title: Dead Code Detection
 description: Agents leave orphans behind. Knip and dependency-cruiser find them before the orphans rot into a half-working codebase.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -100,7 +100,7 @@ Approach: commit the current count to a `.knip-baseline` file. CI fails if the c
 
 Alternative approach, simpler: fail CI if knip finds anything at all. This is strict but it forces cleanup on the PR that introduced the orphan, which is the cheapest possible time to fix it. I prefer this on new codebases and the ratchet approach on old ones.
 
-## `CLAUDE.md` rules
+## A `CLAUDE.md` rules block worth adding
 
 ```markdown
 ## Dead code

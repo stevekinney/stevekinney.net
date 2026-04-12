@@ -1,7 +1,7 @@
 ---
 title: "Lab: Refactor Shelf's Fixtures"
 description: Take a deliberately smell-heavy fixture file and turn it into something you'd be willing to merge, without breaking the spec that exercises it.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-11
 ---
 
@@ -14,7 +14,7 @@ The lab is not about making the spec pass. It already passes. The lab is about m
 
 ## The starting point
 
-Open `tests/end-to-end/labs/fixtures/bad-fixtures.ts` in the Shelf starter. You'll see a file that defines five fixtures:
+Open `tests/end-to-end/labs/fixtures/bad-fixtures.ts` in the Shelf starter. The file defines five fixtures:
 
 - `setupUser`
 - `setupEmptyShelf`
@@ -83,7 +83,7 @@ Add a `resetBetweenTests` fixture that wraps `resetShelfContent(request)` so eve
 
 But: pause before you ship it. Is this better than a `beforeEach` in the spec? Sometimes the answer is no. A fixture with no teardown and one line of setup is a fixture that should have been a `beforeEach`. Make the call, and write it in the commit message.
 
-## What success looks like
+## What a Good Refactor Leaves Behind
 
 Your `bad-fixtures.ts` is now shorter, not longer. The spec still passes. You diff against `good-fixtures.ts` and realize your refactor made different choices than the solution made — and you can defend both.
 

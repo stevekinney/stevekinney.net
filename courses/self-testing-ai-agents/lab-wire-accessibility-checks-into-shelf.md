@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wire Accessibility Checks Into Shelf'
 description: Add an automated accessibility scan for critical routes, document the manual keyboard checks, and make accessibility failures part of the loop.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -36,7 +36,7 @@ Start with the highest-signal routes in Shelf:
 - `/shelf`
 - any modal, drawer, or form-heavy route you added during the workshop
 
-The shape should look like this:
+Start from this exact pattern:
 
 ```ts
 import AxeBuilder from '@axe-core/playwright';

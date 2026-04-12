@@ -32,6 +32,14 @@ title = "Playwright Armor"
 title = "Locators and the Accessibility Hierarchy"
 href = "locators-and-the-accessibility-hierarchy.md"
 
+[[section.item.related]]
+title = "Lab: Locator Challenges"
+href = "lab-locator-challenges.md"
+
+[[section.item.related]]
+title = "Solution"
+href = "locator-challenges-solution.md"
+
 [[section.item]]
 title = "Playwright UI Mode"
 href = "playwright-ui-mode.md"
@@ -43,14 +51,6 @@ href = "playwright-codegen.md"
 [[section.item]]
 title = "Configuring Playwright"
 href = "configuring-playwright.md"
-
-[[section.item]]
-title = "Lab: Locator Challenges"
-href = "lab-locator-challenges.md"
-
-[[section.item.related]]
-title = "Solution"
-href = "locator-challenges-solution.md"
 
 [[section.item]]
 title = "Accessibility as a Quality Gate"

@@ -1,7 +1,7 @@
 ---
 title: 'Failure Dossiers: What Agents Actually Need From a Red Build'
 description: A failed test is a prompt. The prompt is only as good as the evidence attached to it.
-modified: 2026-04-10
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -57,6 +57,7 @@ Three knobs.
 ```ts
 reporter: [
   ['html', { open: 'never', outputFolder: 'playwright-report/html' }],
+  ['json', { outputFile: 'playwright-report/report.json' }],
   ['list'],
 ],
 ```
@@ -69,6 +70,8 @@ The HTML reporter writes `playwright-report/html/index.html`, and for each faile
 ![The Playwright HTML report after a deliberate Shelf failure](./assets/lab-failure-dossier-report.png)
 
 The `open: 'never'` flag keeps Playwright from auto-opening a browser tab when you run tests, which is annoying in CI and distracting locally.
+
+In Shelf, the easiest deliberate break is still the `src/routes/design-system/+page.svelte` route because it gives you a loud UI change without touching auth or seeded data. Run the suite through `npm run test:e2e` when you want the real Playwright artifact set, and keep `npm run test` in the loop too so the basic unit gates stay honest while you are iterating on the failure.
 
 ## Making dossiers agent-readable
 
@@ -83,7 +86,7 @@ A failure dossier summarizer is worth writing. It's a ~50 line script that:
 
 ### What the Playwright report looks like
 
-Before we walk the report, it helps to see the shape you're walking. The JSON reporter writes a nested tree: `suites` at the top, each with its own `suites` and `specs`, each `spec` has `tests`, each `test` has `results`, and each failing `result` has an `error` plus `attachments`. The trimmed shape looks like this:
+Before we walk the report, it helps to see the shape you're walking. The JSON reporter writes a nested tree: `suites` at the top, each with its own `suites` and `specs`, each `spec` has `tests`, each `test` has `results`, and each failing `result` has an `error` plus `attachments`. The trimmed shape is:
 
 ```jsonc
 {
@@ -202,9 +205,9 @@ console.error(`Wrote dossier for ${failures.length} failures`);
 > [!NOTE] The starter ships the production version
 > Shelf's `scripts/summarize-failure-dossier.ts` is a longer, fully-typed version of this sketch that also picks the `diff` attachment ahead of the baseline on visual regression failures, guards against `result.error` being undefined via `result.errors[0]`, and makes every attachment path relative to the repo root. Read the sketch above to understand the walk, then open the shipped file to see the production shape.
 
-### What the generated `dossier.md` looks like
+### A representative failing-run `dossier.md` excerpt
 
-Given one failing rate-book test, running the script writes this markdown to `playwright-report/dossier.md`:
+After one intentionally failing rate-book test, the generated markdown includes an entry like this:
 
 ```markdown
 # Playwright failure dossier
@@ -241,15 +244,16 @@ That's exactly what you want in an agent's hand: the test title, the project it 
 
 For an alternative that skips the custom script entirely and uses the LLM itself to triage the dossier into typed JSON, see [Structured CLI Output as Pipeline Glue](structured-cli-output-as-pipeline-glue.md). That lesson teaches `claude -p --json-schema` with the dossier as input—same data, different consumer.
 
-Now you can add to `CLAUDE.md`:
+Now you can add this section to `CLAUDE.md`:
 
 ```markdown
 ## When a test fails
 
 1. Run `npm run dossier` to generate a summary at `playwright-report/dossier.md`.
-2. Read the dossier. It contains the error, screenshot path, and reproduction command for every failure.
+2. Read the dossier. It contains the error, screenshot path, trace path, and reproduction command for every failing test.
 3. Use the reproduction command to rerun just the failing test while iterating.
-4. Do not "fix" by changing the assertion. Fix the underlying code.
+4. Do not "fix" a failing test by changing the assertion. Fix the underlying code.
+5. Do not add `console.log` calls to test files to debug. The trace already has the DOM at every step; open it with `npx playwright show-trace <path>`.
 ```
 
 The agent now has a single, structured entry point. One command, one file, actionable content inside.

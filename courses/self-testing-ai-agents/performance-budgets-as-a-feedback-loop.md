@@ -1,7 +1,7 @@
 ---
 title: Performance Budgets as a Feedback Loop
 description: Functional and visually correct is not enough if the change made the app slower or heavier. Budgets turn that into a real gate.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -39,6 +39,8 @@ The model:
 - **Runtime budget**: how long did one critical route or interaction take in a reproducible environment?
 
 That is enough to catch most accidental regressions.
+
+In Shelf, the concrete files are `tests/end-to-end/performance.spec.ts` for the runtime side and the `npm run performance:*` script family for the build side, with `npm run performance:build` as the narrow "just gather the numbers" entry point. The whole point is that the budget lives behind named commands the agent can run, not behind a blog post about performance culture.
 
 ## Build-time budgets: catch weight gain early
 
@@ -294,7 +296,7 @@ The last part matters. A budget is allowed to change. But the change should be d
   to change, explain why in the summary or commit message.
 ```
 
-## Success state
+## How You Know the Budget Is Real
 
 You have this loop when:
 

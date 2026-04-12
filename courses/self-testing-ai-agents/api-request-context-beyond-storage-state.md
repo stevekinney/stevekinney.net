@@ -1,7 +1,7 @@
 ---
 title: APIRequestContext Beyond Storage State
 description: Storage state is a photograph of a logged-in browser. When you need to log in as a second user, hit an authenticated API without driving the UI, or survive a token refresh, you need the real HTTP client.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-11
 ---
 
@@ -66,7 +66,7 @@ Any test that asks for `adminRequest` now gets an HTTP client that's carrying th
 npm run test:e2e:admin-setup
 ```
 
-With the fixture in place, a test that needs to create a book as the admin and verify it as the reader looks like this:
+With the fixture in place, a test that needs to create a book as the admin and verify it as the reader can stay this small:
 
 ```ts
 test('admin curates, reader sees', async ({ page, adminRequest }) => {

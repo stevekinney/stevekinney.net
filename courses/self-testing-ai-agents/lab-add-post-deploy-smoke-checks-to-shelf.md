@@ -1,24 +1,35 @@
 ---
 title: 'Lab: Add Post-Deploy Smoke Checks to Shelf'
 description: Add a deployed-URL smoke test, wire it into a preview or deploy workflow, and document the rollback trigger before you need it.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
 This lab is the part of the workshop where "green CI" stops being the finish line.
 
-You're going to add a tiny post-deploy smoke check that runs against a preview or deployed URL, uploads artifacts on failure, and gives the agent a real stop-ship signal after merge.
+You're going to walk the tiny post-deploy smoke check Shelf already ships, prove you understand each moving part locally, and then name the hosted gap honestly if you do not have a real deploy target yet.
 
 > [!NOTE] Prerequisite
 > Complete [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md) first. This lab also assumes the CI workflow from [Lab: Write the CI Workflow from Scratch](lab-write-the-ci-workflow-from-scratch.md) exists or is at least sketched out.
 
+> [!NOTE] In the starter
+> Shelf already ships `tests/smoke/post-deploy.spec.ts`, the `test:smoke` script in `package.json`, `docs/post-deploy-playbook.md`, and the matching `.github/workflows/deploy.yml` shape. This lab is a walkthrough and verification pass, not a blank-page authoring exercise.
+
 ## The task
 
-Add a smoke test for Shelf's deployed URL and wire it into a preview or deployment workflow.
+Open the shipped smoke test, the shipped script, the shipped playbook, and the shipped workflow. Make sure you can explain why each one exists, then run the local stand-in so you know what the hosted version is supposed to prove.
 
-## Step 1: add a deployed-URL smoke spec
+## What you can verify locally
 
-Create `tests/smoke/post-deploy.spec.ts` in the Shelf repository.
+You can do the whole first pass locally: inspect `tests/smoke/post-deploy.spec.ts`, confirm `package.json` exposes `npm run test:smoke`, read `docs/post-deploy-playbook.md`, and walk `.github/workflows/deploy.yml`. If you do not have a hosted target, use a local preview stand-in and make sure the smoke spec still fails loudly when you break it on purpose.
+
+## What remains manual or external
+
+The real post-deploy loop starts only when a connected preview or production-like URL exists. Capturing the deployed URL from the host, running the smoke job against that URL, and treating a failure as an actual stop-ship signal are hosted concerns. If that environment does not exist yet, document the gap instead of pretending the local preview is the full loop.
+
+## Step 1: inspect the deployed-URL smoke spec
+
+Open `tests/smoke/post-deploy.spec.ts` in the Shelf repository.
 
 Keep it small. The test should prove only the most important path:
 
@@ -30,11 +41,11 @@ If auth is required, reuse the existing storage-state or login bootstrap. Do not
 
 The spec should read from an environment variable such as `SMOKE_BASE_URL` so the same test can run against preview, staging, or production.
 
-The lesson shows the exact spec shape in the **What the smoke spec actually looks like** section of [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md). Start from that two-assertion skeleton. Shelf ships the file at `tests/smoke/post-deploy.spec.ts` — write yours first from the lesson, then compare.
+The lesson shows the exact spec shape in the **What the smoke spec actually looks like** section of [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md). Compare the shipped file against that two-assertion skeleton and make sure you can defend why it stays this small.
 
-## Step 2: expose a named smoke-test command
+## Step 2: inspect the named smoke-test command
 
-Add a command such as this to `package.json`:
+Open `package.json` and find the smoke-test command:
 
 ```json
 {
@@ -47,11 +58,11 @@ Add a command such as this to `package.json`:
 The workflow should set `SMOKE_BASE_URL`. The test command should stay boring.
 
 > [!NOTE] Shelf uses a split config
-> The shipped Shelf version of this script is `"test:smoke": "playwright test --config=playwright.smoke.config.ts"`—a separate Playwright config scoped to the smoke suite. The split exists so the smoke run doesn't inherit the main config's `webServer` block, its authenticated project, or the pinned `workers: 1` (which matters when the smoke target is a hosted URL, not a local SQLite file). Both shapes work; pick the single-config version while you're learning and migrate to a dedicated config when the smoke suite grows its own timing, baseURL, and artifact concerns.
+> The shipped Shelf version of this script is `"test:smoke": "playwright test --config=playwright.smoke.config.ts"`—a separate Playwright config scoped to the smoke suite. The split exists so the smoke run doesn't inherit the main config's `webServer` block, its authenticated project, or the pinned `workers: 1` (which matters when the smoke target is a hosted URL, not a local SQLite file). Both shapes work. Shelf already picked the split-config version because the hosted target has different concerns from the local web server.
 
-## Step 3: write the rollback playbook
+## Step 3: inspect the rollback playbook
 
-Create `docs/post-deploy-playbook.md`.
+Open `docs/post-deploy-playbook.md`.
 
 Document:
 
@@ -62,9 +73,9 @@ Document:
 
 This file exists so the agent can make a crisp recommendation instead of narrating a problem vaguely.
 
-## Step 4: wire the workflow
+## Step 4: inspect the workflow wiring
 
-Create or update `.github/workflows/deploy.yml`. The lesson's **The deployment workflow that runs the smoke check** section has a complete two-job YAML skeleton (deploy + smoke) you can start from. Adapt the `deploy` job's `run` step to your actual host command, then leave the `smoke` job alone — it reads `SMOKE_BASE_URL` from the deploy job's output and runs `npm run test:smoke` against it.
+Open `.github/workflows/deploy.yml`. The lesson's **The deployment workflow that runs the smoke check** section has the same two-job shape (deploy + smoke). Compare the shipped file against the lesson and make sure you can point at the step that captures the URL and the step that consumes it.
 
 The minimal shape:
 
@@ -74,12 +85,7 @@ The minimal shape:
 - run `npm run test:smoke` with `SMOKE_BASE_URL` set to that URL
 - upload the Playwright report on failure
 
-If you do **not** have a real hosted target yet, use a local build-and-preview stand-in:
-
-- `npm run build`
-- `npm run preview`
-- run the smoke test against `http://127.0.0.1:4173`
-- document the hosted gap honestly in `docs/post-deploy-playbook.md`
+If you do **not** have a real hosted target yet, use a local build-and-preview stand-in, run the smoke test against `http://127.0.0.1:4173`, and document the hosted gap honestly in `docs/post-deploy-playbook.md`.
 
 That still teaches the loop.
 

@@ -1,7 +1,7 @@
 ---
 title: 'Build a Failure Dossier for Shelf: Solution'
 description: Walkthrough of the shipped failure dossier script, config settings, and the experiment that proves the loop works.
-modified: 2026-04-10
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
@@ -190,7 +190,7 @@ Open the trace to confirm it's real:
 npx playwright show-trace playwright-report/test-results/<the-trace-file>.zip
 ```
 
-You'll see the full timeline of actions, DOM snapshots at each step, and the exact point where the assertion failed.
+The viewer shows the full timeline of actions, DOM snapshots at each step, and the exact point where the assertion failed.
 
 ### Revert and confirm green
 

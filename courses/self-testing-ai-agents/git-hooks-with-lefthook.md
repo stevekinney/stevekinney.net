@@ -1,7 +1,7 @@
 ---
 title: Git Hooks with Lefthook
 description: Wire fast, staged-only checks into every commit and push using Lefthook—a single YAML file that replaces Husky, lint-staged, and half the shell scripts in your repo.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
@@ -62,15 +62,11 @@ Some checks are too slow for pre-commit but too important to skip entirely. Pre-
 ```yaml
 pre-push:
   commands:
-    typecheck:
-      run: bun run typecheck
-    dead-code:
-      run: bun run knip
-    test:
-      run: bun test
+    checks:
+      run: npm run pre-push
 ```
 
-Same file, different lifecycle event. Before any push, the full typecheck runs, [knip](https://knip.dev/) scans for dead code, and the unit tests run. If any of those fail, the push is blocked and you get the output right there in the terminal.
+Same file, different lifecycle event. In the shipped Shelf starter, `npm run pre-push` chains the slower local gates: typecheck, [knip](https://knip.dev/), and the unit test suite. If any of those fail, the push is blocked and you get the output right there in the terminal.
 
 The rule I use: pre-commit takes under ten seconds, pre-push takes under two minutes. Anything slower belongs in CI.
 

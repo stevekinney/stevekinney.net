@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wrap a Custom Verification MCP'
 description: Write a small MCP server that exposes a single verification tool for Shelf and wire it into the repository-local MCP configuration.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -84,6 +84,9 @@ async ({ username }) => {
   const targetUrl = `${baseUrl}/shelf/${encodeURIComponent(username)}`;
   const browser = await chromium.launch();
   try {
+    // Reuse the authenticated storage state when it exists — even though
+    // the /shelf/[username] page is public, the Playwright session stays
+    // consistent with the rest of the workshop tooling.
     const contextOptions = fs.existsSync(STORAGE_STATE_PATH)
       ? { storageState: STORAGE_STATE_PATH }
       : {};
@@ -97,9 +100,9 @@ async ({ username }) => {
 
     await page.goto(targetUrl);
     await page.getByRole('heading', { level: 1 }).waitFor();
-    const bookCount = await page.getByRole('article').count();
 
-    const result = {
+    const bookCount = await page.getByRole('article').count();
+    const result: VerifyShelfPageResult = {
       ok: consoleErrors.length === 0 && bookCount >= 0,
       bookCount,
       consoleErrors,

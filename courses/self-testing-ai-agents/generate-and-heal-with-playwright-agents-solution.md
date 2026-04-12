@@ -1,11 +1,11 @@
 ---
 title: 'Generate and Heal with Playwright Agents: Solution'
 description: What to expect when running Playwright's planner, generator, and healer agents against Shelf, and how to judge the output.
-modified: 2026-04-10
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
-This lab doesn't produce a single shipped file. It produces an _experience_—running three agents against a real app, reading their output, and deciding whether to trust it. The "solution" here isn't code to copy. It's a walkthrough of what you should have seen, what good output looks like, and where the agents need your judgment.
+This lab doesn't produce a single shipped file. It produces an _experience_—running three agents against a real app, reading their output, and deciding whether to trust it. The "solution" here isn't code to copy. It's a walkthrough of what you should have seen, what strong output contains, and where the agents need your judgment.
 
 Your results will differ from mine in the details. The agents explore the app live, and Shelf's layout, copy, and component structure all influence what the planner observes and the generator writes. That's fine. What matters is whether your output meets the quality bar described below—not whether it matches mine token for token.
 

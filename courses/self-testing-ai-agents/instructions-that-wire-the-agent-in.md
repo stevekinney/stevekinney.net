@@ -48,6 +48,8 @@ Things the agent _can_ act on, mechanically:
 
 Notice what these have in common. Every one of them references a specific command, a specific file path, or a specific API. There's nothing to interpret. The agent reads the rule and either complies or doesn't, and you can tell which from the diff.
 
+In Shelf, those concrete rules come straight from real files. The "green means green" commands live in `package.json`, and the stronger rules point at actual places in the tree like `src/lib/components` or `tests/end-to-end/` instead of hand-wavy ideas like "the components folder." If a rule cannot name the command or path it depends on, it is probably still too vague.
+
 ## The "what does green mean" anchor
 
 If you only put one thing in your `CLAUDE.md` after this workshop, make it this: **a definition of what 'green' means in this codebase, with the exact commands.**
@@ -55,19 +57,20 @@ If you only put one thing in your `CLAUDE.md` after this workshop, make it this:
 A version that does the work:
 
 ```markdown
-## What "done" means in this repo
+# Shelf Starter Instructions
 
-A task is not done until all four of these exit zero:
+Shelf is the starter repository for the **Self-Testing AI Agents** course. It is a real SvelteKit + TypeScript book application, not a generated scaffold.
 
-1. `npm run lint`
-2. `npm run typecheck`
-3. `npm run test`
-4. `npm run test:e2e`
+## What "done" means
 
-If any of them fail, read the output, fix the issue, and re-run. Do not
-report the task as complete with a failing check, even if you "know" the
-failure is unrelated. If you genuinely believe a failure is unrelated,
-say so explicitly and link the failing test name in your summary.
+A task is not done until all four exit zero, in this order:
+
+1. `npm run typecheck`
+2. `npm run lint`
+3. `npm run knip`
+4. `npm run test`
+
+Do not report a task complete with any of these failing. If a failure looks unrelated, say so explicitly and link the failing test name in your summary.
 ```
 
 That block alone catches more bad agent output than any number of "write clean code" directives. It's mechanical. It's checkable. It encodes the loop.
@@ -90,58 +93,51 @@ Here's a real `CLAUDE.md` I would have written two years ago. I'm not proud of i
 
 Every one of those bullets is true. Every one of them is also useless to the agent. There is no command to run, no file to open, no rule that fails loudly when broken.
 
-Here's the version that wires the agent in:
+Here is the opening half of the current Shelf `CLAUDE.md`:
 
 ```markdown
-# Project Guidelines
+# Shelf Starter Instructions
+
+Shelf is the starter repository for the **Self-Testing AI Agents** course. It is a real SvelteKit + TypeScript book application, not a generated scaffold.
 
 ## What "done" means
 
-A task is complete only when all of the following exit zero:
+A task is not done until all four exit zero, in this order:
 
-- `npm run lint`
-- `npm run typecheck`
-- `npm run test`
-- `npm run test:e2e`
+1. `npm run typecheck`
+2. `npm run lint`
+3. `npm run knip`
+4. `npm run test`
 
-Run them in that order. Stop and fix the first failure before continuing.
+Do not report a task complete with any of these failing. If a failure looks unrelated, say so explicitly and link the failing test name in your summary.
 
-## Testing
+## Routes
 
-- Write the failing test before the implementation. Commit the test first.
-- Unit tests live next to the file under test as `<name>.test.ts`.
-- End-to-end tests live in `tests/end-to-end/`. Use `getByRole` first,
-  `getByLabel` or `getByText` second, `data-testid` as a last resort.
-  Never use raw CSS selectors.
-- Never use `page.waitForTimeout`. Use `expect(locator).toBeVisible()`,
-  `page.waitForResponse`, or `page.waitForRequest` instead.
+- Public: `/`, `/login`, `/design-system`, `/playground`
+- Protected: `/search`, `/shelf`, `/admin` — gate server-side on `locals.user`, never with client guards
+- `/playground` is the lab fixture for `lab-locator-challenges`. It ships three intentional a11y violations (div-as-button, icon-only button with no accessible name) that trip svelte-check warnings on every typecheck and build. Do not "fix" them — they are the bad examples the lab targets.
+- `/admin` is the protected fixture for `lab-bugbot-on-a-planted-bug`. The planted permission bug lives on branch `planted-bug/admin-feature`; `main`'s admin route is the clean baseline.
+- Do not reintroduce `src/routes/demo/` or any generated starter pages
+- New routes must match the Shelf product domain (books, shelves, ratings)
 
-## When something fails
+## How tests get written
 
-- Playwright failures: read `playwright-report/index.html` and the trace
-  for the failing test before proposing a fix.
-- Type errors: do not silence with `any` or `@ts-expect-error`. Fix the
-  underlying type.
-- Lint errors: do not add `eslint-disable` comments. Fix the underlying
-  code.
+- Write a failing test before the implementation. Commit the test first.
+- Unit tests live next to the file under test as `<name>.test.ts` and run with Vitest.
+- End-to-end tests live in `tests/end-to-end/` and run with Playwright.
+- Test fixtures live in `tests/fixtures/` (including HAR files). Share data there instead of redefining it per spec.
 
-## Things not to do
+## Playwright locator rules
 
-- Do not modify files in `src/lib/legacy-auth/`. That directory is
-  scheduled for deletion. If you think you need to touch it, stop and ask.
-- Do not add new dependencies without flagging it in your summary.
-
-## User-facing copy
-
-- User-facing copy stays in the voice of the product. This codebase is a
-  reading app, so visible page text talks about books, shelves, and
-  reading. Do not mention Playwright, seeded fixtures, test IDs, HARs,
-  or course material in rendered page copy.
-- Testing rationale and infrastructure details belong in code comments,
-  `CLAUDE.md`, or `README.md`, never in the UI.
+- `getByRole` first. `getByLabel` or `getByText` second. `data-testid` only when semantics genuinely don't exist.
+- Never use raw CSS or XPath selectors in specs.
+- Never use `page.waitForTimeout` or `page.waitForLoadState('networkidle')`. Use `expect(locator).toBeVisible()`, `page.waitForResponse`, or `page.waitForRequest`.
+- When a Playwright test fails, open `playwright-report/index.html` and its trace before proposing a fix.
 ```
 
-Notice the last block. Instructions files have to keep the agent honest about more than just commands and lint rules — they also have to keep the agent from leaking the scaffolding into the product. An agent that helpfully writes "Loading seeded fixtures..." into a real shelf page is not being clever; it is bleeding the test layer into the product surface. One mechanically-checkable rule prevents that ("do not mention Playwright, seeded fixtures, test IDs, HARs, or course material in rendered page copy") in a way that "keep the UI clean" cannot.
+The rest of the shipped file keeps going with authentication, seeding, HARs, accessibility, failure triage, static analysis, hooks, and "do not" rules. The important thing for this lesson is the pattern: every section names specific commands, paths, APIs, or forbidden edits.
+
+Notice the last rule family in the real file. Instructions files have to keep the agent honest about more than just commands and lint rules — they also have to keep the agent from leaking the scaffolding into the product. An agent that helpfully writes "Loading seeded fixtures..." into a real shelf page is not being clever; it is bleeding the test layer into the product surface. One mechanically-checkable rule prevents that ("do not mention Playwright, seeded fixtures, test IDs, HARs, or course material in rendered page copy") in a way that "keep the UI clean" cannot.
 
 This is the same shape as the other rules in the file. It names a specific class of strings the agent must not produce, and you can spot a violation by reading the diff. It is also exactly the kind of rule the lab in this section will ask you to add to your own `CLAUDE.md`.
 
