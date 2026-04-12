@@ -1,5 +1,5 @@
 pre-commit:
-  parallel: false
+  piped: true
   commands:
     content-dates-writing:
       glob: 'writing/*.md'
