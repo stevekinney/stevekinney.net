@@ -2,27 +2,34 @@ pre-commit:
   piped: true
   commands:
     content-dates-writing:
+      priority: 10
       glob: 'writing/*.md'
       run: bun run --cwd packages/scripts update-content-dates.ts {staged_files}
       stage_fixed: true
     content-dates-courses:
+      priority: 20
       glob: 'courses/**/*.md'
       run: bun run --cwd packages/scripts update-content-dates.ts {staged_files}
       stage_fixed: true
     audit-course-frontmatter:
+      priority: 30
       glob: 'courses/**/*.md'
       run: bun run --cwd packages/scripts audit-courses-frontmatter.ts {staged_files}
     repository-guards:
+      priority: 40
       run: ./.lefthook/pre-commit/repository-guards.sh
     staged-code-format:
+      priority: 50
       glob: '*.{js,jsx,ts,tsx,svelte}'
       run: bunx prettier --write {staged_files}
       stage_fixed: true
     staged-code-lint:
+      priority: 60
       glob: '*.{js,jsx,ts,tsx,svelte}'
       run: bunx eslint --fix {staged_files}
       stage_fixed: true
     staged-format:
+      priority: 70
       glob: '*.{css,md,html,json}'
       run: bunx prettier --write {staged_files}
       stage_fixed: true
