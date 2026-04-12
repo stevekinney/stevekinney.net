@@ -1,16 +1,21 @@
 ---
 title: 'Lab: Locator Challenges'
 description: Practice every locator strategy against Shelf's playground page—role, label, text, test ID, and the fallbacks you hope you never need.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
 The locator hierarchy is easy to understand and hard to internalize. You know `getByRole` comes first. You know `data-testid` is a last resort. But when you're staring at a page and need to target the _second_ "Delete" button, or an input with no label, or a list item three levels deep—knowing the hierarchy isn't the same as having the muscle memory.
 
-This lab fixes that. Shelf ships a `/playground` page built specifically for this: eleven sections of UI patterns, each designed to exercise a different part of the locator toolkit. Your job is to write Playwright locators for each challenge, run them, and see them pass. The route itself lives at `src/routes/playground/+page.svelte` in the starter—you don't need to edit it, just target it.
+This lab fixes that. Shelf ships a `/playground` page built specifically for this: eleven sections of UI patterns, each designed to exercise a different part of the locator toolkit. Your job is to write Playwright locators for each challenge, run them, and see them pass. The route itself lives at `src/routes/playground/+page.svelte` in the starter — you don't need to edit it, just target it.
+
+![The eleven locator-practice sections on the shipped /playground page](./assets/playground-locator-sections.png)
 
 > [!NOTE] Prerequisite
-> Pull the latest Shelf starter (tag `playground-v1` or later) and start it with `npm run dev`. Navigate to `http://localhost:5173/playground` to see the page you'll be targeting.
+> Pull the latest Shelf starter and start it with `npm run dev`. Navigate to `http://localhost:5173/playground` (or `http://127.0.0.1:4173/playground` if you're running `npm run preview`) to see the page you'll be targeting.
+
+> [!NOTE] Those a11y warnings are on purpose
+> The playground intentionally ships with a handful of accessibility violations — a `div` pretending to be a button, an icon-only button with no accessible name — so challenges 23 and 24 have a real target. You'll see svelte-check print these as warnings every time you run `npm run typecheck` or `npm run build`. That is by design. The whole point of the fallback section is to give you something to locate _when the role hierarchy doesn't help_.
 
 ## Setup
 

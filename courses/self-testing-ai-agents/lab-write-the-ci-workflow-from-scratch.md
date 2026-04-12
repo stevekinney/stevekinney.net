@@ -1,25 +1,25 @@
 ---
-title: 'Lab: Write the CI Workflow from Scratch'
-description: Build the GitHub Actions workflow for Shelf from an empty directory. Prove each layer runs, uploads artifacts, and fails loud enough for an agent to recover.
-modified: 2026-04-11
+title: 'Lab: Walk the Shelf CI Workflow'
+description: Walk the GitHub Actions workflow Shelf ships. Understand why each job is shaped the way it is, verify every named step maps to a real local command, and prove each layer fails loud enough for an agent to recover.
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
-One of the deliberate choices in the Shelf starter repo: there is no `.github/workflows/` directory. You are writing the workflow from scratch, informed by everything you've built today. If you had a broken workflow waiting for you, Shelf would have looked perpetually red in CI for the last several lessons, and that would have been a terrible background noise. Blank canvas, your choice, now you have context.
+Shelf ships two GitHub Actions workflows at `.github/workflows/main.yml` and `.github/workflows/nightly.yml`. Your job in this lab is to open them, walk every job, and understand why each step is there. By the end you should be able to rebuild an equivalent workflow from scratch in your own project — not because you copied the YAML, but because you read it and understood the shape.
+
+> [!NOTE] In the starter
+> The whole workflow is already in place: `main.yml` has `static`, `unit`, and `end-to-end` jobs wired for push and pull request; `nightly.yml` has the scheduled slow-check cadence. This lab is a walkthrough — you are not writing YAML, you are reading it. The "break something and watch CI catch it" section at the bottom is the verification.
 
 > [!NOTE] Prerequisite
-> This lab assumes you've completed **Lab: Build a Failure Dossier for Shelf**. The workflow below calls `npm run dossier`, which is the script you added to `package.json` in that lab. If you skipped it, either go back and do it, or remove the dossier-related steps from this workflow before running it.
-
-> [!NOTE]
-> If `gitleaks/gitleaks-action@v2` is not available under your plan or licensing terms, replace that step with a direct CLI invocation. The CI gate matters more than the wrapper action.
+> This lab assumes you've completed **Lab: Build a Failure Dossier for Shelf**. The `end-to-end` job calls `npm run dossier`, which is the script that lab walks. If you skipped it, go back and read that lab first so the dossier step below makes sense.
 
 ## The task
 
-Create `.github/workflows/main.yml` that runs on push and on pull request, and includes jobs for every layer we built today.
+Open `.github/workflows/main.yml` in the Shelf starter. Walk each job with this lesson open alongside. For every step, ask: _what loop built earlier today is this step gating?_ When you can answer that for every step, you've done the lab.
 
-## The structure
+## The shape
 
-At minimum:
+Open `.github/workflows/main.yml`. At the top you'll see the three things a workflow needs to be safe and predictable:
 
 ```yaml
 name: Main
@@ -28,144 +28,94 @@ on:
   push:
   pull_request:
 
-jobs:
-  static:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            ~/.cache/ms-playwright
-          key: ${{ runner.os }}-deps-${{ hashFiles('package-lock.json') }}-playwright-${{ hashFiles('playwright.config.ts') }}
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
-      - name: Lint
-        run: npm run lint
-      - name: Typecheck
-        run: npm run typecheck
-      - name: Dead code
-        run: npm run knip
-      - name: Secret scan
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  unit:
-    runs-on: ubuntu-latest
-    needs: static
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: npm ci --ignore-scripts
-      - run: npm run test:unit
-
-  end-to-end:
-    runs-on: ubuntu-latest
-    needs: static
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: npm ci --ignore-scripts
-      - run: npx playwright install --with-deps chromium
-      - name: Run Playwright
-        run: npm run test:e2e
-      - name: Generate dossier
-        if: failure()
-        run: npm run dossier
-      - name: Upload report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
-      - name: Upload dossier
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: failure-dossier
-          path: playwright-report/dossier.md
-          retention-days: 7
+permissions:
+  contents: read
 ```
 
-That's the skeleton. You'll flesh it out in the steps below.
+`on:` lists the events. Push and pull request cover every code path into `main`. `permissions: contents: read` is the least-privilege default — the workflow can read the repo but cannot write to it. If you need to write (say, to comment on a PR), you opt in explicitly at the job level. Default-deny is cheaper than default-allow.
 
-## Step-by-step
+Then the three jobs: `static`, `unit`, `end-to-end`. They share the same setup shape — checkout, setup-node, cache, install — but each runs a different layer of the loop. `unit` and `end-to-end` both `needs: static`, so if lint, typecheck, knip, or gitleaks fail, the heavier jobs never start. Cheap gates run first.
 
-### Step 1: the static job
+The sections below walk each job. Open the file as you read.
 
-Write the `static` job first. It should run lint, typecheck, knip, and gitleaks. These are fast and independent; keep them in one job with sequential steps, not four jobs with dependencies. The setup overhead for separate jobs is larger than the benefit of splitting four short checks across four runners.
+## Walk the workflow
 
-If your repository has a Git remote, verify by pushing to a feature branch and watching the job run. Without a remote, validate the YAML locally and make sure every workflow step maps to a real local command:
+### The static job
+
+The `static` job runs lint, typecheck, knip, and gitleaks in one job with sequential steps, not four jobs with dependencies. The setup overhead for separate jobs is larger than the benefit of splitting four short checks across four runners, and the gates are fast enough that sequencing them doesn't cost anything meaningful.
+
+Notice the gitleaks steps in `main.yml`:
+
+```yaml
+- name: Install gitleaks
+  run: |
+    curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz \
+      | tar -xz -C /tmp gitleaks
+    sudo install /tmp/gitleaks /usr/local/bin/gitleaks
+    gitleaks version
+- name: Secret scan
+  run: gitleaks dir . --redact --config .gitleaks.toml
+```
+
+That's a direct CLI invocation, not the `gitleaks/gitleaks-action@v2` wrapper. The reason is operational: the action does a partial scan over `<prev>^..<current>` that fails on first-push branches with "no previous commit." A direct `gitleaks dir .` scans the whole working tree and cannot confuse itself about what "previous" means. If you build your own CI, prefer the direct CLI for the same reason.
+
+Every named step maps to a real local command. Run these on a clean working tree:
 
 ```sh
 npm run lint
 npm run typecheck
 npm run knip
 npm run test:unit
-npm run test:e2e
+gitleaks dir . --redact --config .gitleaks.toml
 ```
 
-The hosted `gitleaks/gitleaks-action@v2` step is the one part you cannot execute locally without GitHub Actions. Local parity there means your repository-level `gitleaks` configuration and staged-file secret scan already work before the workflow ever exists.
+Each of those should exit zero. If any of them doesn't, that is the underlying loop failing, not a CI problem.
 
-### Step 2: the unit job
+### The unit job
 
-Add the `unit` job. It depends on `static` so it doesn't run if static checks fail. It runs `npm run test:unit` against the Vitest suite.
+The `unit` job runs Vitest and `needs: static`. It reuses the same cache key. It doesn't need browsers, so Playwright install is skipped. Short, cheap, predictable.
 
-### Step 3: the end-to-end job
+### The end-to-end job
 
-Add the `end-to-end` job. This is the biggest one:
-
-- Install Chromium (`npx playwright install --with-deps chromium`).
-- Run the Playwright suite.
-- On failure, generate the dossier and upload both the HTML report and the dossier as artifacts.
-- Optionally: start the dev server if your Playwright config doesn't do it automatically (check `webServer` in `playwright.config.ts`).
-
-Shelf's `playwright.config.ts` already starts the preview server through `webServer`, so the workflow does **not** need an extra server boot step. Before writing the workflow step, verify this applies to your config: run `npx playwright test --project=chromium` without starting a server manually. If it fails with "no server running," add `webServer: { command: 'npm run preview', url: 'http://127.0.0.1:4173', reuseExistingServer: !process.env.CI }` to `playwright.config.ts` first.
-
-### Step 4: the visual regression safety
-
-Your Playwright suite includes the screenshot tests from [Visual Regression as a Feedback Loop](visual-regression-as-a-feedback-loop.md). They'll run as part of the `end-to-end` job. Add a step to upload the snapshot diffs as artifacts on failure—`playwright-report/` probably already includes them, but double-check.
-
-### Step 5: the nightly workflow
-
-Create a separate file, `.github/workflows/nightly.yml`:
+`end-to-end` is the biggest one, and it does one thing `static` and `unit` don't: it writes a `.env` file before running Playwright.
 
 ```yaml
-name: Nightly
-
-on:
-  schedule:
-    - cron: '0 4 * * *' # 4 AM UTC
-  workflow_dispatch:
-
-jobs:
-  har-refresh:
-    # ... re-record HARs against the real API and open a PR with the diff
-  dependency-audit:
-    # ... run `npm audit` and open an issue if new findings
-  cross-browser:
-    # ... full Playwright matrix (chromium, firefox, webkit)
+- name: Create .env for preview server
+  run: |
+    cat > .env <<'EOF'
+    DATABASE_URL=file:./tmp/ci.db
+    ORIGIN=http://127.0.0.1:4173
+    BETTER_AUTH_SECRET=ci-test-secret-ci-test-secret-ci-test-secret-32chars
+    ENABLE_TEST_SEED=true
+    OPEN_LIBRARY_BASE_URL=https://openlibrary.org
+    EOF
+    mkdir -p tmp
 ```
 
-You don't have to fully implement these jobs today. Shelf ships each nightly job as a named placeholder with an `echo` command that explains the intended follow-up. The point is to have the file in place so the nightly cadence exists and the missing automation is explicit instead of implied.
+Three things worth noticing.
 
-The appendix lessons come back and turn these placeholders into real cross-browser and nightly loops. For the core day, the explicit placeholder is enough.
+First, the values are hardcoded and obviously fake. `ci-test-secret-ci-test-secret-ci-test-secret-32chars` satisfies Better Auth's length check but it is **not a secret** and does not belong in GitHub Actions secret storage. It lives in the workflow file deliberately, because the `ci.db` it protects is created fresh every run.
+
+Second, `ENABLE_TEST_SEED=true` is on. The seed endpoint is gated on that flag for safety — production environments never have it. CI runs need it because the e2e setup project POSTs to `/api/testing/seed` to seed alice and the books the tests assert against.
+
+Third, `mkdir -p tmp` matters. `DATABASE_URL=file:./tmp/ci.db` assumes the directory exists; libsql errors with `ConnectionFailed` if it doesn't. One missing `mkdir` is the kind of thing that passes locally (because your local `tmp/` has been around since yesterday) and fails in CI (because the runner's checkout doesn't include empty directories).
+
+After the `.env` bootstrap, the job runs `npm run test:e2e`. On failure it runs `npm run dossier`, uploads `playwright-report/` as one artifact and `playwright-report/dossier.md` as another, both with a 7-day retention. `playwright-report/` already contains the trace, screenshots, video, and the HTML report. The dossier is a separate upload so an agent can grab the summary without pulling the whole report tarball.
+
+Shelf's `playwright.config.ts` already starts the preview server through `webServer`, so the workflow does **not** need an extra server-boot step. If you build a CI workflow for a project that doesn't, add `webServer: { command: 'npm run preview', url: 'http://127.0.0.1:4173', reuseExistingServer: !process.env.CI }` to the Playwright config first.
+
+### The visual regression safety
+
+The Playwright suite includes the screenshot tests from [Visual Regression as a Feedback Loop](visual-regression-as-a-feedback-loop.md). They run as part of the `end-to-end` job. Snapshot diffs land in `playwright-report/test-results/<spec>/` and get uploaded as part of the `playwright-report` artifact on failure. No separate upload step is needed.
+
+### The nightly workflow
+
+Open `.github/workflows/nightly.yml`. It runs on a cron schedule and on manual `workflow_dispatch`, and it carries the slow checks that do not belong on every pull request: HAR refresh, dependency audits, cross-browser full runs. The appendix labs ([Lab: Add a Nightly Verification Workflow](lab-add-a-nightly-verification-workflow.md), [Lab: Add Cross-Browser Coverage](lab-add-cross-browser-coverage.md)) expand each of these into a real loop. For this lesson, notice that the nightly file exists so the cadence is explicit, not implied.
 
 > [!WARNING]
 > Do **not** wire `playwright test --update-snapshots` into a scheduled job, even as a stub. A cron that updates snapshots will silently rewrite every visual baseline whenever it runs and quietly destroy your visual regression gate. Snapshot updates should always be human-triggered (a `workflow_dispatch` job, or local `--update-snapshots` followed by a PR you review).
 
-### Step 6: branch protection (optional, but recommended)
+### Branch protection
 
 In the GitHub repo settings, enable branch protection on `main`:
 
@@ -173,25 +123,18 @@ In the GitHub repo settings, enable branch protection on `main`:
 - Require up-to-date branches before merging.
 - Disallow force pushes.
 
-This turns the CI jobs into hard gates.
+This turns the CI jobs into hard gates. The workflow by itself is just a script; branch protection is what makes it a gate you cannot route around.
 
 ## Acceptance criteria
 
-- [ ] `.github/workflows/main.yml` exists.
-- [ ] Workflow runs on both `push` and `pull_request`.
-- [ ] `static` job runs lint, typecheck, knip, and gitleaks as named steps.
-- [ ] `unit` job runs Vitest and depends on `static`.
-- [ ] `end-to-end` job runs Playwright, depends on `static`.
-- [ ] On failure, the `end-to-end` job runs `npm run dossier` and uploads both `playwright-report/` and `playwright-report/dossier.md` as artifacts.
-- [ ] Artifacts have a `retention-days` set to something finite (e.g., 7).
-- [ ] The workflow uses `actions/cache@v4` to cache dependencies and Playwright browsers.
-- [ ] The workflow uses `fail-fast: false` anywhere a matrix strategy is used (or notes that no matrix is used).
-- [ ] Every job uses `uses: actions/checkout@v4` and `uses: actions/setup-node@v4` (or your equivalent).
-- [ ] In the local workshop repo, the workflow files parse as valid YAML and every named step maps to a real local command that exits the way the workflow expects.
-- [ ] If your repository has a Git remote, pushing a clean commit to a feature branch runs the workflow and every job exits zero.
-- [ ] If your repository has a Git remote, pushing a commit with a deliberate lint error fails the workflow at the `static` job, and subsequent jobs (`unit`, `end-to-end`) are skipped.
-- [ ] If your repository has a Git remote, pushing a commit with a failing Playwright test produces a workflow run with the dossier artifact attached. Downloading the artifact with `gh run download` shows the dossier markdown.
-- [ ] `.github/workflows/nightly.yml` exists and runs on a cron schedule.
+- [ ] You opened `.github/workflows/main.yml` and read every step in each of the three jobs.
+- [ ] You can point at the step that gates every layer built earlier today: lint, typecheck, knip, gitleaks, Vitest, Playwright, visual regression, the dossier upload.
+- [ ] You understand why the gitleaks step uses the direct CLI instead of the `gitleaks-action@v2` wrapper (first-push branches).
+- [ ] You understand why `end-to-end` writes a `.env` file with `ENABLE_TEST_SEED=true` and `mkdir -p tmp` before running Playwright.
+- [ ] You understand why `unit` and `end-to-end` both `needs: static` and what happens to them if a lint error lands on a pull request.
+- [ ] You ran the corresponding local commands (`npm run lint`, `typecheck`, `knip`, `test:unit`, `gitleaks dir . --redact --config .gitleaks.toml`) on a clean working tree and they all exited zero.
+- [ ] You opened `.github/workflows/nightly.yml` and can name the slow checks it carries that do not belong on every pull request.
+- [ ] If your repository has a Git remote, you pushed a deliberately broken commit (a lint error, or a failing Playwright assertion) to a throwaway branch and watched the corresponding job fail with the dossier attached.
 - [ ] If your repository has a Git remote, branch protection is enabled on `main` requiring at least the `static` and `end-to-end` jobs to pass.
 
 ## Troubleshooting

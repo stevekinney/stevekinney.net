@@ -1,13 +1,13 @@
 ---
 title: 'Lab: Build a Failure Dossier for Shelf'
 description: Wire up traces, screenshots, console capture, and a dossier summarizer. Then break a test and watch the agent fix it from the dossier alone.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
 Short lab. Walk the dossier infrastructure Shelf ships, understand why each piece is there, then break a test and watch the loop close.
 
-Shelf writes artifacts under `playwright-report/test-results/`, the HTML report to `playwright-report/html/`, the JSON report to `playwright-report/report.json`, and the markdown summary to `playwright-report/dossier.md`. The simplest, most controlled way to force a failure when you want to test the loop is to temporarily move one committed screenshot baseline, run the matching visual test, generate the dossier, then restore the baseline and rerun green.
+Shelf writes artifacts under `playwright-report/test-results/`, the HTML report to `playwright-report/html/`, the JSON report to `playwright-report/report.json`, and the markdown summary to `playwright-report/dossier.md`. The simplest, most controlled way to force a failure when you want to test the loop is to change one word of copy in `src/routes/design-system/+page.svelte`, run `npm run test:e2e`, watch `[public] › tests/end-to-end/visual.spec.ts:3 › design system matches the starter visual baseline` go red, run `npm run dossier`, read the generated markdown, then revert the copy change and rerun green. Editing a component gives you a deterministic red state that survives re-runs — moving a screenshot baseline aside no longer works, because Playwright will auto-regenerate a missing baseline on the next run instead of failing.
 
 > [!NOTE] In the starter
 > Shelf already ships every piece: the config flags, the console forwarders, the dossier script, the `npm run dossier` command, and the CLAUDE.md entry. This lab is a walkthrough. You're opening each file, reading it, and understanding why each decision was made. The "break a test and run the dossier" section at the bottom is the verification — that's the only thing you actively do.
