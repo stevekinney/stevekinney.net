@@ -1,7 +1,7 @@
 ---
 title: API and UI Hybrid Tests
 description: Use the `request` fixture to set up state via API and assert via UI. Faster, clearer, and the pattern most teams haven't found yet.
-modified: 2026-04-07
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -13,7 +13,7 @@ Let's look at why.
 
 ## The test that does too much
 
-A classic end-to-end test for "user can view their shelf stats" looks like this:
+A classic end-to-end test for "user can view their shelf stats" often starts this way:
 
 ```ts
 test('shelf stats show total books read', async ({ page }) => {
@@ -54,6 +54,8 @@ test('shelf stats show total books read', async ({ page, request }) => {
 The setup is API calls. The assertion is still a real browser navigating a real page. The test is three times faster, half as long, and—critically—it _only_ tests the stats page. If the "add book" UI breaks, this test still passes, because this test isn't about adding books. The test for adding books is the one that breaks, as it should.
 
 The `request` fixture authenticates automatically via whatever storage state the test project is using, so you don't have to attach cookies or tokens. That's the whole point of the fixture versus using raw `fetch`.
+
+In Shelf, the concrete version of this pattern lives in `tests/end-to-end/rate-book.spec.ts`. The authenticated project in `playwright.config.ts` provides the storage state from `tests/end-to-end/authentication.setup.ts`, the seed helpers live in `tests/end-to-end/helpers/seed.ts`, and the rate-book fix in the companion lab depends on waiting on the real network signal with `page.waitForResponse` instead of guessing with a timeout.
 
 ## When to use API, when to use UI
 

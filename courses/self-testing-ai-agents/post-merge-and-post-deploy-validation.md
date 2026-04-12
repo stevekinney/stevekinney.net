@@ -1,7 +1,7 @@
 ---
 title: Post-Merge and Post-Deploy Validation
 description: Green pull requests are not the end of the loop. This is the layer that proves the deployment itself is healthy and tells you when to stop the rollout.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -16,7 +16,7 @@ So, this lesson is about the loop _after_ the merge gate.
 
 ## The shape of the loop
 
-If you're using [GitHub Actions environments](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments) or an equivalent deployment system, the loop should look like this:
+If you're using [GitHub Actions environments](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments) or an equivalent deployment system, the loop follows this shape:
 
 ```mermaid
 graph LR
@@ -56,6 +56,8 @@ Small is a feature here. If the post-deploy check takes ten minutes, nobody trus
 ### What the smoke spec actually looks like
 
 A post-deploy smoke test is a regular Playwright spec in a dedicated directory so it does not run as part of the normal end-to-end suite. The only thing that makes it "post-deploy" is that it reads its target URL from an environment variable the deployment workflow injects, so the same file can run against a preview, a staging environment, or production without any code changes.
+
+In Shelf, the named command that runs this route lives in `package.json` as `npm run test:smoke`, the spec lives at `tests/smoke/post-deploy.spec.ts`, and the dedicated config is `playwright.smoke.config.ts`. Those three files are the concrete surface area of the loop.
 
 ```ts
 // tests/smoke/post-deploy.spec.ts
@@ -203,7 +205,7 @@ If the deployment workflow says "run `npm run test:smoke` against `SMOKE_BASE_UR
   of describing the failure passively.
 ```
 
-## Success state
+## How You Know the Loop Is Real
 
 You have this loop when:
 

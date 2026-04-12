@@ -1,7 +1,7 @@
 ---
 title: Writing a Custom MCP Wrapper
 description: When the off-the-shelf MCPs don't give the agent the exact probe you want, wrap your own. It's fewer lines of code than you think.
-modified: 2026-04-10
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -26,6 +26,8 @@ A small MCP server with a single tool called `verify_shelf_page`. When called, i
 The agent can now call `verify_shelf_page` and get a one-shot, structured answer to "is this page in good shape?" No composition, no guessing, no "did you remember to check the console?" It's all in the tool.
 
 Shelf registers the server in a repository-local `.mcp.json` and resolves the target URL from `SHELF_BASE_URL`, defaulting to `http://127.0.0.1:4173`. The `/shelf/[username]` route is public, so the server does not strictly need authentication—but it reuses the existing `playwright/.authentication/user.json` storage state when present so the browser session stays consistent with the rest of the workshop tooling.
+
+In the starter, that target route is the real `src/routes/shelf/[username]/+page.svelte`, and the invocation is exposed as a normal script in `package.json` so the agent is not guessing how to boot the server. That is the pattern to copy: real route, real script surface, one sharply-shaped probe.
 
 ## The skeleton
 

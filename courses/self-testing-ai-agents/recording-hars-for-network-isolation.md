@@ -1,7 +1,7 @@
 ---
 title: Recording HARs for Network Isolation
 description: How to record a real HTTP session once and replay it deterministically in every test, so your suite stops depending on someone else's server.
-modified: 2026-04-10
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -139,27 +139,17 @@ My instruction file rule for HARs:
 
 That "do not re-record to fix a failing test" rule is the one you'll thank me for. Agents love to make failing tests pass by re-recording. Usually it's masking a real bug.
 
-## The alternative: mocking at the request layer
+## When `page.route` is the better tool
 
-If your test only needs to mock one endpoint with a hand-written response, use [`page.route`](https://playwright.dev/docs/mock) directly:
+If you only need to mock one or two endpoints with hand-written responses, HAR replay is usually overkill. Reach for [`page.route`](https://playwright.dev/docs/mock) instead and keep the mock in code.
 
-```ts
-await page.route('**/openlibrary.org/search.json*', async (route) => {
-  await route.fulfill({
-    status: 200,
-    contentType: 'application/json',
-    body: JSON.stringify({ docs: [{ title: 'Station Eleven' }] }),
-  });
-});
-```
+The dedicated lesson, [Route-Based Network Interception](route-based-network-interception.md), covers when to use `route.fulfill`, `route.abort`, and `route.continue`; how route ordering works when `page.route` and `page.routeFromHAR` coexist; and when a small explicit mock is cleaner than a recorded HAR.
 
-This is fine—more explicit, version-controlled as code. Use it when the mock is small. Reach for HARs when the mock is _large_—a dozen requests, or hundreds of KB of response data you don't want to hand-type.
+The short version is:
 
-`page.route` and `page.routeFromHAR` can coexist. Playwright runs routes in reverse registration order—the _last_ registered route gets first crack. If it calls [`route.fallback()`](https://playwright.dev/docs/api/class-route#route-fallback), control passes to the next (earlier) handler; the request only hits the network if nothing handles it. Register `routeFromHAR` first for bulk API traffic, then `page.route` for an endpoint that needs a custom response—the later route runs first.
-
-If your app's HTTP client changes its request shape, the HAR stops matching and the test fails. That failure is intentional—re-record once you've verified the new shape is correct.
-
-HARs are not the right tool for mocking authentication flows. Use [storage state](storage-state-authentication.md) for login, and HARs for the API traffic that happens _after_ login.
+- Use HARs when you want to capture and replay a larger slice of real traffic.
+- Use routes when you want a small, explicit mock or a simulated failure.
+- Use [storage state](storage-state-authentication.md) for authentication, not HAR replay.
 
 ## The one thing to remember
 

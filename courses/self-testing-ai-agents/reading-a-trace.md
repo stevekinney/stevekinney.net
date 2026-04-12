@@ -1,7 +1,7 @@
 ---
 title: Reading a Trace
 description: The Playwright trace viewer is the single best piece of software in the ecosystem, and most agents use it like a folder full of screenshots. This lesson teaches the four panes, a real Shelf failure walked through end to end, and the five fields that feed a failure dossier.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-11
 ---
 
@@ -29,7 +29,7 @@ That opens the viewer in a browser tab. You can also open traces from the HTML r
 npm run traces:generate
 ```
 
-That script runs the three deliberately-broken specs in `tests/end-to-end/labs/broken-traces/` and copies the resulting trace files to `playwright-report/lab-traces/`. Open them one at a time. We'll work through what to look for next.
+That command is just the entry point. The real generator script is `scripts/generate-lab-traces.mjs`, and the cleanup pair is `npm run traces:clean` when you want to wipe the generated artifacts and rerun the lab from a clean slate. The generate step runs the three deliberately-broken specs in `tests/end-to-end/labs/broken-traces/` and copies the resulting trace files to `playwright-report/lab-traces/`. Open them one at a time. We'll work through what to look for next.
 
 ## The four panes and what each one tells you
 

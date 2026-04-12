@@ -1,7 +1,7 @@
 ---
 title: Secret Scanning with Gitleaks
 description: Agents commit fake API keys. Sometimes they commit real ones. Gitleaks is the boring tool that prevents the latter with almost no configuration.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -24,6 +24,8 @@ It has two practical modes in this workshop:
 
 The combination catches both "the agent is about to commit a secret" and "a secret has already snuck in through some other path."
 
+In Shelf, this slot sits inside a wider static layer. The same lab that wires gitleaks also has you inspect `eslint.config.js`, `tsconfig.json`, `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts`, then run `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test`, `npm run pre-push`, and the lightweight `npm run lint -- --quiet` loop. Secret scanning is one layer in that stack, not a side quest.
+
 ## Installing Gitleaks
 
 Gitleaks is a Go binary, not an npm package. Install it with your OS package manager:
@@ -44,12 +46,20 @@ gitleaks version
 
 ## Wiring it into the pre-commit hook
 
-Add a `secrets` command to the `pre-commit` block in `lefthook.yml`:
+Add `lint`, `format`, and `secrets` commands to the `pre-commit` block in `lefthook.yml`:
 
 ```yaml
 pre-commit:
   parallel: true
   commands:
+    lint:
+      glob: '*.{ts,svelte,js,mjs,cjs}'
+      run: npx eslint --fix --max-warnings=0 {staged_files}
+      stage_fixed: true
+    format:
+      glob: '*.{ts,svelte,js,mjs,cjs,json,md,yml,yaml,css}'
+      run: npx prettier --write {staged_files}
+      stage_fixed: true
     secrets:
       run: npx tsx scripts/run-gitleaks-staged.ts
 ```

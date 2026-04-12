@@ -1,13 +1,15 @@
 ---
 title: 'Fixtures: Worker-Scoped, Test-Scoped, and the Trap Between Them'
 description: How to use Playwright's `test.extend` without turning your fixture file into a place where state goes to hide.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-11
 ---
 
 The first `test.extend` you write feels like magic. Five tests collapse into one clean `beforeEach`-free signature, the spec file gets shorter, and you feel like a wizard. The fifth one feels like a cage. Agents love fixtures because they collapse setup, and they _also_ love them because a fixture is a great place to hide state. Hidden state is how test suites get slow, flaky, and impossible to reason about.
 
 So, let's talk about what fixtures actually are, when to reach for them, and the two specific mistakes that agents will make if you don't put rails around this.
+
+Shelf's lab for this lesson is intentionally concrete: the bad starting point lives at `tests/end-to-end/labs/fixtures/bad-fixtures.ts`, the reference folder is `tests/end-to-end/labs/fixtures/`, the exercising spec is `fixtures-lab.spec.ts`, the lab runs through `playwright.labs.config.ts`, and the named gate is `npm run test:e2e:lab-fixtures`. Keep those file names in your head as you read the rest of the lesson, because the lab asks you to refactor the real thing instead of inventing a toy example.
 
 ## What a fixture actually is
 

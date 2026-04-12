@@ -1,7 +1,7 @@
 ---
 title: 'Add Post-Deploy Smoke Checks to Shelf: Solution'
 description: Walkthrough of the shipped smoke test, dedicated config, playbook, and the gap between local preview and a real hosted target.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
@@ -82,22 +82,11 @@ One line. Uses the dedicated config. No `webServer`, no build step. The workflow
 
 ## What you still need to run
 
-Locally, the proof-of-life loop is:
+Locally, the proof-of-life loop is simple: make sure a preview server is already running at `http://127.0.0.1:4173`, then run `npm run test:smoke`. The test should pass. If it doesn't, check that the preview server is actually reachable and that the home page renders an `<h1>` and a "Sign in" link in the main content area.
 
 ```bash
-npm run build && npm run preview &
-npm run test:smoke
-```
-
-Or, if you prefer one line:
-
-```bash
-npm run build && npm run preview -- --host 127.0.0.1 --port 4173 &
-sleep 2
 SMOKE_BASE_URL=http://127.0.0.1:4173 npm run test:smoke
 ```
-
-The test should pass. If it doesn't, check that the preview server is actually running and that the home page renders an `<h1>` and a "Sign in" link in the main content area.
 
 For the deliberate failure check, temporarily change the assertion to look for a heading that doesn't exist:
 

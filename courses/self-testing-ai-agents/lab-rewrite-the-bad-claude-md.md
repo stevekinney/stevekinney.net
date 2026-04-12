@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Rewrite the Bad CLAUDE.md'
 description: Tighten Shelf's starter instructions file until every rule is mechanically actionable and the UI stays product-facing.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -11,14 +11,7 @@ Open the Shelf starter repository. At the root, there's a [`CLAUDE.md`](https://
 
 ## Setup
 
-```sh
-git clone <shelf-repo-url>
-cd shelf
-npm install
-npm run dev
-```
-
-Open [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) in your editor. Read it. The Shelf starter ships with route, auth, and testing rules already—this lab is about making those rules _mechanically enforceable_ and short enough that an agent will actually follow them without you repeating yourself. Keep the ones that earn their place and tighten the ones that are still too vague.
+Use an existing Shelf clone with dependencies already installed and the app available in your usual local workflow. Open [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) and `package.json` side by side in your editor. The Shelf starter ships with route, auth, and testing rules already—this lab is about making those rules _mechanically enforceable_ and short enough that an agent will actually follow them without you repeating yourself. Keep the ones that earn their place and tighten the ones that are still too vague.
 
 ## The task
 

@@ -17,9 +17,17 @@ Shelf ships two GitHub Actions workflows at `.github/workflows/main.yml` and `.g
 
 Open `.github/workflows/main.yml` in the Shelf starter. Walk each job with this lesson open alongside. For every step, ask: _what loop built earlier today is this step gating?_ When you can answer that for every step, you've done the lab.
 
+## What you can verify locally
+
+You can do the whole first pass locally. Open `.github/workflows/main.yml` and `.github/workflows/nightly.yml`, then run the commands each named step maps to: `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test:unit`, `npm run test:e2e`, and `npm run dossier`. You can also confirm the end-to-end job's environment assumptions by checking that the workflow writes `DATABASE_URL=file:./tmp/ci.db`, creates `tmp/`, and relies on the same `playwright.config.ts` web server you already use on your machine.
+
+## What remains manual or external
+
+The hosted part starts only when you push to a connected GitHub repository. Watching a broken branch fail in Actions, downloading the dossier artifact, and confirming branch protection are all real GitHub checks. If this clone has no remote, stop at local command parity plus valid workflow files and call the hosted loop pending.
+
 ## The shape
 
-Open `.github/workflows/main.yml`. At the top you'll see the three things a workflow needs to be safe and predictable:
+Open `.github/workflows/main.yml`. At the top are the three things a workflow needs to be safe and predictable:
 
 ```yaml
 name: Main

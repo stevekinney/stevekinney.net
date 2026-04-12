@@ -1,7 +1,7 @@
 ---
 title: Playwright Test Agents
 description: Playwright ships three built-in agents that can plan, generate, and heal your test suite. Here's how they work and where they fit in the loop.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
@@ -75,11 +75,13 @@ test('seed', async ({ page }) => {
 });
 ```
 
+In Shelf, that seed is literally `tests/end-to-end/seed.spec.ts`. Once generation has happened and a test is red, the healer is usually pointed at one concrete file under `tests/end-to-end/<failing-spec>.spec.ts`. Those two paths are the handoff points for the whole loop.
+
 **What it produces:**
 
 A Markdown file in `specs/`—something like `specs/basic-operations.md`. The plan is human-readable but precise enough that the generator can act on it mechanically. Each scenario includes numbered steps, expected results, and enough context that you could hand it to a human tester and they'd know what to do.
 
-Here's a trimmed example of what the output looks like:
+Here's a trimmed example of the kind of output you should get:
 
 ```markdown
 # TodoMVC Application - Basic Operations Test Plan

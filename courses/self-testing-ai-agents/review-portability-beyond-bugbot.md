@@ -1,7 +1,7 @@
 ---
 title: Review Portability Beyond Bugbot
 description: Bugbot is the example, not the law. This appendix translates the second-opinion loop into portable review primitives you can carry to other tools.
-modified: 2026-04-10
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -146,7 +146,7 @@ file.
 
 Short. Explicit. Mechanical. The whole file fits on a page and every reviewer follows the same three-bucket categorization regardless of which tool is in the reviewer's seat.
 
-## Success state
+## How You Know the Review Loop Travels
 
 You have a portable review loop when:
 

@@ -1,7 +1,7 @@
 ---
 title: 'Harden the Flaky Rate-Book Test: Solution'
 description: Walkthrough of every fix applied to the deliberately broken rate-book test, from storage state auth through hybrid API assertions.
-modified: 2026-04-10
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
@@ -109,7 +109,7 @@ Now the test waits for exactly the right signal: the PATCH request to the shelf 
 
 ## The shipped file
 
-Here's the complete test after all four fixes. I've added annotations so each line traces back to the pattern it came from.
+Here's the final test after all four fixes. The inline comments are teaching annotations layered on top of the shipped shape in `tests/end-to-end/rate-book.spec.ts`.
 
 ```ts
 import { expect, test } from './fixtures'; // Custom fixtures, not bare @playwright/test
