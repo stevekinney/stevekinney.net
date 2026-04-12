@@ -5,9 +5,22 @@ import path from 'node:path';
 const runGit = (args) =>
   execFileSync('git', args, {
     cwd: process.cwd(),
-    stdio: ['ignore', 'pipe', 'inherit'],
+    stdio: ['ignore', 'pipe', 'pipe'],
     encoding: 'utf8',
   }).trim();
+
+const isInsideGitWorkTree = () => {
+  try {
+    return runGit(['rev-parse', '--is-inside-work-tree']) === 'true';
+  } catch {
+    return false;
+  }
+};
+
+if (!isInsideGitWorkTree()) {
+  console.log('not inside a Git work tree; skipping hook installation.');
+  process.exit(0);
+}
 
 let hooksPath = '';
 
