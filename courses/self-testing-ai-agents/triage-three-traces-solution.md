@@ -1,7 +1,7 @@
 ---
 title: 'Solution: Triage Three Traces'
 description: One walk through the three lab traces — Trace A, Trace B, and Trace C — with the smoking-gun evidence in each pane and the fix for each failure.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-11
 ---
 
@@ -23,7 +23,7 @@ Then open each one with `npx playwright show-trace playwright-report/lab-traces/
 
 **Smoking-gun pane**: Network.
 
-**The evidence**: click the `goto('/shelf')` action in the timeline, then open the Network pane. You'll see two requests:
+**The evidence**: click the `goto('/shelf')` action in the timeline, then open the Network pane. The pane shows two requests:
 
 - `GET /shelf` → `302 Found`, with a `Location: /login` response header.
 - `GET /login` → `200 OK`.
@@ -44,7 +44,7 @@ If you want to keep the unauthenticated scenario _and_ still reach a shelf-like 
 
 **Smoking-gun pane**: Network.
 
-**The evidence**: walk the timeline. You'll see the click on the Save button, then the immediate `expect`, then a `PATCH /api/shelf/:entryId` request that's _still pending_ at the moment the assertion ran. The network row shows the request started at (say) 1.187s and completed at 1.420s. The assertion fired at 1.188s, gave up at 1.189s, and failed.
+**The evidence**: walk the timeline. The action list shows the click on the Save button, then the immediate `expect`, then a `PATCH /api/shelf/:entryId` request that's _still pending_ at the moment the assertion ran. The network row shows the request started at (say) 1.187s and completed at 1.420s. The assertion fired at 1.188s, gave up at 1.189s, and failed.
 
 The DOM snapshot at the failure confirms it: the article for Station Eleven shows no "Rated: 4/5" text. The UI hasn't updated because the server hasn't responded, and the client doesn't optimistically render the rating.
 

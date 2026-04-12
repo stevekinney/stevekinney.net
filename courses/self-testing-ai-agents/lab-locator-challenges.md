@@ -12,7 +12,7 @@ This lab fixes that. Shelf ships a `/playground` page built specifically for thi
 ![The eleven locator-practice sections on the shipped /playground page](./assets/playground-locator-sections.png)
 
 > [!NOTE] Prerequisite
-> Pull the latest Shelf starter and start it with `npm run dev`. Navigate to `http://localhost:5173/playground` (or `http://127.0.0.1:4173/playground` if you're running `npm run preview`) to see the page you'll be targeting.
+> Pull the latest Shelf starter, start it in your usual local mode, and navigate to `/playground` to see the page you'll be targeting.
 
 > [!NOTE] Those a11y warnings are on purpose
 > The playground intentionally ships with a handful of accessibility violations — a `div` pretending to be a button, an icon-only button with no accessible name — so challenges 23 and 24 have a real target. You'll see svelte-check print these as warnings every time you run `npm run typecheck` or `npm run build`. That is by design. The whole point of the fallback section is to give you something to locate _when the role hierarchy doesn't help_.
@@ -26,6 +26,14 @@ npx playwright test playground.spec.ts --project=public
 ```
 
 The `public` project doesn't require authentication, which is what you want here—the playground is a public route.
+
+## What you can verify locally
+
+This lab is fully local. With Shelf already running, target the shipped playground route at `src/routes/playground/+page.svelte`, write the exercises in `tests/end-to-end/playground.spec.ts`, and run `npx playwright test playground.spec.ts --project=public` until the file is green. Finish with `npm run typecheck` and `npm run build` so you have seen the intentional playground warnings in the same places the rest of the course references them.
+
+## What remains manual or external
+
+Nothing here depends on GitHub, a deploy preview, or a third-party service. The only judgment call is whether each solution really used the highest-priority locator available. If a test passes but you reached for `getByTestId` or a fallback too early, that still counts as a miss for the point of the lab.
 
 ## Warm-up: role basics
 

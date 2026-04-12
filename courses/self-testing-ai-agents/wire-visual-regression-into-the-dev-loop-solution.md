@@ -1,7 +1,7 @@
 ---
 title: 'Wire Visual Regression Into the Dev Loop: Solution'
 description: Walkthrough of Shelf's visual regression setup, from screenshot config through the break-and-detect cycle.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
@@ -143,7 +143,7 @@ Open the HTML report:
 npx playwright show-report playwright-report/html
 ```
 
-Find the failing test and look at the three-panel view. You'll see:
+Find the failing test and look at the three-panel view. The report shows:
 
 - **Expected**: the committed baseline with the original button sizes.
 - **Actual**: the current page with the wider buttons.

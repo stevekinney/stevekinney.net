@@ -1,7 +1,7 @@
 ---
 title: 'test.step, Tags, and Annotations'
 description: Three Playwright features that agents ignore, and that turn out to be the difference between a failing test you can debug and one you have to reverse-engineer.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-11
 ---
 
@@ -131,6 +131,8 @@ Use soft assertions when the step is verifying a list of things that _should all
 An agent reading a [failure dossier](failure-dossiers-what-agents-actually-need-from-a-red-build.md) gets `Step: verify the rating persists on the shelf — expected "Rated: 4/5" to be visible` instead of a stack trace in a nameless test. That line is the difference between the agent spending its first 90 seconds _figuring out what the test was trying to do_ and the agent spending its first 90 seconds _figuring out why the test failed_. `test.step` is upstream of every dossier that reads cleanly.
 
 The dossier summarizer that already ships in Shelf reads steps out of the Playwright JSON reporter output. Nothing else has to change — once the test file has steps, the dossier has them too.
+
+In Shelf, the concrete reps are `tests/end-to-end/rate-book.spec.ts` and `tests/end-to-end/search.spec.ts`. The lab version runs through `playwright.labs.config.ts` first so you can practice on an isolated slice, but once the step labels and tags are stable they belong in the normal `npm run test:e2e` loop with the rest of the suite.
 
 ## The agent rules
 

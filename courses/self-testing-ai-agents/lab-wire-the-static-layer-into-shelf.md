@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wire the Static Layer into Shelf'
 description: Install and configure the whole stack—ESLint custom rules, TypeScript strict, knip, lefthook, gitleaks—and prove each layer fires on the right mistake.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -13,6 +13,14 @@ Longest lab of the day. Multi-part. Pace yourself—each part is a self-containe
 ## The task
 
 Walk the complete static layer Shelf ships and verify every piece fires on a planted bad input. For each part: open the shipped file, read the rule, then trigger the probe and watch it catch.
+
+## What you can verify locally
+
+Everything in Parts 1 through 5 is local and mechanical: open `eslint.config.js`, `tsconfig.json`, `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts`; run `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test`, and `npm run pre-push`; plant one bad input at a time; then watch the right layer fail. Part 6 is local too if you are updating your own `CLAUDE.md` or Codex instructions file.
+
+## What remains manual or external
+
+The only non-mechanical part is judging the agent behavior at the end. The final prompt is there to test whether the instructions and static layer are strong enough that the agent reads the error, repairs the code, and reruns the checks without coaching. If you decide to open a pull request afterward, treat that as an optional hosted follow-up, not a requirement for finishing the lab locally.
 
 ## Part 1: ESLint custom rules
 
@@ -127,9 +135,9 @@ If the agent does any of the forbidden things, go look at why the static layer d
 
 ## Final acceptance
 
-- [ ] The end-to-end prompt above completed with the agent running all five check commands without being reminded.
+- [ ] The end-to-end prompt above completed with the agent running `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test`, and `npm run pre-push` without being reminded.
 - [ ] No forbidden patterns made it into the final code.
-- [ ] The PR (if you opened one) is clean.
+- [ ] If you opened a pull request, it is clean.
 - [ ] Every single checkbox in Parts 1 through 6 is ticked.
 
 ## Stretch goals

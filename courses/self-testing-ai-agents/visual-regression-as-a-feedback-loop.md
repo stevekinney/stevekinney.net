@@ -1,7 +1,7 @@
 ---
 title: Visual Regression as a Feedback Loop
 description: Screenshot diffs are not just a CI gate. They're the fastest way to tell an agent "this looks wrong" without saying a word.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -45,6 +45,8 @@ First run: Playwright takes a screenshot and writes it to `tests/end-to-end/visu
 Every subsequent run: Playwright takes a new screenshot and compares it to the committed baseline. If they match pixel-for-pixel (modulo a small tolerance), the test passes. If they don't, the test fails, and Playwright writes three files to your report directory: the baseline, the actual, and a diff image highlighting the changed pixels.
 
 You commit the baseline to git. When you make an intentional visual change, you regenerate the baseline (`--update-snapshots`) in the same commit. Reviewers see the old baseline being replaced with the new baseline in the diff and can eyeball whether the change was intentional.
+
+In Shelf, the real file is `tests/end-to-end/visual-authenticated.spec.ts`, it uses `expect.toHaveScreenshot(...)`, and the committed baselines live under `tests/end-to-end/visual-authenticated.spec.ts-snapshots/`. The normal way through the loop is `npm run test:e2e`, the focused way is `npm run test:e2e -- --grep visual`, and the intentional-baseline-update path is `npm run test:e2e -- --update-snapshots`.
 
 ## Making screenshot tests reliable
 

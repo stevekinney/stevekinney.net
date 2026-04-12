@@ -3,6 +3,7 @@
   import { env } from '$env/dynamic/public';
   import { encodeParameters } from '$lib/encode-parameters';
   import { formatPageTitle } from '$lib/format-page-title';
+  import { createLlmsAlternatePath } from '$lib/llms-path';
   import { author, title as siteTitle } from '$lib/metadata';
   import { buildOpenGraphHash } from '$lib/og/hash';
   import { normalizeOpenGraphPath } from '$lib/og/paths';
@@ -144,6 +145,7 @@
 
   const dateIso = $derived(date ? new Date(date).toISOString() : undefined);
   const modifiedIso = $derived(modified ? new Date(modified).toISOString() : undefined);
+  const llmsAlternatePath = $derived(createLlmsAlternatePath(page.url.pathname));
 </script>
 
 <svelte:head>
@@ -155,12 +157,9 @@
     title="Steve Kinney's Writing"
     href="/writing/rss"
   />
-  <link
-    rel="alternate"
-    type="text/plain"
-    title="LLM-readable content"
-    href={`${normalizedPath === '/' ? '' : normalizedPath}/llms.txt`}
-  />
+  {#if llmsAlternatePath}
+    <link rel="alternate" type="text/plain" title="LLM-readable content" href={llmsAlternatePath} />
+  {/if}
 
   <meta name="robots" content="index, follow" />
   <meta name="description" content={description} />

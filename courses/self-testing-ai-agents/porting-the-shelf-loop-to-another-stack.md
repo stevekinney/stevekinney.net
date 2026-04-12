@@ -1,7 +1,7 @@
 ---
 title: Porting the Shelf Loop to Another Stack
 description: The tools change when the framework changes. The loop structure does not. This appendix shows how to translate Shelf's feedback model to other stacks without losing the point.
-modified: 2026-04-09
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -33,7 +33,7 @@ For a React or Next.js stack, the shape is pleasantly close.
 
 The official [Next.js testing guidance](https://nextjs.org/docs/pages/guides/testing) already assumes Playwright and unit-test tooling are normal parts of the workflow.
 
-The mapping usually looks like this:
+The mapping is usually:
 
 | Shelf loop         | Next.js-style equivalent                                           |
 | ------------------ | ------------------------------------------------------------------ |
@@ -91,7 +91,9 @@ For a new stack, I ask:
 
 If I can answer those seven questions, I can usually port the loop cleanly.
 
-## Success state
+If your destination stack is a monorepo, the concrete homes might look like `apps/web/playwright.config.ts` for the browser loop and `test/fixtures/users.yml` for deterministic seeded users. Different filenames, same responsibilities. That is the level to port.
+
+## How You Know the Translation Worked
 
 You have successfully translated the loop when:
 

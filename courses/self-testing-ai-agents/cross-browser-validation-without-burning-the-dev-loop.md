@@ -1,7 +1,7 @@
 ---
 title: Cross-Browser Validation Without Burning the Dev Loop
 description: Chromium stays the fast default. This appendix shows where Firefox and WebKit belong, and how to add them without making every pull request miserable.
-modified: 2026-04-09
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -42,40 +42,45 @@ That is the balance I have seen teams actually maintain.
 
 ## The Playwright projects that split the work
 
-Playwright projects are the mechanism that makes "Chromium on every edit, Firefox and WebKit on a smoke subset" actually work. Each project is a named configuration block inside `playwright.config.ts` that can point at a different browser, a different testMatch, and a different set of options. Shelf's split looks like this:
+Playwright projects are the mechanism that makes "Chromium on every edit, Firefox and WebKit on a smoke subset" actually work. Each project is a named configuration block inside `playwright.config.ts` that can point at a different browser, a different testMatch, and a different set of options. Shelf's split in `playwright.config.ts` is:
 
 ```ts
-// playwright.config.ts (trimmed)
-import { defineConfig, devices } from '@playwright/test';
-
-export default defineConfig({
-  testDir: 'tests/end-to-end',
-  projects: [
-    {
-      name: 'public',
-      testMatch: /(smoke|visual)\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
+projects: [
+  {
+    name: 'setup',
+    testMatch: /authentication\.setup\.ts/,
+  },
+  {
+    name: 'public',
+    testMatch: /(smoke|visual|playground)\.spec\.ts/,
+    use: {
+      ...devices['Desktop Chrome'],
     },
-    {
-      name: 'authenticated',
-      testMatch: /(rate-book|accessibility|search|visual-authenticated|performance)\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.authentication/user.json' },
-      dependencies: ['setup'],
+  },
+  {
+    name: 'authenticated',
+    testMatch: /(rate-book|accessibility|search|visual-authenticated|performance)\.spec\.ts/,
+    use: {
+      ...devices['Desktop Chrome'],
+      storageState: storageStatePath,
     },
-    // Cross-browser smoke projects. Skipped by default; run via
-    // `npm run test:e2e:cross-browser`.
-    {
-      name: 'firefox-smoke',
-      testMatch: /smoke\.spec\.ts/,
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit-smoke',
-      testMatch: /smoke\.spec\.ts/,
-      use: { ...devices['Desktop Safari'] },
-    },
-  ],
-});
+    dependencies: ['setup'],
+  },
+  // Cross-browser smoke projects. They run only the `smoke.spec.ts` file
+  // against Firefox and WebKit. Skip them by default — invoke via
+  // `npm run test:e2e:cross-browser` when you specifically want the
+  // expanded matrix.
+  {
+    name: 'firefox-smoke',
+    testMatch: /smoke\.spec\.ts/,
+    use: { ...devices['Desktop Firefox'] },
+  },
+  {
+    name: 'webkit-smoke',
+    testMatch: /smoke\.spec\.ts/,
+    use: { ...devices['Desktop Safari'] },
+  },
+];
 ```
 
 Four projects. `public` and `authenticated` are the default Chromium loop that runs on every edit. `firefox-smoke` and `webkit-smoke` only match the `smoke.spec.ts` file, and they only run when you ask for them explicitly. The default `npm run test:e2e` script pins `--project=setup --project=public --project=authenticated` so Firefox and WebKit do not sneak into the fast loop:
@@ -162,7 +167,7 @@ When Firefox fails and Chromium passes, the agent should not need a detective no
   unless you can point to a known infrastructure issue.
 ```
 
-## Success state
+## How You Know the Split Is Healthy
 
 You have a useful cross-browser loop when:
 

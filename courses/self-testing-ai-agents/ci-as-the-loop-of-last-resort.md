@@ -1,7 +1,7 @@
 ---
 title: CI as the Loop of Last Resort
 description: By the time CI fires, the agent should have caught 95% of mistakes locally. CI is what catches the last 5% plus the environment-specific ones you can't catch locally.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -18,6 +18,8 @@ That shift matters because it changes what you put _in_ CI. If CI is where tests
 One scope note before we go further: green CI is still not the end of the story. [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md) picks up on what happens after merge or deploy-preview. The appendix builds out the broader nightly and cross-browser loops in more detail.
 
 Shelf's workflows use `npm`, `actions/setup-node@v4`, and cache both `~/.npm` and `~/.cache/ms-playwright`. That's the concrete reference point as you read the rest of this lesson.
+
+The concrete files matter here too. Shelf's daily gate lives at `.github/workflows/main.yml`. The slow cadence lives at `.github/workflows/nightly.yml`. The end-to-end job writes `DATABASE_URL=file:./tmp/ci.db`, creates `tmp/`, runs `npm run test:e2e`, and on failure uploads the output from `npm run dossier`. The static layer inside CI is the same named surface you already have locally: `npm run lint`, `npm run typecheck`, and `npm run knip`.
 
 ## What CI uniquely catches
 
@@ -64,7 +66,7 @@ On a nightly schedule:
 
 On a connected GitHub repository, you can add merge-to-main deployment and post-deploy smoke checks later. [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md) covers that core loop. The appendix lessons turn the nightly and cross-browser placeholders into fuller patterns once the one-day workshop flow is done.
 
-That's the whole shape Shelf ships: three jobs in the main workflow, three placeholder jobs in the nightly workflow, and no deploy workflow yet. Each is boring. The power is in the composition.
+That's the whole shape Shelf ships: three jobs in `.github/workflows/main.yml`, three placeholder jobs in `.github/workflows/nightly.yml`, and no deploy workflow yet. Each is boring. The power is in the composition.
 
 ## Parallelism and caching, the two knobs that matter
 

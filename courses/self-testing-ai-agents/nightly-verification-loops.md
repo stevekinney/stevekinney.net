@@ -1,7 +1,7 @@
 ---
 title: Nightly Verification Loops
 description: Some checks are too slow, too broad, or too drift-sensitive for the fast loop. This appendix shows how to schedule them without turning them into ignored noise.
-modified: 2026-04-10
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -130,7 +130,7 @@ That can mean:
 
 The nightly loop finds the drift. The daily loop fixes it. If those two loops are not connected, the nightly run becomes background wallpaper.
 
-## Success state
+## How You Know Nightly Is Pulling Its Weight
 
 You have a useful nightly loop when:
 

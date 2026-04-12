@@ -1,7 +1,7 @@
 ---
 title: The Static Layer as Underlayment
 description: Lint, types, dead code, hooks, secret scanning—the cheap stuff that should be running underneath everything. Why it lives at the end of the day.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -22,6 +22,8 @@ That's why this lesson is here. Not as a grab bag, but as the _answers_ to the g
 Think of static checks as underlayment. You put them down once, they run under everything else, and they catch a specific class of mistake before any of the more expensive loops fire. Lint catches bad patterns at the moment of typing. Types catch shape mismatches at the moment of editing. Dead code detection catches orphans at the moment of imports. Hooks catch mistakes at the moment of commit. Secret scanning catches credentials at the moment of push.
 
 Each of these runs in milliseconds to seconds. None of them require a browser. None of them require a database. They are the _cheapest_ possible feedback loop, which is why they should be running continuously in the background and why the agent should be wired to trip them constantly.
+
+In Shelf, that layer is not abstract. `eslint.config.js` carries the custom `no-restricted-syntax` rules, `tsconfig.json` carries the strict TypeScript flags, `knip.json` tells dead-code detection what counts as reachable, `lefthook.yml` wires `pre-commit` and `pre-push`, `.gitleaks.toml` defines the allowlist, and `scripts/run-gitleaks-staged.ts` is the wrapper that turns the staged index into a real directory before Gitleaks scans it. The named commands the agent has to run are just as concrete: `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test`, and `npm run pre-push`. If you want the extra Claude-specific loop on top, the lightweight version is `npm run lint -- --quiet` after each edit.
 
 > [!NOTE]
 > In the local Shelf repository for this workshop, `npm` is the source of truth for verification commands. Some lesson snippets use `bun` for package installation because that's my default elsewhere. Match the repository you are actually in. The real requirement is that the repo exposes stable, named scripts and that the agent is told to run them.

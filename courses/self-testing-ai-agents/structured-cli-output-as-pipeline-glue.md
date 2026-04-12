@@ -1,7 +1,7 @@
 ---
 title: Structured CLI Output as Pipeline Glue
 description: When your scripts need the agent's judgment in a shape they can parse, a JSON schema turns "ask an LLM" into a pipeline step.
-modified: 2026-04-10
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
@@ -11,7 +11,7 @@ This lesson is the other direction. Your _scripts_ call the agent and get typed 
 
 ## The mechanics
 
-The primary tool is [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) in print mode with a JSON schema constraint. The invocation looks like this:
+The primary tool is [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) in print mode with a JSON schema constraint. The invocation is:
 
 ```sh
 SCHEMA=$(jq -c . schema.json)

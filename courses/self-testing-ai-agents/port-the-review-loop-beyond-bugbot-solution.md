@@ -1,7 +1,7 @@
 ---
 title: 'Port the Review Loop Beyond Bugbot: Solution'
 description: Walkthrough of the review-loop playbook—blocking rules, noise categories, the rule of three, and what it takes to make the process survive a tool swap.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
@@ -51,6 +51,17 @@ You don't need all three. You need _one_ that works. The test is: if Bugbot disa
 ### The instruction surface
 
 Whatever tool you pick, it needs an instruction file in the repository. Not in a SaaS dashboard. Not in a team wiki. In the repo, checked in, versioned, reviewable. The whole point of this lab is that the review policy survives a tool change. If the policy lives in Bugbot's settings page, it doesn't survive anything.
+
+One perfectly good minimal surface is a tiny reviewer prompt checked into the repo:
+
+```markdown
+# Secondary reviewer instructions
+
+- Treat auth, user scoping, and banned Playwright patterns as blocking.
+- Ignore generated artifacts, lockfiles, snapshot PNGs, and HAR fixtures.
+- If you see the same issue category for the third pull request in a row,
+  tell the author to promote it into `CLAUDE.md`, lint, or tests.
+```
 
 The instruction file should tell the reviewer the same things the playbook tells a human:
 

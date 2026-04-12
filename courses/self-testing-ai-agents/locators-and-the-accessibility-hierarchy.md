@@ -1,7 +1,7 @@
 ---
 title: Locators and the Accessibility Hierarchy
 description: The single most important habit in a Playwright suite an agent will maintain—locator discipline, ordered by what survives a refactor.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -32,6 +32,8 @@ This is the single best argument for locator discipline: **the refactor-proof te
 
 But, do not overread that claim. A good `getByRole` suite gives you upstream pressure toward accessible markup. It does _not_ give you a dedicated accessibility gate. We make that distinction explicit in [Accessibility as a Quality Gate](accessibility-as-a-quality-gate.md), because "probably accessible" is not a quality bar.
 
+If you want reps instead of theory, Shelf ships a dedicated playground at `src/routes/playground/+page.svelte`, and the companion lab has you write the exercises in `tests/end-to-end/playground.spec.ts`. Run the app locally while you work, and keep `npm run typecheck` and `npm run build` nearby too. The playground intentionally includes a few accessibility warnings so you can see where the locator hierarchy stops helping and why the fallback section exists.
+
 ## What the agent does by default, and why it's wrong
 
 Left to its own devices, an agent writing a Playwright test does this:
@@ -44,7 +46,7 @@ I get why. The agent looked at the rendered DOM, saw a button inside a book card
 
 The test wasn't flaky. The locator was coupled to an implementation detail that had no business being part of a test.
 
-The version the agent _should_ write looks like this:
+The version the agent _should_ write is closer to this:
 
 ```ts
 await page
@@ -103,11 +105,13 @@ That's nine lines. It's the most valuable nine lines in your instructions file f
 
 ## Wiring it into the loop
 
-Two pieces of feedback hook into locator discipline directly, and you'll see both later today.
+Two pieces of feedback hook into locator discipline directly, and both show up again later today.
 
 **ESLint rule for `page.locator`.** Later, in [Lint and Types as Guardrails](lint-and-types-as-guardrails.md), we're going to set up an ESLint rule that warns (or errors) whenever `page.locator` appears in a file under `tests/end-to-end/`. The agent gets a red squiggle the moment it reaches for the escape hatch, which is the fastest possible feedback.
 
 **Playwright's built-in accessibility debugging.** When a `getByRole` query fails, Playwright's error message prints the accessibility tree of the page at the point of failure. That tree is gold for the agent—it shows exactly what roles and names _are_ available, so the agent can correct its query without guessing. We'll lean on this when we talk about failure dossiers.
+
+One corollary: dynamic content is still not a license to reach for `page.waitForTimeout`. If a panel expands, a list loads, or a dialog opens, wait on the user-visible signal you expect to change and keep the locator scoped to that element.
 
 ## The one thing to remember
 

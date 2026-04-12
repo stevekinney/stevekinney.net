@@ -1,7 +1,7 @@
 ---
 title: Accessibility as a Quality Gate
 description: Semantic locators are a great start, but they are not an accessibility strategy. This is the layer that turns "probably accessible" into a real gate.
-modified: 2026-04-09
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -72,6 +72,8 @@ A few things worth understanding about that block before you start writing your 
 
 That is the entire shape. Three lines of setup, one assertion. Shelf ships exactly this pattern in `tests/end-to-end/accessibility.spec.ts`, scoped to its highest-signal authenticated routes; once you understand the four pieces above you can read that file as a real-shape implementation rather than a mystery.
 
+In the starter, this check is not a sidecar script. `tests/end-to-end/accessibility.spec.ts` rides the normal `npm run test:e2e` loop, which is the right end state once you trust the scan enough to make it part of the main gate.
+
 ## What the automated gate cannot prove
 
 Accessibility has a manual layer that you cannot wish away. The [W3C keyboard accessibility guidance](https://www.w3.org/WAI/WCAG22/Understanding/keyboard-accessible.html) is still the right bar here: all functionality must be operable from a keyboard, and focus cannot get trapped in weird places.
@@ -139,7 +141,7 @@ That's it. No speeches about how accessibility is important. The gate already sa
   use roles and labels. That is upstream pressure, not proof.
 ```
 
-## Success state
+## How You Know the Gate Is Working
 
 You know this loop is in place when:
 

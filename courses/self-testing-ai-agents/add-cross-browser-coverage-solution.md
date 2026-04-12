@@ -1,7 +1,7 @@
 ---
 title: 'Add Cross-Browser Coverage: Solution'
 description: Walkthrough of the shipped Playwright projects, the named cross-browser command, and the nightly job that runs the expanded matrix without slowing down the fast loop.
-modified: 2026-04-11
+modified: 2026-04-12
 date: 2026-04-10
 ---
 
@@ -20,7 +20,7 @@ Shelf defines five projects. The first three are the daily loop:
 },
 {
   name: 'public',
-  testMatch: /(smoke|visual)\.spec\.ts/,
+  testMatch: /(smoke|visual|playground)\.spec\.ts/,
   use: { ...devices['Desktop Chrome'] },
 },
 {
@@ -36,9 +36,13 @@ Shelf defines five projects. The first three are the daily loop:
 
 These are what `npm run test:e2e` runs. Chromium only. Fast.
 
-The last two are the cross-browser smoke projects:
+In that same `playwright.config.ts` file, the last two are the cross-browser smoke projects:
 
 ```ts
+// Cross-browser smoke projects. They run only the `smoke.spec.ts` file
+// against Firefox and WebKit. Skip them by default — invoke via
+// `npm run test:e2e:cross-browser` when you specifically want the
+// expanded matrix.
 {
   name: 'firefox-smoke',
   testMatch: /smoke\.spec\.ts/,
@@ -81,10 +85,27 @@ cross-browser-smoke:
     - uses: actions/setup-node@v4
       with:
         node-version: 22
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.npm
+          ~/.cache/ms-playwright
+        key: ${{ runner.os }}-deps-${{ hashFiles('package-lock.json') }}-playwright-${{ hashFiles('playwright.config.ts') }}
     - name: Install dependencies
       run: npm ci --ignore-scripts
     - name: Install Playwright browsers
       run: npx playwright install --with-deps firefox webkit
+    - name: Create .env for preview server
+      run: |
+        cat > .env <<'EOF'
+        DATABASE_URL=file:./tmp/ci.db
+        ORIGIN=http://127.0.0.1:4173
+        BETTER_AUTH_SECRET=ci-test-secret-ci-test-secret-ci-test-secret-32chars
+        ENABLE_TEST_SEED=true
+        OPEN_LIBRARY_BASE_URL=https://openlibrary.org
+        EOF
+        mkdir -p tmp
     - name: Run cross-browser smoke tests
       run: npm run test:e2e:cross-browser
     - name: Upload Playwright report
@@ -99,6 +120,8 @@ cross-browser-smoke:
 The `npx playwright install --with-deps firefox webkit` line matters. Playwright doesn't install all browsers by default—it installs Chromium. On a fresh CI runner (or a fresh local machine), Firefox and WebKit aren't there until you ask for them. This is one of those things that works on your machine because you ran it once six months ago and then fails mysteriously on CI because nobody remembered the install step.
 
 The artifact upload on failure gives you the Playwright HTML report with traces and screenshots. The `retention-days: 7` keeps the storage bounded—nightly artifacts pile up fast if you don't cap them.
+
+The temporary `.env` creation step is the other easy one to forget. Shelf's preview server expects the same small cluster of environment variables the local test loop uses; without them, the CI job fails before Firefox or WebKit ever launches.
 
 ## What you still need to run
 

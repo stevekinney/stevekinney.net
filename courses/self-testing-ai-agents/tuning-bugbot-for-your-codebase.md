@@ -1,7 +1,7 @@
 ---
 title: Tuning Bugbot for Your Codebase
 description: How to configure Cursor Bugbot so it finds the real issues and shuts up about the rest.
-modified: 2026-04-10
+modified: 2026-04-12
 date: 2026-04-06
 ---
 
@@ -72,6 +72,8 @@ If nothing is worth flagging, say nothing.
 ```
 
 That file is going to carry most of the weight. The "what to leave alone" section is the one that prevents the bot from commenting on seed data and fixture files that are _supposed_ to be sketchy. The "tone" section is where you kill the reflexive niceties that make review bot comments feel like noise.
+
+In Shelf, the local backstop for the planted-bug lab is still boring on purpose: `npm run typecheck`, `npm run lint`, and `npm run test` all stay green even when the permission bug is present. That is why the planted diff matters. The review loop is catching the class of bug the tests missed, whether the bad check was written as a hand-rolled `session.isAdmin` branch or as a "close enough" replacement for `requireAdministrator(locals.user)`.
 
 ## What the tone section buys you
 
