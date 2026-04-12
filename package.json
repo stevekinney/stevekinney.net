@@ -31,7 +31,7 @@
     "storybook": "turbo run storybook --filter=@stevekinney/website",
     "build-storybook": "turbo run build-storybook --filter=@stevekinney/website",
     "postinstall": "turbo run sync --filter=@stevekinney/website",
-    "prepare": "husky"
+    "prepare": "node .lefthook/install.mjs"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.3",
@@ -82,11 +82,10 @@
     "globals": "^17.0.0",
     "gray-matter": "^4.0.3",
     "html-entities": "^2.6.0",
-    "husky": "^9.1.7",
     "isomorphic-dompurify": "^2.35.0",
     "js-yaml": "^3.14.2",
     "jsdom": "^27.4.0",
-    "lint-staged": "^16.2.7",
+    "lefthook": "^1.13.6",
     "mdast-util-from-markdown": "^2.0.2",
     "mdast-util-to-markdown": "^2.1.2",
     "mdsvex": "^0.12.6",
@@ -143,10 +142,6 @@
     "@img/sharp-linux-x64": "0.34.5",
     "@img/sharp-libvips-darwin-arm64": "1.2.4",
     "@img/sharp-darwin-arm64": "0.34.5"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,svelte,css,md,html,json}": "prettier --write",
-    "*.{js,jsx,ts,tsx,svelte}": "eslint --fix"
   },
   "packageManager": "bun@1.3.2",
   "overrides": {

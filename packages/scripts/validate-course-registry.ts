@@ -9,7 +9,7 @@
  * directory on disk, is the entire chain intact?"
  *
  * Run by `bun content:validate` (chained from packages/scripts/package.json)
- * and unconditionally by `.husky/pre-commit`.
+ * and unconditionally by the repository's pre-commit hook.
  */
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';

@@ -1,0 +1,23 @@
+pre-commit:
+  commands:
+    content-dates-writing:
+      glob: 'writing/*.md'
+      run: bun run --cwd packages/scripts update-content-dates.ts {staged_files}
+      stage_fixed: true
+    content-dates-courses:
+      glob: 'courses/**/*.md'
+      run: bun run --cwd packages/scripts update-content-dates.ts {staged_files}
+      stage_fixed: true
+    audit-course-frontmatter:
+      glob: 'courses/**/*.md'
+      run: bun run --cwd packages/scripts audit-courses-frontmatter.ts {staged_files}
+    repository-guards:
+      run: ./.lefthook/pre-commit/repository-guards.sh
+    staged-code:
+      glob: '*.{js,jsx,ts,tsx,svelte}'
+      run: bunx eslint --fix --max-warnings=0 {staged_files} && bunx prettier --write {staged_files}
+      stage_fixed: true
+    staged-format:
+      glob: '*.{css,md,html,json}'
+      run: bunx prettier --write {staged_files}
+      stage_fixed: true

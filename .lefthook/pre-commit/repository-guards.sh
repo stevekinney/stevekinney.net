@@ -2,43 +2,22 @@
 set -e
 
 # Collect staged files
-STAGED_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB)"
+STAGED_FILES="$(git diff --cached --name-only)"
 if [ -z "$STAGED_FILES" ]; then
-  echo "No staged files; skipping pre-commit checks."
+  echo "No staged files; skipping repository guards."
   exit 0
-fi
-
-# Update content dates (modified → today, normalize formats)
-# Use set/while-read to safely handle filenames with spaces
-set --
-while IFS= read -r file; do
-  [ -n "$file" ] && set -- "$@" "$file"
-done <<EOF
-$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'writing/*.md' 'courses/**/*.md')
-EOF
-if [ $# -gt 0 ]; then
-  echo "Updating content dates..."
-  bun run --cwd packages/scripts update-content-dates.ts "$@"
-  git add "$@"
-fi
-
-# Audit frontmatter for staged course files
-set --
-while IFS= read -r file; do
-  [ -n "$file" ] && set -- "$@" "$file"
-done <<EOF
-$(git diff --cached --name-only --diff-filter=ACMRTUXB -- 'courses/**/*.md')
-EOF
-if [ $# -gt 0 ]; then
-  echo "Auditing frontmatter (title/description) for staged course files..."
-  bun run --cwd packages/scripts audit-courses-frontmatter.ts "$@"
-  git add "$@"
 fi
 
 # Sync images if any image files were added or modified
 IMAGE_FILES="$(git diff --cached --name-only --diff-filter=ACMRTUXB -- '*.png' '*.jpg' '*.jpeg' '*.gif' '*.svg' '*.webp' '*.avif' '*.mp4' '*.webm' | grep -E '^(writing|courses|content)/' || true)"
 if [ -n "$IMAGE_FILES" ]; then
-  echo "New or modified images detected — syncing to Vercel Blob..."
+  if ! git diff --quiet -- image-manifest.json; then
+    echo "image-manifest.json has unstaged changes."
+    echo "Stage or discard them before committing images."
+    exit 1
+  fi
+
+  echo "New or modified images detected - syncing to Vercel Blob..."
   bun images:sync
   git add image-manifest.json
 fi
@@ -53,11 +32,9 @@ fi
 # Validate the full course registration chain on every commit, regardless of
 # what's staged. The previous staged-file gating is what allowed the
 # self-testing-ai-agents course to land with no README, no package.json, and
-# no website workspace dep — every check was opt-in by file pattern, so a
+# no website workspace dep - every check was opt-in by file pattern, so a
 # directory with none of the triggering files slipped past silently. This
 # unconditional run guarantees that every courses/<slug>/ directory has its
 # full registration chain intact before any commit lands.
 echo "Validating course registry..."
 bun run packages/scripts/validate-course-registry.ts
-
-bunx lint-staged
