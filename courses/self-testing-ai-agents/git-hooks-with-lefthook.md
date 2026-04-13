@@ -167,7 +167,7 @@ import fs from 'node:fs';
 const input = JSON.parse(fs.readFileSync(0, 'utf8'));
 const command = input.tool_input?.command ?? '';
 
-if (!/(^|\\s)--no-verify(\\s|$)/.test(command)) {
+if (!/(^|\s)--no-verify(\s|$)/.test(command)) {
   process.exit(0);
 }
 
@@ -181,6 +181,8 @@ process.stdout.write(
     },
   }),
 );
+
+process.exit(0);
 ```
 
 Because the hook sees the whole command string, this catches `--no-verify` even when it is not the first flag.
@@ -243,7 +245,7 @@ import fs from 'node:fs';
 const input = JSON.parse(fs.readFileSync(0, 'utf8'));
 const command = input.tool_input?.command ?? '';
 
-if (!/(^|\\s)--no-verify(\\s|$)/.test(command)) {
+if (!/(^|\s)--no-verify(\s|$)/.test(command)) {
   process.exit(0);
 }
 
@@ -256,6 +258,8 @@ process.stdout.write(
     },
   }),
 );
+
+process.exit(0);
 ```
 
 If you want a broader Codex policy, use a `.rules` file to forbid `git commit` outside the sandbox entirely and reserve hooks for the more precise "spot this flag anywhere in the command" case.

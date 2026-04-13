@@ -53,6 +53,10 @@ title = "Configuring Playwright"
 href = "configuring-playwright.md"
 
 [[section.item]]
+title = "Playwright `webServer` Without Surprises"
+href = "playwright-web-server-without-surprises.md"
+
+[[section.item]]
 title = "Accessibility as a Quality Gate"
 href = "accessibility-as-a-quality-gate.md"
 
@@ -71,6 +75,10 @@ href = "the-waiting-story.md"
 [[section.item]]
 title = "Fixtures: Worker-Scoped, Test-Scoped, and the Trap Between Them"
 href = "fixtures-worker-scoped-test-scoped.md"
+
+[[section.item]]
+title = "Where Fixtures Actually Help"
+href = "where-fixtures-actually-help.md"
 
 [[section.item.related]]
 title = "Lab: Refactor Shelf's Fixtures"
@@ -107,6 +115,10 @@ href = "approaches-to-har-recording.md"
 [[section.item]]
 title = "Route-Based Network Interception"
 href = "route-based-network-interception.md"
+
+[[section.item]]
+title = "Mocking Browser APIs"
+href = "mocking-browser-apis.md"
 
 [[section.item]]
 title = "Deterministic State and Test Isolation"
@@ -228,6 +240,10 @@ title = "Flaky-Test Triage: When Retries Are Lying to You"
 href = "flaky-test-triage.md"
 
 [[section.item]]
+title = "The Playwright Trace Viewer"
+href = "playwright-trace-viewer.md"
+
+[[section.item]]
 title = "Reading a Trace"
 href = "reading-a-trace.md"
 
@@ -276,6 +292,10 @@ href = "dead-code-detection.md"
 [[section.item]]
 title = "Secret Scanning with Gitleaks"
 href = "secret-scanning-with-gitleaks.md"
+
+[[section.item]]
+title = "Making It Hard to Cheat the Guardrails"
+href = "making-it-hard-to-cheat-the-guardrails.md"
 
 [[section.item.related]]
 title = "Lab: Wire the Static Layer into Shelf"
