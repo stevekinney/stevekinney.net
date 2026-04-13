@@ -7,7 +7,7 @@ date: 2026-04-06
 
 Short lesson. Important lesson.
 
-I mentioned in the [CLAUDE.md rewrite lab](lab-rewrite-the-bad-claude-md.md) that Shelf ships with a `sample-config.json` containing a fake API key. That's on purpose. It's bait. The bait is there because an agent will, given half a chance, copy a "real example" secret from one file to another file that's about to be committed, and I want us to see the feedback loop fire on a fake before you ever deploy to a real project.
+I mentioned in the [CLAUDE.md rewrite lab](lab-rewrite-the-bad-claude-md.md) that the completed static-layer version of Shelf uses a `sample-config.json` containing a fake API key. That's on purpose. It's bait. The bait is there because an agent will, given half a chance, copy a "real example" secret from one file to another file that's about to be committed, and I want us to see the feedback loop fire on a fake before you ever deploy to a real project.
 
 This is not hypothetical. I have personally watched Claude Code, Cursor, and Codex all commit credentials in the last year. Every time, the fix was the same: install gitleaks, configure the hook, and the mistake becomes impossible to repeat. Every time, the reason it happened in the first place was that secret scanning wasn't installed.
 
@@ -20,11 +20,11 @@ Install it now. Before the agent commits something you actually have to rotate.
 It has two practical modes in this workshop:
 
 - **Full repository or history scan.** Current Gitleaks releases expose this via commands like `gitleaks git ...`, and older tutorials often show `gitleaks detect ...`. Run the full scan once when you install it, and again in CI as a safety net.
-- **Staged-content scan.** In the current Shelf starter, this is a repo-local helper script that snapshots the exact git index and runs `gitleaks dir` on that temporary directory. Fast. Use this in the pre-commit hook.
+- **Staged-content scan.** In the completed static-layer version of Shelf, this is a repo-local helper script that snapshots the exact git index and runs `gitleaks dir` on that temporary directory. Fast. Use this in the pre-commit hook.
 
 The combination catches both "the agent is about to commit a secret" and "a secret has already snuck in through some other path."
 
-In Shelf, this slot sits inside a wider static layer. The same lab that wires gitleaks also has you inspect `eslint.config.js`, `tsconfig.json`, `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts`, then run `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test`, `npm run pre-push`, and the lightweight `npm run lint -- --quiet` loop. Secret scanning is one layer in that stack, not a side quest.
+In Shelf, this slot sits inside a wider static layer. The same lab that wires gitleaks also has you create or extend `eslint.config.js`, `tsconfig.json`, `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts`, then run `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test`, `npm run pre-push`, and the lightweight `npm run lint -- --quiet` loop. Secret scanning is one layer in that stack, not a side quest.
 
 ## Installing Gitleaks
 

@@ -7,16 +7,16 @@ date: 2026-04-06
 
 Longest lab of the day. Multi-part. Pace yourself—each part is a self-contained check, and you can stop between parts if you need to.
 
-> [!NOTE] In the starter
-> Shelf already ships the complete static layer: `eslint.config.js` with the four `no-restricted-syntax` rules, `tsconfig.json` with every strict flag, `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts`. Every part below is a walkthrough — open the shipped file, read the rule, understand why it's worded the way it is, then run the planted-bad-input check to prove it fires. You're not writing configuration from scratch; you're learning to read it.
+> [!NOTE] In the current starter
+> Shelf now starts smaller on purpose. The day-one repo already has ESLint, TypeScript, and the minimal Playwright loop, but it does **not** ship `knip.json`, `lefthook.yml`, `.gitleaks.toml`, or `scripts/run-gitleaks-staged.ts`. This lab is where you add those files and then verify each one against a planted bad input.
 
 ## The task
 
-Walk the complete static layer Shelf ships and verify every piece fires on a planted bad input. For each part: open the shipped file, read the rule, then trigger the probe and watch it catch.
+Build out the full static layer for Shelf and verify every piece fires on a planted bad input. For each part: add or extend the file, read back over the rule you just created, then trigger the probe and watch it catch.
 
 ## What you can verify locally
 
-Everything in Parts 1 through 5 is local and mechanical: open `eslint.config.js`, `tsconfig.json`, `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts`; run `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test`, and `npm run pre-push`; plant one bad input at a time; then watch the right layer fail. Part 6 is local too if you are updating your own `CLAUDE.md` or Codex instructions file.
+Everything in Parts 1 through 5 is local and mechanical: extend `eslint.config.js` and `tsconfig.json`, create `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts`, run `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test`, and `npm run pre-push`, plant one bad input at a time, then watch the right layer fail. Part 6 is local too if you are updating your own `CLAUDE.md` or Codex instructions file.
 
 ## What remains manual or external
 
@@ -33,7 +33,7 @@ Open `eslint.config.js`. Find the `no-restricted-syntax` block. It bans four pat
 
 Each rule has both a `selector` and a `message`. The message strings are load-bearing — they name the file, the section, and the fix. That's the difference between a lint error the agent ignores and a lint error the agent reads and acts on.
 
-The lesson's **Writing a `no-restricted-syntax` rule** section in [Lint and Types as Guardrails](lint-and-types-as-guardrails.md) walks each of these four AST selectors in English. Read it alongside the shipped file so you understand _why_ the `body.userId` rule uses a nested `MemberExpression` match instead of just a property name, and why the `networkidle` rule uses the descendant combinator.
+The lesson's **Writing a `no-restricted-syntax` rule** section in [Lint and Types as Guardrails](lint-and-types-as-guardrails.md) walks each of these four AST selectors in English. Read it alongside the file you build here so you understand _why_ the `body.userId` rule uses a nested `MemberExpression` match instead of just a property name, and why the `networkidle` rule uses the descendant combinator.
 
 > [!NOTE]
 > In the Shelf workshop repository, `npm` is the source of truth. If your own project uses Bun, translate the commands back to `bun` as appropriate. The important part is that the checks are real, named scripts the agent is required to run.
@@ -59,7 +59,7 @@ Open `tsconfig.json`. Find every strict flag from the lesson — `strict: true`,
 
 ## Part 3: Dead code detection
 
-Open `knip.json`. Read the `entry` and `project` globs — they tell knip which files are roots (SvelteKit pages, tests, scripts) and which files are in-scope for the unused-exports analysis. Then run `npm run knip` to see it report zero findings against the current starter.
+Create `knip.json`. Set the `entry` and `project` globs so knip knows which files are roots (SvelteKit pages, tests, scripts) and which files are in-scope for the unused-exports analysis. Then run `npm run knip` to see it report zero findings against the current repo.
 
 > [!NOTE]
 > In this local repository, the `knip` script sets `DATABASE_URL=file:./tmp/knip.db` before invoking knip. That keeps `drizzle.config.ts` loadable during analysis without depending on a developer-specific `.env`.
@@ -74,7 +74,7 @@ Open `knip.json`. Read the `entry` and `project` globs — they tell knip which 
 
 ## Part 4: Lefthook
 
-Open `lefthook.yml`. Find the `pre-commit` and `pre-push` blocks. Notice pre-commit runs fast checks on `{staged_files}` with `parallel: true` and `stage_fixed: true`, while pre-push runs the slightly-slower `npm run pre-push` script (which calls typecheck, knip, and unit tests) against the whole tree. Read the [Git Hooks with Lefthook](git-hooks-with-lefthook.md) lesson if you want the reasoning behind the split.
+Create `lefthook.yml`. Add `pre-commit` and `pre-push` blocks. Pre-commit should run fast checks on `{staged_files}` with `parallel: true` and `stage_fixed: true`, while pre-push should run the slightly-slower `npm run pre-push` script (which calls typecheck, knip, and unit tests) against the whole tree. Read the [Git Hooks with Lefthook](git-hooks-with-lefthook.md) lesson if you want the reasoning behind the split.
 
 ### Acceptance for Part 4
 
@@ -86,7 +86,7 @@ Open `lefthook.yml`. Find the `pre-commit` and `pre-push` blocks. Notice pre-com
 
 ## Part 5: Secret scanning
 
-Open `lefthook.yml` again and find the `secrets` command under `pre-commit` — it shells out to `npx tsx scripts/run-gitleaks-staged.ts`. Then open that script and read how it materializes the staged index into a tmp directory before running `gitleaks dir`. Finally, open `.gitleaks.toml` and notice which paths are allowlisted (`sample-config.json` and `tests/fixtures/`) and why — they're deliberate bait that would otherwise trip the scanner.
+Add a `secrets` command under `pre-commit` in `lefthook.yml` so it shells out to `npx tsx scripts/run-gitleaks-staged.ts`. Then read back over that script and make sure it materializes the staged index into a tmp directory before running `gitleaks dir`. Finally, create `.gitleaks.toml` and notice which paths you allowlist (`sample-config.json` and `tests/fixtures/`) and why — they're deliberate bait that would otherwise trip the scanner.
 
 > [!NOTE]
 > With the current Gitleaks release used in this workshop, `gitleaks git --staged` was not a reliable pre-commit verifier for newly added files. The local Shelf repository fixes that by materializing the exact git index into a temporary directory and running `gitleaks dir` there from `scripts/run-gitleaks-staged.ts`. That wrapper is what the lefthook `secrets` command shells out to.
@@ -105,7 +105,7 @@ Open `lefthook.yml` again and find the `secrets` command under `pre-commit` — 
 Add sections to `CLAUDE.md` that reflect every layer you wired up. At minimum:
 
 - A "static checks" section listing `npm run lint`, `npm run typecheck`, and `npm run knip` as mandatory pre-done commands.
-- In the local Shelf repository, those commands are `npm run lint`, `npm run typecheck`, and `npm run knip`.
+- In the day-one Shelf starter, "done" only means `npm run typecheck`, `npm run lint`, and `npm run test`. This lab is where you extend that definition to include `npm run knip` and `npm run pre-push`.
 - Rules about `@ts-expect-error`, `eslint-disable`, and `--no-verify`.
 - A secrets section per the gitleaks lesson.
 - A reference back to the Playwright rules ([locators](locators-and-the-accessibility-hierarchy.md), [waiting](the-waiting-story.md), [auth](storage-state-authentication.md)) so the custom lint rules are connected to the same source of truth.

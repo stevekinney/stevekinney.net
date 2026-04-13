@@ -1,13 +1,13 @@
 ---
 title: 'Add Post-Deploy Smoke Checks to Shelf: Solution'
-description: Walkthrough of the shipped smoke test, dedicated config, playbook, and the gap between local preview and a real hosted target.
+description: Walkthrough of the smoke test, dedicated config, playbook, and the gap between local preview and a real hosted target.
 modified: 2026-04-12
 date: 2026-04-10
 ---
 
-The smoke test is the smallest test in the repository. That's the point. Everything else in the suite proves the application _works_. This one proves the application _shipped_.
+The smoke test is the smallest test in the repository. That's the point. Everything else in the suite proves the application _works_. This one proves the application _shipped_. The day-one Shelf starter no longer includes it, so this solution is the code you add during the lab.
 
-## What the shipped repo shows
+## What to add
 
 Three files land in Shelf. Let's walk each one.
 

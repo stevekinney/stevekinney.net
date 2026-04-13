@@ -15,16 +15,22 @@ That is enough to turn performance from a vague aspiration into a real feedback 
 > [!NOTE] Prerequisite
 > Complete [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md) first. This lab assumes you are intentionally building the small two-budget version, not a whole performance platform.
 
-> [!NOTE] In the starter
-> Shelf already ships every piece of this lab: a stats build, a budget file, a check script, a runtime spec, and the four `npm run performance:*` commands. This lab is a walkthrough — you're not writing any of it from scratch, you're opening each file, reading it, and understanding why each decision was made. The point is that you could rebuild it from scratch in your own project after this.
+> [!NOTE] In the current starter
+> Shelf no longer ships the performance budget loop on day one. This lab is where you add the stats build, the budget file, the check script, the runtime spec, and the `npm run performance:*` commands.
+
+Install the stats-build dependency first:
+
+```sh
+npm install -D rollup-plugin-visualizer
+```
 
 ## The task
 
-Open the five pieces of Shelf's performance budget loop in order. For each one, answer the question in its section before moving on. When you're done, falsify one threshold and watch the gate break.
+Create the five pieces of Shelf's performance budget loop in order. For each one, answer the question in its section before moving on. When you're done, falsify one threshold and watch the gate break.
 
 ## 1. The stats build — `vite.config.ts`
 
-Open `vite.config.ts` and find the `rollup-plugin-visualizer` import. Notice it's wired behind a `BUNDLE_STATS=1` environment flag, so the normal build stays fast and the stats build is opt-in.
+Open `vite.config.ts` and add the `rollup-plugin-visualizer` import. Wire it behind a `BUNDLE_STATS=1` environment flag so the normal build stays fast and the stats build is opt-in.
 
 When the flag is set, Vite emits two files:
 
@@ -35,7 +41,7 @@ When the flag is set, Vite emits two files:
 
 ## 2. The thresholds — `performance-budgets.json`
 
-Open `performance-budgets.json`. It's eight lines:
+Create `performance-budgets.json`. It's eight lines:
 
 ```json
 {
@@ -55,7 +61,7 @@ That's it. Two build numbers, one runtime number, no schema, no tooling. The num
 
 ## 3. The check script — `scripts/check-performance-budgets.mjs`
 
-Open `scripts/check-performance-budgets.mjs`. It's 88 lines. Walk the four sections:
+Create `scripts/check-performance-budgets.mjs`. It's about 88 lines. Walk the four sections:
 
 - **Lines 12–16: constants.** The `CLIENT_BUNDLE_PREFIX = '_app/immutable'` is the SvelteKit-specific filter — it's what makes the budget "client bundle only" rather than "everything Vite emits."
 - **Lines 18–43: `computeClientBundleSizes`.** This is the whole lesson. Walk `nodeMetas → moduleParts → nodeParts` to sum gzip bytes per output file, filter to client chunks, return `totalClientGzipBytes`, `largestClientChunkBytes`, and `clientEntries`.
@@ -68,18 +74,18 @@ The lesson walks the `nodeMetas` structure in the **The checker script** section
 
 ## 4. The runtime spec — `tests/end-to-end/performance.spec.ts`
 
-Open `tests/end-to-end/performance.spec.ts`. It goes to `/shelf`, reads `performance.getEntriesByType('navigation')[0].domContentLoadedEventEnd` inside the browser context, loads the threshold from `performance-budgets.json`, and asserts the measured value is under it.
+Create `tests/end-to-end/performance.spec.ts`. It goes to `/shelf`, reads `performance.getEntriesByType('navigation')[0].domContentLoadedEventEnd` inside the browser context, loads the threshold from `performance-budgets.json`, and asserts the measured value is under it.
 
 Two things to notice:
 
 - The threshold is read from disk, not hardcoded. Same contract as the build budget — bumping it is a visible commit.
-- The test runs inside the `authenticated` Playwright project, which means it runs against the real build-and-preview flow (via `webServer` in `playwright.config.ts`), not a hot dev server. Dev-server numbers are not the numbers CI would see.
+- If you already completed the storage-state lab, run the spec inside that authenticated Playwright project so it measures the real build-and-preview flow. If your current Shelf copy is still on the minimal public-only starter, either add the authenticated project first or point the runtime check at a public route until the auth loop exists.
 
 **Question:** why measure `domContentLoadedEventEnd` instead of something like `largestContentfulPaint`? (Answer: `domContentLoaded` is cheaper to stabilize because it doesn't depend on image decode or font load. For a budget you want a number that moves only when _your_ code changes, not when an asset pipeline hiccups.)
 
 ## 5. The named commands — `package.json`
 
-Open `package.json` and find the four performance scripts:
+Open `package.json` and add the four performance scripts:
 
 ```json
 {
@@ -109,7 +115,7 @@ If the failure didn't look the way you expected, go back to `scripts/check-perfo
 
 ## Acceptance criteria
 
-You can't copy-paste your way through this one — the code is already there. You're done when you can answer each of these without looking:
+You're done when you can answer each of these without looking:
 
 - [ ] Why is the stats build gated behind `BUNDLE_STATS=1`?
 - [ ] Why do the thresholds live in a JSON file instead of the script?

@@ -29,7 +29,7 @@ That opens the viewer in a browser tab. You can also open traces from the HTML r
 npm run traces:generate
 ```
 
-That command is just the entry point. The real generator script is `scripts/generate-lab-traces.mjs`, and the cleanup pair is `npm run traces:clean` when you want to wipe the generated artifacts and rerun the lab from a clean slate. The generate step runs the three deliberately-broken specs in `tests/end-to-end/labs/broken-traces/` and copies the resulting trace files to `playwright-report/lab-traces/`. Open them one at a time. We'll work through what to look for next.
+That command is just the entry point. In the current course flow, you add the generator helper yourself as `scripts/generate-lab-traces.mjs` (or equivalent), and you can add a `traces:clean` command when you want to wipe the generated artifacts and rerun the lab from a clean slate. The generate step runs the three deliberately-broken specs in `tests/end-to-end/labs/broken-traces/` and copies the resulting trace files to `playwright-report/lab-traces/`. Open them one at a time. We'll work through what to look for next.
 
 ## The four panes and what each one tells you
 
@@ -93,7 +93,7 @@ Now read the four panes, in order.
 
 **Console**: empty. No JavaScript error. This is important — the failure is server-side, not client-side. The redirect happened before any of your app's code ran in the browser.
 
-**Diagnosis**: the test is unauthenticated, and `/shelf` is gated server-side on `locals.user`. Classify it as a config / auth mismatch from the [flaky-test-triage](flaky-test-triage.md) taxonomy. The fix is the project wiring, not the test body — specifically, the `labs-broken-traces` project in `playwright.labs.config.ts` mounts storage state by default, and this one spec opts out via `test.use({ storageState: { cookies: [], origins: [] } })`. The _lesson_ is the failure. The _trace_ is how you get from the failure to "oh, it's the auth."
+**Diagnosis**: the test is unauthenticated, and `/shelf` is gated server-side on `locals.user`. Classify it as a config / auth mismatch from the [flaky-test-triage](flaky-test-triage.md) taxonomy. The fix is the project wiring, not the test body — whichever lab-only config or setup you use to generate these traces should mount storage state by default, and this one spec opts out via `test.use({ storageState: { cookies: [], origins: [] } })`. The _lesson_ is the failure. The _trace_ is how you get from the failure to "oh, it's the auth."
 
 The whole walkthrough took maybe thirty seconds once you know what to look for. That's the skill.
 

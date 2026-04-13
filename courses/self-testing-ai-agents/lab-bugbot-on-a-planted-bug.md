@@ -5,13 +5,13 @@ modified: 2026-04-12
 date: 2026-04-06
 ---
 
-This lab is mostly hosted process, not code authoring. The starter already ships the planted branch and the tuned reviewer config; your job is to run the review loop honestly and document what the hosted part still depends on.
+This lab is mostly hosted process, not code authoring. The current starter no longer ships the tuned reviewer config or the planted branch, so this lab is where you add or recreate those pieces and then run the review loop honestly.
 
 > [!NOTE] Prerequisite
 > Complete [Tuning Bugbot for Your Codebase](tuning-bugbot-for-your-codebase.md) first. This lab assumes you already have a tuned reviewer configuration and are now pressure-testing it on a known bug.
 
-> [!NOTE] In the starter
-> Shelf already ships the baseline admin endpoint, the `planted-bug/admin-feature` branch, and a tuned `.cursor/BUGBOT.md`. This is a walkthrough of the hosted review loop, not a "write the config from scratch" exercise.
+> [!NOTE] In the current starter
+> Shelf still has the baseline admin endpoint, but you now create or restore `.cursor/BUGBOT.md` yourself and create the `planted-bug/admin-feature` branch as part of the lab. This is still mostly a hosted-process exercise, not a long code-authoring one.
 
 ## What you can verify locally
 
@@ -27,7 +27,7 @@ npm run test
 
 Everything interesting after that depends on GitHub plus a live Bugbot installation: opening the pull request, waiting for the hosted reviewer to comment, handing the comment to an agent, and confirming the next push clears the thread. If you do not have a fork and a connected Bugbot install yet, stop after the local verification and record the hosted gap explicitly.
 
-The Shelf starter already ships the baseline admin endpoint and a tuned `.cursor/BUGBOT.md`. Your job in this lab is to run the review loop end to end: fork or push the repo, open a PR from the `planted-bug/admin-feature` branch, wait for Bugbot to comment, hand the comment to Claude Code, and watch the fix land without you explaining the bug.
+The Shelf starter still has the baseline admin endpoint. Your job in this lab is to add the Bugbot config, create the planted-bug branch, fork or push the repo, open a PR from `planted-bug/admin-feature`, wait for Bugbot to comment, hand the comment to Claude Code, and watch the fix land without you explaining the bug.
 
 ## Setup
 
@@ -39,7 +39,7 @@ You'll need:
 
 Install Bugbot on your Shelf fork from the Cursor dashboard and grant it access. Confirm it's active by opening an existing PR—Bugbot should leave a comment within a minute or two.
 
-Open the shipped `.cursor/BUGBOT.md` in the repo root and compare it against the previous lesson's guidance. In the fully hosted version of the lab, commit it directly to `main`. In the local workshop repo, commit it on your current working branch now and merge it into `main` later when the fork exists.
+Create `.cursor/BUGBOT.md` in the repo root from the previous lesson's guidance. In the fully hosted version of the lab, commit it directly to `main`. In the local workshop repo, commit it on your current working branch now and merge it into `main` later when the fork exists.
 
 ## The planted bug
 

@@ -7,7 +7,7 @@ date: 2026-04-10
 
 The nightly workflow is where the slow checks live. Everything in this file was deliberately excluded from the pull-request loop because it's either too slow, too broad, or too dependent on external state to run on every push. That doesn't make it less important—it makes it important on a _different cadence_.
 
-## What the shipped repo shows
+## What to add
 
 ### `.github/workflows/nightly.yml`
 

@@ -57,7 +57,7 @@ Small is a feature here. If the post-deploy check takes ten minutes, nobody trus
 
 A post-deploy smoke test is a regular Playwright spec in a dedicated directory so it does not run as part of the normal end-to-end suite. The only thing that makes it "post-deploy" is that it reads its target URL from an environment variable the deployment workflow injects, so the same file can run against a preview, a staging environment, or production without any code changes.
 
-In Shelf, the named command that runs this route lives in `package.json` as `npm run test:smoke`, the spec lives at `tests/smoke/post-deploy.spec.ts`, and the dedicated config is `playwright.smoke.config.ts`. Those three files are the concrete surface area of the loop.
+In the post-deploy lab, the named command that runs this route lives in `package.json` as `npm run test:smoke`, the spec lives at `tests/smoke/post-deploy.spec.ts`, and you can add a dedicated `playwright.smoke.config.ts` if you want the smoke run isolated from the main config. Those files are the concrete surface area of the loop.
 
 ```ts
 // tests/smoke/post-deploy.spec.ts
@@ -75,7 +75,7 @@ test('home page renders and exposes sign in', async ({ page }) => {
 });
 ```
 
-Two assertions. That's it. The shipped Shelf version lives at `tests/smoke/post-deploy.spec.ts` and is invoked through a dedicated `playwright.smoke.config.ts` so the default `test:e2e` suite does not accidentally pick it up.
+Two assertions. That's it. The completed Shelf version lives at `tests/smoke/post-deploy.spec.ts` and is often invoked through a dedicated `playwright.smoke.config.ts` so the default `test:e2e` suite does not accidentally pick it up.
 
 ### The deployment workflow that runs the smoke check
 

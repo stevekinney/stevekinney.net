@@ -17,9 +17,9 @@ That shift matters because it changes what you put _in_ CI. If CI is where tests
 
 One scope note before we go further: green CI is still not the end of the story. [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md) picks up on what happens after merge or deploy-preview. The appendix builds out the broader nightly and cross-browser loops in more detail.
 
-Shelf's workflows use `npm`, `actions/setup-node@v4`, and cache both `~/.npm` and `~/.cache/ms-playwright`. That's the concrete reference point as you read the rest of this lesson.
+Shelf's completed workflow uses `npm`, `actions/setup-node@v4`, and caches both `~/.npm` and `~/.cache/ms-playwright`. That's the concrete reference point as you read the rest of this lesson.
 
-The concrete files matter here too. Shelf's daily gate lives at `.github/workflows/main.yml`. The slow cadence lives at `.github/workflows/nightly.yml`. The end-to-end job writes `DATABASE_URL=file:./tmp/ci.db`, creates `tmp/`, runs `npm run test:e2e`, and on failure uploads the output from `npm run dossier`. The static layer inside CI is the same named surface you already have locally: `npm run lint`, `npm run typecheck`, and `npm run knip`.
+The concrete files matter here too. By the end of the CI lab, Shelf's daily gate lives at `.github/workflows/main.yml` and the slow cadence lives at `.github/workflows/nightly.yml`. The end-to-end job writes `DATABASE_URL=file:./tmp/ci.db`, creates `tmp/`, runs `npm run test:e2e`, and on failure can upload the output from `npm run dossier` if you've completed that lab. The starter's day-one static surface is `npm run lint`, `npm run typecheck`, and `npm run test`; later labs extend it with `npm run knip`, gitleaks, and dossier generation.
 
 ## What CI uniquely catches
 

@@ -24,7 +24,7 @@ Install the [axe-core Playwright integration](https://www.deque.com/axe/core-doc
 npm install -D @axe-core/playwright
 ```
 
-If your Shelf starter already has the package, confirm the version and move on. Do not reinstall the world for sport.
+If you've already added the package in an earlier pass, confirm the version and move on. Do not reinstall the world for sport.
 
 ## Step 2: add a dedicated accessibility spec
 

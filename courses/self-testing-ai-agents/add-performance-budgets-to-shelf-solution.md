@@ -1,15 +1,19 @@
 ---
 title: 'Add Performance Budgets to Shelf: Solution'
-description: Walkthrough of the shipped performance budget files and the commands you need to run to verify them.
+description: Walkthrough of the performance budget files you add in the lab and the commands you need to run to verify them.
 modified: 2026-04-10
 date: 2026-04-10
 ---
 
 Performance budgets are one of those things that sound bureaucratic until the first time they save you. You ship a refactor, the bundle doubles, nobody notices for two weeks, and now it's "just how big the app is." The point of this lab is to make that scenario impossible by turning size and speed into numbers that a script can enforce.
 
-The starter repo already has the three pieces wired up: a budget-check script, a budget file, and a runtime Playwright test. Let's walk through what each one does, then run the loop to prove it works.
+The day-one Shelf starter no longer ships this loop. Add the pieces below during the lab, then run the loop to prove it works. Start by installing the stats-build dependency:
 
-## What the shipped repo shows
+```sh
+npm install -D rollup-plugin-visualizer
+```
+
+## What to add
 
 ### `performance-budgets.json`
 
@@ -91,7 +95,7 @@ expect(navigationTiming.domContentLoaded).toBeLessThan(budgetMilliseconds);
 
 `page.evaluate` runs inside the actual Chromium instance, so you're reading real `PerformanceNavigationTiming` data -- not a mock, not a proxy. The `domContentLoadedEventEnd - startTime` delta gives you the time from navigation start to the point where the HTML is fully parsed and all synchronous scripts have executed. It doesn't wait for images or lazy-loaded modules, which is exactly what you want for a "is this page interactive?" gate.
 
-The budget value comes from the same `performance-budgets.json`, so there's no magic number hiding in the test file.
+The budget value comes from the same `performance-budgets.json`, so there's no magic number hiding in the test file. If your current Shelf copy has already added the authenticated Playwright project from the storage-state lesson, run this spec there. If not, point the first version of the check at a public route and tighten it once the auth loop exists.
 
 ## What you still need to run
 

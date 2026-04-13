@@ -27,7 +27,7 @@ The agent can now call `verify_shelf_page` and get a one-shot, structured answer
 
 Shelf registers the server in a repository-local `.mcp.json` and resolves the target URL from `SHELF_BASE_URL`, defaulting to `http://127.0.0.1:4173`. The `/shelf/[username]` route is public, so the server does not strictly need authentication—but it reuses the existing `playwright/.authentication/user.json` storage state when present so the browser session stays consistent with the rest of the workshop tooling.
 
-In the starter, that target route is the real `src/routes/shelf/[username]/+page.svelte`, and the invocation is exposed as a normal script in `package.json` so the agent is not guessing how to boot the server. That is the pattern to copy: real route, real script surface, one sharply-shaped probe.
+In the current starter, that target route is still the real `src/routes/shelf/[username]/+page.svelte`, but the custom verification server itself is something you add later in the course. That is the pattern to copy: real route, repo-local registration in `.mcp.json`, one sharply-shaped probe.
 
 ## The skeleton
 

@@ -44,7 +44,7 @@ Things the agent _can_ act on, mechanically:
 - "Write a failing test before you write the implementation. The first commit on a task should be the test."
 - "When a Playwright test fails, read the trace file at `playwright-report/trace.zip` before guessing at a fix."
 - "Never use `page.waitForTimeout`. If you're tempted, use `page.waitForResponse` or a `getByRole` with `expect` instead."
-- "The `green` state for this codebase means: `npm run typecheck`, `npm run lint`, `npm run knip`, and `npm run test` all exit zero. Don't say a task is done until all four are green."
+- "The `green` state for this codebase means: `npm run typecheck`, `npm run lint`, and `npm run test` all exit zero. Don't say a task is done until all three are green. If you've added the static layer later in the course, extend that list with `npm run knip` and `npm run pre-push`."
 
 Notice what these have in common. Every one of them references a specific command, a specific file path, or a specific API. There's nothing to interpret. The agent reads the rule and either complies or doesn't, and you can tell which from the diff.
 
@@ -63,14 +63,13 @@ Shelf is the starter repository for the **Self-Testing AI Agents** course. It is
 
 ## What "done" means
 
-A task is not done until all four exit zero, in this order:
+A task is not done until all three exit zero, in this order:
 
 1. `npm run typecheck`
 2. `npm run lint`
-3. `npm run knip`
-4. `npm run test`
+3. `npm run test`
 
-Do not report a task complete with any of these failing. If a failure looks unrelated, say so explicitly and link the failing test name in your summary.
+Do not report a task complete with any of these failing. If you later add the static layer, extend this list with `npm run knip` and `npm run pre-push`. If a failure looks unrelated, say so explicitly and link the failing test name in your summary.
 ```
 
 That block alone catches more bad agent output than any number of "write clean code" directives. It's mechanical. It's checkable. It encodes the loop.
@@ -102,14 +101,13 @@ Shelf is the starter repository for the **Self-Testing AI Agents** course. It is
 
 ## What "done" means
 
-A task is not done until all four exit zero, in this order:
+A task is not done until all three exit zero, in this order:
 
 1. `npm run typecheck`
 2. `npm run lint`
-3. `npm run knip`
-4. `npm run test`
+3. `npm run test`
 
-Do not report a task complete with any of these failing. If a failure looks unrelated, say so explicitly and link the failing test name in your summary.
+Do not report a task complete with any of these failing. If you later add the static layer, extend this list with `npm run knip` and `npm run pre-push`. If a failure looks unrelated, say so explicitly and link the failing test name in your summary.
 
 ## Routes
 
@@ -135,7 +133,7 @@ Do not report a task complete with any of these failing. If a failure looks unre
 - When a Playwright test fails, open `playwright-report/index.html` and its trace before proposing a fix.
 ```
 
-The rest of the shipped file keeps going with authentication, seeding, HARs, accessibility, failure triage, static analysis, hooks, and "do not" rules. The important thing for this lesson is the pattern: every section names specific commands, paths, APIs, or forbidden edits.
+The rest of the current file keeps going with authentication, seeding, HARs, accessibility, failure triage, static analysis, hooks, and "do not" rules. The important thing for this lesson is the pattern: every section names specific commands, paths, APIs, or forbidden edits.
 
 Notice the last rule family in the real file. Instructions files have to keep the agent honest about more than just commands and lint rules — they also have to keep the agent from leaking the scaffolding into the product. An agent that helpfully writes "Loading seeded fixtures..." into a real shelf page is not being clever; it is bleeding the test layer into the product surface. One mechanically-checkable rule prevents that ("do not mention Playwright, seeded fixtures, test IDs, HARs, or course material in rendered page copy") in a way that "keep the UI clean" cannot.
 

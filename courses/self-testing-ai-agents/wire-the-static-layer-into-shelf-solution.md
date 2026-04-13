@@ -1,13 +1,13 @@
 ---
 title: 'Wire the Static Layer into Shelf: Solution'
-description: Walkthrough of every shipped static-layer artifact—ESLint rules, TypeScript strict flags, knip, the lefthook config, gitleaks, and the CLAUDE.md additions—with verification commands for each part.
+description: Copyable static-layer artifacts—ESLint rules, TypeScript strict flags, knip, the lefthook config, gitleaks, and the CLAUDE.md additions—with verification commands for each part.
 modified: 2026-04-11
 date: 2026-04-10
 ---
 
-This is the longest lab and the longest solution. Six parts, each self-contained, each backed by a shipped file you can open and verify right now. I will walk through every part in order, show what the shipped file does, explain why, and give you the commands to prove it works.
+This is the longest lab and the longest solution. The current Shelf starter is intentionally smaller, so this solution is the copyable version of the static layer you add during the lab. I will walk through every part in order, show the file to create or extend, explain why, and give you the commands to prove it works.
 
-## What the shipped repo shows
+## What to add
 
 ### Part 1: ESLint custom rules
 
@@ -118,23 +118,19 @@ Open `knip.json`:
     "src/app.html",
     "src/routes/**/+*.{ts,svelte}",
     "tests/**/*.{test,spec}.ts",
-    "tests/end-to-end/authentication.setup.ts",
-    "tests/end-to-end/fixtures.ts",
     "tests/end-to-end/helpers/*.ts",
-    "scripts/*.{ts,mjs}",
-    "tools/shelf-verification-server/server.ts"
+    "scripts/*.{ts,mjs}"
   ],
   "project": [
     "src/**/*.{ts,svelte,svelte.ts}",
     "tests/**/*.ts",
-    "scripts/**/*.{ts,mjs}",
-    "tools/**/*.ts"
+    "scripts/**/*.{ts,mjs}"
   ],
   "ignoreDependencies": ["@tailwindcss/forms", "@tailwindcss/typography", "tailwindcss"]
 }
 ```
 
-The `entry` array tells knip where execution starts—SvelteKit route files (`+page.ts`, `+server.ts`, `+layout.ts`), test files, setup files, scripts, and the verification server. Everything reachable from these entry points is "used." Everything in the `project` globs that is _not_ reachable is dead code.
+The `entry` array tells knip where execution starts—SvelteKit route files (`+page.ts`, `+server.ts`, `+layout.ts`), test files, helper files, and scripts. Everything reachable from these entry points is "used." Everything in the `project` globs that is _not_ reachable is dead code. If you add later labs like authenticated setup or a custom MCP server, extend these globs at that point instead of shipping them on day one.
 
 The `ignoreDependencies` array handles Tailwind. Tailwind v4 uses CSS `@import` directives to pull in its plugins, not JavaScript imports, so knip cannot trace the dependency chain. Without the ignore list, knip reports `tailwindcss`, `@tailwindcss/forms`, and `@tailwindcss/typography` as unused dependencies on every run.
 
@@ -171,9 +167,9 @@ pre-push:
 
 The `pre-commit` block runs three commands in parallel. The `lint` command expands `{staged_files}` to the staged files matching the `glob` and hands them to ESLint with `--fix --max-warnings=0`—auto-fixable issues get corrected, and any remaining warning becomes an error. The `format` command does the same for Prettier, across a wider glob that also covers JSON, Markdown, YAML, and CSS. Both commands use `stage_fixed: true`, which restages whatever the auto-fixers changed. The `secrets` command runs the gitleaks wrapper we cover in Part 5—it is intentionally unscoped by `glob` because the wrapper re-lists the staged index itself and would be confused by a pre-filtered argument list.
 
-The `pre-push` block shells out to `npm run pre-push`, which is the exact same script Shelf uses for local verification: `npm run typecheck && npm run knip && npm run test:unit`. The ordering matters—typecheck is cheapest, knip is next, unit tests are last. If typecheck fails, knip and tests never run.
+The `pre-push` block shells out to `npm run pre-push`, which this lab adds for local verification: `npm run typecheck && npm run knip && npm run test:unit`. The ordering matters—typecheck is cheapest, knip is next, unit tests are last. If typecheck fails, knip and tests never run.
 
-`lefthook install` is wired into the `prepare` script in `package.json`, so running `npm install` after cloning sets up `.git/hooks/pre-commit` and `.git/hooks/pre-push` automatically. No manual step required.
+The minimal starter does not wire `lefthook install` into `prepare`. After adding `lefthook.yml`, run `npx lefthook install` once locally, then decide whether you want to fold that install step into `prepare` for your own project.
 
 **Verification:**
 
@@ -222,9 +218,7 @@ npx tsx scripts/run-gitleaks-staged.ts
 
 ### Part 6: the CLAUDE.md update
 
-The shipped `CLAUDE.md` already reflects every layer. The "What done means" section lists the four commands in order. The "Static layer" section names `eslint.config.js`, `tsconfig.json`, and `knip.json` by path and lists the exact compiler flags. The "Git hooks and secrets" section names lefthook, `lefthook.yml`, and gitleaks, explains the `sample-config.json` allowlist, and points at `scripts/run-gitleaks-staged.ts` as the pre-commit secret scanner. The "Do not" section bans `@ts-expect-error`, `eslint-disable`, `--no-verify`, and `any`.
-
-These are not separate additions made during the lab—they are the _same_ sections we walked in the CLAUDE.md solution. The static layer lab is where those sections earn their place. If you completed the CLAUDE.md lab first and left placeholders for the static layer, this is where you fill them in. If you are doing the labs in order, the [CLAUDE.md you wrote earlier](lab-rewrite-the-bad-claude-md.md) now has concrete rules to point at.
+The day-one `CLAUDE.md` in Shelf only lists the smaller starter loop: `npm run typecheck`, `npm run lint`, and `npm run test`. This lab is where you extend it. Add the static-layer sections now: name `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts` explicitly, add `npm run knip` / `npm run pre-push` to the "done" story, and keep the "Do not" section banning `@ts-expect-error`, `eslint-disable`, and `--no-verify`.
 
 ## What you still need to run
 
@@ -260,7 +254,7 @@ And the full-stack check that the lab's final acceptance criteria require:
 npm run typecheck && npm run lint && npm run knip && npm run test
 ```
 
-All four should exit zero on the clean starter.
+All four should exit zero once you've finished the static-layer pass.
 
 ## Patterns to take away
 

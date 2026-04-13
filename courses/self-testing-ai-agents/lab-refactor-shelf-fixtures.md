@@ -10,7 +10,7 @@ The fixtures lesson gave you the rules. This lab makes you apply them to real co
 The lab is not about making the spec pass. It already passes. The lab is about making the fixture file match the discipline the lesson taught.
 
 > [!NOTE] Isolation
-> The lab lives under `tests/end-to-end/labs/fixtures/` and runs through a dedicated `playwright.labs.config.ts`. The production `tests/end-to-end/fixtures.ts` is never touched. If you break something in the lab, the real suite stays green.
+> The lab still lives under `tests/end-to-end/labs/fixtures/`, but the current starter does not ship a dedicated `playwright.labs.config.ts`. Use a temporary lab-only config or another narrow command so the production suite stays green while you refactor the lab slice.
 
 ## The starting point
 
@@ -48,11 +48,7 @@ When you're done, diff your version against the committed `good-fixtures.ts` in 
 
 Run this from the Shelf repo root:
 
-```bash
-npm run test:e2e:lab-fixtures
-```
-
-That script wraps the lab project end-to-end: `drizzle-kit push --force` bootstraps the database, and then Playwright runs `setup` + `labs-fixtures` against `playwright.labs.config.ts`. It should still pass cleanly after your refactor. If it doesn't, you broke the spec contract, not the fixture design.
+Run the lab slice with whichever narrow command you chose for isolation. A dedicated command such as `npm run test:e2e:lab-fixtures` is fine if you add it during the lab. It should still pass cleanly after your refactor. If it doesn't, you broke the spec contract, not the fixture design.
 
 Then, eyeballing the file:
 
@@ -60,9 +56,9 @@ Then, eyeballing the file:
 - Every fixture that mutates state (seeds, resets, logs in) has a teardown half after `await use(...)`, and the teardown is awaited.
 - At least one of the five original fixtures has been moved out of the fixtures file into a plain helper function, and the spec now calls the helper directly instead of asking for it as a fixture.
 - There is no fixture named for a setup verb — no `setupUser`, no `doLogin`, no `initializeShelf`. Rename anything that looks like that.
-- `npm run test:e2e:lab-fixtures` runs ten times in a row without a single failure:
+- Your lab-only fixture command runs ten times in a row without a single failure:
   ```bash
-  for i in {1..10}; do npm run test:e2e:lab-fixtures || break; done
+  for i in {1..10}; do <your-lab-command> || break; done
   ```
 
 ## Suggested order of attack

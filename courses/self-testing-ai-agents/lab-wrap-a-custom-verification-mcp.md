@@ -5,17 +5,23 @@ modified: 2026-04-12
 date: 2026-04-06
 ---
 
-Shelf ships the `verify_shelf_page` tool from the previous lesson. By the end of this walkthrough, you'll understand every decision inside it and be able to build an equivalent tool for a different verification target in your own project.
+Shelf no longer ships the `verify_shelf_page` tool in the starter. By the end of this walkthrough, you'll have built it yourself and be able to build an equivalent tool for a different verification target in your own project.
 
 > [!NOTE] Prerequisite
 > Complete [Writing a Custom MCP Wrapper](writing-a-custom-mcp-wrapper.md) first. This lab assumes you've seen the MCP server shape and know what `McpServer` / `registerTool` / `StdioServerTransport` are for.
 
-> [!NOTE] In the starter
-> The whole server ships at `tools/shelf-verification-server/server.ts` (98 lines), registered through the root `.mcp.json`, with `@modelcontextprotocol/sdk`, `zod`, and `playwright` already in `package.json`. This lab is a walkthrough — you're not installing anything or filling in a skeleton. You're opening the shipped file and understanding why each decision was made.
+> [!NOTE] In the current starter
+> The root `.mcp.json` only ships the `svelte` MCP entry. This lab is where you add `@modelcontextprotocol/sdk`, `zod`, the `tools/shelf-verification-server/server.ts` file, and the matching `.mcp.json` registration.
+
+Before you start, install the server dependencies:
+
+```sh
+npm install -D @modelcontextprotocol/sdk zod
+```
 
 ## 1. The registration — `.mcp.json`
 
-Open `.mcp.json` at the repository root. Find the `shelf-verification` entry:
+Open `.mcp.json` at the repository root and add the `shelf-verification` entry:
 
 ```json
 {
@@ -34,7 +40,7 @@ Notice it runs under `tsx` (TypeScript directly, no build step) and passes the b
 
 ## 2. The server file — `tools/shelf-verification-server/server.ts`
 
-Open `tools/shelf-verification-server/server.ts`. It's 98 lines. Walk the four sections:
+Create `tools/shelf-verification-server/server.ts`. It's about 98 lines. Walk the four sections:
 
 ### Lines 13–26: imports, constants, server instance
 

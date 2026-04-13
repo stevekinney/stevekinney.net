@@ -1,13 +1,19 @@
 ---
 title: 'Wrap a Custom Verification MCP: Solution'
-description: Walkthrough of the shipped MCP verification server and the steps to prove it works end-to-end.
+description: Walkthrough of the MCP verification server you add in the lab and the steps to prove it works end-to-end.
 modified: 2026-04-10
 date: 2026-04-10
 ---
 
-The whole premise of this lab is: what if your agent could _look at the running app_ instead of just reading test output? Not in a hand-wavy "AI vision" sense, but concretely -- launch a browser, navigate to a page, count the elements, collect errors, return structured JSON. That's what the `verify_shelf_page` tool does, and it's about forty lines of real logic wrapped in the MCP server protocol.
+The whole premise of this lab is: what if your agent could _look at the running app_ instead of just reading test output? Not in a hand-wavy "AI vision" sense, but concretely -- launch a browser, navigate to a page, count the elements, collect errors, return structured JSON. The current Shelf starter does not ship this helper, so this solution is the code you add during the lab.
 
-## What the shipped repo shows
+## What to add
+
+Install the missing packages first:
+
+```sh
+npm install -D @modelcontextprotocol/sdk zod
+```
 
 ### `tools/shelf-verification-server/server.ts`
 

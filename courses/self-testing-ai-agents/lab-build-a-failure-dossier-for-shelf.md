@@ -5,12 +5,12 @@ modified: 2026-04-12
 date: 2026-04-06
 ---
 
-Short lab. Walk the dossier infrastructure Shelf ships, understand why each piece is there, then break a test and watch the loop close.
+Short lab. Add the dossier infrastructure back into Shelf, understand why each piece is there, then break a test and watch the loop close.
 
-Shelf writes artifacts under `playwright-report/test-results/`, the HTML report to `playwright-report/html/`, the JSON report to `playwright-report/report.json`, and the markdown summary to `playwright-report/dossier.md`. The simplest, most controlled way to force a failure when you want to test the loop is to change one word of copy in `src/routes/design-system/+page.svelte`, run `npm run test:e2e`, watch `[public] › tests/end-to-end/visual.spec.ts:3 › design system matches the starter visual baseline` go red, run `npm run dossier`, read the generated markdown, then revert the copy change and rerun green. Editing a component gives you a deterministic red state that survives re-runs — moving a screenshot baseline aside no longer works, because Playwright will auto-regenerate a missing baseline on the next run instead of failing.
+Once the lab is wired up, Shelf writes artifacts under `playwright-report/test-results/`, the HTML report to `playwright-report/html/`, the JSON report to `playwright-report/report.json`, and the markdown summary to `playwright-report/dossier.md`. The simplest, most controlled way to force a failure against the current minimal suite is to change one assertion in `tests/end-to-end/smoke.spec.ts`, run `npm run test:e2e`, watch the smoke spec go red, run `npm run dossier`, read the generated markdown, then revert and rerun green.
 
-> [!NOTE] In the starter
-> Shelf already ships every piece: the config flags, the console forwarders, the dossier script, the `npm run dossier` command, and the CLAUDE.md entry. This lab is a walkthrough. You're opening each file, reading it, and understanding why each decision was made. The "break a test and run the dossier" section at the bottom is the verification — that's the only thing you actively do.
+> [!NOTE] In the current starter
+> Shelf no longer ships the dossier layer on day one. This lab is where you add the Playwright artifact settings, the console-forwarding fixture wrapper, the dossier script, the `npm run dossier` command, and the matching `CLAUDE.md` note.
 
 ## 1. The config — `playwright.config.ts`
 
@@ -36,7 +36,7 @@ The JSON reporter is the load-bearing one — the dossier script reads it. The H
 
 ## 2. The console forwarders — `tests/end-to-end/fixtures.ts`
 
-Open `tests/end-to-end/fixtures.ts`. Find the extended `page` fixture — it subscribes to `page.on('console', ...)` and `page.on('requestfailed', ...)` and forwards errors to the Node process's stderr with a `[browser error]` or `[network error]` prefix.
+Create `tests/end-to-end/fixtures.ts`. The extended `page` fixture subscribes to `page.on('console', ...)` and `page.on('requestfailed', ...)` and forwards errors to the Node process's stderr with a `[browser error]` or `[network error]` prefix.
 
 Notice the filter for `ERR_ABORTED`. That code fires whenever Playwright navigates away from a page mid-request, which happens constantly in a test suite. Without the filter the console is unreadable.
 
@@ -44,7 +44,7 @@ Notice the filter for `ERR_ABORTED`. That code fires whenever Playwright navigat
 
 ## 3. The dossier script — `scripts/summarize-failure-dossier.ts`
 
-Open `scripts/summarize-failure-dossier.ts`. It's 199 lines. Walk the six sections:
+Create `scripts/summarize-failure-dossier.ts`. It's about 199 lines. Walk the six sections:
 
 - **Lines 16–64: type declarations.** `PlaywrightReport → PlaywrightSuite → PlaywrightSpec → PlaywrightTest → PlaywrightResult → PlaywrightAttachment`. These mirror the shape Playwright's JSON reporter emits. They exist as explicit types instead of `any` so the `suites → specs → tests → results` walk stays honest when the report schema drifts.
 - **Lines 66–76: `collectSpecs` and `pickAttachment`.** Recursive flatten of the nested suite tree plus a generic attachment-picker. Both are small helpers the walk needs.
@@ -57,7 +57,7 @@ Open `scripts/summarize-failure-dossier.ts`. It's 199 lines. Walk the six sectio
 
 ## 4. The named command — `package.json`
 
-Open `package.json`. Find `"dossier": "tsx scripts/summarize-failure-dossier.ts"`. Notice there's no `&&` chain — the dossier script runs on demand, not after every test run. That's deliberate: most test runs are green, and writing an empty dossier every time adds noise without signal. The agent calls `npm run dossier` only when it needs to look at a failure.
+Open `package.json` and add `"dossier": "tsx scripts/summarize-failure-dossier.ts"`. Notice there's no `&&` chain — the dossier script runs on demand, not after every test run. That's deliberate: most test runs are green, and writing an empty dossier every time adds noise without signal. The agent calls `npm run dossier` only when it needs to look at a failure.
 
 ## 5. CLAUDE.md — the reproduction instructions
 
@@ -67,7 +67,7 @@ Open `CLAUDE.md`. Find the "When a test fails" section. It names `npm run dossie
 
 ## Acceptance criteria
 
-You can't copy-paste your way through this one — the code is already there. You're done when you can answer each of these without looking:
+You're done when you can answer each of these without looking:
 
 - [ ] Why does the config use `retain-on-failure` instead of `on`?
 - [ ] Why does the console forwarder filter `ERR_ABORTED`?

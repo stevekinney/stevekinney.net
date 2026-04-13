@@ -1,15 +1,15 @@
 ---
 title: 'Rewrite the Bad CLAUDE.md: Solution'
-description: Walkthrough of the shipped CLAUDE.md—why every section exists, what makes it mechanically enforceable, and how to verify it.
+description: Walkthrough of the Shelf CLAUDE.md—why every section exists, what makes it mechanically enforceable, and how to verify it.
 modified: 2026-04-11
 date: 2026-04-10
 ---
 
-The shipped `CLAUDE.md` in the Shelf starter is the one I actually use when I point Claude Code at the repo. It is not a reference answer to memorize—it is a working artifact that evolved through exactly the kind of tightening this lab asks you to do. Your version will differ, and that is fine. What matters is that every line passes two tests: can the agent act on it mechanically, and would you notice if it didn't?
+The current `CLAUDE.md` in Shelf is the one I actually use when I point Claude Code at the repo. It is not a reference answer to memorize—it is a working artifact that evolved through exactly the kind of tightening this lab asks you to do. Your version will differ, and that is fine. What matters is that every line passes two tests: can the agent act on it mechanically, and would you notice if it didn't?
 
 Let me walk through what the shipped file does and why.
 
-## What the shipped repo shows
+## What the current repo shows
 
 The file lives at the repository root as `CLAUDE.md`. Open it and follow along.
 
@@ -29,8 +29,7 @@ Two sentences. The agent now knows this is a real app, not a throwaway template.
 ```markdown
 1. `npm run typecheck`
 2. `npm run lint`
-3. `npm run knip`
-4. `npm run test`
+3. `npm run test`
 ```
 
 Four named commands, ordered. The rule says "not done until all four exit zero, in this order." No wiggle room, no "you should probably run." The ordering matters: typecheck catches the cheapest errors first, then lint, then dead-code detection, then the full test suite. The agent runs them top to bottom and stops at the first failure.
@@ -38,7 +37,7 @@ Four named commands, ordered. The rule says "not done until all four exit zero, 
 Every one of those commands exists in `package.json`. You can verify that yourself:
 
 ```sh
-for cmd in typecheck lint knip test; do
+for cmd in typecheck lint test; do
   grep -q "\"$cmd\":" package.json && echo "$cmd: found" || echo "$cmd: MISSING"
 done
 ```
@@ -107,11 +106,11 @@ This is the "keep the product product-shaped" rule. Without it, the agent will h
 
 ### Static layer
 
-Names three config files by path: `eslint.config.js`, `tsconfig.json`, `knip.json`. Lists the exact TypeScript compiler flags that are enabled. Says "do not bypass with `@ts-expect-error`." The agent now knows the strictness level without reading `tsconfig.json` itself—though it should still check.
+Names concrete config files by path: `eslint.config.js` and `tsconfig.json` in the day-one starter, with later labs extending that list to `knip.json`. Lists the exact TypeScript compiler flags that are enabled. Says "do not bypass with `@ts-expect-error`." The agent now knows the strictness level without reading `tsconfig.json` itself—though it should still check.
 
 ### Git hooks and secrets
 
-Names `lefthook` and `gitleaks` by name. Names the exact hook config file (`lefthook.yml`) and the staged-snapshot wrapper (`scripts/run-gitleaks-staged.ts`). The rule about `sample-config.json` being deliberate bait prevents the agent from "fixing" an intentional test fixture.
+The completed static-layer version names `lefthook` and `gitleaks` by name. It names the exact hook config file (`lefthook.yml`) and the staged-snapshot wrapper (`scripts/run-gitleaks-staged.ts`). The rule about `sample-config.json` being deliberate bait prevents the agent from "fixing" an intentional test fixture.
 
 ### "Do not"
 
@@ -129,7 +128,7 @@ wc -l CLAUDE.md
 grep -iE 'clean|best practices|good|appropriate' CLAUDE.md
 
 # Commands exist in package.json
-for cmd in typecheck lint knip test; do
+for cmd in typecheck lint test; do
   grep -q "\"$cmd\":" package.json && echo "$cmd: ok" || echo "$cmd: MISSING"
 done
 

@@ -139,7 +139,7 @@ Un-break the test. Run the full suite. Commit the diff.
 
 ## Stretch: the step-only reporter
 
-The custom reporter in the lab is ~30 lines. Drop it in `tests/reporters/step-reporter.ts`, add it to `playwright.labs.config.ts` under `reporter`, and the next failing lab run prints exactly the step names and durations for the failing tests — nothing else. That output is the cleanest possible input for the [failure dossier summarizer](failure-dossiers-what-agents-actually-need-from-a-red-build.md), which currently has to parse the full JSON reporter output to extract the same information.
+The custom reporter in the lab is ~30 lines. Drop it in `tests/reporters/step-reporter.ts`, add it to a temporary lab-only Playwright config or your main config while you experiment, and the next failing lab run prints exactly the step names and durations for the failing tests — nothing else. That output is the cleanest possible input for the [failure dossier summarizer](failure-dossiers-what-agents-actually-need-from-a-red-build.md), which currently has to parse the full JSON reporter output to extract the same information.
 
 You probably won't ship the step-only reporter to production. You'll use it locally when you're debugging a long chain.
 

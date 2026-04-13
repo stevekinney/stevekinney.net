@@ -113,7 +113,7 @@ class StepReporter implements Reporter {
 export default StepReporter;
 ```
 
-Wire it into `playwright.labs.config.ts` under `reporter` and run the lab project to see it in action.
+Wire it into a temporary lab-only Playwright config, or add it to the main config while you experiment, and run the lab slice to see it in action.
 
 ## What success looks like
 

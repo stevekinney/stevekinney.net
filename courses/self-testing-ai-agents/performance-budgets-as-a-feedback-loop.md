@@ -225,7 +225,7 @@ And `performance-budgets.json` is the stored-threshold file next to the script. 
 ```
 
 > [!NOTE] The starter ships this
-> Shelf's `scripts/check-performance-budgets.mjs` is a slightly longer version of this sketch that adds `try/catch` around the JSON parse and exposes `clientEntries` for future rules. The walk is identical. Read the sketch above to understand _how_ the aggregation works, then open the shipped file to see the exact shape.
+> Shelf's `scripts/check-performance-budgets.mjs` is a slightly longer version of this sketch that adds `try/catch` around the JSON parse and exposes `clientEntries` for future rules. The walk is identical. Read the sketch above to understand _how_ the aggregation works, then compare it with your lab implementation or the course solution to see the exact shape.
 
 ## Runtime budgets: catch slowness where the user feels it
 

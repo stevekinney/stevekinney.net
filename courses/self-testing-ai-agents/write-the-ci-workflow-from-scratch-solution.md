@@ -1,13 +1,13 @@
 ---
 title: 'Write the CI Workflow from Scratch: Solution'
-description: Annotated walkthrough of the shipped main.yml and nightly.yml workflows—what each job does, what requires GitHub Actions to verify, and what you can validate locally.
+description: Annotated walkthrough of the main.yml and nightly.yml workflows you build in the lab—what each job does, what requires GitHub Actions to verify, and what you can validate locally.
 modified: 2026-04-11
 date: 2026-04-10
 ---
 
-This is another hybrid lab. The workflow files ship in the starter and parse as valid YAML. The jobs map to real local commands. But the actual _runs_—the artifact uploads, the cron triggers, the branch protection gates—require a GitHub remote with Actions enabled. I will walk both halves.
+This is another hybrid lab. The workflow files no longer ship in the starter, but the jobs still map to real local commands. The actual _runs_—the artifact uploads, the cron triggers, the branch protection gates—require a GitHub remote with Actions enabled. I will walk both halves.
 
-## What the shipped repo shows
+## What to add
 
 ### main.yml: the three-job pipeline
 

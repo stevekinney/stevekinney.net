@@ -5,21 +5,21 @@ modified: 2026-04-12
 date: 2026-04-06
 ---
 
-Shelf ships two GitHub Actions workflows at `.github/workflows/main.yml` and `.github/workflows/nightly.yml`. Your job in this lab is to open them, walk every job, and understand why each step is there. By the end you should be able to rebuild an equivalent workflow from scratch in your own project — not because you copied the YAML, but because you read it and understood the shape.
+Shelf no longer ships the workflows on day one. Your job in this lab is to write them from scratch, using the current script surface as your source of truth. By the end you should be able to rebuild an equivalent workflow in your own project without relying on hidden starter scaffolding.
 
-> [!NOTE] In the starter
-> The whole workflow is already in place: `main.yml` has `static`, `unit`, and `end-to-end` jobs wired for push and pull request; `nightly.yml` has the scheduled slow-check cadence. This lab is a walkthrough — you are not writing YAML, you are reading it. The "break something and watch CI catch it" section at the bottom is the verification.
+> [!NOTE] In the current starter
+> The minimal repo does not ship `.github/workflows/main.yml` or `.github/workflows/nightly.yml`. This lab is now a true authoring exercise.
 
 > [!NOTE] Prerequisite
-> This lab assumes you've completed **Lab: Build a Failure Dossier for Shelf**. The `end-to-end` job calls `npm run dossier`, which is the script that lab walks. If you skipped it, go back and read that lab first so the dossier step below makes sense.
+> This lab assumes you've completed **Lab: Build a Failure Dossier for Shelf** and **Lab: Wire the Static Layer into Shelf** if you want the fuller CI shape with `knip`, gitleaks, and dossier uploads. If you're still on the day-one starter, begin with `lint`, `typecheck`, `test:unit`, and `test:e2e`, then extend the workflow as those later labs land.
 
 ## The task
 
-Open `.github/workflows/main.yml` in the Shelf starter. Walk each job with this lesson open alongside. For every step, ask: _what loop built earlier today is this step gating?_ When you can answer that for every step, you've done the lab.
+Create `.github/workflows/main.yml` in the Shelf repo and walk each job with this lesson open alongside. For every step, ask: _what loop built earlier today is this step gating?_ When you can answer that for every step, you've done the lab.
 
 ## What you can verify locally
 
-You can do the whole first pass locally. Open `.github/workflows/main.yml` and `.github/workflows/nightly.yml`, then run the commands each named step maps to: `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test:unit`, `npm run test:e2e`, and `npm run dossier`. You can also confirm the end-to-end job's environment assumptions by checking that the workflow writes `DATABASE_URL=file:./tmp/ci.db`, creates `tmp/`, and relies on the same `playwright.config.ts` web server you already use on your machine.
+You can do the whole first pass locally. Write `.github/workflows/main.yml` and `.github/workflows/nightly.yml`, then run the commands each named step maps to. On the day-one starter that is at least `npm run lint`, `npm run typecheck`, `npm run test:unit`, and `npm run test:e2e`. If you've already completed the static-layer and dossier labs, include `npm run knip`, gitleaks, and `npm run dossier` too. You can also confirm the end-to-end job's environment assumptions by checking that the workflow writes `DATABASE_URL=file:./tmp/ci.db`, creates `tmp/`, and relies on the same `playwright.config.ts` web server you already use on your machine.
 
 ## What remains manual or external
 

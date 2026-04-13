@@ -7,7 +7,7 @@ date: 2026-04-10
 
 The goal here is not "run every test on every browser." The goal is "run the _right_ tests on the _right_ browsers without making the default loop unusable." Shelf's setup proves you can have cross-browser coverage and a fast dev loop at the same time—you just can't have them in the same command.
 
-## What the shipped repo shows
+## What to add
 
 ### The project definitions in `playwright.config.ts`
 

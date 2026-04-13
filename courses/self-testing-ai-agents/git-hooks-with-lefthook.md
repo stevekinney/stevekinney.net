@@ -68,7 +68,7 @@ pre-push:
       run: npm run pre-push
 ```
 
-Same file, different lifecycle event. In the shipped Shelf starter, `npm run pre-push` chains the slower local gates: typecheck, [knip](https://knip.dev/), and the unit test suite. If any of those fail, the push is blocked and you get the output right there in the terminal.
+Same file, different lifecycle event. In the completed static-layer version of Shelf, `npm run pre-push` chains the slower local gates: typecheck, [knip](https://knip.dev/), and the unit test suite. If any of those fail, the push is blocked and you get the output right there in the terminal.
 
 The rule I use: pre-commit takes under ten seconds, pre-push takes under two minutes. Anything slower belongs in CI.
 

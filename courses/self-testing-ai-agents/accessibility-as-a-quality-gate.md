@@ -70,9 +70,9 @@ A few things worth understanding about that block before you start writing your 
 - **`.analyze()`** is the await point. It walks the DOM, runs the rule set, and returns a results object with `violations`, `passes`, `incomplete`, and `inapplicable` arrays.
 - **`expect(results.violations).toEqual([])`** is the gate. An empty `violations` array means axe found nothing wrong. Anything else fails the test, with the violation details printed in the failure output.
 
-That is the entire shape. Three lines of setup, one assertion. Shelf ships exactly this pattern in `tests/end-to-end/accessibility.spec.ts`, scoped to its highest-signal authenticated routes; once you understand the four pieces above you can read that file as a real-shape implementation rather than a mystery.
+That is the entire shape. Three lines of setup, one assertion. The accessibility lab adds exactly this pattern to `tests/end-to-end/accessibility.spec.ts`, scoped to the highest-signal routes; once you understand the four pieces above you can read that file as a real-shape implementation rather than a mystery.
 
-In the starter, this check is not a sidecar script. `tests/end-to-end/accessibility.spec.ts` rides the normal `npm run test:e2e` loop, which is the right end state once you trust the scan enough to make it part of the main gate.
+The day-one starter omits this check. Once you trust the scan enough to make it part of the main gate, let `tests/end-to-end/accessibility.spec.ts` ride the normal `npm run test:e2e` loop instead of hiding it behind a sidecar command.
 
 ## What the automated gate cannot prove
 

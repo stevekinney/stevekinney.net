@@ -7,7 +7,7 @@ date: 2026-04-11
 
 Time to cash the checks from the last two lessons. [Reading a Trace](reading-a-trace.md) taught you the four panes. [Flaky-Test Triage](flaky-test-triage.md) gave you the four-bucket classification. This lab asks you to apply both, at the same time, to three real traces generated from three deliberately-broken specs in the Shelf starter.
 
-The three broken specs and the generator script already live in `tests/end-to-end/labs/broken-traces/` and `scripts/generate-lab-traces.mjs`. Your job is to generate the traces, open them in the viewer, and write a four-field diagnosis per trace. The goal is muscle memory: classify-and-cite, classify-and-cite, classify-and-cite, until reading a trace stops feeling like reverse-engineering and starts feeling like reading.
+The three broken specs live in `tests/end-to-end/labs/broken-traces/`. The day-one starter no longer ships the trace-generator helper, so this lab is where you add `scripts/generate-lab-traces.mjs` (or an equivalent helper) before you generate the traces, open them in the viewer, and write a four-field diagnosis per trace. The goal is muscle memory: classify-and-cite, classify-and-cite, classify-and-cite, until reading a trace stops feeling like reverse-engineering and starts feeling like reading.
 
 ## Setup
 
@@ -17,7 +17,7 @@ From the Shelf repo root:
 npm run traces:generate
 ```
 
-That script runs the `labs-broken-traces` project against `playwright.labs.config.ts`, tolerates the expected nonzero exit (the specs are red by design), and copies the three trace zips into `playwright-report/lab-traces/`:
+That helper runs the deliberately-broken specs, tolerates the expected nonzero exit (the specs are red by design), and copies the three trace zips into `playwright-report/lab-traces/`:
 
 ```
 playwright-report/lab-traces/
@@ -29,7 +29,7 @@ playwright-report/lab-traces/
 If any of the three files are missing, the script will fail loudly. That means the lab scaffolding is out of sync with something — the spec was accidentally fixed, the project was renamed, the outputDir drifted. Open the traces you have and file a bug.
 
 > [!TIP] Re-running the lab
-> `npm run traces:clean` removes `playwright-report/lab-traces/` so you can regenerate from a clean slate. Useful if you want to generate new traces after tweaking the broken specs.
+> If you add a `traces:clean` helper, have it remove `playwright-report/lab-traces/` so you can regenerate from a clean slate. Useful if you want to generate new traces after tweaking the broken specs.
 
 ## Your job
 

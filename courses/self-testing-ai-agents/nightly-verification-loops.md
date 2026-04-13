@@ -98,7 +98,7 @@ A few things to notice:
 
 Expand this shell as the real jobs come online: a `cross-browser-smoke` job that runs the cross-browser smoke subset from the previous appendix, a `performance-audit` job that runs a broader Lighthouse or bundle check, a `data-integrity` job if you have seeded content that can drift.
 
-Shelf already ships the `cross-browser-smoke` job in `nightly.yml`. It implements the cross-browser split using **project-based filtering** rather than the `@cross-browser` tag pattern shown earlier — the `firefox-smoke` and `webkit-smoke` Playwright projects use `testMatch: /smoke\.spec\.ts/`, so any test in a `*.smoke.spec.ts` file is automatically picked up. Project-based and tag-based filtering are equivalent for this case: pick projects when the split is by file (Shelf's situation), pick tags when the split is by individual test inside an otherwise mixed file. The lesson on cross-browser validation walks through both patterns; Shelf chose projects because the smoke set lives in its own file and the project boundary is already meaningful for browser configuration.
+When you add the `cross-browser-smoke` job in `nightly.yml`, you can implement the split using **project-based filtering** rather than the `@cross-browser` tag pattern shown earlier — for example, `firefox-smoke` and `webkit-smoke` Playwright projects with `testMatch: /smoke\.spec\.ts/`. Project-based and tag-based filtering are equivalent for this case: pick projects when the split is by file, pick tags when the split is by individual test inside an otherwise mixed file. The lesson on cross-browser validation walks through both patterns.
 
 ## Nightly failures should land like any other failure
 

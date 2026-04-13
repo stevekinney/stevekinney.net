@@ -7,7 +7,7 @@ date: 2026-04-10
 
 This lab ships two files. One is a Playwright spec that runs axe-core against Shelf's critical routes. The other is a five-item markdown checklist for the things the scanner cannot prove. Together, they turn "we care about accessibility" into "accessibility regressions break the build." That is the whole point.
 
-## What the shipped repo shows
+## What to add
 
 ### The dependency
 
@@ -27,7 +27,7 @@ One dependency. No config files, no plugins, no runtime overhead in production.
 
 ### The spec: `tests/end-to-end/accessibility.spec.ts`
 
-Here is the full shipped file:
+Here is the full file to add:
 
 ```ts
 import AxeBuilder from '@axe-core/playwright';

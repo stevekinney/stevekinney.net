@@ -202,8 +202,8 @@ writeFileSync(
 console.error(`Wrote dossier for ${failures.length} failures`);
 ```
 
-> [!NOTE] The starter ships the production version
-> Shelf's `scripts/summarize-failure-dossier.ts` is a longer, fully-typed version of this sketch that also picks the `diff` attachment ahead of the baseline on visual regression failures, guards against `result.error` being undefined via `result.errors[0]`, and makes every attachment path relative to the repo root. Read the sketch above to understand the walk, then open the shipped file to see the production shape.
+> [!NOTE] The course solution includes the production version
+> Shelf's `scripts/summarize-failure-dossier.ts` is a longer, fully-typed version of this sketch that also picks the `diff` attachment ahead of the baseline on visual regression failures, guards against `result.error` being undefined via `result.errors[0]`, and makes every attachment path relative to the repo root. Read the sketch above to understand the walk, then open the course solution or your lab implementation to see the production shape.
 
 ### A representative failing-run `dossier.md` excerpt
 

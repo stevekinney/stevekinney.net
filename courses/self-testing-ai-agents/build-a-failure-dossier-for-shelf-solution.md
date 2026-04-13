@@ -1,15 +1,15 @@
 ---
 title: 'Build a Failure Dossier for Shelf: Solution'
-description: Walkthrough of the shipped failure dossier script, config settings, and the experiment that proves the loop works.
+description: Walkthrough of the failure dossier script, config settings, and the experiment that proves the loop works.
 modified: 2026-04-12
 date: 2026-04-10
 ---
 
 A failure dossier is the difference between an agent that says "tests failed" and an agent that says "the rate-book dialog test failed on line 47 because the Save button wasn't visible within 5 seconds -- here's the screenshot, here's the trace, and here's the exact command to reproduce it." The first response starts a conversation. The second one starts a fix.
 
-This lab wires up the infrastructure that makes that second response possible: Playwright config that retains the right artifacts, a fixture that forwards browser console noise, and a script that reads the JSON report and renders a structured markdown dossier.
+The day-one Shelf starter no longer ships that infrastructure. This lab wires it back in: Playwright config that retains the right artifacts, a fixture that forwards browser console noise, and a script that reads the JSON report and renders a structured markdown dossier.
 
-## What the shipped repo shows
+## What to add
 
 ### `playwright.config.ts` -- artifact retention settings
 

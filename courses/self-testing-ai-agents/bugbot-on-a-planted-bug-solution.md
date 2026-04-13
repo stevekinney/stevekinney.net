@@ -1,13 +1,13 @@
 ---
 title: 'Bugbot on a Planted Bug: Solution'
-description: Walkthrough of the shipped BUGBOT.md config and planted-bug branch—what is local, what requires a GitHub fork, and what the full loop looks like.
+description: Walkthrough of the BUGBOT.md config and planted-bug branch you add for the lab—what is local, what requires a GitHub fork, and what the full loop looks like.
 modified: 2026-04-11
 date: 2026-04-10
 ---
 
-This is a hybrid lab. Part of it ships in the starter repo and you can verify locally. The rest—Bugbot installation, PR creation, the actual review comment—requires a GitHub fork and a Cursor account. I will walk both halves and be explicit about where the boundary is.
+This is a hybrid lab. Part of it is local authoring in the repo, and the rest—Bugbot installation, PR creation, the actual review comment—requires a GitHub fork and a Cursor account. I will walk both halves and be explicit about where the boundary is.
 
-## What the shipped repo shows
+## What to add
 
 ### The config file
 

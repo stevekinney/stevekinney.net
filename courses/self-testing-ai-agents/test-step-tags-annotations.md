@@ -83,7 +83,7 @@ npx playwright test --grep @critical
 This is how you shard a suite by _purpose_ instead of by file. `@critical` is the handful of tests you'd run on every PR; `@slow` is the expensive ones you defer to nightly; `@flaky-quarantine` is the ones you're not ready to delete but shouldn't block the pipeline. None of that maps cleanly onto file boundaries, because the definition of "critical" changes as the product does.
 
 > [!WARNING] Don't use `@smoke` in Shelf
-> Shelf already defines _smoke_ at the file-and-project level, via `playwright.smoke.config.ts` and the `firefox-smoke` / `webkit-smoke` projects in the root config. If you also start tagging tests `@smoke`, you'll end up with two competing definitions of the same word. The canonical tag vocabulary for this course is `@critical`, `@slow`, and `@flaky-quarantine`. `@smoke` stays out of the tag system.
+> Reserve `@smoke` for file-level or project-level smoke suites if you add them later in the course. If you also start tagging ordinary tests `@smoke`, you'll end up with two competing definitions of the same word. The canonical tag vocabulary for this course is `@critical`, `@slow`, and `@flaky-quarantine`. `@smoke` stays out of the tag system.
 
 Tags are supplemental metadata, not the source of truth. The file-and-project structure is where you decide _which_ tests run; tags are how you decide which subset of _those_ tests to run right now.
 
@@ -130,9 +130,9 @@ Use soft assertions when the step is verifying a list of things that _should all
 
 An agent reading a [failure dossier](failure-dossiers-what-agents-actually-need-from-a-red-build.md) gets `Step: verify the rating persists on the shelf — expected "Rated: 4/5" to be visible` instead of a stack trace in a nameless test. That line is the difference between the agent spending its first 90 seconds _figuring out what the test was trying to do_ and the agent spending its first 90 seconds _figuring out why the test failed_. `test.step` is upstream of every dossier that reads cleanly.
 
-The dossier summarizer that already ships in Shelf reads steps out of the Playwright JSON reporter output. Nothing else has to change — once the test file has steps, the dossier has them too.
+Once you've added the dossier summarizer, it reads steps out of the Playwright JSON reporter output. Nothing else has to change — once the test file has steps, the dossier has them too.
 
-In Shelf, the concrete reps are `tests/end-to-end/rate-book.spec.ts` and `tests/end-to-end/search.spec.ts`. The lab version runs through `playwright.labs.config.ts` first so you can practice on an isolated slice, but once the step labels and tags are stable they belong in the normal `npm run test:e2e` loop with the rest of the suite.
+In the fuller course version of Shelf, the concrete reps are `tests/end-to-end/rate-book.spec.ts` and `tests/end-to-end/search.spec.ts`. However you isolate the practice slice for the lab, once the step labels and tags are stable they belong in the normal `npm run test:e2e` loop with the rest of the suite.
 
 ## The agent rules
 
@@ -140,7 +140,7 @@ In Shelf, the concrete reps are `tests/end-to-end/rate-book.spec.ts` and `tests/
 ## test.step, tags, annotations
 
 - Every top-level user action in a test gets a `test.step('...', async () => { ... })` wrapper with a human-readable label.
-- Tag every test with at least one of `@critical` / `@slow` / `@flaky-quarantine`. Never tag a test `@smoke` in Shelf — that term is reserved for the file-based smoke config.
+- Tag every test with at least one of `@critical` / `@slow` / `@flaky-quarantine`. Never tag a test `@smoke` in Shelf — reserve that term for any future smoke-only file or project split.
 - Use `test.info().annotations.push(...)` to link a test to its issue, incident, or known-flake record. Do not use annotations as a substitute for comments.
 - Use `expect.soft` when a single step is verifying a list of things that should all be true. Use plain `expect` for preconditions.
 - Keep `test.step` nesting to two levels deep at most. If you need three, the test is doing too much.
