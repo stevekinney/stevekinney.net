@@ -17,7 +17,7 @@ That shift matters because it changes what you put _in_ CI. If CI is where tests
 
 One scope note before we go further: green CI is still not the end of the story. [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md) picks up on what happens after merge or deploy-preview. The appendix builds out the broader nightly and cross-browser loops in more detail.
 
-Shelf's completed workflow uses `npm`, `actions/setup-node@v4`, and caches both `~/.npm` and `~/.cache/ms-playwright`. That's the concrete reference point as you read the rest of this lesson.
+Shelf's completed workflow uses `npm`, `actions/setup-node@v6`, and caches both `~/.npm` and `~/.cache/ms-playwright`. That's the concrete reference point as you read the rest of this lesson.
 
 The concrete files matter here too. By the end of the CI lab, Shelf's daily gate lives at `.github/workflows/main.yml` and the slow cadence lives at `.github/workflows/nightly.yml`. The end-to-end job writes `DATABASE_URL=file:./ci.db`, runs `npm run test`, and on failure can upload the output from `npm run dossier` if you've completed that lab. The starter's static surface is `npm run lint`, `npm run typecheck`, and `npm run test`; later labs extend it with `npm run knip`, gitleaks, and dossier generation.
 
@@ -97,7 +97,7 @@ The actual GitHub Actions `cache` action in Shelf looks like:
 
 ```yaml
 - name: Cache dependencies
-  uses: actions/cache@v4
+  uses: actions/cache@v5
   with:
     path: |
       ~/.npm
@@ -111,13 +111,13 @@ That is the exact cache shape Shelf uses. Start there before you invent anything
 
 Once the end-to-end job gets large enough, the next knob is sharding. The important detail from the Playwright docs is that `fullyParallel: true` makes sharding more even because work gets balanced at the **test** level instead of the **file** level. If one file is a monster and the others are tiny, that difference matters.
 
-When you do shard, switch the reporter for CI fan-out to the [blob report format](https://playwright.dev/docs/test-reporters). Blob reports include the tests plus their attachments, survive artifact upload/download cleanly, and can be merged later with:
+When you do shard, switch the reporter for CI fan-out to the [blob report format](https://playwright.dev/docs/test-sharding#merging-reports-from-multiple-shards). Blob reports include the tests plus their attachments, survive artifact upload/download cleanly, and can be merged later with:
 
 ```bash
-npx playwright merge-reports merged-report blob-report-*
+npx playwright merge-reports --reporter html ./all-blob-reports
 ```
 
-If the run needs environment labeling, add a global `tag` in the config so merged reports can still tell you "this came from `@firefox-smoke`" or "`@APIv2`" instead of dumping every shard into one anonymous bucket.
+If the run needs environment labeling, set per-project [`metadata`](https://playwright.dev/docs/api/class-testproject#test-project-metadata) on each lane (or tag individual tests with `@firefox-smoke` / `@APIv2` annotations) so merged reports can still tell you "this came from the Firefox smoke run" instead of dumping every shard into one anonymous bucket.
 
 And if you host attachments somewhere other than the checked-out artifact directory, [`attachmentsBaseURL`](https://playwright.dev/docs/test-reporters) is how the HTML report knows where to look. That is one of those settings you never need until the day your report links all point at nowhere.
 

@@ -7,6 +7,9 @@ date: 2026-04-11
 
 One reasonable walk from the starting state of `rate-book.spec.ts` and `smoke.spec.ts` to a better-instrumented version. As with the other solutions in this course, yours may make different calls — different step labels, different tag choices, different places to drop an annotation. The principles you're grading against are in the lesson; this is the narrative.
 
+> [!NOTE] Prerequisite labs
+> This solution edits `tests/rate-book.spec.ts`, which is the file produced by the [harden-the-flaky-rate-book-test lab](lab-harden-the-flaky-rate-book-test.md). It also calls `resetShelfContent` from `tests/helpers/seed.ts`, which is wired up by the [fixtures refactor lab](lab-refactor-shelf-fixtures.md); the starter ships a stub that throws. If you haven't landed those labs yet, treat the code below as an aspirational target rather than something to paste directly over the current starter.
+
 ## Commit 1: Steps in the rate-book test
 
 Four natural phases in the flow: land on the shelf, open the dialog, submit the rating, verify persistence. Each becomes a `test.step`.
@@ -37,6 +40,10 @@ test.describe('rate a book on your shelf', () => {
       await expect(dialog).toBeVisible();
       await dialog.getByRole('radio', { name: '4 stars' }).check();
 
+      // The `/api/shelf/*` PATCH endpoint is built out in the rate-book
+      // hardening lab; the current Shelf starter intentionally does not ship
+      // persisted-rating routes. Treat this block as future-state until
+      // that lab has landed.
       const ratingResponse = page.waitForResponse(
         (response) =>
           /\/api\/shelf\/.+/.test(response.url()) && response.request().method() === 'PATCH',
@@ -116,12 +123,12 @@ test(
   async ({ page }) => {
     await test.step('verify search redirects to login', async () => {
       await page.goto('/search');
-      await expect(page).toHaveURL(/\\/login\\?returnTo=%2Fsearch$/);
+      await expect(page).toHaveURL(/\/login\?returnTo=%2Fsearch$/);
     });
 
     await test.step('verify shelf redirects to login', async () => {
       await page.goto('/shelf');
-      await expect(page).toHaveURL(/\\/login\\?returnTo=%2Fshelf$/);
+      await expect(page).toHaveURL(/\/login\?returnTo=%2Fshelf$/);
     });
   },
 );
@@ -159,6 +166,8 @@ Break the rate-book test deliberately — change `4` to `5` in the assertion —
    Error in step: verify the rating persists on the shelf and via API
    expected 5 but received 4
 ```
+
+(The `[authenticated]` project prefix appears once the storage-state lab has added the `authenticated` project to `playwright.config.ts`. If you're running this before that lab lands, your project prefix will look different.)
 
 Compare that to the before, which said:
 

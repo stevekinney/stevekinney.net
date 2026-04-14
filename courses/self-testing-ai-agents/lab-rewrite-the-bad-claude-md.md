@@ -83,7 +83,7 @@ Once your file passes the mechanical checks, the real question is whether it act
 
 > Add a "finished this year" count to the stats page. Follow the rules in CLAUDE.md.
 
-A tightened `CLAUDE.md` produces a session that looks roughly like this:
+A tightened `CLAUDE.md` produces a session that looks roughly like this. This transcript assumes the static-layer lab has already added `npm run knip`; if you are doing this lab in isolation, ignore the knip step—the three gates in the starter `package.json` are `typecheck`, `lint`, and `test`.
 
 ```text
 Reading CLAUDE.md...

@@ -34,7 +34,7 @@ The Shelf starter still has the baseline admin endpoint. Your job in this lab is
 You'll need:
 
 - A fork of the Shelf repo on your own GitHub.
-- A Cursor account with Bugbot enabled (included in paid tiers as of the workshop date—check the Cursor dashboard).
+- A Cursor account with Bugbot enabled. Bugbot is a paid add-on on top of Cursor Pro/Teams as of the workshop date, though a free tier with limited PR reviews exists—check the Cursor dashboard.
 - Admin access to install Bugbot on your fork.
 
 Install Bugbot on your Shelf fork from the Cursor dashboard and grant it access. Confirm it's active by opening an existing PR—Bugbot should leave a comment within a minute or two.

@@ -1,7 +1,7 @@
 ---
 title: Approaches to HAR Recording
 description: Three ways to capture a HAR file—programmatic recording inside a test, the Playwright CLI, and Chrome DevTools—and when each one earns its keep.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -11,7 +11,7 @@ I use all three depending on the situation. Here's when each one earns its keep.
 
 ## Programmatic recording inside a test
 
-This is the approach the previous lesson showed—`page.routeFromHAR` with `update: true`:
+This is the approach the previous lesson showed—`page.routeFromHAR` with `update: true`. The examples below use `tests/fixtures/` as the HAR directory—a convention this course adopts rather than a directory that already exists in the Shelf starter. Create it the first time you record:
 
 ```ts
 test('search for books', async ({ page }) => {

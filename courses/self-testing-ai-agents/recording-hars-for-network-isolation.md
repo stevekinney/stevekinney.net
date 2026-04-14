@@ -19,7 +19,7 @@ A recorded HAR is a snapshot of what the network _actually did_ during a single 
 
 ## Recording
 
-You record a HAR by running a test (or a script) in recording mode. Playwright's preferred API is [`page.routeFromHAR`](https://playwright.dev/docs/mock#mocking-with-har-files) with `update: true`:
+You record a HAR by running a test (or a script) in recording mode. Playwright's preferred API is [`page.routeFromHAR`](https://playwright.dev/docs/mock#mocking-with-har-files) with `update: true`. The `tests/fixtures/` path below is the convention this course adopts for HAR fixtures; it's not a directory the Shelf starter ships with, so you'll create it the first time you record.
 
 ```ts
 test('search for books', async ({ page }) => {
@@ -114,7 +114,7 @@ That `'fallback'` option is not hypothetical. It is the clean way to build a hyb
 
 **When you see "request not found in HAR."** Playwright throws this when a request matches the `url` glob but no HAR entry matches the full URL + method + payload. Common causes: a query parameter changed order, a new header appeared, or the request body is slightly different. **Inspect the diff first**—compare what the test is sending against what the HAR has. Run with `DEBUG=pw:api` to see the exact request Playwright tried to match. Only re-record after you understand _why_ the request changed.
 
-When your app fires concurrent requests to the same endpoint (e.g., three parallel fetches to `/api/books/:id`), Playwright serves them in the order the entries appear in the HAR's `entries` array—each request consumes the next unmatched entry with a matching URL and method.
+When your app fires concurrent requests to the same endpoint (e.g., three parallel fetches to `/api/books/:id`), Playwright generally picks an unused entry when multiple HAR entries match the same URL and method, so each concurrent request gets a distinct response.
 
 > [!NOTE]
 > If your app chains API calls—using a URL from response A to make request B—the second URL may differ between recordings. Signed URLs, nonce-bearing redirects, and pagination cursors won't match on replay. For these cases, [`page.route`](https://playwright.dev/docs/mock) with a custom handler is a better tool than HAR replay.
@@ -125,7 +125,7 @@ When your app fires concurrent requests to the same endpoint (e.g., three parall
 > [!WARNING]
 > Service Workers intercept network requests _before_ Playwright's route handler sees them. If your app registers a Service Worker (common in PWAs or when a library installs one for caching), those requests bypass `routeFromHAR` entirely—they're served from the Service Worker's cache, not from the HAR. Set `serviceWorkers: 'block'` in your Playwright config when you rely on HAR replay.
 
-One more route-layer wrinkle: if your test opens a popup, `page.routeFromHAR()` on the original page does not intercept the popup's first request. That first navigation belongs to the browser context. If popup traffic is part of the flow, register the HAR replay at the `browserContext` layer instead of the page layer.
+One more route-layer wrinkle: if your test opens a popup, a page-scoped handler (including `page.routeFromHAR()`) does not intercept the popup's first request. That first navigation belongs to the browser context. If popup traffic is part of the flow, register the HAR replay at the `browserContext` layer instead of the page layer.
 
 ## Refreshing HARs
 

@@ -96,8 +96,8 @@ If you're exploring or writing a new test, `--ui`. If you're watching a test run
 
 For those "pause right here" moments, keep two APIs in your pocket:
 
-- [`page.pause()`](https://playwright.dev/docs/test-ui-mode) stops immediately at that call site
-- `browserContext.debugger.requestPause()` pauses before the **next** Playwright action
+- [`page.pause()`](https://playwright.dev/docs/api/class-page#page-pause) stops immediately at that call site
+- [`browserContext.debugger.requestPause()`](https://playwright.dev/docs/api/class-debugger#debugger-request-pause) pauses before the **next** Playwright action
 
 That second one is surprisingly useful when you want to stop just before the next click or fill without rewriting the whole flow around a hardcoded pause.
 

@@ -337,7 +337,7 @@ Two route gotchas are worth writing down because they look like "Playwright is b
 
 First: `page.route()` does **not** catch the first request of a popup page. That request happens before you have a handle on the popup page object. If you need to intercept popup traffic from the start, register the handler on the browser context with `browserContext.route()`.
 
-Second: socket-heavy apps now have [`browserContext.routeWebSocket()`](https://playwright.dev/docs/api/class-browsercontext) when you need to observe or modify WebSocket traffic. The timing rule is strict: only sockets created **after** routing is registered get intercepted. Set it up before the page creates the connection or do not bother pretending the route will see it.
+Second: socket-heavy apps now have [`browserContext.routeWebSocket()`](https://playwright.dev/docs/api/class-browsercontext#browser-context-route-web-socket) when you need to observe or modify WebSocket traffic. The timing rule is strict: only sockets created **after** routing is registered get intercepted. Set it up before the page creates the connection or do not bother pretending the route will see it.
 
 ## When to use routes vs. HARs
 

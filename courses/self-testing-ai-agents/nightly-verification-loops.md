@@ -72,10 +72,10 @@ jobs:
     name: Dependency audit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: '24'
       - name: Run npm audit
         run: npm audit --audit-level=high
 
@@ -83,10 +83,10 @@ jobs:
     name: Refresh HAR fixtures
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Placeholder
         run: |
-          echo "Placeholder: re-record tests/fixtures/*.har against the real Open Library API"
+          echo "Placeholder: re-record the HAR fixtures the network-isolation lab will add (e.g. tests/fixtures/*.har) against the real Open Library API"
           echo "  and open a pull request with the diff so a human can review upstream drift."
 ```
 
@@ -110,7 +110,7 @@ The failure handling should look familiar by now:
 
 If the nightly run fans out across multiple browser or shard jobs, use blob reports as the intermediate artifact and merge them before you publish the final HTML report. That is the cleanest way to keep one readable report instead of a scattering of half-reports nobody opens.
 
-If the run is truly wide, turn on `fullyParallel: true` so Playwright shards at the test level instead of the file level. Add a global config `tag` per lane if you need the merged report to preserve "nightly-firefox" versus "nightly-webkit" as distinct evidence streams, and wire [`attachmentsBaseURL`](https://playwright.dev/docs/test-reporters) once attachments live outside the report directory.
+If the run is truly wide, turn on `fullyParallel: true` so Playwright shards at the test level instead of the file level. Attach per-project `metadata` — for example `metadata: { lane: 'nightly-firefox' }` on the Firefox project — if you need the merged report to preserve "nightly-firefox" versus "nightly-webkit" as distinct evidence streams, and wire [`attachmentsBaseURL`](https://playwright.dev/docs/test-reporters) once attachments live outside the report directory.
 
 If a nightly job fails and all you get is a red badge, the loop is incomplete. The whole point is to discover drift while there is still time to do something intelligent about it. For nightly jobs that produce text-heavy output, [structured CLI output](structured-cli-output-as-pipeline-glue.md) can turn the results into machine-readable status reports that downstream scripts branch on—opening issues, pinging Slack, or routing to the agent—without a custom parser for each job.
 

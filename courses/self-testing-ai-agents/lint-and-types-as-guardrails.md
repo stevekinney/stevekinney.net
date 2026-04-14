@@ -47,7 +47,7 @@ Ban `page.waitForTimeout`:
 // eslint.config.js
 export default [
   {
-    files: ['tests/**/*.ts'],
+    files: ['tests/end-to-end/**/*.ts'],
     rules: {
       'no-restricted-syntax': [
         'error',
@@ -68,7 +68,7 @@ Now extend the same rule to ban the other Playwright anti-patterns we hit in the
 
 ```js
 {
-  files: ['tests/**/*.ts'],
+  files: ['tests/end-to-end/**/*.ts'],
   rules: {
     'no-restricted-syntax': [
       'error',

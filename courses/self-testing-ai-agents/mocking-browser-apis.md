@@ -40,8 +40,8 @@ await page.clock.install();
 await page.clock.pauseAt(new Date('2026-04-14T09:00:00-05:00'));
 
 await page.goto('/dashboard');
-await page.clock.fastForward('00:05');
-await page.clock.runFor('00:10');
+await page.clock.fastForward(5000);
+await page.clock.runFor(10_000);
 await page.clock.resume();
 ```
 
@@ -181,6 +181,8 @@ test('copies the invite link', async ({ clipboardRecorder, page }) => {
   expect(clipboardRecorder.writes).toEqual(['https://shelf.test/invite/abc123']);
 });
 ```
+
+(This `/settings/team` flow is a constructed illustration; Shelf doesn't ship an invite-link page today.)
 
 That reads like behavior, not setup.
 

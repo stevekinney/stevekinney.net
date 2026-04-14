@@ -62,7 +62,7 @@ Your job from this point is to _not intervene_.
 
 ## Troubleshooting
 
-- If route-level changes do not appear in Playwright after a large refactor, check whether a stale preview server is still listening on port `4173`. Shelf enables `reuseExistingServer` locally, which is fast for repeat runs but can accidentally reuse an older build until you stop that process.
+- If route-level changes do not appear in Playwright after a large refactor, check whether a stale preview server is still listening on port `4173`. Shelf's `webServer` block does not explicitly opt out of reuse, so a running preview can get picked up by Playwright for repeat runs and accidentally serve an older build until you stop that process.
 - If Playwright MCP fails with `ENOENT: no such file or directory, mkdir '/.playwright-mcp'`, that is an environment limitation, not a Shelf bug. Capture the screenshots with local Playwright instead and record the MCP limitation honestly in `ROADMAP.md` or the lesson notes.
 - If the goals routes are present on disk but your browser still shows the old home page or a 404 for `/goals`, kill the preview process and rerun the tests against a fresh build before changing application code.
 
@@ -80,9 +80,9 @@ Sit with a notebook or a text file open. As the agent works, note each time one 
 - [ ] The agent runs `npm run test` for the new end-to-end tests.
 - [ ] The agent calls a custom MCP tool (e.g., `verify_shelf_page`) at least once.
 - [ ] The agent notices a screenshot diff on the shelf or goals page and either updates the baseline or reverts the change.
-- [ ] The agent runs or reads the automated accessibility check for the new UI instead of assuming semantic locators were enough.
+- [ ] The agent runs or reads the automated accessibility check for the new UI instead of assuming semantic locators were enough. _(If you skipped the accessibility lab, mark this item N/A.)_
 - [ ] The agent treats any new accessibility violation as blocking, or documents a narrowly-scoped suppression with a reason.
-- [ ] The agent runs the performance budget check after the UI change and notices if the route or interaction got slower or heavier.
+- [ ] The agent runs the performance budget check after the UI change and notices if the route or interaction got slower or heavier. _(If you skipped the performance-budget lab, mark this item N/A.)_
 - [ ] The agent catches its own mistake via lint (seeing a red squiggle and fixing it before committing).
 - [ ] The agent catches its own mistake via typecheck.
 - [ ] The agent catches its own mistake via a failing Playwright test.

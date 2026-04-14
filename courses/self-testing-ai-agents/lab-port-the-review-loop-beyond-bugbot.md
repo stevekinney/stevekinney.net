@@ -18,7 +18,7 @@ Keep the existing Bugbot setup if you use it, then document and wire one alterna
 
 ## Step 1: write the neutral playbook
 
-Create `docs/review-loop-playbook.md` in the Shelf repository.
+Create `docs/review-loop-playbook.md` in the Shelf repository (create the `docs/` directory if it doesn't exist).
 
 Document:
 

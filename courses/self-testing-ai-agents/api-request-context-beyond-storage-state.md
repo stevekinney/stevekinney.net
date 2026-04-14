@@ -69,13 +69,14 @@ export const test = base.extend<{ adminRequest: APIRequestContext }>({
 });
 ```
 
-Any test that asks for `adminRequest` now gets an HTTP client that's carrying the admin session cookie. No browser. No login flow. The Shelf starter doesn't ship the admin storage-state setup file, so you create it as part of this workflow and write `playwright/.authentication/admin.json` yourself:
+Any test that asks for `adminRequest` now gets an HTTP client that's carrying the admin session cookie. No browser. No login flow. The Shelf starter doesn't ship the admin storage-state setup file, so you create it as part of this workflow and write `playwright/.authentication/admin.json` yourself. The setup will sign the seeded admin in through Shelf's existing `/login` form (the `Display name` field only exists in create-account mode, so a plain sign-in uses just the email and password inputs):
 
 ```ts
 // tests/labs/admin.setup.ts
 import path from 'node:path';
 import { expect, test as setup } from '@playwright/test';
-import { resetShelfContent, seeded } from '../helpers/seed';
+import { admin } from '../data';
+import { resetShelfContent } from '../helpers/seed';
 
 const adminStorageStatePath = path.resolve('playwright/.authentication/admin.json');
 
@@ -83,9 +84,8 @@ setup('authenticate the seeded admin', async ({ page }) => {
   await resetShelfContent();
 
   await page.goto('/login');
-  await page.getByLabel('Email').fill(seeded.admin.email);
-  await page.getByLabel('Password').fill(seeded.admin.password);
-  await page.getByLabel('Display name').fill(seeded.admin.name);
+  await page.getByLabel('Email').fill(admin.email);
+  await page.getByLabel('Password').fill(admin.password);
   await page.getByRole('button', { name: 'Sign in' }).click();
 
   await expect(page).toHaveURL(/\/shelf/);
@@ -145,7 +145,7 @@ Log in through the page, call an endpoint through `browserContext.request`, and 
 
 ## Pattern: surviving a token refresh
 
-Shelf's [Better Auth](https://www.better-auth.com/) session is long-lived enough that you won't see this in practice, but it's a common agent trap, so it's worth showing. If your app's session expires mid-test (think: 15-minute tokens with refresh), the fixture-composition pattern gives you one clean place to handle re-auth:
+Shelf's hand-rolled session (see `src/lib/server/session.ts`) is long-lived enough that you won't see this in practice, but it's a common agent trap, so it's worth showing. If your app's session expires mid-test (think: 15-minute tokens with refresh), the fixture-composition pattern gives you one clean place to handle re-auth:
 
 ```ts
 refreshableAdmin: async ({ playwright }, use) => {

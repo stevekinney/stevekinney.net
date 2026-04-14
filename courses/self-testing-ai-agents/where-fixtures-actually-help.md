@@ -27,7 +27,7 @@ If your setup does not answer one of those questions, it is probably not a fixtu
 
 This is the most obvious fixture category, and also the one that pays rent the fastest. Tests often need to act as a specific _kind_ of user: an authenticated reader, an administrator API client, an anonymous browser context, a premium customer with feature flags turned on.
 
-That is fixture territory because the thing being shared is not "steps" but _identity_:
+That is fixture territory because the thing being shared is not "steps" but _identity_. This example assumes you have already followed the [Storage State Authentication](storage-state-authentication.md) lab and have a `user.json` file on disk — a fresh Shelf starter does not ship it:
 
 ```ts
 import { test as base } from '@playwright/test';

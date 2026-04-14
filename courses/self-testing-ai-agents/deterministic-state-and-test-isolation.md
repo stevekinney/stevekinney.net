@@ -40,7 +40,7 @@ The current starter intentionally stops one layer short of shipping the actual s
 
 Then the deterministic seeding lab has you write `tests/helpers/seed.ts` on top of those pieces. The point is pedagogical: students should focus on Playwright and deterministic state, not spend the whole lesson reverse-engineering raw Drizzle insert calls.
 
-The starter utilities look roughly like this:
+The starter utilities have simplified signatures that look roughly like this (the real exports are arrow functions and take a few more fields, like `isAdmin` on users and `featuredPosition` on books):
 
 ```ts
 // src/lib/server/users.ts
@@ -102,7 +102,7 @@ test('alice can add Piranesi to her shelf', async ({ page }) => {
 });
 ```
 
-Every test starts with alice, three books, and one shelf entry (Station Eleven). That's the contract. If a test needs different data, it seeds different data _explicitly_, not by hoping some earlier test left it around.
+Every test starts with alice, three books, and two shelf entries (Station Eleven and Piranesi). That's the contract. If a test needs different data, it seeds different data _explicitly_, not by hoping some earlier test left it around.
 
 The important thing here is that seeding is _fast_ against SQLite. You can afford to reseed before every test. If you're on Postgres and reseeding takes two seconds, you might reseed per file instead of per test, or use transactions (more on that in a moment).
 
@@ -114,7 +114,7 @@ There are three common strategies. Pick one based on your database.
 
 **Per-test transactions.** Wrap every test in a transaction, roll back at the end. This is the fastest option and it requires zero cleanup code, because nothing was ever committed. The catch: it only works if your application code reuses the same database connection the test opens. Node-level connection pooling usually breaks this, and you have to be careful with framework-level request handlers. [Drizzle](https://orm.drizzle.team/) supports this via `database.transaction`, but wiring it into SvelteKit's request handlers takes more than a lesson's worth of plumbing. Worth knowing about; not my default recommendation.
 
-**Per-worker databases.** [Playwright spins up multiple workers when it runs in parallel.](https://playwright.dev/docs/test-parallel) Each worker gets its own SQLite file, its own schema, its own seed. Tests within a worker share the database but always run serially, so they can't race each other. This is where I want SQLite projects to end up eventually. It looks like:
+**Per-worker databases.** [Playwright spins up multiple workers when it runs in parallel.](https://playwright.dev/docs/test-parallel) Each worker gets its own SQLite file, its own schema, its own seed. Tests within a worker share the database but always run serially, so they can't race each other. This is where I want SQLite projects to end up eventually. A future Shelf could roughly look like this:
 
 ```ts
 // playwright.config.ts
@@ -126,7 +126,8 @@ export default defineConfig({
   },
 });
 
-// src/lib/server/db/index.ts
+// What the db helper would look like (Shelf today keys off databaseUrl,
+// not TEST_WORKER_INDEX — this is aspirational):
 const workerDatabasePath = `./test-database-${process.env.TEST_WORKER_INDEX ?? 0}.sqlite`;
 ```
 

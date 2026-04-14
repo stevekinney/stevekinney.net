@@ -71,7 +71,7 @@ test('home page renders and exposes sign in', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  await expect(page.getByRole('main').getByRole('link', { name: 'Sign in' })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('link', { name: 'Sign in' })).toBeVisible();
 });
 ```
 
@@ -94,10 +94,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: '24'
       - run: npm ci --ignore-scripts
       - run: npm run build
       - name: Deploy
@@ -112,10 +112,10 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: '24'
       - run: npm ci --ignore-scripts
       - run: npx playwright install --with-deps chromium
       - name: Run post-deploy smoke check
@@ -124,7 +124,7 @@ jobs:
         run: npm run test:smoke
       - name: Upload report on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: smoke-report
           path: playwright-report/

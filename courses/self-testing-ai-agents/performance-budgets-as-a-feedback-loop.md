@@ -40,11 +40,11 @@ The model:
 
 That is enough to catch most accidental regressions.
 
-In Shelf, the concrete files are `tests/performance.spec.ts` for the runtime side and the `npm run performance:*` script family for the build side, with `npm run performance:build` as the narrow "just gather the numbers" entry point. The whole point is that the budget lives behind named commands the agent can run, not behind a blog post about performance culture.
+By the end of the companion lab, Shelf will have `tests/performance.spec.ts` for the runtime side and the `npm run performance:*` script family for the build side, with `npm run performance:build` as the narrow "just gather the numbers" entry point. The whole point is that the budget lives behind named commands the agent can run, not behind a blog post about performance culture.
 
 ## Build-time budgets: catch weight gain early
 
-Shelf exposes `npm run build:stats`, which flips a `BUNDLE_STATS=1` environment variable and tells the Vite config to pipe [`rollup-plugin-visualizer`](https://github.com/btd/rollup-plugin-visualizer) into the output—producing both a `build/stats.html` treemap for humans and a `build/stats.json` raw data file for automation. You can follow the same shape with any bundler; the point is not the plugin.
+In the lab you'll add `npm run build:stats` to Shelf, which flips a `BUNDLE_STATS=1` environment variable and tells the Vite config to pipe [`rollup-plugin-visualizer`](https://github.com/btd/rollup-plugin-visualizer) into the output—producing both a `build/stats.html` treemap for humans and a `build/stats.json` raw data file for automation. You can follow the same shape with any bundler; the point is not the plugin.
 
 The wiring inside `vite.config.ts` is small. You import `visualizer` from `rollup-plugin-visualizer`, conditionally include two instances in the Vite plugin list (one HTML, one JSON), and gate the whole block on the `BUNDLE_STATS` flag so a normal `npm run build` stays fast and silent:
 
@@ -87,7 +87,7 @@ Two notes about that block:
 - **`template: 'treemap'`** produces the HTML treemap a human can scroll through. **`template: 'raw-data'`** produces the JSON your check script will parse. You want both — humans use one, the loop uses the other.
 - **`emitFile: false`** writes the report to disk via `filename` instead of pushing it through the Rollup output graph. This keeps the report files out of the published bundle.
 
-Shelf ships exactly this pattern in `vite.config.ts`. The point is that a green build produces machine-readable numbers you can compare against a threshold in version control.
+After the companion lab, Shelf's `vite.config.ts` will carry exactly this pattern. The point is that a green build produces machine-readable numbers you can compare against a threshold in version control.
 
 What I want from the build-side loop:
 
@@ -224,8 +224,8 @@ And `performance-budgets.json` is the stored-threshold file next to the script. 
 }
 ```
 
-> [!NOTE] The starter ships this
-> Shelf's `scripts/check-performance-budgets.mjs` is a slightly longer version of this sketch that adds `try/catch` around the JSON parse and exposes `clientEntries` for future rules. The walk is identical. Read the sketch above to understand _how_ the aggregation works, then compare it with your lab implementation or the course solution to see the exact shape.
+> [!NOTE] The lab ships this
+> When you finish the companion lab, Shelf's `scripts/check-performance-budgets.mjs` will be a slightly longer version of this sketch that adds `try/catch` around the JSON parse and exposes `clientEntries` for future rules. The walk is identical. Read the sketch above to understand _how_ the aggregation works, then compare it with your lab implementation or the course solution to see the exact shape.
 
 ## Runtime budgets: catch slowness where the user feels it
 

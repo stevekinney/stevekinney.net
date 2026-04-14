@@ -19,8 +19,8 @@ The `docs/review-loop-playbook.md` file you add in this lab breaks every possibl
 - An admin route doesn't call `requireAdministrator`. Missing authorization on an admin route isn't a style nit.
 - A Drizzle query on user-owned data doesn't scope by the current user. This means one user can see or modify another user's shelf entries.
 - A `catch` block swallows an error and returns 2xx. The caller thinks everything is fine. It isn't.
-- A Playwright spec uses `page.waitForTimeout`, a raw CSS `page.locator`, or logs in manually instead of using storage state. These are banned by the ESLint rules _and_ by `CLAUDE.md`. If a reviewer catches them, the static layer has a hole.
-- A change removes the dossier script, the JSON reporter, or the retained trace config. Those are the diagnostic lifeline for every future failure.
+- A Playwright spec uses `page.waitForTimeout`, a raw CSS `page.locator`, or logs in manually instead of using storage state (once the auth-bootstrap lab lands). These are banned by `CLAUDE.md` (and, after the static-layer lab, by ESLint rules too). If a reviewer catches them, the static layer has a hole.
+- A change removes the dossier script, the JSON reporter, or the retained trace config (once added in the dossier and reporter labs). Those are the diagnostic lifeline for every future failure.
 
 Notice how none of these say "the code looks messy" or "this could be refactored." Blocking findings are about _correctness_, not taste.
 

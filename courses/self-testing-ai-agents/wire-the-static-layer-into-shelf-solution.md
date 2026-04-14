@@ -37,11 +37,11 @@ The first block applies globally—every file in the project:
 
 The `networkidle` rule uses the child combinator (`>`) to match a `Literal` node with value `'networkidle'` that is a direct argument to `waitForLoadState`. The `userId` rule uses a nested `MemberExpression` match—`body.userId`—because a simple property-name check on `userId` would fire on every object that happens to have a `userId` field. The nesting says "specifically `something.body.userId`," which is the shape of reading from a parsed request body.
 
-The second block scopes to `tests/**/*.ts` only:
+The second block scopes to `tests/end-to-end/**/*.ts` only:
 
 ```js
 {
-  files: ['tests/**/*.ts'],
+  files: ['tests/end-to-end/**/*.ts'],
   rules: {
     'no-restricted-syntax': [
       'error',
@@ -95,7 +95,7 @@ Open `tsconfig.json`. The `compilerOptions` block:
 }
 ```
 
-`strict: true` is the umbrella—it enables `strictNullChecks`, `strictFunctionTypes`, `strictBindCallApply`, `strictPropertyInitialization`, `noImplicitAny`, `noImplicitThis`, `alwaysStrict`, and `useUnknownInCatchVariables`. The five flags listed after it are _not_ included in `strict` and must be enabled individually.
+`strict: true` is the umbrella—it enables `strictNullChecks`, `strictFunctionTypes`, `strictBindCallApply`, `strictPropertyInitialization`, `noImplicitAny`, `noImplicitThis`, `alwaysStrict`, `strictBuiltinIteratorReturn`, and `useUnknownInCatchVariables`. The six flags listed after it are _not_ included in `strict` and must be enabled individually.
 
 `noUncheckedIndexedAccess` is the one that changes your daily life the most. With it on, `items[0]` has type `T | undefined` instead of `T`. Every array index and object bracket access forces you to handle the missing case. It is annoying for the first hour and then it catches a real bug, and you never turn it off.
 
@@ -179,7 +179,7 @@ npx lefthook run pre-push
 
 ### Part 5: Secret scanning with gitleaks
 
-Open `scripts/run-gitleaks-staged.ts`. This script exists because `gitleaks git --staged` had reliability issues with newly added files at the time of writing. The workaround is straightforward: materialize the staged git index into a temporary directory, run `gitleaks dir` against it, then clean up.
+Open `scripts/run-gitleaks-staged.ts`. Depending on the gitleaks release you have installed, `gitleaks git --staged` may miss newly added files; this wrapper script removes that ambiguity. It materializes the staged git index into a temporary directory, runs `gitleaks dir` against it, then cleans up.
 
 The script does four things:
 

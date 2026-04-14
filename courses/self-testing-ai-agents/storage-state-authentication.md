@@ -29,11 +29,11 @@ Log in once, at the start of the test run. Save the resulting browser state—co
 
 Playwright has first-class support for this. You don't need plugins, you don't need clever fixtures, you just need to know where the two knobs are.
 
-One naming note from the official [authentication docs](https://playwright.dev/docs/auth): the docs use `playwright/.auth/` as the conventional directory. Shelf already uses `playwright/.authentication/`, which is fine. The convention matters less than the rule: keep the files out of git and make the location obvious.
+One naming note from the official [authentication docs](https://playwright.dev/docs/auth): the docs use `playwright/.auth/` as the conventional directory. Shelf reserves `playwright/.authentication/` in its `.gitignore` for the lab work in this lesson, which is fine. The convention matters less than the rule: keep the files out of git and make the location obvious.
 
 ## The setup
 
-Create a Playwright setup file—Shelf uses `tests/authentication.setup.ts`—that logs in and writes the state to a file. There are two ways to do the "log in" part, and both are worth knowing.
+Create a Playwright setup file—this lab adds `tests/authentication.setup.ts` to Shelf—that logs in and writes the state to a file. There are two ways to do the "log in" part, and both are worth knowing.
 
 ### Option A: Log in through the UI
 
@@ -66,8 +66,10 @@ import path from 'node:path';
 const authenticationFile = path.resolve('playwright/.authentication/user.json');
 
 setup('authenticate', async ({ request }) => {
-  const response = await request.post('/api/auth/sign-in/email', {
-    data: { email: 'alice@example.com', password: 'password123' },
+  // Shelf's login is a SvelteKit form action, not a JSON API endpoint.
+  // POST to `/login?/signInEmail` with form-encoded credentials.
+  const response = await request.post('/login?/signInEmail', {
+    form: { email: 'alice@example.com', password: 'password123' },
   });
 
   expect(response.ok()).toBeTruthy();
@@ -77,6 +79,8 @@ setup('authenticate', async ({ request }) => {
 ```
 
 No page load, no DOM rendering, no dependency on the login form's markup. This is faster and more resilient to UI changes. The tradeoff: if someone breaks the login form, the setup still passes, and you won't find out until a user reports it—or until you have a separate test that exercises the login page directly.
+
+If your app uses a plain JSON auth endpoint instead of a SvelteKit form action, replace the path and switch `form: { ... }` for `data: { ... }` so the body is sent as JSON.
 
 ### Which one?
 
@@ -90,9 +94,9 @@ Either way, Playwright can write a JSON file to `playwright/.authentication/user
 {
   "cookies": [
     {
-      "name": "session",
+      "name": "shelf_session",
       "value": "eyJhbGciOiJIUzI1NiJ9...",
-      "domain": "localhost",
+      "domain": "127.0.0.1",
       "path": "/",
       "expires": 1748000000,
       "httpOnly": true,
@@ -102,7 +106,7 @@ Either way, Playwright can write a JSON file to `playwright/.authentication/user
   ],
   "origins": [
     {
-      "origin": "http://localhost:5173",
+      "origin": "http://127.0.0.1:4173",
       "localStorage": [
         {
           "name": "shelf:user",
@@ -123,9 +127,9 @@ test.use({
   storageState: {
     cookies: [
       {
-        name: 'session',
+        name: 'shelf_session',
         value: 'test-session-token',
-        domain: 'localhost',
+        domain: '127.0.0.1',
         path: '/',
         expires: 1893456000,
         httpOnly: true,
@@ -135,14 +139,13 @@ test.use({
     ],
     origins: [
       {
-        origin: 'http://localhost:5173',
+        origin: 'http://127.0.0.1:4173',
         localStorage: [
           {
             name: 'shelf:user',
             value: JSON.stringify({
               id: 'usr_01J',
               email: 'alice@example.com',
-              role: 'reader',
             }),
           },
         ],

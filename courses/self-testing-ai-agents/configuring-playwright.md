@@ -30,7 +30,6 @@ This is a good use of `testIgnore`: excluding known teaching fixtures or generat
 webServer: {
   command: 'npm run build && npm run preview -- --host 127.0.0.1 --port 4173',
   url: 'http://127.0.0.1:4173',
-  reuseExistingServer: true,
 },
 ```
 
@@ -38,7 +37,7 @@ This is how Playwright starts your app before any test runs.
 
 Shelf builds and previews rather than running the dev server. Why: preview mode is closer to production. No HMR, no Vite transforms at runtime, no dev-only middleware changing behavior in ways production never will. If a test passes against preview, it's much more likely to pass in CI and production.
 
-`reuseExistingServer: true` keeps the starter smooth locally. If you already have the app running on port `4173`, Playwright reuses it instead of trying to boot a second copy.
+A common addition once the local loop starts to drag is `reuseExistingServer: true`. If you already have the app running on port `4173`, Playwright reuses it instead of trying to boot a second copy.
 
 Later, a common CI-friendly variant is:
 
@@ -102,7 +101,7 @@ retries: process.env.CI ? 2 : 0,
 Here's what each one does:
 
 - `fullyParallel` allows tests in the same file to run concurrently.
-- `workers` controls how many worker processes Playwright can use.
+- `workers` controls how many worker processes Playwright can use. Pinning `workers: 1` in CI is appropriate only for some setups (shared external resources, flaky infrastructure) and it will defeat `fullyParallel` when both are set. If you have `fullyParallel: true` and want the parallelism, leave `workers` undefined in CI so Playwright can scale to the available cores.
 - `forbidOnly` fails CI if someone accidentally committed `test.only`.
 - `retries` gives CI a little resilience against one-off flakes.
 

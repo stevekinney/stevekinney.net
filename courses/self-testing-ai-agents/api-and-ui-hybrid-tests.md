@@ -21,7 +21,7 @@ test('shelf stats show total books read', async ({ page }) => {
   for (const title of ['A', 'B', 'C', 'D', 'E']) {
     await page.goto('/search?q=' + title);
     await page.getByRole('button', { name: 'Add to shelf' }).click();
-    await page.getByRole('button', { name: 'Mark as finished' }).click();
+    await page.getByRole('button', { name: 'Mark as read' }).click();
   }
 
   // Now check the stats page
@@ -80,7 +80,7 @@ That pattern gives you fast setup, real behavior, and a cheap double-check on pe
 
 ## A trickier example: setup the scenario, assert the consequence
 
-Shelf has a feature where finishing a book updates a "currently reading" counter on the home page. Let's test that.
+Shelf has a feature where finishing a book updates a "currently reading" counter on the shelf page. Let's test that.
 
 ```ts
 test('finishing a book updates the currently-reading counter', async ({ page, request }) => {
@@ -93,18 +93,18 @@ test('finishing a book updates the currently-reading counter', async ({ page, re
   });
 
   // Check the counter
-  await page.goto('/');
+  await page.goto('/shelf');
   await expect(page.getByText('Currently reading: 2')).toBeVisible();
 
   // Finish one via the UI—this is the actual action under test
   await page.goto('/shelf');
   await page
     .getByRole('article', { name: /Station Eleven/ })
-    .getByRole('button', { name: 'Mark as finished' })
+    .getByRole('button', { name: 'Mark as read' })
     .click();
 
   // Counter should decrement
-  await page.goto('/');
+  await page.goto('/shelf');
   await expect(page.getByText('Currently reading: 1')).toBeVisible();
 });
 ```

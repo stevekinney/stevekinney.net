@@ -42,7 +42,7 @@ Knip's config lives in `knip.json` (or `knip.jsonc`). A reasonable Shelf startin
 
 ```jsonc
 {
-  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [
     "src/app.html",
     "src/hooks.server.ts",

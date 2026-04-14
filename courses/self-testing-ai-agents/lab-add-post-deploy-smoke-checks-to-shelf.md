@@ -57,6 +57,9 @@ Open `package.json` and find the smoke-test command:
 
 The workflow should set `SMOKE_BASE_URL`. The test command should stay boring.
 
+> [!WARNING] The plain-form script inherits the main `webServer` block
+> This shorter form implicitly uses the main `playwright.config.ts`, which means Playwright will still try to run `npm run build && npm run preview` before hitting your target. That is almost never what you want when `SMOKE_BASE_URL` points at a real deployed URL — the smoke run ends up booting a local preview it does not need. If you're pointing this at anything other than `127.0.0.1:4173`, prefer the split-config form shown in the NOTE below.
+
 > [!NOTE] One good final shape uses a split config
 > A common final version of this script is `"test:smoke": "playwright test --config=playwright.smoke.config.ts"`—a separate Playwright config scoped to the smoke suite. The split exists so the smoke run doesn't inherit the main config's local `webServer` block or any authenticated or browser-specific projects you added later. Both shapes work. Create the split-config version if you want the smoke loop fully isolated from the local dev loop.
 

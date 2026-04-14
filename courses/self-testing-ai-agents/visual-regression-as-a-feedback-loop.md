@@ -38,15 +38,15 @@ test('shelf page matches visual baseline', async ({ page }) => {
 });
 ```
 
-Shelf runs authenticated visual tests inside the same `authenticated` Playwright project the rest of the suite uses, with a `beforeEach` that calls `resetShelfContent` so every diff starts from the same seeded shelf state. If your project has a reason to separate visual reads from write-heavy tests (say, both suites racing the same user's data), you can point a second Playwright project at a different storage-state file, but do not reach for that complexity until a concrete conflict forces it.
+Once you finish the companion lab, Shelf will run authenticated visual tests inside the same `authenticated` Playwright project the rest of the suite uses, with a `beforeEach` that calls `resetShelfContent` so every diff starts from the same seeded shelf state. If your project has a reason to separate visual reads from write-heavy tests (say, both suites racing the same user's data), you can point a second Playwright project at a different storage-state file, but do not reach for that complexity until a concrete conflict forces it.
 
-First run: Playwright takes a screenshot and writes it to `tests/visual-authenticated.spec.ts-snapshots/shelf-page.png` (the snapshot directory is named after the test file, so a different `<test-file>.spec.ts` would produce a different `<test-file>.spec.ts-snapshots/` folder). The test "passes" because there's nothing to compare against.
+First run: Playwright takes a screenshot and writes it under `tests/visual-authenticated.spec.ts-snapshots/`. By default the filename also carries a project and platform suffix (for example, `shelf-page-authenticated-darwin.png`), because Playwright's default `snapshotPathTemplate` appends `{-projectName}{-snapshotSuffix}` to the argument you passed. You can keep that suffix or override the template in `playwright.config.ts` if you want a shorter filename. The snapshot directory is still named after the test file, so a different `<test-file>.spec.ts` would produce a different `<test-file>.spec.ts-snapshots/` folder. The test "passes" because there's nothing to compare against.
 
 Every subsequent run: Playwright takes a new screenshot and compares it to the committed baseline. If they match pixel-for-pixel (modulo a small tolerance), the test passes. If they don't, the test fails, and Playwright writes three files to your report directory: the baseline, the actual, and a diff image highlighting the changed pixels.
 
 You commit the baseline to git. When you make an intentional visual change, you regenerate the baseline (`--update-snapshots`) in the same commit. Reviewers see the old baseline being replaced with the new baseline in the diff and can eyeball whether the change was intentional.
 
-In Shelf, the real file is `tests/visual-authenticated.spec.ts`, it uses `expect.toHaveScreenshot(...)`, and the committed baselines live under `tests/visual-authenticated.spec.ts-snapshots/`. The normal way through the loop is `npm run test`, the focused way is `npm run test -- --grep visual`, and the intentional-baseline-update path is `npm run test -- --update-snapshots`.
+After you complete the companion lab, Shelf will have `tests/visual-authenticated.spec.ts` using `expect.toHaveScreenshot(...)`, with the committed baselines under `tests/visual-authenticated.spec.ts-snapshots/`. The normal way through the loop is `npm run test`, the focused way is `npm run test -- --grep visual`, and the intentional-baseline-update path is `npm run test -- --update-snapshots`.
 
 ## Making screenshot tests reliable
 

@@ -185,7 +185,7 @@ flowchart LR
   style C fill:#ffe0b2
 ```
 
-The execution order: `setup` runs first, then `chromium`, then `cleanup`. If you don't need cleanup—and for authentication you usually don't, since the state file gets overwritten on the next run—skip it. Teardown is there for the cases where leftover state would leak across runs.
+The execution order: `setup` runs first, then `chromium`, then `cleanup`. If you don't need cleanup—and for authentication you usually don't, since the setup project overwrites the state file every time it runs—skip it. Teardown is there for the cases where leftover state would leak across runs.
 
 ## Good teardown-project use cases
 

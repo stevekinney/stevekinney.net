@@ -52,7 +52,7 @@ Link back: this is the exact failure mode [The Waiting Story](the-waiting-story.
 When a test flakes, run it. Run it ten times.
 
 ```bash
-for i in {1..10}; do npm run test -- --grep "your test name" || break; done
+for i in {1..10}; do npm run test -- --grep "your test name" || true; done
 ```
 
 Count the failures.

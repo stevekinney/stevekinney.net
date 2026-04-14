@@ -42,10 +42,10 @@ har-refresh:
   name: Refresh HAR fixtures
   runs-on: ubuntu-latest
   steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Placeholder
       run: |
-        echo "Placeholder: re-record tests/fixtures/*.har against the real Open Library API"
+        echo "Placeholder: re-record the HAR fixtures the network-isolation lab will add (e.g. tests/fixtures/*.har) against the real Open Library API"
         echo "  and open a pull request with the diff so a human can review upstream drift."
 ```
 
@@ -60,10 +60,10 @@ dependency-audit:
   name: Dependency audit
   runs-on: ubuntu-latest
   steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
-        node-version: 22
+        node-version: '24'
     - name: Install dependencies
       run: npm ci --ignore-scripts
     - name: Run npm audit
@@ -84,12 +84,12 @@ cross-browser-smoke:
   name: Cross-browser smoke
   runs-on: ubuntu-latest
   steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
-        node-version: 22
+        node-version: '24'
     - name: Cache dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: |
           ~/.npm
@@ -109,7 +109,7 @@ cross-browser-smoke:
       run: npm run test:cross-browser
     - name: Upload Playwright report
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: cross-browser-smoke-report
         path: playwright-report/
@@ -118,7 +118,7 @@ cross-browser-smoke:
 
 This is the most complete job in the workflow because the lab before this one already had you build the underlying command.
 
-The cache covers both npm packages and Playwright browsers. The browser-install step is explicit because Playwright only defaults to Chromium. The `.env` bootstrap is intentionally small: `DATABASE_URL=file:./ci.db` plus the Open Library base URL the app already expects. The current starter does not need `tmp/ci.db`, an `ORIGIN`, or a fake auth secret just to run the public smoke loop.
+The cache covers both npm packages and Playwright browsers. The browser-install step is explicit because Playwright only defaults to Chromium. The `.env` bootstrap is intentionally small: `DATABASE_URL=file:./ci.db` plus the Open Library base URL the app already expects. Keep this bootstrap focused on what the public smoke loop actually needs — resist the urge to preload auth secrets, extra databases, or origins the current starter does not use.
 
 And again, the artifact name matters. When a nightly run fails, you want the job and artifact names doing triage for you before you click anything.
 

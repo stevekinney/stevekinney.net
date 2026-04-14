@@ -133,7 +133,7 @@ Playwright ships a [Clock API](https://playwright.dev/docs/clock) that lets you 
 await page.clock.install();
 await page.goto('/shelf');
 // ... interact ...
-await page.clock.fastForward('00:03'); // advance three seconds
+await page.clock.fastForward('03'); // advance three seconds
 await expect(page.getByText('Added to your shelf')).toBeHidden();
 ```
 

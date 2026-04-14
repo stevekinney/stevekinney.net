@@ -32,7 +32,7 @@ This is the single best argument for locator discipline: **the refactor-proof te
 
 But, do not overread that claim. A good `getByRole` suite gives you upstream pressure toward accessible markup. It does _not_ give you a dedicated accessibility gate. We make that distinction explicit in [Accessibility as a Quality Gate](accessibility-as-a-quality-gate.md), because "probably accessible" is not a quality bar.
 
-If you want reps instead of theory, Shelf ships a dedicated playground at `src/routes/playground/+page.svelte`, and the companion lab has you write the exercises in `tests/playground.spec.ts`. Run the app locally while you work, and keep `npm run typecheck` and `npm run build` nearby too. The playground intentionally includes a few accessibility warnings so you can see where the locator hierarchy stops helping and why the fallback section exists.
+If you want reps instead of theory, Shelf ships a dedicated playground at `src/routes/playground/+page.svelte`, and the companion lab has you create `tests/playground.spec.ts`. Run the app locally while you work, and keep `npm run typecheck` and `npm run build` nearby too. The playground intentionally includes a few accessibility warnings so you can see where the locator hierarchy stops helping and why the fallback section exists.
 
 ## What the agent does by default, and why it's wrong
 

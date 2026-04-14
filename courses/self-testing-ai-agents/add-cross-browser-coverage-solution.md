@@ -86,17 +86,17 @@ Playwright's default install is Chromium. That is why the browser-install step i
 
 ### The nightly workflow hook-up
 
-Once the command exists, the nightly job is small:
+Once the command exists and the nightly workflow lab lands, the nightly job is small. Here is the shape to aim for:
 
 ```yaml
 cross-browser-smoke:
   name: Cross-browser smoke
   runs-on: ubuntu-latest
   steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
-        node-version: 22
+        node-version: '24'
     - name: Install dependencies
       run: npm ci --ignore-scripts
     - name: Install Playwright browsers
@@ -111,7 +111,7 @@ cross-browser-smoke:
       run: npm run test:cross-browser
     - name: Upload Playwright report
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: cross-browser-smoke-report
         path: playwright-report/
@@ -120,7 +120,7 @@ cross-browser-smoke:
 
 Two details are load-bearing.
 
-First: `DATABASE_URL=file:./ci.db`, not `tmp/ci.db`. The current starter does not need the extra directory ceremony just to boot the preview server.
+First: `DATABASE_URL=file:./ci.db` keeps the preview bootstrap to a single file inside the working directory — no extra directory ceremony just to boot the preview server.
 
 Second: the report artifact name is specific. When a nightly check fails, you want the failure to read like "cross-browser smoke failed," not "some artifact exists somewhere, good luck."
 

@@ -38,7 +38,7 @@ Before you can actually _run_ the new projects locally, install the alternate br
 npx playwright install --with-deps firefox webkit
 ```
 
-The lesson's **Install the extra browsers first** callout explains why this is required (Playwright defaults to Chromium-only). Do this once per machine; CI runners need it too, which is why Shelf's `nightly.yml` `cross-browser-smoke` job runs the same line before the test step.
+The lesson's **Install the extra browsers first** callout explains why this is required (Playwright defaults to Chromium-only). Do this once per machine; CI runners will need it too — the nightly workflow you build in the next lab should run the same line before the test step for that reason.
 
 ## Step 2: tag the smoke subset
 

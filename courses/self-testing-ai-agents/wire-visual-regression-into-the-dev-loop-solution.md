@@ -124,9 +124,9 @@ The lab asks you to change button padding in `src/lib/components/button.svelte`:
 
 ```svelte
 <!-- before -->
-'inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold ...',
+'inline-flex items-center justify-center rounded-(--radius-control) px-4 py-2 text-sm font-semibold ...',
 <!-- after -->
-'inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold ...',
+'inline-flex items-center justify-center rounded-(--radius-control) px-6 py-3 text-sm font-semibold ...',
 ```
 
 Run the visual specs:

@@ -112,9 +112,7 @@ Do not report a task complete with any of these failing. If you later add the st
 ## Routes
 
 - Public: `/`, `/login`, `/design-system`, `/playground`
-- Protected: `/search`, `/shelf`, `/admin` — gate server-side on `locals.user`, never with client guards
-- `/playground` is the lab fixture for `lab-locator-challenges`. It ships three intentional a11y violations (div-as-button, icon-only button with no accessible name) that trip svelte-check warnings on every typecheck and build. Do not "fix" them — they are the bad examples the lab targets.
-- `/admin` is the protected fixture for `lab-bugbot-on-a-planted-bug`. The planted permission bug lives on branch `planted-bug/admin-feature`; `main`'s admin route is the clean baseline.
+- Protected: `/search`, `/shelf`, `/goals`, `/admin` — gate server-side on `locals.user`, never with client guards
 - Do not reintroduce `src/routes/demo/` or any generated starter pages
 - New routes must match the Shelf product domain (books, shelves, ratings)
 
@@ -122,8 +120,8 @@ Do not report a task complete with any of these failing. If you later add the st
 
 - Write a failing test before the implementation. Commit the test first.
 - Unit tests live next to the file under test as `<name>.test.ts` and run with Vitest.
-- End-to-end tests live in `tests/` and run with Playwright.
-- Seed JSON lives in `tests/data/`. HARs and other artifacts live in `tests/fixtures/`. Share data from those paths instead of redefining it per spec.
+- End-to-end tests live in `tests/end-to-end/` and run with Playwright.
+- Seed JSON lives in `tests/data/`. Later labs introduce `tests/fixtures/` for HARs and other artifacts. Share data from those paths instead of redefining it per spec.
 
 ## Playwright locator rules
 
@@ -133,7 +131,7 @@ Do not report a task complete with any of these failing. If you later add the st
 - When a Playwright test fails, open `playwright-report/index.html` and its trace before proposing a fix.
 ```
 
-The rest of the current file keeps going with authentication, seeding, HARs, accessibility, failure triage, static analysis, hooks, and "do not" rules. The important thing for this lesson is the pattern: every section names specific commands, paths, APIs, or forbidden edits.
+The shipped starter continues with UI copy rules and a short "do not" list, and the course will grow the file across later labs with sections on authentication, seeding, HARs, accessibility, failure triage, static analysis, and hooks. The important thing for this lesson is the pattern: every section names specific commands, paths, APIs, or forbidden edits.
 
 Notice the last rule family in the real file. Instructions files have to keep the agent honest about more than just commands and lint rules — they also have to keep the agent from leaking the scaffolding into the product. An agent that helpfully writes "Loading seeded fixtures..." into a real shelf page is not being clever; it is bleeding the test layer into the product surface. One mechanically-checkable rule prevents that ("do not mention Playwright, seeded fixtures, test IDs, HARs, or course material in rendered page copy") in a way that "keep the UI clean" cannot.
 
@@ -378,7 +376,7 @@ If neither rule matches, the script exits `0` with no output and Claude continue
 
 ### Codex
 
-Codex hooks are still experimental, and they are not a substitute for sandboxing or `.rules`. Use the sandbox for filesystem boundaries, use `.rules` for simple outside-sandbox command policy, and use hooks when the decision depends on command contents or the resulting diff. You need to enable hooks explicitly in `.codex/config.toml` before anything in this section works:
+Codex hooks are still experimental, and they are not a substitute for sandboxing or `.rules`. Use the sandbox for filesystem boundaries, use `.rules` for simple outside-sandbox command policy, and use hooks when the decision depends on command contents or the resulting diff. As of this writing, you need to enable hooks explicitly in `.codex/config.toml` before anything in this section works (check the [Codex hooks docs](https://developers.openai.com/codex/hooks) for the current syntax):
 
 ```toml
 [features]

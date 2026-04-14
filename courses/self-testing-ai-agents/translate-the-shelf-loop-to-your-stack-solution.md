@@ -13,7 +13,7 @@ But "map each loop to your stack" is the kind of instruction that produces eithe
 
 ### The example translation
 
-Imagine you're translating Shelf's loops to a Next.js 14 app with Prisma, Jest for unit tests, Playwright for browser tests, and GitHub Actions for CI. Here's what the filled-in `LOOP_TRANSLATION.md` looks like:
+Imagine you're translating Shelf's loops to a Next.js 16 app with Prisma, Jest for unit tests, Playwright for browser tests, and GitHub Actions for CI. Here's what the filled-in `LOOP_TRANSLATION.md` looks like:
 
 ```markdown
 # Loop Translation: Next.js + Prisma + Jest
@@ -52,7 +52,7 @@ Imagine you're translating Shelf's loops to a Next.js 14 app with Prisma, Jest f
 - **Shelf:** `tests/authentication.setup.ts` drives the login form once,
   saves storage state to `playwright/.authentication/user.json`. All authenticated
   specs inherit it via `storageState`.
-- **This stack:** `e2e/global-setup.ts` calls the NextAuth `/api/auth/callback`
+- **This stack:** `e2e/global-setup.ts` calls the Auth.js `/api/auth/callback`
   endpoint directly to create a session, saves the cookies to
   `e2e/.auth/storage-state.json`. Playwright config references it in
   `use.storageState`.

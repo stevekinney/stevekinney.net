@@ -9,7 +9,7 @@ I like Bugbot. I also do not want your review loop to collapse the minute your t
 
 That is the point of this appendix.
 
-The names change. The underlying loop does not. [Cursor Bugbot](https://docs.cursor.com/en/bugbot), [GitHub Copilot code review](https://docs.github.com/en/copilot/tutorials/optimize-code-reviews), and [Codex automatic review](https://help.openai.com/en/articles/11369540-codex-in-chatgpt) all live on the same skeleton: a second agent reads the diff, leaves findings, and the authoring agent or human turns repeated findings into upstream rules.
+The names change. The underlying loop does not. [Cursor Bugbot](https://cursor.com/docs/bugbot), [GitHub Copilot code review](https://docs.github.com/en/copilot/tutorials/optimize-code-reviews), and [Codex automatic review](https://help.openai.com/en/articles/11369540-codex-in-chatgpt) all live on the same skeleton: a second agent reads the diff, leaves findings, and the authoring agent or human turns repeated findings into upstream rules.
 
 > [!NOTE] Prerequisite
 > Start with [The Second Opinion](the-second-opinion.md) and [Tuning Bugbot for Your Codebase](tuning-bugbot-for-your-codebase.md). This appendix assumes you already understand why the second-opinion loop matters. The only thing changing here is the vendor-specific surface area.
@@ -98,7 +98,7 @@ That is enough to keep the process portable even if the product does not stay st
 
 ### What the review playbook looks like
 
-The review playbook is the vendor-neutral artifact. Its job is to describe the loop in terms any reviewer (human, Bugbot, Copilot, Codex) can apply. Shelf's lives at `docs/review-loop-playbook.md` and has this shape:
+The review playbook is the vendor-neutral artifact. Its job is to describe the loop in terms any reviewer (human, Bugbot, Copilot, Codex) can apply. Shelf's would live at `docs/review-loop-playbook.md` — this file is what the lab will create — and has this shape:
 
 ```markdown
 # Review loop playbook

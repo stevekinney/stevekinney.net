@@ -71,7 +71,7 @@ The HTML reporter writes `playwright-report/html/index.html`, and for each faile
 
 The `open: 'never'` flag keeps Playwright from auto-opening a browser tab when you run tests, which is annoying in CI and distracting locally.
 
-In Shelf, the easiest deliberate break is still the `src/routes/design-system/+page.svelte` route because it gives you a loud UI change without touching auth or seeded data. Run the suite through `npm run test` when you want the real Playwright artifact set, and keep the other basic gates in the loop too so the repository stays honest while you are iterating on the failure.
+In Shelf, the easiest deliberate break is editing the home page heading in `src/routes/+page.svelte` — change `Build a shelf that remembers what you actually read` to anything else and `tests/smoke.spec.ts` goes red on its `getByRole('heading', { ... })` assertion. It's a loud UI change that doesn't touch auth or seeded data. Run the suite through `npm run test` when you want the real Playwright artifact set, and keep the other basic gates in the loop too so the repository stays honest while you are iterating on the failure.
 
 ## Making dossiers agent-readable
 
@@ -86,7 +86,7 @@ A failure dossier summarizer is worth writing. It's a ~50 line script that:
 
 ### What the Playwright report looks like
 
-Before we walk the report, it helps to see the shape you're walking. The JSON reporter writes a nested tree: `suites` at the top, each with its own `suites` and `specs`, each `spec` has `tests`, each `test` has `results`, and each failing `result` has an `error` plus `attachments`. The trimmed shape is:
+Before we walk the report, it helps to see the shape you're walking. The JSON reporter writes a nested tree: `suites` at the top, each with its own `suites` and `specs`, each `spec` has `tests`, each `test` has `results`, and each failing `result` has an `error` plus `attachments`. The trimmed shape below is _illustrative_ — the `tests/rate-book.spec.ts` spec and the `authenticated` Playwright project referenced in the example are aspirational: they're added in later labs (fixtures, projects, deterministic state). Against the current minimal starter the same walk runs over `tests/smoke.spec.ts` with an empty `projectName`. The structure is the point:
 
 ```jsonc
 {
@@ -207,7 +207,7 @@ console.error(`Wrote dossier for ${failures.length} failures`);
 
 ### A representative failing-run `dossier.md` excerpt
 
-After one intentionally failing rate-book test, the generated markdown includes an entry like this:
+Here's what the generated markdown would look like after an intentionally failing rate-book test in a version of Shelf that's already been through the later fixtures and projects labs. (In the current starter, the same walk produces an entry for whichever `tests/smoke.spec.ts` assertion you broke, with an empty `projectName`.)
 
 ```markdown
 # Playwright failure dossier

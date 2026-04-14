@@ -50,7 +50,7 @@ Codegen is the first draft, not the final draft. Treat it accordingly.
 
 This is the part people skip. They generate a test, it passes once, and the generated locator gets committed exactly as recorded. Congratulations, you just promoted a first draft into a maintenance burden.
 
-The [Locator API](https://playwright.dev/docs/api/class-locator) has a nice cleanup move for this: `locator.normalize()`. Point it at a recorder-generated or legacy locator, and Playwright will try to rewrite it toward the same user-facing strategies you should have reached for in the first place.
+The [Locator API](https://playwright.dev/docs/api/class-locator) has a nice cleanup move for this: `locator.normalize()` (requires Playwright 1.59+). Point it at a recorder-generated or legacy locator, and Playwright will try to rewrite it toward the same user-facing strategies you should have reached for in the first place.
 
 ```ts
 const repaired = page
@@ -61,6 +61,8 @@ const repaired = page
 await expect(repaired).toBeVisible();
 await repaired.click();
 ```
+
+> [!NOTE] `.describe()` only attaches a human-readable label used in trace viewer and reports. It does not change the matching logic — the locator still resolves the same way with or without it.
 
 This is not a license to keep bad selectors around forever. It is a selector-repair tool. The workflow I want is:
 

@@ -8,7 +8,7 @@ date: 2026-04-10
 This lab puts the three Playwright test agents through a real workflow against Shelf. You'll plan a test suite, generate it, verify it passes, break the UI on purpose, and then watch the healer close the loop. The goal is to see where the agents save you time and where you still need to apply judgment.
 
 > [!NOTE] Prerequisites
-> You need [Playwright](https://playwright.dev/) 1.56 or later and a working Shelf setup with authentication already configured via storage state. If you haven't done the storage state and rate-book labs yet, go do those first—the planner needs a logged-in session to explore the app, and the seed helper needs to exist before the generated tests can rely on a stable shelf.
+> You need [Playwright](https://playwright.dev/) 1.56 or later and a working Shelf setup with storage-state authentication and an `authenticated` Playwright project already configured. Both of those are produced by the earlier storage-state lab, and the `resetShelfContent` helper you'll use in the seed is produced by the fixtures-refactor lab. If you haven't done those labs yet, go do them first — the planner needs a logged-in session to explore the app, and the seed helper needs to exist before the generated tests can rely on a stable shelf.
 
 ## Set up the agent definitions
 
@@ -43,6 +43,9 @@ The seed test does two things: it runs through any global setup and project depe
 ```bash
 npx playwright test tests/seed.spec.ts --project=authenticated
 ```
+
+> [!NOTE] `authenticated` project prerequisite
+> The `--project=authenticated` flag assumes the Playwright projects block is already wired up by the [storage-state authentication lab](storage-state-authentication.md). In the shipped Shelf starter `playwright.config.ts` has no projects and no storage state plumbing, so this command only works after that earlier lab lands.
 
 > [!TIP]
 > If the seed fails, check that storage state authentication is configured—Shelf's `playwright.config.ts` starts the app via `webServer`, so you don't need to start it manually. See [Storage State Authentication](storage-state-authentication.md) if you haven't done that setup yet.

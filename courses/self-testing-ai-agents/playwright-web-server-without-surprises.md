@@ -92,7 +92,7 @@ This is the common mistake in smoke suites: people inherit the end-to-end config
 
 This is the first gotcha worth memorizing.
 
-- `port` waits until something accepts TCP connections on that port.
+- `port` waits until something accepts TCP connections on that port. Note that `port` is marked **deprecated** in current Playwright docs, which direct new configs to use `url` instead.
 - `url` waits until the URL returns an allowed status code.
 
 Allowed status codes for `url` readiness are broader than people expect: `2xx`, `3xx`, `400`, `401`, `402`, and `403` all count as "server is ready." That is deliberate. The question is "is the server listening and responding?" not "did the application render the exact page I wanted?"
@@ -161,7 +161,7 @@ webServer: {
 
 This is an advanced escape hatch, not the default path. If you do use capture groups, keep the names distinct across multiple servers and make sure you have a concrete reason for it beyond "this seemed neat."
 
-Those named capture groups become environment variables for the test run. That is powerful and a great way to create weird invisible plumbing if you use it casually. Treat it like infrastructure, not a cute regex trick.
+Those named capture groups become environment variables for the test run. Playwright uppercases the name, so `app_port` is exposed as `process.env.APP_PORT`. That is powerful and a great way to create weird invisible plumbing if you use it casually. Treat it like infrastructure, not a cute regex trick.
 
 ### `timeout`
 

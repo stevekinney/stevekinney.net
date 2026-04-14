@@ -1,7 +1,7 @@
 ---
 title: 'Wrap a Custom Verification MCP: Solution'
 description: Walkthrough of the MCP verification server you add in the lab and the steps to prove it works end-to-end.
-modified: 2026-04-10
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -22,10 +22,15 @@ This is a self-contained MCP server. It registers one tool, `verify_shelf_page`,
 The server setup is minimal:
 
 ```ts
+import fs from 'node:fs';
+import path from 'node:path';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { chromium } from 'playwright';
 import { z } from 'zod';
+
+const STORAGE_STATE_PATH = path.resolve('playwright/.authentication/user.json');
+const baseUrl = process.env.SHELF_BASE_URL ?? 'http://127.0.0.1:4173';
 
 const server = new McpServer({
   name: 'shelf-verification',
@@ -64,6 +69,7 @@ Both `inputSchema` and `outputSchema` use Zod. The SDK serializes them to JSON S
 Inside the handler, the tool launches Chromium, navigates, and collects data:
 
 ```ts
+const targetUrl = `${baseUrl}/shelf/${encodeURIComponent(username)}`;
 const browser = await chromium.launch();
 try {
   const contextOptions = fs.existsSync(STORAGE_STATE_PATH)

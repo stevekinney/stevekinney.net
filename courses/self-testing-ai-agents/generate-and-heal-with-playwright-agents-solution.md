@@ -35,7 +35,10 @@ test('seed', async ({ page }) => {
 });
 ```
 
-Two things to note. First: at this point in the course it can import directly from `@playwright/test`. The authenticated project wiring lives in `playwright.config.ts`, not in a custom wrapper file. Later, once you've completed the failure-dossier lab, importing from `./fixtures` is a reasonable follow-up because that file wraps `page` with console and network forwarding.
+> [!NOTE] Prerequisite helpers
+> `resetShelfContent` is the seed helper produced by the [fixtures refactor lab](lab-refactor-shelf-fixtures.md); in the starter it's a stub that throws. If you haven't completed that lab yet, drop the `await resetShelfContent()` line and have the seed just navigate — you'll wire the helper back in once the earlier lab lands.
+
+Two things to note. First: at this point in the course it can import directly from `@playwright/test`. The authenticated project wiring is established in the earlier storage-state lab and lives in `playwright.config.ts`, not in a custom wrapper file. Later, once you've completed the failure-dossier lab, importing from `./fixtures` is a reasonable follow-up because that file wraps `page` with console and network forwarding (that lab is what writes the project-root `tests/fixtures.ts`).
 
 Second: the seed test is deliberately boring. It resets shelf content, navigates to one page, and asserts a heading exists. Its job isn't to test anything—it's to bootstrap the app into a logged-in, seeded state so the planner has something to explore. Think of it as the planner's starting position on the chessboard.
 

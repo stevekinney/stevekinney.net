@@ -31,6 +31,8 @@ If OAuth eventually produces a normal session cookie in _your_ app, the cleanest
 2. Call that helper from the Playwright setup project.
 3. Save the resulting storage state and let the rest of the suite reuse it.
 
+The snippet below is illustrative. Shelf does not use third-party auth, so `/test-authentication/session` is a stand-in for whatever app-owned bootstrap route your codebase exposes.
+
 ```ts
 import { test as setup, expect } from '@playwright/test';
 import path from 'node:path';

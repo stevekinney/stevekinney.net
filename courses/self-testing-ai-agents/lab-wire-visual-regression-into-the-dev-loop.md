@@ -111,9 +111,9 @@ Now we're going to simulate the loop. Open `src/lib/components/button.svelte`. F
 
 ```svelte
 <!-- before -->
-'inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold ...',
+'inline-flex items-center justify-center rounded-(--radius-control) px-4 py-2 text-sm font-semibold ...',
 <!-- after -->
-'inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold ...',
+'inline-flex items-center justify-center rounded-(--radius-control) px-6 py-3 text-sm font-semibold ...',
 ```
 
 Re-run the visual specs:

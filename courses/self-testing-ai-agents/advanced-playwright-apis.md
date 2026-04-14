@@ -39,8 +39,11 @@ expect(consoleMessages.map((message) => message.type())).not.toContain('error');
 That is the whole move:
 
 - `consoleMessages()` and `pageErrors()` give you the latest bounded history from the page
-- the API keeps only the last chunk of messages, so this is for focused postmortems, not permanent log retention
+- the API keeps only the last 200 messages, so this is for focused postmortems, not permanent log retention
 - counting before the risky action and slicing after it gives you a simple "what changed?" view without building your own event bus
+
+> [!NOTE] 200-message cap
+> Because the buffer is capped at roughly 200 messages, the "count before and slice after" pattern breaks quietly if the action under test produces more than `200 - messageCountBefore` messages — older messages drop off and the slice index points at the wrong place. For noisy actions, either use the `{ filter: 'since-navigation' }` option on `consoleMessages()` or add an explicit navigation marker before the risky step.
 
 This is not a replacement for the trace viewer. It is a good way to make the test fail with something more informative than "expected true to be false."
 

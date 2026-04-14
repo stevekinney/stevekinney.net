@@ -42,7 +42,7 @@ That is the balance I have seen teams actually maintain.
 
 ## The Playwright projects that split the work
 
-Playwright projects are the mechanism that makes "Chromium on every edit, Firefox and WebKit on a smoke subset" actually work. Each project is a named configuration block inside `playwright.config.ts` that can point at a different browser, a different testMatch, and a different set of options. One common _completed_ Shelf split looks like this after the auth, visual, performance, and cross-browser labs have all landed:
+Playwright projects are the mechanism that makes "Chromium on every edit, Firefox and WebKit on a smoke subset" actually work. Each project is a named configuration block inside `playwright.config.ts` that can point at a different browser, a different testMatch, and a different set of options. The destination shape — not what ships in the starter today, but what Shelf would look like after the auth, visual, performance, and cross-browser labs have all landed — looks roughly like this:
 
 ```ts
 projects: [
@@ -83,7 +83,7 @@ projects: [
 ];
 ```
 
-That is not what Shelf ships. It is the fuller multi-project version you build up across the middle of the course. The important split for this lesson is simpler: keep Chromium as the default fast loop, and make Firefox/WebKit opt-in smoke projects. The default `npm run test` script can then pin the fast project so Firefox and WebKit do not sneak into the everyday loop:
+Again: this is the destination, not a current Shelf file. The starter ships a much smaller `playwright.config.ts` and you build up to this across the middle of the course. The important split for this lesson is simpler: keep Chromium as the default fast loop, and make Firefox/WebKit opt-in smoke projects. The default `npm run test` script can then pin the fast project so Firefox and WebKit do not sneak into the everyday loop:
 
 ```json
 {
@@ -101,7 +101,7 @@ That is not what Shelf ships. It is the fuller multi-project version you build u
 > npx playwright install --with-deps firefox webkit
 > ```
 >
-> Skip this and the alternate-browser projects will fail with a "browser not installed" error that has nothing to do with your test code. Shelf's `nightly.yml` workflow runs the same install line in its `cross-browser-smoke` job for the same reason.
+> Skip this and the alternate-browser projects will fail with a "browser not installed" error that has nothing to do with your test code. The nightly workflow you build in the next lab should run the same install line in its `cross-browser-smoke` job for the same reason.
 
 ## Tag the right tests, not all the tests
 
@@ -135,7 +135,7 @@ npx playwright test --project=firefox-smoke --project=webkit-smoke --grep @cross
 
 Projects say "which browser + which file match pattern." Tags say "which individual tests inside that match pattern." Use projects when the split is by _file_ (all the smoke specs go to Firefox, none of the rate-book specs do), and tags when the split is by _test within a file_ (the rate-book file has ten tests but only two earn cross-browser coverage).
 
-If you are merging reports from multiple browser jobs later, add a global config `tag` per lane so the merged report can still tell you "this came from the Firefox smoke job" instead of flattening everything into one unlabeled blob of evidence.
+If you are merging reports from multiple browser jobs later, attach per-project `metadata` — for example `metadata: { lane: 'firefox-smoke' }` on the Firefox project — so the merged report can still tell you "this came from the Firefox smoke job" instead of flattening everything into one unlabeled blob of evidence.
 
 If the smoke set grows enough to need sharding, `fullyParallel: true` is the setting that keeps shards balanced at the test level instead of the file level. And if the merged HTML report is serving attachments from some external bucket instead of the checked-out artifact directory, [`attachmentsBaseURL`](https://playwright.dev/docs/test-reporters) is what keeps those trace and screenshot links from turning into dead air.
 

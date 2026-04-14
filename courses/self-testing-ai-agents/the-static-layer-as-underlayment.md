@@ -50,7 +50,7 @@ A practical consequence: an agent with a tight static layer looks smarter than a
 
 A concrete example from Shelf: a single `no-restricted-syntax` rule pays for itself the moment someone drops a `page.locator('body')` call into the authentication setup file. The red squiggle shows up before the commit even reaches the agent's next turn. That's the entire value proposition in one line of editor output.
 
-One implementation detail worth calling out because it is easy to cargo-cult the wrong way: Shelf's staged secret scan does _not_ shell out to `gitleaks git --staged`. With the Gitleaks release Shelf uses, that flag was not a reliable pre-commit verifier for newly added files. Instead, the repository copies the exact git index contents into a temporary directory and runs `gitleaks dir` there. Same intent, tighter loop, less ambiguity.
+One implementation detail worth calling out because it is easy to cargo-cult the wrong way: Shelf's staged secret scan does _not_ shell out to `gitleaks git --staged`. Depending on the Gitleaks release you have installed, that flag may miss newly added files in pre-commit; if your release handles `gitleaks git --staged` cleanly, prefer it. The fallback in this repository copies the exact git index contents into a temporary directory and runs `gitleaks dir` there. Same intent, tighter loop, less ambiguity.
 
 ## The pattern, independent of tools
 

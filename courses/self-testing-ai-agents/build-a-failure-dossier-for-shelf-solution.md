@@ -134,10 +134,11 @@ When Playwright does visual comparison testing, it generates three images: `expe
 The rendered dossier for each failure includes a reproduction command:
 
 ```ts
-const reproduceCommand = `npx playwright test --project=${failure.projectName} ${failure.file} -g ${JSON.stringify(failure.title)}`;
+const projectFlag = failure.projectName ? `--project=${failure.projectName} ` : '';
+const reproduceCommand = `npx playwright test ${projectFlag}${failure.file} -g ${JSON.stringify(failure.title)}`;
 ```
 
-This is the line the agent (or you) can copy-paste to rerun just the failing test. The `--project` flag targets the right browser configuration, the file path narrows to the right spec, and `-g` filters to the specific test by title. No guessing, no reading through test files to figure out which test failed.
+This is the line the agent (or you) can copy-paste to rerun just the failing test. The `--project` flag targets the right browser configuration _when the repo defines named projects_ (the minimal starter doesn't yet, so the guard keeps the flag out of the command until you add them), the file path narrows to the right spec, and `-g` filters to the specific test by title. No guessing, no reading through test files to figure out which test failed.
 
 When there are no failures, the dossier says so plainly:
 
@@ -162,7 +163,7 @@ Open `playwright-report/dossier.md`. It should say "No failing tests." This is y
 
 ### The deliberate-break experiment
 
-Now break something on purpose. A reliable way: open `src/routes/shelf/+page.svelte` and change the page heading text to something different. Any test that asserts on the heading content will fail.
+Now break something on purpose. A reliable way: open `src/routes/+page.svelte` (the public home page that `tests/smoke.spec.ts` asserts on) and change the `PageHeader` heading text — for example, replace `Build a shelf that remembers what you actually read` with anything else. The smoke spec's `getByRole('heading', { name: /Build a shelf that remembers what you actually read/i })` assertion will fail. (Avoid editing `/shelf` itself — it's gated behind auth and redirects unauthenticated requests to `/login`, so the starter's smoke spec only asserts on the redirect, not the page heading.)
 
 Run the suite again:
 

@@ -146,7 +146,7 @@ Sometimes Gitleaks flags a specific finding that you genuinely want to keep. May
 path/to/file.md:generic-api-key:42
 ```
 
-Current releases generally expect the fingerprint format Gitleaks prints in its own output, not a hand-typed bare line number. Copy the exact identifier from the report instead of inventing it. Much finer-grained than the path allowlist, which skips entire files.
+The example above is already in the fingerprint format Gitleaks prints in its own output: `path/to/file:rule-id:line-number`. Copy the exact identifier straight from the report rather than hand-typing a bare line number—the fingerprint is how Gitleaks maps an ignore entry back to a specific finding. Much finer-grained than the path allowlist, which skips entire files.
 
 Do not let `.gitleaksignore` become a dumping ground. Every line is a promise you made to keep ignoring a finding, and every promise should be checked periodically. Review the file on a schedule.
 
@@ -162,9 +162,11 @@ In GitHub Actions (we'll go deeper on CI in [CI as the Loop of Last Resort](ci-a
   uses: gitleaks/gitleaks-action@v2
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Organization repos also require a free license key since v2.0.0:
+    # GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 ```
 
-The official action is the easy path. It runs Gitleaks on every push and PR, fails the build on any finding, and gives you a clean CI gate even when someone bypasses the local hook.
+The official action is the easy path. It runs Gitleaks on every push and PR, fails the build on any finding, and gives you a clean CI gate even when someone bypasses the local hook. Personal repos can use only `GITHUB_TOKEN`; repos owned by an organization account additionally need `GITLEAKS_LICENSE` set to a free license key (obtainable from the gitleaks site).
 
 > [!NOTE]
 > Check the current licensing and setup requirements for `gitleaks/gitleaks-action@v2` before you standardize on it for organization repos. If the official action is a bad fit for your plan, invoke the CLI directly in a shell step instead. The important part is the CI gate, not the wrapper.

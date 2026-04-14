@@ -37,6 +37,7 @@ The `planted-bug/admin-feature` branch changes exactly one file: `src/routes/api
 
 ```diff
 -import { requireAdministrator } from '$lib/server/authorization';
++import { error } from '@sveltejs/kit';
  import type { RequestHandler } from './$types';
 
  /**
@@ -53,11 +54,11 @@ The `planted-bug/admin-feature` branch changes exactly one file: `src/routes/api
 +	}
 ```
 
-The import of `requireAdministrator` is gone. The call is replaced with a plain authentication check: `if (!locals.user)`. The endpoint now lets _any_ signed-in user feature or unfeature books. The JSDoc comment is quietly trimmed to remove the mention of administrator-only access.
+The import of `requireAdministrator` is gone, and `error` from `@sveltejs/kit` is imported in its place. The call is replaced with a plain authentication check: `if (!locals.user)`. The endpoint now lets _any_ signed-in user feature or unfeature books. The JSDoc comment is quietly trimmed to remove the mention of administrator-only access.
 
 This is not a subtle bug. It is a permission downgrade on an admin endpoint, and it is exactly the second item in BUGBOT.md's "what to flag" list. The branch passes `npm run typecheck`, `npm run lint`, and `npm run test` cleanly—because no test covers the case of a non-admin user hitting this endpoint. The happy path still works. That is the point: this is a bug that static analysis and existing tests _miss_, but a tuned reviewer _should_ catch.
 
-The branch also removes the `/playground` route (it was added to main after the planted-bug branch was created). That diff is cosmetic—it is not the planted bug, and Bugbot should not comment on it.
+If you created the planted-bug branch by rebasing onto a pre-`/playground` commit, the diff will also remove the `/playground` route (it was added to main after that commit). That diff is cosmetic—it is not the planted bug, and Bugbot should not comment on it. If you started from current `main`, ignore this paragraph entirely.
 
 ## What you still need to run
 

@@ -53,7 +53,7 @@ npx playwright init-agents --loop=opencode
 > [!TIP]
 > VS Code v1.105 or later is needed for the agentic experience to work properly.
 
-For Claude Code, this creates three agent definitions in `.claude/agents/` (planner, generator, healer) and an MCP server config in `.mcp.json`. It may also scaffold a `specs/README.md` and a default seed test if none exists. Other tools put the definitions elsewhere—VS Code and Copilot use `.github/agents/`, OpenCode uses `.opencode/prompts/`.
+For Claude Code, this creates three agent definitions in `.claude/agents/` (planner, generator, healer) and an MCP server config in `.mcp.json`. It may also scaffold a `specs/README.md` and a default seed test if none exists. Other tools put the definitions elsewhere—VS Code and Copilot use `.github/agents/` and additionally write `.github/workflows/copilot-setup-steps.yml` plus an appended `.vscode/mcp.json`, while OpenCode writes agent prompts under `.opencode/prompts/` plus an `opencode.json` at the repo root. Expect files outside the top-level agent folder on those loops and review the full diff after running `init-agents`.
 
 One thing to know: `init-agents` replaces the repo's `.mcp.json`. Shelf doesn't ship one, so this is harmless inside the workshop. If you're running it against your own repo that already registers MCP servers, back the file up first and merge `playwright-test` in after.
 
@@ -82,6 +82,8 @@ This is the only required decision. It tells Playwright which agent host it shou
 - `opencode`: writes OpenCode config plus agent prompts under `.opencode/`
 - `vscode`: uses the current VS Code / GitHub agent layout under `.github/agents/`
 - `vscode-legacy`: uses the older VS Code chatmode layout under `.github/chatmodes/` and `.vscode/mcp.json`
+
+As of Playwright 1.59, `--loop=vscode` and `--loop=copilot` dispatch to the same generator and produce identical output. The two flags are synonyms today; pick whichever name reads more clearly for your workflow.
 
 The important distinction is that `vscode` is the current path. `vscode-legacy` exists for older VS Code setups that still expect chatmodes instead of the newer agent definition format.
 
@@ -160,7 +162,7 @@ test('seed', async ({ page }) => {
 
 If you've already reached the failure-dossier lab and added `tests/fixtures.ts`, importing from `./fixtures` is also fine. The important part here is the seeded, authenticated starting position — not the wrapper file.
 
-In Shelf, that seed is literally `tests/seed.spec.ts`. Once generation has happened and a test is red, the healer is usually pointed at one concrete file under `tests/<failing-spec>.spec.ts`. Those two paths are the handoff points for the whole loop.
+In Shelf, that seed will be `tests/seed.spec.ts` — a file you'll create in the accompanying lab, not one that ships with the starter. Once generation has happened and a test is red, the healer is usually pointed at one concrete file under `tests/<failing-spec>.spec.ts`. Those two paths are the handoff points for the whole loop.
 
 **What it produces:**
 

@@ -26,8 +26,8 @@ The only non-mechanical part is judging the agent behavior at the end. The final
 
 Open `eslint.config.js`. Find the `no-restricted-syntax` block. It bans four patterns:
 
-- `page.waitForTimeout` (anywhere in `tests/`). Selector: `CallExpression[callee.property.name='waitForTimeout']`. Message: `"page.waitForTimeout is banned. See CLAUDE.md → Playwright → Waiting."`
-- `page.locator` called with a string argument (anywhere in `tests/`). Selector: `CallExpression[callee.property.name='locator'][arguments.0.type='Literal']`. Message: `"Use a getByRole/getByLabel locator. See CLAUDE.md → Playwright → Locators."`
+- `page.waitForTimeout` (anywhere in `tests/end-to-end/`). Selector: `CallExpression[callee.property.name='waitForTimeout']`. Message: `"page.waitForTimeout is banned. See CLAUDE.md → Playwright → Waiting."`
+- `page.locator` called with a string argument (anywhere in `tests/end-to-end/`). Selector: `CallExpression[callee.property.name='locator'][arguments.0.type='Literal']`. Message: `"Use a getByRole/getByLabel locator. See CLAUDE.md → Playwright → Locators."`
 - `page.waitForLoadState('networkidle')` (anywhere). Selector: `CallExpression[callee.property.name='waitForLoadState'] Literal[value='networkidle']`. Message: `"networkidle is unreliable. Wait on a real signal."`
 - Reading `userId` from a request body in a route handler. Selector: `MemberExpression[object.type='MemberExpression'][object.property.name='body'][property.name='userId']`. Message: `"Read userId from the session, not the request body. See CLAUDE.md → Auth."`
 
@@ -42,8 +42,8 @@ The lesson's **Writing a `no-restricted-syntax` rule** section in [Lint and Type
 
 - [ ] `eslint.config.js` contains the four restricted-syntax rules above (selector + message).
 - [ ] Running `npm run lint` on the current (clean) Shelf repository exits zero.
-- [ ] Adding a `page.waitForTimeout(1000)` line to any file under `tests/` makes `npm run lint` exit non-zero, and the output contains the substring `page.waitForTimeout is banned`.
-- [ ] Adding a `page.locator('.foo')` line to any file under `tests/` makes `npm run lint` exit non-zero, and the output contains the substring `Use a getByRole/getByLabel locator`.
+- [ ] Adding a `page.waitForTimeout(1000)` line to any file under `tests/end-to-end/` makes `npm run lint` exit non-zero, and the output contains the substring `page.waitForTimeout is banned`.
+- [ ] Adding a `page.locator('.foo')` line to any file under `tests/end-to-end/` makes `npm run lint` exit non-zero, and the output contains the substring `Use a getByRole/getByLabel locator`.
 - [ ] Reverting the test changes restores a clean lint (`npm run lint` exits zero).
 
 ## Part 2: TypeScript strict mode
@@ -129,7 +129,7 @@ Watch what the agent does. The correct behavior is:
 
 1. It writes the route handler.
 2. It writes the Playwright test.
-3. It runs `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test:unit`, and `npm run test`.
+3. It runs `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test`, and `npm run pre-push` (which covers unit tests).
 4. If any of them fail, it reads the error, fixes it, and re-runs.
 5. It does not use `page.waitForTimeout`, does not use `page.locator` with a CSS selector, does not use UI login, does not read `userId` from the request body, does not leave dead code behind.
 

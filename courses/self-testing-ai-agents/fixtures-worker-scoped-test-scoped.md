@@ -68,7 +68,7 @@ This is the moment the fixture mental model clicks: _your_ fixtures and Playwrig
 
 Playwright's `page`, `context`, and `browser` are themselves fixtures defined in the base `test`. You can override them with `test.extend`, and suddenly everything that was true of your custom fixtures is true of the framework's.
 
-The completed failure-dossier version of Shelf does exactly this. Look at [`tests/fixtures.ts`](https://github.com/stevekinney/shelf-life/blob/main/tests/fixtures.ts) after that lab — it overrides `page` to forward browser console errors and failed network requests to stderr, so they show up in the `list` reporter, the HTML report, and the failure dossier JSON:
+The completed failure-dossier version of Shelf does exactly this. After the failure-dossier lab, your `tests/fixtures.ts` will override `page` to forward browser console errors and failed network requests to stderr, so they show up in the `list` reporter, the HTML report, and the failure dossier JSON:
 
 ```ts
 export const test = base.extend({

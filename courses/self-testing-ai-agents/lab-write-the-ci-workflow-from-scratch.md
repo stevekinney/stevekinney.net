@@ -57,7 +57,7 @@ Notice the gitleaks steps in `main.yml`:
 ```yaml
 - name: Install gitleaks
   run: |
-    curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz \
+    curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz \
       | tar -xz -C /tmp gitleaks
     sudo install /tmp/gitleaks /usr/local/bin/gitleaks
     gitleaks version
@@ -105,7 +105,7 @@ Second, the current Shelf starter does not need `ORIGIN`, `BETTER_AUTH_SECRET`, 
 
 After the `.env` bootstrap, the job runs `npm run test`. On failure it runs `npm run dossier`, uploads `playwright-report/` as one artifact and `playwright-report/dossier.md` as another, both with a 7-day retention. `playwright-report/` already contains the trace, screenshots, video, and the HTML report. The dossier is a separate upload so an agent can grab the summary without pulling the whole report tarball.
 
-Shelf's `playwright.config.ts` already starts the preview server through `webServer`, so the workflow does **not** need an extra server-boot step. If you build a CI workflow for a project that doesn't, add `webServer: { command: 'npm run preview', url: 'http://127.0.0.1:4173', reuseExistingServer: !process.env.CI }` to the Playwright config first.
+Shelf's `playwright.config.ts` already starts the preview server through `webServer`, so the workflow does **not** need an extra server-boot step. Shelf uses `command: 'npm run build && npm run preview -- --host 127.0.0.1 --port 4173'` and `url: 'http://127.0.0.1:4173'` and does not set `reuseExistingServer`. If you build a CI workflow for a project that doesn't already have a `webServer` block, add one that starts the same preview surface to the Playwright config first.
 
 ### The visual regression safety
 

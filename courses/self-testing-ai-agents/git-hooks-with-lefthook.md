@@ -57,6 +57,9 @@ pre-commit:
 
 The `parallel: true` flag runs `lint` and `format` concurrently. If one fails, the commit is blocked.
 
+> [!NOTE] `commands:` vs `jobs:`
+> Lefthook also supports a newer `jobs:` key (list form) that you may see in current Lefthook docs and examples. Both `commands:` and `jobs:` are valid and supported; this lesson uses `commands:` because the named sub-keys (`lint:`, `format:`) are easier to read. Pick one style per repo and stay consistent.
+
 ## Adding a pre-push hook
 
 Some checks are too slow for pre-commit but too important to skip entirely. Pre-push is where they go.
@@ -90,7 +93,7 @@ pre-commit:
       run: gitleaks git --staged --no-banner
 ```
 
-If Gitleaks finds a hardcoded API key or token in the staged diff, the commit is blocked. Zero agents and zero humans should be committing secrets, and this hook makes it mechanically difficult to do by accident.
+If Gitleaks finds a hardcoded API key or token in the staged diff, the commit is blocked. Zero agents and zero humans should be committing secrets, and this hook makes it mechanically difficult to do by accident. Some teams wrap the staged scan in a small shell or TypeScript helper for clarity — the [Secret Scanning with Gitleaks](secret-scanning-with-gitleaks.md) lesson covers that pattern and the exact invocation to use for your Gitleaks version.
 
 I'll go deeper on Gitleaks in the [Secret Scanning with Gitleaks](secret-scanning-with-gitleaks.md) lesson. For now, just know it belongs in pre-commit.
 

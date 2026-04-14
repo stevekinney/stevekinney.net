@@ -23,7 +23,7 @@ test.use({ baseURL: smokeBaseUrl });
 test('home page renders and exposes sign in', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  await expect(page.getByRole('main').getByRole('link', { name: 'Sign in' })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('link', { name: 'Sign in' })).toBeVisible();
 });
 ```
 
@@ -82,7 +82,7 @@ One line. Uses the dedicated config. No `webServer`, no build step. The workflow
 
 ## What you still need to run
 
-Locally, the proof-of-life loop is simple: make sure a preview server is already running at `http://127.0.0.1:4173`, then run `npm run test:smoke`. The test should pass. If it doesn't, check that the preview server is actually reachable and that the home page renders an `<h1>` and a "Sign in" link in the main content area.
+Locally, the proof-of-life loop is simple: make sure a preview server is already running at `http://127.0.0.1:4173`, then run `npm run test:smoke`. The test should pass. If it doesn't, check that the preview server is actually reachable and that the home page renders an `<h1>` and a "Sign in" link inside the page banner (the header landmark).
 
 ```bash
 SMOKE_BASE_URL=http://127.0.0.1:4173 npm run test:smoke

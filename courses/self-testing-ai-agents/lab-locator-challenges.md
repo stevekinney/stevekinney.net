@@ -101,7 +101,7 @@ Nothing here depends on GitHub, a deploy preview, or a third-party service. The 
 
 - [ ] `tests/playground.spec.ts` exists and contains at least 20 passing tests.
 - [ ] Every test uses the highest-priority locator strategy available for its target.
-- [ ] No test uses `page.locator()` with a raw CSS selector.
+- [ ] No test uses `page.locator()` with a raw class-based CSS selector. An `id` selector referenced by `aria-controls` (see Challenge 22) is the one natural exception.
 - [ ] The dynamic content tests (14–16) do not use `page.waitForTimeout`.
 - [ ] Running `npx playwright test tests/playground.spec.ts` produces all green.
 

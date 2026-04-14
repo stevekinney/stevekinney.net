@@ -25,11 +25,13 @@ Open `.mcp.json` at the repository root and add the `shelf-verification` entry:
 
 ```json
 {
-  "shelf-verification": {
-    "type": "stdio",
-    "command": "npx",
-    "args": ["tsx", "./tools/shelf-verification-server/server.ts"],
-    "env": { "SHELF_BASE_URL": "http://127.0.0.1:4173" }
+  "mcpServers": {
+    "shelf-verification": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["tsx", "./tools/shelf-verification-server/server.ts"],
+      "env": { "SHELF_BASE_URL": "http://127.0.0.1:4173" }
+    }
   }
 }
 ```
@@ -40,11 +42,13 @@ Notice it runs under `tsx` (TypeScript directly, no build step) and passes the b
 
 ## 2. The server file — `tools/shelf-verification-server/server.ts`
 
-Create `tools/shelf-verification-server/server.ts`. It's about 98 lines. Walk the four sections:
+Create `tools/shelf-verification-server/server.ts`. It's a short file — walk the four sections:
 
-### Lines 13–26: imports, constants, server instance
+### Imports, constants, server instance
 
 ```ts
+import fs from 'node:fs';
+import path from 'node:path';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { chromium } from 'playwright';
@@ -58,7 +62,7 @@ const server = new McpServer({ name: 'shelf-verification', version: '0.1.0' });
 
 Two things to notice. First, `STORAGE_STATE_PATH` points at the same file Playwright's storage-state setup writes — so the MCP tool shares an authenticated browser session with the rest of the test suite. Second, the server name (`shelf-verification`) matches the `.mcp.json` key. That's not enforced by the SDK, but keeping them aligned is the difference between a readable debugger and an indecipherable one.
 
-### Lines 35–49: the tool contract
+### The tool contract
 
 ```ts
 server.registerTool(
@@ -83,7 +87,7 @@ This is the whole contract: one input (`username`), four outputs (`ok`, `bookCou
 
 **Question:** why return `url` as part of the output when the agent theoretically knows what URL it asked about? (Answer: the agent only knows the `username` it passed. The server is the one that constructs the real URL — base URL plus path plus encoding. Putting `url` in the structured output means the agent can quote the exact URL in its summary to the user, which is much more useful than "I called verify_shelf_page with username alice.")
 
-### Lines 50–95: the handler
+### The handler
 
 ```ts
 async ({ username }) => {
@@ -131,7 +135,7 @@ The `ok` predicate is deliberately loose (`bookCount >= 0`) because the public `
 
 The return shape uses both `content` (for MCP hosts that read the text channel) and `structuredContent` (for hosts that honor the structured output schema). Returning both means the tool works against either kind of host without branching.
 
-### Lines 97–98: the transport
+### The transport
 
 ```ts
 const transport = new StdioServerTransport();

@@ -1,7 +1,7 @@
 ---
 title: 'Runtime Tools Compared: Playwright MCP, Chrome DevTools MCP, and Claude in Chrome'
 description: Three ways to let an agent drive a browser, what each one is actually good at, and when to reach for which.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -9,12 +9,12 @@ We spent the morning making the scripted test suite something an agent can rely 
 
 There are three tools in this space that you should know about, and they are different enough that choosing between them matters.
 
-- [**Playwright MCP**](https://playwright.dev/)—exposes Playwright's browser automation as MCP tools
+- [**Playwright MCP**](https://github.com/microsoft/playwright-mcp)—exposes Playwright's browser automation as MCP tools
 - [**Chrome DevTools MCP**](https://github.com/ChromeDevTools/chrome-devtools-mcp)—exposes Chrome DevTools Protocol as MCP tools
 - [**Claude in Chrome**](https://www.anthropic.com/news/claude-for-chrome)—an actual browser extension that puts the agent inside your live browser session
 
 > [!NOTE]
-> As of April 9, 2026, Playwright also ships a dedicated CLI for coding-agent workflows in addition to Playwright MCP. This workshop still uses MCP as the primary runtime tool because the later lessons depend on MCP-style tool calls, accessibility snapshots, and custom MCP wrappers. Also note that current Playwright MCP defaults to a persistent browser profile; use `--isolated` or an explicit storage state when you want clean-room reproduction.
+> As of early 2026, Playwright also ships a dedicated CLI for coding-agent workflows in addition to Playwright MCP. This workshop still uses MCP as the primary runtime tool because the later lessons depend on MCP-style tool calls, accessibility snapshots, and custom MCP wrappers. Also note that current Playwright MCP defaults to a persistent browser profile; use `--isolated` or an explicit storage state when you want clean-room reproduction.
 
 They all let the agent interact with a browser. They are not interchangeable. This lesson is a field guide to which one to reach for.
 

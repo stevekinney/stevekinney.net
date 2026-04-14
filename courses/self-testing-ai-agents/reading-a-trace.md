@@ -29,7 +29,7 @@ That opens the viewer in a browser tab. You can also open traces from the HTML r
 npm run traces:generate
 ```
 
-That command is just the entry point. The Shelf starter does **not** ship it. In the current course flow, you add the generator helper yourself as `scripts/generate-lab-traces.mjs` (or equivalent) in the trace-triage lab, and you can add a `traces:clean` command when you want to wipe the generated artifacts and rerun the lab from a clean slate. The generate step runs the three deliberately-broken specs in `tests/labs/broken-traces/` and copies the resulting trace files to `playwright-report/lab-traces/`. Open them one at a time. We'll work through what to look for next.
+That command is just the entry point. The Shelf starter does **not** ship it. In the current course flow, you add the generator helper yourself as `scripts/generate-lab-traces.mjs` (or equivalent) in the trace-triage lab, and you can add a `traces:clean` command when you want to wipe the generated artifacts and rerun the lab from a clean slate. The generate step runs the three deliberately-broken specs in `tests/labs/broken-traces/` and copies the resulting trace files to `playwright-report/lab-traces/`. Each of those broken specs currently starts with `test.skip()` as a safety gate — your generator helper has to remove or wrap that call before Playwright will run them and produce trace output. The future `labs-broken-traces` project the specs reference isn't shipped in the starter's `playwright.config.ts` yet; you wire it up during the lab. Open them one at a time. We'll work through what to look for next.
 
 ## The four panes and what each one tells you
 
@@ -65,11 +65,11 @@ The signal you're looking for: a request that was still pending when the asserti
 
 The Console pane shows every `console.log`, `console.error`, and `console.warn` the page emitted during the test. The Source pane shows your test code with the failing line highlighted. Between them, you get both the browser's voice and your own.
 
-The signal you're looking for: a `console.error` that explains the failure directly. If the page emitted an error and you didn't catch it, you're missing a whole layer of diagnostic information. Shelf's shared `fixtures.ts` already forwards these to stderr; the [fixtures lesson](fixtures-worker-scoped-test-scoped.md) shows why.
+The signal you're looking for: a `console.error` that explains the failure directly. If the page emitted an error and you didn't catch it, you're missing a whole layer of diagnostic information. After the fixtures lab, Shelf's shared `fixtures.ts` forwards these to stderr; the [fixtures lesson](fixtures-worker-scoped-test-scoped.md) shows why.
 
 ## Reading a trace for a real failure
 
-Let's walk through the Trace A failure from the lab. The spec in `tests/labs/broken-traces/trace-a-config.spec.ts` opts out of the default storage state, navigates to `/shelf`, and asserts the "Your books" heading is visible. It fails.
+Let's walk through the Trace A failure from the lab. The spec in `tests/labs/broken-traces/trace-a-config.spec.ts` opts out of the default storage state, navigates to `/shelf`, and asserts the "Your books" heading is visible. It fails. (In the current starter, that spec begins with `test.skip()` as a safety gate — the lab's generator helper removes it before running the spec.)
 
 Generate it if you've already added the helper in the lab:
 

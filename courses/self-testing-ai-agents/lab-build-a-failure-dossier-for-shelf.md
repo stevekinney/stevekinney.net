@@ -44,7 +44,7 @@ Notice the filter for `ERR_ABORTED`. That code fires whenever Playwright navigat
 
 ## 3. The dossier script — `scripts/summarize-failure-dossier.ts`
 
-Create `scripts/summarize-failure-dossier.ts`. It's about 199 lines. Walk the six sections:
+Create `scripts/summarize-failure-dossier.ts`. Roughly 200 lines in the completed version. Walk the six sections:
 
 - **Lines 16–64: type declarations.** `PlaywrightReport → PlaywrightSuite → PlaywrightSpec → PlaywrightTest → PlaywrightResult → PlaywrightAttachment`. These mirror the shape Playwright's JSON reporter emits. They exist as explicit types instead of `any` so the `suites → specs → tests → results` walk stays honest when the report schema drifts.
 - **Lines 66–76: `collectSpecs` and `pickAttachment`.** Recursive flatten of the nested suite tree plus a generic attachment-picker. Both are small helpers the walk needs.
@@ -85,17 +85,17 @@ And one mechanical check:
 
 Now the hard part. Verify the loop actually works by giving the agent a failing test and nothing else.
 
-1. Introduce a subtle bug in Shelf. Example: in the "rate book" API handler, accidentally multiply the rating by 2 before saving. (`updates.rating = body.rating * 2`)
-2. Run `npx playwright test tests/rate-book.spec.ts --project=authenticated`. It should fail because the persisted rating doesn't match what the UI shows.
+1. Introduce a subtle bug in Shelf that the existing smoke spec catches. Example: open `src/routes/+page.svelte` and change a handful of characters in the `PageHeader` heading (say, from `Build a shelf that remembers what you actually read` to `Build a shelf that remembers every book you open`) so `tests/smoke.spec.ts` goes red on the `getByRole('heading', { name: /Build a shelf that remembers what you actually read/i })` assertion.
+2. Run `npx playwright test tests/smoke.spec.ts`. It should fail because the heading text no longer matches the regex.
 3. Run `npm run dossier`. Open `playwright-report/dossier.md` to confirm the failure is captured.
 4. Open Claude Code. Say: _"Read `playwright-report/dossier.md`. Diagnose the failure. Propose a fix. Apply it."_
-5. Do not give the agent any other context. Do not mention that you multiplied by 2. Let it figure it out from the dossier and the code.
+5. Do not give the agent any other context. Do not mention which line you edited. Let it figure it out from the dossier and the code.
 
 ### End-to-end acceptance criteria
 
 - [ ] The agent reads the dossier without being prompted to look anywhere else.
 - [ ] The agent reproduces the failure locally using the reproduction command from the dossier.
-- [ ] The agent identifies the bug in the rate-book handler.
+- [ ] The agent identifies the mismatched heading in the home page (or whichever spec you broke).
 - [ ] The agent applies the fix and reruns the test.
 - [ ] The test passes.
 - [ ] You did not need to provide additional context during the conversation.

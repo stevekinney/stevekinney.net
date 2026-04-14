@@ -59,7 +59,6 @@ server.registerTool(
     },
     outputSchema: {
       ok: z.boolean(),
-      status: z.number().int(),
       bookCount: z.number().int().nonnegative(),
       consoleErrors: z.array(z.string()),
       url: z.string(),
@@ -90,7 +89,6 @@ server.registerTool(
 
       const result = {
         ok: status >= 200 && status < 300 && headingVisible && consoleErrors.length === 0,
-        status,
         bookCount,
         consoleErrors,
         url: targetUrl,

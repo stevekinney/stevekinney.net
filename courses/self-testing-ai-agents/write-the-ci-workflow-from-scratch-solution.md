@@ -20,12 +20,12 @@ static:
   name: Static layer
   runs-on: ubuntu-latest
   steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
-        node-version: 22
+        node-version: '24'
     - name: Cache dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: |
           ~/.npm
@@ -41,7 +41,7 @@ static:
       run: npm run knip
     - name: Install gitleaks
       run: |
-        curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz \
+        curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz \
           | tar -xz -C /tmp gitleaks
         sudo install /tmp/gitleaks /usr/local/bin/gitleaks
         gitleaks version
@@ -61,12 +61,12 @@ unit:
   runs-on: ubuntu-latest
   needs: static
   steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
-        node-version: 22
+        node-version: '24'
     - name: Cache dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: |
           ~/.npm
@@ -88,12 +88,12 @@ end-to-end:
   runs-on: ubuntu-latest
   needs: static
   steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
-        node-version: 22
+        node-version: '24'
     - name: Cache dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: |
           ~/.npm
@@ -116,14 +116,14 @@ end-to-end:
       run: npm run dossier
     - name: Upload Playwright report
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: playwright-report
         path: playwright-report/
         retention-days: 7
     - name: Upload failure dossier
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: failure-dossier
         path: playwright-report/dossier.md

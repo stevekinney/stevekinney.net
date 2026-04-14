@@ -7,11 +7,14 @@ date: 2026-04-11
 
 Two of Shelf's specs — the starter's `tests/smoke.spec.ts` and the `tests/rate-book.spec.ts` you built in the previous lab — work fine. They pass every time, they hit the right endpoints, and they verify the right outcomes. They also fail like they're punishing you when they fail. No steps, no tags, no annotations, nothing that helps a dossier summarizer turn a red build into something an agent can fix.
 
+> [!NOTE] Prerequisite: the rate-book hardening lab
+> `tests/rate-book.spec.ts` is produced by the [harden-the-flaky-rate-book-test lab](lab-harden-the-flaky-rate-book-test.md), not by the Shelf starter. Run this lab after completing the harden-the-flaky-rate-book-test lab; otherwise, scope the work to `tests/smoke.spec.ts` only and come back for the rate-book pieces once that file exists.
+
 Your job in this lab is to retrofit both specs with `test.step`, tag them correctly, add at least one annotation, and introduce one `expect.soft` assertion where it genuinely helps. Then prove the result by running `--grep @critical` and watching the subset you expect to show up.
 
 ## The starting point
 
-Open `tests/smoke.spec.ts` and `tests/rate-book.spec.ts`. Both files pass today. Neither file has any of the four things the lesson covered.
+Open `tests/smoke.spec.ts` and (assuming you've completed the rate-book hardening lab) `tests/rate-book.spec.ts`. Both files pass today. Neither file has any of the four things the lesson covered.
 
 Specifically:
 
@@ -29,7 +32,7 @@ Count what's missing. I get four things per test. Your job is to put them back.
 
 1. Wrap every top-level user action in each test with a `test.step('...', async () => { ... })`. The label has to be readable as a line in a CI log — "open the shelf," "submit 4 stars," "verify the rating persists via API," not "step 1" or "do the thing."
 
-2. Tag every test with at least one of `@critical`, `@slow`, or `@flaky-quarantine`. The rate-book test is `@critical`. At least one of the smoke tests should be `@critical` too. Defend the rest.
+2. Tag every test with at least one of `@critical`, `@slow`, or `@flaky-quarantine`. The rate-book test (from the earlier rate-book hardening lab) is `@critical`. At least one of the smoke tests should be `@critical` too. Defend the rest.
 
 3. Add an annotation to the rate-book test linking to a fake GitHub issue URL for that test's historical flake. Use `type: 'issue'`.
 
@@ -57,13 +60,13 @@ Must run a strict subset of tests (at least the rate-book test and whichever smo
 rg "test\.step\(" tests/smoke.spec.ts tests/rate-book.spec.ts
 ```
 
-Must return at least two hits per test.
+Must return at least two hits per test. (If you haven't landed the rate-book hardening lab yet, scope these checks to `tests/smoke.spec.ts` only — `tests/rate-book.spec.ts` is produced by that earlier lab.)
 
 ```bash
 rg "annotations\.push" tests/rate-book.spec.ts
 ```
 
-Must return at least one hit.
+Must return at least one hit. (Again, this assumes `tests/rate-book.spec.ts` exists from the earlier rate-book hardening lab.)
 
 ```bash
 rg "expect\.soft" tests/smoke.spec.ts

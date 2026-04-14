@@ -32,7 +32,7 @@ Two sentences. The agent now knows this is a real app, not a throwaway template.
 3. `npm run test`
 ```
 
-Four named commands, ordered. The rule says "not done until all four exit zero, in this order." No wiggle room, no "you should probably run." The ordering matters: typecheck catches the cheapest errors first, then lint, then dead-code detection, then the full test suite. The agent runs them top to bottom and stops at the first failure.
+Three named commands, ordered. The rule says "not done until all three exit zero, in this order." No wiggle room, no "you should probably run." The ordering matters: typecheck catches the cheapest errors first, then lint, then the full test suite. The agent runs them top to bottom and stops at the first failure. Later in the course, the static-layer lab will add a dead-code detection step (`npm run knip`) between lint and test.
 
 Every one of those commands exists in `package.json`. You can verify that yourself:
 
@@ -53,7 +53,7 @@ The line "Do not reintroduce `src/routes/demo/`" is the kind of rule that sounds
 ```markdown
 - Write a failing test before the implementation. Commit the test first.
 - Unit tests live next to the file under test as `<name>.test.ts` and run with Vitest.
-- Playwright specs live in `tests/` and run with `npm run test`.
+- End-to-end tests live in `tests/end-to-end/` and run with Playwright.
 ```
 
 Three rules, each naming a specific file pattern or directory. The agent knows where to put tests without asking, and it knows the TDD order without you reminding it mid-task.
@@ -69,30 +69,32 @@ This names three specific Playwright APIs in priority order. It is not "use acce
 
 The ban on `page.waitForTimeout` and `waitForLoadState('networkidle')` is reinforced here _and_ in the ESLint config. Belt and suspenders. The agent hits the lint rule even if it skips reading `CLAUDE.md`.
 
-### Playwright authentication
+### Playwright authentication (added later)
 
-This section names a specific file: `tests/authentication.setup.ts`. The rule "never log in from inside a regular test" prevents the most common Playwright anti-pattern—and gives the agent a concrete diagnostic: "if a test redirects to `/login`, the setup file is broken."
+After the storage-state lab, the file will name the auth setup file the lab produces (something like `tests/authentication.setup.ts`). The rule "never log in from inside a regular test" prevents the most common Playwright anti-pattern—and gives the agent a concrete diagnostic: "if a test redirects to `/login`, the setup file is broken." The day-one starter has no auth setup file and no section for it.
 
-### Database seeding and isolation
+### Database seeding and isolation (added later)
 
-Names `tests/helpers/seed.ts`, `tests/data/users.json`, `src/lib/server/users.ts`, `resetShelfContent`, and `seedFreshDatabase`. Every noun in this section is a file or a config value the agent can verify. The rule about not resetting users inside individual specs is the kind of thing that takes an hour to debug the first time you hit it—and zero seconds to prevent with a single sentence.
+After the deterministic-state lab, the file will name `tests/helpers/seed.ts`, `tests/data/users.json`, `src/lib/server/users.ts`, `resetShelfContent`, and `seedFreshDatabase`. Every noun in this section is a file or a config value the agent can verify. The rule about not resetting users inside individual specs is the kind of thing that takes an hour to debug the first time you hit it—and zero seconds to prevent with a single sentence. The seed helpers exist in the repo today, but the `CLAUDE.md` section about them is earned by the lab.
 
-### HAR recording
+### HAR recording (added later)
+
+After the HAR-recording lab, the file will carry a rule that looks roughly like this:
 
 ```markdown
 - HARs live in `tests/fixtures/` and replay through `page.routeFromHAR`
   with `notFound: 'abort'`.
 ```
 
-Specific directory, specific API, specific option. The "never commit a new HAR without a human reviewing it" rule is the kind of guardrail that only matters once—and when it matters, it _really_ matters, because HARs can contain session cookies.
+Specific directory, specific API, specific option. The "never commit a new HAR without a human reviewing it" rule is the kind of guardrail that only matters once—and when it matters, it _really_ matters, because HARs can contain session cookies. `tests/fixtures/` does not exist in the day-one starter; the HAR lab is what introduces it.
 
-### Accessibility
+### Accessibility (added later)
 
-Names `tests/accessibility.spec.ts` and `docs/accessibility-smoke-checklist.md`. Two files, clear responsibilities: the spec catches what automation can prove, the checklist documents what it cannot.
+After the accessibility lab, the file will name `tests/accessibility.spec.ts` and the smoke-checklist doc the lab produces. Two files, clear responsibilities: the spec catches what automation can prove, the checklist documents what it cannot. Neither file exists in the day-one starter.
 
-### When a test fails
+### When a test fails (added later)
 
-This section is a five-step diagnostic procedure. Step one names a specific command: `npm run dossier`. Step five names a specific tool: `npx playwright show-trace <path>`. The rule "do not fix a failing test by changing the assertion" prevents the single most common agent failure mode I have seen in the wild.
+After the failure-dossier lab, Shelf will have a five-step diagnostic procedure section. Step one will name a specific command (`npm run dossier`, added by that lab); step five will name a specific tool (`npx playwright show-trace <path>`). The rule "do not fix a failing test by changing the assertion" prevents the single most common agent failure mode I have seen in the wild. The starter `CLAUDE.md` already carries the narrower form of that rule ("do not fix a failing Playwright test by changing the assertion to match broken UI"); the full diagnostic procedure is added once the dossier lab is done.
 
 ### UI copy
 
@@ -104,17 +106,17 @@ This section is a five-step diagnostic procedure. Step one names a specific comm
 
 This is the "keep the product product-shaped" rule. Without it, the agent will happily render "Seeded test book #3" on a page that is supposed to look like a real reading tracker.
 
-### Static layer
+### Static layer (added later)
 
-Names concrete config files by path: `eslint.config.js` and `tsconfig.json` in the Shelf starter, with later labs extending that list to `knip.json`. Lists the exact TypeScript compiler flags that are enabled. Says "do not bypass with `@ts-expect-error`." The agent now knows the strictness level without reading `tsconfig.json` itself—though it should still check.
+After the static-layer lab, the file will name concrete config files by path: `eslint.config.js` and `tsconfig.json` live at the repo root today, and the lab will add `knip.json`. The section lists the exact TypeScript compiler flags that are enabled and says "do not bypass with `@ts-expect-error`." The agent then knows the strictness level without reading `tsconfig.json` itself—though it should still check. None of this section is present in the starter.
 
-### Git hooks and secrets
+### Git hooks and secrets (added later)
 
-The completed static-layer version names `lefthook` and `gitleaks` by name. It names the exact hook config file (`lefthook.yml`) and the staged-snapshot wrapper (`scripts/run-gitleaks-staged.ts`). The rule about `sample-config.json` being deliberate bait prevents the agent from "fixing" an intentional test fixture.
+Once the static-layer and hooks labs are complete, Shelf will carry a section that names `lefthook` and `gitleaks` by name, points at the hook config file (`lefthook.yml`), and references the staged-snapshot wrapper the lab produces. The rule about intentional "bait" fixtures prevents the agent from "fixing" a planted test fixture. None of this is in the day-one `CLAUDE.md`—the section is earned by the lessons that introduce those tools.
 
 ### "Do not"
 
-Five specific bans. No `any`, no `@ts-expect-error`, no `eslint-disable`, no unflagged dependency additions, no `--no-verify`. Each one names the exact thing not to do. No ambiguity, no interpretation required.
+Four specific bans in the shipped file: no `any` or `@ts-expect-error`, no `eslint-disable`, no unflagged dependency additions, and no hand-editing generated artifacts. Each one names the exact thing not to do. No ambiguity, no interpretation required. Later in the course, the hook lab will add a `--no-verify` ban to this list—at that point the file will carry five bans.
 
 ## What you still need to run
 
@@ -137,7 +139,7 @@ grep -E 'getByRole|getByLabel|getByText|data-testid' CLAUDE.md
 
 # Specific file path named (pick any path mentioned, verify it resolves)
 ls tests/
-ls docs/accessibility-smoke-checklist.md
+ls tests/data/
 
 # Linting and tests still pass
 npm run typecheck
@@ -154,9 +156,9 @@ git commit -m 'lab(rewrite-the-bad-claude-md): tighten instructions for mechanic
 
 ## A note about the 60-line constraint
 
-The lab asks you to keep the file under 60 lines. The shipped `CLAUDE.md` is roughly 93 lines. That is because later labs—accessibility, HAR recording, database seeding, the static layer—each add a section when you reach them. The file you write _today_ should be under 60 lines. The file you end the course with will be longer, because more rules have earned their place.
+The lab asks you to keep the file under 60 lines. The shipped `CLAUDE.md` is roughly 46 lines today, and it stays tight on purpose. Later labs—accessibility, HAR recording, database seeding, the static layer—each earn their own section when you reach them, so the file will grow as rules prove their value. The file you write _today_ should be under 60 lines. The file you end the course with will be longer, because more rules have earned their place.
 
-If you are doing this lab in isolation, trim to 60. If you are reading this after completing several later lessons, the shipped 93-line version is the accumulated result of those additions. Both are correct for their moment.
+If you are doing this lab in isolation, trim to 60. If you are reading this after completing several later lessons, your file will have accumulated additions beyond the shipped starter. Both are correct for their moment.
 
 ## Patterns to take away
 
