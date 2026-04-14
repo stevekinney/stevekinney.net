@@ -9,12 +9,12 @@ Two spec files, four config lines, and a committed PNG. That's the entire visual
 
 ## The shipped files
 
-### `tests/end-to-end/visual.spec.ts`
+### `tests/visual.spec.ts`
 
 This file covers public pages that don't need authentication.
 
 ```ts
-import { expect, test } from './fixtures';
+import { expect, test } from '@playwright/test';
 
 test('design system matches the starter visual baseline', async ({ page }) => {
   await page.goto('/design-system');
@@ -33,12 +33,12 @@ Three lines of real work. Navigate, wait for the page to be ready, take the scre
 
 The explicit filename (`'design-system.png'`) is intentional. Without it, Playwright auto-generates a name from the test title, which works but produces filenames like `design-system-matches-the-starter-visual-baseline-1-chromium-darwin.png`. The explicit name is easier to find in the snapshot directory and easier to reason about in diffs.
 
-### `tests/end-to-end/visual-authenticated.spec.ts`
+### `tests/visual-authenticated.spec.ts`
 
 This file covers pages that require a logged-in user and seeded data.
 
 ```ts
-import { expect, test } from './fixtures';
+import { expect, test } from '@playwright/test';
 import { resetShelfContent } from './helpers/seed';
 
 test.beforeEach(async () => {
@@ -87,13 +87,13 @@ Each one solves a specific false-positive scenario.
 The first run creates the baseline PNGs:
 
 ```bash
-npm run test:e2e -- --update-snapshots
+npm run test -- --update-snapshots
 ```
 
 This produces snapshot directories next to each spec file:
 
-- `tests/end-to-end/visual.spec.ts-snapshots/design-system.png`
-- `tests/end-to-end/visual-authenticated.spec.ts-snapshots/shelf-page.png`
+- `tests/visual.spec.ts-snapshots/design-system.png`
+- `tests/visual-authenticated.spec.ts-snapshots/shelf-page.png`
 
 Yes, you commit these PNGs to git. That's the deal. They're small (usually 50-200KB each for a full-page screenshot), and they need to be version-controlled so the comparison works on every machine and in CI.
 
@@ -101,19 +101,19 @@ Check that `.gitignore` doesn't exclude them. Some `.gitignore` templates includ
 
 ```
 # .gitignore
-!tests/end-to-end/**/*.png
+!tests/*-snapshots/*.png
 ```
 
 After committing the baselines, run the suite cleanly:
 
 ```bash
-npm run test:e2e
+npm run test
 ```
 
 Then run it five times to verify stability:
 
 ```bash
-for i in {1..5}; do npm run test:e2e || break; done
+for i in {1..5}; do npm run test || break; done
 ```
 
 If any iteration fails, you have a false positive. The usual suspects: an animation you didn't freeze, a timestamp or relative date on the page ("2 hours ago" changes every run), or a random avatar. Fix the source (disable the animation, mock the date, seed the avatar) rather than loosening the tolerance.
@@ -132,7 +132,7 @@ The lab asks you to change button padding in `src/lib/components/button.svelte`:
 Run the visual specs:
 
 ```bash
-npm run test:e2e -- --grep visual
+npm run test -- --grep visual
 ```
 
 Both tests should fail. The design system page has buttons. The shelf page has buttons. Bigger buttons mean different screenshots.
@@ -165,7 +165,7 @@ You have two options:
 
 **Revert the change.** Undo the padding edit, run the tests again. They pass. The baselines are still the original committed PNGs. This is the "no, that wasn't intentional" path.
 
-**Update the baselines.** If the wider buttons are the new design, run `npm run test:e2e -- --update-snapshots` to regenerate the PNGs. Commit the new baselines as a separate commit with a message like "update visual baselines for wider button padding." This is the "yes, that was intentional" path.
+**Update the baselines.** If the wider buttons are the new design, run `npm run test -- --update-snapshots` to regenerate the PNGs. Commit the new baselines as a separate commit with a message like "update visual baselines for wider button padding." This is the "yes, that was intentional" path.
 
 Either way, your git history should show the experiment as discrete commits. The sequence should be legible: "here's where the padding changed, here's where the test caught it, here's where we decided what to do about it."
 

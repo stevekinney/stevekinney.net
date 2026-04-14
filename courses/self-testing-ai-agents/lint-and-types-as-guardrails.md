@@ -1,7 +1,7 @@
 ---
 title: Lint and Types as Guardrails
 description: ESLint's recommended rules are a starting point, not a finish line. The rules that actually help agents are the ones you write for your own codebase.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -47,14 +47,14 @@ Ban `page.waitForTimeout`:
 // eslint.config.js
 export default [
   {
-    files: ['tests/end-to-end/**/*.ts'],
+    files: ['tests/**/*.ts'],
     rules: {
       'no-restricted-syntax': [
         'error',
         {
           selector: "CallExpression[callee.property.name='waitForTimeout']",
           message:
-            'page.waitForTimeout is banned. Use expect(locator).toBeVisible() or page.waitForResponse instead. See CLAUDE.md → Playwright waiting.',
+            'page.waitForTimeout is banned. Use expect(locator).toBeVisible() or page.waitForResponse instead. See agent rules → Playwright waiting.',
         },
       ],
     },
@@ -62,23 +62,23 @@ export default [
 ];
 ```
 
-Notice the error message. It names the violation, offers the alternatives, and points at `CLAUDE.md`. When the agent trips this rule, the error message is a self-contained fix prompt—it tells the agent what to do next. Write your lint messages like prompts because they _are_ prompts.
+Notice the error message. It names the violation, offers the alternatives, and points at the agent rules. When the agent trips this rule, the error message is a self-contained fix prompt—it tells the agent what to do next. Write your lint messages like prompts because they _are_ prompts.
 
 Now extend the same rule to ban the other Playwright anti-patterns we hit in the [Playwright lessons](locators-and-the-accessibility-hierarchy.md), plus one recurring server-side bug — handlers that pull `userId` out of the request body instead of the authenticated session. Each selector is a tiny AST query; read them below the code block for the mental model.
 
 ```js
 {
-  files: ['tests/end-to-end/**/*.ts'],
+  files: ['tests/**/*.ts'],
   rules: {
     'no-restricted-syntax': [
       'error',
       {
         selector: "CallExpression[callee.property.name='waitForTimeout']",
-        message: 'page.waitForTimeout is banned. Use expect(locator).toBeVisible() or page.waitForResponse instead. See CLAUDE.md → Playwright waiting.',
+        message: 'page.waitForTimeout is banned. Use expect(locator).toBeVisible() or page.waitForResponse instead. See agent rules → Playwright waiting.',
       },
       {
         selector: "CallExpression[callee.property.name='locator'][arguments.0.type='Literal']",
-        message: 'page.locator with a string selector is discouraged. Use page.getByRole, getByLabel, getByText, or getByTestId. See CLAUDE.md → Playwright locators.',
+        message: 'page.locator with a string selector is discouraged. Use page.getByRole, getByLabel, getByText, or getByTestId. See agent rules → Playwright locators.',
       },
       {
         selector: "CallExpression[callee.property.name='waitForLoadState'] Literal[value='networkidle']",
@@ -111,7 +111,7 @@ Four rules, one config file. Translating each selector back into English:
 Four rules, one config file, all firing on every save. The next time the agent reaches for a banned pattern, the editor underlines it in red and the fix is one step away.
 
 > [!TIP] Write your ESLint rule messages like fix prompts
-> Every error message above names the violation, points at the alternative, and references `CLAUDE.md`. When the agent trips the rule, the message _is_ the next instruction in its context. Treat these messages the same way you'd treat the [test failure dossier](failure-dossiers-what-agents-actually-need-from-a-red-build.md): the richer the message, the less work the agent has to do to recover.
+> Every error message above names the violation, points at the alternative, and references the agent rules. When the agent trips the rule, the message _is_ the next instruction in its context. Treat these messages the same way you'd treat the [test failure dossier](failure-dossiers-what-agents-actually-need-from-a-red-build.md): the richer the message, the less work the agent has to do to recover.
 
 ## The tricky one: banning `any` gradually
 
@@ -157,7 +157,7 @@ The effect: new code is strictly typed, old code gets cleaned up opportunistical
 
 All of these are cheap to enable on a new codebase and expensive to enable on an old one. If Shelf is new, turn everything on. If your real project is older, use the gradual tightening pattern from the `any` section above.
 
-## The `CLAUDE.md` hookup
+## The agent rules
 
 The lint rules are worth nothing if the agent doesn't run them. Update the instructions file:
 

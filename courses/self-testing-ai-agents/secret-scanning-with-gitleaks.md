@@ -1,7 +1,7 @@
 ---
 title: Secret Scanning with Gitleaks
 description: Agents commit fake API keys. Sometimes they commit real ones. Gitleaks is the boring tool that prevents the latter with almost no configuration.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -169,7 +169,7 @@ The official action is the easy path. It runs Gitleaks on every push and PR, fai
 > [!NOTE]
 > Check the current licensing and setup requirements for `gitleaks/gitleaks-action@v2` before you standardize on it for organization repos. If the official action is a bad fit for your plan, invoke the CLI directly in a shell step instead. The important part is the CI gate, not the wrapper.
 
-## `CLAUDE.md` rules
+## The agent rules
 
 ```markdown
 ## Secrets

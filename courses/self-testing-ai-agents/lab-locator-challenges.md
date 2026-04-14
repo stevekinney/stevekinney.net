@@ -14,22 +14,20 @@ This lab fixes that. Shelf ships a `/playground` page built specifically for thi
 > [!NOTE] Prerequisite
 > Pull the latest Shelf starter, start it in your usual local mode, and navigate to `/playground` to see the page you'll be targeting.
 
-> [!NOTE] Those a11y warnings are on purpose
-> The playground intentionally ships with a handful of accessibility violations — a `div` pretending to be a button, an icon-only button with no accessible name — so challenges 23 and 24 have a real target. You'll see svelte-check print these as warnings every time you run `npm run typecheck` or `npm run build`. That is by design. The whole point of the fallback section is to give you something to locate _when the role hierarchy doesn't help_.
+> [!NOTE] The fallback targets are still intentional
+> The playground intentionally keeps a handful of accessibility anti-patterns — a `div` pretending to be a button, an icon-only button with no accessible name — so challenges 23 and 24 have a real target. The current Shelf starter suppresses the corresponding Svelte warnings on that page so `npm run typecheck` and `npm run build` still stay clean. The teaching point is unchanged: if you can only reach something with `getByTestId`, the markup is the smell.
 
 ## Setup
 
-Create a new test file at `tests/end-to-end/playground.spec.ts`. Each challenge is one `test()` block. You can run the file with:
+Create a new test file at `tests/playground.spec.ts`. Each challenge is one `test()` block. You can run the file with:
 
 ```bash
-npx playwright test playground.spec.ts --project=public
+npx playwright test tests/playground.spec.ts
 ```
-
-The `public` project doesn't require authentication, which is what you want here—the playground is a public route.
 
 ## What you can verify locally
 
-This lab is fully local. With Shelf already running, target the shipped playground route at `src/routes/playground/+page.svelte`, write the exercises in `tests/end-to-end/playground.spec.ts`, and run `npx playwright test playground.spec.ts --project=public` until the file is green. Finish with `npm run typecheck` and `npm run build` so you have seen the intentional playground warnings in the same places the rest of the course references them.
+This lab is fully local. With Shelf already running, target the shipped playground route at `src/routes/playground/+page.svelte`, write the exercises in `tests/playground.spec.ts`, and run `npx playwright test tests/playground.spec.ts` until the file is green. Finish with `npm run typecheck` and `npm run build` so you've confirmed the playground still stays clean even though sections 23 and 24 are intentionally bad markup.
 
 ## What remains manual or external
 
@@ -101,11 +99,11 @@ Nothing here depends on GitHub, a deploy preview, or a third-party service. The 
 
 ## Acceptance criteria
 
-- [ ] `tests/end-to-end/playground.spec.ts` exists and contains at least 20 passing tests.
+- [ ] `tests/playground.spec.ts` exists and contains at least 20 passing tests.
 - [ ] Every test uses the highest-priority locator strategy available for its target.
 - [ ] No test uses `page.locator()` with a raw CSS selector.
 - [ ] The dynamic content tests (14–16) do not use `page.waitForTimeout`.
-- [ ] Running `npx playwright test playground.spec.ts --project=public` produces all green.
+- [ ] Running `npx playwright test tests/playground.spec.ts` produces all green.
 
 ## Stretch: locator repair and composition
 

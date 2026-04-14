@@ -11,7 +11,7 @@ I say this because the locator is the contact surface between your test and your
 
 ## The hierarchy
 
-Playwright ships with a bunch of [locator APIs](https://playwright.dev/docs/locators). They are not equivalent, and the order you reach for them matters. Here's the order I want in your head and in your `CLAUDE.md` by the end of this lesson:
+Playwright ships with a bunch of [locator APIs](https://playwright.dev/docs/locators). They are not equivalent, and the order you reach for them matters. Here's the order I want in your head and in your agent rules by the end of this lesson:
 
 1. `page.getByRole('button', { name: 'Add book' })`—by semantic role and accessible name
 2. `page.getByLabel('Book title')`—by form label
@@ -32,7 +32,7 @@ This is the single best argument for locator discipline: **the refactor-proof te
 
 But, do not overread that claim. A good `getByRole` suite gives you upstream pressure toward accessible markup. It does _not_ give you a dedicated accessibility gate. We make that distinction explicit in [Accessibility as a Quality Gate](accessibility-as-a-quality-gate.md), because "probably accessible" is not a quality bar.
 
-If you want reps instead of theory, Shelf ships a dedicated playground at `src/routes/playground/+page.svelte`, and the companion lab has you write the exercises in `tests/end-to-end/playground.spec.ts`. Run the app locally while you work, and keep `npm run typecheck` and `npm run build` nearby too. The playground intentionally includes a few accessibility warnings so you can see where the locator hierarchy stops helping and why the fallback section exists.
+If you want reps instead of theory, Shelf ships a dedicated playground at `src/routes/playground/+page.svelte`, and the companion lab has you write the exercises in `tests/playground.spec.ts`. Run the app locally while you work, and keep `npm run typecheck` and `npm run build` nearby too. The playground intentionally includes a few accessibility warnings so you can see where the locator hierarchy stops helping and why the fallback section exists.
 
 ## What the agent does by default, and why it's wrong
 
@@ -159,9 +159,9 @@ I don't want to tell you `data-testid` is always wrong. Sometimes it's the right
 - You're targeting a wrapper element with no semantic role (a layout `div` that the test needs to check visibility on).
 - You're working around a component library that doesn't expose an accessible name and the fix is not in your repo.
 
-In those cases, add a `data-testid` and move on. But the rule in your `CLAUDE.md` should be that `data-testid` is the _third-choice_ answer, not the first, and the agent should have to write a sentence in the commit message explaining why role and label didn't work. (That sentence doesn't need to be enforced mechanically—it needs to exist as a speed bump so the agent doesn't reach for `data-testid` by default.)
+In those cases, add a `data-testid` and move on. But the rule in your agent instructions should be that `data-testid` is the _third-choice_ answer, not the first, and the agent should have to write a sentence in the commit message explaining why role and label didn't work. (That sentence doesn't need to be enforced mechanically—it needs to exist as a speed bump so the agent doesn't reach for `data-testid` by default.)
 
-## What goes in CLAUDE.md
+## The agent rules
 
 Drop this into the instructions file, or something like it:
 
@@ -189,7 +189,7 @@ That's nine lines. It's the most valuable nine lines in your instructions file f
 
 Two pieces of feedback hook into locator discipline directly, and both show up again later today.
 
-**ESLint rule for `page.locator`.** Later, in [Lint and Types as Guardrails](lint-and-types-as-guardrails.md), we're going to set up an ESLint rule that warns (or errors) whenever `page.locator` appears in a file under `tests/end-to-end/`. The agent gets a red squiggle the moment it reaches for the escape hatch, which is the fastest possible feedback.
+**ESLint rule for `page.locator`.** Later, in [Lint and Types as Guardrails](lint-and-types-as-guardrails.md), we're going to set up an ESLint rule that warns (or errors) whenever `page.locator` appears in a file under `tests/`. The agent gets a red squiggle the moment it reaches for the escape hatch, which is the fastest possible feedback.
 
 **Playwright's built-in accessibility debugging.** When a `getByRole` query fails, Playwright's error message prints the accessibility tree of the page at the point of failure. That tree is gold for the agent—it shows exactly what roles and names _are_ available, so the agent can correct its query without guessing. We'll lean on this when we talk about failure dossiers.
 

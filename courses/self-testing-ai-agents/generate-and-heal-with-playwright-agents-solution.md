@@ -1,7 +1,7 @@
 ---
 title: 'Generate and Heal with Playwright Agents: Solution'
 description: What to expect when running Playwright's planner, generator, and healer agents against Shelf, and how to judge the output.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -25,17 +25,19 @@ You don't need to edit these files. They're generated scaffolding. The interesti
 Your seed test should be minimal:
 
 ```ts
-import { test, expect } from './fixtures';
+import { test, expect } from '@playwright/test';
+import { resetShelfContent } from './helpers/seed';
 
 test('seed', async ({ page }) => {
+  await resetShelfContent();
   await page.goto('/shelf');
   await expect(page.getByRole('heading', { name: /shelf/i })).toBeVisible();
 });
 ```
 
-Two things to note. First: it imports from `./fixtures`, not from `@playwright/test`. Shelf's custom fixtures wire up the authenticated project and any shared helpers. If you import from the bare package, you bypass all of that and the seed test runs unauthenticated—which means the planner starts on the login page instead of the shelf.
+Two things to note. First: at this point in the course it can import directly from `@playwright/test`. The authenticated project wiring lives in `playwright.config.ts`, not in a custom wrapper file. Later, once you've completed the failure-dossier lab, importing from `./fixtures` is a reasonable follow-up because that file wraps `page` with console and network forwarding.
 
-Second: the seed test is deliberately boring. It navigates to one page and asserts a heading exists. Its job isn't to test anything—it's to bootstrap the app into a logged-in, seeded state so the planner has something to explore. Think of it as the planner's starting position on the chessboard.
+Second: the seed test is deliberately boring. It resets shelf content, navigates to one page, and asserts a heading exists. Its job isn't to test anything—it's to bootstrap the app into a logged-in, seeded state so the planner has something to explore. Think of it as the planner's starting position on the chessboard.
 
 ## Expected planner output
 

@@ -33,7 +33,7 @@ One naming note from the official [authentication docs](https://playwright.dev/d
 
 ## The setup
 
-Create a Playwright setup file—convention is `tests/end-to-end/authentication.setup.ts`—that logs in and writes the state to a file. There are two ways to do the "log in" part, and both are worth knowing.
+Create a Playwright setup file—Shelf uses `tests/authentication.setup.ts`—that logs in and writes the state to a file. There are two ways to do the "log in" part, and both are worth knowing.
 
 ### Option A: Log in through the UI
 
@@ -309,13 +309,13 @@ projects: [
   { name: 'setup', testMatch: /authentication\.setup\.ts/ },
   {
     name: 'user',
-    testMatch: /tests\/end-to-end\/user\//,
+    testMatch: /tests\/user\//,
     use: { storageState: 'playwright/.authentication/user.json' },
     dependencies: ['setup'],
   },
   {
     name: 'admin',
-    testMatch: /tests\/end-to-end\/admin\//,
+    testMatch: /tests\/admin\//,
     use: { storageState: 'playwright/.authentication/admin.json' },
     dependencies: ['setup'],
   },
@@ -353,13 +353,13 @@ Two options exist:
 > [!TIP]
 > The setup-project pattern is the safest default for workshop code because it gives you a fresh, browser-real authentication state on every run. Cache the file only when you have measured the setup as a bottleneck and you understand the failure modes around expired cookies.
 
-## CLAUDE.md rules
+## The agent rules
 
 ```markdown
 ## Playwright authentication
 
 - Never log in through the UI inside a test. Login happens once, in
-  `tests/end-to-end/authentication.setup.ts`, and all other tests inherit
+  `tests/authentication.setup.ts`, and all other tests inherit
   the resulting storage state.
 - If a test needs a different user or role, add a new setup for that
   role and a new Playwright project that depends on it.

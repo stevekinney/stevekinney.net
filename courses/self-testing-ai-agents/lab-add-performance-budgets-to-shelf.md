@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Add Performance Budgets to Shelf'
 description: Add a build-size budget, add a targeted runtime threshold, and make both numbers cheap enough that the agent can actually use them.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -72,14 +72,14 @@ The lesson walks the `nodeMetas` structure in the **The checker script** section
 
 **Question:** why does the script return `clientEntries` from `computeClientBundleSizes` even though `main` doesn't use it? (Answer: future rules like "which chunk grew the most week-over-week" can read it without re-walking the report. The function is written for the next feature, not just this one.)
 
-## 4. The runtime spec — `tests/end-to-end/performance.spec.ts`
+## 4. The runtime spec — `tests/performance.spec.ts`
 
-Create `tests/end-to-end/performance.spec.ts`. It goes to `/shelf`, reads `performance.getEntriesByType('navigation')[0].domContentLoadedEventEnd` inside the browser context, loads the threshold from `performance-budgets.json`, and asserts the measured value is under it.
+Create `tests/performance.spec.ts`. It goes to `/shelf`, reads `performance.getEntriesByType('navigation')[0].domContentLoadedEventEnd` inside the browser context, loads the threshold from `performance-budgets.json`, and asserts the measured value is under it.
 
 Two things to notice:
 
 - The threshold is read from disk, not hardcoded. Same contract as the build budget — bumping it is a visible commit.
-- If you already completed the storage-state lab, run the spec inside that authenticated Playwright project so it measures the real build-and-preview flow. If your current Shelf copy is still on the minimal public-only starter, either add the authenticated project first or point the runtime check at a public route until the auth loop exists.
+- If you already completed the storage-state lab, run the spec inside that authenticated Playwright project so it measures the real build-and-preview flow. If your current Shelf copy still has only the minimal public starter, either add the authenticated project first or point the runtime check at a public route until the auth loop exists.
 
 **Question:** why measure `domContentLoadedEventEnd` instead of something like `largestContentfulPaint`? (Answer: `domContentLoaded` is cheaper to stabilize because it doesn't depend on image decode or font load. For a budget you want a number that moves only when _your_ code changes, not when an asset pipeline hiccups.)
 
@@ -92,7 +92,7 @@ Open `package.json` and add the four performance scripts:
   "scripts": {
     "build:stats": "BUNDLE_STATS=1 vite build",
     "performance:build": "npm run build:stats && node scripts/check-performance-budgets.mjs",
-    "performance:runtime": "drizzle-kit push --force && playwright test tests/end-to-end/performance.spec.ts --project=authenticated",
+    "performance:runtime": "playwright test tests/performance.spec.ts --project=authenticated",
     "performance:check": "npm run performance:build && npm run performance:runtime"
   }
 }
@@ -100,7 +100,7 @@ Open `package.json` and add the four performance scripts:
 
 The shapes matter: `performance:check` is the one command an agent calls to get the full answer. Everything below it is a piece the agent can rerun in isolation when one of the two halves is the one that broke.
 
-**Question:** why does `performance:runtime` run `drizzle-kit push --force` first? (Answer: the runtime spec needs a seeded database or the authenticated fixture can't log in. The push ensures the local SQLite file exists and has the current schema. Leave this out and the runtime spec looks like a perf regression when it's actually a setup failure.)
+**Question:** why _doesn't_ `performance:runtime` shell out to `drizzle-kit push --force` first? (Answer: by this point the authenticated project and seed helpers should already own the app setup. The performance command should measure the app, not hide infrastructure bootstrapping inside a side-effect-heavy script preamble.)
 
 ## Break it
 
@@ -122,7 +122,7 @@ You're done when you can answer each of these without looking:
 - [ ] What does `CLIENT_BUNDLE_PREFIX` filter out, and why?
 - [ ] What's the difference between exit 1 and exit 2 in `check-performance-budgets.mjs`?
 - [ ] Why does the runtime spec run under the `authenticated` project specifically?
-- [ ] Why does `performance:runtime` run `drizzle-kit push --force` before the test?
+- [ ] Why does `performance:runtime` stay focused on the test run instead of sneaking setup commands into the script?
 - [ ] You lowered `maxTotalGzipKilobytes` to `50`, ran `npm run performance:build`, saw it fail, and restored the threshold. (Mechanical check of the read.)
 
 ## Troubleshooting

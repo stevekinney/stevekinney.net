@@ -1,7 +1,7 @@
 ---
 title: 'Capstone: The Whole Loop, End to End'
 description: One task, one agent, one conversation. Every loop you built today fires at least once. You watch and grade.
-modified: 2026-04-09
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -37,20 +37,20 @@ These are the three capstone surfaces the final Shelf repo should expose when th
 
 ## The prompt
 
-First, save the user story so the agent can read it. Create `CAPSTONE.md` at the **root of the Shelf repo** (alongside `CLAUDE.md` and `package.json`) with the four bullet points from "The task" section above as its body. No frontmatter, no preamble—just the bullets under a single `# Reading Goals` heading. The agent will read this file by name in the next step.
+First, save the user story so the agent can read it. Create `CAPSTONE.md` at the **root of the Shelf repo** (alongside the repo's agent instructions and `package.json`) with the four bullet points from "The task" section above as its body. No frontmatter, no preamble—just the bullets under a single `# Reading Goals` heading. The agent will read this file by name in the next step.
 
 If your Shelf repository has a Git remote and a real hosted CI pipeline, open Claude Code in the Shelf repo and paste _exactly_ this prompt:
 
-> Implement the reading goals feature as described in `CAPSTONE.md`. Follow every rule in `CLAUDE.md`. Keep all user-facing copy product-facing: do not mention Playwright, MCPs, seeded data, route filenames, or workshop notes in the UI. When you believe the task is complete, open a pull request and wait for CI to either pass or fail. If CI fails, read the failure dossier, diagnose the issue, fix it, and push a new commit. Repeat until CI is green. Do not ask me for clarification on anything—use the existing Shelf code as ground truth for patterns.
+> Implement the reading goals feature as described in `CAPSTONE.md`. Follow every project agent rule. Keep all user-facing copy product-facing: do not mention Playwright, MCPs, seeded data, route filenames, or workshop notes in the UI. When you believe the task is complete, open a pull request and wait for CI to either pass or fail. If CI fails, read the failure dossier, diagnose the issue, fix it, and push a new commit. Repeat until CI is green. Do not ask me for clarification on anything—use the existing Shelf code as ground truth for patterns.
 
 If your Shelf repository is still local-only and does **not** have a Git remote yet, paste this version instead:
 
-> Implement the reading goals feature as described in `CAPSTONE.md`. Follow every rule in `CLAUDE.md`. Keep all user-facing copy product-facing: do not mention Playwright, MCPs, seeded data, route filenames, or workshop notes in the UI. When you believe the task is complete, run `npm run lint`, `npm run typecheck`, and `npm run test`. If any check fails, use the failure dossier and local artifacts to diagnose the issue, fix it, and rerun the commands until they pass. Record any hosted pull-request, CI, or review-bot gaps in `ROADMAP.md`. Do not ask me for clarification on anything—use the existing Shelf code as ground truth for patterns.
+> Implement the reading goals feature as described in `CAPSTONE.md`. Follow every project agent rule. Keep all user-facing copy product-facing: do not mention Playwright, MCPs, seeded data, route filenames, or workshop notes in the UI. When you believe the task is complete, run `npm run lint`, `npm run typecheck`, and `npm run test`. If any check fails, use the failure dossier and local artifacts to diagnose the issue, fix it, and rerun the commands until they pass. Record any hosted pull-request, CI, or review-bot gaps in `ROADMAP.md`. Do not ask me for clarification on anything—use the existing Shelf code as ground truth for patterns.
 
 The agent now has everything it needs:
 
 - The task description (in `CAPSTONE.md`, which you just created).
-- The rules (in `CLAUDE.md`, which you've been building all day).
+- The rules (the project agent rules you've been building all day).
 - The code (the hardened Shelf starter).
 - The verification loops (Playwright, visual regression, custom MCPs, static checks, CI).
 - The feedback mechanism (dossiers, Bugbot, CI artifacts).
@@ -70,14 +70,14 @@ Your job from this point is to _not intervene_.
 
 Sit with a notebook or a text file open. As the agent works, note each time one of these happens:
 
-- [ ] The agent reads `CLAUDE.md` before writing code.
+- [ ] The agent reads the project agent rules before writing code.
 - [ ] The agent writes a failing test before writing the implementation (TDD default).
 - [ ] The agent uses `getByRole` locators in new Playwright tests (no raw CSS, no `waitForTimeout`).
 - [ ] The resulting UI reads like a book-tracking product rather than a workshop handout.
 - [ ] The agent runs `npm run lint` after edits, either via hooks or explicitly.
 - [ ] The agent runs `npm run typecheck` after edits.
 - [ ] The agent runs `npm run test:unit` for the new unit tests.
-- [ ] The agent runs `npm run test:e2e` for the new end-to-end tests.
+- [ ] The agent runs `npm run test` for the new end-to-end tests.
 - [ ] The agent calls a custom MCP tool (e.g., `verify_shelf_page`) at least once.
 - [ ] The agent notices a screenshot diff on the shelf or goals page and either updates the baseline or reverts the change.
 - [ ] The agent runs or reads the automated accessibility check for the new UI instead of assuming semantic locators were enough.
@@ -127,17 +127,17 @@ Answer these questions in a markdown file, `CAPSTONE-retrospective.md`:
 1. Which loops fired on their own, catching mistakes without my help?
 2. Which loops failed to fire, allowing mistakes to propagate?
 3. Which interventions did I make, and what was the minimal fix that would have prevented me from needing to intervene?
-4. If I were running this workshop tomorrow with a new agent, what would I change in `CLAUDE.md` based on what I saw today?
+4. If I were running this workshop tomorrow with a new agent, what would I change in the agent rules based on what I saw today?
 5. What was the _biggest_ mistake the agent made that none of the loops caught? Why did they miss it? What loop would catch it next time?
 6. Which of the new core loops—accessibility, performance, or post-deploy validation—saved me the most time, and which still felt too weak to trust?
 
-These questions are the real deliverable of this workshop. The hardened Shelf repo is a nice artifact. The tuned `CLAUDE.md` is a nicer artifact. The retrospective—a list of specific, observed gaps in your agent feedback loop that you can go fix on Monday—is the thing you actually came here for.
+These questions are the real deliverable of this workshop. The hardened Shelf repo is a nice artifact. The tuned agent rules are a nicer artifact. The retrospective—a list of specific, observed gaps in your agent feedback loop that you can go fix on Monday—is the thing you actually came here for.
 
 ## Take-home: tuning
 
 You don't have to fix all the gaps during the workshop. The retrospective is the punch list for the next iteration. For each gap:
 
-- Add a rule to `CLAUDE.md` if the agent needed a clearer operating constraint.
+- Add a rule to the agent instructions if the agent needed a clearer operating constraint.
 - Add a lint rule, custom MCP, or pre-commit check if the gap should be caught mechanically before the agent gets far enough to make a mess.
 - Add a test, dossier field, or CI step if the failure belongs in a later or stricter loop.
 

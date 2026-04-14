@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Rewrite the Bad CLAUDE.md'
 description: Tighten Shelf's starter instructions file until every rule is mechanically actionable and the UI stays product-facing.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -27,7 +27,7 @@ Specifically, the new file should include:
 
 Keep the file under sixty lines. If it's longer than that, you're probably writing instructions to yourself instead of to the agent.
 
-The starter already ships with real paths worth naming. Use that. A rule that says "reuse `src/lib/components`" or "put end-to-end tests in `tests/end-to-end/`" is stronger than a vague rule about staying organized.
+The starter already ships with real paths worth naming. Use that. A rule that says "reuse `src/lib/components`" or "put Playwright specs in `tests/`" is stronger than a vague rule about staying organized.
 
 ## Acceptance criteria
 

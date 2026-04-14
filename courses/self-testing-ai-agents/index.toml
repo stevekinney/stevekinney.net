@@ -75,14 +75,6 @@ href = "fixtures-worker-scoped-test-scoped.md"
 title = "Where Fixtures Actually Help"
 href = "where-fixtures-actually-help.md"
 
-[[section.item.related]]
-title = "Lab"
-href = "lab-refactor-shelf-fixtures.md"
-
-[[section.item.related]]
-title = "Solution"
-href = "refactor-shelf-fixtures-solution.md"
-
 [[section.item]]
 title = "Testing Third-Party Authentication"
 href = "testing-third-party-authentication.md"
@@ -113,6 +105,14 @@ href = "mocking-browser-apis.md"
 [[section.item]]
 title = "Deterministic State and Test Isolation"
 href = "deterministic-state-and-test-isolation.md"
+
+[[section.item]]
+title = "Lab: Refactor Shelf's Fixtures"
+href = "lab-refactor-shelf-fixtures.md"
+
+[[section.item]]
+title = "Solution: Refactor Shelf's Fixtures"
+href = "refactor-shelf-fixtures-solution.md"
 
 [[section.item]]
 title = "API and UI Hybrid Tests"
@@ -199,33 +199,6 @@ title = "Solution"
 href = "add-performance-budgets-to-shelf-solution.md"
 
 [[section]]
-title = "Runtime Tools and Custom MCPs"
-
-[[section.item]]
-title = "Runtime Tools Compared"
-href = "runtime-tools-compared.md"
-
-[[section.item]]
-title = "Runtime Probes in the Development Loop"
-href = "runtime-probes-in-the-development-loop.md"
-
-[[section.item]]
-title = "Writing a Custom MCP Wrapper"
-href = "writing-a-custom-mcp-wrapper.md"
-
-[[section.item.related]]
-title = "Lab"
-href = "lab-wrap-a-custom-verification-mcp.md"
-
-[[section.item.related]]
-title = "Solution"
-href = "wrap-a-custom-verification-mcp-solution.md"
-
-[[section.item]]
-title = "Structured CLI Output as Pipeline Glue"
-href = "structured-cli-output-as-pipeline-glue.md"
-
-[[section]]
 title = "Evidence and Failure Dossiers"
 
 [[section.item]]
@@ -259,6 +232,33 @@ href = "lab-triage-three-traces.md"
 [[section.item.related]]
 title = "Solution"
 href = "triage-three-traces-solution.md"
+
+[[section]]
+title = "Runtime Tools and Custom MCPs"
+
+[[section.item]]
+title = "Runtime Tools Compared"
+href = "runtime-tools-compared.md"
+
+[[section.item]]
+title = "Runtime Probes in the Development Loop"
+href = "runtime-probes-in-the-development-loop.md"
+
+[[section.item]]
+title = "Writing a Custom MCP Wrapper"
+href = "writing-a-custom-mcp-wrapper.md"
+
+[[section.item.related]]
+title = "Lab"
+href = "lab-wrap-a-custom-verification-mcp.md"
+
+[[section.item.related]]
+title = "Solution"
+href = "wrap-a-custom-verification-mcp-solution.md"
+
+[[section.item]]
+title = "Structured CLI Output as Pipeline Glue"
+href = "structured-cli-output-as-pipeline-glue.md"
 
 [[section]]
 title = "The Second Opinion: Review Agents"
@@ -394,8 +394,8 @@ title = "Solution"
 href = "add-a-nightly-verification-workflow-solution.md"
 
 [[section.item]]
-title = "Playwright APIs That Actually Pay Rent"
-href = "playwright-apis-that-actually-pay-rent.md"
+title = "Advanced Playwright APIs"
+href = "advanced-playwright-apis.md"
 
 [[section.item]]
 title = "Porting the Shelf Loop to Another Stack"

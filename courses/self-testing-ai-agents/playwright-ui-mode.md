@@ -22,7 +22,7 @@ That's it. Playwright opens a browser window with its visual test runner. Your t
 You can also scope it to a single file if you don't want the full suite staring at you:
 
 ```bash
-npx playwright test tests/end-to-end/smoke.spec.ts --ui
+npx playwright test tests/smoke.spec.ts --ui
 ```
 
 ## The action timeline
@@ -46,6 +46,23 @@ Click the element, and the suggested locator appears in a playground at the bott
 Once you're happy with the locator, copy it into your test. No guessing, no inspecting the DOM in a separate browser tab, no writing a locator and running the test to see if it finds anything.
 
 For agents, this is the workflow you want to internalize: if you're unsure what locator to use, don't guess. Open UI Mode, pick the locator visually, and let Playwright tell you what works.
+
+## Code-level locator debugging
+
+UI Mode is still the first stop. But sometimes you are already in a headed run and you just need proof that your locator is pointing at the thing you think it is. [`locator.highlight()`](https://playwright.dev/docs/api/class-locator) is the code-level version of that check.
+
+```ts
+const saveButton = page.getByRole('button', { name: 'Save draft' });
+await saveButton.highlight();
+```
+
+Use it when:
+
+- strict mode says the locator matches two things and you need to see which ones
+- a healed or generated locator keeps landing on the wrong card or button
+- you want to confirm that a chained locator is scoped to the right region before rewriting the test
+
+Then delete it. `highlight()` is a debugging helper, not a committed part of the suite. Locator picking itself already lives in UI Mode, which is exactly where it belongs.
 
 ## Watch mode
 
@@ -90,7 +107,7 @@ The pick locator tool doesn't just suggest _any_ locator—it suggests the best 
 
 If you hover over a button and Playwright suggests `getByTestId('add-book-btn')` instead, that's a signal. It means the button doesn't have an accessible name that Playwright can match on—the same signal the locators lesson described as a real bug. The pick locator tool just made that bug visible without you having to think about it.
 
-This is why UI Mode matters for agent-driven testing specifically: it's a visual confirmation of the locator hierarchy you're encoding in your `CLAUDE.md`. The tool and the rule agree.
+This is why UI Mode matters for agent-driven testing specifically: it's a visual confirmation of the locator hierarchy you're encoding in your agent instructions. The tool and the rule agree.
 
 ## Things to Remember
 

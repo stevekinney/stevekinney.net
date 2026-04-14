@@ -68,7 +68,7 @@ projects: [
   },
   // Cross-browser smoke projects. They run only the `smoke.spec.ts` file
   // against Firefox and WebKit. Skip them by default — invoke via
-  // `npm run test:e2e:cross-browser` when you specifically want the
+  // `npm run test:cross-browser` when you specifically want the
   // expanded matrix.
   {
     name: 'firefox-smoke',
@@ -83,19 +83,19 @@ projects: [
 ];
 ```
 
-Four projects. `public` and `authenticated` are the default Chromium loop that runs on every edit. `firefox-smoke` and `webkit-smoke` only match the `smoke.spec.ts` file, and they only run when you ask for them explicitly. The default `npm run test:e2e` script pins `--project=setup --project=public --project=authenticated` so Firefox and WebKit do not sneak into the fast loop:
+Three projects in the minimal starter shape. `chromium` is the default fast loop that runs on every edit. `firefox-smoke` and `webkit-smoke` only match tests tagged `@cross-browser`, and they only run when you ask for them explicitly. The default `npm run test` script pins `--project=chromium` so Firefox and WebKit do not sneak into the fast loop:
 
 ```json
 {
   "scripts": {
-    "test:e2e": "playwright test --project=setup --project=public --project=authenticated",
-    "test:e2e:cross-browser": "playwright test --project=firefox-smoke --project=webkit-smoke"
+    "test": "playwright test --project=chromium",
+    "test:cross-browser": "playwright test --grep @cross-browser --project=chromium --project=firefox-smoke --project=webkit-smoke"
   }
 }
 ```
 
 > [!IMPORTANT] Install the extra browsers first
-> Playwright only installs Chromium when you set up the fast loop. Before running `npm run test:e2e:cross-browser` for the first time — locally or in a fresh CI runner — install the cross-browser binaries explicitly:
+> Playwright only installs Chromium when you set up the fast loop. Before running `npm run test:cross-browser` for the first time — locally or in a fresh CI runner — install the cross-browser binaries explicitly:
 >
 > ```sh
 > npx playwright install --with-deps firefox webkit
@@ -122,7 +122,7 @@ This gives you a stable, small "does the product basically work in these engines
 Projects are one way to filter. Playwright's built-in test tags are the other, and the two are complementary. Tag a test with `@cross-browser` to mark it as part of the cross-browser smoke set, then run it explicitly via `--grep`:
 
 ```ts
-// tests/end-to-end/rate-book.spec.ts
+// tests/rate-book.spec.ts
 test('user can rate Station Eleven', { tag: '@cross-browser' }, async ({ page }) => {
   // ...
 });
@@ -158,7 +158,7 @@ I want:
 
 When Firefox fails and Chromium passes, the agent should not need a detective novel. It should get a clean artifact and a clean reproduction command.
 
-## What goes in `CLAUDE.md`
+## The agent rules
 
 ```markdown
 ## Cross-browser checks

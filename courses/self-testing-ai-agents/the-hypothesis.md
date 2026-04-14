@@ -1,7 +1,7 @@
 ---
 title: The Hypothesis
 description: Why we're spending a whole day on feedback loops instead of prompting tricks, and what "self-correcting" actually means.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -18,7 +18,7 @@ The hypothesis for today is that the problem isn't the agent's intelligence—it
 That's the whole workshop in one sentence: **how do we make it cheap and automatic for an agent to check its own work?**
 
 > [!NOTE] About Shelf
-> Every lab in this workshop runs against the same starter project: a small [SvelteKit](https://kit.svelte.dev/) + TypeScript book-rating app called [**Shelf**](https://github.com/stevekinney/shelf-life). It uses [Vitest](https://vitest.dev/) for unit tests and [Playwright](https://playwright.dev/) for end-to-end. You'll harden it across the day—adding a CLAUDE.md, a static layer, dossiers, visual regression, and CI—until it's the codebase the rest of the workshop assumes. If a lab tells you to "open the Shelf starter repo," that's the one.
+> Every lab in this workshop runs against the same starter project: a small [SvelteKit](https://kit.svelte.dev/) + TypeScript book-rating app called [**Shelf**](https://github.com/stevekinney/shelf-life). It uses [Vitest](https://vitest.dev/) for unit tests and [Playwright](https://playwright.dev/) for end-to-end. You'll harden it across the day—adding agent rules, a static layer, dossiers, visual regression, and CI—until it's the codebase the rest of the workshop assumes. If a lab tells you to "open the Shelf starter repo," that's the one.
 
 ## Why loops beat prompting discipline
 

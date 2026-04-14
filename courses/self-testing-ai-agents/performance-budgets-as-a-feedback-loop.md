@@ -1,7 +1,7 @@
 ---
 title: Performance Budgets as a Feedback Loop
 description: Functional and visually correct is not enough if the change made the app slower or heavier. Budgets turn that into a real gate.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -40,7 +40,7 @@ The model:
 
 That is enough to catch most accidental regressions.
 
-In Shelf, the concrete files are `tests/end-to-end/performance.spec.ts` for the runtime side and the `npm run performance:*` script family for the build side, with `npm run performance:build` as the narrow "just gather the numbers" entry point. The whole point is that the budget lives behind named commands the agent can run, not behind a blog post about performance culture.
+In Shelf, the concrete files are `tests/performance.spec.ts` for the runtime side and the `npm run performance:*` script family for the build side, with `npm run performance:build` as the narrow "just gather the numbers" entry point. The whole point is that the budget lives behind named commands the agent can run, not behind a blog post about performance culture.
 
 ## Build-time budgets: catch weight gain early
 
@@ -281,7 +281,7 @@ When the budget breaks, I want the agent to behave exactly the way it behaves on
 
 The last part matters. A budget is allowed to change. But the change should be deliberate, reviewed, and explained, not smuggled in because the agent wanted the check to stop yelling.
 
-## What goes in `CLAUDE.md`
+## The agent rules
 
 ```markdown
 ## Performance budgets

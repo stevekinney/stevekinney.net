@@ -1,7 +1,7 @@
 ---
 title: 'Build a Failure Dossier for Shelf: Solution'
 description: Walkthrough of the failure dossier script, config settings, and the experiment that proves the loop works.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -40,7 +40,7 @@ reporter: [
 
 The `json` reporter is what the dossier script reads. Without it, there's no machine-readable report to summarize. The `html` reporter is for humans who want to browse failures interactively. The `list` reporter prints results to the terminal during the run.
 
-### `tests/end-to-end/fixtures.ts` -- console forwarding
+### `tests/fixtures.ts` -- console forwarding
 
 ```ts
 export const test = base.extend({

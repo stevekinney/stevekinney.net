@@ -1,7 +1,7 @@
 ---
 title: 'Wire the Static Layer into Shelf: Solution'
 description: Copyable static-layer artifacts—ESLint rules, TypeScript strict flags, knip, the lefthook config, gitleaks, and the CLAUDE.md additions—with verification commands for each part.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -37,11 +37,11 @@ The first block applies globally—every file in the project:
 
 The `networkidle` rule uses the child combinator (`>`) to match a `Literal` node with value `'networkidle'` that is a direct argument to `waitForLoadState`. The `userId` rule uses a nested `MemberExpression` match—`body.userId`—because a simple property-name check on `userId` would fire on every object that happens to have a `userId` field. The nesting says "specifically `something.body.userId`," which is the shape of reading from a parsed request body.
 
-The second block scopes to `tests/end-to-end/**/*.ts` only:
+The second block scopes to `tests/**/*.ts` only:
 
 ```js
 {
-  files: ['tests/end-to-end/**/*.ts'],
+  files: ['tests/**/*.ts'],
   rules: {
     'no-restricted-syntax': [
       'error',
@@ -74,9 +74,9 @@ The `networkidle` rule appears in _both_ blocks. That is deliberate: the global 
 npm run lint
 
 # Prove waitForTimeout fires
-echo "page.waitForTimeout(1000);" >> tests/end-to-end/shelf.spec.ts
+echo "page.waitForTimeout(1000);" >> tests/smoke.spec.ts
 npm run lint 2>&1 | grep "waitForTimeout is banned"
-git checkout tests/end-to-end/shelf.spec.ts
+git checkout tests/smoke.spec.ts
 ```
 
 ### Part 2: TypeScript strict mode
@@ -118,14 +118,10 @@ Open `knip.json`:
     "src/app.html",
     "src/routes/**/+*.{ts,svelte}",
     "tests/**/*.{test,spec}.ts",
-    "tests/end-to-end/helpers/*.ts",
+    "tests/helpers/*.ts",
     "scripts/*.{ts,mjs}"
   ],
-  "project": [
-    "src/**/*.{ts,svelte,svelte.ts}",
-    "tests/**/*.ts",
-    "scripts/**/*.{ts,mjs}"
-  ],
+  "project": ["src/**/*.{ts,svelte,svelte.ts}", "tests/**/*.ts", "scripts/**/*.{ts,mjs}"],
   "ignoreDependencies": ["@tailwindcss/forms", "@tailwindcss/typography", "tailwindcss"]
 }
 ```

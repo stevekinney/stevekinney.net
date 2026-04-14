@@ -17,7 +17,7 @@ This is the posture I want. A summary review is a ritual. An inline comment is a
 
 ## The repo-level config file
 
-Drop a `.cursor/BUGBOT.md` at the root of the repo. This is Bugbot's instructions file—the same idea as `CLAUDE.md`, but for the reviewer. The file tells the bot what the codebase cares about and what to leave alone.
+Drop a `.cursor/BUGBOT.md` at the root of the repo. This is Bugbot's instructions file—the same idea as your main agent instructions, but for the reviewer. The file tells the bot what the codebase cares about and what to leave alone.
 
 > [!NOTE]
 > As of April 9, 2026, Cursor's docs use `.cursor/BUGBOT.md`. Older screenshots and repos may still show `.cursor/bugbot.md`. Follow the current Cursor docs for the account you're actually using, but keep the filename consistent everywhere in the repository and in your lesson notes.
@@ -49,7 +49,7 @@ authentication; authorization helpers live in `src/lib/server/authorization.ts`.
 - Components that render user-generated content without escaping or
   sanitization.
 - Playwright tests that use `page.waitForTimeout`, `page.locator` with raw
-  CSS, or UI login. These patterns are banned in `CLAUDE.md`.
+  CSS, or UI login. These patterns are banned by the agent rules.
 - Changes to the dossier loop that remove `playwright-report/report.json`,
   retained traces, or the `npm run dossier` script.
 
@@ -57,7 +57,7 @@ authentication; authorization helpers live in `src/lib/server/authorization.ts`.
 
 - Generated Playwright artifacts under `playwright-report/`.
 - Storage-state files under `playwright/.authentication/`.
-- Snapshot PNGs in `tests/end-to-end/*-snapshots/`.
+- Snapshot PNGs in `tests/*-snapshots/`.
 - HAR fixtures under `tests/fixtures/*.har`.
 - Generated `build/` outputs.
 - Lockfiles.
@@ -98,7 +98,7 @@ Things I always include:
 - Route handlers (`src/routes/**/+server.ts` and `+page.server.ts`). These are where security and correctness live.
 - Database helpers (`src/lib/server/*.ts`). Query bugs live here.
 - Shared components (`src/lib/components/*.svelte`). Render-level bugs live here.
-- Test helpers (`tests/end-to-end/helpers/*.ts`). These amplify mistakes across the suite; bugs here cost a lot.
+- Test helpers (`tests/helpers/*.ts`). These amplify mistakes across the suite; bugs here cost a lot.
 
 The bot's default is "review everything." Override it.
 
@@ -116,7 +116,7 @@ When Bugbot leaves a comment, the workflow is straightforward:
 Remember the rule of three from the last lesson. When Bugbot flags the same kind of thing repeatedly:
 
 - Once or twice: fix the PR. Move on.
-- Three times: add a rule to `CLAUDE.md` so the writing agent catches it upstream.
+- Three times: add a rule to the agent instructions so the writing agent catches it upstream.
 - Still happening after the rule: add a lint rule or a test assertion to make the bad pattern a hard fail.
 
 The review bot isn't the end of the loop—it's the observer that tells you what to automate next. Every consistent Bugbot finding is a piece of information about where your upstream prevention is weak.
@@ -132,7 +132,7 @@ A quick honesty check.
 
 Treat the bot as the layer between "I finished writing the code" and "a human is going to look at this." It catches the low-hanging fruit so the human review can focus on the interesting stuff.
 
-## CLAUDE.md rules
+## The agent rules
 
 ```markdown
 ## Review bot findings

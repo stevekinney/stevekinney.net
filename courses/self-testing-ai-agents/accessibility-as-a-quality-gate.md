@@ -70,9 +70,9 @@ A few things worth understanding about that block before you start writing your 
 - **`.analyze()`** is the await point. It walks the DOM, runs the rule set, and returns a results object with `violations`, `passes`, `incomplete`, and `inapplicable` arrays.
 - **`expect(results.violations).toEqual([])`** is the gate. An empty `violations` array means axe found nothing wrong. Anything else fails the test, with the violation details printed in the failure output.
 
-That is the entire shape. Three lines of setup, one assertion. The accessibility lab adds exactly this pattern to `tests/end-to-end/accessibility.spec.ts`, scoped to the highest-signal routes; once you understand the four pieces above you can read that file as a real-shape implementation rather than a mystery.
+That is the entire shape. Three lines of setup, one assertion. The accessibility lab adds exactly this pattern to `tests/accessibility.spec.ts`, scoped to the highest-signal routes; once you understand the four pieces above you can read that file as a real-shape implementation rather than a mystery.
 
-The day-one starter omits this check. Once you trust the scan enough to make it part of the main gate, let `tests/end-to-end/accessibility.spec.ts` ride the normal `npm run test:e2e` loop instead of hiding it behind a sidecar command.
+The day-one starter omits this check. Once you trust the scan enough to make it part of the main gate, let `tests/accessibility.spec.ts` ride the normal `npm run test` loop instead of hiding it behind a sidecar command.
 
 ## Structural accessibility checks with ARIA snapshots
 
@@ -157,7 +157,7 @@ The loop is:
 
 That's it. No speeches about how accessibility is important. The gate already said it is.
 
-## What goes in `CLAUDE.md`
+## The agent rules
 
 ```markdown
 ## Accessibility

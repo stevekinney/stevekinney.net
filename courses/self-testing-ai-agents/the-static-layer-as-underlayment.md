@@ -1,7 +1,7 @@
 ---
 title: The Static Layer as Underlayment
 description: Lint, types, dead code, hooks, secret scanning—the cheap stuff that should be running underneath everything. Why it lives at the end of the day.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -59,7 +59,7 @@ Every static tool you install is going to follow roughly the same setup pattern:
 1. Install it.
 2. Configure it with defaults aggressive enough to be useful but not so aggressive that it flags your existing code everywhere.
 3. Wire it into `package.json` as a named script.
-4. Add the script to `CLAUDE.md` under "what done means."
+4. Add the script to your agent rules under "what done means."
 5. Run it on save (via editor integration), on commit (via a git hook), and in CI.
 6. Tune it over the next week based on what it catches and what it gets wrong.
 

@@ -1,7 +1,7 @@
 ---
 title: Playwright Test Agents
 description: Playwright ships three built-in agents that can plan, generate, and heal your test suite. Here's how they work and where they fit in the loop.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -38,6 +38,12 @@ For [VS Code](https://code.visualstudio.com/):
 npx playwright init-agents --loop=vscode
 ```
 
+For [GitHub Copilot](https://github.com/features/copilot):
+
+```bash
+npx playwright init-agents --loop=copilot
+```
+
 For [OpenCode](https://opencode.ai/):
 
 ```bash
@@ -53,6 +59,82 @@ One thing to know: `init-agents` replaces the repo's `.mcp.json`. Shelf doesn't 
 
 Once the agents are generated, you command them through your AI tool of choice. The generated artifacts follow a clean structure we'll look at in a moment.
 
+## The CLI options that actually matter
+
+The help output for `init-agents` is short:
+
+```text
+--loop <loop>
+-c, --config <file>
+--project <project>
+--prompts
+-h, --help
+```
+
+Short help is nice. It is also not enough explanation on its own.
+
+### `--loop <loop>`
+
+This is the only required decision. It tells Playwright which agent host it should initialize for:
+
+- `claude`: writes Claude Code agent definitions under `.claude/agents/` and an MCP config in `.mcp.json`
+- `copilot`: writes GitHub Copilot-style agent definitions under `.github/agents/`
+- `opencode`: writes OpenCode config plus agent prompts under `.opencode/`
+- `vscode`: uses the current VS Code / GitHub agent layout under `.github/agents/`
+- `vscode-legacy`: uses the older VS Code chatmode layout under `.github/chatmodes/` and `.vscode/mcp.json`
+
+The important distinction is that `vscode` is the current path. `vscode-legacy` exists for older VS Code setups that still expect chatmodes instead of the newer agent definition format.
+
+### `-c, --config <file>`
+
+This points `init-agents` at the Playwright config file it should load before it tries to find a seed project.
+
+Use it when:
+
+- your config is not the default `playwright.config.ts` in the current directory
+- you have multiple Playwright configs in the repo
+- you are running `init-agents` from a subdirectory and do not want Playwright guessing
+
+This flag matters because the generator uses the loaded config to find the project's `testDir`, then searches that project for a file whose name includes `seed`. If it does not find one, it creates a default `seed.spec.ts` in that project's `testDir`.
+
+### `--project <project>`
+
+This chooses which Playwright project to treat as the **primary seed project**.
+
+If you omit it, Playwright uses the first top-level project in the loaded config. That is fine when your config has one obvious main project. It is not fine when your config has multiple roles or environments and the first project happens to be something weird like `setup`, `firefox`, or `mobile`.
+
+Use `--project` when the seed should clearly come from one specific project:
+
+```bash
+npx playwright init-agents --loop=claude --project=authenticated
+```
+
+That tells Playwright where to look for an existing seed file and where to create the default one if no seed exists yet.
+
+### `--prompts`
+
+This tells Playwright to write prompt templates alongside the agent initialization instead of only writing the agent definitions.
+
+In practice, that means provider-specific prompt folders such as:
+
+- `.claude/prompts/`
+- `.opencode/prompts/`
+- `.github/prompts/`
+
+This is useful when you want the prompt text version-controlled as an editable artifact instead of living only inside the generated agent files.
+
+One nuance: `--prompts` is meaningful for the current Claude, Copilot, OpenCode, and modern VS Code layouts. It is not the interesting flag in `vscode-legacy` mode, because that older path is built around chatmodes instead of the newer prompt-template layout.
+
+### `-h, --help`
+
+This just prints the command help and exits:
+
+```bash
+npx playwright init-agents --help
+```
+
+That sounds trivial, but it is the fastest way to confirm which loop providers your installed Playwright version actually supports before you start cargo-culting examples from a blog post written against a different release.
+
 ## Planner
 
 The planner agent explores your running app in a real browser and produces a Markdown test plan. It's doing what a QA engineer does on day one: clicking around, noting what the app does, and writing down what should be tested.
@@ -66,16 +148,19 @@ The planner agent explores your running app in a real browser and produces a Mar
 The seed test is just a regular Playwright test that gets the app into a usable state:
 
 ```ts
-import { test, expect } from './fixtures';
+import { test, expect } from '@playwright/test';
+import { resetShelfContent } from './helpers/seed';
 
 test('seed', async ({ page }) => {
-  // This test uses custom fixtures from ./fixtures.
-  // The planner runs it to set up the environment,
-  // then explores from here.
+  await resetShelfContent();
+  await page.goto('/shelf');
+  await expect(page.getByRole('heading', { name: /shelf/i })).toBeVisible();
 });
 ```
 
-In Shelf, that seed is literally `tests/end-to-end/seed.spec.ts`. Once generation has happened and a test is red, the healer is usually pointed at one concrete file under `tests/end-to-end/<failing-spec>.spec.ts`. Those two paths are the handoff points for the whole loop.
+If you've already reached the failure-dossier lab and added `tests/fixtures.ts`, importing from `./fixtures` is also fine. The important part here is the seeded, authenticated starting position — not the wrapper file.
+
+In Shelf, that seed is literally `tests/seed.spec.ts`. Once generation has happened and a test is red, the healer is usually pointed at one concrete file under `tests/<failing-spec>.spec.ts`. Those two paths are the handoff points for the whole loop.
 
 **What it produces:**
 
@@ -201,7 +286,7 @@ repo/
   .mcp.json                   # MCP server config for the test agents
   specs/                      # human-readable test plans from the planner
     basic-operations.md
-  tests/end-to-end/           # generated Playwright tests
+  tests/                      # generated Playwright tests
     seed.spec.ts              # seed test for environment bootstrap
     create/
       add-valid-todo.spec.ts  # generated from specs/basic-operations.md
@@ -235,7 +320,7 @@ The lab walks through this pipeline once, end to end. In practice, you loop back
 
 The catch—and I want to be honest about this—is that agent-generated tests are only as good as the plan. If the planner misunderstands the feature, the generator will faithfully produce tests for the wrong thing, and the healer will faithfully keep those wrong tests passing. You still need to review the specs in `specs/` with the same care you'd review any test. The agents accelerate the mechanical work. The judgment about _what to test_ is still yours.
 
-## CLAUDE.md rules
+## The agent rules
 
 If you're using test agents in your project, add something like this to the instructions file:
 

@@ -136,11 +136,13 @@ Each worker points the app at a different SQLite file. When Playwright launches 
 
 ## What Shelf does today, and why
 
-Shelf's current `playwright.config.ts` pins `workers: 1`. That's a deliberate intermediate step. The starter ships with `fullyParallel: true` so tests that _could_ run in parallel within a single worker still do, and individual specs pay the seeding cost on `beforeEach` instead of leaking state between files. But every worker currently points at the same SQLite file, so running more than one worker would let two tests trample each other.
+Shelf's day-one `playwright.config.ts` no longer pins `workers: 1`, and that is the right starting shape. The shipped suite is intentionally tiny: one public smoke spec, lab subtrees ignored by default, and no authenticated matrix yet. In that world, the cleanest config is the honest config.
 
-The right next move for a project like this is the per-worker-database pattern above. Shelf defers it because it is a bigger plumbing change than this lesson: every server-side DB client needs to read `TEST_WORKER_INDEX`, and the seed helper has to follow whichever file that DB layer points at. When Shelf grows stronger test isolation in a later phase, `workers: 1` becomes `workers: 4` and this lesson's "per-worker databases" pattern slots in wholesale.
+What changes once you build the later labs is the amount of shared mutable state. The moment you add authenticated specs that all talk to the same SQLite file, worker count stops being theoretical. If turning workers up exposes failures, that is not Playwright being mean. It is the suite finally telling you the database isolation story is incomplete.
 
-Treat `workers: 1` as a floor, not a ceiling. If your suite starts failing when you flip it up, that's not a signal to turn it back off—it's a signal that your isolation was incomplete. Find the leaking state and fix it.
+The tempting fix is `workers: 1`. Sometimes you use it temporarily while you are unblocking a refactor. Fine. What you must not do is mistake that temporary brace for the finished design. A single worker hides leaks; it does not remove them.
+
+The durable next move for a SQLite project like Shelf is the per-worker-database pattern above. Each worker gets its own file, the server reads `TEST_WORKER_INDEX`, and the seed helper points at the same file the app is using. Then you can turn the worker count back up without treating parallelism as a bug.
 
 ## Test fixtures for shared setup
 
@@ -179,7 +181,7 @@ test('reader can rate Station Eleven', async ({ page, seeded }) => {
 
 The fixture runs automatically when any test imports this `test`. No more `beforeEach` boilerplate scattered across files. And because the seeding logic is centralized, updating the baseline data is a single-file change.
 
-## CLAUDE.md rules
+## The agent rules
 
 ```markdown
 ## Database state in end-to-end tests
@@ -192,10 +194,10 @@ The fixture runs automatically when any test imports this `test`. No more `befor
 - Individual specs call `resetShelfContent`, which does _not_ reset user
   accounts. Only the authentication setup project uses `seedFreshDatabase`,
   because deleting users invalidates the stored browser session.
-- `playwright.config.ts` pins `workers: 1` today because every worker
-  still shares one SQLite file. When per-worker isolation lands, that
-  number goes up—don't disable `fullyParallel` as a workaround for a
-  leaking test.
+- The day-one starter does not pin `workers` because the shipped suite is
+  intentionally tiny. Once authenticated specs start sharing one SQLite
+  file, treat worker-count failures as isolation bugs to fix, not as a
+  reason to hard-code `workers: 1` forever.
 ```
 
 That last rule matters. Agents will happily disable parallelism to make a failing test pass. It works, it's green, and it's also a silent regression in suite speed and isolation guarantees. Don't let them.

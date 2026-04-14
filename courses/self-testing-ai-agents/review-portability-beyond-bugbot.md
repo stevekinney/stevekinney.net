@@ -1,7 +1,7 @@
 ---
 title: Review Portability Beyond Bugbot
 description: Bugbot is the example, not the law. This appendix translates the second-opinion loop into portable review primitives you can carry to other tools.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -92,7 +92,7 @@ If I want this loop to survive tool churn, I keep three artifacts in the reposit
 
 - the tool-specific instruction file for whichever review surface I actually use
 - a vendor-neutral review playbook describing severity buckets, duplicate handling, and escalation rules
-- one place that says how repeated findings flow back into `CLAUDE.md`, lint rules, and tests
+- one place that says how repeated findings flow back into the agent rules, lint rules, and tests
 
 That is enough to keep the process portable even if the product does not stay still.
 
@@ -134,7 +134,7 @@ producing noise here, update its instruction surface.
 ## The rule of three
 
 - First two occurrences: fix the PR.
-- Third occurrence: add a rule to `CLAUDE.md`.
+- Third occurrence: add a rule to the agent instructions.
 - Still recurring: add a lint rule, test assertion, or CI gate.
 
 ## Re-review path

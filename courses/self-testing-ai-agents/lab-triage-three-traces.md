@@ -1,17 +1,27 @@
 ---
 title: 'Lab: Triage Three Traces'
 description: Generate three real traces from deliberately-broken Shelf specs, open each one in the viewer, and diagnose the failure using the four-bucket taxonomy.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-11
 ---
 
 Time to cash the checks from the last two lessons. [Reading a Trace](reading-a-trace.md) taught you the four panes. [Flaky-Test Triage](flaky-test-triage.md) gave you the four-bucket classification. This lab asks you to apply both, at the same time, to three real traces generated from three deliberately-broken specs in the Shelf starter.
 
-The three broken specs live in `tests/end-to-end/labs/broken-traces/`. The day-one starter no longer ships the trace-generator helper, so this lab is where you add `scripts/generate-lab-traces.mjs` (or an equivalent helper) before you generate the traces, open them in the viewer, and write a four-field diagnosis per trace. The goal is muscle memory: classify-and-cite, classify-and-cite, classify-and-cite, until reading a trace stops feeling like reverse-engineering and starts feeling like reading.
+The three broken specs live in `tests/labs/broken-traces/`. The day-one starter no longer ships the trace-generator helper, and the root `playwright.config.ts` ignores `tests/labs/**` by default so the green starter loop stays green. This lab is where you add `scripts/generate-lab-traces.mjs` (or an equivalent helper) plus whatever temporary config override you need to make those specs discoverable. Then you generate the traces, open them in the viewer, and write a four-field diagnosis per trace. The goal is muscle memory: classify-and-cite, classify-and-cite, classify-and-cite, until reading a trace stops feeling like reverse-engineering and starts feeling like reading.
 
 ## Setup
 
-From the Shelf repo root:
+First, add the generator helper as `scripts/generate-lab-traces.mjs` (or equivalent), then wire a package script for it:
+
+```json
+{
+  "scripts": {
+    "traces:generate": "node scripts/generate-lab-traces.mjs"
+  }
+}
+```
+
+Then, from the Shelf repo root:
 
 ```bash
 npm run traces:generate
@@ -65,7 +75,7 @@ Then Trace C. This one's different again. Your diagnosis should end up citing so
 
 ## Stretch: write the fix
 
-For at least one of the three traces, go beyond diagnosis and actually fix the spec. The broken specs live in `tests/end-to-end/labs/broken-traces/`. Edit the file, run `npm run traces:generate` again, and confirm the generator complains that the trace for your "fixed" spec is missing — because the spec passed, so Playwright didn't write a `trace.zip` for a failed run.
+For at least one of the three traces, go beyond diagnosis and actually fix the spec. The broken specs live in `tests/labs/broken-traces/`. Edit the file, run `npm run traces:generate` again, and confirm the generator complains that the trace for your "fixed" spec is missing — because the spec passed, so Playwright didn't write a `trace.zip` for a failed run.
 
 That's the signal: when the trace disappears, the test is green. The generator is telling you the fix worked.
 

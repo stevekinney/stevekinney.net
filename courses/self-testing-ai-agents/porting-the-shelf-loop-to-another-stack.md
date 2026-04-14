@@ -1,7 +1,7 @@
 ---
 title: Porting the Shelf Loop to Another Stack
 description: The tools change when the framework changes. The loop structure does not. This appendix shows how to translate Shelf's feedback model to other stacks without losing the point.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -20,7 +20,7 @@ Do not port file names. Port responsibilities.
 
 That means:
 
-- `CLAUDE.md` becomes "where the agent learns the repository rules"
+- the agent instructions become "where the agent learns the repository rules"
 - storage state becomes "how browser automation gets authenticated deterministically"
 - seed data becomes "how the repository resets to known state"
 - failure dossier becomes "the artifact bundle that makes a red run fixable"
@@ -37,7 +37,7 @@ The mapping is usually:
 
 | Shelf loop         | Next.js-style equivalent                                           |
 | ------------------ | ------------------------------------------------------------------ |
-| `CLAUDE.md` rules  | `AGENTS.md`, `CLAUDE.md`, or repo instructions file                |
+| Agent rules        | `AGENTS.md`, `CLAUDE.md`, or repo instructions file                |
 | storage state auth | Playwright storage state or seeded test login route                |
 | deterministic data | seed script, test database reset, or fixture loader                |
 | Playwright suite   | Playwright end-to-end tests against the app router or pages router |
@@ -56,7 +56,7 @@ The mapping looks more like this:
 
 | Shelf loop                 | Rails-style equivalent                                       |
 | -------------------------- | ------------------------------------------------------------ |
-| `CLAUDE.md` rules          | `AGENTS.md`, repo docs, or prompt file the agent reads first |
+| Agent rules                | `AGENTS.md`, repo docs, or prompt file the agent reads first |
 | storage state auth         | system-test login helper, seeded user, or browser bootstrap  |
 | deterministic data         | `test/fixtures`, factories, database reset tasks             |
 | Playwright or browser loop | Rails system tests, Playwright, or both depending the team   |

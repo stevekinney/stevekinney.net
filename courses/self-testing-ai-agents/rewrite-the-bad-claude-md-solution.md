@@ -53,7 +53,7 @@ The line "Do not reintroduce `src/routes/demo/`" is the kind of rule that sounds
 ```markdown
 - Write a failing test before the implementation. Commit the test first.
 - Unit tests live next to the file under test as `<name>.test.ts` and run with Vitest.
-- End-to-end tests live in `tests/end-to-end/` and run with Playwright.
+- Playwright specs live in `tests/` and run with `npm run test`.
 ```
 
 Three rules, each naming a specific file pattern or directory. The agent knows where to put tests without asking, and it knows the TDD order without you reminding it mid-task.
@@ -71,11 +71,11 @@ The ban on `page.waitForTimeout` and `waitForLoadState('networkidle')` is reinfo
 
 ### Playwright authentication
 
-This section names a specific file: `tests/end-to-end/authentication.setup.ts`. The rule "never log in from inside a regular test" prevents the most common Playwright anti-pattern—and gives the agent a concrete diagnostic: "if a test redirects to `/login`, the setup file is broken."
+This section names a specific file: `tests/authentication.setup.ts`. The rule "never log in from inside a regular test" prevents the most common Playwright anti-pattern—and gives the agent a concrete diagnostic: "if a test redirects to `/login`, the setup file is broken."
 
 ### Database seeding and isolation
 
-Names `tests/helpers/seed.ts`, `tests/data/users.json`, `src/lib/server/users.ts`, `resetShelfContent`, `seedFreshDatabase`, and the `workers: 1` constraint in `playwright.config.ts`. Every noun in this section is a file or a config value the agent can verify. The rule about not resetting users inside individual specs is the kind of thing that takes an hour to debug the first time you hit it—and zero seconds to prevent with a single sentence.
+Names `tests/helpers/seed.ts`, `tests/data/users.json`, `src/lib/server/users.ts`, `resetShelfContent`, and `seedFreshDatabase`. Every noun in this section is a file or a config value the agent can verify. The rule about not resetting users inside individual specs is the kind of thing that takes an hour to debug the first time you hit it—and zero seconds to prevent with a single sentence.
 
 ### HAR recording
 
@@ -88,7 +88,7 @@ Specific directory, specific API, specific option. The "never commit a new HAR w
 
 ### Accessibility
 
-Names `tests/end-to-end/accessibility.spec.ts` and `docs/accessibility-smoke-checklist.md`. Two files, clear responsibilities: the spec catches what automation can prove, the checklist documents what it cannot.
+Names `tests/accessibility.spec.ts` and `docs/accessibility-smoke-checklist.md`. Two files, clear responsibilities: the spec catches what automation can prove, the checklist documents what it cannot.
 
 ### When a test fails
 
@@ -136,7 +136,7 @@ done
 grep -E 'getByRole|getByLabel|getByText|data-testid' CLAUDE.md
 
 # Specific file path named (pick any path mentioned, verify it resolves)
-ls tests/end-to-end/
+ls tests/
 ls docs/accessibility-smoke-checklist.md
 
 # Linting and tests still pass
@@ -161,7 +161,7 @@ If you are doing this lab in isolation, trim to 60. If you are reading this afte
 ## Patterns to take away
 
 - **Name the command, not the concept.** "`npm run typecheck`" is enforceable. "Make sure types are correct" is not.
-- **Name the file, not the principle.** "Put end-to-end tests in `tests/end-to-end/`" survives copy-paste into a task. "Follow the testing conventions" does not.
+- **Name the file, not the principle.** "Put Playwright specs in `tests/`" survives copy-paste into a task. "Follow the testing conventions" does not.
 - **Ban the specific thing.** "Do not use `@ts-expect-error`" is a grep away from verification. "Maintain type safety" is a judgment call the agent will make differently than you would.
 - **Shorter is louder.** Every line you delete makes the remaining lines more likely to be read. A 200-line `CLAUDE.md` is a suggestion. A 60-line one is an order.
 - **The file is a living document.** You will add to it as the codebase grows. The discipline is not "write it once perfectly"—it is "earn every line."

@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Add Cross-Browser Coverage'
 description: Keep Chromium as the default, then add Firefox and WebKit coverage to a tagged smoke subset so the loop stays fast enough to use.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -24,7 +24,13 @@ Update `playwright.config.ts` in Shelf so it defines projects for:
 
 Keep Chromium as the default project you run most often.
 
-The lesson's **The Playwright projects that split the work** section in [Cross-Browser Validation Without Burning the Dev Loop](cross-browser-validation-without-burning-the-dev-loop.md) has a complete four-project configuration block for Shelf: `public` + `authenticated` for the daily Chromium loop, plus `firefox-smoke` and `webkit-smoke` that only match `smoke.spec.ts`. Copy that shape as your starting point. The key trick is that the default `test:e2e` script explicitly lists `--project=setup --project=public --project=authenticated` so the Firefox and WebKit projects stay out of the fast loop.
+The lesson's **The Playwright projects that split the work** section in [Cross-Browser Validation Without Burning the Dev Loop](cross-browser-validation-without-burning-the-dev-loop.md) has a complete multi-project configuration block for Shelf. On the current starter, the smallest practical version is:
+
+- `chromium` for your normal local loop
+- `firefox-smoke` for the tagged public smoke subset
+- `webkit-smoke` for the tagged public smoke subset
+
+If you've already built `setup` and `authenticated` projects in the earlier auth labs, keep those in Chromium too. The key trick is that the default `test` script explicitly runs only the fast Chromium project, so Firefox and WebKit stay out of the everyday loop.
 
 Before you can actually _run_ the new projects locally, install the alternate browsers Playwright did not pull down when you set up the fast loop:
 
@@ -36,16 +42,16 @@ The lesson's **Install the extra browsers first** callout explains why this is r
 
 ## Step 2: tag the smoke subset
 
-Pick a small set of end-to-end tests and tag them for cross-browser execution.
+Pick a small set of tests and tag them for cross-browser execution.
 
 Good candidates:
 
-- login
-- shelf landing page
+- the starter `tests/smoke.spec.ts`
+- the public `tests/playground.spec.ts` file if you built it in the locator lab
 - one form flow
 - one modal or drawer interaction
 
-The lesson's **Tag the right tests, not all the tests** section shows the Playwright tag syntax — `test('...', { tag: '@cross-browser' }, async ({ page }) => {...})` — and the matching `--grep @cross-browser` CLI invocation. Use that pattern directly. The simplest shape is a dedicated `smoke.spec.ts` that everything in the `firefox-smoke` / `webkit-smoke` projects automatically picks up via `testMatch`, which is what Shelf does today; tag-based filtering is only necessary when you need per-test granularity inside an otherwise mixed file.
+The lesson's **Tag the right tests, not all the tests** section shows the Playwright tag syntax — `test('...', { tag: '@cross-browser' }, async ({ page }) => {...})` — and the matching `--grep @cross-browser` CLI invocation. Use that pattern directly. The simplest current Shelf shape is to tag the tests in `tests/smoke.spec.ts` and let the Firefox and WebKit projects match only that tagged subset.
 
 ## Step 3: add focused commands
 
@@ -54,8 +60,8 @@ Expose commands like these:
 ```json
 {
   "scripts": {
-    "test:e2e": "playwright test --project=chromium",
-    "test:e2e:cross-browser": "playwright test --grep @cross-browser --project=chromium --project=firefox --project=webkit"
+    "test": "playwright test --project=chromium",
+    "test:cross-browser": "playwright test --grep @cross-browser --project=chromium --project=firefox-smoke --project=webkit-smoke"
   }
 }
 ```

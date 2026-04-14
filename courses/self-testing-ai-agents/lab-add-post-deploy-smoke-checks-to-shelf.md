@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Add Post-Deploy Smoke Checks to Shelf'
 description: Add a deployed-URL smoke test, wire it into a preview or deploy workflow, and document the rollback trigger before you need it.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -13,7 +13,7 @@ You're going to add the tiny post-deploy smoke check Shelf used to ship, prove y
 > Complete [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md) first. This lab also assumes the CI workflow from [Lab: Write the CI Workflow from Scratch](lab-write-the-ci-workflow-from-scratch.md) exists or is at least sketched out.
 
 > [!NOTE] In the current starter
-> Shelf now ships only the main `playwright.config.ts` and the minimal `npm run test:e2e` loop. This lab is where you add `tests/smoke/post-deploy.spec.ts`, the `test:smoke` script, `docs/post-deploy-playbook.md`, and the deploy-workflow shape.
+> Shelf now ships only the main `playwright.config.ts` and the minimal `npm run test` loop. This lab is where you add `tests/smoke/post-deploy.spec.ts`, the `test:smoke` script, `docs/post-deploy-playbook.md`, and the deploy-workflow shape.
 
 ## The task
 
@@ -58,7 +58,7 @@ Open `package.json` and find the smoke-test command:
 The workflow should set `SMOKE_BASE_URL`. The test command should stay boring.
 
 > [!NOTE] One good final shape uses a split config
-> A common final version of this script is `"test:smoke": "playwright test --config=playwright.smoke.config.ts"`—a separate Playwright config scoped to the smoke suite. The split exists so the smoke run doesn't inherit the main config's `webServer` block, its authenticated project, or the pinned `workers: 1` (which matters when the smoke target is a hosted URL, not a local SQLite file). Both shapes work. Create the split-config version if you want the smoke loop fully isolated from the local dev loop.
+> A common final version of this script is `"test:smoke": "playwright test --config=playwright.smoke.config.ts"`—a separate Playwright config scoped to the smoke suite. The split exists so the smoke run doesn't inherit the main config's local `webServer` block or any authenticated or browser-specific projects you added later. Both shapes work. Create the split-config version if you want the smoke loop fully isolated from the local dev loop.
 
 ## Step 3: inspect the rollback playbook
 

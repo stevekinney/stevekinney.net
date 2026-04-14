@@ -1,7 +1,7 @@
 ---
 title: 'Failure Dossiers: What Agents Actually Need From a Red Build'
 description: A failed test is a prompt. The prompt is only as good as the evidence attached to it.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -65,13 +65,13 @@ reporter: [
 The HTML reporter writes `playwright-report/html/index.html`, and for each failed test it shows the assertion, the screenshot, the error stack, and a link to open the trace. Open it in a browser and you get a gorgeous, readable dossier with zero effort.
 
 > [!TIP] The easiest way to see this work
-> If you want to see the whole dossier pipeline end-to-end without planting a fake application bug, temporarily move one committed visual-regression baseline and run the matching visual test. That produces the full artifact set—`report.json`, `dossier.md`, retained screenshot, retained video, and a `trace.zip` under `playwright-report/test-results/`—off a single intentional failure you can undo in one commit.
+> If you want to see the Playwright artifact pipeline end-to-end without planting a fake application bug, temporarily move one committed visual-regression baseline and run the matching visual test. That produces `report.json`, a retained screenshot, a retained video, and a `trace.zip` under `playwright-report/test-results/` off a single intentional failure you can undo in one commit. Once you build the dossier summarizer from the companion lab, that same run also produces `playwright-report/dossier.md`.
 
 ![The Playwright HTML report after a deliberate Shelf failure](./assets/lab-failure-dossier-report.png)
 
 The `open: 'never'` flag keeps Playwright from auto-opening a browser tab when you run tests, which is annoying in CI and distracting locally.
 
-In Shelf, the easiest deliberate break is still the `src/routes/design-system/+page.svelte` route because it gives you a loud UI change without touching auth or seeded data. Run the suite through `npm run test:e2e` when you want the real Playwright artifact set, and keep `npm run test` in the loop too so the basic unit gates stay honest while you are iterating on the failure.
+In Shelf, the easiest deliberate break is still the `src/routes/design-system/+page.svelte` route because it gives you a loud UI change without touching auth or seeded data. Run the suite through `npm run test` when you want the real Playwright artifact set, and keep the other basic gates in the loop too so the repository stays honest while you are iterating on the failure.
 
 ## Making dossiers agent-readable
 
@@ -96,7 +96,7 @@ Before we walk the report, it helps to see the shape you're walking. The JSON re
       "specs": [
         {
           "title": "user can rate Station Eleven",
-          "file": "tests/end-to-end/rate-book.spec.ts",
+          "file": "tests/rate-book.spec.ts",
           "line": 9,
           "tests": [
             {
@@ -203,7 +203,7 @@ console.error(`Wrote dossier for ${failures.length} failures`);
 ```
 
 > [!NOTE] The course solution includes the production version
-> Shelf's `scripts/summarize-failure-dossier.ts` is a longer, fully-typed version of this sketch that also picks the `diff` attachment ahead of the baseline on visual regression failures, guards against `result.error` being undefined via `result.errors[0]`, and makes every attachment path relative to the repo root. Read the sketch above to understand the walk, then open the course solution or your lab implementation to see the production shape.
+> The day-one Shelf starter does **not** ship `scripts/summarize-failure-dossier.ts`. You add it in [Lab: Build a Failure Dossier for Shelf](lab-build-a-failure-dossier-for-shelf.md). The completed lab version is a longer, fully-typed implementation of this sketch that also picks the `diff` attachment ahead of the baseline on visual regression failures, guards against `result.error` being undefined via `result.errors[0]`, and makes every attachment path relative to the repo root. Read the sketch above to understand the walk, then open the lab solution or your own implementation to see the production shape.
 
 ### A representative failing-run `dossier.md` excerpt
 
@@ -216,7 +216,7 @@ After one intentionally failing rate-book test, the generated markdown includes 
 
 **Project**: `authenticated`
 
-**File**: `tests/end-to-end/rate-book.spec.ts:9`
+**File**: `tests/rate-book.spec.ts:9`
 
 **Error**:
 
@@ -234,7 +234,7 @@ Received string: ""
 **Reproduce**:
 
 \`\`\`sh
-npx playwright test --project=authenticated tests/end-to-end/rate-book.spec.ts -g "user can rate Station Eleven"
+npx playwright test --project=authenticated tests/rate-book.spec.ts -g "user can rate Station Eleven"
 \`\`\`
 ```
 
@@ -244,7 +244,7 @@ That's exactly what you want in an agent's hand: the test title, the project it 
 
 For an alternative that skips the custom script entirely and uses the LLM itself to triage the dossier into typed JSON, see [Structured CLI Output as Pipeline Glue](structured-cli-output-as-pipeline-glue.md). That lesson teaches `claude -p --json-schema` with the dossier as input—same data, different consumer.
 
-Now you can add this section to `CLAUDE.md`:
+Once you've added the summarizer from the dossier lab, you can add this section to your agent instructions:
 
 ```markdown
 ## When a test fails
@@ -280,7 +280,7 @@ Two Playwright tricks that pay for themselves immediately in the dossier.
 **Forwarding browser console to test output.** Add this as a test fixture:
 
 ```ts
-// tests/end-to-end/fixtures.ts
+// tests/fixtures.ts
 export const test = base.extend({
   page: async ({ page }, use) => {
     page.on('console', (msg) => {

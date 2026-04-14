@@ -107,12 +107,12 @@ Two settings control which tests a project runs.
 }
 ```
 
-`testDir` scopes a project to a directory. If your authenticated tests live under `tests/end-to-end/authenticated/`, you can point a project at that directory and skip the regex:
+`testDir` scopes a project to a directory. If your authenticated tests live under `tests/authenticated/`, you can point a project at that directory and skip the regex:
 
 ```ts
 {
   name: 'authenticated',
-  testDir: 'tests/end-to-end/authenticated',
+  testDir: 'tests/authenticated',
   dependencies: ['setup'],
 }
 ```
@@ -149,7 +149,7 @@ export default defineConfig({
 In a real repo, that usually looks like this:
 
 ```text
-tests/end-to-end/
+tests/
   global.setup.ts
   global.teardown.ts
   smoke.spec.ts
@@ -159,7 +159,7 @@ tests/end-to-end/
 And the teardown file itself is just a tiny Playwright test that removes whatever the setup created:
 
 ```ts
-// tests/end-to-end/global.teardown.ts
+// tests/global.teardown.ts
 import { test as teardown } from '@playwright/test';
 
 teardown('remove temporary database', async () => {

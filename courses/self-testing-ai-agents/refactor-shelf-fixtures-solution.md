@@ -7,6 +7,8 @@ date: 2026-04-11
 
 The course solution below is one reasonable endpoint. Yours may look different — the lab grades on the quality of your decisions, not a byte-for-byte match. What follows is the narrative for how I'd walk from `fixtures.ts` to a cleaner final shape, one commit at a time.
 
+This lab now sits after the deterministic seeding lesson on purpose. The refactor only becomes real once `tests/helpers/seed.ts` exists and `resetShelfContent()` actually works.
+
 If you already finished the lab and want to compare, scroll to the [final file](#the-final-file) at the bottom.
 
 ## Commit 1: Rename everything
@@ -57,9 +59,9 @@ Commit the teardown.
 
 ## Commit 3: Demote the helpers
 
-`authedPage` was a lie. It said "here's an authenticated page" but the `labs-fixtures` project already mounts the reader's storage state on every `page`, so every page is already authenticated. The fixture was navigating to `/shelf` and asserting the URL, which is not a fixture — it's two lines of code. Delete it, and inline the navigation in the spec.
+`authedPage` was a lie. It said "here's an authenticated page" but by the time you reach this lab you should already have some authenticated default Playwright setup for protected Shelf pages — usually storage state from the earlier auth lessons. The fixture was navigating to `/shelf` and asserting the URL, which is not a fixture — it's two lines of code. Delete it, and inline the navigation in the spec.
 
-`loggedOutPage` was a different problem. It was a real fixture (it built a fresh browser context), but it was only used in one test, and it was awkward to compose because it fought the project-level storage state. The solution file moves it out as a plain helper function and lets the caller own teardown:
+`loggedOutPage` was a different problem. It was a real fixture (it built a fresh browser context), but it was only used in one test, and it was awkward to compose because it fought whatever authenticated default browser state you had already set up for the lab run. The solution file moves it out as a plain helper function and lets the caller own teardown:
 
 ```ts
 // In fixtures.ts after the refactor:

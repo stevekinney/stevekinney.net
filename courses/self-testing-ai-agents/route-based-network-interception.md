@@ -35,7 +35,102 @@ test.beforeEach(async ({ context }) => {
 
 The difference matters. `page.route` only intercepts requests from that specific page. `context.route` intercepts requests from every page the context opens. For most test scenarios, `page.route` is what you want. Reach for `context.route` when you need to block something globally—analytics, tracking pixels, third-party scripts—across all pages in the test.
 
+The fast rule is:
+
+- use `page.route()` when the mock belongs to one page and one scenario
+- use `browserContext.route()` when the mock is part of the environment for the whole test
+
+Concrete examples:
+
+- **Use `page.route()`** for "this shelf page should see a 500 from `/api/shelf`" or "this one checkout flow should get a fake tax response." The route is local to the page under test, and when the page goes away, the mock's useful life is over too.
+- **Use `browserContext.route()`** for blocking analytics on every page, intercepting popup traffic from the first request, or setting one fake backend response that both the main page and a popup will hit during the same test.
+- **Use `browserContext.route()`** whenever you do not have the target page object yet. The first request of a popup is the classic case. By the time you get a `Page` handle for the popup, that request already happened.
+- **Prefer `page.route()`** when the broader scope would make the mock too invisible. A context-wide route is effectively ambient test infrastructure; that is good when it truly is infrastructure and bad when it quietly changes unrelated pages.
+
+The precedence rule from the docs is also worth remembering: if both match, `page.route()` wins over `browserContext.route()` for requests coming from that page. That lets you keep a broad context-level default and override one endpoint surgically on the page that needs a different behavior.
+
 One more detail from the [Page API](https://playwright.dev/docs/api/class-page) docs that is easy to miss: enabling routing disables the browser HTTP cache for that page or context. That is usually what you want in tests. It also means "my app got slower after I added routes" is not your imagination.
+
+## Restoring routes
+
+Adding the route is only half the job. If you install a route in the middle of a long test, or inside a reusable helper that runs more than once, you also need to know how to get rid of it.
+
+In plain Playwright Test, the cheapest cleanup is often the test boundary itself: each test gets a fresh browser context, so routes you add in one test do not leak into the next one. But inside a single test or helper, route cleanup is your responsibility.
+
+There are three patterns worth knowing.
+
+### 1. Make the route self-expire
+
+If the mock should only apply once, use the route `times` option and let Playwright remove it after that many matches:
+
+```ts
+await page.route(
+  '**/api/shelf',
+  async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ books: [] }),
+    });
+  },
+  { times: 1 },
+);
+```
+
+This is the cleanest option when you are intercepting one bootstrap request and then want the page to go back to the real network.
+
+### 2. Remove one specific route
+
+Use [`page.unroute()`](https://playwright.dev/docs/api/class-page#page-unroute) or [`browserContext.unroute()`](https://playwright.dev/docs/api/class-browsercontext#browser-context-unroute) when you want to remove a specific handler:
+
+```ts
+const mockShelf = async (route) => {
+  await route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ books: [{ title: 'Station Eleven' }] }),
+  });
+};
+
+await page.route('**/api/shelf', mockShelf);
+
+try {
+  await page.goto('/shelf');
+  await expect(page.getByText('Station Eleven')).toBeVisible();
+} finally {
+  await page.unroute('**/api/shelf', mockShelf);
+}
+```
+
+Passing the handler matters when you have more than one route on the same URL pattern. If you omit it, Playwright removes **all** routes for that URL on that page or context.
+
+`try` / `finally` is the right shape in helpers. Tests fail. Cleanup still has to happen.
+
+### 3. Wipe everything
+
+If a helper installs several routes, or mixes manual routes with HAR replay, use [`page.unrouteAll()`](https://playwright.dev/docs/api/class-page#page-unroute-all) or [`browserContext.unrouteAll()`](https://playwright.dev/docs/api/class-browsercontext#browser-context-unroute-all). These remove both the routes you registered with `route()` and the HAR handlers you registered with `routeFromHAR()`:
+
+```ts
+await page.route('**/api/shelf', async (route) => {
+  await route.fulfill({ status: 500, body: 'boom' });
+});
+
+await page.routeFromHAR('tests/fixtures/open-library.har', {
+  notFound: 'fallback',
+});
+
+// ... run the scenario ...
+
+await page.unrouteAll({ behavior: 'wait' });
+```
+
+The `behavior` option is not decoration.
+
+- `'wait'` waits for currently running handlers to finish before removing them.
+- `'ignoreErrors'` removes immediately and swallows later handler errors.
+- `'default'` removes immediately and can still surface unhandled errors from a handler that was already running.
+
+Use `'wait'` unless you have a specific reason not to. It is the teardown version that behaves like an adult.
 
 ## Routing is middleware, not magic
 
@@ -255,7 +350,7 @@ The decision is usually obvious once you state the question clearly:
 
 Both tools coexist. You can replay a HAR for most endpoints and add a `page.route` on top for the one endpoint you need to simulate failing. The route handler takes priority over the HAR replay for matching requests.
 
-## CLAUDE.md rules
+## The agent rules
 
 ```markdown
 ## Route-based network mocking
@@ -276,6 +371,8 @@ Both tools coexist. You can replay a HAR for most endpoints and add a `page.rout
   interception or HAR replay.
 - If popup traffic or WebSockets are involved, move the interception to
   the browser context layer before debugging anything else.
+- If a helper installs temporary routes, clean them up with `times`,
+  `unroute()`, or `unrouteAll({ behavior: 'wait' })` before returning.
 ```
 
 ## The one thing to remember

@@ -7,7 +7,7 @@ date: 2026-04-10
 
 The starting test had eight problems and zero good habits. The finished version has zero problems and—if you squint—reads like a spec. Here's how we get from one to the other, one pattern at a time.
 
-If you want to skip the walkthrough and just see the shipped file, jump to [the final code](#the-shipped-file). But the interesting part isn't the destination—it's the sequence of commits that got us there, because each one isolates exactly one category of fix.
+If you want to skip the walkthrough and just see the final file, jump to [the final code](#the-final-file). But the interesting part isn't the destination—it's the sequence of commits that got us there, because each one isolates exactly one category of fix.
 
 ## Fix 1: Storage state authentication
 
@@ -23,7 +23,7 @@ await page.waitForTimeout(1000);
 
 Five lines, one `waitForTimeout`, and every test in the suite pays the cost of filling a form and waiting for a redirect. Worse: if the login page changes its markup, every test file that logs in this way breaks.
 
-Storage state fixes all of this. The login happens once in `tests/end-to-end/authentication.setup.ts`, the resulting cookies are saved to disk, and every subsequent test reuses them. The test file doesn't mention `/login` at all.
+Storage state fixes all of this. The login happens once in `tests/authentication.setup.ts`, the resulting cookies are saved to disk, and every subsequent test reuses them. The test file doesn't mention `/login` at all.
 
 After this commit, the test starts at `page.goto('/shelf')`. The five login lines are gone. The first `waitForTimeout` is gone with them.
 
@@ -107,12 +107,12 @@ Note the order: you set up the response listener _before_ the click, then await 
 
 Now the test waits for exactly the right signal: the PATCH request to the shelf API returned a 200. Not "1500ms have passed and I hope things worked out." The actual network response.
 
-## The shipped file
+## The final file
 
-Here's the final test after all four fixes. The inline comments are teaching annotations layered on top of the shipped shape in `tests/end-to-end/rate-book.spec.ts`.
+Here's the final test after all four fixes. The inline comments are teaching annotations layered on top of the final shape in `tests/rate-book.spec.ts`.
 
 ```ts
-import { expect, test } from './fixtures'; // Custom fixtures, not bare @playwright/test
+import { expect, test } from '@playwright/test';
 import { resetShelfContent } from './helpers/seed';
 
 test.describe('rate a book on your shelf', () => {
@@ -171,6 +171,8 @@ test.describe('rate a book on your shelf', () => {
 });
 ```
 
+At this point in the course, the test still imports from `@playwright/test`. Later, in the failure-dossier lab, you add `tests/fixtures.ts` to wrap `page` with console and network forwarding. Once that file exists, swapping the import to `./fixtures` is a good follow-up. It is **not** a prerequisite for this lab.
+
 Zero `waitForTimeout`. Zero `page.locator()`. Zero `page.goto('/login')`. Zero `page.fill('[name=')`. Every locator is semantic. Every wait is a real signal.
 
 ## What you still need to run
@@ -178,7 +180,7 @@ Zero `waitForTimeout`. Zero `page.locator()`. Zero `page.goto('/login')`. Zero `
 The acceptance criteria require 10 consecutive passes. Here's the loop:
 
 ```bash
-for i in {1..10}; do npx playwright test --project=chromium tests/end-to-end/rate-book.spec.ts || break; done
+for i in {1..10}; do npx playwright test --project=authenticated tests/rate-book.spec.ts || break; done
 ```
 
 If any iteration exits non-zero, the test is still flaky. The most common culprit at this point is a seeding issue—`resetShelfContent` didn't fully reset, or the book title doesn't match the regex. Check the seed helper first.
@@ -186,7 +188,7 @@ If any iteration exits non-zero, the test is still flaky. The most common culpri
 For the wall-time check:
 
 ```bash
-time npx playwright test --project=chromium tests/end-to-end/rate-book.spec.ts
+time npx playwright test --project=authenticated tests/rate-book.spec.ts
 ```
 
 The original test with its 4.5 seconds of `waitForTimeout` calls usually clocks in around 8-10 seconds. The hardened version typically finishes under 5 seconds, sometimes under 3. The exact numbers depend on your machine, but the delta should be obvious.
@@ -195,7 +197,7 @@ The original test with its 4.5 seconds of `waitForTimeout` calls usually clocks 
 
 Your git history should show at least four commits, each one addressing a single pattern:
 
-1. **Storage state auth** — delete the login block, wire up `authentication.setup.ts`, verify the test still reaches `/shelf`.
+1. **Storage state auth** — delete the login block, wire up `tests/authentication.setup.ts`, verify the test still reaches `/shelf`.
 2. **Deterministic seeding** — add `resetShelfContent` in `beforeEach`, verify the book exists before interacting with it.
 3. **Semantic locators** — replace every CSS selector with `getByRole`/`getByLabel`/`getByText`, scope by book title.
 4. **Real waits** — replace every `waitForTimeout` with `toBeVisible()` or `waitForResponse`, swap `textContent` + `toContain` for auto-retrying assertions.

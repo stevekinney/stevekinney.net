@@ -40,8 +40,8 @@ Imagine you're translating Shelf's loops to a Next.js 14 app with Prisma, Jest f
 
 ## Browser-level verification
 
-- **Shelf:** Playwright, specs in `tests/end-to-end/`, config in
-  `playwright.config.ts`, run with `npm run test:e2e`.
+- **Shelf:** Playwright, specs in `tests/`, config in
+  `playwright.config.ts`, run with `npm run test`.
 - **This stack:** Playwright, specs in `e2e/`, config in `playwright.config.ts`,
   run with `npx playwright test`.
 - **Exact path:** `playwright.config.ts`, `e2e/*.spec.ts`
@@ -49,7 +49,7 @@ Imagine you're translating Shelf's loops to a Next.js 14 app with Prisma, Jest f
 
 ## Auth bootstrap
 
-- **Shelf:** `tests/end-to-end/authentication.setup.ts` drives the login form once,
+- **Shelf:** `tests/authentication.setup.ts` drives the login form once,
   saves storage state to `playwright/.authentication/user.json`. All authenticated
   specs inherit it via `storageState`.
 - **This stack:** `e2e/global-setup.ts` calls the NextAuth `/api/auth/callback`
@@ -72,7 +72,7 @@ Imagine you're translating Shelf's loops to a Next.js 14 app with Prisma, Jest f
 
 ## Runtime probes
 
-- **Shelf:** `tests/end-to-end/performance.spec.ts` checks runtime metrics.
+- **Shelf:** `tests/performance.spec.ts` checks runtime metrics.
   `scripts/check-performance-budgets.mjs` checks bundle size.
 - **This stack:** No runtime probes yet. Lighthouse CI in the CI pipeline checks
   performance scores but there are no Playwright-based runtime assertions.
@@ -81,9 +81,10 @@ Imagine you're translating Shelf's loops to a Next.js 14 app with Prisma, Jest f
 
 ## Failure dossier artifacts
 
-- **Shelf:** `scripts/summarize-failure-dossier.ts` reads `playwright-report/report.json`
-  and generates `playwright-report/dossier.md` with error, screenshot path, trace
-  path, and reproduction command for every failing test.
+- **Completed Shelf loop:** after the dossier lab, `scripts/summarize-failure-dossier.ts`
+  reads `playwright-report/report.json` and generates
+  `playwright-report/dossier.md` with error, screenshot path, trace path, and
+  reproduction command for every failing test.
 - **This stack:** No dossier. Playwright HTML report exists but there's no structured
   summary an agent can read without opening a browser.
 - **Exact path:** Missing. Proposed: `scripts/dossier.ts`

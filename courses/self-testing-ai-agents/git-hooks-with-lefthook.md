@@ -96,7 +96,7 @@ I'll go deeper on Gitleaks in the [Secret Scanning with Gitleaks](secret-scannin
 
 ## Why one file matters
 
-The thing I like about Lefthook is that the entire hook configuration lives in one place. When a new team member asks "what runs on commit?", the answer is "read `lefthook.yml`." When the agent needs to know what gates it has to pass, you can point `CLAUDE.md` at a single file.
+The thing I like about Lefthook is that the entire hook configuration lives in one place. When a new team member asks "what runs on commit?", the answer is "read `lefthook.yml`." When the agent needs to know what gates it has to pass, you can point the agent rules at a single file.
 
 Compare this to the Husky + lint-staged setup: the hook lives in `.husky/pre-commit`, the staged-file filtering lives in the `lint-staged` key of `package.json` (or `.lintstagedrc`), and the actual commands live in `scripts` inside `package.json`. Three files, three formats. Lefthook collapses all of that into one YAML file with a clear hierarchy: lifecycle event → command name → what to run.
 
@@ -129,7 +129,7 @@ For agents, the rule is simpler:
   taking longer, report it.
 ```
 
-That instruction belongs in `AGENTS.md`, `CLAUDE.md`, or `.cursor/rules`, but if you want an actual enforcement boundary, use the agent's hook or permissions system. The implementation differs quite a bit across tools.
+That instruction belongs in your agent instructions, whether that file is `AGENTS.md`, `CLAUDE.md`, or `.cursor/rules`, but if you want an actual enforcement boundary, use the agent's hook or permissions system. The implementation differs quite a bit across tools.
 
 ## Stopping `--no-verify`
 

@@ -1,7 +1,7 @@
 ---
 title: The Second Opinion
 description: Why you want a different agent reviewing the first agent's work, and what kinds of mistakes a review bot actually catches that tests don't.
-modified: 2026-04-10
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -74,7 +74,7 @@ That last sentence matters more than it sounds like. Bugbot is the example for t
 
 When a review bot flags the same kind of mistake three times across three different PRs, the problem isn't the code—it's the _instructions_. The agent keeps making the same mistake because nothing upstream is telling it not to.
 
-That's when I edit `CLAUDE.md`. I add a rule that encodes the finding. Next time, the agent is less likely to make the mistake, the bot is less likely to flag it, and the loop gets tighter.
+That's when I edit the agent instructions. I add a rule that encodes the finding. Next time, the agent is less likely to make the mistake, the bot is less likely to flag it, and the loop gets tighter.
 
 If the rule doesn't help after another three PRs, I escalate: lint rule, test assertion, something mechanical. Because if an instruction isn't catching it, the instruction isn't firing at the right time.
 

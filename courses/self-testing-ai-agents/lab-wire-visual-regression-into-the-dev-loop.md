@@ -14,17 +14,17 @@ Short lab. Two halves. The first half wires the screenshot gate into Shelf. The 
 
 Make sure you're on the hardened Shelf from [Lab: Harden the Flaky Rate-Book Test](lab-harden-the-flaky-rate-book-test.md). You'll need storage-state authentication and seeding in place. Visual regression without those is a nightmare.
 
-Shelf's `playwright.config.ts` pins `workers: 1` because the local SQLite database is still shared across workers—see [Deterministic State and Test Isolation](deterministic-state-and-test-isolation.md) for the why. The visual-regression workflow below works exactly the same way under single-worker, so you don't have to do anything special to accommodate it.
+The current Shelf starter no longer ships visual-regression specs or project wiring on day one. This lab is where you add them. If your repo still has only the minimal public smoke config, start with the public screenshot first and then route the authenticated screenshot through the `authenticated` project you built in the rate-book lab.
 
 ## Part one: wire the screenshot gate
 
-Shelf splits visual checks across two files so each one runs in the Playwright project whose auth and seeding matches the page under test:
+Split the visual checks across two files so each one runs in the Playwright project whose auth and seeding matches the page under test:
 
-- `tests/end-to-end/visual.spec.ts` — public, no storage state, screenshots `/design-system` (the curated component gallery).
-- `tests/end-to-end/visual-authenticated.spec.ts` — runs under the `authenticated` project, reseeds shelf content before each test, and screenshots `/shelf`.
+- `tests/visual.spec.ts` — public, no storage state, screenshots `/design-system` (the curated component gallery).
+- `tests/visual-authenticated.spec.ts` — runs under the `authenticated` project, reseeds shelf content before each test, and screenshots `/shelf`.
 
 ```ts
-// tests/end-to-end/visual.spec.ts
+// tests/visual.spec.ts
 import { expect, test } from '@playwright/test';
 
 test('design system matches the starter visual baseline', async ({ page }) => {
@@ -37,7 +37,7 @@ test('design system matches the starter visual baseline', async ({ page }) => {
 ```
 
 ```ts
-// tests/end-to-end/visual-authenticated.spec.ts
+// tests/visual-authenticated.spec.ts
 import { expect, test } from '@playwright/test';
 import { resetShelfContent } from './helpers/seed';
 
@@ -85,18 +85,18 @@ expect: {
 Generate the baselines:
 
 ```sh
-npm run test:e2e -- --update-snapshots
+npm run test -- --update-snapshots
 ```
 
-Commit the baseline PNGs at `tests/end-to-end/visual.spec.ts-snapshots/` and `tests/end-to-end/visual-authenticated.spec.ts-snapshots/`. Yes, you commit PNGs to git. That's the deal.
+Commit the baseline PNGs at `tests/visual.spec.ts-snapshots/` and `tests/visual-authenticated.spec.ts-snapshots/`. Yes, you commit PNGs to git. That's the deal.
 
 ## Part one acceptance criteria
 
 - [ ] Both `visual.spec.ts` (public) and `visual-authenticated.spec.ts` (authenticated) exist and each contains at least one `toHaveScreenshot` assertion.
 - [ ] `playwright.config.ts` sets `animations: 'disabled'`, `caret: 'hide'`, `scale: 'css'`, and `maxDiffPixelRatio: 0.01` under `expect.toHaveScreenshot`.
-- [ ] `npm run test:e2e` passes on a clean run (no diffs) — including both visual tests.
-- [ ] Running the suite five times in a row produces zero false positives on either screenshot test: `for i in {1..5}; do npm run test:e2e || break; done` exits zero every iteration.
-- [ ] Both baseline snapshot files exist (`ls tests/end-to-end/visual.spec.ts-snapshots/ tests/end-to-end/visual-authenticated.spec.ts-snapshots/` prints the committed PNGs).
+- [ ] `npm run test` passes on a clean run (no diffs) — including both visual tests.
+- [ ] Running the suite five times in a row produces zero false positives on either screenshot test: `for i in {1..5}; do npm run test || break; done` exits zero every iteration.
+- [ ] Both baseline snapshot files exist (`ls tests/visual.spec.ts-snapshots/ tests/visual-authenticated.spec.ts-snapshots/` prints the committed PNGs).
 - [ ] `.gitignore` does not ignore snapshot PNGs.
 
 ## The snapshot target in Shelf
@@ -119,7 +119,7 @@ Now we're going to simulate the loop. Open `src/lib/components/button.svelte`. F
 Re-run the visual specs:
 
 ```sh
-npm run test:e2e -- --grep visual
+npm run test -- --grep visual
 ```
 
 It fails. Open the HTML report:

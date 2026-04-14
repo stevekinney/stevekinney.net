@@ -1,7 +1,7 @@
 ---
 title: Writing a Custom MCP Wrapper
 description: When the off-the-shelf MCPs don't give the agent the exact probe you want, wrap your own. It's fewer lines of code than you think.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -178,7 +178,7 @@ Custom MCPs are subprocesses that talk over stdio. When they break, they break s
 - Write logs to a file. `fs.appendFileSync('./mcp-log.txt', ...)` is a useful debug crutch. Tail the file in another terminal while you develop.
 - Test the server standalone with the MCP inspector tool before wiring it into an agent. Takes thirty seconds, saves hours.
 
-## CLAUDE.md rules
+## The agent rules
 
 Add to the file:
 

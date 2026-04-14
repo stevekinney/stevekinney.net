@@ -159,7 +159,7 @@ An agent reading a [failure dossier](failure-dossiers-what-agents-actually-need-
 
 Once you've added the dossier summarizer, it reads steps out of the Playwright JSON reporter output. Nothing else has to change — once the test file has steps, the dossier has them too.
 
-In the fuller course version of Shelf, the concrete reps are `tests/end-to-end/rate-book.spec.ts` and `tests/end-to-end/search.spec.ts`. However you isolate the practice slice for the lab, once the step labels and tags are stable they belong in the normal `npm run test:e2e` loop with the rest of the suite.
+In the current course flow, the concrete reps are `tests/rate-book.spec.ts` and `tests/smoke.spec.ts`. However you isolate the practice slice for the lab, once the step labels and tags are stable they belong in the normal `npm run test` loop with the rest of the suite.
 
 ## The agent rules
 

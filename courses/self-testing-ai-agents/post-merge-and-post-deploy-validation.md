@@ -1,7 +1,7 @@
 ---
 title: Post-Merge and Post-Deploy Validation
 description: Green pull requests are not the end of the loop. This is the layer that proves the deployment itself is healthy and tells you when to stop the rollout.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -189,7 +189,7 @@ The agent needs the exact same thing it has needed all day:
 
 If the deployment workflow says "run `npm run test:smoke` against `SMOKE_BASE_URL` and upload the Playwright report on failure," the agent can work with that. If the workflow says "manually look at the deploy and decide if vibes are good," congratulations, you have rebuilt yourself as the relay.
 
-## What goes in `CLAUDE.md`
+## The agent rules
 
 ```markdown
 ## Post-merge and post-deploy

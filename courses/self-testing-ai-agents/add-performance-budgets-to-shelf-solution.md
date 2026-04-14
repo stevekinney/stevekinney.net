@@ -1,7 +1,7 @@
 ---
 title: 'Add Performance Budgets to Shelf: Solution'
 description: Walkthrough of the performance budget files you add in the lab and the commands you need to run to verify them.
-modified: 2026-04-10
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -77,7 +77,7 @@ if (typeof totalBudget === 'number' && totalGzipKilobytes > totalBudget) {
 
 Exit code 1 means a budget was exceeded. Exit code 2 means the script itself errored (missing file, bad JSON). This distinction matters when you wire it into CI -- a budget failure is a policy decision, not a crash.
 
-### `tests/end-to-end/performance.spec.ts`
+### `tests/performance.spec.ts`
 
 The runtime half. This test loads budgets from the same JSON file, navigates to `/shelf`, and reads the actual browser timing:
 

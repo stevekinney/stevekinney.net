@@ -1,7 +1,7 @@
 ---
 title: Visual Regression as a Feedback Loop
 description: Screenshot diffs are not just a CI gate. They're the fastest way to tell an agent "this looks wrong" without saying a word.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -40,13 +40,13 @@ test('shelf page matches visual baseline', async ({ page }) => {
 
 Shelf runs authenticated visual tests inside the same `authenticated` Playwright project the rest of the suite uses, with a `beforeEach` that calls `resetShelfContent` so every diff starts from the same seeded shelf state. If your project has a reason to separate visual reads from write-heavy tests (say, both suites racing the same user's data), you can point a second Playwright project at a different storage-state file, but do not reach for that complexity until a concrete conflict forces it.
 
-First run: Playwright takes a screenshot and writes it to `tests/end-to-end/visual.spec.ts-snapshots/shelf-page.png` (the snapshot directory is named after the test file, so a different `<test-file>.spec.ts` would produce a different `<test-file>.spec.ts-snapshots/` folder). The test "passes" because there's nothing to compare against.
+First run: Playwright takes a screenshot and writes it to `tests/visual-authenticated.spec.ts-snapshots/shelf-page.png` (the snapshot directory is named after the test file, so a different `<test-file>.spec.ts` would produce a different `<test-file>.spec.ts-snapshots/` folder). The test "passes" because there's nothing to compare against.
 
 Every subsequent run: Playwright takes a new screenshot and compares it to the committed baseline. If they match pixel-for-pixel (modulo a small tolerance), the test passes. If they don't, the test fails, and Playwright writes three files to your report directory: the baseline, the actual, and a diff image highlighting the changed pixels.
 
 You commit the baseline to git. When you make an intentional visual change, you regenerate the baseline (`--update-snapshots`) in the same commit. Reviewers see the old baseline being replaced with the new baseline in the diff and can eyeball whether the change was intentional.
 
-In Shelf, the real file is `tests/end-to-end/visual-authenticated.spec.ts`, it uses `expect.toHaveScreenshot(...)`, and the committed baselines live under `tests/end-to-end/visual-authenticated.spec.ts-snapshots/`. The normal way through the loop is `npm run test:e2e`, the focused way is `npm run test:e2e -- --grep visual`, and the intentional-baseline-update path is `npm run test:e2e -- --update-snapshots`.
+In Shelf, the real file is `tests/visual-authenticated.spec.ts`, it uses `expect.toHaveScreenshot(...)`, and the committed baselines live under `tests/visual-authenticated.spec.ts-snapshots/`. The normal way through the loop is `npm run test`, the focused way is `npm run test -- --grep visual`, and the intentional-baseline-update path is `npm run test -- --update-snapshots`.
 
 ## Making screenshot tests reliable
 
@@ -82,6 +82,21 @@ await expect(page).toHaveScreenshot('shelf-page.png', {
 
 Masked regions get painted with a solid color in both the baseline and the actual, so they never affect the diff.
 
+Two underused screenshot knobs from the [Page assertions API](https://playwright.dev/docs/api/class-pageassertions) are `maskColor` and `stylePath`.
+
+- `maskColor` changes the default hot-pink mask to something less distracting in diffs.
+- `stylePath` applies a temporary stylesheet only while the screenshot is captured. Use it to kill pulse animations, hide a volatile badge, or neutralize a noisy embed without changing the app itself.
+
+```ts
+await expect(page).toHaveScreenshot('shelf-page.png', {
+  mask: [page.getByTestId('current-time'), page.getByTestId('user-avatar')],
+  maskColor: '#1f2937',
+  stylePath: 'tests/fixtures/visual-stabilize.css',
+});
+```
+
+The sneaky useful part is `stylePath`. Playwright applies that stylesheet through Shadow DOM and inner frames too, which is exactly the kind of controlled cheating screenshot tests sometimes need. If you drop down to `page.screenshot()` instead of `toHaveScreenshot()`, the lower-level version of that knob is inline `style` rather than `stylePath`.
+
 **Scrollbars.** They vary by OS. Playwright's screenshots ignore them by default on most setups, but double-check if your layout includes scrollable regions.
 
 Fix these four things and screenshot tests are boring and reliable. Skip them and they're the flakiest tests in your suite. There is no in-between.
@@ -109,20 +124,124 @@ My recommendation: start with the built-in. If you find your team is drowning in
 
 Here's the bit that was news to me.
 
-When a screenshot test fails, the failure report includes the diff image. Claude Code and other agents that can read images can look at that diff directly. You can set up a hook (see [Git Hooks with Lefthook](git-hooks-with-lefthook.md) for details) that, on a failed screenshot test, attaches the diff image to the agent's context and asks, "Was this change intentional? If not, what needs to be fixed?"
+When a screenshot test fails, the failure report includes the diff image. Claude Code and other agents that can read images can use that diff directly.
+
+One important correction, though: this is **not** a Git hook.
+
+Git hooks like the ones in [Git Hooks with Lefthook](git-hooks-with-lefthook.md) run on commit or push. They are good for forcing the screenshot test to run before code leaves your machine. They are not the right place to enrich the agent's next turn with the failing artifact.
+
+If you want the agent to react immediately after the screenshot test fails, the right abstraction is an **agent hook**:
+
+- in Claude Code, a [`PostToolUseFailure` hook](https://code.claude.com/docs/en/hooks)
+- in Codex, a [`PostToolUse` or `PreToolUse` Bash hook](https://developers.openai.com/codex/hooks)
+
+As of **April 14, 2026**, Codex hooks are still marked experimental and its Bash interception is still partial, so the concrete example below uses Claude Code. The same idea ports over: inspect the failed test command, find the newest screenshot diff on disk, and feed that path back into the agent loop.
+
+Also: the hook is not literally uploading PNG bytes into the model context. The documented hook APIs add **text context**. In practice, that means the hook should tell the agent exactly which diff file to open next.
+
+Here's a minimal Claude Code hook that does that:
+
+```json
+// .claude/settings.json
+{
+  "hooks": {
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/visual-diff-feedback.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+```js
+// .claude/hooks/visual-diff-feedback.mjs
+import fs from 'node:fs';
+import path from 'node:path';
+
+const input = JSON.parse(fs.readFileSync(0, 'utf8'));
+const command = input.tool_input?.command ?? '';
+const cwd = input.cwd ?? process.cwd();
+
+if (!/(playwright|npm run test|pnpm test|bun test)/.test(command)) {
+  process.exit(0);
+}
+
+const matches = [];
+
+const walk = (dir) => {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = path.join(dir, entry.name);
+
+    if (entry.isDirectory()) {
+      walk(fullPath);
+      continue;
+    }
+
+    if (!entry.isFile()) continue;
+
+    if (/(^|[-/])(diff|.*-diff)\.png$/i.test(entry.name)) {
+      matches.push({
+        file: fullPath,
+        mtimeMs: fs.statSync(fullPath).mtimeMs,
+      });
+    }
+  }
+};
+
+for (const root of ['playwright-report', 'test-results']) {
+  const fullRoot = path.join(cwd, root);
+  if (fs.existsSync(fullRoot)) walk(fullRoot);
+}
+
+if (matches.length === 0) {
+  process.exit(0);
+}
+
+const latest = matches.sort((a, b) => b.mtimeMs - a.mtimeMs)[0];
+const relativePath = path.relative(cwd, latest.file);
+
+process.stdout.write(
+  JSON.stringify({
+    decision: 'block',
+    reason: 'Playwright screenshot diff detected. Review the diff before changing the baseline.',
+    hookSpecificOutput: {
+      hookEventName: 'PostToolUseFailure',
+      additionalContext: [
+        `A screenshot diff was written to ${relativePath}.`,
+        'Open that image before touching the snapshot.',
+        'If the UI change was intentional, update the baseline deliberately.',
+        'If it was not intentional, fix the UI and rerun the test.',
+      ].join(' '),
+    },
+  }),
+);
+```
+
+What this hook buys you is simple:
+
+- the failing screenshot test is still the source of truth
+- the hook turns "a diff exists somewhere in `playwright-report/`" into "open this exact file next"
+- the agent gets the next step as structured feedback instead of improvising from a red test line
 
 The agent will say things like, "The 'Rate' button is now 4 pixels taller because the new icon component has extra padding. The `ShelfCard` component now overflows. Either reduce the padding or increase the card height." That's the diff read back in natural language, as a prompt for the next edit.
 
-This is the agent self-correcting on visual feedback. Not long ago, this was science fiction. Now it's a hook in your CI config.
+This is the agent self-correcting on visual feedback. Not long ago, this was science fiction. Now it is a small hook in your agent runtime.
 
 And there is a natural next question after "did the UI change visually?": "did the same change also make the app slower or heavier?" Screenshot diffs do not answer that. [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md) does.
 
-## CLAUDE.md rules
+## The agent rules
 
 ```markdown
 ## Visual regression
 
-- Page screenshots live in `tests/end-to-end/visual.spec.ts` and use
+- Page screenshots live in `tests/visual.spec.ts` and use
   `expect(page).toHaveScreenshot(name)`. Baselines are committed.
 - Before regenerating a baseline, check that the change is intentional.
   Do not update baselines to "make the test pass."

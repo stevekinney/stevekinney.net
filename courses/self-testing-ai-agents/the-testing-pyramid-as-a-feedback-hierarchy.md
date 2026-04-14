@@ -1,7 +1,7 @@
 ---
 title: The Testing Pyramid as a Feedback Hierarchy
 description: A fast alignment pass on the testing pyramid, reframed as a hierarchy of feedback an agent can actually use.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -55,7 +55,7 @@ A few failure modes I see a lot, and that we're going to actively counter in the
 
 **The agent writes end-to-end tests when unit tests would do.** Classic overreach. The agent changes a utility function, writes a [Playwright](https://playwright.dev/) test that clicks three pages to verify the utility function, and calls it done. The utility function needed a three-line [Vitest](https://vitest.dev/) case. The [Playwright](https://playwright.dev/) test is ten times slower, flakier, and tests the wrong thing. The fix: the instructions file explicitly says _what a unit test looks like in this repo, with an example path_, so the agent has a template to copy.
 
-**The agent writes unit tests when end-to-end tests are what mattered.** The inverse. The agent adds a form, writes unit tests that mock the form's state and pretend the mock is a test, and never actually renders the form in a browser. The whole loading state is broken and nobody notices because no test ever saw a browser. The fix: the instructions file says _"UI features must ship with a [Playwright](https://playwright.dev/) test that opens the page and asserts on visible content."_ A lint rule or pre-commit hook can even enforce it—if `src/routes/foo/+page.svelte` changed, `tests/end-to-end/foo.spec.ts` must exist.
+**The agent writes unit tests when end-to-end tests are what mattered.** The inverse. The agent adds a form, writes unit tests that mock the form's state and pretend the mock is a test, and never actually renders the form in a browser. The whole loading state is broken and nobody notices because no test ever saw a browser. The fix: the instructions file says _"UI features must ship with a [Playwright](https://playwright.dev/) test that opens the page and asserts on visible content."_ A lint rule or pre-commit hook can even enforce it—if `src/routes/foo/+page.svelte` changed, `tests/foo.spec.ts` must exist.
 
 **The agent doesn't know the difference.** This is the most common failure mode. The agent writes "a test" without any awareness of which layer it's targeting, which means the test ends up halfway between two layers and exercises neither well. The fix is again the instructions file, and again with examples: "Here's what a unit test in this repo looks like. Here's what an integration test looks like. Here's what an end-to-end test looks like." Concrete file paths, not abstract descriptions.
 

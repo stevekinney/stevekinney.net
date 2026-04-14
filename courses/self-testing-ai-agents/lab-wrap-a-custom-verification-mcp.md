@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wrap a Custom Verification MCP'
 description: Write a small MCP server that exposes a single verification tool for Shelf and wire it into the repository-local MCP configuration.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -11,7 +11,7 @@ Shelf no longer ships the `verify_shelf_page` tool in the starter. By the end of
 > Complete [Writing a Custom MCP Wrapper](writing-a-custom-mcp-wrapper.md) first. This lab assumes you've seen the MCP server shape and know what `McpServer` / `registerTool` / `StdioServerTransport` are for.
 
 > [!NOTE] In the current starter
-> The root `.mcp.json` only ships the `svelte` MCP entry. This lab is where you add `@modelcontextprotocol/sdk`, `zod`, the `tools/shelf-verification-server/server.ts` file, and the matching `.mcp.json` registration.
+> The root `.mcp.json` only ships the `svelte` MCP entry on day one. If you already completed the Playwright agents lab, you may also have a `playwright-test` entry by now. Either way, this lab is where you add `@modelcontextprotocol/sdk`, `zod`, the `tools/shelf-verification-server/server.ts` file, and the matching `.mcp.json` registration without clobbering the entries you already have.
 
 Before you start, install the server dependencies:
 

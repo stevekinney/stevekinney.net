@@ -57,7 +57,7 @@ The `request` fixture authenticates automatically via whatever storage state the
 
 It also inherits the Playwright config you already wrote. The [API testing docs](https://playwright.dev/docs/api-testing) call out that the built-in `request` fixture respects things like `baseURL` and extra headers from config. So if your test project knows where the app lives and what auth state it should carry, the API client already knows too. Do not rebuild that configuration by hand unless you are intentionally creating a second actor.
 
-In Shelf, the concrete version of this pattern lives in `tests/end-to-end/rate-book.spec.ts`. The authenticated project in `playwright.config.ts` provides the storage state from `tests/end-to-end/authentication.setup.ts`, the deterministic seed helper gets built in `tests/helpers/seed.ts`, and the rate-book fix in the companion lab depends on waiting on the real network signal with `page.waitForResponse` instead of guessing with a timeout.
+In Shelf, the concrete version of this pattern lands in the rate-book lab flow. You add `tests/authentication.setup.ts`, build the deterministic seed helper in `tests/helpers/seed.ts`, then create `tests/rate-book.spec.ts` under the authenticated project. The companion lab's whole point is the same one this lesson is making: wait on the real network signal with `page.waitForResponse`, not on a timeout you hope is long enough.
 
 ## When to use API, when to use UI
 
@@ -143,7 +143,7 @@ One risk of API setup is that the test bypasses whatever validation the UI does.
 
 The safeguard is that the API should have the same validation as the form. That's good server design anyway. If your API lets the test do things the UI doesn't, you've got a bigger problem than your test suite.
 
-## CLAUDE.md rules
+## The agent rules
 
 ```markdown
 ## Hybrid API+UI tests

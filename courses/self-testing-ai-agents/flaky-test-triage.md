@@ -43,7 +43,7 @@ Link back: this is the exact failure mode [The Waiting Story](the-waiting-story.
 
 **Symptom**: the test runs under the wrong Playwright project, misses its storage state, hits a server that wasn't seeded, or depends on `setup` without declaring it. The failure looks like "element missing" or "redirected to /login." The test body is fine — the wiring is broken.
 
-**Example**: a test sitting in `tests/end-to-end/rate-book.spec.ts` but accidentally run under the `public` project instead of `authenticated`. It has no storage state. It navigates to `/shelf` and the server redirects it to `/login` before a single assertion runs.
+**Example**: a test sitting in `tests/rate-book.spec.ts` but accidentally run under the `public` project instead of `authenticated`. It has no storage state. It navigates to `/shelf` and the server redirects it to `/login` before a single assertion runs.
 
 **Fix**: check the project, check the `dependencies: ['setup']` line, check the `storageState` in the project config. The fix is the _wiring_, not the test body. Link back: [Playwright Projects](playwright-projects.md) and [Storage State Authentication](storage-state-authentication.md).
 
@@ -52,7 +52,7 @@ Link back: this is the exact failure mode [The Waiting Story](the-waiting-story.
 When a test flakes, run it. Run it ten times.
 
 ```bash
-for i in {1..10}; do npm run test:e2e -- --grep "your test name" || break; done
+for i in {1..10}; do npm run test -- --grep "your test name" || break; done
 ```
 
 Count the failures.

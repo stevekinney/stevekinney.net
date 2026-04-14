@@ -146,7 +146,7 @@ If you ever do need to swap a single browser context from one auth state to anot
 
 That structure is what keeps "auth is external" from turning into "the whole suite is external."
 
-## CLAUDE.md rules
+## The agent rules
 
 ```markdown
 ## Third-party authentication

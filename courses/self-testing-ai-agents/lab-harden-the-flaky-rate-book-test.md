@@ -5,12 +5,12 @@ modified: 2026-04-14
 date: 2026-04-06
 ---
 
-Time to cash the checks from the last handful of lessons. The Shelf starter ships with a hardened `tests/end-to-end/rate-book.spec.ts`—study it if you want to see the target. Your job in this lab is to _rebuild_ it by hand, starting from the intentionally rough version below, so every Playwright-armor pattern lands in your fingers instead of just your eyes.
+Time to cash the checks from the last handful of lessons. The Shelf starter no longer ships `tests/rate-book.spec.ts` on day one. Your job in this lab is to _build_ that file by hand from the intentionally rough version below, wiring in auth, seed data, locators, and waiting patterns as you go, so every Playwright-armor pattern lands in your fingers instead of just your eyes.
 
 The rough version works. Sort of. It passes until the machine gets slower, the selectors drift, or the database state stops matching your assumptions. It bundles every Playwright anti-pattern into one short file, which makes it a great place to harden the whole loop.
 
-> [!NOTE] Two local-setup details to know
-> Shelf's storage-state setup drives the real login page because the form-action shortcut trips CSRF protection in [Better Auth](https://www.better-auth.com/), and `playwright.config.ts` pins `workers: 1` because the starter uses one shared SQLite file. Both are explicit in the repo; neither is a bug.
+> [!NOTE] What the minimal starter does and does not give you
+> The current starter gives you one small `playwright.config.ts`, the public smoke loop in `tests/smoke.spec.ts`, the seed data files under `tests/data/`, and the low-level create/delete helpers under `src/lib/server/`. It does **not** ship storage-state auth, an authenticated Playwright project, or a finished `tests/helpers/seed.ts`. This lab is where those pieces become real.
 
 Your job is to fix it. Every pattern we learned in the Playwright lessons applies here.
 
@@ -67,11 +67,11 @@ You may also want to use the `request` fixture to verify the rating actually lan
 
 Work top-down. Fix one pattern, run the test, move on.
 
-Start by extracting the login into `tests/end-to-end/authentication.setup.ts` and wiring up `playwright.config.ts` to use it. Delete the login block from the test. In the current Shelf starter, the stable setup is a browser-driven login in the setup project: navigate to `/login`, fill the form through the page, and save state with `page.context().storageState(...)`. Do not use a raw `request.post` to the sign-in action—the current auth stack enforces CSRF-style semantics and will reject it with a 403. Run the suite to make sure authentication still works. Commit. (See the Storage State Authentication lesson for the full pattern.)
+Start by creating `tests/authentication.setup.ts` and wiring `playwright.config.ts` to use it through a `setup` project plus an `authenticated` project. Delete the login block from the test. In the current Shelf starter, the stable setup is a browser-driven login in the setup project: navigate to `/login`, fill the form through the page, and save state with `page.context().storageState(...)`. Run the setup once to make sure authentication works. Commit. (See the Storage State Authentication lesson for the full pattern.)
 
-Next, add (or use) `tests/helpers/seed.ts` to ensure the book you're going to rate is in the database before the test runs. Build it from `tests/data/*.json` plus the small `src/lib/server` create/delete helpers the starter ships. Delete any reliance on "whatever is on the shelf already." Commit.
+Next, implement `tests/helpers/seed.ts` so the book you're going to rate is in the database before the test runs. Build it from `tests/data/*.json` plus the small `src/lib/server` create/delete helpers the starter ships. Delete any reliance on "whatever is on the shelf already." Commit.
 
-Next, swap the CSS selectors for `getByRole` chains. Scope by book title, then by button name inside the book. Run the test locally a few times. Commit.
+Then create `tests/rate-book.spec.ts` from the rough version below, but run it under the new `authenticated` project instead of logging in inside the test. Once the file exists, swap the CSS selectors for `getByRole` chains. Scope by book title, then by button name inside the book. Run the test locally a few times. Commit.
 
 Next, replace every `waitForTimeout` with either an `expect(locator).toBeVisible()` assertion or a `page.waitForResponse` on the rating POST. Delete the `textContent` + `toContain` pattern and use `expect(toast).toHaveText(/Thanks/)` instead. Commit.
 
@@ -79,23 +79,23 @@ Finally, add a second assertion using `request.get('/api/shelf/...')` to verify 
 
 ## Acceptance criteria
 
-- [ ] `rg "waitForTimeout" tests/end-to-end/rate-book.spec.ts` returns nothing.
-- [ ] `rg "page.locator\(" tests/end-to-end/rate-book.spec.ts` returns nothing.
-- [ ] `rg "page.goto\('/login'\)" tests/end-to-end/rate-book.spec.ts` returns nothing.
-- [ ] `rg "page.fill\(\[name=" tests/end-to-end/rate-book.spec.ts` returns nothing.
-- [ ] The test passes ten times in a row: `for i in {1..10}; do npx playwright test --project=chromium tests/end-to-end/rate-book.spec.ts || break; done` and no iteration exits non-zero.
-- [ ] The test passes with the current Playwright configuration, which pins `workers: 1` because the starter still points every browser worker at the same local SQLite file.
-- [ ] Suite wall time for `rate-book.spec.ts` dropped compared to the baseline. Measure with `time npx playwright test --project=chromium tests/end-to-end/rate-book.spec.ts` before and after. Record both numbers in your commit message.
-- [ ] `npx playwright test --project=chromium --grep="can rate" tests/end-to-end/rate-book.spec.ts` completes in under 5 seconds on your machine when Playwright is reusing an already running local server.
+- [ ] `rg "waitForTimeout" tests/rate-book.spec.ts` returns nothing.
+- [ ] `rg "page.locator\(" tests/rate-book.spec.ts` returns nothing.
+- [ ] `rg "page.goto\('/login'\)" tests/rate-book.spec.ts` returns nothing.
+- [ ] `rg "page.fill\(\[name=" tests/rate-book.spec.ts` returns nothing.
+- [ ] The test passes ten times in a row: `for i in {1..10}; do npx playwright test tests/rate-book.spec.ts --project=authenticated || break; done` and no iteration exits non-zero.
+- [ ] The test passes with the Playwright project graph you built in this lab: setup creates storage state, authenticated specs reuse it, and the test no longer depends on a UI login.
+- [ ] Suite wall time for `rate-book.spec.ts` dropped compared to the baseline. Measure with `time npx playwright test tests/rate-book.spec.ts --project=authenticated` before and after. Record both numbers in your commit message.
+- [ ] `npx playwright test tests/rate-book.spec.ts --project=authenticated --grep="can rate"` completes in under 5 seconds on your machine when Playwright is reusing an already running local server.
 - [ ] The commit history shows the work broken into at least four commits, each one addressing one pattern (auth, seed, locators, waits).
 
 ## Stretch goals
 
 If you finish early, pick one or more:
 
-- Add a second test in the same file that verifies a user _can't_ rate a book they haven't added to their shelf yet. Use the `request` fixture to set up the scenario (book exists, user has not added it) and assert the rating button is disabled.
+- Add a second test in the same file that verifies a user _can't_ rate a book they haven't added to their shelf yet. Use the `request` fixture or your server helpers to set up the scenario (book exists, user has not added it) and assert the rating button is disabled.
 - Replace the final persistence check with `expect.poll()` so the test reads as "wait until the backend agrees," not "fire one request and hope the write already landed." Then rewrite the same check once with `expect(async () => { ... }).toPass({ timeout: ... })` so you can feel the difference between retrying one value and retrying a whole assertion block.
-- As a short experiment, try swapping the UI login in `authentication.setup.ts` for a direct `request.post('/api/auth/sign-in/email', { data: { email, password } })`. Confirm the tests still pass. Then consider the tradeoff: the raw POST is faster, but you lose the implicit smoke test on the login form.
+- As a short experiment, try swapping the browser-driven login in `authentication.setup.ts` for a direct server-side shortcut if your auth stack exposes one. Confirm the tests still pass. Then consider the tradeoff: the shortcut is faster, but you lose the implicit smoke test on the login form.
 - Run the test under `--repeat-each=50` and see if anything flakes under load.
 - Turn off `fullyParallel` and see if the test still passes. (It should. If it doesn't, you have a seeding leak—fix it.)
 - Add a route-middleware experiment before the rating click: one broad route that calls `route.fallback()` for everything except `POST`s and stamps those with an `x-test-mode: 1` header, then a narrower `**/api/**` route that uses `route.fetch({ maxRetries: 2 })` and fulfills a patched JSON response. Confirm the chain order does what you think it does.
@@ -111,9 +111,9 @@ The hardened Shelf starter ends up with an explicit toast and persisted rating a
 
 The interesting question isn't whether you can harden this test — you just did. The interesting question is whether an agent can do it given the right context. Here's what that looks like with the rules-laden `CLAUDE.md` from [Lab: Rewrite the Bad CLAUDE.md](lab-rewrite-the-bad-claude-md.md) in place.
 
-Restore the broken version of `tests/end-to-end/rate-book.spec.ts` — the one with UI login, `waitForTimeout`, and CSS selectors. Give Claude Code this prompt:
+Restore the broken version of `tests/rate-book.spec.ts` — the one with UI login, `waitForTimeout`, and CSS selectors. Give Claude Code this prompt:
 
-> `tests/end-to-end/rate-book.spec.ts` is flaky. Harden it following the rules in CLAUDE.md.
+> `tests/rate-book.spec.ts` is flaky. Harden it following the rules in CLAUDE.md.
 
 A typical session:
 
@@ -128,7 +128,7 @@ The Playwright locator rules and waiting rules are both explicit:
 
 Reading the current rate-book.spec.ts... counting violations:
   1. page.goto('/login') + page.fill('[name=email]') — forbidden per
-     the auth rule, should use storage state
+     the auth rule, should use the setup/authenticated project flow
   2. page.waitForTimeout(1000) × 3 — forbidden per the waiting rule
   3. page.locator('.book-card button.rate') — raw CSS, forbidden per
      the locator rule
@@ -140,7 +140,7 @@ Reading the current rate-book.spec.ts... counting violations:
 Fix 1: delete the login block. The authenticated project already
 inherits storage state from authentication.setup.ts.
 
-Fix 2: add resetShelfContent at the top of the test so Station Eleven
+Fix 2: call resetShelfContent at the top of the test so Station Eleven
 is guaranteed to be on the shelf.
 
 Fix 3: replace the click chain with scoped role locators:

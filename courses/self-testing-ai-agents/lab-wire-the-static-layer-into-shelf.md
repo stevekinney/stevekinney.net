@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wire the Static Layer into Shelf'
 description: Install and configure the whole stack—ESLint custom rules, TypeScript strict, knip, lefthook, gitleaks—and prove each layer fires on the right mistake.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -26,8 +26,8 @@ The only non-mechanical part is judging the agent behavior at the end. The final
 
 Open `eslint.config.js`. Find the `no-restricted-syntax` block. It bans four patterns:
 
-- `page.waitForTimeout` (anywhere in `tests/end-to-end/`). Selector: `CallExpression[callee.property.name='waitForTimeout']`. Message: `"page.waitForTimeout is banned. See CLAUDE.md → Playwright → Waiting."`
-- `page.locator` called with a string argument (anywhere in `tests/end-to-end/`). Selector: `CallExpression[callee.property.name='locator'][arguments.0.type='Literal']`. Message: `"Use a getByRole/getByLabel locator. See CLAUDE.md → Playwright → Locators."`
+- `page.waitForTimeout` (anywhere in `tests/`). Selector: `CallExpression[callee.property.name='waitForTimeout']`. Message: `"page.waitForTimeout is banned. See CLAUDE.md → Playwright → Waiting."`
+- `page.locator` called with a string argument (anywhere in `tests/`). Selector: `CallExpression[callee.property.name='locator'][arguments.0.type='Literal']`. Message: `"Use a getByRole/getByLabel locator. See CLAUDE.md → Playwright → Locators."`
 - `page.waitForLoadState('networkidle')` (anywhere). Selector: `CallExpression[callee.property.name='waitForLoadState'] Literal[value='networkidle']`. Message: `"networkidle is unreliable. Wait on a real signal."`
 - Reading `userId` from a request body in a route handler. Selector: `MemberExpression[object.type='MemberExpression'][object.property.name='body'][property.name='userId']`. Message: `"Read userId from the session, not the request body. See CLAUDE.md → Auth."`
 
@@ -42,8 +42,8 @@ The lesson's **Writing a `no-restricted-syntax` rule** section in [Lint and Type
 
 - [ ] `eslint.config.js` contains the four restricted-syntax rules above (selector + message).
 - [ ] Running `npm run lint` on the current (clean) Shelf repository exits zero.
-- [ ] Adding a `page.waitForTimeout(1000)` line to any file under `tests/end-to-end/` makes `npm run lint` exit non-zero, and the output contains the substring `page.waitForTimeout is banned`.
-- [ ] Adding a `page.locator('.foo')` line to any file under `tests/end-to-end/` makes `npm run lint` exit non-zero, and the output contains the substring `Use a getByRole/getByLabel locator`.
+- [ ] Adding a `page.waitForTimeout(1000)` line to any file under `tests/` makes `npm run lint` exit non-zero, and the output contains the substring `page.waitForTimeout is banned`.
+- [ ] Adding a `page.locator('.foo')` line to any file under `tests/` makes `npm run lint` exit non-zero, and the output contains the substring `Use a getByRole/getByLabel locator`.
 - [ ] Reverting the test changes restores a clean lint (`npm run lint` exits zero).
 
 ## Part 2: TypeScript strict mode
@@ -62,7 +62,7 @@ Open `tsconfig.json`. Find every strict flag from the lesson — `strict: true`,
 Create `knip.json`. Set the `entry` and `project` globs so knip knows which files are roots (SvelteKit pages, tests, scripts) and which files are in-scope for the unused-exports analysis. Then run `npm run knip` to see it report zero findings against the current repo.
 
 > [!NOTE]
-> In this local repository, the `knip` script sets `DATABASE_URL=file:./tmp/knip.db` before invoking knip. That keeps `drizzle.config.ts` loadable during analysis without depending on a developer-specific `.env`.
+> In the current Shelf starter, `drizzle.config.ts` can already fall back to `file:./local.db`, so you may not need an extra `DATABASE_URL=...` shim at all. If your own project's config crashes without one, add a throwaway database URL in the script there. The point of the lab is the dead-code loop, not env gymnastics.
 
 ### Acceptance for Part 3
 
@@ -86,7 +86,9 @@ Create `lefthook.yml`. Add `pre-commit` and `pre-push` blocks. Pre-commit should
 
 ## Part 5: Secret scanning
 
-Add a `secrets` command under `pre-commit` in `lefthook.yml` so it shells out to `npx tsx scripts/run-gitleaks-staged.ts`. Then read back over that script and make sure it materializes the staged index into a tmp directory before running `gitleaks dir`. Finally, create `.gitleaks.toml` and notice which paths you allowlist (`sample-config.json` and `tests/fixtures/`) and why — they're deliberate bait that would otherwise trip the scanner.
+Add a `secrets` command under `pre-commit` in `lefthook.yml` so it shells out to `npx tsx scripts/run-gitleaks-staged.ts`. Then read back over that script and make sure it materializes the staged index into a tmp directory before running `gitleaks dir`.
+
+Create a small bait file such as `sample-config.json` during the lab so you have one harmless false-positive to allowlist on purpose. In the current Shelf starter, `tests/data/users.json` is another deliberate allowlist candidate because it stores fake workshop credentials the seeding labs depend on.
 
 > [!NOTE]
 > With the current Gitleaks release used in this workshop, `gitleaks git --staged` was not a reliable pre-commit verifier for newly added files. The local Shelf repository fixes that by materializing the exact git index into a temporary directory and running `gitleaks dir` there from `scripts/run-gitleaks-staged.ts`. That wrapper is what the lefthook `secrets` command shells out to.
@@ -95,7 +97,7 @@ Add a `secrets` command under `pre-commit` in `lefthook.yml` so it shells out to
 
 - [ ] `gitleaks version` runs on your machine.
 - [ ] `lefthook.yml` has a `secrets` command under `pre-commit` that invokes `npx tsx scripts/run-gitleaks-staged.ts`.
-- [ ] `.gitleaks.toml` allowlists `sample-config.json` and `tests/fixtures/`.
+- [ ] `.gitleaks.toml` allowlists `sample-config.json` and `tests/data/users.json` (or `tests/data/` if you prefer the directory-level rule).
 - [ ] Running the staged-snapshot script directly (`npx tsx scripts/run-gitleaks-staged.ts`) exits zero for the clean staged state.
 - [ ] Attempting to stage a file containing `BETTER_AUTH_SECRET="7Xse4XqnSo3hcT31Yb2vi7LMt6BYI93w.0EWmIcjHKAdde1SY5TEVqh5fPu6NvFBf"` triggers the hook and blocks the commit.
 - [ ] The `sample-config.json` file can still be committed without issue (the allowlist works).
@@ -127,7 +129,7 @@ Watch what the agent does. The correct behavior is:
 
 1. It writes the route handler.
 2. It writes the Playwright test.
-3. It runs `npm run lint`, `npm run typecheck`, `npm run knip`, and `npm run test`.
+3. It runs `npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test:unit`, and `npm run test`.
 4. If any of them fail, it reads the error, fixes it, and re-runs.
 5. It does not use `page.waitForTimeout`, does not use `page.locator` with a CSS selector, does not use UI login, does not read `userId` from the request body, does not leave dead code behind.
 

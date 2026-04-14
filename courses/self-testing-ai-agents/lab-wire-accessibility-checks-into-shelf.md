@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wire Accessibility Checks Into Shelf'
 description: Add an automated accessibility scan for critical routes, document the manual keyboard checks, and make accessibility failures part of the loop.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -28,13 +28,14 @@ If you've already added the package in an earlier pass, confirm the version and 
 
 ## Step 2: add a dedicated accessibility spec
 
-Create `tests/end-to-end/accessibility.spec.ts`.
+Create `tests/accessibility.spec.ts`.
 
 Start with the highest-signal routes in Shelf:
 
+- `/`
 - `/login`
-- `/shelf`
-- any modal, drawer, or form-heavy route you added during the workshop
+- `/playground` or `/design-system`
+- if you've already built the authenticated project from the earlier auth labs, add `/shelf` too
 
 Start from this exact pattern:
 
@@ -42,8 +43,8 @@ Start from this exact pattern:
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-test('shelf page has no automated accessibility violations', async ({ page }) => {
-  await page.goto('/shelf');
+test('home page has no automated accessibility violations', async ({ page }) => {
+  await page.goto('/');
 
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
@@ -80,30 +81,30 @@ This file exists so the agent and the humans both know what the automated scan d
 
 ## Step 5: make the loop easy to run
 
-If your Shelf repo has a dedicated end-to-end script already, keep the accessibility spec inside that suite. Otherwise, add an explicit script:
+Because Shelf's minimal starter already runs every spec under `tests/`, you can simply leave `tests/accessibility.spec.ts` in the main suite and let `npm run test` pick it up. If you want a narrower iteration loop while you build trust in it, add an explicit script:
 
 ```json
 {
   "scripts": {
-    "test:accessibility": "playwright test tests/end-to-end/accessibility.spec.ts"
+    "test:accessibility": "playwright test tests/accessibility.spec.ts"
   }
 }
 ```
 
 The key is that the agent has a named command to run. Hidden rituals do not make good loops.
 
-> [!NOTE] Shelf folds accessibility into `test:e2e`
-> The Shelf starter does **not** ship a standalone `test:accessibility` script. Instead, `accessibility.spec.ts` is matched by the `authenticated` project's `testMatch`, so it runs on every `npm run test:e2e` invocation—alongside the rate-book, search, and visual specs. That's the preferred pattern once the spec is stable: one gate, one command, no side channels. If you're new to the project and haven't built trust in the spec yet, keep the standalone script while you iterate, then fold it in once it stops surprising you.
+> [!NOTE] Shelf can fold accessibility into the main Playwright loop
+> The day-one starter does **not** ship a standalone `test:accessibility` script. Once `tests/accessibility.spec.ts` exists, `npm run test` will pick it up automatically. That's the preferred pattern once the spec is stable: one gate, one command, no side channels. If you're new to the project and haven't built trust in the spec yet, keep the standalone script while you iterate, then fold it back into `npm run test` once it stops surprising you.
 
 ## Acceptance criteria
 
 - [ ] `@axe-core/playwright` is installed in the Shelf repository
-- [ ] `tests/end-to-end/accessibility.spec.ts` exists
+- [ ] `tests/accessibility.spec.ts` exists
 - [ ] The spec covers at least two critical Shelf routes
 - [ ] The accessibility scan fails the test when `violations` are present
 - [ ] Any suppression is narrowly scoped and documented in code
 - [ ] `docs/accessibility-smoke-checklist.md` exists with the manual keyboard checks
-- [ ] There is a named command for running the accessibility scan, either standalone or as part of `npm run test:e2e`
+- [ ] There is a named command for running the accessibility scan, either standalone or as part of `npm run test`
 - [ ] Running the accessibility spec locally exits zero on the current green state
 
 ## Troubleshooting

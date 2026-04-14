@@ -201,7 +201,7 @@ A common agent mistake: `await page.waitForLoadState('networkidle')`. Don't. Pla
 
 Instead, wait for the specific thing you actually care about. If you're waiting for the shelf to render, wait for the shelf content, not for network idle. If you're waiting for an API call to finish, wait for _that_ call, not for all calls to stop. Be specific.
 
-## The `CLAUDE.md` rules
+## The agent rules
 
 Add these to the instructions file under Playwright:
 

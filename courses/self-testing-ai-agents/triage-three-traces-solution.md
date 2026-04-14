@@ -7,7 +7,7 @@ date: 2026-04-11
 
 One walk through the three traces, with the evidence I'd cite for each. If your diagnoses look different in _details_ — different fix wording, different specific line numbers — that's fine. What should match is the bucket and the pane.
 
-The traces come from three specs in `tests/end-to-end/labs/broken-traces/`. If you haven't generated them yet, run:
+The traces come from three specs in `tests/labs/broken-traces/`. After you add the generator helper in the lab, generate them with:
 
 ```bash
 npm run traces:generate

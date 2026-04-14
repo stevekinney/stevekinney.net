@@ -1,7 +1,7 @@
 ---
 title: Reading a Trace
 description: The Playwright trace viewer is the single best piece of software in the ecosystem, and most agents use it like a folder full of screenshots. This lesson teaches the four panes, a real Shelf failure walked through end to end, and the five fields that feed a failure dossier.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-11
 ---
 
@@ -23,13 +23,13 @@ Given a trace zip on disk:
 npx playwright show-trace path/to/trace.zip
 ```
 
-That opens the viewer in a browser tab. You can also open traces from the HTML report — every failing test links to its trace, and clicking the link opens the viewer inline. The lab in this section generates three real traces for you to practice on:
+That opens the viewer in a browser tab. You can also open traces from the HTML report — every failing test links to its trace, and clicking the link opens the viewer inline. After you add the helper in the companion lab, you'll have a command like this to generate three real traces for practice:
 
 ```bash
 npm run traces:generate
 ```
 
-That command is just the entry point. In the current course flow, you add the generator helper yourself as `scripts/generate-lab-traces.mjs` (or equivalent), and you can add a `traces:clean` command when you want to wipe the generated artifacts and rerun the lab from a clean slate. The generate step runs the three deliberately-broken specs in `tests/end-to-end/labs/broken-traces/` and copies the resulting trace files to `playwright-report/lab-traces/`. Open them one at a time. We'll work through what to look for next.
+That command is just the entry point. The day-one Shelf starter does **not** ship it. In the current course flow, you add the generator helper yourself as `scripts/generate-lab-traces.mjs` (or equivalent) in the trace-triage lab, and you can add a `traces:clean` command when you want to wipe the generated artifacts and rerun the lab from a clean slate. The generate step runs the three deliberately-broken specs in `tests/labs/broken-traces/` and copies the resulting trace files to `playwright-report/lab-traces/`. Open them one at a time. We'll work through what to look for next.
 
 ## The four panes and what each one tells you
 
@@ -69,9 +69,9 @@ The signal you're looking for: a `console.error` that explains the failure direc
 
 ## Reading a trace for a real failure
 
-Let's walk through the Trace A failure from the lab. The spec in `tests/end-to-end/labs/broken-traces/trace-a-config.spec.ts` opts out of the default storage state, navigates to `/shelf`, and asserts the "Your books" heading is visible. It fails.
+Let's walk through the Trace A failure from the lab. The spec in `tests/labs/broken-traces/trace-a-config.spec.ts` opts out of the default storage state, navigates to `/shelf`, and asserts the "Your books" heading is visible. It fails.
 
-Generate it if you haven't already:
+Generate it if you've already added the helper in the lab:
 
 ```bash
 npm run traces:generate

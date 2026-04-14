@@ -1,14 +1,14 @@
 ---
 title: 'Lab: Generate and Heal a Test Suite with Playwright Agents'
 description: Use the planner, generator, and healer agents to build a test suite for Shelf's core workflow, then break the UI and watch the healer fix it.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
 This lab puts the three Playwright test agents through a real workflow against Shelf. You'll plan a test suite, generate it, verify it passes, break the UI on purpose, and then watch the healer close the loop. The goal is to see where the agents save you time and where you still need to apply judgment.
 
 > [!NOTE] Prerequisites
-> You need [Playwright](https://playwright.dev/) 1.56 or later and a working Shelf setup with authentication already configured via storage state. If you haven't done the storage state lab yet, go do that first—the planner needs a logged-in session to explore the app.
+> You need [Playwright](https://playwright.dev/) 1.56 or later and a working Shelf setup with authentication already configured via storage state. If you haven't done the storage state and rate-book labs yet, go do those first—the planner needs a logged-in session to explore the app, and the seed helper needs to exist before the generated tests can rely on a stable shelf.
 
 ## Set up the agent definitions
 
@@ -21,16 +21,18 @@ npx playwright init-agents --loop=claude
 This creates agent definitions in `.claude/agents/` and an MCP server config in `.mcp.json`. Verify that `.claude/agents/` was created and contains the three agent files (planner, generator, healer) before moving on.
 
 > [!NOTE] `init-agents` replaces `.mcp.json`
-> If you already have a `.mcp.json` at the repo root, `init-agents` will replace it with a fresh one that only registers `playwright-test`. The Shelf starter does not ship one, so there's nothing to preserve here. If your own project does ship one, back it up before running this command and merge `playwright-test` in after.
+> If you already have a `.mcp.json` at the repo root, `init-agents` will replace it with a fresh one that only registers `playwright-test`. The current Shelf starter **does** already ship `.mcp.json` for the Svelte MCP, so back it up first and merge the `playwright-test` entry back in afterward instead of clobbering the existing config.
 
 ## Write the seed test
 
-The planner needs a seed test that bootstraps the app into a usable state. Create `tests/end-to-end/seed.spec.ts` that uses your existing fixtures and navigates to the shelf:
+The planner needs a seed test that bootstraps the app into a usable state. Create `tests/seed.spec.ts` that uses your authenticated project, calls the seed helper, and navigates to the shelf:
 
 ```ts
-import { test, expect } from './fixtures';
+import { expect, test } from '@playwright/test';
+import { resetShelfContent } from './helpers/seed';
 
 test('seed', async ({ page }) => {
+  await resetShelfContent();
   await page.goto('/shelf');
   await expect(page.getByRole('heading', { name: /shelf/i })).toBeVisible();
 });
@@ -39,7 +41,7 @@ test('seed', async ({ page }) => {
 The seed test does two things: it runs through any global setup and project dependencies your `playwright.config.ts` defines (including storage state authentication), and it gives the planner a starting page to explore from. Run it once to make sure it passes:
 
 ```bash
-npx playwright test --project=chromium tests/end-to-end/seed.spec.ts
+npx playwright test tests/seed.spec.ts --project=authenticated
 ```
 
 > [!TIP]
@@ -50,7 +52,7 @@ npx playwright test --project=chromium tests/end-to-end/seed.spec.ts
 Ask the planner to generate a test plan for Shelf's core workflow: browsing the shelf, rating a book, and verifying the rating persists. Include the seed test in the prompt context so the planner knows where to start and what style to follow.
 
 > [!TIP] Example prompt
-> In Claude Code, try: "Use the playwright-test-planner agent to plan tests for the shelf rating workflow. The seed test is at `tests/end-to-end/seed.spec.ts`."
+> In Claude Code, try: "Use the playwright-test-planner agent to plan tests for the shelf rating workflow. The seed test is at `tests/seed.spec.ts`."
 
 The planner will launch a browser, navigate through the app, and produce a Markdown plan in `specs/`. Read the output carefully. Check that the steps match what the app actually does—the planner is exploring live, but it can still miss things or describe a flow incorrectly.
 
@@ -80,7 +82,7 @@ Once the tests are generated, read them. Check for:
 If the generated tests have issues that match anti-patterns from the earlier lessons—CSS selectors, magic timeouts, `.first()` without scoping—note them but don't fix them by hand yet. Let the healer attempt the fix first so you can see what it does and judge its work. Run the suite first:
 
 ```bash
-npx playwright test --project=chromium
+npx playwright test --project=authenticated
 ```
 
 If tests fail at this stage, that's expected. The generator verifies selectors live but doesn't always get assertions right on the first pass. This is where the healer earns its keep.
@@ -90,7 +92,7 @@ If tests fail at this stage, that's expected. The generator verifies selectors l
 For each failing test, invoke the healer agent with the test name (the healer's reasoning and patches appear in your coding tool's output—Claude Code shows each step as it replays, inspects, and patches). Pay attention to the _kind_ of fix it applies.
 
 > [!TIP] Example prompt
-> "Use the playwright-test-healer agent to fix the failing test in `tests/end-to-end/<failing-spec>.spec.ts`."
+> "Use the playwright-test-healer agent to fix the failing test in `tests/<failing-spec>.spec.ts`."
 
 Good healer fixes:
 
@@ -109,7 +111,7 @@ If the healer marks a test with `test.fixme()`, investigate. Either the feature 
 Run the full suite again after healing. Everything should be green:
 
 ```bash
-npx playwright test --project=chromium
+npx playwright test --project=authenticated
 ```
 
 ## Break the UI, then heal
@@ -129,12 +131,12 @@ Revert your UI change when you're done. The tests should fail again (they now ma
 ## Acceptance criteria
 
 - [ ] Agent definitions exist under `.claude/agents/` and `.mcp.json` exists, both generated by `npx playwright init-agents --loop=claude`.
-- [ ] A seed test at `tests/end-to-end/seed.spec.ts` passes and uses the project's custom fixtures.
+- [ ] A seed test at `tests/seed.spec.ts` passes and uses the authenticated project plus `resetShelfContent()`.
 - [ ] At least one Markdown plan exists in `specs/` covering the shelf rating workflow.
 - [ ] Generated test files exist under `tests/` with comments tracing back to their spec.
-- [ ] `rg "waitForTimeout" tests/end-to-end/` returns nothing in any agent-generated test.
+- [ ] `rg "waitForTimeout" tests/` returns nothing in any agent-generated test.
 - [ ] No raw CSS selectors via `page.locator()` in agent-generated tests. Prefer semantic locators (`getByRole`, `getByLabel`, `getByText`), with `getByTestId` only as a last resort.
-- [ ] The full suite passes: `npx playwright test --project=chromium` exits zero.
+- [ ] The generated authenticated slice passes: `npx playwright test --project=authenticated` exits zero.
 - [ ] You successfully broke a UI element, healed the tests, and verified the healer's patch matches the "good healer fixes" criteria from the healing section above.
 
 ## Stretch goals

@@ -1,7 +1,7 @@
 ---
 title: Runtime Probes in the Development Loop
 description: How to wire Playwright MCP into the agent's working loop so it pokes at the UI between edits instead of waiting for you to run the tests.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -105,7 +105,7 @@ A few patterns that work:
 
 **Spin up a test-dedicated dev server.** Your CI or your Playwright config starts a dev server on an unusual port (e.g., 4173) just for probing. The agent uses that port. Your normal dev server on 5173 is untouched by the agent. This is nice for isolation but adds config complexity.
 
-Pick one, put the URL and the rules in CLAUDE.md, and move on. I'd spend more time on this if it were interesting. It's not.
+Pick one, put the URL and the rules in your agent instructions, and move on. I'd spend more time on this if it were interesting. It's not.
 
 ## When a probe finds something
 
@@ -121,7 +121,7 @@ Probes can become busy work. The agent probes _every_ change, including changes 
 
 The instructions file rule I quoted earlier has a scope guard built in: "After any change to a file under `src/routes/` or `src/lib/components/`." Anything outside those paths doesn't trigger a probe. You can widen or narrow the scope based on what you find the agent doing. The goal is that probes fire exactly when they're useful, not every time something changes.
 
-## CLAUDE.md additions
+## The agent rules
 
 In addition to the probe rule above, I put this in the file:
 

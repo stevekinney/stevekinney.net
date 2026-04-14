@@ -11,7 +11,7 @@ Shelf no longer ships the workflows on day one. Your job in this lab is to write
 > The minimal repo does not ship `.github/workflows/main.yml` or `.github/workflows/nightly.yml`. This lab is now a true authoring exercise.
 
 > [!NOTE] Prerequisite
-> This lab assumes you've completed **Lab: Build a Failure Dossier for Shelf** and **Lab: Wire the Static Layer into Shelf** if you want the fuller CI shape with `knip`, gitleaks, and dossier uploads. If you're still on the day-one starter, begin with `lint`, `typecheck`, `test:unit`, and `test:e2e`, then extend the workflow as those later labs land.
+> This lab assumes you've completed **Lab: Build a Failure Dossier for Shelf** and **Lab: Wire the Static Layer into Shelf** if you want the fuller CI shape with `knip`, gitleaks, and dossier uploads. If you're still on the day-one starter, begin with `lint`, `typecheck`, `test:unit`, and `test`, then extend the workflow as those later labs land.
 
 ## The task
 
@@ -19,7 +19,7 @@ Create `.github/workflows/main.yml` in the Shelf repo and walk each job with thi
 
 ## What you can verify locally
 
-You can do the whole first pass locally. Write `.github/workflows/main.yml` and `.github/workflows/nightly.yml`, then run the commands each named step maps to. On the day-one starter that is at least `npm run lint`, `npm run typecheck`, `npm run test:unit`, and `npm run test:e2e`. If you've already completed the static-layer and dossier labs, include `npm run knip`, gitleaks, and `npm run dossier` too. You can also confirm the end-to-end job's environment assumptions by checking that the workflow writes `DATABASE_URL=file:./tmp/ci.db`, creates `tmp/`, and relies on the same `playwright.config.ts` web server you already use on your machine.
+You can do the whole first pass locally. Write `.github/workflows/main.yml` and `.github/workflows/nightly.yml`, then run the commands each named step maps to. On the day-one starter that is at least `npm run lint`, `npm run typecheck`, `npm run test:unit`, and `npm run test`. If you've already completed the static-layer and dossier labs, include `npm run knip`, gitleaks, and `npm run dossier` too. You can also confirm the Playwright job's environment assumptions by checking that the workflow writes a small `.env`, points `DATABASE_URL` at a CI-local SQLite file such as `file:./ci.db`, and relies on the same `playwright.config.ts` web server you already use on your machine.
 
 ## What remains manual or external
 
@@ -74,6 +74,7 @@ npm run lint
 npm run typecheck
 npm run knip
 npm run test:unit
+npm run test
 gitleaks dir . --redact --config .gitleaks.toml
 ```
 
@@ -91,21 +92,18 @@ The `unit` job runs Vitest and `needs: static`. It reuses the same cache key. It
 - name: Create .env for preview server
   run: |
     cat > .env <<'EOF'
-    DATABASE_URL=file:./tmp/ci.db
-    ORIGIN=http://127.0.0.1:4173
-    BETTER_AUTH_SECRET=ci-test-secret-ci-test-secret-ci-test-secret-32chars
+    DATABASE_URL=file:./ci.db
     OPEN_LIBRARY_BASE_URL=https://openlibrary.org
     EOF
-    mkdir -p tmp
 ```
 
-Three things worth noticing.
+Two things worth noticing.
 
-First, the values are hardcoded and obviously fake. `ci-test-secret-ci-test-secret-ci-test-secret-32chars` satisfies Better Auth's length check but it is **not a secret** and does not belong in GitHub Actions secret storage. It lives in the workflow file deliberately, because the `ci.db` it protects is created fresh every run.
+First, the values are explicit and boring. The point is not secrecy; the point is that CI owns its own database path instead of accidentally sharing a developer default.
 
-Second, `mkdir -p tmp` matters. `DATABASE_URL=file:./tmp/ci.db` assumes the directory exists; libsql errors with `ConnectionFailed` if it doesn't. One missing `mkdir` is the kind of thing that passes locally (because your local `tmp/` has been around since yesterday) and fails in CI (because the runner's checkout doesn't include empty directories).
+Second, the current Shelf starter no longer needs `ORIGIN`, `BETTER_AUTH_SECRET`, or a pre-created `tmp/` directory just to boot the preview server. If your later auth work introduces extra runtime env, add only the variables the app actually reads. Don't cargo-cult stale CI scaffolding.
 
-After the `.env` bootstrap, the job runs `npm run test:e2e`. On failure it runs `npm run dossier`, uploads `playwright-report/` as one artifact and `playwright-report/dossier.md` as another, both with a 7-day retention. `playwright-report/` already contains the trace, screenshots, video, and the HTML report. The dossier is a separate upload so an agent can grab the summary without pulling the whole report tarball.
+After the `.env` bootstrap, the job runs `npm run test`. On failure it runs `npm run dossier`, uploads `playwright-report/` as one artifact and `playwright-report/dossier.md` as another, both with a 7-day retention. `playwright-report/` already contains the trace, screenshots, video, and the HTML report. The dossier is a separate upload so an agent can grab the summary without pulling the whole report tarball.
 
 Shelf's `playwright.config.ts` already starts the preview server through `webServer`, so the workflow does **not** need an extra server-boot step. If you build a CI workflow for a project that doesn't, add `webServer: { command: 'npm run preview', url: 'http://127.0.0.1:4173', reuseExistingServer: !process.env.CI }` to the Playwright config first.
 
@@ -135,16 +133,16 @@ This turns the CI jobs into hard gates. The workflow by itself is just a script;
 - [ ] You opened `.github/workflows/main.yml` and read every step in each of the three jobs.
 - [ ] You can point at the step that gates every layer built earlier today: lint, typecheck, knip, gitleaks, Vitest, Playwright, visual regression, the dossier upload.
 - [ ] You understand why the gitleaks step uses the direct CLI instead of the `gitleaks-action@v2` wrapper (first-push branches).
-- [ ] You understand why `end-to-end` writes a `.env` file with `DATABASE_URL=file:./tmp/ci.db` and `mkdir -p tmp` before running Playwright.
+- [ ] You understand why `end-to-end` writes a small `.env` file before running Playwright and why the current starter can use `DATABASE_URL=file:./ci.db` without extra directory setup.
 - [ ] You understand why `unit` and `end-to-end` both `needs: static` and what happens to them if a lint error lands on a pull request.
-- [ ] You ran the corresponding local commands (`npm run lint`, `typecheck`, `knip`, `test:unit`, `gitleaks dir . --redact --config .gitleaks.toml`) on a clean working tree and they all exited zero.
+- [ ] You ran the corresponding local commands (`npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test:unit`, `npm run test`, `gitleaks dir . --redact --config .gitleaks.toml`) on a clean working tree and they all exited zero.
 - [ ] You opened `.github/workflows/nightly.yml` and can name the slow checks it carries that do not belong on every pull request.
 - [ ] If your repository has a Git remote, you pushed a deliberately broken commit (a lint error, or a failing Playwright assertion) to a throwaway branch and watched the corresponding job fail with the dossier attached.
 - [ ] If your repository has a Git remote, branch protection is enabled on `main` requiring at least the `static` and `end-to-end` jobs to pass.
 
 ## Troubleshooting
 
-- If Playwright fails in CI because Chromium is missing, verify that the workflow runs `npx playwright install --with-deps chromium` before `npm run test:e2e`.
+- If Playwright fails in CI because Chromium is missing, verify that the workflow runs `npx playwright install --with-deps chromium` before `npm run test`.
 - If the workflow YAML is valid but a named step does not exist locally, fix the repository command surface first. Do not solve that drift with workflow-only shell scripts.
 - If you are using a clone of Shelf without a Git remote, stop at local command parity plus valid workflow files. Do not claim the hosted artifact-download loop is working until the repository is connected to GitHub.
 - If you split the static checks into multiple jobs, make sure that decision is deliberate and explained. Shelf keeps them together because they are short and share the same setup cost.

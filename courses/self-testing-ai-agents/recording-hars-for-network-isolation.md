@@ -41,6 +41,26 @@ Run this once, with `update: true`, pointed at the real API. Playwright records 
 
 One detail from the [Page API](https://playwright.dev/docs/api/class-page) docs matters here: when you are recording with `update: true`, Playwright writes the refreshed HAR when the page or browser context closes. If you kill the run early, you can end up wondering where the update went. The answer is usually "you never let the context shut down cleanly."
 
+That matters even more when you create contexts manually. Close the context explicitly before you close the browser or declare the job finished.
+
+```ts
+const context = await browser.newContext();
+const page = await context.newPage();
+
+await page.routeFromHAR('tests/fixtures/open-library-search.har', {
+  url: '**/openlibrary.org/**',
+  update: true,
+});
+
+await page.goto('/search');
+// ... drive the recording flow ...
+
+await context.close();
+await browser.close();
+```
+
+Use this rule when a HAR refresh "succeeds" but the file on disk never changes, or when a helper creates extra contexts for popups or alternate roles and then only closes the browser. Playwright flushes the HAR update on context teardown, not on vibes.
+
 > [!WARNING]
 > HARs are machine-generated fixtures with nested request/response data and optional attached body files. Casual hand-edits are brittle—it's easy to break a response body or invalidate a match without realizing. Automate changes with a script and always verify replay afterward.
 
@@ -137,6 +157,9 @@ My instruction file rule for HARs:
 - When a HAR must be regenerated (e.g., because the upstream API
   legitimately changed), regenerate it in a standalone commit so the
   diff is clear.
+- If a helper or script creates a manual browser context for HAR
+  recording, close that context explicitly so the updated HAR is
+  flushed to disk.
 - Approved HAR refresh (the nightly CI job or a human-initiated
   re-recording workflow) is different from ad-hoc re-recording to
   silence a failing test. The refresh workflow is expected to change

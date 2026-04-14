@@ -19,7 +19,7 @@ One scope note before we go further: green CI is still not the end of the story.
 
 Shelf's completed workflow uses `npm`, `actions/setup-node@v4`, and caches both `~/.npm` and `~/.cache/ms-playwright`. That's the concrete reference point as you read the rest of this lesson.
 
-The concrete files matter here too. By the end of the CI lab, Shelf's daily gate lives at `.github/workflows/main.yml` and the slow cadence lives at `.github/workflows/nightly.yml`. The end-to-end job writes `DATABASE_URL=file:./tmp/ci.db`, creates `tmp/`, runs `npm run test:e2e`, and on failure can upload the output from `npm run dossier` if you've completed that lab. The starter's day-one static surface is `npm run lint`, `npm run typecheck`, and `npm run test`; later labs extend it with `npm run knip`, gitleaks, and dossier generation.
+The concrete files matter here too. By the end of the CI lab, Shelf's daily gate lives at `.github/workflows/main.yml` and the slow cadence lives at `.github/workflows/nightly.yml`. The end-to-end job writes `DATABASE_URL=file:./ci.db`, runs `npm run test`, and on failure can upload the output from `npm run dossier` if you've completed that lab. The starter's day-one static surface is `npm run lint`, `npm run typecheck`, and `npm run test`; later labs extend it with `npm run knip`, gitleaks, and dossier generation.
 
 ## What CI uniquely catches
 
@@ -28,7 +28,7 @@ A short list of things that _only_ CI can reliably catch:
 - **Cross-platform differences.** Your laptop is macOS. Production is Linux. Playwright's screenshot pixels differ between them. Your CI runs Linux and catches the drift.
 - **Cross-browser differences.** Locally you run Chromium for speed. CI runs the full matrix (Chromium, Firefox, WebKit) and catches the "works in Chrome, broken in Safari" class of bug.
 - **Clean-slate environment bugs.** The agent's laptop has ten months of cached dependencies, environment variables, and custom shell aliases. CI starts fresh on every run. Anything that only works because of your laptop's accumulated state is going to fail in CI.
-- **Concurrency at scale.** Once you widen the worker count, CI is where the higher-concurrency races show up. Shelf's local and CI Playwright runs stay pinned to `workers: 1` today because the starter still uses a shared SQLite database; the concept still matters and the knob is easy to turn once per-worker isolation lands.
+- **Concurrency at scale.** Once you widen the worker count, CI is where the higher-concurrency races show up. Shelf's day-one starter no longer pins `workers`, but the moment authenticated specs start sharing one SQLite file, CI is where the isolation leaks show themselves first.
 - **Time-sensitive checks.** Nightly HAR regeneration, weekly dependency audits, monthly secret rotation verification—these don't make sense locally. CI is where they live.
 - **Artifact enforcement.** Blocking merges, uploading reports, posting status checks on PRs. The workflow glue lives in CI because that's where the API keys to do those things live.
 
@@ -157,7 +157,7 @@ I have watched this work. An agent opens a PR, CI fails, the agent reads the dos
 
 If your copy of Shelf does not have a hosted remote yet, you cannot close that loop end-to-end. What you _can_ do is make the workflow legible in advance: valid YAML, real commands, explicit artifact paths, finite retention, and no hidden workflow-only scripts. Once the repository is connected to GitHub, the only missing piece is the hosted runner.
 
-## CLAUDE.md rules
+## The agent rules
 
 ```markdown
 ## CI

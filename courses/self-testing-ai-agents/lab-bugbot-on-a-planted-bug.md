@@ -83,7 +83,7 @@ Bugbot re-reviews on the new push. Either the comment is resolved or a refined f
 - [ ] `.cursor/BUGBOT.md` exists at the repo root and contains "what to flag" and "what to leave alone" sections.
 - [ ] The `planted-bug/admin-feature` branch exists and introduces only the planted permission bug on top of the clean working branch.
 - [ ] The planted branch still passes the local quality gates (`npm run typecheck`, `npm run lint`, `npm run test`).
-- [ ] If the repository is still local-only, the hosted gap is documented somewhere durable (for example `ROADMAP.md`) instead of being hand-waved.
+- [ ] If the repository is still local-only, the hosted gap is documented somewhere durable (for example a repo note under `docs/` or an issue) instead of being hand-waved.
 - [ ] Bugbot is installed on your Shelf fork and active on PRs.
 - [ ] The `planted-bug/admin-feature` branch exists and has not been modified by hand after the planted-bug commit.
 - [ ] A PR from `planted-bug/admin-feature` to `main` is open.
