@@ -75,7 +75,7 @@ test('home page renders and exposes sign in', async ({ page }) => {
 });
 ```
 
-Two assertions. That's it. The completed Shelf version lives at `tests/smoke/post-deploy.spec.ts` and is often invoked through a dedicated `playwright.smoke.config.ts` so the default `test:e2e` suite does not accidentally pick it up.
+Two assertions. That's it. The completed Shelf version lives at `tests/smoke/post-deploy.spec.ts` and is often invoked through a dedicated `playwright.smoke.config.ts` so the default Playwright loop does not accidentally pick it up.
 
 ### The deployment workflow that runs the smoke check
 

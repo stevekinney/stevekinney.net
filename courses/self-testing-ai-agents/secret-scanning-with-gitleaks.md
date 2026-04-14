@@ -7,7 +7,7 @@ date: 2026-04-06
 
 Short lesson. Important lesson.
 
-I mentioned in the [CLAUDE.md rewrite lab](lab-rewrite-the-bad-claude-md.md) that the completed static-layer version of Shelf uses a `sample-config.json` containing a fake API key. That's on purpose. It's bait. The bait is there because an agent will, given half a chance, copy a "real example" secret from one file to another file that's about to be committed, and I want us to see the feedback loop fire on a fake before you ever deploy to a real project.
+The [static-layer lab](lab-wire-the-static-layer-into-shelf.md) has you create a `sample-config.json` file containing a fake API key. That's on purpose. It's bait. The bait is there because an agent will, given half a chance, copy a "real example" secret from one file to another file that's about to be committed, and I want us to see the feedback loop fire on a fake before you ever deploy to a real project.
 
 This is not hypothetical. I have personally watched Claude Code, Cursor, and Codex all commit credentials in the last year. Every time, the fix was the same: install gitleaks, configure the hook, and the mistake becomes impossible to repeat. Every time, the reason it happened in the first place was that secret scanning wasn't installed.
 
@@ -107,7 +107,7 @@ If the finding is a false positive—a placeholder like `sk-xxxxxxxxxxxxxxxxxxxx
 
 Most of the time you don't need a config file—gitleaks' defaults are good. But two use cases justify one.
 
-**Allowlisting false positives.** Shelf's `sample-config.json` contains a deliberately fake API key. The [static layer lab](lab-wire-the-static-layer-into-shelf.md) walks through this in two beats: first, you run gitleaks _without_ any config so the bait file gets flagged—that's the point of the bait, to prove the scanner works on a known-bad input. Then, _after_ you've seen the failure, you add `sample-config.json` to the allowlist so the team isn't tripping the rule on the same intentional file forever after. The config below is the "after the lab" version:
+**Allowlisting false positives.** In the completed static-layer lab, you create a `sample-config.json` bait file with a deliberately fake API key so you can prove the scanner works on a known-bad input. Then, _after_ you've seen the failure, you add `sample-config.json` to the allowlist so the team isn't tripping the rule on the same intentional file forever after. If you want to allowlist the starter's seeded workshop credentials too, use `tests/data/` rather than an older fixture path. The config below is the "after the lab" version:
 
 ```toml
 # .gitleaks.toml
@@ -119,11 +119,11 @@ useDefault = true
 description = "Global allowlist"
 paths = [
   '''sample-config\.json$''',
-  '''tests/fixtures/.*''',
+  '''tests/data/.*''',
 ]
 ```
 
-The `paths` list skips files that match. `sample-config.json` is excluded _after_ the lab demonstrates the bait getting caught. `tests/fixtures/` is excluded because fixtures routinely contain realistic-looking-but-fake data.
+The `paths` list skips files that match. `sample-config.json` is excluded _after_ the lab demonstrates the bait getting caught. `tests/data/` is an optional follow-up allowlist because the starter stores fake workshop credentials there for the seeding labs.
 
 **Adding custom rules.** If your organization uses a proprietary token format that gitleaks' defaults don't cover, you can add a rule:
 

@@ -7,7 +7,7 @@ date: 2026-04-11
 
 Time to cash the checks from the last two lessons. [Reading a Trace](reading-a-trace.md) taught you the four panes. [Flaky-Test Triage](flaky-test-triage.md) gave you the four-bucket classification. This lab asks you to apply both, at the same time, to three real traces generated from three deliberately-broken specs in the Shelf starter.
 
-The three broken specs live in `tests/labs/broken-traces/`. The day-one starter no longer ships the trace-generator helper, and the root `playwright.config.ts` ignores `tests/labs/**` by default so the green starter loop stays green. This lab is where you add `scripts/generate-lab-traces.mjs` (or an equivalent helper) plus whatever temporary config override you need to make those specs discoverable. Then you generate the traces, open them in the viewer, and write a four-field diagnosis per trace. The goal is muscle memory: classify-and-cite, classify-and-cite, classify-and-cite, until reading a trace stops feeling like reverse-engineering and starts feeling like reading.
+The three broken specs live in `tests/labs/broken-traces/`. The Shelf starter does not ship the trace-generator helper, and the root `playwright.config.ts` ignores `tests/labs/**` by default so the green starter loop stays green. This lab is where you add `scripts/generate-lab-traces.mjs` (or an equivalent helper) plus whatever temporary config override you need to make those specs discoverable. Then you generate the traces, open them in the viewer, and write a four-field diagnosis per trace. The goal is muscle memory: classify-and-cite, classify-and-cite, classify-and-cite, until reading a trace stops feeling like reverse-engineering and starts feeling like reading.
 
 ## Setup
 

@@ -5,7 +5,7 @@ modified: 2026-04-14
 date: 2026-04-06
 ---
 
-Time to cash the checks from the last handful of lessons. The Shelf starter no longer ships `tests/rate-book.spec.ts` on day one. Your job in this lab is to _build_ that file by hand from the intentionally rough version below, wiring in auth, seed data, locators, and waiting patterns as you go, so every Playwright-armor pattern lands in your fingers instead of just your eyes.
+Time to cash the checks from the last handful of lessons. The Shelf starter doesn't ship `tests/rate-book.spec.ts`. Your job in this lab is to _build_ that file by hand from the intentionally rough version below, wiring in auth, seed data, locators, and waiting patterns as you go, so every Playwright-armor pattern lands in your fingers instead of just your eyes.
 
 The rough version works. Sort of. It passes until the machine gets slower, the selectors drift, or the database state stops matching your assumptions. It bundles every Playwright anti-pattern into one short file, which makes it a great place to harden the whole loop.
 
@@ -99,7 +99,7 @@ If you finish early, pick one or more:
 - Run the test under `--repeat-each=50` and see if anything flakes under load.
 - Turn off `fullyParallel` and see if the test still passes. (It should. If it doesn't, you have a seeding leak—fix it.)
 - Add a route-middleware experiment before the rating click: one broad route that calls `route.fallback()` for everything except `POST`s and stamps those with an `x-test-mode: 1` header, then a narrower `**/api/**` route that uses `route.fetch({ maxRetries: 2 })` and fulfills a patched JSON response. Confirm the chain order does what you think it does.
-- Hunt down the other test that still hits the real Open Library API without HAR isolation. (Hint: it's not in `search.spec.ts`.) Record a new HAR for it using the `UPDATE_HARS` environment variable pattern from the [Approaches to HAR Recording](approaches-to-har-recording.md) lesson, commit the HAR, and verify the test passes in replay mode on airplane Wi-Fi—or at least with your network cable unplugged.
+- Add one more spec that exercises an Open Library-backed search flow, then record a HAR for it using the `UPDATE_HARS` environment variable pattern from the [Approaches to HAR Recording](approaches-to-har-recording.md) lesson. Commit the HAR and verify the test passes in replay mode on airplane Wi-Fi—or at least with your network cable unplugged.
 
 ## A successful end state
 

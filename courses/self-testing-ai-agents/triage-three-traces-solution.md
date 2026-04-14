@@ -112,7 +112,7 @@ The discipline the lab is training: _sweep all four panes_ before deciding which
 
 ## The other thing
 
-A trace is _data_. The lab's generator script, `scripts/generate-lab-traces.mjs`, parses the `playwright-report/test-results/` directory structure and extracts three specific zip files by matching the project + spec prefix. It's ~120 lines of Node, no dependencies, and it handles the case where Playwright exits nonzero because the lab specs are red by design. The current starter no longer ships that helper, so this solution is the reference for the file you add during the lab.
+A trace is _data_. The lab's generator script, `scripts/generate-lab-traces.mjs`, parses the `playwright-report/test-results/` directory structure and extracts three specific zip files by matching the project + spec prefix. It's ~120 lines of Node, no dependencies, and it handles the case where Playwright exits nonzero because the lab specs are red by design. The Shelf starter doesn't ship that helper, so this solution is the reference for the file you add during the lab.
 
 You could write a similar script to extract evidence from traces programmatically — feed it the trace zip, have it look at the network log for 4xx/5xx responses, have it flag pending requests at the moment of failure. That's not a stretch goal for this lab; it's a pointer at where this stuff leads. Traces are structured; you can script against them; you can build your own diagnostics on top of them. Most people don't. That's an opportunity.
 

@@ -7,7 +7,7 @@ date: 2026-04-10
 
 A failure dossier is the difference between an agent that says "tests failed" and an agent that says "the rate-book dialog test failed on line 47 because the Save button wasn't visible within 5 seconds -- here's the screenshot, here's the trace, and here's the exact command to reproduce it." The first response starts a conversation. The second one starts a fix.
 
-The day-one Shelf starter no longer ships that infrastructure. This lab wires it back in: Playwright config that retains the right artifacts, a fixture that forwards browser console noise, and a script that reads the JSON report and renders a structured markdown dossier.
+The Shelf starter doesn't ship that infrastructure. This lab wires it back in: Playwright config that retains the right artifacts, a fixture that forwards browser console noise, and a script that reads the JSON report and renders a structured markdown dossier.
 
 ## What to add
 

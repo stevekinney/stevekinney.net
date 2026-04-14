@@ -1,7 +1,7 @@
 ---
 title: 'Port the Review Loop Beyond Bugbot: Solution'
 description: Walkthrough of the review-loop playbook—blocking rules, noise categories, the rule of three, and what it takes to make the process survive a tool swap.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -11,7 +11,7 @@ The review loop is the only loop in Shelf that's purely about process. There's n
 
 ### Writing the playbook
 
-The shipped `docs/review-loop-playbook.md` breaks every possible review finding into three buckets. Here's how to think about each one.
+The `docs/review-loop-playbook.md` file you add in this lab breaks every possible review finding into three buckets. Here's how to think about each one.
 
 **Blocking** findings are patterns where the cost of merging the bad code is higher than the cost of stopping the PR. In Shelf, these are specific and concrete:
 

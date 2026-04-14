@@ -10,7 +10,7 @@ The fixtures lesson gave you the rules. This lab makes you apply them to real co
 The lab is not about making the spec pass. It already passes. The lab is about making the fixture file match the discipline the lesson taught.
 
 > [!NOTE] Isolation
-> The lab lives under `tests/labs/fixtures/`, and the current starter's root `playwright.config.ts` ignores that subtree on purpose so `npm run test` stays green on day one. Create a throwaway local config for this lab run, or use another narrow equivalent, so the production suite stays green while you refactor the lab slice.
+> The lab lives under `tests/labs/fixtures/`, and the current starter's root `playwright.config.ts` ignores that subtree on purpose so `npm run test` stays green by default. Create a throwaway local config for this lab run, or use another narrow equivalent, so the production suite stays green while you refactor the lab slice.
 
 > [!NOTE] Why this lab now sits later in the sequence
 > The committed lab fixture calls `resetShelfContent()` from `tests/helpers/seed.ts`. That helper gets built in [Deterministic State and Test Isolation](deterministic-state-and-test-isolation.md). By the time you reach this lab in the normal course order, it should already exist. If you skipped ahead, build that helper first or treat this lab as a dry refactor until it does.

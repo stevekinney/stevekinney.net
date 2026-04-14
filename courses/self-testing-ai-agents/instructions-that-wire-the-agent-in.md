@@ -123,7 +123,7 @@ Do not report a task complete with any of these failing. If you later add the st
 - Write a failing test before the implementation. Commit the test first.
 - Unit tests live next to the file under test as `<name>.test.ts` and run with Vitest.
 - End-to-end tests live in `tests/` and run with Playwright.
-- Test fixtures live in `tests/fixtures/` (including HAR files). Share data there instead of redefining it per spec.
+- Seed JSON lives in `tests/data/`. HARs and other artifacts live in `tests/fixtures/`. Share data from those paths instead of redefining it per spec.
 
 ## Playwright locator rules
 

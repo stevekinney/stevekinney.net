@@ -29,7 +29,7 @@ That opens the viewer in a browser tab. You can also open traces from the HTML r
 npm run traces:generate
 ```
 
-That command is just the entry point. The day-one Shelf starter does **not** ship it. In the current course flow, you add the generator helper yourself as `scripts/generate-lab-traces.mjs` (or equivalent) in the trace-triage lab, and you can add a `traces:clean` command when you want to wipe the generated artifacts and rerun the lab from a clean slate. The generate step runs the three deliberately-broken specs in `tests/labs/broken-traces/` and copies the resulting trace files to `playwright-report/lab-traces/`. Open them one at a time. We'll work through what to look for next.
+That command is just the entry point. The Shelf starter does **not** ship it. In the current course flow, you add the generator helper yourself as `scripts/generate-lab-traces.mjs` (or equivalent) in the trace-triage lab, and you can add a `traces:clean` command when you want to wipe the generated artifacts and rerun the lab from a clean slate. The generate step runs the three deliberately-broken specs in `tests/labs/broken-traces/` and copies the resulting trace files to `playwright-report/lab-traces/`. Open them one at a time. We'll work through what to look for next.
 
 ## The four panes and what each one tells you
 

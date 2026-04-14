@@ -57,7 +57,7 @@ First: these are public routes. That is deliberate. The current starter already 
 
 Second: each test waits for a real element before running axe. The scan runs against the current DOM, so firing it immediately after `goto()` is how you end up auditing a loading state and calling it a website. Waiting for the `h1` is cheap and honest.
 
-Third: `.withTags(['wcag2a', 'wcag2aa'])` scopes the scan to the rules most teams actually need as a gate. Pulling in every axe rule on day one is how you turn a useful check into a suggestion engine nobody trusts.
+Third: `.withTags(['wcag2a', 'wcag2aa'])` scopes the scan to the rules most teams actually need as a gate. Pulling in every axe rule up front is how you turn a useful check into a suggestion engine nobody trusts.
 
 If you've already built the authenticated project from the earlier auth labs, extend the file with a `/shelf` check. At that point the pattern is the same: reseed the shelf, navigate to `/shelf`, wait for the heading plus one seeded article, then run the scan. The important part is that public routes come first because the current starter can run them immediately.
 

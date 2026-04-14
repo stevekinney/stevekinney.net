@@ -10,7 +10,7 @@ Short lab. Add the dossier infrastructure back into Shelf, understand why each p
 Once the lab is wired up, Shelf writes artifacts under `playwright-report/test-results/`, the HTML report to `playwright-report/html/`, the JSON report to `playwright-report/report.json`, and the markdown summary to `playwright-report/dossier.md`. The simplest, most controlled way to force a failure against the current minimal suite is to change one assertion in `tests/smoke.spec.ts`, run `npm run test`, watch the smoke spec go red, run `npm run dossier`, read the generated markdown, then revert and rerun green.
 
 > [!NOTE] In the current starter
-> Shelf no longer ships the dossier layer on day one. This lab is where you add the Playwright artifact settings, the console-forwarding fixture wrapper, the dossier script, the `npm run dossier` command, and the matching `CLAUDE.md` note.
+> The Shelf starter doesn't include the dossier layer. This lab is where you add the Playwright artifact settings, the console-forwarding fixture wrapper, the dossier script, the `npm run dossier` command, and the matching `CLAUDE.md` note.
 
 ## 1. The config — `playwright.config.ts`
 

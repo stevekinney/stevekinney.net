@@ -102,11 +102,11 @@ Imagine you're translating Shelf's loops to a Next.js 14 app with Prisma, Jest f
 
 ## CI workflow
 
-- **Shelf:** `.github/workflows/ci.yml` runs typecheck, lint, Knip, unit tests,
+- **Shelf:** `.github/workflows/main.yml` runs typecheck, lint, Knip, unit tests,
   and Playwright on every PR.
 - **This stack:** `.github/workflows/ci.yml` runs lint, type check, Jest, and
   Playwright. No dead-code check.
-- **Exact path:** `.github/workflows/ci.yml`
+- **Exact path:** `.github/workflows/main.yml`
 - **Command:** `npm run lint && npx tsc --noEmit && npm test && npx playwright test`
 
 ## Post-deploy smoke checks

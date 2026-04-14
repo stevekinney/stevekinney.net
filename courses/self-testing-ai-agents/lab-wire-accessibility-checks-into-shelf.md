@@ -94,7 +94,7 @@ Because Shelf's minimal starter already runs every spec under `tests/`, you can 
 The key is that the agent has a named command to run. Hidden rituals do not make good loops.
 
 > [!NOTE] Shelf can fold accessibility into the main Playwright loop
-> The day-one starter does **not** ship a standalone `test:accessibility` script. Once `tests/accessibility.spec.ts` exists, `npm run test` will pick it up automatically. That's the preferred pattern once the spec is stable: one gate, one command, no side channels. If you're new to the project and haven't built trust in the spec yet, keep the standalone script while you iterate, then fold it back into `npm run test` once it stops surprising you.
+> The Shelf starter does **not** ship a standalone `test:accessibility` script. Once `tests/accessibility.spec.ts` exists, `npm run test` will pick it up automatically. That's the preferred pattern once the spec is stable: one gate, one command, no side channels. If you're new to the project and haven't built trust in the spec yet, keep the standalone script while you iterate, then fold it back into `npm run test` once it stops surprising you.
 
 ## Acceptance criteria
 

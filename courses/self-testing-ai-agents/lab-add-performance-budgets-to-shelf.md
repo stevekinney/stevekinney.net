@@ -16,7 +16,7 @@ That is enough to turn performance from a vague aspiration into a real feedback 
 > Complete [Performance Budgets as a Feedback Loop](performance-budgets-as-a-feedback-loop.md) first. This lab assumes you are intentionally building the small two-budget version, not a whole performance platform.
 
 > [!NOTE] In the current starter
-> Shelf no longer ships the performance budget loop on day one. This lab is where you add the stats build, the budget file, the check script, the runtime spec, and the `npm run performance:*` commands.
+> The Shelf starter doesn't include the performance budget loop. This lab is where you add the stats build, the budget file, the check script, the runtime spec, and the `npm run performance:*` commands.
 
 Install the stats-build dependency first:
 

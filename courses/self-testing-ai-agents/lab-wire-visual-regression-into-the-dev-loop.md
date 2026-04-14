@@ -14,7 +14,7 @@ Short lab. Two halves. The first half wires the screenshot gate into Shelf. The 
 
 Make sure you're on the hardened Shelf from [Lab: Harden the Flaky Rate-Book Test](lab-harden-the-flaky-rate-book-test.md). You'll need storage-state authentication and seeding in place. Visual regression without those is a nightmare.
 
-The current Shelf starter no longer ships visual-regression specs or project wiring on day one. This lab is where you add them. If your repo still has only the minimal public smoke config, start with the public screenshot first and then route the authenticated screenshot through the `authenticated` project you built in the rate-book lab.
+The Shelf starter doesn't ship visual-regression specs or project wiring. This lab is where you add them. If your repo still has only the minimal public smoke config, start with the public screenshot first and then route the authenticated screenshot through the `authenticated` project you built in the rate-book lab.
 
 ## Part one: wire the screenshot gate
 
@@ -60,7 +60,7 @@ Route the new file through the `authenticated` project in `playwright.config.ts`
 ```ts
 {
   name: 'authenticated',
-  testMatch: /(rate-book|accessibility|search|visual-authenticated|performance)\.spec\.ts/,
+  testMatch: /(rate-book|accessibility|visual-authenticated|performance)\.spec\.ts/,
   use: {
     ...devices['Desktop Chrome'],
     storageState: storageStatePath,

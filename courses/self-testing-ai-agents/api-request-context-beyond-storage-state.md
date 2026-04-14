@@ -69,7 +69,7 @@ export const test = base.extend<{ adminRequest: APIRequestContext }>({
 });
 ```
 
-Any test that asks for `adminRequest` now gets an HTTP client that's carrying the admin session cookie. No browser. No login flow. The starter no longer ships the admin storage-state setup file, so you create it as part of this workflow and write `playwright/.authentication/admin.json` yourself:
+Any test that asks for `adminRequest` now gets an HTTP client that's carrying the admin session cookie. No browser. No login flow. The Shelf starter doesn't ship the admin storage-state setup file, so you create it as part of this workflow and write `playwright/.authentication/admin.json` yourself:
 
 ```ts
 // tests/labs/admin.setup.ts
@@ -93,7 +93,7 @@ setup('authenticate the seeded admin', async ({ page }) => {
 });
 ```
 
-The starter no longer ships that file. You create it during the lab, then run it with the labs enabled:
+The Shelf starter doesn't ship that file. You create it during the lab, then run it with the labs enabled:
 
 ```bash
 PLAYWRIGHT_INCLUDE_LABS=1 npx playwright test tests/labs/admin.setup.ts

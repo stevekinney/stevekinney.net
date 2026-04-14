@@ -7,7 +7,7 @@ date: 2026-04-10
 
 Performance budgets are one of those things that sound bureaucratic until the first time they save you. You ship a refactor, the bundle doubles, nobody notices for two weeks, and now it's "just how big the app is." The point of this lab is to make that scenario impossible by turning size and speed into numbers that a script can enforce.
 
-The day-one Shelf starter no longer ships this loop. Add the pieces below during the lab, then run the loop to prove it works. Start by installing the stats-build dependency:
+The Shelf starter doesn't ship this loop. Add the pieces below during the lab, then run the loop to prove it works. Start by installing the stats-build dependency:
 
 ```sh
 npm install -D rollup-plugin-visualizer
@@ -119,7 +119,7 @@ The exact numbers will vary with your build, but they should be under the thresh
 npm run performance:runtime
 ```
 
-This pushes the schema and runs the Playwright performance spec against the preview server. The test navigates to `/shelf` and checks that `domContentLoaded` lands under 800ms.
+This runs the Playwright performance spec against the preview server. If you already built the authenticated project in the earlier auth lab, this command should target that project. If you have not, the first version of the runtime check can point at a public route instead. Either way, the test reads `domContentLoaded` from the browser and compares it against the threshold in `performance-budgets.json`.
 
 ### The full loop
 

@@ -7,7 +7,7 @@ date: 2026-04-06
 
 Time to do the thing.
 
-Open the Shelf starter repository. At the root, there's a [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) file. In the local course baseline, it is no longer terrible—but it is still just a draft. Your job in this lab is to tighten it until every rule is something the agent can mechanically act on.
+Open the Shelf starter repository. At the root, there's a [`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory) file. In the local course baseline, it's a decent draft — not terrible, but still too vague in places. Your job in this lab is to tighten it until every rule is something the agent can mechanically act on.
 
 ## Setup
 
@@ -143,7 +143,7 @@ If you're skeptical, try it yourself: revert `CLAUDE.md` to its starter state (o
 
 If you finish early:
 
-- Add a rule that references a file you haven't created yet, then create it. (Shelf has a `tests/fixtures/` directory that's underused—a fixtures convention rule is a good fit.)
+- Add a rule that references a file you haven't created yet, then create it. (The HAR recording lessons later in the course will populate `tests/fixtures/` — a fixtures convention rule is a good fit to land early.)
 - Run the same task against a second agent (Cursor, Codex, Copilot) using the same instruction file translated to that agent's filename. Note where the rules survive the port and where they don't.
 - Take the worst rule you _kept_ and try to make it more mechanically checkable. The goal is not perfection; the goal is to feel the difference between a rule the agent can act on and a rule it can't.
 

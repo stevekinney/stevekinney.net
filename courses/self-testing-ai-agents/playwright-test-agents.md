@@ -137,7 +137,7 @@ That sounds trivial, but it is the fastest way to confirm which loop providers y
 
 ## Planner
 
-The planner agent explores your running app in a real browser and produces a Markdown test plan. It's doing what a QA engineer does on day one: clicking around, noting what the app does, and writing down what should be tested.
+The planner agent explores your running app in a real browser and produces a Markdown test plan. It's doing what a QA engineer does on their first pass through an unfamiliar app: clicking around, noting what the app does, and writing down what should be tested.
 
 **What it needs from you:**
 

@@ -136,7 +136,7 @@ Each worker points the app at a different SQLite file. When Playwright launches 
 
 ## What Shelf does today, and why
 
-Shelf's day-one `playwright.config.ts` no longer pins `workers: 1`, and that is the right starting shape. The shipped suite is intentionally tiny: one public smoke spec, lab subtrees ignored by default, and no authenticated matrix yet. In that world, the cleanest config is the honest config.
+Shelf's `playwright.config.ts` does not pin `workers: 1`, and that is the right starting shape. The shipped suite is intentionally tiny: one public smoke spec, lab subtrees ignored by default, and no authenticated matrix yet. In that world, the cleanest config is the honest config.
 
 What changes once you build the later labs is the amount of shared mutable state. The moment you add authenticated specs that all talk to the same SQLite file, worker count stops being theoretical. If turning workers up exposes failures, that is not Playwright being mean. It is the suite finally telling you the database isolation story is incomplete.
 
@@ -194,7 +194,7 @@ The fixture runs automatically when any test imports this `test`. No more `befor
 - Individual specs call `resetShelfContent`, which does _not_ reset user
   accounts. Only the authentication setup project uses `seedFreshDatabase`,
   because deleting users invalidates the stored browser session.
-- The day-one starter does not pin `workers` because the shipped suite is
+- The Shelf starter does not pin `workers` because the shipped suite is
   intentionally tiny. Once authenticated specs start sharing one SQLite
   file, treat worker-count failures as isolation bugs to fix, not as a
   reason to hard-code `workers: 1` forever.

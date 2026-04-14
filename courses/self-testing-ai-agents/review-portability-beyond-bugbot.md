@@ -128,7 +128,8 @@ not automatically required.
 
 A finding counts as noise when it applies to generated artifacts
 (`playwright-report/`, `build/`), test snapshot PNGs, or the
-allowlisted `sample-config.json` bait file. If the reviewer keeps
+allowlisted bait file you create during the static-layer lab
+(`sample-config.json` in the course walkthrough). If the reviewer keeps
 producing noise here, update its instruction surface.
 
 ## The rule of three

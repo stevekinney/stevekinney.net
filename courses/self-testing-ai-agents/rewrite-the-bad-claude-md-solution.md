@@ -106,7 +106,7 @@ This is the "keep the product product-shaped" rule. Without it, the agent will h
 
 ### Static layer
 
-Names concrete config files by path: `eslint.config.js` and `tsconfig.json` in the day-one starter, with later labs extending that list to `knip.json`. Lists the exact TypeScript compiler flags that are enabled. Says "do not bypass with `@ts-expect-error`." The agent now knows the strictness level without reading `tsconfig.json` itself—though it should still check.
+Names concrete config files by path: `eslint.config.js` and `tsconfig.json` in the Shelf starter, with later labs extending that list to `knip.json`. Lists the exact TypeScript compiler flags that are enabled. Says "do not bypass with `@ts-expect-error`." The agent now knows the strictness level without reading `tsconfig.json` itself—though it should still check.
 
 ### Git hooks and secrets
 

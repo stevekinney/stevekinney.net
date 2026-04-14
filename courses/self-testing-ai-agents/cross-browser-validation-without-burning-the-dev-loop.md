@@ -42,7 +42,7 @@ That is the balance I have seen teams actually maintain.
 
 ## The Playwright projects that split the work
 
-Playwright projects are the mechanism that makes "Chromium on every edit, Firefox and WebKit on a smoke subset" actually work. Each project is a named configuration block inside `playwright.config.ts` that can point at a different browser, a different testMatch, and a different set of options. Shelf's split in `playwright.config.ts` is:
+Playwright projects are the mechanism that makes "Chromium on every edit, Firefox and WebKit on a smoke subset" actually work. Each project is a named configuration block inside `playwright.config.ts` that can point at a different browser, a different testMatch, and a different set of options. One common _completed_ Shelf split looks like this after the auth, visual, performance, and cross-browser labs have all landed:
 
 ```ts
 projects: [
@@ -59,7 +59,7 @@ projects: [
   },
   {
     name: 'authenticated',
-    testMatch: /(rate-book|accessibility|search|visual-authenticated|performance)\.spec\.ts/,
+    testMatch: /(rate-book|accessibility|visual-authenticated|performance)\.spec\.ts/,
     use: {
       ...devices['Desktop Chrome'],
       storageState: storageStatePath,
@@ -83,7 +83,7 @@ projects: [
 ];
 ```
 
-Three projects in the minimal starter shape. `chromium` is the default fast loop that runs on every edit. `firefox-smoke` and `webkit-smoke` only match tests tagged `@cross-browser`, and they only run when you ask for them explicitly. The default `npm run test` script pins `--project=chromium` so Firefox and WebKit do not sneak into the fast loop:
+That is not what Shelf ships. It is the fuller multi-project version you build up across the middle of the course. The important split for this lesson is simpler: keep Chromium as the default fast loop, and make Firefox/WebKit opt-in smoke projects. The default `npm run test` script can then pin the fast project so Firefox and WebKit do not sneak into the everyday loop:
 
 ```json
 {

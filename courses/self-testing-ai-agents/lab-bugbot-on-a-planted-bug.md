@@ -5,7 +5,7 @@ modified: 2026-04-14
 date: 2026-04-06
 ---
 
-This lab is mostly hosted process, not code authoring. The current starter no longer ships the tuned reviewer config or the planted branch, so this lab is where you add or recreate those pieces and then run the review loop honestly.
+This lab is mostly hosted process, not code authoring. The Shelf starter doesn't ship the tuned reviewer config or the planted branch, so this lab is where you add or recreate those pieces and then run the review loop honestly.
 
 > [!NOTE] Prerequisite
 > Complete [Tuning Bugbot for Your Codebase](tuning-bugbot-for-your-codebase.md) first. This lab assumes you already have a tuned reviewer configuration and are now pressure-testing it on a known bug.

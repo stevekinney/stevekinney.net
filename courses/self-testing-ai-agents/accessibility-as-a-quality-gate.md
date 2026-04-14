@@ -72,7 +72,7 @@ A few things worth understanding about that block before you start writing your 
 
 That is the entire shape. Three lines of setup, one assertion. The accessibility lab adds exactly this pattern to `tests/accessibility.spec.ts`, scoped to the highest-signal routes; once you understand the four pieces above you can read that file as a real-shape implementation rather than a mystery.
 
-The day-one starter omits this check. Once you trust the scan enough to make it part of the main gate, let `tests/accessibility.spec.ts` ride the normal `npm run test` loop instead of hiding it behind a sidecar command.
+The Shelf starter omits this check. Once you trust the scan enough to make it part of the main gate, let `tests/accessibility.spec.ts` ride the normal `npm run test` loop instead of hiding it behind a sidecar command.
 
 ## Structural accessibility checks with ARIA snapshots
 

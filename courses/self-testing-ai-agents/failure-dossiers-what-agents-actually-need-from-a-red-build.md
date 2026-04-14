@@ -203,7 +203,7 @@ console.error(`Wrote dossier for ${failures.length} failures`);
 ```
 
 > [!NOTE] The course solution includes the production version
-> The day-one Shelf starter does **not** ship `scripts/summarize-failure-dossier.ts`. You add it in [Lab: Build a Failure Dossier for Shelf](lab-build-a-failure-dossier-for-shelf.md). The completed lab version is a longer, fully-typed implementation of this sketch that also picks the `diff` attachment ahead of the baseline on visual regression failures, guards against `result.error` being undefined via `result.errors[0]`, and makes every attachment path relative to the repo root. Read the sketch above to understand the walk, then open the lab solution or your own implementation to see the production shape.
+> The Shelf starter does **not** ship `scripts/summarize-failure-dossier.ts`. You add it in [Lab: Build a Failure Dossier for Shelf](lab-build-a-failure-dossier-for-shelf.md). The completed lab version is a longer, fully-typed implementation of this sketch that also picks the `diff` attachment ahead of the baseline on visual regression failures, guards against `result.error` being undefined via `result.errors[0]`, and makes every attachment path relative to the repo root. Read the sketch above to understand the walk, then open the lab solution or your own implementation to see the production shape.
 
 ### A representative failing-run `dossier.md` excerpt
 

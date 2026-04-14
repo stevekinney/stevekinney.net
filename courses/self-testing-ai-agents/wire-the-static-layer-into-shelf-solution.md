@@ -126,7 +126,7 @@ Open `knip.json`:
 }
 ```
 
-The `entry` array tells knip where execution starts—SvelteKit route files (`+page.ts`, `+server.ts`, `+layout.ts`), test files, helper files, and scripts. Everything reachable from these entry points is "used." Everything in the `project` globs that is _not_ reachable is dead code. If you add later labs like authenticated setup or a custom MCP server, extend these globs at that point instead of shipping them on day one.
+The `entry` array tells knip where execution starts—SvelteKit route files (`+page.ts`, `+server.ts`, `+layout.ts`), test files, helper files, and scripts. Everything reachable from these entry points is "used." Everything in the `project` globs that is _not_ reachable is dead code. If you add later labs like authenticated setup or a custom MCP server, extend these globs at that point instead of shipping them in the starter.
 
 The `ignoreDependencies` array handles Tailwind. Tailwind v4 uses CSS `@import` directives to pull in its plugins, not JavaScript imports, so knip cannot trace the dependency chain. Without the ignore list, knip reports `tailwindcss`, `@tailwindcss/forms`, and `@tailwindcss/typography` as unused dependencies on every run.
 
@@ -214,7 +214,7 @@ npx tsx scripts/run-gitleaks-staged.ts
 
 ### Part 6: the CLAUDE.md update
 
-The day-one `CLAUDE.md` in Shelf only lists the smaller starter loop: `npm run typecheck`, `npm run lint`, and `npm run test`. This lab is where you extend it. Add the static-layer sections now: name `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts` explicitly, add `npm run knip` / `npm run pre-push` to the "done" story, and keep the "Do not" section banning `@ts-expect-error`, `eslint-disable`, and `--no-verify`.
+Shelf's starter `CLAUDE.md` only lists the smaller starter loop: `npm run typecheck`, `npm run lint`, and `npm run test`. This lab is where you extend it. Add the static-layer sections now: name `knip.json`, `lefthook.yml`, `.gitleaks.toml`, and `scripts/run-gitleaks-staged.ts` explicitly, add `npm run knip` / `npm run pre-push` to the "done" story, and keep the "Do not" section banning `@ts-expect-error`, `eslint-disable`, and `--no-verify`.
 
 ## What you still need to run
 

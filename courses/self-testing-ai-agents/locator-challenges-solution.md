@@ -1,7 +1,7 @@
 ---
 title: 'Locator Challenges: Solution'
 description: Walkthrough and solutions for every locator challenge on Shelf's playground page.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -205,7 +205,7 @@ await expect(page.getByRole('alert')).toBeVisible();
 await expect(page.getByRole('alert')).toHaveText('Unsaved changes will be lost');
 ```
 
-`role="alert"` is a landmark role. `getByRole('alert')` finds it directly.
+`role="alert"` is a live region role. `getByRole('alert')` finds it directly.
 
 ### Challenge 21: Progress bar value
 

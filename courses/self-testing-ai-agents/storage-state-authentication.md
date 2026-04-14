@@ -225,7 +225,7 @@ That matters for SDK-driven auth flows that stash tokens in IndexedDB instead of
 
 Second, newer Playwright versions add [`browserContext.setStorageState()`](https://playwright.dev/docs/api/class-browsercontext). That lets you clear the current cookies, `localStorage`, and IndexedDB and apply a fresh state to the same context. Most test suites are still better served by "new context per test," but if you are writing a very deliberate role-switching or reset helper, this is cleaner than trying to mutate the old session piecemeal.
 
-Third, if you test CHIPS or partitioned third-party cookies, cookie objects can carry a `partitionKey`. That is not a day-one need for Shelf. It is worth knowing the shape exists before you spend an afternoon wondering why a modern third-party cookie test is missing part of the session model.
+Third, if you test CHIPS or partitioned third-party cookies, cookie objects can carry a `partitionKey`. Shelf does not need this. It is worth knowing the shape exists before you spend an afternoon wondering why a modern third-party cookie test is missing part of the session model.
 
 ## Wiring it into the config
 

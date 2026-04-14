@@ -19,7 +19,7 @@ One scope note before we go further: green CI is still not the end of the story.
 
 Shelf's completed workflow uses `npm`, `actions/setup-node@v4`, and caches both `~/.npm` and `~/.cache/ms-playwright`. That's the concrete reference point as you read the rest of this lesson.
 
-The concrete files matter here too. By the end of the CI lab, Shelf's daily gate lives at `.github/workflows/main.yml` and the slow cadence lives at `.github/workflows/nightly.yml`. The end-to-end job writes `DATABASE_URL=file:./ci.db`, runs `npm run test`, and on failure can upload the output from `npm run dossier` if you've completed that lab. The starter's day-one static surface is `npm run lint`, `npm run typecheck`, and `npm run test`; later labs extend it with `npm run knip`, gitleaks, and dossier generation.
+The concrete files matter here too. By the end of the CI lab, Shelf's daily gate lives at `.github/workflows/main.yml` and the slow cadence lives at `.github/workflows/nightly.yml`. The end-to-end job writes `DATABASE_URL=file:./ci.db`, runs `npm run test`, and on failure can upload the output from `npm run dossier` if you've completed that lab. The starter's static surface is `npm run lint`, `npm run typecheck`, and `npm run test`; later labs extend it with `npm run knip`, gitleaks, and dossier generation.
 
 ## What CI uniquely catches
 
@@ -28,7 +28,7 @@ A short list of things that _only_ CI can reliably catch:
 - **Cross-platform differences.** Your laptop is macOS. Production is Linux. Playwright's screenshot pixels differ between them. Your CI runs Linux and catches the drift.
 - **Cross-browser differences.** Locally you run Chromium for speed. CI runs the full matrix (Chromium, Firefox, WebKit) and catches the "works in Chrome, broken in Safari" class of bug.
 - **Clean-slate environment bugs.** The agent's laptop has ten months of cached dependencies, environment variables, and custom shell aliases. CI starts fresh on every run. Anything that only works because of your laptop's accumulated state is going to fail in CI.
-- **Concurrency at scale.** Once you widen the worker count, CI is where the higher-concurrency races show up. Shelf's day-one starter no longer pins `workers`, but the moment authenticated specs start sharing one SQLite file, CI is where the isolation leaks show themselves first.
+- **Concurrency at scale.** Once you widen the worker count, CI is where the higher-concurrency races show up. Shelf does not pin `workers`, but the moment authenticated specs start sharing one SQLite file, CI is where the isolation leaks show themselves first.
 - **Time-sensitive checks.** Nightly HAR regeneration, weekly dependency audits, monthly secret rotation verification—these don't make sense locally. CI is where they live.
 - **Artifact enforcement.** Blocking merges, uploading reports, posting status checks on PRs. The workflow glue lives in CI because that's where the API keys to do those things live.
 
@@ -56,7 +56,7 @@ On every push to any branch and every PR into main:
 3. **Unit tests.** `npm run test:unit`. Fast.
 4. **End-to-end tests.** Playwright, full Chromium run. Upload trace artifacts, screenshots, and the failure dossier if anything fails.
 
-That is the entire `main.yml` Shelf ships: three jobs, not seven. Visual regression rides inside the Playwright suite, and the hosted-only extras (deploy previews, post-deploy smoke) stay out of the main workflow until there is a concrete reason to pay that cost.
+That is the entire `main.yml` the lab has you build: three jobs, not seven. Visual regression rides inside the Playwright suite, and the hosted-only extras (deploy previews, post-deploy smoke) stay out of the main workflow until there is a concrete reason to pay that cost.
 
 On a nightly schedule:
 
@@ -66,7 +66,7 @@ On a nightly schedule:
 
 On a connected GitHub repository, you can add merge-to-main deployment and post-deploy smoke checks later. [Post-Merge and Post-Deploy Validation](post-merge-and-post-deploy-validation.md) covers that core loop. The appendix lessons turn the nightly and cross-browser placeholders into fuller patterns once the one-day workshop flow is done.
 
-That's the whole shape Shelf ships: three jobs in `.github/workflows/main.yml`, three placeholder jobs in `.github/workflows/nightly.yml`, and no deploy workflow yet. Each is boring. The power is in the composition.
+That's the whole shape the lab has you build: three jobs in `.github/workflows/main.yml`, and no deploy or nightly workflow yet. Nightly lands in the appendix labs alongside the commands it gates. Each job is boring. The power is in the composition.
 
 ## Parallelism and caching, the two knobs that matter
 

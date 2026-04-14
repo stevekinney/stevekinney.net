@@ -8,7 +8,7 @@ date: 2026-04-06
 Longest lab of the day. Multi-part. Pace yourself—each part is a self-contained check, and you can stop between parts if you need to.
 
 > [!NOTE] In the current starter
-> Shelf now starts smaller on purpose. The day-one repo already has ESLint, TypeScript, and the minimal Playwright loop, but it does **not** ship `knip.json`, `lefthook.yml`, `.gitleaks.toml`, or `scripts/run-gitleaks-staged.ts`. This lab is where you add those files and then verify each one against a planted bad input.
+> Shelf now starts smaller on purpose. The starter already has ESLint, TypeScript, and the minimal Playwright loop, but it does **not** ship `knip.json`, `lefthook.yml`, `.gitleaks.toml`, or `scripts/run-gitleaks-staged.ts`. This lab is where you add those files and then verify each one against a planted bad input.
 
 ## The task
 
@@ -107,7 +107,7 @@ Create a small bait file such as `sample-config.json` during the lab so you have
 Add sections to `CLAUDE.md` that reflect every layer you wired up. At minimum:
 
 - A "static checks" section listing `npm run lint`, `npm run typecheck`, and `npm run knip` as mandatory pre-done commands.
-- In the day-one Shelf starter, "done" only means `npm run typecheck`, `npm run lint`, and `npm run test`. This lab is where you extend that definition to include `npm run knip` and `npm run pre-push`.
+- In the Shelf starter, "done" only means `npm run typecheck`, `npm run lint`, and `npm run test`. This lab is where you extend that definition to include `npm run knip` and `npm run pre-push`.
 - Rules about `@ts-expect-error`, `eslint-disable`, and `--no-verify`.
 - A secrets section per the gitleaks lesson.
 - A reference back to the Playwright rules ([locators](locators-and-the-accessibility-hierarchy.md), [waiting](the-waiting-story.md), [auth](storage-state-authentication.md)) so the custom lint rules are connected to the same source of truth.

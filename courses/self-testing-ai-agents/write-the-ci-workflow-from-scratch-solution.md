@@ -1,11 +1,11 @@
 ---
 title: 'Write the CI Workflow from Scratch: Solution'
-description: Annotated walkthrough of the `main.yml` and `nightly.yml` workflows you add in the lab—what each job does, what you can verify locally, and what still needs GitHub Actions to prove for real.
+description: Annotated walkthrough of the `main.yml` workflow you add in the lab. The nightly workflow stays in the appendix labs, alongside the commands it gates.
 modified: 2026-04-14
 date: 2026-04-10
 ---
 
-This is another hybrid lab. The workflow files no longer ship in the starter, but the jobs still map to real local commands. The hosted parts—artifact uploads, cron triggers, required checks—need a GitHub remote with Actions enabled. I will keep those two truths separate so the solution does not pretend local YAML parsing is the same thing as a real CI run.
+This is another hybrid lab. The workflow files don't ship in the Shelf starter, but the jobs still map to real local commands. The hosted parts—artifact uploads, cron triggers, required checks—need a GitHub remote with Actions enabled. I will keep those two truths separate so the solution does not pretend local YAML parsing is the same thing as a real CI run.
 
 ## What to add
 
@@ -140,29 +140,9 @@ Third: the dossier upload is conditional and separate. The HTML report is large.
 
 If you have not completed the dossier lab yet, omit the dossier step and its artifact upload on the first pass. The Playwright report artifact still buys you most of the debugging value.
 
-### `nightly.yml`: the slower companion
+### `nightly.yml` lives in the appendix
 
-The companion nightly file is the same one from the nightly workflow lab: placeholder HAR refresh, dependency audit, and cross-browser smoke. The important piece for this solution is not every line of that YAML. It is the fact that the slower checks are _not_ crammed into `main.yml`.
-
-The cross-browser job in `nightly.yml` should run:
-
-```yaml
-- name: Run cross-browser smoke tests
-  run: npm run test:cross-browser
-```
-
-And its preview-server env should stay aligned with the current starter too:
-
-```yaml
-- name: Create .env for preview server
-  run: |
-    cat > .env <<'EOF'
-    DATABASE_URL=file:./ci.db
-    OPEN_LIBRARY_BASE_URL=https://openlibrary.org
-    EOF
-```
-
-Same rule as the main workflow: do not cargo-cult older `tmp/ci.db`, `ORIGIN`, or fake auth-secret scaffolding back into the file unless the app actually reads those variables now.
+The nightly workflow is not part of this lab. It lands in the appendix labs ([Lab: Add Cross-Browser Coverage](lab-add-cross-browser-coverage.md) and [Lab: Add a Nightly Verification Workflow](lab-add-a-nightly-verification-workflow.md)) alongside the commands it actually runs. A standalone placeholder is worse than no file at all — it invites cargo-culted job names and silent schedule drift. Build `nightly.yml` when you build the things it gates.
 
 ## What you still need to run
 
@@ -170,7 +150,6 @@ Locally, validate the YAML:
 
 ```sh
 python3 -c "import yaml; yaml.safe_load(open('.github/workflows/main.yml'))"
-python3 -c "import yaml; yaml.safe_load(open('.github/workflows/nightly.yml'))"
 ```
 
 Then run the commands the jobs map to:
@@ -207,7 +186,7 @@ gitleaks dir . --redact --config .gitleaks.toml
 - Use the repository's real command surface. If the starter says `npm run test`, the workflow says `npm run test`.
 - Keep CI env small and explicit. Add only the variables the app reads today.
 - Upload the dossier separately when you have it. Small artifacts make agent recovery faster.
-- Nightly exists to keep broad or slow checks out of the fast PR loop, not to become a second `main.yml`.
+- Nightly exists to keep broad or slow checks out of the fast PR loop. Build the real nightly jobs when the appendix labs add the commands they depend on.
 
 ## Additional Reading
 

@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Port the Review Loop Beyond Bugbot'
 description: Keep Bugbot if you have it, but write the repository rules so a second review surface can pick up the same job without guesswork.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -30,7 +30,7 @@ Document:
 
 This file is the stable part of the loop.
 
-The lesson's **What the review playbook looks like** section in [Review Portability Beyond Bugbot](review-portability-beyond-bugbot.md) has a complete 30-line skeleton for Shelf's playbook. Copy that as your starting point and edit the blocking rules to match whatever your codebase actually cares about. The starter no longer ships the finished version — you are authoring it here.
+The lesson's **What the review playbook looks like** section in [Review Portability Beyond Bugbot](review-portability-beyond-bugbot.md) has a complete 30-line skeleton for Shelf's playbook. Copy that as your starting point and edit the blocking rules to match whatever your codebase actually cares about. The Shelf starter doesn't ship the finished version — you are authoring it here.
 
 ## Step 2: choose one alternate review surface
 

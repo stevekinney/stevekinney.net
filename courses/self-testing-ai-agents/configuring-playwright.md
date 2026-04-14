@@ -5,7 +5,7 @@ modified: 2026-04-14
 date: 2026-04-10
 ---
 
-Every Playwright suite starts with a config file, and most of them are wrong in the same three ways: the dev server is running instead of preview, runner options are buried inside `use` where Playwright silently ignores them, or the config is trying to teach every advanced trick on day one. Shelf's current starter deliberately does the opposite: it keeps the config tiny.
+Every Playwright suite starts with a config file, and most of them are wrong in the same three ways: the dev server is running instead of preview, runner options are buried inside `use` where Playwright silently ignores them, or the config is trying to teach every advanced trick up front. Shelf's current starter deliberately does the opposite: it keeps the config tiny.
 
 That's good. Students should be able to look at `playwright.config.ts` and understand it in one pass.
 
@@ -73,7 +73,7 @@ Everything in `use` applies to every test's browser context.
 
 `baseURL` is the one thing the starter absolutely wants. It means you write `page.goto('/playground')` instead of `page.goto('http://127.0.0.1:4173/playground')`. Small thing, but it keeps tests portable and keeps hostnames from leaking all over the suite.
 
-What the starter does **not** ship yet is traces, screenshots, and videos. Those are useful, but they are not day-one concepts. When you are ready for them, the setup looks like this:
+What the starter does **not** ship yet is traces, screenshots, and videos. Those are useful, but they are not concepts you need right away. When you are ready for them, the setup looks like this:
 
 ```ts
 use: {

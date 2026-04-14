@@ -5,13 +5,13 @@ modified: 2026-04-14
 date: 2026-04-06
 ---
 
-Shelf no longer ships the workflows on day one. Your job in this lab is to write them from scratch, using the current script surface as your source of truth. By the end you should be able to rebuild an equivalent workflow in your own project without relying on hidden starter scaffolding.
+The Shelf starter doesn't ship the workflows. Your job in this lab is to write them from scratch, using the current script surface as your source of truth. By the end you should be able to rebuild an equivalent workflow in your own project without relying on hidden starter scaffolding.
 
 > [!NOTE] In the current starter
-> The minimal repo does not ship `.github/workflows/main.yml` or `.github/workflows/nightly.yml`. This lab is now a true authoring exercise.
+> The minimal repo does not ship `.github/workflows/main.yml`. This lab is a true authoring exercise: the one required file here is `main.yml`. The nightly workflow is out of scope for this lab — the [appendix labs](lab-add-a-nightly-verification-workflow.md) add `nightly.yml` when the commands it depends on actually exist.
 
 > [!NOTE] Prerequisite
-> This lab assumes you've completed **Lab: Build a Failure Dossier for Shelf** and **Lab: Wire the Static Layer into Shelf** if you want the fuller CI shape with `knip`, gitleaks, and dossier uploads. If you're still on the day-one starter, begin with `lint`, `typecheck`, `test:unit`, and `test`, then extend the workflow as those later labs land.
+> This lab assumes you've completed **Lab: Build a Failure Dossier for Shelf** and **Lab: Wire the Static Layer into Shelf** if you want the fuller CI shape with `knip`, gitleaks, and dossier uploads. If you're still on the Shelf starter, begin with `lint`, `typecheck`, `test:unit`, and `test`, then extend the workflow as those later labs land.
 
 ## The task
 
@@ -19,7 +19,7 @@ Create `.github/workflows/main.yml` in the Shelf repo and walk each job with thi
 
 ## What you can verify locally
 
-You can do the whole first pass locally. Write `.github/workflows/main.yml` and `.github/workflows/nightly.yml`, then run the commands each named step maps to. On the day-one starter that is at least `npm run lint`, `npm run typecheck`, `npm run test:unit`, and `npm run test`. If you've already completed the static-layer and dossier labs, include `npm run knip`, gitleaks, and `npm run dossier` too. You can also confirm the Playwright job's environment assumptions by checking that the workflow writes a small `.env`, points `DATABASE_URL` at a CI-local SQLite file such as `file:./ci.db`, and relies on the same `playwright.config.ts` web server you already use on your machine.
+You can do the whole first pass locally. Write `.github/workflows/main.yml`, then run the commands each named step maps to. On the Shelf starter that is at least `npm run lint`, `npm run typecheck`, `npm run test:unit`, and `npm run test`. If you've already completed the static-layer and dossier labs, include `npm run knip`, gitleaks, and `npm run dossier` too. You can also confirm the Playwright job's environment assumptions by checking that the workflow writes a small `.env`, points `DATABASE_URL` at a CI-local SQLite file such as `file:./ci.db`, and relies on the same `playwright.config.ts` web server you already use on your machine.
 
 ## What remains manual or external
 
@@ -101,7 +101,7 @@ Two things worth noticing.
 
 First, the values are explicit and boring. The point is not secrecy; the point is that CI owns its own database path instead of accidentally sharing a developer default.
 
-Second, the current Shelf starter no longer needs `ORIGIN`, `BETTER_AUTH_SECRET`, or a pre-created `tmp/` directory just to boot the preview server. If your later auth work introduces extra runtime env, add only the variables the app actually reads. Don't cargo-cult stale CI scaffolding.
+Second, the current Shelf starter does not need `ORIGIN`, `BETTER_AUTH_SECRET`, or a pre-created `tmp/` directory just to boot the preview server. If your later auth work introduces extra runtime env, add only the variables the app actually reads. Don't cargo-cult stale CI scaffolding.
 
 After the `.env` bootstrap, the job runs `npm run test`. On failure it runs `npm run dossier`, uploads `playwright-report/` as one artifact and `playwright-report/dossier.md` as another, both with a 7-day retention. `playwright-report/` already contains the trace, screenshots, video, and the HTML report. The dossier is a separate upload so an agent can grab the summary without pulling the whole report tarball.
 
@@ -111,9 +111,9 @@ Shelf's `playwright.config.ts` already starts the preview server through `webSer
 
 The Playwright suite includes the screenshot tests from [Visual Regression as a Feedback Loop](visual-regression-as-a-feedback-loop.md). They run as part of the `end-to-end` job. Snapshot diffs land in `playwright-report/test-results/<spec>/` and get uploaded as part of the `playwright-report` artifact on failure. No separate upload step is needed.
 
-### The nightly workflow
+### The nightly workflow is out of scope
 
-Open `.github/workflows/nightly.yml`. It runs on a cron schedule and on manual `workflow_dispatch`, and it carries the slow checks that do not belong on every pull request: HAR refresh, dependency audits, cross-browser full runs. The appendix labs ([Lab: Add a Nightly Verification Workflow](lab-add-a-nightly-verification-workflow.md), [Lab: Add Cross-Browser Coverage](lab-add-cross-browser-coverage.md)) expand each of these into a real loop. For this lesson, notice that the nightly file exists so the cadence is explicit, not implied.
+Do **not** build `.github/workflows/nightly.yml` in this lab. Authoring a placeholder with no real jobs invites cargo-culted command names. The appendix labs ([Lab: Add Cross-Browser Coverage](lab-add-cross-browser-coverage.md), [Lab: Add a Nightly Verification Workflow](lab-add-a-nightly-verification-workflow.md)) are where that broader or slower loop becomes real, and the workflow lands alongside the commands it gates. At this point in the course, the important thing is that `main.yml` is clean, honest, and mapped to real repository commands.
 
 > [!WARNING]
 > Do **not** wire `playwright test --update-snapshots` into a scheduled job, even as a stub. A cron that updates snapshots will silently rewrite every visual baseline whenever it runs and quietly destroy your visual regression gate. Snapshot updates should always be human-triggered (a `workflow_dispatch` job, or local `--update-snapshots` followed by a PR you review).
@@ -136,7 +136,6 @@ This turns the CI jobs into hard gates. The workflow by itself is just a script;
 - [ ] You understand why `end-to-end` writes a small `.env` file before running Playwright and why the current starter can use `DATABASE_URL=file:./ci.db` without extra directory setup.
 - [ ] You understand why `unit` and `end-to-end` both `needs: static` and what happens to them if a lint error lands on a pull request.
 - [ ] You ran the corresponding local commands (`npm run lint`, `npm run typecheck`, `npm run knip`, `npm run test:unit`, `npm run test`, `gitleaks dir . --redact --config .gitleaks.toml`) on a clean working tree and they all exited zero.
-- [ ] You opened `.github/workflows/nightly.yml` and can name the slow checks it carries that do not belong on every pull request.
 - [ ] If your repository has a Git remote, you pushed a deliberately broken commit (a lint error, or a failing Playwright assertion) to a throwaway branch and watched the corresponding job fail with the dossier attached.
 - [ ] If your repository has a Git remote, branch protection is enabled on `main` requiring at least the `static` and `end-to-end` jobs to pass.
 
