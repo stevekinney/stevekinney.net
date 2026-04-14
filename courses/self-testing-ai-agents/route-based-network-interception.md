@@ -1,7 +1,7 @@
 ---
 title: Route-Based Network Interception
 description: When HAR replay is overkill, `page.route` lets you intercept, mock, modify, or block individual requests with a few lines of code.
-modified: 2026-04-10
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -34,6 +34,41 @@ test.beforeEach(async ({ context }) => {
 ```
 
 The difference matters. `page.route` only intercepts requests from that specific page. `context.route` intercepts requests from every page the context opens. For most test scenarios, `page.route` is what you want. Reach for `context.route` when you need to block something globally—analytics, tracking pixels, third-party scripts—across all pages in the test.
+
+One more detail from the [Page API](https://playwright.dev/docs/api/class-page) docs that is easy to miss: enabling routing disables the browser HTTP cache for that page or context. That is usually what you want in tests. It also means "my app got slower after I added routes" is not your imagination.
+
+## Routing is middleware, not magic
+
+Playwright's routing chain has real middleware semantics.
+
+- Routes run in **reverse registration order**. The most recently registered matching route gets the first shot.
+- A `page.route(...)` handler beats a matching `browserContext.route(...)` handler for requests from that page.
+- [`route.fallback()`](https://playwright.dev/docs/api/class-route#route-fallback) passes the request along to the next matching handler, optionally with request overrides.
+- [`route.continue()`](https://playwright.dev/docs/api/class-route#route-continue) sends the request straight to the network and stops the chain.
+
+That distinction matters a lot once you have more than one handler:
+
+```ts
+await page.route('**/*', async (route, request) => {
+  if (request.method() !== 'POST') return route.fallback();
+
+  return route.fallback({
+    headers: {
+      ...request.headers(),
+      'x-test-mode': '1',
+    },
+  });
+});
+
+await page.route('**/api/**', async (route) => {
+  const response = await route.fetch({ maxRetries: 2 });
+  const json = await response.json();
+  json.debug = true;
+  await route.fulfill({ response, json });
+});
+```
+
+Registered in that order, the `**/api/**` handler runs first, and the broad `**/*` handler runs later only if the first one falls back. If you use `continue()` in the broad handler, the narrower one never gets a turn.
 
 ## Three things you can do with a route
 
@@ -104,6 +139,8 @@ await page.route('**/*', async (route) => {
 
 This is the least common of the three in test code, but it shows up when you need to simulate a specific client environment (changing the `User-Agent`, for example) or when you need to strip headers that your test infrastructure adds but that the server doesn't expect.
 
+There is one nasty caveat from the [Route API](https://playwright.dev/docs/api/class-route): you cannot override the `Cookie` header this way. The browser fills cookies from its cookie jar, not from your handcrafted header override. If cookie state matters, use `browserContext.addCookies()` or `storageState` instead of trying to smuggle it through `continue()`.
+
 ## Modifying responses
 
 Sometimes you want the _real_ response from the server, but with one thing changed—a field added, a field removed, a status code swapped. The pattern is: fetch the original response through the route, modify it, then fulfill with the modified version.
@@ -131,6 +168,8 @@ await page.route('**/api/shelf', async (route) => {
 ```
 
 [`route.fetch`](https://playwright.dev/docs/api/class-route#route-fetch) sends the request to the real server and gives you the response object. You modify whatever you need, then call `route.fulfill` with the modified version. The browser sees the modified response as if it came from the server directly.
+
+`route.fetch()` also takes a few useful knobs of its own. The two that matter most in test code are `maxRedirects` and `maxRetries`. Redirect-heavy auth flows or the occasional transient reset on a backend call are much easier to model there than in handwritten retry wrappers around your route handler.
 
 This is powerful for testing edge cases without building a separate test server. Want to test what happens when the API returns 500? Fetch the real response, ignore it, and fulfill with a 500. Want to test what happens when one field is missing? Fetch the real response, delete the field, fulfill. The real server provides the baseline; you provide the variation.
 
@@ -197,6 +236,14 @@ This disables service workers entirely for the test context. Your routes work as
 > [!WARNING]
 > If you're using [Mock Service Worker (MSW)](https://mswjs.io/) for API mocking in your app, it registers its own service worker. That worker will intercept requests before Playwright's route handlers, making your routes invisible. If you want Playwright-level route interception, either disable MSW in the test environment or use Playwright's built-in routing instead of MSW.
 
+## Popups and WebSockets have their own edge cases
+
+Two route gotchas are worth writing down because they look like "Playwright is broken" right up until you know the rule.
+
+First: `page.route()` does **not** catch the first request of a popup page. That request happens before you have a handle on the popup page object. If you need to intercept popup traffic from the start, register the handler on the browser context with `browserContext.route()`.
+
+Second: socket-heavy apps now have [`browserContext.routeWebSocket()`](https://playwright.dev/docs/api/class-browsercontext) when you need to observe or modify WebSocket traffic. The timing rule is strict: only sockets created **after** routing is registered get intercepted. Set it up before the page creates the connection or do not bother pretending the route will see it.
+
 ## When to use routes vs. HARs
 
 The decision is usually obvious once you state the question clearly:
@@ -215,14 +262,20 @@ Both tools coexist. You can replay a HAR for most endpoints and add a `page.rout
 
 - Use `page.route` with `route.fulfill` for mocking one or two endpoints
   with known responses. Use HAR replay for larger API surfaces.
+- Treat routing as middleware. Use `route.fallback()` when later handlers
+  still need to run; use `route.continue()` only when the chain should end.
 - Use `route.abort` to simulate network failures and to block non-essential
   resources (images, fonts, analytics) that slow down tests.
 - Never use `route.continue` to silently modify request headers without
   documenting why in a comment. Header manipulation is invisible in the
   test output and easy to forget about.
+- Do not try to override cookies through `route.continue()`. Use
+  `addCookies()` or storage state for cookie setup.
 - If routes aren't intercepting as expected, check for service workers.
   Set `serviceWorkers: 'block'` in the test context when using route-based
   interception or HAR replay.
+- If popup traffic or WebSockets are involved, move the interception to
+  the browser context layer before debugging anything else.
 ```
 
 ## The one thing to remember

@@ -1,7 +1,7 @@
 ---
 title: Testing Third-Party Authentication
 description: How to test apps that sign in through Google OAuth, Okta, SAML, or another provider you do not control, without making every test depend on that provider's UI.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-12
 ---
 
@@ -54,6 +54,8 @@ setup('authenticate test user for OAuth-backed app', async ({ request }) => {
 This is not cheating. It is choosing the correct seam.
 
 Your real OAuth callback receives identity from Google and turns it into an application session. The helper should do that same _app-owned_ part directly. What you are bypassing is the provider's UI, not your own authorization model.
+
+The official docs use `playwright/.auth/` as the conventional storage-state folder. Shelf uses `playwright/.authentication/` in the workshop material. Either works. Pick one, keep it out of git, and do not let both conventions drift into the same repository.
 
 Two rules matter here:
 
@@ -140,6 +142,8 @@ The stable version is boring:
 - one storage-state file per role
 - one isolated real-provider smoke lane, only if you truly need it
 
+If you ever do need to swap a single browser context from one auth state to another inside a narrow smoke flow, newer Playwright versions add `browserContext.setStorageState()`. That is an advanced edge, not the default path. The default is still "fresh context, known state, no heroics."
+
 That structure is what keeps "auth is external" from turning into "the whole suite is external."
 
 ## CLAUDE.md rules
@@ -155,6 +159,9 @@ That structure is what keeps "auth is external" from turning into "the whole sui
   there.
 - If the auth state lives in browser storage, capture it with
   `browserContext.storageState({ indexedDB: true })`.
+- If you deliberately switch auth state mid-flow, prefer
+  `browserContext.setStorageState()` over hand-mutating cookies and
+  localStorage.
 - Any full real-provider flow belongs in a dedicated smoke lane, not the
   normal pull-request gate.
 ```

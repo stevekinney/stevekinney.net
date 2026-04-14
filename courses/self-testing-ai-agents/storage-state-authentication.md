@@ -1,7 +1,7 @@
 ---
 title: Storage State Authentication
 description: Stop logging in from the UI on every test. Log in once, save the session, reuse it everywhere.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -28,6 +28,8 @@ There's a better way. It's not new. It's in the [Playwright docs](https://playwr
 Log in once, at the start of the test run. Save the resulting browser state—cookies, `localStorage`, and, if you ask for it, `IndexedDB`—to JSON. Tell every test to start from that state instead of starting from a blank browser. Now every test opens already logged in, and you've paid the login cost exactly once.
 
 Playwright has first-class support for this. You don't need plugins, you don't need clever fixtures, you just need to know where the two knobs are.
+
+One naming note from the official [authentication docs](https://playwright.dev/docs/auth): the docs use `playwright/.auth/` as the conventional directory. Shelf already uses `playwright/.authentication/`, which is fine. The convention matters less than the rule: keep the files out of git and make the location obvious.
 
 ## The setup
 
@@ -163,7 +165,7 @@ import { test } from '@playwright/test';
 test.use({ storageState: { cookies: [], origins: [] } });
 ```
 
-Every field in the inline object matters. In current Playwright docs and the installed Playwright `1.57` types in this repository, the object form accepts exactly two top-level keys: `cookies` and `origins`.
+Every field in the inline object matters. In current Playwright docs and the installed Playwright `1.59.x` types in this repository, the object form accepts exactly two top-level keys: `cookies` and `origins`.
 
 #### `cookies`
 
@@ -205,6 +207,25 @@ So the mental model is:
 
 - `browserContext.storageState({ path, indexedDB })`: export state
 - `test.use({ storageState })` or `browser.newContext({ storageState })`: consume a file path or an inline object with `cookies` and `origins`
+
+## A few advanced auth-state edges
+
+Three smaller APIs are worth knowing once the basic pattern is in place.
+
+First, if your auth data lives in browser-managed storage beyond cookies and `localStorage`, export with `indexedDB: true`:
+
+```ts
+await page.context().storageState({
+  path: authenticationFile,
+  indexedDB: true,
+});
+```
+
+That matters for SDK-driven auth flows that stash tokens in IndexedDB instead of cookies.
+
+Second, newer Playwright versions add [`browserContext.setStorageState()`](https://playwright.dev/docs/api/class-browsercontext). That lets you clear the current cookies, `localStorage`, and IndexedDB and apply a fresh state to the same context. Most test suites are still better served by "new context per test," but if you are writing a very deliberate role-switching or reset helper, this is cleaner than trying to mutate the old session piecemeal.
+
+Third, if you test CHIPS or partitioned third-party cookies, cookie objects can carry a `partitionKey`. That is not a day-one need for Shelf. It is worth knowing the shape exists before you spend an afternoon wondering why a modern third-party cookie test is missing part of the session model.
 
 ## Wiring it into the config
 
@@ -315,6 +336,7 @@ The authentication state files contain real cookies. Do not commit them. Add thi
 
 ```
 playwright/.authentication/
+# or `playwright/.auth/` if you follow the Playwright docs convention
 ```
 
 And do not skip this step. I have seen session cookies committed to public repos twice. Both times it was an agent that did it. Put the ignore line in before the agent writes the setup file, not after.
@@ -342,7 +364,8 @@ Two options exist:
 - If a test needs a different user or role, add a new setup for that
   role and a new Playwright project that depends on it.
 - Never commit `playwright/.authentication/`. It contains real session
-  cookies.
+  cookies. The docs call this folder `playwright/.auth/`; the rule is the
+  same either way.
 - If a test is failing because it's redirected to `/login`, the problem
   is the setup file or the session cookie TTL, not the individual test.
   Do not fix it by adding `page.goto('/login')` to the test.

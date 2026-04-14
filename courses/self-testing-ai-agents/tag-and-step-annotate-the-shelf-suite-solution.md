@@ -1,7 +1,7 @@
 ---
 title: 'Solution: Tag and Step-Annotate the Shelf Suite'
 description: One walk through the steps-and-tags lab, with the exact diff each commit introduces and why.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-11
 ---
 
@@ -16,8 +16,8 @@ import { expect, test } from './fixtures';
 import { resetShelfContent } from './helpers/seed';
 
 test.describe('rate a book on your shelf', () => {
-  test.beforeEach(async ({ request }) => {
-    await resetShelfContent(request);
+  test.beforeEach(async () => {
+    await resetShelfContent();
   });
 
   test('user can rate Station Eleven', { tag: ['@critical'] }, async ({ page, request }) => {

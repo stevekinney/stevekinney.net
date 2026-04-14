@@ -1,7 +1,7 @@
 ---
 title: 'Write the CI Workflow from Scratch: Solution'
 description: Annotated walkthrough of the main.yml and nightly.yml workflows you build in the lab—what each job does, what requires GitHub Actions to verify, and what you can validate locally.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -115,7 +115,6 @@ end-to-end:
         DATABASE_URL=file:./tmp/ci.db
         ORIGIN=http://127.0.0.1:4173
         BETTER_AUTH_SECRET=ci-test-secret-ci-test-secret-ci-test-secret-32chars
-        ENABLE_TEST_SEED=true
         OPEN_LIBRARY_BASE_URL=https://openlibrary.org
         EOF
         mkdir -p tmp
@@ -144,7 +143,7 @@ This is the biggest job and the one with the most moving parts.
 
 `npx playwright install --with-deps chromium` installs Chromium and its system dependencies (fonts, libraries). The `--with-deps` flag is essential on Ubuntu—without it, Chromium launches and immediately crashes because `libatk-bridge` or `libdrm` is missing.
 
-The `.env` creation step writes CI-specific environment variables. The `BETTER_AUTH_SECRET` is a CI-only value—not a real secret, just a string that satisfies the auth library's minimum length requirement. `ENABLE_TEST_SEED=true` enables the `/api/testing/seed` endpoint that the test setup uses to reset the database. `DATABASE_URL` points at a throwaway SQLite file in `tmp/`. These are all CI-specific values that do not belong in the repository's `.env` file.
+The `.env` creation step writes CI-specific environment variables. The `BETTER_AUTH_SECRET` is a CI-only value—not a real secret, just a string that satisfies the auth library's minimum length requirement. `DATABASE_URL` points at a throwaway SQLite file in `tmp/`, which is the same file the test seed helper and the preview server will both read during the run. These are all CI-specific values that do not belong in the repository's `.env` file.
 
 The failure steps are conditional: `if: failure()`. They only run when the Playwright step fails. The dossier step calls `npm run dossier`—the script you built in the failure dossier lab—which reads `playwright-report/report.json`, extracts failing test names, error messages, screenshot paths, and trace paths, and writes a markdown summary. Both the full HTML report and the dossier markdown are uploaded as artifacts with a 7-day retention.
 

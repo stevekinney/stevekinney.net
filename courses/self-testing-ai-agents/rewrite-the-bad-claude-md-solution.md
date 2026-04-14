@@ -1,7 +1,7 @@
 ---
 title: 'Rewrite the Bad CLAUDE.md: Solution'
 description: Walkthrough of the Shelf CLAUDE.md—why every section exists, what makes it mechanically enforceable, and how to verify it.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -75,7 +75,7 @@ This section names a specific file: `tests/end-to-end/authentication.setup.ts`. 
 
 ### Database seeding and isolation
 
-Names `tests/end-to-end/helpers/seed.ts`, the `/api/testing/seed` endpoint, `ENABLE_TEST_SEED=true`, and the `workers: 1` constraint in `playwright.config.ts`. Every noun in this section is a file or a config value the agent can verify. The rule about not resetting users inside individual specs is the kind of thing that takes an hour to debug the first time you hit it—and zero seconds to prevent with a single sentence.
+Names `tests/helpers/seed.ts`, `tests/data/users.json`, `src/lib/server/users.ts`, `resetShelfContent`, `seedFreshDatabase`, and the `workers: 1` constraint in `playwright.config.ts`. Every noun in this section is a file or a config value the agent can verify. The rule about not resetting users inside individual specs is the kind of thing that takes an hour to debug the first time you hit it—and zero seconds to prevent with a single sentence.
 
 ### HAR recording
 
@@ -114,7 +114,7 @@ The completed static-layer version names `lefthook` and `gitleaks` by name. It n
 
 ### "Do not"
 
-Five specific bans. No `any`, no `@ts-expect-error`, no `eslint-disable`, no manual edits to `auth.schema.ts`, no `--no-verify`. Each one names the exact thing not to do. No ambiguity, no interpretation required.
+Five specific bans. No `any`, no `@ts-expect-error`, no `eslint-disable`, no unflagged dependency additions, no `--no-verify`. Each one names the exact thing not to do. No ambiguity, no interpretation required.
 
 ## What you still need to run
 

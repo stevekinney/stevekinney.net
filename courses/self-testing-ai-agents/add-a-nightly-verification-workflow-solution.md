@@ -1,7 +1,7 @@
 ---
 title: 'Add a Nightly Verification Workflow: Solution'
 description: Walkthrough of the shipped nightly workflow—schedule timing, job structure, placeholder honesty, and the gap between parsing YAML locally and running it on Actions.
-modified: 2026-04-10
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -104,7 +104,6 @@ cross-browser-smoke:
         DATABASE_URL=file:./tmp/ci.db
         ORIGIN=http://127.0.0.1:4173
         BETTER_AUTH_SECRET=ci-test-secret-ci-test-secret-ci-test-secret-32chars
-        ENABLE_TEST_SEED=true
         OPEN_LIBRARY_BASE_URL=https://openlibrary.org
         EOF
         mkdir -p tmp

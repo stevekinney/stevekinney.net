@@ -1,7 +1,7 @@
 ---
 title: Locators and the Accessibility Hierarchy
 description: The single most important habit in a Playwright suite an agent will maintain—locator discipline, ordered by what survives a refactor.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -72,6 +72,85 @@ await book.getByRole('button', { name: 'Rate this book' }).click();
 
 The chained version reads in the same order a person thinks: find the book, then find the rate button inside it. And `book` is a reusable `Locator`—you can assert on it, hover it, re-scope off it, pass it to another helper. The CSS version is a single string that does one thing and then you throw it away.
 
+## Composition beats `nth()`
+
+The newer [Locator API](https://playwright.dev/docs/api/class-locator) gives you better composition tools than "well, I guess I'll use `.nth(2)` and hope nobody reorders the DOM."
+
+Three worth memorizing:
+
+- **`locator.and(...)`** intersects two locators. Use it when the target has two meaningful identities and you want both of them in the selector.
+- **`locator.filter({ has, hasText, hasNot })`** narrows a collection by child content or visible text. This is the workhorse for repeated cards, rows, and list items.
+- **`locator.or(...)`** expresses "either this UI or that UI." In practice, add `.first()` when both branches might exist at once, because strict locators are not in the business of guessing which one you meant.
+
+```ts
+const composeButton = page.getByRole('button').and(page.getByTitle('Compose'));
+
+const securityDialog = page.getByText('Confirm security settings');
+
+await expect(composeButton.or(securityDialog).first()).toBeVisible();
+
+if (await securityDialog.isVisible()) {
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+}
+
+await composeButton.click();
+```
+
+The same pattern is excellent for repeated content:
+
+```ts
+const stationEleven = page
+  .getByRole('article')
+  .filter({ has: page.getByRole('heading', { name: 'Station Eleven' }) })
+  .describe('Station Eleven shelf card');
+
+await stationEleven.getByRole('button', { name: 'Rate this book' }).click();
+```
+
+This is what Playwright's [best-practice locator guidance](https://playwright.dev/docs/best-practices) means by chaining and filtering. Use the meaning already in the UI. Stop indexing into DOM order unless you truly have nothing else.
+
+## Name the locator when it matters
+
+[`locator.describe()`](https://playwright.dev/docs/api/class-locator) is one of those tiny APIs that pays rent every time the suite fails in CI. It gives the locator a human-readable label in traces and reports.
+
+That is not decorative. If your trace says "waiting for `Station Eleven shelf card`" instead of "waiting for `getByRole('article')`," the agent spends its time diagnosing the failure instead of reverse-engineering your selector chain.
+
+Use it on locators that:
+
+- show up in multiple assertions
+- represent an important UI object
+- would otherwise read like anonymous plumbing in a trace
+
+## `all()` is not a wait
+
+`locator.all()` looks friendly and behaves like a trap on dynamic UIs. It returns whatever matches _right now_. No waiting, no retry, no mercy.
+
+That makes it fine for already-stable static content and a bad default for rendering lists, search results, and delayed UI. If what you really want is "collect the text from the matching elements once the list is ready," `expect(locator).toHaveCount(...)` plus `locator.evaluateAll(...)` is usually sharper:
+
+```ts
+const results = page.getByRole('listitem');
+
+await expect(results).toHaveCount(3);
+
+const titles = await results.evaluateAll((nodes) =>
+  nodes.map((node) => node.textContent?.trim() ?? ''),
+);
+```
+
+One hop into page context beats bouncing across the protocol for every row.
+
+## Iframes are strict too
+
+Frames are where teams suddenly forget every locator rule they had five minutes ago. The modern pattern is still "start with a normal locator, narrow it until it is unique, then step into the frame."
+
+```ts
+const analyticsFrame = page.getByTitle('Quarterly dashboard').contentFrame();
+
+await analyticsFrame.getByRole('button', { name: 'Refresh' }).click();
+```
+
+The [FrameLocator docs](https://playwright.dev/docs/api/class-framelocator) call out the strictness here for a reason: if multiple frames match, Playwright throws. Good. That is better than clicking inside whichever dashboard happened to render first.
+
 ## When `data-testid` is fine
 
 I don't want to tell you `data-testid` is always wrong. Sometimes it's the right answer. Specifically:
@@ -98,7 +177,10 @@ Order of preference when locating elements:
 5. `page.getByTestId(id)`—only when 1–4 genuinely do not work. If you use this, add a line to the commit message explaining why.
 6. `page.locator(cssSelector)`—never. If you find yourself here, the component needs an accessible name.
 
-For nested elements, scope with chained locators, not compound CSS selectors.
+For nested elements, scope with chained locators, `filter({ has, hasText })`,
+`and()`, and `or().first()` before reaching for `nth()`.
+Use `locator.describe()` on important reusable locators so traces read like
+English instead of plumbing.
 ```
 
 That's nine lines. It's the most valuable nine lines in your instructions file for the next month. It will prevent more flaky tests than any retry configuration you could possibly write.
@@ -121,6 +203,7 @@ Locate by role and accessible name first. Everything else is an escape hatch, an
 
 - [Playwright UI Mode](playwright-ui-mode.md)
 - [Playwright Codegen](playwright-codegen.md)
+- [Locator API](https://playwright.dev/docs/api/class-locator)
 - [Lab: Locator Challenges](lab-locator-challenges.md)
 - [Accessibility as a Quality Gate](accessibility-as-a-quality-gate.md)
 - [The Waiting Story](the-waiting-story.md)

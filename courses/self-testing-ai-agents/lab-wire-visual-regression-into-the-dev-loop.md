@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Wire Visual Regression Into the Dev Loop'
 description: Set up Playwright's screenshot gate on Shelf, commit baselines, and watch an agent respond to a diff.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -41,8 +41,8 @@ test('design system matches the starter visual baseline', async ({ page }) => {
 import { expect, test } from '@playwright/test';
 import { resetShelfContent } from './helpers/seed';
 
-test.beforeEach(async ({ request }) => {
-  await resetShelfContent(request);
+test.beforeEach(async () => {
+  await resetShelfContent();
 });
 
 test('shelf page matches the seeded visual baseline', async ({ page }) => {

@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Harden the Flaky Rate-Book Test'
 description: Take a real, deliberately broken Playwright test and apply every Playwright-armor pattern to make it fast, isolated, and rock-solid.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -69,7 +69,7 @@ Work top-down. Fix one pattern, run the test, move on.
 
 Start by extracting the login into `tests/end-to-end/authentication.setup.ts` and wiring up `playwright.config.ts` to use it. Delete the login block from the test. In the current Shelf starter, the stable setup is a browser-driven login in the setup project: navigate to `/login`, fill the form through the page, and save state with `page.context().storageState(...)`. Do not use a raw `request.post` to the sign-in action—the current auth stack enforces CSRF-style semantics and will reject it with a 403. Run the suite to make sure authentication still works. Commit. (See the Storage State Authentication lesson for the full pattern.)
 
-Next, add (or use) `tests/end-to-end/helpers/seed.ts` to ensure the book you're going to rate is in the database before the test runs. Delete any reliance on "whatever is on the shelf already." Commit.
+Next, add (or use) `tests/helpers/seed.ts` to ensure the book you're going to rate is in the database before the test runs. Build it from `tests/data/*.json` plus the small `src/lib/server` create/delete helpers the starter ships. Delete any reliance on "whatever is on the shelf already." Commit.
 
 Next, swap the CSS selectors for `getByRole` chains. Scope by book title, then by button name inside the book. Run the test locally a few times. Commit.
 
@@ -94,9 +94,11 @@ Finally, add a second assertion using `request.get('/api/shelf/...')` to verify 
 If you finish early, pick one or more:
 
 - Add a second test in the same file that verifies a user _can't_ rate a book they haven't added to their shelf yet. Use the `request` fixture to set up the scenario (book exists, user has not added it) and assert the rating button is disabled.
+- Replace the final persistence check with `expect.poll()` so the test reads as "wait until the backend agrees," not "fire one request and hope the write already landed." Then rewrite the same check once with `expect(async () => { ... }).toPass({ timeout: ... })` so you can feel the difference between retrying one value and retrying a whole assertion block.
 - As a short experiment, try swapping the UI login in `authentication.setup.ts` for a direct `request.post('/api/auth/sign-in/email', { data: { email, password } })`. Confirm the tests still pass. Then consider the tradeoff: the raw POST is faster, but you lose the implicit smoke test on the login form.
 - Run the test under `--repeat-each=50` and see if anything flakes under load.
 - Turn off `fullyParallel` and see if the test still passes. (It should. If it doesn't, you have a seeding leak—fix it.)
+- Add a route-middleware experiment before the rating click: one broad route that calls `route.fallback()` for everything except `POST`s and stamps those with an `x-test-mode: 1` header, then a narrower `**/api/**` route that uses `route.fetch({ maxRetries: 2 })` and fulfills a patched JSON response. Confirm the chain order does what you think it does.
 - Hunt down the other test that still hits the real Open Library API without HAR isolation. (Hint: it's not in `search.spec.ts`.) Record a new HAR for it using the `UPDATE_HARS` environment variable pattern from the [Approaches to HAR Recording](approaches-to-har-recording.md) lesson, commit the HAR, and verify the test passes in replay mode on airplane Wi-Fi—or at least with your network cable unplugged.
 
 ## A successful end state

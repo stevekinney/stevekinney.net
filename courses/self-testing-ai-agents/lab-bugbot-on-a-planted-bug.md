@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Bugbot on a Planted Bug'
 description: Set up Cursor Bugbot on Shelf, open a PR that contains a planted permission bug, and watch the loop close.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -58,7 +58,7 @@ Open a PR from `planted-bug/admin-feature` into the main starter branch.
 Within a minute or two of opening the PR, Bugbot should post at least one inline comment on the diff. With the tuned config file in place, the comment should:
 
 - Identify the specific line where the permission check is wrong.
-- Explain why it's wrong (e.g., "this checks `session.userId` but not `session.isAdmin`; any logged-in user can call this endpoint").
+- Explain why it's wrong (e.g., "this only checks that `locals.user` exists, not `locals.user.isAdmin`; any logged-in user can call this endpoint").
 - Suggest a fix.
 
 If Bugbot doesn't flag the bug on the first pass, that's useful information—you've found a gap in the config. Update `.cursor/BUGBOT.md` to include a rule about admin-only endpoints and push again. Iterate until the bot catches it. This is the tuning loop.

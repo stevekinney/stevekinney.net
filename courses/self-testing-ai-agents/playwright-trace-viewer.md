@@ -1,7 +1,7 @@
 ---
 title: The Playwright Trace Viewer
 description: How to record, open, filter, and actually use Playwright's trace viewer so failed tests come with evidence instead of vibes.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-12
 ---
 
@@ -42,8 +42,11 @@ The options worth remembering:
 
 - `'on-first-retry'`: my default for CI
 - `'retain-on-failure'`: good when you want traces for every failure without enabling retries
+- `'retain-on-failure-and-retries'`: excellent when you are actively chasing a flake and want both the failing and the eventually-passing attempts to compare
 - `'on'`: useful during local debugging, not a great permanent default
 - `'off'`: the setting you forget about until the day you really needed the trace
+
+The docs are also blunt about the tradeoff: tracing everything is performance-heavy. Treat `trace: 'on'` like a debugging mode, not like a moral virtue.
 
 If you are using the [Playwright test runner](https://playwright.dev/docs/test-intro), prefer the config-level `trace` option. If you are using Playwright as a library, use [`browserContext.tracing`](https://playwright.dev/docs/api/class-tracing).
 
@@ -171,7 +174,8 @@ The viewer shows you evidence. It does not name the class of failure for you. Th
 ## Trace viewer
 
 - Record traces intentionally: `on-first-retry` in CI, `retain-on-failure`
-  when retries are off, and `on` only while actively debugging.
+  when retries are off, `retain-on-failure-and-retries` when you need flake
+  forensics, and `on` only while actively debugging.
 - Open the trace from the failing report first, then filter to the slow or
   failing action before reading console or network noise.
 - Use the trace viewer to gather evidence, not to justify a guess.

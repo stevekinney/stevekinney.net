@@ -1,7 +1,7 @@
 ---
 title: Playwright Codegen
 description: Record browser interactions and generate test code automatically—then learn when to trust the output and when to rewrite it.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -45,6 +45,31 @@ None of this is surprising. A recorder can only capture _what happened_, not _wh
 Generate the skeleton with codegen. Copy it into a real test file. Then edit: simplify locators that are more specific than they need to be, add meaningful assertions for the behavior you actually care about, extract repeated patterns into helpers, and name the test something a human would understand six months from now.
 
 Codegen is the first draft, not the final draft. Treat it accordingly.
+
+## Repair selectors before they fossilize
+
+This is the part people skip. They generate a test, it passes once, and the generated locator gets committed exactly as recorded. Congratulations, you just promoted a first draft into a maintenance burden.
+
+The [Locator API](https://playwright.dev/docs/api/class-locator) has a nice cleanup move for this: `locator.normalize()`. Point it at a recorder-generated or legacy locator, and Playwright will try to rewrite it toward the same user-facing strategies you should have reached for in the first place.
+
+```ts
+const repaired = page
+  .locator('main .toolbar > button:nth-child(2)')
+  .normalize()
+  .describe('compose button');
+
+await expect(repaired).toBeVisible();
+await repaired.click();
+```
+
+This is not a license to keep bad selectors around forever. It is a selector-repair tool. The workflow I want is:
+
+1. Generate or copy the rough locator.
+2. Normalize it.
+3. Read the result.
+4. If the result is still ugly, rewrite it by hand with `getByRole`, `filter`, `and`, or `or`.
+
+Codegen is fast. Cleanups are where the test becomes durable.
 
 ## Generating locators without recording
 

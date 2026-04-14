@@ -1,7 +1,7 @@
 ---
 title: Playwright UI Mode
 description: How to use Playwright's visual test runner to inspect the DOM, find locators, and debug failing tests without console.log.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -53,6 +53,8 @@ See the eye icon next to each test in the sidebar? Click it. Now that test re-ru
 
 It's the red-green-refactor loop without the alt-tab-and-rerun ceremony.
 
+UI Mode also gets much more useful once the suite is big enough to need archaeology instead of just debugging. You can filter by project, tag, and status, which is the difference between "open the whole suite" and "show me the failing Firefox-only `@critical` tests from yesterday."
+
 ## The other panels
 
 UI Mode has a row of tabs along the bottom that give you different views into what happened during the test. Quick tour:
@@ -75,6 +77,13 @@ Playwright gives you three flags for visual debugging, and they're not interchan
 
 If you're exploring or writing a new test, `--ui`. If you're watching a test run to see if the flow looks right, `--headed`. If you need to pause on a specific line and inspect the live page, `--debug`.
 
+For those "pause right here" moments, keep two APIs in your pocket:
+
+- [`page.pause()`](https://playwright.dev/docs/test-ui-mode) stops immediately at that call site
+- `browserContext.debugger.requestPause()` pauses before the **next** Playwright action
+
+That second one is surprisingly useful when you want to stop just before the next click or fill without rewriting the whole flow around a hardcoded pause.
+
 ## Connection to the locator hierarchy
 
 The pick locator tool doesn't just suggest _any_ locator—it suggests the best one it can, following the same priority order from the previous lesson. If you hover over a button and Playwright suggests `getByRole('button', { name: 'Add book' })`, that's the tool confirming the component's accessibility is solid.
@@ -83,7 +92,7 @@ If you hover over a button and Playwright suggests `getByTestId('add-book-btn')`
 
 This is why UI Mode matters for agent-driven testing specifically: it's a visual confirmation of the locator hierarchy you're encoding in your `CLAUDE.md`. The tool and the rule agree.
 
-## The one thing to remember
+## Things to Remember
 
 When a locator fails and you don't know why, `--ui` is faster than `console.log`. Pick locator is faster than reading the DOM. And if the suggested locator isn't `getByRole`, the component has a problem—not the test.
 
@@ -91,4 +100,5 @@ When a locator fails and you don't know why, `--ui` is faster than `console.log`
 
 - [Locators and the Accessibility Hierarchy](locators-and-the-accessibility-hierarchy.md)
 - [Playwright Codegen](playwright-codegen.md)
+- [UI Mode](https://playwright.dev/docs/test-ui-mode)
 - [Configuring Playwright](configuring-playwright.md)

@@ -1,7 +1,7 @@
 ---
 title: Git Hooks with Lefthook
 description: Wire fast, staged-only checks into every commit and push using Lefthook—a single YAML file that replaces Husky, lint-staged, and half the shell scripts in your repo.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -159,7 +159,7 @@ Add the hook to `.claude/settings.json`:
 }
 ```
 
-Then inspect the pending shell command:
+Then inspect the pending shell command. The slightly weird-looking `fs.readFileSync(0, 'utf8')` is not reading a project file from disk. In Unix processes, file descriptor `0` is stdin, and Claude Code sends the hook payload JSON there for command hooks:
 
 ```js
 import fs from 'node:fs';
@@ -237,7 +237,7 @@ Then register a `PreToolUse` hook in `.codex/hooks.json`:
 }
 ```
 
-And inspect `tool_input.command` before the shell command runs:
+And inspect `tool_input.command` before the shell command runs. Same deal here: `0` means stdin, which is where Codex delivers the hook event payload for command hooks:
 
 ```js
 import fs from 'node:fs';

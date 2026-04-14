@@ -1,7 +1,7 @@
 ---
 title: 'Bugbot on a Planted Bug: Solution'
 description: Walkthrough of the BUGBOT.md config and planted-bug branch you add for the lab—what is local, what requires a GitHub fork, and what the full loop looks like.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -27,7 +27,7 @@ Open `.cursor/BUGBOT.md`. It has three sections.
 
 Every item names the thing to look for _and_ where to look for it. "Admin routes under `src/routes/api/admin/**`" is a grep. "Unscoped queries" is a judgment call, but the scope is narrowed to user-owned resources. The Playwright patterns mirror the ESLint rules we wired in the static layer—belt and suspenders again.
 
-**What to leave alone** lists the generated artifacts, lockfiles, storage state, snapshots, HARs, build output, and `auth.schema.ts`. Without this section, Bugbot will comment on diffs in files you never edit by hand. That is noise, and noise trains you to ignore the bot.
+**What to leave alone** lists the generated artifacts, lockfiles, storage state, snapshots, HARs, and build output. Without this section, Bugbot will comment on diffs in files you never edit by hand. That is noise, and noise trains you to ignore the bot.
 
 **Tone** is three sentences. "Be direct. Name the line. Suggest a specific fix." No "consider," no summaries. This is the same voice principle from `CLAUDE.md`: if you would not say it to a colleague standing at your desk, do not let the bot say it in a review comment.
 
@@ -42,7 +42,7 @@ The `planted-bug/admin-feature` branch changes exactly one file: `src/routes/api
  /**
   * Admin surface for featuring books on the public home page. Only Shelf
 - * administrators may call this endpoint — `requireAdministrator` throws a 403
-- * when the signed-in reader is not in the administrator allowlist.
+- * when the signed-in reader does not have administrator access.
 + * administrators may call this endpoint.
   */
 

@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Locator Challenges'
 description: Practice every locator strategy against Shelf's playground page—role, label, text, test ID, and the fallbacks you hope you never need.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -106,6 +106,14 @@ Nothing here depends on GitHub, a deploy preview, or a third-party service. The 
 - [ ] No test uses `page.locator()` with a raw CSS selector.
 - [ ] The dynamic content tests (14–16) do not use `page.waitForTimeout`.
 - [ ] Running `npx playwright test playground.spec.ts --project=public` produces all green.
+
+## Stretch: locator repair and composition
+
+If you want the higher-yield reps, add these after the main 24:
+
+- **Challenge 25.** Start from a deliberately broad locator like `page.getByRole('article')`, then use `filter({ hasText: 'Piranesi' })` or `filter({ has: ... })` to narrow it to the one card you actually want. Click "Rate this book" inside that filtered card.
+- **Challenge 26.** Write one test that waits for either the "Compose" button _or_ a security dialog to appear by using `locator.or(...).first()`. If the dialog wins, dismiss it and continue.
+- **Challenge 27.** Pick one repeated locator from the file, give it a `describe('...')` label, and inspect the trace or UI Mode output so you can see the named locator show up in the tooling.
 
 ## The one thing to remember
 

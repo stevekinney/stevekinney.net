@@ -1,7 +1,7 @@
 ---
 title: Where Fixtures Actually Help
 description: A field guide to the setup, state, instrumentation, and app boundaries that actually belong in Playwright fixtures.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-12
 ---
 
@@ -70,9 +70,9 @@ type StateFixtures = {
 
 export const test = base.extend<StateFixtures>({
   seededShelf: async ({ request }, use) => {
-    await resetShelfContent(request);
+    await resetShelfContent();
     await use();
-    await resetShelfContent(request);
+    await resetShelfContent();
   },
 });
 ```
@@ -104,6 +104,16 @@ Useful instrumentation fixtures include:
 - A fixture that attaches extra artifacts to `testInfo`, such as serialized app state on failure
 
 This is one of my favorite uses for fixtures because it moves diagnostics out of the test body. The spec keeps talking about behavior. The fixture quietly makes the artifacts better.
+
+The [TestInfo API](https://playwright.dev/docs/api/class-testinfo) is the reason this category is stronger than "log more stuff."
+
+- `testInfo.outputPath()` gives you a per-test safe temp file location
+- `testInfo.snapshotPath()` resolves where a snapshot should live
+- `testInfo.attach()` copies files into a reporter-visible artifact
+- `testInfo.retry` tells you which attempt you are on
+- `testInfo.setTimeout()` lets the currently running test buy more time on purpose
+
+This is exactly the kind of thing that belongs in fixtures rather than in the test body. If you only want the expensive extra logging on retry, `testInfo.retry` is the switch. If a setup helper needs more time because it is booting a local service, `testInfo.setTimeout()` is the honest place to say so. If you want a dumped app-state JSON file on failure, `outputPath()` plus `attach()` is the shape.
 
 ## Environment fixtures
 
@@ -187,6 +197,9 @@ If the answer breaks at step 4, I am probably trying to hide behavior instead of
 - If the setup mutates state, the fixture owns teardown after `await use(...)`.
 - Prefer composing two small fixtures over building one giant fixture that
   hides half the test's world behind a vague name.
+- When a fixture exists for diagnostics, use `testInfo` on purpose:
+  `outputPath`, `snapshotPath`, `attach`, `retry`, and `setTimeout`
+  are the tools, not ad-hoc temp-file math.
 ```
 
 ## The thing to remember

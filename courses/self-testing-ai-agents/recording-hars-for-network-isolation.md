@@ -1,7 +1,7 @@
 ---
 title: Recording HARs for Network Isolation
 description: How to record a real HTTP session once and replay it deterministically in every test, so your suite stops depending on someone else's server.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -38,6 +38,8 @@ test('search for books', async ({ page }) => {
 The `url` option takes a [glob pattern](https://playwright.dev/docs/network#glob-url-patterns) (`*` matches anything except `/`, `**` matches anything including `/`, and the glob must match the full URL). Playwright also accepts a `RegExp` here. The `update` option is a boolean that defaults to `false` (replay mode).
 
 Run this once, with `update: true`, pointed at the real API. Playwright records every matching request and writes a HAR file to `tests/fixtures/open-library-search.har`. Open it in your editor—it's JSON, it's enormous, and you should resist editing it by hand.
+
+One detail from the [Page API](https://playwright.dev/docs/api/class-page) docs matters here: when you are recording with `update: true`, Playwright writes the refreshed HAR when the page or browser context closes. If you kill the run early, you can end up wondering where the update went. The answer is usually "you never let the context shut down cleanly."
 
 > [!WARNING]
 > HARs are machine-generated fixtures with nested request/response data and optional attached body files. Casual hand-edits are brittle—it's easy to break a response body or invalidate a match without realizing. Automate changes with a script and always verify replay afterward.
@@ -86,6 +88,8 @@ A few ways to make it less sharp:
 
 **Keep `notFound: 'abort'` as the default.** `'abort'` (the default) kills unmatched requests immediately—the browser sees a network error, and your test fails loudly. `'fallback'` lets unmatched requests pass through to other route handlers and eventually to the real network. Use `'fallback'` only when you want _some_ requests to be live while replaying only the API traffic.
 
+That `'fallback'` option is not hypothetical. It is the clean way to build a hybrid live-and-replay setup: replay the API you care about, let everything else continue through the normal route chain, and keep the test explicit about where the live boundary is.
+
 **Record one scenario at a time.** One HAR per test file, scoped to one scenario, is easier to regenerate and debug when it breaks.
 
 **When you see "request not found in HAR."** Playwright throws this when a request matches the `url` glob but no HAR entry matches the full URL + method + payload. Common causes: a query parameter changed order, a new header appeared, or the request body is slightly different. **Inspect the diff first**—compare what the test is sending against what the HAR has. Run with `DEBUG=pw:api` to see the exact request Playwright tried to match. Only re-record after you understand _why_ the request changed.
@@ -100,6 +104,8 @@ When your app fires concurrent requests to the same endpoint (e.g., three parall
 
 > [!WARNING]
 > Service Workers intercept network requests _before_ Playwright's route handler sees them. If your app registers a Service Worker (common in PWAs or when a library installs one for caching), those requests bypass `routeFromHAR` entirely—they're served from the Service Worker's cache, not from the HAR. Set `serviceWorkers: 'block'` in your Playwright config when you rely on HAR replay.
+
+One more route-layer wrinkle: if your test opens a popup, `page.routeFromHAR()` on the original page does not intercept the popup's first request. That first navigation belongs to the browser context. If popup traffic is part of the flow, register the HAR replay at the `browserContext` layer instead of the page layer.
 
 ## Refreshing HARs
 

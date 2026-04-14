@@ -1,7 +1,7 @@
 ---
 title: Deterministic State and Test Isolation
 description: How to seed, reset, and isolate database state so tests never leak into each other and the suite can run in parallel without tears.
-modified: 2026-04-10
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -31,46 +31,59 @@ Let's look at both.
 
 ## Rule one: seeding
 
-Shelf uses SQLite via [Drizzle](https://orm.drizzle.team/). For end-to-end tests, we want a way to reset the database to a known state before each test (or each test file). The naive version is "import the Drizzle client from `$lib/server/db` and wipe the tables"—and that does not work from a Playwright spec, because `$lib/server/...` modules depend on server-only runtime context the test process does not have.
+Shelf uses SQLite via [Drizzle](https://orm.drizzle.team/). For end-to-end tests, we want a way to reset the database to a known state before each test (or each test file). The naive version is "scatter `db.delete(...)` calls through the test files." That works for an afternoon and turns into a maintenance mess immediately.
 
-The pattern that _does_ work is a dev-only HTTP endpoint that the test calls through the `request` fixture. Shelf ships exactly that at `src/routes/api/testing/seed/+server.ts`. The endpoint is gated on an `ENABLE_TEST_SEED=true` environment variable and only runs inside the Playwright webServer, so it can never fire in production:
+The current starter intentionally stops one layer short of shipping the actual seed helper. Instead it gives you two building blocks:
+
+- small server-side utilities like `createUser`, `createBook`, and `createShelfEntry` in `src/lib/server/`
+- JSON fixtures in `tests/data/*.json`
+
+Then the deterministic seeding lab has you write `tests/helpers/seed.ts` on top of those pieces. The point is pedagogical: students should focus on Playwright and deterministic state, not spend the whole lesson reverse-engineering raw Drizzle insert calls.
+
+The starter utilities look roughly like this:
 
 ```ts
-// src/routes/api/testing/seed/+server.ts (abridged)
-import { env } from '$env/dynamic/private';
-import { error, json } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
-import { book, shelfEntry } from '$lib/server/db/schema';
+// src/lib/server/users.ts
+export async function createUser({ email, password, name }: CreateUserInput) {
+  // hashes the password and inserts the row
+}
 
-export const POST: RequestHandler = async () => {
-  if (env.ENABLE_TEST_SEED !== 'true') error(404, 'Not Found');
+// src/lib/server/books.ts
+export async function createBook({ openLibraryId, title, author, description }: CreateBookInput) {
+  // inserts the row and returns it
+}
 
-  await db.delete(shelfEntry);
-  await db.delete(book);
-  await db.insert(book).values([
-    { openLibraryId: 'OL1W', title: 'Station Eleven', author: 'Emily St. John Mandel' },
-    { openLibraryId: 'OL2W', title: 'Piranesi', author: 'Susanna Clarke' },
-    { openLibraryId: 'OL3W', title: 'Annihilation', author: 'Jeff VanderMeer' },
-  ]);
-  // ... ensure a known reader account and seed a shelf entry for them ...
-
-  return json({ ok: true });
-};
+// src/lib/server/shelf-entries.ts
+export async function createShelfEntry({ userId, bookId, status, rating }: CreateShelfEntryInput) {
+  // inserts the row and returns it
+}
 ```
 
-The test-side helper at `tests/end-to-end/helpers/seed.ts` just POSTs to that endpoint through Playwright's `request` fixture:
+And the seed data lives in plain JSON:
+
+```json
+// tests/data/users.json
+[
+  {
+    "email": "alice@example.com",
+    "password": "ShelfStarter123!",
+    "name": "Alice Reader",
+    "isAdmin": false
+  }
+]
+```
+
+The helper students build in the lab reads those JSON files, calls the server utilities, and exports the two functions the rest of the suite relies on:
 
 ```ts
-// tests/end-to-end/helpers/seed.ts
-import type { APIRequestContext } from '@playwright/test';
+// tests/helpers/seed.ts
+export async function seedFreshDatabase() {
+  // reset users, books, and shelf entries from tests/data/*.json
+}
 
-export const resetShelfContent = async (request: APIRequestContext) => {
-  const response = await request.post('/api/testing/seed', { data: {} });
-  if (!response.ok()) {
-    throw new Error(`Seeding failed: ${response.status()}`);
-  }
-  return response.json();
-};
+export async function resetShelfContent() {
+  // preserve users, reset books + shelf entries from tests/data/*.json
+}
 ```
 
 Then in a test:
@@ -78,8 +91,8 @@ Then in a test:
 ```ts
 import { resetShelfContent } from './helpers/seed';
 
-test.beforeEach(async ({ request }) => {
-  await resetShelfContent(request);
+test.beforeEach(async () => {
+  await resetShelfContent();
 });
 
 test('alice can add Piranesi to her shelf', async ({ page }) => {
@@ -113,7 +126,7 @@ export default defineConfig({
   },
 });
 
-// tests/end-to-end/helpers/seed.ts
+// src/lib/server/db/index.ts
 const workerDatabasePath = `./test-database-${process.env.TEST_WORKER_INDEX ?? 0}.sqlite`;
 ```
 
@@ -125,7 +138,7 @@ Each worker points the app at a different SQLite file. When Playwright launches 
 
 Shelf's current `playwright.config.ts` pins `workers: 1`. That's a deliberate intermediate step. The starter ships with `fullyParallel: true` so tests that _could_ run in parallel within a single worker still do, and individual specs pay the seeding cost on `beforeEach` instead of leaking state between files. But every worker currently points at the same SQLite file, so running more than one worker would let two tests trample each other.
 
-The right next move for a project like this is the per-worker-database pattern above. Shelf defers it because it is a bigger plumbing change than this lesson: every server-side DB client needs to read `TEST_WORKER_INDEX`, the seed endpoint needs to know which file to reset, and the webServer command has to forward the index in. When Shelf grows stronger test isolation in a later phase, `workers: 1` becomes `workers: 4` and this lesson's "per-worker databases" pattern slots in wholesale.
+The right next move for a project like this is the per-worker-database pattern above. Shelf defers it because it is a bigger plumbing change than this lesson: every server-side DB client needs to read `TEST_WORKER_INDEX`, and the seed helper has to follow whichever file that DB layer points at. When Shelf grows stronger test isolation in a later phase, `workers: 1` becomes `workers: 4` and this lesson's "per-worker databases" pattern slots in wholesale.
 
 Treat `workers: 1` as a floor, not a ceiling. If your suite starts failing when you flip it up, that's not a signal to turn it back off—it's a signal that your isolation was incomplete. Find the leaking state and fix it.
 
@@ -142,8 +155,8 @@ type Fixtures = {
 };
 
 export const test = base.extend<Fixtures>({
-  seeded: async ({ request }, use) => {
-    const result = await resetShelfContent(request);
+  seeded: async ({}, use) => {
+    const result = await resetShelfContent();
     await use(result);
     // no cleanup—reseeding handles it on the next test
   },
@@ -172,8 +185,7 @@ The fixture runs automatically when any test imports this `test`. No more `befor
 ## Database state in end-to-end tests
 
 - Every test runs against a freshly seeded database. The seed lives in
-  `tests/end-to-end/helpers/seed.ts`. The helper calls the dev-only
-  `/api/testing/seed` endpoint, which is gated on `ENABLE_TEST_SEED=true`.
+  `tests/helpers/seed.ts`.
 - Tests must not depend on data left by previous tests. If a test
   needs specific data, add it to the seed or insert it explicitly at the
   top of the test.
@@ -190,7 +202,7 @@ That last rule matters. Agents will happily disable parallelism to make a failin
 
 ## The one thing to remember
 
-Two invariants make a Playwright suite trustworthy: every test starts in a known state, and no two tests can see each other's state. You get the first from a dev-only seed endpoint every spec calls through the `request` fixture. You get the second by choosing a strategy your database can support—per-worker files, transactions, or namespacing—and by treating flaky parallelism as a leak to fix, not a knob to turn down.
+Two invariants make a Playwright suite trustworthy: every test starts in a known state, and no two tests can see each other's state. You get the first from a seed helper every spec can call directly. You get the second by choosing a strategy your database can support—per-worker files, transactions, or namespacing—and by treating flaky parallelism as a leak to fix, not a knob to turn down.
 
 ## Additional Reading
 

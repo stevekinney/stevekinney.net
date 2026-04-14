@@ -1,7 +1,7 @@
 ---
 title: 'Lab: Walk the Shelf CI Workflow'
 description: Walk the GitHub Actions workflow Shelf ships. Understand why each job is shaped the way it is, verify every named step maps to a real local command, and prove each layer fails loud enough for an agent to recover.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -94,7 +94,6 @@ The `unit` job runs Vitest and `needs: static`. It reuses the same cache key. It
     DATABASE_URL=file:./tmp/ci.db
     ORIGIN=http://127.0.0.1:4173
     BETTER_AUTH_SECRET=ci-test-secret-ci-test-secret-ci-test-secret-32chars
-    ENABLE_TEST_SEED=true
     OPEN_LIBRARY_BASE_URL=https://openlibrary.org
     EOF
     mkdir -p tmp
@@ -104,9 +103,7 @@ Three things worth noticing.
 
 First, the values are hardcoded and obviously fake. `ci-test-secret-ci-test-secret-ci-test-secret-32chars` satisfies Better Auth's length check but it is **not a secret** and does not belong in GitHub Actions secret storage. It lives in the workflow file deliberately, because the `ci.db` it protects is created fresh every run.
 
-Second, `ENABLE_TEST_SEED=true` is on. The seed endpoint is gated on that flag for safety — production environments never have it. CI runs need it because the e2e setup project POSTs to `/api/testing/seed` to seed alice and the books the tests assert against.
-
-Third, `mkdir -p tmp` matters. `DATABASE_URL=file:./tmp/ci.db` assumes the directory exists; libsql errors with `ConnectionFailed` if it doesn't. One missing `mkdir` is the kind of thing that passes locally (because your local `tmp/` has been around since yesterday) and fails in CI (because the runner's checkout doesn't include empty directories).
+Second, `mkdir -p tmp` matters. `DATABASE_URL=file:./tmp/ci.db` assumes the directory exists; libsql errors with `ConnectionFailed` if it doesn't. One missing `mkdir` is the kind of thing that passes locally (because your local `tmp/` has been around since yesterday) and fails in CI (because the runner's checkout doesn't include empty directories).
 
 After the `.env` bootstrap, the job runs `npm run test:e2e`. On failure it runs `npm run dossier`, uploads `playwright-report/` as one artifact and `playwright-report/dossier.md` as another, both with a 7-day retention. `playwright-report/` already contains the trace, screenshots, video, and the HTML report. The dossier is a separate upload so an agent can grab the summary without pulling the whole report tarball.
 
@@ -138,7 +135,7 @@ This turns the CI jobs into hard gates. The workflow by itself is just a script;
 - [ ] You opened `.github/workflows/main.yml` and read every step in each of the three jobs.
 - [ ] You can point at the step that gates every layer built earlier today: lint, typecheck, knip, gitleaks, Vitest, Playwright, visual regression, the dossier upload.
 - [ ] You understand why the gitleaks step uses the direct CLI instead of the `gitleaks-action@v2` wrapper (first-push branches).
-- [ ] You understand why `end-to-end` writes a `.env` file with `ENABLE_TEST_SEED=true` and `mkdir -p tmp` before running Playwright.
+- [ ] You understand why `end-to-end` writes a `.env` file with `DATABASE_URL=file:./tmp/ci.db` and `mkdir -p tmp` before running Playwright.
 - [ ] You understand why `unit` and `end-to-end` both `needs: static` and what happens to them if a lint error lands on a pull request.
 - [ ] You ran the corresponding local commands (`npm run lint`, `typecheck`, `knip`, `test:unit`, `gitleaks dir . --redact --config .gitleaks.toml`) on a clean working tree and they all exited zero.
 - [ ] You opened `.github/workflows/nightly.yml` and can name the slow checks it carries that do not belong on every pull request.

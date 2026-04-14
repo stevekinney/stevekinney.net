@@ -1,7 +1,7 @@
 ---
 title: 'Flaky-Test Triage: When Retries Are Lying to You'
 description: A four-bucket diagnostic framework for flaky tests, and the rule that prevents agents from bumping `retries` every time they see a red build.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-11
 ---
 
@@ -27,7 +27,7 @@ Link back: this is the exact failure mode [The Waiting Story](the-waiting-story.
 
 **Symptom**: test N passes in isolation and fails when test N−1 runs first. The failure is about some book, some user, or some setting that test N−1 left behind. Run the full suite and it's flaky. Run the single test and it's fine.
 
-**Example**: test N−1 adds Annihilation to the shelf and doesn't clean up. Test N counts shelf entries and expects two, because two is what the seed endpoint shelves. It finds three. Fail.
+**Example**: test N−1 adds Annihilation to the shelf and doesn't clean up. Test N counts shelf entries and expects two, because two is what `resetShelfContent()` shelves. It finds three. Fail.
 
 **Fix**: put state management in a _fixture with teardown_, not in `beforeEach` discipline. The [Fixtures lesson](fixtures-worker-scoped-test-scoped.md) is the prerequisite here. The rule is that mutating fixtures have a teardown half that's awaited, and the teardown is what keeps the leak from reaching the next test.
 

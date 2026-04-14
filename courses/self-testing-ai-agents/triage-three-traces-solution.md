@@ -1,7 +1,7 @@
 ---
 title: 'Solution: Triage Three Traces'
 description: One walk through the three lab traces — Trace A, Trace B, and Trace C — with the smoking-gun evidence in each pane and the fix for each failure.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-11
 ---
 
@@ -68,7 +68,7 @@ This is the exact failure mode [The Waiting Story](the-waiting-story.md) warned 
 
 ## Trace C: order-dependent rendering / locator ambiguity
 
-**Spec**: `trace-c-stale-locator.spec.ts`, which navigates to `/shelf` (which already has Station Eleven and Piranesi shelved by the seed endpoint) and calls `page.getByRole('button', { name: 'Rate this book' }).click()` without scoping to a specific article.
+**Spec**: `trace-c-stale-locator.spec.ts`, which navigates to `/shelf` (which already has Station Eleven and Piranesi shelved by the seed helper from the deterministic-state lab) and calls `page.getByRole('button', { name: 'Rate this book' }).click()` without scoping to a specific article.
 
 **Failing step name**: the click on line 33, `page.getByRole('button', { name: 'Rate this book' }).click()`.
 

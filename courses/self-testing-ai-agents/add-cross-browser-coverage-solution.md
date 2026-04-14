@@ -1,7 +1,7 @@
 ---
 title: 'Add Cross-Browser Coverage: Solution'
 description: Walkthrough of the shipped Playwright projects, the named cross-browser command, and the nightly job that runs the expanded matrix without slowing down the fast loop.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -102,7 +102,6 @@ cross-browser-smoke:
         DATABASE_URL=file:./tmp/ci.db
         ORIGIN=http://127.0.0.1:4173
         BETTER_AUTH_SECRET=ci-test-secret-ci-test-secret-ci-test-secret-32chars
-        ENABLE_TEST_SEED=true
         OPEN_LIBRARY_BASE_URL=https://openlibrary.org
         EOF
         mkdir -p tmp

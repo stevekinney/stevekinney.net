@@ -1,7 +1,7 @@
 ---
 title: CI as the Loop of Last Resort
 description: By the time CI fires, the agent should have caught 95% of mistakes locally. CI is what catches the last 5% plus the environment-specific ones you can't catch locally.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -106,6 +106,20 @@ The actual GitHub Actions `cache` action in Shelf looks like:
 ```
 
 That is the exact cache shape Shelf uses. Start there before you invent anything more clever.
+
+## Sharding and reports, once the suite earns them
+
+Once the end-to-end job gets large enough, the next knob is sharding. The important detail from the Playwright docs is that `fullyParallel: true` makes sharding more even because work gets balanced at the **test** level instead of the **file** level. If one file is a monster and the others are tiny, that difference matters.
+
+When you do shard, switch the reporter for CI fan-out to the [blob report format](https://playwright.dev/docs/test-reporters). Blob reports include the tests plus their attachments, survive artifact upload/download cleanly, and can be merged later with:
+
+```bash
+npx playwright merge-reports merged-report blob-report-*
+```
+
+If the run needs environment labeling, add a global `tag` in the config so merged reports can still tell you "this came from `@firefox-smoke`" or "`@APIv2`" instead of dumping every shard into one anonymous bucket.
+
+And if you host attachments somewhere other than the checked-out artifact directory, [`attachmentsBaseURL`](https://playwright.dev/docs/test-reporters) is how the HTML report knows where to look. That is one of those settings you never need until the day your report links all point at nowhere.
 
 ## Fail fast, but not too fast
 

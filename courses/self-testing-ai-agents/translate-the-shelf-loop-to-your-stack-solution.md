@@ -1,7 +1,7 @@
 ---
 title: 'Translate the Shelf Loop to Your Stack: Solution'
 description: Example filled-in translation for a Next.js + Prisma + Jest stack, with guidance on evaluating your own translation.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -61,8 +61,9 @@ Imagine you're translating Shelf's loops to a Next.js 14 app with Prisma, Jest f
 
 ## Deterministic data reset
 
-- **Shelf:** `resetShelfContent` helper POSTs to `/api/testing/seed`, gated on
-  `ENABLE_TEST_SEED=true`. Resets books and ratings without touching users.
+- **Shelf:** `resetShelfContent` in `tests/helpers/seed.ts`, built from
+  `tests/data/*.json` and small server utilities like `createUser` and
+  `createBook`. Resets books and ratings without touching users.
 - **This stack:** `prisma/seed.ts` with a `resetTestData` function that truncates
   the `Book`, `Review`, and `Shelf` tables. Called via a test-only API route
   `/api/testing/reset` gated on `NODE_ENV=test`. User table untouched.

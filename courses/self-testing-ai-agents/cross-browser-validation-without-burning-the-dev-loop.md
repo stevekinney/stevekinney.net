@@ -1,7 +1,7 @@
 ---
 title: Cross-Browser Validation Without Burning the Dev Loop
 description: Chromium stays the fast default. This appendix shows where Firefox and WebKit belong, and how to add them without making every pull request miserable.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -135,6 +135,10 @@ npx playwright test --project=firefox-smoke --project=webkit-smoke --grep @cross
 
 Projects say "which browser + which file match pattern." Tags say "which individual tests inside that match pattern." Use projects when the split is by _file_ (all the smoke specs go to Firefox, none of the rate-book specs do), and tags when the split is by _test within a file_ (the rate-book file has ten tests but only two earn cross-browser coverage).
 
+If you are merging reports from multiple browser jobs later, add a global config `tag` per lane so the merged report can still tell you "this came from the Firefox smoke job" instead of flattening everything into one unlabeled blob of evidence.
+
+If the smoke set grows enough to need sharding, `fullyParallel: true` is the setting that keeps shards balanced at the test level instead of the file level. And if the merged HTML report is serving attachments from some external bucket instead of the checked-out artifact directory, [`attachmentsBaseURL`](https://playwright.dev/docs/test-reporters) is what keeps those trace and screenshot links from turning into dead air.
+
 ## WebKit is strong signal, not a legal guarantee
 
 Playwright gives you Chromium, Firefox, and WebKit. That is exactly what you want for automation coverage. It is also worth being honest about the nuance: WebKit is your best automated signal for Safari-family behavior, not a magical guarantee about every real-device Safari quirk in the wild.
@@ -149,6 +153,7 @@ I want:
 
 - browser name in the job or artifact name
 - retained traces and screenshots per browser
+- blob reports per browser when the run is sharded or split across jobs
 - a small enough test set that the failing browser is obvious
 
 When Firefox fails and Chromium passes, the agent should not need a detective novel. It should get a clean artifact and a clean reproduction command.

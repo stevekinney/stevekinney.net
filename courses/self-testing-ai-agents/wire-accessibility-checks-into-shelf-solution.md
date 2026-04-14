@@ -1,7 +1,7 @@
 ---
 title: 'Wire Accessibility Checks Into Shelf: Solution'
 description: Walkthrough of the shipped accessibility spec and manual checklist—what gets automated, what stays manual, and how the two work together.
-modified: 2026-04-10
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -34,8 +34,8 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from './fixtures';
 import { resetShelfContent } from './helpers/seed';
 
-test.beforeEach(async ({ request }) => {
-  await resetShelfContent(request);
+test.beforeEach(async () => {
+  await resetShelfContent();
 });
 
 test('shelf page has no automated accessibility violations', async ({ page }) => {
@@ -61,7 +61,7 @@ Let me unpack what is happening here and why each piece matters.
 
 **Imports from `./fixtures`, not `@playwright/test`.** The Shelf starter has a custom fixtures file that provides authenticated browser context. These routes—`/shelf` and `/search`—are protected. If you import from `@playwright/test` directly, you get an unauthenticated browser and every test redirects to `/login`. The fixture handles that for you.
 
-**`resetShelfContent` in `beforeEach`.** Each test starts with a known database state. This is the same seed helper the rest of the end-to-end suite uses. It resets shelf content—books, ratings, shelves—without touching the user table, so the stored authentication session stays valid.
+**`resetShelfContent` in `beforeEach`.** Each test starts with a known database state. This is the same seed helper you build in the deterministic seeding lab. It resets shelf content—books, ratings, shelves—without touching the user table, so the stored authentication session stays valid.
 
 **`await expect(page.getByRole('heading', { level: 1 })).toBeVisible()`** before running the scan. This is a stability gate. The axe scan runs against the current DOM, so if you fire it before the page has rendered its primary content, you are scanning a loading skeleton. Waiting for the `h1` to appear is a cheap, reliable signal that the route has finished its initial render. No `waitForTimeout`, no `networkidle`—just a real element assertion.
 

@@ -1,7 +1,7 @@
 ---
 title: 'test.step, Tags, and Annotations'
 description: Three Playwright features that agents ignore, and that turn out to be the difference between a failing test you can debug and one you have to reverse-engineer.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-11
 ---
 
@@ -64,6 +64,29 @@ Now the failure says `Error in step: verify the rating persists on the shelf —
 
 The heuristic I use: every top-level user action gets a step. Navigate, click-through-a-flow, assert-outcome. Four steps for a four-act test. Not one step per line.
 
+There are a few lesser-known step options from the [Test API](https://playwright.dev/docs/api/class-test) that are worth using once the suite gets serious:
+
+- `box: true` makes failures point at the step call site instead of some deeper line inside the callback
+- `timeout` applies only to that step
+- `location` lets you control how the step shows up in reports
+- `test.step(...)` returns the callback value, so helpers can use it as a real abstraction boundary
+
+```ts
+async function login(page: Page) {
+  return test.step(
+    'login',
+    async () => {
+      await page.getByLabel('Email').fill('steve@example.com');
+      await page.getByLabel('Password').fill(process.env.PW_PASSWORD!);
+      await page.getByRole('button', { name: 'Sign in' }).click();
+    },
+    { box: true, timeout: 15_000 },
+  );
+}
+```
+
+That is not "pretty report grouping." That is test structure with better failure ergonomics.
+
 ## Tags are how you slice a suite by intent
 
 Every `test()` call can take a `tag` option:
@@ -104,9 +127,13 @@ Annotations show up in the HTML report and the JSON reporter output. Use them fo
 - Linking a test to the issue it was written for.
 - Linking a test to the incident it regressed against.
 - Flagging a test as known-flaky with a pointer to the quarantine discussion.
-- Recording environment assumptions (`{ type: 'requires', description: 'ENABLE_TEST_SEED=true' }`).
+- Recording environment assumptions (`{ type: 'requires', description: 'DATABASE_URL points at a disposable test database' }`).
 
 Don't use annotations as a substitute for comments. They're structured data meant for tooling, not prose meant for the next reader. A comment above the test is clearer than an annotation for "this tests the empty-results case."
+
+## Skipping a step is not the same as skipping a test
+
+There is a `test.step.skip()` helper, but the docs nudge you toward `testStepInfo.skip()` when you are already inside a step and need to bail out of _that_ unit of work. The distinction matters because "skip the whole test" and "skip this step because the environment does not support it" are not the same story in the report.
 
 ## `expect.soft` is the companion to `test.step`
 
@@ -143,6 +170,11 @@ In the fuller course version of Shelf, the concrete reps are `tests/end-to-end/r
 - Tag every test with at least one of `@critical` / `@slow` / `@flaky-quarantine`. Never tag a test `@smoke` in Shelf — reserve that term for any future smoke-only file or project split.
 - Use `test.info().annotations.push(...)` to link a test to its issue, incident, or known-flake record. Do not use annotations as a substitute for comments.
 - Use `expect.soft` when a single step is verifying a list of things that should all be true. Use plain `expect` for preconditions.
+- Use step options on purpose: `box: true` when the step call site is the
+  useful failure location, and per-step `timeout` when one phase is slower
+  than the rest of the test.
+- Use `testStepInfo.skip()` when the decision is "skip this step," not
+  "skip the whole test."
 - Keep `test.step` nesting to two levels deep at most. If you need three, the test is doing too much.
 ```
 

@@ -1,7 +1,7 @@
 ---
 title: Accessibility as a Quality Gate
 description: Semantic locators are a great start, but they are not an accessibility strategy. This is the layer that turns "probably accessible" into a real gate.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -74,6 +74,39 @@ That is the entire shape. Three lines of setup, one assertion. The accessibility
 
 The day-one starter omits this check. Once you trust the scan enough to make it part of the main gate, let `tests/end-to-end/accessibility.spec.ts` ride the normal `npm run test:e2e` loop instead of hiding it behind a sidecar command.
 
+## Structural accessibility checks with ARIA snapshots
+
+axe is great at rules. It is not trying to tell you whether the _shape_ of a menu, dialog, tree, or form quietly changed in a way that still passes axe but is now wrong for assistive tech.
+
+That is where [ARIA snapshots](https://playwright.dev/docs/aria-snapshots) earn their keep. Playwright can capture the accessibility tree for a locator as YAML and compare it with `toMatchAriaSnapshot()`:
+
+```ts
+const dialog = page.getByRole('dialog', { name: 'Rate Station Eleven' });
+
+await expect(dialog).toMatchAriaSnapshot(`
+- dialog "Rate Station Eleven":
+  - heading "Rate Station Eleven"
+  - radio "1 star"
+  - radio "2 stars"
+  - radio "3 stars"
+  - radio "4 stars"
+  - radio "5 stars"
+  - button "Save rating"
+  - button "Cancel"
+`);
+```
+
+You can also inspect the raw structure with `await dialog.ariaSnapshot()` when you are figuring out what to lock in.
+
+This is not a replacement for axe. It is the complement:
+
+- **axe** catches invalid labels, broken ARIA relationships, and rules violations
+- **ARIA snapshots** catch structural drift in the accessible tree
+
+Use them for the UI where accessible structure _is_ the contract: dialogs, menus, nav landmarks, accordions, grouped forms, and anything else where the semantics matter more than the pixels.
+
+Keep the snapshot focused. Snapshotting an entire page because "why not" is how you create noisy golden files nobody trusts.
+
 ## What the automated gate cannot prove
 
 Accessibility has a manual layer that you cannot wish away. The [W3C keyboard accessibility guidance](https://www.w3.org/WAI/WCAG22/Understanding/keyboard-accessible.html) is still the right bar here: all functionality must be operable from a keyboard, and focus cannot get trapped in weird places.
@@ -137,6 +170,8 @@ That's it. No speeches about how accessibility is important. The gate already sa
   a sentence explaining why the component remains accessible.
 - For dialogs, menus, and other complex interactions, run the manual
   keyboard checklist in addition to the automated scan.
+- For UI whose accessible structure matters, add a focused ARIA snapshot
+  with `toMatchAriaSnapshot()` alongside the axe scan.
 - Do not claim a feature is accessible merely because Playwright locators
   use roles and labels. That is upstream pressure, not proof.
 ```
@@ -156,4 +191,5 @@ Semantic locators make accessible markup more likely. They do not make accessibi
 ## Additional Reading
 
 - [Locators and the Accessibility Hierarchy](locators-and-the-accessibility-hierarchy.md)
+- [ARIA Snapshots](https://playwright.dev/docs/aria-snapshots)
 - [Lab: Wire Accessibility Checks Into Shelf](lab-wire-accessibility-checks-into-shelf.md)

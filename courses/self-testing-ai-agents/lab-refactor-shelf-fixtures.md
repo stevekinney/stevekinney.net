@@ -1,20 +1,20 @@
 ---
 title: "Lab: Refactor Shelf's Fixtures"
 description: Take a deliberately smell-heavy fixture file and turn it into something you'd be willing to merge, without breaking the spec that exercises it.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-11
 ---
 
-The fixtures lesson gave you the rules. This lab makes you apply them to real code. The Shelf starter ships a committed starting point at `tests/end-to-end/labs/fixtures/bad-fixtures.ts` — a fixture file that runs and passes, but has every smell the lesson calls out.
+The fixtures lesson gave you the rules. This lab makes you apply them to real code. The Shelf starter ships a committed starting point at `tests/labs/fixtures/fixtures.ts` — a fixture file that runs and passes, but has every smell the lesson calls out.
 
 The lab is not about making the spec pass. It already passes. The lab is about making the fixture file match the discipline the lesson taught.
 
 > [!NOTE] Isolation
-> The lab still lives under `tests/end-to-end/labs/fixtures/`, but the current starter does not ship a dedicated `playwright.labs.config.ts`. Use a temporary lab-only config or another narrow command so the production suite stays green while you refactor the lab slice.
+> The lab lives under `tests/labs/fixtures/`, but the current starter does not ship a dedicated `playwright.labs.config.ts`. Use a temporary lab-only config or another narrow command so the production suite stays green while you refactor the lab slice.
 
 ## The starting point
 
-Open `tests/end-to-end/labs/fixtures/bad-fixtures.ts` in the Shelf starter. The file defines five fixtures:
+Open `tests/labs/fixtures/fixtures.ts` in the Shelf starter. The file defines five fixtures:
 
 - `setupUser`
 - `setupEmptyShelf`
@@ -34,9 +34,9 @@ Each one has at least one of the smells the lesson catalogued. Count them. I get
 
 ## Your job
 
-Refactor `bad-fixtures.ts` without breaking `fixtures-lab.spec.ts`. You may (and should) edit the spec file to match your new fixture names and shapes — changing what each test _asks for_ is part of the refactor. Do **not** change what each test is _checking_. The discipline of keeping assertions stable is what keeps the exercise about fixture design rather than test rewriting.
+Refactor `fixtures.ts` without breaking `fixtures-lab.spec.ts`. You may (and should) edit the spec file to match your new fixture names and shapes — changing what each test _asks for_ is part of the refactor. Do **not** change what each test is _checking_. The discipline of keeping assertions stable is what keeps the exercise about fixture design rather than test rewriting.
 
-When you're done, diff your version against the committed `good-fixtures.ts` in the same folder. The two won't match byte-for-byte, and that's fine. What should match is the spirit:
+When you're done, compare your version against the [solution walkthrough](refactor-shelf-fixtures-solution.md). The two won't match byte-for-byte, and that's fine. What should match is the spirit:
 
 - Names describe what each fixture provides.
 - Every mutating fixture has an `await`-ed teardown half.
@@ -52,7 +52,7 @@ Run the lab slice with whichever narrow command you chose for isolation. A dedic
 
 Then, eyeballing the file:
 
-- Every fixture in your refactored `bad-fixtures.ts` has a one-line comment naming the scope choice and why.
+- Every fixture in your refactored `fixtures.ts` has a one-line comment naming the scope choice and why.
 - Every fixture that mutates state (seeds, resets, logs in) has a teardown half after `await use(...)`, and the teardown is awaited.
 - At least one of the five original fixtures has been moved out of the fixtures file into a plain helper function, and the spec now calls the helper directly instead of asking for it as a fixture.
 - There is no fixture named for a setup verb — no `setupUser`, no `doLogin`, no `initializeShelf`. Rename anything that looks like that.
@@ -67,21 +67,21 @@ Work top-down. Fix one smell, run the spec, move on.
 
 First, rename. `setupUser` becomes `seededReader`, `setupEmptyShelf` and `setupShelfWithBooks` collapse into one `seededShelf` with a clearer name. Update the spec file to match. The spec should still pass.
 
-Next, add teardowns. Any fixture that calls `resetShelfContent` or mutates state through the `request` fixture gets an `await resetShelfContent(request)` on the teardown side of `await use(...)`. This is the change the lesson cares about the most.
+Next, add teardowns. Any fixture that calls `resetShelfContent` or mutates state through the `request` fixture gets an `await resetShelfContent()` on the teardown side of `await use(...)`. This is the change the lesson cares about the most.
 
 Then, decide what's actually a fixture. `setupUser` returning `{ email: 'alice@example.com' }` is a constant, not a fixture — you can either keep it as a fixture if you want the shape (so future labs can swap users) or move it out entirely. Make the choice explicit in a comment.
 
-Finally, handle `loggedOutPage`. One test uses it. It's a helper function wearing a fixture costume. Export it from `good-fixtures.ts` as a plain function (the committed solution shows one way) and have the spec call it directly. Note the tradeoff: the helper has to hand teardown responsibility back to the caller, because only fixtures can _own_ teardown.
+Finally, handle `loggedOutPage`. One test uses it. It's a helper function wearing a fixture costume. Turn it into a plain helper function (the solution walkthrough shows one way) and have the spec call it directly. Note the tradeoff: the helper has to hand teardown responsibility back to the caller, because only fixtures can _own_ teardown.
 
 ## Stretch
 
-Add a `resetBetweenTests` fixture that wraps `resetShelfContent(request)` so every test in the lab project gets a clean shelf without needing a `beforeEach`. Write the teardown half, too — even though `resetShelfContent` is idempotent, the muscle memory matters.
+Add a `resetBetweenTests` fixture that wraps `resetShelfContent()` so every test in the lab project gets a clean shelf without needing a `beforeEach`. Write the teardown half, too — even though `resetShelfContent` is idempotent, the muscle memory matters.
 
 But: pause before you ship it. Is this better than a `beforeEach` in the spec? Sometimes the answer is no. A fixture with no teardown and one line of setup is a fixture that should have been a `beforeEach`. Make the call, and write it in the commit message.
 
 ## What a Good Refactor Leaves Behind
 
-Your `bad-fixtures.ts` is now shorter, not longer. The spec still passes. You diff against `good-fixtures.ts` and realize your refactor made different choices than the solution made — and you can defend both.
+Your `fixtures.ts` is now shorter, not longer. The spec still passes. You compare it against the solution walkthrough and realize your refactor made different choices than the solution made — and you can defend both.
 
 The commit you'd be willing to merge is the one where future-you reads this file in six months and isn't annoyed at anyone.
 

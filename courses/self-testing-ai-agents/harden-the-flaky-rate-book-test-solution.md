@@ -1,7 +1,7 @@
 ---
 title: 'Harden the Flaky Rate-Book Test: Solution'
 description: Walkthrough of every fix applied to the deliberately broken rate-book test, from storage state auth through hybrid API assertions.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -34,11 +34,11 @@ After this commit, the test starts at `page.goto('/shelf')`. The five login line
 
 The original test has no seeding. It assumes "whatever is on the shelf" includes a book with a `.rate` button. On a fresh database, it might. After another test deletes a book, it might not. That's the definition of flaky.
 
-The fix is `resetShelfContent` in a `beforeEach`. This hits the dev-only `/api/testing/seed` endpoint, which resets the shelf to a known state: a specific set of books, no ratings, every time.
+The fix is `resetShelfContent` in a `beforeEach`. This calls the seed helper you build in `tests/helpers/seed.ts`, which resets the shelf to a known state: a specific set of books, no ratings, every time.
 
 ```ts
-test.beforeEach(async ({ request }) => {
-  await resetShelfContent(request);
+test.beforeEach(async () => {
+  await resetShelfContent();
 });
 ```
 
@@ -117,8 +117,8 @@ import { resetShelfContent } from './helpers/seed';
 
 test.describe('rate a book on your shelf', () => {
   // Fix 2: deterministic seeding — every run starts from the same state
-  test.beforeEach(async ({ request }) => {
-    await resetShelfContent(request);
+  test.beforeEach(async () => {
+    await resetShelfContent();
   });
 
   // Fix 1: no login block — storage state authentication handles it

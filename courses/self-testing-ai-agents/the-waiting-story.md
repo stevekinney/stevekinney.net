@@ -1,7 +1,7 @@
 ---
 title: The Waiting Story
 description: Why `page.waitForTimeout` is the second-most-common cause of flaky tests, and what to reach for instead.
-modified: 2026-04-10
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -59,6 +59,38 @@ This works for more than visibility. The whole `expect(locator).*` family auto-r
 
 Anything you want to assert that's eventually true, use an `expect` on a locator. That's your wait.
 
+## Actions already wait for actionability
+
+This is the part a lot of teams fight instead of using. Playwright actions already auto-wait for actionability: visible, stable, receiving events, enabled, the whole thing. Most "pre-click readiness helpers" are just a slower, worse reimplementation of what Playwright is already doing.
+
+If you want to ask "would this control be clickable yet?" without actually clicking it, many locator actions support [`trial: true`](https://playwright.dev/docs/actionability):
+
+```ts
+await page.getByRole('button', { name: 'Publish' }).click({ trial: true });
+```
+
+That performs the actionability checks and skips the click. It is a neat replacement for bespoke "wait until button is ready" helpers, and it keeps the wait aligned with the real action instead of inventing a second definition of readiness.
+
+## Boolean probes are not waits
+
+The [Locator API](https://playwright.dev/docs/api/class-locator) is explicit about this: methods like `isVisible()` return immediately. They answer "what is true _right now_," not "wait until this becomes true."
+
+So this:
+
+```ts
+if (await page.getByText('Saved').isVisible()) {
+  // ...
+}
+```
+
+is fine as a branch after the page is already stable. It is not a synchronization primitive. If the page updates asynchronously, use the retrying assertion:
+
+```ts
+await expect(page.getByText('Saved')).toBeVisible();
+```
+
+The anti-pattern I keep seeing is `expect(await locator.isVisible()).toBe(true)`. That bypasses the whole retry model and then acts surprised when CI gets there 200 milliseconds later than the laptop did.
+
 ## Waiting for network, not for clocks
 
 Sometimes the thing you're waiting on isn't a DOM change—it's a network response. The click fires off a POST, you need the POST to finish before you can interact with the next thing, and there's no DOM state that cleanly tells you the POST finished. This is where [`page.waitForResponse`](https://playwright.dev/docs/api/class-page#page-wait-for-response) earns its place.
@@ -78,6 +110,19 @@ Two things to notice. First, you set up the waiter _before_ the action, because 
 > [!TIP]
 > If the UI already exposes the end state you care about, prefer a locator assertion over a network wait. `waitForResponse` is for the cases where the network event _is_ the signal. If the page shows "Saved" or the new row appears in the table, assert on that instead.
 
+## `fill()` first, `pressSequentially()` on purpose
+
+Most text entry should use `locator.fill()`. It sets the value directly and lets Playwright do the boring reliable thing.
+
+[`locator.pressSequentially()`](https://playwright.dev/docs/api/class-locator) exists for the genuinely special cases:
+
+- the component reacts to each keystroke
+- autocomplete or mention logic depends on real key events
+- the input is masked or formatted while typing
+- the bug you are reproducing is specifically about keypress handling
+
+If none of those are true, `fill()` is the right call. The "real typing is more realistic" instinct sounds nice and creates some of the dumbest CI-only input failures you will ever debug.
+
 ## Clocks and animations and the Clock API
 
 The ugly class of waits is when the UI has a `setTimeout` somewhere. A toast that auto-dismisses after three seconds. A "just now" timestamp that updates every minute. An animation that takes 250ms. Your test now depends on real wall-clock time, which is an abomination.
@@ -93,6 +138,62 @@ await expect(page.getByText('Added to your shelf')).toBeHidden();
 ```
 
 This is how you test the toast that dismisses after three seconds without actually waiting three seconds. It's how you test "X minutes ago" displays without editing the system clock. It is extremely underused and worth putting in the agent's awareness. If the agent is writing a `waitForTimeout` because it's waiting on a clock-driven UI, the correct answer is almost always `page.clock`.
+
+## `expect.poll()` versus `toPass()`
+
+For eventual consistency, you have two retry hammers. They are not the same hammer.
+
+[`expect.poll()`](https://playwright.dev/docs/test-assertions) retries a value-producing function:
+
+```ts
+await expect
+  .poll(
+    async () => {
+      const response = await request.get('/api/shelf');
+      const data = await response.json();
+      return data.entries.find(
+        (entry: { book: { title: string } }) => entry.book.title === 'Station Eleven',
+      );
+    },
+    { message: 'Station Eleven should eventually appear in the persisted shelf state' },
+  )
+  .toBeTruthy();
+```
+
+It defaults to a 5-second timeout, which is usually what people expect.
+
+`expect(async () => { ... }).toPass()` retries an entire assertion block:
+
+```ts
+await expect(async () => {
+  const response = await request.get('/api/shelf');
+  expect(response.ok()).toBe(true);
+
+  const data = await response.json();
+  expect(data.entries.some((entry: { rating: number | null }) => entry.rating === 4)).toBe(true);
+}).toPass({ timeout: 10_000 });
+```
+
+That default timeout is `0` unless you pass one. This trips people constantly. If you reach for `toPass()`, set the timeout on purpose.
+
+Use `poll()` when one value should eventually settle. Use `toPass()` when you genuinely want to rerun a full block of assertions.
+
+## Give `expect` different personalities
+
+[`expect.configure()`](https://playwright.dev/docs/test-assertions) is worth using once the suite is big enough that every assertion should not share the same temperament.
+
+```ts
+const slowExpect = expect.configure({ timeout: 15_000 });
+const softExpect = expect.configure({ soft: true });
+
+await slowExpect(page.getByRole('status')).toHaveText(/Report complete/);
+await softExpect(page.getByText('Summary')).toBeVisible();
+await softExpect(page.getByText('Details')).toBeVisible();
+```
+
+That keeps the intent local. You do not have to rewrite the global assertion timeout because one eventually consistent screen is slower than the rest of the suite.
+
+When you do use soft assertions, check `test.info().errors` before marching into the next dangerous phase of the test. Failing softly is useful. Failing softly and then pretending the precondition succeeded is just lying with extra steps.
 
 ## Waiting for the page to "settle"
 
@@ -111,8 +212,17 @@ Add these to the instructions file under Playwright:
 - Never use `page.waitForLoadState('networkidle')`.
 - To wait for a UI change, use `expect(locator).toBeVisible()` or a
   similar assertion. They auto-retry up to the configured timeout.
+- Do not use `locator.isVisible()` or similar boolean probes as waits.
+  They answer immediately. Use retrying assertions.
+- Prefer `locator.fill()` for text entry. Use `pressSequentially()` only
+  when the page genuinely depends on real key events.
 - To wait for a network call, set up `page.waitForResponse` with a
   URL+method matcher _before_ triggering the action.
+- If you need to wait for actionability without acting, use the real
+  action with `trial: true` instead of inventing a custom readiness wait.
+- Use `expect.poll()` for eventually consistent values. Use `toPass()`
+  only when you need to retry a whole assertion block, and set its
+  timeout explicitly.
 - To wait for clock-driven UI (toasts, timers, "X minutes ago"),
   install `page.clock` at the top of the test and advance it explicitly.
 - If you are tempted to add a wait to "fix flakiness," stop. The flakiness
@@ -135,5 +245,6 @@ Every wait in your test is a statement about what you expect to be true. If you 
 ## Additional Reading
 
 - [Locators and the Accessibility Hierarchy](locators-and-the-accessibility-hierarchy.md)
+- [Assertions](https://playwright.dev/docs/test-assertions)
 - [Storage State Authentication](storage-state-authentication.md)
 - [Lab: Harden the Flaky Rate-Book Test](lab-harden-the-flaky-rate-book-test.md)

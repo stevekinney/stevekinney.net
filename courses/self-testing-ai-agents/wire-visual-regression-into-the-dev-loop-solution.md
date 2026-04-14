@@ -1,7 +1,7 @@
 ---
 title: 'Wire Visual Regression Into the Dev Loop: Solution'
 description: Walkthrough of Shelf's visual regression setup, from screenshot config through the break-and-detect cycle.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-10
 ---
 
@@ -41,8 +41,8 @@ This file covers pages that require a logged-in user and seeded data.
 import { expect, test } from './fixtures';
 import { resetShelfContent } from './helpers/seed';
 
-test.beforeEach(async ({ request }) => {
-  await resetShelfContent(request);
+test.beforeEach(async () => {
+  await resetShelfContent();
 });
 
 test('shelf page matches the seeded visual baseline', async ({ page }) => {

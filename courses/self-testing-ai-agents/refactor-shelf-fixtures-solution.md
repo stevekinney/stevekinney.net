@@ -1,17 +1,17 @@
 ---
 title: "Solution: Refactor Shelf's Fixtures"
 description: One reasonable walk through the fixtures-refactor lab, commit by commit, with the thinking behind each decision.
-modified: 2026-04-11
+modified: 2026-04-14
 date: 2026-04-11
 ---
 
-The committed `good-fixtures.ts` in `tests/end-to-end/labs/fixtures/` is one reasonable endpoint. Yours may look different — the lab grades on the quality of your decisions, not a byte-for-byte match. What follows is the narrative for how I'd walk from `bad-fixtures.ts` to the committed solution, one commit at a time.
+The course solution below is one reasonable endpoint. Yours may look different — the lab grades on the quality of your decisions, not a byte-for-byte match. What follows is the narrative for how I'd walk from `fixtures.ts` to a cleaner final shape, one commit at a time.
 
 If you already finished the lab and want to compare, scroll to the [final file](#the-final-file) at the bottom.
 
 ## Commit 1: Rename everything
 
-First, names. `setupUser` describes what the fixture _does_ (it sets up a user); `seededReader` describes what the fixture _provides_ (the reader who got seeded). `setupEmptyShelf` and `setupShelfWithBooks` were lying to the reader — both of them call `resetShelfContent`, and Shelf's seed endpoint _always_ shelves Station Eleven and Piranesi. Neither one provides an empty shelf. Collapse them into a single `seededShelf`.
+First, names. `setupUser` describes what the fixture _does_ (it sets up a user); `seededReader` describes what the fixture _provides_ (the reader who got seeded). `setupEmptyShelf` and `setupShelfWithBooks` were lying to the reader — both of them call `resetShelfContent`, and the seed helper you built earlier _always_ shelves Station Eleven and Piranesi. Neither one provides an empty shelf. Collapse them into a single `seededShelf`.
 
 ```ts
 // Before:
@@ -20,12 +20,12 @@ setupUser: async ({}, use) => {
 },
 
 setupEmptyShelf: async ({ request }, use) => {
-  await resetShelfContent(request);
+  await resetShelfContent();
   await use(request);
 },
 
 setupShelfWithBooks: async ({ request }, use) => {
-  await resetShelfContent(request);
+  await resetShelfContent();
   await use(request);
 },
 ```
@@ -37,9 +37,9 @@ seededReader: async ({}, use) => {
 },
 
 seededShelf: async ({ request }, use) => {
-  await resetShelfContent(request);
+  await resetShelfContent();
   await use(request);
-  await resetShelfContent(request);
+  await resetShelfContent();
 },
 ```
 
@@ -49,7 +49,7 @@ Run the spec. It still passes. Commit.
 
 ## Commit 2: Teardown the mutating fixtures
 
-Notice the new `await resetShelfContent(request)` _after_ `await use(request)` in `seededShelf`. That's the teardown half. The starting state didn't have one. The test passed without it, because the next test in the starting file also called `resetShelfContent`, and the seed endpoint is idempotent. But the moment you add a new test that _doesn't_ call it, the leak becomes visible.
+Notice the new `await resetShelfContent()` _after_ `await use(request)` in `seededShelf`. That's the teardown half. The starting state didn't have one. The test passed without it, because the next test in the starting file also called `resetShelfContent`, and the seed utility is idempotent. But the moment you add a new test that _doesn't_ call it, the leak becomes visible.
 
 The rule from the lesson: every mutating fixture has a teardown half, and it's always awaited. Zero exceptions. If the teardown is there but unawaited, Playwright thinks the fixture is done and races the next test's setup.
 
@@ -62,7 +62,7 @@ Commit the teardown.
 `loggedOutPage` was a different problem. It was a real fixture (it built a fresh browser context), but it was only used in one test, and it was awkward to compose because it fought the project-level storage state. The solution file moves it out as a plain helper function and lets the caller own teardown:
 
 ```ts
-// In good-fixtures.ts:
+// In fixtures.ts after the refactor:
 export const openLoggedOutPage = async (browser: Browser) => {
   const context = await browser.newContext({ storageState: { cookies: [], origins: [] } });
   const page = await context.newPage();
@@ -107,7 +107,7 @@ Writing the justification in a comment is how you make the decision visible to t
 
 ## The final file
 
-The committed `good-fixtures.ts` is roughly this:
+The refactored `fixtures.ts` is roughly this:
 
 ```ts
 import { test as base } from '@playwright/test';
@@ -132,9 +132,9 @@ export const test = base.extend<GoodFixtures>({
 
   // Test-scoped: see above.
   seededShelf: async ({ request }, use) => {
-    await resetShelfContent(request);
+    await resetShelfContent();
     await use(request);
-    await resetShelfContent(request);
+    await resetShelfContent();
   },
 });
 

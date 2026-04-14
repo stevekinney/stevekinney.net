@@ -1,7 +1,7 @@
 ---
 title: Mocking Browser APIs
 description: "How to test browser-dependent features without lying to yourself: use Playwright's real knobs when they exist, mock the unsupported bits early, and model the events your app actually listens for."
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-12
 ---
 
@@ -21,6 +21,33 @@ Good examples:
 - [`storageState`](https://playwright.dev/docs/auth) instead of manually stuffing auth state into `localStorage`
 
 The rule is not "never mock." The rule is "prefer the browser model Playwright already knows how to drive." A first-class API buys you less code, fewer lies, and better cross-browser behavior.
+
+## Clock control is richer than "freeze time"
+
+The [Clock docs](https://playwright.dev/docs/clock) are worth reading all the way through once because there are really two levels here.
+
+Use `clock.setFixedTime()` when all you need is deterministic wall-clock reads:
+
+```ts
+await page.clock.setFixedTime(new Date('2026-04-14T09:00:00-05:00'));
+await page.goto('/dashboard');
+```
+
+Use `clock.install()` when the app depends on timers, animation frames, or elapsed time:
+
+```ts
+await page.clock.install();
+await page.clock.pauseAt(new Date('2026-04-14T09:00:00-05:00'));
+
+await page.goto('/dashboard');
+await page.clock.fastForward('00:05');
+await page.clock.runFor('00:10');
+await page.clock.resume();
+```
+
+`install()` is the heavy-duty version. It overrides timers, `Date`, animation frame APIs, `performance`, and the rest of the time surface. `setFixedTime()` is the lighter "just make `Date.now()` deterministic" version.
+
+Pair this with `timezoneId` in the browser context when the feature under test is date-sensitive. Freezing the clock and leaving the timezone floating is how teams end up debugging "works in Chicago, fails in UTC" nonsense they wrote themselves.
 
 ## Install mocks before navigation
 
@@ -53,6 +80,8 @@ test('respects reduced motion preference', async ({ page }) => {
 ```
 
 The timing is the important part. If you move the mock after `goto`, the app already read the real `matchMedia` result and your test is now proving something about your patch timing, not your UI.
+
+If you mix `browserContext.addInitScript()` and `page.addInitScript()`, do not build a test that depends on their relative ordering. Keep related boot-time logic in one place unless you are intentionally testing the layering.
 
 > [!WARNING] This mock is intentionally minimal
 > If your code subscribes with `addEventListener`, `addListener`, or expects live media-query updates, this snippet is not enough. Use an event-capable version in a shared fixture so the test exercises the same contract your component uses in production.

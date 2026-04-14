@@ -1,7 +1,7 @@
 ---
 title: 'Playwright `webServer` Without Surprises'
 description: "A practical guide to Playwright's `webServer` option: the common shapes, the options that matter, and the gotchas that waste half a day when you get them wrong."
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-12
 ---
 
@@ -128,7 +128,7 @@ The spawned process inherits `process.env`, and Playwright adds `PLAYWRIGHT_TEST
 
 This is a good place for test-only flags like:
 
-- enabling seed endpoints
+- pointing the app at a disposable test database
 - switching to a temporary database
 - disabling analytics
 - pointing the app at a fake third-party service
@@ -160,6 +160,8 @@ webServer: {
 ```
 
 This is an advanced escape hatch, not the default path. If you do use capture groups, keep the names distinct across multiple servers and make sure you have a concrete reason for it beyond "this seemed neat."
+
+Those named capture groups become environment variables for the test run. That is powerful and a great way to create weird invisible plumbing if you use it casually. Treat it like infrastructure, not a cute regex trick.
 
 ### `timeout`
 

@@ -1,7 +1,7 @@
 ---
 title: 'Fixtures: Worker-Scoped, Test-Scoped, and the Trap Between Them'
 description: How to use Playwright's `test.extend` without turning your fixture file into a place where state goes to hide.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-11
 ---
 
@@ -9,7 +9,7 @@ The first `test.extend` you write feels like magic. Five tests collapse into one
 
 So, let's talk about what fixtures actually are, when to reach for them, and the two specific mistakes that agents will make if you don't put rails around this.
 
-Shelf's lab for this lesson is intentionally concrete: the bad starting point lives at `tests/end-to-end/labs/fixtures/bad-fixtures.ts`, the reference folder is `tests/end-to-end/labs/fixtures/`, and the exercising spec is `fixtures-lab.spec.ts`. The current starter no longer ships a dedicated lab config or script for this slice, so the lab asks you to isolate it yourself with a temporary config or an equivalent narrow command. Keep those file names in your head as you read the rest of the lesson, because the lab asks you to refactor the real thing instead of inventing a toy example.
+Shelf's lab for this lesson is intentionally concrete: the starting point lives at `tests/labs/fixtures/fixtures.ts`, the reference folder is `tests/labs/fixtures/`, and the exercising spec is `fixtures-lab.spec.ts`. The current starter no longer ships a dedicated lab config or script for this slice, so the lab asks you to isolate it yourself with a temporary config or an equivalent narrow command. Keep those file names in your head as you read the rest of the lesson, because the lab asks you to refactor the real thing instead of inventing a toy example.
 
 ## What a fixture actually is
 
@@ -36,9 +36,9 @@ Here is where I watch agents get this consistently wrong. They see fixture setup
 
 ```ts
 seededShelf: async ({ request }, use) => {
-  await resetShelfContent(request);
+  await resetShelfContent();
   await use(request);
-  await resetShelfContent(request); // teardown: leaves the server clean
+  await resetShelfContent(); // teardown: leaves the server clean
 };
 ```
 
@@ -87,6 +87,18 @@ Notice the shape. `page: async ({ page }, use)` — the fixture is _named_ `page
 
 The reframe I want you to internalize: when you find yourself writing a helper function that wraps `page`, stop. You don't need a wrapper. You need an override.
 
+## Report ergonomics are part of the fixture design
+
+Fixtures do not just shape the test environment. They also shape the report the agent reads later.
+
+The [fixtures docs](https://playwright.dev/docs/test-fixtures) give you a few knobs that are more useful than they look:
+
+- `box: true` hides noisy helper fixtures from the report
+- `box: 'self'` hides the wrapper fixture while still showing its internal steps
+- `title` gives the fixture a useful human name in errors and reports
+
+That means a low-signal plumbing fixture can stay out of the way while a high-signal fixture can identify itself clearly instead of showing up as anonymous setup mush.
+
 ## Test-scoped versus worker-scoped
 
 > [!TIP] One-liner rule
@@ -124,6 +136,9 @@ The specific anti-pattern I see most: an agent writes a "fixture" that just call
 - Worker-scope a fixture only when the data is read-only AND expensive enough to justify sharing it. Add a one-line comment justifying the choice.
 - If a "fixture" is used in exactly one test, it's a helper function. Move it out of the fixtures file.
 - Override Playwright's built-in `page`/`context`/`browser` with `test.extend` when the wrapper would otherwise be a helper. Don't reinvent a wrapper when an override already exists.
+- Use fixture report ergonomics on purpose: hide noisy fixtures with
+  `box`, use `box: 'self'` when only the wrapper is noise, and give
+  important fixtures a human `title`.
 ```
 
 ## The thing to remember

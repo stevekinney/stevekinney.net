@@ -1,7 +1,7 @@
 ---
 title: API and UI Hybrid Tests
 description: Use the `request` fixture to set up state via API and assert via UI. Faster, clearer, and the pattern most teams haven't found yet.
-modified: 2026-04-12
+modified: 2026-04-14
 date: 2026-04-06
 ---
 
@@ -55,7 +55,9 @@ The setup is API calls. The assertion is still a real browser navigating a real 
 
 The `request` fixture authenticates automatically via whatever storage state the test project is using, so you don't have to attach cookies or tokens. That's the whole point of the fixture versus using raw `fetch`.
 
-In Shelf, the concrete version of this pattern lives in `tests/end-to-end/rate-book.spec.ts`. The authenticated project in `playwright.config.ts` provides the storage state from `tests/end-to-end/authentication.setup.ts`, the seed helpers live in `tests/end-to-end/helpers/seed.ts`, and the rate-book fix in the companion lab depends on waiting on the real network signal with `page.waitForResponse` instead of guessing with a timeout.
+It also inherits the Playwright config you already wrote. The [API testing docs](https://playwright.dev/docs/api-testing) call out that the built-in `request` fixture respects things like `baseURL` and extra headers from config. So if your test project knows where the app lives and what auth state it should carry, the API client already knows too. Do not rebuild that configuration by hand unless you are intentionally creating a second actor.
+
+In Shelf, the concrete version of this pattern lives in `tests/end-to-end/rate-book.spec.ts`. The authenticated project in `playwright.config.ts` provides the storage state from `tests/end-to-end/authentication.setup.ts`, the deterministic seed helper gets built in `tests/helpers/seed.ts`, and the rate-book fix in the companion lab depends on waiting on the real network signal with `page.waitForResponse` instead of guessing with a timeout.
 
 ## When to use API, when to use UI
 
@@ -67,6 +69,14 @@ The heuristic I use:
 - **Side-effect verification**: either. If you need to know that the database actually recorded a write, an API GET is cheaper and more specific than navigating to a page and reading text. If you need to know a real user would see the change, UI.
 
 The trap is reaching for UI when API would do. I've rarely seen the opposite mistake—agents reach for UI by default because that's what Playwright tests "look like" in the examples. Your instructions file has to explicitly tell them there's another option.
+
+Another good way to think about the split:
+
+- **API preconditions** create the world the test needs
+- **UI actions** exercise the behavior the user owns
+- **API postconditions** verify the side effect if that is cheaper or more precise than reading another page
+
+That pattern gives you fast setup, real behavior, and a cheap double-check on persistence without turning every test into a browser pantomime.
 
 ## A trickier example: setup the scenario, assert the consequence
 
@@ -121,6 +131,12 @@ test('POST /api/shelf creates an entry', async ({ request }) => {
 
 No browser, no UI, just an HTTP assertion. These run in the tens of milliseconds and they fill in the coverage gap between unit tests and full end-to-end tests. They also make excellent smoke tests at the top of a test file—if the API contract is broken, fail fast before the rest of the tests try to set up state through it.
 
+## Browser cookies can flow through the API client too
+
+When you create contexts by hand, there is one more pattern worth knowing from the docs: [`browserContext.request`](https://playwright.dev/docs/api-testing) shares cookies with the browser context. Log in through the page, call the API through `browserContext.request`, and the session flows both ways.
+
+That is cleaner than manually copying cookie headers and more honest than pretending the browser and API client are unrelated actors when they are really the same user.
+
 ## The pitfall: drifting schemas
 
 One risk of API setup is that the test bypasses whatever validation the UI does. If the real form has a "you can only add a book if you're logged in and not over your 500-book limit" check, the API call might skip the 500-book check and put your test in an impossible state. Usually this is a feature—it lets you set up edge cases the UI couldn't reach—but sometimes it hides a real bug.
@@ -135,11 +151,16 @@ The safeguard is that the API should have the same validation as the form. That'
 - Use the `request` fixture for scenario setup whenever the UI for that
   setup is already tested elsewhere. Don't click through "add book" in
   a test whose subject is the stats page.
+- Treat API setup as preconditions and API reads as postconditions. Use
+  them to make the test smaller, not to dodge the UI you are claiming to test.
 - The action under test is always performed through the UI. If the
   test's purpose is "clicking X causes Y," do not short-circuit the
   click with an API call.
 - Both `page` and `request` share the same authentication context from
   `storageState`. You do not need to attach tokens manually.
+- The built-in `request` fixture already inherits Playwright config such
+  as `baseURL` and default headers. Do not reconfigure it by hand unless
+  you are intentionally creating a second actor.
 - If you need pure API tests for an endpoint, put them in the same test
   file as the UI tests for that endpoint, using the same `request`
   fixture and no `page`.
