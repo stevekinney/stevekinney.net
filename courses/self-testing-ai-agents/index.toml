@@ -18,6 +18,10 @@ title = "Solution"
 href = "rewrite-the-bad-claude-md-solution.md"
 
 [[section.item]]
+title = "Skills, Rules, and Hooks"
+href = "skills-rules-and-hooks.md"
+
+[[section.item]]
 title = "Git Hooks with Lefthook"
 href = "git-hooks-with-lefthook.md"
 
