@@ -3,7 +3,7 @@ title: 'Creating a CloudFront Distribution'
 description: >-
   Create a CloudFront distribution with an S3 origin and configure its basic settings using the AWS CLI.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - cloudfront
@@ -19,6 +19,9 @@ On Vercel, this happens automatically when you push to a Git branch. On AWS, you
 ## The Distribution Config
 
 Creating a CloudFront distribution through the CLI means passing a JSON configuration to `aws cloudfront create-distribution`. The config is verbose—CloudFront has many options and the CLI requires you to specify most of them, even when you want the defaults. Rather than pretend this is simple, here's the full config with annotations explaining each part.
+
+> [!NOTE]
+> This lesson walks through the _minimum viable_ distribution: no OAC, no ACM certificate, no custom domain. You'll get an "Access Denied" in the browser at the end, and that's the point—it sets up the next two lessons. The [Set Up a CloudFront Distribution exercise](cloudfront-distribution-exercise.md) puts the pieces together into the final, production-shaped config once you've worked through OAC and ACM.
 
 In the console, the new **Create distribution** wizard walks you through the same choices step by step—selecting your origin type, specifying the S3 bucket, and configuring OAC.
 

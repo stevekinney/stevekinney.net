@@ -5,7 +5,7 @@ description: >-
   it's a practical choice for frontend engineers who need a lightweight data
   layer.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - dynamodb
@@ -85,8 +85,8 @@ AWS cut DynamoDB on-demand request pricing in late 2024, and the service still p
 
 The practical point for this course is simpler: low-volume frontend workloads still cost pennies. A hobby project or learning app can read and write plenty of data before DynamoDB becomes a meaningful bill.
 
-> [!WARNING]
-> The DynamoDB free tier includes 25 GB of storage and enough read/write capacity for most development workloads. But the free tier only applies to tables using **provisioned** capacity mode, not on-demand. For learning and development, the cost difference is negligible—on-demand with low traffic will cost pennies. But be aware of this distinction if you're trying to stay strictly within the free tier.
+> [!NOTE]
+> The DynamoDB free tier covers 25 GB of storage and read/write capacity for **provisioned-mode** tables only. On-demand tables don't qualify for the free-tier capacity. That sounds alarming, but it isn't—on-demand at development traffic (a few thousand requests a day) costs single-digit pennies per month. **For this course, stay on on-demand.** The free tier doesn't subsidize it, but the actual bill is small enough that the operational simplicity is worth more than the pennies.
 
 ## When DynamoDB Is the Right Choice
 

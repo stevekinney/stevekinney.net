@@ -4,7 +4,7 @@ description: >-
   Retrieve secrets and parameters from a Lambda function at runtime using the
   AWS SDK, with proper IAM permissions and caching strategies.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - lambda
@@ -255,8 +255,8 @@ aws lambda update-function-configuration \
   --output json
 ```
 
-> [!TIP]
-> AWS now publishes the latest extension ARN as a public Systems Manager parameter. Use the `x86/latest` path above for x86_64 functions and `/aws/service/aws-parameters-and-secrets-lambda-extension/arm64/latest` for arm64 functions. That keeps the lesson correct even when AWS revs the layer version again.
+> [!WARNING]
+> The extension ARN is both **architecture-specific** and **region-specific**. The `x86/latest` path above resolves to a layer built for `x86_64` Lambdas; `arm64/latest` resolves to a different layer built for `arm64` (Graviton) Lambdas. Attaching the x86 layer to an arm64 function doesn't fail at deploy time—the function comes up, but any call to `localhost:2773` fails at runtime because the extension binary can't execute on that CPU. Worse, AWS's public parameters are resolved in the region you call them from, so running the `aws ssm get-parameter` lookup in `us-east-1` gives you a `us-east-1` ARN that won't work in a function deployed to `eu-west-1`. Match both the architecture flag (`x86` vs `arm64`) and the region (`--region`) to the function you're attaching the layer to.
 
 Then retrieve parameters via HTTP:
 

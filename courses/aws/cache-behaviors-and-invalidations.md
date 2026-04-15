@@ -3,7 +3,7 @@ title: 'Cache Behaviors and Invalidations'
 description: >-
   Configure cache behaviors and TTLs to control how CloudFront caches your content, and create invalidations to force cache refreshes after deployments.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - cloudfront
@@ -219,6 +219,17 @@ This is the same strategy Vercel and Netlify use behind the scenes. I've used th
 Here's a simple deployment script that ties everything together:
 
 ```bash
+set -euo pipefail
+
+# Guard: refuse to sync if the assets directory is missing or empty.
+# `s3 sync --delete` will happily mirror an empty local directory to S3,
+# wiping every hashed asset from the bucket and leaving the site in a
+# half-broken state the next time the HTML tries to load them.
+if [ ! -d ./build/assets ] || [ -z "$(ls -A ./build/assets 2>/dev/null)" ]; then
+  echo "error: ./build/assets is missing or empty. Did the build succeed?" >&2
+  exit 1
+fi
+
 # Sync hashed assets with long cache
 aws s3 sync ./build/assets s3://my-frontend-app-assets/assets \
   --cache-control "public, max-age=31536000, immutable" \
@@ -240,7 +251,7 @@ aws cloudfront create-invalidation \
   --output json
 ```
 
-> [!TIP]
-> The `--delete` flag on `aws s3 sync` removes files from S3 that no longer exist in your local build directory. This cleans up old hashed assets. Without it, your bucket accumulates every version of every asset you've ever deployed.
+> [!WARNING]
+> The `--delete` flag is load-bearing and dangerous in equal measure. It removes files from S3 that no longer exist in your local build directory—good, because that cleans up stale hashed assets. But if `./build/assets` doesn't exist (failed build), or is empty (bad build output), `s3 sync --delete` treats every existing asset in the bucket as "no longer local" and deletes it. That's why the script aborts before the sync if the local directory is missing or empty. Don't remove the guard.
 
 Caching is sorted. But there's another problem: if a user navigates to `/dashboard/settings` in your single-page application, CloudFront asks S3 for a file at that path. S3 doesn't have a file called `/dashboard/settings`, so it returns a 403 or 404 error. In the next lesson, you'll configure custom error responses to handle SPA routing—telling CloudFront to serve `index.html` whenever it encounters one of these errors.

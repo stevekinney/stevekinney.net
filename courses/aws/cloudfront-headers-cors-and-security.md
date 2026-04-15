@@ -3,7 +3,7 @@ title: 'CloudFront Headers, CORS, and Security'
 description: >-
   Configure CloudFront response headers policies for CORS, security headers (HSTS, X-Content-Type-Options, X-Frame-Options), and cache-control directives.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - cloudfront
@@ -23,7 +23,7 @@ Security headers are HTTP response headers that instruct the browser to behave i
 
 - **`Strict-Transport-Security` (HSTS)**: Tells the browser to only connect to your site over HTTPS, even if the user types `http://`. Prevents protocol downgrade attacks and SSL stripping.
 - **`X-Content-Type-Options: nosniff`**: Prevents the browser from MIME-sniffing a response away from the declared `Content-Type`. Stops an attacker from tricking the browser into executing a file as JavaScript when it was supposed to be an image.
-- **`X-Frame-Options: DENY`**: Prevents your site from being embedded in an `<iframe>` on another domain. Blocks clickjacking attacks.
+- **`X-Frame-Options`**: Prevents your site from being embedded in an `<iframe>` on another domain. Blocks clickjacking attacks. `DENY` blocks all framing; `SAMEORIGIN` (what the managed `SecurityHeadersPolicy` sends) allows your own domain to frame itself. Pick `DENY` unless you have a specific reason to frame yourself.
 - **`Referrer-Policy: strict-origin-when-cross-origin`**: Controls how much referrer information is included in requests to other sites. Prevents leaking sensitive URL paths.
 - **`Content-Security-Policy`**: The big one. Defines which sources are allowed to load scripts, styles, images, and other resources. A well-configured CSP is the most effective defense against XSS attacks.
 
@@ -163,11 +163,16 @@ Save this as `response-headers-policy.json`:
     "OriginOverride": true
   },
   "CustomHeadersConfig": {
-    "Quantity": 1,
+    "Quantity": 2,
     "Items": [
       {
         "Header": "Permissions-Policy",
         "Value": "camera=(), microphone=(), geolocation=()",
+        "Override": true
+      },
+      {
+        "Header": "Content-Security-Policy",
+        "Value": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://api.example.com; frame-ancestors 'none'",
         "Override": true
       }
     ]
@@ -209,7 +214,7 @@ The security headers config gives you control over each header individually:
 - **`ContentTypeOptions`**: Adds `X-Content-Type-Options: nosniff`. No configuration needed beyond enabling it.
 - **`FrameOptions`**: `DENY` prevents your site from being embedded in any iframe. Use `SAMEORIGIN` if your site uses iframes internally (e.g., for embedding preview panels). I default to `DENY` and only loosen it when I have a _definite_ reason to.
 - **`ReferrerPolicy`**: `strict-origin-when-cross-origin` sends the full URL for same-origin requests but only the origin (no path) for cross-origin requests.
-- **`XSSProtection`**: Adds `X-XSS-Protection: 1; mode=block`. This header is deprecated in modern browsers (CSP is the replacement), but it provides defense-in-depth for older browsers. (It doesn't hurt to include it.)
+- **`XSSProtection`**: Adds `X-XSS-Protection: 1; mode=block`. Every current browser either ignores this header or has removed the underlying filter it used to control. It's essentially dead—CSP (below) is the actual defense. Including it costs you nothing and is cheap defense-in-depth, but don't count it toward your XSS story.
 
 The **`Override`** field on each header determines whether CloudFront's value overrides a value set by the origin. When `true`, CloudFront replaces any existing header from S3 with the value defined in the policy. When `false`, CloudFront only adds the header if the origin didn't include it. For security headers, you almost always want `Override: true`—you're the source of truth for security policy, not S3.
 
@@ -219,7 +224,10 @@ If your frontend application makes cross-origin API requests that are routed thr
 
 ### CustomHeadersConfig
 
-Any header not covered by the security or CORS sections can be added here. `Permissions-Policy` (formerly `Feature-Policy`) controls which browser features your site can use—disabling camera, microphone, and geolocation access if your site doesn't need them.
+Any header not covered by the security or CORS sections can be added here.
+
+- **`Permissions-Policy`** (formerly `Feature-Policy`) controls which browser features your site can use—disabling camera, microphone, and geolocation access if your site doesn't need them.
+- **`Content-Security-Policy`** is the real XSS defense. The example here is a tight starting point: scripts and styles only from your own origin, images from your origin and inline `data:` URIs, and XHR/fetch only to `https://api.example.com`. `frame-ancestors 'none'` duplicates `X-Frame-Options: DENY` for browsers that honor CSP over the legacy header. You'll almost certainly need to relax this once you wire up a real app—start strict and add sources as the browser console complains.
 
 ## CORS for API Calls
 

@@ -4,7 +4,7 @@ description: >-
   Write a Lambda handler in TypeScript that receives an event, processes it, and
   returns a properly formatted response.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - lambda
@@ -67,7 +67,7 @@ Create a `tsconfig.json` in the `lambda/` directory:
 ```
 
 > [!TIP]
-> Lambda's Node.js 20 runtime uses CommonJS by default. Setting `"module": "commonjs"` keeps things simple. You can use ESM with Lambda, but it adds configuration overhead with no practical benefit for most Lambda functions.
+> Lambda's Node.js 22 runtime uses CommonJS by default. Setting `"module": "commonjs"` keeps things simple. You can use ESM with Lambda, but it adds configuration overhead with no practical benefit for most Lambda functions.
 
 ## The Handler Signature
 

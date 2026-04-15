@@ -3,7 +3,7 @@ title: 'Origin Access Control for S3'
 description: >-
   Configure Origin Access Control so that your S3 bucket only serves content through CloudFront, not through direct S3 URLs.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - cloudfront
@@ -130,18 +130,37 @@ The updated origin should look like this:
 }
 ```
 
-Extract just the `DistributionConfig` portion into a new file (removing the `ETag` wrapper), and submit the update:
+Extract just the `DistributionConfig` portion into a new file (removing the `ETag` wrapper). Don't try to hand-edit this—the file is large and the `update-distribution` call rejects it if the schema doesn't match exactly. Use `jq`:
+
+```bash
+jq '.DistributionConfig' distribution-config-current.json > distribution-config-updated.json
+
+# Apply your two edits to distribution-config-updated.json:
+#   1. Set .Origins.Items[0].OriginAccessControlId = "E1OAC2EXAMPLE"
+#   2. Ensure .Origins.Items[0].S3OriginConfig.OriginAccessIdentity = ""
+# You can do both in one shot with jq:
+
+jq '.Origins.Items[0].OriginAccessControlId = "E1OAC2EXAMPLE"
+    | .Origins.Items[0].S3OriginConfig.OriginAccessIdentity = ""' \
+   distribution-config-updated.json > distribution-config-updated.tmp \
+  && mv distribution-config-updated.tmp distribution-config-updated.json
+
+# Capture the ETag for the --if-match flag:
+ETAG=$(jq -r '.ETag' distribution-config-current.json)
+```
+
+Now submit the update:
 
 ```bash
 aws cloudfront update-distribution \
   --id E1A2B3C4D5E6F7 \
-  --if-match E2QWRUHEXAMPLE \
+  --if-match "$ETAG" \
   --distribution-config file://distribution-config-updated.json \
   --region us-east-1 \
   --output json
 ```
 
-Replace `E2QWRUHEXAMPLE` with the actual `ETag` from the `get-distribution-config` response. If the `ETag` doesn't match, CloudFront rejects the update—this prevents you from overwriting changes made by someone else (or by a concurrent process).
+If the `ETag` doesn't match, CloudFront rejects the update—this prevents you from overwriting changes made by someone else (or by a concurrent process).
 
 In the console, the **Origins** tab of your distribution shows the OAC attached to the S3 origin in the **Origin access** column.
 

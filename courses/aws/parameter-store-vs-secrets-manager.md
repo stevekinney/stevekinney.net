@@ -4,7 +4,7 @@ description: >-
   Choose between Parameter Store and Secrets Manager based on your use case,
   understanding the tradeoffs in cost, features, and complexity.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - parameter-store
@@ -168,13 +168,18 @@ When you use both services, your Lambda execution role needs permissions for bot
     {
       "Effect": "Allow",
       "Action": ["kms:Decrypt"],
-      "Resource": "arn:aws:kms:us-east-1:123456789012:alias/aws/ssm"
+      "Resource": "arn:aws:kms:us-east-1:123456789012:key/1234abcd-12ab-34cd-56ef-1234567890ab"
     }
   ]
 }
 ```
 
-Notice the scoping. The SSM statement grants access to parameters under `/my-frontend-app/production/*`. The Secrets Manager statement does the same for secrets. The KMS statement grants decryption for Parameter Store SecureString values. This follows the principle of least privilege you learned in [Principle of Least Privilege](principle-of-least-privilege.md)—each function gets access to exactly what it needs.
+Notice the scoping. The SSM statement grants access to parameters under `/my-frontend-app/production/*`. The Secrets Manager statement does the same for secrets. The third statement grants decryption for Parameter Store `SecureString` values encrypted with a **customer-managed** KMS key.
+
+> [!WARNING]
+> The `kms:Decrypt` statement shown here uses the KMS **key ARN**, not an alias ARN. IAM evaluates KMS resource conditions by key ARN, and some evaluators will silently refuse a policy that references `arn:aws:kms:…:alias/…` in the `Resource` field. Always write the key ARN here (or grant decrypt access through a KMS key policy, which is the better pattern for cross-account access).
+>
+> You only need this statement at all if you're using a **customer-managed** KMS key. Parameters encrypted with the AWS-managed `alias/aws/ssm` key are handled by SSM on the caller's behalf—the execution role doesn't need an explicit `kms:Decrypt` statement because SSM uses its own grants. If all your `SecureString` parameters use the default `alias/aws/ssm` key, delete this statement entirely. This follows the principle of least privilege you learned in [Principle of Least Privilege](principle-of-least-privilege.md)—each function gets access to exactly what it needs.
 
 The `*` wildcard in the Secrets Manager ARN isn't laziness—it's required. Secrets Manager appends a random 6-character suffix to secret ARNs (e.g., `secret:/my-frontend-app/production/stripe-key-AbCdEf`) to prevent name reuse within the deletion recovery window. You can't predict that suffix at policy-writing time, so your IAM policy has to use `*` or include the full ARN with the suffix.
 

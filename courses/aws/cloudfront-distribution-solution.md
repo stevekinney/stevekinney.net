@@ -3,7 +3,7 @@ title: 'Solution: Set Up a CloudFront Distribution'
 description: >-
   Complete solution with all CLI commands for creating a CloudFront distribution with S3 origin, OAC, ACM certificate, and SPA routing.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - cloudfront
@@ -57,6 +57,18 @@ Expected output:
 ```
 
 Save the `Id` value (`E1OAC2EXAMPLE`).
+
+## Confirm the ACM Certificate Is Issued
+
+The distribution config below bakes in the ACM certificate ARN _and_ the aliases (`example.com`, `www.example.com`) in the initial `create-distribution` call. CloudFront rejects the request if the certificate isn't in `ISSUED` status yet, so block until validation completes:
+
+```bash
+aws acm wait certificate-validated \
+  --certificate-arn arn:aws:acm:us-east-1:123456789012:certificate/a1b2c3d4-e5f6-7890-abcd-ef1234567890 \
+  --region us-east-1
+```
+
+No output means the cert is issued. If this times out, your DNS validation records haven't propagated yet—check [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md) before continuing.
 
 ## Create the Distribution
 
