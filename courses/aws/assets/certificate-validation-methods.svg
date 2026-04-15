@@ -44,12 +44,12 @@
   <text x="300" y="382" class="label center">Add the CNAME to DNS</text>
 
   <rect x="120" y="450" width="360" height="68" class="green" />
-  <text x="300" y="484" class="label center">ACM sees the record</text>
-  <text x="300" y="506" class="label center">and issues the cert</text>
+  <text x="300" y="478" class="label center">ACM sees the record</text>
+  <text x="300" y="500" class="label center">and issues the cert</text>
 
   <rect x="120" y="560" width="360" height="68" class="green" />
-  <text x="300" y="594" class="label center">The same record enables</text>
-  <text x="300" y="616" class="label center">auto-renewal</text>
+  <text x="300" y="588" class="label center">The same record enables</text>
+  <text x="300" y="610" class="label center">auto-renewal</text>
 
   <path class="line" d="M 300 298 L 300 340" />
   <path class="line" d="M 300 408 L 300 450" />
@@ -67,10 +67,10 @@
   <rect x="720" y="450" width="360" height="68" class="green" />
   <text x="900" y="492" class="label center">Certificate gets issued</text>
 
-  <rect x="720" y="548" width="360" height="92" class="warn" />
-  <text x="900" y="584" class="label center">Renewal needs another</text>
-  <text x="900" y="606" class="label center">human response</text>
-  <text x="900" y="628" class="small center">Miss the email and the certificate expires.</text>
+  <rect x="720" y="548" width="360" height="100" class="warn" />
+  <text x="900" y="582" class="label center">Renewal needs another</text>
+  <text x="900" y="604" class="label center">human response</text>
+  <text x="900" y="630" class="small center">Miss the email and the certificate expires.</text>
 
   <path class="line" d="M 900 298 L 900 340" />
   <path class="line" d="M 900 408 L 900 450" />

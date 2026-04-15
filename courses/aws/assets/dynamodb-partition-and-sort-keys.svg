@@ -36,16 +36,16 @@
   <text x="80" y="184" class="heading">Example table: userId + itemId</text>
 
   <path class="line" d="M 120 250 L 250 250" />
-  <text x="100" y="236" class="body">Query userId = user-123</text>
+  <text x="250" y="236" text-anchor="end" class="small">Query userId = user-123</text>
 
   <rect x="260" y="220" width="340" height="420" class="partition" />
   <text x="300" y="262" class="label">Partition: user-123</text>
-  <rect x="300" y="300" width="260" height="70" class="item" />
-  <text x="330" y="342" class="body">item-001  Deploy to S3</text>
-  <rect x="300" y="400" width="260" height="70" class="item" />
-  <text x="330" y="442" class="body">item-002  Configure CloudFront</text>
-  <rect x="300" y="500" width="260" height="70" class="item" />
-  <text x="330" y="542" class="body">item-003  Set up Route 53</text>
+  <rect x="290" y="300" width="290" height="70" class="item" />
+  <text x="310" y="342" class="body">item-001  Deploy to S3</text>
+  <rect x="290" y="400" width="290" height="70" class="item" />
+  <text x="310" y="442" class="body">item-002  Configure CloudFront</text>
+  <rect x="290" y="500" width="290" height="70" class="item" />
+  <text x="310" y="542" class="body">item-003  Set up Route 53</text>
 
   <text x="430" y="598" class="small" text-anchor="middle">
     <tspan x="430" dy="0">Items stay grouped by partition key</tspan>
@@ -54,12 +54,12 @@
 
   <rect x="660" y="220" width="340" height="420" class="partition" />
   <text x="700" y="262" class="label">Partition: user-456</text>
-  <rect x="700" y="300" width="260" height="70" class="item" />
-  <text x="730" y="342" class="body">item-001  Write Lambda handler</text>
-  <rect x="700" y="400" width="260" height="70" class="item" />
-  <text x="730" y="442" class="body">item-003  Build API route</text>
-  <rect x="700" y="500" width="260" height="70" class="item" />
-  <text x="730" y="542" class="body">item-004  Add DynamoDB query</text>
+  <rect x="690" y="300" width="290" height="70" class="item" />
+  <text x="710" y="342" class="body">item-001  Write Lambda handler</text>
+  <rect x="690" y="400" width="290" height="70" class="item" />
+  <text x="710" y="442" class="body">item-003  Build API route</text>
+  <rect x="690" y="500" width="290" height="70" class="item" />
+  <text x="710" y="542" class="body">item-004  Add DynamoDB query</text>
 
   <text x="830" y="598" class="small" text-anchor="middle">
     <tspan x="830" dy="0">A query for user-123 never reads</tspan>
