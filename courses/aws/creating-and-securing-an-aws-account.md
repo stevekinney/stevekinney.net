@@ -4,7 +4,7 @@ description: >-
   Create an AWS account, enable MFA on the root user, and understand why root
   should be locked away after initial setup.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - iam
@@ -135,6 +135,9 @@ That is a good direction for a team. It is also one more system to understand on
 - Create one everyday IAM user for yourself.
 - Use that user for console access and CLI setup.
 - Learn IAM concepts before layering on organization-wide identity tooling.
+
+> [!NOTE] 2026 Recommendation
+> The course teaches IAM users because they're the shortest path to understanding the permission model. In a real production account, the 2026 recommendation is to enable **IAM Identity Center** and use `aws configure sso` to log in through a short-lived SSO session instead of creating IAM users with long-lived access keys. Same IAM concepts apply underneath—the difference is where the credentials come from. Once you've finished the course, the [AWS IAM Identity Center user guide](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html) is the natural next read.
 
 We will talk about better long-term patterns later. Right now, the shortest path to understanding AWS is still the best one.
 

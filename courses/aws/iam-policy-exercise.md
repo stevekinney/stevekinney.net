@@ -4,7 +4,7 @@ description: >-
   Create an IAM user and policy that can only sync files to an S3 bucket and
   create CloudFront invalidations.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - iam
@@ -14,6 +14,9 @@ tags:
 You're going to create a **deploy bot**—an IAM user whose sole purpose is to deploy your frontend. This user can sync files to a specific S3 bucket and invalidate a specific CloudFront distribution's cache. It can't do anything else. No reading DynamoDB tables, no creating Lambda functions, no changing IAM permissions.
 
 In production, this deploy identity would be an **OIDC-federated IAM role** rather than a user with static access keys—GitHub Actions can request short-lived credentials from AWS without storing any secrets. You'll graduate `deploy-bot` (or its OIDC role equivalent) into the GitHub Actions deploy in the CI/CD lesson. For now, building it as an IAM user with scoped keys is the right learning path: it forces you to think explicitly about which permissions are needed and why.
+
+> [!WARNING] Delete these keys after the CI/CD lesson
+> The access keys you generate in this exercise are training wheels. Once you reach [CI/CD with GitHub Actions](cicd-with-github-actions.md) and wire up the OIDC-federated role, **delete the `deploy-bot` access keys** (`aws iam delete-access-key --user-name deploy-bot --access-key-id <id>`). Long-lived access keys sitting around after you no longer need them are the textbook way AWS accounts get compromised. The IAM role stays, the policy attached to it stays, but the keys go.
 
 This is the same deploy bot you'll wire into a GitHub Actions pipeline later in the course. I want you to build it now so you understand exactly what permissions it has and why.
 
