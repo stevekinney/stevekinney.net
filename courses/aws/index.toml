@@ -327,6 +327,14 @@ href = "secrets-in-lambda-exercise.md"
   title = "Solution"
   href = "secrets-in-lambda-solution.md"
 
+[[section.item]]
+title = "Capstone: End-to-End Summit Supply API"
+href = "end-to-end-summit-supply-api-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "end-to-end-summit-supply-api-solution.md"
+
 [[section]]
 title = "CloudWatch (Monitoring & Observability)"
 
@@ -407,6 +415,10 @@ href = "cost-monitoring-and-budget-alarms.md"
 [[section.item]]
 title = "Infrastructure as Code: When to Reach for CDK"
 href = "infrastructure-as-code-and-cdk.md"
+
+[[section.item]]
+title = "Cleanup and Teardown"
+href = "cleanup-and-teardown.md"
 
 [[section.item]]
 title = "What's Next: Services You'll Eventually Need"
