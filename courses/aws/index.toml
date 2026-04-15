@@ -53,10 +53,6 @@ title = "Static Website Hosting on S3"
 href = "static-website-hosting-on-s3.md"
 
 [[section.item]]
-title = "Versioning, Lifecycle Rules, and Cost"
-href = "s3-versioning-lifecycle-and-cost.md"
-
-[[section.item]]
 title = "Exercise: Deploy a Static Site to S3"
 href = "s3-static-site-exercise.md"
 
@@ -124,6 +120,10 @@ href = "creating-a-cloudfront-distribution.md"
 [[section.item]]
 title = "Origin Access Control for S3"
 href = "origin-access-control-for-s3.md"
+
+[[section.item]]
+title = "Versioning, Lifecycle Rules, and Cost"
+href = "s3-versioning-lifecycle-and-cost.md"
 
 [[section.item]]
 title = "Cache Behaviors and Invalidations"
@@ -266,41 +266,6 @@ href = "api-gateway-lambda-exercise.md"
   href = "api-gateway-lambda-solution.md"
 
 [[section]]
-title = "Lambda@Edge & CloudFront Functions"
-
-[[section.item]]
-title = "Edge Compute: Lambda@Edge vs. CloudFront Functions"
-href = "edge-compute-comparison.md"
-
-[[section.item]]
-title = "Writing a CloudFront Function"
-href = "writing-a-cloudfront-function.md"
-
-[[section.item]]
-title = "Writing a Lambda@Edge Function"
-href = "writing-a-lambda-at-edge-function.md"
-
-[[section.item]]
-title = "Common Use Cases"
-href = "edge-function-use-cases.md"
-
-[[section.item]]
-title = "A/B Testing at the Edge"
-href = "ab-testing-at-the-edge.md"
-
-[[section.item]]
-title = "Debugging and Limitations"
-href = "edge-function-debugging-and-limitations.md"
-
-[[section.item]]
-title = "Exercise: Add a CloudFront Function"
-href = "cloudfront-function-exercise.md"
-
-  [[section.item.related]]
-  title = "Solution"
-  href = "cloudfront-function-solution.md"
-
-[[section]]
 title = "DynamoDB (Lightweight Data Layer)"
 
 [[section.item]]
@@ -392,6 +357,41 @@ href = "cloudwatch-alarms-exercise.md"
   [[section.item.related]]
   title = "Solution"
   href = "cloudwatch-alarms-solution.md"
+
+[[section]]
+title = "Lambda@Edge & CloudFront Functions"
+
+[[section.item]]
+title = "Edge Compute: Lambda@Edge vs. CloudFront Functions"
+href = "edge-compute-comparison.md"
+
+[[section.item]]
+title = "Writing a CloudFront Function"
+href = "writing-a-cloudfront-function.md"
+
+[[section.item]]
+title = "Writing a Lambda@Edge Function"
+href = "writing-a-lambda-at-edge-function.md"
+
+[[section.item]]
+title = "Common Use Cases"
+href = "edge-function-use-cases.md"
+
+[[section.item]]
+title = "A/B Testing at the Edge"
+href = "ab-testing-at-the-edge.md"
+
+[[section.item]]
+title = "Debugging and Limitations"
+href = "edge-function-debugging-and-limitations.md"
+
+[[section.item]]
+title = "Exercise: Add a CloudFront Function"
+href = "cloudfront-function-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "cloudfront-function-solution.md"
 
 [[section]]
 title = "Production Hardening & What's Next"
