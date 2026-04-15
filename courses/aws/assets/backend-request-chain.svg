@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 1200 420"
+   role="img"
+   aria-labelledby="title desc"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title id="title">Frontend fetch request flowing through API Gateway, Lambda, and DynamoDB</title>
+  <desc id="desc">A request starts at the browser, traverses Route 53 and API Gateway, is handled by a Lambda function that reads from DynamoDB and Parameter Store, and the response travels the same path back to the browser.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" />
+    </marker>
+    <style>
+      .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; rx: 10; }
+      .browser { fill: #eef2ff; stroke: #4f46e5; }
+      .edge { fill: #ecfeff; stroke: #0891b2; }
+      .compute { fill: #fdf4ff; stroke: #a21caf; }
+      .data { fill: #fef3c7; stroke: #b45309; }
+      .secret { fill: #f1f5f9; stroke: #475569; }
+      .label { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 14px; fill: #0f172a; text-anchor: middle; }
+      .sublabel { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 11px; fill: #475569; text-anchor: middle; }
+      .arrow-label { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 11px; fill: #334155; text-anchor: middle; }
+      .edgeline { stroke: #334155; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+      .dashed { stroke-dasharray: 5 4; }
+    </style>
+  </defs>
+
+  <!-- Browser -->
+  <rect class="box browser" x="30" y="170" width="140" height="80" rx="10" />
+  <text class="label" x="100" y="205">Browser</text>
+  <text class="sublabel" x="100" y="222">fetch('/lists')</text>
+
+  <!-- Route 53 -->
+  <rect class="box edge" x="210" y="170" width="140" height="80" rx="10" />
+  <text class="label" x="280" y="205">Route 53</text>
+  <text class="sublabel" x="280" y="222">api.example.com</text>
+
+  <!-- API Gateway -->
+  <rect class="box edge" x="390" y="170" width="170" height="80" rx="10" />
+  <text class="label" x="475" y="200">API Gateway</text>
+  <text class="sublabel" x="475" y="218">HTTP API · JWT auth</text>
+  <text class="sublabel" x="475" y="232">CORS · throttling</text>
+
+  <!-- Lambda -->
+  <rect class="box compute" x="600" y="170" width="180" height="80" rx="10" />
+  <text class="label" x="690" y="200">Lambda</text>
+  <text class="sublabel" x="690" y="218">summit-supply-api</text>
+  <text class="sublabel" x="690" y="232">Node.js 22 · arm64</text>
+
+  <!-- DynamoDB -->
+  <rect class="box data" x="830" y="70" width="180" height="80" rx="10" />
+  <text class="label" x="920" y="100">DynamoDB</text>
+  <text class="sublabel" x="920" y="118">saved-lists table</text>
+  <text class="sublabel" x="920" y="132">userId + listId</text>
+
+  <!-- Parameter Store -->
+  <rect class="box secret" x="830" y="270" width="180" height="80" rx="10" />
+  <text class="label" x="920" y="300">Parameter Store</text>
+  <text class="sublabel" x="920" y="318">SecureString</text>
+  <text class="sublabel" x="920" y="332">search-api-key</text>
+
+  <!-- CloudWatch -->
+  <rect class="box secret" x="1040" y="170" width="130" height="80" rx="10" />
+  <text class="label" x="1105" y="200">CloudWatch</text>
+  <text class="sublabel" x="1105" y="218">logs</text>
+  <text class="sublabel" x="1105" y="232">metrics</text>
+
+  <!-- Arrows: forward path -->
+  <path class="edgeline" d="M 170 210 L 205 210" />
+  <path class="edgeline" d="M 350 210 L 385 210" />
+  <path class="edgeline" d="M 560 210 L 595 210" />
+  <path class="edgeline" d="M 780 200 Q 810 200 830 140" />
+  <path class="edgeline" d="M 780 220 Q 810 220 830 290" />
+  <path class="edgeline" d="M 780 210 L 1035 210" />
+
+  <!-- Arrow labels -->
+  <text class="arrow-label" x="187" y="200">DNS</text>
+  <text class="arrow-label" x="367" y="200">HTTPS</text>
+  <text class="arrow-label" x="577" y="200">proxy</text>
+  <text class="arrow-label" x="805" y="160">Query</text>
+  <text class="arrow-label" x="805" y="265">GetParameter</text>
+  <text class="arrow-label" x="905" y="200">PutLogEvents</text>
+
+  <!-- Trust boundary label -->
+  <text class="sublabel" x="30" y="380" text-anchor="start">Each arrow requires an IAM policy: execution role → DynamoDB + Parameter Store + CloudWatch. API Gateway → Lambda via resource policy.</text>
+</svg>

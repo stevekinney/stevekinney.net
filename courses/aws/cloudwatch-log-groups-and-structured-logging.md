@@ -5,7 +5,7 @@ description: >-
   logging in your Lambda functions, and query logs using CloudWatch Logs
   Insights.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - cloudwatch
@@ -301,5 +301,8 @@ fields @timestamp, message, error, duration
 Results appear in seconds, with every field neatly extracted. You see the error message, the request duration, and the timestamp for each failure. No scrolling, no guessing.
 
 The five minutes you spend switching to structured logging pays for itself the first time you debug a production issue at 11 PM. I learned this the hard way—nothing quite like scrolling through unstructured text at midnight wishing you'd spent those five minutes earlier.
+
+> [!TIP]
+> If you want the structured-logging wrappers without writing them yourself, **AWS Lambda Powertools for TypeScript** (`@aws-lambda-powertools/logger`, `metrics`, `tracer`) handles correlation IDs, JSON log formatting, and custom metrics emission with a few lines of setup. It's AWS-maintained and the de facto standard in production TypeScript Lambdas.
 
 Now that your logs are structured and queryable, it's time to look at the other side of CloudWatch: the metrics that Lambda, API Gateway, and DynamoDB publish automatically. In the next lesson, you'll build a dashboard that gives you a single view of your application's health.

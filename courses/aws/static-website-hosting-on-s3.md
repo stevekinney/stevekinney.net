@@ -3,7 +3,7 @@ title: 'Static Website Hosting on S3'
 description: >-
   Enable S3 static website hosting, configure an index document and error document, and access your site through the S3 website endpoint.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - s3
@@ -104,6 +104,9 @@ For `us-east-1`, the format is `s3-website-us-east-1` (with a hyphen before the 
 
 > [!WARNING]
 > S3 website endpoints only support HTTP, not HTTPS. If you load your site over the S3 website URL, the browser will show it as "Not Secure." This is one of the main reasons the production path puts CloudFront in front of the bucket—CloudFront gives you HTTPS with an ACM certificate. For now, HTTP is fine for testing and development.
+
+> [!NOTE] Website Endpoint vs. REST Endpoint
+> S3 exposes two different endpoints per bucket. The **website endpoint** (`bucket.s3-website-us-east-1.amazonaws.com`) is what you're using in this lesson—it supports index documents, error documents, and redirects, but no HTTPS and no `s3:GetObject`-style REST API calls. The **REST endpoint** (`bucket.s3.us-east-1.amazonaws.com`) is the full S3 API endpoint—it supports HTTPS and SDK calls but doesn't honor the website-hosting configuration. When you wire up CloudFront in [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md), you'll use the **REST endpoint** as the origin (not the website one), because CloudFront speaks the REST API. Using the wrong one here is a common footgun—CloudFront + website endpoint _appears_ to work until you hit OAC or custom error responses, then silently fails.
 
 ## How the Index Document Works
 

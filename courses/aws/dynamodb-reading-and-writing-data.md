@@ -4,7 +4,7 @@ description: >-
   Perform basic CRUD operations on DynamoDB items using the AWS SDK v3 with
   PutItem, GetItem, UpdateItem, and DeleteItem from TypeScript.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - dynamodb
@@ -137,6 +137,41 @@ This is more verbose than PutItem, but let's walk through it:
 
 > [!TIP]
 > DynamoDB has over 500 reserved words—including common ones like `status`, `name`, `data`, `type`, and `count`. If you get a `ValidationException` about reserved words, wrap the attribute name in `ExpressionAttributeNames`. A safe habit: always use `#` placeholders for attribute names in expressions.
+
+## Conditional Writes (Optimistic Locking)
+
+Both `PutCommand` and `UpdateCommand` accept a `ConditionExpression` that fails the write if a condition on the item isn't met. This is how you implement optimistic concurrency: read an item, remember its version number, and when you write back, require that the version still matches.
+
+```typescript
+// Two users editing the same list. Fetch current version:
+const current = await client.send(
+  new GetCommand({
+    TableName: TABLE_NAME,
+    Key: { userId, listId },
+  }),
+);
+const currentVersion = current.Item?.version ?? 0;
+
+// Write only if the version hasn't changed since we read it:
+await client.send(
+  new UpdateCommand({
+    TableName: TABLE_NAME,
+    Key: { userId, listId },
+    UpdateExpression: 'SET #n = :name, version = version + :inc',
+    ConditionExpression: 'version = :expected',
+    ExpressionAttributeNames: { '#n': 'name' },
+    ExpressionAttributeValues: {
+      ':name': 'Updated name',
+      ':inc': 1,
+      ':expected': currentVersion,
+    },
+  }),
+);
+```
+
+If another writer updated the item between your read and your write, the `ConditionExpression` fails and DynamoDB returns a `ConditionalCheckFailedException`. Your handler can catch that, re-read, and retry—or surface a 409 to the client.
+
+`ConditionExpression` also covers "only insert if this item doesn't exist already" (`attribute_not_exists(userId)` on a `PutCommand`), which prevents two concurrent POSTs from both creating the same resource with the same ID.
 
 ## DeleteItem: Remove an Item
 

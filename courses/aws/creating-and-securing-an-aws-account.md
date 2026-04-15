@@ -116,6 +116,10 @@ AWS lets you define separate contacts for billing, operations, and security noti
 
 If this is just your personal learning account, you can leave these empty for now. If you have a shared inbox for billing or a teammate who should receive security notices, set them now while you still remember. It is much easier to do this on day one than during an incident.
 
+### Turn On CloudTrail
+
+Every new AWS account already has a 90-day **event history** for management actions enabled by default. That's enough for basic "who did what?" questions, but 90 days is short and it doesn't cover data-plane events (S3 object reads, for example). Enable an organization-wide **CloudTrail trail** writing to an S3 bucket now, while the account is tiny and the footprint is trivial. You can't retroactively reconstruct actions that weren't logged. The [CloudTrail getting-started guide](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-create-and-update-a-trail.html) walks through the console flow.
+
 ### Enable IAM Access to Billing
 
 By default, new IAM users often cannot see billing information. That becomes a problem later when you try to set up budgets or inspect charges without logging back in as root.

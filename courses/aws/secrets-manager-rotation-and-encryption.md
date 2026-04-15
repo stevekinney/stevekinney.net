@@ -4,7 +4,7 @@ description: >-
   Store sensitive credentials in Secrets Manager, understand automatic rotation,
   and know when Secrets Manager is worth the cost over Parameter Store.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - secrets-manager
@@ -122,6 +122,9 @@ aws secretsmanager rotate-secret \
 ```
 
 For third-party services (Stripe, SendGrid, Twilio), you write your own rotation Lambda that calls the third-party API to generate a new key.
+
+> [!WARNING]
+> If your RDS or Aurora database sits inside a private VPC (the default for anything production-shaped), the rotation Lambda must also run inside the same VPC, _and_ that VPC must have a **VPC endpoint for Secrets Manager** (`com.amazonaws.us-east-1.secretsmanager`). Without the endpoint, the rotation Lambda can't reach the Secrets Manager API to confirm success, and rotation fails silently with opaque timeout errors. This is the single most common reason RDS rotation breaks after initial setup.
 
 > [!WARNING]
 > Automatic rotation means your application must handle credential changes gracefully. If your Lambda function caches a secret at init time and never refreshes it, a rotated credential will cause failures until the next cold start. The solution is to cache with a TTL and re-fetch when the cache expires. The next lesson covers caching strategies in detail.

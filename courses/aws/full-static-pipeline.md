@@ -3,7 +3,7 @@ title: 'The Full Static Site Pipeline'
 description: >-
   Walk through the end-to-end architecture of deploying a static site to AWS, connecting S3, CloudFront, ACM, and Route 53 into a working pipeline.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - deployment
@@ -206,3 +206,7 @@ You want four things to be true:
 - **The bucket is still public:** if the S3 URL works directly, Origin Access Control is not actually protecting the bucket.
 - **The alternate domain name is missing from CloudFront:** Route 53 can point at the distribution, but HTTPS still fails for your custom domain.
 - **The SPA fallback is only configured in S3:** that gives you a page, but often with the wrong status code. CloudFront should own the final browser behavior.
+
+## Beyond This Course: Continuous Deployment
+
+Once this pipeline is stable, **CloudFront Continuous Deployment** lets you ship high-risk distribution changes (new cache behaviors, new origin configs, new CloudFront Functions) behind a weighted split. You create a _staging distribution_ linked to your primary, route a percentage of traffic to it via a continuous-deployment policy, and promote the staging config to primary once you've verified it. Think of it as blue/green for CloudFront itself. It's not covered in this course—the scope is shipping the first version, not iterating on it—but it's the right answer when you need to change the distribution without a risky cutover.

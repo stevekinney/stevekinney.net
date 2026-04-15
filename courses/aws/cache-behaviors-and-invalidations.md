@@ -181,7 +181,7 @@ The response includes an invalidation ID you can use to check status:
 }
 ```
 
-Invalidations typically take 5–15 minutes to propagate fully across all edge locations, so don't be surprised if an immediate post-invalidation request still returns stale content.
+Invalidations typically take 5–15 minutes to propagate fully across all edge locations, so don't be surprised if an immediate post-invalidation request still returns stale content. During that window, _different users are served different versions of your site_—the user in Sydney might get the new bundle while the user in Frankfurt still gets the old one. For hashed assets this is fine (both filenames coexist). For `index.html` it means someone's browser can load the new HTML that references old `main.abc.js` that's already been `--delete`d from S3. The short-TTL + hash-the-assets pattern below makes this gap invisible. Skipping it makes the gap loudly visible.
 
 In the console, the **Invalidations** tab lets you create invalidations by entering object paths. The `/*` wildcard invalidates everything in one operation.
 

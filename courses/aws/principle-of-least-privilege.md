@@ -4,7 +4,7 @@ description: >-
   Apply the principle of least privilege by scoping IAM policies to the narrowest
   set of actions and resources a user or service actually needs.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - iam
@@ -138,6 +138,8 @@ Run the commands with the new policy. If something fails with an `AccessDenied` 
 
 > [!TIP]
 > AWS CloudTrail logs every API call made in your account, including which actions were actually invoked. If you're unsure what actions a service needs, attach a broader policy temporarily, run the workflow, then check CloudTrail to see exactly which actions were called. Narrow the policy to match. This is a legitimate way to get to least privilege—the key is that you actually narrow it down afterwards, not leave the broad policy in place.
+>
+> For IAM roles and users specifically, **IAM Access Advisor** (in the IAM console under the identity's details, and via `aws iam generate-service-last-accessed-details`) shows which AWS services the identity has _actually used_ in the last tracking period. It's the fastest path to spotting services attached via `AdministratorAccess` that the identity has never touched. Start with Access Advisor for a quick hit list, use CloudTrail when you need the specific `Action` names.
 
 ## Common Patterns for Frontend Deployments
 

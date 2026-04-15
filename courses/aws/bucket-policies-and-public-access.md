@@ -3,7 +3,7 @@ title: 'Bucket Policies and Public Access'
 description: >-
   Write a bucket policy that grants public read access to your static assets and understand how bucket policies differ from IAM policies.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - s3
@@ -79,6 +79,9 @@ After saving, the **Permissions** tab confirms that Block Public Access is now *
 
 > [!WARNING]
 > Disabling Block Public Access is appropriate for a bucket that serves public static website files. It is not appropriate for buckets containing user data, logs, backups, or anything sensitive. In the CloudFront section, you'll switch to a different approach, Origin Access Control, that keeps the bucket private and lets only CloudFront read from it.
+
+> [!WARNING] Account-Level BPA
+> Block Public Access exists at _two_ levels: the bucket and the account. If the **account-level** BPA is on (the default on accounts created in recent years), it overrides bucket-level settings—your bucket will reject the public policy with an `AccessDenied` or `InvalidBucketAclWithBlockPublicAccess` error no matter what you set on the bucket itself. Check the account-level settings at **S3 Console → Block Public Access settings for this account**, or via `aws s3control get-public-access-block --account-id 123456789012`. Turn them off if the bucket-level change isn't taking effect, or—better—skip this lesson's public-bucket path entirely and go straight to CloudFront + OAC once you've read through the concepts here.
 
 ## Writing a Public Read Bucket Policy
 

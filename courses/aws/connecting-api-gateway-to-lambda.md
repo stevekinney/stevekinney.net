@@ -4,7 +4,7 @@ description: >-
   Wire an HTTP API route to a Lambda function using a Lambda proxy integration,
   so that API requests trigger your function and return its response.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - api-gateway
@@ -33,6 +33,18 @@ flowchart LR
 ```
 
 You've already written the handler and deployed it in [Writing a Lambda Handler](writing-a-lambda-handler.md) and [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md). Now you're wiring the HTTP layer.
+
+> [!TIP] When You Don't Need API Gateway
+> If all you want is _one_ HTTPS endpoint for a single Lambda—no custom domain, no routes, no auth, no stages—**Lambda Function URLs** do that in one command. They give you a `https://<id>.lambda-url.us-east-1.on.aws` URL wired directly to a function, with optional IAM auth, at no extra cost beyond the Lambda invocation. They don't replace API Gateway for real APIs (no routing, no throttling, no authorizers, no usage plans), but they're perfect for a webhook receiver or a one-off endpoint.
+>
+> ```bash
+> aws lambda create-function-url-config \
+>   --function-name my-webhook \
+>   --auth-type NONE \
+>   --region us-east-1
+> ```
+>
+> For everything else in this course, you'll stick with API Gateway—you want routes, CORS, and a custom domain.
 
 ## Create the Integration
 

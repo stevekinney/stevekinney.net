@@ -4,7 +4,7 @@ description: >-
   Store an API key in Parameter Store as a SecureString, create a Lambda
   function that reads it at init time, and call it through API Gateway.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - secrets
@@ -82,7 +82,7 @@ Your Lambda execution role (`my-frontend-app-lambda-role`) needs two new permiss
 
 2. **`kms:Decrypt`** on the AWS-managed SSM KMS key, so the function can decrypt the SecureString value.
 
-Write a policy JSON file and attach it to the execution role using `aws iam put-role-policy` (inline policy) or `aws iam create-policy` followed by `aws iam attach-role-policy` (managed policy).
+Write a policy JSON file and attach it to the execution role using `aws iam put-role-policy` (inline policy) or `aws iam create-policy` followed by `aws iam attach-role-policy` (managed policy). For this exercise, prefer the **inline** approach—the policy is specific to this one role and doesn't need to be shared, which matches the pattern used in [Lambda Execution Roles and Permissions](lambda-execution-roles-and-permissions.md). Managed policies are the right choice when the same policy is reused across multiple roles.
 
 Verify the policy is attached by listing the role's policies.
 

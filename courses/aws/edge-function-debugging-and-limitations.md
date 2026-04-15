@@ -5,7 +5,7 @@ description: >-
   constraints and deployment limitations that affect Lambda@Edge and CloudFront
   Functions.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - edge-functions
@@ -86,7 +86,7 @@ return { statusCode: 200, statusDescription: 'OK' };
 
 ### "Function exceeded the allowed size"
 
-- **CloudFront Functions:** Your code exceeds 10 KB. Remove comments, shorten variable names, or split the logic across a viewer request and viewer response function.
+- **CloudFront Functions:** Your code exceeds 10 KB. Remove comments, shorten variable names, or split the logic across a viewer request and viewer response function. Or move the data out of the function entirely—see KeyValueStore below.
 - **Lambda@Edge:** Your zipped deployment package exceeds 1 MB (viewer events) or 50 MB (origin events). Remove unused dependencies, use tree-shaking, or consider whether the dependency is truly necessary.
 
 ### The function works in test but not in production
@@ -142,6 +142,15 @@ Lambda@Edge functions are replicated to regional edge caches worldwide. This rep
 - **Deletion:** After removing a Lambda@Edge association, replicas are cleaned up asynchronously. You may not be able to delete the Lambda function for hours. The API returns `ReplicatedFunctionStillCreating` or `ResourceConflictException` until cleanup completes.
 
 CloudFront Functions don't have this problem. They propagate in seconds because they run on the CloudFront edge locations themselves, not on separate Lambda infrastructure.
+
+## CloudFront KeyValueStore
+
+**KeyValueStore** (KVS, GA December 2023) is the operational companion to CloudFront Functions. It's a globally distributed, low-latency key-value store that CloudFront Functions can read via `cf.kvs().get(key)`. It solves two problems that otherwise force you to Lambda@Edge:
+
+- **Data bigger than 10 KB.** Redirect maps, feature-flag JSON, per-tenant routing configs—keep the function tiny and look up the data at runtime.
+- **Data that changes independently of the function.** KVS updates don't redeploy the function. You can flip a feature flag in KVS without touching the CloudFront distribution at all.
+
+KVS also has sensible operational surface: the AWS CLI has first-class support (`aws cloudfront-keyvaluestore`), writes propagate globally in seconds, and reads inside a function are sub-millisecond. For any CloudFront Functions use case where the data is more interesting than the logic, reach for KVS before reaching for Lambda@Edge.
 
 ## Constraints Summary
 

@@ -157,7 +157,7 @@ This is the default **behavior**—the rules that apply to every request that do
 - **`TargetOriginId`**: Must match the `Id` of one of your origins.
 - **`ViewerProtocolPolicy`**: `"redirect-to-https"` means any HTTP request gets a 301 redirect to HTTPS. This is what you want for any production site.
 - **`CachePolicyId`**: Instead of manually specifying TTLs and forwarded values, you reference a managed **cache policy**. The ID `658327ea-f89d-4fab-a63d-7e88639e58f6` is AWS's **CachingOptimized** policy, which sets a default TTL of 86,400 seconds (24 hours), a maximum TTL of 31,536,000 seconds (365 days), and a minimum TTL of 1 second.
-- **`Compress`**: When `true`, CloudFront automatically compresses files using gzip or Brotli before sending them to the browser. Free performance improvement.
+- **`Compress`**: When `true`, CloudFront automatically compresses files using gzip or Brotli before sending them to the browser. CloudFront inspects the `Accept-Encoding` header and picks Brotli when the browser advertises it (every modern browser does), otherwise falls back to gzip. Brotli gets roughly 15-20% smaller payloads than gzip on text content. Free performance improvement either way.
 
 ### ViewerCertificate
 

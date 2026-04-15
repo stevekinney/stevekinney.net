@@ -2011,6 +2011,15 @@
       "lqip": "data:image/webp;base64,UklGRrYAAABXRUJQVlA4WAoAAAAQAAAAFwAADAAAQUxQSF8AAAABN6AgbQPGv+p2R0REJA8GsW1FwQY+GnB/g/9pADZYGmj/DiwZIvo/AUqbklYaj+GUhKQjpVMSZC0LxgoP8qwQ1chDwVsPyFKB6FfYzON+ahiAR3vevurff9Uw8Gj3DwBWUDggMAAAANACAJ0BKhgADQA/EXCwUCwmJKKwCAGAIglnAACFKgAA/qe68+vvo2I2NdTLTiUAAA==",
       "videoMimeType": null
     },
+    "courses/aws/assets/backend-request-chain.svg": {
+      "hash": "1471caee7100c608",
+      "width": 1200,
+      "height": 420,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1471caee7100c608/original.svg",
+      "avif": [],
+      "lqip": null,
+      "videoMimeType": null
+    },
     "courses/aws/assets/iam-mental-model.svg": {
       "hash": "a8f9bd27f28fbb96",
       "width": 1200,

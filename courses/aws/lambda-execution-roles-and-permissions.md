@@ -4,7 +4,7 @@ description: >-
   Create an IAM execution role for your Lambda function and attach policies that
   grant access to the AWS services your function needs.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - lambda
@@ -61,6 +61,17 @@ This policy says: "The Lambda service (`lambda.amazonaws.com`) is allowed to ass
 
 > [!WARNING]
 > The trust policy isn't the same as the permission policies you attach to the role. The trust policy controls who can _assume_ the role. The permission policies control what the role can _do_ once assumed. Mixing these up is a common source of confusion.
+
+If you ever need to verify what a role's trust policy actually says (for example, because you're chasing an `AccessDenied` on an `sts:AssumeRole` call), read the `AssumeRolePolicyDocument` field on the role:
+
+```bash
+aws iam get-role \
+  --role-name my-frontend-app-lambda-role \
+  --query 'Role.AssumeRolePolicyDocument' \
+  --output json
+```
+
+The output should show `lambda.amazonaws.com` as the trusted principal. If something else is in there—or the principal is `Service: "*"`—that's your bug.
 
 ## Creating the Role
 

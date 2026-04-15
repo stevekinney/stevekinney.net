@@ -5,7 +5,7 @@ description: >-
   hierarchical path structure, including both plain text and SecureString
   parameters.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - parameter-store
@@ -233,6 +233,29 @@ const getParametersByPath = async (path: string): Promise<Record<string, string>
   return parameters;
 };
 ```
+
+> [!WARNING]
+> `GetParametersByPath` caps at **10 parameters per call**. More than that and the response includes a `NextToken` that you must pass back in on a follow-up call. The example above ignores pagination—if you have more than 10 parameters under the path, you'll silently only see the first 10. The correct shape is a loop:
+>
+> ```typescript
+> let nextToken: string | undefined;
+> do {
+>   const response = await ssm.send(
+>     new GetParametersByPathCommand({
+>       Path: path,
+>       WithDecryption: true,
+>       Recursive: true,
+>       NextToken: nextToken,
+>     }),
+>   );
+>   for (const param of response.Parameters ?? []) {
+>     /* collect */
+>   }
+>   nextToken = response.NextToken;
+> } while (nextToken);
+> ```
+>
+> Or use the AWS SDK v3 paginator helper: `paginateGetParametersByPath({ client: ssm }, { Path: path })`.
 
 ## Standard vs. Advanced Tier
 
