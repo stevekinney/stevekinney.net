@@ -5,8 +5,30 @@
    aria-labelledby="title desc"
    version="1.1"
    id="svg19"
+   sodipodi:docname="parameter-store-hierarchy-and-iam-scope.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview19"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.54896078"
+     inkscape:cx="382.54099"
+     inkscape:cy="451.76269"
+     inkscape:window-width="1512"
+     inkscape:window-height="893"
+     inkscape:window-x="0"
+     inkscape:window-y="33"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg19" />
   <title
      id="title">Parameter Store hierarchy and IAM scope</title>
   <desc
@@ -215,7 +237,8 @@
   <path
      class="line"
      d="m 390,445 h 25 V 610 H 730 V 370 h 48"
-     id="path16" />
+     id="path16"
+     sodipodi:nodetypes="cccccc" />
   <rect
      x="780"
      y="500"

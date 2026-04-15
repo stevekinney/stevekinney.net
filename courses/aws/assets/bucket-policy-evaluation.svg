@@ -5,8 +5,30 @@
    aria-labelledby="title desc"
    version="1.1"
    id="svg26"
+   sodipodi:docname="bucket-policy-evaluation.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview26"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.81616305"
+     inkscape:cx="1037.7828"
+     inkscape:cy="431.28637"
+     inkscape:window-width="1512"
+     inkscape:window-height="893"
+     inkscape:window-x="0"
+     inkscape:window-y="33"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg26" />
   <title
      id="title">Bucket policy evaluation</title>
   <desc
@@ -119,9 +141,11 @@
      y="441.88477"
      class="small"
      id="text8"><tspan
+       sodipodi:role="line"
        id="tspan27"
        x="97.899414"
        y="441.88477">Used for admins, deploy bots,</tspan><tspan
+       sodipodi:role="line"
        id="tspan28"
        x="97.899414"
        y="459.38477">Lambda roles</tspan></text>
@@ -259,11 +283,13 @@
   <path
      class="line dashed"
      d="m 985,350 v 50"
-     id="path23" />
+     id="path23"
+     sodipodi:nodetypes="cc" />
   <path
      class="line dashed"
      d="m 985,350 h 155 v 235 h -30"
-     id="path24" />
+     id="path24"
+     sodipodi:nodetypes="cccc" />
   <rect
      x="455"
      y="560"
