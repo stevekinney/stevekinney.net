@@ -4,7 +4,7 @@ description: >-
   Write a Lambda handler in TypeScript that receives an event, processes it, and
   returns a properly formatted response.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - lambda
@@ -50,6 +50,7 @@ Create a `tsconfig.json` in the `lambda/` directory:
     "target": "ES2022",
     "module": "commonjs",
     "lib": ["ES2022"],
+    "types": ["node"],
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
