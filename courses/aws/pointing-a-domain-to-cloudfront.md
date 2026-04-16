@@ -3,7 +3,7 @@ title: 'Pointing a Domain to CloudFront'
 description: >-
   Create DNS records that point your custom domain to your CloudFront distribution, making your site accessible at your own domain name.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - route53
@@ -189,6 +189,53 @@ aws route53 change-resource-record-sets \
 ```
 
 Option A is preferable because alias records are free (no query charges) and resolve in one step. Option B adds an extra DNS lookup and incurs standard query charges.
+
+## With the SDK
+
+```typescript
+import {
+  Route53Client,
+  ChangeResourceRecordSetsCommand,
+  ListHostedZonesCommand,
+} from '@aws-sdk/client-route-53';
+
+const r53 = new Route53Client({ region: 'us-east-1' });
+// Route 53 is a global service — the SDK requires a region for signing but
+// the actual API endpoint is us-east-1 behind the scenes.
+
+const zones = await r53.send(new ListHostedZonesCommand({}));
+const zoneId = zones.HostedZones?.find((z) => z.Name === 'example.com.')
+  ?.Id?.split('/')
+  .pop()!;
+
+await r53.send(
+  new ChangeResourceRecordSetsCommand({
+    HostedZoneId: zoneId,
+    ChangeBatch: {
+      Changes: [
+        // Apex A-alias + AAAA-alias + www in a single atomic change.
+        ...(['A', 'AAAA'] as const).flatMap((type) =>
+          ['example.com', 'www.example.com'].map((name) => ({
+            Action: 'UPSERT' as const,
+            ResourceRecordSet: {
+              Name: name,
+              Type: type,
+              AliasTarget: {
+                // The hardcoded CloudFront alias hosted zone ID.
+                HostedZoneId: 'Z2FDTNDATAQYW2',
+                DNSName: 'd1234abcdef.cloudfront.net',
+                EvaluateTargetHealth: false,
+              },
+            },
+          })),
+        ),
+      ],
+    },
+  }),
+);
+```
+
+The SDK lets you batch several record changes into one call without the JSON-file choreography the CLI needs. `UPSERT` is idempotent: it creates the record if it's missing and replaces it if it exists.
 
 ## Verifying DNS Resolution
 

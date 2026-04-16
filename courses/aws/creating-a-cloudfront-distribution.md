@@ -3,7 +3,7 @@ title: 'Creating a CloudFront Distribution'
 description: >-
   Create a CloudFront distribution with an S3 origin and configure its basic settings using the AWS CLI.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - cloudfront
@@ -244,6 +244,66 @@ You should see your site—the same files you uploaded to S3 in [Uploading and O
 
 > [!TIP] Seeing "Access Denied"?
 > If you get an "Access Denied" XML error in the browser, that's expected at this point: CloudFront is reaching S3, but S3 isn't letting it in yet. The fix is the next lesson—you'll wire up **Origin Access Control** so CloudFront has its own identity that the bucket policy trusts. Don't loosen the bucket policy or re-enable public access to make this go away. Move on to [Origin Access Control for S3](origin-access-control-for-s3.md), then come back and reload.
+
+## With the SDK
+
+```typescript
+import {
+  CloudFrontClient,
+  CreateDistributionCommand,
+  GetDistributionCommand,
+  ListDistributionsCommand,
+  waitUntilDistributionDeployed,
+} from '@aws-sdk/client-cloudfront';
+
+const cloudfront = new CloudFrontClient({ region: 'us-east-1' });
+
+const created = await cloudfront.send(
+  new CreateDistributionCommand({
+    DistributionConfig: {
+      CallerReference: `my-frontend-app-${Date.now()}`,
+      Comment: 'CloudFront distribution for my-frontend-app-assets',
+      Enabled: true,
+      DefaultRootObject: 'index.html',
+      PriceClass: 'PriceClass_100',
+      HttpVersion: 'http2and3',
+      IsIPV6Enabled: true,
+      Origins: {
+        Quantity: 1,
+        Items: [
+          {
+            Id: 'S3-my-frontend-app-assets',
+            DomainName: 'my-frontend-app-assets.s3.us-east-1.amazonaws.com',
+            S3OriginConfig: { OriginAccessIdentity: '' },
+          },
+        ],
+      },
+      DefaultCacheBehavior: {
+        TargetOriginId: 'S3-my-frontend-app-assets',
+        ViewerProtocolPolicy: 'redirect-to-https',
+        CachePolicyId: '658327ea-f89d-4fab-a63d-7e88639e58f6',
+        Compress: true,
+        AllowedMethods: {
+          Quantity: 2,
+          Items: ['GET', 'HEAD'],
+          CachedMethods: { Quantity: 2, Items: ['GET', 'HEAD'] },
+        },
+      },
+      ViewerCertificate: { CloudFrontDefaultCertificate: true },
+      Restrictions: { GeoRestriction: { RestrictionType: 'none', Quantity: 0 } },
+    },
+  }),
+);
+
+// The v3 SDK ships CloudFormation-style waiter helpers for long-running
+// operations — no manual polling loop.
+await waitUntilDistributionDeployed(
+  { client: cloudfront, maxWaitTime: 1800 },
+  { Id: created.Distribution!.Id! },
+);
+```
+
+Note the `waitUntilDistributionDeployed` helper—the SDK wraps the same polling logic as `aws cloudfront wait distribution-deployed` but returns a proper promise you can `await`, making it far easier to compose into a deploy script.
 
 ## Listing and Describing Distributions
 

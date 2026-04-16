@@ -3,7 +3,7 @@ title: 'S3 Versioning, Lifecycle, and Cost'
 description: >-
   Enable versioning to protect against accidental overwrites, configure lifecycle rules to manage old versions, and understand how S3 pricing works.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - s3
@@ -203,6 +203,47 @@ If you want to save a bit more before deleting, you can transition old versions 
 ```
 
 This moves noncurrent versions to **S3 Standard-IA** (Infrequent Access) after 30 days, then deletes them after 90 days. Standard-IA costs about $0.0125 per GB per month—roughly half the price of Standard storage. For a frontend site, the savings are tiny, but the pattern is worth knowing for when you're managing buckets with more data.
+
+## With the SDK
+
+```typescript
+import {
+  S3Client,
+  PutBucketVersioningCommand,
+  PutBucketLifecycleConfigurationCommand,
+  ListObjectVersionsCommand,
+} from '@aws-sdk/client-s3';
+
+const s3 = new S3Client({ region: 'us-east-1' });
+
+await s3.send(
+  new PutBucketVersioningCommand({
+    Bucket: 'my-frontend-app-assets',
+    VersioningConfiguration: { Status: 'Enabled' },
+  }),
+);
+
+await s3.send(
+  new PutBucketLifecycleConfigurationCommand({
+    Bucket: 'my-frontend-app-assets',
+    LifecycleConfiguration: {
+      Rules: [
+        {
+          ID: 'expire-noncurrent-versions',
+          Status: 'Enabled',
+          Filter: {},
+          NoncurrentVersionTransitions: [{ NoncurrentDays: 30, StorageClass: 'STANDARD_IA' }],
+          NoncurrentVersionExpiration: { NoncurrentDays: 90 },
+        },
+      ],
+    },
+  }),
+);
+
+// Inspect every object version (including delete markers):
+const versions = await s3.send(new ListObjectVersionsCommand({ Bucket: 'my-frontend-app-assets' }));
+console.log(versions.Versions, versions.DeleteMarkers);
+```
 
 ## Understanding S3 Pricing
 

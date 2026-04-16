@@ -4,7 +4,7 @@ description: >-
   Create an IAM user and policy that can only sync files to an S3 bucket and
   create CloudFront invalidations.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - iam
@@ -134,6 +134,62 @@ aws sts get-caller-identity \
 ```
 
 You should see the `deploy-bot` user's ARN in the response.
+
+## With the SDK
+
+The whole exercise in TypeScript, for comparison:
+
+```typescript
+import {
+  IAMClient,
+  CreateUserCommand,
+  CreateAccessKeyCommand,
+  CreatePolicyCommand,
+  AttachUserPolicyCommand,
+} from '@aws-sdk/client-iam';
+
+const iam = new IAMClient({ region: 'us-east-1' });
+
+await iam.send(new CreateUserCommand({ UserName: 'deploy-bot' }));
+
+const keys = await iam.send(new CreateAccessKeyCommand({ UserName: 'deploy-bot' }));
+// This response is the ONLY time the secret is returned — store it now.
+console.log('Access key:', keys.AccessKey?.AccessKeyId);
+console.log('Secret:', keys.AccessKey?.SecretAccessKey);
+
+const policy = await iam.send(
+  new CreatePolicyCommand({
+    PolicyName: 'DeployBotPolicy',
+    PolicyDocument: JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Effect: 'Allow',
+          Action: ['s3:PutObject', 's3:DeleteObject'],
+          Resource: 'arn:aws:s3:::my-frontend-app-assets/*',
+        },
+        {
+          Effect: 'Allow',
+          Action: ['s3:ListBucket'],
+          Resource: 'arn:aws:s3:::my-frontend-app-assets',
+        },
+        {
+          Effect: 'Allow',
+          Action: ['cloudfront:CreateInvalidation'],
+          Resource: 'arn:aws:cloudfront::123456789012:distribution/E1A2B3C4D5E6F7',
+        },
+      ],
+    }),
+  }),
+);
+
+await iam.send(
+  new AttachUserPolicyCommand({
+    UserName: 'deploy-bot',
+    PolicyArn: policy.Policy!.Arn!,
+  }),
+);
+```
 
 ## Checkpoints
 

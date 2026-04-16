@@ -4,7 +4,7 @@ description: >-
   Wire an HTTP API route to a Lambda function using a Lambda proxy integration,
   so that API requests trigger your function and return its response.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - api-gateway
@@ -238,6 +238,51 @@ aws apigatewayv2 get-integrations \
   --api-id abc123def4 \
   --region us-east-1 \
   --output json
+```
+
+## With the SDK
+
+```typescript
+import {
+  ApiGatewayV2Client,
+  CreateIntegrationCommand,
+  CreateRouteCommand,
+} from '@aws-sdk/client-apigatewayv2';
+import { LambdaClient, AddPermissionCommand } from '@aws-sdk/client-lambda';
+
+const apigw = new ApiGatewayV2Client({ region: 'us-east-1' });
+const lambda = new LambdaClient({ region: 'us-east-1' });
+
+const integration = await apigw.send(
+  new CreateIntegrationCommand({
+    ApiId: 'abc123def4',
+    IntegrationType: 'AWS_PROXY',
+    IntegrationUri: 'arn:aws:lambda:us-east-1:123456789012:function:my-frontend-app-api',
+    PayloadFormatVersion: '2.0',
+  }),
+);
+
+for (const routeKey of ['GET /items', 'POST /items', 'GET /items/{id}'] as const) {
+  await apigw.send(
+    new CreateRouteCommand({
+      ApiId: 'abc123def4',
+      RouteKey: routeKey,
+      Target: `integrations/${integration.IntegrationId}`,
+    }),
+  );
+}
+
+// Grant API Gateway permission to invoke the Lambda. This is a _resource
+// policy_ on the Lambda, not an IAM policy — it lives on the Lambda itself.
+await lambda.send(
+  new AddPermissionCommand({
+    FunctionName: 'my-frontend-app-api',
+    StatementId: 'apigateway-invoke',
+    Action: 'lambda:InvokeFunction',
+    Principal: 'apigateway.amazonaws.com',
+    SourceArn: 'arn:aws:execute-api:us-east-1:123456789012:abc123def4/*/*',
+  }),
+);
 ```
 
 ## Common Mistakes

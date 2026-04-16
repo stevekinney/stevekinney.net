@@ -3,7 +3,7 @@ title: 'Cache Behaviors and Invalidations'
 description: >-
   Configure cache behaviors and TTLs to control how CloudFront caches your content, and create invalidations to force cache refreshes after deployments.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - cloudfront
@@ -190,6 +190,37 @@ In the console, the **Invalidations** tab lets you create invalidations by enter
 Once CloudFront finishes propagating the invalidation to all edge locations, the status changes to **Completed**.
 
 ![The CloudFront Invalidations tab showing the invalidation with Completed status.](assets/cloudfront-invalidation-completed.png)
+
+### With the SDK
+
+```typescript
+import {
+  CloudFrontClient,
+  CreateInvalidationCommand,
+  GetInvalidationCommand,
+} from '@aws-sdk/client-cloudfront';
+
+const cloudfront = new CloudFrontClient({ region: 'us-east-1' });
+
+const result = await cloudfront.send(
+  new CreateInvalidationCommand({
+    DistributionId: 'E1A2B3C4D5E6F7',
+    InvalidationBatch: {
+      CallerReference: `deploy-${Date.now()}`,
+      Paths: { Quantity: 1, Items: ['/*'] },
+    },
+  }),
+);
+
+// Optional: poll for completion before declaring the deploy done.
+const invalidationId = result.Invalidation!.Id!;
+const status = await cloudfront.send(
+  new GetInvalidationCommand({ DistributionId: 'E1A2B3C4D5E6F7', Id: invalidationId }),
+);
+console.log(status.Invalidation?.Status); // 'InProgress' → 'Completed'
+```
+
+`CallerReference` acts as an idempotency key—submit the same value twice and CloudFront returns the existing invalidation instead of creating a duplicate. Useful if your deploy script retries.
 
 ### Invalidation Costs
 

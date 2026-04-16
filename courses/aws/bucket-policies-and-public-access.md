@@ -3,7 +3,7 @@ title: 'Bucket Policies and Public Access'
 description: >-
   Write a bucket policy that grants public read access to your static assets and understand how bucket policies differ from IAM policies.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - s3
@@ -141,6 +141,38 @@ aws s3api get-bucket-policy \
 The response wraps the policy in a `Policy` field as a JSON string. It's not the prettiest output, but it confirms the policy is in place.
 
 ![The S3 bucket Permissions tab showing the applied bucket policy granting public read access to all objects.](assets/s3-bucket-policy-applied.png)
+
+## With the SDK
+
+```typescript
+import { S3Client, PutBucketPolicyCommand, GetBucketPolicyCommand } from '@aws-sdk/client-s3';
+
+const s3 = new S3Client({ region: 'us-east-1' });
+
+const policy = {
+  Version: '2012-10-17',
+  Statement: [
+    {
+      Sid: 'PublicReadGetObject',
+      Effect: 'Allow',
+      Principal: '*',
+      Action: 's3:GetObject',
+      Resource: 'arn:aws:s3:::my-frontend-app-assets/*',
+    },
+  ],
+};
+
+await s3.send(
+  new PutBucketPolicyCommand({
+    Bucket: 'my-frontend-app-assets',
+    Policy: JSON.stringify(policy),
+    // Policy is a _string_, not an object. JSON.stringify is required.
+  }),
+);
+
+const current = await s3.send(new GetBucketPolicyCommand({ Bucket: 'my-frontend-app-assets' }));
+console.log(JSON.parse(current.Policy!));
+```
 
 ## What This Policy Does (and Does Not Do)
 

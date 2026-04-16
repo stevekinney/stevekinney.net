@@ -4,7 +4,7 @@ description: >-
   Create an IAM execution role for your Lambda function and attach policies that
   grant access to the AWS services your function needs.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - lambda
@@ -190,6 +190,66 @@ As you progress through the course, you'll add policies to this execution role i
 | Secrets section      | Parameter Store / Secrets Manager | `ssm:GetParameter`, `secretsmanager:GetSecretValue`                | Accessing configuration and secrets |
 
 Each time you add a new integration, you'll create a new policy scoped to exactly the resources your function needs and attach it to the existing role. One role, multiple policies. This keeps your permissions auditable and makes it obvious what your function can do.
+
+## With the SDK
+
+```typescript
+import {
+  IAMClient,
+  CreateRoleCommand,
+  AttachRolePolicyCommand,
+  PutRolePolicyCommand,
+  ListAttachedRolePoliciesCommand,
+} from '@aws-sdk/client-iam';
+
+const iam = new IAMClient({ region: 'us-east-1' });
+
+const role = await iam.send(
+  new CreateRoleCommand({
+    RoleName: 'my-frontend-app-lambda-role',
+    AssumeRolePolicyDocument: JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Effect: 'Allow',
+          Principal: { Service: 'lambda.amazonaws.com' },
+          Action: 'sts:AssumeRole',
+        },
+      ],
+    }),
+  }),
+);
+
+await iam.send(
+  new AttachRolePolicyCommand({
+    RoleName: 'my-frontend-app-lambda-role',
+    PolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+  }),
+);
+
+// Inline policy for scoped S3 read:
+await iam.send(
+  new PutRolePolicyCommand({
+    RoleName: 'my-frontend-app-lambda-role',
+    PolicyName: 'S3AssetsRead',
+    PolicyDocument: JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Effect: 'Allow',
+          Action: ['s3:GetObject'],
+          Resource: 'arn:aws:s3:::my-frontend-app-assets/*',
+        },
+      ],
+    }),
+  }),
+);
+
+const attached = await iam.send(
+  new ListAttachedRolePoliciesCommand({ RoleName: 'my-frontend-app-lambda-role' }),
+);
+console.log(attached.AttachedPolicies);
+```
 
 ## Verifying the Role
 

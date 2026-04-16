@@ -3,7 +3,7 @@ title: 'Automating Deploys with the AWS CLI'
 description: >-
   Automate your deployment process using AWS CLI commands for syncing files to S3 and creating CloudFront invalidations.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - cli
@@ -235,5 +235,76 @@ echo "{\"commit\": \"$GIT_SHA\", \"timestamp\": \"$DEPLOY_TIMESTAMP\"}" | \
 ```
 
 Now you can always check which version is deployed by fetching `https://example.com/_deploy-manifest.json`.
+
+## SDK-Based Deploy Script
+
+Teams that already live in TypeScript tend to prefer a Node-based deploy script over a Bash one—it's easier to share types with the rest of the codebase, and it runs identically on every developer's machine without the `bash` / `zsh` / `fish` quirks. Here's the same pipeline in TypeScript:
+
+```typescript
+// scripts/deploy.ts
+import { readFile, readdir, stat } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import { join, relative } from 'node:path';
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+  ListObjectsV2Command,
+} from '@aws-sdk/client-s3';
+import { CloudFrontClient, CreateInvalidationCommand } from '@aws-sdk/client-cloudfront';
+import mime from 'mime-types';
+
+const BUCKET = 'my-frontend-app-assets';
+const DISTRIBUTION_ID = 'E1A2B3C4D5E6F7';
+const BUILD_DIR = './build';
+
+const s3 = new S3Client({ region: 'us-east-1' });
+const cloudfront = new CloudFrontClient({ region: 'us-east-1' });
+
+async function* walk(dir: string): AsyncGenerator<string> {
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) yield* walk(path);
+    else yield path;
+  }
+}
+
+// Upload every file with appropriate Cache-Control + Content-Type.
+const localKeys = new Set<string>();
+for await (const file of walk(BUILD_DIR)) {
+  const key = relative(BUILD_DIR, file).replace(/\\/g, '/');
+  localKeys.add(key);
+  const isHashed = key.startsWith('assets/');
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: BUCKET,
+      Key: key,
+      Body: createReadStream(file),
+      ContentType: mime.lookup(file) || 'application/octet-stream',
+      CacheControl: isHashed ? 'public, max-age=31536000, immutable' : 'public, max-age=60',
+    }),
+  );
+}
+
+// Delete anything in the bucket that's no longer in the build directory.
+const existing = await s3.send(new ListObjectsV2Command({ Bucket: BUCKET }));
+for (const obj of existing.Contents ?? []) {
+  if (obj.Key && !localKeys.has(obj.Key)) {
+    await s3.send(new DeleteObjectCommand({ Bucket: BUCKET, Key: obj.Key }));
+  }
+}
+
+await cloudfront.send(
+  new CreateInvalidationCommand({
+    DistributionId: DISTRIBUTION_ID,
+    InvalidationBatch: {
+      CallerReference: `deploy-${Date.now()}`,
+      Paths: { Quantity: 1, Items: ['/*'] },
+    },
+  }),
+);
+```
+
+Run it with `npx tsx scripts/deploy.ts`. The pipeline is identical—the choice between the Bash version and this one is purely developer preference.
 
 The deploy script works, but you still have to run it manually. Next up, you'll move this into a GitHub Actions workflow that runs automatically on every push to `main`, including how to authenticate GitHub Actions with AWS using OIDC instead of long-lived access keys.

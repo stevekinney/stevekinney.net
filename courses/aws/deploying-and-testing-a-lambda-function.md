@@ -4,7 +4,7 @@ description: >-
   Package, deploy, and test a Lambda function using the AWS CLI, including
   creating test events and reading invocation results.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - lambda
@@ -260,6 +260,51 @@ cat response.json
 ```
 
 This is the manual version. Later in the course, you'll automate this in a GitHub Actions workflow, just like you automated static frontend deployments in the deployment section.
+
+## With the SDK
+
+Deploy scripts often want to stay in JavaScript rather than shell out to `aws lambda`. Here's the SDK equivalent:
+
+```typescript
+import { readFile } from 'node:fs/promises';
+import {
+  LambdaClient,
+  UpdateFunctionCodeCommand,
+  InvokeCommand,
+  waitUntilFunctionUpdatedV2,
+} from '@aws-sdk/client-lambda';
+
+const lambda = new LambdaClient({ region: 'us-east-1' });
+
+const zip = await readFile('./function.zip');
+
+await lambda.send(
+  new UpdateFunctionCodeCommand({
+    FunctionName: 'my-frontend-app-api',
+    ZipFile: zip, // Uint8Array / Buffer, not a base64 string
+  }),
+);
+
+// Block until the update has propagated — Lambda briefly rejects invokes
+// during an update.
+await waitUntilFunctionUpdatedV2(
+  { client: lambda, maxWaitTime: 60 },
+  { FunctionName: 'my-frontend-app-api' },
+);
+
+const result = await lambda.send(
+  new InvokeCommand({
+    FunctionName: 'my-frontend-app-api',
+    Payload: new TextEncoder().encode(JSON.stringify({ name: 'Steve' })),
+  }),
+);
+
+// Response `Payload` is a Uint8Array — decode it before parsing.
+const body = new TextDecoder().decode(result.Payload);
+console.log(JSON.parse(body));
+```
+
+Two v3-specific gotchas: the request `Payload` must be a `Uint8Array` (not a string), and the response `Payload` is also a `Uint8Array`—`TextDecoder` is how you read it back. The v2 SDK buffered this for you.
 
 ## Common Mistakes
 

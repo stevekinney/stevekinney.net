@@ -3,7 +3,7 @@ title: 'Attaching an SSL Certificate'
 description: >-
   Attach an ACM certificate to your CloudFront distribution and configure it to serve your site over HTTPS with a custom domain.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - cloudfront
@@ -148,6 +148,37 @@ Wait for the deployment:
 aws cloudfront wait distribution-deployed \
   --id E1A2B3C4D5E6F7 \
   --region us-east-1
+```
+
+## With the SDK
+
+```typescript
+import {
+  CloudFrontClient,
+  GetDistributionConfigCommand,
+  UpdateDistributionCommand,
+} from '@aws-sdk/client-cloudfront';
+
+const cloudfront = new CloudFrontClient({ region: 'us-east-1' });
+
+const current = await cloudfront.send(new GetDistributionConfigCommand({ Id: 'E1A2B3C4D5E6F7' }));
+const config = current.DistributionConfig!;
+
+config.ViewerCertificate = {
+  ACMCertificateArn:
+    'arn:aws:acm:us-east-1:123456789012:certificate/a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  SSLSupportMethod: 'sni-only',
+  MinimumProtocolVersion: 'TLSv1.2_2021',
+};
+config.Aliases = { Quantity: 2, Items: ['example.com', 'www.example.com'] };
+
+await cloudfront.send(
+  new UpdateDistributionCommand({
+    Id: 'E1A2B3C4D5E6F7',
+    IfMatch: current.ETag,
+    DistributionConfig: config,
+  }),
+);
 ```
 
 ## DNS: The Missing Piece

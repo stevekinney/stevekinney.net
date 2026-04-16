@@ -4,7 +4,7 @@ description: >-
   Store sensitive credentials in Secrets Manager, understand automatic rotation,
   and know when Secrets Manager is worth the cost over Parameter Store.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - secrets-manager
@@ -57,6 +57,44 @@ aws secretsmanager create-secret \
 ```
 
 But JSON is the better default. I almost always reach for it. Most credentials have multiple related values—an API key and a secret, a username and password, a client ID and client secret. Storing them together as a JSON object keeps them in sync.
+
+## With the SDK
+
+```typescript
+import {
+  SecretsManagerClient,
+  CreateSecretCommand,
+  GetSecretValueCommand,
+  UpdateSecretCommand,
+  RotateSecretCommand,
+} from '@aws-sdk/client-secrets-manager';
+
+const secrets = new SecretsManagerClient({ region: 'us-east-1' });
+
+await secrets.send(
+  new CreateSecretCommand({
+    Name: '/my-frontend-app/production/stripe-key',
+    SecretString: JSON.stringify({
+      apiKey: 'sk_live_abc123xyz',
+      webhookSecret: 'whsec_def456',
+    }),
+  }),
+);
+
+const value = await secrets.send(
+  new GetSecretValueCommand({ SecretId: '/my-frontend-app/production/stripe-key' }),
+);
+const { apiKey, webhookSecret } = JSON.parse(value.SecretString!);
+
+// Rotate on a schedule:
+await secrets.send(
+  new RotateSecretCommand({
+    SecretId: '/my-frontend-app/production/database-password',
+    RotationLambdaARN: 'arn:aws:lambda:us-east-1:123456789012:function:my-rotation-function',
+    RotationRules: { AutomaticallyAfterDays: 30 },
+  }),
+);
+```
 
 ## Retrieving a Secret
 

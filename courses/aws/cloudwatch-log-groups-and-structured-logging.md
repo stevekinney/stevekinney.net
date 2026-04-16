@@ -5,7 +5,7 @@ description: >-
   logging in your Lambda functions, and query logs using CloudWatch Logs
   Insights.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - cloudwatch
@@ -70,6 +70,46 @@ Valid retention values include 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 4
 > If you don't set a retention policy, your log storage costs will grow indefinitely. This is one of those AWS defaults that silently costs you money over time.
 
 Retention lives on the log group, not on the function. If you delete the function and redeploy it, Lambda creates a fresh log group with infinite retention—your retention setting is gone. Codify retention in your IaC (CDK's `Function` construct exposes `logRetention`), or pre-create the log group with retention set before deploying the function.
+
+### With the SDK
+
+```typescript
+import {
+  CloudWatchLogsClient,
+  PutRetentionPolicyCommand,
+  DescribeLogGroupsCommand,
+  StartQueryCommand,
+  GetQueryResultsCommand,
+} from '@aws-sdk/client-cloudwatch-logs';
+
+const logs = new CloudWatchLogsClient({ region: 'us-east-1' });
+
+await logs.send(
+  new PutRetentionPolicyCommand({
+    logGroupName: '/aws/lambda/my-frontend-app-api',
+    retentionInDays: 30,
+  }),
+);
+
+// Programmatic Insights query — useful for building small status pages
+// or dashboards outside the AWS console.
+const started = await logs.send(
+  new StartQueryCommand({
+    logGroupName: '/aws/lambda/my-frontend-app-api',
+    startTime: Math.floor((Date.now() - 60 * 60 * 1000) / 1000),
+    endTime: Math.floor(Date.now() / 1000),
+    queryString: 'fields @timestamp, @message | filter level = "ERROR" | limit 20',
+  }),
+);
+
+// Poll for completion (StartQuery is async):
+let result;
+do {
+  await new Promise((r) => setTimeout(r, 500));
+  result = await logs.send(new GetQueryResultsCommand({ queryId: started.queryId }));
+} while (result.status === 'Running' || result.status === 'Scheduled');
+console.log(result.results);
+```
 
 ## The Problem with `console.log`
 

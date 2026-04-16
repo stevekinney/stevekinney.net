@@ -3,7 +3,7 @@ title: 'Creating and Configuring a Bucket'
 description: >-
   Create an S3 bucket with appropriate settings for static site hosting, including region selection and public access configuration.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - s3
@@ -178,6 +178,57 @@ This is another historical quirk—`us-east-1` is the original S3 region and doe
 
 > [!TIP]
 > If you created the bucket with `aws s3 mb` already, you don't need to create it again with `s3api`. Both commands create the same bucket—`s3 mb` is just a higher-level wrapper around `s3api create-bucket`.
+
+## The Same Operation with the AWS SDK for JavaScript v3
+
+Every CLI command in this course maps to an SDK call. Frontend engineers read CLI as "infrastructure work" and SDK as "application work"—they're the same operations, different transports. Here's the SDK v3 equivalent of everything above:
+
+```typescript
+import {
+  S3Client,
+  CreateBucketCommand,
+  PutBucketEncryptionCommand,
+  PutPublicAccessBlockCommand,
+  HeadBucketCommand,
+} from '@aws-sdk/client-s3';
+
+const s3 = new S3Client({ region: 'us-east-1' });
+// Credentials resolve via the default provider chain: env vars, ~/.aws/credentials,
+// IAM role, SSO session, etc. Never hardcode keys in application code.
+
+await s3.send(
+  new CreateBucketCommand({
+    Bucket: 'my-frontend-app-assets',
+    // us-east-1 is the only region where LocationConstraint must be omitted.
+  }),
+);
+
+await s3.send(
+  new PutPublicAccessBlockCommand({
+    Bucket: 'my-frontend-app-assets',
+    PublicAccessBlockConfiguration: {
+      BlockPublicAcls: true,
+      IgnorePublicAcls: true,
+      BlockPublicPolicy: true,
+      RestrictPublicBuckets: true,
+    },
+  }),
+);
+
+await s3.send(
+  new PutBucketEncryptionCommand({
+    Bucket: 'my-frontend-app-assets',
+    ServerSideEncryptionConfiguration: {
+      Rules: [{ ApplyServerSideEncryptionByDefault: { SSEAlgorithm: 'AES256' } }],
+    },
+  }),
+);
+
+// Verify — HeadBucketCommand throws if the bucket doesn't exist or is forbidden.
+await s3.send(new HeadBucketCommand({ Bucket: 'my-frontend-app-assets' }));
+```
+
+The CLI and SDK hit the same API endpoints. If you can write one, you can write the other—the shapes match.
 
 ## Verifying Your Bucket
 

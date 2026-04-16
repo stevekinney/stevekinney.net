@@ -4,7 +4,7 @@ description: >-
   Create a DynamoDB table, define partition keys and sort keys, and understand
   how key design affects query patterns and performance.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - dynamodb
@@ -184,6 +184,33 @@ Once ACTIVE, the table's **Overview** tab in the console shows the key schema, c
 
 > [!WARNING]
 > The `--attribute-definitions` parameter only defines attributes that are used in the key schema (or secondary indexes). You don't declare non-key attributes here. DynamoDB is schemaless for non-key attributes—you can add any attributes you want when you write items. This trips up people coming from SQL databases who expect to define all columns up front.
+
+## With the SDK
+
+```typescript
+import { DynamoDBClient, CreateTableCommand, waitUntilTableExists } from '@aws-sdk/client-dynamodb';
+
+const ddb = new DynamoDBClient({ region: 'us-east-1' });
+
+await ddb.send(
+  new CreateTableCommand({
+    TableName: 'my-frontend-app-data',
+    AttributeDefinitions: [
+      { AttributeName: 'userId', AttributeType: 'S' },
+      { AttributeName: 'itemId', AttributeType: 'S' },
+    ],
+    KeySchema: [
+      { AttributeName: 'userId', KeyType: 'HASH' },
+      { AttributeName: 'itemId', KeyType: 'RANGE' },
+    ],
+    BillingMode: 'PAY_PER_REQUEST',
+  }),
+);
+
+await waitUntilTableExists({ client: ddb, maxWaitTime: 60 }, { TableName: 'my-frontend-app-data' });
+```
+
+The item-level operations (`PutItem`, `GetItem`, `UpdateItem`, `DeleteItem`, `Query`, `Scan`) are the ones you actually reach for from application code—those lessons ([Reading and Writing Data](dynamodb-reading-and-writing-data.md) and [Querying and Scanning](dynamodb-querying-and-scanning.md)) are SDK-first because that's how you use them in a Lambda.
 
 ## A Note on Attribute Definitions
 

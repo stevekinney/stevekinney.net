@@ -4,7 +4,7 @@ description: >-
   Write an IAM policy from scratch, understanding the Version, Statement,
   Effect, Action, and Resource fields.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - iam
@@ -182,6 +182,44 @@ aws iam attach-user-policy \
   --policy-arn arn:aws:iam::123456789012:policy/S3AssetsReadOnly \
   --region us-east-1 \
   --output json
+```
+
+### With the SDK
+
+```typescript
+import { IAMClient, CreatePolicyCommand, AttachUserPolicyCommand } from '@aws-sdk/client-iam';
+
+const iam = new IAMClient({ region: 'us-east-1' });
+
+const policy = await iam.send(
+  new CreatePolicyCommand({
+    PolicyName: 'S3AssetsReadOnly',
+    PolicyDocument: JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Sid: 'AllowListBucket',
+          Effect: 'Allow',
+          Action: ['s3:ListBucket'],
+          Resource: 'arn:aws:s3:::my-frontend-app-assets',
+        },
+        {
+          Sid: 'AllowReadObjects',
+          Effect: 'Allow',
+          Action: ['s3:GetObject'],
+          Resource: 'arn:aws:s3:::my-frontend-app-assets/*',
+        },
+      ],
+    }),
+  }),
+);
+
+await iam.send(
+  new AttachUserPolicyCommand({
+    UserName: 'admin',
+    PolicyArn: policy.Policy!.Arn!,
+  }),
+);
 ```
 
 ## A More Practical Policy: Deploy Permissions

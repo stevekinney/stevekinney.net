@@ -5,7 +5,7 @@ description: >-
   handler code, understanding when to use environment variables versus other
   configuration approaches.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - lambda
@@ -124,6 +124,38 @@ They're the **wrong** tool for:
 - **API keys, database passwords, and tokens.** These should go in Secrets Manager or Parameter Store's `SecureString` type. Environment variables are visible to anyone with `lambda:GetFunctionConfiguration` permission, and they appear in the Lambda console in plain text. The secrets section covers secure configuration in detail.
 - **Large configuration objects.** If your config is approaching the 4 KB limit, move it to Parameter Store.
 - **Configuration that changes frequently.** Updating an environment variable requires `update-function-configuration`, which triggers a brief function update. For configuration you want to change without redeploying, Parameter Store lets you update the value and have your function pick it up on the next invocation (with appropriate caching).
+
+## With the SDK
+
+The read-modify-write pattern below is cleaner with the SDK because you get proper object merging instead of shell `jq` gymnastics:
+
+```typescript
+import {
+  LambdaClient,
+  GetFunctionConfigurationCommand,
+  UpdateFunctionConfigurationCommand,
+} from '@aws-sdk/client-lambda';
+
+const lambda = new LambdaClient({ region: 'us-east-1' });
+
+const current = await lambda.send(
+  new GetFunctionConfigurationCommand({ FunctionName: 'my-frontend-app-api' }),
+);
+
+await lambda.send(
+  new UpdateFunctionConfigurationCommand({
+    FunctionName: 'my-frontend-app-api',
+    Environment: {
+      Variables: {
+        ...(current.Environment?.Variables ?? {}),
+        LOG_LEVEL: 'debug',
+      },
+    },
+  }),
+);
+```
+
+Same caveat as the CLI: `Environment.Variables` is _replaced_, not merged, by the API. The spread above is doing the merge client-side before the call.
 
 ## Updating a Single Variable
 

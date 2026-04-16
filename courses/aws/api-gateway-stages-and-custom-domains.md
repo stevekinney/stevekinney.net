@@ -4,7 +4,7 @@ description: >-
   Deploy your API to stages, configure custom domain names, and understand how
   stages map to different environments (development, production).
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - api-gateway
@@ -223,6 +223,61 @@ aws apigatewayv2 update-stage \
 ```
 
 This caps the stage at 50 requests per second sustained, with room to absorb short bursts of up to 100 requests before throttling kicks in. (Burst isn't the same as "concurrent executions"—that's a Lambda concept controlled separately. Burst is the token-bucket size that lets traffic briefly exceed the steady-state rate.) Throttled requests receive a `429 Too Many Requests` response. For a personal frontend API, these numbers leave ample headroom for real traffic while preventing runaway clients from generating unexpected Lambda invocation costs.
+
+## With the SDK
+
+```typescript
+import {
+  ApiGatewayV2Client,
+  CreateStageCommand,
+  CreateDeploymentCommand,
+  UpdateStageCommand,
+  CreateDomainNameCommand,
+  CreateApiMappingCommand,
+} from '@aws-sdk/client-apigatewayv2';
+
+const apigw = new ApiGatewayV2Client({ region: 'us-east-1' });
+
+// Create a stage (called 'prod'), then deploy and point the stage at it.
+const stage = await apigw.send(
+  new CreateStageCommand({
+    ApiId: 'abc123def4',
+    StageName: 'prod',
+    AutoDeploy: true,
+    ThrottleSettings: { RateLimit: 50, BurstLimit: 100 },
+  }),
+);
+
+// If AutoDeploy is off, you make a deployment + point the stage at it.
+const deployment = await apigw.send(new CreateDeploymentCommand({ ApiId: 'abc123def4' }));
+await apigw.send(
+  new UpdateStageCommand({
+    ApiId: 'abc123def4',
+    StageName: 'prod',
+    DeploymentId: deployment.DeploymentId,
+  }),
+);
+
+// Custom domain + mapping:
+await apigw.send(
+  new CreateDomainNameCommand({
+    DomainName: 'api.example.com',
+    DomainNameConfigurations: [
+      {
+        CertificateArn: 'arn:aws:acm:us-east-1:123456789012:certificate/a1b2c3d4-e5f6',
+        EndpointType: 'REGIONAL',
+      },
+    ],
+  }),
+);
+await apigw.send(
+  new CreateApiMappingCommand({
+    DomainName: 'api.example.com',
+    ApiId: 'abc123def4',
+    Stage: 'prod',
+  }),
+);
+```
 
 ## Common Mistakes
 

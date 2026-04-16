@@ -3,7 +3,7 @@ title: 'Origin Access Control for S3'
 description: >-
   Configure Origin Access Control so that your S3 bucket only serves content through CloudFront, not through direct S3 URLs.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - cloudfront
@@ -96,6 +96,48 @@ Save the `Id` value—you need it in the next step.
 In the console, the **Create distribution** wizard handles this automatically: selecting "Allow private S3 bucket access to CloudFront" on the Specify origin step creates the OAC and attaches it in one operation.
 
 ![The CloudFront wizard showing the Allow private S3 bucket access to CloudFront checkbox checked and the Use recommended origin settings option selected.](assets/cloudfront-oac-create.png)
+
+### With the SDK
+
+```typescript
+import {
+  CloudFrontClient,
+  CreateOriginAccessControlCommand,
+  GetDistributionConfigCommand,
+  UpdateDistributionCommand,
+} from '@aws-sdk/client-cloudfront';
+
+const cloudfront = new CloudFrontClient({ region: 'us-east-1' });
+
+const oac = await cloudfront.send(
+  new CreateOriginAccessControlCommand({
+    OriginAccessControlConfig: {
+      Name: 'my-frontend-app-oac',
+      Description: 'OAC for my-frontend-app-assets S3 bucket',
+      SigningProtocol: 'sigv4',
+      SigningBehavior: 'always',
+      OriginAccessControlOriginType: 's3',
+    },
+  }),
+);
+const oacId = oac.OriginAccessControl!.Id!;
+
+// Fetch, mutate, update — same three-step dance as the CLI, just without jq:
+const current = await cloudfront.send(new GetDistributionConfigCommand({ Id: 'E1A2B3C4D5E6F7' }));
+const config = current.DistributionConfig!;
+config.Origins!.Items![0].OriginAccessControlId = oacId;
+config.Origins!.Items![0].S3OriginConfig!.OriginAccessIdentity = '';
+
+await cloudfront.send(
+  new UpdateDistributionCommand({
+    Id: 'E1A2B3C4D5E6F7',
+    IfMatch: current.ETag,
+    DistributionConfig: config,
+  }),
+);
+```
+
+The SDK avoids the jq gymnastics — `GetDistributionConfigCommand` returns the config as a plain object you can mutate and hand back to `UpdateDistributionCommand` along with the returned `ETag`.
 
 ## Update the Distribution to Use OAC
 

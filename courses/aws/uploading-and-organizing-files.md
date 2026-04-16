@@ -3,7 +3,7 @@ title: 'Uploading and Organizing Files'
 description: >-
   Upload files to S3 using the AWS CLI and the console, and understand how S3 key prefixes create a virtual folder structure.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - s3
@@ -186,6 +186,45 @@ aws s3api list-objects-v2 \
   ]
 }
 ```
+
+## The Same Upload with the SDK
+
+Build scripts, serverless deploy tools, and apps that upload user content all reach for the SDK instead of shelling out. The SDK equivalents of the commands above:
+
+```typescript
+import { readFile } from 'node:fs/promises';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
+
+const s3 = new S3Client({ region: 'us-east-1' });
+
+// Single-object upload (the SDK equivalent of `aws s3 cp`):
+await s3.send(
+  new PutObjectCommand({
+    Bucket: 'my-frontend-app-assets',
+    Key: 'index.html',
+    Body: await readFile('./build/index.html'),
+    ContentType: 'text/html',
+    CacheControl: 'public, max-age=60',
+  }),
+);
+
+// Streaming upload for large files — use @aws-sdk/lib-storage's `Upload`
+// helper, which handles multipart automatically once the body exceeds
+// the part threshold. `aws s3 cp` does this implicitly for you.
+import { createReadStream } from 'node:fs';
+await new Upload({
+  client: s3,
+  params: {
+    Bucket: 'my-frontend-app-assets',
+    Key: 'assets/bundle.zip',
+    Body: createReadStream('./build/bundle.zip'),
+    ContentType: 'application/zip',
+  },
+}).done();
+```
+
+The SDK has no direct equivalent of `aws s3 sync`—`sync` is a CLI-level convenience that walks a directory, diffs it against the bucket, and issues per-file `PutObject`/`DeleteObject` calls. Reproducing it yourself is a `fs.readdir` walk plus `PutObjectCommand` per changed file. For deploy scripts, shelling out to `aws s3 sync` from Node is usually simpler than rebuilding the diff logic. The SDK wins when you're uploading _application_ content—user avatars, CSV exports, generated reports—one file at a time.
 
 ## Uploading from the Console
 
