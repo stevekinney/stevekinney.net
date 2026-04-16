@@ -58,6 +58,10 @@ Expected output:
 }
 ```
 
+You can also verify the parameter in the AWS Console under **Systems Manager → Parameter Store**:
+
+![The Parameter Store detail view showing the SecureString parameter with its ARN, type, tier, and masked value.](assets/parameter-store-secret.png)
+
 ## Write the Handler
 
 Project setup:

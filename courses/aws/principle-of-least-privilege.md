@@ -4,7 +4,7 @@ description: >-
   Apply the principle of least privilege by scoping IAM policies to the narrowest
   set of actions and resources a user or service actually needs.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - iam
@@ -18,9 +18,9 @@ If you want AWS's canonical version of the same model while you read, the [IAM U
 
 The **principle of least privilege** says: grant only the permissions required to perform a task, and nothing more. It sounds obvious when you say it out loud: don't give the intern the root password. But in practice, least privilege requires discipline—it's easier to over-grant than to figure out exactly which five actions a service needs.
 
-## Why It Matters for Frontend Engineers
+## Why It Matters
 
-On Vercel or Netlify, permissions are mostly invisible. The platform manages access to its own infrastructure, and you interact through a constrained UI. On AWS, you're the platform operator. Every IAM user, every Lambda execution role, every CI pipeline credential is an attack surface. The broader the permissions, the bigger the blast radius when something goes wrong.
+On Vercel or Netlify, permissions are _mostly_ invisible. The platform manages access to its own infrastructure, and you interact through a constrained UI. On AWS, you're the platform operator. Every IAM user, every Lambda execution role, every CI pipeline credential is an attack surface. The broader the permissions, the bigger the blast radius when something goes wrong.
 
 Consider this scenario: your GitHub Actions pipeline uses an IAM user with `AdministratorAccess` to deploy your frontend. The deploy only needs to sync files to S3 and invalidate a CloudFront cache—two actions. But the credential has access to everything: DynamoDB tables, Lambda functions, IAM itself, billing. If that access key leaks (and keys leak—in logs, in error messages, in accidental commits), the attacker inherits unlimited power.
 
@@ -147,19 +147,19 @@ Here are a few least-privilege policy patterns you'll encounter throughout this 
 
 ### Static Site Deployer
 
-Needs: push files to S3, invalidate CloudFront cache.
+**Needs**: push files to S3, invalidate CloudFront cache.
 
-Actions: `s3:PutObject`, `s3:DeleteObject`, `s3:ListBucket`, `cloudfront:CreateInvalidation`.
+**Actions**: `s3:PutObject`, `s3:DeleteObject`, `s3:ListBucket`, `cloudfront:CreateInvalidation`.
 
 ### Lambda Execution Role
 
-Needs: write logs (mandatory for any Lambda), plus whatever AWS services the function calls.
+**Needs**: write logs (mandatory for any Lambda), plus whatever AWS services the function calls.
 
-Baseline actions: `logs:CreateLogGroup`, `logs:CreateLogStream`, `logs:PutLogEvents`. Add only the specific service actions the function needs—`dynamodb:GetItem` for reading data, `s3:GetObject` for reading files, etc.
+**Actions**: `logs:CreateLogGroup`, `logs:CreateLogStream`, `logs:PutLogEvents`. Add only the specific service actions the function needs—`dynamodb:GetItem` for reading data, `s3:GetObject` for reading files, etc.
 
 ### Read-Only Viewer
 
-Needs: view resources in the console without modifying anything.
+**Needs**: view resources in the console without modifying anything.
 
 AWS provides a managed policy called `ReadOnlyAccess` for this, but even that might be broader than necessary. If someone only needs to see S3 and CloudFront, scope it to those services.
 

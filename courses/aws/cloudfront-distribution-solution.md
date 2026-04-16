@@ -465,6 +465,10 @@ curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
 
 Expected results: CloudFront returns `200 OK` for both the root and the SPA route. Direct S3 access returns `403 Forbidden`.
 
+Open the CloudFront domain in a browser to see the site live:
+
+![The static site served through CloudFront with HTTPS, showing Hello from S3 on a dark background with a page-load timestamp.](assets/cloudfront-site-live.png)
+
 ## Summary of Resources Created
 
 | Resource                | Identifier                                                             |

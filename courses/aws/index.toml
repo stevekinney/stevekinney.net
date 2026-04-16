@@ -25,15 +25,15 @@ href = "setting-up-the-aws-cli.md"
 title = "Exercise: IAM Policy for a Deploy Bot"
 href = "iam-policy-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "iam-policy-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "iam-policy-solution.md"
 
 [[section]]
 title = "S3 (Static Hosting Foundation)"
 
 [[section.item]]
-title = "What S3 Is and Why Frontend Engineers Care"
+title = "What is S3?"
 href = "what-is-s3.md"
 
 [[section.item]]
@@ -56,9 +56,9 @@ href = "static-website-hosting-on-s3.md"
 title = "Exercise: Deploy a Static Site to S3"
 href = "s3-static-site-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "s3-static-site-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "s3-static-site-solution.md"
 
 [[section]]
 title = "CloudFront (CDN & Edge Distribution)"
@@ -95,9 +95,9 @@ href = "cloudfront-headers-cors-and-security.md"
 title = "Exercise: Set Up a CloudFront Distribution"
 href = "cloudfront-distribution-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "cloudfront-distribution-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "cloudfront-distribution-solution.md"
 
 [[section]]
 title = "Deploying a Full Static Site"
@@ -118,9 +118,9 @@ href = "cicd-with-github-actions.md"
 title = "Exercise: End-to-End Static Site Deployment"
 href = "static-site-deployment-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "static-site-deployment-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "static-site-deployment-solution.md"
 
 [[section]]
 title = "Lambda (Serverless Compute)"
@@ -153,9 +153,9 @@ href = "lambda-cold-starts-and-performance.md"
 title = "Exercise: Build and Deploy a Lambda Function"
 href = "lambda-function-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "lambda-function-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "lambda-function-solution.md"
 
 [[section]]
 title = "API Gateway (HTTP Layer for Lambda)"
@@ -192,9 +192,9 @@ href = "api-gateway-authentication.md"
 title = "Exercise: Build an API with API Gateway and Lambda"
 href = "api-gateway-lambda-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "api-gateway-lambda-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "api-gateway-lambda-solution.md"
 
 [[section]]
 title = "DynamoDB (Lightweight Data Layer)"
@@ -223,9 +223,9 @@ href = "connecting-dynamodb-to-lambda.md"
 title = "Exercise: Build a Data API with DynamoDB"
 href = "dynamodb-lambda-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "dynamodb-lambda-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "dynamodb-lambda-solution.md"
 
 [[section]]
 title = "Secrets Manager & Parameter Store"
@@ -254,17 +254,17 @@ href = "parameter-store-vs-secrets-manager.md"
 title = "Exercise: Store and Retrieve a Secret in Lambda"
 href = "secrets-in-lambda-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "secrets-in-lambda-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "secrets-in-lambda-solution.md"
 
 [[section.item]]
 title = "Capstone: End-to-End Scratch Lab API"
 href = "end-to-end-scratch-lab-api-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "end-to-end-scratch-lab-api-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "end-to-end-scratch-lab-api-solution.md"
 
 [[section]]
 title = "CloudWatch (Monitoring & Observability)"
@@ -293,9 +293,9 @@ href = "tracing-requests-across-services.md"
 title = "Exercise: Set Up Alarms for Your Lambda Functions"
 href = "cloudwatch-alarms-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "cloudwatch-alarms-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "cloudwatch-alarms-solution.md"
 
 [[section]]
 title = "Lambda@Edge & CloudFront Functions"
@@ -328,9 +328,9 @@ href = "edge-function-debugging-and-limitations.md"
 title = "Exercise: Add a CloudFront Function"
 href = "cloudfront-function-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "cloudfront-function-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "cloudfront-function-solution.md"
 
 [[section]]
 title = "Production Hardening & What's Next"
@@ -406,14 +406,14 @@ href = "pointing-a-domain-to-cloudfront.md"
 title = "Exercise: Request and Validate a Certificate"
 href = "acm-certificate-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "acm-certificate-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "acm-certificate-solution.md"
 
 [[section.item]]
 title = "Exercise: Configure DNS for Your Site"
 href = "route-53-dns-exercise.md"
 
-  [[section.item.related]]
-  title = "Solution"
-  href = "route-53-dns-solution.md"
+[[section.item.related]]
+title = "Solution"
+href = "route-53-dns-solution.md"

@@ -49,7 +49,7 @@ The distinction matters because when you look at S3 in the AWS console, it shows
 > [!TIP]
 > The forward slashes in S3 keys are called **key prefixes**, and they work like virtual folders. You can list all objects with a given prefix, which makes them useful for organizing files. Just remember: they aren't actual directories.
 
-## Why S3 for Frontend Engineers?
+## Why S3?
 
 If you're used to deploying on Vercel, you might wonder why you'd bother with S3 at all. Here's the short version: S3 gives you direct control over where your files live, how they're served, and what it costs.
 
