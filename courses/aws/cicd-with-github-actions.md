@@ -3,7 +3,7 @@ title: 'CI/CD with GitHub Actions'
 description: >-
   Set up a GitHub Actions workflow that builds your frontend and deploys it to AWS on every push to the main branch.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - github-actions
@@ -290,8 +290,8 @@ If any step fails, the workflow stops and subsequent steps don't run. A failed b
 > ```yaml
 > - name: Verify deployment
 >   run: |
->     HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://example.com)
+>     HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://YOUR_CLOUDFRONT_DOMAIN)
 >     echo "Site returned HTTP $HTTP_STATUS"
 > ```
 >
-> This doesn't block the workflow on failure, but it gives you immediate feedback in the workflow logs.
+> Replace `YOUR_CLOUDFRONT_DOMAIN` with your `*.cloudfront.net` URL (or your custom domain if you completed the optional [Custom Domains, DNS, and Certificates](dns-for-frontend-engineers.md) section). This doesn't block the workflow on failure, but it gives you immediate feedback in the workflow logs.

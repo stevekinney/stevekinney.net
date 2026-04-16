@@ -1,16 +1,16 @@
 ---
 title: 'Exercise: Set Up a CloudFront Distribution'
 description: >-
-  Create a CloudFront distribution with an S3 origin, Origin Access Control, ACM certificate, and custom error responses for SPA routing.
+  Create a CloudFront distribution with an S3 origin, Origin Access Control, and custom error responses for SPA routing.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - cloudfront
   - exercise
 ---
 
-You have an S3 bucket with static site files and an ACM certificate in `us-east-1`. Your job is to put CloudFront in front of everything: create a distribution, lock down the bucket with Origin Access Control, configure SPA routing, and attach your certificate. By the end, you should have a globally distributed, HTTPS-secured frontend that serves your SPA correctly on all routes.
+You have an S3 bucket with static site files. Your job is to put CloudFront in front of it: create a distribution, lock down the bucket with Origin Access Control, and configure SPA routing. By the end, you should have a globally distributed, HTTPS-secured frontend on a `*.cloudfront.net` domain that serves your SPA correctly on all routes.
 
 ## Why It Matters
 
@@ -24,9 +24,7 @@ Without CloudFront, your site is a single-region S3 bucket with no HTTPS, no edg
 Before you start, make sure you have:
 
 - An S3 bucket (`my-frontend-app-assets`) with at least an `index.html` file uploaded. See [Uploading and Organizing Files](uploading-and-organizing-files.md) if you need to set this up.
-- An ACM certificate in `us-east-1` with status `ISSUED`. See [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md) if you need one.
-- A domain you control, with DNS already lined up in Route 53 or ready for the final alias-record step.
-- The AWS CLI v2 configured with credentials that have CloudFront, S3, and ACM permissions.
+- The AWS CLI v2 configured with credentials that have CloudFront and S3 permissions.
 
 ## Create an Origin Access Control
 
@@ -51,8 +49,7 @@ Create a CloudFront distribution with these settings:
 - **Viewer protocol policy**: `redirect-to-https`
 - **Compression**: Enabled
 - **HTTP version**: `http2and3`
-- **Viewer certificate**: Use your ACM certificate ARN, `sni-only`, `TLSv1.2_2021`.
-- **Aliases**: Your custom domain (e.g., `example.com` and `www.example.com`).
+- **Viewer certificate**: Use the CloudFront default certificate (`CloudFrontDefaultCertificate: true`). This gives you HTTPS on the `*.cloudfront.net` domain automatically. If you want a custom domain later, see the optional [Custom Domains, DNS, and Certificates](#) section at the end of the course.
 - **Custom error responses**: Map both `403` and `404` to `/index.html` with response code `200` and an error caching TTL of `10` seconds.
 
 Write the full distribution config JSON and use `aws cloudfront create-distribution --distribution-config file://distribution-config.json`.
@@ -160,7 +157,7 @@ At this point, your CloudFront distribution should have:
 
 1. An S3 origin with Origin Access Control (no public bucket access).
 2. The `CachingOptimized` managed cache policy.
-3. HTTPS via your ACM certificate with `redirect-to-https`.
+3. HTTPS via the CloudFront default certificate with `redirect-to-https`.
 4. Custom error responses for SPA routing (403 and 404 to `/index.html` with 200).
 5. Security headers via a response headers policy.
 

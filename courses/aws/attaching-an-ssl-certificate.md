@@ -11,6 +11,9 @@ tags:
   - https
 ---
 
+> [!NOTE]
+> This lesson is part of the optional **Custom Domains, DNS, and Certificates** extension. If you're working through the core course, your CloudFront distribution already serves content over HTTPS on its `*.cloudfront.net` domain. Come back here when you're ready to attach a custom domain.
+
 Your CloudFront distribution works, but it's still serving content on a `*.cloudfront.net` domain. That's fine for testing, but you need your custom domain with HTTPS before this is production-ready. This lesson connects the ACM certificate you provisioned in the ACM section to your CloudFront distribution.
 
 If you want AWS's version of the alternate-domain-name rules while you work, the [CloudFront guide to custom URLs and CNAMEs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html) is the official reference.

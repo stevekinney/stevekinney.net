@@ -1,29 +1,28 @@
 ---
 title: 'Exercise: End-to-End Static Site Deployment'
 description: >-
-  Deploy a complete static site from scratch: S3 bucket, CloudFront with OAC, ACM certificate, Route 53 DNS, and verify HTTPS at your custom domain.
+  Deploy a complete static site from scratch: S3 bucket, CloudFront with OAC, and verify HTTPS on the default CloudFront domain.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - deployment
   - exercise
 ---
 
-You're going to deploy a static site from zero to production. No shortcuts, no skipping steps. This is my favorite exercise in the whole course. By the end, your site will be live at `https://example.com`—served through CloudFront, secured with an ACM certificate, stored in a private S3 bucket, resolved by Route 53. This exercise integrates the entire early static-hosting arc: IAM, S3, domain control, ACM, CloudFront, and final DNS routing.
+You're going to deploy a static site from zero to production. No shortcuts, no skipping steps. This is my favorite exercise in the whole course. By the end, your site will be live on a `*.cloudfront.net` domain—served through CloudFront, secured with HTTPS, and stored in a private S3 bucket. This exercise integrates the core static-hosting arc: IAM, S3, CloudFront, and OAC.
 
 ## Why It Matters
 
 You've built each piece individually across the early static-hosting sections. This exercise proves they compose into a working deployment. It's also a dry run for the workflow you'll automate with GitHub Actions: every manual step here maps to a step in your CI/CD pipeline. If you can do it by hand, you understand what the automation is doing.
 
-If you want the AWS version of the end-to-end workflow open while you work, keep the [S3 static website tutorial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html), the [CloudFront OAC guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html), and the [Route 53 DNS configuration guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring.html) nearby.
+If you want the AWS version of the end-to-end workflow open while you work, keep the [S3 static website tutorial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html) and the [CloudFront OAC guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) nearby.
 
 ## Prerequisites
 
 Before you start:
 
-- AWS CLI v2 configured with credentials that have admin-level permissions (or at minimum: S3, CloudFront, ACM, Route 53, and IAM access). See [Setting Up the AWS CLI](setting-up-the-aws-cli.md).
-- A domain name you control, either registered through Route 53 or with nameservers pointed at a Route 53 hosted zone. See [Registering and Transferring Domains](registering-and-transferring-domains.md).
+- AWS CLI v2 configured with credentials that have admin-level permissions (or at minimum: S3, CloudFront, and IAM access). See [Setting Up the AWS CLI](setting-up-the-aws-cli.md).
 - A static site build directory with at least an `index.html` file. If you don't have one, create a minimal site:
 
 ```bash
@@ -73,49 +72,6 @@ aws s3 ls s3://my-frontend-app-assets \
 
 You should see your `index.html` (and any other files) listed.
 
-## Confirm Domain and DNS Control
-
-Before ACM can issue anything, make sure the domain is actually routed the way you expect:
-
-- Confirm you control the registrar account for the domain.
-- Confirm the domain either uses Route 53 as the registrar or already delegates DNS to a Route 53 hosted zone.
-- Confirm the hosted zone exists in Route 53.
-
-Refer to [Registering and Transferring Domains](registering-and-transferring-domains.md) and [Hosted Zones and Record Types](hosted-zones-and-record-types.md).
-
-### Checkpoint
-
-```bash
-aws route53 list-hosted-zones-by-name \
-  --dns-name example.com \
-  --output json
-```
-
-The output should include your hosted zone for `example.com`.
-
-## Request an ACM Certificate
-
-Request a certificate in `us-east-1` for your domain. Include both the apex domain and the `www` subdomain:
-
-- Use `aws acm request-certificate` with `--domain-name example.com` and `--subject-alternative-names www.example.com`.
-- Use DNS validation (not email validation).
-- Create the validation CNAME records in Route 53.
-- Wait for the certificate status to become `ISSUED`.
-
-Refer to [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md) and [DNS Validation vs. Email Validation](dns-validation-vs-email-validation.md).
-
-### Checkpoint
-
-```bash
-aws acm describe-certificate \
-  --certificate-arn YOUR_CERTIFICATE_ARN \
-  --region us-east-1 \
-  --output json \
-  --query "Certificate.Status"
-```
-
-This should return `"ISSUED"`. If it still says `"PENDING_VALIDATION"`, verify your DNS validation records are correct and wait a few minutes.
-
 ## Create an Origin Access Control
 
 Create an OAC that CloudFront will use to authenticate requests to your S3 bucket:
@@ -146,10 +102,9 @@ Create a distribution that ties the bucket, OAC, and certificate together. Your 
 - **Viewer protocol policy**: `redirect-to-https`.
 - **Cache policy**: The managed `CachingOptimized` policy (`658327ea-f89d-4fab-a63d-7e88639e58f6`).
 - **Custom error responses**: Map 403 and 404 to `/index.html` with a 200 response code.
-- **Viewer certificate**: Your ACM certificate ARN, `sni-only`, `TLSv1.2_2021`.
-- **Aliases**: `example.com` and `www.example.com`.
+- **Viewer certificate**: Use the CloudFront default certificate (`CloudFrontDefaultCertificate: true`).
 
-Refer to [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md), [Attaching an SSL Certificate](attaching-an-ssl-certificate.md), and [Custom Error Pages and SPA Routing](custom-error-pages-and-spa-routing.md).
+Refer to [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md) and [Custom Error Pages and SPA Routing](custom-error-pages-and-spa-routing.md).
 
 Save the distribution ID and domain name from the response.
 
@@ -198,44 +153,16 @@ curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
 
 Should return `403 Forbidden`.
 
-## Create Route 53 DNS Records
-
-Create A alias records that point your domain to the CloudFront distribution:
-
-- Create an A alias record for `example.com` pointing to your distribution.
-- Create an A alias record for `www.example.com` pointing to the same distribution.
-
-Refer to [Alias Records vs. CNAME Records](alias-records-vs-cname-records.md) and [Pointing a Domain to CloudFront](pointing-a-domain-to-cloudfront.md).
-
-### Checkpoint
-
-After DNS propagates (this can take a few minutes, or up to 48 hours if you recently changed nameservers):
-
-```bash
-curl -I https://example.com
-```
-
-You should get `200 OK` with your site's content served over HTTPS.
-
-> [!TIP]
-> If DNS hasn't propagated yet, you can verify the distribution directly using the CloudFront domain name (`d1234abcdef.cloudfront.net`). Once DNS resolves, the custom domain will produce the same result.
-
 ## Verify the Complete Pipeline
 
 Run through every layer of the pipeline:
 
 ```bash
-# DNS resolves to CloudFront
-dig example.com +short
-
-# HTTPS works with your certificate
-curl -vI https://example.com 2>&1 | grep "subject:"
-
-# CloudFront serves your content
-curl -I https://example.com
+# HTTPS works on the CloudFront domain
+curl -I https://YOUR_CLOUDFRONT_DOMAIN
 
 # SPA routing works (returns index.html for non-existent paths)
-curl -I https://example.com/any/spa/route
+curl -I https://YOUR_CLOUDFRONT_DOMAIN/any/spa/route
 
 # Direct S3 access is blocked
 curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
@@ -243,12 +170,9 @@ curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
 
 ### Checkpoint
 
-- [ ] `dig example.com` returns CloudFront IP addresses
-- [ ] `curl -I https://example.com` returns `200 OK`
-- [ ] The SSL certificate subject matches your domain
-- [ ] `curl -I https://example.com/any/spa/route` returns `200 OK` (SPA routing)
+- [ ] `curl -I https://YOUR_CLOUDFRONT_DOMAIN` returns `200 OK`
+- [ ] `curl -I https://YOUR_CLOUDFRONT_DOMAIN/any/spa/route` returns `200 OK` (SPA routing)
 - [ ] Direct S3 access returns `403 Forbidden`
-- [ ] `curl -I https://www.example.com` also returns `200 OK`
 
 ## Test a Deployment
 
@@ -274,16 +198,15 @@ aws cloudfront create-invalidation \
   --output json
 ```
 
-4. Wait a minute, then reload `https://example.com`. You should see the updated content.
+4. Wait a minute, then reload `https://YOUR_CLOUDFRONT_DOMAIN`. You should see the updated content.
 
 ### Checkpoint
 
-Your updated content is live at `https://example.com`. The deployment cycle (sync + invalidate) works end to end.
+Your updated content is live at `https://YOUR_CLOUDFRONT_DOMAIN`. The deployment cycle (sync + invalidate) works end to end.
 
 ## Failure Diagnosis
 
-- **`dig` resolves the domain but `curl -I https://example.com` returns `403`:** DNS is fine. The problem is lower in the stack, usually an S3 bucket policy or Origin Access Control mismatch.
-- **HTTPS works on the CloudFront domain but not on your custom domain:** The Route 53 alias records or the alternate domain names on the distribution are incomplete, or the wrong ACM certificate is attached.
+- **CloudFront returns `403 Forbidden` for files that exist:** The S3 bucket policy does not trust your distribution's Origin Access Control, or the origin is still configured incorrectly.
 - **The updated page never appears after sync:** The new file reached S3, but CloudFront is still serving the cached version. Confirm the invalidation completed before retesting.
 
 ## Stretch Goals
@@ -293,5 +216,8 @@ Your updated content is live at `https://example.com`. The deployment cycle (syn
 - **Security headers**: Attach the managed `SecurityHeadersPolicy` (`67f7725c-6f97-4210-82d7-5512b31e9d03`) to your distribution's default cache behavior. Verify `strict-transport-security`, `x-content-type-options`, and `x-frame-options` appear in the response headers.
 
 - **Deploy script**: Write a `deploy.sh` script that automates the sync and invalidation steps. Refer to [Automating Deploys with the AWS CLI](automating-deploys-with-aws-cli.md) for the template.
+
+> [!TIP]
+> Want to put this behind a custom domain with HTTPS on your own certificate? See the optional [Custom Domains, DNS, and Certificates](dns-for-frontend-engineers.md) section at the end of the course. It walks through Route 53, ACM, and wiring everything together.
 
 When you're ready, check your work against the [Solution: End-to-End Static Site Deployment](static-site-deployment-solution.md).

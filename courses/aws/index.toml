@@ -61,52 +61,6 @@ href = "s3-static-site-exercise.md"
   href = "s3-static-site-solution.md"
 
 [[section]]
-title = "Domains & DNS Foundations"
-
-[[section.item]]
-title = "DNS for Frontend Engineers"
-href = "dns-for-frontend-engineers.md"
-
-[[section.item]]
-title = "Registering and Transferring Domains"
-href = "registering-and-transferring-domains.md"
-
-[[section.item]]
-title = "Hosted Zones and Record Types"
-href = "hosted-zones-and-record-types.md"
-
-[[section]]
-title = "ACM (SSL/TLS Certificates)"
-
-[[section.item]]
-title = "Why HTTPS Matters"
-href = "why-https-matters.md"
-
-[[section.item]]
-title = "Requesting a Certificate in ACM"
-href = "requesting-a-certificate-in-acm.md"
-
-[[section.item]]
-title = "DNS Validation vs. Email Validation"
-href = "dns-validation-vs-email-validation.md"
-
-[[section.item]]
-title = "Wildcard Certificates and Multiple Domains"
-href = "wildcard-certificates-and-multiple-domains.md"
-
-[[section.item]]
-title = "Certificate Renewal and the us-east-1 Requirement"
-href = "certificate-renewal-and-us-east-1.md"
-
-[[section.item]]
-title = "Exercise: Request and Validate a Certificate"
-href = "acm-certificate-exercise.md"
-
-  [[section.item.related]]
-  title = "Solution"
-  href = "acm-certificate-solution.md"
-
-[[section]]
 title = "CloudFront (CDN & Edge Distribution)"
 
 [[section.item]]
@@ -134,10 +88,6 @@ title = "Custom Error Pages and SPA Routing"
 href = "custom-error-pages-and-spa-routing.md"
 
 [[section.item]]
-title = "Attaching an SSL Certificate"
-href = "attaching-an-ssl-certificate.md"
-
-[[section.item]]
 title = "Headers, CORS, and Security Policies"
 href = "cloudfront-headers-cors-and-security.md"
 
@@ -148,25 +98,6 @@ href = "cloudfront-distribution-exercise.md"
   [[section.item.related]]
   title = "Solution"
   href = "cloudfront-distribution-solution.md"
-
-[[section]]
-title = "Route 53 (Custom Domain Routing)"
-
-[[section.item]]
-title = "Alias Records vs. CNAME Records"
-href = "alias-records-vs-cname-records.md"
-
-[[section.item]]
-title = "Pointing a Domain to CloudFront"
-href = "pointing-a-domain-to-cloudfront.md"
-
-[[section.item]]
-title = "Exercise: Configure DNS for Your Site"
-href = "route-53-dns-exercise.md"
-
-  [[section.item.related]]
-  title = "Solution"
-  href = "route-53-dns-solution.md"
 
 [[section]]
 title = "Deploying a Full Static Site"
@@ -423,3 +354,66 @@ href = "cleanup-and-teardown.md"
 [[section.item]]
 title = "What's Next: Services You'll Eventually Need"
 href = "whats-next-services-youll-eventually-need.md"
+
+[[section]]
+title = "Optional: Custom Domains, DNS, and Certificates"
+
+[[section.item]]
+title = "DNS for Frontend Engineers"
+href = "dns-for-frontend-engineers.md"
+
+[[section.item]]
+title = "Registering and Transferring Domains"
+href = "registering-and-transferring-domains.md"
+
+[[section.item]]
+title = "Hosted Zones and Record Types"
+href = "hosted-zones-and-record-types.md"
+
+[[section.item]]
+title = "Why HTTPS Matters"
+href = "why-https-matters.md"
+
+[[section.item]]
+title = "Requesting a Certificate in ACM"
+href = "requesting-a-certificate-in-acm.md"
+
+[[section.item]]
+title = "DNS Validation vs. Email Validation"
+href = "dns-validation-vs-email-validation.md"
+
+[[section.item]]
+title = "Wildcard Certificates and Multiple Domains"
+href = "wildcard-certificates-and-multiple-domains.md"
+
+[[section.item]]
+title = "Certificate Renewal and the us-east-1 Requirement"
+href = "certificate-renewal-and-us-east-1.md"
+
+[[section.item]]
+title = "Attaching an SSL Certificate"
+href = "attaching-an-ssl-certificate.md"
+
+[[section.item]]
+title = "Alias Records vs. CNAME Records"
+href = "alias-records-vs-cname-records.md"
+
+[[section.item]]
+title = "Pointing a Domain to CloudFront"
+href = "pointing-a-domain-to-cloudfront.md"
+
+[[section.item]]
+title = "Exercise: Request and Validate a Certificate"
+href = "acm-certificate-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "acm-certificate-solution.md"
+
+[[section.item]]
+title = "Exercise: Configure DNS for Your Site"
+href = "route-53-dns-exercise.md"
+
+  [[section.item.related]]
+  title = "Solution"
+  href = "route-53-dns-solution.md"
