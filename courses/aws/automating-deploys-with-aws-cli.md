@@ -242,7 +242,7 @@ Teams that already live in TypeScript tend to prefer a Node-based deploy script 
 
 ```typescript
 // scripts/deploy.ts
-import { readFile, readdir, stat } from 'node:fs/promises';
+import { readdir } from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import { join, relative } from 'node:path';
 import {
