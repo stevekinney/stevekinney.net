@@ -214,6 +214,10 @@ This replaces the function's code while preserving all configuration (runtime, m
 
 ## Reading the Logs
 
+In the console, the **Monitor** tab shows invocation metrics, duration, and error rates at a glance. It also links directly to the CloudWatch log group for your function.
+
+![The Lambda Monitor tab showing invocation count, duration, and error metrics with a link to CloudWatch Logs.](assets/lambda-monitoring-tab.png)
+
 Your function's `console.log` output goes to CloudWatch Logs. The simplest way to watch logs in real time is `aws logs tail`:
 
 ```bash

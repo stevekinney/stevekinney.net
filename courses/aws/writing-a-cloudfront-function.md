@@ -16,7 +16,9 @@ CloudFront Functions give you a way to run lightweight JavaScript at CloudFront'
 
 If you want AWS's version of the runtime behavior while you read, the [CloudFront Functions guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) is the official reference.
 
-In this lesson, you'll write a CloudFront Function that rewrites URLs, test it in the console, publish it, and associate it with your CloudFront distribution.
+You already hit a version of this problem earlier. When you set up [Origin Access Control](origin-access-control-for-s3.md), your S3 bucket stopped being a website endpoint and became a private object store. S3 no longer resolves `/about/` to `/about/index.html`—it just looks for an object with the key `about/` and returns a 403 when it doesn't find one. The [custom error responses](custom-error-pages-and-spa-routing.md) you configured handle the SPA case (every missing path serves `index.html`), but they're a blunt instrument. A CloudFront Function gives you precise control: rewrite the URL before the cache check, so CloudFront requests the right object from S3 in the first place.
+
+In this lesson, you'll write a CloudFront Function that does exactly that, test it, publish it, and associate it with your distribution.
 
 ## The Runtime Is Not Node.js
 
@@ -108,7 +110,7 @@ function handler(event) {
 > [!TIP]
 > All CloudFront Functions from this lesson are available as standalone files in the [Scratch Lab repository](https://github.com/stevekinney/scratch-lab/tree/main/cloudfront/functions).
 
-Here's a practical example: a function that appends `index.html` to directory-style URLs. When someone requests `/about/`, your S3 bucket doesn't know that `/about/` means `/about/index.html`. This function handles it.
+Here's the most common CloudFront Function you'll deploy: a URL rewrite that appends `index.html` to directory-style URLs. Your S3 bucket is behind OAC now—it's a private object store, not a website. When someone requests `/about/`, S3 looks for an object with the literal key `about/`, fails, and returns a 403. This function rewrites the URL before CloudFront even checks its cache, so S3 gets a request for `about/index.html` instead.
 
 ```javascript
 function handler(event) {
@@ -126,13 +128,64 @@ function handler(event) {
 }
 ```
 
-This is one of the most common CloudFront Functions in production. Without it, navigating directly to `/about` on a static site hosted in S3 would return a 404 or a 403 because there's no object with the key `about`—the actual object is `about/index.html`.
+Without this function, navigating directly to `/about` on your distribution returns a 403—there's no S3 object with the key `about`. Your custom error responses would catch the 403 and serve `index.html`, which works for SPAs but breaks multi-page static sites. The rewrite function solves it at the right layer: before the request ever reaches S3.
+
+### SPA Variant: Rewriting to the Root
+
+The function above works for multi-page static sites where every directory has its own `index.html`. But Scratch Lab—the app you [just deployed](deploying-scratch-lab.md)—is a single-page application. There's only one `index.html` at the root. Routes like `/notes/abc123` don't correspond to directories in S3 at all—the JavaScript router reads `window.location.pathname` and decides what to render.
+
+For an SPA, the rewrite is different: anything that isn't a static file gets rewritten to the root `index.html`:
+
+```javascript
+function handler(event) {
+  var request = event.request;
+  var uri = request.uri;
+
+  // Static assets (JS, CSS, images, fonts) pass through unchanged
+  if (uri.includes('.')) {
+    return request;
+  }
+
+  // Everything else serves the SPA shell
+  request.uri = '/index.html';
+  return request;
+}
+```
+
+This is a fundamentally different operation from the multi-page rewrite. The multi-page version turns `/about` into `/about/index.html`—it assumes a directory structure with an HTML file at each path. The SPA version turns `/notes/abc123` into `/index.html`—it assumes a single entry point that handles all routing in JavaScript.
+
+Your distribution already has custom error responses doing the same job: S3 returns a 403 for the missing path, CloudFront intercepts it, and serves `/index.html`. The CloudFront Function is cleaner because it rewrites the URL _before_ S3 ever sees it—no wasted round trip, no relying on error interception for normal routing. And as you'll see in [SPA Status Codes with Lambda@Edge](spa-status-codes-with-lambda-edge.md), it also opens the door to returning correct status codes for unknown paths.
+
+> [!TIP]
+> Which variant should you use? If your build output has HTML files in subdirectories (`about/index.html`, `blog/post/index.html`), use the multi-page rewrite. If your build output is a single `index.html` with a JavaScript router, use the SPA variant. Most React, Vue, and Svelte apps use the SPA pattern. Static site generators like Astro and Hugo use the multi-page pattern.
 
 ## Creating and Testing the Function
 
-### Create the function
+The steps below walk through the create → test → publish → associate workflow using the multi-page rewrite as the example. If you're deploying Scratch Lab (or any SPA), swap the function code for the SPA variant above—the workflow is identical.
 
-Save the function code to `url-rewrite.js`:
+### Creating a Function in the Console
+
+Navigate to **CloudFront → Functions** in the left sidebar. You'll see the Functions list page.
+
+![The CloudFront Functions list page showing no functions with a Create function button.](assets/cloudfront-functions-list.png)
+
+Click **Create function**. The create form asks for three things: a **Name**, an optional **Description**, and the **Runtime** version. Use `cloudfront-js-2.0` (the default)—it supports modern JavaScript features including `async`/`await` and WebCrypto APIs.
+
+![The CloudFront Create function form with fields for Name, Description, and Runtime selection between cloudfront-js-1.0 and cloudfront-js-2.0.](assets/cloudfront-create-function-form.png)
+
+After clicking **Create function**, you land on the function detail page. This page has three tabs: **Build**, **Test**, and **Publish**. The Build tab shows the code editor where you write or paste your function code.
+
+![The CloudFront function detail page showing the url-rewrite function with Build, Test, and Publish tabs and the function code editor below.](assets/cloudfront-function-code-editor.png)
+
+Paste your function code into the editor and click **Save changes**. The editor starts with a skeleton handler—replace it entirely with your rewrite function.
+
+The **Test** tab lets you build a test event and run it against the `DEVELOPMENT` stage of your function. Build a viewer request event with `uri` set to `/about`, then click **Test function**. You should see the output with `request.uri` changed to `/about/index.html`.
+
+The **Publish** tab pushes your function from the `DEVELOPMENT` stage to `LIVE`. Until you publish, the function only runs in test mode. Click **Publish function** to make it available for association with a distribution.
+
+### Creating a Function with the CLI
+
+You can also create the function entirely from the command line. Save the function code to `url-rewrite.js`:
 
 ```javascript
 function handler(event) {
@@ -258,7 +311,34 @@ After updating, you must **publish** again to push the changes to `LIVE`. The up
 
 ## Common Patterns
 
+### Redirecting www to the apex domain
+
+If you set up a custom domain in the [DNS and Certificates](dns-for-frontend-engineers.md) section, you might have both `www.example.com` and `example.com` pointing at your distribution. This function canonicalizes traffic to the apex domain:
+
+```javascript
+function handler(event) {
+  var request = event.request;
+  var host = request.headers.host.value;
+
+  if (host.startsWith('www.')) {
+    return {
+      statusCode: 301,
+      statusDescription: 'Moved Permanently',
+      headers: {
+        location: { value: 'https://' + host.substring(4) + request.uri },
+      },
+    };
+  }
+
+  return request;
+}
+```
+
+Without this, search engines treat `www.example.com/about` and `example.com/about` as two different pages. A 301 at the edge fixes that before anyone—crawler or human—sees the duplicate.
+
 ### Adding a trailing slash
+
+If your static site generator creates directories like `about/index.html`, you want `/about` to redirect to `/about/` so relative asset paths resolve correctly:
 
 ```javascript
 function handler(event) {
@@ -279,17 +359,9 @@ function handler(event) {
 }
 ```
 
-### Lowercasing the URI
+You could combine this with the `index.html` rewrite from earlier—redirect `/about` to `/about/`, then rewrite `/about/` to `/about/index.html`—but putting both in one function is simpler and avoids the extra round trip.
 
-```javascript
-function handler(event) {
-  var request = event.request;
-  request.uri = request.uri.toLowerCase();
-  return request;
-}
-```
-
-These patterns are building blocks. In [Edge Function Use Cases](edge-function-use-cases.md), you'll see more practical examples including security headers, geolocation routing, and language detection.
+These patterns are building blocks. In [Edge Function Use Cases](edge-function-use-cases.md), you'll see more examples including security headers, geolocation routing, and language detection.
 
 ## Gotchas
 

@@ -278,6 +278,418 @@
       "lqip": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAAAwAwCdASoYABIAPxF+s1QsKCQjKAqpgCIJQBUk4wBEMn44AP7p2Mxqd4uBCTOxZNtmiekq2kcbSYy0gDHhwAAA",
       "videoMimeType": null
     },
+    "courses/enterprise-ui/assets/exercise-05-lint-boundary-error.png": {
+      "hash": "4a1bfbdd04de0bf8",
+      "width": 752,
+      "height": 482,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4a1bfbdd04de0bf8/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4a1bfbdd04de0bf8/avif-480w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYAA8APxFysFAsJqSisAgBgCIJZwDE2C0kAAD+7gjd3QnSyAA=",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-05-lint-clean.png": {
+      "hash": "d93fd85e3ada35d3",
+      "width": 486,
+      "height": 813,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d93fd85e3ada35d3/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d93fd85e3ada35d3/avif-480w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYACgAPxGGu1csKKYjpWgBgCIJaQAALKYxqgAA/u3O0TZGAHKBqsAA",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-01-analytics-dashboard.png": {
+      "hash": "1513c272ba24478a",
+      "width": 1440,
+      "height": 900,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAe/QAAP7vRMto03oAAAA=",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-01-settings-page.png": {
+      "hash": "43d8b4ccc66ba7cf",
+      "width": 1440,
+      "height": 900,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/43d8b4ccc66ba7cf/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/43d8b4ccc66ba7cf/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/43d8b4ccc66ba7cf/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAgCdASoYAA8APxFysFCsJqSisAgBgCIJaQAAeyAA/u/qgAA=",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-01-users-page.png": {
+      "hash": "a7913a612847b9fa",
+      "width": 1440,
+      "height": 900,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a7913a612847b9fa/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a7913a612847b9fa/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a7913a612847b9fa/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAeyAA/u/qgAA=",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-06-ci-workflow.png": {
+      "hash": "137514a1e95a9092",
+      "width": 1440,
+      "height": 2048,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/137514a1e95a9092/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/137514a1e95a9092/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/137514a1e95a9092/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAAAwAwCdASoYACIAPxGGvFcsKSYjpWgBgCIJaQDOOA8K/fgAAP7uQlVl6aWNlrsAAAA=",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-06-lighthouse-config.png": {
+      "hash": "03c4c27c1620d737",
+      "width": 1440,
+      "height": 550,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/03c4c27c1620d737/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/03c4c27c1620d737/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/03c4c27c1620d737/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAkAPxFysFAsJqSisAgBgCIJZwAAeyAA/u5DETZNQIQA",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-03-turbo-cache-miss.png": {
+      "hash": "3550c52dfc6f00f5",
+      "width": 676,
+      "height": 691,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3550c52dfc6f00f5/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3550c52dfc6f00f5/avif-480w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYABkAPxGAuFWsKCUjKAgBgCIJaQDKABanlwAA/u3Np/2t1IQUNAAA",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-03-turbo-full-turbo.png": {
+      "hash": "2f2506f11cbe0e3f",
+      "width": 676,
+      "height": 467,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2f2506f11cbe0e3f/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2f2506f11cbe0e3f/avif-480w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAAAQAwCdASoYABEAPxGAuFWsKCUjKAgBgCIJZwDJEBanlwAA/u4JL+9/bCoAAA==",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/step-1-initial-app.png": {
+      "hash": "16ee4225c598ef9e",
+      "width": 1600,
+      "height": 827,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/16ee4225c598ef9e/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/16ee4225c598ef9e/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/16ee4225c598ef9e/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/16ee4225c598ef9e/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAwAPxFysFCsJqSisAgBgCIJaQAAeyAA/u8chdchAAAA",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/step-2-strict-version-error.png": {
+      "hash": "0c77d586a86f5b1c",
+      "width": 1600,
+      "height": 827,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0c77d586a86f5b1c/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0c77d586a86f5b1c/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0c77d586a86f5b1c/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0c77d586a86f5b1c/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAACQAQCdASoYAAwABABoJaQAAuaHSqAA/uqv221PZTSQAA==",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/step-4-fixed-auth.png": {
+      "hash": "9d75b817bfb7a2df",
+      "width": 1600,
+      "height": 827,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9d75b817bfb7a2df/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9d75b817bfb7a2df/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9d75b817bfb7a2df/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9d75b817bfb7a2df/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYAAwAPxFysFAsJqSisAgBgCIJaQAAe/QAAP7vHIYI+EXIAAA=",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-08-legacy-app.png": {
+      "hash": "e6ee13959e9b3c1d",
+      "width": 1440,
+      "height": 683,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e6ee13959e9b3c1d/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e6ee13959e9b3c1d/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e6ee13959e9b3c1d/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAsAPxFysFAsJqSisAgBgCIJaQAAeyAA/u9kBWzoAAAA",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-08-modern-app.png": {
+      "hash": "1513c272ba24478a",
+      "width": 1440,
+      "height": 900,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAe/QAAP7vRMto03oAAAA=",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-08-codemod-diff.png": {
+      "hash": "3935f0b66cc04030",
+      "width": 753,
+      "height": 607,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3935f0b66cc04030/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3935f0b66cc04030/avif-480w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYABMAPxGCuVWsKKWjKAgBgCIJaQDKABanlwAA/u4JREe8kUrgAAAA",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-08-codemod-tests.png": {
+      "hash": "e61918a116c73422",
+      "width": 550,
+      "height": 376,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e61918a116c73422/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e61918a116c73422/avif-480w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYABAAPxFysFAsJqSisAgBgCIJZwDCgC0kAAD+7gixFycXMAA=",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-02-loading-skeletons.png": {
+      "hash": "2c25bf507664e2a3",
+      "width": 1440,
+      "height": 900,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2c25bf507664e2a3/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2c25bf507664e2a3/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2c25bf507664e2a3/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAeyAA/u/r1rwIAA==",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-02-stats-loaded.png": {
+      "hash": "2d30ac14928278c5",
+      "width": 1440,
+      "height": 900,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d30ac14928278c5/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d30ac14928278c5/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d30ac14928278c5/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAA8APxFysFCsJqSisAgBgCIJaQAAeyAA/u/MsnEIAA==",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-02-chart-loaded.png": {
+      "hash": "5be4388e37bfd415",
+      "width": 1440,
+      "height": 900,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5be4388e37bfd415/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5be4388e37bfd415/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5be4388e37bfd415/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAe/QAAP7vRMto03oAAAA=",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-02-fully-loaded.png": {
+      "hash": "31a65359d8f710fb",
+      "width": 1440,
+      "height": 900,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/31a65359d8f710fb/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/31a65359d8f710fb/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/31a65359d8f710fb/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAe/QAAP7vRMtqMMX6AAA=",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-07-playwright-results.png": {
+      "hash": "2684867e74aeb6d6",
+      "width": 688,
+      "height": 482,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2684867e74aeb6d6/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2684867e74aeb6d6/avif-480w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYABEAPxGCuVWsKKWjKAgBgCIJaQDKABaoJQAA/u4JRD/MX9LAAAAA",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-07-playwright-report.png": {
+      "hash": "501e82a828db4d1b",
+      "width": 1440,
+      "height": 497,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/501e82a828db4d1b/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/501e82a828db4d1b/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/501e82a828db4d1b/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAgAPxFysFCsJqSisAgBgCIJaQAAeyAA/u/NlUwAAA==",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-04-tsc-build-first-run.png": {
+      "hash": "19b77876e89f43f7",
+      "width": 868,
+      "height": 690,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/19b77876e89f43f7/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/19b77876e89f43f7/avif-480w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYABMAPxGCuVWsKKWjKAgBgCIJaQDKABaoJQAA/u3Np/uSijhsAAAA",
+      "videoMimeType": null
+    },
+    "courses/enterprise-ui/assets/exercise-04-tsc-build-incremental.png": {
+      "hash": "e468db65eef6a95c",
+      "width": 1048,
+      "height": 565,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e468db65eef6a95c/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e468db65eef6a95c/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e468db65eef6a95c/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYAA0APxFysFAsJqSisAgBgCIJZwDCgC0kAAD+7gixFycXMAA=",
+      "videoMimeType": null
+    },
     "courses/figma/assets/figma-button-variants.png": {
       "hash": "d54acc7608b8aa86",
       "width": 1210,
@@ -2313,416 +2725,26 @@
       "lqip": null,
       "videoMimeType": null
     },
-    "courses/enterprise-ui/assets/exercise-05-lint-boundary-error.png": {
-      "hash": "4a1bfbdd04de0bf8",
-      "width": 752,
-      "height": 482,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4a1bfbdd04de0bf8/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4a1bfbdd04de0bf8/avif-480w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYAA8APxFysFAsJqSisAgBgCIJZwDE2C0kAAD+7gjd3QnSyAA=",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-05-lint-clean.png": {
-      "hash": "d93fd85e3ada35d3",
-      "width": 486,
-      "height": 813,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d93fd85e3ada35d3/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d93fd85e3ada35d3/avif-480w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYACgAPxGGu1csKKYjpWgBgCIJaQAALKYxqgAA/u3O0TZGAHKBqsAA",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-01-analytics-dashboard.png": {
-      "hash": "1513c272ba24478a",
-      "width": 1440,
-      "height": 900,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAe/QAAP7vRMto03oAAAA=",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-01-settings-page.png": {
-      "hash": "43d8b4ccc66ba7cf",
-      "width": 1440,
-      "height": 900,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/43d8b4ccc66ba7cf/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/43d8b4ccc66ba7cf/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/43d8b4ccc66ba7cf/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAgCdASoYAA8APxFysFCsJqSisAgBgCIJaQAAeyAA/u/qgAA=",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-01-users-page.png": {
-      "hash": "a7913a612847b9fa",
-      "width": 1440,
-      "height": 900,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a7913a612847b9fa/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a7913a612847b9fa/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a7913a612847b9fa/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAeyAA/u/qgAA=",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-06-ci-workflow.png": {
-      "hash": "137514a1e95a9092",
-      "width": 1440,
-      "height": 2048,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/137514a1e95a9092/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/137514a1e95a9092/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/137514a1e95a9092/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAAAwAwCdASoYACIAPxGGvFcsKSYjpWgBgCIJaQDOOA8K/fgAAP7uQlVl6aWNlrsAAAA=",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-06-lighthouse-config.png": {
-      "hash": "03c4c27c1620d737",
-      "width": 1440,
-      "height": 550,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/03c4c27c1620d737/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/03c4c27c1620d737/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/03c4c27c1620d737/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAkAPxFysFAsJqSisAgBgCIJZwAAeyAA/u5DETZNQIQA",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-03-turbo-cache-miss.png": {
-      "hash": "3550c52dfc6f00f5",
-      "width": 676,
-      "height": 691,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3550c52dfc6f00f5/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3550c52dfc6f00f5/avif-480w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYABkAPxGAuFWsKCUjKAgBgCIJaQDKABanlwAA/u3Np/2t1IQUNAAA",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-03-turbo-full-turbo.png": {
-      "hash": "2f2506f11cbe0e3f",
-      "width": 676,
-      "height": 467,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2f2506f11cbe0e3f/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2f2506f11cbe0e3f/avif-480w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAAAQAwCdASoYABEAPxGAuFWsKCUjKAgBgCIJZwDJEBanlwAA/u4JL+9/bCoAAA==",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/step-1-initial-app.png": {
-      "hash": "16ee4225c598ef9e",
+    "courses/python-ai/assets/hugging-face-website.png": {
+      "hash": "3527117fe8f0a880",
       "width": 1600,
-      "height": 827,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/16ee4225c598ef9e/original.png",
+      "height": 1203,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/original.png",
       "avif": [
         {
           "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/16ee4225c598ef9e/avif-480w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-480w.avif"
         },
         {
           "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/16ee4225c598ef9e/avif-1024w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-1024w.avif"
         },
         {
           "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/16ee4225c598ef9e/avif-1600w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-1600w.avif"
         }
       ],
-      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAwAPxFysFCsJqSisAgBgCIJaQAAeyAA/u8chdchAAAA",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/step-2-strict-version-error.png": {
-      "hash": "0c77d586a86f5b1c",
-      "width": 1600,
-      "height": 827,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0c77d586a86f5b1c/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0c77d586a86f5b1c/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0c77d586a86f5b1c/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0c77d586a86f5b1c/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAACQAQCdASoYAAwABABoJaQAAuaHSqAA/uqv221PZTSQAA==",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/step-4-fixed-auth.png": {
-      "hash": "9d75b817bfb7a2df",
-      "width": 1600,
-      "height": 827,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9d75b817bfb7a2df/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9d75b817bfb7a2df/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9d75b817bfb7a2df/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9d75b817bfb7a2df/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYAAwAPxFysFAsJqSisAgBgCIJaQAAe/QAAP7vHIYI+EXIAAA=",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-08-legacy-app.png": {
-      "hash": "e6ee13959e9b3c1d",
-      "width": 1440,
-      "height": 683,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e6ee13959e9b3c1d/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e6ee13959e9b3c1d/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e6ee13959e9b3c1d/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAAsAPxFysFAsJqSisAgBgCIJaQAAeyAA/u9kBWzoAAAA",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-08-modern-app.png": {
-      "hash": "1513c272ba24478a",
-      "width": 1440,
-      "height": 900,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/1513c272ba24478a/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAe/QAAP7vRMto03oAAAA=",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-08-codemod-diff.png": {
-      "hash": "3935f0b66cc04030",
-      "width": 753,
-      "height": 607,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3935f0b66cc04030/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3935f0b66cc04030/avif-480w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYABMAPxGCuVWsKKWjKAgBgCIJaQDKABanlwAA/u4JREe8kUrgAAAA",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-08-codemod-tests.png": {
-      "hash": "e61918a116c73422",
-      "width": 550,
-      "height": 376,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e61918a116c73422/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e61918a116c73422/avif-480w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYABAAPxFysFAsJqSisAgBgCIJZwDCgC0kAAD+7gixFycXMAA=",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-02-loading-skeletons.png": {
-      "hash": "2c25bf507664e2a3",
-      "width": 1440,
-      "height": 900,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2c25bf507664e2a3/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2c25bf507664e2a3/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2c25bf507664e2a3/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAeyAA/u/r1rwIAA==",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-02-stats-loaded.png": {
-      "hash": "2d30ac14928278c5",
-      "width": 1440,
-      "height": 900,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d30ac14928278c5/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d30ac14928278c5/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2d30ac14928278c5/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAA8APxFysFCsJqSisAgBgCIJaQAAeyAA/u/MsnEIAA==",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-02-chart-loaded.png": {
-      "hash": "5be4388e37bfd415",
-      "width": 1440,
-      "height": 900,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5be4388e37bfd415/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5be4388e37bfd415/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5be4388e37bfd415/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAe/QAAP7vRMto03oAAAA=",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-02-fully-loaded.png": {
-      "hash": "31a65359d8f710fb",
-      "width": 1440,
-      "height": 900,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/31a65359d8f710fb/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/31a65359d8f710fb/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/31a65359d8f710fb/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAgCdASoYAA8APxFysFAsJqSisAgBgCIJaQAAe/QAAP7vRMtqMMX6AAA=",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-07-playwright-results.png": {
-      "hash": "2684867e74aeb6d6",
-      "width": 688,
-      "height": 482,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2684867e74aeb6d6/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2684867e74aeb6d6/avif-480w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYABEAPxGCuVWsKKWjKAgBgCIJaQDKABaoJQAA/u4JRD/MX9LAAAAA",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-07-playwright-report.png": {
-      "hash": "501e82a828db4d1b",
-      "width": 1440,
-      "height": 497,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/501e82a828db4d1b/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/501e82a828db4d1b/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/501e82a828db4d1b/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAAgAPxFysFCsJqSisAgBgCIJaQAAeyAA/u/NlUwAAA==",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-04-tsc-build-first-run.png": {
-      "hash": "19b77876e89f43f7",
-      "width": 868,
-      "height": 690,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/19b77876e89f43f7/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/19b77876e89f43f7/avif-480w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoYABMAPxGCuVWsKKWjKAgBgCIJaQDKABaoJQAA/u3Np/uSijhsAAAA",
-      "videoMimeType": null
-    },
-    "courses/enterprise-ui/assets/exercise-04-tsc-build-incremental.png": {
-      "hash": "e468db65eef6a95c",
-      "width": 1048,
-      "height": 565,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e468db65eef6a95c/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e468db65eef6a95c/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/e468db65eef6a95c/avif-1024w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYAA0APxFysFAsJqSisAgBgCIJZwDCgC0kAAD+7gixFycXMAA=",
+      "lqip": "data:image/webp;base64,UklGRuwAAABXRUJQVlA4WAoAAAAQAAAAFwAAEQAAQUxQSJQAAAABuTJE9D80khPbdu3IK1zlj/dSh1A/gAV/+mGPGwXwA4iYgAm4f+d4vHW8ce3vzyVePTscnjx6cDqdrqDJYjJffpJpZLJG8vv16R8va2QxmUy0mEYm07BGFpPRMs0/nWm/aPECy36QtRx8XpiwaJ9GW8taDTlMs6xpWbLOrDXft1Y7WzNZlknTfxbm67Da2QzWtCACVlA4IDIAAAAQAwCdASoYABIAPxGAuFWsKCUjKAgBgCIJaQDI1Bi5GIAA/u6riiAWvtJVSrxYwVUAAA==",
       "videoMimeType": null
     },
     "courses/aws/assets/alias-vs-cname-apex-routing.svg": {
@@ -2771,21 +2793,21 @@
       "videoMimeType": null
     },
     "courses/aws/assets/apigateway-stages-view.png": {
-      "hash": "4234e1e333b4ce15",
+      "hash": "474bd4be6ffe5ceb",
       "width": 1280,
       "height": 720,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4234e1e333b4ce15/original.png",
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/474bd4be6ffe5ceb/original.png",
       "avif": [
         {
           "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4234e1e333b4ce15/avif-480w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/474bd4be6ffe5ceb/avif-480w.avif"
         },
         {
           "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4234e1e333b4ce15/avif-1024w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/474bd4be6ffe5ceb/avif-1024w.avif"
         }
       ],
-      "lqip": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADwAgCdASoYAA4APxF0sFAsJySisAgBgCIJaQDE2C5wgAD+jK7cR44gOPzBCj9c9AAAAA==",
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAgCdASoYAA4APxF0sFAsJySisAgBgCIJaQDA3C5JAAD+jK7cM/jRKfdTLTatkAA=",
       "videoMimeType": null
     },
     "courses/aws/assets/cloudfront-viewer-certificate-default.png": {
@@ -3108,6 +3130,24 @@
       "lqip": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADwAgCdASoYAA4APxFwsFAsJiSisAgBgCIJaQDE2C5wgAD+jK7cR434jydTLSeO2AAAAA==",
       "videoMimeType": null
     },
+    "courses/aws/assets/apigateway-routes-with-default.png": {
+      "hash": "ad9f48277e6bf774",
+      "width": 1280,
+      "height": 720,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ad9f48277e6bf774/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ad9f48277e6bf774/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ad9f48277e6bf774/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAgCdASoYAA4APxF0slCsJqSisAgBgCIJaQDA3C5JAAD+jK7cM/jRKfdTLTatkAA=",
+      "videoMimeType": null
+    },
     "courses/aws/assets/iam-lambda-dynamodb-policy.png": {
       "hash": "efaff44fe23332f5",
       "width": 1600,
@@ -3174,25 +3214,79 @@
       "lqip": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADwAgCdASoYABAAPxFysFCsJqSqsAgBgCIJZACdAC0kAAD+48ZKsLDCYJ1wDQxbCF7CU66UjsWFLgAA",
       "videoMimeType": null
     },
-    "courses/aws/assets/cloudfront-create-distribution-form.png": {
-      "hash": "7515dac34a9b22c7",
+    "courses/aws/assets/cloudfront-wizard-step1-get-started.png": {
+      "hash": "f11e9babf0b06976",
       "width": 1280,
       "height": 720,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7515dac34a9b22c7/original.png",
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f11e9babf0b06976/original.png",
       "avif": [
         {
           "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7515dac34a9b22c7/avif-480w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f11e9babf0b06976/avif-480w.avif"
         },
         {
           "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7515dac34a9b22c7/avif-1024w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f11e9babf0b06976/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAgCdASoYAA4APxF0slCsJqSisAgBgCIJaQAAfj4AAP6Mrty79MpQoEdTLTV1AAA=",
+      "videoMimeType": null
+    },
+    "courses/aws/assets/cloudfront-wizard-step2-specify-origin.png": {
+      "hash": "b4e5e73ce45a22b5",
+      "width": 1280,
+      "height": 720,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b4e5e73ce45a22b5/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b4e5e73ce45a22b5/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b4e5e73ce45a22b5/avif-1024w.avif"
         }
       ],
       "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAgCdASoYAA4APxF0slCsJqSisAgBgCIJaQAAfj4AAP6Mrty79MXPB4YIUiYEAAA=",
       "videoMimeType": null
     },
-    "courses/aws/assets/cloudfront-create-review.png": {
+    "courses/aws/assets/cloudfront-wizard-step2-origin-settings.png": {
+      "hash": "25dad2c7e85af005",
+      "width": 1280,
+      "height": 720,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/25dad2c7e85af005/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/25dad2c7e85af005/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/25dad2c7e85af005/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAgCdASoYAA4APxF0sFAsJySisAgBgCIJaQAAfj4AAP6Mrty79MXPB4YIUiYEAAA=",
+      "videoMimeType": null
+    },
+    "courses/aws/assets/cloudfront-wizard-step3-waf-disabled.png": {
+      "hash": "b92a63eee57731c2",
+      "width": 1280,
+      "height": 720,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b92a63eee57731c2/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b92a63eee57731c2/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b92a63eee57731c2/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAgCdASoYAA4APxF0slCsJqSisAgBgCIJaQAAfj4AAP6Mrty79MTCxrqZaauoAAA=",
+      "videoMimeType": null
+    },
+    "courses/aws/assets/cloudfront-wizard-step4-review.png": {
       "hash": "cf3117cb3aca84a5",
       "width": 1280,
       "height": 720,
@@ -3865,21 +3959,21 @@
       "videoMimeType": null
     },
     "courses/aws/assets/lambda-function-code-view.png": {
-      "hash": "d24b817425026ac2",
+      "hash": "d3925403588cbbd7",
       "width": 1280,
       "height": 720,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d24b817425026ac2/original.png",
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d3925403588cbbd7/original.png",
       "avif": [
         {
           "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d24b817425026ac2/avif-480w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d3925403588cbbd7/avif-480w.avif"
         },
         {
           "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d24b817425026ac2/avif-1024w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/d3925403588cbbd7/avif-1024w.avif"
         }
       ],
-      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAgCdASoYAA4APxF4slEsJ6SisAgBgCIJaQDDNDDWAAD+jK7cfUSDNWmCFCVIAAA=",
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAgCdASoYAA4APxF0slCsJqSisAgBgCIJaQDE2DDWAAD+jK7cU7QaR/zBChRWgAA=",
       "videoMimeType": null
     },
     "courses/aws/assets/lambda-test-event-config.png": {
@@ -3924,6 +4018,24 @@
         }
       ],
       "lqip": "data:image/webp;base64,UklGRrgAAABXRUJQVlA4WAoAAAAQAAAAFwAADAAAQUxQSF8AAAABN6AgbQPGv+p2R0REJA8GsW1FwQY+GnB/g/9pADZYGmj/DiwZIvo/AUqbklYaj+GUhKQjpVMSZC0LxgoP8qwQ1chDwVsPyFKB6FfYzON+ahiAR3vevurff9Uw8Gj3DwBWUDggMgAAAPACAJ0BKhgADQA/EXSyUKwmpKKwCAGAIglnALsAMvFAAP6nuuxs0CpK7EdTLQHwAAAA",
+      "videoMimeType": null
+    },
+    "courses/aws/assets/lambda-monitoring-tab.png": {
+      "hash": "f980a1555461b6cf",
+      "width": 1280,
+      "height": 720,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f980a1555461b6cf/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f980a1555461b6cf/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f980a1555461b6cf/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAgCdASoYAA4APxF0slCsJqSisAgBgCIJaQAAfj4AAP6Mrty79MXPB4YIUiYEAAA=",
       "videoMimeType": null
     },
     "courses/aws/assets/certificate-validation-methods.svg": {
@@ -4003,25 +4115,21 @@
       "videoMimeType": null
     },
     "courses/aws/assets/dynamodb-table-overview.png": {
-      "hash": "f3dcfdb40cdf6195",
-      "width": 1600,
-      "height": 846,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f3dcfdb40cdf6195/original.png",
+      "hash": "ef0c0cf2de0a297f",
+      "width": 1280,
+      "height": 720,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ef0c0cf2de0a297f/original.png",
       "avif": [
         {
           "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f3dcfdb40cdf6195/avif-480w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ef0c0cf2de0a297f/avif-480w.avif"
         },
         {
           "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f3dcfdb40cdf6195/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/f3dcfdb40cdf6195/avif-1600w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ef0c0cf2de0a297f/avif-1024w.avif"
         }
       ],
-      "lqip": "data:image/webp;base64,UklGRrYAAABXRUJQVlA4WAoAAAAQAAAAFwAADAAAQUxQSF8AAAABN6AgbQPGv+p2R0REJA8GsW1FwQY+GnB/g/9pADZYGmj/DiwZIvo/AUqbklYaj+GUhKQjpVMSZC0LxgoP8qwQ1chDwVsPyFKB6FfYzON+ahiAR3vevurff9Uw8Gj3DwBWUDggMAAAANACAJ0BKhgADQA/EXCwUCwmJKKwCAGAIglnAACFKgAA/qe68+vvo2I2NdTLTiUAAA==",
+      "lqip": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAAAQAwCdASoYAA4APxF0sVAsJySisAgBgCIJZwC7MoAExoAA+/PoOmAXLP8wQoPmGAAAAA==",
       "videoMimeType": null
     },
     "courses/aws/assets/backend-request-chain.svg": {
@@ -4256,18 +4364,18 @@
       "videoMimeType": null
     },
     "courses/aws/assets/s3-exercise-website-live.png": {
-      "hash": "ccbf668cbf24eaf6",
+      "hash": "0784978c9704d8ef",
       "width": 1280,
       "height": 720,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ccbf668cbf24eaf6/original.png",
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0784978c9704d8ef/original.png",
       "avif": [
         {
           "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ccbf668cbf24eaf6/avif-480w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0784978c9704d8ef/avif-480w.avif"
         },
         {
           "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ccbf668cbf24eaf6/avif-1024w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/0784978c9704d8ef/avif-1024w.avif"
         }
       ],
       "lqip": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAgCdASoYAA4APxFysFAsJqSisAgBgCIJaQAAeyAA/u/dCgAAAA==",
@@ -4557,28 +4665,6 @@
       "lqip": "data:image/webp;base64,UklGRrYAAABXRUJQVlA4WAoAAAAQAAAAFwAADAAAQUxQSF8AAAABN6AgbQPGv+p2R0REJA8GsW1FwQY+GnB/g/9pADZYGmj/DiwZIvo/AUqbklYaj+GUhKQjpVMSZC0LxgoP8qwQ1chDwVsPyFKB6FfYzON+ahiAR3vevurff9Uw8Gj3DwBWUDggMAAAAPACAJ0BKhgADQA/EXCwUCwmJKKwCAGAIglpAMM0MNYAAP7CF8wYy8305cMEKEqQAA==",
       "videoMimeType": null
     },
-    "courses/aws/assets/lambda-monitoring-tab.png": {
-      "hash": "37d58f2c5313991d",
-      "width": 1600,
-      "height": 846,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/37d58f2c5313991d/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/37d58f2c5313991d/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/37d58f2c5313991d/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/37d58f2c5313991d/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRrgAAABXRUJQVlA4WAoAAAAQAAAAFwAADAAAQUxQSF8AAAABN6AgbQPGv+p2R0REJA8GsW1FwQY+GnB/g/9pADZYGmj/DiwZIvo/AUqbklYaj+GUhKQjpVMSZC0LxgoP8qwQ1chDwVsPyFKB6FfYzON+ahiAR3vevurff9Uw8Gj3DwBWUDggMgAAAPACAJ0BKhgADQA/EXSwUCwnJKKwCAGAIglnAMb0MvFAAP64Ds/HvYKmJI6mWlTYAAAA",
-      "videoMimeType": null
-    },
     "courses/aws/assets/dynamodb-access-pattern-design.svg": {
       "hash": "5389b48ae3698bc7",
       "width": 1200,
@@ -4624,26 +4710,58 @@
       "lqip": null,
       "videoMimeType": null
     },
-    "courses/python-ai/assets/hugging-face-website.png": {
-      "hash": "3527117fe8f0a880",
-      "width": 1600,
-      "height": 1203,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/original.png",
+    "courses/aws/assets/cloudfront-functions-list.png": {
+      "hash": "2bc1aa28796b7e7e",
+      "width": 1280,
+      "height": 720,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2bc1aa28796b7e7e/original.png",
       "avif": [
         {
           "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-480w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2bc1aa28796b7e7e/avif-480w.avif"
         },
         {
           "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3527117fe8f0a880/avif-1600w.avif"
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2bc1aa28796b7e7e/avif-1024w.avif"
         }
       ],
-      "lqip": "data:image/webp;base64,UklGRuwAAABXRUJQVlA4WAoAAAAQAAAAFwAAEQAAQUxQSJQAAAABuTJE9D80khPbdu3IK1zlj/dSh1A/gAV/+mGPGwXwA4iYgAm4f+d4vHW8ce3vzyVePTscnjx6cDqdrqDJYjJffpJpZLJG8vv16R8va2QxmUy0mEYm07BGFpPRMs0/nWm/aPECy36QtRx8XpiwaJ9GW8taDTlMs6xpWbLOrDXft1Y7WzNZlknTfxbm67Da2QzWtCACVlA4IDIAAAAQAwCdASoYABIAPxGAuFWsKCUjKAgBgCIJaQDI1Bi5GIAA/u6riiAWvtJVSrxYwVUAAA==",
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAgCdASoYAA4APxF0sFAsJySisAgBgCIJaQDG9C5JAAD+jK7cUv4JQbTBCkVSLAA=",
+      "videoMimeType": null
+    },
+    "courses/aws/assets/cloudfront-create-function-form.png": {
+      "hash": "15f9564355755532",
+      "width": 1280,
+      "height": 720,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/15f9564355755532/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/15f9564355755532/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/15f9564355755532/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADwAgCdASoYAA4APxF0sFAsJySisAgBgCIJaQDE2C5wgAD+jK7cR44gOPzBCj9c9AAAAA==",
+      "videoMimeType": null
+    },
+    "courses/aws/assets/cloudfront-function-code-editor.png": {
+      "hash": "cfb8574f7bec6f3e",
+      "width": 1280,
+      "height": 720,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/cfb8574f7bec6f3e/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/cfb8574f7bec6f3e/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/cfb8574f7bec6f3e/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAgCdASoYAA4APxFyslAsJqSisAgBgCIJaQAAelOUAAD+jK7cu/SkmicnOILoAAA=",
       "videoMimeType": null
     },
     "courses/storybook/assets/storybook-styled-basic-button.png": {
