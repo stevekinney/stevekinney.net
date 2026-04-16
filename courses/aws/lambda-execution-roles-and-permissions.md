@@ -40,7 +40,7 @@ Without an execution role, Lambda can't run your function at all. The role is a 
 
 The trust policy is a JSON document that answers one question: "Who is allowed to assume this role?" For Lambda, the answer is always the Lambda service.
 
-Create a file called `trust-policy.json`:
+Create a file called `trust-policy.json` (also available as [`lambda-trust-policy.json`](https://github.com/stevekinney/scratch-lab/blob/main/policies/iam-policies/lambda-trust-policy.json) in the Scratch Lab repository):
 
 ```json
 {

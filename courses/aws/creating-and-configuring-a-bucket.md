@@ -134,7 +134,7 @@ aws s3api get-bucket-encryption \
         "ApplyServerSideEncryptionByDefault": {
           "SSEAlgorithm": "AES256"
         },
-        "BucketKeyEnabled": true
+        "BucketKeyEnabled": false
       }
     ]
   }

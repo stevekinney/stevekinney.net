@@ -56,7 +56,7 @@ aws ssm put-parameter \
 
 ## 3. Execution Role Policy
 
-Save as `scratch-lab-api-policy.json`:
+Save as `scratch-lab-api-policy.json` (also available as [`scratch-lab-api.json`](https://github.com/stevekinney/scratch-lab/blob/main/policies/iam-policies/scratch-lab-api.json) in the Scratch Lab repository):
 
 ```json
 {

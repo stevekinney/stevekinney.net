@@ -73,7 +73,7 @@ Use Option 1 in scripts you'll run against multiple providers; Option 2 is fine 
 
 Create a trust policy that allows GitHub Actions to assume this role, scoped to your specific repository:
 
-Save this as `github-actions-trust-policy.json`:
+Save this as `github-actions-trust-policy.json` (also available in the [Scratch Lab repository](https://github.com/stevekinney/scratch-lab/blob/main/policies/iam-policies/github-actions-trust-policy.json)):
 
 ```json
 {
@@ -129,6 +129,9 @@ aws iam attach-role-policy \
 You can reuse the exact same `DeployBotPolicy`—the permissions don't change just because the principal is a role instead of a user. This is the principle of least privilege from [Principle of Least Privilege](principle-of-least-privilege.md) applied to your CI/CD pipeline: the deploy role can sync files and invalidate caches, and nothing else.
 
 ## The GitHub Actions Workflow
+
+> [!TIP]
+> This workflow file is available in the [Scratch Lab repository](https://github.com/stevekinney/scratch-lab/blob/main/.github/workflows/deploy.yml).
 
 Create the workflow file at `.github/workflows/deploy.yml`:
 

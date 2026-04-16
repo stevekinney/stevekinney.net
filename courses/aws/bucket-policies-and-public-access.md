@@ -85,6 +85,9 @@ After saving, the **Permissions** tab confirms that Block Public Access is now *
 
 ## Writing a Public Read Bucket Policy
 
+> [!TIP]
+> All bucket policies from this lesson are available as standalone JSON files in the [Scratch Lab repository](https://github.com/stevekinney/scratch-lab/tree/main/policies/bucket-policies).
+
 Now you can attach a bucket policy. Here is a complete policy that allows anyone to read any object in the bucket:
 
 ```json

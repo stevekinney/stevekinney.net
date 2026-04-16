@@ -212,7 +212,7 @@ In the console, the **Origins** tab of your distribution shows the OAC attached 
 
 The OAC is attached to CloudFront, but S3 doesn't know about it yet. You need to replace your bucket policy with one that allows CloudFront to read from the bucket and denies everyone else.
 
-If you followed [Bucket Policies and Public Access](bucket-policies-and-public-access.md), your bucket currently has a public read policy with `"Principal": "*"`. Replace it with this:
+If you followed [Bucket Policies and Public Access](bucket-policies-and-public-access.md), your bucket currently has a public read policy with `"Principal": "*"`. Replace it with this (also available as [`cloudfront-oac.json`](https://github.com/stevekinney/scratch-lab/blob/main/policies/bucket-policies/cloudfront-oac.json) in the Scratch Lab repository):
 
 ```json
 {

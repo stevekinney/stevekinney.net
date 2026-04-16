@@ -4,7 +4,7 @@ description: >-
   Complete solution for the DynamoDB Lambda exercise, with all commands, handler
   code, and expected output.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - dynamodb
@@ -87,6 +87,8 @@ Expected output: `"ACTIVE"`
 ## Add DynamoDB Permissions to the Lambda Role
 
 ### `lambda-dynamodb-policy.json`
+
+This policy is available as [`lambda-dynamodb.json`](https://github.com/stevekinney/scratch-lab/blob/main/policies/iam-policies/lambda-dynamodb.json) in the Scratch Lab repository.
 
 ```json
 {

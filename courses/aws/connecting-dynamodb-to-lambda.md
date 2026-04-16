@@ -4,7 +4,7 @@ description: >-
   Connect the full request loop from frontend through API Gateway to Lambda to
   DynamoDB, including IAM permissions and a complete CRUD handler.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - dynamodb
@@ -46,7 +46,7 @@ The only missing piece: your Lambda function doesn't have permission to talk to 
 
 Your Lambda function needs permission to perform DynamoDB operations on the `my-frontend-app-data` table. Create a policy that grants exactly the operations your handler uses—nothing more.
 
-Save this as `lambda-dynamodb-policy.json`:
+Save this as `lambda-dynamodb-policy.json` (also available as [`lambda-dynamodb.json`](https://github.com/stevekinney/scratch-lab/blob/main/policies/iam-policies/lambda-dynamodb.json) in the Scratch Lab repository):
 
 ```json
 {

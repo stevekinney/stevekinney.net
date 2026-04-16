@@ -122,6 +122,9 @@ Notice that S3 bucket ARNs don't include a region or account ID—bucket names a
 
 ## A Real Policy: Read-Only Access to Your Assets Bucket
 
+> [!TIP]
+> All IAM policies from this lesson are available as standalone JSON files in the [Scratch Lab repository](https://github.com/stevekinney/scratch-lab/tree/main/policies/iam-policies).
+
 Let's write a policy that grants read-only access to your static assets bucket. This is the kind of policy you'd attach to a role that only needs to serve files—no uploading, no deleting.
 
 ```json

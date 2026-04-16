@@ -4,7 +4,7 @@ description: >-
   Complete solution for the deploy bot IAM policy exercise, with annotations
   explaining each policy statement.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - iam
@@ -24,6 +24,9 @@ Here's the complete policy, the CLI commands to wire it up, and an explanation o
 > If you want the AWS version of the policy mechanics while you work, keep the [IAM JSON policy reference](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html) and the [`aws iam create-policy` command reference](https://docs.aws.amazon.com/cli/latest/reference/iam/create-policy.html) open.
 
 ## The Policy
+
+> [!TIP]
+> This policy is available as [`deploy-bot-policy.json`](https://github.com/stevekinney/scratch-lab/blob/main/policies/iam-policies/deploy-bot-policy.json) in the Scratch Lab repository.
 
 Create a file called `deploy-bot-policy.json`:
 

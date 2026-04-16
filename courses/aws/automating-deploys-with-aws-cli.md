@@ -26,6 +26,9 @@ The script wraps these with error handling, differentiated cache headers, and st
 
 ## The Deploy Script
 
+> [!TIP]
+> This script is available as [`deploy.sh`](https://github.com/stevekinney/scratch-lab/blob/main/deploy.sh) in the Scratch Lab repository.
+
 Save this as `deploy.sh` in the root of your project:
 
 ```bash

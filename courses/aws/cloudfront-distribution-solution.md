@@ -60,7 +60,7 @@ Save the `Id` value (`E1OAC2EXAMPLE`).
 
 ## Create the Distribution
 
-Save the following as `distribution-config.json`:
+Save the following as `distribution-config.json` (also available in the [Scratch Lab repository](https://github.com/stevekinney/scratch-lab/blob/main/cloudfront/distribution-config.json)):
 
 ```json
 {

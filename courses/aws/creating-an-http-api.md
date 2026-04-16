@@ -60,7 +60,18 @@ In the console, the **Create API** page shows the choice between HTTP API, WebSo
 
 ## The `$default` Stage
 
-When you create an HTTP API, API Gateway automatically creates a **`$default` stage**. This stage has two important properties:
+When you create an HTTP API using the console or quick-create (`--target`), API Gateway automatically creates a **`$default` stage**. When you build the API step-by-step from the CLI (which is what we do in this course), you need to create it yourself:
+
+```bash
+aws apigatewayv2 create-stage \
+  --api-id abc123def4 \
+  --stage-name '$default' \
+  --auto-deploy \
+  --region us-east-1 \
+  --output json
+```
+
+The `$default` stage has two important properties:
 
 1. **Auto-deploy is enabled.** Any changes you make to routes, integrations, or configuration are deployed automatically. You don't need to run a separate deploy command.
 2. **No stage prefix in the URL.** The `$default` stage serves your API at the root of the `ApiEndpoint` URL. If your endpoint is `https://abc123def4.execute-api.us-east-1.amazonaws.com`, a route at `/items` is reachable at `https://abc123def4.execute-api.us-east-1.amazonaws.com/items`—no `/prod` or `/dev` prefix needed.

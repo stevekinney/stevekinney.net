@@ -5,7 +5,7 @@ description: >-
   responses, using the lightweight JavaScript runtime available at CloudFront
   edge locations.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - cloudfront-functions
@@ -104,6 +104,9 @@ function handler(event) {
 ```
 
 ## Writing a URL Rewrite Function
+
+> [!TIP]
+> All CloudFront Functions from this lesson are available as standalone files in the [Scratch Lab repository](https://github.com/stevekinney/scratch-lab/tree/main/cloudfront/functions).
 
 Here's a practical example: a function that appends `index.html` to directory-style URLs. When someone requests `/about/`, your S3 bucket doesn't know that `/about/` means `/about/index.html`. This function handles it.
 
