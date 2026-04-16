@@ -57,6 +57,10 @@ title = "Versioning, Lifecycle Rules, and Cost"
 href = "s3-versioning-lifecycle-and-cost.md"
 
 [[section.item]]
+title = "S3 SDK Examples"
+href = "s3-sdk-examples.md"
+
+[[section.item]]
 title = "Exercise: Deploy a Static Site to S3"
 href = "s3-static-site-exercise.md"
 
