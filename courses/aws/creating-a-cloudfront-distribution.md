@@ -48,7 +48,11 @@ The wizard asks whether to enable AWS WAF (Web Application Firewall). WAF adds c
 
 ![The CloudFront security step showing WAF options with Do not enable security protections selected.](assets/cloudfront-wizard-step3-waf-disabled.png)
 
-### Step 4: Review and Create
+### Step 4: Get TLS Certificate
+
+The wizard asks whether you want to request an ACM certificate for a custom domain. Since we're using CloudFront's default `*.cloudfront.net` domain for now, skip this step by clicking **Next** without entering a domain. You'll attach a custom certificate later in [Attaching an SSL Certificate](attaching-an-ssl-certificate.md) if you set up a custom domain.
+
+### Step 5: Review and Create
 
 The final step shows a summary of everything you've configured—distribution name, S3 origin with CloudFront access granted, cache settings, and security configuration. Verify the details and click **Create distribution**.
 
