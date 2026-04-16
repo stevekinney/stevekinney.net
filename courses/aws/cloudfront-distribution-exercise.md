@@ -49,7 +49,7 @@ Create a CloudFront distribution with these settings:
 - **Viewer protocol policy**: `redirect-to-https`
 - **Compression**: Enabled
 - **HTTP version**: `http2and3`
-- **Viewer certificate**: Use the CloudFront default certificate (`CloudFrontDefaultCertificate: true`). This gives you HTTPS on the `*.cloudfront.net` domain automatically. If you want a custom domain later, see the optional [Custom Domains, DNS, and Certificates](#) section at the end of the course.
+- **Viewer certificate**: Use the CloudFront default certificate (`CloudFrontDefaultCertificate: true`). This gives you HTTPS on the `*.cloudfront.net` domain automatically. If you want a custom domain later, see the optional [Custom Domains, DNS, and Certificates](dns-for-frontend-engineers.md) section at the end of the course.
 - **Custom error responses**: Map both `403` and `404` to `/index.html` with response code `200` and an error caching TTL of `10` seconds.
 
 Write the full distribution config JSON and use `aws cloudfront create-distribution --distribution-config file://distribution-config.json`.

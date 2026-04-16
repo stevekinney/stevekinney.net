@@ -1,22 +1,22 @@
 ---
 title: 'Exercise: End-to-End Summit Supply API'
 description: >-
-  Wire API Gateway, Lambda, DynamoDB, and Secrets Manager into one working backend for the Summit Supply frontend.
+  Wire API Gateway, Lambda, DynamoDB, and Parameter Store into one working backend for the Summit Supply frontend.
 date: 2026-04-15
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - capstone
   - lambda
   - api-gateway
   - dynamodb
-  - secrets-manager
+  - parameter-store
   - exercise
 ---
 
 You've built all the pieces. Now build the backend they add up to.
 
-This is the Part 2 capstone—the mirror of [Exercise: End-to-End Static Site Deployment](static-site-deployment-exercise.md) that closed out Part 1. By the end, Summit Supply's frontend should be able to `fetch()` a real API on your own domain, that hits a real Lambda, that reads and writes a real DynamoDB table, using credentials fetched from a real Secrets Manager secret. Every layer you've learned about, stacked.
+This is the Part 2 capstone—the mirror of [Exercise: End-to-End Static Site Deployment](static-site-deployment-exercise.md) that closed out Part 1. By the end, Summit Supply's frontend should be able to `fetch()` a real API on your own domain, that hits a real Lambda, that reads and writes a real DynamoDB table, using credentials fetched from Parameter Store (or Secrets Manager). Every layer you've learned about, stacked.
 
 ## Why It Matters
 
