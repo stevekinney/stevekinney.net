@@ -30,7 +30,7 @@
   <!-- Browser -->
   <rect class="box browser" x="30" y="170" width="140" height="80" rx="10" />
   <text class="label" x="100" y="205">Browser</text>
-  <text class="sublabel" x="100" y="222">fetch('/lists')</text>
+  <text class="sublabel" x="100" y="222">fetch('/notes')</text>
 
   <!-- Route 53 -->
   <rect class="box edge" x="210" y="170" width="140" height="80" rx="10" />
@@ -46,14 +46,14 @@
   <!-- Lambda -->
   <rect class="box compute" x="600" y="170" width="180" height="80" rx="10" />
   <text class="label" x="690" y="200">Lambda</text>
-  <text class="sublabel" x="690" y="218">summit-supply-api</text>
+  <text class="sublabel" x="690" y="218">scratch-lab-api</text>
   <text class="sublabel" x="690" y="232">Node.js 22 · arm64</text>
 
   <!-- DynamoDB -->
   <rect class="box data" x="830" y="70" width="180" height="80" rx="10" />
   <text class="label" x="920" y="100">DynamoDB</text>
-  <text class="sublabel" x="920" y="118">saved-lists table</text>
-  <text class="sublabel" x="920" y="132">userId + listId</text>
+  <text class="sublabel" x="920" y="118">notes table</text>
+  <text class="sublabel" x="920" y="132">userId + noteId</text>
 
   <!-- Parameter Store -->
   <rect class="box secret" x="830" y="270" width="180" height="80" rx="10" />

@@ -5,7 +5,7 @@ description: >-
   (CloudFormation, CDK, SST), and see what the infrastructure you built by hand
   looks like when defined in code.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - infrastructure-as-code
@@ -13,7 +13,7 @@ tags:
   - cloudformation
 ---
 
-You've spent this entire course clicking through the AWS console and running CLI commands. You created an S3 bucket, configured a CloudFront distribution, set up an API Gateway, attached IAM roles, provisioned a DynamoDB table, and wired it all together. It works. But there's a problem: if you had to do it all again—on a new account, for a new Summit Supply environment, for a teammate—you'd need to repeat every step from memory, in the right order, without mistakes.
+You've spent this entire course clicking through the AWS console and running CLI commands. You created an S3 bucket, configured a CloudFront distribution, set up an API Gateway, attached IAM roles, provisioned a DynamoDB table, and wired it all together. It works. But there's a problem: if you had to do it all again—on a new account, for a new Scratch Lab environment, for a teammate—you'd need to repeat every step from memory, in the right order, without mistakes.
 
 If you want AWS's official framing for the first-party IaC tool in this lesson, the [AWS CDK Developer Guide](https://docs.aws.amazon.com/cdk/v2/guide/home.html) is the canonical reference.
 
@@ -213,7 +213,7 @@ You do not need to deploy CDK in this lesson, but you should be able to verify t
 
 - Can you point at one manual change in the course and say what it would become in code?
 - Can you explain which CloudFormation resource is hiding under the friendly CDK construct?
-- Can you explain what would happen if a teammate recreated Summit Supply in another account from the same IaC definition?
+- Can you explain what would happen if a teammate recreated Scratch Lab in another account from the same IaC definition?
 
 If those answers are clear, the lesson did its job.
 

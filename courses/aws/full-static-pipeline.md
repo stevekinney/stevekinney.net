@@ -159,7 +159,7 @@ This is the foundation. In the next two lessons, you'll wrap these commands in a
 
 ## Verification
 
-Use these checks once the Summit Supply storefront is wired together:
+Use these checks once the Scratch Lab app is wired together:
 
 ```bash
 curl -I https://YOUR_CLOUDFRONT_DOMAIN

@@ -4,7 +4,7 @@ description: >-
   Understand why hardcoding secrets in Lambda environment variables or source
   code is a security risk and what the alternatives look like on AWS.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - secrets
@@ -20,7 +20,7 @@ That approach works. It's also a security problem waiting to happen.
 
 ## Why This Matters
 
-By the time Summit Supply has a live inventory API, payment provider keys, and webhook signing secrets, "just put it in an environment variable" stops being a convenience and starts being a liability. This module is where the course shifts from "it works" to "it works without leaking credentials."
+By the time Scratch Lab has a live notes API, a third-party search key, and webhook signing secrets, "just put it in an environment variable" stops being a convenience and starts being a liability. This module is where the course shifts from "it works" to "it works without leaking credentials."
 
 ## Builds On
 

@@ -259,12 +259,12 @@ href = "secrets-in-lambda-exercise.md"
   href = "secrets-in-lambda-solution.md"
 
 [[section.item]]
-title = "Capstone: End-to-End Summit Supply API"
-href = "end-to-end-summit-supply-api-exercise.md"
+title = "Capstone: End-to-End Scratch Lab API"
+href = "end-to-end-scratch-lab-api-exercise.md"
 
   [[section.item.related]]
   title = "Solution"
-  href = "end-to-end-summit-supply-api-solution.md"
+  href = "end-to-end-scratch-lab-api-solution.md"
 
 [[section]]
 title = "CloudWatch (Monitoring & Observability)"

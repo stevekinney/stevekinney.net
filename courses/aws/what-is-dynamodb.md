@@ -5,7 +5,7 @@ description: >-
   it's a practical choice for frontend engineers who need a lightweight data
   layer.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - dynamodb
@@ -19,7 +19,7 @@ DynamoDB is a fully managed, serverless NoSQL database from AWS. You create a ta
 
 ## Why This Matters
 
-This is the moment Summit Supply stops being "a frontend with an API" and becomes "an application with state." Once you store saved gear lists, lightweight account state, or form submissions, you need a database choice that matches the rest of the stack. DynamoDB fits the same serverless operating model as Lambda, which is why it shows up so often in frontend-heavy AWS architectures.
+This is the moment Scratch Lab stops being "a frontend with an API" and becomes "an application with state." Once you store notes, you need a database choice that matches the rest of the stack. DynamoDB fits the same serverless operating model as Lambda, which is why it shows up so often in frontend-heavy AWS architectures.
 
 ## Builds On
 

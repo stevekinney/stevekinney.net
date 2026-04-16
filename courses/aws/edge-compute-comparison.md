@@ -5,7 +5,7 @@ description: >-
   runtime, execution limits, supported events, pricing—and know which to
   reach for based on your use case.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - lambda-at-edge
@@ -13,7 +13,7 @@ tags:
   - comparison
 ---
 
-Summit Supply is live now, which means the weird requirements start showing up. Marketing wants an A/B test on the homepage hero. You want to redirect a retired campaign URL before it ever touches your origin. Security wants a header added everywhere. These are not "spin up a whole backend" problems. These are _edge_ problems.
+Scratch Lab is live now, which means the weird requirements start showing up. Marketing wants an A/B test on the homepage hero. You want to redirect a retired campaign URL before it ever touches your origin. Security wants a header added everywhere. These are not "spin up a whole backend" problems. These are _edge_ problems.
 
 If you want AWS's exact feature boundaries in front of you while you read, keep the [CloudFront Functions guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) and the [Lambda@Edge guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-at-the-edge.html) open.
 

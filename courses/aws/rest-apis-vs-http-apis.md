@@ -4,7 +4,7 @@ description: >-
   Understand the differences between API Gateway REST APIs and HTTP APIs, and why
   HTTP APIs are the right default for most frontend-to-Lambda integrations.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - api-gateway
@@ -19,7 +19,7 @@ For this course, you'll use HTTP APIs. They're cheaper, faster, and simpler. But
 
 ## Why This Matters
 
-Choosing the wrong API Gateway product is one of those mistakes that does not break anything immediately. It just quietly makes every request more expensive, every configuration screen more cluttered, and every explanation to your future self more annoying. Summit Supply does not need the heavyweight option, and most frontend-driven backends do not either.
+Choosing the wrong API Gateway product is one of those mistakes that does not break anything immediately. It just quietly makes every request more expensive, every configuration screen more cluttered, and every explanation to your future self more annoying. Scratch Lab does not need the heavyweight option, and most frontend-driven backends do not either.
 
 ## Builds On
 
