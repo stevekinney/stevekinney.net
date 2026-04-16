@@ -4,7 +4,7 @@ description: >-
   Complete solution for the Lambda function exercise, with all commands and
   expected output.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - lambda
@@ -67,6 +67,9 @@ npm install -D typescript @types/aws-lambda @types/node
 ```
 
 ## The Handler
+
+> [!TIP]
+> All Lambda handlers, the `tsconfig.json`, and test event JSON files from this course are available in the [Scratch Lab repository](https://github.com/stevekinney/scratch-lab/tree/main/lambda).
 
 ### `lambda/src/handler.ts`
 

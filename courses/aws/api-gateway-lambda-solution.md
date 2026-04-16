@@ -4,7 +4,7 @@ description: >-
   Complete solution for the API Gateway and Lambda exercise, with all commands,
   handler code, and expected output.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - api-gateway
@@ -24,6 +24,9 @@ Here's the complete solution for every step, including the handler code, all CLI
 > If you want AWS's version of the route, integration, and CORS workflow open while you work, keep the [HTTP APIs documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html), the [Lambda integration guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html), and the [HTTP API CORS guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html) nearby.
 
 ## The Handler
+
+> [!TIP]
+> This handler is available as [`items-handler.ts`](https://github.com/stevekinney/scratch-lab/blob/main/lambda/src/items-handler.ts) in the Scratch Lab repository.
 
 ### `lambda/src/handler.ts`
 

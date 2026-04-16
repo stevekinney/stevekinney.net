@@ -4,7 +4,7 @@ description: >-
   Create an AWS account, enable MFA on the root user, and understand why root
   should be locked away after initial setup.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - iam
@@ -15,7 +15,7 @@ tags:
 You've been deploying to Vercel or Cloudflare, a lot of the infrastructure has been abstracted away for you. That's kind of the value proposition of some of these tools. (Yes, Cloudflare has their own infrastructure and Vercel is an abstraction on top of multiple vendors—but, you get my point.) You click a button, connect a repo, and your site is live. AWS gives you actual infrastructure, which means actual security responsibility. The account you're about to create controls real resources that cost real money, and if someone compromises it, they can spin up crypto miners on your credit card. So we're going to do the Right Way™ from the start.
 
 > [!NOTE]
-> We're going to use a _lot_ of screenshots in this very first section. This is because I'd rather not doxx myself on the life stream. Sorry—but, I'm not sorry. 🤓
+> We're going to use a _lot_ of screenshots in this very first section. This is because I'd rather not doxx myself on the live stream. Sorry—but, I'm not sorry. 🤓
 
 ## Why This Matters
 

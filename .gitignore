@@ -38,3 +38,4 @@ writing/manifest.json
 courses/*/manifest.json
 applications/website/src/lib/server/content-index.json
 tmp/
+/.playwright-cli

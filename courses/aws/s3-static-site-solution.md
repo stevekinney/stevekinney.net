@@ -3,7 +3,7 @@ title: 'Solution: Deploy a Static Site to S3'
 description: >-
   Complete solution with all commands and expected output for deploying a static site to S3.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - s3
@@ -23,6 +23,9 @@ This is the complete solution for the S3 static site deployment exercise. Every 
 - Versioning gives you a recovery path the moment you overwrite `index.html`, which is why it belongs in the same exercise as the first deploy.
 
 ## Create the Static Site Files
+
+> [!TIP]
+> These files are also available in the [Scratch Lab repository](https://github.com/stevekinney/scratch-lab/tree/main/playground/build) if you'd prefer to clone them instead of creating them by hand.
 
 Create a `build/` directory with four files:
 
@@ -529,7 +532,7 @@ Expected output (partial):
 }
 ```
 
-The `ContentType` should be `text/css`. Check your JavaScript file the same way—it should be `application/javascript`.
+The `ContentType` should be `text/css`. Check your JavaScript file the same way—it should be `text/javascript`.
 
 ## Summary
 

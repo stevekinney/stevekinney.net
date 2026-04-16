@@ -5,7 +5,7 @@ description: >-
   servers, how invocations work, and how Lambda differs from traditional server
   deployments.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - lambda
@@ -21,7 +21,7 @@ Up to this point in the course, everything you've deployed has been static. S3 h
 
 ## Why This Matters
 
-This is the point where the course stops being "frontend hosting on AWS" and becomes "full-stack frontend architecture on AWS." The Summit Supply storefront has static pages already. Lambda is how it graduates to live inventory, cart actions, webhooks, and API responses without introducing a server you now have to keep alive.
+This is the point where the course stops being "frontend hosting on AWS" and becomes "full-stack frontend architecture on AWS." The Scratch Lab app has static pages already. Lambda is how it graduates to live note syncing, search, and API responses without introducing a server you now have to keep alive.
 
 ## Builds On
 
@@ -130,7 +130,7 @@ When your Lambda function runs, anything you write to `console.log` (or `console
 ## Verification
 
 - You can explain the difference between an invocation, an execution environment, and a warm reuse of that environment.
-- You can look at a frontend feature like "submit the Summit Supply contact form" and describe it as an event that triggers a Lambda function.
+- You can look at a frontend feature like "create a new note in Scratch Lab" and describe it as an event that triggers a Lambda function.
 - You know where Lambda logs land before you ever open the CloudWatch console.
 
 ## Common Failure Modes

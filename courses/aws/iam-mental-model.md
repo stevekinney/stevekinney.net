@@ -4,7 +4,7 @@ description: >-
   Build a mental model of IAM—users, groups, roles, policies, and how AWS
   decides whether to allow or deny a request.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - iam
@@ -31,8 +31,8 @@ An **IAM user** represents a single person or application that needs to interact
 
 Users exist within your AWS account. They're not shared across accounts. If you have three developers who need AWS access, you create three IAM users. (Or you use IAM Identity Center for single sign-on, but that's more complexity than we need right now.)
 
-> [!NOTE] 2026 Recommendation
-> In production you almost never create IAM users for humans anymore. The modern pattern is **IAM Identity Center** federating from your identity provider (Google, Okta, Entra, GitHub), handing humans short-lived SSO sessions instead of long-lived passwords or access keys. The IAM _concepts_ below—policies, roles, allow/deny evaluation—are identical under either model; Identity Center just replaces the "IAM user" entry point. The course sticks with IAM users because they're the cleanest way to teach the evaluation model.
+> [!NOTE] IAM Identity Center
+> In production you _almost_ never create IAM users for humans anymore. The modern pattern is **IAM Identity Center** federating from your identity provider (Google, Okta, Entra, GitHub), handing humans short-lived SSO sessions instead of long-lived passwords or access keys. The IAM _concepts_ below—policies, roles, allow/deny evaluation—are identical under either model; Identity Center just replaces the "IAM user" entry point. The course sticks with IAM users because they're the cleanest way to teach this stuff.
 
 ### Groups
 

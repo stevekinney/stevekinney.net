@@ -3,7 +3,7 @@ title: 'What is S3?'
 description: >-
   Understand what S3 is, how buckets and objects work, and why it is the natural starting point for frontend engineers deploying to AWS.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - s3
@@ -49,7 +49,7 @@ The distinction matters because when you look at S3 in the AWS console, it shows
 > [!TIP]
 > The forward slashes in S3 keys are called **key prefixes**, and they work like virtual folders. You can list all objects with a given prefix, which makes them useful for organizing files. Just remember: they aren't actual directories.
 
-## Why S3 for Frontend Engineers?
+## Why S3?
 
 If you're used to deploying on Vercel, you might wonder why you'd bother with S3 at all. Here's the short version: S3 gives you direct control over where your files live, how they're served, and what it costs.
 
@@ -88,7 +88,11 @@ aws s3 ls \
   --region us-east-1
 ```
 
-If this is a fresh account, you'll see an empty list. That's expected—we'll create our first bucket in the next lesson. The point is that `s3` commands are first-class citizens in the AWS CLI, and you'll use them constantly throughout this course.
+If this is a fresh account, you'll see an empty list. In the console, the S3 homepage shows the same thing—no buckets yet.
+
+![The S3 console showing an empty bucket list with a Get Started prompt before any buckets have been created.](assets/s3-bucket-list-empty.png)
+
+That's expected—we'll create our first bucket in the next lesson. The point is that `s3` commands are first-class citizens in the AWS CLI, and you'll use them constantly throughout this course.
 
 You can also use the lower-level `s3api` commands for more granular control:
 

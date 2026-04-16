@@ -3,7 +3,7 @@ title: 'Cleanup and Teardown'
 description: >-
   Tear down every AWS resource you created in this course in the correct order so you stop paying for it.
 date: 2026-04-15
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - cleanup
@@ -139,7 +139,7 @@ aws apigatewayv2 delete-domain-name \
 Delete each function. Versions attached to the function go with it. Lambda@Edge functions in CloudFront get replicated to edge locations—AWS cleans those up asynchronously after you delete the function; don't be surprised if the console still shows replicas for up to a few hours.
 
 ```bash
-aws lambda delete-function --function-name summit-supply-api --region us-east-1
+aws lambda delete-function --function-name scratch-lab-api --region us-east-1
 aws lambda delete-function --function-name my-frontend-app-api --region us-east-1
 ```
 
@@ -148,7 +148,7 @@ aws lambda delete-function --function-name my-frontend-app-api --region us-east-
 You can't delete a role while policies are attached. Detach first.
 
 ```bash
-ROLE=summit-supply-api-role
+ROLE=scratch-lab-api-role
 
 # List and detach managed policies
 for ARN in $(aws iam list-attached-role-policies --role-name "$ROLE" \
@@ -171,7 +171,7 @@ Repeat for every execution role the course created. Delete customer-managed poli
 
 ```bash
 aws dynamodb delete-table \
-  --table-name summit-supply-saved-lists \
+  --table-name scratch-lab-notes \
   --region us-east-1
 ```
 
@@ -181,13 +181,13 @@ If you had point-in-time recovery enabled, final backups may linger for the rete
 
 ```bash
 aws ssm delete-parameter \
-  --name /summit-supply/production/search-api-key \
+  --name /scratch-lab/production/search-api-key \
   --region us-east-1
 
 # Secrets Manager requires --force-delete-without-recovery to actually delete
 # immediately; otherwise the secret sits in a 7-30 day recovery window.
 aws secretsmanager delete-secret \
-  --secret-id /summit-supply/production/database-credentials \
+  --secret-id /scratch-lab/production/database-credentials \
   --force-delete-without-recovery \
   --region us-east-1
 ```
@@ -196,15 +196,15 @@ aws secretsmanager delete-secret \
 
 ```bash
 aws logs delete-log-group \
-  --log-group-name /aws/lambda/summit-supply-api \
+  --log-group-name /aws/lambda/scratch-lab-api \
   --region us-east-1
 
 aws cloudwatch delete-alarms \
-  --alarm-names summit-supply-5xx-rate \
+  --alarm-names scratch-lab-5xx-rate \
   --region us-east-1
 
 aws sns delete-topic \
-  --topic-arn arn:aws:sns:us-east-1:123456789012:summit-supply-alerts \
+  --topic-arn arn:aws:sns:us-east-1:123456789012:scratch-lab-alerts \
   --region us-east-1
 ```
 
@@ -234,7 +234,7 @@ aws s3api delete-bucket --bucket "$BUCKET" --region us-east-1
 ```bash
 aws budgets delete-budget \
   --account-id 123456789012 \
-  --budget-name monthly-learning-budget
+  --budget-name my-frontend-app-monthly
 ```
 
 ## 12. IAM Users

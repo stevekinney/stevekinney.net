@@ -3,7 +3,7 @@ title: 'Exercise: Deploy a Static Site to S3'
 description: >-
   Create a bucket, upload a static site, enable website hosting, and access it in the browser.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - s3
@@ -23,6 +23,9 @@ Every frontend deployment is fundamentally the same: take build output, put it s
 ## Set Up Your Static Site
 
 Create a minimal static site on your local machine. You don't need a framework—plain HTML, CSS, and JavaScript are enough.
+
+> [!TIP]
+> These files are also available in the [Scratch Lab repository](https://github.com/stevekinney/scratch-lab/tree/main/playground/build) if you'd prefer to clone them instead of creating them by hand.
 
 Create a directory called `build/` with these three files:
 

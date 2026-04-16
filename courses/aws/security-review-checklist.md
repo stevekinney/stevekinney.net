@@ -5,7 +5,7 @@ description: >-
   access, CloudFront settings, Lambda permissions, API Gateway authentication,
   and DynamoDB access.
 date: 2026-03-18
-modified: 2026-04-15
+modified: 2026-04-16
 tags:
   - aws
   - security
@@ -21,7 +21,7 @@ This is your pre-flight checklist. Work through it before you point real users a
 
 ## Why This Matters
 
-Security failures in AWS are usually accumulation failures. One permissive IAM policy, one bucket policy left public, one secret still sitting in configuration, one unauthenticated route you meant to lock down later. This lesson is where you review Summit Supply as a system instead of as a pile of individually reasonable decisions.
+Security failures in AWS are usually accumulation failures. One permissive IAM policy, one bucket policy left public, one secret still sitting in configuration, one unauthenticated route you meant to lock down later. This lesson is where you review Scratch Lab as a system instead of as a pile of individually reasonable decisions.
 
 ## Builds On
 

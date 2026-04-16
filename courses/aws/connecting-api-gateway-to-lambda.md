@@ -133,6 +133,10 @@ aws apigatewayv2 create-route \
 
 Both routes point to the same integration (the same Lambda function). Your handler code is responsible for distinguishing between GET and POST using `event.requestContext.http.method`—the pattern you already set up in [Writing a Lambda Handler](writing-a-lambda-handler.md).
 
+After adding routes, the **Routes** page shows all configured routes in a tree view with the `$default` catch-all route that the console wizard created.
+
+![The API Gateway Routes page showing the routes tree with a $default catch-all route and the Lambda integration attached.](assets/apigateway-routes-with-default.png)
+
 ### Path Parameters
 
 Routes support path parameters using curly braces:

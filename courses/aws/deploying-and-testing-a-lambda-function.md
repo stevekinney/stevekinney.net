@@ -38,6 +38,28 @@ The zip file must contain your handler file at the root level—not nested insid
 > [!WARNING]
 > If your function uses `node_modules` dependencies (beyond what the Lambda runtime provides), you need to include them in the zip. Copy `node_modules` into the `dist/` directory before zipping. For this lesson, the handler has no runtime dependencies—`@types/aws-lambda` is a dev dependency that's only used during compilation.
 
+### The Bundle Size Problem
+
+The `tsc` + zip approach works for simple handlers with no runtime dependencies. But the moment you import the AWS SDK—`@aws-sdk/client-dynamodb`, `@aws-sdk/lib-dynamodb`, `@aws-sdk/client-ssm`—your zip balloons to **37 MB** because `tsc` copies every file and can't tree-shake unused code.
+
+The fix is **esbuild**. It bundles your handler into a single file, tree-shakes dead code, and—critically—lets you mark the AWS SDK as _external_ so it's not included in the bundle at all. The `nodejs22.x` Lambda runtime already includes the AWS SDK v3, so your handler can `require('@aws-sdk/client-dynamodb')` at runtime without shipping it.
+
+```bash
+npx esbuild src/handler.ts \
+  --bundle \
+  --platform=node \
+  --target=node22 \
+  --outfile=dist/handler.js \
+  --external:@aws-sdk/*
+```
+
+The result: **37 MB → under 6 KB**. One file, no `node_modules`, and the zip is small enough that you'll never think about Lambda's 50 MB upload limit.
+
+If you've used Vite, esbuild is already running under the hood—Vite uses it for dev transforms. The difference here is that you're running it directly, with one flag (`--external`) that tells it to skip the AWS SDK because Lambda provides it.
+
+> [!TIP]
+> Use `tsc --noEmit` for type-checking and esbuild for the actual build. They complement each other: TypeScript catches type errors, esbuild produces the deployment artifact. The [Scratch Lab repository](https://github.com/stevekinney/scratch-lab) has this set up as `npm run build:check` (tsc) and `npm run build` (esbuild) in the `lambda/` directory.
+
 ## Creating the Function
 
 Use `aws lambda create-function` to deploy your function for the first time:
@@ -191,6 +213,10 @@ aws lambda update-function-code \
 This replaces the function's code while preserving all configuration (runtime, memory, timeout, environment variables, execution role). The update is atomic—Lambda serves the old code until the new code is ready, then switches over.
 
 ## Reading the Logs
+
+In the console, the **Monitor** tab shows invocation metrics, duration, and error rates at a glance. It also links directly to the CloudWatch log group for your function.
+
+![The Lambda Monitor tab showing invocation count, duration, and error metrics with a link to CloudWatch Logs.](assets/lambda-monitoring-tab.png)
 
 Your function's `console.log` output goes to CloudWatch Logs. The simplest way to watch logs in real time is `aws logs tail`:
 

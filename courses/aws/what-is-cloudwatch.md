@@ -4,7 +4,7 @@ description: >-
   Understand what CloudWatch is and how it collects logs, metrics, and events
   from the AWS services you've deployed throughout this course.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - cloudwatch
@@ -12,7 +12,7 @@ tags:
   - fundamentals
 ---
 
-The Summit Supply storefront is live, people are clicking around, and now the worst kind of bug shows up: "I clicked the button and nothing happened." No stack trace. No obvious repro. Just vibes and disappointment. This is the part where monitoring stops feeling like enterprise garnish and starts feeling like the only way you get your evening back.
+The Scratch Lab app is live, people are clicking around, and now the worst kind of bug shows up: "I clicked the button and nothing happened." No stack trace. No obvious repro. Just vibes and disappointment. This is the part where monitoring stops feeling like enterprise garnish and starts feeling like the only way you get your evening back.
 
 If you want AWS's canonical framing for the service while you read, the [CloudWatch overview](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html) is the official reference.
 

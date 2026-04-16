@@ -16,16 +16,51 @@ If you want AWS's exact terminology next to this lesson, the [CloudFront Develop
 
 On Vercel, this happens automatically when you push to a Git branch. On AWS, you configure it explicitly. The upside: you control every detail. The downside: there are a lot of details.
 
-## The Distribution Config
-
-Creating a CloudFront distribution through the CLI means passing a JSON configuration to `aws cloudfront create-distribution`. The config is verbose—CloudFront has many options and the CLI requires you to specify most of them, even when you want the defaults. Rather than pretend this is simple, here's the full config with annotations explaining each part.
-
 > [!NOTE]
 > This lesson walks through the _minimum viable_ distribution: no OAC, no ACM certificate, no custom domain. You'll get an "Access Denied" in the browser at the end, and that's the point—it sets up the next two lessons. The [Set Up a CloudFront Distribution exercise](cloudfront-distribution-exercise.md) puts the pieces together into the final, production-shaped config once you've worked through OAC and ACM.
 
-In the console, the new **Create distribution** wizard walks you through the same choices step by step—selecting your origin type, specifying the S3 bucket, and configuring OAC.
+## Creating a Distribution in the Console
 
-![The CloudFront Create Distribution wizard on the Specify origin step, showing Amazon S3 selected as the origin type with the S3 bucket URL filled in.](assets/cloudfront-create-distribution-form.png)
+The CloudFront **Create distribution** wizard walks you through the process step by step. Navigate to **CloudFront → Distributions → Create distribution** to get started.
+
+### Step 1: Get Started
+
+The first screen asks for a **distribution name** and **distribution type**. Enter a name like `my-frontend-app`—this is stored as a tag for easy identification. Leave the distribution type as **Single website or app** (the default). You can skip the Route 53 domain for now—you'll add a custom domain later.
+
+![The CloudFront Create Distribution wizard Step 1, showing the distribution name field filled with my-frontend-app and the Single website or app type selected.](assets/cloudfront-wizard-step1-get-started.png)
+
+### Step 2: Specify Origin
+
+This is where you tell CloudFront where to fetch your content. Select **Amazon S3** as the origin type, then enter your S3 bucket's regional domain name: `my-frontend-app-assets.s3.us-east-1.amazonaws.com`.
+
+![The CloudFront Create Distribution wizard Step 2, showing Amazon S3 selected as the origin type with the S3 bucket URL filled in.](assets/cloudfront-wizard-step2-specify-origin.png)
+
+> [!WARNING]
+> Use the S3 REST endpoint (`my-frontend-app-assets.s3.us-east-1.amazonaws.com`), not the S3 website endpoint (`my-frontend-app-assets.s3-website-us-east-1.amazonaws.com`). CloudFront talks to S3 via the REST API, and using the website endpoint breaks OAC authentication.
+
+Scroll down and you'll see the **Settings** section. Leave **Allow private S3 bucket access to CloudFront** checked—this configures Origin Access Control (OAC) so only CloudFront can read from your bucket. The recommended origin and cache settings are fine for a static site.
+
+![The CloudFront origin settings showing the OAC checkbox enabled, recommended origin settings selected, and recommended cache settings tailored to S3 content.](assets/cloudfront-wizard-step2-origin-settings.png)
+
+### Step 3: Enable Security
+
+The wizard asks whether to enable AWS WAF (Web Application Firewall). WAF adds cost ($14/month for 10 million requests) and isn't necessary for a static site exercise. Select **Do not enable security protections**.
+
+![The CloudFront security step showing WAF options with Do not enable security protections selected.](assets/cloudfront-wizard-step3-waf-disabled.png)
+
+### Step 4: Review and Create
+
+The final step shows a summary of everything you've configured—distribution name, S3 origin with CloudFront access granted, cache settings, and security configuration. Verify the details and click **Create distribution**.
+
+![The CloudFront review step showing the distribution name, S3 origin, OAC access granted, and cache settings before creation.](assets/cloudfront-wizard-step4-review.png)
+
+After creation, CloudFront deploys your distribution to edge locations worldwide. This takes a few minutes—the console shows the deployment status.
+
+![CloudFront distribution detail page showing the distribution as Deploying immediately after creation.](assets/cloudfront-distribution-deploying.png)
+
+## The Distribution Config (CLI)
+
+You can also create a distribution through the CLI by passing a JSON configuration to `aws cloudfront create-distribution`. The config is verbose—CloudFront has many options and the CLI requires you to specify most of them, even when you want the defaults. Here's the full config that produces the same distribution you just created in the console.
 
 Save this as `distribution-config.json`:
 

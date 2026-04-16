@@ -4,7 +4,7 @@ description: >-
   Understand how API Gateway transforms HTTP requests into Lambda event objects
   and how your handler's return value maps to an HTTP response.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - api-gateway
@@ -12,7 +12,7 @@ tags:
   - events
 ---
 
-Say the Summit Supply frontend sends `POST /items` when someone adds a piece of gear to their saved list. The browser thinks in HTTP. Your Lambda function does not. API Gateway sits in the middle, turns that HTTP request into a JSON event object, hands it to Lambda, then turns Lambda's return value back into an HTTP response on the way out. Understanding that translation layer is the difference between confidently building an API and guessing at field names until something works.
+Say the Scratch Lab frontend sends `POST /notes` when someone creates a new note. The browser thinks in HTTP. Your Lambda function does not. API Gateway sits in the middle, turns that HTTP request into a JSON event object, hands it to Lambda, then turns Lambda's return value back into an HTTP response on the way out. Understanding that translation layer is the difference between confidently building an API and guessing at field names until something works.
 
 If you want AWS's exact mapping syntax while you read, the [HTTP API parameter mapping guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-parameter-mapping.html) is the official reference.
 

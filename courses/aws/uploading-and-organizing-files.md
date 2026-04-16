@@ -96,7 +96,7 @@ aws s3 sync ./build s3://my-frontend-app-assets \
 
 ## Content Types Matter
 
-Here's the gotcha that trips up every frontend engineer the first time they deploy to S3: **content types**. When you upload a file to S3, the CLI guesses the MIME type based on the file extension. It gets most of them right—`.html` becomes `text/html`, `.css` becomes `text/css`, `.js` becomes `application/javascript`. But it doesn't always guess correctly, especially for newer file formats like `.woff2`, `.webp`, or `.mjs`.
+Here's the gotcha that trips up every frontend engineer the first time they deploy to S3: **content types**. When you upload a file to S3, the CLI guesses the MIME type based on the file extension. It gets most of them right—`.html` becomes `text/html`, `.css` becomes `text/css`, `.js` becomes `text/javascript`. But it doesn't always guess correctly, especially for newer file formats like `.woff2`, `.webp`, or `.mjs`.
 
 If S3 serves a JavaScript file with the wrong content type, the browser will refuse to execute it. You'll see an error in the console like "Refused to execute script because its MIME type is not an executable MIME type." I've spent more time than I'd like to admit debugging this exact issue.
 

@@ -4,7 +4,7 @@ description: >-
   Complete solution for storing an API key in Parameter Store and reading it
   from a Lambda function at runtime.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - secrets
@@ -57,6 +57,10 @@ Expected output:
   }
 }
 ```
+
+You can also verify the parameter in the AWS Console under **Systems Manager → Parameter Store**:
+
+![The Parameter Store detail view showing the SecureString parameter with its ARN, type, tier, and masked value.](assets/parameter-store-secret.png)
 
 ## Write the Handler
 
@@ -158,7 +162,7 @@ npm run build
 
 ## Update the Execution Role
 
-Create `parameter-store-policy.json`:
+Create `parameter-store-policy.json` (also available as [`parameter-store.json`](https://github.com/stevekinney/scratch-lab/blob/main/policies/iam-policies/parameter-store.json) in the Scratch Lab repository):
 
 ```json
 {

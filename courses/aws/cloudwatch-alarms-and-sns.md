@@ -50,6 +50,10 @@ Every alarm is in one of three states at any given time:
 > [!TIP]
 > A new alarm starts in `INSUFFICIENT_DATA`, not `OK`. This is normal. Once your function receives traffic and CloudWatch has enough data points to evaluate the condition, the alarm will transition to `OK` (or `ALARM`, if you're having a bad day).
 
+In the console, the **Alarms** page shows your alarm with its current state, action configuration, and last state update time.
+
+![The CloudWatch Alarms page showing one alarm named my-frontend-app-api-errors in Insufficient data state with Actions enabled.](assets/cloudwatch-alarm-created.png)
+
 ## Setting Up SNS
 
 Before you create an alarm, you need somewhere to send notifications. **SNS** (Simple Notification Service) is AWS's pub/sub messaging service. You create a **topic** (a notification channel), subscribe your email to it, and then point your alarms at that topic.
