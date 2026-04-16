@@ -3,7 +3,7 @@ title: 'Cache Behaviors and Invalidations'
 description: >-
   Configure cache behaviors and TTLs to control how CloudFront caches your content, and create invalidations to force cache refreshes after deployments.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - cloudfront
@@ -181,7 +181,7 @@ The response includes an invalidation ID you can use to check status:
 }
 ```
 
-Invalidations typically take 5–15 minutes to propagate fully across all edge locations, so don't be surprised if an immediate post-invalidation request still returns stale content.
+Invalidations typically take 5–15 minutes to propagate fully across all edge locations, so don't be surprised if an immediate post-invalidation request still returns stale content. During that window, _different users are served different versions of your site_—the user in Sydney might get the new bundle while the user in Frankfurt still gets the old one. For hashed assets this is fine (both filenames coexist). For `index.html` it means someone's browser can load the new HTML that references old `main.abc.js` that's already been `--delete`d from S3. The short-TTL + hash-the-assets pattern below makes this gap invisible. Skipping it makes the gap loudly visible.
 
 In the console, the **Invalidations** tab lets you create invalidations by entering object paths. The `/*` wildcard invalidates everything in one operation.
 
@@ -190,6 +190,37 @@ In the console, the **Invalidations** tab lets you create invalidations by enter
 Once CloudFront finishes propagating the invalidation to all edge locations, the status changes to **Completed**.
 
 ![The CloudFront Invalidations tab showing the invalidation with Completed status.](assets/cloudfront-invalidation-completed.png)
+
+### With the SDK
+
+```typescript
+import {
+  CloudFrontClient,
+  CreateInvalidationCommand,
+  GetInvalidationCommand,
+} from '@aws-sdk/client-cloudfront';
+
+const cloudfront = new CloudFrontClient({ region: 'us-east-1' });
+
+const result = await cloudfront.send(
+  new CreateInvalidationCommand({
+    DistributionId: 'E1A2B3C4D5E6F7',
+    InvalidationBatch: {
+      CallerReference: `deploy-${Date.now()}`,
+      Paths: { Quantity: 1, Items: ['/*'] },
+    },
+  }),
+);
+
+// Optional: poll for completion before declaring the deploy done.
+const invalidationId = result.Invalidation!.Id!;
+const status = await cloudfront.send(
+  new GetInvalidationCommand({ DistributionId: 'E1A2B3C4D5E6F7', Id: invalidationId }),
+);
+console.log(status.Invalidation?.Status); // 'InProgress' → 'Completed'
+```
+
+`CallerReference` acts as an idempotency key—submit the same value twice and CloudFront returns the existing invalidation instead of creating a duplicate. Useful if your deploy script retries.
 
 ### Invalidation Costs
 
@@ -219,6 +250,17 @@ This is the same strategy Vercel and Netlify use behind the scenes. I've used th
 Here's a simple deployment script that ties everything together:
 
 ```bash
+set -euo pipefail
+
+# Guard: refuse to sync if the assets directory is missing or empty.
+# `s3 sync --delete` will happily mirror an empty local directory to S3,
+# wiping every hashed asset from the bucket and leaving the site in a
+# half-broken state the next time the HTML tries to load them.
+if [ ! -d ./build/assets ] || [ -z "$(ls -A ./build/assets 2>/dev/null)" ]; then
+  echo "error: ./build/assets is missing or empty. Did the build succeed?" >&2
+  exit 1
+fi
+
 # Sync hashed assets with long cache
 aws s3 sync ./build/assets s3://my-frontend-app-assets/assets \
   --cache-control "public, max-age=31536000, immutable" \
@@ -240,7 +282,7 @@ aws cloudfront create-invalidation \
   --output json
 ```
 
-> [!TIP]
-> The `--delete` flag on `aws s3 sync` removes files from S3 that no longer exist in your local build directory. This cleans up old hashed assets. Without it, your bucket accumulates every version of every asset you've ever deployed.
+> [!WARNING]
+> The `--delete` flag is load-bearing and dangerous in equal measure. It removes files from S3 that no longer exist in your local build directory—good, because that cleans up stale hashed assets. But if `./build/assets` doesn't exist (failed build), or is empty (bad build output), `s3 sync --delete` treats every existing asset in the bucket as "no longer local" and deletes it. That's why the script aborts before the sync if the local directory is missing or empty. Don't remove the guard.
 
 Caching is sorted. But there's another problem: if a user navigates to `/dashboard/settings` in your single-page application, CloudFront asks S3 for a file at that path. S3 doesn't have a file called `/dashboard/settings`, so it returns a 403 or 404 error. In the next lesson, you'll configure custom error responses to handle SPA routing—telling CloudFront to serve `index.html` whenever it encounters one of these errors.

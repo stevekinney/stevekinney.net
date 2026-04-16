@@ -3,7 +3,7 @@ title: 'CI/CD with GitHub Actions'
 description: >-
   Set up a GitHub Actions workflow that builds your frontend and deploys it to AWS on every push to the main branch.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - github-actions
@@ -35,16 +35,36 @@ You need to do two things in AWS: create an identity provider and create an IAM 
 
 This tells AWS to trust tokens issued by GitHub's OIDC endpoint.
 
+AWS [announced in 2023](https://github.blog/changelog/2023-06-27-github-actions-update-on-oidc-integration-with-aws/) that it no longer validates the thumbprint for GitHub's OIDC provider, but the IAM API still requires a 40-character hex string. The field is syntactically required and operationally ignored for GitHub's endpoint today. You have two options:
+
+**Option 1: Pin the current thumbprint dynamically.** Fetch it with `openssl` so you're not copy-pasting a stale value:
+
 ```bash
+THUMBPRINT=$(openssl s_client -servername token.actions.githubusercontent.com \
+    -showcerts -connect token.actions.githubusercontent.com:443 </dev/null 2>/dev/null \
+  | openssl x509 -fingerprint -noout -sha1 \
+  | cut -d'=' -f2 | tr -d ':' | tr '[:upper:]' '[:lower:]')
+
 aws iam create-open-id-connect-provider \
   --url "https://token.actions.githubusercontent.com" \
   --client-id-list "sts.amazonaws.com" \
-  --thumbprint-list "ffffffffffffffffffffffffffffffffffffffff" \
+  --thumbprint-list "$THUMBPRINT" \
   --region us-east-1 \
   --output json
 ```
 
-AWS no longer validates the thumbprint for GitHub's OIDC provider, but the IAM API still requires a 40-character hex string. In other words, this field is syntactically required and operationally ignored for GitHub's endpoint today. Ridiculous? A little. Still, the command works.
+**Option 2: Pass any syntactically valid hex string.** Since AWS ignores this value for GitHub's endpoint, a placeholder works:
+
+```bash
+aws iam create-open-id-connect-provider \
+  --url "https://token.actions.githubusercontent.com" \
+  --client-id-list "sts.amazonaws.com" \
+  --thumbprint-list "6938fd4d98bab03faadb97b34396831e3780aea1" \
+  --region us-east-1 \
+  --output json
+```
+
+Use Option 1 in scripts you'll run against multiple providers; Option 2 is fine for a one-off.
 
 > [!TIP]
 > You only need to create this identity provider once per AWS account. If you have multiple repositories deploying to the same account, they all share this provider. Each repository gets its own IAM role with scoped permissions.
@@ -67,9 +87,7 @@ Save this as `github-actions-trust-policy.json`:
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
-        },
-        "StringLike": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
           "token.actions.githubusercontent.com:sub": "repo:your-org/your-repo:ref:refs/heads/main"
         }
       }
@@ -78,7 +96,7 @@ Save this as `github-actions-trust-policy.json`:
 }
 ```
 
-The `Condition` block is critical. Without it, _any_ GitHub repository could assume this role. The `sub` condition restricts it to pushes to the `main` branch of your specific repository. Replace `your-org/your-repo` with your actual GitHub organization and repository name.
+The `Condition` block is critical. Without it, _any_ GitHub repository could assume this role. The `sub` condition restricts it to pushes to the `main` branch of your specific repository. Replace `your-org/your-repo` with your actual GitHub organization and repository name. Both conditions sit in `StringEquals` because the `sub` value is an exact literal—use `StringLike` only when the pattern includes a wildcard (`*`).
 
 > [!WARNING]
 > Don't use `"StringLike": {"token.actions.githubusercontent.com:sub": "repo:your-org/your-repo:*"}` with a trailing wildcard. That allows any branch, any pull request, and any tag in your repository to assume the role. Scope it to `ref:refs/heads/main` if you only want production deploys from the main branch.
@@ -272,8 +290,8 @@ If any step fails, the workflow stops and subsequent steps don't run. A failed b
 > ```yaml
 > - name: Verify deployment
 >   run: |
->     HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://example.com)
+>     HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://YOUR_CLOUDFRONT_DOMAIN)
 >     echo "Site returned HTTP $HTTP_STATUS"
 > ```
 >
-> This doesn't block the workflow on failure, but it gives you immediate feedback in the workflow logs.
+> Replace `YOUR_CLOUDFRONT_DOMAIN` with your `*.cloudfront.net` URL (or your custom domain if you completed the optional [Custom Domains, DNS, and Certificates](dns-for-frontend-engineers.md) section). This doesn't block the workflow on failure, but it gives you immediate feedback in the workflow logs.

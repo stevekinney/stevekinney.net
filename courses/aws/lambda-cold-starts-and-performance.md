@@ -4,7 +4,7 @@ description: >-
   Understand what causes cold starts, how they affect latency, and practical
   strategies for minimizing their impact on your frontend's API calls.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - lambda
@@ -50,6 +50,9 @@ Every `import` or `require` statement in your top-level code executes during ini
 
 Node.js and Python have the fastest cold starts among Lambda's managed runtimes. Java and .NET have significantly slower cold starts because their runtimes take longer to initialize. This is one reason Node.js is a natural choice for frontend API backends: you already know the language, and the cold start performance is among the best available.
 
+> [!NOTE] SnapStart
+> If you ever end up on a JVM Lambda, **SnapStart** snapshots the initialized runtime after first load and restores from the snapshot on cold start, collapsing JVM cold starts from seconds to ~200 ms. It's available for Java, .NET, and Python runtimes today. Node.js isn't in that list—it's already fast enough that SnapStart isn't applied—but you'll see it mentioned in AWS docs and job listings, so it's worth knowing the name.
+
 ### Memory Configuration
 
 Lambda allocates CPU proportionally to memory. A 128 MB function gets a fraction of a vCPU; a 1,024 MB function gets substantially more. More CPU means faster initialization—your `import` statements execute faster, your SDK clients initialize faster. For cold-start-sensitive functions, increasing memory from 128 MB to 512 MB or 1,024 MB often reduces cold start latency by 40-60%, and the cost increase is negligible because the function initializes faster (you pay per millisecond).
@@ -84,6 +87,21 @@ ls -lh function.zip
 ```
 
 A good target for a typical API handler is under 5 MB zipped. If your zip is over 10 MB, you probably have dependencies you don't need.
+
+**Use esbuild to bundle and tree-shake.** `tsc` emits one `.js` per `.ts` and doesn't drop unused imports—so your zip ends up shipping every file under `node_modules`. esbuild bundles everything the handler actually touches into one file and drops the rest:
+
+```bash
+npx esbuild src/handler.ts \
+  --bundle \
+  --platform=node \
+  --target=node22 \
+  --format=cjs \
+  --minify \
+  --external:@aws-sdk/* \
+  --outfile=dist/handler.js
+```
+
+Mark `@aws-sdk/*` as external—the AWS SDK is preinstalled in the Lambda Node.js 22 runtime, so bundling it adds megabytes to your zip for no benefit. For every other dependency, let esbuild tree-shake it. A handler that was 28 MB with raw `tsc` + `npm install` routinely drops below 500 KB after this.
 
 ### Use Lazy Imports for Rarely-Used Dependencies
 
@@ -181,6 +199,25 @@ Provisioned concurrency requires a published, numbered version (or an alias poin
 This keeps 5 execution environments warm at all times. You pay for them whether they handle requests or not—it's essentially the cost of running a small server continuously.
 
 For most frontend API backends, provisioned concurrency is overkill. It makes sense for latency-critical production workloads where even occasional cold starts are unacceptable (payment processing, real-time gaming). For a typical frontend API, the strategies above—small bundles, increased memory, top-level initialization—are sufficient and far cheaper.
+
+## Concurrency Limits and 429 Throttling
+
+Lambda doesn't create infinitely many execution environments. Your account has a **concurrent executions** quota (starts at 1,000 per region, raisable on request). Every in-flight invocation counts as one. If traffic spikes past the quota, new invocations fail immediately with `429 TooManyRequestsException` and the error code `Rate exceeded`. API Gateway surfaces this to the browser as a `500` or `502` depending on integration mode—you don't get a nice 503.
+
+Two knobs worth knowing:
+
+- **Reserved concurrency** caps a single function at N concurrent executions, _guaranteeing_ it at least N out of the account quota while also preventing it from consuming more. Useful when one noisy function (video transcoding) shouldn't be able to starve a latency-critical one (`api.example.com`).
+- **Unreserved concurrency** is the rest of the quota, shared across every function that hasn't set a reservation.
+
+```bash
+# Cap a function at 50 concurrent executions
+aws lambda put-function-concurrency \
+  --function-name video-transcoder \
+  --reserved-concurrent-executions 50 \
+  --region us-east-1
+```
+
+For a typical frontend backend the default quota is plenty. It becomes a real concern when you have a mix of spiky-batch and steady-API workloads in the same account.
 
 > [!TIP]
 > Before reaching for provisioned concurrency, measure your actual cold start latency. If your function initializes in 200 milliseconds and your API's p95 latency requirement is under 500 milliseconds, you're already fine. Optimize based on measurement, not anxiety.

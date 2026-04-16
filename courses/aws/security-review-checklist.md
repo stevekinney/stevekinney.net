@@ -5,7 +5,7 @@ description: >-
   access, CloudFront settings, Lambda permissions, API Gateway authentication,
   and DynamoDB access.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - security
@@ -161,6 +161,8 @@ If the findings list is empty, nothing in your account is publicly accessible or
 
 > [!TIP]
 > Run IAM Access Analyzer every time you change a bucket policy, IAM role trust policy, or any resource-based policy. It catches misconfigurations that are easy to miss by reading JSON.
+>
+> Access Analyzer also has an **unused access** analyzer type (`--type ACCOUNT_UNUSED_ACCESS`) that surfaces IAM users and roles that haven't been used recently, plus permissions granted but never exercised. Create one of these in addition to the external-access analyzer above and review the findings monthly—it's the easiest way to prune access drift over time.
 
 ## Security Isn't a One-Time Task
 

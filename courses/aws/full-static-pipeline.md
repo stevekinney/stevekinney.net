@@ -3,7 +3,7 @@ title: 'The Full Static Site Pipeline'
 description: >-
   Walk through the end-to-end architecture of deploying a static site to AWS, connecting S3, CloudFront, ACM, and Route 53 into a working pipeline.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - deployment
@@ -13,11 +13,11 @@ tags:
   - route53
 ---
 
-Imagine someone typing `https://summitsupply.com` into the browser to check whether the new spring camping gear is live yet. They do not care that your storefront is really a private S3 bucket behind CloudFront with a certificate from ACM and DNS in Route 53. They care that the page loads fast, uses HTTPS, and does not fall over when they refresh a deep route. That invisible plumbing is the pipeline you are building now.
+Imagine someone opening a link to your site to check whether the new spring camping gear is live yet. They do not care that your storefront is really a private S3 bucket behind CloudFront. They care that the page loads fast, uses HTTPS, and does not fall over when they refresh a deep route. That invisible plumbing is the pipeline you are building now.
 
-You've spent the early static-hosting arc learning individual AWS services. You can create an S3 bucket, get control of a domain, request a certificate, configure a CloudFront distribution, and point that domain at it. Each piece works on its own. But the value is in how they compose: a user types your domain into a browser, DNS resolves to CloudFront, CloudFront serves cached content from S3 over HTTPS with your certificate, and the whole thing costs pennies. That's the pipeline. This lesson maps out the architecture end to end and explains the order of operations: what you create first, what depends on what, and why.
+You've spent the early static-hosting arc learning individual AWS services. You can create an S3 bucket, configure a CloudFront distribution, and lock it down with Origin Access Control. Each piece works on its own. But the value is in how they compose: a request hits CloudFront, CloudFront serves cached content from S3 over HTTPS, and the whole thing costs pennies. That's the pipeline. This lesson maps out the architecture end to end and explains the order of operations: what you create first, what depends on what, and why.
 
-If you want AWS's canonical building blocks open next to this lesson, keep the [S3 static website tutorial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html), the [CloudFront OAC guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html), and the [Route 53 DNS configuration guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring.html) nearby.
+If you want AWS's canonical building blocks open next to this lesson, keep the [S3 static website tutorial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html) and the [CloudFront OAC guide](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) nearby.
 
 ## Why This Matters
 
@@ -26,34 +26,38 @@ This is the first moment the course stops being "a bunch of AWS services you now
 ## Builds On
 
 - [Creating and Configuring a Bucket](creating-and-configuring-a-bucket.md)
-- [Registering and Transferring Domains](registering-and-transferring-domains.md)
-- [Hosted Zones and Record Types](hosted-zones-and-record-types.md)
-- [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md)
 - [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md)
-- [Pointing a Domain to CloudFront](pointing-a-domain-to-cloudfront.md)
+- [Origin Access Control for S3](origin-access-control-for-s3.md)
+- [Cache Behaviors and Invalidations](cache-behaviors-and-invalidations.md)
 
 ## The Architecture
 
-Here's what the fully assembled pipeline looks like:
+Here's what the core pipeline looks like:
 
 ```mermaid
 flowchart LR
-    Browser["Browser requesting Summit Supply"] --> Route53["Route 53 alias record<br/>example.com"]
+    Browser["Browser"] --> CloudFront["CloudFront distribution<br/>HTTPS, cache, SPA fallback<br/>*.cloudfront.net"]
+    CloudFront -->|cache miss| S3["Private S3 bucket<br/>static assets"]
+```
+
+1. **CloudFront** terminates HTTPS using its default certificate, checks its edge cache, and on a miss, fetches from S3 using Origin Access Control.
+2. **S3** stores the static files in a private bucket. Only CloudFront can read from it.
+
+Two services, two clearly defined responsibilities. No servers. No containers. No load balancers. I genuinely love how simple this ends up being.
+
+If you have a custom domain, you can optionally add Route 53 and ACM to the pipeline. That's covered in the [Custom Domains, DNS, and Certificates](dns-for-frontend-engineers.md) section at the end of the course. The extended architecture looks like this:
+
+```mermaid
+flowchart LR
+    Browser["Browser"] --> Route53["Route 53 alias record<br/>example.com"]
     Route53 --> CloudFront["CloudFront distribution<br/>HTTPS, cache, SPA fallback"]
     CloudFront -->|cache miss| S3["Private S3 bucket<br/>static assets"]
     ACM["ACM certificate<br/>us-east-1"] --> CloudFront
 ```
 
-1. **Route 53** resolves `example.com` to the CloudFront distribution using an alias record.
-2. **CloudFront** terminates HTTPS using the ACM certificate, checks its edge cache, and on a miss, fetches from S3 using Origin Access Control.
-3. **S3** stores the static files in a private bucket. Only CloudFront can read from it.
-4. **ACM** provides the SSL/TLS certificate that CloudFront uses for HTTPS.
-
-Four services, four clearly defined responsibilities. No servers. No containers. No load balancers. I genuinely love how simple this ends up being.
-
 ## The Order of Operations
 
-The order matters. You can't validate a certificate for a domain you don't control. You can't create an alias record for a distribution that has no alternate domain name. Here's the sequence that keeps the dependency chain honest.
+The order matters. You can't attach OAC to a distribution that doesn't exist. You can't lock down S3 before CloudFront has a distribution ARN. Here's the sequence that keeps the dependency chain honest.
 
 ### Create the S3 Bucket
 
@@ -61,39 +65,18 @@ The bucket is still the storage foundation: it holds your files. Nothing else in
 
 At this stage, the bucket can be public or private. The course has you make it public temporarily so you can see direct S3 hosting in isolation. That is the learning checkpoint, not the end state. The end state is private bucket plus CloudFront plus OAC.
 
-### Establish Domain Control and DNS Authority
-
-This is the dependency people usually discover the hard way. Before ACM can issue anything, you need a real domain and a place to publish DNS records for it. That means choosing whether the domain lives in Route 53 or at another registrar, and making sure Route 53 is authoritative if you want to use it for validation and final routing.
-
-You covered that in [Registering and Transferring Domains](registering-and-transferring-domains.md) and [Hosted Zones and Record Types](hosted-zones-and-record-types.md). By the end of that work, you should know who the registrar is, whether the nameservers are correct, and which hosted zone ACM should target.
-
-### Request the ACM Certificate
-
-The certificate must exist and be in the `ISSUED` state before you can attach it to a CloudFront distribution. Certificate validation can take minutes, and it depends on the DNS authority you established in the previous step. You requested a certificate in [Requesting a Certificate in ACM](requesting-a-certificate-in-acm.md) and validated it in [DNS Validation vs. Email Validation](dns-validation-vs-email-validation.md).
-
-> [!WARNING]
-> The certificate must be in `us-east-1`. CloudFront is a global service, but it only reads certificates from `us-east-1`. You covered this requirement in [Certificate Renewal and the us-east-1 Requirement](certificate-renewal-and-us-east-1.md). If your certificate is in any other region, CloudFront won't see it.
-
 ### Create the CloudFront Distribution with OAC
 
-With the bucket and certificate ready, you can create the distribution. This is the step where everything comes together:
+With the bucket ready, you can create the distribution. This is the step where everything comes together:
 
 - The **origin** points to your S3 bucket. You configured this in [Creating a CloudFront Distribution](creating-a-cloudfront-distribution.md).
 - **Origin Access Control** restricts the bucket so only CloudFront can read from it. You set this up in [Origin Access Control for S3](origin-access-control-for-s3.md).
-- The **ACM certificate** is attached for HTTPS on your custom domain. You covered this in [Attaching an SSL Certificate](attaching-an-ssl-certificate.md).
+- The **default CloudFront certificate** provides HTTPS on the `*.cloudfront.net` domain automatically.
 - **Cache behaviors** and **custom error responses** handle caching and SPA routing. You configured these in [Cache Behaviors and Invalidations](cache-behaviors-and-invalidations.md) and [Custom Error Pages and SPA Routing](custom-error-pages-and-spa-routing.md).
-- **Alternate domain names** (CNAMEs) are set to `example.com` and `www.example.com` so Route 53 can point to this distribution.
 
 After creating the distribution, you update the S3 bucket policy to allow only the CloudFront service principal, and you re-enable Block Public Access on the bucket. At this point, direct S3 URLs return 403.
 
-### Configure Route 53 DNS
-
-DNS comes last because the alias record needs to point at something that exists. You create A alias records for `example.com` and `www.example.com` that resolve to your CloudFront distribution. You did this in [Pointing a Domain to CloudFront](pointing-a-domain-to-cloudfront.md) and learned why alias records are the right choice in [Alias Records vs. CNAME Records](alias-records-vs-cname-records.md).
-
-Once the alias records propagate, users can visit `https://example.com` and reach your static site through the full pipeline.
-
-> [!TIP]
-> If your domain is registered outside Route 53, you need to update the nameservers at your registrar to point to Route 53's nameservers. This was covered in [Registering and Transferring Domains](registering-and-transferring-domains.md). DNS propagation can take up to 48 hours when changing nameservers, though it's often faster.
+At this point, your site is live on the `*.cloudfront.net` domain. If you want to add a custom domain, the optional [Custom Domains, DNS, and Certificates](dns-for-frontend-engineers.md) section at the end of the course covers Route 53, ACM, and wiring everything together.
 
 ## Why This Order
 
@@ -101,17 +84,14 @@ The dependency chain flows in one direction:
 
 ```mermaid
 flowchart RL
-    Route53["Route 53"] --> CloudFront["CloudFront"]
-    CloudFront --> S3["S3"]
-    ACM["ACM"] --> CloudFront
+    CloudFront["CloudFront"] --> S3["S3"]
 ```
 
-- ACM depends on domain control and authoritative DNS.
-- CloudFront depends on S3 (as its origin) and ACM (for the certificate).
-- Final Route 53 alias records depend on CloudFront (as the alias target).
-- S3 can be built in parallel with the domain and certificate work, but the learner experience is clearer when you understand both sides before assembling them.
+- CloudFront depends on S3 (as its origin).
+- The S3 bucket policy depends on the CloudFront distribution ARN.
+- OAC can't be attached until the distribution exists.
 
-If you try to request a certificate before you can publish DNS validation records, you stall out. If you try to create Route 53 alias records before the distribution exists, the alias target doesn't resolve. If you try to attach a certificate before it's issued, CloudFront rejects the configuration. If you try to configure OAC before the distribution exists, there's nothing to attach it to. The order isn't arbitrary: it's dictated by the dependencies between services.
+The order isn't arbitrary: it's dictated by the dependencies between services. If you try to configure OAC before the distribution exists, there's nothing to attach it to. If you try to lock down the bucket before you have the distribution's ARN, the policy has no principal to trust.
 
 ## The IAM Permissions That Make It Work
 
@@ -119,17 +99,15 @@ Every operation in this pipeline requires IAM permissions. You built the foundat
 
 - **S3**: `s3:PutObject`, `s3:DeleteObject`, `s3:ListBucket` on your bucket.
 - **CloudFront**: `cloudfront:CreateInvalidation` on your distribution.
-- **ACM**: `acm:DescribeCertificate`, `acm:ListCertificates` for verifying certificate status.
-- **Route 53**: `route53:ChangeResourceRecordSets` on your hosted zone.
 
 You built a scoped deploy bot with exactly these S3 and CloudFront permissions in the [IAM Policy for a Deploy Bot exercise](iam-policy-exercise.md). That same policy is what you'll use in CI/CD pipelines.
 
 ## What Each Service Is Doing at Runtime
 
-Once the pipeline is deployed, here's what happens when a user visits `https://example.com/dashboard`:
+Once the pipeline is deployed, here's what happens when a user visits `https://d1234abcdef.cloudfront.net/dashboard`:
 
-1. **DNS resolution**: The browser queries DNS. Route 53 returns the CloudFront distribution's IP addresses (via the alias record).
-2. **TLS handshake**: The browser connects to CloudFront's edge location. CloudFront presents the ACM certificate for `example.com`. The browser verifies it and establishes an encrypted connection.
+1. **DNS resolution**: The browser queries DNS for the `*.cloudfront.net` domain and gets the nearest edge location's IP.
+2. **TLS handshake**: The browser connects to CloudFront's edge location. CloudFront presents its default certificate. The browser verifies it and establishes an encrypted connection.
 3. **Edge cache check**: CloudFront checks if `/dashboard` is cached at this edge location.
 4. **Cache miss (first visit)**: CloudFront sends a signed request to S3 (using OAC's SigV4 credentials). S3 doesn't have a file at `/dashboard`, so it returns a 403.
 5. **Custom error response**: CloudFront's custom error response intercepts the 403, serves `/index.html` instead, and returns a 200 status code. Your client-side router takes over and renders the `/dashboard` view.
@@ -140,12 +118,9 @@ Every layer does one thing. S3 stores files. CloudFront caches and routes. ACM s
 ```mermaid
 sequenceDiagram
     participant Browser
-    participant Route53
     participant CloudFront
     participant S3
 
-    Browser->>Route53: Resolve example.com
-    Route53-->>Browser: CloudFront alias target
     Browser->>CloudFront: GET /dashboard
     alt Cache hit
         CloudFront-->>Browser: Cached response
@@ -187,22 +162,23 @@ This is the foundation. In the next two lessons, you'll wrap these commands in a
 Use these checks once the Summit Supply storefront is wired together:
 
 ```bash
-dig example.com +short
-curl -I https://example.com
-curl -I https://example.com/collections/tents
+curl -I https://YOUR_CLOUDFRONT_DOMAIN
+curl -I https://YOUR_CLOUDFRONT_DOMAIN/collections/tents
 curl -I https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/index.html
 ```
 
-You want four things to be true:
+You want three things to be true:
 
-- `dig` resolves to CloudFront, not to a raw EC2 or S3 endpoint.
-- `curl -I https://example.com` returns `200` with a valid TLS handshake.
+- `curl -I https://YOUR_CLOUDFRONT_DOMAIN` returns `200` with a valid TLS handshake.
 - The deep route returns `200` and serves HTML, proving the SPA fallback works.
 - The direct S3 URL returns `403`, proving the bucket is private.
 
 ## Common Failure Modes
 
-- **The certificate is in the wrong region:** CloudFront only reads ACM certificates from `us-east-1`.
 - **The bucket is still public:** if the S3 URL works directly, Origin Access Control is not actually protecting the bucket.
-- **The alternate domain name is missing from CloudFront:** Route 53 can point at the distribution, but HTTPS still fails for your custom domain.
 - **The SPA fallback is only configured in S3:** that gives you a page, but often with the wrong status code. CloudFront should own the final browser behavior.
+- **CloudFront returns 403 for files that exist:** the bucket policy doesn't trust the distribution's service principal, or the OAC isn't attached to the origin.
+
+## Beyond This Course: Continuous Deployment
+
+Once this pipeline is stable, **CloudFront Continuous Deployment** lets you ship high-risk distribution changes (new cache behaviors, new origin configs, new CloudFront Functions) behind a weighted split. You create a _staging distribution_ linked to your primary, route a percentage of traffic to it via a continuous-deployment policy, and promote the staging config to primary once you've verified it. Think of it as blue/green for CloudFront itself. It's not covered in this course—the scope is shipping the first version, not iterating on it—but it's the right answer when you need to change the distribution without a risky cutover.

@@ -4,7 +4,7 @@ description: >-
   Install the AWS CLI v2, configure it with named profiles and access keys, and
   verify that your credentials work.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - cli
@@ -64,6 +64,9 @@ aws --version
 You should see something like `aws-cli/2.x.x Python/3.x.x` followed by your platform info. If you get "command not found," the install didn't add `aws` to your PATH—check that `/usr/local/bin` is in your `$PATH`.
 
 ## Creating Access Keys
+
+> [!NOTE] 2026 Recommendation
+> The course uses IAM user access keys because they're the shortest path to a working CLI. In a real production setup, the 2026 recommendation is to run `aws configure sso` and log in through **IAM Identity Center**, which hands the CLI short-lived credentials scoped to an SSO session. No long-lived secret access key ever touches your disk. Every `aws` command in this course works identically against either credential source—the difference is only in how the CLI gets its token. Treat the access-key approach below as a course simplification and plan to migrate once you're comfortable.
 
 Before you can configure the CLI, you need **access keys** for your IAM user. Access keys are a pair of credentials—an **Access Key ID** and a **Secret Access Key**—that let the CLI authenticate as your IAM user.
 

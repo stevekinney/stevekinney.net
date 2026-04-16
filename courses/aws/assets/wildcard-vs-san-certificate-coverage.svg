@@ -36,9 +36,9 @@
   <text x="220" y="264" class="header-label center">Hostname</text>
   <text x="460" y="264" class="header-label center">example.com</text>
   <text x="680" y="264" class="header-label center">*.example.com</text>
-  <text x="940" y="250" class="header-label center">SAN list</text>
-  <text x="940" y="270" class="header-label center">example.com + www</text>
-  <text x="940" y="290" class="header-label center">api + staging</text>
+  <text x="940" y="246" class="header-label center">SAN list</text>
+  <text x="940" y="266" class="header-label center">example.com + www</text>
+  <text x="940" y="286" class="header-label center">api + staging</text>
 
   <rect x="90" y="296" width="260" height="72" class="cell" />
   <rect x="350" y="296" width="220" height="72" class="cell" />

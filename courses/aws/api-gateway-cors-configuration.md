@@ -4,7 +4,7 @@ description: >-
   Configure CORS on your HTTP API so that your frontend application (running on
   a different origin) can call your API without browser errors.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - api-gateway
@@ -106,6 +106,28 @@ aws apigatewayv2 update-api \
 
 > [!WARNING]
 > Setting `AllowCredentials=true` with `AllowOrigins="*"` is rejected by browsers. If you need credentials, you must specify exact origins. This is a browser-enforced rule, not an API Gateway limitation.
+
+## With the SDK
+
+```typescript
+import { ApiGatewayV2Client, UpdateApiCommand } from '@aws-sdk/client-apigatewayv2';
+
+const apigw = new ApiGatewayV2Client({ region: 'us-east-1' });
+
+await apigw.send(
+  new UpdateApiCommand({
+    ApiId: 'abc123def4',
+    CorsConfiguration: {
+      AllowOrigins: ['https://example.com'],
+      AllowMethods: ['GET', 'POST'],
+      AllowHeaders: ['Content-Type', 'Authorization'],
+      AllowCredentials: true,
+      ExposeHeaders: ['X-Request-Id'],
+      MaxAge: 86400,
+    },
+  }),
+);
+```
 
 ## Testing CORS
 

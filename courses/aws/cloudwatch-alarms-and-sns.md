@@ -5,7 +5,7 @@ description: >-
   latency exceed thresholds, so you know when something breaks before your users
   tell you.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - cloudwatch
@@ -185,6 +185,42 @@ This alarm uses a single evaluation period and a threshold of zero—any 5XX err
 
 > [!TIP]
 > If your API receives infrequent traffic, alarms will frequently sit in `INSUFFICIENT_DATA` instead of `OK`. Add `--treat-missing-data notBreaching` to any `put-metric-alarm` command to treat periods with no data as non-breaching—this avoids noisy state transitions in low-traffic environments and during development.
+
+## With the SDK
+
+```typescript
+import { SNSClient, CreateTopicCommand, SubscribeCommand } from '@aws-sdk/client-sns';
+import { CloudWatchClient, PutMetricAlarmCommand } from '@aws-sdk/client-cloudwatch';
+
+const sns = new SNSClient({ region: 'us-east-1' });
+const cloudwatch = new CloudWatchClient({ region: 'us-east-1' });
+
+const topic = await sns.send(new CreateTopicCommand({ Name: 'my-frontend-app-alerts' }));
+await sns.send(
+  new SubscribeCommand({
+    TopicArn: topic.TopicArn,
+    Protocol: 'email',
+    Endpoint: 'alerts@example.com',
+  }),
+);
+
+await cloudwatch.send(
+  new PutMetricAlarmCommand({
+    AlarmName: 'my-frontend-app-lambda-errors',
+    AlarmDescription: 'Lambda function errors exceeded threshold',
+    MetricName: 'Errors',
+    Namespace: 'AWS/Lambda',
+    Dimensions: [{ Name: 'FunctionName', Value: 'my-frontend-app-api' }],
+    Statistic: 'Sum',
+    Period: 60,
+    EvaluationPeriods: 1,
+    Threshold: 5,
+    ComparisonOperator: 'GreaterThanOrEqualToThreshold',
+    AlarmActions: [topic.TopicArn!],
+    TreatMissingData: 'notBreaching',
+  }),
+);
+```
 
 ## Verifying Your Alarms
 

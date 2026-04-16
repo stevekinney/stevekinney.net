@@ -3,7 +3,7 @@ title: 'Bucket Policies and Public Access'
 description: >-
   Write a bucket policy that grants public read access to your static assets and understand how bucket policies differ from IAM policies.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - s3
@@ -80,6 +80,9 @@ After saving, the **Permissions** tab confirms that Block Public Access is now *
 > [!WARNING]
 > Disabling Block Public Access is appropriate for a bucket that serves public static website files. It is not appropriate for buckets containing user data, logs, backups, or anything sensitive. In the CloudFront section, you'll switch to a different approach, Origin Access Control, that keeps the bucket private and lets only CloudFront read from it.
 
+> [!WARNING] Account-Level BPA
+> Block Public Access exists at _two_ levels: the bucket and the account. If the **account-level** BPA is on (the default on accounts created in recent years), it overrides bucket-level settings—your bucket will reject the public policy with an `AccessDenied` or `InvalidBucketAclWithBlockPublicAccess` error no matter what you set on the bucket itself. Check the account-level settings at **S3 Console → Block Public Access settings for this account**, or via `aws s3control get-public-access-block --account-id 123456789012`. Turn them off if the bucket-level change isn't taking effect, or—better—skip this lesson's public-bucket path entirely and go straight to CloudFront + OAC once you've read through the concepts here.
+
 ## Writing a Public Read Bucket Policy
 
 Now you can attach a bucket policy. Here is a complete policy that allows anyone to read any object in the bucket:
@@ -138,6 +141,38 @@ aws s3api get-bucket-policy \
 The response wraps the policy in a `Policy` field as a JSON string. It's not the prettiest output, but it confirms the policy is in place.
 
 ![The S3 bucket Permissions tab showing the applied bucket policy granting public read access to all objects.](assets/s3-bucket-policy-applied.png)
+
+## With the SDK
+
+```typescript
+import { S3Client, PutBucketPolicyCommand, GetBucketPolicyCommand } from '@aws-sdk/client-s3';
+
+const s3 = new S3Client({ region: 'us-east-1' });
+
+const policy = {
+  Version: '2012-10-17',
+  Statement: [
+    {
+      Sid: 'PublicReadGetObject',
+      Effect: 'Allow',
+      Principal: '*',
+      Action: 's3:GetObject',
+      Resource: 'arn:aws:s3:::my-frontend-app-assets/*',
+    },
+  ],
+};
+
+await s3.send(
+  new PutBucketPolicyCommand({
+    Bucket: 'my-frontend-app-assets',
+    Policy: JSON.stringify(policy),
+    // Policy is a _string_, not an object. JSON.stringify is required.
+  }),
+);
+
+const current = await s3.send(new GetBucketPolicyCommand({ Bucket: 'my-frontend-app-assets' }));
+console.log(JSON.parse(current.Policy!));
+```
 
 ## What This Policy Does (and Does Not Do)
 

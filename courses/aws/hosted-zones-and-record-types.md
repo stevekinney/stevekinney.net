@@ -3,7 +3,7 @@ title: 'Hosted Zones and Record Types'
 description: >-
   Create a hosted zone in Route 53 and understand the common DNS record types (A, AAAA, CNAME, MX, TXT) and when to use each.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - route53
@@ -182,6 +182,49 @@ This returns every record in the zone, including the NS and SOA records that Rou
 
 > [!TIP]
 > Use `UPSERT` instead of `CREATE` for record changes. `CREATE` fails if the record already exists, which makes it annoying for scripts and automation. `UPSERT` handles both cases.
+
+## With the SDK
+
+```typescript
+import {
+  Route53Client,
+  CreateHostedZoneCommand,
+  ListResourceRecordSetsCommand,
+  ChangeResourceRecordSetsCommand,
+} from '@aws-sdk/client-route-53';
+
+const r53 = new Route53Client({ region: 'us-east-1' });
+
+const zone = await r53.send(
+  new CreateHostedZoneCommand({
+    Name: 'example.com',
+    CallerReference: `zone-${Date.now()}`,
+  }),
+);
+const zoneId = zone.HostedZone!.Id!.split('/').pop()!;
+
+await r53.send(
+  new ChangeResourceRecordSetsCommand({
+    HostedZoneId: zoneId,
+    ChangeBatch: {
+      Changes: [
+        {
+          Action: 'UPSERT',
+          ResourceRecordSet: {
+            Name: 'example.com',
+            Type: 'A',
+            TTL: 300,
+            ResourceRecords: [{ Value: '192.0.2.1' }],
+          },
+        },
+      ],
+    },
+  }),
+);
+
+const records = await r53.send(new ListResourceRecordSetsCommand({ HostedZoneId: zoneId }));
+console.log(records.ResourceRecordSets);
+```
 
 ## Hosted Zone Costs
 

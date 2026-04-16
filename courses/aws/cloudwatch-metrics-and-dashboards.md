@@ -5,7 +5,7 @@ description: >-
   CloudWatch dashboard that gives you a single view of your application's
   health.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - cloudwatch
@@ -237,6 +237,62 @@ You can also open the CloudWatch console in your browser, navigate to **Dashboar
 
 > [!WARNING]
 > CloudWatch dashboards are free for the first three dashboards (up to 50 metrics each). After that, each dashboard costs $3 per month. For a single application, one dashboard with a handful of widgets is all you need.
+
+## With the SDK
+
+```typescript
+import {
+  CloudWatchClient,
+  GetMetricStatisticsCommand,
+  PutDashboardCommand,
+  PutMetricDataCommand,
+} from '@aws-sdk/client-cloudwatch';
+
+const cloudwatch = new CloudWatchClient({ region: 'us-east-1' });
+
+// Emit a custom metric from application code. This is how you get metrics
+// for things CloudWatch doesn't produce automatically (sign-ups, cart
+// conversions, business KPIs).
+await cloudwatch.send(
+  new PutMetricDataCommand({
+    Namespace: 'MyFrontendApp',
+    MetricData: [{ MetricName: 'SignUps', Value: 1, Unit: 'Count' }],
+  }),
+);
+
+// Read aggregated metrics back:
+const stats = await cloudwatch.send(
+  new GetMetricStatisticsCommand({
+    Namespace: 'AWS/Lambda',
+    MetricName: 'Errors',
+    Dimensions: [{ Name: 'FunctionName', Value: 'my-frontend-app-api' }],
+    StartTime: new Date(Date.now() - 60 * 60 * 1000),
+    EndTime: new Date(),
+    Period: 300,
+    Statistics: ['Sum'],
+  }),
+);
+
+// Create or overwrite a dashboard:
+await cloudwatch.send(
+  new PutDashboardCommand({
+    DashboardName: 'my-frontend-app',
+    DashboardBody: JSON.stringify({
+      widgets: [
+        {
+          type: 'metric',
+          properties: {
+            metrics: [['AWS/Lambda', 'Errors', 'FunctionName', 'my-frontend-app-api']],
+            stat: 'Sum',
+            period: 60,
+            region: 'us-east-1',
+          },
+        },
+      ],
+    }),
+  }),
+);
+```
 
 ## Choosing the Right Statistic
 

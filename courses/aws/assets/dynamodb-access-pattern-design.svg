@@ -25,6 +25,7 @@
       .heading { font-size: 24px; font-weight: 700; }
       .label { font-size: 18px; font-weight: 700; }
       .body { font-size: 16px; fill: #334155; }
+      .center { text-anchor: middle; }
     </style>
   </defs>
   <rect class="bg" width="1200" height="700" />
@@ -36,13 +37,13 @@
   <text x="80" y="184" class="heading">Relational mindset</text>
 
   <rect x="120" y="230" width="360" height="72" class="accent" />
-  <text x="198" y="274" class="label">Design tables and columns</text>
+  <text x="300" y="274" class="label center">Design tables and columns</text>
 
   <rect x="120" y="350" width="360" height="72" class="card" />
-  <text x="212" y="394" class="label">Normalize relationships</text>
+  <text x="300" y="394" class="label center">Normalize relationships</text>
 
   <rect x="120" y="470" width="360" height="72" class="card" />
-  <text x="194" y="514" class="label">Add joins to answer queries</text>
+  <text x="300" y="514" class="label center">Add joins to answer queries</text>
 
   <path class="line" d="M 300 302 L 300 350" />
   <path class="line" d="M 300 422 L 300 470" />
@@ -51,17 +52,17 @@
   <text x="680" y="184" class="heading">DynamoDB mindset</text>
 
   <rect x="720" y="230" width="360" height="72" class="green" />
-  <text x="786" y="274" class="label">List access patterns first</text>
+  <text x="900" y="274" class="label center">List access patterns first</text>
 
   <rect x="720" y="350" width="360" height="72" class="card" />
-  <text x="804" y="394" class="label">Choose partition and sort keys</text>
+  <text x="900" y="394" class="label center">Choose partition and sort keys</text>
 
   <rect x="720" y="470" width="360" height="72" class="card" />
-  <text x="808" y="514" class="label">Model items for Query</text>
+  <text x="900" y="514" class="label center">Model items for Query</text>
 
   <path class="line" d="M 900 302 L 900 350" />
   <path class="line" d="M 900 422 L 900 470" />
 
-  <text x="120" y="598" class="body">Good when you need flexible joins and ad hoc reporting.</text>
-  <text x="720" y="598" class="body">Good when your app knows the exact reads and writes it needs.</text>
+  <text x="300" y="598" class="body center">Good when you need flexible joins and ad hoc reporting.</text>
+  <text x="900" y="598" class="body center">Good when your app knows the exact reads and writes it needs.</text>
 </svg>

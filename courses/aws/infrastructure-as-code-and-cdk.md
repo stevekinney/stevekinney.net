@@ -5,7 +5,7 @@ description: >-
   (CloudFormation, CDK, SST), and see what the infrastructure you built by hand
   looks like when defined in code.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - infrastructure-as-code
@@ -16,6 +16,9 @@ tags:
 You've spent this entire course clicking through the AWS console and running CLI commands. You created an S3 bucket, configured a CloudFront distribution, set up an API Gateway, attached IAM roles, provisioned a DynamoDB table, and wired it all together. It works. But there's a problem: if you had to do it all again—on a new account, for a new Summit Supply environment, for a teammate—you'd need to repeat every step from memory, in the right order, without mistakes.
 
 If you want AWS's official framing for the first-party IaC tool in this lesson, the [AWS CDK Developer Guide](https://docs.aws.amazon.com/cdk/v2/guide/home.html) is the canonical reference.
+
+> [!NOTE] CDK v2 Only
+> Everything in this lesson uses **CDK v2** (`aws-cdk-lib`). CDK v1 reached end-of-support in mid-2023. If you come across tutorials importing from `@aws-cdk/aws-s3` or `@aws-cdk/aws-lambda` (one package per service), that's v1—don't copy it. v2 consolidates everything into `aws-cdk-lib` plus `constructs`. Verify by checking your `package.json`: `"aws-cdk-lib": "^2.x"` is v2.
 
 That's the problem **Infrastructure as Code** solves. Instead of manually configuring services through a web console, you write code that describes your infrastructure. You check that code into version control. You deploy it with a single command. And when you need to tear it down, update it, or replicate it, the code is the source of truth—not a series of console clicks you half-remember.
 

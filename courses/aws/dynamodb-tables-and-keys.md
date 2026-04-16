@@ -4,7 +4,7 @@ description: >-
   Create a DynamoDB table, define partition keys and sort keys, and understand
   how key design affects query patterns and performance.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - dynamodb
@@ -42,6 +42,56 @@ With this design, you can:
 - Get a range of items: query by partition key `user-123` where sort key begins with `item-00`
 
 You can't efficiently query across partition keys—for example, "get all items with status `done` across all users." That requires a **scan** (which reads every item in the table) or a secondary index. This is the trade-off you accept with DynamoDB: predictable performance on your primary access patterns, at the cost of flexibility on queries you didn't plan for.
+
+## Global Secondary Indexes
+
+The standard fix for "I need to query by an attribute that isn't my partition key" is a **Global Secondary Index (GSI)**. A GSI is a second view of the same table with a different key schema. DynamoDB keeps the GSI in sync with the base table automatically—you don't write to it directly; writes to the base table propagate.
+
+For the "find items by status across all users" case, create a GSI keyed on `status`:
+
+```bash
+aws dynamodb update-table \
+  --table-name my-frontend-app-data \
+  --attribute-definitions \
+    AttributeName=status,AttributeType=S \
+    AttributeName=updatedAt,AttributeType=S \
+  --global-secondary-index-updates '[
+    {
+      "Create": {
+        "IndexName": "status-updatedAt-index",
+        "KeySchema": [
+          {"AttributeName": "status", "KeyType": "HASH"},
+          {"AttributeName": "updatedAt", "KeyType": "RANGE"}
+        ],
+        "Projection": {"ProjectionType": "ALL"}
+      }
+    }
+  ]' \
+  --region us-east-1
+```
+
+Then query it instead of the base table:
+
+```typescript
+await ddb.send(
+  new QueryCommand({
+    TableName: 'my-frontend-app-data',
+    IndexName: 'status-updatedAt-index',
+    KeyConditionExpression: '#s = :s',
+    ExpressionAttributeNames: { '#s': 'status' },
+    ExpressionAttributeValues: { ':s': 'done' },
+  }),
+);
+```
+
+A few things worth knowing before you reach for a GSI:
+
+- GSIs are **eventually consistent** with the base table. A write shows up in the GSI milliseconds later, not instantly.
+- GSIs **cost extra**—both storage (the projected attributes duplicate) and write capacity (each base-table write propagates).
+- You can have up to 20 GSIs per table, but if you need more than three or four, you're probably fighting the data model.
+- GSIs can only be _added_ to an existing table; you can't convert a GSI into a primary key. Design for them up front.
+
+The rule of thumb: **design the base table around your one primary access pattern, and add a GSI per additional access pattern you can't avoid**. The [DynamoDB access-patterns-first design talk](https://www.youtube.com/watch?v=HaEPXoXVf2k) from Rick Houlihan is the canonical deep dive.
 
 ## Choosing Good Keys
 
@@ -134,6 +184,33 @@ Once ACTIVE, the table's **Overview** tab in the console shows the key schema, c
 
 > [!WARNING]
 > The `--attribute-definitions` parameter only defines attributes that are used in the key schema (or secondary indexes). You don't declare non-key attributes here. DynamoDB is schemaless for non-key attributes—you can add any attributes you want when you write items. This trips up people coming from SQL databases who expect to define all columns up front.
+
+## With the SDK
+
+```typescript
+import { DynamoDBClient, CreateTableCommand, waitUntilTableExists } from '@aws-sdk/client-dynamodb';
+
+const ddb = new DynamoDBClient({ region: 'us-east-1' });
+
+await ddb.send(
+  new CreateTableCommand({
+    TableName: 'my-frontend-app-data',
+    AttributeDefinitions: [
+      { AttributeName: 'userId', AttributeType: 'S' },
+      { AttributeName: 'itemId', AttributeType: 'S' },
+    ],
+    KeySchema: [
+      { AttributeName: 'userId', KeyType: 'HASH' },
+      { AttributeName: 'itemId', KeyType: 'RANGE' },
+    ],
+    BillingMode: 'PAY_PER_REQUEST',
+  }),
+);
+
+await waitUntilTableExists({ client: ddb, maxWaitTime: 60 }, { TableName: 'my-frontend-app-data' });
+```
+
+The item-level operations (`PutItem`, `GetItem`, `UpdateItem`, `DeleteItem`, `Query`, `Scan`) are the ones you actually reach for from application code—those lessons ([Reading and Writing Data](dynamodb-reading-and-writing-data.md) and [Querying and Scanning](dynamodb-querying-and-scanning.md)) are SDK-first because that's how you use them in a Lambda.
 
 ## A Note on Attribute Definitions
 

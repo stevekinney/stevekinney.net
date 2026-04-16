@@ -4,7 +4,7 @@ description: >-
   Create an IAM user and policy that can only sync files to an S3 bucket and
   create CloudFront invalidations.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - iam
@@ -14,6 +14,9 @@ tags:
 You're going to create a **deploy bot**—an IAM user whose sole purpose is to deploy your frontend. This user can sync files to a specific S3 bucket and invalidate a specific CloudFront distribution's cache. It can't do anything else. No reading DynamoDB tables, no creating Lambda functions, no changing IAM permissions.
 
 In production, this deploy identity would be an **OIDC-federated IAM role** rather than a user with static access keys—GitHub Actions can request short-lived credentials from AWS without storing any secrets. You'll graduate `deploy-bot` (or its OIDC role equivalent) into the GitHub Actions deploy in the CI/CD lesson. For now, building it as an IAM user with scoped keys is the right learning path: it forces you to think explicitly about which permissions are needed and why.
+
+> [!WARNING] Delete these keys after the CI/CD lesson
+> The access keys you generate in this exercise are training wheels. Once you reach [CI/CD with GitHub Actions](cicd-with-github-actions.md) and wire up the OIDC-federated role, **delete the `deploy-bot` access keys** (`aws iam delete-access-key --user-name deploy-bot --access-key-id <id>`). Long-lived access keys sitting around after you no longer need them are the textbook way AWS accounts get compromised. The IAM role stays, the policy attached to it stays, but the keys go.
 
 This is the same deploy bot you'll wire into a GitHub Actions pipeline later in the course. I want you to build it now so you understand exactly what permissions it has and why.
 
@@ -131,6 +134,62 @@ aws sts get-caller-identity \
 ```
 
 You should see the `deploy-bot` user's ARN in the response.
+
+## With the SDK
+
+The whole exercise in TypeScript, for comparison:
+
+```typescript
+import {
+  IAMClient,
+  CreateUserCommand,
+  CreateAccessKeyCommand,
+  CreatePolicyCommand,
+  AttachUserPolicyCommand,
+} from '@aws-sdk/client-iam';
+
+const iam = new IAMClient({ region: 'us-east-1' });
+
+await iam.send(new CreateUserCommand({ UserName: 'deploy-bot' }));
+
+const keys = await iam.send(new CreateAccessKeyCommand({ UserName: 'deploy-bot' }));
+// This response is the ONLY time the secret is returned — store it now.
+console.log('Access key:', keys.AccessKey?.AccessKeyId);
+console.log('Secret:', keys.AccessKey?.SecretAccessKey);
+
+const policy = await iam.send(
+  new CreatePolicyCommand({
+    PolicyName: 'DeployBotPolicy',
+    PolicyDocument: JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Effect: 'Allow',
+          Action: ['s3:PutObject', 's3:DeleteObject'],
+          Resource: 'arn:aws:s3:::my-frontend-app-assets/*',
+        },
+        {
+          Effect: 'Allow',
+          Action: ['s3:ListBucket'],
+          Resource: 'arn:aws:s3:::my-frontend-app-assets',
+        },
+        {
+          Effect: 'Allow',
+          Action: ['cloudfront:CreateInvalidation'],
+          Resource: 'arn:aws:cloudfront::123456789012:distribution/E1A2B3C4D5E6F7',
+        },
+      ],
+    }),
+  }),
+);
+
+await iam.send(
+  new AttachUserPolicyCommand({
+    UserName: 'deploy-bot',
+    PolicyArn: policy.Policy!.Arn!,
+  }),
+);
+```
 
 ## Checkpoints
 

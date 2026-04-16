@@ -1,9 +1,9 @@
 ---
 title: 'Solution: Set Up a CloudFront Distribution'
 description: >-
-  Complete solution with all CLI commands for creating a CloudFront distribution with S3 origin, OAC, ACM certificate, and SPA routing.
+  Complete solution with all CLI commands for creating a CloudFront distribution with S3 origin, OAC, and SPA routing.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - cloudfront
@@ -116,13 +116,7 @@ Save the following as `distribution-config.json`:
     ]
   },
   "ViewerCertificate": {
-    "ACMCertificateArn": "arn:aws:acm:us-east-1:123456789012:certificate/a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "SSLSupportMethod": "sni-only",
-    "MinimumProtocolVersion": "TLSv1.2_2021"
-  },
-  "Aliases": {
-    "Quantity": 2,
-    "Items": ["example.com", "www.example.com"]
+    "CloudFrontDefaultCertificate": true
   },
   "Restrictions": {
     "GeoRestriction": {
@@ -204,13 +198,7 @@ Expected output (abridged to the fields you need):
         ]
       },
       "ViewerCertificate": {
-        "ACMCertificateArn": "arn:aws:acm:us-east-1:123456789012:certificate/a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-        "SSLSupportMethod": "sni-only",
-        "MinimumProtocolVersion": "TLSv1.2_2021"
-      },
-      "Aliases": {
-        "Quantity": 2,
-        "Items": ["example.com", "www.example.com"]
+        "CloudFrontDefaultCertificate": true
       },
       "Restrictions": {
         "GeoRestriction": {
@@ -488,7 +476,7 @@ Expected results: CloudFront returns `200 OK` for both the root and the SPA rout
 | Response Headers Policy | `67f7725c-6f97-4210-82d7-5512b31e9d03` (managed SecurityHeadersPolicy) |
 | Cache Policy            | `658327ea-f89d-4fab-a63d-7e88639e58f6` (managed CachingOptimized)      |
 
-Your distribution is live, secured, and ready for a custom domain. That's what the Route 53 custom-domain-routing section handles next.
+Your distribution is live and secured on its `*.cloudfront.net` domain. If you want to attach a custom domain later, see the optional [Custom Domains, DNS, and Certificates](dns-for-frontend-engineers.md) section at the end of the course.
 
 ## Cleanup
 

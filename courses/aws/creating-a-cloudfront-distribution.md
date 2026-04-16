@@ -3,7 +3,7 @@ title: 'Creating a CloudFront Distribution'
 description: >-
   Create a CloudFront distribution with an S3 origin and configure its basic settings using the AWS CLI.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - cloudfront
@@ -19,6 +19,9 @@ On Vercel, this happens automatically when you push to a Git branch. On AWS, you
 ## The Distribution Config
 
 Creating a CloudFront distribution through the CLI means passing a JSON configuration to `aws cloudfront create-distribution`. The config is verbose—CloudFront has many options and the CLI requires you to specify most of them, even when you want the defaults. Rather than pretend this is simple, here's the full config with annotations explaining each part.
+
+> [!NOTE]
+> This lesson walks through the _minimum viable_ distribution: no OAC, no ACM certificate, no custom domain. You'll get an "Access Denied" in the browser at the end, and that's the point—it sets up the next two lessons. The [Set Up a CloudFront Distribution exercise](cloudfront-distribution-exercise.md) puts the pieces together into the final, production-shaped config once you've worked through OAC and ACM.
 
 In the console, the new **Create distribution** wizard walks you through the same choices step by step—selecting your origin type, specifying the S3 bucket, and configuring OAC.
 
@@ -154,7 +157,7 @@ This is the default **behavior**—the rules that apply to every request that do
 - **`TargetOriginId`**: Must match the `Id` of one of your origins.
 - **`ViewerProtocolPolicy`**: `"redirect-to-https"` means any HTTP request gets a 301 redirect to HTTPS. This is what you want for any production site.
 - **`CachePolicyId`**: Instead of manually specifying TTLs and forwarded values, you reference a managed **cache policy**. The ID `658327ea-f89d-4fab-a63d-7e88639e58f6` is AWS's **CachingOptimized** policy, which sets a default TTL of 86,400 seconds (24 hours), a maximum TTL of 31,536,000 seconds (365 days), and a minimum TTL of 1 second.
-- **`Compress`**: When `true`, CloudFront automatically compresses files using gzip or Brotli before sending them to the browser. Free performance improvement.
+- **`Compress`**: When `true`, CloudFront automatically compresses files using gzip or Brotli before sending them to the browser. CloudFront inspects the `Accept-Encoding` header and picks Brotli when the browser advertises it (every modern browser does), otherwise falls back to gzip. Brotli gets roughly 15-20% smaller payloads than gzip on text content. Free performance improvement either way.
 
 ### ViewerCertificate
 
@@ -241,6 +244,66 @@ You should see your site—the same files you uploaded to S3 in [Uploading and O
 
 > [!TIP] Seeing "Access Denied"?
 > If you get an "Access Denied" XML error in the browser, that's expected at this point: CloudFront is reaching S3, but S3 isn't letting it in yet. The fix is the next lesson—you'll wire up **Origin Access Control** so CloudFront has its own identity that the bucket policy trusts. Don't loosen the bucket policy or re-enable public access to make this go away. Move on to [Origin Access Control for S3](origin-access-control-for-s3.md), then come back and reload.
+
+## With the SDK
+
+```typescript
+import {
+  CloudFrontClient,
+  CreateDistributionCommand,
+  GetDistributionCommand,
+  ListDistributionsCommand,
+  waitUntilDistributionDeployed,
+} from '@aws-sdk/client-cloudfront';
+
+const cloudfront = new CloudFrontClient({ region: 'us-east-1' });
+
+const created = await cloudfront.send(
+  new CreateDistributionCommand({
+    DistributionConfig: {
+      CallerReference: `my-frontend-app-${Date.now()}`,
+      Comment: 'CloudFront distribution for my-frontend-app-assets',
+      Enabled: true,
+      DefaultRootObject: 'index.html',
+      PriceClass: 'PriceClass_100',
+      HttpVersion: 'http2and3',
+      IsIPV6Enabled: true,
+      Origins: {
+        Quantity: 1,
+        Items: [
+          {
+            Id: 'S3-my-frontend-app-assets',
+            DomainName: 'my-frontend-app-assets.s3.us-east-1.amazonaws.com',
+            S3OriginConfig: { OriginAccessIdentity: '' },
+          },
+        ],
+      },
+      DefaultCacheBehavior: {
+        TargetOriginId: 'S3-my-frontend-app-assets',
+        ViewerProtocolPolicy: 'redirect-to-https',
+        CachePolicyId: '658327ea-f89d-4fab-a63d-7e88639e58f6',
+        Compress: true,
+        AllowedMethods: {
+          Quantity: 2,
+          Items: ['GET', 'HEAD'],
+          CachedMethods: { Quantity: 2, Items: ['GET', 'HEAD'] },
+        },
+      },
+      ViewerCertificate: { CloudFrontDefaultCertificate: true },
+      Restrictions: { GeoRestriction: { RestrictionType: 'none', Quantity: 0 } },
+    },
+  }),
+);
+
+// The v3 SDK ships CloudFormation-style waiter helpers for long-running
+// operations — no manual polling loop.
+await waitUntilDistributionDeployed(
+  { client: cloudfront, maxWaitTime: 1800 },
+  { Id: created.Distribution!.Id! },
+);
+```
+
+Note the `waitUntilDistributionDeployed` helper—the SDK wraps the same polling logic as `aws cloudfront wait distribution-deployed` but returns a proper promise you can `await`, making it far easier to compose into a deploy script.
 
 ## Listing and Describing Distributions
 

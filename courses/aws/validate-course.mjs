@@ -1,11 +1,15 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const courseDirectory = fileURLToPath(new URL('.', import.meta.url));
+const assetsDirectory = path.join(courseDirectory, 'assets');
 const markdownFiles = readdirSync(courseDirectory).filter((name) => name.endsWith('.md'));
 const markdownFileSet = new Set(markdownFiles);
 const lessonMarkdownFiles = markdownFiles.filter((name) => name !== 'README.md');
+const assetFileSet = existsSync(assetsDirectory)
+  ? new Set(readdirSync(assetsDirectory))
+  : new Set();
 
 const indexPath = path.join(courseDirectory, 'index.toml');
 const indexContent = readFileSync(indexPath, 'utf8');
@@ -34,6 +38,21 @@ for (const lessonMarkdownFile of lessonMarkdownFiles) {
   }
 }
 
+for (const lessonMarkdownFile of lessonMarkdownFiles) {
+  if (lessonMarkdownFile.endsWith('-exercise.md')) {
+    const solutionFile = lessonMarkdownFile.replace(/-exercise\.md$/, '-solution.md');
+    if (!markdownFileSet.has(solutionFile)) {
+      failures.push(`${lessonMarkdownFile}: missing matching solution file ${solutionFile}`);
+    }
+  }
+  if (lessonMarkdownFile.endsWith('-solution.md')) {
+    const exerciseFile = lessonMarkdownFile.replace(/-solution\.md$/, '-exercise.md');
+    if (!markdownFileSet.has(exerciseFile)) {
+      failures.push(`${lessonMarkdownFile}: missing matching exercise file ${exerciseFile}`);
+    }
+  }
+}
+
 for (const markdownFile of markdownFiles) {
   const filePath = path.join(courseDirectory, markdownFile);
   const content = readFileSync(filePath, 'utf8');
@@ -46,6 +65,13 @@ for (const markdownFile of markdownFiles) {
     const target = path.basename(match[1]);
     if (!markdownFileSet.has(target)) {
       failures.push(`${markdownFile}: broken local lesson link to ${match[1]}`);
+    }
+  }
+
+  for (const match of content.matchAll(/\]\(assets\/([^)#]+)\)/g)) {
+    const asset = match[1];
+    if (!assetFileSet.has(asset)) {
+      failures.push(`${markdownFile}: referenced asset assets/${asset} does not exist`);
     }
   }
 

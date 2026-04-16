@@ -4,7 +4,7 @@ description: >-
   Add authentication to your API Gateway routes using JWT authorizers or Lambda
   authorizers, protecting your endpoints from unauthorized access.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - api-gateway
@@ -17,6 +17,9 @@ Your API is deployed, CORS is configured, and your frontend can call it. But rig
 If you want AWS's exact version of the auth model while you read, the [JWT authorizer guide for HTTP APIs](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-jwt-authorizer.html) is the official reference.
 
 API Gateway supports two types of authorizers for HTTP APIs: **JWT authorizers** and **Lambda authorizers**. JWT authorizers handle the common case—validating tokens from Cognito, Auth0, or any OIDC provider. Lambda authorizers handle everything else.
+
+> [!NOTE] This Lesson Assumes a Token Source
+> This course doesn't cover setting up the identity provider itself—Cognito lives in [What's Next](whats-next-services-youll-eventually-need.md), Auth0 and Clerk are outside the AWS scope. Everything below assumes you already have a JWT coming from _somewhere_: a pre-issued test token, a Cognito User Pool, or an Auth0 tenant. If you want a quick path to a real token for this lesson, create a free Auth0 tenant and use their "Machine-to-Machine" app to mint tokens—that gives you something concrete to point the authorizer at. For production, you'll most likely end up with Cognito or a third-party provider. The _authorizer configuration_ below is identical regardless of which provider issues the token.
 
 ```mermaid
 flowchart LR

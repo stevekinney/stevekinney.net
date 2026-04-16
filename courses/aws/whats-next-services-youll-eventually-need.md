@@ -5,7 +5,7 @@ description: >-
   Functions, EventBridge, SQS, ECS/Fargate, and WAF—and understand when each
   becomes relevant.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - services
@@ -77,6 +77,23 @@ But AWS has over 200 services, and at some point your application will need some
 
 > [!TIP]
 > If you're using the CloudFront free tier flat-rate plan, basic WAF protection is included at no additional cost. For custom rules beyond the managed set, WAF charges per rule and per million requests evaluated.
+
+## When to Go Back to Vercel or Amplify
+
+This course is about understanding what's underneath, not a verdict that raw AWS is always the right choice. Now that you've built the thing, here's when reaching back for the abstraction is genuinely better:
+
+- **Preview deployments per PR matter more than fine-grained control.** Vercel's per-branch preview URLs, with the full SSR stack automatically wired up, are a productivity multiplier that's genuinely hard to replicate on raw AWS without writing a lot of CI glue.
+- **You're doing SSR-heavy Next.js.** Next.js on Vercel is the reference implementation. On raw AWS you're stitching it together with Lambda@Edge or Fargate and will spend non-trivial time on the seams. Amplify's Hosting product closes part of that gap.
+- **You need zero infra headcount.** Vercel pricing is higher at scale, but if the alternative is hiring someone to operate CloudFront + S3 + Lambda + monitoring, Vercel is cheaper.
+- **Edge-heavy personalization is core to the product.** Vercel's edge runtime and Edge Middleware are a cleaner developer experience than Lambda@Edge + CloudFront Functions, which is the rough equivalent on raw AWS.
+
+Go direct to AWS when:
+
+- **You're already on AWS for other reasons.** A data platform on RDS or a business backend on ECS makes "just use AWS for the frontend too" the simpler answer.
+- **Compliance, data residency, or cost optimization at scale drives the decision.** At $100k+/month, the raw-AWS cost advantage compounds.
+- **You want explicit control over the caching and routing model.** Vercel's abstractions are opinionated; AWS is a set of primitives.
+
+Both paths are legitimate. The skills from this course are what let you make the choice on evidence rather than vibes.
 
 ## A Word on the Services You Don't Need Yet
 

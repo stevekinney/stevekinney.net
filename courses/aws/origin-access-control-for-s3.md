@@ -3,7 +3,7 @@ title: 'Origin Access Control for S3'
 description: >-
   Configure Origin Access Control so that your S3 bucket only serves content through CloudFront, not through direct S3 URLs.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - cloudfront
@@ -97,6 +97,48 @@ In the console, the **Create distribution** wizard handles this automatically: s
 
 ![The CloudFront wizard showing the Allow private S3 bucket access to CloudFront checkbox checked and the Use recommended origin settings option selected.](assets/cloudfront-oac-create.png)
 
+### With the SDK
+
+```typescript
+import {
+  CloudFrontClient,
+  CreateOriginAccessControlCommand,
+  GetDistributionConfigCommand,
+  UpdateDistributionCommand,
+} from '@aws-sdk/client-cloudfront';
+
+const cloudfront = new CloudFrontClient({ region: 'us-east-1' });
+
+const oac = await cloudfront.send(
+  new CreateOriginAccessControlCommand({
+    OriginAccessControlConfig: {
+      Name: 'my-frontend-app-oac',
+      Description: 'OAC for my-frontend-app-assets S3 bucket',
+      SigningProtocol: 'sigv4',
+      SigningBehavior: 'always',
+      OriginAccessControlOriginType: 's3',
+    },
+  }),
+);
+const oacId = oac.OriginAccessControl!.Id!;
+
+// Fetch, mutate, update — same three-step dance as the CLI, just without jq:
+const current = await cloudfront.send(new GetDistributionConfigCommand({ Id: 'E1A2B3C4D5E6F7' }));
+const config = current.DistributionConfig!;
+config.Origins!.Items![0].OriginAccessControlId = oacId;
+config.Origins!.Items![0].S3OriginConfig!.OriginAccessIdentity = '';
+
+await cloudfront.send(
+  new UpdateDistributionCommand({
+    Id: 'E1A2B3C4D5E6F7',
+    IfMatch: current.ETag,
+    DistributionConfig: config,
+  }),
+);
+```
+
+The SDK avoids the jq gymnastics — `GetDistributionConfigCommand` returns the config as a plain object you can mutate and hand back to `UpdateDistributionCommand` along with the returned `ETag`.
+
 ## Update the Distribution to Use OAC
 
 Updating a CloudFront distribution is a three-step process: fetch the current config, modify it, and submit the update with the `ETag` from the fetch.
@@ -130,18 +172,37 @@ The updated origin should look like this:
 }
 ```
 
-Extract just the `DistributionConfig` portion into a new file (removing the `ETag` wrapper), and submit the update:
+Extract just the `DistributionConfig` portion into a new file (removing the `ETag` wrapper). Don't try to hand-edit this—the file is large and the `update-distribution` call rejects it if the schema doesn't match exactly. Use `jq`:
+
+```bash
+jq '.DistributionConfig' distribution-config-current.json > distribution-config-updated.json
+
+# Apply your two edits to distribution-config-updated.json:
+#   1. Set .Origins.Items[0].OriginAccessControlId = "E1OAC2EXAMPLE"
+#   2. Ensure .Origins.Items[0].S3OriginConfig.OriginAccessIdentity = ""
+# You can do both in one shot with jq:
+
+jq '.Origins.Items[0].OriginAccessControlId = "E1OAC2EXAMPLE"
+    | .Origins.Items[0].S3OriginConfig.OriginAccessIdentity = ""' \
+   distribution-config-updated.json > distribution-config-updated.tmp \
+  && mv distribution-config-updated.tmp distribution-config-updated.json
+
+# Capture the ETag for the --if-match flag:
+ETAG=$(jq -r '.ETag' distribution-config-current.json)
+```
+
+Now submit the update:
 
 ```bash
 aws cloudfront update-distribution \
   --id E1A2B3C4D5E6F7 \
-  --if-match E2QWRUHEXAMPLE \
+  --if-match "$ETAG" \
   --distribution-config file://distribution-config-updated.json \
   --region us-east-1 \
   --output json
 ```
 
-Replace `E2QWRUHEXAMPLE` with the actual `ETag` from the `get-distribution-config` response. If the `ETag` doesn't match, CloudFront rejects the update—this prevents you from overwriting changes made by someone else (or by a concurrent process).
+If the `ETag` doesn't match, CloudFront rejects the update—this prevents you from overwriting changes made by someone else (or by a concurrent process).
 
 In the console, the **Origins** tab of your distribution shows the OAC attached to the S3 origin in the **Origin access** column.
 

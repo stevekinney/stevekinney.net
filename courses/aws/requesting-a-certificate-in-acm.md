@@ -3,7 +3,7 @@ title: 'Requesting a Certificate in ACM'
 description: >-
   Request a public SSL/TLS certificate in AWS Certificate Manager for your domain using the console and the CLI.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-16
 tags:
   - aws
   - acm
@@ -76,6 +76,43 @@ Save that ARN. You'll need it when you attach the certificate to CloudFront, whe
 > ```
 >
 > The `--output text` flag returns just the ARN string without JSON formatting, which is easier to capture in a variable.
+
+## With the SDK
+
+```typescript
+import {
+  ACMClient,
+  RequestCertificateCommand,
+  DescribeCertificateCommand,
+  waitUntilCertificateValidated,
+} from '@aws-sdk/client-acm';
+
+const acm = new ACMClient({ region: 'us-east-1' }); // must be us-east-1 for CloudFront
+
+const requested = await acm.send(
+  new RequestCertificateCommand({
+    DomainName: 'example.com',
+    SubjectAlternativeNames: ['www.example.com'],
+    ValidationMethod: 'DNS',
+    IdempotencyToken: `cert-${Date.now()}`, // optional, prevents dupes on retry
+  }),
+);
+const certArn = requested.CertificateArn!;
+
+// Read back the DNS validation records so you can write them into Route 53:
+const described = await acm.send(new DescribeCertificateCommand({ CertificateArn: certArn }));
+const validationRecords = described.Certificate?.DomainValidationOptions?.map(
+  (opt) => opt.ResourceRecord,
+).filter(Boolean);
+
+// After the DNS validation records are in Route 53, block until issuance:
+await waitUntilCertificateValidated(
+  { client: acm, maxWaitTime: 1800 },
+  { CertificateArn: certArn },
+);
+```
+
+The `waitUntilCertificateValidated` helper is the SDK equivalent of `aws acm wait certificate-validated`—the CLI waiter and the SDK helper are generated from the same AWS-published waiter specification, so their behavior is identical.
 
 ## The Certificate Lifecycle
 

@@ -4,7 +4,7 @@ description: >-
   Write a Lambda handler in TypeScript that receives an event, processes it, and
   returns a properly formatted response.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-15
 tags:
   - aws
   - lambda
@@ -67,7 +67,7 @@ Create a `tsconfig.json` in the `lambda/` directory:
 ```
 
 > [!TIP]
-> Lambda's Node.js 20 runtime uses CommonJS by default. Setting `"module": "commonjs"` keeps things simple. You can use ESM with Lambda, but it adds configuration overhead with no practical benefit for most Lambda functions.
+> Lambda's Node.js 22 runtime uses CommonJS by default. Setting `"module": "commonjs"` keeps things simple. You can use ESM with Lambda, but it adds configuration overhead with no practical benefit for most Lambda functions.
 
 ## The Handler Signature
 
@@ -254,5 +254,40 @@ TypeScript compiles `src/handler.ts` to `dist/handler.js`. The compiled JavaScri
 
 > [!TIP]
 > The `@types/aws-lambda` package includes types for every Lambda event source: S3 events, DynamoDB streams, SNS messages, CloudFront requests, and more. Even though this course focuses on API Gateway events, the same pattern applies to all of them: import the right handler type, and TypeScript tells you exactly what the event looks like.
+
+## Error Handling and Retry Semantics
+
+How Lambda treats thrown errors depends entirely on _who invoked the function_—and this trips people up because the rules aren't obvious from the handler's perspective.
+
+- **Synchronous invokes** (API Gateway, Function URLs, direct `invoke` calls): if your handler throws, Lambda surfaces the exception to the caller. API Gateway returns a 5xx to the browser. Lambda does **not** retry. The handler owns its own retry logic.
+- **Asynchronous invokes** (S3 events, SNS, EventBridge): Lambda automatically retries a failed invocation **twice** (two retries, three total attempts), with exponential backoff. If all three attempts fail, the event is either dropped or sent to a **destination** or **dead-letter queue (DLQ)** if you configured one.
+- **Stream-based invokes** (DynamoDB Streams, Kinesis): Lambda retries _indefinitely_ on the failing batch until it succeeds or the record ages out of the stream—unless you set `MaximumRetryAttempts` and `MaximumRecordAgeInSeconds` on the event source mapping. A poison-pill record can block a shard forever if you don't configure this.
+
+For async workloads, always configure a DLQ or failure destination so you don't silently lose events:
+
+```bash
+aws lambda put-function-event-invoke-config \
+  --function-name my-worker \
+  --destination-config '{"OnFailure":{"Destination":"arn:aws:sqs:us-east-1:123456789012:my-worker-dlq"}}' \
+  --region us-east-1
+```
+
+In handler code, prefer catching expected errors and returning a structured response over letting them throw. Throwing is for genuinely unexpected failures:
+
+```typescript
+export const handler: APIGatewayProxyHandlerV2 = async (event) => {
+  try {
+    const data = await doWork(event);
+    return { statusCode: 200, body: JSON.stringify(data) };
+  } catch (error) {
+    console.error('handler error', { error, awsRequestId: event.requestContext.requestId });
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'internal server error' }),
+    };
+  }
+};
+```
 
 You've got a compiled TypeScript handler ready to go. Before you can deploy it, you need an IAM execution role—the role that Lambda assumes when it runs your function. That role determines what AWS services your function can access. You'll create one in the next lesson, building on the IAM concepts from [The IAM Mental Model](iam-mental-model.md).

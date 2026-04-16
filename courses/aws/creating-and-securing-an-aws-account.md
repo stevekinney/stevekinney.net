@@ -4,7 +4,7 @@ description: >-
   Create an AWS account, enable MFA on the root user, and understand why root
   should be locked away after initial setup.
 date: 2026-03-18
-modified: 2026-04-07
+modified: 2026-04-15
 tags:
   - aws
   - iam
@@ -116,6 +116,10 @@ AWS lets you define separate contacts for billing, operations, and security noti
 
 If this is just your personal learning account, you can leave these empty for now. If you have a shared inbox for billing or a teammate who should receive security notices, set them now while you still remember. It is much easier to do this on day one than during an incident.
 
+### Turn On CloudTrail
+
+Every new AWS account already has a 90-day **event history** for management actions enabled by default. That's enough for basic "who did what?" questions, but 90 days is short and it doesn't cover data-plane events (S3 object reads, for example). Enable an organization-wide **CloudTrail trail** writing to an S3 bucket now, while the account is tiny and the footprint is trivial. You can't retroactively reconstruct actions that weren't logged. The [CloudTrail getting-started guide](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-create-and-update-a-trail.html) walks through the console flow.
+
 ### Enable IAM Access to Billing
 
 By default, new IAM users often cannot see billing information. That becomes a problem later when you try to set up budgets or inspect charges without logging back in as root.
@@ -135,6 +139,9 @@ That is a good direction for a team. It is also one more system to understand on
 - Create one everyday IAM user for yourself.
 - Use that user for console access and CLI setup.
 - Learn IAM concepts before layering on organization-wide identity tooling.
+
+> [!NOTE] 2026 Recommendation
+> The course teaches IAM users because they're the shortest path to understanding the permission model. In a real production account, the 2026 recommendation is to enable **IAM Identity Center** and use `aws configure sso` to log in through a short-lived SSO session instead of creating IAM users with long-lived access keys. Same IAM concepts apply underneath—the difference is where the credentials come from. Once you've finished the course, the [AWS IAM Identity Center user guide](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html) is the natural next read.
 
 We will talk about better long-term patterns later. Right now, the shortest path to understanding AWS is still the best one.
 

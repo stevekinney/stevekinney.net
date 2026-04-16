@@ -4,7 +4,7 @@ description: >-
   Create an HTTP API in API Gateway with routes and methods that map to your
   application's endpoints.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - api-gateway
@@ -121,6 +121,33 @@ The catch: quick create wires up a single catch-all route (`$default`) that send
 
 > [!WARNING]
 > Quick create doesn't automatically grant API Gateway permission to invoke your Lambda function. You still need to run `aws lambda add-permission` separately, which we cover in the next lesson. Without that permission, every request returns a 500 error with an "Internal Server Error" message and no useful details.
+
+## With the SDK
+
+```typescript
+import {
+  ApiGatewayV2Client,
+  CreateApiCommand,
+  GetApiCommand,
+  GetApisCommand,
+} from '@aws-sdk/client-apigatewayv2';
+
+const apigw = new ApiGatewayV2Client({ region: 'us-east-1' });
+
+const created = await apigw.send(
+  new CreateApiCommand({
+    Name: 'my-frontend-app-api',
+    ProtocolType: 'HTTP',
+    Description: 'HTTP API for the frontend',
+    CorsConfiguration: {
+      AllowOrigins: ['https://example.com'],
+      AllowMethods: ['GET', 'POST'],
+      AllowHeaders: ['content-type'],
+    },
+  }),
+);
+console.log(created.ApiId, created.ApiEndpoint);
+```
 
 ## Verifying Your API
 

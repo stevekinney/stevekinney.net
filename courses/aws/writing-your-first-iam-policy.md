@@ -4,7 +4,7 @@ description: >-
   Write an IAM policy from scratch, understanding the Version, Statement,
   Effect, Action, and Resource fields.
 date: 2026-03-18
-modified: 2026-04-06
+modified: 2026-04-16
 tags:
   - aws
   - iam
@@ -184,6 +184,44 @@ aws iam attach-user-policy \
   --output json
 ```
 
+### With the SDK
+
+```typescript
+import { IAMClient, CreatePolicyCommand, AttachUserPolicyCommand } from '@aws-sdk/client-iam';
+
+const iam = new IAMClient({ region: 'us-east-1' });
+
+const policy = await iam.send(
+  new CreatePolicyCommand({
+    PolicyName: 'S3AssetsReadOnly',
+    PolicyDocument: JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Sid: 'AllowListBucket',
+          Effect: 'Allow',
+          Action: ['s3:ListBucket'],
+          Resource: 'arn:aws:s3:::my-frontend-app-assets',
+        },
+        {
+          Sid: 'AllowReadObjects',
+          Effect: 'Allow',
+          Action: ['s3:GetObject'],
+          Resource: 'arn:aws:s3:::my-frontend-app-assets/*',
+        },
+      ],
+    }),
+  }),
+);
+
+await iam.send(
+  new AttachUserPolicyCommand({
+    UserName: 'admin',
+    PolicyArn: policy.Policy!.Arn!,
+  }),
+);
+```
+
 ## A More Practical Policy: Deploy Permissions
 
 Here's something closer to what you'll actually need. This policy lets a user sync files to an S3 bucket and create CloudFront invalidations—the two operations required to deploy a static frontend:
@@ -213,6 +251,39 @@ Notice that the **Resource** field in the CloudFront statement targets a specifi
 
 > [!TIP]
 > When building a policy, start by asking: "What CLI commands or SDK calls does this user need to run?" Each CLI command maps to one or more IAM actions. `aws s3 sync` needs `s3:PutObject`, `s3:DeleteObject`, and `s3:ListBucket`. `aws cloudfront create-invalidation` needs `cloudfront:CreateInvalidation`. Work backwards from the commands to the policy.
+
+## Condition Keys: Narrowing Allows
+
+The five fields above (`Version`, `Statement`, `Effect`, `Action`, `Resource`) form a working policy. A sixth field, `Condition`, lets you narrow an allow to only fire when specific request attributes match. It's how you turn "allow this action on this resource" into "allow this action on this resource _only when the request comes from my own region_" or "only when the caller's source IP is in a certain range."
+
+One concrete example: restrict an IAM user to operations in `us-east-1` only. Even if they have permission to call `ec2:RunInstances`, the condition refuses the call unless the request is scoped to `us-east-1`.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "*",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "us-east-1"
+        }
+      }
+    }
+  ]
+}
+```
+
+`aws:RequestedRegion` is a **global condition key**—available on every request. Others worth knowing:
+
+- **`aws:SourceIp`** — CIDR-scoped access (office networks).
+- **`aws:SourceVpc`** — only from a specific VPC (for private workloads).
+- **`aws:MultiFactorAuthPresent`** — require MFA for sensitive actions.
+- **`aws:PrincipalTag/<tagKey>`** — ABAC-style gating by caller tag.
+
+The full list lives in the [AWS global condition context keys reference](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html).
 
 ## Common Mistakes
 

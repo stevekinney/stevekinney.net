@@ -92,14 +92,15 @@
   <text x="920" y="610" class="label center">S3 origin bucket</text>
   <text x="920" y="632" class="small center">Stores the frontend files by key</text>
 
-  <rect x="672" y="457" width="104" height="60" class="service-acm" />
-  <text x="724" y="491" class="label center">ACM</text>
-  <text x="724" y="511" class="small center">TLS</text>
+  <rect x="660" y="444" width="116" height="86" class="service-acm" />
+  <text x="718" y="480" class="label center">ACM</text>
+  <text x="718" y="504" class="small center">TLS</text>
 
   <path class="line" d="M 920 294 L 920 332" />
   <path class="line" d="M 920 406 L 920 444" />
   <path class="line" d="M 920 530 L 920 568" />
   <path class="line" d="M 776 487 L 800 487" />
+
 
   <text x="920" y="706" class="body center">
     <tspan x="920" dy="0">CloudFront serves the site and Route 53 sends traffic there.</tspan>
