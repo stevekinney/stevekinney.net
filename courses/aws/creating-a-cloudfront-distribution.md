@@ -27,6 +27,10 @@ In the console, the new **Create distribution** wizard walks you through the sam
 
 ![The CloudFront Create Distribution wizard on the Specify origin step, showing Amazon S3 selected as the origin type with the S3 bucket URL filled in.](assets/cloudfront-create-distribution-form.png)
 
+The final **Review and create** step shows a summary of your distribution configuration—origin, cache settings, and security options—before you submit.
+
+![The CloudFront Create Distribution review step showing the distribution name, S3 origin with CloudFront access granted, cache settings, and security configuration.](assets/cloudfront-create-review.png)
+
 Save this as `distribution-config.json`:
 
 ```json
