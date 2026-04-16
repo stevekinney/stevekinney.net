@@ -109,6 +109,10 @@ After creation, the **Code** tab shows the deployed handler code in the inline e
 
 ![The Lambda function detail page showing the Code tab with the inline code editor displaying the handler function.](assets/lambda-function-code-view.png)
 
+The **Configuration** tab shows the function's runtime settings—memory, timeout, ephemeral storage, and SnapStart. You'll come back here when you need to adjust these or add environment variables.
+
+![The Lambda Configuration tab showing General configuration with 128 MB memory, 10-second timeout, and 512 MB ephemeral storage.](assets/lambda-configuration-tab.png)
+
 ## Invoking the Function
 
 Now test it. The `aws lambda invoke` command calls your function directly, without going through API Gateway:
@@ -148,7 +152,11 @@ cat response.json
 
 Your function received the event, read the `name` query parameter, and returned a greeting. It works.
 
-In the console, the **Test** tab lets you configure a test event and run the function directly. The **Event JSON** editor accepts any JSON payload, and the execution result shows the response and logs inline.
+In the console, the **Test** tab lets you configure a test event and run the function directly. Select **Create new event**, give it a name, and paste your JSON payload into the editor.
+
+![The Lambda Test tab showing the Create new event option selected with the Event JSON editor ready for input.](assets/lambda-test-tab.png)
+
+After entering your test payload, click **Test**. The **Event JSON** editor accepts any JSON payload, and the execution result shows the response and logs inline.
 
 ![The Lambda Test tab showing the Event JSON editor configured with a sample payload, ready to invoke the function.](assets/lambda-test-event-config.png)
 
