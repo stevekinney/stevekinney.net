@@ -42,17 +42,13 @@ for (const lessonMarkdownFile of lessonMarkdownFiles) {
   if (lessonMarkdownFile.endsWith('-exercise.md')) {
     const solutionFile = lessonMarkdownFile.replace(/-exercise\.md$/, '-solution.md');
     if (!markdownFileSet.has(solutionFile)) {
-      failures.push(
-        `${lessonMarkdownFile}: missing matching solution file ${solutionFile}`,
-      );
+      failures.push(`${lessonMarkdownFile}: missing matching solution file ${solutionFile}`);
     }
   }
   if (lessonMarkdownFile.endsWith('-solution.md')) {
     const exerciseFile = lessonMarkdownFile.replace(/-solution\.md$/, '-exercise.md');
     if (!markdownFileSet.has(exerciseFile)) {
-      failures.push(
-        `${lessonMarkdownFile}: missing matching exercise file ${exerciseFile}`,
-      );
+      failures.push(`${lessonMarkdownFile}: missing matching exercise file ${exerciseFile}`);
     }
   }
 }
