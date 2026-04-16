@@ -234,7 +234,7 @@ aws s3api delete-bucket --bucket "$BUCKET" --region us-east-1
 ```bash
 aws budgets delete-budget \
   --account-id 123456789012 \
-  --budget-name monthly-learning-budget
+  --budget-name my-frontend-app-monthly
 ```
 
 ## 12. IAM Users
