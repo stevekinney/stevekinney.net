@@ -5,30 +5,8 @@
    aria-labelledby="title desc"
    version="1.1"
    id="svg12"
-   sodipodi:docname="alias-vs-cname-apex-routing.svg"
-   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview12"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.46601038"
-     inkscape:cx="415.2268"
-     inkscape:cy="482.82187"
-     inkscape:window-width="1512"
-     inkscape:window-height="893"
-     inkscape:window-x="0"
-     inkscape:window-y="33"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg12" />
   <title
      id="title">Alias versus CNAME at the zone apex</title>
   <desc

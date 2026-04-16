@@ -287,12 +287,19 @@ for await (const file of walk(BUILD_DIR)) {
 }
 
 // Delete anything in the bucket that's no longer in the build directory.
-const existing = await s3.send(new ListObjectsV2Command({ Bucket: BUCKET }));
-for (const obj of existing.Contents ?? []) {
-  if (obj.Key && !localKeys.has(obj.Key)) {
-    await s3.send(new DeleteObjectCommand({ Bucket: BUCKET, Key: obj.Key }));
+// ListObjectsV2 returns at most 1000 keys per call — paginate.
+let continuationToken: string | undefined;
+do {
+  const existing = await s3.send(
+    new ListObjectsV2Command({ Bucket: BUCKET, ContinuationToken: continuationToken }),
+  );
+  for (const obj of existing.Contents ?? []) {
+    if (obj.Key && !localKeys.has(obj.Key)) {
+      await s3.send(new DeleteObjectCommand({ Bucket: BUCKET, Key: obj.Key }));
+    }
   }
-}
+  continuationToken = existing.IsTruncated ? existing.NextContinuationToken : undefined;
+} while (continuationToken);
 
 await cloudfront.send(
   new CreateInvalidationCommand({
