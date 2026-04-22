@@ -3,7 +3,7 @@ export const title = 'Steve Kinney';
 export const url = 'https://stevekinney.com';
 
 export const description =
-  'Steve Kinney is a teacher, artist, and software engineer out of Denver, Colorado, USA.';
+  'Steve Kinney is a software engineer, educator, and engineering leader in Denver, Colorado, with deep experience in AI systems, developer tools, and frontend architecture.';
 
 export const author = 'Steve Kinney';
 

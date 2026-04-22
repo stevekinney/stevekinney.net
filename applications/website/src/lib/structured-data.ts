@@ -4,8 +4,17 @@ const PERSON = {
   '@type': 'Person',
   name: author,
   url,
-  jobTitle: 'Software Engineer',
+  description: siteDescription,
+  jobTitle: 'Software Engineer, Educator, and Engineering Leader',
   image: `${url}/open-graph.jpg`,
+  knowsAbout: [
+    'AI systems',
+    'Agentic workflows',
+    'Developer tools',
+    'Distributed systems',
+    'Frontend architecture',
+    'TypeScript',
+  ],
   sameAs: [
     'https://github.com/stevekinney',
     'https://twitter.com/stevekinney',
