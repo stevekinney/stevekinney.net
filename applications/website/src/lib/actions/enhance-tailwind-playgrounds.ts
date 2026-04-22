@@ -2,21 +2,20 @@ import { decodeTailwindPlaygroundHtml } from '@stevekinney/utilities/tailwind-pl
 
 export function enhanceTailwindPlaygrounds(node: HTMLElement): { destroy: () => void } {
   const playgrounds = node.querySelectorAll<HTMLElement>('[data-tailwind-playground]');
-  const placeholders: Array<{ element: HTMLElement; html: string }> = [];
+  const enhanced: HTMLElement[] = [];
 
   for (const playground of playgrounds) {
     const encodedHtml = playground.dataset.tailwindPlaygroundHtml;
     if (!encodedHtml) continue;
 
-    const html = decodeTailwindPlaygroundHtml(encodedHtml);
-    playground.innerHTML = html;
-    placeholders.push({ element: playground, html });
+    playground.innerHTML = decodeTailwindPlaygroundHtml(encodedHtml);
+    enhanced.push(playground);
   }
 
   return {
     destroy() {
-      for (const placeholder of placeholders) {
-        placeholder.element.innerHTML = '';
+      for (const playground of enhanced) {
+        playground.innerHTML = '';
       }
     },
   };

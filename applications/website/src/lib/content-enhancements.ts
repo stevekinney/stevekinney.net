@@ -1,118 +1,64 @@
-type DestroyableEnhancement = {
-  destroy: () => void;
-};
+type EnhancerResult = { destroy?: () => void } | void;
+type Enhancer = (root: HTMLElement) => EnhancerResult | Promise<EnhancerResult>;
 
-type RootEnhancer =
-  | ((node: HTMLElement) => Promise<DestroyableEnhancement | void>)
-  | ((node: HTMLElement) => DestroyableEnhancement | void);
-
-type EnhancementDefinition = {
-  selector: string;
-  load: () => Promise<RootEnhancer>;
-};
-
-type LoadedEnhancement = {
-  selector: string;
-  enhance: RootEnhancer;
-};
-
-const cleanupByRoot = new WeakMap<HTMLElement, Array<() => void>>();
-
-const enhancementDefinitions: EnhancementDefinition[] = [
+const enhancers: ReadonlyArray<{ selector: string; load: () => Promise<Enhancer> }> = [
   {
     selector: '[data-tailwind-playground]',
-    load: () =>
-      import('./actions/enhance-tailwind-playgrounds').then(
-        (module) => module.enhanceTailwindPlaygrounds as RootEnhancer,
-      ),
+    load: async () =>
+      (await import('./actions/enhance-tailwind-playgrounds')).enhanceTailwindPlaygrounds,
   },
   {
     selector: '[data-language]',
-    load: () =>
-      import('./actions/enhance-code-blocks').then(
-        (module) => module.enhanceCodeBlocks as RootEnhancer,
-      ),
+    load: async () => (await import('./actions/enhance-code-blocks')).enhanceCodeBlocks,
   },
   {
     selector: '[data-mermaid]',
-    load: () =>
-      import('./actions/enhance-mermaid-diagrams').then(
-        (module) => module.enhanceMermaidDiagrams as RootEnhancer,
-      ),
+    load: async () => (await import('./actions/enhance-mermaid-diagrams')).enhanceMermaidDiagrams,
   },
   {
     selector: 'table',
-    load: () => import('./actions/enhance-tables').then((module) => module.enhanceTables),
+    load: async () => (await import('./actions/enhance-tables')).enhanceTables,
   },
 ];
 
-const getContentRoots = (): HTMLElement[] => [
+const cleanupsByRoot = new WeakMap<HTMLElement, Array<() => void>>();
+
+const getRoots = (): HTMLElement[] => [
   ...document.querySelectorAll<HTMLElement>('[data-content-document]'),
 ];
 
-const matchesAnyRoot = (roots: HTMLElement[], selector: string): boolean =>
-  roots.some((root) => root.querySelector(selector) !== null);
-
-const loadEnhancements = async (roots: HTMLElement[]): Promise<LoadedEnhancement[]> =>
-  Promise.all(
-    enhancementDefinitions
-      .filter(({ selector }) => matchesAnyRoot(roots, selector))
-      .map(async ({ selector, load }) => ({
-        selector,
-        enhance: await load(),
-      })),
-  );
-
-const getDestroyCallback = (value: DestroyableEnhancement | void): (() => void) | null =>
-  typeof value?.destroy === 'function' ? value.destroy : null;
-
 const cleanupRoot = (root: HTMLElement): void => {
-  const cleanupCallbacks = cleanupByRoot.get(root) ?? [];
-
-  for (const cleanup of [...cleanupCallbacks].reverse()) {
-    cleanup();
+  const cleanups = cleanupsByRoot.get(root);
+  if (cleanups) {
+    for (let index = cleanups.length - 1; index >= 0; index -= 1) cleanups[index]();
+    cleanupsByRoot.delete(root);
   }
-
-  cleanupByRoot.delete(root);
   delete root.dataset.contentEnhanced;
 };
 
-const enhanceRoot = async (root: HTMLElement, enhancements: LoadedEnhancement[]): Promise<void> => {
-  cleanupRoot(root);
-
-  const cleanupCallbacks: Array<() => void> = [];
-
-  for (const { selector, enhance } of enhancements) {
-    if (root.querySelector(selector)) {
-      const result = await enhance(root);
-      const destroy = getDestroyCallback(result);
-      if (destroy) {
-        cleanupCallbacks.push(destroy);
-      }
-    }
-  }
-
-  if (cleanupCallbacks.length > 0) {
-    cleanupByRoot.set(root, cleanupCallbacks);
-  }
-
-  root.dataset.contentEnhanced = 'true';
-};
-
 const applyEnhancements = async (): Promise<void> => {
-  const roots = getContentRoots();
-  if (roots.length === 0) {
-    return;
-  }
+  const roots = getRoots();
+  if (roots.length === 0) return;
 
-  const enhancements = await loadEnhancements(roots);
-  await Promise.all(roots.map((root) => enhanceRoot(root, enhancements)));
-};
+  const activeEnhancers = await Promise.all(
+    enhancers
+      .filter(({ selector }) => roots.some((root) => root.querySelector(selector)))
+      .map(async ({ selector, load }) => ({ selector, enhance: await load() })),
+  );
 
-const cleanupEnhancements = (): void => {
-  for (const root of getContentRoots()) {
-    cleanupRoot(root);
-  }
+  await Promise.all(
+    roots.map(async (root) => {
+      cleanupRoot(root);
+      const cleanups: Array<() => void> = [];
+      for (const { selector, enhance } of activeEnhancers) {
+        if (!root.querySelector(selector)) continue;
+        const result = await enhance(root);
+        if (typeof result?.destroy === 'function') cleanups.push(result.destroy);
+      }
+      if (cleanups.length > 0) cleanupsByRoot.set(root, cleanups);
+      root.dataset.contentEnhanced = 'true';
+    }),
+  );
 };
 
 if (document.readyState === 'loading') {
@@ -121,4 +67,10 @@ if (document.readyState === 'loading') {
   applyEnhancements();
 }
 
-window.addEventListener('pagehide', cleanupEnhancements, { once: true });
+window.addEventListener(
+  'pagehide',
+  () => {
+    for (const root of getRoots()) cleanupRoot(root);
+  },
+  { once: true },
+);
