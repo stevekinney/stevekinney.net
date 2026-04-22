@@ -2,14 +2,24 @@ name: CI
 
 on:
   pull_request:
+  push:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
-  ci:
+  validation:
+    name: Static Validation
     runs-on: ubuntu-latest
+    env:
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
     steps:
       - uses: actions/checkout@v4
@@ -45,35 +55,125 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
 
-      - name: Run postinstall with Turbo cache
-        run: bun run postinstall
-        env:
-          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      - name: Run validation
+        run: bun run continuous-integration:validate
 
-      - name: Validate image compatibility
-        run: bun run content:images:check
-        env:
-          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  build:
+    name: Build
+    needs: validation
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
-      - name: Build
-        run: bun run build
-        env:
-          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
 
-      - name: Lint
-        run: bun run lint
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
 
-      - name: Check
-        run: bun run check
-        env:
-          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: '1.3.2'
 
-      - name: Unit tests
-        run: bun run test:unit
-        env:
-          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Cache image preprocessing outputs
+        uses: actions/cache@v4
+        with:
+          path: applications/website/.svelte-kit/process-images
+          key: ${{ runner.os }}-process-images-${{ hashFiles('applications/website/svelte.config.js', 'packages/plugins/svelte-enhance-images.js', 'writing/**/*.md', 'courses/**/*.md', 'writing/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}', 'courses/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
+          restore-keys: |
+            ${{ runner.os }}-process-images-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: Build website
+        run: bun run continuous-integration:build
+
+      - name: Upload build report
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-report
+          path: |
+            tmp/build-report
+            .turbo/runs/*.json
+          if-no-files-found: error
+
+  integration:
+    name: Integration
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: '1.3.2'
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Cache image preprocessing outputs
+        uses: actions/cache@v4
+        with:
+          path: applications/website/.svelte-kit/process-images
+          key: ${{ runner.os }}-process-images-${{ hashFiles('applications/website/svelte.config.js', 'packages/plugins/svelte-enhance-images.js', 'writing/**/*.md', 'courses/**/*.md', 'writing/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}', 'courses/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
+          restore-keys: |
+            ${{ runner.os }}-process-images-
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps
+
+      - name: Run integration tests
+        run: bun run test:integration
+
+      - name: Upload Playwright artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            applications/website/playwright-report
+            applications/website/test-results
+          if-no-files-found: ignore

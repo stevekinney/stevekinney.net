@@ -3,7 +3,7 @@ title: >-
   Building a To-Do List Application In React Using Test-Driven Development With
   Vitest
 description: A guide to building a To-Do List app using TDD with React and Vitest.
-modified: 2026-03-17
+modified: 2026-04-22
 date: 2024-10-02
 ---
 
@@ -18,15 +18,11 @@ date: 2024-10-02
 5. [Setting Up React with Vitest](#setting-up-react-with-vitest)
 6. [Designing the To-Do List Application](#designing-the-to-do-list-application)
 7. [Implementing the Application with TDD](#implementing-the-application-with-tdd)
-   - [1. Creating the ToDo Component](#1-creating-the-todo-component)
-   - [2. Fetching To-Dos from an API](#2-fetching-to-dos-from-an-api)
-   - [3. Adding a New To-Do](#3-adding-a-new-to-do)
-   - [4. Marking a To-Do as Completed](#4-marking-a-to-do-as-completed)
-   - [5. Deleting a To-Do](#5-deleting-a-to-do)
-8. [Mocking the API with MSW](#mocking-the-api-with-msw)
-9. [Running the Tests](#running-the-tests)
-10. [Conclusion](#conclusion)
-11. [Additional Exercises](#additional-exercises)
+   - [1. Creating the ToDo Component](#creating-the-todolist-component)
+   - [2. Fetching To-Dos from an API](#fetching-to-dos-from-an-api)
+   - [3. Adding a New To-Do](#adding-a-new-to-do)
+   - [4. Marking a To-Do as Completed](#marking-a-to-do-as-completed)
+   - [5. Deleting a To-Do](#deleting-a-to-do)
 
 ---
 

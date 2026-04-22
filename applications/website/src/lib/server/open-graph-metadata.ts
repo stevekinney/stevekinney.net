@@ -1,8 +1,6 @@
 import metadata from '$lib/metadata';
 import { normalizeOpenGraphPath } from '$lib/og/paths';
-import { loadCourseLessonMarkdown } from '$lib/content-modules';
-import { getCourseIndex, getPostIndex } from '$lib/server/content';
-import { CourseMarkdownSchema } from '$lib/schemas/courses';
+import { getCourseEntry, getRouteByPath, getWritingEntry } from '$lib/server/content';
 
 import type { OpenGraphOptions } from './open-graph';
 
@@ -51,7 +49,7 @@ const resolveWritingMetadata = (pathname: string): OpenGraphOptions | null => {
   const slug = safeDecode(pathname.replace('/writing/', ''));
   if (!slug || slug.includes('/')) return null;
 
-  const post = getPostIndex().find((entry) => entry.slug === slug);
+  const post = getWritingEntry(slug);
   if (!post) return null;
 
   return {
@@ -69,7 +67,7 @@ const resolveCourseMetadata = async (pathname: string): Promise<OpenGraphOptions
   const [courseId, lessonId, ...rest] = remainder.split('/').filter(Boolean);
   if (!courseId || rest.length > 0) return null;
 
-  const course = getCourseIndex().find((entry) => entry.slug === courseId);
+  const course = getCourseEntry(courseId);
   if (!course) return null;
 
   if (!lessonId) {
@@ -79,21 +77,14 @@ const resolveCourseMetadata = async (pathname: string): Promise<OpenGraphOptions
     };
   }
 
-  let lessonMetadata: { title?: string; description?: string } | null = null;
-
-  try {
-    const lessonModule = await loadCourseLessonMarkdown(courseId, lessonId);
-    lessonMetadata = CourseMarkdownSchema.parse(lessonModule).metadata;
-  } catch {
+  const lesson = getRouteByPath(`/courses/${courseId}/${lessonId}`);
+  if (!lesson || lesson.contentType !== 'lesson') {
     return null;
   }
 
-  const lessonTitle = lessonMetadata?.title;
-  const title = lessonTitle ? `${lessonTitle} | ${course.title}` : course.title;
-
   return {
-    title,
-    description: lessonMetadata?.description || course.description || metadata.description,
+    title: lesson.title ? `${lesson.title} | ${course.title}` : course.title,
+    description: lesson.description || course.description || metadata.description,
   };
 };
 

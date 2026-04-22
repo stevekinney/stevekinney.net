@@ -9,6 +9,9 @@
   "scripts": {
     "dev": "turbo run dev --filter=@stevekinney/website",
     "build": "turbo run build --filter=@stevekinney/website && if [ -n \"$VERCEL\" ] && [ -d applications/website/.vercel/output ]; then mkdir -p .vercel/output && cp -R applications/website/.vercel/output/. .vercel/output/; fi",
+    "build:report": "bun run packages/scripts/build-report.ts",
+    "continuous-integration:build": "turbo run build --filter=@stevekinney/website --summarize && bun run build:report",
+    "continuous-integration:validate": "bun run content:validate && bun run content:images:check && bun run lint && bun run check && bun run test:unit",
     "build:stats": "turbo run build:stats --filter=@stevekinney/website",
     "preview": "turbo run preview --filter=@stevekinney/website",
     "test": "turbo run test --filter=@stevekinney/website",
@@ -18,19 +21,17 @@
     "lint": "prettier --cache --check . && eslint --cache .",
     "format": "prettier --write .",
     "clean": "turbo run clean --filter=@stevekinney/website && rm -rf node_modules",
+    "content:build": "turbo run content:build --filter=@stevekinney/scripts",
     "content:validate": "turbo run content:validate --filter=@stevekinney/scripts",
     "content:images:check": "turbo run content:images:check --filter=@stevekinney/scripts",
     "images:sync": "turbo run images:sync --filter=@stevekinney/scripts",
     "images:check": "turbo run images:check --filter=@stevekinney/scripts",
-    "content:index": "turbo run content:index --filter=@stevekinney/website",
-    "manifest": "turbo run manifest",
     "test:integration": "turbo run test:integration --filter=@stevekinney/website",
     "test:integration:dev": "turbo run test:integration:dev --filter=@stevekinney/website",
-    "test:unit": "turbo run test:unit --filter=@stevekinney/website",
+    "test:unit": "turbo run test:unit --filter=@stevekinney/website --filter=@stevekinney/scripts",
     "test:storybook": "turbo run test:storybook --filter=@stevekinney/website",
     "storybook": "turbo run storybook --filter=@stevekinney/website",
     "build-storybook": "turbo run build-storybook --filter=@stevekinney/website",
-    "postinstall": "turbo run sync --filter=@stevekinney/website",
     "prepare": "node .lefthook/install.mjs"
   },
   "devDependencies": {
@@ -151,8 +152,6 @@
   },
   "workspaces": [
     "applications/*",
-    "courses/*",
-    "writing",
     "packages/*"
   ]
 }

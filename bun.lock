@@ -117,65 +117,9 @@
     "applications/website": {
       "name": "@stevekinney/website",
       "dependencies": {
-        "@stevekinney/ai-development": "workspace:*",
-        "@stevekinney/aws": "workspace:*",
-        "@stevekinney/enterprise-ui": "workspace:*",
-        "@stevekinney/figma": "workspace:*",
-        "@stevekinney/full-stack-typescript": "workspace:*",
         "@stevekinney/plugins": "workspace:*",
-        "@stevekinney/python-ai": "workspace:*",
-        "@stevekinney/react-performance": "workspace:*",
-        "@stevekinney/react-typescript": "workspace:*",
-        "@stevekinney/self-testing-ai-agents": "workspace:*",
-        "@stevekinney/storybook": "workspace:*",
-        "@stevekinney/tailwind": "workspace:*",
-        "@stevekinney/testing": "workspace:*",
-        "@stevekinney/visual-studio-code": "workspace:*",
-        "@stevekinney/web-security": "workspace:*",
-        "@stevekinney/writing": "workspace:*",
+        "@stevekinney/utilities": "workspace:*",
       },
-    },
-    "courses/ai-development": {
-      "name": "@stevekinney/ai-development",
-    },
-    "courses/aws": {
-      "name": "@stevekinney/aws",
-    },
-    "courses/enterprise-ui": {
-      "name": "@stevekinney/enterprise-ui",
-    },
-    "courses/figma": {
-      "name": "@stevekinney/figma",
-    },
-    "courses/full-stack-typescript": {
-      "name": "@stevekinney/full-stack-typescript",
-    },
-    "courses/python-ai": {
-      "name": "@stevekinney/python-ai",
-    },
-    "courses/react-performance": {
-      "name": "@stevekinney/react-performance",
-    },
-    "courses/react-typescript": {
-      "name": "@stevekinney/react-typescript",
-    },
-    "courses/self-testing-ai-agents": {
-      "name": "@stevekinney/self-testing-ai-agents",
-    },
-    "courses/storybook": {
-      "name": "@stevekinney/storybook",
-    },
-    "courses/tailwind": {
-      "name": "@stevekinney/tailwind",
-    },
-    "courses/testing": {
-      "name": "@stevekinney/testing",
-    },
-    "courses/visual-studio-code": {
-      "name": "@stevekinney/visual-studio-code",
-    },
-    "courses/web-security": {
-      "name": "@stevekinney/web-security",
     },
     "packages/components": {
       "name": "@stevekinney/components",
@@ -195,9 +139,6 @@
     },
     "packages/utilities": {
       "name": "@stevekinney/utilities",
-    },
-    "writing": {
-      "name": "@stevekinney/writing",
     },
   },
   "overrides": {
@@ -670,45 +611,15 @@
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
-    "@stevekinney/ai-development": ["@stevekinney/ai-development@workspace:courses/ai-development"],
-
-    "@stevekinney/aws": ["@stevekinney/aws@workspace:courses/aws"],
-
     "@stevekinney/components": ["@stevekinney/components@workspace:packages/components"],
-
-    "@stevekinney/enterprise-ui": ["@stevekinney/enterprise-ui@workspace:courses/enterprise-ui"],
-
-    "@stevekinney/figma": ["@stevekinney/figma@workspace:courses/figma"],
-
-    "@stevekinney/full-stack-typescript": ["@stevekinney/full-stack-typescript@workspace:courses/full-stack-typescript"],
 
     "@stevekinney/plugins": ["@stevekinney/plugins@workspace:packages/plugins"],
 
-    "@stevekinney/python-ai": ["@stevekinney/python-ai@workspace:courses/python-ai"],
-
-    "@stevekinney/react-performance": ["@stevekinney/react-performance@workspace:courses/react-performance"],
-
-    "@stevekinney/react-typescript": ["@stevekinney/react-typescript@workspace:courses/react-typescript"],
-
     "@stevekinney/scripts": ["@stevekinney/scripts@workspace:packages/scripts"],
-
-    "@stevekinney/self-testing-ai-agents": ["@stevekinney/self-testing-ai-agents@workspace:courses/self-testing-ai-agents"],
-
-    "@stevekinney/storybook": ["@stevekinney/storybook@workspace:courses/storybook"],
-
-    "@stevekinney/tailwind": ["@stevekinney/tailwind@workspace:courses/tailwind"],
-
-    "@stevekinney/testing": ["@stevekinney/testing@workspace:courses/testing"],
 
     "@stevekinney/utilities": ["@stevekinney/utilities@workspace:packages/utilities"],
 
-    "@stevekinney/visual-studio-code": ["@stevekinney/visual-studio-code@workspace:courses/visual-studio-code"],
-
-    "@stevekinney/web-security": ["@stevekinney/web-security@workspace:courses/web-security"],
-
     "@stevekinney/website": ["@stevekinney/website@workspace:applications/website"],
-
-    "@stevekinney/writing": ["@stevekinney/writing@workspace:writing"],
 
     "@storybook/addon-a11y": ["@storybook/addon-a11y@10.2.0", "", { "dependencies": { "@storybook/global": "^5.0.0", "axe-core": "^4.2.0" }, "peerDependencies": { "storybook": "^10.2.0" } }, "sha512-PJVvEr6KpuOvCr1megfp39RNvFSut6XmFxaiDKtf8kxYbD8tMYL2n/9xFcPIvozJCO4zRmug50X+OIoh0GsSGQ=="],
 

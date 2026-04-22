@@ -1,15 +1,10 @@
 @import '@fontsource/league-gothic';
 @import 'tailwindcss';
 
-/*
- * Explicitly include monorepo content and shared UI package sources so clean
- * builds (like Vercel/CI) don't miss Tailwind utilities used in markdown
- * playground examples and external components.
- */
-@source '../**/*.{svelte,js,ts,md}';
-@source '../../../writing/**/*.md';
-@source '../../../courses/**/*.md';
+@source './**/*.{svelte,js,ts}';
 @source '../../../packages/components/**/*.{svelte,js,ts}';
+@source '../../../packages/plugins/src/**/*.ts';
+@source '../.generated/tailwind-playground-source.html';
 
 @plugin '@tailwindcss/typography';
 @plugin '@tailwindcss/container-queries';

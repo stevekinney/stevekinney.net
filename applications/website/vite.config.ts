@@ -1,5 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
+import { spawn } from 'node:child_process';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -21,6 +22,7 @@ const applyClientBuildOnly = (plugin: unknown): PluginOption => {
 };
 
 const IMAGE_MIME_TYPES: Record<string, string> = {
+  '.js': 'application/javascript; charset=utf-8',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -29,6 +31,14 @@ const IMAGE_MIME_TYPES: Record<string, string> = {
   '.webp': 'image/webp',
   '.avif': 'image/avif',
 };
+
+const generatedContentEnhancementsRoot = path.resolve(
+  workspaceRoot,
+  'applications',
+  'website',
+  '.generated',
+  'content-enhancements',
+);
 
 /**
  * Watches monorepo content directories so Vite's `import.meta.glob` picks up
@@ -40,12 +50,119 @@ function watchContentDirectories(): PluginOption {
   return {
     name: 'watch-content-directories',
     configureServer(server) {
-      const contentPaths = ['courses', 'writing', 'content'].map((dir) =>
-        path.resolve(workspaceRoot, dir),
-      );
+      const contentPaths = ['courses', 'writing'].map((dir) => path.resolve(workspaceRoot, dir));
       for (const dir of contentPaths) {
         server.watcher.add(dir);
       }
+    },
+  };
+}
+
+function regenerateGeneratedContent(): PluginOption {
+  const shouldRegenerate = (filePath: string): boolean => {
+    const normalizedPath = filePath.split(path.sep).join('/');
+
+    if (/\.(md|toml)$/i.test(normalizedPath)) {
+      return normalizedPath.includes('/writing/') || normalizedPath.includes('/courses/');
+    }
+
+    if (!/\.ts$/i.test(normalizedPath)) {
+      return false;
+    }
+
+    const contentEnhancementSources = [
+      '/applications/website/src/lib/content-enhancements.ts',
+      '/applications/website/src/lib/copy-code-block-as-image.ts',
+      '/applications/website/src/lib/actions/enhance-code-blocks.ts',
+      '/applications/website/src/lib/actions/enhance-mermaid-diagrams.ts',
+      '/applications/website/src/lib/actions/enhance-tailwind-playgrounds.ts',
+      '/applications/website/src/lib/actions/enhance-tables.ts',
+    ];
+
+    return contentEnhancementSources.some((sourcePath) => normalizedPath.endsWith(sourcePath));
+  };
+
+  return {
+    name: 'regenerate-generated-content',
+    configureServer(server) {
+      let isRunning = false;
+      let hasPendingRun = false;
+
+      const runContentBuild = (): void => {
+        if (isRunning) {
+          hasPendingRun = true;
+          return;
+        }
+
+        isRunning = true;
+        const child = spawn('bun', ['run', '../../packages/scripts/content-build.ts'], {
+          cwd: process.cwd(),
+          stdio: 'inherit',
+        });
+
+        child.on('exit', (code) => {
+          isRunning = false;
+
+          if (code === 0) {
+            server.ws.send({ type: 'full-reload' });
+          } else {
+            server.config.logger.error('Generated content rebuild failed.');
+          }
+
+          if (hasPendingRun) {
+            hasPendingRun = false;
+            runContentBuild();
+          }
+        });
+      };
+
+      const handleChange = (filePath: string): void => {
+        if (shouldRegenerate(filePath)) {
+          runContentBuild();
+        }
+      };
+
+      server.watcher.on('add', handleChange);
+      server.watcher.on('change', handleChange);
+      server.watcher.on('unlink', handleChange);
+    },
+  };
+}
+
+function serveGeneratedContentEnhancements(): PluginOption {
+  const generatedPrefix = '/generated/content-enhancements/';
+
+  return {
+    name: 'serve-generated-content-enhancements',
+    configureServer(server) {
+      server.middlewares.use(async (request, response, next) => {
+        if (!request.url) return next();
+
+        const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+        if (!pathname.startsWith(generatedPrefix)) {
+          return next();
+        }
+
+        const contentType = IMAGE_MIME_TYPES[path.extname(pathname).toLowerCase()];
+        if (!contentType) return next();
+
+        const relativePath = pathname.slice(generatedPrefix.length);
+        const filePath = path.resolve(generatedContentEnhancementsRoot, relativePath);
+        if (!filePath.startsWith(generatedContentEnhancementsRoot)) return next();
+
+        try {
+          const fileStat = await stat(filePath);
+          if (!fileStat.isFile()) return next();
+
+          const content = await readFile(filePath);
+          response.setHeader('Content-Type', contentType);
+          response.setHeader('Content-Length', content.length);
+          response.setHeader('Cache-Control', 'no-cache');
+          response.end(content);
+        } catch {
+          next();
+        }
+      });
     },
   };
 }
@@ -66,11 +183,7 @@ function serveContentAssets(): PluginOption {
 
         const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
 
-        if (
-          !pathname.startsWith('/courses/') &&
-          !pathname.startsWith('/content/') &&
-          !pathname.startsWith('/writing/')
-        ) {
+        if (!pathname.startsWith('/courses/') && !pathname.startsWith('/writing/')) {
           return next();
         }
 
@@ -101,6 +214,8 @@ export default defineConfig({
   plugins: [
     sveltekit(),
     watchContentDirectories(),
+    regenerateGeneratedContent(),
+    serveGeneratedContentEnhancements(),
     serveContentAssets(),
     ViteToml(),
     tailwindcss(),
@@ -135,8 +250,8 @@ export default defineConfig({
     fs: {
       allow: [
         workspaceRoot,
-        path.resolve(workspaceRoot, 'content'),
         path.resolve(workspaceRoot, 'courses'),
+        path.resolve(workspaceRoot, 'writing'),
       ],
     },
   },

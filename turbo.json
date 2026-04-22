@@ -1,94 +1,153 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "image-manifest.json",
-    "packages/scripts/generate-course-manifest.ts",
-    "packages/scripts/generate-site-content-index.ts",
-    "packages/utilities/content-types.ts"
-  ],
   "tasks": {
-    "manifest": {
-      "inputs": ["**/*.md", "package.json"],
-      "outputs": ["manifest.json"]
-    },
-    "build": {
-      "dependsOn": ["^build", "^manifest"],
+    "@stevekinney/scripts#content:build": {
       "inputs": [
-        "**/*.md",
-        "**/*.png",
-        "**/*.jpg",
-        "**/*.jpeg",
-        "**/*.svg",
-        "**/*.gif",
-        "**/*.avif",
-        "**/*.webp",
-        "package.json",
-        "src/**"
+        "content-build.ts",
+        "content-paths.ts",
+        "content-repository.ts",
+        "sync-generated-browser-assets.ts",
+        "../utilities/content-types.ts",
+        "../utilities/frontmatter.ts",
+        "../utilities/tailwind-playground.ts",
+        "../../applications/website/src/lib/content-enhancements.ts",
+        "../../applications/website/src/lib/copy-code-block-as-image.ts",
+        "../../applications/website/src/lib/actions/enhance-code-blocks.ts",
+        "../../applications/website/src/lib/actions/enhance-mermaid-diagrams.ts",
+        "../../applications/website/src/lib/actions/enhance-tailwind-playgrounds.ts",
+        "../../applications/website/src/lib/actions/enhance-tables.ts",
+        "../../writing/**/*.md",
+        "../../courses/**/*.md",
+        "../../courses/*/index.toml"
       ],
-      "env": ["VERCEL"],
       "outputs": [
-        "manifest.json",
-        "dist/**",
-        "build/**",
-        ".vercel/output/**",
-        "src/lib/server/content-index.json"
+        "../../applications/website/.generated/content-data.json",
+        "../../applications/website/.generated/tailwind-playground-source.html",
+        "../../applications/website/.generated/content-enhancements/**"
       ]
     },
-    "build:stats": {
-      "dependsOn": ["build"],
-      "env": ["BUNDLE_STATS"]
+    "@stevekinney/scripts#content:validate": {
+      "dependsOn": ["@stevekinney/scripts#content:build"],
+      "inputs": [
+        "validate-content.ts",
+        "content-build.ts",
+        "content-paths.ts",
+        "content-repository.ts",
+        "../utilities/content-types.ts",
+        "../utilities/frontmatter.ts",
+        "../utilities/tailwind-playground.ts",
+        "../../writing/**/*.md",
+        "../../courses/**/*.md",
+        "../../courses/*/index.toml"
+      ]
     },
-    "preview": {
-      "dependsOn": ["build"],
-      "cache": false
+    "@stevekinney/scripts#content:images:check": {
+      "inputs": [
+        "run-with-sharp-runtime.ts",
+        "validate-image-compatibility.ts",
+        "../../image-manifest.json",
+        "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}",
+        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}"
+      ]
     },
-    "dev": {
-      "dependsOn": ["^build", "^manifest"],
-      "cache": false,
-      "persistent": true
+    "@stevekinney/scripts#images:check": {
+      "inputs": [
+        "check-image-manifest.ts",
+        "../../image-manifest.json",
+        "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}",
+        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}"
+      ]
     },
-    "sync": {
-      "dependsOn": ["^build"]
-    },
-    "lint": {},
-    "check": {},
-    "check:watch": {
-      "cache": false,
-      "persistent": true
-    },
-    "test": {
-      "dependsOn": ["build", "^test"],
-      "outputs": ["playwright-report/**", "test-results/**"]
-    },
-    "test:integration": {
-      "dependsOn": ["build"],
-      "outputs": ["playwright-report/**", "test-results/**"]
-    },
-    "test:integration:dev": {
-      "cache": false
-    },
-    "test:unit": {},
-    "test:storybook": {
-      "dependsOn": ["build-storybook"]
-    },
-    "storybook": {
-      "cache": false,
-      "persistent": true
-    },
-    "build-storybook": {},
-    "content:index": {
-      "dependsOn": ["^manifest"]
-    },
-    "images:sync": {
+    "@stevekinney/scripts#images:sync": {
       "cache": false,
       "env": ["BLOB_READ_WRITE_TOKEN"]
     },
-    "images:check": {
+    "@stevekinney/scripts#test:unit": {
+      "dependsOn": ["@stevekinney/scripts#content:build"],
+      "inputs": [
+        "content-repository.test.ts",
+        "content-build.ts",
+        "content-paths.ts",
+        "content-repository.ts",
+        "../utilities/content-types.ts",
+        "../utilities/frontmatter.ts",
+        "../utilities/tailwind-playground.ts",
+        "../../writing/**/*.md",
+        "../../courses/**/*.md",
+        "../../courses/*/index.toml"
+      ]
+    },
+    "@stevekinney/website#build": {
+      "dependsOn": [
+        "@stevekinney/scripts#content:build",
+        "@stevekinney/scripts#content:images:check"
+      ],
+      "inputs": [
+        "package.json",
+        "src/**",
+        "static/**",
+        "svelte.config.js",
+        "vite.config.ts",
+        "tsconfig.json",
+        "../../packages/components/**/*.{svelte,ts,js}",
+        "../../packages/plugins/src/**/*.ts",
+        "../../packages/utilities/**/*.ts",
+        "../../image-manifest.json",
+        ".generated/**",
+        "!build/**",
+        "!.svelte-kit/**",
+        "!test-results/**",
+        "!playwright-report/**",
+        "!.vercel/**"
+      ],
+      "env": ["VERCEL"],
+      "outputs": ["build/**", ".svelte-kit/output/**", ".vercel/output/**"]
+    },
+    "@stevekinney/website#build:stats": {
+      "dependsOn": ["@stevekinney/website#build"],
+      "env": ["BUNDLE_STATS"]
+    },
+    "@stevekinney/website#preview": {
+      "dependsOn": ["@stevekinney/website#build"],
       "cache": false
     },
-    "content:validate": {},
-    "content:images:check": {},
-    "clean": {
+    "@stevekinney/website#dev": {
+      "dependsOn": ["@stevekinney/scripts#content:build"],
+      "cache": false,
+      "persistent": true
+    },
+    "@stevekinney/website#sync": {},
+    "@stevekinney/website#lint": {},
+    "@stevekinney/website#check": {
+      "dependsOn": ["@stevekinney/scripts#content:build"]
+    },
+    "@stevekinney/website#check:watch": {
+      "dependsOn": ["@stevekinney/scripts#content:build"],
+      "cache": false,
+      "persistent": true
+    },
+    "@stevekinney/website#test": {
+      "dependsOn": ["@stevekinney/website#test:integration", "@stevekinney/website#test:unit"]
+    },
+    "@stevekinney/website#test:integration": {
+      "dependsOn": ["@stevekinney/website#build"],
+      "outputs": ["playwright-report/**", "test-results/**"]
+    },
+    "@stevekinney/website#test:integration:dev": {
+      "cache": false
+    },
+    "@stevekinney/website#test:unit": {
+      "dependsOn": ["@stevekinney/scripts#content:build"]
+    },
+    "@stevekinney/website#test:storybook": {
+      "dependsOn": ["@stevekinney/website#build-storybook"]
+    },
+    "@stevekinney/website#storybook": {
+      "cache": false,
+      "persistent": true
+    },
+    "@stevekinney/website#build-storybook": {},
+    "@stevekinney/website#clean": {
       "cache": false
     }
   }

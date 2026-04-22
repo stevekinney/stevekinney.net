@@ -3,10 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "content:validate": "bun run validate-content.ts && bun run validate-course-registry.ts",
-    "test": "bun test validate-course-registry.test.ts",
-    "content:images:check": "export LD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-linux-x64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\"; export DYLD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-darwin-arm64/lib${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}\"; NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node validate-image-compatibility.ts",
-    "images:sync": "export LD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-linux-x64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\"; export DYLD_LIBRARY_PATH=\"$PWD/../../node_modules/@img/sharp-libvips-darwin-arm64/lib${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}\"; NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local sync-images.ts",
+    "content:build": "bun run content-build.ts",
+    "content:validate": "bun run validate-content.ts",
+    "test": "bun run test:unit",
+    "test:unit": "bun test --timeout 20000 content-repository.test.ts",
+    "content:images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" bun run run-with-sharp-runtime.ts node validate-image-compatibility.ts",
+    "images:sync": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" bun run run-with-sharp-runtime.ts node --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local sync-images.ts",
     "images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node check-image-manifest.ts"
   },
   "dependencies": {

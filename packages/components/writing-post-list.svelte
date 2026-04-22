@@ -1,7 +1,7 @@
 <script lang="ts">
   import DateTime from '$lib/components/date.svelte';
   import { NotebookPen } from '@lucide/svelte';
-  import type { PostWithSlug } from '$lib/posts';
+  import type { PostWithSlug } from '$lib/post-types';
 
   type Props = {
     posts: PostWithSlug[];

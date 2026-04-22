@@ -12,6 +12,7 @@ type Options = {
   sizes?: string;
   classes?: string[];
   firstImagePriority?: boolean;
+  strictManifest?: boolean;
 };
 
 // ---------------------------------------------------------------------------
@@ -21,7 +22,7 @@ type Options = {
 let cachedManifest: ImageManifest | null = null;
 let cachedManifestPath: string | null = null;
 
-const loadManifest = (manifestPath: string): ImageManifest => {
+const loadManifest = (manifestPath: string, strictManifest: boolean): ImageManifest => {
   if (cachedManifest && cachedManifestPath === manifestPath) return cachedManifest;
 
   try {
@@ -29,7 +30,11 @@ const loadManifest = (manifestPath: string): ImageManifest => {
     cachedManifest = JSON.parse(raw) as ImageManifest;
     cachedManifestPath = manifestPath;
     return cachedManifest;
-  } catch {
+  } catch (error) {
+    if (strictManifest) {
+      throw new Error(`Image manifest is required at ${manifestPath}: ${(error as Error).message}`);
+    }
+
     cachedManifest = { version: 1, images: {} };
     cachedManifestPath = manifestPath;
     return cachedManifest;
@@ -97,9 +102,10 @@ const rehypeEnhanceImages: Plugin<[Options?], Root> = (options = {}) => {
   const defaultSizes = options.sizes ?? '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw';
   const imageClasses = options.classes ?? defaultClasses;
   const firstImagePriority = options.firstImagePriority ?? false;
+  const strictManifest = options.strictManifest ?? false;
 
   return function transformer(tree: Root, file: VFile): void {
-    const manifest = loadManifest(manifestPath);
+    const manifest = loadManifest(manifestPath, strictManifest);
     const filename =
       file.path ?? (file as unknown as { filename?: string }).filename ?? file.history[0];
     if (!filename) return;
@@ -125,6 +131,12 @@ const rehypeEnhanceImages: Plugin<[Options?], Root> = (options = {}) => {
       const key = resolveManifestKey(filename, urlForMatch);
       const entry = manifest.images[key];
       if (!entry) {
+        if (strictManifest) {
+          throw new Error(
+            `Missing image manifest entry for '${urlForMatch}' in '${filename}' (resolved key: '${key}').`,
+          );
+        }
+
         // Unmanifested image: rewrite relative src to a repo-rooted absolute path
         // so the dev middleware (serveContentAssets) serves it regardless of the
         // current page URL. Without this, `<img src="assets/foo.png">` on a page

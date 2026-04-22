@@ -29,6 +29,9 @@ const siteUrl =
 // Define directory paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const imageManifestPath = join(__dirname, '../../image-manifest.json');
+const strictImageManifest =
+  process.env.NODE_ENV === 'production' || Boolean(process.env.VERCEL) || Boolean(process.env.CI);
 
 // No in-memory highlight cache — each code block is processed exactly once
 // during build. Caching just accumulates memory that persists into the adapter phase.
@@ -68,9 +71,11 @@ const mdsvexOptions = {
     /** @type {any} */ ([
       rehypeEnhanceImages,
       {
+        manifestPath: imageManifestPath,
         sizes: '(min-width: 1280px) 800px, (min-width: 768px) 80vw, 100vw',
         firstImagePriority: true,
         classes: ['max-w-full'],
+        strictManifest: strictImageManifest,
       },
     ]),
   ],
@@ -179,7 +184,6 @@ const config = {
       '$assets/*': 'src/assets/*',
       '$courses/*': '../../courses/*',
       '$writing/*': '../../writing/*',
-      'content/*': '../../content/*',
       'courses/*': '../../courses/*',
       $merge: 'src/lib/merge.ts',
     },
@@ -201,6 +205,11 @@ const config = {
           return;
         }
         throw new Error(message);
+      },
+      handleMissingId: ({ path, id, referrers }) => {
+        console.warn(
+          `[prerender] Missing id "${id}" on ${path} referenced from ${referrers.join(', ')}`,
+        );
       },
       // Paginated routes may have no entries when post count fits on one page
       handleUnseenRoutes: 'ignore',

@@ -5,3 +5,4 @@ yarn.lock
 templates
 .obsidian/**
 test-results/.last-run.json
+applications/website/.generated/**

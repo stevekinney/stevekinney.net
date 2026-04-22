@@ -5,7 +5,7 @@ title: >-
 description: >-
   Learn how to create an authentication system with TDD using Express and
   Vitest.
-modified: 2026-03-17
+modified: 2026-04-22
 date: 2024-10-02
 ---
 
@@ -17,19 +17,18 @@ date: 2024-10-02
 2. [Prerequisites](#prerequisites)
 3. [Project Setup](#project-setup)
 4. [Understanding Test-Driven Development](#understanding-test-driven-development)
-5. [Setting Up Express with Vitest](#setting-up-express-with-vitest)
-6. [Designing the Authentication System](#designing-the-authentication-system)
-7. [Implementing the System with TDD](#implementing-the-system-with-tdd)
-   - [1. User Registration](#1-user-registration)
-   - [2. User Login](#2-user-login)
-   - [3. User Logout](#3-user-logout)
-8. [Testing Focus Areas](#testing-focus-areas)
+5. [Designing the Authentication System](#designing-the-authentication-system)
+6. [Implementing the System with TDD](#implementing-the-system-with-tdd)
+   - [1. User Registration](#user-registration)
+   - [2. User Login](#user-login)
+   - [3. User Logout](#user-logout)
+7. [Testing Focus Areas](#testing-focus-areas)
    - [Unit Tests: Form Validation and Encryption Methods](#unit-tests-form-validation-and-encryption-methods)
    - [Integration Tests: API Endpoints for Authentication](#integration-tests-api-endpoints-for-authentication)
    - [Security Tests: Handling Authentication Tokens](#security-tests-handling-authentication-tokens)
-9. [Running the Tests](#running-the-tests)
-10. [Conclusion](#conclusion)
-11. [Additional Exercises](#additional-exercises)
+8. [Running the Tests](#running-the-tests)
+9. [Conclusion](#conclusion)
+10. [Additional Exercises](#additional-exercises)
 
 ### Introduction
 

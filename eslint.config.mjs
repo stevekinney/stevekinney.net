@@ -21,6 +21,7 @@ export default [
     ignores: [
       '**/.DS_Store',
       '**/node_modules',
+      '**/.generated/**',
       'build',
       '.svelte-kit',
       '**/.svelte-kit',

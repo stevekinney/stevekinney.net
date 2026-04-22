@@ -1,5 +1,5 @@
 <script lang="ts">
-  type RepoPath = `courses/${string}` | `writing/${string}`;
+  import type { RepoPath } from '$lib/repo-path';
 
   const { repoPath }: { repoPath: RepoPath } = $props();
 

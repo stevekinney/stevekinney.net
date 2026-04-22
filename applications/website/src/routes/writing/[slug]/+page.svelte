@@ -2,6 +2,7 @@
   import { page } from '$app/state';
   import { env } from '$env/dynamic/public';
   import Date from '$lib/components/date.svelte';
+  import ContentEnhancements from '$lib/components/content-enhancements.svelte';
   import OpenInObsidian from '$lib/components/open-in-obsidian.svelte';
   import PullRequest from '$lib/components/pull-request.svelte';
   import SEO from '$lib/components/seo.svelte';
@@ -33,7 +34,9 @@
   jsonLd={articleJsonLd}
 />
 
-<OpenInObsidian repoPath="writing/{data.slug}.md" />
+<ContentEnhancements />
+
+<OpenInObsidian repoPath={data.sourcePath} />
 
 <article class="space-y-10">
   <hgroup class="space-y-2">
@@ -45,7 +48,10 @@
     {data.meta.description}
   </p>
 
-  <data.content class="prose dark:prose-invert max-w-none" as="section" />
+  <div data-content-document>
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+    {@html data.contentHtml}
+  </div>
 
   {#if data.meta.modified}
     <p class="my-6 text-right text-sm text-slate-500 dark:text-gray-400">
@@ -54,4 +60,4 @@
   {/if}
 </article>
 
-<PullRequest repoPath="writing/{data.slug}.md" />
+<PullRequest repoPath={data.sourcePath} />
