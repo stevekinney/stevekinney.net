@@ -9,6 +9,7 @@ import {
   websiteBuildRoot,
   websiteRoot,
   websiteSvelteKitClientRoot,
+  websiteVercelStaticRoot,
 } from './content-paths.ts';
 
 type TurboTaskCache = {
@@ -46,6 +47,7 @@ const buildReportJsonPath = path.resolve(buildReportDirectory, 'website-build-re
 const buildReportMarkdownPath = path.resolve(buildReportDirectory, 'website-build-report.md');
 const turboRunsDirectory = path.resolve(repositoryRoot, '.turbo', 'runs');
 const websiteBuildTaskId = '@stevekinney/website#build';
+const htmlFileMatcher = (filePath: string): boolean => filePath.endsWith('.html');
 
 const formatBytes = (bytes: number): string => {
   if (bytes >= 1024 * 1024) {
@@ -74,6 +76,32 @@ const listFilesRecursively = async (directoryPath: string): Promise<string[]> =>
   );
 
   return files.flat();
+};
+
+const directoryExists = async (directoryPath: string): Promise<boolean> => {
+  try {
+    const directoryStat = await stat(directoryPath);
+    return directoryStat.isDirectory();
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      return false;
+    }
+
+    throw error;
+  }
+};
+
+/** Select the first existing adapter output directory that contains built HTML files. */
+export const findFirstExistingDirectory = async (
+  directoryPaths: readonly string[],
+): Promise<string | null> => {
+  for (const directoryPath of directoryPaths) {
+    if (await directoryExists(directoryPath)) {
+      return directoryPath;
+    }
+  }
+
+  return null;
 };
 
 const getLargestFile = async (
@@ -139,7 +167,21 @@ const countFiles = async (
   return files.filter(matcher).length;
 };
 
-const main = async (): Promise<void> => {
+export const countFilesIfDirectoryExists = async (
+  directoryPath: string,
+  matcher: (filePath: string) => boolean,
+): Promise<number> => {
+  if (!(await directoryExists(directoryPath))) {
+    return 0;
+  }
+
+  return countFiles(directoryPath, matcher);
+};
+
+export const resolveWebsiteHtmlOutputRoot = async (): Promise<string | null> =>
+  findFirstExistingDirectory([websiteBuildRoot, websiteVercelStaticRoot]);
+
+export const main = async (): Promise<void> => {
   const generatedContent = JSON.parse(
     await readFile(generatedContentDataPath, 'utf8'),
   ) as GeneratedContent;
@@ -162,12 +204,13 @@ const main = async (): Promise<void> => {
     (filePath) => filePath.endsWith('.css'),
   );
 
-  const buildHtmlPageCount = await countFiles(websiteBuildRoot, (filePath) =>
-    filePath.endsWith('.html'),
-  );
-  const prerenderedHtmlPageCount = await countFiles(
+  const websiteHtmlOutputRoot = await resolveWebsiteHtmlOutputRoot();
+  const buildHtmlPageCount = websiteHtmlOutputRoot
+    ? await countFiles(websiteHtmlOutputRoot, htmlFileMatcher)
+    : 0;
+  const prerenderedHtmlPageCount = await countFilesIfDirectoryExists(
     path.resolve(websiteRoot, '.svelte-kit', 'output', 'prerendered', 'pages'),
-    (filePath) => filePath.endsWith('.html'),
+    htmlFileMatcher,
   );
 
   const report = {
@@ -199,6 +242,9 @@ const main = async (): Promise<void> => {
         generatedContent.prerenderEntries.lessons.length,
     },
     prerender: {
+      buildOutputRoot: websiteHtmlOutputRoot
+        ? path.relative(repositoryRoot, websiteHtmlOutputRoot)
+        : null,
       buildHtmlPageCount,
       prerenderedHtmlPageCount,
     },
@@ -243,6 +289,7 @@ const main = async (): Promise<void> => {
     '',
     '## Prerender',
     '',
+    `- Build output root: ${report.prerender.buildOutputRoot ?? 'Unavailable'}`,
     `- Built HTML pages: ${report.prerender.buildHtmlPageCount}`,
     `- SvelteKit prerendered HTML pages: ${report.prerender.prerenderedHtmlPageCount}`,
     '',
@@ -260,4 +307,6 @@ const main = async (): Promise<void> => {
   console.log(`Wrote build report to ${path.relative(repositoryRoot, buildReportDirectory)}.`);
 };
 
-await main();
+if (import.meta.main) {
+  await main();
+}
