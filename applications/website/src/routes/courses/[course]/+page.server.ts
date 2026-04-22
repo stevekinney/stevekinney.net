@@ -10,7 +10,8 @@ export const prerender = true;
 export const csr = false;
 
 export const load: PageServerLoad = async ({ params }) => {
-  const course = getCourseRoute(params.course);
+  const courseSlug = params.course.replace(/\.md$/i, '');
+  const course = getCourseRoute(courseSlug);
   if (!course) {
     throw error(404, 'Course not found');
   }

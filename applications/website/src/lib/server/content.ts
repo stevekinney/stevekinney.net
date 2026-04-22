@@ -31,6 +31,8 @@ const lessonSlugCourseMap = content.lessons.reduce<Map<string, string | null>>((
   return map;
 }, new Map<string, string | null>());
 
+const normalizeLegacyMarkdownSlug = (value: string): string => value.replace(/\.md$/i, '');
+
 export const getGeneratedContent = (): GeneratedContent => content;
 
 export const getPostIndex = (): WritingIndexEntry[] => content.siteIndex.posts;
@@ -46,7 +48,7 @@ export const getWritingEntry = (slug: string): WritingIndexEntry | null =>
   writingIndexBySlug.get(slug) ?? null;
 
 export const getCourseEntry = (slug: string): CourseIndexEntry | null =>
-  courseIndexBySlug.get(slug) ?? null;
+  courseIndexBySlug.get(normalizeLegacyMarkdownSlug(slug)) ?? null;
 
 export const getLessonEntry = (courseSlug: string, lessonSlug: string): LessonIndexEntry | null =>
   lessonIndexByKey.get(`${courseSlug}/${lessonSlug}`) ?? null;
@@ -57,7 +59,7 @@ export const getWritingRoute = (slug: string): WritingContentRoute | null => {
 };
 
 export const getCourseRoute = (courseSlug: string): CourseContentRoute | null => {
-  const route = getRouteByPath(`/courses/${courseSlug}`);
+  const route = getRouteByPath(`/courses/${normalizeLegacyMarkdownSlug(courseSlug)}`);
   return route?.contentType === 'course' ? route : null;
 };
 

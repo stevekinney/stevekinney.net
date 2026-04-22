@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import { afterEach, describe, expect, test } from 'bun:test';
 
-import { countFilesIfDirectoryExists, findFirstExistingDirectory } from './build-report.ts';
+import { countFilesIfDirectoryExists, findFirstDirectoryWithMatchingFile } from './build-report.ts';
 
 const temporaryDirectories: string[] = [];
 
@@ -28,6 +28,36 @@ afterEach(async () => {
 });
 
 describe('build report output discovery', () => {
+  test('skips an existing adapter output directory when it does not contain html files', async () => {
+    const temporaryDirectory = await createTemporaryDirectory();
+    const staticBuildRoot = path.join(temporaryDirectory, 'build');
+    const vercelStaticRoot = path.join(temporaryDirectory, '.vercel', 'output', 'static');
+
+    await writeTextFile(path.join(staticBuildRoot, 'assets', 'styles.css'), 'body {}');
+    await writeTextFile(path.join(vercelStaticRoot, 'index.html'), '<html></html>');
+
+    expect(
+      await findFirstDirectoryWithMatchingFile([staticBuildRoot, vercelStaticRoot], (filePath) =>
+        filePath.endsWith('.html'),
+      ),
+    ).toBe(vercelStaticRoot);
+  });
+
+  test('returns null when no adapter output directory contains a matching file', async () => {
+    const temporaryDirectory = await createTemporaryDirectory();
+    const staticBuildRoot = path.join(temporaryDirectory, 'build');
+    const vercelStaticRoot = path.join(temporaryDirectory, '.vercel', 'output', 'static');
+
+    await writeTextFile(path.join(staticBuildRoot, 'assets', 'styles.css'), 'body {}');
+    await writeTextFile(path.join(vercelStaticRoot, 'assets', 'bundle.js'), 'console.log(1);');
+
+    expect(
+      await findFirstDirectoryWithMatchingFile([staticBuildRoot, vercelStaticRoot], (filePath) =>
+        filePath.endsWith('.html'),
+      ),
+    ).toBeNull();
+  });
+
   test('falls back to the Vercel static output when the static adapter output is absent', async () => {
     const temporaryDirectory = await createTemporaryDirectory();
     const staticBuildRoot = path.join(temporaryDirectory, 'build');
@@ -35,9 +65,11 @@ describe('build report output discovery', () => {
 
     await writeTextFile(path.join(vercelStaticRoot, 'index.html'), '<html></html>');
 
-    expect(await findFirstExistingDirectory([staticBuildRoot, vercelStaticRoot])).toBe(
-      vercelStaticRoot,
-    );
+    expect(
+      await findFirstDirectoryWithMatchingFile([staticBuildRoot, vercelStaticRoot], (filePath) =>
+        filePath.endsWith('.html'),
+      ),
+    ).toBe(vercelStaticRoot);
   });
 
   test('returns zero instead of throwing when a build output directory is missing', async () => {

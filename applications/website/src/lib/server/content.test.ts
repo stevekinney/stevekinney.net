@@ -41,6 +41,16 @@ describe('generated content lookups', () => {
     });
   });
 
+  it('normalizes legacy markdown course slugs before looking up generated routes', () => {
+    const course = getCourseRoute('testing.md');
+
+    expect(course).toMatchObject({
+      contentType: 'course',
+      courseSlug: 'testing',
+      sourcePath: 'courses/testing/README.md',
+    });
+  });
+
   it('preserves the legacy lesson-slug redirect behavior only for unique lesson slugs', () => {
     expect(findCourseForLessonSlug('the-basics')).toBe('testing');
   });

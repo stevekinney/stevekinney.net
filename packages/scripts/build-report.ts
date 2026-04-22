@@ -79,12 +79,25 @@ const listFilesRecursively = async (directoryPath: string): Promise<string[]> =>
   return files.flat();
 };
 
-/** Select the first existing adapter output directory that contains built HTML files. */
-export const findFirstExistingDirectory = async (
+const directoryContainsMatchingFile = async (
+  directoryPath: string,
+  matcher: (filePath: string) => boolean,
+): Promise<boolean> => {
+  if (!(await directoryExists(directoryPath))) {
+    return false;
+  }
+
+  const files = await listFilesRecursively(directoryPath);
+  return files.some(matcher);
+};
+
+/** Select the first adapter output directory that contains at least one matching file. */
+export const findFirstDirectoryWithMatchingFile = async (
   directoryPaths: readonly string[],
+  matcher: (filePath: string) => boolean,
 ): Promise<string | null> => {
   for (const directoryPath of directoryPaths) {
-    if (await directoryExists(directoryPath)) {
+    if (await directoryContainsMatchingFile(directoryPath, matcher)) {
       return directoryPath;
     }
   }
@@ -167,7 +180,7 @@ export const countFilesIfDirectoryExists = async (
 };
 
 export const resolveWebsiteHtmlOutputRoot = async (): Promise<string | null> =>
-  findFirstExistingDirectory([websiteBuildRoot, websiteVercelStaticRoot]);
+  findFirstDirectoryWithMatchingFile([websiteBuildRoot, websiteVercelStaticRoot], htmlFileMatcher);
 
 export const main = async (): Promise<void> => {
   const generatedContent = JSON.parse(
