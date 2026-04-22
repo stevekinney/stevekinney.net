@@ -3,7 +3,7 @@ import { fromMarkdown } from 'mdast-util-from-markdown';
 import { visit } from 'unist-util-visit';
 import { VFile } from 'vfile';
 import type { Root } from 'mdast';
-import { fixMarkdownUrls } from '@stevekinney/plugins/remark-fix-urls';
+import { fixMarkdownUrls } from '@stevekinney/markdown/remark-fix-urls';
 
 const collectUrls = (tree: Root): string[] => {
   const urls: string[] = [];

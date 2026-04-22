@@ -15,12 +15,7 @@
         "../utilities/content-types.ts",
         "../utilities/frontmatter.ts",
         "../utilities/tailwind-playground.ts",
-        "../../applications/website/src/lib/content-enhancements.ts",
-        "../../applications/website/src/lib/copy-code-block-as-image.ts",
-        "../../applications/website/src/lib/actions/enhance-code-blocks.ts",
-        "../../applications/website/src/lib/actions/enhance-mermaid-diagrams.ts",
-        "../../applications/website/src/lib/actions/enhance-tailwind-playgrounds.ts",
-        "../../applications/website/src/lib/actions/enhance-tables.ts",
+        "../../applications/website/src/lib/content-enhancements/**/*.ts",
         "../../applications/website/static/**",
         "../../writing/**",
         "../../courses/**"
@@ -75,6 +70,7 @@
     "@stevekinney/scripts#test:unit": {
       "dependsOn": ["@stevekinney/scripts#content:build"],
       "inputs": [
+        "build-report/**/*.ts",
         "content-repository.test.ts",
         "content-build.ts",
         "content-paths.ts",
@@ -95,13 +91,14 @@
       ],
       "inputs": [
         "package.json",
+        "plugins/**/*.ts",
         "src/**",
         "static/**",
         "svelte.config.js",
         "vite.config.ts",
         "tsconfig.json",
         "../../packages/components/**/*.{svelte,ts,js}",
-        "../../packages/plugins/src/**/*.ts",
+        "../../packages/markdown/src/**/*.ts",
         "../../packages/utilities/**/*.ts",
         "../../image-manifest.json",
         ".generated/**",

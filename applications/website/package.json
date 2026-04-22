@@ -6,7 +6,7 @@
     "node": "24.x"
   },
   "dependencies": {
-    "@stevekinney/plugins": "workspace:*",
+    "@stevekinney/markdown": "workspace:*",
     "@stevekinney/utilities": "workspace:*"
   },
   "scripts": {

@@ -17,6 +17,7 @@
         "hastscript": "^9.0.1",
         "mermaid": "^11.4.1",
         "modern-screenshot": "^4.6.8",
+        "prose-writer": "^0.2.3",
         "sharp": "0.34.5",
         "simple-git": "^3.30.0",
         "zod": "^4.3.5",
@@ -117,15 +118,15 @@
     "applications/website": {
       "name": "@stevekinney/website",
       "dependencies": {
-        "@stevekinney/plugins": "workspace:*",
+        "@stevekinney/markdown": "workspace:*",
         "@stevekinney/utilities": "workspace:*",
       },
     },
     "packages/components": {
       "name": "@stevekinney/components",
     },
-    "packages/plugins": {
-      "name": "@stevekinney/plugins",
+    "packages/markdown": {
+      "name": "@stevekinney/markdown",
       "dependencies": {
         "@stevekinney/utilities": "workspace:*",
       },
@@ -613,7 +614,7 @@
 
     "@stevekinney/components": ["@stevekinney/components@workspace:packages/components"],
 
-    "@stevekinney/plugins": ["@stevekinney/plugins@workspace:packages/plugins"],
+    "@stevekinney/markdown": ["@stevekinney/markdown@workspace:packages/markdown"],
 
     "@stevekinney/scripts": ["@stevekinney/scripts@workspace:packages/scripts"],
 
@@ -2108,6 +2109,8 @@
     "prompts": ["prompts@2.4.2", "", { "dependencies": { "kleur": "^3.0.3", "sisteransi": "^1.0.5" } }, "sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q=="],
 
     "property-information": ["property-information@7.1.0", "", {}, "sha512-TwEZ+X+yCJmYfL7TPUOcvBZ4QfoT5YenQiJuX//0th53DE6w0xxLEtfK3iyryQFddXuvkIk51EEgrJQ0WJkOmQ=="],
+
+    "prose-writer": ["prose-writer@0.2.3", "", {}, "sha512-2fI/6Nn3SVya+y1HgATbtCqMo2ZYT6dU/tFsunixlky4A4a3m/8pzMX5OCitSzbUH0+kYDe7d9dObtxggDdMZw=="],
 
     "proxy-from-env": ["proxy-from-env@1.1.0", "", {}, "sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg=="],
 

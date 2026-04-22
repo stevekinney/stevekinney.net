@@ -2,16 +2,18 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
+import fg from 'fast-glob';
+
 import type { GeneratedContent } from '@stevekinney/utilities/content-types';
 import { formatJson } from '@stevekinney/utilities/write-formatted-json';
 
 import {
   contentEnhancementsEntryPath,
+  contentEnhancementsSourceDirectory,
   generatedContentDataPath,
   generatedContentDirectory,
   generatedContentEnhancementsDirectory,
   tailwindPlaygroundSourcePath,
-  websiteRoot,
 } from './content-paths.ts';
 import { collectContentRepository } from './content-repository.ts';
 
@@ -31,25 +33,26 @@ const writeIfChanged = async (filePath: string, contents: string): Promise<boole
   return true;
 };
 
-const enhancementSourcePaths: readonly string[] = [
-  contentEnhancementsEntryPath,
-  path.resolve(websiteRoot, 'src', 'lib', 'copy-code-block-as-image.ts'),
-  path.resolve(websiteRoot, 'src', 'lib', 'actions', 'enhance-code-blocks.ts'),
-  path.resolve(websiteRoot, 'src', 'lib', 'actions', 'enhance-mermaid-diagrams.ts'),
-  path.resolve(websiteRoot, 'src', 'lib', 'actions', 'enhance-tailwind-playgrounds.ts'),
-  path.resolve(websiteRoot, 'src', 'lib', 'actions', 'enhance-tables.ts'),
-];
-
 const enhancementsBuildHashPath = path.resolve(
   generatedContentEnhancementsDirectory,
   '.build-hash',
 );
 
+const listEnhancementSourceFiles = async (): Promise<string[]> => {
+  const matches = await fg('**/*.ts', {
+    cwd: contentEnhancementsSourceDirectory,
+    absolute: true,
+    onlyFiles: true,
+  });
+  return matches.sort();
+};
+
 const computeEnhancementSourceHash = async (): Promise<string> => {
   const hash = createHash('sha256');
-  for (const sourcePath of enhancementSourcePaths) {
+  for (const sourcePath of await listEnhancementSourceFiles()) {
+    const relativePath = path.relative(contentEnhancementsSourceDirectory, sourcePath);
     const contents = await readFile(sourcePath);
-    hash.update(sourcePath);
+    hash.update(relativePath);
     hash.update('\0');
     hash.update(contents);
     hash.update('\0');

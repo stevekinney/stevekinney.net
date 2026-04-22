@@ -1,11 +1,13 @@
 ---
 paths:
-  - '**/plugins/remark-*'
+  - 'packages/markdown/**'
   - '**/remark-*'
   - '**/rehype-*'
 ---
 
 # Remark/Unified Plugin Development
+
+mdsvex/remark/rehype transforms live in `packages/markdown/` (`@stevekinney/markdown`). Svelte config and content-pipeline scripts consume them via subpath exports like `@stevekinney/markdown/remark-fix-urls`.
 
 When developing remark or unified plugins:
 

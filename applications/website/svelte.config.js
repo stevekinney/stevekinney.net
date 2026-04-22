@@ -1,11 +1,11 @@
 import staticAdapter from '@sveltejs/adapter-static';
 import vercelAdapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import remarkCallouts from '@stevekinney/plugins/remark-callouts';
-import remarkEscapeComparators from '@stevekinney/plugins/remark-escape-comparators';
-import { fixMarkdownUrls } from '@stevekinney/plugins/remark-fix-urls';
-import remarkTailwindPlayground from '@stevekinney/plugins/remark-tailwind-playground';
-import rehypeEnhanceImages from '@stevekinney/plugins/rehype-enhance-images';
+import remarkCallouts from '@stevekinney/markdown/remark-callouts';
+import remarkEscapeComparators from '@stevekinney/markdown/remark-escape-comparators';
+import { fixMarkdownUrls } from '@stevekinney/markdown/remark-fix-urls';
+import remarkTailwindPlayground from '@stevekinney/markdown/remark-tailwind-playground';
+import rehypeEnhanceImages from '@stevekinney/markdown/rehype-enhance-images';
 import { extractAnnotations, injectAnnotations } from './src/lib/code-annotations.js';
 
 import { escapeSvelte, mdsvex } from 'mdsvex';

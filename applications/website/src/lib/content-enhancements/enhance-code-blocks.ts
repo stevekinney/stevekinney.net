@@ -28,7 +28,7 @@ const CONTAINER_BASE_CLASSES = [
 ];
 const CONTAINER_FLOATING_CLASSES = ['absolute', 'right-2', 'top-2', 'z-10'];
 
-type ImageCopyModule = typeof import('../copy-code-block-as-image');
+type ImageCopyModule = typeof import('./copy-code-block-as-image');
 
 let imageCopyModulePromise: Promise<ImageCopyModule> | null = null;
 
@@ -40,7 +40,7 @@ const canAttemptImageCopy = (): boolean =>
 
 const getImageCopyModule = (): Promise<ImageCopyModule> => {
   if (!imageCopyModulePromise) {
-    imageCopyModulePromise = import('../copy-code-block-as-image');
+    imageCopyModulePromise = import('./copy-code-block-as-image');
   }
 
   return imageCopyModulePromise;

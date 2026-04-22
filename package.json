@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "turbo run dev --filter=@stevekinney/website",
     "build": "turbo run build --filter=@stevekinney/website && if [ -n \"$VERCEL\" ] && [ -d applications/website/.vercel/output ]; then mkdir -p .vercel/output && cp -R applications/website/.vercel/output/. .vercel/output/; fi",
-    "build:report": "bun run packages/scripts/build-report.ts",
+    "build:report": "bun run packages/scripts/build-report/build-report.ts",
     "continuous-integration:build": "turbo run build --filter=@stevekinney/website --summarize && bun run build:report",
     "continuous-integration:validate": "bun run content:validate && bun run content:images:check && bun run lint && bun run check && bun run test:unit",
     "build:stats": "turbo run build:stats --filter=@stevekinney/website",
@@ -134,6 +134,7 @@
     "hastscript": "^9.0.1",
     "mermaid": "^11.4.1",
     "modern-screenshot": "^4.6.8",
+    "prose-writer": "^0.2.3",
     "sharp": "0.34.5",
     "simple-git": "^3.30.0",
     "zod": "^4.3.5"

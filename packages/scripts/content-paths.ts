@@ -28,10 +28,14 @@ export const tailwindPlaygroundSourcePath = path.resolve(
   generatedContentDirectory,
   'tailwind-playground-source.html',
 );
-export const contentEnhancementsEntryPath = path.resolve(
+export const contentEnhancementsSourceDirectory = path.resolve(
   websiteRoot,
   'src',
   'lib',
+  'content-enhancements',
+);
+export const contentEnhancementsEntryPath = path.resolve(
+  contentEnhancementsSourceDirectory,
   'content-enhancements.ts',
 );
 export const generatedContentEnhancementsDirectory = path.resolve(

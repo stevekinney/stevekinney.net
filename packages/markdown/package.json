@@ -1,5 +1,5 @@
 {
-  "name": "@stevekinney/plugins",
+  "name": "@stevekinney/markdown",
   "private": true,
   "type": "module",
   "dependencies": {

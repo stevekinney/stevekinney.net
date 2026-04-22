@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Code, Html, Root } from 'mdast';
 import { VFile } from 'vfile';
-import remarkTailwindPlayground from '@stevekinney/plugins/remark-tailwind-playground';
+import remarkTailwindPlayground from '@stevekinney/markdown/remark-tailwind-playground';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const transform = (remarkTailwindPlayground as any)() as (tree: Root, file: VFile) => void;

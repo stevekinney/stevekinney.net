@@ -4,20 +4,19 @@ type Enhancer = (root: HTMLElement) => EnhancerResult | Promise<EnhancerResult>;
 const enhancers: ReadonlyArray<{ selector: string; load: () => Promise<Enhancer> }> = [
   {
     selector: '[data-tailwind-playground]',
-    load: async () =>
-      (await import('./actions/enhance-tailwind-playgrounds')).enhanceTailwindPlaygrounds,
+    load: async () => (await import('./enhance-tailwind-playgrounds')).enhanceTailwindPlaygrounds,
   },
   {
     selector: '[data-language]',
-    load: async () => (await import('./actions/enhance-code-blocks')).enhanceCodeBlocks,
+    load: async () => (await import('./enhance-code-blocks')).enhanceCodeBlocks,
   },
   {
     selector: '[data-mermaid]',
-    load: async () => (await import('./actions/enhance-mermaid-diagrams')).enhanceMermaidDiagrams,
+    load: async () => (await import('./enhance-mermaid-diagrams')).enhanceMermaidDiagrams,
   },
   {
     selector: 'table',
-    load: async () => (await import('./actions/enhance-tables')).enhanceTables,
+    load: async () => (await import('./enhance-tables')).enhanceTables,
   },
 ];
 

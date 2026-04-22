@@ -4,7 +4,10 @@ import path from 'node:path';
 
 import { afterEach, describe, expect, test } from 'bun:test';
 
-import { countFilesIfDirectoryExists, findFirstDirectoryWithMatchingFile } from './build-report.ts';
+import {
+  countFilesIfDirectoryExists,
+  findFirstDirectoryWithMatchingFile,
+} from './inspect-website-output.ts';
 
 const temporaryDirectories: string[] = [];
 
