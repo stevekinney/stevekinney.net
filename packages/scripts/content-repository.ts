@@ -3,6 +3,9 @@ import { existsSync } from 'node:fs';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import fg from 'fast-glob';
+import GithubSlugger from 'github-slugger';
+import { toString } from 'mdast-util-to-string';
+import type { Root } from 'mdast';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import { visit } from 'unist-util-visit';
@@ -39,8 +42,33 @@ type MarkdownReferenceNode = {
   url?: string;
 };
 
+type ParsedFrontmatter = ReturnType<typeof parseFrontmatter>;
+
+type MarkdownSource = {
+  absolutePath: string;
+  sourcePath: string;
+  sourceHash: string;
+  data: ParsedFrontmatter['data'];
+  content: string;
+  tree: Root;
+  headingAnchors: Set<string>;
+  tailwindPlaygrounds: string[];
+};
+
+type CourseContentsSource = {
+  sourcePath: string;
+  sourceHash: string;
+  contents?: CourseContentsData;
+};
+
+type LessonRecord = LessonIndexEntry & {
+  source: MarkdownSource;
+};
+
 type CourseRecord = CourseIndexEntry & {
-  lessons: LessonIndexEntry[];
+  source: MarkdownSource;
+  contentsSource?: CourseContentsSource;
+  lessons: LessonRecord[];
 };
 
 export type ContentRepository = GeneratedContent & {
@@ -107,6 +135,53 @@ const fileExists = async (absolutePath: string): Promise<boolean> => {
   }
 };
 
+const collectHeadingAnchors = (tree: Root): Set<string> => {
+  const headingAnchors = new Set<string>();
+  const slugger = new GithubSlugger();
+
+  visit(tree, 'heading', (node) => {
+    const anchor = slugger.slug(toString(node));
+    if (anchor) {
+      headingAnchors.add(anchor);
+    }
+  });
+
+  return headingAnchors;
+};
+
+const extractTailwindPlaygrounds = (tree: Root): string[] => {
+  const playgrounds: string[] = [];
+
+  visit(tree, 'code', (node) => {
+    if (node.lang !== 'html') return;
+    if (!node.meta || !node.meta.includes('tailwind')) return;
+
+    const sanitized = sanitizeTailwindPlaygroundHtml(node.value ?? '');
+    if (sanitized.trim().length > 0) {
+      playgrounds.push(sanitized);
+    }
+  });
+
+  return playgrounds;
+};
+
+const loadMarkdownSource = async (absolutePath: string): Promise<MarkdownSource> => {
+  const raw = await readText(absolutePath);
+  const { data, content } = parseFrontmatter(raw);
+  const tree = markdownParser.parse(content);
+
+  return {
+    absolutePath,
+    sourcePath: relativeSourcePath(absolutePath),
+    sourceHash: hashContents(raw),
+    data,
+    content,
+    tree,
+    headingAnchors: collectHeadingAnchors(tree),
+    tailwindPlaygrounds: extractTailwindPlaygrounds(tree),
+  };
+};
+
 const safeDateString = (
   file: string,
   value: unknown,
@@ -142,6 +217,23 @@ const requiredString = (
   });
 
   return '';
+};
+
+const validateHeadingAnchor = (
+  file: string,
+  urlPath: string,
+  headingAnchors: Set<string>,
+  issues: ContentValidationIssue[],
+): void => {
+  const anchor = urlPath.slice(1);
+  if (!anchor) return;
+
+  if (!headingAnchors.has(anchor)) {
+    issues.push({
+      file,
+      message: `Unknown heading anchor '${urlPath}'.`,
+    });
+  }
 };
 
 const validateRootLink = (
@@ -227,17 +319,22 @@ const validateRelativeLink = async (
 
 const validateMarkdownLinks = async (
   file: string,
-  markdownBody: string,
+  tree: Root,
+  headingAnchors: Set<string>,
   routePaths: Set<string>,
   courseDirectories: Set<string>,
   issues: ContentValidationIssue[],
 ): Promise<void> => {
-  const tree = markdownParser.parse(markdownBody);
   const tasks: Promise<void>[] = [];
 
   visit(tree, ['link', 'image', 'definition'], (node) => {
     const url = String((node as MarkdownReferenceNode).url ?? '').trim();
-    if (!url || isExternalUrl(url)) return;
+    if (!url) return;
+    if (url.startsWith('#')) {
+      validateHeadingAnchor(file, url, headingAnchors, issues);
+      return;
+    }
+    if (isExternalUrl(url)) return;
 
     const normalizedUrl = stripQueryAndHash(url);
     if (!normalizedUrl) return;
@@ -253,24 +350,33 @@ const validateMarkdownLinks = async (
   await Promise.all(tasks);
 };
 
-const parseCourseContents = async (
+const loadCourseContentsSource = async (
   absolutePath: string,
   issues: ContentValidationIssue[],
-): Promise<CourseContentsData | undefined> => {
+): Promise<CourseContentsSource | undefined> => {
   if (!(await fileExists(absolutePath))) {
     return undefined;
   }
 
+  const sourcePath = relativeSourcePath(absolutePath);
+  const raw = await readText(absolutePath);
+
   try {
-    const contents = await readText(absolutePath);
-    const parsed = Bun.TOML.parse(contents) as CourseContentsData;
-    return parsed;
+    return {
+      sourcePath,
+      sourceHash: hashContents(raw),
+      contents: Bun.TOML.parse(raw) as CourseContentsData,
+    };
   } catch (error) {
     issues.push({
-      file: relativeSourcePath(absolutePath),
+      file: sourcePath,
       message: `Failed to parse index.toml: ${(error as Error).message}`,
     });
-    return undefined;
+
+    return {
+      sourcePath,
+      sourceHash: hashContents(raw),
+    };
   }
 };
 
@@ -305,31 +411,12 @@ const validateCourseContents = (
   }
 };
 
-const extractTailwindPlaygrounds = (markdownBody: string): string[] => {
-  const tree = markdownParser.parse(markdownBody);
-  const playgrounds: string[] = [];
-
-  visit(tree, 'code', (node) => {
-    if (node.lang !== 'html') return;
-    if (!node.meta || !node.meta.includes('tailwind')) return;
-
-    const sanitized = sanitizeTailwindPlaygroundHtml(node.value ?? '');
-    if (sanitized.trim().length > 0) {
-      playgrounds.push(sanitized);
-    }
-  });
-
-  return playgrounds;
-};
-
 const buildWritingEntry = async (
-  absolutePath: string,
+  source: MarkdownSource,
   issues: ContentValidationIssue[],
 ): Promise<WritingIndexEntry> => {
-  const sourcePath = relativeSourcePath(absolutePath);
-  const slug = path.basename(absolutePath, '.md');
-  const raw = await readText(absolutePath);
-  const { data } = parseFrontmatter(raw);
+  const { data, sourceHash, sourcePath } = source;
+  const slug = path.basename(source.absolutePath, '.md');
 
   return {
     title: requiredString(sourcePath, data.title, 'title', issues),
@@ -339,7 +426,7 @@ const buildWritingEntry = async (
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     slug,
     sourcePath,
-    sourceHash: hashContents(raw),
+    sourceHash,
     path: `/writing/${slug}`,
   };
 };
@@ -361,9 +448,10 @@ const buildCourseEntry = async (
     return null;
   }
 
-  const rawReadme = await readText(readmePath);
-  const { data } = parseFrontmatter(rawReadme);
-  const lessons: LessonIndexEntry[] = [];
+  const readmeSource = await loadMarkdownSource(readmePath);
+  const { data } = readmeSource;
+  const lessons: LessonRecord[] = [];
+  const courseTitle = requiredString(readmeSource.sourcePath, data.title, 'title', issues);
 
   const lessonFiles = await fg('*.md', {
     cwd: courseDirectory,
@@ -394,43 +482,45 @@ const buildCourseEntry = async (
 
     lessonSlugSet.add(lessonSlug);
 
-    const rawLesson = await readText(lessonPath);
-    const parsedLesson = parseFrontmatter(rawLesson);
-    const sourcePath = relativeSourcePath(lessonPath);
+    const lessonSource = await loadMarkdownSource(lessonPath);
+    const sourcePath = lessonSource.sourcePath;
 
     lessons.push({
-      title: requiredString(sourcePath, parsedLesson.data.title, 'title', issues),
-      description: requiredString(sourcePath, parsedLesson.data.description, 'description', issues),
-      date: safeDateString(sourcePath, parsedLesson.data.date, 'date', issues),
-      modified: safeDateString(sourcePath, parsedLesson.data.modified, 'modified', issues),
+      title: requiredString(sourcePath, lessonSource.data.title, 'title', issues),
+      description: requiredString(sourcePath, lessonSource.data.description, 'description', issues),
+      date: safeDateString(sourcePath, lessonSource.data.date, 'date', issues),
+      modified: safeDateString(sourcePath, lessonSource.data.modified, 'modified', issues),
       slug: lessonSlug,
       courseSlug,
-      courseTitle: requiredString(relativeSourcePath(readmePath), data.title, 'title', issues),
-      tags: Array.isArray(parsedLesson.data.tags) ? parsedLesson.data.tags.map(String) : [],
+      courseTitle,
+      tags: Array.isArray(lessonSource.data.tags) ? lessonSource.data.tags.map(String) : [],
       sourcePath,
-      sourceHash: hashContents(rawLesson),
+      sourceHash: lessonSource.sourceHash,
       path: `/courses/${courseSlug}/${lessonSlug}`,
+      source: lessonSource,
     });
   }
 
-  const courseContents = await parseCourseContents(contentsPath, issues);
-  validateCourseContents(relativeSourcePath(contentsPath), courseContents, lessonSlugSet, issues);
+  const courseContentsSource = await loadCourseContentsSource(contentsPath, issues);
+  validateCourseContents(
+    courseContentsSource?.sourcePath ?? relativeSourcePath(contentsPath),
+    courseContentsSource?.contents,
+    lessonSlugSet,
+    issues,
+  );
 
   return {
-    title: requiredString(relativeSourcePath(readmePath), data.title, 'title', issues),
-    description: requiredString(
-      relativeSourcePath(readmePath),
-      data.description,
-      'description',
-      issues,
-    ),
-    date: safeDateString(relativeSourcePath(readmePath), data.date, 'date', issues),
-    modified: safeDateString(relativeSourcePath(readmePath), data.modified, 'modified', issues),
+    title: courseTitle,
+    description: requiredString(readmeSource.sourcePath, data.description, 'description', issues),
+    date: safeDateString(readmeSource.sourcePath, data.date, 'date', issues),
+    modified: safeDateString(readmeSource.sourcePath, data.modified, 'modified', issues),
     slug: courseSlug,
-    sourcePath: relativeSourcePath(readmePath),
-    sourceHash: hashContents(rawReadme),
+    sourcePath: readmeSource.sourcePath,
+    sourceHash: readmeSource.sourceHash,
     path: `/courses/${courseSlug}`,
-    contents: courseContents,
+    contents: courseContentsSource?.contents,
+    source: readmeSource,
+    contentsSource: courseContentsSource,
     lessons,
   };
 };
@@ -535,17 +625,15 @@ const validateRouteCollisions = (
   }
 };
 
-const buildRepositoryHash = async (sourceFiles: string[]): Promise<string> => {
-  const signatures = await Promise.all(
-    sourceFiles.map(async (sourceFile) => {
-      const absolutePath = resolveRepositoryPath(sourceFile);
-      const contents = await readFile(absolutePath);
-      return `${sourceFile}:${createHash('sha256').update(contents).digest('hex')}`;
-    }),
-  );
-
-  return createHash('sha256').update(signatures.sort().join('|')).digest('hex');
-};
+const buildRepositoryHash = (sourceHashes: Map<string, string>): string =>
+  createHash('sha256')
+    .update(
+      [...sourceHashes.entries()]
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([sourceFile, sourceHash]) => `${sourceFile}:${sourceHash}`)
+        .join('|'),
+    )
+    .digest('hex');
 
 export const collectContentRepository = async (): Promise<ContentRepository> => {
   const validationIssues: ContentValidationIssue[] = [];
@@ -559,9 +647,12 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     absolute: true,
     onlyDirectories: true,
   });
+  const writingSources = await Promise.all(
+    writingFiles.sort().map((file) => loadMarkdownSource(file)),
+  );
 
   const writingEntries = await Promise.all(
-    writingFiles.sort().map((file) => buildWritingEntry(file, validationIssues)),
+    writingSources.map((source) => buildWritingEntry(source, validationIssues)),
   );
   const courseEntries = (
     await Promise.all(
@@ -576,17 +667,15 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   const courseDirectorySlugs = new Set(courseEntries.map((entry) => entry.slug));
 
   const tailwindPlaygrounds: string[] = [];
-  const sourceFiles = new Set<string>();
+  const sourceHashes = new Map<string, string>();
 
-  for (const writingFile of writingFiles) {
-    const sourcePath = relativeSourcePath(writingFile);
-    sourceFiles.add(sourcePath);
-    const raw = await readText(writingFile);
-    const parsed = parseFrontmatter(raw);
-    tailwindPlaygrounds.push(...extractTailwindPlaygrounds(parsed.content));
+  for (const writingSource of writingSources) {
+    sourceHashes.set(writingSource.sourcePath, writingSource.sourceHash);
+    tailwindPlaygrounds.push(...writingSource.tailwindPlaygrounds);
     await validateMarkdownLinks(
-      sourcePath,
-      parsed.content,
+      writingSource.sourcePath,
+      writingSource.tree,
+      writingSource.headingAnchors,
       routePaths,
       courseDirectorySlugs,
       validationIssues,
@@ -594,31 +683,28 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   }
 
   for (const course of courseEntries) {
-    sourceFiles.add(course.sourcePath);
-
-    const readmeRaw = await readText(resolveRepositoryPath(course.sourcePath));
-    const parsedReadme = parseFrontmatter(readmeRaw);
-    tailwindPlaygrounds.push(...extractTailwindPlaygrounds(parsedReadme.content));
+    sourceHashes.set(course.source.sourcePath, course.source.sourceHash);
+    tailwindPlaygrounds.push(...course.source.tailwindPlaygrounds);
     await validateMarkdownLinks(
       course.sourcePath,
-      parsedReadme.content,
+      course.source.tree,
+      course.source.headingAnchors,
       routePaths,
       courseDirectorySlugs,
       validationIssues,
     );
 
-    if (course.contents) {
-      sourceFiles.add(normalizePath(path.join('courses', course.slug, 'index.toml')));
+    if (course.contentsSource) {
+      sourceHashes.set(course.contentsSource.sourcePath, course.contentsSource.sourceHash);
     }
 
     for (const lesson of course.lessons) {
-      sourceFiles.add(lesson.sourcePath);
-      const lessonRaw = await readText(resolveRepositoryPath(lesson.sourcePath));
-      const parsedLesson = parseFrontmatter(lessonRaw);
-      tailwindPlaygrounds.push(...extractTailwindPlaygrounds(parsedLesson.content));
+      sourceHashes.set(lesson.source.sourcePath, lesson.source.sourceHash);
+      tailwindPlaygrounds.push(...lesson.source.tailwindPlaygrounds);
       await validateMarkdownLinks(
-        lesson.sourcePath,
-        parsedLesson.content,
+        lesson.source.sourcePath,
+        lesson.source.tree,
+        lesson.source.headingAnchors,
         routePaths,
         courseDirectorySlugs,
         validationIssues,
@@ -626,16 +712,23 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     }
   }
 
-  const repositoryHash = await buildRepositoryHash([...sourceFiles]);
+  const sourceFiles = [...sourceHashes.keys()].sort();
+  const repositoryHash = buildRepositoryHash(sourceHashes);
+  const lessonEntries = courseEntries
+    .flatMap((course) => course.lessons)
+    .map(({ source: _source, ...lesson }) => lesson)
+    .sort(compareByDate);
   const siteIndex: SiteContentIndex = {
     posts: [...writingEntries].sort(compareByDate),
     courses: [...courseEntries]
-      .map(({ lessons: _lessons, ...course }) => course)
+      .map(
+        ({ lessons: _lessons, source: _source, contentsSource: _contentsSource, ...course }) =>
+          course,
+      )
       .sort(compareByDate),
   };
 
-  const lessons = courseEntries.flatMap((course) => course.lessons).sort(compareByDate);
-  const uniqueLessonRedirectSlugs = lessons
+  const uniqueLessonRedirectSlugs = lessonEntries
     .reduce<Map<string, string | null>>((map, lesson) => {
       const existing = map.get(lesson.slug);
       if (existing && existing !== lesson.courseSlug) {
@@ -657,7 +750,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   return {
     meta: {
       hash: repositoryHash,
-      sourceFileCount: sourceFiles.size,
+      sourceFileCount: sourceFiles.length,
       routeCount: Object.keys(routes).length,
       playgroundCount: tailwindPlaygrounds.length,
     },
@@ -665,7 +758,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     routes,
     writing: siteIndex.posts,
     courses: siteIndex.courses,
-    lessons,
+    lessons: lessonEntries,
     prerenderEntries: {
       writing: [
         ...writingEntries.map((entry) => ({ slug: entry.slug })),
@@ -676,12 +769,12 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
         ...legacyCourseRedirectEntries,
       ],
       lessons: [
-        ...lessons.map((entry) => ({ course: entry.courseSlug, lesson: entry.slug })),
-        ...lessons.map((entry) => ({ course: entry.courseSlug, lesson: `${entry.slug}.md` })),
+        ...lessonEntries.map((entry) => ({ course: entry.courseSlug, lesson: entry.slug })),
+        ...lessonEntries.map((entry) => ({ course: entry.courseSlug, lesson: `${entry.slug}.md` })),
       ],
     },
     validationIssues,
     tailwindPlaygroundSource: buildTailwindPlaygroundSource(tailwindPlaygrounds),
-    sourceFiles: [...sourceFiles].sort(),
+    sourceFiles,
   };
 };

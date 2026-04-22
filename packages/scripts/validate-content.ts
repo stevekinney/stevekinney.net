@@ -14,6 +14,8 @@ const main = async (): Promise<void> => {
   console.log(
     `Content validation passed: ${repository.meta.routeCount} routes across ${repository.meta.sourceFileCount} source files.`,
   );
+  // Bun can keep these CLI tasks alive after the work is done, so exit explicitly.
+  process.exit(0);
 };
 
 await main();

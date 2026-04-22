@@ -111,7 +111,7 @@ describe('collectContentRepository', () => {
       );
       await writeTextFile(
         brokenLinkWritingPath,
-        `---\ntitle: Temporary Broken Link\ndescription: Triggers a broken asset validation issue.\ndate: 2025-01-01\nmodified: 2025-01-01\n---\n\n[Missing asset](/zz-temporary-missing-asset-${randomUUID()}.png)\n`,
+        `---\ntitle: Temporary Broken Link\ndescription: Triggers broken link validation issues.\ndate: 2025-01-01\nmodified: 2025-01-01\n---\n\n## Temporary Heading\n\n[Missing asset](/zz-temporary-missing-asset-${randomUUID()}.png)\n[Missing section](#does-not-exist)\n`,
       );
 
       const repository = await collectContentRepository();
@@ -123,6 +123,7 @@ describe('collectContentRepository', () => {
           expect.stringContaining("index.toml references missing lesson 'missing-lesson.md'."),
           expect.stringContaining("Writing slug 'page' collides with a reserved route."),
           expect.stringContaining('Missing static asset for link'),
+          expect.stringContaining("Unknown heading anchor '#does-not-exist'."),
         ]),
       );
     } finally {

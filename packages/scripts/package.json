@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "content:build": "bun run content-build.ts",
-    "content:validate": "bun run validate-content.ts",
+    "content:build": "bun content-build.ts",
+    "content:validate": "bun validate-content.ts",
     "test": "bun run test:unit",
     "test:unit": "bun test --timeout 30000",
     "content:images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" bun run run-with-sharp-runtime.ts node validate-image-compatibility.ts",

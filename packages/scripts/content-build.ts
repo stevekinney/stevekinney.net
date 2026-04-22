@@ -88,12 +88,15 @@ const main = async (): Promise<void> => {
 
   if (!didWriteContentData && !didWriteTailwindSource) {
     console.log('Generated content artifacts are already up to date.');
-    return;
+    // Bun can keep these CLI tasks alive after the work is done, so exit explicitly.
+    process.exit(0);
   }
 
   console.log(
     `Generated ${repository.meta.routeCount} routes from ${repository.meta.sourceFileCount} source files.`,
   );
+  // Bun can keep these CLI tasks alive after the work is done, so exit explicitly.
+  process.exit(0);
 };
 
 await main();
