@@ -39,3 +39,21 @@ test('tailwind playground previews are progressively enhanced on content pages',
   await expect(playground).not.toHaveAttribute('role', 'presentation');
   await expect(playground).not.toHaveAttribute('inert', '');
 });
+
+test.describe('exactly one content document wrapper per content page', () => {
+  // Regression: a shared markdown layout briefly added its own
+  // `data-content-document` wrapper on top of the per-route one, which caused
+  // every code block, table, and playground to be enhanced twice.
+  const contentPages = [
+    '/writing/setup-python',
+    '/courses/testing/the-basics',
+    '/courses/tailwind/utility-first',
+  ];
+
+  for (const pagePath of contentPages) {
+    test(`${pagePath} exposes a single data-content-document wrapper`, async ({ page }) => {
+      await page.goto(pagePath);
+      await expect(page.locator('[data-content-document]')).toHaveCount(1);
+    });
+  }
+});

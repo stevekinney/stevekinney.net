@@ -1,5 +1,4 @@
 <script>
-  import ContentEnhancements from '$lib/components/content-enhancements.svelte';
   import { toDataAttributes } from '$lib/to-data-attributes';
 
   /** @type {string | undefined | null} */
@@ -17,12 +16,10 @@
   const { class: className = '', children, title, ...rest } = $props();
 </script>
 
-<ContentEnhancements />
-
 <div class={className} {...toDataAttributes(rest)}>
   <h1 class="mb-6 text-4xl font-bold">{title}</h1>
 
-  <article class="prose dark:prose-invert max-w-none" data-content-document>
+  <article class="prose dark:prose-invert max-w-none">
     {@render children?.()}
   </article>
 </div>
