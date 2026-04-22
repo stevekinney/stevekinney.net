@@ -10,14 +10,9 @@ import type {
   WritingContentRoute,
   WritingIndexEntry,
 } from '@stevekinney/utilities/content-types';
+import { normalizeRoutePath } from '@stevekinney/utilities/routes';
 
 const content = generatedContent as GeneratedContent;
-
-const normalizeRoutePath = (value: string): string => {
-  if (!value) return '/';
-  const normalized = value === '/' ? value : value.replace(/\/$/, '');
-  return normalized || '/';
-};
 
 const writingIndexBySlug = new Map(content.writing.map((entry) => [entry.slug, entry]));
 const courseIndexBySlug = new Map(content.courses.map((entry) => [entry.slug, entry]));

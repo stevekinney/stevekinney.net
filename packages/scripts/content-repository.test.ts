@@ -15,15 +15,17 @@ const writeTextFile = async (filePath: string, contents: string): Promise<void> 
 };
 
 describe('collectContentRepository', () => {
+  const repositoryPromise = collectContentRepository();
+
   test('validates the current repository content graph', async () => {
-    const repository = await collectContentRepository();
+    const repository = await repositoryPromise;
     expect(repository.validationIssues).toEqual([]);
     expect(repository.meta.routeCount).toBeGreaterThan(800);
     expect(repository.meta.sourceFileCount).toBeGreaterThan(800);
   });
 
   test('builds a route map for writing, course, and lesson content', async () => {
-    const repository = await collectContentRepository();
+    const repository = await repositoryPromise;
     expect(repository.routes['/writing/setup-python']).toMatchObject({
       contentType: 'writing',
       slug: 'setup-python',
@@ -45,7 +47,7 @@ describe('collectContentRepository', () => {
   });
 
   test('produces deterministic metadata for content routes', async () => {
-    const repository = await collectContentRepository();
+    const repository = await repositoryPromise;
     const route = repository.routes['/writing/setup-python'];
 
     expect(route.sourceHash).toMatch(/^[a-f0-9]{64}$/);
@@ -54,7 +56,7 @@ describe('collectContentRepository', () => {
   });
 
   test('includes canonical and legacy prerender entries for long-form content routes', async () => {
-    const repository = await collectContentRepository();
+    const repository = await repositoryPromise;
 
     expect(repository.prerenderEntries.writing).toContainEqual({ slug: 'setup-python' });
     expect(repository.prerenderEntries.writing).toContainEqual({ slug: 'setup-python.md' });
@@ -72,7 +74,7 @@ describe('collectContentRepository', () => {
   });
 
   test('extracts sanitized Tailwind playground source', async () => {
-    const repository = await collectContentRepository();
+    const repository = await repositoryPromise;
     expect(repository.tailwindPlaygroundSource).toContain('bg-blue-600');
     expect(repository.tailwindPlaygroundSource).toContain('rounded-md');
     expect(repository.tailwindPlaygroundSource).not.toContain('<script');

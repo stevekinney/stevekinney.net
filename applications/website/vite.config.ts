@@ -21,8 +21,7 @@ const applyClientBuildOnly = (plugin: unknown): PluginOption => {
   return plugin as PluginOption;
 };
 
-const IMAGE_MIME_TYPES: Record<string, string> = {
-  '.js': 'application/javascript; charset=utf-8',
+const CONTENT_ASSET_MIME_TYPES: Record<string, string> = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -30,6 +29,11 @@ const IMAGE_MIME_TYPES: Record<string, string> = {
   '.svg': 'image/svg+xml',
   '.webp': 'image/webp',
   '.avif': 'image/avif',
+};
+
+const GENERATED_ASSET_MIME_TYPES: Record<string, string> = {
+  '.js': 'application/javascript; charset=utf-8',
+  ...CONTENT_ASSET_MIME_TYPES,
 };
 
 const generatedContentEnhancementsRoot = path.resolve(
@@ -143,7 +147,7 @@ function serveGeneratedContentEnhancements(): PluginOption {
           return next();
         }
 
-        const contentType = IMAGE_MIME_TYPES[path.extname(pathname).toLowerCase()];
+        const contentType = GENERATED_ASSET_MIME_TYPES[path.extname(pathname).toLowerCase()];
         if (!contentType) return next();
 
         const relativePath = pathname.slice(generatedPrefix.length);
@@ -187,7 +191,7 @@ function serveContentAssets(): PluginOption {
           return next();
         }
 
-        const contentType = IMAGE_MIME_TYPES[path.extname(pathname).toLowerCase()];
+        const contentType = CONTENT_ASSET_MIME_TYPES[path.extname(pathname).toLowerCase()];
         if (!contentType) return next();
 
         const filePath = path.resolve(workspaceRoot, pathname.slice(1));

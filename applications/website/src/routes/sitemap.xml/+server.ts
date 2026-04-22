@@ -40,6 +40,16 @@ const getStaticLastModified = async (filePath: string): Promise<Date | null> => 
   }
 };
 
+const getContentLastModified = (modified: string, date: string): Date | null => {
+  const value = modified || date;
+  if (!value) {
+    return null;
+  }
+
+  const lastModified = new Date(value);
+  return Number.isNaN(lastModified.getTime()) ? null : lastModified;
+};
+
 export const GET = async () => {
   const checked: Set<string> = new Set();
   const paths: Element[] = [];
@@ -67,7 +77,7 @@ export const GET = async () => {
       h('url', [
         h('loc', url),
         h('priority', getStaticPriority(filePath)),
-        h('lastmod', lastModified?.toISOString()),
+        ...(lastModified ? [h('lastmod', lastModified.toISOString())] : []),
       ]),
     );
   }
@@ -77,8 +87,8 @@ export const GET = async () => {
     if (checked.has(url)) continue;
     checked.add(url);
 
-    const lastModified = new Date(route.modified || route.date);
-    if (!Number.isNaN(lastModified.getTime()) && lastModified > mostRecent) {
+    const lastModified = getContentLastModified(route.modified, route.date);
+    if (lastModified && lastModified > mostRecent) {
       mostRecent = lastModified;
     }
 
@@ -86,7 +96,11 @@ export const GET = async () => {
       route.contentType === 'course' ? 0.8 : route.contentType === 'writing' ? 0.7 : 0.6;
 
     paths.push(
-      h('url', [h('loc', url), h('priority', priority), h('lastmod', lastModified.toISOString())]),
+      h('url', [
+        h('loc', url),
+        h('priority', priority),
+        ...(lastModified ? [h('lastmod', lastModified.toISOString())] : []),
+      ]),
     );
   }
 
