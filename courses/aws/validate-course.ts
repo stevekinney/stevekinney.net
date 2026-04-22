@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -5,9 +6,9 @@ import path from 'node:path';
 const courseDirectory = fileURLToPath(new URL('.', import.meta.url));
 const assetsDirectory = path.join(courseDirectory, 'assets');
 const markdownFiles = readdirSync(courseDirectory).filter((name) => name.endsWith('.md'));
-const markdownFileSet = new Set(markdownFiles);
+const markdownFileSet: Set<string> = new Set(markdownFiles);
 const lessonMarkdownFiles = markdownFiles.filter((name) => name !== 'README.md');
-const assetFileSet = existsSync(assetsDirectory)
+const assetFileSet: Set<string> = existsSync(assetsDirectory)
   ? new Set(readdirSync(assetsDirectory))
   : new Set();
 
@@ -20,7 +21,7 @@ const duplicateIndexTargets = indexMarkdownTargets.filter(
   (target, index) => indexMarkdownTargets.indexOf(target) !== index,
 );
 
-const failures = [];
+const failures: string[] = [];
 
 for (const duplicateIndexTarget of new Set(duplicateIndexTargets)) {
   failures.push(`index.toml: duplicate lesson entry for ${duplicateIndexTarget}`);

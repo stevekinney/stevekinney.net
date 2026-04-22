@@ -94,7 +94,7 @@
         "plugins/**/*.ts",
         "src/**",
         "static/**",
-        "svelte.config.js",
+        "svelte.config.ts",
         "vite.config.ts",
         "tsconfig.json",
         "../../packages/components/**/*.{svelte,ts,js}",

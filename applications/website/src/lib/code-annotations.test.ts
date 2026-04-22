@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { extractAnnotations, injectAnnotations, renderAnnotationHtml } from './code-annotations.js';
+import { extractAnnotations, injectAnnotations, renderAnnotationHtml } from './code-annotations';
 
 describe('code annotations', () => {
   it('renders backtick-delimited segments as inline code', () => {

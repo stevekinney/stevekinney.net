@@ -22,7 +22,7 @@
     ".svelte-kit/types/**/$types.d.ts",
     "plugins/**/*.ts",
     "src/**/*",
-    "svelte.config.js",
+    "svelte.config.ts",
     "vite.config.ts"
   ]
 }

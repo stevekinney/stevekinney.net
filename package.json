@@ -32,7 +32,7 @@
     "test:storybook": "turbo run test:storybook --filter=@stevekinney/website",
     "storybook": "turbo run storybook --filter=@stevekinney/website",
     "build-storybook": "turbo run build-storybook --filter=@stevekinney/website",
-    "prepare": "node .lefthook/install.mjs"
+    "prepare": "bun .lefthook/install.ts"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.3",

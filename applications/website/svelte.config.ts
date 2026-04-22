@@ -6,18 +6,18 @@ import remarkEscapeComparators from '@stevekinney/markdown/remark-escape-compara
 import { fixMarkdownUrls } from '@stevekinney/markdown/remark-fix-urls';
 import remarkTailwindPlayground from '@stevekinney/markdown/remark-tailwind-playground';
 import rehypeEnhanceImages from '@stevekinney/markdown/rehype-enhance-images';
-import { extractAnnotations, injectAnnotations } from './src/lib/code-annotations.js';
-
+import type { Config } from '@sveltejs/kit';
+import type { MdsvexOptions } from 'mdsvex';
 import { escapeSvelte, mdsvex } from 'mdsvex';
 import rehypeSlug from 'rehype-slug';
 import unwrapImages from 'rehype-unwrap-images';
 import remarkGfm from 'remark-gfm';
 import { bundledLanguages, codeToHtml } from 'shiki';
 import { transformerMetaHighlight } from '@shikijs/transformers';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-// Node.js path utilities
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { extractAnnotations, injectAnnotations } from './src/lib/code-annotations.ts';
 
 // Determine site URL for prerendering (used in Open Graph meta tags)
 const siteUrl =
@@ -26,49 +26,45 @@ const siteUrl =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : 'http://localhost:4444');
 
-// Define directory paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const imageManifestPath = join(__dirname, '../../image-manifest.json');
 const strictImageManifest =
   process.env.NODE_ENV === 'production' || Boolean(process.env.VERCEL) || Boolean(process.env.CI);
 
-// No in-memory highlight cache — each code block is processed exactly once
-// during build. Caching just accumulates memory that persists into the adapter phase.
-
-/**
- * Extract title="..." from the metastring.
- * @param {string | null | undefined} metastring
- * @returns {{ title: string | null, remaining: string }}
- */
-function parseTitle(metastring) {
+const parseTitle = (
+  metastring: string | null | undefined,
+): { title: string | null; remaining: string } => {
   if (!metastring) return { title: null, remaining: '' };
   const match = metastring.match(/title="([^"]+)"/);
   const title = match ? match[1] : null;
   const remaining = metastring.replace(/title="[^"]+"\s*/, '').trim();
   return { title, remaining };
-}
+};
 
-/**
- * MDSvex configuration options
- * @type {import('mdsvex').MdsvexOptions}
- */
-const mdsvexOptions = {
+// mdsvex bundles an older `unified` type than the remark/rehype plugins
+// resolve to, so the Plugin shapes don't line up here. `asPluggable`
+// collapses both worlds to a single opaque plugin entry; content:validate
+// and the Playwright content-pages specs exercise the actual behaviour.
+type Pluggable = NonNullable<MdsvexOptions['remarkPlugins']>[number];
+const asPluggable = (value: unknown): Pluggable => value as Pluggable;
+const asPreprocess = (value: unknown): NonNullable<Config['preprocess']> =>
+  value as NonNullable<Config['preprocess']>;
+
+const mdsvexOptions: MdsvexOptions = {
   extensions: ['.md'],
 
-  // Process markdown content
-  // Custom remark plugins (typed via casts to satisfy TS)
   remarkPlugins: [
-    /** @type {any} */ (remarkEscapeComparators),
-    /** @type {any} */ ([fixMarkdownUrls, ['../../writing', '../../courses']]),
-    remarkGfm,
-    remarkCallouts,
-    remarkTailwindPlayground,
+    asPluggable(remarkEscapeComparators),
+    asPluggable([fixMarkdownUrls, ['../../writing', '../../courses']]),
+    asPluggable(remarkGfm),
+    asPluggable(remarkCallouts),
+    asPluggable(remarkTailwindPlayground),
   ],
   rehypePlugins: [
-    rehypeSlug,
-    unwrapImages,
-    /** @type {any} */ ([
+    asPluggable(rehypeSlug),
+    asPluggable(unwrapImages),
+    asPluggable([
       rehypeEnhanceImages,
       {
         manifestPath: imageManifestPath,
@@ -80,7 +76,6 @@ const mdsvexOptions = {
     ]),
   ],
 
-  // Layout templates for markdown content
   layout: {
     _: join(__dirname, './src/lib/markdown/base.svelte'),
     page: join(__dirname, './src/lib/markdown/page.svelte'),
@@ -90,7 +85,7 @@ const mdsvexOptions = {
     highlighter: async (code, lang = 'text', metastring) => {
       if (!lang) lang = 'text';
 
-      // Mermaid blocks are rendered client-side as diagrams, not syntax-highlighted.
+      // Mermaid blocks render as diagrams on the client, not syntax-highlighted.
       // HTML-escape < and > so Svelte's compiler doesn't treat them as elements.
       // The client-side renderer reads via textContent, which decodes entities automatically.
       if (lang === 'mermaid') {
@@ -110,14 +105,13 @@ const mdsvexOptions = {
         'not-last:mb-4',
       ];
 
-      // Languages not supported by Shiki (e.g. "text") get a plain <pre>
+      // Unsupported Shiki languages (e.g. "text") get a plain <pre>
       // wrapper so whitespace and newlines are preserved.
-      // HTML-escape < and > so Svelte's compiler doesn't treat them as elements.
       if (!(lang in bundledLanguages)) {
         const escaped = escapeSvelte(
           cleanedCode.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
         );
-        let inner = `<pre style="background:transparent;margin:0;padding:0;color:#d6deeb"><code>${escaped}</code></pre>`;
+        const inner = `<pre style="background:transparent;margin:0;padding:0;color:#d6deeb"><code>${escaped}</code></pre>`;
 
         const titleHtml = title
           ? `<div class="code-block-header">${escapeSvelte(title)}</div>`
@@ -155,19 +149,11 @@ const mdsvexOptions = {
   },
 };
 
-/**
- * SvelteKit configuration
- * @type {import('@sveltejs/kit').Config}
- */
-const config = {
-  // File extensions to process
+const config: Config = {
   extensions: ['.svelte', '.md'],
-
-  // Preprocessing steps for content
-  preprocess: [vitePreprocess(), /** @type {any} */ (mdsvex(mdsvexOptions))],
-
+  // mdsvex's exported preprocessor type predates SvelteKit's PreprocessorGroup.
+  preprocess: asPreprocess([vitePreprocess(), mdsvex(mdsvexOptions)]),
   kit: {
-    // Choose adapter based on deployment target
     adapter: process.env.VERCEL
       ? vercelAdapter({ runtime: 'nodejs24.x' })
       : staticAdapter({
@@ -175,7 +161,6 @@ const config = {
           fallback: '404.html',
         }),
 
-    // Path aliases for imports
     alias: {
       '@/*': 'src/*',
       '$lib/*': 'src/lib/*',
@@ -190,7 +175,6 @@ const config = {
 
     prerender: {
       origin: siteUrl,
-      // Be strict, but ignore only malformed multi-URL fetch attempts from srcset
       handleHttpError: ({ status, path, message }) => {
         if (status === 404 && path.startsWith('/_app/immutable/assets/') && path.includes(',')) {
           return;

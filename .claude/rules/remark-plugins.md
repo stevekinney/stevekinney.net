@@ -19,4 +19,4 @@ When developing remark or unified plugins:
 
 - **Test edge cases in content**: Search the content directory for real-world usage patterns (e.g., `grep -r '\[!.*\]-'`) before assuming a feature isn't used. Existing content often uses features that aren't immediately obvious.
 
-- **Escape Svelte delimiters in emitted HTML**: When a remark plugin emits `type: 'html'` nodes, mdsvex compiles them as Svelte template markup. Curly braces (`{`, `}`) and backticks (`` ` ``) must be escaped as HTML entities (`&#123;`, `&#125;`, `&#96;`) to prevent Svelte from interpreting them as expressions. Use the same `escapeSvelte`-style replacement the highlighter in `svelte.config.js` uses.
+- **Escape Svelte delimiters in emitted HTML**: When a remark plugin emits `type: 'html'` nodes, mdsvex compiles them as Svelte template markup. Curly braces (`{`, `}`) and backticks (`` ` ``) must be escaped as HTML entities (`&#123;`, `&#125;`, `&#96;`) to prevent Svelte from interpreting them as expressions. Use the same `escapeSvelte`-style replacement the highlighter in `svelte.config.ts` uses.

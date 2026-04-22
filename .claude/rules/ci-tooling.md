@@ -17,7 +17,7 @@ paths:
 - When `PLAYWRIGHT_BASE_URL` omits a port, build a resolved URL with the preview port and reuse it for both `webServer.url` and `use.baseURL`.
 - Keep Node requirements consistent across `.node-version`, `CONTRIBUTING.md`, and `package.json` `engines.node`.
 - If Rollup plugin types conflict with Vite types, cast the plugin to Vite's `Plugin` in `vite.config.ts`.
-- Prefer `.js` build-time plugins in `svelte.config.js` (worker threads won’t honor `--import tsx`), and only rely on `NODE_OPTIONS="--import tsx"` for tools that actually need TS loaders (e.g. `svelte-check`, `vitest`).
+- `svelte.config.ts` runs through SvelteKit's own TS resolution, so there's no need to drop back to `.js` for the config itself. The rest of the CLI surface (svelte-check, vitest, rehype plugins invoked via Vite, and any worker-thread preprocessor) still requires `NODE_OPTIONS="--import tsx"` on the command that starts the process.
 - Load `@sveltejs/enhanced-img` lazily (or guard it) so builds don’t fail when `sharp` is unavailable in CI.
 - On Linux CI, ensure both `@img/sharp-linux-x64` and `@img/sharp-libvips-linux-x64` are present so sharp can load its native libs.
 - When `vitest.config.ts` imports `vite.config.ts`, run Vitest with `NODE_OPTIONS="--import tsx"` to avoid `.ts` loader errors.

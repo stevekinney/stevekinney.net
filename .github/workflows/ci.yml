@@ -45,7 +45,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: applications/website/.svelte-kit/process-images
-          key: ${{ runner.os }}-process-images-${{ hashFiles('applications/website/svelte.config.js', 'packages/plugins/svelte-enhance-images.js', 'writing/**/*.md', 'courses/**/*.md', 'writing/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}', 'courses/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
+          key: ${{ runner.os }}-process-images-${{ hashFiles('applications/website/svelte.config.ts', 'packages/markdown/src/**/*.ts', 'writing/**/*.md', 'courses/**/*.md', 'writing/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}', 'courses/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
           restore-keys: |
             ${{ runner.os }}-process-images-
 
@@ -92,7 +92,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: applications/website/.svelte-kit/process-images
-          key: ${{ runner.os }}-process-images-${{ hashFiles('applications/website/svelte.config.js', 'packages/plugins/svelte-enhance-images.js', 'writing/**/*.md', 'courses/**/*.md', 'writing/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}', 'courses/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
+          key: ${{ runner.os }}-process-images-${{ hashFiles('applications/website/svelte.config.ts', 'packages/markdown/src/**/*.ts', 'writing/**/*.md', 'courses/**/*.md', 'writing/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}', 'courses/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
           restore-keys: |
             ${{ runner.os }}-process-images-
 
@@ -148,7 +148,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: applications/website/.svelte-kit/process-images
-          key: ${{ runner.os }}-process-images-${{ hashFiles('applications/website/svelte.config.js', 'packages/plugins/svelte-enhance-images.js', 'writing/**/*.md', 'courses/**/*.md', 'writing/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}', 'courses/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
+          key: ${{ runner.os }}-process-images-${{ hashFiles('applications/website/svelte.config.ts', 'packages/markdown/src/**/*.ts', 'writing/**/*.md', 'courses/**/*.md', 'writing/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}', 'courses/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
           restore-keys: |
             ${{ runner.os }}-process-images-
 

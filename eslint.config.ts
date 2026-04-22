@@ -5,6 +5,7 @@ import parser from 'svelte-eslint-parser';
 import svelte from 'eslint-plugin-svelte';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { Linter } from 'eslint';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
 
@@ -16,7 +17,7 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-export default [
+const config: Linter.Config[] = [
   {
     ignores: [
       '**/.DS_Store',
@@ -119,3 +120,5 @@ export default [
     },
   },
 ];
+
+export default config;

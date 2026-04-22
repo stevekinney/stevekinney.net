@@ -1,15 +1,16 @@
+#!/usr/bin/env bun
 import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 
-const runGit = (args) =>
+const runGit = (args: readonly string[]): string =>
   execFileSync('git', args, {
     cwd: process.cwd(),
     stdio: ['ignore', 'pipe', 'pipe'],
     encoding: 'utf8',
   }).trim();
 
-const isInsideGitWorkTree = () => {
+const isInsideGitWorkTree = (): boolean => {
   try {
     return runGit(['rev-parse', '--is-inside-work-tree']) === 'true';
   } catch {
