@@ -10,16 +10,17 @@ export const csr = false;
 export const load: LayoutServerLoad = async ({ params }) => {
   const rawCourse = params.course;
   const courseSlug = rawCourse.replace(/\.md$/i, '');
+  const lessonSuffix = params.lesson ? `/${params.lesson}` : '';
 
   if (rawCourse !== courseSlug) {
     const course = getCourseEntry(courseSlug);
     if (course) {
-      throw redirect(308, `/courses/${courseSlug}`);
+      throw redirect(308, `/courses/${courseSlug}${lessonSuffix}`);
     }
 
     const matchedCourse = findCourseForLessonSlug(courseSlug);
     if (matchedCourse) {
-      throw redirect(308, `/courses/${matchedCourse}/${courseSlug}`);
+      throw redirect(308, `/courses/${matchedCourse}/${courseSlug}${lessonSuffix}`);
     }
   }
 

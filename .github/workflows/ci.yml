@@ -17,9 +17,6 @@ jobs:
   validation:
     name: Static Validation
     runs-on: ubuntu-latest
-    env:
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
     steps:
       - uses: actions/checkout@v4
@@ -56,6 +53,9 @@ jobs:
         run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Run validation
+        env:
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
         run: bun run continuous-integration:validate
 
   build:
@@ -63,8 +63,6 @@ jobs:
     needs: validation
     runs-on: ubuntu-latest
     env:
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       VERCEL: '1'
 
     steps:
@@ -102,6 +100,9 @@ jobs:
         run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Build website
+        env:
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
         run: bun run continuous-integration:build
 
       - name: Upload build report
@@ -118,8 +119,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     env:
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       VERCEL: '1'
 
     steps:
@@ -168,6 +167,9 @@ jobs:
         run: bunx playwright install --with-deps
 
       - name: Run integration tests
+        env:
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
         run: bun run test:integration
 
       - name: Upload Playwright artifacts
