@@ -119,6 +119,7 @@
       "name": "@stevekinney/website",
       "dependencies": {
         "@stevekinney/markdown": "workspace:*",
+        "@stevekinney/scripts": "workspace:*",
         "@stevekinney/utilities": "workspace:*",
       },
     },
@@ -133,6 +134,16 @@
     },
     "packages/scripts": {
       "name": "@stevekinney/scripts",
+      "bin": {
+        "content-build": "./content-build.ts",
+        "validate-content": "./validate-content.ts",
+        "build-report": "./build-report/build-report.ts",
+        "run-with-sharp-runtime": "./run-with-sharp-runtime.ts",
+        "sync-generated-browser-assets": "./sync-generated-browser-assets.ts",
+        "validate-image-compatibility": "./validate-image-compatibility.ts",
+        "sync-images": "./sync-images.ts",
+        "check-image-manifest": "./check-image-manifest.ts",
+      },
       "dependencies": {
         "@stevekinney/utilities": "workspace:*",
         "@vercel/blob": "^1.0.0",

@@ -2,13 +2,23 @@
   "name": "@stevekinney/scripts",
   "private": true,
   "type": "module",
+  "bin": {
+    "content-build": "./content-build.ts",
+    "validate-content": "./validate-content.ts",
+    "build-report": "./build-report/build-report.ts",
+    "run-with-sharp-runtime": "./run-with-sharp-runtime.ts",
+    "sync-generated-browser-assets": "./sync-generated-browser-assets.ts",
+    "validate-image-compatibility": "./validate-image-compatibility.ts",
+    "sync-images": "./sync-images.ts",
+    "check-image-manifest": "./check-image-manifest.ts"
+  },
   "scripts": {
     "content:build": "bun content-build.ts",
     "content:validate": "bun validate-content.ts",
     "test": "bun run test:unit",
     "test:unit": "bun test --timeout 30000",
-    "content:images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" bun run run-with-sharp-runtime.ts node validate-image-compatibility.ts",
-    "images:sync": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" bun run run-with-sharp-runtime.ts node --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local sync-images.ts",
+    "content:images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" bunx run-with-sharp-runtime node validate-image-compatibility.ts",
+    "images:sync": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" bunx run-with-sharp-runtime node --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local sync-images.ts",
     "images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node check-image-manifest.ts"
   },
   "dependencies": {

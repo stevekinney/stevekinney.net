@@ -3,4 +3,4 @@ export default {
     'postcss-nesting': {},
     autoprefixer: {},
   },
-};
+} satisfies { plugins: Record<string, Record<string, unknown>> };

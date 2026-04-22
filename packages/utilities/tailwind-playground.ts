@@ -96,7 +96,15 @@ export const escapeSvelteDelimiters = (html: string): string =>
 
 export const encodeTailwindPlaygroundHtml = (html: string): string => encodeURIComponent(html);
 
-export const decodeTailwindPlaygroundHtml = (html: string): string => decodeURIComponent(html);
+export const decodeTailwindPlaygroundHtml = (html: string): string => {
+  try {
+    return decodeURIComponent(html);
+  } catch {
+    // Malformed percent-encoding: fail closed so the page-wide enhancer
+    // doesn't throw and skip every other enhancement.
+    return '';
+  }
+};
 
 export const buildTailwindPlaygroundSource = (playgrounds: string[]): string => {
   if (playgrounds.length === 0) {

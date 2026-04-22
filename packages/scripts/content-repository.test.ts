@@ -2,8 +2,9 @@ import { randomUUID } from 'node:crypto';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import { describe, expect, test } from 'bun:test';
+import { beforeAll, describe, expect, test } from 'bun:test';
 
+import type { ContentRepository } from './content-repository.ts';
 import { coursesRoot, writingRoot } from './content-paths.ts';
 import { collectContentRepository } from './content-repository.ts';
 
@@ -15,7 +16,11 @@ const writeTextFile = async (filePath: string, contents: string): Promise<void> 
 };
 
 describe('collectContentRepository', () => {
-  const repositoryPromise = collectContentRepository();
+  let repositoryPromise: Promise<ContentRepository>;
+
+  beforeAll(() => {
+    repositoryPromise = collectContentRepository();
+  });
 
   test('validates the current repository content graph', async () => {
     const repository = await repositoryPromise;

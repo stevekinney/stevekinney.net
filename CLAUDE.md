@@ -39,9 +39,9 @@ The generated-content pipeline is the seam that makes prerendering deterministic
 
 1. **Collect** (`packages/scripts/content-repository/`): walk `writing/` and `courses/`, parse frontmatter, build routes, and surface validation issues.
 2. **Build** (`packages/scripts/content-build.ts`): emit `.generated/content-data.json`, `.generated/tailwind-playground-source.html`, and a bundled `.generated/content-enhancements/` tree. The enhancement bundle is skipped when a hash of `src/lib/content-enhancements/**/*.ts` matches the sidecar `.build-hash` — so Turbo's cache restore keeps working and repeated invocations are no-ops.
-4. **Serve** in dev: `applications/website/plugins/vite/` plugins watch content and enhancement sources, re-run the build script on change, and serve the generated bundle and workspace images under stable URL prefixes. In production the `sync-generated-browser-assets.ts` script copies the bundle into each adapter output.
-5. **Render** at request time: server-only routes call `renderWritingDocument` / `renderCourseDocument` / `renderLessonDocument` in `applications/website/src/lib/server/content-documents.ts`, which renders the mdsvex-compiled Svelte module to HTML. The route wraps the HTML in a single `<div data-content-document>` — never nest this element, the browser-side enhancer walks every match independently.
-6. **Enhance** in the browser: `content-enhancements.ts` lazy-loads the matching enhancers, runs them once per content document, and tracks their `destroy` callbacks for cleanup on `pagehide`.
+3. **Serve** in dev: `applications/website/plugins/vite/` plugins watch content and enhancement sources, re-run the build script on change, and serve the generated bundle and workspace images under stable URL prefixes. In production the `sync-generated-browser-assets.ts` script copies the bundle into each adapter output.
+4. **Render** at request time: server-only routes call `renderWritingDocument` / `renderCourseDocument` / `renderLessonDocument` in `applications/website/src/lib/server/content-documents.ts`, which renders the mdsvex-compiled Svelte module to HTML. The route wraps the HTML in a single `<div data-content-document>` — never nest this element, the browser-side enhancer walks every match independently.
+5. **Enhance** in the browser: `content-enhancements.ts` lazy-loads the matching enhancers, runs them once per content document, and tracks their `destroy` callbacks for cleanup on `pagehide`.
 
 ## Architecture
 

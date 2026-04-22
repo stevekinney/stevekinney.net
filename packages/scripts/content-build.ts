@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';

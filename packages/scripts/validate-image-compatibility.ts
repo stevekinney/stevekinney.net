@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';

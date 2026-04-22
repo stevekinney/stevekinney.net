@@ -3,7 +3,7 @@
 
 @source './**/*.{svelte,js,ts}';
 @source '../../../packages/components/**/*.{svelte,js,ts}';
-@source '../../../packages/plugins/src/**/*.ts';
+@source '../../../packages/markdown/src/**/*.ts';
 @source '../.generated/tailwind-playground-source.html';
 
 @plugin '@tailwindcss/typography';

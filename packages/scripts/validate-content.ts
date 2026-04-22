@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 import { collectContentRepository } from './content-repository.ts';
 
 const main = async (): Promise<void> => {
