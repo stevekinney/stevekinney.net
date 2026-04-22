@@ -10,8 +10,8 @@
     "@stevekinney/utilities": "workspace:*"
   },
   "scripts": {
-    "dev": "bun run ../../packages/scripts/content-build.ts && NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ../../node_modules/vite/bin/vite.js dev --port 4444",
-    "build": "bun run ../../packages/scripts/content-build.ts && NODE_OPTIONS=\"--max-old-space-size=4096 --import tsx --disable-warning=ExperimentalWarning\" bun run ../../packages/scripts/run-with-sharp-runtime.ts node ../../node_modules/vite/bin/vite.js build && bun run ../../packages/scripts/sync-generated-browser-assets.ts",
+    "dev": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node ../../node_modules/vite/bin/vite.js dev --port 4444",
+    "build": "NODE_OPTIONS=\"--max-old-space-size=4096 --import tsx --disable-warning=ExperimentalWarning\" bun run ../../packages/scripts/run-with-sharp-runtime.ts node ../../node_modules/vite/bin/vite.js build && bun run ../../packages/scripts/sync-generated-browser-assets.ts",
     "build:stats": "BUNDLE_STATS=1 bun run build",
     "preview": "node ../../node_modules/vite/bin/vite.js preview",
     "test": "bun run test:integration && bun run test:unit",
@@ -24,7 +24,7 @@
     "content:build": "bun run ../../packages/scripts/content-build.ts",
     "test:integration": "env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning ../../node_modules/.bin/playwright test",
     "test:integration:dev": "PLAYWRIGHT_WEB_SERVER=0 env -u NO_COLOR NODE_OPTIONS=--disable-warning=ExperimentalWarning ../../node_modules/.bin/playwright test",
-    "test:unit": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" ../../node_modules/.bin/vitest",
+    "test:unit": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" ../../node_modules/.bin/vitest run",
     "test:storybook": "../../node_modules/.bin/test-storybook",
     "storybook": "../../node_modules/.bin/storybook dev -p 6006",
     "build-storybook": "../../node_modules/.bin/storybook build"

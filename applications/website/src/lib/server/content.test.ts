@@ -5,6 +5,7 @@ import {
   getCourseRoute,
   getLessonRoute,
   getPostIndex,
+  getPrerenderEntries,
   getWritingRoute,
 } from './content';
 
@@ -44,5 +45,19 @@ describe('generated content lookups', () => {
     const [first, second] = getPostIndex();
 
     expect(new Date(first.date).getTime()).toBeGreaterThanOrEqual(new Date(second.date).getTime());
+  });
+
+  it('includes canonical and legacy prerender entries for content detail routes', () => {
+    const entries = getPrerenderEntries();
+
+    expect(entries.writing).toContainEqual({ slug: 'setup-python' });
+    expect(entries.writing).toContainEqual({ slug: 'setup-python.md' });
+
+    expect(entries.courses).toContainEqual({ course: 'testing' });
+    expect(entries.courses).toContainEqual({ course: 'testing.md' });
+    expect(entries.courses).toContainEqual({ course: 'the-basics.md' });
+
+    expect(entries.lessons).toContainEqual({ course: 'testing', lesson: 'the-basics' });
+    expect(entries.lessons).toContainEqual({ course: 'testing', lesson: 'the-basics.md' });
   });
 });

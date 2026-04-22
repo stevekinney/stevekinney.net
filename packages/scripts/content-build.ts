@@ -1,7 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 
 import type { GeneratedContent } from '@stevekinney/utilities/content-types';
-import { writeFormattedJson } from '@stevekinney/utilities/write-formatted-json';
+import { formatJson } from '@stevekinney/utilities/write-formatted-json';
 
 import {
   contentEnhancementsEntryPath,
@@ -77,25 +77,10 @@ const main = async (): Promise<void> => {
     prerenderEntries: repository.prerenderEntries,
   };
 
-  let didWriteContentData = true;
-  try {
-    const existing = JSON.parse(await readFile(generatedContentDataPath, 'utf8')) as {
-      meta?: { hash?: string };
-    };
-
-    if (existing.meta?.hash === repository.meta.hash) {
-      didWriteContentData = false;
-    }
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
-      throw error;
-    }
-  }
-
-  if (didWriteContentData) {
-    await writeFormattedJson(generatedContentDataPath, generatedContent);
-  }
-
+  const didWriteContentData = await writeIfChanged(
+    generatedContentDataPath,
+    await formatJson(generatedContentDataPath, generatedContent),
+  );
   const didWriteTailwindSource = await writeIfChanged(
     tailwindPlaygroundSourcePath,
     repository.tailwindPlaygroundSource,

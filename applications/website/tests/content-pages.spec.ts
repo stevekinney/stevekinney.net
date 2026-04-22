@@ -25,3 +25,12 @@ test('mermaid diagrams are progressively enhanced on content pages', async ({ pa
 
   await expect(page.locator('[data-mermaid] svg').first()).toBeVisible();
 });
+
+test('tailwind playground previews are progressively enhanced on content pages', async ({
+  page,
+}) => {
+  await page.goto('/courses/tailwind/utility-first');
+
+  await expect(page.locator('[data-content-document][data-content-enhanced="true"]')).toBeVisible();
+  await expect(page.locator('[data-tailwind-playground] button').first()).toBeVisible();
+});

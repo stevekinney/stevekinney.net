@@ -1,8 +1,3 @@
-export type ManifestMeta = {
-  generatedAt: string;
-  hash: string;
-};
-
 export type CourseContentsRelatedLink = {
   title: string;
   href: string;
@@ -109,7 +104,8 @@ export type GeneratedContentPrerenderEntries = {
   lessons: Array<{ course: string; lesson: string }>;
 };
 
-export type GeneratedContentMeta = ManifestMeta & {
+export type GeneratedContentMeta = {
+  hash: string;
   sourceFileCount: number;
   routeCount: number;
   playgroundCount: number;

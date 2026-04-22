@@ -65,6 +65,7 @@ jobs:
     env:
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      VERCEL: '1'
 
     steps:
       - uses: actions/checkout@v4
@@ -119,6 +120,7 @@ jobs:
     env:
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      VERCEL: '1'
 
     steps:
       - uses: actions/checkout@v4

@@ -1,5 +1,3 @@
-import { copyCodeBlockAsImage, supportsClipboardImageCopy } from '$lib/copy-code-block-as-image';
-
 const CLIPBOARD_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>`;
 const CAMERA_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>`;
 const CHECK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
@@ -29,6 +27,24 @@ const CONTAINER_BASE_CLASSES = [
   'transition-opacity',
 ];
 const CONTAINER_FLOATING_CLASSES = ['absolute', 'right-2', 'top-2', 'z-10'];
+
+type ImageCopyModule = typeof import('$lib/copy-code-block-as-image');
+
+let imageCopyModulePromise: Promise<ImageCopyModule> | null = null;
+
+const canAttemptImageCopy = (): boolean =>
+  typeof navigator !== 'undefined' &&
+  typeof navigator.clipboard !== 'undefined' &&
+  typeof navigator.clipboard.write === 'function' &&
+  typeof ClipboardItem !== 'undefined';
+
+const getImageCopyModule = (): Promise<ImageCopyModule> => {
+  if (!imageCopyModulePromise) {
+    imageCopyModulePromise = import('$lib/copy-code-block-as-image');
+  }
+
+  return imageCopyModulePromise;
+};
 
 function showFeedback(button: HTMLButtonElement, success: boolean, originalSvg: string): void {
   button.innerHTML = success ? CHECK_SVG : ERROR_SVG;
@@ -68,7 +84,11 @@ function createCopyTextButton(codeBlock: HTMLElement): HTMLButtonElement {
   return button;
 }
 
-function createCopyImageButton(codeBlock: HTMLElement, container: HTMLElement): HTMLButtonElement {
+function createCopyImageButton(
+  codeBlock: HTMLElement,
+  container: HTMLElement,
+  imageCopyModule: ImageCopyModule,
+): HTMLButtonElement {
   const button = document.createElement('button');
   button.type = 'button';
   button.className = BUTTON_CLASSES;
@@ -78,7 +98,7 @@ function createCopyImageButton(codeBlock: HTMLElement, container: HTMLElement): 
   button.addEventListener('click', async () => {
     try {
       container.style.display = 'none';
-      await copyCodeBlockAsImage(codeBlock);
+      await imageCopyModule.copyCodeBlockAsImage(codeBlock);
       container.style.display = '';
       showFeedback(button, true, CAMERA_SVG);
     } catch (error) {
@@ -91,10 +111,11 @@ function createCopyImageButton(codeBlock: HTMLElement, container: HTMLElement): 
   return button;
 }
 
-export function enhanceCodeBlocks(node: HTMLElement): { destroy: () => void } {
+export async function enhanceCodeBlocks(node: HTMLElement): Promise<{ destroy: () => void }> {
   const codeBlocks = node.querySelectorAll<HTMLElement>('[data-language]');
   const containers: HTMLElement[] = [];
-  const canCopyImage = supportsClipboardImageCopy();
+  const imageCopyModule = canAttemptImageCopy() ? await getImageCopyModule() : null;
+  const canCopyImage = imageCopyModule?.supportsClipboardImageCopy() ?? false;
 
   for (const codeBlock of codeBlocks) {
     codeBlock.classList.add('relative', 'group');
@@ -104,8 +125,8 @@ export function enhanceCodeBlocks(node: HTMLElement): { destroy: () => void } {
 
     container.appendChild(createCopyTextButton(codeBlock));
 
-    if (canCopyImage) {
-      container.appendChild(createCopyImageButton(codeBlock, container));
+    if (canCopyImage && imageCopyModule) {
+      container.appendChild(createCopyImageButton(codeBlock, container, imageCopyModule));
     }
 
     if (header) {

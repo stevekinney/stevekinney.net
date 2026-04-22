@@ -3,10 +3,14 @@
   "tasks": {
     "@stevekinney/scripts#content:build": {
       "inputs": [
+        "../../bun.lock",
+        "../../package.json",
+        "../../applications/website/package.json",
         "content-build.ts",
         "content-paths.ts",
         "content-repository.ts",
         "sync-generated-browser-assets.ts",
+        "../utilities/package.json",
         "../utilities/content-types.ts",
         "../utilities/frontmatter.ts",
         "../utilities/tailwind-playground.ts",
@@ -16,9 +20,9 @@
         "../../applications/website/src/lib/actions/enhance-mermaid-diagrams.ts",
         "../../applications/website/src/lib/actions/enhance-tailwind-playgrounds.ts",
         "../../applications/website/src/lib/actions/enhance-tables.ts",
-        "../../writing/**/*.md",
-        "../../courses/**/*.md",
-        "../../courses/*/index.toml"
+        "../../applications/website/static/**",
+        "../../writing/**",
+        "../../courses/**"
       ],
       "outputs": [
         "../../applications/website/.generated/content-data.json",
@@ -29,16 +33,20 @@
     "@stevekinney/scripts#content:validate": {
       "dependsOn": ["@stevekinney/scripts#content:build"],
       "inputs": [
+        "../../bun.lock",
+        "../../package.json",
+        "../../applications/website/package.json",
         "validate-content.ts",
         "content-build.ts",
         "content-paths.ts",
         "content-repository.ts",
+        "../utilities/package.json",
         "../utilities/content-types.ts",
         "../utilities/frontmatter.ts",
         "../utilities/tailwind-playground.ts",
-        "../../writing/**/*.md",
-        "../../courses/**/*.md",
-        "../../courses/*/index.toml"
+        "../../applications/website/static/**",
+        "../../writing/**",
+        "../../courses/**"
       ]
     },
     "@stevekinney/scripts#content:images:check": {

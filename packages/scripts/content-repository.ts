@@ -87,6 +87,8 @@ const normalizeRoutePath = (value: string): string => {
 const compareByDate = (left: { date: string }, right: { date: string }): number =>
   new Date(right.date).getTime() - new Date(left.date).getTime();
 
+const unique = <T>(values: T[]): T[] => [...new Set(values)];
+
 const relativeSourcePath = (absolutePath: string): string =>
   normalizePath(path.relative(repositoryRoot, absolutePath));
 
@@ -633,10 +635,27 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   };
 
   const lessons = courseEntries.flatMap((course) => course.lessons).sort(compareByDate);
+  const uniqueLessonRedirectSlugs = lessons
+    .reduce<Map<string, string | null>>((map, lesson) => {
+      const existing = map.get(lesson.slug);
+      if (existing && existing !== lesson.courseSlug) {
+        map.set(lesson.slug, null);
+      } else if (!map.has(lesson.slug)) {
+        map.set(lesson.slug, lesson.courseSlug);
+      }
+
+      return map;
+    }, new Map<string, string | null>())
+    .entries();
+  const legacyCourseRedirectEntries = unique([
+    ...courseEntries.map((entry) => `${entry.slug}.md`),
+    ...[...uniqueLessonRedirectSlugs]
+      .filter(([, courseSlug]) => courseSlug !== null)
+      .map(([lessonSlug]) => `${lessonSlug}.md`),
+  ]).map((course) => ({ course }));
 
   return {
     meta: {
-      generatedAt: new Date().toISOString(),
       hash: repositoryHash,
       sourceFileCount: sourceFiles.size,
       routeCount: Object.keys(routes).length,
@@ -648,9 +667,18 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     courses: siteIndex.courses,
     lessons,
     prerenderEntries: {
-      writing: writingEntries.map((entry) => ({ slug: entry.slug })),
-      courses: courseEntries.map((entry) => ({ course: entry.slug })),
-      lessons: lessons.map((entry) => ({ course: entry.courseSlug, lesson: entry.slug })),
+      writing: [
+        ...writingEntries.map((entry) => ({ slug: entry.slug })),
+        ...writingEntries.map((entry) => ({ slug: `${entry.slug}.md` })),
+      ],
+      courses: [
+        ...courseEntries.map((entry) => ({ course: entry.slug })),
+        ...legacyCourseRedirectEntries,
+      ],
+      lessons: [
+        ...lessons.map((entry) => ({ course: entry.courseSlug, lesson: entry.slug })),
+        ...lessons.map((entry) => ({ course: entry.courseSlug, lesson: `${entry.slug}.md` })),
+      ],
     },
     validationIssues,
     tailwindPlaygroundSource: buildTailwindPlaygroundSource(tailwindPlaygrounds),
