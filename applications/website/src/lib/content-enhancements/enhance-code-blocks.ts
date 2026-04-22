@@ -32,18 +32,12 @@ type ImageCopyModule = typeof import('./copy-code-block-as-image');
 
 let imageCopyModulePromise: Promise<ImageCopyModule> | null = null;
 
-const canAttemptImageCopy = (): boolean =>
-  typeof navigator !== 'undefined' &&
-  typeof navigator.clipboard !== 'undefined' &&
-  typeof navigator.clipboard.write === 'function' &&
-  typeof ClipboardItem !== 'undefined';
-
-const getImageCopyModule = (): Promise<ImageCopyModule> => {
+const loadImageCopyModuleIfSupported = async (): Promise<ImageCopyModule | null> => {
   if (!imageCopyModulePromise) {
     imageCopyModulePromise = import('./copy-code-block-as-image');
   }
-
-  return imageCopyModulePromise;
+  const module = await imageCopyModulePromise;
+  return module.supportsClipboardImageCopy() ? module : null;
 };
 
 function showFeedback(button: HTMLButtonElement, success: boolean, originalSvg: string): void {
@@ -114,8 +108,8 @@ function createCopyImageButton(
 export async function enhanceCodeBlocks(node: HTMLElement): Promise<{ destroy: () => void }> {
   const codeBlocks = node.querySelectorAll<HTMLElement>('[data-language]');
   const containers: HTMLElement[] = [];
-  const imageCopyModule = canAttemptImageCopy() ? await getImageCopyModule() : null;
-  const canCopyImage = imageCopyModule?.supportsClipboardImageCopy() ?? false;
+  const imageCopyModule = await loadImageCopyModuleIfSupported();
+  const canCopyImage = imageCopyModule !== null;
 
   for (const codeBlock of codeBlocks) {
     codeBlock.classList.add('relative', 'group');

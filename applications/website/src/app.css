@@ -1,7 +1,14 @@
 @import '@fontsource/league-gothic';
 @import 'tailwindcss';
 
-@source './**/*.{svelte,js,ts}';
+/*
+ * Tailwind scans the entire website app so utility classes emitted from
+ * svelte.config.ts (Shiki highlighter wrappers), mdsvex layouts, and any
+ * .md content under the app tree are included in the built stylesheet.
+ */
+@source '../**/*.{svelte,js,ts,md}';
+@source '../../../writing/**/*.md';
+@source '../../../courses/**/*.md';
 @source '../../../packages/components/**/*.{svelte,js,ts}';
 @source '../../../packages/markdown/src/**/*.ts';
 @source '../.generated/tailwind-playground-source.html';

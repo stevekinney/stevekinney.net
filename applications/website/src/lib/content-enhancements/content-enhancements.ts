@@ -66,10 +66,6 @@ if (document.readyState === 'loading') {
   applyEnhancements();
 }
 
-window.addEventListener(
-  'pagehide',
-  () => {
-    for (const root of getRoots()) cleanupRoot(root);
-  },
-  { once: true },
-);
+window.addEventListener('pagehide', () => {
+  for (const root of getRoots()) cleanupRoot(root);
+});
