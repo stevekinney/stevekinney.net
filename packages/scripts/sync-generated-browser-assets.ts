@@ -1,7 +1,8 @@
-import { cp, mkdir, rm, stat } from 'node:fs/promises';
+import { cp, mkdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 
 import {
+  directoryExists,
   generatedContentEnhancementsDirectory,
   websiteBuildRoot,
   websiteSvelteKitClientRoot,
@@ -22,19 +23,6 @@ const generatedAssetTargets = [
     targetPath: path.resolve(websiteVercelStaticRoot, 'generated', 'content-enhancements'),
   },
 ];
-
-const directoryExists = async (directoryPath: string): Promise<boolean> => {
-  try {
-    const directoryStat = await stat(directoryPath);
-    return directoryStat.isDirectory();
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      return false;
-    }
-
-    throw error;
-  }
-};
 
 const syncGeneratedAssets = async (): Promise<void> => {
   const sourceExists = await directoryExists(generatedContentEnhancementsDirectory);

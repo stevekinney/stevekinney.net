@@ -4,6 +4,7 @@ import path from 'node:path';
 import type { GeneratedContent } from '@stevekinney/utilities/content-types';
 
 import {
+  directoryExists,
   generatedContentDataPath,
   repositoryRoot,
   websiteBuildRoot,
@@ -76,19 +77,6 @@ const listFilesRecursively = async (directoryPath: string): Promise<string[]> =>
   );
 
   return files.flat();
-};
-
-const directoryExists = async (directoryPath: string): Promise<boolean> => {
-  try {
-    const directoryStat = await stat(directoryPath);
-    return directoryStat.isDirectory();
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      return false;
-    }
-
-    throw error;
-  }
 };
 
 /** Select the first existing adapter output directory that contains built HTML files. */

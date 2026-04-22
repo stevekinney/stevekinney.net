@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 import { normalizePath } from '@stevekinney/utilities/frontmatter';
@@ -44,3 +45,17 @@ export const normalizeRepositoryPath = (absolutePath: string): string =>
 
 export const resolveRepositoryPath = (repositoryPath: string): string =>
   path.resolve(repositoryRoot, repositoryPath);
+
+/** Return whether the given path exists and is a directory. */
+export const directoryExists = async (directoryPath: string): Promise<boolean> => {
+  try {
+    const directoryStat = await stat(directoryPath);
+    return directoryStat.isDirectory();
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      return false;
+    }
+
+    throw error;
+  }
+};
