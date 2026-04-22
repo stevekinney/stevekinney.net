@@ -1,4 +1,10 @@
-type RootEnhancer = (node: HTMLElement) => Promise<unknown> | unknown;
+type DestroyableEnhancement = {
+  destroy: () => void;
+};
+
+type RootEnhancer =
+  | ((node: HTMLElement) => Promise<DestroyableEnhancement | void>)
+  | ((node: HTMLElement) => DestroyableEnhancement | void);
 
 type EnhancementDefinition = {
   selector: string;
@@ -9,6 +15,8 @@ type LoadedEnhancement = {
   selector: string;
   enhance: RootEnhancer;
 };
+
+const cleanupByRoot = new WeakMap<HTMLElement, Array<() => void>>();
 
 const enhancementDefinitions: EnhancementDefinition[] = [
   {
@@ -38,10 +46,9 @@ const enhancementDefinitions: EnhancementDefinition[] = [
   },
 ];
 
-const getPendingRoots = (): HTMLElement[] =>
-  [...document.querySelectorAll<HTMLElement>('[data-content-document]')].filter(
-    (root) => root.dataset.contentEnhanced !== 'true',
-  );
+const getContentRoots = (): HTMLElement[] => [
+  ...document.querySelectorAll<HTMLElement>('[data-content-document]'),
+];
 
 const matchesAnyRoot = (roots: HTMLElement[], selector: string): boolean =>
   roots.some((root) => root.querySelector(selector) !== null);
@@ -56,18 +63,44 @@ const loadEnhancements = async (roots: HTMLElement[]): Promise<LoadedEnhancement
       })),
   );
 
+const getDestroyCallback = (value: DestroyableEnhancement | void): (() => void) | null =>
+  typeof value?.destroy === 'function' ? value.destroy : null;
+
+const cleanupRoot = (root: HTMLElement): void => {
+  const cleanupCallbacks = cleanupByRoot.get(root) ?? [];
+
+  for (const cleanup of [...cleanupCallbacks].reverse()) {
+    cleanup();
+  }
+
+  cleanupByRoot.delete(root);
+  delete root.dataset.contentEnhanced;
+};
+
 const enhanceRoot = async (root: HTMLElement, enhancements: LoadedEnhancement[]): Promise<void> => {
+  cleanupRoot(root);
+
+  const cleanupCallbacks: Array<() => void> = [];
+
   for (const { selector, enhance } of enhancements) {
     if (root.querySelector(selector)) {
-      await enhance(root);
+      const result = await enhance(root);
+      const destroy = getDestroyCallback(result);
+      if (destroy) {
+        cleanupCallbacks.push(destroy);
+      }
     }
+  }
+
+  if (cleanupCallbacks.length > 0) {
+    cleanupByRoot.set(root, cleanupCallbacks);
   }
 
   root.dataset.contentEnhanced = 'true';
 };
 
 const applyEnhancements = async (): Promise<void> => {
-  const roots = getPendingRoots();
+  const roots = getContentRoots();
   if (roots.length === 0) {
     return;
   }
@@ -76,8 +109,16 @@ const applyEnhancements = async (): Promise<void> => {
   await Promise.all(roots.map((root) => enhanceRoot(root, enhancements)));
 };
 
+const cleanupEnhancements = (): void => {
+  for (const root of getContentRoots()) {
+    cleanupRoot(root);
+  }
+};
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', applyEnhancements, { once: true });
 } else {
   applyEnhancements();
 }
+
+window.addEventListener('pagehide', cleanupEnhancements, { once: true });

@@ -9,6 +9,9 @@ import {
   websiteVercelStaticRoot,
 } from './content-paths.ts';
 
+const isBuildMetadataFile = (sourcePath: string): boolean =>
+  path.basename(sourcePath) === '.build-hash';
+
 const generatedAssetTargets = [
   {
     basePath: websiteBuildRoot,
@@ -42,7 +45,10 @@ const syncGeneratedAssets = async (): Promise<void> => {
 
     await rm(target.targetPath, { recursive: true, force: true });
     await mkdir(path.dirname(target.targetPath), { recursive: true });
-    await cp(generatedContentEnhancementsDirectory, target.targetPath, { recursive: true });
+    await cp(generatedContentEnhancementsDirectory, target.targetPath, {
+      recursive: true,
+      filter: (sourcePath) => !isBuildMetadataFile(sourcePath),
+    });
   }
 };
 
