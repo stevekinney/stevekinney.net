@@ -14,22 +14,22 @@ const applyEnhancements = async (): Promise<void> => {
 
   const [tailwindEnhancer, codeBlockEnhancer, mermaidEnhancer, tableEnhancer] = await Promise.all([
     hasMatch(roots, '[data-tailwind-playground]')
-      ? import('$lib/actions/enhance-tailwind-playgrounds').then(
+      ? import('./actions/enhance-tailwind-playgrounds').then(
           (module) => module.enhanceTailwindPlaygrounds as RootEnhancer,
         )
       : Promise.resolve<RootEnhancer | null>(null),
     hasMatch(roots, '[data-language]')
-      ? import('$lib/actions/enhance-code-blocks').then(
+      ? import('./actions/enhance-code-blocks').then(
           (module) => module.enhanceCodeBlocks as RootEnhancer,
         )
       : Promise.resolve<RootEnhancer | null>(null),
     hasMatch(roots, '[data-mermaid]')
-      ? import('$lib/actions/enhance-mermaid-diagrams').then(
+      ? import('./actions/enhance-mermaid-diagrams').then(
           (module) => module.enhanceMermaidDiagrams as RootEnhancer,
         )
       : Promise.resolve<RootEnhancer | null>(null),
     hasMatch(roots, 'table')
-      ? import('$lib/actions/enhance-tables').then((module) => module.enhanceTables as RootEnhancer)
+      ? import('./actions/enhance-tables').then((module) => module.enhanceTables as RootEnhancer)
       : Promise.resolve<RootEnhancer | null>(null),
   ]);
 
