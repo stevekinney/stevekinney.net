@@ -74,7 +74,23 @@ export const getLessonRoute = (
   return route?.contentType === 'lesson' ? route : null;
 };
 
-export const getPrerenderEntries = () => content.prerenderEntries;
+const shouldIncludeLegacyMarkdownPrerenderEntries = (): boolean => !process.env.VERCEL;
+
+const filterLegacyMarkdownEntries = <T extends Record<string, string>>(entries: T[]): T[] => {
+  if (shouldIncludeLegacyMarkdownPrerenderEntries()) {
+    return entries;
+  }
+
+  return entries.filter((entry) =>
+    Object.values(entry).every((value) => !value.toLowerCase().endsWith('.md')),
+  );
+};
+
+export const getPrerenderEntries = () => ({
+  writing: filterLegacyMarkdownEntries(content.prerenderEntries.writing),
+  courses: filterLegacyMarkdownEntries(content.prerenderEntries.courses),
+  lessons: filterLegacyMarkdownEntries(content.prerenderEntries.lessons),
+});
 
 export const findCourseForLessonSlug = (lessonSlug: string): string | null =>
   lessonSlugCourseMap.get(lessonSlug) ?? null;

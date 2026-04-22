@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   findCourseForLessonSlug,
@@ -10,6 +10,10 @@ import {
 } from './content';
 
 describe('generated content lookups', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
   it('returns generated writing metadata from the shared content artifact', () => {
     const route = getWritingRoute('setup-python');
 
@@ -59,5 +63,21 @@ describe('generated content lookups', () => {
 
     expect(entries.lessons).toContainEqual({ course: 'testing', lesson: 'the-basics' });
     expect(entries.lessons).toContainEqual({ course: 'testing', lesson: 'the-basics.md' });
+  });
+
+  it('omits legacy markdown prerender entries during Vercel builds', () => {
+    vi.stubEnv('VERCEL', '1');
+
+    const entries = getPrerenderEntries();
+
+    expect(entries.writing).toContainEqual({ slug: 'setup-python' });
+    expect(entries.writing).not.toContainEqual({ slug: 'setup-python.md' });
+
+    expect(entries.courses).toContainEqual({ course: 'testing' });
+    expect(entries.courses).not.toContainEqual({ course: 'testing.md' });
+    expect(entries.courses).not.toContainEqual({ course: 'the-basics.md' });
+
+    expect(entries.lessons).toContainEqual({ course: 'testing', lesson: 'the-basics' });
+    expect(entries.lessons).not.toContainEqual({ course: 'testing', lesson: 'the-basics.md' });
   });
 });
