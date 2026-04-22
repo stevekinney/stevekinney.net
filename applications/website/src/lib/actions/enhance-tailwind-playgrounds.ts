@@ -10,9 +10,6 @@ export function enhanceTailwindPlaygrounds(node: HTMLElement): { destroy: () => 
 
     const html = decodeTailwindPlaygroundHtml(encodedHtml);
     playground.innerHTML = html;
-    playground.setAttribute('aria-hidden', 'true');
-    playground.setAttribute('role', 'presentation');
-    playground.setAttribute('inert', '');
     placeholders.push({ element: playground, html });
   }
 

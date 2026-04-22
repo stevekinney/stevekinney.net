@@ -41,6 +41,9 @@ describe('remarkTailwindPlayground', () => {
     expect(playground.value).toContain('not-prose');
     expect(playground.value).toContain('bg-slate-100');
     expect(playground.value).toContain('dark:bg-slate-800');
+    expect(playground.value).not.toContain('aria-hidden');
+    expect(playground.value).not.toContain('role="presentation"');
+    expect(playground.value).not.toContain('inert');
   });
 
   it('sanitizes dangerous HTML before encoding it into the placeholder', () => {

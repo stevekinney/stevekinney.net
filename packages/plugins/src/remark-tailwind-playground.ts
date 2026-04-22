@@ -10,7 +10,7 @@ import type { VFile } from 'vfile';
 type VFileWithFilename = VFile & { filename?: string };
 
 /**
- * Injects inert preview placeholders before HTML code blocks flagged with
+ * Injects empty preview placeholders before HTML code blocks flagged with
  * `tailwind`. The actual preview markup is hydrated by a small standalone
  * enhancement script, which keeps mdsvex output free of raw demo markup and
  * prevents intentional accessibility anti-patterns from surfacing as Svelte
@@ -35,7 +35,7 @@ export default function remarkTailwindPlayground(): Transformer<Root> {
       const encodedHtml = encodeTailwindPlaygroundHtml(sanitizedHtml);
       const playgroundNode: Html = {
         type: 'html',
-        value: `<div class="tailwind-playground not-prose mb-2 rounded-md bg-slate-100 p-4 shadow-sm dark:bg-slate-800" data-tailwind-playground data-tailwind-playground-html="${encodedHtml}" role="presentation" aria-hidden="true" inert></div>`,
+        value: `<div class="tailwind-playground not-prose mb-2 rounded-md bg-slate-100 p-4 shadow-sm dark:bg-slate-800" data-tailwind-playground data-tailwind-playground-html="${encodedHtml}"></div>`,
       };
 
       parent.children.splice(index, 0, playgroundNode);

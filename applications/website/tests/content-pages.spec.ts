@@ -32,5 +32,10 @@ test('tailwind playground previews are progressively enhanced on content pages',
   await page.goto('/courses/tailwind/utility-first');
 
   await expect(page.locator('[data-content-document][data-content-enhanced="true"]')).toBeVisible();
-  await expect(page.locator('[data-tailwind-playground] button').first()).toBeVisible();
+  const playground = page.locator('[data-tailwind-playground]').first();
+
+  await expect(playground.getByRole('button').first()).toBeVisible();
+  await expect(playground).not.toHaveAttribute('aria-hidden', 'true');
+  await expect(playground).not.toHaveAttribute('role', 'presentation');
+  await expect(playground).not.toHaveAttribute('inert', '');
 });
