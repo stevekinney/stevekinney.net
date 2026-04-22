@@ -10,9 +10,9 @@ export function GET() {
   const lines = [
     '# Steve Kinney',
     '',
-    '> Software engineer, teacher, and artist based in Denver, Colorado.',
+    '> Software engineer, educator, and engineering leader based in Denver, Colorado.',
     '',
-    'Steve Kinney builds tools and teaches courses on frontend engineering, TypeScript, React, and modern web development.',
+    'Steve Kinney builds AI systems, developer tools, and courses on software engineering, including agentic workflows, durable execution, TypeScript, React, and modern web development.',
     '',
     '## Blog Posts',
     '',
