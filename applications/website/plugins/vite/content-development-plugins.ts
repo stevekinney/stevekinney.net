@@ -4,7 +4,7 @@ import { regenerateGeneratedContent } from './regenerate-generated-content';
 import { serveStaticDirectory } from './serve-static-directory';
 import { watchContentDirectories } from './watch-content-directories';
 
-const CONTENT_ASSET_MIME_TYPES: Record<string, string> = {
+const IMAGE_ASSET_MIME_TYPES: Record<string, string> = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -14,15 +14,14 @@ const CONTENT_ASSET_MIME_TYPES: Record<string, string> = {
   '.avif': 'image/avif',
 };
 
+const CONTENT_ASSET_MIME_TYPES: Record<string, string> = {
+  ...IMAGE_ASSET_MIME_TYPES,
+};
+
 const GENERATED_ASSET_MIME_TYPES: Record<string, string> = {
+  ...IMAGE_ASSET_MIME_TYPES,
+  '.css': 'text/css; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg',
-  '.gif': 'image/gif',
-  '.svg': 'image/svg+xml',
-  '.webp': 'image/webp',
-  '.avif': 'image/avif',
 };
 
 type ContentDevelopmentPluginsOptions = {
