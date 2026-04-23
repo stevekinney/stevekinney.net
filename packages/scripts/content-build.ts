@@ -1,21 +1,20 @@
 #!/usr/bin/env bun
-import { createHash } from 'node:crypto';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-
-import fg from 'fast-glob';
 
 import type { GeneratedContent } from '@stevekinney/utilities/content-types';
 import { formatJson } from '@stevekinney/utilities/write-formatted-json';
 
 import {
   contentEnhancementsEntryPath,
-  contentEnhancementsSourceDirectory,
+  contentEnhancementsPackageRoot,
   generatedContentDataPath,
   generatedContentDirectory,
   generatedContentEnhancementsDirectory,
+  repositoryRoot,
   tailwindPlaygroundSourcePath,
 } from './content-paths.ts';
+import { computeContentEnhancementBuildHash } from './content-enhancement-build-hash.ts';
 import { collectContentRepository } from './content-repository.ts';
 
 const writeIfChanged = async (filePath: string, contents: string): Promise<boolean> => {
@@ -39,28 +38,6 @@ const enhancementsBuildHashPath = path.resolve(
   '.build-hash',
 );
 
-const listEnhancementSourceFiles = async (): Promise<string[]> => {
-  const matches = await fg('**/*.ts', {
-    cwd: contentEnhancementsSourceDirectory,
-    absolute: true,
-    onlyFiles: true,
-  });
-  return matches.sort();
-};
-
-const computeEnhancementSourceHash = async (): Promise<string> => {
-  const hash = createHash('sha256');
-  for (const sourcePath of await listEnhancementSourceFiles()) {
-    const relativePath = path.relative(contentEnhancementsSourceDirectory, sourcePath);
-    const contents = await readFile(sourcePath);
-    hash.update(relativePath);
-    hash.update('\0');
-    hash.update(contents);
-    hash.update('\0');
-  }
-  return hash.digest('hex');
-};
-
 const readExistingBuildHash = async (): Promise<string | null> => {
   try {
     return (await readFile(enhancementsBuildHashPath, 'utf8')).trim();
@@ -73,7 +50,10 @@ const readExistingBuildHash = async (): Promise<string | null> => {
 };
 
 const buildContentEnhancements = async (): Promise<boolean> => {
-  const expectedHash = await computeEnhancementSourceHash();
+  const expectedHash = await computeContentEnhancementBuildHash(
+    contentEnhancementsPackageRoot,
+    repositoryRoot,
+  );
   const existingHash = await readExistingBuildHash();
   if (existingHash === expectedHash) {
     return false;

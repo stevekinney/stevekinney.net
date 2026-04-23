@@ -48,13 +48,18 @@ describe('remarkTailwindPlayground', () => {
 
   it('sanitizes dangerous HTML before encoding it into the placeholder', () => {
     const tree = run(
-      makeTree('html', 'tailwind', '<div class="p-4"><script>alert("xss")</script>OK</div>'),
+      makeTree(
+        'html',
+        'tailwind',
+        '<div class="p-4" style="position:fixed"><script>alert("xss")</script>OK</div>',
+      ),
     );
     const [playground] = htmlNodes(tree);
     const encoded = playground.value.match(/data-tailwind-playground-html="([^"]+)"/)?.[1];
     const decoded = encoded ? decodeURIComponent(encoded) : '';
 
     expect(decoded).not.toContain('<script');
+    expect(decoded).not.toContain('style=');
     expect(decoded).toContain('OK');
     expect(decoded).toContain('<div class="p-4">');
   });

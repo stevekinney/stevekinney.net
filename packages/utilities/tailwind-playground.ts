@@ -82,17 +82,11 @@ const DOM_PURIFY_CONFIGURATION = {
     'stroke-linecap',
     'stroke-linejoin',
     'xmlns',
-    'style',
   ],
 } satisfies Config;
 
 export const sanitizeTailwindPlaygroundHtml = (html: string): string =>
   DOMPurify.sanitize(html, DOM_PURIFY_CONFIGURATION);
-
-export const escapeSvelteDelimiters = (html: string): string =>
-  html.replace(/[{}`]/g, (character) => {
-    return { '{': '&#123;', '}': '&#125;', '`': '&#96;' }[character] ?? character;
-  });
 
 export const encodeTailwindPlaygroundHtml = (html: string): string => encodeURIComponent(html);
 
