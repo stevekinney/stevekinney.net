@@ -14,10 +14,6 @@ const IMAGE_ASSET_MIME_TYPES: Record<string, string> = {
   '.avif': 'image/avif',
 };
 
-const CONTENT_ASSET_MIME_TYPES: Record<string, string> = {
-  ...IMAGE_ASSET_MIME_TYPES,
-};
-
 const GENERATED_ASSET_MIME_TYPES: Record<string, string> = {
   ...IMAGE_ASSET_MIME_TYPES,
   '.css': 'text/css; charset=utf-8',
@@ -92,7 +88,7 @@ export function contentDevelopmentPlugins(
         server.middlewares.use(
           serveStaticDirectory({
             rootDirectory: options.workspaceRoot,
-            mimeTypes: CONTENT_ASSET_MIME_TYPES,
+            mimeTypes: IMAGE_ASSET_MIME_TYPES,
             matchRequest: (pathname) =>
               options.contentAssetPathPrefixes.some((prefix) => pathname.startsWith(prefix))
                 ? pathname.slice(1)
