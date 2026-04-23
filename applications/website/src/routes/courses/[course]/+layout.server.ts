@@ -7,20 +7,27 @@ import type { LayoutServerLoad } from './$types';
 export const prerender = true;
 export const csr = false;
 
-export const load: LayoutServerLoad = async ({ params }) => {
+const getCoursePathSuffix = (pathname: string, rawCourse: string): string => {
+  const coursePathPrefix = `/courses/${rawCourse}`;
+  if (!pathname.startsWith(coursePathPrefix)) return '';
+
+  const suffix = pathname.slice(coursePathPrefix.length);
+  return suffix.startsWith('/') ? suffix : '';
+};
+
+export const load: LayoutServerLoad = async ({ params, url }) => {
   const rawCourse = params.course;
   const courseSlug = rawCourse.replace(/\.md$/i, '');
-  const lessonSuffix = params.lesson ? `/${params.lesson}` : '';
 
   if (rawCourse !== courseSlug) {
     const course = getCourseEntry(courseSlug);
     if (course) {
-      throw redirect(308, `/courses/${courseSlug}${lessonSuffix}`);
+      throw redirect(308, `/courses/${courseSlug}${getCoursePathSuffix(url.pathname, rawCourse)}`);
     }
 
     const matchedCourse = findCourseForLessonSlug(courseSlug);
     if (matchedCourse) {
-      throw redirect(308, `/courses/${matchedCourse}/${courseSlug}${lessonSuffix}`);
+      throw redirect(308, `/courses/${matchedCourse}/${courseSlug}`);
     }
   }
 

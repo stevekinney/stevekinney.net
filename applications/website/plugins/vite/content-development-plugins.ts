@@ -1,15 +1,35 @@
 import type { PluginOption } from 'vite';
 
 import { regenerateGeneratedContent } from './regenerate-generated-content';
-import { serveContentAssets } from './serve-content-assets';
-import { serveGeneratedContentEnhancements } from './serve-generated-content-enhancements';
+import { serveStaticDirectory } from './serve-static-directory';
 import { watchContentDirectories } from './watch-content-directories';
+
+const CONTENT_ASSET_MIME_TYPES: Record<string, string> = {
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+  '.avif': 'image/avif',
+};
+
+const GENERATED_ASSET_MIME_TYPES: Record<string, string> = {
+  '.js': 'application/javascript; charset=utf-8',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+  '.avif': 'image/avif',
+};
 
 type ContentDevelopmentPluginsOptions = {
   workspaceRoot: string;
   /**
    * Absolute directories whose `.md` / `.toml` contents drive the generated
-   * content and should also be exposed via `serveContentAssets`.
+   * content and should also be exposed by the content asset middleware.
    */
   contentDirectories: readonly string[];
   /**
@@ -52,13 +72,35 @@ export function contentDevelopmentPlugins(
       contentDirectories: options.contentDirectories,
       enhancementSourceDirectories: options.enhancementSourceDirectories,
     }),
-    serveGeneratedContentEnhancements({
-      rootDirectory: options.generatedEnhancementsDirectory,
-      urlPrefix: options.generatedEnhancementsUrlPrefix,
-    }),
-    serveContentAssets({
-      workspaceRoot: options.workspaceRoot,
-      pathPrefixes: options.contentAssetPathPrefixes,
-    }),
+    {
+      name: 'serve-generated-content-enhancements',
+      configureServer(server) {
+        server.middlewares.use(
+          serveStaticDirectory({
+            rootDirectory: options.generatedEnhancementsDirectory,
+            mimeTypes: GENERATED_ASSET_MIME_TYPES,
+            matchRequest: (pathname) =>
+              pathname.startsWith(options.generatedEnhancementsUrlPrefix)
+                ? pathname.slice(options.generatedEnhancementsUrlPrefix.length)
+                : null,
+          }),
+        );
+      },
+    },
+    {
+      name: 'serve-content-assets',
+      configureServer(server) {
+        server.middlewares.use(
+          serveStaticDirectory({
+            rootDirectory: options.workspaceRoot,
+            mimeTypes: CONTENT_ASSET_MIME_TYPES,
+            matchRequest: (pathname) =>
+              options.contentAssetPathPrefixes.some((prefix) => pathname.startsWith(prefix))
+                ? pathname.slice(1)
+                : null,
+          }),
+        );
+      },
+    },
   ];
 }

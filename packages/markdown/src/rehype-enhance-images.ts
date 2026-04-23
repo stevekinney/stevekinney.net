@@ -138,7 +138,7 @@ const rehypeEnhanceImages: Plugin<[Options?], Root> = (options = {}) => {
         }
 
         // Unmanifested image: rewrite relative src to a repository-rooted absolute path
-        // so the dev middleware (serveContentAssets) serves it regardless of the
+        // so the dev asset middleware serves it regardless of the
         // current page URL. Without this, `<img src="assets/foo.png">` on a page
         // like /courses/<slug> resolves to /courses/assets/foo.png — wrong.
         // In production the manifest is authoritative, so this branch is a no-op.

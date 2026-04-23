@@ -14,8 +14,6 @@ type ServeStaticDirectoryOptions = {
 /**
  * Connect middleware that serves files from a directory under a URL-prefix
  * filter, with extension → MIME-type lookup and a path-traversal guard.
- * Shared by `serveContentAssets` and `serveGeneratedContentEnhancements` so
- * both stay structurally identical — only the request-matching logic differs.
  */
 export function serveStaticDirectory(
   options: ServeStaticDirectoryOptions,
