@@ -1,6 +1,6 @@
 ---
 paths:
-  - 'applications/website/src/lib/content-enhancements/**'
+  - 'packages/content-enhancements/**'
   - 'applications/website/plugins/vite/**'
   - 'packages/scripts/content-build.ts'
   - 'applications/website/src/routes/writing/**'
@@ -19,17 +19,17 @@ Content routes (`/writing/*`, `/courses/*`, `/courses/*/*`) render prerendered H
 
 ## Enhancer modules
 
-- Live at `applications/website/src/lib/content-enhancements/enhance-*.ts`. Despite the name, these are **not** Svelte `use:` actions — they are plain functions `(node: HTMLElement) => { destroy: () => void } | void`, optionally async.
+- Live at `packages/content-enhancements/src/enhance-*.ts` inside `@stevekinney/content-enhancements`. Despite the name, these are **not** Svelte `use:` actions — they are plain functions `(node: HTMLElement) => { destroy: () => void } | void`, optionally async.
 - `content-enhancements.ts` is the loader. It selects roots via `[data-content-document]`, filters enhancers whose selector matches any root, lazy-loads each module, and tracks `destroy` callbacks in a `WeakMap` keyed by root. `pagehide` triggers cleanup.
-- `copy-code-block-as-image.ts` is a shared helper imported by both code-block and mermaid enhancements. Keep it colocated inside `content-enhancements/`.
+- `copy-code-block-as-image.ts` is a shared helper imported by both code-block and mermaid enhancements. Keep it colocated inside the package.
 
 ## Generated bundle
 
-- `packages/scripts/content-build.ts` bundles the enhancer tree (via `Bun.build`) into `applications/website/.generated/content-enhancements/` and writes a `.build-hash` sidecar alongside the output. On subsequent runs the build is skipped when the sha256 of `content-enhancements/**/*.ts` matches the sidecar, so Turbo's cache restore remains valid and the "already up to date" message stays truthful.
+- `packages/scripts/content-build.ts` bundles the enhancer tree (via `Bun.build`) into `applications/website/.generated/content-enhancements/` and writes a `.build-hash` sidecar alongside the output. On subsequent runs the build is skipped when the sha256 of `packages/content-enhancements/src/**/*.ts` matches the sidecar, so Turbo's cache restore remains valid and the "already up to date" message stays truthful.
 - `sync-generated-browser-assets.ts` copies the generated bundle into each adapter output, filtering the `.build-hash` sidecar so it is not served to users.
 
 ## Vite dev-server plugins
 
 - Live at `applications/website/plugins/vite/`. They are app-local because they encode this repository's directory layout; do not hoist to a shared package unless a second app emerges.
 - `content-development-plugins.ts` returns the plugins in their intended order. Always register through the factory rather than picking individual plugins — ordering between watcher registration, content rebuild triggers, and dev-only middleware matters.
-- Watched inputs are globs (`content-enhancements/**/*.{ts,css}`, `writing/**/*.{md,toml}`, `courses/**/*.{md,toml}`), not enumerated paths. Add a new enhancement source file under `content-enhancements/` and the watcher picks it up for free.
+- Watched inputs are globs (`packages/content-enhancements/src/**/*.{ts,css}`, `writing/**/*.{md,toml}`, `courses/**/*.{md,toml}`), not enumerated paths. Add a new enhancement source file inside the package and the watcher picks it up for free.

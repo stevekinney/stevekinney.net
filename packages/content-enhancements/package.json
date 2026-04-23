@@ -1,0 +1,9 @@
+{
+  "name": "@stevekinney/content-enhancements",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/content-enhancements.ts",
+    "./*": "./src/*.ts"
+  }
+}

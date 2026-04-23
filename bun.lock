@@ -126,6 +126,9 @@
     "packages/components": {
       "name": "@stevekinney/components",
     },
+    "packages/content-enhancements": {
+      "name": "@stevekinney/content-enhancements",
+    },
     "packages/markdown": {
       "name": "@stevekinney/markdown",
       "dependencies": {
@@ -624,6 +627,8 @@
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
     "@stevekinney/components": ["@stevekinney/components@workspace:packages/components"],
+
+    "@stevekinney/content-enhancements": ["@stevekinney/content-enhancements@workspace:packages/content-enhancements"],
 
     "@stevekinney/markdown": ["@stevekinney/markdown@workspace:packages/markdown"],
 

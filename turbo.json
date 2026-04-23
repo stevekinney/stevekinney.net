@@ -15,7 +15,7 @@
         "../utilities/content-types.ts",
         "../utilities/frontmatter.ts",
         "../utilities/tailwind-playground.ts",
-        "../../applications/website/src/lib/content-enhancements/**/*.ts",
+        "../content-enhancements/src/**/*.ts",
         "../../applications/website/static/**",
         "../../writing/**",
         "../../courses/**"

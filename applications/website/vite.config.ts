@@ -27,11 +27,9 @@ const contentDirectories = ['writing', 'courses'].map((directory) =>
 );
 const contentEnhancementsSourceDirectory = path.resolve(
   workspaceRoot,
-  'applications',
-  'website',
-  'src',
-  'lib',
+  'packages',
   'content-enhancements',
+  'src',
 );
 const generatedEnhancementsDirectory = path.resolve(
   workspaceRoot,
