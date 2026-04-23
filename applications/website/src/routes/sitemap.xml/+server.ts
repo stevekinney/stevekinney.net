@@ -21,7 +21,7 @@ const getStaticPriority = (filePath: string): number => {
   return 0.5;
 };
 
-const getUrlPath = (filePath: string): string | null => {
+const getUrlPath = (filePath: string): string => {
   const routePath = filePath
     .replace('/src/routes', '')
     .replace('/+page', '')
@@ -62,7 +62,6 @@ export const GET = async () => {
     if (filePath.includes('_index')) continue;
 
     const routePath = getUrlPath(filePath);
-    if (!routePath) continue;
 
     const url = `${metadata.url}${routePath}`;
     if (checked.has(url)) continue;
