@@ -69,3 +69,10 @@ if (document.readyState === 'loading') {
 window.addEventListener('pagehide', () => {
   for (const root of getRoots()) cleanupRoot(root);
 });
+
+// If the browser restores the document from the back/forward cache the
+// pagehide listener above has already torn every enhancement down. Re-run
+// them so copy buttons, diagrams, and playgrounds come back.
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) applyEnhancements();
+});

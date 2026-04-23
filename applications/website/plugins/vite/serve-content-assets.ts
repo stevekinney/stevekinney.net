@@ -1,6 +1,6 @@
-import { readFile, stat } from 'node:fs/promises';
-import path from 'node:path';
 import type { PluginOption } from 'vite';
+
+import { serveStaticDirectory } from './serve-static-directory';
 
 const CONTENT_ASSET_MIME_TYPES: Record<string, string> = {
   '.png': 'image/png',
@@ -25,39 +25,19 @@ type ServeContentAssetsOptions = {
  * `workspaceRoot`.
  */
 export function serveContentAssets(options: ServeContentAssetsOptions): PluginOption {
-  const workspaceRoot = path.resolve(options.workspaceRoot);
-  const { pathPrefixes } = options;
+  const { workspaceRoot, pathPrefixes } = options;
 
   return {
     name: 'serve-content-assets',
     configureServer(server) {
-      server.middlewares.use(async (request, response, next) => {
-        if (!request.url) return next();
-
-        const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
-        if (!pathPrefixes.some((prefix) => pathname.startsWith(prefix))) {
-          return next();
-        }
-
-        const contentType = CONTENT_ASSET_MIME_TYPES[path.extname(pathname).toLowerCase()];
-        if (!contentType) return next();
-
-        const filePath = path.resolve(workspaceRoot, pathname.slice(1));
-        if (!filePath.startsWith(workspaceRoot)) return next();
-
-        try {
-          const fileStat = await stat(filePath);
-          if (!fileStat.isFile()) return next();
-
-          const content = await readFile(filePath);
-          response.setHeader('Content-Type', contentType);
-          response.setHeader('Content-Length', content.length);
-          response.setHeader('Cache-Control', 'no-cache');
-          response.end(content);
-        } catch {
-          next();
-        }
-      });
+      server.middlewares.use(
+        serveStaticDirectory({
+          rootDirectory: workspaceRoot,
+          mimeTypes: CONTENT_ASSET_MIME_TYPES,
+          matchRequest: (pathname) =>
+            pathPrefixes.some((prefix) => pathname.startsWith(prefix)) ? pathname.slice(1) : null,
+        }),
+      );
     },
   };
 }

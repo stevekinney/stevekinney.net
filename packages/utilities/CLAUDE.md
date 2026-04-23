@@ -4,7 +4,7 @@ Shared TypeScript helpers. No framework, no runtime globals, no side effects at 
 
 ## Load-bearing constraints
 
-- **Every module must be pure.** These helpers run in the browser, in Bun scripts, and under SvelteKit SSR. Anything that touches `window`, `document`, or Node-only APIs without guarding it breaks at least one consumer. If you genuinely need a platform-specific module, split it into its own package.
+- **Every module must be isomorphic.** These helpers run in the browser, in Bun scripts, and under SvelteKit SSR. That means no unguarded `window` / `document` access and no Node-only APIs outside a platform guard. Dependencies that ship their own isomorphic builds (for example `isomorphic-dompurify`, used by `tailwind-playground.ts`) are fine because they handle the DOM split for us. If a module genuinely can't be isomorphic, split it into its own platform-scoped package instead of smuggling platform globals in.
 - **`content-types` is a contract, not a sketch.** `GeneratedContent`, `WritingIndexEntry`, `CourseIndexEntry`, and `LessonIndexEntry` define the shape of `.generated/content-data.json`. Breaking changes require rebuilding the content artifact and updating the website's server-only readers in the same commit.
 - **`image-manifest` truncates the SHA to 16 hex chars.** That's the blob pathname scheme in production. Do not return the full digest; the manifest key won't match.
 - **`tailwind-playground.decodeTailwindPlaygroundHtml` must fail closed.** Wrap `decodeURIComponent` in a try/catch that returns `''` on malformed input so a single bad attribute can't throw during the page-wide enhancement pass.
