@@ -39,8 +39,6 @@ export const getPostIndex = (): WritingIndexEntry[] => content.siteIndex.posts;
 
 export const getCourseIndex = (): CourseIndexEntry[] => content.siteIndex.courses;
 
-export const getLessonIndex = (): LessonIndexEntry[] => content.lessons;
-
 export const getRouteByPath = (pathname: string): ContentRoute | null =>
   content.routes[normalizeRoutePath(pathname)] ?? null;
 

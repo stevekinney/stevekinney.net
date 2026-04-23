@@ -66,20 +66,28 @@ export function regenerateGeneratedContent(
           stdio: 'inherit',
         });
 
-        child.on('exit', (code) => {
+        const finish = (success: boolean, reason?: string): void => {
+          if (!isRunning) return;
           isRunning = false;
 
-          if (code === 0) {
+          if (success) {
             server.ws.send({ type: 'full-reload' });
           } else {
-            server.config.logger.error('Generated content rebuild failed.');
+            server.config.logger.error(
+              reason
+                ? `Generated content rebuild failed: ${reason}`
+                : 'Generated content rebuild failed.',
+            );
           }
 
           if (hasPendingRun) {
             hasPendingRun = false;
             runContentBuild();
           }
-        });
+        };
+
+        child.on('exit', (code) => finish(code === 0));
+        child.on('error', (error) => finish(false, error.message));
       };
 
       const handleChange = (filePath: string): void => {
