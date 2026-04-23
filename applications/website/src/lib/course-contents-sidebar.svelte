@@ -1,7 +1,7 @@
 <script lang="ts">
   import Link from '$lib/components/link.svelte';
   import { merge } from '$merge';
-  import type { CourseContentsData } from '$lib/content-modules';
+  import type { CourseContentsData } from '@stevekinney/utilities/content-types';
 
   type Props = {
     data: CourseContentsData;

@@ -1,16 +1,16 @@
 <script lang="ts">
-  type RepoPath = `courses/${string}` | `writing/${string}`;
+  import type { RepositoryPath } from '$lib/repository-path';
 
-  const { repoPath }: { repoPath: RepoPath } = $props();
+  const { repositoryPath }: { repositoryPath: RepositoryPath } = $props();
 
   const dev = import.meta.env.DEV;
 
   const obsidianUrl = $derived.by(() => {
-    if (repoPath.startsWith('writing/')) {
-      const file = repoPath.slice('writing/'.length);
+    if (repositoryPath.startsWith('writing/')) {
+      const file = repositoryPath.slice('writing/'.length);
       return `obsidian://open?vault=${encodeURIComponent('writing')}&file=${encodeURIComponent(file)}`;
     }
-    return `obsidian://open?vault=${encodeURIComponent('stevekinney.net')}&file=${encodeURIComponent(repoPath)}`;
+    return `obsidian://open?vault=${encodeURIComponent('stevekinney.net')}&file=${encodeURIComponent(repositoryPath)}`;
   });
 </script>
 
@@ -24,6 +24,6 @@
     >
       Open in Obsidian
     </a>
-    <span class="ml-2 text-slate-600 dark:text-slate-400">({repoPath})</span>
+    <span class="ml-2 text-slate-600 dark:text-slate-400">({repositoryPath})</span>
   </aside>
 {/if}

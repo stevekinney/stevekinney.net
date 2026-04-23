@@ -3,7 +3,7 @@ title: >-
   Building a To-Do List Application In React Using Test-Driven Development With
   Vitest
 description: A guide to building a To-Do List app using TDD with React and Vitest.
-modified: 2026-03-17
+modified: 2026-04-22
 date: 2024-10-02
 ---
 
@@ -18,11 +18,11 @@ date: 2024-10-02
 5. [Setting Up React with Vitest](#setting-up-react-with-vitest)
 6. [Designing the To-Do List Application](#designing-the-to-do-list-application)
 7. [Implementing the Application with TDD](#implementing-the-application-with-tdd)
-   - [1. Creating the ToDo Component](#1-creating-the-todo-component)
-   - [2. Fetching To-Dos from an API](#2-fetching-to-dos-from-an-api)
-   - [3. Adding a New To-Do](#3-adding-a-new-to-do)
-   - [4. Marking a To-Do as Completed](#4-marking-a-to-do-as-completed)
-   - [5. Deleting a To-Do](#5-deleting-a-to-do)
+   - [1. Creating the `ToDoList` Component](#creating-the-todolist-component)
+   - [2. Fetching To-Dos from an API](#fetching-to-dos-from-an-api)
+   - [3. Adding a New To-Do](#adding-a-new-to-do)
+   - [4. Marking a To-Do as Completed](#marking-a-to-do-as-completed)
+   - [5. Deleting a To-Do](#deleting-a-to-do)
 8. [Mocking the API with MSW](#mocking-the-api-with-msw)
 9. [Running the Tests](#running-the-tests)
 10. [Conclusion](#conclusion)
@@ -528,3 +528,134 @@ test('deletes a to-do item', async () => {
   expect(screen.queryByText('Buy groceries')).not toBeInTheDocument();
 });
 ```
+
+**Explanation:**
+
+- We locate the delete button for a specific to-do item.
+- We mock the `DELETE` request and the follow-up `GET` request.
+- After clicking delete, we assert that the removed item is no longer rendered.
+
+##### Step 2: Run the Test and See It Fail
+
+Run the test:
+
+```bash
+npm run test
+```
+
+The test fails because the component does not render a delete button yet.
+
+##### Step 3: Write Minimal Code to Pass the Test (Green)
+
+Update `src/components/ToDoList.jsx`:
+
+```jsx
+function deleteTodo(id) {
+  fetch(`/api/todos/${id}`, {
+    method: 'DELETE',
+  }).then(() => {
+    fetchTodos();
+  });
+}
+
+// … in the return statement …
+
+<ul>
+  {todos.map((todo) => (
+    <li key={todo.id}>
+      <label>
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={() => toggleComplete(todo)}
+          aria-label={todo.title}
+        />
+        {todo.title}
+      </label>
+      <button onClick={() => deleteTodo(todo.id)} aria-label={`Delete ${todo.title}`}>
+        Delete
+      </button>
+    </li>
+  ))}
+</ul>;
+```
+
+##### Step 4: Run the Test Again
+
+Run the test:
+
+```bash
+npm run test
+```
+
+The test should pass.
+
+##### Step 5: Refactor (if necessary)
+
+Consider extracting the API calls into a small service module if the component starts handling too many responsibilities.
+
+### Mocking the API with MSW
+
+**Mock Service Worker (MSW)** lets you test the component against realistic network behavior without changing your production code. In this guide, we used:
+
+- `setupServer` from `msw/node` to intercept requests in the test environment.
+- `server.use(...)` to override handlers for a single test case.
+- Mocked `GET`, `POST`, `PUT`, and `DELETE` handlers to simulate the full to-do workflow.
+
+That gives you confidence that the UI behaves correctly across loading, create, update, and delete states while keeping the tests deterministic.
+
+### Running the Tests
+
+Run all tests with:
+
+```bash
+npm run test
+```
+
+Vitest will execute the test suite, and you can use `npm run test -- --watch` while you iterate during development.
+
+### Conclusion
+
+By following Test-Driven Development principles, we built a complete React to-do application one behavior at a time. Each test drove a specific piece of functionality, from loading initial data to adding, updating, and deleting tasks.
+
+**Key Takeaways:**
+
+- **TDD keeps scope focused:** each failing test gave us one concrete behavior to implement.
+- **Vitest works well for React applications:** it provides fast feedback and integrates cleanly with Testing Library.
+- **MSW makes networked UI tests practical:** you can exercise realistic request flows without depending on a live API.
+
+### Additional Exercises
+
+To extend this project and keep practicing your testing skills, try adding:
+
+1. **Filtering**
+   - Add filters for all, active, and completed tasks.
+   - Write tests to verify the correct tasks appear in each view.
+
+2. **Editing Existing Tasks**
+   - Allow users to rename a task inline.
+   - Write tests for save and cancel behavior.
+
+3. **Error Handling**
+   - Show an error message when an API request fails.
+   - Write tests for failed `GET`, `POST`, `PUT`, and `DELETE` requests.
+
+4. **Optimistic Updates**
+   - Update the UI before the network round trip completes.
+   - Write tests that confirm the UI rolls back correctly on failure.
+
+5. **Persistence**
+   - Save the list locally with `localStorage` or connect it to a real backend.
+   - Write tests that verify tasks are restored correctly.
+
+6. **Accessibility Improvements**
+   - Improve keyboard support and screen-reader feedback.
+   - Add tests that verify accessible names and states.
+
+7. **Search**
+   - Add a search input to filter tasks by text.
+   - Write tests to confirm partial matches behave correctly.
+
+8. **Bulk Actions**
+   - Add controls to complete or delete multiple tasks at once.
+   - Write tests for mixed selection states and batch updates.

@@ -9,7 +9,7 @@ type FrontmatterError = {
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, '..', '..');
+const REPOSITORY_ROOT = path.resolve(__dirname, '..', '..');
 
 const files = process.argv.slice(2);
 
@@ -25,7 +25,7 @@ const shouldSkipFile = (filePath: string): boolean => {
 const errors: FrontmatterError[] = [];
 
 for (const file of files) {
-  const absolutePath = path.resolve(REPO_ROOT, file);
+  const absolutePath = path.resolve(REPOSITORY_ROOT, file);
   let contents = '';
 
   try {

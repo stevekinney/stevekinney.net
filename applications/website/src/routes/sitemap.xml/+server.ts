@@ -1,8 +1,7 @@
-import {
-  listCourseMarkdownModulePaths,
-  listWritingMarkdownModulePaths,
-} from '$lib/content-modules';
-import { getLastModifiedDate } from '$lib/get-last-modified-date';
+import { stat } from 'node:fs/promises';
+import path from 'node:path';
+
+import { getGeneratedContent } from '$lib/server/content';
 import metadata from '$lib/metadata';
 import type { Element } from 'hast';
 import { toHtml } from 'hast-util-to-html';
@@ -13,57 +12,42 @@ export const prerender = true;
 
 const dynamicRoute = /\[\w+\]/;
 
-const getPriority = (filePath: string): number => {
-  if (filePath.endsWith('/README.md')) return 0.8;
-  if (filePath.includes('/writing/')) return 0.7;
-  if (filePath.includes('/courses/')) return 0.6;
-
+const getStaticPriority = (filePath: string): number => {
   if (filePath.startsWith('/src/routes/')) {
     const depth = filePath.split('/').length - 4;
-    return 1.0 - depth * 0.1; // Decrease priority based on depth
+    return 1.0 - depth * 0.1;
   }
 
   return 0.5;
 };
 
-const getUrlPath = (filePath: string): string | null => {
-  if (filePath.startsWith('/src/routes/')) {
-    const routePath = filePath
-      .replace('/src/routes', '')
-      .replace('/+page', '')
-      .replace('.svelte', '')
-      .replace('.md', '');
-    return routePath || '/';
-  }
+const getUrlPath = (filePath: string): string => {
+  const routePath = filePath
+    .replace('/src/routes', '')
+    .replace('/+page', '')
+    .replace('.svelte', '')
+    .replace('.md', '');
 
-  const writingMatch = filePath.match(/(?:^|\/)content\/writing\/([^/]+)\.md$/);
-  if (writingMatch) {
-    return `/writing/${writingMatch[1]}`;
-  }
-
-  const courseMatch = filePath.match(/(?:^|\/)courses\/([^/]+)\/([^/]+)\.md$/);
-  if (courseMatch) {
-    const [, courseSlug, lessonSlug] = courseMatch;
-    if (lessonSlug === '_index') return null;
-    if (lessonSlug === 'README') return `/courses/${courseSlug}`;
-    return `/courses/${courseSlug}/${lessonSlug}`;
-  }
-
-  return null;
+  return routePath || '/';
 };
 
-const toGitPath = (filePath: string): string | null => {
-  if (filePath.startsWith('/src/routes/')) {
-    return `applications/website${filePath}`;
+const getStaticLastModified = async (filePath: string): Promise<Date | null> => {
+  try {
+    const file = await stat(path.resolve(process.cwd(), filePath.replace(/^\//, '')));
+    return file.mtime;
+  } catch {
+    return null;
+  }
+};
+
+const getContentLastModified = (modified: string, date: string): Date | null => {
+  const value = modified || date;
+  if (!value) {
+    return null;
   }
 
-  const writingMatch = filePath.match(/(?:^|\/)(content\/writing\/[^/]+\.md)$/);
-  if (writingMatch) return writingMatch[1];
-
-  const courseMatch = filePath.match(/(?:^|\/)(courses\/[^/]+\/[^/]+\.md)$/);
-  if (courseMatch) return courseMatch[1];
-
-  return null;
+  const lastModified = new Date(value);
+  return Number.isNaN(lastModified.getTime()) ? null : lastModified;
 };
 
 export const GET = async () => {
@@ -71,33 +55,51 @@ export const GET = async () => {
   const paths: Element[] = [];
   let mostRecent = new Date(0);
 
-  const filePaths = [
-    Object.keys(import.meta.glob('/src/routes/**/+page.{md,svelte}')),
-    listWritingMarkdownModulePaths(),
-    listCourseMarkdownModulePaths(),
-  ].flat();
+  const pageFiles = Object.keys(import.meta.glob('/src/routes/**/+page.{md,svelte}'));
 
-  for (const filePath of filePaths) {
-    if (filePath.startsWith('/src/routes/') && dynamicRoute.test(filePath)) continue;
+  for (const filePath of pageFiles) {
+    if (dynamicRoute.test(filePath)) continue;
     if (filePath.includes('_index')) continue;
 
     const routePath = getUrlPath(filePath);
-    if (!routePath) continue;
-    const url = `${metadata.url}${routePath}`;
 
-    if (checked.has(url)) continue; // Skip if already processed
+    const url = `${metadata.url}${routePath}`;
+    if (checked.has(url)) continue;
     checked.add(url);
 
-    const priority = getPriority(filePath);
-    const gitPath = toGitPath(filePath);
-    const lastModified = gitPath ? await getLastModifiedDate(gitPath) : null;
-
+    const lastModified = await getStaticLastModified(filePath);
     if (lastModified && lastModified > mostRecent) {
       mostRecent = lastModified;
     }
 
     paths.push(
-      h('url', [h('loc', url), h('priority', priority), h('lastmod', lastModified?.toISOString())]),
+      h('url', [
+        h('loc', url),
+        h('priority', getStaticPriority(filePath)),
+        ...(lastModified ? [h('lastmod', lastModified.toISOString())] : []),
+      ]),
+    );
+  }
+
+  for (const route of Object.values(getGeneratedContent().routes)) {
+    const url = `${metadata.url}${route.path}`;
+    if (checked.has(url)) continue;
+    checked.add(url);
+
+    const lastModified = getContentLastModified(route.modified, route.date);
+    if (lastModified && lastModified > mostRecent) {
+      mostRecent = lastModified;
+    }
+
+    const priority =
+      route.contentType === 'course' ? 0.8 : route.contentType === 'writing' ? 0.7 : 0.6;
+
+    paths.push(
+      h('url', [
+        h('loc', url),
+        h('priority', priority),
+        ...(lastModified ? [h('lastmod', lastModified.toISOString())] : []),
+      ]),
     );
   }
 

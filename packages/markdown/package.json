@@ -1,0 +1,15 @@
+{
+  "name": "@stevekinney/markdown",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@stevekinney/utilities": "workspace:*"
+  },
+  "exports": {
+    "./remark-callouts": "./src/remark-callouts.ts",
+    "./remark-escape-comparators": "./src/remark-escape-comparators.ts",
+    "./remark-fix-urls": "./src/remark-fix-urls.ts",
+    "./remark-tailwind-playground": "./src/remark-tailwind-playground.ts",
+    "./rehype-enhance-images": "./src/rehype-enhance-images.ts"
+  }
+}

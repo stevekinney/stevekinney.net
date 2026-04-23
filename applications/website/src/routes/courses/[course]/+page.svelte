@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
+  import ContentEnhancements from '$lib/components/content-enhancements.svelte';
   import OpenInObsidian from '$lib/components/open-in-obsidian.svelte';
   import PullRequest from '$lib/components/pull-request.svelte';
   import SEO from '$lib/components/seo.svelte';
@@ -19,8 +20,13 @@
 
 <SEO title={data.title} description={data.description} jsonLd={courseJsonLd} />
 
-<OpenInObsidian repoPath="courses/{page.params.course}/README.md" />
+<ContentEnhancements />
 
-<data.content />
+<OpenInObsidian repositoryPath={data.sourcePath} />
 
-<PullRequest repoPath="courses/{page.params.course}/README.md" />
+<div data-content-document>
+  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+  {@html data.contentHtml}
+</div>
+
+<PullRequest repositoryPath={data.sourcePath} />

@@ -3,7 +3,7 @@ import { fromMarkdown } from 'mdast-util-from-markdown';
 import type { Properties } from 'hast';
 import type { Blockquote, Paragraph, Root } from 'mdast';
 import { VFile } from 'vfile';
-import remarkCallouts from '@stevekinney/plugins/remark-callouts';
+import remarkCallouts from '@stevekinney/markdown/remark-callouts';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const transform = (remarkCallouts as any)() as (tree: Root, file: VFile, next: () => void) => void;

@@ -16,11 +16,13 @@
     "jsxFragmentFactory": "Fragment"
   },
   "include": [
+    ".generated/**/*.json",
     ".svelte-kit/ambient.d.ts",
     ".svelte-kit/non-ambient.d.ts",
     ".svelte-kit/types/**/$types.d.ts",
+    "plugins/**/*.ts",
     "src/**/*",
-    "svelte.config.js",
+    "svelte.config.ts",
     "vite.config.ts"
   ]
 }

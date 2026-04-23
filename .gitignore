@@ -34,9 +34,7 @@ package-lock.json
 /.claude/worktrees
 
 # Generated content manifests (built by Turborepo)
-writing/manifest.json
-courses/*/manifest.json
-applications/website/src/lib/server/content-index.json
+applications/website/.generated/
 tmp/
 /.playwright-cli
 true/

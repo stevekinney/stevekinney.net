@@ -1,8 +1,7 @@
 import { error } from '@sveltejs/kit';
+
 import { url } from '$lib/metadata';
-import { loadCourseLessonMarkdown } from '$lib/content-modules';
-import { getCourseIndex, getPostIndex } from '$lib/server/content';
-import { CourseMarkdownSchema } from '$lib/schemas/courses';
+import { getCourseEntry, getLessonRoute, getWritingEntry } from '$lib/server/content';
 import {
   loadRawCourseLesson,
   loadRawCourseReadme,
@@ -22,7 +21,7 @@ const safeDecode = (value: string): string => {
 };
 
 const resolveWriting = async (slug: string): Promise<string | null> => {
-  const post = getPostIndex().find((entry) => entry.slug === slug);
+  const post = getWritingEntry(slug);
   if (!post) return null;
 
   try {
@@ -45,7 +44,7 @@ const resolveWriting = async (slug: string): Promise<string | null> => {
 };
 
 const resolveCourse = async (courseSlug: string): Promise<string | null> => {
-  const course = getCourseIndex().find((entry) => entry.slug === courseSlug);
+  const course = getCourseEntry(courseSlug);
   if (!course) return null;
 
   try {
@@ -70,33 +69,23 @@ const resolveCourseLesson = async (
   courseSlug: string,
   lessonSlug: string,
 ): Promise<string | null> => {
-  const course = getCourseIndex().find((entry) => entry.slug === courseSlug);
-  if (!course) return null;
+  const course = getCourseEntry(courseSlug);
+  const lesson = getLessonRoute(courseSlug, lessonSlug);
 
-  let lessonTitle = lessonSlug;
-  let lessonDescription = '';
-
-  try {
-    const lessonModule = await loadCourseLessonMarkdown(courseSlug, lessonSlug);
-    const parsed = CourseMarkdownSchema.parse(lessonModule);
-    lessonTitle = parsed.metadata.title || lessonSlug;
-    lessonDescription = parsed.metadata.description || '';
-  } catch {
-    return null;
-  }
+  if (!course || !lesson) return null;
 
   try {
     const body = await loadRawCourseLesson(courseSlug, lessonSlug);
 
     const header = [
-      `# ${lessonTitle}`,
+      `# ${lesson.title}`,
       '',
       `Course: ${course.title}`,
       `URL: ${url}/courses/${courseSlug}/${lessonSlug}`,
     ];
 
-    if (lessonDescription) {
-      header.push(`Description: ${lessonDescription}`);
+    if (lesson.description) {
+      header.push(`Description: ${lesson.description}`);
     }
 
     return [...header, '', '---', '', body].join('\n');

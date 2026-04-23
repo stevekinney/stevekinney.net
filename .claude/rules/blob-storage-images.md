@@ -2,7 +2,7 @@
 paths:
   - 'packages/scripts/sync-images.ts'
   - 'packages/scripts/check-image-manifest.ts'
-  - 'packages/plugins/src/rehype-enhance-images.ts'
+  - 'packages/markdown/src/rehype-enhance-images.ts'
   - 'packages/utilities/image-discovery.ts'
   - 'packages/utilities/image-manifest.ts'
   - 'image-manifest.json'

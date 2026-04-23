@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PostWithSlug } from '$lib/posts';
+  import type { PostWithSlug } from '$lib/post-types';
   import { merge } from '$merge';
   import type { SvelteHTMLElements } from 'svelte/elements';
   import Date from './date.svelte';

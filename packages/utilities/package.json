@@ -7,6 +7,8 @@
     "./frontmatter": "./frontmatter.ts",
     "./image-discovery": "./image-discovery.ts",
     "./image-manifest": "./image-manifest.ts",
+    "./routes": "./routes.ts",
+    "./tailwind-playground": "./tailwind-playground.ts",
     "./write-formatted-json": "./write-formatted-json.ts"
   }
 }

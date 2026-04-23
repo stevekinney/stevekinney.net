@@ -1,5 +1,7 @@
 <script lang="ts">
-  const { repoPath }: { repoPath: `courses/${string}` | `writing/${string}` } = $props();
+  import type { RepositoryPath } from '$lib/repository-path';
+
+  const { repositoryPath }: { repositoryPath: RepositoryPath } = $props();
 </script>
 
 <footer
@@ -8,7 +10,7 @@
   <p>
     See something that looks a little off? Feel free to <a
       class="decoration-primary-500 font-semibold underline decoration-2 underline-offset-4"
-      href="https://github.com/stevekinney/stevekinney.net/blob/main/{repoPath}"
+      href="https://github.com/stevekinney/stevekinney.net/blob/main/{repositoryPath}"
       >open a pull request here</a
     >.
   </p>

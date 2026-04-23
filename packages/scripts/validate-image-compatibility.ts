@@ -1,10 +1,11 @@
+#!/usr/bin/env bun
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import { discoverAllImages } from '@stevekinney/utilities/image-discovery';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, '..', '..');
+const REPOSITORY_ROOT = path.resolve(__dirname, '..', '..');
 
 const MARKDOWN_PATTERNS = ['writing/**/*.md', 'courses/**/*.md'];
 const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg']);
@@ -16,17 +17,20 @@ type ValidationIssue = {
 };
 
 const normalizePath = (value: string): string => value.split(path.sep).join('/');
-const toRepoPath = (absolutePath: string): string =>
-  normalizePath(path.relative(REPO_ROOT, absolutePath));
+const toRepositoryPath = (absolutePath: string): string =>
+  normalizePath(path.relative(REPOSITORY_ROOT, absolutePath));
 
 const issues: ValidationIssue[] = [];
 
-const { images: imageSources, missing } = await discoverAllImages(MARKDOWN_PATTERNS, REPO_ROOT);
+const { images: imageSources, missing } = await discoverAllImages(
+  MARKDOWN_PATTERNS,
+  REPOSITORY_ROOT,
+);
 
 for (const entry of missing) {
   issues.push({
-    file: toRepoPath(entry.markdownFile),
-    message: `Missing image '${entry.imageUrl}' (${toRepoPath(entry.resolvedPath)}).`,
+    file: toRepositoryPath(entry.markdownFile),
+    message: `Missing image '${entry.imageUrl}' (${toRepositoryPath(entry.resolvedPath)}).`,
   });
 }
 
@@ -39,7 +43,7 @@ for (const source of imageSources.values()) {
 
   checkedCount++;
 
-  const fileLabel = toRepoPath(source.resolvedPath);
+  const fileLabel = toRepositoryPath(source.resolvedPath);
 
   try {
     await sharp(source.resolvedPath).metadata();
