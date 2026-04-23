@@ -23,9 +23,9 @@ const collectDefinitionUrls = (tree: Root): string[] => {
 
 const apply = (
   markdown: string,
-  filePath = '/repo/writing/post.md',
+  filePath = '/repository/writing/post.md',
   contentPath = 'writing',
-  cwd = '/repo',
+  cwd = '/repository',
 ): string[] => {
   const tree = fromMarkdown(markdown) as Root;
   const file = new VFile({ path: filePath, cwd });
@@ -35,9 +35,9 @@ const apply = (
 
 const applyDefinitions = (
   markdown: string,
-  filePath = '/repo/writing/post.md',
+  filePath = '/repository/writing/post.md',
   contentPath = 'writing',
-  cwd = '/repo',
+  cwd = '/repository',
 ): string[] => {
   const tree = fromMarkdown(markdown) as Root;
   const file = new VFile({ path: filePath, cwd });
@@ -57,7 +57,7 @@ describe('fixMarkdownUrls', () => {
   });
 
   it('resolves parent directories against the file path', () => {
-    const [url] = apply('[About](../about.md)', '/repo/writing/subdir/page.md');
+    const [url] = apply('[About](../about.md)', '/repository/writing/subdir/page.md');
     expect(url).toBe('/writing/about');
   });
 
@@ -147,8 +147,8 @@ describe('fixMarkdownUrls', () => {
       ],
     };
     const file = new VFile({
-      path: 'C:\\repo\\content\\courses\\figma\\page.md',
-      cwd: 'C:\\repo',
+      path: 'C:\\repository\\content\\courses\\figma\\page.md',
+      cwd: 'C:\\repository',
     });
     fixMarkdownUrls()(tree, file, () => {});
     const [url] = collectUrls(tree);
@@ -176,21 +176,21 @@ describe('fixMarkdownUrls', () => {
   });
 
   it('normalizes content paths with leading or trailing slashes', () => {
-    const [url] = apply('[Next](./next.md)', '/repo/writing/post.md', '/writing/');
+    const [url] = apply('[Next](./next.md)', '/repository/writing/post.md', '/writing/');
     expect(url).toBe('/writing/next');
   });
 
   it('skips rewriting when file is outside the content path', () => {
-    const [url] = apply('[Next](./next.md)', '/repo/notes/post.md');
+    const [url] = apply('[Next](./next.md)', '/repository/notes/post.md');
     expect(url).toBe('./next.md');
   });
 
   it('rewrites relative links in course lesson files', () => {
     const [url] = apply(
       '[MSW](mock-service-worker.md)',
-      '/repo/courses/enterprise-ui/testing-at-scale.md',
+      '/repository/courses/enterprise-ui/testing-at-scale.md',
       '../../courses',
-      '/repo/applications/website',
+      '/repository/applications/website',
     );
     expect(url).toBe('/courses/enterprise-ui/mock-service-worker');
   });

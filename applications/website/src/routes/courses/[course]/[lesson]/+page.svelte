@@ -28,7 +28,7 @@
 
 <ContentEnhancements />
 
-<OpenInObsidian repoPath={data.sourcePath} />
+<OpenInObsidian repositoryPath={data.sourcePath} />
 
 <div class="space-y-10">
   <hgroup class="space-y-2">
@@ -58,4 +58,4 @@
   {/if}
 </div>
 
-<PullRequest repoPath={data.sourcePath} />
+<PullRequest repositoryPath={data.sourcePath} />

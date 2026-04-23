@@ -36,7 +36,7 @@
 
 <ContentEnhancements />
 
-<OpenInObsidian repoPath={data.sourcePath} />
+<OpenInObsidian repositoryPath={data.sourcePath} />
 
 <article class="space-y-10">
   <hgroup class="space-y-2">
@@ -60,4 +60,4 @@
   {/if}
 </article>
 
-<PullRequest repoPath={data.sourcePath} />
+<PullRequest repositoryPath={data.sourcePath} />

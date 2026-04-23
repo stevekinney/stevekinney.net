@@ -1,6 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
 
-import type { RepoPath } from '$lib/repo-path';
+import type { RepositoryPath } from '$lib/repository-path';
 import { getCourseEntry, getLessonRoute, getPrerenderEntries } from '$lib/server/content';
 import { renderLessonDocument } from '$lib/server/content-documents';
 
@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ params }) => {
     description: lesson.description,
     date: lesson.date,
     modified: lesson.modified,
-    sourcePath: lesson.sourcePath as RepoPath,
+    sourcePath: lesson.sourcePath as RepositoryPath,
     contentHtml: await renderLessonDocument(lesson.sourcePath),
   };
 };

@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 
-import type { RepoPath } from '$lib/repo-path';
+import type { RepositoryPath } from '$lib/repository-path';
 import { getPrerenderEntries, getCourseRoute } from '$lib/server/content';
 import { renderCourseDocument } from '$lib/server/content-documents';
 
@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ params }) => {
     description: course.description,
     date: course.date,
     modified: course.modified,
-    sourcePath: course.sourcePath as RepoPath,
+    sourcePath: course.sourcePath as RepositoryPath,
     contentHtml: await renderCourseDocument(course.sourcePath),
   };
 };

@@ -5,7 +5,7 @@
 //   bun run scripts/get-pr-comments.ts
 //
 // What it does:
-//   - Figures out the GitHub repo for the current directory by reading `git remote get-url origin`
+//   - Figures out the GitHub repository for the current directory by reading `git remote get-url origin`
 //   - Gets the current branch name
 //   - Finds an open PR whose head matches that branch (if any)
 //   - Fetches *unresolved* review threads via GraphQL, then returns the review comments inside them
@@ -16,7 +16,7 @@ import remarkStringify from 'remark-stringify';
 import { remove } from 'unist-util-remove';
 import type { Root } from 'mdast';
 
-type Repository = { owner: string; repo: string };
+type Repository = { owner: string; name: string };
 
 /**
  * Strips HTML nodes from markdown content while preserving the markdown formatting.
@@ -78,7 +78,7 @@ function getOriginRemoteUrl(): string {
   return url;
 }
 
-function parseGitHubRepo(remoteUrl: string): Repository {
+function parseGitHubRepository(remoteUrl: string): Repository {
   // Supports:
   // - git@github.com:OWNER/REPO.git
   // - https://github.com/OWNER/REPO.git
@@ -88,15 +88,15 @@ function parseGitHubRepo(remoteUrl: string): Repository {
 
   // git@github.com:OWNER/REPO
   let m = cleaned.match(/^git@github\.com:([^/]+)\/(.+)$/);
-  if (m) return { owner: m[1], repo: m[2] };
+  if (m) return { owner: m[1], name: m[2] };
 
   // ssh://git@github.com/OWNER/REPO
   m = cleaned.match(/^ssh:\/\/git@github\.com\/([^/]+)\/(.+)$/);
-  if (m) return { owner: m[1], repo: m[2] };
+  if (m) return { owner: m[1], name: m[2] };
 
   // https://github.com/OWNER/REPO
   m = cleaned.match(/^https:\/\/github\.com\/([^/]+)\/(.+)$/);
-  if (m) return { owner: m[1], repo: m[2] };
+  if (m) return { owner: m[1], name: m[2] };
 
   throw new Error(`Remote URL does not look like a GitHub URL I can parse: ${remoteUrl}`);
 }
@@ -165,35 +165,39 @@ type PullRequest = {
 
 async function findOpenPrNumberForBranch(
   token: string,
-  repo: Repository,
+  repository: Repository,
   branch: string,
 ): Promise<number | null> {
-  const head = `${repo.owner}:${branch}`;
+  const head = `${repository.owner}:${branch}`;
 
-  const prs = await githubRest<PullRequest[]>(token, `/repos/${repo.owner}/${repo.repo}/pulls`, {
-    state: 'open',
-    head,
-    per_page: 100,
-  });
+  const pullRequests = await githubRest<PullRequest[]>(
+    token,
+    `/repos/${repository.owner}/${repository.name}/pulls`,
+    {
+      state: 'open',
+      head,
+      per_page: 100,
+    },
+  );
 
-  if (prs.length === 0) return null;
+  if (pullRequests.length === 0) return null;
 
-  prs.sort((a, b) => {
+  pullRequests.sort((a, b) => {
     const ad = a.updated_at ? Date.parse(a.updated_at) : 0;
     const bd = b.updated_at ? Date.parse(b.updated_at) : 0;
     return bd - ad;
   });
 
-  return prs[0]!.number;
+  return pullRequests[0]!.number;
 }
 
 const PR_INFO_QUERY = `
   query PullRequestInfo(
     $owner: String!
-    $repo: String!
+    $repositoryName: String!
     $number: Int!
   ) {
-    repository(owner: $owner, name: $repo) {
+    repository(owner: $owner, name: $repositoryName) {
       pullRequest(number: $number) {
         title
         body
@@ -228,11 +232,11 @@ const PR_INFO_QUERY = `
 const REVIEW_THREADS_QUERY = `
   query UnresolvedReviewThreads(
     $owner: String!
-    $repo: String!
+    $repositoryName: String!
     $number: Int!
     $after: String
   ) {
-    repository(owner: $owner, name: $repo) {
+    repository(owner: $owner, name: $repositoryName) {
       pullRequest(number: $number) {
         reviewThreads(first: 100, after: $after) {
           pageInfo {
@@ -322,12 +326,12 @@ function hasSuggestionBlock(body: string): boolean {
 
 async function fetchPullRequestInfo(
   token: string,
-  repo: Repository,
+  repository: Repository,
   prNumber: number,
 ): Promise<PullRequestInfo> {
   const resp = await githubGraphQL<PRInfoResponse>(token, PR_INFO_QUERY, {
-    owner: repo.owner,
-    repo: repo.repo,
+    owner: repository.owner,
+    repositoryName: repository.name,
     number: prNumber,
   });
 
@@ -371,7 +375,7 @@ async function fetchPullRequestInfo(
 
 async function fetchUnresolvedReviewComments(
   token: string,
-  repo: Repository,
+  repository: Repository,
   prNumber: number,
 ): Promise<UnresolvedReviewComment[]> {
   const results: UnresolvedReviewComment[] = [];
@@ -382,8 +386,8 @@ async function fetchUnresolvedReviewComments(
       token,
       REVIEW_THREADS_QUERY,
       {
-        owner: repo.owner,
-        repo: repo.repo,
+        owner: repository.owner,
+        repositoryName: repository.name,
         number: prNumber,
         after,
       },
@@ -461,18 +465,18 @@ async function main() {
 
   if (!token) {
     throw new Error(
-      'Missing GITHUB_TOKEN. Export it (or use a fine-grained token with repo read access).',
+      'Missing GITHUB_TOKEN. Export it (or use a fine-grained token with repository read access).',
     );
   }
 
   const origin = getOriginRemoteUrl();
-  const repository = parseGitHubRepo(origin);
+  const repository = parseGitHubRepository(origin);
   const branch = getCurrentBranch();
   const prNumber = await findOpenPrNumberForBranch(token, repository, branch);
 
   if (!prNumber) {
     console.log(
-      `There is no open pull request found for branch '${branch}' of ${repository.owner}/${repository.repo}.`,
+      `There is no open pull request found for branch '${branch}' of ${repository.owner}/${repository.name}.`,
       'Run `git push` to push your branch and create a pull request.',
     );
     return process.exit(0);
@@ -485,7 +489,7 @@ async function main() {
 
   // PR header
   console.log(`# PR #${prNumber}: ${prInfo.title}`);
-  console.log(`Branch: ${branch} | ${repository.owner}/${repository.repo}`);
+  console.log(`Branch: ${branch} | ${repository.owner}/${repository.name}`);
   console.log(`URL: ${prInfo.url}`);
   console.log(formatChecksStatus(prInfo));
 

@@ -21,7 +21,7 @@ The SvelteKit app. Every content page is prerendered; the client payload is the 
 
 - `svelte.config.ts` has two helper casts (`asPluggable`, `asPreprocess`) that reconcile mdsvex's bundled `unified` types with the newer `unified` types that the remark/rehype plugins resolve to. They look like escape hatches because they are — but the boundary is the package mismatch, not the helpers.
 - `src/lib/merge.ts` is aliased to `$merge` (not `$lib/merge`). Legacy alias; keep it.
-- `src/lib/repo-path.ts` only exports the `RepoPath` type. The previous helper function was unused dead code and got removed; do not reintroduce it.
+- `src/lib/repository-path.ts` only exports the `RepositoryPath` type. The previous helper function was unused dead code and got removed; do not reintroduce it.
 
 ## Modifying the app
 

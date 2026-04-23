@@ -1,6 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
 
-import type { RepoPath } from '$lib/repo-path';
+import type { RepositoryPath } from '$lib/repository-path';
 import { getPrerenderEntries, getWritingRoute } from '$lib/server/content';
 import { renderWritingDocument } from '$lib/server/content-documents';
 
@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
   return {
     slug: route.slug,
-    sourcePath: route.sourcePath as RepoPath,
+    sourcePath: route.sourcePath as RepositoryPath,
     meta: {
       title: route.title,
       description: route.description,

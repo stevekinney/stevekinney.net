@@ -22,11 +22,11 @@
 
 <ContentEnhancements />
 
-<OpenInObsidian repoPath={data.sourcePath} />
+<OpenInObsidian repositoryPath={data.sourcePath} />
 
 <div data-content-document>
   <!-- eslint-disable-next-line svelte/no-at-html-tags -->
   {@html data.contentHtml}
 </div>
 
-<PullRequest repoPath={data.sourcePath} />
+<PullRequest repositoryPath={data.sourcePath} />

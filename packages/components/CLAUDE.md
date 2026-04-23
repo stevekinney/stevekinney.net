@@ -11,7 +11,7 @@ Shared Svelte 5 components used across the website. The package has no build ste
 
 ## Behaviour to preserve across edits
 
-- `open-in-obsidian.svelte` and `pull-request.svelte` accept a `repoPath` prop. Its type is the `RepoPath` template literal defined in the website's `src/lib/repo-path.ts` — keep the shape matched on both sides.
+- `open-in-obsidian.svelte` and `pull-request.svelte` accept a `repositoryPath` prop. Its type is the `RepositoryPath` template literal defined in the website's `src/lib/repository-path.ts` — keep the shape matched on both sides.
 - `seo.svelte` builds the JSON-LD graph. It expects an array of entities (`buildCourseSchema`, `buildBreadcrumbSchema`), not a single object, and emits them as one `<script type="application/ld+json">`.
 - `navigation.svelte` treats the active link via `$page.url.pathname` normalization. Don't compare against raw `href` values.
 
@@ -22,6 +22,6 @@ Shared Svelte 5 components used across the website. The package has no build ste
 
 ## Modifying the package
 
-- Storybook: `bun run storybook` from the repo root runs the component explorer on port 6006.
+- Storybook: `bun run storybook` from the repository root runs the component explorer on port 6006.
 - Prop changes to shared components should go through Storybook first — the story serves as both a visual test and an API sketch.
 - When you add a new component, keep it colocated with its siblings: `badge/` for the badge family, loose `.svelte` files at the root only for singletons.

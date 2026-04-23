@@ -56,10 +56,10 @@ const resolveManifestKey = (markdownFile: string, imageUrl: string): string => {
     resolved = path.resolve(path.dirname(markdownFile), imageUrl);
   }
 
-  const repoRoot = path.resolve(cwd, '..', '..');
-  const relative = path.relative(repoRoot, resolved);
+  const repositoryRoot = path.resolve(cwd, '..', '..');
+  const relative = path.relative(repositoryRoot, resolved);
 
-  // If the path escapes the repo root, it can't match a manifest key
+  // If the path escapes the repository root, it can't match a manifest key.
   if (relative.startsWith('..')) return '';
 
   return relative.split(path.sep).join('/');
@@ -137,7 +137,7 @@ const rehypeEnhanceImages: Plugin<[Options?], Root> = (options = {}) => {
           );
         }
 
-        // Unmanifested image: rewrite relative src to a repo-rooted absolute path
+        // Unmanifested image: rewrite relative src to a repository-rooted absolute path
         // so the dev middleware (serveContentAssets) serves it regardless of the
         // current page URL. Without this, `<img src="assets/foo.png">` on a page
         // like /courses/<slug> resolves to /courses/assets/foo.png — wrong.

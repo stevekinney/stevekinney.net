@@ -13,8 +13,8 @@ export type SourceImage = {
   imageUrl: string;
   /** Absolute path to the resolved image file */
   resolvedPath: string;
-  /** Repo-relative path (used as manifest key) */
-  repoRelativePath: string;
+  /** Repository-relative path (used as manifest key) */
+  repositoryRelativePath: string;
 };
 
 export type MissingImage = {
@@ -87,20 +87,21 @@ export const resolveImagePath = (
 /**
  * Discover all image and video references across markdown files.
  *
- * Returns a Map keyed by repo-relative path to the resolved asset file.
+ * Returns a Map keyed by repository-relative path to the resolved asset file.
  * Each value includes the first markdown file that references it and the resolved absolute path.
  */
 export const discoverAllImages = async (
   patterns: string[],
-  repoRoot: string,
+  repositoryRoot: string,
   staticRoot?: string,
 ): Promise<DiscoveryResult> => {
-  const resolvedStaticRoot = staticRoot ?? path.resolve(repoRoot, 'applications/website/static');
+  const resolvedStaticRoot =
+    staticRoot ?? path.resolve(repositoryRoot, 'applications/website/static');
   const images = new Map<string, SourceImage>();
   const missing: MissingImage[] = [];
 
   const markdownFiles = await fg(patterns, {
-    cwd: repoRoot,
+    cwd: repositoryRoot,
     absolute: true,
     onlyFiles: true,
   });
@@ -130,14 +131,14 @@ export const discoverAllImages = async (
         continue;
       }
 
-      const repoRelativePath = normalizePath(path.relative(repoRoot, resolvedPath));
+      const repositoryRelativePath = normalizePath(path.relative(repositoryRoot, resolvedPath));
 
-      if (!images.has(repoRelativePath)) {
-        images.set(repoRelativePath, {
+      if (!images.has(repositoryRelativePath)) {
+        images.set(repositoryRelativePath, {
           markdownFile,
           imageUrl: normalized,
           resolvedPath,
-          repoRelativePath,
+          repositoryRelativePath,
         });
       }
     }

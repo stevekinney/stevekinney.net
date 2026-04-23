@@ -10,8 +10,8 @@ import type { ImageManifest, ImageManifestEntry } from '@stevekinney/utilities/i
 import { writeFormattedJson } from '@stevekinney/utilities/write-formatted-json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const MANIFEST_PATH = path.resolve(REPO_ROOT, 'image-manifest.json');
+const REPOSITORY_ROOT = path.resolve(__dirname, '..', '..');
+const MANIFEST_PATH = path.resolve(REPOSITORY_ROOT, 'image-manifest.json');
 
 const MARKDOWN_PATTERNS = ['writing/**/*.md', 'courses/**/*.md'];
 const TARGET_WIDTHS = [480, 1024, 1600];
@@ -141,7 +141,7 @@ const processImage = async (
   existingManifest: ImageManifest,
   existingBlobs: Set<string>,
 ): Promise<ProcessResult> => {
-  const key = source.repoRelativePath;
+  const key = source.repositoryRelativePath;
   const bytes = await readFile(source.resolvedPath);
   const hash = computeHash(bytes);
   const extension = getExtension(source.resolvedPath);
@@ -357,7 +357,7 @@ const processImage = async (
 // ---------------------------------------------------------------------------
 
 console.log('Discovering image references...');
-const { images: allImages } = await discoverAllImages(MARKDOWN_PATTERNS, REPO_ROOT);
+const { images: allImages } = await discoverAllImages(MARKDOWN_PATTERNS, REPOSITORY_ROOT);
 console.log(`Found ${allImages.size} unique image references.`);
 
 console.log('Loading existing manifest...');

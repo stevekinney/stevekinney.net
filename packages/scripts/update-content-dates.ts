@@ -7,8 +7,8 @@ import simpleGit from 'simple-git';
 import { parseFrontmatter, toDateString } from '@stevekinney/utilities/frontmatter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const git = simpleGit(REPO_ROOT);
+const REPOSITORY_ROOT = path.resolve(__dirname, '..', '..');
+const git = simpleGit(REPOSITORY_ROOT);
 
 const today = (): string => {
   const now = new Date();
@@ -55,7 +55,7 @@ const removeField = (block: string, key: string): string => {
 };
 
 const processFile = async (filePath: string): Promise<boolean> => {
-  const absolutePath = path.resolve(REPO_ROOT, filePath);
+  const absolutePath = path.resolve(REPOSITORY_ROOT, filePath);
   const contents = await readFile(absolutePath, 'utf8');
 
   // Use parseFrontmatter (CORE_SCHEMA) to read data safely
@@ -115,7 +115,7 @@ const main = async () => {
   } else {
     // Default: glob all content files
     const patterns = ['writing/*.md', 'courses/**/*.md'];
-    files = await fg(patterns, { cwd: REPO_ROOT, onlyFiles: true });
+    files = await fg(patterns, { cwd: REPOSITORY_ROOT, onlyFiles: true });
   }
 
   let updated = 0;

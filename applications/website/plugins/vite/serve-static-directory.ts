@@ -34,7 +34,8 @@ export function serveStaticDirectory(
     if (!contentType) return next();
 
     const filePath = path.resolve(rootDirectory, relativeFilePath);
-    if (!filePath.startsWith(rootDirectory)) return next();
+    const relativeToRoot = path.relative(rootDirectory, filePath);
+    if (relativeToRoot.startsWith('..') || path.isAbsolute(relativeToRoot)) return next();
 
     try {
       const fileStat = await stat(filePath);

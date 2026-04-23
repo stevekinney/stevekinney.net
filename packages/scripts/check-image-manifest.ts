@@ -7,14 +7,14 @@ import { discoverAllImages } from '@stevekinney/utilities/image-discovery';
 import type { ImageManifest } from '@stevekinney/utilities/image-manifest';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const MANIFEST_PATH = path.resolve(REPO_ROOT, 'image-manifest.json');
+const REPOSITORY_ROOT = path.resolve(__dirname, '..', '..');
+const MANIFEST_PATH = path.resolve(REPOSITORY_ROOT, 'image-manifest.json');
 
 const MARKDOWN_PATTERNS = ['writing/**/*.md', 'courses/**/*.md'];
 
 const normalizePath = (value: string): string => value.split(path.sep).join('/');
-const toRepoPath = (absolutePath: string): string =>
-  normalizePath(path.relative(REPO_ROOT, absolutePath));
+const toRepositoryPath = (absolutePath: string): string =>
+  normalizePath(path.relative(REPOSITORY_ROOT, absolutePath));
 
 const computeHash = (bytes: Buffer): string =>
   createHash('sha256').update(bytes).digest('hex').slice(0, 16);
@@ -33,7 +33,7 @@ try {
 // Discover all image references
 const { images: allImages, missing: missingFiles } = await discoverAllImages(
   MARKDOWN_PATTERNS,
-  REPO_ROOT,
+  REPOSITORY_ROOT,
 );
 
 const notOnDisk: string[] = [];
@@ -43,7 +43,7 @@ const staleHash: string[] = [];
 // Files referenced in markdown but not found on disk
 for (const entry of missingFiles) {
   notOnDisk.push(
-    `${toRepoPath(entry.resolvedPath)} (referenced from ${toRepoPath(entry.markdownFile)})`,
+    `${toRepositoryPath(entry.resolvedPath)} (referenced from ${toRepositoryPath(entry.markdownFile)})`,
   );
 }
 

@@ -6,7 +6,6 @@ import type {
   CourseIndexEntry,
   GeneratedContent,
   LessonContentRoute,
-  LessonIndexEntry,
   WritingContentRoute,
   WritingIndexEntry,
 } from '@stevekinney/utilities/content-types';
@@ -16,9 +15,6 @@ const content = generatedContent as GeneratedContent;
 
 const writingIndexBySlug = new Map(content.writing.map((entry) => [entry.slug, entry]));
 const courseIndexBySlug = new Map(content.courses.map((entry) => [entry.slug, entry]));
-const lessonIndexByKey = new Map(
-  content.lessons.map((entry) => [`${entry.courseSlug}/${entry.slug}`, entry]),
-);
 
 const lessonSlugCourseMap = content.lessons.reduce<Map<string, string | null>>((map, lesson) => {
   const existing = map.get(lesson.slug);
@@ -47,9 +43,6 @@ export const getWritingEntry = (slug: string): WritingIndexEntry | null =>
 
 export const getCourseEntry = (slug: string): CourseIndexEntry | null =>
   courseIndexBySlug.get(normalizeLegacyMarkdownSlug(slug)) ?? null;
-
-export const getLessonEntry = (courseSlug: string, lessonSlug: string): LessonIndexEntry | null =>
-  lessonIndexByKey.get(`${courseSlug}/${lessonSlug}`) ?? null;
 
 export const getWritingRoute = (slug: string): WritingContentRoute | null => {
   const route = getRouteByPath(`/writing/${slug}`);

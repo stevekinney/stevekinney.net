@@ -16,7 +16,7 @@ Framework-agnostic TypeScript helpers shared across the website app, the content
 
 ## Best practices
 
-- **Isomorphic, not browser-only.** Modules have to work in every execution context this repo uses — browser, Bun scripts, and SvelteKit SSR. That rules out unguarded `window`/`document` access and Node-only APIs outside a platform boundary, but it does allow libraries that ship isomorphic builds (for example `isomorphic-dompurify` in `tailwind-playground.ts`).
+- **Isomorphic, not browser-only.** Modules have to work in every execution context this repository uses — browser, Bun scripts, and SvelteKit SSR. That rules out unguarded `window`/`document` access and Node-only APIs outside a platform boundary, but it does allow libraries that ship isomorphic builds (for example `isomorphic-dompurify` in `tailwind-playground.ts`).
 - **Type exports stay stable.** Everything in `content-types.ts` is a structural contract between `packages/scripts` (producer) and the website app (consumer). Schema changes need matching updates in both places, plus a regen of `.generated/content-data.json`.
 - **Validation returns structured results, not thrown errors.** `image-discovery` returns `missing` arrays; `frontmatter` helpers return `null` on failure. Callers decide how strict to be.
 - **Narrow imports at the call site.** Consumers should pick specific subpath exports (`@stevekinney/utilities/routes`) rather than a barrel import that pulls sharp bindings into the browser.

@@ -25,5 +25,5 @@ Command-line scripts that produce the website's generated artifacts. Bun-native 
 ## Modifying the package
 
 - Unit tests: `bun test` from this directory. `content-repository.test.ts` and `build-report/build-report.test.ts` cover the two main graphs.
-- `bunfig.toml` at the repo root sets `[test] root = "src"` for the website app; scripts here use `bun:test` directly and don't need that scope.
+- `bunfig.toml` at the repository root sets `[test] root = "src"` for the website app; scripts here use `bun:test` directly and don't need that scope.
 - When adding a new script: wire the shebang + bin entry + Turbo inputs in the same commit. Otherwise the script works locally and breaks in CI, or Turbo silently returns stale output.

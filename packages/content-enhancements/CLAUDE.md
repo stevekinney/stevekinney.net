@@ -23,5 +23,5 @@ Browser runtime that progressively enhances server-rendered content. Shipped as 
 
 ## Modifying the package
 
-- Run the content-build to verify the bundle still emits without errors: `bunx content-build` from the repo root. It prints `Generated content artifacts are already up to date.` on a cache hit — force a rebuild by deleting `applications/website/.generated/content-enhancements/`.
+- Run the content-build to verify the bundle still emits without errors: `bunx content-build` from the repository root. It prints `Generated content artifacts are already up to date.` on a cache hit — force a rebuild by deleting `applications/website/.generated/content-enhancements/`.
 - Integration tests live at `applications/website/tests/content-pages.spec.ts`. They assert exactly one `data-content-document` per page and that enhancements actually mount. Update them when the DOM contract changes.
