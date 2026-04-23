@@ -30,7 +30,7 @@ const isPluginWithServerHook = (
   return plugin.name === name && typeof plugin.configureServer === 'function';
 };
 
-const findPlugin = (name: string): PluginWithServerHook => {
+const findPlugin = (name: string, generatedEnhancementsDirectory: string): PluginWithServerHook => {
   const plugin = (
     contentDevelopmentPlugins({
       workspaceRoot: '/',
@@ -69,7 +69,10 @@ describe('contentDevelopmentPlugins', () => {
     await writeFile(path.join(generatedEnhancementsDirectory, 'enhancements.css'), 'body {}\n');
 
     const middlewares: Middleware[] = [];
-    findPlugin('serve-generated-content-enhancements').configureServer({
+    findPlugin(
+      'serve-generated-content-enhancements',
+      generatedEnhancementsDirectory,
+    ).configureServer({
       middlewares: { use: (middleware: Middleware) => middlewares.push(middleware) },
     });
 

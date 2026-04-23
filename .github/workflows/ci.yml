@@ -52,6 +52,12 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
 
+      - name: Sync SvelteKit types
+        env:
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+        run: bun run sync
+
       - name: Run validation
         env:
           TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -98,6 +104,12 @@ jobs:
 
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: Sync SvelteKit types
+        env:
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+        run: bun run sync
 
       - name: Build website
         env:
