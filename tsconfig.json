@@ -10,5 +10,5 @@
     "strict": true,
     "types": ["node"]
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "build", "test-results", "playwright-report", ".vercel", "tmp"]
 }
