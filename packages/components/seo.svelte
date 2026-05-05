@@ -4,14 +4,13 @@
   import { encodeParameters } from '$lib/encode-parameters';
   import { formatPageTitle } from '$lib/format-page-title';
   import { createLlmsAlternatePath } from '$lib/llms-path';
-  import { author, title as siteTitle } from '$lib/metadata';
+  import { author, title as siteTitle, url as siteUrl } from '$lib/metadata';
   import { buildOpenGraphHash } from '$lib/og/hash';
   import { normalizeOpenGraphPath } from '$lib/og/paths';
   import type { Snippet } from 'svelte';
 
-  // Use PUBLIC_SITE_URL if set, otherwise fall back to page origin
-  // (works correctly in both SSR and prerendering via kit.prerender.origin)
-  const baseUrl = env.PUBLIC_SITE_URL || page.url.origin;
+  // Use PUBLIC_SITE_URL if set, otherwise keep social image URLs on the canonical site.
+  const baseUrl = env.PUBLIC_SITE_URL || siteUrl;
 
   type SEOProps = {
     title: string;
