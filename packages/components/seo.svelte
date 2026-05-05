@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
+  import { dev } from '$app/environment';
   import { env } from '$env/dynamic/public';
   import { encodeParameters } from '$lib/encode-parameters';
   import { formatPageTitle } from '$lib/format-page-title';
@@ -9,8 +10,8 @@
   import { normalizeOpenGraphPath } from '$lib/og/paths';
   import type { Snippet } from 'svelte';
 
-  // Use PUBLIC_SITE_URL if set, otherwise keep social image URLs on the canonical site.
-  const baseUrl = env.PUBLIC_SITE_URL || siteUrl;
+  // Keep production social previews canonical while preserving local dev previews.
+  const baseUrl = env.PUBLIC_SITE_URL || (dev ? page.url.origin : siteUrl);
 
   type SEOProps = {
     title: string;

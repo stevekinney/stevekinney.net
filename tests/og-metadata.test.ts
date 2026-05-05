@@ -22,6 +22,7 @@ const repositoryRoot = new URL('../', import.meta.url);
 const websiteDirectory = new URL('applications/website/', repositoryRoot);
 const previewPort = 4400 + (process.pid % 1000);
 const previewOrigin = `http://[::1]:${previewPort}`;
+const canonicalSiteOrigin = 'https://stevekinney.com';
 
 const scenarios: Scenario[] = [
   {
@@ -82,7 +83,10 @@ const expectRequiredMetadata = (metadata: OpenGraphMetadata): URL => {
   expect(metadata.twitterCard).not.toHaveLength(0);
   expect(metadata.ogImage).toMatch(/^https:\/\//);
 
-  return new URL(metadata.ogImage);
+  const imageUrl = new URL(metadata.ogImage);
+  expect(imageUrl.origin).toBe(canonicalSiteOrigin);
+
+  return imageUrl;
 };
 
 const runBuild = (): void => {
@@ -167,6 +171,8 @@ describe('Open Graph metadata', () => {
       const previewHtml = await fetchPreviewHtml(scenario.path);
       const previewMetadata = extractMetadata(previewHtml);
       const previewImageUrl = expectRequiredMetadata(previewMetadata);
+
+      expect(previewMetadata).toEqual(fixtureMetadata);
 
       await expectPreviewImageResponse(previewImageUrl);
     }, 120_000);
