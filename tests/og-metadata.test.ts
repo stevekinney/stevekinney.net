@@ -5,6 +5,8 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { JSDOM } from 'jsdom';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 
+import { url as canonicalSiteUrl } from '../applications/website/src/lib/metadata';
+
 type Scenario = {
   name: string;
   path: string;
@@ -22,7 +24,7 @@ const repositoryRoot = new URL('../', import.meta.url);
 const websiteDirectory = new URL('applications/website/', repositoryRoot);
 const previewPort = 4400 + (process.pid % 1000);
 const previewOrigin = `http://[::1]:${previewPort}`;
-const canonicalSiteOrigin = 'https://stevekinney.com';
+const canonicalSiteOrigin = new URL(canonicalSiteUrl).origin;
 
 const scenarios: Scenario[] = [
   {
