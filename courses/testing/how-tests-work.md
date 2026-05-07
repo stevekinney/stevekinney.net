@@ -41,7 +41,7 @@ it('should pass', () => {
 });
 ```
 
-What we can summise—outside of the fact that I spelled it ou in that second test there is that a test fails when an error is thrown. This means that if we got _really_ board, we _could_ write our own super naïve version of `expect` that is missing a lot of the niceities of the one provided by Vitest or Jest or whatever.
+What we can summise—outside of the fact that I spelled it ou in that second test there is that a test fails when an error is thrown. This means that if we got _really_ bored, we _could_ write our own super naïve version of `expect` that is missing a lot of the niceities of the one provided by Vitest or Jest or whatever.
 
 ```javascript
 const expect = (a) => {
