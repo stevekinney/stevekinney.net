@@ -199,7 +199,7 @@ type PolymorphicComponent<DefaultElement extends ElementType, Props = {}> = <
 
 Now you can build polymorphic components with less boilerplate:
 
-````tsx
+```tsx
 interface CardProps {
   padding?: 'sm' | 'md' | 'lg';
   shadow?: boolean;
@@ -218,6 +218,7 @@ const Card: PolymorphicComponent<'div', CardProps> = forwardRef(
     );
   },
 );
+```
 
 ## “asChild” Pattern
 
@@ -261,7 +262,7 @@ export const Button = forwardRef<HTMLElement, BaseButtonProps>(
     );
   },
 );
-````
+```
 
 - Use `asChild` when you need to control the rendered element (e.g., Next.js `Link`, Reach Router links) but want to keep Button's styling and behavior.
 - The ref type becomes a bit more flexible (generic + element guards are possible); for most cases, forwarding as `HTMLElement` works well with DOM elements.
