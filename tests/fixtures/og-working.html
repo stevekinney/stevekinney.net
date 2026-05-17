@@ -1,0 +1,136 @@
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="../favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link href="../_app/immutable/assets/0.BBaPJkvt.css" rel="stylesheet" />
+  <!--19wsvdp-->
+  <link rel="canonical" href="https://stevekinney.com/writing/agent-loops" />
+  <link
+    rel="alternate"
+    type="application/atom+xml"
+    title="Steve Kinney's Writing"
+    href="/writing/rss"
+  />
+  <!--[-->
+  <link
+    rel="alternate"
+    type="text/plain"
+    title="LLM-readable content"
+    href="/writing/agent-loops/llms.txt"
+  />
+  <!--]-->
+  <meta name="robots" content="index, follow" />
+  <meta
+    name="description"
+    content="Every major AI agent runs the same core loop. The 6-line version is easy. The production-hardened version—with context compaction, loop detection, cost budgets, and graceful termination—is where things get interesting."
+  />
+  <meta name="author" content="Steve Kinney" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://stevekinney.com/writing/agent-loops" />
+  <meta property="og:title" content="The Anatomy of an Agent Loop | Steve Kinney" />
+  <meta
+    property="og:description"
+    content="Every major AI agent runs the same core loop. The 6-line version is easy. The production-hardened version—with context compaction, loop detection, cost budgets, and graceful termination—is where things get interesting."
+  />
+  <meta property="og:site_name" content="Steve Kinney" />
+  <meta property="og:locale" content="en_US" />
+  <meta
+    property="og:image"
+    content="https://stevekinney.com/writing/agent-loops/open-graph.jpg?v=ea720da8"
+  />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="The Anatomy of an Agent Loop | Steve Kinney" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://stevekinney.com/writing/agent-loops" />
+  <meta name="twitter:title" content="The Anatomy of an Agent Loop | Steve Kinney" />
+  <meta
+    name="twitter:description"
+    content="Every major AI agent runs the same core loop. The 6-line version is easy. The production-hardened version—with context compaction, loop detection, cost budgets, and graceful termination—is where things get interesting."
+  />
+  <meta name="twitter:creator" content="@stevekinney" />
+  <meta
+    name="twitter:image"
+    content="https://stevekinney.com/writing/agent-loops/open-graph.jpg?v=ea720da8"
+  />
+  <meta name="twitter:image:alt" content="The Anatomy of an Agent Loop | Steve Kinney" />
+  <!--[-->
+  <meta name="date" content="2026-03-19T00:00:00.000Z" />
+  <meta property="article:published_time" content="2026-03-19T00:00:00.000Z" />
+  <!--]-->
+  <!--[-->
+  <meta name="last-modified" content="2026-03-23T00:00:00.000Z" />
+  <meta property="article:modified_time" content="2026-03-23T00:00:00.000Z" />
+  <!--]-->
+  <!--[-->
+  <!---->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "The Anatomy of an Agent Loop",
+      "description": "Every major AI agent runs the same core loop. The 6-line version is easy. The production-hardened version—with context compaction, loop detection, cost budgets, and graceful termination—is where things get interesting.",
+      "datePublished": "2026-03-19",
+      "dateModified": "2026-03-23",
+      "url": "https://stevekinney.com/writing/agent-loops",
+      "image": "https://stevekinney.com/writing/agent-loops/open-graph.jpg",
+      "author": {
+        "@type": "Person",
+        "name": "Steve Kinney",
+        "url": "https://stevekinney.com",
+        "description": "Steve Kinney is a software engineer, educator, and engineering leader in Denver, Colorado, with deep experience in AI systems, developer tools, and frontend architecture.",
+        "jobTitle": "Software Engineer, Educator, and Engineering Leader",
+        "image": "https://stevekinney.com/open-graph.jpg",
+        "knowsAbout": [
+          "AI systems",
+          "Agentic workflows",
+          "Developer tools",
+          "Distributed systems",
+          "Frontend architecture",
+          "TypeScript"
+        ],
+        "sameAs": [
+          "https://github.com/stevekinney",
+          "https://twitter.com/stevekinney",
+          "https://linkedin.com/in/stevekinney",
+          "https://instagram.com/stevekinney",
+          "https://www.youtube.com/channel/UChXe-1_Jh91Z_CM3ppH39Xg"
+        ]
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Steve Kinney",
+        "url": "https://stevekinney.com",
+        "description": "Steve Kinney is a software engineer, educator, and engineering leader in Denver, Colorado, with deep experience in AI systems, developer tools, and frontend architecture.",
+        "jobTitle": "Software Engineer, Educator, and Engineering Leader",
+        "image": "https://stevekinney.com/open-graph.jpg",
+        "knowsAbout": [
+          "AI systems",
+          "Agentic workflows",
+          "Developer tools",
+          "Distributed systems",
+          "Frontend architecture",
+          "TypeScript"
+        ],
+        "sameAs": [
+          "https://github.com/stevekinney",
+          "https://twitter.com/stevekinney",
+          "https://linkedin.com/in/stevekinney",
+          "https://instagram.com/stevekinney",
+          "https://www.youtube.com/channel/UChXe-1_Jh91Z_CM3ppH39Xg"
+        ]
+      }
+    }
+  </script>
+  <!---->
+  <!--]-->
+  <!--[!-->
+  <!--]-->
+  <!---->
+  <!--6gjxo1-->
+  <script type="module" src="../generated/content-enhancements/content-enhancements.js"></script>
+  <!---->
+  <!---->
+  <title>The Anatomy of an Agent Loop | Steve Kinney</title>
+</head>
