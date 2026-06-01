@@ -43,7 +43,7 @@ The temptation with a tool like this is to reach for it constantly, which is a g
 
 And, just as importantly, a list of things that do _not_ earn a call: naming debates, "what does this code do," style nitpicks, anything Claude can already answer by reading the file. Reading code is Claude's job. Burning a slow cross-model call on a cheap lookup is exactly the kind of cargo-culting I try to avoid.
 
-## The part where it stops being an MCP server
+## Why the supervision matters more than the protocol
 
 [The Codex CLI](https://github.com/openai/codex) can run as an [MCP server](https://modelcontextprotocol.io/), and the Model Context Protocol is the obvious way to wire one tool into another. That's where I started. You register the server, Claude gets a `codex` tool, it calls it, done. Clean on paper.
 
