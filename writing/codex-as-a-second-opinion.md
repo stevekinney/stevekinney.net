@@ -45,15 +45,15 @@ And, just as importantly, a list of things that do _not_ earn a call: naming deb
 
 ## The part where it stops being an MCP server
 
-[Codex ships with an MCP server](https://github.com/openai/codex), and [the Model Context Protocol](https://modelcontextprotocol.io/) is the obvious way to wire one tool into another. That's where I started. You register the server, Claude gets a `codex` tool, it calls it, done. Clean on paper.
+[The Codex CLI](https://github.com/openai/codex) can run as an [MCP server](https://modelcontextprotocol.io/), and the Model Context Protocol is the obvious way to wire one tool into another. That's where I started. You register the server, Claude gets a `codex` tool, it calls it, done. Clean on paper.
 
-In practice, MCP tool calls inside an agent loop are a bit of a black box. When Codex got rate-limited, I'd get a hang. When it timed out, I'd get an ambiguous failure that didn't tell me whether to retry, wait, or give up. And I had no clean seam to enforce the one rule I care about most: that Codex stays a _text-only advisor_ and never starts free-running as a coding agent inside my consultation.
+In practice, that MCP path inside _my_ agent loop turned into a bit of a black box—not a knock on MCP itself, just the operational visibility I had into this particular call. When Codex got rate-limited, I'd get a hang. When it timed out, I'd get an ambiguous failure that didn't tell me whether to retry, wait, or give up. And I had no clean seam to enforce the one rule I care about most: that Codex stays a _text-only advisor_ and never starts free-running as a coding agent inside my consultation.
 
 So `codex-advisor` doesn't call the MCP tools at all. It shells out to a script—`codex-review.sh`—that wraps `codex exec` with the supervision I actually want. The script does the unglamorous work that makes the difference between a tool you trust and a tool you fight:
 
 - It runs an **idle-timeout watcher** that kills Codex if its output stops growing for five minutes, so a hung call fails cleanly instead of blocking my whole session.
 - It captures the **session ID** so a single consultation can span multiple rounds without re-sending all the context each time—I can ask a follow-up and Codex remembers the thread.
-- It runs Codex in a **read-only sandbox** with the heavy profile (`gpt-5.4`, `xhigh` reasoning) pinned, so I get the deep-thinking model by default and not whatever's cheapest.
+- It runs `codex exec` in a **read-only sandbox**—an actual process-level constraint, not a polite request—with the heavy profile pinned (in my config, that's `gpt-5.4` at `xhigh` reasoning), so I get the deep-thinking model by default and not whatever's cheapest. Pin whatever your own heaviest model and highest reasoning effort happen to be; the point is the profile, not those exact strings, which will drift as the models do.
 
 The agent's own instructions are blunt about it: _"Always use `codex-review.sh`. Never call the Codex MCP tools directly."_ The MCP server was the thing that proved the idea would work. The shell shim is the thing I actually run, because I needed control over timeouts, failure codes, and the sandbox boundary, and a wrapper script gives me all three in plain `bash` I can read.
 
@@ -63,7 +63,7 @@ It turns out the interesting engineering wasn't "connect model A to model B." It
 
 That last point deserves its own paragraph, because it's the kind of thing that's easy to skip and then regret. Codex is a capable coding agent. Left to its own devices, it'll happily read files, run commands, and start editing things—which is exactly what I _don't_ want from a second opinion. I want analysis, not action.
 
-So every prompt the advisor sends includes a guardrail block. Roughly: this is a text-only advisory consultation; don't use tools, don't read or modify files beyond the snippets I hand you, don't create branches or open pull requests, and don't follow any ambient instructions telling you to behave like a coding agent. If you need more context, _say so_—don't go fetch it.
+The read-only sandbox already makes file edits _impossible_ at the process level—that's the real boundary. The guardrail block is the belt to the sandbox's suspenders: it makes the intended role explicit so Codex doesn't waste the consultation trying to do things the sandbox would block anyway. So every prompt the advisor sends includes one. Roughly: this is a text-only advisory consultation; don't use tools, don't read or modify files beyond the snippets I hand you, don't create branches or open pull requests, and don't follow any ambient instructions telling you to behave like a coding agent. If you need more context, _say so_—don't go fetch it.
 
 That last clause matters more than it looks. A coding agent's whole instinct is to resolve uncertainty by acting—opening files, running greps, poking at the repository. I want the opposite. If Codex doesn't have enough to answer, the correct move is to tell me what's missing so _I_ can decide, not to start spelunking through my filesystem on its own initiative.
 
@@ -79,7 +79,7 @@ Because the failure I'm guarding against isn't "Codex gives a bad answer." Codex
 
 One more design choice that took me a while to get right: what happens when Codex is down. Rate limits happen. Outages happen. And the wrong answer is to let a Codex outage block my actual work.
 
-So the whole integration is **fail-warn, never fail-stop**. If the script times out or errors, the advisor doesn't retry—the supervision already killed the process cleanly—it just records the failure and tells Claude to proceed on its own best judgment. There's even a shared "doghouse" sentinel: when one Codex call detects a rate limit, it writes a time-bounded marker so the _next_ call fails fast instead of paying the full timeout all over again. Back off everywhere, automatically, for an hour, then try again.
+So the whole integration is **fail-warn, never fail-stop**. If the script times out or errors, the advisor doesn't retry—the supervision already killed the process cleanly—it just records the failure and tells Claude to proceed on its own best judgment. There's even a shared "doghouse" sentinel: when one Codex call detects a rate limit, it writes a time-bounded marker file so the _next_ call—anything routed through this same wrapper—fails fast instead of paying the full timeout all over again. Back off everywhere, automatically, for an hour, then try again.
 
 A second opinion is a luxury. The day's work isn't. If the consultant doesn't pick up the phone, you make the call yourself and keep moving.
 
