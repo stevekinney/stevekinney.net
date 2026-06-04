@@ -142,6 +142,7 @@ jobs:
     name: Integration
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     env:
       VERCEL: '1'
 
@@ -180,15 +181,16 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/bun.lock') }}
+          key: ${{ runner.os }}-playwright-headless-shell-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
-            ${{ runner.os }}-playwright-
+            ${{ runner.os }}-playwright-headless-shell-
 
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Install Playwright browsers
-        run: bunx playwright install --with-deps
+        timeout-minutes: 8
+        run: bunx playwright install --with-deps --only-shell chromium
 
       - name: Download website build output
         uses: actions/download-artifact@v4
