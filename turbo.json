@@ -141,10 +141,22 @@
     },
     "@stevekinney/website#test:integration": {
       "dependsOn": ["@stevekinney/website#build"],
+      "env": [
+        "PLAYWRIGHT_BASE_URL",
+        "PLAYWRIGHT_BROWSER_CHANNEL",
+        "PLAYWRIGHT_PORT",
+        "PLAYWRIGHT_WEB_SERVER"
+      ],
       "outputs": ["playwright-report/**", "test-results/**"]
     },
     "@stevekinney/website#test:integration:dev": {
-      "cache": false
+      "cache": false,
+      "env": [
+        "PLAYWRIGHT_BASE_URL",
+        "PLAYWRIGHT_BROWSER_CHANNEL",
+        "PLAYWRIGHT_PORT",
+        "PLAYWRIGHT_WEB_SERVER"
+      ]
     },
     "@stevekinney/website#test:unit": {
       "dependsOn": ["@stevekinney/scripts#content:build"]
