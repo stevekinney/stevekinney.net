@@ -190,7 +190,7 @@ jobs:
 
       - name: Install Playwright browsers
         timeout-minutes: 8
-        run: bunx playwright install --with-deps --only-shell chromium
+        run: npx playwright install --with-deps --only-shell chromium
 
       - name: Download website build output
         uses: actions/download-artifact@v4
