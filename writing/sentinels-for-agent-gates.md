@@ -1,5 +1,5 @@
 ---
-title: 'The Quiet Power of a Touched File'
+title: 'Sentinels: The Quiet Power of a Touched File'
 description: >-
   How I use sentinel files to gate the risky moves my coding agents make—exiting
   plan mode, opening a pull request, addressing review feedback, backing off a
@@ -13,12 +13,14 @@ tags:
   - tooling
 ---
 
-I let agents do a lot of unsupervised work. They plan, they write code, they open pull requests, they grind through review feedback until CI goes green. Most of that is fine to run on autopilot. But, a handful of moves are the kind you don't get to take back cleanly. Exiting plan mode and committing to an approach. Running `gh pr create` and putting a half-baked PR in front of a human who trusts me. Hammering a model's API right after it told me to slow down. Those are the moments where I want a gate—something that says "you may not do this yet, and here's exactly what has to be true first." Ask me how many times I've watched an agent cheerfully open a PR the second I looked away.
+You know what's really annoying? When you write some instructions in `AGENTS.md` or `CLAUDE.md` and then the agent ignores them. Absolutely rage-inducing.
 
-The thing I keep reaching for to build those gates is almost embarrassingly simple. It's a file. An empty one, usually. The presence of the file means "the precondition was met"; its absence means "not yet, go do the work." We call these **sentinels**, and once you start seeing them as a coordination primitive instead of a hack, they show up everywhere in my setup.
+I spend a lot of time thinking about the architecture and design of a given project, defining the tasks, adding acceptance criteria and all of that fun stuff. In a perfect world, if I do all of that planning up front, I should be able to let agents do a lot of unsupervised work. They plan, they write code, they open pull requests, they grind through review feedback until CI goes green. Most of that is fine to run on autopilot. But, a handful of moves are the kind you don't get to take back cleanly. Exiting plan mode and committing to an approach. Running `gh pr create` and putting a half-baked PR in front of a human who trusts me. Hammering a model's API right after it told me to slow down. Those are the moments where I want a gate—something that says "you may not do this yet, and here's exactly what has to be true first." Ask me how many times I've watched an agent cheerfully open a PR the second I looked away.
+
+The thing I keep reaching for to build those gates is almost embarrassingly simple (or, at least it took _me_ way too long to arrive at this station). It's a file. An empty one, usually. The presence of the file means "the precondition was met"; its absence means "not yet, go do the work." We call these **sentinels**, and once you start seeing them as a coordination primitive instead of a hack, they show up everywhere in my setup.
 
 > [!NOTE] A confession about scope
-> This is how _I_ wired up my own [Claude Code](https://code.claude.com/docs/) skills and hooks. It's not a framework or a thing you install. It's a pattern, and the pattern is what I want you to walk away with—not my exact file paths.
+> This is how _I_ wired up my own [Claude Code](https://code.claude.com/docs/) skills and hooks. It's not a framework or a thing you install. It's a pattern, and the pattern is what I want you to walk away with—not my exact file paths. Also, I am constantly tweaking all of this stuff and whatever I include here will be woefully out of date in a matter of weeks—or days, possibly. If y'all hassle me enough, maybe I'll add a [gist](https://gist.github.com) or something.
 
 ## What a sentinel actually is
 
@@ -37,6 +39,8 @@ So there's a hook on the `ExitPlanMode` tool. Before the agent is allowed to exi
 ```text
 tmp/plan-review/plan-<hash>.approved
 ```
+
+The hash is based on the current contents of the plan. If the plan changes, the approval is no longer good.
 
 No file, no exit. The hook blocks the call and routes a message back to the model: here's the plan hash I computed, here's the sentinel I'm waiting for, go run the review skill. The skill then runs the actual loop—Codex reviews, the agent addresses the feedback, Codex re-reviews, around and around until Codex emits a bare-line `APPROVED` or the loop hits its cap. Only then does the skill `touch` the sentinel. The agent retries `ExitPlanMode`, the hook finds the file, and the gate opens.
 
@@ -64,7 +68,7 @@ There's a second, sneakier rule here that's worth calling out: writing the marke
 
 ## Keeping the loop alive with a promise
 
-Both gates so far are permission slips checked by a `PreToolUse` hook—they guard a single tool call. But committee-review needs something subtler too: a way to keep the _loop itself_ alive across rounds.
+Both gates so far are permission slips checked by a `PreToolUse` hook—they guard a single tool call. But committee-review needs something subtler too: a way to keep the _loop itself_ alive across rounds. I stole this idea from [the Ralph Wiggums loop](/writing/the-ralph-loop).
 
 One round of review almost never closes the deal. The committee finds must-fix items, the agent implements them, and now everything needs a fresh look. So the skill leans on a `Stop` hook—a hook that fires when the agent tries to end its turn. As long as the work isn't done, the hook intercepts the stop and feeds the review prompt back in for another round. The agent doesn't get to walk away.
 
