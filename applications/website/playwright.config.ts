@@ -13,6 +13,7 @@ if (!previewUrl.port) {
 }
 const resolvedBaseURL = previewUrl.toString();
 const useWebServer = process.env.PLAYWRIGHT_WEB_SERVER !== '0';
+const browserChannel = process.env.PLAYWRIGHT_BROWSER_CHANNEL;
 
 const config: PlaywrightTestConfig = {
   webServer: useWebServer
@@ -28,6 +29,7 @@ const config: PlaywrightTestConfig = {
   testMatch: /(.+\.)?(test|spec)\.[jt]s/,
   use: {
     baseURL: resolvedBaseURL,
+    ...(browserChannel ? { channel: browserChannel } : {}),
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',
     video: 'retain-on-failure',

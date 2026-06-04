@@ -177,20 +177,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-process-images-
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-headless-shell-${{ hashFiles('**/bun.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-headless-shell-
-
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
 
-      - name: Install Playwright browsers
-        timeout-minutes: 8
-        run: npx playwright install --with-deps --only-shell chromium
+      - name: Verify Chrome browser
+        run: google-chrome --version
 
       - name: Download website build output
         uses: actions/download-artifact@v4
@@ -200,6 +191,7 @@ jobs:
 
       - name: Run integration tests
         env:
+          PLAYWRIGHT_BROWSER_CHANNEL: chrome
           TURBO_TEAM: ${{ vars.TURBO_TEAM }}
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
         run: bun run test:integration
