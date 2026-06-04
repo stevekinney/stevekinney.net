@@ -1,26 +1,28 @@
 ---
-title: 'Getting a Second Opinion from a Different Model Family'
+title: 'Using Codex from Claude: Getting a Second Opinion from a Different Model Family'
 description: >-
   I wired OpenAI's Codex into Claude Code as a consulting subagent—a different
   training lineage I can tap for architecture calls, stuck bugs, and security
   reviews. Here's how the `codex-advisor` agent works and why it isn't actually
   an MCP server anymore.
-date: 2026-06-02
-modified: 2026-06-02
+date: 2026-06-04
+modified: 2026-06-04
 tags:
   - ai
   - agents
   - tooling
 ---
 
-I do this thing where I'll try two fixes for a bug—both reasonable, both failures—and then catch myself about to write a third one that's really just the first one wearing a hat. The problem isn't that I'm not smart enough. The problem is that I'm stuck inside my own priors, and the same instinct that produced the first two wrong answers is the one reaching for the third.
+Let me spoil the narrative up front: One of the most powerful techniques that I've been using over the last month or two has been this idea of getting adversarial reviews. I'll pit multiple subagents against each other. More recently, I've been having models from different families review each others work. I'll have Codex check Claude's work and vice versa. Six or so months ago, I'd do this by hand—copying and pasting from one model to the other. These days, I automate it.
+
+I do this thing where I'll try two fixes for a bug—both reasonable, both failures—and then catch myself about to write a third one that's really just the first one wearing a hat—and y'all know how much I like a good hat. The problem isn't that I'm not smart enough. (I mean that might *also* be a problem, but it's not *the* problem.) The problem is that I'm stuck inside my own head and my current train of thought, and the same instinct that produced the first two wrong answers is the one reaching for the third.
 
 I get this with Claude all the time. Not because Claude is bad—I lean on it for most of my day—but because when it's wrong in a confident, plausible way, asking it to check its own work tends to produce more of the same confident, plausible wrongness. What I actually want in that moment is a second brain that was trained by completely different people on completely different data, so its blind spots don't line up with the first one's.
 
 So I gave myself one. I wired [OpenAI's Codex](https://openai.com/index/introducing-codex/) into [Claude Code](https://www.claude.com/product/claude-code) as a consulting subagent called `codex-advisor`. When Claude hits a decision it can't verify from the inside, it hands the question to a `gpt-5.4` model running at maximum reasoning effort, reads the answer, argues with it, and brings back a synthesis. Two model families, different lineages, different failure modes—pointed at the same problem.
 
-> [!NOTE] About that title
-> You asked me to write about using "Codex as an MCP server," and that's genuinely how it started. But the current setup deliberately moved _off_ the MCP integration, and the reason why is half the point of this post. So we'll get there—I just didn't want you to think I forgot.
+> [!NOTE] A word on rate limits
+> As of June 5th 2026, Anthropic is going to start charging for CLI- and SDK-invoked sessions separately from what's included in your Max plan. Codex *doesn't* do this as if this writing. So, calls to Codex come out of your normal Plus or Pro plan—but, not vice versa. Also, the Codex CLI supports being run as an MCP server out of the box. Obviously, you could wrap the Claude Code CLI as well, but I'm very lazy.
 
 ## Why a different model family, specifically
 
@@ -45,7 +47,7 @@ And, just as importantly, a list of things that do _not_ earn a call: naming deb
 
 ## Why the supervision matters more than the protocol
 
-[The Codex CLI](https://github.com/openai/codex) can run as an [MCP server](https://modelcontextprotocol.io/), and the Model Context Protocol is the obvious way to wire one tool into another. That's where I started. You register the server, Claude gets a `codex` tool, it calls it, done. Clean on paper.
+[The Codex CLI](https://github.com/openai/codex) can run as an [MCP server](https://modelcontextprotocol.io/), and the Model Context Protocol is the obvious way to wire one tool into another. That's where I started. You register the server, Claude gets a `codex` tool, it calls it, done. Clean on paper. This is probably where you *should* start too. Just add Codex as an MCP server in Claude Code and then you can begin to shuffle work back and forth between the two models. (That said, do not email me about the whole MCP versus CLI war. I promise you that I don't care.)
 
 In practice, that MCP path inside _my_ agent loop turned into a bit of a black box—not a knock on MCP itself, just the operational visibility I had into this particular call. When Codex got rate-limited, I'd get a hang. When it timed out, I'd get an ambiguous failure that didn't tell me whether to retry, wait, or give up. And I had no clean seam to enforce the one rule I care about most: that Codex stays a _text-only advisor_ and never starts free-running as a coding agent inside my consultation.
 
@@ -79,7 +81,7 @@ Because the failure I'm guarding against isn't "Codex gives a bad answer." Codex
 
 One more design choice that took me a while to get right: what happens when Codex is down. Rate limits happen. Outages happen. And the wrong answer is to let a Codex outage block my actual work.
 
-So the whole integration is **fail-warn, never fail-stop**. If the script times out or errors, the advisor doesn't retry—the supervision already killed the process cleanly—it just records the failure and tells Claude to proceed on its own best judgment. There's even a shared "doghouse" sentinel: when one Codex call detects a rate limit, it writes a time-bounded marker file so the _next_ call—anything routed through this same wrapper—fails fast instead of paying the full timeout all over again. Back off everywhere, automatically, for an hour, then try again.
+So the whole integration is **fail-warn, never fail-stop**. If the script times out or errors, the advisor doesn't retry—the supervision already killed the process cleanly—it just records the failure and tells Claude to proceed on its own best judgment. I have it write a `doghouse` sentinel (a text file in the `./tmp` directory, effectively): when one Codex call detects a rate limit, it writes a time-bounded marker file so the _next_ call—anything routed through this same wrapper—fails fast instead of paying the full timeout all over again. Back off everywhere, automatically, for an hour, then try again.
 
 A second opinion is a luxury. The day's work isn't. If the consultant doesn't pick up the phone, you make the call yourself and keep moving.
 

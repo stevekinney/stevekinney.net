@@ -1,24 +1,26 @@
 ---
-title: 'Letting the Other Model Do the Typing'
+title: 'Multi-Model Agentic Coding: Letting the Other Model Do the Typing'
 description: >-
   The follow-up to my Codex-as-advisor setup. Same second model family, opposite
   stance: instead of asking Codex for an opinion, I hand it the implementation,
   let it work in an isolated worktree, and run an approval loop where I own the
   diff and Codex never gets to commit.
-date: 2026-06-03
-modified: 2026-06-03
+date: 2026-06-04
+modified: 2026-06-04
 tags:
   - ai
   - agents
   - tooling
 ---
 
-A couple days ago I wrote about wiring [OpenAI's Codex](https://openai.com/index/introducing-codex/) into [Claude Code](https://www.claude.com/product/claude-code) as a consulting subagent—a [second opinion from a different model family](/writing/codex-as-a-second-opinion) that I tap when I'm stuck inside my own priors. That whole setup keeps Codex on a tight leash: read-only sandbox, text-only, _analysis, not action_. It talks. It never touches my files.
+I wrote about wiring [OpenAI's Codex](https://openai.com/index/introducing-codex/) into [Claude Code](https://www.claude.com/product/claude-code) as a consulting subagent—a [second opinion from a different model family](/writing/codex-as-a-second-opinion). That whole setup keeps Codex on a tight leash: read-only sandbox, text-only, _analysis, not action_. It talks. It never touches my files.
 
-This post is about the other half of the relationship, and it took me a while to admit I wanted it. Because sometimes I don't want Codex's opinion. I want Codex to do the work, in a different model family's brain, while I do something else—and then I want to review what it produced like I'd review a coworker's branch. Same two models, completely inverted stance. The advisor is a brain I borrow. The worker is a pair of hands I delegate to.
+This post is about the other half of the relationship, and it took me a while to admit I wanted it. Sometimes, I want to let Claude shell out to Codex to do the work, in a different model family's brain, while I do something else—and then I want to review what it produced like I'd review a coworker's branch. Same two models, completely inverted stance. The advisor is a brain I borrow. The worker is a pair of hands I delegate to.
 
-> [!NOTE] Read the other one first, or don't
-> This leans on the advisor post for the "why a different lineage" argument and the doghouse/fail-warn plumbing. I'm not going to re-litigate either here. If you want the case for two model families at all, that's where it lives.
+You might be asking, "y tho?" The answer? Sometimes I am try to spread the five-hour and weekly rate limits around.
+
+> [!NOTE] Read the other post first, or don't
+> This leans on [my post about getting a second opinion from Codex](/writing/codex-as-a-second-opinion) for the "why a different lineage" argument and the doghouse/fail-warn plumbing. I'm not going to re-litigate either here. If you want the case for two model families at all, that's where it lives.
 
 ## The opposite of a leash
 
