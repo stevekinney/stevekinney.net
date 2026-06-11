@@ -38,4 +38,3 @@ bun.lockb
 applications/website/.generated/
 tmp/
 /.playwright-cli
-true/
