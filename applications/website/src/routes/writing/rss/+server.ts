@@ -44,7 +44,7 @@ export async function GET() {
 
   return new Response(xml, {
     headers: {
-      'Content-Type': 'application/rss+xml',
+      'Content-Type': 'application/atom+xml',
       'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
       'Access-Control-Allow-Origin': '*',
       'Last-Modified': updated.toUTCString(),
