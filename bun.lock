@@ -5,9 +5,6 @@
     "": {
       "name": "stevekinney.net",
       "dependencies": {
-        "@fontsource/fira-sans": "^5.2.7",
-        "@fontsource/league-gothic": "^5.2.8",
-        "@fontsource/roboto": "^5.2.9",
         "@icons-pack/svelte-simple-icons": "^7.2.0",
         "@lucide/svelte": "^1.8.0",
         "@vercel/analytics": "^2.0.1",
@@ -349,12 +346,6 @@
     "@exodus/bytes": ["@exodus/bytes@1.10.0", "", { "peerDependencies": { "@noble/hashes": "^1.8.0 || ^2.0.0" }, "optionalPeers": ["@noble/hashes"] }, "sha512-tf8YdcbirXdPnJ+Nd4UN1EXnz+IP2DI45YVEr3vvzcVTOyrApkmIB4zvOQVd3XPr7RXnfBtAx+PXImXOIU0Ajg=="],
 
     "@fastify/busboy": ["@fastify/busboy@2.1.1", "", {}, "sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA=="],
-
-    "@fontsource/fira-sans": ["@fontsource/fira-sans@5.2.7", "", {}, "sha512-5DE4AealD/VnbwdzMgnpWfCttMQBbteNiK9DCJE7cVwZEbDTPLUoFDMMvxNQ498nZc5in7Mta9c/s+3Ehh0BAg=="],
-
-    "@fontsource/league-gothic": ["@fontsource/league-gothic@5.2.8", "", {}, "sha512-xxu2kSPrZZZG2Gq+M75/4J5q0PWUshfgk4tH09mvMrmNzS6izlDRWVU4W+OFCf+3Hb22PswB4vJOr/PUUDpWCw=="],
-
-    "@fontsource/roboto": ["@fontsource/roboto@5.2.9", "", {}, "sha512-ZTkyHiPk74B/aj8BZWbsxD5Yu+Lq+nR64eV4wirlrac2qXR7jYk2h6JlLYuOuoruTkGQWNw2fMuKNavw7/rg0w=="],
 
     "@hapi/hoek": ["@hapi/hoek@9.3.0", "", {}, "sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ=="],
 

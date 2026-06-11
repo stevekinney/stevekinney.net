@@ -46,7 +46,10 @@ test('writing post JSON-LD contains Article schema with required fields', async 
   expect(typeof article!.headline).toBe('string');
   expect(article!.headline as string).toBeTruthy();
   expect(typeof article!.image).toBe('string');
-  expect(article!.image as string).toContain('stevekinney.com');
+  // The OG image URL carries the runtime origin (localhost in preview, the canonical
+  // host in production), so assert the path it points at rather than a fixed hostname.
+  // The origin is environment-dependent by design (see the gap2-3-1 canonical-origin plan).
+  expect(new URL(article!.image as string).pathname).toBe('/writing/setup-python/open-graph.jpg');
   expect(typeof article!.datePublished).toBe('string');
   expect(article!.datePublished as string).toBeTruthy();
   const author = article!.author as Record<string, unknown>;
