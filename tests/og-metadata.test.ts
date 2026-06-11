@@ -18,6 +18,9 @@ type OpenGraphMetadata = {
   ogDescription: string;
   ogImage: string;
   twitterCard: string;
+  canonicalUrl: string;
+  ogUrl: string;
+  twitterUrl: string;
 };
 
 const repositoryRoot = new URL('../', import.meta.url);
@@ -41,6 +44,11 @@ const scenarios: Scenario[] = [
     name: 'self-testing AI agents course page',
     path: '/courses/self-testing-ai-agents',
     fixturePath: 'tests/fixtures/og-failing-self-testing.html',
+  },
+  {
+    name: 'self-testing AI agents lesson page',
+    path: '/courses/self-testing-ai-agents/configuring-playwright',
+    fixturePath: 'tests/fixtures/og-lesson-configuring-playwright.html',
   },
 ];
 
@@ -68,6 +76,22 @@ const readMetaContent = (document: Document, selector: string): string => {
   return content;
 };
 
+const readLinkHref = (document: Document, selector: string): string => {
+  const element = document.querySelector<HTMLLinkElement>(selector);
+
+  if (!element) {
+    throw new Error(`Missing link element: ${selector}`);
+  }
+
+  const href = element.getAttribute('href');
+
+  if (!href) {
+    throw new Error(`Link element has no href: ${selector}`);
+  }
+
+  return href;
+};
+
 const extractMetadata = (html: string): OpenGraphMetadata => {
   const document = new JSDOM(html).window.document;
 
@@ -76,6 +100,9 @@ const extractMetadata = (html: string): OpenGraphMetadata => {
     ogDescription: readMetaContent(document, 'meta[property="og:description"]'),
     ogImage: readMetaContent(document, 'meta[property="og:image"]'),
     twitterCard: readMetaContent(document, 'meta[name="twitter:card"]'),
+    canonicalUrl: readLinkHref(document, 'link[rel="canonical"]'),
+    ogUrl: readMetaContent(document, 'meta[property="og:url"]'),
+    twitterUrl: readMetaContent(document, 'meta[name="twitter:url"]'),
   };
 };
 
@@ -87,6 +114,10 @@ const expectRequiredMetadata = (metadata: OpenGraphMetadata): URL => {
 
   const imageUrl = new URL(metadata.ogImage);
   expect(imageUrl.origin).toBe(canonicalSiteOrigin);
+
+  expect(new URL(metadata.canonicalUrl).origin).toBe(canonicalSiteOrigin);
+  expect(new URL(metadata.ogUrl).origin).toBe(canonicalSiteOrigin);
+  expect(new URL(metadata.twitterUrl).origin).toBe(canonicalSiteOrigin);
 
   return imageUrl;
 };
