@@ -1,8 +1,10 @@
-import { readdir, stat } from 'node:fs/promises';
+import { gzipSync } from 'node:zlib';
+import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 
 import {
   directoryExists,
+  generatedContentEnhancementsDirectory,
   websiteBuildRoot,
   websiteRoot,
   websiteSvelteKitClientRoot,
@@ -79,7 +81,7 @@ export const countFilesIfDirectoryExists = async (
   return countFiles(directoryPath, matcher);
 };
 
-const getLargestFile = async (
+export const getLargestFile = async (
   directoryPath: string,
   matcher: (filePath: string) => boolean,
 ): Promise<SizedFile | null> => {
@@ -89,10 +91,12 @@ const getLargestFile = async (
   }
 
   const sizedFiles = await Promise.all(
-    files.map(async (filePath) => ({
-      path: filePath,
-      bytes: (await stat(filePath)).size,
-    })),
+    files.map(async (filePath) => {
+      const bytes = (await stat(filePath)).size;
+      const contents = await readFile(filePath);
+      const gzipBytes = gzipSync(contents).length;
+      return { path: filePath, bytes, gzipBytes };
+    }),
   );
 
   return sizedFiles.reduce((largest, current) =>
@@ -109,6 +113,7 @@ export type WebsiteOutputInspection = {
   prerenderedHtmlPageCount: number;
   largestClientChunk: SizedFile | null;
   mainStylesheet: SizedFile | null;
+  largestEnhancementChunk: SizedFile | null;
 };
 
 /**
@@ -132,6 +137,11 @@ export const inspectWebsiteOutput = async (): Promise<WebsiteOutputInspection> =
     path.resolve(websiteSvelteKitClientRoot, '_app', 'immutable', 'assets'),
     (filePath) => filePath.endsWith('.css'),
   );
+  const largestEnhancementChunk = (await directoryExists(generatedContentEnhancementsDirectory))
+    ? await getLargestFile(generatedContentEnhancementsDirectory, (filePath) =>
+        filePath.endsWith('.js'),
+      )
+    : null;
 
   return {
     htmlOutputRoot,
@@ -139,5 +149,6 @@ export const inspectWebsiteOutput = async (): Promise<WebsiteOutputInspection> =
     prerenderedHtmlPageCount,
     largestClientChunk,
     mainStylesheet,
+    largestEnhancementChunk,
   };
 };

@@ -7,6 +7,7 @@ import { afterEach, describe, expect, test } from 'bun:test';
 import {
   countFilesIfDirectoryExists,
   findFirstDirectoryWithMatchingFile,
+  getLargestFile,
 } from './inspect-website-output.ts';
 
 const temporaryDirectories: string[] = [];
@@ -94,5 +95,52 @@ describe('build report output discovery', () => {
     expect(
       await countFilesIfDirectoryExists(outputRoot, (filePath) => filePath.endsWith('.html')),
     ).toBe(2);
+  });
+});
+
+describe('getLargestFile', () => {
+  test('returns bytes and gzipBytes for the largest matching file', async () => {
+    const temporaryDirectory = await createTemporaryDirectory();
+
+    await writeTextFile(path.join(temporaryDirectory, 'small.js'), 'console.log(1);');
+    await writeTextFile(
+      path.join(temporaryDirectory, 'large.js'),
+      'console.log(' + 'x'.repeat(1000) + ');',
+    );
+
+    const result = await getLargestFile(temporaryDirectory, (filePath) => filePath.endsWith('.js'));
+
+    expect(result).not.toBeNull();
+    expect(typeof result?.bytes).toBe('number');
+    expect(result!.bytes).toBeGreaterThan(0);
+    expect(typeof result?.gzipBytes).toBe('number');
+    expect(result!.gzipBytes).toBeGreaterThan(0);
+    expect(result!.gzipBytes).toBeLessThan(result!.bytes);
+    expect(result!.path).toContain('large.js');
+  });
+
+  test('returns null when the directory contains no matching files', async () => {
+    const temporaryDirectory = await createTemporaryDirectory();
+
+    await writeTextFile(path.join(temporaryDirectory, 'styles.css'), 'body {}');
+
+    const result = await getLargestFile(temporaryDirectory, (filePath) => filePath.endsWith('.js'));
+
+    expect(result).toBeNull();
+  });
+
+  test('largestEnhancementChunk is null when the enhancements directory does not exist', async () => {
+    // The directoryExists guard in inspectWebsiteOutput yields null for the
+    // largestEnhancementChunk field when the directory is absent. Simulate the
+    // same guard logic directly so it can be tested with a temp path.
+    const temporaryDirectory = await createTemporaryDirectory();
+    const absentDirectory = path.join(temporaryDirectory, 'nonexistent');
+    const { directoryExists } = await import('../content-paths.ts');
+
+    const largestEnhancementChunk = (await directoryExists(absentDirectory))
+      ? await getLargestFile(absentDirectory, (filePath) => filePath.endsWith('.js'))
+      : null;
+
+    expect(largestEnhancementChunk).toBeNull();
   });
 });

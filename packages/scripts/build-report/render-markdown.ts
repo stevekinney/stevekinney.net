@@ -48,11 +48,18 @@ export const renderMarkdownReport = (report: BuildReport): string =>
           list
             .item(
               `Largest client chunk: ${orUnavailable(report.assets.largestClientChunk?.formattedSize)}`,
-              `(${orUnavailable(report.assets.largestClientChunk?.path)})`,
+              `(${orUnavailable(report.assets.largestClientChunk?.formattedGzipSize)} gzip,`,
+              `${orUnavailable(report.assets.largestClientChunk?.path)})`,
             )
             .item(
               `Main stylesheet: ${orUnavailable(report.assets.mainStylesheet?.formattedSize)}`,
-              `(${orUnavailable(report.assets.mainStylesheet?.path)})`,
+              `(${orUnavailable(report.assets.mainStylesheet?.formattedGzipSize)} gzip,`,
+              `${orUnavailable(report.assets.mainStylesheet?.path)})`,
+            )
+            .item(
+              `Largest enhancement chunk: ${orUnavailable(report.assets.largestEnhancementChunk?.formattedSize)}`,
+              `(${orUnavailable(report.assets.largestEnhancementChunk?.formattedGzipSize)} gzip,`,
+              `${orUnavailable(report.assets.largestEnhancementChunk?.path)})`,
             );
         });
     })

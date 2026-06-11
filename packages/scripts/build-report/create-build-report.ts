@@ -30,6 +30,8 @@ const describeSizedFile = (file: SizedFile | null): SizedFileReport | null =>
         path: path.relative(repositoryRoot, file.path),
         bytes: file.bytes,
         formattedSize: formatBytes(file.bytes),
+        gzipBytes: file.gzipBytes,
+        formattedGzipSize: formatBytes(file.gzipBytes),
       }
     : null;
 
@@ -93,6 +95,7 @@ export const createBuildReport = (inputs: {
     assets: {
       largestClientChunk: describeSizedFile(websiteOutput.largestClientChunk),
       mainStylesheet: describeSizedFile(websiteOutput.mainStylesheet),
+      largestEnhancementChunk: describeSizedFile(websiteOutput.largestEnhancementChunk),
     },
   };
 };

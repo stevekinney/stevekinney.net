@@ -26,6 +26,7 @@ export type TurboRunSummary = {
 export type SizedFile = {
   path: string;
   bytes: number;
+  gzipBytes: number;
 };
 
 export type WebsiteBuildTaskReport = {
@@ -61,11 +62,14 @@ export type SizedFileReport = {
   path: string;
   bytes: number;
   formattedSize: string;
+  gzipBytes: number;
+  formattedGzipSize: string;
 };
 
 export type AssetsReport = {
   largestClientChunk: SizedFileReport | null;
   mainStylesheet: SizedFileReport | null;
+  largestEnhancementChunk: SizedFileReport | null;
 };
 
 export type BuildReport = {

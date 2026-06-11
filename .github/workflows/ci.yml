@@ -117,6 +117,9 @@ jobs:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
         run: bun run continuous-integration:build
 
+      - name: Check build budget
+        run: bun check-build-budget
+
       - name: Upload build report
         uses: actions/upload-artifact@v4
         with:
