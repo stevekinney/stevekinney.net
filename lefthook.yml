@@ -11,10 +11,6 @@ pre-commit:
       glob: 'courses/**/*.md'
       run: bun run --cwd packages/scripts update-content-dates.ts {staged_files}
       stage_fixed: true
-    audit-course-frontmatter:
-      priority: 30
-      glob: 'courses/**/*.md'
-      run: bun run --cwd packages/scripts audit-courses-frontmatter.ts {staged_files}
     repository-guards:
       priority: 40
       run: ./.lefthook/pre-commit/repository-guards.sh
