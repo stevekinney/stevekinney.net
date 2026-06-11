@@ -115,9 +115,6 @@ export default defineConfig({
     },
   },
   build: {
-    rollupOptions: {
-      maxParallelFileOps: 20,
-    },
     chunkSizeWarningLimit: 100,
   },
   optimizeDeps: {

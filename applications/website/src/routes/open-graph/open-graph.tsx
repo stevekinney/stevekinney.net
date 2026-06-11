@@ -1,15 +1,5 @@
 import metadata from '$lib/metadata';
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace JSX {
-    interface IntrinsicElements {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [elemName: string]: any;
-    }
-  }
-}
-
 /**
  * Types for the OpenGraph image components
  */
@@ -68,9 +58,10 @@ const Description = ({
 }: DescriptionProps) => {
   if (!description) return null;
 
-  return (
-    <p
-      style={{
+  return h(
+    'p',
+    {
+      style: {
         fontSize: '2rem',
         margin: 0,
         overflow: 'hidden',
@@ -79,10 +70,9 @@ const Description = ({
         color: textColor,
         padding: '1rem 1rem',
         borderRadius: '0.25rem',
-      }}
-    >
-      {description}
-    </p>
+      },
+    },
+    description,
   );
 };
 
@@ -95,9 +85,10 @@ const Heading = ({
   textColor = 'white',
   backgroundColor = 'black',
 }: HeadingProps) => {
-  return (
-    <h2
-      style={{
+  return h(
+    'h2',
+    {
+      style: {
         fontSize: description ? '2.5rem' : '6rem',
         textAlign: description ? 'left' : 'center',
         margin: 0,
@@ -109,10 +100,9 @@ const Heading = ({
         padding: '1rem 1rem',
         borderRadius: '0.25rem',
         lineHeight: 1.2,
-      }}
-    >
-      {title}
-    </h2>
+      },
+    },
+    title,
   );
 };
 
@@ -125,33 +115,37 @@ const Footer = ({
   backgroundColor = 'white',
   textColor = 'black',
 }: FooterProps) => {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <p
-        style={{
+  return h(
+    'div',
+    { style: { display: 'flex', justifyContent: 'space-between' } },
+    h(
+      'p',
+      {
+        style: {
           fontSize: '2rem',
           margin: 0,
           backgroundColor,
           color: textColor,
           padding: '1rem',
           borderRadius: '0.25rem',
-        }}
-      >
-        {handle}
-      </p>
-      <p
-        style={{
+        },
+      },
+      handle,
+    ),
+    h(
+      'p',
+      {
+        style: {
           fontSize: '2rem',
           margin: 0,
           backgroundColor,
           color: textColor,
           padding: '1rem',
           borderRadius: '0.25rem',
-        }}
-      >
-        {url}
-      </p>
-    </div>
+        },
+      },
+      url,
+    ),
   );
 };
 
@@ -184,10 +178,13 @@ export const OpenGraphImage = ({
         : DEFAULT_STYLES.backgroundImage,
   };
 
-  return (
-    <div style={{ display: 'flex' }}>
-      <div
-        style={{
+  return h(
+    'div',
+    { style: { display: 'flex' } },
+    h(
+      'div',
+      {
+        style: {
           display: 'flex',
           flexDirection: 'column',
           width: '100vw',
@@ -195,25 +192,25 @@ export const OpenGraphImage = ({
           gap: '2rem',
           ...backgroundStyle,
           color: textColor,
-        }}
-      >
-        <div
-          style={{
+        },
+      },
+      h(
+        'div',
+        {
+          style: {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: title ? 'flex-start' : 'center',
             gap: '2rem',
             flexGrow: 1,
             height: '60vh',
-          }}
-        >
-          <Heading title={mainTitle || metadata.title} description={description} />
-          <Description description={description} />
-        </div>
-
-        {!hideFooter && <Footer handle={handle} url={url} />}
-      </div>
-    </div>
+          },
+        },
+        Heading({ title: mainTitle || metadata.title, description }),
+        Description({ description }),
+      ),
+      !hideFooter && Footer({ handle, url }),
+    ),
   );
 };
 
@@ -221,7 +218,6 @@ export const OpenGraphImage = ({
  * Required helper function for JSX rendering with satori
  * This function is used by satori to create the virtual DOM elements
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function h(type: string, props: Record<string, unknown> | null, ...children: unknown[]) {
   if (children && children.length) {
     props = props || {};
