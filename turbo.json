@@ -159,7 +159,15 @@
       ]
     },
     "@stevekinney/website#test:unit": {
-      "dependsOn": ["@stevekinney/scripts#content:build"]
+      "dependsOn": ["@stevekinney/scripts#content:build"],
+      "inputs": [
+        "src/**",
+        "vitest.config.*",
+        "vite.config.*",
+        "tsconfig.json",
+        "../../packages/utilities/**/*.ts",
+        "../../packages/markdown/src/**/*.ts"
+      ]
     },
     "@stevekinney/website#test:storybook": {
       "dependsOn": ["@stevekinney/website#build-storybook"]
