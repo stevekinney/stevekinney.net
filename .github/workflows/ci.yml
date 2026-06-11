@@ -114,7 +114,7 @@ jobs:
         run: bun run continuous-integration:build
 
       - name: Check build budget
-        run: bun packages/scripts/build-report/check-build-budget.ts
+        run: bun run check-build-budget
 
       - name: Upload build report
         uses: actions/upload-artifact@v4
