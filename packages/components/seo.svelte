@@ -69,7 +69,8 @@
   });
 
   const formattedTitle = $derived(formatPageTitle(title));
-  const currentUrl = $derived(page.url.href);
+  // Use the canonical origin so that preview builds don't bake localhost into canonical/og:url/twitter:url.
+  const currentUrl = $derived(`${baseUrl}${page.url.pathname}${page.url.search}`);
 
   const createPerRouteImage = (pathname: string, version: string): string => {
     const path = pathname === '/' ? '/open-graph.jpg' : `${pathname}/open-graph.jpg`;
