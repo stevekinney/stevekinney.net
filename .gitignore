@@ -27,6 +27,7 @@ test-results/
 playwright-report/
 .eslintcache
 package-lock.json
+bun.lockb
 .env*.local
 
 # Turborepo

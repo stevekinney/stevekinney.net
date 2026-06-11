@@ -3,7 +3,6 @@ paths:
   - 'package.json'
   - 'bunfig.toml'
   - 'bun.lock'
-  - 'bun.lockb'
   - '.github/workflows/*.yml'
   - 'playwright.config.ts'
   - 'scripts/validate-content.ts'
@@ -12,7 +11,7 @@ paths:
 
 # CI and tooling notes
 
-- Commit `bun.lockb` alongside `bun.lock` for Bun 1.1.0 CI. Frozen installs fail if the binary lockfile is missing or out of sync.
+- Commit only `bun.lock` (the text-format lockfile). `bun.lockb` is the legacy binary format; it is gitignored and should not be committed. Bun 1.3+ treats `bun.lock` as authoritative and will regenerate `bun.lockb` locally if needed.
 - When mapping course lessons in `scripts/validate-content.ts`, use the first path segment as the course slug and the last segment as the lesson slug. Guard against files directly under `content/courses/`.
 - When `PLAYWRIGHT_BASE_URL` omits a port, build a resolved URL with the preview port and reuse it for both `webServer.url` and `use.baseURL`.
 - Keep Node requirements consistent across `.node-version`, `CONTRIBUTING.md`, and `package.json` `engines.node`.
