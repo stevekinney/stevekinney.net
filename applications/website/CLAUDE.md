@@ -27,4 +27,4 @@ The SvelteKit app. Every content page is prerendered; the client payload is the 
 
 - Run `bun run continuous-integration:validate` before pushing structural changes — it covers content validation, image compatibility, lint, svelte-check, and unit tests in one pass.
 - UI work should show up in Storybook (`bun run storybook`); integration coverage runs via Playwright (`bun run test:integration`).
-- The dev server is on port 4444 (`bun dev`); preview on port 4445. Both are configured in `vite.config.ts` and `playwright.config.ts`.
+- The dev server is on port 4444 (`bun dev`); preview on port 4445. Both are configured in `vite.config.ts` and `playwright.config.ts`. **Always run `bun dev` from the repo root**, not from this directory — turbo ensures the `content:build` task runs first, which generates `.generated/content-data.json`. Running `bun dev` directly from `applications/website/` skips that step and causes a cryptic Vite module-resolution failure.
