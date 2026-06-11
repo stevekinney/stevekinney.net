@@ -1,5 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, searchForWorkspaceRoot, type PluginOption } from 'vite';
@@ -9,6 +10,24 @@ import { contentDevelopmentPlugins } from './plugins/vite/content-development-pl
 
 const enableBundleStats = process.env.BUNDLE_STATS === '1';
 const workspaceRoot = searchForWorkspaceRoot(process.cwd());
+
+const readContentEnhancementsBuildHash = (): string => {
+  try {
+    return readFileSync(
+      path.resolve(
+        workspaceRoot,
+        'applications',
+        'website',
+        '.generated',
+        'content-enhancements',
+        '.build-hash',
+      ),
+      'utf8',
+    ).trim();
+  } catch {
+    return 'dev';
+  }
+};
 
 const applyClientBuildOnly = (plugin: unknown): PluginOption => {
   if (plugin && typeof plugin === 'object' && !Array.isArray(plugin)) {
@@ -46,6 +65,9 @@ const contentBuildScriptPath = path.resolve(
 );
 
 export default defineConfig({
+  define: {
+    __CONTENT_ENHANCEMENTS_BUILD_HASH__: JSON.stringify(readContentEnhancementsBuildHash()),
+  },
   plugins: [
     sveltekit(),
     ...contentDevelopmentPlugins({

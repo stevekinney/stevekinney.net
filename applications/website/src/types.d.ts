@@ -30,3 +30,6 @@ declare module 'rehype-unwrap-images' {
 declare module 'rehype-slug' {
   export default import('unified').Plugin;
 }
+
+/** Injected at build time by Vite define — the content-enhancements bundle build hash for cache busting. */
+declare const __CONTENT_ENHANCEMENTS_BUILD_HASH__: string;
