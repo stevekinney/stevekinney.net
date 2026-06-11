@@ -1,6 +1,6 @@
 ---
 title: 
 description: 
-date: {{date}}
-modified: {{date}}
+date: ''
+modified: ''
 ---

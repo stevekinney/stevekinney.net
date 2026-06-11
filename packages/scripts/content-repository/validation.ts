@@ -64,6 +64,7 @@ const validateHeadingAnchor = (
   urlPath: string,
   headingAnchors: Set<string>,
   issues: ContentValidationIssue[],
+  line?: number,
 ): void => {
   const anchor = urlPath.slice(1);
   if (!anchor) return;
@@ -72,6 +73,7 @@ const validateHeadingAnchor = (
     issues.push({
       file,
       message: `Unknown heading anchor '${urlPath}'.`,
+      line,
     });
   }
 };
@@ -82,6 +84,7 @@ const validateRootLink = (
   routePaths: Set<string>,
   courseDirectories: Set<string>,
   issues: ContentValidationIssue[],
+  line?: number,
 ): void => {
   const normalized = normalizeRoutePath(urlPath);
 
@@ -96,6 +99,7 @@ const validateRootLink = (
     issues.push({
       file,
       message: `Unknown writing route '${urlPath}'.`,
+      line,
     });
     return;
   }
@@ -106,6 +110,7 @@ const validateRootLink = (
       issues.push({
         file,
         message: `Missing course slug for link '${urlPath}'.`,
+        line,
       });
       return;
     }
@@ -114,6 +119,7 @@ const validateRootLink = (
       issues.push({
         file,
         message: `Unknown course '${courseSlug}' for link '${urlPath}'.`,
+        line,
       });
       return;
     }
@@ -121,6 +127,7 @@ const validateRootLink = (
     issues.push({
       file,
       message: `Unknown course route '${urlPath}'.`,
+      line,
     });
     return;
   }
@@ -130,6 +137,7 @@ const validateRootLink = (
     issues.push({
       file,
       message: `Missing static asset for link '${urlPath}'.`,
+      line,
     });
   }
 };
@@ -138,6 +146,7 @@ const validateRelativeLink = async (
   file: string,
   urlPath: string,
   issues: ContentValidationIssue[],
+  line?: number,
 ): Promise<void> => {
   const resolvedPath = path.resolve(path.dirname(resolveRepositoryPath(file)), urlPath);
 
@@ -145,6 +154,7 @@ const validateRelativeLink = async (
     issues.push({
       file,
       message: `Relative link escapes content roots: '${urlPath}'.`,
+      line,
     });
     return;
   }
@@ -153,6 +163,7 @@ const validateRelativeLink = async (
     issues.push({
       file,
       message: `Missing asset or file for link '${urlPath}'.`,
+      line,
     });
   }
 };
@@ -170,8 +181,9 @@ export const validateMarkdownLinks = async (
   visit(tree, ['link', 'image', 'definition'], (node) => {
     const url = String((node as MarkdownReferenceNode).url ?? '').trim();
     if (!url) return;
+    const line = node.position?.start.line;
     if (url.startsWith('#')) {
-      validateHeadingAnchor(file, url, headingAnchors, issues);
+      validateHeadingAnchor(file, url, headingAnchors, issues, line);
       return;
     }
     if (isExternalUrl(url)) return;
@@ -180,11 +192,11 @@ export const validateMarkdownLinks = async (
     if (!normalizedUrl) return;
 
     if (normalizedUrl.startsWith('/')) {
-      validateRootLink(file, normalizedUrl, routePaths, courseDirectories, issues);
+      validateRootLink(file, normalizedUrl, routePaths, courseDirectories, issues, line);
       return;
     }
 
-    tasks.push(validateRelativeLink(file, normalizedUrl, issues));
+    tasks.push(validateRelativeLink(file, normalizedUrl, issues, line));
   });
 
   await Promise.all(tasks);

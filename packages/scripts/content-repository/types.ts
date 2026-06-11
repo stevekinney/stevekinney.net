@@ -11,6 +11,7 @@ import { parseFrontmatter } from '@stevekinney/utilities/frontmatter';
 export type ContentValidationIssue = {
   file: string;
   message: string;
+  line?: number;
 };
 
 export type MarkdownReferenceNode = {

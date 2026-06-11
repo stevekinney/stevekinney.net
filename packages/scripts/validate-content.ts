@@ -7,7 +7,9 @@ const main = async (): Promise<void> => {
   if (repository.validationIssues.length > 0) {
     console.error('Content validation failed:');
     for (const issue of repository.validationIssues) {
-      console.error(`- ${issue.file}: ${issue.message}`);
+      console.error(
+        `- ${issue.file}${issue.line != null ? `:${issue.line}` : ''}: ${issue.message}`,
+      );
     }
     process.exit(1);
   }
