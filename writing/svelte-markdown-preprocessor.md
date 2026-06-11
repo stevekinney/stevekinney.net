@@ -183,9 +183,8 @@ That said, I wouldn't reach for `parse` for this version anymore. Current versio
 /**
  * @param {object} options
  * @param {string} options.content
- * @param {string} options.filename
  */
-export const processMarkdown = async ({ content, filename }) => {
+export const processMarkdown = async ({ content }) => {
   const processed = await toHTML(content);
 
   return {
