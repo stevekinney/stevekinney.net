@@ -5,17 +5,21 @@
   import PullRequest from '$lib/components/pull-request.svelte';
   import SEO from '$lib/components/seo.svelte';
   import { url } from '$lib/metadata';
-  import { buildCourseSchema } from '$lib/structured-data';
+  import { buildBreadcrumbSchema, buildCourseSchema } from '$lib/structured-data';
 
   const { data } = $props();
 
-  const courseJsonLd = $derived(
+  const courseJsonLd = $derived([
     buildCourseSchema({
       name: data.title,
       description: data.description,
       courseUrl: `${url}/courses/${page.params.course}`,
     }),
-  );
+    buildBreadcrumbSchema([
+      { name: 'Courses', url: `${url}/courses` },
+      { name: data.title, url: `${url}/courses/${page.params.course}` },
+    ]),
+  ]);
 </script>
 
 <SEO title={data.title} description={data.description} jsonLd={courseJsonLd} />

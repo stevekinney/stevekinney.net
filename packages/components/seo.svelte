@@ -64,7 +64,7 @@
     if (!jsonLd) return '';
     const data = Array.isArray(jsonLd)
       ? { '@context': 'https://schema.org', '@graph': jsonLd }
-      : jsonLd;
+      : { '@context': 'https://schema.org', ...jsonLd };
     return '<script type="application/ld+json">' + JSON.stringify(data) + '</' + 'script>';
   });
 

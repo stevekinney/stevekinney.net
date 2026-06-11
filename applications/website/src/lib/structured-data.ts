@@ -26,7 +26,6 @@ const PERSON = {
 
 export function buildWebSiteSchema() {
   return {
-    '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: author,
     url,
@@ -37,7 +36,6 @@ export function buildWebSiteSchema() {
 
 export function buildPersonSchema() {
   return {
-    '@context': 'https://schema.org',
     ...PERSON,
   };
 }
@@ -58,7 +56,6 @@ export function buildArticleSchema({
   imageUrl: string;
 }) {
   return {
-    '@context': 'https://schema.org',
     '@type': 'Article',
     headline: title,
     description,
@@ -81,18 +78,17 @@ export function buildCourseSchema({
   courseUrl: string;
 }) {
   return {
-    '@context': 'https://schema.org',
     '@type': 'Course',
     name,
     description,
     url: courseUrl,
     provider: PERSON,
+    hasCourseInstance: [{ '@type': 'CourseInstance', courseMode: 'online' }],
   };
 }
 
 export function buildBreadcrumbSchema(items: { name: string; url: string }[]) {
   return {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: items.map((item, index) => ({
       '@type': 'ListItem',

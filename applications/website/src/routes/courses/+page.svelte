@@ -3,13 +3,17 @@
   import SEO from '$lib/components/seo.svelte';
   import coursesData from '$lib/courses.toml';
   import type { Recording } from '$lib/recording-types';
+  import { url } from '$lib/metadata';
+  import { buildBreadcrumbSchema } from '$lib/structured-data';
 
   const recordings = coursesData.recording as Recording[];
 
   const { data } = $props();
+
+  const jsonLd = buildBreadcrumbSchema([{ name: 'Courses', url: `${url}/courses` }]);
 </script>
 
-<SEO title={data.title} description={data.description} />
+<SEO title={data.title} description={data.description} {jsonLd} />
 
 <div class="space-y-8">
   <section>
