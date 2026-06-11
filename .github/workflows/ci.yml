@@ -34,12 +34,10 @@ jobs:
       - name: Cache Bun dependencies
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.bun/install/cache
-            node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-v2-${{ hashFiles('bun.lock') }}
           restore-keys: |
-            ${{ runner.os }}-bun-
+            ${{ runner.os }}-bun-v2-
 
       - name: Cache image preprocessing outputs
         uses: actions/cache@v4
@@ -87,12 +85,10 @@ jobs:
       - name: Cache Bun dependencies
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.bun/install/cache
-            node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-v2-${{ hashFiles('bun.lock') }}
           restore-keys: |
-            ${{ runner.os }}-bun-
+            ${{ runner.os }}-bun-v2-
 
       - name: Cache image preprocessing outputs
         uses: actions/cache@v4
@@ -118,7 +114,7 @@ jobs:
         run: bun run continuous-integration:build
 
       - name: Check build budget
-        run: bun check-build-budget
+        run: bun run check-build-budget
 
       - name: Upload build report
         uses: actions/upload-artifact@v4
@@ -165,12 +161,10 @@ jobs:
       - name: Cache Bun dependencies
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.bun/install/cache
-            node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-v2-${{ hashFiles('bun.lock') }}
           restore-keys: |
-            ${{ runner.os }}-bun-
+            ${{ runner.os }}-bun-v2-
 
       - name: Cache image preprocessing outputs
         uses: actions/cache@v4
