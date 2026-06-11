@@ -10,6 +10,9 @@ describe('resolveOpenGraphMetadata', () => {
     await expect(resolveOpenGraphMetadata('/writing')).resolves.toMatchObject({
       title: 'Writing',
     });
+    await expect(resolveOpenGraphMetadata('/writing/page/2')).resolves.toMatchObject({
+      title: 'Writing',
+    });
     await expect(resolveOpenGraphMetadata('/courses')).resolves.toMatchObject({
       title: 'Courses',
     });

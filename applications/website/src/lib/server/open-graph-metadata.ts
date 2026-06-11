@@ -47,7 +47,9 @@ const resolveWritingMetadata = (pathname: string): OpenGraphOptions | null => {
   if (!pathname.startsWith('/writing/')) return null;
 
   const slug = safeDecode(pathname.replace('/writing/', ''));
-  if (!slug || slug.includes('/')) return null;
+  if (!slug) return null;
+  if (slug.startsWith('page/')) return WRITING_INDEX;
+  if (slug.includes('/')) return null;
 
   const post = getWritingEntry(slug);
   if (!post) return null;
@@ -63,6 +65,8 @@ const resolveCourseMetadata = async (pathname: string): Promise<OpenGraphOptions
 
   const remainder = safeDecode(pathname.replace('/courses/', ''));
   if (!remainder) return null;
+
+  if (remainder.startsWith('page/')) return COURSES_INDEX;
 
   const [courseId, lessonId, ...rest] = remainder.split('/').filter(Boolean);
   if (!courseId || rest.length > 0) return null;
