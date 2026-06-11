@@ -7,6 +7,8 @@ test('tailwind playground renders inline previews', async ({ page }) => {
 
   await expect(page.locator('[data-tailwind-playground]').first()).toBeVisible();
 
+  await expect(page.locator('[data-content-document][data-content-enhanced="true"]')).toBeVisible();
+
   const hasPreview = await page.evaluate(() => {
     const buttons = Array.from(document.querySelectorAll('[data-tailwind-playground] button'));
     return buttons.some(

@@ -53,6 +53,7 @@ test.describe('exactly one content document wrapper per content page', () => {
   // every code block, table, and playground to be enhanced twice.
   const contentPages = [
     '/writing/setup-python',
+    '/courses/testing',
     '/courses/testing/the-basics',
     '/courses/tailwind/utility-first',
   ];
