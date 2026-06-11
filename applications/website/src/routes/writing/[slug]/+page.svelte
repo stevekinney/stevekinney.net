@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { page } from '$app/state';
   import { env } from '$env/dynamic/public';
   import Date from '$lib/components/date.svelte';
   import ContentEnhancements from '$lib/components/content-enhancements.svelte';
@@ -11,7 +10,7 @@
 
   const { data } = $props();
 
-  const baseUrl = env.PUBLIC_SITE_URL || page.url.origin;
+  const baseUrl = env.PUBLIC_SITE_URL || url;
 
   const articleJsonLd = $derived(
     buildArticleSchema({
