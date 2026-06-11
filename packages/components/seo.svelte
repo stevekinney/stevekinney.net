@@ -70,7 +70,9 @@
 
   const formattedTitle = $derived(formatPageTitle(title));
   // Use the canonical origin so that preview builds don't bake localhost into canonical/og:url/twitter:url.
-  const currentUrl = $derived(`${baseUrl}${page.url.pathname}${page.url.search}`);
+  // Canonical URLs intentionally omit the query string: it would create duplicate-content signals, and
+  // reading page.url.search is forbidden during prerendering (it crashes the prerender of csr=false pages).
+  const currentUrl = $derived(`${baseUrl}${page.url.pathname}`);
 
   const createPerRouteImage = (pathname: string, version: string): string => {
     const path = pathname === '/' ? '/open-graph.jpg' : `${pathname}/open-graph.jpg`;
