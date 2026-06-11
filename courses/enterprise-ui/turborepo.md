@@ -4,7 +4,7 @@ description: >-
   A cache- and graph-aware task runner for JavaScript and TypeScript
   workspaces—how it thinks about packages and tasks, where caching actually
   lives, and the ways teams most reliably sabotage themselves.
-modified: 2026-03-17
+modified: 2026-06-11
 date: 2026-03-01
 ---
 
@@ -47,7 +47,7 @@ If you want one starting point that will survive contact with reality:
 
 ```jsonc
 {
-  "$schema": "https://turborepo.com/schema.json",
+  "$schema": "https://turborepo.dev/schema.json",
   "globalDependencies": [".env", "tsconfig.base.json"],
   "globalEnv": ["NODE_ENV"],
   "envMode": "strict",
@@ -300,29 +300,29 @@ Turborepo is a very good fit when you already have a JS or TS workspace and your
 
 The best way to think about it isn't "a monorepo framework." It's "a cache- and graph-aware task runner for JS/TS workspaces." Once you keep that model straight, the rest becomes much easier: let the package manager manage packages, let Turborepo manage work, and be ruthlessly explicit about outputs, inputs, and environment variables. That's where the speed comes from, and also where teams most reliably sabotage themselves.
 
-[1]: https://turborepo.com/repo/docs 'Introduction | Turborepo'
-[2]: https://turborepo.com/docs/getting-started/add-to-existing-repository 'Add to an existing repository | Turborepo'
-[3]: https://turborepo.com/repo/docs/core-concepts/package-and-task-graph 'Package and Task Graphs | Turborepo'
-[4]: https://turborepo.com/docs/guides/workspaces 'Structuring a repository | Turborepo'
-[5]: https://turborepo.com/repo/docs/crafting-your-repository/configuring-tasks 'Configuring tasks | Turborepo'
-[6]: https://turborepo.com/repo/docs/reference/configuration 'Configuring turbo.json | Turborepo'
-[7]: https://turborepo.com/docs/reference/configuration 'Configuring turbo.json | Turborepo'
-[8]: https://turborepo.com/repo/docs/crafting-your-repository/caching 'Caching | Turborepo'
-[9]: https://turborepo.com/docs/crafting-your-repository/caching 'Caching | Turborepo'
-[10]: https://turborepo.com/repo/docs/core-concepts/remote-caching 'Remote Caching | Turborepo'
-[11]: https://turborepo.com/docs/crafting-your-repository/using-environment-variables 'Using environment variables | Turborepo'
-[12]: https://turborepo.com/repo/docs/reference/run 'run | Turborepo'
-[13]: https://turborepo.com/docs/reference/eslint-plugin-turbo 'eslint-plugin-turbo | Turborepo'
-[14]: https://turborepo.com/docs/crafting-your-repository/managing-dependencies 'Managing dependencies | Turborepo'
-[15]: https://turborepo.com/docs/core-concepts/package-types 'Package types | Turborepo'
-[16]: https://turborepo.com/repo/docs/core-concepts/internal-packages 'Internal Packages | Turborepo'
-[17]: https://turborepo.com/docs/guides/tools/typescript 'TypeScript | Turborepo'
-[18]: https://turborepo.com/repo/docs/reference/package-configurations 'Package Configurations | Turborepo'
-[19]: https://turborepo.com/repo/docs/crafting-your-repository/constructing-ci 'Constructing CI | Turborepo'
-[20]: https://turborepo.com/repo/docs/reference/watch 'watch | Turborepo'
-[21]: https://turborepo.com/docs/reference/prune 'prune | Turborepo'
-[22]: https://turborepo.com/repo/docs/handbook/deploying-with-docker 'Docker | Turborepo'
-[23]: https://turborepo.com/repo/docs/reference/scan 'scan | Turborepo'
-[24]: https://turborepo.com/docs/getting-started/editor-integration 'Editor integration | Turborepo'
-[25]: https://turborepo.com/docs/reference/boundaries 'boundaries | Turborepo'
-[26]: https://turborepo.com/docs/guides/single-package-workspaces 'Single-package workspaces | Turborepo'
+[1]: https://turborepo.dev/repo/docs 'Introduction | Turborepo'
+[2]: https://turborepo.dev/docs/getting-started/add-to-existing-repository 'Add to an existing repository | Turborepo'
+[3]: https://turborepo.dev/repo/docs/core-concepts/package-and-task-graph 'Package and Task Graphs | Turborepo'
+[4]: https://turborepo.dev/docs/guides/workspaces 'Structuring a repository | Turborepo'
+[5]: https://turborepo.dev/repo/docs/crafting-your-repository/configuring-tasks 'Configuring tasks | Turborepo'
+[6]: https://turborepo.dev/repo/docs/reference/configuration 'Configuring turbo.json | Turborepo'
+[7]: https://turborepo.dev/docs/reference/configuration 'Configuring turbo.json | Turborepo'
+[8]: https://turborepo.dev/repo/docs/crafting-your-repository/caching 'Caching | Turborepo'
+[9]: https://turborepo.dev/docs/crafting-your-repository/caching 'Caching | Turborepo'
+[10]: https://turborepo.dev/repo/docs/core-concepts/remote-caching 'Remote Caching | Turborepo'
+[11]: https://turborepo.dev/docs/crafting-your-repository/using-environment-variables 'Using environment variables | Turborepo'
+[12]: https://turborepo.dev/repo/docs/reference/run 'run | Turborepo'
+[13]: https://turborepo.dev/docs/reference/eslint-plugin-turbo 'eslint-plugin-turbo | Turborepo'
+[14]: https://turborepo.dev/docs/crafting-your-repository/managing-dependencies 'Managing dependencies | Turborepo'
+[15]: https://turborepo.dev/docs/core-concepts/package-types 'Package types | Turborepo'
+[16]: https://turborepo.dev/repo/docs/core-concepts/internal-packages 'Internal Packages | Turborepo'
+[17]: https://turborepo.dev/docs/guides/tools/typescript 'TypeScript | Turborepo'
+[18]: https://turborepo.dev/repo/docs/reference/package-configurations 'Package Configurations | Turborepo'
+[19]: https://turborepo.dev/repo/docs/crafting-your-repository/constructing-ci 'Constructing CI | Turborepo'
+[20]: https://turborepo.dev/repo/docs/reference/watch 'watch | Turborepo'
+[21]: https://turborepo.dev/docs/reference/prune 'prune | Turborepo'
+[22]: https://turborepo.dev/repo/docs/handbook/deploying-with-docker 'Docker | Turborepo'
+[23]: https://turborepo.dev/repo/docs/reference/scan 'scan | Turborepo'
+[24]: https://turborepo.dev/docs/getting-started/editor-integration 'Editor integration | Turborepo'
+[25]: https://turborepo.dev/docs/reference/boundaries 'boundaries | Turborepo'
+[26]: https://turborepo.dev/docs/guides/single-package-workspaces 'Single-package workspaces | Turborepo'

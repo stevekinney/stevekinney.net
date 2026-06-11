@@ -1,0 +1,5 @@
+# Domains that return non-200 for automated requests but are valid links
+https://www.npmjs.com
+https://npmjs.com
+https://openai.com
+https://platform.openai.com
