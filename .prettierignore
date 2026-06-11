@@ -6,3 +6,5 @@ templates
 .obsidian/**
 test-results/.last-run.json
 applications/website/.generated/**
+# Claude automation scripts — not project source
+.claude/**

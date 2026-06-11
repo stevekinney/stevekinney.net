@@ -44,6 +44,8 @@ const config: Linter.Config[] = [
       '**/package-lock.json',
       '**/yarn.lock',
       '**/.obsidian',
+      // Claude automation scripts — not project source
+      '.claude/**',
     ],
   },
   ...compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'),
