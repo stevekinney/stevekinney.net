@@ -68,6 +68,14 @@
   ];
 </script>
 
+<!-- Skip navigation link for keyboard users -->
+<a
+  href="#main-content"
+  class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2 focus:text-black focus:shadow-md focus:outline-none dark:focus:bg-gray-900 dark:focus:text-white"
+>
+  Skip to main content
+</a>
+
 <!-- Main layout -->
 <div
   {...dataAttrs}
@@ -110,7 +118,7 @@
   <Navigation class="sm:col-start-2 sm:justify-end lg:order-2 lg:justify-center" />
 
   <!-- Main content container -->
-  <main class="my-6 sm:col-span-full lg:order-3" data-content-container>
+  <main id="main-content" class="my-6 sm:col-span-full lg:order-3" data-content-container>
     {@render children?.()}
   </main>
 

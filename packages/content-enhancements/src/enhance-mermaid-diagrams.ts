@@ -29,6 +29,7 @@ const CONTAINER_CLASSES = [
   'gap-1',
   'opacity-0',
   'group-hover:opacity-100',
+  'focus-within:opacity-100',
   'transition-opacity',
 ].join(' ');
 
@@ -363,6 +364,11 @@ async function renderMermaidDiagram(container: HTMLElement): Promise<void> {
 
     const diagramWrapper = document.createElement('div');
     diagramWrapper.className = 'mermaid-diagram flex items-center justify-center';
+    diagramWrapper.setAttribute('role', 'img');
+    const dataTitle = container.getAttribute('data-title');
+    if (dataTitle) {
+      diagramWrapper.setAttribute('aria-label', dataTitle);
+    }
     diagramWrapper.innerHTML = svg;
     container.prepend(diagramWrapper);
     recenterClusterLabels(diagramWrapper);

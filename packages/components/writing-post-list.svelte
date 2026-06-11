@@ -19,11 +19,11 @@
       >
         <NotebookPen size={28} class="m-2" />
         <div>
-          <h3
+          <h2
             class="decoration-primary-200 group-hover:decoration-primary-400 font-semibold decoration-4 group-hover:underline sm:text-xl"
           >
             {post.title}
-          </h3>
+          </h2>
           <DateTime date={post.date} />
           <p>{post.description}</p>
         </div>

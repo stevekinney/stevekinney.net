@@ -31,18 +31,20 @@
 <OpenInObsidian repositoryPath={data.sourcePath} />
 
 <div class="space-y-10">
-  <hgroup class="space-y-2">
-    <ul class="flex gap-2">
+  <nav aria-label="Breadcrumb" class="space-y-2">
+    <ol class="flex gap-2">
       <li>
-        <a href="/courses" class=" text-primary-600 dark:text-primary-200 block">Courses</a>
+        <a href="/courses" class="text-primary-600 dark:text-primary-200 block">Courses</a>
       </li>
-      <span>&rarr;</span>
+      <li aria-hidden="true">&rarr;</li>
       <li>
-        <a href="/courses/{data.course.slug}" class=" text-primary-600 dark:text-primary-200 block">
+        <a href="/courses/{data.course.slug}" class="text-primary-600 dark:text-primary-200 block">
           {data.course.title}
         </a>
       </li>
-    </ul>
+    </ol>
+  </nav>
+  <hgroup class="space-y-2">
     <h1 class="text-4xl font-bold">{data.title}</h1>
   </hgroup>
 

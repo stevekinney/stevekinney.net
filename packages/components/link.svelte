@@ -26,8 +26,12 @@
     title,
   }: Props = $props();
 
-  const ariaCurrent: 'page' | 'true' | undefined = $derived(
-    href === page.url.pathname ? 'page' : page.url.pathname.startsWith(href) ? 'true' : undefined,
+  const ariaCurrent: 'page' | 'location' | undefined = $derived(
+    href === page.url.pathname
+      ? 'page'
+      : page.url.pathname.startsWith(href)
+        ? 'location'
+        : undefined,
   );
 </script>
 

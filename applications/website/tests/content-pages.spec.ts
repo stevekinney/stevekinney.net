@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { checkA11y, injectAxe } from 'axe-playwright';
 
 test('writing post pages render prerendered content with code-block enhancement', async ({
   page,
@@ -38,6 +39,12 @@ test('tailwind playground previews are progressively enhanced on content pages',
   await expect(playground).not.toHaveAttribute('aria-hidden', 'true');
   await expect(playground).not.toHaveAttribute('role', 'presentation');
   await expect(playground).not.toHaveAttribute('inert', '');
+});
+
+test('writing post page has no accessibility violations', async ({ page }) => {
+  await page.goto('/writing/setup-python');
+  await injectAxe(page);
+  await checkA11y(page);
 });
 
 test.describe('exactly one content document wrapper per content page', () => {

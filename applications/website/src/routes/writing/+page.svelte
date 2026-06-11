@@ -9,6 +9,8 @@
 
 <SEO title={data.title} description={data.description} />
 
+<h2 class="sr-only">Writing</h2>
+
 <WritingPostList posts={data.posts} />
 
 <Pagination

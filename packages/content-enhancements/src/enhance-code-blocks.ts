@@ -24,6 +24,7 @@ const CONTAINER_BASE_CLASSES = [
   'gap-1',
   'opacity-0',
   'group-hover:opacity-100',
+  'focus-within:opacity-100',
   'transition-opacity',
 ];
 const CONTAINER_FLOATING_CLASSES = ['absolute', 'right-2', 'top-2', 'z-10'];

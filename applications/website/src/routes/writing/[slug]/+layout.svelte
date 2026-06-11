@@ -9,7 +9,10 @@
 </script>
 
 <div class="grid grid-cols-1 gap-10 lg:grid-cols-4">
-  <div class="order-1 flex flex-col gap-2 lg:gap-8">
+  <div class="lg:col-span-3">
+    {@render children?.()}
+  </div>
+  <div class="flex flex-col gap-2 lg:gap-8">
     <h2 class="text-lg font-bold">Further Reading</h2>
     <ul class="space-y-4">
       {#each recentPosts as post (post.slug)}
@@ -29,8 +32,5 @@
         </span>
       </a>
     </p>
-  </div>
-  <div class="lg:col-span-3">
-    {@render children?.()}
   </div>
 </div>

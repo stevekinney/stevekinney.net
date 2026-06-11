@@ -16,7 +16,7 @@
   };
 </script>
 
-<aside data-markdown-contents>
+<aside data-markdown-contents aria-label="Course contents">
   {#each data.section as section (section.title)}
     {#if section.title}
       <h2 class={merge('mb-2 font-bold')} data-markdown-heading>{section.title}</h2>
