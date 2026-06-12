@@ -26,7 +26,7 @@ export const collectLessonItems = (
     .flatMap((section) => section.item ?? [])
     .filter(
       (item): item is typeof item & { href: string } =>
-        typeof item.href === 'string' && !item.href.startsWith('http') && item.href.endsWith('.md'),
+        typeof item.href === 'string' && !item.href.startsWith('http') && /\.md$/i.test(item.href),
     )
     .map((item) => ({ title: item.title, slug: item.href.replace(/\.md$/i, '') }));
 

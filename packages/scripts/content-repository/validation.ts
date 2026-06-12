@@ -209,12 +209,13 @@ export const validateCourseContents = (
   issues: ContentValidationIssue[],
 ): void => {
   // With no index.toml, nothing references the lessons on disk, so every one of
-  // them is unreferenced. Surface that as warnings rather than returning silently.
+  // them is unreferenced. Name the missing index as the cause rather than
+  // implying an index exists that simply omits the lesson.
   if (!contents) {
     for (const slug of lessonSlugs) {
       issues.push({
         file,
-        message: `Lesson '${slug}.md' exists on disk but is not referenced in index.toml.`,
+        message: `Lesson '${slug}.md' exists on disk but index.toml is missing or unreadable, so nothing references it.`,
         severity: 'warning',
       });
     }

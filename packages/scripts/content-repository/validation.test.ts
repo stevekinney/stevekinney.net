@@ -65,12 +65,14 @@ describe('validateCourseContents', () => {
     expect(issues).toEqual([
       {
         file: 'courses/example/index.toml',
-        message: "Lesson 'intro.md' exists on disk but is not referenced in index.toml.",
+        message:
+          "Lesson 'intro.md' exists on disk but index.toml is missing or unreadable, so nothing references it.",
         severity: 'warning',
       },
       {
         file: 'courses/example/index.toml',
-        message: "Lesson 'setup.md' exists on disk but is not referenced in index.toml.",
+        message:
+          "Lesson 'setup.md' exists on disk but index.toml is missing or unreadable, so nothing references it.",
         severity: 'warning',
       },
     ]);

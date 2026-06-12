@@ -50,6 +50,14 @@ describe('collectLessonItems', () => {
 
     expect(collectLessonItems(withAsset)).toEqual([]);
   });
+
+  test('matches the .md extension case-insensitively, like the slug strip', () => {
+    const mixedCase = {
+      section: [{ item: [{ title: 'Shouting', href: 'Intro.MD' }] }],
+    } as CourseContentsData;
+
+    expect(collectLessonItems(mixedCase)).toEqual([{ title: 'Shouting', slug: 'Intro' }]);
+  });
 });
 
 describe('getLessonNavigation', () => {
