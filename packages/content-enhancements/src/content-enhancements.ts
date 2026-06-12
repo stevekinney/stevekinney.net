@@ -3,6 +3,10 @@ type Enhancer = (root: HTMLElement) => EnhancerResult | Promise<EnhancerResult>;
 
 const enhancers: ReadonlyArray<{ selector: string; load: () => Promise<Enhancer> }> = [
   {
+    selector: ':is(h2, h3)[id]',
+    load: async () => (await import('./enhance-table-of-contents')).enhanceTableOfContents,
+  },
+  {
     selector: '[data-tailwind-playground]',
     load: async () => (await import('./enhance-tailwind-playgrounds')).enhanceTailwindPlaygrounds,
   },

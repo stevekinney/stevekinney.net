@@ -5,6 +5,7 @@
   import OpenInObsidian from '$lib/components/open-in-obsidian.svelte';
   import PullRequest from '$lib/components/pull-request.svelte';
   import SEO from '$lib/components/seo.svelte';
+  import { getLessonNavigation } from '$lib/lesson-navigation';
   import { url } from '$lib/metadata';
   import { buildBreadcrumbSchema, buildCourseSchema } from '$lib/structured-data';
 
@@ -22,6 +23,10 @@
       { name: data.title, url: `${url}/courses/${data.course.slug}/${page.params.lesson}` },
     ]),
   ]);
+
+  const lessonNavigation = $derived(getLessonNavigation(data.course.contents, page.params.lesson));
+  const prevLesson = $derived(lessonNavigation.previous);
+  const nextLesson = $derived(lessonNavigation.next);
 </script>
 
 <SEO title={`${data.title} | ${data.course.title}`} description={data.description} {jsonLd} />
@@ -57,6 +62,35 @@
     <p class="my-6 text-right text-sm text-slate-500 dark:text-gray-400">
       Last modified on <Date date={data.modified} />.
     </p>
+  {/if}
+
+  {#if prevLesson || nextLesson}
+    <nav aria-label="Lesson navigation" class="flex justify-between gap-4 border-t pt-6">
+      <div>
+        {#if prevLesson}
+          <a
+            rel="prev"
+            href="/courses/{data.course.slug}/{prevLesson.slug}"
+            class="text-primary-600 dark:text-primary-200 flex flex-col"
+          >
+            <span class="text-xs text-slate-500 dark:text-gray-400">Previous</span>
+            <span>{prevLesson.title}</span>
+          </a>
+        {/if}
+      </div>
+      <div class="text-right">
+        {#if nextLesson}
+          <a
+            rel="next"
+            href="/courses/{data.course.slug}/{nextLesson.slug}"
+            class="text-primary-600 dark:text-primary-200 flex flex-col"
+          >
+            <span class="text-xs text-slate-500 dark:text-gray-400">Next</span>
+            <span>{nextLesson.title}</span>
+          </a>
+        {/if}
+      </div>
+    </nav>
   {/if}
 </div>
 

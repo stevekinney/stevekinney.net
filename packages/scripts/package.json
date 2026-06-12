@@ -24,6 +24,6 @@
   },
   "dependencies": {
     "@stevekinney/utilities": "workspace:*",
-    "@vercel/blob": "^1.0.0"
+    "@vercel/blob": "^2.4.0"
   }
 }

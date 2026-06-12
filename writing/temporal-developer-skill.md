@@ -3,7 +3,7 @@ title: "Temporal's Developer Skill Is a Promising First Draft"
 description: >-
   Temporal shipped one of the first major infrastructure vendor agent skills. The diagnosis is right and the architecture is sound. The execution has some fixable gaps.
 date: 2026-03-24
-modified: 2026-04-06
+modified: 2026-06-12
 tags:
   - ai
   - temporal
@@ -20,7 +20,7 @@ Temporal's [Developer Skill](https://temporal.io/blog/introducing-temporal-devel
 
 Before we get into any of the hot takes: Let's give Temporal credit where credit is due. Their [post](https://temporal.io/blog/introducing-temporal-developer-skill) identifies the problem precisely—models haven't internalized Temporal best practices, SDK features ship faster than training data, and documentation traversal is token-expensive. All of that is true.
 
-The decision to use the [Agent Skills open specification](https://agentskills.org) rather than building something proprietary is also the right call. The skill works across Claude Code, Cline, and any future agent that supports the spec. Developers aren't locked into one toolchain to get better Temporal guidance.
+The decision to use the Agent Skills open specification rather than building something proprietary is also the right call. The skill works across Claude Code, Cline, and any future agent that supports the spec. Developers aren't locked into one toolchain to get better Temporal guidance.
 
 The two-tier loading design is smart: roughly 100 tokens of metadata sit in memory at session start, with the full guidance activating only when the agent detects Temporal code. Most of the time, this skill costs you nothing. The reference file organization—splitting content into language-agnostic core concepts and language-specific implementation details—is also sound. Determinism rules are universal; the syntax for expressing them is not.
 
@@ -63,7 +63,7 @@ And the routing problem doesn't stop inside the skill. In a real developer's env
 
 Every new Temporal developer makes the same mistakes. Every LLM generating Temporal code makes the same mistakes: `time.sleep()` instead of the SDK timer, HTTP calls directly from workflow code instead of activities, random values generated non-deterministically, activity timeouts not set.
 
-These are the mistakes that matter most—and the ones an agent will make on the very first try. They're what the [Agent Skills best practices](https://agentskills.org) call "corrections to mistakes the agent will make without being told otherwise"—often the most valuable content a skill can contain.
+These are the mistakes that matter most—and the ones an agent will make on the very first try. They're what the Agent Skills best practices call "corrections to mistakes the agent will make without being told otherwise"—often the most valuable content a skill can contain.
 
 In this skill, they live in [`references/core/gotchas.md`](https://github.com/temporalio/skill-temporal-developer/blob/main/references/core/gotchas.md)—one of nine core reference files. The agent can certainly find and read that file. The problem is it would only do so if it recognized the situation as gotcha-relevant. But, `time.sleep(60)` doesn't announce itself as a mistake while you're writing it. It looks like correct Python. The agent won't pre-emptively load `gotchas.md` before writing workflow code unless the skill tells it to—and the skill doesn't. By the time the mistake is recognized, it's already in the code.
 

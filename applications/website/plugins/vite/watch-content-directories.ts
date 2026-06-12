@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import type { PluginOption } from 'vite';
 
 /**
@@ -12,7 +14,7 @@ export function watchContentDirectories(directories: readonly string[]): PluginO
     name: 'watch-content-directories',
     configureServer(server) {
       for (const directory of directories) {
-        server.watcher.add(directory);
+        server.watcher.add(path.join(directory, '**', '*.{md,toml}'));
       }
     },
   };

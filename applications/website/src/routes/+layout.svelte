@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { dev } from '$app/environment';
   import { page } from '$app/stores';
-  import { injectAnalytics } from '@vercel/analytics/sveltekit';
-  import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
   import { author } from '$lib/metadata';
   import { toDataAttributes } from '$lib/to-data-attributes';
   import { merge } from '$merge';
@@ -15,15 +12,11 @@
   import Linkedin from '$lib/components/linkedin-icon.svelte';
   import type { Snippet } from 'svelte';
 
-  if (!dev) {
-    injectAnalytics({ mode: 'production' });
-    injectSpeedInsights();
-  }
-
   import type { ExtendElement } from '$lib/components/component.types';
   import Navigation from '$lib/components/navigation.svelte';
 
   import SocialLink from '$lib/components/social-link.svelte';
+  import VercelAnalytics from '$lib/components/vercel-analytics.svelte';
   // Import styles
   import '../app.css';
 
@@ -67,6 +60,13 @@
     },
   ];
 </script>
+
+<!--
+  Site-wide analytics. The component emits the first-party Vercel scripts into
+  `<svelte:head>`, so it prerenders correctly on `csr = false` content pages and
+  still loads on hydrating routes — no per-route wiring needed.
+-->
+<VercelAnalytics />
 
 <!-- Skip navigation link for keyboard users -->
 <a

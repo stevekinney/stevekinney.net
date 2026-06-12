@@ -5,7 +5,7 @@ description: >-
   Content Security Policy and Trusted Types to dependency supply chain attacks,
   third-party script sandboxing, SRI, security headers, and the organizational
   patterns that make secure-by-default actually work.
-modified: 2026-03-17
+modified: 2026-06-12
 date: 2026-03-01
 ---
 
@@ -402,7 +402,7 @@ Enterprise applications are subject to compliance frameworks—SOC 2, PCI DSS, H
 The practices described in this section—SBOM generation, CSP violation reporting, security header configuration, dependency audit logs, feature flag audit trails—are not just good engineering. They are audit evidence. Generating them automatically in CI means they are always current, which turns a compliance burden into a CI artifact.
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy 'Same-origin policy | MDN'
-[2]: https://csp.withgoogle.com/docs/strict-csp.html 'Strict CSP | Google'
+[2]: https://web.dev/articles/strict-csp 'Strict CSP | Google'
 [3]: https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API 'Reporting API | MDN'
 [4]: https://w3c.github.io/trusted-types/dist/spec/ 'Trusted Types | W3C'
 [5]: https://github.com/cure53/DOMPurify 'DOMPurify | Cure53'

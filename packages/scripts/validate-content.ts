@@ -4,9 +4,21 @@ import { collectContentRepository } from './content-repository.ts';
 const main = async (): Promise<void> => {
   const repository = await collectContentRepository();
 
-  if (repository.validationIssues.length > 0) {
+  const errors = repository.validationIssues.filter((i) => i.severity !== 'warning');
+  const warnings = repository.validationIssues.filter((i) => i.severity === 'warning');
+
+  if (warnings.length > 0) {
+    console.warn('Content validation warnings:');
+    for (const issue of warnings) {
+      console.warn(
+        `- ${issue.file}${issue.line != null ? `:${issue.line}` : ''}: ${issue.message}`,
+      );
+    }
+  }
+
+  if (errors.length > 0) {
     console.error('Content validation failed:');
-    for (const issue of repository.validationIssues) {
+    for (const issue of errors) {
       console.error(
         `- ${issue.file}${issue.line != null ? `:${issue.line}` : ''}: ${issue.message}`,
       );

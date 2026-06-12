@@ -38,12 +38,12 @@ const scenarios: Scenario[] = [
   {
     name: 'AI gateway durable workflows writing page',
     path: '/writing/ai-gateway-durable-workflows',
-    fixturePath: 'tests/fixtures/og-failing-ai-gateway.html',
+    fixturePath: 'tests/fixtures/og-ai-gateway.html',
   },
   {
     name: 'self-testing AI agents course page',
     path: '/courses/self-testing-ai-agents',
-    fixturePath: 'tests/fixtures/og-failing-self-testing.html',
+    fixturePath: 'tests/fixtures/og-self-testing.html',
   },
   {
     name: 'self-testing AI agents lesson page',
@@ -205,6 +205,8 @@ describe('Open Graph metadata', () => {
       const previewMetadata = extractMetadata(previewHtml);
       const previewImageUrl = expectRequiredMetadata(previewMetadata);
 
+      // To regenerate a fixture: serve a production build locally, fetch the page HTML,
+      // and replace the fixture file. Run `bun run test:og-metadata` to confirm it passes.
       expect(previewMetadata).toEqual(fixtureMetadata);
 
       await expectPreviewImageResponse(previewImageUrl);

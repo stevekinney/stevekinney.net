@@ -24,7 +24,7 @@ const siteUrl =
   process.env.PUBLIC_SITE_URL ||
   (process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : 'http://localhost:4444');
+    : 'https://stevekinney.com');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

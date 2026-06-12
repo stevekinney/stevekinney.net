@@ -4,7 +4,7 @@ description: >-
   MCP servers return data. MCP Apps let them ship a UI alongside that data—so the
   tool author, not the client, decides how results look.
 date: 2026-03-12
-modified: 2026-03-17
+modified: 2026-06-12
 tags:
   - ai
   - mcp
@@ -153,7 +153,7 @@ The [`@modelcontextprotocol/ext-apps`][ext-apps] SDK is the official TypeScript 
 
 Client support is wider than I expected. The [extension support matrix][client-matrix] on the MCP site tracks adoption, and the list is growing: [Claude][claude-apps] (web and desktop), [ChatGPT][chatgpt-apps], [VS Code][vscode-apps], [Goose][goose-apps], [Postman][postman-apps], and [Cursor][cursor-apps] (added in v2.6) all support MCP Apps as of this writing. Some hosts are already extending beyond the base spec—ChatGPT, for example, exposes vendor-specific `window.openai` APIs for checkout, file operations, and modals on top of the standard `postMessage` bridge.
 
-The spec itself is governed by the [Agentic AI Foundation][agentic-ai] under the Linux Foundation—not by a single company. MCP was donated there in December 2025, which means MCP Apps is an open standard with independent governance. That matters if you're going to build on it.
+The spec itself is governed by the Agentic AI Foundation under the Linux Foundation—not by a single company. MCP was donated there in December 2025, which means MCP Apps is an open standard with independent governance. That matters if you're going to build on it.
 
 > [!TIP]
 > The [official SDK and examples][ext-apps] cover everything from Three.js
@@ -181,7 +181,6 @@ You ship a UI alongside your data. If the client supports it, the user gets a ri
 [ext-apps]: https://github.com/modelcontextprotocol/ext-apps
 [spec]: https://apps.extensions.modelcontextprotocol.io/api/documents/Overview.html
 [fastmcp]: https://github.com/jlowin/fastmcp
-[agentic-ai]: https://agenticaiproject.org
 [client-matrix]: https://modelcontextprotocol.io/extensions/client-matrix
 [claude-apps]: https://claude.com/blog/interactive-tools-in-claude
 [chatgpt-apps]: https://developers.openai.com/apps-sdk/mcp-apps-in-chatgpt/
