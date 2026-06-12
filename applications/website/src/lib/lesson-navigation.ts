@@ -6,6 +6,28 @@ export type LessonNavigationItem = {
   slug: string;
 };
 
+/**
+ * Prefixes that mark an `href` as pointing somewhere other than an internal
+ * lesson. Kept in sync with `isExternalUrl` in
+ * `packages/scripts/content-repository/markdown.ts`, which the content
+ * validation pipeline uses — the website package can't import that module
+ * because it pulls in Node-only filesystem dependencies.
+ */
+const EXTERNAL_HREF_PREFIXES = [
+  '#',
+  '//',
+  'http://',
+  'https://',
+  'mailto:',
+  'tel:',
+  'data:',
+  'ftp:',
+];
+
+/** Mirrors the content pipeline's `isExternalUrl`: anything not a local target. */
+const isExternalHref = (href: string): boolean =>
+  href === '' || EXTERNAL_HREF_PREFIXES.some((prefix) => href.startsWith(prefix));
+
 /** The lessons immediately before and after the current one, if any. */
 export type LessonNavigation = {
   previous: LessonNavigationItem | null;
@@ -26,7 +48,7 @@ export const collectLessonItems = (
     .flatMap((section) => section.item ?? [])
     .filter(
       (item): item is typeof item & { href: string } =>
-        typeof item.href === 'string' && !item.href.startsWith('http') && /\.md$/i.test(item.href),
+        typeof item.href === 'string' && !isExternalHref(item.href) && /\.md$/i.test(item.href),
     )
     .map((item) => ({ title: item.title, slug: item.href.replace(/\.md$/i, '') }));
 

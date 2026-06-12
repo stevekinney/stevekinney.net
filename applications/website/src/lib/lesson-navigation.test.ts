@@ -58,6 +58,26 @@ describe('collectLessonItems', () => {
 
     expect(collectLessonItems(mixedCase)).toEqual([{ title: 'Shouting', slug: 'Intro' }]);
   });
+
+  test('treats protocol-relative and non-http external schemes as external', () => {
+    // Matches the content pipeline's isExternalUrl, which rejects `//`, `ftp:`,
+    // `mailto:`, and fragment hrefs in addition to http(s).
+    const external = {
+      section: [
+        {
+          item: [
+            { title: 'Protocol-relative', href: '//cdn.example.com/guide.md' },
+            { title: 'FTP', href: 'ftp://host/path.md' },
+            { title: 'Mail', href: 'mailto:hello@example.com' },
+            { title: 'Fragment', href: '#section.md' },
+            { title: 'Real', href: 'real.md' },
+          ],
+        },
+      ],
+    } as CourseContentsData;
+
+    expect(collectLessonItems(external)).toEqual([{ title: 'Real', slug: 'real' }]);
+  });
 });
 
 describe('getLessonNavigation', () => {
