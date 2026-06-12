@@ -34,6 +34,9 @@ bun.lockb
 .turbo
 /.claude/worktrees
 
+# Lefthook regenerates these locally via .lefthook/install.ts (see PR #85)
+.husky/
+
 # Generated content manifests (built by Turborepo)
 applications/website/.generated/
 tmp/

@@ -18,6 +18,12 @@ type RegenerateGeneratedContentOptions = {
    * runtime bundle rebuilds when its inputs change.
    */
   enhancementSourceDirectories: readonly string[];
+  /**
+   * Milliseconds to wait after the last file-system event before kicking off a
+   * rebuild. Collapses the unlink+write burst that many editors emit on atomic
+   * save into a single build invocation. Defaults to 150 ms.
+   */
+  debounceMs?: number;
 };
 
 const isInsideAny = (absolutePath: string, roots: readonly string[]): boolean =>
@@ -90,10 +96,17 @@ export function regenerateGeneratedContent(
         child.on('error', (error) => finish(false, error.message));
       };
 
+      const debounceMs = options.debounceMs ?? 150;
+      let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+
       const handleChange = (filePath: string): void => {
-        if (shouldRegenerate(filePath)) {
+        if (!shouldRegenerate(filePath)) return;
+
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          debounceTimer = undefined;
           runContentBuild();
-        }
+        }, debounceMs);
       };
 
       server.watcher.on('add', handleChange);

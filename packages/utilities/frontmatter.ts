@@ -1,5 +1,5 @@
 import path from 'node:path';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import matter from 'gray-matter';
 
 /** Parse frontmatter with CORE schema so date-like strings stay as strings (avoids js-yaml timezone bugs). */

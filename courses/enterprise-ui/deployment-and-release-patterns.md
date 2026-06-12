@@ -4,7 +4,7 @@ description: >-
   Deploying code and releasing features are two different decisions—here is how
   immutable assets, CDN caching, feature flags, canary rollouts, and preview
   environments let you separate them without losing sleep.
-modified: 2026-03-17
+modified: 2026-06-12
 date: 2026-03-01
 ---
 
@@ -251,7 +251,7 @@ The organizations that ship fast and break little aren't the ones with the most 
 
 [1]: https://vercel.com/blog/cdn-request-collapsing 'Preventing the stampede: Request collapsing in the Vercel CDN'
 [2]: https://www.uber.com/blog/controlling-the-rollout-of-large-scale-monorepo-changes/ 'Controlling the Rollout of Large-Scale Monorepo Changes | Uber Blog'
-[3]: https://airbnb.tech/infrastructure/continuous-delivery-at-airbnb/ 'Continuous Delivery at Airbnb'
+[3]: https://web.archive.org/web/2023/https://airbnb.tech/infrastructure/continuous-delivery-at-airbnb/ 'Continuous Delivery at Airbnb'
 [4]: https://engineering.fb.com/2017/08/31/web/rapid-release-at-massive-scale/ 'Rapid release at massive scale | Engineering at Meta'
 
 ---

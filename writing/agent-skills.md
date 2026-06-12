@@ -5,7 +5,7 @@ description: >-
   Their value comes from routing and progressive disclosure, not from smarter
   prompts.
 date: 2026-03-17
-modified: 2026-03-17
+modified: 2026-06-12
 tags:
   - ai
   - tooling
@@ -17,7 +17,7 @@ I've been using skills across Claude Code, Codex, and Copilot for a while now, a
 
 ## The mechanism
 
-A **skill** is a folder—not a file—with a `SKILL.md` plus optional scripts, references, and assets. The design is shared across Claude Code, Codex, and the open [Agent Skills standard](https://agentskills.org): the model sees only a name and description at startup, loads full instructions when the task matches, and only _then_ loads supporting files or executes scripts if the instructions call for them.
+A **skill** is a folder—not a file—with a `SKILL.md` plus optional scripts, references, and assets. The design is shared across Claude Code, Codex, and the open Agent Skills standard: the model sees only a name and description at startup, loads full instructions when the task matches, and only _then_ loads supporting files or executes scripts if the instructions call for them.
 
 That three-stage loading is **progressive disclosure**, and it's the architectural decision that makes skills useful. This isn't just a design preference—it's how Claude Code, Codex, and Copilot all avoid exhausting the context window. At startup, the model loads only a name and a one-line description per skill. Without that constraint, installing dozens or hundreds of skills would blow out the context window before the user even asks a question. With it, the model carries a lightweight catalog and pulls in detail on demand.
 

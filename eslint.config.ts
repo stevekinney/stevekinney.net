@@ -46,6 +46,8 @@ const config: Linter.Config[] = [
       '**/.obsidian',
       // Claude automation scripts — not project source
       '.claude/**',
+      // Gitignored scratch space — not project source
+      'tmp/**',
     ],
   },
   ...compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'),

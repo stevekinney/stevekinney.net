@@ -20,6 +20,7 @@
 @source '../../../writing/**/*.md';
 @source '../../../courses/**/*.md';
 @source '../../../packages/components/**/*.{svelte,js,ts}';
+@source '../../../packages/content-enhancements/src/**/*.ts';
 @source '../../../packages/markdown/src/**/*.ts';
 @source '../.generated/tailwind-playground-source.html';
 

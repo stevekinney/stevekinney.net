@@ -208,27 +208,56 @@ export const validateCourseContents = (
   lessonSlugs: Set<string>,
   issues: ContentValidationIssue[],
 ): void => {
-  if (!contents) return;
+  // With no index.toml, nothing references the lessons on disk, so every one of
+  // them is unreferenced. Surface that as warnings rather than returning silently.
+  if (!contents) {
+    for (const slug of lessonSlugs) {
+      issues.push({
+        file,
+        message: `Lesson '${slug}.md' exists on disk but is not referenced in index.toml.`,
+        severity: 'warning',
+      });
+    }
+    return;
+  }
+
+  const referencedSlugs = new Set<string>();
 
   for (const section of contents.section ?? []) {
     for (const item of section.item ?? []) {
       const href = item.href?.replace(/\.md$/i, '');
-      if (href && !isExternalUrl(href) && !lessonSlugs.has(href)) {
-        issues.push({
-          file,
-          message: `index.toml references missing lesson '${item.href}'.`,
-        });
+      if (href && !isExternalUrl(href)) {
+        referencedSlugs.add(href);
+        if (!lessonSlugs.has(href)) {
+          issues.push({
+            file,
+            message: `index.toml references missing lesson '${item.href}'.`,
+          });
+        }
       }
 
       for (const related of item.related ?? []) {
         const relatedHref = related.href?.replace(/\.md$/i, '');
-        if (relatedHref && !isExternalUrl(relatedHref) && !lessonSlugs.has(relatedHref)) {
-          issues.push({
-            file,
-            message: `index.toml references missing related lesson '${related.href}'.`,
-          });
+        if (relatedHref && !isExternalUrl(relatedHref)) {
+          referencedSlugs.add(relatedHref);
+          if (!lessonSlugs.has(relatedHref)) {
+            issues.push({
+              file,
+              message: `index.toml references missing related lesson '${related.href}'.`,
+            });
+          }
         }
       }
+    }
+  }
+
+  for (const slug of lessonSlugs) {
+    if (!referencedSlugs.has(slug)) {
+      issues.push({
+        file,
+        message: `Lesson '${slug}.md' exists on disk but is not referenced in index.toml.`,
+        severity: 'warning',
+      });
     }
   }
 };

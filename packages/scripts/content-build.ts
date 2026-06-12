@@ -85,9 +85,19 @@ const buildContentEnhancements = async (): Promise<boolean> => {
 const main = async (): Promise<void> => {
   const repository = await collectContentRepository();
 
-  if (repository.validationIssues.length > 0) {
+  const buildErrors = repository.validationIssues.filter((i) => i.severity !== 'warning');
+  const buildWarnings = repository.validationIssues.filter((i) => i.severity === 'warning');
+
+  if (buildWarnings.length > 0) {
+    console.warn(`Content build: ${buildWarnings.length} warning(s):`);
+    for (const issue of buildWarnings) {
+      console.warn(`- ${issue.file}: ${issue.message}`);
+    }
+  }
+
+  if (buildErrors.length > 0) {
     console.error('Content build failed validation:');
-    for (const issue of repository.validationIssues) {
+    for (const issue of buildErrors) {
       console.error(`- ${issue.file}: ${issue.message}`);
     }
     process.exit(1);

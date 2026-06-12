@@ -24,7 +24,8 @@ describe('collectContentRepository', () => {
 
   test('validates the current repository content graph', async () => {
     const repository = await repositoryPromise;
-    expect(repository.validationIssues).toEqual([]);
+    const errors = repository.validationIssues.filter((i) => i.severity !== 'warning');
+    expect(errors).toEqual([]);
     expect(repository.meta.routeCount).toBeGreaterThan(800);
     expect(repository.meta.sourceFileCount).toBeGreaterThan(800);
   });

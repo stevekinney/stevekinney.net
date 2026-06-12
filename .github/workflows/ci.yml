@@ -113,6 +113,13 @@ jobs:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
         run: bun run continuous-integration:build
 
+      - name: Run OG metadata tests
+        env:
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          PUBLIC_SITE_URL: https://stevekinney.com
+        run: bun run test:og-metadata
+
       - name: Check build budget
         run: bun run check-build-budget
 
@@ -132,7 +139,6 @@ jobs:
           path: |
             applications/website/build
             applications/website/.svelte-kit/output
-            applications/website/.vercel/output
             applications/website/.generated
           if-no-files-found: error
           retention-days: 1
