@@ -4,6 +4,10 @@
   "ignoreCommand": "if [ -n \"$VERCEL_GIT_PULL_REQUEST_ID\" ] && [ \"$VERCEL_GIT_COMMIT_AUTHOR_LOGIN\" != \"stevekinney\" ]; then echo \"Skipping preview build for fork PR\"; exit 0; fi; exit 1",
   "headers": [
     {
+      "source": "/writing/rss",
+      "headers": [{ "key": "Content-Type", "value": "application/atom+xml; charset=utf-8" }]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         { "key": "X-Frame-Options", "value": "DENY" },

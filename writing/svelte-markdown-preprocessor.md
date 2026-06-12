@@ -2,7 +2,7 @@
 title: Creating a Markdown Preprocessor for Svelte
 description: Let's look at how to write our own preprocessor for SvelteKit.
 date: 2024-01-14
-modified: 2026-03-17
+modified: 2026-06-12
 tags:
   - svelte
   - ast
@@ -150,7 +150,7 @@ We want to keep our existing markup. So, we're turning on `allowDangerousHtml`. 
 
 ### Processing the Component
 
-Next, we need to integrate this into `processMarkdown` in order to wire it together with our preprocessor. For my first pass at this, I ended up with something that looks like this:
+Next, we need to integrate this into `processMarkdown` in order to wire it together with our preprocessor. For my first pass at this, I ended up with something that looked like this:
 
 ```js
 /**
@@ -177,7 +177,24 @@ export const processMarkdown = async ({ content, filename }) => {
 
 The `content` and `filename` are being passed in by SvelteKit. I'm using MagicString to allow me to mutate the string and produce a source map along the way in order to see the original content in my developer tools.
 
-I chose to use the `parse` function found in `svelte/compiler` in order to get the indices of the start and end of the HTML (e.g. not JavaScript or CSS) of the component. In my earlier experiments, passing the entire component into my `toHTML` function didn't cause any problems since we still have that issue where Markdown inside of HTML tags is ignored, but I had just climbed out a rabbit hole of writing my own AST manipulation functions and decided to leave this little piece in there for now.
+That said, I wouldn't reach for `parse` for this version anymore. Current versions of Svelte can throw while parsing hybrid Markdown and Svelte content before Unified gets a chance to process the Markdown. For a learning-oriented preprocessor like this, the simpler and more resilient version is to let Unified process the full `content` string and skip the `MagicString` slice entirely:
+
+```js
+/**
+ * @param {object} options
+ * @param {string} options.content
+ */
+export const processMarkdown = async ({ content }) => {
+  const processed = await toHTML(content);
+
+  return {
+    code: String(processed),
+    map: null,
+  };
+};
+```
+
+The trade-off is that you no longer preserve the original source map in this tiny example. For production, you'd want a more deliberate parser strategy instead of asking Svelte's compiler to successfully parse content that has not been converted into valid Svelte yet.
 
 ## The Result
 

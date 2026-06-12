@@ -116,7 +116,37 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      maxParallelFileOps: 20,
+      output: {
+        manualChunks(id) {
+          if (id.includes('/node_modules/@sveltejs/kit/src/runtime/client/')) {
+            return 'sveltekit-client';
+          }
+
+          if (id.includes('/node_modules/@sveltejs/kit/src/runtime/app/')) {
+            return 'sveltekit-app';
+          }
+
+          if (id.includes('/node_modules/@sveltejs/kit/src/runtime/')) {
+            return 'sveltekit-runtime';
+          }
+
+          if (id.includes('/node_modules/@sveltejs/kit/src/utils/')) {
+            return 'sveltekit-utilities';
+          }
+
+          if (id.includes('/node_modules/svelte/src/internal/client/dom/')) {
+            return 'svelte-dom';
+          }
+
+          if (id.includes('/node_modules/svelte/src/internal/client/reactivity/')) {
+            return 'svelte-reactivity';
+          }
+
+          if (id.includes('/node_modules/svelte/src/internal/')) {
+            return 'svelte-runtime';
+          }
+        },
+      },
     },
     chunkSizeWarningLimit: 100,
   },

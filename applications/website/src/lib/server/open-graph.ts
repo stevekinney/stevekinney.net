@@ -97,7 +97,9 @@ export const renderOpenGraphImage = async (
     data: loadedFontData[index],
   }));
 
-  const svg = await satori(OpenGraphImage(options), {
+  const openGraphImage = OpenGraphImage(options) as Parameters<typeof satori>[0];
+
+  const svg = await satori(openGraphImage, {
     width: IMAGE_WIDTH,
     height: IMAGE_HEIGHT,
     fonts,
