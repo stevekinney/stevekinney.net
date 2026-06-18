@@ -27,7 +27,7 @@
         "@storybook/addon-coverage": "^3.0.0",
         "@storybook/addon-docs": "^10.4.3",
         "@storybook/addon-links": "^10.4.3",
-        "@storybook/addon-svelte-csf": "5.0.10",
+        "@storybook/addon-svelte-csf": "5.1.2",
         "@storybook/svelte": "^10.4.3",
         "@storybook/sveltekit": "^10.4.3",
         "@storybook/test-runner": "^0.24.3",
@@ -748,7 +748,7 @@
 
     "@storybook/addon-links": ["@storybook/addon-links@10.4.3", "", { "dependencies": { "@storybook/global": "^5.0.0" }, "peerDependencies": { "@types/react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "storybook": "^10.4.3" }, "optionalPeers": ["@types/react", "react"] }, "sha512-GBJz1cwnhtwltu9KGUudceAWGFl0SRBv6r/MVc1FuD6ygpi/a8+tCc8TiEzFLFBJaU+4AgJ8IGtXSPzPihH2Iw=="],
 
-    "@storybook/addon-svelte-csf": ["@storybook/addon-svelte-csf@5.0.10", "", { "dependencies": { "@storybook/csf": "^0.1.13", "dedent": "^1.5.3", "es-toolkit": "^1.26.1", "esrap": "^1.2.2", "magic-string": "^0.30.12", "svelte-ast-print": "^0.4.0", "zimmerframe": "^1.1.2" }, "peerDependencies": { "@storybook/svelte": "^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0 || ^10.0.0-0", "@sveltejs/vite-plugin-svelte": "^4.0.0 || ^5.0.0 || ^6.0.0", "storybook": "^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0 || ^10.0.0-0", "svelte": "^5.0.0", "vite": "^5.0.0 || ^6.0.0 || ^7.0.0" } }, "sha512-poSvTS7VdaQ42ZoqW5e4+2Hv1iLO0mekH9fwn/QuBNse48R4WlTyR8XFbHRTfatl9gdc9ZYC4uWzazrmV6zGIA=="],
+    "@storybook/addon-svelte-csf": ["@storybook/addon-svelte-csf@5.1.2", "", { "dependencies": { "@storybook/csf": "^0.1.13", "dedent": "^1.5.3", "es-toolkit": "^1.26.1", "esrap": "^1.2.2", "magic-string": "^0.30.12", "svelte-ast-print": "^0.4.0", "zimmerframe": "^1.1.2" }, "peerDependencies": { "@storybook/svelte": "^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0 || ^10.0.0-0 || ^10.1.0-0 || ^10.2.0-0 || ^10.3.0-0 || ^10.4.0-0", "@sveltejs/vite-plugin-svelte": "^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0", "storybook": "^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0 || ^10.0.0-0 || ^10.1.0-0 || ^10.2.0-0 || ^10.3.0-0 || ^10.4.0-0", "svelte": "^5.0.0", "vite": "^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0" } }, "sha512-NpImknEb48J7yr/ArTYpvhDSvGUrgm5Nuybu9PCicjSKTACsXX7cln2R19572ORtns399RTE+t20BBOKxSPm2g=="],
 
     "@storybook/builder-vite": ["@storybook/builder-vite@10.4.3", "", { "dependencies": { "@storybook/csf-plugin": "10.4.3", "ts-dedent": "^2.0.0" }, "peerDependencies": { "storybook": "^10.4.3", "vite": "^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0" } }, "sha512-gvXVJvcsqFuSO5PLhS5+BdoYbQDxbkVVrW2cHrf4g089bXVTImZrOSzTO7SEOTs4I9acJqv4nK22WEeJpY+VZw=="],
 
