@@ -89,7 +89,7 @@
     "mdast-util-to-markdown": "^2.1.2",
     "mdsvex": "^0.12.6",
     "postcss": "^8.5.15",
-    "postcss-nesting": "^13.0.2",
+    "postcss-nesting": "^14.0.0",
     "prettier": "^3.7.4",
     "prettier-plugin-svelte": "^4.1.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
