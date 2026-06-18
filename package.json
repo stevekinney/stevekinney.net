@@ -113,7 +113,7 @@
     "unist-util-visit": "^5.0.0",
     "vite": "^8.0.16",
     "vite-plugin-dts": "^4.5.4",
-    "vite-plugin-toml": "^0.8.7",
+    "vite-plugin-toml": "^0.9.0",
     "vitest": "^4.0.16"
   },
   "type": "module",
