@@ -46,7 +46,7 @@
     "@storybook/addon-coverage": "^3.0.0",
     "@storybook/addon-docs": "^10.4.3",
     "@storybook/addon-links": "^10.4.3",
-    "@storybook/addon-svelte-csf": "5.0.10",
+    "@storybook/addon-svelte-csf": "5.1.2",
     "@storybook/svelte": "^10.4.3",
     "@storybook/sveltekit": "^10.4.3",
     "@storybook/test-runner": "^0.24.3",
