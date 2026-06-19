@@ -211,7 +211,7 @@ Create a `.cursor/hooks.json` file at the root of your project:
 }
 ```
 
-Then, add the corresponding shell script at .cursor/hooks/block-no-verify.sh to return a structured JSON response instructing the agent to abort:
+Then, add the corresponding shell script at `.cursor/hooks/block-no-verify.sh` to return a structured JSON response instructing the agent to abort:
 
 ```bash
 #!/bin/bash
@@ -225,7 +225,7 @@ cat << EOF
 EOF
 ```
 
-(Make sure to run chmod +x .cursor/hooks/block-no-verify.sh so it is executable).
+(Make sure to run chmod +x `.cursor/hooks/block-no-verify.sh` so it is executable).
 
 This setup ensures that general read-only git tasks (like git status or git diff) continue to work seamlessly, while specifically neutralizing attempts to bypass pre-commit protections.
 
