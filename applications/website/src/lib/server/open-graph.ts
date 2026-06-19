@@ -111,7 +111,7 @@ const ensureWasmInitialized = async (fetch: RequestEvent['fetch']): Promise<void
 export const renderOpenGraphImage = async (
   options: OpenGraphOptions,
   fetch: RequestEvent['fetch'],
-): Promise<Uint8Array> => {
+): Promise<Uint8Array<ArrayBuffer>> => {
   const loadedFontData = await loadFonts(fetch);
 
   const fonts = FONT_INFO.map((font, index) => ({
@@ -137,7 +137,11 @@ export const renderOpenGraphImage = async (
     fitTo: { mode: 'width', value: IMAGE_WIDTH },
   });
   const rendered = renderer.render();
-  const png = rendered.asPng();
+  // resvg's `asPng()` is declared as `Uint8Array` (defaulting the buffer to
+  // `ArrayBufferLike`), but it always returns a fresh, exactly-sized array over
+  // a plain `ArrayBuffer` — never `SharedArrayBuffer`. Narrowing it here lets the
+  // backing buffer serve directly as a `Response` body without a second copy.
+  const png = rendered.asPng() as Uint8Array<ArrayBuffer>;
 
   // Wasm-backed instances hold memory outside the JS heap; release it explicitly.
   rendered.free();
@@ -151,17 +155,16 @@ type OpenGraphResponseOptions = {
 };
 
 export const createOpenGraphResponse = (
-  image: Uint8Array,
+  image: Uint8Array<ArrayBuffer>,
   { isVersioned = false }: OpenGraphResponseOptions = {},
 ): Response => {
   const cacheControl = isVersioned
     ? 'public, max-age=31536000, immutable, no-transform'
     : 'public, max-age=3600, stale-while-revalidate=86400, no-transform';
 
-  const body = new ArrayBuffer(image.byteLength);
-  new Uint8Array(body).set(image);
-
-  return new Response(body, {
+  // `asPng()` returns a fresh, exactly-sized `Uint8Array` (offset 0, no extra
+  // bytes), so its backing buffer can serve as the body with no extra copy.
+  return new Response(image.buffer, {
     headers: {
       // resvg always emits PNG; the `.jpg` route name is cosmetic and social
       // scrapers honor the Content-Type, not the URL extension.
