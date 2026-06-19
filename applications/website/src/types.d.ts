@@ -23,6 +23,11 @@ declare module '*.toml' {
   export default value;
 }
 
+declare module '*.wasm?url' {
+  const url: string;
+  export default url;
+}
+
 declare module 'rehype-unwrap-images' {
   export default import('unified').Plugin;
 }

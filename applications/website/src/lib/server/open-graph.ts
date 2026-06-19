@@ -1,3 +1,5 @@
+import { initWasm, Resvg } from '@resvg/resvg-wasm';
+import resvgWasmUrl from '@resvg/resvg-wasm/index_bg.wasm?url';
 import satori from 'satori';
 
 import { OpenGraphImage } from '../../routes/open-graph/open-graph';
@@ -41,8 +43,7 @@ export type OpenGraphOptions = {
 };
 
 let fontDataPromise: Promise<ArrayBuffer[]> | null = null;
-let fallbackRasterPromise: Promise<Uint8Array> | null = null;
-let didWarnAboutSharp = false;
+let wasmInitPromise: Promise<void> | null = null;
 
 const loadFonts = async (fetch: RequestEvent['fetch']): Promise<ArrayBuffer[]> => {
   if (!fontDataPromise) {
@@ -65,23 +66,31 @@ const loadFonts = async (fetch: RequestEvent['fetch']): Promise<ArrayBuffer[]> =
   return fontDataPromise;
 };
 
-const loadFallbackRaster = async (fetch: RequestEvent['fetch']): Promise<Uint8Array | null> => {
-  if (!fallbackRasterPromise) {
-    fallbackRasterPromise = (async () => {
-      const response = await fetch('/portrait.png');
+/**
+ * Initialize the resvg WebAssembly module exactly once per server instance.
+ *
+ * `initWasm` throws if called more than once, so the promise is cached and
+ * reused. The `.wasm` binary is imported through Vite's `?url` loader, which
+ * emits it as an asset and bundles it into the serverless function — so it is
+ * fetchable at runtime regardless of platform (unlike a native addon).
+ */
+const ensureWasmInitialized = async (fetch: RequestEvent['fetch']): Promise<void> => {
+  if (!wasmInitPromise) {
+    wasmInitPromise = (async () => {
+      const response = await fetch(resvgWasmUrl);
       if (!response.ok) {
         throw new Error(
-          `Failed to load fallback raster image: ${response.status} ${response.statusText}`,
+          `Failed to load resvg WebAssembly module from ${resvgWasmUrl}: ${response.status} ${response.statusText}`,
         );
       }
-      return new Uint8Array(await response.arrayBuffer());
+      await initWasm(await response.arrayBuffer());
     })().catch((error) => {
-      fallbackRasterPromise = null;
+      wasmInitPromise = null;
       throw error;
     });
   }
 
-  return fallbackRasterPromise;
+  return wasmInitPromise;
 };
 
 export const renderOpenGraphImage = async (
@@ -105,27 +114,21 @@ export const renderOpenGraphImage = async (
     fonts,
   });
 
-  try {
-    const { default: sharp } = await import('sharp');
-    const image = await sharp(Buffer.from(svg)).jpeg().toBuffer();
-    return new Uint8Array(image);
-  } catch (error) {
-    if (!didWarnAboutSharp) {
-      didWarnAboutSharp = true;
-      console.warn('[open-graph] Sharp unavailable, falling back to static raster image.', error);
-    }
+  await ensureWasmInitialized(fetch);
 
-    try {
-      const fallbackRaster = await loadFallbackRaster(fetch);
-      if (fallbackRaster) return fallbackRaster;
-    } catch (fallbackError) {
-      if (!didWarnAboutSharp) {
-        console.warn('[open-graph] Failed to load fallback raster image.', fallbackError);
-      }
-    }
+  // Satori vectorizes all text into `<path>` elements using the fonts above, so
+  // resvg needs no font buffers of its own to rasterize the card faithfully.
+  const renderer = new Resvg(svg, {
+    fitTo: { mode: 'width', value: IMAGE_WIDTH },
+  });
+  const rendered = renderer.render();
+  const png = rendered.asPng();
 
-    return new Uint8Array(Buffer.from(svg));
-  }
+  // Wasm-backed instances hold memory outside the JS heap; release it explicitly.
+  rendered.free();
+  renderer.free();
+
+  return png;
 };
 
 type OpenGraphResponseOptions = {
@@ -140,15 +143,14 @@ export const createOpenGraphResponse = (
     ? 'public, max-age=31536000, immutable, no-transform'
     : 'public, max-age=3600, stale-while-revalidate=86400, no-transform';
 
-  const prefix = Buffer.from(image.slice(0, 16)).toString('utf8');
-  const isSvg = prefix.includes('<svg') || prefix.includes('<?xml');
-
   const body = new ArrayBuffer(image.byteLength);
   new Uint8Array(body).set(image);
 
   return new Response(body, {
     headers: {
-      'Content-Type': isSvg ? 'image/svg+xml' : 'image/jpeg',
+      // resvg always emits PNG; the `.jpg` route name is cosmetic and social
+      // scrapers honor the Content-Type, not the URL extension.
+      'Content-Type': 'image/png',
       'Cache-Control': cacheControl,
       'Access-Control-Allow-Origin': '*',
       'Content-Length': image.byteLength.toString(),
