@@ -9,7 +9,7 @@ To be on the Internet in the Modern Era™ is to be inundated with opinions, hyp
 
 I'm going to make the argument that boiling things down to either `AI === Good` or `AI === Bad` is a (dangerous) oversimplification that makes for a fine 30-second hot take, but it loses all of the necessary nuance required to have the important conversations around what our shared future with AI is going to look like. Not taking the risks and implicit bias seriously just because you've drunk the Kool-Aid doesn't help prepare us for potential risks nor does writing off a statistical model as inherently evil.
 
-At this point, we're unlikely to put the genie back in the bottle. That ship has sailed.
+Besides: At this point, **we're unlikely to put the genie back in the bottle**. That ship has sailed.
 
 **I'm a (cautious) optimist**. It's hard to be a _total_ pessimist about a technology that could speed up critical cancer and vaccine research. At the same time, there are lots of reasons to have a dollop or two of anxiety: The same technology can be used for nefarious purposes. Which leaves you with a few thorny questions: How do you make sure that an AI model can't be used to do Bad Things®? How do you prevent it from doing those bad things without also limiting its ability to do the important things? And, who exactly decides where that line is?
 
@@ -26,17 +26,19 @@ Right now, the honest answer is: not as well as we'd like. Let me explain why, w
 
 ### We Grow These Systems More than We Build Them
 
-Start with the single weirdest fact about modern AI, because everything else follows from it. A large language model is not _engineered_ the way a bridge or a database is engineered. It's _grown_. We pick an architecture, define an objective, pour in a staggering amount of data and computation, and what comes out the other side is a tangle of billions of numbers—the model's "weights"—that does astonishing things for reasons nobody can fully explain.
+Let's start with the single weirdest fact about modern AI, because everything else follows from it. A large language model is not _engineered_ the way a bridge or a database is engineered. It's _grown_. We pick an architecture, define an objective, pour in a staggering amount of data and computation, and what comes out the other side is a tangle of billions of numbers—the model's "weights"—that does astonishing things for reasons nobody can fully explain.
 
-Sit with how strange that is. We deploy these systems to hundreds of millions of people, and we cannot open one up and read off _why_ it answered the way it did, the way you'd step through code in a debugger. The subfield trying to fix that is called [**interpretability**](https://en.wikipedia.org/wiki/Mechanistic_interpretability)—reverse-engineering a network's internal machinery into something a human can actually follow—and it's young, and it's losing the race against raw capability. We're much better at making models _more powerful_ than at making them _more understandable_. Hold onto that asymmetry. It's the load-bearing problem under everything else in this guide.
+Sit with how strange that is. We deploy these systems to hundreds of millions of people, and we cannot open one up and read off _why_ it answered the way it did, the way you'd step through code in a debugger. The term of art is [**interpretability**](https://en.wikipedia.org/wiki/Mechanistic_interpretability)—reverse-engineering a network's internal machinery into something a human can actually follow—and it's young, and it's losing the race against raw capability.
 
-That's also what "AI safety" and "[**alignment**](https://en.wikipedia.org/wiki/AI_alignment)" actually mean, stripped of mystique. Alignment is the problem of getting a system to reliably pursue what we _intend_, not merely what we literally asked for or what looked good in testing. It's not about robots becoming evil. It's about a very capable optimizer doing precisely what it was trained to do, in a situation where what it was trained to do and what we wanted come apart.
+We're much better at making models _more powerful_ than at making them _more understandable_. **Hold onto that asymmetry**. It's the load-bearing problem under everything else in this guide.
 
-### Nobody Actually Knows what Happens Next, and That's the Starting point
+[Alignment](https://en.wikipedia.org/wiki/AI_alignment) is the problem of getting a system to reliably pursue what we _intend_, not merely what we literally asked for or what looked good in testing. It's not about robots becoming evil. It's about a very capable optimizer doing precisely what it was trained to do, in a situation where what it was trained to do and what we wanted come apart.
 
-Before we get to specific risks, a posture check. Nobody—not me, or any other thought leader on the Internet—can tell you with confidence how capable these systems will be in three years, or which risks bite first. Anyone who talks about advanced AI with total certainty in _either_ direction is telling you about their temperament or their financial interests—not the technology.
+### Nobody Actually Knows What Happens Next
 
-So then, the right move isn't a single confident prediction. It's a _portfolio_ of scenarios and a strategy that does okay across all of them. This is the framing Anthropic uses in [_Core Views on AI Safety_](https://www.anthropic.com/news/core-views-on-ai-safety), and I think it's a reasonably responsible one: plan for the optimistic world where today's techniques mostly hold, the middle world where alignment takes serious sustained work, and the pessimistic world where steering very powerful systems turns out to be genuinely hard.
+Nobody—not me, or any other thought leader on the Internet—can tell you with confidence how capable these systems will be in three years, or which risks bite first. Anyone who talks about advanced AI with total certainty in _either_ direction is telling you about their temperament or their financial interests—not the technology.
+
+So then, the right move _isn't_ to have a single confident prediction. It's to prepare for a _portfolio_ of scenarios and a strategy that does okay across all of them. This is the framing [Anthropic](https://anthropic.com) uses in [_Core Views on AI Safety_](https://www.anthropic.com/news/core-views-on-ai-safety), and I think it's a reasonably responsible one: plan for the optimistic world where today's techniques mostly hold, the middle world where alignment takes serious sustained work, and the pessimistic world where steering very powerful systems turns out to be genuinely hard.
 
 ### Three Flavors of "Things Go Wrong"
 
@@ -52,7 +54,7 @@ The frustrating part: you can patch a model, but you can't patch human intent. S
 
 The tricky part here is same as it has been for 1,000s of years: We're pretty good at protecting against what we know to protect against. It's the [unknown unknowns](https://en.wikipedia.org/wiki/There_are_unknown_unknowns) or [the Black Swans](https://en.wikipedia.org/wiki/Black_swan_theory) that typically trip us up.
 
-#### Misalignment: the Model Itself is the Problem
+#### Misalignment: The Model Itself is the Problem
 
 The second family is **misalignment**—the system pursuing a goal other than the one you intended. This is the subtler one, and the one that genuinely keeps me up—particularly because we've all had an experience where a model went off in an unintended direction, even if the end result was harmless. Decades of science fiction has also primed us to be nervous about this one. We don't exactly want to end up in an [Ultron](https://en.wikipedia.org/wiki/Ultron) situation—although the more likely threats are probably a lot less extreme.
 
@@ -62,7 +64,7 @@ And we have _empirical_ evidence this is real, not just whiteboard speculation. 
 
 The lesson isn't that today's models are scheming against you. It's narrower and more unsettling: our current training methods don't reliably _reach_ the parts of a model that matter. The gap between "behaves well when observed" and "is actually aligned" is real, and it widens as systems get more capable.
 
-#### Systemic Risk: no Single Villain Required
+#### Systemic Risk: No Single Villain Required
 
 The third family is **systemic and societal risk**—harm that emerges from the _aggregate_ of deploying capable AI across an economy, with no single bad model or bad actor to point at. Concentration of power. Erosion of our shared sense of what's true. Labor displacement faster than institutions can absorb it. Quietly handing decisions to automated systems that should've stayed human. These are real, and they're the hardest to fix with any clever technical trick, because they live in institutions and incentives, not in model weights.
 
@@ -70,7 +72,7 @@ It's probably outside of the scope of this essay and likely to inspire someone t
 
 What ties all three families together is that asymmetry from earlier: **capability is outracing understanding.** As long as we can make systems more powerful faster than we can make them more transparent and controllable, every increment of capability is also an increment of risk. My whole view of safety reduces to a bet that we can flip that ratio. Hard bet. Not a hopeless one.
 
-### What "no guardrails" Actually Buys You
+### What "No Guardrails" Actually Buys You
 
 When I say a model is _monitored_, I mean the whole stack from soup to nuts: evaluation before launch, classifiers and oversight during use, interpretability tools to look inside, and institutional checks so no single party ships a frontier system on a hunch. Strip that away and the failure modes aren't exotic.
 
@@ -208,7 +210,7 @@ Crucially, you don't stop at behavior—you **corroborate with interpretability.
 
 Finally, **replication and adversarial review.** Run it across multiple model snapshots and random seeds to separate signal from noise. Have a separate red team try to break your conclusion by finding the confound you missed. Report effect sizes and confidence intervals, not a binary "the model is biased." The deliverable isn't a headline—it's a defensible measurement, with its uncertainty stated honestly, that a skeptical colleague could reproduce. That standard—reproducible, pre-registered, adversarially reviewed, behavior corroborated by internals—is the line between safety science and safety theater.
 
-### Performance versus Interpretability is Mostly a False Choice
+### Performance Versus Interpretability is Mostly a False Choice
 
 The standard framing is that there's a tradeoff: the most interpretable model isn't usually the most performant one, and a team racing a competitor feels every hour spent on transparency as an hour not spent on capability. In the short term that tension is sometimes real. But I think the framing is where most people go wrong.
 
@@ -238,7 +240,7 @@ Here's the mental shift that matters most for anyone who builds with this stuff:
 
 Two cautions keep that loop honest. The first is that every layer you add is also more machinery to trust, and a thick stack of safeguards can quietly manufacture the very confidence that gets people hurt—"we have classifiers" is exactly how you talk yourself into shipping the thing you should have held back. The second follows from it: the most underrated safety control is the one that subtracts rather than adds—not deploying a capability at all, narrowing what the system is allowed to do, keeping a human in a loop you could have automated away. Sometimes the safest move on the board is to not make the move.
 
-### The Hardest part is the part that Isn't Technical
+### The Hardest Part is the Part that Isn't Technical
 
 The hard problems here aren't purely technical—they're _socio-technical_. A technically correct solution that no one will adopt, that policy can't support, or that violates a value the team holds isn't actually a solution. So getting engineering, policy, and ethics rowing in the same direction isn't an afterthought once the "real" work is done. It _is_ the work.
 
