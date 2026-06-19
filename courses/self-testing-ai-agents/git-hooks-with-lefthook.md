@@ -209,6 +209,7 @@ Create a `.cursor/hooks.json` file at the root of your project:
     ]
   }
 }
+```
 
 Then, add the corresponding shell script at .cursor/hooks/block-no-verify.sh to return a structured JSON response instructing the agent to abort:
 
