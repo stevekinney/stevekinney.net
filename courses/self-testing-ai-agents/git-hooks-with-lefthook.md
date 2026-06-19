@@ -192,21 +192,41 @@ Because the hook sees the whole command string, this catches `--no-verify` even 
 
 ### Cursor
 
-Cursor is the awkward one here. Its [CLI permissions](https://docs.cursor.com/cli/reference/permissions) are command-base rules like `Shell(git)`, not argument-aware policies, and the docs are explicit that the allowlist is not a security control. That means there is not a narrow "deny only `--no-verify`" hook example to show today.
+Cursor provides a powerful, mechanically enforceable way to block specific commands using its native **Hooks** system. By configuring a `beforeShellExecution` hook in `.cursor/hooks.json`, you can intercept shell tools, use a regex matcher to capture `--no-verify`, and completely deny the execution before it reaches the terminal.
 
-The practical permissions-based option is broader: deny all shell `git` commands in `.cursor/cli.json` and leave commits to a human.
+Create a `.cursor/hooks.json` file at the root of your project:
 
 ```json
 {
-  "agent": {
-    "permissions": {
-      "deny": ["Shell(git)"]
-    }
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": ".cursor/hooks/block-no-verify.sh",
+        "matcher": "git commit .*--no-verify|--no-verify.*git commit",
+        "failClosed": true
+      }
+    ]
   }
 }
+
+Then, add the corresponding shell script at .cursor/hooks/block-no-verify.sh to return a structured JSON response instructing the agent to abort:
+
+```bash
+#!/bin/bash
+# Read the input payload from stdin and block execution
+cat << EOF
+{
+  "permission": "deny",
+  "user_message": "Agent blocked from bypassing pre-commit hooks.",
+  "agent_message": "The command was blocked by local policy. You are strictly forbidden from using --no-verify. Please run a standard git commit and fix any linter/test errors if they arise."
+}
+EOF
 ```
 
-That is coarse, but it is mechanically enforceable. If you still want Cursor to run read-only `git status` or `git diff`, the honest answer is that Cursor's documented permissions model does not currently let you deny only `git commit --no-verify`. In that case, keep terminal approval enabled, reject any `--no-verify` command manually, and pair it with a rule in `AGENTS.md` or `.cursor/rules`.
+(Make sure to run chmod +x .cursor/hooks/block-no-verify.sh so it is executable).
+
+This setup ensures that general read-only git tasks (like git status or git diff) continue to work seamlessly, while specifically neutralizing attempts to bypass pre-commit protections.
 
 ### Codex
 
