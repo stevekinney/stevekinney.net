@@ -1,3 +1,5 @@
+import { initWasm, Resvg } from '@resvg/resvg-wasm';
+import resvgWasmUrl from '@resvg/resvg-wasm/index_bg.wasm?url';
 import satori from 'satori';
 
 import { OpenGraphImage } from '../../routes/open-graph/open-graph';
@@ -41,8 +43,22 @@ export type OpenGraphOptions = {
 };
 
 let fontDataPromise: Promise<ArrayBuffer[]> | null = null;
-let fallbackRasterPromise: Promise<Uint8Array> | null = null;
-let didWarnAboutSharp = false;
+let wasmInitPromise: Promise<void> | null = null;
+
+/**
+ * Reset the module-level font cache. Test-only: lets each test exercise the
+ * full font-load path (and its failure modes) instead of reusing a warm cache
+ * from an earlier test.
+ *
+ * The wasm-init cache is intentionally NOT reset: resvg's `initWasm` can only
+ * run once per process (it throws "Already initialized" on a second call), so
+ * once it succeeds the cached promise must stay. This is why
+ * `ensureWasmInitialized` only nulls its promise on a *failed* init — the retry
+ * path can only be reached before the one successful initialization.
+ */
+export const resetOpenGraphCachesForTesting = (): void => {
+  fontDataPromise = null;
+};
 
 const loadFonts = async (fetch: RequestEvent['fetch']): Promise<ArrayBuffer[]> => {
   if (!fontDataPromise) {
@@ -65,29 +81,37 @@ const loadFonts = async (fetch: RequestEvent['fetch']): Promise<ArrayBuffer[]> =
   return fontDataPromise;
 };
 
-const loadFallbackRaster = async (fetch: RequestEvent['fetch']): Promise<Uint8Array | null> => {
-  if (!fallbackRasterPromise) {
-    fallbackRasterPromise = (async () => {
-      const response = await fetch('/portrait.png');
+/**
+ * Initialize the resvg WebAssembly module exactly once per server instance.
+ *
+ * `initWasm` throws if called more than once, so the promise is cached and
+ * reused. The `.wasm` binary is imported through Vite's `?url` loader, which
+ * emits it as an asset and bundles it into the serverless function — so it is
+ * fetchable at runtime regardless of platform (unlike a native addon).
+ */
+const ensureWasmInitialized = async (fetch: RequestEvent['fetch']): Promise<void> => {
+  if (!wasmInitPromise) {
+    wasmInitPromise = (async () => {
+      const response = await fetch(resvgWasmUrl);
       if (!response.ok) {
         throw new Error(
-          `Failed to load fallback raster image: ${response.status} ${response.statusText}`,
+          `Failed to load resvg WebAssembly module from ${resvgWasmUrl}: ${response.status} ${response.statusText}`,
         );
       }
-      return new Uint8Array(await response.arrayBuffer());
+      await initWasm(await response.arrayBuffer());
     })().catch((error) => {
-      fallbackRasterPromise = null;
+      wasmInitPromise = null;
       throw error;
     });
   }
 
-  return fallbackRasterPromise;
+  return wasmInitPromise;
 };
 
 export const renderOpenGraphImage = async (
   options: OpenGraphOptions,
   fetch: RequestEvent['fetch'],
-): Promise<Uint8Array> => {
+): Promise<Uint8Array<ArrayBuffer>> => {
   const loadedFontData = await loadFonts(fetch);
 
   const fonts = FONT_INFO.map((font, index) => ({
@@ -105,27 +129,25 @@ export const renderOpenGraphImage = async (
     fonts,
   });
 
-  try {
-    const { default: sharp } = await import('sharp');
-    const image = await sharp(Buffer.from(svg)).jpeg().toBuffer();
-    return new Uint8Array(image);
-  } catch (error) {
-    if (!didWarnAboutSharp) {
-      didWarnAboutSharp = true;
-      console.warn('[open-graph] Sharp unavailable, falling back to static raster image.', error);
-    }
+  await ensureWasmInitialized(fetch);
 
-    try {
-      const fallbackRaster = await loadFallbackRaster(fetch);
-      if (fallbackRaster) return fallbackRaster;
-    } catch (fallbackError) {
-      if (!didWarnAboutSharp) {
-        console.warn('[open-graph] Failed to load fallback raster image.', fallbackError);
-      }
-    }
+  // Satori vectorizes all text into `<path>` elements using the fonts above, so
+  // resvg needs no font buffers of its own to rasterize the card faithfully.
+  const renderer = new Resvg(svg, {
+    fitTo: { mode: 'width', value: IMAGE_WIDTH },
+  });
+  const rendered = renderer.render();
+  // resvg's `asPng()` is declared as `Uint8Array` (defaulting the buffer to
+  // `ArrayBufferLike`), but it always returns a fresh, exactly-sized array over
+  // a plain `ArrayBuffer` — never `SharedArrayBuffer`. Narrowing it here lets the
+  // backing buffer serve directly as a `Response` body without a second copy.
+  const png = rendered.asPng() as Uint8Array<ArrayBuffer>;
 
-    return new Uint8Array(Buffer.from(svg));
-  }
+  // Wasm-backed instances hold memory outside the JS heap; release it explicitly.
+  rendered.free();
+  renderer.free();
+
+  return png;
 };
 
 type OpenGraphResponseOptions = {
@@ -133,22 +155,20 @@ type OpenGraphResponseOptions = {
 };
 
 export const createOpenGraphResponse = (
-  image: Uint8Array,
+  image: Uint8Array<ArrayBuffer>,
   { isVersioned = false }: OpenGraphResponseOptions = {},
 ): Response => {
   const cacheControl = isVersioned
     ? 'public, max-age=31536000, immutable, no-transform'
     : 'public, max-age=3600, stale-while-revalidate=86400, no-transform';
 
-  const prefix = Buffer.from(image.slice(0, 16)).toString('utf8');
-  const isSvg = prefix.includes('<svg') || prefix.includes('<?xml');
-
-  const body = new ArrayBuffer(image.byteLength);
-  new Uint8Array(body).set(image);
-
-  return new Response(body, {
+  // `asPng()` returns a fresh, exactly-sized `Uint8Array` (offset 0, no extra
+  // bytes), so its backing buffer can serve as the body with no extra copy.
+  return new Response(image.buffer, {
     headers: {
-      'Content-Type': isSvg ? 'image/svg+xml' : 'image/jpeg',
+      // resvg always emits PNG; the `.jpg` route name is cosmetic and social
+      // scrapers honor the Content-Type, not the URL extension.
+      'Content-Type': 'image/png',
       'Cache-Control': cacheControl,
       'Access-Control-Allow-Origin': '*',
       'Content-Length': image.byteLength.toString(),

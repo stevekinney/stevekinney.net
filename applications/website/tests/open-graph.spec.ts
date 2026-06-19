@@ -29,7 +29,7 @@ for (const scenario of scenarios) {
     expect(response.ok()).toBeTruthy();
 
     const contentType = response.headers()['content-type'] ?? '';
-    expect(contentType).toContain('image/jpeg');
+    expect(contentType).toContain('image/png');
 
     const body = await response.body();
     expect(body.byteLength).toBeGreaterThan(1000);
