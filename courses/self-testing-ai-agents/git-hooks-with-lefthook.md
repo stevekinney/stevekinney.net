@@ -225,7 +225,7 @@ cat << EOF
 EOF
 ```
 
-(Make sure to run chmod +x `.cursor/hooks/block-no-verify.sh` so it is executable).
+(Make sure to run `chmod +x .cursor/hooks/block-no-verify.sh` so it is executable).
 
 This setup ensures that general read-only git tasks (like git status or git diff) continue to work seamlessly, while specifically neutralizing attempts to bypass pre-commit protections.
 
