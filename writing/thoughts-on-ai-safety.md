@@ -8,7 +8,7 @@ modified: 2026-06-19
 
 To be on the Internet in the Modern Era™ is to be inundated with opinions, hype, and various flavors of doom and gloom. So, I decided to take a short respite from the infinite stream of 30-second reels and do a bit of a deeper dive. (**Narrator**: He downloaded a bunch of research onto his iPad and sat on the couch instead of doomscrolling.)
 
-I'm going to make the argument that boiling things down to either `AI === Good` or `AI === Bad` is a (dangerous) over-simplification that makes for a fine 30-second hot take, but it loses all of the necessary nuance required to have the important conversations around what our shared future with AI is going to look like. Not taking the risks and implicit bias seriously just because you're drank the Kool-Aid doesn't help prepare us for potential risks nor does writing off a statistical model as inherently evil.
+I'm going to make the argument that boiling things down to either `AI === Good` or `AI === Bad` is a (dangerous) oversimplification that makes for a fine 30-second hot take, but it loses all of the necessary nuance required to have the important conversations around what our shared future with AI is going to look like. Not taking the risks and implicit bias seriously just because you've drunk the Kool-Aid doesn't help prepare us for potential risks nor does writing off a statistical model as inherently evil.
 
 At this point, we're unlikely to put the genie back in the bottle. That ship has sailed.
 
