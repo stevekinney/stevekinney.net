@@ -45,6 +45,21 @@ export type OpenGraphOptions = {
 let fontDataPromise: Promise<ArrayBuffer[]> | null = null;
 let wasmInitPromise: Promise<void> | null = null;
 
+/**
+ * Reset the module-level font cache. Test-only: lets each test exercise the
+ * full font-load path (and its failure modes) instead of reusing a warm cache
+ * from an earlier test.
+ *
+ * The wasm-init cache is intentionally NOT reset: resvg's `initWasm` can only
+ * run once per process (it throws "Already initialized" on a second call), so
+ * once it succeeds the cached promise must stay. This is why
+ * `ensureWasmInitialized` only nulls its promise on a *failed* init — the retry
+ * path can only be reached before the one successful initialization.
+ */
+export const resetOpenGraphCachesForTesting = (): void => {
+  fontDataPromise = null;
+};
+
 const loadFonts = async (fetch: RequestEvent['fetch']): Promise<ArrayBuffer[]> => {
   if (!fontDataPromise) {
     fontDataPromise = Promise.all(
