@@ -14,7 +14,9 @@
     href="https://cinder.website/"
     target="_blank"
     rel="noopener noreferrer"
-    aria-label="Components, opens in a new tab">Components</Link
+    aria-label="Components, opens in a new tab"
   >
+    Components
+  </Link>
   <Link href="https://buttondown.com/stevekinney" target="_blank">Newsletter</Link>
 </nav>
