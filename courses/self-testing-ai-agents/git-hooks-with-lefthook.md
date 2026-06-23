@@ -276,7 +276,7 @@ def command_segments(words):
     current = []
 
     for word in words:
-        if word in {"&&", "||", ";", "|"}:
+        if word in {"&&", "||", ";", "|", "&"}:
             if current:
                 segments.append(current)
                 current = []
