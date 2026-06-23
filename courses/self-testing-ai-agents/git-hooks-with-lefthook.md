@@ -1,7 +1,7 @@
 ---
 title: Git Hooks with Lefthook
 description: Wire fast, staged-only checks into every commit and push using Lefthook—a single YAML file that replaces Husky, lint-staged, and half the shell scripts in your repo.
-modified: 2026-04-14
+modified: 2026-06-23
 date: 2026-04-10
 ---
 
@@ -192,21 +192,200 @@ Because the hook sees the whole command string, this catches `--no-verify` even 
 
 ### Cursor
 
-Cursor is the awkward one here. Its [CLI permissions](https://docs.cursor.com/cli/reference/permissions) are command-base rules like `Shell(git)`, not argument-aware policies, and the docs are explicit that the allowlist is not a security control. That means there is not a narrow "deny only `--no-verify`" hook example to show today.
+[Cursor](https://www.cursor.com/)'s CLI permissions still live in `.cursor/cli.json`, but
+permissions are the wrong tool for a narrow "block only `git commit --no-verify`" policy.
+For that, use Cursor's native [Hooks](https://cursor.com/docs/hooks) system. As of the
+current Cursor Hooks API, a `beforeShellExecution` hook can inspect the full shell command
+and deny it before it reaches the terminal.
 
-The practical permissions-based option is broader: deny all shell `git` commands in `.cursor/cli.json` and leave commits to a human.
+Create a `.cursor/hooks.json` file at the root of your project:
 
 ```json
 {
-  "agent": {
-    "permissions": {
-      "deny": ["Shell(git)"]
-    }
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "python3 .cursor/hooks/block-no-verify.py",
+        "matcher": "git",
+        "failClosed": true
+      }
+    ]
   }
 }
 ```
 
-That is coarse, but it is mechanically enforceable. If you still want Cursor to run read-only `git status` or `git diff`, the honest answer is that Cursor's documented permissions model does not currently let you deny only `git commit --no-verify`. In that case, keep terminal approval enabled, reject any `--no-verify` command manually, and pair it with a rule in `AGENTS.md` or `.cursor/rules`.
+The matcher is just a fast filter. The hook script still needs to inspect the command so
+read-only Git commands and unrelated shell commands keep working. This example uses Python 3
+because `shlex` is a better fit than guessing at shell quoting with a regular expression:
+
+```python
+#!/usr/bin/env python3
+import json
+import shlex
+import sys
+
+GIT_GLOBAL_OPTIONS_WITH_VALUES = {
+    "-C",
+    "-c",
+    "--config-env",
+    "--exec-path",
+    "--git-dir",
+    "--namespace",
+    "--work-tree",
+}
+
+COMMIT_OPTIONS_WITH_VALUES = {
+    "-C",
+    "-F",
+    "-S",
+    "-c",
+    "-m",
+    "-t",
+    "--author",
+    "--cleanup",
+    "--date",
+    "--file",
+    "--fixup",
+    "--message",
+    "--pathspec-from-file",
+    "--reedit-message",
+    "--reuse-message",
+    "--squash",
+    "--template",
+    "--trailer",
+}
+
+
+def respond(permission, message=None):
+    response = {"permission": permission}
+    if message:
+        response["user_message"] = "Agent blocked from bypassing pre-commit hooks."
+        response["agent_message"] = message
+    print(json.dumps(response))
+
+
+def split_shell_words(command):
+    lexer = shlex.shlex(command, posix=True, punctuation_chars=";&|")
+    lexer.whitespace_split = True
+    return list(lexer)
+
+
+def command_segments(words):
+    segments = []
+    current = []
+
+    for word in words:
+        if word in {"&&", "||", ";", "|", "&"}:
+            if current:
+                segments.append(current)
+                current = []
+        else:
+            current.append(word)
+
+    if current:
+        segments.append(current)
+
+    return segments
+
+
+def without_environment_prefix(words):
+    while words and "=" in words[0] and not words[0].startswith("-"):
+        words = words[1:]
+
+    if not words or words[0] != "env":
+        return words
+
+    words = words[1:]
+    while words:
+        if words[0] in {"-u", "--unset", "-C", "--chdir"}:
+            words = words[2:]
+        elif words[0].startswith("-"):
+            words = words[1:]
+        elif "=" in words[0]:
+            words = words[1:]
+        else:
+            break
+
+    return words
+
+
+def option_takes_value(option, options_with_values):
+    return option in options_with_values or any(
+        option.startswith(f"{known_option}=") for known_option in options_with_values
+    )
+
+
+def git_subcommand_index(words):
+    if not words or words[0] != "git":
+        return None
+
+    index = 1
+    while index < len(words):
+        word = words[index]
+        if not word.startswith("-"):
+            return index
+
+        if word in GIT_GLOBAL_OPTIONS_WITH_VALUES and "=" not in word:
+            index += 2
+        else:
+            index += 1
+
+    return None
+
+
+def has_no_verify(args):
+    index = 0
+    while index < len(args):
+        word = args[index]
+
+        if word == "--":
+            return False
+
+        if word == "-n" or word.startswith("--no-verify"):
+            return True
+
+        if option_takes_value(word, COMMIT_OPTIONS_WITH_VALUES) and "=" not in word:
+            index += 2
+        else:
+            index += 1
+
+    return False
+
+
+def blocks_hook_bypass(words):
+    words = without_environment_prefix(words)
+    subcommand_index = git_subcommand_index(words)
+    if subcommand_index is None or words[subcommand_index] != "commit":
+        return False
+
+    return has_no_verify(words[subcommand_index + 1 :])
+
+
+try:
+    payload = json.load(sys.stdin)
+    command = payload["command"]
+    words = split_shell_words(command)
+except Exception:
+    respond("deny", "Cursor could not evaluate the pending command, so the hook failed closed.")
+    raise SystemExit(0)
+
+if any(blocks_hook_bypass(segment) for segment in command_segments(words)):
+    respond(
+        "deny",
+        "Do not use --no-verify or -n. Run a standard git commit and fix hook failures instead.",
+    )
+else:
+    respond("allow")
+```
+
+Because `failClosed` is `true`, Cursor blocks the matched command if the script crashes,
+returns invalid JSON, or cannot be executed. That is what you want for a policy hook, but it
+also means `python3` needs to be available wherever Cursor runs the hook.
+
+This keeps general read-only Git tasks like `git status` and `git diff` available while
+blocking the bypass you actually care about, including `git commit --no-verify`,
+`git commit -n`, and common forms like `git -C path commit --no-verify`.
 
 ### Codex
 
