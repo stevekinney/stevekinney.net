@@ -46,6 +46,8 @@ invisible automation.
 
 ## Large Context Is Not a Replacement
 
-Large-context model aliases such as `sonnet[1m]` and `opus[1m]` can reduce the
-need to compact, but they do not remove the need for clean task state. A million
-tokens of unclear conversation is still unclear.
+Large-context model aliases such as
+[`sonnet[1m]`](https://code.claude.com/docs/en/model-config) and
+[`opus[1m]`](https://code.claude.com/docs/en/model-config) can reduce the need to
+compact, but they do not remove the need for clean task state. A million tokens
+of unclear conversation is still unclear.

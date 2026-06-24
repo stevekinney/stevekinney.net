@@ -37,8 +37,8 @@ needs the instruction, put it in a versioned file.
 ## Imports and AGENTS.md
 
 Claude Code supports imports with `@path` references. As of the current
-documentation, Claude Code does not read `AGENTS.md` directly. If a repository
-uses `AGENTS.md`, create a `CLAUDE.md` that imports it:
+documentation, Claude Code does not read [`AGENTS.md`](https://agents.md/)
+directly. If a repository uses `AGENTS.md`, create a `CLAUDE.md` that imports it:
 
 ```md
 @AGENTS.md

@@ -22,7 +22,8 @@ Cursor supports four practical instruction sources:
 - **User Rules** live in Cursor settings and follow one developer across
   projects.
 - **Team Rules** are centrally managed for teams.
-- **AGENTS.md** files can also provide repository instructions.
+- **[AGENTS.md](https://agents.md/)** files can also provide repository
+  instructions.
 
 Project Rules use Markdown with frontmatter. The file extension matters:
 `.mdc` is the Cursor rule format. Plain `.md` files in `.cursor/rules` are not
