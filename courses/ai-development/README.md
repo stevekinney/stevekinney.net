@@ -1,5 +1,6 @@
 ---
 title: Developing with AI Tools
+layout: page
 description: >-
   Learn practical workflows for Cursor, Claude Code, MCP, and agentic software
   development with current installation, context, permission, and review
