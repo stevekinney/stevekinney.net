@@ -9,7 +9,10 @@ date: 2025-07-29
 
 Older Cursor material sometimes referred to "Ghost Mode." The current product
 language is [Privacy Mode](https://cursor.com/help/security-and-privacy/privacy).
-Use the current term when documenting security and governance.
+Use the current term when documenting security and governance, but do not treat
+old Ghost Mode claims as automatically equivalent to Privacy Mode. Re-check the
+actual data path and retention guarantees instead of assuming a local-only
+posture.
 
 ## What Privacy Mode Means
 

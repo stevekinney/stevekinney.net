@@ -20,8 +20,12 @@ agent
 ```
 
 The terminal interface supports Agent, Plan, and Ask modes. It can resume
-sessions, continue the latest session, and hand work to the cloud when you append
-`&` to an agent request.
+sessions, continue the latest session, and hand work to the cloud when you
+prepend `&` to an agent request:
+
+```bash
+& refactor the auth module
+```
 
 Useful session commands include:
 

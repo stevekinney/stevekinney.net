@@ -26,15 +26,16 @@ Claude Code supports aliases such as:
 - `opusplan`
 
 As of the current documentation, `opus` maps to
-[Opus 4.8](https://code.claude.com/docs/en/model-config) on the Claude Platform
-API, `sonnet` maps to
-[Sonnet 4.6](https://code.claude.com/docs/en/model-config), and
-[Fable 5](https://code.claude.com/docs/en/model-config) is available for explicit
-use when the account and retention policy allow it. Provider routing can differ
-on [Amazon Bedrock](https://aws.amazon.com/bedrock/),
+[Opus 4.8](https://code.claude.com/docs/en/model-config) on the Anthropic API,
+while Claude Platform on AWS, [Amazon Bedrock](https://aws.amazon.com/bedrock/),
 [Google Vertex AI](https://cloud.google.com/vertex-ai), and
-[Microsoft Foundry](https://azure.microsoft.com/products/ai-foundry/), so check
-the provider documentation before making a team-wide rule.
+[Microsoft Foundry](https://azure.microsoft.com/products/ai-foundry/) can resolve
+the same alias differently. `sonnet` maps to
+[Sonnet 4.6](https://code.claude.com/docs/en/model-config) on the Anthropic API
+and Claude Platform on AWS, and
+[Fable 5](https://code.claude.com/docs/en/model-config) is available for explicit
+use when the account and retention policy allow it. Check provider-specific
+model routing before making a team-wide rule.
 
 ## Defaults
 

@@ -25,6 +25,10 @@ Edit(src/**)
 Agent(model:opus)
 ```
 
+Parameter-specific rules such as `Agent(model:opus)` are for deny and ask rules,
+not blanket allow rules. An allow rule for one parameter value does not prove the
+whole tool call is safe.
+
 Use narrow rules where possible. "Allow all Bash" is a very different policy
 from "allow the targeted test command."
 
