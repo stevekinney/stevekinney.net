@@ -8,8 +8,9 @@ date: 2026-06-23
 ---
 
 [Cursor Automations](https://cursor.com/docs/cloud-agent/automations) run Cloud
-Agents from a schedule or event. As of Cursor 3.8, automations can also be
-created from the `/automate` skill.
+Agents from a schedule or event. As of
+[Cursor 3.8](https://cursor.com/changelog), automations can also be created from
+the `/automate` skill.
 
 Automations are useful for repeatable maintenance: dependency checks, flaky test
 triage, issue grooming, release readiness, and scheduled reports. They are risky
@@ -19,9 +20,11 @@ review path.
 ## Trigger Sources
 
 Cursor supports triggers from schedules, webhooks, version control events,
-Slack, Linear, Sentry, PagerDuty, and related integrations. GitHub triggers can
-include issue comments, pull request review comments, submitted reviews, review
-thread updates, and workflow runs.
+[Slack](https://slack.com/), [Linear](https://linear.app/),
+[Sentry](https://sentry.io/), [PagerDuty](https://www.pagerduty.com/), and
+related integrations. [GitHub](https://github.com/) triggers can include issue
+comments, pull request review comments, submitted reviews, review thread updates,
+and workflow runs.
 
 Pick the trigger that matches the workflow. Do not make an automation poll a
 system that can send a precise event.

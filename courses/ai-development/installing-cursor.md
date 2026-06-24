@@ -57,8 +57,11 @@ interactive session, or use print mode for automation:
 agent -p "Review the staged changes for correctness."
 ```
 
-File modification from print mode requires an explicit flag such as `--force` or
-`--yolo`. Treat that as a real permission decision, not a convenience switch.
+File modification from
+[print mode](https://cursor.com/docs/cli/headless) requires an explicit flag such
+as `--force` or `--yolo`, which is a name that is at least honest about the life
+choice you are making. Treat that as a real permission decision, not a
+convenience switch.
 
 ## First Project Setup
 

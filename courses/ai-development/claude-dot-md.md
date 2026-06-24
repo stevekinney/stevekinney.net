@@ -16,7 +16,7 @@ permissions, hooks, or continuous integration.
 
 `CLAUDE.md` is the main human-written project instruction file. It can live at
 the repository root or under `.claude/`. User-level instructions can live at
-`~/.claude/CLAUDE.md`, and local-only notes can live in `CLAUDE.local.md`.
+`~/.claude/CLAUDE.md`.
 
 Use `CLAUDE.md` for durable project guidance:
 
@@ -30,6 +30,9 @@ Use `CLAUDE.md` for durable project guidance:
 
 Keep it short. Link to deeper documentation instead of turning the file into a
 manual.
+
+Do not rely on local-only memory for shared project policy. If the next person
+needs the instruction, put it in a versioned file.
 
 ## Imports and AGENTS.md
 

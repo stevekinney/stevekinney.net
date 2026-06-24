@@ -15,9 +15,12 @@ pull request or comment.
 
 ## Claude Code GitHub Actions
 
-Claude Code GitHub Actions are built on the Claude Agent SDK. The current
-workflow uses `@anthropics/claude-code-action@v1`, a `prompt`, and optional
-`claude_args`. Older beta `mode` patterns should not be copied into new lessons.
+Claude Code GitHub Actions are built on the
+[Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk/overview). The
+current workflow uses
+[`@anthropics/claude-code-action@v1`](https://github.com/anthropics/claude-code-action),
+a `prompt`, and optional `claude_args`. Older beta `mode` patterns should not be
+copied into new lessons.
 
 Use `/install-github-app` for guided setup when possible. For manual setup, keep
 the Anthropic API key in GitHub Secrets and scope repository permissions tightly.

@@ -23,6 +23,21 @@ A typical tool action can pass through:
 
 Different hook types can observe, add context, block, or request a decision.
 
+## The Blocking Contract
+
+For command hooks, the output stream and exit behavior matter:
+
+| Hook response       | What it means                                                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Exit `0`            | Continue. Use `stdout` only for intentional structured output.                                                           |
+| Exit `2`            | Block or steer the action when the event supports blocking. Put the reason in `stderr` so the user and agent can see it. |
+| Other non-zero exit | Treat as hook failure. Surface the failure instead of silently continuing.                                               |
+| JSON on `stdout`    | Use documented fields such as `decision`, `reason`, and `continue` when a hook needs structured control.                 |
+
+Not every event can block the same way. Pre-tool and permission-oriented hooks
+are the right place for guardrails. Post-tool hooks are better for logging,
+auditing, and follow-up context.
+
 ## Deny Clearly
 
 When a hook blocks an action, return a message that tells the agent and human

@@ -19,8 +19,13 @@ Use a pre-tool hook to deny edits under a generated directory:
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Edit",
-        "command": "bun scripts/deny-generated-edits.ts"
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun scripts/deny-generated-edits.ts"
+          }
+        ]
       }
     ]
   }

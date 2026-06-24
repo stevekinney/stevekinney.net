@@ -25,8 +25,8 @@ personal workflow preferences.
 ## Hook Types
 
 Cursor supports command hooks and prompt hooks. Command hooks can run scripts and
-use exit codes to influence the agent. A blocking exit code can stop an unsafe
-action before it happens.
+use exit codes to influence the agent. A command hook that exits with code `2`
+can block an unsafe action before it happens and return the reason to the agent.
 
 Good hook use cases include:
 
@@ -47,6 +47,10 @@ bun scripts/check-generated-file-edit.ts "$CURSOR_FILE"
 ```
 
 The script owns the logic. The hook owns the integration point.
+
+Local and cloud support are not identical. If a hook must run in Cloud Agents,
+keep it command-based, check it into the repository, and verify that the cloud
+support matrix covers the event you are using.
 
 ## Security Posture
 

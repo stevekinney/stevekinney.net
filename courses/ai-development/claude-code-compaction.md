@@ -7,9 +7,10 @@ modified: 2026-06-24
 date: 2025-07-29
 ---
 
-Compaction summarizes a long [Claude Code](https://code.claude.com/docs/en/overview)
-session so work can continue with less context. It is useful, but it is also a
-compression step. Details can be lost.
+When a [Claude Code](https://code.claude.com/docs/en/overview) session gets long
+enough that nobody can remember which decision mattered, compaction starts to
+look attractive. It summarizes the session so work can continue with less
+context. That helps, but it is still compression. Details can be lost.
 
 ## What to Preserve Before Compacting
 

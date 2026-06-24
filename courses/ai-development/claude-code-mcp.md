@@ -7,9 +7,10 @@ modified: 2026-06-24
 date: 2025-07-29
 ---
 
-[Claude Code MCP](https://code.claude.com/docs/en/mcp) connects Claude to
-external tools and data. Use it when the agent needs authoritative context or
-must interact with another system through a structured interface.
+[Claude Code](https://code.claude.com/docs/en/mcp) connects to
+[MCP](https://modelcontextprotocol.io/) servers for external tools and data. Use
+it when the agent needs authoritative context or must interact with another
+system through a structured interface.
 
 ## Add and Inspect Servers
 
@@ -34,9 +35,9 @@ is part of the repository workflow. Use user scope for personal tools.
 
 ## Prefer HTTP for New Remote Servers
 
-Claude Code supports `stdio`, HTTP, WebSocket, and SSE transports. For new remote
-servers, prefer HTTP where possible. SSE remains supported for compatibility, but
-the current documentation marks it as deprecated.
+Claude Code supports `stdio`, HTTP, and SSE transports. For new remote servers,
+prefer HTTP where possible. SSE remains supported for compatibility, but the
+current documentation marks it as deprecated.
 
 ## Permissions
 

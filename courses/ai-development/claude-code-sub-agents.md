@@ -11,6 +11,9 @@ date: 2025-07-29
 with their own context, tools, model, permissions, and optional memory. They are
 useful when one part of the task can be isolated from the main conversation.
 
+I use them when isolation makes the main thread simpler, not when I want the task
+to look more advanced than it is.
+
 ## Built-In Agents
 
 Claude Code includes built-in agents such as Explore, Plan, and

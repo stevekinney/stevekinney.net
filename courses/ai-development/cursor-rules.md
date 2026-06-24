@@ -11,6 +11,9 @@ date: 2025-07-29
 Cursor's agent. They are the right place for behavior that should apply before a
 specific prompt exists.
 
+I add rules when Cursor makes the same mistake twice. The first time is a prompt
+problem. The second time is a repository problem.
+
 ## Rule Types
 
 Cursor supports four practical instruction sources:

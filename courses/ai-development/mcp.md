@@ -39,9 +39,10 @@ marks SSE as deprecated.
 
 ## Authentication
 
-Remote MCP servers can use OAuth. That makes the security model more like a
-first-party application integration than a local editor extension. Review the
-scopes, callback URL, and token storage before enabling a server for a team.
+Remote MCP servers can use [OAuth](https://oauth.net/2/). That makes the
+security model more like a first-party application integration than a local
+editor extension. Review the scopes, callback URL, and token storage before
+enabling a server for a team.
 
 Local servers can also leak secrets through environment variables, logs, and tool
 arguments. "It runs on my machine" is not a security review.

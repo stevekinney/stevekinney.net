@@ -18,7 +18,8 @@ Cursor can draw from several places:
 - Open files, selected code, and recently edited files.
 - Mentioned files, folders, symbols, images, and documentation.
 - Semantic repository search.
-- Project Rules, User Rules, Team Rules, and `AGENTS.md`.
+- Project Rules, User Rules, Team Rules, and
+  [`AGENTS.md`](https://agents.md/).
 - Skills in `.cursor/skills`, `.agents/skills`, `.claude/skills`, or
   `.codex/skills`.
 - Memories that capture reusable preferences.

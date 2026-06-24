@@ -7,6 +7,9 @@ modified: 2026-06-24
 date: 2025-07-29
 ---
 
+The first time an agent runs the wrong shell command confidently, you learn why
+terminal output needs to be evidence, not vibes.
+
 [Claude Code](https://code.claude.com/docs/en/overview) can run shell commands,
 and users can run bash commands inside a session. As of Claude Code 2.1.186,
 commands entered with `!` trigger a Claude response by default unless

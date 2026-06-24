@@ -33,7 +33,7 @@ agent --continue
 
 ## Print Mode
 
-Print mode runs a prompt and exits:
+[Print mode](https://cursor.com/docs/cli/headless) runs a prompt and exits:
 
 ```bash
 agent -p "Summarize the staged diff and list test gaps."

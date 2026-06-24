@@ -39,8 +39,9 @@ If it grows steps, examples, or tool policy, move it to a skill.
 ## Built-In Skills
 
 Claude Code ships bundled skills such as code review, batching, debugging, loops,
-and Claude API work. Use those before writing your own version. A custom skill is
-worth it when the repository has local conventions the bundled skill cannot know.
+and [Claude API](https://docs.anthropic.com/en/api/overview) work. Use those
+before writing your own version. A custom skill is worth it when the repository
+has local conventions the bundled skill cannot know.
 
 ## Migration Pattern
 

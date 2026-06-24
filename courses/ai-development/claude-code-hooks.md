@@ -7,9 +7,11 @@ modified: 2026-06-24
 date: 2025-07-29
 ---
 
-[Claude Code hooks](https://code.claude.com/docs/en/hooks) let you run command,
-HTTP, LLM prompt, or agent hooks around the session lifecycle. Hooks are powerful
-because they can influence tool use and decisions. That also makes them risky.
+I reach for [Claude Code hooks](https://code.claude.com/docs/en/hooks) when I've
+told an agent the same safety rule twice and I want the repository to enforce it
+the third time. Hooks let you run command, HTTP, LLM prompt, or agent hooks
+around the session lifecycle. They are powerful because they can influence tool
+use and decisions. That also makes them risky.
 
 ## Common Events
 
