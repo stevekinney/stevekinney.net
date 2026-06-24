@@ -1,32 +1,35 @@
 ---
-modified: 2026-03-17
 title: Developing with AI Tools
-layout: page
 description: >-
-  Set up a practical AI-assisted development workflow with Cursor and Claude
-  Code—covering context management, custom commands, hooks, MCP servers, and
-  model selection.
+  Learn practical workflows for Cursor, Claude Code, MCP, and agentic software
+  development with current installation, context, permission, and review
+  guidance.
+modified: 2026-06-23
 date: 2025-07-30
 ---
 
-This course covers all the things that I have learned about using AI-powered tools like [Cursor](https://cursor.com) and [Claude Code](https://www.anthropic.com/claude-code) to write software. Since this kind of stuff can go out of date quickly, I try to focus on the battle-tested approaches that have worked for decades: thinking things through before you jump into the code, maintaining good Git discipline so you can revert back to a known good state whenever things go off the rails, testing, linting code quality, and more.
+This course is about using agentic development tools without handing them the
+steering wheel by accident. The current core tools are
+[Cursor](https://cursor.com/) and
+[Claude Code](https://code.claude.com/docs/en/overview). Both can edit files, run
+commands, call MCP servers, create branches, and review changes. That power is
+the point. It is also why the workflow needs structure.
 
-We also spend a decent amount of time accidentally learning how large language models work and how to effectively manage context.
+The course baseline was refreshed on June 23, 2026 against official Cursor and
+Claude Code documentation and changelogs. Exact model menus, pricing, and version
+numbers will continue to change, so model-specific claims are dated or phrased as
+volatile.
 
-And, of course, we'll actually cover the tools themselves. You'll learn to use advanced AI coding assistants like Claude Code and Cursor, understand the Model Context Protocol (MCP) for extending AI capabilities, and master patterns that ensure consistent, high-quality results.
+The durable lessons are:
 
-> [!NOTE] This is designed to be a companion.
-> These are my notes for my course for [Frontend Masters](https://frontendmasters.com/?utm_source=kinney&utm_medium=social&code=kinney) and are designed to be supplementary to that course. If they're helpful to you outside of the course, then that's an added bonus. There is also plenty of content that I won't get to in the course. So, these notes serve as a way to assuage my guilt about the very practical trade-offs that come from the fact that you can only fit so much stuff into a single day.
+- Give the agent the files, rules, and verification commands that define
+  correctness.
+- Use rules for always-on constraints and skills for repeatable workflows.
+- Keep permissions explicit, especially for shell commands, MCP tools, cloud
+  agents, and automation.
+- Review diffs and run the quality gates yourself before shipping.
+- Persist durable knowledge in the repository, not in a chat transcript.
 
-## Resources and References
-
-- [Basic React, TypeScript, and Tailwind Template](https://github.com/stevekinney/basic-template)
-- [Model Context Protocol Overview](https://modelcontextprotocol.io/overview)
-- [Repomix](https://repomix.com/) - Tool for preparing repository content for AI analysis
-- [Extended Thinking Mode (Anthropic)](https://www.anthropic.com/news/visible-extended-thinking) - Documentation on Claude's thinking capabilities
-- [cursor.directory](https://cursor.directory) - Community examples for Cursor rules
-- [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) - Collection of Cursor rules examples
-- [Crystal](https://github.com/stravu/crystal): A tool for managing Git worktrees for Claude Code.
-- [Claude Code Sub-Agents Collection](https://github.com/augmnt/agents)
-- [Awesome Claude Prompts](https://github.com/langgptai/awesome-claude-prompts)
-- [Awesome Claude Code](https://github.com/hesreallyhim/awesome-claude-code?tab=readme-ov-file)
+You should finish this course with a working mental model for when to use inline
+edits, chat, local agents, cloud agents, subagents, hooks, automations, MCP, and
+continuous integration integrations.
