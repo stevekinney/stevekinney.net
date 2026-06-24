@@ -25,12 +25,16 @@ are learning. The agent workflow should be.
 
 After installation, check these settings before you hand it a real repository:
 
-- Enable **Privacy Mode** if the repository contains proprietary code.
-- Decide whether model requests can use premium or Max Mode models.
+- Enable
+  [**Privacy Mode**](https://cursor.com/help/security-and-privacy/privacy) if the
+  repository contains proprietary code.
+- Decide whether model requests can use premium or
+  [Max Mode](https://cursor.com/docs/models-and-pricing) models.
 - Add User Rules only for preferences that should follow you across every
   repository.
 - Keep repository-specific rules in `.cursor/rules/*.mdc`.
-- Configure trusted MCP servers in `.cursor/mcp.json` or `~/.cursor/mcp.json`.
+- Configure trusted [MCP](https://modelcontextprotocol.io/) servers in
+  `.cursor/mcp.json` or `~/.cursor/mcp.json`.
 
 The rule of thumb is simple: personal defaults go in user settings, repository
 behavior goes in the repository, and external tools should be explicit enough
@@ -85,9 +89,9 @@ Add skills only when a workflow needs more structure than a rule can provide:
       SKILL.md
 ```
 
-If the repository already has `AGENTS.md`, Cursor will read it as an instruction
-source. I still prefer putting Cursor-specific behavior in Cursor files so the
-reader can tell which tool owns which instruction.
+If the repository already has [`AGENTS.md`](https://agents.md/), Cursor will read
+it as an instruction source. I still prefer putting Cursor-specific behavior in
+Cursor files so the reader can tell which tool owns which instruction.
 
 ## Verification Checklist
 

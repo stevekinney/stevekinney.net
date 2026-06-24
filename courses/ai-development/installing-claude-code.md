@@ -33,7 +33,9 @@ reason to prefer it over package-manager installs for most developers.
 
 ## Package Managers
 
-Homebrew and WinGet are supported alternatives:
+[Homebrew](https://brew.sh/) and
+[WinGet](https://learn.microsoft.com/windows/package-manager/winget/) are
+supported alternatives:
 
 ```bash
 brew install --cask claude-code

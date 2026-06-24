@@ -42,9 +42,10 @@ For sensitive repositories, decide explicitly:
 
 Some models or providers can have retention behavior that differs from the
 default privacy posture. Cursor's enterprise controls can require approval before
-using models with retention exceptions. As of June 23, 2026, Claude Fable 5 is
-called out in Cursor documentation as requiring approval in contexts where model
-retention matters.
+using models with retention exceptions. As of June 23, 2026,
+[Claude Fable 5](https://cursor.com/docs/models-and-pricing) is called out in
+Cursor documentation as requiring approval in contexts where model retention
+matters.
 
 Do not write a team rule that blindly selects a model for every task. Write a
 governance rule that names who can approve retention exceptions.
