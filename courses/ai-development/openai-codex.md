@@ -3,7 +3,7 @@ title: Understanding OpenAI Codex for Code Generation
 description: >-
   Explore OpenAI Codex's AI-powered code generation capabilities and autonomous
   software engineering features.
-modified: 2026-03-17
+modified: 2026-06-24
 date: 2025-07-29
 ---
 
@@ -59,7 +59,7 @@ Codex is engineered to handle a diverse range of tasks, including:
 ## Workflow and Interaction
 
 - Developers access Codex through a dedicated section in the ChatGPT sidebar. They connect a GitHub repository or organization, and Codex filters repositories they have access to.
-- Tasks can be assigned by typing a prompt and initiating "Code" for file mutations and patches, or "Ask" for codebase questions. Codex supports **parallel processing**, allowing multiple tasks to run simultaneously. Power users can comfortably run up to **60 concurrent instances per hour** during the research preview.
+- Tasks can be assigned by typing a prompt and initiating "Code" for file mutations and patches, or "Ask" for codebase questions. Codex supports **parallel processing**, allowing multiple tasks to run simultaneously. Older course recordings mentioned research-preview concurrency limits; treat those as historical product context, not current guidance.
 - Codex provides **verifiable evidence of its actions** through citations of terminal logs and test outputs. Once a task is completed, it commits its changes within its environment and allows users to open a GitHub pull request or integrate changes locally.
 - **Guidance via AGENTS.md**: Developers can guide Codex's behavior using `AGENTS.md` files within the repository. These files serve as a communication channel, informing Codex how to navigate the codebase, which commands to run for testing, and how to adhere to project coding standards. Instructions in `AGENTS.md` take precedence based on nesting depth, though direct user prompts can override them.
 - **Prompting Habits**: Effective prompts are clear and detailed, similar to assigning work to a junior engineer, focusing on clear goals, success criteria, and testing instructions. Providing existing tests is encouraged, as Codex optimizes for passing them. It's recommended to chunk work into many narrow tasks for parallelism.

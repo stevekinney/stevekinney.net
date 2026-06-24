@@ -29,12 +29,36 @@ title = "Cursor Rules"
 href = "cursor-rules.md"
 
 [[section.item]]
-title = "Notepads"
+title = "Cursor Skills"
+href = "cursor-skills.md"
+
+[[section.item]]
+title = "Cursor Subagents"
+href = "cursor-subagents.md"
+
+[[section.item]]
+title = "Cursor Hooks"
+href = "cursor-hooks.md"
+
+[[section.item]]
+title = "Cursor Command Line Interface"
+href = "cursor-cli.md"
+
+[[section.item]]
+title = "Notepads Migration"
 href = "cursor-notepads.md"
 
 [[section.item]]
-title = "Background Agents"
+title = "Cloud Agents"
 href = "cursor-background-agents.md"
+
+[[section.item]]
+title = "Cursor Automations"
+href = "cursor-automations.md"
+
+[[section.item]]
+title = "Bugbot and Security Review"
+href = "cursor-bugbot-and-security-review.md"
 
 [[section.item]]
 title = "Cursor Checkpoints"
@@ -48,7 +72,7 @@ title = "Model Context Protocol"
 href = "mcp.md"
 
 [[section.item]]
-title = "Some MCP Servers"
+title = "MCP in Claude Code and Cursor"
 href = "mcp-for-claude-code-and-cursor.md"
 
 [[section]]
@@ -91,11 +115,11 @@ title = "Plan Mode"
 href = "claude-code-plan-mode.md"
 
 [[section.item]]
-title = "Sub-Agents"
+title = "Subagents"
 href = "claude-code-sub-agents.md"
 
 [[section.item]]
-title = "Sub-Agent Anti-Patterns"
+title = "Subagent Anti-Patterns"
 href = "subagent-anti-patterns.md"
 
 [[section.item]]
@@ -111,7 +135,7 @@ title = "Claude Code's Permission System"
 href = "claude-code-permissions.md"
 
 [[section.item]]
-title = "Claude Code Commands"
+title = "Claude Code Commands and Skills"
 href = "claude-code-commands.md"
 
 [[section.item]]
@@ -165,5 +189,5 @@ title = "Cursor Environment Configuration"
 href = "cursor-environment-configuration.md"
 
 [[section.item]]
-title = "Cursor Ghost Mode"
+title = "Cursor Privacy Mode"
 href = "cursor-ghost-mode.md"

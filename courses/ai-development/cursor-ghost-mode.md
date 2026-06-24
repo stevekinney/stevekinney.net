@@ -1,52 +1,66 @@
 ---
-title: Cursor Ghost Mode for Maximum Privacy
+title: Cursor Privacy Mode and Data Governance
 description: >-
-  Enable Cursor's Ghost Mode to ensure zero data leaves your machine while using
-  AI coding features.
-modified: 2026-03-17
+  Replace older Ghost Mode language with Cursor Privacy Mode, indexing behavior,
+  Cloud Agent storage, and model-retention governance.
+modified: 2026-06-24
 date: 2025-07-29
 ---
 
-Ghost mode is a stringent privacy feature in Cursor that ensures **zero data leaves your local machine**, operating as a "Local / No-Storage Mode".
+Older Cursor material sometimes referred to "Ghost Mode." The current product
+language is [Privacy Mode](https://cursor.com/help/security-and-privacy/privacy).
+Use the current term when documenting security and governance, but do not treat
+old Ghost Mode claims as automatically equivalent to Privacy Mode. Re-check the
+actual data path and retention guarantees instead of assuming a local-only
+posture.
 
-## Core Functionality
+## What Privacy Mode Means
 
-- When activated, **every chat message, code snippet, agent diff, telemetry ping, and trace that would typically go to Cursor's backend is intercepted locally and discarded**.
-- Minimal headers, like `x-ghost-mode=true`, are sent to the server, but **no payload containing your code or prompts is persisted or used for model training by Cursor**.
-- Your code and prompts are sent **directly to the Large Language Model (LLM) provider** (e.g., OpenAI), subject to that provider's data retention policies (e.g., typically a 30-day retention window), but Cursor itself does not store this data.
+When Privacy Mode is enabled, Cursor says your code is not used to train Cursor
+or third-party models. That is the central promise. It does not mean no data ever
+leaves your machine.
 
-## How it Works Under the Hood
+Model requests still need the prompt and relevant code context. Repository
+indexing can store embeddings, obfuscated paths, and line-number metadata so
+Cursor can search the codebase without storing raw code. The practical security
+question is not "local or remote?" It is "what data is sent, stored, retained,
+and governed?"
 
-- The Cursor client disables internal features that rely on server-side state, such as telemetry, chat storage, and memory/index syncing.
-- This strict isolation means that **cloud-dependent conveniences are unavailable**, including background agents and cloud snapshots, as they require remote server-side state to function.
+## Cloud Agents Change the Storage Story
 
-## Why and When to Use Ghost Mode
+Cloud Agents require a remote execution environment. That means Cursor
+temporarily stores enough repository data to clone, build, test, and operate in
+that environment. The storage should be treated as part of your vendor risk
+review.
 
-- **Regulated and Ultra-Confidential Codebases**: It's the safest way to use Cursor for projects with sensitive intellectual property (e.g., health, defense), ensuring no off-device storage and potentially meeting "on-prem only" policies.
-- **Corporate Security Audits**: Security teams can use it to verify that Cursor's traffic only hits model endpoints, as it guarantees local data processing.
-- **Air-gapped Development**: Ghost mode supports fully offline development, especially when combined with local LLMs (like those served by Ollama/Llama.cpp) or your own OpenAI proxy, ensuring no external network calls for data.
-- **Paranoid Side Projects**: If you want absolute control over your data, using Ghost mode means that deleting your local repository erases all traces of your work and chat history within Cursor, as nothing was ever logged remotely.
+For sensitive repositories, decide explicitly:
 
-## Feature Trade-offs
+- Whether Cloud Agents are allowed.
+- Which repositories they can access.
+- Which secrets can be mounted.
+- Which MCP servers can be used.
+- Which model providers and retention policies are allowed.
 
-- **Features that _work_ in Ghost mode**: Inline editing, refactoring, AI chat, local Composer and Notepads, locally run Model Context Protocol (MCP) tools, keyboard shortcuts, and CLI operations.
-- **Features that are _disabled_ or _degraded_**: Background Agents (which require cloud Virtual Machines), memory synchronization, team knowledge sharing, cloud environment snapshots, Bugbot Pull Request (PR) reviews, and cross-device chat history.
+## Model Retention Exceptions
 
-## Enabling and Verifying Ghost Mode
+Some models or providers can have retention behavior that differs from the
+default privacy posture. Cursor's enterprise controls can require approval before
+using models with retention exceptions. As of June 23, 2026,
+[Claude Fable 5](https://cursor.com/docs/models-and-pricing) is called out in
+Cursor documentation as requiring approval in contexts where model retention
+matters.
 
-- You can toggle Ghost mode in Cursor's settings under `Settings → Advanced → Local / Ghost Mode` (in older builds, it might be labeled `Privacy Mode (legacy no-storage)`).
-- A **restart of Cursor is required** for the new sandbox policy to take effect.
-- To verify, you can inspect network traffic (e.g., using DevTools) to confirm that every HTTPS request includes the `x-ghost-mode: true` header and has empty bodies for sensitive data.
-- Attempting to use a cloud action (like starting a background agent) should result in a "Feature unavailable in Ghost mode" notification, confirming that the lockdown is active.
+Do not write a team rule that blindly selects a model for every task. Write a
+governance rule that names who can approve retention exceptions.
 
-## Distinction from "Privacy Mode"
+## Course-Level Guidance
 
-- Cursor also has a default "Privacy Mode". While this mode prevents your code from being used for model training, it still **retains some data necessary for features** like memories, team sharing, and agent logs on Cursor's servers.
-- **Ghost mode is the most restrictive setting**, ensuring _zero_ data retention by Cursor and keeping all data on-device.
-- This distinction is important because some sources mention that "Privacy Mode" needs to be disabled for background agents. This might refer to Cursor's default Privacy Mode, which, while more private than not, still involves some data leaving your machine, making it incompatible with the strict "nothing leaves the laptop" policy of Ghost mode. Sources indicate that background agents _are_ available in the broader "Privacy Mode" context where data is not used for training, but still processed remotely. The key takeaway is that **Ghost mode represents the highest level of local data isolation**.
+For most teams, the working policy is:
 
-## Best Practices and Gotchas
+- Enable Privacy Mode.
+- Keep secrets out of prompts and rules.
+- Use repository-owned rules and skills for auditable instruction.
+- Require explicit approval for Cloud Agents on sensitive repositories.
+- Review MCP servers like production integrations, not editor plugins.
 
-- **Commit Often**: Since Ghost mode doesn't retain snapshots, it's crucial to commit your work frequently to version control (like Git) to avoid losing chat diffs or progress if your local disk encounters issues.
-- **Use Rules, Not Memories**: Rules, which reside in your repository, are suitable for persistent guidance, as Memories do not sync in Ghost mode.
-- **Budget Tokens**: Without Cursor's cloud caching, identical prompts will re-query the LLM every time, which can lead to higher API costs for premium models.
+Security is a workflow. A toggle helps, but it is not the workflow.

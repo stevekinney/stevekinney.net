@@ -1,37 +1,53 @@
 ---
-title: Claude Code Compaction
+title: Compacting Claude Code Sessions
 description: >-
-  Manage context windows and reduce token costs by compacting conversation
-  history into focused summaries while preserving key information
-modified: 2026-03-17
+  Use Claude Code compaction deliberately, preserve task state in files, and
+  avoid relying on long chat history for correctness.
+modified: 2026-06-24
 date: 2025-07-29
 ---
 
-Compacting in Claude Code is a **feature designed to manage the conversation's context window**, which is the amount of information the AI agent can process at one time.
+When a [Claude Code](https://code.claude.com/docs/en/overview) session gets long
+enough that nobody can remember which decision mattered, compaction starts to
+look attractive. It summarizes the session so work can continue with less
+context. That helps, but it is still compression. Details can be lost.
 
-As your conversation with Claude Code grows longer and longer, more data accumulates in the context window. Since every subsequent message you send includes the entire previous context, this can lead to increasing token costs and potential degradation of response quality as the model tries to keep track of a vast amount of information.
+## What to Preserve Before Compacting
 
-## Why It Even Exists
+Before a long task compacts, make sure the important state is in the filesystem:
 
-The primary purpose of compacting is to **reduce token usage** and prevent the context window from becoming overwhelmed. It helps maintain focus and ensures that the agent doesn't "forget" initial instructions or deviate from the plan during long or complex tasks.
+- The plan is written in a file or reflected in tests.
+- The branch diff is coherent.
+- Verification commands are known.
+- Blockers are documented with command output.
+- Decisions are captured in `CLAUDE.md`, rules, skills, or project
+  documentation when they need to persist.
 
-When you use the `/compact` command, Claude Code **takes your entire current conversation history and creates a summary of it**. It then starts a new chat session with this summary preloaded as the new context. This allows the agent to retain important information and key decisions from the previous conversation without having to carry forward every single message.
+If a future session needs to remember a subtle decision, put that decision in a
+file before compaction.
 
-## When to Use It
+## Manual Compaction
 
-- **Manual Trigger**: You can manually run `/compact` at any time, especially when you are continually working through a problem and want a smaller, more focused context for the model. It's recommended to do this when you finish a task to avoid unrelated tasks piling up in the same chat.
-- **Automatic Compaction**: Claude Code has an auto-compact feature that triggers when the context window reaches approximately **95% capacity** (or 25% remaining). This is a built-in mechanism to prevent hitting the context limit and causing the system to "break" or "go off the rails". However, users often advise against waiting for auto-compact, as it can sometimes lead to the agent losing important context and spiraling out of control.
+Use compaction when the session is still on the same goal but the context is
+getting noisy. After compaction, ask Claude to restate:
 
-## Benefits
+```text
+Restate the goal, files changed, remaining tasks, and verification commands.
+Do not edit files.
+```
 
-- **Reduced Token Usage and Cost**: By summarizing lengthy conversations, compacting directly reduces the number of tokens sent with each new message, leading to **lower operational costs**.
-- **Improved Focus and Stability**: It helps Claude Code stay on track, preventing it from getting lost in details or deviating from objectives in long conversations. This makes the overall development experience more stable.
-- **Context Preservation**: Unlike clearing the context completely, compacting preserves the essential nuances and key information, allowing you to pick up where you left off without significant disruption.
+Compare that answer with `git diff` and the task plan before continuing.
 
-You can provide specific instructions to customize what Claude summarizes when using `/compact`, such as summarizing only to-do items, the last conversation, or limiting the summary to a certain word count.
+## Hooks Around Compaction
 
-## Compared to using `/clear`
+Claude Code exposes hook events around compaction. Use them sparingly for
+auditing or preserving status, not for hiding critical project state in an
+invisible automation.
 
-Compacting is distinct from the `/clear` command. While `/clear` completely wipes out the chat history and starts a brand new conversation from scratch, `/compact` summarizes the conversation and preloads that summary as the new context. Use `/clear` when you want a completely fresh start, and `/compact` when you need to retain key information from a previous discussion.
+## Large Context Is Not a Replacement
 
-Auto-compacting can sometimes take a while, so manual compacting when you have time is suggested.
+Large-context model aliases such as
+[`sonnet[1m]`](https://code.claude.com/docs/en/model-config) and
+[`opus[1m]`](https://code.claude.com/docs/en/model-config) can reduce the need to
+compact, but they do not remove the need for clean task state. A million tokens
+of unclear conversation is still unclear.

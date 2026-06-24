@@ -1,52 +1,66 @@
 ---
-title: Using Cursor Notepads for Context Management
+title: Cursor Notepads Migration
 description: >-
-  Create reusable context bundles with Cursor Notepads to streamline prompts and
-  improve AI responses.
-modified: 2026-03-17
+  Replace deprecated Cursor Notepads with Rules, Skills, Memories, and ordinary
+  Markdown references while keeping old lesson links valid.
+modified: 2026-06-24
 date: 2025-07-29
 ---
 
-Cursor Notepads are essentially **drop-in Markdown pads that can bundle prompts, documentation links, file references, and rules**. They extend the capabilities of `.cursor/rules` files by offering reusable contexts for your development process. Notepads accept rich text and can include `@file` mentions, allowing you to pin code or documents directly within the pad. They are accessible by their name using the `@` syntax (e.g., `@NotepadName`).
+[Cursor Notepads](https://forum.cursor.com/t/deprecating-notepads-in-cursor/138305)
+were deprecated by Cursor in 2025. Do not introduce Notepads into a current
+workflow. If you find one in an older course, team process, or personal setup,
+migrate the content into a durable source that matches how the information is
+used.
 
-![Cursor Notepads](assets/cursor-notepad.png)
+This page keeps the old route alive because external links may still point here.
+The current lesson is migration, not usage.
 
-## Why Are Notepads Useful?
+## Where Notepad Content Should Go Now
 
-Notepads offer several significant benefits for developers using Cursor:
+Use this mapping:
 
-- **One-Click Context Reuse**: Instead of manually tagging multiple files for every session, you can tuck them into a Notepad once and simply reference the Notepad, this can be _huge_ time-saver.
-- **Cleaner Mental RAM**: They help keep recurring prompts and complex instructions organized within a tidy module, rather than cluttering your chat history.
-- **Agent Mode Booster**: Cursor's Agent mode respects Notepads, allowing your autonomous refactoring tasks to automatically inherit the standards and context defined within them.
-- **Team Knowledge Hub**: Notepads can function as a "personal dev toolbox" for reusable code snippets, and they can be invaluable for onboarding new team members by providing architectural overviews, style guides, and relevant links in one place.
-- **Dynamic Boilerplate and Templates**: You can create templates for common code patterns, store project-specific scaffolding rules, and ensure consistent code structure across your project. They can also drive Standard Operating Procedures (SOPs) and dynamic boilerplate generation without manual editing.
-- **Centralized Documentation**: They are useful for storing architecture documentation (e.g., frontend specifications, backend design patterns, data models) and development guidelines (coding standards, project-specific rules, best practices, team conventions).
-- **Saving Suggestions and Research**: Notepads can be used to save AI-suggested improvements or research findings, especially when web search results might be outdated. You can also embed `@docs` within notes to create specialized prompts for third-party libraries.
+- Repeated behavioral guidance becomes a Project Rule in `.cursor/rules/*.mdc`.
+- Multi-step workflows become a Skill in `.cursor/skills/<name>/SKILL.md`.
+- Personal preferences that should not live in the repository become Cursor
+  Memories or User Rules.
+- Long explanations, architecture notes, and onboarding material become ordinary
+  Markdown files in the repository.
+- Team-wide policy belongs in Team Rules or repository-owned documentation.
 
-## How To Use Notepads
+The old habit was "bundle whatever I need later." The current habit should be
+"put the information where ownership and review are obvious."
 
-To get started with Cursor Notepads:
+## Migration Example
 
-1. **Create a New Notepad** In the sidebar, locate the "Notepads" section and click the **"+" button**. Give your Notepad a meaningful name.
-2. **Add Content** Populate your Notepad with Markdown text, add `@file` or `@folder` references, include web links, or attach images to provide context.
-3. **Reference in Chat/Composer** To use the content of a Notepad, simply type the `@` symbol followed by the Notepad's name in any chat or Composer prompt (e.g., `@API_Guide`). Cursor will then inject the Notepad's content into the AI's context for that query.
-4. **Synchronization** Notepads automatically sync across your local Cursor workspaces.
+An old Notepad might contain this:
 
-## Best Practices for Using Notepads
+```text
+When editing API routes, use zod validation, return typed errors, update tests,
+and run bun test:unit.
+```
 
-To maximize the effectiveness of Notepads:
+That should become a scoped project rule:
 
-- **Use Descriptive Names** Name your Notepads clearly, like "Auth_Rules" or "API_Guidelines," rather than vague personal notes, to make them easy to find and understand.
-- **Keep Content Atomic** Since Notepads are not (yet) directly editable by the AI, it's best to split large documents into smaller, themed Notepads. This prevents "scroll hell" and keeps context focused.
-- **Version Critical Information in Git** While Notepads are convenient, they are not stored directly in your Git repository. For information requiring version history or team-wide sharing, consider mirroring it in standard Markdown files within your codebase.
-- **Curate and Lint Content** Treat Notepad content like code: use clear headings, bullet points, and avoid unnecessary fluff. Junk context can inflate your token usage and dilute the AI's focus.
-- **Bundle Repeated Prompts** Store frequently used prompts (e.g., "write exhaustive unit tests") in a Notepad. This can lead to faster workflows and reduce AI hallucinations.
-- **Combine with `.cursor/rules`** Use project-level `.cursor/rules` files for always-on constraints (e.g., "always use TypeScript") and Notepads for "sometimes-on" or dynamic context (e.g., "legacy Stripe migration details").
-- **Regularly Audit** Schedule periodic reviews of your Notepads to remove stale links or outdated rules, preventing "context rot".
-- **Avoid Sensitive Data** Do not store temporary notes, version control information, or sensitive credentials directly in Notepads.
+```md
+---
+description: API route testing and validation expectations.
+globs:
+  - 'src/routes/api/**/*.ts'
+alwaysApply: false
+---
 
-## Current Limitations and Caveats
+When editing API routes, validate inputs at the boundary, return the existing
+typed error shape, update the closest regression test, and run the targeted unit
+test command before reporting completion.
+```
 
-- **No In-Place AI Editing**: The AI cannot directly rewrite or modify the content of Notepads.
-- **Token Cost**: Larger Notepads can still contribute to higher token usage, impacting cost and latency.
-- **Storage and Sharing**: Notepads are stored in local SQLite databases (e.g., `AppData/Roaming/Cursor/User/workspaceStorage/{some_uuid}/state.vscdb` on Windows). This makes sharing them across different machines or with teams cumbersome, as they are not version-controlled by Git and lack built-in import/export functionality.
+If the Notepad also included a release checklist, move that checklist into a
+skill instead of making the rule longer.
+
+## What Not to Migrate
+
+Do not preserve stale Notepad content just because it used to exist. Delete
+temporary prompts, old model recommendations, copied documentation, and notes
+that no longer match the repository. Migrating bad context just gives it a new
+folder.

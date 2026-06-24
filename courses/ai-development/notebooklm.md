@@ -3,7 +3,7 @@ title: Using NotebookLM for AI Development
 description: >-
   Leverage Google's NotebookLM for research, documentation analysis, and
   knowledge synthesis in AI projects.
-modified: 2026-03-17
+modified: 2026-06-24
 date: 2025-07-29
 ---
 
@@ -61,7 +61,8 @@ For engineering work, NotebookLM shines as a “source-of-truth synthesizer” f
 ## Integrating with Cursor and Claude Code
 
 - **Create a “brief” for agents:** Use NotebookLM to produce a concise system overview (constraints, conventions, key files) and paste it into `.cursor/rules` or `CLAUDE.md`.
-- **Notepads/commands:** Turn NotebookLM's checklists and procedures into Cursor Notepads or Claude slash commands for repeatable workflows.
+- **Rules and skills:** Turn NotebookLM's checklists and procedures into Cursor Rules,
+  Cursor Skills, or Claude Code Skills for repeatable workflows.
 - **Context handoff:** When asking an AI coding tool to implement changes, include the brief plus links back to exported NotebookLM docs to keep work grounded.
 
 > [!NOTE] Grounding improves reliability.

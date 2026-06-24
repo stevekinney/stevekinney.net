@@ -1,94 +1,66 @@
 ---
-title: Plan-Implement-Verify Pattern
+title: The Plan → Implement → Verify Prompt Pattern
 description: >-
-  Structure AI coding tasks using the Plan-Implement-Verify pattern for better
-  results and fewer errors.
-modified: 2026-03-17
+  Structure agentic development work as a bounded loop with explicit plans,
+  implementation scope, verification commands, and failure signals.
+modified: 2026-06-24
 date: 2025-07-29
 ---
 
-When you ask AI to write code immediately, it makes assumptions—often wrong ones. The **Plan → Implement → Verify** pattern forces AI to:
+The simplest reliable agent workflow is still:
 
-1. **Think through requirements** before writing code
-2. **Identify dependencies** and potential issues early
-3. **Create testable success criteria** upfront
-4. **Build incrementally** with verification at each step
+1. Plan.
+2. Implement.
+3. Verify.
 
-## Phase 1: Plan
+The point is not ceremony. The point is making the agent show its understanding
+before it changes files and making success mechanically checkable afterward.
 
-AI analyzes the request and creates a structured approach:
+## The Pattern
 
-- Breaks down the task into steps
-- Identifies required files and dependencies
-- Considers edge cases and error handling
-- Defines success criteria
+```text
+Goal:
+Add validation for expired invite tokens.
 
-## Phase 2: Implement
+Plan:
+First inspect the token validation path and the closest tests. Summarize the
+smallest implementation path before editing.
 
-AI executes the plan systematically:
+Implement:
+Write the failing regression test first. Then make the smallest production
+change that passes it.
 
-- Follows the planned steps in order
-- Creates/modifies files as specified
-- Implements error handling
-- Writes tests alongside code
+Verify:
+Run bun test:unit -- src/lib/server/invitations.test.ts and bun run lint.
 
-## Phase 3: Verify
-
-AI confirms the implementation works:
-
-- Runs tests to ensure correctness
-- Checks for type errors or linting issues
-- Validates against success criteria
-- Identifies any remaining issues
-
-## Formatting and an Example
-
-It honestly doesn't matter too much, I typically use Markdown checklists because I am lazy, but you can use YAML too if that makes you happier.
-
-```yaml
-Task: Add a health check endpoint to the Express server
-
-Steps:
-  1. Create basic Express server setup
-     - File: src/server.ts
-     - Set up Express app with TypeScript
-     - Configure basic middleware
-
-  2. Create health check route
-     - File: src/routes/health.ts
-     - Implement GET /health endpoint
-     - Return status, timestamp, uptime
-
-  3. Add types for response
-     - File: src/types/health.ts
-     - Define TypeScript interface
-
-  4. Create tests
-     - File: tests/health.test.ts
-     - Test endpoint returns 200
-     - Validate response structure
-
-  5. Update package.json scripts
-     - Add dev script
-     - Add test script
-
-Success Criteria:
-  - GET /health returns 200 status
-  - Response includes: status, timestamp, uptime
-  - TypeScript compiles without errors
-  - Tests pass
+Stop:
+If a command fails for an unrelated reason, stop and report the command, output,
+and likely cause instead of changing unrelated files.
 ```
 
-## What Makes a Good Plan?
+This works in [Cursor](https://cursor.com/) Agent mode, Cursor Cloud Agents,
+[Claude Code](https://code.claude.com/docs/en/overview), and most command line
+agent workflows.
 
-- **Specific files:** Names the exact files to create/modify
-- **Clear sequence:** Steps build on each other logically
-- **Test inclusion:** Tests are part of the plan, not an afterthought
-- **Success criteria:** Measurable outcomes defined
+## Why It Works
 
-Weak plans—on the other hand—have these qualities:
+Planning catches misunderstandings while the cost is still low. Implementation
+keeps the agent inside the task. Verification turns "looks good" into a binary
+check.
 
-- Vague steps like "implement the feature"
-- Missing file locations
-- No consideration of testing
-- Unclear dependencies between steps
+The stop condition matters as much as the success condition. Without it, agents
+will often route around failures by editing adjacent code, weakening tests, or
+claiming partial success.
+
+## When to Skip the Full Pattern
+
+For a tiny inline edit, a full plan is overkill. Use the pattern when the task:
+
+- Touches more than one file.
+- Has security, data, or user-facing risk.
+- Requires tests or generated artifacts.
+- Could be solved in more than one reasonable way.
+- Will run in a cloud, command line, or automated context.
+
+If you cannot name the verification command, you probably do not have a complete
+task yet.

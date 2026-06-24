@@ -1,48 +1,56 @@
 ---
-title: Understanding Cursor Checkpoints for Safe AI Edits
+title: Cursor Checkpoints
 description: >-
-  Learn how Cursor's automatic checkpoints provide a safety net for AI-driven
-  code changes and modifications.
-modified: 2026-03-17
+  Use Cursor checkpoints to inspect, compare, and recover from agent edits
+  without confusing rollback with review.
+modified: 2026-06-24
 date: 2025-07-29
 ---
 
-In Cursor, **checkpoints are automatic snapshots of the Agent's changes to your codebase**. They serve as a **disposable safety net** for AI-driven edits, allowing you to **undo Agent modifications if needed**.
+[Cursor](https://cursor.com) creates checkpoints during agent work. A checkpoint
+is a recoverable snapshot of the workspace state around an agent turn. It gives
+you a practical escape hatch when an agent takes a wrong turn.
 
-## How They Work
+## What Checkpoints Are Good For
 
-- **Automatic Snapshots**: Checkpoints are automatically created by Cursor. Every time the Agent modifies your code, Cursor zips up the pre-change state into a checkpoint. In Agent mode, checkpoints are created before every code edit.
-- **Local and Separate from Git**: Checkpoints are stored locally on your machine, in a hidden directory, and are **separate from your Git history**. This means they won't clutter your commit log with experimental or undone changes.
-- **Agent-Specific Tracking**: Checkpoints **only track changes made by the AI Agent**. Manual edits you make by hand are not captured, so it's important to use Git for those.
-- **Automatic Cleanup**: Checkpoints are kept for the current session and recent history, and are **automatically cleaned up**. This implies they are ephemeral and not intended for long-term version control.
+Use checkpoints to:
 
-## Restoring Checkpoints
+- Compare the current result with an earlier step.
+- Restore a file or workspace state after a bad edit.
+- Understand which prompt caused a change.
+- Recover quickly from an agent loop.
 
-You have a couple of ways to restore to a previous checkpoint:
+They are especially useful during exploratory refactors because you can let the
+agent try a path without committing to it.
 
-- **From the Input Box**: You can click the "Restore Checkpoint" button on previous requests in the chat interface.
-- **From the Message History**: When hovering over a message in the chat, a small "+" button appears, allowing you to click it to restore to that specific point.
-- **Behavior**: Restoring a checkpoint will **reset all files to that point in the conversation**. If you want to continue from that reverted state, you can then write a new message to the AI agent.
+## What Checkpoints Are Not
 
-## Purpose and Advantages
+A checkpoint is not a code review, a test run, or a version control strategy.
+Cursor can restore an earlier state, but it cannot tell you whether the earlier
+state was correct.
 
-- **Safety Net for AI Edits**: Checkpoints provide an "Oh-crap button" for when the AI Agent makes unintended or "overzealous" changes, allowing you to easily roll back. This is crucial because AI can sometimes introduce errors or go "off the rails".
-- **Facilitates Experimentation**: They enable fearless experimentation with AI-driven modifications without risking your main codebase or polluting Git history with temporary changes.
-- **Cost Efficiency (Indirect)**: By allowing you to revert to a previous state, you might avoid re-running prompts that already worked correctly, potentially saving on token costs for regenerating lost work.
-- **Granular Control**: They offer better control and command directives with the AI, especially useful when working with the Composer agent for multi-file changes.
+Keep using [Git](https://git-scm.com/) for durable history:
 
-## Limitations and Considerations
+```bash
+git status --short
+git diff
+bun run lint
+bun run test:unit
+```
 
-- **Not a Replacement for Git**: Checkpoints are **not version control** and should not be used as a substitute for Git for permanent history. Git offers durable, audited history, whereas checkpoints are disposable and for short-term use.
-- **Manual Edits Not Tracked**: As mentioned, any changes you make manually will **not be included in the checkpoints**.
-- **Ephemeral Nature**: Checkpoints are "wiped once they're no longer useful" and vanish after the session. If a folder is renamed, they may be lost.
-- **Potential Token Costs**: While restoring itself doesn't cost, if you need to re-run prompts after restoring, it can still incur API costs.
-- **UI/UX Challenges**: Some users have reported confusion and frustration with the checkpoint restoration UI, noting that its behavior can be unintuitive or "detrimental". The "Restore checkpoint" button may appear to restore to when the question was completed, not started, and getting fine-grained control to revert specific intermediate steps can be awkward. There have been instances where users felt compelled to downgrade Cursor versions due to these UI changes.
-- **Community Solutions**: Due to some of these limitations, some users have created their own checkpoint scripts (e.g., saving project tree diffs) to have more robust local snapshotting capabilities that complement Git.
+Checkpoints help you recover within an agent session. Commits help your team
+understand the project history.
 
-## Best Practices Related to Checkpoints
+## A Practical Pattern
 
-- **Commit Frequently with Git**: Always **commit your work to Git** before initiating any significant agentic task and immediately after a successful change. This creates reliable, documented "safe points" that can be instantly reverted if the agent goes awry.
-- **Restore Early, Restore Often**: If you notice the AI Agent veering off course, **don't wait for a major disaster**. Roll back to a previous checkpoint as soon as you identify a problem to avoid more extensive issues and potentially save costs.
-- **Treat as Scratch Space**: Use checkpoints liberally during exploratory refactoring or proofs-of-concept, treating them as temporary "scratch space" without cluttering your Git branches.
-- **Combine with Rules and Notepads**: Leveraging Cursor Rules and Notepads can help guide the AI more effectively from the outset, potentially reducing the need for frequent rollbacks.
+Before a risky agent task:
+
+1. Start from a clean working tree when possible.
+2. Ask Cursor for a plan before edits.
+3. Let the agent implement one bounded unit.
+4. Inspect the diff.
+5. Run the verification command.
+6. Commit only after the result is understandable without the chat transcript.
+
+If the agent makes a broad, hard-to-review change, roll back to the checkpoint
+and ask for a smaller unit of work.
