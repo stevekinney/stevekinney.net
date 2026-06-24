@@ -11,9 +11,11 @@ The first time an agent runs the wrong shell command confidently, you learn why
 terminal output needs to be evidence, not vibes.
 
 [Claude Code](https://code.claude.com/docs/en/overview) can run shell commands,
-and users can run bash commands inside a session. As of Claude Code 2.1.186,
-commands entered with `!` trigger a Claude response by default unless
-`respondToBashCommands` is set to `false`.
+and users can run bash commands inside a session. As of
+[Claude Code 2.1.186](https://code.claude.com/docs/en/changelog), commands
+entered with `!` trigger a Claude response by default unless
+[`respondToBashCommands`](https://code.claude.com/docs/en/settings) is set to
+`false`.
 
 That makes terminal output part of the conversation. Treat it as evidence.
 
