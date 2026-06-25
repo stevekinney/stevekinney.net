@@ -63,7 +63,7 @@
     "@types/mdast": "^4.0.4",
     "@types/node": "^25.0.3",
     "@types/unist": "^3.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.52.0",
+    "@typescript-eslint/eslint-plugin": "^8.62.0",
     "@typescript-eslint/parser": "^8.52.0",
     "@vercel/blob": "^2.4.0",
     "ajv": "^8.20.0",
