@@ -84,7 +84,7 @@
     "isomorphic-dompurify": "^2.36.0",
     "js-yaml": "^4.2.0",
     "jsdom": "^27.4.0",
-    "lefthook": "^1.13.6",
+    "lefthook": "^2.1.9",
     "mdast-util-from-markdown": "^2.0.2",
     "mdast-util-to-markdown": "^2.1.2",
     "mdsvex": "^0.12.6",
