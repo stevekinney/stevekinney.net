@@ -70,7 +70,7 @@
     "ajv-formats": "^3.0.1",
     "autoprefixer": "^10.4.23",
     "axe-playwright": "^2.2.2",
-    "caniuse-lite": "^1.0.30001797",
+    "caniuse-lite": "^1.0.30001799",
     "change-case": "^5.4.4",
     "clsx": "^2.1.1",
     "dompurify": "^3.4.9",
