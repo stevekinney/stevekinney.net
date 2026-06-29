@@ -172,3 +172,47 @@ href = "code-coverage.md"
 [[section.item]]
 title = "Setting Up Continuous Integration"
 href = "continuous-integration.md"
+
+[metadata]
+unlisted = [
+  "accident-counter-solution.md",
+  "accident-counter-with-user-event.md",
+  "advanced-test-configuration.md",
+  "assert-versus-expect.md",
+  "asymmetric-matching-example.md",
+  "authentication-example.md",
+  "auto-mocking.md",
+  "basic-math-exercise-walkthrough.md",
+  "custom-matchers.md",
+  "debugging-vitest-tests.md",
+  "differences-between-jest-and-vitest.md",
+  "filtering-tests.md",
+  "fire-event-events.md",
+  "guess-the-number-example.md",
+  "guessing-game-solution.md",
+  "mocking-best-practices.md",
+  "mocking-dom-methods.md",
+  "mocking-the-file-system.md",
+  "organizing-and-annotating-tests.md",
+  "overriding-object-properties.md",
+  "parallelizing-tests.md",
+  "parameterizing-tests.md",
+  "running-tests-for-related-files.md",
+  "running-tests.md",
+  "strategies-for-testing-conditional-logic.md",
+  "structure-of-a-unit-test.md",
+  "task-list-example.md",
+  "test-context.md",
+  "test-driven-development.md",
+  "test-runners-and-assertion-libraries.md",
+  "testing-a-reducer-solution.md",
+  "testing-asynchronous-errors.md",
+  "testing-for-errors-exercise.md",
+  "testing-library-solution.md",
+  "testing-promises.md",
+  "tic-tac-toe-example.md",
+  "types-of-tests.md",
+  "user-event.md",
+  "vitest-reporters.md",
+  "you-dont-need-perfect-code-coverage.md"
+]

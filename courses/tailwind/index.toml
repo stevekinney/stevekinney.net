@@ -369,3 +369,11 @@ href = "color-mix.md"
 [[section.item]]
 title = "Button Exemplars"
 href = "button-exemplars.md"
+
+[metadata]
+unlisted = [
+  "button-solutions.md",
+  "cva-tailwind.md",
+  "has-solutions.md",
+  "in-utility.md"
+]

@@ -413,3 +413,11 @@ href = "route-53-dns-exercise.md"
 [[section.item.related]]
 title = "Solution"
 href = "route-53-dns-solution.md"
+
+[metadata]
+unlisted = [
+  "automating-deploys-with-aws-cli.md",
+  "full-static-pipeline.md",
+  "static-site-deployment-exercise.md",
+  "static-site-deployment-solution.md"
+]

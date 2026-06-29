@@ -146,3 +146,14 @@ href = "storybook-in-figma.md"
 [[section.item]]
 title = "Figma in Storybook"
 href = "figma-in-storybook.md"
+
+[metadata]
+unlisted = [
+  "add-an-addon.md",
+  "adding-button-sizes-solution.md",
+  "callout-component-solution.md",
+  "color-palette-solution.md",
+  "creating-an-icon-component.md",
+  "parameters.md",
+  "text-area-disabled-play-function-solution.md"
+]

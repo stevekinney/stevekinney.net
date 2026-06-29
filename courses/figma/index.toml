@@ -111,3 +111,13 @@ href = "placeholder-components.md"
 [[section.item]]
 title = "Cropped Grid Components"
 href = "cropped-grid-components.md"
+
+[metadata]
+unlisted = [
+  "adding-a-dark-theme-to-the-button.md",
+  "building-a-checkbox-component.md",
+  "creating-a-button-component.md",
+  "libraries.md",
+  "number-variable-tokens.md",
+  "styles-vs-variables.md"
+]

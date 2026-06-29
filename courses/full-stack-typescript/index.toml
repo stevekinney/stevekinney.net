@@ -226,3 +226,8 @@ href = "type-safe-routes-in-express.md"
 [[section.item]]
 title = "Type Safe Middleware with Express"
 href = "type-safe-middleware-with-express.md"
+
+[metadata]
+unlisted = [
+  "validating-zod-schemas-solution.md"
+]

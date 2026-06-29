@@ -16,6 +16,9 @@ export type CourseContentsSection = {
 
 export type CourseContentsData = {
   section: CourseContentsSection[];
+  metadata?: {
+    unlisted?: string[];
+  };
 };
 
 export type ContentType = 'writing' | 'course' | 'lesson';

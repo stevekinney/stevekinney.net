@@ -256,3 +256,8 @@ href = "codemods-at-scale.md"
 [[section.item]]
 title = "Exercise 9: Strangler Fig & Codemods"
 href = "strangler-fig-and-codemods-exercise.md"
+
+[metadata]
+unlisted = [
+  "design-system-governance-exercise.md"
+]

@@ -224,6 +224,18 @@ export const validateCourseContents = (
 
   const referencedSlugs = new Set<string>();
 
+  for (const unlistedHref of contents.metadata?.unlisted ?? []) {
+    const unlistedSlug = unlistedHref.replace(/\.md$/i, '');
+    referencedSlugs.add(unlistedSlug);
+
+    if (!lessonSlugs.has(unlistedSlug)) {
+      issues.push({
+        file,
+        message: `index.toml lists missing unlisted lesson '${unlistedHref}'.`,
+      });
+    }
+  }
+
   for (const section of contents.section ?? []) {
     for (const item of section.item ?? []) {
       const href = item.href?.replace(/\.md$/i, '');

@@ -138,3 +138,44 @@ href = "performance-budgets-and-automation.md"
 [[section.item]]
 title = "Production Performance Monitoring"
 href = "production-performance-monitoring.md"
+
+[metadata]
+unlisted = [
+  "animation-performance-advanced.md",
+  "animation-performance.md",
+  "apollo-client-optimization.md",
+  "cdn-caching-immutable-assets.md",
+  "flushsync-in-react-dom.md",
+  "gpu-acceleration-patterns.md",
+  "graphql-react-performance.md",
+  "image-and-asset-optimization.md",
+  "image-optimization-advanced.md",
+  "inp-optimization-long-tasks.md",
+  "inp-production-monitoring.md",
+  "memory-leak-detection.md",
+  "memory-management-deep-dive.md",
+  "micro-frontend-performance.md",
+  "offscreen-canvas-webgl.md",
+  "optimizing-server-side-rendering.md",
+  "performance-budgets-and-monitoring.md",
+  "performance-testing-implementation.md",
+  "performance-testing-strategy.md",
+  "priority-hints-resource-loading.md",
+  "react-cache-api.md",
+  "react-compiler-migration-guide.md",
+  "react-server-components-rsc.md",
+  "real-time-data-performance.md",
+  "real-time-scale-strategies.md",
+  "resource-preloading-apis.md",
+  "selective-hydration-react-19.md",
+  "service-worker-strategies.md",
+  "skeleton-screens-perceived-performance.md",
+  "speculation-rules-bfcache.md",
+  "streaming-ssr-optimization.md",
+  "swc-speedy-web-compiler.md",
+  "uselayouteffect-performance.md",
+  "view-transitions-api.md",
+  "web-workers-with-react.md",
+  "webassembly-integration.md",
+  "windowing-and-virtualization.md"
+]

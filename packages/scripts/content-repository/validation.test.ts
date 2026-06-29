@@ -59,6 +59,36 @@ describe('validateCourseContents', () => {
     expect(collect(contents, ['intro', 'setup'])).toEqual([]);
   });
 
+  test('does not warn when an on-disk lesson is explicitly unlisted', () => {
+    const contents: CourseContentsData = {
+      section: [{ item: [{ title: 'Intro', href: 'intro.md' }] }],
+      metadata: {
+        unlisted: ['draft.md'],
+      },
+    };
+
+    expect(collect(contents, ['intro', 'draft'])).toEqual([]);
+  });
+
+  test('reports an error when unlisted references a lesson missing from disk', () => {
+    const contents: CourseContentsData = {
+      section: [{ item: [{ title: 'Intro', href: 'intro.md' }] }],
+      metadata: {
+        unlisted: ['missing-draft.md'],
+      },
+    };
+
+    const issues = collect(contents, ['intro']);
+
+    expect(issues).toEqual([
+      {
+        file: 'courses/example/index.toml',
+        message: "index.toml lists missing unlisted lesson 'missing-draft.md'.",
+      },
+    ]);
+    expect(issues[0].severity).toBeUndefined();
+  });
+
   test('warns about every on-disk lesson when index.toml is missing entirely', () => {
     const issues = collect(undefined, ['intro', 'setup']);
 
