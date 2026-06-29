@@ -1,11 +1,10 @@
 <script lang="ts">
-  import Button from '$lib/components/button';
+  import { Rss } from '@lucide/svelte';
   import Card from '$lib/components/card';
-  import Link from '$lib/components/link.svelte';
+  import PostLink from '$lib/components/post-link.svelte';
   import SEO from '$lib/components/seo.svelte';
   import coursesData from '$lib/courses.toml';
   import type { Recording } from '$lib/recording-types';
-  import formatDate from '$lib/format-date';
   import { description, title } from '$lib/metadata';
   import { buildPersonSchema, buildWebSiteSchema } from '$lib/structured-data';
   import { POSTS_PER_PAGE } from '$lib/pagination';
@@ -25,7 +24,6 @@
   const { data } = $props();
 
   const recentPosts = $derived(data.posts.slice(0, POSTS_PER_PAGE));
-  const hasMorePosts = $derived(data.posts.length > POSTS_PER_PAGE);
 
   const jsonLd = [buildWebSiteSchema(), buildPersonSchema()];
 </script>
@@ -33,46 +31,63 @@
 <SEO {title} {description} {jsonLd} />
 
 <div class="space-y-10">
-  <div class="grid grid-cols-1 gap-8 md:grid-cols-[1fr_fit]">
-    <section class="space-y-4">
-      <h2 class="text-xl font-bold">Recent Posts</h2>
-      <ul class="space-y-2">
+  <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-4">
+    <div class="lg:col-span-3">
+      <div class="grid grid-cols-1 items-start gap-8 md:grid-cols-[minmax(0,1fr)_18rem]">
+        <Biography class="prose dark:prose-invert max-w-none" />
+
+        <picture>
+          <source
+            type="image/avif"
+            srcset={selfPortrait.avifSrcset}
+            sizes="(min-width: 768px) 288px, 288px"
+          />
+          <img
+            src={selfPortrait.src}
+            width={selfPortrait.width}
+            height={selfPortrait.height}
+            class="block aspect-[3/4] max-w-full rounded-md shadow-lg sm:w-72"
+            alt="Steve Kinney"
+            fetchpriority="high"
+            loading="eager"
+            decoding="auto"
+            style="background-size:cover;background-image:url({selfPortrait.lqip})"
+          />
+        </picture>
+      </div>
+    </div>
+
+    <aside class="flex flex-col gap-2 lg:gap-8" aria-labelledby="recent-writing-heading">
+      <h2 id="recent-writing-heading" class="text-lg font-bold">Recent Writing</h2>
+      <ul class="space-y-4">
         {#each recentPosts as post (post.slug)}
-          <li class="space-x-2">
-            <Link href="/writing/{post.slug}">{post.title}</Link>
-            <time class="text-primary-800 dark:text-primary-200 text-sm" datetime={post.date}>
-              {formatDate(post.date)}
-            </time>
-          </li>
+          <PostLink {post} href="/writing/{post.slug}" as="li" />
         {/each}
       </ul>
-      {#if hasMorePosts}
-        <p>
-          <Button href="/writing" variant="secondary">View all writing &rarr;</Button>
-        </p>
-      {/if}
-    </section>
-
-    <picture>
-      <source
-        type="image/avif"
-        srcset={selfPortrait.avifSrcset}
-        sizes="(min-width: 768px) 384px, 288px"
-      />
-      <img
-        src={selfPortrait.src}
-        width={selfPortrait.width}
-        height={selfPortrait.height}
-        class="block aspect-[3/4] max-w-full rounded-md shadow-lg sm:w-72 md:w-96"
-        alt="Steve Kinney"
-        fetchpriority="high"
-        loading="eager"
-        decoding="auto"
-        style="background-size:cover;background-image:url({selfPortrait.lqip})"
-      />
-    </picture>
-
-    <Biography class="prose dark:prose-invert order-first max-w-none md:order-last md:col-span-2" />
+      <p>
+        <a
+          href="/writing/rss"
+          class="group flex items-center gap-2"
+          data-sveltekit-preload-data="false"
+          data-sveltekit-reload
+        >
+          <Rss size={16} />
+          <span
+            class="decoration-primary-700 decoration-2 underline-offset-2 group-hover:underline"
+          >
+            RSS Feed
+          </span>
+        </a>
+      </p>
+      <p>
+        <a
+          href="/writing"
+          class="decoration-primary-700 decoration-2 underline-offset-2 hover:underline"
+        >
+          View all writing &rarr;
+        </a>
+      </p>
+    </aside>
   </div>
 
   <section>
