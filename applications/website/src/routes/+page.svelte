@@ -34,12 +34,13 @@
   <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-4">
     <div class="lg:col-span-3">
       <section class="prose dark:prose-invert max-w-none">
-        <h2>Hi, I'm Steve.</h2>
-        <picture class="not-prose float-none mb-4 block w-48 sm:float-left sm:mr-6 sm:w-56 lg:w-72">
+        <picture
+          class="not-prose float-left mr-4 mb-3 block w-32 sm:mr-6 sm:w-40 md:w-48 lg:w-56 xl:w-64"
+        >
           <source
             type="image/avif"
             srcset={selfPortrait.avifSrcset}
-            sizes="(min-width: 1024px) 288px, (min-width: 640px) 224px, 192px"
+            sizes="(min-width: 1280px) 256px, (min-width: 1024px) 224px, (min-width: 768px) 192px, (min-width: 640px) 160px, 128px"
           />
           <img
             src={selfPortrait.src}
