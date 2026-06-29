@@ -33,20 +33,19 @@
 <div class="space-y-10">
   <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-4">
     <div class="lg:col-span-3">
-      <div class="grid grid-cols-1 items-start gap-8 md:grid-cols-[minmax(0,1fr)_18rem]">
-        <Biography class="prose dark:prose-invert max-w-none" />
-
-        <picture>
+      <section class="prose dark:prose-invert max-w-none">
+        <h2>Hi, I'm Steve.</h2>
+        <picture class="not-prose float-none mb-4 block w-48 sm:float-left sm:mr-6 sm:w-56 lg:w-72">
           <source
             type="image/avif"
             srcset={selfPortrait.avifSrcset}
-            sizes="(min-width: 768px) 288px, 288px"
+            sizes="(min-width: 1024px) 288px, (min-width: 640px) 224px, 192px"
           />
           <img
             src={selfPortrait.src}
             width={selfPortrait.width}
             height={selfPortrait.height}
-            class="block aspect-[3/4] max-w-full rounded-md shadow-lg sm:w-72"
+            class="block aspect-[3/4] w-full rounded-md shadow-lg"
             alt="Steve Kinney"
             fetchpriority="high"
             loading="eager"
@@ -54,7 +53,8 @@
             style="background-size:cover;background-image:url({selfPortrait.lqip})"
           />
         </picture>
-      </div>
+        <Biography />
+      </section>
     </div>
 
     <aside class="flex flex-col gap-2 lg:gap-8" aria-labelledby="recent-writing-heading">
