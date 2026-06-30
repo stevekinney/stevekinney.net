@@ -18,7 +18,7 @@
 
 <svelte:element
   this={as}
-  class={merge('group flex flex-wrap items-baseline gap-x-2 gap-y-1', className)}
+  class={merge('group grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3', className)}
   data-post-link
   {...rest}
 >
@@ -29,5 +29,5 @@
   >
     {post.title}
   </Link>
-  <Date date={post.date} class="text-sm text-slate-500 dark:text-slate-400" />
+  <Date date={post.date} class="text-sm whitespace-nowrap text-slate-500 dark:text-slate-400" />
 </svelte:element>

@@ -3,12 +3,10 @@
   import { author } from '$lib/metadata';
   import { toDataAttributes } from '$lib/to-data-attributes';
   import { merge } from '$merge';
-  import {
-    SiGithub as Github,
-    SiInstagram as Instagram,
-    SiX as Twitter,
-    SiYoutube as Youtube,
-  } from '@icons-pack/svelte-simple-icons';
+  import Github from '@icons-pack/svelte-simple-icons/icons/SiGithub';
+  import Instagram from '@icons-pack/svelte-simple-icons/icons/SiInstagram';
+  import Twitter from '@icons-pack/svelte-simple-icons/icons/SiX';
+  import Youtube from '@icons-pack/svelte-simple-icons/icons/SiYoutube';
   import Linkedin from '$lib/components/linkedin-icon.svelte';
   import type { Snippet } from 'svelte';
 

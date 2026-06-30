@@ -48,7 +48,7 @@
       <h2 class="text-xl font-semibold group-hover:underline">{title}</h2>
     {/if}
     {#if description}
-      <p class="prose dark:prose-invert">{description}</p>
+      <p class="mt-3 text-sm leading-6 text-slate-700 dark:text-slate-300">{description}</p>
     {/if}
     {#if date}
       <p class="text-sm text-slate-500 dark:text-slate-400">{formatDate(date)}</p>

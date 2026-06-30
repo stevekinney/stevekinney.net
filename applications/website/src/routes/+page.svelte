@@ -24,6 +24,7 @@
   const { data } = $props();
 
   const recentPosts = $derived(data.posts.slice(0, POSTS_PER_PAGE));
+  const featuredRecordings = $derived(recordings.slice(0, 15));
 
   const jsonLd = [buildWebSiteSchema(), buildPersonSchema()];
 </script>
@@ -31,8 +32,8 @@
 <SEO {title} {description} {jsonLd} />
 
 <div class="space-y-10">
-  <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-4">
-    <div class="lg:col-span-3">
+  <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(20rem,1fr)]">
+    <div>
       <section class="prose dark:prose-invert max-w-none">
         <picture
           class="not-prose float-left mr-4 mb-3 block w-32 sm:mr-6 sm:w-40 md:w-48 lg:w-56 xl:w-64"
@@ -79,70 +80,69 @@
           </span>
         </a>
       </p>
+    </aside>
+  </div>
+
+  <section class="space-y-6">
+    <div class="prose dark:prose-invert max-w-none">
+      <h2>Recordings</h2>
+
       <p>
-        <a
-          href="/writing"
-          class="decoration-primary-700 decoration-2 underline-offset-2 hover:underline"
-        >
-          View all writing &rarr;
-        </a>
+        I am lucky enough to teach a bunch of courses with my friends at <a
+          href="https://master.dev/"
+          target="_blank">Master.dev</a
+        >. We've been working together since 2016. Before I was a teacher, I was a customer back
+        when I was learning the ropes. I can't recommend them highly enough. You can find the most
+        up-to-date list
+        <a href="https://master.dev/teachers/steve-kinney/" target="_blank">here</a>.
       </p>
-    </aside>
-  </div>
+    </div>
 
-  <div class="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
-    <section class="space-y-6">
-      <div class="prose dark:prose-invert max-w-none">
-        <h2>Recordings</h2>
+    <ul class="not-prose grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+      {#each featuredRecordings as recording (recording.slug)}
+        <Card
+          title={recording.title}
+          description={recording.description}
+          url={recording.href}
+          imageSource={recording.imageSource}
+          imageAlternativeText={recording.title}
+          as="li"
+        >
+          {#if recording.duration}
+            <p class="text-sm text-slate-500 dark:text-slate-400">{recording.duration}</p>
+          {/if}
+        </Card>
+      {/each}
+    </ul>
 
-        <p>
-          I am lucky enough to teach a bunch of courses with my friends at <a
-            href="https://master.dev/"
-            target="_blank">Master.dev</a
-          >. We've been working together since 2016. Before I was a teacher, I was a customer back
-          when I was learning the ropes. I can't recommend them highly enough. You can find the most
-          up-to-date list
-          <a href="https://master.dev/teachers/steve-kinney/" target="_blank">here</a>.
-        </p>
-      </div>
+    <p class="not-prose">
+      <a
+        href="/courses"
+        class="decoration-primary-700 font-semibold decoration-2 underline-offset-2 hover:underline"
+      >
+        View all courses &rarr;
+      </a>
+    </p>
+  </section>
 
-      <ul class="not-prose grid gap-10 sm:grid-cols-2 xl:grid-cols-3">
-        {#each recordings as recording (recording.slug)}
-          <Card
-            title={recording.title}
-            description={recording.description}
-            url={recording.href}
-            imageSource={recording.imageSource}
-            imageAlternativeText={recording.title}
-            as="li"
+  <section class="space-y-4" aria-labelledby="walkthroughs-heading">
+    <h2 id="walkthroughs-heading" class="prose dark:prose-invert text-2xl font-bold">
+      Full Course Walkthroughs
+    </h2>
+    <ul class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {#each data.walkthroughs as walkthrough (walkthrough.slug)}
+        <li>
+          <a
+            href="/courses/{walkthrough.slug}"
+            class="decoration-primary-700 font-semibold underline-offset-2 hover:underline"
           >
-            {#if recording.duration}
-              <p class="text-sm text-slate-500 dark:text-slate-400">{recording.duration}</p>
-            {/if}
-          </Card>
-        {/each}
-      </ul>
-    </section>
-
-    <aside class="space-y-4" aria-labelledby="walkthroughs-heading">
-      <h2 id="walkthroughs-heading" class="prose dark:prose-invert text-2xl font-bold">
-        Full Course Walkthroughs
-      </h2>
-      <ul class="space-y-4">
-        {#each data.walkthroughs as walkthrough (walkthrough.slug)}
-          <li>
-            <a
-              href="/courses/{walkthrough.slug}"
-              class="decoration-primary-700 font-semibold underline-offset-2 hover:underline"
-            >
-              {walkthrough.title}
-            </a>
-            <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-              {walkthrough.description}
-            </p>
-          </li>
-        {/each}
-      </ul>
-    </aside>
-  </div>
+            {walkthrough.title}
+          </a>
+          <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+            {walkthrough.description}
+          </p>
+        </li>
+      {/each}
+    </ul>
+  </section>
 </div>
