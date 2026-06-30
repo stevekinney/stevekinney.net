@@ -1,151 +1,199 @@
 [[recording]]
+title = "Deploying Web Applications on AWS, v3"
+slug = "aws-v3"
+description = "Confidently navigate the AWS console and ship real apps. Scaffold lightning fast infrastructure with S3 static hosting and CloudFront global CDN caching."
+href = "https://master.dev/courses/aws-v3/"
+duration = "3h 38m"
+imageSource = "https://cdn.master.dev/assets/courses/2026-06-18-aws-v3/posterframe.jpg"
+
+[[recording]]
+title = "Playwright: Automated Testing & AI Workflows"
+slug = "playwright"
+description = "Catch broken UIs before they ship with Playwright! Build rock-solid verification loops that provide feedback to agentic coding tools and give you the confidence that your code is production-ready."
+href = "https://master.dev/courses/playwright/"
+duration = "4h 34m"
+imageSource = "https://cdn.master.dev/assets/courses/2026-06-02-playwright/posterframe.jpg"
+
+[[recording]]
 title = "Enterprise UI Development: Microfrontends, Testing, & Code Quality"
 slug = "enterprise-ui-dev-v2"
-description = "Architect large frontend systems—balancing autonomy and complexity across monoliths, microfrontends, and monorepos with Turborepo, CI/CD, and testing best practices."
-href = "https://frontendmasters.com/courses/enterprise-ui-dev-v2/?utm_source=kinney&utm_medium=social&code=kinney"
-duration = "5h 11m"
-topics = ["React", "TypeScript", "Build Tools"]
+description = "Architect large, successful frontend systems! From monoliths to microfrontends to monorepos, learn best practices for maintaining complex codebases while shipping high-quality software."
+href = "https://master.dev/courses/enterprise-ui-dev-v2/"
+duration = "5h 12m"
+imageSource = "https://cdn.master.dev/assets/courses/2026-03-17-enterprise-ui-dev-v2/posterframe.jpg"
 
 [[recording]]
 title = "React and TypeScript, v3"
 slug = "react-typescript-v3"
-description = "Type hooks, reducers, and component APIs to build safer, more maintainable React applications with TypeScript."
-href = "https://frontendmasters.com/courses/react-typescript-v3/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Leverage TypeScript in your React codebase for critical type safety, catching errors early, and delivering a better developer experience for your entire team."
+href = "https://master.dev/courses/react-typescript-v3/"
+duration = "4h 23m"
+imageSource = "https://cdn.master.dev/assets/courses/2025-11-21-react-typescript-v3/posterframe.jpg"
 
 [[recording]]
 title = "React Performance, v2"
 slug = "react-performance-v2"
-description = "Profile and optimize React applications with modern tools and patterns to reduce re-renders, speed up interactions, and improve perceived performance."
-href = "https://frontendmasters.com/courses/react-performance-v2/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Ship high-performance React applications! Leverage React 19's performance strategies for hydration, suspense, resource loading, and server actions. Utilize memoization and virtualization and quickly diagnose performance bottlenecks and costly re-renders."
+href = "https://master.dev/courses/react-performance-v2/"
+duration = "4h 11m"
+imageSource = "https://cdn.master.dev/assets/courses/2025-11-10-react-performance-v2/posterframe.jpg"
 
 [[recording]]
 title = "Cursor & Claude Code: Professional AI Setup"
 slug = "pro-ai"
-description = "Build a practical AI-assisted developer workflow with Cursor and Claude Code—from quick inline edits to larger delegated implementation tasks."
-href = "https://frontendmasters.com/courses/pro-ai/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Boost your coding productivity with AI-assisted tools and agents. Use Cursor and Claude Code for precise inline edits or to delegate larger tasks to background agents."
+href = "https://master.dev/courses/pro-ai/"
+duration = "3h 43m"
+imageSource = "https://cdn.master.dev/assets/courses/2025-08-23-pro-ai/posterframe.jpg"
 
 [[recording]]
 title = "Open Source AI with Python & Hugging Face"
 slug = "python-ai"
-description = "Get hands-on with AI development using Python and Hugging Face—covering image generation, fine-tuning, and model pipelines."
-href = "https://frontendmasters.com/courses/python-ai/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Go beyond Anthropic and OpenAI. Build custom AI workflows with Hugging Face, fine-tune models, and generate images with Stable Diffusion."
+href = "https://master.dev/courses/python-ai/"
+duration = "4h 33m"
+imageSource = "https://cdn.master.dev/assets/courses/2025-08-22-python-ai/posterframe.jpg"
 
 [[recording]]
 title = "Tailwind CSS 4+"
 slug = "tailwind-css-v2"
-description = "Work with Tailwind CSS 4 from utility-first fundamentals through design tokens, responsive layouts, and maintainable patterns for modern UI development."
-href = "https://frontendmasters.com/courses/tailwind-css-v2/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Learn Tailwind CSS's utility-first approach for responsive, and customizable web designs. Master themes, layers, responsive breakpoints, dark mode, and more to create maintainable user interfaces!"
+href = "https://master.dev/courses/tailwind-css-v2/"
+duration = "4h 28m"
+imageSource = "https://cdn.master.dev/assets/courses/2025-08-04-tailwind-css-v2/posterframe.jpg"
 
 [[recording]]
 title = "Fullstack TypeScript, v2 (feat. Zod)"
 slug = "fullstack-typescript-v2"
-description = "Wire up end-to-end type safety across frontend and backend with TypeScript, Express, Zod, and shared type-safe contracts."
-href = "https://frontendmasters.com/courses/fullstack-typescript-v2/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Find the end-to-end type-safety strategy that works with your stack! Share TypeScript types across client and server apps. Write bullet-proof Zod schemas. Use tRPC queries and mutations. Explore Prisma for database migrations and schema generation."
+href = "https://master.dev/courses/fullstack-typescript-v2/"
+duration = "4h 9m"
+imageSource = "https://cdn.master.dev/assets/courses/2025-05-19-fullstack-typescript-v2/posterframe.jpg"
 
 [[recording]]
 title = "Become a VS Code Power User"
 slug = "vs-code-v2"
-description = "Get more out of VS Code with advanced workflows, debugging tools, customizations, and keyboard shortcuts that speed up daily development."
-href = "https://frontendmasters.com/courses/vs-code-v2/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Use VS Code like a pro and build apps faster! Search, navigate, and refactor code quickly. Debug your apps without leaving the editor and automate complex or repetitive routines with custom tasks."
+href = "https://master.dev/courses/vs-code-v2/"
+duration = "5h 13m"
+imageSource = "https://cdn.master.dev/assets/courses/2025-05-05-vs-code-v2/posterframe.jpg"
 
 [[recording]]
 title = "Testing Fundamentals"
 slug = "testing"
-description = "Build confidence in your codebase with practical testing techniques—covering assertions, mocks, integration tests, and testing strategy."
-href = "https://frontendmasters.com/courses/testing/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Learn the basics of testing and apply Test-Driven Development techniques to your workflow. Gain practical experience writing unit and integration tests while exploring common testing tools."
+href = "https://master.dev/courses/testing/"
+duration = "4h 30m"
+imageSource = "https://cdn.master.dev/assets/courses/2024-10-29-testing/posterframe.jpg"
 
 [[recording]]
 title = "Web Security, v2"
 slug = "web-security-v2"
-description = "Understand modern web security fundamentals—from authentication and authorization to common vulnerabilities and practical mitigation techniques."
-href = "https://frontendmasters.com/courses/web-security-v2/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Learn to identify and mitigate common vulnerabilities, implement protection strategies, and secure your web applications against various attack vectors."
+href = "https://master.dev/courses/web-security-v2/"
+duration = "4h 29m"
+imageSource = "https://cdn.master.dev/assets/courses/2024-08-20-web-security-v2/posterframe.jpg"
 
 [[recording]]
 title = "Design Systems with Storybook, v2"
 slug = "design-systems-v2"
-description = "Build a scalable design system with Storybook—creating reusable UI components, writing interaction tests, implementing dark mode, and generating documentation."
-href = "https://frontendmasters.com/courses/design-systems-v2/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Learn to create scalable design systems with Storybook. Build reusable UI components, test components, implement dark mode, and generate comprehensive documentation."
+href = "https://master.dev/courses/design-systems-v2/"
+duration = "4h 10m"
+imageSource = "https://cdn.master.dev/assets/courses/2024-06-05-design-systems-v2/posterframe.jpg"
 
 [[recording]]
 title = "Figma for Developers, v2"
 slug = "figma-v2"
-description = "Use Figma's developer-friendly features—constraints, auto layout, component properties, and CSS generation—to bridge the gap between design and code."
-href = "https://frontendmasters.com/courses/figma-v2/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Learn to use Figma's developer-friendly features like constraints, auto layout, component properties and CSS generation to efficiently build and translate designs to code. Bridge the gap between design and development."
+href = "https://master.dev/courses/figma-v2/"
+duration = "4h 12m"
+imageSource = "https://cdn.master.dev/assets/courses/2024-06-04-figma-v2/posterframe.jpg"
 
 [[recording]]
 title = "Vite"
 slug = "vite"
-description = "Set up and configure Vite for modern web development—covering React integration, asset optimization, and extending the build with plugins."
-href = "https://frontendmasters.com/courses/vite/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Master Vite, the modern build tool for faster and leaner web development. Learn to integrate with React, optimize assets, and extend with plugins. See what it's like to actually enjoy using your build tools!"
+href = "https://master.dev/courses/vite/"
+duration = "4h 11m"
+imageSource = "https://cdn.master.dev/assets/courses/2023-12-12-vite/posterframe.jpg"
 
 [[recording]]
 title = "Get Kids into Coding with Scratch"
 slug = "scratch"
-description = "Introduce young learners to programming with Scratch—building games, crafting interactive stories, and exploring computer science fundamentals."
-href = "https://frontendmasters.com/courses/scratch/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Explore the essence of Scratch programming. Delve into game mechanics, craft interactive stories, and grasp computer science fundamentals. This course inspires fun projects tailored for young learners."
+href = "https://master.dev/courses/scratch/"
+duration = "4h 3m"
+imageSource = "https://cdn.master.dev/assets/courses/2023-09-27-scratch/posterframe.jpg"
 
 [[recording]]
 title = "Hardware with Arduino & JavaScript"
 slug = "arduino-javascript"
-description = "Connect the physical and digital worlds with Arduino and JavaScript—wiring up LEDs, buttons, and sensors to drive browser interactions with real-world data."
-href = "https://frontendmasters.com/courses/arduino-javascript/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Tie the physical and digital worlds together, and see what's possible with hardware and JavaScript! Craft circuits, wire up LEDs, buttons, and sensors, and leverage sensors to change browser actions based on real-world data, all with web-based technologies."
+href = "https://master.dev/courses/arduino-javascript/"
+duration = "3h 1m"
+imageSource = "https://cdn.master.dev/assets/courses/2023-09-26-arduino-javascript/posterframe.jpg"
 
 [[recording]]
 title = "Electron, v3"
 slug = "electron-v3"
-description = "Build native, cross-platform desktop applications with web technologies using Electron—covering inter-process communication, native OS features, and performance optimization."
-href = "https://frontendmasters.com/courses/electron-v3/?utm_source=kinney&utm_medium=social&code=kinney"
-
-[[recording]]
-title = "Enterprise UI Development: Testing & Code Quality"
-slug = "enterprise-ui-dev"
-description = "Set up the testing and code quality infrastructure for large frontend teams—covering unit testing, CI, accessibility testing, mocking, and coding standards enforcement."
-href = "https://frontendmasters.com/courses/enterprise-ui-dev/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Use Electron to build native, cross-platform desktop applications using web technologies (e.g. HTML, CSS, and JavaScript). Learn inter-process communication, UI customization, native features, and performance optimization."
+href = "https://master.dev/courses/electron-v3/"
+duration = "3h 54m"
+imageSource = "https://cdn.master.dev/assets/courses/2023-09-19-electron-v3/posterframe.jpg"
 
 [[recording]]
 title = "Advanced Redux with Redux Toolkit"
 slug = "advanced-redux"
-description = "Scale Redux with Redux Toolkit—simplifying reducer logic, adding TypeScript support, writing tests, and using RTK Query for data fetching."
-href = "https://frontendmasters.com/courses/advanced-redux/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Write more performant and maintainable Redux at scale. In this course, you'll use Redux Toolkit to simplify reducer logic and actions, use TypeScript with Redux, add tests, and use RTK Query to fetch data in real-world projects."
+href = "https://master.dev/courses/advanced-redux/"
+duration = "3h 52m"
+imageSource = "https://cdn.master.dev/assets/courses/2023-02-07-advanced-redux/posterframe.jpg"
 
 [[recording]]
 title = "Testing Web Apps with Cypress"
 slug = "cypress"
-description = "Write end-to-end tests for client-side applications with Cypress—covering the selector engine, test runners, assertions, and custom commands."
-href = "https://frontendmasters.com/courses/cypress/?utm_source=kinney&utm_medium=social&code=kinney"
-
-[[recording]]
-title = "AWS For Front-End Engineers, v2"
-slug = "aws-v2"
-description = "Deploy frontend applications on AWS using S3, Route 53, CloudFront, and Lambda@Edge for a production-grade infrastructure."
-href = "https://frontendmasters.com/courses/aws-v2/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Cypress is the fastest and easiest way to write end-to-end tests for your client-side applications. Learn the selector engine, test runners, assertion library, and write your own custom commands."
+href = "https://master.dev/courses/cypress/"
+duration = "4h 41m"
+imageSource = "https://cdn.master.dev/assets/courses/2022-03-08-cypress/posterframe.jpg"
 
 [[recording]]
 title = "Rx.js Fundamentals"
 slug = "rx-js"
-description = "Build an observable from scratch and learn to manipulate data arriving over time with RxJS operators."
-href = "https://frontendmasters.com/courses/rx-js/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Learn the foundations of Rx.js and master handling events over time using observables and operators to build ambitious asynchronous UIs. Build skills like manipulating data streams and orchestrating multiple API requests in this in-depth course."
+href = "https://master.dev/courses/rx-js/"
+duration = "3h 57m"
+imageSource = "https://cdn.master.dev/assets/courses/2022-01-25-rx-js/posterframe.jpg"
 
 [[recording]]
 title = "Redux Fundamentals (feat. React)"
 slug = "redux-fundamentals"
-description = "Learn the Redux API from the ground up, connect it to a React application, and extend it with middleware and tools from the ecosystem."
-href = "https://frontendmasters.com/courses/redux-fundamentals/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Learn the Redux API from scratch, then learn to hook the Redux React application. You'll also learn how to extend Redux with various tools from its ecosystem."
+href = "https://master.dev/courses/redux-fundamentals/"
+duration = "4h 42m"
+imageSource = "https://cdn.master.dev/assets/courses/2021-06-15-redux-fundamentals/posterframe.jpg"
 
 [[recording]]
 title = "Building Your Own Programming Language"
 slug = "programming-language"
-description = "Build a programming language from scratch—lexing, parsing, tokenization, traversing abstract syntax trees, and transpiling to JavaScript."
-href = "https://frontendmasters.com/courses/programming-language/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Learn language building techniques: Lexing, Parsing, Tokenization, Traversing Abstract Syntax Trees, and Transpiling to JavaScript and make your own language now!"
+href = "https://master.dev/courses/programming-language/"
+duration = "3h 10m"
+imageSource = "https://cdn.master.dev/assets/courses/2019-10-08-programming-language/posterframe.jpg"
 
 [[recording]]
 title = "State Management with Redux & MobX"
 slug = "redux-mobx"
-description = "Structure and manage application state with Redux and MobX—comparing approaches and tradeoffs for real-world frontend applications."
-href = "https://frontendmasters.com/courses/redux-mobx/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Learn about structuring your data with front-end architect Steve Kinney. Start the \"State Management with Redux & MobX\" course today!"
+href = "https://master.dev/courses/redux-mobx/"
+duration = "5h 4m"
+imageSource = "https://cdn.master.dev/assets/courses/2019-07-23-redux-mobx/posterframe.jpg"
 
 [[recording]]
 title = "JavaScript Performance"
 slug = "web-performance"
-description = "Write faster JavaScript—optimizing rendering performance, loading assets with a CDN, and splitting resources with Webpack."
-href = "https://frontendmasters.com/courses/web-performance/?utm_source=kinney&utm_medium=social&code=kinney"
+description = "Write more efficient JavaScript, optimize rendering performance, load assets faster with a CDN, split loading resources with Webpack, and more!"
+href = "https://master.dev/courses/web-performance/"
+duration = "4h 56m"
+imageSource = "https://cdn.master.dev/assets/courses/2018-04-05-web-performance/posterframe.jpg"

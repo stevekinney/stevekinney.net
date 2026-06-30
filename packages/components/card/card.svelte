@@ -13,6 +13,8 @@
       description?: string;
       date?: Date | string;
       url?: string;
+      imageSource?: string;
+      imageAlternativeText?: string;
       as?: ValidElements;
     };
 </script>
@@ -23,6 +25,8 @@
     description,
     date,
     url,
+    imageSource,
+    imageAlternativeText = title ?? '',
     variant = 'default',
     as = 'div',
     children,
@@ -31,6 +35,15 @@
 
 <svelte:element this={as} class={variants({ variant })}>
   <svelte:element this={url ? 'a' : 'div'} href={url} class={merge(url && 'group')}>
+    {#if imageSource}
+      <img
+        src={imageSource}
+        alt={imageAlternativeText}
+        loading="lazy"
+        decoding="async"
+        class="-mx-6 -mt-6 mb-4 block aspect-video w-[calc(100%+3rem)] max-w-none rounded-t-md object-cover"
+      />
+    {/if}
     {#if title}
       <h2 class="text-xl font-semibold group-hover:underline">{title}</h2>
     {/if}

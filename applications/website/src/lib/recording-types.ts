@@ -8,6 +8,7 @@ export type Recording = {
   slug: string;
   description: string;
   href: string;
+  imageSource?: string;
   duration?: string;
   topics?: string[];
   testimonial?: Testimonial[];
