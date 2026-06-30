@@ -16,18 +16,16 @@
   const { post, href, as = 'div', class: className = '', ...rest }: Props = $props();
 </script>
 
-<svelte:element
-  this={as}
-  class={merge('group grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3', className)}
-  data-post-link
-  {...rest}
->
+<svelte:element this={as} class={merge('group block', className)} data-post-link {...rest}>
   <Link
     {href}
-    class="decoration-primary-400 bg-transparent font-semibold decoration-2 underline-offset-4"
+    class="decoration-primary-400 -mx-1 bg-transparent box-decoration-clone px-1 py-0.5 font-semibold decoration-2 underline-offset-4"
     data-post-link-title
   >
     {post.title}
   </Link>
-  <Date date={post.date} class="text-sm whitespace-nowrap text-slate-500 dark:text-slate-400" />
+  <Date
+    date={post.date}
+    class="ml-2 inline text-sm whitespace-nowrap text-slate-500 dark:text-slate-400"
+  />
 </svelte:element>
