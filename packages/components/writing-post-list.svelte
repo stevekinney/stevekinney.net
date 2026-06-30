@@ -19,12 +19,14 @@
       >
         <NotebookPen size={28} class="m-2" />
         <div>
-          <h2
-            class="decoration-primary-200 group-hover:decoration-primary-400 font-semibold decoration-4 group-hover:underline sm:text-xl"
-          >
-            {post.title}
-          </h2>
-          <DateTime date={post.date} />
+          <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <span
+              class="decoration-primary-200 group-hover:decoration-primary-400 font-semibold decoration-4 group-hover:underline sm:text-xl"
+            >
+              {post.title}
+            </span>
+            <DateTime date={post.date} class="text-sm text-slate-500 dark:text-slate-400" />
+          </div>
           <p>{post.description}</p>
         </div>
       </a>

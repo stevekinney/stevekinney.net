@@ -58,8 +58,7 @@
       </section>
     </div>
 
-    <aside class="flex flex-col gap-2 lg:gap-8" aria-labelledby="recent-writing-heading">
-      <h2 id="recent-writing-heading" class="text-lg font-bold">Recent Writing</h2>
+    <aside class="flex flex-col gap-2 lg:gap-8" aria-label="Recent writing">
       <ul class="space-y-4">
         {#each recentPosts as post (post.slug)}
           <PostLink {post} href="/writing/{post.slug}" as="li" />

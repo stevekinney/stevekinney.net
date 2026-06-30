@@ -18,16 +18,16 @@
 
 <svelte:element
   this={as}
-  class={merge('group flex flex-wrap items-center gap-1', className)}
+  class={merge('group flex flex-wrap items-baseline gap-x-2 gap-y-1', className)}
   data-post-link
   {...rest}
 >
-  <Date date={post.date} />
   <Link
     {href}
-    class="decoration-primary-400 bg-transparent decoration-2 underline-offset-4"
+    class="decoration-primary-400 bg-transparent font-semibold decoration-2 underline-offset-4"
     data-post-link-title
   >
     {post.title}
   </Link>
+  <Date date={post.date} class="text-sm text-slate-500 dark:text-slate-400" />
 </svelte:element>

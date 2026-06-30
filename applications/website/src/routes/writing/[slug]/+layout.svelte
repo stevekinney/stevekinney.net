@@ -12,8 +12,7 @@
   <div class="lg:col-span-3">
     {@render children?.()}
   </div>
-  <div class="flex flex-col gap-2 lg:gap-8">
-    <h2 class="text-lg font-bold">Further Reading</h2>
+  <aside class="flex flex-col gap-2 lg:gap-8" aria-label="Further reading">
     <ul class="space-y-4">
       {#each recentPosts as post (post.slug)}
         <PostLink {post} href="/writing/{post.slug}" as="li" />
@@ -32,5 +31,5 @@
         </span>
       </a>
     </p>
-  </div>
+  </aside>
 </div>
