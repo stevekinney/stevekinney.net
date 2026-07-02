@@ -68,7 +68,7 @@
     "@vercel/blob": "^2.4.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "autoprefixer": "^10.4.23",
+    "autoprefixer": "^10.5.2",
     "axe-playwright": "^2.2.2",
     "caniuse-lite": "^1.0.30001799",
     "change-case": "^5.4.4",
