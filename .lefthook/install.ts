@@ -23,13 +23,13 @@ if (!isInsideGitWorkTree()) {
   process.exit(0);
 }
 
-let hooksPath = '';
-
-try {
-  hooksPath = runGit(['config', '--local', '--get', 'core.hooksPath']);
-} catch {
-  hooksPath = '';
-}
+const hooksPath = (() => {
+  try {
+    return runGit(['config', '--local', '--get', 'core.hooksPath']);
+  } catch {
+    return '';
+  }
+})();
 
 if (hooksPath === '.husky' || hooksPath === '.husky/_') {
   execFileSync('git', ['config', '--local', '--unset', 'core.hooksPath'], {
