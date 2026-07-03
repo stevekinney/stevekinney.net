@@ -13,7 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPOSITORY_ROOT = path.resolve(__dirname, '..', '..');
 const MANIFEST_PATH = path.resolve(REPOSITORY_ROOT, 'image-manifest.json');
 
-const MARKDOWN_PATTERNS = ['writing/**/*.md', 'courses/**/*.md'];
+const MARKDOWN_PATTERNS = ['writing/**/*.md', 'courses/**/*.md', 'projects/**/*.md'];
 const TARGET_WIDTHS = [480, 1024, 1600];
 const MAIN_WIDTH = 1600;
 const CONCURRENCY = 10;

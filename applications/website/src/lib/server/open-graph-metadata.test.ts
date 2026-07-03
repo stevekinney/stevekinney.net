@@ -16,6 +16,9 @@ describe('resolveOpenGraphMetadata', () => {
     await expect(resolveOpenGraphMetadata('/courses')).resolves.toMatchObject({
       title: 'Courses',
     });
+    await expect(resolveOpenGraphMetadata('/projects')).resolves.toMatchObject({
+      title: 'Projects',
+    });
   });
 
   it('uses generated metadata for writing routes', async () => {
@@ -39,11 +42,19 @@ describe('resolveOpenGraphMetadata', () => {
     });
   });
 
+  it('uses generated metadata for project routes', async () => {
+    await expect(resolveOpenGraphMetadata('/projects/weft')).resolves.toMatchObject({
+      title: 'Weft',
+      description: expect.stringContaining('Durable execution primitives'),
+    });
+  });
+
   it('normalizes trailing slashes and rejects malformed nested paths', async () => {
     await expect(resolveOpenGraphMetadata('/courses/testing/')).resolves.toMatchObject({
       title: 'Introduction to Testing',
     });
     await expect(resolveOpenGraphMetadata('/courses/testing/the-basics/extra')).resolves.toBeNull();
     await expect(resolveOpenGraphMetadata('/writing/does-not-exist')).resolves.toBeNull();
+    await expect(resolveOpenGraphMetadata('/projects/weft/extra')).resolves.toBeNull();
   });
 });

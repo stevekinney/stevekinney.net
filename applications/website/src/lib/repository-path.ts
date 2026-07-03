@@ -1,1 +1,1 @@
-export type RepositoryPath = `courses/${string}` | `writing/${string}`;
+export type RepositoryPath = `courses/${string}` | `projects/${string}` | `writing/${string}`;

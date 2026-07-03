@@ -18,7 +18,8 @@
         "../content-enhancements/src/**/*.ts",
         "../../applications/website/static/**",
         "../../writing/**",
-        "../../courses/**"
+        "../../courses/**",
+        "../../projects/**"
       ],
       "outputs": [
         "../../applications/website/.generated/content-data.json",
@@ -43,7 +44,8 @@
         "../utilities/tailwind-playground.ts",
         "../../applications/website/static/**",
         "../../writing/**",
-        "../../courses/**"
+        "../../courses/**",
+        "../../projects/**"
       ]
     },
     "@stevekinney/scripts#content:images:check": {
@@ -52,7 +54,8 @@
         "validate-image-compatibility.ts",
         "../../image-manifest.json",
         "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}",
-        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}"
+        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}",
+        "../../projects/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}"
       ]
     },
     "@stevekinney/scripts#images:check": {
@@ -60,7 +63,8 @@
         "check-image-manifest.ts",
         "../../image-manifest.json",
         "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}",
-        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}"
+        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}",
+        "../../projects/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}"
       ]
     },
     "@stevekinney/scripts#images:sync": {
@@ -81,6 +85,7 @@
         "../utilities/tailwind-playground.ts",
         "../../writing/**/*.md",
         "../../courses/**/*.md",
+        "../../projects/**/*.md",
         "../../courses/*/index.toml"
       ]
     },

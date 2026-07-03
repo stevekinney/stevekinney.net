@@ -1,6 +1,11 @@
 import metadata from '$lib/metadata';
 import { normalizeOpenGraphPath } from '$lib/og/paths';
-import { getCourseEntry, getRouteByPath, getWritingEntry } from '$lib/server/content';
+import {
+  getCourseEntry,
+  getProjectEntry,
+  getRouteByPath,
+  getWritingEntry,
+} from '$lib/server/content';
 
 import type { OpenGraphOptions } from './open-graph';
 
@@ -20,10 +25,17 @@ const COURSES_INDEX: StaticRoute = {
     "A collection of courses that I've taught over the years, including full course walkthroughs and recordings from Frontend Masters.",
 };
 
+const PROJECTS_INDEX: StaticRoute = {
+  title: 'Projects',
+  description:
+    'A collection of tools, experiments, and open source projects that I maintain or keep nearby.',
+};
+
 const STATIC_ROUTES = new Map<string, StaticRoute>([
   ['/', { title: metadata.title, description: metadata.description }],
   ['/writing', WRITING_INDEX],
   ['/courses', COURSES_INDEX],
+  ['/projects', PROJECTS_INDEX],
 ]);
 
 const safeDecode = (value: string): string => {
@@ -92,6 +104,21 @@ const resolveCourseMetadata = async (pathname: string): Promise<OpenGraphOptions
   };
 };
 
+const resolveProjectMetadata = (pathname: string): OpenGraphOptions | null => {
+  if (!pathname.startsWith('/projects/')) return null;
+
+  const slug = safeDecode(pathname.replace('/projects/', ''));
+  if (!slug || slug.includes('/')) return null;
+
+  const project = getProjectEntry(slug);
+  if (!project) return null;
+
+  return {
+    title: project.name,
+    description: project.description || metadata.description,
+  };
+};
+
 export const resolveOpenGraphMetadata = async (
   pathname: string,
 ): Promise<OpenGraphOptions | null> => {
@@ -105,6 +132,9 @@ export const resolveOpenGraphMetadata = async (
 
   const courseMetadata = await resolveCourseMetadata(normalized);
   if (courseMetadata) return courseMetadata;
+
+  const projectMetadata = resolveProjectMetadata(normalized);
+  if (projectMetadata) return projectMetadata;
 
   return null;
 };

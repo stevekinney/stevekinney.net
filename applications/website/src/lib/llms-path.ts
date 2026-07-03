@@ -22,6 +22,10 @@ export const createLlmsAlternatePath = (pathname: string): string | null => {
     return `${normalizedPath}/llms.txt`;
   }
 
+  if (segments[0] === 'projects' && segments.length === 2 && !isReservedSegment(segments[1])) {
+    return `${normalizedPath}/llms.txt`;
+  }
+
   if (
     segments[0] === 'courses' &&
     segments.length === 3 &&

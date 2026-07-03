@@ -1,12 +1,17 @@
 import { url } from '$lib/metadata';
-import { getCourseIndex, getPostIndex } from '$lib/server/content';
-import { loadRawCourseReadme, loadRawWritingContent } from '$lib/server/load-raw-content';
+import { getCourseIndex, getPostIndex, getProjectIndex } from '$lib/server/content';
+import {
+  loadRawCourseReadme,
+  loadRawProjectContent,
+  loadRawWritingContent,
+} from '$lib/server/load-raw-content';
 
 export const prerender = true;
 
 export async function GET() {
   const posts = getPostIndex();
   const courses = getCourseIndex();
+  const projects = getProjectIndex();
 
   const postBodies = await Promise.all(
     posts.map(async (post) => {
@@ -26,6 +31,17 @@ export async function GET() {
         return { course, body };
       } catch {
         return { course, body: '' };
+      }
+    }),
+  );
+
+  const projectBodies = await Promise.all(
+    projects.map(async (project) => {
+      try {
+        const body = await loadRawProjectContent(project.slug);
+        return { project, body };
+      } catch {
+        return { project, body: '' };
       }
     }),
   );
@@ -64,6 +80,31 @@ export async function GET() {
       '---',
       '',
     ]),
+    '## Projects',
+    '',
+    ...projectBodies.flatMap(({ project, body }) => {
+      const header = [
+        `### ${project.name}`,
+        '',
+        `URL: ${url}/projects/${project.slug}`,
+        `GitHub: ${project.githubUrl}`,
+        `Description: ${project.description}`,
+      ];
+
+      if (project.productionUrl) {
+        header.push(`Production: ${project.productionUrl}`);
+      }
+
+      if (project.writingPath) {
+        header.push(`Related writing: ${url}${project.writingPath}`);
+      }
+
+      if (project.youtubeUrl) {
+        header.push(`YouTube: ${project.youtubeUrl}`);
+      }
+
+      return [...header, '', body, '', '---', ''];
+    }),
   ];
 
   const responseBody = lines.join('\n');

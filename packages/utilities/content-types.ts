@@ -21,7 +21,7 @@ export type CourseContentsData = {
   };
 };
 
-export type ContentType = 'writing' | 'course' | 'lesson';
+export type ContentType = 'writing' | 'course' | 'lesson' | 'project';
 
 export type WritingIndexEntry = {
   title: string;
@@ -61,9 +61,23 @@ export type LessonIndexEntry = {
   path: string;
 };
 
+export type ProjectIndexEntry = {
+  name: string;
+  description: string;
+  githubUrl: string;
+  productionUrl?: string;
+  writingPath?: string;
+  youtubeUrl?: string;
+  slug: string;
+  sourcePath: string;
+  sourceHash: string;
+  path: string;
+};
+
 export type SiteContentIndex = {
   posts: WritingIndexEntry[];
   courses: CourseIndexEntry[];
+  projects: ProjectIndexEntry[];
 };
 
 export type ContentRouteBase = {
@@ -99,12 +113,29 @@ export type LessonContentRoute = ContentRouteBase & {
   tags: string[];
 };
 
-export type ContentRoute = WritingContentRoute | CourseContentRoute | LessonContentRoute;
+export type ProjectContentRoute = Omit<ContentRouteBase, 'date' | 'modified'> & {
+  contentType: 'project';
+  projectSlug: string;
+  name: string;
+  githubUrl: string;
+  productionUrl?: string;
+  writingPath?: string;
+  youtubeUrl?: string;
+  date?: string;
+  modified?: string;
+};
+
+export type ContentRoute =
+  | WritingContentRoute
+  | CourseContentRoute
+  | LessonContentRoute
+  | ProjectContentRoute;
 
 export type GeneratedContentPrerenderEntries = {
   writing: Array<{ slug: string }>;
   courses: Array<{ course: string }>;
   lessons: Array<{ course: string; lesson: string }>;
+  projects: Array<{ project: string }>;
 };
 
 export type GeneratedContentMeta = {
@@ -121,5 +152,6 @@ export type GeneratedContent = {
   writing: WritingIndexEntry[];
   courses: CourseIndexEntry[];
   lessons: LessonIndexEntry[];
+  projects: ProjectIndexEntry[];
   prerenderEntries: GeneratedContentPrerenderEntries;
 };

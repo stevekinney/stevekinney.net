@@ -5,6 +5,7 @@ import type {
   CourseIndexEntry,
   GeneratedContent,
   LessonIndexEntry,
+  ProjectIndexEntry,
 } from '@stevekinney/utilities/content-types';
 import { parseFrontmatter } from '@stevekinney/utilities/frontmatter';
 
@@ -47,6 +48,10 @@ export type CourseRecord = CourseIndexEntry & {
   source: MarkdownSource;
   contentsSource?: CourseContentsSource;
   lessons: LessonRecord[];
+};
+
+export type ProjectRecord = ProjectIndexEntry & {
+  source: MarkdownSource;
 };
 
 export type ContentRepository = GeneratedContent & {

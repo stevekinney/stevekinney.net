@@ -7,6 +7,7 @@ import type {
   CourseContentsData,
   ContentRoute,
   GeneratedContent,
+  ProjectIndexEntry,
   SiteContentIndex,
   WritingIndexEntry,
 } from '@stevekinney/utilities/content-types';
@@ -29,8 +30,15 @@ import type {
   CourseRecord,
   LessonRecord,
   MarkdownSource,
+  ProjectRecord,
 } from './types.ts';
-import { requiredString, safeDateString, validateCourseContents } from './validation.ts';
+import {
+  optionalString,
+  requiredString,
+  safeDateString,
+  validateCourseContents,
+  validateUrlFrontmatter,
+} from './validation.ts';
 
 const compareByDate = (left: { date: string }, right: { date: string }): number =>
   new Date(right.date).getTime() - new Date(left.date).getTime();
@@ -181,9 +189,40 @@ export const buildCourseEntry = async (
   };
 };
 
+export const buildProjectEntry = async (
+  source: MarkdownSource,
+  issues: ContentValidationIssue[],
+): Promise<ProjectRecord> => {
+  const { data, sourceHash, sourcePath } = source;
+  const slug = path.basename(source.absolutePath, '.md');
+  const githubUrl = requiredString(sourcePath, data.githubUrl, 'githubUrl', issues);
+  const productionUrl = optionalString(sourcePath, data.productionUrl, 'productionUrl', issues);
+  const writingPath = optionalString(sourcePath, data.writingPath, 'writingPath', issues);
+  const youtubeUrl = optionalString(sourcePath, data.youtubeUrl, 'youtubeUrl', issues);
+
+  validateUrlFrontmatter(sourcePath, githubUrl, 'githubUrl', issues);
+  validateUrlFrontmatter(sourcePath, productionUrl, 'productionUrl', issues);
+  validateUrlFrontmatter(sourcePath, youtubeUrl, 'youtubeUrl', issues);
+
+  return {
+    name: requiredString(sourcePath, data.name, 'name', issues),
+    description: requiredString(sourcePath, data.description, 'description', issues),
+    githubUrl,
+    ...(productionUrl ? { productionUrl } : {}),
+    ...(writingPath ? { writingPath } : {}),
+    ...(youtubeUrl ? { youtubeUrl } : {}),
+    slug,
+    sourcePath,
+    sourceHash,
+    path: `/projects/${slug}`,
+    source,
+  };
+};
+
 export const buildRoutes = (
   writingEntries: WritingIndexEntry[],
   courseEntries: CourseRecord[],
+  projectEntries: ProjectRecord[],
 ): Record<string, ContentRoute> => {
   const routes = new Map<string, ContentRoute>();
 
@@ -232,6 +271,25 @@ export const buildRoutes = (
     }
   }
 
+  for (const project of projectEntries) {
+    routes.set(project.path, {
+      path: project.path,
+      title: project.name,
+      description: project.description,
+      sourcePath: project.sourcePath,
+      sourceHash: project.sourceHash,
+      llmsPath: `${project.path}/llms.txt`,
+      openGraphPath: `${project.path}/open-graph.jpg`,
+      contentType: 'project',
+      projectSlug: project.slug,
+      name: project.name,
+      githubUrl: project.githubUrl,
+      ...(project.productionUrl ? { productionUrl: project.productionUrl } : {}),
+      ...(project.writingPath ? { writingPath: project.writingPath } : {}),
+      ...(project.youtubeUrl ? { youtubeUrl: project.youtubeUrl } : {}),
+    });
+  }
+
   return Object.fromEntries(
     [...routes.entries()].sort(([left], [right]) => left.localeCompare(right)),
   );
@@ -250,6 +308,7 @@ export const buildRepositoryHash = (sourceHashes: Map<string, string>): string =
 export const buildSiteIndex = (
   writingEntries: WritingIndexEntry[],
   courseEntries: CourseRecord[],
+  projectEntries: ProjectRecord[],
 ): Pick<ContentRepository, 'lessons' | 'siteIndex'> => {
   const lessonEntries = courseEntries
     .flatMap((course) => course.lessons)
@@ -263,6 +322,9 @@ export const buildSiteIndex = (
           course,
       )
       .sort(compareByDate),
+    projects: [...projectEntries]
+      .map(({ source: _source, ...project }) => project)
+      .sort((left, right) => left.name.localeCompare(right.name)),
   };
 
   return {
@@ -275,6 +337,7 @@ export const buildPrerenderEntries = (
   writingEntries: WritingIndexEntry[],
   courseEntries: CourseRecord[],
   lessonEntries: ContentRepository['lessons'],
+  projectEntries: ProjectIndexEntry[],
 ): GeneratedContent['prerenderEntries'] => {
   const uniqueLessonRedirectSlugs = lessonEntries
     .reduce<Map<string, string | null>>((map, lesson) => {
@@ -309,5 +372,6 @@ export const buildPrerenderEntries = (
       ...lessonEntries.map((entry) => ({ course: entry.courseSlug, lesson: entry.slug })),
       ...lessonEntries.map((entry) => ({ course: entry.courseSlug, lesson: `${entry.slug}.md` })),
     ],
+    projects: projectEntries.map((entry) => ({ project: entry.slug })),
   };
 };
