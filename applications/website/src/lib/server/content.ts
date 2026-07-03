@@ -6,6 +6,8 @@ import type {
   CourseIndexEntry,
   GeneratedContent,
   LessonContentRoute,
+  ProjectContentRoute,
+  ProjectIndexEntry,
   WritingContentRoute,
   WritingIndexEntry,
 } from '@stevekinney/utilities/content-types';
@@ -15,6 +17,7 @@ const content = generatedContent as GeneratedContent;
 
 const writingIndexBySlug = new Map(content.writing.map((entry) => [entry.slug, entry]));
 const courseIndexBySlug = new Map(content.courses.map((entry) => [entry.slug, entry]));
+const projectIndexBySlug = new Map(content.projects.map((entry) => [entry.slug, entry]));
 
 const lessonSlugCourseMap = content.lessons.reduce<Map<string, string | null>>((map, lesson) => {
   const existing = map.get(lesson.slug);
@@ -35,6 +38,8 @@ export const getPostIndex = (): WritingIndexEntry[] => content.siteIndex.posts;
 
 export const getCourseIndex = (): CourseIndexEntry[] => content.siteIndex.courses;
 
+export const getProjectIndex = (): ProjectIndexEntry[] => content.siteIndex.projects;
+
 export const getRouteByPath = (pathname: string): ContentRoute | null =>
   content.routes[normalizeRoutePath(pathname)] ?? null;
 
@@ -43,6 +48,9 @@ export const getWritingEntry = (slug: string): WritingIndexEntry | null =>
 
 export const getCourseEntry = (slug: string): CourseIndexEntry | null =>
   courseIndexBySlug.get(normalizeLegacyMarkdownSlug(slug)) ?? null;
+
+export const getProjectEntry = (slug: string): ProjectIndexEntry | null =>
+  projectIndexBySlug.get(slug) ?? null;
 
 export const getWritingRoute = (slug: string): WritingContentRoute | null => {
   const route = getRouteByPath(`/writing/${slug}`);
@@ -62,6 +70,11 @@ export const getLessonRoute = (
   return route?.contentType === 'lesson' ? route : null;
 };
 
+export const getProjectRoute = (projectSlug: string): ProjectContentRoute | null => {
+  const route = getRouteByPath(`/projects/${projectSlug}`);
+  return route?.contentType === 'project' ? route : null;
+};
+
 const shouldIncludeLegacyMarkdownPrerenderEntries = (): boolean => !process.env.VERCEL;
 
 const filterLegacyMarkdownEntries = <T extends Record<string, string>>(entries: T[]): T[] => {
@@ -78,6 +91,7 @@ export const getPrerenderEntries = () => ({
   writing: filterLegacyMarkdownEntries(content.prerenderEntries.writing),
   courses: filterLegacyMarkdownEntries(content.prerenderEntries.courses),
   lessons: filterLegacyMarkdownEntries(content.prerenderEntries.lessons),
+  projects: content.prerenderEntries.projects,
 });
 
 export const findCourseForLessonSlug = (lessonSlug: string): string | null =>

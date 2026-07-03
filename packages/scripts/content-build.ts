@@ -113,6 +113,7 @@ const main = async (): Promise<void> => {
     writing: repository.writing,
     courses: repository.courses,
     lessons: repository.lessons,
+    projects: repository.projects,
     prerenderEntries: repository.prerenderEntries,
   };
 

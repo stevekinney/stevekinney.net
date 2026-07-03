@@ -30,7 +30,7 @@ describe('collectContentRepository', () => {
     expect(repository.meta.sourceFileCount).toBeGreaterThan(800);
   });
 
-  test('builds a route map for writing, course, and lesson content', async () => {
+  test('builds a route map for writing, course, lesson, and project content', async () => {
     const repository = await repositoryPromise;
     expect(repository.routes['/writing/setup-python']).toMatchObject({
       contentType: 'writing',
@@ -49,6 +49,12 @@ describe('collectContentRepository', () => {
       courseSlug: 'testing',
       lessonSlug: 'the-basics',
       sourcePath: 'courses/testing/the-basics.md',
+    });
+
+    expect(repository.routes['/projects/weft']).toMatchObject({
+      contentType: 'project',
+      projectSlug: 'weft',
+      sourcePath: 'projects/weft.md',
     });
   });
 
@@ -77,6 +83,7 @@ describe('collectContentRepository', () => {
       course: 'testing',
       lesson: 'the-basics.md',
     });
+    expect(repository.prerenderEntries.projects).toContainEqual({ project: 'weft' });
   });
 
   test('extracts sanitized Tailwind playground source', async () => {

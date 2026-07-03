@@ -13,12 +13,15 @@ describe('sitemap metadata generation', () => {
     expect(xml).toContain('https://stevekinney.com/writing/setup-python');
     expect(xml).toContain('https://stevekinney.com/courses/testing');
     expect(xml).toContain('https://stevekinney.com/courses/testing/the-basics');
+    expect(xml).toContain('https://stevekinney.com/projects/weft');
     expect(xml).toContain('<loc>https://stevekinney.com/</loc>');
     expect(xml).not.toContain('[course]');
+    expect(xml).not.toContain('[project]');
     expect(xml.match(/https:\/\/stevekinney\.com\/courses\/testing<\/loc>/g)).toHaveLength(1);
     expect(
       xml.match(/https:\/\/stevekinney\.com\/courses\/testing\/the-basics<\/loc>/g),
     ).toHaveLength(1);
+    expect(xml.match(/https:\/\/stevekinney\.com\/projects\/weft<\/loc>/g)).toHaveLength(1);
 
     expect(testingLesson).not.toBeNull();
     expect(xml).toContain(

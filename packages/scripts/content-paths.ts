@@ -9,6 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const repositoryRoot = path.resolve(__dirname, '..', '..');
 export const writingRoot = path.resolve(repositoryRoot, 'writing');
 export const coursesRoot = path.resolve(repositoryRoot, 'courses');
+export const projectsRoot = path.resolve(repositoryRoot, 'projects');
 export const websiteRoot = path.resolve(repositoryRoot, 'applications', 'website');
 export const websiteStaticRoot = path.resolve(websiteRoot, 'static');
 export const websiteBuildRoot = path.resolve(websiteRoot, 'build');

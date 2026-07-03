@@ -10,6 +10,7 @@
 <nav class={merge('flex items-center gap-4', className)} aria-label="Main Navigation">
   <Link href="/writing">Writing</Link>
   <Link href="/courses">Courses</Link>
+  <Link href="/projects">Projects</Link>
   <Link
     href="https://cinder.website/"
     target="_blank"

@@ -2,11 +2,12 @@ import fg from 'fast-glob';
 
 import { buildTailwindPlaygroundSource } from '@stevekinney/utilities/tailwind-playground';
 
-import { coursesRoot, writingRoot } from '../content-paths.ts';
+import { coursesRoot, projectsRoot, writingRoot } from '../content-paths.ts';
 
 import {
   buildCourseEntry,
   buildPrerenderEntries,
+  buildProjectEntry,
   buildRepositoryHash,
   buildRoutes,
   buildSiteIndex,
@@ -19,7 +20,11 @@ import type {
   CourseRecord,
   MarkdownSource,
 } from './types.ts';
-import { validateMarkdownLinks, validateRouteCollisions } from './validation.ts';
+import {
+  validateMarkdownLinks,
+  validateProjectFrontmatterLinks,
+  validateRouteCollisions,
+} from './validation.ts';
 
 const collectSourceArtifacts = async (
   source: MarkdownSource,
@@ -56,12 +61,23 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     absolute: true,
     onlyDirectories: true,
   });
+  const projectFiles = await fg('*.md', {
+    cwd: projectsRoot,
+    absolute: true,
+    onlyFiles: true,
+  });
   const writingSources = await Promise.all(
     writingFiles.sort().map((file) => loadMarkdownSource(file)),
+  );
+  const projectSources = await Promise.all(
+    projectFiles.sort().map((file) => loadMarkdownSource(file)),
   );
 
   const writingEntries = await Promise.all(
     writingSources.map((source) => buildWritingEntry(source, validationIssues)),
+  );
+  const projectEntries = await Promise.all(
+    projectSources.map((source) => buildProjectEntry(source, validationIssues)),
   );
   const courseEntries = (
     await Promise.all(
@@ -69,8 +85,8 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     )
   ).filter((entry): entry is CourseRecord => entry !== null);
 
-  const routes = buildRoutes(writingEntries, courseEntries);
-  validateRouteCollisions(writingEntries, courseEntries, routes, validationIssues);
+  const routes = buildRoutes(writingEntries, courseEntries, projectEntries);
+  validateRouteCollisions(writingEntries, courseEntries, projectEntries, routes, validationIssues);
 
   const routePaths = new Set(Object.keys(routes));
   const courseDirectorySlugs = new Set(courseEntries.map((entry) => entry.slug));
@@ -80,6 +96,17 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   for (const writingSource of writingSources) {
     await collectSourceArtifacts(
       writingSource,
+      routePaths,
+      courseDirectorySlugs,
+      sourceHashes,
+      tailwindPlaygrounds,
+      validationIssues,
+    );
+  }
+
+  for (const projectSource of projectSources) {
+    await collectSourceArtifacts(
+      projectSource,
       routePaths,
       courseDirectorySlugs,
       sourceHashes,
@@ -114,9 +141,11 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     }
   }
 
+  validateProjectFrontmatterLinks(projectEntries, routePaths, validationIssues);
+
   const sourceFiles = [...sourceHashes.keys()].sort();
   const repositoryHash = buildRepositoryHash(sourceHashes);
-  const { lessons, siteIndex } = buildSiteIndex(writingEntries, courseEntries);
+  const { lessons, siteIndex } = buildSiteIndex(writingEntries, courseEntries, projectEntries);
 
   return {
     meta: {
@@ -130,7 +159,13 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     writing: siteIndex.posts,
     courses: siteIndex.courses,
     lessons,
-    prerenderEntries: buildPrerenderEntries(writingEntries, courseEntries, lessons),
+    projects: siteIndex.projects,
+    prerenderEntries: buildPrerenderEntries(
+      writingEntries,
+      courseEntries,
+      lessons,
+      siteIndex.projects,
+    ),
     validationIssues,
     tailwindPlaygroundSource: buildTailwindPlaygroundSource(tailwindPlaygrounds),
     sourceFiles,

@@ -6,6 +6,7 @@ import { normalizeRoutePath } from '@stevekinney/utilities/routes';
 import type {
   ContentRoute,
   CourseContentsData,
+  ProjectIndexEntry,
   WritingIndexEntry,
 } from '@stevekinney/utilities/content-types';
 import type { Root } from 'mdast';
@@ -13,12 +14,18 @@ import { visit } from 'unist-util-visit';
 
 import {
   coursesRoot,
+  projectsRoot,
   resolveRepositoryPath,
   websiteStaticRoot,
   writingRoot,
 } from '../content-paths.ts';
 
-import { courseReservedSlugs, staticRoutes, writingReservedSlugs } from './constants.ts';
+import {
+  courseReservedSlugs,
+  projectReservedSlugs,
+  staticRoutes,
+  writingReservedSlugs,
+} from './constants.ts';
 import { fileExists, isExternalUrl, stripQueryAndHash } from './markdown.ts';
 import type { ContentValidationIssue, CourseRecord, MarkdownReferenceNode } from './types.ts';
 
@@ -44,7 +51,7 @@ export const safeDateString = (
 export const requiredString = (
   file: string,
   value: unknown,
-  field: 'title' | 'description',
+  field: 'title' | 'name' | 'description' | 'githubUrl',
   issues: ContentValidationIssue[],
 ): string => {
   if (typeof value === 'string' && value.trim().length > 0) {
@@ -57,6 +64,53 @@ export const requiredString = (
   });
 
   return '';
+};
+
+export const optionalString = (
+  file: string,
+  value: unknown,
+  field: 'productionUrl' | 'writingPath' | 'youtubeUrl',
+  issues: ContentValidationIssue[],
+): string | undefined => {
+  if (value === undefined || value === null || value === '') {
+    return undefined;
+  }
+
+  if (typeof value === 'string' && value.trim().length > 0) {
+    return value.trim();
+  }
+
+  issues.push({
+    file,
+    message: `Invalid '${field}' frontmatter.`,
+  });
+
+  return undefined;
+};
+
+const isUrl = (value: string): boolean => {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' || url.protocol === 'http:';
+  } catch {
+    return false;
+  }
+};
+
+export const validateUrlFrontmatter = (
+  file: string,
+  value: string | undefined,
+  field: 'githubUrl' | 'productionUrl' | 'youtubeUrl',
+  issues: ContentValidationIssue[],
+): void => {
+  if (!value) return;
+
+  if (!isUrl(value)) {
+    issues.push({
+      file,
+      message: `Invalid URL in '${field}' frontmatter.`,
+    });
+  }
 };
 
 const validateHeadingAnchor = (
@@ -132,6 +186,17 @@ const validateRootLink = (
     return;
   }
 
+  if (normalized.startsWith('/projects/')) {
+    if (!routePaths.has(normalized)) {
+      issues.push({
+        file,
+        message: `Unknown project route '${urlPath}'.`,
+        line,
+      });
+    }
+    return;
+  }
+
   const staticAssetPath = path.join(websiteStaticRoot, normalized.slice(1));
   if (!existsSync(staticAssetPath)) {
     issues.push({
@@ -150,7 +215,11 @@ const validateRelativeLink = async (
 ): Promise<void> => {
   const resolvedPath = path.resolve(path.dirname(resolveRepositoryPath(file)), urlPath);
 
-  if (!resolvedPath.startsWith(writingRoot) && !resolvedPath.startsWith(coursesRoot)) {
+  if (
+    !resolvedPath.startsWith(writingRoot) &&
+    !resolvedPath.startsWith(coursesRoot) &&
+    !resolvedPath.startsWith(projectsRoot)
+  ) {
     issues.push({
       file,
       message: `Relative link escapes content roots: '${urlPath}'.`,
@@ -275,9 +344,36 @@ export const validateCourseContents = (
   }
 };
 
+export const validateProjectFrontmatterLinks = (
+  projectEntries: ProjectIndexEntry[],
+  routePaths: Set<string>,
+  issues: ContentValidationIssue[],
+): void => {
+  for (const project of projectEntries) {
+    if (!project.writingPath) continue;
+
+    const normalized = normalizeRoutePath(project.writingPath);
+    if (!normalized.startsWith('/writing/')) {
+      issues.push({
+        file: project.sourcePath,
+        message: `Project writingPath '${project.writingPath}' must point at a writing route.`,
+      });
+      continue;
+    }
+
+    if (!routePaths.has(normalized)) {
+      issues.push({
+        file: project.sourcePath,
+        message: `Unknown writing route '${project.writingPath}' in project frontmatter.`,
+      });
+    }
+  }
+};
+
 export const validateRouteCollisions = (
   writingEntries: WritingIndexEntry[],
   courseEntries: CourseRecord[],
+  projectEntries: ProjectIndexEntry[],
   routes: Record<string, ContentRoute>,
   issues: ContentValidationIssue[],
 ): void => {
@@ -295,6 +391,15 @@ export const validateRouteCollisions = (
       issues.push({
         file: course.sourcePath,
         message: `Course slug '${course.slug}' collides with a reserved route.`,
+      });
+    }
+  }
+
+  for (const project of projectEntries) {
+    if (projectReservedSlugs.has(project.slug)) {
+      issues.push({
+        file: project.sourcePath,
+        message: `Project slug '${project.slug}' collides with a reserved route.`,
       });
     }
   }
