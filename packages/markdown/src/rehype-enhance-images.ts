@@ -32,7 +32,12 @@ const loadManifest = (manifestPath: string, strictManifest: boolean): ImageManif
     return cachedManifest;
   } catch (error) {
     if (strictManifest) {
-      throw new Error(`Image manifest is required at ${manifestPath}: ${(error as Error).message}`);
+      throw new Error(
+        `Image manifest is required at ${manifestPath}: ${(error as Error).message}`,
+        {
+          cause: error,
+        },
+      );
     }
 
     cachedManifest = { version: 1, images: {} };
