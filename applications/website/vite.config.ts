@@ -134,12 +134,20 @@ export default defineConfig({
             return 'sveltekit-utilities';
           }
 
-          if (id.includes('/node_modules/svelte/src/internal/client/dom/')) {
-            return 'svelte-dom';
-          }
-
           if (id.includes('/node_modules/svelte/src/internal/client/reactivity/')) {
             return 'svelte-reactivity';
+          }
+
+          if (id.includes('/node_modules/svelte/src/internal/client/dom/blocks/')) {
+            return 'svelte-dom-blocks';
+          }
+
+          if (id.includes('/node_modules/svelte/src/internal/client/dom/elements/')) {
+            return 'svelte-dom-elements';
+          }
+
+          if (id.includes('/node_modules/svelte/src/internal/client/dom/')) {
+            return 'svelte-dom';
           }
 
           if (id.includes('/node_modules/svelte/src/internal/')) {
