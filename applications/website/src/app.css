@@ -19,6 +19,7 @@
 @source '../**/*.{svelte,js,ts,md}';
 @source '../../../writing/**/*.md';
 @source '../../../courses/**/*.md';
+@source '../../../projects/**/*.md';
 @source '../../../packages/components/**/*.{svelte,js,ts}';
 @source '../../../packages/content-enhancements/src/**/*.ts';
 @source '../../../packages/markdown/src/**/*.ts';

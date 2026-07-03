@@ -40,7 +40,7 @@ const getStaticLastModified = async (filePath: string): Promise<Date | null> => 
   }
 };
 
-const getContentLastModified = (modified: string, date: string): Date | null => {
+const getContentLastModified = (modified?: string, date?: string): Date | null => {
   const value = modified || date;
   if (!value) {
     return null;
@@ -92,7 +92,11 @@ export const GET = async () => {
     }
 
     const priority =
-      route.contentType === 'course' ? 0.8 : route.contentType === 'writing' ? 0.7 : 0.6;
+      route.contentType === 'course'
+        ? 0.8
+        : route.contentType === 'writing' || route.contentType === 'project'
+          ? 0.7
+          : 0.6;
 
     paths.push(
       h('url', [

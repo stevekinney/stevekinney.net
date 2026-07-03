@@ -1,10 +1,16 @@
 import { error } from '@sveltejs/kit';
 
 import { url } from '$lib/metadata';
-import { getCourseEntry, getLessonRoute, getWritingEntry } from '$lib/server/content';
+import {
+  getCourseEntry,
+  getLessonRoute,
+  getProjectEntry,
+  getWritingEntry,
+} from '$lib/server/content';
 import {
   loadRawCourseLesson,
   loadRawCourseReadme,
+  loadRawProjectContent,
   loadRawWritingContent,
 } from '$lib/server/load-raw-content';
 
@@ -94,6 +100,38 @@ const resolveCourseLesson = async (
   }
 };
 
+const resolveProject = async (projectSlug: string): Promise<string | null> => {
+  const project = getProjectEntry(projectSlug);
+  if (!project) return null;
+
+  try {
+    const body = await loadRawProjectContent(projectSlug);
+    const header = [
+      `# ${project.name}`,
+      '',
+      `URL: ${url}/projects/${projectSlug}`,
+      `GitHub: ${project.githubUrl}`,
+      `Description: ${project.description}`,
+    ];
+
+    if (project.productionUrl) {
+      header.push(`Production: ${project.productionUrl}`);
+    }
+
+    if (project.writingPath) {
+      header.push(`Related writing: ${url}${project.writingPath}`);
+    }
+
+    if (project.youtubeUrl) {
+      header.push(`YouTube: ${project.youtubeUrl}`);
+    }
+
+    return [...header, '', '---', '', body].join('\n');
+  } catch {
+    return null;
+  }
+};
+
 export const GET: RequestHandler = async ({ params }) => {
   const rawPath = safeDecode(params.path || '');
   const segments = rawPath.split('/').filter(Boolean);
@@ -106,6 +144,8 @@ export const GET: RequestHandler = async ({ params }) => {
     content = await resolveCourse(segments[1]);
   } else if (segments[0] === 'courses' && segments.length === 3) {
     content = await resolveCourseLesson(segments[1], segments[2]);
+  } else if (segments[0] === 'projects' && segments.length === 2) {
+    content = await resolveProject(segments[1]);
   }
 
   if (!content) {

@@ -1,6 +1,7 @@
 export const writingReservedSlugs = new Set(['page', 'rss', 'open-graph.jpg', 'llms.txt']);
 export const courseReservedSlugs = new Set(['open-graph.jpg', 'llms.txt']);
 export const lessonReservedSlugs = new Set(['open-graph.jpg', 'llms.txt']);
+export const projectReservedSlugs = new Set(['open-graph.jpg', 'llms.txt']);
 export const staticRoutes = new Set([
   '/',
   '/courses',
@@ -8,6 +9,8 @@ export const staticRoutes = new Set([
   '/llms-full.txt',
   '/llms.txt',
   '/open-graph.jpg',
+  '/projects',
+  '/projects/open-graph.jpg',
   '/sitemap.xml',
   '/writing',
   '/writing/open-graph.jpg',

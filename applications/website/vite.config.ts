@@ -41,7 +41,7 @@ const applyClientBuildOnly = (plugin: unknown): PluginOption => {
   return plugin as PluginOption;
 };
 
-const contentDirectories = ['writing', 'courses'].map((directory) =>
+const contentDirectories = ['writing', 'courses', 'projects'].map((directory) =>
   path.resolve(workspaceRoot, directory),
 );
 const contentEnhancementsSourceDirectory = path.resolve(
@@ -73,7 +73,7 @@ export default defineConfig({
     ...contentDevelopmentPlugins({
       workspaceRoot,
       contentDirectories,
-      contentAssetPathPrefixes: ['/courses/', '/writing/'],
+      contentAssetPathPrefixes: ['/courses/', '/projects/', '/writing/'],
       enhancementSourceDirectories: [contentEnhancementsSourceDirectory],
       contentBuildScriptPath,
       contentBuildWorkingDirectory: process.cwd(),

@@ -11,6 +11,7 @@ type MarkdownLoader = () => Promise<MarkdownModule>;
 
 const writingMarkdownModules = import.meta.glob<MarkdownModule>('../../../../../writing/*.md');
 const courseMarkdownModules = import.meta.glob<MarkdownModule>('../../../../../courses/*/*.md');
+const projectMarkdownModules = import.meta.glob<MarkdownModule>('../../../../../projects/*.md');
 
 export class MarkdownModuleNotFoundError extends Error {
   constructor(sourcePath: string) {
@@ -27,6 +28,10 @@ const getLoader = (sourcePath: string): MarkdownLoader | undefined => {
 
   if (sourcePath.startsWith('courses/')) {
     return courseMarkdownModules[key];
+  }
+
+  if (sourcePath.startsWith('projects/')) {
+    return projectMarkdownModules[key];
   }
 
   return undefined;
@@ -63,4 +68,10 @@ export const renderLessonDocument = async (sourcePath: string): Promise<string> 
   renderMarkdownModule(sourcePath, {
     class: 'prose dark:prose-invert max-w-none',
     as: 'article',
+  });
+
+export const renderProjectDocument = async (sourcePath: string): Promise<string> =>
+  renderMarkdownModule(sourcePath, {
+    class: 'prose dark:prose-invert max-w-none',
+    as: 'section',
   });

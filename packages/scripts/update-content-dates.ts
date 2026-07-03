@@ -114,7 +114,7 @@ const main = async () => {
     files = process.argv.slice(2);
   } else {
     // Default: glob all content files
-    const patterns = ['writing/*.md', 'courses/**/*.md'];
+    const patterns = ['writing/*.md', 'courses/**/*.md', 'projects/*.md'];
     files = await fg(patterns, { cwd: REPOSITORY_ROOT, onlyFiles: true });
   }
 

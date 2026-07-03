@@ -6,6 +6,8 @@ import {
   getLessonRoute,
   getPostIndex,
   getPrerenderEntries,
+  getProjectIndex,
+  getProjectRoute,
   getWritingRoute,
 } from './content';
 
@@ -41,6 +43,17 @@ describe('generated content lookups', () => {
     });
   });
 
+  it('returns generated project metadata', () => {
+    const project = getProjectRoute('weft');
+
+    expect(project).toMatchObject({
+      contentType: 'project',
+      projectSlug: 'weft',
+      sourcePath: 'projects/weft.md',
+      githubUrl: 'https://github.com/stevekinney/weft',
+    });
+  });
+
   it('normalizes legacy markdown course slugs before looking up generated routes', () => {
     const course = getCourseRoute('testing.md');
 
@@ -61,6 +74,12 @@ describe('generated content lookups', () => {
     expect(new Date(first.date).getTime()).toBeGreaterThanOrEqual(new Date(second.date).getTime());
   });
 
+  it('keeps the project index sorted by project name', () => {
+    const [first, second] = getProjectIndex();
+
+    expect(first.name.localeCompare(second.name)).toBeLessThanOrEqual(0);
+  });
+
   it('includes canonical and legacy prerender entries for content detail routes', () => {
     const entries = getPrerenderEntries();
 
@@ -73,6 +92,8 @@ describe('generated content lookups', () => {
 
     expect(entries.lessons).toContainEqual({ course: 'testing', lesson: 'the-basics' });
     expect(entries.lessons).toContainEqual({ course: 'testing', lesson: 'the-basics.md' });
+
+    expect(entries.projects).toContainEqual({ project: 'weft' });
   });
 
   it('omits legacy markdown prerender entries during Vercel builds', () => {
