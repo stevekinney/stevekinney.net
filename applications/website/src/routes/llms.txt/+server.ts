@@ -1,11 +1,12 @@
 import { url } from '$lib/metadata';
-import { getCourseIndex, getPostIndex } from '$lib/server/content';
+import { getCourseIndex, getPostIndex, getProjectIndex } from '$lib/server/content';
 
 export const prerender = true;
 
 export function GET() {
   const posts = getPostIndex();
   const courses = getCourseIndex();
+  const projects = getProjectIndex();
 
   const lines = [
     '# Steve Kinney',
@@ -26,6 +27,13 @@ export function GET() {
     ...courses.map(
       (course) =>
         `- [${course.title}](${url}/courses/${course.slug}): ${course.description} ([llms.txt](${url}/courses/${course.slug}/llms.txt))`,
+    ),
+    '',
+    '## Projects',
+    '',
+    ...projects.map(
+      (project) =>
+        `- [${project.name}](${url}/projects/${project.slug}): ${project.description} ([llms.txt](${url}/projects/${project.slug}/llms.txt))`,
     ),
     '',
     '## Links',

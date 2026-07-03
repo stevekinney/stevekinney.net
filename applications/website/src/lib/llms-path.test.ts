@@ -17,6 +17,10 @@ describe('createLlmsAlternatePath', () => {
     );
   });
 
+  it('returns a per-project llms route for project detail pages', () => {
+    expect(createLlmsAlternatePath('/projects/weft')).toBe('/projects/weft/llms.txt');
+  });
+
   it('returns a per-lesson llms route for course lesson pages', () => {
     expect(
       createLlmsAlternatePath('/courses/self-testing-ai-agents/lab-wrap-a-custom-verification-mcp'),
@@ -27,10 +31,12 @@ describe('createLlmsAlternatePath', () => {
     expect(createLlmsAlternatePath('/writing')).toBeNull();
     expect(createLlmsAlternatePath('/writing/page/2')).toBeNull();
     expect(createLlmsAlternatePath('/courses')).toBeNull();
+    expect(createLlmsAlternatePath('/projects')).toBeNull();
   });
 
   it('does not emit llms alternates for reserved writing routes', () => {
     expect(createLlmsAlternatePath('/writing/rss')).toBeNull();
     expect(createLlmsAlternatePath('/writing/open-graph.jpg')).toBeNull();
+    expect(createLlmsAlternatePath('/projects/open-graph.jpg')).toBeNull();
   });
 });

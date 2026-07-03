@@ -214,12 +214,16 @@ const validateRelativeLink = async (
   line?: number,
 ): Promise<void> => {
   const resolvedPath = path.resolve(path.dirname(resolveRepositoryPath(file)), urlPath);
+  const contentRoots = [writingRoot, coursesRoot, projectsRoot];
+  const isInsideContentRoot = contentRoots.some((root) => {
+    const relativeToRoot = path.relative(root, resolvedPath);
+    return (
+      relativeToRoot === '' ||
+      (!relativeToRoot.startsWith('..') && !path.isAbsolute(relativeToRoot))
+    );
+  });
 
-  if (
-    !resolvedPath.startsWith(writingRoot) &&
-    !resolvedPath.startsWith(coursesRoot) &&
-    !resolvedPath.startsWith(projectsRoot)
-  ) {
+  if (!isInsideContentRoot) {
     issues.push({
       file,
       message: `Relative link escapes content roots: '${urlPath}'.`,
