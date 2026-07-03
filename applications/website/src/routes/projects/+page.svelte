@@ -24,7 +24,7 @@
         <div class="space-y-2">
           <h2 class="text-xl font-bold">
             <a
-              class="decoration-primary-600 hover:text-primary-800 dark:hover:text-primary-200 font-semibold decoration-4 underline-offset-8 focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 focus:outline-none dark:decoration-slate-400"
+              class="decoration-primary-600 hover:text-primary-800 dark:hover:text-primary-200 focus:ring-primary-600 font-semibold decoration-4 underline-offset-8 focus:ring-2 focus:ring-offset-2 focus:outline-none dark:decoration-slate-400"
               href={project.path}
             >
               {project.name}
