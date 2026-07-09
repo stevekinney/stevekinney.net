@@ -114,7 +114,7 @@
     "vite": "^8.1.1",
     "vite-plugin-dts": "^4.5.4",
     "vite-plugin-toml": "^0.9.0",
-    "vitest": "^4.0.16"
+    "vitest": "^4.1.10"
   },
   "type": "module",
   "dependencies": {
