@@ -1,6 +1,8 @@
 ---
 name: ESLint Plugin Temporal
 githubUrl: https://github.com/stevekinney/eslint-plugin-temporal
+npmPackages:
+  - eslint-plugin-temporal
 writingPath: /writing/cursor-rules-temporal-typescript
 description: 'ESLint rules for catching Temporal workflow mistakes before they become replay bugs, which is the polite time to learn about them.'
 ---

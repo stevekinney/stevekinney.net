@@ -37,6 +37,7 @@ export const load: PageServerLoad = async ({ params }) => {
       name: route.name,
       description: route.description,
       githubUrl: route.githubUrl,
+      npmPackages: route.npmPackages,
       productionUrl: route.productionUrl,
       writingPath: route.writingPath,
       youtubeUrl: route.youtubeUrl,

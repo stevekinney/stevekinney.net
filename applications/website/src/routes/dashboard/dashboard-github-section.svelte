@@ -45,7 +45,6 @@
       <DashboardStatTile
         label="Own Issues Closed"
         value={formatMetric(stats.issues.closedLastYear)}
-        context="Issues I opened that are now closed"
       />
       <DashboardStatTile
         label="Pull Requests Reviewed"

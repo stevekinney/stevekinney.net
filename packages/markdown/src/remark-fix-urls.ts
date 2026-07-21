@@ -17,8 +17,8 @@ const MARKDOWN_EXTENSIONS = ['.mdx', '.markdown', '.md'];
 
 const DEFAULT_CONTENT_PATHS = ['content'];
 
-const FRONTEND_MASTERS_ORIGIN = 'https://frontendmasters.com';
-const FRONTEND_MASTERS_UTM = 'utm_source=kinney&utm_medium=social&code=kinney';
+const AFFILIATE_ORIGINS = ['https://frontendmasters.com', 'https://master.dev'];
+const AFFILIATE_PARAMETERS = 'utm_source=kinney&utm_medium=social&code=kinney';
 
 type VFileWithFilename = VFile & { filename?: string };
 
@@ -152,15 +152,23 @@ const getBaseUrl = (fileData: FileData, contentPaths: string[]): string | null =
 };
 
 /**
- * Appends UTM tracking parameters to Frontend Masters URLs.
+ * Appends affiliate tracking parameters to supported course platform URLs.
  */
-const appendFrontendMastersUtm = (node: Link | Definition): void => {
+const appendAffiliateParameters = (node: Link | Definition): void => {
   const { url } = node;
-  if (!url || !url.startsWith(FRONTEND_MASTERS_ORIGIN)) return;
-  if (url.includes(FRONTEND_MASTERS_UTM)) return;
+  const hasSupportedOrigin = AFFILIATE_ORIGINS.some(
+    (origin) =>
+      url === origin ||
+      url.startsWith(`${origin}/`) ||
+      url.startsWith(`${origin}?`) ||
+      url.startsWith(`${origin}#`),
+  );
+
+  if (!url || !hasSupportedOrigin) return;
+  if (url.includes(AFFILIATE_PARAMETERS)) return;
 
   const { path, query, hash } = splitUrl(url);
-  const newQuery = query ? `${query}&${FRONTEND_MASTERS_UTM}` : `?${FRONTEND_MASTERS_UTM}`;
+  const newQuery = query ? `${query}&${AFFILIATE_PARAMETERS}` : `?${AFFILIATE_PARAMETERS}`;
   node.url = `${path}${newQuery}${hash}`;
 };
 
@@ -181,8 +189,8 @@ export function fixMarkdownUrls(
       cwd: anyFile?.cwd ?? process.cwd(),
     };
 
-    visit(tree, 'link', (node) => appendFrontendMastersUtm(node));
-    visit(tree, 'definition', (node) => appendFrontendMastersUtm(node));
+    visit(tree, 'link', (node) => appendAffiliateParameters(node));
+    visit(tree, 'definition', (node) => appendAffiliateParameters(node));
 
     if (!fileData.filename) return;
 

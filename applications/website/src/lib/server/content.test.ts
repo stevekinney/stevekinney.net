@@ -51,6 +51,7 @@ describe('generated content lookups', () => {
       projectSlug: 'weft',
       sourcePath: 'projects/weft.md',
       githubUrl: 'https://github.com/stevekinney/weft',
+      npmPackages: ['@lostgradient/weft'],
     });
   });
 

@@ -65,6 +65,7 @@ export type ProjectIndexEntry = {
   name: string;
   description: string;
   githubUrl: string;
+  npmPackages?: string[];
   productionUrl?: string;
   writingPath?: string;
   youtubeUrl?: string;
@@ -118,6 +119,7 @@ export type ProjectContentRoute = Omit<ContentRouteBase, 'date' | 'modified'> & 
   projectSlug: string;
   name: string;
   githubUrl: string;
+  npmPackages?: string[];
   productionUrl?: string;
   writingPath?: string;
   youtubeUrl?: string;

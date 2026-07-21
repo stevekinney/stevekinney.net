@@ -3,7 +3,7 @@ import { describe, expect, test } from 'bun:test';
 import type { CourseContentsData } from '@stevekinney/utilities/content-types';
 
 import type { ContentValidationIssue } from './types.ts';
-import { validateCourseContents } from './validation.ts';
+import { optionalStringArray, validateCourseContents } from './validation.ts';
 
 const collect = (
   contents: CourseContentsData | undefined,
@@ -129,5 +129,35 @@ describe('validateCourseContents', () => {
       file: 'courses/example/index.toml',
       message: "index.toml references missing related lesson 'missing-related.md'.",
     });
+  });
+});
+
+describe('optionalStringArray', () => {
+  test('normalizes non-empty string arrays', () => {
+    const issues: ContentValidationIssue[] = [];
+
+    expect(
+      optionalStringArray(
+        'projects/example.md',
+        [' package-one ', '@scope/package-two'],
+        'npmPackages',
+        issues,
+      ),
+    ).toEqual(['package-one', '@scope/package-two']);
+    expect(issues).toEqual([]);
+  });
+
+  test('reports malformed package metadata', () => {
+    const issues: ContentValidationIssue[] = [];
+
+    expect(
+      optionalStringArray('projects/example.md', ['package-one', ''], 'npmPackages', issues),
+    ).toBeUndefined();
+    expect(issues).toEqual([
+      {
+        file: 'projects/example.md',
+        message: "Invalid 'npmPackages' frontmatter.",
+      },
+    ]);
   });
 });

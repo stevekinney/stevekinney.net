@@ -1,6 +1,8 @@
 ---
 name: GitHub Webhook Schemas
 githubUrl: https://github.com/stevekinney/github-webhook-schemas
+npmPackages:
+  - github-webhook-schemas
 description: 'TypeScript schemas for GitHub webhook payloads, so webhook handlers can validate reality instead of trusting whatever just hit the endpoint.'
 ---
 

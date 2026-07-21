@@ -1,6 +1,8 @@
 ---
 name: Temporal Explorer
 githubUrl: https://github.com/stevekinney/temporal-explorer
+npmPackages:
+  - temporal-explorer
 writingPath: /writing/build-temporal-workflow
 description: 'An experimental interface for poking at Temporal workflows, histories, and runtime state without turning every debugging session into a scavenger hunt.'
 ---

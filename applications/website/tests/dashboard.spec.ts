@@ -24,6 +24,32 @@ test('main navigation includes a link to the dashboard', async ({ page }) => {
   await expect(nav.getByRole('link', { name: /dashboard/i })).toBeVisible();
 });
 
+test('social links do not overlap the main navigation near the desktop breakpoint', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1024, height: 800 });
+  await page.goto('/dashboard');
+
+  const newsletterBox = await page
+    .getByRole('navigation', { name: 'Main Navigation' })
+    .getByRole('link', { name: 'Newsletter' })
+    .boundingBox();
+  const githubBox = await page.getByRole('link', { name: 'Visit GitHub profile' }).boundingBox();
+
+  expect(newsletterBox).not.toBeNull();
+  expect(githubBox).not.toBeNull();
+
+  const overlaps =
+    newsletterBox !== null &&
+    githubBox !== null &&
+    newsletterBox.x < githubBox.x + githubBox.width &&
+    newsletterBox.x + newsletterBox.width > githubBox.x &&
+    newsletterBox.y < githubBox.y + githubBox.height &&
+    newsletterBox.y + newsletterBox.height > githubBox.y;
+
+  expect(overlaps).toBe(false);
+});
+
 test('all four dashboard section headings are visible', async ({ page }) => {
   await page.goto('/dashboard');
 
@@ -84,6 +110,53 @@ const dashboardFixture = {
     ],
   },
 };
+
+const dashboardWithGithubStats = {
+  ...dashboardFixture,
+  github: {
+    status: 'ok',
+    data: {
+      login: 'stevekinney',
+      profileUrl: 'https://github.com/stevekinney',
+      followers: 10,
+      publicRepositories: 20,
+      totalStars: 30,
+      pullRequests: { openNow: 1, mergedLastYear: 2 },
+      commits: {
+        totalLastYear: 3,
+        privateContributionsLastYear: 4,
+        byRepository: [
+          {
+            nameWithOwner: 'stevekinney/example',
+            url: 'https://github.com/stevekinney/example',
+            stargazerCount: 1,
+            commits: 5,
+          },
+        ],
+      },
+      issues: { openedLastYear: 6, closedLastYear: 7 },
+      reviews: { totalLastYear: 8 },
+    },
+  },
+};
+
+test('dashboard uses concise copy and the system font for stat values', async ({ page }) => {
+  await page.route('**/api/dashboard', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', json: dashboardWithGithubStats }),
+  );
+
+  await page.goto('/dashboard');
+
+  await expect(page.getByText(/This page pulls back the curtain/)).toHaveCount(0);
+  await expect(page.getByText('Issues I opened that are now closed')).toHaveCount(0);
+  await expect(page.getByText('Recomputed at most once every 24 hours.')).toHaveCount(0);
+
+  const commitsTile = page.getByText('Commits', { exact: true }).locator('..');
+  const statValue = commitsTile.locator('p').nth(1);
+  const fontFamily = await statValue.evaluate((element) => getComputedStyle(element).fontFamily);
+
+  expect(fontFamily).toMatch(/^system-ui/);
+});
 
 test('dashboard sections settle into data or a quiet unavailable notice, never a permanent skeleton', async ({
   page,
