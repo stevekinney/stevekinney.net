@@ -7,6 +7,10 @@ describe('createLlmsAlternatePath', () => {
     expect(createLlmsAlternatePath('/')).toBe('/llms.txt');
   });
 
+  it('returns a per-page llms route for the dashboard', () => {
+    expect(createLlmsAlternatePath('/dashboard')).toBe('/dashboard/llms.txt');
+  });
+
   it('returns a per-post llms route for writing detail pages', () => {
     expect(createLlmsAlternatePath('/writing/agent-loops')).toBe('/writing/agent-loops/llms.txt');
   });
@@ -38,5 +42,11 @@ describe('createLlmsAlternatePath', () => {
     expect(createLlmsAlternatePath('/writing/rss')).toBeNull();
     expect(createLlmsAlternatePath('/writing/open-graph.jpg')).toBeNull();
     expect(createLlmsAlternatePath('/projects/open-graph.jpg')).toBeNull();
+  });
+
+  it('does not emit llms alternates for the dashboard feed and its own mirror', () => {
+    expect(createLlmsAlternatePath('/dashboard/rss')).toBeNull();
+    expect(createLlmsAlternatePath('/dashboard/llms.txt')).toBeNull();
+    expect(createLlmsAlternatePath('/dashboard/open-graph.jpg')).toBeNull();
   });
 });
