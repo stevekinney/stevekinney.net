@@ -26,6 +26,7 @@ const SUCCESS_HEADERS = {
 const FAILURE_HEADERS = {
   'Cache-Control': 'no-store',
   'Retry-After': '300',
+  'Access-Control-Allow-Origin': '*',
 };
 
 /**

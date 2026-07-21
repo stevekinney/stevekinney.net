@@ -23,6 +23,7 @@ const DEFAULT_REPO = {
   nameWithOwner: 'stevekinney/example',
   url: 'https://github.com/stevekinney/example',
   stargazerCount: 5,
+  isPrivate: false,
 };
 
 type GraphqlCall = { query: string; variables: Record<string, unknown> };
@@ -242,6 +243,7 @@ describe('fetchGithubStats', () => {
         nameWithOwner: `stevekinney/repo-${index + 1}`,
         url: `https://github.com/stevekinney/repo-${index + 1}`,
         stargazerCount: index,
+        isPrivate: false,
       },
       contributions: { totalCount: index + 1 },
     }));
@@ -284,6 +286,54 @@ describe('fetchGithubStats', () => {
     const lastWindow = parseGraphqlBody(commitCalls[11]?.[1]?.body).variables;
     expect(firstWindow.from).toBe(WINDOW.from);
     expect(lastWindow.to).toBe(WINDOW.to);
+  });
+
+  it('excludes private repositories from the public commits-by-repository breakdown', async () => {
+    env.GITHUB_DASHBOARD_TOKEN = 'test-token';
+
+    const repositories = [
+      {
+        repository: {
+          nameWithOwner: 'stevekinney/public-repo',
+          url: 'https://github.com/stevekinney/public-repo',
+          stargazerCount: 3,
+          isPrivate: false,
+        },
+        contributions: { totalCount: 5 },
+      },
+      {
+        repository: {
+          nameWithOwner: 'stevekinney/secret-repo',
+          url: 'https://github.com/stevekinney/secret-repo',
+          stargazerCount: 0,
+          isPrivate: true,
+        },
+        contributions: { totalCount: 99 },
+      },
+    ];
+
+    const fetchMock = buildFetchMock({
+      commitContributionsByRepository: () =>
+        jsonResponse({
+          data: {
+            user: { contributionsCollection: { commitContributionsByRepository: repositories } },
+          },
+        }),
+    });
+
+    const stats = await fetchGithubStats(fetchMock, WINDOW);
+
+    expect(stats.commits.byRepository).toEqual([
+      {
+        nameWithOwner: 'stevekinney/public-repo',
+        url: 'https://github.com/stevekinney/public-repo',
+        stargazerCount: 3,
+        commits: 60,
+      },
+    ]);
+    expect(
+      stats.commits.byRepository.some((repo) => repo.nameWithOwner === 'stevekinney/secret-repo'),
+    ).toBe(false);
   });
 
   it('never issues concurrent GraphQL requests', async () => {
@@ -351,5 +401,42 @@ describe('fetchGithubStats', () => {
 
     const stats = await fetchGithubStats(fetchMock, WINDOW);
     expect(stats.totalStars).toBe(12);
+  });
+
+  it('builds monotonically increasing monthly windows even when `to` falls on a day short months lack', async () => {
+    // `to` is the 31st: naively subtracting months with `setUTCMonth` would
+    // roll "February 31st" forward into early March, since Feb never has 31
+    // days — this window spans a February, so it exercises that overflow.
+    env.GITHUB_DASHBOARD_TOKEN = 'test-token';
+
+    const overflowWindow: DashboardStatWindow = {
+      from: '2025-07-31T00:00:00.000Z',
+      to: '2026-07-31T00:00:00.000Z',
+    };
+
+    const fetchMock = buildFetchMock();
+
+    await fetchGithubStats(fetchMock, overflowWindow);
+
+    const commitCalls = fetchMock.mock.calls.filter(([callUrl, init]) => {
+      if (String(callUrl) !== 'https://api.github.com/graphql') return false;
+      return parseGraphqlBody(init?.body).query.includes('commitContributionsByRepository');
+    });
+
+    const windows = commitCalls.map(([, init]) => parseGraphqlBody(init?.body).variables);
+
+    expect(windows).toHaveLength(12);
+    expect(windows[0].from).toBe(overflowWindow.from);
+    expect(windows.at(-1)?.to).toBe(overflowWindow.to);
+
+    for (let index = 0; index < windows.length; index += 1) {
+      const from = new Date(windows[index].from as string).getTime();
+      const to = new Date(windows[index].to as string).getTime();
+
+      expect(from).toBeLessThan(to);
+      if (index > 0) {
+        expect(from).toBe(new Date(windows[index - 1].to as string).getTime());
+      }
+    }
   });
 });

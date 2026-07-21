@@ -53,8 +53,9 @@ const renderGithubSection = (section: DashboardSection<GithubStats>): string[] =
       `(${data.commits.privateContributionsLastYear} in private repositories).`,
     `- Pull requests: ${data.pullRequests.openNow} open now, ` +
       `${data.pullRequests.mergedLastYear} merged in the last year.`,
-    `- Issues: ${data.issues.openedLastYear} opened, ${data.issues.closedLastYear} closed ` +
-      'in the last year.',
+    `- Issues opened in the last year: ${data.issues.openedLastYear}.`,
+    `- My own issues closed in the last year: ${data.issues.closedLastYear} ` +
+      '(issues I authored — regardless of when opened — that were closed in the window).',
     `- Reviews: ${data.reviews.totalLastYear} in the last year.`,
     ...(topRepositories.length > 0
       ? [

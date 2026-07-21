@@ -42,7 +42,11 @@
         label="Open Pull Requests"
         value={formatMetric(stats.pullRequests.openNow)}
       />
-      <DashboardStatTile label="Issues Closed" value={formatMetric(stats.issues.closedLastYear)} />
+      <DashboardStatTile
+        label="Own Issues Closed"
+        value={formatMetric(stats.issues.closedLastYear)}
+        context="Issues I opened that are now closed"
+      />
       <DashboardStatTile
         label="Pull Requests Reviewed"
         value={formatMetric(stats.reviews.totalLastYear)}

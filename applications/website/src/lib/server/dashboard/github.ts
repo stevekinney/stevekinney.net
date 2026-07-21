@@ -169,6 +169,7 @@ const CommitContributionsByRepositorySchema = z.object({
             nameWithOwner: z.string(),
             url: z.string(),
             stargazerCount: z.number(),
+            isPrivate: z.boolean(),
           }),
           contributions: z.object({ totalCount: z.number() }),
         }),
@@ -186,6 +187,7 @@ const COMMIT_CONTRIBUTIONS_BY_REPOSITORY_QUERY = `
 						nameWithOwner
 						url
 						stargazerCount
+						isPrivate
 					}
 					contributions {
 						totalCount
@@ -195,6 +197,22 @@ const COMMIT_CONTRIBUTIONS_BY_REPOSITORY_QUERY = `
 		}
 	}
 `;
+
+/**
+ * Subtracts `months` from `date` in UTC, clamping to the last day of the
+ * target month when the original day-of-month doesn't exist there (e.g.
+ * subtracting one month from Mar 31 would otherwise overflow "Feb 31"
+ * forward into early March via `setUTCMonth`'s normal rollover behavior).
+ */
+const subtractUtcMonths = (date: Date, months: number): Date => {
+  const shifted = new Date(date);
+  const dayOfMonth = shifted.getUTCDate();
+
+  shifted.setUTCMonth(shifted.getUTCMonth() - months);
+  if (shifted.getUTCDate() !== dayOfMonth) shifted.setUTCDate(0);
+
+  return shifted;
+};
 
 /**
  * Splits the window into twelve consecutive ~1-month windows, using the
@@ -208,9 +226,7 @@ const buildMonthlyWindows = (window: DashboardStatWindow): DashboardStatWindow[]
   const boundaries = [new Date(window.from)];
 
   for (let monthsBack = MONTHLY_WINDOW_COUNT - 1; monthsBack >= 1; monthsBack -= 1) {
-    const boundary = new Date(to);
-    boundary.setUTCMonth(boundary.getUTCMonth() - monthsBack);
-    boundaries.push(boundary);
+    boundaries.push(subtractUtcMonths(to, monthsBack));
   }
 
   boundaries.push(to);
@@ -226,7 +242,14 @@ const buildMonthlyWindows = (window: DashboardStatWindow): DashboardStatWindow[]
   return windows;
 };
 
-/** Sums commits per repository across monthly pages, sorted by commits descending. */
+/**
+ * Sums commits per repository across monthly pages, sorted by commits
+ * descending. Private repositories are excluded — this dashboard is public,
+ * and a token with private-repo access would otherwise leak private
+ * repository names, URLs, and commit counts through it. The token's private
+ * activity still counts toward `commits.privateContributionsLastYear`
+ * (fetched separately), just not broken out by name here.
+ */
 const aggregateRepositoryCommits = (
   pages: z.infer<typeof CommitContributionsByRepositorySchema>[],
 ): GithubRepositoryCommits[] => {
@@ -234,6 +257,8 @@ const aggregateRepositoryCommits = (
 
   for (const page of pages) {
     for (const entry of page.user.contributionsCollection.commitContributionsByRepository) {
+      if (entry.repository.isPrivate) continue;
+
       const previous = totals.get(entry.repository.nameWithOwner);
 
       totals.set(entry.repository.nameWithOwner, {

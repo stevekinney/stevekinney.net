@@ -103,10 +103,15 @@ export const fetchCourseUpdates = async (
     throw new Error('Failed to load commit history for every course.');
   }
 
+  const lessonCountsBySlug = new Map<string, number>();
+  for (const lesson of lessons) {
+    lessonCountsBySlug.set(lesson.courseSlug, (lessonCountsBySlug.get(lesson.courseSlug) ?? 0) + 1);
+  }
+
   const courseUpdates = entries.map((entry, index) => {
     const result = settled[index];
     const commit = result?.status === 'fulfilled' ? result.value : null;
-    const lessonCount = lessons.filter((lesson) => lesson.courseSlug === entry.slug).length;
+    const lessonCount = lessonCountsBySlug.get(entry.slug) ?? 0;
 
     return {
       slug: entry.slug,
