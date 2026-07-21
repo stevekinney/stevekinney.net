@@ -6,6 +6,7 @@ import prettier from 'prettier';
 
 import type { CourseUpdate } from '$lib/dashboard-types';
 import type { Element } from 'hast';
+import type { Config } from '@sveltejs/adapter-vercel';
 
 export const prerender = false;
 
@@ -13,6 +14,12 @@ export const prerender = false;
 // bodies (adapter-vercel cannot set exposeErrBody), and this route's 503
 // path carries an explanatory body. The s-maxage + stale-while-revalidate
 // headers on success responses provide the 24-hour edge cache instead.
+//
+// maxDuration is raised because a cold compute fans out to GitHub GraphQL
+// (serialized to avoid its secondary rate limit — see github.ts), GitHub
+// REST, and the npm registry; measured live, that combination exceeded
+// Vercel's 15-second default and 504'd before ever producing a response.
+export const config: Config = { maxDuration: 60 };
 
 const FEED_TITLE = 'Steve Kinney — Dashboard: Course Updates';
 

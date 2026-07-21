@@ -8,12 +8,20 @@ import type {
   GithubStats,
   NpmStats,
 } from '$lib/dashboard-types';
+import type { Config } from '@sveltejs/adapter-vercel';
+
 export const prerender = false;
 
 // Deliberately NOT Vercel ISR: prerender functions strip non-200 response
 // bodies (adapter-vercel cannot set exposeErrBody), and this route serves
 // its partial snapshot with a 503. The s-maxage + stale-while-revalidate
 // headers on success responses provide the 24-hour edge cache instead.
+//
+// maxDuration is raised because a cold compute fans out to GitHub GraphQL
+// (serialized to avoid its secondary rate limit — see github.ts), GitHub
+// REST, and the npm registry; measured live, that combination exceeded
+// Vercel's 15-second default and 504'd before ever producing a response.
+export const config: Config = { maxDuration: 60 };
 
 const TOP_REPOSITORY_COUNT = 5;
 
