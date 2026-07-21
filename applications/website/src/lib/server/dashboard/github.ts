@@ -282,18 +282,19 @@ const fetchRepositoryCommits = async (
   window: DashboardStatWindow,
 ): Promise<GithubRepositoryCommits[]> => {
   const monthlyWindows = buildMonthlyWindows(window);
+  const pages: z.infer<typeof CommitContributionsByRepositorySchema>[] = [];
 
-  const pages = await Promise.all(
-    monthlyWindows.map((monthlyWindow) =>
-      requestGraphql(
+  for (const monthlyWindow of monthlyWindows) {
+    pages.push(
+      await requestGraphql(
         fetchImpl,
         token,
         COMMIT_CONTRIBUTIONS_BY_REPOSITORY_QUERY,
         { login: GITHUB_LOGIN, from: monthlyWindow.from, to: monthlyWindow.to },
         CommitContributionsByRepositorySchema,
       ),
-    ),
-  );
+    );
+  }
 
   return aggregateRepositoryCommits(pages);
 };

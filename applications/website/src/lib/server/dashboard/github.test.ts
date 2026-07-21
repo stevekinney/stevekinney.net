@@ -288,6 +288,21 @@ describe('fetchGithubStats', () => {
     expect(lastWindow.to).toBe(WINDOW.to);
   });
 
+  it('stops requesting monthly commit windows after the first failure', async () => {
+    env.GITHUB_DASHBOARD_TOKEN = 'test-token';
+    let commitRequestCount = 0;
+
+    const fetchMock = buildFetchMock({
+      commitContributionsByRepository: () => {
+        commitRequestCount += 1;
+        return jsonResponse({ message: 'secondary rate limit' }, 403);
+      },
+    });
+
+    await expect(fetchGithubStats(fetchMock, WINDOW)).rejects.toThrow(/403/);
+    expect(commitRequestCount).toBe(1);
+  });
+
   it('excludes private repositories from the public commits-by-repository breakdown', async () => {
     env.GITHUB_DASHBOARD_TOKEN = 'test-token';
 

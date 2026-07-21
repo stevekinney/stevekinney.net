@@ -120,6 +120,7 @@ describe('GET /dashboard/llms.txt', () => {
     expect(response.status).toBe(503);
     expect(response.headers.get('Cache-Control')).toBe('no-store');
     expect(response.headers.get('Retry-After')).toBe('300');
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*');
     expect(body).toContain('GitHub activity (temporarily unavailable)');
     expect(body).toContain('@stevekinney/utilities');
     expect(body).toContain('React and TypeScript');
