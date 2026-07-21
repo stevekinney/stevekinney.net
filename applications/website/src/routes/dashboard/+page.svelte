@@ -8,7 +8,7 @@
   import type { DashboardData } from '$lib/dashboard-types';
 
   import DashboardCoursesSection from './dashboard-courses-section.svelte';
-  import { dashboardDataSchema } from './dashboard-data-schema';
+  import { isDashboardData } from './dashboard-data-schema';
   import DashboardGithubSection from './dashboard-github-section.svelte';
   import DashboardNpmSection from './dashboard-npm-section.svelte';
   import type { DashboardPageState } from './dashboard-section-state';
@@ -34,11 +34,10 @@
     try {
       const response = await fetch('/api/dashboard');
       const payload: unknown = await response.json();
-      const result = dashboardDataSchema.safeParse(payload);
 
-      if (!result.success) throw new Error('Unexpected dashboard response shape');
+      if (!isDashboardData(payload)) throw new Error('Unexpected dashboard response shape');
 
-      dashboardData = result.data;
+      dashboardData = payload;
       pageState = 'loaded';
     } catch {
       dashboardData = null;

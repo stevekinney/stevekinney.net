@@ -1,89 +1,118 @@
-import { z } from 'zod';
+import type {
+  CourseUpdate,
+  DashboardData,
+  DashboardSection,
+  DashboardStatWindow,
+  GithubRepositoryCommits,
+  GithubStats,
+  NpmPackageStats,
+  NpmStats,
+} from '$lib/dashboard-types';
 
-import type { CourseUpdate, DashboardData, GithubStats, NpmStats } from '$lib/dashboard-types';
+// Manual type guards rather than zod: this validates `/api/dashboard`'s
+// response, which is our own server's output (not third-party input), and
+// zod's runtime was the single largest contributor to this route's client
+// bundle — pulling it in just to re-check our own API's shape blew the
+// project's build-size budget.
 
-const dashboardStatWindowSchema = z.object({
-  from: z.string(),
-  to: z.string(),
-});
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
 
-const githubRepositoryCommitsSchema = z.object({
-  nameWithOwner: z.string(),
-  url: z.string(),
-  stargazerCount: z.number(),
-  commits: z.number(),
-});
+const isString = (value: unknown): value is string => typeof value === 'string';
+const isNumber = (value: unknown): value is number => typeof value === 'number';
+const isArray = <Item>(value: unknown, isItem: (item: unknown) => item is Item): value is Item[] =>
+  Array.isArray(value) && value.every(isItem);
 
-const githubStatsSchema: z.ZodType<GithubStats> = z.object({
-  login: z.string(),
-  profileUrl: z.string(),
-  followers: z.number(),
-  publicRepositories: z.number(),
-  totalStars: z.number(),
-  pullRequests: z.object({
-    openNow: z.number(),
-    mergedLastYear: z.number(),
-  }),
-  commits: z.object({
-    totalLastYear: z.number(),
-    privateContributionsLastYear: z.number(),
-    byRepository: z.array(githubRepositoryCommitsSchema),
-  }),
-  issues: z.object({
-    openedLastYear: z.number(),
-    closedLastYear: z.number(),
-  }),
-  reviews: z.object({
-    totalLastYear: z.number(),
-  }),
-});
+const isDashboardStatWindow = (value: unknown): value is DashboardStatWindow =>
+  isRecord(value) && isString(value.from) && isString(value.to);
 
-const npmPackageStatsSchema = z.object({
-  name: z.string(),
-  description: z.string().optional(),
-  version: z.string(),
-  url: z.string(),
-  downloadsLastYear: z.number(),
-});
+const isGithubRepositoryCommits = (value: unknown): value is GithubRepositoryCommits =>
+  isRecord(value) &&
+  isString(value.nameWithOwner) &&
+  isString(value.url) &&
+  isNumber(value.stargazerCount) &&
+  isNumber(value.commits);
 
-const npmStatsSchema: z.ZodType<NpmStats> = z.object({
-  packageCount: z.number(),
-  totalDownloadsLastYear: z.number(),
-  topPackages: z.array(npmPackageStatsSchema),
-});
+const isGithubStats = (value: unknown): value is GithubStats => {
+  if (!isRecord(value)) return false;
 
-const courseUpdateSchema: z.ZodType<CourseUpdate> = z.object({
-  slug: z.string(),
-  title: z.string(),
-  description: z.string(),
-  path: z.string(),
-  lessonCount: z.number(),
-  lastUpdatedAt: z.string(),
-  lastCommit: z
-    .object({
-      message: z.string(),
-      url: z.string(),
-      sha: z.string(),
-    })
-    .nullable(),
-});
+  const { pullRequests, commits, issues, reviews } = value;
 
-/** Builds the `{ status: 'ok', data } | { status: 'error', error }` shape shared by every section. */
-function dashboardSection<Schema extends z.ZodType>(schema: Schema) {
-  return z.discriminatedUnion('status', [
-    z.object({ status: z.literal('ok'), data: schema }),
-    z.object({ status: z.literal('error'), error: z.string() }),
-  ]);
-}
+  return (
+    isString(value.login) &&
+    isString(value.profileUrl) &&
+    isNumber(value.followers) &&
+    isNumber(value.publicRepositories) &&
+    isNumber(value.totalStars) &&
+    isRecord(pullRequests) &&
+    isNumber(pullRequests.openNow) &&
+    isNumber(pullRequests.mergedLastYear) &&
+    isRecord(commits) &&
+    isNumber(commits.totalLastYear) &&
+    isNumber(commits.privateContributionsLastYear) &&
+    isArray(commits.byRepository, isGithubRepositoryCommits) &&
+    isRecord(issues) &&
+    isNumber(issues.openedLastYear) &&
+    isNumber(issues.closedLastYear) &&
+    isRecord(reviews) &&
+    isNumber(reviews.totalLastYear)
+  );
+};
 
-/**
- * Validates an untrusted `/api/dashboard` response body against the shared
- * `DashboardData` contract before the page ever renders it.
- */
-export const dashboardDataSchema: z.ZodType<DashboardData> = z.object({
-  generatedAt: z.string(),
-  window: dashboardStatWindowSchema,
-  github: dashboardSection(githubStatsSchema),
-  npm: dashboardSection(npmStatsSchema),
-  courses: dashboardSection(z.array(courseUpdateSchema)),
-});
+const isNpmPackageStats = (value: unknown): value is NpmPackageStats =>
+  isRecord(value) &&
+  isString(value.name) &&
+  (value.description === undefined || isString(value.description)) &&
+  isString(value.version) &&
+  isString(value.url) &&
+  isNumber(value.downloadsLastYear);
+
+const isNpmStats = (value: unknown): value is NpmStats =>
+  isRecord(value) &&
+  isNumber(value.packageCount) &&
+  isNumber(value.totalDownloadsLastYear) &&
+  isArray(value.topPackages, isNpmPackageStats);
+
+const isCourseUpdate = (value: unknown): value is CourseUpdate => {
+  if (!isRecord(value)) return false;
+
+  const { lastCommit } = value;
+  const hasValidCommit =
+    lastCommit === null ||
+    (isRecord(lastCommit) &&
+      isString(lastCommit.message) &&
+      isString(lastCommit.url) &&
+      isString(lastCommit.sha));
+
+  return (
+    isString(value.slug) &&
+    isString(value.title) &&
+    isString(value.description) &&
+    isString(value.path) &&
+    isNumber(value.lessonCount) &&
+    isString(value.lastUpdatedAt) &&
+    hasValidCommit
+  );
+};
+
+const isDashboardSection = <T>(
+  value: unknown,
+  isData: (data: unknown) => data is T,
+): value is DashboardSection<T> => {
+  if (!isRecord(value)) return false;
+  if (value.status === 'ok') return isData(value.data);
+  if (value.status === 'error') return isString(value.error);
+
+  return false;
+};
+
+/** Validates an untrusted `/api/dashboard` response body before the page renders it. */
+export const isDashboardData = (value: unknown): value is DashboardData =>
+  isRecord(value) &&
+  isString(value.generatedAt) &&
+  isDashboardStatWindow(value.window) &&
+  isDashboardSection(value.github, isGithubStats) &&
+  isDashboardSection(value.npm, isNpmStats) &&
+  isDashboardSection(value.courses, (data): data is CourseUpdate[] =>
+    isArray(data, isCourseUpdate),
+  );
