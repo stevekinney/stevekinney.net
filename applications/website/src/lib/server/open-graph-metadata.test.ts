@@ -19,6 +19,9 @@ describe('resolveOpenGraphMetadata', () => {
     await expect(resolveOpenGraphMetadata('/projects')).resolves.toMatchObject({
       title: 'Projects',
     });
+    await expect(resolveOpenGraphMetadata('/dashboard')).resolves.toMatchObject({
+      title: 'Dashboard',
+    });
   });
 
   it('uses generated metadata for writing routes', async () => {

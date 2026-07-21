@@ -38,6 +38,7 @@ export function GET() {
     '',
     '## Links',
     '',
+    `- [Dashboard](${url}/dashboard): A live snapshot of GitHub activity, npm downloads, and course updates, with a JSON API at ${url}/api/dashboard and an Atom feed at ${url}/dashboard/rss ([llms.txt](${url}/dashboard/llms.txt))`,
     `- [RSS Feed](${url}/writing/rss)`,
     `- [Sitemap](${url}/sitemap.xml)`,
     `- [Full Content](${url}/llms-full.txt)`,

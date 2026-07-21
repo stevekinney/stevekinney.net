@@ -31,11 +31,18 @@ const PROJECTS_INDEX: StaticRoute = {
     'A collection of tools, experiments, and open source projects that I maintain or keep nearby.',
 };
 
+const DASHBOARD_INDEX: StaticRoute = {
+  title: 'Dashboard',
+  description:
+    'A snapshot of GitHub activity, npm downloads, and course updates, updated automatically.',
+};
+
 const STATIC_ROUTES = new Map<string, StaticRoute>([
   ['/', { title: metadata.title, description: metadata.description }],
   ['/writing', WRITING_INDEX],
   ['/courses', COURSES_INDEX],
   ['/projects', PROJECTS_INDEX],
+  ['/dashboard', DASHBOARD_INDEX],
 ]);
 
 const safeDecode = (value: string): string => {
