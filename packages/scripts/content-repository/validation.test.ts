@@ -133,6 +133,13 @@ describe('validateCourseContents', () => {
 });
 
 describe('optionalStringArray', () => {
+  test('treats an empty array as unset', () => {
+    const issues: ContentValidationIssue[] = [];
+
+    expect(optionalStringArray('projects/example.md', [], 'npmPackages', issues)).toBeUndefined();
+    expect(issues).toEqual([]);
+  });
+
   test('normalizes non-empty string arrays', () => {
     const issues: ContentValidationIssue[] = [];
 

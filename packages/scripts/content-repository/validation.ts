@@ -98,9 +98,12 @@ export const optionalStringArray = (
     return undefined;
   }
 
+  if (Array.isArray(value) && value.length === 0) {
+    return undefined;
+  }
+
   if (
     Array.isArray(value) &&
-    value.length > 0 &&
     value.every((item) => typeof item === 'string' && item.trim().length > 0)
   ) {
     return value.map((item) => item.trim());
