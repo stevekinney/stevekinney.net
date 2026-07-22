@@ -4,6 +4,8 @@ import type { Transformer } from 'unified';
 import type { Root, Link, Definition } from 'mdast';
 import type { VFile } from 'vfile';
 
+import { addAffiliateParameters } from '@stevekinney/utilities/affiliate-url';
+
 /**
  * Constants for URL processing
  */
@@ -16,9 +18,6 @@ const URL_PATTERNS = {
 const MARKDOWN_EXTENSIONS = ['.mdx', '.markdown', '.md'];
 
 const DEFAULT_CONTENT_PATHS = ['content'];
-
-const AFFILIATE_ORIGINS = ['https://frontendmasters.com', 'https://master.dev'];
-const AFFILIATE_PARAMETERS = 'utm_source=kinney&utm_medium=social&code=kinney';
 
 type VFileWithFilename = VFile & { filename?: string };
 
@@ -155,21 +154,7 @@ const getBaseUrl = (fileData: FileData, contentPaths: string[]): string | null =
  * Appends affiliate tracking parameters to supported course platform URLs.
  */
 const appendAffiliateParameters = (node: Link | Definition): void => {
-  const { url } = node;
-  const hasSupportedOrigin = AFFILIATE_ORIGINS.some(
-    (origin) =>
-      url === origin ||
-      url.startsWith(`${origin}/`) ||
-      url.startsWith(`${origin}?`) ||
-      url.startsWith(`${origin}#`),
-  );
-
-  if (!url || !hasSupportedOrigin) return;
-  if (url.includes(AFFILIATE_PARAMETERS)) return;
-
-  const { path, query, hash } = splitUrl(url);
-  const newQuery = query ? `${query}&${AFFILIATE_PARAMETERS}` : `?${AFFILIATE_PARAMETERS}`;
-  node.url = `${path}${newQuery}${hash}`;
+  node.url = addAffiliateParameters(node.url);
 };
 
 /**
