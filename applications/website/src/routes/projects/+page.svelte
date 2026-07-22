@@ -42,6 +42,16 @@
           >
             GitHub
           </a>
+          {#each project.npmPackages ?? [] as npmPackage (npmPackage)}
+            <a
+              class="font-semibold underline decoration-2 underline-offset-4"
+              href={`https://www.npmjs.com/package/${npmPackage}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              npm: {npmPackage}
+            </a>
+          {/each}
           {#if project.productionUrl}
             <a
               class="font-semibold underline decoration-2 underline-offset-4"

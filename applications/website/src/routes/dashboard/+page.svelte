@@ -73,14 +73,6 @@
 </SEO>
 
 <div class="space-y-10">
-  <div class="prose dark:prose-invert max-w-none">
-    <p>
-      This page pulls back the curtain on what I've actually been building: a live snapshot of my
-      GitHub activity, npm downloads, and course updates from the past year, recomputed at most once
-      a day so it stays fresh without hammering anyone's rate limits.
-    </p>
-  </div>
-
   {#if pageState === 'failed'}
     <div
       class="rounded-md border border-slate-300 p-4 text-sm text-slate-600 dark:border-slate-700 dark:text-slate-300"
@@ -107,7 +99,6 @@
   <footer
     class="space-y-2 border-t border-slate-200 pt-6 text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400"
   >
-    <p>Recomputed at most once every 24 hours.</p>
     {#if dashboardData}
       <p>Last computed {formatDate(dashboardData.generatedAt)}.</p>
     {/if}

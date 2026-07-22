@@ -47,6 +47,49 @@ test('writing post page has no accessibility violations', async ({ page }) => {
   await checkA11y(page);
 });
 
+test('project pages link package-backed projects to npm', async ({ page }) => {
+  await page.goto('/projects');
+
+  await expect(page.getByRole('link', { name: 'npm: armorer' })).toHaveAttribute(
+    'href',
+    'https://www.npmjs.com/package/armorer',
+  );
+  await expect(page.getByRole('link', { name: 'npm: prose-writer' })).toHaveAttribute(
+    'href',
+    'https://www.npmjs.com/package/prose-writer',
+  );
+
+  await page.goto('/projects/cinder');
+
+  await expect(page.getByRole('link', { name: 'npm: @lostgradient/cinder' })).toHaveAttribute(
+    'href',
+    'https://www.npmjs.com/package/@lostgradient/cinder',
+  );
+  await expect(page.getByRole('link', { name: 'npm: @lostgradient/chat' })).toHaveAttribute(
+    'href',
+    'https://www.npmjs.com/package/@lostgradient/chat',
+  );
+});
+
+test('course recording links include affiliate parameters', async ({ page }) => {
+  await page.goto('/courses');
+
+  await expect(page.getByRole('link', { name: 'Master.dev' })).toHaveAttribute(
+    'href',
+    'https://master.dev/?utm_source=kinney&utm_medium=social&code=kinney',
+  );
+  await expect(page.getByRole('link', { name: 'here' })).toHaveAttribute(
+    'href',
+    'https://master.dev/teachers/steve-kinney/?utm_source=kinney&utm_medium=social&code=kinney',
+  );
+  await expect(
+    page.getByRole('link', { name: /Deploying Web Applications on AWS, v3/ }),
+  ).toHaveAttribute(
+    'href',
+    'https://master.dev/courses/aws-v3/?utm_source=kinney&utm_medium=social&code=kinney',
+  );
+});
+
 test.describe('exactly one content document wrapper per content page', () => {
   // Regression: a shared markdown layout briefly added its own
   // `data-content-document` wrapper on top of the per-route one, which caused

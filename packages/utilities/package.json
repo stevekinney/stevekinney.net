@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./affiliate-url": "./affiliate-url.ts",
     "./content-types": "./content-types.ts",
     "./frontmatter": "./frontmatter.ts",
     "./image-discovery": "./image-discovery.ts",

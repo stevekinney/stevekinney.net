@@ -4,6 +4,8 @@ import type { Transformer } from 'unified';
 import type { Root, Link, Definition } from 'mdast';
 import type { VFile } from 'vfile';
 
+import { addAffiliateParameters } from '@stevekinney/utilities/affiliate-url';
+
 /**
  * Constants for URL processing
  */
@@ -16,9 +18,6 @@ const URL_PATTERNS = {
 const MARKDOWN_EXTENSIONS = ['.mdx', '.markdown', '.md'];
 
 const DEFAULT_CONTENT_PATHS = ['content'];
-
-const FRONTEND_MASTERS_ORIGIN = 'https://frontendmasters.com';
-const FRONTEND_MASTERS_UTM = 'utm_source=kinney&utm_medium=social&code=kinney';
 
 type VFileWithFilename = VFile & { filename?: string };
 
@@ -152,16 +151,10 @@ const getBaseUrl = (fileData: FileData, contentPaths: string[]): string | null =
 };
 
 /**
- * Appends UTM tracking parameters to Frontend Masters URLs.
+ * Appends affiliate tracking parameters to supported course platform URLs.
  */
-const appendFrontendMastersUtm = (node: Link | Definition): void => {
-  const { url } = node;
-  if (!url || !url.startsWith(FRONTEND_MASTERS_ORIGIN)) return;
-  if (url.includes(FRONTEND_MASTERS_UTM)) return;
-
-  const { path, query, hash } = splitUrl(url);
-  const newQuery = query ? `${query}&${FRONTEND_MASTERS_UTM}` : `?${FRONTEND_MASTERS_UTM}`;
-  node.url = `${path}${newQuery}${hash}`;
+const appendAffiliateParameters = (node: Link | Definition): void => {
+  node.url = addAffiliateParameters(node.url);
 };
 
 /**
@@ -181,8 +174,8 @@ export function fixMarkdownUrls(
       cwd: anyFile?.cwd ?? process.cwd(),
     };
 
-    visit(tree, 'link', (node) => appendFrontendMastersUtm(node));
-    visit(tree, 'definition', (node) => appendFrontendMastersUtm(node));
+    visit(tree, 'link', (node) => appendAffiliateParameters(node));
+    visit(tree, 'definition', (node) => appendAffiliateParameters(node));
 
     if (!fileData.filename) return;
 

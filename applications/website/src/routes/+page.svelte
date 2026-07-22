@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Rss } from '@lucide/svelte';
+  import { addAffiliateParameters } from '@stevekinney/utilities/affiliate-url';
   import Card from '$lib/components/card';
   import PostLink from '$lib/components/post-link.svelte';
   import SEO from '$lib/components/seo.svelte';
@@ -89,12 +90,15 @@
 
       <p>
         I am lucky enough to teach a bunch of courses with my friends at <a
-          href="https://master.dev/"
+          href={addAffiliateParameters('https://master.dev/')}
           target="_blank">Master.dev</a
         >. We've been working together since 2016. Before I was a teacher, I was a customer back
         when I was learning the ropes. I can't recommend them highly enough. You can find the most
         up-to-date list
-        <a href="https://master.dev/teachers/steve-kinney/" target="_blank">here</a>.
+        <a
+          href={addAffiliateParameters('https://master.dev/teachers/steve-kinney/')}
+          target="_blank">here</a
+        >.
       </p>
     </div>
 
@@ -103,7 +107,7 @@
         <Card
           title={recording.title}
           description={recording.description}
-          url={recording.href}
+          url={addAffiliateParameters(recording.href)}
           imageSource={recording.imageSource}
           imageAlternativeText={recording.title}
           as="li"

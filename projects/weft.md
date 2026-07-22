@@ -1,6 +1,8 @@
 ---
 name: Weft
 githubUrl: https://github.com/stevekinney/weft
+npmPackages:
+  - '@lostgradient/weft'
 description: 'Durable execution primitives for TypeScript applications that need workflows, retries, timers, and real state without pretending distributed systems are easy.'
 ---
 

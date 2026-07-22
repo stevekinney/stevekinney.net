@@ -1,6 +1,9 @@
 ---
 name: Agent Bureau
 githubUrl: https://github.com/stevekinney/agent-bureau
+npmPackages:
+  - armorer
+  - conversationalist
 writingPath: /writing/ai-gateway-durable-workflows
 description: 'A playground for durable agent infrastructure: queues, schedules, memory, gateways, and all the glue code that stops being glue once it matters.'
 ---

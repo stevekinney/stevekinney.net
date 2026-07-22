@@ -1,6 +1,8 @@
 ---
 name: Temporal MCP
 githubUrl: https://github.com/stevekinney/temporal-mcp
+npmPackages:
+  - temporal-mcp
 writingPath: /writing/temporal-developer-skill
 description: 'A Model Context Protocol server for working with Temporal from agent tools, because workflow state is easier to inspect when the agent can ask directly.'
 ---

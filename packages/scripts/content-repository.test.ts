@@ -55,6 +55,11 @@ describe('collectContentRepository', () => {
       contentType: 'project',
       projectSlug: 'weft',
       sourcePath: 'projects/weft.md',
+      npmPackages: ['@lostgradient/weft'],
+    });
+
+    expect(repository.routes['/projects/agent-bureau']).toMatchObject({
+      npmPackages: ['armorer', 'conversationalist'],
     });
   });
 
@@ -65,6 +70,28 @@ describe('collectContentRepository', () => {
     expect(route.sourceHash).toMatch(/^[a-f0-9]{64}$/);
     expect(route.llmsPath).toBe('/writing/setup-python/llms.txt');
     expect(route.openGraphPath).toBe('/writing/setup-python/open-graph.jpg');
+  });
+
+  test('includes npm package metadata for every package-backed project', async () => {
+    const repository = await repositoryPromise;
+    const npmPackagesByProject = Object.fromEntries(
+      repository.projects
+        .filter((project) => project.npmPackages)
+        .map((project) => [project.slug, project.npmPackages]),
+    );
+
+    expect(npmPackagesByProject).toEqual({
+      'agent-bureau': ['armorer', 'conversationalist'],
+      cinder: ['@lostgradient/cinder', '@lostgradient/chat'],
+      'eslint-plugin-temporal': ['eslint-plugin-temporal'],
+      'github-webhook-schemas': ['github-webhook-schemas'],
+      octavian: ['octavian'],
+      'prose-writer': ['prose-writer'],
+      'temporal-explorer': ['temporal-explorer'],
+      'temporal-mcp': ['temporal-mcp'],
+      'vector-frankl': ['vector-frankl'],
+      weft: ['@lostgradient/weft'],
+    });
   });
 
   test('includes canonical and legacy prerender entries for long-form content routes', async () => {

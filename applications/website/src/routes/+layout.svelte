@@ -83,13 +83,13 @@
   aria-label={ariaLabel}
   aria-labelledby={ariaLabelledby}
   class={merge(
-    'mx-auto my-6 grid max-w-7xl grid-cols-1 items-center gap-6 px-4 sm:my-10 sm:grid-cols-2 md:px-8 lg:grid-cols-3',
+    'mx-auto my-6 grid max-w-7xl grid-cols-1 items-center gap-6 px-4 sm:my-10 sm:grid-cols-2 md:px-8 xl:grid-cols-3',
     className,
   )}
 >
   <!-- Site header -->
   <header>
-    <h1 class="whitespace-nowrap lg:order-1">
+    <h1 class="whitespace-nowrap xl:order-1">
       <a
         href="/"
         class="font-header decoration-primary-700 dark:decoration-primary-400 text-6xl text-black hover:underline dark:text-white"
@@ -102,7 +102,7 @@
 
   <!-- Social links -->
   <div
-    class="order-1 flex items-center justify-between gap-4 sm:order-none sm:justify-end lg:order-3"
+    class="order-1 flex items-center justify-between gap-4 sm:order-none sm:justify-end xl:order-3"
     data-social-links
     role="complementary"
     aria-label="Social media links"
@@ -113,15 +113,15 @@
   </div>
 
   <!-- Navigation -->
-  <Navigation class="sm:col-start-2 sm:justify-end lg:order-2 lg:justify-center" />
+  <Navigation class="sm:col-start-2 sm:justify-end xl:order-2 xl:justify-center" />
 
   <!-- Main content container -->
-  <main id="main-content" class="my-6 sm:col-span-full lg:order-3" data-content-container>
+  <main id="main-content" class="my-6 sm:col-span-full xl:order-3" data-content-container>
     {@render children?.()}
   </main>
 
   <!-- Email subscription -->
-  <footer class="sm:col-span-full lg:order-4">
+  <footer class="sm:col-span-full xl:order-4">
     <form
       action="https://buttondown.com/api/emails/embed-subscribe/stevekinney"
       method="post"

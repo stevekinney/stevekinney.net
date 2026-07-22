@@ -1,6 +1,8 @@
 ---
 name: Octavian
 githubUrl: https://github.com/stevekinney/octavian
+npmPackages:
+  - octavian
 description: 'Utilities for reasoning about musical notes, frequencies, and intervals in JavaScript without making every project relearn the circle of fifths.'
 ---
 

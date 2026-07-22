@@ -34,6 +34,7 @@ import type {
 } from './types.ts';
 import {
   optionalString,
+  optionalStringArray,
   requiredString,
   safeDateString,
   validateCourseContents,
@@ -196,6 +197,7 @@ export const buildProjectEntry = async (
   const { data, sourceHash, sourcePath } = source;
   const slug = path.basename(source.absolutePath, '.md');
   const githubUrl = requiredString(sourcePath, data.githubUrl, 'githubUrl', issues);
+  const npmPackages = optionalStringArray(sourcePath, data.npmPackages, 'npmPackages', issues);
   const productionUrl = optionalString(sourcePath, data.productionUrl, 'productionUrl', issues);
   const writingPath = optionalString(sourcePath, data.writingPath, 'writingPath', issues);
   const youtubeUrl = optionalString(sourcePath, data.youtubeUrl, 'youtubeUrl', issues);
@@ -208,6 +210,7 @@ export const buildProjectEntry = async (
     name: requiredString(sourcePath, data.name, 'name', issues),
     description: requiredString(sourcePath, data.description, 'description', issues),
     githubUrl,
+    ...(npmPackages ? { npmPackages } : {}),
     ...(productionUrl ? { productionUrl } : {}),
     ...(writingPath ? { writingPath } : {}),
     ...(youtubeUrl ? { youtubeUrl } : {}),
@@ -284,6 +287,7 @@ export const buildRoutes = (
       projectSlug: project.slug,
       name: project.name,
       githubUrl: project.githubUrl,
+      ...(project.npmPackages ? { npmPackages: project.npmPackages } : {}),
       ...(project.productionUrl ? { productionUrl: project.productionUrl } : {}),
       ...(project.writingPath ? { writingPath: project.writingPath } : {}),
       ...(project.youtubeUrl ? { youtubeUrl: project.youtubeUrl } : {}),

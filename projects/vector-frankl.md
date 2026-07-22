@@ -1,6 +1,8 @@
 ---
 name: Vector Frankl
 githubUrl: https://github.com/stevekinney/vector-frankl
+npmPackages:
+  - vector-frankl
 writingPath: /writing/using-a-vector-database
 description: "A semantic search and vector database experiment, because sometimes the question is not 'what matched?' but 'what was this kind of like?'"
 ---

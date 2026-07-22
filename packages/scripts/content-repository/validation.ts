@@ -88,6 +88,35 @@ export const optionalString = (
   return undefined;
 };
 
+export const optionalStringArray = (
+  file: string,
+  value: unknown,
+  field: 'npmPackages',
+  issues: ContentValidationIssue[],
+): string[] | undefined => {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  if (Array.isArray(value) && value.length === 0) {
+    return undefined;
+  }
+
+  if (
+    Array.isArray(value) &&
+    value.every((item) => typeof item === 'string' && item.trim().length > 0)
+  ) {
+    return value.map((item) => item.trim());
+  }
+
+  issues.push({
+    file,
+    message: `Invalid '${field}' frontmatter.`,
+  });
+
+  return undefined;
+};
+
 const isUrl = (value: string): boolean => {
   try {
     const url = new URL(value);

@@ -175,6 +175,50 @@ describe('fixMarkdownUrls', () => {
     expect(url).toBe('/writing/next');
   });
 
+  it('adds affiliate parameters to supported course platforms', () => {
+    const urls = apply(
+      '[Frontend Masters](https://frontendmasters.com/courses/typescript-v4/) [Master.dev](https://master.dev/teachers/steve-kinney/)',
+    );
+
+    expect(urls).toEqual([
+      'https://frontendmasters.com/courses/typescript-v4/?utm_source=kinney&utm_medium=social&code=kinney',
+      'https://master.dev/teachers/steve-kinney/?utm_source=kinney&utm_medium=social&code=kinney',
+    ]);
+  });
+
+  it('preserves existing query strings and hashes when adding affiliate parameters', () => {
+    const [url] = apply('[Master.dev](https://master.dev/courses/typescript?preview=true#lessons)');
+
+    expect(url).toBe(
+      'https://master.dev/courses/typescript?preview=true&utm_source=kinney&utm_medium=social&code=kinney#lessons',
+    );
+  });
+
+  it('does not duplicate existing affiliate parameters', () => {
+    const [url] = apply(
+      '[Master.dev](https://master.dev/?utm_source=kinney&utm_medium=social&code=kinney)',
+    );
+
+    expect(url).toBe('https://master.dev/?utm_source=kinney&utm_medium=social&code=kinney');
+  });
+
+  it('adds affiliate parameters to supported reference-style definitions', () => {
+    const [url] = applyDefinitions('[Master.dev][master]\n\n[master]: https://master.dev/');
+
+    expect(url).toBe('https://master.dev/?utm_source=kinney&utm_medium=social&code=kinney');
+  });
+
+  it('does not add affiliate parameters to lookalike domains', () => {
+    const urls = apply(
+      '[Frontend Masters](https://frontendmasters.com.example.com/) [Master.dev](https://master.dev.example.com/)',
+    );
+
+    expect(urls).toEqual([
+      'https://frontendmasters.com.example.com/',
+      'https://master.dev.example.com/',
+    ]);
+  });
+
   it('normalizes content paths with leading or trailing slashes', () => {
     const [url] = apply('[Next](./next.md)', '/repository/writing/post.md', '/writing/');
     expect(url).toBe('/writing/next');

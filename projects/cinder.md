@@ -1,6 +1,9 @@
 ---
 name: Cinder
 githubUrl: https://github.com/stevekinney/cinder
+npmPackages:
+  - '@lostgradient/cinder'
+  - '@lostgradient/chat'
 productionUrl: https://cinder.website
 description: 'A Svelte design system for the components I keep rebuilding anyway, packaged as something I can use across real projects instead of copying snippets around.'
 ---
