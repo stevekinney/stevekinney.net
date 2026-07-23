@@ -82,7 +82,7 @@
     "gray-matter": "^4.0.3",
     "html-entities": "^2.6.0",
     "isomorphic-dompurify": "^2.36.0",
-    "js-yaml": "^4.2.0",
+    "js-yaml": "^5.2.1",
     "jsdom": "^27.4.0",
     "lefthook": "^2.1.9",
     "mdast-util-from-markdown": "^2.0.2",
