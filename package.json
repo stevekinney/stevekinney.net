@@ -73,7 +73,7 @@
     "caniuse-lite": "^1.0.30001799",
     "change-case": "^5.4.4",
     "clsx": "^2.1.1",
-    "dompurify": "^3.4.9",
+    "dompurify": "^3.4.12",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.13.1",
