@@ -40,7 +40,7 @@
     "@chromatic-com/storybook": "^5.2.1",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^10.0.1",
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "^1.62.0",
     "@shikijs/transformers": "^4.3.1",
     "@storybook/addon-a11y": "^10.4.3",
     "@storybook/addon-coverage": "^3.0.0",
