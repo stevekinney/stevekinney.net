@@ -1,0 +1,52 @@
+name: Setup workspace
+description: >-
+  Install toolchains, restore caches, install dependencies, and sync
+  SvelteKit types. Requires actions/checkout to have already run in the
+  calling job.
+inputs:
+  turbo-team:
+    description: TURBO_TEAM value for the sync step
+    required: false
+    default: ''
+  turbo-token:
+    description: TURBO_TOKEN value for the sync step
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v7
+      with:
+        node-version: '24.x'
+
+    - uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: '1.3.2'
+
+    - name: Cache Bun dependencies
+      uses: actions/cache@v6
+      with:
+        path: ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-v2-${{ hashFiles('bun.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-v2-
+
+    - name: Cache image preprocessing outputs
+      uses: actions/cache@v6
+      with:
+        path: applications/website/.svelte-kit/process-images
+        key: ${{ runner.os }}-process-images-${{ hashFiles('applications/website/svelte.config.ts', 'packages/markdown/src/**/*.ts', 'writing/**/*.md', 'courses/**/*.md', 'writing/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}', 'courses/**/*.{png,jpg,jpeg,webp,avif,gif,svg,mp4}') }}
+        restore-keys: |
+          ${{ runner.os }}-process-images-
+
+    - name: Install dependencies
+      shell: bash
+      run: bun install --frozen-lockfile --ignore-scripts
+
+    - name: Sync SvelteKit types
+      shell: bash
+      env:
+        TURBO_TEAM: ${{ inputs.turbo-team }}
+        TURBO_TOKEN: ${{ inputs.turbo-token }}
+      run: bun run sync
