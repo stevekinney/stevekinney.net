@@ -91,6 +91,7 @@
     },
     "@stevekinney/website#build": {
       "dependsOn": [
+        "@stevekinney/website#sync",
         "@stevekinney/scripts#content:build",
         "@stevekinney/scripts#content:images:check"
       ],
@@ -134,10 +135,10 @@
     },
     "@stevekinney/website#lint": {},
     "@stevekinney/website#check": {
-      "dependsOn": ["@stevekinney/scripts#content:build"]
+      "dependsOn": ["@stevekinney/website#sync", "@stevekinney/scripts#content:build"]
     },
     "@stevekinney/website#check:watch": {
-      "dependsOn": ["@stevekinney/scripts#content:build"],
+      "dependsOn": ["@stevekinney/website#sync", "@stevekinney/scripts#content:build"],
       "cache": false,
       "persistent": true
     },
@@ -164,7 +165,7 @@
       ]
     },
     "@stevekinney/website#test:unit": {
-      "dependsOn": ["@stevekinney/scripts#content:build"],
+      "dependsOn": ["@stevekinney/website#sync", "@stevekinney/scripts#content:build"],
       "inputs": [
         "src/**",
         "vitest.config.*",
