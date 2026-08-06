@@ -65,7 +65,7 @@
     "@types/unist": "^3.0.3",
     "@typescript-eslint/eslint-plugin": "^8.62.0",
     "@typescript-eslint/parser": "^8.63.0",
-    "@vercel/blob": "^2.4.0",
+    "@vercel/blob": "^2.6.1",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "autoprefixer": "^10.5.2",
