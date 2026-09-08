@@ -3,7 +3,7 @@ title: Template Literal Types
 description: >-
   Master TypeScript's template literal types for type-safe string manipulation
   and CSS-in-JS
-modified: 2026-03-17
+modified: 2026-09-08
 date: 2025-09-14
 ---
 
@@ -240,10 +240,7 @@ type Element = 'header' | 'body' | 'footer' | 'icon';
 type Modifier = 'primary' | 'secondary' | 'disabled' | 'large' | 'small';
 
 type BEMClassName =
-  | Block
-  | `${Block}__${Element}`
-  | `${Block}--${Modifier}`
-  | `${Block}__${Element}--${Modifier}`;
+  Block | `${Block}__${Element}` | `${Block}--${Modifier}` | `${Block}__${Element}--${Modifier}`;
 
 // Examples:
 // "button"
@@ -520,11 +517,7 @@ type Action = 'fetch' | 'resolve' | 'reject' | 'reset';
 type Transition = `${State}_${Action}`;
 
 type ValidTransitions =
-  | 'idle_fetch'
-  | 'loading_resolve'
-  | 'loading_reject'
-  | 'success_reset'
-  | 'error_reset';
+  'idle_fetch' | 'loading_resolve' | 'loading_reject' | 'success_reset' | 'error_reset';
 
 const transitions: Record<ValidTransitions, State> = {
   idle_fetch: 'loading',

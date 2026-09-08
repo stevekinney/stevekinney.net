@@ -4,7 +4,7 @@ description: >-
   Model optimistic UI updates safely—design optimistic state and reconcile
   server results with precise types.
 date: 2025-09-06
-modified: 2026-03-17
+modified: 2026-09-08
 tags:
   - react
   - typescript
@@ -71,8 +71,7 @@ type Post = {
 
 // Actions that can be applied optimistically
 type OptimisticLikeAction =
-  | { type: 'TOGGLE_LIKE'; postId: string }
-  | { type: 'REVERT_LIKE'; postId: string };
+  { type: 'TOGGLE_LIKE'; postId: string } | { type: 'REVERT_LIKE'; postId: string };
 
 // Server response types
 type LikeResponse =

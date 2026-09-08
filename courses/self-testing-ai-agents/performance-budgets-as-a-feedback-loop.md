@@ -1,7 +1,7 @@
 ---
 title: Performance Budgets as a Feedback Loop
 description: Functional and visually correct is not enough if the change made the app slower or heavier. Budgets turn that into a real gate.
-modified: 2026-04-14
+modified: 2026-09-08
 date: 2026-04-06
 ---
 
@@ -106,9 +106,7 @@ Before you can parse it, you have to know what it contains. `rollup-plugin-visua
   "version": 2,
   "tree": {
     "name": "root",
-    "children": [
-      /* the whole module tree */
-    ],
+    "children": [/* the whole module tree */],
   },
   "nodeMetas": {
     "abc-1": {

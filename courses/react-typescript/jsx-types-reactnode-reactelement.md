@@ -4,7 +4,7 @@ description: >-
   Children can be strings, elements, arrays—learn the correct types and helpers
   without guesswork.
 date: 2025-09-06
-modified: 2026-03-17
+modified: 2026-09-08
 tags:
   - react
   - typescript
@@ -34,14 +34,7 @@ Most of the time, you'll want `ReactNode` for children props and `ReactElement` 
 
 ```ts
 type ReactNode =
-  | ReactElement
-  | string
-  | number
-  | Iterable<ReactNode>
-  | ReactPortal
-  | boolean
-  | null
-  | undefined;
+  ReactElement | string | number | Iterable<ReactNode> | ReactPortal | boolean | null | undefined;
 ```
 
 This makes it perfect for typing `children` props, since parents often need to accept a wide variety of content:
@@ -987,9 +980,7 @@ function MyComponent({ children }: Props) {
   return React.Children.map(children, (child) => {
     if (isValidElement(child)) {
       // Now you can safely use cloneElement, etc.
-      return cloneElement(child, {
-        /* additional props */
-      });
+      return cloneElement(child, {/* additional props */});
     }
     return child;
   });

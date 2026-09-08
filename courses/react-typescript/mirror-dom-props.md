@@ -4,7 +4,7 @@ description: >-
   Wrap native elements without losing typing—pass through every valid prop and
   keep autocomplete.
 date: 2025-09-06
-modified: 2026-03-17
+modified: 2026-09-08
 tags:
   - react
   - typescript
@@ -681,8 +681,7 @@ interface GenericProps extends AllHTMLAttributes<HTMLElement> {
 
 // Use JSX.IntrinsicElements for type-safe polymorphism
 type ButtonOrLinkProps =
-  | ({ as: 'button' } & JSX.IntrinsicElements['button'])
-  | ({ as: 'a' } & JSX.IntrinsicElements['a']);
+  ({ as: 'button' } & JSX.IntrinsicElements['button']) | ({ as: 'a' } & JSX.IntrinsicElements['a']);
 ```
 
 ### Real-World Example: Building a Form Field System

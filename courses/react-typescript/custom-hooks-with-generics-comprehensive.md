@@ -4,7 +4,7 @@ description: >-
   Build reusable hooks with proper generic constraints—type-safe data fetching,
   localStorage, and form management patterns.
 date: 2025-09-06
-modified: 2026-03-17
+modified: 2026-09-08
 tags:
   - react
   - typescript
@@ -154,12 +154,8 @@ interface Product {
 }
 
 function MyComponent() {
-  const users: User[] = [
-    /* ... */
-  ];
-  const products: Product[] = [
-    /* ... */
-  ];
+  const users: User[] = [/* ... */];
+  const products: Product[] = [/* ... */];
 
   const userSelection = useSelection(users); // T['id'] is number
   const productSelection = useSelection(products); // T['id'] is string

@@ -128,10 +128,7 @@ export type ProjectContentRoute = Omit<ContentRouteBase, 'date' | 'modified'> & 
 };
 
 export type ContentRoute =
-  | WritingContentRoute
-  | CourseContentRoute
-  | LessonContentRoute
-  | ProjectContentRoute;
+  WritingContentRoute | CourseContentRoute | LessonContentRoute | ProjectContentRoute;
 
 export type GeneratedContentPrerenderEntries = {
   writing: Array<{ slug: string }>;

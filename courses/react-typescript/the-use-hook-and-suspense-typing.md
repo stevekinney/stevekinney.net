@@ -4,7 +4,7 @@ description: >-
   Consume promises and resources directly—type use() calls, Suspense fallbacks,
   and async component returns.
 date: 2025-09-06
-modified: 2026-03-17
+modified: 2026-09-08
 tags:
   - react
   - typescript
@@ -132,9 +132,8 @@ function createCachedResource<T>(key: string, fetcher: () => Promise<T>): Promis
 }
 
 // Type-safe resource creation
-const postsResource = createCachedResource(
-  'posts',
-  (): Promise<Post[]> => fetch('/api/posts').then((res) => res.json()),
+const postsResource = createCachedResource('posts', (): Promise<Post[]> =>
+  fetch('/api/posts').then((res) => res.json()),
 );
 
 function PostsList() {

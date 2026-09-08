@@ -4,7 +4,7 @@ description: >-
   Stop paying rent for caches you never use. Learn to remove unnecessary
   memoization and let React do less work.
 date: 2025-09-06
-modified: 2026-03-17
+modified: 2026-09-08
 tags:
   - react
   - performance
@@ -113,9 +113,7 @@ function Parent({ items, selectedId }: Props) {
     () => {
       // Update logic here
     },
-    [
-      /* dependencies */
-    ],
+    [/* dependencies */],
   );
 
   return (
