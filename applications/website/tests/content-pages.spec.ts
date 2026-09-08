@@ -44,7 +44,12 @@ test('tailwind playground previews are progressively enhanced on content pages',
 test('writing post page has no accessibility violations', async ({ page }) => {
   await page.goto('/writing/setup-python');
   await injectAxe(page);
-  await checkA11y(page);
+  // Report the offending rules and nodes on failure; without this a violation
+  // surfaces only as "1 !== 0", which says nothing about what to fix.
+  await checkA11y(page, undefined, {
+    detailedReport: true,
+    detailedReportOptions: { html: true },
+  });
 });
 
 test('project pages link package-backed projects to npm', async ({ page }) => {
