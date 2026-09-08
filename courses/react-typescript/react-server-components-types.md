@@ -5,7 +5,7 @@ description: >-
   client-server boundary in React applications. Instead of rendering everything
   on the client and fetching data through APIs, some components run on the
   server, some on th...
-modified: 2026-03-17
+modified: 2026-09-08
 date: 2025-09-06
 ---
 
@@ -53,13 +53,7 @@ First, we need types that represent only serializable data. Here's a utility typ
 ```ts
 // Utility type for serializable data
 type Serializable =
-  | string
-  | number
-  | boolean
-  | null
-  | undefined
-  | SerializableObject
-  | SerializableArray;
+  string | number | boolean | null | undefined | SerializableObject | SerializableArray;
 
 type SerializableObject = { [Key in string]: Serializable };
 type SerializableArray = ReadonlyArray<Serializable>;

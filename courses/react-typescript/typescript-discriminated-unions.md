@@ -3,7 +3,7 @@ title: Discriminated Unions
 description: >-
   Master TypeScript's most powerful pattern for representing state and handling
   complex types
-modified: 2026-03-17
+modified: 2026-09-08
 date: 2025-09-14
 ---
 
@@ -145,9 +145,7 @@ interface BadState {
 
 // ✅ Good: Discriminated union makes invalid states impossible
 type GoodState =
-  | { status: 'loading' }
-  | { status: 'error'; error: Error }
-  | { status: 'success'; data: User };
+  { status: 'loading' } | { status: 'error'; error: Error } | { status: 'success'; data: User };
 // Can't be loading AND error
 // Can't have data without success
 // Can't have error without error status

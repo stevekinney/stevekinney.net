@@ -4,7 +4,7 @@ description: >-
   Use overloads to model ergonomic APIs—curried helpers, either‑or props, and
   safe fallbacks.
 date: 2025-09-06
-modified: 2026-03-17
+modified: 2026-09-08
 tags:
   - react
   - typescript
@@ -176,8 +176,7 @@ function useLocalStorage<T>(
   defaultValue: T,
   includeLoading?: boolean,
 ):
-  | [T, (value: T | ((prev: T) => T)) => void]
-  | [T, (value: T | ((prev: T) => T)) => void, boolean] {
+  [T, (value: T | ((prev: T) => T)) => void] | [T, (value: T | ((prev: T) => T)) => void, boolean] {
   const [state, setState] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);

@@ -4,7 +4,7 @@ description: >-
   Master useState, useReducer, and action typing—from inference patterns to
   discriminated unions that prevent impossible states.
 date: 2025-09-06
-modified: 2026-03-17
+modified: 2026-09-08
 tags:
   - react
   - typescript
@@ -335,10 +335,9 @@ For actions that follow similar patterns, you can create generic action types:
 // Generic action patterns
 type AsyncAction<T extends string, TData = undefined> = TData extends undefined
   ? { type: `${T}_PENDING` } | { type: `${T}_FULFILLED` } | { type: `${T}_REJECTED`; error: string }
-  :
-      | { type: `${T}_PENDING` }
-      | { type: `${T}_FULFILLED`; data: TData }
-      | { type: `${T}_REJECTED`; error: string };
+  : | { type: `${T}_PENDING` }
+    | { type: `${T}_FULFILLED`; data: TData }
+    | { type: `${T}_REJECTED`; error: string };
 
 // Usage for API calls
 type UserAction = AsyncAction<'FETCH_USER', User> | AsyncAction<'DELETE_USER'>;

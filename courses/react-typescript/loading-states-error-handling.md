@@ -4,7 +4,7 @@ description: >-
   Master async state patterns with discriminated unions—model loading, success,
   and error states in TypeScript to make impossible states unrepresentable.
 date: 2025-09-27
-modified: 2026-03-17
+modified: 2026-09-08
 tags:
   - react
   - typescript
@@ -774,9 +774,7 @@ function DashboardWithMultipleStates() {
 ```tsx
 // ✅ Good: Impossible states are impossible
 type State =
-  | { status: 'loading' }
-  | { status: 'success'; data: T }
-  | { status: 'error'; error: Error };
+  { status: 'loading' } | { status: 'success'; data: T } | { status: 'error'; error: Error };
 
 // ❌ Bad: Many impossible states
 interface State {
