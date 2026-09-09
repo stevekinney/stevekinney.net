@@ -20,6 +20,12 @@ export const websiteSvelteKitClientRoot = path.resolve(
   'client',
 );
 export const websiteVercelStaticRoot = path.resolve(websiteRoot, '.vercel', 'output', 'static');
+export const websiteVercelFunctionsRoot = path.resolve(
+  websiteRoot,
+  '.vercel',
+  'output',
+  'functions',
+);
 export const generatedContentDirectory = path.resolve(websiteRoot, '.generated');
 export const generatedContentDataPath = path.resolve(
   generatedContentDirectory,
