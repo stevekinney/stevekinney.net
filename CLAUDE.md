@@ -19,6 +19,11 @@ The remote cache credential is **not ambient**. Prefix with the wrapper to get i
 with-turborepo-cache bun run build
 ```
 
+`with-turborepo-cache` is a personal macOS helper on `PATH`, not a script in this
+repository, so it will not exist in a fresh clone. It is a convenience, not a
+requirement: the portable equivalent is exporting `TURBO_TOKEN` and `TURBO_TEAM`
+yourself, and CI does exactly that from repository secrets rather than using the wrapper.
+
 The wrapper reads `TURBO_TOKEN` from the macOS login Keychain (service
 `turborepo-remote-cache`, account `TURBO_TOKEN`) and exports it along with `TURBO_TEAM`.
 The Keychain item grants read access to `/usr/bin/security`, so the lookup never prompts
