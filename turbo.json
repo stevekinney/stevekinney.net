@@ -106,6 +106,7 @@
         "../../packages/components/**/*.{svelte,ts,js}",
         "../../packages/markdown/src/**/*.ts",
         "../../packages/utilities/**/*.ts",
+        "../../packages/scripts/*.ts",
         "../../image-manifest.json",
         ".generated/**",
         "!build/**",
