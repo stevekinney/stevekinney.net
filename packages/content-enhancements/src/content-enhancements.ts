@@ -64,19 +64,41 @@ const applyEnhancements = async (): Promise<void> => {
   );
 };
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', applyEnhancements, { once: true });
-} else {
-  applyEnhancements();
+/**
+ * The page loads this entry with a cache-busting `?v=` query, while the lazily
+ * imported enhancer chunks import it back by its bare filename for shared
+ * symbols. Those are two different URLs, so the browser instantiates this
+ * module twice and runs everything below a second time. `cleanupsByRoot` is
+ * per-instance, so the second instance sees no prior work and enhances every
+ * root again — which is how a page ends up with two "On this page" navs and a
+ * duplicate landmark. Claim a flag on `window` so only the first instance
+ * drives enhancements; the second becomes inert.
+ */
+const ACTIVE_FLAG = '__contentEnhancementsActive';
+
+type EnhancementWindow = Window & { [ACTIVE_FLAG]?: boolean };
+const enhancementWindow = window as EnhancementWindow;
+
+if (!enhancementWindow[ACTIVE_FLAG]) {
+  enhancementWindow[ACTIVE_FLAG] = true;
+  registerEnhancementLifecycle();
 }
 
-window.addEventListener('pagehide', () => {
-  for (const root of getRoots()) cleanupRoot(root);
-});
+function registerEnhancementLifecycle(): void {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyEnhancements, { once: true });
+  } else {
+    applyEnhancements();
+  }
 
-// If the browser restores the document from the back/forward cache the
-// pagehide listener above has already torn every enhancement down. Re-run
-// them so copy buttons, diagrams, and playgrounds come back.
-window.addEventListener('pageshow', (event) => {
-  if (event.persisted) applyEnhancements();
-});
+  window.addEventListener('pagehide', () => {
+    for (const root of getRoots()) cleanupRoot(root);
+  });
+
+  // If the browser restores the document from the back/forward cache the
+  // pagehide listener above has already torn every enhancement down. Re-run
+  // them so copy buttons, diagrams, and playgrounds come back.
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) applyEnhancements();
+  });
+}

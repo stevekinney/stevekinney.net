@@ -65,6 +65,24 @@ test('scrollable code blocks are reachable by keyboard', async ({ page }) => {
   }
 });
 
+test('content enhancements apply exactly once per document', async ({ page }) => {
+  await page.goto('/writing/setup-python');
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+  });
+
+  // The entry is loaded with a cache-busting query while its chunks import it
+  // back bare, so the browser can instantiate the module twice. If both
+  // instances enhance, every injected element is duplicated.
+  const counts = await page.evaluate(() => ({
+    contentDocuments: document.querySelectorAll('[data-content-document]').length,
+    tableOfContents: document.querySelectorAll('nav[aria-label="On this page"]').length,
+  }));
+
+  expect(counts.contentDocuments).toBe(1);
+  expect(counts.tableOfContents).toBe(1);
+});
+
 test('writing post page has no accessibility violations', async ({ page }) => {
   await page.goto('/writing/setup-python');
   // Overflow, and therefore the scrollable-region-focusable rule, depends on
