@@ -41,8 +41,34 @@ test('tailwind playground previews are progressively enhanced on content pages',
   await expect(playground).not.toHaveAttribute('inert', '');
 });
 
+test('scrollable code blocks are reachable by keyboard', async ({ page }) => {
+  await page.goto('/writing/setup-python');
+  // Whether a block actually overflows depends on font metrics, so wait for
+  // fonts before measuring — otherwise this silently checks nothing.
+  await page.evaluate(() => document.fonts.ready);
+
+  const scrollable = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('[data-language], [data-mermaid]'))
+      .flatMap((element) => [element, ...element.querySelectorAll('div')])
+      .filter((element) => element.scrollWidth > element.clientWidth)
+      .map((element) => ({
+        tabIndex: (element as HTMLElement).tabIndex,
+        html: element.outerHTML.slice(0, 120),
+      })),
+  );
+
+  expect(scrollable.length).toBeGreaterThan(0);
+  for (const region of scrollable) {
+    expect(region.tabIndex, `not keyboard focusable: ${region.html}`).toBe(0);
+  }
+});
+
 test('writing post page has no accessibility violations', async ({ page }) => {
   await page.goto('/writing/setup-python');
+  // Overflow, and therefore the scrollable-region-focusable rule, depends on
+  // font metrics. Without this the check races font loading and fails ~4% of
+  // runs on whichever violations happen to be live at that instant.
+  await page.evaluate(() => document.fonts.ready);
   await injectAxe(page);
   // Report the offending rules and nodes on failure; without this a violation
   // surfaces only as "1 !== 0", which says nothing about what to fix.

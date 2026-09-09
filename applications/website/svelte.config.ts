@@ -90,7 +90,7 @@ const mdsvexOptions: MdsvexOptions = {
       // The client-side renderer reads via textContent, which decodes entities automatically.
       if (lang === 'mermaid') {
         const escaped = escapeSvelte(code.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
-        return `<div data-mermaid class="not-prose overflow-x-auto rounded-md border-2 border-slate-800 bg-[#011627] p-4 not-last:mb-4"><pre class="mermaid-source" style="margin:0;color:#d6deeb;white-space:pre-wrap">${escaped}</pre></div>`;
+        return `<!-- svelte-ignore a11y_no_noninteractive_tabindex --><div data-mermaid tabindex="0" class="not-prose overflow-x-auto rounded-md border-2 border-slate-800 bg-[#011627] p-4 not-last:mb-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"><pre class="mermaid-source" style="margin:0;color:#d6deeb;white-space:pre-wrap">${escaped}</pre></div>`;
       }
 
       const { title, remaining: remainingMeta } = parseTitle(metastring);
@@ -105,6 +105,23 @@ const mdsvexOptions: MdsvexOptions = {
         'not-last:mb-4',
       ];
 
+      // A horizontally scrolling region has to be reachable by keyboard, or the
+      // code that overflows it can only be read with a pointer. Shiki's own
+      // tabindex is stripped below because the <pre> is not what scrolls — one
+      // of these wrappers is — so the tab stop belongs here instead.
+      const scrollFocusClasses = [
+        'focus-visible:outline-2',
+        'focus-visible:outline-offset-2',
+        'focus-visible:outline-slate-500',
+      ];
+      const scrollAttributes = `tabindex="0"`;
+      // Svelte's a11y_no_noninteractive_tabindex rule rejects tabindex on any
+      // noninteractive element, and the only roles it accepts (button, link)
+      // would be semantically wrong here. The rule does not model scrollable
+      // regions, which WCAG requires to be focusable, so this is a false
+      // positive — silenced per element rather than globally.
+      const scrollIgnoreComment = '<!-- svelte-ignore a11y_no_noninteractive_tabindex -->';
+
       // Unsupported Shiki languages (e.g. "text") get a plain <pre>
       // wrapper so whitespace and newlines are preserved.
       if (!(lang in bundledLanguages)) {
@@ -116,10 +133,15 @@ const mdsvexOptions: MdsvexOptions = {
         const titleHtml = title
           ? `<div class="code-block-header">${escapeSvelte(title)}</div>`
           : '';
-        const wrapperClasses = title ? baseClasses : [...baseClasses, 'overflow-x-scroll', 'p-4'];
-        const contentWrapper = title ? `<div class="overflow-x-auto p-4">${inner}</div>` : inner;
+        const wrapperClasses = title
+          ? baseClasses
+          : [...baseClasses, 'overflow-x-scroll', 'p-4', ...scrollFocusClasses];
+        const contentWrapper = title
+          ? `${scrollIgnoreComment}<div class="overflow-x-auto p-4 ${scrollFocusClasses.join(' ')}" ${scrollAttributes}>${inner}</div>`
+          : inner;
+        const wrapperAttributes = title ? '' : ` ${scrollAttributes}`;
 
-        return `<div class="${wrapperClasses.join(' ')}" data-language="${lang}">${titleHtml}${contentWrapper}</div>`;
+        return `${title ? '' : scrollIgnoreComment}<div class="${wrapperClasses.join(' ')}" data-language="${lang}"${wrapperAttributes}>${titleHtml}${contentWrapper}</div>`;
       }
 
       const transformers = [];
@@ -141,10 +163,15 @@ const mdsvexOptions: MdsvexOptions = {
       }
 
       const titleHtml = title ? `<div class="code-block-header">${escapeSvelte(title)}</div>` : '';
-      const wrapperClasses = title ? baseClasses : [...baseClasses, 'overflow-x-scroll', 'p-4'];
-      const contentWrapper = title ? `<div class="overflow-x-auto p-4">${html}</div>` : html;
+      const wrapperClasses = title
+        ? baseClasses
+        : [...baseClasses, 'overflow-x-scroll', 'p-4', ...scrollFocusClasses];
+      const contentWrapper = title
+        ? `${scrollIgnoreComment}<div class="overflow-x-auto p-4 ${scrollFocusClasses.join(' ')}" ${scrollAttributes}>${html}</div>`
+        : html;
+      const wrapperAttributes = title ? '' : ` ${scrollAttributes}`;
 
-      return `<div class="${wrapperClasses.join(' ')}" data-language="${lang}">${titleHtml}${contentWrapper}</div>`;
+      return `${title ? '' : scrollIgnoreComment}<div class="${wrapperClasses.join(' ')}" data-language="${lang}"${wrapperAttributes}>${titleHtml}${contentWrapper}</div>`;
     },
   },
 };
