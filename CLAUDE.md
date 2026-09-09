@@ -11,6 +11,41 @@
 - `bun storybook` - Run Storybook on port 6006
 - `bun run build:report` - Write `tmp/build-report/website-build-report.{json,md}` after a build
 
+### Turborepo remote cache
+
+The remote cache credential is **not ambient**. Prefix with the wrapper to get it:
+
+```sh
+with-turborepo-cache bun run build
+```
+
+The wrapper reads `TURBO_TOKEN` from the macOS login Keychain (service
+`turborepo-remote-cache`, account `TURBO_TOKEN`) and exports it along with `TURBO_TEAM`.
+The Keychain item grants read access to `/usr/bin/security`, so the lookup never prompts
+— backgrounded, detached, and unattended runs all work. Rotate the token with:
+
+```sh
+security add-generic-password -U -s turborepo-remote-cache -a TURBO_TOKEN -T /usr/bin/security -w
+```
+
+Without the wrapper there is no `TURBO_TOKEN`, and Turbo emits two warnings that
+describe one condition — no credentials:
+
+```
+WARNING • Remote caching unavailable (Authentication failed — check TURBO_TOKEN ...)
+WARNING Insufficient permissions to write to remote cache. Please verify that your role ...
+```
+
+**"Insufficient permissions" does not mean the Vercel account lacks write access.** It is
+the downstream symptom of never having authenticated. A wrapped run prints
+`• Remote caching enabled` and no warnings. Unwrapped runs still work — they just
+fall back to the local `.turbo/cache`, so a cold build takes ~90s instead of restoring.
+
+Two stale credentials exist on this machine and are _not_ used for caching — ignore them
+when debugging cache behavior: an expired Vercel CLI token in
+`~/Library/Application Support/com.vercel.cli/auth.json`, and an expired `VERCEL_OIDC_TOKEN`
+in `.env.local`.
+
 ## Code Style
 
 - **Formatting**: Use tabs, single quotes, 100 char line length

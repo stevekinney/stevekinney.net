@@ -1,0 +1,8 @@
+# Gitignored files copied into each new worktree Claude Code creates.
+# Uses .gitignore syntax. Only files that match AND are gitignored are
+# copied, so tracked files (e.g. .env.example) are never duplicated.
+# A pattern without a slash matches at any depth, covering monorepo packages.
+.env
+.env.local
+.env.*.local
+.envrc
