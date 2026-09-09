@@ -45,7 +45,9 @@ test('scrollable code blocks are reachable by keyboard', async ({ page }) => {
   await page.goto('/writing/setup-python');
   // Whether a block actually overflows depends on font metrics, so wait for
   // fonts before measuring — otherwise this silently checks nothing.
-  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+  });
 
   const scrollable = await page.evaluate(() =>
     Array.from(document.querySelectorAll('[data-language], [data-mermaid]'))
@@ -68,7 +70,9 @@ test('writing post page has no accessibility violations', async ({ page }) => {
   // Overflow, and therefore the scrollable-region-focusable rule, depends on
   // font metrics. Without this the check races font loading and fails ~4% of
   // runs on whichever violations happen to be live at that instant.
-  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+  });
   await injectAxe(page);
   // Report the offending rules and nodes on failure; without this a violation
   // surfaces only as "1 !== 0", which says nothing about what to fix.
