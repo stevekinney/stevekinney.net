@@ -97,7 +97,7 @@
     "rehype-unwrap-images": "^1.0.0",
     "remark-gfm": "^4.0.1",
     "rollup-plugin-visualizer": "^7.1.1",
-    "satori": "^0.33.4",
+    "satori": "^0.18.4",
     "shiki": "^4.4.3",
     "storybook": "^10.6.0",
     "svelte": "^5.57.0",
