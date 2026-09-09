@@ -67,9 +67,12 @@ test('scrollable code blocks are reachable by keyboard', async ({ page }) => {
 
 test('content enhancements apply exactly once per document', async ({ page }) => {
   await page.goto('/writing/setup-python');
-  await page.evaluate(async () => {
-    await document.fonts.ready;
-  });
+  // Counting before the enhancers finish would read a half-applied page: too
+  // early and there is no table of contents at all, or only the first of two.
+  // Wait for the enhanced marker, then for the network to settle, so a second
+  // module instance has had its chance to load and duplicate the nav.
+  await expect(page.locator('[data-content-document][data-content-enhanced="true"]')).toBeVisible();
+  await page.waitForLoadState('networkidle');
 
   // The entry is loaded with a cache-busting query while its chunks import it
   // back bare, so the browser can instantiate the module twice. If both
@@ -87,7 +90,11 @@ test('writing post page has no accessibility violations', async ({ page }) => {
   await page.goto('/writing/setup-python');
   // Overflow, and therefore the scrollable-region-focusable rule, depends on
   // font metrics. Without this the check races font loading and fails ~4% of
-  // runs on whichever violations happen to be live at that instant.
+  // runs on whichever violations happen to be live at that instant. Audit the
+  // enhanced page too, since enhancers inject landmarks and controls of their
+  // own that axe should see.
+  await expect(page.locator('[data-content-document][data-content-enhanced="true"]')).toBeVisible();
+  await page.waitForLoadState('networkidle');
   await page.evaluate(async () => {
     await document.fonts.ready;
   });
