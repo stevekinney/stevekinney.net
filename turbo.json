@@ -207,6 +207,7 @@
       "dependsOn": ["@stevekinney/website#build-storybook"]
     },
     "@stevekinney/website#storybook": {
+      "dependsOn": ["@stevekinney/scripts#content:build"],
       "cache": false,
       "persistent": true
     },

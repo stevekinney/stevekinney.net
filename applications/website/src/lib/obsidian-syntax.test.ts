@@ -184,3 +184,12 @@ it('keeps currency ranges and prose prices before an equation literal', () => {
   ]);
   expect(normalizeObsidianMarkdown(source, context).markdown).toContain('Budget: $5-$10.');
 });
+
+it('keeps slash-separated currency prices as prose', () => {
+  const source = 'Plans cost $2/$8 ... $75/$150 per month.';
+
+  expect(parseObsidianSource(source).nodes.filter((node) => node.type === 'inlineMath')).toEqual(
+    [],
+  );
+  expect(normalizeObsidianMarkdown(source, context).markdown).toContain(source);
+});

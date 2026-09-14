@@ -1,5 +1,8 @@
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import { visit } from 'unist-util-visit';
 import { getObsidianDocumentMetadata } from './obsidian-document.ts';
 import { normalizeMarkdownLinks } from './obsidian-markdown-links.ts';
 import { resolveObsidianReference } from './obsidian-resolver.ts';
@@ -48,6 +51,41 @@ const fragmentId = (document: PublicationDocument, fragment: string): string | u
     metadata.headings.find((heading) => heading.id === fragment || heading.text === fragment)?.id ??
     (metadata.blocks.some((block) => `block-${block.id}` === fragment) ? fragment : undefined)
   );
+};
+
+const namespaceEmbeddedHtmlIdentifiers = (
+  source: string,
+  start: number,
+  end: number,
+  prefix: string,
+  localIds: Map<string, string>,
+  edits: SourceEdit[],
+): void => {
+  if (!source.slice(start, end).includes('<')) return;
+  const tree = unified().use(remarkParse).parse(source.slice(start, end));
+  visit(tree, 'html', (node) => {
+    const localStart = node.position?.start.offset;
+    const localEnd = node.position?.end.offset;
+    if (localStart === undefined || localEnd === undefined) return;
+    const nodeStart = start + localStart;
+    const nodeEnd = start + localEnd;
+    let value = node.value;
+    value = value.replace(/\bid=(['"])([^'"]+)\1/g, (match, quote: string, id: string) => {
+      localIds.set(id, `${prefix}${id}`);
+      return `id=${quote}${prefix}${id}${quote}`;
+    });
+    value = value.replace(/\bhref=(['"])#([^'"]*)\1/g, (match, quote: string, id: string) => {
+      let decoded: string;
+      try {
+        decoded = decodeURIComponent(id);
+      } catch {
+        return match;
+      }
+      const mapped = localIds.get(decoded);
+      return mapped ? `href=${quote}#${encodeURIComponent(mapped)}${quote}` : match;
+    });
+    if (value !== node.value) edits.push({ start: nodeStart, end: nodeEnd, value });
+  });
 };
 
 /** Resolve against the closed publication index, retaining the original host source map. */
@@ -120,6 +158,7 @@ export const normalizeObsidianReferences = (
           edits.push({ start: block.end, end: block.end, value: `\n\n${anchor}` });
       }
     }
+    if (prefix) namespaceEmbeddedHtmlIdentifiers(source, start, end, prefix, localIds, edits);
     const links = normalizeMarkdownLinks(source, currentContext, {
       embedded: Boolean(prefix),
       hostSourcePath: context.sourcePath,
@@ -201,13 +240,17 @@ export const normalizeObsidianReferences = (
         const label = escapeObsidianHtml(dimensions ? target : (alias ?? target));
         if (attachment.mimeType.startsWith('image/')) {
           // Relative to the HOST because rehype-enhance-images receives the host filename.
-          const imagePath = attachment.sourcePath.includes('/static/')
+          const isPublicStaticAttachment = attachment.sourcePath.includes('/static/');
+          const imagePath = isPublicStaticAttachment
             ? attachment.url
             : encodedPath(
                 path.posix.relative(path.posix.dirname(context.sourcePath), attachment.sourcePath),
               );
+          const publicAttachmentMarker = isPublicStaticAttachment
+            ? ' data-obsidian-public-attachment=""'
+            : '';
           replace(
-            `<img data-obsidian-attachment="" src="${escapeObsidianHtml(imagePath)}" alt="${label}"${attributes}>`,
+            `<img data-obsidian-attachment=""${publicAttachmentMarker} src="${escapeObsidianHtml(imagePath)}" alt="${label}"${attributes}>`,
           );
         } else if (
           attachment.mimeType.startsWith('audio/') ||

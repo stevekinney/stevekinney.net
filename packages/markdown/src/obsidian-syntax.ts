@@ -48,7 +48,7 @@ const parser = unified()
   .use(remarkObsidianLocal);
 
 const currencyAmount = /^\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?(?![\w])/u;
-const currencyProse = /[A-Za-z]{2,}|[-–—]\s*$/u;
+const currencyProse = /[A-Za-z]{2,}|[-–—]\s*$|\/\s*$|(?:\.\.\.|…)/u;
 
 /** Mask currency markers so prose prices cannot be consumed as inline math delimiters. */
 const maskCurrencyMarkers = (source: string): string => {

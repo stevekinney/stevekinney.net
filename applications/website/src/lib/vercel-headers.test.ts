@@ -13,4 +13,5 @@ it('allows same-origin and published Blob PDFs under the production CSP', async 
   expect(csp).toContain(
     "object-src 'self' https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com",
   );
+  expect(csp).toContain("media-src 'self' https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com");
 });

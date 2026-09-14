@@ -120,6 +120,22 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown).toMatch(/\[Jump\]\(<#embed-[a-z0-9-]+block-target>\)/u);
   });
 
+  it('namespaces raw HTML identifiers and local links inside an embed', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/html-identifiers.md',
+      route: '/writing/html-identifiers',
+      source: '<section id="details">Details</section>\n\n<a href="#details">Jump</a>',
+    };
+    const result = normalizeObsidianMarkdown('![[html-identifiers]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toMatch(/id="embed-[a-z0-9-]+details"/u);
+    expect(result.markdown).toMatch(/href="#embed-[a-z0-9-]+details"/u);
+  });
+
   it('expands approved media with dimensions and PDF fragments', () => {
     const result = normalizeObsidianMarkdown(
       '![[assets/demo.png|320x200]] ![[assets/demo.mp4]] ![[assets/demo.pdf#page=2]]',

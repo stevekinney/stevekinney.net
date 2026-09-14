@@ -106,6 +106,40 @@ it('passes nested embedded image dimensions through the host image-manifest pipe
   }
 });
 
+it('leaves approved static image URLs alone under a strict image manifest', async () => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'obsidian-render-'));
+  try {
+    const manifestPath = path.join(directory, 'manifest.json');
+    await writeFile(manifestPath, JSON.stringify({ version: 1, images: {} }));
+    const normalized = normalizeObsidianMarkdown('![[/images/approved.png]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: {
+        documents: [],
+        attachments: [
+          {
+            sourcePath: 'applications/website/static/images/approved.png',
+            url: '/images/approved.png',
+            mimeType: 'image/png',
+          },
+        ],
+      },
+    });
+    expect(normalized.diagnostics).toEqual([]);
+    const compiled = await compile(normalized.markdown, {
+      filename: path.resolve('../..', 'writing/host.md'),
+      extensions: ['.md'],
+      rehypePlugins: [
+        rehypeObsidianIdentifiers as Pluggable,
+        [rehypeEnhanceImages, { manifestPath, strictManifest: true }] as unknown as Pluggable,
+      ],
+    });
+    expect(compiled!.code).toContain('src="/images/approved.png"');
+    compileSvelte(compiled!.code, { generate: 'server' });
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
 it('rejects collisions between authored IDs and generated heading IDs', async () => {
   await expect(
     compile('# Heading\n\n<span id="heading"></span>', { rehypePlugins: plugins }),

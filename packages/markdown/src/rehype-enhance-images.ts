@@ -185,6 +185,13 @@ const rehypeEnhanceImages: Plugin<[Options?], Root> = (options = {}) => {
       const src = String(node.properties?.src ?? '');
       if (!src || isExternalUrl(src)) return;
 
+      // Static attachments are already published at their public URL and do not
+      // need an image-manifest entry. The marker is removed before output.
+      if (node.properties?.dataObsidianPublicAttachment !== undefined) {
+        delete node.properties.dataObsidianPublicAttachment;
+        return;
+      }
+
       let url = safeDecode(src);
       if (url.startsWith('assets/')) url = `./${url}`;
       const urlForMatch = stripQueryHash(url);
