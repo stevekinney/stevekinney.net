@@ -1,18 +1,18 @@
 import type { PlaygroundReport } from './inspect-playgrounds.ts';
 
-export type TurboTaskCache = {
+type TurboTaskCache = {
   status?: string;
   source?: string;
   timeSaved?: number;
 };
 
-export type TurboTaskSummary = {
+type TurboTaskSummary = {
   taskId: string;
   hash: string;
   cache?: TurboTaskCache;
 };
 
-export type TurboExecutionSummary = {
+type TurboExecutionSummary = {
   cached: number;
   attempted: number;
   startTime: number;
@@ -31,7 +31,7 @@ export type SizedFile = {
   gzipBytes: number;
 };
 
-export type WebsiteBuildTaskReport = {
+type WebsiteBuildTaskReport = {
   hash: string;
   cacheStatus: string;
   cacheSource: string;
@@ -54,7 +54,7 @@ export type ContentReport = {
   prerenderEntryCount: number;
 };
 
-export type PrerenderReport = {
+type PrerenderReport = {
   buildOutputRoot: string | null;
   buildHtmlPageCount: number;
   prerenderedHtmlPageCount: number;
@@ -68,7 +68,7 @@ export type SizedFileReport = {
   formattedGzipSize: string;
 };
 
-export type AssetsReport = {
+type AssetsReport = {
   largestClientChunk: SizedFileReport | null;
   mainStylesheet: SizedFileReport | null;
   largestEnhancementChunk: SizedFileReport | null;
