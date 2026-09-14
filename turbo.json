@@ -182,6 +182,7 @@
       "dependsOn": ["@stevekinney/website#sync", "@stevekinney/scripts#content:build"],
       "inputs": [
         "src/**",
+        "plugins/**/*.ts",
         "vitest.config.*",
         "vite.config.*",
         "tsconfig.json",
