@@ -131,7 +131,7 @@ describe('normalizeObsidianMarkdown embeds', () => {
     const target: PublicationDocument = {
       sourcePath: 'writing/html-identifiers.md',
       route: '/writing/html-identifiers',
-      source: '<section id="details">Details</section>\n\n<a href="#details">Jump</a>',
+      source: '<a href="#details">Jump</a>\n\n<section id="details">Details</section>',
     };
     const result = normalizeObsidianMarkdown('![[html-identifiers]]', {
       sourcePath: 'writing/host.md',
@@ -141,6 +141,20 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.diagnostics).toEqual([]);
     expect(result.markdown).toMatch(/id="embed-[a-z0-9-]+details"/u);
     expect(result.markdown).toMatch(/href="#embed-[a-z0-9-]+details"/u);
+  });
+
+  it('allows nested self-section embeds outside the current section range', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/sections.md',
+      route: '/writing/sections',
+      source: '# First\n\n![[#Second]]\n\n# Second\n\nSecond body.',
+    };
+    const result = normalizeObsidianMarkdown('![[sections#First]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toContain('Second body.');
   });
 
   it('expands approved media with dimensions and PDF fragments', () => {

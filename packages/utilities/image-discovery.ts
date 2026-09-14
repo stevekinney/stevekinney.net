@@ -60,6 +60,16 @@ const collectImageUrls = (markdown: string): string[] => {
     if (url) urls.add(url);
   });
 
+  visit(tree, 'embed', (node) => {
+    const url = String((node as { value?: string }).value ?? '').trim();
+    if (url) urls.add(url);
+  });
+
+  for (const match of markdown.matchAll(/!\[\[([^|\]#]+)(?:#[^|\]]*)?(?:\|[^\]]*)?\]\]/g)) {
+    const url = match[1]?.trim();
+    if (url) urls.add(url);
+  }
+
   visit(tree, 'html', (node) => {
     const raw = String((node as { value?: string }).value ?? '');
     const imgTagPattern = /<img\b[^>]*\bsrc=(['"])(.*?)\1/gi;

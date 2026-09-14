@@ -16,8 +16,8 @@ import type { PublicationDocument } from '../../../../packages/markdown/src/obsi
 
 type Pluggable = NonNullable<MdsvexOptions['rehypePlugins']>[number];
 const plugins = [
-  rehypeCallouts,
   rehypeObsidianIdentifiers,
+  rehypeCallouts,
   rehypeSlug,
   rehypeObsidianMath,
   rehypeValidateObsidianIdentifiers,
@@ -212,5 +212,23 @@ it('renders repeated embedded footnotes with unique IDs and math in the footnote
   expect(compiled!.code.match(/<mjx-container/g)).toHaveLength(2);
   expect(compiled!.code).toContain('<strong>formatting</strong>');
   expect(compiled!.code).not.toContain('data-obsidian-footnote');
+  compileSvelte(compiled!.code, { generate: 'server' });
+});
+
+it('transforms callouts restored from embedded footnotes', async () => {
+  const document: PublicationDocument = {
+    sourcePath: 'writing/note.md',
+    route: '/note',
+    source: 'Text[^a]\n\n[^a]:\n    > [!note] Important\n    > Body\n',
+  };
+  const normalized = normalizeObsidianMarkdown('![[note]]', {
+    sourcePath: 'writing/host.md',
+    publicationIndex: { documents: [document], attachments: [] },
+  });
+  const compiled = await compile(normalized.markdown, { rehypePlugins: plugins });
+
+  expect(compiled!.code).toContain('data-callout="note"');
+  expect(compiled!.code).toContain('Important');
+  expect(compiled!.code).toContain('Body');
   compileSvelte(compiled!.code, { generate: 'server' });
 });

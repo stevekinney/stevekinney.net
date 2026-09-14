@@ -64,16 +64,20 @@ const namespaceEmbeddedHtmlIdentifiers = (
   if (!source.slice(start, end).includes('<')) return;
   const tree = unified().use(remarkParse).parse(source.slice(start, end));
   visit(tree, 'html', (node) => {
+    for (const match of node.value.matchAll(/\bid=(['"])([^'"]+)\1/g))
+      localIds.set(match[2], `${prefix}${match[2]}`);
+  });
+  visit(tree, 'html', (node) => {
     const localStart = node.position?.start.offset;
     const localEnd = node.position?.end.offset;
     if (localStart === undefined || localEnd === undefined) return;
     const nodeStart = start + localStart;
     const nodeEnd = start + localEnd;
     let value = node.value;
-    value = value.replace(/\bid=(['"])([^'"]+)\1/g, (match, quote: string, id: string) => {
-      localIds.set(id, `${prefix}${id}`);
-      return `id=${quote}${prefix}${id}${quote}`;
-    });
+    value = value.replace(
+      /\bid=(['"])([^'"]+)\1/g,
+      (match, quote: string, id: string) => `id=${quote}${prefix}${id}${quote}`,
+    );
     value = value.replace(/\bhref=(['"])#([^'"]*)\1/g, (match, quote: string, id: string) => {
       let decoded: string;
       try {
@@ -299,14 +303,6 @@ export const normalizeObsidianReferences = (
         replace(`[${escapeMarkdownLabel(alias ?? (target || fragment))}](<${url}>)`);
         continue;
       }
-      if (stack.includes(destination.sourcePath) && !(fragment && stack.length === 1)) {
-        issue(
-          document,
-          node.position.start,
-          `Obsidian embed cycle: ${[...stack, destination.sourcePath].join(' -> ')}`,
-        );
-        continue;
-      }
       if (stack.length > 32) {
         issue(document, node.position.start, 'Obsidian embeds exceed 32 nested inclusions.');
         continue;
@@ -316,6 +312,19 @@ export const normalizeObsidianReferences = (
       const block = destinationMetadata.blocks.find((block) => `block-${block.id}` === id);
       const sectionStart = heading?.start ?? block?.start ?? destinationMetadata.bodyStart;
       const sectionEnd = heading?.sectionEnd ?? block?.end ?? destination.source.length;
+      const overlapsCurrentRange =
+        destination === document && sectionStart < end && sectionEnd > start;
+      if (
+        stack.includes(destination.sourcePath) &&
+        !(fragment && (stack.length === 1 || !overlapsCurrentRange))
+      ) {
+        issue(
+          document,
+          node.position.start,
+          `Obsidian embed cycle: ${[...stack, destination.sourcePath].join(' -> ')}`,
+        );
+        continue;
+      }
       const nested = render(
         destination,
         [...stack, destination.sourcePath],

@@ -66,8 +66,8 @@ const mdsvexOptions: MdsvexOptions = {
     asPluggable(remarkTailwindPlayground),
   ],
   rehypePlugins: [
-    asPluggable(rehypeCallouts),
     asPluggable(rehypeObsidianIdentifiers),
+    asPluggable(rehypeCallouts),
     asPluggable(rehypeSlug),
     asPluggable(unwrapImages),
     asPluggable([
