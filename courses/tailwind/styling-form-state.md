@@ -7,7 +7,7 @@ description: >-
 
 You can form elements based on their state without conditional logic.
 
-```html tailwind
+```html tailwind height=160
 <input
   class="rounded-md bg-white px-3 py-1.5 outline-2 outline-slate-400 invalid:outline-red-500 disabled:cursor-not-allowed disabled:bg-gray-100"
 />
@@ -32,7 +32,7 @@ You can form elements based on their state without conditional logic.
 
 ### Placeholders
 
-```html tailwind
+```html tailwind height=160
 <input
   placeholder="Email"
   class="rounded-md bg-white px-3 py-1.5 outline-2 outline-slate-400 placeholder:italic"
@@ -41,7 +41,7 @@ You can form elements based on their state without conditional logic.
 
 ### File Inputs
 
-```html tailwind
+```html tailwind height=160
 <input
   type="file"
   class="file:mr-4 file:rounded-full file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-indigo-700 hover:file:bg-indigo-100 dark:file:bg-indigo-600 dark:file:text-indigo-100 dark:hover:file:bg-indigo-500"
@@ -50,7 +50,7 @@ You can form elements based on their state without conditional logic.
 
 ### Text Cursor
 
-```html tailwind
+```html tailwind height=160
 <input class="rounded-md bg-white px-3 py-1.5 caret-pink-500 outline-2 outline-slate-400" />
 ```
 
@@ -58,7 +58,7 @@ You can form elements based on their state without conditional logic.
 
 ### Reset browser styles
 
-```html tailwind
+```html tailwind height=160
 <select
   class="b w-fullg-white block appearance-none rounded-md px-3 py-2 pr-8 outline-2 outline-slate-400 focus:border-blue-500 focus:outline-pink-400"
 >
@@ -71,7 +71,7 @@ You can form elements based on their state without conditional logic.
 
 ### Control text selection
 
-```html tailwind
+```html tailwind height=240
 <div class="space-y-4">
   <div
     class="b w-fullg-white block rounded-md px-3 py-2 outline-2 outline-slate-400 select-all focus:outline-pink-400"
@@ -93,7 +93,7 @@ You can form elements based on their state without conditional logic.
 
 ### Resize behavior
 
-```html tailwind
+```html tailwind height=240
 <div class="space-y-4">
   <textarea
     class="block w-full resize-none rounded-md bg-white px-3 py-2 outline-2 outline-slate-400 focus:outline-pink-400"

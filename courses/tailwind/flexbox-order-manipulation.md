@@ -16,7 +16,7 @@ Tailwind offers utilities corresponding to the CSS `order` property, enabling yo
 Assign numerical order values with `order-<number>` (e.g., `order-1`, `order-3`). This sets the `order` CSS property to the specified number, rendering items in a sequence different from the HTML.
 CSS: `order: <number>;`
 
-```html tailwind
+```html tailwind height=220
 <div class="flex gap-4 rounded-lg bg-gray-100 p-6">
   <div class="order-3 min-w-[100px] rounded-lg bg-blue-500 p-4 text-white">Item 1 (order-3)</div>
   <div class="order-1 min-w-[100px] rounded-lg bg-green-500 p-4 text-white">Item 2 (order-1)</div>
@@ -29,7 +29,7 @@ CSS: `order: <number>;`
 Use negative order values by prefixing the class with a dash (e.g., `-order-<number>`).
 CSS: `order: calc(<number> * -1);`
 
-```html tailwind
+```html tailwind height=220
 <div class="flex gap-4 rounded-lg bg-gray-100 p-6">
   <div class="min-w-[100px] rounded-lg bg-blue-500 p-4 text-white">Item 1 (default)</div>
   <div class="-order-1 min-w-[100px] rounded-lg bg-green-500 p-4 text-white">Item 2 (-order-1)</div>
@@ -46,7 +46,7 @@ CSS: `order: calc(<number> * -1);`
 - `order-last`: Renders items at the end.
   CSS: `order: calc(infinity);`
 
-```html tailwind
+```html tailwind height=220
 <div class="flex gap-4 rounded-lg bg-gray-100 p-6">
   <div class="order-last min-w-[100px] rounded-lg bg-blue-500 p-4 text-white">
     Item 1 (order-last)
@@ -63,7 +63,7 @@ CSS: `order: calc(<number> * -1);`
 - `order-none`: Resets `order` to its default (`0`). Items are ordered by source code position relative to others with `order: 0` or greater.
   CSS: `order: 0;`
 
-```html tailwind
+```html tailwind height=220
 <div class="flex gap-4 rounded-lg bg-gray-100 p-6">
   <div class="order-2 min-w-[100px] rounded-lg bg-blue-500 p-4 text-white">Item 1 (order-2)</div>
   <div class="order-none min-w-[100px] rounded-lg bg-green-500 p-4 text-white">
@@ -79,7 +79,7 @@ If predefined utilities are insufficient, use arbitrary values with `order-[<val
 
 Alternatively, reference a CSS variable with `order-(<custom-property>)` for dynamic or externally managed order values.
 
-```html tailwind
+```html tailwind height=220
 <div class="flex gap-4 rounded-lg bg-gray-100 p-6">
   <div class="order-[5] min-w-[100px] rounded-lg bg-blue-500 p-4 text-white">
     Item 1 (order-[5])
@@ -97,7 +97,7 @@ Alternatively, reference a CSS variable with `order-(<custom-property>)` for dyn
 
 Like most Tailwind utilities, `order` utilities can be applied conditionally at breakpoints (e.g., `sm:order-1`, `md:order-last`). This changes element order responsively. Unprefixed utilities apply to all screen sizes; prefixed utilities apply at the specified breakpoint and larger.
 
-```html tailwind
+```html tailwind height=220
 <div class="flex flex-col gap-4 rounded-lg bg-gray-100 p-6 md:flex-row">
   <div class="order-3 min-w-[100px] rounded-lg bg-blue-500 p-4 text-white md:order-1">
     Item 1 (mobile: 3rd, desktop: 1st)

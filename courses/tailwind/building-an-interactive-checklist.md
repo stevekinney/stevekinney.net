@@ -5,7 +5,7 @@ description: "Build an interactive checklist item that strikes through when comp
 
 Let's start with our basic HTML structure for a simple checklist item.
 
-```html tailwind
+```html tailwind height=160
 <div>
   <input type="checkbox" id="task-1" />
   <label for="task-1">Complete the project documentation</label>
@@ -18,7 +18,7 @@ It's a basic checkbox and label, but there's no visual feedback when the task is
 
 First, let's establish proper layout and spacing using flexbox to align our checkbox and text.
 
-```html tailwind
+```html tailwind height=160
 <div class="flex items-center gap-3 p-3">
   <input type="checkbox" id="task-1" class="h-4 w-4 rounded border-slate-300" />
   <label for="task-1" class="text-slate-900">Complete the project documentation</label>
@@ -39,7 +39,7 @@ This creates a clean, accessible foundation with proper spacing and alignment.
 
 Now comes the magic—let's use Tailwind's `:has()` selector to automatically strike through the text when the checkbox is checked.
 
-```html tailwind
+```html tailwind height=160
 <div
   class="flex items-center gap-3 p-3 has-[input:checked]:text-slate-500 has-[input:checked]:line-through"
 >
@@ -59,7 +59,7 @@ The `has-[input:checked]:*` utilities are Tailwind's way of using CSS's `:has()`
 
 Let's add transitions to make the completion state feel polished and satisfying.
 
-```html tailwind
+```html tailwind height=160
 <div
   class="flex items-center gap-3 p-3 transition-all duration-300 has-[input:checked]:text-slate-500 has-[input:checked]:line-through"
 >
@@ -79,7 +79,7 @@ The 300ms duration provides a nice balance—fast enough to feel immediate but s
 
 Finally, let's add some refinements to make our checklist item feel more premium and interactive.
 
-```html tailwind
+```html tailwind height=160
 <div
   class="flex items-center gap-3 rounded-md p-3 transition-all duration-300 hover:bg-slate-50 has-[input:checked]:text-slate-500 has-[input:checked]:line-through"
 >

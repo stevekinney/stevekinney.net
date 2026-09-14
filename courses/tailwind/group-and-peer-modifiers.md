@@ -13,7 +13,7 @@ description: >-
 
 Apply `group` class to a parent, then use `group-*` variants on descendants:
 
-```html tailwind
+```html tailwind height=220
 <div class="group">
   <h3>Parent</h3>
   <p class="group-hover:text-blue-500">Changes when parent is hovered</p>
@@ -32,7 +32,7 @@ Some ideal use cases include:
 
 ### Practical Example: Interactive Card
 
-```html tailwind
+```html tailwind height=220
 <div class="group rounded-lg bg-white p-6 shadow-md transition-shadow hover:shadow-xl">
   <h3 class="mb-2 text-lg font-semibold transition-colors group-hover:text-blue-600">
     Product Card
@@ -52,7 +52,7 @@ Some ideal use cases include:
 
 **`group-has-*`** - Style based on descendant state:
 
-```html tailwind
+```html tailwind height=220
 <div class="group">
   <p class="group-has-[:focus]:font-bold">Bold when any child has focus</p>
   <input />
@@ -63,7 +63,7 @@ Some ideal use cases include:
 
 **Named groups** for nesting:
 
-```html tailwind
+```html tailwind height=220
 <div class="group/outer">
   <div class="group/inner">
     <p class="group-hover/inner:text-blue-500 group-hover/outer:text-red-500">
@@ -81,7 +81,7 @@ Some ideal use cases include:
 
 Use `group-has` to create contextually aware components:
 
-```html tailwind
+```html tailwind height=220
 <!-- Navigation that changes theme when it contains an active link -->
 <nav class="group group-has-[.active]:bg-blue-50 group-has-[.active]:shadow-lg">
   <a href="#" class="group-hover:text-blue-200">Home</a>
@@ -103,7 +103,7 @@ Peer modifiers let you style elements based on the state of sibling elements. Yo
 
 Apply `peer` class to an element, then use `peer-*` variants on subsequent siblings:
 
-```html tailwind
+```html tailwind height=220
 <div class="space-y-1">
   <label class="block peer-invalid:text-red-500" for="email">Email</label>
   <input type="email" id="email" class="peer block rounded-sm outline-1" />
@@ -119,7 +119,7 @@ Apply `peer` class to an element, then use `peer-*` variants on subsequent sibli
 
 Perfect for modern form inputs:
 
-```html tailwind
+```html tailwind height=220
 <div class="relative">
   <input
     class="peer w-full rounded border px-3 pt-6 pb-2 placeholder-transparent focus:outline-none"
@@ -138,7 +138,7 @@ Perfect for modern form inputs:
 
 **Named peers** for multiple siblings:
 
-```html tailwind
+```html tailwind height=220
 <input type="email" class="peer/email" />
 <input type="password" class="peer/password" />
 <p class="hidden peer-invalid/email:block">Invalid email</p>
@@ -152,7 +152,7 @@ Perfect for modern form inputs:
 
 ### Multiple Peer Problem
 
-```html tailwind
+```html tailwind height=220
 <!-- ❌ Ambiguous - which peer responds? -->
 <input class="peer" />
 <input class="peer" />
@@ -166,7 +166,7 @@ Perfect for modern form inputs:
 
 ### Nested Group Conflicts
 
-```html tailwind
+```html tailwind height=220
 <!-- ❌ Inner button responds to both groups -->
 <div class="group">
   <div class="group">
@@ -186,7 +186,7 @@ Perfect for modern form inputs:
 
 Show/hide content based on form selections without JavaScript by combinig `group` with `has-*:` to become `group-has-*:`
 
-```html tailwind
+```html tailwind height=220
 <div class="group rounded-lg border p-4">
   <h3 class="font-semibold">Feedback Survey</h3>
 

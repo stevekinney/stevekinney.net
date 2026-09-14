@@ -21,7 +21,7 @@ The `word-break` property controls how words break to prevent overflow.
 
 Apply conditionally with breakpoints:
 
-```html tailwind
+```html tailwind height=300
 <p class="break-all md:break-normal">Thisisasuperlongwordthatwillbreakanywherenecessary.</p>
 ```
 
@@ -33,7 +33,7 @@ The `overflow-wrap` property specifies whether browsers should break lines withi
 - **`wrap-break-word`**: Allows line breaks between letters if needed to prevent overflow
 - **`wrap-anywhere`**: Similar to `wrap-break-word` but factors mid-word breaks when calculating intrinsic size. Useful for flex containers where you'd otherwise need `min-width: 0`
 
-```html tailwind
+```html tailwind height=300
 <div class="flex w-32">
   <p class="wrap-anywhere">Anotherlongwordtobreakanywhere.</p>
 </div>
@@ -50,7 +50,7 @@ The `white-space` property controls how whitespace and line breaks are handled.
 - **`whitespace-pre-wrap`**: Preserves newlines and spaces. Text wraps normally
 - **`whitespace-break-spaces`**: Preserves newlines and spaces, including at line ends
 
-```html tailwind
+```html tailwind height=300
 <p class="overflow-hidden text-ellipsis whitespace-nowrap">
   This text will not wrap and will be truncated with an ellipsis if it overflows.
 </p>
@@ -67,7 +67,7 @@ Controls column or page breaks _after_ an element.
 
 Available utilities: `break-after-auto`, `break-after-avoid`, `break-after-all`, `break-after-avoid-page`, `break-after-page`, `break-after-left`, `break-after-right`, `break-after-column`.
 
-```html tailwind
+```html tailwind height=300
 <div class="columns-2">
   <p>Content before break...</p>
   <div class="break-after-column"></div>
@@ -81,7 +81,7 @@ Controls column or page breaks _before_ an element.
 
 Available utilities: `break-before-auto`, `break-before-avoid`, `break-before-all`, `break-before-avoid-page`, `break-before-page`, `break-before-left`, `break-before-right`, `break-before-column`.
 
-```html tailwind
+```html tailwind height=300
 <div class="columns-2">
   <p>Content before break...</p>
   <p class="break-before-column">Content after break...</p>
@@ -94,7 +94,7 @@ Controls column or page breaks _within_ an element.
 
 Available utilities: `break-inside-auto`, `break-inside-avoid`, `break-inside-avoid-page`, `break-inside-avoid-column`.
 
-```html tailwind
+```html tailwind height=300
 <div class="columns-2">
   <div class="break-inside-avoid">
     <p>This block of text should ideally not be broken across columns or pages.</p>
@@ -110,7 +110,7 @@ The `hyphens` property controls whether words should be hyphenated when text wra
 - **`hyphens-manual`**: Only hyphenates at specified break points (`&shy;`). Browser default
 - **`hyphens-auto`**: Allows browser to automatically choose hyphenation points based on language. Manual suggestions are preferred
 
-```html tailwind
+```html tailwind height=300
 <p class="hyphens-auto">This word-processing example demonstrates automatic hyphenation.</p>
 ```
 
@@ -123,7 +123,7 @@ The `text-wrap` property offers modern control over text wrapping.
 - **`text-balance`**: Distributes text evenly across lines. Browsers often limit this to ~6 lines for performance, making it ideal for headings
 - **`text-pretty`**: Attempts to prevent orphans (single words on the last line)
 
-```html tailwind
+```html tailwind height=300
 <h1 class="text-balance">A title that looks good across multiple lines.</h1>
 <p class="text-pretty">
   A longer paragraph that avoids having a single word orphaned on the last line.
@@ -140,7 +140,7 @@ Prevent text from wrapping and indicate overflow.
 
 - **`truncate`**: Composite utility that sets `overflow: hidden`, `text-overflow: ellipsis`, and `white-space: nowrap`. Prevents wrapping and truncates with ellipsis (...)
 
-  ```html tailwind
+  ```html tailwind height=300
   <p class="w-32 truncate">This text is too long and will be truncated.</p>
   ```
 
@@ -153,7 +153,7 @@ Truncate multi-line text after a specific number of lines.
 
 - **`line-clamp-<number>`**: Limits text to specified lines (`line-clamp-2`, `line-clamp-3`). Sets `overflow: hidden`, `display: -webkit-box`, `-webkit-box-orient: vertical`, and `-webkit-line-clamp: <number>`
 
-  ```html tailwind
+  ```html tailwind height=300
   <div class="w-48">
     <p class="line-clamp-3">
       This is a longer block of text that will be limited to a maximum of three lines before being
@@ -167,7 +167,7 @@ Truncate multi-line text after a specific number of lines.
 
 Apply responsively:
 
-```html tailwind
+```html tailwind height=300
 <p class="line-clamp-2 md:line-clamp-4">
   This text will show 2 lines on small screens and 4 on medium screens and up.
 </p>

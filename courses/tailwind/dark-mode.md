@@ -13,7 +13,7 @@ Tailwind's `dark:` variant is the foundation for implementing dark mode. It allo
 
 To use it, prepend `dark:` to any utility class. For example, to change an element's background to dark gray and text to white in dark mode:
 
-```html tailwind
+```html tailwind height=160 theme=system
 <div class="bg-white text-gray-900 dark:bg-gray-800 dark:text-white">
   Content that adapts to light and dark mode.
 </div>
@@ -82,7 +82,7 @@ This gives users full control while respecting system settings by default.
 
 Tailwind's default color palette has many shades. For dark mode, typically use lighter backgrounds and darker text/accents in light mode, and reverse this for dark mode. The `dark:` variant easily switches shades:
 
-```html tailwind
+```html tailwind height=160
 <div class="bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100">Content</div>
 ```
 
@@ -94,7 +94,7 @@ Customize the color palette with the `@theme` directive. Custom colors will also
 
 The `dark:` variant can be stacked with other variants for more specific conditions, like a hover effect only in dark mode or a dark mode style at a specific breakpoint.
 
-```html tailwind
+```html tailwind height=160
 <button
   class="bg-blue-500 text-white hover:bg-blue-600 dark:bg-purple-500 dark:text-white dark:hover:bg-purple-600 md:dark:bg-green-500 md:dark:hover:bg-green-600"
 >

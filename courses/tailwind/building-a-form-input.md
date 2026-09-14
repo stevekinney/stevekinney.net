@@ -7,7 +7,7 @@ description: >-
 
 Let's start with our basic HTML structure.
 
-```html tailwind
+```html tailwind height=160
 <div>
   <label for="username">Username</label>
   <input type="text" name="username" id="username" placeholder="Your Name Here" />
@@ -20,7 +20,7 @@ It's a basic form field, but it looks quite plain. Let's transform it into somet
 
 First, let's establish proper visual hierarchy by styling the label and adding some basic spacing.
 
-```html tailwind
+```html tailwind height=160
 <div>
   <label for="username" class="block font-medium text-slate-900">Username</label>
   <input type="text" name="username" id="username" placeholder="Your Name Here" />
@@ -35,7 +35,7 @@ First, let's establish proper visual hierarchy by styling the label and adding s
 
 Now let's add some breathing room between the label and input field.
 
-```html tailwind
+```html tailwind height=160
 <div class="space-y-2">
   <label for="username" class="block font-medium text-slate-900">Username</label>
   <input type="text" name="username" id="username" placeholder="Your Name Here" />
@@ -48,7 +48,7 @@ You could add a margin to one or both elements, but you can also use the [spacin
 
 Time to make the input field look professional with proper dimensions, colors, and borders.
 
-```html tailwind
+```html tailwind height=160
 <div class="space-y-2">
   <label for="username" class="block font-medium text-slate-900">Username</label>
   <input
@@ -73,7 +73,7 @@ Time to make the input field look professional with proper dimensions, colors, a
 
 Now let's add a proper border and focus states using Tailwind's outline utilities.
 
-```html tailwind
+```html tailwind height=160
 <div class="space-y-2">
   <label for="username" class="block font-medium text-slate-900">Username</label>
   <input
@@ -96,7 +96,7 @@ Using `outline` instead of `border` prevents layout shifts and provides better c
 
 Let's add an interactive focus state that provides clear visual feedback.
 
-```html tailwind
+```html tailwind height=160
 <div class="space-y-2">
   <label for="username" class="block font-medium text-slate-900">Username</label>
   <input
@@ -121,7 +121,7 @@ We'll talk more about [focus states](focus-states.md) in a hot minute.
 
 Let's improve the typography for both the label and input text, including placeholder styling.
 
-```html tailwind
+```html tailwind height=160
 <div class="space-y-2">
   <label for="username" class="block text-sm font-medium text-slate-900">Username</label>
   <input

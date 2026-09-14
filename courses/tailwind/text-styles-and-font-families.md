@@ -33,7 +33,7 @@ For example, to add a custom `display` font family, you would define a variable 
 
 After defining this theme variable, a corresponding `font-display` utility class becomes available for you to use in your HTML:
 
-```html tailwind
+```html tailwind height=160
 <h1 class="font-display text-4xl">Data to enrich your online business</h1>
 ```
 

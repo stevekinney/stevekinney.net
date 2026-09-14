@@ -7,7 +7,7 @@ description: >-
 
 Let's start with our basic HTML structure for a simple disclosure component.
 
-```html tailwind
+```html tailwind height=420
 <details>
   <summary>What are your shipping options?</summary>
   <div>
@@ -25,7 +25,7 @@ It's a semantic `<details>` element with a `<summary>` that users can click to r
 
 First, let's establish proper spacing and visual hierarchy for our disclosure component.
 
-```html tailwind
+```html tailwind height=420
 <details class="rounded-lg border border-slate-200 p-4">
   <summary class="cursor-pointer font-medium text-slate-900">
     What are your shipping options?
@@ -54,7 +54,7 @@ This creates a clean foundation with proper visual hierarchy between the summary
 
 Now comes the key feature—let's use Tailwind's `in-open:*` utilities to change the summary color when the details element is open.
 
-```html tailwind
+```html tailwind height=420
 <details class="rounded-lg border border-slate-200 p-4">
   <summary class="cursor-pointer font-medium text-slate-900 in-open:text-blue-600">
     What are your shipping options?
@@ -78,7 +78,7 @@ The `in-open:*` utilities are Tailwind's way of targeting the CSS `:open` pseudo
 
 Let's add a visual indicator that rotates when the disclosure is opened, making the state change even clearer.
 
-```html tailwind
+```html tailwind height=420
 <details class="rounded-lg border border-slate-200 p-4">
   <summary
     class="flex cursor-pointer items-center justify-between font-medium text-slate-900 in-open:text-blue-600"
@@ -117,7 +117,7 @@ Now both the text and icon change color together, and the icon rotates to indica
 
 Let's add transitions to make the state changes feel polished and professional.
 
-```html tailwind
+```html tailwind height=420
 <details class="rounded-lg border border-slate-200 p-4">
   <summary
     class="flex cursor-pointer items-center justify-between font-medium text-slate-900 transition-colors in-open:text-blue-600"
@@ -152,7 +152,7 @@ The transitions make expanding and collapsing feel responsive and delightful rat
 
 Let's add subtle hover feedback to make the component feel more interactive even before clicking.
 
-```html tailwind
+```html tailwind height=420
 <details class="rounded-lg border border-slate-200 p-4">
   <summary
     class="flex cursor-pointer items-center justify-between font-medium text-slate-900 transition-colors hover:text-slate-700 in-open:text-blue-600 in-open:hover:text-blue-700"
@@ -189,7 +189,7 @@ This creates sophisticated interaction feedback—the hover colors are contextua
 
 Finally, let's add a subtle border accent that also responds to the open state for complete visual cohesion.
 
-```html tailwind
+```html tailwind height=420
 <details class="rounded-lg border border-slate-200 p-4 transition-colors open:border-blue-200">
   <summary
     class="flex cursor-pointer items-center justify-between font-medium text-slate-900 transition-colors hover:text-slate-700 in-open:text-blue-600 in-open:hover:text-blue-700"

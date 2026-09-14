@@ -11,7 +11,7 @@ Controlling alignment and justification of items within grid areas and content w
 
 First, define an element as a grid container using `grid` or `inline-grid` display utilities.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid gap-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-4">Grid item 1</div>
   <div class="rounded bg-red-200 p-4">Grid item 2</div>
@@ -41,7 +41,7 @@ Utilities:
 - `items-stretch`: Stretches items to fill the cross axis.
 - `items-baseline`: Aligns items along their baselines. (`items-baseline-last` for last baseline).
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-32 grid-cols-3 items-center gap-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-4">Item 1</div>
   <div class="rounded bg-red-200 p-4">Item 2</div>
@@ -61,7 +61,7 @@ Utilities:
 - `justify-items-stretch`: Stretches items along their inline axis.
 - `justify-items-normal`: Default item packing.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-3 justify-items-center gap-4 rounded-lg bg-gray-100 p-4">
   <div class="w-16 rounded bg-blue-200 p-4">Item 1</div>
   <div class="w-20 rounded bg-red-200 p-4">Item 2</div>
@@ -81,7 +81,7 @@ Utilities:
 - `place-items-baseline`: `align-items: baseline`, `justify-items: baseline`.
 - `place-items-stretch`: `align-items: stretch`, `justify-items: stretch`.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-32 grid-cols-3 place-items-center gap-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-3">Item 1</div>
   <div class="rounded bg-red-200 p-3">Item 2</div>
@@ -97,7 +97,7 @@ Override container-level settings for individual items using `align-self`, `just
 - `justify-self`: Overrides `justify-items` for an item. Utilities: `justify-self-auto`, `justify-self-start`, `justify-self-center`, `justify-self-end`, `justify-self-stretch`. (Safe variants available).
 - `place-self`: Shorthand for `align-self` and `justify-self`. Utilities: `place-self-auto`, `place-self-start`, `place-self-end`, `place-self-center`, `place-self-stretch`. (Safe variants available).
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-32 grid-cols-3 items-start justify-items-start gap-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-4">Item 1</div>
   <div class="self-center justify-self-end rounded bg-red-200 p-4">Item 2</div>
@@ -122,7 +122,7 @@ Utilities:
 - `content-stretch`: Rows fill available cross-axis space.
 - `content-baseline`, `content-normal`
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-64 grid-rows-3 content-center gap-2 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-4">Row 1</div>
   <div class="rounded bg-red-200 p-4">Row 2</div>
@@ -144,7 +144,7 @@ Utilities:
 - `justify-stretch`: Tracks fill available main-axis space.
 - `justify-normal`, `justify-baseline`
 
-```html tailwind
+```html tailwind height=400
 <div class="grid w-64 grid-cols-3 justify-center gap-2 rounded-lg bg-gray-100 p-4">
   <div class="col-span-1 rounded bg-blue-200 p-4">Item 1</div>
   <div class="col-span-1 rounded bg-red-200 p-4">Item 2</div>
@@ -162,7 +162,7 @@ Utilities:
 - `place-content-baseline`, `place-content-stretch`
 - `place-content-between`, `place-content-around`, `place-content-evenly`
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-64 w-64 grid-cols-3 place-content-center gap-2 rounded-lg bg-gray-100 p-4">
   <div class="col-span-1 rounded bg-blue-200 p-4">Item 1</div>
   <div class="col-span-1 rounded bg-red-200 p-4">Item 2</div>
@@ -175,7 +175,7 @@ Utilities:
 
 All Grid alignment utilities support responsive variants (e.g., `md:justify-items-start`) for adaptive layouts. Unprefixed utilities apply to all screen sizes; prefixed utilities apply at the specified breakpoint and above.
 
-```html tailwind
+```html tailwind height=400
 <div
   class="grid grid-cols-1 justify-items-center gap-4 rounded-lg bg-gray-100 p-4 md:grid-cols-2 md:justify-items-start lg:grid-cols-3"
 >

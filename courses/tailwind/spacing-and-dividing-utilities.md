@@ -17,7 +17,7 @@ The `space-` utility adds fixed margins between child elements.
 
 ### Vertical Spacing
 
-```html tailwind
+```html tailwind height=180
 <div class="space-y-4 bg-sky-100 px-4">
   <div class="border-2 border-fuchsia-600 bg-fuchsia-500 text-center">First</div>
   <div class="border-2 border-fuchsia-600 bg-fuchsia-500 text-center">Second</div>
@@ -28,7 +28,7 @@ The `space-` utility adds fixed margins between child elements.
 
 ### Horizontal Spacing
 
-```html tailwind
+```html tailwind height=180
 <div class="space-x-8">
   <button class="rounded border-2 border-sky-700 bg-sky-500 px-4 py-2 text-white shadow-md">
     Button
@@ -62,7 +62,7 @@ This is what it _really_ does under the hood:
 
 The `divide` utility adds borders between child elements as separators.
 
-```html tailwind
+```html tailwind height=180
 <div class="divide-y-4 bg-sky-100 px-4">
   <div class="bg-fuchsia-500 text-center">First</div>
   <div class="bg-fuchsia-500 text-center">Second</div>
@@ -73,7 +73,7 @@ The `divide` utility adds borders between child elements as separators.
 
 Customize thickness and color:
 
-```html tailwind
+```html tailwind height=180
 <div class="divide-y-4 divide-cyan-400 bg-sky-100 px-4">
   <div class="bg-fuchsia-500 text-center">First</div>
   <div class="bg-fuchsia-500 text-center">Second</div>

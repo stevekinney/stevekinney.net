@@ -10,24 +10,26 @@
         "content-paths.ts",
         "content-repository.ts",
         "content-repository/**/*.ts",
-        "sync-generated-browser-assets.ts",
         "../utilities/package.json",
         "../utilities/content-types.ts",
         "../utilities/frontmatter.ts",
+        "../utilities/write-formatted-json.ts",
         "../utilities/tailwind-playground.ts",
-        "../content-enhancements/src/**/*.ts",
         "../../applications/website/static/**",
         "../../writing/**",
         "../../courses/**",
         "../../projects/**",
+        "build-artifacts.ts",
+        "../utilities/tailwind-playground-types.ts",
+        "../utilities/tailwind-playground-metadata.ts",
         "content-metadata.ts",
         "check-content-metadata.ts",
         "run-with-content-history.ts"
       ],
       "outputs": [
         "../../applications/website/.generated/content-data.json",
-        "../../applications/website/.generated/tailwind-playground-source.html",
-        "../../applications/website/.generated/content-enhancements/**"
+        "../../applications/website/.generated/playground-inputs.json",
+        "../../applications/website/.generated/site-tailwind-candidates.txt"
       ]
     },
     "@stevekinney/scripts#content:validate": {
@@ -43,6 +45,10 @@
         "../utilities/package.json",
         "../utilities/content-types.ts",
         "../utilities/frontmatter.ts",
+        "../utilities/tailwind-playground-metadata.ts",
+        "../utilities/tailwind-playground-types.ts",
+        "../utilities/write-formatted-json.ts",
+        "build-artifacts.ts",
         "../utilities/tailwind-playground.ts",
         "../../applications/website/static/**",
         "../../writing/**",
@@ -81,6 +87,7 @@
       "dependsOn": ["@stevekinney/scripts#content:build"],
       "inputs": [
         "build-report/**/*.ts",
+        "../../turbo.json",
         "content-repository.test.ts",
         "content-build.ts",
         "content-paths.ts",
@@ -88,15 +95,25 @@
         "content-repository/**/*.ts",
         "../utilities/content-types.ts",
         "../utilities/frontmatter.ts",
+        "../utilities/write-formatted-json.ts",
         "../utilities/tailwind-playground.ts",
         "../../writing/**/*.md",
         "../../courses/**/*.md",
         "../../projects/**/*.md",
         "../../courses/*/index.toml",
+        "*.test.ts",
+        "playgrounds-build.ts",
+        "playground-document.ts",
+        "build-artifacts.ts",
+        "build-dependencies.ts",
+        "tailwind-playground.css",
+        "content-enhancements-build.ts",
+        "content-enhancement-build-hash.ts",
+        "sync-generated-browser-assets.ts",
+        "../utilities/**/*.ts",
         "content-metadata.ts",
         "check-content-metadata.ts",
         "run-with-content-history.ts",
-        "*.test.ts",
         "../../templates/**",
         "../../.obsidian/{core-plugins,templates,types}.json",
         "../../lefthook.yml"
@@ -106,7 +123,9 @@
       "dependsOn": [
         "@stevekinney/website#sync",
         "@stevekinney/scripts#content:build",
-        "@stevekinney/scripts#content:images:check"
+        "@stevekinney/scripts#content:images:check",
+        "@stevekinney/scripts#playgrounds:build",
+        "@stevekinney/scripts#content-enhancements:build"
       ],
       "inputs": [
         "package.json",
@@ -121,12 +140,12 @@
         "../../packages/utilities/**/*.ts",
         "../../packages/scripts/*.ts",
         "../../image-manifest.json",
-        ".generated/**",
         "!build/**",
         "!.svelte-kit/**",
         "!test-results/**",
         "!playwright-report/**",
-        "!.vercel/**"
+        "!.vercel/**",
+        "../../vercel.json"
       ],
       "env": ["VERCEL", "VERCEL_ENV"],
       "outputs": ["build/**", ".svelte-kit/output/**", ".vercel/output/**"]
@@ -140,7 +159,11 @@
       "cache": false
     },
     "@stevekinney/website#dev": {
-      "dependsOn": ["@stevekinney/scripts#content:build"],
+      "dependsOn": [
+        "@stevekinney/scripts#content:build",
+        "@stevekinney/scripts#playgrounds:build",
+        "@stevekinney/scripts#content-enhancements:build"
+      ],
       "cache": false,
       "persistent": true
     },
@@ -149,10 +172,20 @@
     },
     "@stevekinney/website#lint": {},
     "@stevekinney/website#check": {
-      "dependsOn": ["@stevekinney/website#sync", "@stevekinney/scripts#content:build"]
+      "dependsOn": [
+        "@stevekinney/website#sync",
+        "@stevekinney/scripts#content:build",
+        "@stevekinney/scripts#playgrounds:build",
+        "@stevekinney/scripts#content-enhancements:build"
+      ]
     },
     "@stevekinney/website#check:watch": {
-      "dependsOn": ["@stevekinney/website#sync", "@stevekinney/scripts#content:build"],
+      "dependsOn": [
+        "@stevekinney/website#sync",
+        "@stevekinney/scripts#content:build",
+        "@stevekinney/scripts#playgrounds:build",
+        "@stevekinney/scripts#content-enhancements:build"
+      ],
       "cache": false,
       "persistent": true
     },
@@ -179,9 +212,17 @@
       ]
     },
     "@stevekinney/website#test:unit": {
-      "dependsOn": ["@stevekinney/website#sync", "@stevekinney/scripts#content:build"],
+      "dependsOn": [
+        "@stevekinney/website#sync",
+        "@stevekinney/scripts#content:build",
+        "@stevekinney/scripts#playgrounds:build",
+        "@stevekinney/scripts#content-enhancements:build"
+      ],
       "inputs": [
         "src/**",
+        "../../vercel.json",
+        "svelte.config.ts",
+        "tests/**/*.ts",
         "plugins/**/*.ts",
         "vitest.config.*",
         "vite.config.*",
@@ -200,6 +241,44 @@
     "@stevekinney/website#build-storybook": {},
     "@stevekinney/website#clean": {
       "cache": false
+    },
+    "@stevekinney/scripts#playgrounds:build": {
+      "dependsOn": ["@stevekinney/scripts#content:build"],
+      "inputs": [
+        "package.json",
+        "../../bun.lock",
+        "../../.node-version",
+        "playgrounds-build.ts",
+        "playground-document.ts",
+        "build-artifacts.ts",
+        "build-dependencies.ts",
+        "content-paths.ts",
+        "tailwind-playground.css",
+        "../utilities/tailwind-playground-types.ts",
+        "../utilities/tailwind-playground-policy.ts"
+      ],
+      "outputs": [
+        "../../applications/website/.generated/playgrounds/**",
+        "../../applications/website/.generated/playground-cache/**"
+      ]
+    },
+    "@stevekinney/scripts#content-enhancements:build": {
+      "inputs": [
+        "../../package.json",
+        "../../bun.lock",
+        "../../.node-version",
+        "content-enhancements-build.ts",
+        "content-enhancement-build-hash.ts",
+        "build-artifacts.ts",
+        "content-paths.ts",
+        "../content-enhancements/package.json",
+        "../content-enhancements/tsconfig.json",
+        "../content-enhancements/src/**",
+        "../utilities/**/*.ts",
+        "!../utilities/**/*.test.ts",
+        "../utilities/package.json"
+      ],
+      "outputs": ["../../applications/website/.generated/content-enhancements/**"]
     },
     "@stevekinney/scripts#content:check": {
       "cache": false

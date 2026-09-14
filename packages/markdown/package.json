@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@stevekinney/utilities": "workspace:*"
+    "@stevekinney/utilities": "workspace:*",
+    "micromark-util-decode-string": "2.0.1"
   },
   "exports": {
     "./remark-callouts": "./src/remark-callouts.ts",

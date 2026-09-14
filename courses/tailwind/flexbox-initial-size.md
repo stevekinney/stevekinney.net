@@ -39,7 +39,7 @@ Combine grow, shrink, and basis with flex utilities:
 
 ## Common Patterns
 
-```html tailwind
+```html tailwind height=300
 <!-- Three equal columns -->
 <div class="flex gap-4 rounded-lg bg-gray-100 p-4">
   <div class="flex-1 basis-0 rounded bg-blue-500 p-4 text-center text-white">Column 1</div>
