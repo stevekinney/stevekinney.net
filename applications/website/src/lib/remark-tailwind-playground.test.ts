@@ -51,6 +51,18 @@ const writeManifest = async (
 const transformWithManifest = (): Transform =>
   remarkTailwindPlayground({ manifestPath, workspaceRoot: temporaryDirectory }) as Transform;
 
+const preprocessWithManifest = async (content: string): Promise<string> => {
+  await writeFile(sourcePath, content);
+  const preprocessor = mdsvex({
+    extensions: ['.md'],
+    remarkPlugins: [
+      [remarkTailwindPlayground, { manifestPath, workspaceRoot: temporaryDirectory }],
+    ] as never,
+  });
+  const processed = await preprocessor.markup({ content, filename: sourcePath });
+  return processed?.code ?? '';
+};
+
 const run = (tree: Root, transform = transformWithManifest()): Root => {
   transform(tree, new VFile({ path: sourcePath }));
   return tree;
@@ -175,6 +187,28 @@ ${code}
     ).not.toThrow();
   });
 
+  it.each([
+    [
+      'single quoted titles',
+      "tailwind height=192 title='A single quoted title'",
+      'A single quoted title',
+    ],
+    [
+      'escaped quotes in titles',
+      String.raw`tailwind height=192 title="A \"quoted\" title"`,
+      'A "quoted" title',
+    ],
+  ])('renders %s from real mdsvex metadata', async (_, meta, title) => {
+    const code = '<button>Button</button>';
+    await writeManifest([example(0, code, { computedTitle: title, meta })]);
+
+    const processed = await preprocessWithManifest(`~~~html ${meta}\n${code}\n~~~\n`);
+
+    expect(processed).toContain(
+      `<span class="tailwind-playground__title">${title.replaceAll('"', '&quot;')}</span>`,
+    );
+  });
+
   it('rejects stale manifests when linked CSS changes', async () => {
     const code = '<button class="button">Save</button>';
     await writeManifest([
@@ -225,6 +259,39 @@ ${code}
     };
 
     expect(() => run(tree)).toThrow(/manifest is stale/);
+  });
+
+  it.each([
+    ['named character references', 'A &amp; B', 'A & B'],
+    ['numeric character references', 'A &#38; B', 'A & B'],
+    ['encoded quotes', 'A &quot;B&quot;', 'A "B"'],
+    ['escaped punctuation', String.raw`A \! B`, 'A ! B'],
+    ['inline heading formatting', '**A** `&` _B_', 'A & B'],
+    ['reference image alt text', 'A ![B][image] C', 'A B C'],
+    ['authored curly apostrophes', 'A ’ B', 'A ’ B'],
+    ['authored curly quotes', 'A “B”', 'A “B”'],
+    ['literal three dots', 'A ... B', 'A ... B'],
+    ['literal double dashes', 'A -- B', 'A -- B'],
+    ['literal triple dashes', 'A --- B', 'A --- B'],
+  ])('uses canonical heading text for %s through mdsvex', async (_, heading, titleText) => {
+    const code = '<button>Button</button>';
+    const meta = 'tailwind height=192';
+    const definition = heading.includes('[image]') ? '\n[image]: /image.png\n' : '';
+    const content = `## ${heading}\n\n~~~html ${meta}\n${code}\n~~~\n${definition}`;
+    const title = `${titleText} — Example 1`;
+    await writeManifest([example(0, code, { computedTitle: title, meta })]);
+
+    const escapedTitle = title.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
+    await expect(preprocessWithManifest(content)).resolves.toContain(`title="${escapedTitle}"`);
+  });
+
+  it('rejects stale manifests when a decoded mdsvex heading title changes', async () => {
+    const code = '<button>Button</button>';
+    const meta = 'tailwind height=192';
+    const content = `## A &amp; B\n\n~~~html ${meta}\n${code}\n~~~\n`;
+    await writeManifest([example(0, code, { computedTitle: 'A & C — Example 1', meta })]);
+
+    await expect(preprocessWithManifest(content)).rejects.toThrow(/fingerprint changed/);
   });
 
   it('keeps later playground iframes lazy loaded', async () => {

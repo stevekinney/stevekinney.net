@@ -13,7 +13,7 @@
       ]
     },
     {
-      "source": "/generated/playgrounds/(.*).html",
+      "source": "/generated/playgrounds/([a-f0-9]{64}\\.html)",
       "headers": [
         {
           "key": "Content-Security-Policy",
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "source": "/generated/playgrounds/(.*).css",
+      "source": "/generated/playgrounds/([a-f0-9]{64}\\.css)",
       "headers": [
         {
           "key": "X-Content-Type-Options",
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "source": "/((?!generated/playgrounds/).*)",
+      "source": "/((?!generated/playgrounds/[a-f0-9]{64}\\.(?:html|css)$).*)",
       "headers": [
         {
           "key": "X-Frame-Options",

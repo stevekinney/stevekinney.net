@@ -1,6 +1,6 @@
 import { spawn, type ChildProcess } from 'node:child_process';
 import path from 'node:path';
-import type { PluginOption } from 'vite';
+import type { HotUpdateOptions, PluginOption } from 'vite';
 
 type BuildTask = 'content' | 'enhancements' | 'playgrounds';
 type SpawnProcess = typeof spawn;
@@ -110,6 +110,12 @@ export function regenerateGeneratedContent(
 
   return {
     name: 'regenerate-generated-content',
+    hotUpdate: {
+      order: 'pre',
+      handler(context: HotUpdateOptions) {
+        if (getTasks(context.file).length > 0) return [];
+      },
+    },
     configureServer(server) {
       let isRunning = false;
       let isClosed = false;
@@ -117,6 +123,15 @@ export function regenerateGeneratedContent(
       let pendingTasks = new Set<BuildTask>();
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let debouncedTasks = new Set<BuildTask>();
+
+      const takeQueuedTasks = (): BuildTask[] => {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+        const queuedTasks = new Set([...pendingTasks, ...debouncedTasks]);
+        pendingTasks = new Set();
+        debouncedTasks = new Set();
+        return orderTasks(queuedTasks);
+      };
 
       const runTasks = (tasks: BuildTask[]): void => {
         if (isClosed || tasks.length === 0) return;
@@ -153,15 +168,15 @@ export function regenerateGeneratedContent(
             return;
           }
 
+          const followUpTasks = takeQueuedTasks();
+          if (followUpTasks.length > 0) {
+            runTasks(followUpTasks);
+            return;
+          }
+
           if (success) {
             server.moduleGraph.invalidateAll();
             server.ws.send({ type: 'full-reload' });
-          }
-
-          if (pendingTasks.size > 0) {
-            const followUpTasks = orderTasks(pendingTasks);
-            pendingTasks = new Set();
-            runTasks(followUpTasks);
           }
         };
 

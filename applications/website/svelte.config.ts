@@ -5,6 +5,7 @@ import remarkCallouts from '@stevekinney/markdown/remark-callouts';
 import remarkEscapeComparators from '@stevekinney/markdown/remark-escape-comparators';
 import { fixMarkdownUrls } from '@stevekinney/markdown/remark-fix-urls';
 import remarkTailwindPlayground from '@stevekinney/markdown/remark-tailwind-playground';
+import { parseTailwindPlaygroundMetadata } from '@stevekinney/utilities/tailwind-playground-metadata';
 import rehypeEnhanceImages from '@stevekinney/markdown/rehype-enhance-images';
 import type { Config } from '@sveltejs/kit';
 import type { MdsvexOptions } from 'mdsvex';
@@ -38,9 +39,9 @@ const parseTitle = (
   metastring: string | null | undefined,
 ): { title: string | null; remaining: string } => {
   if (!metastring) return { title: null, remaining: '' };
-  const match = metastring.match(/title="([^"]+)"/);
-  const title = match ? match[1] : null;
-  const remaining = metastring.replace(/title="[^"]+"\s*/, '').trim();
+  const match = metastring.match(/(?:^|\s)title=(?:"((?:\\.|[^"\\])*)"|'((?:\\.|[^'\\])*)')/);
+  const title = match ? (match[1] ?? match[2]).replace(/\\([\\"'])/g, '$1') : null;
+  const remaining = match ? metastring.replace(match[0], ' ').trim() : metastring.trim();
   return { title, remaining };
 };
 
@@ -98,7 +99,11 @@ const mdsvexOptions: MdsvexOptions = {
         return `<!-- svelte-ignore a11y_no_noninteractive_tabindex --><div data-mermaid tabindex="0" class="not-prose overflow-x-auto rounded-md border-2 border-slate-800 bg-[#011627] p-4 not-last:mb-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"><pre class="mermaid-source" style="margin:0;color:#d6deeb;white-space:pre-wrap">${escaped}</pre></div>`;
       }
 
-      const { title, remaining: remainingMeta } = parseTitle(metastring);
+      const playgroundMetadata =
+        lang === 'html' ? parseTailwindPlaygroundMetadata(metastring ?? undefined) : null;
+      const parsedTitle = parseTitle(metastring);
+      const title = playgroundMetadata?.title ?? parsedTitle.title;
+      const remainingMeta = parsedTitle.remaining;
       const { cleanedCode, annotations } = extractAnnotations(code);
 
       const baseClasses = [

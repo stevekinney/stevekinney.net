@@ -75,10 +75,23 @@ describe('turbo generated asset graph', () => {
     expect(tasks['@stevekinney/website#test:unit']?.inputs).toEqual(
       expect.arrayContaining([
         'plugins/**/*.ts',
+        'tests/**/*.ts',
         'svelte.config.ts',
         '../../vercel.json',
         '../../packages/utilities/**/*.ts',
         '../../packages/markdown/src/**/*.ts',
+      ]),
+    );
+  });
+
+  test('keeps website watch checks behind generated browser asset producers', async () => {
+    const tasks = await readTurboTasks();
+    expect(tasks['@stevekinney/website#check:watch']?.dependsOn).toEqual(
+      expect.arrayContaining([
+        '@stevekinney/website#sync',
+        '@stevekinney/scripts#content:build',
+        '@stevekinney/scripts#playgrounds:build',
+        '@stevekinney/scripts#content-enhancements:build',
       ]),
     );
   });
@@ -114,6 +127,9 @@ describe('turbo generated asset graph', () => {
       ]),
     );
     expect(tasks['@stevekinney/website#test:unit']?.inputs ?? []).not.toEqual(
+      expect.arrayContaining(['.generated/playgrounds/**', '.generated/content-enhancements/**']),
+    );
+    expect(tasks['@stevekinney/website#check:watch']?.inputs ?? []).not.toEqual(
       expect.arrayContaining(['.generated/playgrounds/**', '.generated/content-enhancements/**']),
     );
   });

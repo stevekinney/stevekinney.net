@@ -16,6 +16,7 @@
     "./tailwind-playground-metadata": "./tailwind-playground-metadata.ts"
   },
   "dependencies": {
-    "parse5-sax-parser": "8.0.0"
+    "parse5-sax-parser": "8.0.0",
+    "postcss-value-parser": "4.2.0"
   }
 }

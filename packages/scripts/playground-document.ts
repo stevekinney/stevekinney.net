@@ -18,5 +18,11 @@ export const renderPlaygroundDocument = (
   stylesheetUrl: string,
 ): string => {
   const rootAttributes = { lang: 'en', ...example.htmlAttributes };
-  return `<!doctype html>\n<html${attributes(rootAttributes)}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeAttribute(example.title)}</title><link rel="stylesheet" href="${escapeAttribute(stylesheetUrl)}"></head><body${attributes(example.bodyAttributes)}>${example.html}</body></html>\n`;
+  const head = [
+    '<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">',
+    `<title>${escapeAttribute(example.title)}</title>`,
+    `<link rel="stylesheet" href="${escapeAttribute(stylesheetUrl)}"></head>`,
+  ].join('');
+  const body = `<body${attributes(example.bodyAttributes)}>${example.html}</body>`;
+  return `<!doctype html>\n<html${attributes(rootAttributes)}>${head}${body}</html>\n`;
 };

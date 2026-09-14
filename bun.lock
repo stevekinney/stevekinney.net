@@ -112,6 +112,7 @@
       "name": "@stevekinney/markdown",
       "dependencies": {
         "@stevekinney/utilities": "workspace:*",
+        "micromark-util-decode-string": "2.0.1",
       },
     },
     "packages/scripts": {
@@ -138,6 +139,7 @@
       "name": "@stevekinney/utilities",
       "dependencies": {
         "parse5-sax-parser": "8.0.0",
+        "postcss-value-parser": "4.2.0",
       },
     },
   },

@@ -57,7 +57,11 @@ test('enhancement rebuild prunes obsolete chunk files before adapter sync can co
   await mkdir(path.join(packageRoot, 'src'), { recursive: true });
   await mkdir(outputDirectory, { recursive: true });
   await writeFile(path.join(packageRoot, 'src/content-enhancements.ts'), 'export const value = 1;');
-  await writeFile(path.join(outputDirectory, 'stale-chunk.js'), 'old');
+  await Promise.all(
+    ['stale-chunk.js', 'another-stale-chunk.js', 'unused.css'].map((filename) =>
+      writeFile(path.join(outputDirectory, filename), 'old'),
+    ),
+  );
   await writeFile(
     path.join(outputDirectory, '.build-hash'),
     'old metadata stays managed separately',
@@ -66,6 +70,10 @@ test('enhancement rebuild prunes obsolete chunk files before adapter sync can co
   const result = await buildContentEnhancements({ workspaceRoot, packageRoot, outputDirectory });
 
   expect(result.bundles).toBe(1);
-  await expect(readFile(path.join(outputDirectory, 'stale-chunk.js'))).rejects.toThrow();
+  // Three new output/metadata files and three stale-file removals.
+  expect(result.writes).toBe(6);
+  for (const filename of ['stale-chunk.js', 'another-stale-chunk.js', 'unused.css']) {
+    await expect(readFile(path.join(outputDirectory, filename))).rejects.toThrow();
+  }
   await expect(readFile(path.join(outputDirectory, '.build-hash'), 'utf8')).resolves.toBeTruthy();
 });

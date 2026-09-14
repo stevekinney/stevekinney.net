@@ -104,6 +104,141 @@ describe('tailwind playground extraction', () => {
     expect(result.candidates).toEqual(["before:content-['A\u00a0B']"]);
   });
 
+  test('resolves authored URLs against the source route before relocating the document', () => {
+    const [lesson] = extractTailwindPlaygrounds(
+      [
+        {
+          lang: 'html',
+          value:
+            '<a href="next">Next</a><a href="#section">Section</a><img src="image.png" srcset="small.png 1x,data:image/png;base64,AAAA 2x,large.png 3x"><img src="/already-root/../asset.png"><img src="https://example.com/asset.png"><img src="data:image/png;base64,AAAA"><div style="background: url(icons/icon.svg)"></div><svg><use href="icons.svg#check" xlink:href="symbols.svg#check" /></use></svg><form action="submit" formaction="/save"><blockquote cite="notes.txt">Quote</blockquote></form>',
+          meta: 'tailwind height=160',
+          line: 1,
+          ordinal: 0,
+        },
+      ],
+      'courses/testing/the-basics.md',
+    );
+    expect(lesson?.html).toContain('href="/courses/testing/next"');
+    expect(lesson?.html).toContain('href="#section"');
+    expect(lesson?.html).toContain('src="/courses/testing/image.png"');
+    expect(lesson?.html).toContain(
+      'srcset="/courses/testing/small.png 1x, data:image/png;base64,AAAA 2x, /courses/testing/large.png 3x"',
+    );
+    expect(lesson?.html).toContain('src="/already-root/../asset.png"');
+    expect(lesson?.html).toContain('src="https://example.com/asset.png"');
+    expect(lesson?.html).toContain('src="data:image/png;base64,AAAA"');
+    expect(lesson?.html).toContain('style="background: url(/courses/testing/icons/icon.svg)"');
+    expect(lesson?.html).toContain('href="/courses/testing/icons.svg#check"');
+    expect(lesson?.html).toContain('xlink:href="/courses/testing/symbols.svg#check"');
+    expect(lesson?.html).toContain('action="/courses/testing/submit"');
+    expect(lesson?.html).toContain('formaction="/save"');
+    expect(lesson?.html).toContain('cite="/courses/testing/notes.txt"');
+  });
+
+  test('resolves course README URLs against the course route', () => {
+    const [course] = extractTailwindPlaygrounds(
+      [
+        {
+          lang: 'html',
+          value: '<img src="cover.png">',
+          meta: 'tailwind height=160',
+          line: 1,
+          ordinal: 0,
+        },
+      ],
+      'courses/testing/README.md',
+    );
+    expect(course?.html).toContain('src="/courses/testing/cover.png"');
+  });
+
+  test('resolves writing URLs against the writing route', () => {
+    const [writing] = extractTailwindPlaygrounds(
+      [
+        {
+          lang: 'html',
+          value: '<img src="asset.png">',
+          meta: 'tailwind height=160',
+          line: 1,
+          ordinal: 0,
+        },
+      ],
+      'writing/example.md',
+    );
+    expect(writing?.html).toContain('src="/writing/asset.png"');
+  });
+
+  test('resolves relative URLs in linked CSS per source route before grouping', () => {
+    const playgrounds = extractTailwindPlaygrounds(
+      [
+        {
+          lang: 'css',
+          value: '.card { background: url(./texture%20one.png); mask: url("#mask"); }',
+          meta: 'playground=cards',
+          line: 1,
+          ordinal: 0,
+        },
+        {
+          lang: 'html',
+          value: '<div class="card">One</div>',
+          meta: 'tailwind height=160 css=cards',
+          line: 3,
+          ordinal: 1,
+        },
+        {
+          lang: 'html',
+          value: '<div class="card">Two</div>',
+          meta: 'tailwind height=160 css=cards',
+          line: 5,
+          ordinal: 2,
+        },
+      ],
+      'courses/testing/one.md',
+    );
+    expect(playgrounds[0]?.css).toContain('url(/courses/testing/texture%20one.png)');
+    expect(playgrounds[0]?.css).toContain('url("#mask")');
+    expect(playgrounds[0]?.sourceFingerprint).toMatch(/^[a-f0-9]{64}$/);
+  });
+
+  test('keeps CSS configurations distinct when their relative resource bases differ', () => {
+    const definitions = ['courses/one/lesson.md', 'courses/two/lesson.md'].map(
+      (sourcePath) =>
+        extractTailwindPlaygrounds(
+          [
+            {
+              lang: 'css',
+              value: '.card { background: url(texture.png); }',
+              meta: 'playground=card',
+              line: 1,
+              ordinal: 0,
+            },
+            {
+              lang: 'html',
+              value: '<div class="card">Card</div>',
+              meta: 'tailwind height=160 css=card',
+              line: 4,
+              ordinal: 1,
+            },
+          ],
+          sourcePath,
+        )[0]!,
+    );
+    expect(definitions[0].css).toContain('/courses/one/texture.png');
+    expect(definitions[1].css).toContain('/courses/two/texture.png');
+    expect(definitions[0].css).not.toBe(definitions[1].css);
+    expect(definitions[0].sourceFingerprint).toBe(definitions[1].sourceFingerprint);
+  });
+
+  test('preserves local fragments and all parsed srcset descriptors', () => {
+    const result = extractTailwindPlaygroundHtml(
+      '<a href=" #section ">Jump</a><img srcset="zero.png 0x, sized.png 100w 50h">',
+      '/courses/testing/lesson',
+    );
+    expect(result.html).toContain('href=" #section "');
+    expect(result.html).toContain(
+      'srcset="/courses/testing/zero.png 0x, /courses/testing/sized.png 100w 50h"',
+    );
+  });
+
   test('rejects executable HTML and forbidden CSS imports', () => {
     expect(() => extractTailwindPlaygroundHtml('<button onclick="alert(1)">X</button>')).toThrow();
     expect(() => validateTailwindPlaygroundCss('@import "x";')).toThrow();

@@ -10,6 +10,7 @@ import {
 import { PLAYGROUND_URL_PREFIX } from '@stevekinney/utilities/tailwind-playground-policy';
 import type { PlaygroundManifest } from '@stevekinney/utilities/tailwind-playground-types';
 import type { Code, Heading, Html, Parent, PhrasingContent, Root } from 'mdast';
+import { decodeString } from 'micromark-util-decode-string';
 import type { Transformer } from 'unified';
 import { visit } from 'unist-util-visit';
 import type { VFile } from 'vfile';
@@ -79,13 +80,14 @@ const colorSchemeForTheme = (theme: PlaygroundManifest['examples'][number]['them
 
 const rawPositionedValue = (node: PhrasingContent, rawSource: string | undefined): string => {
   if (node.type === 'inlineCode') return node.value;
+  if (node.type === 'image' || node.type === 'imageReference') return node.alt ?? '';
   if (!rawSource || !node.position || node.type !== 'text') {
     return 'value' in node && typeof node.value === 'string' ? node.value : '';
   }
   const start = node.position.start.offset;
   const end = node.position.end.offset;
   if (start === undefined || end === undefined) return node.value;
-  return rawSource.slice(start, end);
+  return decodeString(rawSource.slice(start, end));
 };
 
 const phrasingContentToText = (
@@ -94,7 +96,12 @@ const phrasingContentToText = (
 ): string =>
   (nodes ?? [])
     .map((node) => {
-      if (node.type === 'text' || node.type === 'inlineCode')
+      if (
+        node.type === 'text' ||
+        node.type === 'inlineCode' ||
+        node.type === 'image' ||
+        node.type === 'imageReference'
+      )
         return rawPositionedValue(node, rawSource);
       if ('children' in node && Array.isArray(node.children))
         return phrasingContentToText(node.children, rawSource);

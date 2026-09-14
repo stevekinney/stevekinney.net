@@ -32,15 +32,13 @@ const removeStaleOutputFiles = async (
     throw error;
   }
 
-  let removals = 0;
-  await Promise.all(
-    entries.map(async (entry) => {
-      if (!entry.isFile() || entry.name.startsWith('.') || currentFiles.has(entry.name)) return;
-      await rm(path.join(outputDirectory, entry.name), { force: true });
-      removals += 1;
-    }),
+  const staleFiles = entries.filter(
+    (entry) => entry.isFile() && !entry.name.startsWith('.') && !currentFiles.has(entry.name),
   );
-  return removals;
+  await Promise.all(
+    staleFiles.map((entry) => rm(path.join(outputDirectory, entry.name), { force: true })),
+  );
+  return staleFiles.length;
 };
 
 /** Build browser enhancements independently of Markdown collection. */

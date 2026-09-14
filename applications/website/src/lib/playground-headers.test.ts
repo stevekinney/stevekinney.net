@@ -25,7 +25,7 @@ const findHeaders = (source: string): Map<string, string> => {
 describe('playground deployment headers', () => {
   it('keeps the static playground document policy in sync with the shared utility', () => {
     const productionHeaders = playgroundResponseHeaders(true);
-    const htmlHeaders = findHeaders('/generated/playgrounds/(.*).html');
+    const htmlHeaders = findHeaders('/generated/playgrounds/([a-f0-9]{64}\\.html)');
 
     expect(htmlHeaders.get('Content-Security-Policy')).toBe(PLAYGROUND_CONTENT_SECURITY_POLICY);
     expect(htmlHeaders.get('Content-Security-Policy')).toBe(
@@ -40,7 +40,7 @@ describe('playground deployment headers', () => {
   });
 
   it('does not put document sandbox policy on playground CSS assets', () => {
-    const cssHeaders = findHeaders('/generated/playgrounds/(.*).css');
+    const cssHeaders = findHeaders('/generated/playgrounds/([a-f0-9]{64}\\.css)');
 
     expect(cssHeaders.get('Cache-Control')).toBe('public, max-age=31536000, immutable');
     expect(cssHeaders.has('Content-Security-Policy')).toBe(false);
@@ -48,12 +48,32 @@ describe('playground deployment headers', () => {
   });
 
   it('keeps the website frame-denied while allowing it to embed same-origin playgrounds', () => {
-    const websiteHeaders = findHeaders('/((?!generated/playgrounds/).*)');
+    const websiteHeaders = findHeaders(
+      '/((?!generated/playgrounds/[a-f0-9]{64}\\.(?:html|css)$).*)',
+    );
     const contentSecurityPolicy = websiteHeaders.get('Content-Security-Policy') ?? '';
 
     expect(websiteHeaders.get('X-Frame-Options')).toBe('DENY');
     expect(contentSecurityPolicy).toContain("frame-src 'self'");
     expect(contentSecurityPolicy).toContain("frame-ancestors 'none'");
+  });
+
+  it('reserves immutable child policies for exact generated filenames', () => {
+    for (const pathname of [
+      `/generated/playgrounds/${'a'.repeat(64)}xhtml`,
+      `/generated/playgrounds/${'b'.repeat(64)}xcss`,
+      '/generated/playgrounds/other.html',
+      `/generated/playgrounds/nested/${'a'.repeat(64)}.html`,
+      `/generated/playgrounds/${'a'.repeat(64)}.html/extra`,
+    ]) {
+      const matchingHeaders = vercelConfiguration.headers
+        .filter((rule) => new RegExp(`^${rule.source}$`).test(pathname))
+        .flatMap((rule) => rule.headers);
+      const policies = matchingHeaders.filter((header) => header.key === 'Content-Security-Policy');
+      expect(policies).toHaveLength(1);
+      expect(policies[0].value).toContain("frame-ancestors 'none'");
+      expect(matchingHeaders.filter((header) => header.key === 'Cache-Control')).toHaveLength(0);
+    }
   });
 
   it('applies exactly one framing policy to each response', () => {

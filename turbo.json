@@ -168,7 +168,12 @@
       ]
     },
     "@stevekinney/website#check:watch": {
-      "dependsOn": ["@stevekinney/website#sync", "@stevekinney/scripts#content:build"],
+      "dependsOn": [
+        "@stevekinney/website#sync",
+        "@stevekinney/scripts#content:build",
+        "@stevekinney/scripts#playgrounds:build",
+        "@stevekinney/scripts#content-enhancements:build"
+      ],
       "cache": false,
       "persistent": true
     },
@@ -205,6 +210,7 @@
         "src/**",
         "../../vercel.json",
         "svelte.config.ts",
+        "tests/**/*.ts",
         "plugins/**/*.ts",
         "vitest.config.*",
         "vite.config.*",

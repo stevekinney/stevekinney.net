@@ -1,5 +1,6 @@
 import { JSDOM } from 'jsdom';
 import postcss from 'postcss';
+import valueParser from 'postcss-value-parser';
 import { SAXParser } from 'parse5-sax-parser';
 
 import type { PlaygroundDefinition } from './tailwind-playground-types.ts';
@@ -38,6 +39,124 @@ const normalizeClasses = (document: Document): string[] =>
     ),
   ].sort();
 
+const urlAttributes = new Set([
+  'action',
+  'background',
+  'cite',
+  'formaction',
+  'href',
+  'imagesrcset',
+  'longdesc',
+  'manifest',
+  'poster',
+  'src',
+  'srcset',
+  'usemap',
+  'xlink:href',
+]);
+
+const sourceRoute = (sourcePath: string): string => {
+  const normalized = sourcePath.replaceAll('\\', '/').replace(/\.md$/, '');
+  return normalized.endsWith('/README')
+    ? `/${normalized.slice(0, -'/README'.length)}/`
+    : `/${normalized}`;
+};
+
+const resolveUrl = (value: string, route: string): string => {
+  const trimmed = value.trim();
+  if (
+    !trimmed ||
+    trimmed.startsWith('#') ||
+    trimmed.startsWith('/') ||
+    /^[a-z][a-z0-9+.-]*:/i.test(trimmed)
+  )
+    return value;
+  try {
+    const resolved = new URL(value, `https://playground.invalid${route}`);
+    if (resolved.origin !== 'https://playground.invalid') return value;
+    return `${resolved.pathname}${resolved.search}${resolved.hash}`;
+  } catch {
+    return value;
+  }
+};
+
+const resolveSrcset = (value: string, route: string): string => {
+  const candidates: string[] = [];
+  let position = 0;
+  // Follow WHATWG's URL and descriptor token boundaries; let the browser interpret
+  // descriptors without discarding authored values or commas inside resource URLs.
+  // https://html.spec.whatwg.org/multipage/images.html#parse-a-srcset-attribute
+  while (position < value.length) {
+    while (position < value.length && /[\t\n\f\r ,]/.test(value[position]!)) position += 1;
+    if (position === value.length) break;
+    const start = position;
+    while (position < value.length && !/[\t\n\f\r ]/.test(value[position]!)) position += 1;
+    const url = value.slice(start, position);
+    if (url.endsWith(',')) {
+      candidates.push(resolveUrl(url.replace(/,+$/, ''), route));
+      continue;
+    }
+    const descriptorStart = position;
+    let inParentheses = false;
+    while (position < value.length) {
+      const character = value[position]!;
+      if (character === ',' && !inParentheses) break;
+      if (character === '(') inParentheses = true;
+      if (character === ')') inParentheses = false;
+      position += 1;
+    }
+    const descriptors = value.slice(descriptorStart, position).trim();
+    candidates.push([resolveUrl(url, route), descriptors].filter(Boolean).join(' '));
+    position += 1;
+  }
+  return candidates.join(', ');
+};
+
+const resolveAuthoredUrls = (document: Document, route: string): void => {
+  for (const element of document.querySelectorAll('*')) {
+    for (const attribute of [...element.attributes]) {
+      const name = attribute.name.toLowerCase();
+      if (name === 'srcset' || name === 'imagesrcset')
+        element.setAttribute(attribute.name, resolveSrcset(attribute.value, route));
+      else if (urlAttributes.has(name))
+        element.setAttribute(attribute.name, resolveUrl(attribute.value, route));
+      else if (name === 'style') {
+        const parsed = valueParser(attribute.value);
+        parsed.walk((node) => {
+          if (node.type !== 'function' || node.value.toLowerCase() !== 'url') return;
+          const value = node.nodes.find(
+            (child) => child.type === 'word' || child.type === 'string',
+          );
+          if (value) value.value = resolveUrl(value.value, route);
+        });
+        element.setAttribute(attribute.name, parsed.toString());
+      } else if (name === 'ping')
+        element.setAttribute(
+          attribute.name,
+          attribute.value
+            .trim()
+            .split(/\s+/)
+            .map((value) => resolveUrl(value, route))
+            .join(' '),
+        );
+    }
+  }
+};
+
+const resolveCssUrls = (css: string, route: string): string => {
+  const root = postcss.parse(css);
+  root.walkDecls((declaration) => {
+    const parsed = valueParser(declaration.value);
+    parsed.walk((node) => {
+      if (node.type !== 'function' || node.value.toLowerCase() !== 'url') return;
+      const value = node.nodes.find((child) => child.type === 'word' || child.type === 'string');
+      if (value) value.value = resolveUrl(value.value, route);
+    });
+    declaration.value = parsed.toString();
+  });
+  return root.toString();
+};
+
 /** Extract decoded class tokens from a raw Markdown HTML fragment. */
 export const extractTailwindCandidatesFromHtml = (html: string): string[] =>
   normalizeClasses(playgroundParser.parseFromString(`<body>${html}</body>`, 'text/html'));
@@ -73,6 +192,7 @@ const validateHtml = (document: Document): void => {
 /** Parse and validate authored HTML at build time. */
 export const extractTailwindPlaygroundHtml = (
   html: string,
+  route?: string,
 ): Pick<PlaygroundDefinition, 'html' | 'htmlAttributes' | 'bodyAttributes' | 'candidates'> => {
   const explicit: string[] = [];
   const tokenizer = new SAXParser();
@@ -92,6 +212,7 @@ export const extractTailwindPlaygroundHtml = (
       : playgroundParser.parseFromString(html, 'text/html');
   if (!document) throw new Error('Unable to parse playground HTML.');
   validateHtml(document);
+  if (route) resolveAuthoredUrls(document, route);
   return {
     html: document.body.innerHTML,
     htmlAttributes: attributes(document.documentElement),
@@ -151,6 +272,7 @@ export const extractTailwindPlaygrounds = (
     }
   }
   const definitions: PlaygroundDefinition[] = [];
+  const resolvedStyles = new Map<string, string>();
   for (const fence of fences) {
     let metadata;
     try {
@@ -164,7 +286,7 @@ export const extractTailwindPlaygrounds = (
     if (!metadata) continue;
     let parsed;
     try {
-      parsed = extractTailwindPlaygroundHtml(fence.value);
+      parsed = extractTailwindPlaygroundHtml(fence.value, sourceRoute(sourcePath));
     } catch (error) {
       throw new Error(
         `${sourcePath}:${fence.line}: ${error instanceof Error ? error.message : String(error)}`,
@@ -175,6 +297,9 @@ export const extractTailwindPlaygrounds = (
     if (metadata.css && !styles.has(metadata.css))
       throw new Error(`${sourcePath}:${fence.line}: Unknown CSS playground '${metadata.css}'.`);
     const title = resolveTailwindPlaygroundTitle(metadata.title, fence.heading, definitions.length);
+    if (metadata.css && !resolvedStyles.has(metadata.css))
+      resolvedStyles.set(metadata.css, resolveCssUrls(css ?? '', sourceRoute(sourcePath)));
+    const resolvedCss = metadata.css ? (resolvedStyles.get(metadata.css) ?? '') : '';
     definitions.push({
       sourcePath,
       ordinal: definitions.length,
@@ -184,7 +309,7 @@ export const extractTailwindPlaygrounds = (
       height: metadata.height,
       theme: metadata.theme,
       title,
-      css: css ?? '',
+      css: resolvedCss,
       ...(metadata.css
         ? { cssName: metadata.css, cssAnchor: `playground-css-${metadata.css}` }
         : {}),

@@ -90,6 +90,7 @@ const contentDependencyPaths = [
   path.join(scriptsDirectory, 'content-repository.ts'),
   path.join(scriptsDirectory, 'content-repository'),
   path.join(utilitiesDirectory, 'content-types.ts'),
+  path.join(utilitiesDirectory, 'frontmatter.ts'),
   path.join(utilitiesDirectory, 'tailwind-playground.ts'),
   path.join(utilitiesDirectory, 'tailwind-playground-metadata.ts'),
   path.join(utilitiesDirectory, 'tailwind-playground-types.ts'),

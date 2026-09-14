@@ -1,4 +1,5 @@
 import { EventEmitter } from 'node:events';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
@@ -24,6 +25,14 @@ type FakeServer = {
   ws: { send: (message: { type: string }) => void };
 };
 
+type RegenerateGeneratedContentPlugin = {
+  configureServer: (server: FakeServer) => void;
+  hotUpdate: {
+    handler: (context: { file: string }) => [] | undefined;
+    order: 'pre';
+  };
+};
+
 const makeChild = (onKill: () => void): FakeChildProcess => {
   const child = new EventEmitter() as FakeChildProcess;
   child.kill = onKill;
@@ -35,7 +44,12 @@ const waitForTimer = (): Promise<void> =>
     setTimeout(resolve, 5);
   });
 
-const makeServer = (): FakeServer => {
+const waitForDebounce = (): Promise<void> =>
+  new Promise((resolve) => {
+    setTimeout(resolve, 60);
+  });
+
+const makeServer = (events: string[] = []): FakeServer => {
   const watcher = new EventEmitter() as FakeServer['watcher'];
   watcher.add = () => {};
 
@@ -43,8 +57,8 @@ const makeServer = (): FakeServer => {
     config: { logger: { error: () => {} } },
     watcher,
     httpServer: new EventEmitter(),
-    moduleGraph: { invalidateAll: () => {} },
-    ws: { send: () => {} },
+    moduleGraph: { invalidateAll: () => events.push('invalidate') },
+    ws: { send: () => events.push('reload') },
   };
 };
 
@@ -56,10 +70,11 @@ const configurePlugin = (
     enhancementDependencyPath: string;
     playgroundDependencyPath: string;
     sharedBuildDependencyPath: string;
+    debounceMs?: number;
     spawnProcess?: (command: string, args: readonly string[]) => FakeChildProcess;
   },
   server: FakeServer,
-): void => {
+): RegenerateGeneratedContentPlugin => {
   const plugin = regenerateGeneratedContent({
     contentBuildScriptPath: '/content-build.ts',
     playgroundsBuildScriptPath: '/playgrounds-build.ts',
@@ -71,19 +86,158 @@ const configurePlugin = (
     enhancementDependencyPaths: [options.enhancementDependencyPath],
     playgroundDependencyPaths: [options.playgroundDependencyPath],
     sharedBuildDependencyPaths: [options.sharedBuildDependencyPath],
-    debounceMs: 1,
+    debounceMs: options.debounceMs ?? 1,
     ...(options.spawnProcess
       ? {
           spawnProcess:
             options.spawnProcess as unknown as typeof import('node:child_process').spawn,
         }
       : {}),
-  }) as unknown as { configureServer: (server: FakeServer) => void };
+  }) as unknown as RegenerateGeneratedContentPlugin;
 
   plugin.configureServer(server);
+  return plugin;
 };
 
 describe('regenerateGeneratedContent', () => {
+  it('suppresses Vite hot updates for changes owned by generated content rebuilds', () => {
+    const server = makeServer();
+    const plugin = configurePlugin(
+      {
+        contentDirectory: '/workspace/courses',
+        contentDependencyPath: '/workspace/packages/scripts/content-repository',
+        enhancementDirectory: '/workspace/packages/content-enhancements/src',
+        enhancementDependencyPath: '/workspace/packages/scripts/content-enhancements-build.ts',
+        playgroundDependencyPath: '/workspace/packages/scripts/playgrounds-build.ts',
+        sharedBuildDependencyPath: '/workspace/packages/scripts/build-artifacts.ts',
+      },
+      server,
+    );
+
+    expect(plugin.hotUpdate.order).toBe('pre');
+    expect(plugin.hotUpdate.handler({ file: '/workspace/courses/tailwind/example.md' })).toEqual(
+      [],
+    );
+    expect(
+      plugin.hotUpdate.handler({
+        file: '/workspace/packages/scripts/content-repository/markdown.ts',
+      }),
+    ).toEqual([]);
+    expect(
+      plugin.hotUpdate.handler({
+        file: '/workspace/packages/content-enhancements/src/enhance-tables.ts',
+      }),
+    ).toEqual([]);
+    expect(plugin.hotUpdate.handler({ file: '/workspace/app/src/routes/+page.svelte' })).toBe(
+      undefined,
+    );
+  });
+
+  it('waits for pending and debounced rebuilds before reloading the browser', async () => {
+    const events: string[] = [];
+    const server = makeServer(events);
+    const children: FakeChildProcess[] = [];
+
+    configurePlugin(
+      {
+        contentDirectory: '/workspace/courses',
+        contentDependencyPath: '/workspace/packages/scripts/content-repository',
+        enhancementDirectory: '/workspace/packages/content-enhancements/src',
+        enhancementDependencyPath: '/workspace/packages/scripts/content-enhancements-build.ts',
+        playgroundDependencyPath: '/workspace/packages/scripts/playgrounds-build.ts',
+        sharedBuildDependencyPath: '/workspace/packages/scripts/build-artifacts.ts',
+        spawnProcess: (_command, args) => {
+          events.push(args[1] ?? 'missing-script');
+          const child = makeChild(() => {});
+          children.push(child);
+          return child;
+        },
+      },
+      server,
+    );
+
+    server.watcher.emit('change' satisfies ServerEventName, '/workspace/courses/example.md');
+    await waitForTimer();
+    expect(events).toEqual(['/content-build.ts']);
+
+    server.watcher.emit(
+      'change' satisfies ServerEventName,
+      '/workspace/packages/content-enhancements/src/enhance-tables.ts',
+    );
+    children[0]?.emit('exit', 0);
+    await waitForTimer();
+
+    expect(events).toEqual(['/content-build.ts', '/playgrounds-build.ts']);
+
+    children[1]?.emit('exit', 0);
+    expect(events).toEqual([
+      '/content-build.ts',
+      '/playgrounds-build.ts',
+      '/content-enhancements-build.ts',
+    ]);
+
+    children[2]?.emit('exit', 0);
+    expect(events).toEqual([
+      '/content-build.ts',
+      '/playgrounds-build.ts',
+      '/content-enhancements-build.ts',
+      'invalidate',
+      'reload',
+    ]);
+  });
+
+  it('drains still-debounced rebuilds before reloading the browser', async () => {
+    const events: string[] = [];
+    const server = makeServer(events);
+    const children: FakeChildProcess[] = [];
+
+    configurePlugin(
+      {
+        contentDirectory: '/workspace/courses',
+        contentDependencyPath: '/workspace/packages/scripts/content-repository',
+        debounceMs: 50,
+        enhancementDirectory: '/workspace/packages/content-enhancements/src',
+        enhancementDependencyPath: '/workspace/packages/scripts/content-enhancements-build.ts',
+        playgroundDependencyPath: '/workspace/packages/scripts/playgrounds-build.ts',
+        sharedBuildDependencyPath: '/workspace/packages/scripts/build-artifacts.ts',
+        spawnProcess: (_command, args) => {
+          events.push(args[1] ?? 'missing-script');
+          const child = makeChild(() => {});
+          children.push(child);
+          return child;
+        },
+      },
+      server,
+    );
+
+    server.watcher.emit('change' satisfies ServerEventName, '/workspace/courses/example.md');
+    await waitForDebounce();
+    expect(events).toEqual(['/content-build.ts']);
+
+    server.watcher.emit(
+      'change' satisfies ServerEventName,
+      '/workspace/packages/content-enhancements/src/enhance-tables.ts',
+    );
+
+    children[0]?.emit('exit', 0);
+    children[1]?.emit('exit', 0);
+
+    expect(events).toEqual([
+      '/content-build.ts',
+      '/playgrounds-build.ts',
+      '/content-enhancements-build.ts',
+    ]);
+
+    children[2]?.emit('exit', 0);
+    expect(events).toEqual([
+      '/content-build.ts',
+      '/playgrounds-build.ts',
+      '/content-enhancements-build.ts',
+      'invalidate',
+      'reload',
+    ]);
+  });
+
   it('classifies source and recipe changes into the smallest affected task sets', () => {
     const root = '/workspace';
     const context = {
@@ -185,5 +339,14 @@ describe('regenerateGeneratedContent', () => {
 
     expect(commands).toHaveLength(1);
     expect(server.watcher.listenerCount('change')).toBe(0);
+  });
+
+  it('watches frontmatter as a content dependency for development builds', async () => {
+    const viteConfiguration = await readFile(
+      path.resolve(import.meta.dirname, '../../vite.config.ts'),
+      'utf8',
+    );
+
+    expect(viteConfiguration).toContain("path.join(utilitiesDirectory, 'frontmatter.ts')");
   });
 });
