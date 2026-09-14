@@ -63,4 +63,21 @@ describe('discoverAllImages', () => {
     expect([...result.images.keys()]).toEqual(['writing/assets/inline.png']);
     expect(result.missing).toEqual([]);
   });
+
+  it('ignores wiki embeds inside raw HTML and discovers OGV videos', async () => {
+    const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
+    temporaryDirectories.push(repositoryRoot);
+    await mkdir(path.join(repositoryRoot, 'writing/assets'), { recursive: true });
+    await writeFile(
+      path.join(repositoryRoot, 'writing/note.md'),
+      ['<div>![[assets/protected.png]]</div>', '', '![[assets/video.ogv]]'].join('\n'),
+    );
+    await writeFile(path.join(repositoryRoot, 'writing/assets/protected.png'), 'image');
+    await writeFile(path.join(repositoryRoot, 'writing/assets/video.ogv'), 'video');
+
+    const result = await discoverAllImages(['writing/**/*.md'], repositoryRoot);
+
+    expect([...result.images.keys()]).toEqual(['writing/assets/video.ogv']);
+    expect(result.missing).toEqual([]);
+  });
 });

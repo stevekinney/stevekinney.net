@@ -9,7 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPOSITORY_ROOT = path.resolve(__dirname, '..', '..');
 
 const MARKDOWN_PATTERNS = ['writing/**/*.md', 'courses/**/*.md', 'projects/**/*.md'];
-const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg']);
+const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogv', '.ogg']);
 const NON_TRANSFORMED_EXTENSIONS = new Set(['.webp', '.avif', '.gif', '.svg']);
 
 type ValidationIssue = {

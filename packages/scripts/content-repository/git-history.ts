@@ -372,6 +372,9 @@ export const collectContentHistory = async (
     '--diff-merges=first-parent',
     '--root',
     revision,
+    '--',
+    ':(glob)**/*.md',
+    ':(glob)**/*.toml',
   ]);
   const allChanges = parseChanges(raw);
   const aliases = buildAliases(allChanges, currentPaths);

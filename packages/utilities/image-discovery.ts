@@ -29,7 +29,7 @@ type DiscoveryResult = {
 };
 
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.svg']);
-const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg']);
+const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogv', '.ogg']);
 const ALL_ASSET_EXTENSIONS = new Set([...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS]);
 const EXTERNAL_PREFIXES = ['http://', 'https://', 'mailto:', 'tel:', 'data:', 'ftp://'];
 
@@ -61,7 +61,7 @@ const maskProtectedMarkdown = (markdown: string): string => {
 
   const tree = unified().use(remarkParse).parse(markdown);
   visit(tree, (node) => {
-    if (node.type !== 'code' && node.type !== 'inlineCode') return;
+    if (node.type !== 'code' && node.type !== 'inlineCode' && node.type !== 'html') return;
     const start = node.position?.start.offset;
     const end = node.position?.end.offset;
     if (start !== undefined && end !== undefined) mask(start, end);

@@ -20,11 +20,12 @@ const CONCURRENCY = 10;
 
 const RASTERIZABLE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg']);
 const PASSTHROUGH_IMAGE_EXTENSIONS = new Set(['.svg', '.gif', '.webp', '.avif']);
-const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg']);
+const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogv', '.ogg']);
 
 const VIDEO_MIME_TYPES: Record<string, string> = {
   '.mp4': 'video/mp4',
   '.webm': 'video/webm',
+  '.ogv': 'video/ogg',
   '.ogg': 'video/ogg',
 };
 
