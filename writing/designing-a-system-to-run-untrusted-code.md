@@ -1,6 +1,6 @@
 ---
 title: 'Designing a Build System That Runs Untrusted Code'
-description: 'A deep technical walkthrough of what it takes to design a build system that securely executes arbitrary customer repositories and turns build output into.'
+description: 'A technical walkthrough of building systems that run untrusted repositories, covering isolation, dependencies, network access, artifacts, and operations.'
 date: 2026-03-16
 ---
 

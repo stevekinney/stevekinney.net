@@ -39,6 +39,8 @@ type RepositoryState = {
 const ZERO_HASH = /^0+$/;
 const TARGET = /^(?:writing\/[^/]+\.md|courses\/[^/]+\/(?:README\.md|index\.toml|[^/]+\.md))$/;
 const isMarkdown = (filePath: string): boolean => filePath.endsWith('.md');
+const isCourseAnchor = (filePath: string): boolean =>
+  filePath.endsWith('/README.md') || filePath.endsWith('/index.toml');
 const courseFor = (filePath: string): string | undefined => {
   const match = filePath.match(/^courses\/([^/]+)\//);
   return match?.[1];
@@ -146,22 +148,48 @@ const parseTreePaths = (raw: Buffer): string[] => raw.toString('utf8').split('\0
 
 const buildAliases = (changes: Change[], currentPaths: string[]): Map<string, Alias> => {
   const aliases = new Map<string, Alias>();
-  const currentCourses = new Set(
-    currentPaths.map(courseFor).filter((slug): slug is string => !!slug),
-  );
   for (const filePath of currentPaths)
     aliases.set(filePath, { canonical: filePath, kind: fileKind(filePath) });
+  const followRenames = (): void => {
+    for (const change of changes.toReversed()) {
+      const newAlias = aliases.get(change.newPath);
+      if (!change.oldPath || !newAlias) continue;
+      const oldCourse = courseFor(change.oldPath);
+      const newCourse = courseFor(change.newPath);
+      if (
+        oldCourse === newCourse ||
+        oldCourse === undefined ||
+        newCourse === undefined ||
+        isCourseAnchor(change.oldPath) ||
+        isCourseAnchor(change.newPath)
+      )
+        aliases.set(change.oldPath, newAlias);
+    }
+  };
+  followRenames();
+  const courseAliases = new Map<string, string>();
+  for (const [filePath, alias] of aliases) {
+    if (!isCourseAnchor(filePath)) continue;
+    const sourceCourse = courseFor(filePath);
+    const canonicalCourse = courseFor(alias.canonical);
+    if (sourceCourse && canonicalCourse) courseAliases.set(sourceCourse, canonicalCourse);
+  }
   for (const change of changes) {
     for (const filePath of [change.newPath, change.oldPath]) {
-      if (!filePath || !TARGET.test(filePath) || !currentCourses.has(courseFor(filePath) ?? ''))
-        continue;
-      aliases.set(filePath, { canonical: filePath, kind: fileKind(filePath) });
+      if (!filePath || !TARGET.test(filePath) || aliases.has(filePath)) continue;
+      const sourceCourse = courseFor(filePath);
+      const canonicalCourse = sourceCourse ? courseAliases.get(sourceCourse) : undefined;
+      aliases.set(filePath, {
+        canonical:
+          sourceCourse && canonicalCourse
+            ? filePath.replace(`courses/${sourceCourse}/`, `courses/${canonicalCourse}/`)
+            : filePath,
+        kind: fileKind(filePath),
+      });
     }
   }
-  for (const change of changes.toReversed()) {
-    const newAlias = aliases.get(change.newPath);
-    if (change.oldPath && newAlias) aliases.set(change.oldPath, newAlias);
-  }
+  // Deleted course files can have earlier names outside the current content roots.
+  followRenames();
   return aliases;
 };
 

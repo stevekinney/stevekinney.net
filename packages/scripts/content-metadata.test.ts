@@ -71,6 +71,43 @@ describe('content metadata workflow', () => {
     );
   });
 
+  test.each([false, true])(
+    'limits navigation parse errors to the selected course (fix: %s)',
+    async (fix) => {
+      const root = await fixture({
+        'writing/post.md':
+          '---\ntitle: A post\ndescription: A clear description of the selected post.\ndate: 2025-01-01\n---\n',
+        'courses/valid/index.toml':
+          '[[section]]\n[[section.item]]\ntitle = "A lesson"\nhref = "lesson.md"\n',
+        'courses/valid/lesson.md':
+          '---\ntitle: A lesson\ndescription: A clear description of the valid lesson.\n---\n',
+        'courses/invalid/index.toml': 'title = "unterminated\n',
+        'courses/invalid/lesson.md':
+          '---\ntitle: Another lesson\ndescription: A clear description of another lesson.\n---\n',
+        'courses/invalid/README.md':
+          '---\ntitle: Another course\ndescription: A clear description of another course.\ndate: 2025-01-01\n---\n',
+      });
+      for (const file of ['writing/post.md', 'courses/valid/lesson.md']) {
+        const result = await auditContentMetadata({ root, history, fix, paths: [file] });
+        expect(result.issues).toEqual([]);
+      }
+      for (const paths of [
+        undefined,
+        ['courses/invalid/lesson.md'],
+        ['courses/invalid/README.md'],
+      ]) {
+        const result = await auditContentMetadata({ root, history, fix, paths });
+        expect(result.issues).toEqual([
+          expect.objectContaining({
+            file: 'courses/invalid/index.toml',
+            message: expect.stringContaining('Cannot read course navigation'),
+            fixable: false,
+          }),
+        ]);
+      }
+    },
+  );
+
   test('rejects unsupported content locations and paths outside the corpus', async () => {
     const root = await fixture({ 'writing/nested/post.md': '# Not a routed source\n' });
     const result = await auditContentMetadata({ root, history });

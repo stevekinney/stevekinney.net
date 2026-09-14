@@ -15,12 +15,14 @@ const state = vi.hoisted(() => ({
         {
           title: 'Basics',
           item: [
+            { title: 'Playground', href: 'https://play.tailwindcss.com/' },
             {
               title: 'The Basics',
               href: 'the-basics.md',
               related: [
                 { title: 'Exercises', href: 'exercises.md' },
                 { title: 'The Basics again', href: 'the-basics.md' },
+                { title: 'External tool', href: 'https://example.com/tool?mode=full' },
               ],
             },
           ],
@@ -85,8 +87,12 @@ describe('LLM content exports', () => {
     const output = await renderCourseExport(state.course);
 
     expect(output.indexOf('[The Basics]')).toBeLessThan(output.indexOf('[Exercises]'));
+    expect(output.indexOf('[Playground]')).toBeLessThan(output.indexOf('[The Basics]'));
     expect(output.indexOf('[Exercises]')).toBeLessThan(output.indexOf('### Additional lessons'));
     expect(output).toContain('- [Zed Lesson](https://stevekinney.com/courses/testing/zed-lesson)');
+    expect(output).toContain('  - [External tool](https://example.com/tool?mode=full)');
+    expect(output).toContain('- [Playground](https://play.tailwindcss.com/)');
+    expect(output).not.toContain('/courses/testing/example.com');
     expect(output.match(/exercises-body/g)?.length).toBe(1);
     expect(output.match(/zed-lesson-body/g)?.length).toBe(1);
     expect(output.match(/the-basics-body/g)?.length).toBe(1);

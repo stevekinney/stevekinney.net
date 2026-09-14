@@ -24,9 +24,8 @@ describe('sitemap metadata generation', () => {
     expect(xml.match(/https:\/\/stevekinney\.com\/projects\/weft<\/loc>/g)).toHaveLength(1);
 
     expect(testingLesson).not.toBeNull();
-    expect(xml).toContain(
-      `<lastmod>${new Date(testingLesson?.modified ?? '').toISOString()}</lastmod>`,
-    );
+    expect(testingLesson?.modified).toBeDefined();
+    expect(xml).toContain(`<lastmod>${testingLesson?.modified}</lastmod>`);
 
     expect(response.headers.get('Content-Type')).toContain('application/xml');
     expect(response.headers.get('ETag')).toMatch(/^W\/"\d+"$/);

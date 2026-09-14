@@ -102,11 +102,16 @@ export async function auditContentMetadata(
       const navigation = Bun.TOML.parse(await readFile(path.join(root, file), 'utf8'));
       collectNavigationTitles(navigation, file.split('/')[1], titles);
     } catch (error) {
-      issues.push({
-        file,
-        message: `Cannot read course navigation: ${(error as Error).message}`,
-        fixable: false,
-      });
+      if (
+        !selected ||
+        [...selected].some((source) => path.dirname(source) === path.dirname(file))
+      ) {
+        issues.push({
+          file,
+          message: `Cannot read course navigation: ${(error as Error).message}`,
+          fixable: false,
+        });
+      }
     }
   }
   for (const file of files) {

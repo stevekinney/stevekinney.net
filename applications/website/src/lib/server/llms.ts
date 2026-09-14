@@ -35,8 +35,16 @@ const documentHeader = (metadata: DocumentMetadata, extra: string[] = []): strin
 
 const separator = ['', '---', ''];
 
-const courseLessonPath = (courseSlug: string, href: string): string =>
-  `/courses/${courseSlug}/${href.split('/').pop()?.replace(/\.md$/i, '') ?? href}`;
+const courseLessonPath = (courseSlug: string, href: string): string => {
+  if (/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(href) || href.startsWith('/')) {
+    return href;
+  }
+
+  return `/courses/${courseSlug}/${href.split('/').pop()?.replace(/\.md$/i, '') ?? href}`;
+};
+
+const toPublicUrl = (path: string): string =>
+  /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(path) ? path : `${url}${path}`;
 
 export const renderWritingExport = async (post: WritingIndexEntry): Promise<string> =>
   [
@@ -55,12 +63,12 @@ export const renderCourseExport = async (course: CourseIndexEntry): Promise<stri
       listedPaths.add(itemPath);
       listedLessonPaths.push(itemPath);
       return [
-        `- [${item.title}](${url}${itemPath})`,
+        `- [${item.title}](${toPublicUrl(itemPath)})`,
         ...(item.related ?? []).map((related) => {
           const relatedPath = courseLessonPath(course.slug, related.href);
           listedPaths.add(relatedPath);
           listedLessonPaths.push(relatedPath);
-          return `  - [${related.title}](${url}${relatedPath})`;
+          return `  - [${related.title}](${toPublicUrl(relatedPath)})`;
         }),
       ];
     }),

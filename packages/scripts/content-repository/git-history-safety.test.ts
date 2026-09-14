@@ -241,6 +241,115 @@ describe('collectContentHistory safety', () => {
     expect(history.modified.has('writing/old.md')).toBe(false);
   });
 
+  test('retains deleted lessons when a course directory is renamed afterward', async () => {
+    const repositoryRoot = await createRepository();
+    const oldCourse = path.join(repositoryRoot, 'courses', 'legacy');
+    await mkdir(oldCourse, { recursive: true });
+    await writeFile(
+      path.join(oldCourse, 'README.md'),
+      '---\ntitle: Legacy\ndescription: Course\ndate: 2024-01-01\n---\n\nCourse\n',
+    );
+    await writeFile(path.join(oldCourse, 'index.toml'), '[[lessons]]\nhref = "lesson.md"\n');
+    await writePost(repositoryRoot, 'courses/legacy/lesson.md', {
+      title: 'Lesson',
+      description: 'Lesson',
+      date: '2024-01-01',
+    });
+    await commit(repositoryRoot, 'add course', '2024-01-01T00:00:00Z');
+    await run(repositoryRoot, ['rm', 'courses/legacy/lesson.md']);
+    await commit(repositoryRoot, 'remove lesson', '2024-01-02T00:00:00Z');
+    await run(repositoryRoot, ['mv', 'courses/legacy', 'courses/renamed']);
+    await commit(repositoryRoot, 'rename course directory', '2024-01-03T00:00:00Z');
+
+    const history = await collectContentHistory(repositoryRoot, 'HEAD');
+    expect(history.courses.get('renamed')).toBe('2024-01-02T00:00:00.000Z');
+  });
+
+  test('keeps course identity separate when a surviving lesson moves between courses', async () => {
+    const repositoryRoot = await createRepository();
+    for (const course of ['alpha', 'beta']) {
+      const directory = path.join(repositoryRoot, 'courses', course);
+      await mkdir(directory, { recursive: true });
+      await writeFile(
+        path.join(directory, 'README.md'),
+        `---\ntitle: ${course}\ndescription: Course\ndate: 2024-01-01\n---\n\nCourse\n`,
+      );
+      await writeFile(path.join(directory, 'index.toml'), '');
+    }
+    await writePost(repositoryRoot, 'courses/alpha/orphan.md', {
+      title: 'Orphan',
+      description: 'Lesson',
+      date: '2024-01-01',
+    });
+    await writePost(repositoryRoot, 'courses/alpha/moved.md', {
+      title: 'Moved',
+      description: 'Lesson',
+      date: '2024-01-01',
+    });
+    await commit(repositoryRoot, 'add courses', '2024-01-01T00:00:00Z');
+    await run(repositoryRoot, ['rm', 'courses/alpha/orphan.md']);
+    await commit(repositoryRoot, 'remove alpha lesson', '2024-01-02T00:00:00Z');
+    await run(repositoryRoot, ['mv', 'courses/alpha/moved.md', 'courses/beta/moved.md']);
+    await commit(repositoryRoot, 'move lesson to beta', '2024-01-03T00:00:00Z');
+
+    const history = await collectContentHistory(repositoryRoot, 'HEAD');
+    expect(history.courses.get('alpha')).toBe('2024-01-03T00:00:00.000Z');
+    expect(history.courses.get('beta')).toBe('2024-01-03T00:00:00.000Z');
+    expect(history.published.has('courses/beta/moved.md')).toBe(true);
+  });
+
+  test('follows a lesson rename from an archive path into a course', async () => {
+    const repositoryRoot = await createRepository();
+    await writePost(repositoryRoot, 'archive/lesson.md', {
+      title: 'Archived',
+      description: 'Lesson',
+      date: '2024-01-01',
+    });
+    await commit(repositoryRoot, 'add archived lesson', '2024-01-01T00:00:00Z');
+    await writePost(repositoryRoot, 'archive/lesson.md', {
+      title: 'Updated',
+      description: 'Lesson',
+      date: '2024-01-01',
+    });
+    await commit(repositoryRoot, 'edit archived lesson', '2024-01-02T00:00:00Z');
+    await writeFile(
+      path.join(repositoryRoot, 'archive', 'lesson.md'),
+      '---\ntitle: Updated\ndescription: Lesson\ndate: 2024-01-01\n---\n\nBody\n',
+    );
+    await mkdir(path.join(repositoryRoot, 'courses', 'example'), { recursive: true });
+    await writeFile(
+      path.join(repositoryRoot, 'courses', 'example', 'README.md'),
+      '---\ntitle: Example\ndescription: Course\ndate: 2024-01-01\n---\n\nCourse\n',
+    );
+    await writeFile(path.join(repositoryRoot, 'courses', 'example', 'index.toml'), '');
+    await run(repositoryRoot, ['mv', 'archive/lesson.md', 'courses/example/lesson.md']);
+    await commit(repositoryRoot, 'move archived lesson into course', '2024-01-03T00:00:00Z');
+
+    const history = await collectContentHistory(repositoryRoot, 'HEAD');
+    expect(history.published.get('courses/example/lesson.md')).toBe('2024-01-01');
+    expect(history.modified.get('courses/example/lesson.md')).toBe('2024-01-02T00:00:00.000Z');
+
+    await writePost(repositoryRoot, 'courses/destination/README.md', {
+      title: 'Destination',
+      description: 'A different course',
+      date: '2024-01-04',
+    });
+    await run(repositoryRoot, ['mv', 'courses/example/lesson.md', 'courses/destination/lesson.md']);
+    await run(repositoryRoot, ['rm', '-r', 'courses/example']);
+    await commit(
+      repositoryRoot,
+      'move lesson and remove its former course',
+      '2024-01-04T00:00:00Z',
+    );
+
+    const movedHistory = await collectContentHistory(repositoryRoot, 'HEAD');
+    expect(movedHistory.published.get('courses/destination/lesson.md')).toBe('2024-01-01');
+    expect(movedHistory.modified.get('courses/destination/lesson.md')).toBe(
+      '2024-01-02T00:00:00.000Z',
+    );
+    expect(movedHistory.courses.get('destination')).toBe('2024-01-04T00:00:00.000Z');
+  });
+
   test('fails closed when a referenced blob cannot be read', async () => {
     const repositoryRoot = await createRepository();
     await writePost(repositoryRoot, 'writing/post.md', {
