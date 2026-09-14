@@ -14,7 +14,7 @@ const configuredLaunchOptions = (testInfo: TestInfo): LaunchOptions => {
 
   return {
     ...launchOptions,
-    headless,
+    ...(headless === undefined ? {} : { headless }),
     ...(channel ? { channel } : {}),
     args: uniqueLaunchArguments(launchOptions.args),
   };
