@@ -17,7 +17,13 @@ export function watchContentDirectories(
     name: 'watch-content-directories',
     configureServer(server) {
       for (const directory of directories) {
-        server.watcher.add(path.join(directory, '**', '*.{md,toml}'));
+        server.watcher.add(
+          path.join(
+            directory,
+            '**',
+            '*.{md,toml,png,jpg,jpeg,gif,svg,webp,avif,mp4,webm,ogv,mp3,wav,ogg,m4a,flac,pdf}',
+          ),
+        );
       }
       for (const dependency of additionalDependencies) server.watcher.add(dependency);
     },

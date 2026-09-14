@@ -217,7 +217,9 @@ describe('contentDevelopmentPlugins', () => {
 
     watcherPlugin.configureServer.call({} as never, { watcher } as never);
 
-    expect(watcher.add).toHaveBeenCalledWith('/workspace/writing/**/*.{md,toml}');
+    expect(watcher.add).toHaveBeenCalledWith(
+      '/workspace/writing/**/*.{md,toml,png,jpg,jpeg,gif,svg,webp,avif,mp4,webm,ogv,mp3,wav,ogg,m4a,flac,pdf}',
+    );
     expect(watcher.add).toHaveBeenCalledWith('/workspace/image-manifest.json');
     expect(watcher.add).toHaveBeenCalledWith('/workspace/packages/markdown/src');
   });

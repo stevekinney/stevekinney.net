@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { resolveObsidianReference } from '../../../../packages/markdown/src/obsidian-resolver';
 import { normalizeMarkdownLinks } from '../../../../packages/markdown/src/obsidian-markdown-links';
+import { normalizeObsidianMarkdown } from '../../../../packages/markdown/src/obsidian-normalization';
 import { applySourceEdits } from '../../../../packages/markdown/src/obsidian-source-edits';
 import type {
   NormalizationContext,
@@ -168,6 +169,20 @@ describe('normalizeMarkdownLinks', () => {
     expect(applySourceEdits(source, result.edits).markdown).toBe(
       '[target](</writing/target?view=reading#heading>)',
     );
+    expect(result.dependencies).toEqual(['writing/target.md']);
+    expect(result.diagnostics).toEqual([]);
+  });
+
+  it('normalizes extensionless internal document links through the full pipeline', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/target.md',
+      route: '/writing/target',
+      source: '# Heading',
+    };
+    const source = '[target](writing/target#heading)';
+    const result = normalizeObsidianMarkdown(source, context([target]));
+
+    expect(result.markdown).toBe('[target](</writing/target#heading>)');
     expect(result.dependencies).toEqual(['writing/target.md']);
     expect(result.diagnostics).toEqual([]);
   });

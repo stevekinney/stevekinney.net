@@ -327,7 +327,14 @@ export const normalizeObsidianReferences = (
         issue(document, node.position.start, 'Obsidian expanded output exceeds 10 MiB.');
         continue;
       }
-      replace(`\n\n${nested.markdown}\n\n`);
+      const lineStart = source.lastIndexOf('\n', node.position.start - 1) + 1;
+      const listPrefix = /^(\s*(?:[-+*]|\d+[.)])\s+)/u.exec(
+        source.slice(lineStart, node.position.start),
+      )?.[1];
+      const expanded = listPrefix
+        ? nested.markdown.trim().replace(/\r?\n/gu, `\n${' '.repeat(listPrefix.length)}`)
+        : `\n\n${nested.markdown}\n\n`;
+      replace(expanded);
     }
     const ranges = [{ start, end }];
     if (prefix)

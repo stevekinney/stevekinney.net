@@ -100,6 +100,13 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(new Set(identifiers).size).toBe(2);
   });
 
+  it('preserves list syntax for a block identifier attached to an embed', () => {
+    const result = normalizeObsidianMarkdown('- ![[guide#^block-one]] ^host', context());
+
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toMatch(/^- Block body\./u);
+  });
+
   it('retargets local anchors and namespaces embedded footnotes', () => {
     const result = normalizeObsidianMarkdown('[[guide#Details]]\n\n![[guide]]', context());
     expect(result.markdown).toContain('/writing/guide#details');

@@ -315,8 +315,11 @@ const buildImage = (
   };
 
   if (!isPassthrough && entry.width && entry.height) {
-    if (!node.properties?.width) props.width = entry.width;
-    if (!node.properties?.height) props.height = entry.height;
+    // Preserve the intrinsic ratio when the author supplies only one dimension.
+    if (!node.properties?.width && !node.properties?.height) {
+      props.width = entry.width;
+      props.height = entry.height;
+    }
   }
 
   return h('img', props);
@@ -341,8 +344,11 @@ const buildPicture = (
   };
 
   if (entry.width && entry.height) {
-    if (!node.properties?.width) imgProps.width = entry.width;
-    if (!node.properties?.height) imgProps.height = entry.height;
+    // Preserve the intrinsic ratio when the author supplies only one dimension.
+    if (!node.properties?.width && !node.properties?.height) {
+      imgProps.width = entry.width;
+      imgProps.height = entry.height;
+    }
   }
 
   if (entry.lqip) {

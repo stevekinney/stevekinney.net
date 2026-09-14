@@ -3,6 +3,7 @@ import { Buffer } from 'node:buffer';
 import type { Root } from 'mdast';
 import { visit } from 'unist-util-visit';
 import { normalizeObsidianReferences } from './obsidian-embeds.ts';
+import { resolveObsidianReference } from './obsidian-resolver.ts';
 import { applySourceEdits, sourceLine, type SourceEdit } from './obsidian-source-edits.ts';
 import { parseObsidianSource } from './obsidian-syntax.ts';
 import type { NormalizationContext, NormalizedMarkdown, SourceMapping } from './obsidian-types.ts';
@@ -22,10 +23,16 @@ const requiresNormalization = (tree: Root): boolean => {
   return required;
 };
 
-const requiresReferenceNormalization = (tree: Root): boolean => {
+const requiresReferenceNormalization = (tree: Root, context: NormalizationContext): boolean => {
   let required = false;
   visit(tree, (node) => {
-    if ('url' in node && /\.md(?:[?#])/i.test(node.url)) required = true;
+    if (!('url' in node) || typeof node.url !== 'string') return;
+    const path = node.url.split(/[?#]/, 1)[0];
+    if (
+      /\.md$/i.test(path) ||
+      resolveObsidianReference(path, context).reference?.kind === 'document'
+    )
+      required = true;
   });
   return required;
 };
@@ -67,7 +74,7 @@ export const normalizeObsidianMarkdown = (
   const requiresReferences =
     parsed.nodes.some((node) =>
       ['blockDefinition', 'comment', 'embed', 'wikiLink'].includes(node.type),
-    ) || requiresReferenceNormalization(context.markdownTree ?? parsed.tree);
+    ) || requiresReferenceNormalization(context.markdownTree ?? parsed.tree, context);
   const references = requiresReferences
     ? normalizeObsidianReferences(source, context)
     : { ...applySourceEdits(source, []), dependencies: [], diagnostics: [] };

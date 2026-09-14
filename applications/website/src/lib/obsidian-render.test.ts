@@ -106,6 +106,55 @@ it('passes nested embedded image dimensions through the host image-manifest pipe
   }
 });
 
+it('preserves the intrinsic ratio for width-only image embeds', async () => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'obsidian-render-'));
+  try {
+    const manifestPath = path.join(directory, 'manifest.json');
+    await writeFile(
+      manifestPath,
+      JSON.stringify({
+        version: 1,
+        images: {
+          'writing/assets/image.png': {
+            hash: 'test',
+            width: 640,
+            height: 480,
+            original: 'https://example.com/published.png',
+            avif: [],
+            lqip: null,
+            videoMimeType: null,
+          },
+        },
+      }),
+    );
+    const normalized = normalizeObsidianMarkdown('![[assets/image.png|320]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: {
+        documents: [],
+        attachments: [
+          {
+            sourcePath: 'writing/assets/image.png',
+            url: 'https://example.com/published.png',
+            mimeType: 'image/png',
+          },
+        ],
+      },
+    });
+    const compiled = await compile(normalized.markdown, {
+      filename: path.resolve('../..', 'writing/host.md'),
+      extensions: ['.md'],
+      rehypePlugins: [
+        rehypeObsidianIdentifiers as Pluggable,
+        [rehypeEnhanceImages, { manifestPath, strictManifest: true }] as unknown as Pluggable,
+      ],
+    });
+    expect(compiled!.code).toContain('width="320"');
+    expect(compiled!.code).not.toContain('height="480"');
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
 it('leaves approved static image URLs alone under a strict image manifest', async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'obsidian-render-'));
   try {
