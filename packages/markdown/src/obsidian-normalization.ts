@@ -37,6 +37,18 @@ const requiresReferenceNormalization = (tree: Root, context: NormalizationContex
   return required;
 };
 
+const unchanged = (source: string): Pick<NormalizedMarkdown, 'markdown' | 'sourceMap'> => ({
+  markdown: source,
+  sourceMap: [
+    {
+      generatedStart: 0,
+      generatedEnd: source.length,
+      sourceStart: 0,
+      sourceEnd: source.length,
+    },
+  ],
+});
+
 const originalOffset = (
   mappings: readonly SourceMapping[],
   offset: number,
@@ -66,7 +78,7 @@ export const normalizeObsidianMarkdown = (
     !requiresNormalization(context.markdownTree)
   )
     return {
-      ...applySourceEdits(source, []),
+      ...unchanged(source),
       dependencies: [],
       diagnostics: [],
     };
@@ -77,7 +89,7 @@ export const normalizeObsidianMarkdown = (
     ) || requiresReferenceNormalization(context.markdownTree ?? parsed.tree, context);
   const references = requiresReferences
     ? normalizeObsidianReferences(source, context)
-    : { ...applySourceEdits(source, []), dependencies: [], diagnostics: [] };
+    : { ...unchanged(source), dependencies: [], diagnostics: [] };
   // Failed expansion is never publishable. Avoid parsing its potentially large
   // intermediate body again once the inclusion budget has already been exceeded.
   if (references.diagnostics.some((issue) => issue.message.includes('exceeds 10 MiB')))
