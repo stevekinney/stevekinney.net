@@ -9,8 +9,14 @@ import {
   getWritingRoute,
 } from '$lib/server/content';
 
-const loadPublishedContent = async (): Promise<GeneratedObsidianContent> =>
-  JSON.parse(await read(publishedContentAsset).text()) as GeneratedObsidianContent;
+let publishedContent: Promise<GeneratedObsidianContent> | undefined;
+
+const loadPublishedContent = (): Promise<GeneratedObsidianContent> => {
+  publishedContent ??= read(publishedContentAsset)
+    .text()
+    .then((source) => JSON.parse(source) as GeneratedObsidianContent);
+  return publishedContent;
+};
 
 const loadPublishedSource = async (sourcePath: string): Promise<string> => {
   const document = (await loadPublishedContent()).documents[sourcePath];
