@@ -7,7 +7,10 @@
   const { class: className = '' }: ExtendElement<'nav'> = $props();
 </script>
 
-<nav class={merge('flex flex-wrap items-center gap-4', className)} aria-label="Main Navigation">
+<nav
+  class={merge('flex flex-wrap items-center gap-4 xl:flex-nowrap xl:whitespace-nowrap', className)}
+  aria-label="Main Navigation"
+>
   <Link href="/writing">Writing</Link>
   <Link href="/courses">Courses</Link>
   <Link href="/projects">Projects</Link>
