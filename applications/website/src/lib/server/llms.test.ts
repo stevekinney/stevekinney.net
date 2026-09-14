@@ -1,4 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
+import { toString } from 'mdast-util-to-string';
+import remarkParse from 'remark-parse';
+import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
 
 const state = vi.hoisted(() => ({
   course: {
@@ -60,19 +64,26 @@ const state = vi.hoisted(() => ({
 
 vi.mock('$lib/server/content', () => ({
   getGeneratedContent: () => ({ courses: [state.course], lessons: state.lessons }),
+  getPostIndex: () => [],
+  getCourseIndex: () => [state.course],
+  getProjectIndex: () => [],
   getCourseEntry: (slug: string) => (slug === state.course.slug ? state.course : undefined),
   getLessonRoute: (courseSlug: string, lessonSlug: string) =>
     state.lessons.find((lesson) => lesson.courseSlug === courseSlug && lesson.slug === lessonSlug),
 }));
 
 vi.mock('$lib/server/load-raw-content', () => ({
-  loadRawCourseReadme: async () => 'course-body',
-  loadRawCourseLesson: async (_courseSlug: string, lessonSlug: string) => `${lessonSlug}-body`,
+  loadRawCourseReadme: async () =>
+    'course-body\n\n# Course body heading\n\n## Course subheading\n\nSetext body heading\nwith *inline formatting*\n====================\n\n```md\n# literal\n```',
+  loadRawCourseLesson: async (_courseSlug: string, lessonSlug: string) =>
+    lessonSlug +
+    '-body\n\n# Lesson body heading\n\n## Lesson subheading\n\n```md\n# literal lesson\n```',
   loadRawWritingContent: async () => 'writing-body',
   loadRawProjectContent: async () => 'project-body',
 }));
 
 import { renderCourseExport, renderLessonExport, renderWritingExport } from './llms';
+import { GET as getFullExport } from '../../routes/llms-full.txt/+server';
 import { GET } from '../../routes/[...path]/llms.txt/+server';
 
 describe('LLM content exports', () => {
@@ -86,6 +97,8 @@ describe('LLM content exports', () => {
   it('preserves index and related links before slug-sorted additional lessons', async () => {
     const output = await renderCourseExport(state.course);
 
+    expect(output).toContain('# Testing');
+    expect(output).toContain('### The Basics');
     expect(output.indexOf('[The Basics]')).toBeLessThan(output.indexOf('[Exercises]'));
     expect(output.indexOf('[Playground]')).toBeLessThan(output.indexOf('[The Basics]'));
     expect(output.indexOf('[Exercises]')).toBeLessThan(output.indexOf('### Additional lessons'));
@@ -121,5 +134,37 @@ describe('LLM content exports', () => {
     expect(writing).toContain('# Writing title');
     expect(writing).toContain('Date: 2024-01-01');
     expect(writing).toContain('Modified: 2024-02-01T00:00:00.000Z');
+  });
+
+  it('uses contextual headings in the aggregate export', async () => {
+    const response = await getFullExport();
+    const output = await response.text();
+    const headings: Array<{ depth: number; text: string }> = [];
+    visit(unified().use(remarkParse).parse(output), 'heading', (node) => {
+      headings.push({ depth: node.depth, text: toString(node) });
+    });
+
+    expect(output).toContain('## Course Walkthroughs\n\n### Testing');
+    expect(output).not.toContain('## Course Walkthroughs\n\n# Testing');
+    expect(output).toContain('#### The Basics');
+    expect(output).not.toContain('\n### The Basics\n\nURL:');
+    expect(output).toContain('#### Course body heading');
+    expect(output).toContain('##### Course subheading');
+    expect(output).toContain('#### Setext body heading with *inline formatting*');
+    expect(output).toContain('```md\n# literal\n```');
+    expect(output).toContain('##### Lesson body heading');
+    expect(output).toContain('###### Lesson subheading');
+    expect(output).toContain('```md\n# literal lesson\n```');
+    expect(headings.filter(({ depth }) => depth === 1).map(({ text }) => text)).toEqual([
+      'Steve Kinney',
+    ]);
+    expect(headings.filter(({ depth }) => depth === 2).map(({ text }) => text)).toEqual([
+      'Blog Posts',
+      'Course Walkthroughs',
+      'Projects',
+    ]);
+    expect(headings.filter(({ depth }) => depth === 3).map(({ text }) => text)).toEqual([
+      'Testing',
+    ]);
   });
 });

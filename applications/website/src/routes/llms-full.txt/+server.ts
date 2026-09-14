@@ -9,9 +9,15 @@ export async function GET() {
   const courses = getCourseIndex();
   const projects = getProjectIndex();
 
-  const postBodies = await Promise.all(posts.map((post) => renderWritingExport(post)));
-  const courseBodies = await Promise.all(courses.map((course) => renderCourseExport(course)));
-  const projectBodies = await Promise.all(projects.map((project) => renderProjectExport(project)));
+  const postBodies = await Promise.all(
+    posts.map((post) => renderWritingExport(post, { headingLevel: 3 })),
+  );
+  const courseBodies = await Promise.all(
+    courses.map((course) => renderCourseExport(course, { headingLevel: 3 })),
+  );
+  const projectBodies = await Promise.all(
+    projects.map((project) => renderProjectExport(project, { headingLevel: 3 })),
+  );
 
   const lines = [
     '# Steve Kinney',

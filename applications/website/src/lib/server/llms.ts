@@ -1,5 +1,8 @@
 import { author, language, url } from '$lib/metadata';
 import { getGeneratedContent, getLessonRoute } from '$lib/server/content';
+import remarkParse from 'remark-parse';
+import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
 import type {
   CourseIndexEntry,
   ProjectIndexEntry,
@@ -20,8 +23,16 @@ type DocumentMetadata = {
   modified?: string;
 };
 
-const documentHeader = (metadata: DocumentMetadata, extra: string[] = []): string[] => [
-  `# ${metadata.title}`,
+type ExportOptions = {
+  headingLevel?: number;
+};
+
+const documentHeader = (
+  metadata: DocumentMetadata,
+  extra: string[] = [],
+  headingLevel = 1,
+): string[] => [
+  `${'#'.repeat(headingLevel)} ${metadata.title}`,
   '',
   `URL: ${url}${metadata.path}`,
   `Canonical: ${url}${metadata.path}`,
@@ -34,6 +45,49 @@ const documentHeader = (metadata: DocumentMetadata, extra: string[] = []): strin
 ];
 
 const separator = ['', '---', ''];
+const markdownParser = unified().use(remarkParse);
+const generatedHeading = (documentLevel: number, relativeLevel: number, title: string): string =>
+  `${'#'.repeat(Math.min(6, documentLevel + relativeLevel))} ${title}`;
+
+const normalizeEmbeddedHeadings = (source: string, minimumLevel: number): string => {
+  const tree = markdownParser.parse(source);
+  const edits: Array<{ start: number; end: number; replacement: string }> = [];
+
+  visit(tree, 'heading', (heading) => {
+    const start = heading.position?.start.offset;
+    const end = heading.position?.end.offset;
+    if (start === undefined || end === undefined) return;
+
+    const lineEnd = source.indexOf('\n', start);
+    const line = source.slice(start, lineEnd === -1 ? source.length : lineEnd);
+    const level = Math.min(6, heading.depth + minimumLevel - 1);
+    const match = /^( {0,3})(#{1,6})(?=\s|$)/.exec(line);
+    if (match) {
+      edits.push({
+        start: start + match[1].length,
+        end: start + match[1].length + match[2].length,
+        replacement: '#'.repeat(level),
+      });
+      return;
+    }
+
+    const lines = source.slice(start, end).split('\n');
+    if (lines.length >= 2 && /^\s*(?:=+|-+)\s*$/.test(lines.at(-1) ?? '')) {
+      edits.push({
+        start,
+        end,
+        replacement: `${'#'.repeat(level)} ${lines.slice(0, -1).join(' ').trim()}`,
+      });
+    }
+  });
+
+  return edits
+    .sort((left, right) => right.start - left.start)
+    .reduce(
+      (result, edit) => result.slice(0, edit.start) + edit.replacement + result.slice(edit.end),
+      source,
+    );
+};
 
 const courseLessonPath = (courseSlug: string, href: string): string => {
   if (/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(href) || href.startsWith('/')) {
@@ -46,18 +100,30 @@ const courseLessonPath = (courseSlug: string, href: string): string => {
 const toPublicUrl = (path: string): string =>
   /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(path) ? path : `${url}${path}`;
 
-export const renderWritingExport = async (post: WritingIndexEntry): Promise<string> =>
+export const renderWritingExport = async (
+  post: WritingIndexEntry,
+  options: ExportOptions = {},
+): Promise<string> =>
   [
-    ...documentHeader(post),
+    ...documentHeader(post, [], options.headingLevel),
     ...separator,
-    await loadRawWritingContent(post.path.split('/').pop() ?? ''),
+    options.headingLevel
+      ? normalizeEmbeddedHeadings(
+          await loadRawWritingContent(post.path.split('/').pop() ?? ''),
+          options.headingLevel + 1,
+        )
+      : await loadRawWritingContent(post.path.split('/').pop() ?? ''),
   ].join('\n');
 
-export const renderCourseExport = async (course: CourseIndexEntry): Promise<string> => {
+export const renderCourseExport = async (
+  course: CourseIndexEntry,
+  options: ExportOptions = {},
+): Promise<string> => {
+  const headingLevel = options.headingLevel ?? 1;
   const listedPaths = new Set<string>();
   const listedLessonPaths: string[] = [];
   const indexLines = (course.contents?.section ?? []).flatMap((section) => [
-    ...(section.title ? [`### ${section.title}`, ''] : []),
+    ...(section.title ? [generatedHeading(headingLevel, 2, section.title), ''] : []),
     ...section.item.flatMap((item) => {
       const itemPath = courseLessonPath(course.slug, item.href);
       listedPaths.add(itemPath);
@@ -87,7 +153,7 @@ export const renderCourseExport = async (course: CourseIndexEntry): Promise<stri
   const lessons = [...indexedLessons, ...additionalLessons];
   const lessonLines = additionalLessons.length
     ? [
-        '### Additional lessons',
+        generatedHeading(headingLevel, 2, 'Additional lessons'),
         '',
         ...additionalLessons.map((lesson) => `- [${lesson.title}](${url}${lesson.path})`),
       ]
@@ -96,7 +162,7 @@ export const renderCourseExport = async (course: CourseIndexEntry): Promise<stri
   const lessonBodies = await Promise.all(
     lessons.map(async (lesson) =>
       [
-        `### ${lesson.title}`,
+        `${'#'.repeat(headingLevel === 1 ? 3 : headingLevel + 1)} ${lesson.title}`,
         '',
         ...documentHeader(
           {
@@ -106,28 +172,35 @@ export const renderCourseExport = async (course: CourseIndexEntry): Promise<stri
             modified: lesson.modified,
           },
           [`Course: ${course.title}`, `Course URL: ${url}${course.path}`],
+          headingLevel === 1 ? 3 : headingLevel + 1,
         ).slice(2),
         '',
-        await loadRawCourseLesson(course.slug, lesson.slug),
+        normalizeEmbeddedHeadings(
+          await loadRawCourseLesson(course.slug, lesson.slug),
+          (headingLevel === 1 ? 3 : headingLevel + 1) + 1,
+        ),
         '',
       ].join('\n'),
     ),
   );
   return [
-    ...documentHeader(course),
+    ...documentHeader(course, [], headingLevel),
     '',
-    '## Course contents',
+    generatedHeading(headingLevel, 1, 'Course contents'),
     '',
     ...indexLines,
     ...lessonLines,
     ...separator,
-    body,
+    normalizeEmbeddedHeadings(body, headingLevel + 1),
     ...separator,
     ...lessonBodies.flatMap((lesson) => [lesson, ...separator]),
   ].join('\n');
 };
 
-export const renderProjectExport = async (project: ProjectIndexEntry): Promise<string> => {
+export const renderProjectExport = async (
+  project: ProjectIndexEntry,
+  options: ExportOptions = {},
+): Promise<string> => {
   const links = [
     `GitHub: ${project.githubUrl}`,
     ...(project.productionUrl ? [`Production: ${project.productionUrl}`] : []),
@@ -135,9 +208,14 @@ export const renderProjectExport = async (project: ProjectIndexEntry): Promise<s
     ...(project.youtubeUrl ? [`YouTube: ${project.youtubeUrl}`] : []),
   ];
   return [
-    ...documentHeader({ ...project, title: project.name }, links),
+    ...documentHeader({ ...project, title: project.name }, links, options.headingLevel),
     ...separator,
-    await loadRawProjectContent(project.path.split('/').pop() ?? ''),
+    options.headingLevel
+      ? normalizeEmbeddedHeadings(
+          await loadRawProjectContent(project.path.split('/').pop() ?? ''),
+          options.headingLevel + 1,
+        )
+      : await loadRawProjectContent(project.path.split('/').pop() ?? ''),
   ].join('\n');
 };
 

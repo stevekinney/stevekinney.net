@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { classifyContentSource } from '@stevekinney/utilities/frontmatter';
+import { classifyContentSource, parseFrontmatter } from '@stevekinney/utilities/frontmatter';
 
 import { normalizeContentMetadata, validateDuplicateDescriptions } from './metadata.ts';
 
@@ -103,6 +103,65 @@ describe('normalizeContentMetadata', () => {
     const second = normalizeContentMetadata(first.normalizedSource, { file: 'writing/post.md' });
     expect(second.normalizedSource).toBe(first.normalizedSource);
     expect(second.metadata.title).toBe('Café 😀');
+  });
+
+  test.each([
+    [
+      'BOM',
+      '\uFEFF---\ntitle: Post\ndescription: Desc\ndate: 2024-01-01\n---\nBody\n',
+      '---\ntitle: Post\ndescription: Desc\ndate: 2024-01-01\n---\nBody\n',
+    ],
+    [
+      'opening fence whitespace',
+      '---   \ntitle: Post\ndescription: Desc\ndate: 2024-01-01\n---\nBody\n',
+      '---\ntitle: Post\ndescription: Desc\ndate: 2024-01-01\n---\nBody\n',
+    ],
+    [
+      'closing fence whitespace',
+      '---\ntitle: Post\ndescription: Desc\ndate: 2024-01-01\n---   \nBody\n',
+      '---\ntitle: Post\ndescription: Desc\ndate: 2024-01-01\n---\nBody\n',
+    ],
+    [
+      'YAML closing marker',
+      '---\ntitle: Post\ndescription: Desc\ndate: 2024-01-01\n...\nBody\n',
+      '---\ntitle: Post\ndescription: Desc\ndate: 2024-01-01\n---\nBody\n',
+    ],
+  ])('normalizes %s without changing the body', (_name, source, expected) => {
+    const result = normalizeContentMetadata(source, { file: 'writing/post.md' });
+
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({
+        message: expect.stringContaining('frontmatter'),
+        fixable: true,
+      }),
+    );
+    expect(result.normalizedSource).toBe(expected);
+    const parsed = parseFrontmatter(result.normalizedSource);
+    expect(parsed.data).toEqual({ title: 'Post', description: 'Desc', date: '2024-01-01' });
+    expect(parsed.content).toBe(parseFrontmatter(expected).content);
+  });
+
+  test('normalizes combined fence issues with CRLF without changing the body', () => {
+    const body = '\n# Keep this body\n\n```yaml\n---   \n```\n';
+    const source = `\uFEFF---   \r\ntitle: Post\r\ndescription: Desc\r\ndate: 2024-01-01\r\n...   \r\n${body}`;
+    const result = normalizeContentMetadata(source, { file: 'writing/post.md' });
+
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({
+        message: expect.stringContaining('frontmatter fence'),
+        fixable: true,
+      }),
+    );
+    expect(result.normalizedSource).toBe(
+      `---\r\ntitle: Post\r\ndescription: Desc\r\ndate: 2024-01-01\r\n---\r\n${body}`,
+    );
+    const parsed = parseFrontmatter(result.normalizedSource);
+    expect(parsed.data).toEqual({ title: 'Post', description: 'Desc', date: '2024-01-01' });
+    expect(parsed.content).toBe(body);
+    expect(
+      normalizeContentMetadata(result.normalizedSource, { file: 'writing/post.md' })
+        .normalizedSource,
+    ).toBe(result.normalizedSource);
   });
 
   test('allows plain identifiers and rejects parsed Markdown markup in descriptions', () => {

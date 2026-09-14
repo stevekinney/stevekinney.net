@@ -1,5 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { checkA11y, injectAxe } from 'axe-playwright';
+import { toString } from 'mdast-util-to-string';
+import remarkParse from 'remark-parse';
+import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
 
 test('writing post pages render prerendered content with code-block enhancement', async ({
   page,
@@ -210,6 +214,22 @@ test('full LLM export contains every generated lesson body exactly once', async 
 
   const fullExport = await fullResponse.text();
   const sitemap = await sitemapResponse.text();
+  const headings: { depth: number; text: string }[] = [];
+  visit(unified().use(remarkParse).parse(fullExport), 'heading', (node) => {
+    headings.push({ depth: node.depth, text: toString(node) });
+  });
+  expect(headings.filter(({ depth }) => depth === 1).map(({ text }) => text)).toEqual([
+    'Steve Kinney',
+  ]);
+  expect(headings.filter(({ depth }) => depth === 2).map(({ text }) => text)).toEqual([
+    'Blog Posts',
+    'Course Walkthroughs',
+    'Projects',
+  ]);
+  const documentUrls = [
+    ...fullExport.matchAll(/^URL: https:\/\/[^/]+\/(?:writing|courses|projects)\/[^/\n]+$/gm),
+  ];
+  expect(headings.filter(({ depth }) => depth === 3)).toHaveLength(documentUrls.length);
   const lessonUrls = [...sitemap.matchAll(/<loc>(https:\/\/[^<]+\/courses\/[^<]+\/[^<]+)<\/loc>/g)]
     .map((match) => match[1])
     .filter((value) => !value.endsWith('/open-graph.jpg'));

@@ -148,12 +148,24 @@ const parseTreePaths = (raw: Buffer): string[] => raw.toString('utf8').split('\0
 
 const buildAliases = (changes: Change[], currentPaths: string[]): Map<string, Alias> => {
   const aliases = new Map<string, Alias>();
+  const reusedPaths = new Set<string>();
+  const futureAdditions = new Set<string>();
+  for (const change of changes.toReversed()) {
+    if (change.oldPath && futureAdditions.has(change.oldPath)) reusedPaths.add(change.oldPath);
+    if (ZERO_HASH.test(change.oldHash)) futureAdditions.add(change.newPath);
+  }
   for (const filePath of currentPaths)
     aliases.set(filePath, { canonical: filePath, kind: fileKind(filePath) });
   const followRenames = (): void => {
     for (const change of changes.toReversed()) {
       const newAlias = aliases.get(change.newPath);
-      if (!change.oldPath || !newAlias) continue;
+      if (
+        !change.oldPath ||
+        reusedPaths.has(change.oldPath) ||
+        !newAlias ||
+        aliases.has(change.oldPath)
+      )
+        continue;
       const oldCourse = courseFor(change.oldPath);
       const newCourse = courseFor(change.newPath);
       if (

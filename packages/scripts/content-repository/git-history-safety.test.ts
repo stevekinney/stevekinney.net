@@ -350,6 +350,43 @@ describe('collectContentHistory safety', () => {
     expect(movedHistory.courses.get('destination')).toBe('2024-01-04T00:00:00.000Z');
   });
 
+  test('keeps a re-added path separate from a renamed file history', async () => {
+    const repositoryRoot = await createRepository();
+    await writePost(repositoryRoot, 'writing/a.md', {
+      title: 'Original',
+      description: 'Post',
+      date: '2024-01-01',
+    });
+    await commit(repositoryRoot, 'add original post', '2024-01-01T00:00:00Z');
+    await writePost(repositoryRoot, 'writing/a.md', {
+      title: 'Original Updated',
+      description: 'Post',
+      date: '2024-01-01',
+    });
+    await commit(repositoryRoot, 'edit original post', '2024-01-02T00:00:00Z');
+    await run(repositoryRoot, ['mv', 'writing/a.md', 'writing/b.md']);
+    await commit(repositoryRoot, 'rename original post', '2024-01-03T00:00:00Z');
+    await writePost(repositoryRoot, 'writing/a.md', {
+      title: 'New Post',
+      description: 'Post',
+      date: '2024-01-04',
+    });
+    await commit(repositoryRoot, 'add new post at old path', '2024-01-04T00:00:00Z');
+
+    const history = await collectContentHistory(repositoryRoot, 'HEAD');
+    expect(history.published.get('writing/b.md')).toBe('2024-01-01');
+    expect(history.modified.get('writing/b.md')).toBe('2024-01-02T00:00:00.000Z');
+    expect(history.published.get('writing/a.md')).toBe('2024-01-04');
+    expect(history.modified.get('writing/a.md')).toBe('2024-01-04T00:00:00.000Z');
+
+    await run(repositoryRoot, ['rm', 'writing/a.md']);
+    await commit(repositoryRoot, 'remove replacement post', '2024-01-05T00:00:00Z');
+    const afterRemoval = await collectContentHistory(repositoryRoot, 'HEAD');
+    expect(afterRemoval.published.get('writing/b.md')).toBe('2024-01-01');
+    expect(afterRemoval.modified.get('writing/b.md')).toBe('2024-01-02T00:00:00.000Z');
+    expect(afterRemoval.published.has('writing/a.md')).toBe(false);
+  });
+
   test('fails closed when a referenced blob cannot be read', async () => {
     const repositoryRoot = await createRepository();
     await writePost(repositoryRoot, 'writing/post.md', {

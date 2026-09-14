@@ -38,6 +38,8 @@ export type MetadataResult = {
   issues: MetadataIssue[];
 };
 
+type SourceEdit = { start: number; end: number; replacement: string };
+
 const yamlKeys = new Set(['title', 'description', 'date']);
 const obsoleteKeys = new Set(['modified', 'tags', 'status', 'exclude', 'published', 'layout']);
 const markdownParser = unified().use(remarkParse);
@@ -61,6 +63,37 @@ const frontmatterBounds = (
     yaml: source.slice(openingEnd, found.index),
     body: source.slice(found.index + found[0].length),
   };
+};
+
+const frontmatterFenceRepairs = (
+  source: string,
+  bounds: { end: number },
+): { edits: SourceEdit[]; issues: string[] } => {
+  const edits: SourceEdit[] = [];
+  const issues: string[] = [];
+  const opening = /^(\uFEFF?)(---)([ \t]*)(\r?\n|$)/u.exec(source);
+  if (opening?.[1]) {
+    edits.push({ start: 0, end: 1, replacement: '' });
+    issues.push('Opening frontmatter fence contains a BOM; normalize it.');
+  }
+  if (opening?.[3]) {
+    const start = opening[1].length + opening[2].length;
+    edits.push({ start, end: start + opening[3].length, replacement: '' });
+    issues.push('Opening frontmatter fence has trailing whitespace; normalize it.');
+  }
+  const closing = /^(---|\.\.\.)([ \t]*)(\r?\n|$)/u.exec(source.slice(bounds.end));
+  if (closing) {
+    if (closing[1] !== '---') {
+      edits.push({ start: bounds.end, end: bounds.end + closing[1].length, replacement: '---' });
+      issues.push("Closing frontmatter marker must be '---'; normalize it.");
+    }
+    if (closing[2]) {
+      const start = bounds.end + closing[1].length;
+      edits.push({ start, end: start + closing[2].length, replacement: '' });
+      issues.push('Closing frontmatter fence has trailing whitespace; normalize it.');
+    }
+  }
+  return { edits, issues };
 };
 
 const scalarValue = (pair: Pair<unknown, unknown> | undefined): string | undefined => {
@@ -128,6 +161,7 @@ export const normalizeContentMetadata = (raw: string, options: MetadataOptions):
       normalizedSource: raw,
       issues: [issue(options.file, 'Missing or malformed YAML frontmatter.')],
     };
+  const fenceRepairs = frontmatterFenceRepairs(raw, bounds);
 
   let document: Document;
   try {
@@ -162,8 +196,10 @@ export const normalizeContentMetadata = (raw: string, options: MetadataOptions):
   }
   const pairs = mapPairs(document);
   const known = new Map<string, Pair<unknown, unknown>>();
-  const issues: MetadataIssue[] = [];
-  const edits: { start: number; end: number; replacement: string }[] = [];
+  const issues: MetadataIssue[] = fenceRepairs.issues.map((message) =>
+    issue(options.file, message, undefined, { fixable: true }),
+  );
+  const edits: SourceEdit[] = [];
   const isFlowMap = isMap(document.contents) && document.contents.flow === true;
   for (const pair of pairs) {
     const key = keyName(pair);
@@ -368,13 +404,20 @@ export const normalizeContentMetadata = (raw: string, options: MetadataOptions):
 
   if (issues.some((entry) => entry.severity !== 'warning' && !entry.fixable))
     return { metadata, normalizedSource: raw, issues };
-  const yamlSource = edits
+  const sourceEdits = [
+    ...fenceRepairs.edits,
+    ...edits.map((edit) => ({
+      ...edit,
+      start: edit.start + bounds.start,
+      end: edit.end + bounds.start,
+    })),
+  ];
+  const normalizedSource = sourceEdits
     .sort((left, right) => right.start - left.start)
     .reduce(
       (value, edit) => value.slice(0, edit.start) + edit.replacement + value.slice(edit.end),
-      bounds.yaml,
+      raw,
     );
-  const normalizedSource = raw.slice(0, bounds.start) + yamlSource + raw.slice(bounds.end);
   const reparsedBounds = frontmatterBounds(normalizedSource);
   if (!reparsedBounds)
     return {
