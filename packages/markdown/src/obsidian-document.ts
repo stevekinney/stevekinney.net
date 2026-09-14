@@ -20,6 +20,7 @@ export type ObsidianDocumentMetadata = {
     sectionEnd: number;
   }>;
   blocks: Array<{ id: string; start: number; end: number; markerStart: number; markerEnd: number }>;
+  htmlIds: string[];
   definitions: Array<{
     identifier: string;
     start: number;
@@ -118,6 +119,13 @@ export const getObsidianDocumentMetadata = (
     : parsed.tree;
   const slugger = new GithubSlugger();
   const headings: ObsidianDocumentMetadata['headings'] = [];
+  const htmlIds: string[] = [];
+  for (const node of collectNodes(parser.parse(source))) {
+    const candidate = node as Positioned & { type?: string; value?: string };
+    if (candidate.type !== 'html' || typeof candidate.value !== 'string') continue;
+    for (const match of candidate.value.matchAll(/(?:^|[\s<])id=(['"])([^'"]+)\1/g))
+      htmlIds.push(match[2]);
+  }
   const headingNodes = collectNodes(tree).filter((node) => {
     const candidate = node as Positioned & { type?: string };
     return candidate.type === 'heading';
@@ -216,7 +224,14 @@ export const getObsidianDocumentMetadata = (
       });
     }
   }
-  const metadata = { headings, blocks, definitions, bodyStart: bodyStartOf(source), diagnostics };
+  const metadata = {
+    headings,
+    blocks,
+    htmlIds,
+    definitions,
+    bodyStart: bodyStartOf(source),
+    diagnostics,
+  };
   cache.set(document, metadata);
   return metadata;
 };

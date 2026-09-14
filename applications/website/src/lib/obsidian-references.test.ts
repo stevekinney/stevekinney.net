@@ -173,6 +173,42 @@ describe('normalizeMarkdownLinks', () => {
     expect(result.diagnostics).toEqual([]);
   });
 
+  it('accepts fragments targeting authored HTML identifiers', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/target.md',
+      route: '/writing/target',
+      source: '<section id="details">Details</section>',
+    };
+    const source = '[target](writing/target.md#details)';
+    const result = normalizeMarkdownLinks(source, context([target]));
+
+    expect(applySourceEdits(source, result.edits).markdown).toBe(
+      '[target](</writing/target#details>)',
+    );
+    expect(result.diagnostics).toEqual([]);
+  });
+
+  it('keeps attachment definitions on their published URL for link references', () => {
+    const source = '[download][asset]\n\n[asset]: image.png';
+    const result = normalizeMarkdownLinks(
+      source,
+      context([], 'writing/a.md', [
+        {
+          sourcePath: 'applications/website/static/image.png',
+          url: '/image.png',
+          mimeType: 'image/png',
+        },
+      ]),
+      { embedded: true },
+    );
+
+    expect(applySourceEdits(source, result.edits).markdown).toBe(
+      '[download][asset]\n\n[asset]: </image.png>',
+    );
+    expect(result.dependencies).toEqual(['applications/website/static/image.png']);
+    expect(result.diagnostics).toEqual([]);
+  });
+
   it('normalizes extensionless internal document links through the full pipeline', () => {
     const target: PublicationDocument = {
       sourcePath: 'writing/target.md',

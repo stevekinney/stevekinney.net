@@ -80,7 +80,8 @@ export const normalizeMarkdownLinks = (
     const metadata = getObsidianDocumentMetadata(document);
     if (
       !metadata.headings.some((heading) => heading.id === id) &&
-      !metadata.blocks.some((block) => `block-${block.id}` === id)
+      !metadata.blocks.some((block) => `block-${block.id}` === id) &&
+      !metadata.htmlIds.includes(id)
     )
       issue(start, `Missing Markdown fragment: ${document.sourcePath}#${fragment}`);
     return id;
@@ -128,8 +129,7 @@ export const normalizeMarkdownLinks = (
           const attachment = result.reference.attachment;
           dependencies.add(attachment.sourcePath);
           destination =
-            node.type === 'image' ||
-            (node.type === 'definition' && attachment.mimeType.startsWith('image/'))
+            node.type === 'image'
               ? path.posix
                   .relative(
                     path.posix.dirname(options.hostSourcePath ?? context.sourcePath),

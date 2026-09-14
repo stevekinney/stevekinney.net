@@ -122,6 +122,7 @@ export const normalizeObsidianReferences = (
     start = 0,
     end = document.source.length,
     prefix = '',
+    appendDefinitions = true,
   ): ReturnType<typeof applySourceEdits> => {
     const source = document.source;
     const currentContext = { ...context, sourcePath: document.sourcePath };
@@ -356,11 +357,12 @@ export const normalizeObsidianReferences = (
         : `\n\n${nested.markdown}\n\n`;
       replace(expanded);
     }
-    const appendedDefinitions = prefix
-      ? documentMetadata().definitions.filter(
-          (definition) => definition.start < start || definition.end > end,
-        )
-      : [];
+    const appendedDefinitions =
+      prefix && appendDefinitions
+        ? documentMetadata().definitions.filter(
+            (definition) => definition.start < start || definition.end > end,
+          )
+        : [];
     const outputs = [
       applySourceEdits(
         source.slice(start, end),
@@ -373,7 +375,7 @@ export const normalizeObsidianReferences = (
           })),
       ),
       ...appendedDefinitions.map((definition) =>
-        render(document, stack, definition.start, definition.end, prefix),
+        render(document, stack, definition.start, definition.end, prefix, false),
       ),
     ];
     const result = outputs[0];

@@ -99,6 +99,7 @@ describe('normalizeObsidianMarkdown embeds', () => {
     const footnotes = [...result.markdown.matchAll(/data-obsidian-footnote="([^"]+)"/gu)].map(
       (match) => Buffer.from(match[1], 'base64url').toString(),
     );
+    expect(footnotes).toHaveLength(2);
     expect(footnotes.some((footnote) => footnote.includes('/writing/guide'))).toBe(true);
     expect(result.dependencies).toContain('writing/guide.md');
   });

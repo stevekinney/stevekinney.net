@@ -98,6 +98,12 @@ describe('turbo generated asset graph', () => {
 
   test('does not duplicate generated producer outputs as downstream cache inputs', async () => {
     const tasks = await readTurboTasks();
+    expect(tasks['@stevekinney/scripts#content:build']?.outputs ?? []).not.toContain(
+      '../../applications/website/.generated/content-enhancements/**',
+    );
+    expect(tasks['@stevekinney/scripts#content-enhancements:build']?.outputs).toEqual([
+      '../../applications/website/.generated/content-enhancements/**',
+    ]);
     expect(tasks['@stevekinney/scripts#playgrounds:build']?.dependsOn).toContain(
       '@stevekinney/scripts#content:build',
     );

@@ -32,7 +32,6 @@
       "outputs": [
         "../../applications/website/.generated/content-data.json",
         "../../applications/website/.generated/tailwind-playground-source.html",
-        "../../applications/website/.generated/content-enhancements/**",
         "../../applications/website/.generated/obsidian-content.json",
         "../../applications/website/.generated/obsidian-math.css",
         "../../applications/website/.generated/playground-inputs.json",
