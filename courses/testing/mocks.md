@@ -1,8 +1,6 @@
 ---
 title: A Comprehensive Guide to Mocks in Testing
 description: Learn how mocks simplify tests by controlling behavior.
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 Generally, speaking it's not helpful to test code that you don't control.

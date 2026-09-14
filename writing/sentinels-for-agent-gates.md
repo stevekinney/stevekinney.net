@@ -1,16 +1,7 @@
 ---
 title: 'Sentinels: The Quiet Power of a Touched File'
-description: >-
-  How I use sentinel files to gate the risky moves my coding agents make—exiting
-  plan mode, opening a pull request, addressing review feedback, backing off a
-  rate-limited model. The whole mechanism is a file on disk and a hook that
-  checks for it.
+description: 'How I use sentinel files to gate the risky moves my coding agents make.'
 date: 2026-06-01
-modified: 2026-06-01
-tags:
-  - ai
-  - agents
-  - tooling
 ---
 
 You know what's really annoying? When you write some instructions in `AGENTS.md` or `CLAUDE.md` and then the agent ignores them. Absolutely rage-inducing.

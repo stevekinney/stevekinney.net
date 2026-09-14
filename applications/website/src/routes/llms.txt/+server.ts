@@ -1,4 +1,4 @@
-import { url } from '$lib/metadata';
+import { author, language, url } from '$lib/metadata';
 import { getCourseIndex, getPostIndex, getProjectIndex } from '$lib/server/content';
 
 export const prerender = true;
@@ -11,6 +11,10 @@ export function GET() {
   const lines = [
     '# Steve Kinney',
     '',
+    `Canonical: ${url}/`,
+    `Author: ${author}`,
+    `Language: ${language}`,
+    '',
     '> Software engineer, educator, and engineering leader based in Denver, Colorado.',
     '',
     'Steve Kinney builds AI systems, developer tools, and courses on software engineering, including agentic workflows, durable execution, TypeScript, React, and modern web development.',
@@ -19,14 +23,14 @@ export function GET() {
     '',
     ...posts.map(
       (post) =>
-        `- [${post.title}](${url}/writing/${post.slug}): ${post.description} ([llms.txt](${url}/writing/${post.slug}/llms.txt))`,
+        `- [${post.title}](${url}/writing/${post.slug}): ${post.description} Published: ${post.date}.${post.modified ? ` Modified: ${post.modified}.` : ''} ([llms.txt](${url}/writing/${post.slug}/llms.txt))`,
     ),
     '',
     '## Course Walkthroughs',
     '',
     ...courses.map(
       (course) =>
-        `- [${course.title}](${url}/courses/${course.slug}): ${course.description} ([llms.txt](${url}/courses/${course.slug}/llms.txt))`,
+        `- [${course.title}](${url}/courses/${course.slug}): ${course.description} Published: ${course.date}.${course.modified ? ` Modified: ${course.modified}.` : ''} ([llms.txt](${url}/courses/${course.slug}/llms.txt))`,
     ),
     '',
     '## Projects',

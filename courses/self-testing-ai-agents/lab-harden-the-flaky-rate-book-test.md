@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Harden the Flaky Rate-Book Test'
 description: Take a real, deliberately broken Playwright test and apply every Playwright-armor pattern to make it fast, isolated, and rock-solid.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 Time to cash the checks from the last handful of lessons. The Shelf starter doesn't ship `tests/rate-book.spec.ts`. Your job in this lab is to _build_ that file by hand from the intentionally rough version below, wiring in auth, seed data, locators, and waiting patterns as you go, so every Playwright-armor pattern lands in your fingers instead of just your eyes.

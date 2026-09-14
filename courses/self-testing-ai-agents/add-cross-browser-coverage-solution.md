@@ -1,8 +1,6 @@
 ---
 title: 'Add Cross-Browser Coverage: Solution'
-description: Walkthrough of the Playwright projects, tagged smoke subset, and nightly hook-up you add in the lab so Firefox and WebKit get coverage without hijacking the fast loop.
-modified: 2026-04-14
-date: 2026-04-10
+description: 'Walkthrough of the Playwright projects, tagged smoke subset.'
 ---
 
 The goal here is not "run everything everywhere." The goal is "run the right tests on the right browsers without making the default loop miserable." Shelf's current starter is small enough that this stays simple if you keep the split honest.

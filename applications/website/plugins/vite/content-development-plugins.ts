@@ -1,8 +1,8 @@
 import type { PluginOption } from 'vite';
 
-import { regenerateGeneratedContent } from './regenerate-generated-content';
-import { serveStaticDirectory } from './serve-static-directory';
-import { watchContentDirectories } from './watch-content-directories';
+import { regenerateGeneratedContent } from './regenerate-generated-content.ts';
+import { serveStaticDirectory } from './serve-static-directory.ts';
+import { watchContentDirectories } from './watch-content-directories.ts';
 
 const IMAGE_ASSET_MIME_TYPES: Record<string, string> = {
   '.png': 'image/png',

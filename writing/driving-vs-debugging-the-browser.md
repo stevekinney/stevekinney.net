@@ -1,19 +1,7 @@
 ---
 title: 'Playwright vs. Chrome DevTools MCP: Driving vs. Debugging'
-description: >-
-  Playwright and Chrome DevTools both ship official tools for letting AI agents
-  drive a browser, but they're optimized for different jobs. Here's how
-  Playwright CLI, Playwright MCP, and Chrome DevTools MCP actually fit together,
-  and how to pick between them without guessing.
+description: "Playwright and Chrome DevTools both ship official tools for letting AI agents drive a browser, but they're optimized for different jobs."
 date: 2026-04-06
-modified: 2026-04-07
-tags:
-  - ai
-  - agents
-  - playwright
-  - chrome-devtools
-  - mcp
-  - tooling
 ---
 
 Both [Playwright](https://playwright.dev/) and the [Chrome DevTools MCP](https://github.com/ChromeDevTools/chrome-devtools-mcp) ship official tools for letting AI agents drive a browser. They are not the same tools and they are not pointed at the same job. If you're picking one because the headlines look interchangeable, you're going to pick the wrong one for at least half your workflows.

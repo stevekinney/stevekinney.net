@@ -3,8 +3,6 @@ title: Flexbox Growing and Shrinking
 description: >-
   Master flex-grow and flex-shrink utilities to control how flex items expand
   and contract in available space
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Control how flex items grow to fill available space or shrink when space is limited.

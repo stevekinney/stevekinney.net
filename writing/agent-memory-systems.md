@@ -1,17 +1,7 @@
 ---
 title: 'Memory Systems for AI Agents: What the Research Says and What You Can Actually Build'
-description: >-
-  The old short-term/long-term taxonomy doesn't capture what modern agent
-  memory systems actually do. A new three-axis framework—Forms, Functions,
-  and Dynamics—maps the design space from flat vector stores to RL-driven
-  memory management. Here's what the research says and what you can build today.
+description: "The old short-term/long-term taxonomy doesn't capture what modern agent memory systems actually do."
 date: 2026-03-25
-modified: 2026-04-09
-tags:
-  - ai
-  - agents
-  - memory
-  - retrieval
 ---
 
 I've been building an agent memory system for the last few days, and it sent me down one of those rabbit holes where you start reading one paper on [arXiv](https://arxiv.org/) and re-surface three hours later with forty browser tabs and a completely different understanding of the problem. The thing that triggered it was a simple frustration: every agent I use—[Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview), [Cursor](https://cursor.com), custom stuff I've built with the [Vercel AI SDK](https://ai-sdk.dev)—forgets everything between sessions. They treat every conversation like their first. I've explained my project structure, my preferences, my constraints, and then the context window fills up or the session ends and all of that knowledge evaporates.

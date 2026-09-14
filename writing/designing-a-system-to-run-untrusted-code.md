@@ -1,16 +1,7 @@
 ---
 title: 'Designing a Build System That Runs Untrusted Code'
-description: >-
-  A deep technical walkthrough of what it takes to design a build system that
-  securely executes arbitrary customer repositories and turns build output into
-  deployable artifacts—covering the pipeline, the security model, the
-  architecture, and the operational realities.
+description: 'A deep technical walkthrough of what it takes to design a build system that securely executes arbitrary customer repositories and turns build output into.'
 date: 2026-03-16
-modified: 2026-03-17
-tags:
-  - architecture
-  - security
-  - infrastructure
 ---
 
 So, you (or, in this case—a younger, less-wise version of _me_) want to build a platform that accepts a Git repository URL from a _stranger_, runs whatever code is inside it on your infrastructure, and produces something you're willing to serve to the internet. Or, in my case—maybe you just want to pull down a repository and do some static analysis on the code with an agent or perhaps even make modifications to it. The specific task varies, but they all share a few things in common. The reality is that every interesting design decision in this kind of system follows from a single uncomfortable fact: you are running untrusted code.

@@ -15,6 +15,8 @@ export type ContentValidationIssue = {
   line?: number;
   /** Defaults to `'error'` when absent. Warnings are surfaced but do not break the build. */
   severity?: 'error' | 'warning';
+  field?: string;
+  fixable?: boolean;
 };
 
 export type MarkdownReferenceNode = {

@@ -1,16 +1,7 @@
 ---
 title: 'Multi-Model Agentic Coding: Letting the Other Model Do the Typing'
-description: >-
-  The follow-up to my Codex-as-advisor setup. Same second model family, opposite
-  stance: instead of asking Codex for an opinion, I hand it the implementation,
-  let it work in an isolated worktree, and run an approval loop where I own the
-  diff and Codex never gets to commit.
+description: 'The follow-up to my Codex-as-advisor setup.'
 date: 2026-06-04
-modified: 2026-06-04
-tags:
-  - ai
-  - agents
-  - tooling
 ---
 
 I wrote about wiring [OpenAI's Codex](https://openai.com/index/introducing-codex/) into [Claude Code](https://www.claude.com/product/claude-code) as a consulting subagent—a [second opinion from a different model family](/writing/codex-as-a-second-opinion). That whole setup keeps Codex on a tight leash: read-only sandbox, text-only, _analysis, not action_. It talks. It never touches my files.

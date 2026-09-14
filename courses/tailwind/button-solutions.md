@@ -3,8 +3,6 @@ title: Secondary and Dangerous Buttons
 description: >-
   Solutions for a exercise in building buttons as part of Steve's course on
   Tailwind.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 ## Secondary Button

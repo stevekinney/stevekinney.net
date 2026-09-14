@@ -78,7 +78,6 @@ const mdsvexOptions: MdsvexOptions = {
 
   layout: {
     _: join(__dirname, './src/lib/markdown/base.svelte'),
-    page: join(__dirname, './src/lib/markdown/page.svelte'),
   },
 
   highlight: {

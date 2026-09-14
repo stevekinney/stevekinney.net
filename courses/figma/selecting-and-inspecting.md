@@ -3,12 +3,6 @@ title: Selecting and Inspecting
 description: >-
   Let's look at some of the tools Figma provides for measuring sizes and
   distances.
-modified: 2026-03-17
-date: 2024-03-05
-tags:
-  - figma
-  - course
-  - frontendmasters
 ---
 
 Some of the standard tips that we've picked up from most GUIs apply to Figma as well:

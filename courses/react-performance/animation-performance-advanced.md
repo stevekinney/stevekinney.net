@@ -1,16 +1,6 @@
 ---
 title: Advanced Animation Performance Techniques
-description: >-
-  Master advanced animation techniques including Intersection Observer
-  optimization, Web Animations API integration, and comprehensive performance
-  testing strategies.
-date: 2025-09-20
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - animations
-  - advanced
+description: 'Master advanced animation techniques including Intersection Observer optimization, Web Animations API integration.'
 ---
 
 Once you've mastered the fundamentals of React animation performance, these advanced techniques will help you create sophisticated, high-performance animations that scale to complex applications. These patterns are essential for applications with heavy animation requirements or performance-critical interactions.

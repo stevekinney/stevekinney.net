@@ -4,10 +4,6 @@ description: >-
   A brief guide for getting started writing Python on a Mac using virtual
   environments.
 date: 2024-08-06
-modified: 2026-03-17
-tags:
-  - python
-  - virtual-env
 ---
 
 So, you want to get started writing some Python on your Macintosh computer. That seems reasonable. Let's walk through some of the steps.

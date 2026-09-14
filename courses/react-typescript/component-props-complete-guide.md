@@ -4,14 +4,6 @@ description: >-
   Master typing React props from basics to advanced patterns—required vs
   optional, defaults, unions, generics, and building self-documenting component
   APIs.
-date: 2025-09-20
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - props
-  - component-patterns
-  - api-design
 ---
 
 Props are the API of your React components—they're how other developers (including future you) will interact with what you've built. Getting the types right isn't just about avoiding runtime errors; it's about creating components that are intuitive to use, self-documenting, and impossible to misuse.

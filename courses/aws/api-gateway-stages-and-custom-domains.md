@@ -1,15 +1,6 @@
 ---
 title: API Gateway Stages and Custom Domains
-description: >-
-  Deploy your API to stages, configure custom domain names, and understand how
-  stages map to different environments (development, production).
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - api-gateway
-  - stages
-  - domains
+description: 'Deploy your API to stages, configure custom domain names, and understand how stages map to development and production environments.'
 ---
 
 So far, your HTTP API has one stage (`$default`) and one URL (the auto-generated `execute-api` endpoint). That works for development, but production needs more: a custom domain name that matches your frontend, separate environments for development and production, and a URL that doesn't change when you recreate the API. This lesson covers all three.

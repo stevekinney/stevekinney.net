@@ -1,11 +1,6 @@
 ---
 title: Integrating Figma Designs into Storybook
-description: >-
-  Integrate Figma designs with Storybook using the @storybook/addon-designs
-  addon by installing it, copying your Figma link, and adding it as a parameter
-  in your story.
-modified: 2026-03-17
-date: 2024-04-15
+description: 'Integrate Figma designs with Storybook using the @storybook/addon-designs addon by installing it, copying your Figma link.'
 ---
 
 A lot of times it'd be nice to see what we're implementing in the same place where we're reviewing our implementation. If you're using Figma, then you can integrate into your stories to make your life just a little bit easier.

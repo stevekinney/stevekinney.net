@@ -1,8 +1,6 @@
 ---
 title: 'Port the Review Loop Beyond Bugbot: Solution'
 description: Walkthrough of the review-loop playbook—blocking rules, noise categories, the rule of three, and what it takes to make the process survive a tool swap.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 The review loop is the only loop in Shelf that's purely about process. There's no test file to run, no config to validate, no CI job to trigger. The deliverable is a written policy that makes the second-opinion review portable across tools. That's harder than it sounds, because it means encoding decisions that most teams leave in someone's head.

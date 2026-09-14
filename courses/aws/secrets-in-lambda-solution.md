@@ -3,13 +3,6 @@ title: 'Solution: Store and Retrieve a Secret in Lambda'
 description: >-
   Complete solution for storing an API key in Parameter Store and reading it
   from a Lambda function at runtime.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - secrets
-  - exercise
-  - solution
 ---
 
 This is the complete solution for the [Exercise: Store and Retrieve a Secret in Lambda](secrets-in-lambda-exercise.md). If you got stuck, don't worry—there are a few gotchas in here that trip everyone up the first time.

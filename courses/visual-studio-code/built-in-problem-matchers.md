@@ -1,8 +1,6 @@
 ---
 title: Built-in Problem Matchers
 description: The problem matchers built-in to Visual Studio Code.
-modified: 2026-03-17
-date: 2025-03-18
 ---
 
 Visual Studio Code includes several built-in problem matchers out of the box, which are designed to parse output from common tools and compilers. These include:

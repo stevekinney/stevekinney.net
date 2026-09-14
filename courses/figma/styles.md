@@ -1,11 +1,6 @@
 ---
 title: Styles
-description: >-
-  Master consistency and efficiency in Figma with Shared Styles. Simplify your
-  workflow by reusing design attributes for text, colors, and effects across
-  projects.
-date: 2024-03-09
-modified: 2026-03-17
+description: 'Master consistency and efficiency in Figma with Shared Styles.'
 ---
 
 > [!NOTE] Styles and Variables

@@ -3,8 +3,6 @@ title: Examples of Visual Studio Code Tasks
 description: >-
   Practical examples of Visual Studio Code tasks for common development
   scenarios including building, testing, and deployments
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 ## Tasks for a Vite Project

@@ -1,8 +1,6 @@
 ---
 title: Accessibility as a Quality Gate
 description: Semantic locators are a great start, but they are not an accessibility strategy. This is the layer that turns "probably accessible" into a real gate.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 If you've ever written a beautiful `getByRole` test and still shipped an inaccessible UI, welcome to the club. I've done it. The test suite felt righteous. The screen reader experience was still bad.

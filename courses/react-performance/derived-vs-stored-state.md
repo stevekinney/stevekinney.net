@@ -3,13 +3,6 @@ title: Derived vs Stored State
 description: >-
   Store less, derive more. Compute on demand to avoid desyncs, extra memory, and
   unnecessary re-renders.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - state-management
-  - architecture
 ---
 
 State management in React often feels like a balancing act between "store everything" and "compute everything." But here's the thing—most developers lean too heavily toward storing state when they should be deriving it. When you store redundant state that can be computed from other values, you're signing up for synchronization bugs, extra memory usage, and unnecessary re-renders. Let's explore when to store state versus when to derive it, and how making the right choice can dramatically improve your app's performance and reliability.

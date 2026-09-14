@@ -3,14 +3,6 @@ title: 'Edge, SSR, and Hydration Payload Types'
 description: >-
   Target multiple runtimes—DOM vs Node types, serializable payloads, and safe
   hydration contracts.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - ssr
-  - hydration
-  - edge
 ---
 
 React 19's modern SSR and streaming capabilities are powerful, but they come with a hidden complexity: your data needs to survive a treacherous journey from server to client, often through multiple runtimes, serialization boundaries, and hydration phases. One small type mismatch—like a `Date` object that becomes a string, or an `undefined` that vanishes entirely—can turn your perfectly typed server code into a client-side hydration mismatch nightmare. Let's explore how to build bulletproof hydration payload types that work seamlessly across edge functions, Node.js servers, and React's hydration process.

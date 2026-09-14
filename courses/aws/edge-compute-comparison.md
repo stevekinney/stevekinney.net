@@ -1,16 +1,6 @@
 ---
 title: Lambda@Edge vs CloudFront Functions
-description: >-
-  Compare Lambda@Edge and CloudFront Functions across dimensions that matter —
-  runtime, execution limits, supported events, pricing—and know which to
-  reach for based on your use case.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - lambda-at-edge
-  - cloudfront-functions
-  - comparison
+description: 'Compare Lambda@Edge and CloudFront Functions across dimensions that matter — runtime, execution limits, supported events, pricing.'
 ---
 
 Scratch Lab is live now, which means the weird requirements start showing up. Marketing wants an A/B test on the homepage hero. You want to redirect a retired campaign URL before it ever touches your origin. Security wants a header added everywhere. These are not "spin up a whole backend" problems. These are _edge_ problems.

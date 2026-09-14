@@ -1,12 +1,6 @@
 ---
 title: Framework Migration Patterns
-description: >-
-  The technical and organizational patterns for moving a large frontend from one
-  framework, data layer, or rendering model to another without stopping feature
-  work—bridge engineering, data architecture migration, the "two systems tax,"
-  the 70% stall, and what Etsy and Lyft learned the hard way.
-date: 2026-03-04
-modified: 2026-03-17
+description: 'The technical and organizational patterns for moving a large frontend from one framework, data layer.'
 ---
 
 So, your application is built on a framework that's either deprecated, unsupported, or two major versions behind the current release. You'd love to be on the modern version—or a different framework entirely—but the application has hundreds of routes, dozens of contributors, and actual users who expect it to keep working while you figure this out.

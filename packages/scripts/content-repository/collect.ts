@@ -3,6 +3,7 @@ import fg from 'fast-glob';
 import { buildTailwindPlaygroundSource } from '@stevekinney/utilities/tailwind-playground';
 
 import { coursesRoot, projectsRoot, writingRoot } from '../content-paths.ts';
+import { auditContentMetadata } from '../content-metadata.ts';
 
 import {
   buildCourseEntry,
@@ -50,7 +51,8 @@ const collectSourceArtifacts = async (
 export type { ContentRepository } from './types.ts';
 
 export const collectContentRepository = async (): Promise<ContentRepository> => {
-  const validationIssues: ContentValidationIssue[] = [];
+  const metadataAudit = await auditContentMetadata();
+  const validationIssues: ContentValidationIssue[] = [...metadataAudit.issues];
   const writingFiles = await fg('*.md', {
     cwd: writingRoot,
     absolute: true,
@@ -67,21 +69,25 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     onlyFiles: true,
   });
   const writingSources = await Promise.all(
-    writingFiles.sort().map((file) => loadMarkdownSource(file)),
+    writingFiles.sort().map((file) => loadMarkdownSource(file, validationIssues)),
   );
   const projectSources = await Promise.all(
     projectFiles.sort().map((file) => loadMarkdownSource(file)),
   );
 
   const writingEntries = await Promise.all(
-    writingSources.map((source) => buildWritingEntry(source, validationIssues)),
+    writingSources.map((source) =>
+      buildWritingEntry(source, validationIssues, metadataAudit.history),
+    ),
   );
   const projectEntries = await Promise.all(
     projectSources.map((source) => buildProjectEntry(source, validationIssues)),
   );
   const courseEntries = (
     await Promise.all(
-      courseDirectories.sort().map((directory) => buildCourseEntry(directory, validationIssues)),
+      courseDirectories
+        .sort()
+        .map((directory) => buildCourseEntry(directory, validationIssues, metadataAudit.history)),
     )
   ).filter((entry): entry is CourseRecord => entry !== null);
 
@@ -144,7 +150,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   validateProjectFrontmatterLinks(projectEntries, routePaths, validationIssues);
 
   const sourceFiles = [...sourceHashes.keys()].sort();
-  const repositoryHash = buildRepositoryHash(sourceHashes);
+  const repositoryHash = buildRepositoryHash(sourceHashes, metadataAudit.history);
   const { lessons, siteIndex } = buildSiteIndex(writingEntries, courseEntries, projectEntries);
 
   return {

@@ -1,8 +1,6 @@
 ---
 title: Porting the Shelf Loop to Another Stack
-description: The tools change when the framework changes. The loop structure does not. This appendix shows how to translate Shelf's feedback model to other stacks without losing the point.
-modified: 2026-04-14
-date: 2026-04-06
+description: 'The tools change when the framework changes.'
 ---
 
 Shelf is a teaching app, not a religion.

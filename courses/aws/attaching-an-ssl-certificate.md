@@ -2,13 +2,6 @@
 title: 'Attaching an SSL Certificate'
 description: >-
   Attach an ACM certificate to your CloudFront distribution and configure it to serve your site over HTTPS with a custom domain.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudfront
-  - ssl
-  - https
 ---
 
 > [!NOTE]

@@ -1,11 +1,6 @@
 ---
 title: Design System Governance
-description: >-
-  How to treat a design system as a platform contract across independently
-  deployed applications—tokens, components, CSS isolation, enforcement, and the
-  organizational patterns that keep it all from drifting apart.
-modified: 2026-03-17
-date: 2026-03-01
+description: 'How to treat a design system as a platform contract across independently deployed applications.'
 ---
 
 When you have one application, your design system is just… your code. A shared `Button` component, some color variables, maybe a Tailwind config. Nobody needs a governance strategy for that.

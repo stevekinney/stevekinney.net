@@ -3,14 +3,6 @@ title: Creating Todos - POST Requests with TypeScript
 description: >-
   Build type-safe POST requests with React and TypeScript—handle form
   submission, optimistic updates, and sync local state with server responses.
-date: 2025-09-27
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - crud
-  - post-requests
-  - forms
 ---
 
 Creating new todos is where your app starts to feel interactive. Users type, hit enter, and boom—their todo appears. But behind that simple interaction lies a complex dance of form handling, API calls, state updates, and error recovery. TypeScript helps us choreograph this dance perfectly, ensuring type safety from the input field all the way to the server response.

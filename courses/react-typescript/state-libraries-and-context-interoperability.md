@@ -3,16 +3,6 @@ title: Interoperability with State Libraries and Context
 description: >-
   Type Redux Toolkit, Zustand, and context selectors—strongly typed stores that
   feel native in React.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - state-libraries
-  - context
-  - interop
-  - zustand
-  - redux
 ---
 
 When your React 19 app grows beyond useState and useReducer (and it will), you'll reach for state management libraries. The good news? Modern TypeScript plays beautifully with Redux Toolkit, Zustand, and Context—but only if you set them up right. Let's explore how to get bulletproof types that actually help you ship faster instead of fighting the compiler at every turn.

@@ -3,13 +3,6 @@ title: The use() Hook
 description: >-
   Simplify async and context consumption by letting components 'use' resources
   directly, with Suspense driving the UI flow.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - hooks
-  - react-19
 ---
 
 React 19's `use()` hook fundamentally changes how you handle asynchronous data and context in your components. Instead of managing loading states, error boundaries, and promise resolution yourself, `use()` lets you "unwrap" promises and context values directly in your component body—while Suspense handles the coordination. It's like having `await` for React components, but with better composition and cleaner error handling.

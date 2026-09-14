@@ -3,13 +3,6 @@ title: 'Solution: Build a Lambda-Backed Data API with DynamoDB'
 description: >-
   Complete solution for the DynamoDB Lambda exercise, with all commands, handler
   code, and expected output.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - dynamodb
-  - exercise
-  - solution
 ---
 
 Here's the complete solution for every step, including the DynamoDB table creation, IAM policy, handler code, deployment commands, and expected output at each stage.

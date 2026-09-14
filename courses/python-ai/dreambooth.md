@@ -3,8 +3,6 @@ title: DreamBooth — Personalizing Text-to-Image Models
 description: >-
   Fine-tune a text-to-image model on a few photos to learn a specific subject;
   cover dataset prep, prior preservation, training, and inference.
-modified: 2026-03-17
-date: 2025-09-14
 ---
 
 > [!ABSTRACT] Key Takeaways

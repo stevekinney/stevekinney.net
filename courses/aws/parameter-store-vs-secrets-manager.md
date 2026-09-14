@@ -3,13 +3,6 @@ title: Parameter Store vs. Secrets Manager
 description: >-
   Choose between Parameter Store and Secrets Manager based on your use case,
   understanding the tradeoffs in cost, features, and complexity.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - parameter-store
-  - secrets-manager
-  - comparison
 ---
 
 You have two AWS services that can store secrets. That's one too many for anyone who just wants to know where to put an API key. This lesson gives you a clear decision framework so you can stop deliberating and start building.

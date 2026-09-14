@@ -28,7 +28,6 @@ export const load: PageServerLoad = async ({ params }) => {
     course,
     title: lesson.title,
     description: lesson.description,
-    date: lesson.date,
     modified: lesson.modified,
     sourcePath: lesson.sourcePath as RepositoryPath,
     contentHtml: await renderLessonDocument(lesson.sourcePath),

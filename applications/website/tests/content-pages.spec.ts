@@ -161,10 +161,60 @@ test.describe('exactly one content document wrapper per content page', () => {
     '/courses/tailwind/utility-first',
   ];
 
+  const courseLandingPages = [
+    'ai-development',
+    'aws',
+    'enterprise-ui',
+    'figma',
+    'full-stack-typescript',
+    'python-ai',
+    'react-performance',
+    'react-typescript',
+    'self-testing-ai-agents',
+    'storybook',
+    'tailwind',
+    'testing',
+    'visual-studio-code',
+    'web-security',
+  ];
+
   for (const pagePath of contentPages) {
     test(`${pagePath} exposes a single data-content-document wrapper`, async ({ page }) => {
       await page.goto(pagePath);
       await expect(page.locator('[data-content-document]')).toHaveCount(1);
     });
+  }
+
+  for (const courseSlug of courseLandingPages) {
+    test(`/courses/${courseSlug} exposes one owned H1 and prose document`, async ({ page }) => {
+      await page.goto(`/courses/${courseSlug}`);
+      await expect(page.locator('main h1')).toHaveCount(1);
+      await expect(page.locator('[data-content-document]')).toHaveCount(1);
+      await expect(page.locator('[data-content-document] .prose')).toHaveCount(1);
+    });
+  }
+});
+
+test('full LLM export contains every generated lesson body exactly once', async ({ request }) => {
+  const [fullResponse, sitemapResponse] = await Promise.all([
+    request.get('/llms-full.txt'),
+    request.get('/sitemap.xml'),
+  ]);
+  expect(fullResponse.ok()).toBeTruthy();
+  expect(sitemapResponse.ok()).toBeTruthy();
+
+  const fullExport = await fullResponse.text();
+  const sitemap = await sitemapResponse.text();
+  const lessonUrls = [...sitemap.matchAll(/<loc>(https:\/\/[^<]+\/courses\/[^<]+\/[^<]+)<\/loc>/g)]
+    .map((match) => match[1])
+    .filter((value) => !value.endsWith('/open-graph.jpg'));
+
+  expect(lessonUrls.length).toBeGreaterThan(0);
+  for (const lessonUrl of lessonUrls) {
+    expect(
+      fullExport.match(
+        new RegExp(`^URL: ${lessonUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'gm'),
+      ),
+    ).toHaveLength(1);
   }
 });

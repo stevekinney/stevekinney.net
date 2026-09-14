@@ -1,11 +1,6 @@
 ---
 title: Importing Fonts from Fontsource
-description: >-
-  Import fonts from Fontsource by installing the specific font package,
-  importing it in your CSS or JS file, and adding the import path to your
-  project configuration if necessary.
-modified: 2026-03-17
-date: 2024-04-15
+description: 'Import fonts from Fontsource by installing the specific font package, importing it in your CSS or JS file.'
 ---
 
 There are lots of ways to include third-party fonts. But, let me tell you about my **favorite**: Just installing them off of npm from [Fontsource](https://fontsource.org).

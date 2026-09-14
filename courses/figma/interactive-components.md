@@ -4,12 +4,6 @@ description: >-
   Utilize Figma's interactive components to bring prototypes to life with
   realistic interactions, streamlining the design process and enhancing user
   experience.
-date: 2024-03-09
-modified: 2026-03-17
-tags:
-  - figma
-  - course
-  - frontendmasters
 ---
 
 It turns out that users like to interact with these web pages that we build. Sometimes, they go as far as to expect that they'll behave like "Applications," I've been told. Interactive Components give us and our designer friends the ability to create components that are—umm—interactive.

@@ -2,13 +2,6 @@
 title: 'DNS Validation vs. Email Validation'
 description: >-
   Complete domain validation for your ACM certificate using DNS or email, and understand why DNS validation is the better choice.
-date: 2026-03-18
-modified: 2026-04-06
-tags:
-  - aws
-  - acm
-  - dns
-  - validation
 ---
 
 You've requested a certificate in ACM and it's sitting at **Pending validation**. ACM needs you to prove that you own the domain before it'll issue the certificate. This isn't an AWS-specific requirement—every Certificate Authority does this. The question is how you prove it. ACM gives you two options: **DNS validation** and **email validation**. DNS validation is almost always the right choice, and by the end of this lesson you'll understand why.

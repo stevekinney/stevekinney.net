@@ -3,13 +3,6 @@ title: Key Stability in Lists
 description: >-
   Master keys to keep state, focus, and animations intact—no more mysterious
   remounts or janky list updates.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - keys
-  - lists
 ---
 
 You've probably seen the warning: "Each child in a list should have a unique 'key' prop." Maybe you've even thrown in some `Math.random()` keys to make it go away (we've all been there). But keys aren't just about silencing warnings—they're about keeping your UI stable, performant, and predictable when lists change. Get them wrong, and you'll see mysterious component remounts, lost focus, broken animations, and performance issues that'll make you question your life choices.

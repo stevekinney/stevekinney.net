@@ -19,7 +19,10 @@
         "../../applications/website/static/**",
         "../../writing/**",
         "../../courses/**",
-        "../../projects/**"
+        "../../projects/**",
+        "content-metadata.ts",
+        "check-content-metadata.ts",
+        "run-with-content-history.ts"
       ],
       "outputs": [
         "../../applications/website/.generated/content-data.json",
@@ -28,7 +31,6 @@
       ]
     },
     "@stevekinney/scripts#content:validate": {
-      "dependsOn": ["@stevekinney/scripts#content:build"],
       "inputs": [
         "../../bun.lock",
         "../../package.json",
@@ -45,8 +47,12 @@
         "../../applications/website/static/**",
         "../../writing/**",
         "../../courses/**",
-        "../../projects/**"
-      ]
+        "../../projects/**",
+        "content-metadata.ts",
+        "check-content-metadata.ts",
+        "run-with-content-history.ts"
+      ],
+      "cache": false
     },
     "@stevekinney/scripts#content:images:check": {
       "inputs": [
@@ -86,7 +92,14 @@
         "../../writing/**/*.md",
         "../../courses/**/*.md",
         "../../projects/**/*.md",
-        "../../courses/*/index.toml"
+        "../../courses/*/index.toml",
+        "content-metadata.ts",
+        "check-content-metadata.ts",
+        "run-with-content-history.ts",
+        "*.test.ts",
+        "../../templates/**",
+        "../../.obsidian/{core-plugins,templates,types}.json",
+        "../../lefthook.yml"
       ]
     },
     "@stevekinney/website#build": {
@@ -186,6 +199,13 @@
     "@stevekinney/website#build-storybook": {},
     "@stevekinney/website#clean": {
       "cache": false
+    },
+    "@stevekinney/scripts#content:check": {
+      "cache": false
+    },
+    "@stevekinney/scripts#content:fix": {
+      "cache": false
     }
-  }
+  },
+  "globalEnv": ["CONTENT_GIT_REVISION"]
 }

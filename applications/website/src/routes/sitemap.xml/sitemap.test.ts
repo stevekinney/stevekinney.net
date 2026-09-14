@@ -25,7 +25,7 @@ describe('sitemap metadata generation', () => {
 
     expect(testingLesson).not.toBeNull();
     expect(xml).toContain(
-      `<lastmod>${new Date(testingLesson?.modified ?? testingLesson?.date ?? '').toISOString()}</lastmod>`,
+      `<lastmod>${new Date(testingLesson?.modified ?? '').toISOString()}</lastmod>`,
     );
 
     expect(response.headers.get('Content-Type')).toContain('application/xml');

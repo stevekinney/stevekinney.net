@@ -1,12 +1,6 @@
 ---
 title: Organizational Patterns and Team Topology
-description: >-
-  How team structure dictates frontend architecture—Conway's Law, Team
-  Topologies, vertical slices, platform teams, ADRs, inner-source, DORA
-  metrics, and the organizational patterns that make (or break) large-scale
-  frontend systems.
-modified: 2026-03-17
-date: 2026-03-01
+description: "How team structure dictates frontend architecture—Conway's Law, Team Topologies, vertical slices, platform teams, ADRs, inner-source, DORA metrics."
 ---
 
 You can spend weeks designing the perfect microfrontend boundary. You can draw the cleanest dependency graph anyone has ever seen. And then the org chart will route around your architecture like water finding cracks in concrete.

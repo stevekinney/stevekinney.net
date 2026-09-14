@@ -1,11 +1,6 @@
 ---
 title: GitHub Actions
-description: >-
-  GitHub's built-in automation system for CI, CD, and everything else humans keep
-  trying to do by hand—how the workflow model works, where the security surface
-  lives, and the footguns that look like features until they go off.
-modified: 2026-03-17
-date: 2026-03-01
+description: "GitHub's built-in automation system for CI, CD, and everything else humans keep trying to do by hand."
 ---
 
 GitHub Actions is GitHub's built-in automation system for CI, CD, release pipelines, repository housekeeping, security workflows, and the rest of the chores humans keep trying to do by hand. A [workflow][1] is a YAML file stored in `.github/workflows`, and it runs when a matching event happens in the repository, on a schedule, or when someone triggers it manually. A repository can have many workflows, each aimed at a different job.

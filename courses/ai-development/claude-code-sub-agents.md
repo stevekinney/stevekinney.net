@@ -3,8 +3,6 @@ title: Claude Code Subagents
 description: >-
   Use Claude Code subagents for isolated exploration, planning, implementation,
   background work, memory, and specialized tool access.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Claude Code subagents](https://code.claude.com/docs/en/sub-agents) are agents

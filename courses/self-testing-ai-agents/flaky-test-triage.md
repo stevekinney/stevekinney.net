@@ -1,8 +1,6 @@
 ---
 title: 'Flaky-Test Triage: When Retries Are Lying to You'
-description: A four-bucket diagnostic framework for flaky tests, and the rule that prevents agents from bumping `retries` every time they see a red build.
-modified: 2026-04-14
-date: 2026-04-11
+description: 'A four-bucket diagnostic framework for flaky tests and the rule that prevents agents from bumping retries whenever a build fails.'
 ---
 
 Shelf's search test passes nine times out of ten on my laptop and one time out of ten in CI. The honest thing is to admit I don't know why. The dishonest thing is to bump `retries` from 2 to 3 and call it Tuesday.

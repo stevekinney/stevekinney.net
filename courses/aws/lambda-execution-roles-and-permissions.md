@@ -3,13 +3,6 @@ title: Lambda Execution Roles and Permissions
 description: >-
   Create an IAM execution role for your Lambda function and attach policies that
   grant access to the AWS services your function needs.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - lambda
-  - iam
-  - permissions
 ---
 
 Every Lambda function needs permission to do things—write logs, read from DynamoDB, access S3. But Lambda functions don't have usernames or access keys. Instead, each function assumes an IAM role when it runs. This is the **execution role**, and it's the single most important security decision you make for each function.

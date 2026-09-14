@@ -3,14 +3,6 @@ title: Accessibility Types and ARIA Props
 description: >-
   Bake a11y into types—ensure valid ARIA usage and constrain props so
   inaccessible states can't compile.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - accessibility
-  - aria
-  - a11y
 ---
 
 TypeScript excels at catching errors at compile time, but accessibility often gets checked at runtime—if at all. What if we could make inaccessible component states literally impossible to compile? With proper TypeScript techniques, you can encode ARIA constraints directly into your types, ensuring screen readers and keyboard navigation work correctly before your code even runs.

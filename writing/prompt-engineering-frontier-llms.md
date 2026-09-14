@@ -1,15 +1,7 @@
 ---
 title: Prompt Engineering Across the OpenAI, Anthropic, and Gemini APIs
-description: >-
-  A practical guide to writing reliable prompts across the major LLM APIs—covering
-  core techniques, where the providers actually diverge, trust boundaries, and two
-  production workflows built from brittle to hardened.
+description: 'A practical guide to writing reliable prompts across the major LLM APIs.'
 date: 2026-03-06
-modified: 2026-03-17
-tags:
-  - ai
-  - prompt-engineering
-  - llms
 ---
 
 It's easy to overlook if you're just one person chatting back and forth with the **Future Robotic Overlord™** of your choice. But if you've spent any time integrating LLMs into production systems through the OpenAI, Anthropic, or Gemini APIs, you've probably noticed something: the difference between a prompt that works and a prompt that works _reliably_ is enormous. And the gap between "works reliably on _one_ model" and "works reliably _across providers_" is wider still.

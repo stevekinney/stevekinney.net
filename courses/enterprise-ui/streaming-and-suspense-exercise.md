@@ -1,11 +1,6 @@
 ---
 title: 'Exercise 3: Streaming & Suspense'
-description: >-
-  Add Suspense boundaries around independently-fetching components and implement
-  renderToPipeableStream for streaming SSR so each section renders progressively
-  as its data arrives.
-date: 2026-03-01
-modified: 2026-03-20
+description: 'Add Suspense boundaries around independently-fetching components and implement renderToPipeableStream for streaming SSR so each section renders.'
 ---
 
 The analytics dashboard makes three API calls at different speeds: summary stats (200ms), chart data (800ms), and activity table (2000ms). Right now, the entire page shows a single loading spinner until all three resolve. You're going to add Suspense boundaries around each section and implement `renderToPipeableStream` for streaming SSR so each section renders progressively as its data arrives.

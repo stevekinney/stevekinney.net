@@ -2,13 +2,6 @@
 title: 'DNS for Frontend Engineers'
 description: >-
   Understand the DNS resolution process from a frontend engineer's perspective—what happens between typing a URL and receiving a response.
-date: 2026-03-18
-modified: 2026-04-07
-tags:
-  - aws
-  - route53
-  - dns
-  - fundamentals
 ---
 
 You've configured custom domains on Vercel. You've pointed a subdomain at a Netlify deployment. You've pasted `CNAME` values into GoDaddy's dashboard and waited for "propagation" to finish. But what was actually happening during all of that? DNS is the system you've been using without fully understanding, and now that you're building your own infrastructure on AWS, understanding it is no longer optional.

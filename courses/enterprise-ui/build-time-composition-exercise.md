@@ -1,11 +1,6 @@
 ---
 title: 'Exercise 2: Build-Time Composition'
-description: >-
-  Take the same analytics module from Exercise 1 and consume it as a regular
-  workspace package in a monorepo—no remote entry, no shared dependency
-  negotiation, just an npm import.
-date: 2026-03-01
-modified: 2026-04-07
+description: 'Take the same analytics module from Exercise 1 and consume it as a regular workspace package in a monorepo.'
 ---
 
 You've seen [Module Federation](/courses/enterprise-ui/module-federation)'s runtime composition in [Exercise 1](./runtime-composition-exercise.md)—two dev servers, remote entry manifests, shared dependency negotiation, cross-boundary state management. Now take the same analytics module and consume it as a regular workspace package. No remote entry, no shared dependency negotiation—just an npm import in a monorepo.

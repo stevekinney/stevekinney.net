@@ -1,8 +1,6 @@
 ---
 title: 'Wire Accessibility Checks Into Shelf: Solution'
 description: Walkthrough of the accessibility spec and manual checklist you add in the lab—what gets automated, what stays manual, and how the two close the loop.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 This lab ships two files. One is a Playwright spec that runs axe-core against Shelf's highest-signal routes. The other is a five-item markdown checklist for the things the scanner cannot prove. Together, they turn "we care about accessibility" into "accessibility regressions break the build." That is the whole point.

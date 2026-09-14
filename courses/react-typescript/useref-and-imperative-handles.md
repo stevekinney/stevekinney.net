@@ -3,15 +3,6 @@ title: 'useRef, Callback Refs, and Imperative Handles'
 description: >-
   Type refs to DOM nodes and components—safely expose imperative APIs with
   forwardRef and useImperativeHandle.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - refs
-  - useref
-  - imperative-handle
-  - dom
 ---
 
 Sometimes React's declarative model isn't quite enough—you need to imperatively focus an input, measure a DOM node, or call a method on a third-party library. Enter refs: React's escape hatch for direct DOM access and component imperative APIs. We'll explore how to type refs properly in TypeScript, understand when callback refs shine over `useRef`, and build clean imperative interfaces with `forwardRef` and `useImperativeHandle`.

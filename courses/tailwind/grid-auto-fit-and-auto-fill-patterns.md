@@ -3,8 +3,6 @@ title: Grid Auto-fit and Auto-fill Patterns
 description: >-
   Create responsive grids that automatically adjust column count using CSS
   Grid's auto-fit and auto-fill with Tailwind.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Tailwind CSS enables fine-grained control over grid layouts. While fixed column counts (`grid-cols-4`) and subgrids (`grid-cols-subgrid`) are useful, some designs need grids that automatically adjust column numbers based on available space and content size. This is where CSS Grid's `auto-fit` and `auto-fill` patterns are used.

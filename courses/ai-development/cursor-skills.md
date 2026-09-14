@@ -3,8 +3,6 @@ title: Cursor Skills
 description: >-
   Package reusable Cursor workflows as Agent Skills with instructions, scripts,
   references, and assets that can also work across compatible agents.
-modified: 2026-06-24
-date: 2026-06-23
 ---
 
 [Cursor Skills](https://cursor.com/docs/skills) package reusable agent behavior.

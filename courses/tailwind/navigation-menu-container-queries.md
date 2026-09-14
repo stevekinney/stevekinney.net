@@ -1,11 +1,6 @@
 ---
 title: Building an Adaptive Navigation Menu
-description: >-
-  Let's build a navigation menu that transforms from horizontal links to compact
-  layout to hamburger menu based on container width using Tailwind's container
-  queries.
-modified: 2026-03-17
-date: 2025-06-12
+description: "Let's build a navigation menu that transforms from horizontal links to compact layout to hamburger menu based on container width using Tailwind's container."
 ---
 
 Let's start with our basic HTML structure for a simple navigation menu.

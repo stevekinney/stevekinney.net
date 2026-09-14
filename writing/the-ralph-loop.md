@@ -1,16 +1,7 @@
 ---
 title: 'Entering the Mind of Ralph Wiggum'
-description: >-
-  A while-true loop, a prompt file, and a clean context window on every
-  iteration. The Ralph Loop is the dumbest-sounding technique that actually
-  works—and the reason it works will change how you think about programming
-  LLMs.
+description: 'A while-true loop, a prompt file, and a clean context window on every iteration.'
 date: 2026-03-31
-modified: 2026-03-31
-tags:
-  - ai
-  - agents
-  - tooling
 ---
 
 A few weeks ago, I wrote about [my ridiculous agentic coding setup](/writing/ai-assisted-development-workflow). I spend _a lot_ of time planning and then I spend a lot of time in Github's pull request review UI. Between the up-front work of planning and writing detailed product requirements and acceptance criteria and the line-by-line review: The actual writing of the code is the least interesting part—and I don't want to have to babysit and nudge it along. What I _want_ to do is spend a bunch of time working on the plan and then when it's time to pickup my kid from school, I want to kick off the execution segment of the show and then review everything when I get back. I don't want to leave the house and have it just stop surreptitiously just because it was feeling like being difficult today.

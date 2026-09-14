@@ -2,12 +2,6 @@
 title: 'Creating and Configuring a Bucket'
 description: >-
   Create an S3 bucket with appropriate settings for static site hosting, including region selection and public access configuration.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - s3
-  - configuration
 ---
 
 You know what S3 is and how buckets and objects work. Now it's time to create one. By the end of this lesson, you'll have an S3 bucket configured and ready to hold your static site files. We'll use the AWS CLI because that's how you'll automate this later—clicking through the console is fine for exploration, but it doesn't scale.

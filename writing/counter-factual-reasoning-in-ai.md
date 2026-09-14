@@ -1,10 +1,6 @@
 ---
 title: 'What If It Goes Wrong?: The Hidden Dangers of Counterfactual Reasoning in AI'
-description: >-
-  Exploring the pitfalls of counterfactual reasoning in AI, highlighting its
-  fragility, chaotic nature, and alignment with Nassim Taleb's critique of
-  prediction in complex systems.
-modified: 2026-03-17
+description: 'Exploring the pitfalls of counterfactual reasoning in AI, highlighting its fragility, chaotic nature.'
 date: 2025-04-21
 ---
 

@@ -3,8 +3,6 @@ title: Claude Code Model Selection
 description: >-
   Choose Claude Code models with aliases, defaults, Opus planning, effort,
   one-million-token context, fallback chains, and provider differences.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Claude Code model configuration](https://code.claude.com/docs/en/model-config)

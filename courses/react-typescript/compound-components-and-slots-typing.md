@@ -3,15 +3,6 @@ title: Typing Compound Components and Slots
 description: >-
   Model parent-child relationships—Menu, Tabs, and List components with typed
   items and slot props.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - compound-components
-  - slots
-  - composition
-  - patterns
 ---
 
 Compound components are one of React's most elegant patterns—they let you compose UIs where multiple components work together seamlessly (think `<select>` and `<option>`, but you get to design the API). When you add TypeScript to the mix, you can create type-safe relationships between parent and child components that prevent runtime errors and provide excellent developer experience. Let's explore how to build Menu, Tabs, and List components that are both flexible and bulletproof.

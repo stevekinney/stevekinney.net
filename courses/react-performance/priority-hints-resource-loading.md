@@ -3,15 +3,6 @@ title: Priority Hints & Resource Loading
 description: >-
   Master browser resource loading with priority hints, preconnect, dns-prefetch,
   and modern loading strategies
-date: 2025-01-14
-modified: 2026-03-17
-status: published
-tags:
-  - React
-  - Performance
-  - Resource Loading
-  - Priority Hints
-  - Network Optimization
 ---
 
 Your React app loads. Eventually. First the HTML, then the CSS, then the JavaScript, then the fonts, then the images, then more JavaScript, then the API calls... By the time your user sees anything useful, they've already mentally composed their resignation letter to your app. The browser is doing its best, but it's guessing at what's important. What if you could tell it exactly what to prioritize?

@@ -3,8 +3,6 @@ title: Understanding OpenAI Codex for Code Generation
 description: >-
   Explore OpenAI Codex's AI-powered code generation capabilities and autonomous
   software engineering features.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 > [!NOTE] About model names and what’s current

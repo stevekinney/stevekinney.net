@@ -3,14 +3,6 @@ title: Error Boundaries and Suspense Boundaries
 description: >-
   Type error and suspense boundaries—ensure fallback components and error info
   props are accurately modeled.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - error-boundaries
-  - suspense
-  - error-handling
 ---
 
 Error boundaries and Suspense boundaries are React's tools for gracefully handling the unexpected—crashes and loading states, respectively. But here's the thing: they're class components and special APIs that don't get the same TypeScript attention as your typical hooks and function components. Let's fix that by learning how to properly type these boundaries so your fallbacks and error handling are as bulletproof as the rest of your application.

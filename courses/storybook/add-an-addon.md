@@ -3,8 +3,6 @@ title: Add an Addon to Storybook
 description: >-
   If you need to manually add an addon in Storybook, you can follow these steps
   to get going.
-modified: 2026-03-17
-date: 2024-04-15
 ---
 
 If you need to manually add an addon in Storybook, you can follow these steps to get going. First, we'll need to install the addon in question.

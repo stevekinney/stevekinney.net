@@ -1,15 +1,10 @@
 pre-commit:
   piped: true
   commands:
-    content-dates-writing:
+    content-metadata:
       priority: 10
-      glob: 'writing/*.md'
-      run: bun run --cwd packages/scripts update-content-dates.ts {staged_files}
-      stage_fixed: true
-    content-dates-courses:
-      priority: 20
-      glob: 'courses/**/*.md'
-      run: bun run --cwd packages/scripts update-content-dates.ts {staged_files}
+      glob: ['writing/*.md', 'courses/**/*.md']
+      run: bun packages/scripts/check-content-metadata.ts --fix {staged_files}
       stage_fixed: true
     repository-guards:
       priority: 40

@@ -3,8 +3,6 @@ title: Defining Grid Columns and Rows
 description: >-
   Create grid layouts with precise column and row definitions using Tailwind's
   grid template utilities.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Defining grid structure, including columns and rows, is essential for complex layouts. Tailwind CSS provides utilities to do this directly in your markup.

@@ -1,8 +1,6 @@
 ---
 title: Recording HARs for Network Isolation
 description: How to record a real HTTP session once and replay it deterministically in every test, so your suite stops depending on someone else's server.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 Shelf talks to the [Open Library API](https://openlibrary.org/developers/api) to look up books. It's a lovely free service—and also not something I want my end-to-end test suite to depend on.

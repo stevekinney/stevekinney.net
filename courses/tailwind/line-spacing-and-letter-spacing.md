@@ -1,10 +1,6 @@
 ---
 title: Line Spacing and Letter Spacing
-description: >-
-  Control typography with Tailwind's leading (line height) and tracking (letter
-  spacing) utilities.
-modified: 2026-03-17
-date: 2025-06-12
+description: "Control typography with Tailwind's leading and tracking utilities for line height and letter spacing."
 ---
 
 Tailwind manages line spacing (leading) and letter spacing (tracking) with utility classes in your HTML.

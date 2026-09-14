@@ -3,13 +3,6 @@ title: Bundle Analysis Deep Dive
 description: >-
   Master webpack-bundle-analyzer, source maps, and dependency auditing to
   eliminate bloat and optimize your React bundle.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - bundling
-  - analysis
 ---
 
 Your React bundle is a black box until you crack it open. That 2MB JavaScript file could contain duplicate dependencies, unused code, or a single poorly chosen library that's 10x larger than alternatives. Bundle analysis transforms guesswork into data-driven optimization—showing you exactly what's shipped, why it's there, and where you can cut the fat without breaking functionality.

@@ -4,9 +4,6 @@ description: >-
   Let's learn a little bit about what generics are in TypeScript, why they're
   useful, and how to use them.
 date: 2021-08-16
-modified: 2026-03-17
-tags:
-  - typescript
 ---
 
 When you're first learning TypeScript, you typically start by adding fairly straight-forward type annotations to your functions and variables. All is good in the world and it feels easy. For example, you might take a function that is allegedly supposed to add two numbers together and make sure that it _actually_ takes two numbers as arguments.

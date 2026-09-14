@@ -3,7 +3,6 @@ title: Using Anthropic's Message Batches API with Temporal
 description: >-
   Build scalable, cost-efficient AI processing with Anthropic's Message Batches
   API and Temporal workflows.
-modified: 2026-03-17
 date: 2025-05-08
 ---
 

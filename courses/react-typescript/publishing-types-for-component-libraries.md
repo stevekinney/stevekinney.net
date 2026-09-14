@@ -3,15 +3,6 @@ title: Publishing Types for Component Libraries
 description: >-
   Ship library-quality types—d.ts output, stable public APIs, and semver
   discipline for React component kits.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - publishing
-  - component-libraries
-  - types
-  - npm
 ---
 
 Building a React component library isn't just about crafting beautiful, reusable components—it's about creating a delightful developer experience for the teams that will use your work. And nothing says "professional-grade library" quite like rock-solid TypeScript definitions that make autocomplete sing and catch bugs before they ship. Let's dive into how to publish types that'll make your users smile (instead of filing GitHub issues about broken intellisense).

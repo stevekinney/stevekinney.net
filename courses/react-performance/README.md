@@ -1,12 +1,7 @@
 ---
 title: React Performance
-description: >-
-  Profile, measure, and optimize React applications—from understanding
-  reconciliation and re-renders to memoization, code splitting, and React 19's
-  concurrent features.
-layout: page
+description: 'Profile, measure, and optimize React applications—from understanding reconciliation and re-renders to memoization, code splitting.'
 date: 2025-09-07
-modified: 2026-03-17
 ---
 
 These are my notes for [my React Performance workshop](https://frontendmasters.com/workshops/react-performance-v2/) for [Frontend Masters](https://frontendmasters.com).

@@ -2,13 +2,6 @@
 title: 'Solution: End-to-End Static Site Deployment'
 description: >-
   Complete solution with every command and expected output for deploying a static site with S3 and CloudFront on AWS.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - deployment
-  - exercise
-  - solution
 ---
 
 This is the complete solution for the [End-to-End Static Site Deployment exercise](static-site-deployment-exercise.md). I've included every command with its expected output so you can compare as you go.

@@ -1,8 +1,6 @@
 ---
 title: Lint and Types as Guardrails
 description: ESLint's recommended rules are a starting point, not a finish line. The rules that actually help agents are the ones you write for your own codebase.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 [ESLint](https://eslint.org/)'s recommended config is fine. [TypeScript](https://www.typescriptlang.org/)'s [strict mode](https://www.typescriptlang.org/tsconfig/#strict) is good. If you do nothing else, turn both on and you've already closed the door on whole categories of agent mistakes. I won't spend time justifying either—if you're here, you already believe in them.

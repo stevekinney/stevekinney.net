@@ -3,7 +3,6 @@ title: Getting the Most Out of GPT-4.1
 description: >-
   A naïve guide to get the most out of GPT-4.1: context window optimization,
   coding tips, prompt best practices, and when to choose GPT-4.1 over GPT-4.5.
-modified: 2026-03-17
 date: 2025-04-17
 ---
 

@@ -3,13 +3,6 @@ title: Selective Hydration in Modern React Apps
 description: >-
   Hydrate what matters first. Prioritize above‑the‑fold work so pages feel
   interactive even while the rest continues to load.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - hydration
-  - ssr
 ---
 
 Your users don't care about the footer interactive when they're trying to click "Add to Cart." Selective hydration in React 18+ lets you prioritize what gets hydrated first, making your server-rendered apps feel snappy where it matters most—even while the rest of your page is still waking up in the background.

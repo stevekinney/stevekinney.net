@@ -1,8 +1,6 @@
 ---
 title: Which Testing Framework Should I Use?
 description: 'An overview of testing frameworks like Jest, Vitest, and Jasmine.'
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 You _could_ separate testing libraries into two classes:

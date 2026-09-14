@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Locator Challenges'
 description: Practice every locator strategy against Shelf's playground page—role, label, text, test ID, and the fallbacks you hope you never need.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 The locator hierarchy is easy to understand and hard to internalize. You know `getByRole` comes first. You know `data-testid` is a last resort. But when you're staring at a page and need to target the _second_ "Delete" button, or an input with no label, or a list item three levels deep—knowing the hierarchy isn't the same as having the muscle memory.

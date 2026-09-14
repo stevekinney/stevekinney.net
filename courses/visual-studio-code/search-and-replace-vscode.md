@@ -3,8 +3,6 @@ title: Search and Replace in Visual Studio Code
 description: >-
   Master powerful search and replace techniques including regular expressions
   and multi-file operations
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 Visual Studio Code's search and replace features are like an all-seeing crystal ball for your codebase—pinpointing the lines you need to tweak, then changing them at scale with minimal hassle.

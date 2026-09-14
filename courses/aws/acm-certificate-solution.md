@@ -2,13 +2,6 @@
 title: 'Solution: Request and Validate a Certificate'
 description: >-
   Complete walkthrough of requesting an ACM certificate, completing DNS validation, and verifying the issued certificate.
-date: 2026-03-18
-modified: 2026-04-07
-tags:
-  - aws
-  - acm
-  - exercise
-  - solution
 ---
 
 This is the solution for the [ACM Certificate Exercise](acm-certificate-exercise.md). Each step includes the exact commands and expected output. If your output differs, the notes after each command explain what to check.

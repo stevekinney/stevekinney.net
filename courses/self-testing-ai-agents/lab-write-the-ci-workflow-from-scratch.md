@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Walk the Shelf CI Workflow'
-description: Walk the GitHub Actions workflow Shelf ships. Understand why each job is shaped the way it is, verify every named step maps to a real local command, and prove each layer fails loud enough for an agent to recover.
-modified: 2026-04-14
-date: 2026-04-06
+description: 'Walk the GitHub Actions workflow Shelf ships.'
 ---
 
 The Shelf starter doesn't ship the workflows. Your job in this lab is to write them from scratch, using the current script surface as your source of truth. By the end you should be able to rebuild an equivalent workflow in your own project without relying on hidden starter scaffolding.

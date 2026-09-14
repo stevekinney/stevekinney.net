@@ -1,16 +1,7 @@
 ---
 title: 'Using Codex from Claude: Getting a Second Opinion from a Different Model Family'
-description: >-
-  I wired OpenAI's Codex into Claude Code as a consulting subagent—a different
-  training lineage I can tap for architecture calls, stuck bugs, and security
-  reviews. Here's how the `codex-advisor` agent works and why it isn't actually
-  an MCP server anymore.
+description: "I wired OpenAI's Codex into Claude Code as a consulting subagent."
 date: 2026-06-04
-modified: 2026-06-04
-tags:
-  - ai
-  - agents
-  - tooling
 ---
 
 Let me spoil the narrative up front: One of the most powerful techniques that I've been using over the last month or two has been this idea of getting adversarial reviews. I'll pit multiple subagents against each other. More recently, I've been having models from different families review each others work. I'll have Codex check Claude's work and vice versa. Six or so months ago, I'd do this by hand—copying and pasting from one model to the other. These days, I automate it.

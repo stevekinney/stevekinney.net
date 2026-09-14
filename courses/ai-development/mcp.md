@@ -3,8 +3,6 @@ title: Model Context Protocol
 description: >-
   Understand MCP as the tool and data layer for coding agents, including
   transports, permissions, OAuth, tool interfaces, and security review.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Model Context Protocol](https://modelcontextprotocol.io/) is a standard way for

@@ -1,12 +1,6 @@
 ---
 title: Flushsync In React Dom
-description: >-
-  React's concurrent rendering is one of its most powerful features—it batches
-  updates, prioritizes work, and keeps your app responsive by breaking rendering
-  into chunks. But sometimes you need to tell React, "No, really, I need this
-  updat...
-modified: 2026-03-17
-date: 2025-09-06
+description: "React's concurrent rendering is one of its most powerful features."
 ---
 
 React's concurrent rendering is one of its most powerful features—it batches updates, prioritizes work, and keeps your app responsive by breaking rendering into chunks. But sometimes you need to tell React, "No, really, I need this update to happen right now." That's where `flushSync` comes in—a sharp tool that forces React to synchronously flush updates immediately.

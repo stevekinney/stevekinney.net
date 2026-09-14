@@ -3,13 +3,6 @@ title: TypeScript Type System Fundamentals
 description: >-
   Master TypeScript's type system from the ground up—structural typing, type
   inference, narrowing, and the mental models that make everything click.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - typescript
-  - fundamentals
-  - type-system
-  - basics
 ---
 
 Before you can master React with TypeScript, you need to understand how TypeScript thinks about types. It's not like Java or C# where types are about classes and inheritance. TypeScript uses structural typing—if it walks like a duck and quacks like a duck, TypeScript says it's a duck. This fundamental difference changes everything about how you write and think about types.
