@@ -90,11 +90,12 @@ const utilitiesDirectory = path.resolve(workspaceRoot, 'packages', 'utilities');
 const contentDependencyPaths = [
   contentBuildScriptPath,
   path.join(scriptsDirectory, 'content-metadata.ts'),
-  path.join(scriptsDirectory, 'content-paths.ts'),
   path.join(scriptsDirectory, 'content-repository.ts'),
   path.join(scriptsDirectory, 'content-repository'),
   path.join(utilitiesDirectory, 'content-types.ts'),
   path.join(utilitiesDirectory, 'frontmatter.ts'),
+  path.join(utilitiesDirectory, 'routes.ts'),
+  path.join(utilitiesDirectory, 'write-formatted-json.ts'),
   path.join(utilitiesDirectory, 'tailwind-playground.ts'),
   path.join(utilitiesDirectory, 'tailwind-playground-metadata.ts'),
   path.join(utilitiesDirectory, 'tailwind-playground-types.ts'),
@@ -113,6 +114,7 @@ const playgroundDependencyPaths = [
 ];
 const sharedBuildDependencyPaths = [
   path.join(scriptsDirectory, 'build-artifacts.ts'),
+  path.join(scriptsDirectory, 'content-paths.ts'),
   path.resolve(workspaceRoot, 'bun.lock'),
 ];
 

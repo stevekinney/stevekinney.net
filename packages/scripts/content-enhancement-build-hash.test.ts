@@ -66,6 +66,14 @@ describe('content enhancement build hash', () => {
     expect(lockfileHash).not.toBe(assetHash);
   });
 
+  test('invalidates changes to shared entry point and output paths', async () => {
+    const pathRecipe = path.join(temporaryRoot, 'packages/scripts/content-paths.ts');
+    await writeTextFile(pathRecipe, 'export const entryPath = "first.ts";');
+    const initial = await computeContentEnhancementBuildHash(packageRoot, temporaryRoot);
+    await writeTextFile(pathRecipe, 'export const entryPath = "second.ts";');
+    expect(await computeContentEnhancementBuildHash(packageRoot, temporaryRoot)).not.toBe(initial);
+  });
+
   test('invalidates transitive utility and build recipe changes', async () => {
     const initial = await computeContentEnhancementBuildHash(packageRoot, temporaryRoot);
     await writeTextFile(

@@ -19,6 +19,7 @@ const REPOSITORY_DEPENDENCY_INPUTS = [
   'packages/utilities/package.json',
   'packages/scripts/content-enhancements-build.ts',
   'packages/scripts/content-enhancement-build-hash.ts',
+  'packages/scripts/content-paths.ts',
   'packages/scripts/build-artifacts.ts',
 ];
 

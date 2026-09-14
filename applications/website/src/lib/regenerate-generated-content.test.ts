@@ -255,6 +255,7 @@ describe('regenerateGeneratedContent', () => {
       ],
       sharedBuildDependencies: [
         path.join(root, 'packages/scripts/build-artifacts.ts'),
+        path.join(root, 'packages/scripts/content-paths.ts'),
         path.join(root, 'bun.lock'),
       ],
     };
@@ -295,6 +296,11 @@ describe('regenerateGeneratedContent', () => {
       'enhancements',
     ]);
     expect(tasks(path.join(root, 'bun.lock'))).toEqual(['content', 'playgrounds', 'enhancements']);
+    expect(tasks(path.join(root, 'packages/scripts/content-paths.ts'))).toEqual([
+      'content',
+      'playgrounds',
+      'enhancements',
+    ]);
   });
 
   it('does not reload stale content after a failed prerequisite and queued enhancement', async () => {
@@ -461,6 +467,17 @@ describe('regenerateGeneratedContent', () => {
 
     expect(viteConfiguration).toContain("path.join(utilitiesDirectory, 'frontmatter.ts')");
     expect(viteConfiguration).toContain("path.join(scriptsDirectory, 'content-metadata.ts')");
-    expect(viteConfiguration).toContain("path.join(scriptsDirectory, 'content-paths.ts')");
+    const sharedDependencies = viteConfiguration.match(
+      /const sharedBuildDependencyPaths = \[([\s\S]*?)\];/,
+    )?.[1];
+    const contentDependencies = viteConfiguration.match(
+      /const contentDependencyPaths = \[([\s\S]*?)\];/,
+    )?.[1];
+    expect(sharedDependencies).toContain("path.join(scriptsDirectory, 'content-paths.ts')");
+    expect(contentDependencies).not.toContain("path.join(scriptsDirectory, 'content-paths.ts')");
+    expect(contentDependencies).toContain("path.join(utilitiesDirectory, 'routes.ts')");
+    expect(contentDependencies).toContain(
+      "path.join(utilitiesDirectory, 'write-formatted-json.ts')",
+    );
   });
 });
