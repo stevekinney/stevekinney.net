@@ -2,8 +2,8 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { chromium, expect, test } from '@playwright/test';
-import type { Browser, BrowserContext, Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 import {
   PLAYGROUND_CONTENT_SECURITY_POLICY,
@@ -13,6 +13,8 @@ import type {
   PlaygroundManifest,
   PlaygroundManifestEntry,
 } from '@stevekinney/utilities/tailwind-playground-types';
+
+import { withSiteDarkPage } from './tailwind-playground-dark-mode';
 
 const websiteDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const manifestPath = path.join(websiteDirectory, '.generated', 'playgrounds', 'manifest.json');
@@ -87,42 +89,6 @@ const measurePlayground = async (
       nextTop: nextElement?.getBoundingClientRect().top ?? null,
     };
   });
-};
-
-const chromiumSiteDarkPage = async (): Promise<{
-  browser: Browser;
-  context: BrowserContext;
-  page: Page;
-}> => {
-  const browser = await chromium.launch({ args: ['--site-per-process'] });
-  const context = await browser.newContext({
-    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:4445',
-  });
-  const page = await context.newPage();
-  const session = await context.newCDPSession(page);
-  await session.send('Emulation.setEmulatedMedia', {
-    features: [{ name: 'prefers-color-scheme', value: 'dark' }],
-  });
-  return { browser, context, page };
-};
-
-const withSiteDarkPage = async <Value>(
-  page: Page,
-  browserName: string,
-  callback: (page: Page) => Promise<Value>,
-): Promise<Value> => {
-  if (browserName !== 'chromium') {
-    await page.emulateMedia({ colorScheme: 'dark' });
-    return callback(page);
-  }
-
-  const darkBrowser = await chromiumSiteDarkPage();
-  try {
-    return await callback(darkBrowser.page);
-  } finally {
-    await darkBrowser.context.close();
-    await darkBrowser.browser.close();
-  }
 };
 
 test.describe('static Tailwind playground iframes', () => {
@@ -367,9 +333,9 @@ test.describe('static Tailwind playground style isolation', () => {
   test('keeps default-light examples independent from the site dark preference', async ({
     browserName,
     page,
-  }) => {
+  }, testInfo) => {
     const entry = manifestEntry('courses/tailwind/dark-mode.md', 2);
-    await withSiteDarkPage(page, browserName, async (darkPage) => {
+    await withSiteDarkPage(page, browserName, testInfo, async (darkPage) => {
       await darkPage.goto(courseRoute(entry.sourcePath));
 
       const frame = await openPlaygroundFrame(darkPage, entry);
@@ -395,9 +361,9 @@ test.describe('static Tailwind playground style isolation', () => {
   test('keeps default-light Canvas and CanvasText colors under the site dark preference', async ({
     browserName,
     page,
-  }) => {
+  }, testInfo) => {
     const entry = manifestEntry('courses/tailwind/building-an-interactive-checklist.md', 4);
-    await withSiteDarkPage(page, browserName, async (darkPage) => {
+    await withSiteDarkPage(page, browserName, testInfo, async (darkPage) => {
       await darkPage.goto(courseRoute(entry.sourcePath));
 
       const frame = await openPlaygroundFrame(darkPage, entry);
