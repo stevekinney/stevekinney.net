@@ -3,13 +3,38 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@stevekinney/utilities": "workspace:*"
+    "@stevekinney/utilities": "workspace:*",
+    "@flowershow/remark-wiki-link": "3.4.0",
+    "rehype-callouts": "2.2.0",
+    "remark-highlight-mark": "1.4.0",
+    "remark-math": "6.0.0",
+    "rehype-mathjax": "7.1.0",
+    "mathjax-full": "3.2.2",
+    "mdast-util-to-hast": "13.2.0",
+    "remark-parse": "11.0.0",
+    "remark-gfm": "4.0.1",
+    "unified": "11.0.5",
+    "hast-util-to-html": "9.0.5",
+    "hast-util-from-html": "2.0.3",
+    "github-slugger": "2.0.0",
+    "micromark-util-types": "2.0.2",
+    "mdast-util-from-markdown": "2.0.3",
+    "acorn": "8.15.0",
+    "micromark": "4.0.2",
+    "micromark-util-character": "2.1.1",
+    "mdast-util-to-string": "4.0.0"
   },
   "exports": {
-    "./remark-callouts": "./src/remark-callouts.ts",
+    "./rehype-callouts": "./src/rehype-callouts.ts",
+    "./obsidian-normalization": "./src/obsidian-normalization.ts",
+    "./obsidian-syntax": "./src/obsidian-syntax.ts",
+    "./obsidian-types": "./src/obsidian-types.ts",
+    "./obsidian-preprocessor": "./src/obsidian-preprocessor.ts",
+    "./rehype-obsidian-math": "./src/rehype-obsidian-math.ts",
     "./remark-escape-comparators": "./src/remark-escape-comparators.ts",
     "./remark-fix-urls": "./src/remark-fix-urls.ts",
     "./remark-tailwind-playground": "./src/remark-tailwind-playground.ts",
-    "./rehype-enhance-images": "./src/rehype-enhance-images.ts"
+    "./rehype-enhance-images": "./src/rehype-enhance-images.ts",
+    "./rehype-obsidian-identifiers": "./src/rehype-obsidian-identifiers.ts"
   }
 }

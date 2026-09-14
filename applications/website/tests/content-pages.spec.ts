@@ -27,6 +27,19 @@ test('mermaid diagrams are progressively enhanced on content pages', async ({ pa
   await expect(page.locator('[data-mermaid] svg').first()).toBeVisible();
 });
 
+test('folded callouts use native details state on content pages', async ({ page }) => {
+  await page.goto('/courses/figma/number-variable-tokens');
+
+  const callout = page.locator('details[data-callout="example"]');
+  await expect(callout).toBeVisible();
+  await expect(callout).not.toHaveAttribute('open', '');
+  await callout.locator('summary').click();
+  await expect(callout).toHaveAttribute('open', '');
+  await callout.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(callout).not.toHaveAttribute('open', '');
+});
+
 test('tailwind playground previews are progressively enhanced on content pages', async ({
   page,
 }) => {

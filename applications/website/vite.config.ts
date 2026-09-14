@@ -6,7 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, searchForWorkspaceRoot, type PluginOption } from 'vite';
 import { ViteToml } from 'vite-plugin-toml';
 
-import { contentDevelopmentPlugins } from './plugins/vite/content-development-plugins';
+import { contentDevelopmentPlugins } from './plugins/vite/content-development-plugins.ts';
 
 const enableBundleStats = process.env.BUNDLE_STATS === '1';
 const workspaceRoot = searchForWorkspaceRoot(process.cwd());
@@ -73,6 +73,11 @@ export default defineConfig({
     ...contentDevelopmentPlugins({
       workspaceRoot,
       contentDirectories,
+      additionalDependencies: [
+        path.join(workspaceRoot, 'packages/markdown/src'),
+        path.join(workspaceRoot, 'image-manifest.json'),
+        path.join(workspaceRoot, 'applications/website/static'),
+      ],
       contentAssetPathPrefixes: ['/courses/', '/projects/', '/writing/'],
       enhancementSourceDirectories: [contentEnhancementsSourceDirectory],
       contentBuildScriptPath,
@@ -105,9 +110,12 @@ export default defineConfig({
       : []),
   ].filter(Boolean) as PluginOption[],
 
-  esbuild: {
-    jsxFactory: 'h',
-    jsxFragment: 'Fragment',
+  oxc: {
+    jsx: {
+      runtime: 'classic',
+      pragma: 'h',
+      pragmaFrag: 'Fragment',
+    },
   },
   server: {
     fs: {

@@ -1,4 +1,5 @@
 import type { Root } from 'mdast';
+import type { PublicationIndex, NormalizedMarkdown } from '@stevekinney/markdown/obsidian-types';
 
 import type {
   CourseContentsData,
@@ -24,6 +25,7 @@ export type MarkdownReferenceNode = {
 type ParsedFrontmatter = ReturnType<typeof parseFrontmatter>;
 
 export type MarkdownSource = {
+  rawSource: string;
   absolutePath: string;
   sourcePath: string;
   sourceHash: string;
@@ -55,6 +57,8 @@ export type ProjectRecord = ProjectIndexEntry & {
 };
 
 export type ContentRepository = GeneratedContent & {
+  publicationIndex: PublicationIndex;
+  normalizedDocuments: Record<string, NormalizedMarkdown>;
   validationIssues: ContentValidationIssue[];
   tailwindPlaygroundSource: string;
   sourceFiles: string[];

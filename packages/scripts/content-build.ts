@@ -4,6 +4,7 @@ import path from 'node:path';
 
 import type { GeneratedContent } from '@stevekinney/utilities/content-types';
 import { formatJson } from '@stevekinney/utilities/write-formatted-json';
+import { getObsidianMathStylesheet } from '@stevekinney/markdown/rehype-obsidian-math';
 
 import {
   contentEnhancementsEntryPath,
@@ -13,6 +14,8 @@ import {
   generatedContentEnhancementsDirectory,
   repositoryRoot,
   tailwindPlaygroundSourcePath,
+  generatedObsidianContentPath,
+  generatedObsidianMathStylesheetPath,
 } from './content-paths.ts';
 import { computeContentEnhancementBuildHash } from './content-enhancement-build-hash.ts';
 import { collectContentRepository } from './content-repository.ts';
@@ -125,8 +128,26 @@ const main = async (): Promise<void> => {
     tailwindPlaygroundSourcePath,
     repository.tailwindPlaygroundSource,
   );
+  // This build-only index is not copied to adapter outputs or browser assets.
+  const didWriteObsidianContent = await writeIfChanged(
+    generatedObsidianContentPath,
+    JSON.stringify({
+      publicationIndex: repository.publicationIndex,
+      documents: repository.normalizedDocuments,
+    }),
+  );
+  const didWriteMathStylesheet = await writeIfChanged(
+    generatedObsidianMathStylesheetPath,
+    await getObsidianMathStylesheet(),
+  );
 
-  if (!didWriteContentData && !didWriteTailwindSource && !didBuildEnhancements) {
+  if (
+    !didWriteContentData &&
+    !didWriteTailwindSource &&
+    !didBuildEnhancements &&
+    !didWriteObsidianContent &&
+    !didWriteMathStylesheet
+  ) {
     console.log('Generated content artifacts are already up to date.');
     // Bun can keep these CLI tasks alive after the work is done, so exit explicitly.
     process.exit(0);

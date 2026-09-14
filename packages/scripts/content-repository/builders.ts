@@ -23,6 +23,7 @@ import {
   readText,
   relativeSourcePath,
 } from './markdown.ts';
+import { normalizeListProperty } from './publication.ts';
 import type {
   ContentValidationIssue,
   ContentRepository,
@@ -158,7 +159,7 @@ export const buildCourseEntry = async (
       slug: lessonSlug,
       courseSlug,
       courseTitle,
-      tags: Array.isArray(lessonSource.data.tags) ? lessonSource.data.tags.map(String) : [],
+      tags: normalizeListProperty(lessonSource, 'tags', issues),
       sourcePath,
       sourceHash: lessonSource.sourceHash,
       path: `/courses/${courseSlug}/${lessonSlug}`,

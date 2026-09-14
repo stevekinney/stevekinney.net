@@ -33,6 +33,14 @@ export const tailwindPlaygroundSourcePath = path.resolve(
   generatedContentDirectory,
   'tailwind-playground-source.html',
 );
+export const generatedObsidianContentPath = path.resolve(
+  generatedContentDirectory,
+  'obsidian-content.json',
+);
+export const generatedObsidianMathStylesheetPath = path.resolve(
+  generatedContentDirectory,
+  'obsidian-math.css',
+);
 export const contentEnhancementsPackageRoot = path.resolve(
   repositoryRoot,
   'packages',

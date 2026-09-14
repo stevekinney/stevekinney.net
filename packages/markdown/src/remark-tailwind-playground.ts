@@ -1,6 +1,7 @@
 import { visit } from 'unist-util-visit';
 import {
   encodeTailwindPlaygroundHtml,
+  hasTailwindPlaygroundFlag,
   sanitizeTailwindPlaygroundHtml,
 } from '@stevekinney/utilities/tailwind-playground';
 import type { Transformer } from 'unified';
@@ -29,7 +30,7 @@ export default function remarkTailwindPlayground(): Transformer<Root> {
       if (!parent || typeof index !== 'number') return;
       if (!Array.isArray(parent.children)) return;
       if (node.lang !== 'html') return;
-      if (!node.meta || !node.meta.includes('tailwind')) return;
+      if (!hasTailwindPlaygroundFlag(node.meta)) return;
 
       const sanitizedHtml = sanitizeTailwindPlaygroundHtml(node.value ?? '');
       const encodedHtml = encodeTailwindPlaygroundHtml(sanitizedHtml);

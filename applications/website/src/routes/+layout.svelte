@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { dev } from '$app/environment';
   import { page } from '$app/stores';
   import { author } from '$lib/metadata';
   import { toDataAttributes } from '$lib/to-data-attributes';
@@ -58,6 +59,13 @@
     },
   ];
 </script>
+
+<svelte:head>
+  {#if dev}
+    <!-- Content pages disable hydration but still need development reload notifications. -->
+    <script type="module" src="/@vite/client"></script>
+  {/if}
+</svelte:head>
 
 <!--
   Site-wide analytics. The component emits the first-party Vercel scripts into

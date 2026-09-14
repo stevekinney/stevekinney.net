@@ -88,6 +88,10 @@ const DOM_PURIFY_CONFIGURATION = {
 export const sanitizeTailwindPlaygroundHtml = (html: string): string =>
   DOMPurify.sanitize(html, DOM_PURIFY_CONFIGURATION);
 
+/** Returns whether metadata contains the standalone, case-sensitive playground flag. */
+export const hasTailwindPlaygroundFlag = (meta: string | null | undefined): boolean =>
+  typeof meta === 'string' && meta.split(/\s+/).includes('tailwind');
+
 export const encodeTailwindPlaygroundHtml = (html: string): string => encodeURIComponent(html);
 
 export const decodeTailwindPlaygroundHtml = (html: string): string => {

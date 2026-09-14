@@ -19,12 +19,17 @@
         "../../applications/website/static/**",
         "../../writing/**",
         "../../courses/**",
-        "../../projects/**"
+        "../../projects/**",
+        "../markdown/package.json",
+        "../markdown/src/**/*.ts",
+        "../../image-manifest.json"
       ],
       "outputs": [
         "../../applications/website/.generated/content-data.json",
         "../../applications/website/.generated/tailwind-playground-source.html",
-        "../../applications/website/.generated/content-enhancements/**"
+        "../../applications/website/.generated/content-enhancements/**",
+        "../../applications/website/.generated/obsidian-content.json",
+        "../../applications/website/.generated/obsidian-math.css"
       ]
     },
     "@stevekinney/scripts#content:validate": {
@@ -45,7 +50,10 @@
         "../../applications/website/static/**",
         "../../writing/**",
         "../../courses/**",
-        "../../projects/**"
+        "../../projects/**",
+        "../markdown/package.json",
+        "../markdown/src/**/*.ts",
+        "../../image-manifest.json"
       ]
     },
     "@stevekinney/scripts#content:images:check": {
@@ -86,7 +94,12 @@
         "../../writing/**/*.md",
         "../../courses/**/*.md",
         "../../projects/**/*.md",
-        "../../courses/*/index.toml"
+        "../../courses/*/index.toml",
+        "../markdown/package.json",
+        "../markdown/src/**/*.ts",
+        "../../image-manifest.json",
+        "../../applications/website/static/**",
+        "../../bun.lock"
       ]
     },
     "@stevekinney/website#build": {

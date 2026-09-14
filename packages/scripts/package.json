@@ -23,6 +23,7 @@
     "images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node check-image-manifest.ts"
   },
   "dependencies": {
+    "@stevekinney/markdown": "workspace:*",
     "@stevekinney/utilities": "workspace:*",
     "@vercel/blob": "^2.6.1"
   }

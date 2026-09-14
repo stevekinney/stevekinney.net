@@ -71,6 +71,18 @@ describe('remarkTailwindPlayground', () => {
     expect(tree.children[0].type).toBe('code');
   });
 
+  it('requires tailwind to be a standalone case-sensitive metadata token', () => {
+    for (const meta of ['tailwind-preview', 'Tailwind', 'preview="tailwindish"', '"tailwind"']) {
+      const tree = run(makeTree('html', meta, '<div>Ignored</div>'));
+      expect(tree.children).toHaveLength(1);
+    }
+
+    for (const meta of ['tailwind', 'preview tailwind', 'preview\ttailwind']) {
+      const tree = run(makeTree('html', meta, '<div>Included</div>'));
+      expect(tree.children).toHaveLength(2);
+    }
+  });
+
   it('ignores non-html language blocks even with tailwind meta', () => {
     const tree = run(makeTree('css', 'tailwind', '.foo { color: red; }'));
 

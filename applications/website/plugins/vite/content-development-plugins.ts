@@ -1,8 +1,8 @@
 import type { PluginOption } from 'vite';
 
-import { regenerateGeneratedContent } from './regenerate-generated-content';
-import { serveStaticDirectory } from './serve-static-directory';
-import { watchContentDirectories } from './watch-content-directories';
+import { regenerateGeneratedContent } from './regenerate-generated-content.ts';
+import { serveStaticDirectory } from './serve-static-directory.ts';
+import { watchContentDirectories } from './watch-content-directories.ts';
 
 const IMAGE_ASSET_MIME_TYPES: Record<string, string> = {
   '.png': 'image/png',
@@ -12,6 +12,15 @@ const IMAGE_ASSET_MIME_TYPES: Record<string, string> = {
   '.svg': 'image/svg+xml',
   '.webp': 'image/webp',
   '.avif': 'image/avif',
+  '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
+  '.ogv': 'video/ogg',
+  '.mp3': 'audio/mpeg',
+  '.wav': 'audio/wav',
+  '.ogg': 'audio/ogg',
+  '.m4a': 'audio/mp4',
+  '.flac': 'audio/flac',
+  '.pdf': 'application/pdf',
 };
 
 const GENERATED_ASSET_MIME_TYPES: Record<string, string> = {
@@ -21,6 +30,7 @@ const GENERATED_ASSET_MIME_TYPES: Record<string, string> = {
 };
 
 type ContentDevelopmentPluginsOptions = {
+  additionalDependencies?: readonly string[];
   workspaceRoot: string;
   /**
    * Absolute directories whose `.md` / `.toml` contents drive the generated
@@ -60,12 +70,16 @@ export function contentDevelopmentPlugins(
   options: ContentDevelopmentPluginsOptions,
 ): PluginOption[] {
   return [
-    watchContentDirectories(options.contentDirectories),
+    watchContentDirectories([
+      ...options.contentDirectories,
+      ...(options.additionalDependencies ?? []),
+    ]),
     regenerateGeneratedContent({
       contentBuildScriptPath: options.contentBuildScriptPath,
       workingDirectory: options.contentBuildWorkingDirectory,
       contentDirectories: options.contentDirectories,
       enhancementSourceDirectories: options.enhancementSourceDirectories,
+      additionalDependencies: options.additionalDependencies,
     }),
     {
       name: 'serve-generated-content-enhancements',

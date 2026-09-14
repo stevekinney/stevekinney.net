@@ -10,6 +10,8 @@
 }
 
 @import 'tailwindcss';
+@import 'rehype-callouts/theme/obsidian';
+@import '../.generated/obsidian-math.css';
 
 /*
  * Tailwind scans the entire website app so utility classes emitted from
@@ -24,6 +26,26 @@
 @source '../../../packages/content-enhancements/src/**/*.ts';
 @source '../../../packages/markdown/src/**/*.ts';
 @source '../.generated/tailwind-playground-source.html';
+
+.callout {
+  --rc-color-default: rgb(8, 109, 221);
+  mix-blend-mode: normal;
+}
+
+.callout-title {
+  color: color-mix(in srgb, var(--rc-color-light, var(--rc-color-default)) 60%, black);
+}
+
+@media (prefers-color-scheme: dark) {
+  .callout {
+    --rc-color-default: rgb(2, 122, 255);
+    background-color: rgb(from var(--rc-color-dark, var(--rc-color-default)) r g b / 0.1);
+  }
+
+  .callout-title {
+    color: color-mix(in srgb, var(--rc-color-dark, var(--rc-color-default)) 80%, white);
+  }
+}
 
 @plugin '@tailwindcss/typography';
 @plugin '@tailwindcss/container-queries';

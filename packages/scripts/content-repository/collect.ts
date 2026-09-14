@@ -1,8 +1,13 @@
 import fg from 'fast-glob';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { normalizeObsidianMarkdown } from '@stevekinney/markdown/obsidian-normalization';
+import type { NormalizedMarkdown } from '@stevekinney/markdown/obsidian-types';
 
 import { buildTailwindPlaygroundSource } from '@stevekinney/utilities/tailwind-playground';
 
-import { coursesRoot, projectsRoot, writingRoot } from '../content-paths.ts';
+import { coursesRoot, projectsRoot, writingRoot, repositoryRoot } from '../content-paths.ts';
 
 import {
   buildCourseEntry,
@@ -13,7 +18,8 @@ import {
   buildSiteIndex,
   buildWritingEntry,
 } from './builders.ts';
-import { loadMarkdownSource } from './markdown.ts';
+import { loadMarkdownSource, updateMarkdownSource, hashContents } from './markdown.ts';
+import { buildPublicationIndex, normalizeListProperty } from './publication.ts';
 import type {
   ContentRepository,
   ContentValidationIssue,
@@ -74,7 +80,10 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   );
 
   const writingEntries = await Promise.all(
-    writingSources.map((source) => buildWritingEntry(source, validationIssues)),
+    writingSources.map((source) => {
+      source.data.tags = normalizeListProperty(source, 'tags', validationIssues);
+      return buildWritingEntry(source, validationIssues);
+    }),
   );
   const projectEntries = await Promise.all(
     projectSources.map((source) => buildProjectEntry(source, validationIssues)),
@@ -87,6 +96,56 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
 
   const routes = buildRoutes(writingEntries, courseEntries, projectEntries);
   validateRouteCollisions(writingEntries, courseEntries, projectEntries, routes, validationIssues);
+
+  const sources = [
+    ...writingSources,
+    ...projectSources,
+    ...courseEntries.flatMap((course) => [
+      course.source,
+      ...course.lessons.map((lesson) => lesson.source),
+    ]),
+  ];
+  const publicationIndex = await buildPublicationIndex(sources, routes, validationIssues);
+  const normalizedDocuments: Record<string, NormalizedMarkdown> = {};
+  const dependencyHashes = new Map(sources.map((source) => [source.sourcePath, source.sourceHash]));
+  for (const source of sources) {
+    const normalized = normalizeObsidianMarkdown(source.rawSource, {
+      sourcePath: source.sourcePath,
+      publicationIndex,
+      markdownTree: source.tree,
+    });
+    normalizedDocuments[source.sourcePath] = normalized;
+    validationIssues.push(...normalized.diagnostics);
+    if (normalized.markdown !== source.rawSource) updateMarkdownSource(source, normalized.markdown);
+    for (const dependency of normalized.dependencies) {
+      if (dependencyHashes.has(dependency)) continue;
+      dependencyHashes.set(
+        dependency,
+        createHash('sha256')
+          .update(await readFile(path.resolve(repositoryRoot, dependency)))
+          .digest('hex'),
+      );
+    }
+    source.sourceHash = hashContents(
+      source.rawSource +
+        normalized.markdown +
+        normalized.dependencies
+          .slice()
+          .sort()
+          .map((dependency) => `${dependency}:${dependencyHashes.get(dependency)}`)
+          .join('\n'),
+    );
+  }
+  const normalizedHashes = new Map(sources.map((source) => [source.sourcePath, source.sourceHash]));
+  for (const record of [
+    ...writingEntries,
+    ...projectEntries,
+    ...courseEntries,
+    ...courseEntries.flatMap((course) => course.lessons),
+    ...Object.values(routes),
+  ]) {
+    record.sourceHash = normalizedHashes.get(record.sourcePath) ?? record.sourceHash;
+  }
 
   const routePaths = new Set(Object.keys(routes));
   const courseDirectorySlugs = new Set(courseEntries.map((entry) => entry.slug));
@@ -148,6 +207,8 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   const { lessons, siteIndex } = buildSiteIndex(writingEntries, courseEntries, projectEntries);
 
   return {
+    publicationIndex,
+    normalizedDocuments,
     meta: {
       hash: repositoryHash,
       sourceFileCount: sourceFiles.length,
