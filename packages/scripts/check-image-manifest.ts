@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { discoverAllImages } from '@stevekinney/utilities/image-discovery';
 import type { ImageManifest } from '@stevekinney/utilities/image-manifest';
+import { normalizePath } from '@stevekinney/utilities/frontmatter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPOSITORY_ROOT = path.resolve(__dirname, '..', '..');
@@ -12,7 +13,6 @@ const MANIFEST_PATH = path.resolve(REPOSITORY_ROOT, 'image-manifest.json');
 
 const MARKDOWN_PATTERNS = ['writing/**/*.md', 'courses/**/*.md', 'projects/**/*.md'];
 
-const normalizePath = (value: string): string => value.split(path.sep).join('/');
 const toRepositoryPath = (absolutePath: string): string =>
   normalizePath(path.relative(REPOSITORY_ROOT, absolutePath));
 

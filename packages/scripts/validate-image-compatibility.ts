@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import { discoverAllImages } from '@stevekinney/utilities/image-discovery';
+import { normalizePath } from '@stevekinney/utilities/frontmatter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPOSITORY_ROOT = path.resolve(__dirname, '..', '..');
@@ -16,7 +17,6 @@ type ValidationIssue = {
   message: string;
 };
 
-const normalizePath = (value: string): string => value.split(path.sep).join('/');
 const toRepositoryPath = (absolutePath: string): string =>
   normalizePath(path.relative(REPOSITORY_ROOT, absolutePath));
 
