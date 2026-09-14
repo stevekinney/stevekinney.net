@@ -1,13 +1,13 @@
 # `@stevekinney/components`
 
-Svelte 5 components shared across the website. Each component ships as its own `.svelte` file, grouped by shape (badge, button, card, etc.) under a subdirectory; simpler single-file components sit at the package root.
+Svelte 5 components shared across the website. Each component ships as its own `.svelte` file, grouped by shape (button, card, etc.) under a subdirectory; simpler single-file components sit at the package root.
 
 ## Using a component
 
 Every file is exported under `./*`, so SvelteKit imports them via the path alias:
 
 ```ts
-import Badge from '$lib/components/badge/badge.svelte';
+import Card from '$lib/components/card';
 import ContentEnhancements from '$lib/components/content-enhancements.svelte';
 ```
 
@@ -17,7 +17,7 @@ import ContentEnhancements from '$lib/components/content-enhancements.svelte';
 
 - **Content components** — `content-enhancements.svelte` injects the `/generated/content-enhancements/content-enhancements.js` bundle into a page's `<head>`. `open-in-obsidian.svelte` and `pull-request.svelte` render author-side utilities for lessons and posts.
 - **Navigation & page chrome** — `navigation.svelte`, `seo.svelte`, `post-link.svelte`, `writing-post-list.svelte`, `pagination/`.
-- **Primitive UI** — `badge/`, `button/`, `card/`, `callout/`, `count/`, `input/`, `label/`, `select/`, `link.svelte`, `social-link.svelte`, `linkedin-icon.svelte`.
+- **Primitive UI** — `button/`, `card/`, `link.svelte`, `social-link.svelte`, `linkedin-icon.svelte`.
 
 ## Best practices
 

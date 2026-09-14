@@ -13,7 +13,7 @@ import {
 
 import type { SizedFile } from './types.ts';
 
-export const htmlFileMatcher = (filePath: string): boolean => filePath.endsWith('.html');
+const htmlFileMatcher = (filePath: string): boolean => filePath.endsWith('.html');
 
 const listFilesRecursively = async (directoryPath: string): Promise<string[]> => {
   const entries = await readdir(directoryPath, { withFileTypes: true });
@@ -104,7 +104,7 @@ export const getLargestFile = async (
   );
 };
 
-export const resolveWebsiteHtmlOutputRoot = async (): Promise<string | null> =>
+const resolveWebsiteHtmlOutputRoot = async (): Promise<string | null> =>
   findFirstDirectoryWithMatchingFile([websiteBuildRoot, websiteVercelStaticRoot], htmlFileMatcher);
 
 export type WebsiteOutputInspection = {
