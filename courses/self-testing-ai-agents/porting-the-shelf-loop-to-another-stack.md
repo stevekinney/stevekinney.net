@@ -1,6 +1,6 @@
 ---
 title: Porting the Shelf Loop to Another Stack
-description: 'The tools change when the framework changes.'
+description: "Adapt Shelf's agent feedback loop to other stacks while preserving authentication, deterministic data, runtime checks, review, and deployment verification."
 ---
 
 Shelf is a teaching app, not a religion.

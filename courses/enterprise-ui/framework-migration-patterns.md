@@ -1,6 +1,6 @@
 ---
 title: Framework Migration Patterns
-description: 'The technical and organizational patterns for moving a large frontend from one framework, data layer.'
+description: 'Patterns for migrating a large frontend across frameworks and data layers while keeping the application running.'
 ---
 
 So, your application is built on a framework that's either deprecated, unsupported, or two major versions behind the current release. You'd love to be on the modern version—or a different framework entirely—but the application has hundreds of routes, dozens of contributors, and actual users who expect it to keep working while you figure this out.

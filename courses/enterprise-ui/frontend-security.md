@@ -1,6 +1,6 @@
 ---
 title: Frontend Security and Supply Chain Safety
-description: 'The security surface of an enterprise frontend extends well beyond XSS.'
+description: 'Address enterprise frontend trust boundaries: SOP/CORS exceptions, third-party script risk, CSP strategy, and supply-chain controls for browser clients.'
 ---
 
 Frontend security used to be a short conversation. Escape your outputs, set some headers, do not put secrets in the bundle. That was about it. The frontend was a thin rendering layer, and the real security work happened on the server.

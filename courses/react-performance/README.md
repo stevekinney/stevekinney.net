@@ -1,6 +1,6 @@
 ---
 title: React Performance
-description: 'Profile, measure, and optimize React applications—from understanding reconciliation and re-renders to memoization, code splitting.'
+description: 'Profile and optimize React applications with lessons on re-renders, memoization, code splitting, concurrent rendering, and performance measurement.'
 date: 2025-09-07
 ---
 

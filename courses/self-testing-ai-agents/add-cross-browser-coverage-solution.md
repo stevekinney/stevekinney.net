@@ -1,6 +1,6 @@
 ---
 title: 'Add Cross-Browser Coverage: Solution'
-description: 'Walkthrough of the Playwright projects, tagged smoke subset.'
+description: 'Configure Playwright projects for targeted browser coverage and a tagged smoke-test subset.'
 ---
 
 The goal here is not "run everything everywhere." The goal is "run the right tests on the right browsers without making the default loop miserable." Shelf's current starter is small enough that this stays simple if you keep the split honest.

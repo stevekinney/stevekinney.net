@@ -1,6 +1,6 @@
 ---
 title: 'Memory Systems for AI Agents: What the Research Says and What You Can Actually Build'
-description: "The old short-term/long-term taxonomy doesn't capture what modern agent memory systems actually do."
+description: 'A three-axis framework—Forms, Functions, and Dynamics—for understanding and building modern agent memory systems.'
 date: 2026-03-25
 ---
 

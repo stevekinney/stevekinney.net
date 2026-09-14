@@ -1,6 +1,6 @@
 ---
 title: Prompt Engineering Across the OpenAI, Anthropic, and Gemini APIs
-description: 'A practical guide to writing reliable prompts across the major LLM APIs.'
+description: 'A practical guide to reliable prompts across major LLM APIs, including provider differences, trust boundaries, and production workflows.'
 date: 2026-03-06
 ---
 

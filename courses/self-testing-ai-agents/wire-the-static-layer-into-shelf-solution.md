@@ -1,6 +1,6 @@
 ---
 title: 'Wire the Static Layer into Shelf: Solution'
-description: 'Copyable static-layer artifacts—ESLint rules, TypeScript strict flags, knip, the lefthook config, gitleaks, and the CLAUDE.md additions.'
+description: "Add and verify Shelf's static checks with ESLint rules, strict TypeScript, knip, Lefthook, gitleaks, and agent instructions."
 ---
 
 This is the longest lab and the longest solution. The current Shelf starter is intentionally smaller, so this solution is the copyable version of the static layer you add during the lab. I will walk through every part in order, show the file to create or extend, explain why, and give you the commands to prove it works.

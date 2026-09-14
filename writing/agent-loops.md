@@ -1,6 +1,6 @@
 ---
 title: The Anatomy of an Agent Loop
-description: 'Every major AI agent runs the same core loop.'
+description: 'Explore the loop shared by AI agents and the production concerns around it: context compaction, loop detection, cost budgets, and graceful termination.'
 date: 2026-03-19
 ---
 

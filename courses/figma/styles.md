@@ -1,6 +1,6 @@
 ---
 title: Styles
-description: 'Master consistency and efficiency in Figma with Shared Styles.'
+description: 'Use Figma Shared Styles to reuse text, color, effect, and layout attributes consistently across projects.'
 ---
 
 > [!NOTE] Styles and Variables

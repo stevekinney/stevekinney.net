@@ -1,6 +1,6 @@
 ---
 title: Traditional approach - does everything
-description: 'Modern TypeScript build tooling has evolved beyond the "just use tsc for everything" approach.'
+description: 'Separate TypeScript checking from transpilation with tsc, SWC, and Vite, and build a pipeline that balances fast feedback with type safety.'
 ---
 
 Modern TypeScript build tooling has evolved beyond the "just use `tsc` for everything" approach. Today's fastest development setups separate type checking from transpilation, using specialized tools for each job. Let's explore how to build a robust pipeline with TypeScript's compiler (`tsc`), the ultra-fast SWC transpiler, and Vite's development server—and understand when to use each tool.

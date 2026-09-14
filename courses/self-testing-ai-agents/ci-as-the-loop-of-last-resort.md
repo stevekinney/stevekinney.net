@@ -1,6 +1,6 @@
 ---
 title: CI as the Loop of Last Resort
-description: 'By the time CI fires, the agent should have caught 95% of mistakes locally.'
+description: 'Treat CI as the final safety net after local checks, with strict browser, visual, secret, and dependency validation.'
 ---
 
 We're almost done. One lesson left, and it's the one where everything we built today runs together, unattended, in a [GitHub Actions](https://docs.github.com/en/actions) workflow you own.

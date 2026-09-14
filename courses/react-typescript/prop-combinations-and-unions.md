@@ -1,6 +1,6 @@
 ---
 title: Prop Combinations And Unions
-description: "Component APIs are contracts—they define what combinations of props make sense and which ones don't."
+description: 'Design React component prop unions that permit valid combinations, reject invalid states, and guide users with IntelliSense.'
 ---
 
 Component APIs are contracts—they define what combinations of props make sense and which ones don't. But too often, we design interfaces that allow nonsensical combinations to slip through, creating runtime confusion and maintenance headaches. TypeScript gives us the tools to encode these rules directly into our types, making invalid states literally impossible to represent.

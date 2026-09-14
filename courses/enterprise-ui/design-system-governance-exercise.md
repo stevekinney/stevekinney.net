@@ -1,6 +1,6 @@
 ---
 title: 'Exercise 7: Design System Governance'
-description: 'Refactor disconnected design tokens into CSS custom properties, connect them to components.'
+description: 'Connect design tokens to components through CSS custom properties, then add visual regression tests to catch unintended changes.'
 ---
 
 ## What You're Doing

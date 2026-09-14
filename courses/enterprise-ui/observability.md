@@ -1,6 +1,6 @@
 ---
 title: Observability
-description: 'Observability is the ability to understand a system from the outside.'
+description: 'Observability links traces, metrics, and logs so teams can diagnose unknown incidents fast using latency, traffic, errors, saturation, and SLO context.'
 ---
 
 Observability is the ability to understand a system from the outside by asking useful questions about it without already knowing its internal state. The practical goal is not "more dashboards." It is being able to explain _why_ something is happening, especially when the failure mode is new and annoying and arrived at 2:13 a.m. without the courtesy of being reproducible locally. [OpenTelemetry's observability primer][1] puts it almost exactly that way: good observability lets you handle novel problems and "unknown unknowns," but only if the system is properly instrumented.

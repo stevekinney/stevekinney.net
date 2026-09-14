@@ -1,6 +1,6 @@
 ---
 title: Importing Fonts from Fontsource
-description: 'Import fonts from Fontsource by installing the specific font package, importing it in your CSS or JS file.'
+description: 'Add Fontsource fonts by installing a package, importing it in CSS, and using the font in your Tailwind configuration.'
 ---
 
 There are lots of ways to include third-party fonts. But, let me tell you about my **favorite**: Just installing them off of npm from [Fontsource](https://fontsource.org).

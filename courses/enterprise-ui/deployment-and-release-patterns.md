@@ -1,6 +1,6 @@
 ---
 title: Deployment and Release Patterns
-description: 'Deploying code and releasing features are two different decisions.'
+description: 'Decouple deploy from release with immutable build artifacts, hash-based caching, feature controls, and safe rollback points for progressive delivery.'
 ---
 
 If you've ever worked on a team where "deploying" and "releasing" mean the same thing, you've felt the tension. Deploying means pushing code to production infrastructure. Releasing means letting users see it. When those two actions are fused into one, every deploy is a public event, every rollback is an emergency, and nobody ships on Fridays because Fridays are for the brave or the reckless.

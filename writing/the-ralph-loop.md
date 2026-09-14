@@ -1,6 +1,6 @@
 ---
 title: 'Entering the Mind of Ralph Wiggum'
-description: 'A while-true loop, a prompt file, and a clean context window on every iteration.'
+description: 'How the Ralph Loop gives an AI coding agent a fresh context window for every iteration—and why that changes the workflow.'
 date: 2026-03-31
 ---
 

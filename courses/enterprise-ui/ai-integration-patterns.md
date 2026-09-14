@@ -1,6 +1,6 @@
 ---
 title: AI and LLM Integration Patterns
-description: 'The frontend architecture that changes when you add LLM-powered features.'
+description: 'Design frontend LLM features with streaming responses, prompt management, tool use, RAG citations, error handling, and an AI gateway.'
 ---
 
 Adding an LLM-powered feature to a frontend application isn't like adding a new API integration. When you call a REST endpoint, you send a request, wait a predictable amount of time, and get back a deterministic response. When you call a language model, you send a prompt, wait _seconds_ (not milliseconds), and get back a stream of tokens that will be different every time—even for the same input. The response might be brilliant. It might be wrong. It might get filtered by a safety system halfway through generation. And it's going to cost you real money per token.

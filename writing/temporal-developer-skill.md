@@ -1,6 +1,6 @@
 ---
 title: "Temporal's Developer Skill Is a Promising First Draft"
-description: 'Temporal shipped one of the first major infrastructure vendor agent skills.'
+description: "Review Temporal's Developer Skill for coding agents: a sound foundation with gaps in actionable guidance, language awareness, and verification."
 date: 2026-03-24
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: AI Fundamentals with Python
-description: 'Get hands-on with AI development using Python and Hugging Face.'
+description: 'Explore AI with Python and Hugging Face through notebooks on tokenization, attention, model fine-tuning, and Stable Diffusion image generation.'
 date: 2025-08-01
 ---
 

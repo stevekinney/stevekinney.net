@@ -1,6 +1,6 @@
 ---
 title: 'Exercise 5: TypeScript References'
-description: 'Add composite builds and project references to each package so TypeScript can do incremental cross-package type checking and skip rechecking packages whose.'
+description: 'Add TypeScript project references and composite builds for incremental cross-package type checking.'
 ---
 
 ## What You're Doing

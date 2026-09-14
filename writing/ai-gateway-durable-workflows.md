@@ -1,6 +1,6 @@
 ---
 title: Designing an AI Gateway and Durable Workflow System
-description: 'A two-layer architecture for production AI systems: a gateway that abstracts providers, enforces policies, and tracks costs.'
+description: 'Design an AI gateway for routing, policies, and cost control alongside durable workflows that survive failures, pause for approval, and replay.'
 date: 2026-03-13
 ---
 

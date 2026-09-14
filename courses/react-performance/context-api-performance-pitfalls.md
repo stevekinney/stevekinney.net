@@ -1,6 +1,6 @@
 ---
 title: Context API Performance Pitfalls
-description: 'Avoid the Context API traps that cause unnecessary re-renders.'
+description: 'Prevent unnecessary React Context re-renders by stabilizing values, splitting state from actions, and choosing focused context patterns.'
 ---
 
 Context seems like the perfect solution for prop drilling—until your entire app re-renders every time someone types in a search box. The Context API is simultaneously one of React's most useful features and one of its biggest performance footguns. Use it wrong, and you'll trigger re-render cascades that make your app feel like it's running on a potato. Use it right, and you get clean component trees with efficient updates.

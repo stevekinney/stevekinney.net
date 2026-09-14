@@ -1,6 +1,6 @@
 ---
 title: Mocking Browser APIs
-description: 'How to test browser-dependent features without lying to yourself.'
+description: 'Test browser-dependent features by using Playwright’s real controls and deliberately mocking unsupported APIs and events.'
 ---
 
 Network mocking gets all the attention because it is loud. Browser API mocking is quieter, and it bites just as hard. Your app reads `matchMedia`, `navigator.clipboard`, `Notification.permission`, `ResizeObserver`, or some shiny experimental API. The test runner lives in a browser that does not quite behave the way your users' browsers behave. Suddenly the test is not about your feature anymore. It is about the gap between "real browser enough" and "the exact browser surface this component assumes."

@@ -1,6 +1,6 @@
 ---
 title: Maintaining a Design System at Scale
-description: 'The problems that emerge after you ship a design system.'
+description: 'Keep a growing design system maintainable through component governance, token discipline, version alignment, documentation, and contribution workflows.'
 ---
 
 Setting up a design system is the easy part. You pick a token format, scaffold some components, wire up a Storybook, and ship a v1 to the registry. Everyone's excited. Adoption ticks up. The Slack channel is quiet in that good way.

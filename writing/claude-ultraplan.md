@@ -1,6 +1,6 @@
 ---
 title: 'Claude Ultraplan: Planning in the Cloud, Executing Wherever'
-description: 'Ultraplan hands the planning phase of a coding task off to a Claude Code on the web session running in plan mode.'
+description: 'How Ultraplan moves coding-task planning to Claude Code on the web for browser review, remote execution, or local handoff.'
 date: 2026-04-07
 ---
 

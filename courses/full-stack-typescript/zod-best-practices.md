@@ -1,6 +1,6 @@
 ---
 title: Best Practices with Zod
-description: 'Learn best practices with Zod for efficient runtime validation, including avoiding redundant checks, reusing schemas.'
+description: 'Reduce validation overhead by avoiding duplicate parsing, validating arrays in bulk, reusing schemas, and choosing appropriate Zod parsing methods.'
 ---
 
 Runtime validation does introduce overhead – after all, it's extra code executing – but Zod is designed to be fairly efficient and small. Still, in performance-sensitive scenarios or large data throughput, you should be mindful of how and when you validate.

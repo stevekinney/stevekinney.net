@@ -1,6 +1,6 @@
 ---
 title: Adding Client-Side Schema Validation
-description: 'Learn to implement client-side schema validation in a React app with TypeScript and Express.'
+description: 'Implement client-side schema validation in a React app with TypeScript and Express to validate API responses and CRUD operations.'
 ---
 
 Now that we have everything set up in our Express application, can we do something similar in our React application.

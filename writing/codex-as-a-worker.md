@@ -1,6 +1,6 @@
 ---
 title: 'Multi-Model Agentic Coding: Letting the Other Model Do the Typing'
-description: 'The follow-up to my Codex-as-advisor setup.'
+description: 'Delegate implementation from Claude Code to Codex in an isolated worktree, then review the diff through an approval loop that keeps commits under your control.'
 date: 2026-06-04
 ---
 

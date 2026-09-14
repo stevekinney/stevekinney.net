@@ -1,6 +1,6 @@
 ---
 title: Structuring Zod Schemas Efficiently
-description: 'Explore Zod schema structuring tips, focusing on modularization, reuse, type inference, composition.'
+description: 'Structure Zod schemas for modularity, reuse, type inference, composition, and generated documentation.'
 ---
 
 ## Modularize schemas by domain

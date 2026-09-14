@@ -1,6 +1,6 @@
 ---
 title: 'Exercise 1: Runtime Composition'
-description: 'Wire up a Module Federation host shell and remote analytics module, configure shared dependency negotiation.'
+description: 'Connect a Module Federation host and analytics remote, negotiate shared dependencies, and use a shared store for cross-boundary state.'
 ---
 
 Let's take a look at setting up a run-time microfrontend. We're going to wire up a host shell and a remote analytics module using [Module Federation](/courses/enterprise-ui/module-federation). The host application (Port `3000`) loads the analytics dashboard from a separately built and served remote (Port `3001`) at runtime. Along the way you'll configure shared dependency negotiation, discover that [React Context](https://react.dev/reference/react/createContext) can't cross federation boundaries, and solve the cross-boundary communication problem using [nanostores](https://github.com/nanostores/nanostores).

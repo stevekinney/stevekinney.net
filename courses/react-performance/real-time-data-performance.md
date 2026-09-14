@@ -1,6 +1,6 @@
 ---
 title: Real-Time Data Performance in React
-description: 'Handle high-frequency updates without killing performance.'
+description: 'Handle high-frequency React updates with WebSockets, Server-Sent Events, throttling, and efficient state management.'
 ---
 
 Real-time data is React's kryptonite. Stock prices updating 100 times per second, chat messages flooding in, live collaboration with dozens of users—each update triggers a re-render, and suddenly your smooth React app becomes a stuttering mess. The challenge isn't the network; modern WebSockets can handle thousands of messages per second. The challenge is React's reconciliation process choking on the frequency of updates.

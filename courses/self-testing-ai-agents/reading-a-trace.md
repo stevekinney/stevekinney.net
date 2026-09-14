@@ -1,6 +1,6 @@
 ---
 title: Reading a Trace
-description: 'The Playwright trace viewer is the single best piece of software in the ecosystem, and most agents use it like a folder full of screenshots.'
+description: 'Learn to read Playwright traces through their panes, DOM snapshots, network activity, and failure-dossier fields.'
 ---
 
 The Playwright trace viewer is the single best piece of software in the Playwright ecosystem, and the agents I work with use it like a folder full of screenshots. They open it, scroll, find a red box, close it, and go guess at a fix. That's not reading a trace. That's looking at one.

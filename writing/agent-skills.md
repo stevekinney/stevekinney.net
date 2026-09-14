@@ -1,6 +1,6 @@
 ---
 title: Agent Skills, Stripped of Hype
-description: "Agent skills are not a new capability—they're a context management strategy."
+description: 'Agent skills are a context-management strategy for routing tasks progressively and reducing cognitive overload.'
 date: 2026-03-17
 ---
 

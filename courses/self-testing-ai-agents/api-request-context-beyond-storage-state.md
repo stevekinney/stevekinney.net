@@ -1,6 +1,6 @@
 ---
 title: APIRequestContext Beyond Storage State
-description: 'Storage state is a photograph of a logged-in browser.'
+description: 'Use Playwright APIRequestContext for authenticated API calls, multiple users, shared cookies, and token refresh beyond saved browser storage state.'
 ---
 
 Storage state is a photograph of a logged-in browser. Photographs don't refresh, they don't log in as a second user mid-test, and they don't get you an authenticated API request without spinning up a full Playwright context first. The [Storage State Authentication lesson](storage-state-authentication.md) covered the 90% case. This lesson is about the 10% that trips agents every time.

@@ -1,6 +1,6 @@
 ---
 title: Identity Stability Props
-description: "React's performance model is built on comparing values to decide when components need to re-render."
+description: 'Track identity stability only where it matters: memoized props, dependency arrays, and context values that drive extra re-renders or repeated effects.'
 ---
 
 React's performance model is built on comparing values to decide when components need to re-render. When you pass objects, arrays, or functions as props, their **identity**—not just their contents—determines whether React considers them "the same." Get this wrong, and you'll trigger unnecessary re-renders that can cascade through your component tree. Get it right, and your app stays snappy even as it grows.

@@ -1,6 +1,6 @@
 ---
 title: Storybook Sandboxes
-description: 'Storybook allows you to set up pre-configured sandboxes.'
+description: 'Create a Storybook sandbox from the command line to try features or build workshop examples without configuring an existing project.'
 ---
 
 > [!NOTE] We'll be using our own repository for this course

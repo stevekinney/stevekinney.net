@@ -1,6 +1,6 @@
 ---
 title: Dependency Management in Monorepos
-description: 'Dependencies are where architecture stops being a whiteboard and starts becoming an operations problem.'
+description: 'Make dependency policy executable to control version drift, duplicate trees, phantom imports, and upgrade noise in multi-package repos.'
 ---
 
 Dependencies are where architecture stops being a whiteboard and starts becoming an operations problem. In a monolith, one lockfile and one deployable artifact can hide a lot of bad habits. In a multi-package repo or any distributed frontend estate, those same habits turn into version drift, duplicate dependency trees, phantom imports from hoisting, and a flood of upgrade PRs nobody wants to review.

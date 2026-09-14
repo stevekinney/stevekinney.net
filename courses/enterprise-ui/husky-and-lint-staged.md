@@ -1,6 +1,6 @@
 ---
 title: Husky and lint-staged
-description: 'Git hooks are just scripts, but managing them across a team is where things get interesting.'
+description: 'Use Husky to wire native Git hooks and lint-staged to run fast tasks only on staged files.'
 ---
 
 Husky and lint-staged solve related but different problems. Git already has native hooks—`pre-commit`, `commit-msg`, `pre-push`—and those hooks are just executable programs in Git's hooks directory, or in whatever directory [`core.hooksPath`][1] points to. Husky is the thin layer that manages those native hooks for a JavaScript project. lint-staged is the thing you usually run _inside_ `pre-commit` to execute commands only on staged files instead of on the whole repo.
