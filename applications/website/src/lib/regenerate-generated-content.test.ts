@@ -348,5 +348,7 @@ describe('regenerateGeneratedContent', () => {
     );
 
     expect(viteConfiguration).toContain("path.join(utilitiesDirectory, 'frontmatter.ts')");
+    expect(viteConfiguration).toContain("path.join(scriptsDirectory, 'content-metadata.ts')");
+    expect(viteConfiguration).toContain("path.join(scriptsDirectory, 'content-paths.ts')");
   });
 });

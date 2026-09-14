@@ -89,6 +89,8 @@ const scriptsDirectory = path.resolve(workspaceRoot, 'packages', 'scripts');
 const utilitiesDirectory = path.resolve(workspaceRoot, 'packages', 'utilities');
 const contentDependencyPaths = [
   contentBuildScriptPath,
+  path.join(scriptsDirectory, 'content-metadata.ts'),
+  path.join(scriptsDirectory, 'content-paths.ts'),
   path.join(scriptsDirectory, 'content-repository.ts'),
   path.join(scriptsDirectory, 'content-repository'),
   path.join(utilitiesDirectory, 'content-types.ts'),
