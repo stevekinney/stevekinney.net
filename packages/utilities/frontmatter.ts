@@ -14,7 +14,7 @@ export const parseFrontmatter = (contents: string) =>
   });
 
 /** Parse date from frontmatter. Date-only strings (YYYY-MM-DD) are parsed as UTC to avoid timezone shifts. */
-export const toDate = (value: unknown): Date | null => {
+const toDate = (value: unknown): Date | null => {
   if (!value) return null;
   const str = String(value);
   if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
