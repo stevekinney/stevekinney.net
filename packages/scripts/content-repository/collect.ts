@@ -1,5 +1,5 @@
 import fg from 'fast-glob';
-import { readFile } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { normalizeObsidianMarkdown } from '@stevekinney/markdown/obsidian-normalization';
@@ -52,6 +52,15 @@ const collectSourceArtifacts = async (
     validationIssues,
   );
 };
+
+const hashDependency = async (filename: string): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const hash = createHash('sha256');
+    const stream = createReadStream(filename);
+    stream.on('data', (chunk: Buffer) => hash.update(chunk));
+    stream.once('error', reject);
+    stream.once('end', () => resolve(hash.digest('hex')));
+  });
 
 export type { ContentRepository } from './types.ts';
 
@@ -121,9 +130,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
       if (dependencyHashes.has(dependency)) continue;
       dependencyHashes.set(
         dependency,
-        createHash('sha256')
-          .update(await readFile(path.resolve(repositoryRoot, dependency)))
-          .digest('hex'),
+        await hashDependency(path.resolve(repositoryRoot, dependency)),
       );
     }
     source.sourceHash = hashContents(

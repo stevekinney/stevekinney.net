@@ -1,4 +1,5 @@
 import { readFileSync, statSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { PreprocessorGroup } from 'svelte/compiler';
 import type { NormalizedMarkdown, PublicationIndex } from './obsidian-types.ts';
@@ -10,8 +11,11 @@ export type GeneratedObsidianContent = {
 };
 
 /** Load the private build artifact; it is never a browser asset. */
-export const readGeneratedObsidianContent = (filename: string): GeneratedObsidianContent => {
-  const artifact: unknown = JSON.parse(readFileSync(filename, 'utf8'));
+const parseGeneratedObsidianContent = (
+  filename: string,
+  contents: string,
+): GeneratedObsidianContent => {
+  const artifact: unknown = JSON.parse(contents);
   if (
     !artifact ||
     typeof artifact !== 'object' ||
@@ -30,6 +34,14 @@ export const readGeneratedObsidianContent = (filename: string): GeneratedObsidia
   }
   return artifact as GeneratedObsidianContent;
 };
+
+export const readGeneratedObsidianContent = (filename: string): GeneratedObsidianContent =>
+  parseGeneratedObsidianContent(filename, readFileSync(filename, 'utf8'));
+
+export const readGeneratedObsidianContentAsync = async (
+  filename: string,
+): Promise<GeneratedObsidianContent> =>
+  parseGeneratedObsidianContent(filename, await readFile(filename, 'utf8'));
 
 /** Normalize published Markdown before mdsvex while registering embed dependencies with Vite. */
 export const obsidianPreprocessor = (options: {

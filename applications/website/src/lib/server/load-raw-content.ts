@@ -1,7 +1,7 @@
-import { statSync } from 'node:fs';
+import { stat } from 'node:fs/promises';
 import path from 'node:path';
 import {
-  readGeneratedObsidianContent,
+  readGeneratedObsidianContentAsync,
   type GeneratedObsidianContent,
 } from '@stevekinney/markdown/obsidian-preprocessor';
 
@@ -16,15 +16,32 @@ const root = path.resolve(process.cwd(), '..', '..');
 const artifactPath = path.join(root, 'applications/website/.generated/obsidian-content.json');
 let cached: GeneratedObsidianContent | undefined;
 let cachedRevision = '';
+let nextArtifactCheckAt = 0;
+let pendingArtifact: Promise<GeneratedObsidianContent> | undefined;
 
-const loadPublishedSource = (sourcePath: string): string => {
-  const status = statSync(artifactPath);
-  const revision = `${status.mtimeMs}:${status.ctimeMs}:${status.size}`;
-  if (!cached || cachedRevision !== revision) {
-    cached = readGeneratedObsidianContent(artifactPath);
-    cachedRevision = revision;
+const loadPublishedContent = async (): Promise<GeneratedObsidianContent> => {
+  // A single llms-full request asks for hundreds of documents. Recheck the artifact
+  // at most once per second, while retaining development rebuild visibility.
+  if (cached && Date.now() < nextArtifactCheckAt) return cached;
+  if (!pendingArtifact) {
+    pendingArtifact = (async () => {
+      const status = await stat(artifactPath);
+      const revision = `${status.mtimeMs}:${status.ctimeMs}:${status.size}`;
+      if (!cached || cachedRevision !== revision) {
+        cached = await readGeneratedObsidianContentAsync(artifactPath);
+        cachedRevision = revision;
+      }
+      nextArtifactCheckAt = Date.now() + 1000;
+      return cached;
+    })().finally(() => {
+      pendingArtifact = undefined;
+    });
   }
-  const document = cached.documents[sourcePath];
+  return pendingArtifact;
+};
+
+const loadPublishedSource = async (sourcePath: string): Promise<string> => {
+  const document = (await loadPublishedContent()).documents[sourcePath];
   if (!document || document.diagnostics.length)
     throw new Error(`No valid published content for '${sourcePath}'.`);
   // Machine-readable endpoints retain readable TeX instead of the HTML transport marker.
@@ -54,7 +71,7 @@ export async function loadRawWritingContent(slug: string): Promise<string> {
     throw new Error(`Writing route not found for '${slug}'.`);
   }
 
-  const raw = loadPublishedSource(route.sourcePath);
+  const raw = await loadPublishedSource(route.sourcePath);
   return stripFrontmatter(raw);
 }
 
@@ -64,7 +81,7 @@ export async function loadRawCourseReadme(courseSlug: string): Promise<string> {
     throw new Error(`Course route not found for '${courseSlug}'.`);
   }
 
-  const raw = loadPublishedSource(route.sourcePath);
+  const raw = await loadPublishedSource(route.sourcePath);
   return stripFrontmatter(raw);
 }
 
@@ -74,7 +91,7 @@ export async function loadRawCourseLesson(courseSlug: string, lessonSlug: string
     throw new Error(`Lesson route not found for '${courseSlug}/${lessonSlug}'.`);
   }
 
-  const raw = loadPublishedSource(route.sourcePath);
+  const raw = await loadPublishedSource(route.sourcePath);
   return stripFrontmatter(raw);
 }
 
@@ -84,6 +101,6 @@ export async function loadRawProjectContent(projectSlug: string): Promise<string
     throw new Error(`Project route not found for '${projectSlug}'.`);
   }
 
-  const raw = loadPublishedSource(route.sourcePath);
+  const raw = await loadPublishedSource(route.sourcePath);
   return stripFrontmatter(raw);
 }
