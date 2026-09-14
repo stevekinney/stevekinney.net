@@ -3,8 +3,6 @@ title: Colors and CSS Variables
 description: >-
   Define custom colors and theme values using CSS variables with Tailwind 4's
   @theme directive for better integration.
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 Tailwind moves configuration from JavaScript to CSS using the `@theme` directive and CSS variables.

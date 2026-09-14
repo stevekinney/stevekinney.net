@@ -4,6 +4,16 @@ The Bun-driven command-line scripts that feed the website build — content coll
 
 ## Commands
 
+Content metadata can be checked and repaired directly from the repository root:
+
+| Command                            | Scope                                     | Purpose                                                                                                       |
+| ---------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `bun run content:check [paths...]` | Selected paths, or all content by default | Check frontmatter schemas, description limits, plain text, uniqueness, and Git-derived metadata expectations. |
+| `bun run content:fix [paths...]`   | Selected paths, or all content by default | Apply safe metadata normalization without inventing title or description copy.                                |
+| `bun run content:validate`         | Whole content graph                       | Validate source content together with generated routes, indexes, and links.                                   |
+
+The root Turbo commands capture the Git revision used to compute semantic `modified` metadata. That value is derived during collection and is never an authoring field.
+
 Each script is exposed as a bin entry so other workspaces can invoke it via `bunx`:
 
 | Bin                             | Source                             | What it does                                                                                                                                                         |

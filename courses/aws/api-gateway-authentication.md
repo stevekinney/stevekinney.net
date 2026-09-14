@@ -3,13 +3,6 @@ title: API Gateway Authentication
 description: >-
   Add authentication to your API Gateway routes using JWT authorizers or Lambda
   authorizers, protecting your endpoints from unauthorized access.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - api-gateway
-  - authentication
-  - security
 ---
 
 Your API is deployed, CORS is configured, and your frontend can call it. But right now, anyone with the URL can call any endpoint. There's nothing stopping a random script from hammering `POST /items` with garbage data. You need authentication—a way to verify that the person making the request is who they claim to be and that they're allowed to do what they're asking.

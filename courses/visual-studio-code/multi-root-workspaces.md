@@ -3,8 +3,6 @@ title: Multi-Root Workspaces in Visual Studio Code
 description: >-
   Work with multiple projects simultaneously in a single Visual Studio Code
   window to improve productivity and reduce context switching
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 Multi-root workspaces in Visual Studio Code allow you to work with **multiple, distinct project folders within a single Visual Studio Code window**. Instead of opening separate Visual Studio Code instances for each project, you can combine them into a workspace. This workspace acts as a container, bringing together these folders under one roof.

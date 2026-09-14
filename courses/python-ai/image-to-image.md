@@ -3,8 +3,6 @@ title: Image-to-Image Transformations
 description: >-
   Generate new images guided by both a textual prompt and an initial image;
   control fidelity with strength and guidance.
-modified: 2026-03-17
-date: 2025-09-14
 ---
 
 > [!ABSTRACT] Key Takeaways

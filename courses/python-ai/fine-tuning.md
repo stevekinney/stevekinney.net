@@ -1,10 +1,6 @@
 ---
 title: Fine-Tuning Transformer Models
-description: >-
-  Prepare datasets, choose an approach (full, LoRA/PEFT), configure training
-  with the Trainer API, evaluate, and ship safely to production.
-modified: 2026-03-17
-date: 2025-09-14
+description: 'Prepare datasets, choose full or LoRA/PEFT fine-tuning, configure the Trainer API, evaluate, and ship safely to production.'
 ---
 
 > [!ABSTRACT] Key Takeaways

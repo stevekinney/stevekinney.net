@@ -1,17 +1,6 @@
 ---
 title: Full CRUD Todo App - Putting It All Together
-description: >-
-  Build a production-ready todo application with complete CRUD operations,
-  optimistic updates, error handling, and TypeScript throughout—your complete
-  guide to real-world React development.
-date: 2025-09-27
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - crud
-  - todo-app
-  - production-ready
+description: 'Build a production-ready todo application with complete CRUD operations, optimistic updates, error handling, and TypeScript throughout.'
 ---
 
 It's time to bring everything together. We've learned how to create, read, update, and delete todos with TypeScript. Now let's build a complete, production-ready todo application that combines all these operations with proper state management, error handling, and a great user experience.

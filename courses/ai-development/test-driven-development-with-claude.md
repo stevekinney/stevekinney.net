@@ -3,8 +3,6 @@ title: Test-Driven Development with Claude Code
 description: >-
   Use Claude Code for regression-first development with failing tests, smallest
   implementation changes, and explicit verification gates.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Claude Code](https://code.claude.com/docs/en/overview) is strongest when the

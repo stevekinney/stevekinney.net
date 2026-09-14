@@ -1,8 +1,6 @@
 ---
 title: 'Walkthrough: Basic Math Exercise'
 description: A short walk through for the Basic Math exercise.
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 Here is a walkthrough for the exercise at the end of the section on [implementing some basic tests](basic-math.md).

@@ -3,15 +3,6 @@ title: Streaming SSR with TypeScript
 description: >-
   Type-safe streaming SSR in React 19—Suspense boundaries, progressive
   hydration, and streaming data patterns with full type safety.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - ssr
-  - streaming
-  - suspense
-  - hydration
 ---
 
 Streaming SSR in React 19 is like upgrading from dial-up to fiber optic. Instead of waiting for your entire page to render on the server before sending anything, you can start streaming HTML to the browser immediately, progressively sending chunks as they become ready. But here's where it gets interesting: combining this with TypeScript means you need to think about types that work across the server-client boundary, handle partial hydration states, and ensure type safety during progressive enhancement.

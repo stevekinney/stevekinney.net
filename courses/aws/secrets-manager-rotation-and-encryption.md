@@ -3,13 +3,6 @@ title: 'Secrets Manager: Rotation and Encryption'
 description: >-
   Store sensitive credentials in Secrets Manager, understand automatic rotation,
   and know when Secrets Manager is worth the cost over Parameter Store.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - secrets-manager
-  - rotation
-  - encryption
 ---
 
 **Secrets Manager** is a standalone AWS service built for one thing: storing and rotating sensitive credentials. While Parameter Store can hold encrypted values (SecureString), Secrets Manager goes further with built-in rotation, cross-service integration, and a purpose-built API for credential lifecycle management.

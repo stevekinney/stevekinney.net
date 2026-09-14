@@ -3,8 +3,6 @@ title: Building a Dashboard with CSS Grid Template Areas
 description: >-
   Let's build a responsive dashboard layout using CSS Grid Template Areas for
   semantic, maintainable grid layouts with named regions.
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 Let's start with our basic HTML structure for a simple analytics dashboard.

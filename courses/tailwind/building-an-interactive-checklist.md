@@ -1,10 +1,6 @@
 ---
 title: Building a Checklist Item
-description: >-
-  Let's build an interactive checklist item that strikes through when completed
-  using Tailwind's :has() selector utilities.
-modified: 2026-09-14
-date: 2025-06-12
+description: "Build an interactive checklist item that strikes through when completed using Tailwind's :has() selector utilities."
 ---
 
 Let's start with our basic HTML structure for a simple checklist item.

@@ -3,14 +3,6 @@ title: Migrating a React App from JS to TS
 description: >-
   Convert safely—incremental tsconfig, strictness ratchet, and patterns for
   typing legacy components without churn.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - migration
-  - javascript
-  - refactoring
 ---
 
 Moving your React application from JavaScript to TypeScript doesn't have to be the kind of heroic weekend effort that leaves you questioning your life choices. With the right strategy, you can migrate incrementally—file by file, component by component—while keeping your app running in production. Let's explore how to convert safely using an incremental TypeScript configuration, a gradual strictness ratchet, and proven patterns for typing legacy components without causing unnecessary churn.

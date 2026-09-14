@@ -3,8 +3,6 @@ title: Current Color
 description: >-
   Use currentColor utilities to create contextually adaptive styles that inherit
   text color for borders, fills, and more
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 `currentColor` is a CSS keyword that just means "use the element's text color." Tailwind provides utilities to apply this adaptive coloring across various properties.

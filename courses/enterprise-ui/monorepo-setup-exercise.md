@@ -4,8 +4,6 @@ description: >-
   Create a Turborepo configuration to get cached, dependency-aware builds.
   Experience the difference between rebuilding everything and FULL TURBO cache
   hits.
-date: 2026-03-01
-modified: 2026-03-20
 ---
 
 The workspace has four packages (`analytics`, `users`, `ui`, `shared`) and a dashboard app, but there is no build orchestration. Running `pnpm -r build` rebuilds everything every time, even unchanged packages. You're going to create a `turbo.json` configuration and wire up Turborepo so builds are cached, dependency-aware, and fast.

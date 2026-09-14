@@ -3,8 +3,6 @@ title: Spacing and Dividing Utilities
 description: >-
   Master the space and divide utilities in Tailwind for managing spacing and
   borders between child elements
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 ## Space

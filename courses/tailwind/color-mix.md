@@ -1,10 +1,6 @@
 ---
 title: color-mix()
-description: >-
-  Learn how Tailwind 4 uses the native color-mix() CSS function for opacity
-  modifiers and color blending.
-modified: 2026-09-14
-date: 2025-06-12
+description: 'Learn how Tailwind 4 uses the native color-mix() CSS function for opacity modifiers and color blending.'
 ---
 
 `color-mix()` is a CSS function for blending colors. Tailwind 4 uses it internally for all opacity modifiers.

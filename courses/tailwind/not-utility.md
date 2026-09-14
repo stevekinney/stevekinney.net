@@ -1,10 +1,6 @@
 ---
 title: Not Utility
-description: >-
-  Apply styles when conditions are NOT met using Tailwind 4's powerful not-*
-  variant for negating states
-modified: 2026-09-14
-date: 2025-06-12
+description: "Apply styles when conditions are not met using Tailwind 4's not-* variant for negating states."
 ---
 
 > [!INFO] This is new in Tailwind 4!

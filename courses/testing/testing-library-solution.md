@@ -1,8 +1,6 @@
 ---
 title: Refactoring Our Button Test
 description: Let's look at a solution for using Testing Library to test a button.
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 Again, we're likely going to want to bring in our libraries:

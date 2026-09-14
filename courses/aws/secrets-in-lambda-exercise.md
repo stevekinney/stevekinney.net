@@ -3,12 +3,6 @@ title: 'Exercise: Store and Retrieve a Secret in Lambda'
 description: >-
   Store an API key in Parameter Store as a SecureString, create a Lambda
   function that reads it at init time, and call it through API Gateway.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - secrets
-  - exercise
 ---
 
 You're going to store a secret in Parameter Store, write a Lambda function that reads it at startup, grant the function's execution role the right permissions, and verify the whole chain works through API Gateway.

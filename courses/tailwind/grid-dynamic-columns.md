@@ -3,8 +3,6 @@ title: Grid Dynamic Columns
 description: >-
   Implement dynamic grid columns with subgrids for perfectly aligned nested
   layouts in CSS Grid.
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 Tailwind CSS simplifies working with dynamic columns, especially with subgrids, using its grid utilities.

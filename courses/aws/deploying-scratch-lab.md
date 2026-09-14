@@ -1,16 +1,6 @@
 ---
 title: Deploying Scratch Lab to CloudFront
-description: >-
-  Replace the playground site with the Scratch Lab React application on your
-  existing S3 and CloudFront infrastructure, and discover the routing behavior
-  that edge functions improve.
-date: 2026-04-16
-modified: 2026-04-16
-tags:
-  - aws
-  - scratch-lab
-  - deployment
-  - cloudfront
+description: 'Replace the playground site with the Scratch Lab React application on your existing S3 and CloudFront infrastructure.'
 ---
 
 Up to this point, you've been deploying a four-file playground site: an `index.html`, a stylesheet, a script, and an error page. That was intentional. When you're learning S3 bucket policies and CloudFront cache behaviors, the last thing you need is a React build step muddying the feedback loop. But the playground site has done its job. You understand the pipeline. Now it's time to put a real application on it.

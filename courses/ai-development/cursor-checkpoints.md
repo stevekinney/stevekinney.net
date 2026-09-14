@@ -3,8 +3,6 @@ title: Cursor Checkpoints
 description: >-
   Use Cursor checkpoints to inspect, compare, and recover from agent edits
   without confusing rollback with review.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Cursor](https://cursor.com) creates checkpoints during agent work. A checkpoint

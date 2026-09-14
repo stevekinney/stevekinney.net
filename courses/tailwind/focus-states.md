@@ -3,8 +3,6 @@ title: Focus States
 description: >-
   Understanding focus, focus-visible, and focus-within utilities in Tailwind for
   accessible keyboard navigation
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 ## `focus`: Always Shows

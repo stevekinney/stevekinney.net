@@ -2,12 +2,6 @@
 title: 'Exercise: Configure DNS for Your Site'
 description: >-
   Create a hosted zone, point a domain to a CloudFront distribution with alias records, and verify DNS resolution.
-date: 2026-03-18
-modified: 2026-04-06
-tags:
-  - aws
-  - route53
-  - exercise
 ---
 
 You have a CloudFront distribution serving your frontend and an ACM certificate attached to it. The distribution works at its `d111111abcdef8.cloudfront.net` URL, but nobody ships a CloudFront domain to production. In this exercise, you'll wire up your own domain so users visit `example.com` and get your site served through CloudFront.

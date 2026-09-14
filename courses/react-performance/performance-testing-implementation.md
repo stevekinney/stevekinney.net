@@ -3,14 +3,6 @@ title: Performance Testing Implementation Guide
 description: >-
   Implement comprehensive performance testing with E2E testing, Lighthouse CI,
   continuous monitoring, and automated performance regression detection.
-date: 2025-09-20
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - testing
-  - ci-cd
-  - lighthouse
 ---
 
 This implementation guide covers advanced performance testing techniques including end-to-end performance testing, Lighthouse CI integration, continuous monitoring, and automated performance regression detection for production React applications.

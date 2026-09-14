@@ -3,15 +3,6 @@ title: Render Props and HOC Alternatives
 description: >-
   When generics beat HOCs—type render props for flexibility while keeping
   IntelliSense delightful.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - render-props
-  - hocs
-  - composition
-  - alternatives
 ---
 
 Higher-Order Components (HOCs) used to be React's go-to pattern for sharing logic between components. But with TypeScript, HOCs can become typing nightmares, especially when you need to thread props through multiple layers. Enter render props—a pattern that gives you the same power with far better type safety and IntelliSense support. We'll explore why render props often win in the modern React + TypeScript world and show you practical alternatives that keep your code both flexible and type-safe.

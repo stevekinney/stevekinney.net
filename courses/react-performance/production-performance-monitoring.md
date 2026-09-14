@@ -3,13 +3,6 @@ title: Production Performance Monitoring
 description: >-
   Monitor real user performance, set up RUM, track Core Web Vitals, and catch
   regressions before users complain.
-date: 2025-09-07
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - monitoring
-  - rum
 ---
 
 Your React app passes all performance tests in development, achieves perfect Lighthouse scores in CI, and feels blazing fast on your MacBook Pro. Then you deploy to production and discover the harsh reality: your users are on slow devices, unreliable networks, and older browsers. That 2-second page load becomes 8 seconds on a Moto G4 over 3G in India. Without production performance monitoring, you're flying blind.

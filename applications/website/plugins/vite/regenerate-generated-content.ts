@@ -144,6 +144,8 @@ export function regenerateGeneratedContent(
         const task = tasks[0];
         activeChild = spawnProcess('bun', commandByTask[task], {
           cwd: options.workingDirectory,
+          // Resolve HEAD for this rebuild; the persistent parent retains its startup revision.
+          env: { ...process.env, CONTENT_GIT_REVISION: 'HEAD' },
           stdio: 'inherit',
         });
         let childFinished = false;

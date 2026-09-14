@@ -1,10 +1,6 @@
 ---
 title: Has Utility
-description: >-
-  Style parent elements based on their descendants' state or content using
-  Tailwind's has-* variant
-modified: 2026-09-14
-date: 2025-06-12
+description: "Style parent elements based on descendant state or content using Tailwind's has-* variant."
 ---
 
 The `has-*` utilities in Tailwind CSS are based on the CSS `:has()` pseudo-class, allowing parent elements to style themselves based on their children's state. Think of it as "if this container has a child that matches `$condition` condition, then style the container like this."

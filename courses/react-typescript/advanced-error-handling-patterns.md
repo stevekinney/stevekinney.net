@@ -3,8 +3,6 @@ title: Advanced Error Handling Patterns
 description: >-
   Build resilient React applications with type-safe error recovery, retry
   strategies, and fallback patterns
-modified: 2026-03-17
-date: 2025-09-14
 ---
 
 Error handling is where many React applications fall apart. Users see generic "Something went wrong" messages, developers lose critical debugging information, and recovery becomes impossible. But with TypeScript and proper patterns, we can build resilient applications that gracefully handle errors, provide meaningful feedback, and recover automatically when possible.

@@ -3,8 +3,6 @@ title: Subagent Anti-Patterns
 description: >-
   Avoid over-splitting work across subagents, losing ownership, duplicating
   context, and accepting unaudited parallel output.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 Subagents are useful when they reduce context pressure. They are harmful when

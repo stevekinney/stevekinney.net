@@ -3,8 +3,6 @@ title: Building a Form Input
 description: >-
   Let's build a professional input field component step by step using Tailwind
   CSS.
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 Let's start with our basic HTML structure.

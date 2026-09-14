@@ -4,15 +4,6 @@ description: >-
   Combine useState with useEffect for type-safe data fetching—handle async
   operations, prevent race conditions, and manage component lifecycle with
   TypeScript.
-date: 2025-09-27
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - hooks
-  - async
-  - data-fetching
-  - useEffect
 ---
 
 Fetching data is where React apps meet the real world, and it's where TypeScript truly shines. When you combine `useState` with `useEffect` for data fetching, TypeScript helps you handle all the edge cases: loading states, error handling, race conditions, and cleanup. No more "Cannot read property 'title' of undefined" errors in production.

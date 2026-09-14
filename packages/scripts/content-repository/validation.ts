@@ -236,12 +236,12 @@ const validateRootLink = (
   }
 };
 
-const validateRelativeLink = async (
+const validateRelativeLink = (
   file: string,
   urlPath: string,
   issues: ContentValidationIssue[],
   line?: number,
-): Promise<void> => {
+): void => {
   const resolvedPath = path.resolve(path.dirname(resolveRepositoryPath(file)), urlPath);
   const contentRoots = [writingRoot, coursesRoot, projectsRoot];
   const isInsideContentRoot = contentRoots.some((root) => {
@@ -270,16 +270,14 @@ const validateRelativeLink = async (
   }
 };
 
-export const validateMarkdownLinks = async (
+export const validateMarkdownLinks = (
   file: string,
   tree: Root,
   headingAnchors: Set<string>,
   routePaths: Set<string>,
   courseDirectories: Set<string>,
   issues: ContentValidationIssue[],
-): Promise<void> => {
-  const tasks: Promise<void>[] = [];
-
+): void => {
   visit(tree, ['link', 'image', 'definition'], (node) => {
     const url = String((node as MarkdownReferenceNode).url ?? '').trim();
     if (!url) return;
@@ -298,10 +296,8 @@ export const validateMarkdownLinks = async (
       return;
     }
 
-    tasks.push(validateRelativeLink(file, normalizedUrl, issues, line));
+    validateRelativeLink(file, normalizedUrl, issues, line);
   });
-
-  await Promise.all(tasks);
 };
 
 export const validateCourseContents = (

@@ -1,11 +1,6 @@
 ---
 title: 'Exercise 8: Testing Strategies'
-description: >-
-  Write Playwright E2E tests for cross-route navigation, mock API responses with
-  MSW, record HAR fixtures for deterministic replay, and discuss where contract
-  testing fills the gaps.
-date: 2026-03-01
-modified: 2026-03-20
+description: 'Write Playwright E2E tests for cross-route navigation, mock API responses with MSW, and record HAR fixtures for deterministic replay.'
 ---
 
 ## What You're Doing

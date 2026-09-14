@@ -1,8 +1,6 @@
 ---
 title: Visual Regression as a Feedback Loop
 description: Screenshot diffs are not just a CI gate. They're the fastest way to tell an agent "this looks wrong" without saying a word.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 I spent years thinking of visual regression testing as a CI-only concern. You check in a screenshot, CI compares against the screenshot on the next run, the build fails if there's a diff. Nice-to-have, kind of annoying to maintain, skip it if you're short on time.

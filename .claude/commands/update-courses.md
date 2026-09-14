@@ -1,59 +1,20 @@
-Update `applications/website/src/lib/courses.toml` with the latest course data from Frontend Masters.
+---
+allowed-tools: Bash(bun run content:check *), Bash(bun run content:fix *), Bash(bun run content:validate), Read, Edit, Glob
+description: Update course Markdown while preserving the current source-of-truth workflow
+---
 
-## Steps
+Update course content in `courses/` by editing the Markdown source files directly. The source files—not generated indexes, manifests, or route data—are authoritative.
 
-1. **Read** `applications/website/src/lib/courses.toml` to understand the current recordings.
+For a course landing page, preserve `title`, `description`, and authored `date` frontmatter. For a lesson, preserve `title` and `description`; lessons have no publication date, and their modification date is derived from Git history. Keep descriptions plain text, nonempty, unique across writing and courses, and at most 160 Unicode codepoints.
 
-2. **Fetch** `https://frontendmasters.com/teachers/steve-kinney/` and extract course titles, slugs, descriptions, and durations. Add any new courses not already in the TOML file.
+Keep Frontend Masters and practice-repository links in the Markdown body when they are relevant. Preserve existing links and course structure unless the requested update requires changing them. Do not add package manifests, workspace dependencies, generated manifests, `published`, `modified`, `tags`, or unused URL fields.
 
-3. **For each course missing `topics` or `testimonial` fields**, fetch the individual course page (e.g., `https://frontendmasters.com/courses/react-typescript-v3/`) and extract:
-   - Topics/tags listed on the course page
-   - Testimonials: `content` (quote text) and `person` (name only, skip avatars)
+After editing, run:
 
-4. **Cross-reference with local `courses/` directories**. For each local walkthrough that has a matching FM recording, add a `url` field to its `README.md` frontmatter pointing to the FM recording URL (with UTM params). Use the slug-to-directory mapping below, plus any obvious matches.
-
-5. **Ensure all `href` values** include `?utm_source=kinney&utm_medium=social&code=kinney`.
-
-6. **Write** the updated `courses.toml`.
-
-## Slug-to-Directory Mapping
-
-These FM course slugs map to local `courses/` directory names that differ:
-
-| FM Slug                   | Local Directory             |
-| ------------------------- | --------------------------- |
-| `design-systems-v2`       | `storybook`                 |
-| `vs-code-v2`              | `visual-studio-code`        |
-| `tailwind-css-v2`         | `tailwind`                  |
-| `react-typescript-v3`     | `react-typescript`          |
-| `react-performance-v2`    | `react-performance`         |
-| `fullstack-typescript-v2` | `fullstack-typescript`      |
-| `web-security-v2`         | `web-security`              |
-| `enterprise-ui-dev`       | `enterprise-ui-development` |
-| `electron-v3`             | `electron`                  |
-| `aws-v2`                  | `aws`                       |
-| `web-performance`         | `javascript-performance`    |
-
-For slugs not listed above, try matching the slug directly to a `courses/<slug>/` directory.
-
-## TOML Format
-
-Each entry is a `[[recording]]` table with these fields:
-
-```toml
-[[recording]]
-title = "Course Title"
-slug = "course-slug"
-description = "Course description."
-href = "https://frontendmasters.com/courses/course-slug/?utm_source=kinney&utm_medium=social&code=kinney"
-duration = "4h 12m"
-topics = ["TypeScript", "React"]
-
-[[recording.testimonial]]
-content = "Quote text here."
-person = "Person Name"
+```sh
+bun run content:fix courses/<slug>/*.md
+bun run content:check courses/<slug>/*.md
+bun run content:validate
 ```
 
-## Allowed Tools
-
-Use only: `WebFetch`, `Read`, `Write`, `Edit`, `Glob`, `Bash(ls *)`
+The path check catches metadata errors in the edited course. Whole-graph validation catches broken links, routes, and generated index relationships elsewhere in the repository.

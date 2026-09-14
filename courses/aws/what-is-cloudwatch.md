@@ -3,13 +3,6 @@ title: What is CloudWatch?
 description: >-
   Understand what CloudWatch is and how it collects logs, metrics, and events
   from the AWS services you've deployed throughout this course.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudwatch
-  - monitoring
-  - fundamentals
 ---
 
 The Scratch Lab app is live, people are clicking around, and now the worst kind of bug shows up: "I clicked the button and nothing happened." No stack trace. No obvious repro. Just vibes and disappointment. This is the part where monitoring stops feeling like enterprise garnish and starts feeling like the only way you get your evening back.

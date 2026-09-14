@@ -11,7 +11,8 @@
     "validate-image-compatibility": "./validate-image-compatibility.ts",
     "sync-images": "./sync-images.ts",
     "check-image-manifest": "./check-image-manifest.ts",
-    "check-build-budget": "./build-report/check-build-budget.ts"
+    "check-build-budget": "./build-report/check-build-budget.ts",
+    "check-content-metadata": "./check-content-metadata.ts"
   },
   "scripts": {
     "content:build": "bun content-build.ts",
@@ -21,6 +22,8 @@
     "content:images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" bunx run-with-sharp-runtime node validate-image-compatibility.ts",
     "images:sync": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" bunx run-with-sharp-runtime node --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local sync-images.ts",
     "images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node check-image-manifest.ts",
+    "content:check": "bun check-content-metadata.ts",
+    "content:fix": "bun check-content-metadata.ts --fix",
     "playgrounds:build": "bun playgrounds-build.ts",
     "content-enhancements:build": "bun content-enhancements-build.ts"
   },

@@ -4,11 +4,6 @@ description: >-
   MCP servers return data. MCP Apps let them ship a UI alongside that data—so the
   tool author, not the client, decides how results look.
 date: 2026-03-12
-modified: 2026-06-12
-tags:
-  - ai
-  - mcp
-  - tooling
 ---
 
 If you've built an MCP server, you've run into this wall. Your tool does something useful—queries a database, fetches metrics, searches documents—and it returns structured data. The model sees that data, summarizes it, and relays the summary to the user. The user sees a paragraph of text. Maybe some JSON if they're lucky.

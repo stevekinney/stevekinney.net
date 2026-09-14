@@ -3,8 +3,6 @@ title: Type Branding with Zod
 description: >-
   Use Zod for type branding to create nominal type relationships while
   maintaining runtime type safety.
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 You can “brand” your types so that TypeScript sees them as unique, even if they're plain strings or numbers at runtime.

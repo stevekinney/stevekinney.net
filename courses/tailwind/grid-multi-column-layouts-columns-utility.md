@@ -3,8 +3,6 @@ title: Grid Multi-column Layouts Columns Utility
 description: >-
   Create magazine-style layouts with CSS multi-column using Tailwind's columns
   utilities.
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 CSS multi-column layouts are useful for text-heavy content like articles. The CSS `columns` property distributes content into a specified number of columns or columns of a minimum width. Tailwind CSS provides utilities that map to this property.

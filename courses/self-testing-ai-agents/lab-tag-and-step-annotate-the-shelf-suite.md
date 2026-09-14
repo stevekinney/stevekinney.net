@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Tag and Step-Annotate the Shelf Suite'
 description: Take two existing Shelf tests and rewrite them to produce failure messages an agent can actually use.
-modified: 2026-04-14
-date: 2026-04-11
 ---
 
 Two of Shelf's specs — the starter's `tests/smoke.spec.ts` and the `tests/rate-book.spec.ts` you built in the previous lab — work fine. They pass every time, they hit the right endpoints, and they verify the right outcomes. They also fail like they're punishing you when they fail. No steps, no tags, no annotations, nothing that helps a dossier summarizer turn a red build into something an agent can fix.

@@ -3,13 +3,6 @@ title: 'Solution: Add a CloudFront Function to Your Distribution'
 description: >-
   Complete solution for the CloudFront Function exercise, with all function
   code, CLI commands, and expected output.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudfront-functions
-  - exercise
-  - solution
 ---
 
 Here's the complete solution for every step, including the function code, all CLI commands, and the expected output at each stage.

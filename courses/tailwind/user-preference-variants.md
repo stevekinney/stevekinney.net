@@ -3,8 +3,6 @@ title: User Preference Variants
 description: >-
   Create adaptive interfaces with Tailwind variants for dark mode, reduced
   motion, contrast preferences, and more
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 Tailwind provides variants for responding to user preferences and system settings, keeping adaptive styles right in your HTML.

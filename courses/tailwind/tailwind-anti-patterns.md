@@ -3,8 +3,6 @@ title: Tailwind Anti-Patterns
 description: >-
   Common Tailwind anti-patterns to avoid for cleaner, maintainable code and
   proper utility-first development practices.
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 ## Overusing the `@apply` Directive

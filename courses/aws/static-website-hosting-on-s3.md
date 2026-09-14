@@ -2,13 +2,6 @@
 title: 'Static Website Hosting on S3'
 description: >-
   Enable S3 static website hosting, configure an index document and error document, and access your site through the S3 website endpoint.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - s3
-  - hosting
-  - static-sites
 ---
 
 You have an S3 bucket with files in it and a bucket policy that allows public reads. But if you navigate to `https://my-frontend-app-assets.s3.us-east-1.amazonaws.com/` right now, you get an XML error page—S3 doesn't know you want it to serve `index.html` when someone hits the root URL. That's because S3's default behavior is object storage, not web hosting. To turn your bucket into an actual website, you need to enable **static website hosting**.

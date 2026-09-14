@@ -3,8 +3,6 @@ title: Global Error Types in Express
 description: >-
   Learn how to define and implement standardized error types across your Express
   application for consistent error handling.
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 For a consistent approach across your application, define error types in a central location:

@@ -1,8 +1,6 @@
 ---
 title: Adding an Icon Gallery to Storybook
 description: Create a gallery for your icons in Storybook with this one weird trick.
-modified: 2026-03-17
-date: 2024-04-15
 ---
 
 There are lots of icons out there, but typically, you want to use as many icons as you need but as few as you can get away with in your application or design system. Storybook's `IconGallery` block makes it easy to show off the icons that you intend to use in your application.

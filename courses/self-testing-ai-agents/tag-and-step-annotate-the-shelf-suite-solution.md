@@ -1,8 +1,6 @@
 ---
 title: 'Solution: Tag and Step-Annotate the Shelf Suite'
 description: One walk through the steps-and-tags lab, with the exact diff each commit introduces and why.
-modified: 2026-04-14
-date: 2026-04-11
 ---
 
 One reasonable walk from the starting state of `rate-book.spec.ts` and `smoke.spec.ts` to a better-instrumented version. As with the other solutions in this course, yours may make different calls — different step labels, different tag choices, different places to drop an annotation. The principles you're grading against are in the lesson; this is the narrative.

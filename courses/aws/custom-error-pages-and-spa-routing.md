@@ -2,13 +2,6 @@
 title: 'Custom Error Pages and SPA Routing'
 description: >-
   Set up custom error responses that redirect 403 and 404 errors to index.html, enabling client-side routing for single-page applications.
-date: 2026-03-18
-modified: 2026-04-07
-tags:
-  - aws
-  - cloudfront
-  - spa
-  - routing
 ---
 
 If you've deployed a single-page application to Vercel or Netlify, you know the drill: you add a `rewrites` rule or a `_redirects` file so that every path serves `index.html`, and your client-side router (React Router, Vue Router, whatever) handles the URL. Without that rule, refreshing the page on `/dashboard/settings` returns a 404 because no file exists at that path—the server doesn't know that your JavaScript handles routing.

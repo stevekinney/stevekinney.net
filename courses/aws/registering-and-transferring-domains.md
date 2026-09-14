@@ -1,14 +1,6 @@
 ---
 title: 'Registering and Transferring Domains'
-description: >-
-  Register a new domain through Route 53 or transfer an existing domain from another registrar, including configuring nameservers for an externally registered domain.
-date: 2026-03-18
-modified: 2026-04-07
-tags:
-  - aws
-  - route53
-  - domains
-  - registrar
+description: 'Register a new domain through Route 53 or transfer an existing domain from another registrar.'
 ---
 
 You need a domain name before ACM can prove you own anything. Maybe you already have one at GoDaddy or Namecheap or Cloudflare. Maybe you want to buy a fresh one through AWS and keep the whole thing in one place. Either path works, but they set up the rest of the static-hosting flow a little differently.

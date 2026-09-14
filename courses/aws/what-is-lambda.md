@@ -1,16 +1,6 @@
 ---
 title: What is Lambda?
-description: >-
-  Understand the Lambda execution model—how Lambda runs your code without
-  servers, how invocations work, and how Lambda differs from traditional server
-  deployments.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - lambda
-  - serverless
-  - fundamentals
+description: "Understand Lambda's invocation lifecycle, managed runtimes, cold starts, and scaling to run event-driven code without managing servers."
 ---
 
 If you've ever deployed a serverless function on Vercel, you already know the core idea: you write a function, you deploy it, and the platform runs it when someone makes a request. You don't provision servers, you don't manage uptime, and you don't pay when nothing is happening. **Lambda** is the AWS service that powers this model—and it's literally what Vercel's serverless functions are built on top of.

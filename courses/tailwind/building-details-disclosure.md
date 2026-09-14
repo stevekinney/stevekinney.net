@@ -3,8 +3,6 @@ title: Building a Details Disclosure with Accent
 description: >-
   Let's build an interactive disclosure component that changes color when
   expanded using Tailwind's in-open pseudo-class utilities.
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 Let's start with our basic HTML structure for a simple disclosure component.

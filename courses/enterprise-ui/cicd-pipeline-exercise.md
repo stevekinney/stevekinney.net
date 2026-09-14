@@ -1,11 +1,6 @@
 ---
 title: 'Exercise 7: CI/CD Pipeline'
-description: >-
-  Build a GitHub Actions workflow that runs the full quality gate on every push,
-  uses Turborepo for caching, and adds Lighthouse CI performance budgets to
-  catch regressions before they ship.
-date: 2026-03-01
-modified: 2026-03-20
+description: 'Build a GitHub Actions workflow that runs quality checks, caches work with Turborepo, and enforces Lighthouse performance budgets.'
 ---
 
 ## What You're Doing

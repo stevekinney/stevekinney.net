@@ -1,12 +1,7 @@
 ---
 title: Self-Testing AI Agents
-description: >-
-  Build the feedback loops that let coding agents catch their own mistakes—Playwright,
-  visual regression, runtime probes, custom MCPs, review bots, a static layer, and CI—so
-  you stop being the verification step.
-layout: page
+description: 'Build the feedback loops that let coding agents catch their own mistakes.'
 date: 2026-04-06
-modified: 2026-04-09
 ---
 
 Agents are fast at editing code. They are not particularly good at knowing whether the edit was any good. If every change they make requires you to read the diff, run the thing, click around the UI, eyeball the console, and then prompt the agent to fix what it missed, you haven't automated much. You've traded one kind of typing for another.

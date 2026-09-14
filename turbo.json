@@ -21,7 +21,10 @@
         "../../projects/**",
         "build-artifacts.ts",
         "../utilities/tailwind-playground-types.ts",
-        "../utilities/tailwind-playground-metadata.ts"
+        "../utilities/tailwind-playground-metadata.ts",
+        "content-metadata.ts",
+        "check-content-metadata.ts",
+        "run-with-content-history.ts"
       ],
       "outputs": [
         "../../applications/website/.generated/content-data.json",
@@ -30,7 +33,6 @@
       ]
     },
     "@stevekinney/scripts#content:validate": {
-      "dependsOn": ["@stevekinney/scripts#content:build"],
       "inputs": [
         "../../bun.lock",
         "../../package.json",
@@ -51,8 +53,12 @@
         "../../applications/website/static/**",
         "../../writing/**",
         "../../courses/**",
-        "../../projects/**"
-      ]
+        "../../projects/**",
+        "content-metadata.ts",
+        "check-content-metadata.ts",
+        "run-with-content-history.ts"
+      ],
+      "cache": false
     },
     "@stevekinney/scripts#content:images:check": {
       "inputs": [
@@ -104,7 +110,13 @@
         "content-enhancements-build.ts",
         "content-enhancement-build-hash.ts",
         "sync-generated-browser-assets.ts",
-        "../utilities/**/*.ts"
+        "../utilities/**/*.ts",
+        "content-metadata.ts",
+        "check-content-metadata.ts",
+        "run-with-content-history.ts",
+        "../../templates/**",
+        "../../.obsidian/{core-plugins,templates,types}.json",
+        "../../lefthook.yml"
       ]
     },
     "@stevekinney/website#build": {
@@ -135,7 +147,7 @@
         "!.vercel/**",
         "../../vercel.json"
       ],
-      "env": ["VERCEL"],
+      "env": ["VERCEL", "VERCEL_ENV"],
       "outputs": ["build/**", ".svelte-kit/output/**", ".vercel/output/**"]
     },
     "@stevekinney/website#build:stats": {
@@ -267,6 +279,13 @@
         "../utilities/package.json"
       ],
       "outputs": ["../../applications/website/.generated/content-enhancements/**"]
+    },
+    "@stevekinney/scripts#content:check": {
+      "cache": false
+    },
+    "@stevekinney/scripts#content:fix": {
+      "cache": false
     }
-  }
+  },
+  "globalEnv": ["CONTENT_GIT_REVISION"]
 }

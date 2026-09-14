@@ -1,4 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+
+import type { GeneratedContent } from '@stevekinney/utilities/content-types';
+
+const generatedContent = JSON.parse(
+  readFileSync(new URL('../.generated/content-data.json', import.meta.url), 'utf8'),
+) as GeneratedContent;
 
 type Scenario = {
   name: string;
@@ -52,9 +59,12 @@ test('writing post JSON-LD contains Article schema with required fields', async 
   expect(new URL(article!.image as string).pathname).toBe('/writing/setup-python/open-graph.jpg');
   expect(typeof article!.datePublished).toBe('string');
   expect(article!.datePublished as string).toBeTruthy();
+  expect(article!.datePublished).toBe('2024-08-06T00:00:00.000Z');
+  expect(article!.inLanguage).toBe('en-US');
   const author = article!.author as Record<string, unknown>;
   expect(author).toBeTruthy();
   expect(typeof author.name).toBe('string');
+  expect(author.name).toBe('Steve Kinney');
 });
 
 test('course index page JSON-LD contains Course schema with hasCourseInstance', async ({
@@ -67,6 +77,12 @@ test('course index page JSON-LD contains Course schema with hasCourseInstance', 
   expect(course, 'Course schema should be present on course index page').toBeTruthy();
   expect(typeof course!.name).toBe('string');
   expect(typeof course!.description).toBe('string');
+  expect(course!.name).toBe('Introduction to Testing');
+  expect(course!.url).toBe('https://stevekinney.com/courses/testing');
+  expect(course!['@id']).toBe('https://stevekinney.com/courses/testing#course');
+  expect(course!.inLanguage).toBe('en-US');
+  expect((course!.provider as Record<string, unknown>).name).toBe('Steve Kinney');
+  expect(course!.datePublished).toBe('2024-09-28T00:00:00.000Z');
   expect(Array.isArray(course!.hasCourseInstance)).toBe(true);
   const instances = course!.hasCourseInstance as Record<string, unknown>[];
   expect(instances.length).toBeGreaterThan(0);
@@ -87,13 +103,25 @@ test('course index page JSON-LD contains BreadcrumbList schema', async ({ page }
   });
 });
 
-test('course lesson JSON-LD contains Course and BreadcrumbList schemas', async ({ page }) => {
+test('course lesson JSON-LD contains LearningResource and BreadcrumbList schemas', async ({
+  page,
+}) => {
   await page.goto('/courses/testing/the-basics');
   const data = await getJsonLd(page);
   const items = getSchemaItems(data);
-  const course = items.find((item) => item['@type'] === 'Course');
+  const lesson = items.find((item) => item['@type'] === 'LearningResource');
   const breadcrumb = items.find((item) => item['@type'] === 'BreadcrumbList');
-  expect(course, 'Course schema should be present on lesson page').toBeTruthy();
+  expect(lesson, 'LearningResource schema should be present on lesson page').toBeTruthy();
+  expect(lesson!.name).toBe('Starting with Simple Tests');
+  expect(lesson!.learningResourceType).toBe('Lesson');
+  expect(lesson!.inLanguage).toBe('en-US');
+  expect((lesson!.author as Record<string, unknown>).name).toBe('Steve Kinney');
+  expect(lesson!.isPartOf).toEqual({
+    '@type': 'Course',
+    '@id': 'https://stevekinney.com/courses/testing#course',
+    name: 'Introduction to Testing',
+    url: 'https://stevekinney.com/courses/testing',
+  });
   expect(breadcrumb, 'BreadcrumbList schema should be present on lesson page').toBeTruthy();
   const listItems = breadcrumb!.itemListElement as Record<string, unknown>[];
   expect(listItems.length).toBeGreaterThanOrEqual(2);
@@ -117,6 +145,62 @@ for (const scenario of scenarios) {
         item['@context'],
         `@graph item of type ${item['@type']} should not have its own @context`,
       ).toBeUndefined();
+    }
+  });
+}
+
+for (const pagePath of [
+  '/writing/setup-python',
+  '/courses/testing',
+  '/courses/testing/the-basics',
+]) {
+  test(`${pagePath} shares generated metadata across HTML, JSON-LD, and LLM output`, async ({
+    page,
+    request,
+  }) => {
+    const route = generatedContent.routes[pagePath];
+    if (!route || route.contentType === 'project')
+      throw new Error(`Missing content route ${pagePath}`);
+    await page.goto(pagePath);
+    const schemas = getSchemaItems(await getJsonLd(page));
+    const schema = schemas.find((item) =>
+      ['Article', 'Course', 'LearningResource'].includes(String(item['@type'])),
+    );
+    expect(schema).toBeTruthy();
+    expect(schema!.description).toBe(route.description);
+    expect(schema!.dateModified).toBe(route.modified);
+    expect(schema!.headline ?? schema!.name).toBe(route.title);
+    for (const selector of [
+      'meta[name="description"]',
+      'meta[property="og:description"]',
+      'meta[name="twitter:description"]',
+    ]) {
+      await expect(page.locator(selector)).toHaveAttribute('content', route.description);
+    }
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      'href',
+      `https://stevekinney.com${pagePath}`,
+    );
+    const exported = await request.get(`${pagePath}/llms.txt`);
+    expect(exported.ok()).toBe(true);
+    const text = await exported.text();
+    expect(text).toContain(`Description: ${route.description}`);
+    expect(text).toContain(`Canonical: https://stevekinney.com${pagePath}`);
+    if (route.modified) {
+      expect(new Date(route.modified).toISOString()).toBe(route.modified);
+      await expect(page.locator('meta[property="article:modified_time"]')).toHaveAttribute(
+        'content',
+        route.modified,
+      );
+      expect(text).toContain(`Modified: ${route.modified}`);
+    }
+    if (route.contentType === 'lesson') {
+      expect(schema!.datePublished).toBeUndefined();
+      await expect(page.locator('meta[property="article:published_time"]')).toHaveCount(0);
+      expect(text).not.toMatch(/^Date:/m);
+    } else {
+      expect(schema!.datePublished).toBe(new Date(route.date).toISOString());
+      expect(text).toContain(`Date: ${route.date}`);
     }
   });
 }

@@ -1,14 +1,6 @@
 ---
 title: 'CloudFront Headers, CORS, and Security'
-description: >-
-  Configure CloudFront response headers policies for CORS, security headers (HSTS, X-Content-Type-Options, X-Frame-Options), and cache-control directives.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - cloudfront
-  - cors
-  - security-headers
+description: 'Configure CloudFront response headers policies for CORS, security headers, and cache-control directives.'
 ---
 
 Your CloudFront distribution serves your static site over HTTPS, routes SPA paths correctly, and locks down S3 with Origin Access Control. But open your browser's DevTools, inspect the response headers on any request, and you'll notice something missing: there are no security headers. No `Strict-Transport-Security`. No `X-Content-Type-Options`. No `X-Frame-Options`. S3 doesn't add these, and CloudFront doesn't add them by default.

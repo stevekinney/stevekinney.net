@@ -4,13 +4,6 @@ description: >-
   Debug edge functions using CloudWatch Logs, and navigate the runtime
   constraints and deployment limitations that affect Lambda@Edge and CloudFront
   Functions.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - edge-functions
-  - debugging
-  - limitations
 ---
 
 Edge functions are powerful, but they fail in ways that are genuinely confusing the first time you encounter them. Your logs aren't where you expect. Your function works locally but fails at the edge. Your deployment succeeds but the function doesn't seem to run. This lesson covers where to look when things go wrong and what constraints to keep in mind before you write a single line of code.

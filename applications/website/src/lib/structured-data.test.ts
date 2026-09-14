@@ -4,6 +4,8 @@ import {
   buildBreadcrumbSchema,
   buildCourseSchema,
   buildPersonSchema,
+  buildLessonSchema,
+  serializeJsonLd,
   buildWebSiteSchema,
 } from './structured-data';
 
@@ -48,19 +50,24 @@ describe('buildArticleSchema', () => {
     const schema = buildArticleSchema(input);
     expect(schema.headline).toBe(input.title);
     expect(schema.image).toBe(input.imageUrl);
-    expect(schema.datePublished).toBe(input.datePublished);
+    expect(schema.datePublished).toBe('2024-01-01T00:00:00.000Z');
     expect(schema.author).toBeTruthy();
     expect((schema.author as Record<string, unknown>)['@type']).toBe('Person');
   });
 
   it('includes dateModified when provided', () => {
     const schema = buildArticleSchema({ ...input, dateModified: '2024-06-01' });
-    expect(schema.dateModified).toBe('2024-06-01');
+    expect(schema.dateModified).toBe('2024-06-01T00:00:00.000Z');
   });
 
   it('omits dateModified when not provided', () => {
     const schema = buildArticleSchema(input);
     expect(schema).not.toHaveProperty('dateModified');
+  });
+
+  it('preserves an invalid source date without throwing', () => {
+    const schema = buildArticleSchema({ ...input, datePublished: 'not-a-date' });
+    expect(schema.datePublished).toBe('not-a-date');
   });
 });
 
@@ -69,6 +76,8 @@ describe('buildCourseSchema', () => {
     name: 'Testing Course',
     description: 'Learn testing',
     courseUrl: 'https://stevekinney.com/courses/testing',
+    datePublished: '2024-01-01',
+    dateModified: '2024-06-01T12:00:00.000Z',
   };
 
   it('returns a Course type without @context', () => {
@@ -84,6 +93,15 @@ describe('buildCourseSchema', () => {
     expect(schema.url).toBe(input.courseUrl);
   });
 
+  it('includes identity, dates, provider, and language', () => {
+    const schema = buildCourseSchema(input);
+    expect(schema['@id']).toBe(`${input.courseUrl}#course`);
+    expect(schema.datePublished).toBe('2024-01-01T00:00:00.000Z');
+    expect(schema.dateModified).toBe(input.dateModified);
+    expect(schema.inLanguage).toBe('en-US');
+    expect(schema.provider).toBeTruthy();
+  });
+
   it('includes hasCourseInstance with at least one item containing courseMode', () => {
     const schema = buildCourseSchema(input);
     expect(Array.isArray(schema.hasCourseInstance)).toBe(true);
@@ -91,6 +109,39 @@ describe('buildCourseSchema', () => {
     const instance = schema.hasCourseInstance[0] as Record<string, unknown>;
     expect(instance['@type']).toBe('CourseInstance');
     expect(instance.courseMode).toBeTruthy();
+  });
+});
+
+describe('buildLessonSchema', () => {
+  it('describes a lesson as a LearningResource in its parent course', () => {
+    const schema = buildLessonSchema({
+      name: 'The Basics',
+      description: 'Learn testing',
+      lessonUrl: 'https://stevekinney.com/courses/testing/the-basics',
+      courseName: 'Testing',
+      courseUrl: 'https://stevekinney.com/courses/testing',
+      dateModified: '2024-06-01T12:00:00.000Z',
+    });
+
+    expect(schema['@type']).toBe('LearningResource');
+    expect(schema['@id']).toBe(`${schema.url}#lesson`);
+    expect(schema.learningResourceType).toBe('Lesson');
+    expect(schema.isPartOf).toEqual({
+      '@type': 'Course',
+      '@id': 'https://stevekinney.com/courses/testing#course',
+      name: 'Testing',
+      url: 'https://stevekinney.com/courses/testing',
+    });
+    expect(schema).not.toHaveProperty('datePublished');
+    expect(schema.dateModified).toBe('2024-06-01T12:00:00.000Z');
+  });
+});
+
+describe('serializeJsonLd', () => {
+  it('escapes characters that can terminate an inline script', () => {
+    const serialized = serializeJsonLd({ text: '</script><script>alert("x")</script>' });
+    expect(serialized).not.toContain('</script>');
+    expect(serialized).toContain('\\u003C/script\\u003E');
   });
 });
 

@@ -3,8 +3,6 @@ title: 'Border, Outline, and Ring'
 description: >-
   Understand the differences between borders, outlines, and rings in CSS and
   when to use each for your design needs.
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 There are _different_ ways to draw lines around elements, and they all behave completely _differently_. (Of course they do, right?) Let's build some examples to see how `border`, `outline`, and `ring` actually work in practice.

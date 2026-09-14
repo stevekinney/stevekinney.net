@@ -3,8 +3,6 @@ title: Compacting Claude Code Sessions
 description: >-
   Use Claude Code compaction deliberately, preserve task state in files, and
   avoid relying on long chat history for correctness.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 When a [Claude Code](https://code.claude.com/docs/en/overview) session gets long

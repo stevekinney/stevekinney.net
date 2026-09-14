@@ -1,8 +1,6 @@
 ---
 title: Tuning Bugbot for Your Codebase
 description: How to configure Cursor Bugbot so it finds the real issues and shuts up about the rest.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 A review bot that comments on every PR with low-quality findings is a review bot that gets muted. The second-most-common failure mode (after "finds nothing useful") is "finds something on every PR regardless of whether there's something to find." Both failures kill the loop, because the signal stops being worth reading.

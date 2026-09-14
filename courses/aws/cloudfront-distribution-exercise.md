@@ -2,12 +2,6 @@
 title: 'Exercise: Set Up a CloudFront Distribution'
 description: >-
   Create a CloudFront distribution with an S3 origin, Origin Access Control, and custom error responses for SPA routing.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudfront
-  - exercise
 ---
 
 You have an S3 bucket with static site files. Your job is to put CloudFront in front of it: create a distribution, lock down the bucket with Origin Access Control, and configure SPA routing. By the end, you should have a globally distributed, HTTPS-secured frontend on a `*.cloudfront.net` domain that serves your SPA correctly on all routes.

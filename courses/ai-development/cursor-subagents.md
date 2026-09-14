@@ -3,8 +3,6 @@ title: Cursor Subagents
 description: >-
   Use Cursor subagents for isolated research, shell, browser, and specialized
   repository tasks without over-splitting the work.
-modified: 2026-06-24
-date: 2026-06-23
 ---
 
 [Cursor subagents](https://cursor.com/docs/subagents) are specialized agents with

@@ -1,12 +1,16 @@
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { EventEmitter, once } from 'node:events';
+import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { contentDevelopmentPlugins } from '../../plugins/vite/content-development-plugins';
 import { PLAYGROUND_CONTENT_SECURITY_POLICY } from '@stevekinney/utilities/tailwind-playground-policy';
+import { contentDevelopmentPlugins } from '../../plugins/vite/content-development-plugins.ts';
+import { regenerateGeneratedContent } from '../../plugins/vite/regenerate-generated-content.ts';
 
 type Middleware = (
   request: { url?: string },
@@ -122,6 +126,7 @@ describe('contentDevelopmentPlugins', () => {
   });
 
   afterEach(async () => {
+    vi.unstubAllEnvs();
     await rm(temporaryDirectory, { recursive: true, force: true });
   });
 
@@ -164,6 +169,100 @@ describe('contentDevelopmentPlugins', () => {
       playgroundDependencyPath,
       sharedBuildDependencyPath,
     ]);
+  });
+
+  it('refreshes committed history on later rebuilds without changing the parent revision', async () => {
+    const git = (argumentsList: string[], date?: string): string =>
+      execFileSync('git', argumentsList, {
+        cwd: temporaryDirectory,
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          ...(date ? { GIT_AUTHOR_DATE: date, GIT_COMMITTER_DATE: date } : {}),
+        },
+      }).trim();
+    git(['init', '-q']);
+    git(['config', 'user.email', 'tests@example.com']);
+    git(['config', 'user.name', 'Tests']);
+    const contentDirectory = path.join(temporaryDirectory, 'writing');
+    const contentFile = path.join(contentDirectory, 'post.md');
+    await mkdir(contentDirectory);
+    const frontmatter = '---\ntitle: Post\ndescription: A post.\ndate: 2024-01-01\n---\n';
+    await writeFile(contentFile, `${frontmatter}\nOriginal body.\n`);
+    git(['add', 'writing']);
+    git(['commit', '-qm', 'initial'], '2024-01-01T00:00:00Z');
+    const initialRevision = git(['rev-parse', 'HEAD']);
+    vi.stubEnv('CONTENT_GIT_REVISION', initialRevision);
+
+    const historyModule = fileURLToPath(
+      new URL('../../../../packages/scripts/content-repository/git-history.ts', import.meta.url),
+    );
+    const resultFile = path.join(temporaryDirectory, 'history.json');
+    const buildScript = path.join(temporaryDirectory, 'build-history.ts');
+    const playgroundsBuildScript = path.join(temporaryDirectory, 'build-playgrounds.ts');
+    await writeFile(
+      buildScript,
+      [
+        `import { collectContentHistory } from ${JSON.stringify(historyModule)};`,
+        'const history = await collectContentHistory(process.cwd());',
+        `await Bun.write(${JSON.stringify(resultFile)}, JSON.stringify({revision: history.revision, modified: history.modified.get('writing/post.md')}));`,
+        'process.exit(0);',
+      ].join('\n'),
+    );
+    await writeFile(playgroundsBuildScript, 'process.exit(0);\n');
+
+    const plugin = regenerateGeneratedContent({
+      contentBuildScriptPath: buildScript,
+      playgroundsBuildScriptPath: playgroundsBuildScript,
+      contentEnhancementsBuildScriptPath: playgroundsBuildScript,
+      workingDirectory: temporaryDirectory,
+      contentDirectories: [contentDirectory],
+      contentDependencyPaths: [],
+      enhancementSourceDirectories: [],
+      enhancementDependencyPaths: [],
+      playgroundDependencyPaths: [],
+      sharedBuildDependencyPaths: [],
+      debounceMs: 0,
+    });
+    if (
+      !plugin ||
+      typeof plugin !== 'object' ||
+      !('configureServer' in plugin) ||
+      typeof plugin.configureServer !== 'function'
+    ) {
+      throw new Error('Expected a content regeneration server hook.');
+    }
+    const watcher = new EventEmitter();
+    const events = new EventEmitter();
+    Reflect.apply(plugin.configureServer, undefined, [
+      {
+        watcher,
+        moduleGraph: { invalidateAll: () => {} },
+        ws: { send: () => events.emit('reload') },
+        config: {
+          logger: { error: (message: string) => events.emit('error', new Error(message)) },
+        },
+      },
+    ]);
+    const rebuild = async (): Promise<{ revision: string; modified: string }> => {
+      const completed = once(events, 'reload');
+      watcher.emit('change', contentFile);
+      await completed;
+      return JSON.parse(await readFile(resultFile, 'utf8'));
+    };
+    expect(await rebuild()).toEqual({
+      revision: initialRevision,
+      modified: '2024-01-01T00:00:00.000Z',
+    });
+
+    await writeFile(contentFile, `${frontmatter}\nUpdated body.\n`);
+    git(['add', 'writing']);
+    git(['commit', '-qm', 'update body'], '2024-01-02T00:00:00Z');
+    expect(await rebuild()).toEqual({
+      revision: git(['rev-parse', 'HEAD']),
+      modified: '2024-01-02T00:00:00.000Z',
+    });
+    expect(process.env.CONTENT_GIT_REVISION).toBe(initialRevision);
   });
 
   it('serves generated CSS enhancement assets during development', async () => {

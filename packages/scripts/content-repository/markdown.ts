@@ -20,6 +20,7 @@ import { normalizePath, parseFrontmatter } from '@stevekinney/utilities/frontmat
 import { repositoryRoot } from '../content-paths.ts';
 
 import type { MarkdownSource } from './types.ts';
+import type { ContentValidationIssue } from './types.ts';
 
 const markdownParser = unified().use(remarkParse);
 const externalPrefixes = ['http://', 'https://', 'mailto:', 'tel:', 'data:', 'ftp:'];
@@ -102,9 +103,22 @@ const extractPlaygroundData = (tree: Root, sourcePath: string, lineOffset: numbe
   return { playgrounds, siteTailwindCandidates: [...siteTailwindCandidates] };
 };
 
-export const loadMarkdownSource = async (absolutePath: string): Promise<MarkdownSource> => {
+export const loadMarkdownSource = async (
+  absolutePath: string,
+  issues?: ContentValidationIssue[],
+): Promise<MarkdownSource> => {
   const raw = await readText(absolutePath);
-  const { data, content } = parseFrontmatter(raw);
+  let data: Record<string, unknown> = {};
+  let content = '';
+  try {
+    ({ data, content } = parseFrontmatter(raw));
+  } catch (error) {
+    if (!issues) throw error;
+    issues.push({
+      file: relativeSourcePath(absolutePath),
+      message: `Cannot parse frontmatter: ${(error as Error).message}`,
+    });
+  }
   const tree = markdownParser.parse(content);
 
   const lineOffset = raw.slice(0, raw.length - content.length).split('\n').length - 1;

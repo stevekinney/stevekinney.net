@@ -3,8 +3,6 @@ title: Tailwind Transform
 description: >-
   Apply 2D and 3D transforms with Tailwind utilities for rotating, scaling,
   skewing, and translating elements
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 CSS transforms allow you to rotate, scale, skew, and translate elements in 2D or 3D space. Tailwind provides utility classes that map directly to these properties, making it fast and intuitive to apply complex visual effects in your HTML markup.

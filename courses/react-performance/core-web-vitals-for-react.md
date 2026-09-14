@@ -3,12 +3,6 @@ title: Core Web Vitals for React Applications
 description: >-
   Master LCP, FID, and CLS optimization in React apps. Practical techniques to
   improve user experience and search rankings.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - web-vitals
 ---
 
 Core Web Vitals aren't just Google's latest SEO ranking factor—they're a measurement of real user frustration. That 4-second Largest Contentful Paint means users are staring at a blank screen. The 300ms First Input Delay means clicks feel broken. The 0.25 Cumulative Layout Shift means content is jumping around like a bouncy castle. For React developers, optimizing these metrics requires understanding how React's rendering behavior affects user experience.

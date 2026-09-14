@@ -3,13 +3,6 @@ title: Concurrent React and Scheduling
 description: >-
   Learn how React can pause and resume work to keep interactions smooth—design
   components that play nicely with the scheduler.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - concurrent
-  - scheduling
 ---
 
 React 18 introduced concurrent features that fundamentally change how React processes updates. Instead of blocking the main thread until every component renders, React can now pause and resume work—keeping your app responsive even during expensive operations. This isn't just about making things faster; it's about making the _right things_ fast and ensuring user interactions never feel sluggish.

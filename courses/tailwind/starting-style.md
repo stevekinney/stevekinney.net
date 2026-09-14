@@ -3,8 +3,6 @@ title: Starting Style
 description: >-
   Using the starting variant in Tailwind 4 for smooth entry animations and
   transitions from display:none to visible states
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 The `starting` variant (new in Tailwind 4) enables smooth animations when elements first appear or transition from `display: none`.

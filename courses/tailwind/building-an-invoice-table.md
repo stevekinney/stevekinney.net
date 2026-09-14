@@ -3,8 +3,6 @@ title: Building an Invoice Table with Subgrid
 description: >-
   Let's build a responsive invoice table that uses CSS Subgrid and container
   queries to create perfectly aligned columns that adapt to any container size.
-modified: 2026-09-14
-date: 2025-06-12
 ---
 
 Let's start with our basic HTML structure for an invoice table with line items.
