@@ -60,7 +60,7 @@ const tasksForChangedPath = (
   }
 
   if (hasPathMatch(absolutePath, options.sharedBuildDependencies)) {
-    return ['playgrounds', 'enhancements'];
+    return ['content', 'playgrounds', 'enhancements'];
   }
 
   if (hasPathMatch(absolutePath, options.playgroundDependencies)) {
@@ -121,6 +121,7 @@ export function regenerateGeneratedContent(
       let isClosed = false;
       let activeChild: ChildProcess | undefined;
       let pendingTasks = new Set<BuildTask>();
+      let staleTasks = new Set<BuildTask>();
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let debouncedTasks = new Set<BuildTask>();
 
@@ -157,11 +158,15 @@ export function regenerateGeneratedContent(
           isRunning = false;
 
           if (!success) {
+            // The failed task and every skipped task must recover before publication.
+            for (const staleTask of tasks) staleTasks.add(staleTask);
             server.config.logger.error(
               reason
                 ? `Generated ${task} rebuild failed: ${reason}`
                 : `Generated ${task} rebuild failed.`,
             );
+          } else {
+            staleTasks.delete(task);
           }
 
           const remainingTasks = success ? tasks.slice(1) : [];
@@ -176,7 +181,7 @@ export function regenerateGeneratedContent(
             return;
           }
 
-          if (success) {
+          if (success && staleTasks.size === 0) {
             server.moduleGraph.invalidateAll();
             server.ws.send({ type: 'full-reload' });
           }
@@ -209,6 +214,7 @@ export function regenerateGeneratedContent(
         clearTimeout(debounceTimer);
         debounceTimer = undefined;
         pendingTasks = new Set();
+        staleTasks = new Set();
         debouncedTasks = new Set();
         server.watcher.off('add', handleChange);
         server.watcher.off('change', handleChange);

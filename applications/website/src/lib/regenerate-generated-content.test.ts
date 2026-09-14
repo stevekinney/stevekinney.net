@@ -290,10 +290,122 @@ describe('regenerateGeneratedContent', () => {
       'playgrounds',
     ]);
     expect(tasks(path.join(root, 'packages/scripts/build-artifacts.ts'))).toEqual([
+      'content',
       'playgrounds',
       'enhancements',
     ]);
-    expect(tasks(path.join(root, 'bun.lock'))).toEqual(['playgrounds', 'enhancements']);
+    expect(tasks(path.join(root, 'bun.lock'))).toEqual(['content', 'playgrounds', 'enhancements']);
+  });
+
+  it('does not reload stale content after a failed prerequisite and queued enhancement', async () => {
+    const events: string[] = [];
+    const server = makeServer(events);
+    const children: FakeChildProcess[] = [];
+
+    configurePlugin(
+      {
+        contentDirectory: '/workspace/courses',
+        contentDependencyPath: '/workspace/packages/scripts/content-repository',
+        enhancementDirectory: '/workspace/packages/content-enhancements/src',
+        enhancementDependencyPath: '/workspace/packages/scripts/content-enhancements-build.ts',
+        playgroundDependencyPath: '/workspace/packages/scripts/playgrounds-build.ts',
+        sharedBuildDependencyPath: '/workspace/packages/scripts/build-artifacts.ts',
+        spawnProcess: (_command, args) => {
+          events.push(args[1] ?? 'missing-script');
+          const child = makeChild(() => {});
+          children.push(child);
+          return child;
+        },
+      },
+      server,
+    );
+
+    server.watcher.emit('change' satisfies ServerEventName, '/workspace/courses/example.md');
+    await waitForTimer();
+    expect(events).toEqual(['/content-build.ts']);
+
+    server.watcher.emit(
+      'change' satisfies ServerEventName,
+      '/workspace/packages/content-enhancements/src/enhance-tables.ts',
+    );
+    await waitForTimer();
+    children[0]?.emit('exit', 1);
+    expect(events).toEqual(['/content-build.ts', '/content-enhancements-build.ts']);
+
+    children[1]?.emit('exit', 0);
+    expect(events).toEqual(['/content-build.ts', '/content-enhancements-build.ts']);
+
+    server.watcher.emit('change' satisfies ServerEventName, '/workspace/courses/example.md');
+    await waitForTimer();
+    expect(events).toEqual([
+      '/content-build.ts',
+      '/content-enhancements-build.ts',
+      '/content-build.ts',
+    ]);
+
+    children[2]?.emit('exit', 0);
+    expect(events).toEqual([
+      '/content-build.ts',
+      '/content-enhancements-build.ts',
+      '/content-build.ts',
+      '/playgrounds-build.ts',
+    ]);
+
+    children[3]?.emit('exit', 0);
+    expect(events).toEqual([
+      '/content-build.ts',
+      '/content-enhancements-build.ts',
+      '/content-build.ts',
+      '/playgrounds-build.ts',
+      'invalidate',
+      'reload',
+    ]);
+  });
+
+  it('retains skipped tasks until every stale output has successfully rebuilt', async () => {
+    const events: string[] = [];
+    const server = makeServer(events);
+    const children: FakeChildProcess[] = [];
+
+    configurePlugin(
+      {
+        contentDirectory: '/workspace/courses',
+        contentDependencyPath: '/workspace/packages/scripts/content-repository',
+        enhancementDirectory: '/workspace/packages/content-enhancements/src',
+        enhancementDependencyPath: '/workspace/packages/scripts/content-enhancements-build.ts',
+        playgroundDependencyPath: '/workspace/packages/scripts/playgrounds-build.ts',
+        sharedBuildDependencyPath: '/workspace/packages/scripts/build-artifacts.ts',
+        spawnProcess: (_command, args) => {
+          events.push(args[1] ?? 'missing-script');
+          const child = makeChild(() => {});
+          children.push(child);
+          return child;
+        },
+      },
+      server,
+    );
+
+    server.watcher.emit('change', '/workspace/packages/scripts/build-artifacts.ts');
+    await waitForTimer();
+    children[0]?.emit('exit', 1);
+
+    server.watcher.emit('change', '/workspace/courses/example.md');
+    await waitForTimer();
+    children[1]?.emit('exit', 0);
+    children[2]?.emit('exit', 0);
+    expect(events).toEqual(['/content-build.ts', '/content-build.ts', '/playgrounds-build.ts']);
+
+    server.watcher.emit('change', '/workspace/packages/content-enhancements/src/enhance-tables.ts');
+    await waitForTimer();
+    children[3]?.emit('exit', 0);
+    expect(events).toEqual([
+      '/content-build.ts',
+      '/content-build.ts',
+      '/playgrounds-build.ts',
+      '/content-enhancements-build.ts',
+      'invalidate',
+      'reload',
+    ]);
   });
 
   it('removes watcher handlers, clears pending work, and kills the owned child on server close', async () => {
