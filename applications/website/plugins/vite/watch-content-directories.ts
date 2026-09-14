@@ -2,19 +2,21 @@ import path from 'node:path';
 
 import type { PluginOption } from 'vite';
 
+const watchPattern = (fileOrDirectory: string): string => {
+  const absolutePath = path.resolve(fileOrDirectory);
+  return path.extname(absolutePath) ? absolutePath : path.join(absolutePath, '**', '*');
+};
+
 /**
- * Adds extra directories to Vite's file watcher so content loaded via
- * `import.meta.glob` with deep relative paths still triggers module
- * invalidation when new files appear. Vite's default watcher does not
- * always cover directories resolved via `../../../../` paths outside the
- * application root.
+ * Adds extra source roots and dependency files to Vite's watcher so generated
+ * content rebuilds when files outside the application root change.
  */
-export function watchContentDirectories(directories: readonly string[]): PluginOption {
+export function watchContentDirectories(paths: readonly string[]): PluginOption {
   return {
     name: 'watch-content-directories',
     configureServer(server) {
-      for (const directory of directories) {
-        server.watcher.add(path.join(directory, '**', '*.{md,toml}'));
+      for (const watchedPath of paths) {
+        server.watcher.add(watchPattern(watchedPath));
       }
     },
   };

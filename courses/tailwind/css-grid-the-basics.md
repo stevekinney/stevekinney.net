@@ -3,7 +3,7 @@ title: CSS Grid The Basics
 description: >-
   Learn CSS Grid layout fundamentals with Tailwind 4's grid utilities for
   two-dimensional layouts.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -15,7 +15,7 @@ To create a grid layout, first define a grid container. In standard CSS, this is
 
 Applying `grid` to an element makes it a grid container, establishing a block-level grid formatting context for its contents. This container dictates how its direct children (grid items) are laid out.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid gap-4 rounded-lg bg-gray-100 p-4">
   <!-- Grid items go here -->
   <div class="rounded bg-blue-200 p-4">Item 1</div>
@@ -36,7 +36,7 @@ Define explicit grid columns using utilities that map to the `grid-template-colu
 
 `grid-cols-<number>` creates a grid with a specified number of equally sized columns. For example, `grid-cols-3` creates three columns, each taking an equal fraction of the available space, using `repeat(<number>, minmax(0, 1fr))` CSS. The `fr` unit represents a fraction of the available space in the grid container.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-3 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="flex min-h-[80px] items-center justify-center rounded bg-blue-200 p-4">1</div>
   <div class="flex min-h-[80px] items-center justify-center rounded bg-red-200 p-4">2</div>
@@ -53,7 +53,7 @@ Remove explicitly defined columns with `grid-cols-none` (`grid-template-columns:
 
 For complex column definitions, use arbitrary values with `grid-cols-[<value>]`. This allows any valid CSS value for `grid-template-columns`, like specific widths, `repeat` with different units, or `fit-content`.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-[200px_1fr_200px] gap-4 rounded-lg bg-gray-100 p-4">
   <div class="min-h-[80px] rounded bg-blue-200 p-4">Fixed 200px</div>
   <div class="min-h-[80px] rounded bg-red-200 p-4">Flexible 1fr</div>
@@ -69,7 +69,7 @@ Similarly, define explicit grid rows using utilities that map to `grid-template-
 
 `grid-rows-<number>` creates a grid with a specified number of equally sized rows, using `repeat(<number>, minmax(0, 1fr))` CSS.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-flow-col grid-rows-3 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="flex min-h-[80px] items-center justify-center rounded bg-blue-200 p-4">1</div>
   <div class="flex min-h-[80px] items-center justify-center rounded bg-red-200 p-4">2</div>
@@ -86,7 +86,7 @@ Remove explicitly defined rows with `grid-rows-none`.
 
 For custom row definitions, `grid-rows-[<value>]` allows arbitrary values.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-rows-[100px_auto_100px] gap-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-4">Header (100px)</div>
   <div class="rounded bg-red-200 p-4">Content (auto)</div>
@@ -102,7 +102,7 @@ Tailwind supports `subgrid` for `grid-template-columns` and `grid-template-rows`
 
 A subgrid allows a nested grid to align its tracks with its parent grid, inheriting the parent's column or row sizing and positioning.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-3 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="min-h-[80px] rounded bg-blue-200 p-4">Item 1</div>
   <div class="col-span-2 grid grid-cols-subgrid gap-4">
@@ -128,7 +128,7 @@ Tailwind utilities for auto-placement:
 - `grid-flow-row-dense`: Dense packing, flowing items by row.
 - `grid-flow-col-dense`: Dense packing, flowing items by column.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-flow-col grid-cols-3 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="flex min-h-[80px] items-center justify-center rounded bg-blue-200 p-4">1</div>
   <div class="flex min-h-[80px] items-center justify-center rounded bg-red-200 p-4">2</div>
@@ -152,7 +152,7 @@ Tailwind utilities for these properties:
 - `auto-cols-max`, `auto-rows-max`: Implicit tracks size to the maximum content size of items within them.
 - `auto-cols-fr`, `auto-rows-fr`: Implicit tracks size as fractions of available space.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid auto-cols-max grid-cols-2 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="min-h-[80px] rounded bg-blue-200 p-4">Item 1</div>
   <div class="min-h-[80px] rounded bg-red-200 p-4">Item 2</div>
@@ -175,7 +175,7 @@ Tailwind uses its spacing scale and arbitrary values for gap utilities:
 - `gap-x-<number>`: Sets column gap.
 - `gap-y-<number>`: Sets row gap.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-4 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="min-h-[80px] rounded bg-blue-200 p-4">Item 1</div>
   <div class="min-h-[80px] rounded bg-red-200 p-4">Item 2</div>
@@ -206,7 +206,7 @@ To make an item span multiple columns or rows, use `grid-column` or `grid-row` w
 - `col-span-<number>`: Item spans specified number of columns.
 - `row-span-<number>`: Item spans specified number of rows.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-6 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="col-span-4 min-h-[80px] rounded bg-blue-200 p-4">Item 1 spans 4 columns</div>
   <div class="col-span-2 min-h-[80px] rounded bg-red-200 p-4">Item 2 spans 2 columns</div>
@@ -230,7 +230,7 @@ Position an item by specifying its start and end grid lines using `grid-column-s
 - `row-start-<number>`: Item starts at specified row line.
 - `row-end-<number>`: Item ends at specified row line.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-64 grid-cols-3 grid-rows-3 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="col-start-2 col-end-3 row-start-1 row-end-3 rounded bg-blue-200 p-4">
     Item 1 (Col 2, Row 1-2)
@@ -258,7 +258,7 @@ Grid offers control over item alignment within grid areas and track positioning 
 Tailwind `content-*` utilities:
 `content-normal`, `content-center`, `content-start`, `content-end`, `content-between`, `content-around`, `content-evenly`, `content-baseline`, `content-stretch`.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-48 grid-rows-3 content-center gap-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-4">Item 1</div>
   <div class="rounded bg-red-200 p-4">Item 2</div>
@@ -275,7 +275,7 @@ Rows are centered vertically due to `content-center`.
 Tailwind `items-*` utilities:
 `items-start`, `items-end`, `items-center`, `items-baseline`, `items-stretch` (default).
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-32 grid-cols-2 items-center gap-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-4">Item 1</div>
   <div class="rounded bg-red-200 p-4">Item 2</div>
@@ -293,7 +293,7 @@ Both items are centered vertically in their cells due to `items-center`.
 Tailwind `self-*` utilities:
 `self-auto` (uses `align-items`), `self-start`, `self-end`, `self-center`, `self-stretch`, `self-baseline`.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-32 grid-cols-2 items-start gap-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-4">Item 1</div>
   <div class="self-center rounded bg-red-200 p-4">Item 2 (centered)</div>
@@ -310,7 +310,7 @@ Tailwind `self-*` utilities:
 
 Tailwind `justify-*` utilities: `justify-start`, `justify-end`, `justify-center`, `justify-between`, `justify-around`, `justify-evenly`, `justify-stretch`, `justify-normal`.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-96 grid-cols-[4rem_4rem_4rem] justify-center gap-4 rounded-lg bg-green-100 p-4">
   <div class="flex h-12 w-12 items-center justify-center rounded bg-blue-200">1</div>
   <div class="flex h-12 w-12 items-center justify-center rounded bg-red-200">2</div>
@@ -326,7 +326,7 @@ Implicit columns are centered within the container due to `justify-center`.
 Tailwind `justify-items-*` utilities:
 `justify-items-start`, `justify-items-end`, `justify-items-center`, `justify-items-stretch` (default), `justify-items-normal`.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-96 grid-cols-3 justify-items-center gap-4 rounded-lg bg-green-100 p-4">
   <div class="h-24 w-24 rounded bg-blue-200 p-4">Item 1</div>
   <div class="h-24 w-24 rounded bg-red-200 p-4">Item 2</div>
@@ -344,7 +344,7 @@ Items are centered horizontally in their cells due to `justify-items-center`.
 Tailwind `justify-self-*` utilities:
 `justify-self-auto` (uses `justify-items`), `justify-self-start`, `justify-self-end`, `justify-self-center`, `justify-self-stretch`.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-2 justify-items-start gap-4 rounded-lg bg-gray-100 p-4">
   <div class="min-h-[80px] rounded bg-blue-200 p-4">Item 1 (start)</div>
   <div class="min-h-[80px] justify-self-center rounded bg-red-200 p-4">Item 2 (centered)</div>
@@ -363,7 +363,7 @@ Grid offers shorthands for setting alignment and justification simultaneously.
 - `place-items-*`: Sets `align-items` and `justify-items`. Applied to container.
 - `place-self-*`: Sets `align-self` and `justify-self`. Applied to item.
 
-```html tailwind
+```html tailwind height=400
 <div
   class="grid h-48 w-48 grid-cols-2 grid-rows-2 place-items-center gap-4 rounded-lg bg-gray-100 p-4"
 >
@@ -384,7 +384,7 @@ Grid offers shorthands for setting alignment and justification simultaneously.
 
 Tailwind supports responsive design. Grid utilities can be applied conditionally at breakpoints (`sm:`, `md:`, `lg:`, `xl:`, `2xl:`).
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-1 gap-4 rounded-lg bg-gray-100 p-4 md:grid-cols-2 lg:grid-cols-3">
   <div class="min-h-[80px] rounded bg-blue-200 p-4">Item 1</div>
   <div class="min-h-[80px] rounded bg-red-200 p-4">Item 2</div>
@@ -401,7 +401,7 @@ Tailwind is mobile-first: unprefixed styles apply to all sizes; prefixed styles 
 
 Tailwind supports container queries. Mark an element with `@container`, then use variants like `@sm:` on its children to style them based on the container's width.
 
-```html tailwind
+```html tailwind height=400
 <div class="@container">
   <div class="grid grid-cols-1 gap-4 rounded-lg bg-gray-100 p-4 @md:grid-cols-2">
     <div class="min-h-[80px] rounded bg-blue-200 p-4">Item 1</div>
@@ -433,7 +433,7 @@ Define custom grid templates with `--grid-template-columns-*` and `--grid-templa
 
 Use these as utility classes:
 
-```html tailwind
+```html tailwind height=400
 <div
   class="grid-cols-layout grid-rows-header grid-rows-content grid-rows-footer grid gap-4 rounded-lg bg-gray-100 p-4"
 >
@@ -449,7 +449,7 @@ This integrates complex grid definitions into your design system. Customize gap 
 
 Many Tailwind grid utilities support arbitrary values via `[<value>]` syntax, allowing any valid CSS value.
 
-```html tailwind
+```html tailwind height=400
 <div
   class="grid grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))] gap-[2rem] rounded-lg bg-gray-100 p-4"
 >

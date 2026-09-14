@@ -3,7 +3,7 @@ title: Grid Dynamic Columns
 description: >-
   Implement dynamic grid columns with subgrids for perfectly aligned nested
   layouts in CSS Grid.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -25,7 +25,7 @@ Consider a main layout with a specific column grid. An element within a cell of 
 
 Example:
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-12 gap-4 rounded-lg bg-gray-100 p-4">
   <!-- Parent container: 12-column grid -->
   <div class="col-span-full grid grid-cols-subgrid gap-4">

@@ -9,6 +9,7 @@
   import Youtube from '@icons-pack/svelte-simple-icons/icons/SiYoutube';
   import Linkedin from '$lib/components/linkedin-icon.svelte';
   import type { Snippet } from 'svelte';
+  import type { LayoutData } from './$types';
 
   import type { ExtendElement } from '$lib/components/component.types';
   import Navigation from '$lib/components/navigation.svelte';
@@ -25,12 +26,14 @@
     'div',
     {
       children?: Snippet;
+      data: LayoutData;
     }
   >;
 
   // Extract props
   const {
     children,
+    data,
     id,
     class: className,
     style,
@@ -64,7 +67,7 @@
   `<svelte:head>`, so it prerenders correctly on `csr = false` content pages and
   still loads on hydrating routes — no per-route wiring needed.
 -->
-<VercelAnalytics />
+<VercelAnalytics enabled={data.analyticsEnabled} />
 
 <!-- Skip navigation link for keyboard users -->
 <a

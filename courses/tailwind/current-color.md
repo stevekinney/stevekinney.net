@@ -3,7 +3,7 @@ title: Current Color
 description: >-
   Use currentColor utilities to create contextually adaptive styles that inherit
   text color for borders, fills, and more
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -29,7 +29,7 @@ All `currentColor` utilities use the `-current` suffix:
 
 ## Basic Usage
 
-```html tailwind
+```html tailwind height=100
 <!-- Border inherits text color -->
 <div class="border-2 border-current text-blue-500">Blue text with blue border</div>
 
@@ -46,7 +46,7 @@ Tailwind 4 embraces `currentColor` for several defaults:
 
 ### Border Color
 
-```html tailwind
+```html tailwind height=100
 <!-- v3: gray-200 by default -->
 <div class="border"></div>
 
@@ -56,7 +56,7 @@ Tailwind 4 embraces `currentColor` for several defaults:
 
 ### Ring Color
 
-```html tailwind
+```html tailwind height=100
 <!-- v3: 3px blue ring -->
 <div class="ring"></div>
 
@@ -75,7 +75,7 @@ Tailwind 4 embraces `currentColor` for several defaults:
 
 ### Adaptive Components
 
-```html tailwind
+```html tailwind height=100
 <!-- Button adapts to parent context -->
 <div class="text-indigo-600">
   <button class="border-2 border-current px-4 py-2">Indigo bordered button</button>
@@ -88,7 +88,7 @@ Tailwind 4 embraces `currentColor` for several defaults:
 
 ### Icon Libraries
 
-```html tailwind
+```html tailwind height=100
 <!-- Icons automatically match text color -->
 <span class="text-gray-600">
   <svg class="inline h-5 w-5 fill-current">...</svg>
@@ -98,7 +98,7 @@ Tailwind 4 embraces `currentColor` for several defaults:
 
 ### Focus States
 
-```html tailwind
+```html tailwind height=100
 <input class="text-blue-600 focus:ring-2 focus:ring-current focus:outline-current" />
 ```
 
@@ -106,7 +106,7 @@ Tailwind 4 embraces `currentColor` for several defaults:
 
 Combine with opacity modifiers:
 
-```html tailwind
+```html tailwind height=100
 <div class="border-2 border-current/50 text-purple-600">50% opacity purple border</div>
 ```
 
@@ -125,7 +125,7 @@ Use in your own styles:
 
 Use `currentColor` in arbitrary value syntax:
 
-```html tailwind
+```html tailwind height=100
 <div class="shadow-[0_2px_8px_currentColor/20]">Shadow using text color at 20% opacity</div>
 ```
 

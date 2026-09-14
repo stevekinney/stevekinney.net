@@ -3,7 +3,7 @@ title: Grid Multi-column Layouts Columns Utility
 description: >-
   Create magazine-style layouts with CSS multi-column using Tailwind's columns
   utilities.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -17,7 +17,7 @@ Tailwind's utilities for the CSS `columns` property create multi-column containe
 
 Use `columns-<number>` utilities for a fixed number of columns. For example, `columns-3` divides content into three columns. The browser calculates column width to fit the container.
 
-```html tailwind
+```html tailwind height=400
 <div class="columns-3 gap-4 rounded-lg bg-gray-100 p-4">
   <p class="mb-4 rounded bg-blue-200 p-3">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
@@ -47,7 +47,7 @@ This is useful for consistent design across screen sizes.
 
 Alternatively, specify an ideal column width, and the browser creates as many columns of that approximate width as fit. Tailwind offers utilities like `columns-xs` to `columns-7xl`, corresponding to predefined widths (e.g., `columns-sm` is `24rem`).
 
-```html tailwind
+```html tailwind height=400
 <div class="columns-sm gap-4 rounded-lg bg-gray-100 p-4">
   <p class="mb-4 rounded bg-blue-200 p-3">
     This content flows into columns roughly 24rem wide. The number of columns adjusts based on
@@ -70,7 +70,7 @@ Width-based columns are good for responsive designs where content dictates colum
 
 Browsers add a small default gap between columns. Control this with `gap-*` utilities alongside `columns-*`.
 
-```html tailwind
+```html tailwind height=400
 <div class="columns-2 gap-8 rounded-lg bg-gray-100 p-4">
   <p class="mb-4 rounded bg-blue-200 p-3">Content for the first column with a larger gap.</p>
   <p class="mb-4 rounded bg-red-200 p-3">Content for the second column.</p>
@@ -90,7 +90,7 @@ Tailwind's arbitrary value syntax allows any CSS value in utility classes. This 
 
 Specify a custom column count with `columns-[<number>]`.
 
-```html tailwind
+```html tailwind height=400
 <div class="columns-[5] gap-4 rounded-lg bg-gray-100 p-4">
   <div class="mb-4 rounded bg-blue-200 p-3">Column content 1</div>
   <div class="mb-4 rounded bg-red-200 p-3">Column content 2</div>
@@ -104,7 +104,7 @@ Specify a custom column count with `columns-[<number>]`.
 
 Specify custom column width with `columns-[<value>]`, where `<value>` is any CSS length.
 
-```html tailwind
+```html tailwind height=400
 <div class="columns-[300px] gap-4 rounded-lg bg-gray-100 p-4">
   <div class="mb-4 rounded bg-blue-200 p-3">Content flows into columns ~300px wide</div>
   <div class="mb-4 rounded bg-red-200 p-3">Each column will be approximately 300 pixels wide</div>
@@ -116,9 +116,16 @@ Specify custom column width with `columns-[<value>]`, where `<value>` is any CSS
 
 ### Using CSS Variables with Arbitrary Values
 
+```css playground=column-vars
+:root {
+  --article-column-width: 20rem;
+  --another-width-var: 18rem;
+}
+```
+
 Reference CSS variables with `columns-[var(--my-column-width)]` or the shorthand `columns-(<custom-property>)`.
 
-```html tailwind
+```html tailwind height=400 css=column-vars
 <div class="mb-4 columns-[var(--article-column-width)] gap-4 rounded-lg bg-gray-100 p-4">
   <div class="mb-4 rounded bg-blue-200 p-3">Column width controlled by a CSS variable</div>
   <div class="mb-4 rounded bg-red-200 p-3">
@@ -140,7 +147,7 @@ Tailwind's responsive design capabilities work with multi-column utilities using
 
 Apply different `columns-*` utilities at various breakpoints.
 
-```html tailwind
+```html tailwind height=400
 <div class="columns-1 gap-4 rounded-lg bg-gray-100 p-4 sm:columns-2 md:columns-3 lg:columns-4">
   <!-- 1 column on small, 2 on medium, 3 on large, 4 on extra large screens -->
   <p class="mb-4 rounded bg-blue-200 p-3">This article layout adjusts columns by screen size.</p>

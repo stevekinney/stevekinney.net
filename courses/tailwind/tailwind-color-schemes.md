@@ -3,7 +3,7 @@ title: Tailwind Color Schemes
 description: >-
   Master CSS-first color management in Tailwind 4 using theme variables, dark
   mode, and the color-scheme property
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -13,7 +13,7 @@ Tailwind 4 uses CSS-first configuration with `@theme` for color management and t
 
 Controls how browsers render native UI elements (form controls, scrollbars, system colors):
 
-```html tailwind
+```html tailwind height=160
 <!-- Apply to root for whole document -->
 <html class="scheme-dark">
   <!-- Or specific elements -->
@@ -55,7 +55,7 @@ Use `@theme` to define colors that generate utilities:
 
 ### Default System Preference
 
-```html tailwind
+```html tailwind height=160 theme=system
 <!-- Automatic dark mode based on OS -->
 <div class="bg-white dark:bg-gray-900">Adapts to system preference</div>
 ```
@@ -107,11 +107,28 @@ Use `@theme` to define colors that generate utilities:
 }
 ```
 
+```css playground=semantic-colors
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+  --color-surface: white;
+  --color-surface-alt: #f5f5f5;
+  --color-text: #1a1a1a;
+  --color-brand: #5b21b6;
+}
+
+[data-theme='dark'] {
+  --color-surface: #1a1a1a;
+  --color-surface-alt: #2a2a2a;
+  --color-text: #f5f5f5;
+}
+```
+
 ## Using Theme Colors
 
 ### In Utilities
 
-```html tailwind
+```html tailwind height=160 css=semantic-colors
 <div class="bg-surface text-text border-surface-alt">Automatically themed content</div>
 ```
 
@@ -127,7 +144,7 @@ Use `@theme` to define colors that generate utilities:
 
 ### In Arbitrary Values
 
-```html tailwind
+```html tailwind height=160 css=semantic-colors
 <!-- Long form -->
 <div class="shadow-[0_2px_8px_var(--color-text)/10]">...</div>
 

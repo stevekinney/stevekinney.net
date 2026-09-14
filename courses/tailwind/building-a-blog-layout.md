@@ -3,13 +3,13 @@ title: Building a Blog Layout with Named Areas
 description: >-
   Let's build a semantic 2-column blog layout that collapses gracefully using
   CSS Grid Template Areas and container queries.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
 Let's start with our basic HTML structure for a simple blog post layout.
 
-```html tailwind
+```html tailwind height=620
 <div class="mx-auto max-w-sm rounded-lg bg-gray-100 p-4">
   <div class="mb-4 rounded bg-blue-200 p-4">
     <h1 class="text-lg font-bold">The Future of Web Development</h1>
@@ -56,7 +56,7 @@ We have a blog post with header, sidebar navigation, and main content, but they'
 
 Building on techniques from our [dashboard tutorial](building-a-dashboard.md), let's use named grid areas instead of numeric positioning. This creates more maintainable, readable layouts where the CSS literally describes the visual structure.
 
-```html tailwind
+```html tailwind height=620
 <div class="mx-auto max-w-sm rounded-lg bg-gray-100 p-4">
   <div class="@container">
     <div
@@ -161,7 +161,7 @@ This makes complex layouts much more maintainable, especially when working in te
 
 Let's enhance our layout with proper styling, building on patterns from our [card tutorial](building-a-card.md) and [form tutorials](building-a-form-input.md).
 
-```html tailwind
+```html tailwind height=620
 <div class="mx-auto max-w-sm">
   <div class="@container">
     <div
@@ -264,7 +264,7 @@ The `sticky` positioning ensures the table of contents remains accessible as use
 
 Let's add more sophisticated responsive behavior using container queries, building on techniques from our [statistics card tutorial](building-a-statistics-card.md).
 
-```html tailwind
+```html tailwind height=620
 <div class="mx-auto max-w-sm">
   <div class="@container">
     <div

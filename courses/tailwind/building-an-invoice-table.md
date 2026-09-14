@@ -3,13 +3,13 @@ title: Building an Invoice Table with Subgrid
 description: >-
   Let's build a responsive invoice table that uses CSS Subgrid and container
   queries to create perfectly aligned columns that adapt to any container size.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
 Let's start with our basic HTML structure for an invoice table with line items.
 
-```html tailwind
+```html tailwind height=620
 <div>
   <div>
     <div>Description</div>
@@ -44,7 +44,7 @@ It's a basic invoice table structure, but the columns don't align and there's no
 
 First, let's establish our container as a query context and create the CSS Grid foundation, building on what we learned in our [statistics card tutorial](building-a-statistics-card.md).
 
-```html tailwind
+```html tailwind height=620
 <div class="@container">
   <div class="grid grid-cols-[1fr_auto_auto_auto] gap-x-4">
     <div class="contents">
@@ -88,7 +88,7 @@ The `contents` utility is key here—it removes the wrapper divs from the visual
 
 Now comes the magic—let's use CSS Subgrid to ensure perfect alignment between header and data rows while adding proper visual hierarchy.
 
-```html tailwind
+```html tailwind height=620
 <div class="@container">
   <div class="grid grid-cols-[1fr_auto_auto_auto] gap-x-4">
     <div class="col-span-4 grid grid-cols-subgrid border-b border-slate-200 pb-2">
@@ -133,7 +133,7 @@ CSS Subgrid ensures that no matter how the content changes, the columns will alw
 
 Let's make the table adapt its typography and spacing based on the container size, creating a more refined experience in larger spaces.
 
-```html tailwind
+```html tailwind height=620
 <div class="@container">
   <div class="grid grid-cols-[1fr_auto_auto_auto] gap-x-4 @lg:gap-x-6">
     <div class="col-span-4 grid grid-cols-subgrid border-b border-slate-200 pb-2 @lg:pb-3">
@@ -177,7 +177,7 @@ The table automatically becomes more spacious and readable when placed in larger
 
 Let's add professional alternating row backgrounds using the `even:` selector for better scannability across wide tables.
 
-```html tailwind
+```html tailwind height=620
 <div class="@container">
   <div class="grid grid-cols-[1fr_auto_auto_auto] gap-x-4 @lg:gap-x-6">
     <div class="col-span-4 grid grid-cols-subgrid border-b border-slate-200 pb-2 @lg:pb-3">
@@ -218,7 +218,7 @@ This creates the classic "zebra stripe" pattern that helps users track across wi
 
 Finally, let's add a totals section and professional polish to complete our invoice table.
 
-```html tailwind
+```html tailwind height=620
 <div class="@container">
   <div class="rounded-lg border border-slate-200 bg-white p-4 @lg:p-6">
     <div class="grid grid-cols-[1fr_auto_auto_auto] gap-x-4 @lg:gap-x-6">

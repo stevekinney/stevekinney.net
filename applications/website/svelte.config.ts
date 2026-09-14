@@ -28,7 +28,9 @@ const siteUrl =
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const workspaceRoot = join(__dirname, '../..');
 const imageManifestPath = join(__dirname, '../../image-manifest.json');
+const playgroundManifestPath = join(__dirname, '.generated/playgrounds/manifest.json');
 const strictImageManifest =
   process.env.NODE_ENV === 'production' || Boolean(process.env.VERCEL) || Boolean(process.env.CI);
 
@@ -59,7 +61,10 @@ const mdsvexOptions: MdsvexOptions = {
     asPluggable([fixMarkdownUrls, ['../../writing', '../../courses']]),
     asPluggable(remarkGfm),
     asPluggable(remarkCallouts),
-    asPluggable(remarkTailwindPlayground),
+    asPluggable([
+      remarkTailwindPlayground,
+      { manifestPath: playgroundManifestPath, workspaceRoot },
+    ]),
   ],
   rehypePlugins: [
     asPluggable(rehypeSlug),

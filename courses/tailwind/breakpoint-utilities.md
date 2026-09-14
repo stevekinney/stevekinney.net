@@ -3,7 +3,7 @@ title: Breakpoint Utilities
 description: >-
   Build responsive designs with Tailwind's mobile-first breakpoint system and
   viewport-based conditional styling.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -19,7 +19,7 @@ Tailwind uses a mobile-first approach: un-prefixed utilities apply to all sizes,
 
 ## Basic Usage
 
-```html tailwind
+```html tailwind height=220
 <!-- Mobile-first design -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
   <!-- 1 column on mobile, 2 on medium, 3 on large -->
@@ -36,7 +36,7 @@ Tailwind uses a mobile-first approach: un-prefixed utilities apply to all sizes,
 
 Use `max-*` to apply styles below a breakpoint:
 
-```html tailwind
+```html tailwind height=220
 <!-- Only on mobile -->
 <div class="block max-sm:hidden">Hidden on mobile only</div>
 
@@ -46,7 +46,7 @@ Use `max-*` to apply styles below a breakpoint:
 
 ### Stacking for Ranges
 
-```html tailwind
+```html tailwind height=220
 <!-- Apply only between md and lg -->
 <div class="md:max-lg:bg-blue-500">Blue background on medium screens only</div>
 ```
@@ -55,7 +55,7 @@ Use `max-*` to apply styles below a breakpoint:
 
 One-off custom breakpoints:
 
-```html tailwind
+```html tailwind height=220
 <!-- Min width -->
 <div class="min-[850px]:flex">Flex at 850px+</div>
 
@@ -92,7 +92,7 @@ Style based on parent container size, not viewport:
 
 ### Basic Container Queries
 
-```html tailwind
+```html tailwind height=220
 <!-- Mark parent as container -->
 <div class="@container">
   <!-- Style children based on container size -->
@@ -104,7 +104,7 @@ Style based on parent container size, not viewport:
 
 ### Named Containers
 
-```html tailwind
+```html tailwind height=220
 <!-- Named container -->
 <div class="@container/sidebar">
   <nav class="@sm/sidebar:flex">...</nav>
@@ -135,7 +135,7 @@ Customize in `@theme`:
 
 ### Arbitrary Container Queries
 
-```html tailwind
+```html tailwind height=220
 <div class="@container">
   <div class="@max-[600px]:block @min-[400px]:flex">Custom container breakpoints</div>
 </div>
@@ -145,7 +145,7 @@ Customize in `@theme`:
 
 ### Combining with Other Variants
 
-```html tailwind
+```html tailwind height=220
 <!-- Dark mode + responsive + hover -->
 <button
   class="bg-gray-100 hover:bg-gray-200 md:bg-white md:hover:bg-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800 dark:md:bg-gray-950 dark:md:hover:bg-gray-900"
@@ -156,7 +156,7 @@ Customize in `@theme`:
 
 ### Responsive Typography
 
-```html tailwind
+```html tailwind height=220
 <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl">Scales with viewport</h1>
 
 <div class="@container">

@@ -3,7 +3,7 @@ title: color-mix()
 description: >-
   Learn how Tailwind 4 uses the native color-mix() CSS function for opacity
   modifiers and color blending.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -22,7 +22,7 @@ color-mix(in srgb, red 50%, blue 50%)
 
 When you use opacity syntax like `/50`:
 
-```html tailwind
+```html tailwind height=160
 <div class="bg-blue-500/50"></div>
 ```
 
@@ -39,7 +39,7 @@ background-color: color-mix(in srgb, var(--color-blue-500) 50%, transparent);
 
 ## All Color Properties Support It
 
-```html tailwind
+```html tailwind height=160
 <!-- Text with opacity -->
 <p class="text-red-600/75">75% opacity text</p>
 
@@ -71,7 +71,7 @@ Use `color-mix()` in your own styles:
 
 ## In Arbitrary Values
 
-```html tailwind
+```html tailwind height=160
 <!-- Custom color mixing -->
 <div class="bg-[color-mix(in_srgb,theme(colors.blue.500)_60%,white)]">Custom mixed background</div>
 ```
@@ -97,19 +97,19 @@ Tailwind uses `srgb` by default for compatibility.
 
 ### Tinted Backgrounds
 
-```html tailwind
+```html tailwind height=160
 <div class="bg-blue-500/10">Very light blue tint</div>
 ```
 
 ### Hover States
 
-```html tailwind
+```html tailwind height=160
 <button class="bg-purple-600 hover:bg-purple-600/80">Hover for transparency</button>
 ```
 
 ### Layered Effects
 
-```html tailwind
+```html tailwind height=160
 <div class="bg-gradient-to-r from-red-500/50 to-blue-500/50">Semi-transparent gradient</div>
 ```
 

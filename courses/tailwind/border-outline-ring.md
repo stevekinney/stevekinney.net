@@ -3,7 +3,7 @@ title: 'Border, Outline, and Ring'
 description: >-
   Understand the differences between borders, outlines, and rings in CSS and
   when to use each for your design needs.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -13,7 +13,7 @@ There are _different_ ways to draw lines around elements, and they all behave co
 
 Let's start with a basic button to see how each approach affects the layout.
 
-```html tailwind
+```html tailwind height=100
 <button class="rounded-md bg-blue-600 px-3 py-2 text-white">Button</button>
 ```
 
@@ -23,7 +23,7 @@ Nothing fancy here—just a blue button with some padding and rounded-md corners
 
 Let's add a border using Tailwind's `border` utilities:
 
-```html tailwind
+```html tailwind height=100
 <button class="rounded-md border-4 border-pink-400 bg-blue-600 px-3 py-2 text-white">
   Click me!
 </button>
@@ -33,7 +33,7 @@ The `border-4` class adds a 4px border all around the button. But here's the thi
 
 If we want to see this in action, let's put two buttons side by side:
 
-```html tailwind
+```html tailwind height=100
 <div class="space-x-4 p-4">
   <button class="rounded-md bg-blue-600 px-3 py-2 text-white">No border</button>
   <button class="rounded-md border-4 border-pink-400 bg-blue-600 px-3 py-2 text-white">
@@ -48,7 +48,7 @@ You'll notice the second button is visibly larger—that's the border adding to 
 
 This size difference becomes a real problem when you want to add borders on hover or focus. Watch what happens:
 
-```html tailwind
+```html tailwind height=100
 <div class="space-x-4 p-4">
   <button class="rounded-md bg-blue-600 px-3 py-2 text-white">No border</button>
   <button class="rounded-md border-pink-400 bg-blue-600 px-3 py-2 text-white hover:border-4">
@@ -63,7 +63,7 @@ When you hover over this button, it suddenly gets bigger and pushes everything a
 
 This is where `outline` comes in handy. Outlines draw outside the element without affecting its size:
 
-```html tailwind
+```html tailwind height=100
 <div class="space-x-4 p-4">
   <button class="rounded-md bg-blue-600 px-3 py-2 text-white">No border</button>
   <button class="rounded-md bg-blue-600 px-3 py-2 text-white outline-pink-400 hover:outline-4">
@@ -78,7 +78,7 @@ Now when you hover, you get the visual feedback without any layout jumping aroun
 
 Outlines are perfect for accessibility because screen readers and keyboard users rely on focus indicators:
 
-```html tailwind
+```html tailwind height=100
 <button
   class="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-2 focus:outline-offset-2 focus:outline-pink-400"
 >
@@ -97,7 +97,7 @@ The `focus:outline-offset-2` class adds a 2px gap between the button and the out
 
 But outlines have one annoying limitation—they don't respect `border-radius` in older browsers. If you have a circular element, the outline will still be square.
 
-```html tailwind
+```html tailwind height=100
 <div class="h-16 w-16 rounded-full bg-green-500 outline-4 outline-green-700">
   <!-- Square outline on round element -->
 </div>
@@ -107,7 +107,7 @@ But outlines have one annoying limitation—they don't respect `border-radius` i
 
 Borders and outlines are Real Things™ in CSS. But, `ring`… isn't. It's _technically_ just a box shadow that _looks_ like an outline.
 
-```html tailwind
+```html tailwind height=100
 <div class="h-16 w-16 rounded-full bg-green-500 ring-4 ring-green-700">
   <!-- Perfect circular ring -->
 </div>
@@ -138,7 +138,7 @@ Borders and outlines are Real Things™ in CSS. But, `ring`… isn't. It's _tech
 
 Here's something cool—you can stack multiple rings for more complex effects:
 
-```html tailwind
+```html tailwind height=100
 <button
   class="rounded-md bg-purple-500 px-3 py-2 text-white ring-4 ring-purple-300 ring-offset-4 ring-offset-green-300"
 >
@@ -150,7 +150,7 @@ The `ring-offset-2` creates space between the element and the ring, and `ring-of
 
 Rings give you precise control over colors and opacity:
 
-```html tailwind
+```html tailwind height=100
 <button class="rounded-md bg-red-500 px-3 py-2 text-white ring-4 ring-red-500/30">
   Semi-transparent ring
 </button>

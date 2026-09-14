@@ -1,13 +1,13 @@
 ---
 title: Building a Button
 description: Let's build a button from scratch using Tailwind.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
 When last we spoke, we had a button that worked like this.
 
-```html tailwind
+```html tailwind height=100
 <button class="bg-blue-600 px-3 py-2 text-white">Button</button>
 ```
 
@@ -15,7 +15,7 @@ It definitely looks like a button now, but I suspect we can do a little better.
 
 ## Add Border Radius
 
-```html tailwind
+```html tailwind height=100
 <button class="rounded-md bg-blue-600 px-3 py-2 text-white">Button</button>
 ```
 
@@ -35,7 +35,7 @@ Some other options to try:
 
 ## Adjusting the Typography
 
-```html tailwind
+```html tailwind height=100
 <button class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white">Button</button>
 ```
 
@@ -60,7 +60,7 @@ Maybe you're a better person that me, but I can never remember the syntax for bo
 
 Where things _really_ start to get magical is when you see how easy it is to style psuedo-classes using **variants**. Let's say we wanted to add a style for when the user hovers over the button—a completely reasonable thing to do—right?
 
-```html tailwind
+```html tailwind height=100
 <button
   class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500"
 >
@@ -87,7 +87,7 @@ We can also add styles for various [focus states](focus-states.md). These focus 
 - Users with motor disabilities who rely on keyboard navigation
 - Meeting WCAG accessibility guidelines
 
-```html tailwind
+```html tailwind height=100
 <button
   type="button"
   class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"

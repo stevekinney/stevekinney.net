@@ -17,13 +17,17 @@
     "content:build": "bun content-build.ts",
     "content:validate": "bun validate-content.ts",
     "test": "bun run test:unit",
-    "test:unit": "bun test --timeout 30000",
+    "test:unit": "bun test --timeout 30000 . ../utilities/tailwind-playground.test.ts",
     "content:images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" bunx run-with-sharp-runtime node validate-image-compatibility.ts",
     "images:sync": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" bunx run-with-sharp-runtime node --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local sync-images.ts",
-    "images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node check-image-manifest.ts"
+    "images:check": "NODE_OPTIONS=\"--import tsx --disable-warning=ExperimentalWarning\" node check-image-manifest.ts",
+    "playgrounds:build": "bun playgrounds-build.ts",
+    "content-enhancements:build": "bun content-enhancements-build.ts"
   },
   "dependencies": {
     "@stevekinney/utilities": "workspace:*",
-    "@vercel/blob": "^2.6.1"
+    "@vercel/blob": "^2.6.1",
+    "tailwindcss": "4.3.3",
+    "@tailwindcss/cli": "4.3.3"
   }
 }

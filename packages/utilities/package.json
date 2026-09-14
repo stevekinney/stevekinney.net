@@ -10,6 +10,12 @@
     "./image-manifest": "./image-manifest.ts",
     "./routes": "./routes.ts",
     "./tailwind-playground": "./tailwind-playground.ts",
-    "./write-formatted-json": "./write-formatted-json.ts"
+    "./write-formatted-json": "./write-formatted-json.ts",
+    "./tailwind-playground-types": "./tailwind-playground-types.ts",
+    "./tailwind-playground-policy": "./tailwind-playground-policy.ts",
+    "./tailwind-playground-metadata": "./tailwind-playground-metadata.ts"
+  },
+  "dependencies": {
+    "parse5-sax-parser": "8.0.0"
   }
 }

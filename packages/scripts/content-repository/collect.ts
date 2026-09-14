@@ -1,7 +1,5 @@
 import fg from 'fast-glob';
 
-import { buildTailwindPlaygroundSource } from '@stevekinney/utilities/tailwind-playground';
-
 import { coursesRoot, projectsRoot, writingRoot } from '../content-paths.ts';
 
 import {
@@ -31,11 +29,13 @@ const collectSourceArtifacts = async (
   routePaths: Set<string>,
   courseDirectorySlugs: Set<string>,
   sourceHashes: Map<string, string>,
-  tailwindPlaygrounds: string[],
+  tailwindPlaygrounds: import('@stevekinney/utilities/tailwind-playground-types').PlaygroundDefinition[],
+  siteTailwindCandidates: string[],
   validationIssues: ContentValidationIssue[],
 ): Promise<void> => {
   sourceHashes.set(source.sourcePath, source.sourceHash);
   tailwindPlaygrounds.push(...source.tailwindPlaygrounds);
+  siteTailwindCandidates.push(...source.siteTailwindCandidates);
 
   await validateMarkdownLinks(
     source.sourcePath,
@@ -90,7 +90,9 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
 
   const routePaths = new Set(Object.keys(routes));
   const courseDirectorySlugs = new Set(courseEntries.map((entry) => entry.slug));
-  const tailwindPlaygrounds: string[] = [];
+  const tailwindPlaygrounds: import('@stevekinney/utilities/tailwind-playground-types').PlaygroundDefinition[] =
+    [];
+  const siteTailwindCandidates: string[] = [];
   const sourceHashes = new Map<string, string>();
 
   for (const writingSource of writingSources) {
@@ -100,6 +102,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
       courseDirectorySlugs,
       sourceHashes,
       tailwindPlaygrounds,
+      siteTailwindCandidates,
       validationIssues,
     );
   }
@@ -111,6 +114,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
       courseDirectorySlugs,
       sourceHashes,
       tailwindPlaygrounds,
+      siteTailwindCandidates,
       validationIssues,
     );
   }
@@ -122,6 +126,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
       courseDirectorySlugs,
       sourceHashes,
       tailwindPlaygrounds,
+      siteTailwindCandidates,
       validationIssues,
     );
 
@@ -136,6 +141,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
         courseDirectorySlugs,
         sourceHashes,
         tailwindPlaygrounds,
+        siteTailwindCandidates,
         validationIssues,
       );
     }
@@ -167,7 +173,8 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
       siteIndex.projects,
     ),
     validationIssues,
-    tailwindPlaygroundSource: buildTailwindPlaygroundSource(tailwindPlaygrounds),
+    playgrounds: tailwindPlaygrounds,
+    siteTailwindCandidates: [...new Set(siteTailwindCandidates)].sort(),
     sourceFiles,
   };
 };

@@ -3,7 +3,7 @@ title: Grid Arbitrary Column Counts
 description: >-
   Define custom grid column structures using arbitrary values and CSS variables
   for maximum layout flexibility.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -29,7 +29,7 @@ This syntax `[]` allows custom track sizes, repeat functions, or CSS variables, 
 
 Provide a custom track list string within square brackets.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-[200px_1fr_1fr] gap-4 rounded-lg bg-gray-100 p-4">
   <div class="flex min-h-[80px] items-center justify-center rounded bg-blue-200 p-4">
     Fixed 200px
@@ -51,7 +51,7 @@ Use the CSS `repeat()` function within arbitrary values for patterns, like a dyn
 
 Example: Variable number of equal-width columns.
 
-```html tailwind
+```html tailwind height=400
 <div
   class="grid grid-cols-[repeat(var(--col-count),_1fr)] gap-4 rounded-lg bg-gray-100 p-4"
   style="--col-count: 4;"

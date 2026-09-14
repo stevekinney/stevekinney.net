@@ -3,7 +3,7 @@ title: Flexbox Multi-Directional Layouts
 description: >-
   Build layouts that adapt to LTR and RTL text directions using Tailwind's
   logical properties and directional variants.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -30,7 +30,7 @@ Tailwind manages directionality via:
 
 Apply any utility conditionally based on text direction using `ltr:` and `rtl:` variants, similar to responsive (`md:`) or state (`hover:`) variants.
 
-```html tailwind
+```html tailwind height=400
 <div dir="ltr" class="mb-4 rounded-lg bg-gray-100 p-6">
   <div class="rounded-lg bg-blue-500 p-4 text-left text-white rtl:text-right">Item 1</div>
 </div>
@@ -76,7 +76,7 @@ For specific directional overrides within Flexbox not handled by axis logic, use
 
 Example: Overriding default alignment in RTL.
 
-```html tailwind
+```html tailwind height=400
 <div class="flex justify-start gap-4 rounded-lg bg-gray-100 p-6 rtl:justify-end">
   <div class="rounded-lg bg-blue-500 p-4 text-white">Item 1</div>
   <div class="rounded-lg bg-green-500 p-4 text-white">Item 2</div>
@@ -87,7 +87,7 @@ Items align `start` by default. In RTL, `rtl:justify-end` aligns them to `end`.
 
 Example: Individual item alignment.
 
-```html tailwind
+```html tailwind height=400
 <div class="flex min-h-[200px] items-center gap-4 rounded-lg bg-gray-100 p-6">
   <div class="self-start rounded-lg bg-blue-500 p-4 text-white rtl:self-end">Item 1</div>
   <div class="self-center rounded-lg bg-green-500 p-4 text-white">Item 2</div>
@@ -99,7 +99,7 @@ Item 1 is `self-start` (RTL: `self-end`). Item 3 is `self-end` (RTL: `self-start
 
 Logical property utilities like `ms-*` and `ps-*` are useful for direction-dependent spacing:
 
-```html tailwind
+```html tailwind height=400
 <div class="flex items-center gap-2 rounded-lg bg-gray-100 p-4">
   <svg class="me-2 size-6 text-blue-500">
     <rect width="24" height="24" fill="currentColor" />
@@ -114,7 +114,7 @@ Logical property utilities like `ms-*` and `ps-*` are useful for direction-depen
 
 `rtl:`/`ltr:` variants and logical property utilities combine with responsive (`sm:`, `md:`) and container query (`@md:`) variants.
 
-```html tailwind
+```html tailwind height=400
 <div
   class="@container flex flex-col gap-4 rounded-lg bg-gray-100 p-6 @md:flex-row rtl:@md:flex-row-reverse"
 >

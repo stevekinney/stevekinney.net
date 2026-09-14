@@ -3,5 +3,5 @@ import { getPostIndex } from '$lib/server/content';
 export const prerender = true;
 
 export async function load() {
-  return { posts: getPostIndex() };
+  return { posts: getPostIndex(), analyticsEnabled: Boolean(process.env.VERCEL) };
 }

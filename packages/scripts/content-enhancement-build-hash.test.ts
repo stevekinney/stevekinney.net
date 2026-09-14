@@ -65,4 +65,32 @@ describe('content enhancement build hash', () => {
     expect(assetHash).not.toBe(initialHash);
     expect(lockfileHash).not.toBe(assetHash);
   });
+
+  test('invalidates transitive utility and build recipe changes', async () => {
+    const initial = await computeContentEnhancementBuildHash(packageRoot, temporaryRoot);
+    await writeTextFile(
+      path.join(temporaryRoot, 'packages/utilities/shared.ts'),
+      'export const value = 1;',
+    );
+    const dependency = await computeContentEnhancementBuildHash(packageRoot, temporaryRoot);
+    expect(dependency).not.toBe(initial);
+    await writeTextFile(
+      path.join(temporaryRoot, 'packages/scripts/build-artifacts.ts'),
+      'export const hashArtifact = true;',
+    );
+    expect(
+      (await listContentEnhancementBuildHashInputs(packageRoot, temporaryRoot)).map(
+        (input) => input.cacheKey,
+      ),
+    ).toContain('repository/packages/scripts/build-artifacts.ts');
+    const sharedRecipe = await computeContentEnhancementBuildHash(packageRoot, temporaryRoot);
+    expect(sharedRecipe).not.toBe(dependency);
+    await writeTextFile(
+      path.join(temporaryRoot, 'packages/scripts/content-enhancements-build.ts'),
+      'export const minify = true;',
+    );
+    expect(await computeContentEnhancementBuildHash(packageRoot, temporaryRoot)).not.toBe(
+      sharedRecipe,
+    );
+  });
 });

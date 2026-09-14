@@ -3,7 +3,7 @@ title: Theme Customization
 description: >-
   Create, customize, and manage design systems using Tailwind's powerful
   CSS-native theme variable system
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -208,11 +208,37 @@ Let's build a comprehensive design system for a SaaS application, step by step:
 }
 ```
 
+```css playground=brand
+@theme {
+  --color-brand-500: oklch(0.65 0.15 240);
+  --color-success-50: oklch(0.96 0.02 142);
+  --color-success-200: oklch(0.88 0.06 142);
+  --color-success-500: oklch(0.65 0.15 142);
+  --color-success-900: oklch(0.25 0.08 142);
+  --color-surface: oklch(0.99 0.002 240);
+  --color-surface-muted: oklch(0.96 0.004 240);
+  --color-text: oklch(0.15 0.006 240);
+  --color-text-muted: oklch(0.45 0.008 240);
+  --color-border: oklch(0.88 0.008 240);
+  --color-border-muted: oklch(0.92 0.004 240);
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+[data-theme='dark'] {
+  --color-surface: oklch(0.08 0.004 240);
+  --color-surface-muted: oklch(0.12 0.006 240);
+  --color-text: oklch(0.94 0.004 240);
+  --color-text-muted: oklch(0.7 0.006 240);
+  --color-border: oklch(0.22 0.008 240);
+  --color-border-muted: oklch(0.16 0.006 240);
+}
+```
+
 ### Step 2: Build Core Components
 
 Now let's build components using our design system:
 
-```html tailwind
+```html tailwind height=300 css=brand
 <!-- Button Component -->
 <button
   class="shadow-card rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-blue-600 hover:shadow-lg"
@@ -263,7 +289,7 @@ Extend your theme to support dark mode elegantly:
 
 Now you can use these semantic colors that automatically adapt:
 
-```html tailwind
+```html tailwind height=300 css=brand
 <div class="bg-surface border-border text-text border">
   <h2 class="text-text font-semibold">Adaptive Component</h2>
   <p class="text-text-muted">This content adapts to light and dark themes automatically.</p>
@@ -319,7 +345,7 @@ Create specialized themes for specific components:
 
 Let's build a comprehensive dashboard card using our design system:
 
-```html tailwind
+```html tailwind height=300 css=brand
 <article class="bg-surface border-border shadow-card overflow-hidden rounded-lg border">
   <!-- Header -->
   <header class="bg-surface-muted border-border border-b px-6 py-4">

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { dev } from '$app/environment';
+  const { enabled }: { enabled: boolean } = $props();
 </script>
 
 <!--
@@ -11,7 +12,7 @@
   mechanism.
 -->
 <svelte:head>
-  {#if !dev}
+  {#if !dev && enabled}
     <script defer src="/_vercel/insights/script.js"></script>
     <script defer src="/_vercel/speed-insights/script.js"></script>
   {/if}

@@ -27,6 +27,32 @@ bun run storybook        # storybook on port 6006
 
 Content commands (collect + validate + build the generated tree) live in `@stevekinney/scripts`; the website app exposes them through `bun run content:build` and `bun run content:validate` wrappers.
 
+## Authoring Tailwind playgrounds
+
+Mark an HTML fence with `tailwind` and a positive integer `height` in pixels. The preview fills the article width and scrolls internally when its content exceeds the authored height. Its caption, standalone link, iframe, and highlighted source are rendered together on the server. The first frame loads eagerly; subsequent frames use native lazy loading. No JavaScript is required to view the example or source.
+
+````markdown
+```css playground=brand
+@theme {
+  --color-brand: #5b21b6;
+}
+```
+
+```html tailwind height=160 css=brand title="Save button"
+<button class="bg-brand rounded px-4 py-2 text-white">Save changes</button>
+```
+````
+
+CSS names belong to one Markdown file and may appear before or after their references. Multiple examples can share a definition. CSS remains visible where you teach it, with a link from each referencing example. Ordinary CSS and Tailwind directives such as `@theme`, `@utility`, `@custom-variant`, and `@apply` are supported. Executable fragments reject `@import`, `@reference`, `@source`, `@config`, and `@plugin`; show installation instructions in separate unmarked fences.
+
+Optional `theme` accepts `light` (the default), `dark`, or `system`. The iframe explicitly declares its color scheme independently of the website theme. Tailwind's standard media-based dark variant remains intact; selector-based dark variants must be declared in linked CSS. Standalone examples follow the browser viewport and preference. Omit `title` to derive an accessible title from the nearest heading and example ordinal. Existing line-highlighting metadata remains supported.
+
+Invalid metadata, missing CSS references, stale manifest entries, duplicate names, and forbidden HTML fail the build with source locations. Native elements, SVG, accessibility attributes, inline styles, and authored `html`/`body` attributes are preserved. Scripts, event handlers, executable URLs, embedded documents, author stylesheets, and redirects are rejected. The generated document owns the head. Forms retain native validation, but response policy prevents submission and scripts. Both the iframe sandbox and response headers use `allow-forms` without same-origin access.
+
+Playground Tailwind is pinned in the scripts workspace and has no website theme, typography plugin, or website source discovery. The website stylesheet scans rendering sources and generated classes from raw article HTML; fenced examples do not enter it. After changing playground behavior, run the repository validation, build, integration tests, and build budget checks. The finite migration screenshot audit is `bun applications/website/tests/audit-tailwind-playgrounds.ts --base-url http://127.0.0.1:4445` against a running preview; it is deliberately outside production builds.
+
+For automated Vercel preview verification, send the `x-vercel-skip-toolbar: 1` request header. [Vercel documents this automation header](https://vercel.com/docs/vercel-toolbar/managing-toolbar) to disable its preview toolbar, which otherwise appends a script to HTML responses for authenticated reviewers. The playground CSP intentionally blocks scripts. Verify the child HTML and CSS response headers and compare their bytes with the manifest, alongside the parent page's separate framing prohibition. Project toolbar settings can disable that injection for interactive reviews as well.
+
 ## What's shared from where
 
 - `@stevekinney/markdown` — remark/rehype plugins consumed by `svelte.config.ts` and by `@stevekinney/scripts`.

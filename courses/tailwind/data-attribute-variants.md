@@ -3,7 +3,7 @@ title: Data Attribute Variants
 description: >-
   Style elements based on HTML data attributes using Tailwind's data-* variant
   for semantic state management
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -13,7 +13,7 @@ Style elements based on their data attributes - perfect for state managed by Jav
 
 ### Presence Check (v4 simplified)
 
-```html tailwind
+```html tailwind height=180
 <!-- Styles apply when data-active exists -->
 <div data-active class="opacity-50 data-active:opacity-100">Active content</div>
 
@@ -24,7 +24,7 @@ Style elements based on their data attributes - perfect for state managed by Jav
 
 ### Value Check
 
-```html tailwind
+```html tailwind height=180
 <!-- Styles apply when attribute has specific value -->
 <div data-theme="dark" class="bg-white data-[theme=dark]:bg-gray-900">Theme-aware container</div>
 
@@ -33,7 +33,7 @@ Style elements based on their data attributes - perfect for state managed by Jav
 
 ## With Group and Peer
 
-```html tailwind
+```html tailwind height=180
 <!-- Style based on parent's data attribute -->
 <div class="group" data-status="error">
   <input class="group-data-[status=error]:border-red-500" />
@@ -61,7 +61,7 @@ Define reusable data attribute variants in your CSS:
 
 Then use them:
 
-```html tailwind
+```html tailwind height=180
 <button data-state="loading" class="data-state-loading:opacity-50">Save</button>
 ```
 
@@ -69,19 +69,19 @@ Then use them:
 
 ### Tab interfaces
 
-```html tailwind
+```html tailwind height=180
 <button data-selected class="data-selected:border-b-2">Tab 1</button>
 ```
 
 ### Accordion items
 
-```html tailwind
+```html tailwind height=180
 <div data-expanded class="data-expanded:pb-4">Content</div>
 ```
 
 ### Form validation
 
-```html tailwind
+```html tailwind height=180
 <input data-invalid class="data-invalid:ring-red-500" />
 ```
 

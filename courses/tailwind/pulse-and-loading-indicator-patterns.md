@@ -3,7 +3,7 @@ title: Pulse and Loading Indicator Patterns
 description: >-
   Create loading states and skeleton screens in Tailwind CSS using animate-pulse
   and custom animations.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -15,7 +15,7 @@ Tailwind's `animate-pulse` utility creates skeleton screens—placeholder previe
 
 Apply it to any element to suggest loading. Use placeholder shapes that mimic the eventual content structure.
 
-```html tailwind
+```html tailwind height=100
 <div class="mx-auto w-full max-w-sm rounded-md border border-blue-300 p-4 shadow">
   <div class="flex animate-pulse space-x-4">
     <div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700"></div>
@@ -43,7 +43,7 @@ Elements with `bg-slate-200` (or `dark:bg-slate-700`) create content card shapes
 
 For traditional loading indicators, use `animate-spin`. This applies circular spinning animation, commonly used for icons or geometric shapes.
 
-```html tailwind
+```html tailwind height=100
 <div class="flex items-center justify-center space-x-2">
   <div
     class="h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-500 border-t-transparent"
@@ -82,7 +82,7 @@ module.exports = {
 
 Use `animate-bounce-dots` in HTML:
 
-```html tailwind
+```html tailwind height=100
 <div class="flex items-center justify-center space-x-2">
   <span class="sr-only">Loading...</span>
   <div class="animate-bounce-dots h-3 w-3 rounded-full bg-blue-600 [animation-delay:-0.3s]"></div>
@@ -99,7 +99,7 @@ SVGs offer custom or intricate loading animations. Embed directly in HTML and us
 
 SVG spinner with `animate-spin`:
 
-```html tailwind
+```html tailwind height=100
 <svg
   class="h-5 w-5 animate-spin text-blue-500"
   xmlns="http://www.w3.org/2000/svg"
@@ -126,7 +126,7 @@ Consider accessibility when implementing loading indicators:
 3. **Screen Reader Text**: Include `sr-only` text for visual-only indicators (`<span class="sr-only">Loading content...</span>`).
 4. **Reduce Motion**: Use `motion-safe` and `motion-reduce` variants to respect user preferences.
 
-```html tailwind
+```html tailwind height=100
 <div role="status" aria-live="polite" class="flex items-center justify-center space-x-2">
   <div
     class="h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-500 border-t-transparent motion-safe:animate-spin motion-reduce:hidden"

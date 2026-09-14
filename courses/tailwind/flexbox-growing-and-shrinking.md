@@ -3,7 +3,7 @@ title: Flexbox Growing and Shrinking
 description: >-
   Master flex-grow and flex-shrink utilities to control how flex items expand
   and contract in available space
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -17,7 +17,7 @@ Use `grow` utilities to control how items expand:
 - `grow` - Item can grow to fill space (flex-grow: 1)
 - `grow-[2]` - Custom grow factor
 
-```html tailwind
+```html tailwind height=220
 <!-- Middle item takes up remaining space -->
 <div class="flex gap-4 rounded-lg bg-gray-100 p-4">
   <div class="w-20 rounded bg-blue-500 p-3 text-center text-white">Fixed</div>
@@ -34,7 +34,7 @@ Use `shrink` utilities to control how items contract:
 - `shrink` - Item can shrink if needed (flex-shrink: 1)
 - `shrink-[2]` - Custom shrink factor
 
-```html tailwind
+```html tailwind height=220
 <!-- Prevent logo from shrinking -->
 <div class="flex gap-4 rounded-lg bg-gray-100 p-4">
   <div
@@ -52,7 +52,7 @@ Use `shrink` utilities to control how items contract:
 
 ## Common Patterns
 
-```html tailwind
+```html tailwind height=220
 <!-- Equal width columns -->
 <div class="flex gap-4 rounded-lg bg-gray-100 p-4">
   <div class="grow rounded bg-purple-500 p-4 text-center text-white">Column 1</div>

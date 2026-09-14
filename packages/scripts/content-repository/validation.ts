@@ -261,7 +261,7 @@ const validateRelativeLink = async (
     return;
   }
 
-  if (!(await fileExists(resolvedPath))) {
+  if (!fileExists(resolvedPath)) {
     issues.push({
       file,
       message: `Missing asset or file for link '${urlPath}'.`,

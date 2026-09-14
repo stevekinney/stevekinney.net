@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
+import { statSync } from 'node:fs';
 import path from 'node:path';
 
 import GithubSlugger from 'github-slugger';
@@ -9,7 +10,11 @@ import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
 
-import { sanitizeTailwindPlaygroundHtml } from '@stevekinney/utilities/tailwind-playground';
+import {
+  extractTailwindCandidatesFromHtml,
+  extractTailwindPlaygrounds,
+  type TailwindPlaygroundFence,
+} from '@stevekinney/utilities/tailwind-playground';
 import { normalizePath, parseFrontmatter } from '@stevekinney/utilities/frontmatter';
 
 import { repositoryRoot } from '../content-paths.ts';
@@ -38,9 +43,11 @@ export const relativeSourcePath = (absolutePath: string): string =>
 export const readText = async (absolutePath: string): Promise<string> =>
   readFile(absolutePath, 'utf8');
 
-export const fileExists = async (absolutePath: string): Promise<boolean> => {
+// Bun 1.3.2 can leave asynchronous stat calls pending during collection. Keep
+// these inexpensive metadata probes synchronous; document reads remain async.
+export const fileExists = (absolutePath: string): boolean => {
   try {
-    await stat(absolutePath);
+    statSync(absolutePath);
     return true;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
@@ -65,20 +72,34 @@ const collectHeadingAnchors = (tree: Root): Set<string> => {
   return headingAnchors;
 };
 
-const extractTailwindPlaygrounds = (tree: Root): string[] => {
-  const playgrounds: string[] = [];
-
-  visit(tree, 'code', (node) => {
-    if (node.lang !== 'html') return;
-    if (!node.meta || !node.meta.includes('tailwind')) return;
-
-    const sanitized = sanitizeTailwindPlaygroundHtml(node.value ?? '');
-    if (sanitized.trim().length > 0) {
-      playgrounds.push(sanitized);
-    }
+const extractPlaygroundData = (tree: Root, sourcePath: string, lineOffset: number) => {
+  const headings: Array<{ line: number; title: string }> = [];
+  visit(tree, 'heading', (node) => {
+    headings.push({ line: node.position?.start.line ?? 1, title: toString(node) });
   });
-
-  return playgrounds;
+  const fences: TailwindPlaygroundFence[] = [];
+  visit(tree, 'code', (node) => {
+    if (node.lang !== 'html' && node.lang !== 'css') return;
+    const position = node.position?.start.line ?? 1;
+    fences.push({
+      lang: node.lang,
+      value: node.value ?? '',
+      meta: node.meta ?? undefined,
+      line: position + lineOffset,
+      ordinal: fences.length,
+      heading: headings.filter((candidate) => candidate.line <= position).at(-1)?.title,
+    });
+  });
+  const playgrounds: ReturnType<typeof extractTailwindPlaygrounds> = extractTailwindPlaygrounds(
+    fences,
+    sourcePath,
+  );
+  const siteTailwindCandidates = new Set<string>();
+  visit(tree, 'html', (node) => {
+    for (const token of extractTailwindCandidatesFromHtml(node.value ?? ''))
+      siteTailwindCandidates.add(token);
+  });
+  return { playgrounds, siteTailwindCandidates: [...siteTailwindCandidates] };
 };
 
 export const loadMarkdownSource = async (absolutePath: string): Promise<MarkdownSource> => {
@@ -86,6 +107,8 @@ export const loadMarkdownSource = async (absolutePath: string): Promise<Markdown
   const { data, content } = parseFrontmatter(raw);
   const tree = markdownParser.parse(content);
 
+  const lineOffset = raw.slice(0, raw.length - content.length).split('\n').length - 1;
+  const playgroundData = extractPlaygroundData(tree, relativeSourcePath(absolutePath), lineOffset);
   return {
     absolutePath,
     sourcePath: relativeSourcePath(absolutePath),
@@ -94,6 +117,7 @@ export const loadMarkdownSource = async (absolutePath: string): Promise<Markdown
     content,
     tree,
     headingAnchors: collectHeadingAnchors(tree),
-    tailwindPlaygrounds: extractTailwindPlaygrounds(tree),
+    tailwindPlaygrounds: playgroundData.playgrounds,
+    siteTailwindCandidates: playgroundData.siteTailwindCandidates,
   };
 };

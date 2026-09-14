@@ -3,13 +3,13 @@ title: Building a Dashboard with CSS Grid Template Areas
 description: >-
   Let's build a responsive dashboard layout using CSS Grid Template Areas for
   semantic, maintainable grid layouts with named regions.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
 Let's start with our basic HTML structure for a simple analytics dashboard.
 
-```html tailwind
+```html tailwind height=620
 <div class="space-y-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-4">
     <h1 class="text-lg font-bold">Analytics Dashboard</h1>
@@ -53,7 +53,7 @@ Unlike the numeric grid positioning we've used in previous tutorials like our [i
 
 Let's set up our basic grid structure with named areas:
 
-```html tailwind
+```html tailwind height=620
 <div
   class="grid h-screen grid-cols-[250px_1fr_200px] grid-rows-[auto_1fr] gap-4 p-4"
   style="grid-template-areas: 'header header header' 'sidebar main stats'"
@@ -141,7 +141,7 @@ The magic is in the `grid-template-areas` string—it's literally a visual repre
 
 Now let's replace the inline styles with Tailwind's grid template utilities, building on the patterns from our [statistics card tutorial](building-a-statistics-card.md):
 
-```html tailwind
+```html tailwind height=620
 <div
   class="grid h-screen grid-cols-[250px_1fr_200px] grid-rows-[auto_1fr] gap-4 p-4 [grid-template-areas:'header_header_header''sidebar_main_stats']"
 >
@@ -229,7 +229,7 @@ The bracket syntax `[property:value]` lets us use any CSS property with Tailwind
 
 Now let's make our dashboard truly responsive using container queries, building on techniques from our [statistics card tutorial](building-a-statistics-card.md):
 
-```html tailwind
+```html tailwind height=620
 <div class="@container">
   <div
     class="grid h-screen gap-4 p-4 @sm:grid-cols-1 @sm:grid-rows-[auto_auto_1fr_auto] @sm:[grid-template-areas:'header''sidebar''main''stats'] @xl:grid-cols-[250px_1fr_200px] @xl:grid-rows-[auto_1fr] @xl:[grid-template-areas:'header_header_header''sidebar_main_stats']"
@@ -366,7 +366,7 @@ The template areas approach is:
 
 Let's enhance our dashboard to handle dynamic content using the techniques we learned in our [card list tutorial](building-a-card-list.md):
 
-```html tailwind
+```html tailwind height=620
 <div class="@container">
   <div
     class="grid h-screen gap-4 p-4 @sm:grid-cols-1 @sm:grid-rows-[auto_auto_1fr_auto] @sm:[grid-template-areas:'header''sidebar''main''stats'] @xl:grid-cols-[250px_1fr_200px] @xl:grid-rows-[auto_1fr] @xl:[grid-template-areas:'header_header_header''sidebar_main_stats']"

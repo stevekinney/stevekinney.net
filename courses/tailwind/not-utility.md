@@ -3,7 +3,7 @@ title: Not Utility
 description: >-
   Apply styles when conditions are NOT met using Tailwind 4's powerful not-*
   variant for negating states
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -13,7 +13,7 @@ The `not-*` variant applies styles when a condition is NOT true, simplifying con
 
 ## Basic Usage
 
-```html tailwind
+```html tailwind height=180
 <!-- Subtle opacity when not hovered, full opacity on hover -->
 <button
   class="rounded bg-blue-500 px-4 py-2 text-white transition-opacity duration-200 not-hover:opacity-80 hover:opacity-100"
@@ -32,7 +32,7 @@ The `not-*` variant applies styles when a condition is NOT true, simplifying con
 
 ### Interactive Button States
 
-```html tailwind
+```html tailwind height=180
 <!-- Button that's interactive when enabled, muted when disabled -->
 <button
   class="rounded-lg bg-blue-500 px-6 py-3 font-medium text-white transition-all not-disabled:cursor-pointer not-disabled:hover:bg-blue-600 not-disabled:active:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
@@ -44,7 +44,7 @@ The `not-*` variant applies styles when a condition is NOT true, simplifying con
 
 ### Responsive Visibility
 
-```html tailwind
+```html tailwind height=180
 <!-- Hide on mobile when not expanded, always show on desktop -->
 <nav class="transition-all not-open:hidden not-open:md:block">
   <ul class="space-y-2">
@@ -58,7 +58,7 @@ The `not-*` variant applies styles when a condition is NOT true, simplifying con
 
 ### Group Interactions
 
-```html tailwind
+```html tailwind height=180
 <!-- Card that dims its content when parent is not hovered -->
 <div class="group rounded-lg bg-white p-6 shadow-md transition-shadow hover:shadow-lg">
   <h3
@@ -74,7 +74,7 @@ The `not-*` variant applies styles when a condition is NOT true, simplifying con
 
 ### Peer-Based Styling
 
-```html tailwind
+```html tailwind height=180
 <!-- Toggle switch with dependent text styling -->
 <div class="flex items-center space-x-3">
   <input type="checkbox" id="notifications" class="peer sr-only" />
@@ -92,7 +92,7 @@ The `not-*` variant applies styles when a condition is NOT true, simplifying con
 
 ### Complex State Management
 
-```html tailwind
+```html tailwind height=180
 <!-- Input with dynamic validation feedback -->
 <div class="space-y-2">
   <input
@@ -113,7 +113,7 @@ The `not-*` variant applies styles when a condition is NOT true, simplifying con
 
 ### Form Field Validation
 
-```html tailwind
+```html tailwind height=180
 <!-- Email field with real-time validation -->
 <div class="space-y-2">
   <label
@@ -135,7 +135,7 @@ The `not-*` variant applies styles when a condition is NOT true, simplifying con
 
 ### Dynamic List Styling
 
-```html tailwind
+```html tailwind height=180
 <!-- List with smart borders and hover effects -->
 <ul class="divide-y divide-gray-200 rounded-lg bg-white shadow">
   <li class="transition-colors not-last:border-b not-last:border-gray-100 hover:bg-gray-50">
@@ -152,7 +152,7 @@ The `not-*` variant applies styles when a condition is NOT true, simplifying con
 
 ### Feature Detection Fallbacks
 
-```html tailwind
+```html tailwind height=180
 <!-- Grid layout with flexbox fallback -->
 <div
   class="p-6 not-supports-[display:grid]:flex not-supports-[display:grid]:flex-wrap not-supports-[display:grid]:gap-4 supports-[display:grid]:grid supports-[display:grid]:grid-cols-3 supports-[display:grid]:gap-6"

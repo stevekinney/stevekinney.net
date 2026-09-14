@@ -3,7 +3,7 @@ title: Text Styles and Font Families
 description: >-
   Master typography in Tailwind with utilities for font families, sizes,
   weights, styles, and text decoration
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -35,7 +35,7 @@ For example, to add a custom `display` font family, you would define a variable 
 
 After defining this theme variable, a corresponding `font-display` utility class becomes available for you to use in your HTML:
 
-```html tailwind
+```html tailwind height=160
 <h1 class="font-display text-4xl">Data to enrich your online business</h1>
 ```
 

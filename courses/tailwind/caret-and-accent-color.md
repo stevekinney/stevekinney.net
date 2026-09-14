@@ -3,7 +3,7 @@ title: Caret and Accent Color
 description: >-
   Customize cursor and form control colors using Tailwind's caret and accent
   color utilities for brand consistency.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -19,7 +19,7 @@ Use `caret-*` utilities (e.g., `caret-blue-600`, `caret-sky-400`) to set the cur
 
 Example:
 
-```html tailwind
+```html tailwind height=100
 <input type="text" class="border caret-rose-500" />
 ```
 
@@ -29,9 +29,16 @@ This generates CSS like `caret-color: var(--color-rose-500);`. Utilities like `c
 
 For specific colors not in your theme, use arbitrary value syntax: `caret-[<value>]`.
 
+```css playground=caret-vars
+:root {
+  --custom-cursor-color: #db2777;
+  --brand-color: #2563eb;
+}
+```
+
 Example:
 
-```html tailwind
+```html tailwind height=100 css=caret-vars
 <input type="text" class="border caret-[#123456]" />
 <input type="text" class="border caret-[var(--custom-cursor-color)]" />
 ```
@@ -42,7 +49,7 @@ Apply `caret-*` utilities conditionally at different breakpoints using responsiv
 
 Example:
 
-```html tailwind
+```html tailwind height=100
 <input type="text" class="border caret-rose-500 md:caret-lime-600" />
 ```
 
@@ -72,7 +79,7 @@ Use `accent-*` utilities (e.g., `accent-indigo-500`) derived from your theme's c
 
 Example:
 
-```html tailwind
+```html tailwind height=100
 <input type="checkbox" class="accent-rose-500" />
 ```
 
@@ -82,7 +89,7 @@ This generates `accent-color: var(--color-rose-500);`. `accent-inherit`, `accent
 
 Adjust accent color opacity with `/<number>` (e.g., `accent-blue-500/50`). Browser support for accent color opacity is limited (mainly Firefox).
 
-```html tailwind
+```html tailwind height=100
 <input type="checkbox" class="accent-blue-500/50" />
 ```
 
@@ -90,7 +97,7 @@ Adjust accent color opacity with `/<number>` (e.g., `accent-blue-500/50`). Brows
 
 Use arbitrary value syntax `accent-[<value>]` for custom accent colors.
 
-```html tailwind
+```html tailwind height=100 css=caret-vars
 <input type="checkbox" class="accent-[#abcdef]" />
 <input type="checkbox" class="accent-[var(--brand-color)]" />
 ```
@@ -99,7 +106,7 @@ Use arbitrary value syntax `accent-[<value>]` for custom accent colors.
 
 Apply `accent-*` utilities conditionally at different breakpoints (e.g., `lg:accent-pink-500`).
 
-```html tailwind
+```html tailwind height=100
 <input type="checkbox" class="accent-blue-500 lg:accent-pink-500" />
 ```
 

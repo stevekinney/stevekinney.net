@@ -3,7 +3,7 @@ title: Grid Auto-Placement and Implicit Tracks
 description: >-
   Understanding CSS Grid's auto-placement algorithm and implicit track creation
   for dynamic, flexible grid layouts
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -13,7 +13,7 @@ Tailwind CSS provides utilities to control how grid items are automatically plac
 
 Use `grid-flow-*` utilities to control how items are placed:
 
-```html tailwind
+```html tailwind height=400
 <!-- Default: fill rows first -->
 <div class="grid grid-flow-row grid-cols-3 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="flex min-h-[80px] items-center justify-center rounded bg-blue-200 p-4">Item 1</div>
@@ -44,7 +44,7 @@ Available utilities:
 
 Control the size of automatically created rows with `auto-rows-*`:
 
-```html tailwind
+```html tailwind height=400
 <!-- New rows are 100px tall -->
 <div class="grid auto-rows-[100px] grid-cols-3 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="flex items-center justify-center rounded bg-blue-200 p-4">Item 1</div>
@@ -73,7 +73,7 @@ Options:
 
 Control the size of automatically created columns with `auto-cols-*`:
 
-```html tailwind
+```html tailwind height=400
 <!-- New columns are 200px wide -->
 <div class="grid auto-cols-[200px] grid-flow-col grid-rows-2 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="flex min-h-[80px] items-center justify-center rounded bg-blue-200 p-4">Item 1</div>
@@ -93,7 +93,7 @@ Options:
 
 ## Dense Packing Example
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-flow-row-dense grid-cols-3 gap-4 rounded-lg bg-gray-100 p-4">
   <div class="col-span-2 flex min-h-[80px] items-center justify-center rounded bg-blue-200 p-4">
     Large item
@@ -110,7 +110,7 @@ Options:
 
 ## Responsive Card Grid
 
-```html tailwind
+```html tailwind height=400
 <div
   class="grid auto-rows-[minmax(200px,auto)] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4 rounded-lg bg-gray-100 p-4"
 >

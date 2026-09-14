@@ -3,13 +3,13 @@ title: Building an Image Card with Hover Overlay
 description: >-
   Let's build an image card with an interactive hover overlay step by step using
   Tailwind CSS group utilities.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
 Let's start with our basic HTML structure for an image card with overlay content.
 
-```html tailwind
+```html tailwind height=420
 <div
   class="max-w-sm overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-200 hover:shadow-lg"
 >
@@ -32,7 +32,7 @@ We have a polished product card with professional styling and subtle hover effec
 
 First, let's introduce Tailwind's `group` utility, which lets us coordinate hover effects across multiple child elements.
 
-```html tailwind
+```html tailwind height=420
 <div
   class="group max-w-sm overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-200 hover:shadow-lg"
 >
@@ -55,7 +55,7 @@ The `group` class marks this container as a "group parent." Now any child elemen
 
 Now let's move our content to sit as an overlay on top of the image. We'll need to add `relative` positioning to the container and `absolute` positioning to the content.
 
-```html tailwind
+```html tailwind height=420
 <div
   class="group relative max-w-sm overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-200 hover:shadow-lg"
 >
@@ -84,7 +84,7 @@ Now our text sits directly over the image, but it's always visible and hard to r
 
 Let's add a semi-transparent background and make the overlay appear only when the card is hovered.
 
-```html tailwind
+```html tailwind height=420
 <div
   class="group relative max-w-sm overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-200 hover:shadow-lg"
 >
@@ -114,7 +114,7 @@ This is our first use of `group-hover:`—the overlay automatically appears when
 
 Let's improve the overlay layout by positioning content at the bottom and adding a smooth entrance animation.
 
-```html tailwind
+```html tailwind height=420
 <div
   class="group relative max-w-sm overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-200 hover:shadow-lg"
 >
@@ -148,7 +148,7 @@ This creates a subtle slide-up animation where the content starts slightly below
 
 Finally, let's add smooth transitions to make the hover effects feel polished and professional.
 
-```html tailwind
+```html tailwind height=420
 <div
   class="group relative max-w-sm overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-200 hover:shadow-lg"
 >

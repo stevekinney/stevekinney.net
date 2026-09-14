@@ -8,6 +8,7 @@ import type {
   ProjectIndexEntry,
 } from '@stevekinney/utilities/content-types';
 import { parseFrontmatter } from '@stevekinney/utilities/frontmatter';
+import type { PlaygroundDefinition } from '@stevekinney/utilities/tailwind-playground-types';
 
 export type ContentValidationIssue = {
   file: string;
@@ -31,7 +32,8 @@ export type MarkdownSource = {
   content: string;
   tree: Root;
   headingAnchors: Set<string>;
-  tailwindPlaygrounds: string[];
+  tailwindPlaygrounds: PlaygroundDefinition[];
+  siteTailwindCandidates: string[];
 };
 
 export type CourseContentsSource = {
@@ -56,6 +58,7 @@ export type ProjectRecord = ProjectIndexEntry & {
 
 export type ContentRepository = GeneratedContent & {
   validationIssues: ContentValidationIssue[];
-  tailwindPlaygroundSource: string;
+  playgrounds: PlaygroundDefinition[];
+  siteTailwindCandidates: string[];
   sourceFiles: string[];
 };

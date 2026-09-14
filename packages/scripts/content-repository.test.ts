@@ -113,11 +113,10 @@ describe('collectContentRepository', () => {
     expect(repository.prerenderEntries.projects).toContainEqual({ project: 'weft' });
   });
 
-  test('extracts sanitized Tailwind playground source', async () => {
+  test('extracts canonical Tailwind playground definitions', async () => {
     const repository = await repositoryPromise;
-    expect(repository.tailwindPlaygroundSource).toContain('bg-blue-600');
-    expect(repository.tailwindPlaygroundSource).toContain('rounded-md');
-    expect(repository.tailwindPlaygroundSource).not.toContain('<script');
+    expect(repository.playgrounds.length).toBeGreaterThan(0);
+    expect(repository.playgrounds.every((playground) => playground.height > 0)).toBe(true);
   });
 
   test('reports missing course readmes, reserved slugs, broken links, and bad course contents', async () => {

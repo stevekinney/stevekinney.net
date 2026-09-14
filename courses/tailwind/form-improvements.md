@@ -3,7 +3,7 @@ title: Advanced Form Input Styling
 description: >-
   Building on our professional form inputs with enhanced states, custom styling,
   and interactive feedback using Tailwind CSS.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -13,7 +13,7 @@ Now that we've built a solid foundation for our form inputs, let's explore some 
 
 In our previous tutorial, we used outlines for focus states. Let's enhance this approach by combining outlines with ring utilities for even more prominent focus indicators.
 
-```html tailwind
+```html tailwind height=160
 <div>
   <label for="username" class="block text-sm/6 font-medium text-slate-900">Username</label>
   <div class="mt-2">
@@ -39,7 +39,7 @@ This creates a subtle glow effect that extends beyond the outline, making the fo
 
 Default placeholder text can feel disconnected from your design system. Let's make it more intentional:
 
-```html tailwind
+```html tailwind height=160
 <input
   type="text"
   name="username"
@@ -60,7 +60,7 @@ The italic styling helps users distinguish between placeholder text and actual i
 
 The default text cursor (caret) can be styled to match your brand colors:
 
-```html tailwind
+```html tailwind height=160
 <input
   type="text"
   name="username"
@@ -76,7 +76,7 @@ The `caret-indigo-600` class changes the blinking text cursor to match our focus
 
 Real-world forms need to communicate validation status clearly. Let's add support for valid and invalid states:
 
-```html tailwind
+```html tailwind height=160
 <!-- Invalid state -->
 <div>
   <label for="email" class="block text-sm/6 font-medium text-slate-900">Email</label>
@@ -105,7 +105,7 @@ This leverages HTML5's built-in validation, automatically applying error styles 
 
 For positive reinforcement, we can also style valid inputs:
 
-```html tailwind
+```html tailwind height=160
 <input
   type="email"
   name="email"
@@ -123,7 +123,7 @@ The `valid:outline-green-500` provides immediate positive feedback when users en
 
 Disabled inputs need clear visual indicators and appropriate cursor behavior:
 
-```html tailwind
+```html tailwind height=160
 <input
   type="text"
   name="readonly-field"
@@ -145,7 +145,7 @@ Disabled state styling:
 
 Form controls like checkboxes and radio buttons can also match your design system:
 
-```html tailwind
+```html tailwind height=160
 <div class="flex items-center gap-2">
   <input type="checkbox" id="newsletter" name="newsletter" class="h-4 w-4 accent-pink-500" />
   <label for="newsletter" class="text-sm text-slate-900">Sign Up for Spam</label>
@@ -163,7 +163,7 @@ The `accent-indigo-600` class styles the active/checked state of form controls t
 
 Here's our fully enhanced input with all improvements:
 
-```html tailwind
+```html tailwind height=160
 <div>
   <label for="enhanced-input" class="block text-sm/6 font-medium text-slate-900">
     Enhanced Input

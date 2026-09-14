@@ -3,13 +3,13 @@ title: Building a Card List with Top Border
 description: >-
   Let's build a card list with separator borders using Tailwind's not-first
   selector to avoid borders on the first item.
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
 Let's start with our basic HTML structure for a simple list of notification cards.
 
-```html tailwind
+```html tailwind height=420
 <div>
   <div>
     <h3>New message from Sarah</h3>
@@ -35,7 +35,7 @@ We have three notification cards stacked vertically, but they're completely unst
 
 First, let's apply professional card styling using patterns from our [card tutorial](building-a-card.md) to establish a proper foundation.
 
-```html tailwind
+```html tailwind height=420
 <div class="mx-auto max-w-md rounded-lg bg-white shadow-sm">
   <div class="p-4">
     <h3 class="font-semibold text-slate-900">New message from Sarah</h3>
@@ -73,7 +73,7 @@ You might think to use `space-y-4` to add spacing between cards, and that would 
 
 Let's try adding borders to every card and see the problem:
 
-```html tailwind
+```html tailwind height=420
 <div class="mx-auto max-w-md rounded-lg bg-white shadow-sm">
   <div class="border-t border-slate-200 p-4">
     <h3 class="font-semibold text-slate-900">New message from Sarah</h3>
@@ -101,7 +101,7 @@ There's an issue: the first card has a border at the top of the container, creat
 
 This is exactly what Tailwind's `not-first:*` utilities solve. Let's remove the unwanted top border from the first item only.
 
-```html tailwind
+```html tailwind height=420
 <div class="mx-auto max-w-md rounded-lg bg-white shadow-sm">
   <div class="p-4 not-first:border-t not-first:border-slate-200">
     <h3 class="font-semibold text-slate-900">New message from Sarah</h3>
@@ -134,7 +134,7 @@ Perfect! Now we have clean separators between items without an awkward border ab
 
 Let's add some polish to make the list feel more interactive and organized.
 
-```html tailwind
+```html tailwind height=420
 <div class="mx-auto max-w-md overflow-hidden rounded-lg bg-white shadow-sm">
   <div
     class="p-4 transition-colors not-first:border-t not-first:border-slate-200 hover:bg-slate-50"
@@ -174,7 +174,7 @@ Now each item feels clickable and responsive while maintaining clear visual sepa
 
 Let's add dark mode variants to make our list work in any theme.
 
-```html tailwind
+```html tailwind height=420
 <div class="mx-auto max-w-md overflow-hidden rounded-lg bg-white shadow-sm dark:bg-slate-800">
   <div
     class="p-4 transition-colors not-first:border-t not-first:border-slate-200 hover:bg-slate-50 not-first:dark:border-slate-700 dark:hover:bg-slate-700"

@@ -3,7 +3,7 @@ title: Transitions
 description: >-
   Create smooth animations with Tailwind's transition utilities for duration,
   timing, delay, and property-specific transitions
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -26,7 +26,7 @@ Tailwind offers utilities for specific property groups:
 
 Example:
 
-```html tailwind
+```html tailwind height=160
 <div class="bg-blue-500 transition hover:bg-red-500">Hover over me</div>
 ```
 
@@ -38,7 +38,7 @@ For granular control, use `transition-*` utilities like `transition-colors` or `
 
 For properties not in predefined sets, use arbitrary values with `transition-[<value>]` syntax:
 
-```html tailwind
+```html tailwind height=160
 <div class="h-10 w-10 transition-[width,height] hover:h-20 hover:w-20">Resize me</div>
 ```
 
@@ -57,7 +57,7 @@ Duration determines animation length:
 - `duration-(<custom-property>)`: Uses CSS variable
 - `duration-[<value>]`: Uses arbitrary CSS value
 
-```html tailwind
+```html tailwind height=160
 <div class="bg-blue-500 transition duration-500 hover:bg-red-500">
   Hover over me (500ms transition)
 </div>
@@ -75,7 +75,7 @@ Controls acceleration curve:
 - `ease-(<custom-property>)`: Uses CSS variable
 - `ease-[<value>]`: Uses arbitrary value for custom `cubic-bezier` functions
 
-```html tailwind
+```html tailwind height=160
 <div class="bg-green-500 transition duration-300 ease-in-out hover:bg-yellow-500">
   Hover over me (ease-in-out)
 </div>
@@ -89,7 +89,7 @@ Specifies waiting period before transition begins:
 - `delay-(<custom-property>)`: Uses CSS variable
 - `delay-[<value>]`: Uses arbitrary CSS value
 
-```html tailwind
+```html tailwind height=160
 <div class="bg-purple-500 transition delay-150 duration-300 hover:bg-orange-500">
   Hover over me (150ms delay)
 </div>
@@ -109,7 +109,7 @@ Tailwind provides utilities for transitioning particular CSS features:
 
 The HTML `inert` attribute marks elements as non-interactive. Use the `inert` variant to style these elements and transition their state changes.
 
-```html tailwind
+```html tailwind height=160
 <div class="opacity-100 transition-opacity duration-300 inert:opacity-50" inert>
   Content that fades when inert
 </div>
@@ -117,7 +117,7 @@ The HTML `inert` attribute marks elements as non-interactive. Use the `inert` va
 
 The transition smoothly animates opacity changes when the `inert` attribute is toggled.
 
-```html tailwind
+```html tailwind height=160
 <button class="cursor-pointer transition-all duration-200 inert:cursor-not-allowed" inert>
   Inert Button
 </button>
@@ -129,7 +129,7 @@ Combine transition utilities with state variants (`hover`, `focus`, `active`, `d
 
 Apply transition only on hover:
 
-```html tailwind
+```html tailwind height=160
 <div class="bg-blue-500 hover:bg-red-500 hover:transition-colors hover:duration-300">
   Transitions only on hover
 </div>
@@ -137,7 +137,7 @@ Apply transition only on hover:
 
 More commonly, apply `transition` in default state for enter and exit animations:
 
-```html tailwind
+```html tailwind height=160
 <div class="bg-blue-500 transition-colors duration-300 hover:bg-red-500">
   Transitions on hover in and out
 </div>
@@ -145,7 +145,7 @@ More commonly, apply `transition` in default state for enter and exit animations
 
 Stack variants for conditional transitions:
 
-```html tailwind
+```html tailwind height=160
 <div class="transition-colors duration-300 md:hover:bg-red-500">
   Background changes on hover from medium screens up
 </div>

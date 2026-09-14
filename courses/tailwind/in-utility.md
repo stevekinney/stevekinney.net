@@ -3,7 +3,7 @@ title: In Utility
 description: >-
   Apply styles based on ancestor element states without explicit group classes
   using Tailwind's in-* variant
-modified: 2026-03-17
+modified: 2026-09-14
 date: 2025-06-12
 ---
 
@@ -11,7 +11,7 @@ The `in-*` variant (new in Tailwind 4) styles elements based on _any_ ancestor's
 
 ## Basic Usage
 
-```html tailwind
+```html tailwind height=160
 <div>
   <!-- No group class needed -->
   <button>
@@ -24,7 +24,7 @@ The `in-*` variant (new in Tailwind 4) styles elements based on _any_ ancestor's
 
 ### Nested hover effects
 
-```html tailwind
+```html tailwind height=160
 <article>
   <h2 class="in-[:hover]:underline">Title</h2>
   <p class="in-[:hover]:text-gray-600">Description</p>
@@ -33,7 +33,7 @@ The `in-*` variant (new in Tailwind 4) styles elements based on _any_ ancestor's
 
 ## Form field focus states
 
-```html tailwind
+```html tailwind height=160
 <label>
   <span class="in-[:focus]:text-blue-600">Email</span>
   <input type="email" />
@@ -66,6 +66,6 @@ Use `group` when:
 
 Combine with other variants:
 
-```html tailwind
+```html tailwind height=160
 <div class="in-[:focus]:not-[:disabled]:ring-2">...</div>
 ```

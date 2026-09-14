@@ -31,10 +31,6 @@ export const generatedContentDataPath = path.resolve(
   generatedContentDirectory,
   'content-data.json',
 );
-export const tailwindPlaygroundSourcePath = path.resolve(
-  generatedContentDirectory,
-  'tailwind-playground-source.html',
-);
 export const contentEnhancementsPackageRoot = path.resolve(
   repositoryRoot,
   'packages',
