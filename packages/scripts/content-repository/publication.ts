@@ -26,6 +26,14 @@ const mimeTypes: Record<string, string> = {
   '.pdf': 'application/pdf',
 };
 
+/** Return the published MIME type, retaining the manifest's video classification. */
+export const attachmentMimeType = (sourcePath: string, entry: unknown): string | undefined => {
+  const extensionMimeType = mimeTypes[path.extname(sourcePath).toLowerCase()];
+  if (!entry || typeof entry !== 'object' || !('videoMimeType' in entry)) return extensionMimeType;
+  const videoMimeType = entry.videoMimeType;
+  return typeof videoMimeType === 'string' ? videoMimeType : extensionMimeType;
+};
+
 /** Normalize Obsidian list properties without changing publication eligibility. */
 export const normalizeListProperty = (
   source: MarkdownSource,
@@ -78,7 +86,7 @@ export const buildPublicationIndex = async (
   }
   const repositoryRealPath = await realpath(repositoryRoot);
   for (const [sourcePath, entry] of Object.entries(manifest.images)) {
-    const mimeType = mimeTypes[path.extname(sourcePath).toLowerCase()];
+    const mimeType = attachmentMimeType(sourcePath, entry);
     if (
       !mimeType ||
       !entry ||

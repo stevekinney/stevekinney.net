@@ -10,6 +10,7 @@ import type { ContentRepository } from './content-repository.ts';
 import { coursesRoot, writingRoot } from './content-paths.ts';
 import { collectContentRepository } from './content-repository.ts';
 import { repositoryRoot } from './content-paths.ts';
+import { attachmentMimeType } from './content-repository/publication.ts';
 
 const createTemporaryName = (prefix: string): string => `${prefix}-${randomUUID()}`;
 
@@ -19,6 +20,15 @@ const writeTextFile = async (filePath: string, contents: string): Promise<void> 
 };
 
 describe('collectContentRepository', () => {
+  test('preserves manifest video MIME types for published attachments', () => {
+    expect(
+      attachmentMimeType('applications/website/static/audio.ogg', { videoMimeType: 'video/ogg' }),
+    ).toBe('video/ogg');
+    expect(
+      attachmentMimeType('applications/website/static/audio.ogg', { videoMimeType: null }),
+    ).toBe('audio/ogg');
+  });
+
   let repositoryPromise: Promise<ContentRepository>;
 
   beforeAll(async () => {

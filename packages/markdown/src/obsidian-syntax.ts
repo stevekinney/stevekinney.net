@@ -47,13 +47,32 @@ const parser = unified()
   .use(remarkHighlightMark)
   .use(remarkObsidianLocal);
 
+const currencyAmount = /^\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?(?![\w])/u;
+const currencyProse = /[A-Za-z]{2,}|[-–—]\s*$/u;
+
+/** Mask currency markers so prose prices cannot be consumed as inline math delimiters. */
+const maskCurrencyMarkers = (source: string): string => {
+  const masked = source.split('');
+
+  for (let index = 0; index < source.length; index++) {
+    if (source[index] !== '$' || source[index - 1] === '$' || source[index + 1] === '$') continue;
+    if (!currencyAmount.test(source.slice(index + 1))) continue;
+
+    const closing = source.indexOf('$', index + 1);
+    const value = closing === -1 ? undefined : source.slice(index + 1, closing);
+    if (value === undefined || currencyProse.test(value)) masked[index] = ' ';
+  }
+
+  return masked.join('');
+};
+
 const parsedSources = new Map<string, ObsidianSourceAst>();
 
 /** Parse Obsidian Markdown while retaining source offsets for supported syntax. */
 export const parseObsidianSource = (source: string): ObsidianSourceAst => {
   const cached = parsedSources.get(source);
   if (cached) return cached;
-  const masked = maskObsidianProtectedSource(source).split('');
+  const masked = maskCurrencyMarkers(maskObsidianProtectedSource(source)).split('');
   const nodes: ObsidianNode[] = [];
   // A comment may cross paragraph/fence boundaries. Recognize its opener with the
   // document parser, then let the same micromark construct consume an uninterrupted

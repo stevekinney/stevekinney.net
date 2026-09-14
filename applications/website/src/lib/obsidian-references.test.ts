@@ -111,6 +111,15 @@ describe('normalizeMarkdownLinks', () => {
     expect(applySourceEdits('[jump](#old)', result.edits).markdown).toBe('[jump](<#host-old>)');
   });
 
+  it('rewrites local block anchors from the supplied identifier map', () => {
+    const source = '[jump](#^old)';
+    const result = normalizeMarkdownLinks(source, context([]), {
+      embedded: true,
+      localIds: new Map([['block-old', 'embed-block-old']]),
+    });
+    expect(applySourceEdits(source, result.edits).markdown).toBe('[jump](<#embed-block-old>)');
+  });
+
   it('applies returned edits without touching route links or fenced code', () => {
     const target: PublicationDocument = {
       sourcePath: 'writing/target.md',
@@ -145,6 +154,22 @@ describe('normalizeMarkdownLinks', () => {
     );
     expect(missingFragment.dependencies).toEqual(['writing/target.md']);
     expect(missingFragment.diagnostics[0]?.message).toContain('Missing Markdown fragment');
+  });
+
+  it('resolves query-bearing Markdown paths before checking the extension', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/target.md',
+      route: '/writing/target',
+      source: '# Heading',
+    };
+    const source = '[target](writing/target?view=reading#heading)';
+    const result = normalizeMarkdownLinks(source, context([target]));
+
+    expect(applySourceEdits(source, result.edits).markdown).toBe(
+      '[target](</writing/target?view=reading#heading>)',
+    );
+    expect(result.dependencies).toEqual(['writing/target.md']);
+    expect(result.diagnostics).toEqual([]);
   });
 
   it('namespaces footnote identifiers with narrow edits', () => {

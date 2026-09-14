@@ -161,3 +161,26 @@ it('recognizes block markers only at the end of a line', () => {
     expect.objectContaining({ type: 'blockDefinition', value: 'valid' }),
   );
 });
+
+it('keeps currency prices as prose while retaining inline and display math', () => {
+  const source = 'Prices are $5 and $10. Inline $x^2$ and display:\n\n$$\ny = x\n$$';
+  const parsed = parseObsidianSource(source);
+
+  expect(parsed.nodes.filter((node) => node.type === 'inlineMath')).toEqual([
+    expect.objectContaining({ type: 'inlineMath', value: 'x^2' }),
+  ]);
+  expect(parsed.nodes.filter((node) => node.type === 'math')).toEqual([
+    expect.objectContaining({ type: 'math', value: 'y = x' }),
+  ]);
+  expect(normalizeObsidianMarkdown(source, context).markdown).toContain('Prices are $5 and $10.');
+});
+
+it('keeps currency ranges and prose prices before an equation literal', () => {
+  const source = 'Budget: $5-$10. The answer is $5, then use $x + 1$.';
+  const parsed = parseObsidianSource(source);
+
+  expect(parsed.nodes.filter((node) => node.type === 'inlineMath')).toEqual([
+    expect.objectContaining({ type: 'inlineMath', value: 'x + 1' }),
+  ]);
+  expect(normalizeObsidianMarkdown(source, context).markdown).toContain('Budget: $5-$10.');
+});

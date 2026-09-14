@@ -106,6 +106,20 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown).toMatch(/embed-[a-z0-9-]+/u);
   });
 
+  it('retargets local Markdown block anchors inside an embed', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/blocks.md',
+      route: '/writing/blocks',
+      source: 'Body.\n\n^target\n\n[Jump](#^target)',
+    };
+    const result = normalizeObsidianMarkdown('![[blocks]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toMatch(/\[Jump\]\(<#embed-[a-z0-9-]+block-target>\)/u);
+  });
+
   it('expands approved media with dimensions and PDF fragments', () => {
     const result = normalizeObsidianMarkdown(
       '![[assets/demo.png|320x200]] ![[assets/demo.mp4]] ![[assets/demo.pdf#page=2]]',

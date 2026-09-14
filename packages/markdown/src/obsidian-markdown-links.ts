@@ -98,9 +98,6 @@ export const normalizeMarkdownLinks = (
       const target = query < 0 ? beforeFragment : beforeFragment.slice(0, query);
       const queryString = query < 0 ? '' : beforeFragment.slice(query);
       let destination: string | undefined;
-      const routeDocument = context.publicationIndex.documents.find(
-        (document) => document.route === target || `${document.route}/` === target,
-      );
       if (!target && fragment) {
         let id: string;
         try {
@@ -109,22 +106,22 @@ export const normalizeMarkdownLinks = (
           issue(start, `Malformed Markdown fragment: ${fragment}`);
           return;
         }
-        const mapped = options.localIds?.get(id);
+        const mapped = options.localIds?.get(id.startsWith('^') ? `block-${id.slice(1)}` : id);
         if (mapped) destination = `#${encodeURIComponent(mapped)}`;
-      } else if (routeDocument || /\.md$/i.test(target)) {
-        const result = routeDocument
-          ? { reference: { kind: 'document' as const, document: routeDocument }, diagnostics: [] }
-          : resolveObsidianReference(target, context);
+      } else if (target) {
+        // Resolve the query-free target so query parameters do not affect document lookup.
+        const result = resolveObsidianReference(target, context);
         if (result.reference?.kind === 'document') {
           const document = result.reference.document;
           dependencies.add(document.sourcePath);
           const id = fragment ? validateFragment(document, fragment, start) : '';
           destination = document.route + queryString + (id ? `#${encodeURIComponent(id)}` : '');
-        } else
+        } else if (/\.md$/i.test(target))
           diagnostics.push(
             ...result.diagnostics.map((item) => ({ ...item, line: sourceLine(source, start) })),
           );
-      } else if (options.embedded && target && !target.startsWith('/')) {
+      }
+      if (destination === undefined && options.embedded && target && !target.startsWith('/')) {
         // Relative non-document destinations inside an embed must be closed-index assets.
         const result = resolveObsidianReference(target, context, 'attachment');
         if (result.reference?.kind === 'attachment') {

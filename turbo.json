@@ -196,7 +196,9 @@
       "cache": false,
       "persistent": true
     },
-    "@stevekinney/website#build-storybook": {},
+    "@stevekinney/website#build-storybook": {
+      "dependsOn": ["@stevekinney/scripts#content:build"]
+    },
     "@stevekinney/website#clean": {
       "cache": false
     }
