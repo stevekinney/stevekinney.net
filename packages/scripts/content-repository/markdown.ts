@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
-import { readFile, stat } from 'node:fs/promises';
+import { statSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import GithubSlugger from 'github-slugger';
@@ -39,9 +40,9 @@ export const relativeSourcePath = (absolutePath: string): string =>
 export const readText = async (absolutePath: string): Promise<string> =>
   readFile(absolutePath, 'utf8');
 
-export const fileExists = async (absolutePath: string): Promise<boolean> => {
+export const fileExists = (absolutePath: string): boolean => {
   try {
-    await stat(absolutePath);
+    statSync(absolutePath);
     return true;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {

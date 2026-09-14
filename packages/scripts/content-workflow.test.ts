@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test';
+import { spawnSync } from 'node:child_process';
 import { mkdtemp, readFile, rm, writeFile, chmod, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -25,6 +26,25 @@ const runGit = async (
   if (code !== 0) throw new Error(error.trim());
   return output.trim();
 };
+
+test('collects the complete corpus in a cold process without diagnostic logging', () => {
+  const result = spawnSync(
+    process.execPath,
+    [
+      '-e',
+      `import { collectContentRepository } from './packages/scripts/content-repository.ts';
+const repository = await collectContentRepository();
+console.log(JSON.stringify({ routes: repository.meta.routeCount, errors: repository.validationIssues.filter(issue => issue.severity !== 'warning') }));
+process.exit(0);`,
+    ],
+    { cwd: repositoryRoot, encoding: 'utf8', timeout: 20_000 },
+  );
+  expect(result.error).toBeUndefined();
+  expect(result.status).toBe(0);
+  const output = JSON.parse(result.stdout) as { routes: number; errors: unknown[] };
+  expect(output.routes).toBeGreaterThan(800);
+  expect(output.errors).toEqual([]);
+});
 
 const withEnvironment = async <T>(
   values: Record<string, string | undefined>,

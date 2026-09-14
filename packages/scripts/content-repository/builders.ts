@@ -51,7 +51,7 @@ const loadCourseContentsSource = async (
   absolutePath: string,
   issues: ContentValidationIssue[],
 ): Promise<CourseContentsSource | undefined> => {
-  if (!(await fileExists(absolutePath))) {
+  if (!fileExists(absolutePath)) {
     return undefined;
   }
 
@@ -107,7 +107,7 @@ export const buildCourseEntry = async (
   const readmePath = path.join(courseDirectory, 'README.md');
   const contentsPath = path.join(courseDirectory, 'index.toml');
 
-  if (!(await fileExists(readmePath))) {
+  if (!fileExists(readmePath)) {
     issues.push({
       file: normalizePath(path.relative(repositoryRoot, readmePath)),
       message: 'Missing course README.md.',
