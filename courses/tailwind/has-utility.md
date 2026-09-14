@@ -7,7 +7,7 @@ The `has-*` utilities in Tailwind CSS are based on the CSS `:has()` pseudo-class
 
 Let's start with our basic HTML structure to explore these powerful utilities.
 
-```html tailwind
+```html tailwind height=160
 <div>
   <input type="checkbox" id="terms-0" />
   <label for="terms-0">I agree to the terms</label>
@@ -20,7 +20,7 @@ It's a basic checkbox and label, but with `has-*` utilities, we can make the ent
 
 First, let's make the container respond to its checkbox child's state.
 
-```html tailwind
+```html tailwind height=160
 <div
   class="flex items-center gap-3 rounded-lg border p-4 has-[input:checked]:border-green-500 has-[input:checked]:bg-green-50"
 >
@@ -39,7 +39,7 @@ This is fundamentally different from `peer-*` utilities—instead of siblings af
 
 ## Form Validation Containers
 
-```html tailwind
+```html tailwind height=160
 <div class="space-y-4">
   <div
     class="rounded-lg border p-4 transition-colors has-[input:invalid]:border-red-500 has-[input:invalid]:bg-red-50 has-[input:valid]:border-green-500 has-[input:valid]:bg-green-50"
@@ -75,7 +75,7 @@ The entire form field container provides visual feedback, not just the input its
 
 Let's build interactive cards that respond to nested form controls, perfect for pricing tables or option selection.
 
-```html tailwind
+```html tailwind height=160
 <div class="grid gap-4 md:grid-cols-3">
   <div
     class="rounded-lg border-2 p-4 transition-all has-[input:checked]:border-blue-500 has-[input:checked]:bg-blue-50 has-[input:checked]:shadow-md"
@@ -124,7 +124,7 @@ Perfect for pricing tables, feature comparisons, or any multi-option selection i
 
 The `has-*` utilities support complex CSS selectors for sophisticated parent-child relationships.
 
-```html tailwind
+```html tailwind height=280
 <div class="space-y-4">
   <!-- Multiple checkbox detection -->
   <div class="rounded-lg border p-4 has-[input:checked]:bg-slate-50">
@@ -180,7 +180,7 @@ This shows how you can create contextually aware containers that respond to diff
 
 `has-*` utilities excel at creating intelligent navigation systems that respond to user interaction.
 
-```html tailwind
+```html tailwind height=240
 <nav class="rounded-lg bg-white shadow-sm">
   <!-- Dropdown state detection -->
   <div class="has-[details[open]]:bg-pink-400">
@@ -216,7 +216,7 @@ Creates navigation where entire sections respond to user interaction states.
 
 Perfect for admin interfaces where entire rows need to respond to selection states.
 
-```html tailwind
+```html tailwind height=360
 <div class="overflow-hidden rounded-lg border bg-white">
   <div class="divide-y">
     <div
@@ -260,7 +260,7 @@ Creates intuitive selection interfaces where entire rows provide visual feedback
 
 Create action panels that appear when items are selected.
 
-```html tailwind
+```html tailwind height=360
 <div class="space-y-4">
   <!-- Product grid -->
   <div class="grid gap-4 md:grid-cols-3">
@@ -337,7 +337,7 @@ The `has-*` utilities unlock powerful new possibilities for creating intelligent
 
 ### Based on Content
 
-```html tailwind
+```html tailwind height=240
 <article class="gap-4 rounded-lg border bg-white p-4 has-[img]:flex">
   <img src="https://picsum.photos/seed/picsum/600/400" class="h-64 w-64 rounded object-cover" />
   <div>
@@ -352,7 +352,7 @@ The `has-*` utilities unlock powerful new possibilities for creating intelligent
 
 **Form validation indicators:**
 
-```html tailwind
+```html tailwind height=160
 <label class="mb-2 block text-sm font-medium has-[:invalid]:text-red-500">
   Email
   <input

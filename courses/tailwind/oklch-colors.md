@@ -29,7 +29,7 @@ Syntax: `oklch(L C H)` or `oklch(L C H / alpha)`
 
 All default colors (red, blue, gray, etc.) use OKLCH internally:
 
-```html tailwind
+```html tailwind height=140
 <div class="bg-sky-500 text-neutral-900">
   <!-- Tailwind handles OKLCH conversion -->
 </div>
@@ -55,7 +55,7 @@ Define OKLCH colors in `@theme`:
 
 Use like any Tailwind color:
 
-```html tailwind
+```html tailwind height=140
 <div class="bg-brand-500 text-midnight">...</div>
 ```
 
@@ -63,7 +63,7 @@ Use like any Tailwind color:
 
 Better interpolation with OKLCH:
 
-```html tailwind
+```html tailwind height=140
 <!-- Standard gradient -->
 <div class="bg-linear-to-r from-purple-500 to-pink-500">Smooth OKLCH interpolation</div>
 
@@ -107,7 +107,7 @@ OKLCH requires modern browsers:
 
 **High contrast button:**
 
-```html tailwind
+```html tailwind height=140
 <button class="bg-[oklch(0.2_0.1_250)] text-[oklch(0.95_0_0)]">
   High Contrast (L: 0.2 vs 0.95)
 </button>
@@ -115,7 +115,7 @@ OKLCH requires modern browsers:
 
 **Vibrant accent:**
 
-```html tailwind
+```html tailwind height=140
 <div class="bg-[oklch(0.7_0.25_160)]">High chroma for vivid color</div>
 ```
 

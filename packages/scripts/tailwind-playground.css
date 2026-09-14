@@ -1,0 +1,21 @@
+@import 'tailwindcss' source(none);
+
+@layer base {
+  :where(html) {
+    color-scheme: light;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :where(html) {
+      color-scheme: dark;
+    }
+  }
+
+  :where(body) {
+    margin: 0;
+    padding: 1rem;
+    font-family: var(--font-sans);
+  }
+}

@@ -7,7 +7,7 @@ description: >-
 
 Let's start with our basic HTML structure for a simple search input field.
 
-```html tailwind
+```html tailwind height=160
 <div>
   <label for="search">Search products</label>
   <input type="text" name="search" id="search" placeholder="Enter search terms..." />
@@ -20,7 +20,7 @@ It's a basic input field, but modern interfaces often need more sophisticated in
 
 First, let's establish a container that will hold our input and additional elements, applying some professional-ish styling.
 
-```html tailwind
+```html tailwind height=160
 <div>
   <label for="search" class="block text-sm font-medium text-slate-900">Search products</label>
   <div class="mt-2">
@@ -51,7 +51,7 @@ This approach treats the entire compound input as a single visual unit, which is
 
 Now let's add proper focus states using the `focus-within` pseudo-class, which applies styles when any child element receives focus.
 
-```html tailwind
+```html tailwind height=160
 <div>
   <label for="search" class="block text-sm font-medium text-slate-900">Search products</label>
   <div class="mt-2">
@@ -82,7 +82,7 @@ The `focus-within` pseudo-class is perfect for compound inputs because it create
 
 Let's add prefix and suffix elements to demonstrate common patterns like URL prefixes and unit suffixes.
 
-```html tailwind
+```html tailwind height=200
 <div>
   <label for="website" class="block text-sm font-medium text-slate-900">Website URL</label>
   <div class="mt-2">
@@ -126,7 +126,7 @@ This creates clear visual separation while maintaining the unified appearance of
 
 Now let's create a search input with an internal search button, demonstrating how to handle interactive elements within the compound input.
 
-```html tailwind
+```html tailwind height=200
 <div>
   <label for="search" class="block text-sm font-medium text-slate-900">Search products</label>
   <div class="mt-2">
@@ -164,7 +164,7 @@ The button's focus ring is designed to work harmoniously with the container's fo
 
 Let's enhance our input with a clear button that only appears when there's content, using the `has()` selector to conditionally show elements.
 
-```html tailwind
+```html tailwind height=200
 <div>
   <label for="search" class="block text-sm font-medium text-slate-900">Search products</label>
   <div class="mt-2">
@@ -210,7 +210,7 @@ This creates smart UX where the clear button only appears when it's needed, redu
 
 Let's create a more sophisticated example that demonstrates different input states and uses multiple advanced selectors.
 
-```html tailwind
+```html tailwind height=300
 <div class="space-y-6">
   <!-- Search with Clear -->
   <div>
@@ -333,7 +333,7 @@ This is particularly important for accessibility—screen reader users and keybo
 
 Let's enhance our inputs with proper ARIA attributes and refined styling for a production-ready component.
 
-```html tailwind
+```html tailwind height=300
 <div class="space-y-6">
   <div>
     <label for="search-enhanced" class="block text-sm font-medium text-slate-900"

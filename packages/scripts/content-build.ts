@@ -1,93 +1,24 @@
 #!/usr/bin/env bun
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 
 import type { GeneratedContent } from '@stevekinney/utilities/content-types';
 import { formatJson } from '@stevekinney/utilities/write-formatted-json';
 import { getObsidianMathStylesheet } from '@stevekinney/markdown/rehype-obsidian-math';
 
+import { generatedContentDataPath, generatedContentDirectory } from './content-paths.ts';
+import { writeArtifact } from './build-artifacts.ts';
 import {
-  contentEnhancementsEntryPath,
-  contentEnhancementsPackageRoot,
-  generatedContentDataPath,
-  generatedContentDirectory,
-  generatedContentEnhancementsDirectory,
-  repositoryRoot,
-  tailwindPlaygroundSourcePath,
   generatedObsidianContentPath,
   generatedObsidianMathStylesheetPath,
 } from './content-paths.ts';
-import { computeContentEnhancementBuildHash } from './content-enhancement-build-hash.ts';
 import { collectContentRepository } from './content-repository.ts';
 import { reportMetadataIssues } from './content-metadata.ts';
 
-const writeIfChanged = async (filePath: string, contents: string): Promise<boolean> => {
-  try {
-    const existing = await readFile(filePath, 'utf8');
-    if (existing === contents) {
-      return false;
-    }
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
-      throw error;
-    }
-  }
-
-  await writeFile(filePath, contents, 'utf8');
-  return true;
-};
-
-const enhancementsBuildHashPath = path.resolve(
-  generatedContentEnhancementsDirectory,
-  '.build-hash',
-);
-
-const readExistingBuildHash = async (): Promise<string | null> => {
-  try {
-    return (await readFile(enhancementsBuildHashPath, 'utf8')).trim();
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      return null;
-    }
-    throw error;
-  }
-};
-
-const buildContentEnhancements = async (): Promise<boolean> => {
-  const expectedHash = await computeContentEnhancementBuildHash(
-    contentEnhancementsPackageRoot,
-    repositoryRoot,
-  );
-  const existingHash = await readExistingBuildHash();
-  if (existingHash === expectedHash) {
-    return false;
-  }
-
-  await rm(generatedContentEnhancementsDirectory, { recursive: true, force: true });
-
-  const result = await Bun.build({
-    entrypoints: [contentEnhancementsEntryPath],
-    outdir: generatedContentEnhancementsDirectory,
-    target: 'browser',
-    format: 'esm',
-    splitting: true,
-    minify: true,
-  });
-
-  if (!result.success) {
-    console.error('Failed to build content enhancement assets.');
-    for (const log of result.logs) {
-      console.error(log.message);
-    }
-    process.exit(1);
-  }
-
-  await writeFile(enhancementsBuildHashPath, expectedHash, 'utf8');
-  return true;
-};
-
 const main = async (): Promise<void> => {
+  console.log('Collecting content sources.');
   const repository = await collectContentRepository();
+  console.log('Content collection complete.');
 
   const buildErrors = repository.validationIssues.filter((i) => i.severity !== 'warning');
   const buildWarnings = repository.validationIssues.filter((i) => i.severity === 'warning');
@@ -104,7 +35,6 @@ const main = async (): Promise<void> => {
   }
 
   await mkdir(generatedContentDirectory, { recursive: true });
-  const didBuildEnhancements = await buildContentEnhancements();
 
   const generatedContent: GeneratedContent = {
     meta: repository.meta,
@@ -117,31 +47,35 @@ const main = async (): Promise<void> => {
     prerenderEntries: repository.prerenderEntries,
   };
 
-  const didWriteContentData = await writeIfChanged(
+  const didWriteContentData = await writeArtifact(
     generatedContentDataPath,
     await formatJson(generatedContentDataPath, generatedContent),
   );
-  const didWriteTailwindSource = await writeIfChanged(
-    tailwindPlaygroundSourcePath,
-    repository.tailwindPlaygroundSource,
+  const didWritePlaygroundInputs = await writeArtifact(
+    path.join(generatedContentDirectory, 'playground-inputs.json'),
+    `${JSON.stringify({ version: 1, examples: repository.playgrounds }, null, 2)}\n`,
+  );
+  const didWriteSiteCandidates = await writeArtifact(
+    path.join(generatedContentDirectory, 'site-tailwind-candidates.txt'),
+    `${repository.siteTailwindCandidates.join('\n')}\n`,
   );
   // This build-only index is not copied to adapter outputs or browser assets.
-  const didWriteObsidianContent = await writeIfChanged(
+  const didWriteObsidianContent = await writeArtifact(
     generatedObsidianContentPath,
-    JSON.stringify({
+    `${JSON.stringify({
       publicationIndex: repository.publicationIndex,
       documents: repository.normalizedDocuments,
-    }),
+    })}\n`,
   );
-  const didWriteMathStylesheet = await writeIfChanged(
+  const didWriteMathStylesheet = await writeArtifact(
     generatedObsidianMathStylesheetPath,
     await getObsidianMathStylesheet(),
   );
 
   if (
     !didWriteContentData &&
-    !didWriteTailwindSource &&
-    !didBuildEnhancements &&
+    !didWritePlaygroundInputs &&
+    !didWriteSiteCandidates &&
     !didWriteObsidianContent &&
     !didWriteMathStylesheet
   ) {

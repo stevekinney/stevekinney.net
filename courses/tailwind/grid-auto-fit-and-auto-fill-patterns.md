@@ -22,13 +22,20 @@ Both are often used with `minmax(<min>, <max>)` to define track sizes. A common 
 
 Tailwind lacks dedicated `grid-cols-auto-fit` or `grid-cols-auto-fill` utilities. However, it supports custom CSS values via arbitrary value syntax: `grid-cols-[<value>]` and `grid-rows-[<value>]`.
 
+```css playground=grid-vars
+@theme {
+  --min-col-width: 200px;
+  --auto-grid-cols: repeat(auto-fit, minmax(250px, 1fr));
+}
+```
+
 This syntax allows using native CSS `repeat()` with `auto-fill` or `auto-fit`.
 
 ### Using `auto-fill`
 
 To create a grid that fills space with items, potentially leaving empty space:
 
-```html tailwind
+```html tailwind height=400
 <div
   class="grid grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] gap-4 rounded-lg bg-gray-100 p-4"
 >
@@ -46,7 +53,7 @@ To create a grid that fills space with items, potentially leaving empty space:
 
 For grids where items expand to fill container width by collapsing empty tracks:
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-4">Item 1</div>
   <div class="rounded bg-red-200 p-4">Item 2</div>
@@ -61,7 +68,7 @@ For grids where items expand to fill container width by collapsing empty tracks:
 
 Define `minmax` values with any CSS unit or CSS variables.
 
-```html tailwind
+```html tailwind height=400 css=grid-vars
 <div
   class="grid grid-cols-[repeat(auto-fit,_minmax(var(--min-col-width),_1fr))] gap-4 rounded-lg bg-gray-100 p-4"
 >
@@ -84,7 +91,7 @@ Tailwind offers `grid-cols-(<custom-property>)` for arbitrary values that are so
 }
 ```
 
-```html tailwind
+```html tailwind height=400 css=grid-vars
 <div class="grid grid-cols-(--auto-grid-cols) gap-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-blue-200 p-4">CSS Variable Item 1</div>
   <div class="rounded bg-red-200 p-4">CSS Variable Item 2</div>

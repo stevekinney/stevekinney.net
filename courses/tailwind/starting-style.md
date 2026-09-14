@@ -40,7 +40,7 @@ The `@starting-style` CSS rule defines initial styles for first render:
 
 Tailwind wraps utilities in `@starting-style` automatically:
 
-```html tailwind
+```html tailwind height=300
 <!-- Fade in on appearance -->
 <div class="opacity-100 transition-opacity duration-300 starting:opacity-0">Fades in smoothly</div>
 
@@ -56,17 +56,18 @@ Tailwind wraps utilities in `@starting-style` automatically:
 
 **Modal dialogs:**
 
-```html tailwind
+```html tailwind height=300
 <dialog
+  open
   class="scale-100 opacity-100 transition-all duration-200 starting:scale-95 starting:opacity-0"
 >
-  Modal content
+  Modal content (open so the starting state can be inspected)
 </dialog>
 ```
 
 **Toast notifications:**
 
-```html tailwind
+```html tailwind height=300
 <div class="translate-x-0 transition-transform duration-300 starting:translate-x-full">
   Slides in from right
 </div>
@@ -74,7 +75,7 @@ Tailwind wraps utilities in `@starting-style` automatically:
 
 **Dropdown menus:**
 
-```html tailwind
+```html tailwind height=300
 <ul
   class="translate-y-0 opacity-100 transition-all duration-150 starting:-translate-y-2 starting:opacity-0"
 >
@@ -86,10 +87,11 @@ Tailwind wraps utilities in `@starting-style` automatically:
 
 Enable transitions on `display` property changes:
 
-```html tailwind
-<div class="hidden transition-[display,opacity] duration-300 open:block starting:opacity-0">
-  Animates when toggled to visible
-</div>
+```html tailwind height=300
+<details open class="transition-[display,opacity] duration-300 starting:opacity-0">
+  <summary class="cursor-pointer font-medium">Toggle the displayed content</summary>
+  <p class="mt-2">Native details provides the visible and hidden states.</p>
+</details>
 ```
 
 **Note:** Requires `transition-behavior: allow-discrete` (included when you use `transition-[display]`).

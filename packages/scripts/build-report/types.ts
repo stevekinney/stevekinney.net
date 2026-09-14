@@ -1,3 +1,5 @@
+import type { PlaygroundReport } from './inspect-playgrounds.ts';
+
 type TurboTaskCache = {
   status?: string;
   source?: string;
@@ -78,4 +80,5 @@ export type BuildReport = {
   content: ContentReport;
   prerender: PrerenderReport;
   assets: AssetsReport;
+  playgrounds?: PlaygroundReport;
 };

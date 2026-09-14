@@ -7,7 +7,7 @@ description: >-
 
 Let's start with our basic HTML structure for a collection of stat cards.
 
-```html tailwind
+```html tailwind height=420
 <div>
   <div>
     <div>
@@ -32,7 +32,7 @@ We have three stat cards in a container, but they're stacked vertically and comp
 
 First, let's establish our container as a "containment context" and add basic card styling using patterns from our [card tutorial](building-a-card.md).
 
-```html tailwind
+```html tailwind height=420
 <div class="@container p-4">
   <div class="grid gap-4">
     <div class="rounded-lg bg-white p-6 shadow-md">
@@ -64,7 +64,7 @@ This is fundamentally different from responsive design with media queries—thes
 
 Now let's add the magic: making the grid responsive to the container's size using container query utilities.
 
-```html tailwind
+```html tailwind height=420
 <div class="@container p-4">
   <div class="grid gap-4 @sm:grid-cols-2 @lg:grid-cols-3">
     <div class="rounded-lg bg-white p-6 shadow-md">

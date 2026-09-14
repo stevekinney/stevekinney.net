@@ -5,7 +5,7 @@ description: "Build a Tailwind navigation menu that switches between horizontal 
 
 Let's start with our basic HTML structure for a simple navigation menu.
 
-```html tailwind
+```html tailwind height=620
 <div>
   <nav>
     <div>
@@ -44,7 +44,7 @@ Let's build this step by step using container queries to create truly modular na
 
 First, let's establish our container as a query context and add basic navigation styling, building on techniques from our [statistics card tutorial](building-a-statistics-card.md).
 
-```html tailwind
+```html tailwind height=620
 <div class="@container border-b border-slate-200 bg-white">
   <nav class="flex items-center justify-between px-4 py-3">
     <div>
@@ -76,7 +76,7 @@ This creates a clean horizontal navigation that works well in wide containers, b
 
 Now let's make the navigation adapt its spacing based on container width. In medium-width containers, we'll use tighter spacing to fit more content.
 
-```html tailwind
+```html tailwind height=620
 <div class="@container border-b border-slate-200 bg-white">
   <nav class="flex items-center justify-between px-4 py-3">
     <div>
@@ -114,7 +114,7 @@ The `@lg:` prefix means "when this container (not the viewport) is large." This 
 
 For medium-width containers, let's create a more compact layout where some links might be abbreviated or repositioned.
 
-```html tailwind
+```html tailwind height=620
 <div class="@container border-b border-slate-200 bg-white">
   <nav class="flex items-center justify-between px-4 py-3">
     <div>
@@ -157,7 +157,7 @@ This creates a smart progressive disclosure where less critical navigation items
 
 Now let's add a hamburger menu that appears when the container is too narrow for horizontal navigation.
 
-```html tailwind
+```html tailwind height=620
 <div class="@container border-b border-slate-200 bg-white">
   <nav class="flex items-center justify-between px-4 py-3">
     <div>
@@ -220,7 +220,7 @@ Now we have intelligent navigation that shows the hamburger menu only when the c
 
 Let's complete the hamburger functionality with a dropdown menu that appears when the button is activated.
 
-```html tailwind
+```html tailwind height=620
 <div class="@container border-b border-slate-200 bg-white">
   <nav>
     <div class="flex items-center justify-between px-4 py-3">
@@ -353,7 +353,7 @@ The beauty is that all menu items appear in the dropdown—even "Portfolio" whic
 
 Let's enhance accessibility with proper focus states and ARIA attributes.
 
-```html tailwind
+```html tailwind height=620
 <div class="@container border-b border-slate-200 bg-white">
   <nav role="navigation" aria-label="Main navigation">
     <div class="flex items-center justify-between px-4 py-3">
@@ -493,7 +493,7 @@ The `focus-visible` pseudo-class ensures focus rings only appear for keyboard na
 
 Finally, let's add some polish with active navigation states and smooth transitions throughout.
 
-```html tailwind
+```html tailwind height=620
 <div class="@container border-b border-slate-200 bg-white shadow-sm">
   <nav role="navigation" aria-label="Main navigation">
     <div class="flex items-center justify-between px-4 py-3 @lg:px-6">

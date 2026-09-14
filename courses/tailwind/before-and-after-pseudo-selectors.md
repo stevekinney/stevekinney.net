@@ -9,7 +9,7 @@ description: >-
 
 Prefix any utility with `before:` or `after:` to style pseudo-elements:
 
-```html tailwind
+```html tailwind height=160
 <div class="before:block before:h-px before:bg-gray-300 before:content-['']">Decorated text</div>
 ```
 
@@ -21,7 +21,7 @@ Tailwind adds `content: ''` by default when using these variants.
 
 ### Text Content
 
-```html tailwind
+```html tailwind height=160
 <span class="before:mr-2 before:content-['→']">Next</span>
 <span class="after:text-red-500 after:content-['*']">Required</span>
 ```
@@ -30,7 +30,7 @@ Tailwind adds `content: ''` by default when using these variants.
 
 Use underscores (converted to spaces):
 
-```html tailwind
+```html tailwind height=160
 <div class="before:content-['Hello_world']"></div>
 ```
 
@@ -38,19 +38,25 @@ Use underscores (converted to spaces):
 
 Escape with backslash:
 
-```html tailwind
+```html tailwind height=160
 <div class="before:content-['snake\_case']"></div>
 ```
 
 ### Attribute Values
 
-```html tailwind
+```html tailwind height=160
 <div data-label="Status" class="before:content-[attr(data-label)]">...</div>
 ```
 
 ### CSS Variables
 
-```html tailwind
+```css playground=label
+:root {
+  --label: 'Status';
+}
+```
+
+```html tailwind height=160 css=label
 <div class="before:content-[var(--label)]">...</div>
 ```
 
@@ -58,7 +64,7 @@ Escape with backslash:
 
 **Prefer real elements** for most cases:
 
-```html tailwind
+```html tailwind height=160
 <!-- Better -->
 <span class="inline-block h-px w-full bg-gray-300"></span>
 
@@ -76,6 +82,6 @@ Use pseudo-elements when:
 
 Stack with other variants:
 
-```html tailwind
+```html tailwind height=160
 <button class="before:opacity-0 before:content-['→'] hover:before:opacity-100">Hover me</button>
 ```

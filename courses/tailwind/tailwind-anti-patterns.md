@@ -52,7 +52,7 @@ Defining custom styles in `@layer` components expecting variant support:
 
 Obviously, you can use Tailwind _without_ components, but it becomes quickly obviously how this could get rough.
 
-```html tailwind
+```html tailwind height=300
 <div class="space-x-2">
   <button class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
     Button
@@ -72,7 +72,7 @@ Obviously, you can use Tailwind _without_ components, but it becomes quickly obv
 
 In a pinch, it might be tempting to use arbitrary values instead of design tokens.
 
-```html tailwind
+```html tailwind height=300
 <!-- ❌ Anti-pattern: Magic values -->
 <div class="bg-[#ff6b35] p-[123px] text-[14.5px]"></div>
 ```

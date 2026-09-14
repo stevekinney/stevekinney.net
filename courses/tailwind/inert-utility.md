@@ -19,7 +19,7 @@ Prefix utility classes with `inert:` to conditionally apply styles when the elem
 
 For example, visually indicate a non-interactive section by reducing opacity or changing the cursor.
 
-```html tailwind
+```html tailwind height=100
 <div inert class="opacity-100 inert:opacity-50">
   <!-- Content that might become inert -->
 </div>

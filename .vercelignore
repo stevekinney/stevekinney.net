@@ -1,0 +1,10 @@
+# Upload source inputs; Vercel rebuilds generated outputs with its own toolchain.
+tmp
+**/.generated
+**/.svelte-kit
+**/.turbo
+**/build
+**/dist
+**/test-results
+**/playwright-report
+.playwright-cli

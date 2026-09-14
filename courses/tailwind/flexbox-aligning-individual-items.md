@@ -35,7 +35,7 @@ Assume the container has `display: flex` or `display: inline-flex`.
 
 By default, `align-self` is `auto`, inheriting the container's `align-items`. `self-auto` makes this explicit.
 
-```html tailwind
+```html tailwind height=220
 <div class="flex min-h-[200px] items-center gap-4 rounded-lg bg-gray-100 p-6">
   <div class="self-auto rounded-lg bg-blue-500 p-4 text-white">Item 1 (inherits center)</div>
   <div class="rounded-lg bg-green-500 p-4 text-white">Item 2 (inherits center)</div>
@@ -47,7 +47,7 @@ By default, `align-self` is `auto`, inheriting the container's `align-items`. `s
 
 `self-start` aligns an item to the beginning of the cross axis, regardless of `align-items`.
 
-```html tailwind
+```html tailwind height=220
 <div class="flex min-h-[200px] items-center gap-4 rounded-lg bg-gray-100 p-6">
   <div class="self-start rounded-lg bg-blue-500 p-4 text-white">Item 1 (aligns to start)</div>
   <div class="rounded-lg bg-green-500 p-4 text-white">Item 2 (aligns to center)</div>
@@ -59,7 +59,7 @@ By default, `align-self` is `auto`, inheriting the container's `align-items`. `s
 
 `self-end` aligns an item to the end of the cross axis.
 
-```html tailwind
+```html tailwind height=220
 <div class="flex min-h-[200px] items-center gap-4 rounded-lg bg-gray-100 p-6">
   <div class="rounded-lg bg-blue-500 p-4 text-white">Item 1 (aligns to center)</div>
   <div class="rounded-lg bg-green-500 p-4 text-white">Item 2 (aligns to center)</div>
@@ -71,7 +71,7 @@ By default, `align-self` is `auto`, inheriting the container's `align-items`. `s
 
 `self-center` centers a specific item when others have different alignments.
 
-```html tailwind
+```html tailwind height=220
 <div class="flex min-h-[200px] items-start gap-4 rounded-lg bg-gray-100 p-6">
   <div class="rounded-lg bg-blue-500 p-4 text-white">Item 1 (aligns to start)</div>
   <div class="self-center rounded-lg bg-green-500 p-4 text-white">Item 2 (aligns to center)</div>
@@ -85,7 +85,7 @@ By default, `align-self` is `auto`, inheriting the container's `align-items`. `s
 
 `self-stretch` makes an item fill the cross axis, overriding its size or `align-items`.
 
-```html tailwind
+```html tailwind height=220
 <div class="flex min-h-[200px] items-start gap-4 rounded-lg bg-gray-100 p-6">
   <div class="rounded-lg bg-blue-500 p-4 text-white">Item 1 (aligns to start)</div>
   <div class="self-stretch rounded-lg bg-green-500 p-4 text-white">Item 2 (stretches)</div>
@@ -97,7 +97,7 @@ By default, `align-self` is `auto`, inheriting the container's `align-items`. `s
 
 `self-baseline` aligns text baselines of items, even with different content heights. `self-baseline-last` aligns to the last baseline.
 
-```html tailwind
+```html tailwind height=220
 <div class="flex min-h-[200px] items-stretch gap-4 rounded-lg bg-gray-100 p-6">
   <div class="rounded-lg bg-blue-500 p-4 text-white">Item 1 (stretches)</div>
   <div class="self-baseline rounded-lg bg-green-500 p-4 text-white">
@@ -121,7 +121,7 @@ Individual item alignment can change with viewport or container size. Tailwind's
 
 Apply `self-*` utilities conditionally with breakpoint prefixes (e.g., `sm:`, `md:`, `lg:`).
 
-```html tailwind
+```html tailwind height=220
 <div class="flex min-h-[200px] items-start gap-4 rounded-lg bg-gray-100 p-6 md:items-center">
   <div class="self-end rounded-lg bg-blue-500 p-4 text-white md:self-auto">Item 1</div>
   <div class="rounded-lg bg-green-500 p-4 text-white">Item 2</div>
@@ -135,7 +135,7 @@ Item 1 aligns to `end` by default. On medium screens (`md`) and up, the containe
 
 Adjust item alignment based on parent container size using `@container` and variants like `@sm:`, `@md:`.
 
-```html tailwind
+```html tailwind height=220
 <div class="@container flex min-h-[200px] items-center gap-4 rounded-lg bg-gray-100 p-6">
   <div class="self-start rounded-lg bg-blue-500 p-4 text-white @md:self-end">Item 1</div>
   <div class="rounded-lg bg-green-500 p-4 text-white">Item 2</div>

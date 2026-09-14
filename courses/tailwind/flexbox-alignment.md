@@ -18,7 +18,7 @@ Control distribution along the main axis with `justify-*` utilities:
 - `justify-around` - Equal space around items
 - `justify-evenly` - Equal space between items and edges
 
-```html tailwind
+```html tailwind height=220
 <!-- Center navigation items -->
 <nav class="flex justify-center gap-4">
   <a href="#" class="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">Home</a>
@@ -44,7 +44,7 @@ Align items perpendicular to the main axis:
 - `items-baseline` - Align text baselines
 - `items-stretch` - Stretch to fill (default)
 
-```html tailwind
+```html tailwind height=220
 <!-- Vertically center items -->
 <div class="flex h-20 items-center gap-3 rounded-lg bg-gray-100 px-4">
   <div class="h-8 w-8 flex-shrink-0 rounded-full bg-blue-500"></div>
@@ -62,7 +62,7 @@ Override container alignment for specific items:
 - `self-center` - Center item
 - `self-stretch` - Stretch item
 
-```html tailwind
+```html tailwind height=220
 <div class="flex h-32 items-start gap-4 rounded-lg bg-gray-100 p-4">
   <div class="rounded bg-red-500 p-3 text-white">Top aligned</div>
   <div class="self-center rounded bg-green-500 p-3 text-white">Centered</div>
@@ -81,7 +81,7 @@ For wrapped flex items, align entire lines:
 - `content-around` - Space around lines
 - `content-evenly` - Even spacing
 
-```html tailwind
+```html tailwind height=220
 <div class="flex h-64 flex-wrap content-center gap-4 rounded-lg bg-gray-100 p-4">
   <div class="h-20 w-32 rounded bg-purple-500 p-4 text-white">Item 1</div>
   <div class="h-20 w-32 rounded bg-pink-500 p-4 text-white">Item 2</div>

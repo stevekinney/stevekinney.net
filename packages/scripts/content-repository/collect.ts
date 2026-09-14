@@ -5,8 +5,6 @@ import { createHash } from 'node:crypto';
 import { normalizeObsidianMarkdown } from '@stevekinney/markdown/obsidian-normalization';
 import type { NormalizedMarkdown } from '@stevekinney/markdown/obsidian-types';
 
-import { buildTailwindPlaygroundSource } from '@stevekinney/utilities/tailwind-playground';
-
 import { coursesRoot, projectsRoot, writingRoot, repositoryRoot } from '../content-paths.ts';
 import { auditContentMetadata } from '../content-metadata.ts';
 
@@ -38,11 +36,13 @@ const collectSourceArtifacts = (
   routePaths: Set<string>,
   courseDirectorySlugs: Set<string>,
   sourceHashes: Map<string, string>,
-  tailwindPlaygrounds: string[],
+  tailwindPlaygrounds: import('@stevekinney/utilities/tailwind-playground-types').PlaygroundDefinition[],
+  siteTailwindCandidates: string[],
   validationIssues: ContentValidationIssue[],
 ): void => {
   sourceHashes.set(source.sourcePath, source.sourceHash);
   tailwindPlaygrounds.push(...source.tailwindPlaygrounds);
+  siteTailwindCandidates.push(...source.siteTailwindCandidates);
 
   validateMarkdownLinks(
     source.sourcePath,
@@ -154,7 +154,9 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
 
   const routePaths = new Set(Object.keys(routes));
   const courseDirectorySlugs = new Set(courseEntries.map((entry) => entry.slug));
-  const tailwindPlaygrounds: string[] = [];
+  const tailwindPlaygrounds: import('@stevekinney/utilities/tailwind-playground-types').PlaygroundDefinition[] =
+    [];
+  const siteTailwindCandidates: string[] = [];
   const sourceHashes = new Map<string, string>();
 
   for (const writingSource of writingSources) {
@@ -164,6 +166,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
       courseDirectorySlugs,
       sourceHashes,
       tailwindPlaygrounds,
+      siteTailwindCandidates,
       validationIssues,
     );
   }
@@ -175,6 +178,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
       courseDirectorySlugs,
       sourceHashes,
       tailwindPlaygrounds,
+      siteTailwindCandidates,
       validationIssues,
     );
   }
@@ -186,6 +190,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
       courseDirectorySlugs,
       sourceHashes,
       tailwindPlaygrounds,
+      siteTailwindCandidates,
       validationIssues,
     );
 
@@ -200,6 +205,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
         courseDirectorySlugs,
         sourceHashes,
         tailwindPlaygrounds,
+        siteTailwindCandidates,
         validationIssues,
       );
     }
@@ -233,7 +239,8 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
       siteIndex.projects,
     ),
     validationIssues,
-    tailwindPlaygroundSource: buildTailwindPlaygroundSource(tailwindPlaygrounds),
+    playgrounds: tailwindPlaygrounds,
+    siteTailwindCandidates: [...new Set(siteTailwindCandidates)].sort(),
     sourceFiles,
   };
 };

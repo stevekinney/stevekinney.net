@@ -1,21 +1,77 @@
 {
-  "installCommand": "bun install",
+  "installCommand": "bun install --frozen-lockfile",
   "buildCommand": "LD_LIBRARY_PATH=$PWD/node_modules/@img/sharp-libvips-linux-x64/lib bun run build",
   "ignoreCommand": "if [ -n \"$VERCEL_GIT_PULL_REQUEST_ID\" ] && [ \"$VERCEL_GIT_COMMIT_AUTHOR_LOGIN\" != \"stevekinney\" ]; then echo \"Skipping preview build for fork PR\"; exit 0; fi; exit 1",
   "headers": [
     {
       "source": "/writing/rss",
-      "headers": [{ "key": "Content-Type", "value": "application/atom+xml; charset=utf-8" }]
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/atom+xml; charset=utf-8"
+        }
+      ]
     },
     {
-      "source": "/(.*)",
+      "source": "/generated/playgrounds/([a-f0-9]{64}\\.html)",
       "headers": [
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         {
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com; font-src 'self' data:; connect-src 'self' https://vitals.vercel-insights.com; form-action 'self' https://buttondown.com; base-uri 'self'; object-src 'self' https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com; frame-ancestors 'none'"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/generated/playgrounds/([a-f0-9]{64}\\.css)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/((?!generated/playgrounds/[a-f0-9]{64}\\.(?:html|css)$).*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://vitals.vercel-insights.com; frame-src 'self'; form-action 'self' https://buttondown.com; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"
         }
       ]
     }

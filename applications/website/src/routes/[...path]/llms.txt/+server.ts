@@ -2,20 +2,22 @@ import { error } from '@sveltejs/kit';
 
 import {
   getCourseEntry,
+  getGeneratedContent,
   getLessonRoute,
   getProjectEntry,
   getWritingEntry,
 } from '$lib/server/content';
-import {
-  renderCourseExport,
-  renderLessonExport,
-  renderProjectExport,
-  renderWritingExport,
-} from '$lib/server/llms';
+import { renderLessonExport, renderProjectExport, renderWritingExport } from '$lib/server/llms';
 
 import type { RequestHandler } from '@sveltejs/kit';
+import type { EntryGenerator } from './$types';
 
-export const prerender = false;
+export const prerender = true;
+
+export const entries: EntryGenerator = () =>
+  Object.values(getGeneratedContent().routes)
+    .filter((route) => route.contentType !== 'course')
+    .map((route) => ({ path: route.path.slice(1) }));
 
 const safeDecode = (value: string): string => {
   try {
@@ -30,13 +32,6 @@ const resolveWriting = async (slug: string): Promise<string | null> => {
   if (!post) return null;
 
   return renderWritingExport({ ...post, path: `/writing/${slug}` });
-};
-
-const resolveCourse = async (courseSlug: string): Promise<string | null> => {
-  const course = getCourseEntry(courseSlug);
-  if (!course) return null;
-
-  return renderCourseExport({ ...course, path: `/courses/${courseSlug}`, slug: courseSlug });
 };
 
 const resolveCourseLesson = async (
@@ -63,8 +58,6 @@ export const GET: RequestHandler = async ({ params }) => {
 
   if (segments[0] === 'writing' && segments.length === 2) {
     content = await resolveWriting(segments[1]);
-  } else if (segments[0] === 'courses' && segments.length === 2) {
-    content = await resolveCourse(segments[1]);
   } else if (segments[0] === 'courses' && segments.length === 3) {
     content = await resolveCourseLesson(segments[1], segments[2]);
   } else if (segments[0] === 'projects' && segments.length === 2) {

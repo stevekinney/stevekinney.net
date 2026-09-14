@@ -1,16 +1,17 @@
-import rehypeObsidianIdentifiers, {
-  rehypeValidateObsidianIdentifiers,
-} from '@stevekinney/markdown/rehype-obsidian-identifiers';
 import staticAdapter from '@sveltejs/adapter-static';
 import vercelAdapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import rehypeObsidianIdentifiers, {
+  rehypeValidateObsidianIdentifiers,
+} from '@stevekinney/markdown/rehype-obsidian-identifiers';
 import rehypeCallouts from '@stevekinney/markdown/rehype-callouts';
-import rehypeObsidianMath from '@stevekinney/markdown/rehype-obsidian-math';
-import { obsidianPreprocessor } from '@stevekinney/markdown/obsidian-preprocessor';
 import remarkEscapeComparators from '@stevekinney/markdown/remark-escape-comparators';
 import { fixMarkdownUrls } from '@stevekinney/markdown/remark-fix-urls';
 import remarkTailwindPlayground from '@stevekinney/markdown/remark-tailwind-playground';
+import { parseTailwindPlaygroundMetadata } from '@stevekinney/utilities/tailwind-playground-metadata';
 import rehypeEnhanceImages from '@stevekinney/markdown/rehype-enhance-images';
+import rehypeObsidianMath from '@stevekinney/markdown/rehype-obsidian-math';
+import { obsidianPreprocessor } from '@stevekinney/markdown/obsidian-preprocessor';
 import type { Config } from '@sveltejs/kit';
 import type { MdsvexOptions } from 'mdsvex';
 import { escapeSvelte, mdsvex } from 'mdsvex';
@@ -33,7 +34,9 @@ const siteUrl =
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const workspaceRoot = join(__dirname, '../..');
 const imageManifestPath = join(__dirname, '../../image-manifest.json');
+const playgroundManifestPath = join(__dirname, '.generated/playgrounds/manifest.json');
 const strictImageManifest =
   process.env.NODE_ENV === 'production' || Boolean(process.env.VERCEL) || Boolean(process.env.CI);
 
@@ -41,9 +44,9 @@ const parseTitle = (
   metastring: string | null | undefined,
 ): { title: string | null; remaining: string } => {
   if (!metastring) return { title: null, remaining: '' };
-  const match = metastring.match(/title="([^"]+)"/);
-  const title = match ? match[1] : null;
-  const remaining = metastring.replace(/title="[^"]+"\s*/, '').trim();
+  const match = metastring.match(/(?:^|\s)title=(?:"((?:\\.|[^"\\])*)"|'((?:\\.|[^'\\])*)')/);
+  const title = match ? (match[1] ?? match[2]).replace(/\\([\\"'])/g, '$1') : null;
+  const remaining = match ? metastring.replace(match[0], ' ').trim() : metastring.trim();
   return { title, remaining };
 };
 
@@ -63,7 +66,10 @@ const mdsvexOptions: MdsvexOptions = {
     asPluggable(remarkEscapeComparators),
     asPluggable([fixMarkdownUrls, ['../../writing', '../../courses']]),
     asPluggable(remarkGfm),
-    asPluggable(remarkTailwindPlayground),
+    asPluggable([
+      remarkTailwindPlayground,
+      { manifestPath: playgroundManifestPath, workspaceRoot },
+    ]),
   ],
   rehypePlugins: [
     asPluggable(rehypeObsidianIdentifiers),
@@ -100,7 +106,11 @@ const mdsvexOptions: MdsvexOptions = {
         return `<!-- svelte-ignore a11y_no_noninteractive_tabindex --><div data-mermaid tabindex="0" class="not-prose overflow-x-auto rounded-md border-2 border-slate-800 bg-[#011627] p-4 not-last:mb-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"><pre class="mermaid-source" style="margin:0;color:#d6deeb;white-space:pre-wrap">${escaped}</pre></div>`;
       }
 
-      const { title, remaining: remainingMeta } = parseTitle(metastring);
+      const playgroundMetadata =
+        lang === 'html' ? parseTailwindPlaygroundMetadata(metastring ?? undefined) : null;
+      const parsedTitle = parseTitle(metastring);
+      const title = playgroundMetadata?.title ?? parsedTitle.title;
+      const remainingMeta = parsedTitle.remaining;
       const { cleanedCode, annotations } = extractAnnotations(code);
 
       const baseClasses = [

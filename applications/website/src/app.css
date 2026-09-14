@@ -9,23 +9,26 @@
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-@import 'tailwindcss';
+@import 'tailwindcss' source(none);
 @import 'rehype-callouts/theme/obsidian';
 @import '../.generated/obsidian-math.css';
 
 /*
- * Tailwind scans the entire website app so utility classes emitted from
- * svelte.config.ts (Shiki highlighter wrappers), mdsvex layouts, and any
- * .md content under the app tree are included in the built stylesheet.
+ * The site stylesheet intentionally scans only application/runtime sources and
+ * a generated site-candidate file. Tailwind playground examples compile into a
+ * separate iframe stylesheet so course demo utilities never pollute the site.
  */
-@source '../**/*.{svelte,js,ts,md}';
-@source '../../../writing/**/*.md';
-@source '../../../courses/**/*.md';
-@source '../../../projects/**/*.md';
+@source '../src/**/*.{html,svelte,js,ts}';
+@source not '../src/**/*.test.ts';
+@source not '../src/**/__fixtures__/**';
+@source '../svelte.config.ts';
 @source '../../../packages/components/**/*.{svelte,js,ts}';
-@source '../../../packages/content-enhancements/src/**/*.ts';
+@source '../../../packages/content-enhancements/src/**/*.{js,ts}';
 @source '../../../packages/markdown/src/**/*.ts';
-@source '../.generated/tailwind-playground-source.html';
+@source not '../../../packages/**/*.test.ts';
+@source not '../../../packages/**/__fixtures__/**';
+@source not '../../../packages/**/*.stories.{svelte,js,ts}';
+@source '../.generated/site-tailwind-candidates.txt';
 
 .callout {
   --rc-color-default: rgb(8, 109, 221);
@@ -81,6 +84,79 @@
   --color-black-pearl-950: oklch(0.194 0.047 245.441);
 }
 
+.tailwind-playground {
+  display: block;
+  margin-block: 0 1.25rem;
+}
+
+.tailwind-playground__caption {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  color: var(--color-slate-600);
+  font-size: 0.875rem;
+  background: color-mix(in oklch, var(--color-slate-50) 92%, transparent);
+  border: 1px solid var(--color-slate-200);
+  border-bottom: 0;
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+@variant dark {
+  .tailwind-playground__caption {
+    color: var(--color-slate-300);
+    background: color-mix(in oklch, var(--color-slate-900) 92%, transparent);
+    border-color: var(--color-slate-700);
+  }
+}
+
+.tailwind-playground__title {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tailwind-playground__links {
+  display: inline-flex;
+  flex: none;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.tailwind-playground__link {
+  color: var(--color-primary-700);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tailwind-playground__link:hover {
+  text-decoration: underline;
+}
+
+@variant dark {
+  .tailwind-playground__link {
+    color: var(--color-primary-300);
+  }
+}
+
+.tailwind-playground__frame {
+  display: block;
+  width: 100%;
+  height: var(--tailwind-playground-height);
+  color-scheme: light dark;
+  background: canvas;
+  border: 1px solid var(--color-slate-200);
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+@variant dark {
+  .tailwind-playground__frame {
+    border-color: var(--color-slate-700);
+  }
+}
+
 @layer utilities {
   .prose :where([data-callout]):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     margin-top: 1.25em;
@@ -101,6 +177,7 @@
 
   .prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     padding: 0.1rem 0.15rem;
+    overflow-wrap: anywhere;
 
     background-color: color-mix(in oklch, var(--color-black-pearl-50) 20%, transparent);
     border-radius: 0.25rem;

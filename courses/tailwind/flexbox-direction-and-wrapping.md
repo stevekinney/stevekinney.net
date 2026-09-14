@@ -22,7 +22,7 @@ Use `flex` to create a flex container. Control layout direction and wrapping wit
 
 ## Responsive Patterns
 
-```html tailwind
+```html tailwind height=220
 <!-- Mobile column, desktop row -->
 <div class="flex flex-col gap-4 md:flex-row">
   <div class="min-h-[100px] rounded-lg bg-blue-500 p-4 text-white">Item 1</div>
@@ -31,7 +31,7 @@ Use `flex` to create a flex container. Control layout direction and wrapping wit
 </div>
 ```
 
-```html tailwind
+```html tailwind height=220
 <!-- Wrap on mobile, no wrap on desktop -->
 <div class="flex flex-wrap gap-4 lg:flex-nowrap">
   <div class="min-h-[100px] min-w-[200px] rounded-lg bg-red-500 p-4 text-white">Item 1</div>
@@ -44,7 +44,7 @@ Use `flex` to create a flex container. Control layout direction and wrapping wit
 
 Style based on parent container size instead of viewport:
 
-```html tailwind
+```html tailwind height=220
 <div class="@container">
   <div class="flex flex-col gap-4 @md:flex-row">
     <div class="min-h-[100px] rounded-lg bg-indigo-500 p-4 text-white">Responsive Item 1</div>

@@ -5,7 +5,7 @@ description: Let's build a simple Card component together using Tailwind.
 
 Let's start with our basic HTML structure.
 
-```html tailwind
+```html tailwind height=420
 <div>
   <img src="https://picsum.photos/seed/picsum/600/400" alt="Product" />
   <div>
@@ -22,7 +22,7 @@ It's obviously not much to look at, but let's start adding to it.
 
 We saw this before when we were [building a button](building-a-button.md), but it doesn't hurt to get some more practice in. Let's add the following classes to the container: `bg-white`, `rounded-lg`, and `shadow-md`.
 
-```html tailwind
+```html tailwind height=420
 <div class="rounded-lg bg-white shadow-md">
   <img src="https://picsum.photos/seed/picsum/600/400" alt="Product" />
   <div>
@@ -39,7 +39,7 @@ It's still not looking that good, but we're making progress—I guess. We're usi
 
 We also saw this with button, but we also adding padding super easily with the `p-6` class.
 
-```html tailwind
+```html tailwind height=420
 <div class="rounded-lg bg-white shadow-md">
   <img src="https://picsum.photos/seed/picsum/600/400" alt="Product" />
   <div class="p-6">
@@ -54,7 +54,7 @@ The `p-6` utility class adds 24px of padding on all sides.
 
 ## Getting the Image to Behave
 
-```html tailwind
+```html tailwind height=420
 <div class="overflow-hidden rounded-lg bg-white shadow-md">
   <img
     src="https://picsum.photos/seed/picsum/600/400"
@@ -81,7 +81,7 @@ Container changes:
 
 ## Typography
 
-```html tailwind
+```html tailwind height=420
 <div class="overflow-hidden rounded-lg bg-white shadow-md">
   <img
     src="https://picsum.photos/seed/picsum/600/400"
@@ -119,7 +119,7 @@ I made the following tweaks to the typography:
 
 We can add some spacing betweent the text by using `space-y-4` on the container surrounded the prose.
 
-```html tailwind
+```html tailwind height=420
 <div class="overflow-hidden rounded-lg bg-white shadow-md">
   <img
     src="https://picsum.photos/seed/picsum/600/400"
@@ -138,7 +138,7 @@ We can add some spacing betweent the text by using `space-y-4` on the container 
 
 ## Adding Hover Interactions
 
-```html tailwind
+```html tailwind height=420
 <div
   class="overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-200 hover:shadow-lg"
 >
@@ -165,7 +165,7 @@ We added the following classes to the container:
 
 It's still a little too wide for my tastes. Let's set a maximum with for the card using `max-w-sm` on the container.
 
-```html tailwind
+```html tailwind height=420
 <div
   class="max-w-sm overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-200 hover:shadow-lg"
 >
