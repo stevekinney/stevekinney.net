@@ -7,12 +7,17 @@ import { applySourceEdits, sourceLine, type SourceEdit } from './obsidian-source
 import { parseObsidianSource } from './obsidian-syntax.ts';
 import type { NormalizationContext, NormalizedMarkdown, SourceMapping } from './obsidian-types.ts';
 
+const obsidianTextSyntax =
+  /\[\[|%%|==(?=\S)[^\r\n]*?\S==|\$\$[\s\S]*?\$\$|(?<!\$)\$[^$\r\n]+?\$(?!\$)|\^[\w-]+\s*(?=\r?\n|$)/;
+
 const requiresNormalization = (tree: Root): boolean => {
   let required = false;
   visit(tree, (node) => {
-    if (node.type === 'text' && /\[\[|%%|==|\$|\^/.test(node.value)) required = true;
+    if (node.type === 'text' && obsidianTextSyntax.test(node.value)) required = true;
     if (node.type === 'footnoteReference' || node.type === 'footnoteDefinition') required = true;
-    if ('url' in node && /\.md(?:[#?]|$)|#/i.test(node.url)) required = true;
+    // Existing URL rewriting handles ordinary Markdown documents. Resolve only
+    // cross-document fragments and queries, which need the publication index.
+    if ('url' in node && /\.md(?:[?#])/i.test(node.url)) required = true;
   });
   return required;
 };

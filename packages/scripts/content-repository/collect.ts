@@ -67,28 +67,22 @@ export type { ContentRepository } from './types.ts';
 
 export const collectContentRepository = async (): Promise<ContentRepository> => {
   const metadataAudit = await auditContentMetadata();
-  const validationIssues: ContentValidationIssue[] = [...metadataAudit.issues];
-  const writingFiles = await fg('*.md', {
-    cwd: writingRoot,
-    absolute: true,
-    onlyFiles: true,
-  });
-  const courseDirectories = await fg('*', {
-    cwd: coursesRoot,
-    absolute: true,
-    onlyDirectories: true,
-  });
-  const projectFiles = await fg('*.md', {
-    cwd: projectsRoot,
-    absolute: true,
-    onlyFiles: true,
-  });
-  const writingSources = await Promise.all(
-    writingFiles.sort().map((file) => loadMarkdownSource(file, validationIssues)),
-  );
-  const projectSources = await Promise.all(
-    projectFiles.sort().map((file) => loadMarkdownSource(file)),
-  );
+  const [writingFiles, courseDirectories, projectFiles] = await Promise.all([
+    fg('*.md', { cwd: writingRoot, absolute: true, onlyFiles: true }),
+    fg('*', { cwd: coursesRoot, absolute: true, onlyDirectories: true }),
+    fg('*.md', { cwd: projectsRoot, absolute: true, onlyFiles: true }),
+  ]);
+  const sourceValidationIssues: ContentValidationIssue[] = [];
+  const [writingSources, projectSources] = await Promise.all([
+    Promise.all(
+      writingFiles.sort().map((file) => loadMarkdownSource(file, sourceValidationIssues)),
+    ),
+    Promise.all(projectFiles.sort().map((file) => loadMarkdownSource(file))),
+  ]);
+  const validationIssues: ContentValidationIssue[] = [
+    ...metadataAudit.issues,
+    ...sourceValidationIssues,
+  ];
 
   const writingEntries = await Promise.all(
     writingSources.map((source) => {

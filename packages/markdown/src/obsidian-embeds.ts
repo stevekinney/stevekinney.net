@@ -80,38 +80,45 @@ export const normalizeObsidianReferences = (
     end = document.source.length,
     prefix = '',
   ): ReturnType<typeof applySourceEdits> => {
-    const metadata = getObsidianDocumentMetadata(document);
-    diagnostics.push(...metadata.diagnostics);
     const source = document.source;
     const currentContext = { ...context, sourcePath: document.sourcePath };
     const edits: SourceEdit[] = [];
     let expandedBytes = Buffer.byteLength(source.slice(start, end));
     const localIds = new Map<string, string>();
-    for (const heading of metadata.headings)
-      if (heading.start >= start && heading.end <= end)
-        localIds.set(heading.id, `${prefix}${heading.id}`);
-    for (const block of metadata.blocks)
-      if (block.start >= start && block.end <= end)
-        localIds.set(`block-${block.id}`, `${prefix}block-${block.id}`);
-    for (const heading of metadata.headings) {
-      if (!prefix) continue;
-      // Inserting in the first line also supports setext headings.
-      const firstLineEnd = source.indexOf('\n', heading.start);
-      const insertion =
-        firstLineEnd < 0 || firstLineEnd > heading.end
-          ? heading.end
-          : firstLineEnd - (source[firstLineEnd - 1] === '\r' ? 1 : 0);
-      edits.push({
-        start: insertion,
-        end: insertion,
-        value: `<span data-obsidian-heading="${escapeObsidianHtml(prefix + heading.id)}"></span>`,
-      });
-    }
-    for (const block of metadata.blocks) {
-      const anchor = `<span id="${escapeObsidianHtml(prefix + 'block-' + block.id)}"></span>`;
-      edits.push({ start: block.markerStart, end: block.markerEnd, value: anchor });
-      if (prefix && block.start >= start && block.end <= end && block.markerStart >= end)
-        edits.push({ start: block.end, end: block.end, value: `\n\n${anchor}` });
+    let metadata: ReturnType<typeof getObsidianDocumentMetadata> | undefined;
+    const documentMetadata = (): ReturnType<typeof getObsidianDocumentMetadata> => {
+      if (metadata) return metadata;
+      metadata = getObsidianDocumentMetadata(document);
+      diagnostics.push(...metadata.diagnostics);
+      return metadata;
+    };
+    if (prefix || /\^[\w-]+\s*(?:\r?\n|$)/m.test(source)) {
+      for (const heading of documentMetadata().headings)
+        if (heading.start >= start && heading.end <= end)
+          localIds.set(heading.id, `${prefix}${heading.id}`);
+      for (const block of documentMetadata().blocks)
+        if (block.start >= start && block.end <= end)
+          localIds.set(`block-${block.id}`, `${prefix}block-${block.id}`);
+      for (const heading of documentMetadata().headings) {
+        if (!prefix) continue;
+        // Inserting in the first line also supports setext headings.
+        const firstLineEnd = source.indexOf('\n', heading.start);
+        const insertion =
+          firstLineEnd < 0 || firstLineEnd > heading.end
+            ? heading.end
+            : firstLineEnd - (source[firstLineEnd - 1] === '\r' ? 1 : 0);
+        edits.push({
+          start: insertion,
+          end: insertion,
+          value: `<span data-obsidian-heading="${escapeObsidianHtml(prefix + heading.id)}"></span>`,
+        });
+      }
+      for (const block of documentMetadata().blocks) {
+        const anchor = `<span id="${escapeObsidianHtml(prefix + 'block-' + block.id)}"></span>`;
+        edits.push({ start: block.markerStart, end: block.markerEnd, value: anchor });
+        if (block.start >= start && block.end <= end && block.markerStart >= end)
+          edits.push({ start: block.end, end: block.end, value: `\n\n${anchor}` });
+      }
     }
     const links = normalizeMarkdownLinks(source, currentContext, {
       embedded: Boolean(prefix),
@@ -122,7 +129,8 @@ export const normalizeObsidianReferences = (
     edits.push(...links.edits);
     diagnostics.push(...links.diagnostics);
     for (const dependency of links.dependencies) dependencies.add(dependency);
-    for (const node of parseObsidianSource(source).nodes) {
+    const nodes = parseObsidianSource(source).nodes;
+    for (const node of nodes) {
       if (node.type === 'comment') {
         const comment = source.slice(node.position.start, node.position.end);
         edits.push({ ...node.position, value: '' });
@@ -280,7 +288,7 @@ export const normalizeObsidianReferences = (
     }
     const ranges = [{ start, end }];
     if (prefix)
-      for (const definition of metadata.definitions) {
+      for (const definition of documentMetadata().definitions) {
         if (definition.start < start || definition.end > end)
           ranges.push({ start: definition.start, end: definition.end });
       }

@@ -250,10 +250,9 @@ describe('collectContentRepository', () => {
       const hostNormalized = first.normalizedDocuments[hostSourcePath];
 
       expect(hostDocument?.aliases).toEqual(['Fixture Host']);
-      expect(first.writing.find((item) => item.sourcePath === hostSourcePath)?.tags).toEqual([
-        'fixture',
-        'obsidian',
-      ]);
+      expect(
+        first.writing.find((item) => item.sourcePath === hostSourcePath)?.tags,
+      ).toBeUndefined();
       expect(
         first.publicationIndex.documents.some(
           (item) =>
