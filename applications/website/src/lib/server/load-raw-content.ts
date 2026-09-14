@@ -1,9 +1,6 @@
-import { stat } from 'node:fs/promises';
-import path from 'node:path';
-import {
-  readGeneratedObsidianContentAsync,
-  type GeneratedObsidianContent,
-} from '@stevekinney/markdown/obsidian-preprocessor';
+import { read } from '$app/server';
+import publishedContentAsset from '../../../.generated/obsidian-content.json?url';
+import type { GeneratedObsidianContent } from '@stevekinney/markdown/obsidian-preprocessor';
 
 import {
   getCourseRoute,
@@ -12,33 +9,8 @@ import {
   getWritingRoute,
 } from '$lib/server/content';
 
-const root = path.resolve(process.cwd(), '..', '..');
-const artifactPath = path.join(root, 'applications/website/.generated/obsidian-content.json');
-let cached: GeneratedObsidianContent | undefined;
-let cachedRevision = '';
-let nextArtifactCheckAt = 0;
-let pendingArtifact: Promise<GeneratedObsidianContent> | undefined;
-
-const loadPublishedContent = async (): Promise<GeneratedObsidianContent> => {
-  // A single llms-full request asks for hundreds of documents. Recheck the artifact
-  // at most once per second, while retaining development rebuild visibility.
-  if (cached && Date.now() < nextArtifactCheckAt) return cached;
-  if (!pendingArtifact) {
-    pendingArtifact = (async () => {
-      const status = await stat(artifactPath);
-      const revision = `${status.mtimeMs}:${status.ctimeMs}:${status.size}`;
-      if (!cached || cachedRevision !== revision) {
-        cached = await readGeneratedObsidianContentAsync(artifactPath);
-        cachedRevision = revision;
-      }
-      nextArtifactCheckAt = Date.now() + 1000;
-      return cached;
-    })().finally(() => {
-      pendingArtifact = undefined;
-    });
-  }
-  return pendingArtifact;
-};
+const loadPublishedContent = async (): Promise<GeneratedObsidianContent> =>
+  JSON.parse(await read(publishedContentAsset).text()) as GeneratedObsidianContent;
 
 const loadPublishedSource = async (sourcePath: string): Promise<string> => {
   const document = (await loadPublishedContent()).documents[sourcePath];

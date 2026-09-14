@@ -2,18 +2,6 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { expect, it } from 'vitest';
 
-it('keeps the generated Obsidian artifact in serverless route bundles', async () => {
-  const vercel = JSON.parse(
-    await readFile(path.resolve(process.cwd(), '../../vercel.json'), 'utf8'),
-  ) as {
-    functions: Record<string, { includeFiles: string[] }>;
-    headers: { headers: { key: string; value: string }[] }[];
-  };
-  expect(vercel.functions['applications/website/src/routes/**/+server.ts']?.includeFiles).toContain(
-    'applications/website/.generated/obsidian-content.json',
-  );
-});
-
 it('allows same-origin and published Blob PDFs under the production CSP', async () => {
   const vercel = JSON.parse(
     await readFile(path.resolve(process.cwd(), '../../vercel.json'), 'utf8'),
