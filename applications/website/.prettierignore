@@ -1,0 +1,4 @@
+.generated/**
+.svelte-kit/**
+playwright-report/**
+test-results/**
