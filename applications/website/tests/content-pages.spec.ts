@@ -14,13 +14,13 @@ test('every document LLM export is included in the static deployment output', as
   ) as GeneratedContent;
   const output = new URL('../.svelte-kit/output/prerendered/pages/', import.meta.url);
   const files = new Set(await readdir(output, { recursive: true }));
-  const exports = Object.keys(content.routes).map((route) => `${route.slice(1)}/llms.txt`);
+  const exports = Object.values(content.routes).map((route) => route.llmsPath.slice(1));
 
   expect(exports.length).toBeGreaterThan(0);
   expect(exports.filter((file) => !files.has(file))).toEqual([]);
 
   for (const route of Object.values(content.routes)) {
-    const exported = await readFile(new URL(`${route.path.slice(1)}/llms.txt`, output), 'utf8');
+    const exported = await readFile(new URL(route.llmsPath.slice(1), output), 'utf8');
     expect(exported).toContain(`Canonical: ${url}${route.path}`);
     expect(exported).toContain(`Description: ${route.description}`);
   }
