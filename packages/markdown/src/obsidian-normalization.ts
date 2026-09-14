@@ -22,6 +22,14 @@ const requiresNormalization = (tree: Root): boolean => {
   return required;
 };
 
+const requiresReferenceNormalization = (tree: Root): boolean => {
+  let required = false;
+  visit(tree, (node) => {
+    if ('url' in node && /\.md(?:[?#])/i.test(node.url)) required = true;
+  });
+  return required;
+};
+
 const originalOffset = (
   mappings: readonly SourceMapping[],
   offset: number,
@@ -55,7 +63,14 @@ export const normalizeObsidianMarkdown = (
       dependencies: [],
       diagnostics: [],
     };
-  const references = normalizeObsidianReferences(source, context);
+  const parsed = parseObsidianSource(source);
+  const requiresReferences =
+    parsed.nodes.some((node) =>
+      ['blockDefinition', 'comment', 'embed', 'wikiLink'].includes(node.type),
+    ) || requiresReferenceNormalization(context.markdownTree ?? parsed.tree);
+  const references = requiresReferences
+    ? normalizeObsidianReferences(source, context)
+    : { ...applySourceEdits(source, []), dependencies: [], diagnostics: [] };
   // Failed expansion is never publishable. Avoid parsing its potentially large
   // intermediate body again once the inclusion budget has already been exceeded.
   if (references.diagnostics.some((issue) => issue.message.includes('exceeds 10 MiB')))
