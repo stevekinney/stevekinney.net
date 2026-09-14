@@ -55,6 +55,40 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.dependencies).toContain('writing/guide.md');
   });
 
+  it('supports self heading and block embeds without treating them as cycles', () => {
+    const source = '# Heading\n\nHeading body.\n\nBlock body.\n^block\n';
+    const result = normalizeObsidianMarkdown('![[#Heading]]\n\n![[#^block]]', {
+      sourcePath: 'writing/self.md',
+      publicationIndex: {
+        documents: [{ sourcePath: 'writing/self.md', route: '/self', source }],
+        attachments: [],
+      },
+    });
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown.match(/Heading body\./g)).toHaveLength(1);
+    expect(result.markdown.match(/Block body\./g)).toHaveLength(2);
+  });
+
+  it('keeps local links outside a partial embed in their original namespace', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/partial.md',
+      route: '/partial',
+      source: '# Included\n\n[Outside](#outside)\n\n# Outside\n\nOutside body.',
+    };
+    const result = normalizeObsidianMarkdown('![[partial#Included]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toContain('[Outside](#outside)');
+  });
+
+  it('allows escaped pipes in wiki aliases', () => {
+    const result = normalizeObsidianMarkdown('[[guide|A \\| B]]', context());
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toContain('[A | B](</writing/guide>)');
+  });
+
   it('expands block embeds and keeps repeated embeds independently addressable', () => {
     const result = normalizeObsidianMarkdown(
       '![[guide#^block-one]]\n\n![[guide#^block-one]]',
@@ -81,6 +115,24 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown).toContain('width="320"');
     expect(result.markdown).toContain('<video');
     expect(result.markdown).toContain('page=2');
+  });
+
+  it('keeps approved static image embeds on their public URL', () => {
+    const result = normalizeObsidianMarkdown('![[/images/approved.png]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: {
+        documents: [],
+        attachments: [
+          {
+            sourcePath: 'applications/website/static/images/approved.png',
+            url: '/images/approved.png',
+            mimeType: 'image/png',
+          },
+        ],
+      },
+    });
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toContain('src="/images/approved.png"');
   });
 
   it('removes comments and preserves highlights and math inside an embed', () => {

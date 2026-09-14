@@ -92,8 +92,11 @@ export const normalizeMarkdownLinks = (
     const raw = source.slice(start, end);
     if ('url' in node && typeof node.url === 'string' && !external(node.url)) {
       const hash = node.url.indexOf('#');
-      const target = hash < 0 ? node.url : node.url.slice(0, hash);
+      const beforeFragment = hash < 0 ? node.url : node.url.slice(0, hash);
       const fragment = hash < 0 ? '' : node.url.slice(hash + 1);
+      const query = beforeFragment.indexOf('?');
+      const target = query < 0 ? beforeFragment : beforeFragment.slice(0, query);
+      const queryString = query < 0 ? '' : beforeFragment.slice(query);
       let destination: string | undefined;
       const routeDocument = context.publicationIndex.documents.find(
         (document) => document.route === target || `${document.route}/` === target,
@@ -116,7 +119,7 @@ export const normalizeMarkdownLinks = (
           const document = result.reference.document;
           dependencies.add(document.sourcePath);
           const id = fragment ? validateFragment(document, fragment, start) : '';
-          destination = document.route + (id ? `#${encodeURIComponent(id)}` : '');
+          destination = document.route + queryString + (id ? `#${encodeURIComponent(id)}` : '');
         } else
           diagnostics.push(
             ...result.diagnostics.map((item) => ({ ...item, line: sourceLine(source, start) })),
@@ -139,6 +142,7 @@ export const normalizeMarkdownLinks = (
                   .map(encodeURIComponent)
                   .join('/')
               : attachment.url;
+          destination += queryString;
           if (fragment) destination += `#${fragment}`;
         } else
           diagnostics.push(

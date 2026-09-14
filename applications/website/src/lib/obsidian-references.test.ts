@@ -124,6 +124,29 @@ describe('normalizeMarkdownLinks', () => {
     expect(result.diagnostics).toEqual([]);
   });
 
+  it('resolves Markdown paths with queries and validates their fragments', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/target.md',
+      route: '/writing/target',
+      source: '# Heading',
+    };
+    const source = '[target](writing/target.md?view=reading#heading)';
+    const result = normalizeMarkdownLinks(source, context([target]));
+
+    expect(applySourceEdits(source, result.edits).markdown).toBe(
+      '[target](</writing/target?view=reading#heading>)',
+    );
+    expect(result.dependencies).toEqual(['writing/target.md']);
+    expect(result.diagnostics).toEqual([]);
+
+    const missingFragment = normalizeMarkdownLinks(
+      '[target](writing/target.md?view=reading#missing)',
+      context([target]),
+    );
+    expect(missingFragment.dependencies).toEqual(['writing/target.md']);
+    expect(missingFragment.diagnostics[0]?.message).toContain('Missing Markdown fragment');
+  });
+
   it('namespaces footnote identifiers with narrow edits', () => {
     const source = 'See[^one].\n\n[^one]: note';
     const result = normalizeMarkdownLinks(source, context([]), { footnotePrefix: 'host-' });

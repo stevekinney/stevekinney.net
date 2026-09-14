@@ -70,10 +70,7 @@ export function contentDevelopmentPlugins(
   options: ContentDevelopmentPluginsOptions,
 ): PluginOption[] {
   return [
-    watchContentDirectories([
-      ...options.contentDirectories,
-      ...(options.additionalDependencies ?? []),
-    ]),
+    watchContentDirectories(options.contentDirectories, options.additionalDependencies),
     regenerateGeneratedContent({
       contentBuildScriptPath: options.contentBuildScriptPath,
       workingDirectory: options.contentBuildWorkingDirectory,

@@ -9,13 +9,17 @@ import type { PluginOption } from 'vite';
  * always cover directories resolved via `../../../../` paths outside the
  * application root.
  */
-export function watchContentDirectories(directories: readonly string[]): PluginOption {
+export function watchContentDirectories(
+  directories: readonly string[],
+  additionalDependencies: readonly string[] = [],
+): PluginOption {
   return {
     name: 'watch-content-directories',
     configureServer(server) {
       for (const directory of directories) {
         server.watcher.add(path.join(directory, '**', '*.{md,toml}'));
       }
+      for (const dependency of additionalDependencies) server.watcher.add(dependency);
     },
   };
 }

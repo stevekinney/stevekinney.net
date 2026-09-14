@@ -20,6 +20,24 @@ import type {
 
 const MAXIMUM_BYTES = 10 * 1024 * 1024;
 const encodedPath = (value: string): string => value.split('/').map(encodeURIComponent).join('/');
+const wikiEmbedParts = (inner: string): { reference: string; alias?: string } => {
+  let pipe = -1;
+  for (let index = 0; index < inner.length; index += 1) {
+    if (inner[index] !== '|') continue;
+    let slashes = 0;
+    for (let previous = index - 1; previous >= 0 && inner[previous] === '\\'; previous -= 1)
+      slashes += 1;
+    if (slashes % 2 === 0) {
+      pipe = index;
+      break;
+    }
+  }
+  if (pipe < 0) return { reference: inner.trim() };
+  return {
+    reference: inner.slice(0, pipe).trim(),
+    alias: inner.slice(pipe + 1).replaceAll('\\|', '|'),
+  };
+};
 const fragmentId = (document: PublicationDocument, fragment: string): string | undefined => {
   const metadata = getObsidianDocumentMetadata(document);
   if (fragment.startsWith('^'))
@@ -69,9 +87,12 @@ export const normalizeObsidianReferences = (
     const edits: SourceEdit[] = [];
     let expandedBytes = Buffer.byteLength(source.slice(start, end));
     const localIds = new Map<string, string>();
-    for (const heading of metadata.headings) localIds.set(heading.id, `${prefix}${heading.id}`);
+    for (const heading of metadata.headings)
+      if (heading.start >= start && heading.end <= end)
+        localIds.set(heading.id, `${prefix}${heading.id}`);
     for (const block of metadata.blocks)
-      localIds.set(`block-${block.id}`, `${prefix}block-${block.id}`);
+      if (block.start >= start && block.end <= end)
+        localIds.set(`block-${block.id}`, `${prefix}block-${block.id}`);
     for (const heading of metadata.headings) {
       if (!prefix) continue;
       // Inserting in the first line also supports setext headings.
@@ -117,9 +138,9 @@ export const normalizeObsidianReferences = (
         continue;
       const raw = source.slice(node.position.start, node.position.end);
       const inner = raw.slice(node.type === 'embed' ? 3 : 2, -2);
-      const pipe = inner.indexOf('|');
-      const reference = (pipe < 0 ? inner : inner.slice(0, pipe)).trim();
-      const alias = pipe < 0 ? undefined : inner.slice(pipe + 1);
+      const parts = wikiEmbedParts(inner);
+      const reference = parts.reference;
+      const alias = parts.alias;
       const hash = reference.indexOf('#');
       const target = hash < 0 ? reference : reference.slice(0, hash);
       let fragment = hash < 0 ? '' : reference.slice(hash + 1);
@@ -172,9 +193,11 @@ export const normalizeObsidianReferences = (
         const label = escapeObsidianHtml(dimensions ? target : (alias ?? target));
         if (attachment.mimeType.startsWith('image/')) {
           // Relative to the HOST because rehype-enhance-images receives the host filename.
-          const imagePath = encodedPath(
-            path.posix.relative(path.posix.dirname(context.sourcePath), attachment.sourcePath),
-          );
+          const imagePath = attachment.sourcePath.includes('/static/')
+            ? attachment.url
+            : encodedPath(
+                path.posix.relative(path.posix.dirname(context.sourcePath), attachment.sourcePath),
+              );
           replace(
             `<img data-obsidian-attachment="" src="${escapeObsidianHtml(imagePath)}" alt="${label}"${attributes}>`,
           );
@@ -195,7 +218,10 @@ export const normalizeObsidianReferences = (
       }
       const result = target
         ? documentResult!
-        : { reference: { kind: 'document' as const, document }, diagnostics: [] };
+        : {
+            reference: { kind: 'document' as const, document: host ?? document },
+            diagnostics: [],
+          };
       if (result.reference?.kind !== 'document') {
         diagnostics.push(
           ...result.diagnostics.map((item) => ({
@@ -206,9 +232,7 @@ export const normalizeObsidianReferences = (
         continue;
       }
       const destination =
-        result.reference.document.sourcePath === document.sourcePath
-          ? document
-          : result.reference.document;
+        result.reference.document === document ? document : result.reference.document;
       const id = fragment ? fragmentId(destination, fragment) : '';
       if (fragment && !id) {
         issue(document, node.position.start, `Missing heading or block reference: ${reference}`);
@@ -224,7 +248,7 @@ export const normalizeObsidianReferences = (
         replace(`[${escapeMarkdownLabel(alias ?? (target || fragment))}](<${url}>)`);
         continue;
       }
-      if (stack.includes(destination.sourcePath)) {
+      if (stack.includes(destination.sourcePath) && !(fragment && stack.length === 1)) {
         issue(
           document,
           node.position.start,

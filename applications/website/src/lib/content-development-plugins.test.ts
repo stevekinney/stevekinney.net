@@ -2,7 +2,7 @@ import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { contentDevelopmentPlugins } from '../../plugins/vite/content-development-plugins';
 
@@ -98,5 +98,38 @@ describe('contentDevelopmentPlugins', () => {
 
     expect(headers.get('Content-Type')).toBe('text/css; charset=utf-8');
     expect(body).toBe('body {}\n');
+  });
+
+  it('registers content globs and additional files or directories with the watcher', () => {
+    const watcher = { add: vi.fn() };
+    const plugins = contentDevelopmentPlugins({
+      workspaceRoot: '/',
+      contentDirectories: ['/workspace/writing'],
+      additionalDependencies: [
+        '/workspace/image-manifest.json',
+        '/workspace/packages/markdown/src',
+      ],
+      contentAssetPathPrefixes: ['/courses/', '/writing/'],
+      enhancementSourceDirectories: [],
+      contentBuildScriptPath: '/content-build.ts',
+      contentBuildWorkingDirectory: '/',
+      generatedEnhancementsDirectory,
+      generatedEnhancementsUrlPrefix: '/generated/content-enhancements/',
+    });
+    const watcherPlugin = plugins[0];
+    if (
+      !watcherPlugin ||
+      typeof watcherPlugin !== 'object' ||
+      Array.isArray(watcherPlugin) ||
+      !('configureServer' in watcherPlugin) ||
+      typeof watcherPlugin.configureServer !== 'function'
+    )
+      throw new Error('Expected a content watcher plugin.');
+
+    watcherPlugin.configureServer.call({} as never, { watcher } as never);
+
+    expect(watcher.add).toHaveBeenCalledWith('/workspace/writing/**/*.{md,toml}');
+    expect(watcher.add).toHaveBeenCalledWith('/workspace/image-manifest.json');
+    expect(watcher.add).toHaveBeenCalledWith('/workspace/packages/markdown/src');
   });
 });
