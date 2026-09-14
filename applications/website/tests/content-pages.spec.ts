@@ -1,9 +1,30 @@
 import { expect, test } from '@playwright/test';
+import { readFile, readdir } from 'node:fs/promises';
 import { checkA11y, injectAxe } from 'axe-playwright';
 import { toString } from 'mdast-util-to-string';
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
+import type { GeneratedContent } from '@stevekinney/utilities/content-types';
+import { url } from '../src/lib/metadata';
+
+test('every document LLM export is included in the static deployment output', async () => {
+  const content = JSON.parse(
+    await readFile(new URL('../.generated/content-data.json', import.meta.url), 'utf8'),
+  ) as GeneratedContent;
+  const output = new URL('../.svelte-kit/output/prerendered/pages/', import.meta.url);
+  const files = new Set(await readdir(output, { recursive: true }));
+  const exports = Object.keys(content.routes).map((route) => `${route.slice(1)}/llms.txt`);
+
+  expect(exports.length).toBeGreaterThan(0);
+  expect(exports.filter((file) => !files.has(file))).toEqual([]);
+
+  for (const route of Object.values(content.routes)) {
+    const exported = await readFile(new URL(`${route.path.slice(1)}/llms.txt`, output), 'utf8');
+    expect(exported).toContain(`Canonical: ${url}${route.path}`);
+    expect(exported).toContain(`Description: ${route.description}`);
+  }
+});
 
 test('writing post pages render prerendered content with code-block enhancement', async ({
   page,
