@@ -13,10 +13,14 @@ const rehypeCallouts: Plugin<[], Root> = () => {
 
     visit(tree, 'element', (node) => {
       if (node.tagName !== 'blockquote') return;
-      const firstChild = node.children.find(
-        (child) => child.type === 'element' && child.tagName === 'p',
+      const firstSubstantiveChild = node.children.find(
+        (child) => child.type !== 'text' || child.value.trim() !== '',
       );
-      if (firstChild?.type !== 'element') return;
+      if (firstSubstantiveChild?.type !== 'element' || firstSubstantiveChild.tagName !== 'p') {
+        ordinaryQuotes.push(node);
+        return;
+      }
+      const firstChild = firstSubstantiveChild;
       const leadingText = [];
       for (const child of firstChild.children) {
         if (child.type !== 'text') break;

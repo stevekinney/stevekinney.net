@@ -133,11 +133,6 @@ export default defineConfig({
         path.join(workspaceRoot, 'image-manifest.json'),
         path.join(workspaceRoot, 'applications/website/static'),
       ],
-      additionalDependencies: [
-        path.join(workspaceRoot, 'packages/markdown/src'),
-        path.join(workspaceRoot, 'image-manifest.json'),
-        path.join(workspaceRoot, 'applications/website/static'),
-      ],
       contentAssetPathPrefixes: ['/courses/', '/projects/', '/writing/'],
       enhancementSourceDirectories: [contentEnhancementsSourceDirectory],
       contentDependencyPaths,

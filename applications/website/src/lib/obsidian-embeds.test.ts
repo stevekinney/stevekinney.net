@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Buffer } from 'node:buffer';
 
 import { normalizeObsidianMarkdown } from '../../../../packages/markdown/src/obsidian-normalization';
 import type {
@@ -83,6 +84,25 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown).toContain('[Outside](#outside)');
   });
 
+  it('normalizes definitions appended to partial embeds', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/partial-definitions.md',
+      route: '/partial-definitions',
+      source:
+        '# Included\n\nIncluded body.[^outside]\n\n# Outside\n\nOutside body.\n\n[^outside]: [[guide]]',
+    };
+    const result = normalizeObsidianMarkdown('![[partial-definitions#Included]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [...documents, target], attachments: [] },
+    });
+    expect(result.diagnostics).toEqual([]);
+    const footnotes = [...result.markdown.matchAll(/data-obsidian-footnote="([^"]+)"/gu)].map(
+      (match) => Buffer.from(match[1], 'base64url').toString(),
+    );
+    expect(footnotes.some((footnote) => footnote.includes('/writing/guide'))).toBe(true);
+    expect(result.dependencies).toContain('writing/guide.md');
+  });
+
   it('allows escaped pipes in wiki aliases', () => {
     const result = normalizeObsidianMarkdown('[[guide|A \\| B]]', context());
     expect(result.diagnostics).toEqual([]);
@@ -105,6 +125,27 @@ describe('normalizeObsidianMarkdown embeds', () => {
 
     expect(result.diagnostics).toEqual([]);
     expect(result.markdown).toMatch(/^- Block body\./u);
+  });
+
+  it('preserves blockquote and nested list containers around expanded embeds', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/quote.md',
+      route: '/quote',
+      source: 'First line.\n\nSecond line.',
+    };
+    const result = normalizeObsidianMarkdown('> ![[quote]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toMatch(/^> First line\.\n>\s*\n> Second line\.$/u);
+
+    const listResult = normalizeObsidianMarkdown('- ![[quote]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+    expect(listResult.diagnostics).toEqual([]);
+    expect(listResult.markdown).toMatch(/^- First line\.\n {2}\n {2}Second line\.$/u);
   });
 
   it('retargets local anchors and namespaces embedded footnotes', () => {
@@ -131,7 +172,8 @@ describe('normalizeObsidianMarkdown embeds', () => {
     const target: PublicationDocument = {
       sourcePath: 'writing/html-identifiers.md',
       route: '/writing/html-identifiers',
-      source: '<a href="#details">Jump</a>\n\n<section id="details">Details</section>',
+      source:
+        '<a href="#details">Jump</a>\n\n<section id="details" data-id="keep">Details</section>',
     };
     const result = normalizeObsidianMarkdown('![[html-identifiers]]', {
       sourcePath: 'writing/host.md',
@@ -140,7 +182,37 @@ describe('normalizeObsidianMarkdown embeds', () => {
 
     expect(result.diagnostics).toEqual([]);
     expect(result.markdown).toMatch(/id="embed-[a-z0-9-]+details"/u);
+    expect(result.markdown).toContain('data-id="keep"');
     expect(result.markdown).toMatch(/href="#embed-[a-z0-9-]+details"/u);
+  });
+
+  it('resolves fragment-only wiki links inside recursively embedded documents', () => {
+    const child: PublicationDocument = {
+      sourcePath: 'writing/child.md',
+      route: '/child',
+      source: '# Child\n\n[[#Child]]',
+    };
+    const result = normalizeObsidianMarkdown('![[child]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [child], attachments: [] },
+    });
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toMatch(/\]\(<#embed-[a-z0-9-]+child>\)/u);
+  });
+
+  it('does not leak BOM-prefixed frontmatter from whole-note embeds', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/bom.md',
+      route: '/bom',
+      source: '\uFEFF---\ntitle: Hidden\n---\nBody.',
+    };
+    const result = normalizeObsidianMarkdown('![[bom]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toContain('Body.');
+    expect(result.markdown).not.toContain('title: Hidden');
   });
 
   it('allows nested self-section embeds outside the current section range', () => {

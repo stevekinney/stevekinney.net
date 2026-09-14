@@ -64,7 +64,7 @@ const namespaceEmbeddedHtmlIdentifiers = (
   if (!source.slice(start, end).includes('<')) return;
   const tree = unified().use(remarkParse).parse(source.slice(start, end));
   visit(tree, 'html', (node) => {
-    for (const match of node.value.matchAll(/\bid=(['"])([^'"]+)\1/g))
+    for (const match of node.value.matchAll(/(?:^|[\s<])id=(['"])([^'"]+)\1/g))
       localIds.set(match[2], `${prefix}${match[2]}`);
   });
   visit(tree, 'html', (node) => {
@@ -75,8 +75,9 @@ const namespaceEmbeddedHtmlIdentifiers = (
     const nodeEnd = start + localEnd;
     let value = node.value;
     value = value.replace(
-      /\bid=(['"])([^'"]+)\1/g,
-      (match, quote: string, id: string) => `id=${quote}${prefix}${id}${quote}`,
+      /((?:^|[\s<]))id=(['"])([^'"]+)\2/g,
+      (match, before: string, quote: string, id: string) =>
+        `${before}id=${quote}${prefix}${id}${quote}`,
     );
     value = value.replace(/\bhref=(['"])#([^'"]*)\1/g, (match, quote: string, id: string) => {
       let decoded: string;
@@ -145,8 +146,12 @@ export const normalizeObsidianReferences = (
         if (!prefix) continue;
         // Inserting in the first line also supports setext headings.
         const firstLineEnd = source.indexOf('\n', heading.start);
-        const insertion =
-          firstLineEnd < 0 || firstLineEnd > heading.end
+        const headingLineEnd =
+          firstLineEnd < 0 || firstLineEnd > heading.end ? heading.end : firstLineEnd;
+        const closingHashes = /\s+#+\s*$/u.exec(source.slice(heading.start, headingLineEnd));
+        const insertion = closingHashes
+          ? heading.start + closingHashes.index
+          : firstLineEnd < 0 || firstLineEnd > heading.end
             ? heading.end
             : firstLineEnd - (source[firstLineEnd - 1] === '\r' ? 1 : 0);
         edits.push({
@@ -274,7 +279,10 @@ export const normalizeObsidianReferences = (
       const result = target
         ? documentResult!
         : {
-            reference: { kind: 'document' as const, document: host ?? document },
+            reference: {
+              kind: 'document' as const,
+              document: host?.sourcePath === document.sourcePath ? host : document,
+            },
             diagnostics: [],
           };
       if (result.reference?.kind !== 'document') {
@@ -337,32 +345,37 @@ export const normalizeObsidianReferences = (
         continue;
       }
       const lineStart = source.lastIndexOf('\n', node.position.start - 1) + 1;
-      const listPrefix = /^(\s*(?:[-+*]|\d+[.)])\s+)/u.exec(
-        source.slice(lineStart, node.position.start),
-      )?.[1];
-      const expanded = listPrefix
-        ? nested.markdown.trim().replace(/\r?\n/gu, `\n${' '.repeat(listPrefix.length)}`)
+      const sourceBeforeEmbed = source.slice(lineStart, node.position.start);
+      const listContainer = /^(\s*(?:(?:>\s*)+)?)(?:[-+*]|\d+[.)])\s+$/u.exec(sourceBeforeEmbed);
+      const blockquoteContainer = /^(\s*(?:>\s+)+)$/u.exec(sourceBeforeEmbed)?.[1];
+      const continuationPrefix = listContainer
+        ? `${listContainer[1]}${' '.repeat(sourceBeforeEmbed.length - listContainer[1].length)}`
+        : blockquoteContainer;
+      const expanded = continuationPrefix
+        ? nested.markdown.trim().replace(/\r?\n/gu, `\n${continuationPrefix}`)
         : `\n\n${nested.markdown}\n\n`;
       replace(expanded);
     }
-    const ranges = [{ start, end }];
-    if (prefix)
-      for (const definition of documentMetadata().definitions) {
-        if (definition.start < start || definition.end > end)
-          ranges.push({ start: definition.start, end: definition.end });
-      }
-    const outputs = ranges.map((range) =>
+    const appendedDefinitions = prefix
+      ? documentMetadata().definitions.filter(
+          (definition) => definition.start < start || definition.end > end,
+        )
+      : [];
+    const outputs = [
       applySourceEdits(
-        source.slice(range.start, range.end),
+        source.slice(start, end),
         edits
-          .filter((edit) => edit.start >= range.start && edit.end <= range.end)
+          .filter((edit) => edit.start >= start && edit.end <= end)
           .map((edit) => ({
             ...edit,
-            start: edit.start - range.start,
-            end: edit.end - range.start,
+            start: edit.start - start,
+            end: edit.end - start,
           })),
       ),
-    );
+      ...appendedDefinitions.map((definition) =>
+        render(document, stack, definition.start, definition.end, prefix),
+      ),
+    ];
     const result = outputs[0];
     if (outputs.length > 1)
       result.markdown +=

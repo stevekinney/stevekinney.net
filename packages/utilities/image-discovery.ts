@@ -50,6 +50,36 @@ const safeDecode = (value: string): string => {
   }
 };
 
+/** Mask Markdown regions where Obsidian embeds are literal text rather than references. */
+const maskProtectedMarkdown = (markdown: string): string => {
+  const masked = markdown.split('');
+  const mask = (start: number, end: number): void => {
+    for (let index = start; index < end; index++) {
+      if (masked[index] !== '\n' && masked[index] !== '\r') masked[index] = ' ';
+    }
+  };
+
+  const tree = unified().use(remarkParse).parse(markdown);
+  visit(tree, (node) => {
+    if (node.type !== 'code' && node.type !== 'inlineCode') return;
+    const start = node.position?.start.offset;
+    const end = node.position?.end.offset;
+    if (start !== undefined && end !== undefined) mask(start, end);
+  });
+
+  // Obsidian comments can span lines and may contain fenced Markdown. Scan the
+  // original source while using the mask to ignore comment markers inside code.
+  for (let index = 0; index < markdown.length - 1; index++) {
+    if (masked[index] !== '%' || masked[index + 1] !== '%') continue;
+    const endMarker = markdown.indexOf('%%', index + 2);
+    const end = endMarker === -1 ? markdown.length : endMarker + 2;
+    mask(index, end);
+    index = end - 1;
+  }
+
+  return masked.join('');
+};
+
 /** Collect all image/video URLs from markdown content (both `![](url)` and `<img src="url">`). */
 const collectImageUrls = (markdown: string): string[] => {
   const tree = unified().use(remarkParse).parse(markdown);
@@ -65,7 +95,8 @@ const collectImageUrls = (markdown: string): string[] => {
     if (url) urls.add(url);
   });
 
-  for (const match of markdown.matchAll(/!\[\[([^|\]#]+)(?:#[^|\]]*)?(?:\|[^\]]*)?\]\]/g)) {
+  const visibleMarkdown = maskProtectedMarkdown(markdown);
+  for (const match of visibleMarkdown.matchAll(/!\[\[([^|\]#]+)(?:#[^|\]]*)?(?:\|[^\]]*)?\]\]/g)) {
     const url = match[1]?.trim();
     if (url) urls.add(url);
   }

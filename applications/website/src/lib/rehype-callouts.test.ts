@@ -107,4 +107,11 @@ describe('rehypeCallouts', () => {
     expect(output).toContain('[!] Not a callout');
     expect(output).not.toContain('data-callout=');
   });
+
+  it('leaves a quote alone when a later paragraph starts with a marker', async () => {
+    const output = await render('> # A heading\n>\n> [!NOTE] This is ordinary text');
+
+    expect(output).not.toContain('data-callout=');
+    expect(output).toContain('[!NOTE] This is ordinary text');
+  });
 });

@@ -58,7 +58,7 @@ const maskProtected = (source: string, nodes: readonly ObsidianNode[]): string =
       if (characters[index] !== '\n' && characters[index] !== '\r') characters[index] = ' ';
     }
   }
-  const frontmatter = source.match(/^---(?:\r?\n|$)[\s\S]*?\r?\n---(?:\r?\n|$)/u);
+  const frontmatter = source.match(/^(?:\uFEFF)?---(?:\r?\n|$)[\s\S]*?\r?\n---(?:\r?\n|$)/u);
   if (frontmatter) {
     for (let index = 0; index < frontmatter[0].length; index += 1) {
       if (characters[index] !== '\n' && characters[index] !== '\r') characters[index] = ' ';
@@ -100,7 +100,7 @@ const collectNodes = (node: unknown, output: Positioned[] = []): Positioned[] =>
 };
 
 const bodyStartOf = (source: string): number => {
-  const frontmatter = source.match(/^---(?:\r?\n|$)[\s\S]*?\r?\n---(?:\r?\n|$)/u);
+  const frontmatter = source.match(/^(?:\uFEFF)?---(?:\r?\n|$)[\s\S]*?\r?\n---(?:\r?\n|$)/u);
   return frontmatter ? frontmatter[0].length : 0;
 };
 
