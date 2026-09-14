@@ -188,7 +188,12 @@ test.describe('exactly one content document wrapper per content page', () => {
   for (const courseSlug of courseLandingPages) {
     test(`/courses/${courseSlug} exposes one owned H1 and prose document`, async ({ page }) => {
       await page.goto(`/courses/${courseSlug}`);
-      await expect(page.locator('main h1')).toHaveCount(1);
+      const title = page.locator('[data-content-document] > h1');
+      await expect(title).toHaveCount(1);
+      await expect(title).toBeVisible();
+      await expect(
+        page.getByRole('heading', { level: 1, name: await title.innerText(), exact: true }),
+      ).toHaveCount(1);
       await expect(page.locator('[data-content-document]')).toHaveCount(1);
       await expect(page.locator('[data-content-document] .prose')).toHaveCount(1);
     });

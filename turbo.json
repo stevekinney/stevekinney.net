@@ -128,7 +128,7 @@
         "!playwright-report/**",
         "!.vercel/**"
       ],
-      "env": ["VERCEL"],
+      "env": ["VERCEL", "VERCEL_ENV"],
       "outputs": ["build/**", ".svelte-kit/output/**", ".vercel/output/**"]
     },
     "@stevekinney/website#build:stats": {
