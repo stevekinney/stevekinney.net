@@ -2,12 +2,6 @@
 title: 'Creating a CloudFront Distribution'
 description: >-
   Create a CloudFront distribution with an S3 origin and configure its basic settings using the AWS CLI.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudfront
-  - distribution
 ---
 
 You have an S3 bucket with your static site files. Now you need to put a CDN in front of it. That means creating a CloudFront **distribution**—the resource that defines how CloudFront serves your content to users around the world.

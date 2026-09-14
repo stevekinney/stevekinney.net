@@ -1,11 +1,6 @@
 ---
 title: Validating Path and Query Parameters with Middleware
-description: >-
-  Learn how to create middleware in Express to validate path and query
-  parameters using Zod schemas for robust request handling. Transform your
-  request validation process with ease.
-modified: 2026-03-17
-date: 2025-03-20
+description: 'Learn how to create middleware in Express to validate path and query parameters using Zod schemas for robust request handling.'
 ---
 
 We can create similar middleware for validating queries and paths.

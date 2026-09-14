@@ -1,8 +1,6 @@
 ---
 title: "Lab: Refactor Shelf's Fixtures"
 description: Take a deliberately smell-heavy fixture file and turn it into something you'd be willing to merge, without breaking the spec that exercises it.
-modified: 2026-04-14
-date: 2026-04-11
 ---
 
 The fixtures lesson gave you the rules. This lab makes you apply them to real code. The Shelf starter ships a committed starting point at `tests/labs/fixtures/fixtures.ts` — a fixture file that becomes runnable once you have the earlier auth and seeding labs in place, and then shows every smell the lesson calls out.

@@ -1,12 +1,6 @@
 ---
 title: Component Granularity Splitting
-description: >-
-  Component splitting is React performance optimization's double-edged sword.
-  Split too little and you get monolithic components that re-render everything
-  when a single prop changes. Split too much and you end up with component
-  confetti—do...
-modified: 2026-03-17
-date: 2025-09-06
+description: 'Split React components to limit unnecessary re-renders while keeping state ownership, memoization, and debugging manageable.'
 ---
 
 Component splitting is React performance optimization's double-edged sword. Split too little and you get monolithic components that re-render everything when a single prop changes. Split too much and you end up with component confetti—dozens of tiny pieces scattered across your codebase that make debugging feel like archaeological excavation. The secret is finding that sweet spot where each component has a single responsibility and clear boundaries, making your app both fast and maintainable.

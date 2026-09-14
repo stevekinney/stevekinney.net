@@ -3,12 +3,6 @@ title: Neural Networks
 description: >-
   A friendly intro to neural networks, what they are, how they learn, and why
   they matter for software engineers exploring the world of generative AI.
-tags:
-  - ai
-  - machine-learning
-  - neural-networks
-  - transformers
-modified: 2026-03-17
 date: 2025-04-16
 ---
 

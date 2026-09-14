@@ -1,8 +1,6 @@
 ---
 title: Documenting Components with MDX
 description: MDX is a flavor of Markdown that allows you to embed React components.
-modified: 2026-03-17
-date: 2024-04-15
 ---
 
 Storybook allows you to document components using [MDX](https://mdxjs.com/), which is basically just Markdown + JSX.

@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Add Cross-Browser Coverage'
 description: Keep Chromium as the default, then add Firefox and WebKit coverage to a tagged smoke subset so the loop stays fast enough to use.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 This lab takes the abstract advice and turns it into an actual Playwright layout the agent can run without melting the fast loop.

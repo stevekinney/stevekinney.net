@@ -8,6 +8,7 @@ import type { NormalizedMarkdown } from '@stevekinney/markdown/obsidian-types';
 import { buildTailwindPlaygroundSource } from '@stevekinney/utilities/tailwind-playground';
 
 import { coursesRoot, projectsRoot, writingRoot, repositoryRoot } from '../content-paths.ts';
+import { auditContentMetadata } from '../content-metadata.ts';
 
 import {
   buildCourseEntry,
@@ -32,18 +33,18 @@ import {
   validateRouteCollisions,
 } from './validation.ts';
 
-const collectSourceArtifacts = async (
+const collectSourceArtifacts = (
   source: MarkdownSource,
   routePaths: Set<string>,
   courseDirectorySlugs: Set<string>,
   sourceHashes: Map<string, string>,
   tailwindPlaygrounds: string[],
   validationIssues: ContentValidationIssue[],
-): Promise<void> => {
+): void => {
   sourceHashes.set(source.sourcePath, source.sourceHash);
   tailwindPlaygrounds.push(...source.tailwindPlaygrounds);
 
-  await validateMarkdownLinks(
+  validateMarkdownLinks(
     source.sourcePath,
     source.tree,
     source.headingAnchors,
@@ -65,7 +66,8 @@ const hashDependency = async (filename: string): Promise<string> =>
 export type { ContentRepository } from './types.ts';
 
 export const collectContentRepository = async (): Promise<ContentRepository> => {
-  const validationIssues: ContentValidationIssue[] = [];
+  const metadataAudit = await auditContentMetadata();
+  const validationIssues: ContentValidationIssue[] = [...metadataAudit.issues];
   const writingFiles = await fg('*.md', {
     cwd: writingRoot,
     absolute: true,
@@ -82,7 +84,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     onlyFiles: true,
   });
   const writingSources = await Promise.all(
-    writingFiles.sort().map((file) => loadMarkdownSource(file)),
+    writingFiles.sort().map((file) => loadMarkdownSource(file, validationIssues)),
   );
   const projectSources = await Promise.all(
     projectFiles.sort().map((file) => loadMarkdownSource(file)),
@@ -91,7 +93,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   const writingEntries = await Promise.all(
     writingSources.map((source) => {
       source.data.tags = normalizeListProperty(source, 'tags', validationIssues);
-      return buildWritingEntry(source, validationIssues);
+      return buildWritingEntry(source, validationIssues, metadataAudit.history);
     }),
   );
   const projectEntries = await Promise.all(
@@ -99,7 +101,9 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   );
   const courseEntries = (
     await Promise.all(
-      courseDirectories.sort().map((directory) => buildCourseEntry(directory, validationIssues)),
+      courseDirectories
+        .sort()
+        .map((directory) => buildCourseEntry(directory, validationIssues, metadataAudit.history)),
     )
   ).filter((entry): entry is CourseRecord => entry !== null);
 
@@ -160,7 +164,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   const sourceHashes = new Map<string, string>();
 
   for (const writingSource of writingSources) {
-    await collectSourceArtifacts(
+    collectSourceArtifacts(
       writingSource,
       routePaths,
       courseDirectorySlugs,
@@ -171,7 +175,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   }
 
   for (const projectSource of projectSources) {
-    await collectSourceArtifacts(
+    collectSourceArtifacts(
       projectSource,
       routePaths,
       courseDirectorySlugs,
@@ -182,7 +186,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   }
 
   for (const course of courseEntries) {
-    await collectSourceArtifacts(
+    collectSourceArtifacts(
       course.source,
       routePaths,
       courseDirectorySlugs,
@@ -196,7 +200,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     }
 
     for (const lesson of course.lessons) {
-      await collectSourceArtifacts(
+      collectSourceArtifacts(
         lesson.source,
         routePaths,
         courseDirectorySlugs,
@@ -210,7 +214,7 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   validateProjectFrontmatterLinks(projectEntries, routePaths, validationIssues);
 
   const sourceFiles = [...sourceHashes.keys()].sort();
-  const repositoryHash = buildRepositoryHash(sourceHashes);
+  const repositoryHash = buildRepositoryHash(sourceHashes, metadataAudit.history);
   const { lessons, siteIndex } = buildSiteIndex(writingEntries, courseEntries, projectEntries);
 
   return {

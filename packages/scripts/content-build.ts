@@ -19,6 +19,7 @@ import {
 } from './content-paths.ts';
 import { computeContentEnhancementBuildHash } from './content-enhancement-build-hash.ts';
 import { collectContentRepository } from './content-repository.ts';
+import { reportMetadataIssues } from './content-metadata.ts';
 
 const writeIfChanged = async (filePath: string, contents: string): Promise<boolean> => {
   try {
@@ -93,16 +94,12 @@ const main = async (): Promise<void> => {
 
   if (buildWarnings.length > 0) {
     console.warn(`Content build: ${buildWarnings.length} warning(s):`);
-    for (const issue of buildWarnings) {
-      console.warn(`- ${issue.file}: ${issue.message}`);
-    }
+    reportMetadataIssues(buildWarnings);
   }
 
   if (buildErrors.length > 0) {
     console.error('Content build failed validation:');
-    for (const issue of buildErrors) {
-      console.error(`- ${issue.file}: ${issue.message}`);
-    }
+    reportMetadataIssues(buildErrors);
     process.exit(1);
   }
 

@@ -3,13 +3,6 @@ title: The Problem with Hardcoded Secrets
 description: >-
   Understand why hardcoding secrets in Lambda environment variables or source
   code is a security risk and what the alternatives look like on AWS.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - secrets
-  - security
-  - fundamentals
 ---
 
 In Vercel, you set environment variables in the dashboard. Your API keys, database URLs, and third-party tokens live there, and the platform handles the rest. In Lambda, you can do the same thing—you set environment variables on the function and read them from `process.env`. You did exactly this in [Lambda Environment Variables](lambda-environment-variables.md).

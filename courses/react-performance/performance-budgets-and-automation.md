@@ -3,14 +3,6 @@ title: Performance Budgets & Automation
 description: >-
   Set and enforce performance budgets in your React apps. Automate testing,
   catch regressions in CI/CD, and maintain fast applications at scale.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - automation
-  - ci-cd
-  - testing
 ---
 
 Performance optimization without budgets is like dieting without a scale—you might feel like you're making progress, but you have no idea if you're actually succeeding. Performance budgets turn vague goals like "make it faster" into concrete, measurable targets like "keep the bundle under 200KB" and "ensure LCP stays below 2.5 seconds." But budgets alone aren't enough—you need automation to enforce them, catching performance regressions before they hit production.

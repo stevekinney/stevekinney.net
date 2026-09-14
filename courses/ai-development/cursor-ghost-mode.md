@@ -3,8 +3,6 @@ title: Cursor Privacy Mode and Data Governance
 description: >-
   Replace older Ghost Mode language with Cursor Privacy Mode, indexing behavior,
   Cloud Agent storage, and model-retention governance.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 Older Cursor material sometimes referred to "Ghost Mode." The current product

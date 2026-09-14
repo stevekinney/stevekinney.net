@@ -3,8 +3,6 @@ title: Cursor Cloud Agents
 description: >-
   Use Cursor Cloud Agents for isolated, remote agent work with explicit
   environments, verification commands, artifacts, and review boundaries.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Cursor Cloud Agents](https://cursor.com/docs/cloud-agent) are the current form

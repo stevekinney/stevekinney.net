@@ -3,8 +3,6 @@ title: Dark Mode
 description: >-
   Implement dark mode with Tailwind's dark variant, supporting system
   preferences and manual toggles.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Dark mode is a popular feature that reduces eye strain and allows users to customize their browsing experience. Tailwind CSS provides a flexible way to implement dark mode using its utility-first approach and variant system.

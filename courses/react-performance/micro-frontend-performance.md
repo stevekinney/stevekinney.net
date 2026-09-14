@@ -4,14 +4,6 @@ description: >-
   Build performant micro-frontend architectures with React. Master Module
   Federation, shared dependencies, runtime optimization, and cross-team
   coordination.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - micro-frontends
-  - module-federation
-  - architecture
 ---
 
 Micro-frontends promise team autonomy and independent deployments, but implement them carelessly and you'll create a performance nightmare. Multiple React versions loading simultaneously, duplicate vendor bundles, runtime coordination overhead, and cascading failures across teams—the very architecture meant to solve organizational problems can create technical ones that tank your application's performance.

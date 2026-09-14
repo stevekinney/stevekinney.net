@@ -1,16 +1,6 @@
 ---
 title: Security Review Checklist
-description: >-
-  Walk through a security review checklist that covers IAM policies, S3 bucket
-  access, CloudFront settings, Lambda permissions, API Gateway authentication,
-  and DynamoDB access.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - security
-  - checklist
-  - review
+description: 'Review IAM policies, S3 access, CloudFront headers, Lambda permissions, API Gateway authentication, and DynamoDB access before deploying to users.'
 ---
 
 You've built a full-stack application on AWS. S3 holds your static assets, CloudFront serves them globally, Lambda runs your API logic, API Gateway handles HTTP routing, DynamoDB stores your data, and Secrets Manager keeps your credentials safe. Every one of those services has security configuration, and every one of them defaults to something you should probably change.

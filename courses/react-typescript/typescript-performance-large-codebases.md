@@ -3,15 +3,6 @@ title: TypeScript Performance for Large Codebases
 description: >-
   Scale TypeScript in massive React apps—project references, incremental builds,
   type optimization, and monorepo strategies.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - performance
-  - scale
-  - monorepo
-  - optimization
 ---
 
 When your React codebase grows from thousands to millions of lines, TypeScript can go from your helpful companion to a resource-hungry monster that makes your IDE crawl and your builds take forever. But here's the thing: TypeScript is designed to scale. You just need to know the right levers to pull. Let's explore battle-tested strategies for keeping TypeScript fast, even when your codebase is massive.

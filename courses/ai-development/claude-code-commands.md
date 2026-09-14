@@ -3,8 +3,6 @@ title: Claude Code Commands and Skills
 description: >-
   Migrate Claude Code custom commands toward Skills while understanding how
   .claude/commands still works.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Claude Code Skills](https://code.claude.com/docs/en/skills) are now the primary

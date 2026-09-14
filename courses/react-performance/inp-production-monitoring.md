@@ -1,17 +1,6 @@
 ---
 title: INP Production Monitoring
-description: >-
-  Measure, track, and improve Interaction to Next Paint (INP) in production
-  React applications with real user data
-date: 2025-01-14
-modified: 2026-03-17
-status: published
-tags:
-  - React
-  - Performance
-  - INP
-  - Monitoring
-  - Core Web Vitals
+description: 'Measure, track, and improve Interaction to Next Paint (INP) in production React applications with real user data.'
 ---
 
 You've optimized your React app locally. INP scores are perfect in your testing. You deploy to production, and suddenly users are experiencing 500ms interaction delays. What went wrong? Everything. Real users have real devices, real network conditions, and real usage patterns that your synthetic tests never captured.

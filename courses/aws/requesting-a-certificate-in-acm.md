@@ -2,13 +2,6 @@
 title: 'Requesting a Certificate in ACM'
 description: >-
   Request a public SSL/TLS certificate in AWS Certificate Manager for your domain using the console and the CLI.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - acm
-  - certificates
-  - ssl
 ---
 
 You know why HTTPS matters. Now you need a certificate. **AWS Certificate Manager (ACM)** is the service that provisions, manages, and renews SSL/TLS certificates for use with AWS services. Requesting a certificate is straightforward, but there are a few decisions you need to make upfront—and one critical constraint around region that'll save you hours of debugging if you learn it now.

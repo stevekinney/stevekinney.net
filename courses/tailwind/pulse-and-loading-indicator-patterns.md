@@ -3,8 +3,6 @@ title: Pulse and Loading Indicator Patterns
 description: >-
   Create loading states and skeleton screens in Tailwind CSS using animate-pulse
   and custom animations.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Providing immediate feedback during data fetching or content loading is crucial. Tailwind CSS offers utilities to create loading indicators, from pulse animations to complex patterns.

@@ -3,13 +3,6 @@ title: Understanding Reconciliation in React 19
 description: >-
   Demystify how React compares trees, chooses updates, and schedules work—then
   apply the rules to ship snappy, predictable UIs.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - reconciliation
-  - react-19
 ---
 
 React's reconciliation process is the magic behind how your components update efficiently—but it's also where most performance problems hide. If you've ever wondered why your React app feels sluggish, or why changing one component causes unexpected re-renders elsewhere, you're in the right place. Let's demystify how React compares component trees, decides what needs updating, and schedules that work in React 19.

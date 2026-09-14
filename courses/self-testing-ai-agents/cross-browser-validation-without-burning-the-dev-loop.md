@@ -1,8 +1,6 @@
 ---
 title: Cross-Browser Validation Without Burning the Dev Loop
 description: Chromium stays the fast default. This appendix shows where Firefox and WebKit belong, and how to add them without making every pull request miserable.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 Cross-browser testing is one of those ideas everyone agrees with in principle and quietly avoids in practice because it threatens to turn every pull request into a hostage situation.

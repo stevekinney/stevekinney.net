@@ -1,15 +1,7 @@
 ---
 title: The Anatomy of an Agent Loop
-description: >-
-  Every major AI agent runs the same core loop. The 6-line version is easy. The
-  production-hardened version—with context compaction, loop detection, cost
-  budgets, and graceful termination—is where things get interesting.
+description: 'Explore the loop shared by AI agents and the production concerns around it: context compaction, loop detection, cost budgets, and graceful termination.'
 date: 2026-03-19
-modified: 2026-03-23
-tags:
-  - ai
-  - agents
-  - tooling
 ---
 
 Every agent framework I've looked at—[Claude Code](https://code.claude.com/docs/en/overview) (and the [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview) that wraps it), [Codex](https://developers.openai.com/codex/sdk), [Cursor](https://cursor.com), the [Vercel AI SDK](https://ai-sdk.dev/docs/introduction), [LangGraph](https://www.langchain.com/langgraph), [smolagents](https://smolagents.org/)—converges on the same architecture. Not similar. The _same_. A while loop that calls an LLM, checks if the response contains tool calls, executes them if it does, and stops if it doesn't. That's the whole thing.

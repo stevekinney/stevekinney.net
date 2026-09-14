@@ -3,8 +3,6 @@ title: Cursor Command Line Interface
 description: >-
   Use Cursor's agent command for terminal workflows, print mode, session resume,
   cloud handoff, and scripted review.
-modified: 2026-06-24
-date: 2026-06-23
 ---
 
 [Cursor's command line interface](https://cursor.com/docs/cli/overview) uses the

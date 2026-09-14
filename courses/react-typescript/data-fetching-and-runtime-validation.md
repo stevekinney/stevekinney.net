@@ -3,15 +3,6 @@ title: Data Fetching and Runtime Validation
 description: >-
   Fetch safely—type APIs, validate at runtime, and keep server/client boundaries
   honest under React 19.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - data-fetching
-  - validation
-  - zod
-  - runtime-validation
 ---
 
 When you're fetching data in React, TypeScript gives you excellent compile-time safety—but it can't magically guarantee that the API you're calling returns what you expect. That's where runtime validation comes in, bridging the gap between TypeScript's static analysis and the wild, unpredictable world of external data sources. React 19's improved async patterns make this even more critical (and thankfully, more elegant) to get right.

@@ -1,10 +1,8 @@
 ---
-modified: 2026-03-17
 title: Setting Up Storybook
 description: >-
   Initialize Storybook with necessary dependencies and creates .storybook files
   for React, TypeScript, and Vite, starting a server on port 6006.
-date: 2024-04-15
 ---
 
 Storybook handles most of it's own configuration. Inside of an existing projects, you just need to run the following command.

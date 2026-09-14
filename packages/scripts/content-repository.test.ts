@@ -7,10 +7,10 @@ import { obsidianPreprocessor } from '@stevekinney/markdown/obsidian-preprocesso
 import { normalizeObsidianMarkdown } from '@stevekinney/markdown/obsidian-normalization';
 
 import type { ContentRepository } from './content-repository.ts';
-import { coursesRoot, writingRoot } from './content-paths.ts';
+import { coursesRoot, repositoryRoot, writingRoot } from './content-paths.ts';
 import { collectContentRepository } from './content-repository.ts';
-import { repositoryRoot } from './content-paths.ts';
 import { attachmentMimeType } from './content-repository/publication.ts';
+import { buildRepositoryHash } from './content-repository/builders.ts';
 
 const createTemporaryName = (prefix: string): string => `${prefix}-${randomUUID()}`;
 
@@ -86,6 +86,26 @@ describe('collectContentRepository', () => {
     expect(route.openGraphPath).toBe('/writing/setup-python/open-graph.jpg');
   });
 
+  test('includes derived dates in the repository hash even when source bytes are unchanged', () => {
+    const sources = new Map([['writing/post.md', 'unchanged source hash']]);
+    const original = {
+      modified: new Map([['writing/post.md', '2025-01-01T01:00:00.000Z']]),
+      courses: new Map<string, string>(),
+    };
+    const amended = {
+      ...original,
+      modified: new Map([['writing/post.md', '2025-01-01T02:00:00.000Z']]),
+    };
+    const courseRemoval = {
+      ...original,
+      courses: new Map([['testing', '2025-01-01T03:00:00.000Z']]),
+    };
+    expect(buildRepositoryHash(sources, original)).not.toBe(buildRepositoryHash(sources, amended));
+    expect(buildRepositoryHash(sources, original)).not.toBe(
+      buildRepositoryHash(sources, courseRemoval),
+    );
+  });
+
   test('includes npm package metadata for every package-backed project', async () => {
     const repository = await repositoryPromise;
     const npmPackagesByProject = Object.fromEntries(
@@ -155,7 +175,7 @@ describe('collectContentRepository', () => {
     try {
       await writeTextFile(
         path.join(courseWithBadContents, 'README.md'),
-        `---\ntitle: Temporary Test Course\ndescription: Temporary test course.\ndate: 2025-01-01\nmodified: 2025-01-01\n---\n\nTemporary course body.\n`,
+        `---\ntitle: Temporary Test Course\ndescription: Temporary test course.\ndate: 2025-01-01\n---\n\nTemporary course body.\n`,
       );
       await writeTextFile(
         path.join(courseWithBadContents, 'index.toml'),
@@ -163,11 +183,11 @@ describe('collectContentRepository', () => {
       );
       await writeTextFile(
         reservedWritingPath,
-        `---\ntitle: Temporary Reserved Route\ndescription: Triggers a reserved route collision.\ndate: 2025-01-01\nmodified: 2025-01-01\n---\n\nTemporary content.\n`,
+        `---\ntitle: Temporary Reserved Route\ndescription: Triggers a reserved route collision.\ndate: 2025-01-01\n---\n\nTemporary content.\n`,
       );
       await writeTextFile(
         brokenLinkWritingPath,
-        `---\ntitle: Temporary Broken Link\ndescription: Triggers broken link validation issues.\ndate: 2025-01-01\nmodified: 2025-01-01\n---\n\n## Temporary Heading\n\n[Missing asset](/zz-temporary-missing-asset-${randomUUID()}.png)\n[Missing section](#does-not-exist)\n`,
+        `---\ntitle: Temporary Broken Link\ndescription: Triggers broken link validation issues.\ndate: 2025-01-01\n---\n\n## Temporary Heading\n\n[Missing asset](/zz-temporary-missing-asset-${randomUUID()}.png)\n[Missing section](#does-not-exist)\n`,
       );
 
       const repository = await collectContentRepository();

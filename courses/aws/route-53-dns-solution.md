@@ -2,13 +2,6 @@
 title: 'Solution: Configure DNS for Your Site'
 description: >-
   Complete walkthrough of creating a hosted zone, pointing a domain to CloudFront with alias records, and verifying DNS resolution.
-date: 2026-03-18
-modified: 2026-04-06
-tags:
-  - aws
-  - route53
-  - exercise
-  - solution
 ---
 
 This is the solution for the [Route 53 DNS Exercise](route-53-dns-exercise.md). Each step includes the exact commands, expected output, and troubleshooting guidance.

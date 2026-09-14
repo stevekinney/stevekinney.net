@@ -3,9 +3,7 @@ title: Introduction to Testing
 description: >-
   Build confidence in your codebase with practical testing techniques—covering
   assertions, mocking, integration tests, and testing strategy.
-layout: page
 date: 2024-09-28
-modified: 2026-03-17
 ---
 
 The material in this course is intended to go along with the [Introduction to Testing](https://frontendmasters.com/courses/testing/?utm_source=kinney&utm_medium=social&code=kinney) course with [Frontend Masters](https://frontendmasters.com/?utm_source=kinney&utm_medium=social&code=kinney).

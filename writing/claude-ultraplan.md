@@ -1,18 +1,7 @@
 ---
 title: 'Claude Ultraplan: Planning in the Cloud, Executing Wherever'
-description: >-
-  Ultraplan hands the planning phase of a coding task off to a Claude Code on
-  the web session running in plan mode, then lets you review it in the browser
-  and decide where to execute. Here's what it actually changes about your
-  workflow, what it costs, and where the sharp edges are.
+description: 'How Ultraplan moves coding-task planning to Claude Code on the web for browser review, remote execution, or local handoff.'
 date: 2026-04-07
-modified: 2026-04-07
-tags:
-  - ai
-  - agents
-  - claude-code
-  - planning
-  - workflow
 ---
 
 If you've spent any time using [Claude Code](https://code.claude.com/docs/en/overview) on a real task, you've probably hit the same wall I keep hitting: the planning phase is the part that matters most, and the terminal is the worst place to do it. You're scrolling through a wall of plan output, trying to remember which step you wanted to push back on, and your only review tool is "type a follow-up message and hope Claude understands which paragraph you meant." It works. It is not _good_.

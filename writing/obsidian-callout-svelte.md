@@ -4,11 +4,6 @@ description: >-
   A gentle walkthrough where we build our take on Obsidian's callout component
   in Svelte.
 date: 2024-04-07
-tags:
-  - svelte
-  - storybook
-  - design-systems
-modified: 2026-03-17
 ---
 
 I use [Obsidian](https://obsidian.md) for a lot of my writing and note gathering when I'm working on a course. I wouldn't mind using [Obsidian Publish](https://obsidian.md/publish) for hosting my notes and—as of this writing—I do have a paid account, but given that I want a high-level of customization and the ability to include code along with my content, I need a bit more control over how the content is hosted than Obsidian Publish is willing to give me.

@@ -4,9 +4,6 @@ description: >-
   Svelte stores simplify state management across components. Let's learn how
   they're implemented.
 date: 2021-08-10
-modified: 2026-03-17
-tags:
-  - svelte
 ---
 
 Any client-side framework or library looks reasonable when you're working on a small demonstration application. But, things tend to get out of hand as your application—and it's state management needs—grow. This is particularly true when you want to share state between multiple components that aren't located near each other in your component hierarchy.

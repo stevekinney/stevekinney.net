@@ -3,13 +3,6 @@ title: Lambda Cold Starts and Performance
 description: >-
   Understand what causes cold starts, how they affect latency, and practical
   strategies for minimizing their impact on your frontend's API calls.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - lambda
-  - performance
-  - cold-starts
 ---
 
 You've deployed a Lambda function, invoked it, and it works. But if you invoke it after a period of inactivity, the first response is noticeably slower than the ones that follow. That first slow response is a **cold start**, and it's the performance characteristic of Lambda that matters most to frontend engineers building API backends.

@@ -1,8 +1,6 @@
 ---
 title: Advanced Playwright APIs
 description: A short list of page-level Playwright APIs that solve real diagnostic and leak-checking problems once the suite is already in decent shape.
-modified: 2026-04-14
-date: 2026-04-14
 ---
 
 Playwright has plenty of APIs that are mildly interesting in the abstract and completely irrelevant in a real test suite. This appendix is not that list.

@@ -3,14 +3,6 @@ title: Loading States and Error Handling
 description: >-
   Master async state patterns with discriminated unions—model loading, success,
   and error states in TypeScript to make impossible states unrepresentable.
-date: 2025-09-27
-modified: 2026-09-08
-tags:
-  - react
-  - typescript
-  - error-handling
-  - loading-states
-  - discriminated-unions
 ---
 
 Half of building a great user experience is handling the unhappy paths gracefully. When you're fetching todos from an API, users need to know when things are loading, when they succeed, and most importantly, when they fail and what they can do about it. TypeScript's discriminated unions let us model these states in a way that makes bugs literally impossible to write.

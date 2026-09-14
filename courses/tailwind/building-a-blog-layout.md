@@ -3,8 +3,6 @@ title: Building a Blog Layout with Named Areas
 description: >-
   Let's build a semantic 2-column blog layout that collapses gracefully using
   CSS Grid Template Areas and container queries.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Let's start with our basic HTML structure for a simple blog post layout.

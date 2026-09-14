@@ -1,14 +1,6 @@
 ---
 title: 'Hosted Zones and Record Types'
-description: >-
-  Create a hosted zone in Route 53 and understand the common DNS record types (A, AAAA, CNAME, MX, TXT) and when to use each.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - route53
-  - dns
-  - hosted-zones
+description: 'Create a hosted zone in Route 53 and understand common DNS record types, including A, AAAA, CNAME, MX, and TXT.'
 ---
 
 A **hosted zone** is Route 53's container for DNS records. If you think of DNS as a phone book, the hosted zone is the page for your domain—it holds every record that tells the internet how to reach your services. When you create a hosted zone for `example.com`, Route 53 becomes the authoritative nameserver for that domain, and every DNS query for `example.com` or its subdomains gets answered by the records you configure inside the zone.

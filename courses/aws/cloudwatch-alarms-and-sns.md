@@ -1,16 +1,6 @@
 ---
 title: CloudWatch Alarms and SNS
-description: >-
-  Create CloudWatch alarms that trigger SNS notifications when error rates or
-  latency exceed thresholds, so you know when something breaks before your users
-  tell you.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudwatch
-  - alarms
-  - sns
+description: 'Create CloudWatch alarms that trigger SNS notifications when error rates or latency exceed thresholds.'
 ---
 
 Dashboards are great for when you're actively looking. Alarms are for when you're not. A **CloudWatch alarm** watches a metric and triggers an action when that metric crosses a threshold you define. The most common action: sending you an email through **SNS** (Simple Notification Service). You wake up to an email that says "your Lambda error rate spiked at 3 AM" instead of a user complaint at 9 AM.

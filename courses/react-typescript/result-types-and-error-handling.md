@@ -3,15 +3,6 @@ title: Result/Either Patterns for React
 description: >-
   Model errors without exceptions—neverthrow/Either, action error unions, and
   ergonomic component APIs.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - errors
-  - result
-  - either
-  - neverthrow
 ---
 
 Exceptions are hard to type and harder to test. Result/Either types make failures explicit and components simpler.

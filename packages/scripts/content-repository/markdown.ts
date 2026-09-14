@@ -1,6 +1,7 @@
 import { fromHtml } from 'hast-util-from-html';
 import { createHash } from 'node:crypto';
-import { readFile, stat } from 'node:fs/promises';
+import { statSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import GithubSlugger from 'github-slugger';
@@ -20,6 +21,7 @@ import { normalizePath, parseFrontmatter } from '@stevekinney/utilities/frontmat
 import { repositoryRoot } from '../content-paths.ts';
 
 import type { MarkdownSource } from './types.ts';
+import type { ContentValidationIssue } from './types.ts';
 
 const markdownParser = unified().use(remarkParse).use(remarkGfm);
 const externalPrefixes = ['http://', 'https://', 'mailto:', 'tel:', 'data:', 'ftp:'];
@@ -43,9 +45,9 @@ export const relativeSourcePath = (absolutePath: string): string =>
 export const readText = async (absolutePath: string): Promise<string> =>
   readFile(absolutePath, 'utf8');
 
-export const fileExists = async (absolutePath: string): Promise<boolean> => {
+export const fileExists = (absolutePath: string): boolean => {
   try {
-    await stat(absolutePath);
+    statSync(absolutePath);
     return true;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
@@ -104,9 +106,22 @@ const extractTailwindPlaygrounds = (tree: Root): string[] => {
   return playgrounds;
 };
 
-export const loadMarkdownSource = async (absolutePath: string): Promise<MarkdownSource> => {
+export const loadMarkdownSource = async (
+  absolutePath: string,
+  issues?: ContentValidationIssue[],
+): Promise<MarkdownSource> => {
   const raw = await readText(absolutePath);
-  const { data, content } = parseFrontmatter(raw);
+  let data: Record<string, unknown> = {};
+  let content = '';
+  try {
+    ({ data, content } = parseFrontmatter(raw));
+  } catch (error) {
+    if (!issues) throw error;
+    issues.push({
+      file: relativeSourcePath(absolutePath),
+      message: `Cannot parse frontmatter: ${(error as Error).message}`,
+    });
+  }
   const tree = markdownParser.parse(content);
 
   return {

@@ -30,7 +30,6 @@ export const load: PageServerLoad = async ({ params }) => {
       description: route.description,
       date: route.date,
       modified: route.modified,
-      tags: route.tags,
     },
     contentHtml: await renderWritingDocument(route.sourcePath),
   };

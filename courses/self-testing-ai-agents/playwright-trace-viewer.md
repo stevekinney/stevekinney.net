@@ -1,8 +1,6 @@
 ---
 title: The Playwright Trace Viewer
 description: How to record, open, filter, and actually use Playwright's trace viewer so failed tests come with evidence instead of vibes.
-modified: 2026-04-14
-date: 2026-04-12
 ---
 
 The trace viewer is one of the best debugging tools in the entire front-end ecosystem, and a lot of teams still use it like a screenshot folder. They open `trace.zip`, click around until they feel vaguely smarter, and then go patch the test. That is not a workflow. That is a ritual.

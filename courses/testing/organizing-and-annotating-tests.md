@@ -1,8 +1,6 @@
 ---
 title: Organizing and Annotating Tests
 description: Learn how to use describe for organizing tests in suites.
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 There are two primary ways in which we can organize our tests:

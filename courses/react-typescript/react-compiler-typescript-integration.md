@@ -3,14 +3,6 @@ title: React Compiler + TypeScript Integration
 description: >-
   Master React's new compiler with TypeScript—automatic memoization,
   optimization hints, and type-safe compiler directives.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - react-compiler
-  - optimization
-  - memoization
 ---
 
 React Compiler (formerly React Forget) is changing the game for React performance. It automatically memoizes your components and hooks, eliminating the need for manual `useMemo`, `useCallback`, and `React.memo` in most cases. But here's the kicker: when you combine it with TypeScript, you get a development experience that's not just faster, but smarter. The compiler understands your types and uses them to make better optimization decisions.

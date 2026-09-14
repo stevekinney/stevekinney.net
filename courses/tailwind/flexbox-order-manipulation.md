@@ -3,8 +3,6 @@ title: Flexbox Order Manipulation
 description: >-
   Reorder flex items visually without changing HTML structure using Tailwind's
   order utilities.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Controlling the visual order of elements in Flexbox or Grid containers is common. CSS's `order` property allows adjusting this without altering HTML structure. Tailwind CSS provides utilities to manipulate this property directly in your markup.

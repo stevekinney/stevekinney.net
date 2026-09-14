@@ -3,15 +3,6 @@ title: Real-Time at Scale Strategies
 description: >-
   Handle high-frequency real-time data in React with backpressure management,
   batching, and reconciliation strategies
-date: 2025-01-14
-modified: 2026-03-17
-status: published
-tags:
-  - React
-  - Performance
-  - Real-Time
-  - WebSocket
-  - Scalability
 ---
 
 Your React app connects to a WebSocket. Data starts flowing. 10 updates per second—smooth. 100 updates per second—manageable. 1000 updates per second—the UI freezes, memory balloons, and Chrome shows the "Aw, Snap!" page. Welcome to the brutal reality of real-time data at scale, where good intentions meet the limits of browser performance.

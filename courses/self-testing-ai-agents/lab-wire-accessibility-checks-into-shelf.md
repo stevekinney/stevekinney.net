@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Wire Accessibility Checks Into Shelf'
 description: Add an automated accessibility scan for critical routes, document the manual keyboard checks, and make accessibility failures part of the loop.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 This is where accessibility stops being a nice sentiment and becomes a real gate.

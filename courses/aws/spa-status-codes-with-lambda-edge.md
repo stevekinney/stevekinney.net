@@ -1,16 +1,6 @@
 ---
 title: SPA Status Codes with Lambda@Edge
-description: >-
-  Use a Lambda@Edge viewer-response function to return correct HTTP status codes
-  for single-page application routes, serving 404 for paths that don't match
-  known route patterns.
-date: 2026-04-16
-modified: 2026-04-16
-tags:
-  - aws
-  - lambda-at-edge
-  - spa
-  - status-codes
+description: 'Use a Lambda@Edge viewer-response function to return correct HTTP status codes for single-page application routes.'
 ---
 
 Your CloudFront Function rewrites all non-file paths to `/index.html`, and your SPA handles the rest. Users can refresh on `/notes/abc123` and the app works. But every path—valid or not—returns a 200 status code. `/notes/abc123` returns 200. `/totally-fake-path` returns 200. `/admin/secret/please` returns 200. The SPA renders its "not found" component for unrecognized routes, but the HTTP response says everything is fine.

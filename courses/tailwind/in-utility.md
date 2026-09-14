@@ -1,10 +1,6 @@
 ---
 title: In Utility
-description: >-
-  Apply styles based on ancestor element states without explicit group classes
-  using Tailwind's in-* variant
-modified: 2026-03-17
-date: 2025-06-12
+description: "Apply styles based on ancestor element states without explicit group classes using Tailwind's in-* variant."
 ---
 
 The `in-*` variant (new in Tailwind 4) styles elements based on _any_ ancestor's state. No `group` class required!

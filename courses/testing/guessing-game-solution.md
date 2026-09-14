@@ -3,8 +3,6 @@ title: Guessing Game Solution
 description: >-
   The solution to the "Guessing Game" exercise in the "Introduction to Testing"
   course.
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 For starters, we want to make sure we can hold the return value of `Math.random()` in place so that we can test against it.

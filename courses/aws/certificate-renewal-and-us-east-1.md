@@ -2,13 +2,6 @@
 title: 'Certificate Renewal and the us-east-1 Requirement'
 description: >-
   Understand how ACM auto-renews certificates and why CloudFront certificates must live in us-east-1.
-date: 2026-03-18
-modified: 2026-04-06
-tags:
-  - aws
-  - acm
-  - cloudfront
-  - us-east-1
 ---
 
 Certificate expiration is one of those problems that doesn't feel urgent until your site is down at 2 a.m. on a Saturday. A valid certificate quietly does its job. An expired certificate triggers a full-page browser warning that tells your users "this site may be trying to steal your information." There's no graceful fallback—the browser blocks the connection entirely. ACM's auto-renewal is the feature that keeps this from happening, but it only works if you set things up correctly.

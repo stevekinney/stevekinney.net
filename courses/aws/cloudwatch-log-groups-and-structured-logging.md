@@ -4,13 +4,6 @@ description: >-
   Navigate CloudWatch log groups and log streams, implement structured JSON
   logging in your Lambda functions, and query logs using CloudWatch Logs
   Insights.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudwatch
-  - logs
-  - structured-logging
 ---
 
 Every `console.log` you've written in your Lambda functions has been landing in CloudWatch Logs since [Deploying and Testing a Lambda Function](deploying-and-testing-a-lambda-function.md). The logs are there—but if you've ever tried to find a specific error in an unstructured wall of text, you know that having logs and being able to use them are two different things.

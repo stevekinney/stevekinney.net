@@ -1,8 +1,6 @@
 ---
 title: 'Add Performance Budgets to Shelf: Solution'
 description: Walkthrough of the performance budget files you add in the lab and the commands you need to run to verify them.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 Performance budgets are one of those things that sound bureaucratic until the first time they save you. You ship a refactor, the bundle doubles, nobody notices for two weeks, and now it's "just how big the app is." The point of this lab is to make that scenario impossible by turning size and speed into numbers that a script can enforce.

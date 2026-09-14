@@ -1,8 +1,6 @@
 ---
 title: Nightly Verification Loops
 description: Some checks are too slow, too broad, or too drift-sensitive for the fast loop. This appendix shows how to schedule them without turning them into ignored noise.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 Some checks are valuable enough to keep and annoying enough that you do not want them on every pull request. That is the entire reason nightly workflows exist.

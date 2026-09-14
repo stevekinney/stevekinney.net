@@ -4,8 +4,6 @@ description: >-
   Configure eslint-plugin-boundaries to encode the intended dependency graph as
   lint rules, preventing cross-package internal imports and circular
   dependencies.
-date: 2026-03-01
-modified: 2026-03-20
 ---
 
 ## What You're Doing

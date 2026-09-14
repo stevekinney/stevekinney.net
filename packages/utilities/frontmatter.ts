@@ -17,9 +17,32 @@ export const parseFrontmatter = (contents: string) =>
 const toDate = (value: unknown): Date | null => {
   if (!value) return null;
   const str = String(value);
-  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-    const [y, m, d] = str.split('-').map(Number);
-    return new Date(Date.UTC(y, m - 1, d));
+  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
+  if (dateOnly) {
+    const [, year, month, day] = dateOnly;
+    const y = Number(year);
+    const m = Number(month);
+    const d = Number(day);
+    const candidate = new Date(Date.UTC(y, m - 1, d));
+    if (
+      candidate.getUTCFullYear() !== y ||
+      candidate.getUTCMonth() !== m - 1 ||
+      candidate.getUTCDate() !== d
+    )
+      return null;
+    return candidate;
+  }
+  const calendar = /^(\d{4})-(\d{2})-(\d{2})T/u.exec(str);
+  if (calendar) {
+    const candidate = new Date(
+      Date.UTC(Number(calendar[1]), Number(calendar[2]) - 1, Number(calendar[3])),
+    );
+    if (
+      candidate.getUTCFullYear() !== Number(calendar[1]) ||
+      candidate.getUTCMonth() !== Number(calendar[2]) - 1 ||
+      candidate.getUTCDate() !== Number(calendar[3])
+    )
+      return null;
   }
   const date = value instanceof Date ? value : new Date(str);
   return Number.isNaN(date.getTime()) ? null : date;
@@ -36,3 +59,14 @@ export const toDateString = (value: unknown): string | null => {
 };
 
 export const normalizePath = (value: string): string => value.split(path.sep).join('/');
+
+export type ContentSourceKind = 'writing' | 'course' | 'lesson';
+
+/** Classify a repository markdown path by the content document it represents. */
+export const classifyContentSource = (value: string): ContentSourceKind | null => {
+  const sourcePath = normalizePath(value).replace(/^\.\//, '');
+  if (/^writing\/[^/]+\.md$/.test(sourcePath)) return 'writing';
+  if (/^courses\/[^/]+\/README\.md$/.test(sourcePath)) return 'course';
+  if (/^courses\/[^/]+\/[^/]+\.md$/.test(sourcePath)) return 'lesson';
+  return null;
+};

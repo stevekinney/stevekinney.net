@@ -1,11 +1,6 @@
 ---
 title: 'Demonstration: Typing Express with Zod'
-description: >-
-  Learn to integrate Zod schema validation in an Express app to ensure data
-  integrity, covering tasks like creation, updates, and database queries with
-  TypeScript.
-modified: 2026-03-17
-date: 2025-03-20
+description: 'Add Zod validation to an Express API’s database responses, request bodies, and updates.'
 ---
 
 Let's add some schema validation to our Express application. We'll start by sketching out our schemas.

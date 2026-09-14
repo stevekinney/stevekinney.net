@@ -3,8 +3,6 @@ title: Grid Arbitrary Column Counts
 description: >-
   Define custom grid column structures using arbitrary values and CSS variables
   for maximum layout flexibility.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 CSS Grid in Tailwind CSS allows building complex, responsive layouts in HTML. Tailwind translates native CSS features like `grid-template-columns` into concise classes.

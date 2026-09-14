@@ -3,8 +3,6 @@ title: Flexbox Alignment
 description: >-
   Master flexbox alignment utilities in Tailwind CSS including justify-content,
   align-items, and align-self for perfect layouts
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Flexbox provides powerful alignment options along both the main and cross axes.

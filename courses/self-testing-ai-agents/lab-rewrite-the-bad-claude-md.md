@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Rewrite the Bad CLAUDE.md'
 description: Tighten Shelf's starter instructions file until every rule is mechanically actionable and the UI stays product-facing.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 Time to do the thing.

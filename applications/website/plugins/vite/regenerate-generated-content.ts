@@ -86,6 +86,8 @@ export function regenerateGeneratedContent(
         isRunning = true;
         const child = spawn('bun', ['run', options.contentBuildScriptPath], {
           cwd: options.workingDirectory,
+          // Resolve HEAD for this rebuild; the persistent parent retains its startup revision.
+          env: { ...process.env, CONTENT_GIT_REVISION: 'HEAD' },
           stdio: 'inherit',
         });
 

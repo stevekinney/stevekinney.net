@@ -2,12 +2,6 @@
 title: 'Exercise: End-to-End Static Site Deployment'
 description: >-
   Deploy a complete static site from scratch: S3 bucket, CloudFront with OAC, and verify HTTPS on the default CloudFront domain.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - deployment
-  - exercise
 ---
 
 You're going to deploy a static site from zero to production. No shortcuts, no skipping steps. This is my favorite exercise in the whole course. By the end, your site will be live on a `*.cloudfront.net` domain—served through CloudFront, secured with HTTPS, and stored in a private S3 bucket. This exercise integrates the core static-hosting arc: IAM, S3, CloudFront, and OAC.
