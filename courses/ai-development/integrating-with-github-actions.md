@@ -3,8 +3,6 @@ title: Integrating with GitHub Actions
 description: >-
   Use Claude Code GitHub Actions and Cursor review automation with explicit
   prompts, secrets, permissions, and pull request verification.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Claude Code GitHub Actions](https://code.claude.com/docs/en/github-actions) and

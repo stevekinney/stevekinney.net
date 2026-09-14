@@ -3,13 +3,6 @@ title: Speedy Web Compiler (SWC) for React Apps
 description: >-
   Compile and minify at warp speed. Configure SWC to speed local builds and keep
   production bundles lean and modern.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - bundling
-  - build-tools
 ---
 
 If your React build times feel like they're stuck in molasses, it might be time to meet SWC—the Rust-powered JavaScript compiler that's making Babel look like it's running on a potato. SWC (Speedy Web Compiler) transforms and bundles your JavaScript up to 20x faster than traditional tools, without sacrificing the transformations your modern React app needs. Whether you're wrestling with sluggish development server startup times or production builds that take forever, SWC can help you get back to shipping features instead of waiting around.

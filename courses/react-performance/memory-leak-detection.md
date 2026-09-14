@@ -3,13 +3,6 @@ title: Memory Leak Detection in React Applications
 description: >-
   Find and fix memory leaks that kill performance. Master Chrome DevTools,
   detect common patterns, and build leak-free React apps.
-date: 2025-09-07
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - debugging
-  - memory
 ---
 
 Memory leaks in React applications are silent killers. Your app launches smoothly, but after an hour of use, it consumes 500MB of RAM and feels sluggish. Users navigate between pages, components mount and unmount, but something holds onto memory that should have been freed. The garbage collector runs, but memory usage keeps climbing. Eventually, the tab crashes or the mobile browser kills your app.

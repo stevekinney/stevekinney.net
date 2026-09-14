@@ -4,9 +4,7 @@ description: >-
   Get more out of VS Code with advanced workflows, debugging tools,
   customizations, extensions, and keyboard shortcuts that speed up daily
   development.
-layout: page
 date: 2025-03-18
-modified: 2026-03-17
 ---
 
 > [!NOTE] Prerequisites

@@ -3,16 +3,6 @@ title: Utility Types That Unlock Clean React APIs
 description: >-
   Partial, Pick, Omit, Record—use them to clean up state updates, prop shaping,
   and public surfaces.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - utility-types
-  - pick
-  - omit
-  - partial
-  - required
 ---
 
 TypeScript's utility types aren't just fancy academic constructs—they're practical tools for building cleaner, more maintainable React components. When used thoughtfully, `Partial`, `Pick`, `Omit`, and `Record` can transform messy prop interfaces and state management into elegant, type-safe APIs that make your components a joy to work with.

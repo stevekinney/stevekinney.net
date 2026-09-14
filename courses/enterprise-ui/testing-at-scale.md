@@ -1,12 +1,6 @@
 ---
 title: Testing Strategy for Large Applications
-description: >-
-  How testing changes when your application spans dozens of packages, multiple
-  teams, and independently deployed services—test shapes, flakiness management,
-  enterprise-specific patterns, and the operational infrastructure that keeps a
-  large test suite from becoming the thing everyone dreads.
-modified: 2026-03-17
-date: 2026-03-04
+description: 'Choose test layers, manage flaky tests, and define ownership and CI workflows for frontend applications spanning many packages and teams.'
 ---
 
 When you have one application and one team, your testing strategy is whatever the team agrees on during a standup. Unit tests for business logic. A few integration tests for the happy path. Maybe some Playwright runs before a release if someone remembers. It works.

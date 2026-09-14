@@ -3,13 +3,6 @@ title: Custom Hooks with Generics
 description: >-
   Build reusable hooks with proper generic constraints—type-safe data fetching,
   localStorage, and form management patterns.
-date: 2025-09-06
-modified: 2026-09-08
-tags:
-  - react
-  - typescript
-  - hooks
-  - generics
 ---
 
 Custom hooks are one of React's most powerful features, and when combined with TypeScript generics, they become incredibly versatile tools for building reusable, type-safe abstractions. Instead of copying and pasting similar state logic across components, you can create hooks that adapt to different data types while maintaining complete type safety. Let's explore how to build custom hooks with generics that are both flexible and bulletproof.

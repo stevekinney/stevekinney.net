@@ -1,8 +1,6 @@
 ---
 title: Some Keyboard Shortcuts for Visual Studio Code
 description: An index of commonly-used extensions for Visual Studio Code.
-modified: 2026-03-17
-date: 2025-03-18
 ---
 
 ## General Navigation & Search

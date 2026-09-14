@@ -3,16 +3,6 @@ title: Code-Splitting and Lazy Types
 description: >-
   Split components with React.lazy and keep types intact—ensure default exports,
   props, and suspense fallbacks match.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - code-splitting
-  - lazy-loading
-  - suspense
-  - performance
-  - bundling
 ---
 
 Code-splitting is one of those performance optimizations that sounds scary but is surprisingly straightforward once you understand the mechanics. You're basically telling your bundler (probably Webpack or Vite) to create separate JavaScript chunks that load on-demand rather than cramming everything into one massive bundle. With React's `lazy` function and TypeScript's type system, you can split your components while keeping your type safety intact—no compromises required.

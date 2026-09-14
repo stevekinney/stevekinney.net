@@ -3,13 +3,6 @@ title: Suspense for Data Fetching
 description: >-
   Stream UI progressively instead of blocking on everything—compose boundaries
   that keep pages interactive and informative.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - suspense
-  - data-fetching
 ---
 
 React Suspense fundamentally changes how we think about loading states and data fetching. Instead of manually wiring up loading spinners and error boundaries throughout your component tree, Suspense lets you declaratively define loading boundaries that handle async operations gracefully. You compose these boundaries strategically to keep parts of your UI interactive while other parts are still loading—turning the traditional "everything waits for everything" pattern into something that feels more like progressive enhancement.

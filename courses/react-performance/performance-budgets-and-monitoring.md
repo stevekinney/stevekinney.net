@@ -3,13 +3,6 @@ title: Performance Budgets and Monitoring
 description: >-
   Overview of performance budgets and monitoring strategies for React
   applications
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - monitoring
-  - budgets
 ---
 
 Performance budgets and monitoring work hand-in-hand to keep your React application fast. Budgets set the constraints, monitoring ensures you stay within them.

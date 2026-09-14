@@ -3,14 +3,6 @@ title: React.memo in React 19 and the Compiler Era
 description: >-
   Learn where React.memo still shines, when a compiler or bailouts make it
   redundant, and how to write fair areEqual checks.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - memoization
-  - react-19
-  - compiler
 ---
 
 React 19 brings the React Compiler to general availability, promising to automatically optimize your components for performance. But does that mean `React.memo` is obsolete? Not quite. While the compiler handles many scenarios that previously required manual memoization, understanding when and how to use `React.memo` effectively remains crucial for building performant React applications. Let's explore where `React.memo` still shines, when modern React makes it redundant, and how to write proper equality comparisons when you need them.

@@ -3,16 +3,6 @@ title: Type-Level Testing in Practice
 description: >-
   Assert your types with tsd/expectTypeOf—lock generics, prevent regressions,
   and add type coverage to CI.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - testing
-  - types
-  - tsd
-  - expectTypeOf
-  - ci
 ---
 
 Types can regress silently. Add type-level tests to catch breaks when refactoring generics, overloads, and public APIs.

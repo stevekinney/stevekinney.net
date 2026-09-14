@@ -4,11 +4,6 @@ description: >-
   In which we learn how to build a simple vector database using Pinecone and
   OpenAI embeddings, and discover it was way easier than we might have expected.
 date: 2024-12-31
-modified: 2026-03-17
-tags:
-  - open-ai
-  - pinecone
-  - artificial-intelligence
 ---
 
 Let's talk about vector databases by using [Pinecone](https://www.pinecone.io) and [OpenAI](https://openai.com) embeddings to build a simple script that allows you to search a set of what we'll generously call "recipes." We're going to explore how vector databases differ from the usual SQL-style tables you might know—and potentially love/hate, learn how to generate embeddings with OpenAI to capture the "meaning" of text, and then put it all together in a simple TypeScript project—because I can't be bothered to learn how `virtualenv`s work in Python. By the end, you'll be ready to store and semantically query unhinged recipes—or anything else you fancy—with ease, grace, and poise.

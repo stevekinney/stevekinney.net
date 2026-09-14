@@ -3,16 +3,6 @@ title: Testing React Components with TypeScript
 description: >-
   Configure Jest/Vitest and RTL for TypeScript—type-safe queries, user events,
   and mock helpers.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - testing
-  - jest
-  - vitest
-  - rtl
-  - mocking
 ---
 
 Testing React components can feel like a chore when you're deep in the flow of building features. But when you're working with TypeScript, testing becomes your safety net—not just for catching bugs, but for ensuring your component APIs work as expected and your types actually match reality. We'll explore how to set up a robust testing environment with Jest or Vitest, leverage React Testing Library's type-safe queries, and write tests that catch the kinds of issues TypeScript alone can't prevent.

@@ -1,8 +1,6 @@
 ---
 title: Review Portability Beyond Bugbot
 description: Bugbot is the example, not the law. This appendix translates the second-opinion loop into portable review primitives you can carry to other tools.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 I like Bugbot. I also do not want your review loop to collapse the minute your team uses a different tool.

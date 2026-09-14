@@ -1,8 +1,6 @@
 ---
 title: Filtering Tests
 description: 'Learn how to filter tests in Vitest by name, directory, and more.'
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 Vitest gives you a bunch of interesting ways to only run _some_ of your tests. Let's walking some of the more popular ones.

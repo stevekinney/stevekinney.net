@@ -14,6 +14,8 @@
       name: data.title,
       description: data.description,
       courseUrl: `${url}/courses/${page.params.course}`,
+      datePublished: data.date,
+      dateModified: data.modified,
     }),
     buildBreadcrumbSchema([
       { name: 'Courses', url: `${url}/courses` },
@@ -22,15 +24,24 @@
   ]);
 </script>
 
-<SEO title={data.title} description={data.description} jsonLd={courseJsonLd} />
+<SEO
+  title={data.title}
+  description={data.description}
+  date={data.date}
+  modified={data.modified}
+  jsonLd={courseJsonLd}
+/>
 
 <ContentEnhancements />
 
 <OpenInObsidian repositoryPath={data.sourcePath} />
 
 <div data-content-document>
-  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-  {@html data.contentHtml}
+  <h1 class="mb-6 text-4xl font-bold">{data.title}</h1>
+  <div class="prose dark:prose-invert max-w-none">
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+    {@html data.contentHtml}
+  </div>
 </div>
 
 <PullRequest repositoryPath={data.sourcePath} />

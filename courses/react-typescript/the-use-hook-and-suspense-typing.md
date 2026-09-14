@@ -1,17 +1,6 @@
 ---
 title: Typing the use() Hook and Suspense Data
-description: >-
-  Consume promises and resources directly—type use() calls, Suspense fallbacks,
-  and async component returns.
-date: 2025-09-06
-modified: 2026-09-08
-tags:
-  - react
-  - typescript
-  - use-hook
-  - suspense
-  - react-19
-  - async
+description: 'Consume promises and resources directly by typing use() calls, Suspense fallbacks, and asynchronous component returns.'
 ---
 
 React's `use()` hook is a game-changer for handling async data—it lets you consume promises and resources directly without the usual `useEffect` ceremony. Combined with Suspense boundaries, you can build components that handle loading and error states elegantly. The tricky part? Making sure TypeScript understands what's happening when your components start throwing promises around (literally).

@@ -4,13 +4,6 @@ description: >-
   Understand what DynamoDB is, how it differs from relational databases, and why
   it's a practical choice for frontend engineers who need a lightweight data
   layer.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - dynamodb
-  - databases
-  - fundamentals
 ---
 
 You don't need PostgreSQL for a todo list. You don't need to learn SQL joins, manage connection pools, or pay for a database server that runs 24/7 whether or not anyone is using your app. If your frontend needs a place to store and retrieve data—user preferences, form submissions, a list of items—**DynamoDB** gives you a database without giving you a database server.

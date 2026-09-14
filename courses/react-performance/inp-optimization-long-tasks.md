@@ -1,17 +1,6 @@
 ---
 title: INP Optimization & Long Tasks
-description: >-
-  Master Interaction to Next Paint (INP) by breaking up long tasks, using
-  scheduler APIs, and optimizing React interactivity
-date: 2025-01-14
-modified: 2026-03-17
-status: published
-tags:
-  - React
-  - Performance
-  - INP
-  - Core Web Vitals
-  - Interactivity
+description: 'Improve Interaction to Next Paint (INP) by breaking up long tasks, using scheduler APIs, and optimizing React interactivity.'
 ---
 
 Your React app _looks_ fast. The page loads quickly, the content appears instantly. Then a user clicks a button and… nothing. For 200 milliseconds, the UI is frozen. The click eventually processes, but that delay—that moment of uncertainty—just cost you a user's trust. Welcome to the world of **INP** (Interaction to Next Paint), where every millisecond of delay is a broken promise.

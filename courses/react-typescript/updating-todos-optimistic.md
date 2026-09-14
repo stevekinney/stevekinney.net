@@ -3,14 +3,6 @@ title: Updating Todos - PUT/PATCH with Optimistic Updates
 description: >-
   Master optimistic updates with TypeScript—implement instant UI updates, handle
   rollbacks on failure, and sync state with PUT/PATCH requests.
-date: 2025-09-27
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - crud
-  - optimistic-updates
-  - put-patch
 ---
 
 Updating todos is where user experience meets technical complexity. Users expect instant feedback when they check off a task, but network requests take time. Optimistic updates solve this by immediately updating the UI while the request happens in the background. TypeScript helps us implement this pattern safely, ensuring we handle both success and failure cases properly.

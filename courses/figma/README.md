@@ -1,12 +1,7 @@
 ---
 title: Figma for Developers
-description: >-
-  Learn Figma's developer-friendly features—constraints, auto layout, component
-  properties, variables, and CSS generation—to bridge the gap between design and
-  code.
-layout: page
+description: "Learn Figma's developer-friendly features—constraints, auto layout, component properties, variables, and CSS generation."
 date: 2024-03-05
-modified: 2026-03-17
 ---
 
 The material in this course is intended to go along with the [Figma, v2](https://frontendmasters.com/courses/figma-v2/?utm_source=kinney&utm_medium=social&code=kinney) course with [Frontend Masters](https://frontendmasters.com/?utm_source=kinney&utm_medium=social&code=kinney).

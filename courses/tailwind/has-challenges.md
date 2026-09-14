@@ -1,8 +1,6 @@
 ---
 title: Challenges with `has` Utility
-modified: 2026-03-17
-description: Getting our hands dirty with the `has` utility in Tailwind.
-date: 2025-06-12
+description: 'Get hands-on with the has utility in Tailwind.'
 ---
 
 Can you implement the following?

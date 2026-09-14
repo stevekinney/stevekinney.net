@@ -3,15 +3,6 @@ title: Vite + React TypeScript Optimization
 description: >-
   Optimize your Vite-powered React TypeScript apps—build performance, HMR, code
   splitting, and bundle optimization strategies.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - vite
-  - performance
-  - optimization
-  - bundling
 ---
 
 Vite has revolutionized React development with its lightning-fast HMR and optimized builds. But when you combine Vite with TypeScript and React, there's a whole world of optimization opportunities that can make your development experience even better and your production bundles even smaller. From parallel type checking to optimal code splitting strategies, let's explore how to squeeze every ounce of performance out of your Vite + React + TypeScript setup.

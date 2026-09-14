@@ -3,8 +3,6 @@ title: Type Narrowing and Control Flow
 description: >-
   Master TypeScript's control flow analysis to write safer code with precise
   type checking
-modified: 2026-03-17
-date: 2025-09-14
 ---
 
 TypeScript has this incredible ability to understand your code's logic and narrow types based on the checks you perform. It's like having a really smart assistant that follows along as you write conditions and helps ensure type safety. Let's dive into how TypeScript's control flow analysis makes your React code safer and more predictable.

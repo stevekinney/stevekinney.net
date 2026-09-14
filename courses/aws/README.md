@@ -1,13 +1,7 @@
 ---
 title: Deploying Web Applications on AWS
-description: >-
-  Deploy, scale, and secure frontend applications on AWS—from S3 and
-  CloudFront to Lambda, API Gateway, and DynamoDB—without ever needing to
-  become a full-time cloud engineer.
-layout: page
+description: 'Deploy, scale, and secure frontend applications on AWS—from S3 and CloudFront to Lambda, API Gateway, and DynamoDB.'
 date: 2026-03-18
-modified: '2026-03-31'
-url: https://frontendmasters.com/courses/aws-v2/?utm_source=kinney&utm_medium=social&code=kinney
 ---
 
 This course walks you through the AWS services that matter most to frontend engineers—the ones you'll actually use to ship, scale, and secure your applications. No hand-waving, no "just click here" tutorials that fall apart when the console changes. You'll understand what each service does, why it exists, and how it connects to the problems you've already been solving on the frontend.

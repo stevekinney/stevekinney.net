@@ -1,11 +1,6 @@
 ---
 title: Design Systems Across Microfrontends
-description: >-
-  How to deliver a design system when your applications are independently
-  deployed—Module Federation sharing, theming, Storybook composition, and
-  testing across boundaries.
-modified: 2026-03-17
-date: 2026-03-01
+description: 'How to deliver a design system when your applications are independently deployed.'
 ---
 
 The first thing to clean up is the framing. A monorepo is a source organization and package management choice. Microfrontends are a runtime and deployment choice. They're not opposites. You can have a monorepo that deploys microfrontends. You can have a polyrepo that doesn't. The most stable default is usually a monorepo for the design system _itself_, even when the products that consume it are deployed as independently built remotes.

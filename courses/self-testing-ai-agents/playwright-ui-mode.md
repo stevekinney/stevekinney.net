@@ -1,8 +1,6 @@
 ---
 title: Playwright UI Mode
 description: How to use Playwright's visual test runner to inspect the DOM, find locators, and debug failing tests without console.log.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 You've written a test, you've used `getByRole` like a responsible adult, and the test fails with "element not found." Now what? You stare at the error. You add a `console.log`. You add three more. You run the test again. You squint at the terminal output and try to reconstruct the page in your head from a wall of HTML.

@@ -3,12 +3,6 @@ title: Animation Performance in React
 description: >-
   Build silky smooth 60fps animations. Master hardware acceleration, avoid
   layout thrashing, and create performant micro-interactions.
-date: 2025-09-07
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - animations
 ---
 
 Smooth animations separate professional React apps from amateur ones. A janky fade-in, stuttering carousel, or laggy modal transition immediately signals poor performance to users. But creating 60fps animations in React requires understanding the browser's rendering pipeline, choosing the right properties to animate, and avoiding common pitfalls that block the main thread.

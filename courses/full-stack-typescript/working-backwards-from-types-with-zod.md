@@ -3,8 +3,6 @@ title: Working Backwards from Types
 description: >-
   Learn how to create Zod schemas that match existing TypeScript types using the
   satisfies operator for perfect type alignment.
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 We know that we can create types out of Zod schemas using `z.infer()`, but sometimes, we find ourselves in the position where we _already_ have the types and we want to create schemas and be 100% positive that those schemas match the types.

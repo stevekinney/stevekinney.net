@@ -3,8 +3,6 @@ title: CLAUDE.md, Rules, and Memory
 description: >-
   Use CLAUDE.md, .claude/rules, auto memory, AGENTS.md imports, and skills as
   distinct instruction layers in Claude Code.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Claude Code](https://code.claude.com/docs/en/memory) has two broad memory

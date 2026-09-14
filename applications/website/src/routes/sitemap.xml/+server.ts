@@ -86,7 +86,10 @@ export const GET = async () => {
     if (checked.has(url)) continue;
     checked.add(url);
 
-    const lastModified = getContentLastModified(route.modified, route.date);
+    const lastModified = getContentLastModified(
+      route.modified,
+      'date' in route ? route.date : undefined,
+    );
     if (lastModified && lastModified > mostRecent) {
       mostRecent = lastModified;
     }

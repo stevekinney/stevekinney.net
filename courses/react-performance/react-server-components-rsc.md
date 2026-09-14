@@ -3,13 +3,6 @@ title: React Server Components
 description: >-
   Move heavy work to the server and hydrate only where needed—ship less JS and
   free the main thread for interactions.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - rsc
-  - server-components
 ---
 
 React Server Components (RSC) fundamentally change how we think about React applications by moving computation to the server and streaming interactive pieces to the client. Instead of shipping massive JavaScript bundles and making every component client-side by default, RSC lets you render components on the server—keeping heavy data fetching, third-party libraries, and business logic away from your user's device while hydrating only the pieces that need interactivity.

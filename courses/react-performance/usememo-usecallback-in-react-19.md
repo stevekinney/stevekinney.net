@@ -3,14 +3,6 @@ title: useMemo and useCallback in React 19
 description: >-
   Use memoization as a scalpel, not a sledgehammer—cache expensive work or
   stabilize identities where it truly pays off.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - hooks
-  - memoization
-  - react-19
 ---
 
 React's `useMemo` and `useCallback` are performance optimization hooks—emphasis on _optimization_. They're not magic bullets that make your app fast, but surgical tools for addressing specific performance bottlenecks. With React 19's compiler optimizations and better default behavior, understanding when and how to use these hooks becomes even more crucial (and thankfully, less frequent).

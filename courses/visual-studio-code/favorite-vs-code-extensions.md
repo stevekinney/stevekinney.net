@@ -3,8 +3,6 @@ title: Favorite Visual Studio Code Extensions
 description: >-
   A curated list of useful Visual Studio Code extensions to enhance your
   development workflow
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 Here is a list of extensions that I like—or that I found when I Google'd _best vscode extensions_. I put the list in alphabetical order so that I didn't appear like I was playing favorites.

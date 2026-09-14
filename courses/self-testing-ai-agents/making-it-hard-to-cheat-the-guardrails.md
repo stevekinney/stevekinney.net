@@ -1,8 +1,6 @@
 ---
 title: Making It Hard to Cheat the Guardrails
-description: 'Git hooks are policy. Real guardrails are layered: command denial, protected configuration, CI mirrors, and merge rules that still hold when an agent gets creative.'
-modified: 2026-04-12
-date: 2026-04-12
+description: 'Layer command restrictions, protected configuration, CI checks, and merge rules so coding agents cannot bypass quality gates by skipping Git hooks.'
 ---
 
 If an agent can dodge the guardrail the first time it gets annoyed, that wasn't a guardrail. That was a suggestion with nice typography.

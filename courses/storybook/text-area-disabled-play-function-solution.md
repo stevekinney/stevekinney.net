@@ -1,8 +1,6 @@
 ---
 title: 'Solution: Checking a Disabled Text Area'
 description: The solution for a challenge in Steve's course on using Storybook.
-modified: 2026-03-17
-date: 2024-04-17
 ---
 
 ```tsx

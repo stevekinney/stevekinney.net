@@ -3,13 +3,6 @@ title: Avoiding Unnecessary Dependencies
 description: >-
   Trim the fat. Replace heavy libraries with native APIs or lighter alts and
   lean on tree‑shaking to cut bundle size.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - bundling
-  - dependencies
 ---
 
 Every dependency you add to your React project is a bet—a bet that the value it provides outweighs its cost in bundle size, maintenance overhead, and potential security vulnerabilities. Too often, we reach for popular libraries without considering whether we actually need them or if there's a lighter alternative. Let's explore how to audit your dependencies, identify unnecessary bloat, and make informed choices that keep your React applications lean and fast.

@@ -6,9 +6,11 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, searchForWorkspaceRoot, type PluginOption } from 'vite';
 import { ViteToml } from 'vite-plugin-toml';
 
-import { contentDevelopmentPlugins } from './plugins/vite/content-development-plugins';
+import { contentDevelopmentPlugins } from './plugins/vite/content-development-plugins.ts';
 
 const enableBundleStats = process.env.BUNDLE_STATS === '1';
+const enableVercelAnalytics =
+  process.env.VERCEL_ENV === 'production' || process.env.VERCEL_ENV === 'preview';
 const workspaceRoot = searchForWorkspaceRoot(process.cwd());
 
 const readContentEnhancementsBuildHash = (): string => {
@@ -67,6 +69,7 @@ const contentBuildScriptPath = path.resolve(
 export default defineConfig({
   define: {
     __CONTENT_ENHANCEMENTS_BUILD_HASH__: JSON.stringify(readContentEnhancementsBuildHash()),
+    __VERCEL_ANALYTICS_ENABLED__: JSON.stringify(enableVercelAnalytics),
   },
   plugins: [
     sveltekit(),
@@ -105,9 +108,12 @@ export default defineConfig({
       : []),
   ].filter(Boolean) as PluginOption[],
 
-  esbuild: {
-    jsxFactory: 'h',
-    jsxFragment: 'Fragment',
+  oxc: {
+    jsx: {
+      runtime: 'classic',
+      pragma: 'h',
+      pragmaFrag: 'Fragment',
+    },
   },
   server: {
     fs: {

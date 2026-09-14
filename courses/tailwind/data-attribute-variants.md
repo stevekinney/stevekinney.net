@@ -1,10 +1,6 @@
 ---
 title: Data Attribute Variants
-description: >-
-  Style elements based on HTML data attributes using Tailwind's data-* variant
-  for semantic state management
-modified: 2026-03-17
-date: 2025-06-12
+description: "Style elements based on HTML data attributes using Tailwind's data-* variant for semantic state management."
 ---
 
 Style elements based on their data attributes - perfect for state managed by JavaScript frameworks.

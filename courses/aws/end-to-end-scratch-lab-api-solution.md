@@ -2,17 +2,6 @@
 title: 'Solution: End-to-End Scratch Lab API'
 description: >-
   Complete working backend wiring API Gateway, Lambda, DynamoDB, and Secrets Manager into one request path for the Scratch Lab notepad app.
-date: 2026-04-15
-modified: 2026-04-16
-tags:
-  - aws
-  - capstone
-  - lambda
-  - api-gateway
-  - dynamodb
-  - secrets-manager
-  - exercise
-  - solution
 ---
 
 This is the complete solution for the [End-to-End Scratch Lab API exercise](end-to-end-scratch-lab-api-exercise.md). Every command is shown with its expected output.

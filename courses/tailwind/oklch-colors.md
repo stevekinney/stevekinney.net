@@ -3,8 +3,6 @@ title: OKLCH Colors
 description: >-
   Understanding Tailwind 4's perceptually uniform OKLCH color space for better
   gradients, accessibility, and P3 gamut support
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Tailwind uses OKLCH colors for its default palette - a perceptually uniform color space that aligns with human vision.

@@ -3,8 +3,6 @@ title: Claude Code and Bash Scripts
 description: >-
   Use Claude Code with shell commands and repository scripts while keeping
   command execution auditable, bounded, and reproducible.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 The first time an agent runs the wrong shell command confidently, you learn why

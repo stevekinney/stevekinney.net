@@ -3,13 +3,6 @@ title: Lifting State Intelligently
 description: >-
   Lift state only when multiple peers truly need it. Contain churn and stop
   render ripples before they swamp your UI.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - state-management
-  - architecture
 ---
 
 "Lift state up" is one of React's most repeated mantras—and for good reason. When multiple components need the same piece of data, moving it to their closest common ancestor makes perfect sense. But like most architectural advice, it's easy to take this too far and accidentally create performance bottlenecks that ripple through your entire component tree.

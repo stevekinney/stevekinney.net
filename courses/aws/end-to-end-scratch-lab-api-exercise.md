@@ -2,16 +2,6 @@
 title: 'Exercise: End-to-End Scratch Lab API'
 description: >-
   Wire API Gateway, Lambda, DynamoDB, and Parameter Store into one working backend for the Scratch Lab notepad app.
-date: 2026-04-15
-modified: 2026-04-16
-tags:
-  - aws
-  - capstone
-  - lambda
-  - api-gateway
-  - dynamodb
-  - parameter-store
-  - exercise
 ---
 
 You've built all the pieces. Now build the backend they add up to.

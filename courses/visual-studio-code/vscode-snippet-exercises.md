@@ -1,8 +1,6 @@
 ---
 title: Visual Studio Code Snippet Exercises
 description: Practice creating various code snippets in Visual Studio Code
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 1. **Basic Function:** Create a snippet that, when you type `func`, generates a basic TypeScript function declaration. It should include placeholders for the function name, parameters, and return type, with tab stops to easily navigate between them. Add a descriptive label.

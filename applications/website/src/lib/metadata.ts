@@ -6,10 +6,12 @@ export const description =
   'Steve Kinney is a software engineer, educator, and engineering leader in Denver, Colorado, with deep experience in AI systems, developer tools, and frontend architecture.';
 
 export const author = 'Steve Kinney';
+export const language = 'en-US';
 
 export default {
   title,
   url,
   description,
   author,
+  language,
 };

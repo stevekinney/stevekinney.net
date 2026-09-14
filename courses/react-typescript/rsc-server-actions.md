@@ -3,14 +3,6 @@ title: React Server Components and Server Actions
 description: >-
   Respect the server/client boundary—serialize safely, type async components,
   and model actions.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - server-components
-  - server-actions
-  - rsc
 ---
 
 React Server Components and Server Actions represent a fundamental shift in how we build React applications. Instead of the traditional pattern of fetching data on the client and managing complex state synchronization, Server Components run on the server during rendering, while Server Actions let you execute server-side logic directly from your components. The result? Less JavaScript shipped to the browser, faster initial page loads, and dramatically simplified data flows.

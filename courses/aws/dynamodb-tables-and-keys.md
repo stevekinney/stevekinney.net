@@ -3,13 +3,6 @@ title: DynamoDB Tables and Keys
 description: >-
   Create a DynamoDB table, define partition keys and sort keys, and understand
   how key design affects query patterns and performance.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - dynamodb
-  - tables
-  - keys
 ---
 
 Every DynamoDB table needs a primary key, and the key you choose determines how you access your data for the lifetime of that table. You can't change a table's primary key after creation. This is the most important decision you make when designing a DynamoDB table, and it's worth getting right from the start.

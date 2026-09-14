@@ -1,8 +1,6 @@
 ---
 title: 'Translate the Shelf Loop to Your Stack: Solution'
 description: Example filled-in translation for a Next.js + Prisma + Jest stack, with guidance on evaluating your own translation.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 This lab doesn't have shipped code. It has a shipped _process_—you create a `LOOP_TRANSLATION.md` that maps every Shelf feedback loop to the equivalent in your stack. The deliverable is yours.

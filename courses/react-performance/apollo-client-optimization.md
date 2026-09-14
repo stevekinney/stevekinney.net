@@ -3,14 +3,6 @@ title: Apollo Client Performance Optimization
 description: >-
   Master Apollo Client performance with cache optimization, query batching,
   optimistic updates, and efficient subscription management strategies.
-date: 2025-09-20
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - graphql
-  - apollo
-  - caching
 ---
 
 Apollo Client provides powerful tools for GraphQL performance optimization, but they require careful configuration to achieve optimal results. This guide covers advanced Apollo Client techniques for caching, batching, optimistic updates, and subscription management that can dramatically improve your React application's performance.

@@ -3,13 +3,6 @@ title: useDeferredValue Patterns
 description: >-
   Keep typing fluid by deferring expensive derived values. Pair with transitions
   and memoization for silky search UIs.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - hooks
-  - concurrent
 ---
 
 You've built a search component that filters a massive list of products. Your users start typing "iPhone" and immediately notice the input field feels sluggish—each keystroke seems to hang for a split second. The UI thread is getting hammered by expensive operations triggered on every character change, making your otherwise snappy interface feel clunky.

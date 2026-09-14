@@ -3,8 +3,6 @@ title: Realtime Typing Websockets And Sse
 description: >-
   Design a real-time layer that stays type-safe across reconnects and protocol
   evolution—validate messages at the edge and keep UI state predictable.
-modified: 2026-03-17
-date: 2025-09-14
 ---
 
 Design a real-time layer that stays type-safe across reconnects and protocol evolution—validate messages at the edge and keep UI state predictable.

@@ -3,15 +3,6 @@ title: GPU Acceleration Patterns
 description: >-
   Leverage GPU acceleration for high-performance React animations, 3D graphics,
   and computational tasks
-date: 2025-01-14
-modified: 2026-03-17
-status: published
-tags:
-  - React
-  - Performance
-  - GPU
-  - WebGL
-  - CSS Transforms
 ---
 
 Your React app runs smoothly... until you add that particle system. Or that complex data visualization. Or those 60fps animations. Suddenly, your CPU is maxed out, fans are spinning, and your beautifully crafted UI is stuttering like a broken record. Meanwhile, your GPU—a parallel processing powerhouse—sits idle, waiting to help.

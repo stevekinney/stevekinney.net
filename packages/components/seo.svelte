@@ -5,10 +5,11 @@
   import { encodeParameters } from '$lib/encode-parameters';
   import { formatPageTitle } from '$lib/format-page-title';
   import { createLlmsAlternatePath } from '$lib/llms-path';
-  import { author, title as siteTitle, url as siteUrl } from '$lib/metadata';
+  import { author, language, title as siteTitle, url as siteUrl } from '$lib/metadata';
   import { buildOpenGraphHash } from '$lib/og/hash';
   import { normalizeOpenGraphPath } from '$lib/og/paths';
   import type { Snippet } from 'svelte';
+  import { serializeJsonLd } from '$lib/structured-data';
 
   // Keep production social previews canonical while preserving local dev previews.
   const baseUrl = env.PUBLIC_SITE_URL || (dev ? page.url.origin : siteUrl);
@@ -65,7 +66,7 @@
     const data = Array.isArray(jsonLd)
       ? { '@context': 'https://schema.org', '@graph': jsonLd }
       : { '@context': 'https://schema.org', ...jsonLd };
-    return '<script type="application/ld+json">' + JSON.stringify(data) + '</' + 'script>';
+    return '<script type="application/ld+json">' + serializeJsonLd(data) + '</' + 'script>';
   });
 
   const formattedTitle = $derived(formatPageTitle(title));
@@ -174,7 +175,7 @@
   <meta property="og:title" content={formattedTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:site_name" content={siteTitle} />
-  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale" content={language.replace('-', '_')} />
   <meta property="og:image" content={image} />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />

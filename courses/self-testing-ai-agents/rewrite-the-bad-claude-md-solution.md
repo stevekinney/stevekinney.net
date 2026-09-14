@@ -1,8 +1,6 @@
 ---
 title: 'Rewrite the Bad CLAUDE.md: Solution'
 description: Walkthrough of the Shelf CLAUDE.md—why every section exists, what makes it mechanically enforceable, and how to verify it.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 The current `CLAUDE.md` in Shelf is the one I actually use when I point Claude Code at the repo. It is not a reference answer to memorize—it is a working artifact that evolved through exactly the kind of tightening this lab asks you to do. Your version will differ, and that is fine. What matters is that every line passes two tests: can the agent act on it mechanically, and would you notice if it didn't?

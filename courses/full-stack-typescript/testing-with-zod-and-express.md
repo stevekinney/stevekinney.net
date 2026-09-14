@@ -3,8 +3,6 @@ title: Testing Express APIs with Zod Fixtures and Superagent
 description: >-
   Learn how to effectively test your Express APIs using Zod fixtures for test
   data generation and Superagent for HTTP request testing.
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 Testing your Express API is crucial for ensuring its reliability and correctness. This guide demonstrates how to use [`zod-fixture`](https://www.npmjs.com/package/zod-fixture) to generate realistic test data based on your Zod schemas, and [`superagent`](https://www.npmjs.com/package/superagent) to make HTTP requests to your API.

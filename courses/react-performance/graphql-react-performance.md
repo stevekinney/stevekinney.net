@@ -3,14 +3,6 @@ title: GraphQL & React Performance
 description: >-
   Optimize GraphQL queries in React apps. Master fragment colocation, query
   batching, caching strategies, and avoid the N+1 query problem.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - graphql
-  - apollo
-  - data-fetching
 ---
 
 GraphQL promises to solve over-fetching and under-fetching, but implement it carelessly in your React app and you'll create performance problems that make REST look speedy. Waterfall requests, cache invalidation nightmares, bundle bloat from generated types, and the infamous N+1 query problem—GraphQL brings its own unique set of performance challenges that can tank your React application if you're not careful.

@@ -1,11 +1,6 @@
 ---
 title: Performance at Scale
-description: >-
-  Enterprise frontend performance is a different game than optimizing a landing
-  page—long sessions, dense data, memory pressure, and the organizational
-  discipline to keep it all from quietly getting worse.
-modified: 2026-03-17
-date: 2026-03-01
+description: 'Keep enterprise frontends fast through long sessions, dense data, memory pressure, and the slow accumulation of cruft.'
 ---
 
 Any client-side framework looks reasonable when the session lasts three minutes. A user lands on a marketing page, scrolls, maybe clicks a CTA, and leaves. The performance conversation for that kind of surface is mostly about first impressions—how fast did the hero image paint, how quickly did the page become interactive, did anything shift while the user was trying to click.

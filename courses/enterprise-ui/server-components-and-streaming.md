@@ -1,11 +1,6 @@
 ---
 title: Server Components and Streaming SSR
-description: >-
-  How Server Components, the client boundary, renderToPipeableStream, and
-  Suspense-driven streaming fit together—and the common mistakes that happen
-  when you learn the names but miss the boundaries.
-modified: 2026-03-17
-date: 2026-03-01
+description: 'How Server Components, the client boundary, renderToPipeableStream, and Suspense-driven streaming fit together.'
 ---
 
 The cleanest way to understand this stack is to separate execution from delivery. Server Components decide what code runs ahead of time on the server. `'use client'` marks which modules belong in the browser. SSR decides whether React turns the result into HTML on the server. Streaming SSR decides whether that HTML is sent all at once or progressively, usually around Suspense boundaries. React can combine all of these, but they solve different problems.

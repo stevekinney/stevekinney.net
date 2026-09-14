@@ -1,10 +1,6 @@
 ---
 title: Testing And Debugging Trpc
-description: >-
-  tRPC offers a handy createCaller() to directly call your procedures without
-  spinning up an Express server. Combine this with a test DB or mocking:
-modified: 2026-03-17
-date: 2025-03-16
+description: "Use tRPC's createCaller() to call procedures without an Express server, combining it with a test database or mocks."
 ---
 
 ## Server-Side Unit Tests

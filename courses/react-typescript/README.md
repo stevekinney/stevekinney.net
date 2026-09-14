@@ -3,9 +3,7 @@ title: React with TypeScript
 description: >-
   Build type-safe React applications with TypeScript and React 19—covering
   hooks, reducers, context, component APIs, and generics.
-layout: page
 date: 2025-09-07
-modified: 2026-03-17
 ---
 
 These are the notes for my [React && TypeScript workshop](https://frontendmasters.com/workshops/react-typescript-v3/) for [Frontend Masters](https://frontendmasters.com).

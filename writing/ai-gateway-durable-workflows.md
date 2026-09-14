@@ -1,16 +1,7 @@
 ---
 title: Designing an AI Gateway and Durable Workflow System
-description: >-
-  A two-layer architecture for production AI systems: a gateway that abstracts
-  providers, enforces policies, and tracks costs, paired with a durable workflow
-  engine that makes long-running agentic tasks survive failures, pause for human
-  approval, and replay deterministically.
+description: 'Design an AI gateway for routing, policies, and cost control alongside durable workflows that survive failures, pause for approval, and replay.'
 date: 2026-03-13
-modified: 2026-03-17
-tags:
-  - ai
-  - architecture
-  - workflows
 ---
 
 Most production AI integrations start the _same-ish_ way. Someone writes a function that calls a model, wraps it in a `try`/`catch`, and ships it. It works _fine_ until it doesn't—the provider has an outage, you blow through a rate limit at 2am (also known as the _only_ time incidents like this happen), a multi-step agent loses its state halfway through a tool chain, or someone asks why the monthly bill tripled. The function that calls the model was never the hard part. The hard part is everything _around_ calling the model: routing, fallbacks, cost control, retries, state management, human approval gates, and the ability to pick up exactly where you left off when something goes sideways.

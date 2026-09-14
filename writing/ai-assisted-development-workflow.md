@@ -4,11 +4,6 @@ description: >-
   A walkthrough of the system I use to ship code with AI agents—from planning in
   Linear to worktrees, linting gauntlets, and a small army of code review bots.
 date: 2026-03-11
-modified: 2026-03-17
-tags:
-  - ai
-  - tooling
-  - workflow
 ---
 
 I've been shipping a lot of code lately. More than I should be able to, honestly, given that I'm one person with a day job and the same 24 hours as everyone else. The secret—if you can call it that—is a system I've built around AI agents that handles most of the mechanical work while I focus on the decisions that actually matter. It's over-engineered. It costs me several hundred dollars a month. It is probably making the Earth a little warmer. But it works _really_ well, and I want to walk through how it all fits together.

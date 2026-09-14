@@ -3,9 +3,7 @@ title: Web Security
 description: >-
   Understand modern web security fundamentals—from authentication and
   authorization to XSS, CSRF, and practical mitigation techniques.
-layout: page
 date: 2024-04-05
-modified: 2026-03-17
 ---
 
 The content below is supplimentary content for the [Web Security, v2](https://frontendmasters.com/courses/web-security-v2/?utm_source=kinney&utm_medium=social&code=kinney) course with **Frontend Masters**.

@@ -32,6 +32,7 @@ import type {
   MarkdownSource,
   ProjectRecord,
 } from './types.ts';
+import type { ContentHistory } from './git-history.ts';
 import {
   optionalString,
   optionalStringArray,
@@ -50,7 +51,7 @@ const loadCourseContentsSource = async (
   absolutePath: string,
   issues: ContentValidationIssue[],
 ): Promise<CourseContentsSource | undefined> => {
-  if (!(await fileExists(absolutePath))) {
+  if (!fileExists(absolutePath)) {
     return undefined;
   }
 
@@ -79,16 +80,17 @@ const loadCourseContentsSource = async (
 export const buildWritingEntry = async (
   source: MarkdownSource,
   issues: ContentValidationIssue[],
+  history: ContentHistory,
 ): Promise<WritingIndexEntry> => {
   const { data, sourceHash, sourcePath } = source;
   const slug = path.basename(source.absolutePath, '.md');
+  const date = safeDateString(sourcePath, data.date, 'date', issues);
 
   return {
     title: requiredString(sourcePath, data.title, 'title', issues),
     description: requiredString(sourcePath, data.description, 'description', issues),
-    date: safeDateString(sourcePath, data.date, 'date', issues),
-    modified: safeDateString(sourcePath, data.modified, 'modified', issues),
-    tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
+    date,
+    modified: history.modified.get(sourcePath) ?? (date ? new Date(date).toISOString() : undefined),
     slug,
     sourcePath,
     sourceHash,
@@ -99,12 +101,13 @@ export const buildWritingEntry = async (
 export const buildCourseEntry = async (
   courseDirectory: string,
   issues: ContentValidationIssue[],
+  history: ContentHistory,
 ): Promise<CourseRecord | null> => {
   const courseSlug = path.basename(courseDirectory);
   const readmePath = path.join(courseDirectory, 'README.md');
   const contentsPath = path.join(courseDirectory, 'index.toml');
 
-  if (!(await fileExists(readmePath))) {
+  if (!fileExists(readmePath)) {
     issues.push({
       file: normalizePath(path.relative(repositoryRoot, readmePath)),
       message: 'Missing course README.md.',
@@ -113,7 +116,7 @@ export const buildCourseEntry = async (
     return null;
   }
 
-  const readmeSource = await loadMarkdownSource(readmePath);
+  const readmeSource = await loadMarkdownSource(readmePath, issues);
   const { data } = readmeSource;
   const lessons: LessonRecord[] = [];
   const courseTitle = requiredString(readmeSource.sourcePath, data.title, 'title', issues);
@@ -147,18 +150,16 @@ export const buildCourseEntry = async (
 
     lessonSlugSet.add(lessonSlug);
 
-    const lessonSource = await loadMarkdownSource(lessonPath);
+    const lessonSource = await loadMarkdownSource(lessonPath, issues);
     const sourcePath = lessonSource.sourcePath;
 
     lessons.push({
       title: requiredString(sourcePath, lessonSource.data.title, 'title', issues),
       description: requiredString(sourcePath, lessonSource.data.description, 'description', issues),
-      date: safeDateString(sourcePath, lessonSource.data.date, 'date', issues),
-      modified: safeDateString(sourcePath, lessonSource.data.modified, 'modified', issues),
+      modified: history.modified.get(sourcePath),
       slug: lessonSlug,
       courseSlug,
       courseTitle,
-      tags: Array.isArray(lessonSource.data.tags) ? lessonSource.data.tags.map(String) : [],
       sourcePath,
       sourceHash: lessonSource.sourceHash,
       path: `/courses/${courseSlug}/${lessonSlug}`,
@@ -173,12 +174,13 @@ export const buildCourseEntry = async (
     lessonSlugSet,
     issues,
   );
+  const date = safeDateString(readmeSource.sourcePath, data.date, 'date', issues);
 
   return {
     title: courseTitle,
     description: requiredString(readmeSource.sourcePath, data.description, 'description', issues),
-    date: safeDateString(readmeSource.sourcePath, data.date, 'date', issues),
-    modified: safeDateString(readmeSource.sourcePath, data.modified, 'modified', issues),
+    date,
+    modified: history.courses.get(courseSlug) ?? (date ? new Date(date).toISOString() : undefined),
     slug: courseSlug,
     sourcePath: readmeSource.sourcePath,
     sourceHash: readmeSource.sourceHash,
@@ -259,7 +261,6 @@ export const buildRoutes = (
         path: lesson.path,
         title: lesson.title,
         description: lesson.description,
-        date: lesson.date,
         modified: lesson.modified,
         sourcePath: lesson.sourcePath,
         sourceHash: lesson.sourceHash,
@@ -269,7 +270,6 @@ export const buildRoutes = (
         courseSlug: lesson.courseSlug,
         courseTitle: lesson.courseTitle,
         lessonSlug: lesson.slug,
-        tags: lesson.tags,
       });
     }
   }
@@ -299,13 +299,22 @@ export const buildRoutes = (
   );
 };
 
-export const buildRepositoryHash = (sourceHashes: Map<string, string>): string =>
+export const buildRepositoryHash = (
+  sourceHashes: Map<string, string>,
+  history: Pick<ContentHistory, 'modified' | 'courses'>,
+): string =>
   createHash('sha256')
     .update(
       [...sourceHashes.entries()]
         .sort(([left], [right]) => left.localeCompare(right))
         .map(([sourceFile, sourceHash]) => `${sourceFile}:${sourceHash}`)
         .join('|'),
+    )
+    .update(
+      JSON.stringify({
+        modified: [...history.modified].sort(([left], [right]) => left.localeCompare(right)),
+        courses: [...history.courses].sort(([left], [right]) => left.localeCompare(right)),
+      }),
     )
     .digest('hex');
 
@@ -317,7 +326,10 @@ export const buildSiteIndex = (
   const lessonEntries = courseEntries
     .flatMap((course) => course.lessons)
     .map(({ source: _source, ...lesson }) => lesson)
-    .sort(compareByDate);
+    .sort(
+      (left, right) =>
+        left.courseSlug.localeCompare(right.courseSlug) || left.slug.localeCompare(right.slug),
+    );
   const siteIndex: SiteContentIndex = {
     posts: [...writingEntries].sort(compareByDate),
     courses: [...courseEntries]

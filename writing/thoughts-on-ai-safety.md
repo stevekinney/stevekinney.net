@@ -2,7 +2,6 @@
 title: Thoughts on AI Safety
 description: 'A cautious, nuanced case for AI optimism: why safety, interpretability, bias, and alignment matter as much as raw capability.'
 date: 2026-06-19
-modified: 2026-06-23
 ---
 
 To be on the Internet in the Modern Era™ is to be inundated with opinions, hype, and various flavors of doom and gloom. So, I decided to take a short respite from the infinite stream of 30-second reels and do a bit of a deeper dive. (**Narrator**: He downloaded a bunch of research onto his iPad and sat on the couch instead of doomscrolling.)

@@ -1,8 +1,6 @@
 ---
 title: Building a Card Component in Tailwind
 description: Let's build a simple Card component together using Tailwind.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Let's start with our basic HTML structure.

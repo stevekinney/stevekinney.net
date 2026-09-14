@@ -1,8 +1,6 @@
 ---
 title: Performance Budgets as a Feedback Loop
 description: Functional and visually correct is not enough if the change made the app slower or heavier. Budgets turn that into a real gate.
-modified: 2026-09-08
-date: 2026-04-06
 ---
 
 There is a class of bug agents are weirdly good at introducing: the feature works, the tests pass, the screenshot matches, and the page is now noticeably slower.

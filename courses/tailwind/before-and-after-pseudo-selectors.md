@@ -3,8 +3,6 @@ title: Before & After Pseudo-Selectors
 description: >-
   Style ::before and ::after pseudo-elements with Tailwind's before: and after:
   variants for decorative content.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 ## Basic Usage

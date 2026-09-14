@@ -3,13 +3,6 @@ title: Resource Preloading APIs
 description: >-
   Prime the cache for what users will do next—preload, prefetch, and preinit
   without double‑loading or hurting metrics.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - preloading
-  - react-19
 ---
 
 Waiting for resources to load is one of those things that makes web apps feel sluggish, even when they're actually pretty fast. Users click a button, stare at a spinner, and wonder if they should refresh the page (spoiler: they probably will). Enter React 19's resource preloading APIs—a set of functions that let you prime the browser's cache with the resources users are _about_ to need, before they actually need them.

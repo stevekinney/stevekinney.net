@@ -3,13 +3,6 @@ title: Tracing Requests Across Services
 description: >-
   Trace a single request from API Gateway through Lambda to DynamoDB using
   correlation IDs, structured logs, and CloudWatch Logs Insights queries.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - cloudwatch
-  - tracing
-  - observability
 ---
 
 An alarm tells you something is broken. Logs tell you what happened. But when a user reports "I clicked the button and nothing happened," you need to trace that single request from the moment it hit API Gateway, through your Lambda function, into DynamoDB, and back. That means connecting log entries across services into a single story.

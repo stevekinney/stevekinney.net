@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Triage Three Traces'
 description: Generate three real traces from deliberately-broken Shelf specs, open each one in the viewer, and diagnose the failure using the four-bucket taxonomy.
-modified: 2026-04-14
-date: 2026-04-11
 ---
 
 Time to cash the checks from the last two lessons. [Reading a Trace](reading-a-trace.md) taught you the four panes. [Flaky-Test Triage](flaky-test-triage.md) gave you the four-bucket classification. This lab asks you to apply both, at the same time, to three real traces generated from three deliberately-broken specs in the Shelf starter.

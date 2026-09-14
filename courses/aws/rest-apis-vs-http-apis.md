@@ -3,12 +3,6 @@ title: REST APIs vs. HTTP APIs
 description: >-
   Understand the differences between API Gateway REST APIs and HTTP APIs, and why
   HTTP APIs are the right default for most frontend-to-Lambda integrations.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - api-gateway
-  - comparison
 ---
 
 API Gateway offers two flavors of API: **REST APIs** and **HTTP APIs**. If you've ever tried to create an API in the console, you've seen both options sitting side by side with no clear guidance on which to pick. The naming doesn't help—both can serve RESTful endpoints, and both speak HTTP. The difference is in what they include and what they cost.

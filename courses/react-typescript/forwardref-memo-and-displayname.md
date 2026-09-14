@@ -3,15 +3,6 @@ title: 'forwardRef, memo, and displayName with TypeScript'
 description: >-
   Compose forwardRef and memo without losing types—fix common inference pitfalls
   and keep good devtools labels.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - forward-ref
-  - memo
-  - display-name
-  - performance
 ---
 
 React's `forwardRef`, `memo`, and `displayName` are fantastic tools for building performant, reusable components. But when you mix them with TypeScript—especially when you start combining them—things can get tricky fast. Type inference breaks, generics get confused, and your beautiful component APIs start looking like alphabet soup. Let's fix that.

@@ -3,13 +3,6 @@ title: Web Workers with React
 description: >-
   Offload expensive computations to Web Workers. Keep your UI responsive with
   parallel processing, proper state synchronization, and TypeScript support.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - web-workers
-  - parallel-processing
 ---
 
 Your React app is grinding to a halt. The culprit? A massive data transformation, complex calculation, or image processing task that's blocking the main thread. While your JavaScript crunches numbers, your UI freezes, animations stutter, and users rage-click unresponsive buttons. The solution isn't to optimize the algorithm (though you should do that too)—it's to move it off the main thread entirely with Web Workers.

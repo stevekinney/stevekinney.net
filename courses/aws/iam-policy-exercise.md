@@ -3,12 +3,6 @@ title: 'Exercise: IAM Policy for a Deploy Bot'
 description: >-
   Create an IAM user and policy that can only sync files to an S3 bucket and
   create CloudFront invalidations.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - iam
-  - exercise
 ---
 
 You're going to create a **deploy bot**—an IAM user whose sole purpose is to deploy your frontend. This user can sync files to a specific S3 bucket and invalidate a specific CloudFront distribution's cache. It can't do anything else. No reading DynamoDB tables, no creating Lambda functions, no changing IAM permissions.
