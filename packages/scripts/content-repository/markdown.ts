@@ -123,11 +123,11 @@ const extractPlaygroundData = (tree: Root, sourcePath: string, lineOffset: numbe
   return { playgrounds, siteTailwindCandidates: [...siteTailwindCandidates] };
 };
 
-export const loadMarkdownSource = async (
+const parseMarkdownSource = (
   absolutePath: string,
+  raw: string,
   issues?: ContentValidationIssue[],
-): Promise<MarkdownSource> => {
-  const raw = await readText(absolutePath);
+): MarkdownSource => {
   let data: Record<string, unknown> = {};
   let content = '';
   try {
@@ -156,6 +156,18 @@ export const loadMarkdownSource = async (
     siteTailwindCandidates: playgroundData.siteTailwindCandidates,
   };
 };
+
+export const loadMarkdownSource = async (
+  absolutePath: string,
+  issues?: ContentValidationIssue[],
+): Promise<MarkdownSource> =>
+  parseMarkdownSource(absolutePath, await readText(absolutePath), issues);
+
+export const loadMarkdownSourceFromRaw = (
+  absolutePath: string,
+  raw: string,
+  issues?: ContentValidationIssue[],
+): MarkdownSource => parseMarkdownSource(absolutePath, raw, issues);
 
 /** Refresh validation artifacts from the same normalized body sent to mdsvex. */
 export const updateMarkdownSource = (source: MarkdownSource, markdown: string): void => {

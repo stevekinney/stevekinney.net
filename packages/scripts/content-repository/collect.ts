@@ -17,7 +17,13 @@ import {
   buildSiteIndex,
   buildWritingEntry,
 } from './builders.ts';
-import { loadMarkdownSource, updateMarkdownSource, hashContents } from './markdown.ts';
+import {
+  loadMarkdownSource,
+  loadMarkdownSourceFromRaw,
+  relativeSourcePath,
+  updateMarkdownSource,
+  hashContents,
+} from './markdown.ts';
 import { buildPublicationIndex, normalizeListProperty } from './publication.ts';
 import type {
   ContentRepository,
@@ -75,7 +81,12 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   const sourceValidationIssues: ContentValidationIssue[] = [];
   const [writingSources, projectSources] = await Promise.all([
     Promise.all(
-      writingFiles.sort().map((file) => loadMarkdownSource(file, sourceValidationIssues)),
+      writingFiles.sort().map((file) => {
+        const raw = metadataAudit.sources.get(relativeSourcePath(file));
+        return raw === undefined
+          ? loadMarkdownSource(file, sourceValidationIssues)
+          : loadMarkdownSourceFromRaw(file, raw, sourceValidationIssues);
+      }),
     ),
     Promise.all(projectFiles.sort().map((file) => loadMarkdownSource(file))),
   ]);
@@ -97,7 +108,14 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     await Promise.all(
       courseDirectories
         .sort()
-        .map((directory) => buildCourseEntry(directory, validationIssues, metadataAudit.history)),
+        .map((directory) =>
+          buildCourseEntry(
+            directory,
+            validationIssues,
+            metadataAudit.history,
+            metadataAudit.sources,
+          ),
+        ),
     )
   ).filter((entry): entry is CourseRecord => entry !== null);
 

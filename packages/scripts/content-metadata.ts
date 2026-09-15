@@ -16,6 +16,7 @@ type NormalizedDocument = ReturnType<typeof normalizeContentMetadata>;
 
 export type ContentMetadataAudit = {
   documents: Map<string, NormalizedDocument>;
+  sources: Map<string, string>;
   issues: MetadataIssue[];
   changedFiles: string[];
   history: History;
@@ -94,6 +95,7 @@ export async function auditContentMetadata(
   const titles = new Map<string, string[]>();
   const issues: MetadataIssue[] = [];
   const documents = new Map<string, NormalizedDocument>();
+  const sources = new Map<string, string>();
   const changedFiles: string[] = [];
   for (const file of (
     await fg('courses/*/index.toml', { cwd: root, followSymbolicLinks: false })
@@ -114,36 +116,57 @@ export async function auditContentMetadata(
       }
     }
   }
-  for (const file of files) {
-    const kind = classifyContentSource(file);
-    if (!kind) {
-      if (!selected || selected.has(file))
-        issues.push({
+  const auditedFiles = await Promise.all(
+    files.map(async (file) => {
+      const kind = classifyContentSource(file);
+      if (!kind) {
+        return {
           file,
-          message:
-            'Markdown content is outside the supported writing/*.md and courses/*/*.md structure.',
-          fixable: false,
-        });
-      continue;
-    }
-    const absolutePath = path.join(root, file);
-    const original = await readFile(absolutePath, 'utf8');
-    const normalized = normalizeContentMetadata(original, {
-      file,
-      kind,
-      publicationDate: history.published.get(file),
-      titleCandidates: titles.get(file),
-    });
-    documents.set(file, normalized);
-    if (selected && !selected.has(file)) continue;
-    if (options.fix && normalized.normalizedSource !== original) {
-      // Fail rather than overwrite an editor's changes made while the audit was running.
-      if ((await readFile(absolutePath, 'utf8')) !== original)
-        throw new Error(`'${file}' changed during metadata repair; rerun content:fix.`);
-      await writeFile(absolutePath, normalized.normalizedSource, 'utf8');
-      changedFiles.push(file);
-    }
-    issues.push(...normalized.issues.filter((issue) => !options.fix || !issue.fixable));
+          original: undefined,
+          normalized: null,
+          issues:
+            !selected || selected.has(file)
+              ? [
+                  {
+                    file,
+                    message:
+                      'Markdown content is outside the supported writing/*.md and courses/*/*.md structure.',
+                    fixable: false,
+                  } satisfies MetadataIssue,
+                ]
+              : [],
+        };
+      }
+      const absolutePath = path.join(root, file);
+      const original = await readFile(absolutePath, 'utf8');
+      const normalized = normalizeContentMetadata(original, {
+        file,
+        kind,
+        publicationDate: history.published.get(file),
+        titleCandidates: titles.get(file),
+      });
+      if (selected && !selected.has(file)) return { file, original, normalized, issues: [] };
+      if (options.fix && normalized.normalizedSource !== original) {
+        // Fail rather than overwrite an editor's changes made while the audit was running.
+        if ((await readFile(absolutePath, 'utf8')) !== original)
+          throw new Error(`'${file}' changed during metadata repair; rerun content:fix.`);
+        await writeFile(absolutePath, normalized.normalizedSource, 'utf8');
+        return {
+          file,
+          original,
+          normalized,
+          changed: true,
+          issues: normalized.issues.filter((issue) => !issue.fixable),
+        };
+      }
+      return { file, original, normalized, issues: normalized.issues };
+    }),
+  );
+  for (const result of auditedFiles) {
+    if (result.normalized) documents.set(result.file, result.normalized);
+    if (result.original !== undefined) sources.set(result.file, result.original);
+    if (result.changed) changedFiles.push(result.file);
+    issues.push(...result.issues);
   }
   issues.push(
     ...validateDuplicateDescriptions(
@@ -152,7 +175,7 @@ export async function auditContentMetadata(
       ),
     ).filter((issue) => !selected || selected.has(issue.file)),
   );
-  return { documents, issues, changedFiles, history };
+  return { documents, sources, issues, changedFiles, history };
 }
 
 export function reportMetadataIssues(issues: MetadataIssue[]): void {
