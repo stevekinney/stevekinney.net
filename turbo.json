@@ -130,7 +130,8 @@
         "run-with-content-history.ts",
         "../../templates/**",
         "../../.obsidian/{core-plugins,templates,types}.json",
-        "../../lefthook.yml"
+        "../../lefthook.yml",
+        "*.integration.ts"
       ]
     },
     "@stevekinney/website#build": {
@@ -230,7 +231,8 @@
         "@stevekinney/website#sync",
         "@stevekinney/scripts#content:build",
         "@stevekinney/scripts#playgrounds:build",
-        "@stevekinney/scripts#content-enhancements:build"
+        "@stevekinney/scripts#content-enhancements:build",
+        "@stevekinney/scripts#test:unit"
       ],
       "inputs": [
         "src/**",
