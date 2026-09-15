@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { visit } from 'unist-util-visit';
 import { h } from 'hastscript';
@@ -21,15 +21,73 @@ type Options = {
 
 let cachedManifest: ImageManifest | null = null;
 let cachedManifestPath: string | null = null;
+type ManifestStamp = { mtimeMs: number; ctimeMs: number; size: number };
+let cachedManifestStamp: ManifestStamp | null = null;
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const isManifestEntry = (value: unknown): value is ImageManifestEntry => {
+  if (!isRecord(value)) return false;
+  if (
+    typeof value.hash !== 'string' ||
+    typeof value.width !== 'number' ||
+    typeof value.height !== 'number' ||
+    typeof value.original !== 'string' ||
+    !Array.isArray(value.avif) ||
+    !(value.lqip === null || typeof value.lqip === 'string') ||
+    !(value.videoMimeType === null || typeof value.videoMimeType === 'string')
+  ) {
+    return false;
+  }
+
+  return value.avif.every(
+    (variant) =>
+      isRecord(variant) && typeof variant.width === 'number' && typeof variant.url === 'string',
+  );
+};
+
+const parseManifest = (value: unknown): ImageManifest | null => {
+  if (!isRecord(value) || value.version !== 1 || !isRecord(value.images)) return null;
+  if (!Object.values(value.images).every(isManifestEntry)) return null;
+  return value as unknown as ImageManifest;
+};
 
 const loadManifest = (manifestPath: string, strictManifest: boolean): ImageManifest => {
-  if (cachedManifest && cachedManifestPath === manifestPath) return cachedManifest;
+  let stamp: ManifestStamp;
+  try {
+    const metadata = statSync(manifestPath);
+    stamp = { mtimeMs: metadata.mtimeMs, ctimeMs: metadata.ctimeMs, size: metadata.size };
+  } catch (error) {
+    if (strictManifest) {
+      throw new Error(
+        `Image manifest is required at ${manifestPath}: ${(error as Error).message}`,
+        {
+          cause: error,
+        },
+      );
+    }
+    return { version: 1, images: {} };
+  }
+
+  if (
+    cachedManifest &&
+    cachedManifestPath === manifestPath &&
+    cachedManifestStamp?.mtimeMs === stamp.mtimeMs &&
+    cachedManifestStamp.ctimeMs === stamp.ctimeMs &&
+    cachedManifestStamp.size === stamp.size
+  ) {
+    return cachedManifest;
+  }
 
   try {
     const raw = readFileSync(manifestPath, 'utf8');
-    cachedManifest = JSON.parse(raw) as ImageManifest;
+    const manifest = parseManifest(JSON.parse(raw));
+    if (!manifest) throw new Error('manifest schema is invalid');
+    cachedManifest = manifest;
     cachedManifestPath = manifestPath;
-    return cachedManifest;
+    cachedManifestStamp = stamp;
+    return manifest;
   } catch (error) {
     if (strictManifest) {
       throw new Error(
@@ -40,9 +98,7 @@ const loadManifest = (manifestPath: string, strictManifest: boolean): ImageManif
       );
     }
 
-    cachedManifest = { version: 1, images: {} };
-    cachedManifestPath = manifestPath;
-    return cachedManifest;
+    return { version: 1, images: {} };
   }
 };
 
@@ -128,6 +184,13 @@ const rehypeEnhanceImages: Plugin<[Options?], Root> = (options = {}) => {
 
       const src = String(node.properties?.src ?? '');
       if (!src || isExternalUrl(src)) return;
+
+      // Static attachments are already published at their public URL and do not
+      // need an image-manifest entry. The marker is removed before output.
+      if (node.properties?.dataObsidianPublicAttachment !== undefined) {
+        delete node.properties.dataObsidianPublicAttachment;
+        return;
+      }
 
       let url = safeDecode(src);
       if (url.startsWith('assets/')) url = `./${url}`;
@@ -252,8 +315,11 @@ const buildImage = (
   };
 
   if (!isPassthrough && entry.width && entry.height) {
-    if (!node.properties?.width) props.width = entry.width;
-    if (!node.properties?.height) props.height = entry.height;
+    // Preserve the intrinsic ratio when the author supplies only one dimension.
+    if (!node.properties?.width && !node.properties?.height) {
+      props.width = entry.width;
+      props.height = entry.height;
+    }
   }
 
   return h('img', props);
@@ -278,8 +344,11 @@ const buildPicture = (
   };
 
   if (entry.width && entry.height) {
-    if (!node.properties?.width) imgProps.width = entry.width;
-    if (!node.properties?.height) imgProps.height = entry.height;
+    // Preserve the intrinsic ratio when the author supplies only one dimension.
+    if (!node.properties?.width && !node.properties?.height) {
+      imgProps.width = entry.width;
+      imgProps.height = entry.height;
+    }
   }
 
   if (entry.lqip) {
@@ -299,9 +368,9 @@ const buildVideo = (node: Element, entry: ImageManifestEntry, classes: string[])
     class: mergeClasses(node.properties?.className, classes),
   };
 
-  if (!node.properties?.controls) {
-    videoProps.controls = true;
-  }
+  videoProps.controls = Object.prototype.hasOwnProperty.call(node.properties ?? {}, 'controls')
+    ? node.properties?.controls
+    : true;
 
   // Preserve non-image attributes
   const skip = new Set([

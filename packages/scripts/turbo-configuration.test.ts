@@ -84,6 +84,22 @@ describe('turbo generated asset graph', () => {
     );
   });
 
+  test('tracks every published attachment extension in cacheable image checks', async () => {
+    const tasks = await readTurboTasks();
+    const attachmentInputs = ['writing', 'courses', 'projects'].map(
+      (directory) =>
+        `../../${directory}/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}`,
+    );
+
+    for (const taskName of [
+      '@stevekinney/scripts#content:images:check',
+      '@stevekinney/scripts#images:check',
+    ]) {
+      const inputs = tasks[taskName]?.inputs ?? [];
+      expect(inputs).toEqual(expect.arrayContaining(attachmentInputs));
+    }
+  });
+
   test('keeps website watch checks behind generated browser asset producers', async () => {
     const tasks = await readTurboTasks();
     expect(tasks['@stevekinney/website#check:watch']?.dependsOn).toEqual(
@@ -98,6 +114,12 @@ describe('turbo generated asset graph', () => {
 
   test('does not duplicate generated producer outputs as downstream cache inputs', async () => {
     const tasks = await readTurboTasks();
+    expect(tasks['@stevekinney/scripts#content:build']?.outputs ?? []).not.toContain(
+      '../../applications/website/.generated/content-enhancements/**',
+    );
+    expect(tasks['@stevekinney/scripts#content-enhancements:build']?.outputs).toEqual([
+      '../../applications/website/.generated/content-enhancements/**',
+    ]);
     expect(tasks['@stevekinney/scripts#playgrounds:build']?.dependsOn).toContain(
       '@stevekinney/scripts#content:build',
     );

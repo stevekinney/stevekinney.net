@@ -1,12 +1,17 @@
 import staticAdapter from '@sveltejs/adapter-static';
 import vercelAdapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import remarkCallouts from '@stevekinney/markdown/remark-callouts';
+import rehypeObsidianIdentifiers, {
+  rehypeValidateObsidianIdentifiers,
+} from '@stevekinney/markdown/rehype-obsidian-identifiers';
+import rehypeCallouts from '@stevekinney/markdown/rehype-callouts';
 import remarkEscapeComparators from '@stevekinney/markdown/remark-escape-comparators';
 import { fixMarkdownUrls } from '@stevekinney/markdown/remark-fix-urls';
 import remarkTailwindPlayground from '@stevekinney/markdown/remark-tailwind-playground';
 import { parseTailwindPlaygroundMetadata } from '@stevekinney/utilities/tailwind-playground-metadata';
 import rehypeEnhanceImages from '@stevekinney/markdown/rehype-enhance-images';
+import rehypeObsidianMath from '@stevekinney/markdown/rehype-obsidian-math';
+import { obsidianPreprocessor } from '@stevekinney/markdown/obsidian-preprocessor';
 import type { Config } from '@sveltejs/kit';
 import type { MdsvexOptions } from 'mdsvex';
 import { escapeSvelte, mdsvex } from 'mdsvex';
@@ -61,13 +66,14 @@ const mdsvexOptions: MdsvexOptions = {
     asPluggable(remarkEscapeComparators),
     asPluggable([fixMarkdownUrls, ['../../writing', '../../courses']]),
     asPluggable(remarkGfm),
-    asPluggable(remarkCallouts),
     asPluggable([
       remarkTailwindPlayground,
       { manifestPath: playgroundManifestPath, workspaceRoot },
     ]),
   ],
   rehypePlugins: [
+    asPluggable(rehypeObsidianIdentifiers),
+    asPluggable(rehypeCallouts),
     asPluggable(rehypeSlug),
     asPluggable(unwrapImages),
     asPluggable([
@@ -80,6 +86,8 @@ const mdsvexOptions: MdsvexOptions = {
         strictManifest: strictImageManifest,
       },
     ]),
+    asPluggable(rehypeObsidianMath),
+    asPluggable(rehypeValidateObsidianIdentifiers),
   ],
 
   layout: {
@@ -188,7 +196,14 @@ const mdsvexOptions: MdsvexOptions = {
 const config: Config = {
   extensions: ['.svelte', '.md'],
   // mdsvex's exported preprocessor type predates SvelteKit's PreprocessorGroup.
-  preprocess: asPreprocess([vitePreprocess(), mdsvex(mdsvexOptions)]),
+  preprocess: asPreprocess([
+    obsidianPreprocessor({
+      artifactPath: join(__dirname, '.generated/obsidian-content.json'),
+      repositoryRoot: join(__dirname, '../..'),
+    }),
+    vitePreprocess(),
+    mdsvex(mdsvexOptions),
+  ]),
   kit: {
     adapter: process.env.VERCEL
       ? vercelAdapter({ runtime: 'nodejs24.x' })

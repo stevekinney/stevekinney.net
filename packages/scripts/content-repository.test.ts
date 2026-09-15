@@ -2,11 +2,14 @@ import { randomUUID } from 'node:crypto';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import { beforeAll, describe, expect, test } from 'bun:test';
+import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
+import { obsidianPreprocessor } from '@stevekinney/markdown/obsidian-preprocessor';
+import { normalizeObsidianMarkdown } from '@stevekinney/markdown/obsidian-normalization';
 
 import type { ContentRepository } from './content-repository.ts';
-import { coursesRoot, writingRoot } from './content-paths.ts';
+import { coursesRoot, repositoryRoot, writingRoot } from './content-paths.ts';
 import { collectContentRepository } from './content-repository.ts';
+import { attachmentMimeType } from './content-repository/publication.ts';
 import { buildRepositoryHash } from './content-repository/builders.ts';
 
 const createTemporaryName = (prefix: string): string => `${prefix}-${randomUUID()}`;
@@ -17,10 +20,20 @@ const writeTextFile = async (filePath: string, contents: string): Promise<void> 
 };
 
 describe('collectContentRepository', () => {
+  test('preserves manifest video MIME types for published attachments', () => {
+    expect(
+      attachmentMimeType('applications/website/static/audio.ogg', { videoMimeType: 'video/ogg' }),
+    ).toBe('video/ogg');
+    expect(
+      attachmentMimeType('applications/website/static/audio.ogg', { videoMimeType: null }),
+    ).toBe('audio/ogg');
+  });
+
   let repositoryPromise: Promise<ContentRepository>;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     repositoryPromise = collectContentRepository();
+    await repositoryPromise;
   });
 
   test('validates the current repository content graph', async () => {
@@ -193,6 +206,152 @@ describe('collectContentRepository', () => {
       await rm(courseWithBadContents, { recursive: true, force: true });
       await rm(reservedWritingPath, { force: true });
       await rm(brokenLinkWritingPath, { force: true });
+    }
+  });
+
+  describe('Obsidian publication dependencies', () => {
+    const suffix = createTemporaryName('zz-obsidian-integration');
+    const hostPath = path.join(writingRoot, `${suffix}-host.md`);
+    const targetPath = path.join(writingRoot, `${suffix}-target.md`);
+    const unpublishedPath = path.join(repositoryRoot, `${suffix}-unpublished.md`);
+    const frontmatter = (title: string, extra = '') =>
+      `---\ntitle: ${title}\ndescription: Temporary fixture.\ndate: 2025-01-01\nmodified: 2025-01-01\n${extra}---\n\n`;
+
+    let first: ContentRepository;
+    let route: string;
+    let firstHash: string;
+    beforeAll(async () => {
+      await writeTextFile(
+        targetPath,
+        `${frontmatter('Obsidian Target')}## Target heading\n\nTarget body.\n`,
+      );
+      await writeTextFile(
+        hostPath,
+        `${frontmatter('Obsidian Host', 'tags: [fixture, fixture, obsidian]\naliases: [Fixture Host, Fixture Host]\n')}%%private comment%%\n\n![[${path.basename(targetPath, '.md')}]]\n`,
+      );
+      await writeTextFile(unpublishedPath, `${frontmatter('Unpublished Note')}Private.\n`);
+
+      first = await collectContentRepository();
+    });
+
+    afterAll(async () => {
+      await rm(hostPath, { force: true });
+      await rm(targetPath, { force: true });
+      await rm(unpublishedPath, { force: true });
+    });
+
+    test('normalizes metadata and excludes unpublished notes', () => {
+      const hostSourcePath = path.relative(repositoryRoot, hostPath).split(path.sep).join('/');
+      const targetSourcePath = path.relative(repositoryRoot, targetPath).split(path.sep).join('/');
+      const hostDocument = first.publicationIndex.documents.find(
+        (item) => item.sourcePath === hostSourcePath,
+      );
+      const hostNormalized = first.normalizedDocuments[hostSourcePath];
+
+      expect(hostDocument?.aliases).toEqual(['Fixture Host']);
+      expect(
+        first.writing.find((item) => item.sourcePath === hostSourcePath)?.tags,
+      ).toBeUndefined();
+      expect(
+        first.publicationIndex.documents.some(
+          (item) =>
+            item.sourcePath ===
+            path.relative(repositoryRoot, unpublishedPath).split(path.sep).join('/'),
+        ),
+      ).toBe(false);
+      expect(hostNormalized.markdown).not.toContain('private comment');
+      expect(hostNormalized.dependencies).toContain(targetSourcePath);
+
+      route = hostDocument!.route;
+      firstHash = first.routes[route].sourceHash;
+    });
+
+    test('invalidates host hashes when embedded dependencies change', async () => {
+      await writeTextFile(
+        targetPath,
+        `${frontmatter('Obsidian Target')}## Target heading\n\nChanged target body.\n`,
+      );
+      const second = await collectContentRepository();
+      expect(second.routes[route].sourceHash).not.toBe(firstHash);
+    });
+  });
+
+  test('preprocessor reads generated content and tracks artifact plus transitive dependencies', async () => {
+    const suffix = createTemporaryName('zz-obsidian-preprocessor');
+    const hostPath = path.join(writingRoot, `${suffix}-host.md`);
+    const targetPath = path.join(writingRoot, `${suffix}-target.md`);
+    const leafPath = path.join(writingRoot, `${suffix}-leaf.md`);
+    const artifactPath = path.join(repositoryRoot, 'tmp', `${suffix}.json`);
+    const frontmatter = (title: string) =>
+      `---\ntitle: ${title}\ndescription: Temporary fixture.\ndate: 2025-01-01\nmodified: 2025-01-01\n---\n\n`;
+
+    try {
+      const leafSource = `${frontmatter('Leaf')}Leaf body.\n`;
+      const targetSource = `${frontmatter('Target')}![[${path.basename(leafPath, '.md')}]]\n`;
+      const hostSource = `${frontmatter('Host')}![[${path.basename(targetPath, '.md')}]]\n`;
+      await writeTextFile(hostPath, hostSource);
+      await writeTextFile(targetPath, targetSource);
+      await writeTextFile(leafPath, leafSource);
+
+      const sourcePath = (filename: string): string =>
+        path.relative(repositoryRoot, filename).split(path.sep).join('/');
+      const hostSourcePath = sourcePath(hostPath);
+      const targetSourcePath = sourcePath(targetPath);
+      const leafSourcePath = sourcePath(leafPath);
+      const publicationIndex = {
+        documents: [
+          { sourcePath: hostSourcePath, route: `/writing/${suffix}-host`, source: hostSource },
+          {
+            sourcePath: targetSourcePath,
+            route: `/writing/${suffix}-target`,
+            source: targetSource,
+          },
+          { sourcePath: leafSourcePath, route: `/writing/${suffix}-leaf`, source: leafSource },
+        ],
+        attachments: [],
+      };
+      const targetNormalized = normalizeObsidianMarkdown(targetSource, {
+        sourcePath: targetSourcePath,
+        publicationIndex,
+      });
+      const hostNormalized = normalizeObsidianMarkdown(hostSource, {
+        sourcePath: hostSourcePath,
+        publicationIndex,
+      });
+      await writeTextFile(
+        artifactPath,
+        JSON.stringify({
+          publicationIndex,
+          documents: {
+            [hostSourcePath]: hostNormalized,
+            [targetSourcePath]: targetNormalized,
+            [leafSourcePath]: normalizeObsidianMarkdown(leafSource, {
+              sourcePath: leafSourcePath,
+              publicationIndex,
+            }),
+          },
+        }),
+      );
+      const preprocessor = obsidianPreprocessor({ artifactPath, repositoryRoot });
+      const result = await preprocessor.markup!({ content: hostSource, filename: hostPath });
+      expect(result?.dependencies).toEqual(
+        expect.arrayContaining([
+          artifactPath,
+          path.resolve(repositoryRoot, targetSourcePath),
+          path.resolve(repositoryRoot, leafSourcePath),
+        ]),
+      );
+      expect(result?.code).toContain('Leaf body.');
+
+      const changedHost = `${frontmatter('Host')}Changed host.\n`;
+      const changed = await preprocessor.markup!({ content: changedHost, filename: hostPath });
+      expect(changed?.code).toContain('Changed host.');
+      expect(changed?.code).not.toContain('Leaf body.');
+    } finally {
+      await rm(hostPath, { force: true });
+      await rm(targetPath, { force: true });
+      await rm(leafPath, { force: true });
+      await rm(artifactPath, { force: true });
     }
   });
 });

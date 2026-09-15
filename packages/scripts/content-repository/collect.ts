@@ -1,6 +1,11 @@
 import fg from 'fast-glob';
+import { createReadStream } from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { normalizeObsidianMarkdown } from '@stevekinney/markdown/obsidian-normalization';
+import type { NormalizedMarkdown } from '@stevekinney/markdown/obsidian-types';
 
-import { coursesRoot, projectsRoot, writingRoot } from '../content-paths.ts';
+import { coursesRoot, projectsRoot, writingRoot, repositoryRoot } from '../content-paths.ts';
 import { auditContentMetadata } from '../content-metadata.ts';
 
 import {
@@ -12,7 +17,14 @@ import {
   buildSiteIndex,
   buildWritingEntry,
 } from './builders.ts';
-import { loadMarkdownSource } from './markdown.ts';
+import {
+  loadMarkdownSource,
+  loadMarkdownSourceFromRaw,
+  relativeSourcePath,
+  updateMarkdownSource,
+  hashContents,
+} from './markdown.ts';
+import { buildPublicationIndex, normalizeListProperty } from './publication.ts';
 import type {
   ContentRepository,
   ContentValidationIssue,
@@ -48,37 +60,46 @@ const collectSourceArtifacts = (
   );
 };
 
+const hashDependency = async (filename: string): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const hash = createHash('sha256');
+    const stream = createReadStream(filename);
+    stream.on('data', (chunk: Buffer) => hash.update(chunk));
+    stream.once('error', reject);
+    stream.once('end', () => resolve(hash.digest('hex')));
+  });
+
 export type { ContentRepository } from './types.ts';
 
 export const collectContentRepository = async (): Promise<ContentRepository> => {
   const metadataAudit = await auditContentMetadata();
-  const validationIssues: ContentValidationIssue[] = [...metadataAudit.issues];
-  const writingFiles = await fg('*.md', {
-    cwd: writingRoot,
-    absolute: true,
-    onlyFiles: true,
-  });
-  const courseDirectories = await fg('*', {
-    cwd: coursesRoot,
-    absolute: true,
-    onlyDirectories: true,
-  });
-  const projectFiles = await fg('*.md', {
-    cwd: projectsRoot,
-    absolute: true,
-    onlyFiles: true,
-  });
-  const writingSources = await Promise.all(
-    writingFiles.sort().map((file) => loadMarkdownSource(file, validationIssues)),
-  );
-  const projectSources = await Promise.all(
-    projectFiles.sort().map((file) => loadMarkdownSource(file)),
-  );
+  const [writingFiles, courseDirectories, projectFiles] = await Promise.all([
+    fg('*.md', { cwd: writingRoot, absolute: true, onlyFiles: true }),
+    fg('*', { cwd: coursesRoot, absolute: true, onlyDirectories: true }),
+    fg('*.md', { cwd: projectsRoot, absolute: true, onlyFiles: true }),
+  ]);
+  const sourceValidationIssues: ContentValidationIssue[] = [];
+  const [writingSources, projectSources] = await Promise.all([
+    Promise.all(
+      writingFiles.sort().map((file) => {
+        const raw = metadataAudit.sources.get(relativeSourcePath(file));
+        return raw === undefined
+          ? loadMarkdownSource(file, sourceValidationIssues)
+          : loadMarkdownSourceFromRaw(file, raw, sourceValidationIssues);
+      }),
+    ),
+    Promise.all(projectFiles.sort().map((file) => loadMarkdownSource(file))),
+  ]);
+  const validationIssues: ContentValidationIssue[] = [
+    ...metadataAudit.issues,
+    ...sourceValidationIssues,
+  ];
 
   const writingEntries = await Promise.all(
-    writingSources.map((source) =>
-      buildWritingEntry(source, validationIssues, metadataAudit.history),
-    ),
+    writingSources.map((source) => {
+      source.data.tags = normalizeListProperty(source, 'tags', validationIssues);
+      return buildWritingEntry(source, validationIssues, metadataAudit.history);
+    }),
   );
   const projectEntries = await Promise.all(
     projectSources.map((source) => buildProjectEntry(source, validationIssues)),
@@ -87,12 +108,67 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
     await Promise.all(
       courseDirectories
         .sort()
-        .map((directory) => buildCourseEntry(directory, validationIssues, metadataAudit.history)),
+        .map((directory) =>
+          buildCourseEntry(
+            directory,
+            validationIssues,
+            metadataAudit.history,
+            metadataAudit.sources,
+          ),
+        ),
     )
   ).filter((entry): entry is CourseRecord => entry !== null);
 
   const routes = buildRoutes(writingEntries, courseEntries, projectEntries);
   validateRouteCollisions(writingEntries, courseEntries, projectEntries, routes, validationIssues);
+
+  const sources = [
+    ...writingSources,
+    ...projectSources,
+    ...courseEntries.flatMap((course) => [
+      course.source,
+      ...course.lessons.map((lesson) => lesson.source),
+    ]),
+  ];
+  const publicationIndex = await buildPublicationIndex(sources, routes, validationIssues);
+  const normalizedDocuments: Record<string, NormalizedMarkdown> = {};
+  const dependencyHashes = new Map(sources.map((source) => [source.sourcePath, source.sourceHash]));
+  for (const source of sources) {
+    const normalized = normalizeObsidianMarkdown(source.rawSource, {
+      sourcePath: source.sourcePath,
+      publicationIndex,
+      markdownTree: source.tree,
+    });
+    normalizedDocuments[source.sourcePath] = normalized;
+    validationIssues.push(...normalized.diagnostics);
+    if (normalized.markdown !== source.rawSource) updateMarkdownSource(source, normalized.markdown);
+    for (const dependency of normalized.dependencies) {
+      if (dependencyHashes.has(dependency)) continue;
+      dependencyHashes.set(
+        dependency,
+        await hashDependency(path.resolve(repositoryRoot, dependency)),
+      );
+    }
+    source.sourceHash = hashContents(
+      source.rawSource +
+        normalized.markdown +
+        normalized.dependencies
+          .slice()
+          .sort()
+          .map((dependency) => `${dependency}:${dependencyHashes.get(dependency)}`)
+          .join('\n'),
+    );
+  }
+  const normalizedHashes = new Map(sources.map((source) => [source.sourcePath, source.sourceHash]));
+  for (const record of [
+    ...writingEntries,
+    ...projectEntries,
+    ...courseEntries,
+    ...courseEntries.flatMap((course) => course.lessons),
+    ...Object.values(routes),
+  ]) {
+    record.sourceHash = normalizedHashes.get(record.sourcePath) ?? record.sourceHash;
+  }
 
   const routePaths = new Set(Object.keys(routes));
   const courseDirectorySlugs = new Set(courseEntries.map((entry) => entry.slug));
@@ -160,6 +236,8 @@ export const collectContentRepository = async (): Promise<ContentRepository> => 
   const { lessons, siteIndex } = buildSiteIndex(writingEntries, courseEntries, projectEntries);
 
   return {
+    publicationIndex,
+    normalizedDocuments,
     meta: {
       hash: repositoryHash,
       sourceFileCount: sourceFiles.length,

@@ -19,6 +19,9 @@
         "../../writing/**",
         "../../courses/**",
         "../../projects/**",
+        "../markdown/package.json",
+        "../markdown/src/**/*.ts",
+        "../../image-manifest.json",
         "build-artifacts.ts",
         "../utilities/tailwind-playground-types.ts",
         "../utilities/tailwind-playground-metadata.ts",
@@ -28,6 +31,9 @@
       ],
       "outputs": [
         "../../applications/website/.generated/content-data.json",
+        "../../applications/website/.generated/tailwind-playground-source.html",
+        "../../applications/website/.generated/obsidian-content.json",
+        "../../applications/website/.generated/obsidian-math.css",
         "../../applications/website/.generated/playground-inputs.json",
         "../../applications/website/.generated/site-tailwind-candidates.txt"
       ]
@@ -54,6 +60,9 @@
         "../../writing/**",
         "../../courses/**",
         "../../projects/**",
+        "../markdown/package.json",
+        "../markdown/src/**/*.ts",
+        "../../image-manifest.json",
         "content-metadata.ts",
         "check-content-metadata.ts",
         "run-with-content-history.ts"
@@ -65,18 +74,18 @@
         "run-with-sharp-runtime.ts",
         "validate-image-compatibility.ts",
         "../../image-manifest.json",
-        "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}",
-        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}",
-        "../../projects/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}"
+        "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}",
+        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}",
+        "../../projects/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}"
       ]
     },
     "@stevekinney/scripts#images:check": {
       "inputs": [
         "check-image-manifest.ts",
         "../../image-manifest.json",
-        "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}",
-        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}",
-        "../../projects/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4}"
+        "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}",
+        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}",
+        "../../projects/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}"
       ]
     },
     "@stevekinney/scripts#images:sync": {
@@ -101,6 +110,11 @@
         "../../courses/**/*.md",
         "../../projects/**/*.md",
         "../../courses/*/index.toml",
+        "../markdown/package.json",
+        "../markdown/src/**/*.ts",
+        "../../image-manifest.json",
+        "../../applications/website/static/**",
+        "../../bun.lock",
         "*.test.ts",
         "playgrounds-build.ts",
         "playground-document.ts",
@@ -116,7 +130,8 @@
         "run-with-content-history.ts",
         "../../templates/**",
         "../../.obsidian/{core-plugins,templates,types}.json",
-        "../../lefthook.yml"
+        "../../lefthook.yml",
+        "*.integration.ts"
       ]
     },
     "@stevekinney/website#build": {
@@ -216,7 +231,8 @@
         "@stevekinney/website#sync",
         "@stevekinney/scripts#content:build",
         "@stevekinney/scripts#playgrounds:build",
-        "@stevekinney/scripts#content-enhancements:build"
+        "@stevekinney/scripts#content-enhancements:build",
+        "@stevekinney/scripts#test:unit"
       ],
       "inputs": [
         "src/**",
@@ -235,10 +251,13 @@
       "dependsOn": ["@stevekinney/website#build-storybook"]
     },
     "@stevekinney/website#storybook": {
+      "dependsOn": ["@stevekinney/scripts#content:build"],
       "cache": false,
       "persistent": true
     },
-    "@stevekinney/website#build-storybook": {},
+    "@stevekinney/website#build-storybook": {
+      "dependsOn": ["@stevekinney/scripts#content:build"]
+    },
     "@stevekinney/website#clean": {
       "cache": false
     },

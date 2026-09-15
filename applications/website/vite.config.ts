@@ -128,6 +128,11 @@ export default defineConfig({
     ...contentDevelopmentPlugins({
       workspaceRoot,
       contentDirectories,
+      additionalDependencies: [
+        path.join(workspaceRoot, 'packages/markdown/src'),
+        path.join(workspaceRoot, 'image-manifest.json'),
+        path.join(workspaceRoot, 'applications/website/static'),
+      ],
       contentAssetPathPrefixes: ['/courses/', '/projects/', '/writing/'],
       enhancementSourceDirectories: [contentEnhancementsSourceDirectory],
       contentDependencyPaths,

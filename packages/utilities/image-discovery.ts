@@ -29,8 +29,15 @@ type DiscoveryResult = {
 };
 
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.svg']);
-const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg']);
-const ALL_ASSET_EXTENSIONS = new Set([...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS]);
+const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogv']);
+export const AUDIO_EXTENSIONS = new Set(['.mp3', '.wav', '.ogg', '.m4a', '.flac']);
+export const PDF_EXTENSIONS = new Set(['.pdf']);
+const ALL_ASSET_EXTENSIONS = new Set([
+  ...IMAGE_EXTENSIONS,
+  ...VIDEO_EXTENSIONS,
+  ...AUDIO_EXTENSIONS,
+  ...PDF_EXTENSIONS,
+]);
 const EXTERNAL_PREFIXES = ['http://', 'https://', 'mailto:', 'tel:', 'data:', 'ftp://'];
 
 const normalizePath = (value: string): string => value.split(path.sep).join('/');
@@ -50,15 +57,101 @@ const safeDecode = (value: string): string => {
   }
 };
 
+/** Mask Svelte expressions while preserving markup and source offsets. */
+const maskSvelteExpressions = (source: string): string => {
+  const characters = source.split('');
+  const mask = (start: number, end: number): void => {
+    for (let index = start; index < end; index++) {
+      if (characters[index] !== '\n' && characters[index] !== '\r') characters[index] = ' ';
+    }
+  };
+
+  for (let index = 0; index < source.length; index++) {
+    if (source[index] !== '{' || source[index - 1] === '\\') continue;
+    const directive = /^[#/:][A-Za-z]+\b/u.exec(source.slice(index + 1));
+    let depth = 1;
+    let quote: string | undefined;
+    let template = false;
+    for (let cursor = index + 1; cursor < source.length; cursor++) {
+      const character = source[cursor];
+      if (quote) {
+        if (character === '\\') cursor++;
+        else if (character === quote) quote = undefined;
+        continue;
+      }
+      if (character === '"' || character === "'") {
+        quote = character;
+        continue;
+      }
+      if (character === '`') {
+        template = !template;
+        continue;
+      }
+      if (template) continue;
+      if (character === '{') depth++;
+      if (character === '}' && --depth === 0) {
+        const end = directive ? index + 1 + directive[0].length : cursor + 1;
+        mask(index, end);
+        if (!directive) mask(index, cursor + 1);
+        index = cursor;
+        break;
+      }
+    }
+  }
+  return characters.join('');
+};
+
+/** Mask Markdown regions where Obsidian embeds are literal text rather than references. */
+const maskProtectedMarkdown = (markdown: string): string => {
+  const masked = markdown.split('');
+  const mask = (start: number, end: number): void => {
+    for (let index = start; index < end; index++) {
+      if (masked[index] !== '\n' && masked[index] !== '\r') masked[index] = ' ';
+    }
+  };
+
+  const tree = unified().use(remarkParse).parse(markdown);
+  visit(tree, (node) => {
+    if (node.type !== 'code' && node.type !== 'inlineCode' && node.type !== 'html') return;
+    const start = node.position?.start.offset;
+    const end = node.position?.end.offset;
+    if (start !== undefined && end !== undefined) mask(start, end);
+  });
+
+  // Obsidian comments can span lines and may contain fenced Markdown. Scan the
+  // original source while using the mask to ignore comment markers inside code.
+  for (let index = 0; index < markdown.length - 1; index++) {
+    if (masked[index] !== '%' || masked[index + 1] !== '%') continue;
+    const endMarker = markdown.indexOf('%%', index + 2);
+    const end = endMarker === -1 ? markdown.length : endMarker + 2;
+    mask(index, end);
+    index = end - 1;
+  }
+
+  return masked.join('');
+};
+
 /** Collect all image/video URLs from markdown content (both `![](url)` and `<img src="url">`). */
 const collectImageUrls = (markdown: string): string[] => {
-  const tree = unified().use(remarkParse).parse(markdown);
+  const expressionMasked = maskSvelteExpressions(markdown);
+  const tree = unified().use(remarkParse).parse(expressionMasked);
   const urls = new Set<string>();
 
   visit(tree, 'image', (node) => {
     const url = String((node as { url?: string }).url ?? '').trim();
     if (url) urls.add(url);
   });
+
+  visit(tree, 'embed', (node) => {
+    const url = String((node as { value?: string }).value ?? '').trim();
+    if (url) urls.add(url);
+  });
+
+  const visibleMarkdown = maskProtectedMarkdown(expressionMasked);
+  for (const match of visibleMarkdown.matchAll(/!\[\[([^|\]#]+)(?:#[^|\]]*)?(?:\|[^\]]*)?\]\]/g)) {
+    const url = match[1]?.trim();
+    if (url) urls.add(url);
+  }
 
   visit(tree, 'html', (node) => {
     const raw = String((node as { value?: string }).value ?? '');
