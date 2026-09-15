@@ -84,6 +84,22 @@ describe('turbo generated asset graph', () => {
     );
   });
 
+  test('tracks every published attachment extension in cacheable image checks', async () => {
+    const tasks = await readTurboTasks();
+    const attachmentInputs = ['writing', 'courses', 'projects'].map(
+      (directory) =>
+        `../../${directory}/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf}`,
+    );
+
+    for (const taskName of [
+      '@stevekinney/scripts#content:images:check',
+      '@stevekinney/scripts#images:check',
+    ]) {
+      const inputs = tasks[taskName]?.inputs ?? [];
+      expect(inputs).toEqual(expect.arrayContaining(attachmentInputs));
+    }
+  });
+
   test('keeps website watch checks behind generated browser asset producers', async () => {
     const tasks = await readTurboTasks();
     expect(tasks['@stevekinney/website#check:watch']?.dependsOn).toEqual(

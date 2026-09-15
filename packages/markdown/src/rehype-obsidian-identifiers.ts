@@ -5,6 +5,42 @@ import type { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
 import { fromHtml } from 'hast-util-from-html';
 
+const svelteComponentTag = /<[A-Z][A-Za-z0-9_$]*(?:\.[A-Za-z0-9_$]+)*(?:\s[^<>]*?)?\/>/g;
+
+/** Parse restored HTML while keeping self-closing mdsvex component tags as raw nodes. */
+const fromHtmlPreservingSvelteComponents = (value: string): Root => {
+  const components = new Map<string, string>();
+  const protectedValue = value.replace(svelteComponentTag, (component, index) => {
+    const token = `svelte-component-${index}`;
+    components.set(
+      token,
+      component.replaceAll('&#123;', '{').replaceAll('&#125;', '}').replaceAll('&#96;', '`'),
+    );
+    return token;
+  });
+  const parsed = fromHtml(protectedValue, { fragment: true });
+  if (!components.size) return parsed;
+  visit(parsed, 'text', (node, index, parent) => {
+    if (index === undefined || !parent) return;
+    const children: Array<{ type: 'text'; value: string } | { type: 'raw'; value: string }> = [];
+    let offset = 0;
+    for (const match of node.value.matchAll(/svelte-component-\d+/g)) {
+      const token = match[0];
+      const component = components.get(token);
+      if (!component || match.index === undefined) continue;
+      if (match.index > offset)
+        children.push({ type: 'text', value: node.value.slice(offset, match.index) });
+      children.push({ type: 'raw', value: component });
+      offset = match.index + token.length;
+    }
+    if (!children.length) return;
+    if (offset < node.value.length)
+      children.push({ type: 'text', value: node.value.slice(offset) });
+    parent.children.splice(index, 1, ...children);
+  });
+  return parsed;
+};
+
 /** Restore explicit embed heading IDs before rehype-slug assigns ordinary heading IDs. */
 const rehypeObsidianIdentifiers: Plugin<[], Root> = () => (tree) => {
   visit(tree, 'raw', (node, index, parent) => {
@@ -21,7 +57,7 @@ const rehypeObsidianIdentifiers: Plugin<[], Root> = () => (tree) => {
     const decoded = Buffer.from(match[2], 'base64url');
     if (decoded.toString('base64url') !== match[2])
       throw new Error('Invalid Obsidian footnote encoding.');
-    const parsed = fromHtml(decoded.toString('utf8'), { fragment: true });
+    const parsed = fromHtmlPreservingSvelteComponents(decoded.toString('utf8'));
     parent.children.splice(
       index,
       match[3] ? 1 : 2,

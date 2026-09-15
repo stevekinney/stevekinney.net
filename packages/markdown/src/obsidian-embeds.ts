@@ -24,6 +24,7 @@ import type {
 const MAXIMUM_BYTES = 10 * 1024 * 1024;
 const htmlIdentifierPattern = /(?:^|[\s<])id=(?:(['"])([^'"]+)\1|([^\s"'`=<>]+))/gu;
 const htmlIdentifierReplacementPattern = /((?:^|[\s<]))id=(?:(['"])([^'"]+)\2|([^\s"'`=<>]+))/gu;
+const htmlFragmentHrefPattern = /(\bhref\s*=\s*)(?:(['"])#([^'"]*)\2|#([^\s"'`=<>]+))/gu;
 const encodedPath = (value: string): string => value.split('/').map(encodeURIComponent).join('/');
 const wikiEmbedParts = (inner: string): { reference: string; alias?: string } => {
   let pipe = -1;
@@ -91,16 +92,29 @@ const namespaceEmbeddedHtmlIdentifiers = (
         return quote ? `${before}id=${quote}${prefix}${id}${quote}` : `${before}id=${prefix}${id}`;
       },
     );
-    value = value.replace(/\bhref=(['"])#([^'"]*)\1/g, (match, quote: string, id: string) => {
-      let decoded: string;
-      try {
-        decoded = decodeURIComponent(id);
-      } catch {
-        return match;
-      }
-      const mapped = localIds.get(decoded);
-      return mapped ? `href=${quote}#${encodeURIComponent(mapped)}${quote}` : match;
-    });
+    value = value.replace(
+      htmlFragmentHrefPattern,
+      (
+        match,
+        before: string,
+        quote: string | undefined,
+        quotedId: string | undefined,
+        unquotedId: string | undefined,
+      ) => {
+        const id = quotedId ?? unquotedId;
+        if (!id) return match;
+        let decoded: string;
+        try {
+          decoded = decodeURIComponent(id);
+        } catch {
+          return match;
+        }
+        const mapped = localIds.get(decoded);
+        if (!mapped) return match;
+        const fragment = `#${encodeURIComponent(mapped)}`;
+        return quote ? `${before}${quote}${fragment}${quote}` : `${before}${fragment}`;
+      },
+    );
     if (value !== node.value) edits.push({ start: nodeStart, end: nodeEnd, value });
   });
 };

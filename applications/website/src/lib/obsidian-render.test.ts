@@ -215,6 +215,24 @@ it('renders repeated embedded footnotes with unique IDs and math in the footnote
   compileSvelte(compiled!.code, { generate: 'server' });
 });
 
+it('preserves Svelte components restored from embedded footnotes', async () => {
+  const document: PublicationDocument = {
+    sourcePath: 'writing/note.md',
+    route: '/note',
+    source: 'Text[^a]\n\n[^a]: Here <Example value={answer} />.\n',
+  };
+  const normalized = normalizeObsidianMarkdown('![[note]]', {
+    sourcePath: 'writing/host.md',
+    publicationIndex: { documents: [document], attachments: [] },
+  });
+  const compiled = await compile(normalized.markdown, { rehypePlugins: plugins });
+
+  expect(compiled!.code).toContain('<Example value={answer} />');
+  expect(compiled!.code).not.toContain('<example');
+  expect(compiled!.code).toContain('. <a');
+  compileSvelte(compiled!.code, { generate: 'server' });
+});
+
 it('transforms callouts restored from embedded footnotes', async () => {
   const document: PublicationDocument = {
     sourcePath: 'writing/note.md',

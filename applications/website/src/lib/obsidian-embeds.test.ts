@@ -210,6 +210,23 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown.match(/href="#embed-[a-z0-9-]+details"/gu)).toHaveLength(2);
   });
 
+  it('namespaces valid unquoted raw HTML fragment links inside an embed', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/unquoted-html-fragment-links.md',
+      route: '/writing/unquoted-html-fragment-links',
+      source:
+        '<a href=#details>Plain</a>\n\n<a href = #details data-kind="spaced">Spaced</a>\n\n<span id=details>Details</span>',
+    };
+    const result = normalizeObsidianMarkdown('![[unquoted-html-fragment-links]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toMatch(/href=#embed-[a-z0-9-]+details\b/u);
+    expect(result.markdown).toMatch(/href = #embed-[a-z0-9-]+details\b/u);
+  });
+
   it('resolves fragment-only wiki links inside recursively embedded documents', () => {
     const child: PublicationDocument = {
       sourcePath: 'writing/child.md',
