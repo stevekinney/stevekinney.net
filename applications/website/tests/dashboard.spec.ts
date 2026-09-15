@@ -24,30 +24,40 @@ test('main navigation includes a link to the dashboard', async ({ page }) => {
   await expect(nav.getByRole('link', { name: /dashboard/i })).toBeVisible();
 });
 
-test('social links do not overlap the main navigation near the desktop breakpoint', async ({
+test('desktop navigation stays on one row and social links live in the footer', async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1024, height: 800 });
+  await page.setViewportSize({ width: 1306, height: 1322 });
   await page.goto('/dashboard');
 
-  const newsletterBox = await page
-    .getByRole('navigation', { name: 'Main Navigation' })
-    .getByRole('link', { name: 'Newsletter' })
-    .boundingBox();
-  const githubBox = await page.getByRole('link', { name: 'Visit GitHub profile' }).boundingBox();
+  const navigation = page.getByRole('navigation', { name: 'Main Navigation' });
+  const navigationBounds = await navigation.boundingBox();
+  const links = await navigation.getByRole('link').all();
+  const linkBounds = await Promise.all(links.map((link) => link.boundingBox()));
 
-  expect(newsletterBox).not.toBeNull();
-  expect(githubBox).not.toBeNull();
+  expect(navigationBounds).not.toBeNull();
+  expect(linkBounds).not.toContain(null);
+  const linkRows = linkBounds.map((bounds) => Math.round(bounds!.y));
+  expect(new Set(linkRows).size).toBe(1);
 
-  const overlaps =
-    newsletterBox !== null &&
-    githubBox !== null &&
-    newsletterBox.x < githubBox.x + githubBox.width &&
-    newsletterBox.x + newsletterBox.width > githubBox.x &&
-    newsletterBox.y < githubBox.y + githubBox.height &&
-    newsletterBox.y + newsletterBox.height > githubBox.y;
+  const socialLinks = page.getByRole('complementary', { name: 'Social media links' });
+  await expect(socialLinks.getByRole('link', { name: 'Visit Instagram profile' })).toHaveCount(0);
+  await expect(socialLinks.getByRole('link')).toHaveCount(4);
+  expect(await socialLinks.boundingBox()).not.toBeNull();
+  expect((await socialLinks.boundingBox())!.y).toBeGreaterThan(navigationBounds!.y);
+});
 
-  expect(overlaps).toBe(false);
+test('newsletter input and submit button share one focus ring', async ({ page }) => {
+  await page.goto('/');
+
+  const input = page.getByLabel('Enter your email');
+  await input.focus();
+
+  await expect(input.locator('..')).toHaveClass(/focus-within:ring-2/);
+  await expect(input).toHaveClass(/rounded-l-md.*focus-visible:ring-2/);
+  await expect(page.getByRole('button', { name: 'Subscribe' })).toHaveClass(
+    /rounded-r-md.*focus-visible:ring-2/,
+  );
 });
 
 test('all four dashboard section headings are visible', async ({ page }) => {
