@@ -78,4 +78,13 @@ describe('rewritePublishedAttachments', () => {
       ].join('\n'),
     );
   });
+
+  it('rewrites ordinary HTML images decoded from footnote transport', () => {
+    const markdown =
+      '<section data-footnotes><p><img src="assets/diagram.png" alt="Diagram"></p></section>';
+
+    expect(rewritePublishedAttachments(markdown, 'writing/post.md', publicationIndex)).toBe(
+      '<section data-footnotes><p><img src="https://cdn.example.com/diagram.png" alt="Diagram"></p></section>',
+    );
+  });
 });

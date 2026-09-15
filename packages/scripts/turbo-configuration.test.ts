@@ -88,7 +88,7 @@ describe('turbo generated asset graph', () => {
     const tasks = await readTurboTasks();
     const attachmentInputs = ['writing', 'courses', 'projects'].map(
       (directory) =>
-        `../../${directory}/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf}`,
+        `../../${directory}/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}`,
     );
 
     for (const taskName of [

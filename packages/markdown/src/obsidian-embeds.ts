@@ -22,10 +22,14 @@ import type {
 } from './obsidian-types.ts';
 
 const MAXIMUM_BYTES = 10 * 1024 * 1024;
-const htmlIdentifierPattern = /(?:^|[\s<])id=(?:(['"])([^'"]+)\1|([^\s"'`=<>]+))/gu;
-const htmlIdentifierReplacementPattern = /((?:^|[\s<]))id=(?:(['"])([^'"]+)\2|([^\s"'`=<>]+))/gu;
-const htmlFragmentHrefPattern = /(\bhref\s*=\s*)(?:(['"])#([^'"]*)\2|#([^\s"'`=<>]+))/gu;
+const htmlIdentifierPattern = /(?:^|[\s<])id\s*=\s*(?:(['"])([^'"]+)\1|([^\s"'`=<>]+))/gu;
+const htmlIdentifierReplacementPattern =
+  /((?:^|[\s<])id)(\s*=\s*)(?:(['"])([^'"]+)\3|([^\s"'`=<>]+))/gu;
+const htmlFragmentHrefPattern = /((?:^|[\s<])href\s*=\s*)(?:(['"])#([^'"]*)\2|#([^\s"'`=<>]+))/gu;
+const htmlImageSourcePattern = /(<img\b[^>]*?\bsrc\s*=\s*)(?:(['"])([^'"]*)\2|([^\s"'`=<>]+))/giu;
 const encodedPath = (value: string): string => value.split('/').map(encodeURIComponent).join('/');
+const embeddedSourceMarker = (sourcePath: string): string =>
+  `<!-- obsidian-embedded-source: ${encodeURIComponent(sourcePath)} -->`;
 const wikiEmbedParts = (inner: string): { reference: string; alias?: string } => {
   let pipe = -1;
   for (let index = 0; index < inner.length; index += 1) {
@@ -63,6 +67,9 @@ const namespaceEmbeddedHtmlIdentifiers = (
   prefix: string,
   localIds: Map<string, string>,
   edits: SourceEdit[],
+  context: NormalizationContext,
+  hostSourcePath: string,
+  dependencies: Set<string>,
 ): void => {
   if (!source.slice(start, end).includes('<')) return;
   const tree = unified().use(remarkParse).parse(source.slice(start, end));
@@ -80,16 +87,53 @@ const namespaceEmbeddedHtmlIdentifiers = (
     const nodeEnd = start + localEnd;
     let value = node.value;
     value = value.replace(
+      htmlImageSourcePattern,
+      (
+        match,
+        before: string,
+        quote: string | undefined,
+        quotedUrl: string | undefined,
+        unquotedUrl: string | undefined,
+      ) => {
+        const url = quotedUrl ?? unquotedUrl;
+        if (!url || /^(?:[a-z][a-z\d+.-]*:|\/\/|\/|#)/iu.test(url)) return match;
+        const hash = url.indexOf('#');
+        const beforeFragment = hash < 0 ? url : url.slice(0, hash);
+        const fragment = hash < 0 ? '' : url.slice(hash);
+        const query = beforeFragment.indexOf('?');
+        const target = query < 0 ? beforeFragment : beforeFragment.slice(0, query);
+        const queryString = query < 0 ? '' : beforeFragment.slice(query);
+        const result = resolveObsidianReference(target, context, 'attachment');
+        if (result.reference?.kind !== 'attachment') return match;
+        const attachment = result.reference.attachment;
+        dependencies.add(attachment.sourcePath);
+        const imagePath = attachment.sourcePath.includes('/static/')
+          ? attachment.url
+          : path.posix
+              .relative(path.posix.dirname(hostSourcePath), attachment.sourcePath)
+              .split('/')
+              .map(encodeURIComponent)
+              .join('/');
+        const replacement = `${imagePath}${queryString}${fragment}`;
+        return quote
+          ? `${before}${quote}${escapeObsidianHtml(replacement)}${quote}`
+          : `${before}${escapeObsidianHtml(replacement)}`;
+      },
+    );
+    value = value.replace(
       htmlIdentifierReplacementPattern,
       (
         match,
         before: string,
+        assignment: string,
         quote: string | undefined,
         quotedId: string | undefined,
         unquotedId: string | undefined,
       ) => {
         const id = quotedId ?? unquotedId;
-        return quote ? `${before}id=${quote}${prefix}${id}${quote}` : `${before}id=${prefix}${id}`;
+        return quote
+          ? `${before}${assignment}${quote}${prefix}${id}${quote}`
+          : `${before}${assignment}${prefix}${id}`;
       },
     );
     value = value.replace(
@@ -194,7 +238,18 @@ export const normalizeObsidianReferences = (
           edits.push({ start: block.end, end: block.end, value: `\n\n${anchor}` });
       }
     }
-    if (prefix) namespaceEmbeddedHtmlIdentifiers(source, start, end, prefix, localIds, edits);
+    if (prefix)
+      namespaceEmbeddedHtmlIdentifiers(
+        source,
+        start,
+        end,
+        prefix,
+        localIds,
+        edits,
+        currentContext,
+        context.sourcePath,
+        dependencies,
+      );
     const links = normalizeMarkdownLinks(source, currentContext, {
       embedded: Boolean(prefix),
       hostSourcePath: context.sourcePath,
@@ -378,9 +433,10 @@ export const normalizeObsidianReferences = (
       const continuationPrefix = listContainer
         ? `${listContainer[1]}${' '.repeat(sourceBeforeEmbed.length - listContainer[1].length)}`
         : blockquoteContainer;
+      const embeddedMarkdown = `${embeddedSourceMarker(destination.sourcePath)}\n${nested.markdown}\n${embeddedSourceMarker(document.sourcePath)}`;
       const expanded = continuationPrefix
-        ? nested.markdown.trim().replace(/\r?\n/gu, `\n${continuationPrefix}`)
-        : `\n\n${nested.markdown}\n\n`;
+        ? embeddedMarkdown.trim().replace(/\r?\n/gu, `\n${continuationPrefix}`)
+        : `\n\n${embeddedMarkdown}\n\n`;
       replace(expanded);
     }
     const appendedDefinitions =

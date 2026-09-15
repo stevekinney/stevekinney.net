@@ -35,6 +35,7 @@ const DEFAULT_MANIFEST_PATH = path.resolve(
 const playgroundHtmlUrlPattern = new RegExp(`^${PLAYGROUND_URL_PREFIX}[a-f0-9]{64}\\.html$`);
 const playgroundCssUrlPattern = new RegExp(`^${PLAYGROUND_URL_PREFIX}[a-f0-9]{64}\\.css$`);
 const digestPattern = /^[a-f0-9]{64}$/;
+const embeddedSourceMarkerPattern = /^<!-- obsidian-embedded-source: ([^\s]+) -->$/;
 
 const escapeAttribute = (value: string): string =>
   value
@@ -237,7 +238,8 @@ export default function remarkTailwindPlayground(
     const examples = new Map(
       manifest.examples.map((entry) => [buildManifestKey(entry.sourcePath, entry.ordinal), entry]),
     );
-    let ordinal = 0;
+    const ordinals = new Map<string, number>();
+    let currentSourcePath = normalizedSourcePath;
 
     const handleCode = (
       node: Code,
@@ -261,20 +263,20 @@ export default function remarkTailwindPlayground(
         node.lang === 'html' ? parseTailwindPlaygroundMetadata(node.meta ?? undefined) : null;
       if (!metadata) return;
 
-      const currentOrdinal = ordinal;
-      ordinal += 1;
-      const entry = examples.get(buildManifestKey(normalizedSourcePath, currentOrdinal));
+      const currentOrdinal = ordinals.get(currentSourcePath) ?? 0;
+      ordinals.set(currentSourcePath, currentOrdinal + 1);
+      const entry = examples.get(buildManifestKey(currentSourcePath, currentOrdinal));
 
       if (!entry) {
         throw new Error(
-          `Tailwind playground manifest is stale: missing ${normalizedSourcePath}#${currentOrdinal}.`,
+          `Tailwind playground manifest is stale: missing ${currentSourcePath}#${currentOrdinal}.`,
         );
       }
 
       const css = metadata.css ? styles.get(metadata.css) : undefined;
       if (metadata.css && css === undefined) {
         throw new Error(
-          `Tailwind playground manifest is stale: missing CSS playground '${metadata.css}' for ${normalizedSourcePath}#${currentOrdinal}.`,
+          `Tailwind playground manifest is stale: missing CSS playground '${metadata.css}' for ${currentSourcePath}#${currentOrdinal}.`,
         );
       }
       const title = resolveTailwindPlaygroundTitle(
@@ -288,7 +290,7 @@ export default function remarkTailwindPlayground(
       });
       if (entry.sourceFingerprint !== actualFingerprint) {
         throw new Error(
-          `Tailwind playground manifest is stale: fingerprint changed for ${normalizedSourcePath}#${currentOrdinal}.`,
+          `Tailwind playground manifest is stale: fingerprint changed for ${currentSourcePath}#${currentOrdinal}.`,
         );
       }
 
@@ -304,6 +306,23 @@ export default function remarkTailwindPlayground(
       return index + 3;
     };
 
-    visit(tree, 'code', handleCode);
+    visit(tree, (node, index, parent) => {
+      if (node.type === 'html') {
+        const sourceMarker = embeddedSourceMarkerPattern.exec(node.value.trim());
+        if (sourceMarker) {
+          currentSourcePath = sourceMarker[1]!
+            .split('/')
+            .map((segment) => decodeURIComponent(segment))
+            .join('/');
+          node.value = '';
+        }
+        return;
+      }
+      if (node.type !== 'code') return;
+      const sourcePath = currentSourcePath;
+      const result = handleCode(node, index, parent);
+      currentSourcePath = sourcePath;
+      return result;
+    });
   };
 }

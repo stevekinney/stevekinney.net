@@ -29,9 +29,7 @@ type DiscoveryResult = {
 };
 
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.svg']);
-const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogv', '.ogg']);
-// OGG is also a supported video extension; sync-images resolves that overlap
-// using the existing manifest video classification.
+const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogv']);
 export const AUDIO_EXTENSIONS = new Set(['.mp3', '.wav', '.ogg', '.m4a', '.flac']);
 export const PDF_EXTENSIONS = new Set(['.pdf']);
 const ALL_ASSET_EXTENSIONS = new Set([
@@ -57,6 +55,50 @@ const safeDecode = (value: string): string => {
   } catch {
     return value;
   }
+};
+
+/** Mask Svelte expressions while preserving markup and source offsets. */
+const maskSvelteExpressions = (source: string): string => {
+  const characters = source.split('');
+  const mask = (start: number, end: number): void => {
+    for (let index = start; index < end; index++) {
+      if (characters[index] !== '\n' && characters[index] !== '\r') characters[index] = ' ';
+    }
+  };
+
+  for (let index = 0; index < source.length; index++) {
+    if (source[index] !== '{' || source[index - 1] === '\\') continue;
+    const directive = /^[#/:][A-Za-z]+\b/u.exec(source.slice(index + 1));
+    let depth = 1;
+    let quote: string | undefined;
+    let template = false;
+    for (let cursor = index + 1; cursor < source.length; cursor++) {
+      const character = source[cursor];
+      if (quote) {
+        if (character === '\\') cursor++;
+        else if (character === quote) quote = undefined;
+        continue;
+      }
+      if (character === '"' || character === "'") {
+        quote = character;
+        continue;
+      }
+      if (character === '`') {
+        template = !template;
+        continue;
+      }
+      if (template) continue;
+      if (character === '{') depth++;
+      if (character === '}' && --depth === 0) {
+        const end = directive ? index + 1 + directive[0].length : cursor + 1;
+        mask(index, end);
+        if (!directive) mask(index, cursor + 1);
+        index = cursor;
+        break;
+      }
+    }
+  }
+  return characters.join('');
 };
 
 /** Mask Markdown regions where Obsidian embeds are literal text rather than references. */
@@ -91,7 +133,8 @@ const maskProtectedMarkdown = (markdown: string): string => {
 
 /** Collect all image/video URLs from markdown content (both `![](url)` and `<img src="url">`). */
 const collectImageUrls = (markdown: string): string[] => {
-  const tree = unified().use(remarkParse).parse(markdown);
+  const expressionMasked = maskSvelteExpressions(markdown);
+  const tree = unified().use(remarkParse).parse(expressionMasked);
   const urls = new Set<string>();
 
   visit(tree, 'image', (node) => {
@@ -104,7 +147,7 @@ const collectImageUrls = (markdown: string): string[] => {
     if (url) urls.add(url);
   });
 
-  const visibleMarkdown = maskProtectedMarkdown(markdown);
+  const visibleMarkdown = maskProtectedMarkdown(expressionMasked);
   for (const match of visibleMarkdown.matchAll(/!\[\[([^|\]#]+)(?:#[^|\]]*)?(?:\|[^\]]*)?\]\]/g)) {
     const url = match[1]?.trim();
     if (url) urls.add(url);

@@ -193,3 +193,13 @@ it('keeps slash-separated currency prices as prose', () => {
   );
   expect(normalizeObsidianMarkdown(source, context).markdown).toContain(source);
 });
+
+it('retains numeric TeX expressions that use commands such as times', () => {
+  const source = 'The ratio is $5 \\times 10$. Prices are $5 and $10.';
+  const parsed = parseObsidianSource(source);
+
+  expect(parsed.nodes.filter((node) => node.type === 'inlineMath')).toEqual([
+    expect.objectContaining({ type: 'inlineMath', value: '5 \\times 10' }),
+  ]);
+  expect(normalizeObsidianMarkdown(source, context).markdown).toContain('Prices are $5 and $10.');
+});

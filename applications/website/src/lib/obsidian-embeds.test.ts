@@ -210,6 +210,37 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown.match(/href="#embed-[a-z0-9-]+details"/gu)).toHaveLength(2);
   });
 
+  it('supports whitespace around raw HTML identifier equals signs', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/spaced-html-identifiers.md',
+      route: '/writing/spaced-html-identifiers',
+      source: '<a href = "#details">Jump</a>\n\n<span id \t=\t details>Details</span>',
+    };
+    const result = normalizeObsidianMarkdown('![[spaced-html-identifiers]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toMatch(/id \t=\t embed-[a-z0-9-]+details/u);
+    expect(result.markdown).toMatch(/href = "#embed-[a-z0-9-]+details"/u);
+  });
+
+  it('does not namespace data-href attributes', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/data-href.md',
+      route: '/writing/data-href',
+      source: '<a data-href="#details">Data</a>\n\n<span id="details">Details</span>',
+    };
+    const result = normalizeObsidianMarkdown('![[data-href]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toContain('data-href="#details"');
+  });
+
   it('namespaces valid unquoted raw HTML fragment links inside an embed', () => {
     const target: PublicationDocument = {
       sourcePath: 'writing/unquoted-html-fragment-links.md',
@@ -279,6 +310,31 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown).toContain('width="320"');
     expect(result.markdown).toContain('<video');
     expect(result.markdown).toContain('page=2');
+  });
+
+  it('resolves raw HTML image resources from the embedded note', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/nested/note.md',
+      route: '/writing/nested/note',
+      source: '<img src="assets/demo.png" alt="Demo">',
+    };
+    const result = normalizeObsidianMarkdown('![[nested/note]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: {
+        documents: [target],
+        attachments: [
+          {
+            sourcePath: 'writing/nested/assets/demo.png',
+            url: '/assets/demo.png',
+            mimeType: 'image/png',
+          },
+        ],
+      },
+    });
+
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toContain('src="nested/assets/demo.png"');
+    expect(result.dependencies).toContain('writing/nested/assets/demo.png');
   });
 
   it('keeps approved static image embeds on their public URL', () => {

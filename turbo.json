@@ -74,18 +74,18 @@
         "run-with-sharp-runtime.ts",
         "validate-image-compatibility.ts",
         "../../image-manifest.json",
-        "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf}",
-        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf}",
-        "../../projects/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf}"
+        "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}",
+        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}",
+        "../../projects/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}"
       ]
     },
     "@stevekinney/scripts#images:check": {
       "inputs": [
         "check-image-manifest.ts",
         "../../image-manifest.json",
-        "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf}",
-        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf}",
-        "../../projects/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf}"
+        "../../writing/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}",
+        "../../courses/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}",
+        "../../projects/**/*.{png,jpg,jpeg,svg,gif,avif,webp,mp4,mp3,wav,ogg,m4a,flac,pdf,ogv}"
       ]
     },
     "@stevekinney/scripts#images:sync": {

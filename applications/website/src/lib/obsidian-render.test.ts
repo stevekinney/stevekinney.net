@@ -233,6 +233,23 @@ it('preserves Svelte components restored from embedded footnotes', async () => {
   compileSvelte(compiled!.code, { generate: 'server' });
 });
 
+it('preserves paired Svelte components restored from embedded footnotes', async () => {
+  const document: PublicationDocument = {
+    sourcePath: 'writing/note.md',
+    route: '/note',
+    source: 'Text[^a]\n\n[^a]: Here <Example>answer</Example>.\n',
+  };
+  const normalized = normalizeObsidianMarkdown('![[note]]', {
+    sourcePath: 'writing/host.md',
+    publicationIndex: { documents: [document], attachments: [] },
+  });
+  const compiled = await compile(normalized.markdown, { rehypePlugins: plugins });
+
+  expect(compiled!.code).toContain('<Example>answer</Example>');
+  expect(compiled!.code).not.toContain('<example>');
+  compileSvelte(compiled!.code, { generate: 'server' });
+});
+
 it('transforms callouts restored from embedded footnotes', async () => {
   const document: PublicationDocument = {
     sourcePath: 'writing/note.md',

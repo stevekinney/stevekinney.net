@@ -49,6 +49,7 @@ const parser = unified()
 
 const currencyAmount = /^\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?(?![\w])/u;
 const currencyProse = /[A-Za-z]{2,}|[-–—]\s*$|\/\s*$|(?:\.\.\.|…)/u;
+const texCommands = /\\[A-Za-z]+/gu;
 
 /** Mask currency markers so prose prices cannot be consumed as inline math delimiters. */
 const maskCurrencyMarkers = (source: string): string => {
@@ -60,7 +61,8 @@ const maskCurrencyMarkers = (source: string): string => {
 
     const closing = source.indexOf('$', index + 1);
     const value = closing === -1 ? undefined : source.slice(index + 1, closing);
-    if (value === undefined || currencyProse.test(value)) masked[index] = ' ';
+    if (value === undefined || currencyProse.test(value.replace(texCommands, '')))
+      masked[index] = ' ';
   }
 
   return masked.join('');

@@ -81,6 +81,23 @@ describe('discoverAllImages', () => {
     expect(result.missing).toEqual([]);
   });
 
+  it('ignores image references inside Svelte expressions', async () => {
+    const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
+    temporaryDirectories.push(repositoryRoot);
+    await mkdir(path.join(repositoryRoot, 'writing/assets'), { recursive: true });
+    await writeFile(
+      path.join(repositoryRoot, 'writing/note.md'),
+      '{image ? "![[assets/dynamic.png]]" : ""}\n\n![[assets/visible.png]]\n',
+    );
+    await writeFile(path.join(repositoryRoot, 'writing/assets/dynamic.png'), 'image');
+    await writeFile(path.join(repositoryRoot, 'writing/assets/visible.png'), 'image');
+
+    const result = await discoverAllImages(['writing/**/*.md'], repositoryRoot);
+
+    expect([...result.images.keys()]).toEqual(['writing/assets/visible.png']);
+    expect(result.missing).toEqual([]);
+  });
+
   it('discovers supported audio and PDF attachments', async () => {
     const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
     temporaryDirectories.push(repositoryRoot);

@@ -111,6 +111,28 @@ export const rewritePublishedAttachments = (
     });
   });
 
+  // Footnote transport decodes ordinary Markdown images to raw HTML before
+  // this export pass. Visit HTML nodes so those images receive the same
+  // published attachment URL as regular Markdown images.
+  visit(markdownParser.parse(markdown), 'html', (node) => {
+    const nodeStart = node.position?.start.offset;
+    if (nodeStart === undefined) return;
+    for (const match of node.value.matchAll(/<img\b[^>]*\bsrc="([^"]*)"[^>]*>/gu)) {
+      if (match.index === undefined) continue;
+      if (match[0].includes('data-obsidian-attachment=""')) continue;
+      const url = attachmentUrl(match[1]);
+      if (!url) continue;
+      const srcAttributeStart = match[0].indexOf('src="');
+      if (srcAttributeStart < 0) continue;
+      const srcStart = match.index + srcAttributeStart + 'src="'.length;
+      edits.push({
+        start: nodeStart + srcStart,
+        end: nodeStart + srcStart + match[1].length,
+        replacement: url,
+      });
+    }
+  });
+
   return edits
     .sort((left, right) => right.start - left.start)
     .reduce(

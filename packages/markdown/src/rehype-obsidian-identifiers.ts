@@ -5,19 +5,25 @@ import type { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
 import { fromHtml } from 'hast-util-from-html';
 
+const svelteComponentRegion =
+  /<([A-Z][A-Za-z0-9_$]*(?:\.[A-Za-z0-9_$]+)*)(?:\s[^<>]*?)?>[\s\S]*?<\/\1>/g;
 const svelteComponentTag = /<[A-Z][A-Za-z0-9_$]*(?:\.[A-Za-z0-9_$]+)*(?:\s[^<>]*?)?\/>/g;
 
-/** Parse restored HTML while keeping self-closing mdsvex component tags as raw nodes. */
+/** Parse restored HTML while keeping mdsvex component regions as raw nodes. */
 const fromHtmlPreservingSvelteComponents = (value: string): Root => {
   const components = new Map<string, string>();
-  const protectedValue = value.replace(svelteComponentTag, (component, index) => {
-    const token = `svelte-component-${index}`;
+  let componentIndex = 0;
+  const protect = (component: string): string => {
+    const token = `svelte-component-${componentIndex++}`;
     components.set(
       token,
       component.replaceAll('&#123;', '{').replaceAll('&#125;', '}').replaceAll('&#96;', '`'),
     );
     return token;
-  });
+  };
+  const protectedValue = value
+    .replace(svelteComponentRegion, protect)
+    .replace(svelteComponentTag, protect);
   const parsed = fromHtml(protectedValue, { fragment: true });
   if (!components.size) return parsed;
   visit(parsed, 'text', (node, index, parent) => {

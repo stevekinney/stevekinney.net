@@ -8,6 +8,7 @@ import type { Code, Heading, Html, Root } from 'mdast';
 import { compile, preprocess } from 'svelte/compiler';
 import { VFile } from 'vfile';
 import remarkTailwindPlayground from '@stevekinney/markdown/remark-tailwind-playground';
+import { normalizeObsidianMarkdown } from '@stevekinney/markdown/obsidian-normalization';
 import { playgroundFingerprint } from '@stevekinney/utilities/tailwind-playground-metadata';
 import type { PlaygroundManifest } from '@stevekinney/utilities/tailwind-playground-types';
 import websiteConfig from '../../svelte.config';
@@ -142,6 +143,42 @@ describe('remarkTailwindPlayground', () => {
     expect(opening.value).toContain('--tailwind-playground-height:192px');
     expect(opening.value).not.toContain('>CSS</a>');
     expect(closing.value).toBe('</figure>');
+  });
+
+  it('renders an embedded playground using the embedded source with the host VFile', async () => {
+    const code = '<button class="bg-blue-600">Embedded</button>';
+    await writeFile(
+      path.join(temporaryDirectory, 'target.md'),
+      `~~~html tailwind height=192\n${code}\n~~~\n`,
+    );
+    const targetSourcePath = 'target.md';
+    await writeManifest([example(0, code, { sourcePath: targetSourcePath })]);
+    const normalized = normalizeObsidianMarkdown('![[target]]\n', {
+      sourcePath: 'host.md',
+      publicationIndex: {
+        documents: [
+          {
+            sourcePath: targetSourcePath,
+            route: '/target',
+            source: await readFile(path.join(temporaryDirectory, 'target.md'), 'utf8'),
+          },
+          { sourcePath: 'host.md', route: '/host', source: '![[target]]\n' },
+        ],
+        attachments: [],
+      },
+    });
+    const preprocessor = mdsvex({
+      extensions: ['.md'],
+      remarkPlugins: [
+        [remarkTailwindPlayground, { manifestPath, workspaceRoot: temporaryDirectory }],
+      ] as never,
+    });
+
+    await expect(
+      preprocessor.markup({ content: normalized.markdown, filename: sourcePath }),
+    ).resolves.toMatchObject({
+      code: expect.stringContaining('Embedded'),
+    });
   });
 
   it('preprocesses real course files whose generated heading titles contain apostrophes', async () => {
