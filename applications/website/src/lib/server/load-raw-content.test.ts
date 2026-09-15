@@ -52,4 +52,30 @@ describe('rewritePublishedAttachments', () => {
       markdown,
     );
   });
+
+  it('decodes relative paths and ignores query strings and fragments', () => {
+    const markdown = [
+      '![Diagram](assets/diagram%20final.png?width=640#preview)',
+      '',
+      '<img data-obsidian-attachment="" src="assets/diagram%20final.png?width=640#preview">',
+    ].join('\n');
+    const index: PublicationIndex = {
+      documents: [],
+      attachments: [
+        {
+          sourcePath: 'writing/assets/diagram final.png',
+          url: 'https://cdn.example.com/diagram-final.png',
+          mimeType: 'image/png',
+        },
+      ],
+    };
+
+    expect(rewritePublishedAttachments(markdown, 'writing/post.md', index)).toBe(
+      [
+        '![Diagram](<https://cdn.example.com/diagram-final.png>)',
+        '',
+        '<img src="https://cdn.example.com/diagram-final.png">',
+      ].join('\n'),
+    );
+  });
 });

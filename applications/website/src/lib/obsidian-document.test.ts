@@ -57,6 +57,11 @@ describe('getObsidianDocumentMetadata', () => {
     expect(metadata.htmlIds).toEqual(['public']);
   });
 
+  it('collects valid unquoted HTML identifiers', () => {
+    const metadata = getObsidianDocumentMetadata(makeDocument('<span id=details>Details</span>'));
+    expect(metadata.htmlIds).toEqual(['details']);
+  });
+
   it('reports detached and colliding block identifiers', () => {
     const metadata = getObsidianDocumentMetadata(
       makeDocument('^detached\n\n# Block\n^Block\n\nText ^Block'),

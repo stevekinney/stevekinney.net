@@ -5,7 +5,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { put, list, del } from '@vercel/blob';
 import sharp from 'sharp';
-import { discoverAllImages, type SourceImage } from '@stevekinney/utilities/image-discovery';
+import {
+  AUDIO_EXTENSIONS,
+  PDF_EXTENSIONS,
+  discoverAllImages,
+  type SourceImage,
+} from '@stevekinney/utilities/image-discovery';
 import type { ImageManifest, ImageManifestEntry } from '@stevekinney/utilities/image-manifest';
 import { writeFormattedJson } from '@stevekinney/utilities/write-formatted-json';
 
@@ -27,6 +32,14 @@ const VIDEO_MIME_TYPES: Record<string, string> = {
   '.webm': 'video/webm',
   '.ogv': 'video/ogg',
   '.ogg': 'video/ogg',
+};
+const ATTACHMENT_MIME_TYPES: Record<string, string> = {
+  '.mp3': 'audio/mpeg',
+  '.wav': 'audio/wav',
+  '.ogg': 'audio/ogg',
+  '.m4a': 'audio/mp4',
+  '.flac': 'audio/flac',
+  '.pdf': 'application/pdf',
 };
 
 // ---------------------------------------------------------------------------
@@ -172,6 +185,29 @@ const processImage = async (
         avif: [],
         lqip: null,
         videoMimeType: mimeType,
+      },
+      uploaded,
+      skipped: false,
+    };
+  }
+
+  // --- Audio / PDF (passthrough) ---
+  if (AUDIO_EXTENSIONS.has(extension) || PDF_EXTENSIONS.has(extension)) {
+    const pathname = `images/${hash}/original${extension}`;
+    const contentType = ATTACHMENT_MIME_TYPES[extension] ?? 'application/octet-stream';
+    const url = await upload(pathname, bytes, contentType);
+    if (!existingBlobs.has(pathname)) uploaded++;
+
+    return {
+      key,
+      entry: {
+        hash,
+        width: 0,
+        height: 0,
+        original: url,
+        avif: [],
+        lqip: null,
+        videoMimeType: null,
       },
       uploaded,
       skipped: false,

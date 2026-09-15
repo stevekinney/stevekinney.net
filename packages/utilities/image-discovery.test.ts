@@ -80,4 +80,27 @@ describe('discoverAllImages', () => {
     expect([...result.images.keys()]).toEqual(['writing/assets/video.ogv']);
     expect(result.missing).toEqual([]);
   });
+
+  it('discovers supported audio and PDF attachments', async () => {
+    const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
+    temporaryDirectories.push(repositoryRoot);
+    await mkdir(path.join(repositoryRoot, 'writing/assets'), { recursive: true });
+    await writeFile(
+      path.join(repositoryRoot, 'writing/note.md'),
+      '![[assets/example.mp3]]\n![[assets/example.m4a]]\n![[assets/example.flac]]\n![[assets/example.pdf#page=2]]\n',
+    );
+    for (const filename of ['example.mp3', 'example.m4a', 'example.flac', 'example.pdf']) {
+      await writeFile(path.join(repositoryRoot, 'writing/assets', filename), 'attachment');
+    }
+
+    const result = await discoverAllImages(['writing/**/*.md'], repositoryRoot);
+
+    expect([...result.images.keys()]).toEqual([
+      'writing/assets/example.mp3',
+      'writing/assets/example.m4a',
+      'writing/assets/example.flac',
+      'writing/assets/example.pdf',
+    ]);
+    expect(result.missing).toEqual([]);
+  });
 });

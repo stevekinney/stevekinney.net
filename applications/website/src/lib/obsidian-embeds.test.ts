@@ -187,6 +187,29 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown).toMatch(/href="#embed-[a-z0-9-]+details"/u);
   });
 
+  it('namespaces valid unquoted raw HTML identifiers inside an embed', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/unquoted-html-identifiers.md',
+      route: '/writing/unquoted-html-identifiers',
+      source: '<a href="#details">Jump</a>\n\n<span id=details>Details</span>',
+    };
+    const result = normalizeObsidianMarkdown(
+      '![[unquoted-html-identifiers]]\n\n![[unquoted-html-identifiers]]',
+      {
+        sourcePath: 'writing/host.md',
+        publicationIndex: { documents: [target], attachments: [] },
+      },
+    );
+
+    expect(result.diagnostics).toEqual([]);
+    const identifiers = [...result.markdown.matchAll(/id=(embed-[a-z0-9-]+details)/gu)].map(
+      (match) => match[1],
+    );
+    expect(identifiers).toHaveLength(2);
+    expect(new Set(identifiers).size).toBe(2);
+    expect(result.markdown.match(/href="#embed-[a-z0-9-]+details"/gu)).toHaveLength(2);
+  });
+
   it('resolves fragment-only wiki links inside recursively embedded documents', () => {
     const child: PublicationDocument = {
       sourcePath: 'writing/child.md',

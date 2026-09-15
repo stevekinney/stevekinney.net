@@ -22,6 +22,8 @@ import type {
 } from './obsidian-types.ts';
 
 const MAXIMUM_BYTES = 10 * 1024 * 1024;
+const htmlIdentifierPattern = /(?:^|[\s<])id=(?:(['"])([^'"]+)\1|([^\s"'`=<>]+))/gu;
+const htmlIdentifierReplacementPattern = /((?:^|[\s<]))id=(?:(['"])([^'"]+)\2|([^\s"'`=<>]+))/gu;
 const encodedPath = (value: string): string => value.split('/').map(encodeURIComponent).join('/');
 const wikiEmbedParts = (inner: string): { reference: string; alias?: string } => {
   let pipe = -1;
@@ -64,8 +66,10 @@ const namespaceEmbeddedHtmlIdentifiers = (
   if (!source.slice(start, end).includes('<')) return;
   const tree = unified().use(remarkParse).parse(source.slice(start, end));
   visit(tree, 'html', (node) => {
-    for (const match of node.value.matchAll(/(?:^|[\s<])id=(['"])([^'"]+)\1/g))
-      localIds.set(match[2], `${prefix}${match[2]}`);
+    for (const match of node.value.matchAll(htmlIdentifierPattern)) {
+      const id = match[2] ?? match[3];
+      if (id) localIds.set(id, `${prefix}${id}`);
+    }
   });
   visit(tree, 'html', (node) => {
     const localStart = node.position?.start.offset;
@@ -75,9 +79,17 @@ const namespaceEmbeddedHtmlIdentifiers = (
     const nodeEnd = start + localEnd;
     let value = node.value;
     value = value.replace(
-      /((?:^|[\s<]))id=(['"])([^'"]+)\2/g,
-      (match, before: string, quote: string, id: string) =>
-        `${before}id=${quote}${prefix}${id}${quote}`,
+      htmlIdentifierReplacementPattern,
+      (
+        match,
+        before: string,
+        quote: string | undefined,
+        quotedId: string | undefined,
+        unquotedId: string | undefined,
+      ) => {
+        const id = quotedId ?? unquotedId;
+        return quote ? `${before}id=${quote}${prefix}${id}${quote}` : `${before}id=${prefix}${id}`;
+      },
     );
     value = value.replace(/\bhref=(['"])#([^'"]*)\1/g, (match, quote: string, id: string) => {
       let decoded: string;

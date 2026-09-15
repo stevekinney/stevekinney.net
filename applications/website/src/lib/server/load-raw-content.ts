@@ -51,6 +51,13 @@ export const rewritePublishedAttachments = (
   const edits: Array<{ start: number; end: number; replacement: string }> = [];
   const attachmentUrl = (target: string): string | undefined => {
     if (/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(target) || target.startsWith('/')) return;
+    const targetWithoutQueryOrFragment = target.split(/[?#]/u, 1)[0];
+    let decodedTarget: string;
+    try {
+      decodedTarget = decodeURIComponent(targetWithoutQueryOrFragment);
+    } catch {
+      return;
+    }
     const normalize = (value: string): string | undefined => {
       const parts: string[] = [];
       for (const part of value.replaceAll('\\', '/').split('/')) {
@@ -64,8 +71,8 @@ export const rewritePublishedAttachments = (
     };
     const sourceDirectory = sourcePath.slice(0, sourcePath.lastIndexOf('/'));
     const candidates = [
-      normalize(`${sourceDirectory}/${target}`),
-      normalize(target.replace(/^\/+/, '')),
+      normalize(`${sourceDirectory}/${decodedTarget}`),
+      normalize(decodedTarget.replace(/^\/+/, '')),
     ].filter((value): value is string => value !== undefined);
     const attachment = publicationIndex.attachments.find((item) => {
       const path = item.sourcePath.replaceAll('\\', '/');

@@ -138,11 +138,14 @@ export const getObsidianDocumentMetadata = (
     if (candidate.type !== 'html' || typeof candidate.value !== 'string') continue;
     const position = offsets(candidate);
     if (!position) continue;
-    for (const match of candidate.value.matchAll(/(?:^|[\s<])id=(['"])([^'"]+)\1/g)) {
+    for (const match of candidate.value.matchAll(
+      /(?:^|[\s<])id=(?:(['"])([^'"]+)\1|([^\s"'`=<>]+))/gu,
+    )) {
       const idStart = position.start + match.index + match[0].indexOf('id=');
       if (protectedSourceRanges.some((range) => idStart >= range.start && idStart < range.end))
         continue;
-      htmlIds.push(match[2]);
+      const id = match[2] ?? match[3];
+      if (id) htmlIds.push(id);
     }
   }
   const headingNodes = collectNodes(tree).filter((node) => {

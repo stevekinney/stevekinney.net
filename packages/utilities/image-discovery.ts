@@ -30,7 +30,16 @@ type DiscoveryResult = {
 
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.svg']);
 const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogv', '.ogg']);
-const ALL_ASSET_EXTENSIONS = new Set([...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS]);
+// OGG is also a supported video extension; sync-images resolves that overlap
+// using the existing manifest video classification.
+export const AUDIO_EXTENSIONS = new Set(['.mp3', '.wav', '.ogg', '.m4a', '.flac']);
+export const PDF_EXTENSIONS = new Set(['.pdf']);
+const ALL_ASSET_EXTENSIONS = new Set([
+  ...IMAGE_EXTENSIONS,
+  ...VIDEO_EXTENSIONS,
+  ...AUDIO_EXTENSIONS,
+  ...PDF_EXTENSIONS,
+]);
 const EXTERNAL_PREFIXES = ['http://', 'https://', 'mailto:', 'tel:', 'data:', 'ftp://'];
 
 const normalizePath = (value: string): string => value.split(path.sep).join('/');

@@ -2,7 +2,11 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { discoverAllImages } from '@stevekinney/utilities/image-discovery';
+import {
+  AUDIO_EXTENSIONS,
+  PDF_EXTENSIONS,
+  discoverAllImages,
+} from '@stevekinney/utilities/image-discovery';
 import { normalizePath } from '@stevekinney/utilities/frontmatter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -40,6 +44,7 @@ for (const source of imageSources.values()) {
   const extension = path.extname(source.resolvedPath).toLowerCase();
   if (VIDEO_EXTENSIONS.has(extension)) continue;
   if (NON_TRANSFORMED_EXTENSIONS.has(extension)) continue;
+  if (AUDIO_EXTENSIONS.has(extension) || PDF_EXTENSIONS.has(extension)) continue;
 
   checkedCount++;
 
