@@ -70,7 +70,7 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown.match(/Block body\./g)).toHaveLength(2);
   });
 
-  it('keeps local links outside a partial embed in their original namespace', () => {
+  it('routes partial-embed links to same-document targets outside the selected range', () => {
     const target: PublicationDocument = {
       sourcePath: 'writing/partial.md',
       route: '/partial',
@@ -81,7 +81,7 @@ describe('normalizeObsidianMarkdown embeds', () => {
       publicationIndex: { documents: [target], attachments: [] },
     });
     expect(result.diagnostics).toEqual([]);
-    expect(result.markdown).toContain('[Outside](#outside)');
+    expect(result.markdown).toContain('[Outside](</partial#outside>)');
   });
 
   it('normalizes definitions appended to partial embeds', () => {

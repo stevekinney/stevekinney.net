@@ -68,6 +68,18 @@ const maskProtected = (source: string, nodes: readonly ObsidianNode[]): string =
   return characters.join('');
 };
 
+const protectedRanges = (
+  source: string,
+  nodes: readonly ObsidianNode[],
+): Array<{ start: number; end: number }> => {
+  const ranges = nodes
+    .filter((node) => node.type === 'comment' || node.type === 'blockDefinition')
+    .map((node) => node.position);
+  const frontmatter = source.match(/^(?:\uFEFF)?---(?:\r?\n|$)[\s\S]*?\r?\n---(?:\r?\n|$)/u);
+  if (frontmatter) ranges.push({ start: 0, end: frontmatter[0].length });
+  return ranges;
+};
+
 const headingText = (source: string, start: number, end: number): string => {
   const fragment = source.slice(start, end);
   const edits: SourceEdit[] = [];
@@ -120,11 +132,18 @@ export const getObsidianDocumentMetadata = (
   const slugger = new GithubSlugger();
   const headings: ObsidianDocumentMetadata['headings'] = [];
   const htmlIds: string[] = [];
+  const protectedSourceRanges = protectedRanges(source, parsed.nodes);
   for (const node of collectNodes(parser.parse(source))) {
     const candidate = node as Positioned & { type?: string; value?: string };
     if (candidate.type !== 'html' || typeof candidate.value !== 'string') continue;
-    for (const match of candidate.value.matchAll(/(?:^|[\s<])id=(['"])([^'"]+)\1/g))
+    const position = offsets(candidate);
+    if (!position) continue;
+    for (const match of candidate.value.matchAll(/(?:^|[\s<])id=(['"])([^'"]+)\1/g)) {
+      const idStart = position.start + match.index + match[0].indexOf('id=');
+      if (protectedSourceRanges.some((range) => idStart >= range.start && idStart < range.end))
+        continue;
       htmlIds.push(match[2]);
+    }
   }
   const headingNodes = collectNodes(tree).filter((node) => {
     const candidate = node as Positioned & { type?: string };

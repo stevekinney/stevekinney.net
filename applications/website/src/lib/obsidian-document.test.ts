@@ -50,6 +50,13 @@ describe('getObsidianDocumentMetadata', () => {
     );
   });
 
+  it('collects HTML identifiers outside protected regions only', () => {
+    const source =
+      '%%\n<div id="private-comment">\n%%\n<div id="public">\n\n```html\n<div id="private-code">\n```';
+    const metadata = getObsidianDocumentMetadata(makeDocument(source));
+    expect(metadata.htmlIds).toEqual(['public']);
+  });
+
   it('reports detached and colliding block identifiers', () => {
     const metadata = getObsidianDocumentMetadata(
       makeDocument('^detached\n\n# Block\n^Block\n\nText ^Block'),

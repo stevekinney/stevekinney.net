@@ -163,8 +163,4 @@ export const updateMarkdownSource = (source: MarkdownSource, markdown: string): 
   source.content = content;
   source.tree = markdownParser.parse(content);
   source.headingAnchors = collectHeadingAnchors(source.tree);
-  const lineOffset = markdown.slice(0, markdown.length - content.length).split('\n').length - 1;
-  const playgroundData = extractPlaygroundData(source.tree, source.sourcePath, lineOffset);
-  source.tailwindPlaygrounds = playgroundData.playgrounds;
-  source.siteTailwindCandidates = playgroundData.siteTailwindCandidates;
 };

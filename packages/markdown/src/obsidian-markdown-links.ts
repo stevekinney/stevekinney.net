@@ -109,6 +109,15 @@ export const normalizeMarkdownLinks = (
         }
         const mapped = options.localIds?.get(id.startsWith('^') ? `block-${id.slice(1)}` : id);
         if (mapped) destination = `#${encodeURIComponent(mapped)}`;
+        else if (options.embedded) {
+          const document = context.publicationIndex.documents.find(
+            (candidate) => candidate.sourcePath === context.sourcePath,
+          );
+          if (document) {
+            const validated = validateFragment(document, fragment, start);
+            destination = `${document.route}#${encodeURIComponent(validated)}`;
+          }
+        }
       } else if (target) {
         // Resolve the query-free target so query parameters do not affect document lookup.
         const result = resolveObsidianReference(target, context);
