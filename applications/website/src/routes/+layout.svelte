@@ -96,7 +96,7 @@
   </header>
 
   <!-- Navigation -->
-  <Navigation class="sm:col-start-2 sm:justify-end xl:order-2 xl:justify-center" />
+  <Navigation class="sm:col-start-2 sm:justify-end xl:order-2" />
 
   <!-- Main content container -->
   <main id="main-content" class="my-6 sm:col-span-full xl:order-3" data-content-container>
