@@ -3,14 +3,6 @@ title: useState with TypeScript - The Basics
 description: >-
   Master TypeScript with React's useState hook—from type inference patterns to
   explicit typing strategies for bulletproof state management.
-date: 2025-09-27
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - hooks
-  - state-management
-  - useState
 ---
 
 When you combine React's `useState` hook with TypeScript, you get a powerful duo that catches bugs before they happen. But there's more to it than just slapping types on your state variables. Understanding how TypeScript infers types, when to be explicit, and how to handle complex state shapes will transform your React development experience from "hoping it works" to "knowing it works."

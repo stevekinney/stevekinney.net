@@ -1,12 +1,6 @@
 ---
 title: Styling Csstype And Css Modules
-description: >-
-  Styling in React with TypeScript doesn't have to feel like a constant battle
-  with the type checker. Whether you're using inline styles, CSS Modules, or
-  building a design system, TypeScript can actually make your styling more
-  robust and d...
-modified: 2026-03-17
-date: 2025-09-06
+description: 'Type React inline styles and CSS Modules with csstype, custom style types, and patterns for reusable design system components.'
 ---
 
 Styling in React with TypeScript doesn't have to feel like a constant battle with the type checker. Whether you're using inline styles, CSS Modules, or building a design system, TypeScript can actually make your styling more robust and developer-friendly. Let's explore how to properly type your styles using `csstype`, CSS Modules, and inline style patterns that scale.

@@ -1,8 +1,6 @@
 ---
 title: Playwright Projects
 description: How Playwright's project system turns a flat test suite into a dependency graph—and why that matters before you wire up authentication.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 Most Playwright setups start the same way: one config, one browser, run everything. That works until you need something to happen _before_ your tests run—seeding a database, logging in, generating fixtures. At that point, you're stuffing setup logic into `beforeAll` hooks and hoping the execution order works out. It usually does. Until it doesn't.

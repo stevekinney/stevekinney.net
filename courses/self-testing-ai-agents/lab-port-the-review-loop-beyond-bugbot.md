@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Port the Review Loop Beyond Bugbot'
 description: Keep Bugbot if you have it, but write the repository rules so a second review surface can pick up the same job without guesswork.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 This appendix lab is half tooling and half policy. That is deliberate.

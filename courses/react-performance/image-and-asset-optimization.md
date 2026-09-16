@@ -3,14 +3,6 @@ title: Image & Asset Optimization for React
 description: >-
   Master image optimization in React apps. Implement responsive images, modern
   formats, lazy loading, and CDN strategies for blazing-fast visual content.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - images
-  - optimization
-  - assets
 ---
 
 Images are the silent performance killers of the modern web. That hero image on your landing page? It's probably 2MB. Those product thumbnails? They're loading at full resolution. The blog post illustrations? They're in PNG when they should be WebP. Your React app might have blazing-fast JavaScript, but if you're shipping megabytes of unoptimized images, your users are still waiting—and waiting users become former users.

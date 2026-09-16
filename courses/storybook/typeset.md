@@ -1,8 +1,6 @@
 ---
 title: Using the TypeSet Doc Block
 description: Storybook provides components for rendering your design system's typography.
-modified: 2026-03-17
-date: 2024-04-15
 ---
 
 Similar to the [color palettes](color-palette.md) and [icon galleries](icon-gallery.md), Storybook also provides a helpful set of components for rendering your design system's typography.

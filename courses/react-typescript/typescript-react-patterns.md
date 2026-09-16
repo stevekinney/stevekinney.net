@@ -3,13 +3,6 @@ title: React-Specific TypeScript Patterns
 description: >-
   Essential TypeScript patterns every React developer needs to know—from
   component typing to ref forwarding
-date: 2025-09-27
-modified: 2026-03-17
-tags:
-  - typescript
-  - react
-  - patterns
-  - components
 ---
 
 TypeScript and React were made for each other, but there are specific patterns and conventions that can make or break your development experience. This guide covers the essential React-specific TypeScript patterns that every React developer should master.

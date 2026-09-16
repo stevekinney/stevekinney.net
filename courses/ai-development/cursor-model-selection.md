@@ -3,8 +3,6 @@ title: Model Selection Strategy in Cursor
 description: >-
   Choose Cursor models by task shape, context needs, speed, cost, Max Mode, and
   cloud-agent behavior without hardcoding volatile model claims.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Cursor](https://cursor.com) changes its model menu frequently. As of June 23,

@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Translate the Shelf Loop to Your Stack'
 description: Map every core feedback loop from Shelf to your real stack so the course ends with an implementation plan you can actually use.
-modified: 2026-04-11
-date: 2026-04-06
 ---
 
 This appendix lab is the bridge back to real life.

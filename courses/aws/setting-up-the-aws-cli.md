@@ -3,13 +3,6 @@ title: 'Setting Up the AWS CLI'
 description: >-
   Install the AWS CLI v2, configure it with named profiles and access keys, and
   verify that your credentials work.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - cli
-  - setup
-  - credentials
 ---
 
 The AWS Management Console is fine for clicking around and exploring, but you're not going to deploy a frontend by clicking buttons. The **AWS CLI (Command Line Interface)** is how you'll interact with AWS from your terminal—syncing files to S3, creating CloudFront invalidations, invoking Lambda functions, and everything else you'll do in this course. It's also what your CI/CD pipeline will use under the hood.

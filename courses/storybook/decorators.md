@@ -1,10 +1,8 @@
 ---
-modified: 2026-03-17
 title: Decorators
 description: >-
   Decorators allow you to wrap the component in your story with another
   component.
-date: 2024-04-15
 ---
 
 Decorators allow you to wrap the component in your story with another component. This is useful in a bunch of situations.

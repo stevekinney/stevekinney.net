@@ -1,8 +1,6 @@
 ---
 title: Route-Based Network Interception
-description: When HAR replay is overkill, `page.route` lets you intercept, mock, modify, or block individual requests with a few lines of code.
-modified: 2026-04-14
-date: 2026-04-10
+description: 'When HAR replay is overkill, page.route lets you intercept, mock, modify, or block individual requests with a few lines of code.'
 ---
 
 The [HAR lessons](recording-hars-for-network-isolation.md) covered the "record everything, replay forever" approach to network isolation. That's the right tool when you're mocking a large API surface—dozens of endpoints, nested responses, pagination tokens. But sometimes you don't need a full recording. You need to mock _one_ endpoint, or block images, or simulate a 500 from the server, or strip a header before it reaches your app. That's where [`page.route`](https://playwright.dev/docs/mock) earns its keep.

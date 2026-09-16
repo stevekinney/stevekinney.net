@@ -3,13 +3,6 @@ title: Optimizing Server‑Side Rendering
 description: >-
   Speed up SSR with streaming, caching, and smarter data fetching—reduce
   time‑to‑first‑byte and hydrate faster.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - ssr
-  - hydration
 ---
 
 Server-side rendering (SSR) can dramatically improve your application's perceived performance by delivering meaningful content before JavaScript loads—but poorly optimized SSR can actually hurt more than it helps. Between long server render times, waterfall data fetching, and expensive hydration, there are plenty of ways to shoot yourself in the foot. Let's explore practical techniques for building SSR that's genuinely fast: streaming responses, smart caching strategies, optimized data fetching patterns, and hydration that doesn't block the main thread.

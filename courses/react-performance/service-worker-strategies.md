@@ -4,14 +4,6 @@ description: >-
   Implement service workers for offline-first React apps. Master caching
   strategies, background sync, and push notifications for blazing-fast
   performance.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - service-workers
-  - pwa
-  - caching
 ---
 
 Your React app loads instantly—until the user loses their internet connection. Then it's a blank screen, spinning wheels, and frustrated users. Service Workers change that game entirely. They're your app's personal proxy server, sitting between your React code and the network, intercepting requests, serving cached responses, and even working offline. But implement them wrong, and you'll cache stale data forever, break your app updates, or worse, serve the wrong content to the wrong users.

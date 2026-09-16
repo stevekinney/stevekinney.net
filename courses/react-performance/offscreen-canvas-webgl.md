@@ -3,15 +3,6 @@ title: OffscreenCanvas & WebGL for React
 description: >-
   Leverage OffscreenCanvas and WebGL to create high-performance visualizations
   and graphics in React applications
-date: 2025-01-14
-modified: 2026-03-17
-status: published
-tags:
-  - React
-  - Performance
-  - OffscreenCanvas
-  - WebGL
-  - Graphics
 ---
 
 Your React app needs to render a complex chart with 100,000 data points. Or animate a 3D visualization. Or process real-time video streams. You implement it on the main thread, and suddenly your entire UI freezes. Every interaction becomes sluggish. The browser's performance monitor shows one long, red bar blocking everything.

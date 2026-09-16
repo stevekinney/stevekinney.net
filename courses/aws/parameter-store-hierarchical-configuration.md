@@ -4,13 +4,6 @@ description: >-
   Store and retrieve application configuration using Parameter Store's
   hierarchical path structure, including both plain text and SecureString
   parameters.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - parameter-store
-  - configuration
-  - ssm
 ---
 
 **Parameter Store** is part of AWS Systems Manager (SSM). It's a key-value store for configuration data—the same kind of data you've been putting in Lambda environment variables, but with encryption, access control, versioning, and a hierarchical namespace built in.

@@ -3,14 +3,6 @@ title: The React 19 Compiler
 description: >-
   Master the React Compiler from basics to advanced patterns. Migrate from
   manual optimizations, handle edge cases, and measure real-world improvements.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - react-19
-  - compiler
-  - optimization
 ---
 
 The React Compiler represents the biggest shift in React performance optimization since hooks. Instead of sprinkling `useMemo`, `useCallback`, and `React.memo` throughout your codebase like performance pixie dust, the compiler analyzes your code at build time and automatically applies optimizations where they actually matter. It's not about making React faster—it's about making React optimization automatic.

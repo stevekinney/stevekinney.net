@@ -3,13 +3,6 @@ title: React Compiler Migration Guide
 description: >-
   Complete guide to adopting React 19's compiler. Migrate from manual
   optimizations, handle edge cases, and measure improvements.
-date: 2025-09-07
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - react-19
-  - compiler
 ---
 
 The React Compiler fundamentally changes how we think about performance optimization in React. Instead of manually placing `useMemo`, `useCallback`, and `React.memo` throughout your codebase, the compiler automatically optimizes your components at build time. It's not magic—it's sophisticated static analysis that understands React's rendering model and applies optimizations where they actually matter.

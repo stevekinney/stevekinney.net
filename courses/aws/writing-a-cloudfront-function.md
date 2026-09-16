@@ -1,15 +1,6 @@
 ---
 title: Writing a CloudFront Function
-description: >-
-  Write and deploy a CloudFront Function that manipulates viewer requests or
-  responses, using the lightweight JavaScript runtime available at CloudFront
-  edge locations.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudfront-functions
-  - javascript
+description: 'Write and deploy lightweight CloudFront edge JavaScript that manipulates viewer requests or responses.'
 ---
 
 CloudFront Functions give you a way to run lightweight JavaScript at CloudFront's edge locations—all 200+ of them—on every single request. If you've ever written a `_redirects` file on Netlify or a `next.config.js` with redirects and rewrites, you already understand the use case. The difference is that you're writing actual code instead of configuration, which means you can handle dynamic logic that static config files can't.

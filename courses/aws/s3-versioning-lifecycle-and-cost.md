@@ -2,13 +2,6 @@
 title: 'S3 Versioning, Lifecycle, and Cost'
 description: >-
   Enable versioning to protect against accidental overwrites, configure lifecycle rules to manage old versions, and understand how S3 pricing works.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - s3
-  - versioning
-  - cost-management
 ---
 
 You have a working static site on S3. Now you need to protect it. Every deployment you run overwrites the previous version of your files. If a bad build goes out and you want to roll back, those old files are gone. If someone on your team accidentally runs `aws s3 sync --delete` against the wrong directory, everything is gone. (Ask me how I know.) **Versioning** solves this by keeping every version of every object in the bucket, and **lifecycle rules** keep versioning from running up your storage costs.

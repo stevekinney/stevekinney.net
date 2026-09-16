@@ -2,13 +2,6 @@
 title: 'Exercise: Deploy a Static Site to S3'
 description: >-
   Create a bucket, upload a static site, enable website hosting, and access it in the browser.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - s3
-  - exercise
-  - deployment
 ---
 
 You've learned the individual pieces: creating a bucket, uploading files, writing a bucket policy, enabling static website hosting, and configuring versioning. Now put them all together. In this exercise, you'll deploy a complete static site to S3 and access it in a browser.

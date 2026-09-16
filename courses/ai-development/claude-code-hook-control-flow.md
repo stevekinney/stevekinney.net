@@ -3,8 +3,6 @@ title: Claude Code Hook Control Flow
 description: >-
   Understand how Claude Code hook decisions, permission prompts, exits, and JSON
   responses influence the agent loop.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 Hook control flow is where [Claude Code](https://code.claude.com/docs/en/hooks)

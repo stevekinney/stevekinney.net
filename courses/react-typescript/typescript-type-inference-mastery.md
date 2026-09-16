@@ -1,8 +1,6 @@
 ---
 title: Type Inference
 description: Master TypeScript's type inference to write cleaner code with less boilerplate
-modified: 2026-03-17
-date: 2025-09-14
 ---
 
 You've probably noticed TypeScript can be pretty smart about figuring out types on its own. But when should you let it work its magic, and when should you be explicit? Let's master the art of type inference to write cleaner React code with less boilerplate.

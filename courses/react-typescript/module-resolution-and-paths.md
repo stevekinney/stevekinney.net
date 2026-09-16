@@ -3,15 +3,6 @@ title: Module Resolution and Path Aliases
 description: >-
   Make imports sane—align tsconfig paths with your bundler and avoid circular
   snags.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - module-resolution
-  - paths
-  - imports
-  - tooling
 ---
 
 Deep folder hierarchies make imports a nightmare. You know the drill: `../../../components/ui/Button` everywhere, fragile paths that break when you refactor, and import statements that look like they're trying to escape your codebase entirely. **Module resolution** and **path aliases** solve this by letting you write clean, absolute imports like `@/components/Button` or `~/utils/helpers`—but only if you configure both TypeScript and your bundler correctly.

@@ -6,6 +6,7 @@ import type { GeneratedContent } from '@stevekinney/utilities/content-types';
 
 import { generatedContentDataPath, repositoryRoot } from '../content-paths.ts';
 
+import { inspectPlaygrounds } from './inspect-playgrounds.ts';
 import { createBuildReport } from './create-build-report.ts';
 import { inspectWebsiteOutput } from './inspect-website-output.ts';
 import { readLatestTurboSummary } from './read-turbo-summary.ts';
@@ -31,6 +32,8 @@ export const main = async (): Promise<void> => {
     websiteOutput,
     generatedAt: new Date(),
   });
+
+  report.playgrounds = await inspectPlaygrounds();
 
   await mkdir(buildReportDirectory, { recursive: true });
   await writeFile(buildReportJsonPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');

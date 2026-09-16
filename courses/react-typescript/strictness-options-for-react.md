@@ -3,14 +3,6 @@ title: Strictness Options That Pay Off for React
 description: >-
   Turn on strict TypeScript options—catch subtle runtime bugs early without
   drowning in red squiggles.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - strictness
-  - compiler-options
-  - configuration
 ---
 
 TypeScript's strict mode isn't just about appeasing the type-checker gods—it's about catching the subtle bugs that would otherwise ruin your Tuesday at 3 PM. When you're building React applications, certain strictness options act like an early warning system for the kind of runtime errors that make users click away and engineers question their life choices.

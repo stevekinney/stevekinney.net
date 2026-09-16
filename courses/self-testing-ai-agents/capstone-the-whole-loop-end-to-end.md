@@ -1,8 +1,6 @@
 ---
 title: 'Capstone: The Whole Loop, End to End'
 description: One task, one agent, one conversation. Every loop you built today fires at least once. You watch and grade.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 We've built a lot today. The capstone is where we take it out for a drive.

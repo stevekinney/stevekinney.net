@@ -3,8 +3,6 @@ title: Using MCP Servers with Claude Code
 description: >-
   Configure Claude Code MCP servers with stdio, HTTP, OAuth login, scopes,
   permissions, and security review.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Claude Code](https://code.claude.com/docs/en/mcp) connects to

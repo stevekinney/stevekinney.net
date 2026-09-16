@@ -3,8 +3,6 @@ title: Cursor Hooks
 description: >-
   Use Cursor hooks to observe, control, and extend agent behavior locally and in
   cloud agents without hiding quality gates in chat.
-modified: 2026-06-24
-date: 2026-06-23
 ---
 
 [Cursor hooks](https://cursor.com/docs/hooks) let you run logic around the agent

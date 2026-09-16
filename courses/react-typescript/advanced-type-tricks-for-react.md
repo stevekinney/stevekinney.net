@@ -3,16 +3,6 @@ title: Advanced Type Tricks for React APIs
 description: >-
   Pull out the big guns—satisfies, const assertions, conditional and mapped
   types that make UIs safer and nicer.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - advanced-types
-  - satisfies
-  - const-assertions
-  - conditional-types
-  - mapped-types
 ---
 
 There's a line where TypeScript stops being helpful and starts feeling like you're wrestling a compiler that's smarter than you are. But once you level up beyond the basics, TypeScript can actually make your React components more expressive, safer, and genuinely pleasant to work with. We're going to explore the advanced type tricks that turn TypeScript from "necessary evil" to "secret superpower" (and maybe help you look like a wizard in your next code review).

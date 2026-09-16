@@ -3,8 +3,6 @@ title: Cursor Automations
 description: >-
   Run Cursor Cloud Agents from schedules and events with explicit prompts,
   permissions, visibility, and quality gates.
-modified: 2026-06-24
-date: 2026-06-23
 ---
 
 [Cursor Automations](https://cursor.com/docs/cloud-agent/automations) run Cloud

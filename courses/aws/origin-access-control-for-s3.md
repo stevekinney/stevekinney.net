@@ -2,13 +2,6 @@
 title: 'Origin Access Control for S3'
 description: >-
   Configure Origin Access Control so that your S3 bucket only serves content through CloudFront, not through direct S3 URLs.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudfront
-  - s3
-  - security
 ---
 
 Right now, your CloudFront distribution works—it fetches files from your S3 bucket and serves them through edge locations. But your S3 bucket is also publicly accessible. Anyone who knows the bucket URL can bypass CloudFront entirely and access your files directly from S3. That means they skip your caching, skip your HTTPS configuration, skip your security headers, and potentially skip any access controls you put at the edge.

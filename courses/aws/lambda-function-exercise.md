@@ -3,12 +3,6 @@ title: 'Exercise: Build and Deploy a Lambda Function'
 description: >-
   Write a TypeScript handler that returns a JSON greeting, create an execution
   role, deploy the function, invoke it, and read the logs.
-date: 2026-03-18
-modified: 2026-04-07
-tags:
-  - aws
-  - lambda
-  - exercise
 ---
 
 You're going to build and deploy a Lambda function from scratch—no console wizards, no frameworks, no abstractions. By the end of this exercise, you'll have a TypeScript function running in AWS that you can invoke from the command line and whose logs you can read in CloudWatch.

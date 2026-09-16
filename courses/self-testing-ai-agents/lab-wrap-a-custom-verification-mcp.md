@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Wrap a Custom Verification MCP'
 description: Write a small MCP server that exposes a single verification tool for Shelf and wire it into the repository-local MCP configuration.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 The Shelf starter doesn't ship the `verify_shelf_page` tool. By the end of this walkthrough, you'll have built it yourself and be able to build an equivalent tool for a different verification target in your own project.

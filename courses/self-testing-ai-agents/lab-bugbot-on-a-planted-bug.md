@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Bugbot on a Planted Bug'
 description: Set up Cursor Bugbot on Shelf, open a PR that contains a planted permission bug, and watch the loop close.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 This lab is mostly hosted process, not code authoring. The Shelf starter doesn't ship the tuned reviewer config or the planted branch, so this lab is where you add or recreate those pieces and then run the review loop honestly.

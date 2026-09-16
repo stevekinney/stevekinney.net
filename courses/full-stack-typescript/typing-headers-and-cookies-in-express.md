@@ -3,8 +3,6 @@ title: Adding Types to Headers and Cookies with Express
 description: >-
   Learn how to add TypeScript types to headers and cookies in Express for safer
   HTTP communication, ensuring better type safety in your applications.
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 Request and response headers play a crucial role in HTTP communication. TypeScript can help ensure they're properly typed.

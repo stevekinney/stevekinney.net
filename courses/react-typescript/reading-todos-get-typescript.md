@@ -3,15 +3,6 @@ title: Reading Todos - GET Requests and Type Safety
 description: >-
   Master GET requests with TypeScript—implement pagination, filtering, search,
   and caching strategies for efficient todo list management.
-date: 2025-09-27
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - crud
-  - get-requests
-  - pagination
-  - filtering
 ---
 
 Reading and displaying data is the foundation of any application. While fetching todos might seem simple—just a GET request, right?—production apps need pagination, filtering, searching, sorting, and caching. TypeScript helps us build these features with confidence, ensuring type safety from API parameters to rendered components.

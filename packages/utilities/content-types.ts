@@ -27,8 +27,7 @@ export type WritingIndexEntry = {
   title: string;
   description: string;
   date: string;
-  modified: string;
-  tags: string[];
+  modified?: string;
   slug: string;
   sourcePath: string;
   sourceHash: string;
@@ -39,7 +38,7 @@ export type CourseIndexEntry = {
   title: string;
   description: string;
   date: string;
-  modified: string;
+  modified?: string;
   slug: string;
   sourcePath: string;
   sourceHash: string;
@@ -50,12 +49,10 @@ export type CourseIndexEntry = {
 export type LessonIndexEntry = {
   title: string;
   description: string;
-  date: string;
-  modified: string;
+  modified?: string;
   slug: string;
   courseSlug: string;
   courseTitle: string;
-  tags: string[];
   sourcePath: string;
   sourceHash: string;
   path: string;
@@ -85,8 +82,7 @@ export type ContentRouteBase = {
   path: string;
   title: string;
   description: string;
-  date: string;
-  modified: string;
+  modified?: string;
   sourcePath: string;
   sourceHash: string;
   llmsPath: string;
@@ -97,11 +93,12 @@ export type ContentRouteBase = {
 export type WritingContentRoute = ContentRouteBase & {
   contentType: 'writing';
   slug: string;
-  tags: string[];
+  date: string;
 };
 
 export type CourseContentRoute = ContentRouteBase & {
   contentType: 'course';
+  date: string;
   courseSlug: string;
   contents?: CourseContentsData;
 };
@@ -111,10 +108,9 @@ export type LessonContentRoute = ContentRouteBase & {
   courseSlug: string;
   courseTitle: string;
   lessonSlug: string;
-  tags: string[];
 };
 
-export type ProjectContentRoute = Omit<ContentRouteBase, 'date' | 'modified'> & {
+export type ProjectContentRoute = Omit<ContentRouteBase, 'modified'> & {
   contentType: 'project';
   projectSlug: string;
   name: string;

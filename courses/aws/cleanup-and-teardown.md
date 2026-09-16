@@ -2,13 +2,6 @@
 title: 'Cleanup and Teardown'
 description: >-
   Tear down every AWS resource you created in this course in the correct order so you stop paying for it.
-date: 2026-04-15
-modified: 2026-04-16
-tags:
-  - aws
-  - cleanup
-  - cost-management
-  - teardown
 ---
 
 The course opened with "real money, real infrastructure." This is where we close that loop. Most of what you built costs pennies per month while it's idle—but "pennies" across a dozen services, over a year you forgot about, compounds into real money. Worse, some services (ACM certificates, Route 53 hosted zones, CloudFront distributions) keep billing even when nobody uses them. This lesson tears everything down in the order AWS actually allows.

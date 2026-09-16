@@ -3,12 +3,6 @@ title: 'Exercise: Build a Lambda-Backed Data API with DynamoDB'
 description: >-
   Create a DynamoDB table, write a Lambda handler for GET, POST, and DELETE
   operations, wire it through API Gateway, and call it from the frontend.
-date: 2026-03-18
-modified: 2026-04-06
-tags:
-  - aws
-  - dynamodb
-  - exercise
 ---
 
 You're going to build a complete data API backed by DynamoDB. By the end of this exercise, you'll have a working endpoint that your frontend can call to create, list, and delete items, with data persisted in a DynamoDB table and served through the same Lambda and API Gateway infrastructure you set up earlier in the course.

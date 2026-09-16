@@ -1,8 +1,6 @@
 ---
 title: Solutions for `has-*` Challenges
 description: A solution for some challenges from Steve's Tailwind course.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 ## Challenge 1: Checkbox Container

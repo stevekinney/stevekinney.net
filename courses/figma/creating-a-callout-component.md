@@ -3,8 +3,6 @@ title: Creating a Callout Component
 description: >-
   Using variables, variables, and nested components to create a Callout
   component.
-modified: 2026-03-17
-date: 2024-04-15
 ---
 
 Let's look at taking some of the concepts we've learned so far and creating a **Callout** component that we can use in our designs. Our end result will look _something_ like this.

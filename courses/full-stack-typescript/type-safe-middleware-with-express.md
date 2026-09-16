@@ -1,8 +1,6 @@
 ---
 title: Type-Safe Middleware with Express
 description: Add type-safety to middleware when using Express.
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 ### Type-Safe Middleware Chains

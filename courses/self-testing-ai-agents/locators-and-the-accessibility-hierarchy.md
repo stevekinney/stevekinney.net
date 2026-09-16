@@ -1,8 +1,6 @@
 ---
 title: Locators and the Accessibility Hierarchy
 description: The single most important habit in a Playwright suite an agent will maintain—locator discipline, ordered by what survives a refactor.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 If you only fix one thing about your Playwright suite before letting an agent touch it, fix how you locate elements.

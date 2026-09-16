@@ -2,13 +2,6 @@
 title: 'Alias Records vs. CNAME Records'
 description: >-
   Understand the difference between Route 53 alias records and standard CNAME records, and why alias records are preferred for AWS resources.
-date: 2026-03-18
-modified: 2026-04-06
-tags:
-  - aws
-  - route53
-  - dns
-  - alias
 ---
 
 If you've managed DNS before, you've probably created CNAME records. They're the standard way to make one domain name point to another. But the moment you try to point the bare domain at CloudFront, CNAME starts falling apart. This is where Route 53's alias records come in. They solve a specific problem that standard DNS does not solve cleanly, and understanding that difference will save you from one of the most common custom-domain mistakes.

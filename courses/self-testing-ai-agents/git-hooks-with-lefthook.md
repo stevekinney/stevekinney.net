@@ -1,8 +1,6 @@
 ---
 title: Git Hooks with Lefthook
-description: Wire fast, staged-only checks into every commit and push using Lefthook—a single YAML file that replaces Husky, lint-staged, and half the shell scripts in your repo.
-modified: 2026-06-23
-date: 2026-04-10
+description: 'Use Lefthook’s single YAML configuration to run fast, staged-only checks on every commit and push.'
 ---
 
 If you've done the git hook dance before, you know how it usually goes: install [Husky](https://typicode.github.io/husky/), install [lint-staged](https://github.com/lint-staged/lint-staged), wire up a `.husky/pre-commit` shell script that calls a `package.json` script that calls lint-staged that calls the actual linter. Three packages, two config surfaces, one shell script, and a `prepare` hook to glue it all together.

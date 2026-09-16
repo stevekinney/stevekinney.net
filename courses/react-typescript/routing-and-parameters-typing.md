@@ -3,15 +3,6 @@ title: Routing and Typed URL Parameters
 description: >-
   Make routes type-safe—constrain path parameters, search parameters, and
   loaders so links and pages never disagree.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - routing
-  - params
-  - navigation
-  - url-params
 ---
 
 URLs are the API of the web—they carry data, state, and intent. But by default, they're just strings, which means your `userId` parameter could be `"definitely-not-a-number"` and TypeScript would happily let you pass it to a function expecting a number. Enter typed routing: a way to make your URLs as type-safe as the rest of your React application, catching mismatched parameters at compile time instead of letting users stumble into broken pages.

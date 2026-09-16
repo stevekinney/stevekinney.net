@@ -3,13 +3,6 @@ title: Debugging React Performance Issues
 description: >-
   Master the systematic approach to finding and fixing performance problems. Use
   React DevTools, Chrome Performance tab, and proven debugging workflows.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - debugging
-  - devtools
 ---
 
 Performance issues in React apps are like medical mysteries—the symptoms are obvious (janky scrolling, sluggish interactions, frozen UI), but the root cause could be anywhere. A slow component might be the victim of a parent's excessive re-renders, a memory leak three components away, or an innocent-looking useEffect that triggers a cascade of state updates. Without a systematic debugging approach, you're just guessing.

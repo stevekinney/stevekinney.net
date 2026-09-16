@@ -1,8 +1,6 @@
 ---
 title: 'Build a Failure Dossier for Shelf: Solution'
 description: Walkthrough of the failure dossier script, config settings, and the experiment that proves the loop works.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 A failure dossier is the difference between an agent that says "tests failed" and an agent that says "the rate-book dialog test failed on line 47 because the Save button wasn't visible within 5 seconds -- here's the screenshot, here's the trace, and here's the exact command to reproduce it." The first response starts a conversation. The second one starts a fix.

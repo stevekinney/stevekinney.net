@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Add Performance Budgets to Shelf'
 description: Add a build-size budget, add a targeted runtime threshold, and make both numbers cheap enough that the agent can actually use them.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 You're going to add two checks to Shelf:

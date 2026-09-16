@@ -3,11 +3,6 @@ title: React 19 + TypeScript Mental Models
 description: >-
   Build a rock‑solid mental model—JSX as function calls, compile‑time vs
   runtime, and why types are executable design docs.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
 ---
 
 The secret to mastering React with TypeScript isn't memorizing every hook signature or generic constraint—it's building the right mental models. When you understand how JSX transforms into function calls, why types disappear at runtime, and how TypeScript becomes your design documentation, everything else clicks into place.

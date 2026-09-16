@@ -3,8 +3,6 @@ title: Cursor Environment Configuration
 description: >-
   Configure Cursor Cloud Agent environments with reproducible setup commands,
   dependencies, secrets, and verification expectations.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Cursor Cloud Agents](https://cursor.com/docs/cloud-agent) need a reproducible

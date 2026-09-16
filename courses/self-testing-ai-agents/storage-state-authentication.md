@@ -1,8 +1,6 @@
 ---
 title: Storage State Authentication
 description: Stop logging in from the UI on every test. Log in once, save the session, reuse it everywhere.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 Here's a pattern I see in nearly every Playwright suite I inherit—and it is doing more damage than anyone on the team realizes.

@@ -1,15 +1,6 @@
 ---
 title: The cache() API
-description: >-
-  Stabilize and dedupe expensive work across requests and renders—use cache() to
-  turn pure functions into shared resources.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - caching
-  - react-19
+description: 'Stabilize and dedupe expensive work across requests and renders with cache(), which turns pure functions into shared resources.'
 ---
 
 React's `cache()` function takes pure functions and makes them memoized, deduplicated, and stable across your entire React tree. Think of it as a supercharged version of `useMemo()` that works at the function level instead of the component level—and crucially, shares results between components when they call the same function with the same arguments.

@@ -1,14 +1,6 @@
 ---
 title: Components Properties
-description: >-
-  Leverage Figma components for scalable and efficient design. Create, reuse,
-  and manage elements easily for consistency and collaboration across projects.
-date: 2024-03-09
-modified: 2026-03-17
-tags:
-  - figma
-  - course
-  - frontendmasters
+description: 'Use Figma component properties to create flexible, reusable components for collaborative design.'
 ---
 
 In Figma, there are four types of component properties:

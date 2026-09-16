@@ -3,15 +3,6 @@ title: CDN Caching & Immutable Assets
 description: >-
   Optimize React app delivery with CDN caching strategies, immutable
   deployments, and hashed chunking patterns
-date: 2025-01-14
-modified: 2026-03-17
-status: published
-tags:
-  - React
-  - Performance
-  - CDN
-  - Caching
-  - Build Optimization
 ---
 
 Your React app's bundle is perfect. Tree-shaken, code-split, minified to perfection. Then you deploy it, and users around the world wait 3 seconds for it to download from your single origin server in Virginia. Meanwhile, your CDN edge servers sit idle, serving stale content because you're afraid of cache invalidation bugs.

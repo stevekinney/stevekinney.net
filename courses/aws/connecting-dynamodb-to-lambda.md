@@ -3,14 +3,6 @@ title: Connecting DynamoDB to Lambda
 description: >-
   Connect the full request loop from frontend through API Gateway to Lambda to
   DynamoDB, including IAM permissions and a complete CRUD handler.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - dynamodb
-  - lambda
-  - api-gateway
-  - full-stack
 ---
 
 You have all the pieces: a DynamoDB table to store data, a Lambda function to run code, and an API Gateway to expose it over HTTP. Now you connect them into the loop that every full-stack frontend application needs: your React app makes an HTTP request, API Gateway routes it to Lambda, Lambda reads from or writes to DynamoDB, and the response flows back to the browser.

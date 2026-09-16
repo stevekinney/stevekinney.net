@@ -1,8 +1,6 @@
 ---
 title: Configuring Playwright
 description: A walkthrough of playwright.config.ts—the settings that matter, the ones you can ignore for now, and a few patterns you can add later.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 Every Playwright suite starts with a config file, and most of them are wrong in the same three ways: the dev server is running instead of preview, runner options are buried inside `use` where Playwright silently ignores them, or the config is trying to teach every advanced trick up front. Shelf's current starter deliberately does the opposite: it keeps the config tiny.

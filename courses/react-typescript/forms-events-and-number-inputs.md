@@ -1,17 +1,6 @@
 ---
 title: "Forms, Events, and Number Inputs That Don't Lie"
-description: >-
-  Type form handlers once, reuse everywhere—and tame <input type="number">
-  returning strings.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - forms
-  - events
-  - input-types
-  - validation
+description: Type reusable React form handlers with TypeScript and handle number inputs that return strings.
 ---
 
 Building forms in React with TypeScript should be straightforward—define your state, handle events, render inputs. But then you hit the classic gotchas: event types that make no sense, `<input type="number">` that cheerfully returns strings anyway, and form handlers that need the same boilerplate everywhere. Let's fix all of that with some solid patterns that'll make your forms both type-safe and actually pleasant to work with.

@@ -2,13 +2,6 @@
 title: 'What is a CDN?'
 description: >-
   Understand what a CDN does, why it matters for frontend performance, and how CloudFront fits into the AWS ecosystem.
-date: 2026-03-18
-modified: 2026-04-06
-tags:
-  - aws
-  - cloudfront
-  - cdn
-  - performance
 ---
 
 When you deploy to Vercel, your site loads fast in New York and fast in Tokyo. When you deploy to a single S3 bucket in `us-east-1`, your site loads fast in Virginia and noticeably slower everywhere else. The difference is a **CDN**—a Content Delivery Network.

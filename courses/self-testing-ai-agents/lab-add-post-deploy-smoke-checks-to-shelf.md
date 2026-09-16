@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Add Post-Deploy Smoke Checks to Shelf'
 description: Add a deployed-URL smoke test, wire it into a preview or deploy workflow, and document the rollback trigger before you need it.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 This lab is the part of the workshop where "green CI" stops being the finish line.

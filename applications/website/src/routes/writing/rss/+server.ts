@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 import { author, description as siteDescription, title as siteTitle, url } from '$lib/metadata';
 import { getPostIndex } from '$lib/server/content';
 import { toHtml } from 'hast-util-to-html';
@@ -9,17 +11,20 @@ const now = new Date();
 
 export async function GET() {
   const posts = getPostIndex();
-  const [first] = posts;
-  const updated = new Date(first.date);
+  const updated = posts.reduce((latest, post) => {
+    const effective = new Date(post.modified ?? post.date);
+    return effective > latest ? effective : latest;
+  }, new Date(0));
 
   const entries = posts.map(({ slug, title, date, description, modified }) => {
+    const effectiveModified = modified ?? date;
     return h('entry', [
       h('title', title),
       h('summary', description),
       h('link', { type: 'text/html', href: `${url}/writing/${slug}` }),
       h('id', `${url}/writing/${slug}`),
       h('published', new Date(date).toISOString()),
-      h('updated', new Date(modified).toISOString()),
+      h('updated', new Date(effectiveModified).toISOString()),
       h('author', [h('name', author), h('uri', url)]),
     ]);
   });
@@ -30,7 +35,7 @@ export async function GET() {
     h('author', [h('name', author)]),
     h('id', `${url}/writing/rss`),
     h('link', { type: 'text/html', href: url }),
-    h('updated', new Date(first.date).toISOString()),
+    h('updated', updated.toISOString()),
     h('rights', `Copyright © ${now.getFullYear()}, ${siteTitle}`),
     ...entries,
   ]);
@@ -50,7 +55,7 @@ export async function GET() {
       'Last-Modified': updated.toUTCString(),
       'X-Robots-Tag': 'all',
       'Content-Length': Buffer.byteLength(xml).toString(),
-      ETag: `W/"${updated.getTime()}"`,
+      ETag: `"${createHash('sha256').update(xml).digest('hex')}"`,
     },
   });
 }

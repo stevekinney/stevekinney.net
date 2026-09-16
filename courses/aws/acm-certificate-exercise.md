@@ -2,12 +2,6 @@
 title: 'Exercise: Request and Validate a Certificate'
 description: >-
   Request an ACM certificate for your domain, complete DNS validation, and verify the certificate is issued.
-date: 2026-03-18
-modified: 2026-04-07
-tags:
-  - aws
-  - acm
-  - exercise
 ---
 
 You've read about ACM, certificates, and DNS validation. Now you're going to do it for real: request a certificate, add the validation records, and verify that ACM issues the certificate. By the end of this exercise, you'll have a valid SSL/TLS certificate in `us-east-1` ready to attach to a CloudFront distribution.

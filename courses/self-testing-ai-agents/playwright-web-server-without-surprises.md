@@ -1,8 +1,6 @@
 ---
 title: 'Playwright `webServer` Without Surprises'
-description: "A practical guide to Playwright's `webServer` option: the common shapes, the options that matter, and the gotchas that waste half a day when you get them wrong."
-modified: 2026-04-14
-date: 2026-04-12
+description: "A practical guide to Playwright's webServer option, including common shapes, important settings, and gotchas that waste half a day."
 ---
 
 Most `webServer` problems don't look like `webServer` problems. They look like "the test is flaky," "the app works locally but not in CI," or my personal favorite: "Playwright says the server is ready, but the page is obviously not ready." I've lost enough time to this knob that I now treat it as infrastructure, not convenience.

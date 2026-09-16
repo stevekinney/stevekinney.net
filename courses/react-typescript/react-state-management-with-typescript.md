@@ -3,13 +3,6 @@ title: Complete Guide to React State Management with TypeScript
 description: >-
   Master useState, useReducer, and action typing—from inference patterns to
   discriminated unions that prevent impossible states.
-date: 2025-09-06
-modified: 2026-09-08
-tags:
-  - react
-  - typescript
-  - hooks
-  - state-management
 ---
 
 React's state management hooks are beautifully simple in JavaScript, but TypeScript transforms them into precision instruments that catch bugs before they happen. Instead of crossing your fingers and hoping your state updates work correctly, you can model your state with discriminated unions, use proper type guards, and build reducers that make impossible states literally impossible to represent. Let's explore how to wield these hooks with the full power of TypeScript's type system.

@@ -3,13 +3,6 @@ title: Deploying and Testing a Lambda Function
 description: >-
   Package, deploy, and test a Lambda function using the AWS CLI, including
   creating test events and reading invocation results.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - lambda
-  - deployment
-  - testing
 ---
 
 You have a compiled TypeScript handler and an execution role with logging permissions. Now you need to get the code into Lambda and verify it works. The workflow is: compile TypeScript, zip the output, create the function (or update it), invoke it, and read the results. All of this happens through the CLI.

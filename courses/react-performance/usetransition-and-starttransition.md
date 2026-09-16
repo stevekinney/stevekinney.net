@@ -3,13 +3,6 @@ title: useTransition and startTransition
 description: >-
   Mark non-urgent updates so urgent ones stay snappy—keep typing smooth while
   expensive UI catches up in the background.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - hooks
-  - concurrent
 ---
 
 React 18 introduced concurrent features that help keep your app responsive even when doing expensive work. At the heart of this is the concept of **transitions**—marking some updates as less urgent so the more important ones (like responding to user input) don't get blocked. Think of it like traffic management: express lanes for urgent updates, regular lanes for everything else.

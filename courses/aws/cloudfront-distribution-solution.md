@@ -2,13 +2,6 @@
 title: 'Solution: Set Up a CloudFront Distribution'
 description: >-
   Complete solution with all CLI commands for creating a CloudFront distribution with S3 origin, OAC, and SPA routing.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudfront
-  - exercise
-  - solution
 ---
 
 This is the complete solution for the [CloudFront Distribution Exercise](cloudfront-distribution-exercise.md). Every command is shown with its expected output.

@@ -1,15 +1,6 @@
 ---
 title: Writing a Lambda@Edge Function
-description: >-
-  Write and deploy a Lambda@Edge function that runs at origin request or
-  response events, understanding the us-east-1 deployment requirement and the
-  replication model.
-date: 2026-03-18
-modified: 2026-04-07
-tags:
-  - aws
-  - lambda-at-edge
-  - deployment
+description: 'Write and deploy a Lambda@Edge function that runs at origin request or response events.'
 ---
 
 Lambda@Edge is a full Lambda function that runs at CloudFront's regional edge caches instead of in a single region. If CloudFront Functions are like Vercel Edge Functions—tiny, fast, constrained—then Lambda@Edge is like a Vercel Serverless Function that AWS has moved closer to your users. You get the full Node.js runtime, npm packages, network access, and up to 30 seconds of execution time on origin events.

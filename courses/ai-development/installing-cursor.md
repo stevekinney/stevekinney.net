@@ -3,8 +3,6 @@ title: Installing and Getting Started with Cursor
 description: >-
   Download, install, and configure Cursor with Visual Studio Code migration,
   privacy settings, rules, skills, and the command line interface.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Cursor](https://cursor.com) is still easiest to explain as a code editor with an

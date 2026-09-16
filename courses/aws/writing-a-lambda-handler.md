@@ -3,13 +3,6 @@ title: Writing a Lambda Handler
 description: >-
   Write a Lambda handler in TypeScript that receives an event, processes it, and
   returns a properly formatted response.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - lambda
-  - typescript
-  - handler
 ---
 
 You know what Lambda is and how the execution model works. Now you need to write the code that Lambda actually runs. A Lambda **handler** is just an exported async function with a specific signature—it receives an event, does some work, and returns a response. If you've ever written an API route in Next.js or a serverless function in Vercel, the shape is nearly identical.

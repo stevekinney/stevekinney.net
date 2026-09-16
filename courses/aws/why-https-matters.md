@@ -2,13 +2,6 @@
 title: 'Why HTTPS Matters'
 description: >-
   Understand why HTTPS is non-negotiable for modern frontends and how SSL/TLS certificates make secure connections possible.
-date: 2026-03-18
-modified: 2026-04-06
-tags:
-  - aws
-  - acm
-  - https
-  - security
 ---
 
 If you've been deploying to Vercel or Netlify, every site you've shipped has been served over HTTPS. You probably never thought about it. There was no certificate to request, no validation step, no region to worry about. It just worked. On AWS, you need to understand what those platforms were doing for you—because now you're the one responsible for it.

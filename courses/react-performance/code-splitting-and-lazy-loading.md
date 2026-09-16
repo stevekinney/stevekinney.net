@@ -3,13 +3,6 @@ title: Code‑Splitting and Lazy Loading
 description: >-
   Load less JavaScript upfront. Split routes, components, and vendors to speed
   first paint and boost Core Web Vitals.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - bundling
-  - web-vitals
 ---
 
 Your JavaScript bundle is getting out of hand. What started as a modest React app has grown into a 2MB monolith that takes forever to load, especially on slower connections. Users are bouncing before they even see your beautiful loading spinner (which is probably over-engineered anyway). Enter code-splitting and lazy loading—the performance optimization techniques that let you serve only what users actually need, when they need it.

@@ -3,8 +3,6 @@ title: Text Styles and Font Families
 description: >-
   Master typography in Tailwind with utilities for font families, sizes,
   weights, styles, and text decoration
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Alright, let's get into how to work with text styles and font families in Tailwind CSS, diving into the capabilities available, particularly with the new features introduced in version 4.0. Tailwind's utility-first approach makes styling typography a streamlined process, allowing you to compose styles directly in your markup using a predefined set of classes. However, the framework is also designed to be highly customizable, so you can easily align it with your project's specific design system.
@@ -35,7 +33,7 @@ For example, to add a custom `display` font family, you would define a variable 
 
 After defining this theme variable, a corresponding `font-display` utility class becomes available for you to use in your HTML:
 
-```html tailwind
+```html tailwind height=160
 <h1 class="font-display text-4xl">Data to enrich your online business</h1>
 ```
 

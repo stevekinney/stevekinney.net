@@ -2,13 +2,6 @@
 title: 'Automating Deploys with the AWS CLI'
 description: >-
   Automate your deployment process using AWS CLI commands for syncing files to S3 and creating CloudFront invalidations.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cli
-  - deployment
-  - automation
 ---
 
 Running two CLI commands after every build is fine for a Saturday afternoon project. It's not fine for a team shipping to production. You want a single command: `./deploy.sh`—build the site, upload the files, invalidate the cache, done. This lesson turns the manual deployment process from [The Full Static Site Pipeline](full-static-pipeline.md) into a repeatable, copy-pasteable deploy script.

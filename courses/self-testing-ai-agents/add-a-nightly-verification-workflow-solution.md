@@ -1,8 +1,6 @@
 ---
 title: 'Add a Nightly Verification Workflow: Solution'
 description: Walkthrough of the nightly workflow you add in the lab—schedule timing, job boundaries, honest placeholders, and the commands each job maps to locally.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 The nightly workflow is where the slow checks live. Everything in this file was deliberately excluded from the pull-request loop because it's too slow, too broad, or too drift-prone to run on every push. That does not make it optional. It just means it belongs on a different cadence.

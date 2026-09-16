@@ -3,13 +3,6 @@ title: Separating Actions from State with Two Contexts
 description: >-
   Split read and write paths. Pass immutable state and stable actions to cut
   re-renders and improve testability.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - context
-  - state-management
 ---
 
 React Context is powerful for sharing state across components, but it comes with a performance trap that catches most of us at some point: every time the context value changes, every consumer re-renders. This becomes particularly painful when you're passing both state and the functions to update that state through the same context—because creating those updater functions inline means the context value changes on every render, even when the actual state hasn't.

@@ -4,9 +4,7 @@ description: >-
   Build a scalable design system with Storybook—creating reusable components,
   writing interaction tests, implementing dark mode, and generating
   documentation.
-layout: page
 date: 2024-03-05
-modified: 2026-03-17
 ---
 
 The material in this course is intended to go along with the [Design Systems with Storybook, v2](https://frontendmasters.com/courses/design-systems-v2/?utm_source=kinney&utm_medium=social&code=kinney) course with [Frontend Masters](https://frontendmasters.com/?utm_source=kinney&utm_medium=social&code=kinney).

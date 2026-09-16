@@ -1,8 +1,6 @@
 ---
 title: The Testing Pyramid as a Feedback Hierarchy
 description: A fast alignment pass on the testing pyramid, reframed as a hierarchy of feedback an agent can actually use.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 I'm going to move fast through this one. If you want the full treatment of the testing pyramid from first principles, I have two courses for that—[Testing JavaScript Applications](https://frontendmasters.com/courses/testing/) and [Enterprise UI Development](https://frontendmasters.com/courses/enterprise-ui-dev-v2/)—and you don't need to rewatch them to follow along here.

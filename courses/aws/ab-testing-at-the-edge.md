@@ -3,12 +3,6 @@ title: A/B Testing at the Edge
 description: >-
   Implement an A/B testing mechanism using edge functions that routes users to
   different content versions based on cookies or random assignment.
-date: 2026-03-18
-modified: 2026-04-07
-tags:
-  - aws
-  - edge-functions
-  - ab-testing
 ---
 
 A/B testing on the frontend usually involves a client-side library like LaunchDarkly or Optimizely that swaps content after the page loads. The problem: there's a flash of content, a layout shift, or a delay while the library initializes and decides which variant to show. Your Lighthouse score takes the hit.

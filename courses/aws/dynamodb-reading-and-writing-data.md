@@ -3,13 +3,6 @@ title: Reading and Writing Data in DynamoDB
 description: >-
   Perform basic CRUD operations on DynamoDB items using the AWS SDK v3 with
   PutItem, GetItem, UpdateItem, and DeleteItem from TypeScript.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - dynamodb
-  - sdk
-  - typescript
 ---
 
 You have a DynamoDB table. Now you need to put data in it and get data out. DynamoDB exposes four core operations for working with individual items: **PutItem** (create or replace), **GetItem** (read by key), **UpdateItem** (partial update), and **DeleteItem** (remove). These map directly to the CRUD operations you've built a hundred times in frontend applications.

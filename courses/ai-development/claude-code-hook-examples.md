@@ -3,8 +3,6 @@ title: Claude Code Hook Cookbook
 description: >-
   Examples of small Claude Code hooks for generated files, dangerous shell
   commands, compaction notes, and subagent audit.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 Hooks should be small enough that you can explain them in one sentence. The

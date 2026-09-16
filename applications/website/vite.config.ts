@@ -6,9 +6,11 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, searchForWorkspaceRoot, type PluginOption } from 'vite';
 import { ViteToml } from 'vite-plugin-toml';
 
-import { contentDevelopmentPlugins } from './plugins/vite/content-development-plugins';
+import { contentDevelopmentPlugins } from './plugins/vite/content-development-plugins.ts';
 
 const enableBundleStats = process.env.BUNDLE_STATS === '1';
+const enableVercelAnalytics =
+  process.env.VERCEL_ENV === 'production' || process.env.VERCEL_ENV === 'preview';
 const workspaceRoot = searchForWorkspaceRoot(process.cwd());
 
 const readContentEnhancementsBuildHash = (): string => {
@@ -57,16 +59,69 @@ const generatedEnhancementsDirectory = path.resolve(
   '.generated',
   'content-enhancements',
 );
+const generatedPlaygroundsDirectory = path.resolve(
+  workspaceRoot,
+  'applications',
+  'website',
+  '.generated',
+  'playgrounds',
+);
+const playgroundManifestPath = path.join(generatedPlaygroundsDirectory, 'manifest.json');
 const contentBuildScriptPath = path.resolve(
   workspaceRoot,
   'packages',
   'scripts',
   'content-build.ts',
 );
+const playgroundsBuildScriptPath = path.resolve(
+  workspaceRoot,
+  'packages',
+  'scripts',
+  'playgrounds-build.ts',
+);
+const contentEnhancementsBuildScriptPath = path.resolve(
+  workspaceRoot,
+  'packages',
+  'scripts',
+  'content-enhancements-build.ts',
+);
+const scriptsDirectory = path.resolve(workspaceRoot, 'packages', 'scripts');
+const utilitiesDirectory = path.resolve(workspaceRoot, 'packages', 'utilities');
+const contentDependencyPaths = [
+  contentBuildScriptPath,
+  path.join(scriptsDirectory, 'content-metadata.ts'),
+  path.join(scriptsDirectory, 'content-repository.ts'),
+  path.join(scriptsDirectory, 'content-repository'),
+  path.join(utilitiesDirectory, 'content-types.ts'),
+  path.join(utilitiesDirectory, 'frontmatter.ts'),
+  path.join(utilitiesDirectory, 'routes.ts'),
+  path.join(utilitiesDirectory, 'write-formatted-json.ts'),
+  path.join(utilitiesDirectory, 'tailwind-playground.ts'),
+  path.join(utilitiesDirectory, 'tailwind-playground-metadata.ts'),
+  path.join(utilitiesDirectory, 'tailwind-playground-types.ts'),
+  path.resolve(workspaceRoot, 'packages', 'markdown', 'src', 'remark-tailwind-playground.ts'),
+];
+const enhancementDependencyPaths = [
+  contentEnhancementsBuildScriptPath,
+  path.join(scriptsDirectory, 'content-enhancement-build-hash.ts'),
+];
+const playgroundDependencyPaths = [
+  playgroundsBuildScriptPath,
+  path.join(scriptsDirectory, 'playground-document.ts'),
+  path.join(scriptsDirectory, 'build-dependencies.ts'),
+  path.join(scriptsDirectory, 'tailwind-playground.css'),
+  path.join(utilitiesDirectory, 'tailwind-playground-policy.ts'),
+];
+const sharedBuildDependencyPaths = [
+  path.join(scriptsDirectory, 'build-artifacts.ts'),
+  path.join(scriptsDirectory, 'content-paths.ts'),
+  path.resolve(workspaceRoot, 'bun.lock'),
+];
 
 export default defineConfig({
   define: {
     __CONTENT_ENHANCEMENTS_BUILD_HASH__: JSON.stringify(readContentEnhancementsBuildHash()),
+    __VERCEL_ANALYTICS_ENABLED__: JSON.stringify(enableVercelAnalytics),
   },
   plugins: [
     sveltekit(),
@@ -75,10 +130,18 @@ export default defineConfig({
       contentDirectories,
       contentAssetPathPrefixes: ['/courses/', '/projects/', '/writing/'],
       enhancementSourceDirectories: [contentEnhancementsSourceDirectory],
+      contentDependencyPaths,
+      enhancementDependencyPaths,
+      playgroundDependencyPaths,
+      sharedBuildDependencyPaths,
       contentBuildScriptPath,
+      playgroundsBuildScriptPath,
+      contentEnhancementsBuildScriptPath,
       contentBuildWorkingDirectory: process.cwd(),
       generatedEnhancementsDirectory,
       generatedEnhancementsUrlPrefix: '/generated/content-enhancements/',
+      generatedPlaygroundsDirectory,
+      playgroundManifestPath,
     }),
     ViteToml(),
     tailwindcss(),
@@ -105,9 +168,12 @@ export default defineConfig({
       : []),
   ].filter(Boolean) as PluginOption[],
 
-  esbuild: {
-    jsxFactory: 'h',
-    jsxFragment: 'Fragment',
+  oxc: {
+    jsx: {
+      runtime: 'classic',
+      pragma: 'h',
+      pragmaFrag: 'Fragment',
+    },
   },
   server: {
     fs: {

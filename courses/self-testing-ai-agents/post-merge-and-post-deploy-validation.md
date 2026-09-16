@@ -1,8 +1,6 @@
 ---
 title: Post-Merge and Post-Deploy Validation
 description: Green pull requests are not the end of the loop. This is the layer that proves the deployment itself is healthy and tells you when to stop the rollout.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 CI going green is a great feeling. It is also not the same thing as "the deployment is healthy."

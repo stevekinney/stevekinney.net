@@ -3,12 +3,6 @@ title: 'Exercise: Add a CloudFront Function to Your Distribution'
 description: >-
   Write a CloudFront Function that adds security headers and redirects a legacy
   URL path, then deploy it to your distribution.
-date: 2026-03-18
-modified: 2026-04-06
-tags:
-  - aws
-  - cloudfront-functions
-  - exercise
 ---
 
 You're going to write and deploy two CloudFront Functions: one that adds security headers to every response and one that redirects a legacy URL to a new path. By the end of this exercise, your CloudFront distribution will enforce security headers on all responses and automatically redirect `/old-path` to `/new-path`—without touching your origin or your application code.

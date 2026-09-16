@@ -3,8 +3,6 @@ title: Cursor Bugbot and Security Review
 description: >-
   Use Cursor Bugbot and Security Agents as review aids while keeping human
   ownership over correctness, risk, and merge decisions.
-modified: 2026-06-24
-date: 2026-06-23
 ---
 
 [Cursor Bugbot](https://cursor.com/docs/bugbot) and

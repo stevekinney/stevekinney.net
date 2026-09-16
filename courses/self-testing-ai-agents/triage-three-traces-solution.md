@@ -1,8 +1,6 @@
 ---
 title: 'Solution: Triage Three Traces'
 description: One walk through the three lab traces — Trace A, Trace B, and Trace C — with the smoking-gun evidence in each pane and the fix for each failure.
-modified: 2026-04-14
-date: 2026-04-11
 ---
 
 One walk through the three traces, with the evidence I'd cite for each. If your diagnoses look different in _details_ — different fix wording, different specific line numbers — that's fine. What should match is the bucket and the pane.

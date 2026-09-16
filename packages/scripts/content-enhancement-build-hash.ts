@@ -10,7 +10,18 @@ const CONTENT_ENHANCEMENT_PACKAGE_INPUTS = [
   'src/**/*.{ts,tsx,js,jsx,css,json,svg,png,jpg,jpeg,webp,avif,gif}',
 ];
 
-const REPOSITORY_DEPENDENCY_INPUTS = ['package.json', 'bun.lock'];
+const REPOSITORY_DEPENDENCY_INPUTS = [
+  'package.json',
+  'bun.lock',
+  '.node-version',
+  'packages/utilities/**/*.ts',
+  '!packages/utilities/**/*.test.ts',
+  'packages/utilities/package.json',
+  'packages/scripts/content-enhancements-build.ts',
+  'packages/scripts/content-enhancement-build-hash.ts',
+  'packages/scripts/content-paths.ts',
+  'packages/scripts/build-artifacts.ts',
+];
 
 export type HashInput = {
   cacheKey: string;
@@ -56,6 +67,14 @@ export const computeContentEnhancementBuildHash = async (
   repositoryRoot: string,
 ): Promise<string> => {
   const hash = createHash('sha256');
+  hash.update(
+    JSON.stringify({
+      bun: process.versions.bun,
+      node: process.versions.node,
+      platform: process.platform,
+      architecture: process.arch,
+    }),
+  );
 
   for (const input of await listContentEnhancementBuildHashInputs(
     contentEnhancementsPackageRoot,

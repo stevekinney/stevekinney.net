@@ -1,22 +1,23 @@
 import { error } from '@sveltejs/kit';
 
-import { url } from '$lib/metadata';
 import {
   getCourseEntry,
+  getGeneratedContent,
   getLessonRoute,
   getProjectEntry,
   getWritingEntry,
 } from '$lib/server/content';
-import {
-  loadRawCourseLesson,
-  loadRawCourseReadme,
-  loadRawProjectContent,
-  loadRawWritingContent,
-} from '$lib/server/load-raw-content';
+import { renderLessonExport, renderProjectExport, renderWritingExport } from '$lib/server/llms';
 
 import type { RequestHandler } from '@sveltejs/kit';
+import type { EntryGenerator } from './$types';
 
-export const prerender = false;
+export const prerender = true;
+
+export const entries: EntryGenerator = () =>
+  Object.values(getGeneratedContent().routes)
+    .filter((route) => route.contentType !== 'course')
+    .map((route) => ({ path: route.path.slice(1) }));
 
 const safeDecode = (value: string): string => {
   try {
@@ -30,45 +31,7 @@ const resolveWriting = async (slug: string): Promise<string | null> => {
   const post = getWritingEntry(slug);
   if (!post) return null;
 
-  try {
-    const body = await loadRawWritingContent(slug);
-
-    return [
-      `# ${post.title}`,
-      '',
-      `URL: ${url}/writing/${slug}`,
-      `Date: ${post.date}`,
-      `Description: ${post.description}`,
-      '',
-      '---',
-      '',
-      body,
-    ].join('\n');
-  } catch {
-    return null;
-  }
-};
-
-const resolveCourse = async (courseSlug: string): Promise<string | null> => {
-  const course = getCourseEntry(courseSlug);
-  if (!course) return null;
-
-  try {
-    const body = await loadRawCourseReadme(courseSlug);
-
-    return [
-      `# ${course.title}`,
-      '',
-      `URL: ${url}/courses/${courseSlug}`,
-      `Description: ${course.description}`,
-      '',
-      '---',
-      '',
-      body,
-    ].join('\n');
-  } catch {
-    return null;
-  }
+  return renderWritingExport({ ...post, path: `/writing/${slug}` });
 };
 
 const resolveCourseLesson = async (
@@ -76,60 +39,15 @@ const resolveCourseLesson = async (
   lessonSlug: string,
 ): Promise<string | null> => {
   const course = getCourseEntry(courseSlug);
-  const lesson = getLessonRoute(courseSlug, lessonSlug);
-
-  if (!course || !lesson) return null;
-
-  try {
-    const body = await loadRawCourseLesson(courseSlug, lessonSlug);
-
-    const header = [
-      `# ${lesson.title}`,
-      '',
-      `Course: ${course.title}`,
-      `URL: ${url}/courses/${courseSlug}/${lessonSlug}`,
-    ];
-
-    if (lesson.description) {
-      header.push(`Description: ${lesson.description}`);
-    }
-
-    return [...header, '', '---', '', body].join('\n');
-  } catch {
-    return null;
-  }
+  if (!course || !getLessonRoute(courseSlug, lessonSlug)) return null;
+  return renderLessonExport(courseSlug, lessonSlug);
 };
 
 const resolveProject = async (projectSlug: string): Promise<string | null> => {
   const project = getProjectEntry(projectSlug);
   if (!project) return null;
 
-  try {
-    const body = await loadRawProjectContent(projectSlug);
-    const header = [
-      `# ${project.name}`,
-      '',
-      `URL: ${url}/projects/${projectSlug}`,
-      `GitHub: ${project.githubUrl}`,
-      `Description: ${project.description}`,
-    ];
-
-    if (project.productionUrl) {
-      header.push(`Production: ${project.productionUrl}`);
-    }
-
-    if (project.writingPath) {
-      header.push(`Related writing: ${url}${project.writingPath}`);
-    }
-
-    if (project.youtubeUrl) {
-      header.push(`YouTube: ${project.youtubeUrl}`);
-    }
-
-    return [...header, '', '---', '', body].join('\n');
-  } catch {
-    return null;
-  }
+  return renderProjectExport(project);
 };
 
 export const GET: RequestHandler = async ({ params }) => {
@@ -140,8 +58,6 @@ export const GET: RequestHandler = async ({ params }) => {
 
   if (segments[0] === 'writing' && segments.length === 2) {
     content = await resolveWriting(segments[1]);
-  } else if (segments[0] === 'courses' && segments.length === 2) {
-    content = await resolveCourse(segments[1]);
   } else if (segments[0] === 'courses' && segments.length === 3) {
     content = await resolveCourseLesson(segments[1], segments[2]);
   } else if (segments[0] === 'projects' && segments.length === 2) {

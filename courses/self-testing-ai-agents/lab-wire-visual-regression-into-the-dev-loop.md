@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Wire Visual Regression Into the Dev Loop'
 description: Set up Playwright's screenshot gate on Shelf, commit baselines, and watch an agent respond to a diff.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 Short lab. Two halves. The first half wires the screenshot gate into Shelf. The second half deliberately breaks a component and watches the loop fire.

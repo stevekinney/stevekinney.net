@@ -1,8 +1,6 @@
 ---
 title: The Waiting Story
-description: Why `page.waitForTimeout` is the second-most-common cause of flaky tests, and what to reach for instead.
-modified: 2026-04-14
-date: 2026-04-06
+description: 'Why page.waitForTimeout is a common cause of flaky tests and what to reach for instead.'
 ---
 
 If locator discipline is the number-one thing an agent will get wrong in a Playwright suite, waiting is a very close second. And where locators are bad because they break across refactors, waiting is bad because it breaks _on the exact same code, intermittently, for reasons nobody can explain_. That's worse. That's the thing that makes your team stop trusting end-to-end tests.

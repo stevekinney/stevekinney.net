@@ -3,8 +3,6 @@ title: Encouraging Claude Code to Think
 description: >-
   Use plan mode, effort controls, opusplan, and explicit tradeoff questions
   instead of relying on magic prompting phrases.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 The goal is not to make [Claude Code](https://code.claude.com/docs/en/overview)

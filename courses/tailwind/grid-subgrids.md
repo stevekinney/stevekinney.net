@@ -3,8 +3,6 @@ title: Grid Subgrids
 description: >-
   Use CSS subgrids in Tailwind to inherit parent grid tracks for aligned nested
   grid structures.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Tailwind CSS uses utility classes to build complex, responsive UIs in HTML. Version 4.0 improves performance and embraces modern CSS.
@@ -21,7 +19,7 @@ Define grid column numbers with utilities like `grid-cols-<number>` (e.g., `grid
 
 Tailwind CSS supports subgrids for columns. Use `grid-cols-subgrid` to adopt column tracks from the parent item. This aligns nested grid items with their parent grid container.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid grid-cols-12 gap-4 rounded-lg bg-gray-100 p-4">
   <!-- Parent container: 12-column grid -->
   <div class="col-span-full grid grid-cols-subgrid gap-4">
@@ -49,7 +47,7 @@ Specify grid rows with utilities like `grid-rows-<number>` (e.g., `grid-rows-2`,
 
 Use `grid-rows-subgrid` for a grid item to adopt row tracks from its parent. This maintains vertical alignment in nested grid structures.
 
-```html tailwind
+```html tailwind height=400
 <div class="grid h-64 grid-rows-6 gap-4 rounded-lg bg-gray-100 p-4">
   <!-- Parent container: 6-row grid, fixed height -->
   <div class="row-span-full grid grid-rows-subgrid gap-4">

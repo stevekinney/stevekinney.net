@@ -1,8 +1,6 @@
 ---
 title: Arrange-Act-Assert (AAA) Pattern
 description: 'Learn the AAA pattern for writing clear, maintainable unit tests.'
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 ## Arrange-Act-Assert (AAA) Pattern

@@ -1,8 +1,6 @@
 ---
 title: "Solution: Refactor Shelf's Fixtures"
 description: One reasonable walk through the fixtures-refactor lab, commit by commit, with the thinking behind each decision.
-modified: 2026-04-14
-date: 2026-04-11
 ---
 
 The course solution below is one reasonable endpoint. Yours may look different — the lab grades on the quality of your decisions, not a byte-for-byte match. What follows is the narrative for how I'd walk from `fixtures.ts` to a cleaner final shape, one commit at a time.

@@ -3,13 +3,6 @@ title: Cost Monitoring and Budget Alarms
 description: >-
   Set up AWS Budgets and billing alerts so you're notified before costs exceed
   your expectations, and understand where the free tier boundaries are.
-date: 2026-03-18
-modified: 2026-04-07
-tags:
-  - aws
-  - billing
-  - budgets
-  - cost-management
 ---
 
 The scariest thing about AWS isn't IAM policies or CloudFormation templates—it's the billing page. Unlike Vercel or Netlify, where you pick a plan and know what you'll pay, AWS charges you for exactly what you use. That's great for cost efficiency at scale. It's terrifying when you're learning, because a misconfigured service can run up charges before you notice.

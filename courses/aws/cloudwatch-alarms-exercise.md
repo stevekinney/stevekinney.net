@@ -3,12 +3,6 @@ title: 'Exercise: Set Up Alarms for Your Lambda Functions'
 description: >-
   Create CloudWatch alarms for error rate and duration, wire them to SNS email
   notifications, and trigger alarms intentionally to verify the pipeline.
-date: 2026-03-18
-modified: 2026-04-06
-tags:
-  - aws
-  - cloudwatch
-  - exercise
 ---
 
 You're going to build a complete alerting pipeline from scratch—an SNS topic, an email subscription, and two CloudWatch alarms that watch your Lambda function's error rate and duration. Then you'll intentionally trigger the alarms to prove the pipeline works end to end.

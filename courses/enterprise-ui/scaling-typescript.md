@@ -3,8 +3,6 @@ title: Scaling TypeScript
 description: >-
   Where TypeScript starts to buckle under the weight of a large codebase, and the
   strategies that keep your tooling fast as the project grows.
-modified: 2026-03-17
-date: 2026-03-01
 ---
 
 TypeScript is great until it isn't. At a few thousand lines of code, everything feels snappy—your editor highlights errors instantly, `tsc` finishes in seconds, and life is good. But, somewhere around the hundreds-of-thousands-of-lines mark, you start noticing that your IDE takes two minutes to show you a red squiggly, your CI pipeline burns through compute for tests that didn't need to run, and `tsc` eats enough RAM to make your laptop fan audible from across the room.

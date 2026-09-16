@@ -3,8 +3,6 @@ title: Visual Studio Code Snippet Exercise Solutions
 description: >-
   Solutions to the Visual Studio Code snippet creation exercises with complete
   code examples
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 Below are some possible solutions to [these exercises around create snippets in Visual Studio Code](vscode-snippet-exercises.md).

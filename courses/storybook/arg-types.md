@@ -3,8 +3,6 @@ title: Improving ArgTypes with Metadata
 description: >-
   Storybook tries it's best to infer as much as it can, but the more data you
   add, the better table you're going to get. Let's walk through this example.
-modified: 2026-03-17
-date: 2024-04-15
 ---
 
 ## Adding Metadata to `argTypes`

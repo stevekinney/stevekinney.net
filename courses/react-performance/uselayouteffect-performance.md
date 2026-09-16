@@ -3,13 +3,6 @@ title: Performance Characteristics of useLayoutEffect
 description: >-
   Know when layout effects are necessary—and when they block paint. Prefer
   passive effects and measure before forcing sync work.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - hooks
-  - effects
 ---
 
 `useLayoutEffect` runs synchronously after all DOM mutations but before the browser paints. This timing makes it powerful for preventing visual glitches but potentially expensive for performance. Let's explore when you need it, when you don't, and how to measure its impact on your application's responsiveness.

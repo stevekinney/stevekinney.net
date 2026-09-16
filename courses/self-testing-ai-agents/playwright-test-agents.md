@@ -1,8 +1,6 @@
 ---
 title: Playwright Test Agents
 description: Playwright ships three built-in agents that can plan, generate, and heal your test suite. Here's how they work and where they fit in the loop.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 So, [Playwright](https://playwright.dev/) 1.56 shipped something genuinely new: three built-in agents—**planner**, **generator**, and **healer**—that can write and maintain your test suite from inside your coding agent's loop. Not "AI-assisted autocomplete for test code." Actual agents with tools, instructions, and the ability to drive a browser, inspect the result, and iterate.

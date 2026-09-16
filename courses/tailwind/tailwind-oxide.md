@@ -3,8 +3,6 @@ title: Tailwind Oxide
 description: >-
   Exploring Oxide - Tailwind's high-performance engine built with Rust and
   Lightning CSS for blazing fast builds
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 [Oxide](https://medium.com/@bomber.marek/whats-tailwind-oxide-engine-the-next-evolution-of-tailwind-css-32e7ef8e19a1) is Tailwind 4's high-performance engine—a ground-up rewrite initially planned for Tailwind 3.x.

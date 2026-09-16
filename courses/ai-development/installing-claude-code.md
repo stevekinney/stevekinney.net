@@ -3,8 +3,6 @@ title: Installing and Setting Up Claude Code
 description: >-
   Install Claude Code with the native installer, Homebrew, WinGet, release
   channels, auto-updates, Windows guidance, and claude doctor.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Claude Code](https://code.claude.com/docs/en/overview) is

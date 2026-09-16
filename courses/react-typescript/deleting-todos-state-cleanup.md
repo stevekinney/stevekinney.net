@@ -3,14 +3,6 @@ title: Deleting Todos - DELETE Requests and State Cleanup
 description: >-
   Handle DELETE operations with TypeScript—implement soft delete, undo
   functionality, cascading deletes, and proper state cleanup patterns.
-date: 2025-09-27
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - crud
-  - delete-requests
-  - state-management
 ---
 
 Deleting data seems simple—remove it from the array and call it done. But production applications need confirmation dialogs, undo functionality, soft deletes, and proper cleanup of related data. TypeScript helps us implement these patterns safely, ensuring we handle all the edge cases that come with destructive operations.

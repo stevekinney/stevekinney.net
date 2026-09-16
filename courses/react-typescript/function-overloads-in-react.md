@@ -3,14 +3,6 @@ title: Function Overloads for Flexible APIs
 description: >-
   Use overloads to model ergonomic APIs—curried helpers, either‑or props, and
   safe fallbacks.
-date: 2025-09-06
-modified: 2026-09-08
-tags:
-  - react
-  - typescript
-  - function-overloads
-  - api-design
-  - flexible-apis
 ---
 
 Function overloads in TypeScript let you define multiple type signatures for a single implementation, creating APIs that feel intuitive and adapt to how developers actually want to use them. In React applications, this translates to components and hooks that "just work" regardless of whether you pass a string, an object, or different combinations of arguments. We'll explore how to design flexible, type-safe APIs that make your components feel as polished as React's built-ins.

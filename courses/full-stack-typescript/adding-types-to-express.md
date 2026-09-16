@@ -3,8 +3,6 @@ title: Adding Types to Express
 description: >-
   Learn how to leverage TypeScript with Express to build type-safe APIs and web
   applications.
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 Express's typing system wasn't built with TypeScript in mind. The `@types/express` package provides essential typings, but using them effectively requires understanding their intricacies.

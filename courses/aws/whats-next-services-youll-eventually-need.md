@@ -1,16 +1,6 @@
 ---
 title: "What's Next: Services You'll Eventually Need"
-description: >-
-  Survey the AWS services you'll likely need next—Amplify, Cognito, Step
-  Functions, EventBridge, SQS, ECS/Fargate, and WAF—and understand when each
-  becomes relevant.
-date: 2026-03-18
-modified: 2026-04-15
-tags:
-  - aws
-  - services
-  - next-steps
-  - overview
+description: "Survey the AWS services you'll likely need next—Amplify, Cognito, Step Functions, EventBridge, SQS, ECS/Fargate, and WAF."
 ---
 
 You now know how to deploy a static frontend with S3 and CloudFront, run serverless functions with Lambda, expose APIs through API Gateway, store data in DynamoDB, manage secrets with Secrets Manager and Parameter Store, and monitor all of it with CloudWatch. That's a real stack. You can build and ship production applications with exactly what you've learned.

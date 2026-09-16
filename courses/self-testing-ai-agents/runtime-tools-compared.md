@@ -1,8 +1,6 @@
 ---
 title: 'Runtime Tools Compared: Playwright MCP, Chrome DevTools MCP, and Claude in Chrome'
 description: Three ways to let an agent drive a browser, what each one is actually good at, and when to reach for which.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 We spent the morning making the scripted test suite something an agent can rely on. That's the slow, durable, repeatable loop. This lesson is about the fast, interactive loop: letting the agent _drive_ a browser in real time during development, poke at the page, read the console, and figure out what's going on.

@@ -1,8 +1,6 @@
 ---
 title: Unhappy Path
 description: Learn how to test edge cases and errors to improve robustness.
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 No, this is _not_ my new band name.

@@ -1,8 +1,6 @@
 ---
 title: Install userEvent
 description: Refactor your tests to use userEvent instead of fireEvent.
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 > [!NOTE] If You're Not Using the Example Repository

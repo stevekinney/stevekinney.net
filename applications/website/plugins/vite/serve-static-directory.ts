@@ -2,6 +2,8 @@ import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import type { Connect } from 'vite';
 
+type StaticHeaders = Record<string, number | string>;
+
 type ServeStaticDirectoryOptions = {
   /** Absolute directory that file paths are resolved against. */
   rootDirectory: string;
@@ -9,6 +11,16 @@ type ServeStaticDirectoryOptions = {
   matchRequest: (pathname: string) => string | null;
   /** Maps a file extension (lowercased, including `.`) to a Content-Type. */
   mimeTypes: Record<string, string>;
+  /** Adds response headers after the Content-Type and Content-Length headers. */
+  headers?: (relativeFilePath: string) => StaticHeaders;
+};
+
+const parsePathname = (url: string): string | null => {
+  try {
+    return decodeURIComponent(new URL(url, 'http://localhost').pathname);
+  } catch {
+    return null;
+  }
 };
 
 /**
@@ -19,12 +31,14 @@ export function serveStaticDirectory(
   options: ServeStaticDirectoryOptions,
 ): Connect.NextHandleFunction {
   const rootDirectory = path.resolve(options.rootDirectory);
-  const { matchRequest, mimeTypes } = options;
+  const { headers, matchRequest, mimeTypes } = options;
 
   return async (request, response, next) => {
     if (!request.url) return next();
 
-    const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+    const pathname = parsePathname(request.url);
+    if (!pathname) return next();
+
     const relativeFilePath = matchRequest(pathname);
     if (relativeFilePath === null) return next();
 
@@ -43,6 +57,11 @@ export function serveStaticDirectory(
       response.setHeader('Content-Type', contentType);
       response.setHeader('Content-Length', content.length);
       response.setHeader('Cache-Control', 'no-cache');
+
+      for (const [name, value] of Object.entries(headers?.(relativeFilePath) ?? {})) {
+        response.setHeader(name, value);
+      }
+
       response.end(content);
     } catch {
       next();

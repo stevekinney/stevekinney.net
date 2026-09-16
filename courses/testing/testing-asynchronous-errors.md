@@ -1,8 +1,6 @@
 ---
-modified: 2026-03-17
 title: Testing Asynchronous Errors
 description: Learn how to write unit tests that test for asynchronous errors.
-date: 2024-10-02
 ---
 
 When working with asynchronous functions that throw errors, you need to handle promises and rejected errors. In Vitest, you can test asynchronous error handling using `async/await` or the `.rejects` matcher for promises.

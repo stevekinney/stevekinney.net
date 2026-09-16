@@ -3,14 +3,6 @@ title: Mirroring DOM Props with ComponentPropsWithoutRef
 description: >-
   Wrap native elements without losing typing—pass through every valid prop and
   keep autocomplete.
-date: 2025-09-06
-modified: 2026-09-08
-tags:
-  - react
-  - typescript
-  - dom-props
-  - component-props
-  - html-attributes
 ---
 
 Building wrapper components around native DOM elements is one of those things that looks simple until you realize you need to support all the props. You know the drill: you build a nice `Button` component, then someone needs `onClick`, then `disabled`, then `aria-label`, then `onMouseEnter`, and before you know it you're manually typing out dozens of props that the native `<button>` already supports perfectly.

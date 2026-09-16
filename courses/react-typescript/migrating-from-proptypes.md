@@ -3,14 +3,6 @@ title: Migrating from PropTypes to TypeScript
 description: >-
   Replace runtime warnings with compile‑time safety—move prop validation into
   your types and editor.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - migration
-  - prop-types
-  - validation
 ---
 
 React's `PropTypes` were great for their time—they gave us runtime prop validation when JavaScript didn't have much in the way of static analysis. But now that TypeScript has become the de facto standard for React development, you can get better type safety, earlier error detection, and superior developer experience by migrating from `PropTypes` to TypeScript interfaces and types.

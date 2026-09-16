@@ -3,12 +3,6 @@ title: Creating an HTTP API
 description: >-
   Create an HTTP API in API Gateway with routes and methods that map to your
   application's endpoints.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - api-gateway
-  - http-api
 ---
 
 You picked HTTP APIs. Now you need to create one. On Vercel, an API endpoint exists the moment you create a file in the `api/` directory. On AWS, you create the API explicitly—a named resource with its own URL, its own configuration, and its own lifecycle. The upside is that you control everything. The downside is that you _have_ to create everything.

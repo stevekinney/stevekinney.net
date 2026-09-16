@@ -1,12 +1,6 @@
 ---
 title: Safer Createcontext Helpers
-description: >-
-  React Context is powerful, but the default createContext API leaves you with
-  an uncomfortable truth: your context value might be undefined if someone
-  forgets to wrap their component tree in a Provider. This leads to defensive
-  programming...
-modified: 2026-03-17
-date: 2025-09-06
+description: 'Build safer React Context helpers that guarantee a provider value and explain when a provider is missing.'
 ---
 
 React Context is powerful, but the default `createContext` API leaves you with an uncomfortable truth: your context value might be `undefined` if someone forgets to wrap their component tree in a Provider. This leads to defensive programming, runtime checks, and the occasional late-night debugging session when you realize why your app is throwing errors in production.

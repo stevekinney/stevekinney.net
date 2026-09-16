@@ -1,12 +1,6 @@
 ---
 title: Server packages
-description: >-
-  Building a fully type-safe data layer between your React frontend and backend
-  is one of those things that sounds complicated but becomes surprisingly
-  elegant once you get the pieces in place. When you combine React Query's
-  powerful cachi...
-modified: 2026-03-17
-date: 2025-09-06
+description: "Build a type-safe React-to-backend data layer by pairing tRPC's end-to-end typing with React Query's caching model."
 ---
 
 Building a fully type-safe data layer between your React frontend and backend is one of those things that sounds complicated but becomes surprisingly elegant once you get the pieces in place. When you combine React Query's powerful caching and state management with tRPC's end-to-end type safety, you get something magical: full TypeScript inference from your server functions all the way to your React components, with zero manual type definitions.

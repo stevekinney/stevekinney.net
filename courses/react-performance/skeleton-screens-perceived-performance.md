@@ -3,14 +3,6 @@ title: Skeleton Screens & Perceived Performance
 description: >-
   Make your React app feel instant with skeleton screens. Master loading states,
   progressive enhancement, and psychological performance tricks.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - ux
-  - loading
-  - skeleton-screens
 ---
 
 Your React app takes 2 seconds to load data. You can't make it faster—the API is slow, the computation is complex, or the user's on a weak connection. But here's the secret: users don't actually care about real performance metrics. They care about _perceived_ performance. A 2-second wait with a skeleton screen feels faster than a 1-second wait with a spinner. It's not magic, it's psychology, and it's one of the most powerful performance optimizations you can make without touching a single algorithm.

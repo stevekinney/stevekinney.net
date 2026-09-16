@@ -1,8 +1,6 @@
 ---
 title: 'Wrap a Custom Verification MCP: Solution'
 description: Walkthrough of the MCP verification server you add in the lab and the steps to prove it works end-to-end.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 The whole premise of this lab is: what if your agent could _look at the running app_ instead of just reading test output? Not in a hand-wavy "AI vision" sense, but concretely -- launch a browser, navigate to a page, count the elements, collect errors, return structured JSON. The current Shelf starter does not ship this helper, so this solution is the code you add during the lab.

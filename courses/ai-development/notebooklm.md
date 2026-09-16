@@ -3,8 +3,6 @@ title: Using NotebookLM for AI Development
 description: >-
   Leverage Google's NotebookLM for research, documentation analysis, and
   knowledge synthesis in AI projects.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 ![NotebookLM](assets/notebooklm.png)

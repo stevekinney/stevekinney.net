@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Add a Nightly Verification Workflow'
 description: Schedule the slow and broad checks, keep them off the fast loop, and make their failures readable enough that an agent can still act on them.
-modified: 2026-04-11
-date: 2026-04-06
 ---
 
 This appendix lab turns the placeholder nightly story into a real workflow.

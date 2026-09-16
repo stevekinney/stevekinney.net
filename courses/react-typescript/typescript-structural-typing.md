@@ -3,13 +3,6 @@ title: Structural Typing in TypeScript
 description: >-
   Master TypeScript's structural type system—why shape matters more than names,
   and how this changes everything about React props.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - typescript
-  - structural-typing
-  - fundamentals
-  - react-props
 ---
 
 TypeScript doesn't care what you call your types—it only cares about their shape. This is structural typing, and it's the most fundamental concept that sets TypeScript apart from nominally-typed languages like Java or C#. Once you truly understand structural typing, React props, component composition, and type compatibility all suddenly make sense.

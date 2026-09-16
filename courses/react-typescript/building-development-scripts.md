@@ -3,8 +3,6 @@ title: Building and Development Scripts
 description: >-
   Set up essential build and development scripts for React TypeScript projects,
   including dev servers, builds, testing, and linting.
-date: 2025-09-20
-modified: 2026-03-17
 ---
 
 ## Building and Development Scripts

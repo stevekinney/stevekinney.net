@@ -1,12 +1,6 @@
 ---
 title: Authentication, Authorization, and Multi-Tenancy
-description: >-
-  How enterprise frontends handle identity, access control, and tenant isolation—from
-  SSO protocols and token management to RBAC versus ABAC versus ReBAC, the BFF
-  pattern, microfrontend auth boundaries, and the routing and branding patterns
-  that make multi-tenant SaaS work.
-modified: 2026-03-17
-date: 2026-03-01
+description: 'How enterprise frontends handle identity, access control, and tenant isolation.'
 ---
 
 Authentication, authorization, and multi-tenancy are three problems that enterprise frontend teams tend to treat as "someone else's job" right up until they are not. The identity provider handles auth, the backend enforces permissions, the platform team manages tenants—and the frontend just… calls an API and hopes for the best.

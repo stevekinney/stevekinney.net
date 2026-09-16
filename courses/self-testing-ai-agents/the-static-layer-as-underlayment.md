@@ -1,8 +1,6 @@
 ---
 title: The Static Layer as Underlayment
 description: Lint, types, dead code, hooks, secret scanning—the cheap stuff that should be running underneath everything. Why it lives at the end of the day.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 We're about six hours into the day. Here's where I explain why the lesson you'd have expected to see first is showing up now.

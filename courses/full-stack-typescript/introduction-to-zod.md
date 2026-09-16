@@ -3,8 +3,6 @@ title: Introduction to Zod
 description: >-
   Get started with Zod, a TypeScript-first schema validation library for
   ensuring runtime type safety in your applications.
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 TypeScript gives you compile‐time type safety, but when your data comes from the wild (APIs, user inputs, env variables), there's no guarantee it will behave. Enter **[Zod](https://www.npmjs.com/package/zod)**—a TypeScript‐first, zero-dependency runtime validation library that makes sure your data is as type-safe as your code (and saves you from unexpected runtime nightmares).

@@ -2,8 +2,6 @@ import path from 'node:path';
 import { stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
-import { normalizePath } from '@stevekinney/utilities/frontmatter';
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const repositoryRoot = path.resolve(__dirname, '..', '..');
@@ -31,19 +29,12 @@ export const generatedContentDataPath = path.resolve(
   generatedContentDirectory,
   'content-data.json',
 );
-export const tailwindPlaygroundSourcePath = path.resolve(
-  generatedContentDirectory,
-  'tailwind-playground-source.html',
-);
 export const contentEnhancementsPackageRoot = path.resolve(
   repositoryRoot,
   'packages',
   'content-enhancements',
 );
-export const contentEnhancementsSourceDirectory = path.resolve(
-  contentEnhancementsPackageRoot,
-  'src',
-);
+const contentEnhancementsSourceDirectory = path.resolve(contentEnhancementsPackageRoot, 'src');
 export const contentEnhancementsEntryPath = path.resolve(
   contentEnhancementsSourceDirectory,
   'content-enhancements.ts',
@@ -52,11 +43,6 @@ export const generatedContentEnhancementsDirectory = path.resolve(
   generatedContentDirectory,
   'content-enhancements',
 );
-export const imageManifestPath = path.resolve(repositoryRoot, 'image-manifest.json');
-
-export const normalizeRepositoryPath = (absolutePath: string): string =>
-  normalizePath(path.relative(repositoryRoot, absolutePath));
-
 export const resolveRepositoryPath = (repositoryPath: string): string =>
   path.resolve(repositoryRoot, repositoryPath);
 

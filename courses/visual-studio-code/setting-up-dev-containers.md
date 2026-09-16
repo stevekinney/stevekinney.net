@@ -3,8 +3,6 @@ title: Setting Up Dev Containers in Visual Studio Code
 description: >-
   A step-by-step guide to setting up and customizing development containers in
   Visual Studio Code
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 ![Setting up Dev Containers](assets/set-up-dev-containers-vscode.png)

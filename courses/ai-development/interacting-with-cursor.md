@@ -3,8 +3,6 @@ title: Interacting with Cursor
 description: >-
   Use Cursor's inline editing, chat, agent, plan, cloud, and terminal workflows
   with clear approval boundaries.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Cursor](https://cursor.com) gives you several interaction surfaces. They are not

@@ -1,8 +1,6 @@
 ---
 title: The Hypothesis
 description: Why we're spending a whole day on feedback loops instead of prompting tricks, and what "self-correcting" actually means.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 So, here's the bet the rest of the day is built on.

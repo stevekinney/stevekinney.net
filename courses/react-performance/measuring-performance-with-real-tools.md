@@ -3,13 +3,6 @@ title: Measuring Performance with Real Tools
 description: >-
   Stop guessing. Use React DevTools, Chrome Performance, and flamegraphs to find
   real bottlenecks and prove improvements.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - monitoring
-  - devtools
 ---
 
 Performance optimization without measurement is just wishful thinking with extra steps. You might _feel_ like that component refactor made things faster, but feelings don't ship reliable software. Whether you're tracking down sluggish renders or proving to stakeholders that your optimization sprint was worth it, you need real data from real tools.

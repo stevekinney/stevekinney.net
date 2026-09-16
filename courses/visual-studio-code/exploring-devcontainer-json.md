@@ -3,8 +3,6 @@ title: Configuring Your Dev Container
 description: >-
   Detailed explanation of the devcontainer.json file and its properties to
   customize your development environment
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 The **`image`:** This property specifies the **Docker image** to use as the base for your Dev Container.

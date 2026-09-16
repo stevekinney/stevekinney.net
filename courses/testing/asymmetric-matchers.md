@@ -1,8 +1,6 @@
 ---
 title: Understanding Asymmetric Matchers in Testing
 description: Why asymmetric matchers are essential to writing flexible tests.
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 Why are they called asymmetric matchers? I don't know. But, that's what the [Jest documentation calls them](https://jestjs.io/docs/expect#asymmetric-matchers), so that's what I'm calling them. (The Vitest documentation doesn't call them anything in particular.)

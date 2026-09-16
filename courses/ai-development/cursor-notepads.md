@@ -3,8 +3,6 @@ title: Cursor Notepads Migration
 description: >-
   Replace deprecated Cursor Notepads with Rules, Skills, Memories, and ordinary
   Markdown references while keeping old lesson links valid.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Cursor Notepads](https://forum.cursor.com/t/deprecating-notepads-in-cursor/138305)

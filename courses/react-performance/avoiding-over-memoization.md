@@ -3,13 +3,6 @@ title: Avoiding Over‑Memoization
 description: >-
   Stop paying rent for caches you never use. Learn to remove unnecessary
   memoization and let React do less work.
-date: 2025-09-06
-modified: 2026-09-08
-tags:
-  - react
-  - performance
-  - memoization
-  - hooks
 ---
 
 React's memoization hooks are powerful performance tools. But like any tool, you can absolutely overuse them. When you memoize everything "just to be safe," you might actually make your app slower. This guide focuses on identifying and avoiding over-memoization anti-patterns.

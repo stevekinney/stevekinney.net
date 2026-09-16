@@ -1,8 +1,6 @@
 ---
 title: 'Skills, Rules, and Hooks: Which Layer Should Fix It'
-description: Claude Code gives you three ways to steer the agent — rules, skills, and hooks. They solve different problems, and picking the wrong one wastes effort. Here's when to reach for each.
-modified: 2026-04-14
-date: 2026-04-14
+description: 'Choose between Claude Code rules, skills, and hooks by matching each layer to the behavior you need to shape.'
 ---
 
 By this point you know what a good `CLAUDE.md` looks like. That file is one of three layers Claude Code gives you to shape how the agent behaves. The other two are **skills** and **hooks**, and the most common mistake I see is picking the wrong layer for the problem.

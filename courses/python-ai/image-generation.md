@@ -3,8 +3,6 @@ title: Text-to-Image Generation (Stable Diffusion)
 description: >-
   Understand Stable Diffusion's components, schedulers, guidance scale, prompt
   craft, safety, and performance for text-to-image tasks.
-modified: 2026-03-17
-date: 2025-09-14
 ---
 
 > [!ABSTRACT] Key Takeaways

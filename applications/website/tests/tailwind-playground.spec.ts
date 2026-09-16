@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('tailwind playground renders inline previews', async ({ page }) => {
+test('tailwind playground renders an isolated preview beside enhanced source', async ({ page }) => {
   await page.goto('/courses/tailwind/building-a-button');
 
   await expect(page.getByRole('heading', { name: 'Building a Button' })).toBeVisible();
@@ -9,13 +9,8 @@ test('tailwind playground renders inline previews', async ({ page }) => {
 
   await expect(page.locator('[data-content-document][data-content-enhanced="true"]')).toBeVisible();
 
-  const hasPreview = await page.evaluate(() => {
-    const buttons = Array.from(document.querySelectorAll('[data-tailwind-playground] button'));
-    return buttons.some(
-      (button) =>
-        button.textContent?.trim() === 'Button' && button.classList.contains('bg-blue-600'),
-    );
-  });
-
-  expect(hasPreview).toBe(true);
+  const preview = page.frameLocator('[data-tailwind-playground] iframe').first();
+  const button = preview.getByRole('button', { name: 'Button', exact: true });
+  await expect(button).toBeVisible();
+  await expect(button).toHaveClass(/bg-blue-600/);
 });

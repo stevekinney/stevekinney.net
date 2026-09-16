@@ -2,13 +2,6 @@
 title: 'Uploading and Organizing Files'
 description: >-
   Upload files to S3 using the AWS CLI and the console, and understand how S3 key prefixes create a virtual folder structure.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - s3
-  - deployment
-  - cli
 ---
 
 You have a bucket. Now you need files in it. This is your `npm run build` output going to the cloud—the HTML, CSS, JavaScript, and images that make up your frontend application. The AWS CLI gives you two primary commands for getting files into S3: `aws s3 cp` for copying individual files and `aws s3 sync` for keeping a local directory and a bucket in sync. Both are essential, and knowing when to use each saves you time and bandwidth.

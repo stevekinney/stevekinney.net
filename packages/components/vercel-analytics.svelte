@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { dev } from '$app/environment';
+  type Props = {
+    enabled?: boolean;
+  };
+
+  let { enabled = __VERCEL_ANALYTICS_ENABLED__ }: Props = $props();
 </script>
 
 <!--
@@ -11,7 +15,7 @@
   mechanism.
 -->
 <svelte:head>
-  {#if !dev}
+  {#if enabled}
     <script defer src="/_vercel/insights/script.js"></script>
     <script defer src="/_vercel/speed-insights/script.js"></script>
   {/if}

@@ -1,6 +1,4 @@
 ---
-title: 
-description: 
-date: ''
-modified: ''
+title: ''
+description: ''
 ---

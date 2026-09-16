@@ -3,13 +3,6 @@ title: 'IAM Mental Model'
 description: >-
   Build a mental model of IAM—users, groups, roles, policies, and how AWS
   decides whether to allow or deny a request.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - iam
-  - security
-  - permissions
 ---
 
 Think of IAM like role-based access control, but for infrastructure. If you've ever configured permissions in a CMS or set up team roles in GitHub, you already have the intuition. The difference is that IAM controls who can create servers, read files, invoke functions, and rack up charges on your credit card. I mean, the stakes are a _little_ higher than "who can merge to main."

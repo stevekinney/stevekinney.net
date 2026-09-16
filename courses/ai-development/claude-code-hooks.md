@@ -3,8 +3,6 @@ title: Claude Code's Hooks
 description: >-
   Use Claude Code hooks for observable, testable integration points around
   prompts, tools, permissions, compaction, files, and subagents.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 I reach for [Claude Code hooks](https://code.claude.com/docs/en/hooks) when I've

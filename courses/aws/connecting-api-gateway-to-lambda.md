@@ -3,13 +3,6 @@ title: Connecting API Gateway to Lambda
 description: >-
   Wire an HTTP API route to a Lambda function using a Lambda proxy integration,
   so that API requests trigger your function and return its response.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - api-gateway
-  - lambda
-  - integration
 ---
 
 You have an HTTP API with a URL that returns 404 for everything. You have a Lambda function that works when you invoke it directly. Now you connect them. The wiring process has three steps: create an integration, create a route, and grant permission. Skip any one of these and your API returns either 404 or 500 with no helpful error message. I've seen each of these trip people up at least once.

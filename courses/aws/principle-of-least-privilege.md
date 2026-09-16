@@ -3,13 +3,6 @@ title: 'Principle of Least Privilege'
 description: >-
   Apply the principle of least privilege by scoping IAM policies to the narrowest
   set of actions and resources a user or service actually needs.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - iam
-  - security
-  - best-practices
 ---
 
 There's a tempting pattern you'll encounter the moment IAM gets in your way: you attach `AdministratorAccess`, everything works, and you move on with your life. I've done it. Everyone's done it. And it works fine until it doesn't—until an access key leaks, or a Lambda function has a bug that lets user input reach an SDK call, or a junior developer accidentally deletes a production database because their CI bot had permissions it never needed.

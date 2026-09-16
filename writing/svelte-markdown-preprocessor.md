@@ -2,10 +2,6 @@
 title: Creating a Markdown Preprocessor for Svelte
 description: Let's look at how to write our own preprocessor for SvelteKit.
 date: 2024-01-14
-modified: 2026-06-12
-tags:
-  - svelte
-  - ast
 ---
 
 This website is built in [Svelte][] and using [SvelteKit][]. Most of the content is written in Markdown. At the time of this writing, I'm using [mdsvex][] to transform the Markdown into Svelte components—and eventually HTML. It's mostly fine, it works, and I'll probably keep using it for the foreseeable future. That said, it does have some bugs and edge cases.

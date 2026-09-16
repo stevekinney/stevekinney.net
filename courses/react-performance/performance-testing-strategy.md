@@ -3,13 +3,6 @@ title: Performance Testing Strategy
 description: >-
   Build comprehensive performance tests for React apps. Unit test performance,
   catch regressions, and automate optimization validation.
-date: 2025-09-07
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - testing
-  - automation
 ---
 
 Performance without tests is just wishful thinking. You might optimize a component today, but without automated testing, tomorrow's feature addition could undo all your work. Performance testing isn't just about catching regressions—it's about establishing performance as a first-class concern in your development process, ensuring that every code change is evaluated not just for correctness, but for its impact on user experience.

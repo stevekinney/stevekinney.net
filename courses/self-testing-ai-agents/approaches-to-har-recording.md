@@ -1,8 +1,6 @@
 ---
 title: Approaches to HAR Recording
 description: Three ways to capture a HAR file—programmatic recording inside a test, the Playwright CLI, and Chrome DevTools—and when each one earns its keep.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 You know you want a HAR file. The [previous lesson](recording-hars-for-network-isolation.md) made the case, and now you need to actually record one. Three ways to do it, each with a different sweet spot, and the choice comes down to one question: do you already have a test that exercises the network calls you need to capture?

@@ -3,14 +3,6 @@ title: Streaming SSR Optimization
 description: >-
   Master React 18+ streaming SSR. Optimize TTFB, implement progressive
   hydration, and deliver instant page loads.
-date: 2025-09-07
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - ssr
-  - streaming
-  - react-18
 ---
 
 Traditional Server-Side Rendering forces users to wait for the entire page to be generated before receiving any HTML. With 10,000 products to render, users stare at a blank screen while your server crunches through data. Streaming SSR changes this: it sends HTML as soon as it's ready, piece by piece, creating the perception of instant loading even when the full page takes time to generate.

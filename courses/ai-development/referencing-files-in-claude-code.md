@@ -3,8 +3,6 @@ title: Referencing Files in Claude Code
 description: >-
   Reference files, directories, images, imports, and generated context in Claude
   Code without overloading the session.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Claude Code](https://code.claude.com/docs/en/overview) can search the

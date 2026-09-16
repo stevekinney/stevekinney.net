@@ -17,13 +17,13 @@ export type SourceImage = {
   repositoryRelativePath: string;
 };
 
-export type MissingImage = {
+type MissingImage = {
   markdownFile: string;
   imageUrl: string;
   resolvedPath: string;
 };
 
-export type DiscoveryResult = {
+type DiscoveryResult = {
   images: Map<string, SourceImage>;
   missing: MissingImage[];
 };
@@ -35,9 +35,9 @@ const EXTERNAL_PREFIXES = ['http://', 'https://', 'mailto:', 'tel:', 'data:', 'f
 
 const normalizePath = (value: string): string => value.split(path.sep).join('/');
 
-export const stripQueryHash = (value: string): string => value.split(/[?#]/)[0] ?? '';
+const stripQueryHash = (value: string): string => value.split(/[?#]/)[0] ?? '';
 
-export const isExternalReference = (value: string): boolean => {
+const isExternalReference = (value: string): boolean => {
   if (!value || value.startsWith('#') || value.startsWith('//')) return true;
   return EXTERNAL_PREFIXES.some((prefix) => value.startsWith(prefix));
 };
@@ -51,7 +51,7 @@ const safeDecode = (value: string): string => {
 };
 
 /** Collect all image/video URLs from markdown content (both `![](url)` and `<img src="url">`). */
-export const collectImageUrls = (markdown: string): string[] => {
+const collectImageUrls = (markdown: string): string[] => {
   const tree = unified().use(remarkParse).parse(markdown);
   const urls = new Set<string>();
 
@@ -73,11 +73,7 @@ export const collectImageUrls = (markdown: string): string[] => {
 };
 
 /** Resolve a markdown-relative or root-relative image URL to an absolute file path. */
-export const resolveImagePath = (
-  markdownFile: string,
-  imageUrl: string,
-  staticRoot: string,
-): string => {
+const resolveImagePath = (markdownFile: string, imageUrl: string, staticRoot: string): string => {
   if (imageUrl.startsWith('/')) {
     return path.resolve(staticRoot, imageUrl.slice(1));
   }

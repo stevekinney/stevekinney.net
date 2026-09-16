@@ -3,8 +3,6 @@ title: State Variants
 description: >-
   Apply styles conditionally using Tailwind's state variants for pseudo-classes,
   media queries, and attribute selectors
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 State variants apply utility classes conditionally based on element state or context. Prefix any utility with a variant name and colon: `hover:bg-blue-500`, `md:text-lg`.
@@ -71,7 +69,7 @@ Key difference from CSS: Tailwind uses separate classes for each state rather th
 
 **`group-*`** - Style based on parent state (parent needs `group` class)
 
-```html tailwind
+```html tailwind height=160
 <div class="group">
   <button class="group-hover:bg-blue-500">...</button>
 </div>
@@ -79,13 +77,13 @@ Key difference from CSS: Tailwind uses separate classes for each state rather th
 
 **`peer-*`** - Style based on previous sibling state (sibling needs `peer` class)
 
-```html tailwind
+```html tailwind height=160
 <input class="peer" /> <span class="peer-invalid:block">Error</span>
 ```
 
 **`has-*`** - Style based on descendant state
 
-```html tailwind
+```html tailwind height=160
 <div class="has-[:focus]:ring">...</div>
 ```
 

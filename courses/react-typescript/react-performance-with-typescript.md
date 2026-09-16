@@ -3,13 +3,6 @@ title: React Performance with TypeScript
 description: >-
   Use types to encode identity contracts—memo boundaries, readonly data, stable
   references, and type-safe performance monitoring.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - performance
-  - optimization
 ---
 
 TypeScript isn't just about catching bugs at compile time—it's also a surprisingly powerful tool for encoding performance contracts in your React applications. When you use types to make performance boundaries explicit, you transform performance from a runtime guessing game into a design-time decision. We're going to explore how strategic typing can guide memo boundaries, prevent unnecessary re-renders, help you build components that are both fast and maintainable, and provide type-safe performance monitoring.

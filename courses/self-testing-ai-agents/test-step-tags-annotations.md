@@ -1,8 +1,6 @@
 ---
 title: 'test.step, Tags, and Annotations'
 description: Three Playwright features that agents ignore, and that turn out to be the difference between a failing test you can debug and one you have to reverse-engineer.
-modified: 2026-04-14
-date: 2026-04-11
 ---
 
 A failing test that says `Error: expected 5, got 0` is a bug report written by someone who doesn't want to be helpful. It tells you what went wrong and nothing about where, why, or under what conditions. The failing test was _right there_, watching it all happen, and all it could think to say was "expected 5, got 0."

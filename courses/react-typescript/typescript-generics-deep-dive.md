@@ -3,13 +3,6 @@ title: TypeScript Generics Deep Dive
 description: >-
   Master TypeScript generics from basics to advanced patterns—type parameters,
   constraints, variance, and real-world applications.
-date: 2025-09-14
-modified: 2026-03-17
-tags:
-  - typescript
-  - generics
-  - advanced
-  - type-parameters
 ---
 
 Generics are TypeScript's superpower for writing reusable, type-safe code. They're like function parameters, but for types. Once you truly understand generics, you'll write less code that does more, and it'll be safer than ever. But generics can feel intimidating with all those angle brackets and abstract type parameters. Let's demystify them completely.

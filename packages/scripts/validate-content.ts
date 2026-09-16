@@ -1,5 +1,6 @@
 #!/usr/bin/env bun
 import { collectContentRepository } from './content-repository.ts';
+import { reportMetadataIssues } from './content-metadata.ts';
 
 const main = async (): Promise<void> => {
   const repository = await collectContentRepository();
@@ -9,20 +10,12 @@ const main = async (): Promise<void> => {
 
   if (warnings.length > 0) {
     console.warn('Content validation warnings:');
-    for (const issue of warnings) {
-      console.warn(
-        `- ${issue.file}${issue.line != null ? `:${issue.line}` : ''}: ${issue.message}`,
-      );
-    }
+    reportMetadataIssues(warnings);
   }
 
   if (errors.length > 0) {
     console.error('Content validation failed:');
-    for (const issue of errors) {
-      console.error(
-        `- ${issue.file}${issue.line != null ? `:${issue.line}` : ''}: ${issue.message}`,
-      );
-    }
+    reportMetadataIssues(errors);
     process.exit(1);
   }
 

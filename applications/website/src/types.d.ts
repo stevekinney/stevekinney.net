@@ -43,3 +43,4 @@ declare module 'sharp' {
 
 /** Injected at build time by Vite define — the content-enhancements bundle build hash for cache busting. */
 declare const __CONTENT_ENHANCEMENTS_BUILD_HASH__: string;
+declare const __VERCEL_ANALYTICS_ENABLED__: boolean;

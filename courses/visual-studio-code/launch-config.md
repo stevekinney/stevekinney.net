@@ -3,8 +3,6 @@ title: Launch Configurations in Visual Studio Code
 description: >-
   Detailed guide to creating and customizing launch.json files for different
   debugging scenarios
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 > [!QUESTION] Should I use `tasks.json` or `launch.json` for development?

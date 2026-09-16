@@ -7,15 +7,18 @@
   import SEO from '$lib/components/seo.svelte';
   import { getLessonNavigation } from '$lib/lesson-navigation';
   import { url } from '$lib/metadata';
-  import { buildBreadcrumbSchema, buildCourseSchema } from '$lib/structured-data';
+  import { buildBreadcrumbSchema, buildLessonSchema } from '$lib/structured-data';
 
   const { data } = $props();
 
   const jsonLd = $derived([
-    buildCourseSchema({
-      name: data.course.title,
-      description: data.course.description,
+    buildLessonSchema({
+      name: data.title,
+      description: data.description,
+      lessonUrl: `${url}/courses/${data.course.slug}/${page.params.lesson}`,
+      courseName: data.course.title,
       courseUrl: `${url}/courses/${data.course.slug}`,
+      dateModified: data.modified,
     }),
     buildBreadcrumbSchema([
       { name: 'Courses', url: `${url}/courses` },
@@ -29,7 +32,12 @@
   const nextLesson = $derived(lessonNavigation.next);
 </script>
 
-<SEO title={`${data.title} | ${data.course.title}`} description={data.description} {jsonLd} />
+<SEO
+  title={`${data.title} | ${data.course.title}`}
+  description={data.description}
+  modified={data.modified}
+  {jsonLd}
+/>
 
 <ContentEnhancements />
 

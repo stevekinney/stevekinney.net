@@ -3,13 +3,6 @@ title: Custom Equality Checks with areEqual
 description: >-
   Write domain-smart equality functions that avoid deep-compare traps and make
   memoized components both fast and correct.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - memoization
-  - equality
 ---
 
 React's memoization features like `React.memo()`, `useMemo()`, and `useCallback()` are powerful performance tools, but they're only as smart as their equality checks. By default, React uses shallow comparison—which works great until it doesn't. When you need more control over when your components re-render, custom equality functions with `areEqual` let you write domain-specific logic that's both performant and correct.

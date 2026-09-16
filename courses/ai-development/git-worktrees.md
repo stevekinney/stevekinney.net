@@ -3,8 +3,6 @@ title: Git Worktrees for Agentic Development
 description: >-
   Use Git worktrees to isolate agent work, run parallel experiments, and keep
   reviewable diffs without losing repository history.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Git worktrees](https://git-scm.com/docs/git-worktree) let one repository have

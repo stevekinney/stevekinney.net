@@ -3,13 +3,6 @@ title: Colocation of State
 description: >-
   Keep state near its consumers to reduce render storms, simplify data flow, and
   make components easier to reason about.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - architecture
-  - state-management
 ---
 
 State colocation is one of those React performance patterns that sounds fancy but is really just common sense: keep your state as close as possible to where it's actually used. Instead of hoisting everything to the top of your component tree "just in case," you put state right where it belongs—near the components that actually need it.

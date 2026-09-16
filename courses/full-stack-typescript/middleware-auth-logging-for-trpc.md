@@ -3,8 +3,6 @@ title: Middleware for Auth & Logging in tRPC
 description: >-
   Learn how to implement authentication and logging middleware in tRPC for
   secure and well-monitored API endpoints.
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 ### Middleware for Auth & Logging

@@ -2,13 +2,6 @@
 title: 'Pointing a Domain to CloudFront'
 description: >-
   Create DNS records that point your custom domain to your CloudFront distribution, making your site accessible at your own domain name.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - route53
-  - cloudfront
-  - dns
 ---
 
 Your CloudFront distribution is live, but right now you access it at something like `d111111abcdef8.cloudfront.net`. That's not what you ship to production. You want users to visit `example.com` and have it serve your frontend through CloudFront—with your ACM certificate, your cache behaviors, your origin access control. This is where Route 53 ties the infrastructure together: you create DNS records that point your domain at the distribution, and the CloudFront URL disappears behind your brand.

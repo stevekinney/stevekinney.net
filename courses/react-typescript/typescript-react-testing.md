@@ -3,13 +3,6 @@ title: TypeScript Patterns for React Testing
 description: >-
   Write type-safe tests for React components with Testing Library, mocks, and
   custom matchers
-date: 2025-09-27
-modified: 2026-03-17
-tags:
-  - typescript
-  - react
-  - testing
-  - react-testing-library
 ---
 
 Testing React components with TypeScript adds an extra layer of confidence to your test suite. Not only do you verify behavior, but you also ensure type safety throughout your tests. This guide covers essential patterns for testing React components with TypeScript, from basic component tests to complex mocking scenarios.

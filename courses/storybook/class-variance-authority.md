@@ -1,10 +1,6 @@
 ---
 title: Class Variance Authority
-description: >-
-  A framework agnostic tool for creating variants of a component with different
-  classes.
-modified: 2026-03-17
-date: 2024-04-15
+description: 'Use Class Variance Authority to define reusable component variants with different classes.'
 ---
 
 [Class Variance Authority](https://cva.style) is a framework agnostic tool for creating variants of a component with different classes. It's super simple and you probably _could_ write it yourself if you had to—but, you don't have to because it already exists.

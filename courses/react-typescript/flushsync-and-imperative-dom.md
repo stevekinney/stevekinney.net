@@ -3,15 +3,6 @@ title: flushSync and Imperative DOM with Types
 description: >-
   Coordinate with the DOM—type helpers that force sync updates for focus,
   measurement, and animations sparingly.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - flush-sync
-  - imperative-dom
-  - refs
-  - dom-manipulation
 ---
 
 React's declarative model is brilliant—until you need to coordinate with the DOM itself. Sometimes you need to measure elements, focus inputs, or time animations precisely. Enter `flushSync` and React's imperative DOM helpers, which let you step outside React's async world when the situation calls for it (and TypeScript helps ensure you do it safely).

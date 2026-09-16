@@ -1,10 +1,6 @@
 ---
 title: Tailwind Cva Typed Variants
-description: >-
-  Pair Tailwind with class-variance-authority (CVA) to create discoverable,
-  type-safe variant APIs—no more stringly-typed class soups.
-modified: 2026-03-17
-date: 2025-09-14
+description: 'Pair Tailwind with class-variance-authority (CVA) to create discoverable, type-safe variant APIs without stringly typed class soups.'
 ---
 
 Pair Tailwind with `class-variance-authority` (CVA) to create discoverable, type-safe variant APIs—no more stringly-typed class soups.

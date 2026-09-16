@@ -1,8 +1,6 @@
 ---
 title: 'Locator Challenges: Solution'
 description: Walkthrough and solutions for every locator challenge on Shelf's playground page.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 These are my preferred solutions. Yours may differ—if the locator is stable, accessible, and readable, it's correct. The notes after each solution explain _why_ this particular approach, not just _what_.

@@ -1,10 +1,8 @@
 ---
-modified: 2026-03-17
 title: 'Accident Counter: Solution'
 description: >-
   The solution for the Accident Counter exercise in the "Introduction to
   Testing" course for Frontend Masters.
-date: 2024-10-02
 ---
 
 Your code might look a bit different, but here is one possible solution.

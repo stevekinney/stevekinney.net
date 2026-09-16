@@ -3,8 +3,6 @@ title: Complex Grid Templates
 description: >-
   Build advanced grid layouts using Tailwind's grid template utilities for
   complex multi-column and row designs.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Tailwind CSS offers utilities for grid layouts, controlling grid structure and item placement. Defining the grid template (columns and rows) is key.

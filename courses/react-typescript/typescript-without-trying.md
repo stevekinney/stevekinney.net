@@ -3,14 +3,6 @@ title: Using TypeScript Without Even Trying
 description: >-
   Let inference do the heavy lifting—see how much TypeScript you get "for free"
   in everyday React files.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - gradual-typing
-  - inference
-  - beginner
 ---
 
 **Here is a main theme for this workshop**: TypeScript's biggest superpower isn't the explicit types you write—it's the types you _don't_ have to write. Modern TypeScript is super good at figuring out what you meant, often giving you bulletproof type safety with zero extra effort. In our time together, I am going to argue that you know you're on the right path when you can barely tell that you're using TypeScript at all in your project.

@@ -1,8 +1,6 @@
 ---
 title: 'Fixtures: Worker-Scoped, Test-Scoped, and the Trap Between Them'
-description: How to use Playwright's `test.extend` without turning your fixture file into a place where state goes to hide.
-modified: 2026-04-14
-date: 2026-04-11
+description: "Use Playwright's test.extend without turning your fixture file into a place where state goes to hide."
 ---
 
 The first `test.extend` you write feels like magic. Five tests collapse into one clean `beforeEach`-free signature, the spec file gets shorter, and you feel like a wizard. The fifth one feels like a cage. Agents love fixtures because they collapse setup, and they _also_ love them because a fixture is a great place to hide state. Hidden state is how test suites get slow, flaky, and impossible to reason about.

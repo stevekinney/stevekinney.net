@@ -1,8 +1,6 @@
 ---
 title: API and UI Hybrid Tests
-description: Use the `request` fixture to set up state via API and assert via UI. Faster, clearer, and the pattern most teams haven't found yet.
-modified: 2026-04-14
-date: 2026-04-06
+description: 'Use the request fixture to set up state via API and assert through the UI—a faster, clearer pattern many teams miss.'
 ---
 
 Here's a pattern I didn't know about for the first two years I used Playwright, and I'm still a little annoyed about it.

@@ -2,13 +2,6 @@
 title: 'Wildcard Certificates and Multiple Domains'
 description: >-
   Request wildcard certificates or multi-SAN certificates in ACM and know when each approach is appropriate.
-date: 2026-03-18
-modified: 2026-04-07
-tags:
-  - aws
-  - acm
-  - certificates
-  - domains
 ---
 
 So far, we've requested a certificate covering a specific domain and its `www` subdomain. That works fine when you know exactly which hostnames you need. But what happens when your frontend grows? You might need `staging.example.com` for a staging environment, `api.example.com` for your backend, or `docs.example.com` for your documentation site. Requesting a new certificate for every subdomain gets tedious fast.

@@ -1,8 +1,6 @@
 ---
 title: Testing Third-Party Authentication
 description: How to test apps that sign in through Google OAuth, Okta, SAML, or another provider you do not control, without making every test depend on that provider's UI.
-modified: 2026-04-14
-date: 2026-04-12
 ---
 
 The hardest authentication bug to explain to a team is this one: _"No, we are not going to make every pull request wait on Google's login screen."_ If your app signs in through Google OAuth, Okta, Auth0, Microsoft, or some enterprise SAML flow you barely understand, it is tempting to treat the provider's UI as part of your regression suite.

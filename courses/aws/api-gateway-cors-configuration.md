@@ -1,15 +1,6 @@
 ---
 title: API Gateway CORS Configuration
-description: >-
-  Configure CORS on your HTTP API so that your frontend application (running on
-  a different origin) can call your API without browser errors.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - api-gateway
-  - cors
-  - frontend
+description: 'Configure CORS on your HTTP API so a frontend running on another origin can call it without browser errors.'
 ---
 
 You've fought CORS errors before. Every frontend engineer has stared at `Access-Control-Allow-Origin` errors in the browser console, scrambled to add headers somewhere, and eventually gotten it working through a combination of Stack Overflow answers and blind luck. The difference now: you own the API. You're not waiting for a backend team to fix their headers. You configure CORS yourself, on your own HTTP API, and understand exactly what each setting does.

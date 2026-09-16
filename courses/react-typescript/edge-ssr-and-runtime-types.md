@@ -3,14 +3,6 @@ title: 'Edge, SSR, and Runtime Types'
 description: >-
   Target multiple runtimes—align DOM vs Node types, edge constraints, and SSR
   data contracts with TypeScript.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - ssr
-  - runtime
-  - edge
 ---
 
 Modern React applications run in multiple JavaScript environments: browsers, Node.js servers, edge runtimes like Cloudflare Workers or Vercel Edge Functions, and everything in between. Each runtime has its own APIs, constraints, and type definitions—but your TypeScript code needs to work across all of them. Let's explore how to navigate these differences, write runtime-aware code, and ensure your SSR data contracts stay bulletproof (even when your API decides to send you `null` instead of that nice user object you were expecting).

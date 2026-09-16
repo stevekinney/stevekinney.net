@@ -1,8 +1,6 @@
 ---
 title: 'Harden the Flaky Rate-Book Test: Solution'
 description: Walkthrough of every fix applied to the deliberately broken rate-book test, from storage state auth through hybrid API assertions.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 The starting test had eight problems and zero good habits. The finished version has zero problems and—if you squint—reads like a spec. Here's how we get from one to the other, one pattern at a time.

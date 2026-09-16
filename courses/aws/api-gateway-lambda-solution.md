@@ -3,13 +3,6 @@ title: 'Solution: Build an API with API Gateway and Lambda'
 description: >-
   Complete solution for the API Gateway and Lambda exercise, with all commands,
   handler code, and expected output.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - api-gateway
-  - exercise
-  - solution
 ---
 
 Here's the complete solution for every step, including the handler code, all CLI commands, and the expected output at each stage.

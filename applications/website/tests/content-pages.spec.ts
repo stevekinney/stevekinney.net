@@ -1,5 +1,30 @@
 import { expect, test } from '@playwright/test';
+import { readFile, readdir } from 'node:fs/promises';
 import { checkA11y, injectAxe } from 'axe-playwright';
+import { toString } from 'mdast-util-to-string';
+import remarkParse from 'remark-parse';
+import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
+import type { GeneratedContent } from '@stevekinney/utilities/content-types';
+import { url } from '../src/lib/metadata';
+
+test('every document LLM export is included in the static deployment output', async () => {
+  const content = JSON.parse(
+    await readFile(new URL('../.generated/content-data.json', import.meta.url), 'utf8'),
+  ) as GeneratedContent;
+  const output = new URL('../.svelte-kit/output/prerendered/pages/', import.meta.url);
+  const files = new Set(await readdir(output, { recursive: true }));
+  const exports = Object.values(content.routes).map((route) => route.llmsPath.slice(1));
+
+  expect(exports.length).toBeGreaterThan(0);
+  expect(exports.filter((file) => !files.has(file))).toEqual([]);
+
+  for (const route of Object.values(content.routes)) {
+    const exported = await readFile(new URL(route.llmsPath.slice(1), output), 'utf8');
+    expect(exported).toContain(`Canonical: ${url}${route.path}`);
+    expect(exported).toContain(`Description: ${route.description}`);
+  }
+});
 
 test('writing post pages render prerendered content with code-block enhancement', async ({
   page,
@@ -157,10 +182,81 @@ test.describe('exactly one content document wrapper per content page', () => {
     '/courses/tailwind/utility-first',
   ];
 
+  const courseLandingPages = [
+    'ai-development',
+    'aws',
+    'enterprise-ui',
+    'figma',
+    'full-stack-typescript',
+    'python-ai',
+    'react-performance',
+    'react-typescript',
+    'self-testing-ai-agents',
+    'storybook',
+    'tailwind',
+    'testing',
+    'visual-studio-code',
+    'web-security',
+  ];
+
   for (const pagePath of contentPages) {
     test(`${pagePath} exposes a single data-content-document wrapper`, async ({ page }) => {
       await page.goto(pagePath);
       await expect(page.locator('[data-content-document]')).toHaveCount(1);
     });
+  }
+
+  for (const courseSlug of courseLandingPages) {
+    test(`/courses/${courseSlug} exposes one owned H1 and prose document`, async ({ page }) => {
+      await page.goto(`/courses/${courseSlug}`);
+      const title = page.locator('[data-content-document] > h1');
+      await expect(title).toHaveCount(1);
+      await expect(title).toBeVisible();
+      await expect(
+        page.getByRole('heading', { level: 1, name: await title.innerText(), exact: true }),
+      ).toHaveCount(1);
+      await expect(page.locator('[data-content-document]')).toHaveCount(1);
+      await expect(page.locator('[data-content-document] .prose')).toHaveCount(1);
+    });
+  }
+});
+
+test('full LLM export contains every generated lesson body exactly once', async ({ request }) => {
+  const [fullResponse, sitemapResponse] = await Promise.all([
+    request.get('/llms-full.txt'),
+    request.get('/sitemap.xml'),
+  ]);
+  expect(fullResponse.ok()).toBeTruthy();
+  expect(sitemapResponse.ok()).toBeTruthy();
+
+  const fullExport = await fullResponse.text();
+  const sitemap = await sitemapResponse.text();
+  const headings: { depth: number; text: string }[] = [];
+  visit(unified().use(remarkParse).parse(fullExport), 'heading', (node) => {
+    headings.push({ depth: node.depth, text: toString(node) });
+  });
+  expect(headings.filter(({ depth }) => depth === 1).map(({ text }) => text)).toEqual([
+    'Steve Kinney',
+  ]);
+  expect(headings.filter(({ depth }) => depth === 2).map(({ text }) => text)).toEqual([
+    'Blog Posts',
+    'Course Walkthroughs',
+    'Projects',
+  ]);
+  const documentUrls = [
+    ...fullExport.matchAll(/^URL: https:\/\/[^/]+\/(?:writing|courses|projects)\/[^/\n]+$/gm),
+  ];
+  expect(headings.filter(({ depth }) => depth === 3)).toHaveLength(documentUrls.length);
+  const lessonUrls = [...sitemap.matchAll(/<loc>(https:\/\/[^<]+\/courses\/[^<]+\/[^<]+)<\/loc>/g)]
+    .map((match) => match[1])
+    .filter((value) => !value.endsWith('/open-graph.jpg'));
+
+  expect(lessonUrls.length).toBeGreaterThan(0);
+  for (const lessonUrl of lessonUrls) {
+    expect(
+      fullExport.match(
+        new RegExp(`^URL: ${lessonUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'gm'),
+      ),
+    ).toHaveLength(1);
   }
 });

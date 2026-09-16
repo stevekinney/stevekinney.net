@@ -1,8 +1,6 @@
 ---
 title: Typed-Error Middleware with Express
 description: Add type-safety to Express errors.
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 ### Typed Error Middleware

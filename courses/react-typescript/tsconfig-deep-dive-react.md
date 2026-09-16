@@ -3,8 +3,6 @@ title: tsconfig.json Deep Dive for React
 description: >-
   Master TypeScript configuration for React applications, from basic setup to
   React 19 features
-modified: 2026-03-17
-date: 2025-09-27
 ---
 
 As we saw in the [previous section](./setting-up-react-and-typescript.md), the `tsconfig.json` file is the command center for TypeScript in your project. It tells TypeScript:

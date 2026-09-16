@@ -3,12 +3,6 @@ title: 'Exercise: Build an API with API Gateway and Lambda'
 description: >-
   Build a 2-endpoint API backed by Lambda, configure CORS, and call it from a
   React frontend using fetch.
-date: 2026-03-18
-modified: 2026-04-06
-tags:
-  - aws
-  - api-gateway
-  - exercise
 ---
 
 You're going to build a complete API from scratch—an HTTP API in API Gateway with two routes, each wired to a Lambda function, with CORS configured so a React app can call it. By the end of this exercise, you'll have a working API that accepts GET and POST requests and returns JSON responses to your frontend.

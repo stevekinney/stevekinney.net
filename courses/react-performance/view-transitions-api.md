@@ -3,15 +3,6 @@ title: View Transitions API for React
 description: >-
   Create smooth, native-like page transitions in React apps using the View
   Transitions API
-date: 2025-01-14
-modified: 2026-03-17
-status: published
-tags:
-  - React
-  - Performance
-  - View Transitions
-  - Animation
-  - UX
 ---
 
 Your React app navigates instantly thanks to client-side routing. But instant isn't always better. When a page changes abruptly, users lose context. They don't see how the old page relates to the new one. They experience what designers call "cognitive load"—that jarring moment where their brain has to reorient itself.

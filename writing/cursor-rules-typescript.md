@@ -3,7 +3,6 @@ title: Cursor Rules for TypeScript Engineers
 description: >-
   A collection of some potentially useful Cursor rules as well as a rundown of
   what potentially makes a Cursor rule great.
-modified: 2026-03-17
 date: 2025-05-13
 ---
 

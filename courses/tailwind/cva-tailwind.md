@@ -1,10 +1,6 @@
 ---
 title: Class Variance Authority
-description: >-
-  A framework agnostic tool for creating variants of a component with different
-  classes.
-modified: 2026-03-17
-date: 2025-06-12
+description: 'Use Class Variance Authority with Tailwind CSS to define reusable component variants.'
 ---
 
 [Class Variance Authority](https://cva.style) is a framework agnostic tool for creating variants of a component with different classes. It's super simple and you probably _could_ write it yourself if you had to—but, you don't have to because it already exists.

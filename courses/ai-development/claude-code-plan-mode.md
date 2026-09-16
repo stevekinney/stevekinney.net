@@ -3,8 +3,6 @@ title: Claude Code Plan Mode
 description: >-
   Use Claude Code plan mode for research, option comparison, permission
   boundaries, and implementation handoff.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 Plan mode in [Claude Code](https://code.claude.com/docs/en/permissions) is a

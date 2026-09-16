@@ -1,8 +1,6 @@
 ---
 title: 'Failure Dossiers: What Agents Actually Need From a Red Build'
 description: A failed test is a prompt. The prompt is only as good as the evidence attached to it.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 Here's a thing I wish I'd understood about a year earlier than I did: **when an agent sees a test failure, the test output is a prompt.** That's the whole framing shift. The red X on the build isn't a status—it's the next instruction the agent is going to act on, and everything attached to the red X is context for that instruction.

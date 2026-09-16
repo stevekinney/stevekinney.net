@@ -3,8 +3,6 @@ title: MCP in Claude Code and Cursor
 description: >-
   Compare MCP configuration, transports, OAuth, permissions, and security review
   in Cursor and Claude Code.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Cursor](https://cursor.com/docs/mcp) and

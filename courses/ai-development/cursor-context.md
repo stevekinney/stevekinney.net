@@ -3,8 +3,6 @@ title: Context is King in Cursor
 description: >-
   Give Cursor the right files, rules, skills, documentation, and external tools
   without flooding the model with stale context.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Cursor](https://cursor.com) is only as useful as the context you give it. More

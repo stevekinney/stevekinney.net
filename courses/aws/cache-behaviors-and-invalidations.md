@@ -2,13 +2,6 @@
 title: 'Cache Behaviors and Invalidations'
 description: >-
   Configure cache behaviors and TTLs to control how CloudFront caches your content, and create invalidations to force cache refreshes after deployments.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudfront
-  - caching
-  - deployment
 ---
 
 CloudFront's entire value proposition is caching: serve content from edge locations close to users instead of making round trips to your origin. But caching creates a problem you've probably already dealt with—stale content. You deploy a fix, but users still see the old version because the CDN hasn't picked up the change yet.

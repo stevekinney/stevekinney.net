@@ -1,8 +1,6 @@
 ---
 title: Reporters in Vitest
 description: Learn how to create and implement custom reporters in Vitest.
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 Reporters are what you see in your terminal when you run your tests. It turns out that there are some options here. I've almost always used the built-in, default reporter. But, maybe you want something different. Or maybe, you _need_ a different format for some other kind of tooling to ingest or something.

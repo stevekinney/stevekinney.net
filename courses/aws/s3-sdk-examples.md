@@ -2,13 +2,6 @@
 title: 'S3 SDK Examples'
 description: >-
   Common patterns for working with Amazon S3 using the AWS SDK for JavaScript v3, including uploads, downloads, pre-signed URLs, and multipart transfers.
-date: 2026-04-16
-modified: 2026-04-16
-tags:
-  - aws
-  - s3
-  - sdk
-  - javascript
 ---
 
 Common patterns for working with Amazon S3 using the AWS SDK for JavaScript v3 (`@aws-sdk/client-s3`).

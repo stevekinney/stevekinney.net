@@ -3,14 +3,6 @@ title: Advanced Image Optimization Techniques
 description: >-
   Master advanced image optimization with CDN integration, build-time
   processing, performance monitoring, and automated optimization pipelines.
-date: 2025-09-20
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - images
-  - cdn
-  - build-optimization
 ---
 
 Advanced image optimization goes beyond basic responsive images and lazy loading. This guide covers CDN integration, build-time optimization, performance monitoring, and automated optimization pipelines that ensure your images perform optimally at scale in production environments.

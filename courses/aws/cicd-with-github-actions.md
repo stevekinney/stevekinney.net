@@ -2,13 +2,6 @@
 title: 'CI/CD with GitHub Actions'
 description: >-
   Set up a GitHub Actions workflow that builds your frontend and deploys it to AWS on every push to the main branch.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - github-actions
-  - cicd
-  - deployment
 ---
 
 You've got a deploy script that works. You run it from your laptop, it uploads to S3, invalidates CloudFront, and the site is updated. The problem: you have to remember to run it. And "you" is a single point of failure. If you're on vacation, nobody deploys. If you deploy from a dirty working tree, broken code goes live. If your laptop dies mid-deploy, the site is in a half-updated state.

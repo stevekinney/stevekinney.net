@@ -1,8 +1,6 @@
 ---
 title: Alternatives to Snapshot Tests
 description: Explore alternatives to snapshot tests for efficient testing.
-modified: 2026-03-17
-date: 2024-10-02
 ---
 
 Snapshot tests—love them or hate them. They seem _so_ helpful at first. "Look, I just got this test to pass by updating the snapshot!" But then, a month later, when that snapshot has 1,200 lines of JSON and you can't even remember what you're testing? Yeah, we've all been there. So, if you want to avoid the trap of snapshot tests becoming a maintenance nightmare, what can you do instead? Let's explore some real-world alternatives that'll keep your test suite both useful and maintainable.

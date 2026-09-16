@@ -3,8 +3,6 @@ title: Debugging Web Applications in Visual Studio Code
 description: >-
   Configure Visual Studio Code to debug front-end web applications with
   breakpoints, variable inspection, and more
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 You can also easily hook into your running web applications using Visual Studio Code.

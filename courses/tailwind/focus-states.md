@@ -3,15 +3,13 @@ title: Focus States
 description: >-
   Understanding focus, focus-visible, and focus-within utilities in Tailwind for
   accessible keyboard navigation
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 ## `focus`: Always Shows
 
 `focus:` triggers on any focus event (mouse, keyboard, programmatic).
 
-```html tailwind
+```html tailwind height=100
 <button class="bg-blue-200 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
   Click or tab
 </button>
@@ -19,7 +17,7 @@ date: 2025-06-12
 
 **Always** use focus for form controls where users need clear feedback regardless of input method.
 
-```html tailwind
+```html tailwind height=100
 <input class="rounded-md bg-white px-3 py-1.5 outline-2 outline-slate-300 focus:outline-pink-400" />
 ```
 
@@ -33,7 +31,7 @@ For skip links, main navigation, or accessibility-critical elements. These eleme
 
 You also want it when you're trying to show an error state.
 
-```html tailwind
+```html tailwind height=100
 <input
   type="email"
   placeholder="Email"
@@ -46,7 +44,7 @@ You also want it when you're trying to show an error state.
 
 Shows focus only when needed (keyboard navigation, not mouse clicks).
 
-```html tailwind
+```html tailwind height=100
 <button
   class="bg-blue-200 px-3 py-2 hover:bg-blue-300 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none active:bg-blue-400"
 >
@@ -60,7 +58,7 @@ Browser heuristics determine when to show focus—typically for keyboard users o
 
 Styles parent when any child has focus.
 
-```html tailwind
+```html tailwind height=100
 <div
   class="space-y-4 border-2 border-gray-300 p-4 focus-within:border-blue-500 focus-within:shadow-lg"
 >
@@ -83,7 +81,7 @@ Container highlights when either input is focused.
 
 `focus-visible` has good modern browser support. For fallbacks:
 
-```html tailwind
+```html tailwind height=100
 <button class="focus:ring-2 focus-visible:ring-2">Fallback support</button>
 ```
 

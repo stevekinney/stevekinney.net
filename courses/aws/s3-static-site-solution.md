@@ -2,13 +2,6 @@
 title: 'Solution: Deploy a Static Site to S3'
 description: >-
   Complete solution with all commands and expected output for deploying a static site to S3.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - s3
-  - exercise
-  - solution
 ---
 
 This is the complete solution for the S3 static site deployment exercise. Every command is shown with its expected output so you can verify each step.

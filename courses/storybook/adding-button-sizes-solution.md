@@ -1,8 +1,6 @@
 ---
 title: 'Solution: Adding Button Size Variants and Controls'
 description: A solution for an exercise.
-modified: 2026-03-17
-date: 2024-04-15
 ---
 
 We should also probably update the component as well, right?

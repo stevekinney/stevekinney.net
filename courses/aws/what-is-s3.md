@@ -2,13 +2,6 @@
 title: 'What is S3?'
 description: >-
   Understand what S3 is, how buckets and objects work, and why it is the natural starting point for frontend engineers deploying to AWS.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - s3
-  - storage
-  - fundamentals
 ---
 
 You've been uploading build output to Vercel or Netlify for years. You run `npm run build`, the framework spits out a `build/` or `dist/` directory, and your platform of choice uploads those files somewhere. That "somewhere" is what we're talking about now. On AWS, the place where those files live is **Amazon S3**—Simple Storage Service.

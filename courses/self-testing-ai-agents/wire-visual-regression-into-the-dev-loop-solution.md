@@ -1,8 +1,6 @@
 ---
 title: 'Wire Visual Regression Into the Dev Loop: Solution'
 description: Walkthrough of Shelf's visual regression setup, from screenshot config through the break-and-detect cycle.
-modified: 2026-04-14
-date: 2026-04-10
 ---
 
 Two spec files, four config lines, and a committed PNG. That's the entire visual regression setup. The hard part isn't the code—it's understanding why each piece exists and what happens when you skip it.

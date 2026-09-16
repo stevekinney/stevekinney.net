@@ -3,13 +3,6 @@ title: 'Solution: Set Up Alarms for Your Lambda Functions'
 description: >-
   Complete solution for the CloudWatch alarms exercise, with all commands and
   expected output.
-date: 2026-03-18
-modified: 2026-04-07
-tags:
-  - aws
-  - cloudwatch
-  - exercise
-  - solution
 ---
 
 Here's the complete solution for every step, including all CLI commands and the expected output at each stage.

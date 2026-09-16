@@ -2,15 +2,6 @@
 title: 'The Full Static Site Pipeline'
 description: >-
   Walk through the end-to-end architecture of deploying a static site to AWS, connecting S3, CloudFront, ACM, and Route 53 into a working pipeline.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - deployment
-  - s3
-  - cloudfront
-  - acm
-  - route53
 ---
 
 Imagine someone opening a link to your site to check whether the new spring camping gear is live yet. They do not care that your storefront is really a private S3 bucket behind CloudFront. They care that the page loads fast, uses HTTPS, and does not fall over when they refresh a deep route. That invisible plumbing is the pipeline you are building now.

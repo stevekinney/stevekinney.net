@@ -1,13 +1,7 @@
 ---
 title: "Temporal's Developer Skill Is a Promising First Draft"
-description: >-
-  Temporal shipped one of the first major infrastructure vendor agent skills. The diagnosis is right and the architecture is sound. The execution has some fixable gaps.
+description: "Review Temporal's Developer Skill for coding agents: a sound foundation with gaps in actionable guidance, language awareness, and verification."
 date: 2026-03-24
-modified: 2026-06-12
-tags:
-  - ai
-  - temporal
-  - tooling
 ---
 
 [Temporal](https://temporal.io) released a [Developer Skill](https://temporal.io/blog/introducing-temporal-developer-skill). I've been working on [an MCP server for Temporal](https://github.com/stevekinney/temporal-mcp) over the last few weeks as well. So, I was eager to kick the tires on it.

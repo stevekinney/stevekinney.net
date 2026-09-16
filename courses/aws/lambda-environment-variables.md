@@ -1,16 +1,6 @@
 ---
 title: Lambda Environment Variables
-description: >-
-  Configure environment variables for a Lambda function and access them in your
-  handler code, understanding when to use environment variables versus other
-  configuration approaches.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - lambda
-  - configuration
-  - environment-variables
+description: 'Configure environment variables for a Lambda function and access them in your handler code.'
 ---
 
 Environment variables work the same way in Lambda as they do in Vercel or Netlify: you set key-value pairs on the function, and your code reads them from `process.env`. The API endpoint for a third-party service, the name of a DynamoDB table, a feature flag—anything that changes between environments or shouldn't be hardcoded goes into an environment variable.

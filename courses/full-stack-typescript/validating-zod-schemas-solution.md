@@ -3,8 +3,6 @@ title: Validating Zod Schemas (Solutions)
 description: >-
   Complete solutions for the Zod validation exercises, demonstrating how to
   implement various validation techniques with Zod.
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 Below are the solutions for the exercises found [here](validating-zod-schema-exercises.md).

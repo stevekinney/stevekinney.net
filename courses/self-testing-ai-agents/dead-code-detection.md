@@ -1,8 +1,6 @@
 ---
 title: Dead Code Detection
 description: Agents leave orphans behind. Knip and dependency-cruiser find them before the orphans rot into a half-working codebase.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 Agents _love_ to leave dead code behind. You ask them to rewrite a module, they write the new version, and the old version is still there, unreferenced, in a file that nobody will delete because nobody notices. You ask them to rename a function, they create the new name, they use the new name in the places they know about, and the old name still exists somewhere and is still exported from a barrel file and still getting imported by some test you forgot about. You ask them to remove a feature, they remove the UI for it and leave the API handler, or they remove the API handler and leave the database column.

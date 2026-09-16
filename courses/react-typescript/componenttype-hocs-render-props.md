@@ -3,15 +3,6 @@ title: 'ComponentType, HOCs, and Render Props'
 description: >-
   This content has been split into focused guides on HOCs and render props
   patterns.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - hocs
-  - render-props
-  - component-type
-  - composition
 ---
 
 > [!NOTE] Content Reorganized

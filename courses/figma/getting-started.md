@@ -3,12 +3,6 @@ title: Getting Started with Figma
 description: >-
   Let's get learn our way around Figma and get comfortable with some of the
   basic tools.
-modified: 2026-03-17
-date: 2024-03-05
-tags:
-  - figma
-  - course
-  - frontendmasters
 ---
 
 When you first enter Figma, you're greeted with the option to either create a new project or select a recent one.

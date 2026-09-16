@@ -1,12 +1,6 @@
 ---
 title: React Server Components Types
-description: >-
-  React Server Components fundamentally change how we think about the
-  client-server boundary in React applications. Instead of rendering everything
-  on the client and fetching data through APIs, some components run on the
-  server, some on th...
-modified: 2026-09-08
-date: 2025-09-06
+description: 'Define typed contracts between React Server and Client Components, validate serialized data, and catch boundary violations with TypeScript.'
 ---
 
 React Server Components fundamentally change how we think about the client-server boundary in React applications. Instead of rendering everything on the client and fetching data through APIs, some components run on the server, some on the client, and some can do both depending on where they're imported. This flexibility is powerful, but it comes with a catch: you need to be deliberate about what data crosses the network and how you enforce these boundaries with TypeScript.

@@ -4,13 +4,6 @@ description: >-
   Identify the key metrics for Lambda, API Gateway, and DynamoDB, and create a
   CloudWatch dashboard that gives you a single view of your application's
   health.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - cloudwatch
-  - metrics
-  - dashboards
 ---
 
 Logs tell you what happened. **Metrics** tell you how things are going. Every AWS service you've deployed in this course—Lambda, API Gateway, DynamoDB—publishes numeric measurements to CloudWatch at regular intervals. Invocation counts, error rates, latency percentiles, throttled requests. This data has been accumulating since you first deployed your Lambda function. You just haven't looked at it yet.

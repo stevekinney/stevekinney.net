@@ -3,8 +3,6 @@ title: Command Palette in Visual Studio Code
 description: >-
   Master Visual Studio Code's Command Palette to quickly access commands and
   customize keybindings
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 Visual Studio Code has hundreds of commands spread across menus, settings screens, and keybindings. When you can't remember where something lives, hunting through the UI is slow. The Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) solves this by offering fuzzy-search across all commands. Even if you only remember part of a command's name, typing snippets of it in the Command Palette often reveals exactly what you need. For instance, typing `pref key` might surface commands like `Preferences: Open Keyboard Shortcuts` or `Preferences: Open User Settings`.

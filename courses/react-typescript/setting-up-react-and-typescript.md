@@ -3,15 +3,6 @@ title: 'Setting Up: React and TypeScript'
 description: >-
   Set up React 19 with TypeScript from scratch—tsconfig, JSX runtime, strict
   mode, linting, and project structure that scales.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - typescript
-  - react-19
-  - setup
-  - foundations
-  - tsconfig
 ---
 
 Building modern React applications with TypeScript isn't just about adding some type annotations and hoping for the best. It's about setting up a foundation that helps you catch bugs before they reach production, provides excellent developer experience, and scales gracefully as your team and codebase grow. React 19 brings some exciting improvements to how we write components, and when paired with TypeScript's latest features, you get a development experience that's both powerful and pleasant.

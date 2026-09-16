@@ -1,8 +1,6 @@
 ---
 title: Structured CLI Output as Pipeline Glue
 description: When your scripts need the agent's judgment in a shape they can parse, a JSON schema turns "ask an LLM" into a pipeline step.
-modified: 2026-04-12
-date: 2026-04-10
 ---
 
 The MCP lesson taught one direction of the structured-contract idea: you wrap your verification logic in a tool, and the agent calls it. The agent gets a typed result it can reason about. That's your code serving the agent.

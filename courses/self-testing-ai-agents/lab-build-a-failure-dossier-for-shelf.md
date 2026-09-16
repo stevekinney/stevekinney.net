@@ -1,8 +1,6 @@
 ---
 title: 'Lab: Build a Failure Dossier for Shelf'
 description: Wire up traces, screenshots, console capture, and a dossier summarizer. Then break a test and watch the agent fix it from the dossier alone.
-modified: 2026-04-14
-date: 2026-04-06
 ---
 
 Short lab. Add the dossier infrastructure back into Shelf, understand why each piece is there, then break a test and watch the loop close.

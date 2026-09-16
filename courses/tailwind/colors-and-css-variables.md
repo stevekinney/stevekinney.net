@@ -3,8 +3,6 @@ title: Colors and CSS Variables
 description: >-
   Define custom colors and theme values using CSS variables with Tailwind 4's
   @theme directive for better integration.
-modified: 2026-03-17
-date: 2025-06-12
 ---
 
 Tailwind moves configuration from JavaScript to CSS using the `@theme` directive and CSS variables.
@@ -73,7 +71,7 @@ Theme colors are exposed as CSS variables:
 
 ### In Arbitrary Values
 
-```html tailwind
+```html tailwind height=300 css=brand
 <!-- Long form -->
 <div class="bg-[var(--color-neon-pink)]">...</div>
 
@@ -85,7 +83,7 @@ Theme colors are exposed as CSS variables:
 
 Works with all color definitions:
 
-```html tailwind
+```html tailwind height=300 css=brand
 <div class="bg-brand/50">50% opacity</div>
 <div class="text-neon-pink/75">75% opacity</div>
 <div class="border-[var(--color-custom)]/20">20% opacity</div>
@@ -95,7 +93,7 @@ Works with all color definitions:
 
 ### Border Color Default
 
-```html tailwind
+```html tailwind height=300
 <!-- v3: defaulted to gray-200 -->
 <div class="border">...</div>
 
@@ -105,7 +103,7 @@ Works with all color definitions:
 
 ### Ring Color Default
 
-```html tailwind
+```html tailwind height=300
 <!-- v3: 3px blue ring -->
 <div class="ring">...</div>
 
@@ -129,7 +127,22 @@ CSS variables enable runtime theme switching:
 }
 ```
 
-```html tailwind
+```css playground=brand
+@theme {
+  --color-brand: #5b21b6;
+  --color-neon-pink: oklch(71.7% 0.25 360);
+  --color-custom: #7c3aed;
+  --color-surface: white;
+  --color-text: black;
+}
+
+[data-theme='dark'] {
+  --color-surface: #1a1a1a;
+  --color-text: white;
+}
+```
+
+```html tailwind height=300 css=brand
 <body data-theme="dark">
   <div class="bg-surface text-text">Automatically themed</div>
 </body>

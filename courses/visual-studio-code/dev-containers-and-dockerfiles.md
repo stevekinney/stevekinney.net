@@ -3,8 +3,6 @@ title: Using Dockerfiles with Dev Containers
 description: >-
   Learn how to create custom development environments with Dockerfiles for
   maximum control and flexibility
-modified: 2026-03-17
-date: 2025-03-16
 ---
 
 Dev Containers offer a high degree of customization to perfectly match your project's needs and your personal preferences. Let's delve into advanced customization techniques. While using pre-built images with the `image` property in `devcontainer.json` is convenient, for more advanced customization, using a **Dockerfile** offers unparalleled control over your container image.

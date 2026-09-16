@@ -3,13 +3,6 @@ title: Tree Shaking Optimization
 description: >-
   Master dead code elimination through advanced tree shaking. Eliminate unused
   imports, optimize side effects, and shrink bundles.
-date: 2025-09-06
-modified: 2026-03-17
-tags:
-  - react
-  - performance
-  - bundling
-  - tree-shaking
 ---
 
 Tree shaking is the process of eliminating dead code from your bundle—code that's imported but never actually used. In theory, it sounds simple: if you import a function but never call it, don't include it in the final bundle. In practice, JavaScript's dynamic nature, CommonJS modules, and side effects make tree shaking a complex optimization that requires understanding how bundlers analyze your code dependencies.

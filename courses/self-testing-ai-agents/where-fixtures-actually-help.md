@@ -1,8 +1,6 @@
 ---
 title: Where Fixtures Actually Help
 description: A field guide to the setup, state, instrumentation, and app boundaries that actually belong in Playwright fixtures.
-modified: 2026-04-14
-date: 2026-04-12
 ---
 
 By the time most teams learn [`test.extend`](https://playwright.dev/docs/test-fixtures), they know _how_ to write a fixture and still don't know _where_ to use one. That is how you end up with a fixture file full of glorified one-liners, mystery state, and three different helpers that all navigate to the same page. I've done this. It feels tidy right up until the suite starts lying to you.

@@ -1,8 +1,6 @@
 ---
 title: 'Write the CI Workflow from Scratch: Solution'
-description: Annotated walkthrough of the `main.yml` workflow you add in the lab. The nightly workflow stays in the appendix labs, alongside the commands it gates.
-modified: 2026-04-14
-date: 2026-04-10
+description: 'Annotated walkthrough of the main.yml workflow added in the lab, with the nightly workflow and its gated commands in the appendix.'
 ---
 
 This is another hybrid lab. The workflow files don't ship in the Shelf starter, but the jobs still map to real local commands. The hosted parts—artifact uploads, cron triggers, required checks—need a GitHub remote with Actions enabled. I will keep those two truths separate so the solution does not pretend local YAML parsing is the same thing as a real CI run.

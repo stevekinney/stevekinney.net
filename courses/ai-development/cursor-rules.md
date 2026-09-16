@@ -3,8 +3,6 @@ title: Cursor Rules
 description: >-
   Use Cursor Project Rules, User Rules, Team Rules, and AGENTS.md instructions
   without turning prompts into a stale style guide.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Cursor Rules](https://cursor.com/docs/rules) are system-level instructions for

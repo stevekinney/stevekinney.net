@@ -62,5 +62,42 @@ export const renderMarkdownReport = (report: BuildReport): string =>
               `${orUnavailable(report.assets.largestEnhancementChunk?.path)})`,
             );
         });
+      if (report.playgrounds) {
+        const playgrounds = report.playgrounds;
+        writer.heading(2, 'Playgrounds').unorderedList((list) => {
+          list
+            .item(`Documents: ${playgrounds.documentCount}`)
+            .item(`CSS configurations: ${playgrounds.configurationCount}`)
+            .item(`CSS bytes: ${playgrounds.cssBytes} (${playgrounds.cssGzipBytes} gzip)`);
+          if (playgrounds.lastLocalInvocation) {
+            const run = playgrounds.lastLocalInvocation;
+            list.item(
+              `Last local invocation: ${run.compilations} compilations, ${run.writes} artifact writes, ${Math.round(run.durationMilliseconds)}ms`,
+            );
+          }
+        });
+        if (playgrounds.benchmark) {
+          const comparison = playgrounds.benchmark;
+          writer.heading(2, 'Playground migration benchmark');
+          writer.write(
+            `Node ${comparison.node}, Bun ${comparison.bun}. Base: ${comparison.baseCommit}. Replacement: ${comparison.replacementRevision}.`,
+          );
+          writer.write(comparison.procedure);
+          writer.write(
+            [
+              '| Build | Cold wall / CPU (ms) | Warm wall / CPU (ms) | Playground compilations | Enhancement bundles | Generated writes | Site CSS / gzip | Playground CSS / gzip |',
+              '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |',
+              ...(['baseline', 'replacement'] as const).map((name) => {
+                const run = comparison[name];
+                return `| ${name} | ${Math.round(run.coldMilliseconds)} / ${Math.round(run.coldCpuMilliseconds)} | ${Math.round(run.warmMilliseconds)} / ${Math.round(run.warmCpuMilliseconds)} | ${run.tailwindCompilations} | ${run.enhancementBundles} | ${run.artifactWrites} | ${run.websiteCssBytes} / ${run.websiteCssGzipBytes} | ${run.playgroundCssBytes} / ${run.playgroundCssGzipBytes} |`;
+              }),
+            ].join('\n'),
+          );
+          const warm = comparison.replacement;
+          writer.write(
+            `Replacement unchanged run: ${warm.warmWebsiteBuilds} website builds, ${warm.warmPlaygroundCompilations} playground compilations, ${warm.warmEnhancementBundles} enhancement bundles, and ${warm.warmGeneratedWrites} generated writes.`,
+          );
+        }
+      }
     })
     .toString();

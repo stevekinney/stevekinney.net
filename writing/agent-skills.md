@@ -1,14 +1,7 @@
 ---
 title: Agent Skills, Stripped of Hype
-description: >-
-  Agent skills are not a new capability—they're a context management strategy.
-  Their value comes from routing and progressive disclosure, not from smarter
-  prompts.
+description: 'Agent skills are a context-management strategy for routing tasks progressively and reducing cognitive overload.'
 date: 2026-03-17
-modified: 2026-06-12
-tags:
-  - ai
-  - tooling
 ---
 
 Agent skills are not a new capability—they're a context management strategy. Their value comes from routing and progressive disclosure, not from "smarter prompts." You're not making the model more capable by handing it a skill. You're deciding what it should know, when it should know it, and how to prove the work is done.

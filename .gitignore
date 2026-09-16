@@ -17,6 +17,7 @@ vite.config.ts.timestamp-*
 !**/.obsidian/community-plugins.json
 !**/.obsidian/hotkeys.json
 !**/.obsidian/templates.json
+!**/.obsidian/types.json
 .vercel
 meta-*
 *storybook.log

@@ -1,16 +1,6 @@
 ---
 title: Infrastructure as Code and CDK
-description: >-
-  Understand why Infrastructure as Code matters, survey the options
-  (CloudFormation, CDK, SST), and see what the infrastructure you built by hand
-  looks like when defined in code.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - infrastructure-as-code
-  - cdk
-  - cloudformation
+description: 'Understand why Infrastructure as Code matters and survey CloudFormation, CDK, and SST.'
 ---
 
 You've spent this entire course clicking through the AWS console and running CLI commands. You created an S3 bucket, configured a CloudFront distribution, set up an API Gateway, attached IAM roles, provisioned a DynamoDB table, and wired it all together. It works. But there's a problem: if you had to do it all again—on a new account, for a new Scratch Lab environment, for a teammate—you'd need to repeat every step from memory, in the right order, without mistakes.

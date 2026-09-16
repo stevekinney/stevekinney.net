@@ -3,13 +3,6 @@ title: TypeScript Patterns for React Hooks
 description: >-
   Master TypeScript with React Hooks—from useState generics to custom hook
   patterns that scale
-date: 2025-09-27
-modified: 2026-03-17
-tags:
-  - typescript
-  - react
-  - hooks
-  - patterns
 ---
 
 React Hooks and TypeScript together enable incredibly powerful patterns, but they also come with unique typing challenges. This guide covers everything from basic hook typing to advanced custom hook patterns that you'll use in production applications.

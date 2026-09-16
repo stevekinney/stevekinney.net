@@ -3,15 +3,6 @@ title: Speculation Rules & bfcache Optimization
 description: >-
   Implement instant navigation with Speculation Rules API and optimize for
   back/forward cache in React applications
-date: 2025-01-14
-modified: 2026-03-17
-status: published
-tags:
-  - React
-  - Performance
-  - Speculation Rules
-  - bfcache
-  - Navigation
 ---
 
 You click a link. The page loads instantly. You hit the back button. The previous page appears immediately, exactly as you left it. No spinners, no re-rendering, no waiting. This isn't magic—it's what happens when you properly leverage the Speculation Rules API and the back/forward cache (bfcache).

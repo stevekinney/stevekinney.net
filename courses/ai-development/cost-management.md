@@ -3,8 +3,6 @@ title: Cost Management in Claude Code
 description: >-
   Manage Claude Code cost through model choice, context discipline, plan mode,
   fallback chains, and verification scope.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 Cost management in [Claude Code](https://code.claude.com/docs/en/overview) is

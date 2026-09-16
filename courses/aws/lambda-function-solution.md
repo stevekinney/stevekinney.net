@@ -3,13 +3,6 @@ title: 'Solution: Build and Deploy a Lambda Function'
 description: >-
   Complete solution for the Lambda function exercise, with all commands and
   expected output.
-date: 2026-03-18
-modified: 2026-04-16
-tags:
-  - aws
-  - lambda
-  - exercise
-  - solution
 ---
 
 Here's the complete solution for every step, including the handler code, the trust policy, all CLI commands, and the expected output at each stage.

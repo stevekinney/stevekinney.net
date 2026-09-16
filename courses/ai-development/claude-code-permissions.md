@@ -3,8 +3,6 @@ title: Claude Code's Permission System
 description: >-
   Configure Claude Code permissions with allow, ask, deny, permission modes,
   tool-specific rules, and explicit safety boundaries.
-modified: 2026-06-24
-date: 2025-07-29
 ---
 
 [Claude Code permissions](https://code.claude.com/docs/en/permissions) decide

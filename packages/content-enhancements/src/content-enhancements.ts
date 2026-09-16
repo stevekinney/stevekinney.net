@@ -7,10 +7,6 @@ const enhancers: ReadonlyArray<{ selector: string; load: () => Promise<Enhancer>
     load: async () => (await import('./enhance-table-of-contents')).enhanceTableOfContents,
   },
   {
-    selector: '[data-tailwind-playground]',
-    load: async () => (await import('./enhance-tailwind-playgrounds')).enhanceTailwindPlaygrounds,
-  },
-  {
     selector: '[data-language]',
     load: async () => (await import('./enhance-code-blocks')).enhanceCodeBlocks,
   },
