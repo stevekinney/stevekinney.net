@@ -190,13 +190,15 @@ const nearestHeading = (
   headings.filter((heading) => heading.owner === owner && heading.line <= (line ?? 1)).at(-1)
     ?.title;
 
-const collectStyles = (tree: Root): Map<string, string> => {
+const styleKey = (owner: number, name: string): string => `${owner}:${name}`;
+
+const collectStyles = (tree: Root, owners: Map<unknown, number>): Map<string, string> => {
   const styles = new Map<string, string>();
   visit(tree, 'code', (node: Code) => {
     if (node.lang !== 'css') return;
     const metadata = parseTailwindPlaygroundStyleMetadata(node.meta ?? undefined);
     if (!metadata) return;
-    styles.set(metadata.name, node.value ?? '');
+    styles.set(styleKey(owners.get(node) ?? 0, metadata.name), node.value ?? '');
   });
   return styles;
 };
@@ -290,11 +292,12 @@ export default function remarkTailwindPlayground(
     const rawSource = loadRawSource(filePath);
     const owners = collectOwners(tree, normalizedSourcePath);
     const headings = collectHeadings(tree, rawSource, owners);
-    const styles = collectStyles(tree);
+    const styles = collectStyles(tree, owners);
     const examples = new Map(
       manifest.examples.map((entry) => [buildManifestKey(entry.sourcePath, entry.ordinal), entry]),
     );
-    const ordinals = new Map<string, number>();
+    // Each embed occurrence numbers its playgrounds from zero, like the source note does alone.
+    const ordinals = new Map<number, number>();
     let currentSourcePath = normalizedSourcePath;
 
     const handleCode = (
@@ -319,8 +322,9 @@ export default function remarkTailwindPlayground(
         node.lang === 'html' ? parseTailwindPlaygroundMetadata(node.meta ?? undefined) : null;
       if (!metadata) return;
 
-      const currentOrdinal = ordinals.get(currentSourcePath) ?? 0;
-      ordinals.set(currentSourcePath, currentOrdinal + 1);
+      const owner = owners.get(node) ?? 0;
+      const currentOrdinal = ordinals.get(owner) ?? 0;
+      ordinals.set(owner, currentOrdinal + 1);
       const entry = examples.get(buildManifestKey(currentSourcePath, currentOrdinal));
 
       if (!entry) {
@@ -329,7 +333,9 @@ export default function remarkTailwindPlayground(
         );
       }
 
-      const css = metadata.css ? styles.get(metadata.css) : undefined;
+      const css = metadata.css
+        ? styles.get(styleKey(owners.get(node) ?? 0, metadata.css))
+        : undefined;
       if (metadata.css && css === undefined) {
         throw new Error(
           `Tailwind playground manifest is stale: missing CSS playground '${metadata.css}' for ${currentSourcePath}#${currentOrdinal}.`,

@@ -7,6 +7,7 @@ import { fromHtml } from 'hast-util-from-html';
 
 const svelteComponentRegion =
   /<([A-Z][A-Za-z0-9_$]*(?:\.[A-Za-z0-9_$]+)*)(?:\s[^<>]*?)?>[\s\S]*?<\/\1>/g;
+const svelteComponentOpeningTag = /<[A-Z][A-Za-z0-9_$]*(?:\.[A-Za-z0-9_$]+)*(?:\s[^<>]*?)?\/?>/g;
 const svelteComponentTag = /<[A-Z][A-Za-z0-9_$]*(?:\.[A-Za-z0-9_$]+)*(?:\s[^<>]*?)?\/>/g;
 
 /** Parse restored HTML while keeping mdsvex component regions as raw nodes. */
@@ -123,7 +124,9 @@ export const rehypeValidateObsidianIdentifiers: Plugin<[], Root> = () => (tree, 
   };
   visit(tree, 'element', (node) => check(node.properties.id));
   visit(tree, 'raw', (node) => {
-    visit(fromHtml(node.value, { fragment: true }), 'element', (element) =>
+    // Props on Svelte components are not DOM identifiers.
+    const domMarkup = node.value.replace(svelteComponentOpeningTag, '');
+    visit(fromHtml(domMarkup, { fragment: true }), 'element', (element) =>
       check(element.properties.id),
     );
   });

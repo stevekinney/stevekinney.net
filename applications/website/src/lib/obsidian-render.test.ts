@@ -267,3 +267,10 @@ it('transforms callouts restored from embedded footnotes', async () => {
   expect(compiled!.code).toContain('Body');
   compileSvelte(compiled!.code, { generate: 'server' });
 });
+
+it('does not treat repeated Svelte component id props as duplicate DOM identifiers', async () => {
+  const compiled = await compile('<Example id="demo" />\n\n<Example id="demo" />\n', {
+    rehypePlugins: [rehypeValidateObsidianIdentifiers] as Pluggable[],
+  });
+  expect(compiled).toBeDefined();
+});

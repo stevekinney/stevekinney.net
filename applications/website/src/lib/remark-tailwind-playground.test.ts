@@ -210,6 +210,63 @@ describe('remarkTailwindPlayground', () => {
     ).resolves.toMatchObject({ code: expect.stringContaining('Target Heading — Example 1') });
   });
 
+  it('numbers playgrounds from zero for each occurrence of a repeated embed', async () => {
+    const code = '<button class="bg-blue-600">Embedded</button>';
+    const targetSource = `~~~html tailwind height=192\n${code}\n~~~\n`;
+    await writeManifest([example(0, code, { sourcePath: 'target.md' })]);
+    const hostSource = '![[target]]\n\n![[target]]\n';
+    const normalized = normalizeObsidianMarkdown(hostSource, {
+      sourcePath: 'lesson.md',
+      publicationIndex: {
+        documents: [
+          { sourcePath: 'target.md', route: '/target', source: targetSource },
+          { sourcePath: 'lesson.md', route: '/lesson', source: hostSource },
+        ],
+        attachments: [],
+      },
+    });
+    const preprocessor = mdsvex({
+      extensions: ['.md'],
+      remarkPlugins: [
+        [remarkTailwindPlayground, { manifestPath, workspaceRoot: temporaryDirectory }],
+      ] as never,
+    });
+
+    await expect(
+      preprocessor.markup({ content: normalized.markdown, filename: sourcePath }),
+    ).resolves.toMatchObject({ code: expect.stringContaining('Embedded') });
+  });
+
+  it('scopes named CSS playground styles to the note that defines them', async () => {
+    const code = '<button class="brand">Embedded</button>';
+    const meta = 'tailwind height=192 css=brand';
+    const targetSource = `~~~css playground=brand\n.brand { color: red; }\n~~~\n\n~~~html ${meta}\n${code}\n~~~\n`;
+    const hostSource = '~~~css playground=brand\n.brand { color: blue; }\n~~~\n\n![[target]]\n';
+    await writeManifest([
+      example(0, code, { sourcePath: 'target.md', css: '.brand { color: red; }', meta }),
+    ]);
+    const normalized = normalizeObsidianMarkdown(hostSource, {
+      sourcePath: 'lesson.md',
+      publicationIndex: {
+        documents: [
+          { sourcePath: 'target.md', route: '/target', source: targetSource },
+          { sourcePath: 'lesson.md', route: '/lesson', source: hostSource },
+        ],
+        attachments: [],
+      },
+    });
+    const preprocessor = mdsvex({
+      extensions: ['.md'],
+      remarkPlugins: [
+        [remarkTailwindPlayground, { manifestPath, workspaceRoot: temporaryDirectory }],
+      ] as never,
+    });
+
+    await expect(
+      preprocessor.markup({ content: normalized.markdown, filename: sourcePath }),
+    ).resolves.toMatchObject({ code: expect.stringContaining('Embedded') });
+  });
+
   it('preprocesses real course files whose generated heading titles contain apostrophes', async () => {
     const files = [
       'courses/tailwind/building-a-card-list.md',
