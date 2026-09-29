@@ -125,6 +125,7 @@
         "mdast-util-to-string": "4.0.0",
         "micromark": "4.0.2",
         "micromark-util-character": "2.1.1",
+        "micromark-util-decode-string": "2.0.1",
         "micromark-util-types": "2.0.2",
         "rehype-callouts": "2.2.0",
         "rehype-mathjax": "7.1.0",
@@ -133,7 +134,6 @@
         "remark-math": "6.0.0",
         "remark-parse": "11.0.0",
         "unified": "11.0.5",
-        "micromark-util-decode-string": "2.0.1",
       },
     },
     "packages/scripts": {
@@ -160,6 +160,7 @@
     "packages/utilities": {
       "name": "@stevekinney/utilities",
       "dependencies": {
+        "acorn": "8.15.0",
         "parse5-sax-parser": "8.0.0",
         "postcss-value-parser": "4.2.0",
       },

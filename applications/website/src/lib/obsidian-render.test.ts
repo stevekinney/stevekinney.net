@@ -290,3 +290,18 @@ it('preserves footnote components whose props contain angle brackets', async () 
   expect(compiled!.code).toContain('<Example value={a < b} />');
   expect(compiled!.code).not.toContain('<example');
 });
+
+it('does not end a footnote component at a closing tag inside an expression string', async () => {
+  const document: PublicationDocument = {
+    sourcePath: 'writing/note.md',
+    route: '/note',
+    source: "Text[^a]\n\n[^a]: Here <Example>{@html '</Example>'}</Example>.\n",
+  };
+  const normalized = normalizeObsidianMarkdown('![[note]]', {
+    sourcePath: 'writing/host.md',
+    publicationIndex: { documents: [document], attachments: [] },
+  });
+  const compiled = await compile(normalized.markdown, { rehypePlugins: plugins });
+
+  expect(compiled!.code).toContain("<Example>{@html '</Example>'}</Example>");
+});

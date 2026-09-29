@@ -19,14 +19,22 @@ const fromHtmlPreservingSvelteComponents = (value: string): Root => {
     );
     return token;
   };
+  // The footnote transport encodes braces, so scan the decoded markup and re-encode what stays HTML.
+  const decoded = value
+    .replaceAll('&#123;', '{')
+    .replaceAll('&#125;', '}')
+    .replaceAll('&#96;', '`');
+  const encode = (text: string): string =>
+    text.replaceAll('{', '&#123;').replaceAll('}', '&#125;').replaceAll('`', '&#96;');
   let protectedValue = '';
   let cursor = 0;
-  for (const region of findSvelteComponentRegions(value)) {
+  for (const region of findSvelteComponentRegions(decoded)) {
     protectedValue +=
-      value.slice(cursor, region.start) + protect(value.slice(region.start, region.end));
+      encode(decoded.slice(cursor, region.start)) +
+      protect(decoded.slice(region.start, region.end));
     cursor = region.end;
   }
-  protectedValue += value.slice(cursor);
+  protectedValue += encode(decoded.slice(cursor));
   const parsed = fromHtml(protectedValue, { fragment: true });
   if (!components.size) return parsed;
   visit(parsed, 'text', (node, index, parent) => {

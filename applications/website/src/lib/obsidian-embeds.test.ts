@@ -107,7 +107,7 @@ describe('normalizeObsidianMarkdown embeds', () => {
   it('allows escaped pipes in wiki aliases', () => {
     const result = normalizeObsidianMarkdown('[[guide|A \\| B]]', context());
     expect(result.diagnostics).toEqual([]);
-    expect(result.markdown).toContain('[A | B](</writing/guide>)');
+    expect(result.markdown).toContain('[A \\| B](</writing/guide>)');
   });
 
   it('expands block embeds and keeps repeated embeds independently addressable', () => {
@@ -275,6 +275,39 @@ describe('normalizeObsidianMarkdown embeds', () => {
 
     expect(result.markdown).toContain('<Example id="demo" />');
     expect(result.markdown).toMatch(/id="embed-[a-z0-9-]+real"/u);
+  });
+
+  it('retargets label and ARIA references to namespaced identifiers', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/form.md',
+      route: '/writing/form',
+      source:
+        '<label for="email">Email</label><input id="email" aria-describedby="hint email"><span id="hint"></span>',
+    };
+    const result = normalizeObsidianMarkdown('![[form]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    const email = /id="(embed-[a-z0-9-]+email)"/u.exec(result.markdown)?.[1];
+    const hint = /id="(embed-[a-z0-9-]+hint)"/u.exec(result.markdown)?.[1];
+    expect(email).toBeDefined();
+    expect(result.markdown).toContain(`for="${email}"`);
+    expect(result.markdown).toContain(`aria-describedby="${hint} ${email}"`);
+  });
+
+  it('escapes wiki-link alias pipes so table cells stay intact', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/guide.md',
+      route: '/writing/guide',
+      source: 'Body.',
+    };
+    const result = normalizeObsidianMarkdown('| [[guide|A \\| B]] |\n| - |', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.markdown).toContain('[A \\| B](');
   });
 
   it('keeps an embed inside a task-list item', () => {

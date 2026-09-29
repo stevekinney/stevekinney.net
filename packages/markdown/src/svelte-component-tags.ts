@@ -60,6 +60,40 @@ export const mapOutsideSvelteComponentTags = (
   return result + transform(source.slice(cursor));
 };
 
+/** Locate the matching `</Name>`, ignoring text inside `{}` expressions and their string literals. */
+const findMatchingClosingTag = (
+  source: string,
+  opening: SvelteComponentTag,
+  tags: SvelteComponentTag[],
+): number | undefined => {
+  const closing = `</${opening.name}>`;
+  const nestedStarts = new Set(
+    tags.filter((tag) => tag.name === opening.name && !tag.selfClosing).map((tag) => tag.start),
+  );
+  let depth = 1;
+  let braces = 0;
+  let quote: string | undefined;
+  for (let cursor = opening.end; cursor < source.length; cursor++) {
+    const character = source[cursor];
+    if (braces > 0) {
+      if (quote) {
+        if (character === '\\') cursor++;
+        else if (character === quote) quote = undefined;
+      } else if (character === '"' || character === "'" || character === '`') quote = character;
+      else if (character === '{') braces++;
+      else if (character === '}') braces--;
+      continue;
+    }
+    if (character === '{') braces++;
+    else if (source.startsWith(closing, cursor)) {
+      depth--;
+      cursor += closing.length - 1;
+      if (depth === 0) return cursor + 1;
+    } else if (nestedStarts.has(cursor)) depth++;
+  }
+  return undefined;
+};
+
 /** Component regions: self-closing tags, or an opening tag through its matching closing tag. */
 export const findSvelteComponentRegions = (
   source: string,
@@ -67,30 +101,17 @@ export const findSvelteComponentRegions = (
   const tags = findSvelteComponentTags(source);
   const regions: Array<{ start: number; end: number }> = [];
   let covered = 0;
-  for (const [index, tag] of tags.entries()) {
+  for (const tag of tags) {
     if (tag.start < covered) continue;
     if (tag.selfClosing) {
       regions.push(tag);
       covered = tag.end;
       continue;
     }
-    const closing = `</${tag.name}>`;
-    let depth = 1;
-    let cursor = tag.end;
-    let nextTag = index + 1;
-    while (depth > 0) {
-      const close = source.indexOf(closing, cursor);
-      if (close < 0) break;
-      while (nextTag < tags.length && tags[nextTag]!.start < close) {
-        const nested = tags[nextTag++]!;
-        if (nested.name === tag.name && !nested.selfClosing) depth++;
-      }
-      depth--;
-      cursor = close + closing.length;
-      if (depth === 0) {
-        regions.push({ start: tag.start, end: cursor });
-        covered = cursor;
-      }
+    const end = findMatchingClosingTag(source, tag, tags);
+    if (end !== undefined) {
+      regions.push({ start: tag.start, end });
+      covered = end;
     }
   }
   return regions;

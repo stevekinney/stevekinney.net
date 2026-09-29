@@ -113,6 +113,47 @@ describe('discoverAllImages', () => {
     expect(result.missing).toEqual([]);
   });
 
+  it('ignores embeds after a regular-expression brace inside a Svelte expression', async () => {
+    const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
+    temporaryDirectories.push(repositoryRoot);
+    await mkdir(path.join(repositoryRoot, 'writing/assets'), { recursive: true });
+    await writeFile(
+      path.join(repositoryRoot, 'writing/note.md'),
+      '{condition && /}/.test(value) ? "![[assets/missing.png]]" : ""}\n',
+    );
+
+    const result = await discoverAllImages(['writing/**/*.md'], repositoryRoot);
+
+    expect([...result.images.keys()]).toEqual([]);
+    expect(result.missing).toEqual([]);
+  });
+
+  it('decodes encoded reserved characters in attachment file names', async () => {
+    const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
+    temporaryDirectories.push(repositoryRoot);
+    await mkdir(path.join(repositoryRoot, 'writing/assets'), { recursive: true });
+    await writeFile(path.join(repositoryRoot, 'writing/note.md'), '![[assets/a%23b.png]]\n');
+    await writeFile(path.join(repositoryRoot, 'writing/assets/a#b.png'), 'image');
+
+    const result = await discoverAllImages(['writing/**/*.md'], repositoryRoot);
+
+    expect([...result.images.keys()]).toEqual(['writing/assets/a#b.png']);
+  });
+
+  it('refuses attachments that resolve outside the repository', async () => {
+    const container = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
+    temporaryDirectories.push(container);
+    const repositoryRoot = path.join(container, 'repository');
+    await mkdir(path.join(repositoryRoot, 'writing'), { recursive: true });
+    await writeFile(path.join(container, 'private.pdf'), 'secret');
+    await writeFile(path.join(repositoryRoot, 'writing/note.md'), '[[../../private.pdf]]\n');
+
+    const result = await discoverAllImages(['writing/**/*.md'], repositoryRoot);
+
+    expect([...result.images.keys()]).toEqual([]);
+    expect(result.missing).toHaveLength(1);
+  });
+
   it('ignores image references inside Svelte expressions', async () => {
     const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
     temporaryDirectories.push(repositoryRoot);

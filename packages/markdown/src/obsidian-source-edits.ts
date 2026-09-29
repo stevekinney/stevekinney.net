@@ -44,7 +44,7 @@ export const escapeObsidianHtml = (value: string): string =>
     .replaceAll('`', '&#96;');
 
 export const escapeMarkdownLabel = (value: string): string =>
-  value.replace(/[\\[\]`*_<>{}]/g, '\\$&');
+  value.replace(/[\\[\]`*_<>{}|]/g, '\\$&');
 
 export const sourceLine = (source: string, offset: number): number =>
   source.slice(0, offset).split('\n').length;

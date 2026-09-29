@@ -1,4 +1,5 @@
-import { access, readFile } from 'node:fs/promises';
+import { access, readFile, realpath } from 'node:fs/promises';
+import { tokenizer } from 'acorn';
 import path from 'node:path';
 import fg from 'fast-glob';
 import matter from 'gray-matter';
@@ -51,13 +52,13 @@ const isExternalReference = (value: string): boolean => {
 
 const safeDecode = (value: string): string => {
   try {
-    return decodeURI(value);
+    return decodeURIComponent(value);
   } catch {
     return value;
   }
 };
 
-/** Mask Svelte expressions while preserving markup and source offsets. */
+/** Mask Svelte expressions with a JavaScript-aware scan, preserving markup and source offsets. */
 const maskSvelteExpressions = (source: string): string => {
   const characters = source.split('');
   const mask = (start: number, end: number): void => {
@@ -68,31 +69,27 @@ const maskSvelteExpressions = (source: string): string => {
 
   for (let index = 0; index < source.length; index++) {
     if (source[index] !== '{' || source[index - 1] === '\\') continue;
+    const directive = /^[#/:@][A-Za-z]+\b/u.exec(source.slice(index + 1));
+    const expressionStart = index + 1 + (directive?.[0].length ?? 0);
+    const tokens = tokenizer(source.slice(expressionStart), {
+      ecmaVersion: 'latest',
+      allowAwaitOutsideFunction: true,
+    });
     let depth = 1;
-    let quote: string | undefined;
-    let template = false;
-    for (let cursor = index + 1; cursor < source.length; cursor++) {
-      const character = source[cursor];
-      if (quote) {
-        if (character === '\\') cursor++;
-        else if (character === quote) quote = undefined;
-        continue;
+    try {
+      while (depth) {
+        const token = tokens.getToken();
+        if (token.type.label === 'eof') break;
+        if (token.type.label === '{' || token.type.label === '${') depth++;
+        if (token.type.label === '}') depth--;
+        if (!depth) {
+          const end = expressionStart + token.end;
+          mask(index, end);
+          index = end - 1;
+        }
       }
-      if (character === '"' || character === "'") {
-        quote = character;
-        continue;
-      }
-      if (character === '`') {
-        template = !template;
-        continue;
-      }
-      if (template) continue;
-      if (character === '{') depth++;
-      if (character === '}' && --depth === 0) {
-        mask(index, cursor + 1);
-        index = cursor;
-        break;
-      }
+    } catch {
+      /* Invalid expressions stay visible; Svelte reports them during compilation. */
     }
   }
   return characters.join('');
@@ -208,8 +205,8 @@ export const discoverAllImages = async (
     for (const rawUrl of urls) {
       if (isExternalReference(rawUrl)) continue;
 
-      const decoded = safeDecode(rawUrl);
-      const normalized = stripQueryHash(decoded).trim();
+      // Strip the query and fragment first so encoded reserved characters such as %23 survive.
+      const normalized = safeDecode(stripQueryHash(rawUrl)).trim();
       if (!normalized) continue;
 
       const extension = path.extname(normalized).toLowerCase();
@@ -221,6 +218,17 @@ export const discoverAllImages = async (
       try {
         await access(resolvedPath);
       } catch {
+        missing.push({ markdownFile, imageUrl: normalized, resolvedPath });
+        continue;
+      }
+
+      // Never publish files outside the repository, including through symlinks.
+      const [realRoot, realResolved] = await Promise.all([
+        realpath(repositoryRoot),
+        realpath(resolvedPath),
+      ]);
+      const relativeToRoot = path.relative(realRoot, realResolved);
+      if (relativeToRoot.startsWith('..') || path.isAbsolute(relativeToRoot)) {
         missing.push({ markdownFile, imageUrl: normalized, resolvedPath });
         continue;
       }

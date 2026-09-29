@@ -29,6 +29,8 @@ const htmlIdentifierReplacementPattern =
 const htmlFragmentHrefPattern = /((?:^|[\s<])href\s*=\s*)(?:(['"])#([^'"]*)\2|#([^\s"'`=<>]+))/gu;
 const htmlImageSourcePattern =
   /(<img\b(?:[^>"']|"[^"]*"|'[^']*')*?[\s"']src\s*=\s*)(?:(['"])([^'"]*)\2|([^\s"'`=<>]+))/giu;
+const htmlIdReferencePattern =
+  /((?:^|[\s<])(?:for|aria-(?:labelledby|describedby|controls|owns|activedescendant|details|errormessage|flowto)))(\s*=\s*)(?:(['"])([^'"]*)\3|([^\s"'`=<>]+))/gu;
 const encodedPath = (value: string): string => value.split('/').map(encodeURIComponent).join('/');
 // Playground bookkeeping only needs source markers around embedded `html` fences.
 const htmlFencePattern = /^[ \t>]*(?:`{3,}|~{3,})[ \t]*html\b/mu;
@@ -141,6 +143,27 @@ const namespaceEmbeddedHtmlIdentifiers = (
           return quote
             ? `${before}${assignment}${quote}${prefix}${id}${quote}`
             : `${before}${assignment}${prefix}${id}`;
+        },
+      ),
+    );
+    value = mapOutsideSvelteComponentTags(value, (segment) =>
+      segment.replace(
+        htmlIdReferencePattern,
+        (
+          match,
+          before: string,
+          assignment: string,
+          quote: string | undefined,
+          quotedIds: string | undefined,
+          unquotedId: string | undefined,
+        ) => {
+          const references = (quotedIds ?? unquotedId ?? '')
+            .split(/\s+/u)
+            .map((reference) => localIds.get(reference) ?? reference)
+            .join(' ');
+          return quote
+            ? `${before}${assignment}${quote}${references}${quote}`
+            : `${before}${assignment}${references}`;
         },
       ),
     );
