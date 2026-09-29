@@ -71,10 +71,6 @@ describe('collectContentRepository', () => {
       sourcePath: 'projects/weft.md',
       npmPackages: ['@lostgradient/weft'],
     });
-
-    expect(repository.routes['/projects/agent-bureau']).toMatchObject({
-      npmPackages: ['armorer', 'conversationalist'],
-    });
   });
 
   test('produces deterministic metadata for content routes', async () => {
@@ -115,7 +111,6 @@ describe('collectContentRepository', () => {
     );
 
     expect(npmPackagesByProject).toEqual({
-      'agent-bureau': ['armorer', 'conversationalist'],
       cinder: ['@lostgradient/cinder', '@lostgradient/chat'],
       'eslint-plugin-temporal': ['eslint-plugin-temporal'],
       'github-webhook-schemas': ['github-webhook-schemas'],
@@ -123,7 +118,6 @@ describe('collectContentRepository', () => {
       'prose-writer': ['prose-writer'],
       'temporal-explorer': ['temporal-explorer'],
       'temporal-mcp': ['temporal-mcp'],
-      'vector-frankl': ['vector-frankl'],
       weft: ['@lostgradient/weft'],
     });
   });

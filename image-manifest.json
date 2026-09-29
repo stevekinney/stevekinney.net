@@ -216,6 +216,24 @@
       "lqip": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAgCdASoYAAYAPxFwsFAsJiSisAgBgCIJaQDImC0kAAD+76lIN/qNAAA=",
       "videoMimeType": null
     },
+    "writing/assets/otto.jpeg": {
+      "hash": "2b72f7335855c8bb",
+      "width": 1280,
+      "height": 960,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2b72f7335855c8bb/original.jpeg",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2b72f7335855c8bb/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/2b72f7335855c8bb/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAAAQAwCdASoYABIAPxF0sFCwpySisAgCECIJZQCvDCsgLUAAzOng96z9J7/7DCMRC8latL0vWdPHRAAA",
+      "videoMimeType": null
+    },
     "writing/assets/ralph-wiggum.png": {
       "hash": "276810d4a85829a2",
       "width": 1376,
@@ -232,28 +250,6 @@
         }
       ],
       "lqip": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADwAgCdASoYAA0APxFysFAsJqSisAgBgCIJZwDGfDDWAAD+2GrNH9dLS4AAAA==",
-      "videoMimeType": null
-    },
-    "courses/ai-development/assets/cursor-notepad.png": {
-      "hash": "7cbc103adf655f9a",
-      "width": 1600,
-      "height": 905,
-      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7cbc103adf655f9a/original.png",
-      "avif": [
-        {
-          "width": 480,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7cbc103adf655f9a/avif-480w.avif"
-        },
-        {
-          "width": 1024,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7cbc103adf655f9a/avif-1024w.avif"
-        },
-        {
-          "width": 1600,
-          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/7cbc103adf655f9a/avif-1600w.avif"
-        }
-      ],
-      "lqip": "data:image/webp;base64,UklGRsYAAABXRUJQVlA4WAoAAAAQAAAAFwAADQAAQUxQSHMAAAABuTJE9D8cDts2cqSLbX7/PeT8X4IE4RcREzABh5uxG6v/omYTrrg4k5MxxtHMScjXKchzgPkik7cm2QuSD40PjezJAMMAM+M5gSR5eQGz+N4uiBl94Iu8aBY/lLNJ9pXQgMw+MnQA8RyYYAIjgAwhQ8AAAFZQOCAsAAAA8AIAnQEqGAAOAD8RcrBQLCakorAIAYAiCWcArAAtJAAA/u9O6x2YPosToAA=",
       "videoMimeType": null
     },
     "courses/ai-development/assets/notebooklm.png": {

@@ -148,10 +148,6 @@ test('writing post page has no accessibility violations', async ({ page }) => {
 test('project pages link package-backed projects to npm', async ({ page }) => {
   await page.goto('/projects');
 
-  await expect(page.getByRole('link', { name: 'npm: armorer' })).toHaveAttribute(
-    'href',
-    'https://www.npmjs.com/package/armorer',
-  );
   await expect(page.getByRole('link', { name: 'npm: prose-writer' })).toHaveAttribute(
     'href',
     'https://www.npmjs.com/package/prose-writer',

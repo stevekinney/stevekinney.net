@@ -8,7 +8,7 @@
 </script>
 
 <nav
-  class={merge('flex flex-wrap items-center gap-4 xl:flex-nowrap xl:whitespace-nowrap', className)}
+  class={merge('flex flex-wrap items-center gap-4 lg:flex-nowrap lg:whitespace-nowrap', className)}
   aria-label="Main Navigation"
 >
   <Link href="/writing">Writing</Link>
