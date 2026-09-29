@@ -107,3 +107,15 @@ describe('rewritePublishedAttachments with lookalike attributes', () => {
     );
   });
 });
+
+describe('rewritePublishedAttachments with single-quoted sources', () => {
+  it('rewrites single-quoted src attributes', () => {
+    expect(
+      rewritePublishedAttachments(
+        "<img src='assets/diagram.png'>",
+        'writing/post.md',
+        publicationIndex,
+      ),
+    ).toBe("<img src='https://cdn.example.com/diagram.png'>");
+  });
+});

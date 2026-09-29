@@ -85,6 +85,12 @@ describe('Obsidian syntax', () => {
     expect(normalizeObsidianMarkdown(source, context).markdown).toContain('% literal');
   });
 
+  it('removes a comment preceded by an escaped backslash', () => {
+    const source = 'before \\\\%% private %% after';
+
+    expect(normalizeObsidianMarkdown(source, context).markdown).not.toContain('private');
+  });
+
   it('protects comments in inline code, fenced code, raw scripts, and frontmatter', () => {
     const source = `---\nnote: %% keep %%\n---\n\n\`%% keep %%\`\n\n\`\`\`md\n%% keep %%\n\`\`\`\n\n<script>const value = '%% keep %%';</script>\n\n%% remove %%`;
 

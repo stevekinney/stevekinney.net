@@ -23,14 +23,14 @@ import type {
 } from './obsidian-types.ts';
 
 const MAXIMUM_BYTES = 10 * 1024 * 1024;
-const htmlIdentifierPattern = /(?:^|[\s<])id\s*=\s*(?:(['"])([^'"]+)\1|([^\s"'`=<>]+))/gu;
+const htmlIdentifierPattern = /(?:^|[\s<])id\s*=\s*(?:(['"])([^'"]+)\1|([^\s"'`=<>]+))/giu;
 const htmlIdentifierReplacementPattern =
-  /((?:^|[\s<])id)(\s*=\s*)(?:(['"])([^'"]+)\3|([^\s"'`=<>]+))/gu;
-const htmlFragmentHrefPattern = /((?:^|[\s<])href\s*=\s*)(?:(['"])#([^'"]*)\2|#([^\s"'`=<>]+))/gu;
+  /((?:^|[\s<])id)(\s*=\s*)(?:(['"])([^'"]+)\3|([^\s"'`=<>]+))/giu;
+const htmlFragmentHrefPattern = /((?:^|[\s<])href\s*=\s*)(?:(['"])#([^'"]*)\2|#([^\s"'`=<>]+))/giu;
 const htmlImageSourcePattern =
   /(<img\b(?:[^>"']|"[^"]*"|'[^']*')*?[\s"']src\s*=\s*)(?:(['"])([^'"]*)\2|([^\s"'`=<>]+))/giu;
 const htmlIdReferencePattern =
-  /((?:^|[\s<])(?:for|form|list|headers|aria-(?:labelledby|describedby|controls|owns|activedescendant|details|errormessage|flowto)))(\s*=\s*)(?:(['"])([^'"]*)\3|([^\s"'`=<>]+))/gu;
+  /((?:^|[\s<])(?:for|form|list|headers|aria-(?:labelledby|describedby|controls|owns|activedescendant|details|errormessage|flowto)))(\s*=\s*)(?:(['"])([^'"]*)\3|([^\s"'`=<>]+))/giu;
 const encodedPath = (value: string): string => value.split('/').map(encodeURIComponent).join('/');
 // Playground bookkeeping only needs source markers around embedded `html` and `css` fences.
 const htmlFencePattern = /^[ \t>]*(?:`{3,}|~{3,})[ \t]*(?:html|css)\b/mu;

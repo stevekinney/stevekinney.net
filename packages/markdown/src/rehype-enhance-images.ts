@@ -145,7 +145,7 @@ const isExternalUrl = (value: string): boolean => {
 
 const safeDecode = (value: string): string => {
   try {
-    return decodeURI(value);
+    return decodeURIComponent(value);
   } catch {
     return value;
   }
@@ -192,9 +192,10 @@ const rehypeEnhanceImages: Plugin<[Options?], Root> = (options = {}) => {
         return;
       }
 
-      let url = safeDecode(src);
+      // Strip the query and fragment before decoding so encoded reserved characters such as %23 survive.
+      let url = safeDecode(stripQueryHash(src));
       if (url.startsWith('assets/')) url = `./${url}`;
-      const urlForMatch = stripQueryHash(url);
+      const urlForMatch = url;
 
       const key = resolveManifestKey(filename, urlForMatch);
       const entry = manifest.images[key];

@@ -30,7 +30,6 @@ declare module 'mdast' {
 
 const comment: Construct = {
   name: 'obsidianComment',
-  previous: (code) => code !== 92,
   tokenize: (effects, ok, nok) => {
     return start;
 

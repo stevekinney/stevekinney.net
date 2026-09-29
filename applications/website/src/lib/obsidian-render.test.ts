@@ -320,3 +320,33 @@ it('does not end a footnote component at a closing tag inside a markup attribute
 
   expect(compiled!.code).toContain('<Example><span title="</Example>">x</span></Example>');
 });
+
+it('does not end a footnote component at a closing tag inside an HTML comment', async () => {
+  const document: PublicationDocument = {
+    sourcePath: 'writing/note.md',
+    route: '/note',
+    source: 'Text[^a]\n\n[^a]: Here <Example><!-- </Example> --></Example>.\n',
+  };
+  const normalized = normalizeObsidianMarkdown('![[note]]', {
+    sourcePath: 'writing/host.md',
+    publicationIndex: { documents: [document], attachments: [] },
+  });
+  const compiled = await compile(normalized.markdown, { rehypePlugins: plugins });
+
+  expect(compiled!.code).toContain('<Example><!-- </Example> --></Example>');
+});
+
+it('keeps literal placeholder-like text next to a footnote component', async () => {
+  const document: PublicationDocument = {
+    sourcePath: 'writing/note.md',
+    route: '/note',
+    source: 'Text[^a]\n\n[^a]: Keep svelte-component-0 and <Example />.\n',
+  };
+  const normalized = normalizeObsidianMarkdown('![[note]]', {
+    sourcePath: 'writing/host.md',
+    publicationIndex: { documents: [document], attachments: [] },
+  });
+  const compiled = await compile(normalized.markdown, { rehypePlugins: plugins });
+
+  expect(compiled!.code).toContain('Keep svelte-component-0 and <Example />');
+});

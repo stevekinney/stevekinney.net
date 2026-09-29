@@ -11,8 +11,12 @@ import { findSvelteComponentRegions, maskSvelteComponentTags } from './svelte-co
 const fromHtmlPreservingSvelteComponents = (value: string): Root => {
   const components = new Map<string, string>();
   let componentIndex = 0;
+  // Placeholders must not collide with text the author already wrote.
+  let placeholder = 'svelte-component';
+  while (value.includes(placeholder)) placeholder += 'x';
+  const placeholderPattern = new RegExp(`${placeholder}-\\d+`, 'g');
   const protect = (component: string): string => {
-    const token = `svelte-component-${componentIndex++}`;
+    const token = `${placeholder}-${componentIndex++}`;
     components.set(
       token,
       component.replaceAll('&#123;', '{').replaceAll('&#125;', '}').replaceAll('&#96;', '`'),
@@ -41,7 +45,7 @@ const fromHtmlPreservingSvelteComponents = (value: string): Root => {
     if (index === undefined || !parent) return;
     const children: Array<{ type: 'text'; value: string } | { type: 'raw'; value: string }> = [];
     let offset = 0;
-    for (const match of node.value.matchAll(/svelte-component-\d+/g)) {
+    for (const match of node.value.matchAll(placeholderPattern)) {
       const token = match[0];
       const component = components.get(token);
       if (!component || match.index === undefined) continue;

@@ -382,6 +382,35 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown).toMatch(/^>First line\.\n>\s*\n>Second line\.$/u);
   });
 
+  it('namespaces identifiers written with uppercase attribute names', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/uppercase.md',
+      route: '/writing/uppercase',
+      source: '<div ID="details"></div>\n\n<a HREF="#details">Jump</a>',
+    };
+    const result = normalizeObsidianMarkdown('![[uppercase]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.markdown).toMatch(/ID="embed-[a-z0-9-]+details"/u);
+    expect(result.markdown).toMatch(/HREF="#embed-[a-z0-9-]+details"/u);
+  });
+
+  it('rebases query-only links from an embedded note to its route', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/printable.md',
+      route: '/writing/printable',
+      source: '[print](?mode=print)',
+    };
+    const result = normalizeObsidianMarkdown('![[printable]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.markdown).toContain('](</writing/printable?mode=print>)');
+  });
+
   it('keeps an embed inside a task-list item', () => {
     const target: PublicationDocument = {
       sourcePath: 'writing/steps.md',

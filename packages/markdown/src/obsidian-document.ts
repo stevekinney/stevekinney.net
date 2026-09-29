@@ -144,9 +144,9 @@ export const getObsidianDocumentMetadata = (
       candidate.value.replace(/<!--[\s\S]*?(?:-->|$)/gu, (comment) => ' '.repeat(comment.length)),
     );
     for (const match of visibleValue.matchAll(
-      /(?:^|[\s<])id\s*=\s*(?:(['"])([^'"]+)\1|([^\s"'`=<>]+))/gu,
+      /(?:^|[\s<])id\s*=\s*(?:(['"])([^'"]+)\1|([^\s"'`=<>]+))/giu,
     )) {
-      const idStart = position.start + match.index + match[0].indexOf('id');
+      const idStart = position.start + match.index + match[0].search(/id/iu);
       if (protectedSourceRanges.some((range) => idStart >= range.start && idStart < range.end))
         continue;
       const id = match[2] ?? match[3];

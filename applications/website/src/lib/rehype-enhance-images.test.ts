@@ -94,6 +94,24 @@ describe('rehypeEnhanceImages', () => {
     }
   });
 
+  it('looks up images whose file names contain encoded reserved characters', async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), 'rehype-images-'));
+    temporaryDirectories.push(directory);
+    const manifestPath = path.join(directory, 'manifest.json');
+    await writeManifest(manifestPath, {
+      [`${manifestKey(markdownFile)}/a#b.png`]: manifestEntry(),
+    });
+
+    await expect(
+      transform(manifestPath, {
+        type: 'element',
+        tagName: 'img',
+        properties: { src: 'assets/a%23b.png' },
+        children: [],
+      }),
+    ).resolves.toBeDefined();
+  });
+
   it('reloads a changed manifest and does not cache permissive failures', async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), 'rehype-images-'));
     temporaryDirectories.push(directory);

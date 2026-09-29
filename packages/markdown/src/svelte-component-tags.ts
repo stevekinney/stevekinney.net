@@ -85,7 +85,11 @@ const findMatchingClosingTag = (
       continue;
     }
     if (character === '{') braces++;
-    else if (source.startsWith(closing, cursor)) {
+    else if (source.startsWith('<!--', cursor)) {
+      const commentEnd = source.indexOf('-->', cursor + 4);
+      if (commentEnd < 0) return undefined;
+      cursor = commentEnd + 2;
+    } else if (source.startsWith(closing, cursor)) {
       depth--;
       cursor += closing.length - 1;
       if (depth === 0) return cursor + 1;
