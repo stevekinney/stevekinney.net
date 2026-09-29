@@ -1,3 +1,4 @@
+import { decodeString } from 'micromark-util-decode-string';
 import { mapOutsideProtectedMarkup, maskProtectedMarkup } from './svelte-component-tags.ts';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -82,7 +83,8 @@ const namespaceEmbeddedHtmlIdentifiers = (
   visit(tree, 'html', (node) => {
     for (const match of maskProtectedMarkup(node.value).matchAll(htmlIdentifierPattern)) {
       const id = match[2] ?? match[3];
-      if (id) localIds.set(id, `${prefix}${id}`);
+      // Key by the decoded spelling: references reach lookup after HTML and URL decoding.
+      if (id) localIds.set(decodeString(id), `${prefix}${decodeString(id)}`);
     }
   });
   visit(tree, 'html', (node) => {
@@ -159,7 +161,10 @@ const namespaceEmbeddedHtmlIdentifiers = (
         ) => {
           const references = (quotedIds ?? unquotedId ?? '')
             .split(/\s+/u)
-            .map((reference) => localIds.get(reference) ?? reference)
+            .map((reference) => {
+              const mapped = localIds.get(decodeString(reference));
+              return mapped === undefined ? reference : escapeObsidianHtml(mapped);
+            })
             .join(' ');
           return quote
             ? `${before}${assignment}${quote}${references}${quote}`
@@ -181,7 +186,7 @@ const namespaceEmbeddedHtmlIdentifiers = (
           if (!id) return match;
           let decoded: string;
           try {
-            decoded = decodeURIComponent(id);
+            decoded = decodeURIComponent(decodeString(id));
           } catch {
             return match;
           }

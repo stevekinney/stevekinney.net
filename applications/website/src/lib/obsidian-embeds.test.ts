@@ -411,6 +411,20 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown).toContain('](</writing/printable?mode=print>)');
   });
 
+  it('retargets links to identifiers written with HTML entities', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/entities.md',
+      route: '/writing/entities',
+      source: '<div id="a&amp;b"></div>\n\n<a href="#a%26b">Jump</a>',
+    };
+    const result = normalizeObsidianMarkdown('![[entities]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.markdown).toMatch(/href="#embed-[a-z0-9-]+a%26b"/u);
+  });
+
   it('keeps an embed inside a task-list item', () => {
     const target: PublicationDocument = {
       sourcePath: 'writing/steps.md',

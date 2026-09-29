@@ -48,7 +48,7 @@ export const stripEmbeddedSourceMarkers = (markdown: string): string =>
   markdown.replace(/<!-- obsidian-embedded-source: [^\s]+ -->\n*/gu, '');
 
 // Match the real `src` attribute rather than a suffix such as `data-src`.
-const srcAttributePattern = /(?<=[\s"'])src=(["'])([^"']*)\1/u;
+const srcAttributePattern = /(?<=[\s"'])src\s*=\s*(["'])([^"']*)\1/iu;
 
 export const rewritePublishedAttachments = (
   markdown: string,
@@ -97,11 +97,11 @@ export const rewritePublishedAttachments = (
     const srcMatch = srcAttributePattern.exec(element);
     const url = srcMatch ? attachmentUrl(srcMatch[2]) : undefined;
     let rewritten = element;
-    if (srcMatch && url)
+    if (srcMatch && url) {
+      const valueStart = srcMatch.index + srcMatch[0].length - 1 - srcMatch[2].length;
       rewritten =
-        element.slice(0, srcMatch.index) +
-        `src=${srcMatch[1]}${url}${srcMatch[1]}` +
-        element.slice(srcMatch.index + srcMatch[0].length);
+        element.slice(0, valueStart) + url + element.slice(valueStart + srcMatch[2].length);
+    }
     rewritten = rewritten
       .replace(/\sdata-obsidian-attachment=""/gu, '')
       .replace(/\sdata-obsidian-public-attachment=""/gu, '');
@@ -136,7 +136,7 @@ export const rewritePublishedAttachments = (
       if (!srcMatch) continue;
       const url = attachmentUrl(srcMatch[2]);
       if (!url) continue;
-      const srcStart = match.index + srcMatch.index + 'src='.length + 1;
+      const srcStart = match.index + srcMatch.index + srcMatch[0].length - 1 - srcMatch[2].length;
       edits.push({
         start: nodeStart + srcStart,
         end: nodeStart + srcStart + srcMatch[2].length,

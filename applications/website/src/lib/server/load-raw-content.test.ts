@@ -119,3 +119,15 @@ describe('rewritePublishedAttachments with single-quoted sources', () => {
     ).toBe("<img src='https://cdn.example.com/diagram.png'>");
   });
 });
+
+describe('rewritePublishedAttachments with spaced and uppercase attributes', () => {
+  it('rewrites SRC attributes with whitespace around the equals sign', () => {
+    expect(
+      rewritePublishedAttachments(
+        '<img SRC = "assets/diagram.png">',
+        'writing/post.md',
+        publicationIndex,
+      ),
+    ).toBe('<img SRC = "https://cdn.example.com/diagram.png">');
+  });
+});

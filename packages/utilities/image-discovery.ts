@@ -115,7 +115,7 @@ const maskProtectedMarkdown = (markdown: string): string => {
   // Obsidian comments can span lines and may contain fenced Markdown. Scan the
   // original source while using the mask to ignore comment markers inside code.
   for (let index = 0; index < markdown.length - 1; index++) {
-    if (masked[index] !== '%' || masked[index + 1] !== '%') continue;
+    if (masked[index] !== '%' || masked[index + 1] !== '%' || isEscaped(markdown, index)) continue;
     const endMarker = markdown.indexOf('%%', index + 2);
     const end = endMarker === -1 ? markdown.length : endMarker + 2;
     mask(index, end);
