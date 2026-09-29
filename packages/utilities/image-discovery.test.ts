@@ -154,6 +154,21 @@ describe('discoverAllImages', () => {
     expect(result.missing).toHaveLength(1);
   });
 
+  it('ignores escaped wiki attachment syntax', async () => {
+    const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
+    temporaryDirectories.push(repositoryRoot);
+    await mkdir(path.join(repositoryRoot, 'writing'), { recursive: true });
+    await writeFile(
+      path.join(repositoryRoot, 'writing/note.md'),
+      '\\[[assets/manual.pdf]] and !\\[[assets/image.png]]\n',
+    );
+
+    const result = await discoverAllImages(['writing/**/*.md'], repositoryRoot);
+
+    expect([...result.images.keys()]).toEqual([]);
+    expect(result.missing).toEqual([]);
+  });
+
   it('ignores image references inside Svelte expressions', async () => {
     const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
     temporaryDirectories.push(repositoryRoot);

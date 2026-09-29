@@ -1,4 +1,4 @@
-import { mapOutsideSvelteComponentTags, maskSvelteComponentTags } from './svelte-component-tags.ts';
+import { mapOutsideProtectedMarkup, maskProtectedMarkup } from './svelte-component-tags.ts';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { unified } from 'unified';
@@ -30,10 +30,10 @@ const htmlFragmentHrefPattern = /((?:^|[\s<])href\s*=\s*)(?:(['"])#([^'"]*)\2|#(
 const htmlImageSourcePattern =
   /(<img\b(?:[^>"']|"[^"]*"|'[^']*')*?[\s"']src\s*=\s*)(?:(['"])([^'"]*)\2|([^\s"'`=<>]+))/giu;
 const htmlIdReferencePattern =
-  /((?:^|[\s<])(?:for|aria-(?:labelledby|describedby|controls|owns|activedescendant|details|errormessage|flowto)))(\s*=\s*)(?:(['"])([^'"]*)\3|([^\s"'`=<>]+))/gu;
+  /((?:^|[\s<])(?:for|form|list|headers|aria-(?:labelledby|describedby|controls|owns|activedescendant|details|errormessage|flowto)))(\s*=\s*)(?:(['"])([^'"]*)\3|([^\s"'`=<>]+))/gu;
 const encodedPath = (value: string): string => value.split('/').map(encodeURIComponent).join('/');
-// Playground bookkeeping only needs source markers around embedded `html` fences.
-const htmlFencePattern = /^[ \t>]*(?:`{3,}|~{3,})[ \t]*html\b/mu;
+// Playground bookkeeping only needs source markers around embedded `html` and `css` fences.
+const htmlFencePattern = /^[ \t>]*(?:`{3,}|~{3,})[ \t]*(?:html|css)\b/mu;
 const embeddedSourceMarker = (sourcePath: string): string =>
   `<!-- obsidian-embedded-source: ${encodeURIComponent(sourcePath)} -->`;
 const wikiEmbedParts = (inner: string): { reference: string; alias?: string } => {
@@ -80,7 +80,7 @@ const namespaceEmbeddedHtmlIdentifiers = (
   if (!source.slice(start, end).includes('<')) return;
   const tree = unified().use(remarkParse).parse(source.slice(start, end));
   visit(tree, 'html', (node) => {
-    for (const match of maskSvelteComponentTags(node.value).matchAll(htmlIdentifierPattern)) {
+    for (const match of maskProtectedMarkup(node.value).matchAll(htmlIdentifierPattern)) {
       const id = match[2] ?? match[3];
       if (id) localIds.set(id, `${prefix}${id}`);
     }
@@ -92,7 +92,7 @@ const namespaceEmbeddedHtmlIdentifiers = (
     const nodeStart = start + localStart;
     const nodeEnd = start + localEnd;
     let value = node.value;
-    value = mapOutsideSvelteComponentTags(value, (segment) =>
+    value = mapOutsideProtectedMarkup(value, (segment) =>
       segment.replace(
         htmlImageSourcePattern,
         (
@@ -128,7 +128,7 @@ const namespaceEmbeddedHtmlIdentifiers = (
         },
       ),
     );
-    value = mapOutsideSvelteComponentTags(value, (segment) =>
+    value = mapOutsideProtectedMarkup(value, (segment) =>
       segment.replace(
         htmlIdentifierReplacementPattern,
         (
@@ -146,7 +146,7 @@ const namespaceEmbeddedHtmlIdentifiers = (
         },
       ),
     );
-    value = mapOutsideSvelteComponentTags(value, (segment) =>
+    value = mapOutsideProtectedMarkup(value, (segment) =>
       segment.replace(
         htmlIdReferencePattern,
         (
@@ -167,7 +167,7 @@ const namespaceEmbeddedHtmlIdentifiers = (
         },
       ),
     );
-    value = mapOutsideSvelteComponentTags(value, (segment) =>
+    value = mapOutsideProtectedMarkup(value, (segment) =>
       segment.replace(
         htmlFragmentHrefPattern,
         (
@@ -420,7 +420,7 @@ export const normalizeObsidianReferences = (
       if (node.type === 'wikiLink') {
         const sameDocument = destination.sourcePath === document.sourcePath;
         const url =
-          sameDocument && id
+          sameDocument && id && (!prefix || localIds.has(id))
             ? `#${encodeURIComponent(localIds.get(id) ?? id)}`
             : destination.route + (id ? `#${encodeURIComponent(id)}` : '');
         replace(`[${escapeMarkdownLabel(alias ?? (target || fragment))}](<${url}>)`);
@@ -464,7 +464,7 @@ export const normalizeObsidianReferences = (
       const listContainer = /^(\s*(?:(?:>\s*)+)?)(?:[-+*]|\d+[.)])\s+(?:\[[ xX]\]\s+)?$/u.exec(
         sourceBeforeEmbed,
       );
-      const blockquoteContainer = /^(\s*(?:>\s+)+)$/u.exec(sourceBeforeEmbed)?.[1];
+      const blockquoteContainer = /^(\s*(?:>\s*)+)$/u.exec(sourceBeforeEmbed)?.[1];
       const continuationPrefix = listContainer
         ? `${listContainer[1]}${' '.repeat(sourceBeforeEmbed.length - listContainer[1].length)}`
         : blockquoteContainer;

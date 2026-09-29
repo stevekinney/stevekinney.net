@@ -47,6 +47,9 @@ const imageDestinationSpan = (raw: string): [number, number] | undefined => {
 export const stripEmbeddedSourceMarkers = (markdown: string): string =>
   markdown.replace(/<!-- obsidian-embedded-source: [^\s]+ -->\n*/gu, '');
 
+// Match the real `src` attribute rather than a suffix such as `data-src`.
+const srcAttributePattern = /(?<=[\s"'])src="([^"]*)"/u;
+
 export const rewritePublishedAttachments = (
   markdown: string,
   sourcePath: string,
@@ -91,12 +94,17 @@ export const rewritePublishedAttachments = (
   for (const match of markdown.matchAll(/<img\b[^>]*\bdata-obsidian-attachment=""[^>]*>/gu)) {
     const start = match.index;
     const element = match[0];
-    const srcMatch = element.match(/\bsrc="([^"]*)"/u);
+    const srcMatch = srcAttributePattern.exec(element);
     const url = srcMatch ? attachmentUrl(srcMatch[1]) : undefined;
-    const rewritten = element
+    let rewritten = element;
+    if (srcMatch && url)
+      rewritten =
+        element.slice(0, srcMatch.index) +
+        `src="${url}"` +
+        element.slice(srcMatch.index + srcMatch[0].length);
+    rewritten = rewritten
       .replace(/\sdata-obsidian-attachment=""/gu, '')
-      .replace(/\sdata-obsidian-public-attachment=""/gu, '')
-      .replace(srcMatch?.[0] ?? '', url ? `src="${url}"` : (srcMatch?.[0] ?? ''));
+      .replace(/\sdata-obsidian-public-attachment=""/gu, '');
     edits.push({ start, end: start + element.length, replacement: rewritten });
   }
 
@@ -121,17 +129,17 @@ export const rewritePublishedAttachments = (
   visit(markdownParser.parse(markdown), 'html', (node) => {
     const nodeStart = node.position?.start.offset;
     if (nodeStart === undefined) return;
-    for (const match of node.value.matchAll(/<img\b[^>]*\bsrc="([^"]*)"[^>]*>/gu)) {
+    for (const match of node.value.matchAll(/<img\b[^>]*>/gu)) {
       if (match.index === undefined) continue;
       if (match[0].includes('data-obsidian-attachment=""')) continue;
-      const url = attachmentUrl(match[1]);
+      const srcMatch = srcAttributePattern.exec(match[0]);
+      if (!srcMatch) continue;
+      const url = attachmentUrl(srcMatch[1]);
       if (!url) continue;
-      const srcAttributeStart = match[0].indexOf('src="');
-      if (srcAttributeStart < 0) continue;
-      const srcStart = match.index + srcAttributeStart + 'src="'.length;
+      const srcStart = match.index + srcMatch.index + 'src="'.length;
       edits.push({
         start: nodeStart + srcStart,
-        end: nodeStart + srcStart + match[1].length,
+        end: nodeStart + srcStart + srcMatch[1].length,
         replacement: url,
       });
     }

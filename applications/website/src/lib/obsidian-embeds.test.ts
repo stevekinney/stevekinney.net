@@ -310,6 +310,78 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown).toContain('[A \\| B](');
   });
 
+  it('retargets list, form, and headers references', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/choices.md',
+      route: '/writing/choices',
+      source: '<input list="choices"><datalist id="choices"></datalist>',
+    };
+    const result = normalizeObsidianMarkdown('![[choices]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+    const choices = /id="(embed-[a-z0-9-]+choices)"/u.exec(result.markdown)?.[1];
+
+    expect(choices).toBeDefined();
+    expect(result.markdown).toContain(`list="${choices}"`);
+  });
+
+  it('ignores identifiers inside HTML comments when namespacing an embed', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/commented.md',
+      route: '/writing/commented',
+      source: '<!-- <span id="details"> -->\n\n<a href="#details">Jump</a>',
+    };
+    const result = normalizeObsidianMarkdown('![[commented]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.markdown).toContain('href="#details"');
+  });
+
+  it('marks embedded CSS-only playground notes', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/styles.md',
+      route: '/writing/styles',
+      source: '~~~css playground=brand\n.brand {}\n~~~',
+    };
+    const result = normalizeObsidianMarkdown('![[styles]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.markdown).toContain('obsidian-embedded-source: writing%2Fstyles.md');
+  });
+
+  it('links to the source route for a heading outside an embedded section', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/sections.md',
+      route: '/writing/sections',
+      source: '# One\n\nSee [[#Two]].\n\n# Two\n\nMore.',
+    };
+    const result = normalizeObsidianMarkdown('![[sections#One]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.markdown).toContain('](</writing/sections#two>)');
+  });
+
+  it('preserves compact blockquote containers around embeds', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/quote.md',
+      route: '/writing/quote',
+      source: 'First line.\n\nSecond line.',
+    };
+    const result = normalizeObsidianMarkdown('>![[quote]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.markdown).toMatch(/^>First line\.\n>\s*\n>Second line\.$/u);
+  });
+
   it('keeps an embed inside a task-list item', () => {
     const target: PublicationDocument = {
       sourcePath: 'writing/steps.md',

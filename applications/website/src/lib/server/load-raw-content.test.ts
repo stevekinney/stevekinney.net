@@ -97,3 +97,13 @@ describe('stripEmbeddedSourceMarkers', () => {
     expect(stripEmbeddedSourceMarkers(markdown)).toBe('Body.\n\n');
   });
 });
+
+describe('rewritePublishedAttachments with lookalike attributes', () => {
+  it('rewrites the real src rather than data-src', () => {
+    const markdown = '<img data-src="assets/other.png" src="assets/diagram.png">';
+
+    expect(rewritePublishedAttachments(markdown, 'writing/post.md', publicationIndex)).toBe(
+      '<img data-src="assets/other.png" src="https://cdn.example.com/diagram.png">',
+    );
+  });
+});

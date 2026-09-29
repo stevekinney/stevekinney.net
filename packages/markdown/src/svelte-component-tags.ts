@@ -67,21 +67,21 @@ const findMatchingClosingTag = (
   tags: SvelteComponentTag[],
 ): number | undefined => {
   const closing = `</${opening.name}>`;
-  const nestedStarts = new Set(
-    tags.filter((tag) => tag.name === opening.name && !tag.selfClosing).map((tag) => tag.start),
-  );
+  const tagByStart = new Map(tags.map((tag) => [tag.start, tag]));
   let depth = 1;
   let braces = 0;
+  let inTag = false;
   let quote: string | undefined;
   for (let cursor = opening.end; cursor < source.length; cursor++) {
     const character = source[cursor];
-    if (braces > 0) {
+    if (braces > 0 || inTag) {
       if (quote) {
         if (character === '\\') cursor++;
         else if (character === quote) quote = undefined;
       } else if (character === '"' || character === "'" || character === '`') quote = character;
       else if (character === '{') braces++;
-      else if (character === '}') braces--;
+      else if (character === '}') braces = Math.max(0, braces - 1);
+      else if (character === '>' && braces === 0) inTag = false;
       continue;
     }
     if (character === '{') braces++;
@@ -89,7 +89,11 @@ const findMatchingClosingTag = (
       depth--;
       cursor += closing.length - 1;
       if (depth === 0) return cursor + 1;
-    } else if (nestedStarts.has(cursor)) depth++;
+    } else if (character === '<') {
+      const nested = tagByStart.get(cursor);
+      if (nested?.name === opening.name && !nested.selfClosing) depth++;
+      if (/[A-Za-z]/u.test(source[cursor + 1] ?? '')) inTag = true;
+    }
   }
   return undefined;
 };
@@ -115,4 +119,25 @@ export const findSvelteComponentRegions = (
     }
   }
   return regions;
+};
+
+const htmlComment = /<!--[\s\S]*?(?:-->|$)/gu;
+
+/** Blank HTML comments and component opening tags while preserving every offset. */
+export const maskProtectedMarkup = (source: string): string =>
+  maskSvelteComponentTags(source.replace(htmlComment, (comment) => ' '.repeat(comment.length)));
+
+/** Apply `transform` only to markup outside HTML comments and component opening tags. */
+export const mapOutsideProtectedMarkup = (
+  source: string,
+  transform: (segment: string) => string,
+): string => {
+  let result = '';
+  let cursor = 0;
+  for (const comment of source.matchAll(htmlComment)) {
+    result +=
+      mapOutsideSvelteComponentTags(source.slice(cursor, comment.index), transform) + comment[0];
+    cursor = comment.index + comment[0].length;
+  }
+  return result + mapOutsideSvelteComponentTags(source.slice(cursor), transform);
 };

@@ -305,3 +305,18 @@ it('does not end a footnote component at a closing tag inside an expression stri
 
   expect(compiled!.code).toContain("<Example>{@html '</Example>'}</Example>");
 });
+
+it('does not end a footnote component at a closing tag inside a markup attribute', async () => {
+  const document: PublicationDocument = {
+    sourcePath: 'writing/note.md',
+    route: '/note',
+    source: 'Text[^a]\n\n[^a]: Here <Example><span title="</Example>">x</span></Example>.\n',
+  };
+  const normalized = normalizeObsidianMarkdown('![[note]]', {
+    sourcePath: 'writing/host.md',
+    publicationIndex: { documents: [document], attachments: [] },
+  });
+  const compiled = await compile(normalized.markdown, { rehypePlugins: plugins });
+
+  expect(compiled!.code).toContain('<Example><span title="</Example>">x</span></Example>');
+});

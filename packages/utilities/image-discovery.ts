@@ -125,6 +125,13 @@ const maskProtectedMarkdown = (markdown: string): string => {
   return masked.join('');
 };
 
+/** Whether the character at `index` is escaped by an odd run of backslashes. */
+const isEscaped = (text: string, index: number): boolean => {
+  let backslashes = 0;
+  while (text[index - 1 - backslashes] === '\\') backslashes++;
+  return backslashes % 2 === 1;
+};
+
 /** Collect all image/video URLs from markdown content (both `![](url)` and `<img src="url">`). */
 const collectImageUrls = (markdown: string): string[] => {
   const expressionMasked = maskSvelteExpressions(markdown);
@@ -143,6 +150,7 @@ const collectImageUrls = (markdown: string): string[] => {
 
   const visibleMarkdown = maskProtectedMarkdown(expressionMasked);
   for (const match of visibleMarkdown.matchAll(/!\[\[([^|\]#]+)(?:#[^|\]]*)?(?:\|[^\]]*)?\]\]/g)) {
+    if (isEscaped(visibleMarkdown, match.index + 1)) continue;
     const url = match[1]?.trim();
     if (url) urls.add(url);
   }
@@ -151,6 +159,7 @@ const collectImageUrls = (markdown: string): string[] => {
   for (const match of visibleMarkdown.matchAll(
     /(?<!!)\[\[([^|\]#]+)(?:#[^|\]]*)?(?:\|[^\]]*)?\]\]/g,
   )) {
+    if (isEscaped(visibleMarkdown, match.index)) continue;
     const url = match[1]?.trim();
     if (url && ALL_ASSET_EXTENSIONS.has(path.extname(url).toLowerCase())) urls.add(url);
   }
