@@ -470,6 +470,41 @@ ${code}
     expect(opening.value).toContain('href="#playground-css-button-theme">CSS</a>');
   });
 
+  it('gives each embed occurrence its own CSS anchor and toolbar link', async () => {
+    const code = '<button class="brand">Embedded</button>';
+    const meta = 'tailwind height=192 css=brand';
+    const targetSource = `~~~css playground=brand\n.brand {}\n~~~\n\n~~~html ${meta}\n${code}\n~~~\n`;
+    await writeManifest([
+      example(0, code, {
+        sourcePath: 'target.md',
+        css: '.brand {}',
+        meta,
+        cssAnchor: 'playground-css-brand',
+      }),
+    ]);
+    const hostSource = '![[target]]\n\n![[target]]\n';
+    const normalized = normalizeObsidianMarkdown(hostSource, {
+      sourcePath: 'lesson.md',
+      publicationIndex: {
+        documents: [
+          { sourcePath: 'target.md', route: '/target', source: targetSource },
+          { sourcePath: 'lesson.md', route: '/lesson', source: hostSource },
+        ],
+        attachments: [],
+      },
+    });
+    const processed = await mdsvex({
+      extensions: ['.md'],
+      remarkPlugins: [
+        [remarkTailwindPlayground, { manifestPath, workspaceRoot: temporaryDirectory }],
+      ] as never,
+    }).markup({ content: normalized.markdown, filename: sourcePath });
+
+    const identifiers = [...(processed?.code ?? '').matchAll(/id="(playground-css-[^"]+)"/gu)];
+    expect(identifiers).toHaveLength(2);
+    expect(new Set(identifiers.map((match) => match[1])).size).toBe(2);
+  });
+
   it('renders explicit dark-theme playgrounds with a dark iframe color scheme', async () => {
     const code = '<button>Button</button>';
     await writeManifest([

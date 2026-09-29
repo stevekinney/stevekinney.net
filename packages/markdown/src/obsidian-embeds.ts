@@ -1,3 +1,4 @@
+import { mapOutsideSvelteComponentTags, maskSvelteComponentTags } from './svelte-component-tags.ts';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { unified } from 'unified';
@@ -77,7 +78,7 @@ const namespaceEmbeddedHtmlIdentifiers = (
   if (!source.slice(start, end).includes('<')) return;
   const tree = unified().use(remarkParse).parse(source.slice(start, end));
   visit(tree, 'html', (node) => {
-    for (const match of node.value.matchAll(htmlIdentifierPattern)) {
+    for (const match of maskSvelteComponentTags(node.value).matchAll(htmlIdentifierPattern)) {
       const id = match[2] ?? match[3];
       if (id) localIds.set(id, `${prefix}${id}`);
     }
@@ -89,78 +90,84 @@ const namespaceEmbeddedHtmlIdentifiers = (
     const nodeStart = start + localStart;
     const nodeEnd = start + localEnd;
     let value = node.value;
-    value = value.replace(
-      htmlImageSourcePattern,
-      (
-        match,
-        before: string,
-        quote: string | undefined,
-        quotedUrl: string | undefined,
-        unquotedUrl: string | undefined,
-      ) => {
-        const url = quotedUrl ?? unquotedUrl;
-        if (!url || /^(?:[a-z][a-z\d+.-]*:|\/\/|\/|#)/iu.test(url)) return match;
-        const hash = url.indexOf('#');
-        const beforeFragment = hash < 0 ? url : url.slice(0, hash);
-        const fragment = hash < 0 ? '' : url.slice(hash);
-        const query = beforeFragment.indexOf('?');
-        const target = query < 0 ? beforeFragment : beforeFragment.slice(0, query);
-        const queryString = query < 0 ? '' : beforeFragment.slice(query);
-        const result = resolveObsidianReference(target, context, 'attachment');
-        if (result.reference?.kind !== 'attachment') return match;
-        const attachment = result.reference.attachment;
-        dependencies.add(attachment.sourcePath);
-        const imagePath = attachment.sourcePath.includes('/static/')
-          ? attachment.url
-          : path.posix
-              .relative(path.posix.dirname(hostSourcePath), attachment.sourcePath)
-              .split('/')
-              .map(encodeURIComponent)
-              .join('/');
-        const replacement = `${imagePath}${queryString}${fragment}`;
-        return quote
-          ? `${before}${quote}${escapeObsidianHtml(replacement)}${quote}`
-          : `${before}${escapeObsidianHtml(replacement)}`;
-      },
+    value = mapOutsideSvelteComponentTags(value, (segment) =>
+      segment.replace(
+        htmlImageSourcePattern,
+        (
+          match,
+          before: string,
+          quote: string | undefined,
+          quotedUrl: string | undefined,
+          unquotedUrl: string | undefined,
+        ) => {
+          const url = quotedUrl ?? unquotedUrl;
+          if (!url || /^(?:[a-z][a-z\d+.-]*:|\/\/|\/|#)/iu.test(url)) return match;
+          const hash = url.indexOf('#');
+          const beforeFragment = hash < 0 ? url : url.slice(0, hash);
+          const fragment = hash < 0 ? '' : url.slice(hash);
+          const query = beforeFragment.indexOf('?');
+          const target = query < 0 ? beforeFragment : beforeFragment.slice(0, query);
+          const queryString = query < 0 ? '' : beforeFragment.slice(query);
+          const result = resolveObsidianReference(target, context, 'attachment');
+          if (result.reference?.kind !== 'attachment') return match;
+          const attachment = result.reference.attachment;
+          dependencies.add(attachment.sourcePath);
+          const imagePath = attachment.sourcePath.includes('/static/')
+            ? attachment.url
+            : path.posix
+                .relative(path.posix.dirname(hostSourcePath), attachment.sourcePath)
+                .split('/')
+                .map(encodeURIComponent)
+                .join('/');
+          const replacement = `${imagePath}${queryString}${fragment}`;
+          return quote
+            ? `${before}${quote}${escapeObsidianHtml(replacement)}${quote}`
+            : `${before}${escapeObsidianHtml(replacement)}`;
+        },
+      ),
     );
-    value = value.replace(
-      htmlIdentifierReplacementPattern,
-      (
-        match,
-        before: string,
-        assignment: string,
-        quote: string | undefined,
-        quotedId: string | undefined,
-        unquotedId: string | undefined,
-      ) => {
-        const id = quotedId ?? unquotedId;
-        return quote
-          ? `${before}${assignment}${quote}${prefix}${id}${quote}`
-          : `${before}${assignment}${prefix}${id}`;
-      },
+    value = mapOutsideSvelteComponentTags(value, (segment) =>
+      segment.replace(
+        htmlIdentifierReplacementPattern,
+        (
+          match,
+          before: string,
+          assignment: string,
+          quote: string | undefined,
+          quotedId: string | undefined,
+          unquotedId: string | undefined,
+        ) => {
+          const id = quotedId ?? unquotedId;
+          return quote
+            ? `${before}${assignment}${quote}${prefix}${id}${quote}`
+            : `${before}${assignment}${prefix}${id}`;
+        },
+      ),
     );
-    value = value.replace(
-      htmlFragmentHrefPattern,
-      (
-        match,
-        before: string,
-        quote: string | undefined,
-        quotedId: string | undefined,
-        unquotedId: string | undefined,
-      ) => {
-        const id = quotedId ?? unquotedId;
-        if (!id) return match;
-        let decoded: string;
-        try {
-          decoded = decodeURIComponent(id);
-        } catch {
-          return match;
-        }
-        const mapped = localIds.get(decoded);
-        if (!mapped) return match;
-        const fragment = `#${encodeURIComponent(mapped)}`;
-        return quote ? `${before}${quote}${fragment}${quote}` : `${before}${fragment}`;
-      },
+    value = mapOutsideSvelteComponentTags(value, (segment) =>
+      segment.replace(
+        htmlFragmentHrefPattern,
+        (
+          match,
+          before: string,
+          quote: string | undefined,
+          quotedId: string | undefined,
+          unquotedId: string | undefined,
+        ) => {
+          const id = quotedId ?? unquotedId;
+          if (!id) return match;
+          let decoded: string;
+          try {
+            decoded = decodeURIComponent(id);
+          } catch {
+            return match;
+          }
+          const mapped = localIds.get(decoded);
+          if (!mapped) return match;
+          const fragment = `#${encodeURIComponent(mapped)}`;
+          return quote ? `${before}${quote}${fragment}${quote}` : `${before}${fragment}`;
+        },
+      ),
     );
     if (value !== node.value) edits.push({ start: nodeStart, end: nodeEnd, value });
   });
@@ -431,7 +438,9 @@ export const normalizeObsidianReferences = (
       }
       const lineStart = source.lastIndexOf('\n', node.position.start - 1) + 1;
       const sourceBeforeEmbed = source.slice(lineStart, node.position.start);
-      const listContainer = /^(\s*(?:(?:>\s*)+)?)(?:[-+*]|\d+[.)])\s+$/u.exec(sourceBeforeEmbed);
+      const listContainer = /^(\s*(?:(?:>\s*)+)?)(?:[-+*]|\d+[.)])\s+(?:\[[ xX]\]\s+)?$/u.exec(
+        sourceBeforeEmbed,
+      );
       const blockquoteContainer = /^(\s*(?:>\s+)+)$/u.exec(sourceBeforeEmbed)?.[1];
       const continuationPrefix = listContainer
         ? `${listContainer[1]}${' '.repeat(sourceBeforeEmbed.length - listContainer[1].length)}`

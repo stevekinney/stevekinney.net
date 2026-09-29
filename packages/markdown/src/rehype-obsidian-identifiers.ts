@@ -5,10 +5,7 @@ import type { Plugin } from 'unified';
 import { visit } from 'unist-util-visit';
 import { fromHtml } from 'hast-util-from-html';
 
-const svelteComponentRegion =
-  /<([A-Z][A-Za-z0-9_$]*(?:\.[A-Za-z0-9_$]+)*)(?:\s[^<>]*?)?>[\s\S]*?<\/\1>/g;
-const svelteComponentOpeningTag = /<[A-Z][A-Za-z0-9_$]*(?:\.[A-Za-z0-9_$]+)*(?:\s[^<>]*?)?\/?>/g;
-const svelteComponentTag = /<[A-Z][A-Za-z0-9_$]*(?:\.[A-Za-z0-9_$]+)*(?:\s[^<>]*?)?\/>/g;
+import { findSvelteComponentRegions, maskSvelteComponentTags } from './svelte-component-tags.ts';
 
 /** Parse restored HTML while keeping mdsvex component regions as raw nodes. */
 const fromHtmlPreservingSvelteComponents = (value: string): Root => {
@@ -22,9 +19,14 @@ const fromHtmlPreservingSvelteComponents = (value: string): Root => {
     );
     return token;
   };
-  const protectedValue = value
-    .replace(svelteComponentRegion, protect)
-    .replace(svelteComponentTag, protect);
+  let protectedValue = '';
+  let cursor = 0;
+  for (const region of findSvelteComponentRegions(value)) {
+    protectedValue +=
+      value.slice(cursor, region.start) + protect(value.slice(region.start, region.end));
+    cursor = region.end;
+  }
+  protectedValue += value.slice(cursor);
   const parsed = fromHtml(protectedValue, { fragment: true });
   if (!components.size) return parsed;
   visit(parsed, 'text', (node, index, parent) => {
@@ -125,7 +127,7 @@ export const rehypeValidateObsidianIdentifiers: Plugin<[], Root> = () => (tree, 
   visit(tree, 'element', (node) => check(node.properties.id));
   visit(tree, 'raw', (node) => {
     // Props on Svelte components are not DOM identifiers.
-    const domMarkup = node.value.replace(svelteComponentOpeningTag, '');
+    const domMarkup = maskSvelteComponentTags(node.value);
     visit(fromHtml(domMarkup, { fragment: true }), 'element', (element) =>
       check(element.properties.id),
     );

@@ -262,6 +262,35 @@ describe('normalizeObsidianMarkdown embeds', () => {
     );
   });
 
+  it('leaves Svelte component id props alone inside an embed', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/component.md',
+      route: '/writing/component',
+      source: '<Example id="demo" />\n\n<span id="real"></span>',
+    };
+    const result = normalizeObsidianMarkdown('![[component]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.markdown).toContain('<Example id="demo" />');
+    expect(result.markdown).toMatch(/id="embed-[a-z0-9-]+real"/u);
+  });
+
+  it('keeps an embed inside a task-list item', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/steps.md',
+      route: '/writing/steps',
+      source: 'First line.\n\nSecond line.',
+    };
+    const result = normalizeObsidianMarkdown('- [ ] ![[steps]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: { documents: [target], attachments: [] },
+    });
+
+    expect(result.markdown).toMatch(/^- \[ \] First line\.\n {6}\n {6}Second line\.$/u);
+  });
+
   it('supports whitespace around raw HTML identifier equals signs', () => {
     const target: PublicationDocument = {
       sourcePath: 'writing/spaced-html-identifiers.md',

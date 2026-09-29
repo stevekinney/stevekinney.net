@@ -190,6 +190,10 @@ const nearestHeading = (
   headings.filter((heading) => heading.owner === owner && heading.line <= (line ?? 1)).at(-1)
     ?.title;
 
+/** Repeated embeds of one note need distinct anchors, so embedded owners get a suffix. */
+const scopedAnchor = (anchor: string, owner: number): string =>
+  owner === 0 ? anchor : `${anchor}-embed-${owner}`;
+
 const styleKey = (owner: number, name: string): string => `${owner}:${name}`;
 
 const collectStyles = (tree: Root, owners: Map<unknown, number>): Map<string, string> => {
@@ -234,6 +238,7 @@ const buildOpeningFigure = (
   entry: PlaygroundManifest['examples'][number],
   manifestFiles: PlaygroundManifest['files'],
   loading: 'eager' | 'lazy',
+  cssAnchor: string | undefined,
 ): string => {
   if (!Number.isSafeInteger(entry.height) || entry.height <= 0) {
     throw new Error(`Invalid Tailwind playground height for ${entry.sourcePath}#${entry.ordinal}.`);
@@ -243,8 +248,8 @@ const buildOpeningFigure = (
   const title = escapeAttribute(entry.title);
   const iframeSource = escapeAttribute(entry.src);
   const colorScheme = colorSchemeForTheme(entry.theme);
-  const cssLink = entry.cssAnchor
-    ? `<a class="tailwind-playground__link" href="#${escapeAttribute(entry.cssAnchor)}">CSS</a>`
+  const cssLink = cssAnchor
+    ? `<a class="tailwind-playground__link" href="#${escapeAttribute(cssAnchor)}">CSS</a>`
     : '';
 
   return [
@@ -312,7 +317,7 @@ export default function remarkTailwindPlayground(
       if (cssMetadata) {
         const anchorNode: Html = {
           type: 'html',
-          value: `<span id="playground-css-${escapeAttribute(cssMetadata.name)}"></span>`,
+          value: `<span id="${escapeAttribute(scopedAnchor(`playground-css-${cssMetadata.name}`, owners.get(node) ?? 0))}"></span>`,
         };
         parent.children.splice(index, 0, anchorNode);
         return index + 2;
@@ -358,7 +363,12 @@ export default function remarkTailwindPlayground(
 
       const openingNode: Html = {
         type: 'html',
-        value: buildOpeningFigure(entry, manifest.files, currentOrdinal === 0 ? 'eager' : 'lazy'),
+        value: buildOpeningFigure(
+          entry,
+          manifest.files,
+          currentOrdinal === 0 ? 'eager' : 'lazy',
+          entry.cssAnchor ? scopedAnchor(entry.cssAnchor, owner) : undefined,
+        ),
       };
       const closingNode: Html = { type: 'html', value: '</figure>' };
 

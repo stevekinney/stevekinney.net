@@ -97,6 +97,22 @@ describe('discoverAllImages', () => {
     expect(result.missing).toEqual([]);
   });
 
+  it('ignores embeds inside Svelte block directive expressions', async () => {
+    const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
+    temporaryDirectories.push(repositoryRoot);
+    await mkdir(path.join(repositoryRoot, 'writing/assets'), { recursive: true });
+    await writeFile(
+      path.join(repositoryRoot, 'writing/note.md'),
+      '{#if value === "![[assets/missing.png]]"}\n\n![[assets/visible.png]]\n\n{/if}\n',
+    );
+    await writeFile(path.join(repositoryRoot, 'writing/assets/visible.png'), 'image');
+
+    const result = await discoverAllImages(['writing/**/*.md'], repositoryRoot);
+
+    expect([...result.images.keys()]).toEqual(['writing/assets/visible.png']);
+    expect(result.missing).toEqual([]);
+  });
+
   it('ignores image references inside Svelte expressions', async () => {
     const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), 'image-discovery-'));
     temporaryDirectories.push(repositoryRoot);

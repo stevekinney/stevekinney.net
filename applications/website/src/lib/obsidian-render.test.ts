@@ -274,3 +274,19 @@ it('does not treat repeated Svelte component id props as duplicate DOM identifie
   });
   expect(compiled).toBeDefined();
 });
+
+it('preserves footnote components whose props contain angle brackets', async () => {
+  const document: PublicationDocument = {
+    sourcePath: 'writing/note.md',
+    route: '/note',
+    source: 'Text[^a]\n\n[^a]: Here <Example value={a < b} />.\n',
+  };
+  const normalized = normalizeObsidianMarkdown('![[note]]', {
+    sourcePath: 'writing/host.md',
+    publicationIndex: { documents: [document], attachments: [] },
+  });
+  const compiled = await compile(normalized.markdown, { rehypePlugins: plugins });
+
+  expect(compiled!.code).toContain('<Example value={a < b} />');
+  expect(compiled!.code).not.toContain('<example');
+});

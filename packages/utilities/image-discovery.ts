@@ -68,7 +68,6 @@ const maskSvelteExpressions = (source: string): string => {
 
   for (let index = 0; index < source.length; index++) {
     if (source[index] !== '{' || source[index - 1] === '\\') continue;
-    const directive = /^[#/:][A-Za-z]+\b/u.exec(source.slice(index + 1));
     let depth = 1;
     let quote: string | undefined;
     let template = false;
@@ -90,9 +89,7 @@ const maskSvelteExpressions = (source: string): string => {
       if (template) continue;
       if (character === '{') depth++;
       if (character === '}' && --depth === 0) {
-        const end = directive ? index + 1 + directive[0].length : cursor + 1;
-        mask(index, end);
-        if (!directive) mask(index, cursor + 1);
+        mask(index, cursor + 1);
         index = cursor;
         break;
       }

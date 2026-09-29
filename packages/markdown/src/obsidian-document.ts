@@ -1,3 +1,4 @@
+import { maskSvelteComponentTags } from './svelte-component-tags.ts';
 import GithubSlugger from 'github-slugger';
 import { toString } from 'mdast-util-to-string';
 import { applySourceEdits, escapeMarkdownLabel, type SourceEdit } from './obsidian-source-edits.ts';
@@ -138,9 +139,9 @@ export const getObsidianDocumentMetadata = (
     if (candidate.type !== 'html' || typeof candidate.value !== 'string') continue;
     const position = offsets(candidate);
     if (!position) continue;
-    // Blank HTML comments so tag examples inside them are not recorded as identifiers.
-    const visibleValue = candidate.value.replace(/<!--[\s\S]*?(?:-->|$)/gu, (comment) =>
-      ' '.repeat(comment.length),
+    // Blank HTML comments and component props so neither is recorded as an identifier.
+    const visibleValue = maskSvelteComponentTags(
+      candidate.value.replace(/<!--[\s\S]*?(?:-->|$)/gu, (comment) => ' '.repeat(comment.length)),
     );
     for (const match of visibleValue.matchAll(
       /(?:^|[\s<])id\s*=\s*(?:(['"])([^'"]+)\1|([^\s"'`=<>]+))/gu,
