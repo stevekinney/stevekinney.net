@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { checkA11y, injectAxe } from 'axe-playwright';
 
 const viewport = { width: 1280, height: 720 };
 const colorSchemes = ['light', 'dark'] as const;
@@ -9,7 +10,7 @@ const scenarios = [
     path: '/writing/setup-python',
     callouts: [
       { name: 'info', selector: '[data-callout="info"]' },
-      { name: 'success', selector: '[data-callout="success"]' },
+      { name: 'done', selector: '[data-callout="done"]' },
       { name: 'question', selector: '[data-callout="question"]' },
     ],
   },
@@ -61,8 +62,14 @@ for (const colorScheme of colorSchemes) {
         const callout = page.locator(calloutConfig.selector).first();
         await expect(callout, `${calloutConfig.name} callout should render`).toBeVisible();
         await callout.scrollIntoViewIfNeeded();
-        await expect(callout.locator('p').first()).not.toContainText('[!');
+        await expect(callout).not.toContainText('[!');
       }
+
+      await injectAxe(page);
+      await checkA11y(page, '[data-callout]', {
+        detailedReport: true,
+        detailedReportOptions: { html: true },
+      });
     });
   }
 }

@@ -1,4 +1,5 @@
-import { access, readFile } from 'node:fs/promises';
+import { access, readFile, realpath } from 'node:fs/promises';
+import { tokenizer } from 'acorn';
 import path from 'node:path';
 import fg from 'fast-glob';
 import matter from 'gray-matter';
@@ -29,8 +30,15 @@ type DiscoveryResult = {
 };
 
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.svg']);
-const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg']);
-const ALL_ASSET_EXTENSIONS = new Set([...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS]);
+const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogv']);
+export const AUDIO_EXTENSIONS = new Set(['.mp3', '.wav', '.ogg', '.m4a', '.flac']);
+export const PDF_EXTENSIONS = new Set(['.pdf']);
+const ALL_ASSET_EXTENSIONS = new Set([
+  ...IMAGE_EXTENSIONS,
+  ...VIDEO_EXTENSIONS,
+  ...AUDIO_EXTENSIONS,
+  ...PDF_EXTENSIONS,
+]);
 const EXTERNAL_PREFIXES = ['http://', 'https://', 'mailto:', 'tel:', 'data:', 'ftp://'];
 
 const normalizePath = (value: string): string => value.split(path.sep).join('/');
@@ -44,21 +52,117 @@ const isExternalReference = (value: string): boolean => {
 
 const safeDecode = (value: string): string => {
   try {
-    return decodeURI(value);
+    return decodeURIComponent(value);
   } catch {
     return value;
   }
 };
 
+/** Mask Svelte expressions with a JavaScript-aware scan, preserving markup and source offsets. */
+const maskSvelteExpressions = (source: string): string => {
+  const characters = source.split('');
+  const mask = (start: number, end: number): void => {
+    for (let index = start; index < end; index++) {
+      if (characters[index] !== '\n' && characters[index] !== '\r') characters[index] = ' ';
+    }
+  };
+
+  for (let index = 0; index < source.length; index++) {
+    if (source[index] !== '{' || source[index - 1] === '\\') continue;
+    const directive = /^[#/:@][A-Za-z]+\b/u.exec(source.slice(index + 1));
+    const expressionStart = index + 1 + (directive?.[0].length ?? 0);
+    const tokens = tokenizer(source.slice(expressionStart), {
+      ecmaVersion: 'latest',
+      allowAwaitOutsideFunction: true,
+    });
+    let depth = 1;
+    try {
+      while (depth) {
+        const token = tokens.getToken();
+        if (token.type.label === 'eof') break;
+        if (token.type.label === '{' || token.type.label === '${') depth++;
+        if (token.type.label === '}') depth--;
+        if (!depth) {
+          const end = expressionStart + token.end;
+          mask(index, end);
+          index = end - 1;
+        }
+      }
+    } catch {
+      /* Invalid expressions stay visible; Svelte reports them during compilation. */
+    }
+  }
+  return characters.join('');
+};
+
+/** Mask Markdown regions where Obsidian embeds are literal text rather than references. */
+const maskProtectedMarkdown = (markdown: string): string => {
+  const masked = markdown.split('');
+  const mask = (start: number, end: number): void => {
+    for (let index = start; index < end; index++) {
+      if (masked[index] !== '\n' && masked[index] !== '\r') masked[index] = ' ';
+    }
+  };
+
+  const tree = unified().use(remarkParse).parse(markdown);
+  visit(tree, (node) => {
+    if (node.type !== 'code' && node.type !== 'inlineCode' && node.type !== 'html') return;
+    const start = node.position?.start.offset;
+    const end = node.position?.end.offset;
+    if (start !== undefined && end !== undefined) mask(start, end);
+  });
+
+  // Obsidian comments can span lines and may contain fenced Markdown. Scan the
+  // original source while using the mask to ignore comment markers inside code.
+  for (let index = 0; index < markdown.length - 1; index++) {
+    if (masked[index] !== '%' || masked[index + 1] !== '%' || isEscaped(markdown, index)) continue;
+    const endMarker = markdown.indexOf('%%', index + 2);
+    const end = endMarker === -1 ? markdown.length : endMarker + 2;
+    mask(index, end);
+    index = end - 1;
+  }
+
+  return masked.join('');
+};
+
+/** Whether the character at `index` is escaped by an odd run of backslashes. */
+const isEscaped = (text: string, index: number): boolean => {
+  let backslashes = 0;
+  while (text[index - 1 - backslashes] === '\\') backslashes++;
+  return backslashes % 2 === 1;
+};
+
 /** Collect all image/video URLs from markdown content (both `![](url)` and `<img src="url">`). */
 const collectImageUrls = (markdown: string): string[] => {
-  const tree = unified().use(remarkParse).parse(markdown);
+  const expressionMasked = maskSvelteExpressions(markdown);
+  const tree = unified().use(remarkParse).parse(expressionMasked);
   const urls = new Set<string>();
 
   visit(tree, 'image', (node) => {
     const url = String((node as { url?: string }).url ?? '').trim();
     if (url) urls.add(url);
   });
+
+  visit(tree, 'embed', (node) => {
+    const url = String((node as { value?: string }).value ?? '').trim();
+    if (url) urls.add(url);
+  });
+
+  const visibleMarkdown = maskProtectedMarkdown(expressionMasked);
+  for (const match of visibleMarkdown.matchAll(/!\[\[([^|\]#]+)(?:#[^|\]]*)?(?:\|[^\]]*)?\]\]/g)) {
+    if (isEscaped(visibleMarkdown, match.index + 1)) continue;
+    const url = match[1]?.trim();
+    if (url) urls.add(url);
+  }
+
+  // Plain wiki links to supported attachments (`[[assets/manual.pdf|Manual]]`) must be published too.
+  for (const match of visibleMarkdown.matchAll(
+    /(?<!!)\[\[([^|\]#]+)(?:#[^|\]]*)?(?:\|[^\]]*)?\]\]/g,
+  )) {
+    if (isEscaped(visibleMarkdown, match.index)) continue;
+    const url = match[1]?.trim();
+    if (url && ALL_ASSET_EXTENSIONS.has(path.extname(url).toLowerCase())) urls.add(url);
+  }
 
   visit(tree, 'html', (node) => {
     const raw = String((node as { value?: string }).value ?? '');
@@ -110,8 +214,8 @@ export const discoverAllImages = async (
     for (const rawUrl of urls) {
       if (isExternalReference(rawUrl)) continue;
 
-      const decoded = safeDecode(rawUrl);
-      const normalized = stripQueryHash(decoded).trim();
+      // Strip the query and fragment first so encoded reserved characters such as %23 survive.
+      const normalized = safeDecode(stripQueryHash(rawUrl)).trim();
       if (!normalized) continue;
 
       const extension = path.extname(normalized).toLowerCase();
@@ -123,6 +227,17 @@ export const discoverAllImages = async (
       try {
         await access(resolvedPath);
       } catch {
+        missing.push({ markdownFile, imageUrl: normalized, resolvedPath });
+        continue;
+      }
+
+      // Never publish files outside the repository, including through symlinks.
+      const [realRoot, realResolved] = await Promise.all([
+        realpath(repositoryRoot),
+        realpath(resolvedPath),
+      ]);
+      const relativeToRoot = path.relative(realRoot, realResolved);
+      if (relativeToRoot.startsWith('..') || path.isAbsolute(relativeToRoot)) {
         missing.push({ markdownFile, imageUrl: normalized, resolvedPath });
         continue;
       }

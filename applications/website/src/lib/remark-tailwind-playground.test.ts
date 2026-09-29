@@ -8,6 +8,7 @@ import type { Code, Heading, Html, Root } from 'mdast';
 import { compile, preprocess } from 'svelte/compiler';
 import { VFile } from 'vfile';
 import remarkTailwindPlayground from '@stevekinney/markdown/remark-tailwind-playground';
+import { normalizeObsidianMarkdown } from '@stevekinney/markdown/obsidian-normalization';
 import { playgroundFingerprint } from '@stevekinney/utilities/tailwind-playground-metadata';
 import type { PlaygroundManifest } from '@stevekinney/utilities/tailwind-playground-types';
 import websiteConfig from '../../svelte.config';
@@ -142,6 +143,128 @@ describe('remarkTailwindPlayground', () => {
     expect(opening.value).toContain('--tailwind-playground-height:192px');
     expect(opening.value).not.toContain('>CSS</a>');
     expect(closing.value).toBe('</figure>');
+  });
+
+  it('renders an embedded playground using the embedded source with the host VFile', async () => {
+    const code = '<button class="bg-blue-600">Embedded</button>';
+    await writeFile(
+      path.join(temporaryDirectory, 'target.md'),
+      `~~~html tailwind height=192\n${code}\n~~~\n`,
+    );
+    const targetSourcePath = 'target.md';
+    await writeManifest([example(0, code, { sourcePath: targetSourcePath })]);
+    const normalized = normalizeObsidianMarkdown('![[target]]\n', {
+      sourcePath: 'host.md',
+      publicationIndex: {
+        documents: [
+          {
+            sourcePath: targetSourcePath,
+            route: '/target',
+            source: await readFile(path.join(temporaryDirectory, 'target.md'), 'utf8'),
+          },
+          { sourcePath: 'host.md', route: '/host', source: '![[target]]\n' },
+        ],
+        attachments: [],
+      },
+    });
+    const preprocessor = mdsvex({
+      extensions: ['.md'],
+      remarkPlugins: [
+        [remarkTailwindPlayground, { manifestPath, workspaceRoot: temporaryDirectory }],
+      ] as never,
+    });
+
+    await expect(
+      preprocessor.markup({ content: normalized.markdown, filename: sourcePath }),
+    ).resolves.toMatchObject({
+      code: expect.stringContaining('Embedded'),
+    });
+  });
+
+  it('titles an embedded playground from its own heading rather than the host heading', async () => {
+    const code = '<button class="bg-blue-600">Embedded</button>';
+    const targetSource = `# Target Heading\n\n~~~html tailwind height=192\n${code}\n~~~\n`;
+    await writeManifest([
+      example(0, code, { sourcePath: 'target.md', computedTitle: 'Target Heading — Example 1' }),
+    ]);
+    const hostSource = '# Host Heading\n\n![[target]]\n';
+    const normalized = normalizeObsidianMarkdown(hostSource, {
+      sourcePath: 'host.md',
+      publicationIndex: {
+        documents: [
+          { sourcePath: 'target.md', route: '/target', source: targetSource },
+          { sourcePath: 'host.md', route: '/host', source: hostSource },
+        ],
+        attachments: [],
+      },
+    });
+    const preprocessor = mdsvex({
+      extensions: ['.md'],
+      remarkPlugins: [
+        [remarkTailwindPlayground, { manifestPath, workspaceRoot: temporaryDirectory }],
+      ] as never,
+    });
+
+    await expect(
+      preprocessor.markup({ content: normalized.markdown, filename: sourcePath }),
+    ).resolves.toMatchObject({ code: expect.stringContaining('Target Heading — Example 1') });
+  });
+
+  it('numbers playgrounds from zero for each occurrence of a repeated embed', async () => {
+    const code = '<button class="bg-blue-600">Embedded</button>';
+    const targetSource = `~~~html tailwind height=192\n${code}\n~~~\n`;
+    await writeManifest([example(0, code, { sourcePath: 'target.md' })]);
+    const hostSource = '![[target]]\n\n![[target]]\n';
+    const normalized = normalizeObsidianMarkdown(hostSource, {
+      sourcePath: 'lesson.md',
+      publicationIndex: {
+        documents: [
+          { sourcePath: 'target.md', route: '/target', source: targetSource },
+          { sourcePath: 'lesson.md', route: '/lesson', source: hostSource },
+        ],
+        attachments: [],
+      },
+    });
+    const preprocessor = mdsvex({
+      extensions: ['.md'],
+      remarkPlugins: [
+        [remarkTailwindPlayground, { manifestPath, workspaceRoot: temporaryDirectory }],
+      ] as never,
+    });
+
+    await expect(
+      preprocessor.markup({ content: normalized.markdown, filename: sourcePath }),
+    ).resolves.toMatchObject({ code: expect.stringContaining('Embedded') });
+  });
+
+  it('scopes named CSS playground styles to the note that defines them', async () => {
+    const code = '<button class="brand">Embedded</button>';
+    const meta = 'tailwind height=192 css=brand';
+    const targetSource = `~~~css playground=brand\n.brand { color: red; }\n~~~\n\n~~~html ${meta}\n${code}\n~~~\n`;
+    const hostSource = '~~~css playground=brand\n.brand { color: blue; }\n~~~\n\n![[target]]\n';
+    await writeManifest([
+      example(0, code, { sourcePath: 'target.md', css: '.brand { color: red; }', meta }),
+    ]);
+    const normalized = normalizeObsidianMarkdown(hostSource, {
+      sourcePath: 'lesson.md',
+      publicationIndex: {
+        documents: [
+          { sourcePath: 'target.md', route: '/target', source: targetSource },
+          { sourcePath: 'lesson.md', route: '/lesson', source: hostSource },
+        ],
+        attachments: [],
+      },
+    });
+    const preprocessor = mdsvex({
+      extensions: ['.md'],
+      remarkPlugins: [
+        [remarkTailwindPlayground, { manifestPath, workspaceRoot: temporaryDirectory }],
+      ] as never,
+    });
+
+    await expect(
+      preprocessor.markup({ content: normalized.markdown, filename: sourcePath }),
+    ).resolves.toMatchObject({ code: expect.stringContaining('Embedded') });
   });
 
   it('preprocesses real course files whose generated heading titles contain apostrophes', async () => {
@@ -345,6 +468,41 @@ ${code}
     const [opening] = htmlNodes(tree);
 
     expect(opening.value).toContain('href="#playground-css-button-theme">CSS</a>');
+  });
+
+  it('gives each embed occurrence its own CSS anchor and toolbar link', async () => {
+    const code = '<button class="brand">Embedded</button>';
+    const meta = 'tailwind height=192 css=brand';
+    const targetSource = `~~~css playground=brand\n.brand {}\n~~~\n\n~~~html ${meta}\n${code}\n~~~\n`;
+    await writeManifest([
+      example(0, code, {
+        sourcePath: 'target.md',
+        css: '.brand {}',
+        meta,
+        cssAnchor: 'playground-css-brand',
+      }),
+    ]);
+    const hostSource = '![[target]]\n\n![[target]]\n';
+    const normalized = normalizeObsidianMarkdown(hostSource, {
+      sourcePath: 'lesson.md',
+      publicationIndex: {
+        documents: [
+          { sourcePath: 'target.md', route: '/target', source: targetSource },
+          { sourcePath: 'lesson.md', route: '/lesson', source: hostSource },
+        ],
+        attachments: [],
+      },
+    });
+    const processed = await mdsvex({
+      extensions: ['.md'],
+      remarkPlugins: [
+        [remarkTailwindPlayground, { manifestPath, workspaceRoot: temporaryDirectory }],
+      ] as never,
+    }).markup({ content: normalized.markdown, filename: sourcePath });
+
+    const identifiers = [...(processed?.code ?? '').matchAll(/id="(playground-css-[^"]+)"/gu)];
+    expect(identifiers).toHaveLength(2);
+    expect(new Set(identifiers.map((match) => match[1])).size).toBe(2);
   });
 
   it('renders explicit dark-theme playgrounds with a dark iframe color scheme', async () => {

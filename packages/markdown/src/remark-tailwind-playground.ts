@@ -35,6 +35,8 @@ const DEFAULT_MANIFEST_PATH = path.resolve(
 const playgroundHtmlUrlPattern = new RegExp(`^${PLAYGROUND_URL_PREFIX}[a-f0-9]{64}\\.html$`);
 const playgroundCssUrlPattern = new RegExp(`^${PLAYGROUND_URL_PREFIX}[a-f0-9]{64}\\.css$`);
 const digestPattern = /^[a-f0-9]{64}$/;
+const obsidianHeadingAnchorPattern = /^<span data-obsidian-heading="[^"]*">$/;
+const embeddedSourceMarkerPattern = /^<!-- obsidian-embedded-source: ([^\s]+) -->$/;
 
 const escapeAttribute = (value: string): string =>
   value
@@ -95,7 +97,19 @@ const phrasingContentToText = (
   rawSource: string | undefined,
 ): string =>
   (nodes ?? [])
-    .map((node) => {
+    .map((node, index, siblings) => {
+      // Embedded headings carry transport anchors (`<span data-obsidian-heading>` and its closing
+      // tag) that are not part of the visible title.
+      if (node.type === 'html') {
+        if (obsidianHeadingAnchorPattern.test(node.value)) return '';
+        const previous = siblings[index - 1];
+        if (
+          node.value === '</span>' &&
+          previous?.type === 'html' &&
+          obsidianHeadingAnchorPattern.test(previous.value)
+        )
+          return '';
+      }
       if (
         node.type === 'text' ||
         node.type === 'inlineCode' ||
@@ -115,32 +129,80 @@ const loadRawSource = (filePath: string): string | undefined => {
   return readFileSync(filePath, 'utf8');
 };
 
+type PlaygroundHeading = { line: number; title: string; owner: number };
+
+const embeddedSourceMarkerOf = (node: { type: string; value?: string }): string | undefined => {
+  if (node.type !== 'html' || typeof node.value !== 'string') return;
+  const marker = embeddedSourceMarkerPattern.exec(node.value.trim());
+  if (!marker) return;
+  return marker[1]!
+    .split('/')
+    .map((segment) => decodeURIComponent(segment))
+    .join('/');
+};
+
+/**
+ * Give every node an owner: 0 for the host note, and a distinct number for each embedded region.
+ * Headings only title playgrounds owned by the same region, matching how each note is fingerprinted alone.
+ */
+const collectOwners = (tree: Root, hostSourcePath: string): Map<unknown, number> => {
+  const owners = new Map<unknown, number>();
+  const stack: Array<{ sourcePath: string; owner: number }> = [
+    { sourcePath: hostSourcePath, owner: 0 },
+  ];
+  let nextOwner = 1;
+  visit(tree, (node) => {
+    const sourcePath = embeddedSourceMarkerOf(node as { type: string; value?: string });
+    if (sourcePath !== undefined) {
+      const enclosing = stack.at(-2);
+      if (enclosing && enclosing.sourcePath === sourcePath) stack.pop();
+      else stack.push({ sourcePath, owner: nextOwner++ });
+      return;
+    }
+    owners.set(node, stack.at(-1)!.owner);
+  });
+  return owners;
+};
+
 const collectHeadings = (
   tree: Root,
   rawSource: string | undefined,
-): Array<{ line: number; title: string }> => {
-  const headings: Array<{ line: number; title: string }> = [];
+  owners: Map<unknown, number>,
+): PlaygroundHeading[] => {
+  const headings: PlaygroundHeading[] = [];
   visit(tree, 'heading', (node: Heading) => {
+    const owner = owners.get(node) ?? 0;
     headings.push({
       line: node.position?.start.line ?? 1,
-      title: phrasingContentToText(node.children, rawSource),
+      // Raw offsets describe the host file, so embedded headings use their parsed text.
+      title: phrasingContentToText(node.children, owner === 0 ? rawSource : undefined),
+      owner,
     });
   });
   return headings;
 };
 
 const nearestHeading = (
-  headings: Array<{ line: number; title: string }>,
+  headings: PlaygroundHeading[],
   line: number | undefined,
-): string | undefined => headings.filter((heading) => heading.line <= (line ?? 1)).at(-1)?.title;
+  owner: number,
+): string | undefined =>
+  headings.filter((heading) => heading.owner === owner && heading.line <= (line ?? 1)).at(-1)
+    ?.title;
 
-const collectStyles = (tree: Root): Map<string, string> => {
+/** Repeated embeds of one note need distinct anchors, so embedded owners get a suffix. */
+const scopedAnchor = (anchor: string, owner: number): string =>
+  owner === 0 ? anchor : `${anchor}-embed-${owner}`;
+
+const styleKey = (owner: number, name: string): string => `${owner}:${name}`;
+
+const collectStyles = (tree: Root, owners: Map<unknown, number>): Map<string, string> => {
   const styles = new Map<string, string>();
   visit(tree, 'code', (node: Code) => {
     if (node.lang !== 'css') return;
     const metadata = parseTailwindPlaygroundStyleMetadata(node.meta ?? undefined);
     if (!metadata) return;
-    styles.set(metadata.name, node.value ?? '');
+    styles.set(styleKey(owners.get(node) ?? 0, metadata.name), node.value ?? '');
   });
   return styles;
 };
@@ -176,6 +238,7 @@ const buildOpeningFigure = (
   entry: PlaygroundManifest['examples'][number],
   manifestFiles: PlaygroundManifest['files'],
   loading: 'eager' | 'lazy',
+  cssAnchor: string | undefined,
 ): string => {
   if (!Number.isSafeInteger(entry.height) || entry.height <= 0) {
     throw new Error(`Invalid Tailwind playground height for ${entry.sourcePath}#${entry.ordinal}.`);
@@ -185,8 +248,8 @@ const buildOpeningFigure = (
   const title = escapeAttribute(entry.title);
   const iframeSource = escapeAttribute(entry.src);
   const colorScheme = colorSchemeForTheme(entry.theme);
-  const cssLink = entry.cssAnchor
-    ? `<a class="tailwind-playground__link" href="#${escapeAttribute(entry.cssAnchor)}">CSS</a>`
+  const cssLink = cssAnchor
+    ? `<a class="tailwind-playground__link" href="#${escapeAttribute(cssAnchor)}">CSS</a>`
     : '';
 
   return [
@@ -232,12 +295,15 @@ export default function remarkTailwindPlayground(
     const manifest = options.manifest ?? loadManifestSync(manifestPath);
     const normalizedSourcePath = normalizePath(filePath, workspaceRoot);
     const rawSource = loadRawSource(filePath);
-    const headings = collectHeadings(tree, rawSource);
-    const styles = collectStyles(tree);
+    const owners = collectOwners(tree, normalizedSourcePath);
+    const headings = collectHeadings(tree, rawSource, owners);
+    const styles = collectStyles(tree, owners);
     const examples = new Map(
       manifest.examples.map((entry) => [buildManifestKey(entry.sourcePath, entry.ordinal), entry]),
     );
-    let ordinal = 0;
+    // Each embed occurrence numbers its playgrounds from zero, like the source note does alone.
+    const ordinals = new Map<number, number>();
+    let currentSourcePath = normalizedSourcePath;
 
     const handleCode = (
       node: Code,
@@ -246,13 +312,12 @@ export default function remarkTailwindPlayground(
     ): number | undefined => {
       if (!parent || typeof index !== 'number') return;
       if (!Array.isArray(parent.children)) return;
-
       const cssMetadata =
         node.lang === 'css' ? parseTailwindPlaygroundStyleMetadata(node.meta ?? undefined) : null;
       if (cssMetadata) {
         const anchorNode: Html = {
           type: 'html',
-          value: `<span id="playground-css-${escapeAttribute(cssMetadata.name)}"></span>`,
+          value: `<span id="${escapeAttribute(scopedAnchor(`playground-css-${cssMetadata.name}`, owners.get(node) ?? 0))}"></span>`,
         };
         parent.children.splice(index, 0, anchorNode);
         return index + 2;
@@ -262,25 +327,28 @@ export default function remarkTailwindPlayground(
         node.lang === 'html' ? parseTailwindPlaygroundMetadata(node.meta ?? undefined) : null;
       if (!metadata) return;
 
-      const currentOrdinal = ordinal;
-      ordinal += 1;
-      const entry = examples.get(buildManifestKey(normalizedSourcePath, currentOrdinal));
+      const owner = owners.get(node) ?? 0;
+      const currentOrdinal = ordinals.get(owner) ?? 0;
+      ordinals.set(owner, currentOrdinal + 1);
+      const entry = examples.get(buildManifestKey(currentSourcePath, currentOrdinal));
 
       if (!entry) {
         throw new Error(
-          `Tailwind playground manifest is stale: missing ${normalizedSourcePath}#${currentOrdinal}.`,
+          `Tailwind playground manifest is stale: missing ${currentSourcePath}#${currentOrdinal}.`,
         );
       }
 
-      const css = metadata.css ? styles.get(metadata.css) : undefined;
+      const css = metadata.css
+        ? styles.get(styleKey(owners.get(node) ?? 0, metadata.css))
+        : undefined;
       if (metadata.css && css === undefined) {
         throw new Error(
-          `Tailwind playground manifest is stale: missing CSS playground '${metadata.css}' for ${normalizedSourcePath}#${currentOrdinal}.`,
+          `Tailwind playground manifest is stale: missing CSS playground '${metadata.css}' for ${currentSourcePath}#${currentOrdinal}.`,
         );
       }
       const title = resolveTailwindPlaygroundTitle(
         metadata.title,
-        nearestHeading(headings, node.position?.start.line),
+        nearestHeading(headings, node.position?.start.line, owners.get(node) ?? 0),
         currentOrdinal,
       );
       const actualFingerprint = playgroundFingerprint(node.value ?? '', node.meta ?? undefined, {
@@ -289,13 +357,18 @@ export default function remarkTailwindPlayground(
       });
       if (entry.sourceFingerprint !== actualFingerprint) {
         throw new Error(
-          `Tailwind playground manifest is stale: fingerprint changed for ${normalizedSourcePath}#${currentOrdinal}.`,
+          `Tailwind playground manifest is stale: fingerprint changed for ${currentSourcePath}#${currentOrdinal}.`,
         );
       }
 
       const openingNode: Html = {
         type: 'html',
-        value: buildOpeningFigure(entry, manifest.files, currentOrdinal === 0 ? 'eager' : 'lazy'),
+        value: buildOpeningFigure(
+          entry,
+          manifest.files,
+          currentOrdinal === 0 ? 'eager' : 'lazy',
+          entry.cssAnchor ? scopedAnchor(entry.cssAnchor, owner) : undefined,
+        ),
       };
       const closingNode: Html = { type: 'html', value: '</figure>' };
 
@@ -305,6 +378,20 @@ export default function remarkTailwindPlayground(
       return index + 3;
     };
 
-    visit(tree, 'code', handleCode);
+    visit(tree, (node, index, parent) => {
+      if (node.type === 'html') {
+        const sourcePath = embeddedSourceMarkerOf(node);
+        if (sourcePath !== undefined) {
+          currentSourcePath = sourcePath;
+          node.value = '';
+        }
+        return;
+      }
+      if (node.type !== 'code') return;
+      const sourcePath = currentSourcePath;
+      const result = handleCode(node, index, parent);
+      currentSourcePath = sourcePath;
+      return result;
+    });
   };
 }

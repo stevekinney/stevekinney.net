@@ -2,14 +2,18 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { discoverAllImages } from '@stevekinney/utilities/image-discovery';
+import {
+  AUDIO_EXTENSIONS,
+  PDF_EXTENSIONS,
+  discoverAllImages,
+} from '@stevekinney/utilities/image-discovery';
 import { normalizePath } from '@stevekinney/utilities/frontmatter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPOSITORY_ROOT = path.resolve(__dirname, '..', '..');
 
 const MARKDOWN_PATTERNS = ['writing/**/*.md', 'courses/**/*.md', 'projects/**/*.md'];
-const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg']);
+const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.ogv']);
 const NON_TRANSFORMED_EXTENSIONS = new Set(['.webp', '.avif', '.gif', '.svg']);
 
 type ValidationIssue = {
@@ -40,6 +44,7 @@ for (const source of imageSources.values()) {
   const extension = path.extname(source.resolvedPath).toLowerCase();
   if (VIDEO_EXTENSIONS.has(extension)) continue;
   if (NON_TRANSFORMED_EXTENSIONS.has(extension)) continue;
+  if (AUDIO_EXTENSIONS.has(extension) || PDF_EXTENSIONS.has(extension)) continue;
 
   checkedCount++;
 

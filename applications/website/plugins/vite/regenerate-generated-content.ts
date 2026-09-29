@@ -6,6 +6,7 @@ type BuildTask = 'content' | 'enhancements' | 'playgrounds';
 type SpawnProcess = typeof spawn;
 
 type RegenerateGeneratedContentOptions = {
+  additionalDependencies?: readonly string[];
   contentBuildScriptPath: string;
   playgroundsBuildScriptPath: string;
   contentEnhancementsBuildScriptPath: string;
@@ -47,15 +48,25 @@ const tasksForChangedPath = (
     enhancementDependencies: readonly string[];
     playgroundDependencies: readonly string[];
     sharedBuildDependencies: readonly string[];
+    additionalDependencies?: readonly string[];
   },
 ): BuildTask[] => {
   const absolutePath = path.resolve(changedPath);
 
-  if (/\.(md|toml)$/i.test(absolutePath) && isInsideAny(absolutePath, options.contentRoots)) {
+  if (
+    /\.(md|toml|png|jpe?g|gif|svg|webp|avif|mp4|webm|ogv|mp3|wav|ogg|m4a|flac|pdf)$/i.test(
+      absolutePath,
+    ) &&
+    isInsideAny(absolutePath, options.contentRoots)
+  ) {
     return ['content', 'playgrounds'];
   }
 
   if (hasPathMatch(absolutePath, options.contentDependencies)) {
+    return ['content', 'playgrounds'];
+  }
+
+  if (hasPathMatch(absolutePath, options.additionalDependencies ?? [])) {
     return ['content', 'playgrounds'];
   }
 
@@ -90,6 +101,7 @@ export function regenerateGeneratedContent(
   const enhancementDependencies = normalizePaths(options.enhancementDependencyPaths);
   const playgroundDependencies = normalizePaths(options.playgroundDependencyPaths);
   const sharedBuildDependencies = normalizePaths(options.sharedBuildDependencyPaths);
+  const additionalDependencies = normalizePaths(options.additionalDependencies ?? []);
   const spawnProcess = options.spawnProcess ?? spawn;
 
   const getTasks = (changedPath: string): BuildTask[] =>
@@ -100,6 +112,7 @@ export function regenerateGeneratedContent(
       enhancementDependencies,
       playgroundDependencies,
       sharedBuildDependencies,
+      additionalDependencies,
     });
 
   const commandByTask: Record<BuildTask, readonly string[]> = {

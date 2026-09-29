@@ -20,9 +20,11 @@ import {
   fileExists,
   hashContents,
   loadMarkdownSource,
+  loadMarkdownSourceFromRaw,
   readText,
   relativeSourcePath,
 } from './markdown.ts';
+import { normalizeListProperty } from './publication.ts';
 import type {
   ContentValidationIssue,
   ContentRepository,
@@ -102,6 +104,7 @@ export const buildCourseEntry = async (
   courseDirectory: string,
   issues: ContentValidationIssue[],
   history: ContentHistory,
+  sourceCache?: ReadonlyMap<string, string>,
 ): Promise<CourseRecord | null> => {
   const courseSlug = path.basename(courseDirectory);
   const readmePath = path.join(courseDirectory, 'README.md');
@@ -116,7 +119,11 @@ export const buildCourseEntry = async (
     return null;
   }
 
-  const readmeSource = await loadMarkdownSource(readmePath, issues);
+  const cachedReadme = sourceCache?.get(relativeSourcePath(readmePath));
+  const readmeSource =
+    cachedReadme !== undefined
+      ? loadMarkdownSourceFromRaw(readmePath, cachedReadme, issues)
+      : await loadMarkdownSource(readmePath, issues);
   const { data } = readmeSource;
   const lessons: LessonRecord[] = [];
   const courseTitle = requiredString(readmeSource.sourcePath, data.title, 'title', issues);
@@ -150,7 +157,11 @@ export const buildCourseEntry = async (
 
     lessonSlugSet.add(lessonSlug);
 
-    const lessonSource = await loadMarkdownSource(lessonPath, issues);
+    const cachedSource = sourceCache?.get(relativeSourcePath(lessonPath));
+    const lessonSource =
+      cachedSource !== undefined
+        ? loadMarkdownSourceFromRaw(lessonPath, cachedSource, issues)
+        : await loadMarkdownSource(lessonPath, issues);
     const sourcePath = lessonSource.sourcePath;
 
     lessons.push({
@@ -160,6 +171,7 @@ export const buildCourseEntry = async (
       slug: lessonSlug,
       courseSlug,
       courseTitle,
+      tags: normalizeListProperty(lessonSource, 'tags', issues),
       sourcePath,
       sourceHash: lessonSource.sourceHash,
       path: `/courses/${courseSlug}/${lessonSlug}`,

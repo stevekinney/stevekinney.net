@@ -4,7 +4,8 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 import type { PlaygroundDefinition } from '@stevekinney/utilities/tailwind-playground-types';
-import { loadMarkdownSource } from './content-repository/markdown.ts';
+import { loadMarkdownSource, updateMarkdownSource } from './content-repository/markdown.ts';
+import { normalizeObsidianMarkdown } from '@stevekinney/markdown/obsidian-normalization';
 import { repositoryRoot } from './content-paths.ts';
 import { buildPlaygrounds } from './playgrounds-build.ts';
 import { compilerDependencyFingerprint } from './build-dependencies.ts';
@@ -65,6 +66,43 @@ const compileStylesheet = async (inputPath: string, outputPath: string): Promise
 };
 
 describe('Tailwind playground compiler isolation', () => {
+  test('keeps embedded playground ownership and URL resolution tied to the embedded note', async () => {
+    const directory = await mkdtemp(path.join(repositoryRoot, 'tmp/playground-embed-source-'));
+    temporaryDirectories.push(directory);
+    const targetPath = path.join(directory, 'target.md');
+    const hostPath = path.join(directory, 'host.md');
+    const frontmatter = (title: string): string =>
+      `---\ntitle: ${title}\ndescription: Fixture.\ndate: 2025-01-01\n---\n\n`;
+    await Bun.write(
+      targetPath,
+      `${frontmatter('Target')}\n\`\`\`html tailwind height=120\n<a href="assets/example">Target</a>\n\`\`\`\n`,
+    );
+    await Bun.write(hostPath, `${frontmatter('Host')}![[target]]\n`);
+
+    const target = await loadMarkdownSource(targetPath);
+    const host = await loadMarkdownSource(hostPath);
+    const targetSourcePath = path.relative(repositoryRoot, targetPath).split(path.sep).join('/');
+    const hostSourcePath = path.relative(repositoryRoot, hostPath).split(path.sep).join('/');
+    const publicationIndex = {
+      documents: [
+        { sourcePath: targetSourcePath, route: '/target', source: target.rawSource },
+        { sourcePath: hostSourcePath, route: '/host', source: host.rawSource },
+      ],
+      attachments: [],
+    };
+    const normalized = normalizeObsidianMarkdown(host.rawSource, {
+      sourcePath: hostSourcePath,
+      publicationIndex,
+    });
+    updateMarkdownSource(host, normalized.markdown);
+
+    expect(target.tailwindPlaygrounds[0]?.sourcePath).toBe(targetSourcePath);
+    expect(target.tailwindPlaygrounds[0]?.html).toContain(
+      `href="/${path.posix.dirname(targetSourcePath)}/assets/example"`,
+    );
+    expect(host.tailwindPlaygrounds).toEqual([]);
+  });
+
   test('keeps website theme tokens out of playground utility compilation', async () => {
     const directory = await createTemporaryDirectory('playground-theme-isolation-');
     const siteCss = await compileStylesheet(

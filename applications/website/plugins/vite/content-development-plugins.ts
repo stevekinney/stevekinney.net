@@ -21,6 +21,15 @@ const IMAGE_ASSET_MIME_TYPES: Record<string, string> = {
   '.svg': 'image/svg+xml',
   '.webp': 'image/webp',
   '.avif': 'image/avif',
+  '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
+  '.ogv': 'video/ogg',
+  '.mp3': 'audio/mpeg',
+  '.wav': 'audio/wav',
+  '.ogg': 'audio/ogg',
+  '.m4a': 'audio/mp4',
+  '.flac': 'audio/flac',
+  '.pdf': 'application/pdf',
 };
 
 const GENERATED_ASSET_MIME_TYPES: Record<string, string> = {
@@ -35,6 +44,7 @@ const PLAYGROUND_ASSET_MIME_TYPES: Record<string, string> = {
 };
 
 type ContentDevelopmentPluginsOptions = {
+  additionalDependencies?: readonly string[];
   workspaceRoot: string;
   contentDirectories: readonly string[];
   contentAssetPathPrefixes: readonly string[];
@@ -154,6 +164,7 @@ export function contentDevelopmentPlugins(
   return [
     watchContentDirectories([
       ...options.contentDirectories,
+      ...(options.additionalDependencies ?? []),
       ...options.contentDependencyPaths,
       ...options.enhancementSourceDirectories,
       ...options.enhancementDependencyPaths,
@@ -171,6 +182,7 @@ export function contentDevelopmentPlugins(
       enhancementDependencyPaths: options.enhancementDependencyPaths,
       playgroundDependencyPaths: options.playgroundDependencyPaths,
       sharedBuildDependencyPaths: options.sharedBuildDependencyPaths,
+      additionalDependencies: options.additionalDependencies,
     }),
     emitReachablePlaygroundAssets(
       options.playgroundManifestPath,
