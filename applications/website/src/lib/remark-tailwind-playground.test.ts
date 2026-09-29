@@ -181,6 +181,35 @@ describe('remarkTailwindPlayground', () => {
     });
   });
 
+  it('titles an embedded playground from its own heading rather than the host heading', async () => {
+    const code = '<button class="bg-blue-600">Embedded</button>';
+    const targetSource = `# Target Heading\n\n~~~html tailwind height=192\n${code}\n~~~\n`;
+    await writeManifest([
+      example(0, code, { sourcePath: 'target.md', computedTitle: 'Target Heading — Example 1' }),
+    ]);
+    const hostSource = '# Host Heading\n\n![[target]]\n';
+    const normalized = normalizeObsidianMarkdown(hostSource, {
+      sourcePath: 'host.md',
+      publicationIndex: {
+        documents: [
+          { sourcePath: 'target.md', route: '/target', source: targetSource },
+          { sourcePath: 'host.md', route: '/host', source: hostSource },
+        ],
+        attachments: [],
+      },
+    });
+    const preprocessor = mdsvex({
+      extensions: ['.md'],
+      remarkPlugins: [
+        [remarkTailwindPlayground, { manifestPath, workspaceRoot: temporaryDirectory }],
+      ] as never,
+    });
+
+    await expect(
+      preprocessor.markup({ content: normalized.markdown, filename: sourcePath }),
+    ).resolves.toMatchObject({ code: expect.stringContaining('Target Heading — Example 1') });
+  });
+
   it('preprocesses real course files whose generated heading titles contain apostrophes', async () => {
     const files = [
       'courses/tailwind/building-a-card-list.md',

@@ -1,3 +1,5 @@
+import remarkParse from 'remark-parse';
+import { unified } from 'unified';
 import { describe, expect, it } from 'vitest';
 
 import { resolveObsidianReference } from '../../../../packages/markdown/src/obsidian-resolver';
@@ -229,5 +231,21 @@ describe('normalizeMarkdownLinks', () => {
     expect(applySourceEdits(source, result.edits).markdown).toBe(
       'See[^host-one].\n\n[^host-one]: note',
     );
+  });
+});
+
+describe('normalizeObsidianMarkdown with a parsed Markdown tree', () => {
+  it('normalizes extensionless document links that carry a fragment', () => {
+    const source = '[course](../courses/example#intro)';
+    const parsed = unified().use(remarkParse).parse(source);
+    const documents = [document('courses/example.md')];
+    const withTree = normalizeObsidianMarkdown(source, {
+      ...context(documents, 'writing/a.md'),
+      markdownTree: parsed,
+    });
+    const withoutTree = normalizeObsidianMarkdown(source, context(documents, 'writing/a.md'));
+
+    expect(withoutTree.markdown).not.toBe(source);
+    expect(withTree.markdown).toBe(withoutTree.markdown);
   });
 });

@@ -35,6 +35,7 @@ const DEFAULT_MANIFEST_PATH = path.resolve(
 const playgroundHtmlUrlPattern = new RegExp(`^${PLAYGROUND_URL_PREFIX}[a-f0-9]{64}\\.html$`);
 const playgroundCssUrlPattern = new RegExp(`^${PLAYGROUND_URL_PREFIX}[a-f0-9]{64}\\.css$`);
 const digestPattern = /^[a-f0-9]{64}$/;
+const obsidianHeadingAnchorPattern = /^<span data-obsidian-heading="[^"]*">$/;
 const embeddedSourceMarkerPattern = /^<!-- obsidian-embedded-source: ([^\s]+) -->$/;
 
 const escapeAttribute = (value: string): string =>
@@ -96,7 +97,19 @@ const phrasingContentToText = (
   rawSource: string | undefined,
 ): string =>
   (nodes ?? [])
-    .map((node) => {
+    .map((node, index, siblings) => {
+      // Embedded headings carry transport anchors (`<span data-obsidian-heading>` and its closing
+      // tag) that are not part of the visible title.
+      if (node.type === 'html') {
+        if (obsidianHeadingAnchorPattern.test(node.value)) return '';
+        const previous = siblings[index - 1];
+        if (
+          node.value === '</span>' &&
+          previous?.type === 'html' &&
+          obsidianHeadingAnchorPattern.test(previous.value)
+        )
+          return '';
+      }
       if (
         node.type === 'text' ||
         node.type === 'inlineCode' ||
@@ -116,24 +129,66 @@ const loadRawSource = (filePath: string): string | undefined => {
   return readFileSync(filePath, 'utf8');
 };
 
+type PlaygroundHeading = { line: number; title: string; owner: number };
+
+const embeddedSourceMarkerOf = (node: { type: string; value?: string }): string | undefined => {
+  if (node.type !== 'html' || typeof node.value !== 'string') return;
+  const marker = embeddedSourceMarkerPattern.exec(node.value.trim());
+  if (!marker) return;
+  return marker[1]!
+    .split('/')
+    .map((segment) => decodeURIComponent(segment))
+    .join('/');
+};
+
+/**
+ * Give every node an owner: 0 for the host note, and a distinct number for each embedded region.
+ * Headings only title playgrounds owned by the same region, matching how each note is fingerprinted alone.
+ */
+const collectOwners = (tree: Root, hostSourcePath: string): Map<unknown, number> => {
+  const owners = new Map<unknown, number>();
+  const stack: Array<{ sourcePath: string; owner: number }> = [
+    { sourcePath: hostSourcePath, owner: 0 },
+  ];
+  let nextOwner = 1;
+  visit(tree, (node) => {
+    const sourcePath = embeddedSourceMarkerOf(node as { type: string; value?: string });
+    if (sourcePath !== undefined) {
+      const enclosing = stack.at(-2);
+      if (enclosing && enclosing.sourcePath === sourcePath) stack.pop();
+      else stack.push({ sourcePath, owner: nextOwner++ });
+      return;
+    }
+    owners.set(node, stack.at(-1)!.owner);
+  });
+  return owners;
+};
+
 const collectHeadings = (
   tree: Root,
   rawSource: string | undefined,
-): Array<{ line: number; title: string }> => {
-  const headings: Array<{ line: number; title: string }> = [];
+  owners: Map<unknown, number>,
+): PlaygroundHeading[] => {
+  const headings: PlaygroundHeading[] = [];
   visit(tree, 'heading', (node: Heading) => {
+    const owner = owners.get(node) ?? 0;
     headings.push({
       line: node.position?.start.line ?? 1,
-      title: phrasingContentToText(node.children, rawSource),
+      // Raw offsets describe the host file, so embedded headings use their parsed text.
+      title: phrasingContentToText(node.children, owner === 0 ? rawSource : undefined),
+      owner,
     });
   });
   return headings;
 };
 
 const nearestHeading = (
-  headings: Array<{ line: number; title: string }>,
+  headings: PlaygroundHeading[],
   line: number | undefined,
-): string | undefined => headings.filter((heading) => heading.line <= (line ?? 1)).at(-1)?.title;
+  owner: number,
+): string | undefined =>
+  headings.filter((heading) => heading.owner === owner && heading.line <= (line ?? 1)).at(-1)
+    ?.title;
 
 const collectStyles = (tree: Root): Map<string, string> => {
   const styles = new Map<string, string>();
@@ -233,7 +288,8 @@ export default function remarkTailwindPlayground(
     const manifest = options.manifest ?? loadManifestSync(manifestPath);
     const normalizedSourcePath = normalizePath(filePath, workspaceRoot);
     const rawSource = loadRawSource(filePath);
-    const headings = collectHeadings(tree, rawSource);
+    const owners = collectOwners(tree, normalizedSourcePath);
+    const headings = collectHeadings(tree, rawSource, owners);
     const styles = collectStyles(tree);
     const examples = new Map(
       manifest.examples.map((entry) => [buildManifestKey(entry.sourcePath, entry.ordinal), entry]),
@@ -281,7 +337,7 @@ export default function remarkTailwindPlayground(
       }
       const title = resolveTailwindPlaygroundTitle(
         metadata.title,
-        nearestHeading(headings, node.position?.start.line),
+        nearestHeading(headings, node.position?.start.line, owners.get(node) ?? 0),
         currentOrdinal,
       );
       const actualFingerprint = playgroundFingerprint(node.value ?? '', node.meta ?? undefined, {
@@ -308,12 +364,9 @@ export default function remarkTailwindPlayground(
 
     visit(tree, (node, index, parent) => {
       if (node.type === 'html') {
-        const sourceMarker = embeddedSourceMarkerPattern.exec(node.value.trim());
-        if (sourceMarker) {
-          currentSourcePath = sourceMarker[1]!
-            .split('/')
-            .map((segment) => decodeURIComponent(segment))
-            .join('/');
+        const sourcePath = embeddedSourceMarkerOf(node);
+        if (sourcePath !== undefined) {
+          currentSourcePath = sourcePath;
           node.value = '';
         }
         return;

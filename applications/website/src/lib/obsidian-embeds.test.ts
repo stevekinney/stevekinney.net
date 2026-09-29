@@ -210,6 +210,58 @@ describe('normalizeObsidianMarkdown embeds', () => {
     expect(result.markdown.match(/href="#embed-[a-z0-9-]+details"/gu)).toHaveLength(2);
   });
 
+  it('rebases the real src attribute when another attribute ends in src', () => {
+    const target: PublicationDocument = {
+      sourcePath: 'writing/sub/lazy.md',
+      route: '/writing/sub/lazy',
+      source: '<img data-src="lazy" src="assets/photo.png">',
+    };
+    const result = normalizeObsidianMarkdown('![[sub/lazy]]', {
+      sourcePath: 'writing/host.md',
+      publicationIndex: {
+        documents: [target],
+        attachments: [
+          {
+            sourcePath: 'writing/sub/assets/photo.png',
+            url: 'https://cdn.example.com/photo.png',
+            mimeType: 'image/png',
+          },
+        ],
+      },
+    });
+
+    expect(result.diagnostics).toEqual([]);
+    expect(result.markdown).toContain('data-src="lazy"');
+    expect(result.markdown).toMatch(/ src="sub\/assets\/photo\.png"/u);
+  });
+
+  it('only marks embedded sources around playground fences, on their own paragraphs', () => {
+    const plain: PublicationDocument = {
+      sourcePath: 'writing/plain.md',
+      route: '/writing/plain',
+      source: 'Plain body.',
+    };
+    const playground: PublicationDocument = {
+      sourcePath: 'writing/playground.md',
+      route: '/writing/playground',
+      source: '~~~html tailwind\n<div></div>\n~~~',
+    };
+    const publicationIndex = { documents: [plain, playground], attachments: [] };
+
+    expect(
+      normalizeObsidianMarkdown('![[plain]]', { sourcePath: 'writing/host.md', publicationIndex })
+        .markdown,
+    ).not.toContain('obsidian-embedded-source');
+    expect(
+      normalizeObsidianMarkdown('![[playground]]', {
+        sourcePath: 'writing/host.md',
+        publicationIndex,
+      }).markdown,
+    ).toMatch(
+      /<!-- obsidian-embedded-source: writing%2Fplayground\.md -->\n\n~~~html[\s\S]*~~~\n\n<!-- obsidian-embedded-source: writing%2Fhost\.md -->/u,
+    );
+  });
+
   it('supports whitespace around raw HTML identifier equals signs', () => {
     const target: PublicationDocument = {
       sourcePath: 'writing/spaced-html-identifiers.md',

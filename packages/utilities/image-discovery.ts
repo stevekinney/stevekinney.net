@@ -153,6 +153,14 @@ const collectImageUrls = (markdown: string): string[] => {
     if (url) urls.add(url);
   }
 
+  // Plain wiki links to supported attachments (`[[assets/manual.pdf|Manual]]`) must be published too.
+  for (const match of visibleMarkdown.matchAll(
+    /(?<!!)\[\[([^|\]#]+)(?:#[^|\]]*)?(?:\|[^\]]*)?\]\]/g,
+  )) {
+    const url = match[1]?.trim();
+    if (url && ALL_ASSET_EXTENSIONS.has(path.extname(url).toLowerCase())) urls.add(url);
+  }
+
   visit(tree, 'html', (node) => {
     const raw = String((node as { value?: string }).value ?? '');
     const imgTagPattern = /<img\b[^>]*\bsrc=(['"])(.*?)\1/gi;

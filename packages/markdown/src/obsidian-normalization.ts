@@ -11,14 +11,24 @@ import type { NormalizationContext, NormalizedMarkdown, SourceMapping } from './
 const obsidianTextSyntax =
   /\[\[|%%|==(?=\S)[^\r\n]*?\S==|\$\$[\s\S]*?\$\$|(?<!\$)\$[^$\r\n]+?\$(?!\$)|\^[\w-]+\s*(?=\r?\n|$)/;
 
-const requiresNormalization = (tree: Root): boolean => {
+const requiresNormalization = (tree: Root, context: NormalizationContext): boolean => {
   let required = false;
   visit(tree, (node) => {
     if (node.type === 'text' && obsidianTextSyntax.test(node.value)) required = true;
     if (node.type === 'footnoteReference' || node.type === 'footnoteDefinition') required = true;
     // Existing URL rewriting handles ordinary Markdown documents. Resolve only
     // cross-document fragments and queries, which need the publication index.
-    if ('url' in node && /\.md(?:[?#])/i.test(node.url)) required = true;
+    if ('url' in node && typeof node.url === 'string') {
+      if (/\.md(?:[?#])/i.test(node.url)) required = true;
+      // Extensionless links to publication documents need the same fragment and route handling.
+      else if (
+        /[?#]/u.test(node.url) &&
+        !/^(?:[a-z][a-z\d+.-]*:|\/\/|#)/iu.test(node.url) &&
+        resolveObsidianReference(node.url.split(/[?#]/u, 1)[0], context).reference?.kind ===
+          'document'
+      )
+        required = true;
+    }
   });
   return required;
 };
@@ -75,7 +85,7 @@ export const normalizeObsidianMarkdown = (
   if (
     context.markdownTree &&
     Buffer.byteLength(source) <= 10 * 1024 * 1024 &&
-    !requiresNormalization(context.markdownTree)
+    !requiresNormalization(context.markdownTree, context)
   )
     return {
       ...unchanged(source),

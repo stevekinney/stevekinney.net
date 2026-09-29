@@ -138,7 +138,11 @@ export const getObsidianDocumentMetadata = (
     if (candidate.type !== 'html' || typeof candidate.value !== 'string') continue;
     const position = offsets(candidate);
     if (!position) continue;
-    for (const match of candidate.value.matchAll(
+    // Blank HTML comments so tag examples inside them are not recorded as identifiers.
+    const visibleValue = candidate.value.replace(/<!--[\s\S]*?(?:-->|$)/gu, (comment) =>
+      ' '.repeat(comment.length),
+    );
+    for (const match of visibleValue.matchAll(
       /(?:^|[\s<])id\s*=\s*(?:(['"])([^'"]+)\1|([^\s"'`=<>]+))/gu,
     )) {
       const idStart = position.start + match.index + match[0].indexOf('id');

@@ -9,7 +9,7 @@ vi.mock('$lib/server/content', () => ({
   getWritingRoute: vi.fn(),
 }));
 
-import { rewritePublishedAttachments } from './load-raw-content';
+import { rewritePublishedAttachments, stripEmbeddedSourceMarkers } from './load-raw-content';
 
 const publicationIndex: PublicationIndex = {
   documents: [],
@@ -86,5 +86,14 @@ describe('rewritePublishedAttachments', () => {
     expect(rewritePublishedAttachments(markdown, 'writing/post.md', publicationIndex)).toBe(
       '<section data-footnotes><p><img src="https://cdn.example.com/diagram.png" alt="Diagram"></p></section>',
     );
+  });
+});
+
+describe('stripEmbeddedSourceMarkers', () => {
+  it('removes transport markers that expose repository paths', () => {
+    const markdown =
+      '<!-- obsidian-embedded-source: writing%2Fguide.md -->\n\nBody.\n\n<!-- obsidian-embedded-source: writing%2Fhost.md -->';
+
+    expect(stripEmbeddedSourceMarkers(markdown)).toBe('Body.\n\n');
   });
 });

@@ -57,6 +57,13 @@ describe('getObsidianDocumentMetadata', () => {
     expect(metadata.htmlIds).toEqual(['public']);
   });
 
+  it('ignores identifiers written inside HTML comments', () => {
+    const metadata = getObsidianDocumentMetadata(
+      makeDocument('<!-- <span id="private"></span> -->\n\n<span id="public"></span>'),
+    );
+    expect(metadata.htmlIds).toEqual(['public']);
+  });
+
   it('collects valid unquoted HTML identifiers', () => {
     const metadata = getObsidianDocumentMetadata(makeDocument('<span id=details>Details</span>'));
     expect(metadata.htmlIds).toEqual(['details']);

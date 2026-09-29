@@ -43,6 +43,10 @@ const imageDestinationSpan = (raw: string): [number, number] | undefined => {
   return [destinationStart, start];
 };
 
+// Embedded-source markers only exist for playground bookkeeping and expose repository paths.
+export const stripEmbeddedSourceMarkers = (markdown: string): string =>
+  markdown.replace(/<!-- obsidian-embedded-source: [^\s]+ -->\n*/gu, '');
+
 export const rewritePublishedAttachments = (
   markdown: string,
   sourcePath: string,
@@ -155,7 +159,7 @@ const loadPublishedSource = async (sourcePath: string): Promise<string> => {
     throw new Error(`No valid published content for '${sourcePath}'.`);
   // Machine-readable endpoints retain readable TeX instead of the HTML transport marker.
   return rewritePublishedAttachments(
-    document.markdown
+    stripEmbeddedSourceMarkers(document.markdown)
       .replace(
         /<(span|div) data-obsidian-footnote="([A-Za-z0-9_-]+)"><\/\1>/g,
         (_marker, _tag: string, encoded: string) =>

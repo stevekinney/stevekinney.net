@@ -26,8 +26,11 @@ const htmlIdentifierPattern = /(?:^|[\s<])id\s*=\s*(?:(['"])([^'"]+)\1|([^\s"'`=
 const htmlIdentifierReplacementPattern =
   /((?:^|[\s<])id)(\s*=\s*)(?:(['"])([^'"]+)\3|([^\s"'`=<>]+))/gu;
 const htmlFragmentHrefPattern = /((?:^|[\s<])href\s*=\s*)(?:(['"])#([^'"]*)\2|#([^\s"'`=<>]+))/gu;
-const htmlImageSourcePattern = /(<img\b[^>]*?\bsrc\s*=\s*)(?:(['"])([^'"]*)\2|([^\s"'`=<>]+))/giu;
+const htmlImageSourcePattern =
+  /(<img\b(?:[^>"']|"[^"]*"|'[^']*')*?[\s"']src\s*=\s*)(?:(['"])([^'"]*)\2|([^\s"'`=<>]+))/giu;
 const encodedPath = (value: string): string => value.split('/').map(encodeURIComponent).join('/');
+// Playground bookkeeping only needs source markers around embedded `html` fences.
+const htmlFencePattern = /^[ \t>]*(?:`{3,}|~{3,})[ \t]*html\b/mu;
 const embeddedSourceMarker = (sourcePath: string): string =>
   `<!-- obsidian-embedded-source: ${encodeURIComponent(sourcePath)} -->`;
 const wikiEmbedParts = (inner: string): { reference: string; alias?: string } => {
@@ -433,7 +436,9 @@ export const normalizeObsidianReferences = (
       const continuationPrefix = listContainer
         ? `${listContainer[1]}${' '.repeat(sourceBeforeEmbed.length - listContainer[1].length)}`
         : blockquoteContainer;
-      const embeddedMarkdown = `${embeddedSourceMarker(destination.sourcePath)}\n${nested.markdown}\n${embeddedSourceMarker(document.sourcePath)}`;
+      const embeddedMarkdown = htmlFencePattern.test(nested.markdown)
+        ? `${embeddedSourceMarker(destination.sourcePath)}\n\n${nested.markdown}\n\n${embeddedSourceMarker(document.sourcePath)}`
+        : nested.markdown;
       const expanded = continuationPrefix
         ? embeddedMarkdown.trim().replace(/\r?\n/gu, `\n${continuationPrefix}`)
         : `\n\n${embeddedMarkdown}\n\n`;
