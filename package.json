@@ -67,7 +67,7 @@
     "@types/mdast": "^4.0.4",
     "@types/node": "^26.6.3",
     "@types/unist": "^3.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.70.0",
+    "@typescript-eslint/eslint-plugin": "^8.70.1",
     "@typescript-eslint/parser": "^8.70.0",
     "autoprefixer": "^10.5.5",
     "axe-playwright": "^2.2.2",
