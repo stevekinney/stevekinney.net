@@ -14,6 +14,7 @@
   <Link href="/writing">Writing</Link>
   <Link href="/courses">Courses</Link>
   <Link href="/projects">Projects</Link>
+  <Link href="/experiments">Experiments</Link>
   <Link href="/dashboard">Dashboard</Link>
   <Link
     href="https://cinder.website/"

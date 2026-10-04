@@ -1,0 +1,43 @@
+<script lang="ts">
+  import type { SourceFile } from '$lib/experiments/dropped-files';
+  import FileDropZone from '$lib/experiments/file-drop-zone.svelte';
+
+  import { isSessionFile } from './session-files';
+
+  type Props = {
+    /** The file being read and how many there are, while reading. */
+    progress: { current: number; total: number } | null;
+    /** What happened with the last files read, announced once reading finishes. */
+    message: string | null;
+    onFiles: (files: Promise<SourceFile[]>) => void;
+  };
+
+  const { progress, message, onFiles }: Props = $props();
+</script>
+
+<FileDropZone
+  title="Drop Claude Code or Codex session files here"
+  draggingTitle="Drop to read the session"
+  accept=".jsonl"
+  keepFile={isSessionFile}
+  captureWindowDrops
+  busy={progress !== null}
+  progress={progress ? `Reading file ${progress.current} of ${progress.total}…` : null}
+  status={message}
+  {onFiles}
+>
+  <ul class="space-y-1">
+    <li>
+      <span class="font-semibold text-slate-600 dark:text-slate-300">Claude Code:</span>
+      <code>~/.claude/<wbr />projects/<wbr />&lt;project&gt;/<wbr />&lt;session&gt;.jsonl</code>.
+      Subagents live in the folder with the same name, so drop both to include them.
+    </li>
+    <li>
+      <span class="font-semibold text-slate-600 dark:text-slate-300">Codex:</span>
+      <code
+        >~/.codex/<wbr />sessions/<wbr />&lt;year&gt;/<wbr />&lt;month&gt;/<wbr />&lt;day&gt;/</code
+      >.
+    </li>
+    <li>Both folders are hidden. In the macOS file picker, press ⌘⇧. to show them.</li>
+  </ul>
+</FileDropZone>

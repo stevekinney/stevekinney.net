@@ -22,6 +22,9 @@ describe('resolveOpenGraphMetadata', () => {
     await expect(resolveOpenGraphMetadata('/dashboard')).resolves.toMatchObject({
       title: 'Dashboard',
     });
+    await expect(resolveOpenGraphMetadata('/experiments/model-calculator')).resolves.toMatchObject({
+      title: 'Model Pricing Calculator',
+    });
   });
 
   it('uses generated metadata for writing routes', async () => {
@@ -60,4 +63,41 @@ describe('resolveOpenGraphMetadata', () => {
     await expect(resolveOpenGraphMetadata('/writing/does-not-exist')).resolves.toBeNull();
     await expect(resolveOpenGraphMetadata('/projects/weft/extra')).resolves.toBeNull();
   });
+});
+
+type PageModule = { load: (event: never) => unknown };
+
+/** Reads the title and description a page's own `load` hands to its SEO tags. */
+const readPageMetadata = async (module: PageModule) => {
+  const data = (await module.load({} as never)) as { title: string; description: string };
+
+  return { title: data.title, description: data.description };
+};
+
+const staticPages: [string, () => Promise<PageModule>][] = [
+  ['/writing', () => import('../../routes/writing/+page.server')],
+  ['/courses', () => import('../../routes/courses/+page.server')],
+  ['/projects', () => import('../../routes/projects/+page.server')],
+  ['/dashboard', () => import('../../routes/dashboard/+page.server')],
+  ['/experiments', () => import('../../routes/experiments/+page.server')],
+];
+
+const experimentPages = Object.entries(
+  import.meta.glob<PageModule>('/src/routes/experiments/*/+page.server.ts'),
+).map(([file, importPage]): [string, () => Promise<PageModule>] => [
+  `/experiments/${file.split('/').at(-2)}`,
+  importPage,
+]);
+
+// The page and its social preview used to define these separately, and the
+// dashboard's two copies drifted apart.
+describe('each static page and its Open Graph image', () => {
+  it.each([...staticPages, ...experimentPages])(
+    '%s shares one title and description',
+    async (path, importPage) => {
+      const page = await readPageMetadata(await importPage());
+
+      await expect(resolveOpenGraphMetadata(path)).resolves.toEqual(page);
+    },
+  );
 });
