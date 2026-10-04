@@ -25,7 +25,7 @@
   const MARGIN_TOP = 14;
   const MARGIN_BOTTOM = 44;
   const LABEL_GAP = 15;
-  const TOOLTIP_WIDTH = 150;
+  const TOOLTIP_WIDTH = 170;
   /** What the chart draws at before it has been measured, such as while prerendering. */
   const UNMEASURED_WIDTH = 720;
 
@@ -121,10 +121,19 @@
     return Math.min(turns, Math.max(0, turn));
   };
 
-  // The tooltip stays inside the plot, so it never covers the labels at the line ends.
-  const tooltipOnRight = $derived(
-    activeTurn !== null && x(activeTurn) + 10 + TOOLTIP_WIDTH > margin.left + plotWidth,
-  );
+  // The tooltip sits beside the crosshair, and inside the plot so it never covers the labels at
+  // the line ends. When neither side has room, it's held inside the plot's edge.
+  const tooltipLeft = $derived.by(() => {
+    if (activeTurn === null) return 0;
+
+    const plotRight = margin.left + plotWidth;
+    const right = x(activeTurn) + 10;
+    const left = x(activeTurn) - 10 - TOOLTIP_WIDTH;
+    if (right + TOOLTIP_WIDTH <= plotRight) return right;
+    if (left >= 4) return left;
+
+    return Math.max(4, Math.min(right, plotRight - TOOLTIP_WIDTH));
+  });
 
   const handleKeydown = (event: KeyboardEvent): void => {
     const current = activeTurn ?? 0;
@@ -335,8 +344,8 @@
         role="tooltip"
         data-testid="chart-tooltip"
         class="pointer-events-none absolute top-2 z-10 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 shadow-lg dark:border-slate-600 dark:bg-slate-800 dark:text-white"
-        style:left={tooltipOnRight ? undefined : `${x(activeTurn) + 10}px`}
-        style:right={tooltipOnRight ? `${width - x(activeTurn) + 10}px` : undefined}
+        style:left="{tooltipLeft}px"
+        style:width="{TOOLTIP_WIDTH}px"
       >
         <p class="font-semibold">
           Turn {activeTurn}{activeTurn === 0 ? ' (up front only)' : ''}{pinnedTurn === activeTurn

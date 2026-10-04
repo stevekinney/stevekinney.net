@@ -2,20 +2,21 @@
   import { bodyClasses } from './field-styles';
   import type { CacheTtl, ModelPrice } from './pricing';
   import type { ProjectionInputs } from './projection';
+  import { compactPayback } from './projection';
   import { SENSITIVITY_HORIZON, sensitivityRows } from './sensitivity';
 
   type Props = {
     inputs: ProjectionInputs;
     models: ModelPrice[];
     ttl: CacheTtl;
-    /** The compaction payback turn for the scenario as it stands, or null. */
-    current: number | null;
     onFocusControl: (controlId: string) => void;
   };
 
-  const { inputs, models, ttl, current, onFocusControl }: Props = $props();
+  const { inputs, models, ttl, onFocusControl }: Props = $props();
 
   const rows = $derived(sensitivityRows(inputs, models, ttl));
+  // Looked for as far ahead as the rows are, so the marker lines up with their bars.
+  const current = $derived(compactPayback(inputs, SENSITIVITY_HORIZON));
 
   const turnText = (turn: number | null): string =>
     turn === null ? `none in ${SENSITIVITY_HORIZON}` : `turn ${turn}`;

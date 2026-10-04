@@ -56,7 +56,7 @@
       id="model"
       value={scenario.modelId}
       onchange={(event) => onChange({ modelId: event.currentTarget.value })}
-      class={fieldClasses}
+      class="{fieldClasses} w-full"
     >
       {#each models as model (model.id)}
         <option value={model.id}>{modelLabel(model)}</option>

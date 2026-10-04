@@ -389,7 +389,6 @@
         inputs,
         models: calculator.models,
         ttl: scenario.ttl,
-        current: projection.compactCrossover,
         onFocusControl: focusControl,
       }}
     />
