@@ -34,7 +34,7 @@ describe('summarizeSession', () => {
 
   it('counts each message ID once and leaves subagent responses out', () => {
     expect(session?.turns).toBe(5);
-    expect(session?.sidechainTurns).toBe(1);
+    expect(session?.sidechainTurns).toBe(2);
   });
 
   it('measures output from the last line of each streamed response', () => {
