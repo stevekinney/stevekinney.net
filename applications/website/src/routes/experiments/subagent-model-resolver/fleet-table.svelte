@@ -3,6 +3,7 @@
 
   import type { FleetAnalysis, FleetFilter, FleetRow } from './fleet';
   import { rowMatchesFilter } from './fleet';
+  import InlineCode from './inline-code.svelte';
   import ModelSwatch from './model-swatch.svelte';
 
   type Props = {
@@ -105,7 +106,7 @@
               <span
                 class="mt-1 block max-w-xs text-xs font-normal text-amber-800 dark:text-amber-300"
               >
-                {row.definition.warnings.join(' ')}
+                <InlineCode text={row.definition.warnings.join(' ')} />
               </span>
             {/if}
           </th>

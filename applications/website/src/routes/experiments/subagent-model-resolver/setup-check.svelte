@@ -9,7 +9,6 @@
   import { settingsScopeLabels } from './effective-settings';
   import type { SettingsScope } from './effective-settings';
   import { fieldClasses, hintClasses, labelClasses, panelClasses } from './field-styles';
-  import FleetAnalysisView from './fleet-analysis.svelte';
   import {
     agentGroupKey,
     analyzeFleet,
@@ -28,6 +27,8 @@
   import { initialSetup } from './setup-state';
   import type { VersionRange } from './versions';
 
+  type FleetAnalysisComponent = typeof import('./fleet-analysis.svelte').default;
+
   type Props = {
     setup: SetupState;
     controls: ResolverConfiguration;
@@ -41,10 +42,27 @@
   // Agent definitions and settings files are small. Anything bigger isn't one.
   const maximumFileBytes = 1_000_000;
 
+  // The table, the fixes, and the exports are the biggest part of this section, and
+  // nothing needs them until there are files to show, so they load on first use.
+  let FleetAnalysisView = $state.raw<FleetAnalysisComponent | null>(null);
+  let fleetFailed = $state(false);
+
   let reading = $state(false);
   let message = $state<string | null>(null);
 
   const analysis = $derived(analyzeFleet({ ...setup, controls, range }));
+
+  $effect(() => {
+    if (!analysis.hasInput || FleetAnalysisView) return;
+
+    import('./fleet-analysis.svelte')
+      .then((module) => {
+        FleetAnalysisView = module.default;
+      })
+      .catch(() => {
+        fleetFailed = true;
+      });
+  });
 
   const keepFile = (path: string): boolean => isSetupFile(path);
   const enterFolder = (path: string): boolean =>
@@ -147,7 +165,7 @@
 </script>
 
 <div class="space-y-8">
-  <div class="grid gap-6 lg:grid-cols-2">
+  <div class="grid items-start gap-6 lg:grid-cols-2">
     <section aria-labelledby="route-a-heading" class="{panelClasses} min-w-0">
       <div class="space-y-1">
         <h3 id="route-a-heading" class="text-lg font-bold text-slate-900 dark:text-white">
@@ -157,31 +175,34 @@
           Uploading catches agents with no <InlineCode text="`model:`" /> line, which a grep can’t see.
         </p>
       </div>
-      <FileDropZone
-        title="Drop your agents folders and settings files"
-        draggingTitle="Drop to read them"
-        accept=".md,.json"
-        folders
-        {keepFile}
-        {enterFolder}
-        busy={reading}
-        progress="Reading files…"
-        status={message}
-        folderButtonLabel="Choose a folder"
-        onFiles={loadFiles}
-      >
-        <ul class="space-y-1">
-          <li>
-            Drop <InlineCode text="`~/.claude/agents`" /> and your project’s <InlineCode
-              text="`.claude/agents`"
-            />, plus <InlineCode text="`settings.json`" /> and <InlineCode
-              text="`settings.local.json`"
-            />.
-          </li>
-          <li>Those folders are hidden. In the macOS file picker, press ⌘⇧. to show them.</li>
-          <li>Drop one folder at a time if you want to set each one’s scope.</li>
-        </ul>
-      </FileDropZone>
+      <!-- The zone fills its parent's height, so it gets a parent with no height of its own. -->
+      <div>
+        <FileDropZone
+          title="Drop your agents folders and settings files"
+          draggingTitle="Drop to read them"
+          accept=".md,.json"
+          folders
+          {keepFile}
+          {enterFolder}
+          busy={reading}
+          progress="Reading files…"
+          status={message}
+          folderButtonLabel="Choose a folder"
+          onFiles={loadFiles}
+        >
+          <ul class="space-y-1">
+            <li>
+              Drop <InlineCode text="`~/.claude/agents`" /> and your project’s <InlineCode
+                text="`.claude/agents`"
+              />, plus <InlineCode text="`settings.json`" /> and <InlineCode
+                text="`settings.local.json`"
+              />.
+            </li>
+            <li>Those folders are hidden. In the macOS file picker, press ⌘⇧. to show them.</li>
+            <li>Drop one folder at a time if you want to set each one’s scope.</li>
+          </ul>
+        </FileDropZone>
+      </div>
 
       {#if sources.length > 0 || setup.settingsFiles.length > 0}
         <div class="space-y-3" data-testid="sources">
@@ -410,7 +431,15 @@
   </p>
 
   {#if analysis.hasInput}
-    <FleetAnalysisView {analysis} bind:setup {controls} {range} {ready} {onLoadConfiguration} />
+    {#if FleetAnalysisView}
+      <FleetAnalysisView {analysis} bind:setup {controls} {range} {ready} {onLoadConfiguration} />
+    {:else if fleetFailed}
+      <p role="alert" class="text-sm text-red-700 dark:text-red-400">
+        The results didn’t load. Reload the page to try again.
+      </p>
+    {:else}
+      <p class="text-sm text-slate-500 dark:text-slate-400">Loading the results…</p>
+    {/if}
   {:else}
     <p class="text-slate-600 dark:text-slate-300">
       Give me some files or output and I’ll tell you whether anything changes.
