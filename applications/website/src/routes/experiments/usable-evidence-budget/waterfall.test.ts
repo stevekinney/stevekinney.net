@@ -99,6 +99,21 @@ describe('layoutWaterfall', () => {
     expect(chart.columns.at(-1)).toMatchObject({ high: 810_000, low: 0, over: false });
   });
 
+  it('gives every column a hit area that spans the whole plot, so a thin bar is easy to hit', () => {
+    const chart = layoutWaterfall(preset('lean'), null, null);
+    const [first, second] = chart.columns;
+
+    for (const column of chart.columns) {
+      expect(column.hit.height).toBeGreaterThan(column.rect.height - 0.001);
+      expect(column.hit.x).toBeLessThanOrEqual(column.rect.x);
+      expect(column.hit.x + column.hit.width).toBeGreaterThanOrEqual(
+        column.rect.x + column.rect.width,
+      );
+    }
+    expect(first.hit.x + first.hit.width).toBeCloseTo(second.hit.x, 5);
+    expect(second.hit.y).toBe(first.hit.y);
+  });
+
   it('draws bars in proportion to their values', () => {
     const chart = layoutWaterfall(preset('lean'), null, null);
     const capacity = chart.columns[0].rect;

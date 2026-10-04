@@ -106,6 +106,8 @@ export type Column = {
   high: number;
   low: number;
   rect: Rect;
+  /** The whole column, from the top of the plot to the bottom, so a thin bar is still easy to hit. */
+  hit: Rect;
   center: number;
   /** The usable bar, when nothing is left. */
   over: boolean;
@@ -219,6 +221,12 @@ export const layoutWaterfall = (
       high: span.high,
       low: span.low,
       rect,
+      hit: {
+        x: plot.left + slot * index,
+        y: plot.top,
+        width: slot,
+        height: plot.bottom - plot.top,
+      },
       center: rect.x + barWidth / 2,
       over: span.key === 'usable' && usable(scenario) <= 0,
     };
