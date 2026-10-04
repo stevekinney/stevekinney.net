@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import type { Component } from 'svelte';
 
+  import { replaceState } from '$app/navigation';
   import SEO from '$lib/components/seo.svelte';
   import { url } from '$lib/metadata';
   import { buildBreadcrumbSchema } from '$lib/structured-data';
@@ -189,8 +190,9 @@
     });
 
     try {
-      // The hash is the same page, not a route, so there's nothing for the router to resolve.
-      window.history.replaceState(window.history.state, '', `#${query}`);
+      // SvelteKit's own replaceState, because writing to window.history directly
+      // conflicts with its router.
+      replaceState(`#${query}`, {});
     } catch {
       // The address bar is a convenience. The page works without it.
     }

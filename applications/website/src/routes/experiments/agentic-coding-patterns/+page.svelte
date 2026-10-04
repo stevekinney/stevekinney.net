@@ -195,13 +195,9 @@
     const { search: query, hash } = serializeUrlState(explorer);
     const address = `${resolve('/experiments/agentic-coding-patterns')}${query}${hash}`;
 
-    // The rule only recognizes a bare `resolve()` call, so it can't see that the
-    // address begins with one. The query string and fragment are the point here.
     if (mode === 'push') {
-      // eslint-disable-next-line svelte/no-navigation-without-resolve
       pushState(address, {});
     } else {
-      // eslint-disable-next-line svelte/no-navigation-without-resolve
       replaceState(address, {});
     }
   };
