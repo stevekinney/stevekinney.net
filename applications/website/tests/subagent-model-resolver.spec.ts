@@ -495,7 +495,7 @@ test.describe('check your own setup', () => {
 
     await page.getByLabel('Paste the output here', { exact: true }).fill('hello there');
 
-    await expect(page.getByText('I couldn’t read any line of that.')).toBeVisible();
+    await expect(page.getByText('None of those lines could be read.')).toBeVisible();
     await expect(page.getByText('CLAUDE_CODE_SUBAGENT_MODEL=haiku').first()).toBeVisible();
   });
 

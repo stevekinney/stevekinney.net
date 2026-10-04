@@ -4,6 +4,7 @@
   import type { Snippet } from 'svelte';
 
   import Button from '$lib/components/button';
+  import { merge } from '$merge';
 
   import { collectDroppedFiles, toSourceFiles } from './dropped-files';
   import type { FolderOptions, SourceFile } from './dropped-files';
@@ -34,6 +35,8 @@
     folderButtonLabel?: string;
     /** Guidance below the controls, such as where these files live on disk. */
     children?: Snippet;
+    /** Extra classes for the zone, such as `h-full` to match the height of a column beside it. */
+    class?: string;
   };
 
   const {
@@ -51,6 +54,7 @@
     enterFolder,
     keepFile,
     children,
+    class: className = '',
   }: Props = $props();
 
   const id = $props.id();
@@ -154,9 +158,13 @@
   }}
   ondragover={handleZoneDragOver}
   ondrop={handleZoneDrop}
-  class="relative flex h-full flex-col justify-center gap-4 rounded-lg border-2 border-dashed p-6 transition-colors {dragging
-    ? 'border-primary-500 bg-primary-50 dark:border-primary-400 dark:bg-primary-950/40'
-    : 'border-slate-300 dark:border-slate-600'}"
+  class={merge(
+    'relative flex flex-col justify-center gap-4 rounded-lg border-2 border-dashed p-6 transition-colors',
+    dragging
+      ? 'border-primary-500 bg-primary-50 dark:border-primary-400 dark:bg-primary-950/40'
+      : 'border-slate-300 dark:border-slate-600',
+    className,
+  )}
 >
   <div class="flex items-start gap-3">
     <FileUp

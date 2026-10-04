@@ -17,6 +17,7 @@
 
 <FileDropZone
   title="Drop Claude Code or Codex session files here"
+  class="h-full"
   draggingTitle="Drop to read the session"
   accept=".jsonl"
   keepFile={isSessionFile}

@@ -175,38 +175,35 @@
           Uploading catches agents with no <InlineCode text="`model:`" /> line, which a grep can’t see.
         </p>
       </div>
-      <!-- The zone fills its parent's height, so it gets a parent with no height of its own. -->
-      <div>
-        <FileDropZone
-          title="Drop your agents folders and settings files"
-          draggingTitle="Drop to read them"
-          accept=".md,.json"
-          folders
-          {keepFile}
-          {enterFolder}
-          busy={reading}
-          progress="Reading files…"
-          status={message}
-          folderButtonLabel="Choose a folder"
-          onFiles={loadFiles}
-        >
-          <ul class="space-y-1">
-            <li>
-              Drop <InlineCode text="`~/.claude/agents`" /> and your project’s <InlineCode
-                text="`.claude/agents`"
-              />, plus <InlineCode text="`settings.json`" /> and <InlineCode
-                text="`settings.local.json`"
-              />.
-            </li>
-            <li>Those folders are hidden. In the macOS file picker, press ⌘⇧. to show them.</li>
-            <li>Drop one folder at a time if you want to set each one’s scope.</li>
-          </ul>
-        </FileDropZone>
-      </div>
+      <FileDropZone
+        title="Drop your agents folders and settings files"
+        draggingTitle="Drop to read them"
+        accept=".md,.json"
+        folders
+        {keepFile}
+        {enterFolder}
+        busy={reading}
+        progress="Reading files…"
+        status={message}
+        folderButtonLabel="Choose a folder"
+        onFiles={loadFiles}
+      >
+        <ul class="space-y-1">
+          <li>
+            Drop <InlineCode text="`~/.claude/agents`" /> and your project’s <InlineCode
+              text="`.claude/agents`"
+            />, plus <InlineCode text="`settings.json`" /> and <InlineCode
+              text="`settings.local.json`"
+            />.
+          </li>
+          <li>Those folders are hidden. In the macOS file picker, press ⌘⇧. to show them.</li>
+          <li>Drop one folder at a time if you want to set each one’s scope.</li>
+        </ul>
+      </FileDropZone>
 
       {#if sources.length > 0 || setup.settingsFiles.length > 0}
         <div class="space-y-3" data-testid="sources">
-          <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-200">What I read</h4>
+          <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-200">What was read</h4>
           <p class={hintClasses}>
             A browser can’t tell your home folder from a project folder, so the scopes below are
             guesses. Correct any that are wrong.
@@ -350,7 +347,7 @@
             class="{fieldClasses} font-mono text-sm"></textarea>
           <p id="shell-environment-hint" class={hintClasses}>
             Lines like <InlineCode text="`CLAUDE_CODE_SUBAGENT_MODEL=haiku`" />. The shell overrides
-            settings files, and I’ll list that as an assumption.
+            settings files, and that’s listed as an assumption.
           </p>
         </div>
         <div class="space-y-1.5">
@@ -408,7 +405,7 @@
       {#if pastedSomething}
         {#if pasted.understood === 0}
           <div class="space-y-2 text-sm text-amber-900 dark:text-amber-200" role="status">
-            <p>I couldn’t read any line of that. These are the lines I expect:</p>
+            <p>None of those lines could be read. Lines like these work:</p>
             <pre class="overflow-x-auto rounded-md bg-slate-900 p-3 text-xs text-slate-100"><code
                 >{exampleLines.join('\n')}</code
               ></pre>
@@ -417,7 +414,7 @@
           <p class="text-sm text-slate-600 dark:text-slate-300" role="status">
             Read {pasted.understood}
             {pasted.understood === 1 ? 'line' : 'lines'}{pasted.ignored > 0
-              ? ` and skipped ${pasted.ignored} I didn’t recognize`
+              ? ` and skipped ${pasted.ignored} that weren’t recognized`
               : ''}.
           </p>
         {/if}
@@ -442,7 +439,7 @@
     {/if}
   {:else}
     <p class="text-slate-600 dark:text-slate-300">
-      Give me some files or output and I’ll tell you whether anything changes.
+      Add files or paste command output to see whether anything changes.
     </p>
   {/if}
 </div>
