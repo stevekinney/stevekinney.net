@@ -85,6 +85,13 @@ describe('nudgeApart', () => {
     expect(Math.min(...gaps(result))).toBeGreaterThanOrEqual(15);
   });
 
+  it('keeps labels inside the top bound when pushing them apart', () => {
+    const result = nudgeApart([0, 1, 2], 15, 0, 100);
+
+    expect(Math.min(...result)).toBeGreaterThanOrEqual(0);
+    expect(Math.min(...gaps(result))).toBeGreaterThanOrEqual(15);
+  });
+
   it('pulls a label inside the bounds', () => {
     expect(nudgeApart([-20], 15, 0, 100)).toEqual([0]);
     expect(nudgeApart([220], 15, 0, 100)).toEqual([100]);

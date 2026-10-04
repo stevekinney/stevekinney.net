@@ -91,6 +91,20 @@ test.describe('the defaults', () => {
     ).toBeVisible();
   });
 
+  test('prints a share inside each segment of the bar that is 12% or more', async ({ page }) => {
+    await open(page);
+
+    const bar = page.getByRole('img', { name: /up-front compaction cost/ });
+    await expect(bar).toContainText('19%');
+    await expect(bar).toContainText('48%');
+    await expect(bar).toContainText('33%');
+
+    // Shrinking the summary makes the generate slice small enough to go unlabeled.
+    await field(page, 'summary-size').fill('1%');
+    await expect(bar).not.toContainText('48%');
+    await expect(bar).toContainText('%');
+  });
+
   test('totals $11.12, $6.70, and $6.12 after 30 turns, and names the best in words', async ({
     page,
   }) => {
@@ -249,6 +263,17 @@ test.describe('the scenario', () => {
     await field(page, 'reread-after-clear').fill('0');
 
     await expect(clearTile(page)).toContainText('Clearing costs $0.15 up front');
+  });
+
+  test('draws no marker at turn zero when clearing costs nothing up front', async ({ page }) => {
+    await open(page);
+    await page.getByText('Advanced').click();
+    await field(page, 'baseline-prefix').fill('0');
+    await field(page, 'reread-after-clear').fill('0');
+
+    await expect(clearTile(page)).toContainText('Clearing costs $0.00 up front');
+    await expect(page.getByText('Clearing is cheaper right away.')).toBeVisible();
+    await expect(chart(page).locator('svg text', { hasText: /^turn 0$/ })).toHaveCount(0);
   });
 
   test('puts a five-minute TTL and a cold cache together without breaking', async ({ page }) => {

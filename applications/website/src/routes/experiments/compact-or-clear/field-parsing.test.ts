@@ -62,6 +62,12 @@ describe('parseSummaryField', () => {
     expect(parseSummaryField('13,000', 312_000)).toBe(4.2);
   });
 
+  it('treats a number just over 100 as tokens, not a percentage', () => {
+    expect(parseSummaryField('100', 400_000)).toBe(90);
+    expect(parseSummaryField('500', 400_000)).toBe(1);
+    expect(parseSummaryField('101', 400_000)).toBe(1);
+  });
+
   it('reads back its own display, such as 20K (5%)', () => {
     expect(parseSummaryField('20K (5%)', 400_000)).toBe(5);
     expect(parseSummaryField('13K (4.1%)', 312_000)).toBe(4.1);
