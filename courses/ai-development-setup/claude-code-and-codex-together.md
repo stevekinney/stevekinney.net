@@ -15,13 +15,23 @@ There are two routes.
 - **The do-it-yourself way**: `codex exec`, which defaults to a read-only sandbox.
 
 ```bash
-codex exec --ephemeral -o /tmp/verdict.md "Is the retry path in src/queue.ts safe?" < /dev/null
+verdict_file=$(mktemp) || exit 1
+trap 'rm -f "$verdict_file"' EXIT
+if ! codex exec --ephemeral -o "$verdict_file" "Is the retry path in src/queue.ts safe?" < /dev/null; then
+  echo "Review process failed" >&2
+  exit 1
+fi
+if [ ! -s "$verdict_file" ]; then
+  echo "Review produced no verdict" >&2
+  exit 1
+fi
+cat "$verdict_file"
 ```
 
 That runs one question with no saved session (`--ephemeral`), writes only the final answer to a file (`-o`), and closes standard input. A few habits make it dependable:
 
 - **Read the `-o` file, not the stream**: It holds just the final message. Add `--output-schema schema.json` when code needs to act on the answer.
-- **Close stdin and check the file**: `codex exec` reads extra input from stdin and appends it to your prompt. When another agent or script launched it, stdin may never close, so Codex can wait forever, or exit `0` having done no work. Redirect stdin from `/dev/null`, then treat a missing `-o` file as a failure, whatever the exit code. A reviewer that produced nothing hasn't approved anything. [Reviewing Agent Work](reviewing-agent-work.md) covers using agents as reviewers.
+- **Close stdin and check the file**: `codex exec` reads extra input from stdin and appends it to your prompt. When another agent or script launched it, stdin may never close, so Codex can wait forever, or exit `0` having done no work. Redirect stdin from `/dev/null`, use a fresh `mktemp` output path for every invocation, and require both a successful process and a new nonempty verdict. A failed call must not reuse an earlier verdict. A reviewer that produced nothing hasn't approved anything. [Reviewing Agent Work](reviewing-agent-work.md) covers using agents as reviewers.
 - **Contain it**: Call it from a [subagent](subagents.md) (a helper agent with its own fresh context) or a [skill](skills.md) that runs with `context: fork` (a plain skill loads into your current conversation, so it won't keep Codex's output out). Either way, Codex's output stays out of your main context.
 
 ## Calling Claude Code from Codex

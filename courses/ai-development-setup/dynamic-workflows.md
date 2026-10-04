@@ -48,7 +48,7 @@ return findings;
 
 Notice what _isn't_ here. There's no instruction telling Claude to remember each finding or keep count. The script holds all of that, and the `return` is the only thing Claude sees.
 
-One gap: there's no handling of failure. `findings.length` counts failed items, so that log line can overstate how many routes were reviewed. If the first call fails, the next line throws. The section on the quiet `null` below explains why.
+One gap: there's no handling of failure. `findings.length` counts failed items, so that log line can overstate how many routes were reviewed. If the first call fails, the next line throws. The section on errors and null results below explains why.
 
 ## A bigger example
 
@@ -92,9 +92,11 @@ A few details are doing real work in that script:
 
 `parallel()` is a barrier. It waits for every function in its list before it returns, so nothing after it starts until the slowest one finishes. Only reach for it when the next step genuinely needs every result at once, like deduplicating findings across all the reviewers.
 
-## The quiet null
+## Errors and null results
 
-Here's the part that bites people. If a subagent can't produce a valid object after five attempts, that item quietly becomes `null`. The run doesn't error. It keeps going with a hole in its results.
+The [workflow documentation](https://code.claude.com/docs/en/workflows#what-the-saved-script-looks-like) distinguishes two failures. If structured output still fails schema validation after five attempts, `agent()` throws an error containing the last validation failure. Catch it to record a failed item, or let it stop the workflow. Don't count that item as reviewed.
+
+If an agent is stopped mid-run or encounters an unrecoverable API error, `agent()` instead resolves to `null`. `pipeline()` retains that entry in its results. Check for both exceptions and null results before reporting success.
 
 Hold that thought. It's the reason [Running Workflows](running-workflows.md) spends a while on failure modes, and why a run that finished isn't the same as a run that worked.
 

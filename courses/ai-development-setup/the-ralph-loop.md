@@ -39,7 +39,7 @@ Make sure these exist before you press go:
 
 Under the one-liner, a real loop has five parts:
 
-- **`measure()`**: Runs the checks and returns facts, like error counts, coverage, and open issues, plus a **score**: one number, like "type errors remaining," that tells you whether things got better. The checks in this step are your **oracle**: the thing that decides whether the work is done. A good oracle is one the agent can't edit or argue with.
+- **`measure()`**: Runs the checks and returns facts, like error counts, coverage, and open issues, plus a **score**: one number normalized so higher is better, like the negative of "type errors remaining." Going from five errors (score `-5`) to two (score `-2`) improves the score; going from five to six lowers it. The checks in this step are your **oracle**: the thing that decides whether the work is done. A good oracle is one the agent can't edit or argue with.
 - **`pick()`**: Chooses one task from those facts.
 - **`run()`**: Calls the agent. This is the _only_ part the agent controls.
 - **`accept()`**: Keeps the work, or rolls it back with `git reset`. It keeps the work only if nothing on your veto list fired (for example, the agent touched the test files), the tests and build still pass, and the score didn't drop.

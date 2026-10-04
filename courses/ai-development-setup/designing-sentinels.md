@@ -19,7 +19,7 @@ A [sentinel](sentinels.md) file is a tiny piece of infrastructure, and tiny infr
 
 If the agent can write its own approval, the gate is an honor system. No clever filename changes that. The **writer** is whatever creates the marker: a hook, a CI job, or your own script. Move the writer out of the agent's reach, in layers:
 
-- **Deny `Edit(/.agent-state/**)` in permissions**: On its own, a path deny rule is friction, not a boundary. See [Permissions](https://code.claude.com/docs/en/permissions).
+- **Deny `Edit(/.agent-state/**)` in project permissions**: Put this in `.claude/settings.json` or `.claude/settings.local.json`, and start the session at the project or worktree root. The leading slash anchors to the settings source: in user settings it would protect `~/.claude/.agent-state`, not the project marker. Verify a direct file-tool write is denied in every worktree. On its own, a path deny rule is friction, not a boundary. See the [Read and Edit path rules](https://code.claude.com/docs/en/permissions#read-and-edit).
 - **Add a sandbox `denyWrite` for the directory**: A sandbox is operating-system-level isolation for the agent's shell commands. This rule only covers Bash and PowerShell commands and their children, not `Edit` or `Write`.
 - **Set `allowUnsandboxedCommands: false`**: Otherwise, a denied command can just be retried outside the sandbox.
 - **Put the writer outside the sandbox**: That, plus the three above, is an actual boundary.

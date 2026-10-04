@@ -27,7 +27,7 @@ It cuts down on prompt fatigue. It doesn't stop a determined payload. Use it for
 
 ## Vectors you might not have considered
 
-- **Deferred execution**: Can the agent write anything that something _outside_ the sandbox will run later? `core.fsmonitor` in a cloned repository's `.git/config` is a command that Git runs, outside the sandbox, with no prompt. The blunt fix: `git config --global core.fsmonitor false`.
+- **Deferred execution**: Can the agent write anything that something _outside_ the sandbox will run later? `core.fsmonitor` in a cloned repository's `.git/config` is a command that Git runs, outside the sandbox, with no prompt. Force it off for each Git command that handles the untrusted repository, for example `git -c core.fsmonitor=false status`. Inspect the setting with `git -c core.fsmonitor=false config --show-origin --get-all core.fsmonitor`, and prevent the agent from changing the repository's configuration. A global `false` is only a default: [Git reads local configuration later](https://git-scm.com/docs/git-config#FILES), so a local hook path can override it.
 - **The allowlist is the exfiltration channel**: `gist.github.com`, `camo.githubusercontent.com`, and `huggingface.co` are all perfectly good places to put stolen data. If a domain accepts uploads and you've allowed it, it's a way out.
 - **`Bash(curl *)` is not a network boundary**: There are a _lot_ of ways to make an HTTP request.
 - **Tool output is input**: An MCP response can carry a prompt injection just as easily as a web page can. Tool poisoning is real, and so is the **rug pull**: a server that shows you a clean tool description when you install it and a poisoned one later.
@@ -37,7 +37,7 @@ It cuts down on prompt fatigue. It doesn't stop a determined payload. Use it for
 
 - **Default-deny network egress**: Block outbound traffic (egress) unless it's on a list. That cuts the "way out" leg.
 - **Whole-process isolation**: A container, or better, a virtual machine, with the credentials outside of it. That cuts the private-data leg, since there's nothing valuable inside to steal. Pair it with locked-down networking and it cuts the way-out leg too.
-- **A reader/doer split**: A reader [subagent](subagents.md) with `tools: Read, Glob` processes the untrusted content and returns JSON against a strict schema (`additionalProperties: false`). The agent that _acts_ never sees the raw payload, so the acting agent's untrusted-content leg is cut. Injected text can fill in a value. It can't add an action.
+- **A reader/doer split**: A reader [subagent](subagents.md) with `tools: Read, Glob` processes the untrusted content. To cut the acting agent's untrusted-content leg, reduce the handoff to closed values, such as a fixed enum of classifications, and let deterministic code map those values to permitted actions. `additionalProperties: false` only restricts keys. An arbitrary string summary can still carry injected instructions, so schema-valid JSON alone is not a security boundary. Keep that text away from the acting agent, and independently authorize any consequential action.
 - **Plan before you read**: Lock in the plan before any untrusted content enters the context. That narrows the untrusted-content leg: the content arrives after the plan is fixed, so it has less to redirect.
 
 ## Secrets

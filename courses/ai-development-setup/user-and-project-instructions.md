@@ -78,6 +78,6 @@ Instruction files are Markdown the model reads. _Settings_ files are different: 
 The [Claude Code settings documentation](https://code.claude.com/docs/en/settings) lists where each file is read from.
 
 > [!TIP] Repository-scoped skills without committing them
-> If you're working in a shared repository and want your own repository-scoped skills or configuration, add them to `.git/info/exclude`. It works like `.gitignore`, except the file lives inside your local `.git` directory, so it's never checked in and nobody else sees it.
+> If you're working in a shared repository and want your own repository-scoped skills or configuration, add their patterns to the file located by `git rev-parse --git-path info/exclude`. It works like `.gitignore`, but isn't checked in. Ask Git for the path: in a linked worktree, `.git` is a pointer file, so constructing `.git/info/exclude` fails. Linked worktrees share the repository's exclude file.
 
 The best instruction file is the shortest one that still prevents the mistakes you keep seeing.

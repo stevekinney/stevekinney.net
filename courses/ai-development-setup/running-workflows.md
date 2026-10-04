@@ -96,7 +96,7 @@ Because an agent can't ask or pause, anything that needs a human decision belong
 
 ### The `.filter(Boolean)` caveat
 
-Remember that a subagent that fails five times becomes `null`. The run finishes either way. The `null` just sits in the results, where you can see it and count it.
+A stopped subagent or an unrecoverable API error produces `null`, which the pipeline retains in its results. Exhausting the five structured-output validation attempts instead throws an error with the last validation failure. As the [workflow reference](https://code.claude.com/docs/en/workflows#what-the-saved-script-looks-like) explains, these need separate handling: catch validation errors if you want to record individual failures and continue, and count null results before reporting success.
 
 Writing `.filter(Boolean)` deletes those entries, so the run looks clean. Whether that's a problem depends on intent. It's fine when losing one item doesn't change what the result means, like one of several independent reviewers. It's a failure when the missing item was the one thing you needed. Count how many items the filter removed, and report it.
 

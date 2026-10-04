@@ -20,7 +20,7 @@ Only `name` and `description` are required. The [subagent documentation](https:/
 
 ## Fields
 
-- `name`: Must be unique. It can't contain `:` or start with `-`. It's derived from the filename if you omit it.
+- `name`: Must be unique. It can't contain `:` or start with `-`. Project and user agent files must declare it; without it, Claude Code treats the file as adjacent documentation and skips registration. Only plugin agents fall back to the filename.
 - `description`: Tells Claude when to delegate to this agent. You need it for automatic delegation, which means it works like a routing rule.
 - `tools`: An allowlist, as a comma-separated string or a YAML list. Listing `Agent` (the tool that starts subagents) lets the agent delegate. Writing `Agent(researcher, analyst)` limits it to those agents, but only when the agent is running the whole session with `--agent`. In an ordinary subagent definition, the parenthesized list is ignored.
 - `disallowedTools`: Removes tools from the inherited set. A name pattern like `mcp__*` (every tool an MCP server supplies) works. A pattern with a specifier, like `Bash(git push *)`, removes the _whole_ tool, not just that command. For command-level blocks, use a deny rule in your settings instead.

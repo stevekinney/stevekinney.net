@@ -71,25 +71,32 @@ Here's a minimal one. It lives under the `hooks` key of `.claude/settings.json`,
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "hooks": [{ "type": "command", "command": ".claude/hooks/block-rm.sh", "timeout": 10 }]
+        "hooks": [{ "type": "command", "command": ".claude/hooks/allow-lint.sh", "timeout": 10 }]
       }
     ]
   }
 }
 ```
 
-And here's the script, which blocks `rm` commands and leaves everything else to the normal permission flow:
+Here's a deliberately narrow script: it accepts only the exact command `bun run lint`. Everything else, including malformed event JSON or a missing `jq`, blocks with exit `2`.
 
 ```bash
 #!/bin/bash
-input=$(cat)
-command=$(jq -r '.tool_input.command' <<< "$input")
-if [[ "$command" == rm* ]]; then
-  echo "Blocked: rm commands are not allowed" >&2
+if ! jq -e -s '
+  length == 1 and
+  (.[0] | type == "object" and
+    .tool_name == "Bash" and
+    .tool_input.command == "bun run lint")
+' >/dev/null; then
+  echo "Blocked: expected one Bash event for exactly bun run lint" >&2
   exit 2
 fi
 exit 0
 ```
+
+This compares the whole command instead of trying to parse shell syntax. `bun run lint && rm -rf x`, leading whitespace, and wrappers all fail the comparison. The lint script and the hook must themselves be trusted: an exact command still runs whatever that script contains. Before installing it, feed the hook valid and malformed events and verify both exits.
+
+For ordinary command restrictions, use Claude Code's documented [compound-command matching](https://code.claude.com/docs/en/permissions#compound-commands) instead of a homemade prefix test. A deny rule for `Bash(rm *)` catches `cd /tmp && rm -rf x`, but alternate invocations such as `/bin/rm` still need their own rules. Use sandbox filesystem controls when the boundary is what can be deleted, regardless of command spelling.
 
 Hooks can live in a bunch of places. Hooks from all of them are merged, and every matching hook runs, in parallel, with no guaranteed order:
 
