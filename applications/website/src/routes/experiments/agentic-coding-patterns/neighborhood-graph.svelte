@@ -22,6 +22,14 @@
   const showAllLabels = $derived(neighborIds.length <= 14);
 
   let hovered = $state<string | null>(null);
+  let region: HTMLDivElement | undefined = $state();
+
+  // On a narrow screen the graph is wider than its region and would open
+  // scrolled to its left edge, cutting off the entry at its center.
+  $effect(() => {
+    void entry.id;
+    if (region) region.scrollLeft = (region.scrollWidth - region.clientWidth) / 2;
+  });
 
   const shorten = (name: string): string => (name.length > 24 ? `${name.slice(0, 23)}…` : name);
 
@@ -31,6 +39,7 @@
 
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
+  bind:this={region}
   class="focus-visible:outline-primary-600 relative overflow-x-auto rounded-lg border border-slate-200 focus-visible:outline-2 dark:border-slate-700"
   tabindex="0"
   role="region"

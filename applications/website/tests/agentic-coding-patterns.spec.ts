@@ -817,28 +817,55 @@ test.describe('your own notes', () => {
 test.describe('on a phone', () => {
   test.use({ viewport: { width: 360, height: 800 } });
 
-  test('never scrolls sideways in any view', async ({ page }) => {
+  for (const colorScheme of ['light', 'dark'] as const) {
+    test(`never scrolls sideways in any view in ${colorScheme} mode`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme });
+      await openPatterns(page);
+      expect(await horizontalOverflow(page)).toBe(0);
+
+      await openEntry(page, 'Agent Teams');
+      expect(await horizontalOverflow(page)).toBe(0);
+      await page.getByRole('button', { name: 'Back to the list' }).click();
+
+      await page.getByRole('checkbox', { name: 'Compare Agent Teams' }).check();
+      await page.getByRole('checkbox', { name: 'Compare Agent Handoff' }).check();
+      await page.getByRole('button', { name: 'Shortlist Agent Teams' }).click();
+      await page.getByRole('button', { name: 'Open comparison' }).click();
+      await expect(page.getByRole('heading', { level: 2, name: 'Compare patterns' })).toBeVisible();
+      expect(await horizontalOverflow(page)).toBe(0);
+
+      await page.getByRole('tab', { name: 'Shortlist (1)' }).click();
+      await expect(page.getByRole('heading', { level: 2, name: 'Shortlist' })).toBeVisible();
+      expect(await horizontalOverflow(page)).toBe(0);
+
+      await page.getByRole('tab', { name: 'Graph' }).click();
+      await expect(page.locator('svg[aria-label^="Relationship graph"] a')).toHaveCount(118);
+      expect(await horizontalOverflow(page)).toBe(0);
+    });
+  }
+
+  test('opens the neighborhood graph centered on the entry', async ({ page }) => {
     await openPatterns(page);
-    expect(await horizontalOverflow(page)).toBe(0);
-
     await openEntry(page, 'Agent Teams');
-    expect(await horizontalOverflow(page)).toBe(0);
-    await page.getByRole('button', { name: 'Back to the list' }).click();
 
-    await page.getByRole('checkbox', { name: 'Compare Agent Teams' }).check();
-    await page.getByRole('checkbox', { name: 'Compare Agent Handoff' }).check();
-    await page.getByRole('button', { name: 'Shortlist Agent Teams' }).click();
-    await page.getByRole('button', { name: 'Open comparison' }).click();
-    await expect(page.getByRole('heading', { level: 2, name: 'Compare patterns' })).toBeVisible();
-    expect(await horizontalOverflow(page)).toBe(0);
+    // The graph is wider than a phone, so its region scrolls. It used to open
+    // at its left edge, which cut the entry's own label off at "Agent Tea".
+    const region = page.getByRole('region', { name: 'Neighborhood graph of Agent Teams' });
+    const label = region.getByText('Agent Teams', { exact: true });
 
-    await page.getByRole('tab', { name: 'Shortlist (1)' }).click();
-    await expect(page.getByRole('heading', { level: 2, name: 'Shortlist' })).toBeVisible();
-    expect(await horizontalOverflow(page)).toBe(0);
+    await expect
+      .poll(async () => {
+        const [regionBox, labelBox] = await Promise.all([
+          region.boundingBox(),
+          label.boundingBox(),
+        ]);
+        if (!regionBox || !labelBox) return false;
 
-    await page.getByRole('tab', { name: 'Graph' }).click();
-    await expect(page.locator('svg[aria-label^="Relationship graph"] a')).toHaveCount(118);
-    expect(await horizontalOverflow(page)).toBe(0);
+        return (
+          labelBox.x >= regionBox.x && labelBox.x + labelBox.width <= regionBox.x + regionBox.width
+        );
+      })
+      .toBe(true);
   });
 
   test('keeps the heat grid and the diagnostics inside their own boxes', async ({ page }) => {
