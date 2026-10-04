@@ -34,7 +34,9 @@ export const parseDecimalField = (text: string, range: NumberRange): number | nu
  * a `k` or `m`, is a token count, which becomes a percentage of the context.
  */
 export const parseSummaryField = (text: string, contextNow: number): number | null => {
-  const normalized = text
+  // The box shows `20K (5%)`, so that has to read back as 5%.
+  const shown = /\(([^)]*)\)\s*$/.exec(text.trim());
+  const normalized = (shown ? shown[1] : text)
     .trim()
     .toLowerCase()
     .replace(/[\s,_]/g, '');

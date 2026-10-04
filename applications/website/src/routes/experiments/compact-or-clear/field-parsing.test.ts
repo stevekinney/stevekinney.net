@@ -62,6 +62,11 @@ describe('parseSummaryField', () => {
     expect(parseSummaryField('13,000', 312_000)).toBe(4.2);
   });
 
+  it('reads back its own display, such as 20K (5%)', () => {
+    expect(parseSummaryField('20K (5%)', 400_000)).toBe(5);
+    expect(parseSummaryField('13K (4.1%)', 312_000)).toBe(4.1);
+  });
+
   it('clamps to 1 through 90', () => {
     expect(parseSummaryField('0', 400_000)).toBe(1);
     expect(parseSummaryField('150%', 400_000)).toBe(90);

@@ -1,6 +1,8 @@
 import { defaultModels, ratesFor } from './pricing';
 import type { CacheTtl, ModelPrice } from './pricing';
+import { summaryTokensFor } from './projection';
 import type { ProjectionInputs } from './projection';
+import { formatTokens } from './format-tokens';
 
 /** The one state object the whole page is derived from. */
 export type Scenario = {
@@ -93,3 +95,25 @@ export const toProjectionInputs = (
 });
 
 export const ttlLabel = (ttl: CacheTtl): string => (ttl === '1h' ? '1-hour' : '5-minute');
+
+/**
+ * A summary larger than what you'd re-read after a clear, or larger than the
+ * whole context, is allowed. It's worth a note, because it changes what
+ * compacting is buying.
+ */
+export const summaryNote = (
+  contextNow: number,
+  summaryPercent: number,
+  reread: number,
+): string | null => {
+  const summary = summaryTokensFor(contextNow, summaryPercent);
+
+  if (summary >= contextNow) {
+    return `A ${formatTokens(summary)} summary is as large as your context, so compacting shrinks nothing.`;
+  }
+  if (summary > reread) {
+    return `A ${formatTokens(summary)} summary is larger than the ${formatTokens(reread)} you’d re-read after a clear.`;
+  }
+
+  return null;
+};
