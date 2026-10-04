@@ -1,12 +1,11 @@
+import { dashboardMetadata } from '$lib/dashboard-metadata';
 import { getCourseIndex, getGeneratedContent } from '$lib/server/content';
 import type { PageServerLoad } from './$types';
 import type { DashboardCourseSummary } from './dashboard-page-types';
 
 export const prerender = true;
 
-const title = 'Dashboard';
-const description =
-  'A live look at my GitHub activity, npm downloads, and course updates over the past year, recomputed at most once a day.';
+const { title, description } = dashboardMetadata;
 
 /** Counts lessons per course by joining the flat lesson index on `courseSlug`. */
 const countLessonsByCourse = (): Map<string, number> => {
