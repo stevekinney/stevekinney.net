@@ -23,7 +23,7 @@ export const baseConfiguration: ResolverConfiguration = {
 
 /** The notice that replaces a preset's once any control changes. */
 export const customScenarioNotice =
-  'Custom scenario — pick a preset to get back to a worked example.';
+  'Custom scenario—pick a preset to get back to a worked example.';
 
 export const presets: Preset[] = [
   {

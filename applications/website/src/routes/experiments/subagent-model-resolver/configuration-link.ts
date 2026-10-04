@@ -26,7 +26,7 @@ const readSetting = (
 };
 
 /**
- * Writes the resolver's configuration, and nothing else, as query parameters.
+ * Writes the resolver's configuration, and nothing else, as `key=value` pairs for the URL's hash, which never reaches a server.
  * Uploaded and pasted content never goes in a link.
  */
 export const encodeConfiguration = ({ configuration, presetId, range }: SharedState): string => {

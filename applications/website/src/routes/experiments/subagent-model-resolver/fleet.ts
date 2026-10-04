@@ -167,7 +167,7 @@ const describeDeclared = (definition: AgentDefinition): string => {
   return definition.declared === 'unset' ? 'not set' : definition.rawModel;
 };
 
-const isAgentFile = (path: string): boolean => {
+export const isAgentFile = (path: string): boolean => {
   if (!/\.md$/i.test(path)) return false;
   const segments = pathSegments(path);
 
@@ -620,7 +620,7 @@ export const analyzeFleet = (input: FleetInput): FleetAnalysis => {
   let verdict: Verdict;
 
   if (context.force && forceSupported) {
-    verdict = { id: 'force-on', text: 'FORCE is on — every `model:` field is being ignored' };
+    verdict = { id: 'force-on', text: 'FORCE is on—every `model:` field is being ignored' };
   } else if (context.force) {
     verdict = { id: 'force-inert', text: 'FORCE is set but does nothing on this version' };
   } else if (context.environmentModel === 'unset') {
