@@ -507,6 +507,23 @@ test.describe('acceptance 6: will my evidence fit', () => {
     await expect(cut).toContainText('Or move history from 600K to 573K.');
   });
 
+  test('suggests removing the largest included file, not the first or the last', async ({
+    page,
+  }) => {
+    await openEvidenceCheck(page);
+    await preset(page, 'Deep into a long session').click();
+    await fileInput(page).setInputFiles([
+      logFile('medium.log', 400_000),
+      logFile('huge.log', 500_000),
+      logFile('small.log', 40_000),
+    ]);
+
+    await expect(page.getByTestId('hero-evidence')).toContainText('over by 62K');
+    const cut = page.getByTestId('what-to-cut');
+    await expect(cut).toContainText('Remove 1 file to fit: huge.log (125K).');
+    await expect(cut).toContainText('That leaves 110K of 173K.');
+  });
+
   test('suggests the tool-definition move from the specification’s example', async ({ page }) => {
     await openEvidenceCheck(page);
     await preset(page, 'MCP-heavy, tool search off').click();
