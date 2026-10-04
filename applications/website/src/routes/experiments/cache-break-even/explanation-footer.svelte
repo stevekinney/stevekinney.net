@@ -22,11 +22,17 @@
       Changing the model and changing the effort level both reprocess everything already in context.
       Either one costs <code class="font-mono text-[0.9em]"
         >N × destination input price × write multiplier</code
-      >. Right now that is {evaluation.contextTokens.toLocaleString('en-US')} × ${formatPriceNumber(
-        evaluation.to.input,
-      )} × {multiplier} ÷ 1,000,000 = {formatPlainDollars(evaluation.cost)}. The multiplier is 2× on
-      a 1-hour TTL and 1.25× on a 5-minute one, because the coding tool caches automatically. You’re
-      on the {ttlLabel(evaluation.ttl)} TTL.
+      >.
+      {#if evaluation.unchanged}
+        Right now your destination matches your starting point, so nothing is being re-cached and
+        the cost is $0.00.
+      {:else}
+        Right now that is {evaluation.contextTokens.toLocaleString('en-US')} × ${formatPriceNumber(
+          evaluation.to.input,
+        )} × {multiplier} ÷ 1,000,000 = {formatPlainDollars(evaluation.cost)}.
+      {/if}
+      The multiplier is 2× on a 1-hour TTL and 1.25× on a 5-minute one, because the coding tool caches
+      automatically. You’re on the {ttlLabel(evaluation.ttl)} TTL.
     </p>
   </div>
 
@@ -35,14 +41,18 @@
     <p class="text-slate-700 dark:text-slate-200">
       A model switch changes the price of each output token. An effort change changes how many
       tokens get generated. The value of what’s left is
-      <code class="font-mono text-[0.9em]">R × (from output − ratio × to output)</code>, which is
-      {evaluation.remainingOutput.toLocaleString('en-US')} × (${formatPriceNumber(
-        evaluation.from.output,
-      )}
-      − {formatRatio(evaluation.ratio)} × ${formatPriceNumber(evaluation.to.output)}) ÷ 1,000,000 = {formatPlainDollars(
-        evaluation.value,
-      )}. That’s why an effort-only change on an expensive model can cost more to carry out than
-      switching to a cheaper one: the re-cache is priced wherever you land.
+      <code class="font-mono text-[0.9em]">R × (from output − ratio × to output)</code>,
+      {#if evaluation.unchanged}
+        which is $0.00 right now, because nothing is changing.
+      {:else}
+        which is {evaluation.remainingOutput.toLocaleString('en-US')} × (${formatPriceNumber(
+          evaluation.from.output,
+        )}
+        − {formatRatio(evaluation.ratio)} × ${formatPriceNumber(evaluation.to.output)}) ÷ 1,000,000
+        = {formatPlainDollars(evaluation.value)}.
+      {/if}
+      That’s why an effort-only change on an expensive model can cost more to carry out than switching
+      to a cheaper one: the re-cache is priced wherever you land.
     </p>
   </div>
 

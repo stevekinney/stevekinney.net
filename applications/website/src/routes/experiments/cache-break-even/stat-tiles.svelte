@@ -38,22 +38,32 @@
     <p class="text-sm text-slate-600 dark:text-slate-300">{perMillion}</p>
   </div>
 
-  <div
-    class="{tileClasses} {ahead
-      ? 'border-emerald-300 bg-emerald-50 dark:border-emerald-700 dark:bg-emerald-950/40'
-      : 'border-rose-300 bg-rose-50 dark:border-rose-700 dark:bg-rose-950/40'}"
-  >
-    <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">Net</p>
-    <p
-      class="text-3xl font-bold tabular-nums {ahead
-        ? 'text-emerald-800 dark:text-emerald-300'
-        : 'text-rose-800 dark:text-rose-300'}"
-      data-stat="net"
+  {#if evaluation.unchanged}
+    <div class="{tileClasses} {neutralClasses}">
+      <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">Net</p>
+      <p class="text-3xl font-bold text-slate-900 tabular-nums dark:text-white" data-stat="net">
+        {formatSignedDollars(evaluation.net)}
+      </p>
+      <p class="text-sm text-slate-700 dark:text-slate-200" data-net-status>nothing is changing</p>
+    </div>
+  {:else}
+    <div
+      class="{tileClasses} {ahead
+        ? 'border-emerald-300 bg-emerald-50 dark:border-emerald-700 dark:bg-emerald-950/40'
+        : 'border-rose-300 bg-rose-50 dark:border-rose-700 dark:bg-rose-950/40'}"
     >
-      {formatSignedDollars(evaluation.net)}
-    </p>
-    <p class="text-sm text-slate-700 dark:text-slate-200">
-      {ahead ? 'ahead' : 'behind'} if you change now
-    </p>
-  </div>
+      <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">Net</p>
+      <p
+        class="text-3xl font-bold tabular-nums {ahead
+          ? 'text-emerald-800 dark:text-emerald-300'
+          : 'text-rose-800 dark:text-rose-300'}"
+        data-stat="net"
+      >
+        {formatSignedDollars(evaluation.net)}
+      </p>
+      <p class="text-sm text-slate-700 dark:text-slate-200" data-net-status>
+        {ahead ? 'ahead' : 'behind'} if you change now
+      </p>
+    </div>
+  {/if}
 </section>

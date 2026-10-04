@@ -16,6 +16,7 @@
     roundToSignificantDigits,
   } from './sensitivity';
   import type { MapCell } from './sensitivity';
+  import { placeTooltip } from './tooltip-position';
 
   type Props = {
     evaluation: ChangeEvaluation;
@@ -71,9 +72,12 @@
       ? describeCell(active.contextTokens, active.remainingOutput, active.net, formatTokens)
       : '',
   );
-  const tooltipLeft = $derived(
+  let tooltipWidth = $state(0);
+  const tooltipAnchor = $derived(
     activeCell ? margins.left + (activeCell.column + 0.5) * cellWidth : 0,
   );
+  // Held inside the map so the tooltip can never make the page wider than the screen.
+  const tooltipLeft = $derived(placeTooltip(tooltipAnchor, tooltipWidth, width, 14));
   const tooltipTop = $derived(activeCell ? margins.top + (activeCell.row + 0.5) * cellHeight : 0);
 
   const boundaryWords = $derived(describeBoundary(evaluation));
@@ -150,7 +154,7 @@
       focused = false;
       keyboardCell = null;
     }}
-    class="focus-visible:outline-primary-600 relative cursor-crosshair rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
+    class="focus-visible:outline-primary-600 relative cursor-crosshair overflow-x-clip rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
     data-sensitivity-map
   >
     <svg viewBox="0 0 {width} {height}" class="block h-auto w-full" aria-hidden="true">
@@ -256,11 +260,12 @@
       <div
         role="tooltip"
         data-map-tooltip
+        bind:clientWidth={tooltipWidth}
         class="pointer-events-none absolute z-10 w-max max-w-[min(16rem,70vw)] rounded-md bg-slate-900 px-3 py-2 text-xs text-white shadow-lg dark:bg-slate-100 dark:text-slate-900"
-        style="left: {tooltipLeft}px; top: {tooltipTop}px; transform: translate({tooltipLeft >
-        width * 0.55
-          ? 'calc(-100% - 14px)'
-          : '14px'}, {tooltipTop > height * 0.7 ? 'calc(-100% - 8px)' : '8px'});"
+        style="left: {tooltipLeft}px; top: {tooltipTop}px; transform: translateY({tooltipTop >
+        height * 0.7
+          ? 'calc(-100% - 8px)'
+          : '8px'});"
       >
         {activeText}
       </div>

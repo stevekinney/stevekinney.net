@@ -195,6 +195,12 @@ test('acceptance check 5: changing nothing costs nothing and says so', async ({ 
   await expect(verdict(page)).toHaveAttribute('data-verdict', 'unchanged');
   await expect(verdict(page)).toContainText('Nothing’s changing');
   await expect(page.getByText('nothing to re-cache')).toBeVisible();
+  // Nothing is being changed, so the Net tile is neutral and says so, not "ahead".
+  await expect(page.locator('[data-net-status]')).toHaveText('nothing is changing');
+  await expect(page.getByText('ahead if you change now')).toHaveCount(0);
+  // The explanation doesn't claim a re-cache cost it isn't charging.
+  await expect(page.getByText('nothing is being re-cached')).toBeVisible();
+  await expect(page.getByText('500,000 × $5')).toHaveCount(0);
 });
 
 test('acceptance check 6: swapping twice restores the defaults', async ({ page }) => {
@@ -914,6 +920,72 @@ test.describe('a populated page at 360 pixels wide', () => {
         const box = await region.boundingBox();
         expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(360);
       }
+    });
+  }
+
+  for (const colorScheme of ['light', 'dark'] as const) {
+    test(`tooltips stay inside the page in ${colorScheme} mode`, async ({ page }) => {
+      await page.setViewportSize({ width: 360, height: 800 });
+      await page.emulateMedia({ colorScheme });
+      await open(page);
+
+      const insideViewport = async (tooltip: Locator, container: Locator): Promise<void> => {
+        await expect(tooltip).toBeVisible();
+        const tooltipBox = await tooltip.boundingBox();
+        const containerBox = await container.boundingBox();
+
+        expect(tooltipBox!.x).toBeGreaterThanOrEqual(containerBox!.x - 0.5);
+        expect(tooltipBox!.x + tooltipBox!.width).toBeLessThanOrEqual(
+          containerBox!.x + containerBox!.width + 0.5,
+        );
+        expect(await horizontalOverflow(page)).toBe(0);
+      };
+
+      const plot = chart(page);
+      await plot.scrollIntoViewIfNeeded();
+      const plotBox = (await plot.boundingBox())!;
+
+      for (const share of [0.02, 0.1, 0.2, 0.4, 0.5, 0.58, 0.7, 0.9, 0.98]) {
+        await page.mouse.move(plotBox.x + plotBox.width * share, plotBox.y + plotBox.height * 0.4);
+        await insideViewport(page.locator('[data-chart-tooltip]'), plot);
+      }
+      await page.mouse.move(0, 0);
+
+      // The keyboard cursor too, from the middle of the plot outwards.
+      await plot.focus();
+      for (const key of ['ArrowLeft', 'ArrowLeft', 'Home', 'ArrowRight', 'End']) {
+        await page.keyboard.press(key);
+        await insideViewport(page.locator('[data-chart-tooltip]'), plot);
+      }
+      await plot.evaluate((element) => (element as HTMLElement).blur());
+
+      const map = page.locator('[data-sensitivity-map]');
+      await map.scrollIntoViewIfNeeded();
+      const mapBox = (await map.boundingBox())!;
+
+      // On a phone the map's plot starts 56 px from the left and 12 px from the top, and leaves
+      // 14 px on the right and 58 px at the bottom for the axes.
+      const plotWidth = mapBox.width - 56 - 14;
+      const plotHeight = mapBox.height - 12 - 58;
+
+      for (const share of [0.02, 0.2, 0.4, 0.5, 0.6, 0.8, 0.98]) {
+        for (const height of [0.1, 0.5, 0.9]) {
+          await page.mouse.move(
+            mapBox.x + 56 + plotWidth * share,
+            mapBox.y + 12 + plotHeight * height,
+          );
+          await insideViewport(page.locator('[data-map-tooltip]'), map);
+        }
+      }
+      await page.mouse.move(0, 0);
+
+      await map.focus();
+      for (const key of ['ArrowLeft', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowRight']) {
+        await page.keyboard.press(key);
+        await insideViewport(page.locator('[data-map-tooltip]'), map);
+      }
+      await page.keyboard.press('Shift+ArrowLeft');
+      await insideViewport(page.locator('[data-map-tooltip]'), map);
     });
   }
 

@@ -17,6 +17,7 @@
   } from './chart-geometry';
   import { formatDollars, formatTokens } from './display';
   import { headingClasses, panelClasses } from './field-styles';
+  import { placeTooltip } from './tooltip-position';
 
   type Props = {
     evaluation: ChangeEvaluation;
@@ -51,7 +52,9 @@
   const cursorX = $derived(cursor === null ? 0 : xOf(layout, cursor));
   const cursorY = $derived(cursor === null ? 0 : yOf(layout, costAtContext(evaluation, cursor)));
   const cursorText = $derived(describeCursor(evaluation, cursor ?? evaluation.contextTokens));
-  const tooltipOnLeft = $derived(cursorX > layout.width * 0.6);
+  let tooltipWidth = $state(0);
+  // Held inside the chart so the tooltip can never make the page wider than the screen.
+  const tooltipLeft = $derived(placeTooltip(cursorX, tooltipWidth, width, 12));
 
   const description = $derived.by(() => {
     const parts = [
@@ -139,7 +142,7 @@
       focused = false;
       keyboardCursor = null;
     }}
-    class="focus-visible:outline-primary-600 relative cursor-crosshair rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
+    class="focus-visible:outline-primary-600 relative cursor-crosshair overflow-x-clip rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
   >
     <svg
       viewBox="0 0 {width} {height}"
@@ -299,11 +302,9 @@
       <div
         role="tooltip"
         data-chart-tooltip
+        bind:clientWidth={tooltipWidth}
         class="pointer-events-none absolute z-10 w-max max-w-[min(15rem,70vw)] rounded-md bg-slate-900 px-3 py-2 text-xs text-white shadow-lg dark:bg-slate-100 dark:text-slate-900"
-        style="left: {cursorX}px; top: {Math.max(
-          4,
-          cursorY - 52,
-        )}px; transform: translateX({tooltipOnLeft ? 'calc(-100% - 12px)' : '12px'});"
+        style="left: {tooltipLeft}px; top: {Math.max(4, cursorY - 52)}px;"
       >
         {cursorText}
       </div>
