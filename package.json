@@ -38,6 +38,7 @@
     "content:check": "bun packages/scripts/check-content-metadata.ts",
     "content:fix": "bun packages/scripts/check-content-metadata.ts --fix",
     "playgrounds:build": "bun packages/scripts/run-with-content-history.ts turbo run playgrounds:build --filter=@stevekinney/scripts",
+    "experiments:patterns:build": "bun applications/website/src/routes/experiments/agentic-coding-patterns/build-dataset.ts",
     "content-enhancements:build": "bun packages/scripts/run-with-content-history.ts turbo run content-enhancements:build --filter=@stevekinney/scripts"
   },
   "devDependencies": {
