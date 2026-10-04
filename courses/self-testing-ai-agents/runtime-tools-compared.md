@@ -1,5 +1,5 @@
 ---
-title: 'Runtime Tools Compared: Playwright MCP, Chrome DevTools MCP, and Claude in Chrome'
+title: 'Playwright, Chrome DevTools, and Claude in Chrome'
 description: Three ways to let an agent drive a browser, what each one is actually good at, and when to reach for which.
 ---
 

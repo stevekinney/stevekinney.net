@@ -1,7 +1,5 @@
 ---
-title: >-
-  Building An Authentication System Using Test-Driven Development With Express
-  And Vitest
+title: 'Testing Authentication with Vitest'
 description: >-
   Learn how to create an authentication system with TDD using Express and
   Vitest.

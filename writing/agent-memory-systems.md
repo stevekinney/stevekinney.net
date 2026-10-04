@@ -1,5 +1,5 @@
 ---
-title: 'Memory Systems for AI Agents: What the Research Says and What You Can Actually Build'
+title: 'AI Agent Memory: Research and Practical Systems'
 description: 'A three-axis framework—Forms, Functions, and Dynamics—for understanding and building modern agent memory systems.'
 date: 2026-03-25
 ---

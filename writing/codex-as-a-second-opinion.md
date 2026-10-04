@@ -1,5 +1,5 @@
 ---
-title: 'Using Codex from Claude: Getting a Second Opinion from a Different Model Family'
+title: 'Using Codex for a Second Opinion in Claude Code'
 description: "I wired OpenAI's Codex into Claude Code as a consulting subagent for architecture reviews and tricky debugging."
 date: 2026-06-04
 ---

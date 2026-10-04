@@ -1,5 +1,5 @@
 ---
-title: 'Type Safety Vs. Runtime Validation: Two Sides of the Same Coin'
+title: 'Type Safety and Runtime Validation'
 description: >-
   Understand the complementary relationship between TypeScript static type
   checking and runtime validation with Zod.

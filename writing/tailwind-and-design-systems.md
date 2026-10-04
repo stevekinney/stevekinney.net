@@ -1,5 +1,5 @@
 ---
-title: 'Positives, Negatives, and Alternatives to Using Tailwind for a Design System'
+title: 'Tailwind for Design Systems: Benefits and Alternatives'
 description: Is Tailwind the best choice when building out a design system? It depends.
 date: 2024-04-06
 ---
