@@ -25,7 +25,7 @@ Interactive tools at `/experiments/<slug>`. Each is a prerendered SvelteKit page
 - Dates: format `YYYY-MM-DD` values with `timeZone: 'UTC'` (`formatCalendarDate` in `src/lib/experiments/format.ts`), or anyone west of UTC sees the previous day.
 - Narrow screens: wide tables scroll inside a `relative overflow-x-auto` region. Without `relative`, absolutely positioned `sr-only` children escape the region and stretch the whole page.
 - Token counts: parse and format them with `src/lib/experiments/format.ts`, which accepts `250k`, `1.5M`, and `1,000,000`.
-- Claude Code transcripts: a streamed response spans several lines with the same `message.id`, and `output_tokens` grows until the last one. Keep the last line for each ID, never the first.
+- Claude Code transcripts: read them with `src/lib/experiments/claude-code-transcript.ts`, which was checked against 121 real transcripts. A streamed response spans several lines with the same `message.id` and `output_tokens` grows until the last one, so the last line wins. A response with several `message` iterations, such as one with an advisor call, reports their sum in its top-level usage; its real context is the last iteration's prompt.
 - Playwright names match by substring unless `exact: true`, so `Cached input` also finds `Uncached input`.
 - Theming follows the site's system preference. Don't add a per-page theme toggle.
 - Test fixtures are synthetic. Never commit real transcripts, settings files, or other personal data.
