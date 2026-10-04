@@ -148,6 +148,7 @@ describe('formatting', () => {
   it('shows percentages to the requested decimals and never a negative zero', () => {
     expect(formatPercent(81)).toBe('81.0%');
     expect(formatPercent(-0.01)).toBe('0.0%');
+    expect(formatPercent(-5)).toBe('\u22125.0%');
     expect(formatPercent(51.2, 0)).toBe('51%');
   });
 });

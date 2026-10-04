@@ -181,6 +181,7 @@ test.describe('acceptance 3: over-committed', () => {
     await setTerm(page, 'Task and retained history', '900k');
 
     await expect(hero(page)).toHaveText(`${MINUS}50K`);
+    await expect(cell(page, 'usable', 'share')).toHaveText(`${MINUS}5.0%`);
     await expect(page.getByTestId('hero-detail')).toContainText(
       'Over-committed by 50K. The claims against this window exceed it',
     );

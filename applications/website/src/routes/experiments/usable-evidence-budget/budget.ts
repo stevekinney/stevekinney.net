@@ -126,7 +126,7 @@ export const formatChange = (change: number): string =>
 export const formatPercent = (percent: number, decimals = 1): string => {
   const text = percent.toFixed(decimals);
 
-  return `${Number(text) === 0 ? (0).toFixed(decimals) : text}%`;
+  return `${Number(text) === 0 ? (0).toFixed(decimals) : text.replace('-', MINUS)}%`;
 };
 
 export type ScenarioRow = {
