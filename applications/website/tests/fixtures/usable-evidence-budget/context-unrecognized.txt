@@ -1,0 +1,6 @@
+ ⛁ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀   claude-opus-5 · 62k/1000k tokens (6%)
+
+ ⛁ System prompt: 18k tokens (1.8%)
+ ⛁ Plugin listing: 4k tokens (0.4%)
+ ⛁ Messages: 40k tokens (4.0%)
+ ⛶ Free space: 938k (93.8%)
