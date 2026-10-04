@@ -244,6 +244,15 @@ export const applyGridSelection = (
   };
 };
 
+// A query that already has quotes, such as a phrase, reads fine as typed.
+const describeQuery = (query: string): string | null => {
+  const trimmed = query.trim();
+
+  if (trimmed === '') return null;
+
+  return trimmed.includes('"') ? trimmed : `“${trimmed}”`;
+};
+
 /** The pieces of the live count, such as `verification` and `established`, in a fixed order. */
 export const describeFilters = ({ filters, query }: ExplorerState): string[] =>
   [
@@ -252,5 +261,5 @@ export const describeFilters = ({ filters, query }: ExplorerState): string[] =>
     filters.confidence,
     filters.type,
     filters.partialOnly ? 'partial only' : null,
-    query.trim() === '' ? null : `“${query.trim()}”`,
+    describeQuery(query),
   ].filter((part): part is string => part !== null);

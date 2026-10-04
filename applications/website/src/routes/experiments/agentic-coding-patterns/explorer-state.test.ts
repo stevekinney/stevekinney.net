@@ -237,6 +237,9 @@ describe('describeFilters', () => {
       }),
     ).toEqual(['verification', 'established', 'partial only', '“loop”']);
     expect(describeFilters(initialState)).toEqual([]);
+    expect(describeFilters({ ...initialState, query: '"cap inflation"' })).toEqual([
+      '"cap inflation"',
+    ]);
   });
 
   it('knows when anything is active', () => {

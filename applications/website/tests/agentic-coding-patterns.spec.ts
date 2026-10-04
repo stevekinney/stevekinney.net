@@ -266,7 +266,7 @@ test.describe('the bundled library', () => {
     await expect(card.getByRole('link', { name: 'Circuit Breaker' })).toBeVisible();
     await expect(card).toContainText('matched in Drawbacks and failure modes');
     await expect(card.locator('mark')).toHaveText('cap inflation');
-    await expect(countLine(page)).toHaveText('1 of 118 · “"cap inflation"”');
+    await expect(countLine(page)).toHaveText('1 of 118 · "cap inflation"');
   });
 
   test('requires every word to match and ranks a name match first', async ({ page }) => {
