@@ -20,6 +20,10 @@ const clean = (dollars: number): number => (Math.abs(dollars) < NOISE ? 0 : doll
 /** A dollar amount to the cent, such as `$2.00`. */
 export const formatDollars = (dollars: number): string => formatCost(Math.abs(clean(dollars)));
 
+/** A dollar amount that shows a minus sign only when it is negative, such as `$2.25` or `−$2.25`. */
+export const formatPlainDollars = (dollars: number): string =>
+  clean(dollars) < 0 ? `−${formatCost(Math.abs(dollars))}` : formatCost(Math.abs(clean(dollars)));
+
 /** A signed dollar amount, such as `+$0.25` or `−$0.25`. Zero is `+$0.00`. */
 export const formatSignedDollars = (dollars: number): string => {
   const value = clean(dollars);

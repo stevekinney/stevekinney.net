@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatDollars, formatRatio, formatSignedDollars, formatTokens } from './display';
+import {
+  formatDollars,
+  formatPlainDollars,
+  formatRatio,
+  formatSignedDollars,
+  formatTokens,
+} from './display';
 
 describe('formatTokens', () => {
   it('keeps three significant digits', () => {
@@ -29,6 +35,12 @@ describe('money', () => {
     expect(formatSignedDollars(-3.125)).toBe('−$3.13');
     expect(formatSignedDollars(1e-14)).toBe('+$0.00');
     expect(formatSignedDollars(-1e-14)).toBe('+$0.00');
+  });
+
+  it('shows a minus sign only for negative amounts', () => {
+    expect(formatPlainDollars(2.25)).toBe('$2.25');
+    expect(formatPlainDollars(-2.25)).toBe('−$2.25');
+    expect(formatPlainDollars(-1e-14)).toBe('$0.00');
   });
 
   it('shows ratios to two decimals', () => {
