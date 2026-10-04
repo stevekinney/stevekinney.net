@@ -1,0 +1,194 @@
+[[section]]
+title = "Foundations"
+
+[[section.item]]
+title = "Why Systems"
+href = "why-systems.md"
+
+[[section.item]]
+title = "Building the System"
+href = "building-the-system.md"
+
+[[section.item]]
+title = "The Operating Model"
+href = "the-operating-model.md"
+
+[[section.item]]
+title = "Planning and Task Contracts"
+href = "planning-and-task-contracts.md"
+
+[[section.item]]
+title = "Verification and Evidence"
+href = "verification-and-evidence.md"
+
+[[section.item]]
+title = "Prompt Caching and Cost"
+href = "caching-and-cost.md"
+
+[[section.item]]
+title = "Managing a Long Session"
+href = "managing-a-long-session.md"
+
+[[section.item]]
+title = "Recovering a Failing Session"
+href = "recovering-a-failing-session.md"
+
+[[section.item]]
+title = "User and Project Instructions"
+href = "user-and-project-instructions.md"
+
+[[section]]
+title = "Primitives"
+
+[[section.item]]
+title = "Skills"
+href = "skills.md"
+
+[[section.item]]
+title = "Configuring Skills"
+href = "skill-configuration.md"
+
+[[section.item]]
+title = "Adapting Prior Art"
+href = "adapting-prior-art.md"
+
+[[section.item]]
+title = "Skill or Tool?"
+href = "skill-or-tool.md"
+
+[[section.item]]
+title = "Subagents"
+href = "subagents.md"
+
+[[section.item]]
+title = "Configuring Subagents"
+href = "subagent-configuration.md"
+
+[[section.item]]
+title = "Delegating Well"
+href = "delegating-well.md"
+
+[[section.item]]
+title = "Exemplar Subagents"
+href = "exemplar-subagents.md"
+
+[[section.item]]
+title = "Skill or Subagent?"
+href = "skill-or-subagent.md"
+
+[[section.item]]
+title = "Agent Teams"
+href = "agent-teams.md"
+
+[[section.item]]
+title = "Reviewing Agent Work"
+href = "reviewing-agent-work.md"
+
+[[section.item]]
+title = "Hooks"
+href = "hooks.md"
+
+[[section.item]]
+title = "The Enforcement Ladder"
+href = "the-enforcement-ladder.md"
+
+[[section.item]]
+title = "Writing Good Hooks"
+href = "writing-good-hooks.md"
+
+[[section.item]]
+title = "Hooks in Practice"
+href = "hooks-in-practice.md"
+
+[[section]]
+title = "Automation"
+
+[[section.item]]
+title = "Dynamic Workflows"
+href = "dynamic-workflows.md"
+
+[[section.item]]
+title = "Running Workflows"
+href = "running-workflows.md"
+
+[[section.item]]
+title = "Goals and Loops"
+href = "goals-and-loops.md"
+
+[[section.item]]
+title = "Goals and Loops in Practice"
+href = "goals-and-loops-in-practice.md"
+
+[[section.item]]
+title = "Routines and Schedules"
+href = "routines-and-schedules.md"
+
+[[section.item]]
+title = "The Ralph Loop"
+href = "the-ralph-loop.md"
+
+[[section.item]]
+title = "Running a Ralph Loop"
+href = "running-a-ralph-loop.md"
+
+[[section.item]]
+title = "Sentinels"
+href = "sentinels.md"
+
+[[section.item]]
+title = "Designing Sentinels"
+href = "designing-sentinels.md"
+
+[[section.item]]
+title = "Where State Lives"
+href = "where-state-lives.md"
+
+[[section]]
+title = "Boundaries"
+
+[[section.item]]
+title = "Worktrees"
+href = "worktrees.md"
+
+[[section.item]]
+title = "Worktrees in Practice"
+href = "worktrees-in-practice.md"
+
+[[section.item]]
+title = "Worktree Commands and Configuration"
+href = "worktree-commands-and-configuration.md"
+
+[[section.item]]
+title = "Agent Communication"
+href = "agent-communication.md"
+
+[[section.item]]
+title = "Claude Code and Codex, Together"
+href = "claude-code-and-codex-together.md"
+
+[[section.item]]
+title = "Measuring Whether It Works"
+href = "measuring-whether-it-works.md"
+
+[[section.item]]
+title = "Blast Radius"
+href = "blast-radius.md"
+
+[[section]]
+title = "Extensions"
+
+[[section.item]]
+title = "Claude Code Mods"
+href = "claude-code-mods.md"
+
+[[section.item]]
+title = "Mods in Practice"
+href = "mods-in-practice.md"
+
+[[section.item]]
+title = "Jev"
+href = "jev.md"
+
+[[section.item]]
+title = "Jev in Practice"
+href = "jev-in-practice.md"
