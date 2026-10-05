@@ -108,10 +108,28 @@ describe('the other warnings', () => {
   });
 
   it('flags excluded commands that reach the network', () => {
-    const report = analyze(file({ sandbox: { excludedCommands: ['docker compose *', 'make'] } }));
+    const report = analyze(
+      file({ sandbox: { excludedCommands: ['docker compose *', 'make', 'ls'] } }),
+    );
 
-    expect(report.warnings.map((candidate) => candidate.id)).toEqual(['excluded-network']);
+    // make runs whatever a recipe says, so it isn't known to stay offline.
+    expect(report.warnings.map((candidate) => candidate.id)).toEqual([
+      'excluded-network',
+      'excluded-network',
+    ]);
+    expect(report.warnings[0].message).toContain('docker compose *');
     expect(report.excludedNetworkCommand).toBe(true);
+  });
+
+  it('flags an excluded shell or a full path to an HTTP client', () => {
+    for (const command of ['bash', '/usr/bin/curl', 'env', 'xargs', 'node', 'python']) {
+      const report = analyze(file({ sandbox: { excludedCommands: [command] } }));
+
+      expect(report.excludedNetworkCommand).toBe(true);
+    }
+    expect(analyze(file({ sandbox: { excludedCommands: ['ls'] } })).excludedNetworkCommand).toBe(
+      false,
+    );
   });
 
   it('flags a strictAllowlist in a repository file, which Claude Code ignores', () => {
@@ -251,6 +269,18 @@ describe('rule helpers', () => {
     expect(reachesNetwork('docker compose *')).toBe(true);
     expect(reachesNetwork('')).toBe(true);
     expect(reachesNetwork('ls')).toBe(false);
+  });
+
+  it('fails safe: anything not known to stay offline counts as reaching the network', () => {
+    for (const command of ['bash', 'sh -c *', 'env', 'xargs', 'node', 'python', 'make', 'find']) {
+      expect(reachesNetwork(command)).toBe(true);
+    }
+    // A path names the same program as its basename.
+    expect(reachesNetwork('/usr/bin/curl *')).toBe(true);
+    expect(reachesNetwork('/bin/ls')).toBe(false);
+    // A wildcard in the command name could match anything.
+    expect(reachesNetwork('l*')).toBe(true);
+    expect(reachesNetwork('cat *')).toBe(false);
   });
 
   it('matches Read patterns against file names', () => {

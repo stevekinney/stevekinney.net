@@ -304,52 +304,47 @@ export const bashCommand = (rule: string): string | null => {
     .replace(/^\*$/, '');
 };
 
-const networkTools = new Set([
-  'curl',
-  'wget',
-  'nc',
-  'ncat',
-  'netcat',
-  'socat',
-  'telnet',
-  'ssh',
-  'scp',
-  'sftp',
-  'rsync',
-  'ftp',
-  'http',
-  'https',
-  'xh',
-  'aria2c',
-  'python',
-  'python3',
-  'node',
-  'deno',
-  'bun',
-  'ruby',
-  'perl',
-  'php',
-  'git',
-  'gh',
-  'npm',
-  'npx',
-  'pnpm',
-  'yarn',
-  'pip',
-  'pip3',
-  'docker',
-  'kubectl',
-  'aws',
-  'gcloud',
-  'az',
-  'openssl',
+/**
+ * Commands known to make no network request and to run no other command. The
+ * list is short on purpose: a shell, `env`, `xargs`, `find`, `make`, or an
+ * interpreter can run anything, so everything not listed counts as reaching
+ * the network.
+ */
+const offlineCommands = new Set([
+  'cat',
+  'cd',
+  'cut',
+  'date',
+  'diff',
+  'du',
+  'echo',
+  'false',
+  'grep',
+  'head',
+  'ls',
+  'mkdir',
+  'pwd',
+  'sort',
+  'stat',
+  'tail',
+  'touch',
+  'tr',
+  'true',
+  'uniq',
+  'wc',
+  'which',
 ]);
 
-/** Whether a command, or a command pattern, can make a network request. An empty command means every command. */
+/**
+ * Whether a command, or a command pattern, can make a network request. It fails
+ * safe: an empty command means every command, a path counts as its program, and
+ * any program not known to stay offline counts as reaching the network.
+ */
 export const reachesNetwork = (command: string): boolean => {
   const first = command.trim().split(/\s+/)[0] ?? '';
+  const program = first.split('/').at(-1) ?? '';
 
-  return first === '' || first === '*' || networkTools.has(first.replace(/\*$/, ''));
+  return program.includes('*') || !offlineCommands.has(program);
 };
 
 const globToPattern = (glob: string): RegExp =>
@@ -489,7 +484,7 @@ export const analyzeSettings = (
   for (const entry of excludedNetwork) {
     warnings.push({
       id: 'excluded-network',
-      message: `excludedCommands includes ${entry.value}, which can reach the network with no proxy and no allowlist.`,
+      message: `excludedCommands includes ${entry.value}, which runs outside the sandbox with no proxy and no allowlist, and isn’t known to stay off the network.`,
       evidence: [entry],
     });
   }
