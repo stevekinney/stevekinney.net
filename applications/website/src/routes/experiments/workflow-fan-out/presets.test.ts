@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import modelPricingData from '../model-calculator/model-pricing.toml';
-import { parseModelPricingCatalog } from '../model-calculator/model-pricing-schema';
+import modelPricingData from '$lib/experiments/model-pricing.toml';
+import { parseModelPricingCatalog } from '$lib/experiments/model-pricing-schema';
 
 import { toWorkflowModels } from './models';
 import { findPreset, presets } from './presets';

@@ -6,7 +6,7 @@
   import { buildBreadcrumbSchema } from '$lib/structured-data';
 
   import { experiment } from './experiment';
-  import { findModelPricing } from './model-pricing';
+  import { findModelPricing } from '$lib/experiments/model-pricing';
   import ModelPricingTable from './model-pricing-table.svelte';
   import SessionFileInput from './session-file-input.svelte';
   import { readSessionFiles } from './session-files';

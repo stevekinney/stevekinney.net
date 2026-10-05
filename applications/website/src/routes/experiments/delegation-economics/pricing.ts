@@ -1,4 +1,4 @@
-import type { ModelPricingCatalog } from '../model-calculator/model-pricing';
+import type { ModelPricingCatalog } from '$lib/experiments/model-pricing';
 
 /**
  * The prices a worker model needs, in US dollars per million tokens. The

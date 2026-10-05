@@ -1,4 +1,4 @@
-import type { PricingRates } from './model-pricing';
+import type { PricingRates } from '$lib/experiments/model-pricing';
 import type { TokenUsage } from './token-usage';
 
 const TOKENS_PER_PRICE_UNIT = 1_000_000;

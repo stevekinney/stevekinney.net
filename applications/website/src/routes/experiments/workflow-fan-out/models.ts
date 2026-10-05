@@ -1,4 +1,4 @@
-import type { ModelPricingCatalog } from '../model-calculator/model-pricing';
+import type { ModelPricingCatalog } from '$lib/experiments/model-pricing';
 
 import type { StageConfig, WorkflowConfig } from './config';
 

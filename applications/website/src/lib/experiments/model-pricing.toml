@@ -1,7 +1,8 @@
-# Prices for the model calculator at /experiments/model-calculator.
+# Model prices shared by the experiments at /experiments, starting with the
+# model calculator.
 #
 # Every price is in US dollars per million tokens. To add a model, copy a
-# [[models]] block. The page validates this file when it builds, so a typo or
+# [[models]] block. Each page validates this file when it builds, so a typo or
 # an unknown key fails the build instead of rendering a wrong price. Rows render
 # in the order they appear here.
 #

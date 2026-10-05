@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { formatCost } from '$lib/experiments/format';
 
-import modelPricingData from '../model-calculator/model-pricing.toml';
-import { parseModelPricingCatalog } from '../model-calculator/model-pricing-schema';
+import modelPricingData from '$lib/experiments/model-pricing.toml';
+import { parseModelPricingCatalog } from '$lib/experiments/model-pricing-schema';
 
 import { defaultConfig } from './config';
 import type { WorkflowConfig } from './config';

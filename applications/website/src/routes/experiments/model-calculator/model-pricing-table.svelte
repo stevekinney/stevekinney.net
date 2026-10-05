@@ -3,8 +3,8 @@
 
   import { calculateCost } from './calculate-cost';
   import { formatCompactTokenCount, formatCost, formatPrice } from '$lib/experiments/format';
-  import { blendedPrice } from './model-pricing';
-  import type { ModelPricing } from './model-pricing';
+  import { blendedPrice } from '$lib/experiments/model-pricing';
+  import type { ModelPricing } from '$lib/experiments/model-pricing';
   import type { TokenUsage } from './token-usage';
 
   type SortKey = 'name' | 'input' | 'cachedInput' | 'output' | 'blended' | 'cost';
