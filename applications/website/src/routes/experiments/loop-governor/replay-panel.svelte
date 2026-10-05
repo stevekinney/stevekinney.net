@@ -117,6 +117,9 @@
         })
       : null,
   );
+  const unknownCount = $derived(
+    replay ? replay.iterations.filter((step) => step.progress === null).length : 0,
+  );
   const results = $derived(
     replay
       ? counterfactualGovernors(settings).map((governor) =>
@@ -262,7 +265,7 @@
         <p class={bodyClasses}>
           {replay.iterations.length.toLocaleString('en-US')} iterations, {formatCost(replay.total)} in
           total, {replay.hasProgress
-            ? `${replay.iterations.filter((step) => step.progress).length} with progress`
+            ? `${replay.iterations.filter((step) => step.progress).length} with progress${unknownCount > 0 ? `, ${unknownCount.toLocaleString('en-US')} unknown` : ''}`
             : 'progress unknown'}.
         </p>
 

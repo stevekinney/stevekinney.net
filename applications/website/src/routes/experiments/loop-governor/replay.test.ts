@@ -298,6 +298,120 @@ describe('reading a log defensively', () => {
     );
   });
 
+  describe('rows whose progress is unknown', () => {
+    const replayOfLines = (lines: Record<string, unknown>[]): Replay => {
+      const log = parseLogText(lines.map((line) => JSON.stringify(line)).join('\n'));
+      const mapping = guessMapping(log.keys);
+
+      return analyzeLog(log, {
+        mapping,
+        lowerIsBetter: guessLowerIsBetter(mapping.score),
+        costIsRunningTotal: false,
+      });
+    };
+    const scored = (scores: (number | null)[]): Replay =>
+      replayOfLines(scores.map((score) => ({ cost_usd: 1, score })));
+
+    it('leaves progress unknown, and the stall count where it was, when a row has no score', () => {
+      const replay = scored([1, 2, 3, null, null, null, 3, 3]);
+
+      expect(replay.iterations.map((step) => step.progress)).toEqual([
+        true,
+        true,
+        true,
+        null,
+        null,
+        null,
+        false,
+        false,
+      ]);
+      // An unknown row neither resets nor adds to the count, and shows none of its own.
+      expect(replay.notes).toContain(
+        '3 iterations have no readable score, so their progress is unknown: they neither start nor end a stall.',
+      );
+      expect(replay.iterations.map((step) => step.sinceProgress)).toEqual([
+        0,
+        0,
+        0,
+        null,
+        null,
+        null,
+        1,
+        2,
+      ]);
+    });
+
+    it('says a stall detector only might stop a run with unknown rows in the stretch', () => {
+      const result = counterfactual(
+        scored([1, 2, 3, null, null, null, 3, 3]),
+        { kind: 'stall', m: 3 },
+        formatCost,
+      );
+
+      expect(result.uncertain).toBe(true);
+      expect(result.sentence).not.toContain('stops this');
+      expect(result.sentence).not.toContain('never fires');
+      expect(result.sentence).toContain('might stop this as early as iteration 6');
+      // The chart marks the iteration the sentence names.
+      expect(result).toMatchObject({ stopIteration: 6, saved: 0, progressLost: 0 });
+      expect(result.sentence).toContain('3 iterations have no readable score');
+    });
+
+    it('says a stop is uncertain when an unknown score earlier could have raised the best', () => {
+      // If iteration 2 scored 20, iteration 3 wasn’t progress and the stall came sooner.
+      const result = counterfactual(
+        scored([10, null, 15, 15, 15]),
+        { kind: 'stall', m: 2 },
+        formatCost,
+      );
+
+      expect(result).toMatchObject({ uncertain: true, stopIteration: 5 });
+      expect(result.sentence).toBe(
+        'A stall detector of 2 might stop this at iteration 5, but 1 iteration up to there has no readable score, so it can’t tell.',
+      );
+    });
+
+    it('stays definite when the unknown rows come after the stop', () => {
+      const result = counterfactual(
+        scored([1, 2, 2, 2, null, 5]),
+        { kind: 'stall', m: 2 },
+        formatCost,
+      );
+
+      expect(result.uncertain).toBe(false);
+      expect(result.sentence).toBe(
+        'A stall detector of 2 stops this at iteration 4 and saves $2.00, but it cuts off 1 later progress iteration.',
+      );
+    });
+
+    it('leaves progress unknown when kept can’t be read, alone or beside a score', () => {
+      const keptOnly = replayOfLines(
+        [true, 'maybe', 'maybe', 'maybe', true].map((kept) => ({ cost_usd: 1, kept })),
+      );
+      expect(keptOnly.iterations.map((step) => step.progress)).toEqual([
+        true,
+        null,
+        null,
+        null,
+        true,
+      ]);
+      expect(keptOnly.iterations.map((step) => step.kept)).toEqual([true, null, null, null, true]);
+      const stall = counterfactual(keptOnly, { kind: 'stall', m: 3 }, formatCost);
+      expect(stall.uncertain).toBe(true);
+      expect(stall.sentence).toContain('might stop this as early as iteration 4');
+      expect(stall.sentence).toContain('3 iterations have no readable kept value');
+
+      const both = replayOfLines([
+        { score: 1, kept: true },
+        { score: 2, kept: 'maybe' },
+        { score: 1, kept: 'maybe' },
+        { score: 3, kept: false },
+      ]);
+      // Improved but maybe not kept is unknown; no better than the best is no progress either way.
+      expect(both.iterations.map((step) => step.progress)).toEqual([true, null, false, false]);
+    });
+  });
+
   it('stops reading at the record limit and says so', () => {
     const reader = createLogReader();
     for (let index = 0; index <= MAXIMUM_RECORDS; index += 1) reader.addLine(`{"i":${index}}`);
