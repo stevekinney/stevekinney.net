@@ -116,7 +116,8 @@ export type ParsedPriceTable = { models: ModelPrice[] } | { error: string };
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
-const readPrice = (value: unknown): number | null =>
+/** A usable price per million tokens: finite, above zero, and at most $100,000. */
+export const readPrice = (value: unknown): number | null =>
   typeof value === 'number' && Number.isFinite(value) && value > 0 && value <= 100_000
     ? value
     : null;

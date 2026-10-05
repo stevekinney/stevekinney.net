@@ -68,6 +68,14 @@ describe('encodeScenario and decodeScenario', () => {
     expect(decodeScenario(encodeScenario(defaultScenario, models))?.customModel?.input).toBe(6);
   });
 
+  it('ignores a custom price that an imported price table would reject', () => {
+    for (const price of ['9'.repeat(400), '100001', '0']) {
+      const query = `model=opus-5-5&name=Opus+5.5&inputPrice=${price}&outputPrice=30`;
+
+      expect(decodeScenario(query)?.customModel).toBeNull();
+    }
+  });
+
   it('holds only controls, never anything from an imported session', () => {
     const encoded = encodeScenario(defaultScenario, defaultModels);
 

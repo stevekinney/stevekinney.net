@@ -1,6 +1,6 @@
 import { clampLaterAfter, clampTo, defaultScenario, ranges } from './scenario';
 import type { Scenario } from './scenario';
-import { defaultModels } from './pricing';
+import { defaultModels, readPrice } from './pricing';
 import type { ModelPrice } from './pricing';
 
 /**
@@ -109,8 +109,9 @@ export const decodeScenario = (query: string): SharedScenario | null => {
   }
 
   const name = parameters.get('name')?.trim().slice(0, 60);
-  const inputPrice = decimal(parameters.get('inputPrice'));
-  const outputPrice = decimal(parameters.get('outputPrice'));
+  // A link is untrusted input, so its prices get the same bounds as an imported price table.
+  const inputPrice = readPrice(decimal(parameters.get('inputPrice')));
+  const outputPrice = readPrice(decimal(parameters.get('outputPrice')));
   const customModel: ModelPrice | null =
     scenario.modelId && name && inputPrice && outputPrice
       ? { id: scenario.modelId, name, input: inputPrice, output: outputPrice }
