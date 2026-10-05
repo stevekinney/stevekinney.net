@@ -164,10 +164,12 @@
       Workflow fan-out: pipeline() against parallel()
     </h1>
     <p class="text-lg text-slate-600 dark:text-slate-300">
-      A workflow script sends a list of items through stages of agents. This page simulates that
-      schedule both ways, shows what the results array really holds, estimates the cost by model,
-      and checks a script you paste for the known sharp edges. Running everything in parallel isn’t
-      the fastest choice, and a completed run doesn’t mean every item succeeded.
+      You have a list of items to push through stages of agents. Running everything in parallel
+      feels like it should finish first, but it doesn’t. A run that completes can still drop failed
+      items from its results without saying so, and every stage that inherits your session model
+      pays that model’s price. This page simulates the schedule both ways, shows what the results
+      array really holds, estimates the cost by model, and checks a script you paste for these sharp
+      edges.
     </p>
   </header>
 
