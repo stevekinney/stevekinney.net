@@ -51,6 +51,11 @@
       Then it pays for the summary to be generated, and for the cache to be rebuilt around the shorter
       prefix.
     </p>
+    <p class={bodyClasses}>
+      A cold cache costs keeping going too: its next turn reprocesses the whole history and writes
+      it back to the cache. That is why, when the cache has gone cold, compacting tends to pay for
+      itself almost at once.
+    </p>
   </section>
 
   <section aria-labelledby="explain-clear" class="space-y-2">

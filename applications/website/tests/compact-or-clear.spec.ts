@@ -158,7 +158,7 @@ test.describe('the defaults', () => {
 });
 
 test.describe('the scenario', () => {
-  test('a cold cache turns the summarize step to $2.00 and payback to turn 16', async ({
+  test('a cold cache turns the summarize step to $2.00 and pays back on turn 1', async ({
     page,
   }) => {
     await open(page);
@@ -166,7 +166,7 @@ test.describe('the scenario', () => {
 
     await expect(page.locator('#cache-cold')).toHaveAttribute('aria-pressed', 'true');
     await expect(compactTile(page)).toHaveText('Compacting costs $2.85 up front, on a cold cache');
-    await expect(leadTile(page)).toHaveText('Compaction pays for itself after 16 turns');
+    await expect(leadTile(page)).toHaveText('Compaction pays for itself after 1 turn');
     await expect(page.getByText('$2.00', { exact: true })).toBeVisible();
   });
 
@@ -881,8 +881,8 @@ test.describe('what would change this answer', () => {
 
     const cache = rows(page).filter({ hasText: 'Warm or cold cache' });
     await expect(cache).toContainText('turn 6 at Warm');
-    await expect(cache).toContainText('turn 16 at Cold');
-    await expect(cache).toContainText('10 turns');
+    await expect(cache).toContainText('turn 1 at Cold');
+    await expect(cache).toContainText('5 turns');
     await expect(rows(page).filter({ hasText: 'Model' })).toContainText('none');
   });
 
@@ -902,7 +902,7 @@ test.describe('what would change this answer', () => {
 
     const cache = rows(page).filter({ hasText: 'Warm or cold cache' });
     await expect(cache).toContainText('turn 6 at Warm');
-    await expect(page.getByText('at turn 16')).toBeVisible();
+    await expect(cache).toContainText('turn 1 at Cold');
   });
 });
 

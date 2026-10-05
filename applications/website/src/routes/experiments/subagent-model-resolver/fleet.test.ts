@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { analyzeFleet, configurationForRow, rowMatchesFilter } from './fleet';
+import { analyzeFleet, configurationForRow, isSettingsPath, rowMatchesFilter } from './fleet';
 import type { FleetInput, UploadedAgentFile } from './fleet';
 import { defaultSettingsPrecedence } from '$lib/experiments/settings-scope';
 import { baseConfiguration } from './presets';
@@ -36,6 +36,26 @@ const input = (overrides: Partial<FleetInput> = {}): FleetInput => ({
 
 const row = (analysis: ReturnType<typeof analyzeFleet>, name: string) =>
   analysis.rows.filter((entry) => entry.name === name);
+
+describe('which settings files count', () => {
+  it('takes a lone file, a .claude file, and a managed settings file', () => {
+    for (const path of [
+      'settings.json',
+      'repo/.claude/settings.local.json',
+      'home/.claude/settings.json',
+      '/Library/Application Support/ClaudeCode/managed-settings.json',
+      'etc/claude-code/managed-settings.json',
+    ]) {
+      expect(isSettingsPath(path)).toBe(true);
+    }
+  });
+
+  it('skips settings files that belong to something else', () => {
+    for (const path of ['repo/.vscode/settings.json', 'repo/app/settings.local.json']) {
+      expect(isSettingsPath(path)).toBe(false);
+    }
+  });
+});
 
 describe('acceptance 9: uploads', () => {
   const files = [

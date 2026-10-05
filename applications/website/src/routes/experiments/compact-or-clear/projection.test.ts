@@ -89,8 +89,29 @@ describe('a cold cache', () => {
     expect(cents(projection.parts.total)).toBe('2.85');
   });
 
-  it('moves the payback to turn 16', () => {
-    expect(projection.compactCrossover).toBe(16);
+  it('pays back on the first turn, because keeping going re-caches the whole old prefix', () => {
+    // Turn 1 of keeping going writes all 400K tokens back to the cache at 2× input. Compacting
+    // pays $2.00 to read them once and never writes the old prefix again.
+    expect(projection.compactCrossover).toBe(1);
+  });
+
+  it('charges keeping going the cold write on its first turn only', () => {
+    const warm = project(defaults());
+    // Write at 2× the $5 input price, instead of reading at 0.1×.
+    const premium = (400_000 * (10 - 0.5)) / 1_000_000;
+
+    expect(projection.keep[1] - warm.keep[1]).toBeCloseTo(premium, 9);
+    expect(projection.keep[30] - warm.keep[30]).toBeCloseTo(premium, 9);
+  });
+
+  it('compacts later against a warm cache, because the turns before it refreshed it', () => {
+    const cold = defaults({ warm: false });
+    const later = compactLaterSeries(cold, 5);
+    const laterWarm = compactLaterSeries(defaults(), 5);
+    const premium = (400_000 * (10 - 0.5)) / 1_000_000;
+
+    expect(later[5] - laterWarm[5]).toBeCloseTo(premium, 9);
+    expect(later[30] - laterWarm[30]).toBeCloseTo(premium, 9);
   });
 
   it('works with a five-minute TTL, which writes at 1.25 times input', () => {

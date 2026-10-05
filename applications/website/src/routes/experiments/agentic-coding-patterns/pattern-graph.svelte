@@ -84,18 +84,17 @@
     };
   };
 
-  // Fit once the graph has a size, and again when the layout changes.
-  let fitted = false;
+  // Fit once the graph has a size, and again when the layout or the container's size changes.
+  let fittedLayout: typeof positions | null = null;
+  let fittedSize = '';
   $effect(() => {
-    void positions;
-    if (width > 0 && height > 0 && !fitted) {
-      fitted = true;
+    const size = `${width}x${height}`;
+
+    if (width > 0 && height > 0 && (positions !== fittedLayout || size !== fittedSize)) {
+      fittedLayout = positions;
+      fittedSize = size;
       fit();
     }
-  });
-  $effect(() => {
-    void positions;
-    fitted = false;
   });
 
   onMount(() => {
@@ -167,6 +166,9 @@
       pointers.delete(end.pointerId);
 
       if (pointers.size === 0) {
+        // The click that finishes a drag fires right after this. Once it has, a keyboard or
+        // assistive-technology click on a node has to open it again.
+        setTimeout(() => (dragged = false), 0);
         window.removeEventListener('pointermove', handleMove);
         window.removeEventListener('pointerup', handleEnd);
         window.removeEventListener('pointercancel', handleEnd);

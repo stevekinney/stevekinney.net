@@ -16,7 +16,7 @@
   import { calibrationPatch, discardPatch, mergeBackup } from './import-state';
   import type { ImportedFields } from './import-state';
   import LazySection from '$lib/experiments/lazy-section.svelte';
-  import { defaultModels } from './pricing';
+  import { defaultModels, renamedModelId } from './pricing';
   import type { ModelPrice } from './pricing';
   import { project } from './projection';
   import ProjectionTable from './projection-table.svelte';
@@ -191,10 +191,17 @@
   };
 
   const setModels = (models: ModelPrice[]): void => {
+    const previous = calculator.models;
     calculator.models = models;
     if (!models.some((entry) => entry.id === calculator.scenario.modelId)) {
-      calculator.scenario.modelId = models[0]?.id ?? defaultScenario.modelId;
-      delete calculator.imported.modelId;
+      const renamed = renamedModelId(previous, models, calculator.scenario.modelId);
+
+      if (renamed) {
+        calculator.scenario.modelId = renamed;
+      } else {
+        calculator.scenario.modelId = models[0]?.id ?? defaultScenario.modelId;
+        delete calculator.imported.modelId;
+      }
     }
     calculator.touched = true;
   };

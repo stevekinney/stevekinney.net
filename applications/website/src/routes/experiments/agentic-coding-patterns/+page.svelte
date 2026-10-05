@@ -518,13 +518,8 @@
 
 {#snippet loadingSections()}
   <div class="space-y-3">
-    <h2
-      tabindex="-1"
-      data-view-heading
-      class="text-xl font-bold text-slate-900 outline-none dark:text-white"
-    >
-      Loading the full text…
-    </h2>
+    <!-- No data-view-heading: focus waits for the real heading rather than landing here. -->
+    <h2 class="text-xl font-bold text-slate-900 dark:text-white">Loading the full text…</h2>
     <p role="status" class="text-sm text-slate-600 dark:text-slate-300">
       The sections of each pattern are still on their way.
     </p>
@@ -619,7 +614,7 @@
         <FilterToolbar
           state={explorer}
           {types}
-          {ready}
+          ready={ready && sectionsLoaded}
           shown={results.length}
           total={entries.length}
           description={describeFilters(explorer)}

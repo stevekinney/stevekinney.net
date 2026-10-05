@@ -25,7 +25,7 @@ describe('the default table', () => {
     ]);
     expect(
       defaultPricing.models.filter((model) => model.preservesCache).map((model) => model.id),
-    ).toEqual(['fable-5-1', 'opus-5']);
+    ).toEqual(['fable-5-1', 'opus-5', 'opus-5-5', 'sonnet-5-5']);
   });
 
   it('keeps the five effort factors, with the unpublished ones flagged', () => {
