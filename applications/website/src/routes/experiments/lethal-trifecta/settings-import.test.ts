@@ -206,7 +206,7 @@ describe('prefilling controls', () => {
 });
 
 describe('prefilling the prompt on push and publish', () => {
-  const pushAndComments = ['Bash(git push:*)', 'Bash(gh issue comment:*)', 'Bash(gh pr comment:*)'];
+  const pushAndGh = ['Bash(git push:*)', 'Bash(gh:*)'];
 
   it('leaves it unknown when only git push asks first, and says comments are uncovered', () => {
     const report = analyze(file({ permissions: { ask: ['Bash(git push:*)'] } }));
@@ -215,36 +215,50 @@ describe('prefilling the prompt on push and publish', () => {
     expect(report.prefill['publish-gate'].reason).toContain('public comments');
   });
 
-  it('turns it on when ask or deny rules cover both pushing and public comments', () => {
-    const report = analyze(file({ permissions: { ask: pushAndComments } }));
+  it('turns it on when ask or deny rules cover pushing and all of gh', () => {
+    const report = analyze(file({ permissions: { ask: pushAndGh } }));
 
     expect(report.prefill['publish-gate'].status).toBe('on');
-    expect(report.prefill['publish-gate'].evidence).toHaveLength(3);
-    expect(
-      analyze(file({ permissions: { ask: ['Bash(git push:*)'], deny: ['Bash(gh:*)'] } })).prefill[
-        'publish-gate'
-      ].status,
-    ).toBe('on');
+    expect(report.prefill['publish-gate'].evidence).toHaveLength(2);
+    for (const rules of [
+      { ask: ['Bash(git push:*)'], deny: ['Bash(gh:*)'] },
+      { ask: ['Bash(git push:*)', 'Bash(gh *)'] },
+      { ask: ['Bash(git push:*)', 'Bash'] },
+      { ask: ['Bash(git push:*)'], deny: ['Bash(*)'] },
+    ]) {
+      expect(analyze(file({ permissions: rules })).prefill['publish-gate'].status).toBe('on');
+    }
   });
 
-  it('needs both comment commands', () => {
+  it('leaves it unknown with narrow comment rules, which miss gh api', () => {
+    // gh api repos/o/r/issues/1/comments -f body=… posts a comment with neither rule matching.
     const report = analyze(
-      file({ permissions: { ask: ['Bash(git push:*)', 'Bash(gh issue comment:*)'] } }),
+      file({
+        permissions: {
+          ask: ['Bash(git push:*)', 'Bash(gh issue comment:*)', 'Bash(gh pr comment:*)'],
+        },
+      }),
     );
 
     expect(report.prefill['publish-gate'].status).toBe('unknown');
+    expect(report.prefill['publish-gate'].reason).toContain('gh api');
+    // An exact rule for gh alone matches no subcommand.
+    expect(
+      analyze(file({ permissions: { ask: ['Bash(git push:*)', 'Bash(gh)'] } })).prefill[
+        'publish-gate'
+      ].status,
+    ).toBe('unknown');
   });
 
   it('needs a rule for every MCP server, which can comment with no prompt', () => {
-    const ungated = analyze(
-      file({ permissions: { ask: pushAndComments }, mcpServers: { tracker: {} } }),
-    );
+    const ungated = analyze(file({ permissions: { ask: pushAndGh }, mcpServers: { tracker: {} } }));
     expect(ungated.prefill['publish-gate'].status).toBe('unknown');
     expect(ungated.prefill['publish-gate'].reason).toContain('tracker');
+    expect(ungated.prefill['publish-gate'].reason).not.toContain('gh api');
 
     const gated = analyze(
       file({
-        permissions: { ask: [...pushAndComments, 'mcp__tracker__*'] },
+        permissions: { ask: [...pushAndGh, 'mcp__tracker__*'] },
         mcpServers: { tracker: {} },
       }),
     );
