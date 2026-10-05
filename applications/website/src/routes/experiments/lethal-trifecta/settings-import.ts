@@ -333,9 +333,9 @@ const coversEvery = (rule: string, command: string): boolean => {
 
 /**
  * Commands known to make no network request and to run no other command. The
- * list is short on purpose: a shell, `env`, `xargs`, `find`, `make`, or an
- * interpreter can run anything, so everything not listed counts as reaching
- * the network.
+ * list is short on purpose: a shell, `env`, `xargs`, `find`, `make`, `sort` (through
+ * `--compress-program`), or an interpreter can run anything, so everything not listed
+ * counts as reaching the network.
  */
 const offlineCommands = new Set([
   'cat',
@@ -351,7 +351,6 @@ const offlineCommands = new Set([
   'ls',
   'mkdir',
   'pwd',
-  'sort',
   'stat',
   'tail',
   'touch',
@@ -363,12 +362,24 @@ const offlineCommands = new Set([
 ]);
 
 /**
+ * Shell syntax that runs more than one program or opens a connection: a redirection, which
+ * reaches `/dev/tcp` and `/dev/udp`, a pipe, a chain, a background `&`, or a substitution.
+ */
+const shellOperators = /[<>|;&`]|\$\(|\/dev\/(tcp|udp)\b/;
+
+/**
  * Whether a command, or a command pattern, can make a network request. It fails
- * safe: an empty command means every command, a path counts as its program, and
- * any program not known to stay offline counts as reaching the network.
+ * safe: only a single offline program with plain arguments counts as offline. An
+ * empty command means every command, any shell operator counts as reaching the
+ * network, an absolute path counts as its program, a relative path such as `./cat`
+ * is a script that could do anything, and any program not known to stay offline
+ * counts as reaching the network.
  */
 export const reachesNetwork = (command: string): boolean => {
+  if (shellOperators.test(command)) return true;
+
   const first = command.trim().split(/\s+/)[0] ?? '';
+  if (first.includes('/') && !first.startsWith('/')) return true;
   const program = first.split('/').at(-1) ?? '';
 
   return program.includes('*') || !offlineCommands.has(program);
