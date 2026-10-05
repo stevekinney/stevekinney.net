@@ -32,6 +32,13 @@ export type Dataset = {
   total: number;
 };
 
+/**
+ * The largest duration, review time, or cost a row may hold: about 1,900 years
+ * of minutes. Anything bigger is a typo, and values near the top of the
+ * floating-point range would overflow every sum built from them.
+ */
+export const MAX_AMOUNT = 1_000_000_000;
+
 /** Issues past this many are counted but not listed, so a messy 50,000-row file stays readable. */
 export const MAX_LISTED_ISSUES = 200;
 
@@ -132,6 +139,15 @@ export const buildDataset = (table: RawTable, mapping: ColumnMapping): Dataset =
 
         return;
       }
+      if (value > MAX_AMOUNT) {
+        report({
+          row,
+          message: `its duration, ${quote(text)}, is more than a billion minutes, which can’t be right`,
+          skipped: true,
+        });
+
+        return;
+      }
       minutes = value;
     }
 
@@ -156,10 +172,13 @@ export const buildDataset = (table: RawTable, mapping: ColumnMapping): Dataset =
       if (text === '') return null;
 
       const value = parseNumber(text);
-      if (value === null || value < 0) {
+      if (value === null || value < 0 || value > MAX_AMOUNT) {
         report({
           row,
-          message: `${name} ${quote(text)} isn’t a number of zero or more, so it’s left blank`,
+          message:
+            value !== null && value > MAX_AMOUNT
+              ? `${name} ${quote(text)} is more than a billion, so it’s left blank`
+              : `${name} ${quote(text)} isn’t a number of zero or more, so it’s left blank`,
           skipped: false,
         });
 

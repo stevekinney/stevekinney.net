@@ -59,6 +59,25 @@ describe('buildDataset', () => {
     ]);
   });
 
+  it('rejects a duration or amount too large to add up, instead of overflowing', () => {
+    const dataset = datasetOf('condition,minutes,cost\nA,1e308,2\nA,4,1e308\n');
+
+    expect(dataset.rows.map((row) => row.minutes)).toEqual([4]);
+    expect(dataset.rows[0].cost).toBeNull();
+    expect(dataset.issues).toEqual([
+      {
+        row: 1,
+        message: 'its duration, “1e308”, is more than a billion minutes, which can’t be right',
+        skipped: true,
+      },
+      {
+        row: 2,
+        message: 'cost “1e308” is more than a billion, so it’s left blank',
+        skipped: false,
+      },
+    ]);
+  });
+
   it('skips a third condition, since this tool compares two', () => {
     const dataset = datasetOf('condition,minutes\nA,1\nB,2\nC,3\n');
 
