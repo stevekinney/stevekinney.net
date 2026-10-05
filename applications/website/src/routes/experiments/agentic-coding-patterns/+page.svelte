@@ -83,6 +83,8 @@
   let graphComponent = $state.raw<typeof import('./pattern-graph.svelte').default | null>(null);
 
   const dataset = $derived(folder?.dataset ?? bundled ?? data.dataset);
+  // Entry sections arrive with the whole library. If that fetch fails, show what there is.
+  const sectionsLoaded = $derived(folder !== null || bundled !== null || bundledFailed);
   const entries = $derived(dataset.entries);
   const graph = $derived(buildGraph(entries));
   const documents = $derived(buildSearchDocuments(entries));
@@ -476,15 +478,16 @@
   };
 
   onMount(() => {
-    // The address is read with the library, not before it: an entry named in the address would
-    // otherwise open with its sections still empty.
+    explorer = parseUrlState(location.search, location.hash);
+    shortlist = readShortlist();
+    shortlistLoaded = true;
+    ready = true;
+
+    // The page is usable now, on the list view's share of the library. An entry's sections and the
+    // comparison wait for the rest, which usually arrives before anyone opens one.
     void fetchBundled().then((library) => {
       bundled = library;
       bundledFailed = library === null;
-      explorer = parseUrlState(location.search, location.hash);
-      shortlist = readShortlist();
-      shortlistLoaded = true;
-      ready = true;
     });
 
     // Warm the views the page loads on demand, so opening one doesn't wait on the network.
@@ -512,6 +515,21 @@
     }
   });
 </script>
+
+{#snippet loadingSections()}
+  <div class="space-y-3">
+    <h2
+      tabindex="-1"
+      data-view-heading
+      class="text-xl font-bold text-slate-900 outline-none dark:text-white"
+    >
+      Loading the full text…
+    </h2>
+    <p role="status" class="text-sm text-slate-600 dark:text-slate-300">
+      The sections of each pattern are still on their way.
+    </p>
+  </div>
+{/snippet}
 
 <svelte:window onkeydown={handleKeydown} />
 
@@ -613,7 +631,9 @@
       {/if}
 
       {#if showingDetail}
-        {#if selectedEntry}
+        {#if selectedEntry && !sectionsLoaded}
+          {@render loadingSections()}
+        {:else if selectedEntry}
           {#await import('./entry-detail.svelte') then { default: EntryDetail }}
             <EntryDetail
               entry={selectedEntry}
@@ -713,6 +733,8 @@
         {:else}
           <p class="text-sm text-slate-600 dark:text-slate-300">Loading the graph…</p>
         {/if}
+      {:else if explorer.view === 'compare' && !sectionsLoaded}
+        {@render loadingSections()}
       {:else if explorer.view === 'compare'}
         {#await import('./compare-view.svelte') then { default: CompareView }}
           <CompareView
