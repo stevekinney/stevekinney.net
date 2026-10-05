@@ -103,6 +103,29 @@ export const pricesEqual = (first: readonly ModelPrice[], second: readonly Model
     );
   });
 
+/**
+ * When the selected model's ID is gone from an edited table, the new ID if the edit was only a
+ * rename: the same row, in the same place, with the same name and prices. Otherwise `null`.
+ */
+export const renamedModelId = (
+  before: readonly ModelPrice[],
+  after: readonly ModelPrice[],
+  selectedId: string,
+): string | null => {
+  const index = before.findIndex((model) => model.id === selectedId);
+  const old = before[index];
+  const next = after[index];
+
+  return old &&
+    next &&
+    before.length === after.length &&
+    next.name === old.name &&
+    next.input === old.input &&
+    next.output === old.output
+    ? next.id
+    : null;
+};
+
 /** Turns a name such as `Opus 5.5` into an ID such as `opus-5-5`. */
 export const toModelId = (name: string): string =>
   name

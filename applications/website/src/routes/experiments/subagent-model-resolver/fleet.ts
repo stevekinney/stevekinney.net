@@ -175,12 +175,31 @@ export const isAgentFile = (path: string): boolean => {
   return segments.length === 1 || segments.slice(0, -1).includes('agents');
 };
 
-/** Whether a dropped file is one this tool reads: an agent definition or a settings file. */
-export const isSetupFile = (path: string): boolean =>
-  isAgentFile(path) || /(^|[\\/])(managed-)?settings(\.local)?\.json$/i.test(path);
+const settingsName = /^(managed-)?settings(\.local)?\.json$/i;
+const managedFolders = new Set(['claudecode', 'claude-code']);
 
-export const isSettingsPath = (path: string): boolean =>
-  /(^|[\\/])(managed-)?settings(\.local)?\.json$/i.test(path);
+/**
+ * Whether a path is a Claude settings file. A lone file is whatever the person chose. Inside a
+ * dropped folder it has to live somewhere Claude reads settings from, `.claude` or a managed
+ * settings folder, so an editor's `.vscode/settings.json` isn't taken for one.
+ */
+export const isSettingsPath = (path: string): boolean => {
+  const segments = pathSegments(path);
+  const name = segments.at(-1) ?? '';
+  if (!settingsName.test(name)) return false;
+
+  const folders = segments.slice(0, -1).map((segment) => segment.toLowerCase());
+
+  return (
+    folders.length === 0 ||
+    folders.includes('.claude') ||
+    folders.some((folder) => managedFolders.has(folder)) ||
+    name.toLowerCase().startsWith('managed-')
+  );
+};
+
+/** Whether a dropped file is one this tool reads: an agent definition or a settings file. */
+export const isSetupFile = (path: string): boolean => isAgentFile(path) || isSettingsPath(path);
 
 export const isIgnoredFolder = (path: string): boolean =>
   /(^|[\\/])(node_modules|\.git)$/.test(path);

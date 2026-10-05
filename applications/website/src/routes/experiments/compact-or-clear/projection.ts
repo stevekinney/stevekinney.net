@@ -65,12 +65,16 @@ export const summaryTokensFor = (contextNow: number, summaryPercent: number): nu
 export const growthPerTurn = ({ inputPerTurn, outputPerTurn }: ProjectionInputs): number =>
   inputPerTurn + outputPerTurn;
 
-/** What one turn costs: re-read the prefix, write what's new, and generate the output. */
-export const turnCost = (inputs: ProjectionInputs, prefix: number): number => {
+/**
+ * What one turn costs: re-read the prefix, write what's new, and generate the output. On a cold
+ * turn the cache has expired, so the prefix is processed again and written back to the cache at
+ * the write rate instead of being read. The cache is warm again after that turn.
+ */
+export const turnCost = (inputs: ProjectionInputs, prefix: number, cold = false): number => {
   const { rates, inputPerTurn, outputPerTurn } = inputs;
 
   return dollars(
-    prefix * rates.read +
+    prefix * (cold ? rates.write : rates.read) +
       (inputPerTurn + outputPerTurn) * rates.write +
       outputPerTurn * rates.output,
   );
@@ -80,8 +84,9 @@ export const turnCost = (inputs: ProjectionInputs, prefix: number): number => {
 export const compactParts = (
   inputs: ProjectionInputs,
   context = inputs.contextNow,
+  warm = inputs.warm,
 ): CompactParts => {
-  const { rates, warm, summaryPercent, baseline } = inputs;
+  const { rates, summaryPercent, baseline } = inputs;
   const summaryTokens = summaryTokensFor(context, summaryPercent);
   const summarize = dollars(context * (warm ? rates.read : rates.input));
   const generate = dollars(summaryTokens * rates.output);
@@ -106,19 +111,23 @@ export const clearOneTime = (inputs: ProjectionInputs): number =>
 
 /**
  * Cumulative spend after each turn, starting from `start` at index 0 with a
- * prefix of `firstPrefix` tokens that grows by `growth` each turn.
+ * prefix of `firstPrefix` tokens that grows by `growth` each turn. When
+ * `coldStart` is set the first turn finds the cache expired.
  */
 const accumulate = (
   inputs: ProjectionInputs,
   start: number,
   firstPrefix: number,
   length: number,
+  coldStart = false,
 ): number[] => {
   const growth = growthPerTurn(inputs);
   const series = [start];
 
   for (let index = 0; index < length; index += 1) {
-    series.push(series[index] + turnCost(inputs, firstPrefix + index * growth));
+    series.push(
+      series[index] + turnCost(inputs, firstPrefix + index * growth, coldStart && index === 0),
+    );
   }
 
   return series;
@@ -134,9 +143,10 @@ export const compactLaterSeries = (inputs: ProjectionInputs, k: number): number[
   const { contextNow, baseline, turns } = inputs;
   const growth = growthPerTurn(inputs);
   const split = Math.max(0, Math.min(Math.floor(k), turns));
-  const keep = accumulate(inputs, 0, contextNow, split);
+  const keep = accumulate(inputs, 0, contextNow, split, !inputs.warm);
   const compactedContext = contextNow + split * growth;
-  const parts = compactParts(inputs, compactedContext);
+  // Turns before the compaction refresh the cache, so only compacting right now can find it cold.
+  const parts = compactParts(inputs, compactedContext, inputs.warm || split > 0);
   const series = [...keep.slice(0, split), keep[split] + parts.total];
 
   for (let index = split; index < turns; index += 1) {
@@ -165,7 +175,7 @@ export const project = (inputs: ProjectionInputs, laterAfter: number | null = nu
   const { contextNow, baseline, reread, turns } = inputs;
   const parts = compactParts(inputs);
   const clearCost = clearOneTime(inputs);
-  const keep = accumulate(inputs, 0, contextNow, turns);
+  const keep = accumulate(inputs, 0, contextNow, turns, !inputs.warm);
   const compact = accumulate(inputs, parts.total, baseline + parts.summaryTokens, turns);
   const clear = accumulate(inputs, clearCost, baseline + reread, turns);
   const later = laterAfter === null ? null : compactLaterSeries(inputs, laterAfter);

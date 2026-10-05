@@ -7,6 +7,7 @@ import {
   modelsOffTheRatio,
   normalizeModelId,
   parsePriceTable,
+  renamedModelId,
   pricesEqual,
   ratesFor,
   serializePriceTable,
@@ -110,6 +111,27 @@ describe('toModelId', () => {
   it('makes a URL-safe ID from a name', () => {
     expect(toModelId('Opus 5.5')).toBe('opus-5-5');
     expect(toModelId('  Fable   6 (preview) ')).toBe('fable-6-preview');
+  });
+});
+
+describe('renamedModelId', () => {
+  const before = [
+    { id: 'a', name: 'A', input: 1, output: 5 },
+    { id: 'b', name: 'B', input: 2, output: 10 },
+  ];
+
+  it('follows a row whose only change is its ID', () => {
+    expect(renamedModelId(before, [before[0], { ...before[1], id: 'b2' }], 'b')).toBe('b2');
+  });
+
+  it('returns null for a deletion, a replacement, or a repriced row', () => {
+    expect(renamedModelId(before, [before[0]], 'b')).toBeNull();
+    expect(
+      renamedModelId(before, [before[0], { ...before[1], id: 'c', input: 3 }], 'b'),
+    ).toBeNull();
+    expect(
+      renamedModelId(before, [before[0], { ...before[1], id: 'c', name: 'C' }], 'b'),
+    ).toBeNull();
   });
 });
 

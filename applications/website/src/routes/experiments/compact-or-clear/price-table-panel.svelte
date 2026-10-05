@@ -4,7 +4,13 @@
   import Button from '$lib/components/button';
 
   import { bodyClasses, hintClasses } from './field-styles';
-  import { defaultModels, parsePriceTable, pricesEqual, serializePriceTable } from './pricing';
+  import {
+    defaultModels,
+    MODEL_ID_PATTERN,
+    parsePriceTable,
+    pricesEqual,
+    serializePriceTable,
+  } from './pricing';
   import type { ModelPrice } from './pricing';
   import TextCell from './text-cell.svelte';
 
@@ -45,7 +51,9 @@
 
   const validateId = (text: string, index: number): string | null => {
     const id = text.trim();
-    if (!/^[a-z0-9][a-z0-9-]*$/.test(id)) return 'Use lowercase letters, numbers, and hyphens.';
+    if (!MODEL_ID_PATTERN.test(id)) {
+      return 'Use lowercase letters, numbers, and hyphens, up to 60 characters.';
+    }
 
     return models.some((model, position) => position !== index && model.id === id)
       ? 'Another model already uses that ID.'

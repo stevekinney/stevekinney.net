@@ -23,8 +23,9 @@ describe('sensitivityRows', () => {
 
   it('finds the compaction payback at each end of an input, holding the rest', () => {
     expect(row('cache').low).toBe(6);
-    expect(row('cache').high).toBe(16);
-    expect(row('cache').spread).toBe(10);
+    // A cold cache makes keeping going re-cache the old prefix, so compacting pays back at once.
+    expect(row('cache').high).toBe(1);
+    expect(row('cache').spread).toBe(5);
     expect(row('cache').lowLabel).toBe('Warm');
     expect(row('cache').highLabel).toBe('Cold');
   });
