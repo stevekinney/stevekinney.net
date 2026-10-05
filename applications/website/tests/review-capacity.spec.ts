@@ -145,6 +145,23 @@ test.describe('presets', () => {
     await expect(page.getByTestId('queue-headline')).toContainText('3,000 lines are waiting');
   });
 
+  test('an oversized pull request still waits when capacity covers the average', async ({
+    page,
+  }) => {
+    // One 2,000-line pull request every other day: 1,000 lines a day on average, against 1,200.
+    await openRevealed(page, '#agents=1&prs=0.5&lines=2000&days=9');
+
+    await expect(page.getByTestId('gap-label')).toHaveText(
+      'Capacity covers it, with 200 lines/day to spare',
+    );
+    await expect(page.getByTestId('oversized-warning')).toBeVisible();
+    await expect(page.getByText('so it still waits or gets a tired review')).toBeVisible();
+    await expect(page.getByText('both policies give the same result')).toHaveCount(0);
+    await expect(page.getByTestId('queue-headline')).toContainText(
+      'the backlog peaked at 800 lines on day 2',
+    );
+  });
+
   test('no fatigue makes both policies equal on quality', async ({ page }) => {
     await openRevealed(page);
     await preset(page, 'No fatigue').click();

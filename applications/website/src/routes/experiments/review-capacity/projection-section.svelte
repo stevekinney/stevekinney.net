@@ -21,6 +21,12 @@
 
   const days = $derived(queued.days.map((day) => String(day.day)));
   const lastQueued = $derived(queued.days.at(-1));
+  const peakQueued = $derived(
+    queued.days.reduce<(typeof queued.days)[number] | undefined>(
+      (peak, day) => (peak && peak.backlogLines >= day.backlogLines ? peak : day),
+      undefined,
+    ),
+  );
   const tiredPerDay = $derived(tired.totals.escaped.total / scenario.days);
 
   const backlogSeries = $derived<BarSeries[]>([
@@ -86,6 +92,10 @@
           <strong>{formatLines(lastQueued.backlogLines)} lines</strong> are waiting, which is
           <strong>{lastQueued.backlogPrs} {plural(lastQueued.backlogPrs, 'pull request')}</strong>.
           The oldest was {oldestText(lastQueued)}.
+        {:else if peakQueued && peakQueued.backlogLines > 0}
+          After {scenario.days} working {plural(scenario.days, 'day')}, nothing is waiting, but the
+          backlog peaked at <strong>{formatLines(peakQueued.backlogLines)} lines</strong> on day {peakQueued.day},
+          because one pull request is more than a day of good sittings.
         {:else}
           The backlog stays at zero. Everything opened is reviewed fresh the same day.
         {/if}

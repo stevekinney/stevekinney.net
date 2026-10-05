@@ -121,6 +121,9 @@
         {scenario.policy === 'queue' ? 'wait for tomorrow' : 'get a tired review'}.
       {:else if balance.generated === 0}
         With no agents, the backlog stays at zero and nothing escapes review.
+      {:else if balance.oversizedPr}
+        On average your good sittings cover what the agents open, but a single pull request is
+        bigger than a whole day of them, so it still waits or gets a tired review.
       {:else}
         Everything the agents open fits in your good sittings, so the backlog stays at zero and both
         policies give the same result.
