@@ -155,7 +155,8 @@ export const simulate = (
 ): Simulation => {
   const capacity = scenario.sittings * scenario.linesPerSitting;
   // The queue only grows at the back, so a head index and a running total of waiting
-  // lines replace shifting the array and summing it every day.
+  // lines replace shifting the array and summing it every day. The array empties whenever
+  // the head reaches its end.
   const queue: WaitingPr[] = [];
   let head = 0;
   let backlogLines = 0;
@@ -185,6 +186,11 @@ export const simulate = (
         freshLines += reviewed;
         backlogLines -= reviewed;
         if (next.remaining === 0) head += 1;
+      }
+      // Once everything waiting is reviewed, drop the finished entries so they don't pile up.
+      if (head === queue.length) {
+        queue.length = 0;
+        head = 0;
       }
     } else {
       freshLines = Math.min(generatedLines, capacity);
