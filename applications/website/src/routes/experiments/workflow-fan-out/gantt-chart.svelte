@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { placeTooltip } from '../cache-break-even/tooltip-position';
+  import { placeTooltip } from '$lib/experiments/tooltip-position';
 
   import { ganttSegments, timeTicks } from './gantt-geometry';
   import { formatMinutes } from './results';

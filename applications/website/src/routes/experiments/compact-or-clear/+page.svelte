@@ -15,7 +15,7 @@
   import HeroTiles from './hero-tiles.svelte';
   import { calibrationPatch, discardPatch, mergeBackup } from './import-state';
   import type { ImportedFields } from './import-state';
-  import LazySection from './lazy-section.svelte';
+  import LazySection from '$lib/experiments/lazy-section.svelte';
   import { defaultModels } from './pricing';
   import type { ModelPrice } from './pricing';
   import { project } from './projection';

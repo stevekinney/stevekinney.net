@@ -18,7 +18,7 @@
   } from './chart-geometry';
   import { formatDollars, formatTokens } from './display';
   import { headingClasses, panelClasses } from './field-styles';
-  import { placeTooltip } from './tooltip-position';
+  import { placeTooltip } from '$lib/experiments/tooltip-position';
 
   type Props = {
     evaluation: ChangeEvaluation;

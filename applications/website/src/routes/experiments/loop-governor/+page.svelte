@@ -7,7 +7,7 @@
   import { url } from '$lib/metadata';
   import { buildBreadcrumbSchema } from '$lib/structured-data';
 
-  import LazySection from '../compact-or-clear/lazy-section.svelte';
+  import LazySection from '$lib/experiments/lazy-section.svelte';
   import { falseDoneBeforeTrue } from './analytic';
   import CautionaryTales from './cautionary-tales.svelte';
   import { experiment } from './experiment';

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { formatCost } from '$lib/experiments/format';
 
-  import { placeTooltip } from '../cache-break-even/tooltip-position';
+  import { placeTooltip } from '$lib/experiments/tooltip-position';
   import type { Replay } from './replay';
 
   type Props = {

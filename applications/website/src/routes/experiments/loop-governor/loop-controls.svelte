@@ -4,7 +4,7 @@
   import Button from '$lib/components/button';
   import { formatCost } from '$lib/experiments/format';
 
-  import LazySection from '../compact-or-clear/lazy-section.svelte';
+  import LazySection from '$lib/experiments/lazy-section.svelte';
   import CheckField from './check-field.svelte';
   import { iterationCost } from './cost';
   import {
