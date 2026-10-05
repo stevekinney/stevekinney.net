@@ -17,27 +17,38 @@
   } as const;
 </script>
 
-<div role="status" aria-live="polite" class="space-y-4">
-  {#if revealed}
-    <div
-      data-testid="verdict"
-      data-verdict={text.tone}
-      class="space-y-2 rounded-lg border p-4 text-lg leading-relaxed {tints[text.tone]}"
-    >
-      <p><strong class="font-bold">{text.headline}</strong>: {text.detail}</p>
-      {#if text.legLine}
-        <p data-testid="leg-line" class="font-semibold">{text.legLine}</p>
-      {/if}
-      {#if evaluation.path}
-        <p data-testid="path" class="font-semibold [overflow-wrap:anywhere]">
-          {evaluation.path.sentence}
-        </p>
-        {#if evaluation.path.exit.note}
-          <p class="text-base">{evaluation.path.exit.note}</p>
+<div class="space-y-4">
+  <!-- Only the verdict is announced; the residual risks below it are read on demand. -->
+  <div role="status" aria-live="polite">
+    {#if revealed}
+      <div
+        data-testid="verdict"
+        data-verdict={text.tone}
+        class="space-y-2 rounded-lg border p-4 text-lg leading-relaxed {tints[text.tone]}"
+      >
+        <p><strong class="font-bold">{text.headline}</strong>: {text.detail}</p>
+        {#if text.legLine}
+          <p data-testid="leg-line" class="font-semibold">{text.legLine}</p>
         {/if}
-      {/if}
-    </div>
+        {#if evaluation.path}
+          <p data-testid="path" class="font-semibold [overflow-wrap:anywhere]">
+            {evaluation.path.sentence}
+          </p>
+          {#if evaluation.path.exit.note}
+            <p class="text-base">{evaluation.path.exit.note}</p>
+          {/if}
+        {/if}
+      </div>
+    {:else}
+      <p
+        class="rounded-lg border border-dashed border-slate-300 p-4 text-slate-600 dark:border-slate-600 dark:text-slate-300"
+      >
+        Make your prediction above to see the verdict.
+      </p>
+    {/if}
+  </div>
 
+  {#if revealed}
     <div class="space-y-2" data-testid="residual-risks">
       <h3 class="font-bold text-slate-900 dark:text-white">Residual risks</h3>
       {#if evaluation.residualRisks.length === 0}
@@ -58,11 +69,5 @@
         </ul>
       {/if}
     </div>
-  {:else}
-    <p
-      class="rounded-lg border border-dashed border-slate-300 p-4 text-slate-600 dark:border-slate-600 dark:text-slate-300"
-    >
-      Make your prediction above to see the verdict.
-    </p>
   {/if}
 </div>
