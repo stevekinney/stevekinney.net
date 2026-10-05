@@ -299,7 +299,7 @@
 <div class="space-y-12">
   <header class="max-w-3xl space-y-4">
     <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-      What's actually left for evidence.
+      What’s actually left for evidence
     </h1>
     <p class="text-lg text-slate-600 dark:text-slate-300">
       A context window is a capacity limit. It is not a promise that every token gets used equally

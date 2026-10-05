@@ -95,7 +95,7 @@ test('responds with 200, a descriptive title, and the specification’s headline
   expect(response?.status()).toBe(200);
   await expect(page).toHaveTitle(/Usable Evidence Budget/);
   await expect(
-    page.getByRole('heading', { level: 1, name: "What's actually left for evidence." }),
+    page.getByRole('heading', { level: 1, name: 'What’s actually left for evidence', exact: true }),
   ).toBeVisible();
   await expect(page.getByRole('main').getByRole('heading', { level: 1 })).toHaveCount(1);
 });
