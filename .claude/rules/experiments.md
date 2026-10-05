@@ -25,6 +25,8 @@ Interactive tools at `/experiments/<slug>`. Each is a prerendered SvelteKit page
 - Money: add the parts before dividing by a million, and test an exact half cent such as $0.335, which must show as $0.34.
 - Dates: format `YYYY-MM-DD` values with `timeZone: 'UTC'` (`formatCalendarDate` in `src/lib/experiments/format.ts`), or anyone west of UTC sees the previous day.
 - Narrow screens: wide tables scroll inside a `relative overflow-x-auto` region. Without `relative`, absolutely positioned `sr-only` children escape the region and stretch the whole page.
+- Chart tooltips: place them from their measured width and clamp them inside the chart, or a tooltip near the right edge widens a 360-pixel page. The phone-width test should hover and keyboard-focus the chart, not just load it.
+- Untrusted strings with no spaces, such as model IDs and file names, need `[overflow-wrap:anywhere]`; a 120-character model ID once widened the page by 732 pixels.
 - Token counts: parse and format them with `src/lib/experiments/format.ts`, which accepts `250k`, `1.5M`, and `1,000,000`.
 - Claude Code transcripts: read them with `src/lib/experiments/claude-code-transcript.ts`, which was checked against 121 real transcripts. A streamed response spans several lines with the same `message.id` and `output_tokens` grows until the last one, so the last line wins. A response with several `message` iterations, such as one with an advisor call, reports their sum in its top-level usage; its real context is the last iteration's prompt.
 - Playwright names match by substring unless `exact: true`, so `Cached input` also finds `Uncached input`.
