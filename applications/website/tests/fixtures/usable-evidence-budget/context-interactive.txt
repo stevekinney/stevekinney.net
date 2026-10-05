@@ -1,0 +1,14 @@
+ Context Usage
+ ⛁ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀   claude-opus-5 · 190k/1000k tokens (19%)
+ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀
+ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶
+
+ ⛁ System prompt: 18k tokens (1.8%)
+ ⛁ System tools: 12.5k tokens (1.3%)
+ ⛁ Memory files: 7.5k tokens (0.8%)
+ ⛁ Messages: 40k tokens (4.0%)
+ ⛶ Free space: 810k (81.0%)
+ ⛝ Autocompact buffer: 112k tokens (11.2%)
+
+ Memory files · /memory
+ └ CLAUDE.md: 7.5k tokens
