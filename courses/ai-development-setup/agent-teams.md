@@ -15,7 +15,7 @@ Compare that with an ordinary subagent. Its final report is its return value to 
 
 A team makes peer messaging the default. Instead of a lead (the main agent that created the team) dispatching workers and waiting for their reports, teammates share a task list, claim work from it, and message each other directly.
 
-_TL;DR_: teams are only worth their cost when workers need to change each other's minds mid-task. If the lead only needs final answers, subagents give you the same parallelism for about half the tokens a team would use, with worktree isolation (each worker in its own checkout of the repository) thrown in.
+_TL;DR_: teams are only worth their cost when workers need to change each other's minds mid-task. If the lead only needs final answers, subagents give you the same parallelism for about half the tokens a team would use, and can use worktree isolation (each worker in its own checkout of the repository) when you explicitly set `isolation: worktree` in the definition or invocation. Without that setting, ordinary subagents share the main session's working directory. See the [subagent configuration reference](https://code.claude.com/docs/en/sub-agents#write-subagent-files).
 
 ## Turning a team on
 

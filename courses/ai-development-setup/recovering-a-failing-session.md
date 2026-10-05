@@ -21,7 +21,7 @@ So the default is the original attempt plus two failed corrections, then `/clear
 
 Before you clear anything, save what you learned:
 
-- **Keep the plan, nuke the commits**: If you have a written plan or task contract, keep it. It's a file the next session can read. Reset the branch to the last commit you trust (`git reset --hard`, or `git revert` if the failed commits are already pushed) so the failed code doesn't come along.
+- **Preserve the work before removing failed commits**: Run `git status --porcelain` first. Snapshot the plan, recovery notes, and every tracked or untracked change that should survive to a location outside the checkout, and verify the copy. Only use `git reset --hard <trusted-commit>` after the checkout is clean and the commits are yours to discard; it overwrites tracked changes and can remove obstructing untracked files. For already-pushed commits, use `git revert` from a clean checkout instead. The plan is a file the next session needs, so preserve it before either operation.
 - **Write a recovery handoff**: The original goal, what's been ruled out, and the _one_ observation that disproved the last approach. Leave the failed diff out of it.
 - **Start fresh with the handoff**: New session, empty context, and the handoff (plus the plan, if you kept one).
 
@@ -46,7 +46,7 @@ My rule of thumb is that a recovery either works in the first ten minutes or it 
 
 If a credential was exposed, rotate it immediately, before anything else, even before you freeze the scene. Transcripts (the session logs the harness saves to disk) sit there in plaintext, so assume anything the agent printed is now stored somewhere. Investigate second. [Blast Radius](blast-radius.md) covers how to limit what an agent can reach in the first place.
 
-Then freeze the scene. Stop the agent. Don't run "just one more command" in the damaged repository. Copy the `.git` directory somewhere safe.
+Then freeze the scene. Stop the agent and every process that might write to the repository. Before any recovery mutation, snapshot the entire working directory, including uncommitted and untracked files, outside the checkout. Resolve the common Git directory with `git rev-parse --path-format=absolute --git-common-dir` and copy that directory too, preserving metadata. In a linked worktree, `.git` is only a pointer file; the common directory holds the objects, refs, reflogs, and `worktrees/<id>` administrative state. Also resolve `git rev-parse --absolute-git-dir` and verify its administrative files are covered by the backup. If those plumbing commands cannot run, snapshot the full repository and worktree layout without modifying it. [Git's worktree storage documentation](https://git-scm.com/docs/git-worktree#_details) explains what must survive.
 
 Next, climb the recovery ladder: `git reflog`, `ORIG_HEAD`, `git fsck --lost-found`, the remote, another clone, your editor's local history. Anything that was ever staged is probably recoverable. Anything that wasn't, probably isn't.
 

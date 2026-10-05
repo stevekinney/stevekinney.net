@@ -40,9 +40,9 @@ The second list ranks _exit conditions_, the things that tell a loop to stop. Ag
 3. A separate model judging the transcript.
 4. An agent hook that inspects the repository.
 5. A deterministic check, like an exit code, a `jq` query, or an empty diff.
-6. Artifact presence, where "done" just means the output file exists.
+6. A validated artifact: its contents satisfy the contract and its downstream checks pass.
 
-Artifact presence tops this list even though a file's existence is the weakest marker. What differs is what the file is. `touch done` is a flag _about_ the work, so it can exist without the work. An artifact _is_ the work: a ported module, a generated report. It can't exist unless the work happened. And an empty file works fine as a gate when something other than the agent writes it, which is item 6 again.
+A ported module can exist without compiling, and a generated report can be empty or partial. File presence only tells you that something was written. Validate the artifact's contents and behavior before using it as an exit condition. An empty marker written by a trusted external process can record a completed check, but it is still a claim about that check: bind it to the exact artifact and verify the evidence it represents.
 
 Always know which one you're relying on.
 
@@ -67,7 +67,7 @@ Other harnesses are moving toward "finish as a tool call": OpenHands has `finish
 
 ## How file sentinels work
 
-Why disk at all? The hook surface forces it. `SessionEnd` is observation-only, so it can't pass anything to the next session, and `SessionStart` can't see the previous one. The more reliable write point is `Stop`, which fires after every turn, so you rewrite the file each time. Then you read it in `SessionStart`, which has matchers for `startup`, `resume`, `clear`, `compact`, and `fork`. Those tell the hook _how_ the new session began, so you can decide whether to read the file at all.
+Why disk at all? A new session needs state it can read independently of the old context. A [SessionEnd hook](https://code.claude.com/docs/en/hooks#sessionend) can save a handoff file or other external state when the session terminates. It cannot block termination or inject JSON output, and its default execution budget is only 1.5 seconds, so keep the write small and verify it completed. A `Stop` hook can instead checkpoint after each turn; label those records as intermediate so they do not overwrite a final handoff as if the task were complete. Read the saved state in `SessionStart`, whose `startup`, `resume`, `clear`, `compact`, and `fork` matchers tell you how the session began.
 
 There are three shapes of file, and they're good at different things:
 

@@ -45,7 +45,7 @@ It cuts down on prompt fatigue. It doesn't stop a determined payload. Use it for
 The only safe credential is one the agent can't read.
 
 - A sandbox (operating-system-level isolation for the agent's shell commands) still inherits your environment, and there's no built-in credential deny list. If you exported a token before launching, the agent can `echo` it.
-- Set `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1`. It's the only control that also reaches [hooks](hooks.md) and MCP servers.
+- `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` removes recognized credentials from subprocess environments, including [hooks](hooks.md) and stdio MCP servers. It is not a complete credential boundary: the [environment-scrub reference](https://code.claude.com/docs/en/env-vars#what-the-subprocess-environment-scrub-removes) explicitly leaves GitHub tokens and authenticated proxy variables in place, and secrets with unrecognized names and values can survive. Launch the agent with a clean environment containing only the credentials it needs; keep sensitive credentials outside its process and use explicit `sandbox.credentials` denies where appropriate.
 - `Read(.env)` is a permission rule that stops the agent reading that file, but it doesn't match `.env.local`. Use `Read(**/.env*)`.
 - Secret scanners catch commits, not context. Transcripts sit on disk in plaintext.
 - If something leaks: rotate first, investigate second.

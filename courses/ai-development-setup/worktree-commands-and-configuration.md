@@ -29,7 +29,7 @@ A few `add` flags earn their keep:
 ## Configuration
 
 - **Shared configuration**: `git config --local` changes _every_ worktree, because the repository's configuration file is shared.
-- **Per-worktree configuration**: Needs `extensions.worktreeConfig`. Before you turn it on, move `core.worktree` and `core.bare` into the worktree's own configuration file. Older versions of Git refuse repositories that have this extension.
+- **Per-worktree configuration**: First enable `extensions.worktreeConfig` in the common configuration. Then move any existing `core.worktree` and `core.bare` values that belong to the main worktree into its `config.worktree`, and remove them from the common file. Perform the move in the main worktree and verify both files before using linked worktrees. As the [Git configuration reference](https://git-scm.com/docs/git-config#Documentation/git-config.txt---worktree) explains, `git config --worktree` acts like `--local` while the extension is disabled, so moving keys first just writes them back to the shared file. Older versions of Git refuse repositories that have this extension.
 - **Relative paths (Git 2.48+)**: Let you move a repository and its worktrees together, and work inside containers. The cost is that older Git versions and some graphical clients can't open the repository.
 - **Other keys worth knowing**: `gc.worktreePruneExpire` (how long Git waits before pruning stale worktree records; the default is three months), `worktree.guessRemote` (guess a matching remote branch when creating a worktree), and `includeIf "worktree:"` (Git 2.56), which applies configuration only to worktrees whose path matches a pattern.
 
