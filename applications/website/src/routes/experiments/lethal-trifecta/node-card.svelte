@@ -30,7 +30,7 @@
 
   const border = $derived(
     edge.state === 'absent'
-      ? 'border-dotted border-slate-300 opacity-70 dark:border-slate-600'
+      ? 'border-dotted border-slate-300 text-slate-500 dark:border-slate-600'
       : edge.state === 'cut'
         ? 'border-dashed border-slate-400 dark:border-slate-500'
         : edge.state === 'gated'
@@ -46,7 +46,7 @@
   data-edge={edge.state}
   data-path={onPath ? 'true' : undefined}
   data-highlighted={highlighted ? 'true' : undefined}
-  class="group relative rounded-md border-2 bg-white p-2.5 text-sm transition-shadow motion-reduce:transition-none dark:bg-slate-900 {border} {highlighted
+  class="group relative rounded-md border-2 bg-white p-2.5 text-sm transition-shadow focus-within:z-30 hover:z-30 motion-reduce:transition-none dark:bg-slate-900 {border} {highlighted
     ? 'shadow-primary-400/70 shadow-[0_0_0_3px]'
     : ''}"
 >

@@ -265,9 +265,11 @@ test.describe('load your settings', () => {
     await expect(warning(page, 'env-pattern')).toContainText(
       'Read(.env) doesn’t cover .env.local. Read(.env) doesn’t match it, and Read(**/.env*) does.',
     );
-    await expect(warning(page, 'unsandboxed-retry')).toContainText(
-      'Bash(curl *) also approves an unsandboxed retry',
-    );
+    // npm test is flagged too: it runs whatever the repository's test script says.
+    await expect(warning(page, 'unsandboxed-retry')).toHaveCount(2);
+    await expect(
+      warning(page, 'unsandboxed-retry').filter({ hasText: 'Bash(curl *) also' }),
+    ).toContainText('Bash(curl *) also approves an unsandboxed retry');
     await expect(warning(page, 'allowlist')).toContainText('gist.github.com');
     await expect(warning(page, 'excluded-network')).toContainText('docker compose *');
 

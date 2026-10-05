@@ -178,7 +178,7 @@
     <div class="flex items-center justify-center">
       <div
         data-agent
-        class="w-full rounded-lg border-2 border-slate-800 bg-slate-800 px-3 py-4 text-center text-white lg:sticky lg:top-1/2 dark:border-slate-200 dark:bg-slate-100 dark:text-slate-900"
+        class="w-full rounded-lg border-2 border-slate-800 bg-slate-800 px-3 py-4 text-center text-white dark:border-slate-200 dark:bg-slate-100 dark:text-slate-900"
       >
         <p class="font-bold">Agent context</p>
         <p class="mt-1 text-xs opacity-80">

@@ -61,7 +61,7 @@
           {@const kind = badge(control)}
           {@const fromSettings = prefill?.[control.id]}
           <li
-            class="group relative rounded-md border border-slate-200 p-2.5 dark:border-slate-700"
+            class="group relative rounded-md border border-slate-200 p-2.5 focus-within:z-30 hover:z-30 dark:border-slate-700"
             data-control={control.id}
             onmouseenter={() => onHover(control.id)}
             onmouseleave={() => onHover(null)}
