@@ -263,7 +263,10 @@ describe('prefilling the prompt on push and publish', () => {
 
     // Bash(git push) prompts for a bare git push, not git push origin main.
     const exactPush = analyze(file({ permissions: { ask: ['Bash(git push)', 'Bash(gh:*)'] } }));
-    expect(exactPush.prefill['publish-gate'].status).not.toBe('on');
+    expect(exactPush.prefill['publish-gate']).toMatchObject({
+      status: 'unknown',
+      reason: 'No ask or deny rule covers every git push.',
+    });
 
     // A bare Bash rule covers pushing and all of gh.
     expect(analyze(file({ permissions: { ask: ['Bash'] } })).prefill['publish-gate'].status).toBe(

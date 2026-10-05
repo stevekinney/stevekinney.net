@@ -674,7 +674,7 @@ export const analyzeSettings = (
               reason: `git push asks first, or is denied, but no ask or deny rule covers public comments through ${missing}, so a comment can still go out with no prompt.`,
               evidence: gated,
             }
-          : notDeterminable('No rule names git push.');
+          : notDeterminable('No ask or deny rule covers every git push.');
 
   const mode = merged.defaultMode;
   prefill['auto-mode'] = mode
