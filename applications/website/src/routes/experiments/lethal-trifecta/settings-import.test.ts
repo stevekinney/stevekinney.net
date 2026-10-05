@@ -194,13 +194,67 @@ describe('prefilling controls', () => {
 
     expect(report.prefill['deny-web-fetch'].status).toBe('on');
     expect(report.prefill['deny-curl'].status).toBe('on');
-    expect(report.prefill['publish-gate'].status).toBe('on');
+    // An ask rule for git push alone leaves public comments without a prompt.
+    expect(report.prefill['publish-gate'].status).toBe('unknown');
     expect(report.prefill['auto-mode'].status).toBe('on');
     expect(report.prefill['sandbox-deny-read-env'].status).toBe('on');
     expect(report.prefill['environment-scrub'].status).toBe('on');
     expect(report.hasMcpServers).toBe(true);
     expect(report.parsed[0].unknownKeys).toEqual(['env.GITHUB_TOKEN']);
     expect(JSON.stringify(report.parsed[0].unknownKeys)).not.toContain('synthetic-value');
+  });
+});
+
+describe('prefilling the prompt on push and publish', () => {
+  const pushAndComments = ['Bash(git push:*)', 'Bash(gh issue comment:*)', 'Bash(gh pr comment:*)'];
+
+  it('leaves it unknown when only git push asks first, and says comments are uncovered', () => {
+    const report = analyze(file({ permissions: { ask: ['Bash(git push:*)'] } }));
+
+    expect(report.prefill['publish-gate'].status).toBe('unknown');
+    expect(report.prefill['publish-gate'].reason).toContain('public comments');
+  });
+
+  it('turns it on when ask or deny rules cover both pushing and public comments', () => {
+    const report = analyze(file({ permissions: { ask: pushAndComments } }));
+
+    expect(report.prefill['publish-gate'].status).toBe('on');
+    expect(report.prefill['publish-gate'].evidence).toHaveLength(3);
+    expect(
+      analyze(file({ permissions: { ask: ['Bash(git push:*)'], deny: ['Bash(gh:*)'] } })).prefill[
+        'publish-gate'
+      ].status,
+    ).toBe('on');
+  });
+
+  it('needs both comment commands', () => {
+    const report = analyze(
+      file({ permissions: { ask: ['Bash(git push:*)', 'Bash(gh issue comment:*)'] } }),
+    );
+
+    expect(report.prefill['publish-gate'].status).toBe('unknown');
+  });
+
+  it('needs a rule for every MCP server, which can comment with no prompt', () => {
+    const ungated = analyze(
+      file({ permissions: { ask: pushAndComments }, mcpServers: { tracker: {} } }),
+    );
+    expect(ungated.prefill['publish-gate'].status).toBe('unknown');
+    expect(ungated.prefill['publish-gate'].reason).toContain('tracker');
+
+    const gated = analyze(
+      file({
+        permissions: { ask: [...pushAndComments, 'mcp__tracker__*'] },
+        mcpServers: { tracker: {} },
+      }),
+    );
+    expect(gated.prefill['publish-gate'].status).toBe('on');
+  });
+
+  it('turns it off when git push is allowed', () => {
+    const report = analyze(file({ permissions: { allow: ['Bash(git push:*)'] } }));
+
+    expect(report.prefill['publish-gate'].status).toBe('off');
   });
 });
 

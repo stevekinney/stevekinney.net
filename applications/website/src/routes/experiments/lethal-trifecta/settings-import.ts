@@ -591,16 +591,58 @@ export const analyzeSettings = (
         ? { status: 'off', reason: 'The sandbox denyRead misses .env.local.', evidence: shellEnv }
         : notDeterminable('No sandbox denyRead entry covers .env files in every directory.');
 
+  // The control means a prompt on pushing and on public comments, so it's on only when the
+  // ask and deny rules cover both. A comment can go out through gh or through any MCP server.
   const pushRule = (rule: Located<string>): boolean =>
     /^git push\b/.test(bashCommand(rule.value) ?? '') || bashCommand(rule.value) === 'git';
-  const gated = [...merged.ask, ...merged.deny].filter(pushRule);
+  const coversCommand =
+    (command: string) =>
+    (rule: Located<string>): boolean => {
+      const named = bashCommand(rule.value);
+
+      return (
+        named !== null && (named === '' || command === named || command.startsWith(`${named} `))
+      );
+    };
+  const askOrDeny = [...merged.ask, ...merged.deny];
+  const gated = askOrDeny.filter(pushRule);
   const pushAllowed = merged.allow.filter(pushRule);
+  const commentRules = ['gh issue comment', 'gh pr comment'].map((command) =>
+    askOrDeny.find(coversCommand(command)),
+  );
+  const mcpServers = [...new Set(merged.mcpServers.map((server) => server.value))];
+  const mcpRules = mcpServers.map((server) =>
+    askOrDeny.find((rule) => [`mcp__${server}`, `mcp__${server}__*`].includes(rule.value.trim())),
+  );
+  const ungatedServers = mcpServers.filter((_, index) => !mcpRules[index]);
+  const commentsGated = [...commentRules, ...mcpRules].every((rule) => rule !== undefined);
+  const missing = [
+    ...(commentRules.every((rule) => rule !== undefined)
+      ? []
+      : ['gh issue comment and gh pr comment']),
+    ...(ungatedServers.length > 0 ? [`the MCP servers ${ungatedServers.join(', ')}`] : []),
+  ].join(', or ');
   prefill['publish-gate'] =
-    gated.length > 0
-      ? { status: 'on', reason: 'git push asks first, or is denied.', evidence: gated }
+    gated.length > 0 && commentsGated
+      ? {
+          status: 'on',
+          reason: 'git push and public comments ask first, or are denied.',
+          evidence: [
+            ...new Set([
+              ...gated,
+              ...[...commentRules, ...mcpRules].filter((rule) => rule !== undefined),
+            ]),
+          ],
+        }
       : pushAllowed.length > 0
         ? { status: 'off', reason: 'git push is allowed without a prompt.', evidence: pushAllowed }
-        : notDeterminable('No rule names git push.');
+        : gated.length > 0
+          ? {
+              status: 'unknown',
+              reason: `git push asks first, or is denied, but no ask or deny rule covers public comments through ${missing}, so a comment can still go out with no prompt.`,
+              evidence: gated,
+            }
+          : notDeterminable('No rule names git push.');
 
   const mode = merged.defaultMode;
   prefill['auto-mode'] = mode
