@@ -405,6 +405,39 @@ describe('Codex sessions that report the same counts', () => {
     ).toBe(1);
   });
 
+  it('follows a fork chain back to the original whichever order the files are read in', () => {
+    const files = {
+      'a.jsonl': [codexMeta('thread-a'), codexTurn('gpt-6-luna'), first],
+      'b.jsonl': [codexMeta('thread-b', 'thread-a'), codexTurn('gpt-6-luna'), first],
+      'c.jsonl': [codexMeta('thread-c', 'thread-b'), codexTurn('gpt-6-luna'), first],
+    };
+
+    expect(
+      collect({
+        'c.jsonl': files['c.jsonl'],
+        'b.jsonl': files['b.jsonl'],
+        'a.jsonl': files['a.jsonl'],
+      }).requests,
+    ).toBe(1);
+    expect(
+      collect({
+        'c.jsonl': files['c.jsonl'],
+        'a.jsonl': files['a.jsonl'],
+        'b.jsonl': files['b.jsonl'],
+      }).requests,
+    ).toBe(1);
+  });
+
+  it('counts an identical request on either side of a compaction reset', () => {
+    const reset = codexTokenCount({}, {});
+    const session = collect({
+      'rollout.jsonl': [codexMeta('thread-a'), codexTurn('gpt-6-luna'), first, reset, first],
+    });
+
+    expect(session.requests).toBe(2);
+    expect(session.total.uncachedInput).toBe(200);
+  });
+
   it('follows a fork of a fork back to the original thread', () => {
     const session = collect({
       'a.jsonl': [codexMeta('thread-a'), codexTurn('gpt-6-luna'), first],

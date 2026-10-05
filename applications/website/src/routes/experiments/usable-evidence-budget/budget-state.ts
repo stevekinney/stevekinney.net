@@ -176,6 +176,18 @@ export const fillFromReadout = (
     if (scenario.margin !== state.scenario.margin) filled.push('margin');
   }
 
+  // A mapping change can move a row away from a term. That term goes back to what it was before
+  // the readout, or the row's tokens would count in the old place and the new one.
+  const stale = refill
+    ? state.fromReadout.filter(
+        (mark): mark is TermKey =>
+          mark !== 'capacity' &&
+          !(mark in applied.values) &&
+          !(mark === 'margin' && applied.capacityFromHeader),
+      )
+    : [];
+  for (const key of stale) scenario[key] = before[key];
+
   for (const [key, value] of Object.entries(applied.values) as [TermKey, number][]) {
     if (edited.includes(key)) continue;
 
@@ -188,7 +200,9 @@ export const fillFromReadout = (
   }
 
   // A row the new readout leaves out keeps its number, so it keeps its mark and stays discardable.
-  const marks = [...new Set([...state.fromReadout, ...filled])];
+  const marks = [...new Set([...state.fromReadout, ...filled])].filter(
+    (mark) => !stale.includes(mark as TermKey),
+  );
 
   return {
     ...state,
@@ -199,7 +213,9 @@ export const fillFromReadout = (
       ? isCustomCapacity(scenario.capacity)
       : state.customCapacity,
     fromReadout: marks,
-    readoutKeys: [...new Set([...state.readoutKeys, ...filled])],
+    readoutKeys: [...new Set([...state.readoutKeys, ...filled])].filter(
+      (key) => !stale.includes(key as TermKey),
+    ),
     beforeReadout: filled.length > 0 || refill ? before : state.beforeReadout,
     presetBeforeReadout: filled.length > 0 || refill ? presetBefore : state.presetBeforeReadout,
   };

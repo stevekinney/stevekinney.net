@@ -81,15 +81,22 @@
     ),
   );
 
+  // The cache keeps aging while the page is open, so the assessment is measured against now, not
+  // against the moment the files were read.
+  let now = $state(Date.now());
+
   const assessment = $derived(
     calculator.calibration
-      ? assessCache(
-          calculator.calibration.lastTimestamp,
-          calculator.calibration.importedAt,
-          scenario.ttl,
-        )
+      ? assessCache(calculator.calibration.lastTimestamp, now, scenario.ttl)
       : null,
   );
+
+  // A cache setting that came from the session follows the assessment until the person sets it.
+  $effect(() => {
+    if (assessment && calculator.imported.warm && scenario.warm !== assessment.warm) {
+      calculator.scenario.warm = assessment.warm;
+    }
+  });
 
   const markEdited = (fields: ScenarioField[]): void => {
     for (const field of fields) delete calculator.imported[field];
@@ -119,11 +126,7 @@
 
     // A calibrated cache setting follows the TTL until the person sets it.
     if (patch.ttl !== undefined && calculator.imported.warm && calculator.calibration) {
-      const next = assessCache(
-        calculator.calibration.lastTimestamp,
-        calculator.calibration.importedAt,
-        patch.ttl,
-      );
+      const next = assessCache(calculator.calibration.lastTimestamp, Date.now(), patch.ttl);
       if (next) calculator.scenario.warm = next.warm;
     }
 
@@ -133,7 +136,13 @@
   };
 
   const applyCalibration = (calibration: Calibration): void => {
-    const next = assessCache(calibration.lastTimestamp, calibration.importedAt, scenario.ttl);
+    // A second session replaces the first. Whatever the first filled in and the person hasn't
+    // edited goes back first, so a field the new session can't measure doesn't keep the old value.
+    Object.assign(calculator.scenario, discardPatch(calculator.backup, calculator.imported));
+    calculator.imported = {};
+
+    now = Date.now();
+    const next = assessCache(calibration.lastTimestamp, now, scenario.ttl);
     const { patch, imported } = calibrationPatch(calibration, next);
 
     calculator.backup = mergeBackup(
@@ -229,6 +238,10 @@
     }
 
     calculator.ready = true;
+
+    const timer = setInterval(() => (now = Date.now()), 15_000);
+
+    return () => clearInterval(timer);
   });
 
   // Keep the address bar in step with the controls, once a person has changed one.

@@ -326,6 +326,22 @@ describe('filling from a readout', () => {
     expect(discardReadout(replaced).scenario).toEqual(initialState().scenario);
   });
 
+  it('puts a term back when a mapping change moves its row somewhere else', () => {
+    const messages = parseReadout('Messages: 40k tokens');
+    const toHistory = applyReadout(messages, defaultMapping, 1_000_000);
+    const first = fillFromReadout(initialState(), toHistory);
+
+    expect(first.scenario.history).toBe(40_000);
+
+    const toTools = applyReadout(messages, { ...defaultMapping, messages: 'tools' }, 1_000_000);
+    const moved = fillFromReadout(first, toTools, { refill: true });
+
+    expect(moved.scenario.tools).toBe(40_000);
+    expect(moved.scenario.history).toBe(initialState().scenario.history);
+    expect(moved.fromReadout).not.toContain('history');
+    expect(discardReadout(moved).scenario).toEqual(initialState().scenario);
+  });
+
   it('keeps the earlier marks when a refill adds a term', () => {
     const partial = applyReadout(
       parseReadout('System prompt: 18k tokens'),
