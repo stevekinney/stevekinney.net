@@ -447,6 +447,29 @@ test.describe('sharing and comparing', () => {
     expect(summary).toContain('- False done before true done: 21.8% exact');
   });
 
+  test('opens a shared runaway A at 10,000 runs without freezing the page', async ({ page }) => {
+    await page.addInitScript(() => {
+      const durations: number[] = [];
+      (window as unknown as { longTasks: number[] }).longTasks = durations;
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) durations.push(entry.duration);
+      }).observe({ type: 'longtask', buffered: true });
+    });
+    const runaway = 'p=0&n=10000&m=external&gv=';
+    await open(page, `#${runaway}&a=${encodeURIComponent(runaway)}`);
+
+    await expect(page.getByRole('heading', { name: 'A (pinned)' })).toHaveCount(2, {
+      timeout: 60_000,
+    });
+    await settled(page, '10,000');
+    await expect(share(page, 'runaway', 'a')).toHaveText('100.0%');
+
+    const longest = await page.evaluate(() =>
+      Math.max(0, ...(window as unknown as { longTasks: number[] }).longTasks),
+    );
+    expect(longest).toBeLessThan(500);
+  });
+
   test('pins A and compares it with the current configuration', async ({ page }) => {
     await open(page);
     await showResults(page);

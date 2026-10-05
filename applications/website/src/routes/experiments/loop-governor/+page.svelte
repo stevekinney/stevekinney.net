@@ -131,9 +131,26 @@
     page.showResults = true;
   };
 
+  /** Whether a person has pinned or unpinned, which overrides a shared link's A. */
+  let pinChosen = false;
+
   const togglePin = (): void => {
+    pinChosen = true;
     pinned = pinned ? null : { config: cloneConfig(tallied), tally };
     page.touched = true;
+  };
+
+  // A shared link's A runs in slices too, so a runaway A at 10,000 runs doesn't
+  // freeze the page while it opens. A person who pins or unpins first wins.
+  const loadPinned = (shared: Config): void => {
+    const batch = createBatch(shared);
+    const work = (): void => {
+      if (pinChosen) return;
+      if (batch.step(SLICE_MILLISECONDS)) pinned = { config: shared, tally: batch.tally };
+      else setTimeout(work, 0);
+    };
+
+    setTimeout(work, 0);
   };
 
   onMount(() => {
@@ -141,9 +158,7 @@
     const shared = decodeState(window.location.hash.slice(1));
     if (shared) {
       config = shared.config;
-      if (shared.pinned) {
-        pinned = { config: shared.pinned, tally: simulateBatch(shared.pinned) };
-      }
+      if (shared.pinned) loadPinned(shared.pinned);
       // Someone sent this configuration on purpose, so its results show straight away.
       page.showResults = true;
     }
