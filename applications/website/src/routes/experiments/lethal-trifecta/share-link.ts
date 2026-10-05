@@ -1,5 +1,5 @@
 import type { CiScenario } from './ci-scenarios';
-import { exfiltrationDomains, normalizeDomain } from './domains';
+import { exfiltrationDomains, exfiltrationMatches, normalizeDomain } from './domains';
 import type { TrifectaState } from './evaluate';
 import { controls, nodes } from './model';
 import type { ControlId, NodeId } from './model';
@@ -14,8 +14,8 @@ const list = (value: string | null): string[] =>
 
 /**
  * The toggles as `key=value` pairs for the address's hash, which never reaches
- * a server. Only the known exfiltration domains travel. A domain from an
- * uploaded file, and the file itself, never do.
+ * a server. Only the known exfiltration domains the allowlist admits travel.
+ * An entry from an uploaded file, and the file itself, never do.
  */
 export const encodeState = (state: TrifectaState): string => {
   const parameters = new URLSearchParams();
@@ -35,9 +35,9 @@ export const encodeState = (state: TrifectaState): string => {
       .join(','),
   );
 
-  const domains = state.allowlist
-    .map(normalizeDomain)
-    .filter((domain) => shareableDomains.has(domain));
+  // The known hosts the allowlist admits, so a wildcard from an uploaded file
+  // reopens the same exit after a restore without its own text traveling.
+  const domains = exfiltrationMatches(state.allowlist).map(({ domain }) => domain.host);
   if (domains.length > 0) parameters.set('allow', domains.join(','));
   if (state.excludedNetworkCommand) parameters.set('excluded', '1');
 
