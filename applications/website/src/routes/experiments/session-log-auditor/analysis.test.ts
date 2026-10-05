@@ -137,7 +137,7 @@ describe('the presets', () => {
     const analysis = run(readPreset('floor-fixed'));
     const timeout = analysis.clusters.find((cluster) => cluster.signature.endsWith('timeout'));
 
-    expect(timeout?.lastSeen?.slice(0, 10) < '2026-09-01').toBe(true);
+    expect(timeout?.lastSeen?.slice(0, 10)).toBe('2026-08-29');
     expect(analysis.overview.floorShare).toBeGreaterThan(0.5);
     expect(analysis.overview.compactions.manual).toBe(1);
     expect(analysis.cost.unpricedModels).toEqual(['claude-opus-5']);

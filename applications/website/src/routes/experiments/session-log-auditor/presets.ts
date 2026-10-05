@@ -3,17 +3,14 @@
  * Each one is generated here, in the shape Claude Code writes, and read
  * through the same path as dropped files. None of it is real data.
  */
+import { presetSummaries } from './preset-list';
+import type { PresetSummary } from './preset-list';
 import { createSessionWriter, syntheticSessionId } from './synthetic-sessions';
 import type { SessionInfo, SessionWriter } from './synthetic-sessions';
 
 export type PresetFile = { path: string; text: string };
 
-export type Preset = {
-  id: string;
-  name: string;
-  notice: string;
-  files: () => PresetFile[];
-};
+export type Preset = PresetSummary & { files: () => PresetFile[] };
 
 const DAY = 86_400_000;
 
@@ -246,29 +243,16 @@ const regression = (): PresetFile[] => {
   return files;
 };
 
-export const presets: readonly Preset[] = [
-  {
-    id: 'floor-fixed',
-    name: 'A floor that got fixed',
-    notice:
-      'Twenty-four made-up sessions across two repositories. The missing `timeout` command stops on September 1, when a shim goes in, and the Bun types stop on September 8. Mark either one fixed to see its control row hold at zero.',
-    files: floorFixed,
-  },
-  {
-    id: 'retry-storm',
-    name: 'One session, 200 retries',
-    notice:
-      'One session retries a failed database connection 200 times. Ranked by sessions, the missing `pnpm` that hits four sessions still comes first.',
-    files: retryStorm,
-  },
-  {
-    id: 'regression',
-    name: 'A fix that slipped',
-    notice:
-      'The missing `timeout` command goes away on September 1 and comes back on September 10. Mark it fixed on 2026-09-01 and the control row raises a regression.',
-    files: regression,
-  },
-];
+const generators: Record<string, () => PresetFile[]> = {
+  'floor-fixed': floorFixed,
+  'retry-storm': retryStorm,
+  regression,
+};
+
+export const presets: readonly Preset[] = presetSummaries.map((summary) => ({
+  ...summary,
+  files: generators[summary.id],
+}));
 
 export const findPreset = (id: string | null): Preset | undefined =>
   presets.find((preset) => preset.id === id);

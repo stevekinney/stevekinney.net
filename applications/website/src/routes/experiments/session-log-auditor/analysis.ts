@@ -231,3 +231,20 @@ export const analyze = ({ data, rules, prices, filters, marks }: AnalysisInput):
     activeDays,
   };
 };
+
+/** The filters in effect, in words, for the digest and summary, or `null` for none. */
+export const describeFilters = (filters: Filters): string | null => {
+  const parts = [
+    filters.from || filters.to
+      ? `${filters.from || 'the start'} to ${filters.to || 'the end'}`
+      : '',
+    filters.cwd ? `directory ${filters.cwd}` : '',
+    filters.branch ? `branch ${filters.branch}` : '',
+    filters.model ? `model ${filters.model}` : '',
+    filters.tool ? `tool ${filters.tool}` : '',
+    filters.category ? `category ${filters.category}` : '',
+    filters.search.trim() ? `matching “${filters.search.trim()}”` : '',
+  ].filter(Boolean);
+
+  return parts.length > 0 ? parts.join('; ') : null;
+};
