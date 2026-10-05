@@ -71,12 +71,20 @@ Here's a minimal one. It lives under the `hooks` key of `.claude/settings.json`,
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "hooks": [{ "type": "command", "command": ".claude/hooks/allow-lint.sh", "timeout": 10 }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR}/.claude/hooks/allow-lint.sh\"",
+            "timeout": 10
+          }
+        ]
       }
     ]
   }
 }
 ```
+
+The absolute `${CLAUDE_PROJECT_DIR}` path keeps the hook executable anchored to the launch project when Claude changes directories or enters a worktree. The JSON input's `cwd` still identifies where the requested tool call will run.
 
 Here's a deliberately narrow script: it accepts only the exact command `bun run lint`. Everything else, including malformed event JSON or a missing `jq`, blocks with exit `2`.
 

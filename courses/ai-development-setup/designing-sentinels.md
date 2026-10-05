@@ -22,9 +22,9 @@ If the agent can write its own approval, the gate is an honor system. No clever 
 - **Deny `Edit(/.agent-state/**)` in project permissions**: Put this in `.claude/settings.json` or `.claude/settings.local.json`, and start the session at the project or worktree root. The leading slash anchors to the settings source: in user settings it would protect `~/.claude/.agent-state`, not the project marker. Verify a direct file-tool write is denied in every worktree. On its own, a path deny rule is friction, not a boundary. See the [Read and Edit path rules](https://code.claude.com/docs/en/permissions#read-and-edit).
 - **Add a sandbox `denyWrite` for the directory**: A sandbox is operating-system-level isolation for the agent's shell commands. This rule only covers Bash and PowerShell commands and their children, not `Edit` or `Write`.
 - **Set `allowUnsandboxedCommands: false`**: Otherwise, a denied command can just be retried outside the sandbox.
-- **Put the writer outside the sandbox**: That, plus the three above, is an actual boundary.
+- **Protect the writer and its configuration**: Command hooks run with the user's full permissions, as the [hook security reference](https://code.claude.com/docs/en/hooks#security-considerations) explains. Running outside the sandbox does not protect an executable stored in the agent-writable repository. Keep the writer executable, dependencies, and configuration outside every agent-writable root, and protect them against file tools and subprocesses. If they must remain in the repository, deny edits and OS-protect those paths as well. The marker controls only become a boundary when the agent cannot alter either the marker or the code and configuration that authorize it.
 
-Test every gate negatively: delete the marker, attempt the action, and assert the denial. A passing run proves nothing, because a gate that allows everything passes too.
+Test every gate negatively: delete the marker, attempt the action, and assert the denial. Also attempt to modify the writer and its configuration through both file tools and a subprocess; every attempt must fail. A passing run proves nothing, because a gate that allows everything passes too.
 
 ## Best practices
 
