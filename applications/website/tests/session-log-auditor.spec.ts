@@ -106,7 +106,7 @@ test.describe('predict first', () => {
     await expect(result).toContainText('Your guess');
     await expect(result).toContainText('20%');
     await expect(result).toContainText('Measured');
-    await expect(result).toContainText(/failed tool\s+calls came from the floor/);
+    await expect(result).toContainText(/failed\s+tool\s+calls came from the floor/);
     await expect(guess(page)).toBeDisabled();
     await expect(page.getByTestId('tile-floor')).toHaveText(/^\d+\.\d%$/);
   });

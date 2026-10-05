@@ -459,11 +459,11 @@ test.describe('keyboard focus', () => {
   test('moves focus to the answer after a prediction or a skip', async ({ page }) => {
     await open(page);
     await page.getByRole('button', { name: 'No, it’s protected' }).click();
-    await expect(page.getByRole('group', { name: 'The answer' })).toBeFocused();
+    await expect(page.getByRole('group', { name: 'The answer', exact: true })).toBeFocused();
 
     await open(page);
     await page.getByRole('button', { name: 'Skip and show me' }).click();
-    await expect(page.getByRole('group', { name: 'The answer' })).toBeFocused();
+    await expect(page.getByRole('group', { name: 'The answer', exact: true })).toBeFocused();
   });
 
   test('announces the verdict but not the residual risks', async ({ page }) => {

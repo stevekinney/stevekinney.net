@@ -590,7 +590,7 @@ test.describe('keyboard focus', () => {
     await openPicker(page);
     await page.getByRole('radio', { name: 'Hook', exact: true }).check();
     await page.getByRole('button', { name: 'Check my answer' }).click();
-    await expect(page.getByRole('group', { name: 'The answer' })).toBeFocused();
+    await expect(page.getByRole('group', { name: 'The answer', exact: true })).toBeFocused();
 
     await page.getByRole('button', { name: 'Try it again' }).click();
     await expect(page.getByTestId('predict-card').getByRole('radio').first()).toBeFocused();
