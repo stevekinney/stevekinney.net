@@ -67,6 +67,8 @@
   };
 
   const readFiles = async (files: Promise<SourceFile[]>): Promise<void> => {
+    if (busy) return;
+
     busy = true;
     error = null;
 
