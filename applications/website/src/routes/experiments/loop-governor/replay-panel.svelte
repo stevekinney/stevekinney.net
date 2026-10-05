@@ -20,6 +20,7 @@
   } from './replay';
   import type { FieldMapping, FieldRole } from './replay';
   import ReplayChart from './replay-chart.svelte';
+  import ToggleGroup from './toggle-group.svelte';
 
   type Props = {
     settings: { stallM: number; maxIterations: number; budget: number };
@@ -41,6 +42,7 @@
   let mapping = $state<FieldMapping | null>(null);
   let lowerIsBetter = $state(false);
   let runningTotal = $state(false);
+  let runningTotalScope = $state<'log' | 'session'>('log');
   let busy = $state(false);
   let progress = $state<string | null>(null);
   let error = $state<string | null>(null);
@@ -62,6 +64,7 @@
     mapping = guessed;
     lowerIsBetter = guessLowerIsBetter(guessed.score);
     runningTotal = false;
+    runningTotalScope = 'log';
     error = null;
     chosen = 1;
   };
@@ -106,8 +109,16 @@
   const transcript = $derived(intake && mapping ? looksLikeTranscript(intake, mapping) : false);
   const replay = $derived(
     intake && mapping && !transcript
-      ? analyzeLog(intake.log, { mapping, lowerIsBetter, costIsRunningTotal: runningTotal })
+      ? analyzeLog(intake.log, {
+          mapping,
+          lowerIsBetter,
+          costIsRunningTotal: runningTotal,
+          runningTotalScope,
+        })
       : null,
+  );
+  const unknownCount = $derived(
+    replay ? replay.iterations.filter((step) => step.progress === null).length : 0,
   );
   const results = $derived(
     replay
@@ -229,6 +240,21 @@
             />The cost is a running total
           </label>
         </div>
+        {#if runningTotal && mapping.session !== null}
+          <div class="max-w-md">
+            <ToggleGroup
+              id="running-total-scope"
+              label="The running total counts"
+              value={runningTotalScope}
+              options={[
+                { value: 'log', label: 'Across the whole log' },
+                { value: 'session', label: 'Per session' },
+              ]}
+              onChange={(value) => (runningTotalScope = value)}
+              hint="A log can’t say which. A loop that keeps one total for every session needs the whole log; one that restarts its total in each session needs per session."
+            />
+          </div>
+        {/if}
       </fieldset>
 
       {#if replay}
@@ -239,7 +265,7 @@
         <p class={bodyClasses}>
           {replay.iterations.length.toLocaleString('en-US')} iterations, {formatCost(replay.total)} in
           total, {replay.hasProgress
-            ? `${replay.iterations.filter((step) => step.progress).length} with progress`
+            ? `${replay.iterations.filter((step) => step.progress).length} with progress${unknownCount > 0 ? `, ${unknownCount.toLocaleString('en-US')} unknown` : ''}`
             : 'progress unknown'}.
         </p>
 

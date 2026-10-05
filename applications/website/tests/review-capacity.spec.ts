@@ -60,6 +60,25 @@ test.describe('predict first', () => {
     await expect(page.getByRole('heading', { name: 'Your daily balance' })).toBeVisible();
   });
 
+  test('announces only the two numbers, so a slider change doesn’t reread the explanation', async ({
+    page,
+  }) => {
+    await openExperiment(page, path);
+    await page.getByLabel('Your guess, in agents').fill('4');
+    await page.getByRole('button', { name: 'Reveal' }).click();
+
+    const live = page
+      .locator('[aria-live="polite"]')
+      .filter({ has: page.getByTestId('prediction-reveal') });
+    await expect(live).toHaveCount(1);
+    await expect(live).not.toContainText('You guessed');
+    await expect(live).not.toContainText('rounds down to');
+    // The verdict and the explanation still sit in the focused group.
+    const outcome = page.getByRole('group', { name: 'Your guess and the answer' });
+    await expect(outcome).toContainText('You guessed 2 more than you can keep reviewed.');
+    await expect(outcome).toContainText('1,200 ÷ 600 rounds down to 2 agents');
+  });
+
   test('says so when the guess is right', async ({ page }) => {
     await openExperiment(page, path);
 

@@ -213,11 +213,16 @@ export type ReplayOptions = {
   mapping: FieldMapping;
   lowerIsBetter: boolean;
   /**
-   * Whether the cost field is each iteration's cost or a running total. A running total is
-   * kept for each session when a mapped session repeats, otherwise for the whole log, and a
-   * drop starts a new total.
+   * Whether the cost field is each iteration's cost or a running total. A drop in a running
+   * total starts a new total.
    */
   costIsRunningTotal: boolean;
+  /**
+   * What a running total counts: the whole log (the default) or each session. Used only when
+   * `costIsRunningTotal` is on. Per session needs a mapped session field; without one, the
+   * total is read across the whole log.
+   */
+  runningTotalScope?: 'log' | 'session';
 };
 
 export type ReplayIteration = {
@@ -227,14 +232,21 @@ export type ReplayIteration = {
   cost: number;
   cumulative: number;
   score: number | null;
-  kept: boolean;
+  /** True when the log has no kept field, and null when this row's kept can't be read. */
+  kept: boolean | null;
   failure: string | null;
   /**
-   * Kept and the score improved on the best kept so far, or kept alone with no score.
-   * Null when the log has neither a score nor a kept field, so progress is unknown.
+   * Kept and the score improved on the best kept so far, or kept alone with no score. Null
+   * when this row lacks a value it needs, such as a score or a readable kept, or when the log
+   * has neither field. A row that wasn't kept is no progress whatever its score, and one no
+   * better than the best is no progress whether or not it was kept.
    */
   progress: boolean | null;
-  /** Iterations in a row without progress, counting this one, or null when progress is unknown. */
+  /**
+   * Iterations in a row without progress, counting this one, or null when this row's progress
+   * is unknown. An unknown row leaves the count where it was: it neither resets it nor adds to
+   * it, so the next known row carries on from the last known one.
+   */
   sinceProgress: number | null;
   /** The same failure as the iteration before. */
   repeated: boolean;
@@ -256,7 +268,7 @@ const plural = (count: number, word: string): string =>
   `${count.toLocaleString('en-US')} ${word}${count === 1 ? '' : 's'}`;
 
 export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
-  const { mapping, lowerIsBetter, costIsRunningTotal } = options;
+  const { mapping, lowerIsBetter, costIsRunningTotal, runningTotalScope = 'log' } = options;
   const notes: string[] = [];
   const read = (record: Record<string, unknown>, role: FieldRole): unknown =>
     mapping[role] === null ? undefined : record[mapping[role] as string];
@@ -298,19 +310,12 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     notes.push(`Read the first ${MAXIMUM_RECORDS.toLocaleString('en-US')} iterations only.`);
   }
 
-  // A running total belongs to a session only when sessions repeat. A loop that starts a fresh
-  // session every iteration, as an external loop does, keeps one total for the whole log.
+  // Nothing in a log says which a running total counts, so the reader chooses.
+  const totalPerSession = runningTotalScope === 'session' && mapping.session !== null;
   const sessionKeys = log.records.map((record) => {
     const session = read(record, 'session');
     return session === undefined || session === null ? '' : String(session);
   });
-  const totalPerSession =
-    mapping.session !== null && new Set(sessionKeys).size < sessionKeys.length;
-  if (costIsRunningTotal && mapping.session !== null && !totalPerSession) {
-    notes.push(
-      'Every iteration has its own session, so the running total is read across the whole log.',
-    );
-  }
 
   const iterations: ReplayIteration[] = [];
   let cumulative = 0;
@@ -341,15 +346,16 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     cumulative = roundDollars(cumulative + cost);
 
     const score = scores[index];
-    const kept = hasKept ? keptValues[index] === true : true;
+    const kept = hasKept ? keptValues[index] : true;
 
+    // An unknown row never moves the best score, so it can't be mistaken for one that did.
     let progress: boolean | null;
     if (!hasProgress) {
       progress = null;
     } else if (hasScore) {
       const improved =
-        score !== null && (best === null || (lowerIsBetter ? score < best : score > best));
-      progress = kept && improved;
+        score === null ? null : best === null || (lowerIsBetter ? score < best : score > best);
+      progress = kept === false || improved === false ? false : kept && improved ? true : null;
       if (progress) best = score;
     } else {
       progress = kept;
@@ -370,11 +376,20 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
       kept,
       failure,
       progress,
-      sinceProgress: hasProgress ? sinceProgress : null,
+      sinceProgress: progress === null ? null : sinceProgress,
       repeated,
     });
   });
 
+  const unknownProgress = hasProgress
+    ? iterations.filter((step) => step.progress === null).length
+    : 0;
+  if (unknownProgress > 0) {
+    const what = !hasScore ? 'kept value' : hasKept ? 'score or kept value' : 'score';
+    notes.push(
+      `${plural(unknownProgress, 'iteration')} ${unknownProgress === 1 ? 'has' : 'have'} no readable ${what}, so ${unknownProgress === 1 ? 'its' : 'their'} progress is unknown: ${unknownProgress === 1 ? 'it neither starts nor ends' : 'they neither start nor end'} a stall.`,
+    );
+  }
   if (resets > 0) {
     notes.push(
       `The running total dropped ${resets === 1 ? 'once' : `${resets.toLocaleString('en-US')} times`}, so ${resets === 1 ? 'that iteration starts' : 'each of those iterations starts'} a new total at its own value.`,
@@ -401,6 +416,11 @@ export type Counterfactual = {
   saved: number;
   /** Progress iterations after the stop that the governor would have cut off. */
   progressLost: number;
+  /**
+   * Whether rows with unknown progress leave a stall detector's stop in doubt. When it is,
+   * nothing is claimed as saved or lost, and the sentence says the stop only might happen.
+   */
+  uncertain: boolean;
   sentence: string;
 };
 
@@ -415,6 +435,43 @@ const fires = (governor: CounterfactualGovernor, step: ReplayIteration, index: n
     case 'repeatedFailure':
       return step.repeated;
   }
+};
+
+/**
+ * Whether rows with unknown progress could move a stall detector's stop, given where it
+ * fires counting only the known rows. Null when the stop is certain. Treating every unknown
+ * row as no progress finds the earliest it could fire. With a score, an unknown row before
+ * the stop could also have raised the best score, so later rows counted as progress might
+ * not be, and any unknown row up to the stop leaves it in doubt.
+ */
+const stallDoubt = (
+  replay: Replay,
+  m: number,
+  stopIndex: number | null,
+): { earliest: number | null; unknown: number; unknownBefore: number } | null => {
+  const steps = replay.iterations;
+  const unknown = steps.filter((step) => step.progress === null).length;
+  if (unknown === 0) return null;
+
+  let count = 0;
+  let earliest: number | null = null;
+  for (const [index, step] of steps.entries()) {
+    count = step.progress === true ? 0 : count + 1;
+    if (count >= m) {
+      earliest = index;
+      break;
+    }
+  }
+
+  const end = stopIndex ?? steps.length - 1;
+  const upToStop = steps.slice(0, end + 1);
+  const unknownBefore = upToStop.filter((step) => step.progress === null).length;
+  const lastProgress = upToStop.findLastIndex((step) => step.progress === true);
+  const unknownInStretch = upToStop.slice(lastProgress + 1).some((step) => step.progress === null);
+  const doubtful =
+    earliest !== stopIndex || unknownInStretch || (replay.hasScore && unknownBefore > 0);
+
+  return doubtful ? { earliest, unknown, unknownBefore } : null;
 };
 
 const governorName = (governor: CounterfactualGovernor, format: (dollars: number) => string) => {
@@ -450,11 +507,45 @@ export const counterfactual = (
       stopIteration: null,
       saved: 0,
       progressLost: 0,
+      uncertain: false,
       sentence: `${name} can’t be checked on this log, which has neither a score nor a kept field.`,
     };
   }
 
   const stopIndex = replay.iterations.findIndex((step, index) => fires(governor, step, index));
+
+  if (governor.kind === 'stall') {
+    const firstFire = stopIndex === -1 ? null : stopIndex;
+    const doubt = stallDoubt(replay, governor.m, firstFire);
+    if (doubt) {
+      const what = !replay.hasScore
+        ? 'kept value'
+        : replay.hasKept
+          ? 'score or kept value'
+          : 'score';
+      const unknown = (count: number, where: string): string =>
+        `${plural(count, 'iteration')}${where} ${count === 1 ? 'has' : 'have'} no readable ${what}`;
+      // The chart marks the iteration the sentence names, if it names one.
+      const sooner = doubt.earliest !== null && doubt.earliest !== firstFire;
+      const marked = sooner ? doubt.earliest : firstFire;
+      const sentence = sooner
+        ? `${name} might stop this as early as iteration ${replay.iterations[doubt.earliest as number].iteration}, but ${unknown(doubt.unknown, '')}, so it can’t tell.`
+        : firstFire !== null
+          ? `${name} might stop this at iteration ${replay.iterations[firstFire].iteration}, but ${unknown(doubt.unknownBefore, ' up to there')}, so it can’t tell.`
+          : `${name} never fires on the iterations it can read, but ${unknown(doubt.unknown, '')}, so it might.`;
+
+      return {
+        governor,
+        name,
+        stopIndex: marked,
+        stopIteration: marked === null ? null : replay.iterations[marked].iteration,
+        saved: 0,
+        progressLost: 0,
+        uncertain: true,
+        sentence,
+      };
+    }
+  }
 
   if (stopIndex === -1 || stopIndex === replay.iterations.length - 1) {
     const stoppedLast = stopIndex !== -1;
@@ -466,6 +557,7 @@ export const counterfactual = (
       stopIteration: stoppedLast ? replay.iterations[stopIndex].iteration : null,
       saved: 0,
       progressLost: 0,
+      uncertain: false,
       sentence: stoppedLast
         ? `${name} stops this at iteration ${replay.iterations[stopIndex].iteration}, its last, and saves nothing.`
         : `${name} never fires on this run.`,
@@ -488,6 +580,7 @@ export const counterfactual = (
     stopIteration: stop.iteration,
     saved,
     progressLost,
+    uncertain: false,
     sentence: `${name} ${cost}${lost}.`,
   };
 };

@@ -365,8 +365,37 @@ test.describe('replaying a loop log', () => {
     await expect(page.getByLabel('A lower score is better')).toBeChecked();
     await expect(page.getByText('Skipped 1 line that wasn’t a JSON object.')).toBeVisible();
 
+    const scope = page.getByRole('group', { name: 'The running total counts' });
+    await expect(scope).toBeHidden();
     await page.getByLabel('The cost is a running total').check();
+    await expect(scope.getByRole('button', { name: 'Across the whole log' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
     await expect(page.getByText('10 iterations, $5.00 in total, 4 with progress.')).toBeVisible();
+
+    // Each iteration has its own session, so a per-session total reads each value whole.
+    await scope.getByRole('button', { name: 'Per session' }).click();
+    await expect(page.getByText('10 iterations, $27.50 in total, 4 with progress.')).toBeVisible();
+  });
+
+  test('shows rows without a score as unknown and a stall stop as only possible', async ({
+    page,
+  }) => {
+    await open(page);
+    const lines = [1, 2, 3, null, null, null, 3, 3].map((score) =>
+      JSON.stringify({ cost_usd: 1, score }),
+    );
+    await page.getByLabel('Or paste the lines').fill(lines.join('\n'));
+    await page.getByRole('button', { name: 'Replay the pasted lines' }).click();
+
+    await expect(
+      page.getByText('8 iterations, $8.00 in total, 3 with progress, 3 unknown.'),
+    ).toBeVisible();
+    await expect(page.getByText('Unknown: no readable score')).toBeVisible();
+    await expect(page.getByTestId('counterfactuals')).toContainText(
+      'A stall detector of 3 might stop this as early as iteration 6, but 3 iterations have no readable score, so it can’t tell.',
+    );
   });
 
   test('infers stalls from kept alone when the log has no score, and says so', async ({ page }) => {

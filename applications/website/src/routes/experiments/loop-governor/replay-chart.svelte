@@ -85,7 +85,7 @@
     const parts = [
       `Iteration ${step.iteration}`,
       step.score === null ? null : `score ${formatScore(step.score)}`,
-      step.kept ? 'kept' : 'not kept',
+      step.kept === null ? 'kept unknown' : step.kept ? 'kept' : 'not kept',
       step.progress === null
         ? 'progress unknown'
         : step.progress
@@ -128,6 +128,7 @@
   const stripClass = (index: number): string => {
     const step = steps[index];
     if (step.repeated) return 'fill-rose-600 dark:fill-rose-400';
+    if (step.progress === null && replay.hasProgress) return 'fill-amber-500 dark:fill-amber-400';
     if (step.progress) return 'fill-emerald-600 dark:fill-emerald-400';
 
     return 'fill-slate-300 dark:fill-slate-600';
@@ -329,6 +330,18 @@
       <span aria-hidden="true" class="inline-block size-3 rounded-sm bg-slate-300 dark:bg-slate-600"
       ></span>Stall
     </li>
+    {#if replay.hasProgress && steps.some((step) => step.progress === null)}
+      <li class="flex items-center gap-1.5">
+        <span
+          aria-hidden="true"
+          class="inline-block size-3 rounded-sm bg-amber-500 dark:bg-amber-400"
+        ></span>Unknown: no readable {replay.hasScore
+          ? replay.hasKept
+            ? 'score or kept value'
+            : 'score'
+          : 'kept value'}
+      </li>
+    {/if}
     <li class="flex items-center gap-1.5">
       <span aria-hidden="true" class="inline-block size-3 rounded-sm bg-rose-600 dark:bg-rose-400"
       ></span>Repeated failure

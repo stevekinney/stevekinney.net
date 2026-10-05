@@ -291,24 +291,51 @@ export const parseRule = (rule: string): { tool: string; argument: string | null
     : { tool: rule.trim(), argument: null };
 };
 
-/** The command a Bash rule names, such as `curl` for `Bash(curl *)` or `git push` for `Bash(git push:*)`. Empty means every command. */
-export const bashCommand = (rule: string): string | null => {
+/**
+ * The command a Bash rule names and whether it ends in a wildcard. `Bash(git push:*)` and
+ * `Bash(git push *)` are `git push` with a wildcard, matching every push. Without a wildcard,
+ * `Bash(git push)` matches that exact command only. A bare `Bash` or `Bash(*)` is an empty
+ * command with a wildcard: every command.
+ */
+export const bashRule = (rule: string): { command: string; wildcard: boolean } | null => {
   const { tool, argument } = parseRule(rule);
   if (tool !== 'Bash') return null;
-  if (argument === null) return '';
+  if (argument === null) return { command: '', wildcard: true };
 
-  return argument
-    .replace(/:\*$/, '')
-    .replace(/\s*\*$/, '')
-    .trim()
-    .replace(/^\*$/, '');
+  return {
+    command: argument
+      .replace(/:\*$/, '')
+      .replace(/\s*\*$/, '')
+      .trim()
+      .replace(/^\*$/, ''),
+    wildcard: /\*\s*$/.test(argument),
+  };
+};
+
+/** The command a Bash rule names, such as `curl` for `Bash(curl *)` or `git push` for `Bash(git push:*)`. Empty means every command. */
+export const bashCommand = (rule: string): string | null => bashRule(rule)?.command ?? null;
+
+/**
+ * Whether a Bash rule matches every use of a command, such as `Bash(gh:*)` for `gh`. It needs
+ * a wildcard, or it matches only the exact command, and a bare `Bash` or `Bash(*)` covers all.
+ */
+const coversEvery = (rule: string, command: string): boolean => {
+  const parsed = bashRule(rule);
+
+  return (
+    parsed !== null &&
+    parsed.wildcard &&
+    (parsed.command === '' ||
+      parsed.command === command ||
+      command.startsWith(`${parsed.command} `))
+  );
 };
 
 /**
  * Commands known to make no network request and to run no other command. The
- * list is short on purpose: a shell, `env`, `xargs`, `find`, `make`, or an
- * interpreter can run anything, so everything not listed counts as reaching
- * the network.
+ * list is short on purpose: a shell, `env`, `xargs`, `find`, `make`, `sort` (through
+ * `--compress-program`), or an interpreter can run anything, so everything not listed
+ * counts as reaching the network.
  */
 const offlineCommands = new Set([
   'cat',
@@ -324,7 +351,6 @@ const offlineCommands = new Set([
   'ls',
   'mkdir',
   'pwd',
-  'sort',
   'stat',
   'tail',
   'touch',
@@ -336,12 +362,24 @@ const offlineCommands = new Set([
 ]);
 
 /**
+ * Shell syntax that runs more than one program or opens a connection: a redirection, which
+ * reaches `/dev/tcp` and `/dev/udp`, a pipe, a chain, a background `&`, or a substitution.
+ */
+const shellOperators = /[<>|;&`]|\$\(|\/dev\/(tcp|udp)\b/;
+
+/**
  * Whether a command, or a command pattern, can make a network request. It fails
- * safe: an empty command means every command, a path counts as its program, and
- * any program not known to stay offline counts as reaching the network.
+ * safe: only a single offline program with plain arguments counts as offline. An
+ * empty command means every command, any shell operator counts as reaching the
+ * network, an absolute path counts as its program, a relative path such as `./cat`
+ * is a script that could do anything, and any program not known to stay offline
+ * counts as reaching the network.
  */
 export const reachesNetwork = (command: string): boolean => {
+  if (shellOperators.test(command)) return true;
+
   const first = command.trim().split(/\s+/)[0] ?? '';
+  if (first.includes('/') && !first.startsWith('/')) return true;
   const program = first.split('/').at(-1) ?? '';
 
   return program.includes('*') || !offlineCommands.has(program);
@@ -592,34 +630,33 @@ export const analyzeSettings = (
         : notDeterminable('No sandbox denyRead entry covers .env files in every directory.');
 
   // The control means a prompt on pushing and on public comments, so it's on only when the
-  // ask and deny rules cover both. A comment can go out through gh or through any MCP server.
-  const pushRule = (rule: Located<string>): boolean =>
-    /^git push\b/.test(bashCommand(rule.value) ?? '') || bashCommand(rule.value) === 'git';
-  const coversCommand =
-    (command: string) =>
-    (rule: Located<string>): boolean => {
-      const named = bashCommand(rule.value);
+  // ask and deny rules cover both. A comment can go out through any gh subcommand, such as
+  // gh api, so only a rule covering all of gh counts, and through any MCP server.
+  // A prompt has to cover every push. Any allow rule for a push lets one out with no prompt.
+  const gatesPush = (rule: Located<string>): boolean => coversEvery(rule.value, 'git push');
+  const allowsPush = (rule: Located<string>): boolean => {
+    const command = bashCommand(rule.value);
 
-      return (
-        named !== null && (named === '' || command === named || command.startsWith(`${named} `))
-      );
-    };
+    return command !== null && (command === '' || command === 'git' || /^git push\b/.test(command));
+  };
+  const coversAllOfGh = (rule: Located<string>): boolean => coversEvery(rule.value, 'gh');
   const askOrDeny = [...merged.ask, ...merged.deny];
-  const gated = askOrDeny.filter(pushRule);
-  const pushAllowed = merged.allow.filter(pushRule);
-  const commentRules = ['gh issue comment', 'gh pr comment'].map((command) =>
-    askOrDeny.find(coversCommand(command)),
-  );
+  const gated = askOrDeny.filter(gatesPush);
+  const pushAllowed = merged.allow.filter(allowsPush);
+  const ghRule = askOrDeny.find(coversAllOfGh);
   const mcpServers = [...new Set(merged.mcpServers.map((server) => server.value))];
   const mcpRules = mcpServers.map((server) =>
     askOrDeny.find((rule) => [`mcp__${server}`, `mcp__${server}__*`].includes(rule.value.trim())),
   );
   const ungatedServers = mcpServers.filter((_, index) => !mcpRules[index]);
-  const commentsGated = [...commentRules, ...mcpRules].every((rule) => rule !== undefined);
+  const commentRules = [ghRule, ...mcpRules];
+  const commentsGated = commentRules.every((rule) => rule !== undefined);
   const missing = [
-    ...(commentRules.every((rule) => rule !== undefined)
+    ...(ghRule
       ? []
-      : ['gh issue comment and gh pr comment']),
+      : [
+          'gh (a rule must cover all of gh, such as Bash(gh:*): narrow rules for gh issue comment and gh pr comment miss gh api and other gh subcommands)',
+        ]),
     ...(ungatedServers.length > 0 ? [`the MCP servers ${ungatedServers.join(', ')}`] : []),
   ].join(', or ');
   prefill['publish-gate'] =
@@ -627,12 +664,7 @@ export const analyzeSettings = (
       ? {
           status: 'on',
           reason: 'git push and public comments ask first, or are denied.',
-          evidence: [
-            ...new Set([
-              ...gated,
-              ...[...commentRules, ...mcpRules].filter((rule) => rule !== undefined),
-            ]),
-          ],
+          evidence: [...new Set([...gated, ...commentRules.filter((rule) => rule !== undefined)])],
         }
       : pushAllowed.length > 0
         ? { status: 'off', reason: 'git push is allowed without a prompt.', evidence: pushAllowed }
@@ -642,7 +674,7 @@ export const analyzeSettings = (
               reason: `git push asks first, or is denied, but no ask or deny rule covers public comments through ${missing}, so a comment can still go out with no prompt.`,
               evidence: gated,
             }
-          : notDeterminable('No rule names git push.');
+          : notDeterminable('No ask or deny rule covers every git push.');
 
   const mode = merged.defaultMode;
   prefill['auto-mode'] = mode
@@ -653,9 +685,7 @@ export const analyzeSettings = (
       }
     : notDeterminable('permissions.defaultMode isn’t set in these files.');
 
-  const curlDeny = merged.deny.filter(
-    (rule) => bashCommand(rule.value)?.split(/\s+/)[0] === 'curl',
-  );
+  const curlDeny = merged.deny.filter((rule) => coversEvery(rule.value, 'curl'));
   prefill['deny-curl'] =
     curlDeny.length > 0
       ? { status: 'on', reason: 'curl is denied.', evidence: curlDeny }

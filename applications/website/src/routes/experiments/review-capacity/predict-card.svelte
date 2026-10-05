@@ -94,41 +94,46 @@
     </form>
   {/if}
 
+  <!-- Only the two numbers are live. The verdict and the explanation follow the sliders, so
+       inside the live region they'd be reread on every change. Focus lands on the group. -->
   <div
     id="prediction-outcome"
     role="group"
     aria-label="Your guess and the answer"
     tabindex="-1"
-    aria-live="polite"
     class="space-y-4 outline-none"
   >
-    {#if revealed === null}
-      <p class={bodyClasses}>The rest of the page opens once you’ve guessed or skipped.</p>
-    {:else}
-      <dl class="grid grid-cols-2 gap-3 sm:max-w-md" data-testid="prediction-reveal">
-        <div
-          class="rounded-md border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900"
-        >
-          <dt class="text-sm text-slate-600 dark:text-slate-300">Your guess</dt>
-          <dd
-            class="text-2xl font-bold text-slate-900 tabular-nums dark:text-white"
-            data-testid="guess-value"
+    <div aria-live="polite">
+      {#if revealed === null}
+        <p class={bodyClasses}>The rest of the page opens once you’ve guessed or skipped.</p>
+      {:else}
+        <dl class="grid grid-cols-2 gap-3 sm:max-w-md" data-testid="prediction-reveal">
+          <div
+            class="rounded-md border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900"
           >
-            {revealed.skipped || parsedGuess === null ? 'Skipped' : parsedGuess}
-          </dd>
-        </div>
-        <div
-          class="rounded-md border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900"
-        >
-          <dt class="text-sm text-slate-600 dark:text-slate-300">You can keep reviewed</dt>
-          <dd
-            class="text-2xl font-bold text-slate-900 tabular-nums dark:text-white"
-            data-testid="sustainable-value"
+            <dt class="text-sm text-slate-600 dark:text-slate-300">Your guess</dt>
+            <dd
+              class="text-2xl font-bold text-slate-900 tabular-nums dark:text-white"
+              data-testid="guess-value"
+            >
+              {revealed.skipped || parsedGuess === null ? 'Skipped' : parsedGuess}
+            </dd>
+          </div>
+          <div
+            class="rounded-md border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900"
           >
-            {balance.sustainableAgents ?? 'Any'}
-          </dd>
-        </div>
-      </dl>
+            <dt class="text-sm text-slate-600 dark:text-slate-300">You can keep reviewed</dt>
+            <dd
+              class="text-2xl font-bold text-slate-900 tabular-nums dark:text-white"
+              data-testid="sustainable-value"
+            >
+              {balance.sustainableAgents ?? 'Any'}
+            </dd>
+          </div>
+        </dl>
+      {/if}
+    </div>
+    {#if revealed !== null}
       {#if !revealed.skipped && verdict}
         <p class="text-slate-800 dark:text-slate-100">{verdict}</p>
       {/if}

