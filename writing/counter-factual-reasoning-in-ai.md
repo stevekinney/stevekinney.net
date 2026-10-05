@@ -1,5 +1,5 @@
 ---
-title: 'What If It Goes Wrong?: The Hidden Dangers of Counterfactual Reasoning in AI'
+title: 'The Hidden Dangers of Counterfactual Reasoning in AI'
 description: 'A paper review about why counterfactual reasoning becomes fragile and chaotic in complex AI systems.'
 date: 2025-04-21
 ---

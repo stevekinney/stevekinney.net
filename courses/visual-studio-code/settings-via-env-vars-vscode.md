@@ -1,5 +1,5 @@
 ---
-title: Controlling Settings with Environment Variables in Visual Studio Code
+title: 'Controlling VS Code Settings with Environment Variables'
 description: >-
   Learn how to use environment variables to dynamically configure Visual Studio
   Code settings across different environments

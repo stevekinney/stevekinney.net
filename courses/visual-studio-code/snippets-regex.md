@@ -1,5 +1,5 @@
 ---
-title: Using Snippets with Regular Expressions in Visual Studio Code
+title: 'Using Regular Expressions in VS Code Snippets'
 description: >-
   Master regex transformations in snippets to create advanced dynamic templates
   with powerful text manipulation
