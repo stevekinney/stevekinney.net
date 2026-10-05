@@ -365,7 +365,7 @@ test.describe('sharing', () => {
     await page.getByRole('button', { name: 'Copy summary' }).click();
     await expect(page.getByText('Summary copied as Markdown.')).toBeVisible();
     const summary = await page.evaluate(() => navigator.clipboard.readText());
-    expect(summary).toContain('# Cut a Leg');
+    expect(summary).toContain('# Lethal Trifecta');
     expect(summary).toContain('Exploitable: all three legs are intact.');
     expect(summary).toContain('## Residual risks');
   });
