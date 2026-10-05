@@ -1282,6 +1282,16 @@ test.describe('at phone width', () => {
       await expect(page.getByTestId('what-to-cut')).toBeVisible();
       await page.getByRole('button', { name: 'Copy summary' }).click();
       await page.getByLabel('Context capacity', { exact: true }).selectOption('custom');
+      await pasteReadout(
+        page,
+        [
+          '100k/1000k tokens (10%)',
+          '⛁ An-unmapped-row-label-with-no-spaces-that-keeps-going-for-a-long-while: 3k tokens (0.3%)',
+          '⛁ Messages: 10k tokens (1.0%)',
+          '⛶ Free space: 890k (89.0%)',
+        ].join('\n'),
+      );
+      await expect(page.getByTestId('readout-unrecognized')).toBeVisible();
 
       expect(await horizontalOverflow(page)).toBe(0);
     });
