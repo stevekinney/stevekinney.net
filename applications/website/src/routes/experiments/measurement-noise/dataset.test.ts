@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
 import { guessMapping } from './columns';
-import { buildDataset, MAX_LISTED_ISSUES, parseBoolean, parseNumber } from './dataset';
+import {
+  buildDataset,
+  MAX_LISTED_ISSUES,
+  parseBoolean,
+  parseNumber,
+  swapConditions,
+} from './dataset';
 import { parseCsv } from './parse-table';
 
 const datasetOf = (csv: string) => {
@@ -95,5 +101,15 @@ describe('buildDataset', () => {
 
     expect(dataset.rows).toHaveLength(12_000);
     expect(dataset.issueCount).toBe(0);
+  });
+});
+
+describe('swapConditions', () => {
+  it('makes the second condition A, and leaves a single condition alone', () => {
+    expect(swapConditions(datasetOf('condition,minutes\nafter,1\nbefore,2\n')).labels).toEqual([
+      'before',
+      'after',
+    ]);
+    expect(swapConditions(datasetOf('condition,minutes\nA,1\n')).labels).toEqual(['A']);
   });
 });

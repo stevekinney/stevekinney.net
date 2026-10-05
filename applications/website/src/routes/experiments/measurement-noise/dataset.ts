@@ -185,3 +185,9 @@ export const buildDataset = (table: RawTable, mapping: ColumnMapping): Dataset =
 
   return { labels, rows, issues, issueCount, total: table.rows.length };
 };
+
+/** Makes the second condition the baseline, A, instead of the first one the data happened to list. */
+export const swapConditions = (dataset: Dataset): Dataset =>
+  dataset.labels.length === 2
+    ? { ...dataset, labels: [dataset.labels[1], dataset.labels[0]] }
+    : dataset;
