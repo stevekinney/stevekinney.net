@@ -61,7 +61,7 @@ Some details that will save you an afternoon:
 
 ## Configuring hooks
 
-Each event holds matcher groups, and each group holds handlers. A handler has a `type`, a `command`, and a `timeout` in seconds. The default timeout is 600 seconds for _any_ command hook.
+Each event holds matcher groups, and each group holds handlers. A handler has a `type`, a `command`, and a `timeout` in seconds. Most command hooks default to 600 seconds, but event-specific defaults differ: `UserPromptSubmit` and `PreModelSwitch` default to 30 seconds; `SessionEnd` defaults to 1.5 seconds and also has a shared execution budget. Check the event in the [hooks reference](https://code.claude.com/docs/en/hooks) and set an explicit timeout appropriate to the work. A timeout can cancel the hook before it returns its decision.
 
 Here's a minimal one. It lives under the `hooks` key of `.claude/settings.json`, and it runs a script before every `Bash` call:
 

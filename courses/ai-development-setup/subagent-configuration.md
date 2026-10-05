@@ -49,7 +49,7 @@ Only `name` and `description` are required. The [subagent documentation](https:/
 - **Model selection takes the first match**: The model passed when spawning, then the definition's `model`, then the `CLAUDE_CODE_SUBAGENT_MODEL` environment variable, then the parent's model. Forks (subagents that start with a copy of your conversation) always run on the parent's model. Check `/tasks`, the command that lists your session's tasks and the model each subagent actually ran on.
 - **Unknown fields fail silently**: Write `max_turns` instead of `maxTurns`, and it's ignored without so much as a warning.
 - **Plugin agents drop fields**: `hooks`, `mcpServers`, `permissionMode`, and `initialPrompt` all get dropped from agents that ship in a plugin.
-- **Background by default**: In interactive sessions, subagents run in the background unless you force the foreground. That silently removes some tools. A background subagent that hits a permission prompt just stalls.
+- **Background by default**: In interactive sessions, subagents run in the background unless you force the foreground. Some tools are unavailable in the background. In an interactive session, a permission request is shown in the main session with the requesting subagent identified, and the worker waits for your answer. In an unattended run, nobody may be present to answer; define how that run reports a blocked action instead of granting broader access to avoid the prompt.
 - **Limits**: 20 subagents running at once and three layers of nesting by default (a subagent starting subagents, which start more). Four children per agent across three layers is 4 + 16 + 64 = 84 workers. (Please don't.)
 
 ## Choosing a model per stage
@@ -71,7 +71,7 @@ The biggest difference is who decides to delegate.
 
 Claude Code treats delegation as something the model does on its own. It reads each agent's `description`, so descriptions work like routing rules, and you can also force a choice with an @-mention or `--agent`. In Claude Code, you tune the model's judgment.
 
-[Codex](https://developers.openai.com/codex/subagents) only spawns an agent when you explicitly ask, so you name the agents in your prompt. In Codex, you do the orchestrating: you decide which agents run, and Codex then runs them and gathers their results.
+[Codex](https://developers.openai.com/codex/subagents) delegates when you ask directly or when applicable `AGENTS.md` or skill instructions request it. You can name the agents and roster in the prompt, but also inspect those standing instructions: they can trigger parallel work without a new delegation request each turn. Codex runs the agents and gathers their results; every worker adds token usage and concurrency.
 
 Next, [Delegating Well](delegating-well.md) covers how to write the assignment these definitions get handed.
 

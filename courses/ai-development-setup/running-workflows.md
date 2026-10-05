@@ -32,7 +32,7 @@ The limits stack. A call can stay under 4,096 items and still hit the 1,000-agen
 
 ## Resuming a run
 
-A run can be resumed after a pause, a kill, or an edit to the script. Claude Code replays the script from the top. Every unchanged agent call at the start returns its saved result instantly, and from the first call that changed or failed, everything after it runs live again.
+Pausing a live run in `/workflows` and pressing `p` again resumes that run where it paused; it does not replay the script. Relaunching a stopped run or an edited script is different: Claude Code replays from the top, returning saved results for unchanged successful calls until the first changed or failed call, after which calls run live again. The [resume reference](https://code.claude.com/docs/en/workflows#resume-after-a-pause) distinguishes these paths.
 
 ## What doesn't work in a script
 
@@ -102,9 +102,9 @@ Writing `.filter(Boolean)` deletes those entries, so the run looks clean. Whethe
 
 ### Resume's sharp edge
 
-Everything from the first changed or failed step reruns, so if those steps write to outside systems, they can write twice. Use idempotency keys (IDs that make a repeated write harmless) or move the write outside the workflow.
+When a stopped or edited run is relaunched, everything from the first changed or failed step reruns, so if those steps write to outside systems, they can write twice. An ordinary UI pause and resume does not replay completed steps. Use idempotency keys (IDs that make a repeated write harmless) or move the write outside the workflow.
 
-You don't type this yourself. Ask Claude to resume the run, and it calls the `Workflow` tool with `{ scriptPath, resumeFromRunId }` as its arguments. The run ID comes back in the original tool result. And check `journal.jsonl`, the file in the run's transcript directory that records what each agent actually returned, before you trust an empty-looking result.
+You don't type this yourself. Ask Claude to relaunch the stopped or edited run, and it calls the `Workflow` tool with `{ scriptPath, resumeFromRunId }` as its arguments. The run ID comes back in the original tool result. And check `journal.jsonl`, the file in the run's transcript directory that records what each agent actually returned, before you trust an empty-looking result.
 
 ## What to use when
 

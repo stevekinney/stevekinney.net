@@ -36,9 +36,9 @@ It cuts down on prompt fatigue. It doesn't stop a determined payload. Use it for
 ## Controls that actually cut a leg
 
 - **Default-deny network egress**: Block outbound traffic (egress) unless it's on a list. That cuts the "way out" leg.
-- **Whole-process isolation**: A container, or better, a virtual machine, with the credentials outside of it. That cuts the private-data leg, since there's nothing valuable inside to steal. Pair it with locked-down networking and it cuts the way-out leg too.
+- **Whole-process isolation**: A container, or better, a virtual machine, with host credentials outside of it. That protects the host and unrelated secrets, but private source code and sensitive fixtures inside the guest are still private data. To cut that leg, use a sanitized workspace containing no sensitive data. If the task needs private data, pair isolation with default-deny egress instead of assuming the guest has nothing valuable to steal.
 - **A reader/doer split**: A reader [subagent](subagents.md) with `tools: Read, Glob` processes the untrusted content. To cut the acting agent's untrusted-content leg, reduce the handoff to closed values, such as a fixed enum of classifications, and let deterministic code map those values to permitted actions. `additionalProperties: false` only restricts keys. An arbitrary string summary can still carry injected instructions, so schema-valid JSON alone is not a security boundary. Keep that text away from the acting agent, and independently authorize any consequential action.
-- **Plan before you read**: Lock in the plan before any untrusted content enters the context. That narrows the untrusted-content leg: the content arrives after the plan is fixed, so it has less to redirect.
+  Planning before reading untrusted content can help keep the task focused, but it remains a prompting habit. The acting agent still sees the payload and can change its tool choices. Use it alongside structural controls; it does not remove untrusted content from the context or narrow a trust boundary.
 
 ## Secrets
 
