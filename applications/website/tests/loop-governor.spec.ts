@@ -153,8 +153,15 @@ test.describe('the presets', () => {
     await page.locator('#failure-mode-closed').click();
     await settled(page);
 
+    // Fail-closed turns the first-iteration throws into broken runs. Later throws add more.
     await expect(share(page, 'done-false')).toHaveText('0.0%');
-    expect(Math.abs(percent(await share(page, 'broken').textContent()) - 20)).toBeLessThan(4);
+    await expect(page.locator('[data-analytic="first-iteration-throw"] th')).toHaveText(
+      'Broken on iteration 1 because the measurement threw',
+    );
+    expect(
+      Math.abs(percent(await analytic(page, 'first-iteration-throw').nth(2).textContent()) - 20),
+    ).toBeLessThan(4);
+    expect(percent(await share(page, 'broken').textContent())).toBeGreaterThan(20);
     await expect(preset(page, 'Count the type errors, compiler missing')).toHaveAttribute(
       'aria-pressed',
       'false',
@@ -286,13 +293,13 @@ test.describe('the animated run', () => {
     await page.locator('#progress-p').fill('0');
     await page.locator('#ladder-q-promise-string').fill('0');
 
-    await page.getByRole('button', { name: 'Step' }).click();
-    await page.getByRole('button', { name: 'Step' }).click();
+    await page.getByRole('button', { name: 'Step', exact: true }).click();
+    await page.getByRole('button', { name: 'Step', exact: true }).click();
     await page.getByRole('button', { name: 'Touch STOP' }).click();
     await expect(page.getByTestId('stop-ignored')).toBeVisible();
 
     await page.getByLabel('Stop file').check();
-    await page.getByRole('button', { name: 'Step' }).click();
+    await page.getByRole('button', { name: 'Step', exact: true }).click();
     await page.getByRole('button', { name: 'Touch STOP' }).click();
 
     await expect(page.getByTestId('timeline-status')).toHaveText(
@@ -304,11 +311,11 @@ test.describe('the animated run', () => {
     await open(page);
     await showResults(page);
     await page.locator('#progress-p').fill('0.05');
-    await page.getByRole('button', { name: 'Play' }).click();
-    await expect(page.getByRole('button', { name: 'Pause' })).toBeVisible();
+    await page.getByRole('button', { name: 'Play', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Pause', exact: true })).toBeVisible();
     await expect(page.getByTestId('timeline').locator('li').first()).toBeVisible();
-    await page.getByRole('button', { name: 'Pause' }).click();
-    await expect(page.getByRole('button', { name: 'Play' })).toBeVisible();
+    await page.getByRole('button', { name: 'Pause', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Play', exact: true })).toBeVisible();
   });
 
   test('draws the whole run at once with reduced motion', async ({ page }) => {
@@ -317,7 +324,11 @@ test.describe('the animated run', () => {
     await showResults(page);
 
     await expect(page.getByTestId('timeline-status')).toHaveText(/^This run ended /);
-    await expect(page.getByRole('button', { name: 'Play' })).toBeDisabled();
+    await expect(page.getByTestId('timeline').locator('li').last()).toHaveAttribute(
+      'data-event',
+      /done|false-claim/,
+    );
+    await expect(page.getByRole('button', { name: 'Replay', exact: true })).toBeDisabled();
   });
 });
 
@@ -466,7 +477,7 @@ test.describe('at phone width', () => {
 
       // The animated run, drawn out with Step, then hovered and focused.
       for (let index = 0; index < 4; index += 1) {
-        await page.getByRole('button', { name: 'Step' }).click();
+        await page.getByRole('button', { name: 'Step', exact: true }).click();
       }
       const timeline = page.getByTestId('timeline');
       await timeline.scrollIntoViewIfNeeded();

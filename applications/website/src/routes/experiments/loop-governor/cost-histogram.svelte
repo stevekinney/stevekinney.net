@@ -106,9 +106,10 @@
     const x = event.clientX - bounds.left;
     if (hasRunaway && x >= runawayX - RUNAWAY_GAP / 2) return bins.length;
 
-    const index = Math.floor((x - LEFT) / barWidth);
+    if (x < 0 || x > width) return null;
 
-    return index >= 0 && index < bins.length ? index : null;
+    // The margins at either side belong to the nearest bin.
+    return Math.min(bins.length - 1, Math.max(0, Math.floor((x - LEFT) / barWidth)));
   };
 
   const handleKeydown = (event: KeyboardEvent): void => {

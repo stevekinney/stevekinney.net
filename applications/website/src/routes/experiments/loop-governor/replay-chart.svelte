@@ -15,7 +15,7 @@
   const LEFT = 52;
   const RIGHT = 12;
   const PANEL = 110;
-  const GAP = 26;
+  const GAP = 44;
   const STRIP = 14;
   const TOOLTIP_WIDTH = 220;
   const UNMEASURED_WIDTH = 640;
@@ -32,7 +32,7 @@
   const band = $derived(plotWidth / Math.max(1, count));
   const detailed = $derived(count <= DETAILED);
 
-  const scoreTop = 16;
+  const scoreTop = 30;
   const costTop = $derived(replay.hasScore ? scoreTop + PANEL + GAP : scoreTop);
   const stripTop = $derived(costTop + PANEL + 10);
   const height = $derived(stripTop + (detailed ? STRIP : 0) + 24);
@@ -96,9 +96,11 @@
 
   const indexAt = (event: PointerEvent): number | null => {
     const bounds = (event.currentTarget as HTMLElement).getBoundingClientRect();
-    const index = Math.floor((event.clientX - bounds.left - LEFT) / band);
+    const x = event.clientX - bounds.left;
+    if (count === 0 || x < 0 || x > width) return null;
 
-    return index >= 0 && index < count ? index : null;
+    // The margins at either side belong to the nearest iteration.
+    return Math.min(count - 1, Math.max(0, Math.floor((x - LEFT) / band)));
   };
 
   const handleKeydown = (event: KeyboardEvent): void => {
@@ -173,7 +175,7 @@
     {#if replay.hasScore}
       <text
         x={4}
-        y={scoreTop - 4}
+        y={scoreTop - 16}
         class="fill-slate-700 text-[11px] font-semibold dark:fill-slate-200">Score</text
       >
       <text
@@ -217,8 +219,10 @@
       {/if}
     {/if}
 
-    <text x={4} y={costTop - 4} class="fill-slate-700 text-[11px] font-semibold dark:fill-slate-200"
-      >Cumulative cost</text
+    <text
+      x={4}
+      y={costTop - 16}
+      class="fill-slate-700 text-[11px] font-semibold dark:fill-slate-200">Cumulative cost</text
     >
     <text
       x={LEFT - 6}

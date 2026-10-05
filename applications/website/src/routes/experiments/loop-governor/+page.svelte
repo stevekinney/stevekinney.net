@@ -230,7 +230,8 @@
         tally,
         tallied,
         pinned,
-        simulating: page.simulating,
+        // Until a batch finishes, the tally belongs to an older configuration.
+        simulating: page.simulating || config !== tallied,
         simulated: page.simulated,
         onTogglePin: togglePin,
       }}
