@@ -382,6 +382,34 @@ describe('where each value comes from', () => {
     ).toBe(true);
   });
 
+  it('leaves the controls alone when pasted output has no environment or FORCE value', () => {
+    const controls = { ...baseConfiguration, environmentModel: 'haiku' as const, force: true };
+    const analysis = analyzeFleet(
+      input({
+        controls,
+        pastedText: '2.1.250 (Claude Code)\n/Users/me/.claude/agents/a.md:3:model: opus',
+      }),
+    );
+
+    expect(analysis.context.environmentModel).toBe('haiku');
+    expect(analysis.context.force).toBe(true);
+    expect(analysis.hasInput).toBe(true);
+  });
+
+  it('keeps same-name, same-model pasted definitions that come from different paths', () => {
+    const analysis = analyzeFleet(
+      input({
+        pastedText: [
+          '/Users/me/.claude/agents/reviewer.md:3:model: haiku',
+          '/Users/me/repo/.claude/agents/reviewer.md:3:model: haiku',
+          '/Users/me/repo/.claude/agents/reviewer.md:3:model: haiku',
+        ].join('\n'),
+      }),
+    );
+
+    expect(row(analysis, 'reviewer')).toHaveLength(2);
+  });
+
   it('keeps a pasted definition from another scope so precedence can decide', () => {
     const analysis = analyzeFleet(
       input({
