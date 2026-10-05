@@ -67,6 +67,18 @@ describe('parseAgentFile', () => {
     );
   });
 
+  it('ignores a comment after a quoted value, and keeps a # inside the quotes', () => {
+    const quoted = parseAgentFile(
+      'x.md',
+      agent(['name: "Review Bot" # shown in the list', 'model: "inherit" # follow the main model']),
+    );
+
+    expect(quoted).toMatchObject({ name: 'Review Bot', declared: 'inherit' });
+    expect(quoted.warnings).toEqual([]);
+    expect(parseAgentFile('x.md', agent(["name: 'a # b' # note"])).name).toBe('a # b');
+    expect(parseAgentFile('x.md', agent(['name: "a # b"'])).name).toBe('a # b');
+  });
+
   it('folds a block scalar description', () => {
     const parsed = parseAgentFile(
       'x.md',

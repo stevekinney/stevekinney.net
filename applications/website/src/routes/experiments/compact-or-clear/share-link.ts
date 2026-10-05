@@ -1,6 +1,6 @@
 import { clampLaterAfter, clampTo, defaultScenario, ranges } from './scenario';
 import type { Scenario } from './scenario';
-import { defaultModels, readPrice } from './pricing';
+import { defaultModels, MODEL_ID_PATTERN, readPrice } from './pricing';
 import type { ModelPrice } from './pricing';
 
 /**
@@ -12,8 +12,6 @@ export type SharedScenario = {
   /** Prices for the selected model when they differ from the defaults, so the link reproduces the numbers. */
   customModel: ModelPrice | null;
 };
-
-const MODEL_ID = /^[a-z0-9][a-z0-9-]{0,59}$/;
 
 const wholeNumber = (value: string | null): number | null => {
   if (value === null || !/^\d+$/.test(value)) return null;
@@ -72,7 +70,7 @@ export const decodeScenario = (query: string): SharedScenario | null => {
   const scenario: Partial<Scenario> = {};
 
   const model = parameters.get('model');
-  if (model !== null && MODEL_ID.test(model)) scenario.modelId = model;
+  if (model !== null && MODEL_ID_PATTERN.test(model)) scenario.modelId = model;
 
   const ttl = parameters.get('ttl');
   if (ttl === '5m' || ttl === '1h') scenario.ttl = ttl;

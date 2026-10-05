@@ -58,6 +58,8 @@ const readResponseKey = (line: JsonRecord, message: JsonRecord): string | null =
  * callers must keep only the last line for each key. When the advisor tool
  * runs, its call appears as an `advisor_message` iteration on a different
  * model. The top-level usage excludes it, so it becomes a separate request.
+ * When the response made several `message` iterations, the top-level usage is
+ * their sum, but each prompt is measured on its own.
  */
 export const readClaudeCodeResponse = (line: JsonRecord): ClaudeCodeResponse | null => {
   if (line.type !== 'assistant' || !isRecord(line.message)) return null;
@@ -75,11 +77,21 @@ export const readClaudeCodeResponse = (line: JsonRecord): ClaudeCodeResponse | n
       : UNKNOWN_ADVISOR_MODEL;
 
   if (Array.isArray(usage.iterations)) {
+    const executorPrompts: number[] = [];
+
     for (const iteration of usage.iterations) {
-      if (isRecord(iteration) && iteration.type === 'advisor_message') {
+      if (!isRecord(iteration)) continue;
+
+      if (iteration.type === 'advisor_message') {
         requests.push(toRequest(advisorModel, iteration));
+      } else if (iteration.type === 'message') {
+        executorPrompts.push(toRequest(model, iteration).promptTokens);
       }
     }
+
+    // The top-level usage sums the executor's iterations, so its prompt is several requests added
+    // together. The largest single prompt is what a price tier's prompt limit applies to.
+    if (executorPrompts.length > 0) requests[0].promptTokens = Math.max(...executorPrompts);
   }
 
   return { key, requests };

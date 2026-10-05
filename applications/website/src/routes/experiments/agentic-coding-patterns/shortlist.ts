@@ -1,10 +1,20 @@
 import type { PatternEntry } from './pattern-types';
 
 export type ShortlistItem = {
-  /** The entry's id. */
+  /** The entry's id. It's a slug of the name, so two libraries can share one. */
   id: string;
   note: string;
+  /** Which library the entry came from. Absent means the bundled one, as in older saved lists. */
+  library?: string;
 };
+
+export const bundledLibrary = 'bundled';
+
+export const libraryOf = (item: ShortlistItem): string => item.library ?? bundledLibrary;
+
+/** The items that belong to one library. The others are kept for when that library is open. */
+export const itemsIn = (items: readonly ShortlistItem[], library: string): ShortlistItem[] =>
+  items.filter((item) => libraryOf(item) === library);
 
 export const shortlistStorageKey = 'agentic-coding-patterns:shortlist';
 
@@ -14,7 +24,8 @@ const isShortlistItem = (value: unknown): value is ShortlistItem =>
   typeof value === 'object' &&
   value !== null &&
   typeof (value as ShortlistItem).id === 'string' &&
-  typeof (value as ShortlistItem).note === 'string';
+  typeof (value as ShortlistItem).note === 'string' &&
+  ['string', 'undefined'].includes(typeof (value as ShortlistItem).library);
 
 /** The browser's storage, or `null` where it's blocked, such as in some private windows. */
 const browserStorage = (): StorageLike | null => {
@@ -51,18 +62,31 @@ export const writeShortlist = (
   }
 };
 
-export const isStarred = (items: readonly ShortlistItem[], id: string): boolean =>
-  items.some((item) => item.id === id);
+const isEntry = (item: ShortlistItem, id: string, library: string): boolean =>
+  item.id === id && libraryOf(item) === library;
+
+export const isStarred = (
+  items: readonly ShortlistItem[],
+  id: string,
+  library = bundledLibrary,
+): boolean => items.some((item) => isEntry(item, id, library));
 
 /** Adds an entry to the shortlist, or removes it when it's already there. */
-export const toggleStar = (items: readonly ShortlistItem[], id: string): ShortlistItem[] =>
-  isStarred(items, id) ? items.filter((item) => item.id !== id) : [...items, { id, note: '' }];
+export const toggleStar = (
+  items: readonly ShortlistItem[],
+  id: string,
+  library = bundledLibrary,
+): ShortlistItem[] =>
+  isStarred(items, id, library)
+    ? items.filter((item) => !isEntry(item, id, library))
+    : [...items, library === bundledLibrary ? { id, note: '' } : { id, note: '', library }];
 
 export const setNote = (
   items: readonly ShortlistItem[],
   id: string,
   note: string,
-): ShortlistItem[] => items.map((item) => (item.id === id ? { ...item, note } : item));
+  library = bundledLibrary,
+): ShortlistItem[] => items.map((item) => (isEntry(item, id, library) ? { ...item, note } : item));
 
 export type ShortlistRow = {
   entry: PatternEntry;

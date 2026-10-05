@@ -8,7 +8,7 @@ import {
   neighborsOf,
   sharedRelations,
 } from './graph-metrics';
-import { boundsOf, layoutGraph, radialLayout } from './graph-layout';
+import { boundsOf, iterationsFor, layoutGraph, radialLayout } from './graph-layout';
 import type { PatternEntry } from './pattern-types';
 
 const entry = (name: string, related: string[]): PatternEntry => ({
@@ -124,6 +124,24 @@ describe('layoutGraph', () => {
       );
 
     expect(distance('a', 'b')).toBeLessThan(distance('a', 'c'));
+  });
+
+  it('spends the full 300 steps on the bundled library and fewer on a huge folder', () => {
+    expect(iterationsFor(ids.length)).toBe(300);
+    expect(iterationsFor(0)).toBe(300);
+    expect(iterationsFor(1)).toBe(300);
+    // 3,000 notes is the most a folder can hold. Each step compares 4.5 million pairs.
+    expect(iterationsFor(3_000)).toBeLessThanOrEqual(10);
+    expect(iterationsFor(3_000) * ((3_000 * 2_999) / 2)).toBeLessThan(60_000_000);
+  });
+
+  it('lays out a few thousand nodes in a bounded time', () => {
+    const many = Array.from({ length: 2_000 }, (_, index) => `node-${index}`);
+    const started = performance.now();
+    const positions = layoutGraph(many, []);
+
+    expect(positions.size).toBe(2_000);
+    expect(performance.now() - started).toBeLessThan(5_000);
   });
 
   it('handles no nodes, and bounds a set of points', () => {

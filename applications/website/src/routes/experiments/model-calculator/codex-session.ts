@@ -23,11 +23,29 @@ export const readCodexTurnModel = (line: JsonRecord): string | null => {
   return typeof model === 'string' && model ? model : null;
 };
 
+/** Which thread a Codex file belongs to, and the thread it was forked from, if any. */
+export type CodexSessionMeta = { id: string; forkedFromId: string | null };
+
+/** Reads the thread identity from a `session_meta` line, or returns `null` for every other line. */
+export const readCodexSessionMeta = (line: JsonRecord): CodexSessionMeta | null => {
+  if (line.type !== 'session_meta' || !isRecord(line.payload)) return null;
+
+  const { id, forked_from_id: forkedFromId } = line.payload;
+  if (typeof id !== 'string' || !id) return null;
+
+  return {
+    id,
+    forkedFromId: typeof forkedFromId === 'string' && forkedFromId ? forkedFromId : null,
+  };
+};
+
 /** One model request reported by a Codex `token_count` event. */
 export type CodexTokenEvent = {
   /**
-   * Identifies the event across files, or `null` when the event lacks the
-   * running total that makes it identifiable.
+   * Identifies the event within a thread and the threads forked from it, or
+   * `null` when the event lacks the running total that makes it identifiable.
+   * Two unrelated sessions can report identical counts, so callers must scope
+   * the key to the thread's lineage.
    */
   key: string | null;
   usage: TokenUsage;
@@ -53,8 +71,8 @@ const describeCounts = (counts: JsonRecord): string =>
  * tokens and `output_tokens` includes the reasoning tokens. It emits most
  * events twice, resets its running total to zero after compaction, and
  * replays a parent thread's events into a forked subagent's file. Keying each
- * event by its running total plus its own usage lets callers drop all three
- * kinds of repeat, within one file or across several.
+ * event by its running total plus its own usage, within the thread's lineage,
+ * lets callers drop all three kinds of repeat.
  */
 export const readCodexTokenEvent = (line: JsonRecord): CodexTokenEvent | null => {
   if (line.type !== 'event_msg' || !isRecord(line.payload)) return null;

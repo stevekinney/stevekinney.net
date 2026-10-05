@@ -7,12 +7,14 @@
   type Props = {
     /** The file being read and how many there are, while reading. */
     progress: { current: number; total: number } | null;
+    /** True from the drop until reading finishes, including while a dropped folder is being walked. */
+    busy: boolean;
     /** What happened with the last files read, announced once reading finishes. */
     message: string | null;
     onFiles: (files: Promise<SourceFile[]>) => void;
   };
 
-  const { progress, message, onFiles }: Props = $props();
+  const { progress, busy, message, onFiles }: Props = $props();
 </script>
 
 <FileDropZone
@@ -22,8 +24,12 @@
   accept=".jsonl"
   keepFile={isSessionFile}
   captureWindowDrops
-  busy={progress !== null}
-  progress={progress ? `Reading file ${progress.current} of ${progress.total}…` : null}
+  {busy}
+  progress={progress
+    ? `Reading file ${progress.current} of ${progress.total}…`
+    : busy
+      ? 'Collecting files…'
+      : null}
   status={message}
   {onFiles}
 >

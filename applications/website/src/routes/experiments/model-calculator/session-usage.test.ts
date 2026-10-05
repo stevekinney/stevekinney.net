@@ -75,11 +75,19 @@ const codexCounts = ({ input = 0, cached = 0, output = 0, reasoning = 0 }: Codex
   total_tokens: input + output,
 });
 
-const codexSessionMeta = JSON.stringify({
-  timestamp: '2026-10-04T00:00:00.000Z',
-  type: 'session_meta',
-  payload: { id: 'thread-1', cli_version: '0.200.0', model_provider: 'openai' },
-});
+const codexMeta = (id: string, forkedFromId?: string): string =>
+  JSON.stringify({
+    timestamp: '2026-10-04T00:00:00.000Z',
+    type: 'session_meta',
+    payload: {
+      id,
+      ...(forkedFromId ? { forked_from_id: forkedFromId } : {}),
+      cli_version: '0.200.0',
+      model_provider: 'openai',
+    },
+  });
+
+const codexSessionMeta = codexMeta('thread-1');
 
 const codexTurn = (model: string): string =>
   JSON.stringify({
@@ -165,6 +173,27 @@ describe('Claude Code sessions', () => {
     expect(usageFor(session, 'claude-fable-5-1')).toMatchObject({
       requests: 1,
       usage: { uncachedInput: 112_634, cacheRead: 0, output: 16_212 },
+    });
+  });
+
+  it('measures the largest prompt per iteration, not from the summed usage', () => {
+    const iteration = claudeCodeUsage({ input: 2, output: 100, cacheRead: 109_997 });
+    const session = collect({
+      'session.jsonl': [
+        claudeCodeResponse('two-iterations', {
+          ...claudeCodeUsage({ input: 4, output: 200, cacheRead: 219_994 }),
+          iterations: [
+            { ...iteration, type: 'message' },
+            { ...iteration, type: 'message' },
+          ],
+        }),
+      ],
+    });
+
+    expect(session.largestPrompt).toBe(109_999);
+    expect(usageFor(session, 'claude-sonnet-5-5')).toMatchObject({
+      largestPrompt: 109_999,
+      usage: { uncachedInput: 4, cacheRead: 219_994 },
     });
   });
 
@@ -338,6 +367,52 @@ describe('Codex sessions', () => {
     expect(session.requests).toBe(3);
     expect(session.total.uncachedInput).toBe(700);
     expect(session.files.map((file) => file.requests)).toEqual([2, 1]);
+  });
+});
+
+describe('Codex sessions that report the same counts', () => {
+  const first = codexTokenCount({ input: 100, output: 10 }, { input: 100, output: 10 });
+
+  it('counts both when the sessions are unrelated', () => {
+    const session = collect({
+      'one.jsonl': [codexMeta('thread-a'), codexTurn('gpt-6-luna'), first],
+      'two.jsonl': [codexMeta('thread-b'), codexTurn('gpt-6-luna'), first],
+    });
+
+    expect(session.requests).toBe(2);
+    expect(session.total.uncachedInput).toBe(200);
+  });
+
+  it('counts both when neither file names its thread', () => {
+    const session = collect({
+      'one.jsonl': [codexTurn('gpt-6-luna'), first],
+      'two.jsonl': [codexTurn('gpt-6-luna'), first],
+    });
+
+    expect(session.requests).toBe(2);
+  });
+
+  it('counts a replay once when the fork names its parent, whichever file comes first', () => {
+    const files = {
+      'parent.jsonl': [codexMeta('thread-a'), codexTurn('gpt-6-luna'), first],
+      'fork.jsonl': [codexMeta('thread-b', 'thread-a'), codexTurn('gpt-6-luna'), first],
+    };
+
+    expect(collect(files).requests).toBe(1);
+    expect(
+      collect({ 'fork.jsonl': files['fork.jsonl'], 'parent.jsonl': files['parent.jsonl'] })
+        .requests,
+    ).toBe(1);
+  });
+
+  it('follows a fork of a fork back to the original thread', () => {
+    const session = collect({
+      'a.jsonl': [codexMeta('thread-a'), codexTurn('gpt-6-luna'), first],
+      'b.jsonl': [codexMeta('thread-b', 'thread-a'), codexTurn('gpt-6-luna'), first],
+      'c.jsonl': [codexMeta('thread-c', 'thread-b'), codexTurn('gpt-6-luna'), first],
+    });
+
+    expect(session.requests).toBe(1);
   });
 });
 

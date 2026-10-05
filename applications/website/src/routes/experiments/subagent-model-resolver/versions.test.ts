@@ -8,6 +8,7 @@ import {
   formatVersion,
   isInRange,
   isValidRange,
+  MAXIMUM_RANGE_LENGTH,
   parseVersion,
   rangeLength,
   v,
@@ -61,5 +62,11 @@ describe('ranges', () => {
     expect(isValidRange({ first: v(190), last: v(289) })).toBe(true);
     expect(isValidRange({ first: v(190), last: v(190) })).toBe(false);
     expect(isValidRange({ first: v(190), last: { major: 2, minor: 2, patch: 5 } })).toBe(false);
+  });
+
+  it('rejects a range too wide to resolve, such as one from a hand-edited link', () => {
+    expect(isValidRange({ first: v(0), last: v(MAXIMUM_RANGE_LENGTH - 1) })).toBe(true);
+    expect(isValidRange({ first: v(0), last: v(MAXIMUM_RANGE_LENGTH) })).toBe(false);
+    expect(isValidRange({ first: v(0), last: v(9_999_999_999) })).toBe(false);
   });
 });

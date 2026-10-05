@@ -590,7 +590,18 @@ export const analyzeFleet = (input: FleetInput): FleetAnalysis => {
       first.id.localeCompare(second.id),
   );
 
-  const running = rows.filter((row) => row.status.kind !== 'shadowed');
+  // Same-name definitions that tie can't both be loaded, and the tool can't say which wins. Both
+  // stay in the table, but they count once, so the totals and the verdict talk about one agent.
+  const countedAmbiguous = new Set<string>();
+  const running = rows.filter((row) => {
+    if (row.status.kind === 'shadowed') return false;
+    if (row.status.kind !== 'ambiguous') return true;
+    if (countedAmbiguous.has(row.name)) return false;
+
+    countedAmbiguous.add(row.name);
+
+    return true;
+  });
   const changed = running.filter((row) => row.changed);
 
   const summary = {

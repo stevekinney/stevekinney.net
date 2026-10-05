@@ -111,6 +111,12 @@ export const toModelId = (name: string): string =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 
+/**
+ * What a model ID can be. A shared link has to carry the ID of the selected model, and
+ * `decodeScenario` drops one that doesn't match, so an imported table can't hold one either.
+ */
+export const MODEL_ID_PATTERN = /^[a-z0-9][a-z0-9-]{0,59}$/;
+
 const MAXIMUM_MODELS = 60;
 
 export type ParsedPriceTable = { models: ModelPrice[] } | { error: string };
@@ -153,6 +159,11 @@ export const parsePriceTable = (text: string): ParsedPriceTable => {
 
     const id = typeof entry.id === 'string' && entry.id.trim() ? entry.id.trim() : toModelId(name);
     if (!id) return { error: `${position} needs an ID.` };
+    if (!MODEL_ID_PATTERN.test(id)) {
+      return {
+        error: `The ID “${id}” can only use lowercase letters, numbers, and hyphens, and up to 60 characters.`,
+      };
+    }
     if (seen.has(id)) return { error: `The ID “${id}” appears more than once.` };
 
     const input = readPrice(entry.input);

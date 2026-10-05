@@ -46,12 +46,19 @@ export const defaultVersion: Version = v(278);
 export const rangeLength = (range: VersionRange): number =>
   range.last.patch - range.first.patch + 1;
 
+/** The most versions a range may span. Each one is resolved and drawn, so a link can't ask for billions. */
+export const MAXIMUM_RANGE_LENGTH = 500;
+
 /**
  * A range has to stay inside one minor line, so each patch number is one
- * version, and it needs at least two versions to compare.
+ * version, it needs at least two versions to compare, and it can't span more
+ * than `MAXIMUM_RANGE_LENGTH`.
  */
 export const isValidRange = ({ first, last }: VersionRange): boolean =>
-  first.major === last.major && first.minor === last.minor && last.patch > first.patch;
+  first.major === last.major &&
+  first.minor === last.minor &&
+  last.patch > first.patch &&
+  rangeLength({ first, last }) <= MAXIMUM_RANGE_LENGTH;
 
 export const clampVersion = (version: Version, range: VersionRange): Version => {
   if (compareVersions(version, range.first) < 0) return range.first;

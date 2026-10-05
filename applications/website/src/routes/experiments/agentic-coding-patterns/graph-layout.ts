@@ -20,6 +20,26 @@ const seededRandom = (seed: number): (() => number) => {
   };
 };
 
+const DEFAULT_ITERATIONS = 300;
+const MINIMUM_ITERATIONS = 10;
+/** The most pair interactions the layout spends in total, about a second on a slow laptop. */
+const PAIR_STEP_BUDGET = 20_000_000;
+
+/**
+ * How many steps to run for `count` nodes. Every step compares every pair, so the cost grows with
+ * the square of the node count. The bundled library of 118 nodes gets the full 300 steps. A folder
+ * of thousands of notes gets fewer, so opening the graph stays responsive instead of hanging.
+ */
+export const iterationsFor = (count: number): number => {
+  const pairs = (count * (count - 1)) / 2;
+  if (pairs === 0) return DEFAULT_ITERATIONS;
+
+  return Math.max(
+    MINIMUM_ITERATIONS,
+    Math.min(DEFAULT_ITERATIONS, Math.floor(PAIR_STEP_BUDGET / pairs)),
+  );
+};
+
 /**
  * Places nodes with a force simulation: every pair pushes apart, every edge
  * pulls together, and a weak pull toward the center keeps unconnected nodes in
@@ -31,9 +51,10 @@ const seededRandom = (seed: number): (() => number) => {
 export const layoutGraph = (
   ids: readonly string[],
   edges: readonly { source: string; target: string }[],
-  { width = 1000, height = 700, iterations = 300 }: LayoutOptions = {},
+  { width = 1000, height = 700, iterations: requestedIterations }: LayoutOptions = {},
 ): Map<string, Point> => {
   const count = ids.length;
+  const iterations = requestedIterations ?? iterationsFor(count);
   const positions = new Map<string, Point>();
   if (count === 0) return positions;
 

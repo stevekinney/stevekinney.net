@@ -52,9 +52,33 @@ const unquote = (value: string): string => {
   return trimmed;
 };
 
+/** Where a quoted scalar's closing quote is, or -1. A `#` inside the quotes is part of the value. */
+const closingQuote = (text: string): number => {
+  const quote = text[0];
+
+  for (let index = 1; index < text.length; index += 1) {
+    if (quote === '"' && text[index] === '\\') {
+      index += 1;
+    } else if (text[index] === quote) {
+      // A doubled single quote is an escaped quote, not the end.
+      if (quote === "'" && text[index + 1] === "'") index += 1;
+      else return index;
+    }
+  }
+
+  return -1;
+};
+
 const stripComment = (value: string): string => {
   const trimmed = value.trim();
-  if (trimmed.startsWith('"') || trimmed.startsWith("'")) return trimmed;
+
+  if (trimmed.startsWith('"') || trimmed.startsWith("'")) {
+    const end = closingQuote(trimmed);
+    if (end === -1) return trimmed;
+
+    // A comment may follow the closing quote: `model: "inherit" # follow the main model`.
+    return /^\s+#/.test(trimmed.slice(end + 1)) ? trimmed.slice(0, end + 1) : trimmed;
+  }
 
   return trimmed.replace(/\s+#.*$/, '');
 };

@@ -172,6 +172,8 @@ export const fillFromReadout = (
     scenario.capacity = applied.capacity;
     scenario.margin = marginForCapacity(applied.capacity, marginShare);
     filled.push('capacity');
+    // The margin follows the capacity, so discarding has to put it back along with the capacity.
+    if (scenario.margin !== state.scenario.margin) filled.push('margin');
   }
 
   for (const [key, value] of Object.entries(applied.values) as [TermKey, number][]) {

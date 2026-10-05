@@ -268,6 +268,25 @@ describe('filling from a readout', () => {
     expect(discarded.beforeReadout).toBeNull();
   });
 
+  it('puts the margin back too when a readout changed the capacity without an autocompact row', () => {
+    const readout = applyReadout(
+      parseReadout('claude-opus-5 · 100k/400k tokens (25%)\nSystem prompt: 18k tokens'),
+      defaultMapping,
+      400_000,
+    );
+    const start = initialState();
+    const filled = fillFromReadout(start, readout);
+
+    expect(filled.scenario.capacity).toBe(400_000);
+    expect(filled.scenario.margin).not.toBe(start.scenario.margin);
+    expect(filled.fromReadout).toContain('margin');
+
+    const discarded = discardReadout(filled);
+
+    expect(discarded.scenario.capacity).toBe(start.scenario.capacity);
+    expect(discarded.scenario.margin).toBe(start.scenario.margin);
+  });
+
   it('keeps edits when discarding, and drops the preset', () => {
     const edited = setTerm(fillFromReadout(initialState(), applied), 'history', 50_000);
     const discarded = discardReadout(edited);

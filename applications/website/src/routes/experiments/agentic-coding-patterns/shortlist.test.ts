@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  bundledLibrary,
   isStarred,
+  itemsIn,
   readShortlist,
   setNote,
   shortlistStorageKey,
@@ -46,6 +48,43 @@ describe('shortlist edits', () => {
     expect(isStarred(added, 'a')).toBe(true);
     expect(setNote(added, 'a', 'hello')).toEqual([{ id: 'a', note: 'hello' }]);
     expect(toggleStar(added, 'a')).toEqual([]);
+  });
+});
+
+describe('shortlists for different libraries', () => {
+  it('keeps an entry with the same id in each library apart', () => {
+    const bundled = toggleStar([], 'agent-teams');
+    const both = toggleStar(bundled, 'agent-teams', 'folder:notes');
+
+    expect(both).toEqual([
+      { id: 'agent-teams', note: '' },
+      { id: 'agent-teams', note: '', library: 'folder:notes' },
+    ]);
+    expect(isStarred(both, 'agent-teams')).toBe(true);
+    expect(isStarred(bundled, 'agent-teams', 'folder:notes')).toBe(false);
+    expect(itemsIn(both, 'folder:notes')).toEqual([
+      { id: 'agent-teams', note: '', library: 'folder:notes' },
+    ]);
+    expect(itemsIn(both, bundledLibrary)).toEqual([{ id: 'agent-teams', note: '' }]);
+  });
+
+  it('notes and unstars only the library asked for', () => {
+    const both = toggleStar(toggleStar([], 'a'), 'a', 'folder:notes');
+
+    expect(setNote(both, 'a', 'mine', 'folder:notes')).toEqual([
+      { id: 'a', note: '' },
+      { id: 'a', note: 'mine', library: 'folder:notes' },
+    ]);
+    expect(toggleStar(both, 'a', 'folder:notes')).toEqual([{ id: 'a', note: '' }]);
+  });
+
+  it('reads a saved list from before libraries as bundled', () => {
+    const storage = {
+      getItem: () => JSON.stringify([{ id: 'a', note: '' }]),
+      setItem: () => undefined,
+    };
+
+    expect(itemsIn(readShortlist(storage), bundledLibrary)).toEqual([{ id: 'a', note: '' }]);
   });
 });
 

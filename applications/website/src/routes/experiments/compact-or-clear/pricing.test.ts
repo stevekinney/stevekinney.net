@@ -127,6 +127,17 @@ describe('parsePriceTable', () => {
   });
 
   it.each([
+    ['{"models":[{"id":"Opus_5.5","name":"A","input":1,"output":5}]}', 'lowercase letters'],
+    ['{"models":[{"id":"has space","name":"A","input":1,"output":5}]}', 'lowercase letters'],
+    [`{"models":[{"id":"${'a'.repeat(61)}","name":"A","input":1,"output":5}]}`, '60 characters'],
+    [`{"models":[{"name":"${'long '.repeat(20)}","input":1,"output":5}]}`, '60 characters'],
+  ])('rejects an ID that a shared link could not carry: %#', (text, message) => {
+    const result = parsePriceTable(text);
+
+    expect('error' in result && result.error).toContain(message);
+  });
+
+  it.each([
     ['not json', 'valid JSON'],
     ['{}', 'models'],
     ['{"models":[]}', 'models'],

@@ -29,6 +29,7 @@
     defaultRange,
     formatVersion,
     isValidRange,
+    MAXIMUM_RANGE_LENGTH,
     parseVersion,
   } from './versions';
   import type { Version, VersionRange } from './versions';
@@ -68,7 +69,7 @@
     rangeFirst && rangeLast
       ? isValidRange({ first: rangeFirst, last: rangeLast })
         ? null
-        : 'Both versions need to be in the same 2.x line, with the second after the first.'
+        : `Both versions need to be in the same 2.x line, with the second after the first and no more than ${MAXIMUM_RANGE_LENGTH} versions apart.`
       : 'Enter both versions like 2.1.190.',
   );
 

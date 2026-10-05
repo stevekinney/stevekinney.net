@@ -33,7 +33,14 @@
   import { commonFolderName, readNotes } from './read-notes';
   import { buildSearchDocuments, parseQuery, search } from './search';
   import type { ListResult } from './search';
-  import { readShortlist, setNote, toggleStar, writeShortlist } from './shortlist';
+  import {
+    bundledLibrary,
+    itemsIn,
+    readShortlist,
+    setNote,
+    toggleStar,
+    writeShortlist,
+  } from './shortlist';
   import type { ShortlistItem, ShortlistRow } from './shortlist';
 
   const { data } = $props();
@@ -121,9 +128,13 @@
   );
   const comparisonFull = $derived(explorer.compare.length >= maximumCompared);
 
-  const starred = $derived(new Set(shortlist.map((item) => item.id)));
+  // Entry IDs are slugs, so a custom folder can hold an ID the bundled library also has. The
+  // shortlist keeps each library's items apart, and only the open library's are shown.
+  const shortlistLibrary = $derived(folder ? `folder:${folder.name ?? ''}` : bundledLibrary);
+  const librarySavedItems = $derived(itemsIn(shortlist, shortlistLibrary));
+  const starred = $derived(new Set(librarySavedItems.map((item) => item.id)));
   const shortlistRows = $derived(
-    shortlist
+    librarySavedItems
       .flatMap((item): ShortlistRow[] => {
         const entry = graph.byId.get(item.id);
 
@@ -131,7 +142,7 @@
       })
       .sort((first, second) => first.entry.name.localeCompare(second.entry.name)),
   );
-  const hiddenShortlistCount = $derived(shortlist.length - shortlistRows.length);
+  const hiddenShortlistCount = $derived(librarySavedItems.length - shortlistRows.length);
 
   // Links keep the filters and view, so a link to an entry opens it with the same filters.
   const linkSearch = $derived(serializeUrlState({ ...explorer, selected: null }).search);
@@ -148,7 +159,8 @@
       { view: 'graph', label: 'Graph' },
       {
         view: 'shortlist',
-        label: shortlist.length > 0 ? `Shortlist (${shortlist.length})` : 'Shortlist',
+        label:
+          librarySavedItems.length > 0 ? `Shortlist (${librarySavedItems.length})` : 'Shortlist',
       },
     ];
 
@@ -281,11 +293,11 @@
     );
 
   const toggleShortlist = (id: string): void => {
-    shortlist = toggleStar(shortlist, id);
+    shortlist = toggleStar(shortlist, id, shortlistLibrary);
   };
 
   const noteOnShortlist = (entry: PatternEntry, note: string): void => {
-    shortlist = setNote(shortlist, entry.id, note);
+    shortlist = setNote(shortlist, entry.id, note, shortlistLibrary);
   };
 
   const focusSearch = async (): Promise<void> => {

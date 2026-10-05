@@ -106,6 +106,25 @@ describe('acceptance 9: uploads', () => {
     expect(analysis.rows.map((entry) => entry.name)).toContain('general-purpose');
   });
 
+  it('counts same-name definitions that tie once, while keeping both rows', () => {
+    const analysis = analyzeFleet(
+      input({
+        agentFiles: [
+          agentFile('first', 'home/.claude/agents/first.md', ['name: twin', 'model: haiku']),
+          agentFile('second', 'home/.claude/agents/second.md', ['name: twin', 'model: opus']),
+        ],
+      }),
+    );
+    const baseline = analyzeFleet(input());
+
+    expect(row(analysis, 'twin')).toHaveLength(2);
+    expect(row(analysis, 'twin').every((entry) => entry.status.kind === 'ambiguous')).toBe(true);
+    expect(analysis.ambiguousCount).toBe(2);
+    // The built-ins plus one `twin`, not two.
+    expect(analysis.agentCount).toBe(baseline.agentCount + 1);
+    expect(analysis.summary.moved + analysis.summary.unchanged).toBe(analysis.agentCount);
+  });
+
   it('lists an agent with no model line, declaring "not set"', () => {
     const analysis = analyzeFleet(
       input({ agentFiles: [agentFile('quiet', 'repo/.claude/agents/quiet.md', ['name: quiet'])] }),

@@ -36,6 +36,8 @@
   let usage = $state<TokenUsage>({ ...defaultUsage });
   let session = $state.raw<SessionUsage | null>(null);
   let progress = $state<{ current: number; total: number } | null>(null);
+  // Set from the drop, before a dropped folder has been walked, so a second drop can't start.
+  let loading = $state(false);
   let readError = $state<string | null>(null);
   let readMessage = $state<string | null>(null);
   let cacheWritesOpen = $state(false);
@@ -60,8 +62,9 @@
   };
 
   const loadFiles = async (source: Promise<SourceFile[]>): Promise<void> => {
-    if (progress) return;
+    if (loading) return;
 
+    loading = true;
     readError = null;
     readMessage = null;
 
@@ -92,6 +95,7 @@
       readError = 'Those files couldn’t be read. Try choosing them again.';
     } finally {
       progress = null;
+      loading = false;
     }
   };
 
@@ -183,7 +187,7 @@
           The session's token counts fill in the fields, and the table prices them on every model.
         </p>
       </div>
-      <SessionFileInput {progress} message={readMessage} onFiles={loadFiles} />
+      <SessionFileInput {progress} busy={loading} message={readMessage} onFiles={loadFiles} />
       {#if readError}
         <p role="alert" class="text-sm text-red-700 dark:text-red-400">{readError}</p>
       {/if}
