@@ -368,6 +368,34 @@ test.describe('acceptance 5: the seeded bootstrap', () => {
     await expect(result).toContainText('With seed 7, the 95% interval');
     expect(await result.locator('strong').nth(1).textContent()).toBe(first);
   });
+
+  test('new costs with the same durations get a new cost-per-accepted interval', async ({
+    page,
+  }) => {
+    const withCosts = (scale: number): string =>
+      [
+        'condition,minutes,accepted,cost',
+        ...[40, 55, 30, 70, 45].map(
+          (minutes, index) => `A,${minutes},true,${((index + 1) * scale).toFixed(2)}`,
+        ),
+        ...[52, 30, 41, 38, 43].map(
+          (minutes, index) => `B,${minutes},true,${((6 - index) * 0.5 * scale).toFixed(2)}`,
+        ),
+      ].join('\n');
+
+    await openResults(page);
+    const cost = outcomeRow(page, 'cost');
+    const interval = cost.locator('[data-cell="interval"]');
+
+    await paste(page, withCosts(1));
+    await expect(cost).toContainText('Bootstrap, 10,000 resamples');
+    const first = await interval.textContent();
+
+    await paste(page, withCosts(10));
+    await expect(cost.locator('[data-cell="difference"]')).toContainText('$10.00');
+    await expect(cost).toContainText('Bootstrap, 10,000 resamples');
+    await expect(interval).not.toHaveText(first ?? '');
+  });
 });
 
 test.describe('planner', () => {

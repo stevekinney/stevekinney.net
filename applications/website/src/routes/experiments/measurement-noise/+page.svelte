@@ -194,8 +194,12 @@
       );
     const costsA = costs(rowsA);
     const costsB = costs(rowsB);
+    // The costs belong in the key by value, not just by count: new costs with the same
+    // durations still need a new cost-per-accepted interval.
+    const costKey = (records: typeof costsA): string =>
+      records.map((record) => `${record.cost}${record.accepted ? '+' : '-'}`).join(',');
     const dataKey = comparison
-      ? `${comparison.design}|${comparison.valuesA.join(',')}|${comparison.valuesB.join(',')}|${costsA.length}|${costsB.length}`
+      ? `${comparison.design}|${comparison.valuesA.join(',')}|${comparison.valuesB.join(',')}|${costKey(costsA)}|${costKey(costsB)}`
       : '';
     // A recomputed analysis with the same data and seed, such as after changing α, needs no new
     // run once the last one has finished.
