@@ -22,7 +22,6 @@
   import { describeColumns, guessMapping, hasOutcome } from './columns';
   import type { ColumnMapping, Role } from './columns';
   import type { InputMode } from './data-panel.svelte';
-  import DataReport from './data-report.svelte';
   import { buildDataset, swapConditions } from './dataset';
   import { emptyGrid, gridToTable } from './entry-grid';
   import type { GridState } from './entry-grid';
@@ -30,8 +29,7 @@
   import { bodyClasses, headingClasses, panelClasses } from './field-styles';
   import FooterNotes from './footer-notes.svelte';
   import LazySection from './lazy-section.svelte';
-  import OutcomeTable from './outcome-table.svelte';
-  import { buildOutcomes, outcomesToCsv } from './outcomes';
+  import { buildOutcomes } from './outcomes';
   import type { CostIntervalState } from './outcomes';
   import { parseCsv, parsePasted } from './parse-table';
   import type { ParsedTable } from './parse-table';
@@ -42,7 +40,6 @@
   import type { PresetId } from './presets';
   import { readDataFile } from './read-data-file';
   import { decodeSettings, encodeSettings } from './share-link';
-  import { buildSummary } from './summary';
   import VerdictBanner from './verdict-banner.svelte';
   import { describeVerdict, endpointUnit } from './verdict';
 
@@ -527,18 +524,22 @@
       }}
     />
 
-    <DataReport
-      columns={table.columns}
-      {mapping}
-      {report}
-      {dataset}
-      hasOutcome={outcomePresent}
-      editable={app.active === 'paste' || app.active === 'file'}
-      ready={app.ready}
-      onMap={setMapping}
-      onSwap={() => {
-        app.swapped = !app.swapped;
-        changed();
+    <LazySection
+      name="the data summary"
+      load={() => import('./data-report.svelte')}
+      props={{
+        columns: table.columns,
+        mapping,
+        report,
+        dataset,
+        hasOutcome: outcomePresent,
+        editable: app.active === 'paste' || app.active === 'file',
+        ready: app.ready,
+        onMap: setMapping,
+        onSwap: () => {
+          app.swapped = !app.swapped;
+          changed();
+        },
       }}
     />
   </section>
@@ -590,8 +591,10 @@
         props={{
           ready: app.ready,
           link: shareLink,
-          summary: () => buildSummary(analysis, sourceName),
-          csv: () => outcomesToCsv(outcomes, labels),
+          analysis,
+          source: sourceName,
+          outcomes,
+          labels,
           ownData: app.active !== 'preset',
         }}
       />
@@ -628,7 +631,11 @@
           The endpoint you picked decides the verdict. The rest are here so you can see what you’d
           be trading. Greyed-out rows aren’t in your data.
         </p>
-        <OutcomeTable rows={outcomes} {labels} />
+        <LazySection
+          name="the outcome table"
+          load={() => import('./outcome-table.svelte')}
+          props={{ rows: outcomes, labels }}
+        />
       </section>
 
       <section aria-labelledby="bootstrap-heading" class="space-y-3">

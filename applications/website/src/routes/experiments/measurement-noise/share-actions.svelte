@@ -3,19 +3,26 @@
 
   import Button from '$lib/components/button';
 
+  import type { Analysis } from './analysis';
   import { downloadText } from './download';
+  import { outcomesToCsv } from './outcomes';
+  import type { OutcomeRow } from './outcomes';
+  import { buildSummary } from './summary';
 
   type Props = {
     ready: boolean;
     /** Builds the link when it's copied, since it needs the page's address. */
     link: () => string;
-    summary: () => string;
-    csv: () => string;
+    analysis: Analysis;
+    /** What the data is, such as a preset's name, for the summary. */
+    source: string;
+    outcomes: OutcomeRow[];
+    labels: string[];
     /** Whether the data on screen is the person's own, which the link leaves out. */
     ownData: boolean;
   };
 
-  const { ready, link, summary, csv, ownData }: Props = $props();
+  const { ready, link, analysis, source, outcomes, labels, ownData }: Props = $props();
 
   let message = $state<string | null>(null);
   let fallbackText = $state<string | null>(null);
@@ -61,7 +68,7 @@
       size="small"
       icon={Copy}
       disabled={!ready}
-      onclick={() => copy(summary(), 'Summary copied as Markdown.', 'Summary')}
+      onclick={() => copy(buildSummary(analysis, source), 'Summary copied as Markdown.', 'Summary')}
     >
       Copy summary
     </Button>
@@ -70,7 +77,7 @@
       size="small"
       icon={Download}
       disabled={!ready}
-      onclick={() => downloadText('outcome-table.csv', csv(), 'text/csv')}
+      onclick={() => downloadText('outcome-table.csv', outcomesToCsv(outcomes, labels), 'text/csv')}
     >
       Export the outcome table
     </Button>
