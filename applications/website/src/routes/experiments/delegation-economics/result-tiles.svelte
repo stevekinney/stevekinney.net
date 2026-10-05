@@ -31,7 +31,8 @@
   const labelClasses = 'text-sm font-semibold text-slate-600 dark:text-slate-300';
   const valueClasses =
     'mt-1 text-2xl font-bold tracking-tight text-slate-900 tabular-nums dark:text-white';
-  const reasonClasses = 'mt-2 text-sm text-slate-600 dark:text-slate-300';
+  // The cost reason names the model, which an imported table or a shared link can set.
+  const reasonClasses = 'mt-2 text-sm text-slate-600 [overflow-wrap:anywhere] dark:text-slate-300';
 
   const wallClockReason = $derived.by(() => {
     if (solo) return 'One worker is the solo session: nothing runs in parallel or gets integrated.';

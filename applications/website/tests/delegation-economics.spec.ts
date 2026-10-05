@@ -515,3 +515,20 @@ for (const colorScheme of ['light', 'dark'] as const) {
     expect(await horizontalOverflow(page)).toBe(0);
   });
 }
+
+for (const colorScheme of ['light', 'dark'] as const) {
+  test(`fits 360 pixels in ${colorScheme} mode with a long model name from a shared link`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.emulateMedia({ colorScheme });
+    const name = 'x'.repeat(60);
+    await open(
+      page,
+      `#model=custom-model&name=${name}&inputPrice=2&cachedPrice=0.2&outputPrice=10`,
+    );
+
+    await expect(cost(page)).toContainText(name);
+    expect(await horizontalOverflow(page)).toBe(0);
+  });
+}
