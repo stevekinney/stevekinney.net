@@ -2,7 +2,7 @@
   import { untrack } from 'svelte';
 
   import { fieldClasses } from './field-styles';
-  import { formatPriceNumber } from './pricing';
+  import { formatPriceNumber, MAX_PRICE } from './pricing';
 
   type Props = {
     label: string;
@@ -10,9 +10,11 @@
     onChange: (value: number) => void;
     /** Whether zero is a usable value. Prices can be free, but an effort factor can't be zero. */
     allowZero?: boolean;
+    /** The largest value the field accepts. */
+    max?: number;
   };
 
-  const { label, value, onChange, allowZero = true }: Props = $props();
+  const { label, value, onChange, allowZero = true, max = MAX_PRICE }: Props = $props();
 
   let text = $state(untrack(() => formatPriceNumber(value)));
   let editing = $state(false);
@@ -23,7 +25,7 @@
 
     const number = Number(normalized);
 
-    return Number.isFinite(number) && (allowZero || number > 0) ? number : null;
+    return Number.isFinite(number) && number <= max && (allowZero || number > 0) ? number : null;
   };
 
   const invalid = $derived(parse(text) === null);

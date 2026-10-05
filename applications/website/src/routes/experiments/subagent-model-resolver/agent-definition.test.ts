@@ -141,6 +141,14 @@ describe('setModelLine', () => {
     );
   });
 
+  it('leaves exactly one model line when the file declares several', () => {
+    const original = agent(['name: x', 'model: haiku', 'description: y', 'model: sonnet']);
+
+    expect(setModelLine(original, 'opus')).toBe(
+      agent(['name: x', 'model: opus', 'description: y']),
+    );
+  });
+
   it('adds a missing model line before the closing fence', () => {
     expect(setModelLine(agent(['name: x', 'description: y']), 'sonnet')).toBe(
       agent(['name: x', 'description: y', 'model: sonnet']),
