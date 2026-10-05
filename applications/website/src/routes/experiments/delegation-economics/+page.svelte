@@ -30,8 +30,6 @@
   import type { Scenario } from './scenario';
   import ScenarioControls from './scenario-controls.svelte';
   import { decodeScenario, encodeScenario } from './share-link';
-  import SpeedupChart from './speedup-chart.svelte';
-  import TokenBreakdown from './token-breakdown.svelte';
 
   const { data } = $props();
 
@@ -279,12 +277,16 @@
           turns down past the best worker count.
         </p>
       </div>
-      <SpeedupChart
-        {curve}
-        workers={evaluation.workers}
-        bestWorkers={evaluation.best.workers}
-        ceiling={evaluation.ceiling}
-        onSelect={(workers) => change({ workers })}
+      <LazySection
+        name="the speedup chart"
+        load={() => import('./speedup-chart.svelte')}
+        props={{
+          curve,
+          workers: evaluation.workers,
+          bestWorkers: evaluation.best.workers,
+          ceiling: evaluation.ceiling,
+          onSelect: (workers: number) => change({ workers }),
+        }}
       />
     </section>
 
@@ -295,7 +297,11 @@
           The shared context is drawn once per worker, so you can see how often you pay for it.
         </p>
       </div>
-      <TokenBreakdown {evaluation} {inputs} />
+      <LazySection
+        name="the token breakdown"
+        load={() => import('./token-breakdown.svelte')}
+        props={{ evaluation, inputs }}
+      />
     </section>
 
     <section aria-labelledby="checklist-heading" class="space-y-4">
