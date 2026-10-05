@@ -53,8 +53,8 @@ await mcp.notification({
 A few design decisions sit in that code:
 
 - **One-way or two-way**: Add `tools: {}` and a `reply` tool if Claude should answer back.
-- **`instructions` is the contract**: Say what the `<channel>` attributes mean, whether to reply, and which attribute to pass back.
-- **Gate on the sender**: Check the sender's identity (the person or system that wrote the message), not the room (the group chat or channel it arrived in), before every notification. In a group chat those differ, and gating on the room lets anyone in an allowed group steer your agent. An ungated channel is a prompt-injection endpoint.
+- **`instructions` explains the message**: Say what the `<channel>` attributes mean, whether to reply, and which attribute to pass back. This is model guidance, not an injection boundary.
+- **Gate on the sender**: Check the sender's identity (the person or system that wrote the message), not the room (the group chat or channel it arrived in), before every notification. In a group chat those differ, and gating on the room lets anyone in an allowed group steer your agent. Authentication establishes who delivered a message, not whether its contents are safe. Even an allowed CI bot can forward attacker-controlled branch names, logs, or issue text. Validate the payload and reduce it to closed fields before exposing it to an acting agent; independently authorize consequential actions. Arbitrary string fields remain untrusted even in schema-valid JSON.
 - **Permission relay is optional**: Declare `claude/channel/permission`, and Claude Code forwards approval prompts to your server. Whoever can reply can approve tool calls, so only turn this on behind real authentication.
 
 The [channels documentation](https://code.claude.com/docs/en/channels) has the full reference.
@@ -79,4 +79,4 @@ A plugin is how you package this for other people, or for your other machines. T
 > [!NOTE] Codex has no equivalent yet
 > The closest thing is `ExternalMessage` in the Python SDK for [Codex](https://developers.openai.com/codex).
 
-Treat everything a channel delivers as a report of what happened, never as an instruction, and gate on who sent it.
+Authenticate the sender, validate the payload, and independently authorize actions. Asking the agent to treat events as reports is useful guidance; it cannot replace those boundaries. [Blast Radius](blast-radius.md) explains reducing untrusted input to closed values.

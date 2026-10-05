@@ -31,7 +31,7 @@ For you: `--safe-mode` for one session, or `"disableAllHooks": true` in your set
 
 ## Best practices
 
-- **Make guards fail closed**: A hook that throws or times out gets skipped, so a guard lets the call through. Attach a `.catch()` and return `{ deny }`.
+- **Make guards fail closed**: A hook that throws or reaches the host timeout gets skipped, so a guard lets the call through. Handle rejected operations with `.catch()` and return a denial, but also race a pending operation against an internal deadline that returns a denial before the host's 10-second deadline. Use the supported `$.clock.sleep` timer, for example a five-second wait mapped to `{ deny: "Guard deadline exceeded" }` for `tool.call`; `.catch()` alone cannot settle a promise that hangs. Test success, rejection, and a never-settling operation. An internal timer still cannot survive a crashed or unloaded mod runtime: enforce invariants that must survive that failure with an external permission rule, managed hook, sandbox, or OS boundary.
 - **Write deny text as an instruction**: Claude reads it as the tool's result, so tell it what to do instead.
 - **Keep waiting inside `$` calls**: A hook gets 10 seconds of its own running time. Waiting on `next()` or `$.ui.ask` doesn't count. Awaiting your own promises does.
 - **Choose storage by how long a value has to last**: A module variable is lost on every reload. `$.state` lasts the session, and writing to it redraws whatever depends on it for you. `$.store` persists across sessions and is shared by all of them.
