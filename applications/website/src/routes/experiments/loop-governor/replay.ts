@@ -311,11 +311,25 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
   }
 
   // Nothing in a log says which a running total counts, so the reader chooses.
-  const totalPerSession = runningTotalScope === 'session' && mapping.session !== null;
   const sessionKeys = log.records.map((record) => {
     const session = read(record, 'session');
-    return session === undefined || session === null ? '' : String(session);
+    if (typeof session === 'number' && Number.isFinite(session)) return String(session);
+
+    return typeof session === 'string' ? session.trim() : '';
   });
+  // Rows without a session ID can't be told apart, so one of them with a cost leaves every
+  // per-session total in doubt, and the whole log is read as one total instead.
+  const unidentifiedCosts =
+    runningTotalScope === 'session' && mapping.session !== null && costIsRunningTotal
+      ? costValues.filter((cost, index) => cost !== null && sessionKeys[index] === '').length
+      : 0;
+  const totalPerSession =
+    runningTotalScope === 'session' && mapping.session !== null && unidentifiedCosts === 0;
+  if (unidentifiedCosts > 0) {
+    notes.push(
+      `${plural(unidentifiedCosts, 'iteration')} with a cost had no session ID, so running totals are read across the whole log, not per session.`,
+    );
+  }
 
   const iterations: ReplayIteration[] = [];
   let cumulative = 0;

@@ -203,6 +203,40 @@ describe('reading a log defensively', () => {
     expect(replay.notes.some((note) => note.includes('its own session'))).toBe(false);
   });
 
+  it('falls back to one total across the log when a cost row has no session ID', () => {
+    // Two unidentified sessions would otherwise merge into one total under an empty key.
+    const replay = runningTotals(
+      [
+        { session_id: 'a', cost_usd: 1 },
+        { cost_usd: 2 },
+        { session_id: 'a', cost_usd: 3 },
+        { session_id: '', cost_usd: 4 },
+      ],
+      'session',
+    );
+
+    expect(replay.iterations.map((step) => step.cost)).toEqual([1, 1, 1, 1]);
+    expect(replay.total).toBe(4);
+    expect(replay.notes).toContain(
+      '2 iterations with a cost had no session ID, so running totals are read across the whole log, not per session.',
+    );
+  });
+
+  it('keeps per-session totals when only rows without a cost lack a session ID', () => {
+    const replay = runningTotals(
+      [
+        { session_id: 'a', cost_usd: 1 },
+        { session_id: 'b', cost_usd: 2 },
+        { score: 1 },
+        { session_id: 'a', cost_usd: 3 },
+      ],
+      'session',
+    );
+
+    expect(replay.iterations.map((step) => step.cost)).toEqual([1, 2, 0, 2]);
+    expect(replay.notes.some((note) => note.includes('no session ID'))).toBe(false);
+  });
+
   it('reads per-session totals across the log when no session is mapped', () => {
     const log = parseLogText(
       [1, 3, 6].map((total) => JSON.stringify({ cost_usd: total })).join('\n'),
