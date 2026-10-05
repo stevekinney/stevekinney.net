@@ -1,4 +1,4 @@
-import { stripByteOrderMark } from './lenient-json';
+import { stripByteOrderMark } from '$lib/experiments/lenient-json';
 import { parseModelSetting } from './models';
 import type { ModelSetting } from './models';
 

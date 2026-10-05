@@ -6,7 +6,6 @@ import {
   agentsRootOf,
   containsWorkingDirectory,
   guessAgentScope,
-  guessSettingsScope,
   projectDirectoryOf,
 } from './scopes';
 
@@ -32,15 +31,6 @@ describe('guessAgentScope', () => {
     );
     expect(guessAgentScope('plugins/cache/tools/1.0/agents/a.md')).toBe('plugin');
     expect(guessAgentScope('my-plugin/agents/a.md')).toBe('plugin');
-  });
-});
-
-describe('guessSettingsScope', () => {
-  it('tells the settings files apart', () => {
-    expect(guessSettingsScope('settings.local.json')).toBe('project-local');
-    expect(guessSettingsScope('/Users/me/.claude/settings.json')).toBe('user');
-    expect(guessSettingsScope('repo/.claude/settings.json')).toBe('project');
-    expect(guessSettingsScope('managed-settings.json')).toBe('managed');
   });
 });
 

@@ -1,4 +1,4 @@
-import { parseLenientJson } from './lenient-json';
+import { parseLenientJson } from '$lib/experiments/lenient-json';
 
 /** What a settings file says that this tool cares about. Values are raw text. */
 export type SettingsValues = {

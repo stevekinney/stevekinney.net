@@ -1,24 +1,21 @@
+import { parseLenientJson } from '$lib/experiments/lenient-json';
+import { pathSegments } from '$lib/experiments/settings-scope';
+import type { SettingsScope } from '$lib/experiments/settings-scope';
+
 import { flipDirection } from './across-versions';
 import type { FlipDirection } from './across-versions';
 import { parseAgentFile } from './agent-definition';
 import { resolvePrecedence } from './agent-precedence';
 import type { PrecedenceStatus } from './agent-precedence';
 import { effectiveSettings } from './effective-settings';
-import type { SettingsFile, SettingsScope } from './effective-settings';
-import { parseLenientJson } from './lenient-json';
+import type { SettingsFile } from './effective-settings';
 import { parseModelSetting } from './models';
 import type { ModelSetting, ModelValue } from './models';
 import { parsePastedOutput } from './paste-parser';
 import type { PastedAgent } from './paste-parser';
 import { resolve } from './resolve';
 import type { ProviderGroup, ResolverConfiguration, SubagentKind } from './resolve';
-import {
-  agentScopeLabels,
-  agentsRootOf,
-  guessAgentScope,
-  pathSegments,
-  projectDirectoryOf,
-} from './scopes';
+import { agentScopeLabels, agentsRootOf, guessAgentScope, projectDirectoryOf } from './scopes';
 import type { AgentScope } from './scopes';
 import { parseForceValue } from './settings-parser';
 import { thresholds } from './version-boundaries';
