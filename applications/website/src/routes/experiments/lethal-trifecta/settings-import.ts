@@ -291,17 +291,44 @@ export const parseRule = (rule: string): { tool: string; argument: string | null
     : { tool: rule.trim(), argument: null };
 };
 
-/** The command a Bash rule names, such as `curl` for `Bash(curl *)` or `git push` for `Bash(git push:*)`. Empty means every command. */
-export const bashCommand = (rule: string): string | null => {
+/**
+ * The command a Bash rule names and whether it ends in a wildcard. `Bash(git push:*)` and
+ * `Bash(git push *)` are `git push` with a wildcard, matching every push. Without a wildcard,
+ * `Bash(git push)` matches that exact command only. A bare `Bash` or `Bash(*)` is an empty
+ * command with a wildcard: every command.
+ */
+export const bashRule = (rule: string): { command: string; wildcard: boolean } | null => {
   const { tool, argument } = parseRule(rule);
   if (tool !== 'Bash') return null;
-  if (argument === null) return '';
+  if (argument === null) return { command: '', wildcard: true };
 
-  return argument
-    .replace(/:\*$/, '')
-    .replace(/\s*\*$/, '')
-    .trim()
-    .replace(/^\*$/, '');
+  return {
+    command: argument
+      .replace(/:\*$/, '')
+      .replace(/\s*\*$/, '')
+      .trim()
+      .replace(/^\*$/, ''),
+    wildcard: /\*\s*$/.test(argument),
+  };
+};
+
+/** The command a Bash rule names, such as `curl` for `Bash(curl *)` or `git push` for `Bash(git push:*)`. Empty means every command. */
+export const bashCommand = (rule: string): string | null => bashRule(rule)?.command ?? null;
+
+/**
+ * Whether a Bash rule matches every use of a command, such as `Bash(gh:*)` for `gh`. It needs
+ * a wildcard, or it matches only the exact command, and a bare `Bash` or `Bash(*)` covers all.
+ */
+const coversEvery = (rule: string, command: string): boolean => {
+  const parsed = bashRule(rule);
+
+  return (
+    parsed !== null &&
+    parsed.wildcard &&
+    (parsed.command === '' ||
+      parsed.command === command ||
+      command.startsWith(`${parsed.command} `))
+  );
 };
 
 /**
@@ -594,18 +621,17 @@ export const analyzeSettings = (
   // The control means a prompt on pushing and on public comments, so it's on only when the
   // ask and deny rules cover both. A comment can go out through any gh subcommand, such as
   // gh api, so only a rule covering all of gh counts, and through any MCP server.
-  const pushRule = (rule: Located<string>): boolean =>
-    /^git push\b/.test(bashCommand(rule.value) ?? '') || bashCommand(rule.value) === 'git';
-  const coversAllOfGh = (rule: Located<string>): boolean => {
-    const { tool, argument } = parseRule(rule.value);
-    if (tool !== 'Bash') return false;
+  // A prompt has to cover every push. Any allow rule for a push lets one out with no prompt.
+  const gatesPush = (rule: Located<string>): boolean => coversEvery(rule.value, 'git push');
+  const allowsPush = (rule: Located<string>): boolean => {
+    const command = bashCommand(rule.value);
 
-    // Without a wildcard, Bash(gh) matches the bare command only.
-    return argument === null || /^\s*(\*|gh\s*(:\*|\s\*))\s*$/.test(argument);
+    return command !== null && (command === '' || command === 'git' || /^git push\b/.test(command));
   };
+  const coversAllOfGh = (rule: Located<string>): boolean => coversEvery(rule.value, 'gh');
   const askOrDeny = [...merged.ask, ...merged.deny];
-  const gated = askOrDeny.filter(pushRule);
-  const pushAllowed = merged.allow.filter(pushRule);
+  const gated = askOrDeny.filter(gatesPush);
+  const pushAllowed = merged.allow.filter(allowsPush);
   const ghRule = askOrDeny.find(coversAllOfGh);
   const mcpServers = [...new Set(merged.mcpServers.map((server) => server.value))];
   const mcpRules = mcpServers.map((server) =>
@@ -648,9 +674,7 @@ export const analyzeSettings = (
       }
     : notDeterminable('permissions.defaultMode isn’t set in these files.');
 
-  const curlDeny = merged.deny.filter(
-    (rule) => bashCommand(rule.value)?.split(/\s+/)[0] === 'curl',
-  );
+  const curlDeny = merged.deny.filter((rule) => coversEvery(rule.value, 'curl'));
   prefill['deny-curl'] =
     curlDeny.length > 0
       ? { status: 'on', reason: 'curl is denied.', evidence: curlDeny }

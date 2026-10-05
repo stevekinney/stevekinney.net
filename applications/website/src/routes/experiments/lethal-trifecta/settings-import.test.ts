@@ -6,6 +6,7 @@ import type { SettingsScope } from '$lib/experiments/settings-scope';
 import {
   analyzeSettings,
   bashCommand,
+  bashRule,
   findLine,
   parseSettingsFile,
   readRuleCovers,
@@ -250,6 +251,35 @@ describe('prefilling the prompt on push and publish', () => {
     ).toBe('unknown');
   });
 
+  it('counts a rule without a wildcard as covering that exact command only', () => {
+    const exactComments = analyze(
+      file({
+        permissions: {
+          ask: ['Bash(git push:*)', 'Bash(gh issue comment)', 'Bash(gh pr comment)'],
+        },
+      }),
+    );
+    expect(exactComments.prefill['publish-gate'].status).toBe('unknown');
+
+    // Bash(git push) prompts for a bare git push, not git push origin main.
+    const exactPush = analyze(file({ permissions: { ask: ['Bash(git push)', 'Bash(gh:*)'] } }));
+    expect(exactPush.prefill['publish-gate'].status).not.toBe('on');
+
+    // A bare Bash rule covers pushing and all of gh.
+    expect(analyze(file({ permissions: { ask: ['Bash'] } })).prefill['publish-gate'].status).toBe(
+      'on',
+    );
+  });
+
+  it('turns deny-curl on only for a rule that covers every curl command', () => {
+    expect(
+      analyze(file({ permissions: { deny: ['Bash(curl)'] } })).prefill['deny-curl'].status,
+    ).toBe('unknown');
+    expect(
+      analyze(file({ permissions: { deny: ['Bash(curl *)'] } })).prefill['deny-curl'].status,
+    ).toBe('on');
+  });
+
   it('needs a rule for every MCP server, which can comment with no prompt', () => {
     const ungated = analyze(file({ permissions: { ask: pushAndGh }, mcpServers: { tracker: {} } }));
     expect(ungated.prefill['publish-gate'].status).toBe('unknown');
@@ -344,6 +374,15 @@ describe('rule helpers', () => {
     expect(bashCommand('Bash')).toBe('');
     expect(bashCommand('Bash(*)')).toBe('');
     expect(bashCommand('Read(.env)')).toBeNull();
+    expect(bashRule('Bash(gh issue comment)')).toEqual({
+      command: 'gh issue comment',
+      wildcard: false,
+    });
+    expect(bashRule('Bash(git push:*)')).toEqual({ command: 'git push', wildcard: true });
+    expect(bashRule('Bash(curl *)')).toEqual({ command: 'curl', wildcard: true });
+    expect(bashRule('Bash')).toEqual({ command: '', wildcard: true });
+    expect(bashRule('Bash(*)')).toEqual({ command: '', wildcard: true });
+    expect(bashRule('Read(.env)')).toBeNull();
   });
 
   it('knows which commands reach the network', () => {
