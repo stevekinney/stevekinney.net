@@ -149,7 +149,10 @@
       data-session-summary
     >
       <div class="flex flex-wrap items-start justify-between gap-3">
-        <p class="text-base font-semibold text-slate-900 dark:text-white" data-session-chip>
+        <p
+          class="min-w-0 text-base font-semibold [overflow-wrap:anywhere] text-slate-900 dark:text-white"
+          data-session-chip
+        >
           Imported {plural(session.turns, 'turn')} · current context {formatTokens(
             session.contextTokens,
           )} · {matchedModel?.name ?? session.modelId} · median output {formatTokens(
@@ -161,7 +164,7 @@
 
       <ul class="space-y-1 text-sm text-slate-700 dark:text-slate-200">
         {#if !matchedModel}
-          <li data-model-unmatched>
+          <li data-model-unmatched class="[overflow-wrap:anywhere]">
             This session’s latest turn ran <code>{session.modelId}</code>, which isn’t in your price
             table, so From model is unchanged. Add it under
             <button

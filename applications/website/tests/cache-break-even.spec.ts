@@ -366,6 +366,29 @@ test.describe('acceptance check 8: importing a session', () => {
     await expect(page.getByRole('button', { name: 'Add a model' })).toBeVisible();
   });
 
+  test('an unmatched model ID with no break points stays inside a 360-pixel page', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await open(page);
+    const longModel = `claude-${'x'.repeat(120)}`;
+    const directory = mkdtempSync(join(tmpdir(), 'cache-break-even-'));
+    const session = join(directory, 'long-model.jsonl');
+    writeFileSync(
+      session,
+      readFileSync(fixture('session-opus-5-5.jsonl'), 'utf8').replaceAll(
+        'claude-opus-5-5',
+        longModel,
+      ),
+    );
+
+    await page.locator('input[type="file"]').first().setInputFiles(session);
+
+    await expect(page.locator('[data-model-unmatched]')).toContainText(longModel);
+    await expect(page.locator('[data-session-chip]')).toContainText(longModel);
+    expect(await horizontalOverflow(page)).toBe(0);
+  });
+
   test('a file with no responses changes nothing and says so', async ({ page }) => {
     await open(page);
     const directory = mkdtempSync(join(tmpdir(), 'cache-break-even-'));
@@ -485,7 +508,7 @@ test.describe('setup controls', () => {
     await expect(page.getByText('from published coding runs')).toBeVisible();
   });
 
-  test('toggle and sort controls expose their state', async ({ page }) => {
+  test('the cache TTL toggle exposes its pressed state', async ({ page }) => {
     await open(page);
 
     await expect(page.getByRole('group', { name: 'Cache TTL' })).toBeVisible();
