@@ -214,7 +214,8 @@ export type ReplayOptions = {
   lowerIsBetter: boolean;
   /**
    * Whether the cost field is each iteration's cost or a running total. A running total is
-   * kept for each session when the session is mapped, and a drop starts a new total.
+   * kept for each session when a mapped session repeats, otherwise for the whole log, and a
+   * drop starts a new total.
    */
   costIsRunningTotal: boolean;
 };
@@ -297,9 +298,23 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     notes.push(`Read the first ${MAXIMUM_RECORDS.toLocaleString('en-US')} iterations only.`);
   }
 
+  // A running total belongs to a session only when sessions repeat. A loop that starts a fresh
+  // session every iteration, as an external loop does, keeps one total for the whole log.
+  const sessionKeys = log.records.map((record) => {
+    const session = read(record, 'session');
+    return session === undefined || session === null ? '' : String(session);
+  });
+  const totalPerSession =
+    mapping.session !== null && new Set(sessionKeys).size < sessionKeys.length;
+  if (costIsRunningTotal && mapping.session !== null && !totalPerSession) {
+    notes.push(
+      'Every iteration has its own session, so the running total is read across the whole log.',
+    );
+  }
+
   const iterations: ReplayIteration[] = [];
   let cumulative = 0;
-  // The last running total seen in each session, or in the whole log when no session is mapped.
+  // The last running total seen in each session, or in the whole log.
   const previousTotals = new Map<string, number>();
   let resets = 0;
   let best: number | null = null;
@@ -314,7 +329,7 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     const reported = costValues[index];
     let cost = 0;
     if (reported !== null && costIsRunningTotal) {
-      const key = mapping.session === null ? '' : String(session ?? '');
+      const key = totalPerSession ? sessionKeys[index] : '';
       const previous = previousTotals.get(key) ?? 0;
       // A total that drops means a new run started counting from zero.
       if (reported < previous) resets += 1;

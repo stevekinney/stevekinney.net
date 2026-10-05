@@ -169,6 +169,25 @@ describe('reading a log defensively', () => {
     expect(replay.notes.some((note) => note.includes('dropped'))).toBe(false);
   });
 
+  it('keeps one running total when every iteration starts a fresh session', () => {
+    const lines = [1, 2, 3, 4].map((total, index) => ({
+      session_id: `fresh-${index + 1}`,
+      cost_usd: total,
+    }));
+    const log = parseLogText(lines.map((line) => JSON.stringify(line)).join('\n'));
+    const replay = analyzeLog(log, {
+      mapping: guessMapping(log.keys),
+      lowerIsBetter: false,
+      costIsRunningTotal: true,
+    });
+
+    expect(replay.iterations.map((step) => step.cost)).toEqual([1, 1, 1, 1]);
+    expect(replay.total).toBe(4);
+    expect(replay.notes).toContain(
+      'Every iteration has its own session, so the running total is read across the whole log.',
+    );
+  });
+
   it('reads a running total as per-iteration costs only if told to', () => {
     expect(replayOf('renamed-fields.jsonl').total).toBe(27.5);
   });
