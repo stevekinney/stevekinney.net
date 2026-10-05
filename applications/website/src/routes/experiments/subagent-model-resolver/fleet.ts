@@ -257,15 +257,19 @@ const buildDefinitions = (
     }
   }
 
-  // Pasted agent lines only name a file and its model, so an uploaded copy of the same name wins.
-  const uploadedNames = new Set(definitions.map((definition) => definition.name));
+  // Pasted agent lines only name a file and its model, so an uploaded copy of the same name and
+  // scope is the same file and wins. A pasted line from another scope is a different definition,
+  // and precedence decides between them.
+  const uploadedKeys = new Set(
+    definitions.map((definition) => `${definition.scope}:${definition.name}`),
+  );
   const pasted = parsePastedOutput(input.pastedText);
 
   const addPasted = (agent: PastedAgent): void => {
-    if (uploadedNames.has(agent.name)) return;
+    const scope = guessAgentScope(agent.path);
+    if (uploadedKeys.has(`${scope}:${agent.name}`)) return;
 
     const model = parseModelSetting(agent.model);
-    const scope = guessAgentScope(agent.path);
 
     definitions.push({
       id: `paste:${agent.name}:${agent.model}`,

@@ -144,6 +144,16 @@
   };
 
   const applySession = (imported: SessionImport): void => {
+    // A field the person edited since the last import is theirs now, so the backup takes its value
+    // and the new import's Discard won't roll it back to something older.
+    if (beforeImport) {
+      for (const field of ['fromModel', 'contextTokens', 'remainingOutput'] as const) {
+        if (sources[field] !== 'session') {
+          beforeImport = { ...beforeImport, [field]: app.calc[field] };
+        }
+      }
+    }
+
     // A second import replaces the first, so nothing the first filled in carries over.
     restoreImportedFields();
 

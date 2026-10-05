@@ -1,4 +1,4 @@
-import { defaultState, MAX_TOKENS, normalizeState } from './calculator-state';
+import { defaultState, MAX_RATIO, MAX_TOKENS, normalizeState } from './calculator-state';
 import type { CalculatorState } from './calculator-state';
 import { defaultPricing, isCustomPricing, parsePricingTable } from './pricing';
 import type { PricingTable } from './pricing';
@@ -85,7 +85,7 @@ export const decodeConfiguration = (hash: string): DecodedConfiguration | null =
       ttl: ttl === '5m' || ttl === '1h' ? ttl : defaultState.ttl,
       contextTokens: readCount(parameters.get('n')) ?? defaultState.contextTokens,
       remainingOutput: readCount(parameters.get('r')) ?? defaultState.remainingOutput,
-      ratioOverride: ratio !== null && Number.isFinite(ratio) ? ratio : null,
+      ratioOverride: ratio !== null && Number.isFinite(ratio) && ratio <= MAX_RATIO ? ratio : null,
     },
     pricing,
   );

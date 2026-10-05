@@ -5,6 +5,7 @@ import {
   describeRatioSource,
   evaluateState,
   normalizeState,
+  MAX_RATIO,
   parseRatioOverride,
   swapState,
 } from './calculator-state';
@@ -25,6 +26,18 @@ describe('swapState', () => {
 
   it('restores the defaults when swapped twice', () => {
     expect(swapState(swapState(defaultState))).toEqual(defaultState);
+  });
+});
+
+describe('the ratio cap', () => {
+  it('turns an override past the cap into no override', () => {
+    expect(
+      normalizeState({ ...defaultState, ratioOverride: 1e307 }, defaultPricing).ratioOverride,
+    ).toBeNull();
+    expect(
+      normalizeState({ ...defaultState, ratioOverride: MAX_RATIO }, defaultPricing).ratioOverride,
+    ).toBe(MAX_RATIO);
+    expect(parseRatioOverride('1' + '0'.repeat(307))).toBeNull();
   });
 });
 

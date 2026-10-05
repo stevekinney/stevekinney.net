@@ -36,6 +36,9 @@ export const MAX_TOKENS = 1_000_000_000_000;
  * Replaces anything the price table doesn't know, such as a model that was
  * just removed or a link written for different prices, with something it does.
  */
+/** The largest output ratio a link, a field, or a saved scenario can set. Larger ones overflow the cost arithmetic. */
+export const MAX_RATIO = 1_000;
+
 export const normalizeState = (state: CalculatorState, pricing: PricingTable): CalculatorState => {
   const firstModel = pricing.models[0].id;
   const standardEffort = findEffort(pricing, 'high') ?? pricing.efforts[0];
@@ -49,6 +52,11 @@ export const normalizeState = (state: CalculatorState, pricing: PricingTable): C
     toModel: model(state.toModel, defaultState.toModel),
     fromEffort: effort(state.fromEffort),
     toEffort: effort(state.toEffort),
+    ratioOverride:
+      state.ratioOverride !== null &&
+      !(state.ratioOverride >= 0 && state.ratioOverride <= MAX_RATIO)
+        ? null
+        : state.ratioOverride,
   };
 };
 
@@ -85,7 +93,7 @@ export const parseRatioOverride = (text: string): number | null => {
 
   const ratio = Number(normalized);
 
-  return Number.isFinite(ratio) ? ratio : null;
+  return Number.isFinite(ratio) && ratio <= MAX_RATIO ? ratio : null;
 };
 
 /** What the note under the ratio field says. An override beats everything, then the efforts. */

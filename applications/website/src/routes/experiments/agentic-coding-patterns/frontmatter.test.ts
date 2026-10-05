@@ -57,6 +57,16 @@ describe('parseFrontmatter', () => {
   });
 });
 
+describe('comments after quoted values', () => {
+  it('strips a comment after the closing quote and keeps a # inside the quotes', () => {
+    const { data } = parseFrontmatter(
+      ['---', 'type: "pattern" # explorer entry', "category: 'a # b' # note", '---', ''].join('\n'),
+    );
+
+    expect(data).toMatchObject({ type: 'pattern', category: 'a # b' });
+  });
+});
+
 describe('splitFlowList', () => {
   it('keeps an apostrophe inside a double-quoted item', () => {
     expect(splitFlowList('"It\'s", other')).toEqual(["It's", 'other']);
