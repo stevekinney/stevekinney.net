@@ -44,6 +44,45 @@ describe('parseCsv', () => {
     });
   });
 
+  it('treats a quote inside a cell as a character, so it doesn’t swallow the rows after it', () => {
+    expect(parseCsv('condition,task,minutes\nA,5" monitor,40\nA,b,50\nB,c,30\n')).toEqual({
+      ok: true,
+      table: {
+        columns: ['condition', 'task', 'minutes'],
+        rows: [
+          ['A', '5" monitor', '40'],
+          ['A', 'b', '50'],
+          ['B', 'c', '30'],
+        ],
+      },
+    });
+  });
+
+  it('reads the lines of a quote that never closes one at a time, keeping the rows after it', () => {
+    const parsed = parseCsv('condition,task,minutes\nA,"unclosed,40\nA,b,50\nB,c,30\n');
+
+    expect(parsed).toMatchObject({
+      table: {
+        rows: [
+          ['A', 'unclosed,40'],
+          ['A', 'b', '50'],
+          ['B', 'c', '30'],
+        ],
+      },
+    });
+  });
+
+  it('stays linear on a large file with a stray quote near the top', () => {
+    const lines = ['condition,task,minutes', 'A,"open,40'];
+    for (let index = 0; index < 20_000; index += 1) lines.push(`A,t${index},${index + 1}`);
+
+    const started = performance.now();
+    const parsed = parseCsv(lines.join('\n'));
+
+    expect(parsed.ok && parsed.table.rows.length).toBe(20_001);
+    expect(performance.now() - started).toBeLessThan(1_000);
+  });
+
   it('detects tabs and semicolons', () => {
     expect(detectDelimiter('a\tb\tc')).toBe('\t');
     expect(detectDelimiter('a;b;c')).toBe(';');

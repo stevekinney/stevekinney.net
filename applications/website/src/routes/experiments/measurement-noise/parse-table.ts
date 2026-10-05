@@ -66,12 +66,41 @@ export const splitRecord = (record: string, delimiter: Delimiter): string[] => {
   return cells;
 };
 
-/** Whether a record so far ends inside an open quote, so the next line belongs to it. */
-const endsQuoted = (record: string): boolean => {
-  let quotes = 0;
-  for (const character of record) if (character === '"') quotes += 1;
+type QuoteState = { quoted: boolean; cellBlank: boolean };
 
-  return quotes % 2 === 1;
+/**
+ * Carries the quote state across one line, with the rule `splitRecord` uses: a
+ * quote opens a cell only when nothing but spaces comes before it in that
+ * cell. A stray quote inside a cell, such as `5" monitor`, is just a character,
+ * so it doesn't swallow every line after it.
+ */
+const scanQuotes = (line: string, start: QuoteState, delimiter: Delimiter): QuoteState => {
+  let { quoted, cellBlank } = start;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+
+    if (quoted) {
+      if (character === '"') {
+        if (line[index + 1] === '"') {
+          cellBlank = false;
+          index += 1;
+        } else {
+          quoted = false;
+        }
+      } else if (character.trim() !== '') {
+        cellBlank = false;
+      }
+    } else if (character === '"' && cellBlank) {
+      quoted = true;
+    } else if (character === delimiter) {
+      cellBlank = true;
+    } else if (character.trim() !== '') {
+      cellBlank = false;
+    }
+  }
+
+  return { quoted, cellBlank };
 };
 
 /**
@@ -86,7 +115,10 @@ export const createCsvReader = (): {
   let delimiter: Delimiter = ',';
   let columns: string[] | null = null;
   const rows: string[][] = [];
-  let pending: string | null = null;
+  /** The lines of a record whose quoted cell hasn't closed yet. */
+  let pending: string[] | null = null;
+  let pendingDelimiter: Delimiter = ',';
+  let state: QuoteState = { quoted: false, cellBlank: true };
 
   const take = (record: string): void => {
     if (columns === null) {
@@ -105,20 +137,29 @@ export const createCsvReader = (): {
   return {
     push: (line) => {
       const text = line.endsWith('\r') ? line.slice(0, -1) : line;
-      const record = pending === null ? text : `${pending}\n${text}`;
 
-      if (endsQuoted(record)) {
-        pending = record;
+      if (pending === null) {
+        // The header's delimiter isn't known until its line is read.
+        pendingDelimiter = columns === null ? detectDelimiter(text) : delimiter;
+        state = { quoted: false, cellBlank: true };
+      }
+
+      state = scanQuotes(pending === null ? text : `\n${text}`, state, pendingDelimiter);
+      if (state.quoted) {
+        (pending ??= []).push(text);
 
         return;
       }
 
+      const record = pending === null ? text : [...pending, text].join('\n');
       pending = null;
       take(record);
     },
     finish: () => {
       if (pending !== null) {
-        take(pending);
+        // A quote that never closed. Read its lines one at a time, so one bad
+        // cell costs one row, which is reported, instead of the rest of the file.
+        for (const text of pending) take(text);
         pending = null;
       }
 
