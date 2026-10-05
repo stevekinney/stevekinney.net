@@ -72,6 +72,20 @@ const detectSessionFormat = (line: JsonRecord): SessionFormat | null => {
  * Most lines in a session are prompts, tool calls, and tool output. These
  * substring checks skip parsing any line that can't carry usage.
  */
+type CodexEvent = {
+  /** Which file it came from, as an index into the collector's files. */
+  fileIndex: number;
+  /** The thread its file names, or the file itself when it names none. */
+  thread: string;
+  /** Counts the compactions before it, since a compaction resets the running total to zero. */
+  epoch: number;
+  key: string | null;
+  /** `null` until a `turn_context` names the model. */
+  model: string | null;
+  usage: SessionRequest['usage'];
+  promptTokens: number;
+};
+
 const mightCarryUsage = (line: string, format: SessionFormat): boolean =>
   format === 'claude-code'
     ? line.includes('"usage"') || line.includes('"cost-state"')
@@ -88,17 +102,20 @@ export const createSessionUsageCollector = (): SessionUsageCollector => {
   // lines that the subagent's own file repeats, and the last line written for
   // a response always has its final usage.
   const claudeCodeResponses = new Map<string, SessionRequest[]>();
-  const codexRequests: SessionRequest[] = [];
-  // Event keys are scoped to a thread's lineage, so two unrelated sessions that happen to report
-  // the same counts aren't mistaken for a replay.
-  const codexEventKeys = new Set<string>();
+  // Codex events are kept raw and deduplicated when the usage is summarized, because a fork's
+  // parent can turn up in any order and only the finished set of `session_meta` lines says which
+  // threads share a lineage. Keys are scoped to a lineage, so two unrelated sessions that happen
+  // to report the same counts aren't mistaken for a replay.
+  const codexEvents: CodexEvent[] = [];
   const codexForkParents = new Map<string, string>();
   const reportedCosts = new Map<string, number>();
   const files: SessionFileSummary[] = [];
 
-  const lineageOf = (threadId: string): string => {
+  const lineageOf = (thread: string): string => {
+    if (!thread.startsWith('thread:')) return thread;
+
     const seen = new Set<string>();
-    let current = threadId;
+    let current = thread.slice('thread:'.length);
 
     for (
       let parent = codexForkParents.get(current);
@@ -110,17 +127,19 @@ export const createSessionUsageCollector = (): SessionUsageCollector => {
       current = parent;
     }
 
-    return current;
+    return `thread:${current}`;
   };
 
   const readFile = (name: string): SessionFileReader => {
     const summary: SessionFileSummary = { name, format: null, requests: 0, unreadableLines: 0 };
     const claudeCodeKeys = new Set<string>();
+    const fileIndex = files.length;
     let codexModel: string | null = null;
     // A file that never names its thread is its own lineage.
-    let codexLineage = `file:${name}`;
+    let codexThread = `file:${name}`;
+    let codexEpoch = 0;
     // Usage that arrives before the first turn names a model waits here.
-    const codexPending: Omit<SessionRequest, 'model'>[] = [];
+    const codexPending: CodexEvent[] = [];
 
     const parse = (line: string): JsonRecord | null => {
       try {
@@ -153,7 +172,7 @@ export const createSessionUsageCollector = (): SessionUsageCollector => {
 
       if (meta) {
         if (meta.forkedFromId) codexForkParents.set(meta.id, meta.forkedFromId);
-        codexLineage = `thread:${lineageOf(meta.id)}`;
+        codexThread = `thread:${meta.id}`;
 
         return;
       }
@@ -162,27 +181,37 @@ export const createSessionUsageCollector = (): SessionUsageCollector => {
 
       if (model) {
         codexModel = model;
-        for (const pending of codexPending.splice(0)) codexRequests.push({ model, ...pending });
+        for (const pending of codexPending.splice(0)) {
+          pending.model = model;
+          codexEvents.push(pending);
+        }
 
         return;
       }
 
       const event = readCodexTokenEvent(line);
-      // A reset after compaction reports zero usage and isn't a request.
-      if (!event || event.promptTokens + event.usage.output === 0) return;
+      if (!event) return;
 
-      if (event.key !== null) {
-        const scopedKey = `${codexLineage}|${event.key}`;
+      // A reset after compaction reports zero usage and isn't a request. It starts a new run of
+      // running totals, so an identical event on either side of it is a different request.
+      if (event.promptTokens + event.usage.output === 0) {
+        codexEpoch += 1;
 
-        if (codexEventKeys.has(scopedKey)) return;
-        codexEventKeys.add(scopedKey);
+        return;
       }
 
-      summary.requests += 1;
+      const entry: CodexEvent = {
+        fileIndex,
+        thread: codexThread,
+        epoch: codexEpoch,
+        key: event.key,
+        model: codexModel,
+        usage: event.usage,
+        promptTokens: event.promptTokens,
+      };
 
-      const request = { usage: event.usage, promptTokens: event.promptTokens };
-      if (codexModel) codexRequests.push({ model: codexModel, ...request });
-      else codexPending.push(request);
+      if (codexModel) codexEvents.push(entry);
+      else codexPending.push(entry);
     };
 
     const addRecord = (line: JsonRecord): void => {
@@ -212,7 +241,8 @@ export const createSessionUsageCollector = (): SessionUsageCollector => {
       },
       finish: () => {
         for (const pending of codexPending.splice(0)) {
-          codexRequests.push({ model: UNKNOWN_MODEL, ...pending });
+          pending.model = UNKNOWN_MODEL;
+          codexEvents.push(pending);
         }
 
         if (summary.format === 'claude-code') {
@@ -246,7 +276,26 @@ export const createSessionUsageCollector = (): SessionUsageCollector => {
     };
 
     for (const requests of claudeCodeResponses.values()) requests.forEach(record);
-    codexRequests.forEach(record);
+
+    // Drop what a fork replays from its parent, now that every file's lineage is known.
+    const seen = new Set<string>();
+    const codexCounts = new Map<number, number>();
+
+    for (const event of codexEvents) {
+      if (event.key !== null) {
+        const scoped = `${lineageOf(event.thread)}|${event.epoch}|${event.key}`;
+
+        if (seen.has(scoped)) continue;
+        seen.add(scoped);
+      }
+
+      record({
+        model: event.model ?? UNKNOWN_MODEL,
+        usage: event.usage,
+        promptTokens: event.promptTokens,
+      });
+      codexCounts.set(event.fileIndex, (codexCounts.get(event.fileIndex) ?? 0) + 1);
+    }
 
     const models = [...byModel.values()].sort(
       (first, second) => totalTokens(second.usage) - totalTokens(first.usage),
@@ -255,7 +304,10 @@ export const createSessionUsageCollector = (): SessionUsageCollector => {
     for (const model of models) addTokenUsage(total, model.usage);
 
     return {
-      files: files.map((file) => ({ ...file })),
+      files: files.map((file, index) => ({
+        ...file,
+        requests: file.requests + (codexCounts.get(index) ?? 0),
+      })),
       models,
       total,
       requests: models.reduce((sum, model) => sum + model.requests, 0),

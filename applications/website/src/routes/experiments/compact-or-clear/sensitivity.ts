@@ -36,10 +36,43 @@ type Variation = {
 
 const tokens = (count: number): string => formatTokens(count);
 
-const variations = (models: readonly ModelPrice[], ttl: CacheTtl): Variation[] => {
+/** A payback that never comes counts as just past the horizon. */
+const paybackScore = (payback: number | null): number => payback ?? SENSITIVITY_HORIZON + 1;
+
+/**
+ * The models whose compaction payback is the soonest and the latest, found by trying every one.
+ * Input price alone doesn't order them once a custom table breaks the default output ratio. Ties
+ * go to the cheaper model for the soonest and the dearer one for the latest.
+ */
+const modelExtremes = (
+  inputs: ProjectionInputs,
+  models: readonly ModelPrice[],
+  ttl: CacheTtl,
+): { soonest: ModelPrice; latest: ModelPrice } | null => {
   const byPrice = [...models].sort((first, second) => first.input - second.input);
-  const cheapest = byPrice[0];
-  const dearest = byPrice.at(-1);
+  const scored = byPrice.map((model) => ({
+    model,
+    score: paybackScore(
+      compactPayback({ ...inputs, rates: ratesFor(model, ttl) }, SENSITIVITY_HORIZON),
+    ),
+  }));
+  let soonest = scored[0];
+  let latest = scored[0];
+
+  for (const entry of scored) {
+    if (entry.score < soonest.score) soonest = entry;
+    if (entry.score >= latest.score) latest = entry;
+  }
+
+  return soonest && latest ? { soonest: soonest.model, latest: latest.model } : null;
+};
+
+const variations = (
+  inputs: ProjectionInputs,
+  models: readonly ModelPrice[],
+  ttl: CacheTtl,
+): Variation[] => {
+  const extremes = modelExtremes(inputs, models, ttl);
 
   const list: Variation[] = [
     {
@@ -116,18 +149,20 @@ const variations = (models: readonly ModelPrice[], ttl: CacheTtl): Variation[] =
     },
   ];
 
-  if (cheapest && dearest) {
+  if (extremes) {
+    const { soonest, latest } = extremes;
+
     list.push({
       id: 'model',
       label: 'Model',
       controlId: 'model',
       low: {
-        label: cheapest.name,
-        apply: (inputs) => ({ ...inputs, rates: ratesFor(cheapest, ttl) }),
+        label: soonest.name,
+        apply: (inputs) => ({ ...inputs, rates: ratesFor(soonest, ttl) }),
       },
       high: {
-        label: dearest.name,
-        apply: (inputs) => ({ ...inputs, rates: ratesFor(dearest, ttl) }),
+        label: latest.name,
+        apply: (inputs) => ({ ...inputs, rates: ratesFor(latest, ttl) }),
       },
     });
   }
@@ -139,18 +174,18 @@ const variations = (models: readonly ModelPrice[], ttl: CacheTtl): Variation[] =
  * For each input, the compaction payback turn with that input at its minimum
  * and at its maximum, everything else held where it is. Sorted by how far
  * apart the two land, widest first. A model's minimum and maximum are the
- * cheapest and the dearest in the price table.
+ * models in the price table with the soonest and the latest payback.
  */
 export const sensitivityRows = (
   inputs: ProjectionInputs,
   models: readonly ModelPrice[],
   ttl: CacheTtl,
 ): SensitivityRow[] =>
-  variations(models, ttl)
+  variations(inputs, models, ttl)
     .map((variation, order) => {
       const low = compactPayback(variation.low.apply(inputs), SENSITIVITY_HORIZON);
       const high = compactPayback(variation.high.apply(inputs), SENSITIVITY_HORIZON);
-      const spread = Math.abs((low ?? SENSITIVITY_HORIZON + 1) - (high ?? SENSITIVITY_HORIZON + 1));
+      const spread = Math.abs(paybackScore(low) - paybackScore(high));
 
       return {
         order,

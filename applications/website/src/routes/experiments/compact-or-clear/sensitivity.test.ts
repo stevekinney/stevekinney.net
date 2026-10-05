@@ -57,6 +57,20 @@ describe('sensitivityRows', () => {
     expect(custom.find((entry) => entry.id === 'model')?.spread).toBeGreaterThan(0);
   });
 
+  it('picks the soonest and latest payback from every model, not just the price extremes', () => {
+    // The cheapest and dearest keep the 5× ratio and pay back together, but a model in between
+    // with a lopsided output price pays back later.
+    const models = [
+      { id: 'low', name: 'Low', input: 1, output: 5 },
+      { id: 'odd', name: 'Odd', input: 3, output: 300 },
+      { id: 'high', name: 'High', input: 10, output: 50 },
+    ];
+    const model = sensitivityRows(inputs, models, '1h').find((entry) => entry.id === 'model');
+
+    expect(model?.spread).toBeGreaterThan(0);
+    expect([model?.lowLabel, model?.highLabel]).toContain('Odd');
+  });
+
   it('uses the selected TTL’s write price for each model', () => {
     const five = sensitivityRows(
       { ...inputs, rates: ratesFor(defaultModels[1], '5m') },
