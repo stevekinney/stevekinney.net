@@ -16,8 +16,7 @@
     resizeGrid,
     roundMinutes,
   } from './config';
-  import type { DurationMode, StageConfig, WorkflowConfig } from './config';
-  import CostPanel from './cost-panel.svelte';
+  import type { DurationMode, ResultsHandling, StageConfig, WorkflowConfig } from './config';
   import { experiment } from './experiment';
   import { bodyClasses, codeClasses, headingClasses, panelClasses } from './field-styles';
   import GanttPanel from './gantt-panel.svelte';
@@ -26,11 +25,9 @@
   import PredictFirst from './predict-first.svelte';
   import PresetPicker from './preset-picker.svelte';
   import { findPreset } from './presets';
-  import ResultsPanel from './results-panel.svelte';
   import { runWorkflow } from './run';
   import { decodeConfiguration, encodeConfiguration } from './share-link';
   import WhenNot from './when-not.svelte';
-  import WorkflowControls from './workflow-controls.svelte';
 
   const { data } = $props();
 
@@ -192,16 +189,20 @@
         Settings
       </summary>
       <div class="border-t border-slate-200 p-4 sm:p-6 dark:border-slate-700">
-        <WorkflowControls
-          {config}
-          models={page.models}
-          ready={page.ready}
-          onChange={change}
-          onStageChange={changeStage}
-          onAddStage={addStage}
-          onRemoveStage={removeStage}
-          onCellChange={setCell}
-          onDurationMode={setDurationMode}
+        <LazySection
+          name="the settings"
+          load={() => import('./workflow-controls.svelte')}
+          props={{
+            config,
+            models: page.models,
+            ready: page.ready,
+            onChange: change,
+            onStageChange: changeStage,
+            onAddStage: addStage,
+            onRemoveStage: removeStage,
+            onCellChange: setCell,
+            onDurationMode: setDurationMode,
+          }}
         />
       </div>
     </details>
@@ -238,11 +239,15 @@
       </p>
     </div>
     {#if run.runs}
-      <ResultsPanel
-        run={run.runs.pipeline}
-        {stageNames}
-        handling={config.handling}
-        onHandlingChange={(handling) => change({ handling })}
+      <LazySection
+        name="the results"
+        load={() => import('./results-panel.svelte')}
+        props={{
+          run: run.runs.pipeline,
+          stageNames,
+          handling: config.handling,
+          onHandlingChange: (handling: ResultsHandling) => change({ handling }),
+        }}
       />
     {:else}
       <p class={bodyClasses}>No agent runs, so there are no results.</p>
@@ -251,14 +256,18 @@
 
   <section aria-labelledby="cost-heading" class="space-y-4">
     <h2 id="cost-heading" class={headingClasses}>Cost and scale</h2>
-    <CostPanel
-      {config}
-      {run}
-      models={page.models}
-      {defaultModels}
-      ready={page.ready}
-      onPriceChange={changePrice}
-      onResetPrices={resetPrices}
+    <LazySection
+      name="the cost estimate"
+      load={() => import('./cost-panel.svelte')}
+      props={{
+        config,
+        run,
+        models: page.models,
+        defaultModels,
+        ready: page.ready,
+        onPriceChange: changePrice,
+        onResetPrices: resetPrices,
+      }}
     />
     <LazySection
       name="the copy buttons"

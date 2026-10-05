@@ -200,7 +200,7 @@
         {height}
         viewBox="0 0 {width} {height}"
         aria-hidden="true"
-        class="block"
+        class="block [&_line]:pointer-events-none [&_text]:pointer-events-none"
         onpointermove={handlePointerMove}
         onpointerup={endDrag}
         onpointercancel={endDrag}

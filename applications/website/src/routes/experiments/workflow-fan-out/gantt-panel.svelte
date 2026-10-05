@@ -6,9 +6,9 @@
 
   import { bodyClasses, codeClasses } from './field-styles';
   import GanttChart from './gantt-chart.svelte';
+  import LazySection from './lazy-section.svelte';
   import { formatMinutes } from './results';
   import type { StrategyRun } from './run';
-  import ScheduleTable from './schedule-table.svelte';
   import type { Strategy } from './schedule';
   import { stageStyle } from './stage-styles';
   import { compareMakespans } from './summary';
@@ -186,5 +186,9 @@
     {/if}
   </p>
 
-  <ScheduleTable {runs} {stageNames} />
+  <LazySection
+    name="the schedule table"
+    load={() => import('./schedule-table.svelte')}
+    props={{ runs, stageNames }}
+  />
 </div>
