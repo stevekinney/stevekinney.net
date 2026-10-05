@@ -60,6 +60,20 @@ describe('acceptance 5: an .env deny that misses .env.local', () => {
   });
 });
 
+describe('an .env deny scoped to one directory', () => {
+  it('does not turn on the .env controls', () => {
+    const report = analyze(
+      file({
+        permissions: { deny: ['Read(secrets/.env)', 'Read(secrets/.env.local)'] },
+        sandbox: { filesystem: { denyRead: ['secrets/.env', 'secrets/.env.local'] } },
+      }),
+    );
+
+    expect(report.prefill['deny-read-env'].status).toBe('unknown');
+    expect(report.prefill['sandbox-deny-read-env'].status).toBe('unknown');
+  });
+});
+
 describe('acceptance 6: a broad allow without allowUnsandboxedCommands: false', () => {
   it('warns that Bash(curl *) also approves the unsandboxed retry', () => {
     const report = analyze(file({ permissions: { allow: ['Bash(curl *)'] } }));
@@ -108,10 +122,28 @@ describe('the other warnings', () => {
   });
 
   it('flags excluded commands that reach the network', () => {
-    const report = analyze(file({ sandbox: { excludedCommands: ['docker compose *', 'make'] } }));
+    const report = analyze(
+      file({ sandbox: { excludedCommands: ['docker compose *', 'make', 'ls'] } }),
+    );
 
-    expect(report.warnings.map((candidate) => candidate.id)).toEqual(['excluded-network']);
+    // make runs whatever a recipe says, so it isn't known to stay offline.
+    expect(report.warnings.map((candidate) => candidate.id)).toEqual([
+      'excluded-network',
+      'excluded-network',
+    ]);
+    expect(report.warnings[0].message).toContain('docker compose *');
     expect(report.excludedNetworkCommand).toBe(true);
+  });
+
+  it('flags an excluded shell or a full path to an HTTP client', () => {
+    for (const command of ['bash', '/usr/bin/curl', 'env', 'xargs', 'node', 'python']) {
+      const report = analyze(file({ sandbox: { excludedCommands: [command] } }));
+
+      expect(report.excludedNetworkCommand).toBe(true);
+    }
+    expect(analyze(file({ sandbox: { excludedCommands: ['ls'] } })).excludedNetworkCommand).toBe(
+      false,
+    );
   });
 
   it('flags a strictAllowlist in a repository file, which Claude Code ignores', () => {
@@ -154,7 +186,7 @@ describe('prefilling controls', () => {
           ask: ['Bash(git push:*)'],
           defaultMode: 'auto',
         },
-        sandbox: { filesystem: { denyRead: ['~/**/.env*'] } },
+        sandbox: { filesystem: { denyRead: ['**/.env*'] } },
         env: { CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: '1', GITHUB_TOKEN: 'synthetic-value' },
         mcpServers: { tracker: {} },
       }),
@@ -162,13 +194,67 @@ describe('prefilling controls', () => {
 
     expect(report.prefill['deny-web-fetch'].status).toBe('on');
     expect(report.prefill['deny-curl'].status).toBe('on');
-    expect(report.prefill['publish-gate'].status).toBe('on');
+    // An ask rule for git push alone leaves public comments without a prompt.
+    expect(report.prefill['publish-gate'].status).toBe('unknown');
     expect(report.prefill['auto-mode'].status).toBe('on');
     expect(report.prefill['sandbox-deny-read-env'].status).toBe('on');
     expect(report.prefill['environment-scrub'].status).toBe('on');
     expect(report.hasMcpServers).toBe(true);
     expect(report.parsed[0].unknownKeys).toEqual(['env.GITHUB_TOKEN']);
     expect(JSON.stringify(report.parsed[0].unknownKeys)).not.toContain('synthetic-value');
+  });
+});
+
+describe('prefilling the prompt on push and publish', () => {
+  const pushAndComments = ['Bash(git push:*)', 'Bash(gh issue comment:*)', 'Bash(gh pr comment:*)'];
+
+  it('leaves it unknown when only git push asks first, and says comments are uncovered', () => {
+    const report = analyze(file({ permissions: { ask: ['Bash(git push:*)'] } }));
+
+    expect(report.prefill['publish-gate'].status).toBe('unknown');
+    expect(report.prefill['publish-gate'].reason).toContain('public comments');
+  });
+
+  it('turns it on when ask or deny rules cover both pushing and public comments', () => {
+    const report = analyze(file({ permissions: { ask: pushAndComments } }));
+
+    expect(report.prefill['publish-gate'].status).toBe('on');
+    expect(report.prefill['publish-gate'].evidence).toHaveLength(3);
+    expect(
+      analyze(file({ permissions: { ask: ['Bash(git push:*)'], deny: ['Bash(gh:*)'] } })).prefill[
+        'publish-gate'
+      ].status,
+    ).toBe('on');
+  });
+
+  it('needs both comment commands', () => {
+    const report = analyze(
+      file({ permissions: { ask: ['Bash(git push:*)', 'Bash(gh issue comment:*)'] } }),
+    );
+
+    expect(report.prefill['publish-gate'].status).toBe('unknown');
+  });
+
+  it('needs a rule for every MCP server, which can comment with no prompt', () => {
+    const ungated = analyze(
+      file({ permissions: { ask: pushAndComments }, mcpServers: { tracker: {} } }),
+    );
+    expect(ungated.prefill['publish-gate'].status).toBe('unknown');
+    expect(ungated.prefill['publish-gate'].reason).toContain('tracker');
+
+    const gated = analyze(
+      file({
+        permissions: { ask: [...pushAndComments, 'mcp__tracker__*'] },
+        mcpServers: { tracker: {} },
+      }),
+    );
+    expect(gated.prefill['publish-gate'].status).toBe('on');
+  });
+
+  it('turns it off when git push is allowed', () => {
+    const report = analyze(file({ permissions: { allow: ['Bash(git push:*)'] } }));
+
+    expect(report.prefill['publish-gate'].status).toBe('off');
   });
 });
 
@@ -253,13 +339,35 @@ describe('rule helpers', () => {
     expect(reachesNetwork('ls')).toBe(false);
   });
 
+  it('fails safe: anything not known to stay offline counts as reaching the network', () => {
+    for (const command of ['bash', 'sh -c *', 'env', 'xargs', 'node', 'python', 'make', 'find']) {
+      expect(reachesNetwork(command)).toBe(true);
+    }
+    // A path names the same program as its basename.
+    expect(reachesNetwork('/usr/bin/curl *')).toBe(true);
+    expect(reachesNetwork('/bin/ls')).toBe(false);
+    // A wildcard in the command name could match anything.
+    expect(reachesNetwork('l*')).toBe(true);
+    expect(reachesNetwork('cat *')).toBe(false);
+  });
+
   it('matches Read patterns against file names', () => {
     expect(readRuleCovers('Read(.env)', '.env')).toBe(true);
     expect(readRuleCovers('Read(.env)', '.env.local')).toBe(false);
     expect(readRuleCovers('Read(**/.env*)', '.env.local')).toBe(true);
-    expect(readRuleCovers('Read(./.env.*)', '.env.local')).toBe(true);
+    expect(readRuleCovers('Read(**/.env.*)', '.env.local')).toBe(true);
+    // ./ is one directory, so it doesn't cover a .env.local anywhere else.
+    expect(readRuleCovers('Read(./.env.*)', '.env.local')).toBe(false);
     expect(readRuleCovers('Read', '.env.local')).toBe(true);
     expect(readRuleCovers('Edit(.env)', '.env')).toBe(false);
+  });
+
+  it('treats a pattern with a concrete directory as covering that directory only', () => {
+    expect(readRuleCovers('Read(secrets/.env)', '.env')).toBe(false);
+    expect(readRuleCovers('Read(src/**/.env*)', '.env')).toBe(false);
+    expect(readRuleCovers('Read(**/config/.env)', '.env')).toBe(false);
+    expect(readRuleCovers('Read(~/**/.env*)', '.env')).toBe(false);
+    expect(readRuleCovers('Read(**)', '.env.local')).toBe(true);
   });
 
   it('finds the line under the right parent key', () => {

@@ -20,6 +20,16 @@ describe('the Markdown summary', () => {
     expect(markdown).toContain('- Partial: Bash(curl *) deny blocks curl only.');
   });
 
+  it('labels planning first as architectural and partial', () => {
+    const state = findPreset('default')?.state();
+    if (!state) throw new Error('default');
+    state.controls['plan-first'] = true;
+
+    const markdown = summaryToMarkdown(state, evaluate(state));
+    expect(markdown).toContain('- Plan before reading untrusted content (architectural, partial)');
+    expect(markdown).toContain('- Partial: Planning before reading');
+  });
+
   it('lists the human-gated exits for strict egress', () => {
     const state = findPreset('allowlist')?.state();
     if (!state) throw new Error('allowlist');

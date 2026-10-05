@@ -102,19 +102,6 @@ export const buildDataset = (table: RawTable, mapping: ColumnMapping): Dataset =
       return;
     }
 
-    if (!labels.includes(condition)) {
-      if (labels.length === 2) {
-        report({
-          row,
-          message: `its condition, ${quote(condition)}, is a third one. This tool compares two.`,
-          skipped: true,
-        });
-
-        return;
-      }
-      labels.push(condition);
-    }
-
     let minutes: number | null = null;
     if (mapping.minutes !== null) {
       const text = cell(cells, mapping.minutes);
@@ -149,6 +136,21 @@ export const buildDataset = (table: RawTable, mapping: ColumnMapping): Dataset =
         return;
       }
       minutes = value;
+    }
+
+    // Only a row that's kept claims a condition, so a junk row such as a "Total" line
+    // can't take the second slot from the real second condition.
+    if (!labels.includes(condition)) {
+      if (labels.length === 2) {
+        report({
+          row,
+          message: `its condition, ${quote(condition)}, is a third one. This tool compares two.`,
+          skipped: true,
+        });
+
+        return;
+      }
+      labels.push(condition);
     }
 
     const readBoolean = (index: number | null, name: string): boolean | null => {

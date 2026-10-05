@@ -67,6 +67,8 @@
   };
 
   const readFiles = async (files: Promise<SourceFile[]>): Promise<void> => {
+    if (busy) return;
+
     busy = true;
     error = null;
 
@@ -236,7 +238,9 @@
 
         <p class={bodyClasses}>
           {replay.iterations.length.toLocaleString('en-US')} iterations, {formatCost(replay.total)} in
-          total, {replay.iterations.filter((step) => step.progress).length} with progress.
+          total, {replay.hasProgress
+            ? `${replay.iterations.filter((step) => step.progress).length} with progress`
+            : 'progress unknown'}.
         </p>
 
         <ReplayChart {replay} stopIndex={selected?.stopIndex ?? null} />

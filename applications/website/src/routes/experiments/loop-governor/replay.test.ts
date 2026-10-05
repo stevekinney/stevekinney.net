@@ -133,6 +133,42 @@ describe('reading a log defensively', () => {
     expect(replay.total).toBe(5);
   });
 
+  it('reads a drop in the running total as a new run starting over', () => {
+    const log = parseLogText(
+      [2, 6, 10, 1, 2].map((total) => JSON.stringify({ cost_usd: total })).join('\n'),
+    );
+    const replay = analyzeLog(log, {
+      mapping: guessMapping(log.keys),
+      lowerIsBetter: false,
+      costIsRunningTotal: true,
+    });
+
+    expect(replay.iterations.map((step) => step.cost)).toEqual([2, 4, 4, 1, 1]);
+    expect(replay.total).toBe(12);
+    expect(replay.notes).toContain(
+      'The running total dropped once, so that iteration starts a new total at its own value.',
+    );
+  });
+
+  it('keeps a running total for each session when the session is mapped', () => {
+    const lines = [
+      { session_id: 'a', cost_usd: 1 },
+      { session_id: 'b', cost_usd: 2 },
+      { session_id: 'a', cost_usd: 3 },
+      { session_id: 'b', cost_usd: 5 },
+    ];
+    const log = parseLogText(lines.map((line) => JSON.stringify(line)).join('\n'));
+    const replay = analyzeLog(log, {
+      mapping: guessMapping(log.keys),
+      lowerIsBetter: false,
+      costIsRunningTotal: true,
+    });
+
+    expect(replay.iterations.map((step) => step.cost)).toEqual([1, 2, 2, 3]);
+    expect(replay.total).toBe(8);
+    expect(replay.notes.some((note) => note.includes('dropped'))).toBe(false);
+  });
+
   it('reads a running total as per-iteration costs only if told to', () => {
     expect(replayOf('renamed-fields.jsonl').total).toBe(27.5);
   });
@@ -170,6 +206,32 @@ describe('reading a log defensively', () => {
       'This log has no cost field, so every iteration costs $0.',
       'Skipped 2 lines that weren’t JSON objects.',
     ]);
+  });
+
+  it('leaves progress unknown, and the stall detector unchecked, with neither score nor kept', () => {
+    const log = parseLogText(
+      [1, 2, 3, 4, 5].map((cost) => JSON.stringify({ cost_usd: cost })).join('\n'),
+    );
+    const replay = analyzeLog(log, {
+      mapping: guessMapping(log.keys),
+      lowerIsBetter: false,
+      costIsRunningTotal: false,
+    });
+
+    expect(replay.hasProgress).toBe(false);
+    expect(replay.iterations.every((step) => step.progress === null)).toBe(true);
+    expect(replay.iterations.every((step) => step.sinceProgress === null)).toBe(true);
+
+    const stall = counterfactual(replay, { kind: 'stall', m: 2 }, formatCost);
+    expect(stall).toMatchObject({ stopIndex: null, stopIteration: null, saved: 0 });
+    expect(stall.sentence).toBe(
+      'A stall detector of 2 can’t be checked on this log, which has neither a score nor a kept field.',
+    );
+
+    // The other governors don't need progress.
+    expect(counterfactual(replay, { kind: 'maxIterations', maximum: 3 }, formatCost)).toMatchObject(
+      { stopIteration: 3, saved: 9 },
+    );
   });
 
   it('stops reading at the record limit and says so', () => {

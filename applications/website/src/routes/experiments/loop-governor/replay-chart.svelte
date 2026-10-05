@@ -86,7 +86,11 @@
       `Iteration ${step.iteration}`,
       step.score === null ? null : `score ${formatScore(step.score)}`,
       step.kept ? 'kept' : 'not kept',
-      step.progress ? 'progress' : `${step.sinceProgress} without progress`,
+      step.progress === null
+        ? 'progress unknown'
+        : step.progress
+          ? 'progress'
+          : `${step.sinceProgress} without progress`,
       step.repeated ? 'repeated failure' : null,
       `${formatCost(step.cumulative)} spent`,
     ];

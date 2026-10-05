@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Play } from '@lucide/svelte';
+  import { onMount } from 'svelte';
 
   import Button from '$lib/components/button';
 
@@ -20,6 +21,9 @@
   // Every stage shows until someone plays the animation, so nothing is hidden without JavaScript.
   let step = $state(3);
   let timer: ReturnType<typeof setTimeout> | undefined;
+
+  // Stop the animation's timer chain when the demo goes away.
+  onMount(() => () => clearTimeout(timer));
 
   const output = $derived(readerOutput(untrusted));
   const gate = $derived(applyStrictSchema(output));

@@ -154,7 +154,11 @@ export const simulate = (
   policy: OverflowPolicy = scenario.policy,
 ): Simulation => {
   const capacity = scenario.sittings * scenario.linesPerSitting;
+  // The queue only grows at the back, so a head index and a running total of waiting
+  // lines replace shifting the array and summing it every day.
   const queue: WaitingPr[] = [];
+  let head = 0;
+  let backlogLines = 0;
   const days: SimulatedDay[] = [];
   let cumulative = noEscapes;
   let reviewedLines = 0;
@@ -170,15 +174,17 @@ export const simulate = (
       for (let index = 0; index < openedPrs; index += 1) {
         queue.push({ openedDay: day, remaining: scenario.linesPerPr });
       }
+      backlogLines += generatedLines;
 
       let budget = capacity;
-      while (budget > 0 && queue.length > 0) {
-        const next = queue[0];
+      while (budget > 0 && head < queue.length) {
+        const next = queue[head];
         const reviewed = Math.min(budget, next.remaining);
         next.remaining -= reviewed;
         budget -= reviewed;
         freshLines += reviewed;
-        if (next.remaining === 0) queue.shift();
+        backlogLines -= reviewed;
+        if (next.remaining === 0) head += 1;
       }
     } else {
       freshLines = Math.min(generatedLines, capacity);
@@ -190,15 +196,15 @@ export const simulate = (
     reviewedLines += freshLines + tiredLines;
     tiredTotal += tiredLines;
 
-    const oldestOpenedDay = queue[0]?.openedDay ?? null;
+    const oldestOpenedDay = queue[head]?.openedDay ?? null;
     days.push({
       day,
       openedPrs,
       generatedLines,
       freshLines,
       tiredLines,
-      backlogLines: queue.reduce((sum, pr) => sum + pr.remaining, 0),
-      backlogPrs: queue.length,
+      backlogLines,
+      backlogPrs: queue.length - head,
       oldestOpenedDay,
       oldestAge: oldestOpenedDay === null ? null : day - oldestOpenedDay,
       escaped,

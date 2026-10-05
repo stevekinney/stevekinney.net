@@ -26,6 +26,8 @@
   const scopes = Object.keys(settingsScopeLabels) as SettingsScope[];
 
   let reading = $state(false);
+  // Files that arrived while others were still being read, which were left out.
+  let ignoredDrop = $state(false);
   let message = $state<string | null>(null);
 
   const report = $derived(
@@ -40,8 +42,13 @@
   });
 
   const loadFiles = async (source: Promise<SourceFile[]>): Promise<void> => {
-    if (reading) return;
+    if (reading) {
+      ignoredDrop = true;
+
+      return;
+    }
     reading = true;
+    ignoredDrop = false;
     message = null;
 
     try {
@@ -72,6 +79,11 @@
       message = 'Those files couldn’t be read. Try choosing them again.';
     } finally {
       reading = false;
+      if (ignoredDrop) {
+        message =
+          `${message ?? ''} Files added while these were reading were left out, so add them again.`.trim();
+        ignoredDrop = false;
+      }
     }
   };
 
@@ -116,7 +128,7 @@
       keepFile={(path) => /(^|\/)(settings(\.local)?|managed-settings|\.mcp)\.json$/i.test(path)}
       enterFolder={(path) => !/(^|\/)(node_modules|\.git|projects)$/.test(path)}
       busy={reading}
-      progress="Reading files…"
+      progress={ignoredDrop ? 'Still reading the last files.' : 'Reading files…'}
       status={message}
       onFiles={loadFiles}
     >

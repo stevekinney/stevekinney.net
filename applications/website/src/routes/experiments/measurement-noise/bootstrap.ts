@@ -106,6 +106,15 @@ const createJob = (
   resamples: number,
   statistic: Statistic,
 ): BootstrapJob => {
+  if (sizeA === 0 || sizeB === 0) {
+    throw new RangeError('A bootstrap needs at least one value in each condition.');
+  }
+  if (paired && sizeA !== sizeB) {
+    throw new RangeError(
+      `Paired data needs the same number of values in each condition, not ${sizeA} and ${sizeB}.`,
+    );
+  }
+
   const random = createRandom(seed);
   const indicesA = new Int32Array(sizeA);
   const indicesB = new Int32Array(sizeB);
@@ -158,7 +167,8 @@ const createJob = (
 /**
  * A percentile interval for the difference in medians, A − B. Unpaired data
  * resamples each condition on its own; paired data, given as two arrays in
- * task order, resamples tasks.
+ * task order, resamples tasks. Throws a RangeError for an empty condition, or
+ * for paired arrays of different lengths.
  */
 export const medianDifferenceJob = (
   a: readonly number[],

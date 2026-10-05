@@ -89,6 +89,23 @@ describe('buildDataset', () => {
     });
   });
 
+  it('lets only kept rows claim a condition, so a junk row between conditions takes no slot', () => {
+    const dataset = datasetOf(
+      'condition,minutes\nbaseline,30\nbaseline,35\nTotal,N/A\nagent,20\nagent,22\n',
+    );
+
+    expect(dataset.labels).toEqual(['baseline', 'agent']);
+    expect(dataset.rows.map((row) => row.condition)).toEqual([
+      'baseline',
+      'baseline',
+      'agent',
+      'agent',
+    ]);
+    expect(dataset.issues).toEqual([
+      { row: 3, message: 'its duration, “N/A”, isn’t a number', skipped: true },
+    ]);
+  });
+
   it('keeps a row with an unreadable optional value, leaving that value blank', () => {
     const dataset = datasetOf('condition,minutes,rework,cost\nA,4,maybe,$-1\n');
 
