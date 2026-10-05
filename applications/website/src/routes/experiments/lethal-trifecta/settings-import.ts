@@ -469,9 +469,14 @@ export const analyzeSettings = (
 
   // .env patterns.
   const readDenies = merged.deny.filter((rule) => parseRule(rule.value).tool === 'Read');
+  // The rules count together: Read(.env) beside Read(.env.local) covers both files.
   const envDenies = readDenies.filter((rule) => readRuleCovers(rule.value, '.env'));
-  const fullEnvDenies = envDenies.filter((rule) => readRuleCovers(rule.value, '.env.local'));
-  if (envDenies.length > 0 && fullEnvDenies.length === 0) {
+  const localEnvDenies = readDenies.filter((rule) => readRuleCovers(rule.value, '.env.local'));
+  const fullEnvDenies =
+    envDenies.length > 0 && localEnvDenies.length > 0
+      ? [...new Set([...envDenies, ...localEnvDenies])]
+      : [];
+  if (envDenies.length > 0 && localEnvDenies.length === 0) {
     warnings.push({
       id: 'env-pattern',
       message: `${envDenies.map((rule) => rule.value).join(', ')} doesn’t cover .env.local. Read(.env) doesn’t match it, and Read(**/.env*) does.`,
@@ -571,7 +576,13 @@ export const analyzeSettings = (
         : notDeterminable('No Read rule denies .env files.');
 
   const shellEnv = merged.denyRead.filter((entry) => patternCoversFile(entry.value, '.env'));
-  const fullShellEnv = shellEnv.filter((entry) => patternCoversFile(entry.value, '.env.local'));
+  const localShellEnv = merged.denyRead.filter((entry) =>
+    patternCoversFile(entry.value, '.env.local'),
+  );
+  const fullShellEnv =
+    shellEnv.length > 0 && localShellEnv.length > 0
+      ? [...new Set([...shellEnv, ...localShellEnv])]
+      : [];
   prefill['sandbox-deny-read-env'] =
     fullShellEnv.length > 0
       ? { status: 'on', reason: 'The sandbox denies reading .env files.', evidence: fullShellEnv }

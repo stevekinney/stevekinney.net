@@ -44,6 +44,20 @@ describe('acceptance 5: an .env deny that misses .env.local', () => {
     expect(report.warnings.filter((candidate) => candidate.id === 'env-pattern')).toEqual([]);
     expect(report.prefill['deny-read-env'].status).toBe('on');
   });
+
+  it('counts separate rules for .env and .env.local together', () => {
+    const report = analyze(
+      file({
+        permissions: { deny: ['Read(.env)', 'Read(.env.local)'] },
+        sandbox: { filesystem: { denyRead: ['.env', '.env.local'] } },
+      }),
+    );
+
+    expect(report.warnings.filter((candidate) => candidate.id === 'env-pattern')).toEqual([]);
+    expect(report.prefill['deny-read-env'].status).toBe('on');
+    expect(report.prefill['deny-read-env'].evidence).toHaveLength(2);
+    expect(report.prefill['sandbox-deny-read-env'].status).toBe('on');
+  });
 });
 
 describe('acceptance 6: a broad allow without allowUnsandboxedCommands: false', () => {
