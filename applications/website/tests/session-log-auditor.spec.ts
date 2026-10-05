@@ -106,7 +106,7 @@ test.describe('predict first', () => {
     await expect(result).toContainText('Your guess');
     await expect(result).toContainText('20%');
     await expect(result).toContainText('Measured');
-    await expect(result).toContainText(/failed tool\s+calls came from the floor/);
+    await expect(result).toContainText(/failed\s+tool\s+calls came from the floor/);
     await expect(guess(page)).toBeDisabled();
     await expect(page.getByTestId('tile-floor')).toHaveText(/^\d+\.\d%$/);
   });
@@ -402,5 +402,21 @@ test.describe('at phone width', () => {
     await expect(page.getByTestId('control-row')).toBeVisible();
 
     expect(await horizontalOverflow(page)).toBe(0);
+  });
+});
+
+test.describe('keyboard focus', () => {
+  test('moves focus to the measured share after a reveal', async ({ page }) => {
+    await openExperiment(page, path);
+    await choosePreset(page, 'A floor that got fixed');
+    await reveal(page);
+    await expect(
+      page.getByRole('group', { name: 'Your guess and the measured share' }),
+    ).toBeFocused();
+    await expect(page.getByTestId('clusters-table')).toBeVisible();
+    await expect(page.locator('[aria-label="Top clusters table"]')).toHaveAttribute(
+      'tabindex',
+      '0',
+    );
   });
 });

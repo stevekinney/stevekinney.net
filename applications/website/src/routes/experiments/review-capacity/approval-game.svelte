@@ -2,6 +2,7 @@
   import { tick } from 'svelte';
 
   import Button from '$lib/components/button';
+  import { focusAfterUpdate } from '$lib/experiments/focus-after-update';
 
   import BarChart from './bar-chart.svelte';
   import {
@@ -54,6 +55,8 @@
 
     if (results.length >= CARD_COUNT) {
       phase = 'done';
+      // The card that had focus goes away, so focus moves to the verdict.
+      await focusAfterUpdate('game-results');
       return;
     }
 
@@ -61,11 +64,12 @@
     shownAt = performance.now();
   };
 
+  /**
+   * The single-key shortcuts listen on the card, not the window, so they only
+   * fire while focus is on the card or its buttons (WCAG 2.1.4).
+   */
   const handleKeydown = (event: KeyboardEvent): void => {
     if (phase !== 'playing' || event.metaKey || event.ctrlKey || event.altKey) return;
-
-    const target = event.target as HTMLElement | null;
-    if (target?.closest('input, textarea, select, [contenteditable="true"]')) return;
 
     const key = event.key.toLowerCase();
     if (key === 'a' || key === 'y') {
@@ -80,12 +84,19 @@
   const playAgain = (fresh: boolean): void => {
     if (fresh) seedText = String(randomSeed());
     phase = 'ready';
+    void focusAfterUpdate('game-start');
   };
+
+  /** What the live region says for each prompt: everything on the card but the seed. */
+  const announcement = $derived(
+    current
+      ? `Prompt ${results.length + 1} of ${CARD_COUNT}: ${current.tool}, ${current.request}`
+      : '',
+  );
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
-
 <div class="space-y-4">
+  <p class="sr-only" aria-live="polite" data-testid="card-announcement">{announcement}</p>
   <p class={hintClasses}>
     Your decisions and timings stay in this tab. Nothing is recorded or sent anywhere.
   </p>
@@ -119,7 +130,7 @@
             class="{fieldClasses} w-40"
           />
         </div>
-        <Button type="submit" variant="primary" disabled={parsedSeed === null}
+        <Button id="game-start" type="submit" variant="primary" disabled={parsedSeed === null}
           >Start the round</Button
         >
       </form>
@@ -133,15 +144,17 @@
       </p>
     </div>
   {:else if phase === 'playing' && current}
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div
       bind:this={cardElement}
       tabindex="-1"
       role="group"
       aria-labelledby="card-heading"
+      onkeydown={handleKeydown}
       data-testid="approval-card"
       class="max-w-xl space-y-3 rounded-lg border border-slate-300 bg-white p-4 shadow-sm outline-none dark:border-slate-600 dark:bg-slate-900"
     >
-      <p id="card-heading" class="text-sm text-slate-600 dark:text-slate-300" aria-live="polite">
+      <p id="card-heading" class="text-sm text-slate-600 dark:text-slate-300">
         Prompt {results.length + 1} of {CARD_COUNT} · seed {seed}
       </p>
       <p class="font-semibold text-slate-900 dark:text-white">
@@ -159,11 +172,19 @@
       </div>
     </div>
   {:else if phase === 'done' && summary}
-    <div class="space-y-4" data-testid="game-results">
+    <div
+      id="game-results"
+      role="group"
+      aria-labelledby="game-verdict"
+      tabindex="-1"
+      class="space-y-4 outline-none"
+      data-testid="game-results"
+    >
       <p
         class="text-lg font-semibold {summary.caught
           ? 'text-slate-900 dark:text-white'
           : 'text-rose-700 dark:text-rose-300'}"
+        id="game-verdict"
         data-testid="game-verdict"
       >
         {summary.caught
@@ -214,7 +235,13 @@
         <summary class="cursor-pointer text-sm font-semibold text-slate-700 dark:text-slate-200">
           Every prompt as a table
         </summary>
-        <div class="relative overflow-x-auto" role="region" aria-label="Round table" tabindex="-1">
+        <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+        <div
+          class="focus-visible:outline-primary-600 relative overflow-x-auto focus-visible:outline-2"
+          role="region"
+          aria-label="Round table"
+          tabindex="0"
+        >
           <table class="mt-2 w-full min-w-[28rem] text-left text-sm tabular-nums">
             <thead class="text-slate-600 dark:text-slate-300">
               <tr>

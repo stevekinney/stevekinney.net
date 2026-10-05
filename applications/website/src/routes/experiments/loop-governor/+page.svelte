@@ -4,6 +4,7 @@
 
   import { replaceState } from '$app/navigation';
   import SEO from '$lib/components/seo.svelte';
+  import { focusAfterUpdate } from '$lib/experiments/focus-after-update';
   import { url } from '$lib/metadata';
   import { buildBreadcrumbSchema } from '$lib/structured-data';
 
@@ -236,21 +237,29 @@
   </section>
 
   {#if page.showResults}
-    <LazySection
-      name="the results"
-      load={() => import('./results.svelte')}
-      props={{
-        ready: page.ready,
-        config,
-        tally,
-        tallied,
-        pinned,
-        // Until a batch finishes, the tally belongs to an older configuration.
-        simulating: page.simulating || config !== tallied,
-        simulated: page.simulated,
-        onTogglePin: togglePin,
-      }}
-    />
+    <div
+      id="results"
+      role="group"
+      aria-label="Results"
+      tabindex="-1"
+      class="space-y-12 outline-none"
+    >
+      <LazySection
+        name="the results"
+        load={() => import('./results.svelte')}
+        props={{
+          ready: page.ready,
+          config,
+          tally,
+          tallied,
+          pinned,
+          // Until a batch finishes, the tally belongs to an older configuration.
+          simulating: page.simulating || config !== tallied,
+          simulated: page.simulated,
+          onTogglePin: togglePin,
+        }}
+      />
+    </div>
   {:else}
     <section aria-labelledby="hidden-heading" class="{panelClasses} max-w-3xl">
       <h2 id="hidden-heading" class={headingClasses}>The results are waiting on your guess</h2>
@@ -261,7 +270,10 @@
       <button
         type="button"
         disabled={!page.ready}
-        onclick={() => (page.showResults = true)}
+        onclick={() => {
+          page.showResults = true;
+          void focusAfterUpdate('results');
+        }}
         class="text-primary-700 dark:text-primary-300 cursor-pointer text-sm underline underline-offset-2 disabled:cursor-not-allowed"
       >
         Skip the prediction and show the results

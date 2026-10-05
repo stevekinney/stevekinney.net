@@ -217,6 +217,7 @@
       guess={auditor.guess}
       revealed={auditor.revealed}
       overview={analysis.overview}
+      ready={auditor.ready}
       onGuess={(guess) => (auditor.guess = guess)}
       onReveal={() => (auditor.revealed = true)}
     />

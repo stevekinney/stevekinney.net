@@ -103,11 +103,12 @@
           ],
         }))}
       />
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
       <div
         class={tableRegionClasses}
         role="region"
         aria-label="Cost per session table"
-        tabindex="-1"
+        tabindex="0"
       >
         <table class={tableClasses}>
           <thead>
@@ -153,7 +154,8 @@
         Download as CSV
       </button>
     </div>
-    <div class={tableRegionClasses} role="region" aria-label="Cost by model table" tabindex="-1">
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <div class={tableRegionClasses} role="region" aria-label="Cost by model table" tabindex="0">
       <table class={tableClasses} data-testid="cost-by-model">
         <thead>
           <tr>
@@ -212,11 +214,12 @@
         <summary class="cursor-pointer text-sm font-semibold text-slate-700 dark:text-slate-200">
           Cache hit ratio per day as a table
         </summary>
+        <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
         <div
           class="{tableRegionClasses} mt-3 max-h-80"
           role="region"
           aria-label="Cache hit ratio table"
-          tabindex="-1"
+          tabindex="0"
         >
           <table class={tableClasses}>
             <thead>
@@ -248,11 +251,12 @@
         Download every session as CSV
       </button>
     </div>
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <div
       class={tableRegionClasses}
       role="region"
       aria-label="Costliest sessions table"
-      tabindex="-1"
+      tabindex="0"
     >
       <table class={tableClasses} data-testid="costliest-sessions">
         <thead>

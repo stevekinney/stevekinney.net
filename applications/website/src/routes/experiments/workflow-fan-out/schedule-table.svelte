@@ -36,11 +36,12 @@
     The schedule as a table
   </summary>
   {#if open}
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <div
-      class="relative max-h-[28rem] overflow-auto border-t border-slate-200 dark:border-slate-700"
+      class="focus-visible:outline-primary-600 relative max-h-[28rem] overflow-auto border-t border-slate-200 focus-visible:outline-2 dark:border-slate-700"
       role="region"
       aria-label="Schedule table"
-      tabindex="-1"
+      tabindex="0"
     >
       <table class="w-full text-sm text-slate-700 dark:text-slate-200">
         <caption class="sr-only">

@@ -244,11 +244,12 @@
         testId="histogram-chart"
       />
 
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
       <div
-        class="relative overflow-x-auto"
+        class="focus-visible:outline-primary-600 relative overflow-x-auto focus-visible:outline-2"
         role="region"
         aria-label="Throughput by author group"
-        tabindex="-1"
+        tabindex="0"
       >
         <table
           class="w-full min-w-[34rem] text-left text-sm tabular-nums"

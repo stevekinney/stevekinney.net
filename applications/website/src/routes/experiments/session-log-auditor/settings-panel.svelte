@@ -114,11 +114,12 @@
     <datalist id="category-options">
       {#each categories as category (category)}<option value={category}></option>{/each}
     </datalist>
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <div
       class={tableRegionClasses}
       role="region"
       aria-label="Classification rules table"
-      tabindex="-1"
+      tabindex="0"
     >
       <table class={tableClasses} data-testid="rules-table">
         <thead>
@@ -239,7 +240,8 @@
       editable. A turn whose transcript doesn’t say how long it cached is billed at the five-minute
       rate.
     </p>
-    <div class={tableRegionClasses} role="region" aria-label="Prices table" tabindex="-1">
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <div class={tableRegionClasses} role="region" aria-label="Prices table" tabindex="0">
       <table class={tableClasses} data-testid="prices-table">
         <thead>
           <tr>

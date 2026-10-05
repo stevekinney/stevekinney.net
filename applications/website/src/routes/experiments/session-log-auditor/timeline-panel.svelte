@@ -81,11 +81,12 @@
       </summary>
       <div class="mt-3 space-y-2">
         <button type="button" class={buttonClasses} onclick={exportCsv}>Download as CSV</button>
+        <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
         <div
           class="{tableRegionClasses} max-h-96"
           role="region"
           aria-label="Failures per day table"
-          tabindex="-1"
+          tabindex="0"
         >
           <table class={tableClasses}>
             <thead>

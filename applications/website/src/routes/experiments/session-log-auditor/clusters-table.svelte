@@ -110,7 +110,8 @@
       <button type="button" class={buttonClasses} onclick={exportCsv}>Download as CSV</button>
     </div>
 
-    <div class={tableRegionClasses} role="region" aria-label="Top clusters table" tabindex="-1">
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <div class={tableRegionClasses} role="region" aria-label="Top clusters table" tabindex="0">
       <table class={tableClasses} data-testid="clusters-table">
         <thead>
           <tr>

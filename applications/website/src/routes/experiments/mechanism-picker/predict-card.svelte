@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from '$lib/components/button';
+  import { focusAfterUpdate } from '$lib/experiments/focus-after-update';
 
   import InlineCode from './inline-code.svelte';
   import { findMechanism, mechanisms } from './mechanisms';
@@ -21,6 +22,20 @@
   const answer = findMechanism(predictScenario.answer);
   const result = $derived(pick ? grade(predictScenario, pick) : null);
   const reason = $derived(pick ? missReason(predictScenario, pick) : null);
+
+  // Checking disables the choices and swaps the button, so focus follows the feedback.
+  const reveal = (): void => {
+    onReveal();
+    void focusAfterUpdate('predict-outcome');
+  };
+
+  const reset = (): void => {
+    onReset();
+    // The choices are cleared, so focus goes back to the first one.
+    void focusAfterUpdate(() =>
+      document.querySelector<HTMLInputElement>('[data-testid="predict-card"] input[type="radio"]'),
+    );
+  };
 </script>
 
 <div class="space-y-4" data-testid="predict-card">
@@ -55,15 +70,22 @@
 
   <div class="flex flex-wrap gap-3">
     {#if revealed}
-      <Button variant="secondary" size="small" onclick={onReset}>Try it again</Button>
+      <Button variant="secondary" size="small" onclick={reset}>Try it again</Button>
     {:else}
-      <Button size="small" disabled={!ready || pick === null} onclick={onReveal}>
+      <Button size="small" disabled={!ready || pick === null} onclick={reveal}>
         Check my answer
       </Button>
     {/if}
   </div>
 
-  <div aria-live="polite">
+  <div
+    id="predict-outcome"
+    role="group"
+    aria-label="The answer"
+    tabindex="-1"
+    aria-live="polite"
+    class="outline-none"
+  >
     {#if revealed && pick && result}
       <div
         data-testid="predict-feedback"

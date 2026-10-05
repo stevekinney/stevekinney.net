@@ -2,6 +2,7 @@
   import { Eye } from '@lucide/svelte';
 
   import Button from '$lib/components/button';
+  import { focusAfterUpdate } from '$lib/experiments/focus-after-update';
 
   import { bodyClasses, headingClasses, panelClasses } from './field-styles';
   import { formatShare } from './labels';
@@ -28,6 +29,12 @@
       ? 'You guessed low, like most people. Every iteration that doesn’t finish is another chance to claim done, and nothing checks the claim.'
       : 'You guessed high. It’s bad, but not that bad: real progress usually wins the race.';
   });
+
+  /** Reveals the answer and moves focus to it, since the button that had focus goes away. */
+  const reveal = (): void => {
+    onReveal();
+    void focusAfterUpdate('prediction-outcome');
+  };
 </script>
 
 <section aria-labelledby="predict-heading" class="{panelClasses} max-w-3xl">
@@ -57,33 +64,37 @@
     />
   </div>
 
-  {#if answer}
-    <div
-      class="grid gap-3 sm:grid-cols-2"
-      data-testid="prediction-result"
-      aria-live="polite"
-      role="status"
-    >
-      <div class="rounded-md bg-slate-100 p-3 dark:bg-slate-800">
-        <p class={bodyClasses}>Your guess</p>
-        <p class="text-2xl font-bold text-slate-900 tabular-nums dark:text-white">{guess}%</p>
+  <div
+    id="prediction-outcome"
+    role="group"
+    aria-label="Your guess and the answer"
+    tabindex="-1"
+    aria-live="polite"
+    class="outline-none"
+  >
+    {#if answer}
+      <div class="grid gap-3 sm:grid-cols-2" data-testid="prediction-result">
+        <div class="rounded-md bg-slate-100 p-3 dark:bg-slate-800">
+          <p class={bodyClasses}>Your guess</p>
+          <p class="text-2xl font-bold text-slate-900 tabular-nums dark:text-white">{guess}%</p>
+        </div>
+        <div class="rounded-md bg-rose-50 p-3 dark:bg-rose-950/50">
+          <p class={bodyClasses}>Runs that ended falsely done</p>
+          <p class="text-2xl font-bold text-rose-700 tabular-nums dark:text-rose-300">
+            {formatShare(answer.simulated)}
+          </p>
+          <p class={bodyClasses}>
+            of {answer.runs.toLocaleString('en-US')} simulated runs. Exactly, it’s {formatShare(
+              answer.exact,
+            )}.
+          </p>
+        </div>
+        <p class="text-slate-700 sm:col-span-2 dark:text-slate-200">{verdict}</p>
       </div>
-      <div class="rounded-md bg-rose-50 p-3 dark:bg-rose-950/50">
-        <p class={bodyClasses}>Runs that ended falsely done</p>
-        <p class="text-2xl font-bold text-rose-700 tabular-nums dark:text-rose-300">
-          {formatShare(answer.simulated)}
-        </p>
-        <p class={bodyClasses}>
-          of {answer.runs.toLocaleString('en-US')} simulated runs. Exactly, it’s {formatShare(
-            answer.exact,
-          )}.
-        </p>
-      </div>
-      <p class="text-slate-700 sm:col-span-2 dark:text-slate-200">{verdict}</p>
-    </div>
-  {:else}
-    <Button variant="primary" icon={Eye} disabled={!ready} onclick={onReveal}>
-      Lock in my guess and show the answer
-    </Button>
-  {/if}
+    {:else}
+      <Button variant="primary" icon={Eye} disabled={!ready} onclick={reveal}>
+        Lock in my guess and show the answer
+      </Button>
+    {/if}
+  </div>
 </section>

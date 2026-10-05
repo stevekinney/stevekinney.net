@@ -4,6 +4,7 @@
   import { replaceState } from '$app/navigation';
   import SEO from '$lib/components/seo.svelte';
   import type { SourceFile } from '$lib/experiments/dropped-files';
+  import { focusAfterUpdate } from '$lib/experiments/focus-after-update';
   import { url } from '$lib/metadata';
   import { buildBreadcrumbSchema } from '$lib/structured-data';
 
@@ -548,7 +549,12 @@
     />
   </section>
 
-  <section aria-labelledby="results-heading" class="scroll-mt-6 space-y-6">
+  <section
+    id="results"
+    aria-labelledby="results-heading"
+    tabindex="-1"
+    class="scroll-mt-6 space-y-6 outline-none"
+  >
     <h2 id="results-heading" class={headingClasses}>Can the data tell them apart?</h2>
 
     {#if !app.revealed}
@@ -560,7 +566,10 @@
         <button
           type="button"
           disabled={!app.ready}
-          onclick={reveal}
+          onclick={() => {
+            reveal();
+            void focusAfterUpdate('results');
+          }}
           class="focus-visible:outline-primary-600 text-primary-700 dark:text-primary-300 cursor-pointer text-sm font-semibold underline underline-offset-2 focus-visible:outline-2 disabled:cursor-not-allowed disabled:opacity-60"
         >
           Skip the prediction

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { focusAfterUpdate } from '$lib/experiments/focus-after-update';
+
   type Props = {
     prediction: boolean | null;
     revealed: boolean;
@@ -10,6 +12,17 @@
   };
 
   const { prediction, revealed, exploitable, ready, onPredict, onSkip }: Props = $props();
+
+  // Answering disables the buttons and skipping removes its own, so focus follows the answer.
+  const predict = (value: boolean): void => {
+    onPredict(value);
+    void focusAfterUpdate('prediction-outcome');
+  };
+
+  const skip = (): void => {
+    onSkip();
+    void focusAfterUpdate('prediction-outcome');
+  };
 
   const options = [
     { value: true, label: 'Yes, still exploitable' },
@@ -34,7 +47,7 @@
         type="button"
         disabled={!ready || revealed}
         aria-pressed={prediction === option.value}
-        onclick={() => onPredict(option.value)}
+        onclick={() => predict(option.value)}
         class="focus-visible:outline-primary-600 aria-pressed:border-primary-600 aria-pressed:bg-primary-600 dark:aria-pressed:border-primary-400 dark:aria-pressed:bg-primary-700 min-h-10 cursor-pointer rounded-full border border-slate-300 px-4 py-1.5 text-sm font-semibold text-slate-700 hover:border-slate-500 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed aria-pressed:text-white dark:border-slate-600 dark:text-slate-200 dark:hover:border-slate-400 [&:disabled:not([aria-pressed=true])]:opacity-60"
       >
         {option.label}
@@ -44,14 +57,21 @@
       <button
         type="button"
         disabled={!ready}
-        onclick={onSkip}
+        onclick={skip}
         class="cursor-pointer text-sm text-slate-600 underline underline-offset-2 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-60 dark:text-slate-300 dark:hover:text-white"
       >
         Skip and show me
       </button>
     {/if}
   </div>
-  <div aria-live="polite">
+  <div
+    id="prediction-outcome"
+    role="group"
+    aria-label="The answer"
+    tabindex="-1"
+    aria-live="polite"
+    class="outline-none"
+  >
     {#if revealed}
       <p
         data-testid="prediction-result"
