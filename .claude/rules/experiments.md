@@ -35,6 +35,6 @@ Interactive tools at `/experiments/<slug>`. Each is a prerendered SvelteKit page
 - Type checks: when `applications/website/.generated/content-data.json` exists, svelte-check covers only 99 files and misses real errors. For full coverage, move that file aside and run it again (the one error about the missing file is expected), or add `bunx tsc --noEmit -p tsconfig.json`.
 - Don't run vitest or `bun run check` in a worktree while its build runs. Both rerun `svelte-kit sync`, so the client and the prerendered pages get different version hashes, every page fails to hydrate, and Turbo caches the broken output. Rebuild with `TURBO_FORCE=true`.
 - Theming follows the site's system preference. Don't add a per-page theme toggle.
-- Test fixtures are synthetic. Never commit real transcripts, settings files, or other personal data.
+- Test fixtures are synthetic. Never commit real transcripts, settings files, or other personal data. The root `.gitignore` ignores `settings.local.json` and `.env*.local` files, so check `git status` shows each fixture you add; a spec once passed only in the worktree that held an uncommitted one.
 - Check a specification's factual claims against real data before relying on them, and report any deviation. Specifications can be edited while work is underway: the current file is the source of truth, so reread it rather than trusting a summary of it.
 - On macOS, `pgrep -f "a|b"` doesn't treat `|` as alternation, so it matches nothing. Check each pattern separately, or check your port with `lsof -nP -iTCP:<port> -sTCP:LISTEN`.
