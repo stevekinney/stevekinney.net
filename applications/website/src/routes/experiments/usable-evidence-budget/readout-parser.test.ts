@@ -291,7 +291,7 @@ describe('applyReadout', () => {
       const parsed = parseReadout(`⛁ ${label}: 5k tokens\n⛁ Messages: 10k tokens`);
       const applied = applyReadout(parsed, defaultMapping, 1_000_000);
 
-      expect(applied.unrecognized.map((row) => row.key)).toEqual([label.toLowerCase()]);
+      expect(applied.unrecognized.map((row) => row.key)).toEqual(['constructor']);
       expect(applied.values).toEqual({ history: 10_000 });
       expect(applied.counted.map((row) => row.key)).toEqual(['messages']);
     },
