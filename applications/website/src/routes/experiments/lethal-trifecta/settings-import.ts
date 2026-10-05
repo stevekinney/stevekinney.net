@@ -240,7 +240,7 @@ export const mergeSettings = (
   const conflicts: Conflict[] = [];
 
   const all = <K extends keyof Collected>(key: K): Collected[K] =>
-    ordered.flatMap((entry) => entry.values[key]) as Collected[K];
+    ordered.flatMap((entry) => entry.values[key] as Located<unknown>[]) as Collected[K];
 
   const single = <T>(key: string, candidates: Located<T>[]): Located<T> | null => {
     const [winner, ...rest] = candidates;
