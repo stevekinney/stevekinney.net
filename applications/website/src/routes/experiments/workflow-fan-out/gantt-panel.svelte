@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Pause, Play, RotateCcw } from '@lucide/svelte';
-  import { onDestroy } from 'svelte';
+  import { onMount } from 'svelte';
 
   import Button from '$lib/components/button';
 
@@ -66,7 +66,8 @@
     frame = requestAnimationFrame(step);
   };
 
-  onDestroy(stop);
+  // onMount's cleanup only runs in the browser, where animation frames exist.
+  onMount(() => stop);
 
   const strategies: { id: Strategy; title: string; caption: string }[] = [
     {
