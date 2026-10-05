@@ -224,7 +224,8 @@
     <p>
       Each of these {evaluation.live.sources.length}
       {evaluation.live.sources.length === 1 ? 'source' : 'sources'}, combined with each of these
-      {evaluation.live.data.length} kinds of private data and each of these
+      {evaluation.live.data.length}
+      {evaluation.live.data.length === 1 ? 'kind' : 'kinds'} of private data and each of these
       {evaluation.live.exits.length}
       {evaluation.live.exits.length === 1 ? 'exit' : 'exits'}, is a live path:
       {evaluation.live.sources.length * evaluation.live.data.length * evaluation.live.exits.length} in
