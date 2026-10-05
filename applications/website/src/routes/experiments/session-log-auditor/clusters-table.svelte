@@ -5,7 +5,7 @@
 
   import { categoryStyle } from './category-styles';
   import type { Cluster } from './clusters';
-  import { isCalendarDate, upsertMark } from './control-rows';
+  import { isCalendarDate, QUIET_DAYS, upsertMark } from './control-rows';
   import type { ControlRow, FixMark } from './control-rows';
   import { toCsv } from './digest';
   import { downloadText } from './download';
@@ -154,6 +154,11 @@
                     class="mt-1 ml-5 inline-block rounded bg-red-100 px-1.5 py-0.5 text-xs font-semibold text-red-800 dark:bg-red-950 dark:text-red-200"
                   >
                     Regression: back on {back}
+                  </span>
+                  <span class="mt-0.5 ml-5 block text-xs text-slate-500 dark:text-slate-400">
+                    {rowsByKey.get(cluster.key)?.firstReturn
+                      ? 'After the date you marked it fixed.'
+                      : `After ${QUIET_DAYS} or more active days without it.`}
                   </span>
                 {/if}
               </th>

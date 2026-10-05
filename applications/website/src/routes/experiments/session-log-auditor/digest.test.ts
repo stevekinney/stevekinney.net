@@ -79,6 +79,11 @@ describe('buildDigest', () => {
     expect(digest.markdown).not.toContain(githubToken);
     expect(digest.json).not.toContain(githubToken);
     expect(digest.markdown).toContain('[redacted ghp_]');
+    // A masked quote is no longer verbatim, and the digest says so.
+    expect(digest.markdown).toContain('except where a home directory or secret is masked');
+    expect(JSON.parse(digest.json).note).toContain(
+      'except where a home directory or secret is masked',
+    );
     expect(digest.findings.map((finding) => finding.kind)).toEqual(
       expect.arrayContaining(['GitHub token']),
     );
@@ -94,6 +99,7 @@ describe('buildDigest', () => {
     });
 
     expect(digest.markdown).toContain(githubToken);
+    expect(digest.markdown).not.toContain('except where');
     expect(digest.findings).toEqual([]);
   });
 

@@ -130,7 +130,29 @@
   </section>
 
   <section aria-labelledby="by-model-heading" class="space-y-3">
-    <h3 id="by-model-heading" class={subheadingClasses}>Cost by model</h3>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h3 id="by-model-heading" class={subheadingClasses}>Cost by model</h3>
+      <button
+        type="button"
+        class={buttonClasses}
+        onclick={() =>
+          downloadText(
+            'cost-by-model.csv',
+            toCsv(
+              ['Model', 'Priced as', 'Turns', 'Cost (USD)'],
+              cost.byModel.map((row) => [
+                row.model,
+                row.priceName ?? 'unpriced',
+                row.turns,
+                row.cost === null ? null : row.cost.toFixed(4),
+              ]),
+            ),
+            'text/csv',
+          )}
+      >
+        Download as CSV
+      </button>
+    </div>
     <div class={tableRegionClasses} role="region" aria-label="Cost by model table" tabindex="-1">
       <table class={tableClasses} data-testid="cost-by-model">
         <thead>

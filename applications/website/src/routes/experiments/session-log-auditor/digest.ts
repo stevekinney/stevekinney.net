@@ -96,10 +96,14 @@ export const buildDigest = ({ overview, clusters, scope, redaction }: DigestInpu
     compactions: overview.compactions,
   };
 
+  const quoteNote = redaction
+    ? 'Every quote is a verbatim substring of the file and line named, except where a home directory or secret is masked.'
+    : 'Every quote is a verbatim substring of the file and line named.';
+
   const json = `${JSON.stringify(
     {
       digest: 'session-log-auditor',
-      note: 'Every count here was computed by code from the transcripts. Quotes are verbatim substrings of the line named.',
+      note: `Every count here was computed by code from the transcripts. ${quoteNote}`,
       scope,
       redacted: redaction,
       counts,
@@ -112,9 +116,8 @@ export const buildDigest = ({ overview, clusters, scope, redaction }: DigestInpu
   const lines = [
     '# Session log digest',
     '',
-    'Every count below was computed by code. Every quote is a verbatim substring of the file and line named.',
+    `Every count below was computed by code. ${quoteNote}`,
     ...(scope ? ['', `Scope: ${scope}`] : []),
-    ...(redaction ? ['', 'Home directories and secret-shaped strings are masked.'] : []),
     '',
     '## Counts',
     '',

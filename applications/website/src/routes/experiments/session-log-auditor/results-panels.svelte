@@ -8,7 +8,8 @@
   import ControlRowsPanel from './control-rows-panel.svelte';
   import type { FixMark } from './control-rows';
   import { copyText } from './copy-text';
-  import { buildSummary } from './digest';
+  import { buildSummary, toCsv } from './digest';
+  import { downloadText } from './download';
   import {
     bodyClasses,
     buttonClasses,
@@ -181,6 +182,21 @@
       )} malformed line{records.skippedLines === 1 ? '' : 's'} skipped. Sessions can come from several
       Claude Code versions:
     </p>
+    <button
+      type="button"
+      class={buttonClasses}
+      onclick={() =>
+        downloadText(
+          'versions.csv',
+          toCsv(
+            ['Claude Code version', 'Sessions'],
+            analysis.versions.map((row) => [row.version, row.sessions]),
+          ),
+          'text/csv',
+        )}
+    >
+      Download versions as CSV
+    </button>
     <div class={tableRegionClasses} role="region" aria-label="Versions table" tabindex="-1">
       <table class={tableClasses} data-testid="versions-table">
         <thead>
