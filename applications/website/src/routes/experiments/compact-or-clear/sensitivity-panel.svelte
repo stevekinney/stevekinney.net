@@ -56,7 +56,7 @@
           <th scope="col" class={heading}>Input</th>
           <th scope="col" class={heading}>At minimum</th>
           <th scope="col" class={heading}>At maximum</th>
-          <th scope="col" class={heading}>Spread</th>
+          <th scope="col" class={heading} aria-sort="descending">Spread</th>
           <th scope="col" class="{heading} min-w-48">Range of paybacks</th>
         </tr>
       </thead>

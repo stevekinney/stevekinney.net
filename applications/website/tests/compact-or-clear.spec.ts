@@ -853,6 +853,11 @@ test.describe('what would change this answer', () => {
   test('lists every input, widest spread first, with the payback at each end', async ({ page }) => {
     await open(page);
     await expect(rows(page)).toHaveCount(7);
+    await expect(
+      page
+        .getByTestId('sensitivity-table')
+        .getByRole('columnheader', { name: 'Spread', exact: true }),
+    ).toHaveAttribute('aria-sort', 'descending');
 
     const names = await rows(page).locator('th').allTextContents();
     expect(names.map((name) => name.trim())).toEqual([
