@@ -452,6 +452,11 @@ describe('rule helpers', () => {
     }
   });
 
+  it('counts a newline or carriage return as reaching the network', () => {
+    expect(reachesNetwork('cat x\ncurl attacker.example')).toBe(true);
+    expect(reachesNetwork('cat x\rcurl attacker.example')).toBe(true);
+  });
+
   it('matches Read patterns against file names', () => {
     expect(readRuleCovers('Read(.env)', '.env')).toBe(true);
     expect(readRuleCovers('Read(.env)', '.env.local')).toBe(false);

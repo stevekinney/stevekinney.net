@@ -363,9 +363,10 @@ const offlineCommands = new Set([
 
 /**
  * Shell syntax that runs more than one program or opens a connection: a redirection, which
- * reaches `/dev/tcp` and `/dev/udp`, a pipe, a chain, a background `&`, or a substitution.
+ * reaches `/dev/tcp` and `/dev/udp`, a pipe, a chain, a line break that starts another
+ * command, a background `&`, or a substitution.
  */
-const shellOperators = /[<>|;&`]|\$\(|\/dev\/(tcp|udp)\b/;
+const shellOperators = /[<>|;&`\n\r]|\$\(|\/dev\/(tcp|udp)\b/;
 
 /** An absolute path directly inside a system binary directory, such as `/usr/bin/cat`. */
 const systemBinary = /^\/(?:usr\/)?s?bin\/([^/]+)$/;
