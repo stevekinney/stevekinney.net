@@ -1,5 +1,5 @@
 import type { Analysis, Endpoint } from './analysis';
-import { formatCount, formatNumber, intervalDecimals } from './display';
+import { differenceDecimals, formatCount, formatNumber, intervalDecimals } from './display';
 
 export type VerdictKind = 'distinguishable' | 'cant-tell' | 'not-measured';
 
@@ -102,7 +102,10 @@ export const describeVerdict = (analysis: Analysis): VerdictText | null => {
   let detail: string | null = null;
   const { comparison } = analysis;
   if (verdict.planner && comparison?.kind === 'mean') {
-    const seen = formatNumber(Math.abs(comparison.test.difference), decimals);
+    const seen = formatNumber(
+      Math.abs(comparison.test.difference),
+      differenceDecimals(verdict.lower, verdict.upper),
+    );
     const tasks = formatCount(verdict.planner.tasks);
     detail =
       comparison.design === 'paired'

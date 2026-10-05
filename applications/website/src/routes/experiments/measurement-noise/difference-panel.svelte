@@ -1,7 +1,13 @@
 <script lang="ts">
   import type { Analysis } from './analysis';
   import { niceDomain, scale, ticks } from './chart-scale';
-  import { formatNumber, formatP, formatPercent, intervalDecimals } from './display';
+  import {
+    differenceDecimals,
+    formatNumber,
+    formatP,
+    formatPercent,
+    intervalDecimals,
+  } from './display';
   import ExplainTip from './explain-tip.svelte';
   import { bodyClasses } from './field-styles';
   import { endpointScale, endpointUnit } from './verdict';
@@ -45,6 +51,7 @@
 
   const decimals = $derived(figures ? intervalDecimals(figures.lower, figures.upper) : 1);
   const show = (value: number): string => formatNumber(value, decimals);
+  const pointDecimals = $derived(figures ? differenceDecimals(figures.lower, figures.upper) : 1);
 
   const domain = $derived(
     niceDomain(figures ? [figures.lower, figures.upper, figures.difference] : [0], {
@@ -101,11 +108,11 @@
       {
         id: 'difference',
         label: `Difference (${labelA} − ${labelB})`,
-        value: show(figures.difference),
+        value: formatNumber(figures.difference, pointDecimals),
         text:
           comparison.kind === 'mean'
-            ? `In this sample, ${labelA} averaged ${formatNumber(comparison.test.meanA, 1)} and ${labelB} ${formatNumber(comparison.test.meanB, 1)}: a gap of ${show(figures.difference)} ${unit}, ${formatPercent(comparison.percent)} of ${labelA}’s mean. Positive means ${labelB} came out ahead in this sample. The interval says how much to trust that.`
-            : `${labelA}’s rework rate minus ${labelB}’s: ${show(figures.difference)} percentage points. Positive means ${labelB} needed rework less often in this sample.`,
+            ? `In this sample, ${labelA} averaged ${formatNumber(comparison.test.meanA, 1)} and ${labelB} ${formatNumber(comparison.test.meanB, 1)}: a gap of ${formatNumber(figures.difference, pointDecimals)} ${unit}, ${formatPercent(comparison.percent)} of ${labelA}’s mean. Positive means ${labelB} came out ahead in this sample. The interval says how much to trust that.`
+            : `${labelA}’s rework rate minus ${labelB}’s: ${formatNumber(figures.difference, pointDecimals)} percentage points. Positive means ${labelB} needed rework less often in this sample.`,
       },
       {
         id: 'lower',
@@ -184,10 +191,10 @@
         role="img"
         aria-label="95% interval from {show(figures.lower)} to {show(
           figures.upper,
-        )} {unit}, with the difference at {show(figures.difference)}. Zero is {kind ===
-        'distinguishable'
-          ? 'outside'
-          : 'inside'} it."
+        )} {unit}, with the difference at {formatNumber(
+          figures.difference,
+          pointDecimals,
+        )}. Zero is {kind === 'distinguishable' ? 'outside' : 'inside'} it."
         class="block max-w-full"
       >
         <line

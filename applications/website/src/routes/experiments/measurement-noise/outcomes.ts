@@ -7,6 +7,7 @@ import {
   formatInterval,
   formatNumber,
   formatRate,
+  differenceDecimals,
   intervalDecimals,
 } from './display';
 
@@ -228,7 +229,7 @@ export const formatDifference = (row: OutcomeRow): string => {
   if (row.unit === 'dollars') return formatDollars(row.difference);
 
   const decimals =
-    row.lower !== null && row.upper !== null ? intervalDecimals(row.lower, row.upper) : 1;
+    row.lower !== null && row.upper !== null ? differenceDecimals(row.lower, row.upper) : 1;
 
   return `${formatNumber(row.difference, decimals)} min`;
 };

@@ -43,7 +43,7 @@ describe('buildOutcomes', () => {
 
     expect(formatValue(time, time.a)).toBe('48.0 min');
     expect(formatValue(time, time.b)).toBe('41.0 min');
-    expect(formatDifference(time)).toBe('7.00 min');
+    expect(formatDifference(time)).toBe('7.0 min');
     expect(formatOutcomeInterval(time)).toBe('[3.83, 10.17] min');
     expect(time.note).toBe('Paired t, 5 tasks.');
   });

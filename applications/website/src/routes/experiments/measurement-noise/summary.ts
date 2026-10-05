@@ -1,6 +1,13 @@
 import { endpointLabels } from './analysis';
 import type { Analysis } from './analysis';
-import { formatInterval, formatNumber, formatP, formatPercent, intervalDecimals } from './display';
+import {
+  differenceDecimals,
+  formatInterval,
+  formatNumber,
+  formatP,
+  formatPercent,
+  intervalDecimals,
+} from './display';
 import { describeVerdict, endpointScale, endpointUnit } from './verdict';
 
 /** The Markdown block “Copy summary” puts on the clipboard: verdict, interval, endpoint, and n. */
@@ -33,7 +40,7 @@ export const buildSummary = (analysis: Analysis, source: string): string => {
         ? `- Design: paired, n = ${comparison.valuesA.length} tasks run under both`
         : `- Design: unpaired, n = ${comparison.valuesA.length} (${labelA}) and ${comparison.valuesB.length} (${labelB})`,
       `- Means: ${labelA} ${formatNumber(test.meanA, 1)}, ${labelB} ${formatNumber(test.meanB, 1)}`,
-      `- Difference: ${formatNumber(test.difference, decimals)} ${endpointUnit(analysis.endpoint)} (${formatPercent(comparison.percent)} of ${labelA})`,
+      `- Difference: ${formatNumber(test.difference, differenceDecimals(test.lower, test.upper))} ${endpointUnit(analysis.endpoint)} (${formatPercent(comparison.percent)} of ${labelA})`,
       test.degenerate
         ? '- 95% interval: degenerate, a single point'
         : `- 95% interval: ${formatInterval(test.lower, test.upper, decimals)}, p ≈ ${formatP(test.p)}`,

@@ -28,6 +28,14 @@ export const intervalDecimals = (lower: number, upper: number): number => {
   return Math.min(3, Math.max(0, 2 - Math.floor(Math.log10(width))));
 };
 
+/**
+ * How many decimals a point estimate needs beside its interval: one fewer than
+ * the interval, and at least one, so 7.2 sits in [−11.6, 26.0] and 7.0 in
+ * [3.83, 10.17].
+ */
+export const differenceDecimals = (lower: number, upper: number): number =>
+  Math.max(1, intervalDecimals(lower, upper) - 1);
+
 /** A p-value: three decimals, four below 0.01, and “< 0.001” below that. */
 export const formatP = (p: number | null): string => {
   if (p === null || !Number.isFinite(p)) return '—';
