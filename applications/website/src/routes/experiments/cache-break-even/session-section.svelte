@@ -22,6 +22,8 @@
     /** The model in the price table that the session's latest turn ran, if any. */
     matchedModel: ModelPrice | null;
     progress: { current: number; total: number } | null;
+    /** True from the drop until reading finishes, including while a dropped folder is being walked. */
+    busy: boolean;
     message: string | null;
     error: string | null;
     pasteText: string;
@@ -40,6 +42,7 @@
     session,
     matchedModel,
     progress,
+    busy,
     message,
     error,
     pasteText,
@@ -91,8 +94,12 @@
       folders
       keepFile={isSessionFile}
       captureWindowDrops
-      busy={progress !== null}
-      progress={progress ? `Reading file ${progress.current} of ${progress.total}…` : null}
+      {busy}
+      progress={progress
+        ? `Reading file ${progress.current} of ${progress.total}…`
+        : busy
+          ? 'Collecting files…'
+          : null}
       status={message}
       {onFiles}
     >

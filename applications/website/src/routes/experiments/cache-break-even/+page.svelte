@@ -12,7 +12,13 @@
   import { buildBreadcrumbSchema } from '$lib/structured-data';
 
   import CachePreservingCallout from './cache-preserving-callout.svelte';
-  import { defaultState, evaluateState, normalizeState, swapState } from './calculator-state';
+  import {
+    defaultState,
+    evaluateState,
+    MAX_TOKENS,
+    normalizeState,
+    swapState,
+  } from './calculator-state';
   import type { CalculatorState } from './calculator-state';
   import { parseContextReadout } from './context-readout';
   import { experiment } from './experiment';
@@ -109,6 +115,8 @@
 
   let session = $state.raw<SessionImport | null>(null);
   let progress = $state<{ current: number; total: number } | null>(null);
+  // Set from the drop, before a dropped folder has been walked, so a second drop can't start.
+  let loading = $state(false);
   let readError = $state<string | null>(null);
   let readMessage = $state<string | null>(null);
   let estimate = $state({ average: '', turns: '' });
@@ -119,7 +127,26 @@
 
   const matchedModel = $derived(session ? matchModel(session.modelId, pricing) : null);
 
+  /** Puts back every field the current import filled in and the person hasn't edited since. */
+  const restoreImportedFields = (): void => {
+    if (beforeImport) {
+      const patch: Partial<CalculatorState> = {};
+      if (sources.fromModel === 'session') patch.fromModel = beforeImport.fromModel;
+      if (sources.contextTokens === 'session') patch.contextTokens = beforeImport.contextTokens;
+      if (sources.remainingOutput === 'session')
+        patch.remainingOutput = beforeImport.remainingOutput;
+      app.calc = normalizeState({ ...app.calc, ...patch }, pricing);
+    }
+
+    for (const field of ['fromModel', 'contextTokens', 'remainingOutput'] as const) {
+      if (sources[field] === 'session') sources[field] = null;
+    }
+  };
+
   const applySession = (imported: SessionImport): void => {
+    // A second import replaces the first, so nothing the first filled in carries over.
+    restoreImportedFields();
+
     beforeImport ??= {
       fromModel: app.calc.fromModel,
       contextTokens: app.calc.contextTokens,
@@ -139,8 +166,9 @@
   };
 
   const loadFiles = async (source: Promise<SourceFile[]>): Promise<void> => {
-    if (progress) return;
+    if (loading) return;
 
+    loading = true;
     readError = null;
     readMessage = null;
 
@@ -171,22 +199,12 @@
       readError = 'Those files couldn’t be read. Try choosing them again.';
     } finally {
       progress = null;
+      loading = false;
     }
   };
 
   const discardImport = (): void => {
-    if (beforeImport) {
-      const patch: Partial<CalculatorState> = {};
-      if (sources.fromModel === 'session') patch.fromModel = beforeImport.fromModel;
-      if (sources.contextTokens === 'session') patch.contextTokens = beforeImport.contextTokens;
-      if (sources.remainingOutput === 'session')
-        patch.remainingOutput = beforeImport.remainingOutput;
-      app.calc = normalizeState({ ...app.calc, ...patch }, pricing);
-    }
-
-    for (const field of ['fromModel', 'contextTokens', 'remainingOutput'] as const) {
-      if (sources[field] === 'session') sources[field] = null;
-    }
+    restoreImportedFields();
 
     beforeImport = null;
     session = null;
@@ -200,8 +218,17 @@
 
     const average = parseTokenCount(estimate.average);
     const turns = parseTokenCount(estimate.turns);
-    if (average !== null && turns !== null && turns > 0) {
-      update({ remainingOutput: average * turns }, 'remainingOutput');
+    const total = average !== null && turns !== null ? average * turns : null;
+
+    // The product of two fields that are each in range can still be out of range.
+    if (
+      total !== null &&
+      turns !== null &&
+      turns > 0 &&
+      Number.isSafeInteger(total) &&
+      total <= MAX_TOKENS
+    ) {
+      update({ remainingOutput: total }, 'remainingOutput');
       sources.remainingOutput = 'session';
     }
   };
@@ -361,6 +388,7 @@
     {session}
     {matchedModel}
     {progress}
+    busy={loading}
     message={readMessage}
     error={readError}
     {pasteText}

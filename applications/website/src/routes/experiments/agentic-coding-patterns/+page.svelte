@@ -35,6 +35,7 @@
   import type { ListResult } from './search';
   import {
     bundledLibrary,
+    folderLibraryKey,
     itemsIn,
     readShortlist,
     setNote,
@@ -52,6 +53,8 @@
 
   type LoadedFolder = {
     name: string | null;
+    /** Tells this upload apart from any other, even one with the same folder name. */
+    libraryKey: string;
     notes: NoteSource[];
     skipped: ExcludedNote[];
     truncated: boolean;
@@ -130,7 +133,7 @@
 
   // Entry IDs are slugs, so a custom folder can hold an ID the bundled library also has. The
   // shortlist keeps each library's items apart, and only the open library's are shown.
-  const shortlistLibrary = $derived(folder ? `folder:${folder.name ?? ''}` : bundledLibrary);
+  const shortlistLibrary = $derived(folder ? folder.libraryKey : bundledLibrary);
   const librarySavedItems = $derived(itemsIn(shortlist, shortlistLibrary));
   const starred = $derived(new Set(librarySavedItems.map((item) => item.id)));
   const shortlistRows = $derived(
@@ -422,8 +425,11 @@
       const built = await rebuild(notes, skipped);
       if (!built) return;
 
+      const name = commonFolderName(notes.map(({ path }) => path));
+
       folder = {
-        name: commonFolderName(notes.map(({ path }) => path)),
+        name,
+        libraryKey: folderLibraryKey(name, notes),
         notes,
         skipped,
         truncated,

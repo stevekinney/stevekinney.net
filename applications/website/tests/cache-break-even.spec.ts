@@ -369,6 +369,40 @@ test.describe('acceptance check 8: importing a session', () => {
     await expect(page.getByText('≈ 140K tokens')).toBeVisible();
   });
 
+  test('an estimate whose product is out of range leaves R alone', async ({ page }) => {
+    await open(page);
+    await page.locator('input[type="file"]').first().setInputFiles(fixture('session-opus-5.jsonl'));
+    await page.getByLabel('Turns you expect remaining').fill('100');
+    await expect(outputField(page)).toHaveValue('140,000');
+
+    await page.getByLabel('Average output per turn').fill('500b');
+    await page.getByLabel('Turns you expect remaining').fill('3');
+
+    // 500 billion × 3 is past the one-trillion limit, so R keeps its last good value.
+    await expect(outputField(page)).not.toHaveValue('1,500,000,000,000');
+    await expect(outputField(page)).not.toHaveValue(/^1,500/);
+  });
+
+  test('a second import replaces the first instead of mixing the two sessions', async ({
+    page,
+  }) => {
+    await open(page);
+    await fromModel(page).selectOption('haiku-4-5');
+    const input = page.locator('input[type="file"]').first();
+    await input.setInputFiles(fixture('session-opus-5.jsonl'));
+    await page.getByLabel('Turns you expect remaining').fill('100');
+    await expect(fromModel(page)).toHaveValue('opus-5');
+    await expect(outputField(page)).toHaveValue('140,000');
+
+    // The second session's model isn't in the table, so nothing from the first should linger.
+    await input.setInputFiles(fixture('session-opus-5-1.jsonl'));
+
+    await expect(page.locator('[data-model-unmatched]')).toContainText('claude-opus-5-1');
+    await expect(fromModel(page)).toHaveValue('haiku-4-5');
+    await expect(outputField(page)).toHaveValue('150,000');
+    await expect(contextField(page)).toHaveValue('35,500');
+  });
+
   test('a model that is not in the price table is named, and the selection stays', async ({
     page,
   }) => {

@@ -328,7 +328,12 @@ export const analyzeFleet = (input: FleetInput): FleetAnalysis => {
     input.settingsFiles.length > 0 ||
     input.shellEnvironmentText.trim() !== '' ||
     input.pastedText.trim() !== '';
-  const hasInput = gaveEnvironment || definitions.length > 0 || input.versionText.trim() !== '';
+  // Text for `--agents` counts even when it doesn't parse, so its error reaches the page.
+  const hasInput =
+    gaveEnvironment ||
+    definitions.length > 0 ||
+    input.versionText.trim() !== '' ||
+    input.cliAgentsText.trim() !== '';
 
   // Environment: the shell overrides settings files, and a pasted `=` line is the shell too.
   const pastedShell = (value: typeof pasted.force) => (value?.origin === 'shell' ? value : null);

@@ -10,6 +10,26 @@ export type ShortlistItem = {
 
 export const bundledLibrary = 'bundled';
 
+/**
+ * A key for an uploaded library: its folder name and a fingerprint of its notes' paths and sizes.
+ * Two different folders called `notes`, or two loose-file selections, get different keys, so their
+ * entries never share stars or notes just because their slugs match.
+ */
+export const folderLibraryKey = (
+  name: string | null,
+  notes: readonly { path: string; text: string }[],
+): string => {
+  let hash = 0x811c9dc5;
+
+  for (const { path, text } of [...notes].sort((a, b) => a.path.localeCompare(b.path))) {
+    for (const character of `${path}|${text.length}\n`) {
+      hash = Math.imul(hash ^ character.charCodeAt(0), 0x01000193) >>> 0;
+    }
+  }
+
+  return `folder:${name ?? ''}:${notes.length}:${hash.toString(16)}`;
+};
+
 export const libraryOf = (item: ShortlistItem): string => item.library ?? bundledLibrary;
 
 /** The items that belong to one library. The others are kept for when that library is open. */

@@ -125,6 +125,14 @@ describe('acceptance 9: uploads', () => {
     expect(analysis.summary.moved + analysis.summary.unchanged).toBe(analysis.agentCount);
   });
 
+  it('treats malformed --agents text as input, so its warning can be shown', () => {
+    const analysis = analyzeFleet(input({ cliAgentsText: '[1]' }));
+
+    expect(analysis.hasInput).toBe(true);
+    expect(analysis.warnings.length).toBeGreaterThan(0);
+    expect(analyzeFleet(input({ cliAgentsText: '   ' })).hasInput).toBe(false);
+  });
+
   it('lists an agent with no model line, declaring "not set"', () => {
     const analysis = analyzeFleet(
       input({ agentFiles: [agentFile('quiet', 'repo/.claude/agents/quiet.md', ['name: quiet'])] }),
