@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from '$lib/components/button';
+  import { focusAfterUpdate } from '$lib/experiments/focus-after-update';
 
   import { formatLines, formatNumber, plural } from './display';
   import { bodyClasses, fieldClasses, headingClasses, labelClasses } from './field-styles';
@@ -33,6 +34,12 @@
 
     return 'You guessed lower than the arithmetic allows, which is the safe side to be wrong on.';
   });
+
+  /** Reveals the answer and moves focus to it, since the form that had focus goes away. */
+  const reveal = (skipped: boolean): void => {
+    onReveal(skipped);
+    void focusAfterUpdate('prediction-outcome');
+  };
 </script>
 
 <section
@@ -57,7 +64,7 @@
       class="flex flex-wrap items-end gap-3"
       onsubmit={(event) => {
         event.preventDefault();
-        if (parsedGuess !== null) onReveal(false);
+        if (parsedGuess !== null) reveal(false);
       }}
     >
       <div class="space-y-1">
@@ -79,55 +86,63 @@
       <button
         type="button"
         disabled={!ready}
-        onclick={() => onReveal(true)}
+        onclick={() => reveal(true)}
         class="focus-visible:outline-primary-600 text-primary-700 dark:text-primary-300 cursor-pointer py-2 text-sm underline underline-offset-2 focus-visible:outline-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         Skip the guess
       </button>
     </form>
-    <p class={bodyClasses}>The rest of the page opens once you’ve guessed or skipped.</p>
-  {:else}
-    <dl
-      class="grid grid-cols-2 gap-3 sm:max-w-md"
-      data-testid="prediction-reveal"
-      aria-live="polite"
-    >
-      <div
-        class="rounded-md border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900"
-      >
-        <dt class="text-sm text-slate-600 dark:text-slate-300">Your guess</dt>
-        <dd
-          class="text-2xl font-bold text-slate-900 tabular-nums dark:text-white"
-          data-testid="guess-value"
-        >
-          {revealed.skipped || parsedGuess === null ? 'Skipped' : parsedGuess}
-        </dd>
-      </div>
-      <div
-        class="rounded-md border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900"
-      >
-        <dt class="text-sm text-slate-600 dark:text-slate-300">You can keep reviewed</dt>
-        <dd
-          class="text-2xl font-bold text-slate-900 tabular-nums dark:text-white"
-          data-testid="sustainable-value"
-        >
-          {balance.sustainableAgents ?? 'Any'}
-        </dd>
-      </div>
-    </dl>
-    {#if !revealed.skipped && verdict}
-      <p class="text-slate-800 dark:text-slate-100">{verdict}</p>
-    {/if}
-    <p class={bodyClasses}>
-      {#if balance.sustainableAgents === null}
-        Each agent opens nothing, so {sustainableText(null)} fits.
-      {:else}
-        You can review {formatLines(balance.capacity)} lines a day well. Each agent opens {formatLines(
-          perAgent,
-        )}, so {formatLines(balance.capacity)} ÷ {formatLines(perAgent)} rounds down to {sustainableText(
-          balance.sustainableAgents,
-        )}.
-      {/if}
-    </p>
   {/if}
+
+  <div
+    id="prediction-outcome"
+    role="group"
+    aria-label="Your guess and the answer"
+    tabindex="-1"
+    aria-live="polite"
+    class="space-y-4 outline-none"
+  >
+    {#if revealed === null}
+      <p class={bodyClasses}>The rest of the page opens once you’ve guessed or skipped.</p>
+    {:else}
+      <dl class="grid grid-cols-2 gap-3 sm:max-w-md" data-testid="prediction-reveal">
+        <div
+          class="rounded-md border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900"
+        >
+          <dt class="text-sm text-slate-600 dark:text-slate-300">Your guess</dt>
+          <dd
+            class="text-2xl font-bold text-slate-900 tabular-nums dark:text-white"
+            data-testid="guess-value"
+          >
+            {revealed.skipped || parsedGuess === null ? 'Skipped' : parsedGuess}
+          </dd>
+        </div>
+        <div
+          class="rounded-md border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900"
+        >
+          <dt class="text-sm text-slate-600 dark:text-slate-300">You can keep reviewed</dt>
+          <dd
+            class="text-2xl font-bold text-slate-900 tabular-nums dark:text-white"
+            data-testid="sustainable-value"
+          >
+            {balance.sustainableAgents ?? 'Any'}
+          </dd>
+        </div>
+      </dl>
+      {#if !revealed.skipped && verdict}
+        <p class="text-slate-800 dark:text-slate-100">{verdict}</p>
+      {/if}
+      <p class={bodyClasses}>
+        {#if balance.sustainableAgents === null}
+          Each agent opens nothing, so {sustainableText(null)} fits.
+        {:else}
+          You can review {formatLines(balance.capacity)} lines a day well. Each agent opens {formatLines(
+            perAgent,
+          )}, so {formatLines(balance.capacity)} ÷ {formatLines(perAgent)} rounds down to {sustainableText(
+            balance.sustainableAgents,
+          )}.
+        {/if}
+      </p>
+    {/if}
+  </div>
 </section>

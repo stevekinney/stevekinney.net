@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from '$lib/components/button';
+  import { focusAfterUpdate } from '$lib/experiments/focus-after-update';
 
   import { formatMinutes } from './display';
   import { fieldClasses, labelClasses } from './field-styles';
@@ -49,13 +50,27 @@
       onReveal(guess);
       text = '';
       attempted = false;
+      // The form goes away with the button that had focus, so focus follows the answer.
+      void focusAfterUpdate('prediction-card');
     }
+  };
+
+  const skip = (): void => {
+    onSkip();
+    void focusAfterUpdate('prediction-card');
+  };
+
+  const reset = (): void => {
+    onReset();
+    void focusAfterUpdate('speedup-guess');
   };
 </script>
 
 <section
+  id="prediction-card"
   aria-labelledby="predict-heading"
-  class="border-primary-300 dark:border-primary-700 space-y-4 rounded-lg border bg-white p-4 sm:p-6 dark:bg-slate-900"
+  tabindex="-1"
+  class="border-primary-300 dark:border-primary-700 space-y-4 rounded-lg border bg-white p-4 outline-none sm:p-6 dark:bg-slate-900"
   data-testid="predict-card"
 >
   <h2 id="predict-heading" class="text-xl font-bold text-slate-900 dark:text-white">
@@ -97,7 +112,7 @@
       <button
         type="button"
         disabled={!ready}
-        onclick={onSkip}
+        onclick={skip}
         class="focus-visible:outline-primary-600 text-primary-700 dark:text-primary-300 cursor-pointer py-2 text-sm underline underline-offset-2 focus-visible:outline-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         Just show me
@@ -126,7 +141,7 @@
     {/if}
     <button
       type="button"
-      onclick={onReset}
+      onclick={reset}
       class="focus-visible:outline-primary-600 text-primary-700 dark:text-primary-300 cursor-pointer text-sm underline underline-offset-2 focus-visible:outline-2"
     >
       Predict again
