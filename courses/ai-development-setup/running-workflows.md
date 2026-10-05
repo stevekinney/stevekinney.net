@@ -17,7 +17,7 @@ Skip it when:
 - You're just making one edit.
 - Nothing can run in parallel.
 - The plan may change mid-run, so you'd keep replanning. (Not yet knowing the _list_ of work is different. See the table below.)
-- You need a human to approve something partway through.
+- You need planned human sign-off between phases. Tool permission prompts are supported, but arbitrary mid-run questions aren't.
 - Several agents would share ownership of the same files. Give each its own [worktree](worktrees.md), an extra checkout of the repository with its own files and branch.
 - The script would have to make the important decisions. Merges and writes to outside systems should stay with the main session (the agent coordinating the work) or with you.
 - Verifying the fan-out would cost more than the fan-out itself.
@@ -83,9 +83,9 @@ It can't:
 - See your conversation or the skills you invoked.
 - Ask you a question. The `AskUserQuestion` tool is removed from every subagent.
 - Launch another workflow. The `Workflow` tool is removed too.
-- Pause for your input mid-run.
+- Request arbitrary human sign-off between stages. Split those stages into separate runs.
 
-Because an agent can't ask or pause, anything that needs a human decision belongs outside the script.
+The run can pause when an agent's tool call needs permission, and eligible interactive runs can wait for usage limits to reset. Those are the [automatic pause cases](https://code.claude.com/docs/en/workflows#behavior-and-limits). They don't provide a scripted sign-off step: keep arbitrary human decisions between stages outside the script.
 
 ## Failure modes
 
@@ -116,7 +116,7 @@ You don't type this yourself. Ask Claude to relaunch the stopped or edited run, 
 | Dozens to hundreds of agents, or an orchestration you'll rerun | A workflow                                                  |
 | A known fan-out you want deterministic and resumable           | A workflow                                                  |
 | A graph with no real parallelism and a plan that _may_ change  | Direct agent dispatch                                       |
-| Mid-run human approval, or a stop-and-verify handshake         | Direct agent dispatch                                       |
+| Planned human sign-off, or a stop-and-verify handshake         | Direct agent dispatch                                       |
 | A list of work you haven't discovered yet                      | Scout inline first, then pipeline over what you found       |
 | You want to steer each step yourself                           | A [skill](skills.md)                                        |
 | Five to thirty worktree pull requests                          | `/batch`, which fans a change out as worktree pull requests |

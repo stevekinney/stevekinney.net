@@ -19,7 +19,7 @@ _TL;DR_: teams are only worth their cost when workers need to change each other'
 
 ## Turning a team on
 
-Teams are experimental and off by default. Set the `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable, in your shell or a settings file. Then ask the lead, which is the session you're talking to, for a team in plain language: "Spawn three teammates to review PR #142: one security, one performance, one test coverage." Each teammate starts like a fresh session. It loads your `CLAUDE.md`, MCP servers, and skills, plus the spawn prompt, but it doesn't get the lead's conversation. On Opus 5 you also need `CLAUDE_CODE_ENABLE_TODO_TOOLS=1`, or teammates have no shared task list.
+Teams are experimental and off by default. Set the `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` environment variable, in your shell or a settings file. Then ask the lead, which is the session you're talking to, for a team in plain language: "Spawn three teammates to review PR #142: one security, one performance, one test coverage." Each teammate starts like a fresh session. It loads your `CLAUDE.md`, MCP servers, and skills, plus the spawn prompt, but it doesn't get the lead's conversation. Since Claude Code v2.1.233, task-tracking tools are disabled by default on Opus 4.8+, Sonnet 5+, Fable 5+, and Mythos 5+. Set `CLAUDE_CODE_ENABLE_TODO_TOOLS=1` to restore that model-gated tool set, as the [release notes](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#21233) specify, and verify the shared task tools are available before relying on them.
 
 ## What they cost
 
