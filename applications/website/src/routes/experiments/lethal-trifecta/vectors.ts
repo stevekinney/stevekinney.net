@@ -17,7 +17,7 @@ export const vectors: Vector[] = [
   {
     id: 'deferred',
     title: 'Deferred execution',
-    body: 'Can the agent write something that runs later, outside the sandbox? core.fsmonitor in a cloned repository’s .git/config is a command Git runs, with no prompt. The blunt fix is git config --global core.fsmonitor false.',
+    body: 'Can the agent write something that runs later, outside the sandbox? core.fsmonitor in a cloned repository’s .git/config is a command Git runs, with no prompt. git config --global core.fsmonitor false closes that one vector, but not Git hooks or build scripts you run later.',
     nodes: ['cloned-repositories', 'deferred-execution'],
   },
   {

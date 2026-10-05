@@ -267,9 +267,11 @@ const exitEdge = (node: GraphNode<ExitId>, state: TrifectaState): Edge => {
         : edge(node, 'live', touchedBy);
     }
     case 'deferred-execution':
+      // core.fsmonitor is one vector. Git hooks and build scripts run later are others.
       return controls['fsmonitor-off']
-        ? edge(node, 'cut', touchedBy, {
-            cuts: [{ control: 'fsmonitor-off', label: 'core.fsmonitor false' }],
+        ? edge(node, 'live', touchedBy, {
+            note: 'Partial: core.fsmonitor only. Git hooks and build scripts that run later, outside the sandbox, still run what the agent wrote.',
+            phrase: 'a Git hook or build script that runs later',
           })
         : edge(node, 'live', touchedBy);
     default:

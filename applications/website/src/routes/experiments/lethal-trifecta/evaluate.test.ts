@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { evaluate } from './evaluate';
 import type { TrifectaState } from './evaluate';
-import { exits } from './model';
+import { controlById, exits } from './model';
 import type { ControlId } from './model';
 import { ciState, defaultState, findPreset, noControls } from './presets';
 import { describeVerdict } from './verdict';
@@ -221,10 +221,9 @@ describe('edge cases', () => {
 
     const evaluation = evaluate(state);
     expect(evaluation.exploitable).toBe(false);
-    expect(evaluation.cutLegNames).toEqual([
-      'untrusted content reaching the acting agent',
-      'a way out',
-    ]);
+    // core.fsmonitor false leaves Git hooks and build scripts, so deferred execution stays a way out.
+    expect(evaluation.cutLegNames).toEqual(['untrusted content reaching the acting agent']);
+    expect(evaluation.live.exits.map((edge) => edge.node.id)).toEqual(['deferred-execution']);
     expect(evaluation.live.data.map((edge) => edge.node.id)).toEqual(['source']);
   });
 
@@ -245,13 +244,30 @@ describe('edge cases', () => {
     expect(both.edges['env-files'].state).toBe('cut');
   });
 
-  it('cuts deferred execution with core.fsmonitor false and notes the other vectors', () => {
+  it('keeps deferred execution live with core.fsmonitor false, which is only one vector', () => {
     const state = withControls(defaultState(), 'fsmonitor-off');
     state.nodes['deferred-execution'] = true;
 
     const evaluation = evaluate(state);
-    expect(evaluation.edges['deferred-execution'].state).toBe('cut');
-    expect(evaluation.residualRisks.at(-1)?.text).toContain('Git hooks');
+    const edge = evaluation.edges['deferred-execution'];
+    expect(edge.state).toBe('live');
+    expect(edge.cuts).toEqual([]);
+    expect(edge.note).toMatch(/^Partial: core\.fsmonitor only\./);
+    expect(edge.touchedBy).toContain('fsmonitor-off');
+    expect(controlById['fsmonitor-off'].kind).toBe('partial');
+    expect(evaluation.residualRisks).toContainEqual(
+      expect.objectContaining({ kind: 'partial', text: expect.stringContaining('Git hooks') }),
+    );
+  });
+
+  it('finds a path through deferred execution when it is the only exit, even with fsmonitor off', () => {
+    const state = withControls(defaultState(), 'fsmonitor-off');
+    for (const { id } of exits) state.nodes[id] = id === 'deferred-execution';
+
+    const evaluation = evaluate(state);
+    expect(evaluation.legs.exit).toBe('intact');
+    expect(evaluation.exploitable).toBe(true);
+    expect(evaluation.path?.exit.node.id).toBe('deferred-execution');
   });
 });
 

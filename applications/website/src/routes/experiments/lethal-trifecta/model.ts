@@ -287,10 +287,11 @@ export const controls: Control[] = [
   },
   {
     id: 'fsmonitor-off',
-    kind: 'structural',
+    kind: 'partial',
     label: 'git config --global core.fsmonitor false',
-    removes: 'The core.fsmonitor deferred-execution vector',
-    description: 'Git stops running a command named in a repository’s core.fsmonitor.',
+    removes: 'The core.fsmonitor vector only',
+    description:
+      'Git stops running a command named in a repository’s core.fsmonitor. Git hooks and build scripts that run later outside the sandbox still run what the agent wrote, so deferred execution stays a way out.',
   },
   {
     id: 'publish-gate',
