@@ -239,7 +239,10 @@ export type ReplayIteration = {
    * Kept and the score improved on the best kept so far, or kept alone with no score. Null
    * when this row lacks a value it needs, such as a score or a readable kept, or when the log
    * has neither field. A row that wasn't kept is no progress whatever its score, and one no
-   * better than the best is no progress whether or not it was kept.
+   * better than the best is no progress whether or not it was kept. An earlier row with
+   * unknown progress might have raised the best, so a later row that beats the best known
+   * score is progress only if it also beats what that row might have scored, and is null
+   * otherwise.
    */
   progress: boolean | null;
   /**
@@ -263,6 +266,10 @@ export type Replay = {
   /** Plain statements about what the log lacked and how it was read. */
   notes: string[];
 };
+
+/** A row whose progress is unknown only because an earlier unknown row might have scored higher. */
+export const isShadowed = (step: ReplayIteration): boolean =>
+  step.progress === null && step.score !== null && step.kept !== null;
 
 const plural = (count: number, word: string): string =>
   `${count.toLocaleString('en-US')} ${word}${count === 1 ? '' : 's'}`;
@@ -336,7 +343,12 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
   // The last running total seen in each session, or in the whole log.
   const previousTotals = new Map<string, number>();
   let resets = 0;
+  // The best score definite progress reached, and the best it might be had every row with
+  // unknown progress counted. A missing score might have been anything.
   let best: number | null = null;
+  let possibleBest: number | null = null;
+  const better = (score: number, than: number | null): boolean =>
+    than === null || (lowerIsBetter ? score < than : score > than);
   let sinceProgress = 0;
   let previousFailure: string | null = null;
 
@@ -362,15 +374,33 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     const score = scores[index];
     const kept = hasKept ? keptValues[index] : true;
 
-    // An unknown row never moves the best score, so it can't be mistaken for one that did.
+    // An unknown row never moves the best known score, but it widens the best it might be.
     let progress: boolean | null;
     if (!hasProgress) {
       progress = null;
     } else if (hasScore) {
       const improved =
-        score === null ? null : best === null || (lowerIsBetter ? score < best : score > best);
+        score === null
+          ? null
+          : !better(score, best)
+            ? false
+            : better(score, possibleBest)
+              ? true
+              : null;
       progress = kept === false || improved === false ? false : kept && improved ? true : null;
-      if (progress) best = score;
+      if (progress) {
+        best = score;
+        possibleBest = score;
+      } else if (progress === null) {
+        possibleBest =
+          score === null
+            ? lowerIsBetter
+              ? Number.NEGATIVE_INFINITY
+              : Number.POSITIVE_INFINITY
+            : better(score, possibleBest)
+              ? score
+              : possibleBest;
+      }
     } else {
       progress = kept;
     }
@@ -395,13 +425,20 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     });
   });
 
+  // Rows with every value they need whose progress is still unknown, because of an earlier one.
+  const shadowed = hasProgress ? iterations.filter(isShadowed).length : 0;
   const unknownProgress = hasProgress
-    ? iterations.filter((step) => step.progress === null).length
+    ? iterations.filter((step) => step.progress === null).length - shadowed
     : 0;
   if (unknownProgress > 0) {
     const what = !hasScore ? 'kept value' : hasKept ? 'score or kept value' : 'score';
     notes.push(
       `${plural(unknownProgress, 'iteration')} ${unknownProgress === 1 ? 'has' : 'have'} no readable ${what}, so ${unknownProgress === 1 ? 'its' : 'their'} progress is unknown: ${unknownProgress === 1 ? 'it neither starts nor ends' : 'they neither start nor end'} a stall.`,
+    );
+  }
+  if (shadowed > 0) {
+    notes.push(
+      `${plural(shadowed, 'iteration')} beat the best known score after an iteration whose progress is unknown and that might have scored higher, so ${shadowed === 1 ? 'its' : 'their'} progress is unknown too.`,
     );
   }
   if (resets > 0) {
@@ -430,6 +467,11 @@ export type Counterfactual = {
   saved: number;
   /** Progress iterations after the stop that the governor would have cut off. */
   progressLost: number;
+  /**
+   * The most progress iterations it might have cut off, counting the rows after the stop whose
+   * progress is unknown. Above `progressLost`, the figure is uncertain.
+   */
+  progressLostAtMost: number;
   /**
    * Whether rows with unknown progress leave a stall detector's stop in doubt. When it is,
    * nothing is claimed as saved or lost, and the sentence says the stop only might happen.
@@ -521,6 +563,7 @@ export const counterfactual = (
       stopIteration: null,
       saved: 0,
       progressLost: 0,
+      progressLostAtMost: 0,
       uncertain: false,
       sentence: `${name} can’t be checked on this log, which has neither a score nor a kept field.`,
     };
@@ -537,15 +580,16 @@ export const counterfactual = (
         : replay.hasKept
           ? 'score or kept value'
           : 'score';
-      const unknown = (count: number, where: string): string =>
-        `${plural(count, 'iteration')}${where} ${count === 1 ? 'has' : 'have'} no readable ${what}`;
+      // A row that is unknown only because of an earlier one has every value it needs.
+      const unknown = (count: number, where: string, end = replay.iterations.length): string =>
+        `${plural(count, 'iteration')}${where} ${count === 1 ? 'has' : 'have'} ${replay.iterations.slice(0, end).some(isShadowed) ? 'unknown progress' : `no readable ${what}`}`;
       // The chart marks the iteration the sentence names, if it names one.
       const sooner = doubt.earliest !== null && doubt.earliest !== firstFire;
       const marked = sooner ? doubt.earliest : firstFire;
       const sentence = sooner
         ? `${name} might stop this as early as iteration ${replay.iterations[doubt.earliest as number].iteration}, but ${unknown(doubt.unknown, '')}, so it can’t tell.`
         : firstFire !== null
-          ? `${name} might stop this at iteration ${replay.iterations[firstFire].iteration}, but ${unknown(doubt.unknownBefore, ' up to there')}, so it can’t tell.`
+          ? `${name} might stop this at iteration ${replay.iterations[firstFire].iteration}, but ${unknown(doubt.unknownBefore, ' up to there', firstFire + 1)}, so it can’t tell.`
           : `${name} never fires on the iterations it can read, but ${unknown(doubt.unknown, '')}, so it might.`;
 
       return {
@@ -555,6 +599,7 @@ export const counterfactual = (
         stopIteration: marked === null ? null : replay.iterations[marked].iteration,
         saved: 0,
         progressLost: 0,
+        progressLostAtMost: 0,
         uncertain: true,
         sentence,
       };
@@ -571,6 +616,7 @@ export const counterfactual = (
       stopIteration: stoppedLast ? replay.iterations[stopIndex].iteration : null,
       saved: 0,
       progressLost: 0,
+      progressLostAtMost: 0,
       uncertain: false,
       sentence: stoppedLast
         ? `${name} stops this at iteration ${replay.iterations[stopIndex].iteration}, its last, and saves nothing.`
@@ -580,12 +626,22 @@ export const counterfactual = (
 
   const stop = replay.iterations[stopIndex];
   const saved = roundDollars(replay.total - stop.cumulative);
-  const progressLost = replay.iterations
-    .slice(stopIndex + 1)
-    .filter((step) => step.progress).length;
+  const after = replay.iterations.slice(stopIndex + 1);
+  const progressLost = after.filter((step) => step.progress).length;
+  // With neither a score nor a kept field, progress is unknown everywhere and goes unmentioned.
+  const progressLostAtMost = replay.hasProgress
+    ? after.filter((step) => step.progress !== false).length
+    : progressLost;
+  const unknownLost = progressLostAtMost - progressLost;
   const cost = `stops this at iteration ${stop.iteration} and saves ${format(saved)}`;
   const lost =
-    progressLost > 0 ? `, but it cuts off ${plural(progressLost, 'later progress iteration')}` : '';
+    unknownLost > 0 && progressLost === 0
+      ? `, and it might cut off up to ${plural(progressLostAtMost, 'later progress iteration')}, but ${unknownLost === 1 ? 'its' : 'their'} progress is unknown, so it can’t tell exactly`
+      : unknownLost > 0
+        ? `, but it cuts off at least ${plural(progressLost, 'later progress iteration')}, and up to ${progressLostAtMost.toLocaleString('en-US')}: ${unknownLost.toLocaleString('en-US')} more ${unknownLost === 1 ? 'has' : 'have'} unknown progress, so it can’t tell exactly`
+        : progressLost > 0
+          ? `, but it cuts off ${plural(progressLost, 'later progress iteration')}`
+          : '';
 
   return {
     governor,
@@ -594,6 +650,7 @@ export const counterfactual = (
     stopIteration: stop.iteration,
     saved,
     progressLost,
+    progressLostAtMost,
     uncertain: false,
     sentence: `${name} ${cost}${lost}.`,
   };

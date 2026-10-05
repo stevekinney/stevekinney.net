@@ -2,6 +2,7 @@
   import { formatCost } from '$lib/experiments/format';
 
   import { placeTooltip } from '$lib/experiments/tooltip-position';
+  import { isShadowed } from './replay';
   import type { Replay } from './replay';
 
   type Props = {
@@ -339,7 +340,7 @@
           ? replay.hasKept
             ? 'score or kept value'
             : 'score'
-          : 'kept value'}
+          : 'kept value'}{steps.some(isShadowed) ? ', or an improvement after one' : ''}
       </li>
     {/if}
     <li class="flex items-center gap-1.5">

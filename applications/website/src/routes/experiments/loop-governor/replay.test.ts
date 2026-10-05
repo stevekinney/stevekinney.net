@@ -399,22 +399,96 @@ describe('reading a log defensively', () => {
         formatCost,
       );
 
-      expect(result).toMatchObject({ uncertain: true, stopIteration: 5 });
+      // Every row after the missing score beats 10 but might not beat it, so all are unknown.
+      expect(result).toMatchObject({ uncertain: true, stopIteration: 3, saved: 0 });
       expect(result.sentence).toBe(
-        'A stall detector of 2 might stop this at iteration 5, but 1 iteration up to there has no readable score, so it can’t tell.',
+        'A stall detector of 2 might stop this as early as iteration 3, but 4 iterations have unknown progress, so it can’t tell.',
       );
     });
 
-    it('stays definite when the unknown rows come after the stop', () => {
+    it('keeps the stop definite, and progress lost uncertain, when unknown rows follow it', () => {
       const result = counterfactual(
         scored([1, 2, 2, 2, null, 5]),
         { kind: 'stall', m: 2 },
         formatCost,
       );
 
-      expect(result.uncertain).toBe(false);
+      // If iteration 5 scored 10, iteration 6 wasn’t progress, so neither row is definite.
+      expect(result).toMatchObject({ uncertain: false, progressLost: 0, progressLostAtMost: 2 });
       expect(result.sentence).toBe(
-        'A stall detector of 2 stops this at iteration 4 and saves $2.00, but it cuts off 1 later progress iteration.',
+        'A stall detector of 2 stops this at iteration 4 and saves $2.00, and it might cut off up to 2 later progress iterations, but their progress is unknown, so it can’t tell exactly.',
+      );
+    });
+
+    it('leaves an improvement unknown after a row whose score is missing', () => {
+      // If iteration 2 scored 20, neither 11 nor 12 improved on it.
+      const replay = scored([10, null, 11, 12]);
+
+      expect(replay.iterations.map((step) => step.progress)).toEqual([true, null, null, null]);
+      // The same holds when a lower score is better.
+      const errors = replayOfLines([12, null, 11, 10].map((count) => ({ errors: count })));
+      expect(errors.iterations.map((step) => step.progress)).toEqual([true, null, null, null]);
+      expect(replay.notes).toContain(
+        '2 iterations beat the best known score after an iteration whose progress is unknown and that might have scored higher, so their progress is unknown too.',
+      );
+
+      const result = counterfactual(replay, { kind: 'maxIterations', maximum: 1 }, formatCost);
+      expect(result).toMatchObject({ stopIteration: 1, progressLost: 0, progressLostAtMost: 3 });
+      expect(result.sentence).toBe(
+        'A maximum of 1 iterations stops this at iteration 1 and saves $3.00, and it might cut off up to 3 later progress iterations, but their progress is unknown, so it can’t tell exactly.',
+      );
+    });
+
+    it('settles an improvement once it beats the score an unknown row might have had', () => {
+      const replay = replayOfLines([
+        { score: 10, kept: true },
+        { score: 15, kept: 'maybe' },
+        { score: 12, kept: true },
+        { score: 20, kept: true },
+        { score: 18, kept: true },
+      ]);
+
+      // 12 beats 10 but not the 15 that might have been kept; 20 beats both.
+      expect(replay.iterations.map((step) => step.progress)).toEqual([
+        true,
+        null,
+        null,
+        true,
+        false,
+      ]);
+    });
+
+    it('says progress lost is uncertain for every governor when a later row is unknown', () => {
+      const replay = replayOfLines(
+        [true, true, 'maybe', true].map((kept) => ({ cost_usd: 1, kept })),
+      );
+
+      for (const governor of [
+        { kind: 'maxIterations', maximum: 1 },
+        { kind: 'budget', dollars: 1 },
+      ] as const) {
+        const result = counterfactual(replay, governor, formatCost);
+        expect(result).toMatchObject({ stopIteration: 1, progressLost: 2, progressLostAtMost: 3 });
+        expect(result.sentence).toContain(
+          'but it cuts off at least 2 later progress iterations, and up to 3: 1 more has unknown progress, so it can’t tell exactly.',
+        );
+      }
+    });
+
+    it('stays silent about progress lost when the log can’t show progress at all', () => {
+      const log = parseLogText(
+        [1, 2, 3].map((cost) => JSON.stringify({ cost_usd: cost })).join('\n'),
+      );
+      const replay = analyzeLog(log, {
+        mapping: guessMapping(log.keys),
+        lowerIsBetter: false,
+        costIsRunningTotal: false,
+      });
+      const result = counterfactual(replay, { kind: 'maxIterations', maximum: 1 }, formatCost);
+
+      expect(result).toMatchObject({ progressLost: 0, progressLostAtMost: 0 });
+      expect(result.sentence).toBe(
+        'A maximum of 1 iterations stops this at iteration 1 and saves $5.00.',
       );
     });
 
