@@ -122,6 +122,40 @@ describe('createTranscriptReader', () => {
     expect(transcript.files[0]).toMatchObject({ turns: 1, sidechainTurns: 1 });
   });
 
+  it('keeps subagent responses apart with the agent that wrote them, last line winning', () => {
+    const subagent = { isSidechain: true, agentId: 'agent-a' };
+    const transcript = read({
+      'session.jsonl': [response('main', '2026-10-04T10:00:00.000Z', usage({ cacheRead: 100 }))],
+      'session/subagents/agent-a.jsonl': [
+        response(
+          'first',
+          '2026-10-04T10:00:01.000Z',
+          usage({ cacheRead: 4_000, cacheWrite: 16_000, output: 3 }),
+          subagent,
+        ),
+        response(
+          'first',
+          '2026-10-04T10:00:02.000Z',
+          usage({ cacheRead: 4_000, cacheWrite: 16_000, output: 90 }),
+          subagent,
+        ),
+        response('second', '2026-10-04T10:00:03.000Z', usage({ cacheRead: 21_000 }), subagent),
+      ],
+      'old-session.jsonl': [
+        response('inline', '2026-10-04T09:00:00.000Z', usage({ input: 9_000 }), {
+          isSidechain: true,
+        }),
+      ],
+    });
+
+    expect(transcript.turns.map((turn) => turn.messageId)).toEqual(['main']);
+    expect(transcript.subagentTurns).toMatchObject([
+      { messageId: 'inline', agentId: null, contextTokens: 9_000, file: 'old-session.jsonl' },
+      { messageId: 'first', agentId: 'agent-a', contextTokens: 20_000, outputTokens: 90 },
+      { messageId: 'second', agentId: 'agent-a', contextTokens: 21_000 },
+    ]);
+  });
+
   it('records compactions and separates the turns on either side of one', () => {
     const transcript = read({
       'session.jsonl': [
