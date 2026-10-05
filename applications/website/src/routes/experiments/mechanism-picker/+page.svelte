@@ -283,9 +283,7 @@
         <div
           role="tablist"
           aria-label="Modes"
-          tabindex="-1"
           class="flex gap-1 rounded-lg bg-slate-100 p-1 dark:bg-slate-800"
-          onkeydown={onTabKey}
         >
           {#each modes as mode (mode)}
             <button
@@ -293,10 +291,11 @@
               role="tab"
               id="tab-{mode}"
               aria-selected={picker.mode === mode}
-              aria-controls="panel-{mode}"
+              aria-controls={picker.mode === mode ? `panel-${mode}` : undefined}
               tabindex={picker.mode === mode ? 0 : -1}
               disabled={!picker.ready}
               onclick={() => selectMode(mode)}
+              onkeydown={onTabKey}
               class="focus-visible:outline-primary-600 cursor-pointer rounded-md px-4 py-1.5 text-sm font-semibold text-slate-700 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-1 disabled:cursor-not-allowed aria-selected:bg-white aria-selected:text-slate-900 aria-selected:shadow-sm aria-selected:ring-1 aria-selected:ring-slate-300 dark:text-slate-300 dark:hover:bg-slate-700 dark:aria-selected:bg-slate-600 dark:aria-selected:text-white dark:aria-selected:ring-slate-500"
             >
               {modeLabels[mode]}
