@@ -215,6 +215,27 @@ test.describe('the other presets and edge cases', () => {
     await expect(node(page, 'environment')).toHaveAttribute('data-edge', 'cut');
   });
 
+  test('planning first and core.fsmonitor false are partial and leave their edges live', async ({
+    page,
+  }) => {
+    await openRevealed(page);
+    await preset(page, 'Default coding agent').click();
+    await control(page, 'plan-first').check();
+
+    await expect(page.locator('[data-control="plan-first"]')).toContainText('partial');
+    await expect(verdict(page)).toHaveAttribute('data-verdict', 'exploitable');
+    await expect(node(page, 'issues')).toHaveAttribute('data-edge', 'live');
+    await expect(node(page, 'issues')).toContainText(
+      'Partial: fixes the actions, not their arguments.',
+    );
+
+    await control(page, 'fsmonitor-off').check();
+    await page.getByRole('button', { name: 'Show me: Deferred execution' }).click();
+    await expect(page.locator('[data-control="fsmonitor-off"]')).toContainText('partial');
+    await expect(node(page, 'deferred-execution')).toHaveAttribute('data-edge', 'live');
+    await expect(node(page, 'deferred-execution')).toContainText('Partial: core.fsmonitor only.');
+  });
+
   test('no sources is not exploitable, and unusual', async ({ page }) => {
     await openRevealed(page);
     for (const id of [
