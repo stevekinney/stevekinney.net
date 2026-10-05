@@ -211,7 +211,8 @@ export const parseAgentFile = (path: string, text: string): AgentDefinitionFile 
 /**
  * Returns a copy of an agent file with its `model:` line set to `model`. Only
  * that line changes: an existing one is rewritten in place and a missing one
- * is added just before the closing fence. Returns `null` when the file has no
+ * is added just before the closing fence. Any further `model:` lines are removed, so exactly
+ * one remains. Returns `null` when the file has no
  * well-formed frontmatter to edit.
  */
 export const setModelLine = (text: string, model: string): string | null => {
@@ -220,15 +221,17 @@ export const setModelLine = (text: string, model: string): string | null => {
   const frontmatter = findFrontmatter(lines);
   if (!frontmatter) return null;
 
-  const modelIndex = lines.findIndex(
-    (line, index) =>
-      index > frontmatter.start && index < frontmatter.end && /^model\s*:/.test(line),
+  const modelIndexes = lines.flatMap((line, index) =>
+    index > frontmatter.start && index < frontmatter.end && /^model\s*:/.test(line) ? [index] : [],
   );
 
-  if (modelIndex === -1) {
+  if (modelIndexes.length === 0) {
     lines.splice(frontmatter.end, 0, `model: ${model}`);
   } else {
-    lines[modelIndex] = `model: ${model}`;
+    lines[modelIndexes[0]] = `model: ${model}`;
+    // A file that declares `model:` twice is warned about, but the patch has to leave one, or the
+    // "fixed" file would still carry the conflicting line.
+    for (const index of modelIndexes.slice(1).reverse()) lines.splice(index, 1);
   }
 
   return lines.join(newline);

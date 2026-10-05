@@ -254,15 +254,19 @@ const buildDefinitions = (
     }
   }
 
-  // Pasted agent lines only name a file and its model, so an uploaded copy of the same name wins.
-  const uploadedNames = new Set(definitions.map((definition) => definition.name));
+  // Pasted agent lines only name a file and its model, so an uploaded copy of the same name and
+  // scope is the same file and wins. A pasted line from another scope is a different definition,
+  // and precedence decides between them.
+  const uploadedKeys = new Set(
+    definitions.map((definition) => `${definition.scope}:${definition.name}`),
+  );
   const pasted = parsePastedOutput(input.pastedText);
 
   const addPasted = (agent: PastedAgent): void => {
-    if (uploadedNames.has(agent.name)) return;
+    const scope = guessAgentScope(agent.path);
+    if (uploadedKeys.has(`${scope}:${agent.name}`)) return;
 
     const model = parseModelSetting(agent.model);
-    const scope = guessAgentScope(agent.path);
 
     definitions.push({
       id: `paste:${agent.name}:${agent.model}`,
@@ -325,7 +329,12 @@ export const analyzeFleet = (input: FleetInput): FleetAnalysis => {
     input.settingsFiles.length > 0 ||
     input.shellEnvironmentText.trim() !== '' ||
     input.pastedText.trim() !== '';
-  const hasInput = gaveEnvironment || definitions.length > 0 || input.versionText.trim() !== '';
+  // Text for `--agents` counts even when it doesn't parse, so its error reaches the page.
+  const hasInput =
+    gaveEnvironment ||
+    definitions.length > 0 ||
+    input.versionText.trim() !== '' ||
+    input.cliAgentsText.trim() !== '';
 
   // Environment: the shell overrides settings files, and a pasted `=` line is the shell too.
   const pastedShell = (value: typeof pasted.force) => (value?.origin === 'shell' ? value : null);

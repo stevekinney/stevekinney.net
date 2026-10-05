@@ -7,6 +7,16 @@ import { decodeState, encodeState } from './share-link';
 const lean = findPreset('lean')?.scenario as Scenario;
 const heavy = findPreset('mcp-heavy')?.scenario as Scenario;
 
+describe('a shared preset', () => {
+  it('is kept only while the scenario still matches it', () => {
+    const matching = encodeState({ scenario: lean, presetId: 'lean', pinned: null });
+    const mismatched = encodeState({ scenario: heavy, presetId: 'lean', pinned: null });
+
+    expect(decodeState(matching)?.presetId).toBe('lean');
+    expect(decodeState(mismatched)).toEqual({ scenario: heavy, presetId: null, pinned: null });
+  });
+});
+
 describe('share links', () => {
   it('round-trips the capacity, every term, the preset, and the pinned scenario', () => {
     const encoded = encodeState({ scenario: lean, presetId: 'lean', pinned: heavy });

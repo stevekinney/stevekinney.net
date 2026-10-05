@@ -1,4 +1,4 @@
-import { evaluateState, MAX_TOKENS, normalizeState } from './calculator-state';
+import { evaluateState, MAX_RATIO, MAX_TOKENS, normalizeState } from './calculator-state';
 import type { CalculatorState } from './calculator-state';
 import type { ChangeEvaluation } from './calculate';
 import type { PricingTable } from './pricing';
@@ -52,7 +52,10 @@ const readState = (value: unknown): CalculatorState | null => {
     contextTokens,
     remainingOutput,
     ratioOverride:
-      typeof ratioOverride === 'number' && Number.isFinite(ratioOverride) && ratioOverride >= 0
+      typeof ratioOverride === 'number' &&
+      Number.isFinite(ratioOverride) &&
+      ratioOverride >= 0 &&
+      ratioOverride <= MAX_RATIO
         ? ratioOverride
         : null,
   };

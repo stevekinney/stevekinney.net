@@ -7,6 +7,7 @@
   import { fieldClasses, hintClasses } from './field-styles';
   import NumberField from './number-field.svelte';
   import {
+    MAX_EFFORT_FACTOR,
     MAX_MODELS,
     defaultPricing,
     isCustomPricing,
@@ -246,6 +247,7 @@
                   label="{effort.label} effort factor"
                   value={effort.factor}
                   allowZero={false}
+                  max={MAX_EFFORT_FACTOR}
                   onChange={(factor) => editEffort(effort.id, { factor })}
                 />
               </td>

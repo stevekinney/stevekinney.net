@@ -90,8 +90,18 @@ type JsonRecord = Record<string, unknown>;
 const isRecord = (value: unknown): value is JsonRecord =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
-const readPrice = (value: unknown): number | null =>
-  typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
+/** The most a model can cost per million tokens. Larger values overflow the cost arithmetic. */
+export const MAX_PRICE = 100_000;
+
+/** The most an effort level can scale output volume. */
+export const MAX_EFFORT_FACTOR = 100;
+
+const readNumber = (value: unknown, maximum: number): number | null =>
+  typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= maximum
+    ? value
+    : null;
+
+const readPrice = (value: unknown): number | null => readNumber(value, MAX_PRICE);
 
 export type PricingParseResult =
   { ok: true; table: PricingTable; warnings: string[] } | { ok: false; error: string };
@@ -146,10 +156,10 @@ export const parsePricingTable = (value: unknown): PricingParseResult => {
     const imported = importedEfforts.find((entry) => entry.id === standard.id);
     if (!imported) return { ...standard };
 
-    const factor = readPrice(imported.factor);
+    const factor = readNumber(imported.factor, MAX_EFFORT_FACTOR);
     if (factor === null || factor === 0) {
       warnings.push(
-        `The factor for ${standard.label} effort wasn’t a positive number, so the default stays.`,
+        `The factor for ${standard.label} effort wasn’t a positive number up to ${MAX_EFFORT_FACTOR}, so the default stays.`,
       );
 
       return { ...standard };

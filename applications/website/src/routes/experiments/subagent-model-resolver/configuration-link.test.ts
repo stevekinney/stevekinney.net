@@ -44,6 +44,18 @@ describe('configuration links', () => {
     expect(decodeConfiguration(encodeConfiguration(custom), state)).toEqual(custom);
   });
 
+  it('restores a range where only one end differs from the default', () => {
+    const lastOnly: SharedState = { ...state, range: { first: defaultRange.first, last: v(300) } };
+    const firstOnly: SharedState = { ...state, range: { first: v(200), last: defaultRange.last } };
+
+    expect(decodeConfiguration(encodeConfiguration(lastOnly), state)?.range).toEqual(
+      lastOnly.range,
+    );
+    expect(decodeConfiguration(encodeConfiguration(firstOnly), state)?.range).toEqual(
+      firstOnly.range,
+    );
+  });
+
   it('keeps only the resolver configuration in the link', () => {
     const encoded = encodeConfiguration(state);
 

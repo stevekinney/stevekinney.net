@@ -63,8 +63,11 @@ export const decodeConfiguration = (query: string, fallback: SharedState): Share
   const provider = parameters.get('provider');
   const main = parameters.get('main');
   const version = parseVersion(parameters.get('version') ?? '');
-  const first = parseVersion(parameters.get('from') ?? '');
-  const last = parseVersion(parameters.get('to') ?? '');
+  // The encoder leaves out an endpoint that matches the default, so an absent one means the default.
+  const fromText = parameters.get('from');
+  const toText = parameters.get('to');
+  const first = fromText === null ? fallback.range.first : parseVersion(fromText);
+  const last = toText === null ? fallback.range.last : parseVersion(toText);
   const range: VersionRange =
     first && last && isValidRange({ first, last }) ? { first, last } : fallback.range;
 

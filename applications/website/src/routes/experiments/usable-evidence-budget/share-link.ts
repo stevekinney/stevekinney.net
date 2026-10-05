@@ -1,4 +1,4 @@
-import { maximumTokenCount, termKeys } from './budget';
+import { maximumTokenCount, scenariosEqual, termKeys } from './budget';
 import type { Scenario } from './budget';
 import { findPreset } from './presets';
 
@@ -68,10 +68,13 @@ export const decodeState = (query: string): SharedState | null => {
     scenarioKeys.map((key, index) => [key, counts[index]]),
   ) as Scenario;
   const presetId = parameters.get('preset');
+  const preset = findPreset(presetId);
 
   return {
     scenario,
-    presetId: findPreset(presetId) ? presetId : null,
+    // A link is only "that preset" while its numbers still are: it could carry unrelated numbers,
+    // or predate a change to the preset.
+    presetId: preset && scenariosEqual(preset.scenario, scenario) ? presetId : null,
     pinned: decodeScenario(parameters.get('a')),
   };
 };

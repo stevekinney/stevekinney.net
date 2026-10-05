@@ -312,6 +312,20 @@ describe('filling from a readout', () => {
     expect(discardReadout(refilled).scenario.history).toBe(50_000);
   });
 
+  it('keeps the marks of rows a replacement readout leaves out, so they stay discardable', () => {
+    const first = fillFromReadout(initialState(), applied);
+    const partial = applyReadout(
+      parseReadout('System prompt: 20k tokens'),
+      defaultMapping,
+      1_000_000,
+    );
+    const replaced = fillFromReadout(first, partial);
+
+    expect(replaced.scenario.instructions).toBe(20_000);
+    expect(replaced.fromReadout).toContain('history');
+    expect(discardReadout(replaced).scenario).toEqual(initialState().scenario);
+  });
+
   it('keeps the earlier marks when a refill adds a term', () => {
     const partial = applyReadout(
       parseReadout('System prompt: 18k tokens'),

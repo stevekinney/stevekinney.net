@@ -125,6 +125,14 @@ describe('acceptance 9: uploads', () => {
     expect(analysis.summary.moved + analysis.summary.unchanged).toBe(analysis.agentCount);
   });
 
+  it('treats malformed --agents text as input, so its warning can be shown', () => {
+    const analysis = analyzeFleet(input({ cliAgentsText: '[1]' }));
+
+    expect(analysis.hasInput).toBe(true);
+    expect(analysis.warnings.length).toBeGreaterThan(0);
+    expect(analyzeFleet(input({ cliAgentsText: '   ' })).hasInput).toBe(false);
+  });
+
   it('lists an agent with no model line, declaring "not set"', () => {
     const analysis = analyzeFleet(
       input({ agentFiles: [agentFile('quiet', 'repo/.claude/agents/quiet.md', ['name: quiet'])] }),
@@ -354,7 +362,27 @@ describe('where each value comes from', () => {
     ).toBe(true);
   });
 
-  it('reads agents from pasted output unless an uploaded file has the same name', () => {
+  it('keeps a pasted definition from another scope so precedence can decide', () => {
+    const analysis = analyzeFleet(
+      input({
+        pastedText: '/etc/claude-code/.claude/agents/reviewer.md:3:model: haiku',
+        agentFiles: [
+          agentFile('r', 'repo/.claude/agents/reviewer.md', ['name: reviewer', 'model: opus']),
+        ],
+      }),
+    );
+    const rows = row(analysis, 'reviewer');
+
+    expect(rows).toHaveLength(2);
+    expect(rows.find((entry) => entry.definition?.source === 'paste')?.status.kind).toBe(
+      'effective',
+    );
+    expect(rows.find((entry) => entry.definition?.source === 'upload')?.status.kind).toBe(
+      'shadowed',
+    );
+  });
+
+  it('reads agents from pasted output unless an uploaded file has the same name and scope', () => {
     const pasted = analyzeFleet(
       input({ pastedText: '/Users/me/.claude/agents/reviewer.md:3:model: haiku' }),
     );
@@ -362,7 +390,7 @@ describe('where each value comes from', () => {
       input({
         pastedText: '/Users/me/.claude/agents/reviewer.md:3:model: haiku',
         agentFiles: [
-          agentFile('r', 'repo/.claude/agents/reviewer.md', ['name: reviewer', 'model: opus']),
+          agentFile('r', 'home/.claude/agents/reviewer.md', ['name: reviewer', 'model: opus']),
         ],
       }),
     );

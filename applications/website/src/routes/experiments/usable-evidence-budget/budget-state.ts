@@ -187,7 +187,8 @@ export const fillFromReadout = (
     marginShare = marginShareOf(scenario.capacity, scenario.margin);
   }
 
-  const marks = [...new Set([...(refill ? state.fromReadout : []), ...filled])];
+  // A row the new readout leaves out keeps its number, so it keeps its mark and stays discardable.
+  const marks = [...new Set([...state.fromReadout, ...filled])];
 
   return {
     ...state,
@@ -198,7 +199,7 @@ export const fillFromReadout = (
       ? isCustomCapacity(scenario.capacity)
       : state.customCapacity,
     fromReadout: marks,
-    readoutKeys: [...new Set([...(refill ? state.readoutKeys : []), ...filled])],
+    readoutKeys: [...new Set([...state.readoutKeys, ...filled])],
     beforeReadout: filled.length > 0 || refill ? before : state.beforeReadout,
     presetBeforeReadout: filled.length > 0 || refill ? presetBefore : state.presetBeforeReadout,
   };

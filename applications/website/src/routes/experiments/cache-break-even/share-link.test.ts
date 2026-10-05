@@ -4,6 +4,16 @@ import { defaultState } from './calculator-state';
 import { defaultPricing } from './pricing';
 import { decodeConfiguration, encodeConfiguration } from './share-link';
 
+describe('an enormous ratio in a link', () => {
+  it('is ignored instead of overflowing the cost arithmetic', () => {
+    const decoded = decodeConfiguration(
+      `#from=opus-5&to=sonnet-5&n=1000&ratio=1${'0'.repeat(307)}`,
+    );
+
+    expect(decoded?.state.ratioOverride).toBeNull();
+  });
+});
+
 describe('share links', () => {
   it('round-trips the full configuration', () => {
     const state = {

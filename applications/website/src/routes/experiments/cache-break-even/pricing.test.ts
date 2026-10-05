@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import {
   defaultPricing,
   isCustomPricing,
+  MAX_EFFORT_FACTOR,
+  MAX_PRICE,
   modelOptionLabel,
   parsePricingTable,
   serializePricingTable,
@@ -84,6 +86,37 @@ describe('parsePricingTable', () => {
     const result = parsePricingTable(JSON.parse(serializePricingTable(defaultPricing)));
 
     expect(result).toEqual({ ok: true, table: defaultPricing, warnings: [] });
+  });
+
+  it('skips a model priced past what the arithmetic can hold', () => {
+    const result = parsePricingTable({
+      models: [
+        { name: 'Fine', input: MAX_PRICE, output: 1 },
+        { name: 'Huge', input: 1e308, output: 1 },
+        { name: 'Huge output', input: 1, output: MAX_PRICE + 1 },
+      ],
+    });
+
+    expect(result.ok && result.table.models.map((model) => model.name)).toEqual(['Fine']);
+    expect(result.ok && result.warnings).toHaveLength(2);
+  });
+
+  it('keeps the default for an effort factor that is too large', () => {
+    const result = parsePricingTable({
+      models: [{ name: 'Good', input: 1, output: 2 }],
+      efforts: [
+        { id: 'high', factor: 1e300 },
+        { id: 'low', factor: MAX_EFFORT_FACTOR },
+      ],
+    });
+
+    expect(result.ok && result.table.efforts.find((effort) => effort.id === 'high')?.factor).toBe(
+      1,
+    );
+    expect(result.ok && result.table.efforts.find((effort) => effort.id === 'low')?.factor).toBe(
+      MAX_EFFORT_FACTOR,
+    );
+    expect(result.ok && result.warnings).toHaveLength(1);
   });
 
   it('skips unusable models with a warning and keeps the rest', () => {

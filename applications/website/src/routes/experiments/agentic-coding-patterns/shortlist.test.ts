@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   bundledLibrary,
+  folderLibraryKey,
   isStarred,
   itemsIn,
   readShortlist,
@@ -48,6 +49,25 @@ describe('shortlist edits', () => {
     expect(isStarred(added, 'a')).toBe(true);
     expect(setNote(added, 'a', 'hello')).toEqual([{ id: 'a', note: 'hello' }]);
     expect(toggleStar(added, 'a')).toEqual([]);
+  });
+});
+
+describe('folderLibraryKey', () => {
+  const notes = [
+    { path: 'a.md', text: 'one' },
+    { path: 'b.md', text: 'three' },
+  ];
+
+  it('is the same for the same notes in any order', () => {
+    expect(folderLibraryKey('notes', notes)).toBe(folderLibraryKey('notes', [...notes].reverse()));
+  });
+
+  it('differs between folders that share a name, and between unnamed selections', () => {
+    const other = [{ path: 'c.md', text: 'one' }];
+
+    expect(folderLibraryKey('notes', notes)).not.toBe(folderLibraryKey('notes', other));
+    expect(folderLibraryKey(null, notes)).not.toBe(folderLibraryKey(null, other));
+    expect(folderLibraryKey('notes', notes)).not.toBe(folderLibraryKey('journal', notes));
   });
 });
 

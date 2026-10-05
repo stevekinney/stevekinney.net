@@ -40,14 +40,17 @@
   }: Props = $props();
 
   let progress = $state<{ current: number; total: number } | null>(null);
+  // Set from the drop, before a dropped folder has been walked, so a second drop can't start.
+  let loading = $state(false);
   let problem = $state<string | null>(null);
   let status = $state<string | null>(null);
 
   const isTranscript = (path: string): boolean => path.toLowerCase().endsWith('.jsonl');
 
   const load = async (source: Promise<SourceFile[]>): Promise<void> => {
-    if (progress) return;
+    if (loading) return;
 
+    loading = true;
     problem = null;
     status = null;
 
@@ -76,6 +79,7 @@
       problem = 'Those files couldn’t be read. Try choosing them again.';
     } finally {
       progress = null;
+      loading = false;
     }
   };
 
@@ -98,8 +102,12 @@
     accept=".jsonl"
     folders
     keepFile={isTranscript}
-    busy={progress !== null}
-    progress={progress ? `Reading file ${progress.current} of ${progress.total}…` : null}
+    busy={loading}
+    progress={progress
+      ? `Reading file ${progress.current} of ${progress.total}…`
+      : loading
+        ? 'Collecting files…'
+        : null}
     {status}
     onFiles={load}
   >
