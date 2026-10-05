@@ -195,6 +195,13 @@ test.describe('presets', () => {
     await expect(wallClock(page)).toContainText('73.5 min vs 60 solo (1.23× slower)');
     await expect(cost(page)).toHaveAttribute('data-warning', 'true');
     await expect(cost(page)).toContainText('Warning: slower than one session');
+    // The tile itself turns amber, not just its text.
+    const [warningBorder, plainBorder] = await Promise.all(
+      [cost(page), tokens(page)].map((tile) =>
+        tile.evaluate((element) => getComputedStyle(element).borderTopColor),
+      ),
+    );
+    expect(warningBorder).not.toBe(plainBorder);
     await expect(
       page.getByRole('checkbox', { name: /Integration costs exceed parallel savings/ }),
     ).toBeChecked();

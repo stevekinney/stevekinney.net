@@ -26,13 +26,18 @@
   const team = $derived(inputs.mode !== 'subagents');
   const solo = $derived(evaluation.workers === 1);
 
-  const tileClasses =
-    'min-w-0 rounded-lg border bg-white p-4 dark:bg-slate-900 border-slate-200 dark:border-slate-700';
+  // Each state lists its own colors. Appending warning colors to the plain ones
+  // leaves the winner to the stylesheet's order, and the plain ones won.
+  const tileBaseClasses = 'min-w-0 rounded-lg border p-4';
+  const plainTileClasses = `${tileBaseClasses} border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900`;
+  const warningTileClasses = `${tileBaseClasses} border-amber-500 bg-amber-50 dark:border-amber-500 dark:bg-amber-950/40`;
   const labelClasses = 'text-sm font-semibold text-slate-600 dark:text-slate-300';
   const valueClasses =
     'mt-1 text-2xl font-bold tracking-tight text-slate-900 tabular-nums dark:text-white';
   // The cost reason names the model, which an imported table or a shared link can set.
-  const reasonClasses = 'mt-2 text-sm text-slate-600 [overflow-wrap:anywhere] dark:text-slate-300';
+  const reasonBaseClasses = 'mt-2 text-sm [overflow-wrap:anywhere]';
+  const reasonClasses = `${reasonBaseClasses} text-slate-600 dark:text-slate-300`;
+  const warningReasonClasses = `${reasonBaseClasses} font-semibold text-amber-900 dark:text-amber-200`;
 
   const wallClockReason = $derived.by(() => {
     if (solo) return 'One worker is the solo session: nothing runs in parallel or gets integrated.';
@@ -75,7 +80,11 @@
 </script>
 
 <div class="grid gap-4 md:grid-cols-3" data-testid="result-tiles">
-  <section aria-labelledby="wall-clock-label" class={tileClasses} data-testid="wall-clock-tile">
+  <section
+    aria-labelledby="wall-clock-label"
+    class={plainTileClasses}
+    data-testid="wall-clock-tile"
+  >
     <h3 id="wall-clock-label" class={labelClasses}>
       Wall-clock{team ? ' (assumed similar)' : ''}
     </h3>
@@ -83,7 +92,7 @@
     <p class={reasonClasses}>{wallClockReason}</p>
   </section>
 
-  <section aria-labelledby="tokens-label" class={tileClasses} data-testid="tokens-tile">
+  <section aria-labelledby="tokens-label" class={plainTileClasses} data-testid="tokens-tile">
     <h3 id="tokens-label" class={labelClasses}>Tokens</h3>
     <p class={valueClasses}>{tokensText(evaluation)}</p>
     <p class={reasonClasses}>{tokensReason}</p>
@@ -91,9 +100,7 @@
 
   <section
     aria-labelledby="cost-label"
-    class="{tileClasses} {evaluation.warning
-      ? 'border-amber-500 bg-amber-50 dark:border-amber-500 dark:bg-amber-950/40'
-      : ''}"
+    class={evaluation.warning ? warningTileClasses : plainTileClasses}
     data-testid="cost-tile"
     data-warning={evaluation.warning || undefined}
   >
@@ -104,12 +111,6 @@
       Cost
     </h3>
     <p class={valueClasses}>{costText(evaluation)}</p>
-    <p
-      class="{reasonClasses} {evaluation.warning
-        ? 'font-semibold text-amber-900 dark:text-amber-200'
-        : ''}"
-    >
-      {costReason}
-    </p>
+    <p class={evaluation.warning ? warningReasonClasses : reasonClasses}>{costReason}</p>
   </section>
 </div>
