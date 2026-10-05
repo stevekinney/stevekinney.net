@@ -548,3 +548,17 @@ test.describe('at phone width', () => {
     });
   }
 });
+
+test.describe('keyboard focus', () => {
+  test('moves focus to the answer after a reveal', async ({ page }) => {
+    await open(page);
+    await reveal(page);
+    await expect(page.getByRole('group', { name: 'Your guess and the answer' })).toBeFocused();
+  });
+
+  test('moves focus to the results after a skip', async ({ page }) => {
+    await open(page);
+    await showResults(page);
+    await expect(page.getByRole('group', { name: 'Results', exact: true })).toBeFocused();
+  });
+});

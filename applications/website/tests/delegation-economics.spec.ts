@@ -551,3 +551,20 @@ for (const colorScheme of ['light', 'dark'] as const) {
     expect(await horizontalOverflow(page)).toBe(0);
   });
 }
+
+test.describe('keyboard focus', () => {
+  test('moves focus to the answer after a reveal or a skip, and back to the guess after', async ({
+    page,
+  }) => {
+    await open(page);
+    await page.getByLabel('Your guess for the speedup').fill('3x');
+    await page.getByRole('button', { name: 'Reveal the answer' }).click();
+    await expect(page.getByRole('region', { name: 'Your prediction' })).toBeFocused();
+
+    await page.getByRole('button', { name: 'Predict again' }).click();
+    await expect(page.getByLabel('Your guess for the speedup')).toBeFocused();
+
+    await skipPrediction(page);
+    await expect(page.getByRole('region', { name: 'Your prediction' })).toBeFocused();
+  });
+});

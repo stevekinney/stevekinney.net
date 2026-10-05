@@ -79,6 +79,21 @@ for (const slug of slugs) {
       expect(errors).toEqual([]);
     });
 
+    test('lets the keyboard reach every scrolling region it shows', async ({ page }) => {
+      await openExperiment(page, path);
+
+      const unreachable = await page.evaluate(() =>
+        [...document.querySelectorAll('main [role="region"]')]
+          .filter((region) => {
+            const style = getComputedStyle(region);
+            const scrolls = /auto|scroll/.test(style.overflowX + style.overflowY);
+            return scrolls && region.getAttribute('tabindex') !== '0';
+          })
+          .map((region) => region.getAttribute('aria-label') ?? region.id),
+      );
+      expect(unreachable).toEqual([]);
+    });
+
     for (const colorScheme of ['light', 'dark'] as const) {
       test(`never scrolls sideways at 360 pixels wide in ${colorScheme} mode`, async ({ page }) => {
         await page.setViewportSize({ width: 360, height: 800 });

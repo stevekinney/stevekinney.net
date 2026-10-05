@@ -596,3 +596,12 @@ test.describe('at phone width', () => {
     });
   }
 });
+
+test.describe('keyboard focus', () => {
+  test('moves focus to the results after skipping the prediction', async ({ page }) => {
+    await openResults(page);
+    await expect(page.getByRole('region', { name: 'Can the data tell them apart?' })).toBeFocused();
+    await expect(page.getByTestId('outcome-table')).toBeAttached();
+    await expect(page.locator('[aria-label="Outcome table"]')).toHaveAttribute('tabindex', '0');
+  });
+});

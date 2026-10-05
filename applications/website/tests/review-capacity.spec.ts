@@ -412,3 +412,52 @@ test.describe('at phone width', () => {
     });
   }
 });
+
+test.describe('keyboard focus', () => {
+  test('moves focus to the answer after a reveal or a skip', async ({ page }) => {
+    await openExperiment(page, path);
+    await page.getByLabel('Your guess, in agents').fill('4');
+    await page.getByRole('button', { name: 'Reveal' }).click();
+    await expect(page.getByRole('group', { name: 'Your guess and the answer' })).toBeFocused();
+
+    await openExperiment(page, path);
+    await page.getByRole('button', { name: 'Skip the guess' }).click();
+    await expect(page.getByRole('group', { name: 'Your guess and the answer' })).toBeFocused();
+  });
+
+  test('keeps the game’s shortcuts on the card and announces each prompt without the seed', async ({
+    page,
+  }) => {
+    await openExperiment(page, path);
+    await page.getByLabel('Seed', { exact: true }).fill('1');
+    await page.getByRole('button', { name: 'Start the round' }).click();
+
+    const card = page.getByTestId('approval-card');
+    const announcement = page.getByTestId('card-announcement');
+    await expect(card).toBeFocused();
+    const request = ((await page.getByTestId('card-request').textContent()) ?? '').trim();
+    await expect(announcement).toHaveText(/^Prompt 1 of 20: \S+, /);
+    await expect(announcement).toContainText(request);
+    await expect(announcement).not.toContainText('seed');
+
+    // With focus outside the card, A does nothing.
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+    await page.keyboard.press('a');
+    await card.focus();
+    await page.keyboard.press('a');
+    await expect(card).toContainText('Prompt 2 of 20');
+    await expect(announcement).toHaveText(/^Prompt 2 of 20: /);
+
+    for (let index = 2; index <= 20; index += 1) {
+      await expect(card).toContainText(`Prompt ${index} of 20`);
+      await page.keyboard.press('a');
+    }
+
+    await expect(page.getByTestId('game-results')).toBeFocused();
+    await expect(page.getByRole('group', { name: /^You allowed it\./ })).toBeFocused();
+    await expect(page.locator('[aria-label="Round table"]')).toHaveAttribute('tabindex', '0');
+
+    await page.getByRole('button', { name: 'Play seed 1 again' }).click();
+    await expect(page.getByRole('button', { name: 'Start the round' })).toBeFocused();
+  });
+});

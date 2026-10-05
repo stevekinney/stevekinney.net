@@ -404,3 +404,19 @@ test.describe('at phone width', () => {
     expect(await horizontalOverflow(page)).toBe(0);
   });
 });
+
+test.describe('keyboard focus', () => {
+  test('moves focus to the measured share after a reveal', async ({ page }) => {
+    await openExperiment(page, path);
+    await choosePreset(page, 'A floor that got fixed');
+    await reveal(page);
+    await expect(
+      page.getByRole('group', { name: 'Your guess and the measured share' }),
+    ).toBeFocused();
+    await expect(page.getByTestId('clusters-table')).toBeVisible();
+    await expect(page.locator('[aria-label="Top clusters table"]')).toHaveAttribute(
+      'tabindex',
+      '0',
+    );
+  });
+});

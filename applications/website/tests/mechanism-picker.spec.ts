@@ -584,3 +584,55 @@ test.describe('at phone width', () => {
     expect(await horizontalOverflow(page)).toBe(0);
   });
 });
+
+test.describe('keyboard focus', () => {
+  test('moves focus to the feedback, and back to the choices on Try it again', async ({ page }) => {
+    await openPicker(page);
+    await page.getByRole('radio', { name: 'Hook', exact: true }).check();
+    await page.getByRole('button', { name: 'Check my answer' }).click();
+    await expect(page.getByRole('group', { name: 'The answer' })).toBeFocused();
+
+    await page.getByRole('button', { name: 'Try it again' }).click();
+    await expect(page.getByTestId('predict-card').getByRole('radio').first()).toBeFocused();
+  });
+
+  test('moves focus to the review after the last card, and to the card after Retry and Start over', async ({
+    page,
+  }) => {
+    const order = startGame(outlineScenarios, 1234).order;
+    await openPicker(page, '#mode=sort&seed=1234');
+
+    for (let index = 0; index < order.length; index += 1) {
+      await page
+        .locator('[data-target]')
+        .and(page.getByRole('button', { name: 'Prompt', exact: true }))
+        .click();
+      await page.getByRole('button', { name: /^(Next card|See the review)$/ }).click();
+    }
+    await expect(page.locator('#review-heading')).toBeFocused();
+
+    await page.getByRole('button', { name: /^Retry the \d+ missed cards$/ }).click();
+    await expect(page.locator('#scenario-card-text')).toBeFocused();
+
+    await page.getByRole('button', { name: 'Start over' }).click();
+    await expect(page.locator('#scenario-card-text')).toBeFocused();
+  });
+
+  test('points only the selected tab at a panel, and the tab list takes no focus', async ({
+    page,
+  }) => {
+    await openPicker(page);
+
+    const controls = await tab(page, 'Map').getAttribute('aria-controls');
+    expect(controls).toBeTruthy();
+    await expect(page.locator(`#${controls}`)).toHaveAttribute('role', 'tabpanel');
+    await expect(tab(page, 'Sort')).not.toHaveAttribute('aria-controls');
+    await expect(tab(page, 'Lint')).not.toHaveAttribute('aria-controls');
+    await expect(page.getByRole('tablist', { name: 'Modes' })).not.toHaveAttribute('tabindex');
+
+    await tab(page, 'Map').focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(tab(page, 'Sort')).toBeFocused();
+    await expect(tab(page, 'Sort')).toHaveAttribute('aria-selected', 'true');
+  });
+});
