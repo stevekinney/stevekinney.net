@@ -1,5 +1,5 @@
-import modelPricingData from '../model-calculator/model-pricing.toml';
-import { parseModelPricingCatalog } from '../model-calculator/model-pricing-schema';
+import modelPricingData from '$lib/experiments/model-pricing.toml';
+import { parseModelPricingCatalog } from '$lib/experiments/model-pricing-schema';
 import { experiment } from './experiment';
 import { toWorkerPricing } from './pricing';
 import type { PageServerLoad } from './$types';

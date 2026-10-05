@@ -1,7 +1,7 @@
 /**
  * Client-safe pricing types and helpers. The zod schema that validates
  * `model-pricing.toml` lives in `model-pricing-schema.ts` and only runs on the
- * server, so zod never reaches this route's client bundle.
+ * server, so zod never reaches a client bundle.
  */
 
 /** The per-million-token prices that a cost calculation needs. */

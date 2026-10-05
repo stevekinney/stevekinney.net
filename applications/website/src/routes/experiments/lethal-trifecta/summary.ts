@@ -4,7 +4,7 @@ import { verdictSentence } from './verdict';
 
 /** A Markdown report: the verdict, the path, the controls in place by kind, and the residual risks. */
 export const summaryToMarkdown = (state: TrifectaState, evaluation: Evaluation): string => {
-  const lines = ['# Cut a Leg', '', '## Verdict', '', verdictSentence(evaluation), ''];
+  const lines = ['# Lethal Trifecta', '', '## Verdict', '', verdictSentence(evaluation), ''];
 
   if (evaluation.path) {
     lines.push('## Path', '', evaluation.path.sentence, '');
@@ -46,7 +46,7 @@ export const summaryToMarkdown = (state: TrifectaState, evaluation: Evaluation):
   }
 
   lines.push(
-    'Made with the Cut a Leg tool. The trifecta is Simon Willison’s. A model-judgment control cuts nothing.',
+    'Made with the Lethal Trifecta tool. The trifecta is Simon Willison’s. A model-judgment control cuts nothing.',
     '',
   );
 

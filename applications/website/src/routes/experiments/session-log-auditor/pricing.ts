@@ -6,8 +6,8 @@
  */
 import type { ResponseUsage } from '$lib/experiments/claude-code-transcript';
 
-import { normalizeModelIdentifier } from '../model-calculator/model-pricing';
-import type { ModelPricing } from '../model-calculator/model-pricing';
+import { normalizeModelIdentifier } from '$lib/experiments/model-pricing';
+import type { ModelPricing } from '$lib/experiments/model-pricing';
 
 export type PriceRow = {
   /** The model ID as Claude Code records it, such as `claude-opus-5-5`. */

@@ -4,7 +4,7 @@
 
   import Button from '$lib/components/button';
 
-  import { copyText } from '../usable-evidence-budget/copy-text';
+  import { copyText } from '$lib/experiments/copy-text';
   import { analyticRows } from './analytic';
   import AnalyticTable from './analytic-table.svelte';
   import CostComparison from './cost-comparison.svelte';

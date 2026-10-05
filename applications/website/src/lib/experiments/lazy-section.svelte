@@ -2,8 +2,6 @@
   import { onMount } from 'svelte';
   import type { Component } from 'svelte';
 
-  import { bodyClasses } from './field-styles';
-
   type Props = {
     /** The heavy section's module, loaded once the page is interactive. */
     load: () => Promise<{ default: Component<SectionProps> }>;
@@ -35,5 +33,5 @@
     Couldn’t load {name}. Reload the page to try again.
   </p>
 {:else}
-  <p class={bodyClasses}>Loading {name}…</p>
+  <p class="text-sm text-slate-600 dark:text-slate-300">Loading {name}…</p>
 {/if}

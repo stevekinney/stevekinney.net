@@ -150,7 +150,7 @@
 <div class="space-y-12">
   <header class="max-w-3xl space-y-3">
     <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-      Cut a leg of the lethal trifecta.
+      Cut a leg of the lethal trifecta
     </h1>
     <p class="text-lg text-slate-600 dark:text-slate-300">
       Can untrusted content steer your agent into moving private data somewhere you don’t control? A

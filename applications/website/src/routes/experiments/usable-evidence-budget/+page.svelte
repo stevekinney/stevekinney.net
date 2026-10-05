@@ -30,7 +30,7 @@
   import { usable } from './budget';
   import type { TermKey } from './budget';
   import CapacityControl from './capacity-control.svelte';
-  import { copyText } from './copy-text';
+  import { copyText } from '$lib/experiments/copy-text';
   import { initialEvidence } from './evidence-state';
   import type { EvidenceState } from './evidence-state';
   import type { EvidenceSummary, FitPlan } from './fit-check';

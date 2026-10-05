@@ -65,7 +65,7 @@ test('responds with 200, its title, and one heading', async ({ page }) => {
   const response = await page.goto(path);
 
   expect(response?.status()).toBe(200);
-  await expect(page).toHaveTitle(/Is the Difference Real\?/);
+  await expect(page).toHaveTitle(/Measurement Noise/);
   await expect(
     page.getByRole('heading', { level: 1, name: 'Is the difference real?', exact: true }),
   ).toBeVisible();

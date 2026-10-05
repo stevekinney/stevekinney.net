@@ -5,7 +5,7 @@
   import Button from '$lib/components/button';
   import { formatCost } from '$lib/experiments/format';
 
-  import { placeTooltip } from '../cache-break-even/tooltip-position';
+  import { placeTooltip } from '$lib/experiments/tooltip-position';
   import { bodyClasses } from './field-styles';
   import { outcomeStyles, stopReasonLabels } from './labels';
   import type { Config } from './loop-config';

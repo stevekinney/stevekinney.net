@@ -34,9 +34,9 @@ test('responds with 200 and a descriptive title', async ({ page }) => {
   const response = await page.goto(path);
 
   expect(response?.status()).toBe(200);
-  await expect(page).toHaveTitle(/Cut a Leg/);
+  await expect(page).toHaveTitle(/Lethal Trifecta/);
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Cut a leg of the lethal trifecta.' }),
+    page.getByRole('heading', { level: 1, name: 'Cut a leg of the lethal trifecta' }),
   ).toBeVisible();
 });
 
@@ -365,7 +365,7 @@ test.describe('sharing', () => {
     await page.getByRole('button', { name: 'Copy summary' }).click();
     await expect(page.getByText('Summary copied as Markdown.')).toBeVisible();
     const summary = await page.evaluate(() => navigator.clipboard.readText());
-    expect(summary).toContain('# Cut a Leg');
+    expect(summary).toContain('# Lethal Trifecta');
     expect(summary).toContain('Exploitable: all three legs are intact.');
     expect(summary).toContain('## Residual risks');
   });

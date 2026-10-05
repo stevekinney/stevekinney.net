@@ -13,6 +13,7 @@ Interactive tools at `/experiments/<slug>`. Each is a prerendered SvelteKit page
 
 - A route folder `src/routes/experiments/<slug>/` with a `+page.svelte` needs an `experiment.ts` beside it exporting `experiment: ExperimentMetadata` (`title`, `description`, `added` as `YYYY-MM-DD`). The index page, sitemap, and Open Graph image all derive from it. Never add an experiment to a shared list; `src/lib/experiments/registry.test.ts` fails on an unregistered page.
 - `+page.server.ts` sets `prerender = true`, returns `title` and `description` from `./experiment`, and never sets `csr = false`. The Open Graph drift test compares the two.
+- Code that two or more experiments use lives in `src/lib/experiments/`, such as the model prices in `model-pricing.toml`. An experiment never imports from another experiment's route folder.
 - The page has exactly one `h1` inside `main`; the site header has its own for the wordmark. `tests/experiments.spec.ts` checks every experiment for a 200 response, a clean hydration with no console errors, its registered title, and no horizontal scroll at 360 pixels in light and dark.
 
 ## Gotchas
