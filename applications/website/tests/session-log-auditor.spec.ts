@@ -348,4 +348,59 @@ test.describe('at phone width', () => {
       expect(await horizontalOverflow(page)).toBe(0);
     });
   }
+
+  test('wraps long tool names, directories, branches, and models from a transcript', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await openExperiment(page, path);
+
+    const long = 'x'.repeat(150);
+    const session = `session-${long}`;
+    const transcript = [
+      {
+        type: 'assistant',
+        sessionId: session,
+        timestamp: '2026-09-03T10:00:00.000Z',
+        cwd: `/work/${long}`,
+        gitBranch: `feature/${long}`,
+        version: `3.1.2-${long}`,
+        message: {
+          id: 'msg_long',
+          model: `claude-opus-5-5-${long}`,
+          content: [{ type: 'tool_use', id: 'call_long', name: `Tool${long}`, input: {} }],
+          usage: { input_tokens: 10, output_tokens: 20 },
+        },
+      },
+      {
+        type: 'user',
+        sessionId: session,
+        timestamp: '2026-09-03T10:00:01.000Z',
+        message: {
+          role: 'user',
+          content: [
+            {
+              type: 'tool_result',
+              tool_use_id: 'call_long',
+              is_error: true,
+              content: `Exit code 2\nerror:${long}${long}`,
+            },
+          ],
+        },
+      },
+    ]
+      .map((record) => JSON.stringify(record))
+      .join('\n');
+
+    await page.getByText('Paste a transcript instead').click();
+    await page.getByLabel('Transcript lines (JSON Lines)').fill(transcript);
+    await page.getByRole('button', { name: 'Audit the pasted lines' }).click();
+    await reveal(page);
+
+    await clusterRows(page).first().getByRole('button').first().click();
+    await page.getByRole('button', { name: 'Mark fixed' }).click();
+    await expect(page.getByTestId('control-row')).toBeVisible();
+
+    expect(await horizontalOverflow(page)).toBe(0);
+  });
 });

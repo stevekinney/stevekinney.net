@@ -107,7 +107,7 @@
               {#each group.items as item (item.key)}
                 <li class="space-y-0.5">
                   <code class="{codeClasses} {wrapAnywhere}">{item.signature}</code>
-                  <span class="block text-xs text-slate-500 dark:text-slate-400">
+                  <span class="block text-xs text-slate-500 dark:text-slate-400 {wrapAnywhere}">
                     {item.tool}, {item.category}: {describe(item)}
                   </span>
                 </li>

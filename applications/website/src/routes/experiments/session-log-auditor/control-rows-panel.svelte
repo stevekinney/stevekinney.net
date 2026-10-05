@@ -82,7 +82,7 @@
           <div class="flex flex-wrap items-start justify-between gap-2">
             <div class="min-w-0 space-y-1">
               <code class="{codeClasses} {wrapAnywhere}">{row.mark.signature}</code>
-              <p class="text-xs text-slate-500 dark:text-slate-400">
+              <p class="text-xs text-slate-500 dark:text-slate-400 {wrapAnywhere}">
                 {row.mark.tool}, marked fixed on {row.mark.date}
               </p>
             </div>
