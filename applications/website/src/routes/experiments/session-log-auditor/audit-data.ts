@@ -150,11 +150,16 @@ export const toAuditData = (transcript: DetailedTranscript): AuditData => {
   const errors: AuditError[] = details.toolErrors.map((error) => {
     const call = error.toolUseId ? calls.get(error.toolUseId) : undefined;
     const tool = call?.name ?? 'unknown';
+    const sessionId = sessionFor(error.file, error.sessionId);
     const { exitCode, message } = buildErrorText(error.text);
+
+    // Every result answers a call. One whose call isn't in any file read still
+    // counts as a tool call, so failures never outnumber the calls they failed.
+    if (!call) toolCalls.push({ sessionId, timestamp: error.timestamp, name: tool });
 
     return {
       id: `${error.file}:${error.line}`,
-      sessionId: sessionFor(error.file, error.sessionId),
+      sessionId,
       timestamp: error.timestamp,
       tool,
       command: call && SHELL_TOOLS.has(tool.toLowerCase()) ? call.command : null,

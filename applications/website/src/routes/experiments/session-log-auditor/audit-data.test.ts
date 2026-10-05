@@ -80,6 +80,15 @@ describe('the Claude Code adapter', () => {
     expect(orphan).toMatchObject({ tool: 'unknown', command: null, exitCode: null });
   });
 
+  it('counts a result whose call isn’t in any file as a call, so failures never outnumber calls', () => {
+    const data = readFixtures();
+
+    expect(data.toolCalls.filter((call) => call.name === 'unknown')).toEqual([
+      { sessionId: FIRST, timestamp: '2026-09-02T10:01:00.000Z', name: 'unknown' },
+    ]);
+    expect(data.errors.length).toBeLessThanOrEqual(data.toolCalls.length);
+  });
+
   it('attributes a subagent transcript to the session folder it sits in', () => {
     const agent = createSessionWriter(
       { ...info, sessionId: 'recorded-elsewhere' },

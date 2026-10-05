@@ -296,7 +296,7 @@ test.describe('your own sessions', () => {
 
     const copied = await page.evaluate(() => navigator.clipboard.readText());
     expect(copied).toContain('## Session log audit');
-    expect(copied).toContain('- Failed tool calls: 5 of 4');
+    expect(copied).toContain('- Failed tool calls: 5 of 5 (100.0%)');
     expect(copied).toContain(
       '| zsh: command not found: timeout | Bash | floor: missing tool | 2 | 2 |',
     );

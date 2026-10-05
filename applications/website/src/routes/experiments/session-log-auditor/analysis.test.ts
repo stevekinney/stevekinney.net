@@ -42,9 +42,9 @@ describe('analyze with the fixtures', () => {
       sessions: 2,
       turns: 4,
       subagentTurns: 1,
-      toolCalls: 4,
+      toolCalls: 5,
       failures: 5,
-      failureShare: 1.25,
+      failureShare: 1,
       floorFailures: 3,
       askFailures: 0,
       unpricedTurns: 1,
@@ -101,6 +101,7 @@ describe('filters', () => {
   it('narrows to a model, a tool, a category, and a search', () => {
     expect(run(data, { model: 'claude-haiku-4-5' }).overview.turns).toBe(1);
     expect(run(data, { tool: 'unknown' }).overview.failures).toBe(1);
+    expect(run(data, { tool: 'unknown' }).overview.failureShare).toBe(1);
     expect(run(data, { category: 'floor: shell option' }).clusters).toHaveLength(1);
     expect(run(data, { search: 'PATHSPEC' }).clusters.map((cluster) => cluster.tool)).toEqual([
       'Bash',
