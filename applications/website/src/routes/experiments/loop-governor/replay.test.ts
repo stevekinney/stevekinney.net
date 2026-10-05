@@ -133,6 +133,42 @@ describe('reading a log defensively', () => {
     expect(replay.total).toBe(5);
   });
 
+  it('reads a drop in the running total as a new run starting over', () => {
+    const log = parseLogText(
+      [2, 6, 10, 1, 2].map((total) => JSON.stringify({ cost_usd: total })).join('\n'),
+    );
+    const replay = analyzeLog(log, {
+      mapping: guessMapping(log.keys),
+      lowerIsBetter: false,
+      costIsRunningTotal: true,
+    });
+
+    expect(replay.iterations.map((step) => step.cost)).toEqual([2, 4, 4, 1, 1]);
+    expect(replay.total).toBe(12);
+    expect(replay.notes).toContain(
+      'The running total dropped once, so that iteration starts a new total at its own value.',
+    );
+  });
+
+  it('keeps a running total for each session when the session is mapped', () => {
+    const lines = [
+      { session_id: 'a', cost_usd: 1 },
+      { session_id: 'b', cost_usd: 2 },
+      { session_id: 'a', cost_usd: 3 },
+      { session_id: 'b', cost_usd: 5 },
+    ];
+    const log = parseLogText(lines.map((line) => JSON.stringify(line)).join('\n'));
+    const replay = analyzeLog(log, {
+      mapping: guessMapping(log.keys),
+      lowerIsBetter: false,
+      costIsRunningTotal: true,
+    });
+
+    expect(replay.iterations.map((step) => step.cost)).toEqual([1, 2, 2, 3]);
+    expect(replay.total).toBe(8);
+    expect(replay.notes.some((note) => note.includes('dropped'))).toBe(false);
+  });
+
   it('reads a running total as per-iteration costs only if told to', () => {
     expect(replayOf('renamed-fields.jsonl').total).toBe(27.5);
   });

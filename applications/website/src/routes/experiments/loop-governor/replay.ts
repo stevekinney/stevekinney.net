@@ -212,7 +212,10 @@ export const readFailure = (value: unknown): string | null => {
 export type ReplayOptions = {
   mapping: FieldMapping;
   lowerIsBetter: boolean;
-  /** Whether the cost field is each iteration's cost or a running total. */
+  /**
+   * Whether the cost field is each iteration's cost or a running total. A running total is
+   * kept for each session when the session is mapped, and a drop starts a new total.
+   */
   costIsRunningTotal: boolean;
 };
 
@@ -290,7 +293,9 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
 
   const iterations: ReplayIteration[] = [];
   let cumulative = 0;
-  let previousTotal = 0;
+  // The last running total seen in each session, or in the whole log when no session is mapped.
+  const previousTotals = new Map<string, number>();
+  let resets = 0;
   let best: number | null = null;
   let sinceProgress = 0;
   let previousFailure: string | null = null;
@@ -299,11 +304,16 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     const labeled = readNumber(read(record, 'iteration'));
     const iteration = labeled !== null && Number.isInteger(labeled) ? labeled : index + 1;
 
+    const session = read(record, 'session');
     const reported = costValues[index];
     let cost = 0;
     if (reported !== null && costIsRunningTotal) {
-      cost = Math.max(0, reported - previousTotal);
-      previousTotal = Math.max(previousTotal, reported);
+      const key = mapping.session === null ? '' : String(session ?? '');
+      const previous = previousTotals.get(key) ?? 0;
+      // A total that drops means a new run started counting from zero.
+      if (reported < previous) resets += 1;
+      cost = Math.max(0, reported < previous ? reported : reported - previous);
+      previousTotals.set(key, reported);
     } else if (reported !== null) {
       cost = Math.max(0, reported);
     }
@@ -328,8 +338,6 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     const repeated = failure !== null && failure === previousFailure;
     previousFailure = failure;
 
-    const session = read(record, 'session');
-
     iterations.push({
       iteration,
       session: typeof session === 'string' && session ? session : null,
@@ -343,6 +351,12 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
       repeated,
     });
   });
+
+  if (resets > 0) {
+    notes.push(
+      `The running total dropped ${resets === 1 ? 'once' : `${resets.toLocaleString('en-US')} times`}, so ${resets === 1 ? 'that iteration starts' : 'each of those iterations starts'} a new total at its own value.`,
+    );
+  }
 
   return { iterations, total: cumulative, hasScore, hasKept, hasCost, notes };
 };
