@@ -202,7 +202,10 @@
         {folderButtonLabel}
       </Button>
     {/if}
-    <p class="text-sm text-slate-600 dark:text-slate-300" aria-live="polite">
+    <p
+      class="text-sm [overflow-wrap:anywhere] text-slate-600 dark:text-slate-300"
+      aria-live="polite"
+    >
       {#if busy && progress}
         {progress}
       {:else if !busy && status}
