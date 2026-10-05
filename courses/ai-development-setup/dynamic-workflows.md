@@ -88,7 +88,7 @@ A few details are doing real work in that script:
 
 ## Pipeline versus parallel
 
-`pipeline()` is the default, and it's usually what you want. Each item moves through the stages at its own pace, so the run takes as long as the slowest single item. A fast item never waits for a slow one.
+`pipeline()` lets each item advance through its stages independently, without a barrier between stages. That does not give every item an immediate worker: agents beyond the concurrency limit queue for a slot. Only when the whole fan-out fits the available slots can the slowest item dominate runtime; larger fan-outs also pay for queued waves of work. The [workflow limits](https://code.claude.com/docs/en/workflows#behavior-and-limits) default to at most 16 concurrent agents, sometimes fewer on CPU-limited systems.
 
 `parallel()` is a barrier. It waits for every function in its list before it returns, so nothing after it starts until the slowest one finishes. Only reach for it when the next step genuinely needs every result at once, like deduplicating findings across all the reviewers.
 

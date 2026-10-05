@@ -10,7 +10,7 @@ Most people learn `git worktree add` and stop. That's enough for one worktree. I
 The full [`git worktree`](https://git-scm.com/docs/git-worktree) command set is small:
 
 - `add`: Creates a worktree.
-- `list --porcelain -z`: Lists worktrees in a stable, machine-readable format, with entries separated by NUL characters. Use this in scripts, never the human-readable output.
+- `list --porcelain -z`: Lists worktrees in a stable, machine-readable format. Each field line, such as `worktree`, `HEAD`, or `branch`, ends in a NUL byte. An empty field separates worktree records, producing a double NUL at each record boundary. Group fields until that empty field; a single NUL is not a complete-worktree delimiter. Use this framing in scripts instead of the human-readable output.
 - `lock` and `unlock`: Protect a worktree from being pruned or removed.
 - `move`: Relocates a worktree. Don't move the folder yourself.
 - `remove`: Deletes a worktree.
