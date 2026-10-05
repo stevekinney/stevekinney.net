@@ -71,6 +71,7 @@
     <BarChart
       {bars}
       testId="timeline-chart"
+      integer
       label="Failures per day, stacked by category. The failures per day table below has the same numbers."
       formatValue={(value) => formatTokenCount(Math.round(value))}
     />

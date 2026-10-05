@@ -87,6 +87,7 @@
     {:else}
       <BarChart
         testId="cost-histogram"
+        integer
         label="Sessions per cost bracket. The table below has the same numbers."
         bars={histogram.map((bin) => ({
           id: String(bin.from).padStart(12, '0'),

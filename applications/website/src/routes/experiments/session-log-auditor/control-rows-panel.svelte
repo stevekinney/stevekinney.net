@@ -113,6 +113,7 @@
           {#if series.length > 0}
             <BarChart
               testId="control-chart"
+              integer
               height={140}
               label="Sessions affected per day for this cluster, with the fix date marked."
               markerBefore={row.mark.date}

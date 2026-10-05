@@ -24,6 +24,8 @@
     markerLabel?: string;
     /** The largest value on the y axis, such as 1 for a ratio. Defaults to the tallest bar. */
     maximum?: number;
+    /** Counts: keep the gridlines on whole numbers. */
+    integer?: boolean;
     height?: number;
   };
 
@@ -35,10 +37,11 @@
     markerBefore = null,
     markerLabel = '',
     maximum,
+    integer = false,
     height = 200,
   }: Props = $props();
 
-  const MARGIN = { top: 12, right: 8, bottom: 28, left: 40 };
+  const MARGIN = { top: 12, right: 8, bottom: 28, left: 48 };
   const UNMEASURED_WIDTH = 640;
 
   let measuredWidth = $state(0);
@@ -51,7 +54,9 @@
   const totals = $derived(
     bars.map((bar) => bar.segments.reduce((sum, segment) => sum + segment.value, 0)),
   );
-  const top = $derived(maximum ?? Math.max(1, ...totals));
+  const tallest = $derived(Math.max(1, ...totals));
+  // Whole-number charts round the top up to an even number so the middle gridline is whole too.
+  const top = $derived(maximum ?? (integer ? Math.ceil(tallest / 2) * 2 : tallest));
   const slot = $derived(bars.length > 0 ? plotWidth / bars.length : plotWidth);
   const barWidth = $derived(Math.max(1, Math.min(28, slot * 0.8)));
 
@@ -84,7 +89,7 @@
   const showLabel = (index: number): boolean =>
     index === 0 || index === bars.length - 1
       ? true
-      : index % labelEvery === 0 && bars.length - 1 - index >= labelEvery / 2;
+      : index % labelEvery === 0 && bars.length - 1 - index >= labelEvery;
 
   const markerIndex = $derived(
     markerBefore === null ? -1 : bars.findIndex((bar) => bar.id > markerBefore),

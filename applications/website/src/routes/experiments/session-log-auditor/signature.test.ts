@@ -38,6 +38,9 @@ describe('toSignature', () => {
     expect(toSignature('<tool_use_error>File has not been read yet.</tool_use_error>')).toBe(
       '<tool_use_error>File has not been read yet.</tool_use_error>',
     );
+    expect(toSignature('zsh: no matches found: src/routes/blog/[slug]/+page.svelte')).toBe(
+      'zsh: no matches found: src/routes/blog/[slug]/+page.svelte',
+    );
     expect(toSignature('zsh:  no matches found:   src/routes/[slug]')).toBe(
       'zsh: no matches found: src/routes/[slug]',
     );

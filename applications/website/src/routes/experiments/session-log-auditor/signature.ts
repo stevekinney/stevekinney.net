@@ -13,8 +13,12 @@ const REPLACEMENTS: Replacement[] = [
   },
   // A Windows path, such as `C:\Users\me\app\index.ts`.
   { pattern: /\b[A-Za-z]:\\[^\s'"`,;)\]]+/g, placeholder: '<path>' },
-  // A Unix path that starts at the root or a home directory, but not a closing tag or a URL.
-  { pattern: /(?<![\w.~<:/-])(?:~(?=\/)|\$HOME(?=\/))?\/[^\s'"`,;:)\]]+/g, placeholder: '<path>' },
+  // A Unix path that starts at the root or a home directory, after a space, a quote, or the start.
+  // A slash inside a relative path, a closing tag, or a URL doesn't start one.
+  {
+    pattern: /(?<=^|[\s'"`=(,])(?:~(?=\/)|\$HOME(?=\/))?\/[^\s'"`,;:)\]]+/g,
+    placeholder: '<path>',
+  },
   // A home directory on its own, such as `~`.
   { pattern: /(?<![\w/])~(?![\w/])/g, placeholder: '<path>' },
   // A hash has at least one digit and one letter, so ordinary words and numbers aren't hashes.
