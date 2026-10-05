@@ -197,7 +197,8 @@
     >
       Download versions as CSV
     </button>
-    <div class={tableRegionClasses} role="region" aria-label="Versions table" tabindex="-1">
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <div class={tableRegionClasses} role="region" aria-label="Versions table" tabindex="0">
       <table class={tableClasses} data-testid="versions-table">
         <thead>
           <tr>

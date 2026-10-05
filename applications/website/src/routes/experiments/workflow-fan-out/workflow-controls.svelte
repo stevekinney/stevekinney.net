@@ -199,11 +199,12 @@
       onChange={(value) => onDurationMode(value as DurationMode)}
     />
     {#if config.durationMode === 'manual'}
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
       <div
-        class="relative max-h-96 overflow-auto rounded-lg border border-slate-200 dark:border-slate-700"
+        class="focus-visible:outline-primary-600 relative max-h-96 overflow-auto rounded-lg border border-slate-200 focus-visible:outline-2 dark:border-slate-700"
         role="region"
         aria-label="Manual durations"
-        tabindex="-1"
+        tabindex="0"
       >
         <table class="text-sm text-slate-700 dark:text-slate-200">
           <caption class="sr-only">Minutes for each item and stage</caption>

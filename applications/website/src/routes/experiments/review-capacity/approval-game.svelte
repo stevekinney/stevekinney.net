@@ -214,7 +214,13 @@
         <summary class="cursor-pointer text-sm font-semibold text-slate-700 dark:text-slate-200">
           Every prompt as a table
         </summary>
-        <div class="relative overflow-x-auto" role="region" aria-label="Round table" tabindex="-1">
+        <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+        <div
+          class="focus-visible:outline-primary-600 relative overflow-x-auto focus-visible:outline-2"
+          role="region"
+          aria-label="Round table"
+          tabindex="0"
+        >
           <table class="mt-2 w-full min-w-[28rem] text-left text-sm tabular-nums">
             <thead class="text-slate-600 dark:text-slate-300">
               <tr>

@@ -113,7 +113,13 @@
     </p>
   {/if}
 
-  <div class="relative overflow-x-auto" role="region" aria-label="Cost by stage" tabindex="-1">
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+  <div
+    class="focus-visible:outline-primary-600 relative overflow-x-auto focus-visible:outline-2"
+    role="region"
+    aria-label="Cost by stage"
+    tabindex="0"
+  >
     <table class="w-full text-sm text-slate-700 dark:text-slate-200">
       <thead>
         <tr class="border-b border-slate-200 dark:border-slate-700">

@@ -23,11 +23,12 @@
   ];
 </script>
 
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
-  class="relative overflow-x-auto"
+  class="focus-visible:outline-primary-600 relative overflow-x-auto focus-visible:outline-2"
   role="region"
   aria-label="When not to use a workflow"
-  tabindex="-1"
+  tabindex="0"
 >
   <table class="w-full text-sm text-slate-700 dark:text-slate-200">
     <thead>

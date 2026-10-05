@@ -13,7 +13,13 @@
   const labelB = $derived(labels[1] ?? 'B');
 </script>
 
-<div class="relative overflow-x-auto" role="region" aria-label="Outcome table" tabindex="-1">
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+<div
+  class="focus-visible:outline-primary-600 relative overflow-x-auto focus-visible:outline-2"
+  role="region"
+  aria-label="Outcome table"
+  tabindex="0"
+>
   <table class="w-full min-w-[40rem] text-left text-sm" data-testid="outcome-table">
     <caption class="sr-only">
       Each outcome under {labelA} and {labelB}, the difference, and its 95% interval. Rows the data

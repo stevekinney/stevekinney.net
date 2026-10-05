@@ -175,7 +175,13 @@
     <summary class="cursor-pointer text-sm font-semibold text-slate-700 dark:text-slate-200">
       The projection as a table
     </summary>
-    <div class="relative overflow-x-auto" role="region" aria-label="Projection table" tabindex="-1">
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <div
+      class="focus-visible:outline-primary-600 relative overflow-x-auto focus-visible:outline-2"
+      role="region"
+      aria-label="Projection table"
+      tabindex="0"
+    >
       <table
         class="w-full min-w-[36rem] text-left text-sm tabular-nums"
         data-testid="projection-table"

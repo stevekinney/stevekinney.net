@@ -82,7 +82,13 @@
     <summary class="cursor-pointer text-sm font-semibold text-slate-700 dark:text-slate-200">
       The sweep as a table
     </summary>
-    <div class="relative overflow-x-auto" role="region" aria-label="Sweep table" tabindex="-1">
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <div
+      class="focus-visible:outline-primary-600 relative overflow-x-auto focus-visible:outline-2"
+      role="region"
+      aria-label="Sweep table"
+      tabindex="0"
+    >
       <table class="w-full min-w-[24rem] text-left text-sm tabular-nums">
         <thead class="text-slate-600 dark:text-slate-300">
           <tr>

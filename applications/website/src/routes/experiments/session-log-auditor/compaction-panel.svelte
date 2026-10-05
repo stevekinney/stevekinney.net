@@ -51,11 +51,12 @@
       ({formatTokenCount(summary.manual)} manual, {formatTokenCount(summary.auto)} auto).
     </p>
     <button type="button" class={buttonClasses} onclick={exportCsv}>Download as CSV</button>
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <div
       class="{tableRegionClasses} max-h-96"
       role="region"
       aria-label="Compactions table"
-      tabindex="-1"
+      tabindex="0"
     >
       <table class={tableClasses} data-testid="compactions-table">
         <thead>

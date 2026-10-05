@@ -24,7 +24,7 @@ export const linkButtonClasses =
 
 /** A wide table scrolls inside this, never the page. `relative` keeps `sr-only` children inside it. */
 export const tableRegionClasses =
-  'relative overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700';
+  'focus-visible:outline-primary-600 relative overflow-x-auto rounded-lg border border-slate-200 focus-visible:outline-2 dark:border-slate-700';
 
 export const tableClasses = 'w-full min-w-max text-left text-sm tabular-nums';
 
