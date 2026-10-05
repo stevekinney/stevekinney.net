@@ -253,6 +253,60 @@ describe('applyReadout', () => {
     expect(applied.values).toEqual({ tools: 19_600 });
   });
 
+  it('merges repeated labels in the line form so each row has one entry and one count', () => {
+    const parsed = parseReadout('⛁ Foo: 1k tokens\n⛁ Foo: 2k tokens\n⛁ Messages: 10k tokens');
+
+    expect(parsed.rows.map((row) => [row.key, row.tokens])).toEqual([
+      ['foo', 3000],
+      ['messages', 10_000],
+    ]);
+
+    const applied = applyReadout(parsed, defaultMapping, 1_000_000);
+    expect(applied.unrecognized.map((row) => row.key)).toEqual(['foo']);
+
+    const assigned = applyReadout(parsed, { ...defaultMapping, foo: 'tools' }, 1_000_000);
+    expect(assigned.values).toEqual({ tools: 3000, history: 10_000 });
+  });
+
+  it('merges repeated labels in the table form too', () => {
+    const parsed = parseReadout(
+      '| Category | Tokens | Percentage |\n|---|---|---|\n| Foo | 1k | 0.1% |\n| Foo | 2k | 0.2% |',
+    );
+
+    expect(parsed.rows).toHaveLength(1);
+    expect(parsed.rows[0].tokens).toBe(3000);
+  });
+
+  it('keeps a deferred row apart from a resident one with the same label', () => {
+    const parsed = parseReadout('System tools: 14k tokens\nSystem tools (deferred): 20k tokens');
+    const applied = applyReadout(parsed, defaultMapping, 1_000_000);
+
+    expect(applied.values).toEqual({ tools: 14_000 });
+    expect(applied.deferred.map((row) => row.tokens)).toEqual([20_000]);
+  });
+
+  it.each(['constructor', 'Constructor', '⛁ CONSTRUCTOR'])(
+    'lists a row labeled %s as unrecognized instead of finding an inherited value',
+    (label) => {
+      const parsed = parseReadout(`⛁ ${label}: 5k tokens\n⛁ Messages: 10k tokens`);
+      const applied = applyReadout(parsed, defaultMapping, 1_000_000);
+
+      expect(applied.unrecognized.map((row) => row.key)).toEqual([label.toLowerCase()]);
+      expect(applied.values).toEqual({ history: 10_000 });
+      expect(applied.counted.map((row) => row.key)).toEqual(['messages']);
+    },
+  );
+
+  it('lists a row whose key is __proto__ as unrecognized', () => {
+    const parsed = parseReadout('⛁ Messages: 10k tokens');
+    parsed.rows.push({ label: '__proto__', key: '__proto__', tokens: 5000, deferred: false });
+
+    const applied = applyReadout(parsed, defaultMapping, 1_000_000);
+
+    expect(applied.unrecognized.map((row) => row.key)).toEqual(['__proto__']);
+    expect(applied.values).toEqual({ history: 10_000 });
+  });
+
   it('never sets generation, which the readout does not report', () => {
     const applied = applyReadout(parseReadout(printMode), defaultMapping, 1_000_000);
 

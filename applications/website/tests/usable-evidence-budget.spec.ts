@@ -452,6 +452,46 @@ test.describe('acceptance 5: pasting a context readout', () => {
     await expect(termBox(page, 'Trusted instructions')).toHaveValue('22,000');
   });
 
+  test('a label that repeats is listed once, and assigning it counts every occurrence', async ({
+    page,
+  }) => {
+    const errors = watchForErrors(page);
+    await openBudget(page);
+    await pasteReadout(
+      page,
+      [
+        '100k/1000k tokens (10%)',
+        '⛁ Foo: 1k tokens (0.1%)',
+        '⛁ Foo: 2k tokens (0.2%)',
+        '⛁ Constructor: 5k tokens (0.5%)',
+        '⛁ Messages: 10k tokens (1.0%)',
+        '⛶ Free space: 975k (97.5%)',
+      ].join('\n'),
+    );
+
+    const unrecognized = page.getByTestId('readout-unrecognized');
+    await expect(unrecognized).toBeVisible();
+    await expect(unrecognized.getByRole('combobox')).toHaveCount(2);
+    await expect(unrecognized).toContainText('Foo (3K)');
+    await expect(unrecognized).toContainText('Constructor (5K)');
+    await expect(page.getByTestId('readout-mismatch')).toBeVisible();
+    await expect(termBox(page, 'Task and retained history')).toHaveValue('10,000');
+
+    await page.getByRole('combobox', { name: 'Assign Foo to a term' }).selectOption('tools');
+    await expect(termBox(page, 'Exposed tool definitions')).toHaveValue('3,000');
+
+    await page
+      .getByRole('combobox', { name: 'Assign Constructor to a term' })
+      .selectOption('instructions');
+    await expect(termBox(page, 'Trusted instructions')).toHaveValue('5,000');
+
+    await expect(unrecognized).toHaveCount(0);
+    await expect(page.getByTestId('readout-reconciled')).toContainText(
+      'the rows leave 982K, and the readout reports 975K free',
+    );
+    expect(errors).toEqual([]);
+  });
+
   test('the label mapping can be edited, and an ignored row is not counted', async ({ page }) => {
     await openBudget(page);
     await pasteReadout(page, readFixture('context-interactive.txt'));

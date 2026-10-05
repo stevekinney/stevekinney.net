@@ -68,7 +68,7 @@
   );
 
   const isCustomRow = (label: string): boolean =>
-    overrides[label] !== undefined && defaultMapping[label] === undefined;
+    Object.hasOwn(overrides, label) && !Object.hasOwn(defaultMapping, label);
 </script>
 
 <div class="space-y-4">

@@ -163,6 +163,26 @@ const readLineRows = (lines: string[]): ReadoutRow[] => {
 };
 
 /**
+ * Folds rows that share a label into one, adding their tokens, because the
+ * page would count each of them. The key also identifies a row in the
+ * interface, so it has to be unique there. A deferred row never merges with a
+ * resident one, since they are counted differently.
+ */
+const mergeRepeatedRows = (rows: ReadoutRow[]): ReadoutRow[] => {
+  const merged = new Map<string, ReadoutRow>();
+
+  for (const row of rows) {
+    const identity = `${row.deferred ? 'deferred' : 'resident'}:${row.key}`;
+    const existing = merged.get(identity);
+
+    if (existing) existing.tokens += row.tokens;
+    else merged.set(identity, { ...row });
+  }
+
+  return [...merged.values()];
+};
+
+/**
  * Reads what Claude Code's `/context` prints, in either form: the interactive
  * view's `<label>: <number>k tokens (<pct>%)` lines under a `120k/1000k tokens`
  * header, or print mode's Markdown tables.
@@ -171,7 +191,7 @@ export const parseReadout = (text: string): ParsedReadout => {
   const lines = text.split(/\r?\n/);
   const capacity = readCapacity(lines);
   const table = readTable(lines);
-  const all = table.found ? table.rows : readLineRows(lines);
+  const all = mergeRepeatedRows(table.found ? table.rows : readLineRows(lines));
 
   const freeRow = all.find((row) => row.key === 'free space');
   const rows = all.filter((row) => row.key !== 'free space');
@@ -231,7 +251,8 @@ export const applyReadout = (
       continue;
     }
 
-    const destination = mapping[row.key];
+    // Own properties only: a label such as `constructor` must not find an inherited value.
+    const destination = Object.hasOwn(mapping, row.key) ? mapping[row.key] : undefined;
     if (destination === undefined) {
       unrecognized.push(row);
     } else if (destination !== 'ignore' && destination !== 'free') {
