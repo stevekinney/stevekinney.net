@@ -9,7 +9,9 @@ import { readLines } from './read-lines';
  * - A streamed response is written as several lines that share a
  *   `message.id`. Their `output_tokens` grows until the last line, so the last
  *   line for each ID wins. Treating the copies as identical undercounts output.
- * - `isSidechain` lines are subagent traffic, not the main context.
+ * - `isSidechain` lines are subagent traffic, not the main context. They're
+ *   kept apart as `subagentTurns`, each with the `agentId` Claude Code
+ *   records, so a subagent's own transcript can still be measured.
  * - When a response has several `message` iterations, as it does around an
  *   advisor call, its top-level usage is their sum. That double-counts the
  *   prompt: the next turn's context is about half of it, but just above the
@@ -36,6 +38,15 @@ export type TranscriptTurn = {
   segment: number;
   /** The file this turn came from. */
   file: string;
+};
+
+/** One subagent response. */
+export type SubagentTurn = TranscriptTurn & {
+  /**
+   * The subagent that wrote it, as recorded in `agentId`. Older transcripts
+   * kept subagent lines in the session file without one.
+   */
+  agentId: string | null;
 };
 
 /** A `compact_boundary` record: the session's history was replaced with a summary. */
@@ -69,6 +80,8 @@ export type ClaudeCodeTranscript = {
   /** Main-thread responses, one per message ID, oldest first. */
   turns: TranscriptTurn[];
   sidechainTurns: number;
+  /** Subagent responses, one per message ID, oldest first. */
+  subagentTurns: SubagentTurn[];
   /** Oldest first. */
   compactions: CompactionEvent[];
   /**
@@ -159,7 +172,11 @@ const earlier = (first: string | null, second: string | null): string | null =>
 const later = (first: string | null, second: string | null): string | null =>
   first === null ? second : second === null || first >= second ? first : second;
 
-type TurnEntry = TranscriptTurn & { sequence: number; isSidechain: boolean };
+type TurnEntry = TranscriptTurn & {
+  sequence: number;
+  isSidechain: boolean;
+  agentId: string | null;
+};
 type CompactionEntry = CompactionEvent & { sequence: number };
 
 const toTurn = (entry: TurnEntry): TranscriptTurn => ({
@@ -171,6 +188,11 @@ const toTurn = (entry: TurnEntry): TranscriptTurn => ({
   outputTokens: entry.outputTokens,
   segment: entry.segment,
   file: entry.file,
+});
+
+const toSubagentTurn = (entry: TurnEntry): SubagentTurn => ({
+  ...toTurn(entry),
+  agentId: entry.agentId,
 });
 
 const toCompaction = (entry: CompactionEntry): CompactionEvent => ({
@@ -249,6 +271,7 @@ export const createTranscriptReader = (): TranscriptReader => {
         file: previous?.file ?? name,
         sequence: previous?.sequence ?? sequence++,
         isSidechain: record.isSidechain === true,
+        agentId: readString(record.agentId) ?? previous?.agentId ?? null,
       });
       fileResponses.add(messageId);
     };
@@ -327,6 +350,7 @@ export const createTranscriptReader = (): TranscriptReader => {
       files: files.map((file) => ({ ...file })),
       turns,
       sidechainTurns: entries.length - turns.length,
+      subagentTurns: entries.filter((entry) => entry.isSidechain).map(toSubagentTurn),
       compactions: [...compactions].sort(chronologically).map(toCompaction),
       firstTimestamp,
       lastTimestamp,
