@@ -298,6 +298,39 @@ describe('prefilling the prompt on push and publish', () => {
     expect(gated.prefill['publish-gate'].status).toBe('on');
   });
 
+  it('counts only deny rules under bypassPermissions, which skips ask prompts', () => {
+    const asksOnly = analyze(
+      file({ permissions: { defaultMode: 'bypassPermissions', ask: pushAndGh } }),
+    );
+    expect(asksOnly.prefill['publish-gate'].status).toBe('unknown');
+    expect(asksOnly.prefill['publish-gate'].reason).toContain('bypassPermissions');
+
+    // Ask for push but deny gh: push still goes out with no prompt.
+    const mixed = analyze(
+      file({
+        permissions: {
+          defaultMode: 'bypassPermissions',
+          ask: ['Bash(git push:*)'],
+          deny: ['Bash(gh:*)'],
+        },
+      }),
+    );
+    expect(mixed.prefill['publish-gate'].status).toBe('unknown');
+    expect(mixed.prefill['publish-gate'].reason).toContain('bypassPermissions');
+
+    const denied = analyze(
+      file({ permissions: { defaultMode: 'bypassPermissions', deny: pushAndGh } }),
+    );
+    expect(denied.prefill['publish-gate'].status).toBe('on');
+
+    // The mode set in a higher-priority file wins.
+    const overridden = analyze(
+      file({ permissions: { defaultMode: 'default' } }, 'project-local'),
+      file({ permissions: { defaultMode: 'bypassPermissions', ask: pushAndGh } }),
+    );
+    expect(overridden.prefill['publish-gate'].status).toBe('on');
+  });
+
   it('turns it off when git push is allowed', () => {
     const report = analyze(file({ permissions: { allow: ['Bash(git push:*)'] } }));
 

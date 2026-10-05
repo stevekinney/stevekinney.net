@@ -644,7 +644,11 @@ export const analyzeSettings = (
     return command !== null && (command === '' || command === 'git' || /^git push\b/.test(command));
   };
   const coversAllOfGh = (rule: Located<string>): boolean => coversEvery(rule.value, 'gh');
-  const askOrDeny = [...merged.ask, ...merged.deny];
+  // bypassPermissions skips every prompt, so an ask rule gates nothing and only a deny counts.
+  const bypass = merged.defaultMode?.value === 'bypassPermissions' ? merged.defaultMode : null;
+  const askOrDeny = bypass ? merged.deny : [...merged.ask, ...merged.deny];
+  const gatingRule = bypass ? 'deny rule' : 'ask or deny rule';
+  const gatedPush = bypass ? 'git push is denied' : 'git push asks first, or is denied';
   const gated = askOrDeny.filter(gatesPush);
   const pushAllowed = merged.allow.filter(allowsPush);
   const ghRule = askOrDeny.find(coversAllOfGh);
@@ -675,10 +679,17 @@ export const analyzeSettings = (
         : gated.length > 0
           ? {
               status: 'unknown',
-              reason: `git push asks first, or is denied, but no ask or deny rule covers public comments through ${missing}, so a comment can still go out with no prompt.`,
+              reason: `${gatedPush}, but no ${gatingRule} covers public comments through ${missing}, so a comment can still go out with no prompt.`,
               evidence: gated,
             }
-          : notDeterminable('No ask or deny rule covers every git push.');
+          : notDeterminable(`No ${gatingRule} covers every git push.`);
+  if (bypass && prefill['publish-gate'].status === 'unknown') {
+    prefill['publish-gate'] = {
+      status: 'unknown',
+      reason: `The default permission mode is bypassPermissions, which skips ask prompts, so only deny rules count. ${prefill['publish-gate'].reason}`,
+      evidence: [bypass, ...prefill['publish-gate'].evidence],
+    };
+  }
 
   const mode = merged.defaultMode;
   prefill['auto-mode'] = mode
