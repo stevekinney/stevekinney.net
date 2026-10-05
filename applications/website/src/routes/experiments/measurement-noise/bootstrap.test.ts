@@ -122,6 +122,26 @@ describe('acceptance 5: the bootstrap', () => {
   });
 });
 
+describe('bootstrap input guards', () => {
+  it('rejects paired data of unequal lengths', () => {
+    expect(() => medianDifferenceJob([1, 2, 3], [1, 2], { seed: 1, paired: true })).toThrow(
+      RangeError,
+    );
+  });
+
+  it('rejects an empty condition', () => {
+    expect(() => medianDifferenceJob([], [1, 2], { seed: 1 })).toThrow(RangeError);
+    expect(() => medianDifferenceJob([1, 2], [], { seed: 1 })).toThrow(RangeError);
+    expect(() => costPerAcceptedJob([], [{ cost: 1, accepted: true }], { seed: 1 })).toThrow(
+      RangeError,
+    );
+  });
+
+  it('still accepts unpaired data of unequal lengths', () => {
+    expect(() => medianDifferenceJob([1, 2, 3], [1, 2], { seed: 1 })).not.toThrow();
+  });
+});
+
 describe('quantileSorted', () => {
   it('interpolates between neighbors', () => {
     expect(quantileSorted([1, 2, 3, 4, 5], 0.5)).toBe(3);
