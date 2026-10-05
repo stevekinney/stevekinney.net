@@ -60,6 +60,20 @@ describe('acceptance 5: an .env deny that misses .env.local', () => {
   });
 });
 
+describe('an .env deny scoped to one directory', () => {
+  it('does not turn on the .env controls', () => {
+    const report = analyze(
+      file({
+        permissions: { deny: ['Read(secrets/.env)', 'Read(secrets/.env.local)'] },
+        sandbox: { filesystem: { denyRead: ['secrets/.env', 'secrets/.env.local'] } },
+      }),
+    );
+
+    expect(report.prefill['deny-read-env'].status).toBe('unknown');
+    expect(report.prefill['sandbox-deny-read-env'].status).toBe('unknown');
+  });
+});
+
 describe('acceptance 6: a broad allow without allowUnsandboxedCommands: false', () => {
   it('warns that Bash(curl *) also approves the unsandboxed retry', () => {
     const report = analyze(file({ permissions: { allow: ['Bash(curl *)'] } }));
@@ -172,7 +186,7 @@ describe('prefilling controls', () => {
           ask: ['Bash(git push:*)'],
           defaultMode: 'auto',
         },
-        sandbox: { filesystem: { denyRead: ['~/**/.env*'] } },
+        sandbox: { filesystem: { denyRead: ['**/.env*'] } },
         env: { CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: '1', GITHUB_TOKEN: 'synthetic-value' },
         mcpServers: { tracker: {} },
       }),
@@ -287,9 +301,19 @@ describe('rule helpers', () => {
     expect(readRuleCovers('Read(.env)', '.env')).toBe(true);
     expect(readRuleCovers('Read(.env)', '.env.local')).toBe(false);
     expect(readRuleCovers('Read(**/.env*)', '.env.local')).toBe(true);
-    expect(readRuleCovers('Read(./.env.*)', '.env.local')).toBe(true);
+    expect(readRuleCovers('Read(**/.env.*)', '.env.local')).toBe(true);
+    // ./ is one directory, so it doesn't cover a .env.local anywhere else.
+    expect(readRuleCovers('Read(./.env.*)', '.env.local')).toBe(false);
     expect(readRuleCovers('Read', '.env.local')).toBe(true);
     expect(readRuleCovers('Edit(.env)', '.env')).toBe(false);
+  });
+
+  it('treats a pattern with a concrete directory as covering that directory only', () => {
+    expect(readRuleCovers('Read(secrets/.env)', '.env')).toBe(false);
+    expect(readRuleCovers('Read(src/**/.env*)', '.env')).toBe(false);
+    expect(readRuleCovers('Read(**/config/.env)', '.env')).toBe(false);
+    expect(readRuleCovers('Read(~/**/.env*)', '.env')).toBe(false);
+    expect(readRuleCovers('Read(**)', '.env.local')).toBe(true);
   });
 
   it('finds the line under the right parent key', () => {

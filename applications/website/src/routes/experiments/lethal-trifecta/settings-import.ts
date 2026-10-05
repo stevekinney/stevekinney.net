@@ -361,9 +361,15 @@ const globToPattern = (glob: string): RegExp =>
       .join('')}$`,
   );
 
-/** Whether a path pattern's last segment matches a file name, such as `**\/.env*` and `.env.local`. */
+/**
+ * Whether a path pattern covers a file name in every directory, such as `**\/.env*` and
+ * `.env.local`. A pattern with a concrete directory, such as `secrets/.env` or `./.env`,
+ * covers that directory only, so it fails safe and covers nothing here.
+ */
 export const patternCoversFile = (pattern: string, fileName: string): boolean => {
-  const last = pattern.replace(/\/+$/, '').split('/').at(-1) ?? '';
+  const directories = pattern.replace(/\/+$/, '').split('/');
+  const last = directories.pop() ?? '';
+  if (!directories.every((directory) => directory === '**')) return false;
   if (last === '' || last === '**') return true;
 
   return globToPattern(last).test(fileName);
@@ -568,7 +574,7 @@ export const analyzeSettings = (
       ? { status: 'on', reason: 'A Read deny covers .env and .env.local.', evidence: fullEnvDenies }
       : envDenies.length > 0
         ? { status: 'off', reason: 'The Read deny misses .env.local.', evidence: envDenies }
-        : notDeterminable('No Read rule denies .env files.');
+        : notDeterminable('No Read rule denies .env files in every directory.');
 
   const shellEnv = merged.denyRead.filter((entry) => patternCoversFile(entry.value, '.env'));
   const localShellEnv = merged.denyRead.filter((entry) =>
@@ -583,7 +589,7 @@ export const analyzeSettings = (
       ? { status: 'on', reason: 'The sandbox denies reading .env files.', evidence: fullShellEnv }
       : shellEnv.length > 0
         ? { status: 'off', reason: 'The sandbox denyRead misses .env.local.', evidence: shellEnv }
-        : notDeterminable('No sandbox denyRead entry covers .env files.');
+        : notDeterminable('No sandbox denyRead entry covers .env files in every directory.');
 
   const pushRule = (rule: Located<string>): boolean =>
     /^git push\b/.test(bashCommand(rule.value) ?? '') || bashCommand(rule.value) === 'git';
