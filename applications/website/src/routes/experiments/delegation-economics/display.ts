@@ -20,6 +20,8 @@ export const wallClockText = (evaluation: Evaluation): string => {
   const comparison = `${formatMinutes(fanMinutes)} vs ${formatMinuteCount(soloMinutes)} solo`;
 
   if (speedup === null) return `${comparison} (no work to speed up)`;
+  // With no solo time, integration alone makes it slower, by no finite multiple.
+  if (evaluation.slower && soloMinutes === 0) return `${comparison} (slower)`;
   if (evaluation.slower)
     return `${comparison} (${formatMultiplier(fanMinutes / soloMinutes)} slower)`;
   if (formatMultiplier(speedup) === '1×') return `${comparison} (no faster)`;

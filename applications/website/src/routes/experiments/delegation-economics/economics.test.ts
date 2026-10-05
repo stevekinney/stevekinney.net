@@ -286,6 +286,14 @@ describe('edge cases', () => {
     ).not.toContain('NaN');
   });
 
+  it('with no solo time, says integration makes it slower without an infinite multiple', () => {
+    const evaluation = evaluate(inputs({ soloMinutes: 0 }));
+
+    expect(evaluation.fanMinutes).toBe(12);
+    expect(evaluation.slower).toBe(true);
+    expect(wallClockText(evaluation)).toBe('12 min vs 0 solo (slower)');
+  });
+
   it('warns when the fan-out costs more than 2× for under a 1.2× speedup', () => {
     const evaluation = evaluate(
       inputs({
