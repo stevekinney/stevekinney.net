@@ -51,7 +51,10 @@ const RULES: RedactionRule[] = [
   },
   {
     kind: 'Home directory',
-    pattern: /(?:\/Users|\/home)\/[^/\s'"`:]+|\b[A-Za-z]:\\Users\\[^\\\s'"`]+/g,
+    // Claude Code names a project folder after its path with `/` as `-`, so
+    // `/Users/someone/app` is also `-Users-someone-app` in a dropped file's path.
+    pattern:
+      /(?:\/Users|\/home)\/[^/\s'"`:]+|\b[A-Za-z]:\\Users\\[^\\\s'"`]+|(?<=^|[/\s'"`(])-(?:Users|home)-[^-/\s'"`]+/g,
     replace: () => '~',
   },
   {

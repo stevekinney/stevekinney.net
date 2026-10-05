@@ -84,6 +84,9 @@ export const buildDigest = ({ overview, clusters, scope, redaction }: DigestInpu
     })),
   }));
 
+  // The scope can name a working directory, which is a home path like any other.
+  const cleanScope = scope === null ? null : clean(scope);
+
   const counts = {
     sessions: overview.sessions,
     turns: overview.turns,
@@ -104,7 +107,7 @@ export const buildDigest = ({ overview, clusters, scope, redaction }: DigestInpu
     {
       digest: 'session-log-auditor',
       note: `Every count here was computed by code from the transcripts. ${quoteNote}`,
-      scope,
+      scope: cleanScope,
       redacted: redaction,
       counts,
       clusters: top,
@@ -117,7 +120,7 @@ export const buildDigest = ({ overview, clusters, scope, redaction }: DigestInpu
     '# Session log digest',
     '',
     `Every count below was computed by code. ${quoteNote}`,
-    ...(scope ? ['', `Scope: ${scope}`] : []),
+    ...(cleanScope ? ['', `Scope: ${cleanScope}`] : []),
     '',
     '## Counts',
     '',

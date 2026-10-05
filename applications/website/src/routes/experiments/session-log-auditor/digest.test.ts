@@ -53,6 +53,11 @@ describe('redact', () => {
     ['AWS', 'id AKIAABCDEFGHIJKLMNOP', 'id [redacted AWS key]'],
     ['Bearer', 'Authorization: Bearer abc.def.ghi123', 'Authorization: Bearer [redacted token]'],
     ['home', 'open /Users/someone/app and /home/other/x', 'open ~/app and ~/x'],
+    [
+      'dash-encoded home',
+      'projects/-Users-someone-work-app/a.jsonl and -home-other-x/b.jsonl',
+      'projects/~-work-app/a.jsonl and ~-x/b.jsonl',
+    ],
     ['base64', `blob ${'QmFzZTY0'.repeat(6)}1==`, 'blob [redacted base64]'],
   ])('masks a %s shape', (_, text, expected) => {
     expect(redact(text).text).toBe(expected);
@@ -101,6 +106,23 @@ describe('buildDigest', () => {
     expect(digest.markdown).toContain(githubToken);
     expect(digest.markdown).not.toContain('except where');
     expect(digest.findings).toEqual([]);
+  });
+
+  it('masks a home directory in the scope a filter puts in the digest', () => {
+    const analysis = sessionWithSecret();
+    const digest = buildDigest({
+      overview: analysis.overview,
+      clusters: analysis.clusters,
+      scope: 'directory /Users/someone/work/app',
+      redaction: true,
+    });
+
+    expect(digest.markdown).toContain('Scope: directory ~/work/app');
+    expect(JSON.parse(digest.json).scope).toBe('directory ~/work/app');
+    expect(`${digest.markdown}${digest.json}`).not.toContain('someone');
+    expect(digest.findings).toContainEqual(
+      expect.objectContaining({ kind: 'Home directory', replacement: '~' }),
+    );
   });
 
   it('carries counts from code and the clusters ranked by sessions', () => {
