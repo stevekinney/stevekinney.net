@@ -228,10 +228,13 @@ export type ReplayIteration = {
   score: number | null;
   kept: boolean;
   failure: string | null;
-  /** Kept and the score improved on the best kept so far, or kept alone with no score. */
-  progress: boolean;
-  /** Iterations in a row without progress, counting this one. */
-  sinceProgress: number;
+  /**
+   * Kept and the score improved on the best kept so far, or kept alone with no score.
+   * Null when the log has neither a score nor a kept field, so progress is unknown.
+   */
+  progress: boolean | null;
+  /** Iterations in a row without progress, counting this one, or null when progress is unknown. */
+  sinceProgress: number | null;
   /** The same failure as the iteration before. */
   repeated: boolean;
 };
@@ -241,6 +244,8 @@ export type Replay = {
   total: number;
   hasScore: boolean;
   hasKept: boolean;
+  /** Whether progress can be told from a stall: the log has a score or a kept field. */
+  hasProgress: boolean;
   hasCost: boolean;
   /** Plain statements about what the log lacked and how it was read. */
   notes: string[];
@@ -262,6 +267,7 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
   const hasScore = scores.some((score) => score !== null);
   const hasKept = keptValues.some((kept) => kept !== null);
   const hasCost = costValues.some((cost) => cost !== null);
+  const hasProgress = hasScore || hasKept;
 
   if (!hasScore && hasKept) {
     notes.push(
@@ -322,17 +328,19 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     const score = scores[index];
     const kept = hasKept ? keptValues[index] === true : true;
 
-    let progress: boolean;
-    if (hasScore) {
+    let progress: boolean | null;
+    if (!hasProgress) {
+      progress = null;
+    } else if (hasScore) {
       const improved =
         score !== null && (best === null || (lowerIsBetter ? score < best : score > best));
       progress = kept && improved;
       if (progress) best = score;
     } else {
-      progress = hasKept && kept;
+      progress = kept;
     }
 
-    sinceProgress = progress ? 0 : sinceProgress + 1;
+    if (progress !== null) sinceProgress = progress ? 0 : sinceProgress + 1;
 
     const failure = readFailure(read(record, 'failure'));
     const repeated = failure !== null && failure === previousFailure;
@@ -347,7 +355,7 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
       kept,
       failure,
       progress,
-      sinceProgress,
+      sinceProgress: hasProgress ? sinceProgress : null,
       repeated,
     });
   });
@@ -358,7 +366,7 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     );
   }
 
-  return { iterations, total: cumulative, hasScore, hasKept, hasCost, notes };
+  return { iterations, total: cumulative, hasScore, hasKept, hasProgress, hasCost, notes };
 };
 
 export type CounterfactualGovernor =
@@ -384,7 +392,7 @@ export type Counterfactual = {
 const fires = (governor: CounterfactualGovernor, step: ReplayIteration, index: number): boolean => {
   switch (governor.kind) {
     case 'stall':
-      return step.sinceProgress >= governor.m;
+      return step.sinceProgress !== null && step.sinceProgress >= governor.m;
     case 'maxIterations':
       return index + 1 >= governor.maximum;
     case 'budget':
@@ -417,6 +425,20 @@ export const counterfactual = (
   format: (dollars: number) => string,
 ): Counterfactual => {
   const name = governorName(governor, format);
+
+  // A stall is a run without progress, so it can't be found where progress is unknown.
+  if (governor.kind === 'stall' && !replay.hasProgress) {
+    return {
+      governor,
+      name,
+      stopIndex: null,
+      stopIteration: null,
+      saved: 0,
+      progressLost: 0,
+      sentence: `${name} can’t be checked on this log, which has neither a score nor a kept field.`,
+    };
+  }
+
   const stopIndex = replay.iterations.findIndex((step, index) => fires(governor, step, index));
 
   if (stopIndex === -1 || stopIndex === replay.iterations.length - 1) {

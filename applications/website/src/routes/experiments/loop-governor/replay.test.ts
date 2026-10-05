@@ -208,6 +208,32 @@ describe('reading a log defensively', () => {
     ]);
   });
 
+  it('leaves progress unknown, and the stall detector unchecked, with neither score nor kept', () => {
+    const log = parseLogText(
+      [1, 2, 3, 4, 5].map((cost) => JSON.stringify({ cost_usd: cost })).join('\n'),
+    );
+    const replay = analyzeLog(log, {
+      mapping: guessMapping(log.keys),
+      lowerIsBetter: false,
+      costIsRunningTotal: false,
+    });
+
+    expect(replay.hasProgress).toBe(false);
+    expect(replay.iterations.every((step) => step.progress === null)).toBe(true);
+    expect(replay.iterations.every((step) => step.sinceProgress === null)).toBe(true);
+
+    const stall = counterfactual(replay, { kind: 'stall', m: 2 }, formatCost);
+    expect(stall).toMatchObject({ stopIndex: null, stopIteration: null, saved: 0 });
+    expect(stall.sentence).toBe(
+      'A stall detector of 2 can’t be checked on this log, which has neither a score nor a kept field.',
+    );
+
+    // The other governors don't need progress.
+    expect(counterfactual(replay, { kind: 'maxIterations', maximum: 3 }, formatCost)).toMatchObject(
+      { stopIteration: 3, saved: 9 },
+    );
+  });
+
   it('stops reading at the record limit and says so', () => {
     const reader = createLogReader();
     for (let index = 0; index <= MAXIMUM_RECORDS; index += 1) reader.addLine(`{"i":${index}}`);
