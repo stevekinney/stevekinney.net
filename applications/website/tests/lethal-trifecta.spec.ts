@@ -34,9 +34,9 @@ test('responds with 200 and a descriptive title', async ({ page }) => {
   const response = await page.goto(path);
 
   expect(response?.status()).toBe(200);
-  await expect(page).toHaveTitle(/Cut a Leg/);
+  await expect(page).toHaveTitle(/Lethal Trifecta/);
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Cut a leg of the lethal trifecta.' }),
+    page.getByRole('heading', { level: 1, name: 'Cut a leg of the lethal trifecta' }),
   ).toBeVisible();
 });
 

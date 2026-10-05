@@ -55,7 +55,7 @@ test('responds with 200 and its title', async ({ page }) => {
   const response = await page.goto(pickerPath);
 
   expect(response?.status()).toBe(200);
-  await expect(page).toHaveTitle(/Which Primitive\?/);
+  await expect(page).toHaveTitle(/Mechanism Picker/);
   await expect(page.getByRole('heading', { level: 1, name: 'Which primitive?' })).toBeVisible();
 });
 
