@@ -156,8 +156,8 @@ export const simulate = (
   const capacity = scenario.sittings * scenario.linesPerSitting;
   // The queue only grows at the back, so a head index and a running total of waiting
   // lines replace shifting the array and summing it every day. The array empties whenever
-  // the head reaches its end.
-  const queue: WaitingPr[] = [];
+  // the head reaches its end, and drops its finished entries once they outnumber the rest.
+  let queue: WaitingPr[] = [];
   let head = 0;
   let backlogLines = 0;
   const days: SimulatedDay[] = [];
@@ -190,6 +190,10 @@ export const simulate = (
       // Once everything waiting is reviewed, drop the finished entries so they don't pile up.
       if (head === queue.length) {
         queue.length = 0;
+        head = 0;
+      } else if (head > 1024 && head * 2 > queue.length) {
+        // A backlog that never clears would otherwise keep every reviewed entry.
+        queue = queue.slice(head);
         head = 0;
       }
     } else {
