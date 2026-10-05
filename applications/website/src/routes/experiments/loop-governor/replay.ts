@@ -213,11 +213,16 @@ export type ReplayOptions = {
   mapping: FieldMapping;
   lowerIsBetter: boolean;
   /**
-   * Whether the cost field is each iteration's cost or a running total. A running total is
-   * kept for each session when a mapped session repeats, otherwise for the whole log, and a
-   * drop starts a new total.
+   * Whether the cost field is each iteration's cost or a running total. A drop in a running
+   * total starts a new total.
    */
   costIsRunningTotal: boolean;
+  /**
+   * What a running total counts: the whole log (the default) or each session. Used only when
+   * `costIsRunningTotal` is on. Per session needs a mapped session field; without one, the
+   * total is read across the whole log.
+   */
+  runningTotalScope?: 'log' | 'session';
 };
 
 export type ReplayIteration = {
@@ -256,7 +261,7 @@ const plural = (count: number, word: string): string =>
   `${count.toLocaleString('en-US')} ${word}${count === 1 ? '' : 's'}`;
 
 export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
-  const { mapping, lowerIsBetter, costIsRunningTotal } = options;
+  const { mapping, lowerIsBetter, costIsRunningTotal, runningTotalScope = 'log' } = options;
   const notes: string[] = [];
   const read = (record: Record<string, unknown>, role: FieldRole): unknown =>
     mapping[role] === null ? undefined : record[mapping[role] as string];
@@ -298,19 +303,12 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     notes.push(`Read the first ${MAXIMUM_RECORDS.toLocaleString('en-US')} iterations only.`);
   }
 
-  // A running total belongs to a session only when sessions repeat. A loop that starts a fresh
-  // session every iteration, as an external loop does, keeps one total for the whole log.
+  // Nothing in a log says which a running total counts, so the reader chooses.
+  const totalPerSession = runningTotalScope === 'session' && mapping.session !== null;
   const sessionKeys = log.records.map((record) => {
     const session = read(record, 'session');
     return session === undefined || session === null ? '' : String(session);
   });
-  const totalPerSession =
-    mapping.session !== null && new Set(sessionKeys).size < sessionKeys.length;
-  if (costIsRunningTotal && mapping.session !== null && !totalPerSession) {
-    notes.push(
-      'Every iteration has its own session, so the running total is read across the whole log.',
-    );
-  }
 
   const iterations: ReplayIteration[] = [];
   let cumulative = 0;

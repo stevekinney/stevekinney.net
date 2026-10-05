@@ -365,8 +365,18 @@ test.describe('replaying a loop log', () => {
     await expect(page.getByLabel('A lower score is better')).toBeChecked();
     await expect(page.getByText('Skipped 1 line that wasn’t a JSON object.')).toBeVisible();
 
+    const scope = page.getByRole('group', { name: 'The running total counts' });
+    await expect(scope).toBeHidden();
     await page.getByLabel('The cost is a running total').check();
+    await expect(scope.getByRole('button', { name: 'Across the whole log' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
     await expect(page.getByText('10 iterations, $5.00 in total, 4 with progress.')).toBeVisible();
+
+    // Each iteration has its own session, so a per-session total reads each value whole.
+    await scope.getByRole('button', { name: 'Per session' }).click();
+    await expect(page.getByText('10 iterations, $27.50 in total, 4 with progress.')).toBeVisible();
   });
 
   test('infers stalls from kept alone when the log has no score, and says so', async ({ page }) => {

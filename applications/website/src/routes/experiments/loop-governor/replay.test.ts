@@ -150,41 +150,86 @@ describe('reading a log defensively', () => {
     );
   });
 
-  it('keeps a running total for each session when the session is mapped', () => {
-    const lines = [
-      { session_id: 'a', cost_usd: 1 },
-      { session_id: 'b', cost_usd: 2 },
-      { session_id: 'a', cost_usd: 3 },
-      { session_id: 'b', cost_usd: 5 },
-    ];
+  const runningTotals = (
+    lines: Record<string, unknown>[],
+    runningTotalScope?: 'log' | 'session',
+  ): Replay => {
     const log = parseLogText(lines.map((line) => JSON.stringify(line)).join('\n'));
-    const replay = analyzeLog(log, {
+
+    return analyzeLog(log, {
       mapping: guessMapping(log.keys),
       lowerIsBetter: false,
       costIsRunningTotal: true,
+      runningTotalScope,
     });
+  };
+
+  it('keeps a running total for each session when told to', () => {
+    const replay = runningTotals(
+      [
+        { session_id: 'a', cost_usd: 1 },
+        { session_id: 'b', cost_usd: 2 },
+        { session_id: 'a', cost_usd: 3 },
+        { session_id: 'b', cost_usd: 5 },
+      ],
+      'session',
+    );
 
     expect(replay.iterations.map((step) => step.cost)).toEqual([1, 2, 2, 3]);
     expect(replay.total).toBe(8);
     expect(replay.notes.some((note) => note.includes('dropped'))).toBe(false);
   });
 
+  it('keeps one running total across the log by default, even when sessions repeat', () => {
+    // A loop-wide total, logged against whichever session ran each iteration.
+    const replay = runningTotals([
+      { session_id: 'a', cost_usd: 1 },
+      { session_id: 'b', cost_usd: 2 },
+      { session_id: 'a', cost_usd: 3 },
+      { session_id: 'c', cost_usd: 4 },
+    ]);
+
+    expect(replay.iterations.map((step) => step.cost)).toEqual([1, 1, 1, 1]);
+    expect(replay.total).toBe(4);
+  });
+
   it('keeps one running total when every iteration starts a fresh session', () => {
-    const lines = [1, 2, 3, 4].map((total, index) => ({
-      session_id: `fresh-${index + 1}`,
-      cost_usd: total,
-    }));
-    const log = parseLogText(lines.map((line) => JSON.stringify(line)).join('\n'));
+    const replay = runningTotals(
+      [1, 2, 3, 4].map((total, index) => ({ session_id: `fresh-${index + 1}`, cost_usd: total })),
+    );
+
+    expect(replay.iterations.map((step) => step.cost)).toEqual([1, 1, 1, 1]);
+    expect(replay.total).toBe(4);
+    expect(replay.notes.some((note) => note.includes('its own session'))).toBe(false);
+  });
+
+  it('reads per-session totals across the log when no session is mapped', () => {
+    const log = parseLogText(
+      [1, 3, 6].map((total) => JSON.stringify({ cost_usd: total })).join('\n'),
+    );
     const replay = analyzeLog(log, {
       mapping: guessMapping(log.keys),
       lowerIsBetter: false,
       costIsRunningTotal: true,
+      runningTotalScope: 'session',
     });
 
-    expect(replay.iterations.map((step) => step.cost)).toEqual([1, 1, 1, 1]);
-    expect(replay.total).toBe(4);
+    expect(replay.total).toBe(6);
+  });
+
+  it('starts a new total on a drop within a session', () => {
+    const replay = runningTotals(
+      [
+        { session_id: 'a', cost_usd: 2 },
+        { session_id: 'b', cost_usd: 5 },
+        { session_id: 'a', cost_usd: 1 },
+      ],
+      'session',
+    );
+
+    expect(replay.iterations.map((step) => step.cost)).toEqual([2, 5, 1]);
     expect(replay.notes).toContain(
-      'Every iteration has its own session, so the running total is read across the whole log.',
+      'The running total dropped once, so that iteration starts a new total at its own value.',
     );
   });
 
