@@ -176,8 +176,16 @@ const exitEdge = (node: GraphNode<ExitId>, state: TrifectaState): Edge => {
   const platform = ciCuts(state.ci)[node.id];
   const isNetwork = networkExits.includes(node.id);
 
+  // Default-deny egress removes the shell network on its own, and every other network exit
+  // only alongside a container, so a hover highlights only what the pair would remove.
+  const egressControls: ControlId[] = [
+    ...(node.id === 'shell-network' || controls.container
+      ? (['default-deny-egress'] as ControlId[])
+      : []),
+    ...(deny ? (['container'] as ControlId[]) : []),
+  ];
   const touchedBy: ControlId[] = [
-    ...(isNetwork ? (['default-deny-egress', 'container'] as ControlId[]) : []),
+    ...(isNetwork ? egressControls : []),
     ...((
       {
         'shell-network': ['deny-curl'],

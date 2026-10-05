@@ -157,6 +157,38 @@ describe('the other presets', () => {
   });
 });
 
+describe('which edges a control touches', () => {
+  const touched = (state: TrifectaState, id: ControlId): string[] =>
+    Object.values(evaluate(state).edges)
+      .filter((edge) => edge.state !== 'absent' && edge.touchedBy.includes(id))
+      .map((edge) => edge.node.id);
+
+  it('has default-deny egress touch only the shell network without a container', () => {
+    expect(touched(defaultState(), 'default-deny-egress')).toEqual(['shell-network']);
+  });
+
+  it('has the container touch only private data while egress is open', () => {
+    expect(touched(defaultState(), 'container')).toEqual([
+      'environment',
+      'env-files',
+      'transcripts',
+    ]);
+  });
+
+  it('has both touch every network exit together', () => {
+    const state = preset('container');
+
+    expect(touched(state, 'default-deny-egress')).toEqual([
+      'shell-network',
+      'unsandboxed-shell',
+      'web-fetch',
+      'git-push',
+      'public-comment',
+    ]);
+    expect(touched(state, 'container')).toContain('web-fetch');
+  });
+});
+
 describe('edge cases', () => {
   it('says no sources is unusual', () => {
     const state = defaultState();
