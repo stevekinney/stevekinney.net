@@ -166,7 +166,9 @@
   </div>
 
   {#if error}
-    <p role="alert" class="text-sm text-red-700 dark:text-red-400">{error}</p>
+    <p role="alert" class="text-sm [overflow-wrap:anywhere] text-red-700 dark:text-red-400">
+      {error}
+    </p>
   {/if}
 
   {#if intake && mapping}

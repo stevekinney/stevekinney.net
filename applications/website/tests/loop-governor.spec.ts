@@ -379,6 +379,29 @@ test.describe('replaying a loop log', () => {
     );
   });
 
+  test('wraps a long file name at phone width, whether or not it reads', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await open(page);
+    const name = `${'a'.repeat(150)}.jsonl`;
+    const input = page
+      .getByRole('group', { name: 'Drop a loop log here' })
+      .locator('input[type="file"]')
+      .first();
+
+    await input.setInputFiles({ name, mimeType: 'text/plain', buffer: Buffer.from('not json\n') });
+    await expect(page.getByRole('alert')).toContainText('has no lines that are JSON objects');
+    expect(await horizontalOverflow(page)).toBe(0);
+
+    const { readFileSync } = await import('node:fs');
+    await input.setInputFiles({
+      name,
+      mimeType: 'text/plain',
+      buffer: readFileSync(fixture('loop-governor/flat-from-15.jsonl')),
+    });
+    await expect(page.getByTestId('counterfactuals')).toBeVisible();
+    expect(await horizontalOverflow(page)).toBe(0);
+  });
+
   test('names a Claude Code transcript instead of replaying it', async ({ page }) => {
     await open(page);
     await chooseLog(page, 'model-calculator/claude-code-session.jsonl');
