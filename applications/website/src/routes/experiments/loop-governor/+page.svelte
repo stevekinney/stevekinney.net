@@ -1,37 +1,28 @@
 <script lang="ts">
-  import { Copy, Link, Pin, PinOff } from '@lucide/svelte';
-  import { onMount, tick } from 'svelte';
+  import { onMount } from 'svelte';
   import type { Component } from 'svelte';
 
   import { replaceState } from '$app/navigation';
-  import Button from '$lib/components/button';
   import SEO from '$lib/components/seo.svelte';
   import { url } from '$lib/metadata';
   import { buildBreadcrumbSchema } from '$lib/structured-data';
 
-  import { copyText } from '../usable-evidence-budget/copy-text';
-  import AnalyticTable from './analytic-table.svelte';
-  import { analyticRows, falseDoneBeforeTrue } from './analytic';
+  import LazySection from '../compact-or-clear/lazy-section.svelte';
+  import { falseDoneBeforeTrue } from './analytic';
   import CautionaryTales from './cautionary-tales.svelte';
-  import CostComparison from './cost-comparison.svelte';
-  import CostHistogram from './cost-histogram.svelte';
   import { experiment } from './experiment';
   import { bodyClasses, headingClasses, panelClasses } from './field-styles';
   import FourJobs from './four-jobs.svelte';
-  import { formatCount, formatShare } from './labels';
   import LoopControls from './loop-controls.svelte';
   import LoopFooter from './loop-footer.svelte';
   import { cloneConfig, defaultConfig, defaultLadder } from './loop-config';
   import type { Config, Governors, MarkerId } from './loop-config';
   import MarkerLadder from './marker-ladder.svelte';
-  import OutcomeBar from './outcome-bar.svelte';
   import PredictFirst from './predict-first.svelte';
   import { findPreset, presetMatching } from './presets';
-  import RunTimeline from './run-timeline.svelte';
   import { decodeState, encodeState } from './share-link';
   import { createBatch, simulateBatch } from './simulate';
   import type { Tally } from './simulate';
-  import { costHistogram, settledMaximum } from './statistics';
 
   const { data } = $props();
 
@@ -60,24 +51,14 @@
     showResults: false,
     ready: false,
     touched: false,
-    shareMessage: null as string | null,
-    manualCopy: null as string | null,
   });
 
-  let manualCopyBox: HTMLTextAreaElement | undefined = $state();
   let ReplayPanel = $state.raw<Component<{
     settings: { stallM: number; maxIterations: number; budget: number };
   }> | null>(null);
   let replayFailed = $state(false);
 
   const presetId = $derived(presetMatching(config)?.id ?? null);
-  const rows = $derived(analyticRows(tallied, tally));
-  const sharedAxis = $derived(
-    pinned ? Math.max(settledMaximum(tally), settledMaximum(pinned.tally)) : 0,
-  );
-  const histogram = $derived(costHistogram(tally, 20, sharedAxis));
-  const pinnedHistogram = $derived(pinned ? costHistogram(pinned.tally, 20, sharedAxis) : null);
-
   const change = (next: Config): void => {
     config = next;
     page.touched = true;
@@ -155,39 +136,6 @@
     page.touched = true;
   };
 
-  const sharedLink = (): string =>
-    `${window.location.origin}${window.location.pathname}#${encodeState({
-      config,
-      pinned: pinned?.config ?? null,
-    })}`;
-
-  // The clipboard can reject. Then the text goes in a box, already selected.
-  const copy = async (text: string, copied: string): Promise<void> => {
-    if (await copyText(text)) {
-      page.manualCopy = null;
-      page.shareMessage = copied;
-
-      return;
-    }
-
-    page.manualCopy = text;
-    page.shareMessage = 'Couldn’t reach the clipboard. Press Command-C or Control-C to copy it.';
-    await tick();
-    manualCopyBox?.select();
-  };
-
-  const copyLink = (): Promise<void> =>
-    copy(
-      sharedLink(),
-      'Link copied. It holds the configuration, the seed, and A, and nothing from a replayed log.',
-    );
-
-  const copySummary = async (): Promise<void> => {
-    const { buildSummary } = await import('./summary');
-
-    await copy(buildSummary(tallied, tally, sharedLink()), 'Summary copied as Markdown.');
-  };
-
   onMount(() => {
     // The hash doesn't exist while the page prerenders, so it's read here.
     const shared = decodeState(window.location.hash.slice(1));
@@ -201,7 +149,8 @@
     }
 
     page.ready = true;
-    void import('./summary');
+    // Fetch the results now, so revealing them finds them already loaded.
+    void import('./results.svelte');
 
     import('./replay-panel.svelte')
       .then((module) => {
@@ -272,133 +221,20 @@
   </section>
 
   {#if page.showResults}
-    <section aria-labelledby="outcomes-heading" class="space-y-6">
-      <div class="space-y-1">
-        <h2 id="outcomes-heading" class={headingClasses}>How the runs ended</h2>
-        <p class={bodyClasses} aria-live="polite" data-testid="simulation-status">
-          {#if page.simulating}
-            Simulating… {formatCount(page.simulated)} of {formatCount(config.runs)} runs.
-          {:else}
-            {formatCount(tally.runs)} runs, seed {tallied.seed}.
-          {/if}
-        </p>
-        {#if page.simulating}
-          <progress
-            max={config.runs}
-            value={page.simulated}
-            aria-label="Simulation progress"
-            class="accent-primary-600 h-2 w-full max-w-md"
-          ></progress>
-        {/if}
-      </div>
-
-      <div class="grid gap-8 {pinned ? 'lg:grid-cols-2' : ''}">
-        {#if pinned}
-          <OutcomeBar id="a" tally={pinned.tally} title="A (pinned)" />
-        {/if}
-        <OutcomeBar id="b" {tally} title={pinned ? 'B (current)' : undefined} />
-      </div>
-
-      {#if tallied.dual}
-        <p class="text-slate-700 dark:text-slate-200" data-testid="premature-claims">
-          The dual condition caught {formatCount(tally.prematureClaims)} premature claims, in
-          {formatCount(tally.runsWithClaims)} of {formatCount(tally.runs)} runs ({formatShare(
-            tally.runsWithClaims / Math.max(1, tally.runs),
-          )}). False done is {formatShare(tally.outcomes['done-false'] / Math.max(1, tally.runs))}.
-          That count is your false-completion rate, and now you can track it.
-        </p>
-      {/if}
-
-      <AnalyticTable {rows} runs={tally.runs} />
-
-      <div class="space-y-3">
-        <div class="flex flex-wrap gap-3">
-          <Button
-            variant="secondary"
-            size="small"
-            icon={pinned ? PinOff : Pin}
-            disabled={!page.ready || page.simulating}
-            onclick={togglePin}
-          >
-            {pinned ? 'Unpin A' : 'Pin this as A to compare'}
-          </Button>
-          <Button
-            variant="secondary"
-            size="small"
-            icon={Link}
-            disabled={!page.ready}
-            onclick={copyLink}
-          >
-            Copy link
-          </Button>
-          <Button
-            variant="secondary"
-            size="small"
-            icon={Copy}
-            disabled={!page.ready || page.simulating}
-            onclick={copySummary}
-          >
-            Copy summary
-          </Button>
-        </div>
-        {#if page.shareMessage}
-          <p role="status" class="text-sm text-slate-600 dark:text-slate-300">
-            {page.shareMessage}
-          </p>
-        {/if}
-        {#if page.manualCopy}
-          <textarea
-            bind:this={manualCopyBox}
-            readonly
-            rows="4"
-            aria-label="Text to copy"
-            class="w-full rounded-md border border-slate-300 p-2 font-mono text-xs dark:border-slate-600 dark:bg-slate-800"
-            >{page.manualCopy}</textarea
-          >
-        {/if}
-      </div>
-    </section>
-
-    <section aria-labelledby="cost-heading" class="space-y-6">
-      <div class="space-y-1">
-        <h2 id="cost-heading" class={headingClasses}>What the runs cost</h2>
-        <p class={bodyClasses}>
-          Total cost per run, with the median, the 95th percentile, and the maximum marked. Runs
-          that never stopped sit in their own bin, so they don’t squash the rest.
-        </p>
-      </div>
-      <div class="grid gap-8 {pinnedHistogram ? 'lg:grid-cols-2' : ''}">
-        {#if pinnedHistogram && pinned}
-          <CostHistogram
-            id="a"
-            histogram={pinnedHistogram}
-            runs={pinned.tally.runs}
-            title="A (pinned)"
-          />
-        {/if}
-        <CostHistogram
-          id="b"
-          {histogram}
-          runs={tally.runs}
-          title={pinned ? 'B (current)' : undefined}
-        />
-      </div>
-      <h3 class="text-lg font-bold text-slate-900 dark:text-white">
-        Fresh against accumulating context
-      </h3>
-      <CostComparison {config} />
-    </section>
-
-    <section aria-labelledby="run-heading" class="space-y-4">
-      <div class="space-y-1">
-        <h2 id="run-heading" class={headingClasses}>One run, iteration by iteration</h2>
-        <p class={bodyClasses}>
-          The first run from seed {config.seed}. Touch STOP while it plays to see whether anything
-          in your loop is listening.
-        </p>
-      </div>
-      <RunTimeline {config} ready={page.ready} />
-    </section>
+    <LazySection
+      name="the results"
+      load={() => import('./results.svelte')}
+      props={{
+        ready: page.ready,
+        config,
+        tally,
+        tallied,
+        pinned,
+        simulating: page.simulating,
+        simulated: page.simulated,
+        onTogglePin: togglePin,
+      }}
+    />
   {:else}
     <section aria-labelledby="hidden-heading" class="{panelClasses} max-w-3xl">
       <h2 id="hidden-heading" class={headingClasses}>The results are waiting on your guess</h2>

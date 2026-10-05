@@ -4,6 +4,7 @@
   import Button from '$lib/components/button';
   import { formatCost } from '$lib/experiments/format';
 
+  import LazySection from '../compact-or-clear/lazy-section.svelte';
   import CheckField from './check-field.svelte';
   import { iterationCost } from './cost';
   import {
@@ -18,7 +19,6 @@
   import { markers, ranges } from './loop-config';
   import type { Config, Governors, MarkerId } from './loop-config';
   import NumberField from './number-field.svelte';
-  import PricingHelper from './pricing-helper.svelte';
   import { MAXIMUM_SEED } from './random';
   import { customNotice, findPreset, presets } from './presets';
   import ToggleGroup from './toggle-group.svelte';
@@ -247,7 +247,25 @@
           onChange={(g) => onChange({ g })}
         />
       </div>
-      <PricingHelper {ready} {models} {pricesUpdated} onApply={(prices) => onChange(prices)} />
+      <details class="rounded-md border border-slate-200 p-3 dark:border-slate-700">
+        <summary
+          class="focus-visible:outline-primary-600 cursor-pointer font-semibold text-slate-800 focus-visible:outline-2 dark:text-slate-100"
+        >
+          Price an iteration from a model
+        </summary>
+        <div class="mt-3">
+          <LazySection
+            name="the model prices"
+            load={() => import('./pricing-helper.svelte')}
+            props={{
+              ready,
+              models,
+              pricesUpdated,
+              onApply: (prices: Partial<Config>) => onChange(prices),
+            }}
+          />
+        </div>
+      </details>
     </fieldset>
 
     <fieldset class="min-w-0 space-y-4">

@@ -280,7 +280,9 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     notes.push(`${plural(missingCosts, 'iteration')} had no readable cost and count as $0.`);
   }
   if (log.skippedLines > 0) {
-    notes.push(`Skipped ${plural(log.skippedLines, 'line')} that weren’t JSON objects.`);
+    notes.push(
+      `Skipped ${plural(log.skippedLines, 'line')} that ${log.skippedLines === 1 ? 'wasn’t a JSON object' : 'weren’t JSON objects'}.`,
+    );
   }
   if (log.truncated) {
     notes.push(`Read the first ${MAXIMUM_RECORDS.toLocaleString('en-US')} iterations only.`);
