@@ -17,6 +17,13 @@
   const { on, prefill, ready, onToggle, onHover }: Props = $props();
 
   const badge = (control: Control): { text: string; classes: string } => {
+    if (control.partial) {
+      return {
+        text: 'partial',
+        classes: 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-100',
+      };
+    }
+
     switch (control.kind) {
       case 'prompt-only':
         return {

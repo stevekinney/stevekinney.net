@@ -1,5 +1,5 @@
 import type { Evaluation, TrifectaState } from './evaluate';
-import { controlGroups, controls, kindLabels } from './model';
+import { controlGroups, controlKindLabel, controls } from './model';
 import { verdictSentence } from './verdict';
 
 /** A Markdown report: the verdict, the path, the controls in place by kind, and the residual risks. */
@@ -23,7 +23,7 @@ export const summaryToMarkdown = (state: TrifectaState, evaluation: Evaluation):
     lines.push(`### ${group.title}`, '');
     for (const control of inPlace) {
       lines.push(
-        `- ${control.label} (${kindLabels[control.kind]}): removes ${control.removes.toLowerCase()}`,
+        `- ${control.label} (${controlKindLabel(control)}): removes ${control.removes.toLowerCase()}`,
       );
     }
     lines.push('');

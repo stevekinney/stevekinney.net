@@ -208,6 +208,8 @@ export type ControlId =
 export type Control = {
   id: ControlId;
   kind: ControlKind;
+  /** It narrows an edge without cutting it, though its kind would suggest otherwise. */
+  partial?: true;
   label: string;
   /** What it removes, in the words of the specification’s table. */
   removes: string;
@@ -280,10 +282,11 @@ export const controls: Control[] = [
   {
     id: 'plan-first',
     kind: 'architectural',
+    partial: true,
     label: 'Plan before reading untrusted content',
-    removes: 'The payload choosing the actions',
+    removes: 'The payload choosing which actions run, but not their arguments',
     description:
-      'The plan is fixed before any untrusted content enters the context, so the content can change values but not which actions run.',
+      'The plan is fixed before any untrusted content enters the context, so the content can’t change which actions run. It still supplies their arguments, such as the URL a planned fetch goes to, so it narrows the untrusted-content leg without cutting it.',
   },
   {
     id: 'fsmonitor-off',
@@ -363,6 +366,12 @@ export const kindLabels: Record<ControlKind, string> = {
   'best-effort': 'best-effort',
   'prompt-only': 'prompt-only',
 };
+
+/** A control's kind as words, with partial added when it narrows rather than cuts. */
+export const controlKindLabel = (control: Control): string =>
+  control.partial && control.kind !== 'partial'
+    ? `${kindLabels[control.kind]}, partial`
+    : kindLabels[control.kind];
 
 export const legLabels: Record<Leg, string> = {
   untrusted: 'Untrusted content',

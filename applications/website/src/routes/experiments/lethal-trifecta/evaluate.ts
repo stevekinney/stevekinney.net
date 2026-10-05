@@ -87,9 +87,12 @@ const sourceEdge = (node: GraphNode<SourceId>, state: TrifectaState): Edge => {
       cuts: [{ control: 'reader-doer', label: 'Reader/doer split' }],
     });
   }
+  // A fixed plan decides which actions run, but the content still supplies their
+  // arguments, such as the URL a planned fetch goes to. So it narrows the edge, and
+  // only the reader/doer split cuts it.
   if (state.controls['plan-first']) {
-    return edge(node, 'cut', touchedBy, {
-      cuts: [{ control: 'plan-first', label: 'Plan before reading' }],
+    return edge(node, 'live', touchedBy, {
+      note: 'Partial: fixes the actions, not their arguments. The content can still supply a value such as a destination URL.',
     });
   }
 
@@ -286,14 +289,6 @@ const legStatus = (edges: Edge[]): LegStatus => {
   return present.some((candidate) => candidate.state === 'live') ? 'intact' : 'cut';
 };
 
-const untrustedLegName = (edges: Edge[]): string =>
-  edges.every(
-    (candidate) =>
-      candidate.state === 'absent' || candidate.cuts.some((cut) => cut.control === 'reader-doer'),
-  )
-    ? 'untrusted content reaching the acting agent'
-    : 'untrusted content choosing the actions';
-
 export const pathSentence = (source: Edge, data: Edge, exit: Edge): string =>
   `${source.phrase} → agent context ← ${data.phrase} → ${exit.phrase}.`;
 
@@ -333,7 +328,8 @@ export const evaluate = (state: TrifectaState): Evaluation => {
     : null;
 
   const cutLegNames = [
-    ...(legs.untrusted === 'cut' ? [untrustedLegName(sourceEdges)] : []),
+    // Only the reader/doer split cuts a source.
+    ...(legs.untrusted === 'cut' ? ['untrusted content reaching the acting agent'] : []),
     ...(legs.private === 'cut' ? ['private data'] : []),
     ...(legs.exit === 'cut' ? ['a way out'] : []),
   ];
@@ -355,6 +351,12 @@ export const evaluate = (state: TrifectaState): Evaluation => {
     residualRisks.push({
       kind: 'partial',
       text: 'Bash(curl *) deny blocks curl only. wget, python, node, nc, and git still reach the network.',
+    });
+  }
+  if (state.controls['plan-first'] && live.sources.length > 0) {
+    residualRisks.push({
+      kind: 'partial',
+      text: 'Planning before reading fixes which actions run, not their arguments. An issue can still supply the URL a planned fetch goes to.',
     });
   }
   if (edges['env-files'].state === 'live' && edges['env-files'].note) {

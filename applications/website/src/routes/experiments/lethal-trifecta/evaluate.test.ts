@@ -130,11 +130,28 @@ describe('acceptance 4: the reader/doer split', () => {
     );
   });
 
-  it('names the leg differently when the plan is fixed before reading', () => {
+  it('keeps untrusted content live when the plan is fixed first, since it still supplies arguments', () => {
     const evaluation = evaluate(withControls(defaultState(), 'plan-first'));
 
+    expect(evaluation.exploitable).toBe(true);
+    expect(evaluation.legs.untrusted).toBe('intact');
+    expect(evaluation.path?.source.state).toBe('live');
+    expect(evaluation.path?.source.cuts).toEqual([]);
+    expect(evaluation.path?.source.note).toMatch(
+      /^Partial: fixes the actions, not their arguments\./,
+    );
+    expect(evaluation.residualRisks).toContainEqual(
+      expect.objectContaining({ kind: 'partial', text: expect.stringContaining('arguments') }),
+    );
+    expect(controlById['plan-first']).toMatchObject({ kind: 'architectural', partial: true });
+  });
+
+  it('still cuts the leg with the reader/doer split beside planning first', () => {
+    const evaluation = evaluate(withControls(defaultState(), 'plan-first', 'reader-doer'));
+
+    expect(evaluation.legs.untrusted).toBe('cut');
     expect(describeVerdict(evaluation).legLine).toBe(
-      'Leg cut: untrusted content choosing the actions.',
+      'Leg cut: untrusted content reaching the acting agent.',
     );
   });
 });
