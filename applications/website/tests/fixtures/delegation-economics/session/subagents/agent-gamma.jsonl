@@ -1,0 +1,2 @@
+{"type": "user", "sessionId": "synthetic-session", "timestamp": "2026-10-04T10:03:00.000Z", "message": {"role": "user", "content": "Synthetic brief."}, "isSidechain": true, "agentId": "gamma"}
+{"type": "assistant", "sessionId": "synthetic-session", "timestamp": "2026-10-04T10:03:01.000Z", "uuid": "uuid-gamma-1-03:01", "isSidechain": true, "agentId": "gamma", "message": {"id": "gamma-1", "model": "claude-sonnet-5-5", "role": "assistant", "usage": {"input_tokens": 41000, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": 12}}}
