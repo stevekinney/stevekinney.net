@@ -2,6 +2,7 @@
   import { tick } from 'svelte';
 
   import { variants } from '$lib/components/button/variants';
+  import { focusAfterUpdate } from '$lib/experiments/focus-after-update';
 
   import CustomDeckPanel from './custom-deck-panel.svelte';
   import type { CustomCard } from './custom-scenarios';
@@ -68,10 +69,23 @@
     nextButton?.focus();
   };
 
-  const next = async (): Promise<void> => {
+  /** The next card, or the review once the deck runs out, since the button that had focus goes. */
+  const focusNextStep = (): Promise<void> =>
+    focusAfterUpdate(() => (finished ? document.getElementById('review-heading') : cardHeading));
+
+  const next = (): void => {
     onNext();
-    await tick();
-    cardHeading?.focus();
+    void focusNextStep();
+  };
+
+  const retry = (): void => {
+    onRetry();
+    void focusNextStep();
+  };
+
+  const restart = (): void => {
+    onRestart();
+    void focusNextStep();
   };
 
   const gradeText = {
@@ -94,7 +108,7 @@
         type="button"
         class={variants({ variant: 'secondary', size: 'small' })}
         disabled={!ready}
-        onclick={onRestart}>Start over</button
+        onclick={restart}>Start over</button
       >
       <button
         type="button"
@@ -300,7 +314,7 @@
           type="button"
           class={variants({ variant: 'primary', size: 'medium' })}
           disabled={!ready}
-          onclick={onRetry}
+          onclick={retry}
         >
           Retry the {misses.length} missed {misses.length === 1 ? 'card' : 'cards'}
         </button>
