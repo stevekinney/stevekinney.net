@@ -15,7 +15,7 @@ A skill lives in a folder. At the very least, that folder needs a `SKILL.md` fil
 
 It's not totally wrong to think of a skill as a _saved prompt_. There are some nuances. For one, the agent can decide on its own to read up on a skill and add it to its context. That's usually what you want. And skills let you load supporting detail only when it's needed.
 
-That saves you from shoving _everything_ into your instruction file, which is `CLAUDE.md` for Claude Code (or `AGENTS.md` in Codex) and which the harness (the program wrapped around the model) loads at the start of every session. If you write your descriptions well, a skill is a way to lazy-load instructions on an as-needed basis.
+That saves you from shoving _everything_ into your instruction file, which is `CLAUDE.md` for Claude Code (or `AGENTS.md` in Codex) and which the harness (the program wrapped around the model) loads according to directory scope, with descendant Claude Code instructions discovered on demand. If you write your descriptions well, a skill is a way to lazy-load instructions on an as-needed basis.
 
 ## What a skill isn't
 

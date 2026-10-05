@@ -37,10 +37,11 @@ The safe order of operations:
 
 1. Stop the task's processes.
 2. Check the status, including ignored files.
-3. Confirm the work landed (watch out for squash merges), or push it or save it with [`git bundle`](https://git-scm.com/docs/git-bundle).
-4. Run `git worktree remove` _without_ `--force`.
-5. Run `git branch -d` as a separate step.
-6. Optionally, run `git worktree prune`.
+3. Confirm committed work landed (watch out for squash merges), or preserve its refs and objects with a push or [`git bundle`](https://git-scm.com/docs/git-bundle). A bundle does not contain ignored or untracked working files.
+4. Copy or archive every needed ignored and untracked file to a location outside the worktree, then verify the preserved contents. Stop database writers first and use a consistent database backup. Do not remove the worktree until that separate preservation is verified.
+5. Run `git worktree remove` _without_ `--force`.
+6. Run `git branch -d` as a separate step.
+7. Optionally, run `git worktree prune`.
 
 And here are a few ways to make a mess:
 

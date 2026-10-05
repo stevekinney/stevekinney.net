@@ -27,7 +27,7 @@ A [skill](skills.md) is knowledge: how to do the work. A [subagent](subagents.md
 | Deterministic repeated behavior        | **[Hook](hooks.md), script, or CI** |
 | External capability                    | **Tool or MCP server**              |
 
-`CLAUDE.md` (for Claude Code) and `AGENTS.md` (for Codex) are the instruction files the harness, the program wrapped around the model, loads at the start of every session. An MCP server is a program that adds tools to the harness over the [Model Context Protocol](https://modelcontextprotocol.io/). [Skill or Tool?](skill-or-tool.md) covers that last row.
+`CLAUDE.md` (for Claude Code) and `AGENTS.md` (for Codex) are the instruction files the harness, the program wrapped around the model, loads according to directory scope, with descendant Claude Code instructions discovered on demand. An MCP server is a program that adds tools to the harness over the [Model Context Protocol](https://modelcontextprotocol.io/). [Skill or Tool?](skill-or-tool.md) covers that last row.
 
 ## Who owns what
 

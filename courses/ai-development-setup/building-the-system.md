@@ -18,7 +18,7 @@ That's the crux of this course. The tools keep growing, changing, and improving 
 The high-level approach is _very_ simple:
 
 - **Start empty**: No plugins, no borrowed rules. Just the harness (the program wrapped around the model) and your project.
-- **Notice what you repeat**: Pay attention to the instructions you type over and over. Those are your candidates. Standing rules go in an instruction file, which is `CLAUDE.md` for Claude Code (or `AGENTS.md` in Codex) and which the harness loads at the start of every session. A _session_ is one conversation with the agent. Repeatable procedures go in a [skill](skills.md), a folder of instructions the agent loads only when it needs them.
+- **Notice what you repeat**: Pay attention to the instructions you type over and over. Those are your candidates. Standing rules go in an instruction file, which is `CLAUDE.md` for Claude Code (or `AGENTS.md` in Codex) and which the harness loads according to its directory scope. In Claude Code, working-directory and ancestor instructions load at launch; descendant `CLAUDE.md` files load only when Claude reads files in that subtree. Put rules needed for initial planning in a launch-loaded file, and explicitly read subtree instructions before planning there. A _session_ is one conversation with the agent. Repeatable procedures go in a [skill](skills.md), a folder of instructions the agent loads only when it needs them.
 
 A small system you understand really well, and know how to tweak, will almost always beat seven plugins full of conflicting skills and instructions and a hopeful shrug.
 

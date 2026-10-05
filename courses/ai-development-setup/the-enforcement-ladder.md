@@ -26,7 +26,7 @@ The glossary for that table:
 
 - **Compaction**: Replacing the conversation so far with a summary, to free up context. Details can get lost. See [Managing a Long Session](managing-a-long-session.md).
 - **Auto memory**: Notes the harness saves for itself between sessions. They live on your machine, so teammates don't get them.
-- **`CLAUDE.md` (or `AGENTS.md` in Codex)**: The instruction file the harness loads at the start of every session. See [User and Project Instructions](user-and-project-instructions.md).
+- **`CLAUDE.md` (or `AGENTS.md` in Codex)**: The instruction file the harness loads according to directory scope, with descendant Claude Code instructions discovered on demand. See [User and Project Instructions](user-and-project-instructions.md).
 - **A skill**: Packaged instructions the agent loads when a task matches. Loading is the agent's call. See [Skills](skills.md).
 - **A permission rule**: A setting that allows or denies a specific tool call. The harness enforces it whatever the model decides.
 - **A hook**: A script the harness runs at a set point. See [Hooks](hooks.md).

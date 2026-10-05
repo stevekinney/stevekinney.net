@@ -19,7 +19,7 @@ Your `SKILL.md` starts with a block of YAML (a simple key-value format) between 
 - `license`: A license identifier or reference.
 - `compatibility`: 1–500 characters describing environment requirements the body assumes.
 - `metadata`: A string-to-string map. A version here is a record, not a dependency resolver. Nothing checks it.
-- `allowed-tools`: The open standard marks this experimental, so support depends on the host. Claude Code reads it as pre-approval: the tools you list (actions like reading a file or running a shell command) don't prompt you for the turn that invokes the skill. A _turn_ is one round where the agent responds to a message and then waits. The grant clears when you send your next message. It grants permission and never restricts anything, and it can't override a deny rule.
+- `allowed-tools`: The open standard marks this experimental, so support depends on the host. Claude Code reads it as pre-approval: the tools you list (actions like reading a file or running a shell command) don't prompt you for the turn that invokes the skill. A _turn_ is one round where the agent responds to a message and then waits. The grant clears when you send your next message. It grants permission and never restricts anything, and it can't override a deny rule. Workspace trust does not gate this field: an automatically invoked repository skill can preapprove commands even in `claude -p` in an untrusted clone. Review repository skills and their grants before running there. Organizations can set `allowManagedPermissionRulesOnly` in managed settings (v2.1.282+) to ignore project and personal skill grants; see the [skill permission reference](https://code.claude.com/docs/en/skills#pre-approve-tools-for-a-skill).
 
 ### Claude Code-specific
 

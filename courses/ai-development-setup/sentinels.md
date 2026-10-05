@@ -29,9 +29,9 @@ Here's the one test that governs both: **a good marker is at least as hard to sa
 3. A `"passes": true` field in a JSON file.
 4. A test suite's exit code.
 5. A check of the files on disk, plus tests the agent can't edit.
-6. A marker written by something other than the agent: CI, a hook, or a human.
+6. A marker written by an independently protected writer, CI job, or human.
 
-`touch done` is weakest because it costs the agent nothing. Any process can create a file at any time, and a later reader just finds it. Item 6 is strongest because the agent can't produce it.
+`touch done` is weakest because it costs the agent nothing. Any process can create a file at any time, and a later reader just finds it. Item 6 is strongest only when the agent cannot write the marker or alter the writer, its dependencies, or its configuration. A repository hook the agent can edit does not meet that condition. [Designing Sentinels](designing-sentinels.md#keeping-the-agent-away-from-the-marker) covers protecting both the marker and its writer.
 
 The second list ranks _exit conditions_, the things that tell a loop to stop. Again from weakest to strongest:
 
