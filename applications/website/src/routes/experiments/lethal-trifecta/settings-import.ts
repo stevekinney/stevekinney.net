@@ -367,20 +367,23 @@ const offlineCommands = new Set([
  */
 const shellOperators = /[<>|;&`]|\$\(|\/dev\/(tcp|udp)\b/;
 
+/** An absolute path directly inside a system binary directory, such as `/usr/bin/cat`. */
+const systemBinary = /^\/(?:usr\/)?s?bin\/([^/]+)$/;
+
 /**
  * Whether a command, or a command pattern, can make a network request. It fails
  * safe: only a single offline program with plain arguments counts as offline. An
  * empty command means every command, any shell operator counts as reaching the
- * network, an absolute path counts as its program, a relative path such as `./cat`
- * is a script that could do anything, and any program not known to stay offline
- * counts as reaching the network.
+ * network, an absolute path counts as its program only in `/bin`, `/usr/bin`, `/sbin`,
+ * or `/usr/sbin`, any other path such as `./cat` or `/tmp/cat` could be anything, and
+ * any program not known to stay offline counts as reaching the network.
  */
 export const reachesNetwork = (command: string): boolean => {
   if (shellOperators.test(command)) return true;
 
   const first = command.trim().split(/\s+/)[0] ?? '';
-  if (first.includes('/') && !first.startsWith('/')) return true;
-  const program = first.split('/').at(-1) ?? '';
+  const program = first.includes('/') ? systemBinary.exec(first)?.[1] : first;
+  if (program === undefined) return true;
 
   return program.includes('*') || !offlineCommands.has(program);
 };
