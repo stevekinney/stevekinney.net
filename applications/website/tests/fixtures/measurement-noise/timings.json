@@ -1,0 +1,10 @@
+{
+  "tasks": [
+    { "condition": "A", "task": "parse-config", "minutes": 34, "rework": false },
+    { "condition": "A", "task": "fix-flaky-test", "minutes": 52, "rework": true },
+    { "condition": "A", "task": "add-endpoint", "minutes": 41, "rework": false },
+    { "condition": "B", "task": "rename-module", "minutes": 29, "rework": false },
+    { "condition": "B", "task": "update-docs", "minutes": 38, "rework": true },
+    { "condition": "B", "task": "bump-deps", "minutes": 31, "rework": false }
+  ]
+}
