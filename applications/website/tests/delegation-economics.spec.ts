@@ -270,6 +270,18 @@ test.describe('the checklist and team warnings', () => {
     await expect(verdict(page)).toContainText('One worker is the solo session');
   });
 
+  test('doesn’t promise extra workers help when all the work is serial', async ({ page }) => {
+    await open(page);
+    await skipPrediction(page);
+    await field(page, 'serial-fraction').fill('100%');
+    await field(page, 'integration-minutes').fill('0');
+
+    await expect(page.getByTestId('best-workers')).toContainText(
+      'Every worker count from 1 to 32 takes the same time',
+    );
+    await expect(page.getByTestId('best-workers')).not.toContainText('every added worker helps');
+  });
+
   test('copes with every input at zero', async ({ page }) => {
     await open(page);
     await skipPrediction(page);

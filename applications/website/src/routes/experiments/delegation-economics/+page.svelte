@@ -14,7 +14,7 @@
   import { toPlan } from './compare';
   import type { Plan } from './compare';
   import { bestWorkersText, formatMultiplier } from './display';
-  import { evaluate, speedupCurve, TEAM_SIZE_WARNING } from './economics';
+  import { evaluate, MAXIMUM_WORKERS, speedupCurve, TEAM_SIZE_WARNING } from './economics';
   import { experiment } from './experiment';
   import { bodyClasses, headingClasses, panelClasses } from './field-styles';
   import LazySection from './lazy-section.svelte';
@@ -248,7 +248,7 @@
         {bestWorkersText(evaluation)}
         {#if evaluation.continuousOptimum !== null}
           Treating workers as continuous, the optimum is {evaluation.continuousOptimum.toFixed(2)}.
-        {:else}
+        {:else if evaluation.best.tied.length < MAXIMUM_WORKERS}
           With no integration time, every added worker helps a little.
         {/if}
         {evaluation.ceiling === null
