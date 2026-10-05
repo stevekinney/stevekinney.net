@@ -180,7 +180,8 @@
   let costInterval = $state<CostIntervalState>(null);
   let runId = 0;
   let lastDataKey = '';
-  let lastSeed: number | null = null;
+  /** The data and seed of the last run that finished, so an identical rerun can be skipped. */
+  let finishedKey = '';
 
   $effect(() => {
     if (!app.ready) return;
@@ -196,6 +197,13 @@
       );
     const costsA = costs(rowsA);
     const costsB = costs(rowsB);
+    const dataKey = comparison
+      ? `${comparison.design}|${comparison.valuesA.join(',')}|${comparison.valuesB.join(',')}|${costsA.length}|${costsB.length}`
+      : '';
+    // A recomputed analysis with the same data and seed, such as after changing α, needs no new
+    // run once the last one has finished.
+    if (comparison && `${dataKey}#${seed}` === finishedKey) return;
+
     const id = (runId += 1);
 
     untrack(() => {
@@ -214,19 +222,13 @@
       }
     });
 
-    const dataKey = comparison
-      ? `${comparison.design}|${comparison.valuesA.join(',')}|${comparison.valuesB.join(',')}|${costsA.length}|${costsB.length}`
-      : '';
-    // A recomputed analysis with the same data and seed, such as after changing α, needs no new run.
-    if (comparison && dataKey === lastDataKey && seed === lastSeed) return;
-
     const timer = setTimeout(async () => {
       if (comparison) {
         const prior = untrack(() => bootstrap.result);
         const previous: BootstrapInterval | null =
           dataKey === lastDataKey && prior && prior.seed !== seed ? prior : null;
         lastDataKey = dataKey;
-        lastSeed = seed;
+        finishedKey = '';
         bootstrap = {
           status: 'running',
           completed: 0,
@@ -257,10 +259,13 @@
         const interval = await runInSlices(costPerAcceptedJob(costsA, costsB, { seed }), {
           cancelled: () => id !== runId,
         });
-        if (id === runId) costInterval = interval;
+        if (id !== runId) return;
+        costInterval = interval;
       } else {
         costInterval = null;
       }
+
+      finishedKey = `${dataKey}#${seed}`;
     }, 150);
 
     return () => {
