@@ -9,6 +9,7 @@ import {
   contextAtX,
   costLinePoints,
   describeCursor,
+  placeHereLabel,
   xOf,
   xTicks,
   yOf,
@@ -127,5 +128,33 @@ describe('describeCursor', () => {
     expect(describeCursor(evaluateChange({ ...defaults, to: model('sonnet-5') }), 312_000)).toBe(
       '312K tokens in context · Cost to change $1.25',
     );
+  });
+});
+
+describe('placeHereLabel', () => {
+  const layout = buildLayout(evaluation, 360, 300);
+  const rightEdge = layout.margins.left + layout.plotWidth;
+
+  it('puts the label above the marker when nothing is in the way', () => {
+    expect(placeHereLabel(layout, layout.margins.left + 100, 150, 40, 'Value $2.25')).toEqual({
+      y: 136,
+      anchor: 'middle',
+    });
+  });
+
+  it('puts the label below a marker that is near the top of the plot', () => {
+    expect(placeHereLabel(layout, layout.margins.left + 100, 30, 200, 'Value $2.25').y).toBe(56);
+  });
+
+  it('moves the label below the marker when above would land on the value label', () => {
+    // The value label's baseline is 6 px above the value line at y = 100.
+    const label = placeHereLabel(layout, rightEdge - 20, 108, 100, 'Value $2.25');
+
+    expect(label.y).toBe(134);
+    expect(label.anchor).toBe('end');
+  });
+
+  it('keeps the label where it is when it is far from the value label horizontally', () => {
+    expect(placeHereLabel(layout, layout.margins.left + 10, 108, 100, 'Value $2.25').y).toBe(94);
   });
 });

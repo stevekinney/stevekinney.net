@@ -49,12 +49,12 @@ describe('encodeScenario and decodeScenario', () => {
   });
 
   it('carries custom prices for the selected model so the link reproduces the numbers', () => {
-    const models = [...defaultModels, { id: 'opus-5-5', name: 'Opus 5.5', input: 6, output: 30 }];
-    const decoded = decodeScenario(encodeScenario(scenario({ modelId: 'opus-5-5' }), models));
+    const models = [...defaultModels, { id: 'opus-5-1', name: 'Opus 5.1', input: 6, output: 30 }];
+    const decoded = decodeScenario(encodeScenario(scenario({ modelId: 'opus-5-1' }), models));
 
     expect(decoded?.customModel).toEqual({
-      id: 'opus-5-5',
-      name: 'Opus 5.5',
+      id: 'opus-5-1',
+      name: 'Opus 5.1',
       input: 6,
       output: 30,
     });
@@ -70,7 +70,7 @@ describe('encodeScenario and decodeScenario', () => {
 
   it('ignores a custom price that an imported price table would reject', () => {
     for (const price of ['9'.repeat(400), '100001', '0']) {
-      const query = `model=opus-5-5&name=Opus+5.5&inputPrice=${price}&outputPrice=30`;
+      const query = `model=opus-5-1&name=Opus+5.1&inputPrice=${price}&outputPrice=30`;
 
       expect(decodeScenario(query)?.customModel).toBeNull();
     }

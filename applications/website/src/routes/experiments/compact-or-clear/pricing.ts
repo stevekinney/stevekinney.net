@@ -28,7 +28,9 @@ export const TOKENS_PER_PRICE_UNIT = 1_000_000;
 export const defaultModels: readonly ModelPrice[] = [
   { id: 'fable-5-1', name: 'Fable 5.1', input: 10, output: 50 },
   { id: 'opus-5', name: 'Opus 5', input: 5, output: 25 },
+  { id: 'opus-5-5', name: 'Opus 5.5', input: 4, output: 20 },
   { id: 'sonnet-5', name: 'Sonnet 5', input: 2, output: 10 },
+  { id: 'sonnet-5-5', name: 'Sonnet 5.5', input: 2, output: 10 },
   { id: 'sonnet-4-6', name: 'Sonnet 4.6', input: 3, output: 15 },
   { id: 'haiku-4-5', name: 'Haiku 4.5', input: 1, output: 5 },
 ];

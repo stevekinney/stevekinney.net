@@ -1,6 +1,5 @@
-import { formatCost } from '$lib/experiments/format';
+import { formatCompactTokenCount as formatTokens, formatCost } from '$lib/experiments/format';
 
-import { formatTokens } from './format-tokens';
 import { formatPercent } from './field-parsing';
 import { modelLabel } from './pricing';
 import type { ModelPrice } from './pricing';

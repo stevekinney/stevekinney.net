@@ -27,4 +27,24 @@ describe('placeTooltip', () => {
   test('treats a tooltip that has not been measured yet as zero wide', () => {
     expect(placeTooltip(100, 0, 300, 12)).toBe(112);
   });
+
+  test('stays between the insets so it clears the axis labels', () => {
+    const inset = { left: 56, right: 14 };
+
+    for (let anchor = 0; anchor <= 328; anchor += 4) {
+      const left = placeTooltip(anchor, 200, 328, 12, inset);
+
+      expect(left).toBeGreaterThanOrEqual(56);
+      expect(left + 200).toBeLessThanOrEqual(328 - 14);
+    }
+  });
+
+  test('flips to the left of the anchor when the right inset would be crossed', () => {
+    // 150 + 12 + 100 = 262 fits in 300, but not inside the 300 - 60 = 240 boundary.
+    expect(placeTooltip(150, 100, 300, 12, { left: 0, right: 60 })).toBe(38);
+  });
+
+  test('pins to the left inset when the tooltip is wider than the room between the insets', () => {
+    expect(placeTooltip(100, 400, 300, 12, { left: 40, right: 20 })).toBe(40);
+  });
 });

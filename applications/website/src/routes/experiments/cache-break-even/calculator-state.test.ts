@@ -66,7 +66,10 @@ describe('normalizeState', () => {
   });
 
   it('uses the first model when even the defaults are gone', () => {
-    const table = { ...defaultPricing, models: [defaultPricing.models[4]] };
+    const table = {
+      ...defaultPricing,
+      models: defaultPricing.models.filter((model) => model.id === 'haiku-4-5'),
+    };
 
     expect(normalizeState(defaultState, table)).toMatchObject({
       fromModel: 'haiku-4-5',

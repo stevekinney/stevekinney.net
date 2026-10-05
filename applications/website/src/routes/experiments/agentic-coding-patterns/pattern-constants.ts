@@ -14,6 +14,9 @@ export const knownMaturities = ['foundational', 'established', 'emerging'] as co
 
 export const knownConfidences = ['Strong', 'Emerging', 'Experimental'] as const;
 
+/** Where the browser fetches the whole bundled library. `build-dataset.ts` writes it. */
+export const bundledLibraryPath = '/experiments/agentic-coding-patterns/patterns.json';
+
 /** The types a note must have to be included unless the person says otherwise. */
 export const defaultIncludedTypes = ['pattern', 'methodology'] as const;
 

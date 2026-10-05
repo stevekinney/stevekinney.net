@@ -224,11 +224,11 @@ describe('calibrate', () => {
         '2026-10-04T10:00:00.000Z',
         { read: 10_000, output: 100 },
         {},
-        'claude-opus-5-5',
+        'claude-opus-5-1',
       ),
     ]);
 
-    expect(unmatched.modelId).toBe('claude-opus-5-5');
+    expect(unmatched.modelId).toBe('claude-opus-5-1');
     expect(unmatched.modelMatch).toBeNull();
   });
 

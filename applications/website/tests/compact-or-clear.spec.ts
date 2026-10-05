@@ -407,16 +407,25 @@ test.describe('calibrating from a session', () => {
   }) => {
     await open(page);
     await page.getByRole('combobox', { name: 'Model' }).selectOption('sonnet-4-6');
-    await chooseSession(page, 'session-opus-5-5.jsonl');
+    await chooseSession(page, 'session-opus-5-1.jsonl');
 
     const summary = page.getByTestId('calibration-summary');
-    await expect(summary).toContainText('claude-opus-5-5');
+    await expect(summary).toContainText('claude-opus-5-1');
     await expect(summary).toContainText('isn’t in the price table');
     await expect(page.getByRole('combobox', { name: 'Model' })).toHaveValue('sonnet-4-6');
     await expect(page.locator('label[for="model"]')).not.toContainText('from your session');
 
     await summary.getByRole('button', { name: 'Open the price table' }).click();
     await expect(page.getByTestId('price-table')).toHaveAttribute('open', '');
+  });
+
+  test('matches a session on Opus 5.5 to the Opus 5.5 row', async ({ page }) => {
+    await open(page);
+    await page.getByRole('combobox', { name: 'Model' }).selectOption('sonnet-4-6');
+    await chooseSession(page, 'session-opus-5-5.jsonl');
+
+    await expect(page.getByTestId('calibration-summary')).toContainText('matches Opus 5.5');
+    await expect(page.getByRole('combobox', { name: 'Model' })).toHaveValue('opus-5-5');
   });
 
   test('offers the first turn’s context as a baseline without applying it', async ({ page }) => {
@@ -833,7 +842,7 @@ test.describe('the price table', () => {
     await prices(page).locator('input[type="file"]').setInputFiles(fixture('session-opus-5.jsonl'));
 
     await expect(page.getByRole('alert').filter({ hasText: 'valid JSON' })).toBeVisible();
-    await expect(page.getByRole('option')).toHaveCount(5);
+    await expect(page.getByRole('option')).toHaveCount(7);
   });
 
   test('prices a session’s model after it is added to the table', async ({ page }) => {

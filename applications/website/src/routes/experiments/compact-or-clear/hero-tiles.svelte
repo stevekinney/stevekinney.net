@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { formatCost } from '$lib/experiments/format';
+  import { formatCompactTokenCount as formatTokens, formatCost } from '$lib/experiments/format';
 
-  import { formatTokens } from './format-tokens';
   import type { Projection } from './projection';
 
   type Props = {

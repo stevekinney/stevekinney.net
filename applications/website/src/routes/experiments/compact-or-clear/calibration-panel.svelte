@@ -9,7 +9,7 @@
   import { calibrate } from './calibrate';
   import type { CacheAssessment, Calibration } from './calibrate';
   import { bodyClasses, codeClasses } from './field-styles';
-  import { formatTokens } from './format-tokens';
+  import { formatCompactTokenCount as formatTokens } from '$lib/experiments/format';
   import { formatPercent } from './field-parsing';
   import type { ModelPrice } from './pricing';
 

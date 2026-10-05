@@ -1,4 +1,4 @@
-import { formatTokens } from './format-tokens';
+import { formatCompactTokenCount as formatTokens } from '$lib/experiments/format';
 import { formatPercent } from './field-parsing';
 import { ratesFor } from './pricing';
 import type { CacheTtl, ModelPrice } from './pricing';

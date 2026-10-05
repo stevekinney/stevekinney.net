@@ -28,15 +28,21 @@ describe('matchModel', () => {
   });
 
   it('never prices a newer version at an older version’s rates', () => {
-    expect(nameOf('claude-opus-5-5')).toBeUndefined();
-    expect(nameOf('claude-sonnet-5-5')).toBeUndefined();
-    expect(nameOf('claude-opus-5-5[1m]')).toBeUndefined();
+    expect(nameOf('claude-opus-5-1')).toBeUndefined();
+    expect(nameOf('claude-sonnet-5-1')).toBeUndefined();
+    expect(nameOf('claude-opus-5-1[1m]')).toBeUndefined();
+  });
+
+  it('prices the 5.5 models at their own rates', () => {
+    expect(nameOf('claude-opus-5-5')).toBe('Opus 5.5');
+    expect(nameOf('claude-opus-5-5[1m]')).toBe('Opus 5.5');
+    expect(nameOf('claude-sonnet-5-5')).toBe('Sonnet 5.5');
   });
 
   it('matches a model the person added to the table', () => {
-    const models = [...defaultModels, { id: 'opus-5-5', name: 'Opus 5.5', input: 5, output: 25 }];
+    const models = [...defaultModels, { id: 'opus-5-1', name: 'Opus 5.1', input: 5, output: 25 }];
 
-    expect(matchModel('claude-opus-5-5', models)?.name).toBe('Opus 5.5');
+    expect(matchModel('claude-opus-5-1', models)?.name).toBe('Opus 5.1');
     expect(matchModel('claude-opus-5', models)?.name).toBe('Opus 5');
   });
 

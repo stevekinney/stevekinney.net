@@ -1,6 +1,6 @@
 import type { ClaudeCodeTranscript } from '$lib/experiments/claude-code-transcript';
 import { formatPercent, roundPercent } from './field-parsing';
-import { formatTokens } from './format-tokens';
+import { formatCompactTokenCount as formatTokens } from '$lib/experiments/format';
 import { matchModel } from './pricing';
 import type { CacheTtl, ModelPrice } from './pricing';
 import { clampTo, ranges } from './scenario';

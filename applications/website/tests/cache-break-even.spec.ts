@@ -96,7 +96,9 @@ test.describe('acceptance check 1: the defaults', () => {
     await expect(fromModel(page).locator('option')).toHaveText([
       'Fable 5.1 ($10/$50)',
       'Opus 5 ($5/$25)',
+      'Opus 5.5 ($4/$20)',
       'Sonnet 5 ($2/$10)',
+      'Sonnet 5.5 ($2/$10)',
       'Sonnet 4.6 ($3/$15)',
       'Haiku 4.5 ($1/$5)',
     ]);
@@ -277,6 +279,25 @@ test.describe('acceptance check 7: clicking the chart sets N', () => {
     expect(context).toBeGreaterThan(450_000);
   });
 
+  test('the "you are here" label stays clear of the value label at phone width', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await open(page);
+
+    const here = chart(page).locator('text', { hasText: 'you are here' });
+    const value = chart(page).locator('text', { hasText: /^Value / });
+    const hereBox = (await here.boundingBox())!;
+    const valueBox = (await value.boundingBox())!;
+
+    const overlapsHorizontally =
+      hereBox.x < valueBox.x + valueBox.width && valueBox.x < hereBox.x + hereBox.width;
+    const overlapsVertically =
+      hereBox.y < valueBox.y + valueBox.height && valueBox.y < hereBox.y + hereBox.height;
+
+    expect(overlapsHorizontally && overlapsVertically).toBe(false);
+  });
+
   test('the chart has a text equivalent and a legend with all five marks', async ({ page }) => {
     await open(page);
 
@@ -356,14 +377,27 @@ test.describe('acceptance check 8: importing a session', () => {
     await page
       .locator('input[type="file"]')
       .first()
-      .setInputFiles(fixture('session-opus-5-5.jsonl'));
+      .setInputFiles(fixture('session-opus-5-1.jsonl'));
 
-    await expect(page.locator('[data-model-unmatched]')).toContainText('claude-opus-5-5');
+    await expect(page.locator('[data-model-unmatched]')).toContainText('claude-opus-5-1');
     await expect(fromModel(page)).toHaveValue('haiku-4-5');
     await expect(contextField(page)).toHaveValue('35,500');
 
     await page.getByRole('button', { name: 'Prices and assumptions' }).first().click();
     await expect(page.getByRole('button', { name: 'Add a model' })).toBeVisible();
+  });
+
+  test('a session on Opus 5.5 matches the Opus 5.5 row and sets From model', async ({ page }) => {
+    await open(page);
+    await fromModel(page).selectOption('haiku-4-5');
+    await page
+      .locator('input[type="file"]')
+      .first()
+      .setInputFiles(fixture('session-opus-5-5.jsonl'));
+
+    await expect(page.locator('[data-model-unmatched]')).toHaveCount(0);
+    await expect(fromModel(page)).toHaveValue('opus-5-5');
+    await expect(contextField(page)).toHaveValue('35,500');
   });
 
   test('an unmatched model ID with no break points stays inside a 360-pixel page', async ({
@@ -376,8 +410,8 @@ test.describe('acceptance check 8: importing a session', () => {
     const session = join(directory, 'long-model.jsonl');
     writeFileSync(
       session,
-      readFileSync(fixture('session-opus-5-5.jsonl'), 'utf8').replaceAll(
-        'claude-opus-5-5',
+      readFileSync(fixture('session-opus-5-1.jsonl'), 'utf8').replaceAll(
+        'claude-opus-5-1',
         longModel,
       ),
     );
@@ -526,7 +560,7 @@ test.describe('every option from here', () => {
     await open(page);
     const table = page.locator('[data-options-table]');
 
-    await expect(table.locator('tbody tr')).toHaveCount(25);
+    await expect(table.locator('tbody tr')).toHaveCount(35);
     await expect(table.getByRole('columnheader', { name: 'Net' })).toHaveAttribute(
       'aria-sort',
       'descending',
@@ -628,7 +662,7 @@ test.describe('prices and assumptions', () => {
     await expect(page.locator('[data-custom-prices]')).toHaveCount(0);
     await openPanel(page);
 
-    await page.getByLabel('Model 3 output price').fill('12');
+    await page.getByLabel('Model 4 output price').fill('12');
 
     await expect(page.locator('[data-custom-prices]')).toBeVisible();
     // 150,000 × ($25 − $12) ÷ 1,000,000
@@ -645,11 +679,11 @@ test.describe('prices and assumptions', () => {
     await openPanel(page);
 
     await page.getByRole('button', { name: 'Add a model' }).click();
-    await expect(page.getByLabel('Model 6 name')).toHaveValue('New model');
-    await expect(toModel(page).locator('option')).toHaveCount(6);
+    await expect(page.getByLabel('Model 8 name')).toHaveValue('New model');
+    await expect(toModel(page).locator('option')).toHaveCount(8);
 
-    await page.getByRole('button', { name: 'Remove model 6' }).click();
-    await expect(toModel(page).locator('option')).toHaveCount(5);
+    await page.getByRole('button', { name: 'Remove model 8' }).click();
+    await expect(toModel(page).locator('option')).toHaveCount(7);
 
     await toEffort(page).selectOption('medium');
     await page.getByLabel('medium effort factor', { exact: true }).fill('0.4');
@@ -664,10 +698,10 @@ test.describe('prices and assumptions', () => {
     await open(page);
     await openPanel(page);
 
-    await page.getByRole('button', { name: 'Remove model 3' }).click();
+    await page.getByRole('button', { name: 'Remove model 4' }).click();
 
     await expect(toModel(page)).not.toHaveValue('sonnet-5');
-    await expect(toModel(page).locator('option')).toHaveCount(4);
+    await expect(toModel(page).locator('option')).toHaveCount(6);
   });
 
   test('exports the table as JSON and imports one, skipping what is unusable', async ({ page }) => {
@@ -679,7 +713,7 @@ test.describe('prices and assumptions', () => {
     const file = await download;
     expect(file.suggestedFilename()).toBe('cache-break-even-prices.json');
     const exported = JSON.parse(readFileSync((await file.path()) ?? '', 'utf8'));
-    expect(exported.models).toHaveLength(5);
+    expect(exported.models).toHaveLength(7);
     expect(exported.efforts).toHaveLength(5);
 
     await page
@@ -724,7 +758,7 @@ test.describe('sharing', () => {
     await page.getByLabel('Output volume ratio').fill('0.45');
     await outputField(page).fill('90k');
     await page.getByText('Prices and assumptions', { exact: true }).first().click();
-    await page.getByLabel('Model 5 input price').fill('1.5');
+    await page.getByLabel('Model 7 input price').fill('1.5');
 
     await page.getByRole('button', { name: 'Copy link' }).click();
     await expect(page.getByText('Link copied.')).toBeVisible();
@@ -781,7 +815,7 @@ test.describe('sharing', () => {
   test('a summary mentions custom prices', async ({ page }) => {
     await open(page);
     await page.getByText('Prices and assumptions', { exact: true }).first().click();
-    await page.getByLabel('Model 3 output price').fill('11');
+    await page.getByLabel('Model 4 output price').fill('11');
 
     await page.getByRole('button', { name: 'Copy summary' }).click();
 
@@ -952,14 +986,19 @@ test.describe('a populated page at 360 pixels wide', () => {
       await page.emulateMedia({ colorScheme });
       await open(page);
 
+      // On a phone both plots leave 56 px on the left for the axis and 14 px on the right. The
+      // tooltip stays between them, so it never covers the tick labels or the axis title.
+      const LEFT_INSET = 56;
+      const RIGHT_INSET = 14;
+
       const insideViewport = async (tooltip: Locator, container: Locator): Promise<void> => {
         await expect(tooltip).toBeVisible();
         const tooltipBox = await tooltip.boundingBox();
         const containerBox = await container.boundingBox();
 
-        expect(tooltipBox!.x).toBeGreaterThanOrEqual(containerBox!.x - 0.5);
+        expect(tooltipBox!.x).toBeGreaterThanOrEqual(containerBox!.x + LEFT_INSET - 0.5);
         expect(tooltipBox!.x + tooltipBox!.width).toBeLessThanOrEqual(
-          containerBox!.x + containerBox!.width + 0.5,
+          containerBox!.x + containerBox!.width - RIGHT_INSET + 0.5,
         );
         expect(await horizontalOverflow(page)).toBe(0);
       };

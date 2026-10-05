@@ -577,14 +577,21 @@ test.describe('acceptance 9: uploads', () => {
     page,
   }) => {
     await openResolver(page);
+    // An Opus session on 2.1.278 with no env override. The built-in Explore would inherit the
+    // session's Opus here, so only the project agent's own `model: haiku` can produce haiku. With
+    // the env var set to haiku, as the default controls have it, either path would read haiku.
+    await chooseOption(page, 'Main conversation model', 'opus');
+    await setVersion(page, '2.1.278');
+    await chooseOption(page, 'CLAUDE_CODE_SUBAGENT_MODEL', 'unset');
     await folderInput(page).setInputFiles(fixture('repository'));
     await expect(page.getByText('Read 3 agent files')).toBeVisible();
 
     await expect(row(page, 'Explore')).toHaveCount(1);
     await expect(row(page, 'Explore')).toContainText('Overrides the built-in');
     await expect(row(page, 'Explore')).toContainText('Project');
-    // The control values stand in for what the files don't say, so Explore's own model decides.
-    await expect(row(page, 'Explore').getByRole('cell').nth(3)).toContainText('haiku');
+    const after = row(page, 'Explore').getByRole('cell').nth(3);
+    await expect(after).toContainText('haiku');
+    await expect(after).not.toContainText('opus');
     await expect(row(page, 'Plan')).toHaveCount(1);
     await expect(row(page, 'general-purpose')).toHaveCount(1);
   });

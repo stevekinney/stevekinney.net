@@ -1,6 +1,4 @@
-import { parseTokenCount } from '$lib/experiments/format';
-
-import { formatTokens } from './format-tokens';
+import { formatCompactTokenCount as formatTokens, parseTokenCount } from '$lib/experiments/format';
 
 import { clamp, clampTo, ranges } from './scenario';
 import type { NumberRange } from './scenario';

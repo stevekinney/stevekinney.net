@@ -76,8 +76,13 @@
   const tooltipAnchor = $derived(
     activeCell ? margins.left + (activeCell.column + 0.5) * cellWidth : 0,
   );
-  // Held inside the map so the tooltip can never make the page wider than the screen.
-  const tooltipLeft = $derived(placeTooltip(tooltipAnchor, tooltipWidth, width, 14));
+  // Held inside the plot so the tooltip can neither widen the page nor cover the axis labels.
+  const tooltipLeft = $derived(
+    placeTooltip(tooltipAnchor, tooltipWidth, width, 14, {
+      left: margins.left,
+      right: margins.right,
+    }),
+  );
   const tooltipTop = $derived(activeCell ? margins.top + (activeCell.row + 0.5) * cellHeight : 0);
 
   const boundaryWords = $derived(describeBoundary(evaluation));
@@ -261,8 +266,8 @@
         role="tooltip"
         data-map-tooltip
         bind:clientWidth={tooltipWidth}
-        class="pointer-events-none absolute z-10 w-max max-w-[min(16rem,70vw)] rounded-md bg-slate-900 px-3 py-2 text-xs text-white shadow-lg dark:bg-slate-100 dark:text-slate-900"
-        style="left: {tooltipLeft}px; top: {tooltipTop}px; transform: translateY({tooltipTop >
+        class="pointer-events-none absolute z-10 w-max rounded-md bg-slate-900 px-3 py-2 text-xs text-white shadow-lg dark:bg-slate-100 dark:text-slate-900"
+        style="left: {tooltipLeft}px; top: {tooltipTop}px; max-width: min(16rem, {plotWidth}px); transform: translateY({tooltipTop >
         height * 0.7
           ? 'calc(-100% - 8px)'
           : '8px'});"

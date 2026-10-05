@@ -1,10 +1,5 @@
 const tokenCountFormatter = new Intl.NumberFormat('en-US');
 
-const compactTokenCountFormatter = new Intl.NumberFormat('en-US', {
-  notation: 'compact',
-  maximumFractionDigits: 1,
-});
-
 // The pricing table quotes prices like $0.206 and $4.951, so prices keep up to three decimals.
 const priceFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -37,9 +32,18 @@ const calendarDateFormatter = new Intl.DateTimeFormat('en-US', {
 
 export const formatTokenCount = (count: number): string => tokenCountFormatter.format(count);
 
-/** Short form for headlines, such as `1.5M`. */
-export const formatCompactTokenCount = (count: number): string =>
-  compactTokenCountFormatter.format(count);
+/** Short form to three significant digits, such as `313K`, `1.25M`, or `18.9K`. */
+export const formatCompactTokenCount = (count: number): string => {
+  if (count < 1_000) return String(Math.round(count));
+
+  const inMillions = count >= 1_000_000;
+  const rounded = Number((count / (inMillions ? 1_000_000 : 1_000)).toPrecision(3));
+
+  // 999,600 rounds to 1000K, which reads better as 1M.
+  if (!inMillions && rounded >= 1_000) return '1M';
+
+  return `${rounded}${inMillions ? 'M' : 'K'}`;
+};
 
 /** A price per million tokens. */
 export const formatPrice = (price: number): string => priceFormatter.format(price);

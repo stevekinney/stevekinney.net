@@ -20,9 +20,15 @@ describe('matchModel', () => {
   });
 
   it('does not price a later version at an earlier version’s rates', () => {
-    expect(nameFor('claude-opus-5-5')).toBeNull();
-    expect(nameFor('claude-sonnet-5-5')).toBeNull();
     expect(nameFor('claude-opus-5-1')).toBeNull();
+    expect(nameFor('claude-sonnet-5-1')).toBeNull();
+    expect(nameFor('claude-opus-5-2')).toBeNull();
+  });
+
+  it('prices the 5.5 models at their own rows', () => {
+    expect(nameFor('claude-opus-5-5')).toBe('Opus 5.5');
+    expect(nameFor('claude-opus-5-5[1m]')).toBe('Opus 5.5');
+    expect(nameFor('claude-sonnet-5-5')).toBe('Sonnet 5.5');
   });
 
   it('reads a trailing zero as the same version', () => {
@@ -49,11 +55,11 @@ describe('matchModel', () => {
       ...defaultPricing,
       models: [
         ...defaultPricing.models,
-        { id: 'custom-1', name: 'Opus 5.5', input: 6, output: 30, preservesCache: true },
+        { id: 'custom-1', name: 'Opus 5.1', input: 6, output: 30, preservesCache: true },
       ],
     };
 
-    expect(matchModel('claude-opus-5-5', table)?.id).toBe('custom-1');
+    expect(matchModel('claude-opus-5-1', table)?.id).toBe('custom-1');
     expect(matchModel('claude-opus-5', table)?.id).toBe('opus-5');
   });
 });

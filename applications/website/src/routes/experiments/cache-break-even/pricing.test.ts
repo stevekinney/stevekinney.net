@@ -11,11 +11,13 @@ import {
 } from './pricing';
 
 describe('the default table', () => {
-  it('keeps the five models in order, with the specification’s prices', () => {
+  it('keeps the seven models in order, with the specification’s prices', () => {
     expect(defaultPricing.models.map((model) => [model.id, model.input, model.output])).toEqual([
       ['fable-5-1', 10, 50],
       ['opus-5', 5, 25],
+      ['opus-5-5', 4, 20],
       ['sonnet-5', 2, 10],
+      ['sonnet-5-5', 2, 10],
       ['sonnet-4-6', 3, 15],
       ['haiku-4-5', 1, 5],
     ]);

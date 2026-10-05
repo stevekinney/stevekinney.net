@@ -89,6 +89,50 @@ export const yOf = (layout: ChartLayout, dollars: number): number => {
   return layout.margins.top + (1 - (dollars - min) / (max - min)) * layout.plotHeight;
 };
 
+/** Rough widths of the two labels in the plot, in pixels at their font sizes. */
+const HERE_LABEL_WIDTH = 74;
+const VALUE_LABEL_CHARACTER_WIDTH = 6.6;
+const LABEL_HEIGHT = 13;
+
+export type HereLabel = { y: number; anchor: 'start' | 'middle' | 'end' };
+
+/**
+ * Where the "you are here" label sits. It goes above the marker, or below it when the marker is
+ * near the top of the plot. When that spot would land on the "Value" label, which is right-aligned
+ * just above the value line, it moves to the other side of the marker.
+ */
+export const placeHereLabel = (
+  layout: ChartLayout,
+  hereX: number,
+  hereY: number,
+  valueY: number,
+  valueLabel: string,
+): HereLabel => {
+  const anchor =
+    hereX > layout.width - 70 ? 'end' : hereX < layout.margins.left + 40 ? 'start' : 'middle';
+  const above = hereY - 14;
+  const below = hereY + 26;
+  const preferred = hereY < layout.margins.top + 26 ? below : above;
+
+  const hereStart =
+    anchor === 'start'
+      ? hereX
+      : anchor === 'end'
+        ? hereX - HERE_LABEL_WIDTH
+        : hereX - HERE_LABEL_WIDTH / 2;
+  const valueEnd = layout.margins.left + layout.plotWidth - 4;
+  const valueStart = valueEnd - valueLabel.length * VALUE_LABEL_CHARACTER_WIDTH;
+  const sideBySide = hereStart < valueEnd && hereStart + HERE_LABEL_WIDTH > valueStart;
+  const collides = (y: number): boolean =>
+    sideBySide && y > valueY - 6 - LABEL_HEIGHT && y - LABEL_HEIGHT < valueY - 6;
+
+  if (!collides(preferred)) return { y: preferred, anchor };
+
+  const other = preferred === above ? below : above;
+
+  return { y: collides(other) ? preferred : other, anchor };
+};
+
 /** The context a horizontal position inside the chart stands for, rounded to the nearest 1,000 tokens. */
 export const contextAtX = (layout: ChartLayout, x: number): number => {
   const fraction = Math.min(1, Math.max(0, (x - layout.margins.left) / layout.plotWidth));

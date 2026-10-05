@@ -2,7 +2,7 @@ import { defaultModels, ratesFor } from './pricing';
 import type { CacheTtl, ModelPrice } from './pricing';
 import { summaryTokensFor } from './projection';
 import type { ProjectionInputs } from './projection';
-import { formatTokens } from './format-tokens';
+import { formatCompactTokenCount as formatTokens } from '$lib/experiments/format';
 
 /** The one state object the whole page is derived from. */
 export type Scenario = {

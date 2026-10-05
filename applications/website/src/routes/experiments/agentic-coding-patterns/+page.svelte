@@ -28,7 +28,7 @@
   import { buildGraph } from './graph-metrics';
   import HeatGrid from './heat-grid.svelte';
   import LibraryLoader from './library-loader.svelte';
-  import { defaultIncludedTypes } from './pattern-constants';
+  import { bundledLibraryPath, defaultIncludedTypes } from './pattern-constants';
   import type { ExcludedNote, NoteSource, PatternDataset, PatternEntry } from './pattern-types';
   import { commonFolderName, readNotes } from './read-notes';
   import { buildSearchDocuments, parseQuery, search } from './search';
@@ -57,6 +57,9 @@
   let explorer = $state<ExplorerState>(initialState);
   let ready = $state(false);
   let folder = $state.raw<LoadedFolder | null>(null);
+  // The whole bundled library, fetched after hydration. Until then the page has only the list view's share.
+  let bundled = $state.raw<PatternDataset | null>(null);
+  let bundledFailed = $state(false);
   let shortlist = $state<ShortlistItem[]>([]);
   let shortlistLoaded = false;
 
@@ -69,7 +72,7 @@
   let searchInput = $state<HTMLInputElement>();
   let graphComponent = $state.raw<typeof import('./pattern-graph.svelte').default | null>(null);
 
-  const dataset = $derived(folder?.dataset ?? data.dataset);
+  const dataset = $derived(folder?.dataset ?? bundled ?? data.dataset);
   const entries = $derived(dataset.entries);
   const graph = $derived(buildGraph(entries));
   const documents = $derived(buildSearchDocuments(entries));
@@ -443,11 +446,28 @@
     resetLibrary();
   };
 
+  const fetchBundled = async (): Promise<PatternDataset | null> => {
+    try {
+      const response = await fetch(bundledLibraryPath);
+
+      // The file was validated when the page prerendered, so the browser trusts its shape.
+      return response.ok ? ((await response.json()) as PatternDataset) : null;
+    } catch {
+      return null;
+    }
+  };
+
   onMount(() => {
-    explorer = parseUrlState(location.search, location.hash);
-    shortlist = readShortlist();
-    shortlistLoaded = true;
-    ready = true;
+    // The address is read with the library, not before it: an entry named in the address would
+    // otherwise open with its sections still empty.
+    void fetchBundled().then((library) => {
+      bundled = library;
+      bundledFailed = library === null;
+      explorer = parseUrlState(location.search, location.hash);
+      shortlist = readShortlist();
+      shortlistLoaded = true;
+      ready = true;
+    });
 
     // Warm the views the page loads on demand, so opening one doesn't wait on the network.
     void import('./entry-detail.svelte');
@@ -702,6 +722,13 @@
       {/if}
     </div>
   </section>
+
+  {#if bundledFailed && folder === null}
+    <p role="alert" class="text-sm text-red-700 dark:text-red-400">
+      The full text of the patterns didn’t load, so entries show only their summaries. Reload the
+      page to try again.
+    </p>
+  {/if}
 
   <LibraryLoader
     bind:includedTypes

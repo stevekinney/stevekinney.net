@@ -6,7 +6,7 @@
   import FileDropZone from '$lib/experiments/file-drop-zone.svelte';
 
   import { bodyClasses } from './field-styles';
-  import { formatTokens } from './format-tokens';
+  import { formatCompactTokenCount as formatTokens } from '$lib/experiments/format';
   import { enterFolder, estimateTokens, MAXIMUM_FILE_BYTES, readFileEstimates } from './reread';
   import type { FileEstimate, SkippedFile } from './reread';
 

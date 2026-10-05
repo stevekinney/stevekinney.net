@@ -387,7 +387,7 @@ test.describe('acceptance 5: pasting a context readout', () => {
       'System tools (deferred) 20.5K',
     );
     await expect(page.getByTestId('readout-reconciled')).toContainText(
-      'leave 931.5K, and the readout reports 931.5K free',
+      'leave 932K, and the readout reports 932K free',
     );
     await expect(page.getByTestId('readout-mismatch')).toHaveCount(0);
   });
@@ -502,7 +502,7 @@ test.describe('acceptance 5: pasting a context readout', () => {
 
     await expect(termBox(page, 'Trusted instructions')).toHaveValue('18,000');
     // 7.5K short of the reported free space is inside the 1% of the window the page tolerates.
-    await expect(page.getByTestId('readout-reconciled')).toContainText('leave 817.5K');
+    await expect(page.getByTestId('readout-reconciled')).toContainText('leave 818K');
 
     await page.getByRole('button', { name: 'Reset to the defaults' }).click();
     await expect(termBox(page, 'Trusted instructions')).toHaveValue('25,500');
@@ -778,7 +778,7 @@ test.describe('acceptance 8: autocompact threshold', () => {
     await custom.blur();
 
     await expect(termBox(page, 'Operational margin')).toHaveValue('200,000');
-    await expect(hero(page)).toHaveText('1.7M');
+    await expect(hero(page)).toHaveText('1.71M');
   });
 });
 

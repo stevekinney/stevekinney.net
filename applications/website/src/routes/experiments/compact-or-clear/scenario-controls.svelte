@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  import { formatTokens } from './format-tokens';
+  import { formatCompactTokenCount as formatTokens } from '$lib/experiments/format';
   import {
     formatSummary,
     parseDecimalField,

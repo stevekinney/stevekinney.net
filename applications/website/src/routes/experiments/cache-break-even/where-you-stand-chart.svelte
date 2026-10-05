@@ -9,6 +9,7 @@
     costLinePoints,
     cursorStep,
     describeCursor,
+    placeHereLabel,
     toPath,
     xOf,
     xTicks,
@@ -41,10 +42,10 @@
   const hereX = $derived(xOf(layout, evaluation.contextTokens));
   const hereY = $derived(yOf(layout, evaluation.cost));
   const ahead = $derived(evaluation.net >= -1e-9);
-  const hereBelow = $derived(hereY < layout.margins.top + 26);
-  const hereAnchor = $derived(
-    hereX > layout.width - 70 ? 'end' : hereX < layout.margins.left + 40 ? 'start' : 'middle',
+  const valueLabel = $derived(
+    `Value ${formatDollars(Math.abs(evaluation.value))}${evaluation.value < 0 ? ' below zero' : ''}`,
   );
+  const hereLabel = $derived(placeHereLabel(layout, hereX, hereY, valueY, valueLabel));
 
   const cursor = $derived(
     hovered ?? (focused ? clampContext(layout, keyboardCursor ?? evaluation.contextTokens) : null),
@@ -53,8 +54,13 @@
   const cursorY = $derived(cursor === null ? 0 : yOf(layout, costAtContext(evaluation, cursor)));
   const cursorText = $derived(describeCursor(evaluation, cursor ?? evaluation.contextTokens));
   let tooltipWidth = $state(0);
-  // Held inside the chart so the tooltip can never make the page wider than the screen.
-  const tooltipLeft = $derived(placeTooltip(cursorX, tooltipWidth, width, 12));
+  // Held inside the plot so the tooltip can neither widen the page nor cover the axis labels.
+  const tooltipLeft = $derived(
+    placeTooltip(cursorX, tooltipWidth, width, 12, {
+      left: layout.margins.left,
+      right: layout.margins.right,
+    }),
+  );
 
   const description = $derived.by(() => {
     const parts = [
@@ -218,7 +224,7 @@
         text-anchor="end"
         class="fill-amber-800 text-[11px] font-semibold tabular-nums dark:fill-amber-300"
       >
-        Value {formatDollars(Math.abs(evaluation.value))}{evaluation.value < 0 ? ' below zero' : ''}
+        {valueLabel}
       </text>
 
       <!-- cost to change -->
@@ -271,8 +277,8 @@
       />
       <text
         x={hereX}
-        y={hereBelow ? hereY + 26 : hereY - 14}
-        text-anchor={hereAnchor}
+        y={hereLabel.y}
+        text-anchor={hereLabel.anchor}
         class="fill-slate-900 text-xs font-semibold dark:fill-white"
       >
         you are here
@@ -303,8 +309,11 @@
         role="tooltip"
         data-chart-tooltip
         bind:clientWidth={tooltipWidth}
-        class="pointer-events-none absolute z-10 w-max max-w-[min(15rem,70vw)] rounded-md bg-slate-900 px-3 py-2 text-xs text-white shadow-lg dark:bg-slate-100 dark:text-slate-900"
-        style="left: {tooltipLeft}px; top: {Math.max(4, cursorY - 52)}px;"
+        class="pointer-events-none absolute z-10 w-max rounded-md bg-slate-900 px-3 py-2 text-xs text-white shadow-lg dark:bg-slate-100 dark:text-slate-900"
+        style="left: {tooltipLeft}px; top: {Math.max(
+          4,
+          cursorY - 52,
+        )}px; max-width: min(15rem, {layout.plotWidth}px);"
       >
         {cursorText}
       </div>

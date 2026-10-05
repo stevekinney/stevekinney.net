@@ -6,9 +6,13 @@
  *   bun run experiments:patterns:build
  *   bun run experiments:patterns:build -- --source <folder> --output <file>
  *
+ * It writes the library twice: `patterns.json` beside this file, which the
+ * page validates while it prerenders, and a copy under `static/` that the page
+ * fetches in the browser after it hydrates.
+ *
  * The folder defaults to `AGENTIC_CODING_PATTERNS_SOURCE`, then to the vault.
  */
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -27,6 +31,10 @@ const defaultSource = path.join(
   'Agentic Coding Patterns',
 );
 const defaultOutput = path.join(here, 'patterns.json');
+const browserCopy = path.resolve(
+  here,
+  '../../../../static/experiments/agentic-coding-patterns/patterns.json',
+);
 
 const readOption = (name: string): string | undefined => {
   const index = process.argv.indexOf(`--${name}`);
@@ -73,7 +81,14 @@ const dataset = buildDataset(notes);
 
 // Format the way Prettier would, so the lint check accepts the committed file.
 const options = (await resolveConfig(output)) ?? {};
-await writeFile(output, await format(JSON.stringify(dataset), { ...options, parser: 'json' }));
+const formatted = await format(JSON.stringify(dataset), { ...options, parser: 'json' });
+await writeFile(output, formatted);
+
+// Only the default build refreshes the browser's copy. A build to another file is a scratch run.
+if (output === defaultOutput) {
+  await mkdir(path.dirname(browserCopy), { recursive: true });
+  await writeFile(browserCopy, formatted);
+}
 
 console.log(`Read ${notes.length} notes from ${source}`);
 console.log(`Wrote ${dataset.entries.length} entries to ${path.relative(process.cwd(), output)}\n`);

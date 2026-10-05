@@ -17,7 +17,7 @@ const calibration = (overrides: Partial<Calibration> = {}): Calibration => ({
   inputPairs: 39,
   pairsAcrossCompaction: 0,
   modelId: 'claude-sonnet-5',
-  modelMatch: defaultModels[2],
+  modelMatch: defaultModels.find((model) => model.id === 'sonnet-5') ?? null,
   lastTimestamp: null,
   importedAt: 0,
   summaryPercent: 4.1,
