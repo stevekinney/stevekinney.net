@@ -81,7 +81,7 @@ And before you write one at all, the missing knowledge should be specific enough
 
 Skills load in stages, and every stage has a price tag. (Costs here are measured in _tokens_, the chunks of text a model reads and writes. [Prompt Caching and Cost](caching-and-cost.md) explains why they matter.)
 
-- **Name and description**: Sent with _every_ request, at roughly 100 tokens for a typical short description (one at the 1,024-character limit is closer to 250), whether or not the skill ever gets used. Thirty typical skills is about 3,000 tokens of overhead before you've typed a word.
+- **Name and description**: For model-invocable skills, included in the discovery listing at roughly 100 tokens for a typical short description (one at the 1,024-character limit is closer to 250), whether or not the skill ever gets used. Thirty typical listed skills is about 3,000 tokens of overhead before you've typed a word. In Claude Code, manual-only skills with `disable-model-invocation: true` are excluded from that listing, so they incur no name/description overhead before invocation. The [invocation table](https://code.claude.com/docs/en/skills#control-who-invokes-a-skill) distinguishes these cases; use `/context` to measure the actual listing after its budget is applied.
 - **Body**: Loads when the skill is invoked and then sticks around for the rest of the session.
 - **Reference files**: Free until something actually reads them.
 - **Scripts**: You pay for their output, not their source.

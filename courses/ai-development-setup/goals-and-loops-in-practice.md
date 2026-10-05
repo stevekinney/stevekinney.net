@@ -35,7 +35,7 @@ Pretty much every `/loop` anti-pattern is asking it for something it doesn't hav
 
 - Letting the model decide when it's done needs an **oracle**: a check the model can't talk its way past.
 - Polling something that already sends notifications needs an **event source**.
-- "Leave it running overnight" needs **durability**. A `/loop` task dies with its session.
+- "Leave it running overnight" needs **durability**. A `/loop` task stops firing when its session stops. Fixed-interval tasks can return on resume while unexpired; self-paced loops must be restarted. Use a desktop scheduled task or cloud routine when execution must continue independently of that session.
 - Looping on a shared branch needs **isolation**. See [Worktrees](worktrees.md).
 - Judgment calls on every run need a **human**.
 

@@ -38,7 +38,7 @@ Only `name` and `description` are required. The [subagent documentation](https:/
   - `user` stores it under `~/.claude/agent-memory/<agent-name>/`.
   - `project` stores it under `.claude/agent-memory/<agent-name>/`, which can be committed to the repository.
   - `local` stores it under `.claude/agent-memory-local/<agent-name>/`, which stays out of version control.
-- `omitClaudeMd`: Skips loading `CLAUDE.md` files.
+- `omitClaudeMd`: On v2.1.271+, skips user, project, and local `CLAUDE.md` instructions for a spawned subagent. Managed policy still loads for ordinary definitions; managed definitions can omit it too. The field is ignored when the definition runs as the main session through `--agent` or the `agent` setting. It is not a policy-free context switch; see the [frontmatter reference](https://code.claude.com/docs/en/sub-agents#frontmatter-reference).
 - `color`: Terminal display color, such as `red`, `blue`, `green`, `yellow`, `purple`, `orange`, `pink`, or `cyan`.
 - `experimental.cacheTtl`: `5m` or `1h`, the lifetime of this one agent's [prompt cache](caching-and-cost.md). The `subagentPromptCacheTtl` setting does the same job session-wide for everything outside your main conversation. Per Claude Code's [prompt caching documentation](https://code.claude.com/docs/en/prompt-caching), that setting is checked first, so it wins when both are set.
 

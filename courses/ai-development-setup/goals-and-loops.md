@@ -85,7 +85,7 @@ Some sharp edges:
 
 - **Self-paced loops can die quietly**: If a run forgets to reschedule, Claude Code arms one fallback wakeup about 20 minutes later. If _that_ run forgets too, the loop just ends, without telling you.
 - **Stopping is asymmetric**: Esc, or asking Claude to stop, ends a self-paced loop. A fixed-interval cron keeps firing until you delete it by ID.
-- **A `/loop` task belongs to its session**: `/clear` empties the conversation and ends it, and `--resume` doesn't bring back a self-paced loop. Recurring tasks also expire after seven days.
+- **A `/loop` task belongs to its session**: `/clear` removes session tasks. Closing the session stops tasks firing, but `--resume` or `--continue` restores unexpired fixed-interval `CronCreate` tasks. Self-paced loops, expired recurring tasks, and elapsed one-shot tasks are not restored. Recurring tasks expire after seven days. The [scheduled-task limitations](https://code.claude.com/docs/en/scheduled-tasks#limitations) spell out these exceptions.
 
 A desktop scheduled task or a cloud routine outlives any session. [Routines and Schedules](routines-and-schedules.md) covers them, and the [scheduled tasks documentation](https://code.claude.com/docs/en/scheduled-tasks) covers the scheduler.
 

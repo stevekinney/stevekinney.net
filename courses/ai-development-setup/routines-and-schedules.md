@@ -7,7 +7,7 @@ A prompt that runs while you're asleep is a different kind of thing from a promp
 
 The idea is inspired by [OpenClaw](https://openclaw.ai), and Claude Code, Codex, and other tools now support it: kick off a prompt on a schedule or an external event. In Claude Code, there are three different things, and "scheduled task" alone is ambiguous, so we'll keep them apart:
 
-- **`/loop` task**: A recurring prompt inside one open session. It dies when the session ends. ([Goals and Loops](goals-and-loops.md) covers it.)
+- **`/loop` task**: A recurring prompt that fires only while its session is running. Unexpired fixed-interval tasks return with `claude --resume` or `--continue`; self-paced loops do not. Expired recurring tasks and elapsed one-shot tasks are not restored. ([Goals and Loops](goals-and-loops.md) covers it.)
 - **Desktop scheduled task**: A prompt that the Claude desktop app runs on a schedule on your machine. It persists across sessions.
 - **Cloud routine**: A prompt Anthropic runs on a schedule or an event, in the cloud, without your machine. See the [routines documentation](https://code.claude.com/docs/en/routines) and the [scheduled tasks documentation](https://code.claude.com/docs/en/scheduled-tasks).
 
