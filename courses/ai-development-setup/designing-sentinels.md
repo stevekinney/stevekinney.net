@@ -59,7 +59,7 @@ Test every gate negatively: delete the marker, attempt the action, and assert th
 - **Proof-carrying markers**: The marker holds a digest of the reviewer's response, a handle the gate can re-query itself, or a signature from outside the sandbox. Now a marker that exists but _doesn't_ verify is positive evidence of gaming, not just a missing approval.
 - **Fallback approvals**: If there's no approval for the exact tree, fall back to one for the tree of the parent commit and review only the diff. (Nobody seems to be shipping this yet.)
 - **Git notes for commit-scoped facts**: "I already reviewed this commit."
-- **Artifact presence**: The work product _is_ the record, so resuming is just running it again.
+- **Validated artifacts**: The work product can serve as the record only after its contents and downstream checks satisfy the contract. An empty or partial file is not completion evidence; verify before resuming or accepting it.
 - **Control channels from you to the loop**: Editing `loop.md` steers a running `/loop`. A stop file like `.ralph/STOP` is a kill switch the loop checks every iteration.
 
 ## When a scheme has already failed
