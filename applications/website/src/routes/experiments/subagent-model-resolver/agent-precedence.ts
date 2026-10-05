@@ -1,4 +1,6 @@
-import { containsWorkingDirectory, pathSegments, scopeRank } from './scopes';
+import { pathSegments } from '$lib/experiments/settings-scope';
+
+import { containsWorkingDirectory, scopeRank } from './scopes';
 import type { AgentScope } from './scopes';
 
 /** What the precedence rules need to know about a definition. */

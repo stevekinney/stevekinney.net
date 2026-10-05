@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { diffPreview, suggestFix } from './fixes';
 import { analyzeFleet } from './fleet';
 import type { FleetInput } from './fleet';
-import { defaultSettingsPrecedence } from './effective-settings';
+import { defaultSettingsPrecedence } from '$lib/experiments/settings-scope';
 import { buildCsv, buildMarkdownReport, csvField, escapeMarkdownCell } from './export-report';
 import { baseConfiguration } from './presets';
 import { defaultRange, v } from './versions';

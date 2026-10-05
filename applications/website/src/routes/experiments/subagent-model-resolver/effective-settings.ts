@@ -1,23 +1,7 @@
+import type { SettingsScope } from '$lib/experiments/settings-scope';
+
 import { parseForceValue, parseSettingsFile } from './settings-parser';
 import type { SettingsValues } from './settings-parser';
-
-/** Where a settings file comes from. */
-export type SettingsScope = 'managed' | 'project-local' | 'project' | 'user';
-
-export const settingsScopeLabels: Record<SettingsScope, string> = {
-  managed: 'Managed',
-  'project-local': 'Project, local',
-  project: 'Project',
-  user: 'User',
-};
-
-/** The documented order, highest priority first. It's shown as an assumption the person can edit. */
-export const defaultSettingsPrecedence: SettingsScope[] = [
-  'managed',
-  'project-local',
-  'project',
-  'user',
-];
 
 export type SettingsFile = {
   id: string;
