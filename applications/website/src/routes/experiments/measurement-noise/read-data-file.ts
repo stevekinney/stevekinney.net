@@ -20,7 +20,8 @@ export const formatOf = (name: string): Format => {
 /**
  * Reads a CSV, JSON, or JSON Lines file into a table. CSV and JSON Lines are
  * streamed a line at a time, so a large file never sits in memory as one
- * string and the page keeps responding. `onLines` reports progress.
+ * string and the page keeps responding. Reading stops after `MAX_ROWS` rows.
+ * `onLines` reports progress.
  */
 export const readDataFile = async (
   file: File,
@@ -41,13 +42,19 @@ export const readDataFile = async (
   }
 
   const reader = format === 'jsonl' ? createJsonLinesReader() : createCsvReader();
+  // Past `MAX_ROWS`, the reader wants no more lines, so the rest of the file is never read.
+  const stop = new AbortController();
   let count = 0;
 
-  await readLines(file.stream(), (line) => {
-    reader.push(line);
-    count += 1;
-    if (count % 5_000 === 0) onLines?.(count);
-  });
+  await readLines(
+    file.stream(),
+    (line) => {
+      if (!reader.push(line)) stop.abort();
+      count += 1;
+      if (count % 5_000 === 0) onLines?.(count);
+    },
+    { signal: stop.signal },
+  );
 
   return reader.finish();
 };

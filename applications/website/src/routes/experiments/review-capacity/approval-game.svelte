@@ -47,21 +47,39 @@
     shownAt = performance.now();
   };
 
+  /** Set while a decision waits for the next card to render, so input meanwhile is ignored. */
+  let deciding = false;
+
   const decide = async (decision: Decision): Promise<void> => {
-    if (phase !== 'playing') return;
+    if (phase !== 'playing' || deciding) return;
+    deciding = true;
 
-    const milliseconds = Math.max(0, performance.now() - shownAt);
-    results = [...results, { position: results.length + 1, decision, milliseconds }];
+    try {
+      const milliseconds = Math.max(0, performance.now() - shownAt);
+      results = [...results, { position: results.length + 1, decision, milliseconds }];
 
-    if (results.length >= CARD_COUNT) {
-      phase = 'done';
-      // The card that had focus goes away, so focus moves to the verdict.
-      await focusAfterUpdate('game-results');
-      return;
+      if (results.length >= CARD_COUNT) {
+        phase = 'done';
+        // The card that had focus goes away, so focus moves to the verdict.
+        await focusAfterUpdate('game-results');
+        return;
+      }
+
+      await tick();
+      shownAt = performance.now();
+    } finally {
+      deciding = false;
     }
+  };
 
-    await tick();
-    shownAt = performance.now();
+  /**
+   * The second click of a double-click arrives after the next card has
+   * rendered, so the in-flight flag no longer holds it back, yet nobody could
+   * have read that card. Clicks after the first in a quick series are ignored.
+   */
+  const handleClick = (event: MouseEvent, decision: Decision): void => {
+    if (event.detail > 1) return;
+    void decide(decision);
   };
 
   /**
@@ -167,8 +185,12 @@
         Working directory: <span class="font-mono">{current.workingDirectory}</span>
       </p>
       <div class="flex flex-wrap gap-3">
-        <Button variant="primary" onclick={() => void decide('allow')}>Allow (A)</Button>
-        <Button variant="secondary" onclick={() => void decide('deny')}>Deny (D)</Button>
+        <Button variant="primary" onclick={(event: MouseEvent) => handleClick(event, 'allow')}
+          >Allow (A)</Button
+        >
+        <Button variant="secondary" onclick={(event: MouseEvent) => handleClick(event, 'deny')}
+          >Deny (D)</Button
+        >
       </div>
     </div>
   {:else if phase === 'done' && summary}

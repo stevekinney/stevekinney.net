@@ -32,7 +32,7 @@
   import LazySection from './lazy-section.svelte';
   import { buildOutcomes } from './outcomes';
   import type { CostIntervalState } from './outcomes';
-  import { parseCsv, parsePasted } from './parse-table';
+  import { parseCsv, parsePasted, ROW_LIMIT_NOTE } from './parse-table';
   import type { ParsedTable } from './parse-table';
   import PredictCard from './predict-card.svelte';
   import type { Prediction } from './predict-card.svelte';
@@ -367,7 +367,13 @@
       app.file = { name: first.path, parsed: result };
       app.active = 'file';
       app.swapped = false;
-      fileStatus = `Read ${first.path}.${files.length > 1 ? ' Only the first file is used.' : ''}`;
+      fileStatus = [
+        `Read ${first.path}.`,
+        result.truncated ? ROW_LIMIT_NOTE : '',
+        files.length > 1 ? 'Only the first file is used.' : '',
+      ]
+        .filter(Boolean)
+        .join(' ');
       reveal();
       changed();
     } catch {
@@ -522,6 +528,8 @@
         grid: app.grid,
         progress: fileProgress,
         status: fileStatus,
+        pasteStatus:
+          app.active === 'paste' && parsed.ok && parsed.truncated ? ROW_LIMIT_NOTE : null,
         error: app.active === 'paste' && !parsed.ok ? parsed.error : fileError,
         onMode: setMode,
         onPaste: setPaste,

@@ -4,9 +4,11 @@ import {
   createCsvReader,
   createJsonLinesReader,
   detectDelimiter,
+  MAX_ROWS,
   parseCsv,
   parseJson,
   parsePasted,
+  ROW_LIMIT_NOTE,
   splitRecord,
 } from './parse-table';
 
@@ -124,6 +126,27 @@ describe('parseJson', () => {
     });
   });
 
+  it('prefers the rows key over an earlier array, such as a list of column names', () => {
+    expect(parseJson('{"columns":["a","b"],"Rows":[{"a":"A","b":"1"},{"a":"B","b":"2"}]}')).toEqual(
+      {
+        ok: true,
+        table: {
+          columns: ['a', 'b'],
+          rows: [
+            ['A', '1'],
+            ['B', '2'],
+          ],
+        },
+      },
+    );
+  });
+
+  it('otherwise takes the first array of objects, under any key', () => {
+    expect(
+      parseJson('{"labels":["x"],"runs":[{"condition":"A"}],"other":[{"condition":"B"}]}'),
+    ).toEqual({ ok: true, table: { columns: ['condition'], rows: [['A']] } });
+  });
+
   it('turns entries that aren’t objects into blank rows the dataset reports', () => {
     expect(parseJson('[{"condition":"A"}, 4]')).toMatchObject({ table: { rows: [['A'], ['']] } });
   });
@@ -172,5 +195,60 @@ describe('parsePasted', () => {
 
   it('asks for data when the box is empty', () => {
     expect(parsePasted('  ')).toEqual({ ok: false, error: 'Paste some rows to get started.' });
+  });
+});
+
+describe('the row limit', () => {
+  const csvLines = (count: number): string[] => [
+    'condition,minutes',
+    ...Array.from({ length: count }, (_, index) => `A,${index + 1}`),
+  ];
+
+  it('is 100,000 rows, and says so when it cuts a file short', () => {
+    expect(MAX_ROWS).toBe(100_000);
+    expect(ROW_LIMIT_NOTE).toBe('Read the first 100,000 rows only.');
+  });
+
+  it('keeps every row of a CSV file at exactly the limit', () => {
+    const result = parseCsv(csvLines(MAX_ROWS).join('\n'));
+
+    expect(result.ok && result.table.rows.length).toBe(MAX_ROWS);
+    expect(result).not.toHaveProperty('truncated');
+  });
+
+  it('stops a CSV reader at the limit and reports it', () => {
+    const reader = createCsvReader();
+    const wanted = csvLines(MAX_ROWS + 2).map((line) => reader.push(line));
+    const result = reader.finish();
+
+    // Blank lines and the header don't count toward the limit.
+    expect(wanted.slice(0, MAX_ROWS + 1).every(Boolean)).toBe(true);
+    expect(wanted.slice(MAX_ROWS + 1)).toEqual([false, false]);
+    expect(result.ok && result.table.rows.length).toBe(MAX_ROWS);
+    expect(result.ok && result.table.rows.at(-1)).toEqual(['A', String(MAX_ROWS)]);
+    expect(result).toMatchObject({ ok: true, truncated: true });
+  });
+
+  it('stops a JSON Lines reader at the limit and reports it', () => {
+    const reader = createJsonLinesReader();
+    const wanted = Array.from({ length: MAX_ROWS + 1 }, (_, index) =>
+      reader.push(`{"condition":"A","minutes":${index + 1}}`),
+    );
+    const result = reader.finish();
+
+    expect(wanted.at(-2)).toBe(true);
+    expect(wanted.at(-1)).toBe(false);
+    expect(result.ok && result.table.rows.length).toBe(MAX_ROWS);
+    expect(result).toMatchObject({ ok: true, truncated: true });
+  });
+
+  it('keeps the first rows of a JSON array past the limit, and pasted text says so too', () => {
+    const items = Array.from({ length: MAX_ROWS + 1 }, (_, index) => ({ minutes: index + 1 }));
+    const json = parseJson(JSON.stringify({ rows: items }));
+
+    expect(json.ok && json.table.rows.length).toBe(MAX_ROWS);
+    expect(json).toMatchObject({ ok: true, truncated: true });
+    expect(parsePasted(csvLines(MAX_ROWS + 1).join('\n'))).toMatchObject({ truncated: true });
+    expect(parseJson(JSON.stringify(items.slice(0, MAX_ROWS)))).not.toHaveProperty('truncated');
   });
 });

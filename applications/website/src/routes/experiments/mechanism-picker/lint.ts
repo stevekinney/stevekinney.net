@@ -75,17 +75,20 @@ export const splitInstructions = (source: string): SourceLine[] => {
     const line = lines[index];
     const trimmed = line.trim();
     const lineNumber = index + 1;
+    // A fence inside a blockquote, such as `> ```` … `> ````, is still a fence, so
+    // fences are found after the quote markers come off, the same as the line's text.
+    const unquoted = line.replace(blockquote, '');
 
     if (fenceMarker !== null) {
       // Only the same character, at least as many of it as opened the block, closes it.
-      const closing = closingFence.exec(line)?.[1];
+      const closing = closingFence.exec(unquoted)?.[1];
       if (closing && closing[0] === fenceMarker[0] && closing.length >= fenceMarker.length) {
         fenceMarker = null;
       }
       continue;
     }
 
-    const fenceMatch = fence.exec(line);
+    const fenceMatch = fence.exec(unquoted);
     if (fenceMatch && !(fenceMatch[1][0] === '`' && fenceMatch[2].includes('`'))) {
       fenceMarker = fenceMatch[1];
       previousBlank = false;
@@ -136,7 +139,7 @@ export const splitInstructions = (source: string): SourceLine[] => {
       continue;
     }
 
-    let text = line.replace(blockquote, '');
+    let text = unquoted;
     let kind: SourceLine['kind'] = 'text';
     let indent = text.length - text.trimStart().length;
 

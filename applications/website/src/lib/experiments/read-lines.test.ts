@@ -65,4 +65,19 @@ describe('readLines', () => {
 
     expect(firedBeforeLastLine).toBe(true);
   });
+
+  it('stops reading once the signal is aborted', async () => {
+    const controller = new AbortController();
+    const lines: string[] = [];
+    await readLines(
+      streamOf('one\ntwo\n', 'three\n'),
+      (line) => {
+        lines.push(line);
+        if (line === 'one') controller.abort();
+      },
+      { signal: controller.signal },
+    );
+
+    expect(lines).toEqual(['one']);
+  });
 });

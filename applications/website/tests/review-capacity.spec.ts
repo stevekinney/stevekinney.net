@@ -366,6 +366,26 @@ test.describe('the approval-fatigue game', () => {
     );
   });
 
+  test('records one decision for a double-click, not a second for the next card', async ({
+    page,
+  }) => {
+    await openExperiment(page, path);
+    await page.getByLabel('Seed', { exact: true }).fill('1');
+    await page.getByRole('button', { name: 'Start the round' }).click();
+
+    const card = page.getByTestId('approval-card');
+    await expect(card).toContainText('Prompt 1 of 20');
+    await card.getByRole('button', { name: 'Allow (A)' }).dblclick();
+    await expect(card).toContainText('Prompt 2 of 20');
+
+    // Nineteen more decisions finish the round, so the double-click counted once.
+    for (let index = 2; index <= 20; index += 1) {
+      await expect(card).toContainText(`Prompt ${index} of 20`);
+      await page.keyboard.press('a');
+    }
+    await expect(page.getByTestId('game-results')).toBeVisible();
+  });
+
   test('keeps the dangerous card within 10 to 20 for other seeds', async ({ page }) => {
     await openExperiment(page, path);
 
