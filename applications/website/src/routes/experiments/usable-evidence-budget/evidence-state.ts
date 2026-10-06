@@ -68,7 +68,13 @@ export const addIntake = (
     ...state,
     files,
     skipped: [
-      ...state.skipped.filter((entry) => !incoming.has(entry.path) && !readNow.has(entry.path)),
+      ...state.skipped.filter(
+        (entry) =>
+          !incoming.has(entry.path) &&
+          !readNow.has(entry.path) &&
+          // A folder skipped before, whose files this drop read, isn't skipped any more.
+          !(entry.path.endsWith('/') && [...readNow].some((path) => path.startsWith(entry.path))),
+      ),
       ...skippedEntries,
     ],
   };

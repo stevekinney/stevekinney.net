@@ -76,6 +76,11 @@ describe('parsePastedOutput', () => {
     expect(parsed.agents.map((agent) => agent.model)).toEqual(['sonnet']);
   });
 
+  it('keeps a # inside a quoted value but drops a comment after it', () => {
+    expect(parsePastedOutput('a/x.md:1:model: "sonnet" # note').agents[0]?.model).toBe('sonnet');
+    expect(parsePastedOutput('a/x.md:1:model: "sonnet #literal"').agents).toEqual([]);
+  });
+
   it('ignores a model value with characters it does not expect, and a line with no file', () => {
     expect(parsePastedOutput('a/x.md:1:model: has spaces here').agents).toEqual([]);
     expect(parsePastedOutput('model: opus').agents).toEqual([]);

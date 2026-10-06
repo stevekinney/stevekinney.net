@@ -7,6 +7,7 @@
   import {
     defaultModels,
     MAXIMUM_MODELS,
+    MAXIMUM_NAME_LENGTH,
     MODEL_ID_PATTERN,
     parsePriceTable,
     pricesEqual,
@@ -48,7 +49,11 @@
   };
 
   const validateName = (text: string): string | null =>
-    text.trim() ? null : 'A model needs a name.';
+    text.trim().length === 0
+      ? 'A model needs a name.'
+      : text.trim().length > MAXIMUM_NAME_LENGTH
+        ? `A name can be up to ${MAXIMUM_NAME_LENGTH} characters.`
+        : null;
 
   const validateId = (text: string, index: number): string | null => {
     const id = text.trim();
