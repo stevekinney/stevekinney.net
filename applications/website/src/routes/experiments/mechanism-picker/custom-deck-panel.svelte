@@ -88,7 +88,7 @@
       const merged = mergeDecks(cards, result.cards);
       onChange(merged);
       problems = result.skipped;
-      status = `Imported ${merged.length - before} of ${result.cards.length + result.skipped.length} cards from ${first.path}.`;
+      status = `Imported ${merged.length - before} of ${result.total.toLocaleString('en-US')} cards from ${first.path}.`;
     } catch {
       problems = ['Couldn’t read that file.'];
     } finally {

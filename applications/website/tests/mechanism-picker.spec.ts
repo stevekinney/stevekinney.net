@@ -361,6 +361,23 @@ test.describe('custom scenarios', () => {
       'skill',
     ]);
   });
+
+  test('lists the first skipped entries of a huge deck, then counts the rest', async ({ page }) => {
+    await openPicker(page, '#mode=sort&seed=5');
+
+    await page.locator('input[type="file"]').setInputFiles({
+      name: 'huge-deck.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify(Array.from({ length: 200_000 }, () => 4))),
+    });
+    await expect(page.getByText('Imported 0 of 200,000 cards from huge-deck.json.')).toBeVisible();
+
+    const problems = page.getByRole('status').filter({ hasText: 'isn’t an object' });
+    await expect(problems.getByRole('listitem')).toHaveCount(21);
+    await expect(problems.getByRole('listitem').last()).toHaveText(
+      '…and 199,980 more entries were skipped.',
+    );
+  });
 });
 
 test.describe('the linter', () => {
