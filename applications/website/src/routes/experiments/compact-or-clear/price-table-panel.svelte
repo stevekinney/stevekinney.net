@@ -2,6 +2,7 @@
   import { Download, Plus, RotateCcw, Trash2, Upload } from '@lucide/svelte';
 
   import Button from '$lib/components/button';
+  import { countCharacters } from '$lib/experiments/truncate';
 
   import { bodyClasses, hintClasses } from './field-styles';
   import {
@@ -51,7 +52,7 @@
   const validateName = (text: string): string | null =>
     text.trim().length === 0
       ? 'A model needs a name.'
-      : text.trim().length > MAXIMUM_NAME_LENGTH
+      : countCharacters(text.trim()) > MAXIMUM_NAME_LENGTH
         ? `A name can be up to ${MAXIMUM_NAME_LENGTH} characters.`
         : null;
 

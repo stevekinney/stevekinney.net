@@ -1,3 +1,5 @@
+import { truncateCharacters } from '$lib/experiments/truncate';
+
 import defaultPricingData from './default-pricing.json';
 
 /** One model's prices, in dollars per million tokens. */
@@ -145,7 +147,8 @@ export const parsePricingTable = (value: unknown): PricingParseResult => {
     }
 
     // Names are capped so any table the page accepts still fits in a share link.
-    const name = typeof entry.name === 'string' ? entry.name.trim().slice(0, MAX_NAME_LENGTH) : '';
+    const name =
+      typeof entry.name === 'string' ? truncateCharacters(entry.name, MAX_NAME_LENGTH) : '';
     const input = readPrice(entry.input);
     const output = readPrice(entry.output);
     if (!name || input === null || output === null) {

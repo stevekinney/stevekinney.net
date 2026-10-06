@@ -6,6 +6,8 @@
  * $1.05.
  */
 
+import { truncateCharacters } from '$lib/experiments/truncate';
+
 export type ModelPrice = {
   /** A key such as `opus-5`. Imported session models match against it. */
   id: string;
@@ -133,13 +135,18 @@ export const renamedModelId = (
     : null;
 };
 
-/** Turns a name such as `Opus 5.5` into an ID such as `opus-5-5`. */
+/**
+ * Turns a name such as `Opus 5.5` into an ID such as `opus-5-5`, at most 60
+ * characters long. Lowercasing can lengthen a name: `İ` becomes two characters.
+ */
 export const toModelId = (name: string): string =>
   name
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/^-+/, '')
+    .slice(0, 60)
+    .replace(/-+$/, '');
 
 /**
  * What a model ID can be. A shared link has to carry the ID of the selected model, and
@@ -190,7 +197,7 @@ export const parsePriceTable = (text: string): ParsedPriceTable => {
 
     // Names are capped so a table fits in a share link and doesn't overflow the page.
     const name =
-      typeof entry.name === 'string' ? entry.name.trim().slice(0, MAXIMUM_NAME_LENGTH) : '';
+      typeof entry.name === 'string' ? truncateCharacters(entry.name, MAXIMUM_NAME_LENGTH) : '';
     if (!name) return { error: `${position} needs a name.` };
 
     const id = typeof entry.id === 'string' && entry.id.trim() ? entry.id.trim() : toModelId(name);
