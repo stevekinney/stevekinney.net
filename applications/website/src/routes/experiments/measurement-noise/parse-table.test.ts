@@ -4,6 +4,8 @@ import {
   createCsvReader,
   createJsonLinesReader,
   detectDelimiter,
+  MAX_PENDING_CHARACTERS,
+  MAX_PENDING_LINES,
   MAX_ROWS,
   parseCsv,
   parseJson,
@@ -75,14 +77,48 @@ describe('parseCsv', () => {
   });
 
   it('stays linear on a large file with a stray quote near the top', () => {
+    // The quote's line and the lines after it fill the pending record exactly to its limit.
     const lines = ['condition,task,minutes', 'A,"open,40'];
-    for (let index = 0; index < 20_000; index += 1) lines.push(`A,t${index},${index + 1}`);
+    for (let index = 1; index < MAX_PENDING_LINES; index += 1) {
+      lines.push(`A,t${index},${index + 1}`);
+    }
 
     const started = performance.now();
     const parsed = parseCsv(lines.join('\n'));
 
-    expect(parsed.ok && parsed.table.rows.length).toBe(20_001);
+    expect(parsed.ok && parsed.table.rows.length).toBe(MAX_PENDING_LINES);
     expect(performance.now() - started).toBeLessThan(1_000);
+  });
+
+  it('stops with an error once an unclosed quote runs past 10,000 lines', () => {
+    expect(MAX_PENDING_LINES).toBe(10_000);
+
+    const reader = createCsvReader();
+    const lines = ['condition,task,minutes', 'A,b,1', 'A,"open,40'];
+    for (let index = 0; index < MAX_PENDING_LINES * 3; index += 1) lines.push(`A,t${index},1`);
+    const wanted = lines.map((line) => reader.push(line));
+
+    // The 10,001st line of the open quote stops the reader, and every push after it.
+    const stop = 2 + MAX_PENDING_LINES;
+    expect(wanted.slice(0, stop).every(Boolean)).toBe(true);
+    expect(wanted.slice(stop).some(Boolean)).toBe(false);
+    expect(reader.finish()).toEqual({
+      ok: false,
+      error:
+        'A quoted field never closes. The quote that opens on line 3 is still open 10,000 lines later, so the file can’t be read. Check that line for a stray quote mark.',
+    });
+  });
+
+  it('stops with an error once an unclosed quote holds more than a million characters', () => {
+    expect(MAX_PENDING_CHARACTERS).toBe(1_000_000);
+
+    const long = 'x'.repeat(300_000);
+    const parsed = parseCsv(['"condition', long, long, long, long, 'A,b'].join('\n'));
+
+    expect(parsed).toMatchObject({ ok: false });
+    expect(!parsed.ok && parsed.error).toMatch(
+      /^A quoted field never closes\. The quote that opens on line 1 is still open/,
+    );
   });
 
   it('detects tabs and semicolons', () => {
