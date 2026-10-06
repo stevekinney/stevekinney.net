@@ -370,6 +370,13 @@ describe('filling from a readout', () => {
     expect(fillFromReadout(initialState(), readout).scenario.capacity).toBe(maximumTokenCount);
   });
 
+  it('keeps a margin set above the window inside the term limit when the window grows', () => {
+    const start = setTerm(setCapacity(initialState(), 200_000), 'margin', maximumTokenCount);
+    const grown = setCapacity(start, 1_000_000);
+
+    expect(grown.scenario.margin).toBe(maximumTokenCount);
+  });
+
   it('keeps the earlier marks when a refill adds a term', () => {
     const partial = applyReadout(
       parseReadout('System prompt: 18k tokens'),

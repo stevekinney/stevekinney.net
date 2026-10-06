@@ -140,7 +140,8 @@ export const toModelId = (name: string): string =>
  */
 export const MODEL_ID_PATTERN = /^[a-z0-9][a-z0-9-]{0,59}$/;
 
-const MAXIMUM_MODELS = 60;
+/** The most models a price table can hold. The editor stops at it too, so it can't export a file the importer rejects. */
+export const MAXIMUM_MODELS = 60;
 
 export type ParsedPriceTable = { models: ModelPrice[] } | { error: string };
 

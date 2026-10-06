@@ -1,3 +1,5 @@
+import { maximumTokenCount } from './budget';
+
 /**
  * Autocompact fires when the context reaches a threshold, so the margin is
  * whatever is left between that threshold and the end of the window.
@@ -23,7 +25,7 @@ export const marginFromPercent = (capacity: number, percent: number): number | n
  * `marginShare` is the margin divided by the capacity it was set against.
  */
 export const marginForCapacity = (capacity: number, marginShare: number): number =>
-  Math.round(capacity * marginShare);
+  Math.min(Math.round(capacity * marginShare), maximumTokenCount);
 
 /** The margin as a share of a window, remembered so that resizing the window can keep it. */
 export const marginShareOf = (capacity: number, margin: number): number =>

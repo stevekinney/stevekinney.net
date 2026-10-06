@@ -81,9 +81,16 @@ export const uniqueModelId = (table: PricingTable, name: string): string => {
 export const modelOptionLabel = (model: ModelPrice): string =>
   `${model.name} ($${formatPriceNumber(model.input)}/$${formatPriceNumber(model.output)})`;
 
-/** A price without trailing zeros: 5, 0.8, 12.5. */
-export const formatPriceNumber = (price: number): string =>
-  Number.isInteger(price) ? String(price) : String(Number(price.toFixed(4)));
+/** A price without trailing zeros: 5, 0.8, 12.5, or 0.0000001 for a very small one. */
+export const formatPriceNumber = (price: number): string => {
+  if (Number.isInteger(price)) return String(price);
+  if (price >= 0.0001) return String(Number(price.toFixed(4)));
+
+  // A price this small would round to zero, so it keeps its digits.
+  const exact = price.toFixed(20).replace(/0+$/, '');
+
+  return Number(exact) === 0 ? String(price) : exact;
+};
 
 type JsonRecord = Record<string, unknown>;
 

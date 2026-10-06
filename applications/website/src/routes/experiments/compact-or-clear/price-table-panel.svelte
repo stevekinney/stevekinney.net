@@ -6,6 +6,7 @@
   import { bodyClasses, hintClasses } from './field-styles';
   import {
     defaultModels,
+    MAXIMUM_MODELS,
     MODEL_ID_PATTERN,
     parsePriceTable,
     pricesEqual,
@@ -61,6 +62,8 @@
   };
 
   const addModel = (): void => {
+    if (models.length >= MAXIMUM_MODELS) return;
+
     let number = models.length + 1;
     while (models.some((model) => model.id === `model-${number}`)) number += 1;
 
@@ -227,7 +230,13 @@
     </p>
 
     <div class="flex flex-wrap gap-3">
-      <Button variant="secondary" size="small" icon={Plus} onclick={addModel}>Add a model</Button>
+      <Button
+        variant="secondary"
+        size="small"
+        icon={Plus}
+        onclick={addModel}
+        disabled={models.length >= MAXIMUM_MODELS}>Add a model</Button
+      >
       <Button
         variant="secondary"
         size="small"

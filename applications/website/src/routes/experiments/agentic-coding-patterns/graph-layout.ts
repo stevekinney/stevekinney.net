@@ -21,7 +21,7 @@ const seededRandom = (seed: number): (() => number) => {
 };
 
 const DEFAULT_ITERATIONS = 300;
-const MINIMUM_ITERATIONS = 10;
+const MINIMUM_ITERATIONS = 1;
 /** The most pair interactions the layout spends in total, about a second on a slow laptop. */
 const PAIR_STEP_BUDGET = 20_000_000;
 
