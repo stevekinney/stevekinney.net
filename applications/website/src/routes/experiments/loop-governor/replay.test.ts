@@ -539,10 +539,18 @@ describe('reading a log defensively', () => {
       });
       const result = counterfactual(replay, { kind: 'maxIterations', maximum: 1 }, formatCost);
 
-      expect(result).toMatchObject({ progressLost: 0, progressLostAtMost: 0 });
+      // Any later iteration might have made progress, so no upper bound can be known.
+      expect(result).toMatchObject({ progressLost: 0, progressLostAtMost: null });
       expect(result.sentence).toBe(
         'A maximum of 1 iterations stops this at iteration 1 and saves $5.00.',
       );
+      for (const governor of [
+        { kind: 'stall', m: 2 },
+        { kind: 'maxIterations', maximum: 3 },
+        { kind: 'budget', dollars: 100 },
+      ] as const) {
+        expect(counterfactual(replay, governor, formatCost).progressLostAtMost).toBeNull();
+      }
     });
 
     it('leaves progress unknown when kept can’t be read, alone or beside a score', () => {

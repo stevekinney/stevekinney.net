@@ -498,9 +498,10 @@ export type Counterfactual = {
   progressLost: number;
   /**
    * The most progress iterations it might have cut off, counting the rows after the stop whose
-   * progress is unknown. Above `progressLost`, the figure is uncertain.
+   * progress is unknown. Above `progressLost`, the figure is uncertain. Null when the log has
+   * neither a score nor a kept field, so any later iteration might have made progress.
    */
-  progressLostAtMost: number;
+  progressLostAtMost: number | null;
   /**
    * Whether rows with unknown progress leave a stall detector's stop in doubt. When it is,
    * nothing is claimed as saved or lost, and the sentence says the stop only might happen.
@@ -585,6 +586,8 @@ export const counterfactual = (
   format: (dollars: number) => string,
 ): Counterfactual => {
   const name = governorName(governor, format);
+  // Without a score or a kept field, nothing bounds the progress a stop might cut off.
+  const noneLostAtMost = replay.hasProgress ? 0 : null;
 
   // A stall is a run without progress, so it can't be found where progress is unknown.
   if (governor.kind === 'stall' && !replay.hasProgress) {
@@ -595,7 +598,7 @@ export const counterfactual = (
       stopIteration: null,
       saved: 0,
       progressLost: 0,
-      progressLostAtMost: 0,
+      progressLostAtMost: null,
       uncertain: false,
       sentence: `${name} can’t be checked on this log, which has neither a score nor a kept field.`,
     };
@@ -611,7 +614,7 @@ export const counterfactual = (
       stopIteration: null,
       saved: null,
       progressLost: 0,
-      progressLostAtMost: 0,
+      progressLostAtMost: noneLostAtMost,
       uncertain: true,
       sentence: `${name} can’t be checked on this log: ${unidentified(replay)}, so the running total is unknown.`,
     };
@@ -664,7 +667,7 @@ export const counterfactual = (
       stopIteration: stoppedLast ? replay.iterations[stopIndex].iteration : null,
       saved: 0,
       progressLost: 0,
-      progressLostAtMost: 0,
+      progressLostAtMost: noneLostAtMost,
       uncertain: false,
       sentence: stoppedLast
         ? `${name} stops this at iteration ${replay.iterations[stopIndex].iteration}, its last, and saves nothing.`
@@ -680,8 +683,8 @@ export const counterfactual = (
   // With neither a score nor a kept field, progress is unknown everywhere and goes unmentioned.
   const progressLostAtMost = replay.hasProgress
     ? after.filter((step) => step.progress !== false).length
-    : progressLost;
-  const unknownLost = progressLostAtMost - progressLost;
+    : null;
+  const unknownLost = progressLostAtMost === null ? 0 : progressLostAtMost - progressLost;
   const cost =
     saved === null
       ? `stops this at iteration ${stop.iteration}, but ${unidentified(replay)}, so what it saves can’t be told`
@@ -689,9 +692,9 @@ export const counterfactual = (
   const but = saved === null ? 'and' : 'but';
   const lost =
     unknownLost > 0 && progressLost === 0
-      ? `, and it might cut off up to ${plural(progressLostAtMost, 'later progress iteration')}, but ${unknownLost === 1 ? 'its' : 'their'} progress is unknown, so it can’t tell exactly`
+      ? `, and it might cut off up to ${plural(unknownLost, 'later progress iteration')}, but ${unknownLost === 1 ? 'its' : 'their'} progress is unknown, so it can’t tell exactly`
       : unknownLost > 0
-        ? `, ${but} it cuts off at least ${plural(progressLost, 'later progress iteration')}, and up to ${progressLostAtMost.toLocaleString('en-US')}: ${unknownLost.toLocaleString('en-US')} more ${unknownLost === 1 ? 'has' : 'have'} unknown progress, so it can’t tell exactly`
+        ? `, ${but} it cuts off at least ${plural(progressLost, 'later progress iteration')}, and up to ${(progressLost + unknownLost).toLocaleString('en-US')}: ${unknownLost.toLocaleString('en-US')} more ${unknownLost === 1 ? 'has' : 'have'} unknown progress, so it can’t tell exactly`
         : progressLost > 0
           ? `, ${but} it cuts off ${plural(progressLost, 'later progress iteration')}`
           : '';
