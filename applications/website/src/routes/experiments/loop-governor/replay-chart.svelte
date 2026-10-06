@@ -93,7 +93,7 @@
           ? 'progress'
           : `${step.sinceProgress} without progress`,
       step.repeated ? 'repeated failure' : null,
-      `${formatCost(step.cumulative)} spent`,
+      `${replay.costIndeterminate ? 'at least ' : ''}${formatCost(step.cumulative)} spent`,
     ];
 
     return `${parts.filter(Boolean).join(', ')}.`;
@@ -147,7 +147,7 @@
   aria-valuemax={Math.max(1, count)}
   aria-valuenow={(active ?? 0) + 1}
   aria-valuetext={active === null
-    ? `${count} iterations, ${formatCost(replay.total)} in total.`
+    ? `${count} iterations, ${replay.costIndeterminate ? 'at least ' : ''}${formatCost(replay.total)} in total.`
     : describe(active)}
   data-testid="replay-chart"
   class="focus-visible:outline-primary-600 relative cursor-crosshair touch-pan-y rounded-md select-none focus-visible:outline-2 focus-visible:outline-offset-2"
@@ -228,7 +228,8 @@
     <text
       x={4}
       y={costTop - 16}
-      class="fill-slate-700 text-[11px] font-semibold dark:fill-slate-200">Cumulative cost</text
+      class="fill-slate-700 text-[11px] font-semibold dark:fill-slate-200"
+      >{replay.costIndeterminate ? 'Cumulative cost, at least' : 'Cumulative cost'}</text
     >
     <text
       x={LEFT - 6}

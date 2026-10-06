@@ -379,6 +379,38 @@ test.describe('replaying a loop log', () => {
     await expect(page.getByText('10 iterations, $27.50 in total, 4 with progress.')).toBeVisible();
   });
 
+  test('gives only a lower bound per session when a cost row has no session ID', async ({
+    page,
+  }) => {
+    await open(page);
+    const lines = [
+      { session_id: 'a', cost_usd: 1, kept: true },
+      { session_id: 'b', cost_usd: 5, kept: true },
+      { cost_usd: 2, kept: false },
+      { session_id: 'a', cost_usd: 3, kept: false },
+      { session_id: 'b', cost_usd: 6, kept: true },
+      { session_id: 'a', cost_usd: 4, kept: true },
+    ].map((line) => JSON.stringify(line));
+    await page.getByLabel('Or paste the lines').fill(lines.join('\n'));
+    await page.getByRole('button', { name: 'Replay the pasted lines' }).click();
+    await page.getByLabel('The cost is a running total').check();
+    await page
+      .getByRole('group', { name: 'The running total counts' })
+      .getByRole('button', { name: 'Per session' })
+      .click();
+
+    await expect(
+      page.getByText('6 iterations, at least $10.00 in total, 4 with progress.'),
+    ).toBeVisible();
+    await expect(page.getByText(/Choose “Across the whole log” to read one/)).toBeVisible();
+    const counterfactuals = page.getByTestId('counterfactuals');
+    await expect(counterfactuals).toContainText(
+      'A stall detector of 2 stops this at iteration 4, but 1 iteration with a cost has no session ID, so what it saves can’t be told, and it cuts off 2 later progress iterations.',
+    );
+    await expect(counterfactuals).toContainText('budget can’t be checked on this log');
+    await expect(counterfactuals).not.toContainText('saves $');
+  });
+
   test('shows rows without a score as unknown and a stall stop as only possible', async ({
     page,
   }) => {

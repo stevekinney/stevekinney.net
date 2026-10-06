@@ -322,6 +322,7 @@ describe('prefilling the prompt on push and publish', () => {
       file({ permissions: { defaultMode: 'bypassPermissions', deny: pushAndGh } }),
     );
     expect(denied.prefill['publish-gate'].status).toBe('on');
+    expect(denied.prefill['publish-gate'].reason).toBe('git push and public comments are denied.');
 
     // The mode set in a higher-priority file wins.
     const overridden = analyze(
@@ -329,6 +330,9 @@ describe('prefilling the prompt on push and publish', () => {
       file({ permissions: { defaultMode: 'bypassPermissions', ask: pushAndGh } }),
     );
     expect(overridden.prefill['publish-gate'].status).toBe('on');
+    expect(overridden.prefill['publish-gate'].reason).toBe(
+      'git push and public comments ask first, or are denied.',
+    );
   });
 
   it('turns it off when git push is allowed', () => {

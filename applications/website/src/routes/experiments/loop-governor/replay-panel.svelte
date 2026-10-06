@@ -263,8 +263,9 @@
         {/each}
 
         <p class={bodyClasses}>
-          {replay.iterations.length.toLocaleString('en-US')} iterations, {formatCost(replay.total)} in
-          total, {replay.hasProgress
+          {replay.iterations.length.toLocaleString('en-US')} iterations, {replay.costIndeterminate
+            ? 'at least '
+            : ''}{formatCost(replay.total)} in total, {replay.hasProgress
             ? `${replay.iterations.filter((step) => step.progress).length} with progress${unknownCount > 0 ? `, ${unknownCount.toLocaleString('en-US')} unknown` : ''}`
             : 'progress unknown'}.
         </p>

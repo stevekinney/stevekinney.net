@@ -220,7 +220,8 @@ export type ReplayOptions = {
   /**
    * What a running total counts: the whole log (the default) or each session. Used only when
    * `costIsRunningTotal` is on. Per session needs a mapped session field; without one, the
-   * total is read across the whole log.
+   * total is read across the whole log. A cost row without a session ID leaves every
+   * per-session total in doubt, so the cost is then indeterminate.
    */
   runningTotalScope?: 'log' | 'session';
 };
@@ -229,7 +230,12 @@ export type ReplayIteration = {
   /** The iteration's number: the log's own, or its position when the log has none. */
   iteration: number;
   session: string | null;
+  /**
+   * What this iteration cost. When the cost is indeterminate, a row without a session ID costs
+   * $0 here and a row after one might really have cost less, so no single figure is exact.
+   */
   cost: number;
+  /** The spend so far, and when the cost is indeterminate, the least it could be. */
   cumulative: number;
   score: number | null;
   /** True when the log has no kept field, and null when this row's kept can't be read. */
@@ -257,7 +263,17 @@ export type ReplayIteration = {
 
 export type Replay = {
   iterations: ReplayIteration[];
+  /** The whole run's cost, and when the cost is indeterminate, the least it could be. */
   total: number;
+  /**
+   * Whether per-session running totals can't be worked out, because rows with a cost have no
+   * session ID and any of them might start a session of its own or belong to another. The
+   * total and each cumulative figure count only the rows with a session ID, which can only
+   * understate the spend, so they are lower bounds.
+   */
+  costIndeterminate: boolean;
+  /** Cost rows without a session ID while running totals are read per session. */
+  unidentifiedCosts: number;
   hasScore: boolean;
   hasKept: boolean;
   /** Whether progress can be told from a stall: the log has a score or a kept field. */
@@ -324,17 +340,18 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
 
     return typeof session === 'string' ? session.trim() : '';
   });
-  // Rows without a session ID can't be told apart, so one of them with a cost leaves every
-  // per-session total in doubt, and the whole log is read as one total instead.
-  const unidentifiedCosts =
-    runningTotalScope === 'session' && mapping.session !== null && costIsRunningTotal
-      ? costValues.filter((cost, index) => cost !== null && sessionKeys[index] === '').length
-      : 0;
   const totalPerSession =
-    runningTotalScope === 'session' && mapping.session !== null && unidentifiedCosts === 0;
-  if (unidentifiedCosts > 0) {
+    runningTotalScope === 'session' && mapping.session !== null && costIsRunningTotal;
+  // Rows without a session ID can't be told apart, so one of them with a cost leaves every
+  // per-session total in doubt. Leaving those rows out, and reading the rest per session, can
+  // only understate the spend: a row added to a session's totals never lowers what they add up to.
+  const unidentifiedCosts = totalPerSession
+    ? costValues.filter((cost, index) => cost !== null && sessionKeys[index] === '').length
+    : 0;
+  const costIndeterminate = unidentifiedCosts > 0;
+  if (costIndeterminate) {
     notes.push(
-      `${plural(unidentifiedCosts, 'iteration')} with a cost had no session ID, so running totals are read across the whole log, not per session.`,
+      `${plural(unidentifiedCosts, 'iteration')} with a cost ${unidentifiedCosts === 1 ? 'has' : 'have'} no session ID, so ${unidentifiedCosts === 1 ? 'its' : 'their'} running totals can’t be told apart: the total is only the least it could be, and what a governor saves is unknown. Choose “Across the whole log” to read one running total across every row.`,
     );
   }
 
@@ -357,7 +374,8 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     const iteration = labeled !== null && Number.isInteger(labeled) ? labeled : index + 1;
 
     const session = read(record, 'session');
-    const reported = costValues[index];
+    // A row without a session ID can't be placed in a per-session total, so it counts toward none.
+    const reported = totalPerSession && sessionKeys[index] === '' ? null : costValues[index];
     let cost = 0;
     if (reported !== null && costIsRunningTotal) {
       const key = totalPerSession ? sessionKeys[index] : '';
@@ -447,7 +465,17 @@ export const analyzeLog = (log: RawLog, options: ReplayOptions): Replay => {
     );
   }
 
-  return { iterations, total: cumulative, hasScore, hasKept, hasProgress, hasCost, notes };
+  return {
+    iterations,
+    total: cumulative,
+    costIndeterminate,
+    unidentifiedCosts,
+    hasScore,
+    hasKept,
+    hasProgress,
+    hasCost,
+    notes,
+  };
 };
 
 export type CounterfactualGovernor =
@@ -464,14 +492,16 @@ export type Counterfactual = {
   stopIndex: number | null;
   /** The log's own number for that iteration. */
   stopIteration: number | null;
-  saved: number;
+  /** What stopping there saves, or null when the cost is indeterminate and it can't be told. */
+  saved: number | null;
   /** Progress iterations after the stop that the governor would have cut off. */
   progressLost: number;
   /**
    * The most progress iterations it might have cut off, counting the rows after the stop whose
-   * progress is unknown. Above `progressLost`, the figure is uncertain.
+   * progress is unknown. Above `progressLost`, the figure is uncertain. Null when the log has
+   * neither a score nor a kept field, so any later iteration might have made progress.
    */
-  progressLostAtMost: number;
+  progressLostAtMost: number | null;
   /**
    * Whether rows with unknown progress leave a stall detector's stop in doubt. When it is,
    * nothing is claimed as saved or lost, and the sentence says the stop only might happen.
@@ -530,6 +560,9 @@ const stallDoubt = (
   return doubtful ? { earliest, unknown, unknownBefore } : null;
 };
 
+const unidentified = (replay: Replay): string =>
+  `${plural(replay.unidentifiedCosts, 'iteration')} with a cost ${replay.unidentifiedCosts === 1 ? 'has' : 'have'} no session ID`;
+
 const governorName = (governor: CounterfactualGovernor, format: (dollars: number) => string) => {
   switch (governor.kind) {
     case 'stall':
@@ -553,6 +586,8 @@ export const counterfactual = (
   format: (dollars: number) => string,
 ): Counterfactual => {
   const name = governorName(governor, format);
+  // Without a score or a kept field, nothing bounds the progress a stop might cut off.
+  const noneLostAtMost = replay.hasProgress ? 0 : null;
 
   // A stall is a run without progress, so it can't be found where progress is unknown.
   if (governor.kind === 'stall' && !replay.hasProgress) {
@@ -563,9 +598,25 @@ export const counterfactual = (
       stopIteration: null,
       saved: 0,
       progressLost: 0,
-      progressLostAtMost: 0,
+      progressLostAtMost: null,
       uncertain: false,
       sentence: `${name} can’t be checked on this log, which has neither a score nor a kept field.`,
+    };
+  }
+
+  // Each cumulative figure is only the least the spend could be, so the real budget stop might
+  // come sooner.
+  if (governor.kind === 'budget' && replay.costIndeterminate) {
+    return {
+      governor,
+      name,
+      stopIndex: null,
+      stopIteration: null,
+      saved: null,
+      progressLost: 0,
+      progressLostAtMost: noneLostAtMost,
+      uncertain: true,
+      sentence: `${name} can’t be checked on this log: ${unidentified(replay)}, so the running total is unknown.`,
     };
   }
 
@@ -597,9 +648,10 @@ export const counterfactual = (
         name,
         stopIndex: marked,
         stopIteration: marked === null ? null : replay.iterations[marked].iteration,
-        saved: 0,
+        // Where it would stop is in doubt, so neither what it saves nor what it cuts off is known.
+        saved: null,
         progressLost: 0,
-        progressLostAtMost: 0,
+        progressLostAtMost: null,
         uncertain: true,
         sentence,
       };
@@ -616,7 +668,7 @@ export const counterfactual = (
       stopIteration: stoppedLast ? replay.iterations[stopIndex].iteration : null,
       saved: 0,
       progressLost: 0,
-      progressLostAtMost: 0,
+      progressLostAtMost: noneLostAtMost,
       uncertain: false,
       sentence: stoppedLast
         ? `${name} stops this at iteration ${replay.iterations[stopIndex].iteration}, its last, and saves nothing.`
@@ -625,22 +677,27 @@ export const counterfactual = (
   }
 
   const stop = replay.iterations[stopIndex];
-  const saved = roundDollars(replay.total - stop.cumulative);
+  // Two lower bounds don't bound their difference, so nothing is claimed as saved.
+  const saved = replay.costIndeterminate ? null : roundDollars(replay.total - stop.cumulative);
   const after = replay.iterations.slice(stopIndex + 1);
   const progressLost = after.filter((step) => step.progress).length;
   // With neither a score nor a kept field, progress is unknown everywhere and goes unmentioned.
   const progressLostAtMost = replay.hasProgress
     ? after.filter((step) => step.progress !== false).length
-    : progressLost;
-  const unknownLost = progressLostAtMost - progressLost;
-  const cost = `stops this at iteration ${stop.iteration} and saves ${format(saved)}`;
+    : null;
+  const unknownLost = progressLostAtMost === null ? 0 : progressLostAtMost - progressLost;
+  const cost =
+    saved === null
+      ? `stops this at iteration ${stop.iteration}, but ${unidentified(replay)}, so what it saves can’t be told`
+      : `stops this at iteration ${stop.iteration} and saves ${format(saved)}`;
+  const but = saved === null ? 'and' : 'but';
   const lost =
     unknownLost > 0 && progressLost === 0
-      ? `, and it might cut off up to ${plural(progressLostAtMost, 'later progress iteration')}, but ${unknownLost === 1 ? 'its' : 'their'} progress is unknown, so it can’t tell exactly`
+      ? `, and it might cut off up to ${plural(unknownLost, 'later progress iteration')}, but ${unknownLost === 1 ? 'its' : 'their'} progress is unknown, so it can’t tell exactly`
       : unknownLost > 0
-        ? `, but it cuts off at least ${plural(progressLost, 'later progress iteration')}, and up to ${progressLostAtMost.toLocaleString('en-US')}: ${unknownLost.toLocaleString('en-US')} more ${unknownLost === 1 ? 'has' : 'have'} unknown progress, so it can’t tell exactly`
+        ? `, ${but} it cuts off at least ${plural(progressLost, 'later progress iteration')}, and up to ${(progressLost + unknownLost).toLocaleString('en-US')}: ${unknownLost.toLocaleString('en-US')} more ${unknownLost === 1 ? 'has' : 'have'} unknown progress, so it can’t tell exactly`
         : progressLost > 0
-          ? `, but it cuts off ${plural(progressLost, 'later progress iteration')}`
+          ? `, ${but} it cuts off ${plural(progressLost, 'later progress iteration')}`
           : '';
 
   return {
