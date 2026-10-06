@@ -648,9 +648,10 @@ export const counterfactual = (
         name,
         stopIndex: marked,
         stopIteration: marked === null ? null : replay.iterations[marked].iteration,
-        saved: 0,
+        // Where it would stop is in doubt, so neither what it saves nor what it cuts off is known.
+        saved: null,
         progressLost: 0,
-        progressLostAtMost: 0,
+        progressLostAtMost: null,
         uncertain: true,
         sentence,
       };

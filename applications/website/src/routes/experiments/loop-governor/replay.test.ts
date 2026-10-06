@@ -440,7 +440,12 @@ describe('reading a log defensively', () => {
       expect(result.sentence).not.toContain('never fires');
       expect(result.sentence).toContain('might stop this as early as iteration 6');
       // The chart marks the iteration the sentence names.
-      expect(result).toMatchObject({ stopIteration: 6, saved: 0, progressLost: 0 });
+      expect(result).toMatchObject({
+        stopIteration: 6,
+        saved: null,
+        progressLost: 0,
+        progressLostAtMost: null,
+      });
       expect(result.sentence).toContain('3 iterations have no readable score');
     });
 
@@ -453,7 +458,12 @@ describe('reading a log defensively', () => {
       );
 
       // Every row after the missing score beats 10 but might not beat it, so all are unknown.
-      expect(result).toMatchObject({ uncertain: true, stopIteration: 3, saved: 0 });
+      expect(result).toMatchObject({
+        uncertain: true,
+        stopIteration: 3,
+        saved: null,
+        progressLostAtMost: null,
+      });
       expect(result.sentence).toBe(
         'A stall detector of 2 might stop this as early as iteration 3, but 4 iterations have unknown progress, so it can’t tell.',
       );
