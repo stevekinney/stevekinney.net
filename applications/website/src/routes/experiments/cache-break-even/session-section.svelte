@@ -7,13 +7,7 @@
   import { MAX_TOKENS } from './calculator-state';
   import type { ContextReadout } from './context-readout';
   import { formatTokens } from './display';
-  import {
-    fieldClasses,
-    headingClasses,
-    hintClasses,
-    labelClasses,
-    panelClasses,
-  } from './field-styles';
+  import { fieldClasses, hintClasses, labelClasses, panelClasses } from './field-styles';
   import type { ModelPrice } from './pricing';
   import { isSessionFile } from './session-import';
   import type { SessionImport } from './session-import';
@@ -81,16 +75,7 @@
     `${count} ${noun}${count === 1 ? '' : 's'}`;
 </script>
 
-<section aria-labelledby="session-heading" class={panelClasses}>
-  <div class="space-y-1">
-    <h2 id="session-heading" class={headingClasses}>Start from your session</h2>
-    <p class="max-w-3xl text-sm text-slate-600 dark:text-slate-300">
-      Fill in your context, your current model, and an estimate of the work left from a Claude Code
-      session, or from a context readout you paste. Everything is read in your browser, and nothing
-      you drop or paste is sent anywhere.
-    </p>
-  </div>
-
+<section aria-label="Start from your session" class={panelClasses}>
   <div class="grid gap-4 lg:grid-cols-2">
     <FileDropZone
       title="Use my session"

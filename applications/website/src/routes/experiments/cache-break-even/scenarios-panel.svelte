@@ -102,7 +102,9 @@
         class={fieldClasses}
       />
     </div>
-    <Button type="submit" variant="secondary" icon={Save}>Save scenario</Button>
+    <Button type="submit" variant="secondary" icon={Save} class="h-[2.625rem]">
+      Save scenario
+    </Button>
   </form>
   <p class={hintClasses} role="status">{notice ?? ''}</p>
 

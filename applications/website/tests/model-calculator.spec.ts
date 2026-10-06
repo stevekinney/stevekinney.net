@@ -50,7 +50,10 @@ test.describe('without JavaScript', () => {
     await page.goto(calculatorPath);
 
     await expect(costFor(page, 'Claude Opus 5.5')).toHaveText('$24.00');
-    await expect(page.getByRole('button', { name: 'Choose files' })).toBeDisabled();
+    // The zone starts closed, and without scripts it can't open.
+    await expect(
+      page.getByRole('button', { name: 'Choose files', includeHidden: true }),
+    ).toBeDisabled();
   });
 });
 

@@ -105,3 +105,26 @@ for (const slug of slugs) {
     }
   });
 }
+
+test.describe('file drop zones', () => {
+  const path = '/experiments/model-calculator';
+
+  test('start closed, and remember being opened', async ({ page }) => {
+    await openExperiment(page, path, { fileControlsOpen: false });
+
+    const toggle = page.getByRole('button', { name: 'Show file controls' });
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(page.getByRole('button', { name: 'Choose files' })).toBeHidden();
+
+    await toggle.click();
+    await expect(page.getByRole('button', { name: 'Choose files' })).toBeVisible();
+
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+    await expect(page.getByRole('button', { name: 'Hide file controls' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+    await expect(page.getByRole('button', { name: 'Choose files' })).toBeVisible();
+  });
+});

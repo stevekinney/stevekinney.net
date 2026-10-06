@@ -412,25 +412,6 @@
     </p>
   </header>
 
-  <SessionSection
-    {session}
-    {matchedModel}
-    {progress}
-    busy={loading}
-    message={readMessage}
-    error={readError}
-    {pasteText}
-    {readout}
-    {estimate}
-    ready={app.ready}
-    onFiles={loadFiles}
-    onPasteInput={(text) => (pasteText = text)}
-    onUseReadout={useReadout}
-    onEstimateInput={editEstimate}
-    onDiscard={discardImport}
-    onOpenPrices={openPrices}
-  />
-
   <div class="space-y-6">
     <SetupCard
       setup={app.calc}
@@ -517,6 +498,25 @@
       <p class={hintClasses}>Loading the map…</p>
     {/if}
   </section>
+
+  <SessionSection
+    {session}
+    {matchedModel}
+    {progress}
+    busy={loading}
+    message={readMessage}
+    error={readError}
+    {pasteText}
+    {readout}
+    {estimate}
+    ready={app.ready}
+    onFiles={loadFiles}
+    onPasteInput={(text) => (pasteText = text)}
+    onUseReadout={useReadout}
+    onEstimateInput={editEstimate}
+    onDiscard={discardImport}
+    onOpenPrices={openPrices}
+  />
 
   <section bind:this={pricesSection} aria-label="Prices and assumptions" class="scroll-mt-6">
     <details
