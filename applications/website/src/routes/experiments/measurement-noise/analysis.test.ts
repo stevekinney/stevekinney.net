@@ -60,7 +60,7 @@ describe('acceptance 1: five tasks, unpaired', () => {
     expect(formatNumber(test.meanA, 1)).toBe('48.0');
     expect(formatNumber(test.meanB, 1)).toBe('40.8');
     expect(test.difference).toBeCloseTo(7.2, 10);
-    expect(formatPercent(percent)).toBe('15.0%');
+    expect(formatPercent(percent ?? Number.NaN)).toBe('15.0%');
   });
 
   it('has SE 7.70, Welch df 6.04, and t critical value 2.443', () => {
@@ -104,7 +104,7 @@ describe('acceptance 2: the same five tasks, paired', () => {
       5, 9, 4, 10, 7,
     ]);
     expect(test.difference).toBe(7);
-    expect(formatPercent(comparison.percent)).toBe('14.6%');
+    expect(formatPercent(comparison.percent ?? Number.NaN)).toBe('14.6%');
   });
 
   it('has SD 2.55 and SE 1.14', () => {
@@ -165,6 +165,27 @@ describe('faster but more rework', () => {
 
     expect(analysis.verdict?.kind).toBe('distinguishable');
     expect(describeVerdict(analysis)?.body).toMatch(/^B needs .* more review minutes per task/);
+  });
+
+  it('leaves the percentage unavailable when A’s mean is zero, in both designs', () => {
+    const csv = [
+      'condition,task,minutes,review_minutes',
+      'A,one,30,0',
+      'A,two,40,0',
+      'A,three,35,0',
+      'B,one,31,4',
+      'B,two,42,6',
+      'B,three,33,5',
+    ].join('\n');
+
+    for (const preferPaired of [true, false]) {
+      const comparison = means(run(csv, { endpoint: 'review', preferPaired }));
+
+      expect(comparison.design).toBe(preferPaired ? 'paired' : 'unpaired');
+      expect(comparison.test.meanA).toBe(0);
+      expect(comparison.percent).toBeNull();
+      expect(Number.isFinite(comparison.test.difference)).toBe(true);
+    }
   });
 
   it('raises the cost per accepted result from $1.28 to $1.87', () => {
