@@ -671,7 +671,9 @@ export const analyzeSettings = (
     gated.length > 0 && commentsGated
       ? {
           status: 'on',
-          reason: 'git push and public comments ask first, or are denied.',
+          reason: bypass
+            ? 'git push and public comments are denied.'
+            : 'git push and public comments ask first, or are denied.',
           evidence: [...new Set([...gated, ...commentRules.filter((rule) => rule !== undefined)])],
         }
       : pushAllowed.length > 0
