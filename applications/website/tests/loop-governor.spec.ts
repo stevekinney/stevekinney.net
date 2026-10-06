@@ -292,14 +292,23 @@ test.describe('the animated run', () => {
     await showResults(page);
     await page.locator('#progress-p').fill('0');
     await page.locator('#ladder-q-promise-string').fill('0');
+    // A configuration change restarts the sample run, so wait for it to settle before stepping.
+    const settled = async (): Promise<void> => {
+      await expect(page.getByTestId('simulation-status')).not.toContainText('Simulating');
+      await expect(page.getByTestId('timeline').locator('li')).toHaveCount(0);
+    };
+    await settled();
 
     await page.getByRole('button', { name: 'Step', exact: true }).click();
     await page.getByRole('button', { name: 'Step', exact: true }).click();
+    await expect(page.getByTestId('timeline').locator('li')).toHaveCount(2);
     await page.getByRole('button', { name: 'Touch STOP' }).click();
     await expect(page.getByTestId('stop-ignored')).toBeVisible();
 
     await page.getByLabel('Stop file').check();
+    await settled();
     await page.getByRole('button', { name: 'Step', exact: true }).click();
+    await expect(page.getByTestId('timeline').locator('li')).toHaveCount(1);
     await page.getByRole('button', { name: 'Touch STOP' }).click();
 
     await expect(page.getByTestId('timeline-status')).toHaveText(
