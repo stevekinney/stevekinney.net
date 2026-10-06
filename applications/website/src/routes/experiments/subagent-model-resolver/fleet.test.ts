@@ -408,6 +408,8 @@ describe('where each value comes from', () => {
     );
 
     expect(row(analysis, 'reviewer')).toHaveLength(2);
+    expect(new Set(row(analysis, 'reviewer').map((entry) => entry.definition?.id)).size).toBe(2);
+    expect(analysis.shadowedCount).toBe(1);
   });
 
   it('keeps a pasted definition from another scope so precedence can decide', () => {

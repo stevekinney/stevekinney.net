@@ -5,6 +5,7 @@ import {
   isCustomPricing,
   MAX_EFFORT_FACTOR,
   MAX_PRICE,
+  MIN_EFFORT_FACTOR,
   modelOptionLabel,
   parsePricingTable,
   serializePricingTable,
@@ -99,6 +100,23 @@ describe('parsePricingTable', () => {
 
     expect(result.ok && result.table.models.map((model) => model.name)).toEqual(['Fine']);
     expect(result.ok && result.warnings).toHaveLength(2);
+  });
+
+  it('keeps the default for an effort factor too small to divide by safely', () => {
+    const result = parsePricingTable({
+      models: [{ name: 'Good', input: 1, output: 2 }],
+      efforts: [
+        { id: 'high', factor: 1e-323 },
+        { id: 'low', factor: MIN_EFFORT_FACTOR },
+      ],
+    });
+
+    expect(result.ok && result.table.efforts.find((effort) => effort.id === 'high')?.factor).toBe(
+      1,
+    );
+    expect(result.ok && result.table.efforts.find((effort) => effort.id === 'low')?.factor).toBe(
+      MIN_EFFORT_FACTOR,
+    );
   });
 
   it('keeps the default for an effort factor that is too large', () => {

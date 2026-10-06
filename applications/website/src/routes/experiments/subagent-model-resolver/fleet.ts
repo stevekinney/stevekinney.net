@@ -288,7 +288,7 @@ const buildDefinitions = (
     const model = parseModelSetting(agent.model);
 
     definitions.push({
-      id: `paste:${agent.name}:${agent.model}`,
+      id: `paste:${agent.path}:${agent.name}:${agent.model}`,
       name: agent.name,
       path: agent.path,
       scope,

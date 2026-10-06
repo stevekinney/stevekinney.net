@@ -165,12 +165,21 @@ export const fillFromReadout = (
   // A field the person edited after an earlier fill is theirs, so the backup takes its value and
   // Discard won't roll it back to something older.
   const before = { ...(state.beforeReadout ?? state.scenario) };
+  let backupEdited = false;
   if (state.beforeReadout) {
     for (const key of state.readoutKeys) {
-      if (!state.fromReadout.includes(key)) before[key] = state.scenario[key];
+      if (!state.fromReadout.includes(key) && before[key] !== state.scenario[key]) {
+        before[key] = state.scenario[key];
+        backupEdited = true;
+      }
     }
   }
-  const presetBefore = state.beforeReadout ? state.presetBeforeReadout : state.presetId;
+  // A backup that now holds the person's own numbers no longer matches the preset it came from.
+  const presetBefore = state.beforeReadout
+    ? backupEdited
+      ? null
+      : state.presetBeforeReadout
+    : state.presetId;
   const scenario = { ...state.scenario };
   const filled: Mark[] = [];
   let marginShare = state.marginShare;

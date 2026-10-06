@@ -156,6 +156,21 @@ describe('createTranscriptReader', () => {
     ]);
   });
 
+  it('ignores a compaction recorded by a subagent', () => {
+    const sidechain = JSON.stringify({
+      ...JSON.parse(compaction('2026-10-04T10:05:00.000Z', 150_000, 6_000)),
+      isSidechain: true,
+    });
+    const transcript = read({
+      'session.jsonl': [
+        response('message-1', '2026-10-04T10:00:00.000Z', usage({ cacheRead: 900, output: 6 })),
+        sidechain,
+      ],
+    });
+
+    expect(transcript.compactions).toEqual([]);
+  });
+
   it('records compactions and separates the turns on either side of one', () => {
     const transcript = read({
       'session.jsonl': [

@@ -506,6 +506,8 @@ const createReader = ({ details }: ReaderOptions): InternalReader => {
 
         if (
           carriesCompaction &&
+          // A subagent's compaction measures its own context, not the main session's.
+          record.isSidechain !== true &&
           record.type === 'system' &&
           record.subtype === 'compact_boundary'
         ) {

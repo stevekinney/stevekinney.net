@@ -96,8 +96,14 @@ export const MAX_PRICE = 100_000;
 /** The most an effort level can scale output volume. */
 export const MAX_EFFORT_FACTOR = 100;
 
-const readNumber = (value: unknown, maximum: number): number | null =>
-  typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= maximum
+/**
+ * The least an effort level can scale output volume. Below it the ratio between two levels can
+ * overflow, since a subnormal factor divides into infinity.
+ */
+export const MIN_EFFORT_FACTOR = 0.001;
+
+const readNumber = (value: unknown, maximum: number, minimum = 0): number | null =>
+  typeof value === 'number' && Number.isFinite(value) && value >= minimum && value <= maximum
     ? value
     : null;
 
@@ -156,10 +162,10 @@ export const parsePricingTable = (value: unknown): PricingParseResult => {
     const imported = importedEfforts.find((entry) => entry.id === standard.id);
     if (!imported) return { ...standard };
 
-    const factor = readNumber(imported.factor, MAX_EFFORT_FACTOR);
-    if (factor === null || factor === 0) {
+    const factor = readNumber(imported.factor, MAX_EFFORT_FACTOR, MIN_EFFORT_FACTOR);
+    if (factor === null) {
       warnings.push(
-        `The factor for ${standard.label} effort wasn’t a positive number up to ${MAX_EFFORT_FACTOR}, so the default stays.`,
+        `The factor for ${standard.label} effort wasn’t a number from ${MIN_EFFORT_FACTOR} to ${MAX_EFFORT_FACTOR}, so the default stays.`,
       );
 
       return { ...standard };
