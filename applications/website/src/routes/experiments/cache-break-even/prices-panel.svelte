@@ -154,7 +154,13 @@
                   oninput={(event) => {
                     const name = event.currentTarget.value;
 
+                    event.currentTarget.setAttribute('aria-invalid', String(!name.trim()));
                     if (name.trim()) editModel(model.id, { name });
+                  }}
+                  onblur={(event) => {
+                    // A model needs a name, so an emptied field goes back to the one it has.
+                    if (!event.currentTarget.value.trim()) event.currentTarget.value = model.name;
+                    event.currentTarget.removeAttribute('aria-invalid');
                   }}
                   class="{fieldClasses} min-w-40 py-1.5"
                 />

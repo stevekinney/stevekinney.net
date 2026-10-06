@@ -344,16 +344,20 @@ export const analyzeFleet = (input: FleetInput): FleetAnalysis => {
   const pasted = parsePastedOutput(input.pastedText);
   const definitions = buildDefinitions(input, warnings);
 
+  // Pasted output only speaks for the environment when it holds an environment or FORCE value. A
+  // version or a few agent lines alone leave the controls in charge.
   const gaveEnvironment =
     input.settingsFiles.length > 0 ||
     input.shellEnvironmentText.trim() !== '' ||
-    input.pastedText.trim() !== '';
+    pasted.environmentModel !== null ||
+    pasted.force !== null;
   // Text for `--agents` counts even when it doesn't parse, so its error reaches the page.
   const hasInput =
     gaveEnvironment ||
     definitions.length > 0 ||
     input.versionText.trim() !== '' ||
-    input.cliAgentsText.trim() !== '';
+    input.cliAgentsText.trim() !== '' ||
+    input.pastedText.trim() !== '';
 
   // Environment: the shell overrides settings files, and a pasted `=` line is the shell too.
   const pastedShell = (value: typeof pasted.force) => (value?.origin === 'shell' ? value : null);

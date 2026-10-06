@@ -342,6 +342,15 @@ describe('filling from a readout', () => {
     expect(discardReadout(moved).scenario).toEqual(initialState().scenario);
   });
 
+  it('keeps a manual edit when a replacement readout fills the same field, and discard keeps it', () => {
+    const first = fillFromReadout(initialState(), applied);
+    const edited = setTerm(first, 'history', 55_000);
+    const second = fillFromReadout(edited, applied);
+
+    expect(second.beforeReadout?.history).toBe(55_000);
+    expect(discardReadout(second).scenario.history).toBe(55_000);
+  });
+
   it('keeps the earlier marks when a refill adds a term', () => {
     const partial = applyReadout(
       parseReadout('System prompt: 18k tokens'),

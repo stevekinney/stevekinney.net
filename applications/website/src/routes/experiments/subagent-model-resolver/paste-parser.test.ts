@@ -57,12 +57,17 @@ describe('parsePastedOutput', () => {
     );
   });
 
-  it('deduplicates agents on name plus model, and keeps different models apart', () => {
+  it('deduplicates repeated lines, and keeps different paths and models apart', () => {
     const parsed = parsePastedOutput(
-      ['a/x.md:1:model: haiku', 'b/x.md:1:model: haiku', 'c/x.md:1:model: opus'].join('\n'),
+      [
+        'a/x.md:1:model: haiku',
+        'a/x.md:1:model: haiku',
+        'b/x.md:1:model: haiku',
+        'c/x.md:1:model: opus',
+      ].join('\n'),
     );
 
-    expect(parsed.agents.map((agent) => agent.model)).toEqual(['haiku', 'opus']);
+    expect(parsed.agents.map((agent) => agent.model)).toEqual(['haiku', 'haiku', 'opus']);
   });
 
   it('ignores a model value with characters it does not expect, and a line with no file', () => {

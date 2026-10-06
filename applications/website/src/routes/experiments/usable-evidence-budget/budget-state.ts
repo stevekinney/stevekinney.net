@@ -162,7 +162,14 @@ export const fillFromReadout = (
   { refill = false }: { refill?: boolean } = {},
 ): BudgetState => {
   const edited = refill ? state.readoutKeys.filter((key) => !state.fromReadout.includes(key)) : [];
-  const before = state.beforeReadout ?? state.scenario;
+  // A field the person edited after an earlier fill is theirs, so the backup takes its value and
+  // Discard won't roll it back to something older.
+  const before = { ...(state.beforeReadout ?? state.scenario) };
+  if (state.beforeReadout) {
+    for (const key of state.readoutKeys) {
+      if (!state.fromReadout.includes(key)) before[key] = state.scenario[key];
+    }
+  }
   const presetBefore = state.beforeReadout ? state.presetBeforeReadout : state.presetId;
   const scenario = { ...state.scenario };
   const filled: Mark[] = [];

@@ -85,7 +85,8 @@ export const parsePastedOutput = (text: string): PastedOutput => {
 
     const agent = parseAgentLine(line);
     if (agent) {
-      const key = `${agent.name}\u0000${agent.model}`;
+      // Two files with the same name and model but different paths are different definitions.
+      const key = `${agent.path}\u0000${agent.name}\u0000${agent.model}`;
       if (!seen.has(key)) {
         seen.add(key);
         result.agents.push(agent);
