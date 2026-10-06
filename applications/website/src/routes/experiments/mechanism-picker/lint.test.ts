@@ -148,6 +148,27 @@ describe('edge cases', () => {
     expect(splitInstructions(text).map((line) => line.text)).toEqual(['After.']);
   });
 
+  it('skips a fenced example inside a blockquote, at any depth', () => {
+    const text = [
+      'Before.',
+      '> ```sh',
+      '> never run rm -rf /',
+      '> ```',
+      '> Quoted.',
+      '> > ~~~',
+      '> >Maintain high quality code.',
+      '>> ~~~',
+      'After.',
+    ].join('\n');
+
+    expect(splitInstructions(text).map((line) => line.text)).toEqual([
+      'Before.',
+      'Quoted.',
+      'After.',
+    ]);
+    expect(lint(text).map((item) => item.text)).toEqual(['Before.', 'Quoted.', 'After.']);
+  });
+
   it('skips front matter and indented code', () => {
     const text = ['---', 'name: x', '---', 'Intro.', '', '    never read .env', 'After.'].join(
       '\n',
