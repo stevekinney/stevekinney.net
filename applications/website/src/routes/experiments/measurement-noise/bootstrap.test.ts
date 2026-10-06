@@ -184,9 +184,14 @@ describe('the bootstrap work budget', () => {
   });
 
   it('stays within the budget and above the minimum for any size', () => {
-    for (const size of [2, 999, 1_000, 1_001, 9_999, 10_000, 20_000, 33_333, 100_000]) {
+    for (const size of [2, 999, 1_000, 1_001, 9_999, 10_000, 10_001, 20_000, 33_333, 100_000]) {
       for (const paired of [false, true]) {
         const plan = planBootstrap(size, size, paired);
+
+        expect(plan.sampleA).toBeGreaterThanOrEqual(1);
+        expect(plan.sampleA).toBeLessThanOrEqual(size);
+        expect(plan.sampleB).toBeGreaterThanOrEqual(1);
+        expect(plan.sampleB).toBeLessThanOrEqual(size);
 
         expect((plan.sampleA + plan.sampleB) * plan.resamples).toBeLessThanOrEqual(
           BOOTSTRAP_WORK_BUDGET,
@@ -195,6 +200,19 @@ describe('the bootstrap work budget', () => {
         expect(plan.resamples).toBeLessThanOrEqual(BOOTSTRAP_RESAMPLES);
       }
     }
+  });
+
+  it('keeps the same tasks on both sides when it subsamples paired data', () => {
+    const random = createRandom(11);
+    const groupA = Array.from({ length: 30_000 }, () => Math.floor(random() * 1_000));
+    // Every task takes exactly 7 minutes longer under B, so only mismatched tasks could widen it.
+    const groupB = groupA.map((value) => value + 7);
+
+    const result = runToEnd(medianDifferenceJob(groupA, groupB, { seed: 3, paired: true }));
+
+    expect(result).toMatchObject({ resamples: 1_000, rows: 60_000, sampledRows: 20_000 });
+    expect(result.lower).toBe(-7);
+    expect(result.upper).toBe(-7);
   });
 
   it('bootstraps 100,000 rows on a seeded subsample, the same for the same seed', () => {
