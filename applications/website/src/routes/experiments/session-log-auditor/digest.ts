@@ -168,7 +168,8 @@ export const buildSummary = (
   const lines = [
     '## Session log audit',
     '',
-    ...(scope ? [`Scope: ${scope}`, ''] : []),
+    // The scope can name a working directory, which is a home path like any other.
+    ...(scope ? [`Scope: ${redact(scope).text}`, ''] : []),
     `- Sessions: ${overview.sessions}`,
     `- Assistant turns (after dedupe): ${overview.turns}`,
     `- Failed tool calls: ${overview.failures} of ${overview.toolCalls} (${formatPercent(overview.failureShare)})`,
