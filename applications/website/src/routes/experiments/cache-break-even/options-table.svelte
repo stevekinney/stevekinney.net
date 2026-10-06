@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArrowDown, ArrowUp, ArrowUpDown } from '@lucide/svelte';
+  import { ArrowDown, ArrowUp, ArrowUpDown, CircleCheck } from '@lucide/svelte';
   import type { Attachment } from 'svelte/attachments';
 
   import { formatPlainDollars, formatSignedDollars, formatTokens } from './display';
@@ -15,6 +15,8 @@
   };
 
   const { rows, selectedKey, onSelect }: Props = $props();
+
+  const cachePreservingNote = 'Free with a per-request effort setting';
 
   let sortKey = $state<OptionSortKey>('net');
   let sortDirection = $state<SortDirection>('descending');
@@ -104,9 +106,6 @@
           {@render sortableHeader('value', 'Value of remaining work', 'right')}
           {@render sortableHeader('net', 'Net', 'right')}
           {@render sortableHeader('breakEven', 'Break-even R', 'right')}
-          <th scope="col" class="px-3 py-2 text-left font-semibold">
-            Free via cache-preserving effort change
-          </th>
         </tr>
       </thead>
       <tbody {@attach clickableRows}>
@@ -133,6 +132,24 @@
               {#if row.evaluation.unchanged}
                 <span class="ml-1 text-xs font-normal">(your current setup)</span>
               {/if}
+              {#if row.evaluation.cachePreserving}
+                <span class="group relative ml-1 inline-flex align-middle">
+                  <button
+                    type="button"
+                    aria-label={cachePreservingNote}
+                    class="focus-visible:outline-primary-600 inline-flex cursor-help rounded text-sky-700 focus-visible:outline-2 focus-visible:outline-offset-2 dark:text-sky-300"
+                  >
+                    <CircleCheck aria-hidden="true" class="size-4" />
+                  </button>
+                  <span
+                    role="tooltip"
+                    aria-hidden="true"
+                    class="pointer-events-none invisible absolute top-1/2 left-full z-10 ml-2 w-48 -translate-y-1/2 rounded-md bg-slate-900 px-2.5 py-1.5 text-xs font-normal text-white opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100 dark:bg-slate-100 dark:text-slate-900"
+                  >
+                    {cachePreservingNote}
+                  </span>
+                </span>
+              {/if}
             </th>
             <td class="px-3 py-2 text-right tabular-nums">
               {formatPlainDollars(row.evaluation.cost)}
@@ -150,15 +167,6 @@
                 never
               {:else}
                 {formatTokens(row.evaluation.breakEvenOutput ?? 0)}
-              {/if}
-            </td>
-            <td class="px-3 py-2">
-              {#if row.evaluation.cachePreserving}
-                <span
-                  class="inline-flex rounded-full bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-900 dark:bg-sky-900/50 dark:text-sky-100"
-                >
-                  Free with a per-request effort setting
-                </span>
               {/if}
             </td>
           </tr>

@@ -602,9 +602,11 @@ test.describe('every option from here', () => {
     await expect(table.locator('tbody tr').first()).toContainText('Haiku 4.5 at low');
     await expect(table.locator('tbody tr').last()).toContainText('Fable 5.1 at max');
     await expect(table.locator('[data-option-key="fable-5-1:high"]')).toContainText('never');
-    await expect(table.locator('[data-option-key="opus-5:medium"]')).toContainText(
-      'Free with a per-request effort setting',
-    );
+    await expect(
+      table
+        .locator('[data-option-key="opus-5:medium"]')
+        .getByRole('button', { name: 'Free with a per-request effort setting' }),
+    ).toBeVisible();
     await expect(table.locator('[data-option-key="opus-5:high"]')).toContainText(
       '(your current setup)',
     );

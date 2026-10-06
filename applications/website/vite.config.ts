@@ -7,6 +7,7 @@ import { defineConfig, searchForWorkspaceRoot, type PluginOption } from 'vite';
 import { ViteToml } from 'vite-plugin-toml';
 
 import { contentDevelopmentPlugins } from './plugins/vite/content-development-plugins.ts';
+import { workspaceRootDefine } from './plugins/vite/workspace-root.ts';
 
 const enableBundleStats = process.env.BUNDLE_STATS === '1';
 const enableVercelAnalytics =
@@ -125,6 +126,7 @@ export default defineConfig({
   },
   plugins: [
     sveltekit(),
+    workspaceRootDefine(workspaceRoot),
     ...contentDevelopmentPlugins({
       workspaceRoot,
       contentDirectories,

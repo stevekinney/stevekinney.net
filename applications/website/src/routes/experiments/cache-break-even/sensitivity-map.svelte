@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { boundaryCoefficient } from './calculate';
   import type { ChangeEvaluation } from './calculate';
   import { formatTokens } from './display';
   import {
@@ -39,12 +40,54 @@
   const cellHeight = $derived(plotHeight / MAP_ROWS);
 
   const cells = $derived(buildMapCells(evaluation));
-  const aheadCells = $derived(cells.filter((cell) => cell.net > 1e-9));
-  const behindCells = $derived(cells.filter((cell) => cell.net < -1e-9));
   const boundary = $derived(boundarySegment(evaluation));
+
+  // Each cell is colored by its center, so the edge between the colors would step around the
+  // line. Cells the line crosses are drawn in both colors, and each color is clipped to its own
+  // side of the line, so the edge follows the line exactly.
+  const crossesBoundary = (cell: MapCell): boolean => {
+    const coefficient = boundaryCoefficient(evaluation);
+    if (!boundary || coefficient === null) return false;
+
+    const offset = Math.log10(coefficient) / Math.log10(MAP_MAX / MAP_MIN);
+    const left = cell.column / MAP_COLUMNS;
+    const right = (cell.column + 1) / MAP_COLUMNS;
+    const bottom = 1 - (cell.row + 1) / MAP_ROWS;
+    const top = 1 - cell.row / MAP_ROWS;
+
+    return bottom - right - offset < 0 && top - left - offset > 0;
+  };
+
+  const aheadCells = $derived(
+    cells.filter((cell) => cell.net > 1e-9 || (Math.abs(cell.net) > 1e-9 && crossesBoundary(cell))),
+  );
+  const behindCells = $derived(
+    cells.filter(
+      (cell) => cell.net < -1e-9 || (Math.abs(cell.net) > 1e-9 && crossesBoundary(cell)),
+    ),
+  );
 
   const xOf = (context: number): number => margins.left + logPosition(context) * plotWidth;
   const yOf = (output: number): number => margins.top + (1 - logPosition(output)) * plotHeight;
+
+  // The line, extended far past the plot, closes each side into a clipping polygon.
+  const clipPolygons = $derived.by(() => {
+    if (!boundary) return null;
+
+    const x1 = xOf(boundary.from.context);
+    const y1 = yOf(boundary.from.output);
+    const x2 = xOf(boundary.to.context);
+    const y2 = yOf(boundary.to.output);
+    const reach = 10;
+    const far = 100_000;
+    const start = `${x1 - (x2 - x1) * reach},${y1 - (y2 - y1) * reach}`;
+    const end = `${x2 + (x2 - x1) * reach},${y2 + (y2 - y1) * reach}`;
+
+    return {
+      above: `${start} ${end} ${x2 + (x2 - x1) * reach},${-far} ${-far},${-far} ${-far},${y1 - (y2 - y1) * reach}`,
+      below: `${start} ${end} ${far},${y2 + (y2 - y1) * reach} ${far},${far} ${x1 - (x2 - x1) * reach},${far}`,
+    };
+  });
 
   const ticks = [MAP_MIN, 10_000, 100_000, 1_000_000, MAP_MAX];
 
@@ -170,7 +213,16 @@
         height={plotHeight}
         class="fill-slate-50 stroke-slate-300 dark:fill-slate-800/60 dark:stroke-slate-600"
       />
-      <g class="fill-sky-600 dark:fill-sky-400">
+      {#if clipPolygons}
+        <defs>
+          <clipPath id="map-above-line"><polygon points={clipPolygons.above} /></clipPath>
+          <clipPath id="map-below-line"><polygon points={clipPolygons.below} /></clipPath>
+        </defs>
+      {/if}
+      <g
+        class="fill-sky-600 dark:fill-sky-400"
+        clip-path={clipPolygons ? 'url(#map-above-line)' : undefined}
+      >
         {#each aheadCells as cell (cell.row * MAP_COLUMNS + cell.column)}
           <rect
             x={margins.left + cell.column * cellWidth}
@@ -181,7 +233,10 @@
           />
         {/each}
       </g>
-      <g class="fill-orange-500 dark:fill-orange-400">
+      <g
+        class="fill-orange-500 dark:fill-orange-400"
+        clip-path={clipPolygons ? 'url(#map-below-line)' : undefined}
+      >
         {#each behindCells as cell (cell.row * MAP_COLUMNS + cell.column)}
           <rect
             x={margins.left + cell.column * cellWidth}
