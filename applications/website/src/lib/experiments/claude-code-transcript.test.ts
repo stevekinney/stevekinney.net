@@ -292,6 +292,7 @@ describe('createDetailedTranscriptReader', () => {
         id: 'call-1',
         name: 'Bash',
         command: 'timeout 5 ls',
+        model: 'claude-opus-5-5',
         sessionId: 'session-1',
         timestamp: '2026-10-04T10:00:00.000Z',
         file: 'session.jsonl',

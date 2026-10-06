@@ -38,6 +38,8 @@ export type AuditToolCall = {
   sessionId: string;
   timestamp: string | null;
   name: string;
+  /** The model of the response that issued the call, or `null` when it isn't known. */
+  model: string | null;
 };
 
 export type AuditError = {
@@ -47,6 +49,8 @@ export type AuditError = {
   timestamp: string | null;
   /** The tool's name, or `unknown` when the call isn't in any file read. */
   tool: string;
+  /** The model whose call failed, or `null` when the call isn't in any file read. */
+  model: string | null;
   /** The shell command, for a shell tool. */
   command: string | null;
   exitCode: number | null;
@@ -145,23 +149,26 @@ export const toAuditData = (transcript: DetailedTranscript): AuditData => {
     sessionId: sessionFor(call.file, call.sessionId),
     timestamp: call.timestamp,
     name: call.name,
+    model: call.model,
   }));
 
   const errors: AuditError[] = details.toolErrors.map((error) => {
     const call = error.toolUseId ? calls.get(error.toolUseId) : undefined;
     const tool = call?.name ?? 'unknown';
+    const model = call?.model ?? null;
     const sessionId = sessionFor(error.file, error.sessionId);
     const { exitCode, message } = buildErrorText(error.text);
 
     // Every result answers a call. One whose call isn't in any file read still
     // counts as a tool call, so failures never outnumber the calls they failed.
-    if (!call) toolCalls.push({ sessionId, timestamp: error.timestamp, name: tool });
+    if (!call) toolCalls.push({ sessionId, timestamp: error.timestamp, name: tool, model });
 
     return {
       id: `${error.file}:${error.line}`,
       sessionId,
       timestamp: error.timestamp,
       tool,
+      model,
       command: call && SHELL_TOOLS.has(tool.toLowerCase()) ? call.command : null,
       exitCode,
       message,

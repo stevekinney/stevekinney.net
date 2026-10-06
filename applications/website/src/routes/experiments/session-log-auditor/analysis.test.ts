@@ -109,6 +109,81 @@ describe('filters', () => {
   });
 });
 
+describe('the model filter in a session with two models', () => {
+  const sessionId = 'bbbbbbbb-0000-4000-8000-000000000001';
+  const usage = { input_tokens: 10, output_tokens: 20 };
+  const line = (fields: object): string =>
+    JSON.stringify({ sessionId, cwd: '/work/app', gitBranch: 'main', ...fields });
+  const call = (id: string, name: string) => ({ type: 'tool_use', id, name, input: {} });
+  const result = (id: string, isError: boolean) => ({
+    type: 'tool_result',
+    tool_use_id: id,
+    is_error: isError,
+    content: isError ? 'Error: no such file' : 'ok',
+  });
+  const data = readLinesByFile({
+    [`projects/-work-app/${sessionId}.jsonl`]: [
+      line({
+        type: 'assistant',
+        timestamp: '2026-09-03T10:00:00.000Z',
+        message: {
+          id: 'msg_opus',
+          model: 'claude-opus-4-1',
+          content: [call('toolu_opus_1', 'Read'), call('toolu_opus_2', 'Bash')],
+          usage,
+        },
+      }),
+      line({
+        type: 'user',
+        timestamp: '2026-09-03T10:00:01.000Z',
+        message: { role: 'user', content: [result('toolu_opus_1', true)] },
+      }),
+      line({
+        type: 'assistant',
+        timestamp: '2026-09-03T10:01:00.000Z',
+        isSidechain: true,
+        message: {
+          id: 'msg_haiku',
+          model: 'claude-haiku-4-5',
+          content: [call('toolu_haiku', 'Grep')],
+          usage,
+        },
+      }),
+      line({
+        type: 'user',
+        timestamp: '2026-09-03T10:01:01.000Z',
+        isSidechain: true,
+        message: { role: 'user', content: [result('toolu_haiku', false)] },
+      }),
+    ],
+  });
+
+  it('counts only the tool calls and failures the chosen model issued', () => {
+    expect(run(data).overview).toMatchObject({ turns: 2, toolCalls: 3, failures: 1 });
+    expect(run(data, { model: 'claude-haiku-4-5' }).overview).toMatchObject({
+      turns: 1,
+      toolCalls: 1,
+      failures: 0,
+    });
+    expect(run(data, { model: 'claude-opus-4-1' }).overview).toMatchObject({
+      turns: 1,
+      toolCalls: 2,
+      failures: 1,
+    });
+  });
+
+  it('records the issuing model on each tool call and failure', () => {
+    expect(data.toolCalls.map(({ name, model }) => [name, model])).toEqual([
+      ['Read', 'claude-opus-4-1'],
+      ['Bash', 'claude-opus-4-1'],
+      ['Grep', 'claude-haiku-4-5'],
+    ]);
+    expect(data.errors.map(({ tool, model }) => [tool, model])).toEqual([
+      ['Read', 'claude-opus-4-1'],
+    ]);
+  });
+});
+
 describe('the presets', () => {
   it('reads every preset without skipping anything it didn’t mean to', () => {
     for (const preset of presets) {

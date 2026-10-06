@@ -23,6 +23,7 @@ const failureOn = (day: string, sessionId: string): AuditError => ({
   sessionId,
   timestamp: `${day}T12:00:00.000Z`,
   tool: 'Bash',
+  model: 'claude-opus-5-5',
   command: null,
   exitCode: 1,
   message: MESSAGE,
