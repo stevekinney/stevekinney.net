@@ -166,11 +166,7 @@ const costRow = (
         : interval === 'running'
           ? 'Bootstrapping the interval…'
           : ready
-            ? `Bootstrap, ${interval.resamples.toLocaleString('en-US')} resamples${
-                interval.sampledRows < interval.rows
-                  ? ` of a seeded subsample of ${interval.sampledRows.toLocaleString('en-US')} rows`
-                  : ''
-              }, seed ${interval.seed}.`
+            ? `Bootstrap, ${interval.resamples.toLocaleString('en-US')} resamples, seed ${interval.seed}.`
             : 'Total cost divided by accepted tasks.',
     intervalNote: difference !== null && interval === 'too-many-rows' ? COST_TOO_MANY_ROWS : '',
     unit: 'dollars',

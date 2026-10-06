@@ -74,25 +74,6 @@ describe('buildOutcomes', () => {
     expect(cost.note).toBe('Bootstrap, 10,000 resamples, seed 1.');
   });
 
-  it('says when the cost interval ran on a seeded subsample', () => {
-    const cost = byId(
-      outcomesOf(findPreset('faster-more-rework')!.csv, {
-        seed: 1,
-        resamples: 1_000,
-        rows: 100_000,
-        sampledRows: 20_000,
-        usable: 1_000,
-        lower: -0.9,
-        upper: -0.3,
-      }),
-      'cost',
-    );
-
-    expect(cost.note).toBe(
-      'Bootstrap, 1,000 resamples of a seeded subsample of 20,000 rows, seed 1.',
-    );
-  });
-
   it('shows why there’s no cost interval for too many tasks, keeping the point estimate', () => {
     const rows = outcomesOf(findPreset('faster-more-rework')!.csv, 'too-many-rows');
     const cost = byId(rows, 'cost');
