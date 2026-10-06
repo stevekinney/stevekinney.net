@@ -233,6 +233,26 @@ describe('not measured', () => {
     );
   });
 
+  it('measures rework with one task under a condition, since a rate needs no spread', () => {
+    const analysis = run('condition,minutes,rework\nA,10,yes\nA,12,no\nB,9,no\n', {
+      endpoint: 'rework',
+    });
+
+    expect(analysis.comparison?.kind).toBe('rate');
+    expect(analysis.verdict?.kind).not.toBe('not-measured');
+  });
+
+  it('when a condition has no rework values', () => {
+    const analysis = run('condition,minutes,rework\nA,10,yes\nA,12,no\nB,9,\n', {
+      endpoint: 'rework',
+    });
+
+    expect(analysis.verdict).toMatchObject({ kind: 'not-measured' });
+    expect(describeVerdict(analysis)?.body).toBe(
+      '“B” has no tasks with a rework value. It takes at least one under each condition to compare rates.',
+    );
+  });
+
   it('when there’s no data at all', () => {
     expect(run('condition,minutes\n').verdict).toMatchObject({ kind: 'not-measured' });
   });
