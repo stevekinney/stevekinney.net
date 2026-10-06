@@ -4,6 +4,7 @@
  * Markdown summary behind the Copy summary button and the CSV table exports.
  * Every number in them is counted here, in code.
  */
+import { csvCell } from '$lib/experiments/csv';
 import { formatCost } from '$lib/experiments/format';
 
 import type { Overview } from './analysis';
@@ -189,18 +190,6 @@ export const buildSummary = (
   ];
 
   return `${lines.join('\n')}\n`;
-};
-
-/** A spreadsheet would run a cell that starts with one of these as a formula. */
-const FORMULA_START = /^[=+\-@\t\r]/;
-
-const csvCell = (value: string | number | null): string => {
-  if (value === null) return '';
-
-  const text = String(value);
-  const safe = typeof value === 'string' && FORMULA_START.test(text) ? `'${text}` : text;
-
-  return /[",\n\r]/.test(safe) ? `"${safe.replace(/"/g, '""')}"` : safe;
 };
 
 export const toCsv = (

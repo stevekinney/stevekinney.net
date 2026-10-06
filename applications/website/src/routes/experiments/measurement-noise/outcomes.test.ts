@@ -100,4 +100,15 @@ describe('outcomesToCsv', () => {
     expect(lines[2]).toBe('Rework rate,rate,,,,,,Not in your data.');
     expect(lines).toHaveLength(6);
   });
+
+  it('defuses condition labels a spreadsheet would run as formulas', () => {
+    const rows = outcomesOf(findPreset('five-unpaired')!.csv);
+    const header = (labels: string[]): string => outcomesToCsv(rows, labels).split('\n')[0];
+
+    expect(header(['=1+1', '@SUM(A1)'])).toBe(
+      "outcome,unit,'=1+1,'@SUM(A1),difference (=1+1 - @SUM(A1)),interval low,interval high,note",
+    );
+    expect(header(['+cmd', '-2'])).toContain(",'+cmd,'-2,");
+    expect(header(['\tTab', '\rReturn'])).toContain(',\'\tTab,"\'\rReturn",');
+  });
 });
