@@ -90,6 +90,16 @@ A few details are doing real work in that script:
 
 `parallel()` is a barrier. It waits for every function in its list before it returns, so nothing after it starts until the slowest one finishes. Reach for it only when the next step needs every result at once, like deduplicating findings across all the reviewers.
 
+The barrier's cost is easy to underestimate. Take three items and two stages, with enough agents to run them all at once and durations in minutes:
+
+| Item | Stage 1 | Stage 2 | Its own path |
+| ---- | ------- | ------- | ------------ |
+| A    | 1       | 10      | 11           |
+| B    | 1       | 1       | 2            |
+| C    | 10      | 1       | 11           |
+
+With a barrier between the stages, stage 2 can't start until C finishes stage 1, so the run takes 10 + 10 = 20 minutes. Pass each item along as soon as it's ready and the run takes as long as the slowest single path: 11 minutes. Same work, almost half the time, and the more the item durations vary, the bigger the gap. Calling `parallel()` once per stage, or `Promise.all` per stage in your own code, puts the barrier back. The [delegation economics experiment](/experiments/delegation-economics) lets you play with the numbers.
+
 ## Errors and null results
 
 The [workflow documentation](https://code.claude.com/docs/en/workflows#what-the-saved-script-looks-like) distinguishes two failures. If structured output still fails schema validation after five attempts, `agent()` throws an error containing the last validation failure. Catch it and record a failed item, or let it stop the workflow—just don't count that item as reviewed.

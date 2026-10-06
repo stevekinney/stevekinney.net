@@ -52,6 +52,25 @@ Only `name` and `description` are required. The [subagent documentation](https:/
 - **Background by default**: With fork mode on (the interactive default), subagents run in the background, and some tools are unavailable there. Where fork mode is off, foreground execution is available; `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1` forces it. In an interactive session, a subagent's permission request shows up in the main session, labeled with the subagent, and the worker waits for your answer. An unattended run may have nobody to answer, so define how it reports a blocked action instead of granting broader access to dodge the prompt.
 - **Limits**: 20 subagents running at once and three layers of nesting by default (a subagent starting subagents, which start more). Four children per agent across three layers is 4 + 16 + 64 = 84 workers. (Please don't.)
 
+## Which model a subagent runs on
+
+The `model:` line in a definition doesn't guarantee that model. From Claude Code 2.1.251 on, for a custom agent, the first source that's set wins: the model passed at spawn time, the definition's `model:` (`inherit` means the main model), the `CLAUDE_CODE_SUBAGENT_MODEL` environment variable (`inherit` is the same as unset), and then the main conversation's model.
+
+Before 2.1.251, the environment variable sat at the top and overrode everything. Same files, opposite answer, and no warning either way:
+
+| `CLAUDE_CODE_SUBAGENT_MODEL=haiku`, plus... | Before 2.1.251 | 2.1.251 and later    |
+| ------------------------------------------- | -------------- | -------------------- |
+| A definition with `model: opus`             | Haiku          | Opus                 |
+| A model passed at spawn time                | Haiku          | The spawn-time model |
+| Nothing else                                | Haiku          | Haiku                |
+| The variable unset, nothing else            | The main model | The main model       |
+
+To get the old behavior back, 2.1.257 added `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`. It applies the variable's model, or the main model if the variable isn't set, to every subagent and ignores definitions and spawn-time models. Forks and skills running with `model: inherit` are exempt. On 2.1.251 through 2.1.256 the flag doesn't exist, so it silently does nothing.
+
+The built-in agents follow their own rules. Explore inherits the main model, capped at Opus on a subscription, a Console account, or an LLM gateway (before 2.1.198 it always ran on Haiku). Plan runs on the main model. The environment variable alone doesn't move either one; with `FORCE` on, it does. A project or user agent with the same name as a built-in replaces it and follows the custom-agent order above.
+
+Don't trust the order; check it. From 2.1.243, `/tasks` shows the model each subagent actually ran on. Last verified: 2026-10-04 against Claude Code 2.1.289.
+
 ## Choosing a model per stage
 
 Pick the model by what a mistake at that stage costs:

@@ -32,12 +32,3 @@ The tools will change. The habits that keep you out of trouble are more durable:
 You should finish this course with a working mental model for when to use inline
 edits, chat, local agents, cloud agents, subagents, hooks, automations, MCP, and
 continuous integration integrations.
-
-If you want working examples to borrow from, I keep my own collection of skills,
-agents, and other reusable pieces in
-[Repertoire](https://github.com/stevekinney/repertoire).
-
-If you'd like a safe place to try things out, fork or clone
-[front-desk](https://github.com/stevekinney/front-desk). It's a little
-playground repository for the examples in this course, so you can let an agent
-loose without worrying about your real code.

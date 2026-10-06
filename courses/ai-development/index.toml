@@ -127,10 +127,6 @@ title = "Claude Code and Bash Scripts"
 href = "claude-code-and-bash-scripts.md"
 
 [[section.item]]
-title = "Stopping an Agent Loop"
-href = "stopping-an-agent-loop.md"
-
-[[section.item]]
 title = "Cost Management"
 href = "cost-management.md"
 

@@ -46,6 +46,8 @@ Put each rule on the weakest rung that reliably holds it.
 - **"Don't write to production"** goes to the credentials. The agent shouldn't _have_ them. That's the OS-and-network rung.
 - **Judgment calls** are what prose is for.
 
+To see how your own `CLAUDE.md` holds up, [paste it into this checker](/experiments/mechanism-picker). It tags each line as one that can stay a request or one that needs a permission rule, a hook, or a required check.
+
 If a mistake would be expensive and a sentence is your only defense, you have a rule on the wrong rung. Move it down the table, or take away the thing that makes the mistake possible.
 
 ## A hook can fail open
